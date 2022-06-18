@@ -29,6 +29,7 @@ type FieldType =
 export type InputFieldProps = {
   readonly type?: FieldType;
   readonly required?: boolean;
+  readonly autoFocus?: boolean;
 
   readonly placeholder?: string;
 
@@ -39,6 +40,7 @@ export type InputFieldProps = {
 export const InputField = ({
   type = 'text',
   required = false,
+  autoFocus = false,
 
   placeholder,
 
@@ -47,6 +49,7 @@ export const InputField = ({
 }: InputFieldProps): ReturnType<FC> => {
   return (
     <input
+      autoFocus={autoFocus}
       css={inputStyles}
       type={type}
       required={required}

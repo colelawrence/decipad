@@ -54,43 +54,62 @@ const buttonStyles = css({ paddingTop: '36px' });
 
 interface ErrorPageProps {
   readonly Heading: 'h1';
+  readonly messages?: string[];
   readonly wellKnown?: '404' | '500';
   readonly authenticated?: boolean;
+  readonly backUrl?: string;
+  readonly backCall?: string;
 }
 
 export const ErrorPage = ({
   Heading,
   wellKnown,
+  messages = [],
   authenticated = false,
+  backUrl,
+  backCall,
 }: ErrorPageProps): ReturnType<FC> => {
   return (
     <main css={styles}>
-      <Heading css={headingStyles}>
-        {wellKnown === '404'
-          ? 'Something went wrong'
-          : 'Sorry, we did something wrong'}
-      </Heading>
-      {wellKnown === '404' && (
-        <p css={subHeadingStyles}>
-          The link you tried may be broken, or the page may have been removed
-        </p>
-      )}
-      {wellKnown === '500' && (
-        <p css={subHeadingStyles}>
-          Decipad isn't accessible right now. We're probably fixing this right
-          now
-        </p>
-      )}
-      {wellKnown && (
-        <p css={errorCodeStyles}>The geeks call this a {wellKnown} error</p>
+      {messages.length ? (
+        <>
+          <Heading css={headingStyles}>{messages[0]}</Heading>
+          {messages.slice(1).map((m) => (
+            <p css={subHeadingStyles}>{m}</p>
+          ))}
+        </>
+      ) : (
+        <>
+          <Heading css={headingStyles}>
+            {wellKnown === '404'
+              ? 'Something went wrong'
+              : 'Sorry, we did something wrong'}
+          </Heading>
+          {wellKnown === '404' && (
+            <p css={subHeadingStyles}>
+              The link you tried may be broken, or the page may have been
+              removed
+            </p>
+          )}
+          {wellKnown === '500' && (
+            <p css={subHeadingStyles}>
+              Decipad isn't accessible right now. We're probably fixing this
+              right now
+            </p>
+          )}
+          {wellKnown && (
+            <p css={errorCodeStyles}>The geeks call this a {wellKnown} error</p>
+          )}
+        </>
       )}
       <div css={buttonStyles}>
         <Button
           type="primaryBrand"
           size="extraLarge"
-          href={authenticated ? '/' : 'https://decipad.com'}
+          href={backUrl || (authenticated ? '/' : 'https://decipad.com')}
         >
-          {authenticated ? 'Back to workspace' : 'Back to our website'}
+          {backCall ||
+            (authenticated ? 'Back to workspace' : 'Back to our website')}
         </Button>
       </div>
     </main>

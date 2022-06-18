@@ -65,6 +65,9 @@ export default function createAuthHandler(): HttpHandler {
     debug: !!process.env.DEBUG,
     pages: {
       verifyRequest: '/verifyEmail',
+      signIn: '/',
+      newUser: '/',
+      error: '/error',
     },
     theme: {
       colorScheme: 'light',

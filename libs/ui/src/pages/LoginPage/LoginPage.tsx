@@ -57,6 +57,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
         }}
       >
         <InputField
+          autoFocus
           placeholder="Your Email"
           type="email"
           required
