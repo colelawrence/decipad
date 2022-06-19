@@ -4,7 +4,7 @@ import {
   DynamoDbQuery,
 } from '@decipad/backendtypes';
 
-export default async function* allPages<T extends ConcreteRecord, T2 = T>(
+export async function* allPages<T extends ConcreteRecord, T2 = T>(
   table: DataTable<T>,
   query: DynamoDbQuery,
   map: (rec: T) => T2 | Promise<T2 | undefined> = identity

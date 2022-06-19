@@ -1,4 +1,4 @@
-const by =
+export const byDesc =
   <P extends string>(prop: P) =>
   (
     { [prop]: ida }: Record<P, unknown>,
@@ -12,5 +12,3 @@ const by =
     }
     return 0;
   };
-
-export default by;

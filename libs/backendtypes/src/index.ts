@@ -273,6 +273,7 @@ export interface PadRecord extends TableRecordBase {
   workspace_id: ID;
   isPublic?: boolean;
   icon?: string;
+  createdAt: number;
 }
 
 export interface WorkspaceRecord extends TableRecordBase {
@@ -423,6 +424,7 @@ export interface DataTable<T extends TableRecordBase> {
 export interface EnhancedDataTable<T extends TableRecordBase>
   extends DataTable<T> {
   create(doc: T): Promise<void>;
+  batchGet(ids: string[]): Promise<T[]>;
 }
 
 export interface EnhancedDataTables {
@@ -478,6 +480,8 @@ export type ConcreteRecord =
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
 export type ConcreteDataTable = DataTable<ConcreteRecord>;
+
+export type TableName = keyof ConcreteDataTable;
 
 /* DynamoDB */
 

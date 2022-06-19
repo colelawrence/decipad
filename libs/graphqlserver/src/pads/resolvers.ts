@@ -5,21 +5,20 @@ import {
   PadInput,
   PadRecord,
   PageInput,
-  PermissionRecord,
   RoleRecord,
   User,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
-import { expectAuthorized } from '@decipad/services/authorization';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
   importDoc,
-} from '@decipad/services/pads';
+  getNotebooks,
+} from 'libs/services/src/notebooks';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
-import { getDefined, identity } from '@decipad/utils';
+import { identity } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
@@ -28,7 +27,7 @@ import {
   loadUser,
   requireUser,
 } from '../authorization';
-import paginate from '../utils/paginate';
+import timestamp from '../utils/timestamp';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -48,6 +47,7 @@ const padResource = Resource({
     name: pad.name,
     icon: pad.icon,
     workspace_id: workspaceId,
+    createdAt: timestamp(),
   }),
 
   updateRecordFrom: (record: PadRecord, { pad }: { pad: PadInput }) => {
@@ -73,20 +73,6 @@ const padResource = Resource({
     `/workspaces/${workspace_id}`,
 });
 
-const byPadCreationDateDesc = (a: PadRecord, b: PadRecord): number => {
-  const diff = (b.createdAt || 0) - (a.createdAt || 0);
-  if (!diff) {
-    if (a.name > b.name) {
-      return -1;
-    }
-    if (a.name === b.name) {
-      return 0;
-    }
-    return 1;
-  }
-  return diff;
-};
-
 const resolvers = {
   Query: {
     getPadById: padResource.getById,
@@ -96,48 +82,11 @@ const resolvers = {
       { page, workspaceId }: { page: PageInput; workspaceId: ID },
       context: GraphqlContext
     ) {
-      const data = await tables();
-
-      const workspace = await data.workspaces.get({ id: workspaceId });
-      if (!workspace) {
-        throw new UserInputError(`Unknown workspace with id ${workspaceId}`);
-      }
-
-      const user = loadUser(context);
-
-      await expectAuthorized({
-        resource: `/workspaces/${workspaceId}`,
-        user,
-        permissionType: 'READ',
-      });
-
-      const query = {
-        IndexName: 'byUserId',
-        KeyConditionExpression:
-          'user_id = :user_id and resource_type = :resource_type',
-        FilterExpression: 'parent_resource_uri = :parent_resource_uri',
-        ExpressionAttributeValues: {
-          ':user_id': getDefined(user).id,
-          ':resource_type': 'pads',
-          ':parent_resource_uri': `/workspaces/${workspace.id}`,
-        },
-      };
-
-      const pads = await paginate(
-        data.permissions,
-        query,
+      return getNotebooks({
+        user: loadUser(context),
+        workspaceId,
         page,
-        async (permission: PermissionRecord) => {
-          return data.pads.get({ id: permission.resource_id });
-        }
-      );
-
-      return {
-        // TODO: this ad-hoc sorting is a hack, to get stabler outputs for tests
-        // TODO: the sorting should come directly from the database
-        ...pads,
-        items: pads.items.sort(byPadCreationDateDesc),
-      };
+      });
     },
   },
 

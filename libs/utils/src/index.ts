@@ -13,3 +13,5 @@ export * from './timeout';
 export * from './unzip';
 export * from './zip';
 export * from './assert-defined';
+export * from './unique';
+export * from './byDesc';

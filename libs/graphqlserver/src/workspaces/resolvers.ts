@@ -1,8 +1,9 @@
 import {
   GraphqlContext,
   ID,
+  PadRecord,
+  PagedResult,
   PageInput,
-  PermissionRecord,
   Workspace,
   WorkspaceInput,
   WorkspaceRecord,
@@ -13,17 +14,17 @@ import {
 } from '@decipad/services/permissions';
 import { notifyAllWithAccessTo, subscribe } from '@decipad/services/pubsub';
 import { create as createWorkspace2 } from '@decipad/services/workspaces';
+import { getNotebooks } from '@decipad/services/notebooks';
 import tables from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
+import { byDesc } from '@decipad/utils';
 import {
   isAuthenticatedAndAuthorized,
   isAuthorized,
   loadUser,
   requireUser,
 } from '../authorization';
-import by from '../utils/by';
-import paginate from '../utils/paginate';
 
 export default {
   Query: {
@@ -75,7 +76,7 @@ export default {
         }
       }
 
-      return workspaces.sort(by('name'));
+      return workspaces.sort(byDesc('name'));
     },
   },
 
@@ -205,38 +206,20 @@ export default {
         }
       }
 
-      return roles.sort(by('name'));
+      return roles.sort(byDesc('name'));
     },
 
     async pads(
       workspace: Workspace,
       { page }: { page: PageInput },
       context: GraphqlContext
-    ) {
-      const user = requireUser(context);
-
-      const query = {
-        IndexName: 'byUserId',
-        KeyConditionExpression:
-          'user_id = :user_id and resource_type = :resource_type',
-        FilterExpression: 'parent_resource_uri = :parent_resource_uri',
-        ExpressionAttributeValues: {
-          ':user_id': user.id,
-          ':resource_type': 'pads',
-          ':parent_resource_uri': `/workspaces/${workspace.id}`,
-        },
-      };
-
-      const data = await tables();
-
-      return paginate(
-        data.permissions,
-        query,
+    ): Promise<PagedResult<PadRecord>> {
+      const notebooks = await getNotebooks({
+        user: loadUser(context),
+        workspaceId: workspace.id,
         page,
-        async (permission: PermissionRecord) => {
-          return data.pads.get({ id: permission.resource_id });
-        }
-      );
+      });
+      return notebooks;
     },
   },
 };

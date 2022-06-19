@@ -14,11 +14,10 @@ import {
   PagedResult,
   PermissionType,
 } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import tables, { paginate } from '@decipad/tables';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { create as createUser } from '@decipad/services/users';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
-import paginate from '../utils/paginate';
 import timestamp from '../utils/timestamp';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 

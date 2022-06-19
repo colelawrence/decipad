@@ -6,7 +6,7 @@ import {
   ConcreteRecord,
 } from '@decipad/backendtypes';
 
-export default async function paginate<T1 extends ConcreteRecord, T2>(
+export async function paginate<T1 extends ConcreteRecord, T2>(
   table: DataTable<T1>,
   /* eslint-disable no-param-reassign */
   query: DynamoDbQuery,

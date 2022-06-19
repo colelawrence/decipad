@@ -7,11 +7,10 @@ import {
   Pad,
 } from '@decipad/backendtypes';
 import assert from 'assert';
-import tables, { allPages } from '@decipad/tables';
+import tables, { allPages, paginate } from '@decipad/tables';
 
 import { subscribe } from '@decipad/services/pubsub';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
-import paginate from '../utils/paginate';
 import parseResourceUri from '../utils/resource/parse-uri';
 
 const resolvers = {

@@ -12,6 +12,8 @@ import { timeout } from './timeout';
 import { unzip } from './unzip';
 import { zip } from './zip';
 import { assertDefined } from './assert-defined';
+import { unique } from './unique';
+import { byDesc } from './byDesc';
 
 it('turns a mapping-like into a map', () => {
   expect(anyMappingToMap([['key', 1]])).toEqual(new Map([['key', 1]]));
@@ -105,4 +107,14 @@ it('can timeout', (done) => {
 it('asserts defined', () => {
   expect(() => assertDefined(true)).not.toThrow();
   expect(() => assertDefined(null)).toThrowError();
+});
+
+it('unique', () => {
+  expect(unique([1, 2, 1, 2, 3])).toEqual([1, 2, 3]);
+});
+
+it('byDesc', () => {
+  expect(
+    [{ a: 1 }, { c: 1, a: 3 }, { b: 2, a: 2 }, { c: 1, a: 3 }].sort(byDesc('a'))
+  ).toEqual([{ c: 1, a: 3 }, { c: 1, a: 3 }, { b: 2, a: 2 }, { a: 1 }]);
 });
