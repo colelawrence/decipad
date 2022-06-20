@@ -18,6 +18,7 @@ import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';
 import { inferCategories } from '../categories';
 import { inferFunctionDefinition, inferFunctionCall } from './functions';
+import { getConstantByName } from '../builtins';
 
 export { makeContext };
 export type { Context };
@@ -68,6 +69,10 @@ export const inferExpression = wrap(
             (ctx.previousStatement && deserializeType(ctx.previousStatement)) ||
             t.impossible(InferError.noPreviousStatement())
           );
+        }
+        const c = getConstantByName(name);
+        if (c) {
+          return c.type;
         }
         const value = ctx.stack.get(name);
         return value ?? t.number([parseUnit(name)]);
@@ -233,9 +238,11 @@ export const inferStatement = wrap(
         const varName = getIdentifierString(nName);
 
         ctx.inAssignment = varName;
-        const type = await (!ctx.stack.has(varName, 'function')
-          ? inferExpression(ctx, nValue)
-          : t.impossible(InferError.duplicatedName(varName)));
+        const constant = getConstantByName(varName);
+        const type =
+          constant || ctx.stack.has(varName, 'function')
+            ? t.impossible(InferError.duplicatedName(varName))
+            : await inferExpression(ctx, nValue);
         ctx.inAssignment = null;
 
         ctx.stack.set(varName, type, 'function');

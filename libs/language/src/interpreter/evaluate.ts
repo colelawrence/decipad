@@ -1,6 +1,6 @@
 import pSeries from 'p-series';
 import { AST } from '..';
-import { callBuiltin } from '../builtins';
+import { callBuiltin, getConstantByName } from '../builtins';
 import {
   getOfType,
   getDefined,
@@ -69,6 +69,10 @@ export async function evaluate(
           throw new RuntimeError('No previous value');
         }
         return realm.previousStatementValue;
+      }
+      const c = getConstantByName(identifier);
+      if (c) {
+        return c.value;
       }
       const value = realm.stack.get(identifier);
       if (value != null) {
