@@ -88,7 +88,9 @@ export function callBuiltin(
 
   let stage = 0;
   try {
-    const autoConvert = !op.noAutoconvert && shouldAutoconvert(argTypes);
+    const autoConvert =
+      !!op.autoConvertArgs ||
+      (!op.noAutoconvert && shouldAutoconvert(argTypes));
     let args = autoConvert
       ? autoconvertArguments(argsBeforeConvert, argTypes)
       : argsBeforeConvert;

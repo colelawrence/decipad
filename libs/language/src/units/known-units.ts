@@ -24,6 +24,7 @@ import * as SolidAngleUnits from './solid-angle-units';
 import * as PowerUnits from './power-units';
 import * as FrequencyUnits from './frequency-units';
 import * as CurrencyUnits from './currency-units';
+import * as AngleUnits from './angle-units';
 
 export type BaseQuantity =
   | 'length'
@@ -50,6 +51,7 @@ export type BaseQuantity =
   | 'power'
   | 'frequency'
   | 'information'
+  | 'angle'
   | 'EUR'
   | 'USD'
   | 'GBP'
@@ -124,6 +126,7 @@ const allUnitPackages = [
   LuminousIntensityUnits,
   LuminousFlowUnits,
   SolidAngleUnits,
+  AngleUnits,
 ];
 
 const duplicates: Set<string> = new Set();

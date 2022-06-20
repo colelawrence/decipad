@@ -9,6 +9,7 @@ import { tableOperators } from './table-operators';
 import { tableGroupingOperators } from './table-grouping-operators';
 import { miscOperators } from './misc-operators';
 import { contractOperators } from './contract-operators';
+import { trignometricOperators } from './trignometric-operators';
 
 export const operators: { [fname: string]: BuiltinSpec } = {
   ...mathOperators,
@@ -21,4 +22,5 @@ export const operators: { [fname: string]: BuiltinSpec } = {
   ...tableGroupingOperators,
   ...miscOperators,
   ...contractOperators,
+  ...trignometricOperators,
 };

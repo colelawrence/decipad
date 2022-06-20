@@ -16,6 +16,7 @@ export interface BuiltinSpec {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn?: (args: any[], types?: Type[]) => any;
   noAutoconvert?: boolean;
+  autoConvertArgs?: boolean;
   absoluteNumberInput?: boolean;
   // Variant that operates on Value specifically
 
