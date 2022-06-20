@@ -12,3 +12,4 @@ export * as templates from './templates';
 export * as icons from './icons';
 export * from './utils';
 export * from './hooks';
+export * from './primitives';

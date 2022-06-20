@@ -1,5 +1,6 @@
 import { DropLineDirection } from '@udecode/plate';
-import { DropLine, dropLineWidth } from './DropLine';
+import { DropLine } from './DropLine';
+import { dropLineWidth } from '../../styles/drop-line';
 
 export const RowDropLine = ({ dropLine }: { dropLine: DropLineDirection }) => {
   return (

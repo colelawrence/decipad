@@ -2,6 +2,7 @@ export * as blockAlignment from './block-alignment';
 export * as card from './card';
 export * as codeBlock from './code-block';
 export * as dashboard from './dashboard';
+export * as dropline from './drop-line';
 export * as highlight from './highlight';
 export * as editorLayout from './editor-layout';
 export * as menu from './menu';

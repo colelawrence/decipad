@@ -1,7 +1,7 @@
 import { useUploadDataPlugin } from '@decipad/editor-plugins';
 import { EditorChangeContextProvider } from '@decipad/react-contexts';
 import { EditorPlaceholder } from '@decipad/ui';
-import { useCallback, useState } from 'react';
+import { RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
@@ -14,7 +14,13 @@ export interface EditorProps {
   editor: MyEditor;
 }
 
-const InsidePlate = ({ notebookId, editor }: EditorProps) => {
+const InsidePlate = ({
+  notebookId,
+  editor,
+  containerRef,
+}: EditorProps & {
+  containerRef: RefObject<HTMLDivElement>;
+}) => {
   // upload / fetch data
   const {
     startUpload,
@@ -34,15 +40,20 @@ const InsidePlate = ({ notebookId, editor }: EditorProps) => {
         uploadState={uploadState}
         clearAll={clearAllUploads}
       />
+      <components.CursorOverlay containerRef={containerRef} />
     </>
   );
 };
 
+/**
+ * TODO: remove Plate.id after plate patch
+ */
 export const Editor = (props: EditorProps) => {
   const { loaded, editor } = props;
   // Cursor remote presence
   // useCursors(editor);
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [changeSubject] = useState(() => new Subject<undefined>());
   const onChange = useCallback(() => {
     changeSubject.next(undefined);
@@ -54,9 +65,11 @@ export const Editor = (props: EditorProps) => {
 
   return (
     <EditorChangeContextProvider changeSubject={changeSubject}>
-      <Plate<MyValue> editor={editor} onChange={onChange}>
-        <InsidePlate {...props} />
-      </Plate>
+      <div ref={containerRef} style={{ position: 'relative' }}>
+        <Plate<MyValue> editor={editor} id={editor.id} onChange={onChange}>
+          <InsidePlate {...props} containerRef={containerRef} />
+        </Plate>
+      </div>
     </EditorChangeContextProvider>
   );
 };

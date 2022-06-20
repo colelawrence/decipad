@@ -1,4 +1,5 @@
 import {
+  createAutoCompleteMenuPlugin,
   createAutoFormatCodeBlockPlugin,
   createAutoPairsPlugin,
   createCalloutPlugin,
@@ -6,6 +7,7 @@ import {
   createCodeVariableHighlightPlugin,
   createCursorsPlugin,
   createDividerPlugin,
+  createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
   createLayoutColumnsPlugin,
   createLinkPlugin,
@@ -20,10 +22,9 @@ import {
   createNormalizePlainTextBlockPlugin,
   createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
-  createAutoCompleteMenuPlugin,
   createNormalizeVoidPlugin,
-  createPlotPlugin,
   createOperationsBlackboxPlugin,
+  createPlotPlugin,
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
   createUpdateComputerPlugin,
@@ -90,6 +91,7 @@ export const plugins = (computer: Computer) =>
       createSoftBreakPlugin(),
       createResetNodePlugin({ options: resetBlockTypeOptions }),
       createDndPlugin(),
+      createDragOverCursorPlugin(),
 
       // creating elements
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

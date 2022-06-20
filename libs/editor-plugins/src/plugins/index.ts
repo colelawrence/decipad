@@ -7,6 +7,7 @@ export * from './CodeLine';
 export * from './Cursors';
 export * from './Divider';
 export * from './DocSync';
+export * from './DragOverCursor';
 export * from './EditorApplyErrorReporter';
 export * from './ExternalData';
 export * from './LayoutColumns';

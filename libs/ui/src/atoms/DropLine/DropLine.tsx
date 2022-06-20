@@ -1,12 +1,11 @@
 import { css } from '@emotion/react';
 import { blue300 } from '../../primitives';
+import { dropLineWidth } from '../../styles/drop-line';
 
 const dropLineCommonStyles = css({
   backgroundColor: blue300.rgb,
   zIndex: 1,
 });
-
-export const dropLineWidth = 2;
 
 const dropLineBlockStyles = css({
   height: `${dropLineWidth}px`,
