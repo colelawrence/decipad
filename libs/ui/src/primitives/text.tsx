@@ -214,7 +214,7 @@ export const GlobalTextStyles = (): ReturnType<React.FC> => (
     {/* @import is not as good for performance as <link rel>, but the web font URLs will need to change with changes to the styles above,
         so it's good to have them co-located, which if using <link> would be more difficult to achieve.
         While these text styles are still undergoing frequent changes, let's keep it like this. */}
-    <Global styles="@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600');" />
+    <Global styles="@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');" />
     <Global styles={allianceNo1Medium.atRule} />
     <Global
       styles={{
