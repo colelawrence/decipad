@@ -10,6 +10,7 @@ import {
   grey700,
   setCssVar,
   transparency,
+  white,
 } from '../../primitives';
 import { VariableEditorMenu } from '..';
 import { AvailableSwatchColor, baseSwatches } from '../../utils';
@@ -103,7 +104,7 @@ const variableNameStyles = css({
     pointerEvents: 'none',
     background: `linear-gradient(
       90deg,
-      transparent,
+      ${transparency(white, 0).rgba},
       ${cssVar('backgroundColor')}
     )`,
   },
