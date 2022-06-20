@@ -21,9 +21,8 @@ describe('notebook icon', () => {
     const green = await page.waitForSelector('button[aria-label="Sulu"]');
     await green?.click();
 
-    await percySnapshot(page, 'UI: Color Picker');
-
     await page.waitForTimeout(200);
+    await percySnapshot(page, 'Notebook: Icon selection');
 
     const buttonColor = await page
       .locator('button[aria-haspopup="dialog"]')

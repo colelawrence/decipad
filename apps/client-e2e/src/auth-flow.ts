@@ -8,10 +8,10 @@ beforeAll(async () => {
 });
 
 test('Should display welcome message', async () => {
-  await percySnapshot(page, 'Auth: Login Window');
   await waitForExpect(async () =>
     expect(await page.isVisible('text=/make/i')).toBe(true)
   );
+  await percySnapshot(page, 'Auth: Login Window');
 });
 
 test('should allow the user to type their email for login', async () => {

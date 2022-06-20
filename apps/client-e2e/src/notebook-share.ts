@@ -15,11 +15,11 @@ describe('notebook share', () => {
     await page.keyboard.press('Enter');
     await page.keyboard.type('/');
 
-    await percySnapshot(page, 'Notebook: Slash Command');
-
     const linkSelector = 'text=Calculations';
     const calculations = await page.$(linkSelector);
     expect(calculations).toBeTruthy();
+
+    await percySnapshot(page, 'Notebook: Slash Command');
 
     await page.keyboard.press('Backspace');
   });

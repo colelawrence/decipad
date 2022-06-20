@@ -48,9 +48,9 @@ describe('notebook load json', () => {
       )
     ).toBeDefined();
 
-    await percySnapshot(page, 'Notebook: All elements');
-
     expect(await page.$('text=756,869,701')).toBeDefined();
+
+    await percySnapshot(page, 'Notebook: All elements');
   });
 
   it('old-style URLs work and pass on search params', async () => {
@@ -78,9 +78,10 @@ describe('notebook load json', () => {
 
     await sharedNotebookPage.goto(sharedNotebookLink);
     await waitForEditorToLoad(sharedNotebookPage);
-    await percySnapshot(page, 'Notebook: Shared with a user');
     // make sure screenshot is captured
-    await expect(page).toBeDefined();
+    expect(page).toBeDefined();
+
+    await percySnapshot(page, 'Notebook: Shared with a user');
   });
 
   it('navigates to shared notebook link incognito', async () => {
@@ -89,8 +90,9 @@ describe('notebook load json', () => {
 
     await sharedNotebookPage.goto(sharedNotebookLink);
     await waitForEditorToLoad(sharedNotebookPage);
-    await percySnapshot(page, 'Notebook: Published mode (incognito)');
     // make sure screenshot is captured
-    await expect(page).toBeDefined();
+    expect(page).toBeDefined();
+
+    await percySnapshot(page, 'Notebook: Published mode (incognito)');
   });
 });
