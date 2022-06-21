@@ -25,7 +25,7 @@ Instead of creating a notebook, you can also duplicate them.
 
 When you duplicate a notebook, a copy of that notebook will be automatically added to your workspace.
 
-Take a look at our [Gallery of examples](/get-inspiration) and try to duplicate one:
+Take a look at our [Gallery of examples](/examples) and try to duplicate one:
 
 1. Selection an example;
 2. On the topbar you will find a `Duplicate` button;

@@ -14,7 +14,7 @@ Our journey of reimagining how people interact with data and numbers just began!
 
 Right now only simple use cases are possible on our editor, we are looking forward to expanding our features alongside our community.
 
-For examples of what is possible and inspiration [click here](/get-inspiration).
+For examples of what is possible and inspiration [click here](/examples/).
 
 ---
 

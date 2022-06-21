@@ -111,7 +111,7 @@ export const NotebookTopbar = ({
           <div css={linksStyles}>
             <em css={helpLinkStyles}>
               <Anchor
-                href={docs({}).page({ name: 'get-inspiration' }).$}
+                href={docs({}).page({ name: 'examples' }).$}
                 // Analytics
                 onClick={() =>
                   clientEvent({

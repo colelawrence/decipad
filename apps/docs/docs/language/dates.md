@@ -2,7 +2,7 @@
 sidebar_position: 65
 ---
 
-# Time
+# Dates
 
 Decipad tries to capture time in a natural way for people.
 

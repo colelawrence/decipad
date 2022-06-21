@@ -156,3 +156,9 @@ BooksRead = {
 stepgrowth(BooksRead.Total)
 ==> [ 15, -3, 13, -5 ]
 ```
+
+## Trignometric 
+
+### sin / asin
+### cos / acos
+### tan / atan

@@ -1,8 +1,8 @@
 ---
-sidebar_position: 300
+sidebar_position: 6
 ---
 
-# Gallery
+# Examples
 
 We've created a collection of example notebooks to inspire your imagination. 
 
@@ -19,7 +19,7 @@ export const Card =({children,title,description,img,notebook}) => (
 </a>
 );
 
-## Subjects
+## Topics
 
 <gridContainer style= {{  
 display: "flex",

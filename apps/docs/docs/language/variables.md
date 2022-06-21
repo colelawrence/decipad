@@ -47,3 +47,7 @@ Beans = 1 bean
 MoreBeans = beans + 1
 ==> 2 beans
 ```
+
+## Constants
+
+The Language supports some contants by default such as π (pi) and e (Euler's numbers).
