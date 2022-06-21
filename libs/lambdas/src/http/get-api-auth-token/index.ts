@@ -56,7 +56,6 @@ export const handler = handle(
           firstCompleteCredential.secret,
           purpose
         );
-        console.log('GENERATED NEW TOKEN:', token);
         return token;
       }
       if (firstCompleteCredential.secret) {

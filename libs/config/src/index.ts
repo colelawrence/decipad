@@ -71,6 +71,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_SES_ACCESS_KEY_ID);
     case 'DECI_SES_SECRET_ACCESS_KEY':
       return valueOrDefault(name, process.env.DECI_SES_SECRET_ACCESS_KEY);
+    case 'DECI_TEST_USER_SECRET':
+      return valueOrDefault(name, process.env.DECI_TEST_USER_SECRET);
     case 'DISCORD_APP_ID':
       return valueOrDefault(name, process.env.DISCORD_APP_ID);
     case 'DISCORD_PUBLIC_KEY':
@@ -138,6 +140,7 @@ export function auth() {
       secret: env('JWT_SECRET'),
       maxAge: Number(env('JWT_MAX_AGE')),
     },
+    testUserSecret: env('DECI_TEST_USER_SECRET'),
   };
 }
 

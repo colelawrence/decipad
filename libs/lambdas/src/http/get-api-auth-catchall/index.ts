@@ -1,8 +1,16 @@
 import { HttpRequest } from '@architect/functions';
-import Auth from '../../auth-flow';
+import { auth as authConfig } from '@decipad/config';
+import { createAuthHandler, testUserAuth } from '../../auth-flow';
 
-const auth = Auth();
+const auth = createAuthHandler();
+const testUserPath = `/api/auth/${authConfig().testUserSecret}`;
 
-export const handler = async (req: HttpRequest) => {
+type RequestWithRawPath = HttpRequest & { rawPath?: string };
+
+export const handler = async (req: RequestWithRawPath) => {
+  if (req.rawPath === testUserPath) {
+    return testUserAuth();
+  }
+
   return auth(req);
 };

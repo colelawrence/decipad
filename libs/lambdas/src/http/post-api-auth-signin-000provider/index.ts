@@ -1,7 +1,7 @@
 import { HttpRequest } from '@architect/functions';
-import Auth from '../../auth-flow';
+import { createAuthHandler } from '../../auth-flow';
 
-const auth = Auth();
+const auth = createAuthHandler();
 
 export const handler = async (req: HttpRequest) => {
   return auth(req);

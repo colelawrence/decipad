@@ -7,7 +7,10 @@ import {
 } from '@decipad/services/users';
 import { isAllowedToLogIn } from './is-allowed';
 
-export async function signInEmail(user: UserWithSecret, account: Account) {
+export async function signInEmail(
+  user: UserWithSecret & { provider?: string; providerId?: string },
+  account: Account
+) {
   const { email } = user;
   if (!email || !(await isAllowedToLogIn(email))) {
     return false;

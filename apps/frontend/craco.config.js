@@ -77,4 +77,9 @@ module.exports = {
       return config;
     },
   },
+  devServer: {
+    open: [
+      'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
+    ],
+  },
 };
