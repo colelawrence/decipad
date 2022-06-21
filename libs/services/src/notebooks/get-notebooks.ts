@@ -37,7 +37,7 @@ export const getNotebooks = async ({
 
   let items: PadRecord[] = [];
   for (let i = 0; i < notebookIds.length; i += 99) {
-    const notebookIdsSlice = notebookIds.slice(i, 99);
+    const notebookIdsSlice = notebookIds.slice(i, i + 99);
     // eslint-disable-next-line no-await-in-loop
     const sliceItems = await data.pads.batchGet(notebookIdsSlice);
     items = items.concat(sliceItems);
