@@ -18,12 +18,6 @@ const backCallFromError: Record<string, string> = {
   Verification: 'Click here to request a new one',
 };
 
-const defaultErrorMessage = [
-  "Sorry, some error happened, we're not sure why.",
-  'Please contact support.',
-  'Sorry again!',
-];
-
 export const ErrorPage: FC<
   Omit<ComponentProps<typeof ErrorPageUi>, 'authenticated'>
 > = (props) => {
@@ -33,7 +27,7 @@ export const ErrorPage: FC<
     typeof backUrlFromError &
     typeof backCallFromError);
 
-  const messages = messagesFromError[errorCode] || defaultErrorMessage;
+  const messages = messagesFromError[errorCode];
 
   const { data: session } = useSession();
 
