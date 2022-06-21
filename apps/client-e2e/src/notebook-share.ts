@@ -2,7 +2,7 @@ import percySnapshot from '@percy/playwright';
 import type { Page } from 'playwright';
 import waitForExpect from 'wait-for-expect';
 import { setUp, waitForEditorToLoad } from './page-utils/Pad';
-import { withNewUser } from './utils';
+import { withTestUser } from './utils';
 
 waitForExpect.defaults.interval = 1000;
 let link: string;
@@ -41,7 +41,7 @@ describe('notebook share', () => {
     otherUserPage = await newContext.newPage();
 
     // Meet Bob, a new user. Bob, go do your thing.
-    await withNewUser(newContext);
+    await withTestUser({ ctx: newContext, p: otherUserPage });
 
     await otherUserPage.goto(link);
     await waitForEditorToLoad(otherUserPage);

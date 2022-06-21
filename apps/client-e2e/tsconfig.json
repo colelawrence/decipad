@@ -7,11 +7,8 @@
   "include": ["src", "src/__fixtures__/*.json"],
   "files": ["./testConfig.js"],
   "references": [
-    { "path": "../../libs/services" },
-    { "path": "../../libs/tables" },
-    { "path": "../../libs/backendtypes" },
+    { "path": "../../libs/config" },
     { "path": "../../libs/utils" },
-    { "path": "../../libs/services" },
     { "path": "../../libs/initial-workspace" }
   ]
 }

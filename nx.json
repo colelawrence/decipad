@@ -90,7 +90,7 @@
     },
     "client-e2e": {
       "tags": [],
-      "implicitDependencies": ["frontend", "backend"]
+      "implicitDependencies": ["frontend", "backend", "config"]
     },
     "client-events": {
       "tags": []

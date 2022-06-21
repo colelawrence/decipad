@@ -10,21 +10,23 @@ import { jwt as jwtConf } from '@decipad/services/authentication';
 import { isAllowedToLogIn } from './is-allowed';
 import { UserInput } from '../types';
 
-const testUserEmail = 'test@decipad.com';
+const defaultTestUserEmail = 'test@decipad.com';
 const isSecureCookie =
   process.env.NEXTAUTH_URL && process.env.NEXTAUTH_URL.startsWith('https:');
 const tokenCookieName = isSecureCookie
   ? '__Secure-next-auth.session-token'
   : 'next-auth.session-token';
 
-export const testUserAuth = async (): Promise<HttpResponse> => {
-  if (!isAllowedToLogIn(testUserEmail)) {
+export const testUserAuth = async (url: URL): Promise<HttpResponse> => {
+  const email = url.searchParams.get('email') || defaultTestUserEmail;
+  if (!(await isAllowedToLogIn(email))) {
     throw badRequest();
   }
+  console.log('TEST USER AUTH', email);
 
   let existingUser;
   const data = await tables();
-  const userKeyId = `email:${testUserEmail}`;
+  const userKeyId = `email:${email}`;
   const userKey = await data.userkeys.get({ id: userKeyId });
 
   if (userKey) {
@@ -32,7 +34,7 @@ export const testUserAuth = async (): Promise<HttpResponse> => {
   }
   if (existingUser) {
     const userInput: Partial<UserInput> = {
-      email: testUserEmail,
+      email,
     };
     if (!existingUser.name) {
       userInput.name = userInput.email as string | undefined;
@@ -45,8 +47,8 @@ export const testUserAuth = async (): Promise<HttpResponse> => {
 
     existingUser = (
       await createUser({
-        name: testUserEmail,
-        email: testUserEmail,
+        name: email,
+        email,
         provider: 'email',
       })
     ).user;

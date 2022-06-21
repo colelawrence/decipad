@@ -6,7 +6,7 @@ import path from 'path';
 import { ElementHandle, Page } from 'playwright';
 import { URL } from 'url';
 import waitForExpect from 'wait-for-expect';
-import { withNewUser } from '../utils';
+import { withTestUser } from '../utils';
 
 interface Pad {
   anchor: ElementHandle;
@@ -33,7 +33,7 @@ export async function navigateToWorkspacePage() {
 }
 
 export async function setUp() {
-  await withNewUser();
+  await withTestUser();
   await navigateToWorkspacePage();
 }
 

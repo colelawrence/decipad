@@ -1,10 +1,5 @@
-import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
-import { MyValue } from '@decipad/editor-types';
-import { pads } from '@decipad/services';
-import tables from '@decipad/tables';
-import { nanoid } from 'nanoid';
 import retry from 'p-retry';
-import { timeout, withNewUser } from '../utils';
+import { timeout, withTestUser } from '../utils';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
@@ -26,29 +21,9 @@ export async function waitForEditorToLoad(browserPage = page) {
   }
 }
 
-export async function createPadFromUpdates(
-  updates: string[],
-  user: User,
-  workspace: WorkspaceRecord
-): Promise<Pad> {
-  const newPad = await pads.create(workspace.id, { name: 'test pad' }, user);
-  const data = await tables();
-  await Promise.all(
-    updates.map((update) =>
-      data.docsyncupdates.put({
-        id: `/pads/${newPad.id}`,
-        seq: `${Date.now()}:${nanoid()}`,
-        data: update,
-      })
-    )
-  );
-
-  return newPad;
-}
-
 export async function setUp(options: SetupOptions = {}) {
   const { createAndNavigateToNewPad = true } = options;
-  const newUser = await withNewUser();
+  const newUser = await withTestUser();
   await retry(
     async () => {
       await navigateToWorkspacePage();
@@ -105,20 +80,4 @@ export async function navigateToNotebookWithClassicUrl(
   await page.goto(
     `/workspaces/ignoredWorkspaceId/pads/pad-title:${notebookId}${searchParams}`
   );
-}
-
-export function createNotebook({
-  doc,
-  user,
-  workspace,
-}: {
-  doc: MyValue;
-  user: User;
-  workspace: WorkspaceRecord;
-}): Promise<Pad> {
-  return pads.importDoc({
-    workspaceId: workspace.id,
-    source: doc,
-    user,
-  });
 }

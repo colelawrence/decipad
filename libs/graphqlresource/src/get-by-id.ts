@@ -29,7 +29,6 @@ export function getById<
     if (record == null) {
       throw new UserInputError(`No such ${resource.humanName}`);
     }
-    console.log('record', record);
     if (!resource.isPublic || !resource.isPublic(record)) {
       await expectAuthenticatedAndAuthorized(
         `/${resource.resourceTypeName}/${id}`,

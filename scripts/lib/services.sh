@@ -6,6 +6,7 @@ SERVICE_PIDS=""
 
 # Kill the services at the end, placed in a trap EXIT by services_setup
 services_teardown () {
+  echo "tearing down services..."
   if [ -n "$SERVICE_PIDS" ]; then
     # Intentionally not wrapping $SERVICE_PIDS in quotes here because
     # it's an (air quotes) array. Bash will split in spaces into multiple args.
@@ -39,21 +40,13 @@ services_wait () {
 services_setup () {
   trap "services_teardown" EXIT
 
-  if services_check localhost:3000; then
-    echo " ✅ ~ frontend is already up ~ "
-  else
-    echo " ⌛ ~ frontend is down, let me start it ~ "
-    nx serve frontend &
-    SERVICE_PIDS="${SERVICE_PIDS} ${!}"
-  fi
+  echo " ⌛ ~ starting frontend... ~ "
+  nx serve frontend &
+  SERVICE_PIDS="${SERVICE_PIDS} ${!}"
 
-  if services_check localhost:3333; then
-    echo " ✅ ~ backend is already up ~ "
-  else
-    echo " ⌛ ~ backend is down, let me start it ~ "
-    nx serve backend &
-    SERVICE_PIDS="${SERVICE_PIDS} ${!}"
-  fi
+  echo " ⌛ ~ starting backend... ~ "
+  nx serve backend &
+  SERVICE_PIDS="${SERVICE_PIDS} ${!}"
 
   services_wait localhost:3333
   services_wait localhost:3000

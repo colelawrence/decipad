@@ -14,6 +14,7 @@ if [[ -z "${DECI_E2E:-}" ]]; then
 fi
 
 teardown () {
+  echo "tearing down services..."
   if [ -n "$SERVICE_PIDS" ]; then
     echo "Killing these PIDEs:" $SERVICE_PIDS
     kill -s SIGINT -- $SERVICE_PIDS

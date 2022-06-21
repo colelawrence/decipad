@@ -1,42 +1,39 @@
-import { Pad, User, WorkspaceRecord } from '@decipad/backendtypes';
 import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright';
 import {
-  createNotebook,
   getPadName,
   navigateToNotebook,
   navigateToNotebookWithClassicUrl,
   setUp,
   waitForEditorToLoad,
 } from './page-utils/Pad';
-import { withNewUser } from './utils';
+import { withTestUser } from './utils';
 import notebookSource from './__fixtures__/001-notebook';
+import { createWorkspace } from './utils/create-workspace';
+import { importNotebook } from './utils/import-notebook';
 
 describe('notebook load json', () => {
-  let user: User;
   let sharedNotebookLink: string;
   let sharedNotebookPage: Page;
-  let workspace: WorkspaceRecord;
-  let notebook: Pad;
+  let notebookId: string;
 
   beforeAll(async () => {
-    const userCreationResult = await setUp({
+    await setUp({
       createAndNavigateToNewPad: false,
     });
-    user = userCreationResult.user;
-    [workspace] = userCreationResult.workspaces;
   });
 
   beforeAll(async () => {
-    notebook = await createNotebook({
-      doc: notebookSource.children,
-      user,
-      workspace,
-    });
+    // create workspace
+    const workspaceId = await createWorkspace();
+    notebookId = await importNotebook(
+      workspaceId,
+      JSON.stringify(notebookSource)
+    );
   });
 
   it('navigates to notebook and loads it', async () => {
-    await navigateToNotebook(notebook.id);
+    await navigateToNotebook(notebookId);
     // some time for the notebook to render
     await page.waitForTimeout(1000);
     await waitForEditorToLoad();
@@ -54,7 +51,7 @@ describe('notebook load json', () => {
   });
 
   it('old-style URLs work and pass on search params', async () => {
-    await navigateToNotebookWithClassicUrl(notebook.id, '?searchParam=foo');
+    await navigateToNotebookWithClassicUrl(notebookId, '?searchParam=foo');
     // some time for the notebook to render
     await page.waitForTimeout(1000);
     await waitForEditorToLoad();
@@ -74,7 +71,7 @@ describe('notebook load json', () => {
     const newContext = await browser.newContext();
     sharedNotebookPage = await newContext.newPage();
 
-    await withNewUser(newContext);
+    await withTestUser({ ctx: newContext, p: sharedNotebookPage });
 
     await sharedNotebookPage.goto(sharedNotebookLink);
     await waitForEditorToLoad(sharedNotebookPage);

@@ -8,6 +8,17 @@ export DECI_E2E=1
 export PATH="${PATH}:${PWD}/node_modules/.bin"
 . scripts/lib/services.sh
 
+
+if services_check "localhost:3333"; then
+  echo "Detected a server already running on port 3333. Exiting."
+  exit 1
+fi
+
+if services_check "localhost:3000"; then
+  echo "Detected a server already running on port 3000. Exiting."
+  exit 1
+fi
+
 services_setup
 
 nx e2e client-e2e $@

@@ -1,7 +1,7 @@
 import percySnapshot from '@percy/playwright';
 import waitForExpect from 'wait-for-expect';
 import { setUp } from './page-utils/Home';
-import { withNewUser } from './utils/with-new-user';
+import { withTestUser } from './utils/with-test-user';
 
 beforeAll(async () => {
   await setUp();
@@ -28,7 +28,7 @@ test('should show confirmation email on login attempt', async () => {
 });
 
 test('should redirect to workspace if authenticated', async () => {
-  await withNewUser();
+  await withTestUser();
   await page.goto('/');
   await waitForExpect(async () =>
     expect(await page.isVisible('text=/Workspace/i')).toBe(true)
