@@ -113,6 +113,7 @@
     "@types/apache-arrow": "npm:@apache-arrow/ts@^8.0.0",
     "@types/lodash": "^4.14.182",
     "@udecode/plate": "^13.3.0",
+    "@udecode/plate-juice": "^13.1.0",
     "@udecode/zustood": "^1.1.1",
     "@urql/devtools": "^2.0.3",
     "@urql/exchange-graphcache": "^4.4.2",

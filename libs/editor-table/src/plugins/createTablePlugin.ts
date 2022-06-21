@@ -7,12 +7,10 @@ import {
   ELEMENT_TR,
   MyPlatePlugin,
   MyValue,
-  MyWithOverride,
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { decorateCode } from '@decipad/editor-utils';
-import { isEnabled } from '@decipad/feature-flags';
-import { TablePlugin, withTable } from '@udecode/plate';
+import { TablePlugin } from '@udecode/plate';
 import {
   Table,
   TableCaption,
@@ -36,6 +34,7 @@ import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDelete
 import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
 import { createCursorFocusPlugin } from './createCursorFocusPlugin';
 import { addColumn, addRow } from '../hooks/index';
+import { withTable } from './withTable';
 
 type Attributes =
   | {
@@ -64,9 +63,7 @@ export const createTablePlugin = (
       addRow(editor, tablePath);
     },
   },
-  withOverrides: isEnabled('TABLE_CELL_SELECTION')
-    ? (withTable as MyWithOverride)
-    : undefined,
+  withOverrides: withTable,
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createPreventDeleteTableFromCaptionPlugin(),

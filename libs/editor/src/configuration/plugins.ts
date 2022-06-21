@@ -38,6 +38,7 @@ import {
 } from '@decipad/editor-types';
 import {
   createBlockquotePlugin,
+  createDeserializeDocxPlugin,
   createDndPlugin,
   createExitBreakPlugin,
   createHeadingPlugin,
@@ -52,6 +53,7 @@ import { nanoid } from 'nanoid';
 import { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { createPowerTablePlugin } from '@decipad/editor-power-table';
+import { createJuicePlugin } from '@udecode/plate-juice';
 import { components } from './components';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
@@ -124,6 +126,10 @@ export const plugins = (computer: Computer) =>
       // error handling
       createEditorApplyErrorReporterPlugin(),
       createOperationsBlackboxPlugin(),
+
+      // deserializers
+      createDeserializeDocxPlugin(),
+      createJuicePlugin(),
     ],
     {
       components: components(computer),

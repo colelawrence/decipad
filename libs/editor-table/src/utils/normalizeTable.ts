@@ -1,22 +1,22 @@
 import {
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TABLE_VARIABLE_NAME,
   MyEditor,
   TableCaptionElement,
   TableCellElement,
+  TableColumnFormulaElement,
   TableElement,
   TableHeaderElement,
   TableRowElement,
   TableVariableNameElement,
-  TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import {
-  normalizeIdentifierElement,
   isElementOfType,
+  normalizeIdentifierElement,
 } from '@decipad/editor-utils';
 import {
   ChildOf,
@@ -35,6 +35,7 @@ import {
 import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
+import { createTableCaption } from './createTableCaption';
 
 const normalizeTableStructure = (
   editor: MyEditor,
@@ -46,17 +47,7 @@ const normalizeTableStructure = (
   if (!caption) {
     insertNodes<TableCaptionElement>(
       editor,
-      {
-        id: node.id,
-        type: ELEMENT_TABLE_CAPTION,
-        children: [
-          {
-            id: nanoid(),
-            type: ELEMENT_TABLE_VARIABLE_NAME,
-            children: [{ text: '' }],
-          },
-        ],
-      },
+      createTableCaption({ id: node.id }),
       { at: [...path, 0] }
     );
     return true;
