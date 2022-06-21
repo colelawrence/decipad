@@ -139,7 +139,10 @@ export const NotebookTopbar = ({
             </em>
           </div>
         )}
-        <NotebookAvatars usersWithAccess={usersWithAccess} />
+        <NotebookAvatars
+          isWriter={isWriter}
+          usersWithAccess={usersWithAccess}
+        />
 
         {!isWriter && hasLocalChanges && (
           <Button onClick={() => onRevertChanges()}>Revert changes</Button>

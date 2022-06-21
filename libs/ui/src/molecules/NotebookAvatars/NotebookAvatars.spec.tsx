@@ -26,6 +26,7 @@ const props: NotebookAvatarsProps = {
       permission: 'ADMIN',
     },
   ],
+  isWriter: true,
 };
 
 describe('NotebookAvatars Molecule', () => {
@@ -37,7 +38,7 @@ describe('NotebookAvatars Molecule', () => {
     expect(container).toHaveTextContent('C');
   });
 
-  it("renders the users' names and role inside tooltip", async () => {
+  it("renders the users' names and role inside tooltip when in writer mode", async () => {
     render(<NotebookAvatars {...props} />);
 
     expect(screen.queryByText('Chris Doe')).toBeNull();

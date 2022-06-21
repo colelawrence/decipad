@@ -46,32 +46,43 @@ const tooltipRoleStyles = css({
 });
 
 export interface NotebookAvatarsProps {
+  isWriter?: boolean;
   usersWithAccess?: NotebookAvatar[] | null;
 }
 
 export const NotebookAvatars = ({
+  isWriter,
   usersWithAccess,
 }: NotebookAvatarsProps): ReturnType<FC> => {
   return (
     <div css={avatarsWrapperStyles}>
-      {usersWithAccess?.map((avatar) => (
-        <Tooltip
-          key={avatar.user.id}
-          trigger={
-            <div css={avatarStyles}>
-              <Avatar
-                name={avatar.user.name}
-                greyedOut={avatar.permission !== 'ADMIN'}
-              />
+      {usersWithAccess?.map((avatar) =>
+        isWriter ? (
+          <Tooltip
+            key={avatar.user.id}
+            trigger={
+              <div css={avatarStyles}>
+                <Avatar
+                  name={avatar.user.name}
+                  greyedOut={avatar.permission !== 'ADMIN'}
+                />
+              </div>
+            }
+          >
+            <div css={{ textAlign: 'center' }}>
+              <p css={tooltipNameStyles}>{avatar.user.name}</p>
+              <p css={tooltipRoleStyles}>{genRole(avatar.permission)}</p>
             </div>
-          }
-        >
-          <div css={{ textAlign: 'center' }}>
-            <p css={tooltipNameStyles}>{avatar.user.name}</p>
-            <p css={tooltipRoleStyles}>{genRole(avatar.permission)}</p>
+          </Tooltip>
+        ) : (
+          <div css={avatarStyles}>
+            <Avatar
+              name={avatar.user.name}
+              greyedOut={avatar.permission !== 'ADMIN'}
+            />
           </div>
-        </Tooltip>
-      ))}
+        )
+      )}
     </div>
   );
 };
