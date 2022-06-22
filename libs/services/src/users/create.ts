@@ -31,21 +31,22 @@ async function createInitialWorkspace(
     user
   );
 
-  const notebooks = await Promise.all(
-    initialWorkspace.notebooks.map(async (notebook) => {
-      const pad = await createPad(
-        workspace.id,
-        {
-          name: notebook.title,
-          icon: notebook.icon,
-        },
-        user
-      );
+  const notebooks = [];
+  /* eslint-disable no-await-in-loop */
+  for (const notebook of initialWorkspace.notebooks) {
+    const pad = await createPad(
+      workspace.id,
+      {
+        name: notebook.title,
+        icon: notebook.icon,
+      },
+      user
+    );
 
-      await createContent(pad.id, notebook.content.children as MyElement[]);
-      return pad;
-    })
-  );
+    await createContent(pad.id, notebook.content.children as MyElement[]);
+    notebooks.push(pad);
+  }
+  /* eslint-enable no-await-in-loop */
 
   return {
     workspaces: [workspace],
