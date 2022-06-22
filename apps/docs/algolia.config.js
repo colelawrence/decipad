@@ -4,7 +4,7 @@ const configs = {
   'docs.dev.decipad.com': {
     appId: 'TV8XZ0RFSZ',
     // Public API key: it is safe to commit it
-    apiKey: '994009e9b8a6e0dbd2a5880df9ba4365',
+    apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.dev.decipad.com',
   },
   'docs.alpha.decipad.com': {
