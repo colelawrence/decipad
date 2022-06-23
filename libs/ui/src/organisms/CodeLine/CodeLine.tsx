@@ -89,6 +89,7 @@ const expandedResultStyles = css(p14Medium, {
   gridArea: 'expanded-res',
   display: 'grid',
   marginTop: '4px',
+  overflowX: 'auto',
 });
 
 const grabbingStyles = css({

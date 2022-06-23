@@ -8,10 +8,13 @@ import { tableRowCounter } from '../../utils';
 import { useMergedRef } from '../../hooks';
 
 const lineNumberWidth = '22px';
+const minTdWidth = '80px';
 
 const tdBaseStyles = css(p14Medium, {
   overflow: 'visible',
   alignItems: 'center',
+  whiteSpace: 'nowrap',
+  minWidth: minTdWidth,
 
   background: cssVar('backgroundColor'),
 
@@ -24,6 +27,7 @@ const tdBaseStyles = css(p14Medium, {
 const tdPlaceholderStyles = css({
   // Show line numbers on the first cell of each row.
   position: 'relative',
+  minWidth: '0',
 
   '&:first-of-type': {
     paddingLeft: '34px',

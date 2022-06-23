@@ -10,8 +10,8 @@ import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 const numberResultStyles = css({
-  wordBreak: 'break-all',
-  userSelect: 'all',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
 });
 
 const DECIMAL_PLACES_TEST_JUMP = 10;

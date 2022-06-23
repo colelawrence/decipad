@@ -3,8 +3,10 @@ import { FC } from 'react';
 import { CheckboxSelected, CheckboxUnselected } from '../../icons';
 import { CodeResultProps } from '../../types';
 
-const numberResultStyles = css({
-  wordBreak: 'break-all',
+const booleanResultStyles = css({
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+
   '> svg': {
     width: '16px',
     height: '16px',
@@ -15,7 +17,7 @@ export const BooleanResult = ({
   value,
 }: CodeResultProps<'boolean'>): ReturnType<FC> => {
   return (
-    <span css={numberResultStyles} contentEditable={false}>
+    <span css={booleanResultStyles} contentEditable={false}>
       {value ? <CheckboxSelected /> : <CheckboxUnselected />}
     </span>
   );

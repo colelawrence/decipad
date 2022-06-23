@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { ConnectDropTarget } from 'react-dnd';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
-import { slimBlockWidth } from '../../styles/editor-layout';
 import { tableControlWidth } from '../../styles/table';
 
 const border = `1px solid ${cssVar('strongHighlightColor')}`;
@@ -18,7 +17,6 @@ const tableBaseStyles = css({
   tableLayout: 'auto',
   counterReset: tableRowCounter,
   width: '100%',
-  maxWidth: slimBlockWidth,
 });
 
 const wideTableStyles = css({
