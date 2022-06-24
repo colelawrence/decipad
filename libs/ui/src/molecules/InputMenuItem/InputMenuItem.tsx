@@ -41,7 +41,7 @@ const inputStyles = css(p13Medium, {
   margin: '2px 0',
 
   width: 0, // Override vendor default width so flex basis can apply
-  flex: '0 1 40%',
+  flex: '0 1 50%',
 
   background: cssVar('highlightColor'),
 });
@@ -57,7 +57,8 @@ interface InputMenuItemProps {
   readonly error?: string;
   readonly label?: string;
   readonly onChange?: (value: string) => void;
-  readonly placeholder?: string;
+  readonly pattern?: InputHTMLAttributes<HTMLInputElement>['pattern'];
+  readonly placeholder?: InputHTMLAttributes<HTMLInputElement>['placeholder'];
   readonly type?: InputHTMLAttributes<HTMLInputElement>['type'];
   readonly value?: InputHTMLAttributes<HTMLInputElement>['value'];
 }
@@ -66,8 +67,9 @@ export const InputMenuItem = ({
   error,
   label,
   onChange = noop,
+  pattern,
   placeholder,
-  type,
+  type = 'text',
   value,
 }: InputMenuItemProps): ReturnType<FC> => {
   const input = (
@@ -79,6 +81,7 @@ export const InputMenuItem = ({
         e.stopPropagation();
       }}
       onChange={(e) => onChange(e.target.value)}
+      pattern={pattern}
       placeholder={placeholder}
       type={type}
       value={value}
@@ -94,13 +97,12 @@ export const InputMenuItem = ({
     >
       <div css={menuItemStyles}>
         {label && <span css={labelStyles}>{label}</span>}
-        {error ? (
-          <Tooltip trigger={input}>
-            <p>{error}</p>
-          </Tooltip>
-        ) : (
-          input
-        )}
+        {/* Tooltip is always rendered and explicitly set to not opened when 
+            there's no error to avoid changing the DOM tree and losing focus on 
+            the input */}
+        <Tooltip open={error ? undefined : false} trigger={input}>
+          <p>{error}</p>
+        </Tooltip>
       </div>
     </MenuItem>
   );

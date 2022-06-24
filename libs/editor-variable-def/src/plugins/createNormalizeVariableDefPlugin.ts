@@ -7,13 +7,12 @@ import {
   ELEMENT_VARIABLE_DEF,
   ExpressionElement,
   MyEditor,
-  MyElement,
   MyNode,
   MyNodeEntry,
   SliderElement,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { deleteText, insertNodes, setNodes } from '@udecode/plate';
+import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
 import { isElementOfType } from '@decipad/editor-utils';
 
 const allowableVariant = new Set(['expression', 'slider']);
@@ -45,26 +44,40 @@ const normalize =
     }
 
     if (node.children[0].type !== ELEMENT_CAPTION) {
-      deleteText(editor, {
+      removeNodes(editor, {
         at: [...path, 0],
       });
       return true;
     }
 
-    if (node.children.length < 2) {
-      if (!node.variant || node.variant === 'expression') {
-        insertNodes<ExpressionElement>(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_EXPRESSION,
-            children: [{ text: '' }],
-          },
-          { at: [...path, 1] }
-        );
-        return true;
-      }
-      if (node.variant === 'slider') {
+    if (
+      node.children.length < 2 &&
+      (node.variant === 'expression' || node.variant === 'slider')
+    ) {
+      insertNodes<ExpressionElement>(
+        editor,
+        {
+          id: nanoid(),
+          type: ELEMENT_EXPRESSION,
+          children: [{ text: '' }],
+        },
+        { at: [...path, 1] }
+      );
+      return true;
+    }
+
+    if (
+      node.children[1].type !== ELEMENT_EXPRESSION &&
+      (node.variant === 'expression' || node.variant === 'slider')
+    ) {
+      removeNodes(editor, {
+        at: [...path, 1],
+      });
+      return true;
+    }
+
+    if (node.variant === 'slider') {
+      if (node.children.length < 3) {
         insertNodes<SliderElement>(
           editor,
           {
@@ -76,22 +89,17 @@ const normalize =
             value: '0',
             children: [{ text: '' }],
           },
-          { at: [...path, 1] }
+          { at: [...path, 2] }
         );
         return true;
       }
-    }
 
-    if (
-      (node.variant === 'expression' &&
-        (node.children[1] as MyElement).type !== ELEMENT_EXPRESSION) ||
-      (node.variant === 'slider' &&
-        (node.children[1] as MyElement).type !== ELEMENT_SLIDER)
-    ) {
-      deleteText(editor, {
-        at: [...path, 1],
-      });
-      return true;
+      if (node.children[2].type !== ELEMENT_SLIDER) {
+        removeNodes(editor, {
+          at: [...path, 2],
+        });
+        return true;
+      }
     }
 
     return false;

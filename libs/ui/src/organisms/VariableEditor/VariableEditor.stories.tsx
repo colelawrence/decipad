@@ -1,7 +1,8 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { VariableEditor } from './VariableEditor';
-import { Caption, Expression, VariableSlider } from '../../molecules';
+import { Caption, Expression } from '../../molecules';
+import { Slider } from '../../atoms';
 
 export default {
   title: 'Organisms / Editor / Variable Editor',
@@ -23,7 +24,8 @@ export const SliderVariant: Story<
   return (
     <VariableEditor variant="slider">
       <Caption>Variable</Caption>
-      <VariableSlider value="5" max="10" min="0" step="1" />
+      <Expression>5 km^2</Expression>
+      <Slider value="5" max="10" min="0" step="1" />
     </VariableEditor>
   );
 };

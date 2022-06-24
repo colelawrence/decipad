@@ -22,6 +22,7 @@ import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlug
 import { createEnterOnExpressionPlugin } from './createEnterOnExpressionPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
+import { createSliderExpressionSyncPlugin } from './createSliderExpressionSyncPlugin';
 
 export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
@@ -114,5 +115,6 @@ export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
       ),
     },
     createNormalizeSliderPlugin(),
+    createSliderExpressionSyncPlugin(),
   ],
 });

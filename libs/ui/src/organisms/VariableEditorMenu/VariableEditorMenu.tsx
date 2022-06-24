@@ -1,6 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 import { noop } from '@decipad/utils';
 import { isEnabled } from '@decipad/feature-flags';
+import { tokenRules } from '@decipad/language';
 import { MenuItem, MenuSeparator } from '../../atoms';
 import { InputMenuItem, MenuList } from '../../molecules';
 
@@ -46,27 +47,27 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
     {variant === 'slider' && [
       <InputMenuItem
         error={
-          max != null && min != null && Number(max) < Number(min)
-            ? `Must be bigger than ${min}`
-            : undefined
-        }
-        key="max"
-        label="Maximum value"
-        onChange={onChangeMax}
-        type="number"
-        value={max}
-      />,
-      <InputMenuItem
-        error={
           max != null && min != null && Number(min) > Number(max)
             ? `Must be lower than ${max}`
             : undefined
         }
         key="min"
-        label="Minimum value"
+        label="Minimum"
         onChange={onChangeMin}
-        type="number"
+        pattern={tokenRules.main.number.source}
         value={min}
+      />,
+      <InputMenuItem
+        error={
+          max != null && min != null && Number(max) < Number(min)
+            ? `Must be bigger than ${min}`
+            : undefined
+        }
+        key="max"
+        label="Maximum"
+        onChange={onChangeMax}
+        pattern={tokenRules.main.number.source}
+        value={max}
       />,
       <InputMenuItem
         error={
@@ -81,7 +82,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         key="step"
         label="Step"
         onChange={onChangeStep}
-        type="number"
+        pattern={tokenRules.main.number.source}
         value={step}
       />,
       <MenuSeparator key="sep" />,

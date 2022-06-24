@@ -42,42 +42,6 @@ it.each(['max', 'min', 'step', 'value'] as const)(
   }
 );
 
-it('normalizes value to be below max', () => {
-  editor.children = [
-    expectedSliderElement({ max: '10', value: '100' }) as never,
-  ];
-  normalizeEditor(editor, { force: true });
-  expect(editor.children).toMatchObject([
-    expectedSliderElement({ max: '10', value: '10' }),
-  ]);
-});
-
-it('normalizes value to be above min', () => {
-  editor.children = [expectedSliderElement({ min: '5', value: '0' }) as never];
-  normalizeEditor(editor, { force: true });
-  expect(editor.children).toMatchObject([
-    expectedSliderElement({ min: '5', value: '5' }),
-  ]);
-});
-
-it('normalizes value to be between min and max', () => {
-  editor.children = [
-    expectedSliderElement({ min: '5', max: '10', value: '0' }) as never,
-  ];
-  normalizeEditor(editor, { force: true });
-  expect(editor.children).toMatchObject([
-    expectedSliderElement({ min: '5', max: '10', value: '5' }),
-  ]);
-
-  editor.children = [
-    expectedSliderElement({ min: '5', max: '10', value: '20' }) as never,
-  ];
-  normalizeEditor(editor, { force: true });
-  expect(editor.children).toMatchObject([
-    expectedSliderElement({ min: '5', max: '10', value: '10' }),
-  ]);
-});
-
 it('does not normalize switched min and max', () => {
   editor.children = [
     expectedSliderElement({

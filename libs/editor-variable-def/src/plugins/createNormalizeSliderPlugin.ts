@@ -9,7 +9,6 @@ const normalize =
     if (isElement(node) && node.type !== ELEMENT_SLIDER) {
       return false;
     }
-
     if (!isElement(node)) {
       unwrapNodes(editor, { at: path });
       return true;
@@ -32,22 +31,6 @@ const normalize =
 
     if (typeof node.value !== 'string' || isNaN(Number(node.value))) {
       setNodes(editor, { value: '5' }, { at: path });
-      return true;
-    }
-
-    if (
-      Number(node.value) > Number(node.max) &&
-      Number(node.min) < Number(node.max)
-    ) {
-      setNodes(editor, { value: node.max }, { at: path });
-      return true;
-    }
-
-    if (
-      Number(node.value) < Number(node.min) &&
-      Number(node.min) < Number(node.max)
-    ) {
-      setNodes(editor, { value: node.min }, { at: path });
       return true;
     }
 

@@ -18,3 +18,5 @@ export { defaultComputerResults } from './defaultComputerResults';
 export { delayErrors, getDelayedBlockId } from './delayErrors';
 
 export { isSyntaxError, isBracketError } from '../utils';
+
+export { parseNumberWithUnit } from './parseNumberWithUnit';

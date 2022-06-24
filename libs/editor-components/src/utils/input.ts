@@ -41,6 +41,10 @@ const sliderInputElement = {
       children: [{ text: '' }],
     },
     {
+      type: ELEMENT_EXPRESSION,
+      children: [{ text: '' }],
+    },
+    {
       type: ELEMENT_SLIDER,
       max: '10',
       min: '0',

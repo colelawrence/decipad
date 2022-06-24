@@ -150,7 +150,7 @@ export const VariableEditor = ({
               )}
             </div>
           </div>
-          {childrenArray[1]}
+          {childrenArray.slice(1)}
         </div>
       </div>
       <div css={addNewWrapperStyles} contentEditable={false}>

@@ -131,6 +131,10 @@ describe('Variable def slider element', () => {
               children: [{ text: 'var' }],
             },
             {
+              type: ELEMENT_EXPRESSION,
+              children: [{ text: '5' }],
+            },
+            {
               type: ELEMENT_SLIDER,
               max: '10',
               min: '0',

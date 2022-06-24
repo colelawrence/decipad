@@ -74,17 +74,17 @@ export const VariableDef: PlateComponent = ({
   // Slider
   const onChangeMax = useElementMutatorCallback(
     editor,
-    (element as VariableSliderElement).children[1],
+    (element as VariableSliderElement).children[2],
     'max'
   );
   const onChangeMin = useElementMutatorCallback(
     editor,
-    (element as VariableSliderElement).children[1],
+    (element as VariableSliderElement).children[2],
     'min'
   );
   const onChangeStep = useElementMutatorCallback(
     editor,
-    (element as VariableSliderElement).children[1],
+    (element as VariableSliderElement).children[2],
     'step'
   );
 
@@ -114,9 +114,15 @@ export const VariableDef: PlateComponent = ({
           onChangeMax={onChangeMax}
           onChangeMin={onChangeMin}
           onChangeStep={onChangeStep}
-          max={(element as VariableSliderElement).children[1].max}
-          min={(element as VariableSliderElement).children[1].min}
-          step={(element as VariableSliderElement).children[1].step}
+          max={
+            element.variant === 'slider' ? element.children[2]?.max : undefined
+          }
+          min={
+            element.variant === 'slider' ? element.children[2]?.min : undefined
+          }
+          step={
+            element.variant === 'slider' ? element.children[2]?.step : undefined
+          }
           color={color as AvailableSwatchColor}
           readOnly={readOnly}
         >

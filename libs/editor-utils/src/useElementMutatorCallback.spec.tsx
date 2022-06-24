@@ -9,17 +9,19 @@ import { createTEditor, withTReact } from '@udecode/plate';
 import { useElementMutatorCallback } from './useElementMutatorCallback';
 
 describe('useElementMutatorCallback', () => {
-  const Link: React.FC<RenderElementProps> = ({
+  const Link: React.FC<RenderElementProps & { sideEffects: () => void }> = ({
     element,
     attributes,
     children,
+    sideEffects,
   }) => {
     const [text, setText] = useState('');
     const editor = useTEditorState();
     const mutateElement = useElementMutatorCallback(
       editor,
       element as LinkElement,
-      'url'
+      'url',
+      sideEffects
     );
     return (
       <div {...attributes}>
@@ -39,6 +41,7 @@ describe('useElementMutatorCallback', () => {
   };
 
   it('hook tests', async () => {
+    const sideEffects = jest.fn();
     const editor = withTReact(createTEditor());
     const { getByText, getByLabelText } = render(
       <Slate
@@ -50,7 +53,11 @@ describe('useElementMutatorCallback', () => {
         }
         onChange={noop}
       >
-        <Editable renderElement={(props) => <Link {...props} />} />
+        <Editable
+          renderElement={(props) => (
+            <Link {...props} sideEffects={sideEffects} />
+          )}
+        />
       </Slate>
     );
 
@@ -58,5 +65,6 @@ describe('useElementMutatorCallback', () => {
     await userEvent.click(getByText('mutate'));
 
     expect(editor).toHaveProperty('children.0.url', 'test');
+    expect(sideEffects).toHaveBeenCalledTimes(1);
   });
 });

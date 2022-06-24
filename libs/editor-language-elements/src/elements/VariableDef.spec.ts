@@ -56,6 +56,11 @@ describe('VariableDef slider element', () => {
           color: 'Sulu',
         },
         {
+          id: 'id3',
+          type: ELEMENT_EXPRESSION,
+          children: [{ text: '5' }],
+        },
+        {
           id: 'id2',
           type: ELEMENT_SLIDER,
           value: '5',

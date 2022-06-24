@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, InputHTMLAttributes } from 'react';
 import { offBlack, cssVar, grey700, transparency } from '../../primitives';
 
 const thumbBorderWidth = 1;
@@ -63,6 +63,7 @@ const styles = css({
 
 interface SliderProps {
   readonly onChange?: (value: string) => void;
+  readonly onFocus?: InputHTMLAttributes<HTMLInputElement>['onFocus'];
   readonly max?: string;
   readonly min?: string;
   readonly step?: string;
@@ -71,6 +72,7 @@ interface SliderProps {
 
 export const Slider = ({
   onChange = noop,
+  onFocus = noop,
   max,
   min,
   step,
@@ -80,6 +82,7 @@ export const Slider = ({
     css={styles}
     type="range"
     onChange={(e) => onChange(e.target.value)}
+    onFocus={onFocus}
     max={max}
     min={min}
     step={step}

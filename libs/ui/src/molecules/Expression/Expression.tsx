@@ -53,6 +53,7 @@ const lineStyles = css({
   whiteSpace: 'pre',
   overflow: 'hidden',
   scrollSnapAlign: 'start',
+  fontVariantNumeric: 'tabular-nums',
 });
 
 const errorContainerStyles = css({

@@ -54,7 +54,7 @@ describe('createNormalizeVariablePlugin for variable def expressions', () => {
   });
 });
 
-const sliderVarDef = (name = '', value = '0') => ({
+const sliderVarDef = (name = '', value = '') => ({
   type: ELEMENT_VARIABLE_DEF,
   variant: 'slider',
   children: [
@@ -63,11 +63,15 @@ const sliderVarDef = (name = '', value = '0') => ({
       children: [{ text: name }],
     },
     {
+      type: ELEMENT_EXPRESSION,
+      children: [{ text: value }],
+    },
+    {
       type: ELEMENT_SLIDER,
       max: '10',
       min: '0',
       step: '0.1',
-      value,
+      value: value !== '' ? value : '0',
       children: [{ text: '' }],
     },
   ],
