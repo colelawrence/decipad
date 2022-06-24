@@ -85,20 +85,22 @@ export const ErrorPage = ({
               ? 'Something went wrong'
               : 'Sorry, we did something wrong'}
           </Heading>
-          {wellKnown === '404' && (
-            <p css={subHeadingStyles}>
-              The link you tried may be broken, or the page may have been
-              removed
-            </p>
-          )}
-          {wellKnown === '500' && (
-            <p css={subHeadingStyles}>
-              Decipad isn't accessible right now. We're probably fixing this
-              right now
-            </p>
-          )}
-          {wellKnown && (
-            <p css={errorCodeStyles}>The geeks call this a {wellKnown} error</p>
+          {wellKnown === '404' ? (
+            <>
+              <p css={subHeadingStyles}>
+                The link you tried may be broken, or the page may have been
+                removed
+              </p>
+              <p css={errorCodeStyles}>The geeks call this a 404 error</p>
+            </>
+          ) : (
+            <>
+              <p css={subHeadingStyles}>
+                Decipad isn't accessible right now. We're probably fixing this
+                right now
+              </p>
+              <p css={errorCodeStyles}>The geeks call this a 500 error</p>
+            </>
           )}
         </>
       )}
