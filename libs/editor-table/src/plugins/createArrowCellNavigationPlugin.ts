@@ -13,7 +13,6 @@ import {
   setSelection,
 } from '@udecode/plate';
 import { Path } from 'slate';
-import { isEnabled } from '@decipad/feature-flags';
 
 const nextUpOrDown = (
   editor: MyEditor,
@@ -52,21 +51,19 @@ const move = (editor: MyEditor, path: Path, direction: 1 | -1): boolean => {
 export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory({
   name: 'ARROW_CELL_NAVIGATION_PLUGIN',
   plugin: (editor: MyEditor) => (event) => {
-    if (isEnabled('TABLE_CELL_SELECTION')) {
-      if (event.shiftKey) {
-        const edges: Record<string, 'top' | 'left' | 'bottom' | 'right'> = {
-          ArrowLeft: 'left',
-          ArrowRight: 'right',
-          ArrowUp: 'top',
-          ArrowDown: 'bottom',
-        };
+    if (event.shiftKey) {
+      const edges: Record<string, 'top' | 'left' | 'bottom' | 'right'> = {
+        ArrowLeft: 'left',
+        ArrowRight: 'right',
+        ArrowUp: 'top',
+        ArrowDown: 'bottom',
+      };
 
-        const edge = edges[event.key];
-        if (edge) {
-          if (moveSelectionFromCell(editor, { edge })) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
+      const edge = edges[event.key];
+      if (edge) {
+        if (moveSelectionFromCell(editor, { edge })) {
+          event.preventDefault();
+          event.stopPropagation();
         }
       }
     }

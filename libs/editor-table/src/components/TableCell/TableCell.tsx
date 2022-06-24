@@ -7,7 +7,6 @@ import {
 } from '@decipad/editor-types';
 import { atoms, molecules, organisms } from '@decipad/ui';
 import { useAtom } from 'jotai';
-import { isEnabled } from '@decipad/feature-flags';
 import { useFormulaResult } from './useFormulaResult';
 import { useIsCellSelected } from './useIsCellSelected';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
@@ -63,9 +62,7 @@ export const TableCell: PlateComponent = ({
         <atoms.ColumnDropLine dropDirection={direction} />
       )}
       {children}
-      {isEnabled('TABLE_CELL_SELECTION') && (
-        <atoms.TableCellBackground selected={selected} />
-      )}
+      {<atoms.TableCellBackground selected={selected} />}
       {direction === 'right' && (
         <atoms.ColumnDropLine dropDirection={direction} />
       )}

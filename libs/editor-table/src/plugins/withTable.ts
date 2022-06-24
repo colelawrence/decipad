@@ -5,14 +5,11 @@ import {
   getMyEditor,
   MyWithOverride,
 } from '@decipad/editor-types';
-import { isEnabled } from '@decipad/feature-flags';
 import { isElement, withTable as withPlateTable } from '@udecode/plate';
 import { createTableCaption } from '../utils/createTableCaption';
 
 export const withTable: MyWithOverride = (editor, plugin) => {
-  if (isEnabled('TABLE_CELL_SELECTION')) {
-    editor = withPlateTable(editor, plugin);
-  }
+  editor = withPlateTable(editor, plugin);
 
   const myEditor = getMyEditor(editor);
   const { insertFragment } = myEditor;

@@ -127,7 +127,7 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         title: 'Slider',
         description: 'Let users interact with your notebook with a slider',
         icon: <Slider />,
-        enabled: isEnabled('SLIDER_ELEMENT'),
+        enabled: true,
         extraSearchTerms: ['input', 'number', 'slider', 'publish'],
       },
     ],

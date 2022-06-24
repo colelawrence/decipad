@@ -7,7 +7,6 @@ import {
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { dequal } from 'dequal';
-import { isEnabled } from '@decipad/feature-flags';
 import { tableScope } from './Table';
 
 export const useSelectedCells = () => {
@@ -25,7 +24,6 @@ export const useSelectedCells = () => {
   }, [selected, editor, setSelectedCells, readOnly]);
 
   useEffect(() => {
-    if (!isEnabled('TABLE_CELL_SELECTION')) return;
     if (readOnly) return;
 
     const cellEntries = getTableGridAbove(editor, { format: 'cell' });

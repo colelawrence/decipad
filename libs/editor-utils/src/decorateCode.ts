@@ -1,5 +1,4 @@
 import { TRange, getAboveNode, getNodeString } from '@udecode/plate';
-import { isEnabled } from '@decipad/feature-flags';
 import {
   MyDecorate,
   MyElement,
@@ -48,7 +47,6 @@ export const decorateCode =
       const { selection } = editor;
 
       if (
-        isEnabled('AUTO_COMPLETE_MENU') &&
         // Slate seems to have an issue with decorators on empty lines so we're skipping them.
         getNodeString(node).length > 0 &&
         selection?.focus?.path &&
