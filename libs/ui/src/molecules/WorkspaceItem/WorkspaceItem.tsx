@@ -11,6 +11,7 @@ const styles = css({
   flexDirection: 'column',
   justifyContent: 'space-between',
   rowGap: '4px',
+  maxWidth: '176px',
 });
 
 export interface WorkspaceItemProps {
@@ -33,7 +34,12 @@ export const WorkspaceItem = ({
         <strong
           css={css(
             p14Medium,
-            setCssVar('currentTextColor', cssVar('strongTextColor'))
+            setCssVar('currentTextColor', cssVar('strongTextColor')),
+            {
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }
           )}
         >
           {name}
