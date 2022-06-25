@@ -291,7 +291,7 @@
     "@types/webpack": "5.28.0",
     "@typescript-eslint/eslint-plugin": "5.29.0",
     "@typescript-eslint/parser": "5.29.0",
-    "@udecode/plate-test-utils": "^10.0.0",
+    "@udecode/plate-test-utils": "^13.0.0",
     "apollo-server-plugin-base": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.2",
