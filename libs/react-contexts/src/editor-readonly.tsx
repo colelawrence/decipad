@@ -1,5 +1,17 @@
-import { createContext, useContext } from 'react';
+import { noop } from '@decipad/utils';
+import { createContext, useContext, useEffect } from 'react';
 
-export const EditorReadOnlyContext = createContext(false);
+export const EditorReadOnlyContext = createContext<{
+  readOnly: boolean;
+  lockWriting: () => () => void;
+}>({
+  readOnly: false,
+  lockWriting: () => noop,
+});
 export const useIsEditorReadOnly = (): boolean =>
-  useContext(EditorReadOnlyContext);
+  useContext(EditorReadOnlyContext).readOnly;
+
+export const useLockEditorWriting = () => {
+  const { lockWriting } = useContext(EditorReadOnlyContext);
+  useEffect(lockWriting, [lockWriting]);
+};

@@ -1,4 +1,5 @@
 import waitFor from 'wait-for-expect';
+import { createCalculationBlockBelow } from './page-utils/Block';
 import {
   focusOnBody,
   goToPlayground,
@@ -37,7 +38,7 @@ const valueOfFoo = 120;
 it('inserts a magic number', async () => {
   await focusOnBody();
   await keyPress('Enter');
-  await page.keyboard.type(`Time = ${valueOfFoo} minutes`);
+  await createCalculationBlockBelow(`Time = ${valueOfFoo} minutes`);
   await keyPress('Enter');
   await page.keyboard.type('You have %Time% to live - %Time in seconds%');
   const magicNumber = await page.$$(`span[title="${valueOfFoo * 60}"]`);

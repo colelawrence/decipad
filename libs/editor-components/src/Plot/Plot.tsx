@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 import { useReadOnly } from 'slate-react';
 import {
   ELEMENT_PLOT,
@@ -13,9 +13,10 @@ import {
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
 import { usePlot } from '../utils/usePlot';
-import { PlotParamsProps } from '../../../ui/src/organisms/PlotParams/PlotParams';
 
 const DEFAULT_TITLE = 'Plot';
+
+type PlotParamsProps = ComponentProps<typeof organisms.PlotBlock>['plotParams'];
 
 export const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);

@@ -1,7 +1,6 @@
 import {
   ElementKind,
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_LINE,
   ELEMENT_CALLOUT,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -26,7 +25,6 @@ import {
   Bold,
   Callout,
   Code,
-  CodeLine,
   Divider,
   Heading1,
   Heading2,
@@ -58,9 +56,6 @@ export const components = (computer: Computer): PlateComponents => ({
   [ELEMENT_BLOCKQUOTE]: Blockquote,
   [ELEMENT_CALLOUT]: Callout,
   [ELEMENT_HR]: Divider,
-
-  // Code
-  [ELEMENT_CODE_LINE]: CodeLine,
 
   // Lists
   [ELEMENT_UL]: UnorderedList,

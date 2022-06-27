@@ -1,23 +1,25 @@
+import { ReactEditor } from 'slate-react';
+import { LoadingFilter } from '@decipad/ui';
 import {
   ComputerContextProvider,
   EditorChangeContextProvider,
+  EditorReadOnlyContext,
   ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
-import { Plate } from '@udecode/plate';
+import { Plate, createPlateEditor } from '@udecode/plate';
 import { FC, useCallback, useMemo, useState } from 'react';
-import { MyPlateProps, MyValue } from '@decipad/editor-types';
+import { MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import { Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
 import { POPULATE_PLAYGROUND } from './utils/storage';
+import { useWriteLock } from './utils/useWriteLock';
 
 const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 
-export const NoDocSyncEditorInternal = (
-  props: MyPlateProps
-): ReturnType<FC> => {
+export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
 
   const editorPlugins = useMemo(
@@ -25,36 +27,50 @@ export const NoDocSyncEditorInternal = (
     [computer]
   );
 
+  const [editor] = useState(() =>
+    createPlateEditor<MyValue>({ plugins: editorPlugins })
+  );
+
   const [changeSubject] = useState(() => new Subject<undefined>());
   const onChange = useCallback(() => {
     changeSubject.next(undefined);
   }, [changeSubject]);
 
+  const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
+
   return (
     <ResultsContext.Provider value={computer.results.asObservable()}>
       <EditorChangeContextProvider changeSubject={changeSubject}>
-        <Plate<MyValue>
-          id={NO_DOC_SYNC_EDITOR_ID}
-          plugins={editorPlugins}
-          onChange={onChange}
-          initialValue={
-            window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-              ? introNotebook()
-              : emptyNotebook()
-          }
-          {...props}
+        <EditorReadOnlyContext.Provider
+          value={{ readOnly: isWritingLocked, lockWriting }}
         >
-          <Tooltip />
-        </Plate>
+          <LoadingFilter loading={isWritingLocked}>
+            <Plate<MyValue>
+              id={NO_DOC_SYNC_EDITOR_ID}
+              editor={editor}
+              onChange={onChange}
+              initialValue={
+                window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+                  ? introNotebook()
+                  : emptyNotebook()
+              }
+              editableProps={{
+                readOnly: isWritingLocked,
+              }}
+            >
+              <Tooltip />
+            </Plate>
+          </LoadingFilter>
+        </EditorReadOnlyContext.Provider>
       </EditorChangeContextProvider>
     </ResultsContext.Provider>
   );
 };
 
-export const NoDocSyncEditor = (props: MyPlateProps): ReturnType<FC> => {
+export const NoDocSyncEditor: FC = () => {
   return (
     <ComputerContextProvider>
-      <NoDocSyncEditorInternal {...props} />
+      <NoDocSyncEditorInternal />
     </ComputerContextProvider>
   );
 };

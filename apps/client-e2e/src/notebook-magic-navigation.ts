@@ -1,3 +1,4 @@
+import { createCalculationBlockBelow } from './page-utils/Block';
 import {
   goToPlayground,
   keyPress,
@@ -14,7 +15,7 @@ describe('notebook navigation', () => {
     await page.keyboard.type('Price is %Price');
     await page.keyboard.type('%');
     await keyPress('Enter');
-    await page.keyboard.type('Fees = 500 gbp');
+    await createCalculationBlockBelow('Fees = 500 gbp');
 
     expect(
       await page.waitForSelector('text=Should you buy a house?')

@@ -5,7 +5,7 @@ import {
   ELEMENT_UL,
   PlateComponent,
 } from '@decipad/editor-types';
-import { noop } from '@decipad/utils';
+import { noop, thro } from '@decipad/utils';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
@@ -76,7 +76,12 @@ describe('when editor is in readOnly mode', () => {
       editableProps: { ...plateProps.editableProps, readOnly: true },
     };
     const { queryByTitle } = render(
-      <EditorReadOnlyContext.Provider value={true}>
+      <EditorReadOnlyContext.Provider
+        value={{
+          readOnly: true,
+          lockWriting: () => thro(new Error('not implemented, see: useWriteLock')),
+        }}
+      >
         <Plate {...props} editor={editor} />
       </EditorReadOnlyContext.Provider>,
       {

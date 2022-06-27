@@ -7,7 +7,6 @@ import {
 } from '@decipad/notebook-state';
 import {
   ComputerContextProvider,
-  EditorReadOnlyContext,
   ResultsContext,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
@@ -122,16 +121,14 @@ const InsideNotebookState = ({
   return (
     (editor && (
       <ComputerContextProvider computer={computer}>
-        <EditorReadOnlyContext.Provider value={readOnly}>
-          <ResultsContext.Provider value={computerObservable || EMPTY}>
-            <Editor
-              notebookId={notebookId}
-              loaded={loadedFromRemote || timedOutLoadingFromRemote}
-              editor={editor}
-              readOnly={readOnly}
-            />
-          </ResultsContext.Provider>
-        </EditorReadOnlyContext.Provider>
+        <ResultsContext.Provider value={computerObservable || EMPTY}>
+          <Editor
+            notebookId={notebookId}
+            loaded={loadedFromRemote || timedOutLoadingFromRemote}
+            editor={editor}
+            readOnly={readOnly}
+          />
+        </ResultsContext.Provider>
       </ComputerContextProvider>
     )) ||
     null
