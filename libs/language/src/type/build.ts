@@ -6,20 +6,19 @@ import { getDefined } from '../utils';
 import { Unit, Units, units } from './unit-type';
 import { timeUnitFromUnit } from '../date';
 
-// "scalar" is a legacy name
-export const scalar = (type: PrimitiveTypeName) =>
+const primitive = (type: PrimitiveTypeName) =>
   produce(new Type(), (t) => {
     t.type = type;
   });
 
 export const number = (unit: Units | Unit[] | null = null) =>
-  produce(scalar('number'), (t) => {
+  produce(primitive('number'), (t) => {
     t.unit = Array.isArray(unit) ? units(...unit) : unit;
   });
 
-export const string = () => scalar('string');
+export const string = () => primitive('string');
 
-export const boolean = () => scalar('boolean');
+export const boolean = () => primitive('boolean');
 
 export const range = (rangeContents: Type) =>
   produce(new Type(), (t) => {
@@ -32,7 +31,7 @@ export const date = (specificity: Time.Specificity) =>
   });
 
 export const timeQuantity = (timeUnits: (Unit | string)[]) =>
-  produce(scalar('number'), (numberType) => {
+  produce(primitive('number'), (numberType) => {
     numberType.unit = {
       type: 'units',
       args: timeUnits.map((unit) => ({
@@ -51,39 +50,40 @@ interface BuildTableArgs {
   columnNames: string[];
 }
 
+// TODO: use produce
 export const table = ({
   indexName,
   length,
   columnTypes,
   columnNames,
 }: BuildTableArgs) => {
-  const t = new Type();
+  const tableT = produce(new Type(), (t) => {
+    t.indexName = indexName ?? null;
+    t.tableLength = length;
+    t.columnTypes = columnTypes;
+    t.columnNames = columnNames;
+  });
 
-  t.indexName = indexName ?? null;
-  t.tableLength = length;
-  t.columnTypes = columnTypes;
-  t.columnNames = columnNames;
-
-  const errored = t.columnTypes.find((t) => t.errorCause != null);
+  const errored = tableT.columnTypes?.find((t) => t.errorCause != null);
   if (errored != null) {
-    return t.withErrorCause(getDefined(errored.errorCause));
+    return tableT.withErrorCause(getDefined(errored.errorCause));
   } else {
-    return t;
+    return tableT;
   }
 };
 
 export const row = (cells: Type[], cellNames: string[]) => {
-  const t = new Type();
+  const rowT = produce(new Type(), (t) => {
+    t.rowCellTypes = cells;
+    t.rowCellNames = cellNames;
+  });
 
-  t.rowCellTypes = cells;
-  t.rowCellNames = cellNames;
-
-  const errored = t.rowCellTypes.find((t) => t.errorCause != null);
+  const errored = rowT.rowCellTypes?.find((t) => t.errorCause != null);
 
   if (errored != null) {
-    return t.withErrorCause(getDefined(errored.errorCause));
+    return rowT.withErrorCause(getDefined(errored.errorCause));
   } else {
-    return t;
+    return rowT;
   }
 };
 
@@ -93,17 +93,17 @@ export const column = (
   indexedBy?: string | null,
   atParentIndex?: number | null
 ) => {
-  const t = new Type();
-
-  t.indexedBy = indexedBy ?? null;
-  t.cellType = cellType;
-  t.columnSize = columnSize;
-  t.atParentIndex = atParentIndex ?? null;
+  const colT = produce(new Type(), (t) => {
+    t.indexedBy = indexedBy ?? null;
+    t.cellType = cellType;
+    t.columnSize = columnSize;
+    t.atParentIndex = atParentIndex ?? null;
+  });
 
   if (cellType.errorCause != null) {
-    return t.withErrorCause(cellType.errorCause);
+    return colT.withErrorCause(cellType.errorCause);
   } else {
-    return t;
+    return colT;
   }
 };
 

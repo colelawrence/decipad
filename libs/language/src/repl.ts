@@ -1,5 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
 import repl from 'repl';
+import chalk from 'chalk';
 
 import { AST } from '.';
 import { parseBlock } from './parser';
@@ -33,7 +34,7 @@ async function execDeci(ast: AST.Block) {
 
     const value = await runBlock(ast, realm);
 
-    return stringifyResult(value, type);
+    return stringifyResult(value, type, chalk.blue);
   } catch (error) {
     console.error(error);
     return '< Crashed >';

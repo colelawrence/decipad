@@ -45,7 +45,7 @@ const wrap =
     return linkToAST(ctx, thing, type);
   };
 
-/*
+/**
  Walk depth-first into an expanded AST.Expression, collecting the type of things beneath and checking it against the current iteration's constraints.
 
  Given a literal, this type is always known (barring casting).
@@ -53,7 +53,7 @@ const wrap =
  Given a condition, the functor is (thentype == elsetype) and its condition must be boolean
 
  AST.Assign is special-cased by looking at its expression and returning just that
- */
+*/
 export const inferExpression = wrap(
   // exhaustive switch
   // eslint-disable-next-line consistent-return

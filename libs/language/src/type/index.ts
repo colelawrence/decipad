@@ -106,6 +106,14 @@ export class Type {
     return notErrored ?? types[0];
   }
 
+  mapType(fn: (t: Type) => Type) {
+    if (this.errorCause) {
+      return this;
+    } else {
+      return fn(this);
+    }
+  }
+
   toString({
     isTableColumn = false,
   }: { isTableColumn?: boolean } = {}): string {
@@ -147,6 +155,10 @@ export class Type {
       return this.date;
     }
 
+    if (this.nothingness) {
+      return `nothing`;
+    }
+
     const unitString = this.unit && stringifyUnits(this.unit);
 
     return unitString || `<${this.type}>`;
@@ -167,17 +179,10 @@ export class Type {
     if (this.columnSize != null) return 'column';
     if (this.columnTypes != null) return 'table';
     if (this.rowCellTypes != null) return 'row';
+    if (this.nothingness) return 'nothing';
 
     /* istanbul ignore next */
     throw new Error('toBasicString: unknown type');
-  }
-
-  mapType(fn: (t: Type) => Type) {
-    if (this.errorCause) {
-      return this;
-    } else {
-      return fn(this);
-    }
   }
 
   inNode(node: AST.Node) {

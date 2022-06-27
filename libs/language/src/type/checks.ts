@@ -32,7 +32,7 @@ export const isScalar = checker((me: Type, type: PrimitiveTypeName) => {
   if (type === me.type) {
     return me;
   } else {
-    return me.expected(t.scalar(type));
+    return me.expected(t[type]());
   }
 });
 

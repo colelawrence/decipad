@@ -155,8 +155,7 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
 
 export const resultSnapshotSerializer: jest.SnapshotSerializerPlugin = {
   test: (arg) => arg?.type instanceof Type && arg.value != null,
-  serialize: ({ type, value }) =>
-    `Result(${stringifyResult(value, type, (x) => x)})`,
+  serialize: ({ type, value }) => `Result(${stringifyResult(value, type)})`,
 };
 
 export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {

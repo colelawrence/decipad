@@ -1,5 +1,4 @@
 import util from 'util';
-import chalk from 'chalk';
 import Fraction from '@decipad/fraction';
 
 import { buildType, Interpreter } from '..';
@@ -8,11 +7,10 @@ import { stringifyDate } from '../date';
 import { Type, convertToMultiplierUnit } from '../type';
 import { validateResult } from '.';
 
-type Colorizer = (s: string) => string;
 export const stringifyResult = (
   result: Interpreter.OneResult | undefined | null,
   type: Type,
-  color: Colorizer = chalk.blue
+  color = (s: string) => s
 ): string => {
   validateResult(type, result);
 

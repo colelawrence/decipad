@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { nanoid } from 'nanoid';
 
-import { getDefined, identity } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import {
   deserializeType,
   InferError,
@@ -28,10 +28,10 @@ function resultFromComputerResult(
       if (lastResult.type.kind === 'type-error') {
         return new InferError(lastResult.type.errorCause).message;
       }
+
       return stringifyResult(
         lastResult.value,
-        deserializeType(lastResult.type),
-        identity
+        deserializeType(lastResult.type)
       );
     }
   }

@@ -41,7 +41,7 @@ describe('heightenValueDimensionsIfNecessary', () => {
     const [type, value] = heightenValueDimensionsIfNecessary(...args);
 
     return zip(type, value).map(([type, value]) =>
-      stringifyResult(value.getData(), type, (x) => x)
+      stringifyResult(value.getData(), type)
     );
   };
 

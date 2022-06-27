@@ -79,6 +79,7 @@ export const automapValues = (
     expectedCardinalities
   );
 
+  // todo necessary?
   if (!validateCardinalities(argTypes, expectedCardinalities)) {
     throw new Error('panic: one or more cardinalities are too low');
   }

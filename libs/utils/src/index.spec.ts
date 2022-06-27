@@ -73,6 +73,7 @@ it('can zip an array', () => {
 
 it('can throw an error inside of an expression', () => {
   expect(() => thro(new Error('error!'))).toThrow(/error!/);
+  expect(() => thro('error!')).toThrow(/error!/);
 });
 
 it('can unzip an array', () => {
