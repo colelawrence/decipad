@@ -43,4 +43,4 @@ date(2020-02-23 17:35:43) - date(2020-01-12 05:23:12) as milliseconds
 
 ## Functions on dates
 
-[Here is a list of all the functions that work on dates](/docs/built-in-formulas/formulas-for-dates).
+[Here is a list of all the functions that work on dates](/docs/language/built-in-formulas/formulas-for-dates).

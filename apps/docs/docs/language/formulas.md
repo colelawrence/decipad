@@ -36,4 +36,4 @@ even(10)
 
 ## Formulas on numbers
 
-[Here you can see some of the supported built-in functions](/docs/built-in-formulas/formulas-for-numbers).
+[Here you can see some of the supported built-in functions](/docs/language/built-in-formulas/formulas-for-numbers).

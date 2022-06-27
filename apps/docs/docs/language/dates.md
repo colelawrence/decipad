@@ -115,5 +115,5 @@ year = 365 days
 
 ## Formulas on dates
 
-[Here is a list of all the functions that work on dates](/docs/built-in-formulas/formulas-for-dates).
-[Read more on sequences and how they work with time](/docs/advanced-concepts/sequences).
+[Here is a list of all the functions that work on dates](/docs/language/built-in-formulas/formulas-for-dates).
+[Read more on sequences and how they work with time](/docs/language/advanced-concepts/sequences).

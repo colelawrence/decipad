@@ -16,7 +16,7 @@ fetch "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
 ```
 
 The data will be imported into a table.
-Check [the section about tables](/docs/data-organization/tables) to learn how to manipulate tables.
+Check [the section about tables](/docs/language/data-organization/tables) to learn how to manipulate tables.
 
 ## Import data from a file
 
@@ -35,7 +35,7 @@ Decipad supports the following file types:
 
 ## Name imported data
 
-Give a name to your imported data with a [variable](../language/variables):
+Give a name to your imported data with a [variable](/language/variables):
 
 ```deci live
 MyExample = fetch "https://decipad-packages.s3.eu-west-2.amazonaws.com/static/example-1.csv"
@@ -53,4 +53,4 @@ MyExample.Col2
 ==> fetch is not defined
 ```
 
-Check [the section about lists](/docs/data-organization/lists) to learn more.
+Check [the section about lists](/docs/language/data-organization/lists) to learn more.

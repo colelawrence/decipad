@@ -71,4 +71,4 @@ Use parenthesis to chain operators and define priorities
 
 ## Formulas on booleans
 
-[Here is a list of all the functions that work on booleans](/docs/built-in-formulas/formulas-for-booleans).
+[Here is a list of all the functions that work on booleans](/docs/language/built-in-formulas/formulas-for-booleans).

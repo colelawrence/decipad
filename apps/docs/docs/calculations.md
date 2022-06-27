@@ -6,7 +6,7 @@ sidebar_position: 8
 
 Currently, there is just one way of manipulating data on your notebook, and that is with calculations blocks.
 
-On the calculation block you can play with numbers and data using the [Decipad language](../language).
+On the calculation block you can play with numbers and data using the [Decipad language](/language).
 
 Other blocks such as tables and widgets are useful for data inputting and display.
 
@@ -22,7 +22,7 @@ Here's an example:
 ==> 4
 ```
 
-As you would expect, [operators](../language/numbers/arithmetic-functions) work as in any other mathematical context.
+As you would expect, [operators](/language/numbers/arithmetic-functions) work as in any other mathematical context.
 
 Each calculation block will also resume the operation result on the right for you or anyone reading to follow.
 
@@ -46,7 +46,7 @@ NameSomethingInDecipad = 300
 
 ## Language Tables
 
-If you are looking to create complex tables, you can always build your own table on a calculation block using the [Decipad language](/docs/data-organization/tables).
+If you are looking to create complex tables, you can always build your own table on a calculation block using the [Decipad language](/docs/tables).
 
 Take a look at this example:
 

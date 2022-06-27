@@ -112,4 +112,4 @@ Or even using the `not` boolean operator:
 
 ## Functions on lists
 
-[Here is a list of all the functions that work on lists](/docs/built-in-formulas/formulas-for-lists).
+[Here is a list of all the functions that work on lists](/docs/language/built-in-formulas/formulas-for-lists).

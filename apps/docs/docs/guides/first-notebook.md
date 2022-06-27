@@ -13,7 +13,7 @@ To create a notebook, go to a workspaces and clink on the `New Notebook` button 
 
 ![](https://user-images.githubusercontent.com/12210180/162472107-28945a31-5255-4bbc-83fc-8d4222816cb1.gif)
 
-A notebook can be a digital textbook or you can type `/` to add [widgets](/blocks/widgets), [calculation blocks](/blocks/calculations) or [tables](/blocks/tables) to explore data and numbers.
+A notebook can be a digital textbook or you can type `/` to add [widgets](/widgets), [calculation blocks](/calculations) or [tables](/tables) to explore data and numbers.
 
 #### Video: Creating your first Notebook
 

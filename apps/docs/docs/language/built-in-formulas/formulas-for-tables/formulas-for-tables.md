@@ -8,7 +8,7 @@ Built-in functions that operate on tables:
 
 ## lookup
 
-[Here is documentation on the lookup function](/docs/built-in-formulas/formulas-for-tables/lookups).
+[Here is documentation on the lookup function](/docs/language/built-in-formulas/formulas-for-tables/lookups).
 
 ## select
 

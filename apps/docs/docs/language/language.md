@@ -22,7 +22,7 @@ Discover the fundamental concepts:
 
 - [Units](units)
 
-- [Time](time)
+- [Dates](dates)
 
 - [Conditions](conditions)
 

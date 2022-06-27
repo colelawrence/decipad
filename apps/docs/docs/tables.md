@@ -4,7 +4,7 @@ sidebar_position: 9
 
 # Tables
 
-Learn how to organize your data using tables on: [Data Organization](../data-organization/tables)
+Learn how to organize your data using tables on: [Data Organization](/docs/language/data-organization/tables)
 
 Type `/` and select **Table** to add a table to your notebook.
 
