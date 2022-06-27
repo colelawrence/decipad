@@ -3,7 +3,7 @@ import { AST, UnparsedBlock } from '@decipad/computer';
 
 interface NameAndExpression {
   name: string;
-  expression: AST.Expression;
+  expression?: AST.Expression;
   parseErrors?: ParseError[];
 }
 

@@ -44,11 +44,23 @@ export const VariableDef = {
         }
       } else if (element.variant === 'slider') {
         const expression = getNodeString(element.children[1]);
-        return {
-          name: variableName,
-          expression: parseOneExpression(expression),
-          parseErrors,
-        };
+        try {
+          return {
+            name: variableName,
+            expression: parseOneExpression(expression),
+            parseErrors,
+          };
+        } catch (err) {
+          return {
+            name: variableName,
+            parseErrors: [
+              {
+                elementId: element.id,
+                error: (err as Error).message,
+              },
+            ],
+          };
+        }
       }
 
       return null;

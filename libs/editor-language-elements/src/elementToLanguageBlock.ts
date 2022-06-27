@@ -83,14 +83,21 @@ export const elementToLanguageBlock = (
       return null;
     }
     const { name, expression, parseErrors } = nameAndExpression;
+    if (expression) {
+      return {
+        program: [
+          {
+            type: 'parsed-block',
+            id: element.id,
+            block:
+              expression && getAssignmentBlock(element.id, name, expression),
+          },
+        ],
+        parseErrors: parseErrors ?? [],
+      };
+    }
     return {
-      program: [
-        {
-          type: 'parsed-block',
-          id: element.id,
-          block: getAssignmentBlock(element.id, name, expression),
-        },
-      ],
+      program: [],
       parseErrors: parseErrors ?? [],
     };
   }

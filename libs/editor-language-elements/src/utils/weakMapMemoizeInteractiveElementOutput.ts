@@ -3,7 +3,7 @@ import { MyEditor, MyElement } from '@decipad/editor-types';
 
 export interface OutputNode {
   name: string;
-  expression: AST.Expression;
+  expression?: AST.Expression;
 }
 
 type TransformerFn<T extends MyElement> = (
