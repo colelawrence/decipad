@@ -8,6 +8,10 @@ export const createSyntaxErrorHighlightPlugin = createTPluginFactory({
   key: DECORATE_SYNTAX_ERROR,
   isLeaf: true,
   component: (props) => (
-    <CodeErrorHighlight {...props} variant={props.leaf.variant} />
+    <CodeErrorHighlight
+      {...props}
+      variant={props.leaf.variant}
+      error={props.leaf.error}
+    />
   ),
 });

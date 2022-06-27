@@ -4,12 +4,15 @@ import {
   ELEMENT_EXPRESSION,
   VariableDefinitionElement,
   ELEMENT_SLIDER,
+  MyEditor,
 } from '@decipad/editor-types';
 import FFraction from '@decipad/fraction';
+import { createPlateEditor } from '@udecode/plate';
 import { VariableDef } from './VariableDef';
 
 describe('VariableDef expression element', () => {
   it('converts variable def expression document element into name and expression', () => {
+    const editor = createPlateEditor() as MyEditor;
     expect(VariableDef.resultsInNameAndExpression).toBe(true);
     const el = {
       id: 'id0',
@@ -30,7 +33,9 @@ describe('VariableDef expression element', () => {
         },
       ],
     } as VariableDefinitionElement;
-    expect(VariableDef.getNameAndExpressionFromElement(el)).toMatchObject({
+    expect(
+      VariableDef.getNameAndExpressionFromElement(editor, el)
+    ).toMatchObject({
       expression: {
         type: 'ref',
         args: ['expression'],
@@ -41,6 +46,7 @@ describe('VariableDef expression element', () => {
 });
 
 describe('VariableDef slider element', () => {
+  const editor = createPlateEditor() as MyEditor;
   it('converts variable def slider document element into name and expression', () => {
     expect(VariableDef.resultsInNameAndExpression).toBe(true);
     const el = {
@@ -71,7 +77,9 @@ describe('VariableDef slider element', () => {
         },
       ],
     } as VariableDefinitionElement;
-    expect(VariableDef.getNameAndExpressionFromElement(el)).toMatchObject({
+    expect(
+      VariableDef.getNameAndExpressionFromElement(editor, el)
+    ).toMatchObject({
       expression: {
         type: 'literal',
         args: ['number', new FFraction(5)],

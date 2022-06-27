@@ -1,6 +1,6 @@
 import { Computer, ComputeRequest } from '@decipad/computer';
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { documentToProgram } from '@decipad/editor-language-elements';
+import { editorToProgram } from '@decipad/editor-language-elements';
 import { Subject } from 'rxjs';
 
 export interface UpdateComputerPluginProps {
@@ -13,9 +13,7 @@ export const createUpdateComputerPlugin = (
   key: 'UPDATE_COMPUTER_PLUGIN',
   handlers: {
     onChange: (editor) => () => {
-      computer.pushCompute({
-        program: documentToProgram(editor.children),
-      });
+      computer.pushCompute(editorToProgram(editor));
     },
   },
 });

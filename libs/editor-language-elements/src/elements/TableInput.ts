@@ -3,6 +3,7 @@ import {
   ELEMENT_TABLE_INPUT,
   TableData,
   TableInputElement,
+  MyEditor,
 } from '@decipad/editor-types';
 import { AST } from '@decipad/computer';
 import {
@@ -35,7 +36,7 @@ export const TableInput: InteractiveLanguageElement = {
   type: ELEMENT_TABLE_INPUT,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
-    (element: MyElement) => {
+    (_editor: MyEditor, element: MyElement) => {
       const { tableData } = element as TableInputElement;
       if (!tableData || !tableData.variableName) return null;
       const expression = getTableNodeFromTableData(tableData);

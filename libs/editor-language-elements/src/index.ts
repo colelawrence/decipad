@@ -1,1 +1,1 @@
-export * from './documentToProgram';
+export * from './editorToProgram';

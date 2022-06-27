@@ -32,10 +32,15 @@ export type ParsedBlock = {
 export type ProgramBlock = UnparsedBlock | ParsedBlock;
 export type Program = ProgramBlock[];
 
+export interface UserParseError {
+  elementId: string;
+  error: string;
+}
 export interface ComputeRequest {
   program: Program;
   externalData?: AnyMapping<InjectableExternalData>;
   subscriptions?: string[];
+  parseErrors?: UserParseError[];
 }
 
 // User facing

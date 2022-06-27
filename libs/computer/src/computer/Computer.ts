@@ -40,6 +40,7 @@ import {
   IdentifiedResult,
   InBlockResult,
   ResultsContextItem,
+  UserParseError,
   ValueLocation,
 } from '../types';
 import {
@@ -245,6 +246,7 @@ export class Computer {
   private computing = false;
   private cursorBlockId: string | null = null;
   private requestDebounceMs: number;
+  private parseErrors: Map<string, UserParseError> = new Map();
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -375,7 +377,11 @@ export class Computer {
     );
   }
 
-  private ingestComputeRequest({ program, externalData }: ComputeRequest) {
+  private ingestComputeRequest({
+    program,
+    externalData,
+    parseErrors,
+  }: ComputeRequest) {
     const newExternalData = anyMappingToMap(externalData ?? new Map());
     const newParse = updateParse(program, this.previouslyParsed);
 
@@ -389,6 +395,12 @@ export class Computer {
     this.computationRealm.setExternalData(newExternalData);
     this.previousExternalData = newExternalData;
     this.previouslyParsed = newParse;
+
+    if (parseErrors) {
+      this.parseErrors = new Map(
+        parseErrors.map((parseError) => [parseError.elementId, parseError])
+      );
+    }
 
     return newParse;
   }
@@ -528,5 +540,9 @@ export class Computer {
 
   isExpression(statement: AST.Statement): statement is AST.Expression {
     return isExpression(statement);
+  }
+
+  getParseErrorForElement(elementId: string): UserParseError | undefined {
+    return this.parseErrors.get(elementId);
   }
 }

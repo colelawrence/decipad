@@ -1,10 +1,16 @@
-import { CodeBlockElement, ColumnsElement } from '@decipad/editor-types';
+import {
+  CodeBlockElement,
+  ColumnsElement,
+  MyEditor,
+} from '@decipad/editor-types';
 import { ParsedBlock, prettyPrintAST } from '@decipad/computer';
-import { documentToProgram } from './documentToProgram';
+import { createPlateEditor } from '@udecode/plate';
+import { editorToProgram } from './editorToProgram';
 
-describe('documentToProgram', () => {
-  it('creates a program out of a document', () => {
-    const program = documentToProgram([
+describe('editorToProgram', () => {
+  it('creates a program out of an editor', () => {
+    const editor = createPlateEditor() as MyEditor;
+    editor.children = [
       { type: 'h1', id: '1', children: [{ text: '' }] },
       {
         type: 'code_line',
@@ -44,7 +50,8 @@ describe('documentToProgram', () => {
           },
         ],
       } as ColumnsElement,
-    ]);
+    ];
+    const { program } = editorToProgram(editor);
 
     expect(program.length).toBe(4);
 

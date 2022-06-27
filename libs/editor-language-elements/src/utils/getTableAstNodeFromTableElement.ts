@@ -1,5 +1,6 @@
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
+  MyEditor,
   TableElement,
 } from '@decipad/editor-types';
 import { AST, parseOneExpression } from '@decipad/computer';
@@ -11,11 +12,14 @@ import {
 } from '@decipad/editor-utils';
 import Fraction from '@decipad/fraction';
 import { getNodeString } from '@udecode/plate';
+import { ParseError } from '../types';
 
 export const getTableAstNodeFromTableElement = (
+  _editor: MyEditor,
   table: TableElement
-): { name: string; expression: AST.Table } => {
+): { name: string; expression: AST.Table; parseErrors: ParseError[] } => {
   const [caption, headerRow, ...dataRows] = table.children;
+  const parseErrors: ParseError[] = [];
   const columns = headerRow.children.map((th, columnIndex) => {
     const { cellType } = th;
     const columnName = getNodeString(th);
@@ -35,10 +39,21 @@ export const getTableAstNodeFromTableElement = (
       }
       const items = dataRows.map((tr) => {
         const td = tr.children[columnIndex];
-        return (
-          (td && parseCell(cellType, getNodeString(td))) ??
-          getNullReplacementValue(cellType)
-        );
+        let parsed: AST.Expression | null = null;
+        if (td) {
+          const text = getNodeString(td);
+          parsed = parseCell(cellType, text);
+          if (!parsed) {
+            parseErrors.push({
+              error: `Invalid ${cellType.kind}`,
+              elementId: td.id,
+            });
+          }
+        }
+        if (!parsed) {
+          parsed = getNullReplacementValue(cellType);
+        }
+        return parsed;
       });
       return astColumn(...items);
     })();
@@ -49,6 +64,7 @@ export const getTableAstNodeFromTableElement = (
   return {
     name: getNodeString(caption.children[0]),
     expression: astNode('table', ...columns),
+    parseErrors,
   };
 };
 

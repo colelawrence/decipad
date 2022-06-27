@@ -7,9 +7,11 @@ import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TABLE_COLUMN_FORMULA,
+  MyEditor,
 } from '@decipad/editor-types';
 import { F } from '@decipad/editor-utils';
 import { prettyPrintAST } from '@decipad/computer';
+import { createPlateEditor } from '@udecode/plate';
 import {
   formulaSourceToColumn,
   getTableAstNodeFromTableElement,
@@ -21,6 +23,7 @@ expect.addSnapshotSerializer({
 });
 
 describe('getTableAstNodeFromTableElement', () => {
+  const editor = createPlateEditor() as MyEditor;
   it('converts table element into table AST node', () => {
     const node: TableElement = {
       id: 'table1',
@@ -142,7 +145,7 @@ describe('getTableAstNodeFromTableElement', () => {
       ],
     };
 
-    expect(getTableAstNodeFromTableElement(node).expression)
+    expect(getTableAstNodeFromTableElement(editor, node).expression)
       .toMatchInlineSnapshot(`
         (table
           column1 (column (implicit* 1 (ref banana)) (implicit* 2 (ref banana)) (implicit* 3 (ref banana)))
@@ -212,7 +215,7 @@ describe('getTableAstNodeFromTableElement', () => {
       ],
     };
 
-    expect(getTableAstNodeFromTableElement(node).expression)
+    expect(getTableAstNodeFromTableElement(editor, node).expression)
       .toMatchInlineSnapshot(`
         (table
           column1 (column "Hello")

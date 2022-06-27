@@ -1,9 +1,10 @@
-import { MyElement } from '@decipad/editor-types';
+import { MyEditor, MyElement } from '@decipad/editor-types';
 import { AST, UnparsedBlock } from '@decipad/computer';
 
 interface NameAndExpression {
   name: string;
   expression: AST.Expression;
+  parseErrors?: ParseError[];
 }
 
 interface InteractiveLanguageElementBase {
@@ -15,7 +16,10 @@ type ExpressionInteractiveLanguageElement = InteractiveLanguageElementBase & {
   resultsInNameAndExpression?: false;
   resultsInUnparsedBlock?: false;
   isStructural?: false;
-  getExpressionFromElement: (element: MyElement) => AST.Expression | null;
+  getExpressionFromElement: (
+    editor: MyEditor,
+    element: MyElement
+  ) => { expression: AST.Expression; parseErrors?: ParseError[] } | null;
 };
 
 type NameAndExpressionInteractiveLanguageElement =
@@ -25,6 +29,7 @@ type NameAndExpressionInteractiveLanguageElement =
     resultsInUnparsedBlock?: false;
     isStructural?: false;
     getNameAndExpressionFromElement: (
+      editor: MyEditor,
       element: MyElement
     ) => NameAndExpression | null;
   };
@@ -35,7 +40,10 @@ type UnparsedBlockInteractiveLanguageElement =
     resultsInNameAndExpression?: false;
     resultsInUnparsedBlock: true;
     isStructural?: false;
-    getUnparsedBlockFromElement: (element: MyElement) => UnparsedBlock | null;
+    getUnparsedBlockFromElement: (
+      editor: MyEditor,
+      element: MyElement
+    ) => UnparsedBlock | null;
   };
 
 type StructuralElement = InteractiveLanguageElementBase & {
@@ -50,3 +58,8 @@ export type InteractiveLanguageElement =
   | NameAndExpressionInteractiveLanguageElement
   | UnparsedBlockInteractiveLanguageElement
   | StructuralElement;
+
+export interface ParseError {
+  elementId: string;
+  error: string;
+}

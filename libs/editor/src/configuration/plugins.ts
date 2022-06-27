@@ -6,6 +6,7 @@ import {
   createCodeLinePlugin,
   createCodeVariableHighlightPlugin,
   createCursorsPlugin,
+  createDecorateUserParseErrorsPlugin,
   createDividerPlugin,
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
@@ -109,6 +110,9 @@ export const plugins = (computer: Computer) =>
       createAutoCompleteMenuPlugin(),
       createSyntaxErrorHighlightPlugin(),
       createAutoPairsPlugin(),
+
+      // user parse errors
+      createDecorateUserParseErrorsPlugin(computer),
 
       // language
       createCodeLinePlugin(computer),

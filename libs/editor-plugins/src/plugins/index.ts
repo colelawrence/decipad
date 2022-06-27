@@ -5,6 +5,7 @@ export * from './CodeVariableHighlight';
 export * from './Callout';
 export * from './CodeLine';
 export * from './Cursors';
+export * from './DecorateUserParseErrors';
 export * from './Divider';
 export * from './DocSync';
 export * from './DragOverCursor';

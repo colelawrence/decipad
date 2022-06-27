@@ -3,14 +3,14 @@ import {
   isBracketError,
   isSyntaxError,
 } from '@decipad/computer';
-import { Path, Range } from 'slate';
+import { Path } from 'slate';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
-import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';
+import { SyntaxErrorAnnotation } from '../../types';
 
 export function getSyntaxErrorRanges(
   path: Path,
   lineResult: IdentifiedResult | undefined
-): (Range & SyntaxErrorAnnotation)[] {
+): SyntaxErrorAnnotation[] {
   if (lineResult == null || !lineResult.isSyntaxError) {
     return [];
   }

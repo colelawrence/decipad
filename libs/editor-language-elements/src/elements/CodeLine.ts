@@ -1,9 +1,10 @@
-import { ELEMENT_CODE_LINE, MyElement } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE, MyEditor, MyElement } from '@decipad/editor-types';
 import { UnparsedBlock } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
 
 export const getUnparsedBlockFromCodeLine = (
+  _editor: MyEditor,
   block: MyElement
 ): UnparsedBlock | null => {
   if (block.type === ELEMENT_CODE_LINE) {

@@ -1,9 +1,11 @@
 import {
+  CaptionElement,
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
   MyEditor,
+  SliderElement,
   VariableDefinitionElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
@@ -39,7 +41,7 @@ const sliderInputElement = {
     {
       type: ELEMENT_CAPTION,
       children: [{ text: '' }],
-    },
+    } as CaptionElement,
     {
       type: ELEMENT_EXPRESSION,
       children: [{ text: '' }],
@@ -51,12 +53,16 @@ const sliderInputElement = {
       step: '1',
       value: '0',
       children: [{ text: '' }],
-    },
+    } as SliderElement,
   ],
-} as VariableSliderElement;
+};
 
 export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
-  insertNodes<VariableSliderElement>(editor, sliderInputElement, {
-    at: requirePathBelowBlock(editor, path),
-  });
+  insertNodes<VariableSliderElement>(
+    editor,
+    sliderInputElement as unknown as VariableSliderElement,
+    {
+      at: requirePathBelowBlock(editor, path),
+    }
+  );
 };
