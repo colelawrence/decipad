@@ -99,7 +99,9 @@ export const ErrorPage = ({
                 Decipad isn't accessible right now. We're probably fixing this
                 right now
               </p>
-              <p css={errorCodeStyles}>The geeks call this a 500 error</p>
+              {wellKnown === '500' && (
+                <p css={errorCodeStyles}>The geeks call this a 500 error</p>
+              )}
             </>
           )}
         </>

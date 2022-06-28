@@ -25,7 +25,6 @@ it('shows default text for an unknown error', () => {
     Array [
       "Sorry, we did something wrong",
       "Decipad isn't accessible right now. We're probably fixing this right now",
-      "The geeks call this a 500 error",
       "Back to our website",
     ]
   `);
