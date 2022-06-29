@@ -8,7 +8,6 @@ import { NotebookListItemActions } from '../../molecules';
 import {
   offBlack,
   cssVar,
-  p13Regular,
   p14Medium,
   setCssVar,
   shortAnimationDuration,
@@ -60,7 +59,7 @@ const iconStyles = css({
 const nameStyles = css({
   gridArea: 'title',
   gridColumnEnd: 'emptycol',
-  alignSelf: 'end',
+  alignSelf: 'center',
 
   overflowX: 'clip',
   '@supports not (overflow-x: clip)': {
@@ -78,17 +77,17 @@ const noDescriptionNameStyles = css({
 const noNameNameStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
-const descriptionStyles = css(p13Regular, {
-  gridArea: 'description',
-  gridColumnEnd: 'emptycol',
-  alignSelf: 'start',
+// const descriptionStyles = css(p13Regular, {
+//   gridArea: 'description',
+//   gridColumnEnd: 'emptycol',
+//   alignSelf: 'start',
 
-  overflowX: 'clip',
-  '@supports not (overflow-x: clip)': {
-    overflowX: 'hidden',
-  },
-  textOverflow: 'ellipsis',
-});
+//   overflowX: 'clip',
+//   '@supports not (overflow-x: clip)': {
+//     overflowX: 'hidden',
+//   },
+//   textOverflow: 'ellipsis',
+// });
 const actionsStyles = css({
   gridArea: 'actions',
 
@@ -149,7 +148,7 @@ export const NotebookListItem = ({
         >
           {name || 'My notebook title'}
         </strong>
-        <div css={descriptionStyles}>{description}</div>
+        {/* <div css={descriptionStyles}>{description}</div> */}
         <div
           css={[
             actionsStyles,
