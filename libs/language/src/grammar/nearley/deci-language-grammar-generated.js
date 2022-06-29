@@ -234,10 +234,6 @@ const implicitMultHandler = (d, _l, reject) => {
   const left = d[0];
   const right = d[2] || d[1];
 
-  if (right.type === 'literal') {
-    return reject;
-  }
-
   // disambiguate things like `2 - 1` <- this is not `2 * (- 1)`!
   if (right.type === 'function-call') {
     const funcRef = right.args[0];

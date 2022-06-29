@@ -1,7 +1,5 @@
-import { getDefined } from '@decipad/utils';
 import { F, l, c, r } from '../utils';
 import { runTests } from './run-tests';
-import { parseBlock } from './index';
 
 runTests({
   'ref as expression': {
@@ -681,14 +679,4 @@ runTests({
       ),
     ],
   },
-});
-
-it('multiply by default only accepts number in the first position', async () => {
-  const errors = getDefined(parseBlock({ id: '', source: 'a 25' }).errors);
-  expect(errors).toHaveLength(1);
-});
-
-it('multiply by default only accepts one number', async () => {
-  const errors = getDefined(parseBlock({ id: '', source: '100 200' }).errors);
-  expect(errors).toHaveLength(1);
 });
