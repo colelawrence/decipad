@@ -11,8 +11,9 @@ import {
   setCssVar,
 } from '../../primitives';
 import { blockAlignment, codeBlock } from '../../styles';
-import { isTabularType } from '../../utils/results';
-import { CodeResultProps } from '../../types/index';
+import { isTabularType, isNodeEmpty } from '../../utils';
+import { CodeResultProps } from '../../types';
+import { variableStyles } from '../../styles/code-block';
 
 const { lineHeight } = codeBlock;
 
@@ -40,6 +41,7 @@ const codeLineStyles = (variant: CodeLineProps['variant']) =>
         }),
 
     ':hover': highlightedLineStyles,
+    position: 'relative',
 
     display: 'grid',
     gridGap: '0 5%',
@@ -72,7 +74,28 @@ const codeStyles = (variant: CodeLineProps['variant']) =>
     whiteSpace: 'pre-wrap',
   });
 
+const placeholderStyles = css(codeStyles('standalone'), {
+  opacity: 0.4,
+  pointerEvents: 'none',
+});
+
+const tipsStyles = css(variableStyles, {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  transform: 'translate(2px, 100%)',
+  paddingLeft: '8px',
+  paddingRight: '8px',
+  borderRadius: '6px',
+  color: cssVar('weakTextColor'),
+  backgroundColor: 'transparent',
+  pointerEvents: 'none',
+  userSelect: 'none',
+});
+
 const inlineResultStyles = css(p14Regular, {
+  ':empty': { display: 'none' },
+
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
@@ -101,6 +124,8 @@ interface CodeLineProps {
   readonly children: ReactNode;
   readonly displayInline?: boolean;
   readonly highlight?: boolean;
+  readonly tip?: string;
+  readonly placeholder?: string;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
@@ -113,6 +138,8 @@ export const CodeLine = ({
   displayInline = false,
   highlight = false,
   result,
+  tip,
+  placeholder,
   syntaxError,
   onDragStartInlineResult,
   onDragStartCell,
@@ -125,6 +152,7 @@ export const CodeLine = ({
   const hasError = hasSyntaxError || hasTypeError;
 
   const isTableOrColumn = isTabularType(result?.type);
+  const isEmpty = isNodeEmpty(children);
 
   const renderExpandedResult = !hasError && hasResult && isTableOrColumn;
 
@@ -135,6 +163,16 @@ export const CodeLine = ({
     <div css={spacingStyles(variant)} spellCheck={false}>
       <div css={[codeLineStyles(variant), highlight && highlightedLineStyles]}>
         <code css={codeStyles(variant)}>{children}</code>
+        {placeholder && isEmpty && (
+          <span css={placeholderStyles} contentEditable={false}>
+            {placeholder}
+          </span>
+        )}
+        {tip && (
+          <span css={tipsStyles} contentEditable={false}>
+            {tip}
+          </span>
+        )}
         <div
           css={[inlineStyles, grabbing && grabbingStyles]}
           contentEditable={false}

@@ -10,11 +10,12 @@ import {
 } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
-import { organisms } from '@decipad/ui';
+import { isNodeEmpty, organisms } from '@decipad/ui';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
+import { useCodeLineTutorials } from './useCodeLineTutorials';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_CODE_LINE) {
@@ -27,11 +28,13 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const computer = useComputer();
   const selected = useSelected();
   const editor = useTEditorRef();
+  const isEmpty = isNodeEmpty(children);
 
   const { id: lineId } = element;
   const line = useResult(lineId);
   const lineResult = line?.results[0];
 
+  const { tips, placeholder } = useCodeLineTutorials(selected, isEmpty);
   const statement = computer.getStatement(lineId, 0);
   const syntaxError = getSyntaxError(line);
 
@@ -42,6 +45,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           displayInline={!computer.isLiteralValueOrAssignment(statement)}
           highlight={selected}
           result={lineResult}
+          tip={tips}
+          placeholder={placeholder}
           syntaxError={syntaxError}
           onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
           onDragStartCell={onDragStartTableCellResult(editor)}
