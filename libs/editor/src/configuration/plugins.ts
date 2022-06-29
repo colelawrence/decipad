@@ -29,6 +29,7 @@ import {
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
   createUpdateComputerPlugin,
+  createUniqueElementIdPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -134,6 +135,9 @@ export const plugins = (computer: Computer) =>
       // deserializers
       createDeserializeDocxPlugin(),
       createJuicePlugin(),
+
+      // id uniqueness
+      createUniqueElementIdPlugin(),
     ],
     {
       components: components(computer),

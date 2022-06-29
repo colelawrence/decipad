@@ -32,5 +32,6 @@ export * from './SentryBreadcrumbsPlugin';
 export * from './OperationsBlackboxPlugin';
 export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
+export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './UploadData';

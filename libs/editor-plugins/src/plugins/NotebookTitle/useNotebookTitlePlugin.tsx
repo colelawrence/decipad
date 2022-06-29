@@ -23,12 +23,16 @@ export const useNotebookTitlePlugin = ({
   const onChangeNotebookTitle: MyOnChange = useCallback(
     (editor) => () => {
       if (!readOnly) {
-        const [node] = getNodeEntry(editor, [0, 0]);
-        const newTitle = getNodeString(node);
+        try {
+          const [node] = getNodeEntry(editor, [0, 0]);
+          const newTitle = getNodeString(node);
 
-        if (newTitle !== lastNotebookTitle.current) {
-          lastNotebookTitle.current = newTitle;
-          onNotebookTitleChangeDebounced(newTitle);
+          if (newTitle !== lastNotebookTitle.current) {
+            lastNotebookTitle.current = newTitle;
+            onNotebookTitleChangeDebounced(newTitle);
+          }
+        } catch (err) {
+          console.error('Eror in onChangeNotebookTitle', err);
         }
       }
     },
