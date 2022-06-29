@@ -45,7 +45,6 @@ const InsideNotebookState = ({
   // DocSync
 
   const {
-    syncClientState,
     docSyncEditor,
     computer,
     init,
@@ -55,12 +54,11 @@ const InsideNotebookState = ({
     destroy,
   } = useNotebookState();
   useEffect(() => {
-    if (syncClientState === 'idle') {
-      init(slateBaseEditor as MyEditor, notebookId, {
-        authSecret: secret,
-      });
-    }
-  }, [init, notebookId, secret, slateBaseEditor, syncClientState]);
+    init(slateBaseEditor as MyEditor, notebookId, {
+      authSecret: secret,
+    });
+    return destroy;
+  }, [init, destroy, notebookId, secret, slateBaseEditor]);
 
   // Editor
   // Needs to be created last so other editor (e.g. docsync editor) wrapping editor functions
@@ -88,10 +86,6 @@ const InsideNotebookState = ({
       onDocsync(docSyncEditor);
     }
   }, [docSyncEditor, onDocsync]);
-
-  useEffect(() => {
-    return destroy;
-  }, [destroy]);
 
   // changes warning
 

@@ -13,19 +13,22 @@ interface NotebookStateProviderProps {
 }
 
 const { Provider, useStore } = createContext();
-
 const LOAD_TIMEOUT_MS = 5000;
+
+const initialState: Omit<NotebookState, 'init' | 'destroy'> = {
+  syncClientState: 'idle',
+  docSyncEditor: undefined,
+  computer: undefined,
+  connected: false,
+  loadedFromLocal: false,
+  loadedFromRemote: false,
+  timedOutLoadingFromRemote: false,
+  hasLocalChanges: false,
+};
 
 const createStore = () =>
   create<NotebookState>((set, get) => ({
-    syncClientState: 'idle',
-    docSyncEditor: undefined,
-    computer: undefined,
-    connected: false,
-    loadedFromLocal: false,
-    loadedFromRemote: false,
-    timedOutLoadingFromRemote: false,
-    hasLocalChanges: false,
+    ...initialState,
     init: (editor: MyEditor, notebookId: string, options: DocSyncOptions) => {
       if (get().syncClientState === 'idle') {
         const loadTimeout = setTimeout(() => {
@@ -67,11 +70,7 @@ const createStore = () =>
       if (syncClientState === 'created') {
         docSyncEditor?.disconnect();
         docSyncEditor?.destroy();
-        set({
-          syncClientState: 'idle',
-          docSyncEditor: undefined,
-          computer: undefined,
-        });
+        set(initialState);
       }
     },
   }));
