@@ -18,6 +18,12 @@ module.exports = {
             name: '@decipad/language',
             message: 'Import language helpers from @decipad/computer',
           },
+          {
+            name: 'slate-react',
+            importNames: ['useReadOnly'],
+            message:
+              'We do not usually set the entire editor to readOnly. Import useIsEditorReadOnly instead.',
+          },
         ],
       },
     ],

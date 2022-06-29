@@ -1,11 +1,14 @@
 import { ComponentProps, useState } from 'react';
-import { useReadOnly } from 'slate-react';
 import {
   ELEMENT_PLOT,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useComputer, useResult } from '@decipad/react-contexts';
+import {
+  useComputer,
+  useIsEditorReadOnly,
+  useResult,
+} from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
@@ -22,7 +25,7 @@ export const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
   const [error, setError] = useState<string | undefined>();
   const editor = useTEditorRef();
-  const readOnly = useReadOnly();
+  const readOnly = useIsEditorReadOnly();
   const computer = useComputer();
   const identifiedResult = useResult(element.id as string);
   const result = identifiedResult?.results[identifiedResult.results.length - 1];

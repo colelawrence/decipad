@@ -1,7 +1,8 @@
 import { PlateComponent, useTEditorState } from '@decipad/editor-types';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
 import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
-import { useReadOnly, useSelected } from 'slate-react';
+import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 
 export const Paragraph: PlateComponent = ({
@@ -14,7 +15,7 @@ export const Paragraph: PlateComponent = ({
   }
 
   const editor = useTEditorState();
-  const readOnly = useReadOnly();
+  const readOnly = useIsEditorReadOnly();
 
   const selected = useSelected();
 
