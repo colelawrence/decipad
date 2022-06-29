@@ -22,6 +22,7 @@ module.exports = {
       },
     },
     'storybook-dark-mode',
+    '@storybook/addon-a11y',
   ],
   previewHead: (head) =>
     head.replace('<base target="_parent"', '<base target="_self"'),
@@ -33,7 +34,7 @@ module.exports = {
             resourceQuery: /raw/,
             type: 'asset/source',
           },
-          ...config.module?.rules,
+          ...(config.module?.rules ?? []),
         ],
       },
     ];

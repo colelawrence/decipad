@@ -254,6 +254,7 @@
     "@nrwl/workspace": "12.9.0",
     "@percy/cli": "^1.2.1",
     "@percy/playwright": "^1.0.3",
+    "@storybook/addon-a11y": "^6.5.9",
     "@storybook/builder-webpack5": "^6.5.0-alpha.55",
     "@storybook/manager-webpack5": "^6.5.0-alpha.55",
     "@svgr/webpack": "^6.0.0",
