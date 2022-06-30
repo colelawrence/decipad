@@ -1,10 +1,10 @@
 import { forwardRef } from 'react';
-import { tableControlWidth } from '../../styles/table';
+import { DragHandle } from '../../icons/index';
 import {
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
 } from '../../primitives/index';
-import { DragHandle } from '../../icons/index';
+import { tableControlWidth } from '../../styles/table';
 
 export interface TableCellControlsProps {
   readonly onSelect?: () => void;
@@ -26,7 +26,6 @@ export const TableCellControls = forwardRef<
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-
         opacity: 0,
         '*:hover > &': {
           opacity: 'unset',
@@ -35,7 +34,10 @@ export const TableCellControls = forwardRef<
       }}
     >
       {!readOnly && (
-        <button css={{ gridArea: 'handle', width: 16 }} onClick={onSelect}>
+        <button
+          css={{ gridArea: 'handle', width: 16, cursor: 'grab' }}
+          onClick={onSelect}
+        >
           <DragHandle />
         </button>
       )}

@@ -1,13 +1,13 @@
-import { Children, FC, forwardRef, ReactNode, RefCallback } from 'react';
-import { css } from '@emotion/react';
-import { noop } from '@decipad/utils';
 import { ElementAttributes } from '@decipad/editor-types';
+import { atoms } from '@decipad/ui';
+import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { DropLineDirection } from '@udecode/plate';
+import { Children, FC, forwardRef, ReactNode, RefCallback } from 'react';
 import { TableData } from '../../atoms';
+import { useMergedRef } from '../../hooks/index';
 import { Minus } from '../../icons';
 import { table } from '../../styles';
-import { useMergedRef } from '../../hooks/index';
-import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
 import {
   TableCellControls,
   TableCellControlsProps,
@@ -69,7 +69,6 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
             Children.toArray(children).length,
             !!readOnly
           ),
-          opacity: isBeingDragged ? draggingOpacity : 'unset',
         })}
       >
         <TableCellControls
@@ -77,6 +76,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
           readOnly={readOnly}
           onSelect={onSelect}
         />
+        <atoms.TableCellBackground selected={isBeingDragged} left={20} />
         {children}
         {!readOnly && (
           <TableData contentEditable={false} as="td">

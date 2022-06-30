@@ -1,11 +1,18 @@
+import { PlateComponentAttributes } from '@decipad/editor-types';
+import { css } from '@emotion/react';
 import { ElementType, FC, HTMLAttributes } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-import { css } from '@emotion/react';
-import { PlateComponentAttributes } from '@decipad/editor-types';
-import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
+import { useSelected } from 'slate-react';
+import { useMergedRef } from '../../hooks';
+import {
+  blue300,
+  cssVar,
+  p12Medium,
+  p14Medium,
+  setCssVar,
+} from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
-import { useMergedRef } from '../../hooks';
 
 const lineNumberWidth = '22px';
 const minTdWidth = '80px';
@@ -15,6 +22,7 @@ const tdBaseStyles = css(p14Medium, {
   alignItems: 'center',
   whiteSpace: 'nowrap',
   minWidth: minTdWidth,
+  cursor: 'default',
 
   background: cssVar('backgroundColor'),
 
@@ -32,10 +40,11 @@ const tdPlaceholderStyles = css({
   '&:first-of-type': {
     paddingLeft: '34px',
   },
+
   '&:first-of-type::before': {
     ...setCssVar('normalTextColor', cssVar('weakTextColor')),
     ...p12Medium,
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: 'transparent',
 
     counterIncrement: tableRowCounter,
     content: `counter(${tableRowCounter})`,
@@ -45,6 +54,7 @@ const tdPlaceholderStyles = css({
     top: '50%',
     transform: 'translateY(-50%)',
     fontVariantNumeric: 'tabular-nums',
+    userSelect: 'none',
   },
 });
 
@@ -73,6 +83,8 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
   grabbing?: boolean;
+  selected?: boolean;
+  collapsed?: boolean;
   dropTarget?: ConnectDropTarget;
 }
 
@@ -83,13 +95,15 @@ export const TableData = ({
   showPlaceholder = true,
   draggable,
   grabbing,
+  selected,
+  collapsed,
   dropTarget,
   ...props
 }: TableDataProps): ReturnType<FC> => {
   const existingRef =
     attributes && 'ref' in attributes ? attributes.ref : undefined;
   const tdRef = useMergedRef(existingRef, dropTarget);
-
+  const focused = useSelected();
   return (
     <Component
       {...attributes}
@@ -100,6 +114,14 @@ export const TableData = ({
         tdGridStyles,
         draggable && draggableStyles,
         grabbing && grabbingStyles,
+        isEditable &&
+          focused &&
+          !selected &&
+          collapsed &&
+          css({
+            cursor: 'text',
+            boxShadow: `inset 0 0 0 2px ${blue300.rgb}`,
+          }),
         showPlaceholder && tdPlaceholderStyles,
       ]}
       {...props}

@@ -5,12 +5,14 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { useSelection } from '@decipad/editor-utils';
 import { atoms, molecules, organisms } from '@decipad/ui';
+import { isCollapsed } from '@udecode/plate';
 import { useAtom } from 'jotai';
-import { useFormulaResult } from './useFormulaResult';
-import { useIsCellSelected } from './useIsCellSelected';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import { useColumnDropDirection, useDropColumn } from '../../hooks';
+import { useFormulaResult } from './useFormulaResult';
+import { useIsCellSelected } from './useIsCellSelected';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -19,7 +21,7 @@ export const TableCell: PlateComponent = ({
 }) => {
   const editor = useTEditorRef();
   const selected = useIsCellSelected(element!);
-
+  const collapsed = isCollapsed(useSelection());
   const [dropLine] = useAtom(dropLineAtom, trScope);
 
   const [, dropTarget] = useDropColumn(editor, element!);
@@ -56,6 +58,8 @@ export const TableCell: PlateComponent = ({
       as="td"
       attributes={attributes}
       dropTarget={dropTarget}
+      selected={selected}
+      collapsed={collapsed}
     >
       {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
       {direction === 'left' && (

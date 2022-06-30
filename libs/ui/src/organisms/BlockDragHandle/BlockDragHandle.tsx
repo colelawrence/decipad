@@ -1,12 +1,12 @@
-import { css } from '@emotion/react';
-import { FC } from 'react';
-import { once } from 'ramda';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { once } from 'ramda';
+import { FC } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { Delete, DragHandle } from '../../icons';
 import { MenuList } from '../../molecules';
-import { editorLayout } from '../../styles';
 import { p12Bold, p12Regular } from '../../primitives';
+import { editorLayout } from '../../styles';
 
 const gridStyles = once(() =>
   css({
@@ -35,7 +35,7 @@ export const BlockDragHandle = ({
   const menuButton = (
     <button
       onClick={() => onDelete !== false && onChangeMenuOpen(!menuOpen)}
-      css={{ gridArea: 'handle' }}
+      css={{ gridArea: 'handle', cursor: 'grab' }}
     >
       <DragHandle />
     </button>

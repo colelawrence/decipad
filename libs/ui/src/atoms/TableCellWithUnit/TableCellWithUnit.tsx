@@ -10,20 +10,15 @@ const unitStyles = css({
 
 interface TableCellWithUnitProps {
   children: ReactNode;
-  showUnit: boolean;
   unit?: string;
 }
 
 export const TableCellWithUnit = ({
   children,
-  showUnit,
   unit,
 }: TableCellWithUnitProps): ReturnType<FC> => {
   return (
-    <span
-      css={showUnit && unit && unitStyles}
-      data-unit={(showUnit && unit) || ''}
-    >
+    <span css={unit && unitStyles} data-unit={unit || ''}>
       {children}
     </span>
   );

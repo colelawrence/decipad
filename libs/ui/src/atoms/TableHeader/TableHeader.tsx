@@ -1,20 +1,16 @@
-import { FC, forwardRef, useContext } from 'react';
 import type { TableCellType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
+import { FC, forwardRef, useContext } from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
   ConnectDropTarget,
 } from 'react-dnd';
-import {
-  Opacity,
-  p13Medium,
-  strongOpacity,
-  transparency,
-} from '../../primitives';
-import { table } from '../../styles';
+import { useMergedRef } from '../../hooks/index';
 import { DragHandle as DragHandleIcon } from '../../icons';
+import { p13Medium, strongOpacity, transparency } from '../../primitives';
+import { table } from '../../styles';
 import {
   AvailableSwatchColor,
   baseSwatches,
@@ -23,7 +19,6 @@ import {
   TableStyleContext,
 } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
-import { useMergedRef } from '../../hooks/index';
 
 const columnStyles = css(p13Medium, {
   position: 'relative',
@@ -58,20 +53,15 @@ const childrenWrapperStyles = css({
   textAlign: 'left',
 });
 
-const transparent: Opacity = 0;
-const opaque: Opacity = 1;
-
 const dragHandleStyles = css({
   width: '12px',
   height: '14px',
-  opacity: transparent,
-  position: 'absolute',
-  left: '12px',
-  top: '8px',
   pointerEvents: 'all',
-  ':hover': {
-    opacity: opaque,
+  marginTop: '-1px',
+  'svg > rect': {
+    fill: 'transparent',
   },
+  cursor: 'grab',
 });
 
 const editableChildrenWrapperStyles = css({
@@ -98,14 +88,9 @@ const DropSourceAndTarget = forwardRef<
   return (
     <div
       css={css([
+        columnTypeStyles,
         {
           pointerEvents: draggingOver ? 'all' : 'none', // IMPORTANT!
-          cursor: (draggingOver && 'grabbing') || undefined,
-          position: 'absolute',
-          left: '-13px',
-          right: '-9px',
-          top: 0,
-          bottom: 0,
           height: '32px',
         },
       ])}
@@ -197,11 +182,6 @@ export const TableHeader = ({
           />
         )}
 
-        {showIcon && (
-          <span contentEditable={false} css={columnTypeStyles}>
-            <Icon />
-          </span>
-        )}
         <div
           css={[
             childrenWrapperStyles,
@@ -211,6 +191,11 @@ export const TableHeader = ({
           {children}
         </div>
         {menu}
+        {showIcon && (
+          <span contentEditable={false} css={columnTypeStyles}>
+            <Icon />
+          </span>
+        )}
       </div>
 
       {isEditable && dropDirection === 'right' && (
