@@ -9,6 +9,7 @@
     { "path": "../services" },
     { "path": "../tables" },
     { "path": "../graphqlresource" },
-    { "path": "../config" }
+    { "path": "../config" },
+    { "path": "../backend-trace" }
   ]
 }

@@ -114,7 +114,8 @@
       "@decipad/editor-power-table": ["libs/editor-power-table/src/index.ts"],
       "@decipad/toast": ["libs/toast/src/index.ts"],
       "@decipad/notebook": ["libs/notebook/src/index.ts"],
-      "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"]
+      "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
+      "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"]
     }
   },
   "files": [],

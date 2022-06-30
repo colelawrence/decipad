@@ -3,6 +3,7 @@
   "projects": {
     "backend": "apps/backend",
     "backend-test-sandbox": "libs/backend-test-sandbox",
+    "backend-trace": "libs/backend-trace",
     "backendtypes": "libs/backendtypes",
     "client-e2e": "apps/client-e2e",
     "client-events": "libs/client-events",

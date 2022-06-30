@@ -1,9 +1,9 @@
 import { HttpResponse } from '@architect/functions';
 import { WSRequest } from '@decipad/backendtypes';
 import { authenticate, AuthResult } from '@decipad/services/authentication';
-import { wrapHandler } from '@decipad/services/monitor';
 import { onConnect } from '@decipad/sync-connection-lambdas';
 import { getDefined } from '@decipad/utils';
+import { trace } from '@decipad/backend-trace';
 import Boom, { boomify } from '@hapi/boom';
 import { docIdFromPath } from '../path';
 
@@ -11,7 +11,7 @@ function isValidAuthResult(authResult: AuthResult): boolean {
   return !!authResult.secret || !!authResult.user;
 }
 
-export const handler = wrapHandler(async function ws(
+export const handler = trace(async function ws(
   event: WSRequest
 ): Promise<HttpResponse> {
   try {

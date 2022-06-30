@@ -3,12 +3,12 @@ import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
-import { wrapHandler } from '@decipad/services/monitor';
+import { trace } from '@decipad/backend-trace';
 
 type Handler = (req: APIGatewayProxyEvent) => Promise<any>;
 
 export default (handler: Handler) => {
-  return wrapHandler(
+  return trace(
     async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
       try {
         let body = await handler(req);

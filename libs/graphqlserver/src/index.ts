@@ -1,11 +1,11 @@
-import { HttpHandler } from '@architect/functions';
-import { wrapHandler } from '@decipad/services/monitor';
 import {
   APIGatewayProxyCallback,
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context as LambdaContext,
+  Handler,
 } from 'aws-lambda';
+import { trace } from '@decipad/backend-trace';
 import createServer from './server';
 
 type AdditionalContext = {
@@ -14,13 +14,13 @@ type AdditionalContext = {
 };
 type Context = LambdaContext & AdditionalContext;
 
-export default function createHandler(): HttpHandler {
+export default function createHandler(): Handler {
   const server = createServer();
   const handler = server.createHandler();
 
   /* eslint-disable no-param-reassign */
 
-  return wrapHandler(
+  return trace(
     (
       event: APIGatewayProxyEvent,
       context: Context,
@@ -72,5 +72,5 @@ export default function createHandler(): HttpHandler {
         );
       }
     }
-  ) as HttpHandler;
+  );
 }
