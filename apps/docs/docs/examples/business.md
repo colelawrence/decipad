@@ -30,12 +30,7 @@ flex: "0 1 calc(25% - 1em)",
    flexWrap: "wrap",
   }}>
 
-<Card title="When can I retire?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/-Decode-F-I-R-E-%3AD8PUgXa8VQxoCIWi7Tq4A?secret=JTq7qfP3q_qbNGsYAm_Uu" description="Use the F.I.R.E model (Financial Independence, Retire Early) to understand how you can become work optional"></Card>
-
-
-<Card title="Can I afford all these subcriptions?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/-Subscription-Tracker%3Awy0DuDrADXjoUOsW59iTc?secret=DpImmwlNWuLdw4XYUhldd" description="Everything is using a subscription model nowadays. Use this model to understand your expenses"></Card>
-
-<Card title="Should I buy an electric car?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/bxTv4RqJC_DCPv3xXLuLX?secret=RFmB4s_xKJQo-K3RMHDnY" description="Want to make the switch to electric? Use this model to understand how to calculate your savings potential"></Card>
+<Card title="Start a candle business" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/-Starting-a-Candle-Business%3AJTYAmhcwfINZobogKoEbU" description="Finance is a key component of starting a business. Yet, many entrepreneurs struggle to understand how to create a basic business model"></Card>
 
 <Card title="How much should I price this project?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/-Consulting-Projects-Fee-Estimation%3A8Kx9X0612rXUElUSVFl0S?secret=qdQBEsgCdMvnh-D6_JGxp" description="Landed a new project? Use this model to understand how to calculate staff allocation, project expenses, and target rates"></Card>
 

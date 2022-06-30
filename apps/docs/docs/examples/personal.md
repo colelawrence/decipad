@@ -4,7 +4,7 @@ sidebar_position: 300
 
 # Personal Notebooks
 
-## Hobbies
+## Personal Finances
 
 export const Card =({children,title,description,img,notebook}) => (
   <a href={notebook} style={{textDecoration: "none", height: "auto", width: "49%", marginBottom: "15px"}}> <div class="card" style={{
@@ -31,6 +31,25 @@ flex: "0 1 calc(25% - 1em)",
    flexWrap: "wrap",
   }}>
 
+<Card title="When can I retire?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/-Decode-F-I-R-E-%3AD8PUgXa8VQxoCIWi7Tq4A?secret=JTq7qfP3q_qbNGsYAm_Uu" description="Use the F.I.R.E model (Financial Independence, Retire Early) to understand how you can become work optional"></Card>
+
+<Card title="Can I afford all these subcriptions?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/-Subscription-Tracker%3Awy0DuDrADXjoUOsW59iTc?secret=DpImmwlNWuLdw4XYUhldd" description="Everything is using a subscription model nowadays. Use this model to understand your expenses"></Card>
+
+<Card title="Should I buy an electric car?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/bxTv4RqJC_DCPv3xXLuLX?secret=RFmB4s_xKJQo-K3RMHDnY" description="Want to make the switch to electric? Use this model to understand how to calculate your savings potential"></Card>
+
+<Card title="$AAPL, interest rates and the stock market" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/Rising-interest-rates-and-AAPL-share-price%3AGwKX8lzGM5tDFJ3aV6eTJ" description="You’ve probably been hearing a lot about interest rates lately. Check out this model that shows why they have been making the markets go wild."></Card>
+
+</gridContainer>
+
+## Hobbies
+
+<gridContainer style= {{  
+display: "flex",
+flex: "0 1 calc(25% - 1em)",
+   justifyContent: "space-between",
+   flexWrap: "wrap",
+  }}>
+
 <Card title="What size should my skis be?" img="https://user-images.githubusercontent.com/12210180/174139877-d558a1ac-b995-4848-a7a7-f42cd53e3401.png" notebook="https://alpha.decipad.com/n/-What-size-skis-do-I-need-%3AHAxnPfO0e4H9MHoig3zFG?secret=VDoYnnowEi8imsPqvUyWT" description="Going to the mountains? Use this model to learn how to calculate your perfect ski size"></Card>
 
 </gridContainer>
@@ -46,7 +65,9 @@ flex: "0 1 calc(25% - 1em)",
 
 <Card title="What is the right medicine dosage for a child?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/VlKVyJVuK1rKveg7YLzpK?secret=JkHVzPOQKxmsSga-BObkK" description="How does the NHS calculate the right paracetamol dosage for a child under 6? Use this model to find out"></Card>
 
-<Card title="How does gravity work? " img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/Q5sDRcpQ4lYSg84Hrs3gf?secret=Bf2nWPe5ZAuDJL9MEWP1L" description="How much force do you exert on earth? Use this model to learn some physics fundamentals!"></Card>
+<Card title="How does gravity work?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/Q5sDRcpQ4lYSg84Hrs3gf?secret=Bf2nWPe5ZAuDJL9MEWP1L" description="How much force do you exert on earth? Use this model to learn some physics fundamentals!"></Card>
+
+<Card title="How to make the perfect cup of coffee?" img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png" notebook="https://alpha.decipad.com/n/The-Perfect-Coffee-Drip-Brew-%3Aqi0EWqpCXpIq5b95aP1uj" description="Brewing coffee is a science. This Notebook will help you understand the math behind it and help you with some instructions to make drip coffee."></Card>
 
 </gridContainer>
 
