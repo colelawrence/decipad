@@ -28,9 +28,9 @@ flex: "0 1 calc(25% - 1em)",
    flexWrap: "wrap",
   }}>
   
-<Card title="" img="https://user-images.githubusercontent.com/12210180/174136531-54a17857-24f0-4c6a-a201-2e0ea2747602.png" notebook="business" description=""></Card>
+<Card title="" img="https://user-images.githubusercontent.com/12210180/174136531-54a17857-24f0-4c6a-a201-2e0ea2747602.png" notebook="/docs/examples/business" description=""></Card>
 
-<Card title="" img="https://user-images.githubusercontent.com/12210180/174136601-68750d37-b023-4e47-ad4a-f7643ce81e8f.png" notebook="personal" description=""></Card>
+<Card title="" img="https://user-images.githubusercontent.com/12210180/174136601-68750d37-b023-4e47-ad4a-f7643ce81e8f.png" notebook="/docs/examples/personal" description=""></Card>
 
 </gridContainer>
 
