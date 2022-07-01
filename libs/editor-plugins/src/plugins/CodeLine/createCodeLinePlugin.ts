@@ -21,6 +21,6 @@ export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   serializeHtml: serializeCodeLineHtml,
   decorate: decorateCode(computer, ELEMENT_CODE_LINE),
   handlers: {
-    onDrop: onDropCodeLine,
+    onDrop: onDropCodeLine(computer),
   },
 });

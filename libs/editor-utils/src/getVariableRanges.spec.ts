@@ -1,7 +1,8 @@
+import { Computer } from '@decipad/computer';
 import { getVariableRanges } from './getVariableRanges';
 
 const testFindVariables = (code: string) => {
-  const ranges = getVariableRanges(code, [], 'blockId');
+  const ranges = getVariableRanges(new Computer(), code, [], 'blockId');
 
   return ranges.map((range) =>
     code.slice(range.anchor.offset, range.focus.offset)

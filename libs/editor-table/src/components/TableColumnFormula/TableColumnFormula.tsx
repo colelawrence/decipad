@@ -3,7 +3,7 @@ import {
   PlateComponent,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { atoms, organisms } from '@decipad/ui';
+import { molecules, organisms } from '@decipad/ui';
 import { Node } from 'slate';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 
@@ -13,9 +13,9 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
   return (
     <organisms.CodeLine variant="table">
       <span contentEditable={false}>
-        <atoms.CodeVariable type={{ kind: 'table-formula' }}>
+        <molecules.CodeVariable type={{ kind: 'table-formula' }}>
           {header && Node.string(header)}
-        </atoms.CodeVariable>{' '}
+        </molecules.CodeVariable>{' '}
         ={' '}
       </span>
       {children}

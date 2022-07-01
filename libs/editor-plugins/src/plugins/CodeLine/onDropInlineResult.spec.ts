@@ -11,11 +11,13 @@ import {
 import * as plate from '@udecode/plate-core';
 import { DragEvent } from 'react';
 import { onDragStartInlineResult } from '@decipad/editor-components';
+import { Computer } from '@decipad/computer';
 import { onDropInlineResult } from './onDropInlineResult';
 
 const testStorage = new Map();
 
 describe('onDropInlineResult', () => {
+  const computer = new Computer();
   let editor: MyEditor;
   let codeLine: CodeLineElement;
   let codeLine2: CodeLineElement;
@@ -73,7 +75,7 @@ describe('onDropInlineResult', () => {
       onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropInlineResult(editor)(testEvent);
+      onDropInlineResult(computer, editor)(testEvent);
 
       expect(editor.children).toEqual([
         {
@@ -97,7 +99,7 @@ describe('onDropInlineResult', () => {
       onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropInlineResult(editor)(testEvent);
+      onDropInlineResult(computer, editor)(testEvent);
 
       expect(editor.children).toEqual([
         codeLine,
@@ -131,7 +133,7 @@ describe('onDropInlineResult', () => {
       onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropInlineResult(editor)(testEvent);
+      onDropInlineResult(computer, editor)(testEvent);
 
       expect(editor.children).toEqual([
         codeLine,
@@ -165,7 +167,7 @@ describe('onDropInlineResult', () => {
       onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropInlineResult(editor)(testEvent);
+      onDropInlineResult(computer, editor)(testEvent);
 
       expect(editor.children).toEqual([
         codeLine,
@@ -199,7 +201,7 @@ describe('onDropInlineResult', () => {
       onDragStartInlineResult(editor, {
         element: codeLine,
       })(testEvent);
-      onDropInlineResult(editor)(testEvent);
+      onDropInlineResult(computer, editor)(testEvent);
 
       expect(editor.children).toEqual([codeLine, codeLine2]);
     });

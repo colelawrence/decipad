@@ -2,9 +2,11 @@ import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { ReactNode } from 'react';
 import type { TableCellType } from '@decipad/editor-types';
+import { Result, SerializedType } from '@decipad/computer';
 import { grey400, grey500 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
+import { CodeVariableTooltip } from '..';
 
 const varStyles = css(codeBlock.variableStyles, {
   padding: '4px 6px',
@@ -38,6 +40,8 @@ interface CodeVariableProps {
   readonly setPointyStyles?: boolean;
   readonly type?: TableCellType;
   readonly variableScope?: VariableScope;
+  readonly variableType?: SerializedType;
+  readonly variableValue?: Result.OneResult;
 }
 
 export type VariableScope = 'global' | 'local' | 'undefined';
@@ -47,10 +51,12 @@ export const CodeVariable = ({
   setPointyStyles = false,
   onClick = noop,
   type,
+  variableType,
+  variableValue,
   variableScope = 'global',
 }: CodeVariableProps): ReturnType<React.FC> => {
   const Icon = getTypeIcon(type || { kind: 'string' });
-  return (
+  const decoration = (
     <span
       onClick={onClick}
       css={
@@ -72,4 +78,14 @@ export const CodeVariable = ({
       {children}
     </span>
   );
+
+  if (variableType && variableValue) {
+    return (
+      <CodeVariableTooltip type={variableType} value={variableValue}>
+        {decoration}
+      </CodeVariableTooltip>
+    );
+  }
+
+  return decoration;
 };

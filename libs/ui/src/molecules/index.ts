@@ -3,6 +3,8 @@ export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
 export { Caption } from './Caption/Caption';
 export { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
+export { CodeVariable } from './CodeVariable/CodeVariable';
+export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
 export { DividerBlock } from './DividerBlock/DividerBlock';
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
 export { Expression } from './Expression/Expression';

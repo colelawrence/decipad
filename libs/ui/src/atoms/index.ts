@@ -9,7 +9,6 @@ export { Callout } from './Callout/Callout';
 export { CellInput } from './CellInput/CellInput';
 export { CodeError } from './CodeError/CodeError';
 export { CodeSyntax } from './CodeSyntax/CodeSyntax';
-export { CodeVariable } from './CodeVariable/CodeVariable';
 export { ColorPicker } from './ColorPicker/ColorPicker';
 export { ColumnDropLine } from './DropLine/ColumnDropLine';
 export { DateResult } from './DateResult/DateResult';

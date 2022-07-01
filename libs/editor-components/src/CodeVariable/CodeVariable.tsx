@@ -1,15 +1,23 @@
 import { PlateComponent, RichText } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
-import { atoms } from '@decipad/ui';
-import { VisibleVariables } from 'libs/computer/src/computer/getVisibleVariables';
-import { VariableScope } from 'libs/ui/src/atoms/CodeVariable/CodeVariable';
+import { molecules } from '@decipad/ui';
 import { useRef } from 'react';
 import { useObservable } from 'rxjs-hooks';
+import type { SerializedType, Result } from '@decipad/computer';
+
+type VariableScope = 'local' | 'global' | 'undefined';
+
+type VisibleVariables = {
+  global: ReadonlySet<string>;
+  local: ReadonlySet<string>;
+};
 
 interface VariableInfo {
   blockId: string;
   variableName: string;
   isDeclaration: boolean;
+  type: SerializedType;
+  value: Result.OneResult;
 }
 type CodeLeaf = PlateComponent<{
   leaf: RichText & VariableInfo;
@@ -31,7 +39,7 @@ export const getVariableScope = (
 export const CodeVariable: CodeLeaf = ({
   attributes,
   children,
-  leaf: { variableName, blockId, isDeclaration },
+  leaf: { variableName, blockId, isDeclaration, type, value },
 }) => {
   const rootRef = useRef<HTMLSpanElement>(null);
 
@@ -48,9 +56,11 @@ export const CodeVariable: CodeLeaf = ({
 
   return (
     <span ref={rootRef} {...attributes}>
-      <atoms.CodeVariable
+      <molecules.CodeVariable
         setPointyStyles={pointyStylesToBeUsed}
         variableScope={variableScope}
+        variableType={type}
+        variableValue={value}
         onClick={() => {
           if (pointyStylesToBeUsed) {
             const el = document.getElementById(defBlockId);
@@ -60,7 +70,7 @@ export const CodeVariable: CodeLeaf = ({
         }}
       >
         {children}
-      </atoms.CodeVariable>
+      </molecules.CodeVariable>
     </span>
   );
 };
