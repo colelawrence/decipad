@@ -26,6 +26,9 @@ describe('without a description', () => {
     const { y: titleY } = (await (await page.$(
       select(getByText('My Notebook'))
     ))!.boundingBox())!;
+    const { y: descriptionY } = (await (await page.$(
+      select(getByText('The Description'))
+    ))!.boundingBox())!;
 
     rerender(
       <NotebookListItem {...props} name="My Notebook" description={undefined} />
@@ -36,6 +39,7 @@ describe('without a description', () => {
     ))!.boundingBox())!;
 
     expect(combinedY).toBeGreaterThan(titleY);
+    expect(combinedY).toBeLessThan(descriptionY);
   });
 });
 

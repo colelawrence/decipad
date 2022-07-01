@@ -17,6 +17,7 @@ export const gridStyles: CSSObject = {
   display: 'grid',
   gridTemplate: `
     "icon title       updated emptycol actions" 1fr
+    "icon description updated emptycol actions" 1fr
     /32px 506fr       282fr   240fr    28px
   `,
   alignItems: 'center',
