@@ -9,8 +9,7 @@ type ColorId = Exclude<
 
 const wrapperStyle = {
   display: 'grid',
-  gridGap: '5px',
-  gridTemplateColumns: '100px 100px 100px',
+  gridTemplateColumns: 'repeat(6, 1fr)',
 };
 
 const colorNames: Record<ColorId, string> = {
@@ -138,8 +137,10 @@ export const Normal: Story = () => (
       <div
         role="presentation"
         css={{
-          width: '100px',
-          height: '24px',
+          height: '200px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: (colors[colorName as ColorId] as OpaqueColor).rgb,
         }}
       >
@@ -148,3 +149,4 @@ export const Normal: Story = () => (
     ))}
   </div>
 );
+Normal.storyName = 'Color';

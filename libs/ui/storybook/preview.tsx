@@ -7,7 +7,9 @@ import {
   smallestDesktop,
   smallestMobile,
 } from '../src/primitives';
+
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../src/utils';
+import { dark, light } from './theme';
 
 const withGlobalStyles: DecoratorFn = (StoryFn, context) => {
   return (
@@ -74,6 +76,10 @@ export const globalTypes: ArgTypes = {
 };
 
 export const parameters: Parameters = {
+  darkMode: {
+    dark: { ...dark },
+    light: { ...light },
+  },
   viewport: {
     viewports: Object.fromEntries(
       Object.entries({
@@ -91,6 +97,18 @@ export const parameters: Parameters = {
         },
       ])
     ),
-    defaultViewport: 'Smallest Mobile',
+  },
+  options: {
+    storySort: {
+      order: [
+        'Primitives',
+        'Atoms',
+        'Molecules',
+        'Organisms',
+        'Templates',
+        'Pages',
+        '*',
+      ],
+    },
   },
 };

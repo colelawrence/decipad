@@ -1,0 +1,42 @@
+import { Meta, Source } from '@storybook/addon-docs';
+import cover from './cover.png';
+
+<Meta title="Introduction" />
+
+<img src={cover} alt="cover" style={{ marginBottom: '2rem' }} />
+
+# Decipad Design System
+
+The Decipad design system is a collection of UI primitives and components that are used to assemble the final user interface for Decipad. The design system is assembled using the [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/) methodology, that is split between two areas for each hierarchy, UI section is for any user interface components that are outside of the editor and the Editor section is for all the components that are specifically used in the editor.
+
+# Primitives
+
+The lowest level of UI that the design system includes is a set of UI primitives that dictate common colors and typography rules to ensure consistent styling all around the application, primitives also include dark mode support and the colors automatically change based on dark/light modes.
+
+## Guidelines
+
+- Do not use a custom font size or weight, there are pre-defined values to set a font size on an element.
+- Do not use a custom css color value, all the colors are pre-defined in the primitives.
+- Do not directly set a css color or background property to a color, use `setCssVar`.
+
+## Usage
+
+**Setting a color on an element:**
+
+export const code1 = `const elementStyles = css({
+  ...setCssVar('currentTextColor', white.rgb),
+});`;
+
+<Source code={code1} dark />
+
+In the above code snippet, we are changing the `currentTextColor` css variable for this element to be the white color. There are many css variables that you can set and it will autocomplete for you when you use the `setCssVar` function.
+
+**Setting a typography style on an element:**
+
+export const code2 = `const elementStyles = css(p13SemiBold, {
+  // ...Extra styles here
+});`;
+
+<Source code={code2} dark />
+
+This snippet above sets the element to be the `p13SemiBold` preset, there are many that are included, you can check them out in the `Primitives / Text` section.

@@ -10,6 +10,7 @@ module.exports = {
   },
   features: {
     storyStoreV7: true,
+    previewMdx2: true,
   },
   typescript: {
     reactDocgen: false,

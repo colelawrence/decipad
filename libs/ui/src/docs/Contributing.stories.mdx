@@ -1,0 +1,71 @@
+import { Meta, Source } from '@storybook/addon-docs';
+import cover from './cover.png';
+
+<Meta title="Contributing" />
+
+<img src={cover} alt="cover" style={{ marginBottom: '2rem' }} />
+
+# Contributing Guidelines
+
+The first step of making a new UI component is to determine if it is an atom, molecule, organism, or page.
+
+## Creating new components
+
+Let's imagine we are making a Button component.
+
+1. Create a folder with the name of the component in the hierarchial folder (example: `atoms/Button`)
+2. Create a file with the component name inside that folder (`atoms/Button/Button.tsx`)
+3. Create a story file for the component (`atoms/Button/Button.stories.tsx`)
+4. Create a spec file for the component(`atoms/Button/Button.spec.tsx`)
+
+Let's start with creating a basic starting point for our component, this will help us then write the story file, view the component in storybook and continue it's development while seeing it in storybook. You should also pre-fill the spec file with tests about how you expect the component to be used.
+
+export const code1 = `import { ReactNode, FC } from 'react';
+import { css } from '@emotion/react';\n
+const buttonStyles = css({
+  padding: '4px 8px',
+});\n
+type ButtonProps = {
+  children: ReactNode;
+};\n
+export const Button: FC<ButtonProps> = ({ children }) => {
+  return (
+    <button type="button" css={buttonStyles}>{children}</button>
+  )
+}`;
+
+<Source code={code1} dark language="typescript" />
+
+Now we can initialise the story file.
+
+export const code2 = `import { Meta, Story } from '@storybook/react';
+import { ComponentProps } from 'react';
+import { Button } from './Button';\n
+const config: ComponentProps<typeof Button> = {
+  children: 'Button',
+};\n
+const config: Meta<typeof args> = {
+  title: 'Atoms / Button',
+  component: Button,
+  args,
+};\n
+export default config;\n
+export const Normal: Story<typeof args> = (props) => <Button {...props} />;`;
+
+<Source code={code2} dark language="typescript" />
+
+The default story name that should be used is `Normal`.
+
+You can now view the component in storybook and continue the development of the component, adjusting the story file to suit possible props as you go along and checking if the tests pass/fail.
+
+When you are done with developing the new component, don't forget to export it from the parent `index.ts` file in the hierarchial folder, for example `atoms/index.ts` file.
+
+## Library Guidelines
+
+- In most cases, no atoms/molecules or organisms should be exported from the ui library and it should mainly export complete templates / pages.
+- No data fetching should happen in the library, you should result to props to supply data into the templates and the data fetching should happen in the frontend application instead.
+- Always stick to using the primitives all the time to ensure consistent design and ease of pivoting to design changes.
+- Accessibility should be a top priority, the accessibility addon is included in the storybook and it will notify you with any violations that are occurring in the component.
+- Layouts should use the css grid system preferrably.
+- Radix ui should be used for complex components to ensure accessibility, the tooltip and modals are using Radix ui.
+- Have fun, create awesome components, Decipad to the moooooonnnn.
