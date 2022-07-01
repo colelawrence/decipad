@@ -110,15 +110,14 @@ describe('search', () => {
     expect(secondCommand).toEqual(firstCommand);
   });
 
-  it('resets the selection when changing', async () => {
+  it('updates the selection when changing', async () => {
     const handleExecute = jest.fn();
     const { rerender } = render(
       <SlashCommandsMenu onExecute={handleExecute} />
     );
 
-    await userEvent.keyboard('{arrowdown}');
-    rerender(<SlashCommandsMenu onExecute={handleExecute} search="a" />);
+    rerender(<SlashCommandsMenu onExecute={handleExecute} search="table" />);
     await userEvent.keyboard('{enter}');
-    expect(handleExecute).not.toHaveBeenCalled();
+    expect(handleExecute).toHaveBeenCalled();
   });
 });

@@ -228,9 +228,11 @@ export const SlashCommandsMenu = ({
 
   // SlashCommandsMenuItems do not use real browser focus, see their docs
   const [focusedCommand, setFocusedCommand] = useState<SlashCommand>();
+
+  const firstMatch = matchingCommands[0];
   useEffect(() => {
-    setFocusedCommand(undefined);
-  }, [search]);
+    setFocusedCommand(firstMatch);
+  }, [firstMatch]);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -255,6 +257,11 @@ export const SlashCommandsMenu = ({
                 : matchingCommands.length) - 1
             ] ?? matchingCommands.slice(-1)[0]
           );
+          event.stopPropagation();
+          event.preventDefault();
+          break;
+        case event.key === 'Enter' && focusedCommand === undefined:
+          setFocusedCommand(matchingCommands[0]);
           event.stopPropagation();
           event.preventDefault();
           break;
