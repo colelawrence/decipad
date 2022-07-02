@@ -5165,7 +5165,7 @@
     "@radix-ui/react-use-callback-ref" "0.1.0"
     "@radix-ui/react-use-controllable-state" "0.1.0"
 
-"@radix-ui/react-slot@0.1.2":
+"@radix-ui/react-slot@0.1.2", "@radix-ui/react-slot@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-0.1.2.tgz#e6f7ad9caa8ce81cc8d532c854c56f9b8b6307c8"
   integrity sha512-ADkqfL+agEzEguU3yS26jfB50hRrwf7U4VTwAOZEmi/g+ITcBWe12yM46ueS/UCIMI9Py+gFUaAdxgxafFvY2Q==
@@ -9164,6 +9164,19 @@
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
+"@udecode/plate-core@14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-14.0.0.tgz#e8c4641f7ca6900faf0167cd7c4b1a1b8845876e"
+  integrity sha512-jED+in3TpUxRJxw7iXY1aogN5MzXHhUidflZUDuSbvm2Ti53Pct3ICG/pDcIDqXd0wOoHSk4J5vZ82tO/vi93A==
+  dependencies:
+    "@radix-ui/react-slot" "^0.1.2"
+    "@udecode/zustood" "^1.1.1"
+    clsx "^1.1.1"
+    jotai "^1.7.2"
+    lodash "^4.17.21"
+    use-deep-compare "^1.1.0"
+    zustand "^3.7.2"
+
 "@udecode/plate-find-replace@13.1.0":
   version "13.1.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-13.1.0.tgz#7716b4855f3609640e4da54b4a3a9815de072410"
@@ -9261,12 +9274,12 @@
   dependencies:
     "@udecode/plate-core" "13.1.0"
 
-"@udecode/plate-juice@^13.1.0":
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-13.1.0.tgz#d29f6f129deaacc669c1f83f04ebbf7f3b169fcf"
-  integrity sha512-laRpX5n8YX5rdbfVtndUIjf0QzANvyHEgA4weHO8GEsQpqZdtUGhj5DGrUSSXGfib4BemQjpMlXs2uHRfwaNFw==
+"@udecode/plate-juice@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-14.0.0.tgz#a21a59ba189a258ea49a991bdba4229fce1c239d"
+  integrity sha512-nzO4rtQ3+BCWxUnN6OBHjv7rp5ozhMWw7ZNuy7wVw1ecL0yo6J8xKW59REAtzov7uJb5mTad41/zJoknLdBTrQ==
   dependencies:
-    "@udecode/plate-core" "13.1.0"
+    "@udecode/plate-core" "14.0.0"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@13.1.0":
@@ -20113,6 +20126,11 @@ jotai@^1.6.6, jotai@^1.7.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.7.1.tgz#a8ed7e05dc4ea0d6692f1301126340a24ee1350c"
   integrity sha512-Ucighxm0GwjvMpnLn7//CrHFSgLoL7LxHhXm7ofUNIktsRE4TAAhzrwsBb0LjJ0DuBJqQEJq9/jbHFfjO0ylYQ==
+
+jotai@^1.7.2:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.7.3.tgz#b27259f818daa39757c0177b952d416141c28849"
+  integrity sha512-7oyKS1cUlwO8bLvhrSrw3/G2tiprmUjt0eK19z4LMiyScsaeqnFwcr+3xaM6N8Ej6iGd0MmBlGhQsmJcnV6+Fw==
 
 jpeg-js@^0.4.1, jpeg-js@^0.4.3:
   version "0.4.3"
