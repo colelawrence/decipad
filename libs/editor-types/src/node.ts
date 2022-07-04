@@ -24,7 +24,7 @@ export type MyNodeEntry = ENodeEntry<MyValue>;
  * Editor
  */
 
-export type MyEditor = PlateEditor<MyValue>;
+export type MyEditor = PlateEditor<MyValue> & { isDragging?: boolean };
 export type MyReactEditor = TReactEditor<MyValue>;
 
 /**

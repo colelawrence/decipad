@@ -7,6 +7,8 @@ export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
   key: 'drag-over-cursor',
   handlers: {
     onDragOver: (editor) => (event) => {
+      if (editor.isDragging) return;
+
       const range = findEventRange(editor, event);
       if (!range) return;
 
