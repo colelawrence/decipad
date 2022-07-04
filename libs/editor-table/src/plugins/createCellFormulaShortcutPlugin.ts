@@ -1,6 +1,4 @@
-import { Path, Node } from 'slate';
-import { getBlockAbove } from '@udecode/plate';
-import { last } from '@decipad/utils';
+import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
 import {
   BlockElement,
   ELEMENT_TD,
@@ -8,7 +6,9 @@ import {
   MyElement,
   TableCellType,
 } from '@decipad/editor-types';
-import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
+import { last } from '@decipad/utils';
+import { getBlockAbove } from '@udecode/plate';
+import { Node, Path } from 'slate';
 import { changeColumnType } from '../utils/changeColumnType';
 
 const TRIGGER_KEY = '=';
@@ -17,7 +17,6 @@ export const createCellFormulaShortcutPlugin = createOnKeyDownPluginFactory({
   name: 'ARROW_CELL_FORMULA_SHORTCUT_PLUGIN',
   plugin: (editor: MyEditor) => (event) => {
     if (event.key !== TRIGGER_KEY) return false;
-
     const entry = getBlockAbove<BlockElement>(editor);
     if (!entry) return false;
 
@@ -25,7 +24,8 @@ export const createCellFormulaShortcutPlugin = createOnKeyDownPluginFactory({
     const element: MyElement = node;
     const columnIndex = last(path);
 
-    if (columnIndex == null) return false;
+    // can't have formulas on first column
+    if (columnIndex == null || columnIndex === 0) return false;
     if (element.type !== ELEMENT_TD) return false;
 
     const content = Node.string(element).trim();
