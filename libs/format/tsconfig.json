@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../fraction" },
+    { "path": "../language" },
+    { "path": "../utils" }
+  ]
+}

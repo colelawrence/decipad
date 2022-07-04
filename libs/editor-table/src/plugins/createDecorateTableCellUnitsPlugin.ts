@@ -6,12 +6,13 @@ import {
   ELEMENT_TR,
   MyDecorate,
 } from '@decipad/editor-types';
-import { stringifyUnits } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import { DECORATION_CELL_UNIT } from '../constants';
 import { TableCellUnitLeaf } from '../components';
 import { DecorationCellUnit } from '../types';
 
-export const decorateTableCellUnits: MyDecorate =
+export const decorateTableCellUnits =
+  (computer: Computer): MyDecorate =>
   (editor) =>
   ([node, path]): DecorationCellUnit[] | undefined => {
     if (!isText(node)) {
@@ -51,7 +52,7 @@ export const decorateTableCellUnits: MyDecorate =
       if (!unit) {
         return undefined;
       }
-      const unitString = stringifyUnits(unit);
+      const unitString = computer.formatUnit(unit);
       return [
         {
           [DECORATION_CELL_UNIT]: true,

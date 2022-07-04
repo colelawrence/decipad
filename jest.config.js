@@ -28,7 +28,10 @@ module.exports = {
     '<rootDir>/libs/editor-components',
     '<rootDir>/libs/editor-variable-def',
     '<rootDir>/libs/editor-power-table',
+    '<rootDir>/libs/editor-utils',
     '<rootDir>/libs/y-websocket',
+    '<rootDir>/libs/format',
+    '<rootDir>/libs/repl',
     '<rootDir>/libs/computer',
   ],
 };

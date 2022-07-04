@@ -1,4 +1,4 @@
-import { l, genericIdent, ne } from '../utils';
+import { F, l, genericIdent, ne, U, u } from '../utils';
 import { getType, getValue } from './of-directive';
 import { testGetType, testGetValue } from './testUtils';
 
@@ -11,10 +11,11 @@ describe('getType', () => {
 
   it('sets unit quality on unitful number', async () => {
     expect(
-      (
-        await testGetType(getType, ne(1, 'kilograms'), genericIdent('flour'))
-      ).toString()
-    ).toMatchInlineSnapshot(`"kilograms of flour"`);
+      await testGetType(getType, ne(1, 'kilograms'), genericIdent('flour'))
+    ).toMatchObject({
+      type: 'number',
+      unit: U([u('grams', { quality: 'flour', multiplier: F(1000) })]),
+    });
   });
 });
 

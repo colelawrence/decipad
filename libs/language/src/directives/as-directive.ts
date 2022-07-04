@@ -9,7 +9,7 @@ import { automapTypes, automapValues } from '../dimtools';
 import { FractionValue, fromJS, Value } from '../interpreter/Value';
 import { AST } from '../parser';
 import { build as t, InferError, Type, Unit, Units } from '../type';
-import { matchUnitArrays, stringifyUnits } from '../type/units';
+import { matchUnitArrays } from '../type/units';
 import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
 import type { GetTypeCtx, GetValueCtx, Directive } from './types';
 import { F, getIdentifierString, getInstanceof, U } from '../utils';
@@ -140,11 +140,7 @@ export async function getValue(
   return automapValues([expressionType], [evalResult], ([value]) => {
     if (value instanceof TimeQuantity) {
       if (targetUnits && targetUnits.args.length > 1) {
-        throw new RuntimeError(
-          `Don't know how to convert to composed unit ${stringifyUnits(
-            targetUnits
-          )}`
-        );
+        throw InferError.cannotConvertToUnit(targetUnits);
       }
 
       const targetUnitAsString = singular(
@@ -172,12 +168,11 @@ export async function getValue(
       return fromJS(converted.div(conversionRate));
     }
 
-    throw new RuntimeError(
-      `Don't know how to convert value to ${
-        (targetUnits && stringifyUnits(targetUnits)) ||
-        value.getData().toString()
-      }`
-    );
+    throw targetUnits
+      ? InferError.cannotConvertToUnit(targetUnits)
+      : new RuntimeError(
+          `Don't know how to convert value to ${value.getData().toString()}`
+        );
   });
 }
 

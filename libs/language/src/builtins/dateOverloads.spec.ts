@@ -18,11 +18,7 @@ describe('common functions', () => {
     expect(
       dateAndTimeQuantityFunctor([t.date('month'), t.timeQuantity(['day'])])
         .errorCause
-    ).toMatchInlineSnapshot(`
-      InferError {
-        "spec": ErrSpec:mismatched-specificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
-      }
-    `);
+    ).toMatchInlineSnapshot(`[Error: Inference Error: mismatched-specificity]`);
 
     expect(
       dateAndTimeQuantityFunctor([t.date('day'), t.timeQuantity(['quarter'])])
@@ -101,12 +97,9 @@ describe('common functions', () => {
 });
 
 it('date + number', () => {
-  expect(plus.functor!([t.date('month'), t.number(U('day'))]).errorCause)
-    .toMatchInlineSnapshot(`
-    InferError {
-      "spec": ErrSpec:mismatched-specificity("expectedSpecificity" => "month", "gotSpecificity" => "day"),
-    }
-  `);
+  expect(
+    plus.functor!([t.date('month'), t.number(U('day'))]).errorCause
+  ).toMatchInlineSnapshot(`[Error: Inference Error: mismatched-specificity]`);
   expect(
     plus.functor!([t.date('month'), t.number(U('year'))]).date
   ).toMatchInlineSnapshot(`"month"`);

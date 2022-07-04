@@ -1,4 +1,5 @@
 import Fraction, { FractionLike } from '@decipad/fraction';
+import { BaseQuantity } from '../units';
 
 export interface TUnit<TNumberType = Fraction> {
   unit: string;
@@ -8,6 +9,11 @@ export interface TUnit<TNumberType = Fraction> {
   aliasFor?: TUnits<TNumberType>;
   enforceMultiplier?: boolean;
   quality?: string;
+  isPrefix?: boolean;
+  baseQuantity?: BaseQuantity;
+  baseSuperQuantity?: BaseQuantity | 'currency';
+  hasNoSpaceBetweenUnitAndNumber?: boolean;
+  thousandsSeparator?: ',' | '.';
 }
 
 export interface TUnits<TNumberType = Fraction> {

@@ -13,7 +13,9 @@ describe('auto complete menu', () => {
     await page.keyboard.press('Enter');
     await createCalculationBlockBelow('OtherVare = 419 + 1');
     await waitForExpect(async () => {
-      expect(await page.$("span:has-text('69')")).not.toBeNull();
+      expect(
+        (await page.$$("span:has-text('69')")).length
+      ).toBeGreaterThanOrEqual(1);
     });
   });
 

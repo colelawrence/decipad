@@ -1,20 +1,17 @@
 // E2e tests
 import Fraction from '@decipad/fraction';
-import { build as t, units } from './type';
+import { build as t, InferError, units } from './type';
 import { runCode } from './run';
 import {
   runCodeForVariables,
   objectToTableType,
   objectToTableValue,
-  resultSnapshotSerializer,
   runAST,
 } from './testUtils';
 import { date, parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
 import { block, n, F, U, u, c } from './utils';
 import { number } from './type/build';
-
-expect.addSnapshotSerializer(resultSnapshotSerializer);
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -56,7 +53,10 @@ describe('basic code', () => {
   it('boolean ops support dates', async () => {
     const eq = c('==', date('2021-01', 'month'), date('2021-01', 'month'));
 
-    expect(await runAST(block(eq))).toMatchInlineSnapshot(`Result(true)`);
+    expect(await runAST(block(eq))).toMatchObject({
+      type: { type: 'boolean' },
+      value: true,
+    });
   });
 
   it('boolean ops support booleans', async () => {
@@ -68,7 +68,10 @@ describe('basic code', () => {
           false == false
         ]
       `)
-    ).toMatchInlineSnapshot(`Result([ true, true, true ])`);
+    ).toMatchObject({
+      type: { cellType: { type: 'boolean' } },
+      value: [true, true, true],
+    });
   });
 
   it('has correct operator precedence', async () => {
@@ -114,7 +117,10 @@ describe('basic code', () => {
 
         [Variable == "expect this", OnceRemoved("do not expect this")]
       `)
-    ).toMatchInlineSnapshot(`Result([ true, true ])`);
+    ).toMatchObject({
+      type: { cellType: { type: 'boolean' } },
+      value: [true, true],
+    });
   });
 
   it('Can perform operations between columns', async () => {
@@ -226,11 +232,13 @@ describe('basic code', () => {
         TableWrong = { Correct = [false] }
         if 1 < 3 then TableCorrect else TableWrong
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Correct = [ true ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Correct'],
+        columnTypes: [{ type: 'boolean' }],
+      },
+      value: [[true]],
+    });
   });
 });
 
@@ -275,14 +283,29 @@ describe('Multidimensional operations', () => {
         X = { Nums = [1, 2, 3] }
         total([100, 1000] * X.Nums)
       `)
-    ).toMatchInlineSnapshot(`Result([ 600, 6000 ])`);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          type: 'number',
+        },
+      },
+      value: [F(600), F(6000)],
+    });
 
     expect(
       await runCode(`
         X = { Nums = [1, 2, 3] }
         total(([100, 1000] * X.Nums) over X)
       `)
-    ).toMatchInlineSnapshot(`Result([ 1100, 2200, 3300 ])`);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          type: 'number',
+        },
+        columnSize: 3,
+      },
+      value: [F(1100), F(2200), F(3300)],
+    });
   });
 });
 
@@ -332,12 +355,13 @@ describe('Tables', () => {
           Cell = max([Index, 2])
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Index = [ 1, 2, 3, 4 ],
-        Cell = [ 2, 2, 3, 4 ]
-      })
-    `);
+    ).toMatchObject({
+      type: { columnNames: ['Index', 'Cell'], tableLength: 4 },
+      value: [
+        [F(1), F(2), F(3), F(4)],
+        [F(2), F(2), F(3), F(4)],
+      ],
+    });
   });
 
   it('can perform calculations between columns', async () => {
@@ -417,13 +441,22 @@ describe('Tables', () => {
           MoneyInTheBank = stepgrowth(Growth.Profit)
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Period = [ 1, 2, 3 ],
-        Profit = [ 1, 1, 1 ],
-        MoneyInTheBank = [ 1, 0, 0 ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Period', 'Profit', 'MoneyInTheBank'],
+        columnTypes: [
+          { type: 'number' },
+          { type: 'number' },
+          { type: 'number' },
+        ],
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [F(1), F(1), F(1)],
+        [F(1), F(0), F(0)],
+      ],
+    });
   });
 
   it('can be splitby() a 2d column', async () => {
@@ -438,16 +471,22 @@ describe('Tables', () => {
 
         splitby(Table, Table.Numbers)
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Numbers = [ [ 3, 4 ], [ 6, 8 ] ],
-        Values = [ {
-        Names = [ 'First' ]
-      }, {
-        Names = [ 'Second' ]
-      } ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Numbers', 'Values'],
+        columnTypes: [
+          { cellType: { type: 'number' }, columnSize: 2 },
+          { columnNames: ['Names'], columnTypes: [{ type: 'string' }] },
+        ],
+      },
+      value: [
+        [
+          [F(3), F(4)],
+          [F(6), F(8)],
+        ],
+        [[['First']], [['Second']]],
+      ],
+    });
   });
 
   it('Regression: tables inside tables', async () => {
@@ -457,11 +496,16 @@ describe('Tables', () => {
         C = { A = A }
         C.A
       `)
-    ).toMatchInlineSnapshot(`
-      Result([ {
-        B = [ 1, 2, 3 ]
-      } ])
-    `);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          columnNames: ['B'],
+          columnTypes: [{ type: 'number' }],
+        },
+        indexedBy: 'C',
+      },
+      value: [[[F(1), F(2), F(3)]]],
+    });
   });
 
   it('can call functions with auto-expanded columns as arguments (2)', async () => {
@@ -473,13 +517,22 @@ describe('Tables', () => {
           MoneyInTheBank = stepgrowth(Growth.Profit)
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Period = [ 1, 2, 3 ],
-        Profit = [ 500 $, 1000 $, 1500 $ ],
-        MoneyInTheBank = [ 500 $, 500 $, 500 $ ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Period', 'Profit', 'MoneyInTheBank'],
+        columnTypes: [
+          { type: 'number' },
+          { type: 'number', unit: U('USD', { known: true }) },
+          { type: 'number', unit: U('USD', { known: true }) },
+        ],
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [F(500), F(1000), F(1500)],
+        [F(500), F(500), F(500)],
+      ],
+    });
   });
 
   it('can create per-cell formulae', async () => {
@@ -490,12 +543,17 @@ describe('Tables', () => {
           CumulativeSum = Column + previous(0)
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Column = [ 1, 2, 0, 0, 3, -3, -3 ],
-        CumulativeSum = [ 1, 3, 3, 3, 6, 3, 0 ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Column', 'CumulativeSum'],
+        columnTypes: [{ type: 'number' }, { type: 'number' }],
+        tableLength: 7,
+      },
+      value: [
+        [F(1), F(2), F(0), F(0), F(3), F(-3), F(-3)],
+        [F(1), F(3), F(3), F(3), F(6), F(3), F(0)],
+      ],
+    });
 
     await expect(
       runCode(`
@@ -542,11 +600,14 @@ describe('Tables', () => {
 
         select(SourceTable, ThisOne)
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        ThisOne = [ 1 ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['ThisOne'],
+        columnTypes: [{ type: 'number' }],
+        tableLength: 1,
+      },
+      value: [[F(1)]],
+    });
   });
 
   it('Can use a spread table to dictate the tables length', async () => {
@@ -561,12 +622,17 @@ describe('Tables', () => {
           Item = 1
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Col = [ 1, 2, 3 ],
-        Item = [ 1, 1, 1 ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Col', 'Item'],
+        columnTypes: [{ type: 'number' }, { type: 'number' }],
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [F(1), F(1), F(1)],
+      ],
+    });
   });
 
   it('can have multidimensional columns', async () => {
@@ -580,54 +646,116 @@ describe('Tables', () => {
     `;
 
     const result = await runCode(fuelTable('Fuel.Years * Cars.Num'));
-    expect(result).toMatchInlineSnapshot(`
-      Result({
-        Years = [ 1, 2, 3 ],
-        Cost = [ [ 100, 200 ], [ 200, 400 ], [ 300, 600 ] ]
-      })
-    `);
-    expect(result.type.toString()).toMatchInlineSnapshot(
-      `"table (3) { Years = <number>, Cost = <number> x 2 }"`
-    );
+    expect(result).toMatchObject({
+      type: {
+        columnNames: ['Years', 'Cost'],
+        columnTypes: [
+          { type: 'number' },
+          { cellType: { type: 'number' }, columnSize: 2 },
+        ],
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [
+          [F(100), F(200)],
+          [F(200), F(400)],
+          [F(300), F(600)],
+        ],
+      ],
+    });
 
     const resultInvertedDims = await runCode(
       fuelTable('Cars.Num * Fuel.Years')
     );
-    expect(resultInvertedDims).toMatchInlineSnapshot(`
-      Result({
-        Years = [ 1, 2, 3 ],
-        Cost = [ [ 100, 200, 300 ], [ 200, 400, 600 ] ]
-      })
-    `);
-    expect(resultInvertedDims.type.toString()).toMatchInlineSnapshot(
-      `"table (3) { Years = <number>, Cost = <number> x 3 }"`
-    );
+    expect(resultInvertedDims).toMatchObject({
+      type: {
+        columnNames: ['Years', 'Cost'],
+        columnTypes: [
+          {
+            type: 'number',
+          },
+          {
+            cellType: {
+              type: 'number',
+            },
+            columnSize: 3,
+          },
+        ],
+        indexName: 'Fuel',
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [
+          [F(100), F(200), F(300)],
+          [F(200), F(400), F(600)],
+        ],
+      ],
+    });
 
     const resultExtraDim = await runCode(
       fuelTable('Cars.Num * Fuel.Years * [1]')
     );
-    expect(resultExtraDim).toMatchInlineSnapshot(`
-      Result({
-        Years = [ 1, 2, 3 ],
-        Cost = [ [ [ 100 ], [ 200 ], [ 300 ] ], [ [ 200 ], [ 400 ], [ 600 ] ] ]
-      })
-    `);
-    expect(resultExtraDim.type.toString()).toMatchInlineSnapshot(
-      `"table (3) { Years = <number>, Cost = <number> x 1 x 3 }"`
-    );
+    expect(resultExtraDim).toMatchObject({
+      type: {
+        columnNames: ['Years', 'Cost'],
+        columnTypes: [
+          {
+            type: 'number',
+          },
+          {
+            cellType: {
+              cellType: {
+                type: 'number',
+              },
+              columnSize: 1,
+            },
+            columnSize: 3,
+            indexedBy: 'Fuel',
+          },
+        ],
+        indexName: 'Fuel',
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [
+          [[F(100)], [F(200)], [F(300)]],
+          [[F(200)], [F(400)], [F(600)]],
+        ],
+      ],
+    });
 
     const resultExtraDim2 = await runCode(
       fuelTable('Cars.Num * [1] * Fuel.Years')
     );
-    expect(resultExtraDim2).toMatchInlineSnapshot(`
-      Result({
-        Years = [ 1, 2, 3 ],
-        Cost = [ [ [ 100, 200, 300 ] ], [ [ 200, 400, 600 ] ] ]
-      })
-    `);
-    expect(resultExtraDim2.type.toString()).toMatchInlineSnapshot(
-      `"table (3) { Years = <number>, Cost = <number> x 3 (Fuel) x 1 }"`
-    );
+    expect(resultExtraDim2).toMatchObject({
+      type: {
+        columnNames: ['Years', 'Cost'],
+        columnTypes: [
+          {
+            type: 'number',
+          },
+          {
+            cellType: {
+              cellType: {
+                type: 'number',
+              },
+              columnSize: 3,
+              indexedBy: 'Fuel',
+            },
+            columnSize: 1,
+          },
+        ],
+        indexName: 'Fuel',
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(2), F(3)],
+        [[[F(100), F(200), F(300)]], [[F(200), F(400), F(600)]]],
+      ],
+    });
   });
 
   it('Regression: splitby + lookup issue', async () => {
@@ -640,14 +768,28 @@ describe('Tables', () => {
         Countries = splitby(Table, Table.Country)
         lookup(Countries, Countries.Country == "🇬🇧")
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Country = '🇬🇧',
-        Values = {
-        Name = [ 'Eva', 'Adam' ]
-      }
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        rowCellNames: ['Country', 'Values'],
+        rowCellTypes: [
+          {
+            type: 'string',
+          },
+          {
+            columnNames: ['Name'],
+            columnSize: null,
+            columnTypes: [
+              {
+                type: 'string',
+              },
+            ],
+            indexName: 'Table',
+            tableLength: 3,
+          },
+        ],
+      },
+      value: ['🇬🇧', [['Eva', 'Adam']]],
+    });
   });
 
   it('looked-up rows can be accessed', async () => {
@@ -659,7 +801,12 @@ describe('Tables', () => {
         }
         lookup(Table, Table.Names == "World").Numbers
       `)
-    ).toMatchInlineSnapshot(`Result(1)`);
+    ).toMatchObject({
+      type: {
+        type: 'number',
+      },
+      value: F(1),
+    });
   });
 });
 
@@ -674,7 +821,17 @@ describe('Matrices', () => {
         ${createVars}
         CoffeePrice[Cities] = 1.20 EUR
       `)
-    ).toMatchInlineSnapshot(`Result([ 1.2 €, 1.2 € ])`);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          type: 'number',
+          unit: U('EUR', { known: true }),
+        },
+        columnSize: 2,
+        indexedBy: 'Cities',
+      },
+      value: [F(12, 10), F(12, 10)],
+    });
   });
 
   it('can assign partial contents', async () => {
@@ -683,7 +840,16 @@ describe('Matrices', () => {
         ${createVars}
         CoffeePrice[Cities == "Faro"] = 1.20 EUR
       `)
-    ).toMatchInlineSnapshot(`Result([ 0.7 €, 1.2 € ])`);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          type: 'number',
+          unit: U('EUR', { known: true }),
+        },
+        columnSize: 2,
+      },
+      value: [F(7, 10), F(12, 10)],
+    });
   });
 
   it('can read contents', async () => {
@@ -693,7 +859,17 @@ describe('Matrices', () => {
         CoffeePrice[Cities == "Faro"] = 1.20 EUR
         CoffeePrice[Cities]
       `)
-    ).toMatchInlineSnapshot(`Result([ 0.7 €, 1.2 € ])`);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          type: 'number',
+          unit: U('EUR', { known: true }),
+        },
+        columnSize: 'unknown',
+        indexedBy: 'Cities',
+      },
+      value: [F(7, 10), F(12, 10)],
+    });
   });
 
   it('can read partial contents', async () => {
@@ -703,7 +879,17 @@ describe('Matrices', () => {
         CoffeePrice[Cities == "Faro"] = 1.2
         CoffeePrice[Cities == "Faro"]
       `)
-    ).toMatchInlineSnapshot(`Result([ 1.2 € ])`);
+    ).toMatchObject({
+      type: {
+        cellType: {
+          type: 'number',
+          unit: U('EUR', { known: true }),
+        },
+        columnSize: 'unknown',
+        indexedBy: 'Cities',
+      },
+      value: [F(12, 10)],
+    });
   });
 });
 
@@ -807,7 +993,13 @@ describe('Units', () => {
     const { type, value } = await runCode(
       '(120 meter^2) * (50 USD/meter^2/month)'
     );
-    expect(type.toString()).toEqual('$ per month');
+    expect(type).toMatchObject({
+      type: 'number',
+      unit: U([
+        u('USD', { known: true }),
+        u('months', { known: true, exp: F(-1) }),
+      ]),
+    });
     expect(value.valueOf()).toEqual(6000);
   });
 });
@@ -857,53 +1049,117 @@ describe('Dates', () => {
           Days = Months == MaybeEqualMonths
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Result({
-        Months = [ month 2020-09, month 2020-10, month 2020-11 ],
-        MaybeEqualMonths = [ month 2020-09, month 2020-11, month 2020-10 ],
-        Days = [ true, false, false ]
-      })
-    `);
+    ).toMatchObject({
+      type: {
+        columnNames: ['Months', 'MaybeEqualMonths', 'Days'],
+        columnTypes: [
+          {
+            date: 'month',
+          },
+          {
+            date: 'month',
+          },
+          {
+            type: 'boolean',
+          },
+        ],
+        tableLength: 3,
+      },
+      value: [
+        [1598918400000n, 1601510400000n, 1604188800000n],
+        [1598918400000n, 1604188800000n, 1601510400000n],
+        [true, false, false],
+      ],
+    });
   });
 
   it('can get the max of a list of dates', async () => {
     expect(
       await runCode(`max([date(2050-Jan-01), date(2025-Jun-01)])`)
-    ).toMatchInlineSnapshot(`Result(day 2050-01-01)`);
+    ).toMatchObject({
+      type: {
+        date: 'day',
+      },
+      value: 2524608000000n,
+    });
   });
 
   it('can operate between dates', async () => {
-    expect(await runCode(`date(2020) - date(2010)`)).toMatchInlineSnapshot(
-      `Result(10 years)`
-    );
-    expect(
-      await runCode(`date(2020-01) - date(2010-01)`)
-    ).toMatchInlineSnapshot(`Result(120 months)`);
-    expect(
-      await runCode(`date(2020-01-01) - date(2010-01-01)`)
-    ).toMatchInlineSnapshot(`Result(3652 days)`);
+    expect(await runCode(`date(2020) - date(2010)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('year', { known: true }),
+      },
+      value: F(10),
+    });
+    expect(await runCode(`date(2020-01) - date(2010-01)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('month', { known: true }),
+      },
+      value: F(120),
+    });
+    expect(await runCode(`date(2020-01-01) - date(2010-01-01)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('day', { known: true }),
+      },
+      value: F(3652),
+    });
     expect(
       await runCode(`date(2020-01-01T10:30) - date(2020-01-01T09:30)`)
-    ).toMatchInlineSnapshot(`Result(60 minutes)`);
+    ).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('minute', { known: true }),
+      },
+      value: F(60),
+    });
     expect(
       await runCode(`date(2020-01-01T10:30:16) - date(2020-01-01T10:30:00)`)
-    ).toMatchInlineSnapshot(`Result(16 seconds)`);
+    ).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('second', { known: true }),
+      },
+      value: F(16),
+    });
 
-    expect(await runCode(`1 year + date(2020)`)).toMatchInlineSnapshot(
-      `Result(year 2021)`
-    );
-    expect(await runCode(`date(2020-01) + 12 months`)).toMatchInlineSnapshot(
-      `Result(month 2021-01)`
-    );
-    expect(await runCode(`date(2020-01) + 1 year`)).toMatchInlineSnapshot(
-      `Result(month 2021-01)`
-    );
-    expect(
-      await runCode(`[ date(2020-01) ] + [ 1 year ]`)
-    ).toMatchInlineSnapshot(`Result([ month 2021-01 ])`);
+    expect(await runCode(`1 year + date(2020)`)).toMatchObject({
+      type: {
+        date: 'year',
+      },
+      value: 1609459200000n,
+    });
+    expect(await runCode(`date(2020-01) + 12 months`)).toMatchObject({
+      type: {
+        date: 'month',
+      },
+      value: 1609459200000n,
+    });
+    expect(await runCode(`date(2020-01) + 1 year`)).toMatchObject({
+      type: {
+        date: 'month',
+      },
+      value: 1609459200000n,
+    });
+    expect(await runCode(`[ date(2020-01) ] + [ 1 year ]`)).toMatchObject({
+      type: {
+        cellType: {
+          date: 'month',
+        },
+        columnSize: 1,
+      },
+      value: [1609459200000n],
+    });
     expect(
       await runCode(`date(2020-01-01T10:30:16) - 16 seconds`)
-    ).toMatchInlineSnapshot(`Result(second 2020-01-01 10:30)`);
+    ).toMatchObject({
+      type: {
+        date: 'second',
+      },
+      value: 1577874600000n,
+    });
   });
 });
 
@@ -1128,18 +1384,34 @@ describe('number units work together', () => {
   });
 
   it('(historical dates regression): can subtract dates', async () => {
-    expect(
-      await runCode(`date(1883-12) - date(1883-10)`)
-    ).toMatchInlineSnapshot(`Result(2 months)`);
-    expect(
-      await runCode(`date(1884-01) - date(1883-01)`)
-    ).toMatchInlineSnapshot(`Result(12 months)`);
-    expect(await runCode(`date(1900) - date(1883)`)).toMatchInlineSnapshot(
-      `Result(17 years)`
-    );
-    expect(await runCode(`date(2200) - date(1883)`)).toMatchInlineSnapshot(
-      `Result(317 years)`
-    );
+    expect(await runCode(`date(1883-12) - date(1883-10)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('month', { known: true }),
+      },
+      value: F(2),
+    });
+    expect(await runCode(`date(1884-01) - date(1883-01)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('month', { known: true }),
+      },
+      value: F(12),
+    });
+    expect(await runCode(`date(1900) - date(1883)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('year', { known: true }),
+      },
+      value: F(17),
+    });
+    expect(await runCode(`date(2200) - date(1883)`)).toMatchObject({
+      type: {
+        type: 'number',
+        unit: U('year', { known: true }),
+      },
+      value: F(317),
+    });
   });
 
   it('calculates number from time quantity decade', async () => {
@@ -1620,9 +1892,24 @@ describe('unit conversion', () => {
 
         [Hours, Hours2, Hours3]
     `)
-    ).toMatchInlineSnapshot(
-      `Result([ [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ], [ 1.68 hours, 0.83 hours ] ])`
-    );
+    ).toMatchObject({
+      type: {
+        cellType: {
+          cellType: {
+            type: 'number',
+            unit: U('hours', { known: true }),
+          },
+          columnSize: 2,
+          indexedBy: 'Animals',
+        },
+        columnSize: 3,
+      },
+      value: [
+        [F(168, 100), F(83, 100)],
+        [F(168, 100), F(83, 100)],
+        [F(168, 100), F(83, 100)],
+      ],
+    });
   });
 
   it('converts autoexpanding units correctly', async () => {
@@ -1719,12 +2006,30 @@ describe('math operators', () => {
 
 describe('len', () => {
   it('len a column', async () => {
-    expect(await runCode('len([1])')).toMatchInlineSnapshot(`Result(1)`);
-    expect(await runCode('len(1)')).toMatchInlineSnapshot(`Result(1)`);
-    expect(await runCode('len("contents")')).toMatchInlineSnapshot(`Result(1)`);
-    expect(await runCode('len(["contents"])')).toMatchInlineSnapshot(
-      `Result(1)`
-    );
+    expect(await runCode('len([1])')).toMatchObject({
+      type: {
+        type: 'number',
+      },
+      value: F(1),
+    });
+    expect(await runCode('len(1)')).toMatchObject({
+      type: {
+        type: 'number',
+      },
+      value: F(1),
+    });
+    expect(await runCode('len("contents")')).toMatchObject({
+      type: {
+        type: 'number',
+      },
+      value: F(1),
+    });
+    expect(await runCode('len(["contents"])')).toMatchObject({
+      type: {
+        type: 'number',
+      },
+      value: F(1),
+    });
   });
   it('len a column of dates', async () => {
     expect(await runCode(`len([date(2020), date(2021)])`)).toMatchObject({
@@ -1757,9 +2062,12 @@ describe('type cohercion', () => {
 
 describe('unit qualities', () => {
   it('cannot be applied to numbers without units', async () => {
-    expect(await runCode('3 of sugar')).toMatchInlineSnapshot(
-      `Result(Fraction { 3 } Error: Need one and only one unit)`
-    );
+    expect(await runCode('3 of sugar')).toMatchObject({
+      type: {
+        errorCause: InferError.needOneAndOnlyOneUnit(),
+      },
+      value: F(3),
+    });
   });
 
   it('applies to numbers with single unit', async () => {

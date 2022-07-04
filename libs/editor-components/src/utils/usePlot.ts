@@ -4,6 +4,7 @@ import {
   useElementMutatorCallback,
   useNamesDefinedBefore,
 } from '@decipad/editor-utils';
+import { useComputer } from '@decipad/react-contexts';
 import type { PlotData, PlotSpec } from './plotUtils';
 import {
   enhanceSpecFromWideData,
@@ -52,9 +53,14 @@ export const usePlot = ({
   const table = names.find((varName) => varName.name === element.sourceVarName);
   const columns =
     (table?.type.kind === 'table' && table.type.columnNames) || [];
+  const computer = useComputer();
 
   let spec = normalizePlotSpec(
-    defaultPlotSpec(result?.type, specFromType(result?.type, element))
+    defaultPlotSpec(
+      computer,
+      result?.type,
+      specFromType(computer, result?.type, element)
+    )
   );
   const data = resultToPlotResultData(result, element);
   spec = spec && data && enhanceSpecFromWideData(spec, data);

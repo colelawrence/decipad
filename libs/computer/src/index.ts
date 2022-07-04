@@ -23,14 +23,18 @@ export {
   Result,
   STATEMENT_SEP_TOKEN_TYPE,
   prettyPrintAST,
-  stringifyUnits,
   normalizeUnitsOf,
   serializeResult,
   tokenize,
   CompareValues,
 } from '@decipad/language';
 
-export type { AutocompleteName } from '@decipad/language';
+export type {
+  AutocompleteName,
+  FUnit,
+  FUnits,
+  ErrSpec,
+} from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

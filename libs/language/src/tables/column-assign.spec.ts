@@ -29,31 +29,49 @@ describe('Column assignment inference', () => {
       ctx,
       tableColAssign('Table', 'Col2', col(1, 2))
     );
-    expect(justTheColumn).toMatchInlineSnapshot(`<number> x 2 (Table)`);
-    expect(ctx.stack.globalVariables.get('Table')).toMatchInlineSnapshot(
-      `table (2) { Col1 = <number>, Col2 = <number> }`
-    );
+    expect(justTheColumn).toMatchObject({
+      columnSize: 2,
+      cellType: { type: 'number' },
+    });
+    expect(ctx.stack.globalVariables.get('Table')).toMatchObject({
+      columnNames: ['Col1', 'Col2'],
+      columnTypes: [{ type: 'number' }, { type: 'number' }],
+      tableLength: 2,
+    });
   });
   it('can create a new column with scalar number', async () => {
     const expandedNum = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', l(1))
     );
-    expect(expandedNum).toMatchInlineSnapshot(`<number> x 2 (Table)`);
+    expect(expandedNum).toMatchObject({
+      columnSize: 2,
+      cellType: {
+        type: 'number',
+      },
+    });
   });
   it('can create a new column with a formula', async () => {
     const expandedFormula = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', r('Col1'), l(1)))
     );
-    expect(expandedFormula).toMatchInlineSnapshot(`<number> x 2 (Table)`);
+    expect(expandedFormula).toMatchObject({
+      columnSize: 2,
+      cellType: { type: 'number' },
+    });
   });
   it('can create a new column with a formula using previous', async () => {
     const usingPrevious = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', c('previous', l(1)), l(1)))
     );
-    expect(usingPrevious).toMatchInlineSnapshot(`<number> x 2 (Table)`);
+    expect(usingPrevious).toMatchObject({
+      columnSize: 2,
+      cellType: {
+        type: 'number',
+      },
+    });
   });
 
   it('only works in global scope', async () => {
@@ -84,9 +102,11 @@ describe('Column assignment inference', () => {
     expect(duplicatedColumn.errorCause?.spec.errType).toEqual(
       'duplicated-table-column'
     );
-    expect(ctx.stack.globalVariables.get('Table')).toMatchInlineSnapshot(
-      `table (2) { Col1 = <number> }`
-    );
+    expect(ctx.stack.globalVariables.get('Table')).toMatchObject({
+      columnNames: ['Col1'],
+      columnTypes: [{ type: 'number' }],
+      tableLength: 2,
+    });
 
     ctx.stack.globalVariables.set('Num', t.number());
     const assigningToNonTable = await inferStatement(
@@ -96,9 +116,9 @@ describe('Column assignment inference', () => {
     expect(assigningToNonTable.errorCause?.spec.errType).toMatchInlineSnapshot(
       `"expected-but-got"`
     );
-    expect(ctx.stack.globalVariables.get('Num')).toMatchInlineSnapshot(
-      `<number>`
-    );
+    expect(ctx.stack.globalVariables.get('Num')).toMatchObject({
+      type: 'number',
+    });
   });
 });
 

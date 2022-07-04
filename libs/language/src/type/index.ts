@@ -1,7 +1,6 @@
 import { immerable, produce } from 'immer';
 import { Time } from '..';
 import * as AST from '../parser/ast-types';
-import { zip } from '../utils';
 import * as t from './build';
 import {
   divideUnit,
@@ -25,21 +24,24 @@ import {
   isPrimitive,
   canAddTableColumn,
 } from './checks';
-import { InferError } from './InferError';
+import { InferError, ErrSpec } from './InferError';
 import {
   inverseExponent,
   normalizeUnits,
   normalizeUnitsOf,
   setUnit,
-  stringifyUnits,
+  simplifyUnits,
+  pluralizeUnit,
 } from './units';
-import { Unit, Units, units } from './unit-type';
+import { Unit, Units, units, FUnit, FUnits, TUnit, TUnits } from './unit-type';
 
-export type { Unit, Units };
+export { simplifyUnits, pluralizeUnit };
+
+export type { ErrSpec, Unit, Units, FUnit, FUnits, TUnit, TUnits };
 
 export * from './serialization';
 export * from './convert-to-multiplier-unit';
-export { setUnit, stringifyUnits, normalizeUnits, normalizeUnitsOf, units };
+export { setUnit, normalizeUnits, normalizeUnitsOf, units };
 export { InferError, inverseExponent, t as build };
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
@@ -112,77 +114,6 @@ export class Type {
     } else {
       return fn(this);
     }
-  }
-
-  toString({
-    isTableColumn = false,
-  }: { isTableColumn?: boolean } = {}): string {
-    if (this.errorCause != null) {
-      return `Error: ${this.errorCause.message}`;
-    }
-
-    if (this.columnSize != null && this.cellType != null) {
-      const columnStr = `${this.cellType.toString()} x ${this.columnSize}`;
-
-      if (!isTableColumn && this.indexedBy) {
-        return `${columnStr} (${this.indexedBy})`;
-      } else {
-        return columnStr;
-      }
-    }
-
-    if (this.columnTypes != null && this.columnNames != null) {
-      const columnStrings = zip(this.columnNames, this.columnTypes).map(
-        ([name, col]) => `${name} = ${col.toString({ isTableColumn: true })}`
-      );
-
-      return `table (${this.tableLength}) { ${columnStrings.join(', ')} }`;
-    }
-
-    if (this.rowCellTypes != null && this.rowCellNames != null) {
-      const rowCellStrings = zip(this.rowCellNames, this.rowCellTypes).map(
-        ([name, cell]) => `${name} = ${cell.toString()}`
-      );
-
-      return `row [ ${rowCellStrings.join(', ')} ]`;
-    }
-
-    if (this.rangeOf != null) {
-      return `range of ${this.rangeOf.toString()}`;
-    }
-
-    if (this.date != null) {
-      return this.date;
-    }
-
-    if (this.nothingness) {
-      return `nothing`;
-    }
-
-    const unitString = this.unit && stringifyUnits(this.unit);
-
-    return unitString || `<${this.type}>`;
-  }
-
-  toBasicString() {
-    if (this.functionness) return 'function';
-
-    if (this.errorCause != null) {
-      throw new Error('toBasicString: errors not supported');
-    }
-
-    if (this.unit != null) return stringifyUnits(this.unit);
-    if (this.type != null) return this.type;
-    if (this.isTimeQuantity().errorCause == null) return 'time quantity';
-    if (this.date != null) return `date(${this.date})`;
-    if (this.rangeOf != null) return 'range';
-    if (this.columnSize != null) return 'column';
-    if (this.columnTypes != null) return 'table';
-    if (this.rowCellTypes != null) return 'row';
-    if (this.nothingness) return 'nothing';
-
-    /* istanbul ignore next */
-    throw new Error('toBasicString: unknown type');
   }
 
   inNode(node: AST.Node) {

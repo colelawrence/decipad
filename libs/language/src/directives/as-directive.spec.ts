@@ -10,21 +10,25 @@ const year = u('years');
 
 describe('getType', () => {
   it('adds a unit to a unitless type', async () => {
-    expect(
-      (await testGetType(getType, l(1), ne(1, 'hours'))).toString()
-    ).toMatchInlineSnapshot(`"hours"`);
+    expect(await testGetType(getType, l(1), ne(1, 'hours'))).toMatchObject({
+      type: 'number',
+      unit: U('hours'),
+    });
   });
 
   it('converts a unit to another', async () => {
     expect(
-      (await testGetType(getType, ne(1, 'minute'), ne(1, 'hours'))).toString()
-    ).toMatchInlineSnapshot(`"hours"`);
+      await testGetType(getType, ne(1, 'minute'), ne(1, 'hours'))
+    ).toMatchObject({
+      type: 'number',
+      unit: U('hours'),
+    });
   });
 
   it('converts unitless column to other unitful column', async () => {
-    expect(await testGetType(getType, col(l(1), l(2)), ne(1, 'years'))).toEqual(
-      t.column(t.number([year]), 2)
-    );
+    expect(
+      await testGetType(getType, col(l(1), l(2)), ne(1, 'years'))
+    ).toMatchObject(t.column(t.number([year]), 2));
   });
 
   it('assigns the ref name as the target unit', async () => {

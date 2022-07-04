@@ -2,37 +2,50 @@ import { build as t } from './index';
 import { InferError } from './InferError';
 
 it('can stringify errors', () => {
-  expect(new InferError('random string').message).toEqual('random string');
+  expect(new InferError('random string').spec).toMatchObject({
+    errType: 'free-form',
+    message: 'random string',
+  });
 
-  expect(InferError.missingVariable('Var').message).toEqual(
-    'The variable Var is missing'
-  );
+  expect(InferError.missingVariable('Var').spec).toMatchObject({
+    errType: 'missing-variable',
+    missingVariable: ['Var'],
+  });
 
-  expect(InferError.expectedButGot('REQ', t.number()).message).toEqual(
-    'This operation requires a REQ and a number was entered'
-  );
+  expect(InferError.expectedButGot('REQ', t.number()).spec).toMatchObject({
+    errType: 'expected-but-got',
+    expectedButGot: ['REQ', t.number()],
+  });
 
-  expect(InferError.expectedArgCount('Func', 10, 9).message).toEqual(
-    'The function Func requires 10 parameters and 9 parameters were entered'
-  );
+  expect(InferError.expectedArgCount('Func', 10, 9).spec).toMatchObject({
+    errType: 'expected-arg-count',
+    expectedArgCount: ['Func', 10, 9],
+  });
 
-  expect(InferError.expectedUnit(null, null).message).toEqual(
-    'This operation requires compatible units'
-  );
+  expect(InferError.expectedUnit(null, null).spec).toMatchObject({
+    errType: 'expected-unit',
+    expectedUnit: [null, null],
+  });
+
+  expect(InferError.mismatchedSpecificity('month', 'hour').spec).toMatchObject({
+    errType: 'mismatched-specificity',
+    expectedSpecificity: 'month',
+    gotSpecificity: 'hour',
+  });
 
   expect(
-    InferError.mismatchedSpecificity('month', 'hour').message
-  ).toMatchInlineSnapshot(
-    `"Expected time specific up to the month, but got hour"`
-  );
+    InferError.columnContainsInconsistentType(t.number(), t.string()).spec
+  ).toMatchObject({
+    errType: 'column-contains-inconsistent-type',
+    cellType: t.number(),
+    got: t.string(),
+  });
 
   expect(
-    InferError.columnContainsInconsistentType(t.number(), t.string()).message
-  ).toMatchInlineSnapshot(`"Column cannot contain both number and string"`);
-
-  expect(
-    InferError.badOverloadedBuiltinCall('+', [t.string(), t.number()]).message
-  ).toMatchInlineSnapshot(
-    `"The function + cannot be called with (string, number)"`
-  );
+    InferError.badOverloadedBuiltinCall('+', [t.string(), t.number()]).spec
+  ).toMatchObject({
+    errType: 'bad-overloaded-builtin-call',
+    functionName: '+',
+    gotArgTypes: [t.string(), t.number()],
+  });
 });

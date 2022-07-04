@@ -2,10 +2,10 @@ import Fraction, { FractionLike } from '@decipad/fraction';
 import produce from 'immer';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
-import { RuntimeError } from '../interpreter';
 import { Unit, Units, TUnits } from '../type/unit-type';
-import { normalizeUnits, simplifyUnits, stringifyUnits } from '../type/units';
+import { normalizeUnits, simplifyUnits } from '../type/units';
 import { zip } from '../utils';
+import { InferError } from '../type';
 
 function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {
   return a.unit === b.unit && a.exp.compare(b.exp) === 0;
@@ -104,11 +104,7 @@ export function convertBetweenUnits(
   to: Units
 ): Fraction {
   if (!areUnitsConvertible(from, to)) {
-    throw new RuntimeError(
-      `Don't know how to convert between ${stringifyUnits(
-        from
-      )} and ${stringifyUnits(to)}`
-    );
+    throw InferError.cannotConvertBetweenUnits(from, to);
   }
 
   const [expandedUnits, expandedN] = toExpandedBaseQuantity(n, from);

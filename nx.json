@@ -232,6 +232,12 @@
     },
     "backend-trace": {
       "tags": []
+    },
+    "format": {
+      "tags": []
+    },
+    "repl": {
+      "tags": []
     }
   }
 }

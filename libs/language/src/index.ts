@@ -37,6 +37,7 @@ export {
   Realm,
   isColumnLike,
   CompareValues,
+  runBlock,
 } from './interpreter';
 export {
   Column,
@@ -49,7 +50,7 @@ export {
 } from './interpreter/Value';
 export { AST, parse, Parser, parseBlock, SyntaxError } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export { serializeResult, stringifyResult, validateResult } from './result';
+export { serializeResult, validateResult } from './result';
 export * as Result from './result';
 export * from './run';
 export {
@@ -61,18 +62,28 @@ export {
   InferError,
   serializeType,
   serializeUnit,
-  stringifyUnits,
+  simplifyUnits,
   Type,
+  pluralizeUnit,
+  inverseExponent,
 } from './type';
 export type {
   SerializedType,
   SerializedTypes,
   SerializedTypeKind,
   SerializedUnits,
+  FUnit,
+  FUnits,
+  TUnit,
+  TUnits,
+  ErrSpec,
 } from './type';
 export { isExpression, walkAst, n as astNode, isAssignment } from './utils';
 export { units };
 export type { Unit, Units };
+export * from './units';
+
+export * from './pluralize';
 
 export interface InjectableExternalData {
   type: Type;

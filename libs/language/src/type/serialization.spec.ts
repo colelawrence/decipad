@@ -1,5 +1,5 @@
 import { buildType as t, Unit } from '..';
-import { F } from '../utils';
+import { F, U } from '../utils';
 import { InferError } from './InferError';
 import {
   deserializeType,
@@ -143,35 +143,44 @@ it('can parse a type', () => {
     kind: 'number',
     unit: null,
   };
-  const testDeserialize = (x: SerializedType) => deserializeType(x).toString();
+  const testDeserialize = (x: SerializedType) => deserializeType(x);
 
-  expect(
-    testDeserialize({ kind: 'date', date: 'month' })
-  ).toMatchInlineSnapshot(`"month"`);
+  expect(testDeserialize({ kind: 'date', date: 'month' })).toMatchObject({
+    date: 'month',
+  });
 
-  expect(testDeserialize(unitlessNumber)).toMatchInlineSnapshot(`"<number>"`);
+  expect(testDeserialize(unitlessNumber)).toMatchObject({
+    type: 'number',
+  });
 
   expect(
     testDeserialize({
       kind: 'number',
       unit: units(smeter),
     })
-  ).toMatchInlineSnapshot(`"meters"`);
+  ).toMatchObject({
+    type: 'number',
+    unit: U(meter),
+  });
 
-  expect(testDeserialize({ kind: 'string' })).toMatchInlineSnapshot(
-    `"<string>"`
-  );
+  expect(testDeserialize({ kind: 'string' })).toMatchObject({
+    type: 'string',
+  });
 
-  expect(testDeserialize({ kind: 'boolean' })).toMatchInlineSnapshot(
-    `"<boolean>"`
-  );
+  expect(testDeserialize({ kind: 'boolean' })).toMatchObject({
+    type: 'boolean',
+  });
 
   expect(
     testDeserialize({
       kind: 'range',
       rangeOf: unitlessNumber,
     })
-  ).toMatchInlineSnapshot(`"range of <number>"`);
+  ).toMatchObject({
+    rangeOf: {
+      type: 'number',
+    },
+  });
 
   expect(
     testDeserialize({
@@ -180,7 +189,12 @@ it('can parse a type', () => {
       cellType: unitlessNumber,
       columnSize: 123,
     })
-  ).toMatchInlineSnapshot(`"<number> x 123"`);
+  ).toMatchObject({
+    columnSize: 123,
+    cellType: {
+      type: 'number',
+    },
+  });
 
   expect(
     testDeserialize({
@@ -188,7 +202,10 @@ it('can parse a type', () => {
       rowCellTypes: [unitlessNumber, unitlessNumber],
       rowCellNames: ['Hi', 'Hi2'],
     })
-  ).toMatchInlineSnapshot(`"row [ Hi = <number>, Hi2 = <number> ]"`);
+  ).toMatchObject({
+    rowCellNames: ['Hi', 'Hi2'],
+    rowCellTypes: [{ type: 'number' }, { type: 'number' }],
+  });
 
   expect(
     testDeserialize({
@@ -198,7 +215,11 @@ it('can parse a type', () => {
       columnTypes: [unitlessNumber, unitlessNumber],
       columnNames: ['Hi', 'Hi2'],
     })
-  ).toMatchInlineSnapshot(`"table (123) { Hi = <number>, Hi2 = <number> }"`);
+  ).toMatchObject({
+    columnNames: ['Hi', 'Hi2'],
+    columnTypes: [{ type: 'number' }, { type: 'number' }],
+    tableLength: 123,
+  });
 
   expect(deserializeType({ kind: 'function' })).toMatchObject({
     functionness: true,

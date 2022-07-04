@@ -49,7 +49,7 @@ export const createTablePlugin = (
   key: ELEMENT_TABLE,
   isElement: true,
   component: Table,
-  decorate: decorateTableCellUnits,
+  decorate: decorateTableCellUnits(computer),
   deserializeHtml: {
     rules: [{ validNodeName: 'TABLE' }],
   },

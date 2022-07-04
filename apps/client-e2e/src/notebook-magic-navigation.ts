@@ -43,9 +43,7 @@ describe('notebook navigation', () => {
     await keyPress('Enter');
     await keyPress('Enter');
     await page.keyboard.type('Price = Fees + 300000 gbp');
-    expect(
-      (await page.textContent('text=is 300,500 £'))!.trim()
-    ).not.toBeNull();
+    expect((await page.textContent('text=is £300,500'))!.trim()).not.toBeNull();
     const magic = await page.locator('span[title="300500"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
@@ -64,7 +62,7 @@ describe('notebook navigation', () => {
     await keyPress('Enter');
     await page.keyboard.type('Price = 4200 gbp');
     await keyPress('Enter');
-    expect((await page.textContent('text=is 4,200 £'))!.trim()).not.toBeNull();
+    expect((await page.textContent('text=is £4,200'))!.trim()).not.toBeNull();
     const magic = await page.locator('span[title="4200"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();

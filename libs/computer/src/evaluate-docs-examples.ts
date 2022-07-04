@@ -2,16 +2,14 @@
 import { nanoid } from 'nanoid';
 
 import { getDefined } from '@decipad/utils';
-import {
-  deserializeType,
-  InferError,
-  RuntimeError,
-  stringifyResult,
-} from '@decipad/language';
+import { deserializeType, RuntimeError } from '@decipad/language';
 
+import { formatError, formatResult } from '@decipad/format';
 import { Computer, ComputeResponse } from '.';
 
 type EvaluatedDoc = string | { crash: string };
+
+const DEFAULT_LOCALE = 'en-US';
 
 function resultFromComputerResult(
   blockId: string,
@@ -26,10 +24,11 @@ function resultFromComputerResult(
       const { results } = update;
       const lastResult = results[results.length - 1];
       if (lastResult.type.kind === 'type-error') {
-        return new InferError(lastResult.type.errorCause).message;
+        return formatError(DEFAULT_LOCALE, lastResult.type.errorCause);
       }
 
-      return stringifyResult(
+      return formatResult(
+        DEFAULT_LOCALE,
         lastResult.value,
         deserializeType(lastResult.type)
       );

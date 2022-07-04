@@ -1,6 +1,6 @@
 import { inferBlock } from '..';
 import { build as t, InferError } from '../type';
-import { assign, block, c, funcDef, l, r } from '../utils';
+import { assign, block, c, funcDef, l, r, U } from '../utils';
 import { makeContext } from './context';
 import { inferFunction } from './functions';
 import { inferProgram } from '.';
@@ -64,7 +64,8 @@ it("gets a separate stack so as to not see another function's arg", async () => 
   );
 
   const ctx = makeContext();
-  expect((await inferBlock(funcs, ctx)).toString()).toMatch(
-    /OtherFunctionsArgument/
-  );
+  expect(await inferBlock(funcs, ctx)).toMatchObject({
+    type: 'number',
+    unit: U('OtherFunctionsArgument', { known: false }),
+  });
 });

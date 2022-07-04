@@ -1,0 +1,27 @@
+{
+  "root": "libs/repl",
+  "sourceRoot": "libs/repl/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/repl/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/repl"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/repl"],
+      "options": {
+        "jestConfig": "libs/repl/jest.config.js"
+      }
+    }
+  }
+}

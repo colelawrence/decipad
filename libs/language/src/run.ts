@@ -54,7 +54,7 @@ export const runAST = async (
 
   const erroredType = type.errorCause != null ? type : null;
   if (erroredType && throwOnError) {
-    throw new TypeError(type.errorCause?.message || 'Type error');
+    throw new TypeError(`Type error: ${JSON.stringify(erroredType)}`);
   }
 
   const [value] = await run([block], [0], new Realm(ctx));

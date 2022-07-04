@@ -23,10 +23,13 @@ beforeEach(async () => {
 
 it('infers sets', async () => {
   expect(
-    (
-      await inferCategories(testContext, categories('Name', col(1, 2)))
-    ).toString()
-  ).toMatchInlineSnapshot(`"<number> x 2 (Name)"`);
+    await inferCategories(testContext, categories('Name', col(1, 2)))
+  ).toMatchObject({
+    columnSize: 2,
+    cellType: {
+      type: 'number',
+    },
+  });
 
   expect(testContext.stack.get('Name')).toBeDefined();
 });

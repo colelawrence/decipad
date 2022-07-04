@@ -222,7 +222,9 @@ describe('math operators', () => {
 
   it('implements the smooth operator', () => {
     const smooth = getDefined(mathOperators.smooth);
-    expect(smooth.functor?.([]).toString()).toMatchInlineSnapshot(`"<number>"`);
+    expect(smooth.functor?.([])).toMatchObject({
+      type: 'number',
+    });
     expect(smooth.fn?.([1, 2])).toMatchInlineSnapshot(`69`);
     expect(smooth.fn?.([3, 4])).toMatchInlineSnapshot(`69`);
   });

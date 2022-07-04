@@ -1,0 +1,27 @@
+{
+  "root": "libs/format",
+  "sourceRoot": "libs/format/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/format/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/format"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/format"],
+      "options": {
+        "jestConfig": "libs/format/jest.config.js"
+      }
+    }
+  }
+}

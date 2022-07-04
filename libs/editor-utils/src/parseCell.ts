@@ -1,14 +1,9 @@
 import { TableCellType } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
-import {
-  AST,
-  deserializeUnit,
-  parseOneBlock,
-  stringifyUnits,
-  Time,
-} from '@decipad/computer';
+import { AST, parseOneBlock, Time } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
+import { formatUnit } from '@decipad/format';
 import { astNode } from './astNode';
 
 export function parseCell(
@@ -67,9 +62,8 @@ function unitToAST(
   try {
     // NOTE: seems more error prone to generate an AST from the Units object than to stringify the
     // units back to the language and parse the AST.
-    const ast = parseOneBlock(
-      stringifyUnits(deserializeUnit(unit), new Fraction(1), false)
-    );
+    const formattedUnit = formatUnit('en-US', unit, new Fraction(1), false);
+    const ast = parseOneBlock(formattedUnit);
     return ast.args.length > 0 ? (ast.args[0] as AST.Expression) : null;
   } catch {
     return null;

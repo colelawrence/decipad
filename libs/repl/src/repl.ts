@@ -1,12 +1,18 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-import-module-exports */
 import repl from 'repl';
 import chalk from 'chalk';
+import {
+  AST,
+  parseBlock,
+  Realm,
+  runBlock,
+  inferBlock,
+  makeContext as makeInferContext,
+} from '@decipad/language';
+import { formatError, formatResult } from '@decipad/format';
 
-import { AST } from '.';
-import { parseBlock } from './parser';
-import { Realm, runBlock } from './interpreter';
-import { inferBlock, makeContext as makeInferContext } from './infer';
-import { stringifyResult } from './result';
+const DEFAULT_LOCALE = 'en-US';
 
 const wrappedParse = (source: string): AST.Block | null => {
   const parsed = parseBlock({ id: '<repl>', source });
@@ -29,12 +35,12 @@ async function execDeci(ast: AST.Block) {
     const type = await inferBlock(ast, inferContext);
 
     if (type.errorCause != null) {
-      return type.toString();
+      return `Error: ${formatError(DEFAULT_LOCALE, type.errorCause.spec)}`;
     }
 
     const value = await runBlock(ast, realm);
 
-    return stringifyResult(value, type, chalk.blue);
+    return formatResult(DEFAULT_LOCALE, value, type, chalk.blue);
   } catch (error) {
     console.error(error);
     return '< Crashed >';

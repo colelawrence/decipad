@@ -4,5 +4,5 @@
     "lib": ["esnext", "dom"]
   },
   "include": ["src"],
-  "references": [{ "path": "../language" }]
+  "references": [{ "path": "../language" }, { "path": "../format" }]
 }

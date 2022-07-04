@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { SerializedType } from '@decipad/computer';
+import { Computer, SerializedType } from '@decipad/computer';
 import { encodingFor, PlotSpec } from './plotUtils';
 
 type KindSet = Set<SerializedType['kind']>;
@@ -41,6 +41,7 @@ const firstNominalColumn = (type: SerializedType, exclude?: ExclusionList) =>
   firstColumnInKind(type, nominalKinds, exclude);
 
 export const defaultPlotSpec = (
+  computer: Computer,
   type: undefined | SerializedType,
   spec: PlotSpec | undefined
 ): PlotSpec | undefined => {
@@ -55,13 +56,13 @@ export const defaultPlotSpec = (
       const column = firstQuantitativeColumn(type, exclude);
       if (column) {
         exclude.push(column[0]);
-        spec.encoding.theta = encodingFor(...column);
+        spec.encoding.theta = encodingFor(computer, ...column);
       }
     }
     if (!spec.encoding.color) {
       const column = firstNominalColumn(type, exclude);
       if (column) {
-        spec.encoding.theta = encodingFor(...column);
+        spec.encoding.theta = encodingFor(computer, ...column);
       }
     }
 
@@ -79,7 +80,7 @@ export const defaultPlotSpec = (
       firstNominalColumn(type, exclusions) ||
       firstQuantitativeColumn(type, exclusions);
     if (column) {
-      spec.encoding.x = encodingFor(...column);
+      spec.encoding.x = encodingFor(computer, ...column);
     }
   }
 
@@ -93,14 +94,14 @@ export const defaultPlotSpec = (
       firstQuantitativeColumn(type, exclusions) ||
       firstNominalColumn(type, exclusions);
     if (column) {
-      spec.encoding.y = encodingFor(...column);
+      spec.encoding.y = encodingFor(computer, ...column);
     }
   }
 
   if (!spec.encoding.y) {
     const column = firstQuantitativeColumn(type) || firstNominalColumn(type);
     if (column) {
-      spec.encoding.y = encodingFor(...column);
+      spec.encoding.y = encodingFor(computer, ...column);
     }
   }
 

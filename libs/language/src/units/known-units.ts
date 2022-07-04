@@ -99,6 +99,10 @@ export type UnitOfMeasure = {
   doesNotScaleOnConversion?: true;
   toBaseQuantity: (n: Fraction) => Fraction;
   fromBaseQuantity: (n: Fraction) => Fraction;
+  superBaseQuantity?: 'currency';
+  isPrefix?: boolean;
+  hasNoSpaceBetweenUnitAndNumber?: boolean;
+  thousandsSeparator?: '.' | ',';
 };
 
 const allUnitPackages = [
@@ -184,27 +188,30 @@ baseQuantitiesThatDoNotUseUnitPrefixes.add('speed');
 
 const allSymbols = new Map<string, UnitOfMeasure>();
 
-export const unitsByName = allUnits.reduce((byName, unit) => {
-  byName.set(unit.name, unit);
-  if (unit.symbols) {
-    for (const symbol of unit.symbols) {
-      allSymbols.set(symbol, unit);
-      byName.set(symbol.toLowerCase(), unit);
+export const unitsByName = allUnits.reduce<Map<string, UnitOfMeasure>>(
+  (byName, unit) => {
+    byName.set(unit.name, unit);
+    if (unit.symbols) {
+      for (const symbol of unit.symbols) {
+        allSymbols.set(symbol, unit);
+        byName.set(symbol.toLowerCase(), unit);
+      }
     }
-  }
-  if (unit.aliases) {
-    for (const alias of unit.aliases) {
-      byName.set(alias.toLowerCase(), unit);
+    if (unit.aliases) {
+      for (const alias of unit.aliases) {
+        byName.set(alias.toLowerCase(), unit);
+      }
     }
-  }
-  return byName;
-}, new Map());
+    return byName;
+  },
+  new Map()
+);
 
 export function isKnownSymbol(symbol = ''): boolean {
   return !!symbol && allSymbols.has(symbol.toLowerCase());
 }
 
-export function getUnitByName(unit: string): UnitOfMeasure | null {
+export function getUnitByName(unit: string): UnitOfMeasure | undefined {
   const n = normalizeUnitName(unit);
   return unitsByName.get(n);
 }

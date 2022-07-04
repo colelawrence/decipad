@@ -15,11 +15,9 @@ import {
   r,
 } from '../utils';
 import { parseUTCDate } from '../date';
-import { runAST, resultSnapshotSerializer } from '../testUtils';
+import { runAST } from '../testUtils';
 
 import { run, runOne } from './index';
-
-expect.addSnapshotSerializer(resultSnapshotSerializer);
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -380,12 +378,17 @@ describe('Tables', () => {
       })
     );
 
-    expect(await runAST(block)).toMatchInlineSnapshot(`
-      Result({
-        MaybeNegative = [ 1, -2, 3 ],
-        Positive = [ 1, 0, 3 ]
-      })
-    `);
+    expect(await runAST(block)).toMatchObject({
+      type: {
+        columnNames: ['MaybeNegative', 'Positive'],
+        columnTypes: [{ type: 'number' }, { type: 'number' }],
+        tableLength: 3,
+      },
+      value: [
+        [F(1), F(-2), F(3)],
+        [F(1), F(0), F(3)],
+      ],
+    });
   });
 });
 

@@ -10,14 +10,6 @@ describe('Correctness of error behaviour', () => {
   });
 });
 
-describe('Error messages are intuitive for users', () => {
-  it('Cannot convert units that have nothing to do with each other', async () => {
-    await expect(() => runCode(`1 m * 1 m * 1 cm in yA`)).rejects.toThrowError(
-      "Don't know how to convert between m³ and 1.0000000000000001e-24A"
-    );
-  });
-});
-
 describe('Contracts to be uphelp', () => {
   it('Assert a condition that is false', async () => {
     await expect(() => runCode(`assert(1==2)`)).rejects.toThrowError(

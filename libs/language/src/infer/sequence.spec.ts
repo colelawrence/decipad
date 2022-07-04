@@ -24,16 +24,22 @@ it('infers sequences of numbers', async () => {
 
 it('catches multiple errors', async () => {
   const msg = async (start: number, end: number, by: number) =>
-    (await inferSequence(nilCtx, seq(l(start), l(end), l(by)))).errorCause
-      ?.message;
-
-  expect(await msg(10, 1, 1)).toEqual(
-    'Invalid step in sequence: sequence is descending but step is positive'
-  );
-  expect(await msg(1, 10, -1)).toEqual(
-    'Invalid step in sequence: sequence is ascending but step is negative'
-  );
-  expect(await msg(1, 10, 0)).toEqual('Sequence step must not be zero');
+    (await inferSequence(nilCtx, seq(l(start), l(end), l(by)))).errorCause;
+  expect(await msg(10, 1, 1)).toMatchObject({
+    spec: {
+      errType: 'invalid-sequence-step',
+    },
+  });
+  expect(await msg(1, 10, -1)).toMatchObject({
+    spec: {
+      errType: 'invalid-sequence-step',
+    },
+  });
+  expect(await msg(1, 10, 0)).toMatchObject({
+    spec: {
+      errType: 'sequence-step-zero',
+    },
+  });
 });
 
 describe('sequences of dates', () => {
@@ -59,11 +65,7 @@ describe('sequences of dates', () => {
           )
         )
       ).errorCause
-    ).toMatchInlineSnapshot(`
-      InferError {
-        "spec": ErrSpec:free-form("message" => "An increment clause of year is too broad"),
-      }
-    `);
+    ).toMatchInlineSnapshot(`[Error: Inference Error: free-form]`);
   });
 
   it('ensures start and end have the same specificity', async () => {

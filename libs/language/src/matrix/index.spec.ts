@@ -92,13 +92,16 @@ describe('matrix op evaluation', () => {
 describe('matrix op inference', () => {
   it('infers the result of a match', async () => {
     expect(
-      (
-        await inferMatrixRef(
-          testContext,
-          matrixRef('CoffeePrice', [c('==', r('City'), l('Lisbon'))])
-        )
-      ).toString()
-    ).toMatchInlineSnapshot(`"<number> x unknown (City)"`);
+      await inferMatrixRef(
+        testContext,
+        matrixRef('CoffeePrice', [c('==', r('City'), l('Lisbon'))])
+      )
+    ).toMatchObject({
+      columnSize: 'unknown',
+      cellType: {
+        type: 'number',
+      },
+    });
   });
 
   it('propagates inference errors', async () => {
@@ -207,21 +210,30 @@ describe('matrix op inference', () => {
       testContext,
       matrixAssign('CreatedVar', [r('City')], l(1))
     );
-    expect(newVariable.toString()).toMatchInlineSnapshot(
-      `"<number> x 2 (City)"`
-    );
+    expect(newVariable).toMatchObject({
+      columnSize: 2,
+      indexedBy: 'City',
+      cellType: {
+        type: 'number',
+      },
+    });
     expect(testContext.stack.get('CreatedVar')).toBe(newVariable);
   });
 
   it('ensures the dimension exists', async () => {
     expect(
-      (
-        await inferMatrixAssign(
-          testContext,
-          matrixAssign('CreatedVar', [r('UnknownSet')], l(1))
-        )
-      ).toString()
-    ).toMatchInlineSnapshot(`"Error: The variable UnknownSet is missing"`);
+      await inferMatrixAssign(
+        testContext,
+        matrixAssign('CreatedVar', [r('UnknownSet')], l(1))
+      )
+    ).toMatchObject({
+      errorCause: {
+        spec: {
+          errType: 'missing-variable',
+          missingVariable: ['UnknownSet'],
+        },
+      },
+    });
   });
 });
 
@@ -260,23 +272,31 @@ describe('assigning multidimensional values', () => {
 
   it('can infer simple assignment', async () => {
     expect(
-      (
-        await inferMatrixAssign(
-          testContext,
-          matrixAssign('CoffeePrice', [r('City')], col(1, 2))
-        )
-      ).toString()
-    ).toMatchInlineSnapshot(`"<number> x 2 (City)"`);
+      await inferMatrixAssign(
+        testContext,
+        matrixAssign('CoffeePrice', [r('City')], col(1, 2))
+      )
+    ).toMatchObject({
+      columnSize: 2,
+      cellType: {
+        type: 'number',
+      },
+      indexedBy: 'City',
+    });
   });
 
   it('can infer filtered assignment', async () => {
     expect(
-      (
-        await inferMatrixAssign(
-          testContext,
-          matrixAssign('CoffeePrice', [c('==', r('City'), l('Faro'))], col(123))
-        )
-      ).toString()
-    ).toMatchInlineSnapshot(`"<number> x 2 (City)"`);
+      await inferMatrixAssign(
+        testContext,
+        matrixAssign('CoffeePrice', [c('==', r('City'), l('Faro'))], col(123))
+      )
+    ).toMatchObject({
+      columnSize: 2,
+      cellType: {
+        type: 'number',
+      },
+      indexedBy: 'City',
+    });
   });
 });

@@ -1,4 +1,3 @@
-import Fraction from '@decipad/fraction';
 import produce from 'immer';
 
 import { F, l, u, U } from '../utils';
@@ -9,8 +8,6 @@ import { Unit, units } from './unit-type';
 
 const meter = u('meters');
 const second = u('seconds');
-const cm = u('m', { multiplier: new Fraction(1, 100) });
-const kw = u('W', { multiplier: new Fraction(1000) });
 
 const invMeter: Unit = inverseExponent(meter);
 const invSecond: Unit = inverseExponent(second);
@@ -18,171 +15,6 @@ const invSecond: Unit = inverseExponent(second);
 const numberInMeter = t.number([meter]);
 const numberInMeterBySecond = t.number([meter, second]);
 const numberInMeterPerSecond = t.number([meter, invSecond]);
-
-it('can follow SI units rules and style conventions', () => {
-  expect(t.number([u('s')]).toString()).toEqual('s');
-  expect(t.number([second]).toString()).toEqual('seconds');
-  // cm = 0.01m
-  expect(t.number([cm]).toString()).toEqual('cm');
-  expect(
-    t.number([u('meter', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('centimeters');
-  expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
-    'meters per second'
-  );
-  expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
-    'meters per second'
-  );
-  expect(t.number([u('m'), inverseExponent(u('s'))]).toBasicString()).toEqual(
-    'm/s'
-  );
-  expect(t.number([u('meter'), u('banana')]).toBasicString()).toEqual(
-    'meters·banana'
-  );
-  expect(t.number([u('watt'), u('hour')]).toBasicString()).toEqual('W·hour');
-  expect(t.number([u('w'), u('h')]).toBasicString()).toEqual('W·h');
-  expect(t.number([kw, u('h')]).toBasicString()).toEqual('kW·h');
-  // cm3 = 0.01m3
-  const cm3 = t.number([
-    u('m', { multiplier: new Fraction(1, 100), exp: F(3) }),
-  ]);
-  expect(cm3.toString()).toEqual('cm³');
-  expect(t.number([u('cubicmeter')]).toString()).toEqual('m³');
-  expect(t.number([u('lightyear')]).toString()).toEqual('light year');
-  expect(t.number([u('ly')]).toString()).toEqual('light year');
-  expect(t.number([u('$')]).toString()).toEqual('$');
-  expect(
-    t.number([u('m'), u('kg'), inverseExponent(u('s'))]).toBasicString()
-  ).toEqual('m·kg·s⁻¹');
-  expect(t.number(units(cm, cm, cm)).toString()).toEqual('μm³');
-  expect(
-    t.number([u('f', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('cF');
-  expect(
-    t.number([u('m2', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('cm²');
-  expect(
-    t.number([u('sqmi', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('cmi²');
-  expect(
-    t.number([u('sqyd', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('cyd²');
-  expect(
-    t.number([u('sqft', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('cft²');
-  expect(
-    t.number([u('sqin', { multiplier: new Fraction(1, 100) })]).toString()
-  ).toEqual('cin²');
-  expect(
-    t.number([u('wh', { multiplier: new Fraction(1000) })]).toString()
-  ).toEqual('kWh');
-  expect(
-    t.number([u('Wh', { multiplier: new Fraction(1000) })]).toString()
-  ).toEqual('kWh');
-  expect(
-    t.number([u('EUR', { multiplier: new Fraction(1000) })]).toString()
-  ).toEqual('k€');
-  expect(
-    t.number([u('c', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('C');
-  expect(
-    t.number([u('f', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('F');
-  expect(
-    t.number([u('F', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('F');
-  expect(
-    t.number([u('Hz', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('Hz');
-  expect(
-    t.number([u('hz', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('Hz');
-  expect(
-    t.number([u('W', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('W');
-  expect(
-    t.number([u('w', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('W');
-  expect(
-    t.number([u('°c', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('°C');
-  expect(
-    t.number([u('°C', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('°C');
-  expect(
-    t.number([u('SEK', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('kr');
-  expect(
-    t.number([u('v', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('V');
-  expect(
-    t.number([u('V', { multiplier: new Fraction(1) })]).toString()
-  ).toEqual('V');
-});
-
-it.todo('support yotta and zetta');
-
-it('can be stringified', () => {
-  expect(t.number().toString()).toEqual('<number>');
-  expect(t.number([meter]).toString()).toEqual('meters');
-  expect(t.number(units(meter, second)).toString()).toEqual('meters·second');
-  expect(t.number([meter, inverseExponent(second)]).toString()).toEqual(
-    'meters per second'
-  );
-
-  expect(t.range(t.number()).toString()).toEqual('range of <number>');
-
-  expect(t.date('month').toString()).toEqual('month');
-
-  const table = t.table({
-    length: 123,
-    columnTypes: [t.number([meter]), t.string()],
-    columnNames: ['Col1', 'Col2'],
-  });
-  expect(table.toString()).toEqual(
-    'table (123) { Col1 = meters, Col2 = <string> }'
-  );
-
-  const row = t.row([t.number([meter]), t.string()], ['Col1', 'Col2']);
-  expect(row.toString()).toEqual('row [ Col1 = meters, Col2 = <string> ]');
-
-  const col = t.column(t.string(), 4);
-  expect(col.toString()).toEqual('<string> x 4');
-
-  const nestedCol = t.column(t.column(t.string(), 4), 6);
-  expect(nestedCol.toString()).toEqual('<string> x 4 x 6');
-});
-
-it('can be stringified in basic form', () => {
-  expect(t.functionPlaceholder().toBasicString()).toEqual('function');
-  expect(t.number().toBasicString()).toEqual('number');
-  expect(t.number([meter]).toBasicString()).toEqual('meters');
-  expect(t.number(units(meter, second)).toBasicString()).toEqual(
-    'meters·second'
-  );
-  expect(t.number([meter, inverseExponent(second)]).toBasicString()).toEqual(
-    'meters per second'
-  );
-
-  expect(t.range(t.number()).toBasicString()).toEqual('range');
-
-  expect(t.date('month').toBasicString()).toEqual('date(month)');
-
-  const table = t.table({
-    length: 123,
-    columnTypes: [t.number([meter]), t.string()],
-    columnNames: ['Col1', 'Col2'],
-  });
-  expect(table.toBasicString()).toEqual('table');
-
-  const row = t.row([t.number([meter]), t.string()], ['Col1', 'Col2']);
-  expect(row.toBasicString()).toEqual('row');
-
-  const col = t.column(t.string(), 4);
-  expect(col.toBasicString()).toEqual('column');
-
-  expect(() => t.number().withErrorCause('').toBasicString()).toThrow();
-});
 
 describe('sameAs', () => {
   it('checks if the types are completely equal', () => {
@@ -304,11 +136,21 @@ describe('new columns and tables', () => {
 
   it('can have unknown lengths', () => {
     expect(
-      t.column(t.string(), 'unknown').sameAs(t.column(t.string(), 3)).toString()
-    ).toMatchInlineSnapshot(`"<string> x unknown"`);
+      t.column(t.string(), 'unknown').sameAs(t.column(t.string(), 3))
+    ).toMatchObject({
+      columnSize: 'unknown',
+      cellType: {
+        type: 'string',
+      },
+    });
     expect(
-      t.column(t.string(), 3).sameAs(t.column(t.string(), 'unknown')).toString()
-    ).toMatchInlineSnapshot(`"<string> x 3"`);
+      t.column(t.string(), 3).sameAs(t.column(t.string(), 'unknown'))
+    ).toMatchObject({
+      columnSize: 3,
+      cellType: {
+        type: 'string',
+      },
+    });
 
     const fixedTable = t.table({
       length: 3,

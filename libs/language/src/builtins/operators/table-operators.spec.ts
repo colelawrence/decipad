@@ -70,9 +70,10 @@ describe('table operators', () => {
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup;
 
-    expect(functor?.([tableType, t.string()]).toString()).toMatchInlineSnapshot(
-      `"row [ Index = <string>, Value = <number> ]"`
-    );
+    expect(functor?.([tableType, t.string()])).toMatchObject({
+      rowCellTypes: [{ type: 'string' }, { type: 'number' }],
+      rowCellNames: ['Index', 'Value'],
+    });
     expect(fnValues?.([tableValue, fromJS('The Thing')]).getData()).toEqual([
       'The Thing',
       F(12345),
@@ -105,9 +106,10 @@ describe('table operators', () => {
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup;
 
-    expect(functor?.([tableType, t.string()]).toString()).toMatchInlineSnapshot(
-      `"row [ Index = <string>, Value = day ]"`
-    );
+    expect(functor?.([tableType, t.string()])).toMatchObject({
+      rowCellTypes: [{ type: 'string' }, { date: 'day' }],
+      rowCellNames: ['Index', 'Value'],
+    });
     expect(fnValues?.([tableValue, fromJS('The Thing')]).getData()).toEqual([
       'The Thing',
       BigInt(new Date('2022-03-01').getTime()),
@@ -128,8 +130,10 @@ describe('table operators', () => {
     const column = t.column(table.columnTypes?.[1] as Type, 3, 'TheTable');
 
     expect(
-      operators.lookup.functorNoAutomap!([column, t.number()]).toString()
-    ).toMatchInlineSnapshot(`"<boolean>"`);
+      operators.lookup.functorNoAutomap!([column, t.number()])
+    ).toMatchObject({
+      type: 'boolean',
+    });
 
     const tableValue = Table.fromNamedColumns(
       [
@@ -177,9 +181,10 @@ describe('table operators', () => {
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup;
 
-    expect(
-      functor?.([tableType, conditionColumnType]).toString()
-    ).toMatchInlineSnapshot(`"row [ col1 = <string>, col2 = <number> ]"`);
+    expect(functor?.([tableType, conditionColumnType])).toMatchObject({
+      rowCellNames: ['col1', 'col2'],
+      rowCellTypes: [{ type: 'string' }, { type: 'number' }],
+    });
     expect(fnValues?.([tableValue, conditionColumnValue]).getData()).toEqual([
       'b',
       F(2),

@@ -2,76 +2,15 @@ import Fraction, { FractionLike, pow } from '@decipad/fraction';
 import { lenientZip } from '@decipad/utils';
 import { Draft, produce } from 'immer';
 import { Type } from '..';
-import pluralize, { singular } from '../pluralize';
+import pluralize from '../pluralize';
 import {
   areUnitsCompatible,
   expandUnits,
   getUnitByName,
   isKnownSymbol,
-  prettyForSymbol,
-  unitIsSymbol,
 } from '../units';
 import { F, getDefined } from '../utils';
-import { FUnit, FUnits, TUnit, TUnits, Unit, Units, units } from './unit-type';
-
-export type AvailablePrefixes =
-  | 1e24
-  | 1e21
-  | 1_000_000_000_000_000_000
-  | 1_000_000_000_000_000
-  | 1_000_000_000_000
-  | 1_000_000_000
-  | 1_000_000
-  | 1_000
-  | 100
-  | 10
-  | 1
-  | 0.1
-  | 0.01
-  | 0.001
-  | 0.000001
-  | 1e-9
-  | 1e-12
-  | 1e-15
-  | 1e-18;
-
-const multipliersToPrefixes: Record<AvailablePrefixes, string[]> = {
-  1e-18: ['a', 'atto'],
-  1e-15: ['f', 'femto'],
-  1e-12: ['p', 'pico'],
-  1e-9: ['n', 'nano'],
-  0.000001: ['μ', 'micro'], // 1e-6
-  0.001: ['m', 'milli'], // 1e-3
-  0.01: ['c', 'centi'], // 1e-2
-  0.1: ['d', 'deci'], // 1e-1
-  1: ['', ''],
-  10: ['da', 'deca'], // 1e1
-  100: ['h', 'hecto'], // 1e2
-  1000: ['k', 'kilo'], // 1e3
-  1000000: ['M', 'mega'], // 1e6
-  1000000000: ['G', 'giga'], // 1e9
-  1000000000000: ['T', 'tera'], // 1e12
-  1000000000000000: ['P', 'peta'], // 1e15
-  1000000000000000000: ['E', 'exa'], // 1e18
-  1e21: ['Z', 'zetta'],
-  1e24: ['Y', 'yotta'],
-};
-
-const numberToSubOrSuperscript: Record<string, string[]> = {
-  '0': ['₀', '⁰'], // subscript not used for now
-  '1': ['₁', '¹'],
-  '2': ['₂', '²'],
-  '3': ['₃', '³'],
-  '4': ['₄', '⁴'],
-  '5': ['₅', '⁵'],
-  '6': ['₆', '⁶'],
-  '7': ['₇', '⁷'],
-  '8': ['₈', '⁸'],
-  '9': ['₉', '⁹'],
-  '-': ['₋', '⁻'], // minus
-  '.': ['·', '˙'], // dot
-  '/': ['/', 'ᐟ'], // slash
-};
+import { FUnit, TUnit, TUnits, Unit, Units, units } from './unit-type';
 
 export const timeUnits = new Set([
   'millennium',
@@ -99,13 +38,7 @@ export const timeUnits = new Set([
   'milliseconds',
 ]);
 
-function scriptFromNumber(n: string): string {
-  return numberToSubOrSuperscript[n]?.[1] || n;
-}
-
-const byExp = (u1: FUnit, u2: FUnit): number => Number(F(u2.exp).sub(u1.exp));
-
-const pluralizeUnit = <TF extends FractionLike>(
+export const pluralizeUnit = <TF extends FractionLike>(
   baseUnit: TUnit<TF>,
   value: bigint | number = 2n
 ): TUnit<TF> => {
@@ -302,120 +235,6 @@ export const setExponent = (unit: Unit, newExponent: Fraction) =>
 
 export const inverseExponent = (unit: Unit) =>
   setExponent(unit, unit.exp.neg());
-
-const isInteger = (f: FractionLike): boolean => {
-  return Number(f.d) === 1;
-};
-
-const stringifyUnit = (unit: FUnit, prettify = true) => {
-  const symbol = singular(unit.unit.toLowerCase());
-  const pretty = prettyForSymbol[symbol];
-  const isSymbol = unitIsSymbol(symbol);
-
-  const multiPrefix = unit.multiplier
-    ? new Fraction(unit.multiplier).valueOf()
-    : 1;
-  const prefix = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
-
-  const result = [
-    prefix != null
-      ? isSymbol
-        ? prefix[0]
-        : prefix[1]
-      : multiPrefix.toString(),
-    prettify && pretty ? pretty : unit.unit,
-  ];
-
-  const { exp } = unit;
-  if (F(exp).compare(F(1)) !== 0) {
-    const strExp = isInteger(exp)
-      ? exp.toString()
-      : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
-          .filter(Boolean)
-          .join('')}`;
-    const prettyExp = strExp.replace(/./g, scriptFromNumber);
-
-    if (prettify) {
-      result.push(prettyExp);
-    } else {
-      result.push('^', strExp);
-    }
-  }
-
-  if (unit.quality) {
-    result.push(` of ${unit.quality}`);
-  }
-
-  return result.join('');
-};
-
-function produceExp(unit: FUnit, makePositive = false): FUnit {
-  return produce(unit, (unit) => {
-    unit.unit = singular(unit.unit);
-    if (makePositive) {
-      unit.exp = F(unit.exp).abs();
-    }
-  });
-}
-
-export const stringifyUnitArgs = (
-  units: FUnit[] | null,
-  value?: Fraction,
-  prettify = true
-): string => {
-  return (units ?? [])
-    .reduce((parts: string[], unit: FUnit): string[] => {
-      if (parts.length > 0) {
-        let prefix: string;
-        //
-        // when you have two units you show
-        // meter per second
-        // but when you have more
-        // you use international system like `m.s-1`
-        //
-        if (units?.length === 2 && F(unit.exp).compare(F(-1)) === 0) {
-          prefix = prettify ? (unitIsSymbol(unit.unit) ? '/' : ' per ') : '/';
-          parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit, true), prettify));
-        } else {
-          prefix = prettify ? '·' : '*';
-          parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit), prettify));
-        }
-      } else {
-        //
-        // turn off pluralisation if there's more than 2 unit
-        //
-        parts.push(
-          stringifyUnit(
-            pluralizeUnit(
-              unit,
-              units && units.length > 2 ? 2 : value?.valueOf() || 2
-            ),
-            prettify
-          )
-        );
-      }
-      return parts;
-    }, [])
-    .join('');
-};
-
-export const stringifyUnits = (
-  units: FUnits | null | undefined,
-  value?: Fraction,
-  prettify = true
-): string => {
-  if (units == null || units.args.length === 0) {
-    return 'unitless';
-  } else {
-    const simplified = simplifyUnits(units) || units;
-    const sortedUnits = produce(simplified, (units) => {
-      units.args.sort(byExp);
-    });
-    return stringifyUnitArgs(sortedUnits.args, value, prettify);
-  }
-};
 
 export const combineUnits = <TF extends FractionLike>(
   myUnitsObj: TUnits<TF> | null,

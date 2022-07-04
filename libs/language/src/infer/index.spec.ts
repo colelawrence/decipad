@@ -169,7 +169,9 @@ describe('columns', () => {
         nilCtx,
         col(c('*', l(1), r('cm')), c('*', l(1), r('ft')))
       )
-    ).toMatchInlineSnapshot(`Error: Column cannot contain both cm and ft`);
+    ).toMatchObject({
+      errorCause: { spec: { errType: 'column-contains-inconsistent-type' } },
+    });
   });
 
   it('column-ness is infectious', async () => {
@@ -240,7 +242,9 @@ describe('tables', () => {
   it('Errors on empty tables', async () => {
     expect(
       await inferStatement(makeContext(), tableDef('Table', {}))
-    ).toMatchInlineSnapshot(`Error: Unexpected empty table`);
+    ).toMatchObject({
+      errorCause: { spec: { errType: 'unexpected-empty-table' } },
+    });
   });
 
   it('References to table columns', async () => {
@@ -344,25 +348,29 @@ describe('tables', () => {
             Col1: prop(r('MissingVar'), 'nosuchprop'),
           })
         )
-      ).errorCause?.message
-    ).toMatch(/MissingVar/);
+      ).errorCause?.spec.errType
+    ).toBe('expected-but-got');
   });
 
   it('tracks the index through columns', async () => {
     expect(
-      (
-        await inferStatement(
-          makeContext(),
-          tableDef('Table', {
-            Col1: col(1, 2, 3),
-            Col2: l(2),
-            Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
-          })
-        )
-      ).toString()
-    ).toMatchInlineSnapshot(
-      `"table (3) { Col1 = <number>, Col2 = <number>, Col3 = <boolean> }"`
-    );
+      await inferStatement(
+        makeContext(),
+        tableDef('Table', {
+          Col1: col(1, 2, 3),
+          Col2: l(2),
+          Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
+        })
+      )
+    ).toMatchObject({
+      columnNames: ['Col1', 'Col2', 'Col3'],
+      columnTypes: [
+        { type: 'number' },
+        { type: 'number' },
+        { type: 'boolean' },
+      ],
+      tableLength: 3,
+    });
   });
 
   describe('table spreads', () => {
@@ -371,9 +379,11 @@ describe('tables', () => {
       assign('Extended', n('table', n('table-spread', r('Base')), ...cols));
 
     it('extending with no new columns is just a copy', async () => {
-      expect(await inferBlock(block(base, extend()))).toMatchInlineSnapshot(
-        `table (2) { Idx = <string> }`
-      );
+      expect(await inferBlock(block(base, extend()))).toMatchObject({
+        columnNames: ['Idx'],
+        columnTypes: [{ type: 'string' }],
+        tableLength: 2,
+      });
     });
 
     it('can add a column', async () => {
@@ -381,15 +391,21 @@ describe('tables', () => {
         await inferBlock(
           block(base, extend(n('table-column', n('coldef', 'New'), col(1, 2))))
         )
-      ).toMatchInlineSnapshot(`table (2) { Idx = <string>, New = <number> }`);
+      ).toMatchObject({
+        columnNames: ['Idx', 'New'],
+        columnTypes: [{ type: 'string' }, { type: 'number' }],
+        tableLength: 2,
+      });
     });
 
     it('needs the source table to be a table', async () => {
       expect(
         await inferBlock(block(assign('Base', l(1)), extend()))
-      ).toMatchInlineSnapshot(
-        `Error: This operation requires a table and a number was entered`
-      );
+      ).toMatchObject({
+        errorCause: {
+          spec: { errType: 'expected-but-got' },
+        },
+      });
     });
 
     it('supports (previous)', async () => {
@@ -406,9 +422,11 @@ describe('tables', () => {
             )
           )
         )
-      ).toMatchInlineSnapshot(
-        `table (2) { Idx = <string>, WithPrev = <boolean> }`
-      );
+      ).toMatchObject({
+        columnNames: ['Idx', 'WithPrev'],
+        columnTypes: [{ type: 'string' }, { type: 'boolean' }],
+        tableLength: 2,
+      });
     });
   });
 
@@ -421,11 +439,11 @@ describe('tables', () => {
       })
     );
 
-    expect(
-      (await inferProgram([block])).stack.get('Table')?.toString()
-    ).toMatchInlineSnapshot(
-      `"table (3) { MaybeNegative = <number>, Positive = <number> }"`
-    );
+    expect((await inferProgram([block])).stack.get('Table')).toMatchObject({
+      columnNames: ['MaybeNegative', 'Positive'],
+      columnTypes: [{ type: 'number' }, { type: 'number' }],
+      tableLength: 3,
+    });
   });
 });
 
@@ -440,12 +458,15 @@ describe('Property access', () => {
 
   it('Accesses columns in tables', async () => {
     expect(
-      (await inferExpression(scopeWithTable, prop('Table', 'Col'))).toString()
-    ).toMatchInlineSnapshot(`"<number> x 3 (Table)"`);
+      await inferExpression(scopeWithTable, prop('Table', 'Col'))
+    ).toMatchObject({
+      cellType: { type: 'number' },
+      columnSize: 3,
+    });
 
     expect(
-      (await inferExpression(scopeWithTable, prop('Row', 'Name'))).toString()
-    ).toMatchInlineSnapshot(`"<string>"`);
+      await inferExpression(scopeWithTable, prop('Row', 'Name'))
+    ).toMatchObject({ type: 'string' });
   });
 
   it('Property access errors', async () => {
@@ -573,14 +594,21 @@ describe('Data', () => {
           )
         )
       )
-    ).toMatchInlineSnapshot(
-      `table (2) { Numba = <number>, Straing = <string>, Bulian = <boolean>, Doite = millisecond }`
-    );
+    ).toMatchObject({
+      columnNames: ['Numba', 'Straing', 'Bulian', 'Doite'],
+      columnTypes: [
+        { type: 'number' },
+        { type: 'string' },
+        { type: 'boolean' },
+        { date: 'millisecond' },
+      ],
+      tableLength: 2,
+    });
   });
 });
 
 it('expands directives such as `as`', async () => {
-  expect(await inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))).toEqual(
-    t.number([degC])
-  );
+  expect(
+    await inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))
+  ).toMatchObject(t.number([degC]));
 });

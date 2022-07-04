@@ -1,26 +1,30 @@
 import util from 'util';
 import Fraction from '@decipad/fraction';
+import { getDefined, zip } from '@decipad/utils';
+import {
+  buildType,
+  Interpreter,
+  stringifyDate,
+  Type,
+  convertToMultiplierUnit,
+  serializeType,
+} from '@decipad/language';
+import { formatType } from './formatType';
 
-import { buildType, Interpreter } from '..';
-import { getDefined, zip } from '../utils';
-import { stringifyDate } from '../date';
-import { Type, convertToMultiplierUnit } from '../type';
-import { validateResult } from '.';
-
-export const stringifyResult = (
+export const formatResult = (
+  locale: string,
   result: Interpreter.OneResult | undefined | null,
   type: Type,
   color = (s: string) => s
 ): string => {
-  validateResult(type, result);
-
   if (type.rangeOf != null) {
     const [start, end] = result as Interpreter.OneResult[];
-    return `range(${stringifyResult(
+    return `range(${formatResult(
+      locale,
       start,
       type.rangeOf,
       color
-    )} to ${stringifyResult(end, type.rangeOf, color)})`;
+    )} to ${formatResult(locale, end, type.rangeOf, color)})`;
   }
 
   if (type.date != null) {
@@ -33,7 +37,7 @@ export const stringifyResult = (
       type.unit
     ).toString(4);
     if (type.unit == null) return color(numStr);
-    return [color(numStr), type.toString()].join(' ');
+    return [color(numStr), formatType(locale, serializeType(type))].join(' ');
   }
 
   if (type.type === 'string' || type.type === 'boolean') {
@@ -46,7 +50,9 @@ export const stringifyResult = (
     Array.isArray(result)
   ) {
     return `[ ${result
-      .map((item) => stringifyResult(item, getDefined(type.cellType), color))
+      .map((item) =>
+        formatResult(locale, item, getDefined(type.cellType), color)
+      )
       .join(', ')} ]`;
   }
 
@@ -59,10 +65,11 @@ export const stringifyResult = (
     const { tableLength } = type;
     const cols = zip(result, zip(type.columnTypes, type.columnNames))
       .map(
-        ([col, [type, name]]) =>
-          `  ${name} = ${stringifyResult(
+        ([col, [t, name]]) =>
+          `  ${name} = ${formatResult(
+            locale,
             col,
-            buildType.column(type, tableLength),
+            buildType.column(t, tableLength),
             color
           )}`
       )
@@ -77,12 +84,15 @@ export const stringifyResult = (
   ) {
     const cols = zip(result, zip(type.rowCellTypes, type.rowCellNames))
       .map(
-        ([col, [type, name]]) =>
-          `  ${name} = ${stringifyResult(col, type, color)}`
+        ([col, [t, name]]) =>
+          `  ${name} = ${formatResult(locale, col, t, color)}`
       )
       .join(',\n');
     return `{\n${cols}\n}`;
   }
 
-  return [color(util.inspect(result)), type?.toString()].join(' ');
+  return [
+    color(util.inspect(result)),
+    type && formatType(locale, serializeType(type)),
+  ].join(' ');
 };

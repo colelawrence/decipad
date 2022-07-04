@@ -1,6 +1,8 @@
 import { UnitOfMeasure } from './known-units';
 import { identity } from '../utils';
 
+const superBaseQuantity = 'currency';
+
 export const units: UnitOfMeasure[] = [
   {
     name: 'euro',
@@ -9,6 +11,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '€',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: '.',
   },
   {
     name: 'usdollar',
@@ -18,6 +23,10 @@ export const units: UnitOfMeasure[] = [
     pretty: '$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    hasNoSpaceBetweenUnitAndNumber: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'britishpound',
@@ -26,6 +35,10 @@ export const units: UnitOfMeasure[] = [
     pretty: '£',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    hasNoSpaceBetweenUnitAndNumber: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'swedishkrona',
@@ -34,6 +47,8 @@ export const units: UnitOfMeasure[] = [
     pretty: 'kr',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    thousandsSeparator: '.',
   },
   {
     name: 'scarab',
@@ -42,6 +57,7 @@ export const units: UnitOfMeasure[] = [
     pretty: '¤',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
   {
     name: 'norwegiankrona',
@@ -50,6 +66,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'kr',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'japanyen',
@@ -58,6 +77,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '¥',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'chinayuan',
@@ -66,6 +88,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '¥',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'philippinepeso',
@@ -74,6 +99,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '₱',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'indianrupee',
@@ -82,6 +110,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '₹',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'russianruble',
@@ -90,6 +121,8 @@ export const units: UnitOfMeasure[] = [
     pretty: '₽',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    thousandsSeparator: '.',
   },
   {
     name: 'turkishlira',
@@ -98,6 +131,7 @@ export const units: UnitOfMeasure[] = [
     pretty: '₺',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
   {
     name: 'southkoreanwon',
@@ -106,6 +140,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '₩',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'thaibaht',
@@ -114,6 +151,8 @@ export const units: UnitOfMeasure[] = [
     pretty: '฿',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    thousandsSeparator: ',',
   },
   {
     name: 'polishzłoty',
@@ -122,6 +161,8 @@ export const units: UnitOfMeasure[] = [
     pretty: 'zł',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    thousandsSeparator: '.',
   },
   {
     name: 'israelinewshekel',
@@ -130,6 +171,9 @@ export const units: UnitOfMeasure[] = [
     pretty: '₪',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: '.',
   },
   {
     name: 'UAEdirham',
@@ -137,6 +181,7 @@ export const units: UnitOfMeasure[] = [
     baseQuantity: 'AED',
     pretty: 'د.إ',
     toBaseQuantity: identity,
+    superBaseQuantity,
     fromBaseQuantity: identity,
   },
   {
@@ -146,6 +191,7 @@ export const units: UnitOfMeasure[] = [
     pretty: '﷼',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    thousandsSeparator: ',',
   },
   {
     name: 'australiandollar',
@@ -154,6 +200,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'A$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'canadiandollar',
@@ -162,6 +211,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'C$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'swissfranc',
@@ -170,6 +222,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'chf',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: '.',
   },
   {
     name: 'hongkongdollar',
@@ -178,6 +233,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'HK$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'newzealanddollar',
@@ -186,6 +244,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'NZ$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'singaporedollar',
@@ -194,6 +255,10 @@ export const units: UnitOfMeasure[] = [
     pretty: 'S$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    hasNoSpaceBetweenUnitAndNumber: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'southafricanrand',
@@ -202,6 +267,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'R',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'brazilianreal',
@@ -210,6 +278,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'R$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'newtaiwandollar',
@@ -218,6 +289,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'NT$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'danishkrone',
@@ -226,6 +300,7 @@ export const units: UnitOfMeasure[] = [
     pretty: 'kr',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
   {
     name: 'indonesianrupiah',
@@ -234,6 +309,7 @@ export const units: UnitOfMeasure[] = [
     pretty: 'rp',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
   {
     name: 'hungarianforint',
@@ -242,6 +318,8 @@ export const units: UnitOfMeasure[] = [
     pretty: 'ft',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    thousandsSeparator: '.',
   },
   {
     name: 'czechkoruna',
@@ -250,6 +328,8 @@ export const units: UnitOfMeasure[] = [
     pretty: 'Kč',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    thousandsSeparator: '.',
   },
   {
     name: 'chileanpeso',
@@ -258,6 +338,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'CLP$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'colombianpeso',
@@ -266,6 +349,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'COL$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'malaysianringgit',
@@ -274,6 +360,9 @@ export const units: UnitOfMeasure[] = [
     pretty: 'RM',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
+    isPrefix: true,
+    thousandsSeparator: ',',
   },
   {
     name: 'romanianleu',
@@ -282,6 +371,7 @@ export const units: UnitOfMeasure[] = [
     pretty: 'L',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
   {
     name: 'cryptobitcoin',
@@ -290,6 +380,7 @@ export const units: UnitOfMeasure[] = [
     pretty: '₿',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
   {
     name: 'cryptoethereum',
@@ -298,5 +389,6 @@ export const units: UnitOfMeasure[] = [
     pretty: 'Ξ',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+    superBaseQuantity,
   },
 ];

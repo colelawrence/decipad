@@ -1,5 +1,5 @@
 import Fraction from '@decipad/fraction';
-import { SerializedType } from '@decipad/computer';
+import { Computer, SerializedType } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import {
   DisplayProps,
@@ -70,8 +70,9 @@ const tableData = [
 ];
 
 describe('specFromType', () => {
+  const computer = new Computer();
   it('returns no spec if no type is provided', () => {
-    expect(specFromType(undefined, displayProps())).toBeUndefined();
+    expect(specFromType(computer, undefined, displayProps())).toBeUndefined();
   });
 
   it('returns no encodings if nothing other than a table and a mark type are provided', () => {
@@ -82,7 +83,9 @@ describe('specFromType', () => {
       indexName: 'col1',
       tableLength: 3,
     };
-    expect(specFromType(type, displayProps({ markType: 'bar' }))).toEqual({
+    expect(
+      specFromType(computer, type, displayProps({ markType: 'bar' }))
+    ).toEqual({
       config: {
         encoding: {
           color: {
@@ -102,7 +105,7 @@ describe('specFromType', () => {
   });
 
   it('returns a default spec with default display props', () => {
-    expect(specFromType(tableType, displayProps())).toMatchObject({
+    expect(specFromType(computer, tableType, displayProps())).toMatchObject({
       data: {
         name: 'table',
       },
@@ -116,7 +119,7 @@ describe('specFromType', () => {
 
   it('changes spec mark type accordingly', () => {
     expect(
-      specFromType(tableType, displayProps({ markType: 'area' }))
+      specFromType(computer, tableType, displayProps({ markType: 'area' }))
     ).toMatchObject({
       data: {
         name: 'table',
@@ -131,7 +134,7 @@ describe('specFromType', () => {
 
   it('xColumnName', () => {
     expect(
-      specFromType(tableType, displayProps({ xColumnName: 'index' }))
+      specFromType(computer, tableType, displayProps({ xColumnName: 'index' }))
     ).toMatchObject({
       data: {
         name: 'table',
@@ -153,7 +156,7 @@ describe('specFromType', () => {
 
   it('yColumnName', () => {
     expect(
-      specFromType(tableType, displayProps({ yColumnName: 'index' }))
+      specFromType(computer, tableType, displayProps({ yColumnName: 'index' }))
     ).toMatchObject({
       data: {
         name: 'table',
@@ -173,7 +176,11 @@ describe('specFromType', () => {
 
   it('sizeColumnName', () => {
     expect(
-      specFromType(tableType, displayProps({ sizeColumnName: 'index' }))
+      specFromType(
+        computer,
+        tableType,
+        displayProps({ sizeColumnName: 'index' })
+      )
     ).toMatchObject({
       data: {
         name: 'table',
@@ -193,7 +200,11 @@ describe('specFromType', () => {
 
   it('colorColumnName', () => {
     expect(
-      specFromType(tableType, displayProps({ colorColumnName: 'index' }))
+      specFromType(
+        computer,
+        tableType,
+        displayProps({ colorColumnName: 'index' })
+      )
     ).toMatchObject({
       data: {
         name: 'table',
@@ -213,7 +224,11 @@ describe('specFromType', () => {
 
   it('thetaColumnName', () => {
     expect(
-      specFromType(tableType, displayProps({ thetaColumnName: 'index' }))
+      specFromType(
+        computer,
+        tableType,
+        displayProps({ thetaColumnName: 'index' })
+      )
     ).toMatchObject({
       data: {
         name: 'table',
@@ -244,7 +259,11 @@ describe('specFromType', () => {
         millisecond: 'utcyearmonthdatehoursminutesseconds',
       };
       expect(
-        specFromType(tableType, displayProps({ xColumnName: `date-${unit}` }))
+        specFromType(
+          computer,
+          tableType,
+          displayProps({ xColumnName: `date-${unit}` })
+        )
       ).toMatchObject({
         data: {
           name: 'table',
@@ -313,6 +332,7 @@ describe('resultToPlotResultData', () => {
 });
 
 describe('enhanceSpecFromWideData', () => {
+  const computer = new Computer();
   it('enhances spec when data are numbers', () => {
     const data = {
       table: [
@@ -324,7 +344,11 @@ describe('enhanceSpecFromWideData', () => {
     };
     const spec = enhanceSpecFromWideData(
       getDefined(
-        specFromType(tableType, displayProps({ xColumnName: 'simple-number' }))
+        specFromType(
+          computer,
+          tableType,
+          displayProps({ xColumnName: 'simple-number' })
+        )
       ),
       data
     );

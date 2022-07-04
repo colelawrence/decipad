@@ -4,13 +4,13 @@ import { convertBetweenUnits, normalizeUnitName } from '.';
 describe('convert', () => {
   it('throws when from unit is unknown', () => {
     expect(() => convertBetweenUnits(F(1), U('apples'), U('meters'))).toThrow(
-      "Don't know how to convert between apples and meters"
+      'Inference Error: cannot-convert-between-units'
     );
   });
 
   it('throws when to unit is unknown', () => {
     expect(() => convertBetweenUnits(F(1), U('meters'), U('jeeters'))).toThrow(
-      "Don't know how to convert between meters and jeeters"
+      'Inference Error: cannot-convert-between-units'
     );
   });
 
@@ -60,7 +60,7 @@ describe('convert', () => {
 
   it('throws if units are not of the same base quantity', () => {
     expect(() => convertBetweenUnits(F(1), U('meters'), U('grams'))).toThrow(
-      "Don't know how to convert between meters and grams"
+      'Inference Error: cannot-convert-between-units'
     );
   });
 

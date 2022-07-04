@@ -3,7 +3,6 @@ import { Interpreter } from '../interpreter';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 import { validateResult } from './validate';
 
-export { stringifyResult } from './stringify';
 export { validateResult } from './validate';
 
 type OneResult = Interpreter.OneResult;

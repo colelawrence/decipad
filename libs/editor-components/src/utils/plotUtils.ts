@@ -1,10 +1,10 @@
 import { PlotElement } from '@decipad/editor-types';
 import Fraction from '@decipad/fraction';
 import {
+  Computer,
   convertToMultiplierUnit,
   Result,
   SerializedType,
-  stringifyUnits,
 } from '@decipad/computer';
 import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
 
@@ -174,13 +174,18 @@ function displayTimeUnitType(type: SerializedType): TimeUnit {
   }
 }
 
-function columnTitle(columnName: string, columnType: SerializedType): string {
+function columnTitle(
+  computer: Computer,
+  columnName: string,
+  columnType: SerializedType
+): string {
   return columnType.kind === 'number' && columnType.unit != null
-    ? `${columnName} (${stringifyUnits(columnType.unit)})`
+    ? `${columnName} (${computer.formatUnit(columnType.unit)})`
     : columnName;
 }
 
 export function encodingFor(
+  computer: Computer,
   columnName: string,
   columnType: SerializedType
 ): EncodingSpec {
@@ -188,7 +193,7 @@ export function encodingFor(
   const spec: EncodingSpec = {
     field: columnName,
     type,
-    title: columnTitle(columnName, columnType),
+    title: columnTitle(computer, columnName, columnType),
     timeUnit:
       columnType.kind === 'date' ? displayTimeUnitType(columnType) : undefined,
   };
@@ -202,6 +207,7 @@ export function encodingFor(
 }
 
 export function specFromType(
+  computer: Computer,
   type: undefined | SerializedType,
   displayProps: DisplayProps
 ): undefined | PlotSpec {
@@ -227,7 +233,7 @@ export function specFromType(
       if (columnType) {
         const channelKey = displayPropsToEncoding[specPropName];
         // eslint-disable-next-line no-param-reassign
-        encodings[channelKey] = encodingFor(columnName, columnType);
+        encodings[channelKey] = encodingFor(computer, columnName, columnType);
       }
 
       return encodings;

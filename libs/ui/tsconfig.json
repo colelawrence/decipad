@@ -17,6 +17,7 @@
     { "path": "../feature-flags" },
     { "path": "../client-events" },
     { "path": "../editor-types" },
-    { "path": "../toast" }
+    { "path": "../toast" },
+    { "path": "../format" }
   ]
 }

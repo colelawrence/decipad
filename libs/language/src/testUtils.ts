@@ -4,7 +4,7 @@ import { AST, InjectableExternalData } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { fromJS, FromJSArg, Table } from './interpreter/Value';
-import { OneResult, stringifyResult } from './result';
+import { OneResult } from './result';
 import { parseOneBlock } from './run';
 import {
   build as t,
@@ -152,11 +152,6 @@ export const objectToMap = <K extends string, V, Obj extends ObjectOf<V>>(
 export function dataUrl(data: Buffer | string, contentType: string): string {
   return `data:${contentType};base64,${Buffer.from(data).toString('base64')}`;
 }
-
-export const resultSnapshotSerializer: jest.SnapshotSerializerPlugin = {
-  test: (arg) => arg?.type instanceof Type && arg.value != null,
-  serialize: ({ type, value }) => `Result(${stringifyResult(value, type)})`,
-};
 
 export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
   test: (item) => item instanceof Type,

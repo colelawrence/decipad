@@ -1,6 +1,4 @@
-import { zip } from '@decipad/utils';
 import { buildType as t } from '..';
-import { stringifyResult } from '../result';
 import { fromJS, Column } from '../interpreter/Value';
 import {
   getCardinality,
@@ -35,78 +33,76 @@ it('can get cardinality', () => {
 });
 
 describe('heightenValueDimensionsIfNecessary', () => {
-  const testNecessary = (
-    ...args: Parameters<typeof heightenValueDimensionsIfNecessary>
-  ) => {
-    const [type, value] = heightenValueDimensionsIfNecessary(...args);
-
-    return zip(type, value).map(([type, value]) =>
-      stringifyResult(value.getData(), type)
-    );
-  };
-
   it('can heightenValueDimensionsIfNecessary', () => {
-    expect(testNecessary([t.number()], [fromJS(1)], [2]))
-      .toMatchInlineSnapshot(`
-      Array [
-        "[ 1 ]",
-      ]
-    `);
+    expect(
+      heightenValueDimensionsIfNecessary([t.number()], [fromJS(1)], [2])
+    ).toMatchObject([
+      [{ cellType: { type: 'number' }, columnSize: 1 }],
+      [new Column([fromJS(1)])],
+    ]);
   });
 
   it('base case (do ñothing)', () => {
-    expect(testNecessary([t.column(t.number(), 1)], [fromJS([1])], [2]))
-      .toMatchInlineSnapshot(`
-        Array [
-          "[ 1 ]",
-        ]
-      `);
     expect(
-      testNecessary(
+      heightenValueDimensionsIfNecessary(
+        [t.column(t.number(), 1)],
+        [fromJS([1])],
+        [2]
+      )
+    ).toMatchObject([
+      [{ cellType: { type: 'number' }, columnSize: 1 }],
+      [new Column([fromJS(1)])],
+    ]);
+    expect(
+      heightenValueDimensionsIfNecessary(
         [t.column(t.column(t.number(), 1), 2)],
         [Column.fromValues([Column.fromValues([fromJS(1)])])],
         [2]
       )
-    ).toMatchInlineSnapshot(`
-      Array [
-        "[ [ 1 ] ]",
-      ]
-    `);
+    ).toMatchObject([
+      [{ cellType: { type: null }, columnSize: 2 }],
+      [new Column([new Column([fromJS(1)])])],
+    ]);
   });
 
   it.todo('errors with mismatched dimensions in arguments');
 });
 
 describe('heightenDimensionsIfNecessary', () => {
-  const testNecessary = (
-    ...args: Parameters<typeof heightenDimensionsIfNecessary>
-  ) => {
-    const types = heightenDimensionsIfNecessary(...args);
-
-    return types.map((type) => type.toString());
-  };
-
   it('can heightenValueDimensionsIfNecessary', () => {
-    expect(testNecessary([t.number()], [2])).toMatchInlineSnapshot(`
-      Array [
-        "<number> x 1",
-      ]
-    `);
+    expect(heightenDimensionsIfNecessary([t.number()], [2])).toMatchObject([
+      {
+        columnSize: 1,
+        cellType: {
+          type: 'number',
+        },
+      },
+    ]);
   });
 
   it('base case (do ñothing)', () => {
-    expect(testNecessary([t.column(t.number(), 1)], [2]))
-      .toMatchInlineSnapshot(`
-      Array [
-        "<number> x 1",
-      ]
-    `);
-    expect(testNecessary([t.column(t.column(t.number(), 1), 2)], [2]))
-      .toMatchInlineSnapshot(`
-      Array [
-        "<number> x 1 x 2",
-      ]
-    `);
+    expect(
+      heightenDimensionsIfNecessary([t.column(t.number(), 1)], [2])
+    ).toMatchObject([
+      {
+        columnSize: 1,
+        cellType: {
+          type: 'number',
+        },
+      },
+    ]);
+    expect(
+      heightenDimensionsIfNecessary([t.column(t.column(t.number(), 1), 2)], [2])
+    ).toMatchObject([
+      {
+        columnSize: 2,
+        cellType: {
+          cellType: {
+            type: 'number',
+          },
+        },
+      },
+    ]);
   });
 
   it.todo('errors with mismatched dimensions in arguments');

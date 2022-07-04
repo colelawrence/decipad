@@ -1,3 +1,4 @@
+import FFraction, { FractionLike } from '@decipad/fraction';
 import {
   AST,
   AutocompleteName,
@@ -16,8 +17,10 @@ import {
   serializeResult,
   serializeType,
   serializeUnit,
+  FUnits,
   validateResult,
   Value,
+  ErrSpec,
 } from '@decipad/language';
 import { anyMappingToMap, getDefined } from '@decipad/utils';
 import assert from 'assert';
@@ -30,6 +33,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
+import { formatError, formatNumber, formatUnit } from '@decipad/format';
 import { captureException } from '../reporting';
 import {
   ComputePanic,
@@ -233,6 +237,7 @@ interface ComputerOpts {
 }
 
 export class Computer {
+  private locale = 'en-US';
   private previouslyParsed: ParseRet[] = [];
   private previousExternalData: ExternalDataMap = new Map();
   private computationRealm = new ComputationRealm();
@@ -544,5 +549,27 @@ export class Computer {
 
   getParseError(elementId: string): UserParseError | undefined {
     return this.parseErrors.get(elementId);
+  }
+
+  // locale
+
+  setLocale(locale: string) {
+    this.locale = locale;
+  }
+
+  formatNumber(
+    unit: FUnits | null,
+    value: FractionLike,
+    decimalPlaces?: number
+  ): string {
+    return formatNumber(this.locale, unit, value, decimalPlaces);
+  }
+
+  formatUnit(unit: FUnits, value?: FFraction): string {
+    return formatUnit(this.locale, unit, value);
+  }
+
+  formatError(error: ErrSpec): string {
+    return formatError(this.locale, error);
   }
 }

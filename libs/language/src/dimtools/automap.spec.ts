@@ -626,33 +626,41 @@ describe('automap for reducers', () => {
     it('automapTypesForReducer can call a reducer', () => {
       const oneDeeType = t.column(t.number(), 1, 'X');
 
-      expect(
-        automapTypesForReducer(oneDeeType, sumFunctor).toString()
-      ).toMatchInlineSnapshot(`"<number>"`);
+      expect(automapTypesForReducer(oneDeeType, sumFunctor)).toMatchObject({
+        type: 'number',
+      });
     });
 
     it('automapTypesForReducer can reduce', () => {
       const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
 
-      expect(
-        automapTypesForReducer(twoDeeType, sumFunctor).toString()
-      ).toMatchInlineSnapshot(`"<number> x 2 (Y)"`);
+      expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
+        columnSize: 2,
+        indexedBy: 'Y',
+        cellType: {
+          type: 'number',
+        },
+      });
     });
 
     it('automapTypesForReducer can reduce the other way', () => {
       const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
 
-      expect(
-        automapTypesForReducer(twoDeeType, sumFunctor).toString()
-      ).toMatchInlineSnapshot(`"<number> x 1 (Y)"`);
+      expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
+        cellType: {
+          type: 'number',
+        },
+        columnSize: 1,
+        indexedBy: 'Y',
+      });
     });
 
     it('automapTypesForReducer works with 1D arguments', () => {
       const oneDeeType = t.number();
 
-      expect(
-        automapTypesForReducer(oneDeeType, sumFunctor).toString()
-      ).toMatchInlineSnapshot(`"<number>"`);
+      expect(automapTypesForReducer(oneDeeType, sumFunctor)).toMatchObject({
+        type: 'number',
+      });
     });
   });
 

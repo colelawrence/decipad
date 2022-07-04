@@ -69,10 +69,18 @@ it('renders repetitive decimal', async () => {
 });
 
 it('shows approximation of long decimal', async () => {
-  const { container } = render(
-    <NumberResult {...await runCode(`5.81 / 41248.20`)} />
-  );
-  expect(container.textContent).toMatchInlineSnapshot(`"0.00014(...)"`);
+  {
+    const { container } = render(
+      <NumberResult {...await runCode(`5.81 / 41248.20`)} />
+    );
+    expect(container.textContent).toMatchInlineSnapshot(`"0.00014(...)"`);
+  }
+  {
+    const { container } = render(
+      <NumberResult {...await runCode(`0.000007 / 2`)} />
+    );
+    expect(container.textContent).toMatchInlineSnapshot(`"0.0000035"`);
+  }
 });
 
 describe('units', () => {

@@ -15,6 +15,7 @@
   "scripts": {
     "start": "yarn serve:all",
     "serve:all": "run-p serve:backend serve:frontend",
+    "serve:all:e2e": "DECI_E2E=1 run-p serve:backend serve:frontend",
     "serve:backend": "nx serve backend",
     "serve:frontend": "nx serve frontend",
     "serve:storybook": "nx run ui:storybook",
@@ -41,7 +42,7 @@
     "deploy:pr": "./scripts/deploy-pr.sh",
     "deploy:alpha": "./scripts/deploy-alpha.sh",
     "deploy:discord-customer-support-bot": "./scripts/deploy-discord-customer-support-bot-commands.mjs",
-    "repl": "babel-node --inspect --extensions=.js,.jsx,.ts,.tsx libs/language/src/repl.ts",
+    "repl": "babel-node --inspect --extensions=.js,.jsx,.ts,.tsx libs/repl/src/repl.ts",
     "nx": "nx",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
