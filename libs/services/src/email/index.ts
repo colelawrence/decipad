@@ -23,11 +23,11 @@ export function sendEmail({
   subject,
 }: SendEmailParams): Promise<void> {
   return new Promise((resolve, reject) => {
-    const params = {
+    const params: SESV2.SendEmailRequest = {
       Content: {
         Simple: {
           Body: {
-            Text: {
+            Html: {
               Data: body,
               Charset: 'UTF-8',
             },

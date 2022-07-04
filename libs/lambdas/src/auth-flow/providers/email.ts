@@ -1,6 +1,6 @@
 import arc from '@architect/functions';
-import Email from 'next-auth/providers/email';
 import { auth } from '@decipad/config';
+import Email from 'next-auth/providers/email';
 
 type EmailVerificationRequest = {
   identifier: string;
@@ -12,7 +12,7 @@ type EmailVerificationRequest = {
 export default function EmailProvider() {
   return Email({
     server: 'mail.decipad.com',
-    from: 'info@decipad.com',
+    from: 'Decipad <info@decipad.com>',
     sendVerificationRequest,
     maxAge: auth().userKeyValidationExpirationSeconds,
   });
