@@ -6,7 +6,7 @@ const defaultEnvValues = {
   APP_ROOT_PATH: '/',
   AWS_REGION: 'eu-west-2',
 
-  DECI_FROM_EMAIL_ADDRESS: 'info@decipad.com',
+  DECI_FROM_EMAIL_ADDRESS: 'Decipad<info@decipad.com>',
   DECI_APP_URL_BASE: 'http://localhost:3000',
   DECI_PORT: '3000',
 
