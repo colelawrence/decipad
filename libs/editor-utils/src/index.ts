@@ -24,9 +24,12 @@ export * from './assertElementType';
 export * from './getVariableRanges';
 export * from './matchNodeType';
 export * from './isElementOfType';
+export * from './parseSeriesStart';
+export * from './seriesIterator';
+export * from './getSlateFragment';
+export * from './selectEventRange';
+export * from './isPath';
 
 export * from './useElementMutatorCallback';
 export * from './useSelection';
 export * from './useElementAbove';
-export * from './getSlateFragment';
-export * from './selectEventRange';

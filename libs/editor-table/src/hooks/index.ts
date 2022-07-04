@@ -3,3 +3,7 @@ export * from './useDropColumn';
 export * from './useColumnDropDirection';
 export * from './useTableColumnHeaderOfTableAbove';
 export * from './useTableColumnCount';
+export * from './useFormulaResult';
+export * from './useIsCellSelected';
+export * from './useCellType';
+export * from './useIsColumnSelected';

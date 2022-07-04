@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAtom } from 'jotai';
 import { selectedCellsAtom, TElement } from '@udecode/plate';
-import { tableScope } from '../Table/index';
+import { tableScope } from '../components';
 
 export const useIsCellSelected = (element: TElement) => {
   const [selectedCells] = useAtom(selectedCellsAtom, tableScope);

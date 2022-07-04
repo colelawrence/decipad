@@ -13,12 +13,15 @@ import type {
 } from './element-kinds';
 import type { BaseElement } from './value';
 
+export type SeriesType = 'date'; // only date for now, but we could have others
+
 export type TableCellType =
   | SerializedTypes.Number
   | SerializedTypes.String
   | SerializedTypes.Boolean
   | SerializedTypes.Date
-  | Readonly<{ kind: 'table-formula' }>;
+  | Readonly<{ kind: 'table-formula' }>
+  | Readonly<{ kind: 'series'; seriesType: SeriesType }>;
 
 export interface TableColumn {
   columnName: string;

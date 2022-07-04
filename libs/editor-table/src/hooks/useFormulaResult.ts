@@ -12,7 +12,7 @@ import {
 import { Computer, Result } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
-import { useEditorTableContext } from '../../contexts/EditorTableContext';
+import { useEditorTableContext } from '../contexts/EditorTableContext';
 
 function subscribeToFormulaResult(
   computer: Computer,

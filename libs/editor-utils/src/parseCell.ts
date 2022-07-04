@@ -5,6 +5,7 @@ import {
   deserializeUnit,
   parseOneBlock,
   stringifyUnits,
+  Time,
 } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { parse } from 'date-fns';
@@ -113,7 +114,7 @@ function dateToAST(cellType: TableCellType, asDate: Date) {
   return astNode('date', ...parts);
 }
 
-const dateFormats = (text: string, formatStrings: string[]) => {
+const parseDateStr = (text: string, formatStrings: string[]) => {
   const normalized = text
     .trim()
     .replace('T', ' ')
@@ -129,17 +130,37 @@ const dateFormats = (text: string, formatStrings: string[]) => {
   return null;
 };
 
+const combineFormats = (a: string[], b: string[]): string[] => {
+  const formats: string[] = [];
+  for (const aElem of a) {
+    for (const bElem of b) {
+      formats.push(`${aElem} ${bElem}`);
+    }
+  }
+  return formats;
+};
+
 // Format strings reference:
 // https://date-fns.org/v2.25.0/docs/format
-const yearFormats = ['yy', 'yyyy'];
-const monthFormats = ['yyyy-MM', 'MM-yyyy'];
 const dayFormats = ['dd-MM-yyyy', 'yyyy-MM-dd'];
-const timeFormats = ['HH:mm', 'HHmm', 'h:m aaa', 'hh:mm aaa', 'hhmm aaa'];
-const dateTimeFormats = [
-  ...dayFormats.flatMap((date) =>
-    timeFormats.flatMap((time) => [`${date} ${time}`, `${time} ${date}`])
+const minuteFormats = ['HH:mm', 'HHmm', 'h:m aaa', 'hh:mm aaa', 'hhmm aaa'];
+const secondFormats = ['s', 'ss'];
+const fractionSecondsFormats = ['S', 'SS', 'SSS', 'SSSS'];
+export const dateFormats: Record<Time.Specificity, string[]> = {
+  year: ['yy', 'yyyy'],
+  month: ['yyyy-MM', 'MM-yyyy'],
+  day: dayFormats,
+  hour: combineFormats(dayFormats, ['HH']),
+  minute: combineFormats(dayFormats, minuteFormats),
+  second: combineFormats(
+    combineFormats(dayFormats, minuteFormats),
+    secondFormats
   ),
-];
+  millisecond: combineFormats(
+    combineFormats(combineFormats(dayFormats, minuteFormats), secondFormats),
+    fractionSecondsFormats
+  ),
+};
 
 export function parseDate(cellType: TableCellType, text: string): Date | null {
   if (cellType.kind !== 'date') {
@@ -147,20 +168,6 @@ export function parseDate(cellType: TableCellType, text: string): Date | null {
       `Expected cell type kind 'date', received ${cellType.kind}`
     );
   }
-  switch (cellType.date) {
-    case 'year': {
-      return dateFormats(text, yearFormats);
-    }
-    case 'month': {
-      return dateFormats(text, monthFormats);
-    }
-    case 'day': {
-      return dateFormats(text, dayFormats);
-    }
-    case 'minute': {
-      return dateFormats(text, dateTimeFormats);
-    }
-    default:
-      return null;
-  }
+  const formats = dateFormats[cellType.date];
+  return parseDateStr(text, formats);
 }

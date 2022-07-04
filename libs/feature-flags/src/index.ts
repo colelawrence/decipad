@@ -2,7 +2,8 @@ export type Flag =
   | 'FORMULA_COLUMNS'
   | 'INPUT_COPY'
   | 'PERSISTENT_EXAMPLE'
-  | 'POWER_TABLE';
+  | 'POWER_TABLE'
+  | 'TABLE_COLUMN_SERIES';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

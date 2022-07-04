@@ -4,7 +4,7 @@ import {
   SerializedUnits,
   Time,
 } from '@decipad/computer';
-import type { TableCellType } from '@decipad/editor-types';
+import type { SeriesType, TableCellType } from '@decipad/editor-types';
 import { createContext, FunctionComponent } from 'react';
 import {
   All,
@@ -29,6 +29,8 @@ export function getTypeIcon(
       return type.unit == null ? Number : All;
     case 'table-formula':
       return Formula;
+    case 'series':
+      return Calendar; // only calendar for now
     default:
       return Text;
   }
@@ -38,6 +40,10 @@ export function getDateType(
   specificity: Time.Specificity
 ): SerializedTypes.Date {
   return { kind: 'date', date: specificity };
+}
+
+export function getSeriesType(type: SeriesType): TableCellType {
+  return { kind: 'series', seriesType: type };
 }
 
 export function getNumberType(unit?: SerializedUnits): SerializedTypes.Number {

@@ -6,6 +6,7 @@ import {
   MyEditor,
   MyElement,
   MyNodeEntry,
+  MyPlatePlugin,
   MyWithOverride,
 } from '@decipad/editor-types';
 
@@ -118,6 +119,14 @@ const withNormalizerOverride = ({
     return editor;
   };
 };
+
+export const createNormalizerPlugin = ({
+  name,
+  ...props
+}: NormalizerPluginProps): MyPlatePlugin => ({
+  key: name,
+  withOverrides: withNormalizerOverride(props),
+});
 
 export const createNormalizerPluginFactory = ({
   name,

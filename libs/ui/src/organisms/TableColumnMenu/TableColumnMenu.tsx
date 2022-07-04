@@ -11,6 +11,7 @@ import {
   Calendar,
   CheckboxSelected,
   Formula,
+  Leaf,
   Number,
   Shapes,
   Text,
@@ -22,6 +23,7 @@ import {
   getDateType,
   getNumberType,
   getStringType,
+  getSeriesType,
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
 
@@ -141,6 +143,23 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             Time
           </MenuItem>
         </MenuList>
+        {isEnabled('TABLE_COLUMN_SERIES') && (
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem icon={<Leaf />}>
+                <div css={{ minWidth: '116px' }}>Series</div>
+              </TriggerMenuItem>
+            }
+          >
+            <MenuItem
+              icon={<Calendar />}
+              onSelect={() => onChangeColumnType(getSeriesType('date'))}
+              selected={type.kind === 'series' && type.seriesType === 'date'}
+            >
+              Date
+            </MenuItem>
+          </MenuList>
+        )}
       </MenuList>
       <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
         Remove column

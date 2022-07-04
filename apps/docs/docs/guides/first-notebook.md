@@ -32,7 +32,6 @@ Take a look at our [Gallery of examples](/examples) and try to duplicate one:
 3. Click on it to create a copy of that notebook for yourself;
 4. Adapt it or transform it however you wish since you now own a copy of the original notebook.
 
-
 ---
 
 # Learn More:

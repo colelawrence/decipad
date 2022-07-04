@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -6,12 +7,12 @@ import {
   ELEMENT_TR,
 } from '@decipad/editor-types';
 import { createPlateEditor, normalizeEditor, TEditor } from '@udecode/plate';
-import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFormulaCellsPlugin';
+import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
 
 let editor: TEditor;
 beforeEach(() => {
   editor = createPlateEditor({
-    plugins: [createNormalizeTableFormulaCellsPlugin()],
+    plugins: [createNormalizeTableFormulaAndSeriesCellsPlugin(new Computer())],
   });
 });
 

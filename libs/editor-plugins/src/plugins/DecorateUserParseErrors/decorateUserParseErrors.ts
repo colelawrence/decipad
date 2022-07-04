@@ -16,9 +16,7 @@ export const decorateUserParseErrors =
   (editor: MyEditor) =>
   ([node, path]: NodeEntry): SyntaxErrorAnnotation[] | undefined => {
     if (isElement(node)) {
-      const error = computer.getParseErrorForElement(
-        (node as ElementWithId).id
-      );
+      const error = computer.getParseError((node as ElementWithId).id);
       if (error) {
         return [
           {
