@@ -27,7 +27,7 @@ import {
 import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
-import { createNormalizeTableFormulaCellsPlugin } from './createNormalizeTableFormulaCellsPlugin';
+import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
 import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDeleteTableFromCaptionPlugin';
@@ -76,7 +76,7 @@ export const createTablePlugin = (
     // createExtraRowPlaceholderPlugin(),
     createCellFormulaShortcutPlugin(),
     createNormalizeTableFormulaPlugin(),
-    createNormalizeTableFormulaCellsPlugin(),
+    createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
     createNormalizeTablesPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,

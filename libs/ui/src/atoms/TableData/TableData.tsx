@@ -76,27 +76,35 @@ const grabbingStyles = css({
   cursor: 'grabbing',
 });
 
+const tdDisabledStyles = css({
+  ...setCssVar('normalTextColor', cssVar('weakerTextColor')),
+});
+
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   isEditable?: boolean;
+  isUserContent?: boolean;
   contentEditable?: boolean;
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
   grabbing?: boolean;
   selected?: boolean;
   collapsed?: boolean;
+  disabled?: boolean;
   dropTarget?: ConnectDropTarget;
 }
 
 export const TableData = ({
   as: Component = 'div',
   isEditable = false,
+  isUserContent = false,
   attributes,
   showPlaceholder = true,
   draggable,
   grabbing,
   selected,
   collapsed,
+  disabled = false,
   dropTarget,
   ...props
 }: TableDataProps): ReturnType<FC> => {
@@ -104,12 +112,15 @@ export const TableData = ({
     attributes && 'ref' in attributes ? attributes.ref : undefined;
   const tdRef = useMergedRef(existingRef, dropTarget);
   const focused = useSelected();
+  const additionalProps = isEditable ? {} : { contentEditable: false };
+
   return (
     <Component
       {...attributes}
+      {...additionalProps}
       ref={tdRef}
       css={[
-        isEditable && editableStyles,
+        isUserContent && editableStyles,
         tdBaseStyles,
         tdGridStyles,
         draggable && draggableStyles,
@@ -123,6 +134,7 @@ export const TableData = ({
             boxShadow: `inset 0 0 0 2px ${blue300.rgb}`,
           }),
         showPlaceholder && tdPlaceholderStyles,
+        disabled && tdDisabledStyles,
       ]}
       {...props}
     />

@@ -528,7 +528,21 @@ export class Computer {
     return isExpression(statement);
   }
 
-  getParseErrorForElement(elementId: string): UserParseError | undefined {
+  // User parse errors
+
+  setParseError(id: string, error: UserParseError): void {
+    this.parseErrors.set(id, error);
+  }
+
+  unsetParseError(id: string): void {
+    this.parseErrors.delete(id);
+  }
+
+  hasParseError(id: string): boolean {
+    return this.parseErrors.has(id);
+  }
+
+  getParseError(elementId: string): UserParseError | undefined {
     return this.parseErrors.get(elementId);
   }
 }

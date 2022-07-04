@@ -84,6 +84,7 @@ jobs:
           cd ../..
           scripts/push-sam.sh
 
+          yarn clean
           yarn deploy
 
   notify:

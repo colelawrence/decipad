@@ -79,7 +79,8 @@ describe('when editor is in readOnly mode', () => {
       <EditorReadOnlyContext.Provider
         value={{
           readOnly: true,
-          lockWriting: () => thro(new Error('not implemented, see: useWriteLock')),
+          lockWriting: () =>
+            thro(new Error('not implemented, see: useWriteLock')),
         }}
       >
         <Plate {...props} editor={editor} />
