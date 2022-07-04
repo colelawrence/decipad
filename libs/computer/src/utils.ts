@@ -104,7 +104,8 @@ export const getSomeBlockLocations = (
     blockIds.includes(block.id) ? blockLocs(block) : []
   );
 
-const getIdentifierString = (ident: AST.Identifier): string => ident.args[0];
+export const getIdentifierString = (ident: AST.Identifier): string =>
+  ident.args[0];
 
 export const getDefinedSymbol = (stmt: AST.Statement) => {
   switch (stmt.type) {

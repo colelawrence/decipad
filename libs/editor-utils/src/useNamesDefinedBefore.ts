@@ -10,9 +10,7 @@ export const useNamesDefinedBefore = (
   const computer = useComputer();
 
   useEffect(() => {
-    const subscription = computer
-      .getNamesDefinedBefore$([blockId, 0], stopIfNotFound)
-      .subscribe(setNames);
+    const subscription = computer.getNamesDefined$().subscribe(setNames);
 
     return () => {
       subscription.unsubscribe();

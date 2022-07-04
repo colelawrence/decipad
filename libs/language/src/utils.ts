@@ -220,29 +220,50 @@ const statementTypesSet = new Set([
   'function-definition',
 ]);
 
-export const isStatement = (
-  value: unknown | AST.Statement
-): value is AST.Statement => isNode(value) && statementTypesSet.has(value.type);
+export const isStatement = (value: unknown): value is AST.Statement =>
+  isNode(value) && statementTypesSet.has(value.type);
 
-export const getIdentifierString = ({ type, args }: AST.Identifier): string => {
-  if (
-    (type !== 'ref' &&
-      type !== 'catdef' &&
-      type !== 'def' &&
-      type !== 'tablepartialdef' &&
-      type !== 'funcdef' &&
-      type !== 'generic-identifier' &&
-      type !== 'funcref' &&
-      type !== 'coldef' &&
-      type !== 'externalref') ||
-    typeof args[0] !== 'string'
-  ) {
-    throw new Error(
-      `panic: identifier expected on node of type ${type} and arg[0] of type ${typeof args[0]}`
+const assignmentTypesSet = new Set([
+  'assign',
+  'matrix-assign',
+  'function-definition',
+  'table-column-assign',
+]);
+
+export const isAssignment = (value: unknown): value is AST.GenericAssignment =>
+  isNode(value) && assignmentTypesSet.has(value.type);
+
+const identifierTypesSet = new Set([
+  'ref',
+  'catdef',
+  'def',
+  'tablepartialdef',
+  'funcdef',
+  'generic-identifier',
+  'funcref',
+  'coldef',
+  'externalref',
+]);
+
+export const isIdentifier = (value: unknown): value is AST.Identifier =>
+  isNode(value) && identifierTypesSet.has(value.type);
+
+export function assertIdentifier(
+  value: unknown
+): asserts value is AST.Identifier {
+  if (!isIdentifier(value)) {
+    throw new TypeError(
+      `panic: identifier expected on node of type ${
+        (value as AST.Statement)?.type
+      } and arg[0] of type ${typeof (value as AST.Statement)?.args[0]}`
     );
-  } else {
-    return args[0];
   }
+}
+
+export const getIdentifierString = (node: AST.Identifier): string => {
+  assertIdentifier(node);
+  const { args } = node;
+  return args[0];
 };
 
 export const getDefined = <T>(

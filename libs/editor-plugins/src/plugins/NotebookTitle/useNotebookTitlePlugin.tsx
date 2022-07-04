@@ -32,7 +32,7 @@ export const useNotebookTitlePlugin = ({
             onNotebookTitleChangeDebounced(newTitle);
           }
         } catch (err) {
-          console.error('Eror in onChangeNotebookTitle', err);
+          console.error('Error in onChangeNotebookTitle', err);
         }
       }
     },

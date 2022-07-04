@@ -4,12 +4,7 @@ import { useSelected, useFocused } from 'slate-react';
 import { findWordStart, useSelection } from '@decipad/editor-utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';
-import {
-  MyElement,
-  PlateComponent,
-  useTEditorState,
-} from '@decipad/editor-types';
-import { getNode } from '@udecode/plate';
+import { PlateComponent, useTEditorState } from '@decipad/editor-types';
 
 export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   const computer = useComputer();
@@ -46,10 +41,8 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   }, [editor, selection, selection?.focus]);
 
   if (selection) {
-    const element = getNode<MyElement>(editor, [selection.focus.path[0]]);
-    const lineId = (element as MyElement).id;
     const identifiers = computer
-      .getNamesDefinedBefore([lineId, 0], false)
+      .getNamesDefined()
       .filter((n) => n.kind === 'variable')
       .map((n) => ({
         kind: 'variable' as const,

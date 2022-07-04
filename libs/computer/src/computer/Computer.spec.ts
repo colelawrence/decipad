@@ -174,8 +174,8 @@ describe('caching', () => {
       Array [
         "block-0/0 -> 1",
         "block-1/0 -> undefined",
-        "block-2/0 -> 3",
         "block-3/0 -> 1",
+        "block-2/0 -> 3",
       ]
     `);
   });
@@ -282,12 +282,12 @@ it('can pass on injected data', async () => {
 });
 
 describe('tooling data', () => {
-  it('Can get variables and functions available until a certain location (exclusive)', async () => {
+  it('Can get variables and functions available', async () => {
     await computeOnTestComputer({
       program: getUnparsed('A = 1', 'f(x) = 1\nC = 3'),
     });
 
-    const names = await computer.getNamesDefinedBefore(['block-1', 1]);
+    const names = await computer.getNamesDefined();
     expect(names).toMatchObject([
       {
         kind: 'variable',
@@ -298,6 +298,11 @@ describe('tooling data', () => {
         kind: 'function',
         name: 'f',
         type: { kind: 'function' },
+      },
+      {
+        kind: 'variable',
+        name: 'C',
+        type: { kind: 'number' },
       },
     ]);
   });

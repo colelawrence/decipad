@@ -70,7 +70,7 @@ export type {
   SerializedTypeKind,
   SerializedUnits,
 } from './type';
-export { isExpression, walkAst, n as astNode } from './utils';
+export { isExpression, walkAst, n as astNode, isAssignment } from './utils';
 export { units };
 export type { Unit, Units };
 

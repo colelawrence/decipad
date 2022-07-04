@@ -54,6 +54,7 @@ import { defaultComputerResults } from './defaultComputerResults';
 import { getDelayedBlockId } from './delayErrors';
 import { getVisibleVariables } from './getVisibleVariables';
 import { ParseRet, updateParse } from './parse';
+import { topologicalSort } from './topologicalSort';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -180,21 +181,13 @@ export const computeProgram = async (
 
 function* findNames(
   realm: ComputationRealm,
-  program: AST.Block[],
-  [blockId, stmtIdx]: ValueLocation,
-  stopIfNotFound: boolean
+  program: AST.Block[]
 ): Iterable<AutocompleteName> {
   const seenSymbols = new Set<string>();
   const { nodeTypes } = realm.inferContext;
   // Our search stops at this statement
-  const findUntil = program.find((b) => b.id === blockId)?.args[stmtIdx];
-  if (stopIfNotFound && !findUntil) {
-    return;
-  }
   for (const block of program) {
     for (const statement of block.args) {
-      if (statement === findUntil) return;
-
       const symbol = getDefinedSymbol(statement);
       if (symbol) {
         if (seenSymbols.has(symbol)) continue;
@@ -316,12 +309,9 @@ export class Computer {
     );
   }
 
-  getNamesDefinedBefore$(
-    location: ValueLocation,
-    stopIfNotFound = true
-  ): Observable<AutocompleteName[]> {
+  getNamesDefined$(): Observable<AutocompleteName[]> {
     return this.results.pipe(
-      map(() => this.getNamesDefinedBefore(location, stopIfNotFound)),
+      map(() => this.getNamesDefined()),
       distinctUntilChanged(dequal)
     );
   }
@@ -384,17 +374,18 @@ export class Computer {
   }: ComputeRequest) {
     const newExternalData = anyMappingToMap(externalData ?? new Map());
     const newParse = updateParse(program, this.previouslyParsed);
+    const sortedParse = topologicalSort(newParse);
 
     this.computationRealm.evictCache({
       oldBlocks: getGoodBlocks(this.previouslyParsed),
-      newBlocks: getGoodBlocks(newParse),
+      newBlocks: getGoodBlocks(sortedParse),
       oldExternalData: this.previousExternalData,
       newExternalData,
     });
 
     this.computationRealm.setExternalData(newExternalData);
     this.previousExternalData = newExternalData;
-    this.previouslyParsed = newParse;
+    this.previouslyParsed = sortedParse;
 
     if (parseErrors) {
       this.parseErrors = new Map(
@@ -402,7 +393,7 @@ export class Computer {
       );
     }
 
-    return newParse;
+    return sortedParse;
   }
 
   public async computeRequest(
@@ -478,14 +469,9 @@ export class Computer {
   /**
    * Get names for the autocomplete, and information about them
    */
-  getNamesDefinedBefore(
-    location: ValueLocation,
-    stopIfNotFound = true
-  ): AutocompleteName[] {
+  getNamesDefined(): AutocompleteName[] {
     const program = getGoodBlocks(this.previouslyParsed);
-    return Array.from(
-      findNames(this.computationRealm, program, location, stopIfNotFound)
-    );
+    return Array.from(findNames(this.computationRealm, program));
   }
 
   getStatement(blockId: string, statementIndex: number): AST.Statement | null {

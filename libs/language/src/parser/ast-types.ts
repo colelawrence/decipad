@@ -288,6 +288,12 @@ export interface Block {
   end?: Pos;
 }
 
+export type GenericAssignment =
+  | Assign
+  | MatrixAssign
+  | FunctionDefinition
+  | TableColumnAssign;
+
 export type Expression =
   | Noop
   | FunctionCall
