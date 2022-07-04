@@ -124,7 +124,7 @@ export function formatNumber<TF extends FractionLike = FFraction>(
 
     const decimalSep = thousandsSep === ',' ? '.' : ',';
     const commatizedDecimalPart =
-      decimalPart && `${decimalSep}${decimalPart.slice(1)}`;
+      (decimalPart && `${decimalSep}${decimalPart.slice(1)}`) || '';
     return removeExtraSpaces(
       `${sign}${formattedIntegerPart}${commatizedDecimalPart} ${unitPart}`
     );
