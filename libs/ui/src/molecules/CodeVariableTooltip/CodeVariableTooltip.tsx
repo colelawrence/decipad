@@ -23,7 +23,7 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
 }): ReturnType<FC> => {
   return (
     <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
-      <CodeResult type={type} value={value} variant="inline" />
+      <CodeResult type={type} value={value} variant="inline" tooltip={false} />
     </Tooltip>
   );
 };

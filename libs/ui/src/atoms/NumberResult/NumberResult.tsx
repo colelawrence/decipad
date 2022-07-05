@@ -12,6 +12,7 @@ const numberResultStyles = css({
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,
   value,
+  tooltip = true,
 }) => {
   const computer = useComputer();
 
@@ -21,8 +22,13 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
     </span>
   );
 
+  const trigger = <span css={numberResultStyles}>{fullResult}</span>;
+  if (!tooltip) {
+    return trigger;
+  }
+
   return (
-    <Tooltip trigger={<span css={numberResultStyles}>{fullResult}</span>}>
+    <Tooltip trigger={trigger}>
       ~ {computer.formatNumber(type.unit, value, 10)}
     </Tooltip>
   );

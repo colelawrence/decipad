@@ -5,6 +5,7 @@ import { CodeResultProps } from '../../types';
 export const InlineRowResult = ({
   value,
   type,
+  tooltip = true,
 }: CodeResultProps<'row'>): ReturnType<React.FC> => {
   const { rowCellTypes } = type;
 
@@ -17,6 +18,7 @@ export const InlineRowResult = ({
               value={column}
               variant="inline"
               type={rowCellTypes[colIndex]}
+              tooltip={tooltip}
             />
             {colIndex < value.length - 1 && ', '}
           </Fragment>

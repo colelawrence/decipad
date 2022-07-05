@@ -14,4 +14,5 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   readonly onDragStartCell?: (
     data: DragCellData
   ) => (e: DragEvent<HTMLDivElement>) => void;
+  tooltip?: boolean;
 }

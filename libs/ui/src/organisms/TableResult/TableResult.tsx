@@ -13,6 +13,7 @@ export const TableResult = ({
   type,
   value,
   onDragStartCell,
+  tooltip = true,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const { columnNames, columnTypes } = type;
   if (!columnNames.length) {
@@ -78,6 +79,7 @@ export const TableResult = ({
                     type={columnTypes[colIndex]}
                     value={column[rowIndex]}
                     variant="block"
+                    tooltip={tooltip}
                   />
                 </div>
               </TableData>
