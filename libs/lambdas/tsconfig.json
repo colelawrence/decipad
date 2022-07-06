@@ -19,6 +19,7 @@
     { "path": "../config" },
     { "path": "../discord-customerservice-lambda" },
     { "path": "../y-dynamodb" },
-    { "path": "../backend-trace" }
+    { "path": "../backend-trace" },
+    { "path": "../backend-analytics" }
   ]
 }

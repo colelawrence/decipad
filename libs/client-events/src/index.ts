@@ -7,3 +7,5 @@ export type ClientEvent = PageEvent | ActionEvent;
 
 export const ClientEventsContext =
   createContext<(clientEvent: ClientEvent) => void>(noop);
+
+export * from './useAnalytics';

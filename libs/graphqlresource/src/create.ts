@@ -4,14 +4,15 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { create as createPermission } from '@decipad/services/permissions';
-import { Resource } from './';
+import { track } from '@decipad/backend-analytics';
+import { Resource } from '.';
 import { requireUser } from './authorization';
 
 export type CreateFunction<
   GraphqlT extends GraphqlObjectType,
   CreateInputType
 > = (
-  _: any,
+  _: unknown,
   args: CreateInputType,
   context: GraphqlContext
 ) => Promise<GraphqlT>;
@@ -24,7 +25,11 @@ export function create<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateT>
 ): CreateFunction<GraphqlT, CreateInputT> {
-  return async function (_: any, input: CreateInputT, context: GraphqlContext) {
+  return async function create(
+    _: unknown,
+    input: CreateInputT,
+    context: GraphqlContext
+  ) {
     if (resourceType.beforeCreate) {
       await resourceType.beforeCreate(input, context);
     }
@@ -47,6 +52,11 @@ export function create<
         resourceType.parentResourceUriFromCreateInput(input);
     }
     await createPermission(permission);
+
+    await track(
+      { userId: user.id, event: `${resourceType.humanName} created` },
+      context
+    );
 
     return resourceType.toGraphql(newRecord);
   };

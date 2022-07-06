@@ -2,13 +2,15 @@ type WorkspacePageEvent = {
   type: 'page';
   url: string;
   category: 'workspace';
-  props?: undefined;
+  props?: {
+    title: string;
+  };
 };
 type NotebookPageEvent = {
   type: 'page';
   url: string;
   category: 'notebook';
-  props: {
+  props?: {
     title: string;
   };
 };
@@ -16,7 +18,9 @@ type PlaygroundPageEvent = {
   type: 'page';
   url: string;
   category: 'playground';
-  props?: undefined;
+  props?: {
+    title: string;
+  };
 };
 export type PageEvent =
   | WorkspacePageEvent

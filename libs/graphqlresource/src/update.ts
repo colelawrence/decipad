@@ -6,18 +6,23 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { notifyAllWithAccessTo } from '@decipad/services/pubsub';
+import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from './';
+import { Resource } from '.';
 
 export type UpdateArgs<T> = T & {
   id: ID;
 };
 
+interface MaybePublic {
+  isPublic?: boolean;
+}
+
 export type UpdateFunction<
   GraphqlT extends GraphqlObjectType,
   UpdateInputType
 > = (
-  _: any,
+  _: unknown,
   args: UpdateArgs<UpdateInputType>,
   context: GraphqlContext
 ) => Promise<GraphqlT>;
@@ -30,8 +35,8 @@ export function update<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): UpdateFunction<GraphqlT, UpdateInputT> {
-  return async function (
-    _: any,
+  return async function update(
+    _: unknown,
     input: UpdateArgs<UpdateInputT>,
     context: GraphqlContext
   ) {
@@ -52,6 +57,38 @@ export function update<
       await notifyAllWithAccessTo(resource, resourceType.pubSubChangeTopic, {
         updated: [graphqlReturn],
       });
+    }
+
+    await track(
+      {
+        userId: context.user?.id,
+        event: `${resourceType.humanName} updated`,
+      },
+      context
+    );
+
+    if (
+      (oldRecord as MaybePublic).isPublic &&
+      !(updatedRecord as MaybePublic).isPublic
+    ) {
+      await track(
+        {
+          userId: context.user?.id,
+          event: `${resourceType.humanName} made private`,
+        },
+        context
+      );
+    } else if (
+      !(oldRecord as MaybePublic).isPublic &&
+      (updatedRecord as MaybePublic).isPublic
+    ) {
+      await track(
+        {
+          userId: context.user?.id,
+          event: `${resourceType.humanName} made public`,
+        },
+        context
+      );
     }
 
     return graphqlReturn;

@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid';
 import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
 import { MyElement } from '@decipad/editor-types';
+import { track } from '@decipad/backend-analytics';
 import { create as createWorkspace } from '../workspaces/create';
 import { create as createPad } from '../notebooks';
 import { create as createContent } from '../pad-content';
@@ -93,6 +94,12 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
     workspaceName,
     newUser
   );
+
+  await track({
+    event: 'user created',
+    userId: newUser.id,
+    properties: { email: user.email, firstName },
+  });
 
   return {
     user: newUser,

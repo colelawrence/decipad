@@ -15,6 +15,7 @@
     { "path": "../initial-workspace" },
     { "path": "../y-dynamodb" },
     { "path": "../slate-yjs" },
-    { "path": "../editor-types" }
+    { "path": "../editor-types" },
+    { "path": "../backend-analytics" }
   ]
 }

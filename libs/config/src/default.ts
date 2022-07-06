@@ -45,6 +45,8 @@ const defaultEnvValues = {
   DISCORD_PUBLIC_KEY: 'LjZeWHYTwsps07NJfu1J',
   DISCORD_APP_ID: 'discord app id',
 
+  REACT_APP_ANALYTICS_WRITE_KEY: '',
+
   // Tests-related
   DECI_TEST_USER_SECRET: '8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
 };

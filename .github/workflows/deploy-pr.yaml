@@ -55,6 +55,7 @@ jobs:
           SENTRY_PROJECT: '${{secrets.SENTRY_PROJECT}}'
           SENTRY_AUTH_TOKEN: '${{secrets.SENTRY_AUTH_TOKEN}}'
           SENTRY_ENVIRONMENT: 'development'
+          REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
           NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.dev.decipad.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'

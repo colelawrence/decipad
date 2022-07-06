@@ -87,6 +87,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.JWT_SECRET);
     case 'NEXTAUTH_URL':
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
+    case 'REACT_APP_ANALYTICS_WRITE_KEY':
+      return valueOrDefault(name, process.env.REACT_APP_ANALYTICS_WRITE_KEY);
     case 'SENTRY_DSN':
       return valueOrDefault(name, process.env.SENTRY_DSN);
   }
@@ -127,6 +129,12 @@ export function app() {
         env('DECI_MAX_ATTACHMENT_DOWNLOAD_TOKEN_EXPIRATION_SECONDS')
       ),
     },
+  };
+}
+
+export function analytics() {
+  return {
+    secretKey: env('REACT_APP_ANALYTICS_WRITE_KEY'),
   };
 }
 

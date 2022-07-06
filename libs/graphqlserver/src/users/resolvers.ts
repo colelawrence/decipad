@@ -1,6 +1,7 @@
 import { AuthenticationError } from 'apollo-server-lambda';
 import { UserInput, User, GraphqlContext } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
+import { identify } from '@decipad/backend-analytics';
 import { requireUser } from '../authorization';
 
 export default {
@@ -28,6 +29,8 @@ export default {
       Object.assign(self, props, { id: user.id });
 
       await data.users.put(self);
+
+      await identify(user.id, { fullName: self.name, email: self.email });
 
       return self;
     },

@@ -3,7 +3,7 @@ import { ReactNode, FC, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 type PageEvent = ClientEvent & { type: 'page' };
-type PlainPageEvent = PageEvent & { props: undefined };
+type PlainPageEvent = PageEvent;
 
 interface RouteEventsProps {
   children: ReactNode;
@@ -15,11 +15,11 @@ export function RouteEvents({
   category,
 }: RouteEventsProps): ReturnType<FC> {
   const clientEvent = useContext(ClientEventsContext);
-  const location = useLocation();
+  const url = useLocation().pathname;
 
   useEffect(() => {
-    clientEvent({ type: 'page', category, url: location.pathname });
-  }, [clientEvent, category, location]);
+    clientEvent({ type: 'page', category, url });
+  }, [clientEvent, category, url]);
 
   return <>{children}</>;
 }

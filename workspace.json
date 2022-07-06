@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "backend": "apps/backend",
+    "backend-analytics": "libs/backend-analytics",
     "backend-test-sandbox": "libs/backend-test-sandbox",
     "backend-trace": "libs/backend-trace",
     "backendtypes": "libs/backendtypes",
