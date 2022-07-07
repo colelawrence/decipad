@@ -32,28 +32,30 @@ const typeStyles = css({
   color: grey500.rgb,
 });
 
-const pointyStylesInW3C = css({ cursor: 'pointer' });
-
 interface CodeVariableProps {
   readonly children: ReactNode;
   readonly onClick?: () => void;
-  readonly setPointyStyles?: boolean;
+  readonly provideVariableDefLink?: boolean;
   readonly type?: TableCellType;
   readonly variableScope?: VariableScope;
   readonly variableType?: SerializedType;
   readonly variableValue?: Result.OneResult;
+  readonly defBlockId?: string | null;
+  onGoToDefinition?: () => void;
 }
 
 export type VariableScope = 'global' | 'local' | 'undefined';
 
 export const CodeVariable = ({
   children,
-  setPointyStyles = false,
+  provideVariableDefLink = false,
   onClick = noop,
   type,
   variableType,
   variableValue,
   variableScope = 'global',
+  defBlockId,
+  onGoToDefinition,
 }: CodeVariableProps): ReturnType<React.FC> => {
   const Icon = getTypeIcon(type || { kind: 'string' });
   const decoration = (
@@ -66,7 +68,6 @@ export const CodeVariable = ({
               varStyles,
               type && typeStyles,
               variableScope === 'local' && localVarStyles,
-              setPointyStyles && pointyStylesInW3C,
             ]
       }
     >
@@ -81,7 +82,13 @@ export const CodeVariable = ({
 
   if (variableType && variableValue) {
     return (
-      <CodeVariableTooltip type={variableType} value={variableValue}>
+      <CodeVariableTooltip
+        type={variableType}
+        value={variableValue}
+        defBlockId={defBlockId}
+        provideDefinitionLink={provideVariableDefLink}
+        onGoToDefinition={onGoToDefinition}
+      >
         {decoration}
       </CodeVariableTooltip>
     );

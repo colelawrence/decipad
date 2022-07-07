@@ -1,9 +1,20 @@
-import { PlateComponent, RichText } from '@decipad/editor-types';
+import {
+  PlateComponent,
+  RichText,
+  useTEditorState,
+} from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useObservable } from 'rxjs-hooks';
 import type { SerializedType, Result } from '@decipad/computer';
+import {
+  findNodePath,
+  focusEditor,
+  getEndPoint,
+  setSelection,
+  toSlateNode,
+} from '@udecode/plate';
 
 type VariableScope = 'local' | 'global' | 'undefined';
 
@@ -51,23 +62,36 @@ export const CodeVariable: CodeLeaf = ({
   const computer = useComputer();
   const defBlockId = useObservable(() => computer.getBlockId$(variableName));
 
-  const pointyStylesToBeUsed =
+  const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
+
+  const editor = useTEditorState();
+  const goToDefinition = useCallback(() => {
+    if (provideVariableDefLink && defBlockId) {
+      const el = document.getElementById(defBlockId);
+      if (el) {
+        const slateNode = toSlateNode(editor, el);
+        if (slateNode) {
+          const path = findNodePath(editor, slateNode);
+          if (path) {
+            focusEditor(editor);
+            const anchor = getEndPoint(editor, path);
+            setSelection(editor, { anchor, focus: anchor });
+          }
+        }
+      }
+    }
+  }, [defBlockId, editor, provideVariableDefLink]);
 
   return (
     <span ref={rootRef} {...attributes}>
       <molecules.CodeVariable
-        setPointyStyles={pointyStylesToBeUsed}
+        provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
         variableType={type}
         variableValue={value}
-        onClick={() => {
-          if (pointyStylesToBeUsed) {
-            const el = document.getElementById(defBlockId);
-            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            el?.focus();
-          }
-        }}
+        defBlockId={defBlockId}
+        onGoToDefinition={goToDefinition}
       >
         {children}
       </molecules.CodeVariable>
