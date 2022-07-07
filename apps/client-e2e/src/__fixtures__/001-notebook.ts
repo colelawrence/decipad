@@ -2812,6 +2812,17 @@ export default {
     {
       children: [
         {
+          text: '',
+        },
+      ],
+      type: 'img',
+      url: 'https://memegenerator.net/img/instances/80423445.jpg',
+      alt: 'Foo',
+      id: 'yGFskX6GEZnf6Es3ofE69',
+    },
+    {
+      children: [
+        {
           text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ',
         },
         {

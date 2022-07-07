@@ -1,7 +1,7 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { FC, Fragment, ReactNode, RefObject, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import { BlockDragHandle } from '..';
 import { DropLine, EditorBlock } from '../../atoms';
 import {
@@ -33,6 +33,8 @@ interface DraggableBlockProps {
   readonly blockRef?: RefObject<HTMLDivElement>;
   readonly previewRef?: RefObject<HTMLDivElement>;
 
+  readonly draggableCss?: SerializedStyles;
+
   readonly onDelete?: (() => void) | false;
 
   readonly blockKind: keyof typeof blockAlignment;
@@ -45,6 +47,8 @@ export const DraggableBlock = ({
   dragSource,
   blockRef,
   previewRef,
+
+  draggableCss,
 
   onDelete,
 
@@ -82,16 +86,17 @@ export const DraggableBlock = ({
         <div
           contentEditable={false}
           ref={dragSource}
-          css={{
-            opacity: menuOpen ? 'unset' : 0,
-            '*:hover > &': {
-              opacity: 'unset',
-            },
-            transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
+          css={[
+            {
+              opacity: menuOpen ? 'unset' : 0,
+              '*:hover > &': {
+                opacity: 'unset',
+              },
+              transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
 
-            paddingTop: typography
-              ? // Align with first line of text in addition to paddingTop
-                `calc(
+              paddingTop: typography
+                ? // Align with first line of text in addition to paddingTop
+                  `calc(
                 ${paddingTop}
                 +
                 (
@@ -100,11 +105,13 @@ export const DraggableBlock = ({
                   ${editorLayout.gutterHandleHeight()}
                 ) / 2
               )`
-              : paddingTop,
+                : paddingTop,
 
-            // Draw over following blocks instead of increasing the current block's height
-            height: 0,
-          }}
+              // Draw over following blocks instead of increasing the current block's height
+              height: 0,
+            },
+            draggableCss,
+          ]}
         >
           <BlockDragHandle
             menuOpen={menuOpen}

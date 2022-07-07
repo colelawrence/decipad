@@ -31,6 +31,12 @@ export const callout: StyleData = {
   desiredWidth: slimBlockWidth,
 };
 
+export const image: StyleData = {
+  paddingTop: '40px',
+  typography: p14Medium,
+  desiredWidth: slimBlockWidth,
+};
+
 export const heading1: StyleData = {
   paddingTop: '40px',
   typography: h1,

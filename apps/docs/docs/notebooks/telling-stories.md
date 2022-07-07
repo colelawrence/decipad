@@ -37,13 +37,14 @@ Besides the styling menu that pops up when you select text, Decipad supports a n
 - `>!` followed by a `space` to create a **callout**
 - `---` followed by a `space` to create a **divider**
 
-### Inline Text Formatting Commands
+### Inline Formatting
 
 - Wrap words between `*` and `*` or `_` and `_` for **italic**
 - Wrap words between `**` and `**` for **bold**
 - Wrap words between `~~` and `~~` for **strikethrough**
 - Wrap words between `==` and `==` for **highlight**
 - Use the notation `[link name](url)` to insert a **link**
+- Use `![Alt text](https://decipad.com/octopus.png "An octopus")` to add an **image**.
 - Wrap words between `` ` `` and `` ` `` for **inline code**
 - Wrap a variable name between `%` to get a **magic number**
 

@@ -1,23 +1,25 @@
 import {
-  ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
+  ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_HR,
+  ELEMENT_IMAGE,
   ELEMENT_LI,
   ELEMENT_LIC,
-  ELEMENT_HR,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
-  MarkKind,
+  ElementKind,
   MARK_BOLD,
   MARK_CODE,
+  MARK_HIGHLIGHT,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  MARK_HIGHLIGHT,
   MARK_UNDERLINE,
+  MarkKind,
   PlateComponent,
 } from '@decipad/editor-types';
 import {
@@ -25,10 +27,12 @@ import {
   Bold,
   Callout,
   Code,
+  CodeLine,
   Divider,
   Heading1,
   Heading2,
   Highlight,
+  Image,
   Italic,
   ListItem,
   ListItemContent,
@@ -56,6 +60,12 @@ export const components = (computer: Computer): PlateComponents => ({
   [ELEMENT_BLOCKQUOTE]: Blockquote,
   [ELEMENT_CALLOUT]: Callout,
   [ELEMENT_HR]: Divider,
+
+  // media
+  [ELEMENT_IMAGE]: Image,
+
+  // Code
+  [ELEMENT_CODE_LINE]: CodeLine,
 
   // Lists
   [ELEMENT_UL]: UnorderedList,

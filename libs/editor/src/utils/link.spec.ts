@@ -34,4 +34,8 @@ describe('getTrailingLink', () => {
   it('extracts the url from the link', () => {
     expect(getTrailingLink('[ab](cd)')).toHaveProperty('url', 'cd');
   });
+
+  it('doesnt think an image is a link', () => {
+    expect(getTrailingLink('![ab](cd)')).toEqual(null);
+  });
 });

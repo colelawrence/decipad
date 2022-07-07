@@ -6,6 +6,7 @@ export {
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
+  ELEMENT_IMAGE,
   ELEMENT_LI,
   ELEMENT_LIC,
   // Inline

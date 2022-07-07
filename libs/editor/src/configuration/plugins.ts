@@ -18,6 +18,7 @@ import {
   createNormalizeColumnsPlugin,
   createNormalizeEditorPlugin,
   createNormalizeElementIdPlugin,
+  createNormalizeImagePlugin,
   createNormalizeLinkPlugin,
   createNormalizeListPlugin,
   createNormalizePlainTextBlockPlugin,
@@ -28,12 +29,13 @@ import {
   createPlotPlugin,
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
-  createUpdateComputerPlugin,
   createUniqueElementIdPlugin,
+  createUpdateComputerPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
   createTAutoformatPlugin,
+  ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
   MyEditor,
   MyValue,
@@ -44,11 +46,13 @@ import {
   createDndPlugin,
   createExitBreakPlugin,
   createHeadingPlugin,
+  createImagePlugin,
   createListPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
   createPlugins,
   createResetNodePlugin,
+  createSelectOnBackspacePlugin,
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
@@ -84,6 +88,7 @@ export const plugins = (computer: Computer) =>
       createNormalizeCodeLinePlugin(),
       createNormalizeListPlugin(),
       createNormalizeLinkPlugin(),
+      createNormalizeImagePlugin(),
       createNormalizeElementIdPlugin(),
       createNormalizeTextPlugin(),
       createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
@@ -96,6 +101,18 @@ export const plugins = (computer: Computer) =>
       createResetNodePlugin({ options: resetBlockTypeOptions }),
       createDndPlugin(),
       createDragOverCursorPlugin(),
+
+      // media elements
+      createImagePlugin({
+        withOverrides: null,
+      }),
+      createSelectOnBackspacePlugin({
+        options: {
+          query: {
+            allow: [ELEMENT_IMAGE],
+          },
+        },
+      }),
 
       // creating elements
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

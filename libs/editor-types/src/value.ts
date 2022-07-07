@@ -1,4 +1,4 @@
-import { TElement } from '@udecode/plate';
+import { TElement, TImageElement } from '@udecode/plate';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
@@ -10,6 +10,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
+  ELEMENT_IMAGE,
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_LINK,
@@ -24,17 +25,6 @@ import {
   InteractiveElement,
   MarkKind,
 } from '.';
-import {
-  TableCaptionElement,
-  TableCellElement,
-  TableElement,
-  TableHeaderElement,
-  TableHeaderRowElement,
-  TableInputElement,
-  TableRowElement,
-  TableColumnFormulaElement,
-  TableVariableNameElement,
-} from './table';
 import { ELEMENT_POWER_TABLE, ELEMENT_VARIABLE_DEF } from './element-kinds';
 import {
   CaptionElement,
@@ -46,6 +36,17 @@ import {
   PowerTableHeader,
   PowerTableHeaderRowElement,
 } from './power-table';
+import {
+  TableCaptionElement,
+  TableCellElement,
+  TableColumnFormulaElement,
+  TableElement,
+  TableHeaderElement,
+  TableHeaderRowElement,
+  TableInputElement,
+  TableRowElement,
+  TableVariableNameElement,
+} from './table';
 
 // Defining specific elements
 
@@ -85,6 +86,12 @@ export interface CalloutElement extends BaseElement {
 }
 export interface DividerElement extends BaseElement {
   type: typeof ELEMENT_HR;
+  children: [EmptyText];
+}
+
+// Media Blocks
+export interface ImageElement extends TImageElement, BaseElement {
+  type: typeof ELEMENT_IMAGE;
   children: [EmptyText];
 }
 
@@ -151,6 +158,8 @@ export type BlockElement =
   | BlockquoteElement
   | CalloutElement
   | DividerElement
+  // Media
+  | ImageElement
   // Code
   | CodeBlockElement
   | CodeLineElement
@@ -193,6 +202,7 @@ export type MyValue = [
     | BlockquoteElement
     | CalloutElement
     | DividerElement
+    | ImageElement
     | CodeBlockElement
     | UnorderedListElement
     | OrderedListElement
@@ -219,6 +229,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_PARAGRAPH,
   ELEMENT_CALLOUT,
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_IMAGE,
   ELEMENT_CODE_BLOCK, // Legacy
   ELEMENT_CODE_LINE,
   ELEMENT_UL,

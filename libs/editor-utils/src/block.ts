@@ -1,5 +1,6 @@
 import {
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_IMAGE,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   ElementKind,
@@ -12,6 +13,7 @@ import {
   getNode,
   insertNodes,
   setSelection,
+  TDescendant,
   TElement,
 } from '@udecode/plate';
 import { Path } from 'slate';
@@ -74,6 +76,19 @@ export const insertBlockOfTypeBelow = (
   insertNodes<TElement>(
     editor,
     { type, children: [{ text: '' }] },
+    { at: requirePathBelowBlock(editor, path) }
+  );
+};
+
+export const insertImageBelow = (
+  editor: MyEditor,
+  path: Path,
+  url: string,
+  alt = ''
+): void => {
+  insertNodes<TElement>(
+    editor,
+    { type: ELEMENT_IMAGE, children: [{ text: alt } as TDescendant], url },
     { at: requirePathBelowBlock(editor, path) }
   );
 };
