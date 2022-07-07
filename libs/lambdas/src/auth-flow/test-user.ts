@@ -37,7 +37,7 @@ export const testUserAuth = async (url: URL): Promise<HttpResponse> => {
       email,
     };
     if (!existingUser.name) {
-      userInput.name = userInput.email as string | undefined;
+      userInput.name = 'Test User';
     }
     existingUser = await maybeEnrichUser(existingUser, userInput);
   } else {
@@ -47,7 +47,7 @@ export const testUserAuth = async (url: URL): Promise<HttpResponse> => {
 
     existingUser = (
       await createUser({
-        name: email,
+        name: 'Test User',
         email,
         provider: 'email',
       })
