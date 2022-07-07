@@ -57,6 +57,7 @@ export type DocSyncEditor = MyEditor &
     hasLocalChanges: () => BehaviorSubject<boolean>;
     removeLocalChanges: () => Promise<void>;
     connected: boolean;
+    isDocSyncEnabled: boolean;
   };
 
 function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
@@ -187,6 +188,7 @@ function docSyncEditor<E extends MyEditor>(
     removeLocalChanges() {
       return store.remove();
     },
+    isDocSyncEnabled: true,
   });
 
   const onLoaded = (source: 'local' | 'remote') => {
@@ -272,5 +274,7 @@ export function createDocSyncEditor(
   // Sync editor
   const syncEditor = docSyncEditor(cursorEditor, shared, doc, store, wsp);
   syncEditor.destroy = () => store.destroy();
+
+  syncEditor.isDocSyncEnabled = true;
   return syncEditor;
 }

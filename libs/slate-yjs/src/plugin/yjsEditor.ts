@@ -121,12 +121,17 @@ function applyRemoteYjsEvents(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   events: Y.YEvent<any>[]
 ): void {
-  if (isHistoryEditor(_editor)) {
-    withoutSavingHistory(_editor, () => {
+  try {
+    if (isHistoryEditor(_editor)) {
+      withoutSavingHistory(_editor, () => {
+        yjsApply(_editor, events);
+      });
+    } else {
       yjsApply(_editor, events);
-    });
-  } else {
-    yjsApply(_editor, events);
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error applying remote events', { error: err, events });
   }
 }
 

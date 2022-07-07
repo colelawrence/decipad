@@ -88,6 +88,9 @@ export const Editor = (props: EditorProps) => {
                 // The rest are controlled via EditorReadOnlyContext.
                 readOnly: isWritingLocked,
               }}
+              disableCorePlugins={{
+                history: true,
+              }}
             >
               <InsidePlate {...props} containerRef={containerRef} />
             </Plate>

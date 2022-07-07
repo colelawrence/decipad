@@ -31,6 +31,7 @@ import {
   createSyntaxErrorHighlightPlugin,
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
+  createWithDocSyncHistoryPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -155,6 +156,9 @@ export const plugins = (computer: Computer) =>
 
       // id uniqueness
       createUniqueElementIdPlugin(),
+
+      // history
+      createWithDocSyncHistoryPlugin(),
     ],
     {
       components: components(computer),
