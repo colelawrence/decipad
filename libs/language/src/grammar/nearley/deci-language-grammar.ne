@@ -71,6 +71,15 @@ identifier -> %identifier                               {%
                                                         }
                                                         %}
 
+currency     -> %currency                               {%
+                                                        ([currency]) => {
+                                                          return addLoc({
+                                                            type: 'ref',
+                                                            args: [ currency.value ]
+                                                          }, currency)
+                                                        }
+                                                        %}
+
 genericIdentifier -> %identifier                        {%
                                                         (d) => {
                                                           return addArrayLoc({
@@ -80,9 +89,9 @@ genericIdentifier -> %identifier                        {%
                                                         }
                                                         %}
 
-ref          -> identifier                              {%
+ref          -> %identifier                             {%
                                                         (d, _l, reject) => {
-                                                          const name = d[0].name
+                                                          const name = d[0].value
                                                           if (reservedWords.has(name)) {
                                                             return reject
                                                           } else {

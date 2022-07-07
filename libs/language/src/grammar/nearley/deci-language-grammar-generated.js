@@ -585,15 +585,74 @@ let ParserRules = [
         d[0]
       ),
   },
+  { name: 'number', symbols: ['negPosNumber'], postprocess: id },
   {
     name: 'number',
+    symbols: ['currency', 'negPosNumber'],
+    postprocess: (d) => {
+      const [currency, num] = d;
+      return addArrayLoc(
+        {
+          type: 'function-call',
+          args: [
+            addArrayLoc(
+              {
+                type: 'funcref',
+                args: ['implicit*'],
+              },
+              d
+            ),
+            addArrayLoc(
+              {
+                type: 'argument-list',
+                args: [currency, num],
+              },
+              d
+            ),
+          ],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'number',
+    symbols: ['negPosNumber', 'currency'],
+    postprocess: (d) => {
+      const [num, currency] = d;
+      return addArrayLoc(
+        {
+          type: 'function-call',
+          args: [
+            addArrayLoc(
+              {
+                type: 'funcref',
+                args: ['implicit*'],
+              },
+              d
+            ),
+            addArrayLoc(
+              {
+                type: 'argument-list',
+                args: d,
+              },
+              d
+            ),
+          ],
+        },
+        d
+      );
+    },
+  },
+  {
+    name: 'negPosNumber',
     symbols: ['unsignedNumber'],
     postprocess: (d) => {
       return makeNumber(d, d[0].n);
     },
   },
   {
-    name: 'number',
+    name: 'negPosNumber',
     symbols: [{ literal: '-' }, 'unsignedNumber'],
     postprocess: (d) => {
       return makeNumber(d, new Fraction(d[1].n).neg());
@@ -1441,6 +1500,7 @@ let ParserRules = [
   { name: 'primary', symbols: ['select'], postprocess: id },
   { name: 'primary', symbols: ['matrixRef'], postprocess: id },
   { name: 'primary', symbols: ['ref'], postprocess: id },
+  { name: 'primary', symbols: ['currency'], postprocess: id },
   { name: 'primary', symbols: ['parenthesizedExpression'], postprocess: id },
   {
     name: 'primary',
@@ -1980,6 +2040,19 @@ let ParserRules = [
     },
   },
   {
+    name: 'currency',
+    symbols: [tokenizer.has('currency') ? { type: 'currency' } : currency],
+    postprocess: ([currency]) => {
+      return addLoc(
+        {
+          type: 'ref',
+          args: [currency.value],
+        },
+        currency
+      );
+    },
+  },
+  {
     name: 'genericIdentifier',
     symbols: [
       tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
@@ -1996,9 +2069,11 @@ let ParserRules = [
   },
   {
     name: 'ref',
-    symbols: ['identifier'],
+    symbols: [
+      tokenizer.has('identifier') ? { type: 'identifier' } : identifier,
+    ],
     postprocess: (d, _l, reject) => {
-      const name = d[0].name;
+      const name = d[0].value;
       if (reservedWords.has(name)) {
         return reject;
       } else {

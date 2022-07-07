@@ -32,9 +32,10 @@ const regexHack = (text: string, flags = 'u') => {
 const identifierRegExp = regexHack(
   '[\\p{L}\\p{Sc}\\p{Emoji_Presentation}_μ°][\\p{L}\\p{Nd}\\p{Sc}\\p{Emoji_Presentation}_μ°]*'
 );
+const currencies = ['r$', 'R$', '$', '£', '€'];
 export const identifierRegExpGlobal = regexHack(
-  '[\\p{L}\\p{Sc}\\p{Emoji_Presentation}_μ°][\\p{L}\\p{Nd}\\p{Sc}\\p{Emoji_Presentation}_μ°]*',
-  'gu'
+  identifierRegExp.source,
+  `${identifierRegExp.flags}g`
 );
 
 export const tokenRules = {
@@ -84,11 +85,15 @@ export const tokenRules = {
       push: 'date',
     },
 
+    number: {
+      match: regexHack('[0-9]+(?:[ _]*[0-9]+)*(?:\\.[0-9]+)?'),
+      value: (splitUp: string) => splitUp.replace(/[_ ]+/g, ''),
+    },
+    currency: currencies,
     identifier: {
       match: identifierRegExp,
       type: keywords,
     },
-    number: regexHack('[0-9]+(?:\\.[0-9]+)?'),
     string: {
       // Adding control characters to comply with https://json.org
       /* eslint-disable-next-line no-control-regex */

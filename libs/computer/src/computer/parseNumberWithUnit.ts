@@ -1,7 +1,7 @@
 import { tokenRules } from '@decipad/language';
 
 const captureNumberAndExpression = new RegExp(
-  `^(${tokenRules.main.number.source})(.+)?$`
+  `^(${tokenRules.main.number.match.source})(.+)?$`
 );
 
 export function parseNumberWithUnit(source: string): [number, string] | null {

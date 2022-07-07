@@ -22,12 +22,51 @@ function makeNumber(parentNode, n) {
 ### Number ###
 ##############
 
-number       -> unsignedNumber                          {%
+number       -> negPosNumber                            {% id %}
+number       -> currency negPosNumber                   {%
+                                                        (d) => {
+                                                          const [currency, num] = d
+                                                          return addArrayLoc({
+                                                            type: 'function-call',
+                                                            args: [
+                                                              addArrayLoc({
+                                                                type: 'funcref',
+                                                                args: ['implicit*']
+                                                              }, d),
+                                                              addArrayLoc({
+                                                                type: 'argument-list',
+                                                                args: [currency, num]
+                                                              }, d)
+                                                            ]
+                                                          }, d)
+                                                        }
+                                                        %}
+
+number       -> negPosNumber currency                   {%
+                                                        (d) => {
+                                                          const [num, currency] = d
+                                                          return addArrayLoc({
+                                                            type: 'function-call',
+                                                            args: [
+                                                              addArrayLoc({
+                                                                type: 'funcref',
+                                                                args: ['implicit*']
+                                                              }, d),
+                                                              addArrayLoc({
+                                                                type: 'argument-list',
+                                                                args: d
+                                                              }, d)
+                                                            ]
+                                                          }, d)
+                                                        }
+                                                        %}
+
+negPosNumber -> unsignedNumber                          {%
                                                         (d) => {
                                                           return makeNumber(d, d[0].n);
                                                         }
                                                         %}
-number       -> "-" unsignedNumber                      {%
+negPosNumber -> "-" unsignedNumber                      {%
                                                         (d) => {
                                                           return makeNumber(d, new Fraction(d[1].n).neg())
                                                         }

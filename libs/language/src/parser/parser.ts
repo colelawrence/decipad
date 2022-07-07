@@ -99,9 +99,12 @@ function tryParse(source: string): ParserNode[] {
   ) as ParserNode[];
 
   if (solutions.length > 1) {
-    solutions.forEach((solution) => {
-      console.error(prettyPrintAST(solution as AST.Node));
-    });
+    const printedSolutions = solutions.map((s) =>
+      prettyPrintAST(s as AST.Node)
+    );
+    console.error(
+      [`Source: ${source}`, ...printedSolutions].join('\n\n---\n\n')
+    );
 
     // If this ever happens, it's a problem with the grammar
     throw new SyntaxError({ message: 'panic: multiple solutions' });

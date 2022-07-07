@@ -4,8 +4,9 @@ const testTokenizer = (input: string) =>
   Array.from(tokenizer.reset(input))
     .map((t) => {
       if (t.type === 'statementSep') return '/stmt/';
-      if (t.type?.includes('keyword')) return `<${t.text}>`;
-      return `${t.type}(${t.text.replace(/\n/g, '<newline>')})`;
+      const text = typeof t.value === 'string' ? t.value : t.text;
+      if (t.type?.includes('keyword')) return `<${text}>`;
+      return `${t.type}(${text.replace(/\n/g, '<newline>')})`;
     })
     .join(' ');
 
@@ -34,6 +35,20 @@ it('can find numbers', () => {
   expect(testTokenizer('1.10')).toMatchInlineSnapshot(`"number(1.10)"`);
 });
 
+it('can find numbers with basic thousands separators', () => {
+  expect(testTokenizer('100 000')).toMatchInlineSnapshot(`"number(100000)"`);
+  expect(testTokenizer('100 _ 000')).toMatchInlineSnapshot(`"number(100000)"`);
+});
+
+it('accepts some currencies', () => {
+  expect(testTokenizer('$100 £100 €100')).toMatchInlineSnapshot(
+    `"currency($) number(100) ws( ) currency(£) number(100) ws( ) currency(€) number(100)"`
+  );
+  expect(testTokenizer('r$10 R$10')).toMatchInlineSnapshot(
+    `"currency(r$) number(10) ws( ) currency(R$) number(10)"`
+  );
+});
+
 it('parses strings using JSON.parse', () => {
   const stringWithBS = '\n\f\b\\/ hello';
   const [stringToken] = tokenize(JSON.stringify(stringWithBS));
@@ -45,7 +60,9 @@ it('finds identifiers and keywords', () => {
   expect(testTokenizer('helloif')).toMatchInlineSnapshot(
     `"identifier(helloif)"`
   );
-  expect(testTokenizer('$ident')).toMatchInlineSnapshot(`"identifier($ident)"`);
+  expect(testTokenizer('$ident')).toMatchInlineSnapshot(
+    `"currency($) identifier(ident)"`
+  );
   expect(testTokenizer('ident2With3Numbers4')).toMatchInlineSnapshot(
     `"identifier(ident2With3Numbers4)"`
   );

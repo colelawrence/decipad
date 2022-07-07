@@ -1,4 +1,4 @@
-import { F, l, c, r } from '../utils';
+import { F, l, as, c, r } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -20,6 +20,12 @@ runTests({
         },
       },
     ],
+  },
+
+  'currency ref': {
+    source: 'Var as $',
+    sourceMap: false,
+    ast: [as(r('Var'), r('$'))],
   },
 
   'unary operation': {

@@ -54,7 +54,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         key="min"
         label="Minimum"
         onChange={onChangeMin}
-        pattern={tokenRules.main.number.source}
+        pattern={tokenRules.main.number.match.source}
         value={min}
       />,
       <InputMenuItem
@@ -66,7 +66,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         key="max"
         label="Maximum"
         onChange={onChangeMax}
-        pattern={tokenRules.main.number.source}
+        pattern={tokenRules.main.number.match.source}
         value={max}
       />,
       <InputMenuItem
@@ -82,7 +82,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         key="step"
         label="Step"
         onChange={onChangeStep}
-        pattern={tokenRules.main.number.source}
+        pattern={tokenRules.main.number.match.source}
         value={step}
       />,
       <MenuSeparator key="sep" />,

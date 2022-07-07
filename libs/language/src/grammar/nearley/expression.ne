@@ -156,6 +156,7 @@ primary            -> functionCall                      {% id %}
 primary            -> select                            {% id %}
 primary            -> matrixRef                         {% id %}
 primary            -> ref                               {% id %}
+primary            -> currency                          {% id %}
 primary            -> parenthesizedExpression           {% id %}
 
 primary            -> "-" _ parenthesizedExpression     {% unaryMinusHandler %}
