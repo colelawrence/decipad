@@ -1,16 +1,28 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import fetch from 'jest-fetch-mock';
+import { SessionProvider } from 'next-auth/react';
 import { InlineCodeError } from './InlineCodeError';
+
+beforeAll(() => {
+  fetch.enableMocks();
+});
+
+afterAll(() => {
+  fetch.disableMocks();
+});
 
 it('renders error in tooltip', async () => {
   render(
-    <InlineCodeError
-      type={{
-        kind: 'type-error',
-        errorCause: { errType: 'missing-variable', missingVariable: ['foo'] },
-      }}
-      value={null}
-    />
+    <SessionProvider>
+      <InlineCodeError
+        type={{
+          kind: 'type-error',
+          errorCause: { errType: 'missing-variable', missingVariable: ['foo'] },
+        }}
+        value={null}
+      />
+    </SessionProvider>
   );
 
   await userEvent.hover(screen.getByTitle(/Warning/i));

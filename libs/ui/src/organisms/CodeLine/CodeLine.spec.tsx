@@ -1,6 +1,8 @@
 import { Result } from '@decipad/language';
 import { render } from '@testing-library/react';
+import { SessionProvider } from 'next-auth/react';
 import { ComponentProps } from 'react';
+import fetch from 'jest-fetch-mock';
 import { runCode } from '../../test-utils';
 import { CodeLine } from './CodeLine';
 
@@ -27,6 +29,14 @@ beforeAll(async () => {
   };
 });
 
+beforeAll(() => {
+  fetch.enableMocks();
+});
+
+afterAll(() => {
+  fetch.disableMocks();
+});
+
 it('renders children', () => {
   const { getByText } = render(<CodeLine>10</CodeLine>);
   expect(getByText('10')).toBeVisible();
@@ -42,9 +52,11 @@ describe('displayInline prop', () => {
 
   it('renders inline result when true', async () => {
     const { getByText } = render(
-      <CodeLine displayInline result={await runCode('9 + 1')}>
-        9 + 1
-      </CodeLine>
+      <SessionProvider>
+        <CodeLine displayInline result={await runCode('9 + 1')}>
+          9 + 1
+        </CodeLine>
+      </SessionProvider>
     );
     expect(getByText('10')).toBeVisible();
   });
@@ -61,13 +73,17 @@ describe('displayInline prop', () => {
       },
     };
     const { getByTitle, rerender } = render(
-      <CodeLine result={result}>9 +</CodeLine>
+      <SessionProvider>
+        <CodeLine result={result}>9 +</CodeLine>
+      </SessionProvider>
     );
 
     rerender(
-      <CodeLine displayInline result={result}>
-        9 +
-      </CodeLine>
+      <SessionProvider>
+        <CodeLine displayInline result={result}>
+          9 +
+        </CodeLine>
+      </SessionProvider>
     );
     expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();
   });
@@ -81,7 +97,9 @@ describe('when result is tabular', () => {
 
   it('should not render the result inline', () => {
     const { getByRole, getAllByRole, queryByRole } = render(
-      <CodeLine {...tabularProps} highlight />
+      <SessionProvider>
+        <CodeLine {...tabularProps} highlight />
+      </SessionProvider>
     );
 
     const queryInlineResultElement = () =>
@@ -99,7 +117,9 @@ describe('when result is tabular', () => {
 describe('when result is an error', () => {
   it('should render just the inline error', () => {
     const { getAllByRole, queryByTitle } = render(
-      <CodeLine {...typeErrorProps} />
+      <SessionProvider>
+        <CodeLine {...typeErrorProps} />
+      </SessionProvider>
     );
     expect(getAllByRole('status')).toHaveLength(1);
     expect(queryByTitle(/warning/i)!.closest('svg')).toBeVisible();
@@ -109,7 +129,9 @@ describe('when result is an error', () => {
 describe('syntaxError prop', () => {
   it('renders the error inline', () => {
     const { getByTitle } = render(
-      <CodeLine syntaxError={syntaxError}>10</CodeLine>
+      <SessionProvider>
+        <CodeLine syntaxError={syntaxError}>10</CodeLine>
+      </SessionProvider>
     );
 
     expect(getByTitle(/Warning/i).closest('svg')).toBeVisible();

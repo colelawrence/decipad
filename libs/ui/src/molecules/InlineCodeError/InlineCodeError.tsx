@@ -13,7 +13,7 @@ export const InlineCodeError = ({
   const { url } = new InferError(type.errorCause);
   const message = computer.formatError(type.errorCause);
   const analytics = useAnalytics();
-  const userId = (useSession()?.data?.user as { id: string }).id;
+  const userId = (useSession()?.data?.user as undefined | { id: string })?.id;
 
   useEffect(() => {
     analytics?.track('user code error', {
