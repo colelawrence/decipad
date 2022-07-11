@@ -33,5 +33,4 @@ export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
 export * from './UniqueElementId';
 export * from './UpdateComputer';
-export * from './UploadData';
 export * from './WithDocSyncHistory';

@@ -1,4 +1,3 @@
-import { useUploadDataPlugin } from '@decipad/editor-plugins';
 import {
   EditorChangeContextProvider,
   EditorReadOnlyContext,
@@ -20,31 +19,14 @@ export interface EditorProps {
 }
 
 const InsidePlate = ({
-  notebookId,
-  editor,
   containerRef,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
 }) => {
   // upload / fetch data
-  const {
-    startUpload,
-    uploadState,
-    clearAll: clearAllUploads,
-  } = useUploadDataPlugin({ editor });
-
   return (
     <>
       <components.Tooltip />
-      <components.DropFile
-        editor={editor}
-        startUpload={startUpload}
-        notebookId={notebookId}
-      />
-      <components.UploadDialogue
-        uploadState={uploadState}
-        clearAll={clearAllUploads}
-      />
       <components.CursorOverlay containerRef={containerRef} />
     </>
   );
@@ -59,7 +41,7 @@ export const Editor = (props: EditorProps) => {
   // Cursor remote presence
   // useCursors(editor);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [changeSubject] = useState(() => new Subject<undefined>());
   const onChange = useCallback(() => {
     changeSubject.next(undefined);
