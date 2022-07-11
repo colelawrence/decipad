@@ -245,7 +245,15 @@ If you add or change a file in `libs/queries/src/lib`, you'll need to re-run the
 
 If you're adding a file to You may also need to `libs/queries/src/lib/operations/{mutations,queries}`, you'll also need to export it in `libs/queries/src/lib/index.ts`, so that the client code may use it.
 
-## Resources
+## Further resources
 
 - [Development cycle](docs/DEVELOPMENT.md)
 - [Cheat sheet](docs/CHEAT_SHEET.md)
+
+### Documentation for certain areas of the codebase
+
+Some packages (both `apps` and `libs`) and sometimes even subdirectories may contain their own `README` files documenting peculiarities or other noteworthy things about the package or directory contents. Make sure to read them before working extensively in one area.
+
+There is also documentation available for larger areas of the codebase that span more than one package:
+
+- [Frontend](docs/FRONTEND.md)
