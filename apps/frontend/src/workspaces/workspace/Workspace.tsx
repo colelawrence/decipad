@@ -1,6 +1,6 @@
 import { useRouteParams, workspaces, notebooks } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
-import { Dashboard, NotebookListPlaceholder } from '@decipad/ui';
+import { Dashboard, atoms, NotebookListPlaceholder } from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
 import { FC, lazy, useMemo } from 'react';
@@ -16,7 +16,7 @@ import {
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
 } from '../../graphql';
-import { ErrorPage, Frame } from '../../meta';
+import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
 
 const loadTopbar = () =>
@@ -119,10 +119,14 @@ const Workspace: FC = () => {
       <Route
         path="/"
         element={
-          <Frame Heading="h1" title={currentWorkspace.name}>
+          <LazyRoute title={currentWorkspace.name}>
             <Dashboard
               sidebar={
-                <Frame Heading="h1" title={null}>
+                <Frame
+                  Heading="h1"
+                  title={null}
+                  suspenseFallback={<atoms.DashboardSidebarPlaceholder />}
+                >
                   <Sidebar
                     Heading="h1"
                     activeWorkspace={{
@@ -148,7 +152,11 @@ const Workspace: FC = () => {
                 </Frame>
               }
               topbar={
-                <Frame Heading="h1" title={null}>
+                <Frame
+                  Heading="h1"
+                  title={null}
+                  suspenseFallback={<atoms.TopbarPlaceholder />}
+                >
                   <Topbar
                     name={session.user.name || 'Me'}
                     email={session.user.email || 'me@example.com'}
@@ -199,7 +207,7 @@ const Workspace: FC = () => {
               }
             />
             <Outlet />
-          </Frame>
+          </LazyRoute>
         }
       >
         <Route

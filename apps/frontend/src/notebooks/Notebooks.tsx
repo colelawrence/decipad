@@ -1,7 +1,7 @@
 import { notebooks } from '@decipad/routing';
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ErrorPage, Frame, RequireSession, RouteEvents } from '../meta';
+import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from '../meta';
 
 const loadNotebook = () =>
   import(/* webpackChunkName: "notebook" */ './notebook/Notebook');
@@ -17,9 +17,9 @@ const Notebooks: React.FC = () => {
         path={notebooks({}).notebook.template}
         element={
           <RouteEvents category="notebook">
-            <Frame Heading="h1" title={null}>
+            <LazyRoute>
               <Notebook />
-            </Frame>
+            </LazyRoute>
           </RouteEvents>
         }
       />

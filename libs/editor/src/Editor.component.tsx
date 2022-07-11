@@ -3,7 +3,7 @@ import {
   EditorChangeContextProvider,
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
-import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
+import { atoms, LoadingFilter } from '@decipad/ui';
 import { RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
@@ -68,7 +68,7 @@ export const Editor = (props: EditorProps) => {
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
 
   if (!loaded || !editor) {
-    return <EditorPlaceholder />;
+    return <atoms.EditorPlaceholder />;
   }
 
   return (

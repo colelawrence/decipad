@@ -1,7 +1,7 @@
 import { workspaces } from '@decipad/routing';
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ErrorPage, Frame } from '../meta';
+import { ErrorPage, LazyRoute } from '../meta';
 import RedirectToDefaultWorkspace from './RedirectToDefaultWorkspace';
 
 const loadWorkspace = () =>
@@ -17,17 +17,17 @@ const Workspaces: React.FC = () => {
       <Route
         path="/"
         element={
-          <Frame Heading="h1" title={null}>
+          <LazyRoute>
             <RedirectToDefaultWorkspace />
-          </Frame>
+          </LazyRoute>
         }
       />
       <Route
         path={`${workspaces({}).workspace.template}/*`}
         element={
-          <Frame Heading="h1" title={null}>
+          <LazyRoute>
             <Workspace />
-          </Frame>
+          </LazyRoute>
         }
       />
       <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />

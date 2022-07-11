@@ -2,8 +2,7 @@ import { lazy, StrictMode, Suspense } from 'react';
 // React 18
 // import { createRoot } from 'react-dom/client';
 import { render } from 'react-dom';
-import { GlobalStyles } from '@decipad/ui';
-import { Loading } from './meta/Loading';
+import { GlobalStyles, LoadingLogo } from '@decipad/ui';
 import reportWebVitals from './reportWebVitals';
 import suppressWarnings from './suppressWarnings';
 
@@ -16,7 +15,7 @@ const AppWithMeta = lazy(
 const AppLoader: React.FC = () => {
   return (
     <GlobalStyles>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<LoadingLogo />}>
         <AppWithMeta />
       </Suspense>
     </GlobalStyles>

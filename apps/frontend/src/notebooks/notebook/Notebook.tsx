@@ -1,7 +1,7 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { notebooks, useRouteParams } from '@decipad/routing';
-import { NotebookPage } from '@decipad/ui';
+import { LoadingLogo, NotebookPage, atoms } from '@decipad/ui';
 import {
   ComponentProps,
   FC,
@@ -99,10 +99,18 @@ const Notebook: FC = () => {
   }
 
   return (
-    <Frame Heading="h1" title={notebook.name}>
+    <Frame
+      Heading="h1"
+      title={notebook.name}
+      suspenseFallback={<LoadingLogo />}
+    >
       <NotebookPage
         notebook={
-          <Frame Heading="h1" title={null}>
+          <Frame
+            Heading="h1"
+            title={null}
+            suspenseFallback={<atoms.EditorPlaceholder />}
+          >
             <Editor
               notebookTitle={notebook.name}
               onNotebookTitleChange={(newName) => {
@@ -120,7 +128,11 @@ const Notebook: FC = () => {
           </Frame>
         }
         notebookIcon={
-          <Frame Heading="h1" title={null}>
+          <Frame
+            Heading="h1"
+            title={null}
+            suspenseFallback={<atoms.NotebookIconPlaceholder />}
+          >
             <EditorIcon
               color={iconColor}
               icon={icon}
@@ -134,7 +146,11 @@ const Notebook: FC = () => {
           </Frame>
         }
         topbar={
-          <Frame Heading="h1" title={null}>
+          <Frame
+            Heading="h1"
+            title={null}
+            suspenseFallback={<atoms.TopbarPlaceholder />}
+          >
             <Topbar notebookId={notebookId} docsync={docsync} editor={editor} />
           </Frame>
         }

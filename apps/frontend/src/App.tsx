@@ -1,7 +1,7 @@
 import { FC, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { notebooks, playground, workspaces } from '@decipad/routing';
-import { ErrorPage, Frame, RequireSession, RouteEvents } from './meta';
+import { ErrorPage, RequireSession, LazyRoute, RouteEvents } from './meta';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
 export const loadWorkspaces = () =>
@@ -28,9 +28,9 @@ export const App: FC = () => {
         element={
           <RequireSession>
             <RouteEvents category="workspace">
-              <Frame Heading="h1" title={null}>
+              <LazyRoute>
                 <Workspaces />
-              </Frame>
+              </LazyRoute>
             </RouteEvents>
           </RequireSession>
         }
@@ -38,18 +38,18 @@ export const App: FC = () => {
       <Route
         path={`${notebooks.template}/*`}
         element={
-          <Frame Heading="h1" title={null}>
+          <LazyRoute>
             <Notebooks />
-          </Frame>
+          </LazyRoute>
         }
       />
       <Route
         path={playground.template}
         element={
           <RouteEvents category="playground">
-            <Frame Heading="h1" title="Playground">
+            <LazyRoute>
               <Playground />
-            </Frame>
+            </LazyRoute>
           </RouteEvents>
         }
       />

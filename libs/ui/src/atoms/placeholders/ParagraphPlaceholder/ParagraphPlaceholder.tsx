@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, useEffect, useState } from 'react';
-import { Placeholder } from '../../atoms';
+import { Placeholder } from '../../index';
 
 const paragraphWrapperStyles = css({
   display: 'grid',

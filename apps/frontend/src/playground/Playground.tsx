@@ -1,4 +1,4 @@
-import { NotebookPage } from '@decipad/ui';
+import { NotebookPage, atoms } from '@decipad/ui';
 import { useState, ComponentProps, lazy } from 'react';
 import { Frame } from '../meta';
 
@@ -21,12 +21,20 @@ const Playground: React.FC = () => {
   return (
     <NotebookPage
       notebook={
-        <Frame Heading="h1" title={null}>
+        <Frame
+          Heading="h1"
+          title={null}
+          suspenseFallback={<atoms.EditorPlaceholder />}
+        >
           <Editor />
         </Frame>
       }
       notebookIcon={
-        <Frame Heading="h1" title={null}>
+        <Frame
+          Heading="h1"
+          title={null}
+          suspenseFallback={<atoms.NotebookIconPlaceholder />}
+        >
           <EditorIcon
             icon={icon}
             onChangeIcon={setIcon}
