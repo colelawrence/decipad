@@ -28,11 +28,12 @@ describe('notebook share', () => {
     const linkSelector = 'text=//n/hello-world/';
     await page.click('text=share');
     await page.click('[aria-checked="false"]');
-    await percySnapshot(page, 'Notebook: Share Popover');
     await page.waitForSelector(linkSelector);
 
     link = await page.innerText(linkSelector);
     expect(link.length).toBeGreaterThan(0);
+
+    await percySnapshot(page, 'Notebook: Share Popover');
   }, 60000);
 
   let otherUserPage: Page;

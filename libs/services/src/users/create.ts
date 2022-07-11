@@ -10,6 +10,7 @@ import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
 import { MyElement } from '@decipad/editor-types';
 import { track } from '@decipad/backend-analytics';
+import { timeout } from '@decipad/utils';
 import { create as createWorkspace } from '../workspaces/create';
 import { create as createPad } from '../notebooks';
 import { create as createContent } from '../pad-content';
@@ -43,9 +44,12 @@ async function createInitialWorkspace(
       },
       user
     );
-
     await createContent(pad.id, notebook.content.children as MyElement[]);
     notebooks.push(pad);
+
+    // Giving it some time so the notebooks won't end up with the same timestamp and therefore
+    // random order in the frontend.
+    await timeout(1000);
   }
   /* eslint-enable no-await-in-loop */
 

@@ -77,8 +77,6 @@ describe('notebook load json', () => {
     await waitForEditorToLoad(sharedNotebookPage);
     // make sure screenshot is captured
     expect(page).toBeDefined();
-
-    await percySnapshot(page, 'Notebook: Shared with a user');
   });
 
   it('navigates to shared notebook link incognito', async () => {
@@ -88,8 +86,11 @@ describe('notebook load json', () => {
     await sharedNotebookPage.goto(sharedNotebookLink);
     await waitForEditorToLoad(sharedNotebookPage);
     // make sure screenshot is captured
-    expect(page).toBeDefined();
+    expect(sharedNotebookPage).toBeDefined();
 
-    await percySnapshot(page, 'Notebook: Published mode (incognito)');
+    await percySnapshot(
+      sharedNotebookPage,
+      'Notebook: Published mode (incognito)'
+    );
   });
 });

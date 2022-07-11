@@ -24,7 +24,7 @@ describe('auto complete menu', () => {
     await waitForExpect(async () => {
       expect(await page.$('.test-auto-complete-menu')).not.toBeNull();
     });
-    percySnapshot(page, 'Auto Complete Menu: Open');
+    await percySnapshot(page, 'Auto Complete Menu: Open');
   });
 
   it('filters menu based on word before cursor', async () => {
@@ -35,10 +35,6 @@ describe('auto complete menu', () => {
         )
       ).not.toBeNull();
     });
-    percySnapshot(
-      page,
-      'Auto Complete Menu: Filter options based on word before cursor'
-    );
   });
 
   it('completes the name of the variable on click', async () => {
