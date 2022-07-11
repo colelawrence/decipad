@@ -38,6 +38,8 @@ jobs:
           restore-keys: ${{ runner.os }}-modules-
 
       - name: Install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
         run: yarn install
 
       - name: Cache NX things

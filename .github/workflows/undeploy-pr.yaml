@@ -18,6 +18,8 @@ jobs:
           node-version: 16
 
       - name: Install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
         run: yarn install
 
       - name: Configure AWS credentials
