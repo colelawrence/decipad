@@ -96,7 +96,7 @@ describe('readOnly prop', () => {
       </table>
     );
 
-    expect(screen.getAllByRole('columnheader')).toHaveLength(3);
+    expect(screen.getAllByRole('columnheader')).toHaveLength(2);
     expect(screen.queryByTitle(/create/i)).not.toBeInTheDocument();
   });
 });

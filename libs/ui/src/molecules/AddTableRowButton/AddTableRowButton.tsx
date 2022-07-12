@@ -43,13 +43,7 @@ export const AddTableRowButton = ({
   onAddRow = noop,
 }: AddTableRowButtonProps): ReturnType<FC> => {
   return (
-    <tr
-      contentEditable={false}
-      css={{
-        display: 'grid',
-        gridTemplate: table.rowTemplate(1, true),
-      }}
-    >
+    <tr contentEditable={false} css={{}}>
       <th css={{}} />
       <td css={tdStyles} colSpan={colSpan}>
         <button css={buttonStyles} onClick={onAddRow}>

@@ -9,6 +9,7 @@ export const tableControlWidth = '20px';
 export const thMinHeight = '32px';
 export const thMinWidth = '269px';
 export const tdMinHeight = '36px';
+
 export const firstTdLeftPadding = '20px';
 
 export const cellSidePadding = '12px';
@@ -24,7 +25,6 @@ export const cellLeftPaddingStyles = css({
 });
 
 export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({
-  overflowX: 'hidden',
   display: 'grid',
   padding: isTabularType(type) ? undefined : `0 ${cellSidePadding}`,
 });

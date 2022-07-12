@@ -13,7 +13,7 @@ it('renders a table', async () => {
 
   const headers = getAllByRole('columnheader');
   const cells = getAllByRole('cell');
-  expect(headers).toHaveLength(5);
+  expect(headers).toHaveLength(2);
   expect(cells).toHaveLength(4);
 
   const th = headers.slice(0, 3);

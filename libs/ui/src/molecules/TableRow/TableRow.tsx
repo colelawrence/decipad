@@ -1,13 +1,13 @@
 import { ElementAttributes } from '@decipad/editor-types';
 import { atoms } from '@decipad/ui';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { DropLineDirection } from '@udecode/plate';
-import { Children, FC, forwardRef, ReactNode, RefCallback } from 'react';
+import { ReactNode, RefCallback, forwardRef, FC } from 'react';
+import { noop } from 'rxjs';
 import { TableData } from '../../atoms';
-import { useMergedRef } from '../../hooks/index';
+import { useMergedRef } from '../../hooks';
 import { Minus } from '../../icons';
-import { table } from '../../styles';
+import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
 import {
   TableCellControls,
   TableCellControlsProps,
@@ -33,6 +33,7 @@ interface TableRowProps extends TableCellControlsProps {
   readonly children: ReactNode;
   readonly onRemove?: () => void;
   readonly readOnly?: boolean;
+  readonly draggable?: boolean;
 
   readonly isBeingDragged?: boolean;
   readonly dropLine?: DropLineDirection;
@@ -63,20 +64,19 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
         {...attributes}
         ref={trRef}
         css={css({
-          position: 'relative',
-          display: 'grid',
-          gridTemplate: table.rowTemplate(
-            Children.toArray(children).length,
-            !!readOnly
-          ),
+          opacity: isBeingDragged ? draggingOpacity : 'unset',
         })}
       >
-        <TableCellControls
-          ref={dragRef}
-          readOnly={readOnly}
-          onSelect={onSelect}
-        />
-        <atoms.TableCellBackground selected={isBeingDragged} left={20} />
+        {!readOnly && (
+          <>
+            <TableCellControls
+              ref={dragRef}
+              readOnly={readOnly}
+              onSelect={onSelect}
+            />
+            <atoms.TableCellBackground selected={isBeingDragged} left={20} />
+          </>
+        )}
         {children}
         {!readOnly && (
           <TableData contentEditable={false} as="td">

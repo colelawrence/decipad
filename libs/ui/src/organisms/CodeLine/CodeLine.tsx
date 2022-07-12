@@ -197,7 +197,7 @@ export const CodeLine = ({
           )}
         </div>
         {renderExpandedResult && result && (
-          <output css={expandedResultStyles} contentEditable={false}>
+          <output contentEditable={false} css={expandedResultStyles}>
             <CodeResult
               {...result}
               variant="block"

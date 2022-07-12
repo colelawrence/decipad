@@ -22,27 +22,22 @@ import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 
 const columnStyles = css(p13Medium, {
   position: 'relative',
-  display: 'grid',
-  alignItems: 'center',
 
   minHeight: table.thMinHeight,
   paddingLeft: table.cellSidePadding,
   paddingRight: '8px',
-  verticalAlign: 'middle',
 });
 
 const headerWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'left',
+  minHeight: '30px',
   gap: '6px',
-  minHeight: '100%',
   position: 'relative',
 });
 
 const columnTypeStyles = css({
-  display: 'grid',
-  alignItems: 'center',
+  display: 'inline-block',
   width: '12px',
   height: '12px',
 });
@@ -62,10 +57,6 @@ const dragHandleStyles = css({
     fill: 'transparent',
   },
   cursor: 'grab',
-});
-
-const editableChildrenWrapperStyles = css({
-  width: '75px',
 });
 
 const DragHandle = () => {
@@ -92,6 +83,8 @@ const DropSourceAndTarget = forwardRef<
         {
           pointerEvents: draggingOver ? 'all' : 'none', // IMPORTANT!
           height: '32px',
+          display: 'flex',
+          alignItems: 'center',
         },
       ])}
       ref={ref}
@@ -181,21 +174,13 @@ export const TableHeader = ({
             onSelectColumn={onSelectColumn}
           />
         )}
-
-        <div
-          css={[
-            childrenWrapperStyles,
-            isEditable && editableChildrenWrapperStyles,
-          ]}
-        >
-          {children}
-        </div>
-        {menu}
         {showIcon && (
           <span contentEditable={false} css={columnTypeStyles}>
             <Icon />
           </span>
         )}
+        <div css={[childrenWrapperStyles]}>{children}</div>
+        {menu}
       </div>
 
       {isEditable && dropDirection === 'right' && (

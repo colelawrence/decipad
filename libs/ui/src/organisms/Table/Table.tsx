@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { ConnectDropTarget } from 'react-dnd';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
-import { tableControlWidth } from '../../styles/table';
 
 const border = `1px solid ${cssVar('strongHighlightColor')}`;
 const borderRadius = '6px';
@@ -16,13 +15,13 @@ const tableBaseStyles = css({
   borderSpacing: '0',
   tableLayout: 'auto',
   counterReset: tableRowCounter,
-  width: '100%',
+  minWidth: 'max-content',
 });
 
 const wideTableStyles = css({
-  tableLayout: 'fixed',
   width: 'initial',
   maxWidth: 'initial',
+  minWidth: 'max-content',
 });
 
 // Top border and border-radius, applied to table headers if they exist or to the first table row.
@@ -53,6 +52,9 @@ const innerBorderStyles = css({
     {
       borderRight: border,
     },
+  table: {
+    borderLeft: border,
+  },
 });
 
 const allBorderStyles = css(innerBorderStyles, {
@@ -75,10 +77,6 @@ const hiddenSelectionStyles = css({
   },
 });
 
-const translateStyles = css({
-  transform: `translateX(-${tableControlWidth})`,
-});
-
 type Border = 'all' | 'inner';
 export type TableWidth = 'SLIM' | 'WIDE';
 
@@ -97,7 +95,6 @@ export const Table = ({
   dropRef,
   tableWidth,
   isSelectingCell,
-  translateX,
 }: TableProps): ReturnType<FC> => (
   <table
     ref={dropRef}
@@ -107,7 +104,6 @@ export const Table = ({
       b === 'inner' && innerBorderStyles,
       tableWidth === 'WIDE' && wideTableStyles,
       isSelectingCell && hiddenSelectionStyles,
-      translateX && translateStyles,
     ]}
   >
     {children}

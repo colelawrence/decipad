@@ -15,13 +15,9 @@ import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
 const lineNumberWidth = '22px';
-const minTdWidth = '80px';
 
 const tdBaseStyles = css(p14Medium, {
-  overflow: 'visible',
   alignItems: 'center',
-  minWidth: minTdWidth,
-  cursor: 'default',
 
   background: cssVar('backgroundColor'),
 
@@ -57,9 +53,7 @@ const tdPlaceholderStyles = css({
   },
 });
 
-const tdGridStyles = {
-  display: 'grid',
-};
+const tdGridStyles = {};
 
 const editableStyles = css({
   paddingLeft: '12px',

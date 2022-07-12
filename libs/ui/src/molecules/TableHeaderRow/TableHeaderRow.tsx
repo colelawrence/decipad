@@ -1,7 +1,7 @@
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode, useContext } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 import { Create } from '../../icons';
 import { strongOpacity, transparency } from '../../primitives';
 import { table } from '../../styles';
@@ -49,25 +49,16 @@ export const TableHeaderRow = ({
 }: TableHeaderRowProps): ReturnType<FC> => {
   const { color } = useContext(TableStyleContext);
   return (
-    <tr
-      {...attributes}
-      css={{
-        display: 'grid',
-        gridTemplate: table.rowTemplate(
-          Children.toArray(children).length,
-          !actionsColumn
-        ),
-      }}
-    >
-      <th
-        contentEditable={false}
-        css={{
-          position: 'sticky',
-          left: `-${tableControlWidth}`,
-          border: 'none !important',
-          userSelect: 'none',
-        }}
-      />
+    <tr {...attributes}>
+      {!readOnly && (
+        <th
+          contentEditable={false}
+          css={{
+            width: tableControlWidth,
+            border: 'none !important',
+          }}
+        />
+      )}
       {children}
       {actionsColumn && (
         <th
@@ -75,6 +66,7 @@ export const TableHeaderRow = ({
           css={[
             createColumnThStyles,
             css({
+              verticalAlign: 'middle',
               backgroundColor: transparency(
                 baseSwatches[color as AvailableSwatchColor],
                 strongOpacity
