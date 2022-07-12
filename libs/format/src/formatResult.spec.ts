@@ -45,5 +45,18 @@ describe('stringify', () => {
         Strings = [ <'hi'>, <'lol'> ]
       }"
     `);
+
+    expect(
+      formatResult(
+        locale,
+        ['hi', F(1n)],
+        t.row([t.string(), t.number()], ['Str', 'Num'])
+      )
+    ).toMatchInlineSnapshot(`
+      "{
+        Str = 'hi',
+        Num = 1
+      }"
+    `);
   });
 });

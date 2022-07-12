@@ -49,6 +49,35 @@ const roundIfNeeded = (f: FFraction, decimalPlaces: number): string => {
   return s;
 };
 
+// When there's a big repeating 0.(123456789) indicator
+// We remove the parens to force Fraction to un-repeat it, then round.
+function formatInfinitelyRepeating(
+  integerPart: string,
+  dirtyDecimalPart: string,
+  decimalPlaces: number
+) {
+  let decimalPart: string;
+
+  const insideParensDecimalPart = dirtyDecimalPart.match(/\((\d+)\)$/);
+  if (insideParensDecimalPart) {
+    const parensIndex = dirtyDecimalPart.indexOf(
+      `(${insideParensDecimalPart[1]})`
+    );
+    decimalPart = dirtyDecimalPart.slice(0, parensIndex);
+    while (decimalPart.length < decimalPlaces + 1) {
+      decimalPart += insideParensDecimalPart[1];
+    }
+  } else {
+    decimalPart = dirtyDecimalPart;
+  }
+
+  const backToTheOven = `${integerPart}.${decimalPart}`;
+  return roundIfNeeded(
+    new FFraction(backToTheOven).round(decimalPlaces + 1),
+    decimalPlaces
+  );
+}
+
 const formatFraction = (
   locale: string,
   f: FFraction,
@@ -58,33 +87,14 @@ const formatFraction = (
   if (s === '0') {
     return s;
   }
+
   if (firstIndexOfNonZero(s) < 0) {
     return formatFraction(locale, f, decimalPlaces + DECIMAL_PLACES_TEST_JUMP);
   }
+
   const parts = s.split('.');
-  let decimalPart = parts[1] as string;
-  if (
-    decimalPart &&
-    decimalPart.length > decimalPlaces &&
-    decimalPart.includes('(')
-  ) {
-    // There's a big repeating 0.(123456789) indicator
-    // We remove the parens to force Fraction to un-repeat it, then round.
-    const insideParensDecimalPart = decimalPart.match(/\((\d+)\)$/);
-    if (insideParensDecimalPart) {
-      const parensIndex = decimalPart.indexOf(
-        `(${insideParensDecimalPart[1]})`
-      );
-      decimalPart = decimalPart.slice(0, parensIndex);
-      while (decimalPart.length < decimalPlaces + 1) {
-        decimalPart += insideParensDecimalPart[1];
-      }
-    }
-    const backToTheOven = `${parts[0]}.${decimalPart}`;
-    return roundIfNeeded(
-      new FFraction(backToTheOven).round(decimalPlaces + 1),
-      decimalPlaces
-    );
+  if (parts[1] && parts[1].includes('(')) {
+    return formatInfinitelyRepeating(parts[0], parts[1], decimalPlaces);
   }
   return roundIfNeeded(f, decimalPlaces);
 };

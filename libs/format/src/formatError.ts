@@ -2,6 +2,7 @@ import { ErrSpec, serializeType } from '@decipad/language';
 import { formatTypeToBasicString } from './formatType';
 import { formatUnit } from './formatUnit';
 
+// istanbul ignore next
 export const formatError = (locale: string, spec: ErrSpec): string => {
   switch (spec.errType) {
     case 'free-form': {

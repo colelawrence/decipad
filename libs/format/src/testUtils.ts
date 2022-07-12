@@ -31,3 +31,13 @@ export function F(
     ? new FFraction(n, d)
     : new FFraction(n as string);
 }
+
+export const usd = U('USD', { baseSuperQuantity: 'currency' });
+export const usdShort = U('$', { baseSuperQuantity: 'currency' });
+export const usdPerDay: Units = {
+  type: 'units',
+  args: [
+    u('USD', { baseSuperQuantity: 'currency' }),
+    u('days', { exp: new FFraction(-1) }),
+  ],
+};

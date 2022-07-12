@@ -3,7 +3,7 @@ import { TUnit, TUnits } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import produce from 'immer';
 import { formatUnit } from './formatUnit';
-import type { FormatNumber } from './formatNumber';
+import { formatNumber as defaultFormatNumber } from './formatNumber';
 
 function isCurrencyUnit<TF extends FractionLike = FFraction>(
   unit: TUnit<TF> | null
@@ -18,14 +18,17 @@ function isCurrencyUnit<TF extends FractionLike = FFraction>(
 export function isCurrency<TF extends FractionLike = FFraction>(
   unit: TUnits<TF> | null
 ): boolean {
-  return unit?.args.some(isCurrencyUnit) || false;
+  if (unit?.args.length === 1) {
+    return isCurrencyUnit(unit.args[0]);
+  }
+  return false;
 }
 
 export function formatCurrency<TF extends FractionLike = FFraction>(
   locale: string,
   unit: TUnits<TF>,
   number: FFraction,
-  formatNumber: FormatNumber
+  formatNumber = defaultFormatNumber
 ): string {
   const currencyIndex = unit.args.findIndex(isCurrencyUnit);
   const currencyUnit = getDefined(

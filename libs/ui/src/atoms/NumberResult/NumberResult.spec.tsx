@@ -65,7 +65,7 @@ it('renders huge number', async () => {
 
 it('renders repetitive decimal', async () => {
   const { container } = render(<NumberResult {...await runCode(`1/3`)} />);
-  expect(container.textContent).toMatchInlineSnapshot(`"0.(3)"`);
+  expect(container.textContent).toMatchInlineSnapshot(`"0.33333(...)"`);
 });
 
 it('shows approximation of long decimal', async () => {
