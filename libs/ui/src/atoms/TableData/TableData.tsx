@@ -20,7 +20,6 @@ const minTdWidth = '80px';
 const tdBaseStyles = css(p14Medium, {
   overflow: 'visible',
   alignItems: 'center',
-  whiteSpace: 'nowrap',
   minWidth: minTdWidth,
   cursor: 'default',
 
