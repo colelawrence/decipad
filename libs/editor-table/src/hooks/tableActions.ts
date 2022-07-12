@@ -22,6 +22,7 @@ import {
   insertNodes,
   insertText,
   moveNodes,
+  setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
 import { Path } from 'slate';
@@ -34,6 +35,10 @@ export interface TableActions {
   onChangeColumnType: (
     columnIndex: number,
     newColumnType: TableCellType
+  ) => void;
+  onChangeColumnAggregation: (
+    columnIndex: number,
+    newColumnAggregation: string | undefined
   ) => void;
   onAddColumn: () => void;
   onRemoveColumn: (columnId: string) => void;
@@ -144,6 +149,24 @@ export const useTableActions = (
     [editor, element]
   );
 
+  const onChangeColumnAggregation = useCallback(
+    (columnIndex: number, aggregation: string | undefined) => {
+      withPath(editor, element, (path) => {
+        const columnHeaderPath = [...path, 1, columnIndex];
+        if (hasNode(editor, columnHeaderPath)) {
+          setNodes<TableHeaderElement>(
+            editor,
+            { aggregation },
+            {
+              at: columnHeaderPath,
+            }
+          );
+        }
+      });
+    },
+    [editor, element]
+  );
+
   const onAddColumn = useCallback(() => {
     withPath(editor, element, (path) => {
       addColumn(editor, path);
@@ -229,6 +252,7 @@ export const useTableActions = (
     onDelete,
     onChangeColumnName,
     onChangeColumnType,
+    onChangeColumnAggregation,
     onAddColumn,
     onRemoveColumn,
     onAddRow,

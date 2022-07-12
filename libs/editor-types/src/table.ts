@@ -63,6 +63,7 @@ export interface TableHeaderElement extends BaseElement {
   type: typeof ELEMENT_TH;
   cellType: TableCellType;
   autoCreated?: boolean;
+  aggregation?: string;
   children: [Text];
 }
 

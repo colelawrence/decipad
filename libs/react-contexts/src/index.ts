@@ -3,3 +3,5 @@ export * from './computer';
 export * from './editor-readonly';
 export * from './results';
 export * from './editor-change';
+export * from './editor-table';
+export * from './useFormulaResult';

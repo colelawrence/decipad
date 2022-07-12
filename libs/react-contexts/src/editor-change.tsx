@@ -1,10 +1,4 @@
-import {
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useEffect,
-} from 'react';
+import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
 import {
   distinctUntilChanged,
   map,
@@ -16,8 +10,8 @@ import {
 } from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
-import type { MyValue } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
+import type { MyValue } from '../../editor-types/src';
 
 export const EditorChangeContext = createContext<Observable<undefined>>(
   new Observable<undefined>()

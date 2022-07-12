@@ -100,7 +100,7 @@ describe('notebook table', () => {
   });
 
   it('can change column type to a formula', async () => {
-    await page.click('th:nth-child(5) button:has-text("Caret down")');
+    await page.click('thead th:nth-child(5) button:has-text("Caret down")');
     await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
     await page.press('[role="menuitem"]:has-text("Formula")', 'Enter');
 

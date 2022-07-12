@@ -145,11 +145,12 @@ UI components are, from lowest to highest level, grouped into
 `primitives` are another key piece of the `ui` internals, implementing the design tokens of our design system, such as centralized typography style combinations, color values, theming variables, etc.
 When a styling aspect is encoded in primitives, components must never hardcode it themselves, for it may introduce visual inconsistencies.
 Examples include
-* colors, including
-* colors with `opacity` or alpha values (`Opacity` primitive);
-* font styles, including not only `font-size` and `font-family`, but also `font-weight`, `line-height`, and everything else encoded in primitives;
-* breakpoints, whether for media queries, or (preferred) for viewport unit `calc`s (we have utils for this), `flex-basis`, et cetera;
-* animation durations.
+
+- colors, including
+- colors with `opacity` or alpha values (`Opacity` primitive);
+- font styles, including not only `font-size` and `font-family`, but also `font-weight`, `line-height`, and everything else encoded in primitives;
+- breakpoints, whether for media queries, or (preferred) for viewport unit `calc`s (we have utils for this), `flex-basis`, et cetera;
+- animation durations.
 
 There are further directories in the UI, containing shared `styles` (use for example when you are aligning things across multiple components with similar padding values or grid templates), `types`, and more things you may occasionally need.
 

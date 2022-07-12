@@ -6,15 +6,15 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useSelection } from '@decipad/editor-utils';
+import { isElementOfType, useSelection } from '@decipad/editor-utils';
 import { atoms, molecules, organisms } from '@decipad/ui';
 import { useAtom } from 'jotai';
 import { isCollapsed, findNodePath } from '@udecode/plate';
+import { useTableColumnFormulaResultForElement } from '@decipad/react-contexts';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import {
   useColumnDropDirection,
   useDropColumn,
-  useFormulaResult,
   useIsCellSelected,
   useCellType,
   useIsColumnSelected,
@@ -33,14 +33,16 @@ export const TableCell: PlateComponent = ({
   const [, dropTarget] = useDropColumn(editor, element!);
   const direction = useColumnDropDirection(editor, element!);
 
-  const type = element?.type;
-  if (!element || (type !== ELEMENT_TH && type !== ELEMENT_TD)) {
+  if (
+    !isElementOfType(element, ELEMENT_TH) &&
+    !isElementOfType(element, ELEMENT_TD)
+  ) {
     throw new Error(
       `TableCell is meant to render table cells, not ${element?.type}`
     );
   }
 
-  const result = useFormulaResult(element);
+  const formulaResult = useTableColumnFormulaResultForElement(element);
 
   // series
   const cellType = useCellType(element);
@@ -49,26 +51,23 @@ export const TableCell: PlateComponent = ({
     () => cellType && cellType.kind === 'series',
     [cellType]
   );
-  const editableProps = useMemo(() => {
+  const editable = useMemo(() => {
     const path = findNodePath(editor, element);
     if (path && path[path.length - 2] !== 2 && isSeriesColumn) {
       // first data row
-      return { isEditable: false };
+      return false;
     }
-    return { isEditable: true };
+    return true;
   }, [editor, element, isSeriesColumn]);
 
-  const disabledProps = useMemo(() => {
+  const disabled = useMemo(() => {
     const path = findNodePath(editor, element);
-    return isSeriesColumn &&
-      path &&
-      path[path.length - 2] !== 2 &&
-      isColumnSelected
-      ? { disabled: true }
-      : { disabled: false };
+    return (
+      isSeriesColumn && path && path[path.length - 2] !== 2 && isColumnSelected
+    );
   }, [editor, element, isColumnSelected, isSeriesColumn]);
 
-  if (result != null) {
+  if (formulaResult != null) {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
     // an uncaught exception in slate-react.
@@ -76,7 +75,7 @@ export const TableCell: PlateComponent = ({
     // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
     return (
       <molecules.FormulaTableData
-        result={<organisms.CodeResult {...result} />}
+        result={<organisms.CodeResult {...formulaResult} />}
         {...attributes}
       >
         {children}
@@ -86,8 +85,8 @@ export const TableCell: PlateComponent = ({
 
   return (
     <atoms.TableData
-      {...editableProps}
-      {...disabledProps}
+      isEditable={editable}
+      disabled={disabled}
       isUserContent
       as="td"
       attributes={attributes}

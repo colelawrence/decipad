@@ -1,4 +1,5 @@
 export type Flag =
+  | 'SMART_ROWS'
   | 'FORMULA_COLUMNS'
   | 'INPUT_COPY'
   | 'PERSISTENT_EXAMPLE'

@@ -20,6 +20,7 @@ export interface MenuItemProps {
   >['onPointerMove'];
   readonly onSelect?: () => void;
   readonly selected?: boolean;
+  readonly itemAlignment?: 'left' | 'right' | 'center';
 }
 
 export const MenuItem: FC<MenuItemProps> = ({
@@ -28,6 +29,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   onPointerMove,
   onSelect,
   selected,
+  itemAlignment,
 }) => {
   return (
     <RadixDropdownMenu.Item
@@ -37,7 +39,16 @@ export const MenuItem: FC<MenuItemProps> = ({
       onPointerMove={onPointerMove}
     >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
-      <span css={childrenWrapperStyles}>{children}</span>
+      <span
+        css={[
+          childrenWrapperStyles,
+          itemAlignment && {
+            textAlign: itemAlignment,
+          },
+        ]}
+      >
+        {children}
+      </span>
     </RadixDropdownMenu.Item>
   );
 };

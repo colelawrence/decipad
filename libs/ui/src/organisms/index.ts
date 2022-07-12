@@ -22,6 +22,8 @@ export { RangeResult } from './RangeResult/RangeResult';
 export { RowResult } from './RowResult/RowResult';
 export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';
 export { AutoCompleteMenu } from './AutoCompleteMenu/AutoCompleteMenu';
+export { SmartColumnCell } from './SmartColumnCell/SmartColumnCell';
+export { SmartRow } from './SmartRow/SmartRow';
 export { Table } from './Table/Table';
 export { TableColumnHeader } from './TableColumnHeader/TableColumnHeader';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';

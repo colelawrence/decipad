@@ -3,9 +3,13 @@ import { cssVar } from '../../primitives';
 
 interface CaretProps {
   readonly variant: 'down' | 'right' | 'up';
+  readonly color?: 'weak' | 'normal';
 }
 
-export const Caret = ({ variant }: CaretProps): ReturnType<FC> => (
+export const Caret = ({
+  variant,
+  color = 'normal',
+}: CaretProps): ReturnType<FC> => (
   <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>Caret {variant}</title>
     <path
@@ -17,7 +21,7 @@ export const Caret = ({ variant }: CaretProps): ReturnType<FC> => (
           up: 'M9.44208 7.17761L10.4204 8.40049C11.0861 9.23266 11.419 9.64875 11.4194 9.99892C11.4197 10.3035 11.2812 10.5916 11.0432 10.7815C10.7696 11 10.2367 11 9.171 11L7.59258 11C6.45445 11 5.88538 11 5.60799 10.7706C5.36704 10.5713 5.23319 10.2707 5.24623 9.95828C5.26125 9.59861 5.64194 9.17563 6.40331 8.32966L7.49115 7.12094C7.83832 6.7352 8.0119 6.54233 8.21415 6.47581C8.39163 6.41743 8.58395 6.42302 8.75775 6.4916C8.9558 6.56975 9.11789 6.77237 9.44208 7.17761Z',
         }[variant]
       }
-      fill={cssVar('normalTextColor')}
+      fill={cssVar(color === 'weak' ? 'weakerTextColor' : 'normalTextColor')}
     />
   </svg>
 );

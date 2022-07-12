@@ -4,10 +4,13 @@ import {
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useEditorChange } from '@decipad/react-contexts';
+import {
+  useEditorChange,
+  useEditorTableContext,
+} from '@decipad/react-contexts';
 import { findNodePath } from '@udecode/plate';
-import { useState } from 'react';
-import { useEditorTableContext } from '../contexts/EditorTableContext';
+import { dequal } from 'dequal';
+import { useEffect, useState } from 'react';
 
 export const useCellType = (
   element: TableCellElement | TableHeaderElement
@@ -16,14 +19,23 @@ export const useCellType = (
   const [cellType, setCellType] = useState<TableCellType | undefined>();
   const editor = useTEditorRef();
 
-  useEditorChange(setCellType, () => {
-    const cellPath = findNodePath(editor, element);
-    if (cellPath) {
-      const columnIndex = cellPath[cellPath.length - 1];
-      return table.cellTypes[columnIndex];
+  useEditorChange(
+    (newCellType) => {
+      if (!dequal(cellType, newCellType)) {
+        setCellType(newCellType);
+      }
+    },
+    () => {
+      const cellPath = findNodePath(editor, element);
+      if (cellPath) {
+        const columnIndex = cellPath[cellPath.length - 1];
+        return table.cellTypes[columnIndex];
+      }
+      return undefined;
     }
-    return undefined;
-  });
+  );
+
+  useEffect(() => {}, [editor, element, table.cellTypes]);
 
   return cellType;
 };

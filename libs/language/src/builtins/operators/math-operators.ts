@@ -141,6 +141,22 @@ const average = ([value]: Value[]): Value => {
   );
 };
 
+const median = ([value]: Value[]): Value => {
+  const fractions = (value.getData() as Fraction[]).map(coherceToFraction);
+  if (fractions.length === 0) {
+    throw new RuntimeError('median needs at least one element');
+  }
+  const sortedValues = fractions.sort((f1, f2) => f1.compare(f2));
+  const { length } = sortedValues;
+  const rightCenterPos = Math.floor(length / 2);
+  const rightCenter = sortedValues[rightCenterPos];
+  if (length % 2 === 1) {
+    return fromJS(rightCenter);
+  }
+  const leftCenter = sortedValues[rightCenterPos - 1];
+  return fromJS(leftCenter.add(rightCenter).div(2));
+};
+
 export const mathOperators: Record<string, BuiltinSpec> = {
   abs: {
     argCount: 1,
@@ -231,6 +247,12 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   avgif: { aliasFor: 'averageif' },
   meanif: { aliasFor: 'averageif' },
+  median: {
+    argCount: 1,
+    argCardinalities: [2],
+    functor: numberReducerFunctor,
+    fnValues: median,
+  },
   sqrt: {
     argCount: 1,
     fn: ([n]) => {

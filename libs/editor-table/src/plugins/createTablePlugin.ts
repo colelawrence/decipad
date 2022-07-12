@@ -33,6 +33,7 @@ import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCrea
 import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDeleteTableFromCaptionPlugin';
 import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
 import { createCursorFocusPlugin } from './createCursorFocusPlugin';
+import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { addColumn, addRow } from '../hooks/index';
 import { withTable } from './withTable';
 
@@ -64,6 +65,9 @@ export const createTablePlugin = (
     },
   },
   withOverrides: withTable,
+  handlers: {
+    onDrop: onDropSmartCellResult,
+  },
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createPreventDeleteTableFromCaptionPlugin(),

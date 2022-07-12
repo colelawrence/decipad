@@ -1,5 +1,4 @@
 import { noop } from '@decipad/utils';
-import type { TableColumn } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
@@ -14,6 +13,7 @@ import {
 import { TableWidth } from '../Table/Table';
 import { smallestDesktop } from '../../primitives';
 import { tableControlWidth } from '../../styles/table';
+import { Column } from '../../types';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -61,11 +61,6 @@ const tableWrapperStyles = css({
   },
 });
 
-interface Column {
-  name: string;
-  cellType: TableColumn['cellType'];
-}
-
 interface EditorTableProps {
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;
@@ -78,6 +73,8 @@ interface EditorTableProps {
   readonly onAddRow?: () => void;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
+
+  readonly smartRow?: ReactNode;
 }
 
 export const EditorTable: FC<EditorTableProps> = ({
@@ -91,6 +88,7 @@ export const EditorTable: FC<EditorTableProps> = ({
   isSelectingCell,
   onChangeIcon = noop,
   onChangeColor = noop,
+  smartRow,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
 
@@ -115,6 +113,7 @@ export const EditorTable: FC<EditorTableProps> = ({
               <thead>{thead}</thead>
               <tbody>{tbody}</tbody>
               <tfoot contentEditable={false}>
+                {smartRow}
                 <AddTableRowButton
                   colSpan={columns.length + 1}
                   onAddRow={onAddRow}

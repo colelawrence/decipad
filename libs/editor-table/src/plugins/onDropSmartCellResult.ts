@@ -1,28 +1,27 @@
+import { DragEvent } from 'react';
 import {
   CodeLineElement,
   ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+  MARK_MAGICNUMBER,
   MyEditor,
   MyElement,
   MyText,
 } from '@decipad/editor-types';
-import React, { ComponentProps } from 'react';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
-import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
 import {
   getBlockAbove,
   insertNodes,
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate';
-import { organisms } from '@decipad/ui';
+import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
-type DragCellData = Parameters<
-  NonNullable<ComponentProps<typeof organisms.CodeResult>['onDragStartCell']>
->[0];
+type DragCellData = string;
 
-export const onDropTableCellResult =
-  (editor: MyEditor) => (event: React.DragEvent) => {
-    if (editor.dragging === DRAG_TABLE_CELL_RESULT) {
+export const onDropSmartCellResult =
+  (editor: MyEditor) => (event: DragEvent) => {
+    if (editor.dragging === DRAG_SMART_CELL_RESULT) {
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
@@ -43,11 +42,16 @@ export const onDropTableCellResult =
         const [block, blockPath] = blockAbove;
         if (!block) return;
 
-        const text = `lookup(${data.tableName}, "${data.cellValue}").${data.columnName}`;
+        const text = data;
 
         if (block.type === ELEMENT_CODE_LINE) {
           filteredFragment.push({
             text,
+          });
+        } else if (block.type === ELEMENT_PARAGRAPH) {
+          filteredFragment.push({
+            text,
+            [MARK_MAGICNUMBER]: true,
           });
         } else {
           if (isElementEmpty(editor, block as MyElement)) {

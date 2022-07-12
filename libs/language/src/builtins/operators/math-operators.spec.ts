@@ -71,6 +71,13 @@ describe('math operators', () => {
     `);
   });
 
+  it('median of a list of numbers', () => {
+    expect(operators.median.fnValues?.([fromJS([3, 4, 2])])).toEqual(fromJS(3));
+    expect(operators.median.fnValues?.([fromJS([3, 4, 2, 5])])).toEqual(
+      fromJS(3.5)
+    );
+  });
+
   it('calculates sqrt', () => {
     expect(operators.sqrt.functor?.([t.number()])).toEqual(t.number());
     expect(operators.sqrt.functor?.([t.number(U('W'))])).toEqual(

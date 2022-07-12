@@ -7,19 +7,22 @@ import {
 import {
   assertElementType,
   useElementMutatorCallback,
+  useNodePath,
 } from '@decipad/editor-utils';
 import { AvailableSwatchColor, organisms, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
 import { selectedCellsAtom, withProviders } from '@udecode/plate';
 import { Provider, useAtom } from 'jotai';
-import { WIDE_MIN_COL_COUNT } from '../../constants';
 import {
   EditorTableContext,
   EditorTableContextValue,
-} from '../../contexts/EditorTableContext';
-import { useTableActions } from '../../hooks';
+} from '@decipad/react-contexts';
+import { isEnabled } from '@decipad/feature-flags';
+import { WIDE_MIN_COL_COUNT } from '../../constants';
+import { useTable, useTableActions } from '../../hooks';
 import { useSelectedCells } from './useSelectedCells';
 import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
+import { SmartRow } from '../SmartRow';
 
 export const tableScope = Symbol('table');
 
@@ -34,27 +37,23 @@ export const Table: PlateComponent = withProviders([
   const saveIcon = useElementMutatorCallback(editor, element, 'icon');
   const saveColor = useElementMutatorCallback(editor, element, 'color');
 
-  const { onDelete, onAddRow } = useTableActions(editor, element);
+  const { onDelete, onAddRow, onChangeColumnAggregation } = useTableActions(
+    editor,
+    element
+  );
   const [selectedCells] = useAtom(selectedCellsAtom, tableScope);
 
   useSelectedCells();
 
-  const tableHeaders = element.children[1].children;
-
-  const columns = useMemo(
-    () =>
-      tableHeaders.map((th) => ({
-        name: th.children[0].text,
-        cellType: th.cellType,
-      })),
-    [tableHeaders]
-  );
+  const { name, columns, headers } = useTable(element);
 
   const blockId = element.id;
   const contextValue: EditorTableContextValue = useMemo(
     () => ({ blockId, cellTypes: columns.map((col) => col.cellType) }),
     [blockId, columns]
   );
+
+  const tablePath = useNodePath(element);
 
   const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
 
@@ -85,6 +84,19 @@ export const Table: PlateComponent = withProviders([
                 columns={columns}
                 tableWidth={wideTable ? 'WIDE' : 'SLIM'}
                 isSelectingCell={!!selectedCells}
+                smartRow={
+                  isEnabled('SMART_ROWS') && (
+                    <SmartRow
+                      onAggregationTypeChange={onChangeColumnAggregation}
+                      selectedAggregationTypeNames={headers.map(
+                        (h) => h.aggregation
+                      )}
+                      tableName={name}
+                      tablePath={tablePath}
+                      columns={columns}
+                    />
+                  )
+                }
               >
                 {children}
               </organisms.EditorTable>

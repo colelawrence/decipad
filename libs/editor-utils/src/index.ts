@@ -33,3 +33,4 @@ export * from './isPath';
 export * from './useElementMutatorCallback';
 export * from './useSelection';
 export * from './useElementAbove';
+export * from './useNodePath';

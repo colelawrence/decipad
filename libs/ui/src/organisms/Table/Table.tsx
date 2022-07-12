@@ -35,10 +35,10 @@ const borderRadiusStyles = css({
     {
       borderTopRightRadius: borderRadius,
     },
-  '> :last-child > tr:last-of-type > td:nth-of-type(2)': {
+  '> tfoot > tr:last-of-type > td:first-of-type': {
     borderBottomLeftRadius: borderRadius,
   },
-  '> :last-child > tr:last-of-type > td:last-of-type': {
+  '> tfoot > tr:last-of-type > td:last-of-type': {
     borderBottomRightRadius: borderRadius,
   },
 });
