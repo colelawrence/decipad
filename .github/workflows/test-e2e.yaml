@@ -2,6 +2,8 @@ name: Run E2E Tests
 
 on:
   push:
+    # Since Percy will auto-approve main, it'll become the new baseline for
+    # future PRs.
     branches: [main]
   pull_request:
     branches:
@@ -37,11 +39,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      - name: Run end-to-end tests
+      - name: Run end-to-end and visual regression tests
         env:
-          APPLITOOLS_API_KEY: '${{ secrets.APPLITOOLS_API_KEY }}'
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-        run: ./scripts/e2e.sh || ./scripts/e2e.sh || ./scripts/e2e.sh
+          PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
+        run: ./node_modules/.bin/percy exec -- ./scripts/e2e.sh
 
   notify:
     name: Discord Notification
