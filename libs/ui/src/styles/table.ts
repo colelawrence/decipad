@@ -28,11 +28,3 @@ export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({
   display: 'grid',
   padding: isTabularType(type) ? undefined : `0 ${cellSidePadding}`,
 });
-
-export const rowTemplate = (
-  numberOfColumns: number,
-  readOnly: boolean
-): string =>
-  `auto / ${tableControlWidth} repeat(${numberOfColumns}, 1fr) ${
-    readOnly ? '' : buttonColumnWidth
-  }`;

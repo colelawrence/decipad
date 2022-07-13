@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar } from '../../primitives';
-import { table } from '../../styles';
 
 const border = `1px solid ${cssVar('strongHighlightColor')}`;
 
@@ -24,16 +23,7 @@ interface SmartRowProps {
 
 export const SmartRow: FC<SmartRowProps> = ({ smartCells }) => {
   return (
-    <tr
-      css={[
-        tableRowStyles,
-        css({
-          position: 'relative',
-          display: 'grid',
-          gridTemplate: table.rowTemplate(smartCells.length, false),
-        }),
-      ]}
-    >
+    <tr css={[tableRowStyles, css({ position: 'relative' })]}>
       <th></th>
       {smartCells.map((smartCell, index) => (
         <th key={index}>{index > 0 && smartCell}</th>
