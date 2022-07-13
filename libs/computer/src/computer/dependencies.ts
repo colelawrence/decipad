@@ -95,6 +95,15 @@ function excludeLocalNames(
   return referencesFound.filter((item) => !localNames.has(item));
 }
 
+const blocksToStatements = (blocksOrStmts: AST.Node[]): AST.Node[] =>
+  blocksOrStmts.flatMap((node) => {
+    if (node.type === 'block') {
+      return node.args;
+    } else {
+      return [node];
+    }
+  });
+
 /** Find tables, and update the namespaces available */
 export function findAllTables(nodes: AST.Node[]) {
   const namespaces: TableNamespaces = new Map();
@@ -111,7 +120,7 @@ export function findAllTables(nodes: AST.Node[]) {
     }
   }
 
-  for (const node of nodes) {
+  for (const node of blocksToStatements(nodes)) {
     if (node.type === 'assign' && node.args[1].type === 'table') {
       const [name, table] = node.args;
       const ns = getIdentifierString(name);
@@ -143,23 +152,25 @@ function getTableColNames(table: AST.Table, namespaces: TableNamespaces) {
 }
 
 function getLocalNames(
-  node: AST.Node,
+  nodeOrBlock: AST.Node,
   namespaces: TableNamespaces
 ): Set<string> | null {
-  if (node.type === 'assign' && node.args[1].type === 'table') {
-    return new Set([
-      getIdentifierString(node.args[0]),
-      ...getTableColNames(node.args[1], namespaces),
-    ]);
-  }
-  if (node.type === 'table-column-assign') {
-    const tableName = getIdentifierString(node.args[0]);
+  const names = [];
 
-    const thisTableCols = namespaces.get(tableName) ?? new Set();
-    return new Set([...thisTableCols]);
+  for (const node of blocksToStatements([nodeOrBlock])) {
+    if (node.type === 'assign' && node.args[1].type === 'table') {
+      names.push(getIdentifierString(node.args[0]));
+      names.push(...getTableColNames(node.args[1], namespaces));
+    }
+    if (node.type === 'table-column-assign') {
+      const tableName = getIdentifierString(node.args[0]);
+
+      names.push(...(namespaces.get(tableName) ?? new Set()));
+    }
+    if (node.type === 'function-definition') {
+      names.push(...node.args[1].args.map(getIdentifierString));
+    }
   }
-  if (node.type === 'function-definition') {
-    return new Set(node.args[1].args.map(getIdentifierString));
-  }
-  return null;
+
+  return names.length > 0 ? new Set(names) : null;
 }
