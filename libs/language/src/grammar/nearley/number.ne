@@ -81,6 +81,27 @@ percentage -> decimal "%"                               {%
                                                           return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(100)))
                                                         }
                                                         %}
+permille -> "-" decimal "‰"                             {%
+                                                        (d) => {
+                                                          return makeNumber(d, new Fraction((d[1].n).neg()).div(new Fraction(1000)))
+                                                        }
+                                                        %}
+permille -> decimal "‰"                                 {%
+                                                        (d) => {
+                                                          return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(1000)))
+                                                        }
+                                                        %}
+permyriad -> "-" decimal "‱"                            {%
+                                                        (d) => {
+                                                          return makeNumber(d, new Fraction((d[1].n).neg()).div(new Fraction(10000)))
+                                                        }
+                                                        %}
+permyriad -> decimal "‱"                                {%
+                                                        (d) => {
+                                                          return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(10000)))
+                                                        }
+                                                        %}
+
 
 unsignedNumber -> %number                               {%
                                                         ([number]) => {

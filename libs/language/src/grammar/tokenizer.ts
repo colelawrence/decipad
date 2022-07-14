@@ -56,6 +56,8 @@ export const tokenRules = {
     dot: '.',
     bang: '!',
     percent: '%',
+    permille: '‰',
+    permyriad: '‱',
     leftParen: '(',
     rightParen: ')',
     leftSquareBracket: '[',

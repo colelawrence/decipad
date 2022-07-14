@@ -557,6 +557,8 @@ let ParserRules = [
   { name: 'literal', symbols: ['string'], postprocess: id },
   { name: 'literal', symbols: ['number'], postprocess: id },
   { name: 'literal', symbols: ['percentage'], postprocess: id },
+  { name: 'literal', symbols: ['permille'], postprocess: id },
+  { name: 'literal', symbols: ['permyriad'], postprocess: id },
   { name: 'literal', symbols: ['column'], postprocess: id },
   { name: 'literal', symbols: ['date'], postprocess: id },
   { name: 'literal', symbols: ['range'], postprocess: id },
@@ -670,6 +672,34 @@ let ParserRules = [
     symbols: ['decimal', { literal: '%' }],
     postprocess: (d) => {
       return makeNumber(d, new Fraction(d[0].n).div(new Fraction(100)));
+    },
+  },
+  {
+    name: 'permille',
+    symbols: [{ literal: '-' }, 'decimal', { literal: '‰' }],
+    postprocess: (d) => {
+      return makeNumber(d, new Fraction(d[1].n.neg()).div(new Fraction(1000)));
+    },
+  },
+  {
+    name: 'permille',
+    symbols: ['decimal', { literal: '‰' }],
+    postprocess: (d) => {
+      return makeNumber(d, new Fraction(d[0].n).div(new Fraction(1000)));
+    },
+  },
+  {
+    name: 'permyriad',
+    symbols: [{ literal: '-' }, 'decimal', { literal: '‱' }],
+    postprocess: (d) => {
+      return makeNumber(d, new Fraction(d[1].n.neg()).div(new Fraction(10000)));
+    },
+  },
+  {
+    name: 'permyriad',
+    symbols: ['decimal', { literal: '‱' }],
+    postprocess: (d) => {
+      return makeNumber(d, new Fraction(d[0].n).div(new Fraction(10000)));
     },
   },
   {

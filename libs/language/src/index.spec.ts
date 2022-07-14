@@ -1,17 +1,17 @@
 // E2e tests
 import Fraction from '@decipad/fraction';
-import { build as t, InferError, units } from './type';
+import { date, parseUTCDate } from './date';
+import { Column, Scalar } from './interpreter/Value';
 import { runCode } from './run';
 import {
-  runCodeForVariables,
   objectToTableType,
   objectToTableValue,
   runAST,
+  runCodeForVariables,
 } from './testUtils';
-import { date, parseUTCDate } from './date';
-import { Column, Scalar } from './interpreter/Value';
-import { block, n, F, U, u, c } from './utils';
+import { build as t, InferError, units } from './type';
 import { number } from './type/build';
+import { block, c, F, n, U, u } from './utils';
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -22,6 +22,8 @@ describe('basic code', () => {
           -1,
           55 % 2,
           101%,
+          1000‰,
+          10000‱,
           1/4,
           2^4,
           sqrt(16)
@@ -29,7 +31,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [F(2), F(-1), F(1), F(101, 100), F(1, 4), F(16), F(4)],
+      value: [F(2), F(-1), F(1), F(101, 100), F(1), F(1), F(1, 4), F(16), F(4)],
     });
   });
 
