@@ -177,7 +177,7 @@ const emailValidation: EmailGenerator<{
                                         <tr>
                                           <td align="left" style="font-size:0px;padding:10px 25px 5px 25px;word-break:break-word;">
                                             <div style="font-family:&#x27;Inter&#x27;, sans-serif;font-size:12px;font-style:italic;font-weight:normal;line-height:1.8;text-align:left;color:#c9c9c9;">
-                                              <div><span style="caret-color: rgb(34, 34, 34); color: rgb(34, 34, 34); font-family: Roboto, sans-serif; font-size: small; font-style: normal; text-align: -webkit-center;">Or copy and paste this link to your browser</span></div>
+                                              <div><span style="caret-color: rgb(34, 34, 34); color: rgb(34, 34, 34); font-family: Roboto, sans-serif; font-size: small; font-style: normal; text-align: -webkit-center;">Or paste this link to your browser</span></div>
                                             </div>
                                           </td>
                                         </tr>
