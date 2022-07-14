@@ -7,6 +7,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 const numberResultStyles = css({
   textOverflow: 'ellipsis',
   overflow: 'hidden',
+  fontFeatureSettings: '"tnum"',
 });
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
