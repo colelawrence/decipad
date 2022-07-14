@@ -129,6 +129,12 @@ table tr:nth-child(2n) {
   background-color: rgba(204, 204, 204, 0.3);
 }
 
+/* Cards */
+
+.shadow:hover {
+  box-shadow: rgba(83, 83, 83, 0.2) 0px 2px 8px 0px;
+}
+
 /* Footer */
 .theme-doc-footer {
   padding: 0px 48px;
