@@ -13,7 +13,7 @@ import {
 } from '../../interpreter/Value';
 import { SwappedHypercube, ConcatenatedColumn } from '../../lazy';
 import { Type, build as t } from '../../type';
-import { getInstanceof, U } from '../../utils';
+import { getInstanceof } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
 import { approximateSubsetSumIndices } from '../table';
 
@@ -24,14 +24,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     argCardinalities: [2],
     fnValues: ([col]: Value[]) => fromJS(getColumnLike(col).rowCount),
-    functor: ([a]) =>
-      Type.either(
-        a
-          .reduced()
-          .isDate()
-          .mapType((date) => t.number(U(getDefined(date.date)))),
-        t.number()
-      ),
+    functor: ([a]) => a.isColumn().mapType(() => t.number()),
   },
   cat: {
     argCount: 2,

@@ -21,10 +21,6 @@ describe('list operators', () => {
       t.number()
     );
 
-    expect(
-      operators.len.functor?.([t.column(t.date('year'), 1)])
-    ).toMatchObject(t.number(U('year')));
-
     expect(operators.len.fnValues?.([fromJS([1, 2, 3])]))
       .toMatchInlineSnapshot(`
         FractionValue {
