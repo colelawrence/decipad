@@ -22,9 +22,13 @@ const tdBaseStyles = css(p14Medium, {
   background: cssVar('backgroundColor'),
 
   minHeight: table.tdMinHeight,
-  verticalAlign: 'middle',
 
-  lineHeight: table.cellLineHeight,
+  minWidth: table.tdMinWidth,
+  maxWidth: table.tdMaxWidth,
+  cursor: 'default',
+  verticalAlign: 'middle',
+  paddingTop: '8px',
+  paddingBottom: '8px',
 });
 
 const tdPlaceholderStyles = css({

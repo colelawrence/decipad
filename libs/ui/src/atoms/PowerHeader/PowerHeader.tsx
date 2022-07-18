@@ -13,6 +13,7 @@ interface PowerHeaderProps {
 
 const powerHeaderStyles = css({
   height: '100%',
+  padding: '10px',
 });
 
 const hoverStyles = css({

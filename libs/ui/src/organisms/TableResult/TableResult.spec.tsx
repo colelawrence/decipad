@@ -58,24 +58,4 @@ describe('dimensions', () => {
 
     expect(dimensions).toHaveLength(2);
   });
-
-  it('renders left padding on first column cells containing another dimension', async () => {
-    const { container } = render(
-      <TableResult {...await runCode(dimensionalCode)} />
-    );
-
-    const dimensions = getAllDescendantsByRole(
-      container.querySelector('table')!,
-      'table'
-    );
-
-    expect(
-      dimensions.map(
-        (cell) => findParentWithStyle(cell, 'paddingLeft')?.paddingLeft
-      )
-    ).toEqual([expect.stringMatching(/.+/), undefined]);
-    expect(
-      dimensions.map((cell) => findParentWithStyle(cell, 'padding')?.padding)
-    ).toEqual([undefined, undefined]);
-  });
 });

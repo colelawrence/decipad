@@ -1,11 +1,9 @@
 import { ComponentProps, FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { p14Medium } from '../../primitives';
-import { table } from '../../styles';
 import { TableFormulaCell } from '../../atoms';
 
 const tdLineStyles = css(p14Medium, {
-  lineHeight: table.cellLineHeight,
   marginLeft: '12px',
 });
 

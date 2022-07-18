@@ -11,7 +11,6 @@ const selectWrapperStyles = css({
 
 const menuListWrapperStyles = css({
   marginLeft: 'auto',
-  position: 'absolute',
 });
 
 const itemStyles = css(p12Regular, {
@@ -23,7 +22,6 @@ const triggerStyles = css({
   display: 'grid',
   alignItems: 'center',
   width: '16px',
-  marginTop: '0.55rem',
 });
 
 interface SelectProps<T extends string> {

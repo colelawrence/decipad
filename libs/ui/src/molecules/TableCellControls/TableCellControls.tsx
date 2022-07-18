@@ -4,7 +4,6 @@ import {
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
 } from '../../primitives/index';
-import { tableControlWidth } from '../../styles/table';
 
 export interface TableCellControlsProps {
   readonly onSelect?: () => void;
@@ -20,17 +19,13 @@ export const TableCellControls = forwardRef<
       contentEditable={false}
       ref={ref}
       css={{
-        position: 'sticky',
-        left: `-${tableControlWidth}`,
-        zIndex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         opacity: 0,
         '*:hover > &': {
           opacity: 'unset',
         },
         transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
+        verticalAlign: 'middle',
+        marginRight: '6px',
       }}
     >
       {!readOnly && (

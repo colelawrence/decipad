@@ -8,7 +8,6 @@ import {
   ConnectDropTarget,
 } from 'react-dnd';
 import { normalOpacity, p13Medium, transparency } from '../../primitives';
-import { table } from '../../styles';
 import {
   AvailableSwatchColor,
   baseSwatches,
@@ -28,16 +27,14 @@ const columnStyles = css(p13Medium, {
 const headerWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'left',
+  minHeight: '30px',
   gap: '6px',
-  minHeight: table.thMinHeight,
-  paddingLeft: table.cellSidePadding,
-  paddingRight: '8px',
+  position: 'relative',
+  padding: '0 12px',
 });
 
 const columnTypeStyles = css({
-  display: 'grid',
-  alignItems: 'center',
+  display: 'inline-block',
   width: '12px',
   height: '12px',
 });
@@ -122,18 +119,19 @@ export function PowerTableColumnHeader<TAggregation extends string>({
       )}
       <div ref={connectDropTarget} contentEditable={false}>
         <div css={headerWrapperStyles} ref={connectDragSource}>
+          {name}
+
+          <div>
+            <Select
+              options={availableAggregations}
+              value={selectedAggregation}
+              onChange={onAggregationChange}
+            ></Select>
+          </div>
           <span css={columnTypeStyles}>
             <Icon />
           </span>
-          {name}
           <div css={childrenWrapperStyles}>{children}</div>
-        </div>
-        <div>
-          <Select
-            options={availableAggregations}
-            value={selectedAggregation}
-            onChange={onAggregationChange}
-          ></Select>
         </div>
       </div>
       {overDirection === 'right' && (

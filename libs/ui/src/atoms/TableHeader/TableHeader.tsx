@@ -174,13 +174,13 @@ export const TableHeader = ({
             onSelectColumn={onSelectColumn}
           />
         )}
+        <div css={[childrenWrapperStyles]}>{children}</div>
+        {menu}
         {showIcon && (
           <span contentEditable={false} css={columnTypeStyles}>
             <Icon />
           </span>
         )}
-        <div css={[childrenWrapperStyles]}>{children}</div>
-        {menu}
       </div>
 
       {isEditable && dropDirection === 'right' && (

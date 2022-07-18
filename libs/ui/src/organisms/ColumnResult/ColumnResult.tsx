@@ -12,6 +12,8 @@ import { isTabularType } from '../../utils';
 const rowLabelStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   color: cssVar('currentTextColor'),
+  display: 'inline-block',
+  lineHeight: 1.2,
 });
 
 export const ColumnResult = ({

@@ -7,6 +7,7 @@ import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
+import { tableParentStyles } from '../../styles/table';
 
 export const TableResult = ({
   parentType,
@@ -67,6 +68,7 @@ export const TableResult = ({
                   setGrabbing(true);
                 }}
                 onDragEnd={() => setGrabbing(false)}
+                css={{ ...tableParentStyles }}
               >
                 <div
                   css={[

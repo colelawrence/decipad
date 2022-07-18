@@ -1,15 +1,15 @@
 import { css } from '@emotion/react';
 import { Result } from '@decipad/computer';
-import { Children, DragEvent, FC, ReactNode, useState } from 'react';
+import { DragEvent, FC, ReactNode, useState } from 'react';
 import { cssVar, p12Regular } from '../../primitives';
-import { table } from '../../styles';
 import { CodeResult } from '../CodeResult/CodeResult';
+import { table } from '../../styles';
 
 const resultWrapperStyles = css({
-  marginLeft: '1rem',
   userSelect: 'all',
   cursor: 'grab',
-  paddingRight: table.cellSidePadding,
+  wordBreak: 'break-all',
+  textAlign: 'left',
 });
 
 const grabbingStyles = css({
@@ -18,18 +18,14 @@ const grabbingStyles = css({
 
 const smartColumnCellStyles = css(p12Regular, {
   color: cssVar('weakerTextColor'),
-  whiteSpace: 'nowrap',
-  lineHeight: table.cellLineHeight,
+  display: 'inline-flex',
+  padding: '10px',
+  alignItems: 'center',
+  position: 'relative',
+  maxWidth: table.tdMaxWidth,
+  minWidth: table.tdMinWidth,
+  width: '100%',
 });
-
-const layoutStyles = (menuChildrenCount: number) =>
-  css({
-    position: 'relative',
-    display: 'grid',
-    gridTemplateColumns: `1fr ${new Array(menuChildrenCount)
-      .fill('0.5fr')
-      .join(' ')} 1fr`,
-  });
 
 interface SmartColumnCellProps {
   readonly aggregationTypeMenu: ReactNode | ReactNode[];
@@ -47,13 +43,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   const [grabbing, setGrabbing] = useState(false);
 
   return (
-    <div
-      css={[
-        smartColumnCellStyles,
-        layoutStyles(Children.count(aggregationTypeMenu)),
-      ]}
-    >
-      <span>&nbsp;</span>
+    <div css={[smartColumnCellStyles]}>
       {aggregationTypeMenu}
       <span
         css={[resultWrapperStyles, grabbing && grabbingStyles]}

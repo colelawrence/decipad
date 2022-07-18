@@ -29,8 +29,6 @@ const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px
 
 const wrapperStyles = css({
   margin: '0',
-  marginBottom: '8px',
-  paddingBottom: '6px',
 });
 
 const wrapperInnerStyles = css({
@@ -53,8 +51,9 @@ const tableWrapperStyles = css({
   width: 'min-content',
   minWidth: editorLayout.slimBlockWidth,
   maxWidth: restWidthBlock,
-  overflowX: 'scroll',
+  overflowX: 'auto',
   display: 'inline-block',
+  paddingBottom: '12px',
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
     minWidth: '0',

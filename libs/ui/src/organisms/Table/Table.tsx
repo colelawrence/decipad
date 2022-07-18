@@ -15,13 +15,11 @@ const tableBaseStyles = css({
   borderSpacing: '0',
   tableLayout: 'auto',
   counterReset: tableRowCounter,
-  minWidth: 'max-content',
 });
 
 const wideTableStyles = css({
   width: 'initial',
   maxWidth: 'initial',
-  minWidth: 'max-content',
 });
 
 // Top border and border-radius, applied to table headers if they exist or to the first table row.
@@ -52,9 +50,6 @@ const innerBorderStyles = css({
     {
       borderRight: border,
     },
-  table: {
-    borderLeft: border,
-  },
 });
 
 const allBorderStyles = css(innerBorderStyles, {

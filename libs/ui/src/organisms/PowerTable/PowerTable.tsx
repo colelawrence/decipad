@@ -48,7 +48,7 @@ const tableWrapperStyles = css({
   width: 'min-content',
   minWidth: editorLayout.slimBlockWidth,
   maxWidth: restWidthBlock,
-  overflowX: 'scroll',
+  overflowX: 'auto',
   display: 'inline-block',
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
@@ -65,7 +65,7 @@ const tableBaseStyles = css({
   // and <td> separately for borders and border radius.
   borderCollapse: 'inherit',
   borderSpacing: '0',
-  tableLayout: 'fixed',
+  tableLayout: 'auto',
 });
 
 // Top border and border-radius, applied to table headers if they exist or to the first table row.
