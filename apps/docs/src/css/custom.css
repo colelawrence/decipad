@@ -132,8 +132,9 @@ table tr:nth-child(2n) {
 /* Cards */
 
 .shadow:hover {
-  box-shadow: rgba(83, 83, 83, 0.2) 0px 2px 8px 0px;
+  box-shadow: var(--ifm-color-primary-light) 0 0 11px;
 }
+
 
 /* Footer */
 .theme-doc-footer {
