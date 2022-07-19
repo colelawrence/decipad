@@ -111,7 +111,7 @@
     "@types/apache-arrow": "npm:@apache-arrow/ts@^8.0.0",
     "@types/lodash": "^4.14.182",
     "@udecode/plate": "14.4.3",
-    "@udecode/plate-juice": "^14.0.0",
+    "@udecode/plate-juice": "^15.0.0",
     "@urql/devtools": "^2.0.3",
     "@urql/exchange-graphcache": "^4.4.2",
     "@xzar90/react-router-hash-link": "^6",

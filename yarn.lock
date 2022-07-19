@@ -9605,19 +9605,6 @@
     "@udecode/plate-core" "14.4.2"
     downshift "^6.1.7"
 
-"@udecode/plate-core@14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-14.0.0.tgz#e8c4641f7ca6900faf0167cd7c4b1a1b8845876e"
-  integrity sha512-jED+in3TpUxRJxw7iXY1aogN5MzXHhUidflZUDuSbvm2Ti53Pct3ICG/pDcIDqXd0wOoHSk4J5vZ82tO/vi93A==
-  dependencies:
-    "@radix-ui/react-slot" "^0.1.2"
-    "@udecode/zustood" "^1.1.1"
-    clsx "^1.1.1"
-    jotai "^1.7.2"
-    lodash "^4.17.21"
-    use-deep-compare "^1.1.0"
-    zustand "^3.7.2"
-
 "@udecode/plate-core@14.4.2":
   version "14.4.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-14.4.2.tgz#4a1f621d6218bda77321904d8706c80d70a40652"
@@ -9628,6 +9615,20 @@
     clsx "^1.1.1"
     jotai "^1.7.2"
     lodash "^4.17.21"
+    use-deep-compare "^1.1.0"
+    zustand "^3.7.2"
+
+"@udecode/plate-core@15.0.0":
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-15.0.0.tgz#5bd925cfc4306b1c66f0f20f034b29d9b2bd3b1b"
+  integrity sha512-ipArK9gBnjyfUWz8rh14YLCE5XlISdnSr3QpgHBFi0qdd0l3LcDaK8b+C7bVTrfgzf0o8gIhzgquNg2mxkXFQQ==
+  dependencies:
+    "@radix-ui/react-slot" "^0.1.2"
+    "@udecode/zustood" "^1.1.1"
+    clsx "^1.1.1"
+    jotai "^1.7.2"
+    lodash "^4.17.21"
+    react-hotkeys-hook "^3.4.6"
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
@@ -9731,12 +9732,12 @@
   dependencies:
     "@udecode/plate-core" "14.4.2"
 
-"@udecode/plate-juice@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-14.0.0.tgz#a21a59ba189a258ea49a991bdba4229fce1c239d"
-  integrity sha512-nzO4rtQ3+BCWxUnN6OBHjv7rp5ozhMWw7ZNuy7wVw1ecL0yo6J8xKW59REAtzov7uJb5mTad41/zJoknLdBTrQ==
+"@udecode/plate-juice@^15.0.0":
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-15.0.0.tgz#c5f2755d38b5f7b4442408ecd2fd8a5404f838b6"
+  integrity sha512-WutmgG2VPDFrEWfRKm1IjyoRzRVdcgnusBZP/fnvhZPU7kO4lsstzQ9vs58llbLWimQsaYa7IR1anzIQBK1yJg==
   dependencies:
-    "@udecode/plate-core" "14.0.0"
+    "@udecode/plate-core" "15.0.0"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@14.4.2":
@@ -18451,6 +18452,11 @@ hosted-git-info@^4.0.1:
   dependencies:
     lru-cache "^6.0.0"
 
+hotkeys-js@3.9.3:
+  version "3.9.3"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.3.tgz#4b755cc695b388d7f93a83aff4b0c2a45719996c"
+  integrity sha512-s+f0xyvDmf6+DyrFQ2SY+eA7lbvMbjqkqi0I0SpMgnN5tZx7DeH8nsWhkJR4KEq3pxDPHJppDUhdt1rZFW5LeQ==
+
 hpack.js@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/hpack.js/-/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"
@@ -26202,6 +26208,13 @@ react-hotjar@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/react-hotjar/-/react-hotjar-5.0.0.tgz#72beaa2e0067b407c4183dc3ace5020f68959cab"
   integrity sha512-nEKDm+O5a77C9DlheuA9tz5rwhRjeIFPLhdvynGFxEYTT1qrYC3NU12Z9/tgvN2l9Tzyn7erUQ0C8fZHZBceTw==
+
+react-hotkeys-hook@^3.4.6:
+  version "3.4.6"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-3.4.6.tgz#21eda8e97121583a14056479e3eea9e51d2e2a69"
+  integrity sha512-SiGKHnauaAQglRA7qeiW5LTa0KoT2ssv8YGYKZQoM3P9v5JFEHJdXOSFml1N6K86oKQ8dLCLlxqBqGlSJWGmxQ==
+  dependencies:
+    hotkeys-js "3.9.3"
 
 react-icons@^4.2.0:
   version "4.4.0"
