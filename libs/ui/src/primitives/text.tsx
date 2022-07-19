@@ -1,6 +1,6 @@
 import { CSSObject, Global } from '@emotion/react';
-import { cssVar, setCssVar } from './var';
 import { allianceNo1Medium } from '../fonts';
+import { cssVar, setCssVar } from './var';
 
 export type TypographyStyles = Readonly<
   Required<
@@ -193,7 +193,8 @@ export const p32Medium: TypographyStyles = {
 
 // monospace
 
-const mFontFamily: TypographyStyles['fontFamily'] = '"Inter", monospace';
+const mFontFamily: TypographyStyles['fontFamily'] =
+  '"ABCDiatypeMono-Regular", monospace';
 
 export const code: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
