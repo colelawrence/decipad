@@ -3,6 +3,7 @@ import {
   inverseExponent,
   serializeType,
 } from '@decipad/language';
+import produce from 'immer';
 import { formatType, formatTypeToBasicString } from './formatType';
 import { u, U } from './testUtils';
 
@@ -13,6 +14,8 @@ const second = u('seconds');
 
 it('type can be stringified', () => {
   expect(formatType(locale, serializeType(t.number()))).toEqual('<number>');
+  expect(formatType(locale, serializeType(t.nothing()))).toEqual('nothing');
+  expect(formatType(locale, serializeType(t.anything()))).toEqual('anything');
   expect(formatType(locale, serializeType(t.number([meter])))).toEqual(
     'meters'
   );
@@ -55,6 +58,20 @@ it('type can be stringified', () => {
 
   const nestedCol = serializeType(t.column(t.column(t.string(), 4), 6));
   expect(formatType(locale, nestedCol)).toEqual('<string> x 4 x 6');
+});
+
+it('annotates symbol if present', () => {
+  expect(
+    formatType(
+      locale,
+      serializeType(
+        produce(t.anything(), (withSymbol) => {
+          // eslint-disable-next-line no-param-reassign
+          withSymbol.symbol = 'T';
+        })
+      )
+    )
+  ).toEqual('anything:T');
 });
 
 it('can be stringified in basic form', () => {

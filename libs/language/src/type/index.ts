@@ -84,6 +84,12 @@ export class Type {
   // Set to true when no data will be present. Used for empty blocks
   nothingness = false;
 
+  // Set to true when it can be anything. Used for narrowing when you don't care about the insides of composite types
+  anythingness = false;
+
+  // Associates the type to a symbol
+  symbol: string | null = null;
+
   // Return the first type that has an error, or the last one.
   static combine(initialType: Type, ...types: CombineArg[]): Type {
     let lastNonErrorType = initialType;

@@ -356,6 +356,16 @@ export function equalOrUnknown(a: number | 'unknown', b: number | 'unknown') {
   return a === b;
 }
 
+export function equalOrUndefined<T>(
+  a: T | null | undefined,
+  b: T | null | undefined
+) {
+  if (a == null || b == null) {
+    return true;
+  }
+  return a === b;
+}
+
 export function identity<T>(o: T): T {
   return o;
 }

@@ -1,3 +1,4 @@
+import { immerable } from 'immer';
 import { Time, Type, Units } from '..';
 
 export type ErrSpec =
@@ -101,7 +102,10 @@ export type ErrSpec =
 
 // exhaustive switch
 export class InferError extends Error {
+  [immerable] = true;
+
   spec: ErrSpec;
+  pathToError: ('range' | 'column')[] = [];
 
   constructor(spec: string | ErrSpec) {
     if (typeof spec === 'string') {

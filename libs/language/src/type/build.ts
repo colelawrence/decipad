@@ -117,6 +117,11 @@ export const nothing = () =>
     fType.nothingness = true;
   });
 
+export const anything = () =>
+  produce(new Type(), (anyType) => {
+    anyType.anythingness = true;
+  });
+
 export const impossible = (
   errorCause: string | InferError,
   inNode: AST.Node | null = null

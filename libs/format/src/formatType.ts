@@ -1,12 +1,27 @@
-import { SerializedType } from '@decipad/language';
+import type { SerializedType } from '@decipad/language';
 import { zip } from '@decipad/utils';
 import { formatUnit } from './formatUnit';
+import { formatError } from './formatError';
 
-export const formatType = (
+export function formatType(
   locale: string,
   type: SerializedType,
   { isTableColumn = false }: { isTableColumn?: boolean } = {}
-): string => {
+): string {
+  // eslint-disable-next-line no-use-before-define
+  const inner = formatTypeInner(locale, type, { isTableColumn });
+
+  if (type.symbol) {
+    return `${inner}:${type.symbol}`;
+  }
+  return inner;
+}
+
+export function formatTypeInner(
+  locale: string,
+  type: SerializedType,
+  { isTableColumn }: { isTableColumn: boolean }
+): string {
   switch (type.kind) {
     case 'boolean':
       return '<boolean>';
@@ -14,6 +29,8 @@ export const formatType = (
       return type.date;
     case 'nothing':
       return 'nothing';
+    case 'anything':
+      return 'anything';
     case 'string':
       return '<string>';
     case 'function':
@@ -48,9 +65,9 @@ export const formatType = (
       return columnStr;
     }
     case 'type-error':
-      return `Error: ${JSON.stringify(type.errorCause)}`;
+      return `Error: ${formatError(locale, type.errorCause)}`;
   }
-};
+}
 
 export const formatTypeToBasicString = (
   locale: string,
