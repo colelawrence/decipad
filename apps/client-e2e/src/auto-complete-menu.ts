@@ -24,6 +24,12 @@ describe('auto complete menu', () => {
     await waitForExpect(async () => {
       expect(await page.$('.test-auto-complete-menu')).not.toBeNull();
     });
+    // Wait for result to appear. Avoids flaky snapshots.
+    await waitForExpect(async () => {
+      expect(
+        (await page.$$("span:has-text('1 MyV')")).length
+      ).toBeGreaterThanOrEqual(1);
+    });
     await percySnapshot(page, 'Auto Complete Menu: Open');
   });
 
