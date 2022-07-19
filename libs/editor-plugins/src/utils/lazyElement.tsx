@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { PlateComponent } from '@decipad/editor-types';
+import type { PlateComponent } from '@decipad/editor-types';
 import { LoadingIndicator } from '@decipad/ui';
 import { useLockEditorWriting } from '@decipad/react-contexts';
 

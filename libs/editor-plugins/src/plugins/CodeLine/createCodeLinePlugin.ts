@@ -4,19 +4,12 @@ import { decorateCode } from '@decipad/editor-utils';
 import { deserializeCodeLineHtml } from './deserializeCodeLineHtml';
 import { serializeCodeLineHtml } from './serializeCodeLineHtml';
 import { onDropCodeLine } from './onDropCodeLine';
-import { lazyElementComponent } from '../../utils/lazyElement';
-
-const loadCodeLine = () =>
-  import(/* webpackChunkName: "editor-code-line" */ './CodeLine');
-// prefetch
-loadCodeLine();
-
-const LazyCodeLine = lazyElementComponent(loadCodeLine);
+import CodeLine from './CodeLine';
 
 export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_CODE_LINE,
   isElement: true,
-  component: LazyCodeLine,
+  component: CodeLine,
   deserializeHtml: deserializeCodeLineHtml,
   serializeHtml: serializeCodeLineHtml,
   decorate: decorateCode(computer, ELEMENT_CODE_LINE),
