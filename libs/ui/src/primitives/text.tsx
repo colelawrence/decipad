@@ -2,6 +2,14 @@ import { CSSObject, Global } from '@emotion/react';
 import { allianceNo1Medium } from '../fonts';
 import { cssVar, setCssVar } from './var';
 
+/** When the browser is being automated by a test driver, use the fallback font */
+const simpleFontIfTesting = (font: string, fallback: string) => {
+  if (globalThis.navigator?.webdriver) {
+    return fallback;
+  }
+  return `${font}, ${fallback}`;
+};
+
 export type TypographyStyles = Readonly<
   Required<
     Pick<
@@ -24,9 +32,10 @@ const usualRemPxs = 16;
 
 // heading
 
-const hFontFamily: TypographyStyles['fontFamily'] =
-  'Inter, "Neue Haas Grotesk Display Pro", Helvetica, "Open Sans", sans-serif';
-
+const hFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
+  'Inter, "Neue Haas Grotesk Display Pro", Helvetica, "Open Sans"',
+  'sans-serif'
+);
 const hDefault: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   color: cssVar('currentTextColor'),
@@ -67,7 +76,10 @@ export const h2: TypographyStyles = {
 
 // paragraph
 
-const pFontFamily: TypographyStyles['fontFamily'] = 'Inter, sans-serif';
+const pFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
+  'Inter',
+  'sans-serif'
+);
 
 const pDefault: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),
@@ -193,8 +205,10 @@ export const p32Medium: TypographyStyles = {
 
 // monospace
 
-const mFontFamily: TypographyStyles['fontFamily'] =
-  '"ABCDiatypeMono-Regular", monospace';
+const mFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
+  '"ABCDiatypeMono-Regular"',
+  'monospace'
+);
 
 export const code: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
