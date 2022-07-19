@@ -20,6 +20,7 @@ import {
   TNode,
 } from '@udecode/plate';
 import { parseNumberWithUnit } from '@decipad/computer';
+import { Path } from 'slate';
 
 const isExpression = (n: TNode) =>
   isElement(n) && n.type === ELEMENT_EXPRESSION;
@@ -31,8 +32,11 @@ export const createSliderExpressionSyncPlugin =
     plugin: (editor, apply) => {
       return (op) => {
         apply(op);
-
-        if (op.type !== 'set_node' && op.type !== 'insert_text') {
+        if (
+          op.type !== 'set_node' &&
+          op.type !== 'insert_text' &&
+          op.type !== 'remove_text'
+        ) {
           return;
         }
 
@@ -43,8 +47,7 @@ export const createSliderExpressionSyncPlugin =
           return;
         }
 
-        const [node] = entry;
-
+        const [node, path] = entry;
         if (
           op.type === 'set_node' &&
           node.type === ELEMENT_SLIDER &&
@@ -53,7 +56,7 @@ export const createSliderExpressionSyncPlugin =
           const [sliderNode, sliderPath] = entry;
           const expressionEntry = getPreviousNode<ExpressionElement>(editor, {
             at: sliderPath,
-            match: isExpression,
+            match: (n, p) => isExpression(n) && Path.isSibling(path, p),
           });
           if (!expressionEntry) {
             return;
@@ -72,11 +75,14 @@ export const createSliderExpressionSyncPlugin =
           });
         }
 
-        if (op.type === 'insert_text' && node.type === ELEMENT_EXPRESSION) {
+        if (
+          (op.type === 'insert_text' || op.type === 'remove_text') &&
+          node.type === ELEMENT_EXPRESSION
+        ) {
           const [expressionNode, expressionPath] = entry;
           const sliderEntry = getNextNode<SliderElement>(editor, {
             at: expressionPath,
-            match: isSlider,
+            match: (n, p) => isSlider(n) && Path.isSibling(path, p),
           });
           if (!sliderEntry) {
             return;
