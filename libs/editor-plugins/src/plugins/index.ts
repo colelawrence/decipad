@@ -34,3 +34,4 @@ export * from './SyntaxErrorHighlight';
 export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './WithDocSyncHistory';
+export * from './TabIndent';

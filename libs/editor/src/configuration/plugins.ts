@@ -32,6 +32,7 @@ import {
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
+  createTabIndentPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -74,6 +75,7 @@ export const plugins = (computer: Computer) =>
       createBlockquotePlugin(),
       createHeadingPlugin({ options: { levels: 3 } }),
       createListPlugin(),
+
       createCalloutPlugin(),
       createDividerPlugin(),
 
@@ -129,6 +131,7 @@ export const plugins = (computer: Computer) =>
       createAutoCompleteMenuPlugin(),
       createSyntaxErrorHighlightPlugin(),
       createAutoPairsPlugin(),
+      createTabIndentPlugin(),
 
       // user parse errors
       createDecorateUserParseErrorsPlugin(computer),
