@@ -21,4 +21,4 @@ fi
 
 services_setup
 
-nx e2e client-e2e $@
+nx e2e client-e2e --skip-nx-cache $@
