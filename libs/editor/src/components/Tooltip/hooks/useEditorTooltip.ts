@@ -35,7 +35,6 @@ export const useEditorTooltip = (): UseEditorTooltip => {
   const selection = useSelection();
 
   // As long as we only ever `setIsActive(true)` we don't cause infinite update loops
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const el = ref.current;
 
@@ -78,9 +77,6 @@ export const useEditorTooltip = (): UseEditorTooltip => {
     return () => {
       if (el) {
         el.removeAttribute('style');
-      }
-      if (isActive) {
-        setIsActive(false);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

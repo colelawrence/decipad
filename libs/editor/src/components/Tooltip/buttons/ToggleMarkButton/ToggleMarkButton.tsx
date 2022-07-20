@@ -5,8 +5,9 @@ import {
   toggleMark,
 } from '@udecode/plate';
 import { cssVar } from 'libs/ui/src/primitives';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { MyMark, useTEditorRef } from '@decipad/editor-types';
+import { useEditorChange } from '@decipad/react-contexts';
 import { dividerStyle } from '../../styles/divider';
 
 const buttonStyles = css({
@@ -47,19 +48,29 @@ export const ToggleMarkButton = ({
 }: ToggleMarkButtonProps): ReturnType<FC> => {
   const editor = useTEditorRef();
 
-  const isActive = !!editor?.selection && isMarkActive(editor, type);
+  const [active, setActive] = useState(
+    !!editor?.selection && isMarkActive(editor, type)
+  );
+
+  useEditorChange(
+    (result: boolean) => {
+      setActive(result);
+    },
+    () => !!editor?.selection && isMarkActive(editor, type)
+  );
 
   return (
     <>
       {divider && <div css={dividerStyle} />}
       <button
         className="toggle"
-        css={[buttonStyles, isActive && activeButtonStyles]}
-        onMouseDown={
-          editor
-            ? getPreventDefaultHandler(toggleMark, editor, { key: type })
-            : undefined
-        }
+        css={[buttonStyles, active && activeButtonStyles]}
+        onMouseDown={(e) => {
+          if (editor) {
+            setActive(!active);
+            getPreventDefaultHandler(toggleMark, editor, { key: type })(e);
+          }
+        }}
       >
         {icon}
       </button>
