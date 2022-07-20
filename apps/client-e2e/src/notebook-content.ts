@@ -24,9 +24,7 @@ describe('notebook content', () => {
   });
 
   it('can make bold using the toolbar', async () => {
-    const p = await page.locator(
-      'text=this is the content for the first paragraph'
-    );
+    const p = page.locator('text=this is the content for the first paragraph');
     await p.selectText();
 
     await percySnapshot(page, 'Notebook: Text Toolbar');

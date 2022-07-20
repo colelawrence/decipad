@@ -1,4 +1,4 @@
-import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { render, waitFor } from '@testing-library/react';
 import {
   createParagraphPlugin,
@@ -34,6 +34,24 @@ beforeEach(() => {
     plugins,
   };
   editor = createPlateEditor({ plugins });
+});
+
+it('shows a placeholder when notebook empty and not selected', () => {
+  const renderedObject = render(
+    <Plate
+      {...plateProps}
+      editor={editor}
+      initialValue={[
+        { type: ELEMENT_H1, children: [{ text: 'title' }] },
+        { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
+      ]}
+    />,
+    {
+      wrapper,
+    }
+  );
+  const paragraphElement = renderedObject.container.querySelector('p');
+  expect(paragraphElement).toHaveAttribute('aria-placeholder');
 });
 
 it('shows a placeholder when empty and selected', async () => {
@@ -82,6 +100,7 @@ it('does not show a placeholder when not selected', async () => {
       {...plateProps}
       editor={editor}
       initialValue={[
+        { type: ELEMENT_H1, children: [{ text: 'title' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
@@ -112,6 +131,7 @@ it('does not show a placeholder when selecting more than the paragraph', async (
       {...plateProps}
       editor={editor}
       initialValue={[
+        { type: ELEMENT_H1, children: [{ text: 'title' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}

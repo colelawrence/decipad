@@ -5,6 +5,8 @@ import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 
+const PLACEHOLDER_TEXT = 'Type “/” for commands or write text';
+
 export const Paragraph: PlateComponent = ({
   attributes,
   children,
@@ -19,18 +21,19 @@ export const Paragraph: PlateComponent = ({
 
   const selected = useSelected();
 
+  // If notebook is empty, we display the placeholder, even if not selected.
+  const needPlaceholder =
+    !readOnly &&
+    ((editor.children.length === 2 && isElementEmpty(editor, element)) ||
+      (isElementEmpty(editor, element) &&
+        selected &&
+        !isSelectionExpanded(editor)));
+
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="paragraph" element={element}>
         <atoms.Paragraph
-          placeholder={
-            isElementEmpty(editor, element) &&
-            selected &&
-            !isSelectionExpanded(editor) &&
-            !readOnly
-              ? 'Type “/” for commands or write text'
-              : undefined
-          }
+          placeholder={needPlaceholder ? PLACEHOLDER_TEXT : undefined}
         >
           {children}
         </atoms.Paragraph>
