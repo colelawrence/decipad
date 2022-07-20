@@ -1,31 +1,18 @@
 import { ELEMENT_LINK, PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useSafeState } from '@decipad/react-utils';
 import { atoms } from '@decipad/ui';
+import { useLink } from '@udecode/plate';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 
-export const Link: PlateComponent = ({ attributes, children, element }) => {
+export const Link: PlateComponent = (props) => {
+  const { children, element } = props;
   assertElementType(element, ELEMENT_LINK);
-  const [contentEditable, setContentEditable] = useSafeState(true);
+  const readOnly = useIsEditorReadOnly();
 
-  return (
-    <span
-      {...attributes}
-      onPointerDown={() => {
-        setContentEditable(false);
-      }}
-      onPointerUp={() => {
-        setTimeout(() => {
-          setContentEditable(true);
-        }, 0);
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-      contentEditable={contentEditable}
-      // We're already in a contentEditable context handled by Slate
-      suppressContentEditableWarning
-    >
-      <atoms.Link href={element.url}>{children}</atoms.Link>
-    </span>
-  );
+  const htmlProps = useLink({
+    ...(props as any),
+    onClick: (e) => !readOnly && e.preventDefault(),
+  });
+
+  return <atoms.Link {...htmlProps}>{children}</atoms.Link>;
 };

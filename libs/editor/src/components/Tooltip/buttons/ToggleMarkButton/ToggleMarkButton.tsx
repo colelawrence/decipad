@@ -1,39 +1,13 @@
-import { css } from '@emotion/react';
 import {
   getPreventDefaultHandler,
   isMarkActive,
   toggleMark,
 } from '@udecode/plate';
-import { cssVar } from 'libs/ui/src/primitives';
 import { FC, useState } from 'react';
 import { MyMark, useTEditorRef } from '@decipad/editor-types';
+import { atoms } from '@decipad/ui';
 import { useEditorChange } from '@decipad/react-contexts';
 import { dividerStyle } from '../../styles/divider';
-
-const buttonStyles = css({
-  backgroundColor: 'transparent',
-  border: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  height: '100%',
-  borderRadius: '3px',
-  padding: '0 8px',
-  cursor: 'pointer',
-  transition: 'background-color 0.2s ease-out',
-  '&:hover': {
-    backgroundColor: `${cssVar('highlightColor')}`,
-  },
-  '> div > svg > path': {
-    transition: 'stroke 0.2s ease-out',
-  },
-});
-
-const activeButtonStyles = css({
-  '> div > svg > path': {
-    stroke: `${cssVar('normalTextColor')}`,
-    strokeWidth: '2',
-  },
-});
 
 interface ToggleMarkButtonProps {
   type: MyMark;
@@ -62,9 +36,9 @@ export const ToggleMarkButton = ({
   return (
     <>
       {divider && <div css={dividerStyle} />}
-      <button
+      <atoms.FloatingButton
         className="toggle"
-        css={[buttonStyles, active && activeButtonStyles]}
+        isActive={active}
         onMouseDown={(e) => {
           if (editor) {
             setActive(!active);
@@ -73,7 +47,7 @@ export const ToggleMarkButton = ({
         }}
       >
         {icon}
-      </button>
+      </atoms.FloatingButton>
     </>
   );
 };

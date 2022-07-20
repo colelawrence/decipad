@@ -16,9 +16,4 @@ export const wrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   padding: '6px',
-  position: 'absolute',
-  left: '-9999px',
-  top: '-9999px',
-  opacity: 0,
-  transition: 'opacity 0.2s ease-out',
 });

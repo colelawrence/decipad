@@ -11,7 +11,6 @@ import {
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
   createLayoutColumnsPlugin,
-  createLinkPlugin,
   createMarksPlugins,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
@@ -32,6 +31,7 @@ import {
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
+  linkPlugin,
   createTabIndentPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
@@ -120,7 +120,7 @@ export const plugins = (computer: Computer) =>
       // creating elements
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ...(createMarksPlugins() as any[]),
-      createLinkPlugin(),
+      linkPlugin,
       createTAutoformatPlugin({
         options: { rules: autoformatRules },
       }),

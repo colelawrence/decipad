@@ -10,11 +10,11 @@ import {
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { PortalBody } from '@udecode/plate';
 import { FC, ReactElement } from 'react';
 import { ToggleMarkButton } from './buttons/ToggleMarkButton/ToggleMarkButton';
 import { useEditorTooltip } from './hooks/useEditorTooltip';
 import { wrapperStyles } from './styles/wrapper';
+import { LinkButton } from './buttons/LinkButton';
 
 const iconWrapper = css({
   width: '16px',
@@ -85,18 +85,22 @@ const toolTipMarks: TooltipMark[] = [
 ];
 
 export const Tooltip = (): ReturnType<FC> => {
-  const { active, ref } = useEditorTooltip();
+  const { floating, style } = useEditorTooltip();
+
   const readOnly = useIsEditorReadOnly();
 
-  if (readOnly || !active) return null;
+  if (readOnly) return null;
 
   return (
-    <PortalBody>
-      <div ref={ref} css={wrapperStyles}>
-        {toolTipMarks.map((m) => (
-          <ToggleMarkButton key={m.type} {...m} />
-        ))}
-      </div>
-    </PortalBody>
+    <div ref={floating} style={style} css={wrapperStyles}>
+      {toolTipMarks.map((m) => (
+        <ToggleMarkButton key={m.type} {...m} />
+      ))}
+      <LinkButton>
+        <div css={iconWrapper}>
+          <icons.Link />
+        </div>
+      </LinkButton>
+    </div>
   );
 };

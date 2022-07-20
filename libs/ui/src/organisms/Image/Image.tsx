@@ -1,4 +1,4 @@
-import { Box, Image as PlateImage, ImageProps } from '@udecode/plate';
+import { Box, Image as PlateImage } from '@udecode/plate';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { ImageElement, MyElement, PlateComponent } from '@decipad/editor-types';
 import { css } from '@emotion/react';
@@ -124,9 +124,8 @@ type ImageComponent = PlateComponent<{
 export const Image: ImageComponent = ({
   draggableBlock: Draggable,
   readOnly,
-  ..._props
+  ...props
 }) => {
-  const props = _props as unknown as ImageProps;
   const { children, element } = props;
 
   const focused = useFocused();
@@ -134,7 +133,7 @@ export const Image: ImageComponent = ({
   const isSelected = !readOnly && focused && selected;
 
   return (
-    <PlateImage.Root css={rootStyles} {...props}>
+    <PlateImage.Root css={rootStyles} {...(props as any)}>
       <Draggable
         blockKind="image"
         element={element as ImageElement}

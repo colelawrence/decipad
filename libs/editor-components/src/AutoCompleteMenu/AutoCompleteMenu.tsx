@@ -1,6 +1,6 @@
 import { useComputer } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { useSelected, useFocused } from 'slate-react';
+import { useFocused, useSelected } from 'slate-react';
 import { findWordStart, useSelection } from '@decipad/editor-utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';

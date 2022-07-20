@@ -18,6 +18,7 @@ export { DropLine } from './DropLine/DropLine';
 export { EditorBlock } from './EditorBlock/EditorBlock';
 export { EditorColumns } from './EditorColumns/EditorColumns';
 export { ErrorMessage } from './ErrorMessage/ErrorMessage';
+export { FloatingButton } from './FloatingButton/FloatingButton';
 export { Heading1 } from './Heading1/Heading1';
 export { Heading2 } from './Heading2/Heading2';
 export { Highlight } from './Highlight/Highlight';

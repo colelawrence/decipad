@@ -1,22 +1,27 @@
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { HTMLPropsAs } from '@udecode/plate';
 import { malibu700, p16Regular } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const styles = css(p16Regular, {
-  textDecoration: 'underline',
+  display: 'inline',
   color: malibu700.rgb,
-  cursor: 'pointer',
+  textDecoration: 'underline',
+
+  ':hover,:visited:hover': {
+    color: malibu700.rgb,
+  },
+  ':visited': { color: malibu700.rgb },
 });
 
-interface LinkProps {
-  readonly children: ReactNode;
-  readonly href: string;
-}
+interface LinkProps extends HTMLPropsAs<'a'> {}
 
-export const Link = ({ children, href }: LinkProps): ReturnType<React.FC> => {
+export const Link = ({
+  children,
+  ...props
+}: LinkProps): ReturnType<React.FC> => {
   return (
-    <Anchor css={styles} href={href}>
+    <Anchor css={styles} {...(props as any)}>
       {children}
     </Anchor>
   );

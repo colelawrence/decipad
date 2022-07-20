@@ -9,6 +9,7 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_LI,
   ELEMENT_LIC,
+  ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
@@ -34,6 +35,7 @@ import {
   Highlight,
   Image,
   Italic,
+  Link,
   ListItem,
   ListItemContent,
   OrderedList,
@@ -61,7 +63,7 @@ export const components = (computer: Computer): PlateComponents => ({
   [ELEMENT_CALLOUT]: Callout,
   [ELEMENT_HR]: Divider,
 
-  // media
+  // Media
   [ELEMENT_IMAGE]: Image,
 
   // Code
@@ -72,6 +74,9 @@ export const components = (computer: Computer): PlateComponents => ({
   [ELEMENT_OL]: OrderedList,
   [ELEMENT_LI]: ListItem,
   [ELEMENT_LIC]: ListItemContent,
+
+  // Inlines
+  [ELEMENT_LINK]: Link,
 
   // Marks
   [MARK_BOLD]: Bold,
