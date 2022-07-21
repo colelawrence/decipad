@@ -168,6 +168,20 @@ export interface Table {
   end?: Pos;
 }
 
+export interface MatchDef {
+  type: 'matchdef';
+  args: [Expression, Expression];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface Match {
+  type: 'match';
+  args: MatchDef[];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface PropertyAccess {
   type: 'property-access';
   args: [Expression, string];
@@ -308,7 +322,8 @@ export type Expression =
   | Table
   | FetchData
   | Directive
-  | MatrixRef;
+  | MatrixRef
+  | Match;
 
 export type Statement =
   | FunctionDefinition
@@ -331,7 +346,8 @@ export type Node =
   | Identifier
   | Lists
   | TableColumn
-  | TableSpread;
+  | TableSpread
+  | MatchDef;
 
 export interface TypeToNode {
   noop: Noop;
@@ -368,4 +384,6 @@ export interface TypeToNode {
   'function-definition': FunctionDefinition;
   block: Block;
   'fetch-data': FetchData;
+  match: Match;
+  matchdef: MatchDef;
 }

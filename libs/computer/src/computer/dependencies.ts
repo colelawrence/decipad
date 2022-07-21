@@ -72,7 +72,9 @@ function findRefs(node: AST.Node): string[] {
       const [, where, assignee] = node.args;
       return unique([...findRefs(where), ...findRefs(assignee)]);
     }
-    case 'matrix-ref': {
+    case 'matrix-ref':
+    case 'match':
+    case 'matchdef': {
       return unique(node.args.flatMap(findRefs));
     }
     case 'ref':

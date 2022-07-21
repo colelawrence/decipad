@@ -19,6 +19,7 @@ import { inferMatrixAssign, inferMatrixRef } from '../matrix';
 import { inferCategories } from '../categories';
 import { inferFunctionDefinition, inferFunctionCall } from './functions';
 import { getConstantByName } from '../builtins';
+import { inferMatch } from '../match/inferMatch';
 
 export { makeContext };
 export type { Context };
@@ -222,6 +223,8 @@ export const inferExpression = wrap(
         const [name, ...args] = expr.args;
         return expandDirectiveToType(expr, ctx, name, args);
       }
+      case 'match':
+        return inferMatch(ctx, expr);
     }
   }
 );

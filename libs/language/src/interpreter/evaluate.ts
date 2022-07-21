@@ -21,6 +21,7 @@ import { isPreviousRef } from '../previous-ref';
 import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
 import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
+import { evaluateMatch } from '../match/evaluateMatch';
 
 // Gets a single value from an expanded AST.
 
@@ -208,6 +209,9 @@ export async function evaluate(
     case 'directive': {
       const [name, ...args] = node.args;
       return expandDirectiveToValue(node, realm, name, args);
+    }
+    case 'match': {
+      return evaluateMatch(realm, node);
     }
   }
 }

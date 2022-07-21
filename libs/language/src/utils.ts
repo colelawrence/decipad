@@ -153,6 +153,14 @@ export function as(left: AST.Expression, units: AST.Expression) {
   return n('directive', 'as', left, units);
 }
 
+export function match(...defs: AST.MatchDef[]) {
+  return n('match', ...defs);
+}
+
+export function matchDef(cond: AST.Expression, value: AST.Expression) {
+  return n('matchdef', cond, value);
+}
+
 export function funcDef(
   fName: string,
   args: string[],

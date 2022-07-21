@@ -1403,6 +1403,74 @@ let ParserRules = [
       return [ref, cols];
     },
   },
+  {
+    name: 'match',
+    symbols: [
+      { literal: 'match' },
+      '_',
+      { literal: '{' },
+      'matchContents',
+      { literal: '}' },
+    ],
+    postprocess: (d) =>
+      addArrayLoc(
+        {
+          type: 'match',
+          args: d[3],
+        },
+        d
+      ),
+  },
+  { name: 'matchContents', symbols: ['_'], postprocess: (d) => [] },
+  { name: 'matchContents$ebnf$1', symbols: [] },
+  {
+    name: 'matchContents$ebnf$1$subexpression$1',
+    symbols: ['matchDefSep', 'matchDef'],
+  },
+  {
+    name: 'matchContents$ebnf$1',
+    symbols: ['matchContents$ebnf$1', 'matchContents$ebnf$1$subexpression$1'],
+    postprocess: function arrpush(d) {
+      return d[0].concat([d[1]]);
+    },
+  },
+  {
+    name: 'matchContents',
+    symbols: ['_', 'matchDef', 'matchContents$ebnf$1', '_'],
+    postprocess: (d) => {
+      const [_ws, first, rest] = d;
+      const matchdefs = [first];
+
+      for (const [_sep, matchdef] of rest ?? []) {
+        matchdefs.push(matchdef);
+      }
+
+      return matchdefs;
+    },
+  },
+  {
+    name: 'matchDef',
+    symbols: ['expression', '_', { literal: ':' }, '_', 'expression'],
+    postprocess: (d) =>
+      addArrayLoc(
+        {
+          type: 'matchdef',
+          args: [d[0], d[4]],
+        },
+        d
+      ),
+  },
+  { name: 'matchDefSep$subexpression$1', symbols: ['__n'] },
+  {
+    name: 'matchDefSep$subexpression$1',
+    symbols: ['_', { literal: ',' }, '_'],
+  },
+  {
+    name: 'matchDefSep',
+    symbols: ['matchDefSep$subexpression$1'],
+    postprocess: id,
+  },
+  { name: 'expression', symbols: ['match'], postprocess: id },
   { name: 'expression', symbols: ['overExp'], postprocess: id },
   { name: 'expression', symbols: ['fetchData'], postprocess: id },
   { name: 'overExp', symbols: ['asExp'], postprocess: id },
