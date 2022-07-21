@@ -7,10 +7,8 @@ import {
   compareDimensions,
   deLinearizeType,
   getCardinality,
-  heightenDimensionsIfNecessary,
-  heightenValueDimensionsIfNecessary,
   linearizeType,
-  validateCardinalities,
+  findInvalidCardinality,
 } from './common';
 import { getReductionPlan } from './getReductionPlan';
 import { groupTypesByDimension } from './multidimensional-utils';
@@ -30,10 +28,13 @@ export const automapTypes = (
   mapFn: (types: Type[]) => Type,
   expectedCardinalities = arrayOfOnes(argTypes.length)
 ): Type => {
-  argTypes = heightenDimensionsIfNecessary(argTypes, expectedCardinalities);
+  const invalidCardinality = findInvalidCardinality(
+    argTypes,
+    expectedCardinalities
+  );
 
-  if (!validateCardinalities(argTypes, expectedCardinalities)) {
-    return t.impossible('A column is required');
+  if (invalidCardinality) {
+    return invalidCardinality.expected(t.column(t.anything()));
   }
 
   if (expectedCardinalities.every((c) => c === 1)) {
@@ -73,14 +74,7 @@ export const automapValues = (
   mapFn: (values: Value.Value[], types: Type[]) => Value.Value,
   expectedCardinalities = arrayOfOnes(argValues.length)
 ): Value.Value => {
-  [argTypes, argValues] = heightenValueDimensionsIfNecessary(
-    argTypes,
-    argValues,
-    expectedCardinalities
-  );
-
-  // todo necessary?
-  if (!validateCardinalities(argTypes, expectedCardinalities)) {
+  if (findInvalidCardinality(argTypes, expectedCardinalities)) {
     throw new Error('panic: one or more cardinalities are too low');
   }
 
@@ -132,10 +126,9 @@ export const automapTypesForReducer = (
   argType: Type,
   mapFn: (types: Type[]) => Type
 ): Type => {
-  [argType] = heightenDimensionsIfNecessary([argType], [2]);
-
-  if (!validateCardinalities([argType], [2])) {
-    return t.impossible('A column is required');
+  const invalidCardinality = findInvalidCardinality([argType], [2]);
+  if (invalidCardinality) {
+    return invalidCardinality.expected(t.column(t.anything()));
   }
 
   if (getCardinality(argType) === 2) {
@@ -156,13 +149,7 @@ export const automapValuesForReducer = (
   argValue: Value.Value,
   mapFn: (values: Value.Value[], types: Type[]) => Value.Value
 ): Value.Value => {
-  [[argType], [argValue]] = heightenValueDimensionsIfNecessary(
-    [argType],
-    [argValue],
-    [2]
-  );
-
-  if (!validateCardinalities([argType], [2])) {
+  if (findInvalidCardinality([argType], [2])) {
     throw new Error('panic: cardinality is too low');
   }
 

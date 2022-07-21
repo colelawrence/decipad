@@ -38,7 +38,7 @@ cat([1, 2, 3], [4, 5, 6])
 You can also use this formula to push an element to the end of a list, resulting in a new list:
 
 ```deci live
-cat([1, 2, 3], 4)
+cat([1, 2, 3], [4])
 ==> [ 1, 2, 3, 4 ]
 ```
 
@@ -47,7 +47,7 @@ cat([1, 2, 3], 4)
 Or add an element to the beginning of a list:
 
 ```deci live
-cat(1, [2, 3, 4])
+cat([1], [2, 3, 4])
 ==> [ 1, 2, 3, 4 ]
 ```
 

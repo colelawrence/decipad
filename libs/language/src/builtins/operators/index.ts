@@ -8,5 +8,10 @@ function normalizeOpName(name: string): string {
 }
 
 export function getOperatorByName(name: string): BuiltinSpec | null {
-  return operators[normalizeOpName(name)] ?? null;
+  const op = operators[normalizeOpName(name)];
+  if (op?.aliasFor) {
+    return getOperatorByName(op.aliasFor);
+  } else {
+    return op ?? null;
+  }
 }

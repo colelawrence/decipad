@@ -88,20 +88,6 @@ describe('callBuiltin', () => {
         t.column(t.number([meter]), 3),
       ])
     ).toEqual(t.column(t.number([meter]), 5));
-
-    expect(
-      callBuiltinFunctor(nilCtx, 'cat', [
-        t.number([meter]),
-        t.column(t.number([meter]), 3),
-      ])
-    ).toEqual(t.column(t.number([meter]), 4));
-
-    expect(
-      callBuiltinFunctor(nilCtx, 'cat', [
-        t.column(t.number([meter]), 3),
-        t.number([meter]),
-      ])
-    ).toEqual(t.column(t.number([meter]), 4));
   });
 
   it('first', () => {

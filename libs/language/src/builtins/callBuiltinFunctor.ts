@@ -25,15 +25,6 @@ export const callBuiltinFunctor = (
   if (op == null) {
     return t.impossible(InferError.missingFormula(opName));
   } else {
-    if (op.aliasFor) {
-      return callBuiltinFunctor(
-        context,
-        op.aliasFor,
-        givenArguments,
-        givenValues
-      );
-    }
-
     let { argCount: argCounts = [] } = op;
     if (typeof argCounts === 'number') {
       argCounts = [argCounts];

@@ -121,7 +121,7 @@ export function formatNumber<TF extends FractionLike = FFraction>(
   }
   const asString = formatFraction(locale, fraction, decimalPlaces);
 
-  // Numbers' toString isn't always formatted like [-]####.###
+  // Fraction's toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
   const unitPart = unit ? ` ${formatUnit(locale, unit, fraction)}` : '';
   if (basicNumberMatch != null) {

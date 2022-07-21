@@ -309,6 +309,19 @@ describe('Multidimensional operations', () => {
       value: [F(1100), F(2200), F(3300)],
     });
   });
+
+  it('errors when not 1D', async () => {
+    await expect(
+      runCode(`total(1)`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"panic: cardinality is too low"`
+    );
+    await expect(
+      runCode(`cat(1, 1)`)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"panic: one or more cardinalities are too low"`
+    );
+  });
 });
 
 describe('Tables', () => {
@@ -1980,18 +1993,6 @@ describe('math operators', () => {
       type: t.number(U('grams')),
     });
   });
-  it('rounds a list of numbers', async () => {
-    expect(await runCode(`round([1.7 grams, 3.4 grams])`)).toMatchObject({
-      value: [F(2), F(3)],
-      type: t.column(t.number(U('grams')), 2),
-    });
-  });
-  it('rounds a list of lists of numbers', async () => {
-    expect(await runCode(`round([[1.7 grams, 3.4 grams]])`)).toMatchObject({
-      value: [[F(2), F(3)]],
-      type: t.column(t.column(t.number(U('grams')), 2), 1),
-    });
-  });
   it('sqrt works on units', async () => {
     expect(await runCode(`sqrt(1 banana)`)).toMatchObject({
       value: F(1),
@@ -2009,18 +2010,6 @@ describe('math operators', () => {
 describe('len', () => {
   it('len a column', async () => {
     expect(await runCode('len([1])')).toMatchObject({
-      type: {
-        type: 'number',
-      },
-      value: F(1),
-    });
-    expect(await runCode('len(1)')).toMatchObject({
-      type: {
-        type: 'number',
-      },
-      value: F(1),
-    });
-    expect(await runCode('len("contents")')).toMatchObject({
       type: {
         type: 'number',
       },

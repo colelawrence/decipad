@@ -73,6 +73,14 @@ describe('automapTypes', () => {
 
   const typeId = (t: Type[]) => t[0];
 
+  it('ensures that cardinality is high enough for the expectedCardinality array', () => {
+    const error = automapTypes([t.number()], typeId, [2]);
+    expect(error.errorCause?.spec).toMatchObject({
+      errType: 'expected-but-got',
+      expectedButGot: [t.column(t.anything()), t.number()],
+    });
+  });
+
   it('errors with incompatible dims', () => {
     const diffColLengths = automapTypes(
       [t.column(num, 1), t.column(num, 2)],
@@ -550,15 +558,6 @@ describe('automapValues', () => {
         ]
       `);
     });
-
-    it('heightens dimensions if needed', () => {
-      expect(automapValues([t.number()], [Values.fromJS(1)], sumOne, [2]))
-        .toMatchInlineSnapshot(`
-          FractionValue {
-            "value": Fraction(1),
-          }
-        `);
-    });
   });
 
   it('can take tables as arguments', () => {
@@ -655,11 +654,11 @@ describe('automap for reducers', () => {
       });
     });
 
-    it('automapTypesForReducer works with 1D arguments', () => {
-      const oneDeeType = t.number();
-
-      expect(automapTypesForReducer(oneDeeType, sumFunctor)).toMatchObject({
-        type: 'number',
+    it('ensures that cardinality is high enough', () => {
+      const error = automapTypesForReducer(t.number(), ([ret]) => ret);
+      expect(error.errorCause?.spec).toMatchObject({
+        errType: 'expected-but-got',
+        expectedButGot: [t.column(t.anything()), t.number()],
       });
     });
   });
@@ -735,24 +734,6 @@ describe('automap for reducers', () => {
       automapValuesForReducer(twoDeeType, twoDeeValue as Values.Column, mapFn);
 
       expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
-    });
-
-    it('Works with 1-dimensional arg', () => {
-      const mapFn = jest.fn(() => Values.fromJS('ret'));
-
-      const oneDeeType = t.string();
-      const oneDeeValue = Values.fromJS([new Fraction(1)]);
-
-      const ret = automapValuesForReducer(
-        oneDeeType,
-        oneDeeValue as Values.Column,
-        mapFn
-      );
-      expect(ret).toEqual(Values.fromJS('ret'));
-      expect(mapFn).toHaveBeenCalledWith(
-        [Values.Column.fromValues([oneDeeValue])],
-        [t.column(oneDeeType, 1)]
-      );
     });
   });
 });

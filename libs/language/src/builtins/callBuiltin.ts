@@ -76,16 +76,6 @@ export function callBuiltin(
     `panic: builtin not found: ${funcName}`
   );
 
-  if (op.aliasFor) {
-    return callBuiltin(
-      realm,
-      op.aliasFor,
-      argsBeforeConvert,
-      argTypes,
-      returnType
-    );
-  }
-
   let stage = 0;
   try {
     const autoConvert =
