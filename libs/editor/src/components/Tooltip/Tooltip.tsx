@@ -85,11 +85,11 @@ const toolTipMarks: TooltipMark[] = [
 ];
 
 export const Tooltip = (): ReturnType<FC> => {
-  const { floating, style } = useEditorTooltip();
+  const { floating, style, open } = useEditorTooltip();
 
   const readOnly = useIsEditorReadOnly();
 
-  if (readOnly) return null;
+  if (readOnly || !open) return null;
 
   return (
     <div ref={floating} style={style} css={wrapperStyles}>
