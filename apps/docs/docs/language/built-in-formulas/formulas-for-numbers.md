@@ -157,8 +157,41 @@ stepgrowth(BooksRead.Total)
 ==> [ 15, -3, 13, -5 ]
 ```
 
-## Trignometric 
+## Trignometric
 
+You must remember our friend Pythagoras; close. Trigonometric formulas relate an angle of a righ-angled triangle with the ratios of two side lengths. By default, they use radians, but you can also play with degrees.
 ### sin / asin
+
+```deci live
+sin(90degrees)
+==> 1
+```
+
+```deci live
+asin(1) in degrees
+==> 90 °
+```
+
 ### cos / acos
+
+```deci live
+cos(2*pi)
+==> 1
+```
+
+```deci live
+acos(1)
+==> 0 rad
+```
+
 ### tan / atan
+
+```deci live
+tan(45degrees)
+==> 1
+```
+
+```deci live
+round(atan(1) in degrees)
+==> 45 °
+```

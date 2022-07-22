@@ -347,6 +347,10 @@ Lumen can be expressed as `cd⋅sr` and we support expanding (or contracting) an
 
 The default unit is Lumen (`steraradian`, `sr`).
 
+## Angles
+
+The default unit for angles is radians (`radian`, `rad`). Alternatively, you can use degrees (`degree`, `°`).
+
 ## Currency
 
 Currencies can be expressed as their symbol or by their name.
