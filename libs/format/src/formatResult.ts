@@ -32,6 +32,9 @@ export const formatResult = (
   }
 
   if (type.type === 'number') {
+    if (type.numberFormat === 'percentage') {
+      return `${color((result as Fraction).mul(100).toString())}%`;
+    }
     const numStr = convertToMultiplierUnit(
       result as Fraction,
       type.unit

@@ -3,12 +3,12 @@
 
 import Fraction from '@decipad/fraction';
 
-function makeNumber(parentNode, n) {
+function makeNumber(parentNode, n, numberFormat = undefined) {
   const fraction = n instanceof Fraction ? n : new Fraction(n);
 
   const node = {
     type: 'literal',
-    args: ['number', fraction]
+    args: numberFormat ? ['number', fraction, numberFormat] : ['number', fraction],
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);
@@ -66,37 +66,46 @@ negPosNumber -> unsignedNumber                          {%
                                                           return makeNumber(d, d[0].n);
                                                         }
                                                         %}
+
 negPosNumber -> "-" unsignedNumber                      {%
                                                         (d) => {
-                                                          return makeNumber(d, new Fraction(d[1].n).neg())
+                                                          return makeNumber(d, new Fraction(d[1].n).neg());
                                                         }
                                                         %}
+
 percentage -> "-" decimal "%"                           {%
                                                         (d) => {
-                                                          return makeNumber(d, new Fraction((d[1].n).neg()).div(new Fraction(100)))
+                                                          const n = new Fraction((d[1].n).neg()).div(new Fraction(100));
+                                                          return makeNumber(d, n, 'percentage');
                                                         }
                                                         %}
+
 percentage -> decimal "%"                               {%
                                                         (d) => {
-                                                          return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(100)))
+                                                          const n = new Fraction((d[0].n)).div(new Fraction(100));
+                                                          return makeNumber(d, n, 'percentage');
                                                         }
                                                         %}
+
 permille -> "-" decimal "‰"                             {%
                                                         (d) => {
                                                           return makeNumber(d, new Fraction((d[1].n).neg()).div(new Fraction(1000)))
                                                         }
                                                         %}
+
 permille -> decimal "‰"                                 {%
                                                         (d) => {
                                                           return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(1000)))
                                                         }
                                                         %}
-permyriad -> "-" decimal "‱"                            {%
+
+permyriad -> "-" decimal "‱"                          {%
                                                         (d) => {
                                                           return makeNumber(d, new Fraction((d[1].n).neg()).div(new Fraction(10000)))
                                                         }
                                                         %}
-permyriad -> decimal "‱"                                {%
+
+permyriad -> decimal "‱"                              {%
                                                         (d) => {
                                                           return makeNumber(d, new Fraction((d[0].n)).div(new Fraction(10000)))
                                                         }

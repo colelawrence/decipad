@@ -3,20 +3,8 @@ import { walkAst, zip } from '../utils';
 import { prettyPrintAST } from './utils';
 import { parse } from '.';
 
-const walkWithUnits = (ast, fn) => {
-  walkAst(ast, (node, path) => {
-    fn(node, path);
-
-    if (node.type === 'literal' && node.args[2] != null) {
-      node.args[2].args.forEach((unit, i) => {
-        fn(unit, [...path, i]);
-      });
-    }
-  });
-};
-
 function cleanSourceMap(ast) {
-  walkWithUnits(ast, (node) => {
+  walkAst(ast, (node) => {
     delete node.end;
     delete node.start;
   });
@@ -32,7 +20,7 @@ function simplifySourceMaps(gots, expecteds) {
     const simplifiedStart = new Set();
     const simplifiedEnd = new Set();
 
-    walkWithUnits(expected, (node, path) => {
+    walkAst(expected, (node, path) => {
       const pathStr = path.toString();
       if (typeof node.start === 'number') {
         simplifiedStart.add(pathStr);
@@ -42,7 +30,7 @@ function simplifySourceMaps(gots, expecteds) {
       }
     });
 
-    walkWithUnits(got, (node, path) => {
+    walkAst(got, (node, path) => {
       const pathStr = path.toString();
       if (simplifiedStart.has(pathStr)) {
         node.start = node.start.char;

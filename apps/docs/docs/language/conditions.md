@@ -54,7 +54,7 @@ Bonus = match {
   Performance == "Exceeds": 2%
   Performance == "Greatly exceeds": 3%
 }
-==> 0.02
+==> 2%
 ```
 
 **A more complex example:**

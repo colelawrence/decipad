@@ -44,6 +44,19 @@ export function l(value: LitType): AST.Literal {
   }
 }
 
+export function num(
+  num: Fraction | number | bigint,
+  format?: AST.NumberFormat
+) {
+  const numberFrac = num instanceof Fraction ? num : new Fraction(num);
+
+  if (format) {
+    return n('literal', 'number', numberFrac, format);
+  } else {
+    return n('literal', 'number', numberFrac);
+  }
+}
+
 export function col(...values: (LitType | AST.Expression)[]): AST.Column {
   return n(
     'column',

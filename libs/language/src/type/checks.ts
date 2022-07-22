@@ -1,10 +1,11 @@
 import { dequal } from 'dequal';
-
+import { PrimitiveTypeName, Type } from '.';
 import type { Time } from '..';
 import { equalOrUnknown, getDefined, zip } from '../utils';
-import { PrimitiveTypeName, Type } from '.';
 import * as t from './build';
 import { InferError } from './InferError';
+import { propagatePercentage } from './percentages';
+import { Units, units } from './unit-type';
 import {
   combineUnits,
   inverseExponent,
@@ -14,7 +15,6 @@ import {
   setUnit,
   timeUnits,
 } from './units';
-import { Units, units } from './unit-type';
 
 const checker = <Args extends unknown[]>(
   fn: (...args: Args) => Type
@@ -47,29 +47,48 @@ export const noUnitsOrSameUnitsAs = checker((me: Type, other: Type) => {
   return !me.unit ? me : me.sameUnitsAs(other);
 });
 
+const sameNumbernessAs = (me: Type, other: Type) => {
+  me = propagatePercentage(me, other);
+
+  const matchingUnits = matchUnitArrays(me.unit, other.unit);
+  if (matchingUnits) {
+    return me;
+  }
+
+  const onlyOneHasAUnit = removeSingleUnitless(me, other);
+  if (onlyOneHasAUnit) {
+    return setUnit(me, onlyOneHasAUnit);
+  }
+  return me.withErrorCause(InferError.expectedUnit(other.unit, me.unit));
+};
+
 export const sameScalarnessAs = checker((me: Type, other: Type) => {
   const meScalar = me.type != null;
   const theyScalar = me.type != null;
 
   if (meScalar && theyScalar) {
     const matchingTypes = me.type === other.type;
-    const matchingUnits = matchUnitArrays(me.unit, other.unit);
-    const onlyOneHasAUnit = removeSingleUnitless(me, other);
-
-    if (matchingTypes && matchingUnits) {
-      return me;
-    } else if (!matchingTypes) {
+    if (!matchingTypes) {
       return me.expected(other);
-    } else if (onlyOneHasAUnit != null) {
-      return setUnit(me, onlyOneHasAUnit);
-    } else {
-      return me.withErrorCause(InferError.expectedUnit(other.unit, me.unit));
     }
+
+    if (me.type === 'number') {
+      return sameNumbernessAs(me, other);
+    }
+
+    return me;
   } else if (!meScalar && !theyScalar) {
     return me;
   } else {
     return me.expected(other);
   }
+});
+
+export const sharePercentage = checker((me: Type, other: Type) => {
+  if (me.type === 'number' && other.type === 'number') {
+    return propagatePercentage(me, other);
+  }
+  return me;
 });
 
 export const isColumn = checker((me: Type, size?: number | 'unknown') => {

@@ -47,7 +47,21 @@ export function serializeType(type: Type): SerializedType {
         rowCellNames: type.rowCellNames,
       };
     } else if (type.type === 'number') {
-      return { kind: 'number', unit: serializeUnit(type.unit) };
+      if (type.numberFormat === 'percentage' && type.unit) {
+        throw new Error('Cannot serialize a percentage number with a unit');
+      }
+
+      if (type.numberFormat) {
+        return {
+          kind: 'number',
+          numberFormat: type.numberFormat,
+        };
+      }
+
+      return {
+        kind: 'number',
+        unit: serializeUnit(type.unit),
+      };
     } else if (type.type === 'boolean') {
       return { kind: 'boolean' };
     } else if (type.type === 'string') {
@@ -102,7 +116,7 @@ export function deserializeType(type: SerializedType): Type {
     (() => {
       switch (type.kind) {
         case 'number':
-          return t.number(deserializeUnit(type.unit));
+          return t.number(deserializeUnit(type.unit), type.numberFormat);
         case 'string':
           return t.string();
         case 'boolean':

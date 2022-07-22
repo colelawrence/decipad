@@ -78,14 +78,13 @@
         "backendtypes"
       ]
     },
-    "docs": {
-      "tags": [],
-      "implicitDependencies": ["ui", "language", "computer", "react-contexts"]
+    "backend-analytics": {
+      "tags": []
     },
     "backend-test-sandbox": {
       "tags": []
     },
-    "backend-analytics": {
+    "backend-trace": {
       "tags": []
     },
     "backendtypes": {
@@ -103,6 +102,10 @@
     },
     "discord-customerservice-lambda": {
       "tags": []
+    },
+    "docs": {
+      "tags": [],
+      "implicitDependencies": ["ui", "language", "computer", "react-contexts"]
     },
     "docsync": {
       "tags": []
@@ -155,6 +158,9 @@
     "fnqueue": {
       "tags": []
     },
+    "format": {
+      "tags": []
+    },
     "fraction": {
       "tags": []
     },
@@ -200,6 +206,9 @@
     "react-utils": {
       "tags": []
     },
+    "repl": {
+      "tags": []
+    },
     "routing": {
       "tags": []
     },
@@ -231,15 +240,6 @@
       "tags": []
     },
     "y-websocket": {
-      "tags": []
-    },
-    "backend-trace": {
-      "tags": []
-    },
-    "format": {
-      "tags": []
-    },
-    "repl": {
       "tags": []
     }
   }

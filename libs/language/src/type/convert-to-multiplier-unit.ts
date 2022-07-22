@@ -15,7 +15,7 @@ function multipliersFor(units: Units | SerializedUnits): Fraction {
 
 export function convertToMultiplierUnit(
   n: Fraction,
-  units: Units | SerializedUnits | null
+  units?: Units | SerializedUnits | null
 ): Fraction {
   if (!units) {
     return n;

@@ -11,9 +11,16 @@ const primitive = (type: PrimitiveTypeName) =>
     t.type = type;
   });
 
-export const number = (unit: Units | Unit[] | null = null) =>
+export const number = (
+  unit: Units | Unit[] | null = null,
+  numberFormat: AST.NumberFormat | null = undefined
+) =>
   produce(primitive('number'), (t) => {
+    if (unit != null && numberFormat != null) {
+      throw new Error('Cannot specify both unit and numberFormat');
+    }
     t.unit = Array.isArray(unit) ? units(...unit) : unit;
+    t.numberFormat = numberFormat ?? null;
   });
 
 export const string = () => primitive('string');

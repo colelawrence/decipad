@@ -2,6 +2,7 @@ import {
   convertToMultiplierUnit,
   TUnits,
   normalizeUnitsOf,
+  AST,
 } from '@decipad/language';
 import FFraction, { FractionLike } from '@decipad/fraction';
 import { formatUnit } from './formatUnit';
@@ -109,9 +110,15 @@ export function formatNumber<TF extends FractionLike = FFraction>(
   unit: TUnits<TF> | null | undefined,
   number: FractionLike,
   decimalPlaces = 5,
-  thousandsSep = ','
+  thousandsSep = ',',
+  numberFormat: AST.NumberFormat | null = undefined
 ): string {
   let fraction = new FFraction(number);
+
+  if (numberFormat === 'percentage') {
+    fraction = fraction.mul(100);
+  }
+
   if (unit) {
     const units = normalizeUnitsOf(unit);
     fraction = convertToMultiplierUnit(fraction, units);
@@ -123,7 +130,11 @@ export function formatNumber<TF extends FractionLike = FFraction>(
 
   // Fraction's toString isn't always formatted like [-]####.###
   const basicNumberMatch = asString.match(/^(-?)(\d+)(\.\d+)?$/);
-  const unitPart = unit ? ` ${formatUnit(locale, unit, fraction)}` : '';
+  const unitPart = unit
+    ? ` ${formatUnit(locale, unit, fraction)}`
+    : numberFormat === 'percentage'
+    ? '%'
+    : '';
   if (basicNumberMatch != null) {
     const [, sign, integerPart, decimalPart = ''] = basicNumberMatch;
 
@@ -136,11 +147,11 @@ export function formatNumber<TF extends FractionLike = FFraction>(
     const commatizedDecimalPart =
       (decimalPart && `${decimalSep}${decimalPart.slice(1)}`) || '';
     return removeExtraSpaces(
-      `${sign}${formattedIntegerPart}${commatizedDecimalPart} ${unitPart}`
+      `${sign}${formattedIntegerPart}${commatizedDecimalPart}${unitPart}`
     );
   }
 
-  return removeExtraSpaces(`${asString} ${unitPart}`);
+  return removeExtraSpaces(`${asString}${unitPart}`);
 }
 
 export type FormatNumber = typeof formatNumber;

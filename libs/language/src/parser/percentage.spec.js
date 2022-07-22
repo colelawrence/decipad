@@ -1,4 +1,4 @@
-import { F, c, l } from '../utils';
+import { F, c, l, num } from '../utils';
 import { runTests } from './run-tests';
 
 runTests({
@@ -7,7 +7,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(19, 10)],
+        args: ['number', F(19, 10), 'percentage'],
         start: 1,
         end: 4,
       },
@@ -18,7 +18,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(19, 10).neg()],
+        args: ['number', F(19, 10).neg(), 'percentage'],
         start: {
           char: 1,
           column: 2,
@@ -35,6 +35,6 @@ runTests({
   "Isn't ambiguous with the modulo operator and subtraction": {
     source: ' 10% - 1 ',
     sourceMap: false,
-    ast: [c('-', l(0.1), l(1))],
+    ast: [c('-', num(0.1, 'percentage'), l(1))],
   },
 });

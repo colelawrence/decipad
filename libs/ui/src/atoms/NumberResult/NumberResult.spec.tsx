@@ -98,3 +98,8 @@ describe('units', () => {
     expect(container.textContent).toMatchInlineSnapshot(`"2 bananas"`);
   });
 });
+
+it('renders percentage', async () => {
+  const { container } = render(<NumberResult {...await runCode('11%')} />);
+  expect(container.textContent).toMatchInlineSnapshot(`"11%"`);
+});

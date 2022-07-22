@@ -21,6 +21,7 @@ import {
   validateResult,
   Value,
   ErrSpec,
+  SerializedTypes,
 } from '@decipad/language';
 import { anyMappingToMap, getDefined } from '@decipad/utils';
 import assert from 'assert';
@@ -558,11 +559,18 @@ export class Computer {
   }
 
   formatNumber(
-    unit: FUnits | null,
+    type: SerializedTypes.Number,
     value: FractionLike,
     decimalPlaces?: number
   ): string {
-    return formatNumber(this.locale, unit, value, decimalPlaces);
+    return formatNumber(
+      this.locale,
+      type.unit,
+      value,
+      decimalPlaces,
+      ',',
+      type.numberFormat
+    );
   }
 
   formatUnit(unit: FUnits, value?: FFraction): string {

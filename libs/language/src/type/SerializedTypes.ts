@@ -1,4 +1,5 @@
 import type { Time } from '../date';
+import { AST } from '../parser';
 import type { ErrSpec } from './InferError';
 import type { SerializedType, SerializedUnits } from './SerializedType';
 
@@ -25,7 +26,17 @@ export type Row = SType<{
 }>;
 
 // Non-groups
-export type Number = SType<{ kind: 'number'; unit: SerializedUnits | null }>;
+export type Number =
+  | SType<{
+      kind: 'number';
+      unit: SerializedUnits | null;
+      numberFormat?: null;
+    }>
+  | SType<{
+      kind: 'number';
+      numberFormat: AST.NumberFormat;
+      unit?: null;
+    }>;
 export type Boolean = SType<{ kind: 'boolean' }>;
 export type String = SType<{ kind: 'string' }>;
 export type Date = SType<{ kind: 'date'; date: Time.Specificity }>;

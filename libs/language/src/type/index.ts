@@ -23,6 +23,7 @@ import {
   withAtParentIndex,
   isPrimitive,
   canAddTableColumn,
+  sharePercentage,
 } from './checks';
 import { InferError, ErrSpec } from './InferError';
 import {
@@ -56,6 +57,7 @@ export class Type {
 
   type: PrimitiveTypeName | null = null;
   unit: Units | null = null;
+  numberFormat: AST.NumberFormat | null = null;
 
   date: Time.Specificity | null = null;
 
@@ -223,5 +225,9 @@ export class Type {
 
   divideUnit(divideBy: Units | number | null): Type {
     return divideUnit(this, divideBy);
+  }
+
+  sharePercentage(other: Type) {
+    return sharePercentage(this, other);
   }
 }

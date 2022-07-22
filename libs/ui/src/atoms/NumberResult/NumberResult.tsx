@@ -21,9 +21,7 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
   const computer = useComputer();
 
   const fullResult = (
-    <span css={numberResultStyles}>
-      {computer.formatNumber(type.unit, value)}
-    </span>
+    <span css={numberResultStyles}>{computer.formatNumber(type, value)}</span>
   );
 
   const trigger = <span css={numberResultStyles}>{fullResult}</span>;
@@ -33,7 +31,7 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
 
   return (
     <Tooltip trigger={trigger}>
-      ~ {computer.formatNumber(type.unit, value, 10)}
+      ~ {computer.formatNumber(type, value, 10)}
     </Tooltip>
   );
 };

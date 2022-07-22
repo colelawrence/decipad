@@ -2098,3 +2098,54 @@ describe('unit qualities', () => {
     });
   });
 });
+
+describe('percentages', () => {
+  it('can be applied to numbers', async () => {
+    expect(await runCode('3%')).toMatchObject({
+      value: F(3, 100),
+      type: t.number(null, 'percentage'),
+    });
+    expect(await runCode('3% + 1')).toMatchObject({
+      value: F(103, 100),
+      type: t.number(),
+    });
+    expect(await runCode('1 + 3%')).toMatchObject({
+      value: F(103, 100),
+      type: t.number(),
+    });
+    expect(await runCode('3% + 1%')).toMatchObject({
+      value: F(4, 100),
+      type: t.number(null, 'percentage'),
+    });
+  });
+
+  it('multiplies properly', async () => {
+    expect(await runCode('3% * 2')).toMatchObject({
+      value: F(6, 100),
+      type: t.number(),
+    });
+    expect(await runCode('2 * 3%')).toMatchObject({
+      value: F(6, 100),
+      type: t.number(),
+    });
+    expect(await runCode('3% * 3%')).toMatchObject({
+      value: F(9, 10000),
+      type: t.number(null, 'percentage'),
+    });
+  });
+
+  it('divides properly', async () => {
+    expect(await runCode('3% / 2')).toMatchObject({
+      value: F(15, 1000),
+      type: t.number(),
+    });
+    expect(await runCode('2 / 50%')).toMatchObject({
+      value: F(4),
+      type: t.number(),
+    });
+    expect(await runCode('100% / 10%')).toMatchObject({
+      value: F(10),
+      type: t.number(null, 'percentage'),
+    });
+  });
+});

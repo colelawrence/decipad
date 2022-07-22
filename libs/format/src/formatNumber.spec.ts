@@ -2,6 +2,12 @@ import { F } from '@decipad/fraction';
 import { formatNumber } from './formatNumber';
 import { U, usd, usdPerDay } from './testUtils';
 
+it('formats percentages', () => {
+  expect(
+    formatNumber('en-US', null, F(0.011), 2, ',', 'percentage')
+  ).toMatchInlineSnapshot(`"1.1%"`);
+});
+
 it('formats numbers', () => {
   expect(formatNumber('en-US', U([]), F(1.2345), 2)).toMatchInlineSnapshot(
     `"1.23(...)"`

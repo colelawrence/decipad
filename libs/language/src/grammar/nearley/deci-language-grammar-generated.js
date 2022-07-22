@@ -185,12 +185,14 @@ function addArrayLoc(node, locArray) {
 
 import Fraction from '@decipad/fraction';
 
-function makeNumber(parentNode, n) {
+function makeNumber(parentNode, n, numberFormat = undefined) {
   const fraction = n instanceof Fraction ? n : new Fraction(n);
 
   const node = {
     type: 'literal',
-    args: ['number', fraction],
+    args: numberFormat
+      ? ['number', fraction, numberFormat]
+      : ['number', fraction],
   };
   if (Array.isArray(parentNode)) {
     return addArrayLoc(node, parentNode);
@@ -664,14 +666,16 @@ let ParserRules = [
     name: 'percentage',
     symbols: [{ literal: '-' }, 'decimal', { literal: '%' }],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[1].n.neg()).div(new Fraction(100)));
+      const n = new Fraction(d[1].n.neg()).div(new Fraction(100));
+      return makeNumber(d, n, 'percentage');
     },
   },
   {
     name: 'percentage',
     symbols: ['decimal', { literal: '%' }],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[0].n).div(new Fraction(100)));
+      const n = new Fraction(d[0].n).div(new Fraction(100));
+      return makeNumber(d, n, 'percentage');
     },
   },
   {

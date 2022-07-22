@@ -84,7 +84,11 @@ export type Identifier =
 
 // Literal number, char, string etc
 
-type LitArgs = ['number', Fraction] | ['boolean', boolean] | ['string', string];
+export type NumberFormat = undefined | 'percentage';
+type LitArgs =
+  | ['number', Fraction, NumberFormat?]
+  | ['boolean', boolean]
+  | ['string', string];
 
 export interface Literal {
   type: 'literal';

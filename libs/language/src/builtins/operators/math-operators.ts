@@ -326,7 +326,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       Type.combine(
         a.isScalar('number'),
         b.isScalar('number'),
-        a.multiplyUnit(b.unit)
+        a.sharePercentage(b).multiplyUnit(b.unit)
       ),
   },
   // this is added when we use implicit multiplication instead of '*'
@@ -341,7 +341,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       Type.combine(
         a.isScalar('number'),
         b.isScalar('number'),
-        a.divideUnit(b.unit)
+        a.sharePercentage(b).divideUnit(b.unit)
       ),
   },
   '%': {

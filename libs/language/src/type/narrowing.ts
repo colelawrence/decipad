@@ -5,6 +5,7 @@ import { equalOrUndefined, equalOrUnknown } from '../utils';
 import { build as t, SerializedTypes, serializeType, Type } from '.';
 import { InferError } from './InferError';
 import { matchUnitArrays } from './units';
+import { onlyOneIsPercentage } from './percentages';
 
 export function narrowTypes(
   t1: Type,
@@ -45,6 +46,11 @@ export function narrowTypes(
       }
 
       case 'number': {
+        if (onlyOneIsPercentage(t1.numberFormat, t2.numberFormat)) {
+          return produce(t1, (number) => {
+            number.numberFormat = null;
+          });
+        }
         return narrowUnitsOf(t1, t2);
       }
 

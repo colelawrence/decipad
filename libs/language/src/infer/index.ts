@@ -89,6 +89,10 @@ export const inferExpression = wrap(
       case 'literal': {
         const [litType] = expr.args;
 
+        if (litType === 'number') {
+          return t.number(null, expr.args[2]);
+        }
+
         return t[litType]();
       }
       case 'range': {

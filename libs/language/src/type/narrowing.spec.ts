@@ -25,6 +25,18 @@ it('can narrow some types', () => {
   ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
 });
 
+it('can narrow percentages', () => {
+  expect(
+    narrowTypes(t.number(), t.number(null, 'percentage'))
+  ).toMatchInlineSnapshot(`{"kind":"number","unit":null}`);
+  expect(
+    narrowTypes(t.number(null, 'percentage'), t.number())
+  ).toMatchInlineSnapshot(`{"kind":"number","unit":null}`);
+  expect(
+    narrowTypes(t.number(null, 'percentage'), t.number(null, 'percentage'))
+  ).toMatchInlineSnapshot(`{"kind":"number","numberFormat":"percentage"}`);
+});
+
 it('can narrow `anything`', () => {
   expect(
     narrowTypes(parseType('column<number, 2>'), parseType('anything'))

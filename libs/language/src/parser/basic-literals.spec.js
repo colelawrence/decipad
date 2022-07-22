@@ -107,7 +107,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(105, 1000)],
+        args: ['number', F(105, 1000), 'percentage'],
         start: {
           char: 0,
           line: 1,
