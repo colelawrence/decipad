@@ -22,8 +22,8 @@ interface SmartColumnCellProps {
   column: TableColumn;
   columnIndex: number;
   readonly selectedAggregationTypeName: string | undefined;
-  readonly onAggregationTypeChange: (
-    aggType: AggregationType | undefined
+  readonly onAggregationTypeNameChange: (
+    aggTypeName: string | undefined
   ) => void;
 }
 
@@ -33,7 +33,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   column,
   columnIndex,
   selectedAggregationTypeName,
-  onAggregationTypeChange,
+  onAggregationTypeNameChange,
 }) => {
   const editor = useTEditorRef();
   const [selectedAggregationType, setSelectedAggregationType] = useState<
@@ -47,39 +47,21 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
 
   const [result, setResult] = useState<Result.Result | null>(null);
 
-  const onSelectedAggregationChange = useCallback(
-    (name: string) => {
-      if (!name) {
-        setSelectedAggregationType(undefined);
-        setResult(null);
-        onAggregationTypeChange(undefined);
-        return;
-      }
-      const aggType =
-        name && availableAggregationTypes.find((agg) => agg.name === name);
-      if (aggType) {
-        setSelectedAggregationType(aggType);
-        onAggregationTypeChange(aggType);
-      }
-    },
-    [availableAggregationTypes, onAggregationTypeChange]
-  );
+  useEffect(() => {
+    const aggType =
+      (selectedAggregationTypeName != null &&
+        availableAggregationTypes.find(
+          (agg) => agg.name === selectedAggregationTypeName
+        )) ||
+      undefined;
+    setSelectedAggregationType(aggType);
+  }, [availableAggregationTypes, selectedAggregationTypeName]);
 
   useEffect(() => {
-    if (selectedAggregationTypeName !== selectedAggregationType?.name) {
-      const aggType =
-        (selectedAggregationTypeName != null &&
-          availableAggregationTypes.find(
-            (agg) => agg.name === selectedAggregationTypeName
-          )) ||
-        undefined;
-      setSelectedAggregationType(aggType);
+    if (selectedAggregationType == null) {
+      setResult(null);
     }
-  }, [
-    availableAggregationTypes,
-    selectedAggregationType?.name,
-    selectedAggregationTypeName,
-  ]);
+  }, [selectedAggregationType]);
 
   const expression = useMemo(() => {
     const columnRef = `${tableName}.${column.name}`;
@@ -93,9 +75,13 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
     const sub = (
       (expression && computer.expressionResultFromText$(expression)) ||
       EMPTY
-    ).subscribe(setResult);
+    ).subscribe((r) => {
+      if (selectedAggregationType) {
+        setResult(r);
+      }
+    });
     return () => sub.unsubscribe();
-  }, [computer, expression]);
+  }, [computer, expression, selectedAggregationType]);
 
   const onDragExpressionStart = useCallback(
     (ev: DragEvent) => {
@@ -120,7 +106,8 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
           caretColor="weak"
           options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
           value={selectedAggregationType?.name}
-          onChange={onSelectedAggregationChange}
+          clear={!!selectedAggregationType}
+          onChange={onAggregationTypeNameChange}
         ></atoms.Select>,
       ]}
     />

@@ -87,10 +87,8 @@ export const Table: PlateComponent = withProviders([
                 smartRow={
                   isEnabled('SMART_ROWS') && (
                     <SmartRow
-                      onAggregationTypeChange={onChangeColumnAggregation}
-                      selectedAggregationTypeNames={headers.map(
-                        (h) => h.aggregation
-                      )}
+                      onAggregationTypeNameChange={onChangeColumnAggregation}
+                      aggregationTypeNames={headers.map((h) => h.aggregation)}
                       tableName={name}
                       tablePath={tablePath}
                       columns={columns}

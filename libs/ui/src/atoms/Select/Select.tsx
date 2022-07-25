@@ -29,7 +29,8 @@ interface SelectProps<T extends string> {
   caretColor?: 'weak' | 'normal';
   options: T[];
   value?: T;
-  onChange: (newSelected: T) => void;
+  onChange: (newSelected: T | undefined) => void;
+  clear?: boolean;
 }
 
 export function Select<T extends string>({
@@ -37,6 +38,7 @@ export function Select<T extends string>({
   value,
   onChange,
   caretColor = 'normal',
+  clear = false,
 }: SelectProps<T>) {
   const [opened, setOpened] = useState(false);
   const onTriggerClick = useCallback(() => {
@@ -56,6 +58,16 @@ export function Select<T extends string>({
             </button>
           }
         >
+          {clear && (
+            <MenuItem
+              itemAlignment="left"
+              selected={value == null}
+              key="clear"
+              onSelect={() => onChange(undefined)}
+            >
+              <span css={itemStyles}>- clear -</span>
+            </MenuItem>
+          )}
           {options.map((text, index) => (
             <MenuItem
               itemAlignment="left"

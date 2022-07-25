@@ -64,7 +64,7 @@ export interface PowerTableColumnHeaderProps<TAggregation extends string> {
   children?: ReactNode;
   selectedAggregation?: TAggregation;
   availableAggregations: Array<TAggregation>;
-  onAggregationChange: (aggregation: TAggregation) => void;
+  onAggregationChange: (aggregation: TAggregation | undefined) => void;
   connectDragSource?: ConnectDragSource;
   connectDragPreview?: ConnectDragPreview;
   connectDropTarget?: ConnectDropTarget;

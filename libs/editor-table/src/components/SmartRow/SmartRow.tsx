@@ -8,8 +8,8 @@ interface SmartRowProps {
   readonly tableName: string;
   readonly tablePath?: Path;
   readonly columns: TableColumn[];
-  readonly selectedAggregationTypeNames: Array<string | undefined>;
-  readonly onAggregationTypeChange: (
+  readonly aggregationTypeNames: Array<string | undefined>;
+  readonly onAggregationTypeNameChange: (
     columnIndex: number,
     aggType: string | undefined
   ) => void;
@@ -17,8 +17,8 @@ interface SmartRowProps {
 }
 export const SmartRow: FC<SmartRowProps> = ({
   columns,
-  selectedAggregationTypeNames,
-  onAggregationTypeChange,
+  aggregationTypeNames,
+  onAggregationTypeNameChange,
   ...props
 }) => (
   <organisms.SmartRow
@@ -29,9 +29,9 @@ export const SmartRow: FC<SmartRowProps> = ({
         {...props}
         column={column}
         columnIndex={index}
-        selectedAggregationTypeName={selectedAggregationTypeNames[index]}
-        onAggregationTypeChange={(agg) =>
-          onAggregationTypeChange(index, agg?.name)
+        selectedAggregationTypeName={aggregationTypeNames[index]}
+        onAggregationTypeNameChange={(agg) =>
+          onAggregationTypeNameChange(index, agg)
         }
       />
     ))}
