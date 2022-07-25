@@ -1,8 +1,4 @@
-import {
-  PlateComponent,
-  RichText,
-  useTEditorState,
-} from '@decipad/editor-types';
+import { PlateComponent, RichText, useTEditorRef } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
 import { useCallback, useRef } from 'react';
@@ -65,7 +61,7 @@ export const CodeVariable: CodeLeaf = ({
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const goToDefinition = useCallback(() => {
     if (provideVariableDefLink && defBlockId) {
       const el = document.getElementById(defBlockId);

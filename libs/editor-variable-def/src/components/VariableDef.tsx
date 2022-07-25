@@ -4,7 +4,7 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
   VariableDefinitionElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
@@ -30,7 +30,7 @@ export const VariableDef: PlateComponent = ({
     throw new Error(`VariableDef is meant to render variable def elements`);
   }
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
 
   const onDelete = useCallback(() => {

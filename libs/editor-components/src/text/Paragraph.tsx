@@ -1,4 +1,4 @@
-import { PlateComponent, useTEditorState } from '@decipad/editor-types';
+import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
 import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
@@ -16,7 +16,7 @@ export const Paragraph: PlateComponent = ({
     throw new Error('Paragraph is not a leaf');
   }
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
 
   const selected = useSelected();

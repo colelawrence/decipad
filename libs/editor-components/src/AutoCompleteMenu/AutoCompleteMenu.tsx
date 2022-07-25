@@ -4,13 +4,13 @@ import { useFocused, useSelected } from 'slate-react';
 import { findWordStart, useSelection } from '@decipad/editor-utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';
-import { PlateComponent, useTEditorState } from '@decipad/editor-types';
+import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 
 export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   const computer = useComputer();
   const selected = useSelected();
   const focused = useFocused();
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const selection = useSelection();
 
   const [menuSuppressed, setMenuSuppressed] = useState(false);

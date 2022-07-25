@@ -9,7 +9,7 @@ import {
   setSelection,
 } from '@udecode/plate';
 import { organisms } from '@decipad/ui';
-import { PlateComponent, useTEditorState } from '@decipad/editor-types';
+import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import { Paragraph } from '@decipad/editor-components';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useFocused, useSelected } from 'slate-react';
@@ -18,14 +18,13 @@ import { useSelection } from '@decipad/editor-utils';
 import { dequal } from 'dequal';
 import { execute } from '../utils/slashCommands';
 
-export const SlashCommandsParagraph =
-  (computer: Computer): PlateComponent =>
-  (props) => {
+export const SlashCommandsParagraph = (computer: Computer): PlateComponent =>
+  function SlashCommandsParagraphHOC(props) {
     if (!props.element) {
       throw new Error('SlashCommandsParagraph is not a leaf');
     }
 
-    const editor = useTEditorState();
+    const editor = useTEditorRef();
     const selected = useSelected();
     const focused = useFocused();
     const clientEvent = useContext(ClientEventsContext);

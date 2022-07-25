@@ -1,7 +1,7 @@
 import {
   ELEMENT_H1,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
@@ -20,7 +20,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
     throw new Error('Title is not a leaf');
   }
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const [shouldAutofocus, setShouldAutofocus] = useState(true);
   const readOnly = useIsEditorReadOnly();
 

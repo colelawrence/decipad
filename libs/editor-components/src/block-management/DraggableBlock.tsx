@@ -2,7 +2,7 @@ import {
   alwaysWritableElementTypes,
   MyElement,
   MyReactEditor,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms, organisms } from '@decipad/ui';
@@ -72,7 +72,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   ...props
 }) => {
   const [deleted, setDeleted] = useState(false);
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;

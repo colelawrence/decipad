@@ -1,7 +1,7 @@
 import {
   ELEMENT_CALLOUT,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { atoms } from '@decipad/ui';
@@ -17,7 +17,7 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
     throw new Error(`This should be a callout element, not ${element?.type}.`);
   }
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
 
   const saveIcon = useElementMutatorCallback(editor, element, 'icon');
   const saveColor = useElementMutatorCallback(editor, element, 'color');

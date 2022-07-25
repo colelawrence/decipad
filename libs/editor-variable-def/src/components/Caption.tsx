@@ -2,7 +2,7 @@ import { molecules } from '@decipad/ui';
 import {
   ELEMENT_CAPTION,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
@@ -14,7 +14,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Caption is meant to render caption elements`);
   }
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
 
   const setIcon = useElementMutatorCallback(editor, element, 'icon');
   const setColor = useElementMutatorCallback(editor, element, 'color');

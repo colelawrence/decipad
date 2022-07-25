@@ -29,7 +29,7 @@ export const tableScope = Symbol('table');
 export const Table: PlateComponent = withProviders([
   Provider,
   { scope: tableScope },
-])(({ attributes, children, element }) => {
+])(function Table({ attributes, children, element }) {
   assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
   const editor = useTEditorState();
