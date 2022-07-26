@@ -2,9 +2,9 @@
 sidebar_position: 145
 ---
 
-# Tables
+# Language Tables
 
-A table is a set of values indexed by name. You can define a table in the UI, but you can also do it in the language.
+A table is a set of values indexed by name. You can define a table in the UI and on the language.
 
 ```deci live
 MyTable = {
