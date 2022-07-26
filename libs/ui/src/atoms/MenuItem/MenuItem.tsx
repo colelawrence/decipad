@@ -15,6 +15,7 @@ const childrenWrapperStyles = css({
 export interface MenuItemProps {
   readonly children: ReactNode;
   readonly icon?: ReactNode;
+  readonly disabled?: boolean;
   readonly onPointerMove?: ComponentProps<
     typeof RadixDropdownMenu.Item
   >['onPointerMove'];
@@ -29,14 +30,16 @@ export const MenuItem: FC<MenuItemProps> = ({
   onPointerMove,
   onSelect,
   selected,
+  disabled,
   itemAlignment,
 }) => {
   return (
     <RadixDropdownMenu.Item
-      css={menu.itemStyles}
+      css={disabled ? menu.itemDisabledStyles : menu.itemStyles}
       onSelect={onSelect}
       data-selected={selected}
       onPointerMove={onPointerMove}
+      disabled={disabled}
     >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span

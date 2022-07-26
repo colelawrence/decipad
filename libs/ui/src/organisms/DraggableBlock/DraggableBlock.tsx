@@ -19,6 +19,16 @@ export const draggingOpacity: Opacity = 0.4;
 const blockWrapperStyle = css({ position: 'relative' });
 const dropLineStyle = css({ position: 'absolute', width: '100%' });
 
+const hiddenEditorBlockStyle = css({
+  opacity: '.5',
+  transition: 'opacity .2s ease',
+});
+
+const hiddenFocusedStyle = css({
+  opacity: '1',
+  filter: 'unset',
+});
+
 const dropLineEl = (
   <div contentEditable={false} css={dropLineStyle}>
     <DropLine />
@@ -26,6 +36,8 @@ const dropLineEl = (
 );
 
 interface DraggableBlockProps {
+  readonly isSelected?: boolean;
+  readonly isHidden?: boolean;
   readonly isBeingDragged?: boolean;
   readonly dropLine?: 'top' | 'bottom';
 
@@ -35,12 +47,15 @@ interface DraggableBlockProps {
 
   readonly draggableCss?: SerializedStyles;
 
+  readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onDelete?: (() => void) | false;
 
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;
 }
 export const DraggableBlock = ({
+  isSelected = false,
+  isHidden = false,
   isBeingDragged = false,
   dropLine,
 
@@ -51,6 +66,7 @@ export const DraggableBlock = ({
   draggableCss,
 
   onDelete,
+  onShowHide,
 
   blockKind,
   children,
@@ -59,6 +75,8 @@ export const DraggableBlock = ({
   const BlockActiveProvider = menuOpen ? BlockIsActiveProvider : Fragment;
 
   const { paddingTop, typography } = blockAlignment[blockKind];
+
+  const showEyeLabel = isHidden && !menuOpen;
 
   const editorBlock = (
     <EditorBlock blockKind={blockKind}>
@@ -87,11 +105,15 @@ export const DraggableBlock = ({
           contentEditable={false}
           ref={dragSource}
           css={[
+            showEyeLabel
+              ? {}
+              : {
+                  opacity: menuOpen ? 'unset' : 0,
+                  '*:hover > &': {
+                    opacity: 'unset',
+                  },
+                },
             {
-              opacity: menuOpen ? 'unset' : 0,
-              '*:hover > &': {
-                opacity: 'unset',
-              },
               transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
 
               paddingTop: typography
@@ -115,12 +137,19 @@ export const DraggableBlock = ({
         >
           <BlockDragHandle
             menuOpen={menuOpen}
+            isHidden={isHidden}
             onChangeMenuOpen={setMenuOpen}
             onDelete={onDelete}
+            onShowHide={onShowHide}
+            showEyeLabel={showEyeLabel}
           />
         </div>
         <div
-          css={{ opacity: isBeingDragged ? draggingOpacity : 'unset' }}
+          css={[
+            isBeingDragged ? { opacity: draggingOpacity } : {},
+            isHidden ? hiddenEditorBlockStyle : {},
+            isSelected || menuOpen ? hiddenFocusedStyle : {},
+          ]}
           ref={previewRef}
         >
           <BlockActiveProvider>{children}</BlockActiveProvider>

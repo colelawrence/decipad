@@ -5,6 +5,7 @@ interface EditorBlockProps {
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;
 }
+
 export const EditorBlock: React.FC<EditorBlockProps> = ({
   blockKind,
   children,

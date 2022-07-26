@@ -53,6 +53,7 @@ import {
 export interface BaseElement extends TElement {
   type: ElementKind;
   id: string;
+  isHidden?: boolean;
 }
 
 // Headings

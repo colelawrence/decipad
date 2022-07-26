@@ -19,3 +19,12 @@ export const itemStyles = css(p14Regular, {
 
   outline: 'none',
 });
+
+export const itemDisabledStyles = css(itemStyles, {
+  cursor: 'default',
+
+  backgroundColor: cssVar('backgroundColor'),
+  '&:hover, &:focus, &[data-selected="true"]': {
+    backgroundColor: cssVar('backgroundColor'),
+  },
+});

@@ -23,6 +23,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
+import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 const InDraggableBlock = createContext(false);
@@ -77,6 +79,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;
 
+  const selected = useSelected();
+  const setIsHidden = useElementMutatorCallback(editor, element, 'isHidden');
+
   const blockRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const { dragRef, dropLine, isDragging } = useDndBlock({
@@ -93,6 +98,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   }, [parentOnDelete, editor, element]);
 
   if (deleted) {
+    return <></>;
+  }
+  if (readOnly && element.isHidden) {
     return <></>;
   }
   if (readOnly) {
@@ -116,12 +124,17 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   return (
     <organisms.DraggableBlock
       {...props}
+      isHidden={element.isHidden}
+      isSelected={selected}
       dragSource={dragRef}
       blockRef={blockRef}
       previewRef={previewRef}
       dropLine={dropLine || undefined}
       isBeingDragged={isDragging}
       onDelete={parentOnDelete === false ? false : onDelete}
+      onShowHide={(a) => {
+        a === 'show' ? setIsHidden(false) : setIsHidden(true);
+      }}
     >
       <InDraggableBlock.Provider value={true}>
         <BlockErrorBoundary>{children}</BlockErrorBoundary>

@@ -22,7 +22,13 @@ interface NormalizerPluginProps {
 
 type NormalizerOverrideProps = Omit<NormalizerPluginProps, 'name'>;
 
-const EXPECTED_ELEMENT_PROPERTIES = ['type', 'id', 'children', 'text'];
+const EXPECTED_ELEMENT_PROPERTIES = [
+  'type',
+  'id',
+  'children',
+  'text',
+  'isHidden',
+];
 
 const withRemoveUnacceptableElementProperties = (
   editor: MyEditor,
