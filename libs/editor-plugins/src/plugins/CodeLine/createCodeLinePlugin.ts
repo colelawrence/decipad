@@ -5,6 +5,7 @@ import { deserializeCodeLineHtml } from './deserializeCodeLineHtml';
 import { serializeCodeLineHtml } from './serializeCodeLineHtml';
 import { onDropCodeLine } from './onDropCodeLine';
 import CodeLine from './CodeLine';
+import { withCodeLine } from './withCodeLine';
 
 export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_CODE_LINE,
@@ -13,6 +14,7 @@ export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   deserializeHtml: deserializeCodeLineHtml,
   serializeHtml: serializeCodeLineHtml,
   decorate: decorateCode(computer, ELEMENT_CODE_LINE),
+  withOverrides: withCodeLine,
   handlers: {
     onDrop: onDropCodeLine(computer),
   },
