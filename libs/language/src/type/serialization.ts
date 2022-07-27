@@ -1,3 +1,4 @@
+import { getDefined } from '@decipad/utils';
 import { buildType as t, Type } from '..';
 import { F } from '../utils';
 import { InferError } from './InferError';
@@ -75,7 +76,11 @@ export function serializeType(type: Type): SerializedType {
     } else if (type.anythingness) {
       return { kind: 'anything' };
     } else if (type.functionness) {
-      return { kind: 'function' };
+      return {
+        kind: 'function',
+        name: getDefined(type.functionName),
+        argCount: type.functionArgCount,
+      };
     } else if (type.errorCause) {
       return { kind: 'type-error', errorCause: type.errorCause.spec };
     }
@@ -144,7 +149,7 @@ export function deserializeType(type: SerializedType): Type {
         case 'anything':
           return t.nothing();
         case 'function':
-          return t.functionPlaceholder();
+          return t.functionPlaceholder(type.name, type.argCount);
         case 'type-error':
           return t.impossible(new InferError(type.errorCause));
       }

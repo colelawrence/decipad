@@ -103,7 +103,7 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
   if (!cachedBuiltins) {
     cachedBuiltins = builtinsForAutocomplete.map((name) => ({
       kind: 'function',
-      type: serializeType(t.functionPlaceholder()),
+      type: serializeType(t.functionPlaceholder(name, undefined)),
       name,
     }));
   }

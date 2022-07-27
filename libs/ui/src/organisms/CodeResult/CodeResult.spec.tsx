@@ -59,10 +59,3 @@ it.each(['block', 'inline'] as const)(
     expect(container.textContent).toMatch(/Table|A/);
   }
 );
-
-it('renders a function result', async () => {
-  const { container } = render(
-    <CodeResult {...await runCode('even (n) = n % 2 == 0')} variant="inline" />
-  );
-  expect(container.textContent).toMatchInlineSnapshot(`"ƒ"`);
-});

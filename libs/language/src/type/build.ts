@@ -114,9 +114,14 @@ export const column = (
   }
 };
 
-export const functionPlaceholder = () =>
+export const functionPlaceholder = (
+  name: string,
+  argCount: number | undefined
+) =>
   produce(new Type(), (fType) => {
     fType.functionness = true;
+    fType.functionName = name;
+    fType.functionArgCount = argCount;
   });
 
 export const nothing = () =>

@@ -8,7 +8,7 @@ import {
   TableResult,
 } from '..';
 import { BooleanResult, DateResult, NumberResult } from '../../atoms';
-import { InlineCodeError } from '../../molecules';
+import { FunctionResult, InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
 
 // Simple result components
@@ -21,9 +21,6 @@ const DefaultResult: CodeResultComponentType<SerializedTypeKind> = ({
   value,
 }) => <span>{String(value ?? '')}</span>;
 const NothingResult: CodeResultComponentType<'nothing'> = () => null;
-const FunctionResult: CodeResultComponentType<'function'> = () => (
-  <span>ƒ</span>
-);
 const InlineTableResult: CodeResultComponentType<'table'> = () => (
   <span>Table</span>
 );

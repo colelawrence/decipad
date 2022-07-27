@@ -11,6 +11,7 @@ export { Expression } from './Expression/Expression';
 export { EditorTitle } from './EditorTitle/EditorTitle';
 export { FloatingLink } from './FloatingLink/FloatingLink';
 export { FormulaTableData } from './FormulaTableData/FormulaTableData';
+export { FunctionResult } from './FunctionResult/FunctionResult';
 export { HelpButton } from './HelpButton/HelpButton';
 export { IconPopover } from './IconPopover/IconPopover';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';

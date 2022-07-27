@@ -38,6 +38,7 @@ export { NumberResult } from './NumberResult/NumberResult';
 export { Overlay } from './Overlay/Overlay';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
+export { PlotFunction } from './PlotFunction/PlotFunction';
 export { PowerHeader } from './PowerHeader/PowerHeader';
 export { PowerTableColumnHeader } from './PowerTableColumnHeader/PowerTableColumnHeader';
 export { PowerTableColumnHeaderRow } from './PowerTableColumnHeaderRow/PowerTableColumnHeaderRow';

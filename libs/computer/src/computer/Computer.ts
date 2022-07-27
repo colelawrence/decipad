@@ -63,6 +63,14 @@ import { topologicalSort } from './topologicalSort';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
+interface ExpressionResultOptions {
+  version?: boolean;
+}
+
+type WithVersion<T> = T & {
+  version?: number;
+};
+
 /*
  - Skip cached stuff
  - Infer this statement
@@ -338,37 +346,44 @@ export class Computer {
     return computerExpression;
   }
 
-  expressionResult$(expression: AST.Expression): Observable<Result.Result> {
+  async expressionResult(expression: AST.Expression): Promise<Result.Result> {
+    const type = await inferExpression(
+      this.computationRealm.inferContext,
+      expression
+    );
+
+    try {
+      const value = await evaluateStatement(
+        this.computationRealm.interpreterRealm,
+        expression
+      );
+
+      return {
+        value: value.getData(),
+        type: serializeType(type),
+      };
+    } catch (err) {
+      return {
+        value: null,
+        type: {
+          kind: 'type-error',
+          errorCause: {
+            errType: 'free-form',
+            message: (err as Error).message,
+          },
+        },
+      };
+    }
+  }
+
+  expressionResult$(
+    expression: AST.Expression,
+    options: ExpressionResultOptions = {}
+  ): Observable<WithVersion<Result.Result>> {
+    let version = 0;
     return this.results.pipe(
-      concatMap(async (): Promise<Result.Result> => {
-        const type = await inferExpression(
-          this.computationRealm.inferContext,
-          expression
-        );
-
-        try {
-          const value = await evaluateStatement(
-            this.computationRealm.interpreterRealm,
-            expression
-          );
-
-          return {
-            value: value.getData(),
-            type: serializeType(type),
-          };
-        } catch (err) {
-          return {
-            value: null,
-            type: {
-              kind: 'type-error',
-              errorCause: {
-                errType: 'free-form',
-                message: 'Magic does not believe in errors',
-              },
-            },
-          };
-        }
-      }),
+      concatMap(async () => this.expressionResult(expression)),
+      map((r) => (options.version ? { version: ++version, ...r } : r)),
       distinctUntilChanged(dequal)
     );
   }

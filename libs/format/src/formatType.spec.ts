@@ -76,7 +76,10 @@ it('annotates symbol if present', () => {
 
 it('can be stringified in basic form', () => {
   expect(
-    formatTypeToBasicString(locale, serializeType(t.functionPlaceholder()))
+    formatTypeToBasicString(
+      locale,
+      serializeType(t.functionPlaceholder('fname', 2))
+    )
   ).toEqual('function');
   expect(formatTypeToBasicString(locale, serializeType(t.number()))).toEqual(
     'number'

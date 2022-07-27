@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import type { Time } from '../date';
 import { AST } from '../parser';
 import type { ErrSpec } from './InferError';
@@ -45,5 +46,9 @@ export type Range = SType<{ kind: 'range'; rangeOf: SerializedType }>;
 // Oddball
 export type Nothing = SType<{ kind: 'nothing' }>; // No-op
 export type Anything = SType<{ kind: 'anything' }>; // Top type
-export type Function = SType<{ kind: 'function' }>;
+export type Function = SType<{
+  kind: 'function';
+  name: string;
+  argCount: number | undefined;
+}>;
 export type TypeError = SType<{ kind: 'type-error'; errorCause: ErrSpec }>;

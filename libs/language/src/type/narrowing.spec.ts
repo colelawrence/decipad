@@ -159,7 +159,7 @@ it('cant narrow tables, rows, functions', () => {
     columnTypes: [t.boolean()],
   });
   const row = t.row([t.boolean()], ['X']);
-  const func = t.functionPlaceholder();
+  const func = t.functionPlaceholder('fname', undefined);
 
   expect(() => narrowTypes(table, table)).toThrow();
   expect(() => narrowTypes(row, row)).toThrow();

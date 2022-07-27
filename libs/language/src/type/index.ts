@@ -82,6 +82,8 @@ export class Type {
 
   // Functions are impossible types with functionness = true
   functionness = false;
+  functionName: string | undefined;
+  functionArgCount: number | undefined;
 
   // Set to true when no data will be present. Used for empty blocks
   nothingness = false;

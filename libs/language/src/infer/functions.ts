@@ -10,11 +10,12 @@ export function inferFunctionDefinition(
   ctx: Context,
   statement: AST.FunctionDefinition
 ): Type | PromiseLike<Type> {
-  const fName = getIdentifierString(statement.args[0]);
+  const [name, args] = statement.args;
+  const fName = getIdentifierString(name);
 
   ctx.functionDefinitions.set(fName, statement);
 
-  return t.functionPlaceholder();
+  return t.functionPlaceholder(fName, args.args.length);
 }
 
 export const inferFunction = async (
