@@ -47,7 +47,16 @@ export interface TableActions {
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
 }
 
-export const addColumn = (editor: MyEditor, tablePath: Path) => {
+export const addColumn = (
+  editor: MyEditor,
+  {
+    tablePath,
+    cellType = { kind: 'string' },
+  }: {
+    tablePath: Path;
+    cellType?: TableCellType;
+  }
+) => {
   const headerRowPath = [...tablePath, 1];
   const headerRowEntry = getNodeEntry<TableHeaderRowElement>(
     editor,
@@ -66,7 +75,7 @@ export const addColumn = (editor: MyEditor, tablePath: Path) => {
       {
         id: nanoid(),
         type: ELEMENT_TH,
-        cellType: { kind: 'string' },
+        cellType,
         children: [{ text: columnName }],
       },
       {
@@ -80,7 +89,6 @@ export const addColumn = (editor: MyEditor, tablePath: Path) => {
         {
           id: nanoid(),
           type: ELEMENT_TD,
-          cellType: { kind: 'string' },
           children: [{ text: '' }],
         },
         {
@@ -169,7 +177,9 @@ export const useTableActions = (
 
   const onAddColumn = useCallback(() => {
     withPath(editor, element, (path) => {
-      addColumn(editor, path);
+      addColumn(editor, {
+        tablePath: path,
+      });
     });
   }, [editor, element]);
 

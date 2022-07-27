@@ -36,6 +36,7 @@ import { createCursorFocusPlugin } from './createCursorFocusPlugin';
 import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { addColumn, addRow } from '../hooks/index';
 import { withTable } from './withTable';
+import { onKeyDownTable } from './onKeyDownTable';
 
 type Attributes =
   | {
@@ -57,7 +58,9 @@ export const createTablePlugin = (
   options: {
     insertColumn: (editor, { fromCell }) => {
       const tablePath = fromCell.slice(0, -2);
-      addColumn(editor, tablePath);
+      addColumn(editor, {
+        tablePath,
+      });
     },
     insertRow: (editor, { fromRow }) => {
       const tablePath = fromRow.slice(0, -1);
@@ -67,6 +70,7 @@ export const createTablePlugin = (
   withOverrides: withTable,
   handlers: {
     onDrop: onDropSmartCellResult,
+    onKeyDown: onKeyDownTable,
   },
   plugins: [
     createPreventEnterToCreateCellPlugin(),

@@ -1,4 +1,7 @@
-import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+} from '@decipad/editor-types';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { filterStatementSeparator } from './filterStatementSeparator';
 import { getSoftBreakOnKeyDown } from './getSoftBreakOnKeyDown';
@@ -14,7 +17,7 @@ export const createSoftBreakPlugin = createOnKeyDownPluginFactory({
       {
         hotkey: 'shift+enter',
         query: {
-          exclude: [ELEMENT_CODE_LINE],
+          exclude: [ELEMENT_CODE_LINE, ELEMENT_TABLE_COLUMN_FORMULA],
         },
       },
       {
