@@ -35,3 +35,4 @@ export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './WithDocSyncHistory';
 export * from './TabIndent';
+export * from './NormalizeNewParagraph';

@@ -17,7 +17,9 @@ describe('notebook reload', () => {
     await page.keyboard.type('this is the second paragraph');
     await page.keyboard.press('Enter');
     await page.keyboard.type('this is the third paragraph');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(3);
+
+    // an empty paragraph is now created under non-empty paragraphs.
+    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
     await waitForSaveFlush();
   });
 
@@ -25,7 +27,7 @@ describe('notebook reload', () => {
     await page.reload();
     await waitForEditorToLoad();
     const lastParagraph = await page.waitForSelector(
-      '[contenteditable] p >> nth=-1'
+      '[contenteditable] p >> nth=-2'
     );
     expect(await lastParagraph.textContent()).toBe(
       'this is the third paragraph'

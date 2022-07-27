@@ -19,7 +19,10 @@ describe('notebook content', () => {
   it('allows changing the first paragraph on the body', async () => {
     await focusOnBody();
     await page.keyboard.type('this is the content for the first paragraph');
-    expect(await page.textContent('[contenteditable] p')).toBe(
+    const firstParagraph = await page.waitForSelector(
+      '[contenteditable] p >> nth=0'
+    );
+    expect(await firstParagraph.textContent()).toBe(
       'this is the content for the first paragraph'
     );
   });
@@ -79,7 +82,7 @@ describe('notebook content', () => {
 
   it('allows to create a new paragraph', async () => {
     await keyPress('Enter');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(2);
+    expect(await page.$$('[contenteditable] p')).toHaveLength(3);
   });
   it('allows to type in the second paragraph', async () => {
     await page.keyboard.type('this is the content for the second paragraph');
@@ -91,7 +94,7 @@ describe('notebook content', () => {
 
   it('allows to create even another new paragraph', async () => {
     await keyPress('Enter');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(3);
+    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
   });
   it('allows to type in the third paragraph', async () => {
     await page.keyboard.type('this is the content for the third paragraph');

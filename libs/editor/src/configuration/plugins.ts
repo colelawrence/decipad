@@ -33,6 +33,7 @@ import {
   createWithDocSyncHistoryPlugin,
   linkPlugin,
   createTabIndentPlugin,
+  createNormalizeNewParagraphPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -162,6 +163,8 @@ export const plugins = (computer: Computer) =>
 
       // history
       createWithDocSyncHistoryPlugin(),
+
+      createNormalizeNewParagraphPlugin(),
     ],
     {
       components: components(computer),
