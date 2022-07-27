@@ -45,6 +45,7 @@ module.exports = {
       // Polyfill node core modules
       config.plugins.push(
         new ProvidePlugin({
+          process: 'process',
           Buffer: ['buffer', 'Buffer'],
         })
       );
