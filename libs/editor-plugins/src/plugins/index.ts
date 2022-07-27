@@ -10,6 +10,7 @@ export * from './Divider';
 export * from './DragOverCursor';
 export * from './EditorApplyErrorReporter';
 export * from './ExternalData';
+export * from './Image';
 export * from './LayoutColumns';
 export * from './Link';
 export * from './Marks';

@@ -1,6 +1,7 @@
-import { createLinkPlugin } from '@udecode/plate';
+import { createLinkPlugin as _createLinkPlugin } from '@udecode/plate';
 import { molecules } from '@decipad/ui';
 
-export const linkPlugin = createLinkPlugin({
-  renderAfterEditable: molecules.FloatingLink,
-});
+export const createLinkPlugin = () =>
+  _createLinkPlugin({
+    renderAfterEditable: molecules.FloatingLink,
+  });

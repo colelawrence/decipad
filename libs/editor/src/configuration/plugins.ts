@@ -10,7 +10,9 @@ import {
   createDividerPlugin,
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
+  createImagePlugin,
   createLayoutColumnsPlugin,
+  createLinkPlugin,
   createMarksPlugins,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
@@ -20,6 +22,7 @@ import {
   createNormalizeImagePlugin,
   createNormalizeLinkPlugin,
   createNormalizeListPlugin,
+  createNormalizeNewParagraphPlugin,
   createNormalizePlainTextBlockPlugin,
   createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
@@ -28,12 +31,10 @@ import {
   createPlotPlugin,
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
+  createTabIndentPlugin,
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
-  linkPlugin,
-  createTabIndentPlugin,
-  createNormalizeNewParagraphPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -49,7 +50,6 @@ import {
   createDndPlugin,
   createExitBreakPlugin,
   createHeadingPlugin,
-  createImagePlugin,
   createListPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
@@ -107,9 +107,6 @@ export const plugins = (computer: Computer) =>
       createDragOverCursorPlugin(),
 
       // media elements
-      createImagePlugin({
-        withOverrides: null,
-      }),
       createSelectOnBackspacePlugin({
         options: {
           query: {
@@ -121,7 +118,8 @@ export const plugins = (computer: Computer) =>
       // creating elements
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ...(createMarksPlugins() as any[]),
-      linkPlugin,
+      createLinkPlugin(),
+      createImagePlugin(),
       createTAutoformatPlugin({
         options: { rules: autoformatRules },
       }),
