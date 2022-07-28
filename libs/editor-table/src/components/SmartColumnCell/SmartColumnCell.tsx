@@ -50,7 +50,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   useEffect(() => {
     const aggType =
       (selectedAggregationTypeName != null &&
-        availableAggregationTypes.find(
+        availableAggregationTypes?.find(
           (agg) => agg.name === selectedAggregationTypeName
         )) ||
       undefined;
