@@ -33,17 +33,17 @@ const initialTableElement = () => {
           {
             type: ELEMENT_TH,
             cellType: { kind: 'string' },
-            children: [{ text: 'Column1' }],
+            children: [{ text: 'Property1' }],
           },
           {
             type: ELEMENT_TH,
             cellType: { kind: 'number' },
-            children: [{ text: 'Column2' }],
+            children: [{ text: 'Property2' }],
           },
           {
             type: ELEMENT_TH,
             cellType: { kind: 'number' },
-            children: [{ text: 'Column3' }],
+            children: [{ text: 'Property3' }],
           },
         ],
       },

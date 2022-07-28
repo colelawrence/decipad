@@ -107,7 +107,7 @@ describe('notebook table', () => {
     const codeBlock = await page.waitForSelector('section:has-text("=")');
     const codeBlockText = await codeBlock.innerText();
 
-    expect(codeBlockText).toContain('Column4 =');
+    expect(codeBlockText).toContain('Property4 =');
   });
 
   it('focused on formula', async () => {
@@ -125,7 +125,7 @@ describe('notebook table', () => {
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
     const codeBlockText = await codeBlock.innerText();
-    expect(codeBlockText).toBe('Column4 = 1 + 1');
+    expect(codeBlockText).toBe('Property4 = 1 + 1');
 
     await waitForExpect(async () => {
       const cell = await page

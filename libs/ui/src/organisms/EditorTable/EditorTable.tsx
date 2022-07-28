@@ -47,17 +47,25 @@ const tableCaptionWrapperStyles = css({
 });
 
 const tableWrapperStyles = css({
-  transform: `translateX(-${tableControlWidth})`,
-  width: 'min-content',
+  transform: `translateX(calc((((100vw - 700px) / 2) + ${tableControlWidth}) * -1 ))`,
+  width: '100vw',
   minWidth: editorLayout.slimBlockWidth,
-  maxWidth: restWidthBlock,
   overflowX: 'auto',
-  display: 'inline-block',
   paddingBottom: '12px',
+  whiteSpace: 'nowrap',
+  position: 'relative',
+  left: tableControlWidth,
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
+    transform: `translateX(-${tableControlWidth})`,
     minWidth: '0',
   },
+});
+
+const tableOverflowStyles = css({
+  display: 'inline-block',
+  height: '20px',
+  width: `calc(((100vw - 700px) / 2) - ${tableControlWidth})`,
 });
 
 interface EditorTableProps {
@@ -103,7 +111,9 @@ export const EditorTable: FC<EditorTableProps> = ({
       <div css={wrapperStyles}>
         <div css={wrapperInnerStyles}>
           <div css={tableCaptionWrapperStyles}>{caption}</div>
+
           <div css={tableWrapperStyles}>
+            <div css={tableOverflowStyles} contentEditable={false} />
             <Table
               dropRef={dropRef}
               tableWidth={tableWidth}

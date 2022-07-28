@@ -9,7 +9,7 @@ export const getColumnName = (
 ): string => {
   const columnNames = getColumnNames(editor, tablePath);
   let num = start;
-  const createProposal = () => `Column${num}`;
+  const createProposal = () => `Property${num}`;
   let proposal = createProposal();
   while (columnNames.has(proposal)) {
     num += 1;

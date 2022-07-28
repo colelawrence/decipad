@@ -15,6 +15,7 @@ const tableBaseStyles = css({
   borderSpacing: '0',
   tableLayout: 'auto',
   counterReset: tableRowCounter,
+  display: 'inline-table',
 });
 
 const wideTableStyles = css({
