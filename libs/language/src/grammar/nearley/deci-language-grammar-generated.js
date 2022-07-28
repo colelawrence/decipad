@@ -1295,6 +1295,75 @@ let ParserRules = [
   { name: 'tableSep$subexpression$1', symbols: ['_', { literal: ',' }, '_'] },
   { name: 'tableSep', symbols: ['tableSep$subexpression$1'], postprocess: id },
   {
+    name: 'tiered',
+    symbols: [
+      'tieredKeyword',
+      '_',
+      'expression',
+      '_',
+      { literal: '{' },
+      'tieredContents',
+      { literal: '}' },
+    ],
+    postprocess: (d) => {
+      return addArrayLoc(
+        {
+          type: 'tiered',
+          args: [d[2], ...d[5]],
+        },
+        d
+      );
+    },
+  },
+  { name: 'tieredKeyword', symbols: [{ literal: 'tiered' }] },
+  { name: 'tieredKeyword', symbols: [{ literal: 'tiers' }] },
+  { name: 'tieredKeyword', symbols: [{ literal: 'sliced' }] },
+  { name: 'tieredKeyword', symbols: [{ literal: 'slices' }], postprocess: id },
+  { name: 'tieredContents', symbols: ['_'], postprocess: (d) => [] },
+  { name: 'tieredContents$ebnf$1', symbols: [] },
+  {
+    name: 'tieredContents$ebnf$1$subexpression$1',
+    symbols: ['tieredSep', 'tieredDef'],
+  },
+  {
+    name: 'tieredContents$ebnf$1',
+    symbols: ['tieredContents$ebnf$1', 'tieredContents$ebnf$1$subexpression$1'],
+    postprocess: function arrpush(d) {
+      return d[0].concat([d[1]]);
+    },
+  },
+  {
+    name: 'tieredContents',
+    symbols: ['_', 'tieredDef', 'tieredContents$ebnf$1', '_'],
+    postprocess: ([_ws, first, rest]) => {
+      const tieredDefs = [first];
+
+      for (const [_sep, tieredDef] of rest ?? []) {
+        tieredDefs.push(tieredDef);
+      }
+      return tieredDefs;
+    },
+  },
+  {
+    name: 'tieredDef',
+    symbols: ['expression', '_', { literal: ':' }, '_', 'expression'],
+    postprocess: (d) =>
+      addArrayLoc(
+        {
+          type: 'tiered-def',
+          args: [d[0], d[4]],
+        },
+        d
+      ),
+  },
+  { name: 'tieredSep$subexpression$1', symbols: ['__n'] },
+  { name: 'tieredSep$subexpression$1', symbols: ['_', { literal: ',' }, '_'] },
+  {
+    name: 'tieredSep',
+    symbols: ['tieredSep$subexpression$1'],
+    postprocess: id,
+  },
+  {
     name: 'select',
     symbols: [
       { literal: 'select' },
@@ -1474,6 +1543,7 @@ let ParserRules = [
     symbols: ['matchDefSep$subexpression$1'],
     postprocess: id,
   },
+  { name: 'expression', symbols: ['tiered'], postprocess: id },
   { name: 'expression', symbols: ['match'], postprocess: id },
   { name: 'expression', symbols: ['overExp'], postprocess: id },
   { name: 'expression', symbols: ['fetchData'], postprocess: id },

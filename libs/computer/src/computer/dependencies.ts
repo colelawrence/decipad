@@ -74,7 +74,9 @@ function findRefs(node: AST.Node): string[] {
     }
     case 'matrix-ref':
     case 'match':
-    case 'matchdef': {
+    case 'matchdef':
+    case 'tiered':
+    case 'tiered-def': {
       return unique(node.args.flatMap(findRefs));
     }
     case 'ref':
@@ -171,6 +173,9 @@ function getLocalNames(
     }
     if (node.type === 'function-definition') {
       names.push(...node.args[1].args.map(getIdentifierString));
+    }
+    if (node.type === 'tiered-def') {
+      names.push('slice', 'tier');
     }
   }
 

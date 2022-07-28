@@ -94,12 +94,12 @@ ul {
 }
 
 /* code*/
-.codeBlockContainer__-_-node_modules-\@docusaurus-theme-classic-lib-next-theme-CodeBlock-styles-module {
+.codeBlockContainer_------node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Container-styles-module {
   max-width: 652px;
 }
 
 /* wrap text of code errors*/
-pre {
+.playgroundError_src-lib-deci-language-live-codeblock-theme-Playground-styles-module {
   white-space: pre-wrap; /* css-3 */
   white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
   white-space: -pre-wrap; /* Opera 4-6 */

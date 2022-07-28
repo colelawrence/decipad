@@ -22,6 +22,7 @@ import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
 import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
 import { evaluateMatch } from '../match/evaluateMatch';
+import { evaluateTiered } from '../tiered/evaluateTiered';
 
 // Gets a single value from an expanded AST.
 
@@ -212,6 +213,9 @@ export async function evaluate(
     }
     case 'match': {
       return evaluateMatch(realm, node);
+    }
+    case 'tiered': {
+      return evaluateTiered(realm, node);
     }
   }
 }

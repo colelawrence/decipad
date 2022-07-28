@@ -20,3 +20,5 @@ export type FractionLike = {
 };
 
 export * from './utils';
+export * from './min';
+export * from './max';

@@ -31,8 +31,11 @@ export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
 
 export const block = (...contents: AST.Statement[]) => n('block', ...contents);
 
-type LitType = number | bigint | string | boolean;
+type LitType = number | bigint | string | boolean | Fraction;
 export function l(value: LitType): AST.Literal {
+  if (value instanceof Fraction) {
+    return n('literal', 'number', value);
+  }
   const t = typeof value;
   if (t === 'number' || t === 'bigint') {
     const fraction = new Fraction(value as number | bigint);
@@ -174,6 +177,14 @@ export function matchDef(cond: AST.Expression, value: AST.Expression) {
   return n('matchdef', cond, value);
 }
 
+export function tiered(arg: AST.Expression, ...defs: AST.TieredDef[]) {
+  return n('tiered', arg, ...defs);
+}
+
+export function tieredDef(tier: AST.Expression, value: AST.Expression) {
+  return n('tiered-def', tier, value);
+}
+
 export function funcDef(
   fName: string,
   args: string[],
@@ -227,6 +238,8 @@ const expressionTypesSet = new Set([
   'date',
   'matrix-ref',
   'directive',
+  'match',
+  'tiered',
 ]);
 
 export const isExpression = (

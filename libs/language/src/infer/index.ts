@@ -20,6 +20,7 @@ import { inferCategories } from '../categories';
 import { inferFunctionDefinition, inferFunctionCall } from './functions';
 import { getConstantByName } from '../builtins';
 import { inferMatch } from '../match/inferMatch';
+import { inferTiered } from '../tiered/inferTiered';
 
 export { makeContext };
 export type { Context };
@@ -229,6 +230,8 @@ export const inferExpression = wrap(
       }
       case 'match':
         return inferMatch(ctx, expr);
+      case 'tiered':
+        return inferTiered(ctx, expr);
     }
   }
 );

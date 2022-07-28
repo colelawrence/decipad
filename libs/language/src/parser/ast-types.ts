@@ -186,6 +186,20 @@ export interface Match {
   end?: Pos;
 }
 
+export interface TieredDef {
+  type: 'tiered-def';
+  args: [Expression, Expression];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface Tiered {
+  type: 'tiered';
+  args: [Expression, ...TieredDef[]];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface PropertyAccess {
   type: 'property-access';
   args: [Expression, string];
@@ -327,7 +341,8 @@ export type Expression =
   | FetchData
   | Directive
   | MatrixRef
-  | Match;
+  | Match
+  | Tiered;
 
 export type Statement =
   | FunctionDefinition
@@ -351,7 +366,8 @@ export type Node =
   | Lists
   | TableColumn
   | TableSpread
-  | MatchDef;
+  | MatchDef
+  | TieredDef;
 
 export interface TypeToNode {
   noop: Noop;
@@ -390,4 +406,6 @@ export interface TypeToNode {
   'fetch-data': FetchData;
   match: Match;
   matchdef: MatchDef;
+  tiered: Tiered;
+  'tiered-def': TieredDef;
 }
