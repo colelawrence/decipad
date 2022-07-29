@@ -1,5 +1,5 @@
 import Fraction from '@decipad/fraction';
-import { knowsUnit, unitUsesPrefixes, getUnitByName } from '.';
+import { getUnitByName, knowsUnit, unitUsesPrefixes } from '.';
 import { Unit } from '..';
 import { F } from '../utils';
 
@@ -85,11 +85,8 @@ export function parseUnit(unitString: string): Unit {
       exp: F(1),
       multiplier: F(1),
       known: true,
-      isPrefix: knownUnit.isPrefix,
       baseQuantity: knownUnit.baseQuantity,
       baseSuperQuantity: knownUnit.superBaseQuantity ?? knownUnit.baseQuantity,
-      hasNoSpaceBetweenUnitAndNumber: knownUnit.hasNoSpaceBetweenUnitAndNumber,
-      thousandsSeparator: knownUnit.thousandsSeparator ?? ',',
     };
   } else {
     const trimResult = trimPrefix(unitString);
@@ -127,11 +124,22 @@ export function parseUnit(unitString: string): Unit {
       }
     }
 
-    return {
+    const ret = {
       unit: name,
       exp: F(exponent),
       multiplier,
       known,
     };
+
+    if (known) {
+      const maybeACurrency = getUnitByName(name);
+      if (maybeACurrency && maybeACurrency.superBaseQuantity === 'currency') {
+        return { ...ret, baseSuperQuantity: 'currency' };
+      } else {
+        return ret;
+      }
+    }
+
+    return ret;
   }
 }

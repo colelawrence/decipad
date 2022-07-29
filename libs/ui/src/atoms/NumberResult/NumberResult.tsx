@@ -1,6 +1,6 @@
-import { FC } from 'react';
-import { css } from '@emotion/react';
 import { useComputer } from '@decipad/react-contexts';
+import { css } from '@emotion/react';
+import { FC } from 'react';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -20,18 +20,14 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
 }) => {
   const computer = useComputer();
 
-  const fullResult = (
-    <span css={numberResultStyles}>{computer.formatNumber(type, value)}</span>
-  );
+  const formatted = computer.formatNumber(type, value);
+
+  const fullResult = <span css={numberResultStyles}>{formatted.asString}</span>;
 
   const trigger = <span css={numberResultStyles}>{fullResult}</span>;
   if (!tooltip) {
     return trigger;
   }
 
-  return (
-    <Tooltip trigger={trigger}>
-      ~ {computer.formatNumber(type, value, 10)}
-    </Tooltip>
-  );
+  return <Tooltip trigger={trigger}>{formatted.asStringPrecise}</Tooltip>;
 };

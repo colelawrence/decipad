@@ -1,15 +1,18 @@
 /* eslint-disable no-param-reassign */
+import FFraction, { F, FractionLike, ONE } from '@decipad/fraction';
 import {
   FUnit,
+  getUnitByName,
+  pluralizeUnit,
   prettyForSymbol,
   simplifyUnits,
   singular,
+  TUnit,
+  TUnits,
   unitIsSymbol,
-  pluralizeUnit,
 } from '@decipad/language';
-import FFraction, { F, FractionLike, ONE } from '@decipad/fraction';
 import produce from 'immer';
-import { TUnits } from 'libs/language/src/type/unit-type';
+import { DeciNumberPart } from './formatNumber';
 
 const TWO = new FFraction(2);
 
@@ -24,6 +27,7 @@ const numberToSubOrSuperscript: Record<string, string[]> = {
   '7': ['₇', '⁷'],
   '8': ['₈', '⁸'],
   '9': ['₉', '⁹'],
+  '+': ['₊', '⁺'], // minus
   '-': ['₋', '⁻'], // minus
   '.': ['·', '˙'], // dot
   '/': ['/', 'ᐟ'], // slash
@@ -91,45 +95,130 @@ const isInteger = (f: FractionLike): boolean => {
   return Number(f.d) === 1;
 };
 
-const stringifyUnit = (unit: FUnit, prettify = true) => {
-  const symbol = singular(unit.unit.toLowerCase());
-  const pretty = prettyForSymbol[symbol];
-  const isSymbol = unitIsSymbol(symbol);
+export function prettyENumbers(
+  exponent: string,
+  show10 = false,
+  coefficient = '1'
+): string {
+  return `${+coefficient === 1 ? '' : coefficient}${
+    show10 ? ' ×10' : ''
+  }${exponent.replace('+', '').replace(/./g, scriptFromNumber)}`.trim();
+}
+export interface UnitPart {
+  type:
+    | 'unit'
+    | 'unit-literal'
+    | 'unit-exponent'
+    | 'unit-quality'
+    | 'unit-group'
+    | 'unit-prefix';
+  value: string;
+  originalValue?: string; // for values that are prettified
+  base?: string; // for unit conversions in the ui
+}
 
+const stringifyUnit = (
+  unit: FUnit,
+  prettify = true,
+  ignoreExp = false
+): UnitPart[] => {
+  const symbol = singular(unit.unit.toLowerCase());
+  const fullUnit = getUnitByName(symbol);
+  const pretty = prettyForSymbol[symbol];
+  const base =
+    fullUnit?.superBaseQuantity === 'currency'
+      ? 'currency'
+      : fullUnit?.baseQuantity || 'user-defined-unit';
+  const isSymbol = unitIsSymbol(symbol);
   const multiPrefix = unit.multiplier ? F(unit.multiplier).valueOf() : 1;
   const prefix = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
 
-  const result = [
-    prefix != null
-      ? isSymbol
-        ? prefix[0]
-        : prefix[1]
-      : multiPrefix.toString(),
-    prettify && pretty ? pretty : unit.unit,
-  ];
+  const result: UnitPart[] = [];
+
+  if (prefix != null) {
+    if (isSymbol) {
+      result.push({
+        type: 'unit-prefix',
+        value: prefix[0],
+      });
+    } else {
+      result.push({
+        type: 'unit-prefix',
+        value: prefix[1],
+      });
+    }
+  } else {
+    const [coefficient, exponent] = multiPrefix.toString().split('e');
+    result.push({
+      type: 'unit-exponent',
+      originalValue: multiPrefix.toString(),
+      value: prettyENumbers(exponent, true, coefficient),
+    });
+    result.push({
+      type: 'unit-literal',
+      value: ' ',
+    });
+  }
+
+  if (prettify && pretty) {
+    result.push({
+      type: 'unit',
+      originalValue: unit.baseSuperQuantity === 'currency' ? pretty : unit.unit,
+      value: pretty,
+      base,
+    });
+  } else {
+    result.push({
+      type: 'unit',
+      value: unit.unit,
+      base,
+    });
+  }
 
   const { exp: _exp } = unit;
   const exp = F(_exp);
+
   if (exp.compare(ONE) !== 0) {
     const strExp = isInteger(exp)
       ? exp.toString()
       : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
           .filter(Boolean)
           .join('')}`;
-    const prettyExp = strExp.replace(/./g, scriptFromNumber);
+    const prettyExp = prettyENumbers(strExp);
 
-    if (prettify) {
-      result.push(prettyExp);
-    } else {
-      result.push('^', strExp);
+    //
+    // when we say per kg, it means kg^-1
+    // however we already sorted this previously
+    // and dont want to show the exponent twice
+    //
+    if (!ignoreExp) {
+      if (prettify) {
+        result.push({
+          type: 'unit-exponent',
+          value: prettyExp,
+          originalValue: strExp,
+        });
+      } else {
+        result.push({
+          type: 'unit-exponent',
+          originalValue: strExp,
+          value: `^${strExp}`,
+        });
+      }
     }
   }
 
   if (unit.quality) {
-    result.push(` of ${unit.quality}`);
+    result.push({
+      type: 'unit-quality',
+      originalValue: unit.quality,
+      value: ` of ${unit.quality}`,
+    });
   }
 
-  return result.join('');
+  // 1 multipliers dont affect strings so we remove useless
+  // declarations
+  return result.filter((x) => x.value !== '');
 };
 
 export const formatUnitArgs = (
@@ -137,45 +226,113 @@ export const formatUnitArgs = (
   value?: FFraction,
   prettify = true,
   previousLength = 0
-): string => {
+) => {
   const unitsLength = units?.length ?? 0 + previousLength;
-  return (units ?? [])
-    .reduce((parts: string[], unit: FUnit): string[] => {
-      if (parts.length > 0) {
-        let prefix: string;
-        //
-        // when you have two units you show
-        // meter per second
-        // but when you have morpreviousLength = 0e
-        // you use international system like `m.s-1`
-        //
-        if (unitsLength === 2 && F(unit.exp).compare(F(-1)) === 0) {
-          prefix = prettify ? (unitIsSymbol(unit.unit) ? '/' : ' per ') : '/';
-          parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit, true), prettify));
-        } else {
-          prefix = prettify ? '·' : '*';
-          parts.push(prefix);
-          parts.push(stringifyUnit(produceExp(unit), prettify));
+  return (units ?? []).reduce((parts: UnitPart[], unit: FUnit) => {
+    if (parts.length > 0) {
+      let prefix: string;
+      //
+      // when you have two units you show
+      // meter per second
+      // but when you have more previousLength = 0
+      // you use international system like `m.s-1`
+      //
+      if (unitsLength === 2 && F(unit.exp).compare(F(-1)) === 0) {
+        if (prettify) {
+          if (unitIsSymbol(unit.unit)) {
+            parts.push({
+              type: 'unit-group',
+              value: '/',
+            });
+          } else {
+            parts.push({ type: 'unit-literal', value: ' ' });
+            parts.push({
+              type: 'unit-group',
+              value: 'per',
+            });
+            parts.push({ type: 'unit-literal', value: ' ' });
+          }
         }
-      } else {
-        //
-        // turn off pluralisation if there's more than 2 unit
-        //
-        parts.push(
-          stringifyUnit(
-            pluralizeUnit(
-              unit,
-              units && unitsLength > 2 ? 2 : value?.valueOf() || 2
-            ),
-            prettify
-          )
+        stringifyUnit(produceExp(unit, true), prettify).forEach((x) =>
+          parts.push(x)
         );
+      } else {
+        prefix = prettify ? '·' : '*';
+        parts.push({
+          type: 'unit-group',
+          value: prefix,
+        });
+        stringifyUnit(produceExp(unit), prettify).forEach((x) => parts.push(x));
       }
-      return parts;
-    }, [])
-    .join('');
+    } else if (unitsLength === 1 && F(unit.exp).compare(F(-1)) === 0) {
+      parts.push({ type: 'unit-literal', value: ' ' });
+      parts.push({
+        type: 'unit-group',
+        value: 'per',
+      });
+      parts.push({ type: 'unit-literal', value: ' ' });
+      stringifyUnit(pluralizeUnit(unit, 1), prettify, true).forEach((x) =>
+        parts.push(x)
+      );
+    } else {
+      stringifyUnit(
+        pluralizeUnit(
+          unit,
+          units && unitsLength > 2 ? 2 : value?.valueOf() || 2
+        ),
+        prettify
+      ).forEach((x) => parts.push(x));
+    }
+    return parts;
+  }, []);
 };
+
+function fixSpaces(partsOfUnit: UnitPart[]) {
+  return partsOfUnit
+    .reduce(
+      //
+      // we want to join strings with a space, but with expecting
+      // for multipliers, e.g. `km` not `k m`
+      //
+      (p, d, i, a) =>
+        p +
+        (i > 0 &&
+        (a[i - 1].type === 'unit-prefix' || // `km` not `k m`
+          d.type === 'unit-exponent' || // 2^420 not 2 ^420
+          d.type === 'unit-literal' ||
+          (a[i + 1] && a[i + 1].type === 'unit-literal') ||
+          a[i - 1].type === 'unit-literal') // `1 meter per second` not `1 meter  per  second`
+          ? ''
+          : ' ') +
+        d.value,
+      ''
+    )
+    .trim();
+}
+
+export function formatUnitAsParts<TF extends FractionLike = FFraction>(
+  _locale: string,
+  units: TUnits<TF>,
+  value: FFraction = TWO,
+  prettify = true,
+  previousLength = 0
+): DeciNumberPart {
+  const simplified = simplifyUnits(units) || units;
+  const sortedUnits = produce(simplified, (u) => {
+    u.args.sort(byExp);
+  });
+  const unitParts = formatUnitArgs(
+    sortedUnits.args,
+    value,
+    prettify,
+    previousLength
+  );
+  return {
+    type: 'unit',
+    value: fixSpaces(unitParts),
+    partsOf: unitParts as UnitPart[],
+  };
+}
 
 export function formatUnit<TF extends FractionLike = FFraction>(
   _locale: string,
@@ -184,12 +341,39 @@ export function formatUnit<TF extends FractionLike = FFraction>(
   prettify = true,
   previousLength = 0
 ): string {
-  if (units == null || units.args.length === 0) {
-    return '';
+  const parts = formatUnitAsParts(
+    _locale,
+    units,
+    value,
+    prettify,
+    previousLength
+  );
+  if (parts.partsOf) {
+    return parts.partsOf.map((x) => x.value).join('');
   }
-  const simplified = simplifyUnits(units) || units;
-  const sortedUnits = produce(simplified, (u) => {
-    u.args.sort(byExp);
-  });
-  return formatUnitArgs(sortedUnits.args, value, prettify, previousLength);
+  throw new Error('This should not happen its a typescript imposition');
+}
+
+function isUserDefinedUnit<TF extends FractionLike = FFraction>(
+  unit: TUnit<TF> | null
+): boolean {
+  if (!unit) {
+    return false;
+  }
+  const fullUnit = getUnitByName(unit.unit);
+  return (
+    unit != null &&
+    !fullUnit?.baseQuantity &&
+    new FFraction(unit.exp).equals(ONE) &&
+    new FFraction(unit.multiplier).equals(ONE)
+  );
+}
+
+export function isUserDefined<TF extends FractionLike = FFraction>(
+  unit: TUnits<TF> | null
+): boolean {
+  if (unit?.args.length === 1) {
+    return isUserDefinedUnit(unit.args[0]);
+  }
+  return false;
 }

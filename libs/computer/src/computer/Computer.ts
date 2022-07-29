@@ -1,10 +1,18 @@
+import {
+  DeciNumber,
+  formatError,
+  formatNumber,
+  formatUnit,
+} from '@decipad/format';
 import FFraction, { FractionLike } from '@decipad/fraction';
 import {
   AST,
   AutocompleteName,
   buildType as t,
+  ErrSpec,
   evaluateStatement,
   ExternalDataMap,
+  FUnits,
   inferExpression,
   inferStatement,
   isExpression,
@@ -13,15 +21,13 @@ import {
   parseOneExpression,
   Result,
   RuntimeError,
+  SerializedTypes,
   SerializedUnits,
   serializeResult,
   serializeType,
   serializeUnit,
-  FUnits,
   validateResult,
   Value,
-  ErrSpec,
-  SerializedTypes,
 } from '@decipad/language';
 import { anyMappingToMap, getDefined } from '@decipad/utils';
 import assert from 'assert';
@@ -34,7 +40,6 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
-import { formatError, formatNumber, formatUnit } from '@decipad/format';
 import { captureException } from '../reporting';
 import {
   ComputePanic,
@@ -577,19 +582,8 @@ export class Computer {
     this.locale = locale;
   }
 
-  formatNumber(
-    type: SerializedTypes.Number,
-    value: FractionLike,
-    decimalPlaces?: number
-  ): string {
-    return formatNumber(
-      this.locale,
-      type.unit,
-      value,
-      decimalPlaces,
-      ',',
-      type.numberFormat
-    );
+  formatNumber(type: SerializedTypes.Number, value: FractionLike): DeciNumber {
+    return formatNumber(this.locale, type.unit, value, type.numberFormat);
   }
 
   formatUnit(unit: FUnits, value?: FFraction): string {

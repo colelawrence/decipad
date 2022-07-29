@@ -1,8 +1,8 @@
-import { parseUnit } from '../units';
 import { build as t } from '.';
+import { typeSnapshotSerializer } from '../testUtils';
+import { parseUnit } from '../units';
 import { narrowFunctionCall, narrowTypes } from './narrowing';
 import { parseFunctionSignature, parseType } from './parseType';
-import { typeSnapshotSerializer } from '../testUtils';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 

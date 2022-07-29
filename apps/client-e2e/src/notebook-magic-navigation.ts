@@ -15,7 +15,7 @@ describe('notebook navigation', () => {
     await page.keyboard.type('Price is %Price');
     await page.keyboard.type('%');
     await keyPress('Enter');
-    await createCalculationBlockBelow('Fees = 500 gbp');
+    await createCalculationBlockBelow('Fees = 5 gbp');
 
     expect(
       await page.waitForSelector('text=Should you buy a house?')
@@ -42,13 +42,13 @@ describe('notebook navigation', () => {
     await keyPress('Enter');
     await keyPress('Enter');
     await keyPress('Enter');
-    await page.keyboard.type('Price = Fees + 300000 gbp');
-    expect((await page.textContent('text=is £300,500'))!.trim()).not.toBeNull();
-    const magic = await page.locator('span[title="300500"]');
+    await page.keyboard.type('Price = Fees + 30 gbp');
+    expect((await page.textContent('text=is £35'))!.trim()).not.toBeNull();
+    const magic = await page.locator('span[title="35"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
     await expect(
-      page.locator(`span[title="300500"] >> visible=false`)
+      page.locator(`span[title="35"] >> visible=false`)
     ).toBeTruthy();
   });
 
@@ -60,14 +60,14 @@ describe('notebook navigation', () => {
     const deleteButton = page.locator(`:nth-match(:text("Delete"), 2)`);
     await deleteButton.click();
     await keyPress('Enter');
-    await page.keyboard.type('Price = 4200 gbp');
+    await page.keyboard.type('Price = 42 gbp');
     await keyPress('Enter');
-    expect((await page.textContent('text=is £4,200'))!.trim()).not.toBeNull();
-    const magic = await page.locator('span[title="4200"]');
+    expect((await page.textContent('text=is £42'))!.trim()).not.toBeNull();
+    const magic = await page.locator('span[title="42"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
     await expect(
-      page.locator(`span[title="4200"] >> visible=false`)
+      page.locator(`span[title="42"] >> visible=false`)
     ).toBeTruthy();
   });
 });

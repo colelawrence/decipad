@@ -1,30 +1,30 @@
 import Fraction from '@decipad/fraction';
-import { normalizeUnitName, doNotPluralize } from './utils';
-import * as LengthUnits from './length-units';
+import * as AngleUnits from './angle-units';
 import * as AreaUnits from './area-units';
-import * as SpeedUnits from './speed-units';
-import * as VolumeUnits from './volume-units';
-import * as PressureUnits from './pressure-units';
+import * as CurrencyUnits from './currency-units';
+import * as ElectricChargeUnits from './electric-charge-units';
+import * as ElectricCurrentUnits from './electric-current-units';
+import * as ElectricalCapacitanceUnits from './electrical-capacitance-units';
+import * as ElectricalConductanceUnits from './electrical-conductance-units';
+import * as ElectricalResistanceUnits from './electrical-resistance-units';
 import * as EnergyUnits from './energy-units';
 import * as ForceUnits from './force-units';
+import * as FrequencyUnits from './frequency-units';
+import * as InformationUnits from './information-units';
+import * as LengthUnits from './length-units';
+import * as LuminousFlowUnits from './luminous-flow-units';
+import * as LuminousIntensityUnits from './luminous-intensity-units';
 import * as MassUnits from './mass-units';
+import * as PowerUnits from './power-units';
+import * as PressureUnits from './pressure-units';
+import * as SolidAngleUnits from './solid-angle-units';
+import * as SpeedUnits from './speed-units';
+import * as SubstanceUnits from './substance-units';
 import * as TemperatureUnits from './temperature-units';
 import * as TimeUnits from './time-units';
-import * as InformationUnits from './information-units';
-import * as SubstanceUnits from './substance-units';
-import * as ElectricCurrentUnits from './electric-current-units';
-import * as ElectricChargeUnits from './electric-charge-units';
+import { doNotPluralize, normalizeUnitName } from './utils';
 import * as VoltageUnits from './voltage-units';
-import * as ElectricalCapacitanceUnits from './electrical-capacitance-units';
-import * as ElectricalResistanceUnits from './electrical-resistance-units';
-import * as ElectricalConductanceUnits from './electrical-conductance-units';
-import * as LuminousIntensityUnits from './luminous-intensity-units';
-import * as LuminousFlowUnits from './luminous-flow-units';
-import * as SolidAngleUnits from './solid-angle-units';
-import * as PowerUnits from './power-units';
-import * as FrequencyUnits from './frequency-units';
-import * as CurrencyUnits from './currency-units';
-import * as AngleUnits from './angle-units';
+import * as VolumeUnits from './volume-units';
 
 export type BaseQuantity =
   | 'length'
@@ -100,9 +100,6 @@ export type UnitOfMeasure = {
   toBaseQuantity: (n: Fraction) => Fraction;
   fromBaseQuantity: (n: Fraction) => Fraction;
   superBaseQuantity?: 'currency';
-  isPrefix?: boolean;
-  hasNoSpaceBetweenUnitAndNumber?: boolean;
-  thousandsSeparator?: '.' | ',';
 };
 
 const allUnitPackages = [
@@ -249,3 +246,5 @@ export function areUnitsCompatible(
 
   return unitA.baseQuantity === unitB.baseQuantity;
 }
+
+export { CurrencyUnits };

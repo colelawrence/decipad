@@ -22,7 +22,7 @@ it('inserts a link using markdown syntax', async () => {
   );
 });
 
-const valueOfFoo = 120;
+const valueOfFoo = 1;
 
 it('inserts a magic number', async () => {
   await focusOnBody();
@@ -37,7 +37,7 @@ it('inserts a magic number', async () => {
 });
 
 it('can use an expression in magic number', async () => {
-  expect((await page.textContent('text=7,200 seconds'))!.trim()).not.toBeNull();
+  expect((await page.textContent('text=60 seconds'))!.trim()).not.toBeNull();
 });
 
 it('deleted a magic number', async () => {

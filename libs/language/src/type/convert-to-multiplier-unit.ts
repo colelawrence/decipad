@@ -1,5 +1,5 @@
 import Fraction, { pow } from '@decipad/fraction';
-import { Units, SerializedUnits } from '.';
+import { SerializedUnits, Units } from '.';
 import { F } from '../utils';
 
 function multipliersFor(units: Units | SerializedUnits): Fraction {
