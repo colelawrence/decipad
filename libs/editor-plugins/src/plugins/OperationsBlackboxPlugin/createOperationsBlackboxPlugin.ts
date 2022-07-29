@@ -9,13 +9,15 @@ export const createOperationsBlackboxPlugin = createTPluginFactory({
   withOverrides: (editor) => {
     const { apply } = editor;
 
-    console.info('%cInitial Document:', logsColor, editor.children);
+    // eslint-disable-next-line no-console
+    console.debug('%cInitial Document:', logsColor, editor.children);
 
     // eslint-disable-next-line no-param-reassign
     editor.apply = (operation) => {
       const { type } = operation;
 
-      console.info(`%c${type}`, logsColor, operation);
+      // eslint-disable-next-line no-console
+      console.debug(`%c${type}`, logsColor, operation);
 
       return apply(operation);
     };
