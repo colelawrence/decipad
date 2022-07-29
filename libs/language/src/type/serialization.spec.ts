@@ -129,6 +129,7 @@ it('can stringify a type', () => {
     .toMatchInlineSnapshot(`
     Object {
       "argCount": 2,
+      "ast": null,
       "kind": "function",
       "name": "fname",
     }

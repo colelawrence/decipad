@@ -40,6 +40,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
+import { FunctionDefinition } from 'libs/language/src/parser/ast-types';
 import { captureException } from '../reporting';
 import {
   ComputePanic,
@@ -309,6 +310,10 @@ export class Computer {
       : null;
   }
 
+  getFunctionDefinition(funcName: string): FunctionDefinition | undefined {
+    return this.computationRealm.inferContext.functionDefinitions.get(funcName);
+  }
+
   getBlockId$(varName: string): Observable<string | undefined> {
     const mainIdentifier = varName.includes('.') // table.name
       ? varName.split('.')[0]
@@ -339,6 +344,15 @@ export class Computer {
     return this.results.pipe(
       map(() => this.getVariable(varName)),
       distinctUntilChanged()
+    );
+  }
+
+  getFunctionDefinition$(
+    funcName: string
+  ): Observable<FunctionDefinition | null | undefined> {
+    return this.results.pipe(
+      map(() => this.getFunctionDefinition(funcName)),
+      distinctUntilChanged(dequal)
     );
   }
 

@@ -12,6 +12,7 @@ export { CodeSyntax } from './CodeSyntax/CodeSyntax';
 export { ColorPicker } from './ColorPicker/ColorPicker';
 export { ColumnDropLine } from './DropLine/ColumnDropLine';
 export { DateResult } from './DateResult/DateResult';
+export { DefaultFunctionResult } from './DefaultFunctionResult/DefaultFunctionResult';
 export { Display } from './Display/Display';
 export { Divider } from './Divider/Divider';
 export { DropLine } from './DropLine/DropLine';

@@ -49,6 +49,7 @@ export type Anything = SType<{ kind: 'anything' }>; // Top type
 export type Function = SType<{
   kind: 'function';
   name: string;
-  argCount: number | undefined;
+  argCount?: number;
+  ast?: AST.Node | null;
 }>;
 export type TypeError = SType<{ kind: 'type-error'; errorCause: ErrSpec }>;

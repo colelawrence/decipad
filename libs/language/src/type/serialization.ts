@@ -80,6 +80,7 @@ export function serializeType(type: Type): SerializedType {
         kind: 'function',
         name: getDefined(type.functionName),
         argCount: type.functionArgCount,
+        ast: type.node,
       };
     } else if (type.errorCause) {
       return { kind: 'type-error', errorCause: type.errorCause.spec };
