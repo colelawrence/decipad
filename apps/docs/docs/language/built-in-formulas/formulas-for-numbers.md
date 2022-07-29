@@ -195,3 +195,12 @@ tan(45degrees)
 round(atan(1) in degrees)
 ==> 45 °
 ```
+
+### Factorial
+
+You can compute factorials with the `factorial()` formula. For example `5!`.
+
+```deci live
+factorial(5)
+==> 120
+```

@@ -5,7 +5,13 @@ import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { F, getInstanceof, multiplyMultipliers } from '../../utils';
 import { InferError, Type, build as t } from '../../type';
-import { fromJS, Scalar, Value, isColumnLike } from '../../interpreter/Value';
+import {
+  fromJS,
+  Scalar,
+  Value,
+  isColumnLike,
+  FractionValue,
+} from '../../interpreter/Value';
 import { AST } from '../../parser';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
@@ -277,6 +283,49 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     fn: ([n]) => Math.log(n),
     functionSignature: 'number:R -> R',
+  },
+  factorial: {
+    argCount: 1,
+    fnValues: (() => {
+      const lookupTable = Array(100_000);
+
+      return ([n]) => {
+        const frac = getInstanceof(n.getData(), Fraction);
+
+        if (frac.compare(0) < 0) {
+          throw new RuntimeError(
+            'factorial() requires a positive number or zero'
+          );
+        }
+
+        if (frac.compare(100000) > 0) {
+          throw new RuntimeError('factorial() number too large');
+        }
+
+        if (frac.compare(2) < 0) {
+          return new FractionValue(new Fraction(1n));
+        }
+
+        if (frac.valueOf() !== Math.round(frac.valueOf())) {
+          throw new RuntimeError('factorial() number not an integer');
+        }
+
+        if (lookupTable[frac.valueOf()]) {
+          return new FractionValue(new Fraction(lookupTable[frac.valueOf()]));
+        }
+
+        let i = BigInt(frac.valueOf() - 1);
+        let fact = BigInt(frac.valueOf());
+        for (; i >= 1; i--) {
+          fact *= i;
+        }
+
+        lookupTable[frac.valueOf()] = fact;
+
+        return new FractionValue(new Fraction(fact));
+      };
+    })(),
+    functor: ([n]) => n,
   },
   '+': overloadBuiltin('+', 2, [
     {
