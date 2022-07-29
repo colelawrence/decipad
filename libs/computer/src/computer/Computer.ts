@@ -352,6 +352,10 @@ export class Computer {
       expression
     );
 
+    if (type.errorCause) {
+      return { value: null, type: serializeType(type) };
+    }
+
     try {
       const value = await evaluateStatement(
         this.computationRealm.interpreterRealm,
