@@ -17,13 +17,8 @@ import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-ev
 
 const ZERO = new Fraction(0);
 
-const simpleUnaryOpFunctor = ([n]: Type[]) => n.isScalar('number');
-
 const binopFunctor = ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
-
-const numberReducerFunctor = ([t]: Type[]) =>
-  Type.combine(t.reduced().isScalar('number'));
 
 const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
@@ -162,7 +157,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     noAutoconvert: true,
     fn: ([n]) => Math.abs(n as number),
-    functor: simpleUnaryOpFunctor,
+    functionSignature: 'number:R -> R',
   },
   round: {
     argCount: [1, 2],
@@ -209,8 +204,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   average: {
     argCount: 1,
     argCardinalities: [2],
-    functor: numberReducerFunctor,
     fnValues: average,
+    functionSignature: 'column<R> -> R',
   },
   avg: { aliasFor: 'average' },
   mean: { aliasFor: 'average' },
@@ -250,8 +245,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   median: {
     argCount: 1,
     argCardinalities: [2],
-    functor: numberReducerFunctor,
     fnValues: median,
+    functionSignature: 'column<R> -> R',
   },
   sqrt: {
     argCount: 1,
@@ -281,7 +276,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     noAutoconvert: true,
     fn: ([n]) => Math.log(n),
-    functor: simpleUnaryOpFunctor,
+    functionSignature: 'number:R -> R',
   },
   '+': overloadBuiltin('+', 2, [
     {
@@ -317,7 +312,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     noAutoconvert: true,
     fn: ([a]) => a.neg(),
-    functor: ([n]) => n.isScalar('number'),
+    functionSignature: 'number:R -> R',
   },
   '*': {
     argCount: 2,

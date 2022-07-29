@@ -3,6 +3,7 @@ import moo from 'moo';
 import { getDefined, thro } from '@decipad/utils';
 
 import { build as t, Type } from '.';
+import type { FunctionSignature } from './narrowing';
 
 const tokens = moo.compile({
   lt: '<',
@@ -25,7 +26,7 @@ export const parseType = (typeSource: string) => {
   return parsed;
 };
 
-export const parseFunctionSignature = (sig: string) => {
+export const parseFunctionSignature = (sig: string): FunctionSignature => {
   const tokenStream = tokenize(sig);
 
   const expectedArgs = [parseTypeInner(tokenStream)];

@@ -10,6 +10,7 @@ import {
 } from '../interpreter/Value';
 import { getDefined } from '../utils';
 import { AST } from '..';
+import { parseFunctor } from './parseFunctor';
 
 export type OverloadTypeName =
   | 'number'
@@ -19,11 +20,19 @@ export type OverloadTypeName =
   | 'date'
   | 'range';
 
-export interface OverloadedBuiltinSpec {
-  argTypes: OverloadTypeName[];
-  fnValues: (values: Value[], types?: Type[]) => Value;
-  functor: (types: Type[], values?: AST.Expression[]) => Type;
-}
+export type OverloadedBuiltinSpec =
+  | {
+      argTypes: OverloadTypeName[];
+      fnValues: (values: Value[], types?: Type[]) => Value;
+      functor: (types: Type[], values?: AST.Expression[]) => Type;
+      functionSignature?: undefined;
+    }
+  | {
+      argTypes: OverloadTypeName[];
+      fnValues: (values: Value[], types?: Type[]) => Value;
+      functor?: undefined;
+      functionSignature: string;
+    };
 
 export const overloadBuiltin = (
   fName: string,
@@ -55,7 +64,9 @@ export const overloadBuiltin = (
     if (overload == null) {
       return t.impossible(InferError.badOverloadedBuiltinCall(fName, types));
     } else {
-      return overload.functor(types);
+      const resolvedFunctor =
+        overload.functor ?? parseFunctor(overload.functionSignature);
+      return resolvedFunctor(types);
     }
   };
 

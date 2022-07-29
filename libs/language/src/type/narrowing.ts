@@ -1,17 +1,27 @@
-import produce from 'immer';
 import { getDefined, zip } from '@decipad/utils';
-
+import produce from 'immer';
+import {
+  build as t,
+  deserializeType,
+  SerializedTypes,
+  serializeType,
+  Type,
+} from '.';
 import { equalOrUndefined, equalOrUnknown } from '../utils';
-import { build as t, SerializedTypes, serializeType, Type } from '.';
 import { InferError } from './InferError';
-import { matchUnitArrays } from './units';
 import { onlyOneIsPercentage } from './percentages';
+import { traverseType } from './traverseType';
+import { matchUnitArrays } from './units';
+
+export interface FunctionSignature {
+  expectedArgs: Type[];
+  returnType: Type;
+}
 
 export function narrowTypes(
   t1: Type,
   t2: Type,
   mutSymbols = new Map<string, Type>(),
-  readSymbols = false,
   errorPath: ('column' | 'range')[] = []
 ): Type {
   if (t1.errorCause) return t1;
@@ -19,8 +29,8 @@ export function narrowTypes(
 
   // Treat generic symbols
   if (t1.symbol) {
-    if (readSymbols && mutSymbols.has(t1.symbol)) {
-      return getDefined(mutSymbols.get(t1.symbol));
+    if (mutSymbols.has(t1.symbol)) {
+      t1 = getDefined(mutSymbols.get(t1.symbol));
     } else {
       mutSymbols.set(t1.symbol, t2);
     }
@@ -69,9 +79,12 @@ export function narrowTypes(
           getDefined(t1.rangeOf),
           getDefined(t2.rangeOf),
           mutSymbols,
-          readSymbols,
           [...errorPath, 'range']
         );
+
+        if (narrowedContents.errorCause) {
+          return narrowedContents;
+        }
 
         return produce(t1, (type) => {
           type.rangeOf = narrowedContents;
@@ -85,9 +98,12 @@ export function narrowTypes(
           getDefined(t1.cellType),
           getDefined(t2.cellType),
           mutSymbols,
-          readSymbols,
           [...errorPath, 'column']
         );
+
+        if (narrowedCell.errorCause) {
+          return narrowedCell;
+        }
 
         if (!equalOrUnknown(s1.columnSize, s2.columnSize)) {
           return t1.withErrorCause('mismatched column size');
@@ -120,7 +136,7 @@ export function narrowTypes(
 
   // Trace the path to the error
   return produce(ret, (type) => {
-    if (type.errorCause) {
+    if (type.errorCause && !type.errorCause.pathToError.length) {
       type.errorCause.pathToError = errorPath;
     }
   });
@@ -148,7 +164,7 @@ function narrowUnitsOf(t1: Type, t2: Type): Type {
     return t1;
   }
 
-  return t.impossible(InferError.cannotConvertBetweenUnits(s1, s2));
+  return t.impossible(InferError.expectedUnit(s1, s2));
 }
 
 export function narrowFunctionCall({
@@ -168,5 +184,19 @@ export function narrowFunctionCall({
     return error;
   }
 
-  return narrowTypes(returnType, t.anything(), genericSymbols, true);
+  const returnTypeWithSymbols = traverseType(
+    serializeType(returnType),
+    (type) => {
+      if (type.symbol) {
+        const ret = getDefined(genericSymbols.get(type.symbol));
+        const typeWithoutSymbol = produce(ret, (t) => {
+          t.symbol = null;
+        });
+        return serializeType(typeWithoutSymbol);
+      }
+      return type;
+    }
+  );
+
+  return deserializeType(returnTypeWithSymbols);
 }

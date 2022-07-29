@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction from '@decipad/fraction';
-import { BuiltinSpec } from '../interfaces';
+import type { BuiltinSpec } from '../interfaces';
 import { Value, fromJS } from '../../interpreter/Value';
-import { Type } from '../../type';
 
 export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   total: {
@@ -11,7 +10,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCardinalities: [2],
     isReducer: true,
     fn: ([nums]: number[][]) => nums.reduce((a, b) => a + b, 0),
-    functor: ([nums]) => nums.reduced().isScalar('number'),
+    functionSignature: 'column<number:R> -> R',
   },
   sum: {
     aliasFor: 'total',
@@ -32,10 +31,6 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
         )
       );
     },
-    functor: ([numbers, booleans]) =>
-      Type.combine(
-        booleans.reduced().isScalar('boolean'),
-        numbers.reduced().isScalar('number')
-      ),
+    functionSignature: 'column<number:R>, column<boolean> -> R',
   },
 };

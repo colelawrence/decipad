@@ -1,8 +1,8 @@
 import produce from 'immer';
 import Fraction from '@decipad/fraction';
-import { AST, Time } from '..';
+import { getDefined } from '@decipad/utils';
+import type { AST, Time } from '..';
 import { InferError, Type, PrimitiveTypeName } from '.';
-import { getDefined } from '../utils';
 import { Unit, Units, units } from './unit-type';
 import { timeUnitFromUnit } from '../date';
 

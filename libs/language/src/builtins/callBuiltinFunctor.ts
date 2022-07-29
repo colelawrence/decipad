@@ -1,13 +1,9 @@
-import { Context } from '..';
+import type { AST, Context } from '..';
 import { Type, build as t, InferError } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
-import { getDefined } from '../utils';
 import { getOperatorByName } from './operators';
-import { AST } from '../parser';
-
-function typeHasError(t: Type) {
-  return t.errorCause != null;
-}
+import type { BuiltinSpec, Functor } from './interfaces';
+import { parseFunctor } from './parseFunctor';
 
 export const callBuiltinFunctor = (
   context: Context,
@@ -36,7 +32,7 @@ export const callBuiltinFunctor = (
     }
 
     if (op.isReducer) {
-      const lowerDimFunctor = getDefined(op.functor);
+      const lowerDimFunctor = getFunctor(op);
       return automapTypesForReducer(givenArguments[0], (types: Type[]) =>
         lowerDimFunctor(types, givenValues, context)
       );
@@ -50,13 +46,25 @@ export const callBuiltinFunctor = (
       givenArguments,
       ([type, ...rest]) =>
         Type.combine(type, ...rest).mapType(() =>
-          getDefined(op.functor, 'need a builtin functor')(
-            [type, ...rest],
-            givenValues,
-            context
-          )
+          getFunctor(op)([type, ...rest], givenValues, context)
         ),
       op.argCardinalities
     );
   }
+};
+
+function typeHasError(t: Type) {
+  return t.errorCause != null;
+}
+
+const getFunctor = (op: BuiltinSpec): Functor => {
+  if (op.functor) {
+    return op.functor;
+  }
+
+  if (op.functionSignature) {
+    return parseFunctor(op.functionSignature);
+  }
+
+  throw new Error(`must either specify a functor or a functionSignature`);
 };

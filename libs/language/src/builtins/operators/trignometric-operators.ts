@@ -18,7 +18,7 @@ const radian = once(() =>
 const angleOpFunctor = ([n]: Type[]) =>
   n
     .isScalar('number')
-    .noUnitsOrSameUnitsAs(radian())
+    .sameAs(radian())
     .mapType(() => t.number());
 
 const arcFunctor = ([n]: Type[]) =>

@@ -1,9 +1,5 @@
 import { BuiltinSpec } from '../interfaces';
-import { Type, build as t } from '../../type';
 import { compare } from '../../interpreter/compare-values';
-
-const cmpFunctor = ([left, right]: Type[]): Type =>
-  Type.combine(right.sameAs(left), t.boolean());
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isEqual = (a: any, b: any) => {
@@ -17,11 +13,11 @@ export const equalityOperators: Record<string, BuiltinSpec> = {
   '==': {
     argCount: 2,
     fn: ([a, b]) => isEqual(a, b),
-    functor: cmpFunctor,
+    functionSignature: 'A, A -> boolean',
   },
   '!=': {
     argCount: 2,
     fn: ([a, b]) => !isEqual(a, b),
-    functor: cmpFunctor,
+    functionSignature: 'A, A -> boolean',
   },
 };

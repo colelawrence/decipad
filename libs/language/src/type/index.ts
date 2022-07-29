@@ -13,11 +13,9 @@ import {
   isTableOrRow,
   isTimeQuantity,
   multiplyUnit,
-  noUnitsOrSameUnitsAs,
   reduced,
   reducedToLowest,
   sameAs,
-  sameUnitsAs,
   withColumnSize,
   withMinimumColumnCount,
   withAtParentIndex,
@@ -44,6 +42,9 @@ export * from './serialization';
 export * from './convert-to-multiplier-unit';
 export { setUnit, normalizeUnits, normalizeUnitsOf, units };
 export { InferError, inverseExponent, t as build };
+export { parseType, parseFunctionSignature } from './parseType';
+export type { FunctionSignature } from './narrowing';
+export { narrowTypes, narrowFunctionCall } from './narrowing';
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
 
@@ -155,14 +156,6 @@ export class Type {
 
   isScalar(type: PrimitiveTypeName): Type {
     return isScalar(this, type);
-  }
-
-  sameUnitsAs(other: Type): Type {
-    return sameUnitsAs(this, other);
-  }
-
-  noUnitsOrSameUnitsAs(other: Type): Type {
-    return noUnitsOrSameUnitsAs(this, other);
   }
 
   isColumn(size?: number | 'unknown'): Type {

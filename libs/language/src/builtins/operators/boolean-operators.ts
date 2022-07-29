@@ -1,18 +1,10 @@
 import { BuiltinSpec } from '../interfaces';
-import { Type, build as t } from '../../type';
-
-const booleanBinopFunctor = ([left, right]: Type[]): Type =>
-  Type.combine(
-    left.isScalar('boolean'),
-    right.isScalar('boolean'),
-    t.boolean()
-  );
 
 export const booleanOperators: Record<string, BuiltinSpec> = {
   '!': {
     argCount: 1,
     fn: ([a]) => !a,
-    functor: ([a]) => a.isScalar('boolean'),
+    functionSignature: 'boolean -> boolean',
   },
   not: {
     aliasFor: '!',
@@ -20,7 +12,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
   '&&': {
     argCount: 2,
     fn: ([a, b]) => a && b,
-    functor: booleanBinopFunctor,
+    functionSignature: 'boolean, boolean -> boolean',
   },
   and: {
     aliasFor: '&&',
@@ -28,7 +20,7 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
   '||': {
     argCount: 2,
     fn: ([a, b]) => a || b,
-    functor: booleanBinopFunctor,
+    functionSignature: 'boolean, boolean -> boolean',
   },
   or: {
     aliasFor: '||',

@@ -36,17 +36,6 @@ export const isScalar = checker((me: Type, type: PrimitiveTypeName) => {
   }
 });
 
-export const sameUnitsAs = checker((me: Type, other: Type) => {
-  if (!matchUnitArrays(me.unit, other.unit)) {
-    return me.withErrorCause(InferError.expectedUnit(other.unit, me.unit));
-  }
-  return me;
-});
-
-export const noUnitsOrSameUnitsAs = checker((me: Type, other: Type) => {
-  return !me.unit ? me : me.sameUnitsAs(other);
-});
-
 const sameNumbernessAs = (me: Type, other: Type) => {
   me = propagatePercentage(me, other);
 

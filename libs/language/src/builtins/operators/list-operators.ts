@@ -1,6 +1,5 @@
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
-import produce from 'immer';
 import { RuntimeError } from '../../interpreter';
 import { OneResult } from '../../interpreter/interpreter-types';
 import {
@@ -24,7 +23,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     argCardinalities: [2],
     fnValues: ([col]: Value[]) => fromJS(getColumnLike(col).rowCount),
-    functor: ([a]) => a.isColumn().mapType(() => t.number()),
+    functionSignature: 'column<A> -> number',
   },
   cat: {
     argCount: 2,
@@ -45,7 +44,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     fnValues: ([arg]: Value[]) => getColumnLike(arg).atIndex(0),
-    functor: ([a]) => a.reduced(),
+    functionSignature: 'column<A> -> A',
   },
   last: {
     argCount: 1,
@@ -54,7 +53,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
       const col = getColumnLike(arg);
       return col.atIndex(col.rowCount - 1);
     },
-    functor: ([a]) => Type.combine(a.reduced()),
+    functionSignature: 'column<A> -> A',
   },
   count: {
     aliasFor: 'len',
@@ -68,7 +67,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
         aData.reduce((count, elem) => (elem.valueOf() ? count + 1 : count), 0)
       );
     },
-    functor: ([a]) => Type.combine(a.reduced().isScalar('boolean'), t.number()),
+    functionSignature: 'column<boolean> -> number',
   },
   stepgrowth: {
     argCount: 1,
@@ -78,8 +77,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
         const previous = a[index - 1] ?? 0;
         return item - previous;
       }),
-    functor: ([a]) =>
-      Type.combine(a.isColumn().reduced().isScalar('number'), a),
+    functionSignature: 'column<number>:A -> A',
   },
   grow: {
     argCount: 3,
@@ -114,21 +112,15 @@ export const listOperators: Record<string, BuiltinSpec> = {
   sort: {
     argCount: 1,
     argCardinalities: [2],
-    functor: ([column]) => column.isColumn(),
     fnValues: ([column]) => ValueTransforms.sort(getColumnLike(column)),
+    functionSignature: 'column<A>:R -> R',
   },
 
   unique: {
     argCount: 1,
     argCardinalities: [2],
-    functor: ([column]) =>
-      Type.combine(
-        column.isColumn(),
-        produce((column) => {
-          column.columnSize = 'unknown';
-        })
-      ),
     fnValues: ([column]) => ValueTransforms.unique(getColumnLike(column)),
+    functionSignature: 'column<A> -> column<A>',
   },
 
   reverse: {

@@ -1,5 +1,6 @@
 import FFraction from '@decipad/fraction';
 import { AnyMapping, zip } from '@decipad/utils';
+import Fraction from 'fraction.js/bigfraction';
 import { AST, InjectableExternalData } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
@@ -10,8 +11,11 @@ import {
   build as t,
   convertToMultiplierUnit,
   normalizeUnitsOf,
+  SerializedType,
+  serializeType,
   Type,
 } from './type';
+import { isSerializedType, SerializedUnit } from './type/SerializedType';
 
 export const runAST = async (
   block: AST.Block,
@@ -153,7 +157,91 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
   return `data:${contentType};base64,${Buffer.from(data).toString('base64')}`;
 }
 
+/** Stringify units (for testing/snapshots ONLY) */
+export const snapshotUnit = (unit: SerializedUnit[]) => {
+  return unit
+    .map((u) => {
+      const exp = new Fraction(u.exp).valueOf();
+
+      if (exp !== 1) {
+        return `${u.unit}^${exp}`;
+      } else {
+        return u.unit;
+      }
+    })
+    .join('.');
+};
+
+/** Stringify types (for testing/snapshots ONLY) */
+export const snapshotType = (type: Type | SerializedType): string => {
+  if (type instanceof Type) {
+    type = serializeType(type);
+  }
+
+  if (type.kind === 'anything') {
+    return type.symbol || 'anything';
+  }
+
+  switch (type.kind) {
+    case 'string':
+    case 'boolean':
+    case 'nothing':
+    case 'function': {
+      return type.kind;
+    }
+
+    case 'number': {
+      if (type.numberFormat) {
+        return type.numberFormat;
+      } else if (type.unit) {
+        return snapshotUnit(type.unit.args);
+      } else {
+        return 'number';
+      }
+    }
+
+    case 'table': {
+      const colsPairs = zip(type.columnNames, type.columnTypes).map(
+        ([name, colType]) => `${name} = ${snapshotType(colType)}`
+      );
+      return `table<${colsPairs.join(', ')}>`;
+    }
+
+    case 'column': {
+      let contents = snapshotType(type.cellType);
+
+      if (type.columnSize !== 'unknown') {
+        contents += `, ${type.columnSize}`;
+      }
+
+      if (type.indexedBy != null) {
+        contents += `, indexed by ${type.indexedBy}`;
+      }
+
+      return `column<${contents}>`;
+    }
+
+    case 'range': {
+      return `range<${snapshotType(type.rangeOf)}>`;
+    }
+
+    case 'row': {
+      return `row<${type.rowCellTypes.map((t) => snapshotType(t)).join(', ')}>`;
+    }
+
+    case 'date': {
+      return `date<${type.date}>`;
+    }
+
+    case 'type-error': {
+      return `InferError ${type.errorCause.errType}`;
+    }
+  }
+};
+
 export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
-  test: (item) => item instanceof Type,
-  serialize: (item: Type) => item.toString(),
+  test: (item) => item instanceof Type || isSerializedType(item),
+  serialize: (item: Type) => {
+    return snapshotType(item);
+  },
 };

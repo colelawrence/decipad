@@ -2148,4 +2148,19 @@ describe('percentages', () => {
       type: t.number(null, 'percentage'),
     });
   });
+
+  it('propagates units correctly', async () => {
+    expect(await runCode('3% / 2 meters')).toMatchObject({
+      value: F(15, 1000),
+      type: t.number(U('meters')),
+    });
+    expect(await runCode('8 meters * 50%')).toMatchObject({
+      value: F(4),
+      type: t.number(U('meters')),
+    });
+    expect(await runCode('100% + 1 meter')).toMatchObject({
+      value: F(2),
+      type: t.number(U('meters')),
+    });
+  });
 });

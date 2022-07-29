@@ -1,20 +1,42 @@
-import { build as t } from '../../type';
-import { booleanOperators as operators } from './boolean-operators';
+import { runCode } from '../../run';
+import { typeSnapshotSerializer } from '../../testUtils';
+
+expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 describe('boolean operators', () => {
-  it('negates a boolean', () => {
-    expect(operators['!'].functor?.([t.boolean(), t.boolean()])).toMatchObject(
-      t.boolean()
-    );
-    expect(operators['!'].fn?.([true])).toBe(false);
-    expect(operators['!'].fn?.([false])).toBe(true);
+  it('runs boolean ops', async () => {
+    expect(await runCode(`!true`)).toMatchInlineSnapshot(`
+      Object {
+        "type": boolean,
+        "value": false,
+      }
+    `);
+    expect(await runCode(`!1`)).toMatchInlineSnapshot(`
+      Object {
+        "type": InferError expected-but-got,
+        "value": false,
+      }
+    `);
   });
 
-  it('ands two booleans', () => {
-    expect(operators['&&'].functor?.([t.boolean(), t.boolean()])).toMatchObject(
-      t.boolean()
-    );
-    expect(operators['&&'].fn?.([true, true])).toBe(true);
-    expect(operators['&&'].fn?.([false, true])).toBe(false);
+  it('ands two booleans', async () => {
+    expect(await runCode(`true && true`)).toMatchInlineSnapshot(`
+      Object {
+        "type": boolean,
+        "value": true,
+      }
+    `);
+    expect(await runCode(`false && true`)).toMatchInlineSnapshot(`
+      Object {
+        "type": boolean,
+        "value": false,
+      }
+    `);
+    expect(await runCode(`false && "Hello"`)).toMatchInlineSnapshot(`
+      Object {
+        "type": InferError expected-but-got,
+        "value": false,
+      }
+    `);
   });
 });

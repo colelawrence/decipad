@@ -1,10 +1,15 @@
-import { build as t } from '../../type';
-import { contractOperators as operators } from './contract-operators';
+import { runCode } from '../../run';
+import { typeSnapshotSerializer } from '../../testUtils';
+
+expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 describe('contract operators', () => {
-  it('assert to exist', () => {
-    expect(operators.assert.functor?.([t.boolean()])).toMatchObject(
-      t.boolean()
-    );
+  it('assert to exist', async () => {
+    expect(await runCode('assert(1)')).toMatchInlineSnapshot(`
+      Object {
+        "type": InferError expected-but-got,
+        "value": true,
+      }
+    `);
   });
 });

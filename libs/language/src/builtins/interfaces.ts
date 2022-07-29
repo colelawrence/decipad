@@ -4,6 +4,12 @@ import type { AST } from '../parser';
 import type { Context } from '../infer';
 import type { Realm } from '../interpreter';
 
+export type Functor = (
+  types: Type[],
+  values?: AST.Expression[],
+  context?: Context
+) => Type;
+
 export interface BuiltinSpec {
   argCount?: number | number[];
   /**
@@ -26,11 +32,8 @@ export interface BuiltinSpec {
     realm?: Realm
   ) => Value;
   fnValues?: (args: Value[], argTypes?: Type[], realm?: Realm) => Value;
-  functor?: (
-    types: Type[],
-    values?: AST.Expression[],
-    context?: Context
-  ) => Type;
+  functor?: Functor;
+  functionSignature?: string;
   functorNoAutomap?: (
     types: Type[],
     values?: AST.Expression[],

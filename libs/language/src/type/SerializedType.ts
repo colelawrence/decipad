@@ -1,7 +1,8 @@
-import { TUnit, TUnits } from './unit-type';
+import type { TUnit, TUnits } from './unit-type';
 import * as SerializedTypes from './SerializedTypes';
+import { Type } from '.';
 
-export { SerializedTypes };
+export type { SerializedTypes };
 
 export interface SerializedFraction {
   n: bigint;
@@ -32,3 +33,12 @@ export type SerializedType =
   | SerializedTypes.TypeError;
 
 export type SerializedTypeKind = SerializedType['kind'];
+
+export const isSerializedType = (thing: unknown): thing is SerializedType => {
+  return (
+    !(thing instanceof Type) &&
+    typeof thing === 'object' &&
+    thing !== null &&
+    'kind' in thing
+  );
+};

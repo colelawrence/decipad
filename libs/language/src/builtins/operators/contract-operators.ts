@@ -10,6 +10,6 @@ export const contractOperators: Record<string, BuiltinSpec> = {
       }
       return true;
     },
-    functor: ([a]) => a.isScalar('boolean'),
+    functionSignature: 'boolean -> boolean',
   },
 };

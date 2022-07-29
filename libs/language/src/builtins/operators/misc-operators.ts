@@ -28,7 +28,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
       functor: ([a, b]): Type =>
         Type.combine(
           a.isRange(),
-          b.isScalar('number').noUnitsOrSameUnitsAs(a.getRangeOf()),
+          b.isScalar('number').sameAs(a.getRangeOf()),
           t.boolean()
         ),
     },
