@@ -17,7 +17,6 @@ import {
   EditorTableContext,
   EditorTableContextValue,
 } from '@decipad/react-contexts';
-import { isEnabled } from '@decipad/feature-flags';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTable, useTableActions } from '../../hooks';
 import { useSelectedCells } from './useSelectedCells';
@@ -85,15 +84,13 @@ export const Table: PlateComponent = withProviders([
                 tableWidth={wideTable ? 'WIDE' : 'SLIM'}
                 isSelectingCell={!!selectedCells}
                 smartRow={
-                  isEnabled('SMART_ROWS') && (
-                    <SmartRow
-                      onAggregationTypeNameChange={onChangeColumnAggregation}
-                      aggregationTypeNames={headers.map((h) => h.aggregation)}
-                      tableName={name}
-                      tablePath={tablePath}
-                      columns={columns}
-                    />
-                  )
+                  <SmartRow
+                    onAggregationTypeNameChange={onChangeColumnAggregation}
+                    aggregationTypeNames={headers.map((h) => h.aggregation)}
+                    tableName={name}
+                    tablePath={tablePath}
+                    columns={columns}
+                  />
                 }
               >
                 {children}

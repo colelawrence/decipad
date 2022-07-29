@@ -1,10 +1,4 @@
-export type Flag =
-  | 'SMART_ROWS'
-  | 'FORMULA_COLUMNS'
-  | 'INPUT_COPY'
-  | 'PERSISTENT_EXAMPLE'
-  | 'POWER_TABLE'
-  | 'TABLE_COLUMN_SERIES';
+export type Flag = 'INPUT_COPY' | 'PERSISTENT_EXAMPLE' | 'POWER_TABLE';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

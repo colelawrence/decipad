@@ -1,6 +1,5 @@
 import { ComponentProps, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { isEnabled } from '@decipad/feature-flags';
 import Fraction from '@decipad/fraction';
 import type { TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
@@ -86,7 +85,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             Number
           </MenuItem>
-          {!isFirst && isEnabled('FORMULA_COLUMNS') && (
+          {!isFirst && (
             <MenuItem
               icon={<Formula />}
               onSelect={() => onChangeColumnType(getFormulaType())}
@@ -145,23 +144,21 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               Time
             </MenuItem>
           </MenuList>
-          {isEnabled('TABLE_COLUMN_SERIES') && (
-            <MenuList
-              itemTrigger={
-                <TriggerMenuItem icon={<Leaf />}>
-                  <div css={{ minWidth: '116px' }}>Series</div>
-                </TriggerMenuItem>
-              }
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem icon={<Leaf />}>
+                <div css={{ minWidth: '116px' }}>Series</div>
+              </TriggerMenuItem>
+            }
+          >
+            <MenuItem
+              icon={<Calendar />}
+              onSelect={() => onChangeColumnType(getSeriesType('date'))}
+              selected={type.kind === 'series' && type.seriesType === 'date'}
             >
-              <MenuItem
-                icon={<Calendar />}
-                onSelect={() => onChangeColumnType(getSeriesType('date'))}
-                selected={type.kind === 'series' && type.seriesType === 'date'}
-              >
-                Date
-              </MenuItem>
-            </MenuList>
-          )}
+              Date
+            </MenuItem>
+          </MenuList>
         </MenuList>
         <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
           Remove column
