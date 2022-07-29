@@ -65,5 +65,5 @@ Make each table unique by selecting a custom icon and color.
 
 
 # Learn More:
-
+- See how to create more advanced tables using the Language: [Decision Tables](/docs/language/advanced-concepts/decision-tables)
 - Learn how to organize your data using tables on: [Data Organization](/docs/language/data-organization/tables)
