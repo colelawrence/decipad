@@ -14,6 +14,13 @@ interface PlotFunctionProps {
   onFinishRender: (version: number, variance: number) => void;
 }
 
+const updatePath = (oldPath: string, newPart: string): string => {
+  if (oldPath.endsWith(newPart)) {
+    return oldPath;
+  }
+  return oldPath + newPart;
+};
+
 const margin = 2;
 
 export const PlotFunction: FC<PlotFunctionProps> = ({
@@ -31,6 +38,7 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
   const [points, setPoints] = useState('');
   const [renderPoints, setRenderPoints] = useState<string>('');
   const [variance, setVariance] = useState<[number, number]>([0, 0]);
+  const [isDiscontinued, setIsDiscontinued] = useState(false);
 
   const xScale = useMemo(
     () => new Fraction(width).div(maxX.sub(maxX.neg())).valueOf(),
@@ -58,6 +66,7 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
     setSampleX(maxX.neg());
     setPoints('');
     setRenderPoints('');
+    setIsDiscontinued(false);
     setVariance([0, 0]);
   }, [maxX]);
 
@@ -81,7 +90,14 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
           setLastResult(originalY);
           setPoints((p) => {
             const currentPath = p;
-            return currentPath ? `${currentPath} L${x},${y}` : `M${x},${y}`;
+            let newPart: string;
+            if (isDiscontinued) {
+              newPart = ` M${x},${y}`;
+              setIsDiscontinued(false);
+            } else {
+              newPart = currentPath ? ` L${x},${y}` : `M${x},${y}`;
+            }
+            return updatePath(currentPath, newPart);
           });
           setVariance((v) => {
             let [newV, sampleSize] = v;
@@ -94,7 +110,8 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
         } else if (lastResult) {
           // no result, so let's just move the SVG cursor there
           const [x, y] = placePoint(sampleX.valueOf(), lastResult.valueOf());
-          setPoints((p) => `${p} M${x},${y}`);
+          setPoints((p) => updatePath(p, ` M${x},${y}`));
+          setIsDiscontinued(true);
         }
         setSampleX((x) => x.add(sampleInterval));
       } else {
@@ -109,6 +126,7 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
   }, [
     fn,
     internalOnFinishRender,
+    isDiscontinued,
     lastResult,
     maxX,
     placePoint,
