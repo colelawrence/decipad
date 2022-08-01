@@ -57,13 +57,13 @@ export const Table: PlateComponent = withProviders([
   const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
 
   return (
-    <div
-      {...attributes}
-      contentEditable={true}
-      suppressContentEditableWarning
-      id={blockId}
-    >
-      {!deleted && (
+    (!deleted && (
+      <div
+        {...attributes}
+        contentEditable={true}
+        suppressContentEditableWarning
+        id={blockId}
+      >
         <DraggableBlock
           element={element}
           blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
@@ -98,7 +98,8 @@ export const Table: PlateComponent = withProviders([
             </TableDndProvider>
           </EditorTableContext.Provider>
         </DraggableBlock>
-      )}
-    </div>
+      </div>
+    )) ||
+    null
   );
 });

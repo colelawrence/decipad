@@ -5,3 +5,4 @@ export * from './results';
 export * from './editor-change';
 export * from './editor-table';
 export * from './useFormulaResult';
+export * from './editor-block-parent-ref';

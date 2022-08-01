@@ -14,6 +14,7 @@ import { TableWidth } from '../Table/Table';
 import { smallestDesktop } from '../../primitives';
 import { tableControlWidth } from '../../styles/table';
 import { Column } from '../../types';
+import { useAutoAnimate } from '../../hooks';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -98,6 +99,8 @@ export const EditorTable: FC<EditorTableProps> = ({
   smartRow,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
+  const [animateTableBody] = useAutoAnimate<HTMLTableSectionElement>();
+  const [animateTableHead] = useAutoAnimate<HTMLTableSectionElement>();
 
   return (
     <TableStyleContext.Provider
@@ -119,8 +122,8 @@ export const EditorTable: FC<EditorTableProps> = ({
               tableWidth={tableWidth}
               isSelectingCell={isSelectingCell}
             >
-              <thead>{thead}</thead>
-              <tbody>{tbody}</tbody>
+              <thead ref={animateTableHead}>{thead}</thead>
+              <tbody ref={animateTableBody}>{tbody}</tbody>
               <tfoot contentEditable={false}>
                 {smartRow}
                 <AddTableRowButton

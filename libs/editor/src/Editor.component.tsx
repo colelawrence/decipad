@@ -1,6 +1,7 @@
 import {
   EditorChangeContextProvider,
   EditorReadOnlyContext,
+  EditorBlockParentRefProvider,
 } from '@decipad/react-contexts';
 import { atoms, LoadingFilter } from '@decipad/ui';
 import { RefObject, useCallback, useRef, useState } from 'react';
@@ -10,6 +11,7 @@ import { Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
 import * as components from './components';
 import { useWriteLock } from './utils/useWriteLock';
+import { useAutoAnimate } from './hooks';
 
 export interface EditorProps {
   notebookId: string;
@@ -48,6 +50,7 @@ export const Editor = (props: EditorProps) => {
   }, [changeSubject]);
 
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
+  const { onRefChange } = useAutoAnimate();
 
   if (!loaded || !editor) {
     return <atoms.EditorPlaceholder />;
@@ -59,24 +62,26 @@ export const Editor = (props: EditorProps) => {
     >
       <EditorChangeContextProvider changeSubject={changeSubject}>
         <LoadingFilter loading={isWritingLocked}>
-          <div ref={containerRef} style={{ position: 'relative' }}>
-            <Plate<MyValue>
-              editor={editor}
-              id={editor.id}
-              onChange={onChange}
-              editableProps={{
-                // Only respect write locks here and not the readOnly prop.
-                // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                // The rest are controlled via EditorReadOnlyContext.
-                readOnly: isWritingLocked,
-              }}
-              disableCorePlugins={{
-                history: true,
-              }}
-            >
-              <InsidePlate {...props} containerRef={containerRef} />
-            </Plate>
-          </div>
+          <EditorBlockParentRefProvider onRefChange={onRefChange}>
+            <div ref={containerRef} style={{ position: 'relative' }}>
+              <Plate<MyValue>
+                editor={editor}
+                id={editor.id}
+                onChange={onChange}
+                editableProps={{
+                  // Only respect write locks here and not the readOnly prop.
+                  // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                  // The rest are controlled via EditorReadOnlyContext.
+                  readOnly: isWritingLocked,
+                }}
+                disableCorePlugins={{
+                  history: true,
+                }}
+              >
+                <InsidePlate {...props} containerRef={containerRef} />
+              </Plate>
+            </div>
+          </EditorBlockParentRefProvider>
         </LoadingFilter>
       </EditorChangeContextProvider>
     </EditorReadOnlyContext.Provider>

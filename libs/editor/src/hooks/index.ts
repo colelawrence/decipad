@@ -1,2 +1,1 @@
-export * from './useMergedRef';
 export * from './useAutoAnimate';

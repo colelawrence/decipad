@@ -97,11 +97,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     defaultOnDelete(editor, element, parentOnDelete);
   }, [parentOnDelete, editor, element]);
 
-  if (deleted) {
-    return <></>;
-  }
-  if (readOnly && element.isHidden) {
-    return <></>;
+  if (deleted || (readOnly && element.isHidden)) {
+    return null;
   }
   if (readOnly) {
     return (

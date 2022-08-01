@@ -6,14 +6,15 @@ module.exports = {
   collectCoverageFrom: ['<rootDir>/src/**'],
   coveragePathIgnorePatterns: ['^((?!<rootDir>).)*$'],
 
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'mjs'],
   resolver: require.resolve('@nrwl/jest/plugins/resolver'),
 
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest',
+    '^.+\\.mjs$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lib0|p-retry|y-protocols|.*dnd.*)/)',
+    'node_modules/(?!(lib0|p-retry|y-protocols|@formkit/auto-animate|.*dnd.*)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
 
