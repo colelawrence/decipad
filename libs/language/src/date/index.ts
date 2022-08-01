@@ -10,7 +10,6 @@ import * as Time from './time-types';
 
 export * from './time-quantities';
 
-export { TimeQuantity } from './TimeQuantity';
 export { Time };
 
 /*

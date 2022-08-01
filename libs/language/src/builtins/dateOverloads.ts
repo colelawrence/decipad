@@ -2,11 +2,12 @@ import Fraction from '@decipad/fraction';
 
 import { Date, FractionValue } from '../interpreter/Value';
 import {
-  addTimeQuantity,
+  addTime,
   cmpSpecificities,
   getHighestSpecificity as getMostSpecific,
   subtractDates,
-  TimeQuantity,
+  Time,
+  timeUnitFromUnits,
 } from '../date';
 import { F, getDefined, getInstanceof } from '../utils';
 import { Type, build as t, InferError } from '../type';
@@ -16,9 +17,10 @@ type OverloadSet = Record<string, OverloadedBuiltinSpec[]>;
 
 export const addDateAndTimeQuantity = (
   date: Date,
-  timeQuantity: TimeQuantity
+  unit: Time.Unit,
+  amount: bigint
 ) => {
-  const newDate = addTimeQuantity(date.getData(), timeQuantity);
+  const newDate = addTime(date.getData(), unit, amount);
 
   return Date.fromDateAndSpecificity(newDate, date.specificity);
 };
@@ -78,10 +80,9 @@ export const dateOverloads: OverloadSet = {
       fnValues: ([v1, v2], [, t2] = []) =>
         addDateAndTimeQuantity(
           getInstanceof(v1, Date),
-          TimeQuantity.fromUnits(
-            BigInt(getInstanceof(v2, FractionValue).getData().valueOf()),
-            getDefined(t2?.unit)
-          )
+
+          timeUnitFromUnits(getDefined(t2?.unit)),
+          BigInt(getInstanceof(v2, FractionValue).getData().valueOf())
         ),
       functor: ([t1, t2]) =>
         Type.combine(t2.isTimeQuantity(), () =>
@@ -93,10 +94,8 @@ export const dateOverloads: OverloadSet = {
       fnValues: ([v1, v2], [t1] = []) =>
         addDateAndTimeQuantity(
           getInstanceof(v2, Date),
-          TimeQuantity.fromUnits(
-            BigInt(getInstanceof(v1, FractionValue).getData().valueOf()),
-            getDefined(t1.unit)
-          )
+          timeUnitFromUnits(getDefined(t1?.unit)),
+          BigInt(getInstanceof(v1, FractionValue).getData().valueOf())
         ),
       functor: ([t1, t2]) =>
         Type.combine(t1.isTimeQuantity(), () =>
@@ -110,12 +109,13 @@ export const dateOverloads: OverloadSet = {
       fnValues: ([v1, v2], [, t2] = []) => {
         const number = getInstanceof(v2, FractionValue);
 
-        const negatedQuantity = TimeQuantity.fromUnits(
-          BigInt(number.getData().neg().valueOf()),
-          getDefined(t2?.unit, 'the unit of time must exist')
-        );
+        const negatedQuantity = BigInt(number.getData().neg().valueOf());
 
-        return addDateAndTimeQuantity(getInstanceof(v1, Date), negatedQuantity);
+        return addDateAndTimeQuantity(
+          getInstanceof(v1, Date),
+          timeUnitFromUnits(getDefined(t2?.unit)),
+          negatedQuantity
+        );
       },
       functor: dateAndTimeQuantityFunctor,
     },

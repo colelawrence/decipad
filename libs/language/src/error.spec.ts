@@ -10,7 +10,7 @@ describe('Correctness of error behaviour', () => {
   });
 });
 
-describe('Contracts to be uphelp', () => {
+describe('Contracts to be upheld', () => {
   it('Assert a condition that is false', async () => {
     await expect(() => runCode(`assert(1==2)`)).rejects.toThrowError(
       'User defined pre-condition was not met'

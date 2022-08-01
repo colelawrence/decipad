@@ -1,6 +1,6 @@
 import { build as t } from '../type';
 import { Date as IDate, FractionValue } from '../interpreter/Value';
-import { parseUTCDate, Time, TimeQuantity } from '../date';
+import { parseUTCDate, Time } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';
 import {
   dateOverloads,
@@ -73,14 +73,20 @@ describe('common functions', () => {
     expect(
       addDateAndTimeQuantity(
         IDate.fromDateAndSpecificity(parseUTCDate('2020'), 'year'),
-        new TimeQuantity({ year: 1n })
+        'year',
+        1n
       ).getData()
     ).toEqual(parseUTCDate('2021'));
 
     expect(
       addDateAndTimeQuantity(
-        IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01'), 'day'),
-        new TimeQuantity({ year: -1n, month: 1n })
+        addDateAndTimeQuantity(
+          IDate.fromDateAndSpecificity(parseUTCDate('2020-01-01'), 'day'),
+          'year',
+          -1n
+        ),
+        'month',
+        1n
       ).getData()
     ).toEqual(parseUTCDate('2019-02-01'));
 
@@ -90,7 +96,8 @@ describe('common functions', () => {
           parseUTCDate('2020-01-01 10:30'),
           'minute'
         ),
-        new TimeQuantity({ hour: 1n })
+        'hour',
+        1n
       ).getData()
     ).toEqual(parseUTCDate('2020-01-01 11:30'));
   });

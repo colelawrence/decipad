@@ -16,13 +16,14 @@ import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
 import { evaluateData } from './data';
 import { getDateSequenceIncrement } from '../infer/sequence';
-import { RuntimeError } from '.';
 import { isPreviousRef } from '../previous-ref';
 import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
 import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
 import { evaluateMatch } from '../match/evaluateMatch';
 import { evaluateTiered } from '../tiered/evaluateTiered';
+import { RuntimeError } from '.';
+import { fromDateSequence, fromSequence } from './sequences';
 
 // Gets a single value from an expanded AST.
 
@@ -150,17 +151,13 @@ export async function evaluate(
           getOfType('date', node.args[1]).args
         );
 
-        return Column.fromDateSequence(
-          start,
-          end,
-          getDateSequenceIncrement(node.args[2], startUnit, endUnit)
-        );
+        const step = getDateSequenceIncrement(node.args[2], startUnit, endUnit);
+        return fromDateSequence(start, end, step);
       } else {
-        return Column.fromSequence(
-          start,
-          end,
-          node.args[2] ? await evaluate(realm, node.args[2]) : undefined
-        );
+        const step = node.args[2]
+          ? await evaluate(realm, node.args[2])
+          : undefined;
+        return fromSequence(start, end, step);
       }
     }
     case 'date': {

@@ -5,7 +5,7 @@ import parseDataUrl from 'data-urls';
 import Fraction from '@decipad/fraction';
 /* eslint-enable import/no-extraneous-dependencies */
 import { Date as IDate } from './src/interpreter/Value';
-import { stringifyDate, TimeQuantity } from './src/date';
+import { stringifyDate } from './src/date';
 
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";
 
@@ -53,14 +53,6 @@ expect.addSnapshotSerializer({
       return `ErrSpec:${errType}(${errDataString})`;
     }
   },
-});
-
-expect.addSnapshotSerializer({
-  test: (v) => v instanceof TimeQuantity,
-  print: ({ timeUnits }) =>
-    `TimeQuantity({ ${[...timeUnits.entries()]
-      .map(([unitName, quantity]) => `${unitName}: ${quantity}`)
-      .join(', ')} })`,
 });
 
 expect.addSnapshotSerializer({

@@ -3,12 +3,7 @@ import Fraction from '@decipad/fraction';
 import { unzip, getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import { Interpreter, Time } from '..';
-import {
-  addTimeQuantity,
-  cleanDate,
-  getSpecificity,
-  TimeQuantity,
-} from '../date';
+import { addTime, cleanDate } from '../date';
 import { Dimension, EmptyColumn, lowLevelGet } from '../lazy';
 import { filterUnzipped } from '../utils';
 import { RuntimeError } from '.';
@@ -66,8 +61,6 @@ export type NonColumn =
   | DateValue
   | Table
   | Row;
-
-const MAX_ITERATIONS = 10_000; // Failsafe
 
 export class Scalar {
   static fromValue(
@@ -168,12 +161,7 @@ class DateValue implements Value {
    * Dates such as month, day and year, have a start and end. getData() gets us the first millisecond of that range. getEnd gets us the last.
    */
   getEnd() {
-    return (
-      addTimeQuantity(
-        this.moment,
-        new TimeQuantity({ [this.specificity]: 1 })
-      ) - 1n
-    );
+    return addTime(this.moment, this.specificity, 1n) - 1n;
   }
 
   getEndDate() {
@@ -250,70 +238,6 @@ export class Column implements ColumnLike {
       throw new Error('panic: Empty columns are forbidden');
     }
     return new Column(values);
-  }
-
-  static fromSequence(startV: Value, endV: Value, byV?: Value): ColumnLike {
-    const [start, end] = [startV, endV].map((val) => val.getData() as Fraction);
-
-    const by = byV
-      ? (byV.getData() as Fraction)
-      : start.compare(end) < 0
-      ? new Fraction(1)
-      : new Fraction(-1);
-
-    const array = [];
-    let iterations = 0;
-
-    // helper to allow decreasing sequences
-    const cmpFn = (s: Fraction, e: Fraction, i: Fraction) => {
-      return s.compare(e) < 0 ? i.compare(e) <= 0 : i.compare(e) >= 0;
-    };
-
-    for (let i = start; cmpFn(start, end, i); i = i.add(by)) {
-      if (++iterations > MAX_ITERATIONS) {
-        throw new RuntimeError(
-          `A maximum number of ${MAX_ITERATIONS} has been reached in sequence. Check for an unbound sequence in your code.`
-        );
-      }
-      array.push(Scalar.fromValue(i));
-    }
-
-    return Column.fromValues(array);
-  }
-
-  static fromDateSequence(
-    startD: DateValue,
-    endD: DateValue,
-    by: Time.Unit
-  ): ColumnLike {
-    let start = startD.getData();
-    let end = endD.getData();
-    if (end >= start) {
-      end = endD.getEnd();
-    } else {
-      start = startD.getEnd();
-    }
-
-    const spec = getSpecificity(by);
-
-    const array = [];
-
-    // helper to allow decreasing date sequences
-    const cmpFn = (s: bigint, e: bigint, i: bigint) => {
-      return s < e ? i <= e : i >= e;
-    };
-
-    const signal = start < end ? 1 : -1;
-    const add = new TimeQuantity({ [by]: 1 * signal });
-    for (
-      let cur = start;
-      cmpFn(start, end, cur);
-      cur = addTimeQuantity(cur, add)
-    ) {
-      array.push(DateValue.fromDateAndSpecificity(cur, spec));
-    }
-
-    return Column.fromValues(array);
   }
 
   get values() {

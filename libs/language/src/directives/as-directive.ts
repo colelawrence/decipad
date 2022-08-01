@@ -1,10 +1,8 @@
-import { singular } from 'pluralize';
 import Fraction, { pow } from '@decipad/fraction';
 
 import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { RuntimeError } from '../interpreter';
-import { convertTimeQuantityTo, Time, TimeQuantity } from '../date';
 import { automapTypes, automapValues } from '../dimtools';
 import { FractionValue, fromJS, Value } from '../interpreter/Value';
 import { AST } from '../parser';
@@ -138,22 +136,6 @@ export async function getValue(
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
   return automapValues([expressionType], [evalResult], ([value]) => {
-    if (value instanceof TimeQuantity) {
-      if (targetUnits && targetUnits.args.length > 1) {
-        throw InferError.cannotConvertToUnit(targetUnits);
-      }
-
-      const targetUnitAsString = singular(
-        (targetUnits?.args[0].unit ?? '').toLocaleLowerCase()
-      );
-      return fromJS(
-        convertTimeQuantityTo(
-          value as TimeQuantity,
-          targetUnitAsString as Time.Unit
-        )
-      );
-    }
-
     if (value instanceof FractionValue) {
       if (!targetUnits || !sourceUnits || sourceUnits.args.length < 1) {
         return fromJS(value.getData().div(conversionRate));
