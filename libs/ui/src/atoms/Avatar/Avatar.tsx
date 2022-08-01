@@ -16,6 +16,7 @@ const containerStyles = css(p12Bold, {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  cursor: 'default',
 
   '@supports not (aspect-ratio: 1 / 1)': {
     position: 'relative',
