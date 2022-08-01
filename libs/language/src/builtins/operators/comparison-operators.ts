@@ -14,20 +14,24 @@ export const comparisonOperators: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([a, b]) => compare(a, b) < 0,
     functor: cmpFunctor,
+    operatorKind: 'infix',
   },
   '>': {
     argCount: 2,
     fn: ([a, b]) => compare(a, b) > 0,
     functor: cmpFunctor,
+    operatorKind: 'infix',
   },
   '<=': {
     argCount: 2,
     fn: ([a, b]) => compare(a, b) <= 0,
     functor: cmpFunctor,
+    operatorKind: 'infix',
   },
   '>=': {
     argCount: 2,
     fn: ([a, b]) => compare(a, b) >= 0,
     functor: cmpFunctor,
+    operatorKind: 'infix',
   },
 };

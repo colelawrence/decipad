@@ -23,7 +23,8 @@ const styles = css({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  overflow: 'hidden',
+  overflowX: 'hidden',
+  overflowY: 'auto',
   top: '26px',
   left: 0,
   userSelect: 'none',
@@ -46,7 +47,7 @@ const mainStyles = css({
 });
 
 export type Identifier = {
-  kind: 'variable';
+  kind: 'variable' | 'function';
   identifier: string;
   type: string;
 };
@@ -67,7 +68,7 @@ export const AutoCompleteMenu = ({
       {
         title: 'Variables',
         items: identifiers
-          .filter((i) => i.kind === 'variable')
+          .filter((i) => i.kind === 'variable' || i.kind === 'function')
           .map((i) => ({
             identifier: i.identifier,
             kind: 'variable' as const,

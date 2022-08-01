@@ -327,41 +327,52 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     })(),
     functor: ([n]) => n,
   },
-  '+': overloadBuiltin('+', 2, [
-    {
-      argTypes: ['number', 'number'],
-      fnValues: ([n1, n2]) => {
-        return Scalar.fromValue(
-          (n1.getData() as Fraction).add(n2.getData() as Fraction)
-        );
+  '+': overloadBuiltin(
+    '+',
+    2,
+    [
+      {
+        argTypes: ['number', 'number'],
+        fnValues: ([n1, n2]) => {
+          return Scalar.fromValue(
+            (n1.getData() as Fraction).add(n2.getData() as Fraction)
+          );
+        },
+        functor: binopFunctor,
       },
-      functor: binopFunctor,
-    },
-    {
-      argTypes: ['string', 'string'],
-      fnValues: ([n1, n2]) =>
-        Scalar.fromValue(String(n1.getData()) + String(n2.getData())),
-      functor: ([a, b]) =>
-        Type.combine(a.isScalar('string'), b.isScalar('string')),
-    },
-    ...dateOverloads['+'],
-  ]),
-  '-': overloadBuiltin('-', 2, [
-    {
-      argTypes: ['number', 'number'],
-      fnValues: ([a, b]) =>
-        Scalar.fromValue(
-          (a.getData() as Fraction).sub(b.getData() as Fraction)
-        ),
-      functor: binopFunctor,
-    },
-    ...dateOverloads['-'],
-  ]),
+      {
+        argTypes: ['string', 'string'],
+        fnValues: ([n1, n2]) =>
+          Scalar.fromValue(String(n1.getData()) + String(n2.getData())),
+        functor: ([a, b]) =>
+          Type.combine(a.isScalar('string'), b.isScalar('string')),
+      },
+      ...dateOverloads['+'],
+    ],
+    'infix'
+  ),
+  '-': overloadBuiltin(
+    '-',
+    2,
+    [
+      {
+        argTypes: ['number', 'number'],
+        fnValues: ([a, b]) =>
+          Scalar.fromValue(
+            (a.getData() as Fraction).sub(b.getData() as Fraction)
+          ),
+        functor: binopFunctor,
+      },
+      ...dateOverloads['-'],
+    ],
+    'infix'
+  ),
   'unary-': {
     argCount: 1,
     noAutoconvert: true,
     fn: ([a]) => a.neg(),
     functionSignature: 'number:R -> R',
+    operatorKind: 'prefix',
   },
   '*': {
     argCount: 2,
@@ -372,11 +383,13 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         b.isScalar('number'),
         a.sharePercentage(b).multiplyUnit(b.unit)
       ),
+    operatorKind: 'infix',
   },
   // this is added when we use implicit multiplication instead of '*'
   // there is a separate function because this way we can tell it apart from '*'
   'implicit*': {
     aliasFor: '*',
+    operatorKind: 'prefix',
   },
   '/': {
     argCount: 2,
@@ -387,11 +400,13 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         b.isScalar('number'),
         a.sharePercentage(b).divideUnit(b.unit)
       ),
+    operatorKind: 'infix',
   },
   '%': {
     argCount: 2,
     fn: ([a, b]) => a.mod(b),
     functor: binopFunctor,
+    operatorKind: 'infix',
   },
   '**': {
     argCount: 2,
@@ -401,6 +416,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     absoluteNumberInput: true,
     functor: exponentiationFunctor,
+    operatorKind: 'infix',
   },
   '^': {
     aliasFor: '**',

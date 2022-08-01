@@ -39,4 +39,5 @@ export interface BuiltinSpec {
     values?: AST.Expression[],
     context?: Context
   ) => Type;
+  operatorKind?: 'infix' | 'prefix';
 }

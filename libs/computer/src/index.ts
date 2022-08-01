@@ -27,6 +27,7 @@ export {
   serializeResult,
   tokenize,
   CompareValues,
+  getBuiltinsForAutocomplete,
 } from '@decipad/language';
 
 export type {

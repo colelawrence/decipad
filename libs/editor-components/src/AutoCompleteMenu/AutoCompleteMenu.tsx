@@ -5,6 +5,7 @@ import { findWordStart, useSelection } from '@decipad/editor-utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';
 import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
+import { getBuiltinsForAutocomplete } from '@decipad/computer';
 
 export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   const computer = useComputer();
@@ -41,14 +42,15 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   }, [editor, selection, selection?.focus]);
 
   if (selection) {
-    const identifiers = computer
-      .getNamesDefined()
-      .filter((n) => n.kind === 'variable')
-      .map((n) => ({
-        kind: 'variable' as const,
-        identifier: n.name,
-        type: n.type.kind,
-      }));
+    const identifiers = [
+      ...computer.getNamesDefined(),
+      ...getBuiltinsForAutocomplete(),
+    ].map((n) => ({
+      kind:
+        n.kind === 'variable' ? ('variable' as const) : ('function' as const),
+      identifier: n.kind === 'variable' ? n.name : `${n.name}(`,
+      type: n.type.kind,
+    }));
 
     if (showAutoComplete && identifiers.length) {
       return (
@@ -62,7 +64,9 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
                 editor.deleteBackward('word');
               }
               editor.insertText(item.identifier);
-              editor.insertText(' ');
+              if (item.kind === 'variable') {
+                editor.insertText(' ');
+              }
             }}
           />
         </span>

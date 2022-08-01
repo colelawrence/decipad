@@ -37,7 +37,8 @@ export type OverloadedBuiltinSpec =
 export const overloadBuiltin = (
   fName: string,
   argCount: number,
-  overloads: OverloadedBuiltinSpec[]
+  overloads: OverloadedBuiltinSpec[],
+  operatorKind?: 'prefix' | 'infix'
 ): BuiltinSpec => {
   const byArgTypes = new Map(
     overloads.map((o) => [argTypesKey(o.argTypes), o])
@@ -74,6 +75,7 @@ export const overloadBuiltin = (
     argCount,
     fnValues,
     functor,
+    operatorKind,
   };
 };
 

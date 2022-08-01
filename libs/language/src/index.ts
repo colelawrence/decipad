@@ -1,5 +1,5 @@
 /* istanbul ignore file: just config and re-export */
-import { builtinsForAutocomplete } from './builtins';
+import { operators } from './builtins';
 import { Value } from './interpreter/Value';
 import {
   build as t,
@@ -101,11 +101,16 @@ let cachedBuiltins: AutocompleteName[] | null = null;
 /* Always returns the same array. It's a function, so as to avoid an import cycle */
 export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
   if (!cachedBuiltins) {
-    cachedBuiltins = builtinsForAutocomplete.map((name) => ({
-      kind: 'function',
-      type: serializeType(t.functionPlaceholder(name, undefined)),
-      name,
-    }));
+    cachedBuiltins = Object.entries(operators).flatMap(([name, operator]) => {
+      if (operator.operatorKind) {
+        return [];
+      }
+      return {
+        kind: 'function',
+        type: serializeType(t.functionPlaceholder(name, undefined)),
+        name,
+      };
+    });
   }
 
   return cachedBuiltins;

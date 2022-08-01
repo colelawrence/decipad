@@ -14,10 +14,12 @@ export const equalityOperators: Record<string, BuiltinSpec> = {
     argCount: 2,
     fn: ([a, b]) => isEqual(a, b),
     functionSignature: 'A, A -> boolean',
+    operatorKind: 'infix',
   },
   '!=': {
     argCount: 2,
     fn: ([a, b]) => !isEqual(a, b),
     functionSignature: 'A, A -> boolean',
+    operatorKind: 'infix',
   },
 };
