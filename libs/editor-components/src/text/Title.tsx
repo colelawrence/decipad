@@ -43,7 +43,9 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
       <molecules.EditorTitle
         Heading="h1"
         placeholder={
-          isElementEmpty(editor, element) ? 'My notebook title' : undefined
+          isElementEmpty(editor, element) && !readOnly
+            ? 'My notebook title'
+            : undefined
         }
       >
         {children}
