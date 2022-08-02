@@ -10,22 +10,23 @@ import {
 import { cssVar, p13Regular, setCssVar } from '../../primitives';
 import { notebookList } from '../../styles';
 
-const styles = css({
+const notebookListWrapperStyles = css({
   padding: `${notebookList.verticalPadding} ${notebookList.horizontalPadding}`,
   display: 'grid',
 });
+
+const columnNameStyles = css(
+  p13Regular,
+  setCssVar('currentTextColor', cssVar('weakTextColor'))
+);
+
+const listItemStyles = css({ position: 'relative' });
 
 type NotebookListProps = {
   readonly notebooks: ReadonlyArray<
     Pick<
       ComponentProps<typeof NotebookListItem>,
-      | 'id'
-      | 'name'
-      | 'description'
-      | 'exportHref'
-      | 'exportFileName'
-      | 'icon'
-      | 'iconColor'
+      'id' | 'name' | 'exportHref' | 'exportFileName' | 'icon' | 'iconColor'
     > & { readonly id: string }
   >;
   readonly onDuplicate?: (id: string) => void;
@@ -49,26 +50,21 @@ export const NotebookList = ({
   const [openActionsId, setOpenActionsId] = useState<string>();
 
   return (
-    <div css={styles} onPointerEnter={onPointerEnter}>
+    <div css={notebookListWrapperStyles} onPointerEnter={onPointerEnter}>
       <DragAndDropImportNotebook onImport={onImport}>
         {notebooks.length ? (
           <div css={{ alignSelf: 'start' }}>
-            <strong
-              css={css(
-                p13Regular,
-                setCssVar('currentTextColor', cssVar('weakTextColor'))
-              )}
-            >
-              Name
-            </strong>
+            <strong css={columnNameStyles}>Name</strong>
             <ol className="notebookList">
               {notebooks.map(({ id, ...notebook }, i) => (
                 <li
                   key={id}
-                  css={{
-                    position: 'relative',
-                    zIndex: openActionsId === id ? 1 : 0,
-                  }}
+                  css={[
+                    listItemStyles,
+                    {
+                      zIndex: openActionsId === id ? 1 : 0,
+                    },
+                  ]}
                 >
                   {i === 0 || <Divider />}
                   <NotebookListItem

@@ -8,7 +8,6 @@ import { NotebookListItemActions } from '../../molecules';
 import {
   offBlack,
   cssVar,
-  p13Regular,
   p14Medium,
   setCssVar,
   shortAnimationDuration,
@@ -23,7 +22,13 @@ import {
 } from '../../utils';
 
 const { gridStyles } = notebookList;
-const styles = css(gridStyles, {
+
+const wrapperStyles = css({
+  // height: '72px',
+  position: 'relative',
+});
+
+const anchorStyles = css(gridStyles, {
   padding: `16px 0`,
   whiteSpace: 'nowrap',
 
@@ -57,10 +62,11 @@ const iconStyles = css({
 
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
 });
+
 const nameStyles = css({
   gridArea: 'title',
   gridColumnEnd: 'emptycol',
-  alignSelf: 'end',
+  alignSelf: 'center',
 
   overflowX: 'clip',
   '@supports not (overflow-x: clip)': {
@@ -71,24 +77,11 @@ const nameStyles = css({
   ...p14Medium,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
-const noDescriptionNameStyles = css({
-  gridRowEnd: 'description',
-  alignSelf: 'center',
-});
+
 const noNameNameStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
-const descriptionStyles = css(p13Regular, {
-  gridArea: 'description',
-  gridColumnEnd: 'emptycol',
-  alignSelf: 'start',
 
-  overflowX: 'clip',
-  '@supports not (overflow-x: clip)': {
-    overflowX: 'hidden',
-  },
-  textOverflow: 'ellipsis',
-});
 const actionsStyles = css({
   gridArea: 'actions',
 
@@ -98,12 +91,21 @@ const actionsStyles = css({
   transition: `opacity ${shortAnimationDuration} ease-out`,
 
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
+  position: 'relative',
+  opacity: 1,
+});
+
+const actionWrapperStyles = css({
+  position: 'absolute',
+  top: 'calc(100% - 12px)',
+  right: 0,
+  width: '156px',
 });
 
 type NotebookListItemProps = {
   readonly id: string;
   readonly name: string;
-  readonly description?: string;
 
   readonly exportHref: string;
   readonly exportFileName: string;
@@ -118,7 +120,6 @@ type NotebookListItemProps = {
 export const NotebookListItem = ({
   id,
   name,
-  description,
   exportHref,
   exportFileName,
   actionsOpen = false,
@@ -133,27 +134,19 @@ export const NotebookListItem = ({
   const href = notebooks({}).notebook({ notebook: { id, name } }).$;
 
   return (
-    <div css={{ position: 'relative' }}>
-      <Anchor href={href} css={styles}>
+    <div css={wrapperStyles}>
+      <Anchor href={href} css={anchorStyles}>
         <div
           css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
         >
           <Icon />
         </div>
-        <strong
-          css={[
-            nameStyles,
-            name || noNameNameStyles,
-            description || noDescriptionNameStyles,
-          ]}
-        >
+        <strong css={[nameStyles, name || noNameNameStyles]}>
           {name || 'My notebook title'}
         </strong>
-        <div css={descriptionStyles}>{description}</div>
         <div
           css={[
             actionsStyles,
-            { position: 'relative', opacity: 1 },
             actionsOpen || {
               '@media (pointer: fine)': {
                 '*:not(:hover):not(:focus) > &': { opacity: 0 },
@@ -167,14 +160,7 @@ export const NotebookListItem = ({
         </div>
       </Anchor>
       {actionsOpen && (
-        <div
-          css={{
-            position: 'absolute',
-            top: 'calc(100% - 12px)',
-            right: 0,
-            width: '156px',
-          }}
-        >
+        <div css={actionWrapperStyles}>
           <NotebookListItemActions
             href={href}
             exportHref={exportHref}

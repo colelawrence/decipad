@@ -6,13 +6,11 @@ import { NotebookListItem } from './NotebookListItem';
 
 const args: Pick<
   ComponentProps<typeof NotebookListItem>,
-  'name' | 'description' | 'iconColor' | 'icon'
+  'name' | 'iconColor' | 'icon'
 > = {
   iconColor: 'Malibu' as AvailableSwatchColor,
   icon: 'Rocket' as UserIconKey,
   name: 'Getting started with Decipad',
-  description:
-    'Decipad is a low-code notebook that is easy and frictionless to use.',
 };
 
 export default {
