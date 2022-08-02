@@ -5,12 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
-import {
-  findNodePath,
-  focusEditor,
-  isElementEmpty,
-  select,
-} from '@udecode/plate';
+import { findNodePath, focusEditor, isElementEmpty } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 
 // TODO Title should probably not be a part of the editor in the first place
@@ -28,10 +23,6 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
     if (shouldAutofocus) {
       const path = findNodePath(editor, element.children[0]);
       if (path) {
-        select(editor, {
-          path,
-          offset: 0,
-        });
         focusEditor(editor);
         setShouldAutofocus(false);
       }
