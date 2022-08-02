@@ -108,12 +108,7 @@ export const AutoCompleteMenu = ({
   }, [search, groupsWithItemsFiltered]);
 
   // AutoCompleteMenuItems do not use real browser focus, see their docs
-  const [focusedItem, setFocusedItem] = useState<string>(
-    matchingIdentifiers?.[0]
-  );
-  useEffect(() => {
-    setFocusedItem(matchingIdentifiers?.[0]);
-  }, [matchingIdentifiers]);
+  const [focusedItem, setFocusedItem] = useState<string>();
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {

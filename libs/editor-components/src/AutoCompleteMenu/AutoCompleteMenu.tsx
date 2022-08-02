@@ -48,7 +48,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
     ].map((n) => ({
       kind:
         n.kind === 'variable' ? ('variable' as const) : ('function' as const),
-      identifier: n.kind === 'variable' ? n.name : `${n.name}(`,
+      identifier: n.kind === 'function' ? `${n.name}(` : n.name,
       type: n.type.kind,
     }));
 
@@ -64,7 +64,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
                 editor.deleteBackward('word');
               }
               editor.insertText(item.identifier);
-              if (item.kind === 'variable') {
+              if (item.kind !== 'function') {
                 editor.insertText(' ');
               }
             }}

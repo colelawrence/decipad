@@ -25,14 +25,13 @@ it('renders menuitems triggering different commands', async () => {
   );
 });
 
-it('first item is pre-selected', async () => {
+it('does not select when pressing enter', async () => {
   const handleExecute = jest.fn();
   render(
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await userEvent.keyboard('{enter}');
-  expect(handleExecute).toHaveBeenCalledTimes(1);
+  expect(handleExecute).not.toHaveBeenCalled();
 });
 
 it('focuses menuitems using the arrow keys', async () => {
@@ -41,20 +40,14 @@ it('focuses menuitems using the arrow keys', async () => {
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await userEvent.keyboard('{enter}');
+  await userEvent.keyboard('{arrowdown}{enter}');
   expect(handleExecute).toHaveBeenCalledTimes(1);
 
-  await userEvent.keyboard('{arrowdown}{enter}');
+  await userEvent.keyboard('{arrowup}{enter}');
   expect(handleExecute).toHaveBeenCalledTimes(2);
 
   const [[firstCommand], [secondCommand]] = handleExecute.mock.calls;
   expect(secondCommand).not.toEqual(firstCommand);
-
-  await userEvent.keyboard('{arrowup}{enter}');
-  expect(handleExecute).toHaveBeenCalledTimes(3);
-
-  const [, , [thirdCommand]] = handleExecute.mock.calls;
-  expect(thirdCommand).toEqual(firstCommand);
 });
 it('does not focus menuitems when holding shift', async () => {
   const handleExecute = jest.fn();
