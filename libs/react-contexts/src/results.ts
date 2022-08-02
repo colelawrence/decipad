@@ -84,7 +84,6 @@ export const useResult = (
       }),
       pauseWhenOffScreen(element)
     );
-
     const subscription = results$.subscribe((possiblyDelayed) => {
       setResult(possiblyDelayed.result);
     });

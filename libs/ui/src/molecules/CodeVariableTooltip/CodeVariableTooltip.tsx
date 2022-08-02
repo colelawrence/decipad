@@ -3,13 +3,8 @@ import { css } from '@emotion/react';
 import type { SerializedType, Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { Tooltip } from '../../atoms';
-import { p8Regular, red600 } from '../../primitives';
+import { p8Regular } from '../../primitives';
 import { CodeResult } from '../../organisms';
-
-const highlightStyles = css({
-  borderBottom: `1px dotted ${red600.rgb}`,
-  color: red600.rgb,
-});
 
 const goToDefStyles = css(p8Regular);
 
@@ -31,7 +26,7 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   onGoToDefinition = noop,
 }): ReturnType<FC> => {
   return (
-    <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
+    <Tooltip trigger={<span>{children}</span>}>
       <CodeResult type={type} value={value} variant="inline" tooltip={false} />
       {provideDefinitionLink && defBlockId && (
         <a

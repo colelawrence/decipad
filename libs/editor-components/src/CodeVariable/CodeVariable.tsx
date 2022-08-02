@@ -51,6 +51,7 @@ export const CodeVariable: CodeLeaf = ({
   const rootRef = useRef<HTMLSpanElement>(null);
 
   const blockResult = useResult(blockId, rootRef.current);
+
   const vars = blockResult?.results?.[0]?.visibleVariables;
   const variableScope = getVariableScope(variableName, vars);
   const variableMissing = variableScope === 'undefined';

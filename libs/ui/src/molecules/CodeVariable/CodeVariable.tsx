@@ -8,9 +8,10 @@ import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
 import { CodeVariableTooltip } from '..';
 
-const varStyles = css(codeBlock.variableStyles, {
+const varStyles = css({
   padding: '4px 6px',
   borderRadius: '6px',
+  fontSize: '13px',
 });
 
 const localVarStyles = css({
@@ -63,8 +64,9 @@ export const CodeVariable = ({
       onClick={onClick}
       css={
         variableScope === 'undefined'
-          ? []
+          ? [varStyles, type && typeStyles]
           : [
+              codeBlock.variableStyles,
               varStyles,
               type && typeStyles,
               variableScope === 'local' && localVarStyles,
