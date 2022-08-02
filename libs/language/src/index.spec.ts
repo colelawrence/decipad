@@ -8,10 +8,13 @@ import {
   objectToTableValue,
   runAST,
   runCodeForVariables,
+  typeSnapshotSerializer,
 } from './testUtils';
 import { build as t, InferError, units } from './type';
 import { number } from './type/build';
 import { block, c, F, n, U, u } from './utils';
+
+expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 describe('basic code', () => {
   it('runs basic operations', async () => {
@@ -2100,23 +2103,36 @@ describe('unit qualities', () => {
 });
 
 describe('percentages', () => {
-  it('can be applied to numbers', async () => {
+  it('can be added and subtracted from numbers', async () => {
     expect(await runCode('3%')).toMatchObject({
       value: F(3, 100),
       type: t.number(null, 'percentage'),
     });
-    expect(await runCode('3% + 1')).toMatchObject({
-      value: F(103, 100),
-      type: t.number(),
-    });
-    expect(await runCode('1 + 3%')).toMatchObject({
-      value: F(103, 100),
-      type: t.number(),
-    });
-    expect(await runCode('3% + 1%')).toMatchObject({
-      value: F(4, 100),
-      type: t.number(null, 'percentage'),
-    });
+    expect(await runCode('3% + 2')).toMatchInlineSnapshot(`
+      Object {
+        "type": number,
+        "value": Fraction(2.03),
+      }
+    `);
+    expect(await runCode('2 + 3%')).toMatchInlineSnapshot(`
+      Object {
+        "type": number,
+        "value": Fraction(2.06),
+      }
+    `);
+    expect(await runCode('3% + 1%')).toMatchInlineSnapshot(`
+      Object {
+        "type": percentage,
+        "value": Fraction(0.04),
+      }
+    `);
+
+    expect(await runCode('100 - 10%')).toMatchInlineSnapshot(`
+      Object {
+        "type": number,
+        "value": Fraction(90),
+      }
+    `);
   });
 
   it('multiplies properly', async () => {
@@ -2158,9 +2174,13 @@ describe('percentages', () => {
       value: F(4),
       type: t.number(U('meters')),
     });
-    expect(await runCode('100% + 1 meter')).toMatchObject({
-      value: F(2),
+    expect(await runCode('100% + 2 meter')).toMatchObject({
+      value: F(3),
       type: t.number(U('meters')),
+    });
+    expect(await runCode('100% + 50%')).toMatchObject({
+      value: F(3, 2),
+      type: t.number(null, 'percentage'),
     });
   });
 });

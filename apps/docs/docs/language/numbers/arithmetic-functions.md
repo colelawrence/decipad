@@ -54,3 +54,10 @@ You can also use percentages:
 20% * 5000kg
 ==> 1000 kg
 ```
+
+Percentages can be added to other numbers, to increase them proportionally:
+
+```deci live
+200m + 5%
+==> 210 m
+```

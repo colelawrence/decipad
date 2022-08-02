@@ -158,6 +158,9 @@ const median = ([value]: Value[]): Value => {
   return fromJS(leftCenter.add(rightCenter).div(2));
 };
 
+const secondArgIsPercentage = (types?: Type[]) =>
+  types?.[0].numberFormat == null && types?.[1].numberFormat === 'percentage';
+
 export const mathOperators: Record<string, BuiltinSpec> = {
   abs: {
     argCount: 1,
@@ -333,7 +336,13 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     [
       {
         argTypes: ['number', 'number'],
-        fnValues: ([n1, n2]) => {
+        fnValues: ([n1, n2], types) => {
+          if (secondArgIsPercentage(types)) {
+            return Scalar.fromValue(
+              (n1.getData() as Fraction).mul((n2.getData() as Fraction).add(1))
+            );
+          }
+
           return Scalar.fromValue(
             (n1.getData() as Fraction).add(n2.getData() as Fraction)
           );
@@ -357,10 +366,19 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     [
       {
         argTypes: ['number', 'number'],
-        fnValues: ([a, b]) =>
-          Scalar.fromValue(
+        fnValues: ([a, b], types) => {
+          if (secondArgIsPercentage(types)) {
+            return Scalar.fromValue(
+              (a.getData() as Fraction).mul(
+                new Fraction(1).sub(b.getData() as Fraction)
+              )
+            );
+          }
+
+          return Scalar.fromValue(
             (a.getData() as Fraction).sub(b.getData() as Fraction)
-          ),
+          );
+        },
         functor: binopFunctor,
       },
       ...dateOverloads['-'],
