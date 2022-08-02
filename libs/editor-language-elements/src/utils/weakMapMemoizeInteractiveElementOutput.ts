@@ -1,20 +1,17 @@
-import { AST } from '@decipad/computer';
 import { MyEditor, MyElement } from '@decipad/editor-types';
 
-export interface OutputNode {
-  name: string;
-  expression?: AST.Expression;
-}
-
-type TransformerFn<T extends MyElement> = (
+type TransformerFn<T extends MyElement, RetT> = (
   editor: MyEditor,
   arg: T
-) => OutputNode | null;
+) => RetT;
 
-export const weakMapMemoizeInteractiveElementOutput = <T extends MyElement>(
-  fn: TransformerFn<T>
-): TransformerFn<T> => {
-  const cache = new WeakMap<T, OutputNode | null>();
+export const weakMapMemoizeInteractiveElementOutput = <
+  T extends MyElement,
+  RetT
+>(
+  fn: TransformerFn<T, RetT>
+): TransformerFn<T, RetT> => {
+  const cache = new WeakMap<T, RetT | null>();
 
   return (editor: MyEditor, arg: T) => {
     const cached = cache.get(arg) ?? fn(editor, arg);

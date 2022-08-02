@@ -171,6 +171,7 @@
     "prismjs": "^1.27.0",
     "process": "^0.11.10",
     "ramda": "^0.28.0",
+    "random-words": "^1.2.0",
     "raw-body": "^2.4.1",
     "react": "17",
     "react-copy-to-clipboard": "^5.0.4",

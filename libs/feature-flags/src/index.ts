@@ -1,4 +1,8 @@
-export type Flag = 'INPUT_COPY' | 'PERSISTENT_EXAMPLE' | 'POWER_TABLE';
+export type Flag =
+  | 'INPUT_COPY'
+  | 'INLINE_BUBBLES'
+  | 'PERSISTENT_EXAMPLE'
+  | 'POWER_TABLE';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

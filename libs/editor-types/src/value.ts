@@ -1,6 +1,7 @@
 import { TElement, TImageElement } from '@udecode/plate';
 import {
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_BUBBLE,
   ELEMENT_CALLOUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
@@ -134,6 +135,17 @@ export interface LinkElement extends BaseElement {
   url: string;
 }
 
+export interface BubbleFormula {
+  name: string;
+  expression: string;
+}
+
+export interface BubbleElement extends BaseElement {
+  type: typeof ELEMENT_BUBBLE;
+  formula: BubbleFormula;
+  children: [EmptyText];
+}
+
 // Layout
 export interface ColumnsElement extends BaseElement {
   type: typeof ELEMENT_COLUMNS;
@@ -191,7 +203,7 @@ export type BlockElement =
   | PowerTableHeaderRowElement
   | PowerTableHeader
   | TableColumnFormulaElement;
-type InlineElement = LinkElement;
+type InlineElement = LinkElement | BubbleElement;
 
 export type MyValue = [
   H1Element,
@@ -201,6 +213,7 @@ export type MyValue = [
     | H3Element
     | ParagraphElement
     | BlockquoteElement
+    | BubbleElement
     | CalloutElement
     | DividerElement
     | ImageElement

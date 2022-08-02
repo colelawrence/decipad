@@ -11,9 +11,12 @@ import {
 import { findNodePath, getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
-import { ParseError } from '../types';
+import {
+  NameAndExpressionInteractiveLanguageElement,
+  ParseError,
+} from '../types';
 
-export const VariableDef = {
+export const VariableDef: NameAndExpressionInteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(

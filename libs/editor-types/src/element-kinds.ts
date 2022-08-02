@@ -33,6 +33,9 @@ export const ELEMENT_SLIDER = 'slider';
 // Interactive
 export const ELEMENT_INPUT = 'input';
 
+// Inlines
+export const ELEMENT_BUBBLE = 'bubble';
+
 // tables
 export const ELEMENT_TABLE_INPUT = 'table-input'; // legacy
 export const ELEMENT_TABLE = 'table';

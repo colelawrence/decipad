@@ -12,7 +12,11 @@ import {
   WithRequired,
 } from '@udecode/plate';
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { createMagicNumberPlugin } from '../MagicNumber';
+import { isEnabled } from '@decipad/feature-flags';
+import {
+  createMagicNumberPlugin,
+  createValueBubblePlugin,
+} from '../MagicNumber';
 
 export type StrictPlugin = WithRequired<
   MyPlatePlugin,
@@ -62,6 +66,15 @@ const magicNumberPlugin = () =>
     createMagicNumberPlugin() as StrictPlugin
   );
 
+const valueBubblePlugin = () =>
+  !isEnabled('INLINE_BUBBLES')
+    ? []
+    : [
+        withHotkeyRestrictedToAllowedBlocks(
+          createValueBubblePlugin() as StrictPlugin
+        ),
+      ];
+
 export const createMarksPlugins = (): StrictPlugin[] => [
   boldPlugin(),
   italicPlugin(),
@@ -70,4 +83,5 @@ export const createMarksPlugins = (): StrictPlugin[] => [
   strikethroughPlugin(),
   highlightPlugin(),
   magicNumberPlugin(),
+  ...valueBubblePlugin(),
 ];

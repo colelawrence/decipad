@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { EMPTY } from 'rxjs';
 import { createEditor } from 'slate';
+import { BubbleEditor } from '../../editor-components/src/BubbleEditor/BubbleEditor';
 
 export interface NotebookProps {
   notebookId: string;
@@ -116,12 +117,14 @@ const InsideNotebookState = ({
     (editor && (
       <ComputerContextProvider computer={computer}>
         <ResultsContext.Provider value={computerObservable || EMPTY}>
-          <Editor
-            notebookId={notebookId}
-            loaded={loadedFromRemote || timedOutLoadingFromRemote}
-            editor={editor}
-            readOnly={readOnly}
-          />
+          <BubbleEditor>
+            <Editor
+              notebookId={notebookId}
+              loaded={loadedFromRemote || timedOutLoadingFromRemote}
+              editor={editor}
+              readOnly={readOnly}
+            />
+          </BubbleEditor>
         </ResultsContext.Provider>
       </ComputerContextProvider>
     )) ||

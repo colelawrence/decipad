@@ -1,5 +1,6 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
 export { BlockDragHandle } from './BlockDragHandle/BlockDragHandle';
+export { BubbleEditor } from './BubbleEditor/BubbleEditor';
 export { ClosableModal } from './ClosableModal/ClosableModal';
 export { FormulasDrawer } from './FormulasDrawer/FormulasDrawer';
 export { CodeLine } from './CodeLine/CodeLine';

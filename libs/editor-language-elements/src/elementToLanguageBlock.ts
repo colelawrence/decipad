@@ -1,5 +1,5 @@
 import { MyEditor, MyElement, MyNode } from '@decipad/editor-types';
-import { AST, ProgramBlock } from '@decipad/computer';
+import { AST, Program, ProgramBlock } from '@decipad/computer';
 import { astNode } from '@decipad/editor-utils';
 import { interactiveElementsByElementType } from './interactiveElements';
 import { ParseError } from './types';
@@ -77,29 +77,26 @@ export const elementToLanguageBlock = (
 
   // blocks that return (name, element) pairs:
   if (interactiveElement.resultsInNameAndExpression) {
-    const nameAndExpression =
-      interactiveElement.getNameAndExpressionFromElement(editor, element);
-    if (!nameAndExpression) {
-      return null;
+    const nameAndExpression = toArray(
+      interactiveElement.getNameAndExpressionFromElement(editor, element)
+    );
+
+    const program: Program = [];
+    const parseErrors = nameAndExpression.flatMap(
+      (nex) => nex.parseErrors ?? []
+    );
+
+    for (const { name, expression, id } of nameAndExpression) {
+      if (expression) {
+        program.push({
+          type: 'parsed-block',
+          id: id ?? element.id,
+          block: expression && getAssignmentBlock(element.id, name, expression),
+        });
+      }
     }
-    const { name, expression, parseErrors } = nameAndExpression;
-    if (expression) {
-      return {
-        program: [
-          {
-            type: 'parsed-block',
-            id: element.id,
-            block:
-              expression && getAssignmentBlock(element.id, name, expression),
-          },
-        ],
-        parseErrors: parseErrors ?? [],
-      };
-    }
-    return {
-      program: [],
-      parseErrors: parseErrors ?? [],
-    };
+
+    return { program, parseErrors };
   }
 
   // blocks that return unparsed code:
@@ -118,4 +115,11 @@ export const elementToLanguageBlock = (
   }
 
   return null;
+};
+
+/** get a messy structure containing nulls and T, to array of T */
+const toArray = <T>(things?: T | (T | null)[] | null) => {
+  const items = Array.isArray(things) ? things : [things];
+
+  return items.filter((t) => t != null) as T[];
 };

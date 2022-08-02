@@ -10,6 +10,7 @@ import { autoformatImages } from './autoformatImages';
 import { autoformatLinks } from './autoformatLinks';
 import { autoformatLists } from './autoformatLists';
 import { autoformatMarks } from './autoformatMarks';
+import { autoformatBubbles } from './autoformatBubbles';
 
 /** Prevent arrow rules to be applied in codelines,
  * like <= becoming ⇐ */
@@ -33,5 +34,6 @@ export const autoformatRules = [
   ...autoformatMarks,
   ...autoformatLinks,
   ...autoformatImages,
+  ...autoformatBubbles,
   ...rulesForbiddenInCodeLines,
 ] as MyAutoformatRule[];
