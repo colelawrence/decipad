@@ -99,6 +99,29 @@ describe('notebook table', () => {
     expect(row3).toBe('2020-03-01');
   });
 
+  it('can write spaces in a table cell', async () => {
+    await page.waitForTimeout(2000);
+    await page.click('th button:has-text("Create")');
+    await page.waitForTimeout(2000);
+    await writeInTable('X', 0, 2);
+    await writeInTable(
+      'The rain  in   spain    falls     mainly in the plane!',
+      1,
+      2
+    );
+    await writeInTable('Hello world!', 2, 2);
+
+    const row1 = await page
+      .locator('table > tbody > tr:nth-child(1) > td:nth-child(4)')
+      .textContent();
+    const row2 = await page
+      .locator('table > tbody > tr:nth-child(2) > td:nth-child(4)')
+      .textContent();
+
+    expect(row1).toBe('The rain  in   spain    falls     mainly in the plane!');
+    expect(row2).toBe('Hello world!');
+  });
+
   it('can change column type to a formula', async () => {
     await page.click('thead th:nth-child(5) button:has-text("Caret down")');
     await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');

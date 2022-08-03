@@ -53,7 +53,6 @@ const tableWrapperStyles = css({
   minWidth: editorLayout.slimBlockWidth,
   overflowX: 'auto',
   paddingBottom: '12px',
-  whiteSpace: 'nowrap',
   position: 'relative',
   left: tableControlWidth,
   [smallScreenQuery]: {
