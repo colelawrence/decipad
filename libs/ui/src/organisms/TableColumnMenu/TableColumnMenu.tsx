@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import Fraction from '@decipad/fraction';
 import type { TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   All,
@@ -51,6 +51,10 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   type,
 }) => {
   const computer = useComputer();
+
+  const editorTableContext = useEditorTableContext();
+  const { length } = editorTableContext.cellTypes;
+
   return (
     <div contentEditable={false} css={tableColumnMenuStyles}>
       <MenuList
@@ -160,9 +164,11 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
           </MenuList>
         </MenuList>
-        <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
-          Remove column
-        </MenuItem>
+        {length > 1 ? (
+          <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
+            Remove column
+          </MenuItem>
+        ) : null}
       </MenuList>
     </div>
   );
