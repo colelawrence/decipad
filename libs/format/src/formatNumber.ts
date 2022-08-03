@@ -198,7 +198,11 @@ const formatToParts = (
       });
     isPrecise = getIsPrecise(n, places, false);
   } else {
-    partsOf = new Intl.NumberFormat(locale, args).formatToParts(n.valueOf());
+    const valOfN = n.valueOf();
+    const valIsNaN = Number.isNaN(valOfN);
+    partsOf = new Intl.NumberFormat(locale, args).formatToParts(
+      valIsNaN ? value : n.valueOf()
+    );
     isPrecise = getIsPrecise(n, places, args.notation !== 'standard');
   }
 

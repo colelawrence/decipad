@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
 import autoAnimate, { AutoAnimateOptions } from '@formkit/auto-animate';
+import { useEffect, useRef } from 'react';
 import {
   easing as defaultEasing,
   shortAnimationDurationMs as defaultDuration,

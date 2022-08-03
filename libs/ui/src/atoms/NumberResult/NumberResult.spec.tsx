@@ -53,6 +53,13 @@ describe('NumberResult', () => {
     expect(container.textContent).toMatchInlineSnapshot(`"≈0.00"`);
   });
 
+  it('negative exponents are not nan', async () => {
+    const { container } = render(
+      <NumberResult {...await runCode(`(1+(4%/12))^-140`)} />
+    );
+    expect(container.textContent).toMatchInlineSnapshot(`"≈0.63"`);
+  });
+
   it('renders huge number', async () => {
     const { container } = render(<NumberResult {...await runCode(`10^101`)} />);
     expect(container.textContent).toMatchInlineSnapshot(
