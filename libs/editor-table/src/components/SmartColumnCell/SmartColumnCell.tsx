@@ -64,8 +64,11 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   }, [selectedAggregationType]);
 
   const expression = useMemo(() => {
-    const columnRef = `${tableName}.${column.name}`;
-    return selectedAggregationType?.expression(columnRef);
+    if (column.name) {
+      const columnRef = `${tableName}.${column.name}`;
+      return selectedAggregationType?.expression(columnRef);
+    }
+    return undefined;
   }, [column.name, selectedAggregationType, tableName]);
 
   // Expression and result
