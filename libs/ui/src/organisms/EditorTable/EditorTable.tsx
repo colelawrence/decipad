@@ -54,6 +54,7 @@ const tableWrapperStyles = css({
   overflowX: 'auto',
   paddingBottom: '12px',
   position: 'relative',
+  whiteSpace: 'nowrap',
   left: tableControlWidth,
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
