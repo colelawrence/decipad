@@ -65,6 +65,17 @@ export type DeciNumber = {
 
 type IntermediateDeciNumber = Omit<DeciNumber, 'asString'>;
 
+export function unpreciseButSafeFractionAsNumber(
+  n: FFraction
+): [number, number] {
+  const roundedNumber = n.round(MAX_PRECISION).valueOf();
+  const notRoundedNumber = n.valueOf();
+  return [
+    roundedNumber,
+    Number.isNaN(notRoundedNumber) ? roundedNumber : notRoundedNumber,
+  ];
+}
+
 function beautifyExponents(partsOf: DeciNumberPart[]): DeciNumberPart[] {
   let ret: DeciNumberPart[] = [];
   let unclean = false;
@@ -177,7 +188,7 @@ const formatToParts = (
   n: FFraction,
   mapParts: (num: DeciNumberPart[]) => DeciNumberPart[]
 ): IntermediateDeciNumber => {
-  const value = n.round(MAX_PRECISION).valueOf();
+  const [value, useSafeN] = unpreciseButSafeFractionAsNumber(n);
 
   const places = args.maximumFractionDigits ?? DEFAULT_PRECISION;
   // todo: review, is this enough? @pgte
@@ -198,11 +209,7 @@ const formatToParts = (
       });
     isPrecise = getIsPrecise(n, places, false);
   } else {
-    const valOfN = n.valueOf();
-    const valIsNaN = Number.isNaN(valOfN);
-    partsOf = new Intl.NumberFormat(locale, args).formatToParts(
-      valIsNaN ? value : n.valueOf()
-    );
+    partsOf = new Intl.NumberFormat(locale, args).formatToParts(useSafeN);
     isPrecise = getIsPrecise(n, places, args.notation !== 'standard');
   }
 
@@ -211,23 +218,22 @@ const formatToParts = (
   }
 
   const asStringPrecise = partsToString(formatEdgeCaseNumber(n, MAX_PRECISION));
-  const valOf = n.valueOf();
 
   return {
     isPrecise,
     partsOf: mapParts(partsOf),
     value,
     asStringPrecise:
-      Math.abs(valOf) > Number.MAX_SAFE_INTEGER
+      Math.abs(useSafeN) > Number.MAX_SAFE_INTEGER
         ? asStringPrecise
         : partsToString(
             beautifyExponents(
               new Intl.NumberFormat(
                 locale,
-                Math.abs(valOf) > 1e10 || Math.abs(valOf) < 1 / 1e10
+                Math.abs(useSafeN) > 1e10 || Math.abs(useSafeN) < 1 / 1e10
                   ? LONG_NUMBER_OPTIONS
                   : OTHER_LONG_NUMBER_OPTIONS
-              ).formatToParts(valOf)
+              ).formatToParts(useSafeN)
             )
           ),
   };
@@ -298,10 +304,11 @@ function formatUserDefinedUnit<TF extends FractionLike = FFraction>(
 
   return formatToParts(locale, args, fraction, (parts) =>
     parts.map((u) => {
+      const [, valOf] = unpreciseButSafeFractionAsNumber(fraction);
       if (u.type === 'unit') {
         return {
           type: 'unit',
-          value: pluralize(unit.args[0].unit, fraction.valueOf()),
+          value: pluralize(unit.args[0].unit, valOf),
         };
       }
       return u;
