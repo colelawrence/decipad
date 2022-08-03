@@ -3,6 +3,7 @@ const path = require('path');
 const { ProvidePlugin } = require('webpack');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const ForkTsCheckerWarningWebpackPlugin = require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin');
 
 module.exports = {
   webpack: {
@@ -12,6 +13,12 @@ module.exports = {
       config.resolve.plugins = config.resolve.plugins.filter(
         (plugin) => !(plugin instanceof ModuleScopePlugin)
       );
+
+      // Remove expensive and ultimately ignored TS checks
+      config.plugins = config.plugins.filter(
+        (plugin) => !(plugin instanceof ForkTsCheckerWarningWebpackPlugin)
+      );
+
       // Add support for importing workspace projects.
       config.resolve.plugins.push(
         new TsConfigPathsPlugin({
@@ -78,6 +85,8 @@ module.exports = {
       return config;
     },
   },
+  eslint: { enable: false },
+  typescript: { enableTypeChecking: false },
   devServer: {
     open: [
       'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',

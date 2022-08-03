@@ -235,7 +235,7 @@
     "@babel/preset-env": "^7.14.4",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
-    "@craco/craco": "^6.4.3",
+    "@craco/craco": "^6.4.5",
     "@emotion/babel-plugin": "^11.9.2",
     "@emotion/jest": "^11.9.1",
     "@graphql-codegen/cli": "2.9.1",
