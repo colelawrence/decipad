@@ -5,12 +5,17 @@ import * as icons from '../../icons';
 import { FormulasDrawer } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
+import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
 import { TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
 
-const tableCaptionWideStyles = css({});
+const tableCaptionWideStyles = css({
+  maxWidth: `${wideBlockWidth}px`,
+});
 
-const tableCaptionSlimStyles = css({});
+const tableCaptionSlimStyles = css({
+  maxWidth: `${slimBlockWidth}px`,
+});
 
 const tableTitleWrapper = css({
   alignItems: 'center',
