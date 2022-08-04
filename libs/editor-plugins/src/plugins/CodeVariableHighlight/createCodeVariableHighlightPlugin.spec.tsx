@@ -10,10 +10,7 @@ import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
-import {
-  ComputerContextProvider,
-  ResultsContext,
-} from '@decipad/react-contexts';
+import { ComputerContextProvider } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
@@ -21,27 +18,25 @@ import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
-const PlateWrapper = ({
-  children,
-  computer,
-}: Pick<CodeBlockElement, 'children'> & { computer: Computer }) => (
+type PlateWrapperProps = Pick<CodeBlockElement, 'children'> & {
+  computer: Computer;
+};
+const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
   <DndProvider backend={HTML5Backend}>
-    <ResultsContext.Provider value={computer.results}>
-      <ComputerContextProvider computer={computer}>
-        <Plate<MyValue>
-          initialValue={[
-            {
-              type: ELEMENT_CODE_BLOCK,
-              children,
-            } as never,
-          ]}
-          plugins={[
-            createCodeLinePlugin(computer),
-            createCodeVariableHighlightPlugin(),
-          ]}
-        />
-      </ComputerContextProvider>
-    </ResultsContext.Provider>
+    <ComputerContextProvider computer={computer}>
+      <Plate<MyValue>
+        initialValue={[
+          {
+            type: ELEMENT_CODE_BLOCK,
+            children,
+          } as never,
+        ]}
+        plugins={[
+          createCodeLinePlugin(computer),
+          createCodeVariableHighlightPlugin(),
+        ]}
+      />
+    </ComputerContextProvider>
   </DndProvider>
 );
 

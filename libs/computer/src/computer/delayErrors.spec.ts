@@ -4,9 +4,9 @@ import { buildType as t, serializeType } from '@decipad/language';
 import { timeout } from '@decipad/utils';
 import { getDelayedBlockId } from '.';
 
-import { delayErrors, SingleBlockRes } from './delayErrors';
+import { delayErrors, DelayableResult } from './delayErrors';
 
-const goodRes: SingleBlockRes = {
+const goodRes: DelayableResult = {
   result: {
     blockId: 'blockId',
     error: undefined,
@@ -26,7 +26,7 @@ const goodRes: SingleBlockRes = {
   },
   needsDelay: false,
 };
-const errorRes: SingleBlockRes = {
+const errorRes: DelayableResult = {
   result: {
     blockId: 'blockId',
     error: undefined,

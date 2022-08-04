@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -22,8 +16,9 @@ import {
   defaultComputerResults,
   AST,
   Result,
+  Computer,
 } from '@decipad/computer';
-import { useComputer } from './computer';
+import { ComputerContextProvider, useComputer } from './computer';
 
 export interface ResultsContextItem {
   readonly blockResults: {
@@ -33,23 +28,21 @@ export interface ResultsContextItem {
   readonly delayedResultBlockId: string | null;
 }
 
-export const ResultsContext =
-  createContext<Observable<ResultsContextItem>>(EMPTY);
-
-/** A ResultsContext.Provider with a value for tests */
+/** A computer provider with a value for tests */
 export const TestResultsProvider: React.FC<
   Partial<ResultsContextItem> & { children?: ReactNode }
 > = ({ children, ...contextItem }) => {
-  const value = new BehaviorSubject({
+  const computer = new Computer();
+  computer.results = new BehaviorSubject({
     ...defaultComputerResults,
     ...contextItem,
   });
-  return React.createElement(ResultsContext.Provider, { value }, children);
+  return React.createElement(ComputerContextProvider, { computer }, children);
 };
 
 export const useResults = (): ResultsContextItem => {
-  const subject = useContext(ResultsContext);
-  const [resultsItem, setResultsItem] = useState(defaultComputerResults);
+  const subject = useComputer().results;
+  const [resultsItem, setResultsItem] = useState(subject.getValue());
 
   useEffect(() => {
     const subscription = subject.subscribe(setResultsItem);
@@ -67,8 +60,10 @@ export const useResult = (
   blockId: string,
   element?: Element | null
 ): IdentifiedResult | null => {
-  const subject = useContext(ResultsContext);
-  const [result, setResult] = useState<IdentifiedResult | null>(null);
+  const subject = useComputer().results;
+  const [result, setResult] = useState<IdentifiedResult | null>(
+    () => subject.getValue().blockResults[blockId] ?? null
+  );
 
   useEffect(() => {
     const results$ = subject.pipe(

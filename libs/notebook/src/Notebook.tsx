@@ -5,14 +5,10 @@ import {
   NotebookStateProvider,
   useNotebookState,
 } from '@decipad/notebook-state';
-import {
-  ComputerContextProvider,
-  ResultsContext,
-} from '@decipad/react-contexts';
+import { ComputerContextProvider } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useSession } from 'next-auth/react';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { EMPTY } from 'rxjs';
 import { createEditor } from 'slate';
 import { BubbleEditor } from '../../editor-components/src/BubbleEditor/BubbleEditor';
 
@@ -108,28 +104,21 @@ const InsideNotebookState = ({
 
   // computer
 
-  const computerObservable = useMemo(
-    () => computer?.results.asObservable(),
-    [computer?.results]
-  );
-
-  return (
-    (editor && (
+  if (editor) {
+    return (
       <ComputerContextProvider computer={computer}>
-        <ResultsContext.Provider value={computerObservable || EMPTY}>
-          <BubbleEditor>
-            <Editor
-              notebookId={notebookId}
-              loaded={loadedFromRemote || timedOutLoadingFromRemote}
-              editor={editor}
-              readOnly={readOnly}
-            />
-          </BubbleEditor>
-        </ResultsContext.Provider>
+        <BubbleEditor>
+          <Editor
+            notebookId={notebookId}
+            loaded={loadedFromRemote || timedOutLoadingFromRemote}
+            editor={editor}
+            readOnly={readOnly}
+          />
+        </BubbleEditor>
       </ComputerContextProvider>
-    )) ||
-    null
-  );
+    );
+  }
+  return null;
 };
 
 export const Notebook: FC<NotebookProps> = (props) => {

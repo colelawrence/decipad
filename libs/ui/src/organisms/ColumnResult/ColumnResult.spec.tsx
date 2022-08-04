@@ -50,13 +50,13 @@ it('renders padding on cells contents', async () => {
 
 describe('dimensions', () => {
   const code = `
-      table = {
-        H1 = ["A", "B", "C"]
-        H2 = [1, 2, 3]
-      }
-      list = [1, 2, 3]
-      list + table.H2
-    `;
+    table = {
+      H1 = ["A", "B", "C"]
+      H2 = [1, 2, 3]
+    }
+    list = [1, 2, 3]
+    list + table.H2
+  `;
   const indexLabels = new Map([['table', ['A', 'B', 'C']]]);
 
   it('renders a bidimensional column', async () => {

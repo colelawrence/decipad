@@ -4,7 +4,6 @@ import {
   ComputerContextProvider,
   EditorChangeContextProvider,
   EditorReadOnlyContext,
-  ResultsContext,
   useComputer,
 } from '@decipad/react-contexts';
 import { Plate, createPlateEditor } from '@udecode/plate';
@@ -39,31 +38,29 @@ export const NoDocSyncEditorInternal: FC = () => {
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
 
   return (
-    <ResultsContext.Provider value={computer.results.asObservable()}>
-      <EditorChangeContextProvider changeSubject={changeSubject}>
-        <EditorReadOnlyContext.Provider
-          value={{ readOnly: isWritingLocked, lockWriting }}
-        >
-          <LoadingFilter loading={isWritingLocked}>
-            <Plate<MyValue>
-              id={NO_DOC_SYNC_EDITOR_ID}
-              editor={editor}
-              onChange={onChange}
-              initialValue={
-                window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-                  ? introNotebook()
-                  : emptyNotebook()
-              }
-              editableProps={{
-                readOnly: isWritingLocked,
-              }}
-            >
-              <Tooltip />
-            </Plate>
-          </LoadingFilter>
-        </EditorReadOnlyContext.Provider>
-      </EditorChangeContextProvider>
-    </ResultsContext.Provider>
+    <EditorChangeContextProvider changeSubject={changeSubject}>
+      <EditorReadOnlyContext.Provider
+        value={{ readOnly: isWritingLocked, lockWriting }}
+      >
+        <LoadingFilter loading={isWritingLocked}>
+          <Plate<MyValue>
+            id={NO_DOC_SYNC_EDITOR_ID}
+            editor={editor}
+            onChange={onChange}
+            initialValue={
+              window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+                ? introNotebook()
+                : emptyNotebook()
+            }
+            editableProps={{
+              readOnly: isWritingLocked,
+            }}
+          >
+            <Tooltip />
+          </Plate>
+        </LoadingFilter>
+      </EditorReadOnlyContext.Provider>
+    </EditorChangeContextProvider>
   );
 };
 

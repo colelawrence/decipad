@@ -21,7 +21,6 @@ const {
 const {
   useComputer,
   ComputerContextProvider,
-  ResultsContext,
 } = require('../../../../../../../libs/react-contexts/src');
 
 function identityFn(o) {
@@ -148,7 +147,6 @@ function ResultWithHeader({ code }) {
 function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
   const [codeValue, setCodeValue] = useState(code);
   const prismTheme = usePrismTheme();
-  const computer = useComputer();
 
   const highlightCode = (c) => (
     <Highlight Prism={Prism} code={c} theme={prismTheme} language="js">
@@ -167,7 +165,7 @@ function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
   );
 
   return (
-    <ResultsContext.Provider value={computer.results.asObservable()}>
+    <>
       <div className={styles.playgroundEditor}>
         <Editor
           value={codeValue}
@@ -176,7 +174,7 @@ function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
         />
       </div>
       <ResultWithHeader code={codeValue} />
-    </ResultsContext.Provider>
+    </>
   );
 }
 

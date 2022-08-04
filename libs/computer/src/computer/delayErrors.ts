@@ -11,7 +11,7 @@ interface DelayErrorsArgs {
 
 type SimpleRes = ComputeResponse | ComputePanic;
 
-export interface SingleBlockRes {
+export interface DelayableResult {
   result: IdentifiedResult;
   needsDelay: boolean;
 }
@@ -19,7 +19,7 @@ export interface SingleBlockRes {
 export const delayErrors = ({
   shouldDelay$,
   timeoutFn = timeout,
-}: DelayErrorsArgs): OperatorFunction<SingleBlockRes, SingleBlockRes> => {
+}: DelayErrorsArgs): OperatorFunction<DelayableResult, DelayableResult> => {
   /* How many ms do we delay revealing an error under the cursor */
   const errorRevealDelay = 2000;
   /** If another call to this function is already waiting, wait alongside it.
@@ -34,7 +34,7 @@ export const delayErrors = ({
     nextErrorReveal = null;
   };
 
-  return switchMap((res: SingleBlockRes) => {
+  return switchMap((res: DelayableResult) => {
     if (res.needsDelay) {
       return mapTo(res)(
         race(
