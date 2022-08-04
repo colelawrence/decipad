@@ -1,5 +1,4 @@
 import { ElementAttributes } from '@decipad/editor-types';
-import { atoms } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { DropLineDirection } from '@udecode/plate';
 import { ReactNode, RefCallback, forwardRef, FC } from 'react';
@@ -68,14 +67,11 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
         })}
       >
         {!readOnly && (
-          <>
-            <TableCellControls
-              ref={dragRef}
-              readOnly={readOnly}
-              onSelect={onSelect}
-            />
-            <atoms.TableCellBackground selected={isBeingDragged} left={20} />
-          </>
+          <TableCellControls
+            ref={dragRef}
+            readOnly={readOnly}
+            onSelect={onSelect}
+          />
         )}
         {children}
         {!readOnly && (
