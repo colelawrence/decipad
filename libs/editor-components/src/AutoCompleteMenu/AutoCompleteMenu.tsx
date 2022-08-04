@@ -61,7 +61,10 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
             identifiers={identifiers}
             onExecuteItem={(item) => {
               if (word) {
-                editor.deleteBackward('word');
+                // deleteBackword('word') was misbehaving with ^ and + operators.
+                for (let i = 0; i < word.length; i += 1) {
+                  editor.deleteBackward('character');
+                }
               }
               editor.insertText(item.identifier);
               if (item.kind !== 'function') {
