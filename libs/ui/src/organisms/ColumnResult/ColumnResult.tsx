@@ -34,7 +34,18 @@ export const ColumnResult = ({
             <TableRow key={rowIndex} readOnly>
               {labels && (
                 <TableData as="td" showPlaceholder={false}>
-                  <span css={[rowLabelStyles]}>{labels[rowIndex]}</span>
+                  <div
+                    css={[
+                      css(table.getCellWrapperStyles(type.cellType)),
+                      // In case there is a nested dimension but no labels (ie. the nested dimension
+                      // will render in the first column), we need to give it some space from the row
+                      // number
+                      !labels && table.cellLeftPaddingStyles,
+                      rowLabelStyles,
+                    ]}
+                  >
+                    {labels[rowIndex]}
+                  </div>
                 </TableData>
               )}
               <TableData as="td" showPlaceholder={!labels}>
