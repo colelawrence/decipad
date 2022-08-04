@@ -23,7 +23,7 @@ const buttonStyles = css(p13Medium, {
   gap: '6px',
   width: '100%',
   height: '100%',
-  padding: `0 ${table.cellSidePadding}`,
+  padding: `0 ${table.tdHorizontalPadding}`,
 });
 
 const iconWrapperStyles = css({

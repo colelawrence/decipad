@@ -6,7 +6,7 @@ import { table } from '../../styles';
 import { Table } from './Table';
 
 const cellStyles = css({
-  padding: `0 ${table.cellSidePadding}`,
+  padding: `0 ${table.tdHorizontalPadding}`,
 });
 
 const headers = (

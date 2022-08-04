@@ -24,7 +24,7 @@ const columnStyles = css(p13Medium, {
   position: 'relative',
 
   minHeight: table.thMinHeight,
-  paddingLeft: table.cellSidePadding,
+  paddingLeft: table.tdHorizontalPadding,
   paddingRight: '8px',
 });
 

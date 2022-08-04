@@ -27,8 +27,8 @@ const tdBaseStyles = css(p14Medium, {
   whiteSpace: 'break-spaces',
   cursor: 'default',
   verticalAlign: 'middle',
-  paddingTop: '8px',
-  paddingBottom: '8px',
+  paddingTop: table.tdVerticalPadding,
+  paddingBottom: table.tdVerticalPadding,
 });
 
 const tdPlaceholderStyles = css({

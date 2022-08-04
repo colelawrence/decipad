@@ -34,9 +34,7 @@ export const ColumnResult = ({
             <TableRow key={rowIndex} readOnly>
               {labels && (
                 <TableData as="td" showPlaceholder={false}>
-                  <span css={[rowLabelStyles, table.cellSidePaddingStyles]}>
-                    {labels[rowIndex]}
-                  </span>
+                  <span css={[rowLabelStyles]}>{labels[rowIndex]}</span>
                 </TableData>
               )}
               <TableData as="td" showPlaceholder={!labels}>

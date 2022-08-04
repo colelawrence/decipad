@@ -5,7 +5,7 @@ import { table } from '../../styles';
 
 const headerStyles = css(p13Medium, {
   alignItems: 'center',
-  paddingLeft: table.cellSidePadding,
+  paddingLeft: table.tdHorizontalPadding,
   paddingRight: '8px',
   verticalAlign: 'middle',
   backgroundColor: cssVar('backgroundColor'),

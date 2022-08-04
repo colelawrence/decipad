@@ -5,7 +5,7 @@ import { table } from '../../styles';
 import { TableRow } from './TableRow';
 
 const cellStyles = css({
-  padding: `0 ${table.cellSidePadding}`,
+  padding: `0 ${table.tdHorizontalPadding}`,
 });
 
 export default {

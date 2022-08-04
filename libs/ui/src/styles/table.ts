@@ -11,18 +11,14 @@ export const thMinWidth = '269px';
 export const tdMinHeight = '36px';
 export const tdMinWidth = '120px';
 export const tdMaxWidth = '240px';
+export const tdVerticalPadding = '8px';
+export const tdHorizontalPadding = '12px';
 
 export const firstTdLeftPadding = '20px';
 
-export const cellSidePadding = '12px';
-
-export const cellSidePaddingStyles = css({
-  padding: `0 ${cellSidePadding}`,
-});
-
 export const cellLeftPaddingStyles = css({
-  paddingLeft: cellSidePadding,
-  paddingRight: cellSidePadding,
+  paddingLeft: tdHorizontalPadding,
+  paddingRight: tdHorizontalPadding,
 });
 
 export const tableParentStyles = css({
@@ -34,5 +30,7 @@ export const tableParentStyles = css({
 });
 
 export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({
-  padding: isTabularType(type) ? undefined : `0 ${cellSidePadding}`,
+  padding: isTabularType(type)
+    ? undefined
+    : `${tdVerticalPadding} ${tdHorizontalPadding}`,
 });
