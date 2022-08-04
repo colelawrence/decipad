@@ -9,7 +9,7 @@ export const inMenu: DecoratorFn = (story) => (
     <div
       css={{ '>[data-radix-popper-content-wrapper]': { display: 'contents' } }}
     >
-      <RadixDropdown.Content portalled={false}>{story()}</RadixDropdown.Content>
+      <RadixDropdown.Content>{story()}</RadixDropdown.Content>
     </div>
   </RadixDropdown.Root>
 );

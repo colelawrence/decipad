@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer, useRef } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import { SerializedUnits } from '@decipad/computer';
@@ -90,8 +90,14 @@ export const UnitMenuItem = ({
       })();
     }
   }, [state.text, parseUnit]);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <MenuItem onSelect={() => onSelect(state.unit)}>
+    <MenuItem
+      onSelect={() => onSelect(state.unit)}
+      onFocus={() => inputRef.current?.focus()}
+    >
       <div css={menuItemStyles}>
         <input
           css={inputStyles}
@@ -99,11 +105,14 @@ export const UnitMenuItem = ({
           onClick={(e) => {
             // Prevent propagation to the MenuItem which will try to select itself
             // as an option and close the dropdown
+
             e.stopPropagation();
           }}
+          ref={inputRef}
           onChange={(e) => {
             dispatch({ type: 'text', value: e.target.value });
           }}
+          onMouseLeave={() => inputRef.current?.focus()}
           onKeyDown={(e) => {
             if (e.key !== 'Enter' && e.key !== 'Escape') {
               // Prevent propagation to the MenuItem which can lead to focus/blur

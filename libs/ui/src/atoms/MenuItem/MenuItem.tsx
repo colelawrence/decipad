@@ -19,6 +19,7 @@ export interface MenuItemProps {
   readonly onPointerMove?: ComponentProps<
     typeof RadixDropdownMenu.Item
   >['onPointerMove'];
+  readonly onFocus?: ComponentProps<typeof RadixDropdownMenu.Item>['onFocus'];
   readonly onSelect?: () => void;
   readonly selected?: boolean;
   readonly itemAlignment?: 'left' | 'right' | 'center';
@@ -28,6 +29,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   children,
   icon,
   onPointerMove,
+  onFocus,
   onSelect,
   selected,
   disabled,
@@ -39,6 +41,7 @@ export const MenuItem: FC<MenuItemProps> = ({
       onSelect={onSelect}
       data-selected={selected}
       onPointerMove={onPointerMove}
+      onFocus={onFocus}
       disabled={disabled}
     >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}

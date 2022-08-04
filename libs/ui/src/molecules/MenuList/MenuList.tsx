@@ -7,7 +7,7 @@ import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { InputMenuItem, UnitMenuItem } from '..';
 import { cssVar, grey500, transparency } from '../../primitives';
 
-const Depth = createContext(0);
+export const Depth = createContext(0);
 
 const shadow1 = transparency(grey500, 0.02).rgba;
 const shadow2 = transparency(grey500, 0.08).rgba;
@@ -59,6 +59,25 @@ type MenuListProps = (
   readonly onChangeOpen?: (newOpen: boolean) => void;
 };
 
+function getSubElementType(isRoot: boolean | undefined) {
+  const DropdownMenuTopElement = isRoot
+    ? RadixDropdownMenu.Root
+    : RadixDropdownMenu.Sub;
+
+  const DropdownMenuContentElement = isRoot
+    ? RadixDropdownMenu.Content
+    : RadixDropdownMenu.SubContent;
+
+  const DropdownMenuTriggerElement = isRoot
+    ? RadixDropdownMenu.Trigger
+    : RadixDropdownMenu.SubTrigger;
+  return {
+    DropdownMenuTriggerElement,
+    DropdownMenuTopElement,
+    DropdownMenuContentElement,
+  };
+}
+
 export const MenuList = ({
   children,
 
@@ -81,10 +100,16 @@ export const MenuList = ({
     throw new Error('Non-root MenuList must be nested in another MenuList');
   }
 
+  const {
+    DropdownMenuTriggerElement,
+    DropdownMenuTopElement,
+    DropdownMenuContentElement,
+  } = getSubElementType(root);
+
   let triggerNode: ReactNode;
   if (root) {
     triggerNode = (
-      <RadixDropdownMenu.Trigger asChild>{trigger}</RadixDropdownMenu.Trigger>
+      <DropdownMenuTriggerElement asChild>{trigger}</DropdownMenuTriggerElement>
     );
   } else if (isElement(itemTrigger) && itemTrigger.type === TriggerMenuItem) {
     triggerNode = itemTrigger;
@@ -94,43 +119,45 @@ export const MenuList = ({
 
   return (
     <Depth.Provider value={depth}>
-      <RadixDropdownMenu.Root
+      <DropdownMenuTopElement
         open={open}
         onOpenChange={onChangeOpen}
         modal={dropdown}
       >
         {triggerNode}
-        <div css={dropdown || undropdownifyContentStyles}>
-          <RadixDropdownMenu.Content
-            css={styles}
-            align="start"
-            portalled={dropdown}
-          >
-            {Children.map(children, (child) => {
-              if (child == null) {
-                return null;
-              }
-              if (
-                isElement(child) &&
-                (child.type === MenuItem ||
-                  child.type === MenuList ||
-                  child.type === MenuSeparator ||
-                  child.type === InputMenuItem ||
-                  child.type === UnitMenuItem)
-              ) {
-                return child;
-              }
-              console.error(
-                'Received child that is not a menu list or menu item',
-                child
-              );
-              throw new Error(
-                'Expected all children to be menu lists or menu items'
-              );
-            })}
-          </RadixDropdownMenu.Content>
-        </div>
-      </RadixDropdownMenu.Root>
+        <RadixDropdownMenu.Portal>
+          <div css={dropdown || undropdownifyContentStyles}>
+            <DropdownMenuContentElement
+              css={styles}
+              align="start"
+              onFocusOutside={(e) => e.preventDefault()}
+            >
+              {Children.map(children, (child) => {
+                if (child == null) {
+                  return null;
+                }
+                if (
+                  isElement(child) &&
+                  (child.type === MenuItem ||
+                    child.type === MenuList ||
+                    child.type === MenuSeparator ||
+                    child.type === InputMenuItem ||
+                    child.type === UnitMenuItem)
+                ) {
+                  return child;
+                }
+                console.error(
+                  'Received child that is not a menu list or menu item',
+                  child
+                );
+                throw new Error(
+                  'Expected all children to be menu lists or menu items'
+                );
+              })}
+            </DropdownMenuContentElement>
+          </div>
+        </RadixDropdownMenu.Portal>
+      </DropdownMenuTopElement>
     </Depth.Provider>
   );
 };
