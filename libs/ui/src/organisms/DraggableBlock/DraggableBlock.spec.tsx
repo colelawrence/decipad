@@ -10,10 +10,13 @@ const props: ComponentProps<typeof DraggableBlock> = {
 };
 
 it('opens the menu when clicking the drag handle', async () => {
-  const { getByTitle, queryByTitle } = render(<DraggableBlock {...props} />);
+  const { getByTitle, getAllByTitle, queryByTitle } = render(
+    <DraggableBlock {...props} />
+  );
   expect(queryByTitle(/delete/i)).not.toBeInTheDocument();
 
-  await userEvent.click(getByTitle(/drag/i));
+  await userEvent.click(getAllByTitle(/drag/i)[1]);
+
   expect(getByTitle(/delete/i)).toBeInTheDocument();
 });
 

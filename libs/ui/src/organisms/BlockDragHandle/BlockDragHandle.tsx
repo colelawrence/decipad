@@ -86,35 +86,36 @@ export const BlockDragHandle = ({
 
   return (
     <div css={gridStyles()}>
-      {menuOpen ? (
-        menuButton
-      ) : (
-        <Tooltip trigger={menuButton}>
-          <span
-            css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
-          >
-            <strong css={css(p12Bold)}>Drag</strong> to move
-            <br />
-            <strong css={css(p12Bold)}>Click</strong> for options
-          </span>
-        </Tooltip>
-      )}
-      {/* onDelete is only false when disabled by the parent component */}
-      {onDelete !== false && (
-        <div css={{ gridArea: 'menu', zIndex: 1 }}>
-          <MenuList root open={menuOpen} onChangeOpen={onChangeMenuOpen}>
-            {showHideButton}
+      <MenuList
+        root
+        open={menuOpen}
+        onChangeOpen={onChangeMenuOpen}
+        trigger={menuButton}
+        dropdown
+      >
+        {showHideButton}
 
-            <MenuItem disabled>
-              <hr css={{ color: cssVar('highlightColor') }} />
-            </MenuItem>
+        <MenuItem disabled>
+          <hr css={{ color: cssVar('highlightColor') }} />
+        </MenuItem>
 
-            <MenuItem icon={<Delete />} onSelect={onDelete}>
-              Delete
-            </MenuItem>
-          </MenuList>
-        </div>
-      )}
+        {/* onDelete is only false when disabled by the parent component */}
+        {onDelete !== false && (
+          <MenuItem icon={<Delete />} onSelect={onDelete}>
+            Delete
+          </MenuItem>
+        )}
+      </MenuList>
+
+      <Tooltip trigger={menuButton}>
+        <span
+          css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
+        >
+          <strong css={css(p12Bold)}>Drag</strong> to move
+          <br />
+          <strong css={css(p12Bold)}>Click</strong> for options
+        </span>
+      </Tooltip>
     </div>
   );
 };

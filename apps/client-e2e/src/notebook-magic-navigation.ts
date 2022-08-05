@@ -55,7 +55,7 @@ describe('notebook navigation', () => {
   it('works even when the variable is re-declared', async () => {
     const allDraggable = await page.$$('div[draggable="true"] button');
     const nrDraggable = allDraggable.length;
-    const toDelete = allDraggable[nrDraggable - 2];
+    const toDelete = allDraggable[nrDraggable - 3];
     await toDelete.click();
     const deleteButton = page.locator(`:nth-match(:text("Delete"), 2)`);
     await deleteButton.click();
