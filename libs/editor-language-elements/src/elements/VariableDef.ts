@@ -8,24 +8,22 @@ import {
   parseOneBlock,
   parseOneExpression,
 } from '@decipad/computer';
-import { findNodePath, getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
-import {
-  NameAndExpressionInteractiveLanguageElement,
-  ParseError,
-} from '../types';
+import { NameAndExpressionInteractiveLanguageElement } from '../types';
 
 export const VariableDef: NameAndExpressionInteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
-    (editor: MyEditor, element: MyElement) => {
+    (_editor: MyEditor, element: MyElement) => {
       assertElementType(element, ELEMENT_VARIABLE_DEF);
       if (element.children.length < 2) {
-        return null;
+        return [];
       }
-      const parseErrors: ParseError[] = [];
+
+      const { id } = element;
       const variableName = getNodeString(element.children[0]);
 
       if (element.variant === 'expression') {
@@ -33,40 +31,42 @@ export const VariableDef: NameAndExpressionInteractiveLanguageElement = {
         try {
           const block = parseOneBlock(value);
           if (block.args.length === 1 && isExpression(block.args[0])) {
-            return { name: variableName, expression: block.args[0] };
+            return [{ id, name: variableName, expression: block.args[0] }];
           }
           // eslint-disable-next-line no-empty
         } catch (err) {
-          const path = findNodePath(editor, element);
-          if (path) {
-            parseErrors.push({
-              error: (err as Error).message,
-              elementId: element.id,
-            });
-          }
+          const parseErrors = [
+            { error: (err as Error).message, elementId: element.id },
+          ];
+          return [{ id, name: variableName, parseErrors }];
         }
       } else if (element.variant === 'slider') {
         const expression = getNodeString(element.children[1]);
         try {
-          return {
-            name: variableName,
-            expression: parseOneExpression(expression),
-            parseErrors,
-          };
+          return [
+            {
+              id,
+              name: variableName,
+              expression: parseOneExpression(expression),
+            },
+          ];
         } catch (err) {
-          return {
-            name: variableName,
-            parseErrors: [
-              {
-                elementId: element.id,
-                error: (err as Error).message,
-              },
-            ],
-          };
+          return [
+            {
+              id,
+              name: variableName,
+              parseErrors: [
+                {
+                  elementId: element.id,
+                  error: (err as Error).message,
+                },
+              ],
+            },
+          ];
         }
       }
 
-      return null;
+      return [];
     }
   ),
 };

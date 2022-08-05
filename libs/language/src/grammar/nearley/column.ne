@@ -11,7 +11,7 @@ column       -> "[" _ "]"                               {%
                                                             addLoc({
                                                               type: 'column-items',
                                                               args: []
-                                                            }, d[1])
+                                                            }, d[1] ?? d[0])
                                                           ],
                                                         }, d[0], d[2])
                                                         %}

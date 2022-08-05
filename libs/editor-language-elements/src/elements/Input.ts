@@ -13,19 +13,19 @@ export const Input: InteractiveLanguageElement = {
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
     (_editor: MyEditor, element: MyElement) => {
-      const { variableName, value } = element as InputElement;
+      const { variableName, value, id } = element as InputElement;
       if (!variableName) {
-        return null;
+        return [];
       }
       try {
         const block = parseOneBlock(value);
         if (block.args.length === 1 && isExpression(block.args[0])) {
-          return { name: variableName, expression: block.args[0] };
+          return [{ id, name: variableName, expression: block.args[0] }];
         }
         // eslint-disable-next-line no-empty
       } catch {}
 
-      return null;
+      return [];
     }
   ),
 };

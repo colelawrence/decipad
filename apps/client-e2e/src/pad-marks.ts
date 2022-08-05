@@ -1,3 +1,4 @@
+import waitForExpect from 'wait-for-expect';
 import { createCalculationBlockBelow } from './page-utils/Block';
 import {
   focusOnBody,
@@ -30,10 +31,14 @@ it('inserts a magic number', async () => {
   await createCalculationBlockBelow(`Time = ${valueOfFoo} minutes`);
   await keyPress('Enter');
   await page.keyboard.type('You have %Time% to live - %Time in seconds%');
-  const magicNumber = await page.$$(`span[title="${valueOfFoo * 60}"]`);
-  const notMagicNumber = await page.$$(`span[title="${1 + valueOfFoo * 60}"]`);
-  expect(magicNumber).not.toEqual([]);
-  expect(notMagicNumber).toEqual([]);
+  await waitForExpect(async () => {
+    const magicNumber = await page.$$(`span[title="${valueOfFoo * 60}"]`);
+    const notMagicNumber = await page.$$(
+      `span[title="${1 + valueOfFoo * 60}"]`
+    );
+    expect(magicNumber).not.toEqual([]);
+    expect(notMagicNumber).toEqual([]);
+  });
 });
 
 it('can use an expression in magic number', async () => {
@@ -51,7 +56,9 @@ it('undefined var magic number shows loading', async () => {
   await focusOnBody();
   await keyPress('Enter');
   await page.keyboard.type('This is %Undefined% ');
-  expect(await page.textContent('p svg title')).toBe('Loading');
+  await waitForExpect(async () => {
+    expect(await page.textContent('p svg title')).toBe('Loading');
+  });
 });
 
 it('error magic var shows loading', async () => {
@@ -59,5 +66,7 @@ it('error magic var shows loading', async () => {
   await keyPress('Backspace');
   await keyPress('Enter');
   await page.keyboard.type('This is %1/0%');
-  expect(await page.textContent('p svg title')).toBe('Loading');
+  await waitForExpect(async () => {
+    expect(await page.textContent('p svg title')).toBe('Loading');
+  });
 });

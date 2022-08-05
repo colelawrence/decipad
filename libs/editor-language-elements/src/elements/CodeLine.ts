@@ -6,15 +6,17 @@ import { InteractiveLanguageElement } from '../types';
 export const getUnparsedBlockFromCodeLine = (
   _editor: MyEditor,
   block: MyElement
-): UnparsedBlock | null => {
+): UnparsedBlock[] => {
   if (block.type === ELEMENT_CODE_LINE) {
-    return {
-      type: 'unparsed-block',
-      id: block.id,
-      source: getNodeString(block),
-    };
+    return [
+      {
+        type: 'unparsed-block',
+        id: block.id,
+        source: getNodeString(block),
+      },
+    ];
   }
-  return null;
+  return [];
 };
 
 export const CodeLine: InteractiveLanguageElement = {

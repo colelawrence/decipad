@@ -21,7 +21,12 @@ import { ParseError } from '../types';
 export const getTableAstNodeFromTableElement = (
   _editor: MyEditor,
   table: TableElement
-): { name: string; expression: AST.Table; parseErrors: ParseError[] } => {
+): {
+  id: string;
+  name: string;
+  expression: AST.Table;
+  parseErrors: ParseError[];
+} => {
   const [caption, headerRow, ...dataRows] = table.children;
   const parseErrors: ParseError[] = [];
   const columns = headerRow.children.map((th, columnIndex) => {
@@ -75,6 +80,7 @@ export const getTableAstNodeFromTableElement = (
   });
 
   return {
+    id: table.id,
     name: getNodeString(caption.children[0]),
     expression: astNode('table', ...columns),
     parseErrors,

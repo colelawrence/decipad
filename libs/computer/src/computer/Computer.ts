@@ -40,7 +40,6 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
-import { FunctionDefinition } from 'libs/language/src/parser/ast-types';
 import { captureException } from '../reporting';
 import {
   ComputePanic,
@@ -310,7 +309,7 @@ export class Computer {
       : null;
   }
 
-  getFunctionDefinition(funcName: string): FunctionDefinition | undefined {
+  getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
     return this.computationRealm.inferContext.functionDefinitions.get(funcName);
   }
 
@@ -349,7 +348,7 @@ export class Computer {
 
   getFunctionDefinition$(
     funcName: string
-  ): Observable<FunctionDefinition | null | undefined> {
+  ): Observable<AST.FunctionDefinition | null | undefined> {
     return this.results.pipe(
       map(() => this.getFunctionDefinition(funcName)),
       distinctUntilChanged(dequal)

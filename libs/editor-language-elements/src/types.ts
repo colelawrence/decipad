@@ -3,7 +3,13 @@ import { AST, UnparsedBlock } from '@decipad/computer';
 
 interface NameAndExpression {
   name: string;
-  id?: string;
+  id: string;
+  expression?: AST.Expression;
+  parseErrors?: ParseError[];
+}
+
+interface JustExpression {
+  id: string;
   expression?: AST.Expression;
   parseErrors?: ParseError[];
 }
@@ -20,7 +26,7 @@ type ExpressionInteractiveLanguageElement = InteractiveLanguageElementBase & {
   getExpressionFromElement: (
     editor: MyEditor,
     element: MyElement
-  ) => { expression: AST.Expression; parseErrors?: ParseError[] } | null;
+  ) => JustExpression[];
 };
 
 export type NameAndExpressionInteractiveLanguageElement =
@@ -32,7 +38,7 @@ export type NameAndExpressionInteractiveLanguageElement =
     getNameAndExpressionFromElement: (
       editor: MyEditor,
       element: MyElement
-    ) => NameAndExpression | NameAndExpression[] | null;
+    ) => NameAndExpression[];
   };
 
 type UnparsedBlockInteractiveLanguageElement =
@@ -44,7 +50,7 @@ type UnparsedBlockInteractiveLanguageElement =
     getUnparsedBlockFromElement: (
       editor: MyEditor,
       element: MyElement
-    ) => UnparsedBlock | null;
+    ) => UnparsedBlock[];
   };
 
 type StructuralElement = InteractiveLanguageElementBase & {
@@ -52,6 +58,10 @@ type StructuralElement = InteractiveLanguageElementBase & {
   resultsInExpression?: false;
   resultsInNameAndExpression?: false;
   resultsInUnparsedBlock?: true;
+  getUnparsedBlockFromElement?: (
+    editor: MyEditor,
+    element: MyElement
+  ) => UnparsedBlock[];
 };
 
 export type InteractiveLanguageElement =

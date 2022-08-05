@@ -1,19 +1,30 @@
-import { Result } from '@decipad/computer';
-import { PlateComponent } from '@decipad/editor-types';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  PlateComponent,
+  RichText,
+  useTEditorRef,
+  ELEMENT_PARAGRAPH,
+} from '@decipad/editor-types';
+import {
+  useComputer,
+  useIsEditorReadOnly,
+  useResult,
+} from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
 import { css } from '@emotion/react';
+import { Node } from 'slate';
+import { findNodePath } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 import { useObservable } from 'rxjs-hooks';
+import { assertElementType, magicNumberId } from '@decipad/editor-utils';
+import { getDefined } from '@decipad/utils';
 
 export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
   const computer = useComputer();
   const exp = text?.text ?? '';
-  const [result, setResult] = useState<Result.Result | null>(null);
-  useEffect(() => {
-    const sub = computer.expressionResultFromText$(exp).subscribe(setResult);
-    return () => sub.unsubscribe();
-  }, [computer, exp]);
+
+  const blockId = useMagicNumberId(getDefined(text));
+
+  const result = useResult(blockId)?.results[0];
 
   const loadingState =
     result?.type?.kind === 'type-error' ||
@@ -45,3 +56,37 @@ export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
     </span>
   );
 };
+
+/** Get the ID of the magic number, comprised of paragraph and index */
+function useMagicNumberId(text: RichText) {
+  const editor = useTEditorRef();
+  const [magicNumberBlockId, setMagicNumberBlockId] = useState<string>('');
+
+  useEffect(() => {
+    const blockId = (() => {
+      const path = findNodePath(editor, text);
+
+      if (!path) return '';
+
+      const pathOfParagraph = path.slice(0, -1);
+
+      const paragraph = (() => {
+        try {
+          return Node.get(editor, pathOfParagraph);
+        } catch {
+          return null;
+        }
+      })();
+
+      if (!paragraph) return '';
+
+      assertElementType(paragraph, ELEMENT_PARAGRAPH);
+
+      return magicNumberId(paragraph, path[path.length - 1]);
+    })();
+
+    setMagicNumberBlockId(blockId);
+  }, [editor, text]);
+
+  return magicNumberBlockId;
+}

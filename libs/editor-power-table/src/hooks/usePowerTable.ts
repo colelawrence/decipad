@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ELEMENT_POWER_TR,
   MyEditor,
@@ -9,9 +9,8 @@ import {
   matchNodeType,
   useNamesDefinedBefore,
 } from '@decipad/editor-utils';
-import { useEditorChange, useExpressionResult } from '@decipad/react-contexts';
+import { useEditorChange, useResult } from '@decipad/react-contexts';
 import {
-  AST,
   Interpreter,
   SerializedType,
   AutocompleteName,
@@ -42,18 +41,8 @@ export const usePowerTable = ({
     usePowerTableActions(editor, element);
 
   const variableNames = useNamesDefinedBefore(element.id, false);
-  const expression: AST.Expression | undefined = useMemo(
-    () =>
-      element.varName
-        ? {
-            type: 'ref',
-            args: [element.varName],
-          }
-        : undefined,
-    [element.varName]
-  );
 
-  const result = useExpressionResult(expression);
+  const result = useResult(element.id)?.results?.[0];
 
   let data: Interpreter.ResultTable | undefined;
   let columnNames: string[] | undefined;

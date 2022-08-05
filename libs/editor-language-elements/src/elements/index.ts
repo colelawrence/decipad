@@ -3,7 +3,7 @@ export * from './Input';
 export * from './InlineBubble';
 export * from './Plot';
 export * from './Paragraph';
-export * from './TableInput';
 export * from './Table';
 export * from './Column';
 export * from './VariableDef';
+export * from './PowerTable';

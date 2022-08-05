@@ -428,9 +428,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   '**': {
     argCount: 2,
-    fn: ([a, b]) => {
-      return pow(a, b);
-    },
+    fn: ([a, b]) => pow(a, b),
     noAutoconvert: true,
     absoluteNumberInput: true,
     functor: exponentiationFunctor,

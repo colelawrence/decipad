@@ -17,8 +17,8 @@ export const Plot: InteractiveLanguageElement = {
   getExpressionFromElement: (_editor: MyEditor, element: MyElement) => {
     const { sourceVarName } = element as PlotElement;
     if (!sourceVarName) {
-      return null;
+      return [];
     }
-    return { expression: astNode('ref', sourceVarName) };
+    return [{ id: element.id, expression: astNode('ref', sourceVarName) }];
   },
 };

@@ -1118,7 +1118,7 @@ let ParserRules = [
                 type: 'column-items',
                 args: [],
               },
-              d[1]
+              d[1] ?? d[0]
             ),
           ],
         },

@@ -14,7 +14,7 @@ export const Table: InteractiveLanguageElement = {
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
     (editor: MyEditor, _element: MyElement) => {
       const element = _element as TableElement;
-      return getTableAstNodeFromTableElement(editor, element);
+      return [getTableAstNodeFromTableElement(editor, element)];
     }
   ),
 };

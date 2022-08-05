@@ -35,13 +35,15 @@ describe('VariableDef expression element', () => {
     } as VariableDefinitionElement;
     expect(
       VariableDef.getNameAndExpressionFromElement(editor, el)
-    ).toMatchObject({
-      expression: {
-        type: 'ref',
-        args: ['expression'],
+    ).toMatchObject([
+      {
+        expression: {
+          type: 'ref',
+          args: ['expression'],
+        },
+        name: 'varName',
       },
-      name: 'varName',
-    });
+    ]);
   });
 });
 
@@ -79,12 +81,14 @@ describe('VariableDef slider element', () => {
     } as VariableDefinitionElement;
     expect(
       VariableDef.getNameAndExpressionFromElement(editor, el)
-    ).toMatchObject({
-      expression: {
-        type: 'literal',
-        args: ['number', new FFraction(5)],
+    ).toMatchObject([
+      {
+        expression: {
+          type: 'literal',
+          args: ['number', new FFraction(5)],
+        },
+        name: 'varName',
       },
-      name: 'varName',
-    });
+    ]);
   });
 });

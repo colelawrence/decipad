@@ -1,8 +1,10 @@
-import { MyEditor, MyElement, MyNode } from '@decipad/editor-types';
-import { AST, Program, ProgramBlock } from '@decipad/computer';
+import { MyEditor, MyElement } from '@decipad/editor-types';
+import { AST, ProgramBlock } from '@decipad/computer';
 import { astNode } from '@decipad/editor-utils';
-import { interactiveElementsByElementType } from './interactiveElements';
-import { ParseError } from './types';
+import { isElement } from '@udecode/plate';
+import * as interactiveLanguageElements from './elements';
+
+import { InteractiveLanguageElement, ParseError } from './types';
 
 const getAssignmentBlock = (
   id: string,
@@ -16,110 +18,111 @@ const getAssignmentBlock = (
   };
 };
 
-const mapChildAsElement = (editor: MyEditor) => (e: MyNode) =>
-  elementToLanguageBlock(editor, e as MyElement);
+const interactiveElementsByType = new Map(
+  (
+    Object.values(interactiveLanguageElements) as InteractiveLanguageElement[]
+  ).map((element) => [element.type, element])
+);
 
-export interface ElementToLanguageBlockReturn {
+interface LanguageBlock {
   program: ProgramBlock[];
   parseErrors: ParseError[];
 }
 
+/**
+ * Given an element, what are the language expressions, blocks or assignments that it represents?
+ *
+ * The result of this function, called once an element changes, is fed into the computer.
+ */
 export const elementToLanguageBlock = (
   editor: MyEditor,
   element: MyElement
-): ElementToLanguageBlockReturn | null => {
-  const interactiveElement = interactiveElementsByElementType[element.type];
+): LanguageBlock | null => {
+  const interactiveElement = interactiveElementsByType.get(element.type);
   if (!interactiveElement) {
     return null;
   }
 
   if (interactiveElement.isStructural) {
-    return element.children
-      .map(mapChildAsElement(editor))
-      .reduce<ElementToLanguageBlockReturn>(
-        (
-          result: ElementToLanguageBlockReturn,
-          childResult: ElementToLanguageBlockReturn | null
-        ) => {
-          if (childResult) {
-            const { program, parseErrors } = childResult;
-            // eslint-disable-next-line no-param-reassign
-            result.program = result.program.concat(program).flat();
-            // eslint-disable-next-line no-param-reassign
-            result.parseErrors = result.parseErrors.concat(parseErrors);
-          }
-          return result;
-        },
-        { program: [], parseErrors: [] }
-      );
+    const blocks = element.children.flatMap((node) =>
+      isElement(node) ? elementToLanguageBlock(editor, node) ?? [] : []
+    );
+
+    // HACK: paragraphs can have non-element decorations (magic numbers) as well as themselves being structural
+    if (interactiveElement.getUnparsedBlockFromElement) {
+      const moreBlocks = interactiveElement
+        .getUnparsedBlockFromElement(editor, element)
+        .map((program) => ({ program: [program], parseErrors: [] }));
+
+      blocks.push(...moreBlocks);
+    }
+
+    return flattenLanguageBlocks(blocks);
   }
 
   if (interactiveElement.resultsInExpression) {
-    const result = interactiveElement.getExpressionFromElement(editor, element);
-    if (!result) {
-      return null;
-    }
-    return {
-      program: [
-        {
-          type: 'parsed-block',
-          id: element.id,
-          block: {
-            type: 'block',
-            id: element.id,
-            args: [result.expression],
-          },
-        },
-      ],
-      parseErrors: result.parseErrors ?? [],
-    };
+    const result: LanguageBlock[] = interactiveElement
+      .getExpressionFromElement(editor, element)
+      .map(({ expression, parseErrors = [], id }) => {
+        return {
+          program: expression
+            ? [
+                {
+                  type: 'parsed-block',
+                  id,
+                  block: { type: 'block', id, args: [expression] },
+                },
+              ]
+            : [],
+          parseErrors,
+        };
+      });
+
+    return flattenLanguageBlocks(result);
   }
 
   // blocks that return (name, element) pairs:
   if (interactiveElement.resultsInNameAndExpression) {
-    const nameAndExpression = toArray(
-      interactiveElement.getNameAndExpressionFromElement(editor, element)
-    );
+    const nameAndExpression: LanguageBlock[] = interactiveElement
+      .getNameAndExpressionFromElement(editor, element)
+      .flatMap(({ name, expression, id, parseErrors = [] }) => {
+        return {
+          program: expression
+            ? [
+                {
+                  type: 'parsed-block',
+                  id,
+                  block: getAssignmentBlock(id, name, expression),
+                },
+              ]
+            : [],
+          parseErrors,
+        };
+      });
 
-    const program: Program = [];
-    const parseErrors = nameAndExpression.flatMap(
-      (nex) => nex.parseErrors ?? []
-    );
-
-    for (const { name, expression, id } of nameAndExpression) {
-      if (expression) {
-        program.push({
-          type: 'parsed-block',
-          id: id ?? element.id,
-          block: expression && getAssignmentBlock(element.id, name, expression),
-        });
-      }
-    }
-
-    return { program, parseErrors };
+    return flattenLanguageBlocks(nameAndExpression);
   }
 
   // blocks that return unparsed code:
   if (interactiveElement.resultsInUnparsedBlock) {
-    const unparsedBlock = interactiveElement.getUnparsedBlockFromElement(
+    const program = interactiveElement.getUnparsedBlockFromElement(
       editor,
       element
     );
-    if (!unparsedBlock) {
-      return null;
-    }
-    return {
-      program: [unparsedBlock],
-      parseErrors: [],
-    };
+    return { program, parseErrors: [] };
   }
 
   return null;
 };
 
-/** get a messy structure containing nulls and T, to array of T */
-const toArray = <T>(things?: T | (T | null)[] | null) => {
-  const items = Array.isArray(things) ? things : [things];
+function flattenLanguageBlocks(items: LanguageBlock[]): LanguageBlock {
+  const program: LanguageBlock['program'] = [];
+  const parseErrors: LanguageBlock['parseErrors'] = [];
 
-  return items.filter((t) => t != null) as T[];
-};
+  for (const item of items) {
+    program.push(...item.program);
+    parseErrors.push(...item.parseErrors);
+  }
+
+  return { program, parseErrors };
+}

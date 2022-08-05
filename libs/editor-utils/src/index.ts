@@ -22,6 +22,7 @@ export * from './serializeDocument';
 export * from './useNamesDefinedBefore';
 export * from './assertElementType';
 export * from './getVariableRanges';
+export * from './magicNumberId';
 export * from './matchNodeType';
 export * from './isElementOfType';
 export * from './parseSeriesStart';
