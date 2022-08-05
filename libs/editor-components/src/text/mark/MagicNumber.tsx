@@ -15,7 +15,7 @@ import { Node } from 'slate';
 import { findNodePath } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 import { useObservable } from 'rxjs-hooks';
-import { assertElementType, magicNumberId } from '@decipad/editor-utils';
+import { isElementOfType, magicNumberId } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 
 export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
@@ -78,11 +78,10 @@ function useMagicNumberId(text: RichText) {
         }
       })();
 
-      if (!paragraph) return '';
-
-      assertElementType(paragraph, ELEMENT_PARAGRAPH);
-
-      return magicNumberId(paragraph, path[path.length - 1]);
+      if (paragraph && isElementOfType(paragraph, ELEMENT_PARAGRAPH)) {
+        return magicNumberId(paragraph, path[path.length - 1]);
+      }
+      return '';
     })();
 
     setMagicNumberBlockId(blockId);
