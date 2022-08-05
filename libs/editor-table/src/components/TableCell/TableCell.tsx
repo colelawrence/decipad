@@ -76,6 +76,7 @@ export const TableCell: PlateComponent = ({
     return (
       <molecules.FormulaTableData
         result={<organisms.CodeResult {...formulaResult} />}
+        resultType={formulaResult.type.kind}
         {...attributes}
       >
         {children}

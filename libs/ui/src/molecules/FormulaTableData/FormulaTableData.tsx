@@ -11,11 +11,13 @@ const noEditingStyles = css({ display: 'none' });
 
 export type FormulaTableDataProps = ComponentProps<typeof TableFormulaCell> & {
   result?: ReactNode;
+  resultType?: string;
 };
 
 export const FormulaTableData = ({
   children,
   result,
+  resultType,
   ...props
 }: FormulaTableDataProps): ReturnType<FC> => {
   // IMPORTANT NOTE: do not remove the children elements from rendering.
@@ -26,7 +28,10 @@ export const FormulaTableData = ({
   return (
     <TableFormulaCell {...props}>
       <span css={noEditingStyles}>{children}</span>
-      <span css={tdLineStyles} contentEditable={false}>
+      <span
+        css={resultType !== 'table' ? tdLineStyles : null}
+        contentEditable={false}
+      >
         {result}
       </span>
     </TableFormulaCell>
