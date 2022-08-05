@@ -33,7 +33,7 @@ const findWordStartAcc = (
   }
 
   const char = getEditorString(editor, { anchor: point, focus: prevPoint });
-  if (!/[a-z]/i.test(char)) {
+  if (!/[a-z_]/i.test(char)) {
     return { word, start: point };
   }
 
