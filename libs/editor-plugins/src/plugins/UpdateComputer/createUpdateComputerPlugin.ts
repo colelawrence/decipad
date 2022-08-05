@@ -11,9 +11,14 @@ export const createUpdateComputerPlugin = (
   computer: Computer
 ): MyPlatePlugin => ({
   key: 'UPDATE_COMPUTER_PLUGIN',
-  handlers: {
-    onChange: (editor) => () => {
+  withOverrides: (editor) => {
+    const { onChange } = editor;
+    // eslint-disable-next-line no-param-reassign
+    editor.onChange = () => {
       computer.pushCompute(editorToProgram(editor));
-    },
+      onChange();
+    };
+
+    return editor;
   },
 });
