@@ -1,6 +1,6 @@
 import FFraction from '@decipad/fraction';
 import { inverseExponent } from '@decipad/language';
-import { formatUnit } from './formatUnit';
+import { formatUnit, simpleFormatUnit } from './formatUnit';
 import { F, U, u } from './testUtils';
 
 const meter = u('meters');
@@ -100,5 +100,11 @@ describe('base unit tests', () => {
     );
     expect(formatUnit(locale, U([u('v', { multiplier: F(1) })]))).toEqual('V');
     expect(formatUnit(locale, U([u('V', { multiplier: F(1) })]))).toEqual('V');
+  });
+
+  it('formats simply', () => {
+    expect(
+      simpleFormatUnit(U([u('m'), u('kg'), inverseExponent(u('s'))]))
+    ).toEqual('m * kg * s^-1');
   });
 });

@@ -39,7 +39,9 @@ it('turns cells into AST nodes', () => {
 
       '123'
     )
-  ).toMatchInlineSnapshot(`"(implicit* 123 (* (ref banana) (^ (ref km) -2)))"`);
+  ).toMatchInlineSnapshot(
+    `"(implicit* 123 (* (ref bananas) (^ (ref km) -2)))"`
+  );
 
   expect(
     testParseCell(

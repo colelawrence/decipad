@@ -335,14 +335,14 @@ export function formatUnitAsParts<TF extends FractionLike = FFraction>(
 }
 
 export function formatUnit<TF extends FractionLike = FFraction>(
-  _locale: string,
+  locale: string,
   units: TUnits<TF>,
   value: FFraction = TWO,
   prettify = true,
   previousLength = 0
 ): string {
   const parts = formatUnitAsParts(
-    _locale,
+    locale,
     units,
     value,
     prettify,
@@ -376,4 +376,28 @@ export function isUserDefined<TF extends FractionLike = FFraction>(
     return isUserDefinedUnit(unit.args[0]);
   }
   return false;
+}
+
+function simpleFormatUnitPart<TF extends FractionLike = FFraction>(
+  unit: TUnit<TF>
+): string {
+  const multiplier = new FFraction(unit.multiplier).valueOf();
+  const multiplierStr =
+    multipliersToPrefixes[
+      multiplier as keyof typeof multipliersToPrefixes
+    ]?.[0] ?? `${multiplier} * `;
+  const exp = new FFraction(unit.exp).valueOf();
+  const expStr = exp === 1 ? '' : `^${exp}`;
+  const value = `${multiplierStr}${unit.unit}${expStr}`;
+  return value;
+}
+
+export function simpleFormatUnit<TF extends FractionLike = FFraction>(
+  units: TUnits<TF>
+): string {
+  return units.args.reduce((str, u) => {
+    return str
+      ? `${str} * ${simpleFormatUnitPart(u)}`
+      : simpleFormatUnitPart(u);
+  }, '');
 }

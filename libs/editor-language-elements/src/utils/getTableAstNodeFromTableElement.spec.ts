@@ -147,11 +147,11 @@ describe('getTableAstNodeFromTableElement', () => {
 
     expect(getTableAstNodeFromTableElement(editor, node).expression)
       .toMatchInlineSnapshot(`
-        (table
-          column1 (column (implicit* 1 (ref banana)) (implicit* 2 (ref banana)) (implicit* 3 (ref banana)))
-          column2 (column "string 1" "string 2" "string 3")
-          column3 (column (date year 2020 month 1 day 1) (date year 2020 month 1 day 1) (date year 2020 month 1 day 1)))
-      `);
+      (table
+        column1 (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas)))
+        column2 (column "string 1" "string 2" "string 3")
+        column3 (column (date year 2020 month 1 day 1) (date year 2020 month 1 day 1) (date year 2020 month 1 day 1)))
+    `);
   });
 
   it('converts table formulas correctly', () => {
