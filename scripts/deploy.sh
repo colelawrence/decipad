@@ -33,6 +33,9 @@ cp -rT apps/docs/build/. apps/backend/public/docs
 echo "Building the backend..."
 yarn build:backend
 
+echo "Clearing sourcemaps..."
+find apps/backend/public/ | grep '\.map$' | xargs rm
+
 echo "Deploying..."
 mkdir -p tmp/deploy
 cd apps/backend

@@ -19,6 +19,8 @@ echo "Building storybook..."
 yarn build:storybook
 cp -rT dist/storybook/ui/. apps/backend/public/.storybook
 
+echo "Clearing sourcemaps..."
+find apps/backend/public/ | grep '\.map$' | xargs rm
 
 echo "Deploying client on \"$DEPLOY_NAME\"...";
 cd apps/backend
