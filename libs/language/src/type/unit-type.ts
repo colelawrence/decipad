@@ -1,33 +1,22 @@
-import Fraction, { FractionLike } from '@decipad/fraction';
+import Fraction from '@decipad/fraction';
 import { BaseQuantity } from '../units';
 
-export interface TUnit<TNumberType = Fraction> {
+export interface Unit {
   pretty?: 'string';
   unit: string;
-  exp: TNumberType;
-  multiplier: TNumberType;
+  exp: Fraction;
+  multiplier: Fraction;
   known: boolean;
-  aliasFor?: TUnits<TNumberType>;
+  aliasFor?: Units;
   enforceMultiplier?: boolean;
   quality?: string;
   baseQuantity?: BaseQuantity;
   baseSuperQuantity?: BaseQuantity | 'currency';
 }
 
-export interface TUnits<TNumberType = Fraction> {
+export interface Units {
   type: 'units';
-  args: TUnit<TNumberType>[];
+  args: Unit[];
 }
 
-export type Units = TUnits<Fraction>;
-export type Unit = TUnit<Fraction>;
-
-export type FUnits = TUnits<FractionLike>;
-export type FUnit = TUnit<FractionLike>;
-
-export const units = <TF>(...args: TUnit<TF>[]): TUnits<TF> => {
-  return {
-    type: 'units',
-    args,
-  };
-};
+export const units = (...args: Unit[]): Units => ({ type: 'units', args });

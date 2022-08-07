@@ -1,11 +1,9 @@
-import FFraction, { pow } from '@decipad/fraction';
+import Fraction, { pow } from '@decipad/fraction';
 import { parseUnit } from '@decipad/language';
-import Fraction from 'fraction.js/bigfraction';
 import * as CurrencyUnits from '../../language/src/units/currency-units';
 import { formatNumber, getIsPrecise } from './formatNumber';
 import {
   bananasPerDay,
-  F,
   makeFractionUnitTuple,
   metersPerDay,
   metersPerSecond,
@@ -14,6 +12,7 @@ import {
   perEuros,
   u,
   U,
+  F,
   usd,
   usdPerDay,
 } from './testUtils';
@@ -497,7 +496,7 @@ describe('formatNumber', () => {
           locale,
           {
             type: 'units',
-            args: [parseUnit('liter'), u('meter', { exp: new FFraction(-1) })],
+            args: [parseUnit('liter'), u('meter', { exp: new Fraction(-1) })],
           },
           F(1, 100)
         );
@@ -571,7 +570,7 @@ describe('formatNumber', () => {
           locale,
           {
             type: 'units',
-            args: [parseUnit('usd'), u('meter', { exp: new FFraction(-1) })],
+            args: [parseUnit('usd'), u('meter', { exp: new Fraction(-1) })],
           },
           F(1)
         );
@@ -600,7 +599,7 @@ describe('formatNumber', () => {
             type: 'units',
             args: [
               parseUnit('gbp'),
-              u('Wh', { exp: new FFraction(-1), multiplier: F(1000) }),
+              u('Wh', { exp: new Fraction(-1), multiplier: F(1000) }),
             ],
           },
           F(5, 1000)
@@ -613,7 +612,7 @@ describe('formatNumber', () => {
           locale,
           {
             type: 'units',
-            args: [parseUnit('gbp'), u('usd', { exp: new FFraction(-1) })],
+            args: [parseUnit('gbp'), u('usd', { exp: new Fraction(-1) })],
           },
           F(5)
         );
@@ -1451,34 +1450,34 @@ describe('formatNumber', () => {
 describe('detects if the number can be displayed precisely', () => {
   it('when abbreviated', () => {
     // Precision determined by fractional number length
-    expect(getIsPrecise(new FFraction(123.34))).toEqual(true);
-    expect(getIsPrecise(new FFraction(123.345))).toEqual(false);
-    expect(getIsPrecise(new FFraction(1.256))).toEqual(false);
-    expect(getIsPrecise(new FFraction(10, 4), 2)).toEqual(true);
+    expect(getIsPrecise(new Fraction(123.34))).toEqual(true);
+    expect(getIsPrecise(new Fraction(123.345))).toEqual(false);
+    expect(getIsPrecise(new Fraction(1.256))).toEqual(false);
+    expect(getIsPrecise(new Fraction(10, 4), 2)).toEqual(true);
 
     // Larger-than-1000 numbers have 3 digits available for precision,
     // the rest must be zero.
-    expect(getIsPrecise(new FFraction(678n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(6780n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(67800n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(6700n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(67000n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(670000n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(678000n))).toEqual(true);
-    expect(getIsPrecise(new FFraction(678900n))).toEqual(false);
+    expect(getIsPrecise(new Fraction(678n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(6780n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(67800n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(6700n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(67000n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(670000n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(678000n))).toEqual(true);
+    expect(getIsPrecise(new Fraction(678900n))).toEqual(false);
 
     // Repeating fractions
-    expect(getIsPrecise(new FFraction(1, 3))).toEqual(false);
-    expect(getIsPrecise(new FFraction(1_000, 3))).toEqual(false);
-    expect(getIsPrecise(new FFraction(10_000_000, 3))).toEqual(false);
+    expect(getIsPrecise(new Fraction(1, 3))).toEqual(false);
+    expect(getIsPrecise(new Fraction(1_000, 3))).toEqual(false);
+    expect(getIsPrecise(new Fraction(10_000_000, 3))).toEqual(false);
 
     // Edge cases
-    expect(getIsPrecise(new FFraction(1230))).toEqual(true);
-    expect(getIsPrecise(new FFraction(1234))).toEqual(false);
+    expect(getIsPrecise(new Fraction(1230))).toEqual(true);
+    expect(getIsPrecise(new Fraction(1234))).toEqual(false);
 
     // Too many integers
-    expect(getIsPrecise(new FFraction(123.34))).toEqual(true);
-    expect(getIsPrecise(new FFraction(1230.34))).toEqual(false);
-    expect(getIsPrecise(new FFraction(1234.34))).toEqual(false);
+    expect(getIsPrecise(new Fraction(123.34))).toEqual(true);
+    expect(getIsPrecise(new Fraction(1230.34))).toEqual(false);
+    expect(getIsPrecise(new Fraction(1234.34))).toEqual(false);
   });
 });

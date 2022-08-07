@@ -6,14 +6,14 @@ export type {
   SerializedType,
   SerializedTypes,
   SerializedTypeKind,
-  SerializedUnits,
+  Unit,
+  Units,
   Time,
   Token,
 } from '@decipad/language';
 
 export {
   convertToMultiplierUnit,
-  deserializeUnit,
   identifierRegExpGlobal,
   InferError,
   isExpression,
@@ -30,12 +30,7 @@ export {
   getBuiltinsForAutocomplete,
 } from '@decipad/language';
 
-export type {
-  AutocompleteName,
-  FUnit,
-  FUnits,
-  ErrSpec,
-} from '@decipad/language';
+export type { AutocompleteName, ErrSpec } from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

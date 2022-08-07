@@ -57,26 +57,19 @@ export {
   build as buildType,
   convertToMultiplierUnit,
   deserializeType,
-  deserializeUnit,
   normalizeUnitsOf,
   InferError,
   serializeType,
-  serializeUnit,
   simplifyUnits,
   Type,
   pluralizeUnit,
   inverseExponent,
 } from './type';
 export type {
+  ErrSpec,
   SerializedType,
   SerializedTypes,
   SerializedTypeKind,
-  SerializedUnits,
-  FUnit,
-  FUnits,
-  TUnit,
-  TUnits,
-  ErrSpec,
 } from './type';
 export { isExpression, walkAst, n as astNode, isAssignment } from './utils';
 export { units };

@@ -1,4 +1,4 @@
-import { SerializedUnits } from '@decipad/language';
+import { Units } from '@decipad/language';
 import { All, Number, Calendar, Text } from '../icons';
 import { getTypeIcon } from './table';
 
@@ -18,7 +18,7 @@ describe('getTypeIcon()', () => {
     expect(
       getTypeIcon({
         kind: 'number',
-        unit: { type: 'units' } as SerializedUnits,
+        unit: { type: 'units' } as Units,
       })
     ).toBe(All);
   });

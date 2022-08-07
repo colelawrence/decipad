@@ -1,17 +1,7 @@
-import type { TUnit, TUnits } from './unit-type';
 import * as SerializedTypes from './SerializedTypes';
 import { Type } from '.';
 
 export type { SerializedTypes };
-
-export interface SerializedFraction {
-  n: bigint;
-  d: bigint;
-  s: bigint;
-}
-
-export type SerializedUnit = TUnit<SerializedFraction>;
-export type SerializedUnits = TUnits<SerializedFraction>;
 
 export type SerializedType =
   // Groups

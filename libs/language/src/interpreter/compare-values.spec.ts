@@ -36,9 +36,9 @@ it('compares fractions', () => {
 });
 
 it('compares fraction-likes', () => {
-  expect(compare({ n: 2n, d: 1n, s: 1n }, { n: 2n, d: 1n, s: 1n })).toBe(0);
-  expect(compare({ n: 1n, d: 1n, s: 1n }, { n: 2n, d: 1n, s: 1n })).toBe(-1);
-  expect(compare({ n: 2n, d: 1n, s: 1n }, { n: 1n, d: 1n, s: 1n })).toBe(1);
+  expect(compare(F(2), F(2))).toBe(0);
+  expect(compare(F(1), F(2))).toBe(-1);
+  expect(compare(F(2), F(1))).toBe(1);
 });
 
 it('compares strings', () => {

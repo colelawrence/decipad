@@ -80,17 +80,9 @@ describe('tableFromLegacyTableInputElement', () => {
                   type: 'units',
                   args: [
                     {
-                      exp: {
-                        d: 1n,
-                        n: 1n,
-                        s: 1n,
-                      },
+                      exp: F(1),
                       known: false,
-                      multiplier: {
-                        d: 1n,
-                        n: 1n,
-                        s: 1n,
-                      },
+                      multiplier: F(1),
                       unit: 'bananas',
                     },
                   ],

@@ -1,28 +1,13 @@
 import { getDefined } from '@decipad/utils';
 import { buildType as t, Type } from '..';
-import { F } from '../utils';
 import { InferError } from './InferError';
 import {
   SerializedType,
   SerializedTypes,
   SerializedTypeKind,
-  SerializedUnits,
-  SerializedUnit,
 } from './SerializedType';
-import { Units } from './unit-type';
 
-export type {
-  SerializedType,
-  SerializedTypes,
-  SerializedTypeKind,
-  SerializedUnits,
-  SerializedUnit,
-};
-
-// TODO: is this just a lokey type cast?
-export function serializeUnit(unit: Units | null): SerializedUnits | null {
-  return unit;
-}
+export type { SerializedType, SerializedTypes, SerializedTypeKind };
 
 export function serializeType(type: Type): SerializedType {
   const serializedType = ((): SerializedType | null => {
@@ -61,7 +46,7 @@ export function serializeType(type: Type): SerializedType {
 
       return {
         kind: 'number',
-        unit: serializeUnit(type.unit),
+        unit: type.unit,
       };
     } else if (type.type === 'boolean') {
       return { kind: 'boolean' };
@@ -98,23 +83,6 @@ export function serializeType(type: Type): SerializedType {
   throw new Error(`panic: serializing invalid type ${type.type}`);
 }
 
-export function deserializeUnit(
-  unit: SerializedUnits | undefined | null
-): Units | undefined {
-  if (unit == null) {
-    return undefined;
-  }
-  return {
-    type: 'units',
-    args: unit.args.map((u) => ({
-      ...u,
-      multiplier: F(u.multiplier),
-      exp: F(u.exp),
-      aliasFor: u.aliasFor ? deserializeUnit(u.aliasFor) : undefined,
-    })),
-  };
-}
-
 /* eslint-disable-next-line consistent-return */
 export function deserializeType(type: SerializedType): Type {
   return propagateSymbol(
@@ -122,7 +90,7 @@ export function deserializeType(type: SerializedType): Type {
     (() => {
       switch (type.kind) {
         case 'number':
-          return t.number(deserializeUnit(type.unit), type.numberFormat);
+          return t.number(type.unit, type.numberFormat);
         case 'string':
           return t.string();
         case 'boolean':

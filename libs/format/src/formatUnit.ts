@@ -1,20 +1,19 @@
 /* eslint-disable no-param-reassign */
-import FFraction, { F, FractionLike, ONE } from '@decipad/fraction';
+import Fraction, { F, ONE } from '@decipad/fraction';
 import {
-  FUnit,
   getUnitByName,
   pluralizeUnit,
   prettyForSymbol,
   simplifyUnits,
   singular,
-  TUnit,
-  TUnits,
+  Unit,
+  Units,
   unitIsSymbol,
 } from '@decipad/language';
 import produce from 'immer';
 import { DeciNumberPart } from './formatNumber';
 
-const TWO = new FFraction(2);
+const TWO = new Fraction(2);
 
 const numberToSubOrSuperscript: Record<string, string[]> = {
   '0': ['₀', '⁰'], // subscript not used for now
@@ -80,9 +79,9 @@ function scriptFromNumber(n: string): string {
   return numberToSubOrSuperscript[n]?.[1] || n;
 }
 
-const byExp = (u1: FUnit, u2: FUnit): number => Number(F(u2.exp).sub(u1.exp));
+const byExp = (u1: Unit, u2: Unit): number => Number(F(u2.exp).sub(u1.exp));
 
-const produceExp = (unit: FUnit, makePositive = false): FUnit => {
+const produceExp = (unit: Unit, makePositive = false): Unit => {
   return produce(unit, (u) => {
     u.unit = singular(u.unit);
     if (makePositive) {
@@ -91,7 +90,7 @@ const produceExp = (unit: FUnit, makePositive = false): FUnit => {
   });
 };
 
-const isInteger = (f: FractionLike): boolean => {
+const isInteger = (f: Fraction): boolean => {
   return Number(f.d) === 1;
 };
 
@@ -118,7 +117,7 @@ export interface UnitPart {
 }
 
 const stringifyUnit = (
-  unit: FUnit,
+  unit: Unit,
   prettify = true,
   ignoreExp = false
 ): UnitPart[] => {
@@ -222,13 +221,13 @@ const stringifyUnit = (
 };
 
 export const formatUnitArgs = (
-  units: FUnit[] | null,
-  value?: FFraction,
+  units: Unit[] | null,
+  value?: Fraction,
   prettify = true,
   previousLength = 0
 ) => {
   const unitsLength = units?.length ?? 0 + previousLength;
-  return (units ?? []).reduce((parts: UnitPart[], unit: FUnit) => {
+  return (units ?? []).reduce((parts: UnitPart[], unit: Unit) => {
     if (parts.length > 0) {
       let prefix: string;
       //
@@ -310,10 +309,10 @@ function fixSpaces(partsOfUnit: UnitPart[]) {
     .trim();
 }
 
-export function formatUnitAsParts<TF extends FractionLike = FFraction>(
+export function formatUnitAsParts(
   _locale: string,
-  units: TUnits<TF>,
-  value: FFraction = TWO,
+  units: Units,
+  value: Fraction = TWO,
   prettify = true,
   previousLength = 0
 ): DeciNumberPart {
@@ -334,10 +333,10 @@ export function formatUnitAsParts<TF extends FractionLike = FFraction>(
   };
 }
 
-export function formatUnit<TF extends FractionLike = FFraction>(
+export function formatUnit(
   locale: string,
-  units: TUnits<TF>,
-  value: FFraction = TWO,
+  units: Units,
+  value: Fraction = TWO,
   prettify = true,
   previousLength = 0
 ): string {
@@ -354,9 +353,7 @@ export function formatUnit<TF extends FractionLike = FFraction>(
   throw new Error('This should not happen its a typescript imposition');
 }
 
-function isUserDefinedUnit<TF extends FractionLike = FFraction>(
-  unit: TUnit<TF> | null
-): boolean {
+function isUserDefinedUnit(unit: Unit | null): boolean {
   if (!unit) {
     return false;
   }
@@ -364,40 +361,34 @@ function isUserDefinedUnit<TF extends FractionLike = FFraction>(
   return (
     unit != null &&
     !fullUnit?.baseQuantity &&
-    new FFraction(unit.exp).equals(ONE) &&
-    new FFraction(unit.multiplier).equals(ONE)
+    new Fraction(unit.exp).equals(ONE) &&
+    new Fraction(unit.multiplier).equals(ONE)
   );
 }
 
-export function isUserDefined<TF extends FractionLike = FFraction>(
-  unit: TUnits<TF> | null
-): boolean {
+export function isUserDefined(unit: Units | null): boolean {
   if (unit?.args.length === 1) {
     return isUserDefinedUnit(unit.args[0]);
   }
   return false;
 }
 
-function simpleFormatUnitPart<TF extends FractionLike = FFraction>(
-  unit: TUnit<TF>
-): string {
-  const multiplier = new FFraction(unit.multiplier).valueOf();
+function simpleFormatUnitPart(unit: Unit): string {
+  const multiplier = new Fraction(unit.multiplier).valueOf();
   const multiplierStr =
     multipliersToPrefixes[
       multiplier as keyof typeof multipliersToPrefixes
     ]?.[0] ?? `${multiplier} * `;
-  const exp = new FFraction(unit.exp).valueOf();
+  const exp = new Fraction(unit.exp).valueOf();
   const expStr = exp === 1 ? '' : `^${exp}`;
   const value = `${multiplierStr}${unit.unit}${expStr}`;
   return value;
 }
 
-export function simpleFormatUnit<TF extends FractionLike = FFraction>(
-  units: TUnits<TF>
-): string {
-  return units.args.reduce((str, u) => {
-    return str
-      ? `${str} * ${simpleFormatUnitPart(u)}`
-      : simpleFormatUnitPart(u);
-  }, '');
+export function simpleFormatUnit(units: Units): string {
+  return units.args.reduce(
+    (str, u) =>
+      str ? `${str} * ${simpleFormatUnitPart(u)}` : simpleFormatUnitPart(u),
+    ''
+  );
 }

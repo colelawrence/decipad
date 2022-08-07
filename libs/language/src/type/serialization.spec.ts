@@ -1,28 +1,17 @@
-import { buildType as t, Unit } from '..';
+import { buildType as t, Unit, Units } from '..';
 import { F, U } from '../utils';
 import { InferError } from './InferError';
 import {
   deserializeType,
   SerializedType,
   serializeType,
-  SerializedUnit,
-  SerializedUnits,
 } from './serialization';
 
 const meter: Unit = { unit: 'meter', exp: F(1), multiplier: F(1), known: true };
-const smeter: SerializedUnit = {
-  unit: 'meter',
-  exp: { n: 1n, d: 1n, s: 1n },
-  multiplier: { n: 1n, d: 1n, s: 1n },
-  known: true,
-};
 const errorCause = InferError.expectedButGot('A', 'B');
 
-function units(unit: SerializedUnit): SerializedUnits {
-  return {
-    type: 'units',
-    args: [unit],
-  };
+function units(unit: Unit): Units {
+  return { type: 'units', args: [unit] };
 }
 
 it('can stringify a type', () => {
@@ -64,16 +53,16 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.column(t.number(), 2, 'Index')))
     .toMatchInlineSnapshot(`
-    Object {
-      "cellType": Object {
-        "kind": "number",
-        "unit": null,
-      },
-      "columnSize": 2,
-      "indexedBy": "Index",
-      "kind": "column",
-    }
-  `);
+      Object {
+        "cellType": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "columnSize": 2,
+        "indexedBy": "Index",
+        "kind": "column",
+      }
+    `);
 
   expect(
     serializeType(
@@ -127,13 +116,13 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.functionPlaceholder('fname', 2)))
     .toMatchInlineSnapshot(`
-    Object {
-      "argCount": 2,
-      "ast": null,
-      "kind": "function",
-      "name": "fname",
-    }
-  `);
+      Object {
+        "argCount": 2,
+        "ast": null,
+        "kind": "function",
+        "name": "fname",
+      }
+    `);
   expect(serializeType(t.impossible(errorCause))).toMatchInlineSnapshot(`
     Object {
       "errorCause": ErrSpec:expected-but-got("expectedButGot" => ["A","B"]),
@@ -160,7 +149,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'number',
-      unit: units(smeter),
+      unit: units(meter),
     })
   ).toMatchObject({
     type: 'number',

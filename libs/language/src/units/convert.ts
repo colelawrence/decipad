@@ -1,8 +1,8 @@
-import Fraction, { FractionLike } from '@decipad/fraction';
+import Fraction from '@decipad/fraction';
 import produce from 'immer';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
-import { Unit, Units, TUnits } from '../type/unit-type';
+import { Unit, Units } from '../type/unit-type';
 import { normalizeUnits, simplifyUnits } from '../type/units';
 import { zip } from '../utils';
 import { InferError } from '../type';
@@ -31,9 +31,7 @@ function areQuantityUnitsReversible(a: Units | null, b: Units | null): boolean {
   );
 }
 
-function baseQuantityUnits<TF extends FractionLike>(
-  units: TUnits<TF> | null
-): TUnits<TF> | null {
+function baseQuantityUnits(units: Units | null): Units | null {
   if (units == null) {
     return units;
   }

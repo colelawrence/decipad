@@ -1,6 +1,6 @@
-import Fraction, { FractionLike, pow } from '@decipad/fraction';
+import Fraction, { pow } from '@decipad/fraction';
 import { lenientZip } from '@decipad/utils';
-import { Draft, produce } from 'immer';
+import { produce } from 'immer';
 import { Type } from '..';
 import pluralize from '../pluralize';
 import {
@@ -10,7 +10,7 @@ import {
   isKnownSymbol,
 } from '../units';
 import { F, getDefined } from '../utils';
-import { FUnit, TUnit, TUnits, Unit, Units, units } from './unit-type';
+import { Unit, Units, units } from './unit-type';
 
 export const timeUnits = new Set([
   'millennium',
@@ -38,10 +38,10 @@ export const timeUnits = new Set([
   'milliseconds',
 ]);
 
-export const pluralizeUnit = <TF extends FractionLike>(
-  baseUnit: TUnit<TF>,
+export const pluralizeUnit = (
+  baseUnit: Unit,
   value: bigint | number = 2n
-): TUnit<TF> => {
+): Unit => {
   const { unit } = baseUnit;
   if (isKnownSymbol(unit)) {
     return baseUnit;
@@ -131,12 +131,10 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   }
 };
 
-const simplifyUnitsArgs = <TF extends FractionLike>(
-  units: TUnit<TF>[]
-): TUnit<TF>[] => {
-  return units
+const simplifyUnitsArgs = (units: Unit[]): Unit[] =>
+  units
     .map((u) => pluralizeUnit(u))
-    .reduce<FUnit[]>((units, unit) => {
+    .reduce<Unit[]>((units, unit) => {
       const matchingUnitIndex = units.findIndex(
         (candidate) =>
           unit.unit === candidate.unit &&
@@ -158,12 +156,9 @@ const simplifyUnitsArgs = <TF extends FractionLike>(
         return [...units, unit];
       }
     }, [])
-    .filter((unit) => F(unit.exp).compare(F(0)) !== 0) as TUnit<TF>[];
-};
+    .filter((unit) => F(unit.exp).compare(F(0)) !== 0) as Unit[];
 
-export const simplifyUnits = <TF extends FractionLike>(
-  units: TUnits<TF> | null
-): TUnits<TF> | null => {
+export const simplifyUnits = (units: Units | null): Units | null => {
   if (units == null) {
     return units;
   }
@@ -186,10 +181,7 @@ export const normalizeUnitNames = (units: Unit[]): Unit[] => {
   return units.map(normalizeUnitName);
 };
 
-const byUnitName = <TF extends FractionLike>(
-  a: TUnit<TF>,
-  b: TUnit<TF>
-): number => {
+const byUnitName = (a: Unit, b: Unit): number => {
   if (a.unit > b.unit) {
     return 1;
   } else if (a.unit < b.unit) {
@@ -199,10 +191,10 @@ const byUnitName = <TF extends FractionLike>(
   }
 };
 
-export const normalizeUnits = <TF extends FractionLike>(
-  units: TUnit<TF>[] | null,
+export const normalizeUnits = (
+  units: Unit[] | null,
   { mult = false }: { mult?: boolean } = {}
-): TUnit<TF>[] | null => {
+): Unit[] | null => {
   if (units == null) {
     return null;
   }
@@ -217,9 +209,7 @@ export const normalizeUnits = <TF extends FractionLike>(
   }
 };
 
-export const normalizeUnitsOf = <TF extends FractionLike>(
-  unit: TUnits<TF> | null
-): TUnits<TF> | null => {
+export const normalizeUnitsOf = (unit: Units | null): Units | null => {
   if (unit == null) {
     return null;
   }
@@ -236,17 +226,17 @@ export const setExponent = (unit: Unit, newExponent: Fraction) =>
 export const inverseExponent = (unit: Unit) =>
   setExponent(unit, unit.exp.neg());
 
-export const combineUnits = <TF extends FractionLike>(
-  myUnitsObj: TUnits<TF> | null,
-  theirUnitsObj: TUnits<TF> | null,
+export const combineUnits = (
+  myUnitsObj: Units | null,
+  theirUnitsObj: Units | null,
   { mult = false }: { mult?: boolean } = {}
-): TUnits<TF> | null => {
+): Units | null => {
   const myUnits = normalizeUnits(myUnitsObj?.args ?? null, { mult }) ?? [];
   const theirUnits =
     normalizeUnits(theirUnitsObj?.args ?? null, { mult }) ?? [];
 
-  const outputUnits: TUnit<TF>[] = mult ? [...myUnits] : [...theirUnits];
-  const sourceUnits: TUnit<TF>[] = mult ? theirUnits : myUnits;
+  const outputUnits: Unit[] = mult ? [...myUnits] : [...theirUnits];
+  const sourceUnits: Unit[] = mult ? theirUnits : myUnits;
 
   // Combine their units in
   for (const thisUnit of sourceUnits) {
@@ -260,9 +250,7 @@ export const combineUnits = <TF extends FractionLike>(
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],
         (inversed) => {
-          inversed.exp = F(inversed.exp).add(
-            thisUnit.exp
-          ) as unknown as Draft<TF>;
+          inversed.exp = F(inversed.exp).add(thisUnit.exp);
         }
       );
     } else {
@@ -274,15 +262,12 @@ export const combineUnits = <TF extends FractionLike>(
   return ret == null ? ret : units(...ret);
 };
 
-export const multiplyExponent = <TF extends FractionLike>(
-  myUnits: TUnits<TF>,
-  by: number
-): TUnits<TF> | null =>
+export const multiplyExponent = (myUnits: Units, by: number): Units | null =>
   normalizeUnitsOf(
     produce(myUnits, (myUnits) => {
       for (const u of myUnits.args) {
         try {
-          u.exp = F(u.exp).mul(by) as unknown as Draft<TF>;
+          u.exp = F(u.exp).mul(by);
         } catch (err) {
           const error = new Error(
             `error multiplying ${u.exp} by ${by}: ${(err as Error).message}`

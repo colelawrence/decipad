@@ -1,4 +1,4 @@
-import { SerializedUnits } from '@decipad/language';
+import { Units } from '@decipad/language';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';
@@ -30,9 +30,7 @@ it('renders a button when parse is successful', async () => {
   await expect(screen.findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
-  rerender(
-    <UnitMenuItem parseUnit={() => Promise.resolve({} as SerializedUnits)} />
-  );
+  rerender(<UnitMenuItem parseUnit={() => Promise.resolve({} as Units)} />);
 
   expect(await screen.findByRole('button')).toBeInTheDocument();
 });
@@ -43,7 +41,7 @@ describe('onSelect prop', () => {
     render(
       <UnitMenuItem
         onSelect={onSelect}
-        parseUnit={() => Promise.resolve({} as SerializedUnits)}
+        parseUnit={() => Promise.resolve({} as Units)}
       />,
       {
         wrapper,
@@ -62,7 +60,7 @@ describe('onSelect prop', () => {
     render(
       <UnitMenuItem
         onSelect={onSelect}
-        parseUnit={() => Promise.resolve({} as SerializedUnits)}
+        parseUnit={() => Promise.resolve({} as Units)}
       />,
       {
         wrapper,

@@ -1,4 +1,5 @@
 import { Computer } from '@decipad/computer';
+import { F } from '@decipad/fraction';
 import { formatCell } from './formatCell';
 
 it('formats cell value according to the column type', () => {
@@ -18,8 +19,8 @@ it('formats cell value according to the column type', () => {
           args: [
             {
               unit: 'banana',
-              exp: { n: 1n, d: 1n, s: 1n },
-              multiplier: { n: 1n, d: 1n, s: 1n },
+              exp: F(1),
+              multiplier: F(1),
               known: false,
             },
           ],
@@ -38,8 +39,8 @@ it('formats cell value according to the column type', () => {
           args: [
             {
               unit: 'banana',
-              exp: { n: 1n, d: 1n, s: 1n },
-              multiplier: { n: 1n, d: 1n, s: 1n },
+              exp: F(1),
+              multiplier: F(1),
               known: false,
             },
           ],
@@ -58,8 +59,8 @@ it('formats cell value according to the column type', () => {
           args: [
             {
               unit: 'banana',
-              exp: { n: 1n, d: 1n, s: 1n },
-              multiplier: { n: 1n, d: 1n, s: 1n },
+              exp: F(1),
+              multiplier: F(1),
               known: false,
             },
           ],

@@ -32,11 +32,11 @@ import {
   simplifyUnits,
   pluralizeUnit,
 } from './units';
-import { Unit, Units, units, FUnit, FUnits, TUnit, TUnits } from './unit-type';
+import { Unit, Units, units } from './unit-type';
 
 export { simplifyUnits, pluralizeUnit };
 
-export type { ErrSpec, Unit, Units, FUnit, FUnits, TUnit, TUnits };
+export type { ErrSpec, Unit, Units };
 
 export * from './serialization';
 export * from './convert-to-multiplier-unit';

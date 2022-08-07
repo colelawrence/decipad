@@ -1,10 +1,8 @@
-import FFraction, { FractionLike, ONE } from '@decipad/fraction';
-import { CurrencyUnits, getUnitByName, TUnit, TUnits } from '@decipad/language';
+import FFraction, { ONE } from '@decipad/fraction';
+import { CurrencyUnits, getUnitByName, Unit, Units } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 
-function isCurrencyUnit<TF extends FractionLike = FFraction>(
-  unit: TUnit<TF> | null
-): boolean {
+function isCurrencyUnit(unit: Unit | null): boolean {
   return (
     unit != null &&
     unit.baseSuperQuantity === 'currency' &&
@@ -12,18 +10,14 @@ function isCurrencyUnit<TF extends FractionLike = FFraction>(
   );
 }
 
-export function hasCurrency<TF extends FractionLike = FFraction>(
-  unit: TUnits<TF> | null
-): number {
+export function hasCurrency(unit: Units | null): number {
   if (!unit) {
     return -1;
   }
   return unit.args.findIndex((arg) => isCurrencyUnit(arg));
 }
 
-export function getCurrency<TF extends FractionLike = FFraction>(
-  unit: TUnits<TF>
-): TUnit<TF> {
+export function getCurrency(unit: Units): Unit {
   const currencyIndex = unit.args.findIndex(isCurrencyUnit);
   const currencyUnit = getDefined(
     (currencyIndex >= 0 && unit?.args[currencyIndex]) || undefined

@@ -1,7 +1,7 @@
+import Fraction from 'fraction.js/bigfraction';
 import FFraction from '@decipad/fraction';
 import { AnyMapping, zip } from '@decipad/utils';
-import Fraction from 'fraction.js/bigfraction';
-import { AST, InjectableExternalData } from '.';
+import type { AST, InjectableExternalData } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { fromJS, FromJSArg, Table } from './interpreter/Value';
@@ -14,8 +14,9 @@ import {
   SerializedType,
   serializeType,
   Type,
+  Unit,
 } from './type';
-import { isSerializedType, SerializedUnit } from './type/SerializedType';
+import { isSerializedType } from './type/SerializedType';
 
 export const runAST = async (
   block: AST.Block,
@@ -158,7 +159,7 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
 }
 
 /** Stringify units (for testing/snapshots ONLY) */
-export const snapshotUnit = (unit: SerializedUnit[]) => {
+export const snapshotUnit = (unit: Unit[]) => {
   return unit
     .map((u) => {
       const exp = new Fraction(u.exp).valueOf();

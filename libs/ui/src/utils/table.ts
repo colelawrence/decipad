@@ -1,7 +1,7 @@
 import {
   SerializedType,
   SerializedTypes,
-  SerializedUnits,
+  Units,
   Time,
 } from '@decipad/computer';
 import type { SeriesType, TableCellType } from '@decipad/editor-types';
@@ -46,7 +46,7 @@ export function getSeriesType(type: SeriesType): TableCellType {
   return { kind: 'series', seriesType: type };
 }
 
-export function getNumberType(unit?: SerializedUnits): SerializedTypes.Number {
+export function getNumberType(unit?: Units): SerializedTypes.Number {
   return { kind: 'number', unit: unit ?? null };
 }
 

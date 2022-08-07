@@ -1,7 +1,7 @@
 import { FC, useEffect, useReducer, useRef } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
-import { SerializedUnits } from '@decipad/computer';
+import type { Units } from '@decipad/computer';
 import { cssVar, p12Medium, p13Medium, setCssVar } from '../../primitives';
 import { MenuItem } from '../../atoms';
 import { menu } from '../../styles';
@@ -43,15 +43,13 @@ const buttonStyles = css(p12Medium, {
   padding: '4px 8px',
 });
 
-type Unit = SerializedUnits | null;
-
 type UnitsAction =
   | { type: 'text'; value: string }
-  | { type: 'unit'; value: Unit };
+  | { type: 'unit'; value: Units | null };
 
 interface UnitsState {
   text: string;
-  unit: Unit;
+  unit: Units | null;
 }
 
 const initialState: UnitsState = {
@@ -69,8 +67,8 @@ function reducer(state: UnitsState, action: UnitsAction): UnitsState {
 }
 
 interface UnitMenuItemProps {
-  readonly onSelect?: (unit: Unit) => void;
-  readonly parseUnit?: (value: string) => Promise<Unit>;
+  readonly onSelect?: (unit: Units | null) => void;
+  readonly parseUnit?: (value: string) => Promise<Units | null>;
 }
 
 export const UnitMenuItem = ({

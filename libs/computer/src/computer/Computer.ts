@@ -4,7 +4,7 @@ import {
   formatNumber,
   formatUnit,
 } from '@decipad/format';
-import FFraction, { FractionLike } from '@decipad/fraction';
+import FFraction from '@decipad/fraction';
 import {
   AST,
   AutocompleteName,
@@ -12,7 +12,7 @@ import {
   ErrSpec,
   evaluateStatement,
   ExternalDataMap,
-  FUnits,
+  Units,
   inferExpression,
   inferStatement,
   isExpression,
@@ -22,10 +22,8 @@ import {
   Result,
   RuntimeError,
   SerializedTypes,
-  SerializedUnits,
   serializeResult,
   serializeType,
-  serializeUnit,
   validateResult,
   Value,
 } from '@decipad/language';
@@ -550,7 +548,7 @@ export class Computer {
     );
   }
 
-  async getUnitFromText(text: string): Promise<SerializedUnits | null> {
+  async getUnitFromText(text: string): Promise<Units | null> {
     const ast = parseOneBlock(text);
     if (!isExpression(ast.args[0])) {
       return null;
@@ -559,7 +557,7 @@ export class Computer {
       this.computationRealm.inferContext,
       ast.args[0]
     );
-    return serializeUnit(expr.unit);
+    return expr.unit;
   }
 
   parseStatement(source: string): ComputerParseStatementResult {
@@ -595,11 +593,11 @@ export class Computer {
     this.locale = locale;
   }
 
-  formatNumber(type: SerializedTypes.Number, value: FractionLike): DeciNumber {
+  formatNumber(type: SerializedTypes.Number, value: FFraction): DeciNumber {
     return formatNumber(this.locale, type.unit, value, type.numberFormat);
   }
 
-  formatUnit(unit: FUnits, value?: FFraction): string {
+  formatUnit(unit: Units, value?: FFraction): string {
     return formatUnit(this.locale, unit, value);
   }
 

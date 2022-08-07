@@ -1,11 +1,11 @@
-import FFraction, { FractionLike } from '@decipad/fraction';
+import Fraction from '@decipad/fraction';
 import {
   AST,
   convertToMultiplierUnit,
   normalizeUnitsOf,
-  TUnits,
+  Units,
 } from '@decipad/language';
-import produce, { Draft } from 'immer';
+import produce from 'immer';
 import pluralize from 'pluralize';
 import {
   formatEdgeCaseNumber,
@@ -66,7 +66,7 @@ export type DeciNumber = {
 type IntermediateDeciNumber = Omit<DeciNumber, 'asString'>;
 
 export function unpreciseButSafeFractionAsNumber(
-  n: FFraction
+  n: Fraction
 ): [number, number] {
   const roundedNumber = n.round(MAX_PRECISION).valueOf();
   const notRoundedNumber = n.valueOf();
@@ -135,16 +135,16 @@ export function partsToString(partsOf: DeciNumberPart[]): string {
     .trim();
 }
 
-function isLargeNumber(x: FFraction): boolean {
-  return x.compare(new FFraction(1_000_000_000_000_000n)) > 0;
+function isLargeNumber(x: Fraction): boolean {
+  return x.compare(new Fraction(1_000_000_000_000_000n)) > 0;
 }
 
-function isLessThan10k(x: FFraction): boolean {
-  return x.compare(new FFraction(10_000n)) < 0;
+function isLessThan10k(x: Fraction): boolean {
+  return x.compare(new Fraction(10_000n)) < 0;
 }
 
 export const getIsPrecise = (
-  n: FFraction,
+  n: Fraction,
   places = 2,
   largeNumbersGetAbbreviated = true
 ): boolean => {
@@ -185,7 +185,7 @@ export const getIsPrecise = (
 const formatToParts = (
   locale: string,
   args: Intl.NumberFormatOptions,
-  n: FFraction,
+  n: Fraction,
   mapParts: (num: DeciNumberPart[]) => DeciNumberPart[]
 ): IntermediateDeciNumber => {
   const [value, useSafeN] = unpreciseButSafeFractionAsNumber(n);
@@ -217,33 +217,25 @@ const formatToParts = (
     partsOf = [{ type: 'roughly', value: '≈' }, ...partsOf];
   }
 
-  const asStringPrecise = partsToString(formatEdgeCaseNumber(n, MAX_PRECISION));
+  let asStringPrecise;
+  if (Math.abs(useSafeN) > Number.MAX_SAFE_INTEGER) {
+    asStringPrecise = partsToString(formatEdgeCaseNumber(n, MAX_PRECISION));
+  } else {
+    const fmt = new Intl.NumberFormat(
+      locale,
+      Math.abs(useSafeN) > 1e10 || Math.abs(useSafeN) < 1 / 1e10
+        ? LONG_NUMBER_OPTIONS
+        : OTHER_LONG_NUMBER_OPTIONS
+    );
+    asStringPrecise = partsToString(
+      beautifyExponents(fmt.formatToParts(useSafeN))
+    );
+  }
 
-  return {
-    isPrecise,
-    partsOf: mapParts(partsOf),
-    value,
-    asStringPrecise:
-      Math.abs(useSafeN) > Number.MAX_SAFE_INTEGER
-        ? asStringPrecise
-        : partsToString(
-            beautifyExponents(
-              new Intl.NumberFormat(
-                locale,
-                Math.abs(useSafeN) > 1e10 || Math.abs(useSafeN) < 1 / 1e10
-                  ? LONG_NUMBER_OPTIONS
-                  : OTHER_LONG_NUMBER_OPTIONS
-              ).formatToParts(useSafeN)
-            )
-          ),
-  };
+  return { isPrecise, partsOf: mapParts(partsOf), value, asStringPrecise };
 };
 
-function formatCurrency<TF extends FractionLike = FFraction>(
-  locale: string,
-  unit: TUnits<TF>,
-  fraction: FFraction
-) {
+function formatCurrency(locale: string, unit: Units, fraction: Fraction) {
   const currency = getCurrency(unit);
 
   const numberFormatOptions: Intl.NumberFormatOptions = {
@@ -268,13 +260,13 @@ function formatCurrency<TF extends FractionLike = FFraction>(
 
 function formatUnitless(
   locale: string,
-  fraction: FFraction
+  fraction: Fraction
 ): IntermediateDeciNumber {
   const formattingOptions: Intl.NumberFormatOptions = {
     ...DEFAULT_NUMBER_OPTIONS,
     ...(isLargeNumber(fraction) ||
     (fraction.mod(10).compare(0) !== 0 &&
-      fraction.compare(new FFraction(0.01)) < 0)
+      fraction.compare(new Fraction(0.01)) < 0)
       ? { notation: 'engineering' }
       : isLessThan10k(fraction)
       ? { notation: 'standard' }
@@ -284,10 +276,10 @@ function formatUnitless(
   return formatToParts(locale, formattingOptions, fraction, (x) => x);
 }
 
-function formatUserDefinedUnit<TF extends FractionLike = FFraction>(
+function formatUserDefinedUnit(
   locale: string,
-  unit: TUnits<TF>,
-  fraction: FFraction
+  unit: Units,
+  fraction: Fraction
 ) {
   const args: Intl.NumberFormatOptions = { ...DEFAULT_NUMBER_OPTIONS };
 
@@ -316,11 +308,7 @@ function formatUserDefinedUnit<TF extends FractionLike = FFraction>(
   );
 }
 
-function formatAnyUnit<TF extends FractionLike = FFraction>(
-  locale: string,
-  units: TUnits<TF>,
-  fraction: FFraction
-) {
+function formatAnyUnit(locale: string, units: Units, fraction: Fraction) {
   const args = { ...DEFAULT_NUMBER_OPTIONS };
 
   // dont show smart `thousand` instead of K if things are too big
@@ -344,16 +332,12 @@ function formatAnyUnit<TF extends FractionLike = FFraction>(
   });
 }
 
-function formatAnyCurrency<TF extends FractionLike = FFraction>(
-  locale: string,
-  units: TUnits<TF>,
-  fraction: FFraction
-) {
+function formatAnyCurrency(locale: string, units: Units, fraction: Fraction) {
   const currencyIndex = hasCurrency(units);
-  const currencyUnit = {
+  const currencyUnit: Units = {
     type: 'units',
     args: [units.args[currencyIndex]],
-  } as TUnits<TF>;
+  };
   const unitsWithoutCurrency = produce(units, (uns) => {
     uns.args.map((_, i) => {
       if (i === currencyIndex) {
@@ -367,7 +351,7 @@ function formatAnyCurrency<TF extends FractionLike = FFraction>(
     (ac, current) => {
       return ac.mul(current.multiplier);
     },
-    new FFraction(1)
+    new Fraction(1)
   );
 
   const partsOfUnits =
@@ -375,7 +359,7 @@ function formatAnyCurrency<TF extends FractionLike = FFraction>(
       ? formatAnyUnit(
           locale,
           unitsWithoutCurrency,
-          new FFraction(1)
+          new Fraction(1)
         ).partsOf.filter((e, i) => !(i === 0 && e.value === '1'))
       : [];
 
@@ -383,7 +367,7 @@ function formatAnyCurrency<TF extends FractionLike = FFraction>(
     locale,
     produce(currencyUnit, (cu) => {
       // eslint-disable-next-line no-param-reassign
-      cu.args[0].multiplier = new FFraction(1) as never as Draft<TF>;
+      cu.args[0].multiplier = new Fraction(1);
     }),
     fraction.mul(otherUnitsMult)
   );
@@ -408,13 +392,13 @@ function formatAnyCurrency<TF extends FractionLike = FFraction>(
 // ...
 // bananas....
 //
-export function formatNumber<TF extends FractionLike = FFraction>(
+export function formatNumber(
   locale: string,
-  unit: TUnits<TF> | null | undefined,
-  number: FractionLike,
+  unit: Units | null | undefined,
+  number: Fraction,
   numberFormat: AST.NumberFormat | null = undefined
 ): DeciNumber {
-  const fraction = new FFraction(number);
+  const fraction = new Fraction(number);
 
   if (numberFormat === 'percentage') {
     const mulFraction = fraction.mul(100);
@@ -432,7 +416,7 @@ export function formatNumber<TF extends FractionLike = FFraction>(
 
   let deciNumber: IntermediateDeciNumber;
   if (unit) {
-    const units = normalizeUnitsOf(unit) as TUnits<TF>;
+    const units = normalizeUnitsOf(unit) as Units;
 
     if (hasCurrency(units) !== -1) {
       deciNumber = formatAnyCurrency(locale, units, fraction);

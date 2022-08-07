@@ -1,11 +1,11 @@
 import Fraction from 'fraction.js/bigfraction';
-import FFraction, { FractionLike } from '.';
+import { FractionLike } from '.';
 
-export const isZero = (f: FFraction): boolean => {
+export const isZero = (f: Fraction): boolean => {
   return f.compare(0) === 0;
 };
 
-export const pow = (a: FFraction, b: FFraction): FFraction => {
+export const pow = (a: Fraction, b: Fraction): Fraction => {
   const result = a.pow(b);
   if (result == null || isZero(result)) {
     const resultNumber = a.valueOf() ** b.valueOf();
@@ -19,11 +19,7 @@ export const pow = (a: FFraction, b: FFraction): FFraction => {
   return result;
 };
 
-const fractionLikeProps: ReadonlyArray<keyof FractionLike> = [
-  'n',
-  'd',
-  's',
-] as const;
+const fractionLikeProps = ['n', 'd', 's'] as const;
 
 export const isFractionLike = (f: unknown): f is FractionLike => {
   return (
@@ -35,7 +31,7 @@ export const isFractionLike = (f: unknown): f is FractionLike => {
   );
 };
 
-export const F = (n: number | bigint | FractionLike): FFraction => {
+export const F = (n: number | bigint | FractionLike): Fraction => {
   if (isFractionLike(n)) {
     return new Fraction(n.n * n.s, n.d);
   }

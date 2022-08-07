@@ -1,6 +1,6 @@
-import { FractionLike } from '@decipad/fraction';
+import Fraction from '@decipad/fraction';
 
-export type ResultNumber = FractionLike;
+export type ResultNumber = Fraction;
 export type ResultString = string;
 export type ResultBoolean = boolean;
 export type ResultDate = bigint;
