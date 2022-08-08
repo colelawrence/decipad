@@ -10,7 +10,7 @@ import { parseOneBlock } from './run';
 import {
   build as t,
   convertToMultiplierUnit,
-  normalizeUnitsOf,
+  normalizeUnits,
   SerializedType,
   serializeType,
   Type,
@@ -64,7 +64,7 @@ export const runCodeForVariables = async (
 
 const userValue = (type: Type, value: OneResult): OneResult => {
   if (value instanceof FFraction) {
-    const units = normalizeUnitsOf(type.unit);
+    const units = normalizeUnits(type.unit);
     return convertToMultiplierUnit(value, units);
   }
   return value;
@@ -195,7 +195,7 @@ export const snapshotType = (type: Type | SerializedType): string => {
       if (type.numberFormat) {
         return type.numberFormat;
       } else if (type.unit) {
-        return snapshotUnit(type.unit.args);
+        return snapshotUnit(type.unit);
       } else {
         return 'number';
       }

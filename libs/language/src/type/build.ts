@@ -3,7 +3,7 @@ import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import type { AST, Time } from '..';
 import { InferError, Type, PrimitiveTypeName } from '.';
-import { Unit, Units, units } from './unit-type';
+import { Unit } from './unit-type';
 import { timeUnitFromUnit } from '../date';
 
 const primitive = (type: PrimitiveTypeName) =>
@@ -12,14 +12,14 @@ const primitive = (type: PrimitiveTypeName) =>
   });
 
 export const number = (
-  unit: Units | Unit[] | null = null,
+  unit: Unit[] | null = null,
   numberFormat: AST.NumberFormat | null = undefined
 ) =>
   produce(primitive('number'), (t) => {
     if (unit != null && numberFormat != null) {
       throw new Error('Cannot specify both unit and numberFormat');
     }
-    t.unit = Array.isArray(unit) ? units(...unit) : unit;
+    t.unit = unit?.length ? unit : null;
     t.numberFormat = numberFormat ?? null;
   });
 
@@ -39,15 +39,12 @@ export const date = (specificity: Time.Specificity) =>
 
 export const timeQuantity = (timeUnits: (Unit | string)[]) =>
   produce(primitive('number'), (numberType) => {
-    numberType.unit = {
-      type: 'units',
-      args: timeUnits.map((unit) => ({
-        unit: timeUnitFromUnit(unit),
-        exp: new Fraction(1),
-        multiplier: new Fraction(1),
-        known: true,
-      })),
-    };
+    numberType.unit = timeUnits.map((unit) => ({
+      unit: timeUnitFromUnit(unit),
+      exp: new Fraction(1),
+      multiplier: new Fraction(1),
+      known: true,
+    }));
   });
 
 interface BuildTableArgs {

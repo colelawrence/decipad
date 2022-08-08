@@ -5,7 +5,7 @@ import { equalOrUnknown, getDefined, zip } from '../utils';
 import * as t from './build';
 import { InferError } from './InferError';
 import { propagatePercentage } from './percentages';
-import { Units, units } from './unit-type';
+import { Unit } from './unit-type';
 import {
   combineUnits,
   inverseExponent,
@@ -239,8 +239,8 @@ export const sameTablenessAs = checker((me: Type, other: Type) => {
 export const isTimeQuantity = checker((me: Type) => {
   if (
     me.unit == null ||
-    me.unit.args.length === 0 ||
-    !me.unit.args.every((unit) => timeUnits.has(unit.unit))
+    me.unit.length === 0 ||
+    !me.unit.every((unit) => timeUnits.has(unit.unit))
   ) {
     return me.expected('time quantity');
   }
@@ -263,12 +263,12 @@ export const sameDatenessAs = checker((me: Type, other: Type) => {
   }
 });
 
-export const multiplyUnit = checker((me: Type, withUnits: Units | null) => {
+export const multiplyUnit = checker((me: Type, withUnits: Unit[] | null) => {
   return setUnit(me, combineUnits(me.unit, withUnits, { mult: true }));
 });
 
 export const divideUnit = checker(
-  (me: Type, divideBy: Units | number | null) => {
+  (me: Type, divideBy: Unit[] | number | null) => {
     if (typeof divideBy === 'number') {
       const multiplyBy = 1 / divideBy;
       if (me.unit) {
@@ -276,8 +276,8 @@ export const divideUnit = checker(
       }
       return me;
     } else {
-      const invTheirUnits = divideBy?.args.map((u) => inverseExponent(u)) ?? [];
-      const combinedUnits = combineUnits(me.unit, units(...invTheirUnits));
+      const invTheirUnits = divideBy?.map((u) => inverseExponent(u)) ?? [];
+      const combinedUnits = combineUnits(me.unit, invTheirUnits);
       return setUnit(me, combinedUnits);
     }
   }

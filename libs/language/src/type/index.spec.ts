@@ -4,7 +4,7 @@ import { F, l, u, U } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type, build as t } from './index';
-import { Unit, units } from './unit-type';
+import type { Unit } from './unit-type';
 
 const meter = u('meters');
 const second = u('seconds');
@@ -45,7 +45,7 @@ describe('sameAs', () => {
     ).not.toBeNull();
   });
 
-  const n = (...units: Unit[]) => t.number(units.length > 0 ? units : null);
+  const n = (...units: Unit[]) => t.number(units);
 
   it('sameAs checks units', () => {
     expect(n(meter)).toEqual(numberInMeter);
@@ -55,10 +55,10 @@ describe('sameAs', () => {
 
     // Mismatched units
     expect(n(meter).sameAs(n(second)).errorCause).toEqual(
-      InferError.expectedUnit(units(second), units(meter))
+      InferError.expectedUnit([second], [meter])
     );
     expect(n(meter, second).sameAs(n(second)).errorCause).toEqual(
-      InferError.expectedUnit(units(second), units(meter, second))
+      InferError.expectedUnit([second], [meter, second])
     );
   });
 
@@ -194,8 +194,8 @@ describe('Impossible types', () => {
 
     expect(imp.isScalar('string')).toEqual(imp);
 
-    expect(imp.multiplyUnit(units(meter))).toEqual(imp);
-    expect(imp.divideUnit(units(meter))).toEqual(imp);
+    expect(imp.multiplyUnit([meter])).toEqual(imp);
+    expect(imp.divideUnit([meter])).toEqual(imp);
 
     expect(imp.withErrorCause('ignored different error')).toEqual(imp);
   });
@@ -203,62 +203,58 @@ describe('Impossible types', () => {
 
 describe('divideUnit', () => {
   it('divides units', () => {
-    expect(t.number([meter]).divideUnit(units(second))).toEqual(
+    expect(t.number([meter]).divideUnit([second])).toEqual(
       numberInMeterPerSecond
     );
   });
 
   it('exponentiates units', () => {
-    expect(t.number([invSecond]).divideUnit(units(second))).toEqual(
+    expect(t.number([invSecond]).divideUnit([second])).toEqual(
       t.number([setExponent(second, F(-2))])
     );
 
-    expect(
-      t.number([setExponent(second, F(-2))]).divideUnit(units(second))
-    ).toEqual(t.number([setExponent(second, F(-3))]));
+    expect(t.number([setExponent(second, F(-2))]).divideUnit([second])).toEqual(
+      t.number([setExponent(second, F(-3))])
+    );
   });
 
   it('exponentiation that results in 0-exponent eliminates the unit', () => {
-    expect(t.number([meter]).divideUnit(units(meter))).toEqual(t.number());
+    expect(t.number([meter]).divideUnit([meter])).toEqual(t.number());
   });
 
   it('divides units even further', () => {
-    expect(
-      t.number([meter, invSecond]).divideUnit(units(u('USD'))).unit
-    ).toEqual(
-      units(
-        setExponent(u('USD'), F(-1)), // first because of sort
-        meter,
-        invSecond
-      )
-    );
+    expect(t.number([meter, invSecond]).divideUnit([u('USD')]).unit).toEqual([
+      setExponent(u('USD'), F(-1)), // first because of sort
+      meter,
+      invSecond,
+    ]);
   });
 
   it('maintains units when one of the operands is unitless', () => {
     expect(t.number([meter]).divideUnit(null)).toEqual(t.number([meter]));
-    expect(t.number().divideUnit(units(invMeter))).toEqual(t.number([meter]));
+    expect(t.number().divideUnit([invMeter])).toEqual(t.number([meter]));
   });
 });
 
 describe('multiplyUnit', () => {
   it('multiplies units', () => {
-    expect(numberInMeterPerSecond.multiplyUnit(units(second))).toEqual(
+    expect(numberInMeterPerSecond.multiplyUnit([second])).toEqual(
       t.number([meter])
     );
   });
 
   it('when one of the numbers has no unit, the other unit prevails', () => {
-    expect(t.number(units(meter, second)).multiplyUnit(null)).toEqual(
-      t.number(units(meter, second))
+    expect(t.number([meter, second]).multiplyUnit(null)).toEqual(
+      t.number([meter, second])
     );
-    expect(t.number().multiplyUnit(units(meter, second))).toEqual(
-      t.number(units(meter, second))
+    expect(t.number().multiplyUnit([meter, second])).toEqual(
+      t.number([meter, second])
     );
   });
 
   it('eliminates units that are opposite on both sides', () => {
     expect(
-      t.number([invMeter, invSecond]).multiplyUnit(units(meter, second))
+      t.number([invMeter, invSecond]).multiplyUnit([meter, second])
     ).toEqual(t.number());
   });
 });

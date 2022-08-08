@@ -1,5 +1,5 @@
 import { immerable } from 'immer';
-import { Time, Type, Units } from '..';
+import { Time, Type, Unit } from '..';
 
 export type ErrSpec =
   | {
@@ -28,7 +28,7 @@ export type ErrSpec =
     }
   | {
       errType: 'expected-unit';
-      expectedUnit: [Units | null, Units | null];
+      expectedUnit: [Unit[] | null, Unit[] | null];
     }
   | { errType: 'unexpected-empty-column' }
   | { errType: 'unexpected-empty-table' }
@@ -53,8 +53,8 @@ export type ErrSpec =
     }
   | {
       errType: 'cannot-convert-between-units';
-      fromUnit: Units;
-      toUnit: Units;
+      fromUnit: Unit[];
+      toUnit: Unit[];
     }
   | {
       errType: 'formula-cannot-call-itself';
@@ -62,7 +62,7 @@ export type ErrSpec =
     }
   | {
       errType: 'cannot-convert-to-unit';
-      toUnit: Units;
+      toUnit: Unit[];
     }
   | {
       errType: 'unknown-category';
@@ -157,7 +157,7 @@ export class InferError extends Error {
     });
   }
 
-  static expectedUnit(expected: Units | null, got: Units | null) {
+  static expectedUnit(expected: Unit[] | null, got: Unit[] | null) {
     return new InferError({
       errType: 'expected-unit',
       expectedUnit: [expected, got],
@@ -210,7 +210,7 @@ export class InferError extends Error {
     });
   }
 
-  static cannotConvertBetweenUnits(fromUnit: Units, toUnit: Units) {
+  static cannotConvertBetweenUnits(fromUnit: Unit[], toUnit: Unit[]) {
     return new InferError({
       errType: 'cannot-convert-between-units',
       fromUnit,
@@ -222,7 +222,7 @@ export class InferError extends Error {
     return new InferError({ errType: 'formula-cannot-call-itself', fname });
   }
 
-  static cannotConvertToUnit(toUnit: Units) {
+  static cannotConvertToUnit(toUnit: Unit[]) {
     return new InferError({
       errType: 'cannot-convert-to-unit',
       toUnit,

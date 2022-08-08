@@ -10,7 +10,7 @@ import {
   isKnownSymbol,
 } from '../units';
 import { F, getDefined } from '../utils';
-import { Unit, Units, units } from './unit-type';
+import type { Unit } from './unit-type';
 
 export const timeUnits = new Set([
   'millennium',
@@ -63,13 +63,13 @@ const areUnitQualitiesCompatible = (
 };
 
 export const matchUnitArrays = (
-  units1: Units | null,
-  units2: Units | null
+  units1: Unit[] | null,
+  units2: Unit[] | null
 ): boolean => {
   const [expandedUnit1] = expandUnits(units1);
-  const expandedUnits1 = expandedUnit1?.args ?? [];
+  const expandedUnits1 = expandedUnit1 ?? [];
   const [expandedUnit2] = expandUnits(units2);
-  const expandedUnits2 = expandedUnit2?.args ?? [];
+  const expandedUnits2 = expandedUnit2 ?? [];
   if (expandedUnits1.length !== expandedUnits2.length) {
     return false;
   }
@@ -97,11 +97,11 @@ export const matchUnitArrays = (
 };
 
 export const matchUnitArraysForColumn = (
-  _units1: Units | null,
-  _units2: Units | null
+  _units1: Unit[] | null,
+  _units2: Unit[] | null
 ) => {
-  const units1 = normalizeUnits(_units1?.args ?? []) ?? [];
-  const units2 = normalizeUnits(_units2?.args ?? []) ?? [];
+  const units1 = normalizeUnits(_units1) ?? [];
+  const units2 = normalizeUnits(_units2) ?? [];
 
   if ((units1.length === 0) !== (units2.length === 0)) {
     return true;
@@ -131,7 +131,7 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   }
 };
 
-const simplifyUnitsArgs = (units: Unit[]): Unit[] =>
+export const simplifyUnits = (units: Unit[]): Unit[] =>
   units
     .map((u) => pluralizeUnit(u))
     .reduce<Unit[]>((units, unit) => {
@@ -157,15 +157,6 @@ const simplifyUnitsArgs = (units: Unit[]): Unit[] =>
       }
     }, [])
     .filter((unit) => F(unit.exp).compare(F(0)) !== 0) as Unit[];
-
-export const simplifyUnits = (units: Units | null): Units | null => {
-  if (units == null) {
-    return units;
-  }
-  return produce(units, (u) => {
-    u.args = simplifyUnitsArgs(u.args);
-  });
-};
 
 export const normalizeUnitName = (unit: Unit): Unit => {
   const symbolUnit = getUnitByName(unit.unit);
@@ -195,10 +186,11 @@ export const normalizeUnits = (
   units: Unit[] | null,
   { mult = false }: { mult?: boolean } = {}
 ): Unit[] | null => {
-  if (units == null) {
+  if (!units?.length) {
     return null;
   }
-  const simplified = simplifyUnitsArgs(units);
+
+  const simplified = simplifyUnits(units);
 
   if (simplified.length === 0) {
     return null;
@@ -209,31 +201,20 @@ export const normalizeUnits = (
   }
 };
 
-export const normalizeUnitsOf = (unit: Units | null): Units | null => {
-  if (unit == null) {
-    return null;
-  }
-  return produce(unit, (unit) => {
-    unit.args = normalizeUnits(unit.args) || [];
-  });
-};
-
-export const setExponent = (unit: Unit, newExponent: Fraction) =>
-  produce(unit, (unit) => {
-    unit.exp = newExponent;
-  });
+export const setExponent = produce((unit: Unit, newExponent: Fraction) => {
+  unit.exp = newExponent;
+});
 
 export const inverseExponent = (unit: Unit) =>
   setExponent(unit, unit.exp.neg());
 
 export const combineUnits = (
-  myUnitsObj: Units | null,
-  theirUnitsObj: Units | null,
+  myUnitsObj: Unit[] | null,
+  theirUnitsObj: Unit[] | null,
   { mult = false }: { mult?: boolean } = {}
-): Units | null => {
-  const myUnits = normalizeUnits(myUnitsObj?.args ?? null, { mult }) ?? [];
-  const theirUnits =
-    normalizeUnits(theirUnitsObj?.args ?? null, { mult }) ?? [];
+): Unit[] | null => {
+  const myUnits = normalizeUnits(myUnitsObj, { mult }) ?? [];
+  const theirUnits = normalizeUnits(theirUnitsObj, { mult }) ?? [];
 
   const outputUnits: Unit[] = mult ? [...myUnits] : [...theirUnits];
   const sourceUnits: Unit[] = mult ? theirUnits : myUnits;
@@ -258,14 +239,13 @@ export const combineUnits = (
     }
   }
 
-  const ret = normalizeUnits(outputUnits, { mult });
-  return ret == null ? ret : units(...ret);
+  return normalizeUnits(outputUnits, { mult });
 };
 
-export const multiplyExponent = (myUnits: Units, by: number): Units | null =>
-  normalizeUnitsOf(
+export const multiplyExponent = (myUnits: Unit[], by: number): Unit[] | null =>
+  normalizeUnits(
     produce(myUnits, (myUnits) => {
-      for (const u of myUnits.args) {
+      for (const u of myUnits) {
         try {
           u.exp = F(u.exp).mul(by);
         } catch (err) {
@@ -278,7 +258,7 @@ export const multiplyExponent = (myUnits: Units, by: number): Units | null =>
     })
   );
 
-export const setUnit = (t: Type, newUnit: Units | null) =>
+export const setUnit = (t: Type, newUnit: Unit[] | null) =>
   produce(t, (t) => {
     if (t.type === 'number') {
       t.unit = newUnit;

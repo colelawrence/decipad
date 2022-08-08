@@ -10,7 +10,7 @@ import {
   runCodeForVariables,
   typeSnapshotSerializer,
 } from './testUtils';
-import { build as t, InferError, units } from './type';
+import { build as t, InferError } from './type';
 import { number } from './type/build';
 import { block, c, F, n, U, u } from './utils';
 
@@ -919,7 +919,7 @@ describe('Units', () => {
       `)
     ).toMatchObject({
       type: {
-        unit: units(
+        unit: [
           {
             exp: F(1),
             known: true,
@@ -931,8 +931,8 @@ describe('Units', () => {
             known: true,
             multiplier: new Fraction(1),
             unit: 'seconds',
-          }
-        ),
+          },
+        ],
       },
       value: F(1),
     });
@@ -949,7 +949,7 @@ describe('Units', () => {
     ).toMatchObject({
       value: F(1),
       type: {
-        unit: units(
+        unit: [
           {
             exp: F(1),
             known: true,
@@ -961,8 +961,8 @@ describe('Units', () => {
             known: true,
             multiplier: new Fraction(1),
             unit: 'seconds',
-          }
-        ),
+          },
+        ],
       },
     });
   });
@@ -977,12 +977,14 @@ describe('Units', () => {
     ).toMatchObject({
       value: F(6),
       type: {
-        unit: units({
-          exp: F(1),
-          known: true,
-          multiplier: new Fraction(1),
-          unit: 'meters',
-        }),
+        unit: [
+          {
+            exp: F(1),
+            known: true,
+            multiplier: new Fraction(1),
+            unit: 'meters',
+          },
+        ],
       },
     });
   });
@@ -997,12 +999,14 @@ describe('Units', () => {
     ).toMatchObject({
       value: F(2),
       type: {
-        unit: units({
-          exp: F(-1),
-          known: true,
-          multiplier: new Fraction(1),
-          unit: 'seconds',
-        }),
+        unit: [
+          {
+            exp: F(-1),
+            known: true,
+            multiplier: new Fraction(1),
+            unit: 'seconds',
+          },
+        ],
       },
     });
   });
@@ -1213,34 +1217,28 @@ describe('number units work together', () => {
   it('handles unknown units', async () => {
     expect(await runCode(`1 banana + 2 bananas`)).toMatchObject({
       value: F(3),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'bananas',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: false,
-          },
-        ],
-      }),
+      type: t.number([
+        {
+          unit: 'bananas',
+          exp: F(1),
+          multiplier: new Fraction(1),
+          known: false,
+        },
+      ]),
     });
   });
 
   it('handles known units', async () => {
     expect(await runCode(`1 meter + 2 meters`)).toMatchObject({
       value: F(3),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      type: t.number([
+        {
+          unit: 'meters',
+          exp: F(1),
+          multiplier: new Fraction(1),
+          known: true,
+        },
+      ]),
     });
   });
 
@@ -1273,17 +1271,14 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: F(12, 100),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(1),
-            multiplier: new Fraction(0.01),
-            known: true,
-          },
-        ],
-      }),
+      type: t.number([
+        {
+          unit: 'meters',
+          exp: F(1),
+          multiplier: new Fraction(0.01),
+          known: true,
+        },
+      ]),
     });
   });
 
@@ -1301,17 +1296,14 @@ describe('number units work together', () => {
   it('handles exponentiated known units with multipliers', async () => {
     expect(await runCode(`1 centimeters^2 + 2 meters^2`)).toMatchObject({
       value: F(20001, 10000),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'meters',
-            exp: F(2),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      type: t.number([
+        {
+          unit: 'meters',
+          exp: F(2),
+          multiplier: new Fraction(1),
+          known: true,
+        },
+      ]),
     });
   });
 
@@ -1343,17 +1335,14 @@ describe('number units work together', () => {
   it('cancels out units', async () => {
     expect(await runCode(`4 miles/hour * 2 hour`)).toMatchObject({
       value: F(8),
-      type: t.number({
-        type: 'units',
-        args: [
-          {
-            unit: 'miles',
-            exp: F(1),
-            multiplier: new Fraction(1),
-            known: true,
-          },
-        ],
-      }),
+      type: t.number([
+        {
+          unit: 'miles',
+          exp: F(1),
+          multiplier: new Fraction(1),
+          known: true,
+        },
+      ]),
     });
   });
 

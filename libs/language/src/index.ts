@@ -7,7 +7,6 @@ import {
   serializeType,
   Type,
   Unit,
-  Units,
   units,
 } from './type';
 
@@ -57,7 +56,7 @@ export {
   build as buildType,
   convertToMultiplierUnit,
   deserializeType,
-  normalizeUnitsOf,
+  normalizeUnits,
   InferError,
   serializeType,
   simplifyUnits,
@@ -73,7 +72,7 @@ export type {
 } from './type';
 export { isExpression, walkAst, n as astNode, isAssignment } from './utils';
 export { units };
-export type { Unit, Units };
+export type { Unit };
 export * from './units';
 
 export * from './pluralize';

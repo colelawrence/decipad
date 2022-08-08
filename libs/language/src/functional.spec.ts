@@ -205,18 +205,15 @@ describe('more models', () => {
     const years = Array.from({ length: 4 }, (_, i) =>
       cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
-    const unit = {
-      type: 'units',
-      args: [
-        {
-          // TODO this unit is million USD,
-          // multiplier/exponent should reflect that
-          unit: 'usd',
-          exp: F(1),
-          multiplier: F(1, 1000),
-        },
-      ],
-    };
+    const unit = [
+      {
+        // TODO this unit is million USD,
+        // multiplier/exponent should reflect that
+        unit: 'usd',
+        exp: F(1),
+        multiplier: F(1, 1000),
+      },
+    ];
 
     expect(
       await runCodeForVariables(
@@ -300,7 +297,7 @@ describe('more models', () => {
           { date: 'year' },
           {
             type: 'number',
-            unit: { type: 'units', args: [{ unit: 'eur' }] },
+            unit: [{ unit: 'eur' }],
           },
         ],
       },
@@ -388,19 +385,19 @@ ${'' /* Get capital needed */}
         TimeToProfitability: { type: 'number', unit: null },
         CumulativeMonthlyRevenue: {
           type: 'number',
-          unit: { type: 'units', args: [{ unit: 'eur' }] },
+          unit: [{ unit: 'eur' }],
         },
         CumulativeMonthlyExpenses: {
           type: 'number',
-          unit: { type: 'units', args: [{ unit: 'eur' }] },
+          unit: [{ unit: 'eur' }],
         },
         CapitalNeeded: {
           type: 'number',
-          unit: { type: 'units', args: [{ unit: 'eur' }] },
+          unit: [{ unit: 'eur' }],
         },
         IPOTargetMonthlyRevenue: {
           type: 'number',
-          unit: { type: 'units', args: [{ unit: 'eur' }] },
+          unit: [{ unit: 'eur' }],
         },
         TimeToIPO: { type: 'number', unit: null },
       },
@@ -535,7 +532,7 @@ ${'' /* Get capital needed */}
           cellType: { date: 'month' },
         },
         RevenuePerUser: {
-          cellType: { unit: { type: 'units', args: [{ unit: 'eur' }] } },
+          cellType: { unit: [{ unit: 'eur' }] },
         },
         Users: { cellType: { cellType: { type: 'number', unit: null } } },
         Revenue: {

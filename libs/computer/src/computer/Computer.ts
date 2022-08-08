@@ -12,7 +12,7 @@ import {
   ErrSpec,
   evaluateStatement,
   ExternalDataMap,
-  Units,
+  Unit,
   inferExpression,
   inferStatement,
   isExpression,
@@ -548,7 +548,7 @@ export class Computer {
     );
   }
 
-  async getUnitFromText(text: string): Promise<Units | null> {
+  async getUnitFromText(text: string): Promise<Unit[] | null> {
     const ast = parseOneBlock(text);
     if (!isExpression(ast.args[0])) {
       return null;
@@ -597,7 +597,7 @@ export class Computer {
     return formatNumber(this.locale, type.unit, value, type.numberFormat);
   }
 
-  formatUnit(unit: Units, value?: FFraction): string {
+  formatUnit(unit: Unit[], value?: FFraction): string {
     return formatUnit(this.locale, unit, value);
   }
 

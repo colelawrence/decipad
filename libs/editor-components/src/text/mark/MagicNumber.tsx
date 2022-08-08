@@ -28,8 +28,7 @@ export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
 
   const loadingState =
     result?.type?.kind === 'type-error' ||
-    (result?.type?.kind === 'number' &&
-      result?.type?.unit?.args[0].unit === exp);
+    (result?.type?.kind === 'number' && result?.type?.unit?.[0].unit === exp);
 
   const readOnly = useIsEditorReadOnly();
 

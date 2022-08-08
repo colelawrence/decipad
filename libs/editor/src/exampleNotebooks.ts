@@ -423,17 +423,14 @@ export const introNotebook = (): MyValue => [
           columnName: 'Distance',
           cellType: {
             kind: 'number',
-            unit: {
-              type: 'units',
-              args: [
-                {
-                  unit: 'miles',
-                  exp: new Fraction(1),
-                  multiplier: new Fraction(1),
-                  known: true,
-                },
-              ],
-            },
+            unit: [
+              {
+                unit: 'miles',
+                exp: new Fraction(1),
+                multiplier: new Fraction(1),
+                known: true,
+              },
+            ],
           },
           cells: ['3.2', '5', '12'],
         },

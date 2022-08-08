@@ -23,13 +23,13 @@ export const getType: Directive['getType'] = async (
   }
   return automapTypes([expressionType], ([expressionType]: Type[]): Type => {
     return expressionType.isScalar('number').mapType((type): Type => {
-      if (!type.unit || type.unit.args.length !== 1) {
+      if (!type.unit || type.unit.length !== 1) {
         return t.impossible(InferError.needOneAndOnlyOneUnit());
       }
 
       return produce(type, (t) => {
         if (t.unit) {
-          t.unit.args[0] = produce(t.unit.args[0], (u) => {
+          t.unit[0] = produce(t.unit[0], (u) => {
             u.quality = quality;
           });
         }

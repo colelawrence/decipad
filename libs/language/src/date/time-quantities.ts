@@ -1,6 +1,6 @@
 import { singular } from 'pluralize';
 import { Time, timeUnitToJSDateUnit, toLuxonUTC, getTimeUnit } from '.';
-import type { Units } from '..';
+import type { Unit } from '..';
 import { RuntimeError } from '../interpreter/RuntimeError';
 import { getDefined } from '../utils';
 
@@ -21,12 +21,12 @@ export const addTime = (
   return BigInt(added.toMillis());
 };
 
-export function timeUnitFromUnits(units: Units): Time.Unit {
-  if (units.args.length !== 1) {
+export function timeUnitFromUnits(units: Unit[]): Time.Unit {
+  if (units.length !== 1) {
     throw new RuntimeError(
       'Cannot construct time quantity from more than one unit of time'
     );
   }
-  const unit = singular(units.args[0].unit);
+  const unit = singular(units[0].unit);
   return getTimeUnit(unit);
 }

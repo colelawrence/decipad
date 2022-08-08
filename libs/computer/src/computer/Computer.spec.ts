@@ -366,16 +366,16 @@ it('can extract units from text', async () => {
 
   // Internal units
   let units = await computer.getUnitFromText('W');
-  expect(units?.args[0].unit).toBe('W');
+  expect(units?.[0].unit).toBe('W');
   units = await computer.getUnitFromText('km/h');
-  expect(units?.args[0].unit).toBe('h');
-  expect(units?.args[1].unit).toBe('m');
+  expect(units?.[0].unit).toBe('h');
+  expect(units?.[1].unit).toBe('m');
 
   // Custom units
   units = await computer.getUnitFromText('Bananas');
-  expect(units?.args[0].unit).toBe('Bananas');
+  expect(units?.[0].unit).toBe('Bananas');
   units = await computer.getUnitFromText('Foo');
-  expect(units?.args[0].unit).toBe('m');
+  expect(units?.[0].unit).toBe('m');
 
   // Non units
   units = await computer.getUnitFromText('Bar');

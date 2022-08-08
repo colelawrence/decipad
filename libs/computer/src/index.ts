@@ -7,7 +7,6 @@ export type {
   SerializedTypes,
   SerializedTypeKind,
   Unit,
-  Units,
   Time,
   Token,
 } from '@decipad/language';
@@ -23,7 +22,7 @@ export {
   Result,
   STATEMENT_SEP_TOKEN_TYPE,
   prettyPrintAST,
-  normalizeUnitsOf,
+  normalizeUnits,
   serializeResult,
   tokenize,
   CompareValues,

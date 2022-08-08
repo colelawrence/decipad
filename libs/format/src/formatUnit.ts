@@ -7,7 +7,6 @@ import {
   simplifyUnits,
   singular,
   Unit,
-  Units,
   unitIsSymbol,
 } from '@decipad/language';
 import produce from 'immer';
@@ -311,17 +310,15 @@ function fixSpaces(partsOfUnit: UnitPart[]) {
 
 export function formatUnitAsParts(
   _locale: string,
-  units: Units,
+  units: Unit[],
   value: Fraction = TWO,
   prettify = true,
   previousLength = 0
 ): DeciNumberPart {
   const simplified = simplifyUnits(units) || units;
-  const sortedUnits = produce(simplified, (u) => {
-    u.args.sort(byExp);
-  });
+  const sortedUnits = [...simplified].sort(byExp);
   const unitParts = formatUnitArgs(
-    sortedUnits.args,
+    sortedUnits,
     value,
     prettify,
     previousLength
@@ -335,7 +332,7 @@ export function formatUnitAsParts(
 
 export function formatUnit(
   locale: string,
-  units: Units,
+  units: Unit[],
   value: Fraction = TWO,
   prettify = true,
   previousLength = 0
@@ -366,9 +363,9 @@ function isUserDefinedUnit(unit: Unit | null): boolean {
   );
 }
 
-export function isUserDefined(unit: Units | null): boolean {
-  if (unit?.args.length === 1) {
-    return isUserDefinedUnit(unit.args[0]);
+export function isUserDefined(unit: Unit[] | null): boolean {
+  if (unit?.length === 1) {
+    return isUserDefinedUnit(unit[0]);
   }
   return false;
 }
@@ -385,8 +382,8 @@ function simpleFormatUnitPart(unit: Unit): string {
   return value;
 }
 
-export function simpleFormatUnit(units: Units): string {
-  return units.args.reduce(
+export function simpleFormatUnit(units: Unit[]): string {
+  return units.reduce(
     (str, u) =>
       str ? `${str} * ${simpleFormatUnitPart(u)}` : simpleFormatUnitPart(u),
     ''

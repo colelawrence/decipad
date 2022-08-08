@@ -2,8 +2,8 @@ import Fraction from '@decipad/fraction';
 import {
   AST,
   convertToMultiplierUnit,
-  normalizeUnitsOf,
-  Units,
+  normalizeUnits,
+  Unit,
 } from '@decipad/language';
 import produce from 'immer';
 import pluralize from 'pluralize';
@@ -235,7 +235,7 @@ const formatToParts = (
   return { isPrecise, partsOf: mapParts(partsOf), value, asStringPrecise };
 };
 
-function formatCurrency(locale: string, unit: Units, fraction: Fraction) {
+function formatCurrency(locale: string, unit: Unit[], fraction: Fraction) {
   const currency = getCurrency(unit);
 
   const numberFormatOptions: Intl.NumberFormatOptions = {
@@ -278,7 +278,7 @@ function formatUnitless(
 
 function formatUserDefinedUnit(
   locale: string,
-  unit: Units,
+  unit: Unit[],
   fraction: Fraction
 ) {
   const args: Intl.NumberFormatOptions = { ...DEFAULT_NUMBER_OPTIONS };
@@ -300,7 +300,7 @@ function formatUserDefinedUnit(
       if (u.type === 'unit') {
         return {
           type: 'unit',
-          value: pluralize(unit.args[0].unit, valOf),
+          value: pluralize(unit[0].unit, valOf),
         };
       }
       return u;
@@ -308,11 +308,11 @@ function formatUserDefinedUnit(
   );
 }
 
-function formatAnyUnit(locale: string, units: Units, fraction: Fraction) {
+function formatAnyUnit(locale: string, units: Unit[], fraction: Fraction) {
   const args = { ...DEFAULT_NUMBER_OPTIONS };
 
   // dont show smart `thousand` instead of K if things are too big
-  if (units && units.args.length > 1) {
+  if (units && units.length > 1) {
     args.compactDisplay = 'short';
   }
 
@@ -332,30 +332,20 @@ function formatAnyUnit(locale: string, units: Units, fraction: Fraction) {
   });
 }
 
-function formatAnyCurrency(locale: string, units: Units, fraction: Fraction) {
+function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
   const currencyIndex = hasCurrency(units);
-  const currencyUnit: Units = {
-    type: 'units',
-    args: [units.args[currencyIndex]],
-  };
-  const unitsWithoutCurrency = produce(units, (uns) => {
-    uns.args.map((_, i) => {
-      if (i === currencyIndex) {
-        // eslint-disable-next-line no-param-reassign
-        uns.args.splice(i, 1);
-      }
-    });
-  });
+  const currencyUnit: Unit[] = [units[currencyIndex]];
 
-  const otherUnitsMult = (unitsWithoutCurrency.args || []).reduce(
-    (ac, current) => {
-      return ac.mul(current.multiplier);
-    },
+  const unitsWithoutCurrency = [...units];
+  unitsWithoutCurrency.splice(currencyIndex, 1);
+
+  const otherUnitsMult = (unitsWithoutCurrency || []).reduce(
+    (ac, current) => ac.mul(current.multiplier),
     new Fraction(1)
   );
 
   const partsOfUnits =
-    unitsWithoutCurrency.args.length > 0
+    unitsWithoutCurrency.length > 0
       ? formatAnyUnit(
           locale,
           unitsWithoutCurrency,
@@ -367,7 +357,7 @@ function formatAnyCurrency(locale: string, units: Units, fraction: Fraction) {
     locale,
     produce(currencyUnit, (cu) => {
       // eslint-disable-next-line no-param-reassign
-      cu.args[0].multiplier = new Fraction(1);
+      cu[0].multiplier = new Fraction(1);
     }),
     fraction.mul(otherUnitsMult)
   );
@@ -394,7 +384,7 @@ function formatAnyCurrency(locale: string, units: Units, fraction: Fraction) {
 //
 export function formatNumber(
   locale: string,
-  unit: Units | null | undefined,
+  unit: Unit[] | null | undefined,
   number: Fraction,
   numberFormat: AST.NumberFormat | null = undefined
 ): DeciNumber {
@@ -416,7 +406,7 @@ export function formatNumber(
 
   let deciNumber: IntermediateDeciNumber;
   if (unit) {
-    const units = normalizeUnitsOf(unit) as Units;
+    const units = normalizeUnits(unit) as Unit[];
 
     if (hasCurrency(units) !== -1) {
       deciNumber = formatAnyCurrency(locale, units, fraction);

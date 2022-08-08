@@ -50,17 +50,14 @@ describe('getTableAstNodeFromTableElement', () => {
               type: ELEMENT_TH,
               cellType: {
                 kind: 'number',
-                unit: {
-                  type: 'units',
-                  args: [
-                    {
-                      unit: 'bananas',
-                      exp: F(1),
-                      multiplier: F(1),
-                      known: false,
-                    },
-                  ],
-                },
+                unit: [
+                  {
+                    unit: 'bananas',
+                    exp: F(1),
+                    multiplier: F(1),
+                    known: false,
+                  },
+                ],
               },
               children: [{ text: 'column1' }],
             },

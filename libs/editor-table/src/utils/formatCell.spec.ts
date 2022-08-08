@@ -14,17 +14,14 @@ it('formats cell value according to the column type', () => {
       computer,
       {
         kind: 'number',
-        unit: {
-          type: 'units',
-          args: [
-            {
-              unit: 'banana',
-              exp: F(1),
-              multiplier: F(1),
-              known: false,
-            },
-          ],
-        },
+        unit: [
+          {
+            unit: 'banana',
+            exp: F(1),
+            multiplier: F(1),
+            known: false,
+          },
+        ],
       },
       '1'
     )
@@ -34,17 +31,14 @@ it('formats cell value according to the column type', () => {
       computer,
       {
         kind: 'number',
-        unit: {
-          type: 'units',
-          args: [
-            {
-              unit: 'banana',
-              exp: F(1),
-              multiplier: F(1),
-              known: false,
-            },
-          ],
-        },
+        unit: [
+          {
+            unit: 'banana',
+            exp: F(1),
+            multiplier: F(1),
+            known: false,
+          },
+        ],
       },
       '10'
     )
@@ -54,17 +48,14 @@ it('formats cell value according to the column type', () => {
       computer,
       {
         kind: 'number',
-        unit: {
-          type: 'units',
-          args: [
-            {
-              unit: 'banana',
-              exp: F(1),
-              multiplier: F(1),
-              known: false,
-            },
-          ],
-        },
+        unit: [
+          {
+            unit: 'banana',
+            exp: F(1),
+            multiplier: F(1),
+            known: false,
+          },
+        ],
       },
       'text'
     )

@@ -3,7 +3,7 @@ import { isZero } from '@decipad/fraction';
 import { identity, F } from '../../utils';
 import { Converter } from '.';
 import { expandUnits } from './expand-units';
-import { Unit, Units } from '../../type';
+import { Unit } from '../../type';
 import { getUnitByName } from '..';
 
 function scalarInversion(convert: Converter): Converter {
@@ -21,8 +21,10 @@ function nonScalarInversion(u: Unit): [Unit, Converter] {
   return [u, knownUnit.fromBaseQuantity];
 }
 
-export function contractUnits(units: Units | null): [Units | null, Converter] {
-  if (units === null) {
+export function contractUnits(
+  units: Unit[] | null
+): [Unit[] | null, Converter] {
+  if (!units?.length) {
     return [null, identity];
   }
   const [, converter] = expandUnits(units, nonScalarInversion, scalarInversion);

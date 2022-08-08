@@ -1,5 +1,5 @@
 import FFraction, { ONE } from '@decipad/fraction';
-import { CurrencyUnits, getUnitByName, Unit, Units } from '@decipad/language';
+import { CurrencyUnits, getUnitByName, Unit } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 
 function isCurrencyUnit(unit: Unit | null): boolean {
@@ -10,17 +10,17 @@ function isCurrencyUnit(unit: Unit | null): boolean {
   );
 }
 
-export function hasCurrency(unit: Units | null): number {
+export function hasCurrency(unit: Unit[] | null): number {
   if (!unit) {
     return -1;
   }
-  return unit.args.findIndex((arg) => isCurrencyUnit(arg));
+  return unit.findIndex((arg) => isCurrencyUnit(arg));
 }
 
-export function getCurrency(unit: Units): Unit {
-  const currencyIndex = unit.args.findIndex(isCurrencyUnit);
+export function getCurrency(unit: Unit[]): Unit {
+  const currencyIndex = unit.findIndex(isCurrencyUnit);
   const currencyUnit = getDefined(
-    (currencyIndex >= 0 && unit?.args[currencyIndex]) || undefined
+    (currencyIndex >= 0 && unit[currencyIndex]) || undefined
   );
   const currencyFromIdx = getUnitByName(currencyUnit.unit);
 

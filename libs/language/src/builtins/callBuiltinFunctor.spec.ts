@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { makeContext } from '..';
-import { Type, build as t, Unit, units } from '../type';
+import { Type, build as t, Unit } from '../type';
 import { U, F } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
@@ -160,7 +160,7 @@ const typeDimTests: Record<string, Test> = {
         build({ type: 'number', unit: [meter] }),
         build2({ type: 'number', unit: [second] }),
       ]).errorCause?.spec
-    ).toHaveProperty('expectedUnit', [units(meter), units(second)]);
+    ).toHaveProperty('expectedUnit', [[meter], [second]]);
   },
   if: (build, build2, build3, buildOut) => {
     expect(
@@ -190,13 +190,13 @@ const typeDimTests: Record<string, Test> = {
     expect(
       callBuiltinFunctor(nilCtx, '+', [
         build({ type: 'month' }),
-        build2({ type: 'number', unit: U('month').args }),
+        build2({ type: 'number', unit: U('month') }),
       ])
     ).toEqual(buildOut({ type: 'month' }));
 
     expect(
       callBuiltinFunctor(nilCtx, '+', [
-        build2({ type: 'number', unit: U('month').args }),
+        build2({ type: 'number', unit: U('month') }),
         build({ type: 'month' }),
       ])
     ).toEqual(buildOut({ type: 'month' }));
@@ -212,13 +212,13 @@ const typeDimTests: Record<string, Test> = {
     expect(
       callBuiltinFunctor(nilCtx, '-', [
         build({ type: 'month' }),
-        build2({ type: 'number', unit: U('month').args }),
+        build2({ type: 'number', unit: U('month') }),
       ])
     ).toEqual(buildOut({ type: 'month' }));
 
     expect(
       callBuiltinFunctor(nilCtx, '-', [
-        build2({ type: 'number', unit: U('month').args }),
+        build2({ type: 'number', unit: U('month') }),
         build({ type: 'month' }),
       ]).errorCause
     ).not.toBeNull();

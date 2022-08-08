@@ -1,4 +1,3 @@
-import { Units } from '@decipad/language';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';
@@ -19,9 +18,7 @@ it('renders a button when parse is successful', async () => {
   // Parse always fails.
   const { rerender } = render(
     <UnitMenuItem parseUnit={() => Promise.resolve(null)} />,
-    {
-      wrapper,
-    }
+    { wrapper }
   );
 
   expect(screen.queryByRole('button')).toBeNull();
@@ -30,7 +27,7 @@ it('renders a button when parse is successful', async () => {
   await expect(screen.findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
-  rerender(<UnitMenuItem parseUnit={() => Promise.resolve({} as Units)} />);
+  rerender(<UnitMenuItem parseUnit={() => Promise.resolve([])} />);
 
   expect(await screen.findByRole('button')).toBeInTheDocument();
 });
@@ -41,11 +38,9 @@ describe('onSelect prop', () => {
     render(
       <UnitMenuItem
         onSelect={onSelect}
-        parseUnit={() => Promise.resolve({} as Units)}
+        parseUnit={() => Promise.resolve([])}
       />,
-      {
-        wrapper,
-      }
+      { wrapper }
     );
 
     await user.type(screen.getByRole('textbox'), 'm/s');
@@ -60,11 +55,9 @@ describe('onSelect prop', () => {
     render(
       <UnitMenuItem
         onSelect={onSelect}
-        parseUnit={() => Promise.resolve({} as Units)}
+        parseUnit={() => Promise.resolve([])}
       />,
-      {
-        wrapper,
-      }
+      { wrapper }
     );
 
     await user.type(screen.getByRole('textbox'), 'm/s');
@@ -82,9 +75,7 @@ describe('onSelect prop', () => {
         onSelect={onSelect}
         parseUnit={() => Promise.resolve(null)}
       />,
-      {
-        wrapper,
-      }
+      { wrapper }
     );
 
     await user.type(screen.getByRole('textbox'), 'm/s');

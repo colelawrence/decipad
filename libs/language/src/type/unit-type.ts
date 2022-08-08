@@ -7,16 +7,12 @@ export interface Unit {
   exp: Fraction;
   multiplier: Fraction;
   known: boolean;
-  aliasFor?: Units;
+  aliasFor?: Unit[];
   enforceMultiplier?: boolean;
   quality?: string;
   baseQuantity?: BaseQuantity;
   baseSuperQuantity?: BaseQuantity | 'currency';
 }
 
-export interface Units {
-  type: 'units';
-  args: Unit[];
-}
-
-export const units = (...args: Unit[]): Units => ({ type: 'units', args });
+// TODO remove
+export const units = (...args: Unit[]): Unit[] => args;

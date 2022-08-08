@@ -18,24 +18,20 @@ it('turns cells into AST nodes', () => {
     testParseCell(
       {
         kind: 'number',
-        unit: {
-          type: 'units',
-          args: [
-            {
-              exp: F(1),
-              known: false,
-              multiplier: F(1),
-              unit: 'bananas',
-            },
-
-            {
-              exp: F(-2),
-              known: true,
-              multiplier: F(1000),
-              unit: 'm',
-            },
-          ],
-        },
+        unit: [
+          {
+            exp: F(1),
+            known: false,
+            multiplier: F(1),
+            unit: 'bananas',
+          },
+          {
+            exp: F(-2),
+            known: true,
+            multiplier: F(1000),
+            unit: 'm',
+          },
+        ],
       },
 
       '123'
@@ -48,24 +44,20 @@ it('turns cells into AST nodes', () => {
     testParseCell(
       {
         kind: 'number',
-        unit: {
-          type: 'units',
-          args: [
-            {
-              exp: F(1),
-              known: true,
-              multiplier: F(1),
-              unit: 'm',
-            },
-
-            {
-              exp: F(1),
-              known: true,
-              multiplier: F(1),
-              unit: 's',
-            },
-          ],
-        },
+        unit: [
+          {
+            exp: F(1),
+            known: true,
+            multiplier: F(1),
+            unit: 'm',
+          },
+          {
+            exp: F(1),
+            known: true,
+            multiplier: F(1),
+            unit: 's',
+          },
+        ],
       },
 
       '123'

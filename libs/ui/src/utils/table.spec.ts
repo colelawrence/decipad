@@ -1,4 +1,3 @@
-import { Units } from '@decipad/language';
 import { All, Number, Calendar, Text } from '../icons';
 import { getTypeIcon } from './table';
 
@@ -15,12 +14,7 @@ describe('getTypeIcon()', () => {
   });
 
   it('should return an icon for type number with unit', () => {
-    expect(
-      getTypeIcon({
-        kind: 'number',
-        unit: { type: 'units' } as Units,
-      })
-    ).toBe(All);
+    expect(getTypeIcon({ kind: 'number', unit: [] })).toBe(All);
   });
 
   it('should return an icon for type string', () => {

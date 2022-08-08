@@ -494,10 +494,7 @@ describe('formatNumber', () => {
       it('0.01 liter/meter = 0.01 liters per meter', () => {
         const { partsOf, asString } = formatNumber(
           locale,
-          {
-            type: 'units',
-            args: [parseUnit('liter'), u('meter', { exp: new Fraction(-1) })],
-          },
+          [parseUnit('liter'), u('meter', { exp: new Fraction(-1) })],
           F(1, 100)
         );
         expect(asString).toEqual('0.01 liters per meter');
@@ -522,10 +519,7 @@ describe('formatNumber', () => {
       it('1 liter * meter = 1 liter · meter', () => {
         const { partsOf, asString } = formatNumber(
           locale,
-          {
-            type: 'units',
-            args: [parseUnit('liter'), parseUnit('meter')],
-          },
+          [parseUnit('liter'), parseUnit('meter')],
           F(1)
         );
         expect(asString).toEqual('1 liter · meter');
@@ -546,10 +540,7 @@ describe('formatNumber', () => {
       it('$1 * meter = $1 meter', () => {
         const { partsOf, asString, asStringPrecise } = formatNumber(
           locale,
-          {
-            type: 'units',
-            args: [parseUnit('usd'), parseUnit('meter')],
-          },
+          [parseUnit('usd'), parseUnit('meter')],
           F(1)
         );
         expect(partsOf).toEqual([
@@ -568,10 +559,7 @@ describe('formatNumber', () => {
       it('$1 / meter = $1 per meter', () => {
         const { partsOf, asString, asStringPrecise } = formatNumber(
           locale,
-          {
-            type: 'units',
-            args: [parseUnit('usd'), u('meter', { exp: new Fraction(-1) })],
-          },
+          [parseUnit('usd'), u('meter', { exp: new Fraction(-1) })],
           F(1)
         );
         expect(asString).toEqual('$1 per meter');
@@ -595,13 +583,10 @@ describe('formatNumber', () => {
       it('£5/kWh is £5 per kWh', () => {
         const { asString } = formatNumber(
           locale,
-          {
-            type: 'units',
-            args: [
-              parseUnit('gbp'),
-              u('Wh', { exp: new Fraction(-1), multiplier: F(1000) }),
-            ],
-          },
+          [
+            parseUnit('gbp'),
+            u('Wh', { exp: new Fraction(-1), multiplier: F(1000) }),
+          ],
           F(5, 1000)
         );
         expect(asString).toEqual('£5 per kWh');
@@ -610,10 +595,7 @@ describe('formatNumber', () => {
       it('£5/$ is £5 per kWh', () => {
         const { asString } = formatNumber(
           locale,
-          {
-            type: 'units',
-            args: [parseUnit('gbp'), u('usd', { exp: new Fraction(-1) })],
-          },
+          [parseUnit('gbp'), u('usd', { exp: new Fraction(-1) })],
           F(5)
         );
         expect(asString).toEqual('£5 per $');
@@ -755,11 +737,7 @@ describe('formatNumber', () => {
       test.each(CurrencyUnits.units.map((x) => x.baseQuantity))(
         '%p is monies?',
         (fx) => {
-          const { partsOf } = formatNumber(
-            locale,
-            { type: 'units', args: [parseUnit(fx)] },
-            F(100000)
-          );
+          const { partsOf } = formatNumber(locale, [parseUnit(fx)], F(100000));
           expect(partsOf.map((x) => x.type)).toContain('currency');
         }
       );
@@ -769,11 +747,7 @@ describe('formatNumber', () => {
         '%p is pretty printed?',
         (fx) => {
           expect(prettyCurrencies.map((x) => x.pretty)).toContain(
-            formatNumber(
-              locale,
-              { type: 'units', args: [parseUnit(fx)] },
-              F(100000)
-            )
+            formatNumber(locale, [parseUnit(fx)], F(100000))
               .partsOf.filter((x) => x.type === 'currency')
               .map((x) => x.value)[0]
           );

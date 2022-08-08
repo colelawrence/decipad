@@ -1,4 +1,4 @@
-import { buildType as t, Unit, Units } from '..';
+import { buildType as t, Unit } from '..';
 import { F, U } from '../utils';
 import { InferError } from './InferError';
 import {
@@ -10,10 +10,6 @@ import {
 const meter: Unit = { unit: 'meter', exp: F(1), multiplier: F(1), known: true };
 const errorCause = InferError.expectedButGot('A', 'B');
 
-function units(unit: Unit): Units {
-  return { type: 'units', args: [unit] };
-}
-
 it('can stringify a type', () => {
   expect(serializeType(t.number())).toMatchInlineSnapshot(`
     Object {
@@ -24,17 +20,14 @@ it('can stringify a type', () => {
   expect(serializeType(t.number([meter]))).toMatchInlineSnapshot(`
     Object {
       "kind": "number",
-      "unit": Object {
-        "args": Array [
-          Object {
-            "exp": Fraction(1),
-            "known": true,
-            "multiplier": Fraction(1),
-            "unit": "meter",
-          },
-        ],
-        "type": "units",
-      },
+      "unit": Array [
+        Object {
+          "exp": Fraction(1),
+          "known": true,
+          "multiplier": Fraction(1),
+          "unit": "meter",
+        },
+      ],
     }
   `);
   expect(serializeType(t.string())).toMatchInlineSnapshot(`
@@ -149,7 +142,7 @@ it('can parse a type', () => {
   expect(
     testDeserialize({
       kind: 'number',
-      unit: units(meter),
+      unit: [meter],
     })
   ).toMatchObject({
     type: 'number',

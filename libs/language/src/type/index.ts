@@ -27,20 +27,19 @@ import { InferError, ErrSpec } from './InferError';
 import {
   inverseExponent,
   normalizeUnits,
-  normalizeUnitsOf,
   setUnit,
   simplifyUnits,
   pluralizeUnit,
 } from './units';
-import { Unit, Units, units } from './unit-type';
+import { Unit, units } from './unit-type';
 
 export { simplifyUnits, pluralizeUnit };
 
-export type { ErrSpec, Unit, Units };
+export type { ErrSpec, Unit };
 
 export * from './serialization';
 export * from './convert-to-multiplier-unit';
-export { setUnit, normalizeUnits, normalizeUnitsOf, units };
+export { setUnit, normalizeUnits, units };
 export { InferError, inverseExponent, t as build };
 export { parseType, parseFunctionSignature } from './parseType';
 export type { FunctionSignature } from './narrowing';
@@ -57,7 +56,7 @@ export class Type {
   errorCause: InferError | null = null;
 
   type: PrimitiveTypeName | null = null;
-  unit: Units | null = null;
+  unit: Unit[] | null = null;
   numberFormat: AST.NumberFormat | null = null;
 
   date: Time.Specificity | null = null;
@@ -214,11 +213,11 @@ export class Type {
     return isDate(this, specificity);
   }
 
-  multiplyUnit(withUnits: Units | null): Type {
+  multiplyUnit(withUnits: Unit[] | null): Type {
     return multiplyUnit(this, withUnits);
   }
 
-  divideUnit(divideBy: Units | number | null): Type {
+  divideUnit(divideBy: Unit[] | number | null): Type {
     return divideUnit(this, divideBy);
   }
 

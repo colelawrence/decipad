@@ -1,6 +1,6 @@
 import Fraction, { FractionLike, pow } from '@decipad/fraction';
 import { Class } from 'utility-types';
-import { AST, Unit, Units } from '.';
+import type { AST, Unit } from '.';
 
 export { date } from './date';
 
@@ -434,12 +434,9 @@ export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   return { ...unit, ...opts };
 }
 
-export function U(units: string | Unit | Unit[], opts?: Partial<Unit>): Units {
+export function U(units: string | Unit | Unit[], opts?: Partial<Unit>): Unit[] {
   const unitsArr = Array.isArray(units) ? units : [units];
-  return {
-    type: 'units',
-    args: unitsArr.map((unit) => u(unit, opts)),
-  };
+  return unitsArr.map((unit) => u(unit, opts));
 }
 
 // ne = number expression
@@ -460,14 +457,14 @@ export function ne(n: number, unit: string): AST.Expression {
 }
 
 export function multiplyMultipliers(
-  units: Units | undefined | null,
+  units: Unit[] | undefined | null,
   start: Fraction = F(1)
 ): Fraction {
   if (!units) {
     return start;
   }
   let acc = start;
-  for (const unit of units.args) {
+  for (const unit of units) {
     acc = acc.mul(pow(unit.multiplier, unit.exp));
   }
   return acc;

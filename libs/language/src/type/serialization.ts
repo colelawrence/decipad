@@ -33,7 +33,7 @@ export function serializeType(type: Type): SerializedType {
         rowCellNames: type.rowCellNames,
       };
     } else if (type.type === 'number') {
-      if (type.numberFormat === 'percentage' && type.unit) {
+      if (type.numberFormat === 'percentage' && type.unit?.length) {
         throw new Error('Cannot serialize a percentage number with a unit');
       }
 
@@ -46,7 +46,7 @@ export function serializeType(type: Type): SerializedType {
 
       return {
         kind: 'number',
-        unit: type.unit,
+        unit: type.unit?.length ? type.unit : null,
       };
     } else if (type.type === 'boolean') {
       return { kind: 'boolean' };

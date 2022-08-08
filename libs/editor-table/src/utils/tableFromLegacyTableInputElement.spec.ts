@@ -20,17 +20,14 @@ describe('tableFromLegacyTableInputElement', () => {
           columnName: 'firstColumn',
           cellType: {
             kind: 'number',
-            unit: {
-              type: 'units',
-              args: [
-                {
-                  unit: 'bananas',
-                  exp: F(1),
-                  multiplier: F(1),
-                  known: false,
-                },
-              ],
-            },
+            unit: [
+              {
+                unit: 'bananas',
+                exp: F(1),
+                multiplier: F(1),
+                known: false,
+              },
+            ],
           },
           cells: ['1', '2', '3'],
         },
@@ -76,33 +73,20 @@ describe('tableFromLegacyTableInputElement', () => {
               type: ELEMENT_TH,
               cellType: {
                 kind: 'number',
-                unit: {
-                  type: 'units',
-                  args: [
-                    {
-                      exp: F(1),
-                      known: false,
-                      multiplier: F(1),
-                      unit: 'bananas',
-                    },
-                  ],
-                },
+                unit: [
+                  {
+                    exp: F(1),
+                    known: false,
+                    multiplier: F(1),
+                    unit: 'bananas',
+                  },
+                ],
               },
-              children: [
-                {
-                  text: 'firstColumn',
-                },
-              ],
+              children: [{ text: 'firstColumn' }],
             },
             {
-              cellType: {
-                kind: 'string',
-              },
-              children: [
-                {
-                  text: 'secondColumn',
-                },
-              ],
+              cellType: { kind: 'string' },
+              children: [{ text: 'secondColumn' }],
               type: ELEMENT_TH,
             },
             {
@@ -110,11 +94,7 @@ describe('tableFromLegacyTableInputElement', () => {
                 date: 'day',
                 kind: 'date',
               },
-              children: [
-                {
-                  text: 'thirdColumn',
-                },
-              ],
+              children: [{ text: 'thirdColumn' }],
               type: ELEMENT_TH,
             },
           ],
@@ -124,27 +104,15 @@ describe('tableFromLegacyTableInputElement', () => {
           children: [
             {
               type: ELEMENT_TD,
-              children: [
-                {
-                  text: '1',
-                },
-              ],
+              children: [{ text: '1' }],
             },
             {
               type: 'td',
-              children: [
-                {
-                  text: 'str 1',
-                },
-              ],
+              children: [{ text: 'str 1' }],
             },
             {
               type: 'td',
-              children: [
-                {
-                  text: 'date(2020-01-01)',
-                },
-              ],
+              children: [{ text: 'date(2020-01-01)' }],
             },
           ],
           type: ELEMENT_TR,
@@ -153,27 +121,15 @@ describe('tableFromLegacyTableInputElement', () => {
           children: [
             {
               type: ELEMENT_TD,
-              children: [
-                {
-                  text: '2',
-                },
-              ],
+              children: [{ text: '2' }],
             },
             {
               type: ELEMENT_TD,
-              children: [
-                {
-                  text: 'str 2',
-                },
-              ],
+              children: [{ text: 'str 2' }],
             },
             {
               type: 'td',
-              children: [
-                {
-                  text: 'date(2020-02-01)',
-                },
-              ],
+              children: [{ text: 'date(2020-02-01)' }],
             },
           ],
           type: 'tr',
@@ -183,27 +139,15 @@ describe('tableFromLegacyTableInputElement', () => {
           children: [
             {
               type: ELEMENT_TD,
-              children: [
-                {
-                  text: '3',
-                },
-              ],
+              children: [{ text: '3' }],
             },
             {
               type: ELEMENT_TD,
-              children: [
-                {
-                  text: 'str 3',
-                },
-              ],
+              children: [{ text: 'str 3' }],
             },
             {
               type: ELEMENT_TD,
-              children: [
-                {
-                  text: 'date(2020-03-01)',
-                },
-              ],
+              children: [{ text: 'date(2020-03-01)' }],
             },
           ],
         },

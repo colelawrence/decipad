@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { Time } from '../date';
 import type { AST } from '../parser';
-import type { Units } from '.';
+import type { Unit } from '.';
 import type { ErrSpec } from './InferError';
 import type { SerializedType } from './SerializedType';
 
@@ -31,7 +31,7 @@ export type Row = SType<{
 export type Number =
   | SType<{
       kind: 'number';
-      unit: Units | null;
+      unit: Unit[] | null;
       numberFormat?: null;
     }>
   | SType<{

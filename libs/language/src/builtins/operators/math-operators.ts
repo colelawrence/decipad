@@ -39,7 +39,7 @@ const exponentiationFunctor = (
   const ctx = getDefined(context, 'context should be defined');
 
   let u: Fraction;
-  if (a.unit && a.unit.args.length > 0) {
+  if (a.unit && a.unit.length > 0) {
     const realm = new Realm(ctx);
     try {
       u = simpleExpressionEvaluate(realm, bValue).getData();
@@ -52,7 +52,7 @@ const exponentiationFunctor = (
     }
     return binopFunctor([a, removeUnit(b)]).mapType(
       produce((arg1) => {
-        for (const unit of arg1.unit?.args ?? []) {
+        for (const unit of arg1.unit ?? []) {
           unit.exp = (unit.exp || F(1)).mul(u);
         }
       })

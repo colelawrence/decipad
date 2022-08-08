@@ -2,7 +2,7 @@ import Fraction, { pow } from '@decipad/fraction';
 import { produce } from 'immer';
 import { getDefined } from '@decipad/utils';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
-import { normalizeUnits, Unit, Units } from '../../type';
+import { normalizeUnits, Unit } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
 import { identity, F } from '../../utils';
@@ -116,7 +116,7 @@ function expandUnitArgs(
       .map((u) => expandUnit(u, nonScalarExpansion, scale))
       .reduce(
         ([allExpandedUnits, allConverters], [expandedUnits, converter]) => [
-          [...(allExpandedUnits ?? []), ...expandedUnits],
+          [...allExpandedUnits, ...expandedUnits],
           (n) => allConverters(converter(n)),
         ],
         [[], converter]
@@ -132,23 +132,19 @@ function expandUnitArgs(
 }
 
 export function expandUnits(
-  units: Units | null,
+  units: Unit[] | null,
   nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
   scale: ScaleConverter = identity
-): [Units | null, Converter] {
-  if (units === null) {
+): [Unit[] | null, Converter] {
+  if (!units?.length) {
     return [null, identity];
   }
+
   const [unitArgs, converter] = expandUnitArgs(
-    normalizeUnitNames(units.args),
+    normalizeUnitNames(units),
     nonScalarExpansion,
     scale
   );
 
-  return [
-    produce(units, (u) => {
-      u.args = unitArgs ?? [];
-    }),
-    converter,
-  ];
+  return [unitArgs ?? [], converter];
 }

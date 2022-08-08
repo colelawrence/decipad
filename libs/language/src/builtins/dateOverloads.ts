@@ -29,7 +29,7 @@ export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
   Type.combine(date.isDate(), timeQuantity.isTimeQuantity()).mapType(() => {
     const dateSpecificity = getDefined(date.date);
 
-    const lowestUnit = getMostSpecific(getDefined(timeQuantity.unit?.args));
+    const lowestUnit = getMostSpecific(getDefined(timeQuantity.unit));
 
     if (cmpSpecificities(dateSpecificity, lowestUnit) < 0) {
       return t.impossible(
@@ -43,8 +43,8 @@ export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
 export const timeQuantityBinopFunctor = ([t1, t2]: Type[]) =>
   Type.combine(t1.isTimeQuantity(), t2.isTimeQuantity()).mapType(() => {
     const allTimeUnits = new Set([
-      ...getDefined(t1.unit?.args),
-      ...getDefined(t2.unit?.args),
+      ...getDefined(t1.unit),
+      ...getDefined(t2.unit),
     ]);
     return t.timeQuantity(Array.from(allTimeUnits));
   });
