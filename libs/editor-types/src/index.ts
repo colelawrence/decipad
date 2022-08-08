@@ -5,9 +5,10 @@ export * from './decorator-kinds';
 
 export * from './mark-kinds';
 import * as markKinds from './mark-kinds';
+export { markKinds };
+
 import * as elementKinds from './element-kinds';
 
-export { markKinds };
 export type MarkKind = typeof markKinds[keyof typeof markKinds];
 
 export * from './decorator-kinds';
@@ -28,3 +29,7 @@ export const alwaysWritableElementTypes = [
   elementKinds.ELEMENT_VARIABLE_DEF,
   elementKinds.ELEMENT_COLUMNS,
 ];
+
+export const allElementKinds: readonly string[] = Object.freeze(
+  Object.values(elementKinds)
+);

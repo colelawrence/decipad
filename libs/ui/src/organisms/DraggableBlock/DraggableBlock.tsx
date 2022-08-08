@@ -50,6 +50,7 @@ interface DraggableBlockProps {
 
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onDelete?: (() => void) | false;
+  readonly onDuplicate?: () => void;
   readonly onAdd?: () => void;
   readonly showLine?: boolean;
 
@@ -69,6 +70,7 @@ export const DraggableBlock = ({
   draggableCss,
 
   onDelete,
+  onDuplicate,
   onAdd,
   showLine = true,
   onShowHide,
@@ -145,6 +147,7 @@ export const DraggableBlock = ({
             isHidden={isHidden}
             onChangeMenuOpen={setMenuOpen}
             onDelete={onDelete}
+            onDuplicate={onDuplicate}
             onShowHide={onShowHide}
             showEyeLabel={showEyeLabel}
           />

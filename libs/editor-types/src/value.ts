@@ -235,6 +235,8 @@ type InlineDescendant = InlineElement | RichText;
 type InlineChildren = Array<InlineDescendant>;
 type PlainTextChildren = [PlainText];
 
+export type AnyElement = BlockElement | InlineElement;
+
 export const topLevelBlockKinds: string[] = [
   ELEMENT_H1,
   ELEMENT_H2,

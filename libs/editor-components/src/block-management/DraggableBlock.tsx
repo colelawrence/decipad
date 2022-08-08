@@ -6,13 +6,14 @@ import {
   ELEMENT_PARAGRAPH,
   ParagraphElement,
 } from '@decipad/editor-types';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms, organisms } from '@decipad/ui';
 import {
-  deleteText,
   findNodePath,
   getStartPoint,
   hasNode,
+  insertElements,
+  removeNodes,
   insertNodes,
   select,
   setSelection,
@@ -27,7 +28,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  clone,
+  requirePathBelowBlock,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
@@ -52,9 +57,8 @@ const defaultOnDelete = (
 
   const onDelete = () => {
     if (path) {
-      deleteText(editor, {
+      removeNodes(editor, {
         at: path,
-        unit: 'block',
       });
       if (hasNode(editor, path)) {
         const point = getStartPoint(editor, path);
@@ -80,6 +84,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   const [deleted, setDeleted] = useState(false);
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
+  const computer = useComputer();
   const isInDraggableBlock = useContext(InDraggableBlock);
   const { id } = element;
 
@@ -100,6 +105,16 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     setDeleted(true);
     defaultOnDelete(editor, element, parentOnDelete);
   }, [parentOnDelete, editor, element]);
+
+  const onDuplicate = useCallback(() => {
+    const path = findNodePath(editor, element);
+    if (path) {
+      const newEl = clone(computer, element);
+      insertElements(editor, newEl, {
+        at: requirePathBelowBlock(editor, path),
+      });
+    }
+  }, [computer, editor, element]);
 
   const onAdd = () => {
     const path = findNodePath(editor, element);
@@ -149,6 +164,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       dropLine={dropLine || undefined}
       isBeingDragged={isDragging}
       onDelete={parentOnDelete === false ? false : onDelete}
+      onDuplicate={onDuplicate}
       onShowHide={(a) => {
         a === 'show' ? setIsHidden(false) : setIsHidden(true);
       }}

@@ -39,6 +39,7 @@ export { Divider } from './Divider/Divider';
 export { Docs } from './Docs/Docs';
 export { DollarCircle } from './DollarCircle/DollarCircle';
 export { DragHandle } from './DragHandle/DragHandle';
+export { Duplicate } from './Duplicate/Duplicate';
 export { Education } from './Education/Education';
 export { Ellipsis } from './Ellipsis/Ellipsis';
 export { File } from './File/File';

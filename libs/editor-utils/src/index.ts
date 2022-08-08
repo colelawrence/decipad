@@ -1,6 +1,7 @@
 export * from './astNode';
 export * from './parseCell';
 export * from './block';
+export * from './clone';
 export * from './path';
 export * from './selection';
 export * from './codeBlock';
