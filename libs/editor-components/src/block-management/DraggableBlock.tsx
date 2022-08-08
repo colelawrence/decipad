@@ -3,6 +3,8 @@ import {
   MyElement,
   MyReactEditor,
   useTEditorRef,
+  ELEMENT_PARAGRAPH,
+  ParagraphElement,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { atoms, organisms } from '@decipad/ui';
@@ -11,6 +13,8 @@ import {
   findNodePath,
   getStartPoint,
   hasNode,
+  insertNodes,
+  select,
   setSelection,
   useDndBlock,
 } from '@udecode/plate';
@@ -97,6 +101,22 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     defaultOnDelete(editor, element, parentOnDelete);
   }, [parentOnDelete, editor, element]);
 
+  const onAdd = () => {
+    const path = findNodePath(editor, element);
+    if (path === undefined) return;
+    insertNodes(
+      editor,
+      {
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: '' }],
+      } as unknown as ParagraphElement,
+      {
+        at: path,
+      }
+    );
+    select(editor, path);
+  };
+
   if (deleted || (readOnly && element.isHidden)) {
     return null;
   }
@@ -132,6 +152,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       onShowHide={(a) => {
         a === 'show' ? setIsHidden(false) : setIsHidden(true);
       }}
+      onAdd={onAdd}
+      showLine={
+        !(
+          editor.children.length === 2 &&
+          editor.children[1].children[0].text === ''
+        )
+      }
     >
       <InDraggableBlock.Provider value={true}>
         <BlockErrorBoundary>{children}</BlockErrorBoundary>

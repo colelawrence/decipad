@@ -10,6 +10,7 @@ import {
   shortAnimationDuration,
 } from '../../primitives';
 import { blockAlignment, editorLayout } from '../../styles';
+import { NewElementLine } from '../../atoms/NewElementLine/NewElementLine';
 
 const handleAndMenuReservedSpace = 172;
 const totalSpaceWithGap = handleAndMenuReservedSpace + editorLayout.gutterGap;
@@ -49,6 +50,8 @@ interface DraggableBlockProps {
 
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onDelete?: (() => void) | false;
+  readonly onAdd?: () => void;
+  readonly showLine?: boolean;
 
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;
@@ -66,6 +69,8 @@ export const DraggableBlock = ({
   draggableCss,
 
   onDelete,
+  onAdd,
+  showLine = true,
   onShowHide,
 
   blockKind,
@@ -152,6 +157,7 @@ export const DraggableBlock = ({
           ]}
           ref={previewRef}
         >
+          <NewElementLine onAdd={onAdd} show={showLine} />
           <BlockActiveProvider>{children}</BlockActiveProvider>
         </div>
       </div>
