@@ -27,15 +27,24 @@ const iconWrapperStyles = css({
   width: '20px',
 });
 
+const tableRowStyles = (isBeingDragged: boolean) =>
+  css({
+    opacity: isBeingDragged ? draggingOpacity : 'unset',
+  });
+
+const invisibleTableRowStyles = css({
+  display: 'none',
+});
+
 interface TableRowProps extends TableCellControlsProps {
   readonly attributes?: ElementAttributes;
   readonly children: ReactNode;
   readonly onRemove?: () => void;
   readonly readOnly?: boolean;
   readonly draggable?: boolean;
-
   readonly isBeingDragged?: boolean;
   readonly dropLine?: DropLineDirection;
+  readonly isVisible?: boolean;
 
   /**
    * Table cell controls ref
@@ -52,7 +61,8 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       onSelect,
       readOnly = false,
       dragRef,
-      isBeingDragged,
+      isBeingDragged = false,
+      isVisible = true,
     },
     ref
   ): ReturnType<FC> => {
@@ -62,9 +72,10 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       <tr
         {...attributes}
         ref={trRef}
-        css={css({
-          opacity: isBeingDragged ? draggingOpacity : 'unset',
-        })}
+        css={[
+          tableRowStyles(isBeingDragged),
+          !isVisible && invisibleTableRowStyles,
+        ]}
       >
         {!readOnly && (
           <TableCellControls

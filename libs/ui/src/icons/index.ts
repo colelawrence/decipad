@@ -42,6 +42,7 @@ export { DragHandle } from './DragHandle/DragHandle';
 export { Duplicate } from './Duplicate/Duplicate';
 export { Education } from './Education/Education';
 export { Ellipsis } from './Ellipsis/Ellipsis';
+export { Eye } from './Eye/Eye';
 export { File } from './File/File';
 export { Folder } from './Folder/Folder';
 export { Formula } from './Formula/Formula';

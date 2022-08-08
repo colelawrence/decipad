@@ -34,3 +34,5 @@ export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({
     ? undefined
     : `${tdVerticalPadding} ${tdHorizontalPadding}`,
 });
+
+export const defaultMaxRows = 10;

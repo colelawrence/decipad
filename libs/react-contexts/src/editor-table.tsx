@@ -4,11 +4,13 @@ import type { TableCellType } from '../../editor-types/src';
 export type EditorTableContextValue = Readonly<{
   blockId: string;
   cellTypes: TableCellType[];
+  isCollapsed: boolean;
 }>;
 
 const defaultValue = {
   blockId: '',
   cellTypes: [],
+  isCollapsed: false,
 };
 
 export const EditorTableContext =

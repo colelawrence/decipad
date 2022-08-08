@@ -14,7 +14,6 @@ import { TableWidth } from '../Table/Table';
 import { smallestDesktop } from '../../primitives';
 import { tableControlWidth } from '../../styles/table';
 import { Column } from '../../types';
-import { useAutoAnimate } from '../../hooks';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -81,6 +80,8 @@ interface EditorTableProps {
   readonly onAddRow?: () => void;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
+  readonly hiddenRowCount?: number;
+  readonly setCollapsed?: (collapsed: boolean) => void;
 
   readonly smartRow?: ReactNode;
 }
@@ -96,11 +97,11 @@ export const EditorTable: FC<EditorTableProps> = ({
   isSelectingCell,
   onChangeIcon = noop,
   onChangeColor = noop,
+  hiddenRowCount = 0,
+  setCollapsed = noop,
   smartRow,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
-  const [animateTableBody] = useAutoAnimate<HTMLTableSectionElement>();
-  const [animateTableHead] = useAutoAnimate<HTMLTableSectionElement>();
 
   return (
     <TableStyleContext.Provider
@@ -118,20 +119,25 @@ export const EditorTable: FC<EditorTableProps> = ({
           <div css={tableWrapperStyles}>
             <div css={tableOverflowStyles} contentEditable={false} />
             <Table
+              isReadOnly={false}
+              columnCount={columns.length}
               dropRef={dropRef}
               tableWidth={tableWidth}
               isSelectingCell={isSelectingCell}
-            >
-              <thead ref={animateTableHead}>{thead}</thead>
-              <tbody ref={animateTableBody}>{tbody}</tbody>
-              <tfoot contentEditable={false}>
-                {smartRow}
-                <AddTableRowButton
-                  colSpan={columns.length + 1}
-                  onAddRow={onAddRow}
-                />
-              </tfoot>
-            </Table>
+              hiddenRowCount={hiddenRowCount}
+              setShowAllRows={(showMoreRows) => setCollapsed(!showMoreRows)}
+              head={thead}
+              body={tbody}
+              foot={
+                <>
+                  {smartRow}
+                  <AddTableRowButton
+                    colSpan={columns.length + 1}
+                    onAddRow={onAddRow}
+                  />
+                </>
+              }
+            ></Table>
           </div>
         </div>
       </div>

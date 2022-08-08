@@ -16,8 +16,12 @@ import { Provider, useAtom } from 'jotai';
 import {
   EditorTableContext,
   EditorTableContextValue,
+  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { WIDE_MIN_COL_COUNT } from '../../constants';
+import {
+  MAX_UNCOLLAPSED_TABLE_ROWS,
+  WIDE_MIN_COL_COUNT,
+} from '../../constants';
 import { useTable, useTableActions } from '../../hooks';
 import { useSelectedCells } from './useSelectedCells';
 import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
@@ -44,13 +48,20 @@ export const Table: PlateComponent = withProviders([
 
   useSelectedCells();
 
-  const { name, columns, headers } = useTable(element);
+  const { name, columns, headers, rowCount } = useTable(element);
 
   const blockId = element.id;
-  const contextValue: EditorTableContextValue = useMemo(
-    () => ({ blockId, cellTypes: columns.map((col) => col.cellType) }),
-    [blockId, columns]
-  );
+
+  const readOnly = useIsEditorReadOnly();
+  const [isCollapsed, setCollapsed] = useState(() => readOnly);
+
+  const contextValue: EditorTableContextValue = useMemo(() => {
+    return {
+      blockId,
+      cellTypes: columns.map((col) => col.cellType),
+      isCollapsed,
+    };
+  }, [blockId, columns, isCollapsed]);
 
   const tablePath = useNodePath(element);
 
@@ -83,6 +94,12 @@ export const Table: PlateComponent = withProviders([
                 columns={columns}
                 tableWidth={wideTable ? 'WIDE' : 'SLIM'}
                 isSelectingCell={!!selectedCells}
+                hiddenRowCount={
+                  isCollapsed
+                    ? Math.max(0, rowCount - MAX_UNCOLLAPSED_TABLE_ROWS)
+                    : 0
+                }
+                setCollapsed={setCollapsed}
                 smartRow={
                   <SmartRow
                     onAggregationTypeNameChange={onChangeColumnAggregation}

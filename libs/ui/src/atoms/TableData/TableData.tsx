@@ -29,6 +29,7 @@ const tdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
   paddingTop: table.tdVerticalPadding,
   paddingBottom: table.tdVerticalPadding,
+  position: 'relative',
 });
 
 const tdPlaceholderStyles = css({
@@ -77,6 +78,11 @@ const tdDisabledStyles = css({
   ...setCssVar('normalTextColor', cssVar('weakerTextColor')),
 });
 
+const tdEditableFocusedUnselectedStyles = css({
+  cursor: 'text',
+  boxShadow: `inset 0 0 0 2px ${blue300.rgb}`,
+});
+
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   isEditable?: boolean;
@@ -89,6 +95,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   collapsed?: boolean;
   disabled?: boolean;
   dropTarget?: ConnectDropTarget;
+  lastBeforeMoreRowsHidden?: boolean;
 }
 
 export const TableData = ({
@@ -103,6 +110,8 @@ export const TableData = ({
   collapsed,
   disabled = false,
   dropTarget,
+  lastBeforeMoreRowsHidden = false,
+  children,
   ...props
 }: TableDataProps): ReturnType<FC> => {
   const existingRef =
@@ -126,14 +135,13 @@ export const TableData = ({
           focused &&
           !selected &&
           collapsed &&
-          css({
-            cursor: 'text',
-            boxShadow: `inset 0 0 0 2px ${blue300.rgb}`,
-          }),
+          tdEditableFocusedUnselectedStyles,
         showPlaceholder && tdPlaceholderStyles,
         disabled && tdDisabledStyles,
       ]}
       {...props}
-    />
+    >
+      {children}
+    </Component>
   );
 };

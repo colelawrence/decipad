@@ -4,7 +4,7 @@ import { TableRow } from '../../molecules';
 import { Table } from './Table';
 
 const body = (
-  <tbody>
+  <>
     <TableRow readOnly>
       <td>
         <TableData>Cell 1.1</TableData>
@@ -21,11 +21,11 @@ const body = (
         <TableData>Cell 2.2</TableData>
       </td>
     </TableRow>
-  </tbody>
+  </>
 );
 
 it('renders children', () => {
-  const { getAllByRole } = render(<Table>{body}</Table>);
+  const { getAllByRole } = render(<Table body={body} />);
 
   const rows = getAllByRole('row');
   const cells = getAllByRole('cell');

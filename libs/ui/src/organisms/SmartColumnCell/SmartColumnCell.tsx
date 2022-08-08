@@ -46,6 +46,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
     <div css={[smartColumnCellStyles]}>
       {aggregationTypeMenu}
       <span
+        key="result"
         css={[resultWrapperStyles, grabbing && grabbingStyles]}
         draggable
         onDragStart={(ev) => {

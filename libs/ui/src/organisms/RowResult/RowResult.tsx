@@ -14,8 +14,12 @@ export const RowResult = ({
 }: CodeResultProps<'row'>): ReturnType<FC> => {
   const { rowCellNames, rowCellTypes } = type;
   return (
-    <Table border={isTabularType(parentType) ? 'inner' : 'all'} translateX>
-      <thead>
+    <Table
+      isReadOnly={true}
+      columnCount={1}
+      border={isTabularType(parentType) ? 'inner' : 'all'}
+      translateX
+      head={
         <TableHeaderRow readOnly actionsColumn={false}>
           {rowCellNames.map((columnName, colIndex) => (
             <TableHeader
@@ -27,8 +31,8 @@ export const RowResult = ({
             </TableHeader>
           ))}
         </TableHeaderRow>
-      </thead>
-      <tbody>
+      }
+      body={
         <TableRow readOnly>
           {value.map((col, colIndex) => {
             return (
@@ -50,7 +54,7 @@ export const RowResult = ({
             );
           })}
         </TableRow>
-      </tbody>
-    </Table>
+      }
+    />
   );
 };

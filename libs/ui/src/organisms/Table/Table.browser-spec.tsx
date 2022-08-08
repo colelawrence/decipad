@@ -21,7 +21,7 @@ const body = (
 
 describe('border prop', () => {
   it('displays the inner borders', async () => {
-    const { getAllByRole } = render(<Table border="inner">{body}</Table>);
+    const { getAllByRole } = render(<Table border="inner" body={body} />);
 
     const { select } = await domToPlaywright(page, document);
 
@@ -54,7 +54,7 @@ describe('border prop', () => {
   });
 
   it('displays all borders by default', async () => {
-    const { getAllByRole } = render(<Table>{body}</Table>);
+    const { getAllByRole } = render(<Table body={body} />);
 
     const { select } = await domToPlaywright(page, document);
 

@@ -98,7 +98,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
       onDragStart={onDragExpressionStart}
       result={result || undefined}
       aggregationTypeMenu={[
-        <span>
+        <span key="name">
           {(selectedAggregationType &&
             (selectedAggregationType.shortName ||
               selectedAggregationType.name)) ||

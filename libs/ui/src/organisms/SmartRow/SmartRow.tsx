@@ -24,7 +24,7 @@ interface SmartRowProps {
 export const SmartRow: FC<SmartRowProps> = ({ smartCells }) => {
   return (
     <tr css={[tableRowStyles, css({ position: 'relative' })]}>
-      <th></th>
+      <th key="firstcol"></th>
       {smartCells.map((smartCell, index) => (
         <th key={index}>{index > 0 && smartCell}</th>
       ))}

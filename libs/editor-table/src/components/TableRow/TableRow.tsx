@@ -1,9 +1,4 @@
-import {
-  findNodePath,
-  getNodeEntry,
-  useDndNode,
-  withProviders,
-} from '@udecode/plate';
+import { getNodeEntry, useDndNode, withProviders } from '@udecode/plate';
 import { Path } from 'slate';
 import { molecules, useMergedRef } from '@decipad/ui';
 import {
@@ -12,13 +7,15 @@ import {
   TableElement,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
+import { useEditorTableContext } from '@decipad/react-contexts';
 import { useEffect, useRef } from 'react';
 import { Provider, useAtom } from 'jotai';
 import { useTableActions } from '../../hooks';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import { selectRow } from '../../utils/selectRow';
+import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';
 
 const DRAG_ITEM_ROW = 'row';
 
@@ -28,7 +25,10 @@ export const TableRow: PlateComponent = withProviders([
 ])(({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TR);
   const editor = getDefined(useTPlateEditorRef());
-  const path = getDefined(findNodePath(editor, element));
+  const path = getDefined(useNodePath(element));
+  const { isCollapsed } = useEditorTableContext();
+  const isVisible =
+    !isCollapsed || path[path.length - 1] <= MAX_UNCOLLAPSED_TABLE_ROWS + 1;
   const tablePath = Path.parent(path);
   const [table] = getNodeEntry<TableElement>(editor, tablePath);
   const { onAddColumn, onRemoveRow } = useTableActions(editor, table);
@@ -79,6 +79,7 @@ export const TableRow: PlateComponent = withProviders([
       dragRef={dragRef}
       ref={trRef}
       isBeingDragged={isDragging}
+      isVisible={isVisible}
     >
       {children}
     </molecules.TableRow>

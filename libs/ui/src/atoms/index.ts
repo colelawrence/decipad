@@ -54,6 +54,7 @@ export { TableCellWithUnit } from './TableCellWithUnit/TableCellWithUnit';
 export { TableData } from './TableData/TableData';
 export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';
 export { TableHeader } from './TableHeader/TableHeader';
+export { TextAndIconButton } from './TextAndIconButton/TextAndIconButton';
 export { Toast } from './Toast/Toast';
 export { Toggle } from './Toggle/Toggle';
 export { Tooltip } from './Tooltip/Tooltip';

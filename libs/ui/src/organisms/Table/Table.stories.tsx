@@ -10,19 +10,17 @@ const cellStyles = css({
 });
 
 const headers = (
-  <thead>
-    <TableHeaderRow readOnly>
-      <TableHeader>Header 1</TableHeader>
-      <TableHeader>Header 2</TableHeader>
-      <TableHeader>Header 3</TableHeader>
-      <TableHeader>Header 4</TableHeader>
-      <TableHeader>Header 5</TableHeader>
-      <TableHeader>Header 6</TableHeader>
-    </TableHeaderRow>
-  </thead>
+  <TableHeaderRow readOnly>
+    <TableHeader>Header 1</TableHeader>
+    <TableHeader>Header 2</TableHeader>
+    <TableHeader>Header 3</TableHeader>
+    <TableHeader>Header 4</TableHeader>
+    <TableHeader>Header 5</TableHeader>
+    <TableHeader>Header 6</TableHeader>
+  </TableHeaderRow>
 );
 const body = (
-  <tbody>
+  <>
     <TableRow readOnly>
       <TableData>
         <div css={cellStyles}>Cell 1.1</div>
@@ -63,7 +61,7 @@ const body = (
         <div css={cellStyles}>Cell 6.2</div>
       </TableData>
     </TableRow>
-  </tbody>
+  </>
 );
 
 export default {
@@ -74,13 +72,10 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story = () => <Table>{body}</Table>;
+export const Normal: Story = () => <Table body={body} />;
 
 export const NormalWithHeaders: Story = () => (
-  <Table>
-    {headers}
-    {body}
-  </Table>
+  <Table head={headers} body={body} />
 );
 
-export const InnerBorders: Story = () => <Table border="inner">{body}</Table>;
+export const InnerBorders: Story = () => <Table border="inner" body={body} />;

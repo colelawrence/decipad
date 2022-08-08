@@ -56,10 +56,10 @@ export const NotebookAvatars = ({
 }: NotebookAvatarsProps): ReturnType<FC> => {
   return (
     <div css={avatarsWrapperStyles}>
-      {usersWithAccess?.map((avatar) =>
+      {usersWithAccess?.map((avatar, index) =>
         isWriter ? (
           <Tooltip
-            key={avatar.user.id}
+            key={index}
             trigger={
               <div css={avatarStyles}>
                 <Avatar
@@ -75,7 +75,7 @@ export const NotebookAvatars = ({
             </div>
           </Tooltip>
         ) : (
-          <div css={avatarStyles}>
+          <div key={index} css={avatarStyles}>
             <Avatar
               name={avatar.user.name}
               greyedOut={avatar.permission !== 'ADMIN'}

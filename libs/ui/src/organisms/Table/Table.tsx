@@ -1,8 +1,14 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { ConnectDropTarget } from 'react-dnd';
+import pluralize from 'pluralize';
+import { noop } from '@decipad/utils';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
+import { TextAndIconButton } from '../../atoms';
+import { Eye } from '../../icons';
+import { table } from '../../styles';
+import { useAutoAnimate } from '../../hooks';
 
 const border = `1px solid ${cssVar('strongHighlightColor')}`;
 const borderRadius = '6px';
@@ -16,6 +22,11 @@ const tableBaseStyles = css({
   tableLayout: 'auto',
   counterReset: tableRowCounter,
   display: 'inline-table',
+  backgroundColor: cssVar('backgroundColor'),
+});
+
+const readOnlyTableStyles = css({
+  width: '100%',
 });
 
 const wideTableStyles = css({
@@ -73,35 +84,140 @@ const hiddenSelectionStyles = css({
   },
 });
 
+const showAllRowsTdStyles = css({
+  borderBottom: border,
+});
+
+const showAllRowsWrapperStyle = css({
+  position: 'relative',
+});
+
+const thinVeilAtTheEndStyles = css({
+  position: 'absolute',
+  height: `calc(${table.tdMinHeight} * 1.5)`,
+  left: 0,
+  right: 0,
+  bottom: '57px',
+  background: `linear-gradient(180deg, transparent, ${cssVar(
+    'backgroundColor'
+  )})`,
+  border: '1px solid ref',
+});
+
+const showMoreWrapperStyles = css({
+  width: '100%',
+  position: 'relative',
+  paddingBottom: '20px',
+  marginTop: '10px',
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+const showMoreButtonWrapperStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+});
+
+interface ShowAllRowsProps {
+  readonly columnCount: number;
+  readonly hiddenRowCount: number;
+  readonly isReadOnly: boolean;
+  readonly setShowAllRows: (showMoreRows: boolean) => void;
+}
+
+const ShowAllRows: FC<ShowAllRowsProps> = ({
+  columnCount,
+  hiddenRowCount,
+  setShowAllRows,
+  isReadOnly,
+}) => (
+  <tr>
+    {!isReadOnly && <td contentEditable={false} style={{ border: 0 }}></td>}
+    <td
+      colSpan={isReadOnly ? columnCount : columnCount + 1}
+      contentEditable={false}
+      css={showAllRowsTdStyles}
+      style={{ borderRight: 0 }}
+    >
+      <div css={showAllRowsWrapperStyle}>
+        <div css={thinVeilAtTheEndStyles}></div>
+        <div css={showMoreWrapperStyles}>
+          <div css={showMoreButtonWrapperStyles}>
+            <TextAndIconButton
+              text={`View ${hiddenRowCount} more ${pluralize(
+                'result',
+                hiddenRowCount
+              )}`}
+              onClick={() => setShowAllRows(true)}
+            >
+              <Eye />
+            </TextAndIconButton>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+);
+
 type Border = 'all' | 'inner';
 export type TableWidth = 'SLIM' | 'WIDE';
 
 interface TableProps {
+  readonly head?: ReactNode;
+  readonly body: ReactNode;
+  readonly foot?: ReactNode;
+  readonly columnCount?: number;
   readonly border?: Border;
-  readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
   readonly translateX?: boolean;
+  readonly hiddenRowCount?: number;
+  readonly setShowAllRows?: (showMoreRows: boolean) => void;
+  readonly isReadOnly?: boolean;
 }
 
 export const Table = ({
+  head,
+  body,
+  foot,
   border: b = 'all',
-  children,
+  columnCount = 1,
   dropRef,
   tableWidth,
   isSelectingCell,
-}: TableProps): ReturnType<FC> => (
-  <table
-    ref={dropRef}
-    css={[
-      tableBaseStyles,
-      b === 'all' && [borderRadiusStyles, allBorderStyles],
-      b === 'inner' && innerBorderStyles,
-      tableWidth === 'WIDE' && wideTableStyles,
-      isSelectingCell && hiddenSelectionStyles,
-    ]}
-  >
-    {children}
-  </table>
-);
+  hiddenRowCount = 0,
+  setShowAllRows = noop,
+  isReadOnly = false,
+}: TableProps): ReturnType<FC> => {
+  const [animateHead] = useAutoAnimate<HTMLTableSectionElement>();
+  const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
+  return (
+    <table
+      ref={dropRef}
+      css={[
+        tableBaseStyles,
+        b === 'all' && [borderRadiusStyles, allBorderStyles],
+        b === 'inner' && innerBorderStyles,
+        tableWidth === 'WIDE' && wideTableStyles,
+        isSelectingCell && hiddenSelectionStyles,
+        isReadOnly && readOnlyTableStyles,
+      ]}
+    >
+      {head && <thead ref={animateHead}>{head}</thead>}
+      <tbody ref={animateBody}>
+        {body}
+        {hiddenRowCount > 0 && (
+          <ShowAllRows
+            columnCount={columnCount}
+            hiddenRowCount={hiddenRowCount}
+            setShowAllRows={setShowAllRows}
+            isReadOnly={isReadOnly}
+          />
+        )}
+      </tbody>
+
+      {foot && <tfoot>{foot}</tfoot>}
+    </table>
+  );
+};
