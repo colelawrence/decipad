@@ -3,6 +3,7 @@ import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import { useSession } from 'next-auth/react';
 import { ReactNode, useEffect, useState } from 'react';
+import * as Sentry from '@sentry/react';
 
 export const useAnalytics = (): AnalyticsBrowser | undefined => {
   const [analytics] = useState<AnalyticsBrowser | undefined>(() => {
@@ -37,6 +38,15 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
       });
     }
   }, [analytics, session, userId, userEmail]);
+
+  useEffect(() => {
+    if (session?.user.id) {
+      Sentry.setUser({
+        id: session.user.id,
+        email: session.user.email,
+      });
+    }
+  }, [session?.user.email, session?.user.id]);
 
   return <>{children}</>;
 };
