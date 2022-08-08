@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode, useCallback, useRef } from 'react';
 import { noop } from '@decipad/utils';
 import {
   cssVar,
@@ -87,6 +87,8 @@ export const SlashCommandsMenuItem = ({
   focused,
   onExecute = noop,
 }: SlashCommandsMenuItemProps): ReturnType<FC> => {
+  const itemRef = useRef<HTMLButtonElement>(null);
+
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (focused && event.key === 'Enter' && !event.shiftKey) {
@@ -99,6 +101,14 @@ export const SlashCommandsMenuItem = ({
   );
   useWindowListener('keydown', onKeyDown, true);
 
+  if (focused) {
+    itemRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
+    });
+  }
+
   return (
     <button
       role="menuitem"
@@ -109,6 +119,7 @@ export const SlashCommandsMenuItem = ({
         event.preventDefault();
       }}
       data-focused={focused}
+      ref={itemRef}
     >
       <span css={[iconStyles, !enabled && css({ opacity: '0.5' })]}>
         {icon}
