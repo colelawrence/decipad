@@ -190,7 +190,6 @@ export const Table = ({
   setShowAllRows = noop,
   isReadOnly = false,
 }: TableProps): ReturnType<FC> => {
-  const [animateHead] = useAutoAnimate<HTMLTableSectionElement>();
   const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
   return (
     <table
@@ -204,7 +203,7 @@ export const Table = ({
         isReadOnly && readOnlyTableStyles,
       ]}
     >
-      {head && <thead ref={animateHead}>{head}</thead>}
+      {head && <thead>{head}</thead>}
       <tbody ref={animateBody}>
         {body}
         {hiddenRowCount > 0 && (
