@@ -158,9 +158,7 @@ export const NotebookSharingPopUp = ({
             <div css={innerPopUpStyles}>
               <div>
                 <p css={css(p14Medium)}>Share public link</p>
-                <p css={descriptionStyles}>
-                  Enable to share a the notebook to the world
-                </p>
+                <p css={descriptionStyles}>Enable to share this notebook</p>
               </div>
               <Toggle
                 active={isPublic}
