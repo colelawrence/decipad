@@ -1,6 +1,9 @@
 const { warn, error } = console;
 
-const suppressMessagesBeginnings = ['Warning: validateDOMNesting'];
+const suppressMessagesBeginnings = [
+  'Warning: validateDOMNesting',
+  'Warning: Function components cannot be given refs',
+];
 
 const suppress = (s: string): boolean => {
   return suppressMessagesBeginnings.some(

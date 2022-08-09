@@ -18,11 +18,21 @@ const getAssignmentBlock = (
   };
 };
 
-const interactiveElementsByType = new Map(
-  (
-    Object.values(interactiveLanguageElements) as InteractiveLanguageElement[]
-  ).map((element) => [element.type, element])
-);
+const interactiveElementsByType = (() => {
+  const map: Array<[string, InteractiveLanguageElement]> = [];
+  for (const el of Object.values(
+    interactiveLanguageElements
+  ) as InteractiveLanguageElement[]) {
+    if (Array.isArray(el.type)) {
+      for (const t of el.type) {
+        map.push([t, el]);
+      }
+    } else {
+      map.push([el.type, el]);
+    }
+  }
+  return new Map<string, InteractiveLanguageElement>(map);
+})();
 
 interface LanguageBlock {
   program: ProgramBlock[];

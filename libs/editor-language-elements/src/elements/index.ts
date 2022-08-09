@@ -2,7 +2,7 @@ export * from './CodeLine';
 export * from './Input';
 export * from './InlineBubble';
 export * from './Plot';
-export * from './Paragraph';
+export * from './TextElements';
 export * from './Table';
 export * from './Column';
 export * from './VariableDef';

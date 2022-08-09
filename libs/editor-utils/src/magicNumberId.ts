@@ -1,9 +1,9 @@
-import { ParagraphElement } from '@decipad/editor-types';
+import { MyElement } from '@decipad/editor-types';
 
 /** Get the (unstable) ID for a magic number. */
 export const magicNumberId = (
-  paragraph: ParagraphElement,
+  element: MyElement,
   childIndex: number
 ): string => {
-  return `${paragraph.id}-${childIndex}`;
+  return `${element.id}-${childIndex}`;
 };

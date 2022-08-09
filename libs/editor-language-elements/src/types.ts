@@ -15,7 +15,7 @@ interface JustExpression {
 }
 
 interface InteractiveLanguageElementBase {
-  type: string;
+  type: string | string[];
 }
 
 type ExpressionInteractiveLanguageElement = InteractiveLanguageElementBase & {

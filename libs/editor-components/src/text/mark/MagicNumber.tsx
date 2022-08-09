@@ -2,35 +2,42 @@ import {
   PlateComponent,
   RichText,
   useTEditorRef,
-  ELEMENT_PARAGRAPH,
+  MyEditor,
+  MyNode,
+  MyElement,
 } from '@decipad/editor-types';
 import {
   useComputer,
+  useEditorChange,
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { Node } from 'slate';
-import { findNodePath } from '@udecode/plate';
-import { useEffect, useState } from 'react';
+import { Element, Path } from 'slate';
+import { findNodePath, getNode, getNodeString } from '@udecode/plate';
+import { useState } from 'react';
 import { useObservable } from 'rxjs-hooks';
-import { isElementOfType, magicNumberId } from '@decipad/editor-utils';
+import { magicNumberId } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 
-export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
+export const MagicNumber: PlateComponent = ({
+  attributes,
+  text: _text,
+  children,
+}) => {
   const computer = useComputer();
-  const exp = text?.text ?? '';
+  const readOnly = useIsEditorReadOnly();
+  const text = getDefined(_text);
+  const exp = getNodeString(text);
 
-  const blockId = useMagicNumberId(getDefined(text));
+  const blockId = useMagicNumberId(text);
 
   const result = useResult(blockId)?.results[0];
 
   const loadingState =
     result?.type?.kind === 'type-error' ||
     (result?.type?.kind === 'number' && result?.type?.unit?.[0].unit === exp);
-
-  const readOnly = useIsEditorReadOnly();
 
   const defBlockId = useObservable(() => computer.getBlockId$(exp));
 
@@ -39,6 +46,7 @@ export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
       <atoms.MagicNumber
         loadingState={loadingState}
         result={result}
+        expression={exp}
         onClick={() => {
           // if it's a variable name, we can navigate to it.
           if (typeof defBlockId === 'string') {
@@ -56,35 +64,41 @@ export const MagicNumber: PlateComponent = ({ attributes, text, children }) => {
   );
 };
 
+function myGetNode(editor: MyEditor, path: Path): MyNode | null {
+  let node: MyNode | null = null;
+  try {
+    node = getNode<MyNode>(editor, path);
+  } catch (err) {
+    // do nothing
+  }
+  return node;
+}
+
 /** Get the ID of the magic number, comprised of paragraph and index */
 function useMagicNumberId(text: RichText) {
   const editor = useTEditorRef();
   const [magicNumberBlockId, setMagicNumberBlockId] = useState<string>('');
 
-  useEffect(() => {
-    const blockId = (() => {
-      const path = findNodePath(editor, text);
+  useEditorChange(setMagicNumberBlockId, (): string => {
+    const path = findNodePath(editor, text);
 
-      if (!path) return '';
+    if (!path) return '';
 
-      const pathOfParagraph = path.slice(0, -1);
-
-      const paragraph = (() => {
-        try {
-          return Node.get(editor, pathOfParagraph);
-        } catch {
-          return null;
-        }
-      })();
-
-      if (paragraph && isElementOfType(paragraph, ELEMENT_PARAGRAPH)) {
-        return magicNumberId(paragraph, path[path.length - 1]);
+    let pathOfElement = path;
+    while (pathOfElement.length) {
+      const node = myGetNode(editor, pathOfElement);
+      if (Element.isElement(node)) {
+        break;
       }
-      return '';
-    })();
+      pathOfElement = Path.parent(pathOfElement);
+    }
+    const element = myGetNode(editor, pathOfElement);
 
-    setMagicNumberBlockId(blockId);
-  }, [editor, text]);
+    if (element) {
+      return magicNumberId(element as MyElement, path[path.length - 1]);
+    }
+    return '';
+  });
 
   return magicNumberBlockId;
 }
