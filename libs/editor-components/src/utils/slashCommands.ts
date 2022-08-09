@@ -47,10 +47,10 @@ export const execute = ({
       insertCodeLineBelow(editor, path);
       break;
     case 'input':
-      insertInputBelow(editor, path);
+      insertInputBelow(editor, path, getAvailableIdentifier);
       break;
     case 'slider':
-      insertSliderInputBelow(editor, path);
+      insertSliderInputBelow(editor, path, getAvailableIdentifier);
       break;
     case 'table':
       insertTableBelow(editor, path, getAvailableIdentifier);

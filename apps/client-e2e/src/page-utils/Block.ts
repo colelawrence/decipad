@@ -21,7 +21,7 @@ export async function writeInTable(text: string, line: number, col = 0) {
   const locator = `table > ${parentType} > tr:nth-child(${
     lineNumber + 1
   }) > ${cellType}:nth-child(${col + 2})`;
-  const cell = await page.locator(locator);
+  const cell = page.locator(locator);
   await cell.click();
   await page.keyboard.type(text);
 }
@@ -41,7 +41,8 @@ export async function createInputBelow(identifier: string, value: number) {
     'text=InputInputShare your notebook and have others interact with it'
   );
 
-  await page.click('div [aria-placeholder="Name your input"]');
+  await page.dblclick('text=Input');
+  await page.keyboard.press('Backspace');
 
   await page.keyboard.type(identifier);
 
