@@ -65,39 +65,36 @@ it('works for a very weird table', () => {
             {
               cellType: {
                 kind: 'number',
-                unit: {
-                  args: [
-                    {
-                      exp: {
-                        d: '1',
-                        n: '1',
-                        s: '1',
-                      },
-                      known: true,
-                      multiplier: {
-                        d: '1',
-                        n: '1',
-                        s: '1',
-                      },
-                      unit: 'gbp',
+                unit: [
+                  {
+                    exp: {
+                      d: '1',
+                      n: '1',
+                      s: '1',
                     },
-                    {
-                      exp: {
-                        d: '1',
-                        n: '1',
-                        s: '-1',
-                      },
-                      known: true,
-                      multiplier: {
-                        d: '1',
-                        n: '1',
-                        s: '1',
-                      },
-                      unit: 'years',
+                    known: true,
+                    multiplier: {
+                      d: '1',
+                      n: '1',
+                      s: '1',
                     },
-                  ],
-                  type: 'units',
-                },
+                    unit: 'gbp',
+                  },
+                  {
+                    exp: {
+                      d: '1',
+                      n: '1',
+                      s: '-1',
+                    },
+                    known: true,
+                    multiplier: {
+                      d: '1',
+                      n: '1',
+                      s: '1',
+                    },
+                    unit: 'years',
+                  },
+                ],
               },
               children: [
                 {
@@ -109,25 +106,22 @@ it('works for a very weird table', () => {
             {
               cellType: {
                 kind: 'number',
-                unit: {
-                  args: [
-                    {
-                      exp: {
-                        d: '1',
-                        n: '1',
-                        s: '1',
-                      },
-                      known: false,
-                      multiplier: {
-                        d: '1',
-                        n: '1',
-                        s: '1',
-                      },
-                      unit: 'options',
+                unit: [
+                  {
+                    exp: {
+                      d: '1',
+                      n: '1',
+                      s: '1',
                     },
-                  ],
-                  type: 'units',
-                },
+                    known: false,
+                    multiplier: {
+                      d: '1',
+                      n: '1',
+                      s: '1',
+                    },
+                    unit: 'options',
+                  },
+                ],
               },
               children: [
                 {

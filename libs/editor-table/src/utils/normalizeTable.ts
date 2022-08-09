@@ -36,6 +36,7 @@ import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { createTableCaption } from './createTableCaption';
+import { convertLegacyType } from './convertLegacyType';
 
 const normalizeTableStructure = (
   editor: MyEditor,
@@ -183,6 +184,14 @@ const normalizeTableHeaderCell = (
       at: path,
     });
     return true;
+  }
+
+  if (th.cellType.kind === 'number') {
+    const newCellType = convertLegacyType(th.cellType);
+    if (newCellType) {
+      setNodes(editor, { cellType: newCellType }, { at: path });
+      return true;
+    }
   }
 
   let childIndex = -1;
