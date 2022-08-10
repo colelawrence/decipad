@@ -7,6 +7,7 @@ import {
 import { requireCollapsedSelection } from '@decipad/editor-utils';
 import { insertNodes, isText } from '@udecode/plate';
 import words from 'random-words';
+import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
   requireCollapsedSelection(editor);
@@ -14,13 +15,15 @@ const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
   const emptyElement: Omit<BubbleElement, 'id'> = {
     type: ELEMENT_BUBBLE,
     formula: {
-      name: `new_${words(1)}`,
+      name: words(3).join('_'),
       expression: `${Math.floor(Math.random() * 5000)}`,
     },
     children: [{ text: '' }],
   };
 
-  insertNodes(editor, emptyElement as BubbleElement, { match: isText });
+  insertNodes(editor, emptyElement as BubbleElement, {
+    match: isText,
+  });
 };
 
 export const autoformatBubbles: MyAutoformatRule[] = [
@@ -28,7 +31,8 @@ export const autoformatBubbles: MyAutoformatRule[] = [
     mode: 'block',
     type: ELEMENT_BUBBLE,
     triggerAtBlockStart: false,
-    match: '§',
+    match: '+',
+    query: doesSelectionAllowTextStyling,
     format: convertPrecedingTextWithTriggerToImage,
   },
 ];

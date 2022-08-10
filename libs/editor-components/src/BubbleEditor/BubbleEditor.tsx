@@ -1,11 +1,11 @@
-import React, { PropsWithChildren, useCallback, useState } from 'react';
+import { BubbleFormula } from '@decipad/editor-types';
 import {
   EditingBubble,
   EditorBubblesContext,
   useResult,
 } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { BubbleFormula } from '@decipad/editor-types';
+import React, { PropsWithChildren, useCallback, useState } from 'react';
 
 type BubbleEditorProps = PropsWithChildren<{}>;
 

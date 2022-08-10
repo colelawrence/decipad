@@ -1,5 +1,7 @@
+export * from './AutoCompleteMenu';
 export * from './block-management';
 export * from './BlockErrorBoundary';
+export * from './BubbleEditor';
 export * from './CodeErrorHighlight';
 export * from './CodeLine';
 export * from './CodeVariable';
@@ -8,6 +10,3 @@ export * from './layout';
 export * from './Plot';
 export * from './slash-commands';
 export * from './text';
-export * from './layout';
-export * from './BlockErrorBoundary';
-export * from './AutoCompleteMenu';

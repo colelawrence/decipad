@@ -3,12 +3,16 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useEditorBubblesContext, useResult } from '@decipad/react-contexts';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  useEditorBubblesContext,
+  useIsEditorReadOnly,
+  useResult,
+} from '@decipad/react-contexts';
+import { atoms } from '@decipad/ui';
+import { getDefined } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useCallback } from 'react';
-import { brand700, organisms } from '@decipad/ui';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
-import { getDefined } from '@decipad/utils';
 
 export const InlineBubble: PlateComponent = ({
   attributes,
@@ -31,18 +35,18 @@ export const InlineBubble: PlateComponent = ({
     });
   }, [blockId, element.formula, setEditing, updateValue]);
 
+  const readOnly = useIsEditorReadOnly();
   const codeResult = result?.results?.[0];
+  const loadingState = !!result?.error;
 
   return (
     <span {...attributes} id={blockId}>
-      <span
-        css={{ color: brand700.rgb, fontWeight: 500, cursor: 'pointer' }}
+      <atoms.MagicNumber
+        result={codeResult}
+        readOnly={readOnly}
+        loadingState={loadingState}
         onClick={openEditor}
-      >
-        {codeResult && (
-          <organisms.CodeResult variant="inline" {...codeResult} />
-        )}
-      </span>
+      ></atoms.MagicNumber>
 
       <span contentEditable={false} css={css({ display: 'none' })}>
         {children}

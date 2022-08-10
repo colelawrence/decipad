@@ -1,5 +1,6 @@
-import { NotebookPage, atoms } from '@decipad/ui';
-import { useState, ComponentProps, lazy } from 'react';
+import { BubbleEditor } from '@decipad/editor-components';
+import { atoms, NotebookPage } from '@decipad/ui';
+import { ComponentProps, lazy, useState } from 'react';
 import { Frame } from '../meta';
 
 const loadEditor = () =>
@@ -26,7 +27,9 @@ const Playground: React.FC = () => {
           title={null}
           suspenseFallback={<atoms.EditorPlaceholder />}
         >
-          <Editor />
+          <BubbleEditor>
+            <Editor />
+          </BubbleEditor>
         </Frame>
       }
       notebookIcon={

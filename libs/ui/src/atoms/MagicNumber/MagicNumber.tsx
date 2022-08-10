@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { InBlockResult } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
@@ -8,7 +8,7 @@ import { cssVar } from '../../primitives';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 type MagicNumberProps = {
-  readonly result?: Result.Result | null;
+  readonly result?: InBlockResult | undefined;
   readonly loadingState?: boolean;
   readOnly?: boolean;
   readonly onClick?: () => void;

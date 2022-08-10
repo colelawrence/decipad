@@ -1,5 +1,6 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useCreateEditor } from '@decipad/editor';
+import { BubbleEditor } from '@decipad/editor-components';
 import { MyEditor } from '@decipad/editor-types';
 import {
   NotebookStateProvider,
@@ -10,7 +11,6 @@ import { useToast } from '@decipad/toast';
 import { useSession } from 'next-auth/react';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
-import { BubbleEditor } from '../../editor-components/src/BubbleEditor/BubbleEditor';
 
 export interface NotebookProps {
   notebookId: string;
