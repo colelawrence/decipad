@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, useMemo, useState } from 'react';
-import { SerializedTypes } from '@decipad/language';
+import { SerializedType, SerializedTypes } from '@decipad/computer';
 import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
@@ -9,15 +9,17 @@ import { isTabularType, toTableHeaderType } from '../../utils';
 import { defaultMaxRows, tableParentStyles } from '../../styles/table';
 import { table } from '../../styles';
 
-const recursiveRowCount = (t: Array<unknown>): number => {
-  return t
-    .map((result) => {
-      if (Array.isArray(result)) {
-        return recursiveRowCount(result);
-      }
-      return 1;
-    })
-    .reduce((sum, n) => sum + n, 0);
+const recursiveRowCount = (t: SerializedType): number => {
+  if (t.kind === 'table' && t.tableLength !== 'unknown') {
+    return (
+      Math.max(...t.columnTypes.map((ct) => recursiveRowCount(ct))) *
+      t.tableLength
+    );
+  }
+  if (t.kind === 'column' && t.columnSize !== 'unknown') {
+    return recursiveRowCount(t.cellType) * t.columnSize;
+  }
+  return 1;
 };
 
 export const TableResult = ({
@@ -40,37 +42,31 @@ export const TableResult = ({
   const [grabbing, setGrabbing] = useState(false);
   const [showAllRows, setShowAllRows] = useState(false);
 
-  const tableLength = value[0].length;
+  const tableLength =
+    type.tableLength === 'unknown' ? value[0].length : type.tableLength;
 
-  const tableRecursiveLength = useMemo(
-    () => Math.max(...value.map((col) => recursiveRowCount(col))) as number,
-    [value]
-  );
+  const tableRecursiveLength = useMemo(() => recursiveRowCount(type), [type]);
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
-  const showRowLength = useMemo(() => {
+  const hiddenRowsCount = useMemo(() => {
     if (isNested || showAllRows) {
-      return tableLength;
+      return 0;
     }
-    if (tableRecursiveLength < defaultMaxRows) {
-      return tableRecursiveLength;
+    if (tableRecursiveLength <= defaultMaxRows) {
+      return 0;
     }
     if (tableRecursiveLength === tableLength) {
-      return Math.min(defaultMaxRows, tableLength);
+      return tableLength - defaultMaxRows;
     }
     const recursiveShowLength = tableRecursiveLength - defaultMaxRows;
     const proportionOfTableToHide = recursiveShowLength / tableRecursiveLength;
-    const hideRows = Math.max(
-      Math.floor(tableLength * proportionOfTableToHide),
-      1
-    );
-    return tableLength - hideRows;
+    return Math.floor(tableLength * proportionOfTableToHide);
   }, [isNested, showAllRows, tableLength, tableRecursiveLength]);
 
-  const hiddenRowCount = useMemo(
-    () => tableLength - showRowLength,
-    [showRowLength, tableLength]
+  const showRowLength = useMemo(
+    () => tableLength - hiddenRowsCount,
+    [hiddenRowsCount, tableLength]
   );
 
   return (
@@ -78,7 +74,7 @@ export const TableResult = ({
       columnCount={columnNames.length}
       border={isNested ? 'inner' : 'all'}
       translateX
-      hiddenRowCount={hiddenRowCount}
+      hiddenRowCount={hiddenRowsCount}
       setShowAllRows={setShowAllRows}
       isReadOnly={true}
       head={
@@ -119,7 +115,7 @@ export const TableResult = ({
                   }}
                   onDragEnd={() => setGrabbing(false)}
                   lastBeforeMoreRowsHidden={
-                    hiddenRowCount > 0 && rowIndex === showRowLength - 1
+                    hiddenRowsCount > 0 && rowIndex === showRowLength - 1
                   }
                   css={{ ...tableParentStyles }}
                 >
