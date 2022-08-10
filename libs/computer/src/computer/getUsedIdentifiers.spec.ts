@@ -25,15 +25,6 @@ it('finds variable declarations', () => {
   ]);
 });
 
-it('finds column declarations', () => {
-  expect(getUsedIdentifiers('A = { B = 1 }')[1]).toStrictEqual({
-    text: 'B',
-    start: 6,
-    end: 7,
-    isDeclaration: true,
-  });
-});
-
 it('finds column usage', () => {
   expect(getUsedIdentifiers('A.B')).toStrictEqual([
     { text: 'A.B', start: 0, end: 3, isDeclaration: false },

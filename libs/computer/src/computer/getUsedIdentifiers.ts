@@ -13,8 +13,18 @@ export const getUsedIdentifiers = (code: string): TokenPos[] => {
   const identifiers: TokenPos[] = [];
   const tokens = tokenize(code).filter((tok) => tok.type !== 'ws');
 
+  let inBrackets = 0;
+
   for (let i = 0; i < tokens.length; i += 1) {
     const currentTok = tokens[i];
+
+    // Count curly brackets to see if we're in table
+    if (currentTok.type === 'leftCurlyBracket') {
+      inBrackets += 1;
+    } else if (currentTok.type === 'rightCurlyBracket') {
+      inBrackets -= 1;
+    }
+
     // we only care about identifiers, and identifier.identifier
     if (currentTok.type !== 'identifier') {
       continue;
@@ -43,16 +53,18 @@ export const getUsedIdentifiers = (code: string): TokenPos[] => {
       continue;
     }
 
-    // variable declaration or ref
-    if (currentTok.type === 'identifier') {
-      identifiers.push({
-        text: currentTok.text,
-        start: currentTok.offset,
-        end: endOf(currentTok),
-        isDeclaration: tokens[i + 1]?.type === 'equalSign',
-      });
+    // Skip column definitions inside tables
+    if (inBrackets > 0 && tokens[i + 1]?.type === 'equalSign') {
       continue;
     }
+
+    // variable declaration or ref
+    identifiers.push({
+      text: currentTok.text,
+      start: currentTok.offset,
+      end: endOf(currentTok),
+      isDeclaration: tokens[i + 1]?.type === 'equalSign',
+    });
   }
 
   return identifiers;

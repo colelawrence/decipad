@@ -24,10 +24,9 @@ import {
   selectEventRange,
 } from '@decipad/editor-utils';
 import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
-import { Computer } from '@decipad/computer';
 
 export const onDropInlineResult =
-  (computer: Computer, editor: MyEditor) => (event: React.DragEvent) => {
+  (editor: MyEditor) => (event: React.DragEvent) => {
     if (editor.dragging === DRAG_INLINE_RESULT) {
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
@@ -57,7 +56,6 @@ export const onDropInlineResult =
           if (!block) return;
 
           const variableRanges = getVariableRanges(
-            computer,
             getNodeString(node),
             path,
             node.id as string

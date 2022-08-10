@@ -35,11 +35,8 @@ export const decorateCode =
       nodeId: string,
       [node, path]: MyNodeEntry
     ): Range[] => {
-      return getVariableRanges(computer, getNodeString(node), path, nodeId).map(
-        (range) => ({
-          ...range,
-          [DECORATE_CODE_VARIABLE]: true,
-        })
+      return getVariableRanges(getNodeString(node), path, nodeId).map(
+        (range) => ({ ...range, [DECORATE_CODE_VARIABLE]: true })
       );
     };
 

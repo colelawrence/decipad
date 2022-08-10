@@ -1,8 +1,7 @@
-import { Computer } from '@decipad/computer';
 import { getVariableRanges } from './getVariableRanges';
 
 const testFindVariables = (code: string) => {
-  const ranges = getVariableRanges(new Computer(), code, [], 'blockId');
+  const ranges = getVariableRanges(code, [], 'blockId');
 
   return ranges.map((range) =>
     code.slice(range.anchor.offset, range.focus.offset)
@@ -49,12 +48,11 @@ it('finds bubbles for external variables in function declarations', () => {
 });
 
 it('matches tables correctly', () => {
-  expect(testFindVariables('Table = { Col = 1, Col2 = 2 }'))
+  expect(testFindVariables('Table = { Col = 1, Col2 = Col }'))
     .toMatchInlineSnapshot(`
       Array [
         "Table",
         "Col",
-        "Col2",
       ]
     `);
 });

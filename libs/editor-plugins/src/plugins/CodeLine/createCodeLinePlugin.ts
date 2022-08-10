@@ -16,6 +16,6 @@ export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   decorate: decorateCode(computer, ELEMENT_CODE_LINE),
   withOverrides: withCodeLine,
   handlers: {
-    onDrop: onDropCodeLine(computer),
+    onDrop: onDropCodeLine,
   },
 });

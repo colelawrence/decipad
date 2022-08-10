@@ -187,7 +187,7 @@ describe('variable highlights', () => {
     );
 
     expect(tableDecl!.backgroundColor).toEqual(colDecl!.backgroundColor);
-    expect(tableDecl!.backgroundColor).toEqual(colUse!.backgroundColor);
+    expect(tableDecl!.backgroundColor).not.toEqual(colUse!.backgroundColor);
 
     expect(tableDecl?.backgroundColor).not.toEqual(notCol?.backgroundColor);
   });
@@ -227,11 +227,11 @@ describe('variable highlights', () => {
     cleanup = await applyCssVars();
     expect(
       findParentWithStyle(colDecl, 'backgroundColor')!.backgroundColor
-    ).toEqual(
+    ).not.toEqual(
       findParentWithStyle(colUsage1, 'backgroundColor')!.backgroundColor
     );
     expect(
-      findParentWithStyle(colDecl, 'backgroundColor')!.backgroundColor
+      findParentWithStyle(colUsage1, 'backgroundColor')!.backgroundColor
     ).toEqual(
       findParentWithStyle(colUsage2, 'backgroundColor')!.backgroundColor
     );
@@ -268,7 +268,7 @@ describe('variable highlights', () => {
     cleanup = await applyCssVars();
     expect(
       findParentWithStyle(colDecl, 'backgroundColor')!.backgroundColor
-    ).toEqual(
+    ).not.toEqual(
       findParentWithStyle(colUsage, 'backgroundColor')!.backgroundColor
     );
     expect(

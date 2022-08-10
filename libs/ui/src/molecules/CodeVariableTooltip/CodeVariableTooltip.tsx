@@ -9,8 +9,9 @@ import { CodeResult } from '../../organisms';
 const goToDefStyles = css(p8Regular);
 
 interface CodeVariableTooltipProps {
-  type: SerializedType;
-  value: Result.OneResult;
+  type?: SerializedType;
+  value?: Result.OneResult;
+  variableMissing?: boolean;
   children: ReactNode;
   defBlockId?: string | null;
   provideDefinitionLink: boolean;
@@ -20,14 +21,23 @@ interface CodeVariableTooltipProps {
 export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   type,
   value,
+  variableMissing = false,
   children,
   defBlockId,
   provideDefinitionLink,
   onGoToDefinition = noop,
 }): ReturnType<FC> => {
-  return (
-    <Tooltip trigger={<span>{children}</span>}>
+  const resultIfAvailable =
+    type != null && value != null ? (
       <CodeResult type={type} value={value} variant="inline" tooltip={false} />
+    ) : null;
+
+  return (
+    <Tooltip
+      trigger={<span>{children}</span>}
+      open={variableMissing ? false : undefined}
+    >
+      {resultIfAvailable}
       {provideDefinitionLink && defBlockId && (
         <a
           css={goToDefStyles}

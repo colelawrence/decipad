@@ -3,7 +3,6 @@ import { useComputer, useResult } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
 import { useCallback, useRef } from 'react';
 import { useObservable } from 'rxjs-hooks';
-import type { SerializedType, Result } from '@decipad/computer';
 import {
   findNodePath,
   focusEditor,
@@ -23,8 +22,6 @@ interface VariableInfo {
   blockId: string;
   variableName: string;
   isDeclaration: boolean;
-  type: SerializedType;
-  value: Result.OneResult;
 }
 type CodeLeaf = PlateComponent<{
   leaf: RichText & VariableInfo;
@@ -46,13 +43,13 @@ export const getVariableScope = (
 export const CodeVariable: CodeLeaf = ({
   attributes,
   children,
-  leaf: { variableName, blockId, isDeclaration, type, value },
+  leaf: { variableName, blockId, isDeclaration },
 }) => {
   const rootRef = useRef<HTMLSpanElement>(null);
 
-  const blockResult = useResult(blockId, rootRef.current);
+  const result = useResult(blockId, rootRef.current)?.results?.[0];
 
-  const vars = blockResult?.results?.[0]?.visibleVariables;
+  const vars = result?.visibleVariables;
   const variableScope = getVariableScope(variableName, vars);
   const variableMissing = variableScope === 'undefined';
 
@@ -85,8 +82,8 @@ export const CodeVariable: CodeLeaf = ({
       <molecules.CodeVariable
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
-        variableType={type}
-        variableValue={value}
+        variableType={result?.type}
+        variableValue={result?.value ?? undefined}
         defBlockId={defBlockId}
         onGoToDefinition={goToDefinition}
       >

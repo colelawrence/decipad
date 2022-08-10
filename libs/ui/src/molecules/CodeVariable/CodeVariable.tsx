@@ -8,7 +8,7 @@ import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
 import { CodeVariableTooltip } from '..';
 
-const varStyles = css({
+const varStyles = css(codeBlock.variableStyles, {
   padding: '4px 6px',
   borderRadius: '6px',
   fontSize: '13px',
@@ -63,14 +63,11 @@ export const CodeVariable = ({
     <span
       onClick={onClick}
       css={
-        variableScope === 'undefined'
-          ? [varStyles, type && typeStyles]
-          : [
-              codeBlock.variableStyles,
-              varStyles,
-              type && typeStyles,
-              variableScope === 'local' && localVarStyles,
-            ]
+        variableScope !== 'undefined' && [
+          varStyles,
+          type && typeStyles,
+          variableScope === 'local' && localVarStyles,
+        ]
       }
     >
       {type ? (
@@ -82,19 +79,16 @@ export const CodeVariable = ({
     </span>
   );
 
-  if (variableType && variableValue) {
-    return (
-      <CodeVariableTooltip
-        type={variableType}
-        value={variableValue}
-        defBlockId={defBlockId}
-        provideDefinitionLink={provideVariableDefLink}
-        onGoToDefinition={onGoToDefinition}
-      >
-        {decoration}
-      </CodeVariableTooltip>
-    );
-  }
-
-  return decoration;
+  return (
+    <CodeVariableTooltip
+      type={variableType}
+      value={variableValue}
+      variableMissing={variableScope === 'undefined'}
+      defBlockId={defBlockId}
+      provideDefinitionLink={provideVariableDefLink}
+      onGoToDefinition={onGoToDefinition}
+    >
+      {decoration}
+    </CodeVariableTooltip>
+  );
 };
