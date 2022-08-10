@@ -216,7 +216,7 @@ eqDiffOperator     -> ("==" | "!=")                     {% simpleOperator %}
 cmpOperator        -> (">" | "<" | "<=" | ">=")         {% simpleOperator %}
 smoothOperator     -> ("smooth")                        {% simpleOperator %}
 additiveOperator   -> ("-" | "+")                       {% simpleOperator %}
-divMulOperator     -> ("*" | "/" | "contains")          {% simpleOperator %}
+divMulOperator     -> ("*" | "/" | "per" | "contains")  {% simpleOperator %}
 divMulOperator     -> __ ("%" | "mod" | "modulo")       {%
                                                         (d) => {
                                                           return addArrayLoc({ name: '%' }, d)

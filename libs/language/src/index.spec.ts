@@ -2172,4 +2172,13 @@ describe('percentages', () => {
       type: t.number(null, 'percentage'),
     });
   });
+
+  it('per acts as /', async () => {
+    expect(await runCode('kw per hour')).toMatchObject({
+      value: F(1000),
+      type: t.number(
+        U([u('hours', { exp: F(-1) }), u('w', { multiplier: F(1000) })])
+      ),
+    });
+  });
 });

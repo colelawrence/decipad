@@ -420,6 +420,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       ),
     operatorKind: 'infix',
   },
+  per: {
+    aliasFor: '/',
+    operatorKind: 'infix',
+  },
   '%': {
     argCount: 2,
     fn: ([a, b]) => a.mod(b),

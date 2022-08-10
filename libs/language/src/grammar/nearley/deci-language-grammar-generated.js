@@ -1786,6 +1786,7 @@ let ParserRules = [
   },
   { name: 'divMulOperator$subexpression$1', symbols: [{ literal: '*' }] },
   { name: 'divMulOperator$subexpression$1', symbols: [{ literal: '/' }] },
+  { name: 'divMulOperator$subexpression$1', symbols: [{ literal: 'per' }] },
   {
     name: 'divMulOperator$subexpression$1',
     symbols: [{ literal: 'contains' }],
