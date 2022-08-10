@@ -83,8 +83,13 @@ const tdEditableFocusedUnselectedStyles = css({
   boxShadow: `inset 0 0 0 2px ${blue300.rgb}`,
 });
 
+const alignRightStyles = css({
+  textAlign: 'right',
+});
+
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
+  alignRight?: boolean;
   isEditable?: boolean;
   isUserContent?: boolean;
   contentEditable?: boolean;
@@ -111,6 +116,7 @@ export const TableData = ({
   disabled = false,
   dropTarget,
   lastBeforeMoreRowsHidden = false,
+  alignRight,
   children,
   ...props
 }: TableDataProps): ReturnType<FC> => {
@@ -138,6 +144,7 @@ export const TableData = ({
           tdEditableFocusedUnselectedStyles,
         showPlaceholder && tdPlaceholderStyles,
         disabled && tdDisabledStyles,
+        alignRight && alignRightStyles,
       ]}
       {...props}
     >

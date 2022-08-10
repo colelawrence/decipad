@@ -9,16 +9,17 @@ import {
 import { isElementOfType, useSelection } from '@decipad/editor-utils';
 import { atoms, molecules, organisms } from '@decipad/ui';
 import { useAtom } from 'jotai';
-import { isCollapsed, findNodePath } from '@udecode/plate';
+import { findNodePath, isCollapsed } from '@udecode/plate';
 import { useTableColumnFormulaResultForElement } from '@decipad/react-contexts';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import {
+  useCellType,
   useColumnDropDirection,
   useDropColumn,
   useIsCellSelected,
-  useCellType,
   useIsColumnSelected,
 } from '../../hooks';
+import { isCellAlignRight } from '../../utils/isCellAlignRight';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -94,6 +95,7 @@ export const TableCell: PlateComponent = ({
       dropTarget={dropTarget}
       selected={selected}
       collapsed={collapsed}
+      alignRight={isCellAlignRight(cellType)}
     >
       {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
       {direction === 'left' && (
