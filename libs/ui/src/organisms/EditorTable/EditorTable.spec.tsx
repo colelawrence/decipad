@@ -48,3 +48,19 @@ it('renders the add row button', () => {
   );
   expect(getByText(/add.+row/i)).toBeVisible();
 });
+
+it('renders the add new column button', () => {
+  const { getByTitle } = render(
+    <EditorTable {...defaultProps}>
+      <span>Caption</span>
+      <tr>
+        <th>children th</th>
+      </tr>
+      <tr>
+        <td>children td</td>
+      </tr>
+    </EditorTable>
+  );
+
+  expect(getByTitle('Add Column')).toBeVisible();
+});

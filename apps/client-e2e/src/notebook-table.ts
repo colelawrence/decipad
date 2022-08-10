@@ -46,8 +46,13 @@ describe('notebook table', () => {
   });
 
   it('can delete a row', async () => {
-    const delete3 = await page.$(':nth-match(button:has-text("Minus"), 3)');
-    await delete3?.click();
+    await page
+      .locator(
+        'table > tbody > tr:nth-child(3) > th > div > button:nth-child(2)'
+      )
+      .click();
+
+    await page.locator('span', { hasText: 'Delete' }).click();
 
     const row1 = await page
       .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
@@ -61,7 +66,9 @@ describe('notebook table', () => {
   });
 
   it('can add a new row', async () => {
-    await page.click('text=CreateAdd row');
+    await page
+      .locator('table > tfoot > tr > td > button')
+      .click({ force: true });
     await page.waitForTimeout(2000);
     await page
       .locator('table > tbody > tr:nth-child(3) > td:nth-child(2)')
@@ -76,9 +83,7 @@ describe('notebook table', () => {
   });
 
   it('can add a new column', async () => {
-    await page.waitForTimeout(2000);
-    await page.click('th button:has-text("Create")');
-    await page.waitForTimeout(2000);
+    await page.locator('div + table + button').click({ force: true });
     await writeInTable('Y', 0, 1);
     await writeInTable('2020-01-01', 1, 1);
     await writeInTable('2020-02-01', 2, 1);
@@ -101,7 +106,7 @@ describe('notebook table', () => {
 
   it('can write spaces in a table cell', async () => {
     await page.waitForTimeout(2000);
-    await page.click('th button:has-text("Create")');
+    await page.locator('div + table + button').click({ force: true });
     await page.waitForTimeout(2000);
     await writeInTable('X', 0, 2);
     await writeInTable(

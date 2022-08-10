@@ -14,6 +14,7 @@ import { TableWidth } from '../Table/Table';
 import { smallestDesktop } from '../../primitives';
 import { tableControlWidth } from '../../styles/table';
 import { Column } from '../../types';
+import { Add } from '../../icons';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -55,6 +56,7 @@ const tableWrapperStyles = css({
   position: 'relative',
   whiteSpace: 'nowrap',
   left: tableControlWidth,
+  display: 'flex',
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
     transform: `translateX(-${tableControlWidth})`,
@@ -68,6 +70,18 @@ const tableOverflowStyles = css({
   width: `calc(((100vw - 700px) / 2) - ${tableControlWidth})`,
 });
 
+const tableAddColumnButtonStyles = css({
+  width: '40px',
+  minWidth: '40px',
+  backgroundColor: '#F2F4F7',
+  marginLeft: '8px',
+  borderRadius: '8px',
+  padding: '8px',
+  '&:hover': {
+    backgroundColor: '#DDE0E5',
+  },
+});
+
 interface EditorTableProps {
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;
@@ -78,6 +92,7 @@ interface EditorTableProps {
   readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
   readonly onAddRow?: () => void;
+  readonly onAddColumn?: () => void;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
   readonly hiddenRowCount?: number;
@@ -88,6 +103,7 @@ interface EditorTableProps {
 
 export const EditorTable: FC<EditorTableProps> = ({
   onAddRow,
+  onAddColumn,
   columns,
   children,
   dropRef,
@@ -138,6 +154,13 @@ export const EditorTable: FC<EditorTableProps> = ({
                 </>
               }
             ></Table>
+            <button
+              onClick={onAddColumn}
+              css={tableAddColumnButtonStyles}
+              title="Add Column"
+            >
+              <Add />
+            </button>
           </div>
         </div>
       </div>

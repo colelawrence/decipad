@@ -40,10 +40,8 @@ export const Table: PlateComponent = withProviders([
   const saveIcon = useElementMutatorCallback(editor, element, 'icon');
   const saveColor = useElementMutatorCallback(editor, element, 'color');
 
-  const { onDelete, onAddRow, onChangeColumnAggregation } = useTableActions(
-    editor,
-    element
-  );
+  const { onDelete, onAddRow, onAddColumn, onChangeColumnAggregation } =
+    useTableActions(editor, element);
   const [selectedCells] = useAtom(selectedCellsAtom, tableScope);
 
   useSelectedCells();
@@ -91,6 +89,7 @@ export const Table: PlateComponent = withProviders([
                 icon={(element.icon ?? 'Table') as UserIconKey}
                 color={(element.color ?? 'Catskill') as AvailableSwatchColor}
                 onAddRow={onAddRow}
+                onAddColumn={onAddColumn}
                 columns={columns}
                 tableWidth={wideTable ? 'WIDE' : 'SLIM'}
                 isSelectingCell={!!selectedCells}

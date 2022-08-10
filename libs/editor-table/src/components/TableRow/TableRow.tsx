@@ -31,7 +31,7 @@ export const TableRow: PlateComponent = withProviders([
     !isCollapsed || path[path.length - 1] <= MAX_UNCOLLAPSED_TABLE_ROWS + 1;
   const tablePath = Path.parent(path);
   const [table] = getNodeEntry<TableElement>(editor, tablePath);
-  const { onAddColumn, onRemoveRow } = useTableActions(editor, table);
+  const { onRemoveRow } = useTableActions(editor, table);
 
   const { id } = element;
   const trRef = useRef<HTMLTableRowElement>(null);
@@ -60,12 +60,7 @@ export const TableRow: PlateComponent = withProviders([
   const firstRow = path[path.length - 1] === 1;
   if (firstRow) {
     return (
-      <molecules.TableHeaderRow
-        attributes={attributes}
-        readOnly={false}
-        actionsColumn={true}
-        onAddColumn={onAddColumn}
-      >
+      <molecules.TableHeaderRow attributes={attributes} readOnly={false}>
         {children}
       </molecules.TableHeaderRow>
     );

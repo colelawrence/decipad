@@ -3,29 +3,12 @@ import { css } from '@emotion/react';
 import { DropLineDirection } from '@udecode/plate';
 import { ReactNode, RefCallback, forwardRef, FC } from 'react';
 import { noop } from 'rxjs';
-import { TableData } from '../../atoms';
 import { useMergedRef } from '../../hooks';
-import { Minus } from '../../icons';
 import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
 import {
   TableCellControls,
   TableCellControlsProps,
 } from '../TableCellControls/TableCellControls';
-
-const buttonStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  width: '100%',
-  paddingLeft: '12px',
-  paddingRight: '12px',
-});
-
-const iconWrapperStyles = css({
-  height: '20px',
-  width: '20px',
-});
 
 const tableRowStyles = (isBeingDragged: boolean) =>
   css({
@@ -82,18 +65,10 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
             ref={dragRef}
             readOnly={readOnly}
             onSelect={onSelect}
+            onRemove={onRemove}
           />
         )}
         {children}
-        {!readOnly && (
-          <TableData contentEditable={false} as="td">
-            <button css={buttonStyles} onClick={onRemove}>
-              <span css={iconWrapperStyles}>
-                <Minus />
-              </span>
-            </button>
-          </TableData>
-        )}
       </tr>
     );
   }

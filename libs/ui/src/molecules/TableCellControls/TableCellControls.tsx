@@ -1,41 +1,110 @@
-import { forwardRef } from 'react';
-import { DragHandle } from '../../icons/index';
+import { css } from '@emotion/react';
+import { once } from 'ramda';
+import { forwardRef, useState } from 'react';
+import { MenuItem, Tooltip } from '../../atoms';
+import { DragHandle, Trash } from '../../icons/index';
 import {
   mouseMovingOverTransitionDelay,
+  p12Bold,
+  p12Regular,
   shortAnimationDuration,
 } from '../../primitives/index';
+import { editorLayout } from '../../styles';
+import { MenuList } from '../MenuList/MenuList';
 
 export interface TableCellControlsProps {
   readonly onSelect?: () => void;
+  readonly onRemove?: () => void;
   readonly readOnly?: boolean;
 }
+
+export interface MenuButtonProps {
+  readonly setMenuIsOpen: (menuIsOpen: boolean) => void;
+  readonly menuIsOpen: boolean;
+}
+
+const gridStyles = once(() =>
+  css({
+    display: 'grid',
+    gridTemplate: `
+      ".                          handle                             " ${editorLayout.gutterHandleHeight()}
+      "menu                       .                                  " auto
+      /minmax(max-content, 144px) ${editorLayout.gutterHandleWidth()}
+    `,
+    justifyContent: 'end',
+  })
+);
 
 export const TableCellControls = forwardRef<
   HTMLTableHeaderCellElement,
   TableCellControlsProps
->(({ readOnly, onSelect }, ref) => {
+>(({ readOnly, onSelect, onRemove }, ref) => {
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+
+  const handleMenuClick = () => {
+    if (onSelect) {
+      onSelect();
+    }
+    setMenuIsOpen(!menuIsOpen);
+  };
+
+  const menuButton = (
+    <button
+      onClick={() => handleMenuClick()}
+      css={{ gridArea: 'handle', cursor: 'grab', width: '16px' }}
+    >
+      <DragHandle />
+    </button>
+  );
+
   return (
     <th
       contentEditable={false}
       ref={ref}
       css={{
-        opacity: 0,
+        opacity: menuIsOpen ? 1 : 0,
         '*:hover > &': {
           opacity: 'unset',
         },
         transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
         verticalAlign: 'middle',
-        marginRight: '6px',
+        paddingRight: '6px',
       }}
     >
-      {!readOnly && (
-        <button
-          css={{ gridArea: 'handle', width: 16, cursor: 'grab' }}
-          onClick={onSelect}
-        >
-          <DragHandle />
-        </button>
-      )}
+      {!readOnly ? (
+        <div css={gridStyles()}>
+          <MenuList
+            root
+            open={menuIsOpen}
+            onChangeOpen={setMenuIsOpen}
+            trigger={menuButton}
+            dropdown
+          >
+            {onRemove ? (
+              <MenuItem
+                icon={<Trash />}
+                onSelect={() => onRemove()}
+                selected={false}
+              >
+                Delete
+              </MenuItem>
+            ) : null}
+          </MenuList>
+
+          <Tooltip trigger={menuButton}>
+            <span
+              css={css(p12Regular, {
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+              })}
+            >
+              <strong css={css(p12Bold)}>Drag</strong> to move
+              <br />
+              <strong css={css(p12Bold)}>Click</strong> for options
+            </span>
+          </Tooltip>
+        </div>
+      ) : null}
     </th>
   );
 });

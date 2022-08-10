@@ -82,7 +82,7 @@ export const TableResult = ({
       setShowAllRows={setShowAllRows}
       isReadOnly={true}
       head={
-        <TableHeaderRow actionsColumn={false} readOnly>
+        <TableHeaderRow readOnly>
           {columnNames?.map((columnName, index) => (
             <TableHeader
               type={toTableHeaderType(columnTypes[index])}
