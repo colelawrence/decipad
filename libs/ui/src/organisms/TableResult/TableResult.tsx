@@ -8,6 +8,7 @@ import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
 import { defaultMaxRows, tableParentStyles } from '../../styles/table';
 import { table } from '../../styles';
+import { DragHandle } from '../../icons/index';
 
 const recursiveRowCount = (t: SerializedType): number => {
   if (t.kind === 'table' && t.tableLength !== 'unknown') {
@@ -39,7 +40,6 @@ export const TableResult = ({
     );
   }
 
-  const [grabbing, setGrabbing] = useState(false);
   const [showAllRows, setShowAllRows] = useState(false);
 
   const tableLength =
@@ -101,24 +101,38 @@ export const TableResult = ({
                   as="td"
                   isEditable={false}
                   showPlaceholder={false}
-                  draggable
-                  grabbing={grabbing}
-                  onDragStart={(e) => {
-                    onDragStartCell?.({
-                      tableName: (type as SerializedTypes.Table)
-                        .indexName as string,
-                      columnName: columnNames[colIndex],
-                      cellValue: value[0][rowIndex] as string,
-                    })(e);
-
-                    setGrabbing(true);
-                  }}
-                  onDragEnd={() => setGrabbing(false)}
                   lastBeforeMoreRowsHidden={
                     hiddenRowsCount > 0 && rowIndex === showRowLength - 1
                   }
                   css={{ ...tableParentStyles }}
                 >
+                  <div
+                    draggable
+                    onDragStart={(e) => {
+                      onDragStartCell?.({
+                        tableName: (type as SerializedTypes.Table)
+                          .indexName as string,
+                        columnName: columnNames[colIndex],
+                        cellValue: value[0][rowIndex] as string,
+                      })(e);
+                    }}
+                    className="drag-handle"
+                    css={{
+                      display: 'none',
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                    }}
+                  >
+                    <button
+                      css={{
+                        width: '16px',
+                      }}
+                    >
+                      <DragHandle />
+                    </button>
+                  </div>
+
                   <div
                     css={[
                       css(table.getCellWrapperStyles(columnTypes[colIndex])),

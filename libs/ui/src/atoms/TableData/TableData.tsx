@@ -30,6 +30,12 @@ const tdBaseStyles = css(p14Medium, {
   paddingTop: table.tdVerticalPadding,
   paddingBottom: table.tdVerticalPadding,
   position: 'relative',
+
+  '&:hover': {
+    '& > .drag-handle': {
+      display: 'block',
+    },
+  },
 });
 
 const tdPlaceholderStyles = css({
@@ -63,15 +69,6 @@ const tdGridStyles = {};
 const editableStyles = css({
   paddingLeft: '12px',
   paddingRight: '12px',
-});
-
-const draggableStyles = css({
-  userSelect: 'all',
-  cursor: 'grab',
-});
-
-const grabbingStyles = css({
-  cursor: 'grabbing',
 });
 
 const tdDisabledStyles = css({
@@ -135,8 +132,6 @@ export const TableData = ({
         isUserContent && editableStyles,
         tdBaseStyles,
         tdGridStyles,
-        draggable && draggableStyles,
-        grabbing && grabbingStyles,
         isEditable &&
           focused &&
           !selected &&
