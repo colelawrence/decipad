@@ -105,6 +105,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
             'Calculate'}
         </span>,
         <atoms.Select
+          key="selectaggregation"
           variant="transparent"
           caretColor="weak"
           options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
