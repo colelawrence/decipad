@@ -11,6 +11,7 @@ export const createWithDocSyncHistoryPlugin = (): MyPlatePlugin => ({
     if (editor.isDocSyncEnabled) {
       const undoManager = new UndoManager(editor.sharedType, {
         trackedOrigins: new Set([slateYjsSymbol]),
+        captureTimeout: 200,
       });
       editor.undo = () => {
         undoManager.undo();

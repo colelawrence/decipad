@@ -37,6 +37,7 @@ const colorNames: Record<ColorId, string> = {
   brand800: 'Brand 800',
   brand900: 'Brand 900',
 
+  red50: 'Red 50',
   red100: 'Red 100',
   red200: 'Red 200',
   red300: 'Red 300',
@@ -58,6 +59,7 @@ const colorNames: Record<ColorId, string> = {
   yellow800: 'Yellow 800',
   yellow900: 'Yellow 900',
 
+  orange50: 'Orange 50',
   orange100: 'Orange 100',
   orange200: 'Orange 200',
   orange300: 'Orange 300',

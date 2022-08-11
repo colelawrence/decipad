@@ -60,5 +60,7 @@ export { Toggle } from './Toggle/Toggle';
 export { Tooltip } from './Tooltip/Tooltip';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
 export { Underline } from './Underline/Underline';
+export { Chip } from './Chip/Chip';
+export { TextButton } from './TextButton/TextButton';
 
 export * from './placeholders';

@@ -144,7 +144,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         suppressContentEditableWarning
       >
         <atoms.EditorBlock blockKind={props.blockKind}>
-          <BlockErrorBoundary>{children}</BlockErrorBoundary>
+          <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
         </atoms.EditorBlock>
       </div>
     );
@@ -177,7 +177,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       }
     >
       <InDraggableBlock.Provider value={true}>
-        <BlockErrorBoundary>{children}</BlockErrorBoundary>
+        <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
       </InDraggableBlock.Provider>
     </organisms.DraggableBlock>
   );

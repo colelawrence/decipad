@@ -34,3 +34,4 @@ export { VariableEditorMenu } from './VariableEditorMenu/VariableEditorMenu';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';
+export { ErrorBlock } from './ErrorBlock/ErrorBlock';

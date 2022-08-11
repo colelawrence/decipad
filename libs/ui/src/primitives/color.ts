@@ -119,6 +119,7 @@ export const teal900 = color(4, 37, 33);
 //
 // orange
 //
+export const orange50 = color(255, 247, 240);
 export const orange100 = color(255, 232, 209);
 export const orange200 = color(255, 209, 163);
 export const orange300 = color(255, 186, 117);
@@ -146,6 +147,7 @@ export const yellow900 = color(51, 44, 13);
 //
 // red
 //
+export const red50 = color(254, 245, 245);
 export const red100 = color(252, 218, 218);
 export const red200 = color(249, 181, 181);
 export const red300 = color(246, 143, 143);

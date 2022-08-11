@@ -17,6 +17,9 @@ import {
   grey200,
   grey100,
   red400,
+  red800,
+  orange800,
+  orange300,
 } from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 
@@ -87,6 +90,40 @@ const typeStyles: Record<
       ...setCssVar('currentTextColor', white.rgb),
     },
   },
+  text: {
+    enabled: {
+      ...setCssVar('currentTextColor', offBlack.rgb),
+    },
+    disabled: {
+      ...setCssVar('currentTextColor', grey400.rgb),
+    },
+  },
+  darkDanger: {
+    enabled: {
+      backgroundColor: red800.rgb,
+      ...setCssVar('currentTextColor', white.rgb),
+    },
+    disabled: {
+      ...setCssVar('currentTextColor', grey400.rgb),
+    },
+  },
+  darkWarning: {
+    enabled: {
+      backgroundColor: orange800.rgb,
+      ...setCssVar('currentTextColor', white.rgb),
+    },
+    disabled: {
+      ...setCssVar('currentTextColor', grey400.rgb),
+    },
+  },
+  darkWarningText: {
+    enabled: {
+      ...setCssVar('currentTextColor', orange800.rgb),
+    },
+    disabled: {
+      ...setCssVar('currentTextColor', orange300.rgb),
+    },
+  },
 };
 
 const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
@@ -105,7 +142,15 @@ const enabledStyles = css({ cursor: 'pointer' });
 const disabledStyles = css({ cursor: 'unset' });
 
 type ButtonProps = {
-  readonly type?: 'primary' | 'primaryBrand' | 'secondary' | 'danger';
+  readonly type?:
+    | 'primary'
+    | 'primaryBrand'
+    | 'secondary'
+    | 'danger'
+    | 'text'
+    | 'darkDanger'
+    | 'darkWarning'
+    | 'darkWarningText';
   readonly children: TextChildren;
   readonly disabled?: boolean;
   readonly size?: 'normal' | 'extraSlim' | 'extraLarge';

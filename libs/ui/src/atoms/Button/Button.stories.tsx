@@ -11,7 +11,16 @@ export default {
     },
     type: {
       control: { type: 'radio' },
-      options: ['secondary', 'primary', 'primaryBrand', 'danger'],
+      options: [
+        'secondary',
+        'primary',
+        'primaryBrand',
+        'danger',
+        'text',
+        'darkDanger',
+        'darkWarning',
+        'darkWarningText',
+      ],
       defaultValue: 'secondary',
     },
     size: {
@@ -27,7 +36,7 @@ export default {
 } as Meta;
 interface Args {
   children: string;
-  type: 'primary' | 'primaryBrand' | 'secondary' | 'danger';
+  type: 'primary' | 'primaryBrand' | 'secondary' | 'danger' | 'text';
   size: 'normal' | 'extraSlim' | 'extraLarge';
   disabled: boolean;
 }
