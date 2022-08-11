@@ -1,6 +1,7 @@
 import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
-import { getChildren, setNodes, TDescendant } from '@udecode/plate';
+import { findNode, getChildren, setNodes, TDescendant } from '@udecode/plate';
+import { dequal } from 'dequal';
 import { nanoid } from 'nanoid';
 import { Node, NodeEntry } from 'slate';
 
@@ -51,8 +52,11 @@ export const createUniqueElementIdPlugin = createTPluginFactory({
       if (op.type === 'insert_node') {
         const { id } = op.node as NodeWithId;
         if (id && store.has(id)) {
-          // eslint-disable-next-line no-param-reassign
-          op.node.id = nanoid();
+          const entry = findNode(editor, { at: op.path });
+          if (!entry || !dequal(op.node, entry[0])) {
+            // eslint-disable-next-line no-param-reassign
+            op.node.id = nanoid();
+          }
         }
       } else if (op.type === 'remove_node') {
         const { id } = op.node as NodeWithId;

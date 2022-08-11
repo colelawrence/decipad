@@ -97,7 +97,7 @@ export const plugins = (computer: Computer) =>
       createNormalizeTextPlugin(),
       createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
       createNormalizeColumnsPlugin(),
-      createNodeIdPlugin({ options: { idCreator: nanoid } }),
+      createNodeIdPlugin({ options: { idCreator: nanoid, reuseId: true } }),
 
       // block manipulation
       createExitBreakPlugin({ options: exitBreakOptions }),
