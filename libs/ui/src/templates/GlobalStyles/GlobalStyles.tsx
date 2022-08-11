@@ -58,6 +58,14 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         '*:focus-visible': {
           outline: 'none',
         },
+        '@media print': {
+          body: {
+            padding: '48px',
+          },
+          header: {
+            display: 'none',
+          },
+        },
       }}
     />
     <GlobalTextStyles />
