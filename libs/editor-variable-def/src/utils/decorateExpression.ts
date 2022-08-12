@@ -3,7 +3,11 @@ import {
   MyDecorate,
   MyDecorateEntry,
 } from '@decipad/editor-types';
-import { getSyntaxErrorRanges } from '@decipad/editor-utils';
+import {
+  filterDecorate,
+  getSyntaxErrorRanges,
+  memoizeDecorate,
+} from '@decipad/editor-utils';
 import { Computer, Token, tokenize } from '@decipad/computer';
 import { getNodeString, isElement } from '@udecode/plate';
 import { Path, Range } from 'slate';
@@ -68,12 +72,15 @@ const withErrorDecorations =
 export const decorateExpression = (computer: Computer): MyDecorate => {
   const errorDecorations = withErrorDecorations(computer);
 
-  return () => (entry) => {
-    const syntax = syntaxDecorations(entry);
-    const error = errorDecorations(entry);
-    if (!syntax && !error) {
-      return undefined;
-    }
-    return (syntax || []).concat(error || []);
-  };
+  return filterDecorate(
+    memoizeDecorate(() => (entry) => {
+      const syntax = syntaxDecorations(entry);
+      const error = errorDecorations(entry);
+      if (!syntax && !error) {
+        return undefined;
+      }
+      return (syntax || []).concat(error || []);
+    }),
+    ([node]) => node.type === ELEMENT_EXPRESSION
+  );
 };

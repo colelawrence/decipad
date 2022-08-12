@@ -36,7 +36,7 @@ beforeEach(() => {
   editor = createPlateEditor({ plugins });
 });
 
-it('shows a placeholder when notebook empty and not selected', () => {
+it('shows a placeholder when notebook empty and not selected', async () => {
   const renderedObject = render(
     <Plate
       {...plateProps}
@@ -51,7 +51,9 @@ it('shows a placeholder when notebook empty and not selected', () => {
     }
   );
   const paragraphElement = renderedObject.container.querySelector('p');
-  expect(paragraphElement).toHaveAttribute('aria-placeholder');
+  await waitFor(() =>
+    expect(paragraphElement).toHaveAttribute('aria-placeholder')
+  );
 });
 
 it('shows a placeholder when empty and selected', async () => {
@@ -70,9 +72,11 @@ it('shows a placeholder when empty and selected', async () => {
     offset: 0,
   });
   await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
-  expect(paragraphElement).toHaveAttribute(
-    'aria-placeholder',
-    expect.stringMatching(/type/i)
+  await waitFor(() =>
+    expect(paragraphElement).toHaveAttribute(
+      'aria-placeholder',
+      expect.stringMatching(/type/i)
+    )
   );
 });
 
