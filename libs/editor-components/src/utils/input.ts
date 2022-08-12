@@ -11,8 +11,10 @@ import {
 } from '@decipad/editor-types';
 import { insertNodes } from '@udecode/plate';
 import { Path } from 'slate';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { GetAvailableIdentifier } from './slashCommands';
+import {
+  requirePathBelowBlock,
+  getElementUniqueName,
+} from '@decipad/editor-utils';
 
 const getInitialInputElement = () => {
   return {
@@ -31,13 +33,14 @@ const getInitialInputElement = () => {
   } as VariableDefinitionElement;
 };
 
-export const insertInputBelow = (
-  editor: MyEditor,
-  path: Path,
-  getAvailableIdentifier: GetAvailableIdentifier
-): void => {
+export const insertInputBelow = (editor: MyEditor, path: Path): void => {
   const input = getInitialInputElement();
-  input.children[0].children[0].text = getAvailableIdentifier('Input', 1);
+  input.children[0].children[0].text = getElementUniqueName(
+    editor,
+    ELEMENT_VARIABLE_DEF,
+    'expression',
+    'Input'
+  );
   insertNodes<VariableDefinitionElement>(editor, input, {
     at: requirePathBelowBlock(editor, path),
   });
@@ -68,13 +71,14 @@ const getSliderInputElement = () => {
   };
 };
 
-export const insertSliderInputBelow = (
-  editor: MyEditor,
-  path: Path,
-  getAvailableIdentifier: GetAvailableIdentifier
-): void => {
+export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
   const input = getSliderInputElement();
-  input.children[0].children[0].text = getAvailableIdentifier('Slider', 1);
+  input.children[0].children[0].text = getElementUniqueName(
+    editor,
+    ELEMENT_VARIABLE_DEF,
+    'slider',
+    'Slider'
+  );
   insertNodes<VariableSliderElement>(
     editor,
     input as unknown as VariableSliderElement,

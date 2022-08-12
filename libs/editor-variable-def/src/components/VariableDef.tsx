@@ -9,6 +9,7 @@ import {
   VariableSliderElement,
 } from '@decipad/editor-types';
 import {
+  getElementUniqueName,
   insertNodeIntoColumns,
   safeDelete,
   useElementMutatorCallback,
@@ -58,7 +59,16 @@ export const VariableDef: PlateComponent = ({
           children: [
             {
               type: ELEMENT_CAPTION,
-              children: [{ text: '' }],
+              children: [
+                {
+                  text: getElementUniqueName(
+                    editor,
+                    ELEMENT_VARIABLE_DEF,
+                    element.variant,
+                    element.variant === 'expression' ? 'Input' : 'Slider'
+                  ),
+                },
+              ],
             },
             {
               type: ELEMENT_EXPRESSION,

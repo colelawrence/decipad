@@ -33,6 +33,7 @@ export * from './seriesIterator';
 export * from './getSlateFragment';
 export * from './selectEventRange';
 export * from './isPath';
+export * from './countEditorChildren';
 
 export * from './useElementMutatorCallback';
 export * from './useSelection';
