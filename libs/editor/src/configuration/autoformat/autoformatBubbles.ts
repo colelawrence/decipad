@@ -7,6 +7,7 @@ import {
 import { requireCollapsedSelection } from '@decipad/editor-utils';
 import { insertNodes, isText } from '@udecode/plate';
 import words from 'random-words';
+import { isEnabled } from '@decipad/feature-flags';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
 const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
@@ -26,13 +27,15 @@ const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
   });
 };
 
-export const autoformatBubbles: MyAutoformatRule[] = [
-  {
-    mode: 'block',
-    type: ELEMENT_BUBBLE,
-    triggerAtBlockStart: false,
-    match: '+',
-    query: doesSelectionAllowTextStyling,
-    format: convertPrecedingTextWithTriggerToImage,
-  },
-];
+export const autoformatBubbles: MyAutoformatRule[] = isEnabled('INLINE_BUBBLES')
+  ? [
+      {
+        mode: 'block',
+        type: ELEMENT_BUBBLE,
+        triggerAtBlockStart: false,
+        match: '+',
+        query: doesSelectionAllowTextStyling,
+        format: convertPrecedingTextWithTriggerToImage,
+      },
+    ]
+  : [];
