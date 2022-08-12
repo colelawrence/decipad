@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useMemo } from 'react';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
@@ -7,10 +6,15 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType, useSelection } from '@decipad/editor-utils';
+import {
+  useComputer,
+  useInteractiveElementParseError,
+  useTableColumnFormulaResultForElement,
+} from '@decipad/react-contexts';
 import { atoms, molecules, organisms } from '@decipad/ui';
+import { findNodePath, getNodeString, isCollapsed } from '@udecode/plate';
 import { useAtom } from 'jotai';
-import { findNodePath, isCollapsed } from '@udecode/plate';
-import { useTableColumnFormulaResultForElement } from '@decipad/react-contexts';
+import { useMemo } from 'react';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import {
   useCellType,
@@ -68,6 +72,16 @@ export const TableCell: PlateComponent = ({
     );
   }, [editor, element, isColumnSelected, isSeriesColumn]);
 
+  const computer = useComputer();
+  // Displaying the unit on an empty cell creates a visual glitch
+  const hasText = getNodeString(element).trim() !== '';
+  const unit =
+    cellType?.kind === 'number' && cellType.unit?.length && hasText
+      ? computer.formatUnit(cellType.unit)
+      : undefined;
+
+  const parseError = useInteractiveElementParseError(element.id);
+
   if (formulaResult != null) {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
@@ -95,7 +109,9 @@ export const TableCell: PlateComponent = ({
       dropTarget={dropTarget}
       selected={selected}
       collapsed={collapsed}
+      unit={unit}
       alignRight={isCellAlignRight(cellType)}
+      parseError={parseError}
     >
       {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
       {direction === 'left' && (

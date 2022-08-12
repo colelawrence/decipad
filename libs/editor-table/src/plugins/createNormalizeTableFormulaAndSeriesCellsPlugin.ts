@@ -50,7 +50,6 @@ const getBlankCell = (isHeader: boolean) => {
 };
 
 const normalizeFormulaColumns = (
-  _computer: Computer,
   editor: MyEditor,
   [table, tablePath]: TNodeEntry<TableElement>
 ) => {
@@ -196,7 +195,7 @@ export const normalizeTableFormulaAndSeries =
     }
     if (node.type === ELEMENT_TABLE) {
       return (
-        normalizeFormulaColumns(computer, editor, [node, path]) ||
+        normalizeFormulaColumns(editor, [node, path]) ||
         normalizeSeriesColumns(computer, editor, [node, path])
       );
     }

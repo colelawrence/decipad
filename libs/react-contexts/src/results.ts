@@ -91,6 +91,27 @@ export const useResult = (
   return result;
 };
 
+export const useInteractiveElementParseError = (blockId?: string) => {
+  const computer = useComputer();
+  const [error, setError] = useState<string | undefined>(
+    () => blockId && computer.getParseError(blockId)?.error
+  );
+
+  useEffect(() => {
+    const error$ = computer.results.pipe(
+      map(() => blockId && computer.getParseError(blockId)?.error),
+      distinctUntilChanged((a, b) => dequal(a, b))
+    );
+    const subscription = error$.subscribe(setError);
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [computer, blockId]);
+
+  return error;
+};
+
 /**
  * Obtain the result of an expression.
  * */

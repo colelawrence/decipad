@@ -4,6 +4,7 @@ import { ElementType, FC, HTMLAttributes } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useSelected } from 'slate-react';
 import { useMergedRef } from '../../hooks';
+import { ConditionalCodeSyntaxError } from '../../molecules/CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
 import {
   blue300,
   cssVar,
@@ -71,6 +72,13 @@ const editableStyles = css({
   paddingRight: '12px',
 });
 
+const unitStyles = css({
+  '&::after': {
+    content: 'attr(data-unit)',
+    marginLeft: '0.25rem',
+  },
+});
+
 const tdDisabledStyles = css({
   ...setCssVar('normalTextColor', cssVar('weakerTextColor')),
 });
@@ -96,7 +104,9 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   selected?: boolean;
   collapsed?: boolean;
   disabled?: boolean;
+  unit?: string;
   dropTarget?: ConnectDropTarget;
+  parseError?: string;
   lastBeforeMoreRowsHidden?: boolean;
 }
 
@@ -113,8 +123,10 @@ export const TableData = ({
   disabled = false,
   dropTarget,
   lastBeforeMoreRowsHidden = false,
+  unit,
   alignRight,
   children,
+  parseError,
   ...props
 }: TableDataProps): ReturnType<FC> => {
   const existingRef =
@@ -139,11 +151,15 @@ export const TableData = ({
           tdEditableFocusedUnselectedStyles,
         showPlaceholder && tdPlaceholderStyles,
         disabled && tdDisabledStyles,
+        unit ? unitStyles : null,
         alignRight && alignRightStyles,
       ]}
+      data-unit={unit ?? ''}
       {...props}
     >
-      {children}
+      <ConditionalCodeSyntaxError error={parseError}>
+        {children}
+      </ConditionalCodeSyntaxError>
     </Component>
   );
 };

@@ -30,3 +30,31 @@ export const CodeSyntaxErrorHighlight = ({
     </Tooltip>
   );
 };
+
+interface ConditionalCodeSyntaxErrorProps {
+  error?: string;
+  children: ReactNode;
+}
+
+export const ConditionalCodeSyntaxError = ({
+  children,
+  error,
+}: ConditionalCodeSyntaxErrorProps) => {
+  if (!error) {
+    // Retain DOM structure for error highlighting
+    // To avoid jumping cursor when an error is fixed or caused around it.
+    // This keeps happening. Please do not undo.
+    return (
+      <Tooltip
+        trigger={<span css={[]}>{children}</span>}
+        open={false}
+      ></Tooltip>
+    );
+  }
+
+  return (
+    <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
+      {error}
+    </Tooltip>
+  );
+};

@@ -20,10 +20,6 @@ import {
   TableRow,
 } from '../components';
 import { createArrowCellNavigationPlugin } from './createArrowCellNavigationPlugin';
-import {
-  createDecorateTableCellUnitsPlugin,
-  decorateTableCellUnits,
-} from './createDecorateTableCellUnitsPlugin';
 import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
@@ -51,7 +47,6 @@ export const createTablePlugin = (
   key: ELEMENT_TABLE,
   isElement: true,
   component: Table,
-  decorate: decorateTableCellUnits(computer),
   deserializeHtml: {
     rules: [{ validNodeName: 'TABLE' }],
   },
@@ -75,7 +70,6 @@ export const createTablePlugin = (
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createPreventDeleteTableFromCaptionPlugin(),
-    createDecorateTableCellUnitsPlugin(),
     createArrowCellNavigationPlugin(),
     createCursorFocusPlugin(),
     // TODO: enable this
