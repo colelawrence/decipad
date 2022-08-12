@@ -1,4 +1,5 @@
 export * from './CodeLine';
+export * from './Eval';
 export * from './Input';
 export * from './InlineBubble';
 export * from './Plot';

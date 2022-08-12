@@ -32,6 +32,7 @@ export const ELEMENT_SLIDER = 'slider';
 
 // Interactive
 export const ELEMENT_INPUT = 'input';
+export const ELEMENT_EVAL = 'eval';
 
 // Inlines
 export const ELEMENT_BUBBLE = 'bubble';

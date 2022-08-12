@@ -10,6 +10,7 @@ import {
   createDividerPlugin,
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
+  createEvalPlugin,
   createImagePlugin,
   createLayoutColumnsPlugin,
   createLinkPlugin,
@@ -136,6 +137,7 @@ export const plugins = (computer: Computer) =>
       createDecorateUserParseErrorsPlugin(computer),
 
       // language
+      ...createEvalPlugin(computer),
       createCodeLinePlugin(computer),
       createCursorsPlugin(computer),
       createUpdateComputerPlugin(computer),

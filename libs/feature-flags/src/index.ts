@@ -1,6 +1,7 @@
 export type Flag =
   | 'INPUT_COPY'
   | 'INLINE_BUBBLES'
+  | 'UNSAFE_JS_EVAL'
   | 'PERSISTENT_EXAMPLE'
   | 'POWER_TABLE';
 

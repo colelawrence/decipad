@@ -18,6 +18,7 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
+  ELEMENT_EVAL,
   ELEMENT_TABLE,
   ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
@@ -25,6 +26,7 @@ import {
   InputElement,
   InteractiveElement,
   MarkKind,
+  EvalElement,
 } from '.';
 import { ELEMENT_POWER_TABLE, ELEMENT_VARIABLE_DEF } from './element-kinds';
 import {
@@ -216,6 +218,7 @@ export type MyValue = [
     | BubbleElement
     | CalloutElement
     | DividerElement
+    | EvalElement
     | ImageElement
     | CodeBlockElement
     | UnorderedListElement
@@ -256,5 +259,6 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_COLUMNS,
+  ELEMENT_EVAL,
   ELEMENT_VARIABLE_DEF,
 ];

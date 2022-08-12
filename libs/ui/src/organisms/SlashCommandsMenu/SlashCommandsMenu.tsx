@@ -30,6 +30,7 @@ const SLASH_COMMANDS = [
   'calculation-block',
   'input',
   'table',
+  'eval',
   'power-table',
   'plot',
   'heading1',
@@ -98,6 +99,19 @@ const dataItems = [
   },
 ];
 
+const jsEvalCmd: ReadonlyArray<SlashCommandItem> = !isEnabled('UNSAFE_JS_EVAL')
+  ? []
+  : [
+      {
+        command: 'eval',
+        title: 'Eval',
+        icon: <Slider />,
+        description: 'Let users to run unsafe code',
+        enabled: true,
+        extraSearchTerms: ['eval', 'fork-bomb', 'shit-bomb'],
+      },
+    ];
+
 const groups: ReadonlyArray<SlashCommandGroup> = [
   {
     title: 'Numbers',
@@ -130,6 +144,7 @@ const groups: ReadonlyArray<SlashCommandGroup> = [
         enabled: true,
         extraSearchTerms: ['input', 'number', 'slider', 'publish'],
       },
+      ...jsEvalCmd,
     ],
   },
   {

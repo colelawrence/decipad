@@ -9,6 +9,7 @@ export { ColumnResult } from './ColumnResult/ColumnResult';
 export { DragAndDropImportNotebook } from './DragAndDropImportNotebook/DragAndDropImportNotebook';
 export { DraggableBlock } from './DraggableBlock/DraggableBlock';
 export { EditorTable } from './EditorTable/EditorTable';
+export { EvalCodeArea } from './EvalCodeArea/EvalCodeArea';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { Image } from './Image/Image';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';

@@ -72,6 +72,7 @@ interface SlashCommandsMenuItemProps {
   readonly title: string;
   readonly description: string;
   readonly enabled: boolean;
+  readonly hidden?: boolean;
   /**
    * Unfortunately, we canont use real browser focus for this menu since we need the editor to stay focused.
    * Even a "switching focus back and forth on key presses" does not work well enough because Slate tends to lose selection state on blur.

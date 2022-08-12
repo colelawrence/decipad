@@ -5,6 +5,7 @@ export * from './BubbleEditor';
 export * from './CodeErrorHighlight';
 export * from './CodeLine';
 export * from './CodeVariable';
+export * from './EvalCodeArea';
 export * from './Image/Image';
 export * from './layout';
 export * from './Plot';

@@ -2,6 +2,7 @@ import { isElement } from '@udecode/plate';
 import {
   BaseElement,
   BlockElement,
+  ELEMENT_EVAL,
   ELEMENT_FETCH,
   ELEMENT_INPUT,
   ELEMENT_PLOT,
@@ -61,6 +62,12 @@ export interface InputElement extends BaseElement {
   color: string;
 }
 
+export interface EvalElement extends BaseElement {
+  type: typeof ELEMENT_EVAL;
+  result: string;
+  children: [PlainText];
+}
+
 export interface CaptionElement extends BaseElement {
   type: typeof ELEMENT_CAPTION;
   children: [PlainText];
@@ -108,6 +115,7 @@ export type InteractiveElement =
   | TableElement
   | FetchElement
   | PlotElement
+  | EvalElement
   | InputElement
   | VariableDefinitionElement;
 
@@ -120,6 +128,7 @@ export const interactiveElementKinds: ReadonlyArray<
   ELEMENT_INPUT,
   ELEMENT_TABLE_INPUT,
   ELEMENT_PLOT,
+  ELEMENT_EVAL,
   ELEMENT_VARIABLE_DEF,
 ] as const;
 
