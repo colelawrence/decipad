@@ -4,14 +4,12 @@ import type { Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { organisms } from '../..';
 import { ErrorMessage } from '../../atoms';
-import { cssVar, Opacity } from '../../primitives';
+import { cssVar, p12Medium } from '../../primitives';
 
-const smartCellOpacity: Opacity = 0.4;
-
-const smartCellStyles = css({
-  fontSize: '75%',
-  opacity: smartCellOpacity,
+const smartCellStyles = css(p12Medium, {
   whiteSpace: 'nowrap',
+  textAlign: 'left',
+  color: cssVar('weakerTextColor'),
 });
 
 const hoverCellStyles = css({
@@ -19,7 +17,7 @@ const hoverCellStyles = css({
 });
 
 const labelStyles = css({
-  marginLeft: '1rem',
+  textTransform: 'capitalize',
 });
 
 export interface ColumnAggregation {

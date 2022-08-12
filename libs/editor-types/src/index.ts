@@ -19,7 +19,7 @@ export * from './interactive-elements';
 export * from './value';
 export * from './table';
 export * from './components';
-export * from './power-table';
+export * from './data-view';
 export * from './utils';
 export * from './node';
 export * from './plate';

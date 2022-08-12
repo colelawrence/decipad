@@ -47,10 +47,10 @@ export const ELEMENT_TD = 'td';
 export const ELEMENT_TABLE_COLUMN_FORMULA = 'table-column-formula';
 export const ELEMENT_TABLE_VARIABLE_NAME = 'table-var-name';
 
-// power-tables
-export const ELEMENT_POWER_TABLE = 'power-table';
-export const ELEMENT_POWER_TR = 'power-tr';
-export const ELEMENT_POWER_TH = 'power-th';
+// data-views
+export const ELEMENT_DATA_VIEW = 'data-view';
+export const ELEMENT_DATA_VIEW_TR = 'data-view-tr';
+export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
 
 // others
 export const ELEMENT_CAPTION = 'caption';

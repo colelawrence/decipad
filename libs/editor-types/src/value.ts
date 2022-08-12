@@ -28,17 +28,17 @@ import {
   MarkKind,
   EvalElement,
 } from '.';
-import { ELEMENT_POWER_TABLE, ELEMENT_VARIABLE_DEF } from './element-kinds';
+import { ELEMENT_DATA_VIEW, ELEMENT_VARIABLE_DEF } from './element-kinds';
 import {
   CaptionElement,
   ExpressionElement,
   SliderElement,
 } from './interactive-elements';
 import {
-  PowerTableElement,
-  PowerTableHeader,
-  PowerTableHeaderRowElement,
-} from './power-table';
+  DataViewElement,
+  DataViewHeader,
+  DataViewHeaderRowElement,
+} from './data-view';
 import {
   TableCaptionElement,
   TableCellElement,
@@ -201,9 +201,9 @@ export type BlockElement =
   | CaptionElement
   | SliderElement
   | InteractiveElement
-  | PowerTableElement
-  | PowerTableHeaderRowElement
-  | PowerTableHeader
+  | DataViewElement
+  | DataViewHeaderRowElement
+  | DataViewHeader
   | TableColumnFormulaElement;
 type InlineElement = LinkElement | BubbleElement;
 
@@ -225,7 +225,7 @@ export type MyValue = [
     | OrderedListElement
     | ColumnsElement
     | InteractiveElement
-    | PowerTableElement
+    | DataViewElement
   >
 ];
 
@@ -255,7 +255,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_OL,
   ELEMENT_TABLE_INPUT,
   ELEMENT_TABLE,
-  ELEMENT_POWER_TABLE,
+  ELEMENT_DATA_VIEW,
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_COLUMNS,

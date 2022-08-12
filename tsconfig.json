@@ -111,7 +111,7 @@
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
       "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
       "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
-      "@decipad/editor-power-table": ["libs/editor-power-table/src/index.ts"],
+      "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
       "@decipad/toast": ["libs/toast/src/index.ts"],
       "@decipad/notebook": ["libs/notebook/src/index.ts"],
       "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],

@@ -3,7 +3,7 @@ export type Flag =
   | 'INLINE_BUBBLES'
   | 'UNSAFE_JS_EVAL'
   | 'PERSISTENT_EXAMPLE'
-  | 'POWER_TABLE';
+  | 'DATA_VIEW';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

@@ -19,7 +19,7 @@ export { NotebookSharingPopUp } from './NotebookSharingPopUp/NotebookSharingPopU
 export { PlotBlock } from './PlotBlock/PlotBlock';
 export { PlotParams } from './PlotParams/PlotParams';
 export { PlotResult } from './PlotResult/PlotResult';
-export { PowerTable } from './PowerTable/PowerTable';
+export { DataView } from './DataView/DataView';
 export { RangeResult } from './RangeResult/RangeResult';
 export { RowResult } from './RowResult/RowResult';
 export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';

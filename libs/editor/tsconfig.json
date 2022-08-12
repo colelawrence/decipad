@@ -18,6 +18,6 @@
     { "path": "../editor-components" },
     { "path": "../editor-table" },
     { "path": "../editor-variable-def" },
-    { "path": "../editor-power-table" }
+    { "path": "../editor-data-view" }
   ]
 }
