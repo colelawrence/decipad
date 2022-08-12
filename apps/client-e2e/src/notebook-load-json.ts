@@ -47,9 +47,9 @@ describe('notebook load json', () => {
 
     expect(await page.$('text=756,869,701')).toBeDefined();
     // Magic numbers are delayed
-    expect(await page.$$('text="This is a string"'))
-      .its('length')
-      .toBeGreaterThan(0);
+    expect((await page.$$('text="This is a string"')).length).toBeGreaterThan(
+      0
+    );
 
     await percySnapshot(page, 'Notebook: All elements');
   });
