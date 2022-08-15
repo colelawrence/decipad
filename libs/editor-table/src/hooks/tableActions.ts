@@ -15,19 +15,20 @@ import { withPath } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
-  deleteText,
   getNodeChildren,
   getNodeEntry,
   hasNode,
   insertNodes,
   insertText,
   moveNodes,
+  removeNodes,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
 import { Path } from 'slate';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
+import { afterTableMenuInteraction } from '../utils/afterTableMenuInteraction';
 
 export interface TableActions {
   onDelete: () => void;
@@ -130,7 +131,10 @@ export const useTableActions = (
 ): TableActions => {
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {
-      deleteText(editor, { at: path });
+      withoutNormalizing(editor, () => {
+        removeNodes(editor, { at: path });
+        afterTableMenuInteraction(editor, path);
+      });
     });
   }, [editor, element]);
 
@@ -151,7 +155,10 @@ export const useTableActions = (
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType: TableCellType) => {
       withPath(editor, element, (path) => {
-        changeColumnType(editor, path, cellType, columnIndex);
+        withoutNormalizing(editor, () => {
+          changeColumnType(editor, path, cellType, columnIndex);
+          afterTableMenuInteraction(editor, path, columnIndex);
+        });
       });
     },
     [editor, element]
@@ -162,13 +169,16 @@ export const useTableActions = (
       withPath(editor, element, (path) => {
         const columnHeaderPath = [...path, 1, columnIndex];
         if (hasNode(editor, columnHeaderPath)) {
-          setNodes<TableHeaderElement>(
-            editor,
-            { aggregation },
-            {
-              at: columnHeaderPath,
-            }
-          );
+          withoutNormalizing(editor, () => {
+            setNodes<TableHeaderElement>(
+              editor,
+              { aggregation },
+              {
+                at: columnHeaderPath,
+              }
+            );
+            afterTableMenuInteraction(editor, path, columnIndex);
+          });
         }
       });
     },
@@ -177,8 +187,11 @@ export const useTableActions = (
 
   const onAddColumn = useCallback(() => {
     withPath(editor, element, (path) => {
-      addColumn(editor, {
-        tablePath: path,
+      withoutNormalizing(editor, () => {
+        addColumn(editor, {
+          tablePath: path,
+        });
+        afterTableMenuInteraction(editor, path);
       });
     });
   }, [editor, element]);
@@ -202,9 +215,10 @@ export const useTableActions = (
                 return;
               }
               const cellToDeletePath = [...childPath, columnIndex];
-              deleteText(editor, {
+              removeNodes(editor, {
                 at: cellToDeletePath,
               });
+              afterTableMenuInteraction(editor, path);
             });
           });
         }
@@ -215,7 +229,10 @@ export const useTableActions = (
 
   const onAddRow = useCallback(() => {
     withPath(editor, element, (path) => {
-      addRow(editor, path);
+      withoutNormalizing(editor, () => {
+        addRow(editor, path);
+        afterTableMenuInteraction(editor, path);
+      });
     });
   }, [editor, element]);
 
@@ -227,7 +244,10 @@ export const useTableActions = (
         const rowIndex = rows.findIndex((row) => row.id === id);
         const rowPath = [...path, rowIndex];
         if (hasNode(editor, rowPath)) {
-          deleteText(editor, { at: rowPath });
+          withoutNormalizing(editor, () => {
+            removeNodes(editor, { at: rowPath });
+            afterTableMenuInteraction(editor, path);
+          });
         }
       });
     },
@@ -252,6 +272,7 @@ export const useTableActions = (
               moveNodes(editor, { at: sourcePath, to: targetPath });
             }
           }
+          afterTableMenuInteraction(editor, path, toIndex);
         });
       });
     },
