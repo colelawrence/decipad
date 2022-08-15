@@ -117,7 +117,9 @@
       "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
       "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"],
       "@decipad/format": ["libs/format/src/index.ts"],
-      "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"]
+      "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
+      "@decipad/import": ["libs/import/src/index.ts"],
+      "@decipad/client-config": ["libs/client-config/src/index.ts"]
     }
   },
   "files": [],

@@ -76,7 +76,7 @@ async function getDataUrlFromSheetUrl(
   });
 
   return new URL(
-    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?${qs}`
+    `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?${qs}`
   );
 }
 

@@ -25,6 +25,7 @@ export const ELEMENT_HR = 'divider';
 
 // inputs
 export const ELEMENT_FETCH = 'fetch-data';
+export const ELEMENT_IMPORT = 'import';
 export const ELEMENT_PLOT = 'plot';
 export const ELEMENT_VARIABLE_DEF = 'def';
 export const ELEMENT_EXPRESSION = 'exp';

@@ -241,6 +241,12 @@
     },
     "y-websocket": {
       "tags": []
+    },
+    "import": {
+      "tags": []
+    },
+    "client-config": {
+      "tags": []
     }
   }
 }

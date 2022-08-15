@@ -14,12 +14,23 @@ import {
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
+  ELEMENT_IMPORT,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import type { TableElement, TableInputElement } from './table';
 
 export type { TableElement };
+
+export type ImportElementSource = 'gsheets'; // add more as they come
+export interface ImportElement extends BaseElement {
+  type: typeof ELEMENT_IMPORT;
+  source: ImportElementSource;
+  url: string;
+  children: [EmptyText];
+}
+
+// legacy FetchElement
 export interface FetchElement extends BaseElement {
   type: typeof ELEMENT_FETCH;
   children: [EmptyText];
@@ -32,6 +43,7 @@ export interface FetchElement extends BaseElement {
   'data-provider': string;
   'data-varname': string;
 }
+
 export interface PlotElement extends BaseElement {
   type: typeof ELEMENT_PLOT;
   title?: string;
@@ -114,6 +126,7 @@ export type InteractiveElement =
   | TableInputElement
   | TableElement
   | FetchElement
+  | ImportElement
   | PlotElement
   | EvalElement
   | InputElement
@@ -125,6 +138,7 @@ export const interactiveElementKinds: ReadonlyArray<
   InteractiveElement['type']
 > = [
   ELEMENT_FETCH,
+  ELEMENT_IMPORT,
   ELEMENT_INPUT,
   ELEMENT_TABLE_INPUT,
   ELEMENT_PLOT,

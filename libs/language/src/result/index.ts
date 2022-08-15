@@ -1,5 +1,5 @@
 import { Type } from '..';
-import { Interpreter } from '../interpreter';
+import { Interpreter, UnknownValue } from '../interpreter';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 import { validateResult } from './validate';
 
@@ -7,6 +7,8 @@ export { validateResult } from './validate';
 
 type OneResult = Interpreter.OneResult;
 export type { OneResult };
+
+export { UnknownValue };
 
 // Can be used as Result to represent the entire spectrum of possible result values and types or
 // Result<'number'> to represent a specific kind of result value and type.

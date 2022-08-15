@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"]
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../editor-types" },
+    { "path": "../computer" },
+    { "path": "../utils" },
+    { "path": "../fraction" },
+    { "path": "../client-config" }
+  ]
+}

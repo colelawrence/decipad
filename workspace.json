@@ -58,7 +58,9 @@
     "y-dynamodb": "libs/y-dynamodb",
     "y-indexeddb": "libs/y-indexeddb",
     "y-lambdawebsocket": "libs/y-lambdawebsocket",
-    "y-websocket": "libs/y-websocket"
+    "y-websocket": "libs/y-websocket",
+    "import": "libs/import",
+    "client-config": "libs/client-config"
   },
   "defaultProject": "frontend"
 }

@@ -18,6 +18,7 @@
     { "path": "../react-contexts" },
     { "path": "../editor-utils" },
     { "path": "../editor-components" },
-    { "path": "../editor-language-elements" }
+    { "path": "../editor-language-elements" },
+    { "path": "../import" }
   ]
 }

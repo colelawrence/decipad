@@ -12,6 +12,9 @@
     { "path": "../editor-utils" },
     { "path": "../client-events" },
     { "path": "../react-contexts" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../import" },
+    { "path": "../format" },
+    { "path": "../fraction" }
   ]
 }

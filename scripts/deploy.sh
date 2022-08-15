@@ -16,6 +16,8 @@ echo "REACT_APP_SENTRY_PROJECT=${SENTRY_PROJECT:-}" >> apps/frontend/.env.produc
 echo "REACT_APP_SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}" >> apps/frontend/.env.production
 echo "REACT_APP_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}" >> apps/frontend/.env.production
 echo "REACT_APP_ANALYTICS_WRITE_KEY=${REACT_APP_ANALYTICS_WRITE_KEY:-}" >> apps/frontend/.env.production
+echo "REACT_APP_GOOGLE_SHEETS_KEY=${REACT_APP_GOOGLE_SHEETS_KEY:-}" >> apps/frontend/.env.production
+
 
 echo "Building frontend..."
 yarn build:frontend

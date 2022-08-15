@@ -12,6 +12,7 @@ export * from './EditorApplyErrorReporter';
 export * from './ExternalData';
 export * from './Eval';
 export * from './Image';
+export * from './Import';
 export * from './LayoutColumns';
 export * from './Link';
 export * from './Marks';

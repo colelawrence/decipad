@@ -12,6 +12,7 @@ import {
   createEditorApplyErrorReporterPlugin,
   createEvalPlugin,
   createImagePlugin,
+  createImportPlugin,
   createLayoutColumnsPlugin,
   createLinkPlugin,
   createMarksPlugins,
@@ -125,6 +126,7 @@ export const plugins = (computer: Computer) =>
         options: { rules: autoformatRules },
       }),
       createAutoFormatCodeBlockPlugin(),
+      createImportPlugin(),
 
       // code editing
       createCodeVariableHighlightPlugin(),

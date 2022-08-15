@@ -48,6 +48,7 @@ export { RowDropLine } from './DropLine/RowDropLine';
 export { Select } from './Select/Select';
 export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenuItem';
 export { Slider } from './Slider/Slider';
+export { Spinner } from './Spinner/Spinner';
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { TableCellBackground } from './TableCellBackground/TableCellBackground';
 export { TableCellWithUnit } from './TableCellWithUnit/TableCellWithUnit';

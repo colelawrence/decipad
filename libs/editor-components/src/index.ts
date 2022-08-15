@@ -7,6 +7,7 @@ export * from './CodeLine';
 export * from './CodeVariable';
 export * from './EvalCodeArea';
 export * from './Image/Image';
+export * from './Import/Import';
 export * from './layout';
 export * from './Plot';
 export * from './slash-commands';

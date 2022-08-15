@@ -1,0 +1,20 @@
+{
+  "root": "libs/client-config",
+  "sourceRoot": "libs/client-config/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/client-config/**/*.{ts,tsx,js,jsx}"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/client-config"
+      }
+    }
+  }
+}

@@ -28,7 +28,11 @@ import {
   MarkKind,
   EvalElement,
 } from '.';
-import { ELEMENT_DATA_VIEW, ELEMENT_VARIABLE_DEF } from './element-kinds';
+import {
+  ELEMENT_IMPORT,
+  ELEMENT_DATA_VIEW,
+  ELEMENT_VARIABLE_DEF,
+} from './element-kinds';
 import {
   CaptionElement,
   ExpressionElement,
@@ -261,4 +265,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_COLUMNS,
   ELEMENT_EVAL,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_IMPORT,
 ];

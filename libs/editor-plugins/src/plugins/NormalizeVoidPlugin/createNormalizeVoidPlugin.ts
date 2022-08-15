@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import {
   ELEMENT_FETCH,
+  ELEMENT_IMPORT,
   ELEMENT_INPUT,
   ELEMENT_PLOT,
   ELEMENT_TABLE_INPUT,
@@ -41,6 +42,7 @@ const VOID_TYPE_PROPERTIES = {
     'thetaColumnName',
   ],
   [ELEMENT_INPUT]: ['value', 'variableName'],
+  [ELEMENT_IMPORT]: ['url', 'source'],
 };
 
 const emptyString = () => '';
