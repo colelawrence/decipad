@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import Fraction from '@decipad/fraction';
 import type { TableCellType } from '@decipad/editor-types';
@@ -54,6 +54,18 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
 
   const editorTableContext = useEditorTableContext();
   const { length } = editorTableContext.cellTypes;
+
+  // TODO: Very specific fix, during cooldown week, we can have a better
+  // look for a more general fix.
+  const [dateOpen, setDateOpen] = useState(false);
+  const [seriesOpen, setSeriesOpen] = useState(false);
+
+  useEffect(() => {
+    if (dateOpen) setSeriesOpen(false);
+  }, [dateOpen]);
+  useEffect(() => {
+    if (seriesOpen) setDateOpen(false);
+  }, [seriesOpen]);
 
   return (
     <div contentEditable={false} css={tableColumnMenuStyles}>
@@ -118,6 +130,8 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 <div css={{ minWidth: '116px' }}>Date</div>
               </TriggerMenuItem>
             }
+            open={dateOpen}
+            onChangeOpen={setDateOpen}
           >
             <MenuItem
               icon={<Calendar />}
@@ -154,6 +168,8 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 <div css={{ minWidth: '116px' }}>Series</div>
               </TriggerMenuItem>
             }
+            open={seriesOpen}
+            onChangeOpen={setSeriesOpen}
           >
             <MenuItem
               icon={<Calendar />}

@@ -43,6 +43,27 @@ it('renders the menu only when open', async () => {
   expect(await findAllByRole('menuitem')).not.toHaveLength(0);
 });
 
+it('shows the sub menu', async () => {
+  const handleChangeOpen = jest.fn();
+  const { findByText, getByText } = render(
+    <TableColumnMenu
+      {...props}
+      trigger={<button>trigger</button>}
+      onChangeOpen={handleChangeOpen}
+    />
+  );
+  expect(getByText('trigger')).toBeInTheDocument();
+
+  await userEvent.click(getByText('trigger'));
+  await userEvent.click(await findByText(/change type/i), {
+    pointerEventsCheck: 0,
+  });
+  await userEvent.click(await findByText(/date/i), {
+    pointerEventsCheck: 0,
+  });
+  expect(await findByText(/month/i)).toBeInTheDocument();
+});
+
 mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
