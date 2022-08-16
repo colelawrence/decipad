@@ -10,6 +10,7 @@ import {
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
@@ -38,6 +39,7 @@ import {
   Link,
   ListItem,
   ListItemContent,
+  MediaEmbed,
   OrderedList,
   SlashCommandsParagraph,
   Strikethrough,
@@ -65,6 +67,7 @@ export const components = (computer: Computer): PlateComponents => ({
 
   // Media
   [ELEMENT_IMAGE]: Image,
+  [ELEMENT_MEDIA_EMBED]: MediaEmbed,
 
   // Code
   [ELEMENT_CODE_LINE]: CodeLine,

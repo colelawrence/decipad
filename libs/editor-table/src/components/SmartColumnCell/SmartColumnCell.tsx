@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { EMPTY } from 'rxjs';
 import { Path } from 'slate';
-import { atoms, organisms } from '@decipad/ui';
+import { organisms } from '@decipad/ui';
 import { useTEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { Result } from '@decipad/computer';
@@ -104,7 +104,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
               selectedAggregationType.name)) ||
             'Calculate'}
         </span>,
-        <atoms.Select
+        <organisms.Select
           key="selectaggregation"
           variant="transparent"
           caretColor="weak"
@@ -112,7 +112,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
           value={selectedAggregationType?.name}
           clear={!!selectedAggregationType}
           onChange={onAggregationTypeNameChange}
-        ></atoms.Select>,
+        ></organisms.Select>,
       ]}
     />
   );

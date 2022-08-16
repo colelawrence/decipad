@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { useCallback, useState } from 'react';
+import { MenuItem } from '../../atoms';
 import { Caret } from '../../icons';
 import { MenuList } from '../../molecules';
 import { p12Regular } from '../../primitives';
-import { MenuItem } from '../MenuItem/MenuItem';
 
 const selectWrapperStyles = css({
   position: 'relative',

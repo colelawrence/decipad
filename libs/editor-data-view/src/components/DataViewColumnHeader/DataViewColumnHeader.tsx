@@ -8,7 +8,7 @@ import {
   assertElementType,
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
-import { atoms } from '@decipad/ui';
+import { templates } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { Path } from 'slate';
 import { findNodePath, getNodeEntry } from '@udecode/plate';
@@ -42,7 +42,7 @@ export const DataViewColumnHeader: PlateComponent = ({
   );
 
   return (
-    <atoms.DataViewColumnHeader
+    <templates.DataViewColumnHeader
       name={element.name}
       type={element.cellType}
       attributes={attributes}
@@ -57,6 +57,6 @@ export const DataViewColumnHeader: PlateComponent = ({
       overDirection={overDirection}
     >
       {children}
-    </atoms.DataViewColumnHeader>
+    </templates.DataViewColumnHeader>
   );
 };

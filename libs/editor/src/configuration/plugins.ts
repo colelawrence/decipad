@@ -16,6 +16,7 @@ import {
   createLayoutColumnsPlugin,
   createLinkPlugin,
   createMarksPlugins,
+  createMediaEmbedPlugin,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
   createNormalizeColumnsPlugin,
@@ -42,6 +43,7 @@ import { createTablePlugin } from '@decipad/editor-table';
 import {
   createTAutoformatPlugin,
   ELEMENT_IMAGE,
+  ELEMENT_MEDIA_EMBED,
   ELEMENT_PARAGRAPH,
   MyEditor,
   MyValue,
@@ -112,7 +114,7 @@ export const plugins = (computer: Computer) =>
       createSelectOnBackspacePlugin({
         options: {
           query: {
-            allow: [ELEMENT_IMAGE],
+            allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
           },
         },
       }),
@@ -122,6 +124,7 @@ export const plugins = (computer: Computer) =>
       ...(createMarksPlugins() as any[]),
       createLinkPlugin(),
       createImagePlugin(),
+      createMediaEmbedPlugin(),
       createTAutoformatPlugin({
         options: { rules: autoformatRules },
       }),

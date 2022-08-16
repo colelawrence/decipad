@@ -1,5 +1,6 @@
 export { CreateWorkspaceModal } from './CreateWorkspaceModal/CreateWorkspaceModal';
 export { DashboardSidebar } from './DashboardSidebar/DashboardSidebar';
+export { DataViewColumnHeader } from './DataViewColumnHeader/DataViewColumnHeader';
 export { DashboardPlaceholder } from './DashboardPlaceholder/DashboardPlaceholder';
 export { DashboardTopbar } from './DashboardTopbar/DashboardTopbar';
 export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';

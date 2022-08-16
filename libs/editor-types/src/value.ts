@@ -1,11 +1,13 @@
-import { TElement, TImageElement } from '@udecode/plate';
+import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
 import {
+  ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_BUBBLE,
   ELEMENT_CALLOUT,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
+  ELEMENT_EVAL,
   ELEMENT_FETCH,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -15,19 +17,23 @@ import {
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
-  ELEMENT_EVAL,
   ELEMENT_TABLE,
   ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
-  ElementKind,
+  EvalElement,
   InputElement,
   InteractiveElement,
   MarkKind,
-  EvalElement,
 } from '.';
+import {
+  DataViewElement,
+  DataViewHeader,
+  DataViewHeaderRowElement,
+} from './data-view';
 import {
   ELEMENT_IMPORT,
   ELEMENT_DATA_VIEW,
@@ -38,11 +44,6 @@ import {
   ExpressionElement,
   SliderElement,
 } from './interactive-elements';
-import {
-  DataViewElement,
-  DataViewHeader,
-  DataViewHeaderRowElement,
-} from './data-view';
 import {
   TableCaptionElement,
   TableCellElement,
@@ -100,6 +101,10 @@ export interface DividerElement extends BaseElement {
 // Media Blocks
 export interface ImageElement extends TImageElement, BaseElement {
   type: typeof ELEMENT_IMAGE;
+  children: [EmptyText];
+}
+export interface MediaEmbedElement extends TMediaEmbedElement, BaseElement {
+  type: typeof ELEMENT_MEDIA_EMBED;
   children: [EmptyText];
 }
 
@@ -179,6 +184,7 @@ export type BlockElement =
   | DividerElement
   // Media
   | ImageElement
+  | MediaEmbedElement
   // Code
   | CodeBlockElement
   | CodeLineElement
@@ -190,7 +196,6 @@ export type BlockElement =
   // Layout
   | ColumnsElement
   // Special elements
-  | InteractiveElement
   | InteractiveElement
   // Table elements
   | TableInputElement
@@ -224,6 +229,7 @@ export type MyValue = [
     | DividerElement
     | EvalElement
     | ImageElement
+    | MediaEmbedElement
     | CodeBlockElement
     | UnorderedListElement
     | OrderedListElement

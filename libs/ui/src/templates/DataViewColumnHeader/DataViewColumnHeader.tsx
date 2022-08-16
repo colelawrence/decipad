@@ -7,8 +7,8 @@ import {
   ConnectDropTarget,
 } from 'react-dnd';
 import { css } from '@emotion/react';
-import { DropLine } from '../DropLine/DropLine';
-import { Select } from '../Select/Select';
+import { DropLine } from '../../atoms';
+import { Select } from '../../organisms';
 
 export interface DataViewColumnHeaderProps<TAggregation extends string> {
   name: string;

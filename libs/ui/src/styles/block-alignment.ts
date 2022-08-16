@@ -31,7 +31,7 @@ export const callout: StyleData = {
   desiredWidth: slimBlockWidth,
 };
 
-export const image: StyleData = {
+export const media: StyleData = {
   paddingTop: '40px',
   typography: p14Medium,
   desiredWidth: slimBlockWidth,
