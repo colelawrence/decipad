@@ -12,6 +12,7 @@ import { templates } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { Path } from 'slate';
 import { findNodePath, getNodeEntry } from '@udecode/plate';
+import { isCellAlignRight } from 'libs/editor-table/src/components';
 import { useDragColumn, useDropColumn } from '../../hooks';
 import { availableAggregationTypesForColumnOf } from '../../utils/availableAggregationTypesForColumnOf';
 
@@ -55,6 +56,7 @@ export const DataViewColumnHeader: PlateComponent = ({
       connectDragPreview={connectDragPreview}
       connectDropTarget={connectDropTarget}
       overDirection={overDirection}
+      alignRight={isCellAlignRight(element.cellType)}
     >
       {children}
     </templates.DataViewColumnHeader>

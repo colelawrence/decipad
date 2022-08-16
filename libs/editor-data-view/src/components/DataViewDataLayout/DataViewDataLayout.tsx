@@ -15,6 +15,7 @@ export interface HeaderProps {
   colSpan?: number;
   onHover: (hover: boolean) => void;
   hover: boolean;
+  alignRight?: boolean;
 }
 
 export interface SmartProps {
@@ -28,6 +29,7 @@ export interface SmartProps {
   colSpan?: number;
   onHover: (hover: boolean) => void;
   hover: boolean;
+  alignRight?: boolean;
 }
 
 export interface DataViewLayoutProps {
@@ -64,7 +66,13 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   return (
     <>
       {table.map((row, index) => (
-        <molecules.DataViewRow key={index} isFullWidth={row.length === maxCols}>
+        <molecules.DataViewRow
+          key={index}
+          isFullWidth={row.length === maxCols}
+          isBeforeFullWidthRow={
+            table[index + 1] && table[index + 1].length === maxCols
+          }
+        >
           <DataViewDataGroup
             key={index}
             group={row}

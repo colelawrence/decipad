@@ -10,16 +10,18 @@ export const SmartCell: FC<SmartProps> = ({
   colSpan,
   onHover,
   hover,
+  alignRight,
 }: SmartProps) => {
-  const { columnAggregation } = useSmartColumn(column, aggregationType);
-  return (
+  const smartColumn = useSmartColumn(column, aggregationType);
+  return smartColumn?.columnAggregation === undefined ? null : (
     <templates.SmartCell
       aggregationType={aggregationType}
-      aggregation={columnAggregation}
+      aggregation={smartColumn?.columnAggregation}
       rowSpan={rowSpan}
       colSpan={colSpan}
       onHover={onHover}
       hover={hover}
+      alignRight={alignRight}
     ></templates.SmartCell>
   );
 };

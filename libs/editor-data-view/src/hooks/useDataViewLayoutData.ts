@@ -60,9 +60,11 @@ export const group = (
     );
     const selfHighlight$ = new BehaviorSubject<boolean>(false);
 
+    const smartRowShouldHide =
+      restDataSlice[0] && restDataSlice[0].rowCount <= 1;
+
     const sRow =
-      columnIndex > 0 &&
-      (!restDataSlice || !restDataSlice[0] || restDataSlice[0].rowCount < 2)
+      !restDataSlice || !restDataSlice[0] || smartRowShouldHide
         ? undefined
         : smartRow(
             zip(restOfTypes, restDataSlice),
@@ -75,8 +77,8 @@ export const group = (
       value,
       type,
       children: [
+        sRow,
         ...group(restDataSlice, restOfTypes, columnIndex + 1, selfHighlight$),
-        !restDataSlice[0] ? sRow : null,
       ].filter(Boolean) as DataGroup[],
       columnIndex,
       selfHighlight$,
@@ -92,9 +94,7 @@ export const layoutPowerData = (
   const sortableColumns = columns.map((column) =>
     Column.fromValues(column as Result.Comparable[])
   );
-  return group(sortableColumns, columnTypes, 0).concat(
-    smartRow(zip(columnTypes, sortableColumns), 0)
-  );
+  return group(sortableColumns, columnTypes, 0);
 };
 
 export const useDataViewLayoutData = (

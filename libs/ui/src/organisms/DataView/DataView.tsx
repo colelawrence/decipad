@@ -7,7 +7,7 @@ import {
   UserIconKey,
 } from '../../utils';
 import { VariableNameSelector } from '../../molecules';
-import { cssVar, p14Regular, smallestDesktop } from '../../primitives';
+import { p14Regular, smallestDesktop } from '../../primitives';
 import { editorLayout } from '../../styles';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
@@ -34,26 +34,10 @@ const tableCaptionWrapperStyles = css({
   },
 });
 
-const tableWrapperStyles = css({
-  width: 'min-content',
-  minWidth: editorLayout.slimBlockWidth,
-  maxWidth: restWidthBlock,
-  overflowX: 'auto',
-  display: 'inline-block',
-  [smallScreenQuery]: {
-    maxWidth: `calc(100vw - ${gutterWidth})`,
-    minWidth: '0',
-  },
-});
-
 const dataViewTableStyles = css(p14Regular, {
+  tableLayout: 'auto',
   'th, td': {
     padding: '8px',
-    textAlign: 'left',
-  },
-
-  tr: {
-    borderBottom: `1px solid ${cssVar('strongHighlightColor')}`,
   },
 });
 interface DataViewProps {
@@ -97,7 +81,7 @@ export const DataView: FC<DataViewProps> = ({
           selectedVariableName={variableName}
           onChangeVariableName={onChangeVariableName}
         />
-        <div contentEditable={false} css={tableWrapperStyles}>
+        <div contentEditable={false}>
           <table css={dataViewTableStyles}>
             <thead>{thead}</thead>
             <tbody>{data}</tbody>

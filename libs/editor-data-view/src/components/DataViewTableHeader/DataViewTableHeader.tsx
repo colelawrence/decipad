@@ -10,6 +10,7 @@ interface DataViewTableHeaderProps {
   colSpan?: number;
   onHover: (hover: boolean) => void;
   hover: boolean;
+  alignRight?: boolean;
 }
 
 export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
@@ -19,6 +20,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   colSpan = 1,
   onHover,
   hover,
+  alignRight,
 }) => {
   if (type == null || value == null) {
     return null;
@@ -30,6 +32,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       rowSpan={rowSpan}
       colSpan={colSpan}
       onHover={onHover}
+      alignRight={alignRight}
     >
       <organisms.CodeResult
         value={value as Result.Result['value']}

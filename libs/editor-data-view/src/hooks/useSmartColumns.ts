@@ -16,11 +16,15 @@ export interface UseSmartColumnReturn {
 export const useSmartColumn = (
   column: SmartRowElement['column'],
   selectedAggregationType: AggregationKind | undefined
-): UseSmartColumnReturn => {
-  return {
-    columnAggregation: useSmartColumnAggregation(
-      column,
-      selectedAggregationType
-    ),
-  };
+): UseSmartColumnReturn | null => {
+  const columnAggregation = useSmartColumnAggregation(
+    column,
+    selectedAggregationType
+  );
+
+  return selectedAggregationType !== undefined
+    ? {
+        columnAggregation,
+      }
+    : null;
 };

@@ -23,17 +23,19 @@ export const SmartRow: FC<SmartRowProps> = ({
 }) => (
   <organisms.SmartRow
     {...props}
-    smartCells={columns.map((column, index) => (
-      <SmartColumnCell
-        key={index}
-        {...props}
-        column={column}
-        columnIndex={index}
-        selectedAggregationTypeName={aggregationTypeNames[index]}
-        onAggregationTypeNameChange={(agg) =>
-          onAggregationTypeNameChange(index, agg)
-        }
-      />
-    ))}
+    smartCells={columns.map((column, index) => {
+      return (
+        <SmartColumnCell
+          key={index}
+          {...props}
+          column={column}
+          columnIndex={index}
+          selectedAggregationTypeName={aggregationTypeNames[index]}
+          onAggregationTypeNameChange={(agg) =>
+            onAggregationTypeNameChange(index, agg)
+          }
+        />
+      );
+    })}
   />
 );

@@ -22,6 +22,7 @@ export interface DataViewColumnHeaderProps<TAggregation extends string> {
   connectDragPreview?: ConnectDragPreview;
   connectDropTarget?: ConnectDropTarget;
   overDirection?: 'left' | 'right';
+  alignRight?: boolean;
 }
 
 const dataViewColumnHeaderStyles = css({
@@ -34,6 +35,10 @@ const dataViewColumnHeaderSelectWrapperStyles = css({
   gap: '8px',
 });
 
+const alignRightStyles = css({
+  justifyContent: 'flex-end',
+});
+
 export function DataViewColumnHeader<TAggregation extends string>({
   name,
   attributes,
@@ -44,6 +49,7 @@ export function DataViewColumnHeader<TAggregation extends string>({
   connectDragSource,
   connectDropTarget,
   overDirection,
+  alignRight = false,
 }: DataViewColumnHeaderProps<TAggregation>): ReturnType<FC> {
   return (
     <th {...attributes} css={dataViewColumnHeaderStyles}>
@@ -55,7 +61,11 @@ export function DataViewColumnHeader<TAggregation extends string>({
       <div ref={connectDropTarget} contentEditable={false}>
         <div
           ref={connectDragSource}
-          css={dataViewColumnHeaderSelectWrapperStyles}
+          // eslint-disable-next-line no-sparse-arrays
+          css={[
+            dataViewColumnHeaderSelectWrapperStyles,
+            alignRight ? alignRightStyles : null,
+          ]}
         >
           {name}
 

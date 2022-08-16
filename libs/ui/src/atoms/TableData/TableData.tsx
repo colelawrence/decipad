@@ -30,13 +30,6 @@ const tdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
   paddingTop: table.tdVerticalPadding,
   paddingBottom: table.tdVerticalPadding,
-  position: 'relative',
-
-  '&:hover': {
-    '& > .drag-handle': {
-      display: 'block',
-    },
-  },
 });
 
 const tdPlaceholderStyles = css({

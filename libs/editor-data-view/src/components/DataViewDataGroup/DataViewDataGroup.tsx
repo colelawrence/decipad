@@ -1,3 +1,4 @@
+import { isCellAlignRight } from 'libs/editor-table/src/components';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { Subscription } from 'rxjs';
 import { AggregationKind, DataGroup } from '../../types';
@@ -54,6 +55,7 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       colSpan={element.colspan}
       onHover={onHover}
       hover={parentHover || selfHover}
+      alignRight={isCellAlignRight(element.type)}
     />
   ) : (
     element.column && (
@@ -64,6 +66,7 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
         aggregationType={aggregationType}
         onHover={onHover}
         hover={parentHover || selfHover}
+        alignRight={isCellAlignRight(element.column.type)}
       />
     )
   );

@@ -4,20 +4,25 @@ import type { Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { organisms } from '../..';
 import { ErrorMessage } from '../../atoms';
-import { cssVar, p12Medium } from '../../primitives';
+import { cssVar, p12Medium, p14Medium } from '../../primitives';
 
-const smartCellStyles = css(p12Medium, {
+const smartCellStyles = css(p14Medium, {
   whiteSpace: 'nowrap',
   textAlign: 'left',
-  color: cssVar('weakerTextColor'),
+  fontWeight: '700',
 });
 
 const hoverCellStyles = css({
   backgroundColor: cssVar('highlightColor'),
 });
 
-const labelStyles = css({
+const labelStyles = css(p12Medium, {
+  color: cssVar('weakerTextColor'),
   textTransform: 'capitalize',
+});
+
+const alignRightStyles = css({
+  textAlign: 'right',
 });
 
 export interface ColumnAggregation {
@@ -32,6 +37,7 @@ export interface SmartRowProps {
   colSpan?: number;
   onHover?: (hover: boolean) => void;
   hover?: boolean;
+  alignRight?: boolean;
 }
 
 export function SmartCell({
@@ -41,6 +47,7 @@ export function SmartCell({
   colSpan = 1,
   onHover = noop,
   hover = false,
+  alignRight = false,
 }: SmartRowProps): ReturnType<FC> {
   const onMouseOver = useCallback(() => onHover(true), [onHover]);
   const onMouseOut = useCallback(() => onHover(false), [onHover]);
@@ -55,7 +62,11 @@ export function SmartCell({
   const { type, value } = aggregation;
   return (
     <td
-      css={[smartCellStyles, hover && hoverCellStyles]}
+      css={[
+        smartCellStyles,
+        hover && hoverCellStyles,
+        alignRight && alignRightStyles,
+      ]}
       rowSpan={rowSpan}
       colSpan={colSpan}
       onMouseOver={onMouseOver}
