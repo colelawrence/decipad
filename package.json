@@ -201,7 +201,7 @@
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.77.0",
     "slate-react": "^0.82.0",
-    "slug": "^5.1.0",
+    "slug": "^6.0.0",
     "storybook-dark-mode": "^1.0.9",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.1",
