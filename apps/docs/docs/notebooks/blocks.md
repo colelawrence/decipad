@@ -11,7 +11,8 @@ Blocks are components of your notebook that help you tell better stories or work
 Type `/` on a new paragraph and access a menu of different blocks.
 Select any block by typing its name or scrolling and pressing `enter`.
 
-![heading](https://user-images.githubusercontent.com/76447845/149759719-390e3a33-da96-4cad-af83-df375249b47f.gif)
+![heading](https://user-images.githubusercontent.com/12210180/185147746-c80e405d-b01a-4f9f-a305-aa14f34dec13.gif)
+
 
 ## Delete Blocks
 
