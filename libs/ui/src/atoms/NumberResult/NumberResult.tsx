@@ -7,8 +7,8 @@ import { Tooltip } from '../Tooltip/Tooltip';
 const numberResultStyles = css({
   textOverflow: 'ellipsis',
   overflow: 'hidden',
-  display: 'inline-block',
-  verticalAlign: 'middle',
+  display: 'inline',
+  verticalAlign: 'baseline',
   lineHeight: 1.2,
   fontFeatureSettings: '"tnum"',
 });
