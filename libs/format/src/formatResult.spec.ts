@@ -1,6 +1,6 @@
-import { buildType as t, parseUTCDate } from '@decipad/language';
-import { F } from './testUtils';
+import { buildType as t, parseUnit, parseUTCDate } from '@decipad/language';
 import { formatResult } from './formatResult';
+import { F } from './testUtils';
 
 // we'll usually use chalk.blue but we can't write colorful snapshots in text files
 const highlight = (inp: string) => `<${inp}>`;
@@ -12,6 +12,14 @@ describe('stringify', () => {
     expect(
       formatResult(locale, F(10), t.number(), highlight)
     ).toMatchInlineSnapshot(`"<10>"`);
+
+    expect(
+      formatResult(locale, F(1, 10), t.number(null, 'percentage'), highlight)
+    ).toMatchInlineSnapshot(`"<10>%"`);
+
+    expect(
+      formatResult(locale, F(10), t.number([parseUnit('m')]), highlight)
+    ).toMatchInlineSnapshot(`"<10> m"`);
 
     expect(
       formatResult(locale, [F(1), F(10)], t.range(t.number()), highlight)

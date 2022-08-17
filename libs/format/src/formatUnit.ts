@@ -146,7 +146,12 @@ const stringifyUnit = (
       });
     }
   } else {
-    const [coefficient, exponent] = multiPrefix.toString().split('e');
+    let multiplierString = multiPrefix.toString();
+    if (!multiplierString.includes('e')) {
+      const asNumber = +multiplierString;
+      multiplierString = asNumber.toExponential().toString();
+    }
+    const [coefficient, exponent] = multiplierString.toString().split('e');
     result.push({
       type: 'unit-exponent',
       originalValue: multiPrefix.toString(),

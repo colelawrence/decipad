@@ -14,8 +14,12 @@ const second = u('seconds');
 
 it('type can be stringified', () => {
   expect(formatType(locale, serializeType(t.number()))).toEqual('<number>');
+  expect(formatType(locale, serializeType(t.boolean()))).toEqual('<boolean>');
   expect(formatType(locale, serializeType(t.nothing()))).toEqual('nothing');
   expect(formatType(locale, serializeType(t.anything()))).toEqual('anything');
+  expect(
+    formatType(locale, serializeType(t.functionPlaceholder('foo', 1)))
+  ).toEqual('<function>');
   expect(formatType(locale, serializeType(t.number([meter])))).toEqual(
     'meters'
   );

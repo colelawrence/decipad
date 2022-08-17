@@ -2,7 +2,10 @@ import Fraction from '@decipad/fraction';
 import {
   AST,
   convertToMultiplierUnit,
+  DEFAULT_PRECISION,
+  MAX_PRECISION,
   normalizeUnits,
+  safeNumberForPrecision,
   Unit,
 } from '@decipad/language';
 import produce from 'immer';
@@ -11,6 +14,7 @@ import {
   formatEdgeCaseNumber,
   isEdgeCaseNumber,
 } from './formatEdgeCaseNumbers';
+import { formatTime, isTimeUnit } from './formatTime';
 import {
   formatUnitAsParts,
   isUserDefined,
@@ -18,9 +22,6 @@ import {
   UnitPart,
 } from './formatUnit';
 import { getCurrency, getPrettyCurrency, hasCurrency } from './getCurrency';
-
-const DEFAULT_PRECISION = 10;
-const MAX_PRECISION = 15;
 
 const DEFAULT_NUMBER_OPTIONS: Intl.NumberFormatOptions = {
   maximumFractionDigits: 2,
@@ -63,18 +64,7 @@ export type DeciNumber = {
   partsOf: DeciNumberPart[];
 };
 
-type IntermediateDeciNumber = Omit<DeciNumber, 'asString'>;
-
-export function unpreciseButSafeFractionAsNumber(
-  n: Fraction
-): [number, number] {
-  const roundedNumber = n.round(MAX_PRECISION).valueOf();
-  const notRoundedNumber = n.valueOf();
-  return [
-    roundedNumber,
-    Number.isNaN(notRoundedNumber) ? roundedNumber : notRoundedNumber,
-  ];
-}
+export type IntermediateDeciNumber = Omit<DeciNumber, 'asString'>;
 
 function beautifyExponents(partsOf: DeciNumberPart[]): DeciNumberPart[] {
   let ret: DeciNumberPart[] = [];
@@ -188,7 +178,7 @@ const formatToParts = (
   n: Fraction,
   mapParts: (num: DeciNumberPart[]) => DeciNumberPart[]
 ): IntermediateDeciNumber => {
-  const [value, useSafeN] = unpreciseButSafeFractionAsNumber(n);
+  const [value, useSafeN] = safeNumberForPrecision(n);
 
   const places = args.maximumFractionDigits ?? DEFAULT_PRECISION;
   // todo: review, is this enough? @pgte
@@ -296,7 +286,7 @@ function formatUserDefinedUnit(
 
   return formatToParts(locale, args, fraction, (parts) =>
     parts.map((u) => {
-      const [, valOf] = unpreciseButSafeFractionAsNumber(fraction);
+      const [, valOf] = safeNumberForPrecision(fraction);
       if (u.type === 'unit') {
         return {
           type: 'unit',
@@ -325,10 +315,7 @@ function formatAnyUnit(locale: string, units: Unit[], fraction: Fraction) {
   }
 
   return formatToParts(locale, args, fraction, (parts) => {
-    if (units) {
-      return [...parts, formatUnitAsParts(locale, units, fraction)];
-    }
-    return parts;
+    return [...parts, formatUnitAsParts(locale, units, fraction)];
   });
 }
 
@@ -412,6 +399,8 @@ export function formatNumber(
       deciNumber = formatAnyCurrency(locale, units, fraction);
     } else if (isUserDefined(units)) {
       deciNumber = formatUserDefinedUnit(locale, units, fraction);
+    } else if (isTimeUnit(units)) {
+      deciNumber = formatTime(locale, units, fraction, { verbose: true });
     } else {
       const scaledToUnit = convertToMultiplierUnit(fraction, units);
       deciNumber = formatAnyUnit(locale, units, scaledToUnit);

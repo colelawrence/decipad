@@ -6,6 +6,9 @@ export { date } from './date';
 
 type WalkFn = (node: AST.Node, path: number[]) => void;
 
+export const DEFAULT_PRECISION = 10;
+export const MAX_PRECISION = 15;
+
 export const walkAst = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
   fn(node, path);
 
@@ -468,4 +471,13 @@ export function multiplyMultipliers(
     acc = acc.mul(pow(unit.multiplier, unit.exp));
   }
   return acc;
+}
+
+export function safeNumberForPrecision(n: Fraction): [number, number] {
+  const rounded = n.round(MAX_PRECISION).valueOf();
+  const precise = n.valueOf();
+  return [
+    rounded,
+    Number.isNaN(precise) || !Number.isFinite(precise) ? rounded : precise,
+  ];
 }

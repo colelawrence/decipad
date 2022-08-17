@@ -1,10 +1,10 @@
-import produce from 'immer';
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
+import produce from 'immer';
+import { InferError, PrimitiveTypeName, Type } from '.';
 import type { AST, Time } from '..';
-import { InferError, Type, PrimitiveTypeName } from '.';
-import { Unit } from './unit-type';
 import { timeUnitFromUnit } from '../date';
+import { Unit } from './unit-type';
 
 const primitive = (type: PrimitiveTypeName) =>
   produce(new Type(), (t) => {

@@ -193,3 +193,11 @@ it('renders percentage', async () => {
   const { container } = render(<NumberResult {...await runCode('11%')} />);
   expect(container.textContent).toMatchInlineSnapshot(`"11%"`);
 });
+
+// eslint-disable-next-line jest/no-disabled-tests
+it.skip('does time conversions', async () => {
+  const { container } = render(
+    <NumberResult {...await runCode('1 minute in seconds')} />
+  );
+  expect(container.textContent).toMatchInlineSnapshot(`"60 seconds"`);
+});

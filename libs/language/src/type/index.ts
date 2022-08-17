@@ -3,10 +3,12 @@ import { Time } from '..';
 import * as AST from '../parser/ast-types';
 import * as t from './build';
 import {
+  canAddTableColumn,
   divideUnit,
   getRangeOf,
   isColumn,
   isDate,
+  isPrimitive,
   isRange,
   isScalar,
   isTable,
@@ -16,34 +18,29 @@ import {
   reduced,
   reducedToLowest,
   sameAs,
+  sharePercentage,
+  withAtParentIndex,
   withColumnSize,
   withMinimumColumnCount,
-  withAtParentIndex,
-  isPrimitive,
-  canAddTableColumn,
-  sharePercentage,
 } from './checks';
-import { InferError, ErrSpec } from './InferError';
+import { ErrSpec, InferError } from './InferError';
+import { Unit, units } from './unit-type';
 import {
   inverseExponent,
   normalizeUnits,
+  pluralizeUnit,
   setUnit,
   simplifyUnits,
-  pluralizeUnit,
 } from './units';
-import { Unit, units } from './unit-type';
 
-export { simplifyUnits, pluralizeUnit };
-
-export type { ErrSpec, Unit };
-
-export * from './serialization';
 export * from './convert-to-multiplier-unit';
+export * from './narrowing';
+export * from './parseType';
+export * from './serialization';
+export { simplifyUnits, pluralizeUnit };
+export type { ErrSpec, Unit };
 export { setUnit, normalizeUnits, units };
 export { InferError, inverseExponent, t as build };
-export { parseType, parseFunctionSignature } from './parseType';
-export type { FunctionSignature } from './narrowing';
-export { narrowTypes, narrowFunctionCall } from './narrowing';
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
 

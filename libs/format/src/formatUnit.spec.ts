@@ -17,6 +17,12 @@ describe('base unit tests', () => {
     ).toEqual('m·kg·s⁻¹');
   });
 
+  it('crazy multipliers', () => {
+    expect(
+      formatUnit(locale, U([u('meter', { multiplier: new FFraction(10000) })]))
+    ).toEqual('×10⁴ meters');
+  });
+
   it('can follow SI units rules and style conventions', () => {
     expect(formatUnit(locale, U('s'))).toEqual('s');
     expect(formatUnit(locale, U(second))).toEqual('seconds');

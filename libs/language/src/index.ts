@@ -11,44 +11,45 @@ import {
 } from './type';
 
 export { ExternalData } from './data';
-export { Time, parseUTCDate, stringifyDate } from './date';
+export { parseUTCDate, stringifyDate, Time } from './date';
 export {
   identifierRegExpGlobal,
   STATEMENT_SEP_TOKEN_TYPE,
   tokenize,
   tokenRules,
 } from './grammar';
-export { previousRefSymbols } from './previous-ref';
 export type { Token } from './grammar';
 export * from './grammar/containmentCounting';
 export {
   inferBlock,
-  makeContext,
-  inferProgram,
   inferExpression,
+  inferProgram,
   inferStatement,
+  makeContext,
 } from './infer';
 export type { Context } from './infer';
-export type { Interpreter, Value, ColumnLike } from './interpreter';
 export {
-  evaluateStatement,
-  RuntimeError,
-  Realm,
-  isColumnLike,
   CompareValues,
+  evaluateStatement,
+  isColumnLike,
+  Realm,
   runBlock,
+  RuntimeError,
 } from './interpreter';
+export type { ColumnLike, Interpreter, Value } from './interpreter';
 export {
   Column,
   Date,
+  fromJS,
   Range,
   Row,
   Scalar,
   Table,
-  fromJS,
 } from './interpreter/Value';
-export { AST, parse, Parser, parseBlock, SyntaxError } from './parser';
+export { AST, parse, parseBlock, Parser, SyntaxError } from './parser';
 export { prettyPrintAST } from './parser/utils';
+export * from './pluralize';
+export { previousRefSymbols } from './previous-ref';
 export { serializeResult, validateResult } from './result';
 export * as Result from './result';
 export * from './run';
@@ -56,26 +57,32 @@ export {
   build as buildType,
   convertToMultiplierUnit,
   deserializeType,
-  normalizeUnits,
   InferError,
+  inverseExponent,
+  normalizeUnits,
+  pluralizeUnit,
   serializeType,
   simplifyUnits,
   Type,
-  pluralizeUnit,
-  inverseExponent,
 } from './type';
 export type {
   ErrSpec,
   SerializedType,
-  SerializedTypes,
   SerializedTypeKind,
+  SerializedTypes,
 } from './type';
-export { isExpression, walkAst, n as astNode, isAssignment } from './utils';
+export * from './units';
+export {
+  DEFAULT_PRECISION,
+  isAssignment,
+  isExpression,
+  MAX_PRECISION,
+  n as astNode,
+  safeNumberForPrecision,
+  walkAst,
+} from './utils';
 export { units };
 export type { Unit };
-export * from './units';
-
-export * from './pluralize';
 
 export interface InjectableExternalData {
   type: Type;

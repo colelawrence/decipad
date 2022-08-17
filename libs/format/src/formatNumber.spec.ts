@@ -465,16 +465,54 @@ describe('formatNumber', () => {
         expect(asString).toEqual('15 thousand kilometers');
       });
 
-      it('15,000 weeks = 15 thousand weeks', () => {
-        const [value, unit] = makeFractionUnitTuple(F(15000), 'week');
-        const { asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('15 thousand weeks');
+      it('12 months = 1 year', () => {
+        const [value, unit] = makeFractionUnitTuple(F(12), 'month');
+        const { asString, partsOf } = formatNumber(locale, unit, value);
+        expect(partsOf).toEqual([
+          { type: 'integer', value: '1' },
+          { type: 'unit', value: 'year' },
+        ]);
+        expect(asString).toEqual('1 year');
       });
 
-      it('1/1500 weeks = 0 weeks [0.00066 weeks]', () => {
+      it('60 second = 1 minute', () => {
+        const [value, unit] = makeFractionUnitTuple(F(60), 'second');
+        const { asString, partsOf } = formatNumber(locale, unit, value);
+        expect(partsOf).toEqual([
+          { type: 'integer', value: '1' },
+          { type: 'unit', value: 'minute' },
+        ]);
+        expect(asString).toEqual('1 minute');
+      });
+
+      it('15,000 weeks = 287y 245d', () => {
+        const [value, unit] = makeFractionUnitTuple(F(15000), 'week');
+        const { asString } = formatNumber(locale, unit, value);
+        expect(asString).toEqual('287 years 245 days');
+      });
+
+      it('1/150000 seconds = [Object]', () => {
+        const [value, unit] = makeFractionUnitTuple(F(1, 150000), 'seconds');
+        const deciNum = formatNumber(locale, unit, value);
+        expect(deciNum).toEqual({
+          asString: '6 µs 666 ns',
+          asStringPrecise: '0.000006666666666666667 seconds',
+          isPrecise: true,
+          partsOf: [
+            { type: 'integer', value: '6' },
+            { type: 'unit', value: 'µs' },
+            { type: 'literal', value: ' ' },
+            { type: 'integer', value: '666' },
+            { type: 'unit', value: 'ns' },
+          ],
+          value: 0.000006666666666666667,
+        });
+      });
+
+      it('1/1500 weeks = 6 minutes 43.2 seconds', () => {
         const [value, unit] = makeFractionUnitTuple(F(1, 1500), 'week');
         const { asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('≈0 weeks');
+        expect(asString).toEqual('6 minutes 43.2 seconds');
       });
 
       it('90.000 m/day = 90K meters per day', () => {
