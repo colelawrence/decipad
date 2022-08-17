@@ -22,18 +22,20 @@ const caretRightWrapper = css({
 interface TriggerMenuItemProps {
   readonly children: ReactNode;
   readonly icon?: ReactNode;
+  readonly selected?: boolean;
 }
 
 export const TriggerMenuItem: FC<TriggerMenuItemProps> = ({
   children,
   icon,
+  selected,
 }) => {
   const depth = useContext(Depth);
   const DropdownMenuTriggerElement =
     depth === 0 ? RadixDropdownMenu.Trigger : RadixDropdownMenu.SubTrigger;
 
   return (
-    <DropdownMenuTriggerElement css={menu.itemStyles}>
+    <DropdownMenuTriggerElement css={menu.itemStyles} data-selected={selected}>
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span css={childrenWrapperStyles}>{children}</span>
       <span css={caretRightWrapper}>

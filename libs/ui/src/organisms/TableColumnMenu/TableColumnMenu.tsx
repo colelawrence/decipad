@@ -126,7 +126,10 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           </MenuItem>
           <MenuList
             itemTrigger={
-              <TriggerMenuItem icon={<Calendar />}>
+              <TriggerMenuItem
+                icon={<Calendar />}
+                selected={type.kind === 'date'}
+              >
                 <div css={{ minWidth: '116px' }}>Date</div>
               </TriggerMenuItem>
             }
@@ -164,7 +167,10 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           </MenuList>
           <MenuList
             itemTrigger={
-              <TriggerMenuItem icon={<Leaf />}>
+              <TriggerMenuItem
+                icon={<Leaf />}
+                selected={type.kind === 'series'}
+              >
                 <div css={{ minWidth: '116px' }}>Series</div>
               </TriggerMenuItem>
             }
