@@ -136,7 +136,7 @@ export const MediaEmbed: Component = ({
               <Caption.Textarea
                 readOnly={readOnly}
                 css={captionTextareaStyles}
-                placeholder="Description of your image..."
+                placeholder="Your description..."
               />
             </Caption.Root>
           </figure>
