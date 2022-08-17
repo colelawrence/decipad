@@ -5,13 +5,14 @@ import { BubbleFormula } from '@decipad/editor-types';
 export type EditingBubble = {
   blockId: string;
   formula: BubbleFormula;
+  deleteBubble(): void;
   updateValue(newFormula: BubbleFormula): void;
 };
 
 export type EditorBubblesContextValue = Readonly<{
   editing?: EditingBubble;
   codeResult?: InBlockResult;
-  setEditing(bubble: EditingBubble): void;
+  setEditing(bubble?: EditingBubble): void;
 }>;
 
 const defaultValue: EditorBubblesContextValue = {

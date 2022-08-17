@@ -153,6 +153,7 @@ export interface BubbleFormula {
 
 export interface BubbleElement extends BaseElement {
   type: typeof ELEMENT_BUBBLE;
+  opened?: boolean;
   formula: BubbleFormula;
   children: [EmptyText];
 }
@@ -209,7 +210,6 @@ export type BlockElement =
   | ExpressionElement
   | CaptionElement
   | SliderElement
-  | InteractiveElement
   | DataViewElement
   | DataViewHeaderRowElement
   | DataViewHeader

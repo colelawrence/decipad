@@ -15,6 +15,7 @@ const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
 
   const emptyElement: Omit<BubbleElement, 'id'> = {
     type: ELEMENT_BUBBLE,
+    opened: true,
     formula: {
       name: words(3).join('_'),
       expression: `${Math.floor(Math.random() * 5000)}`,

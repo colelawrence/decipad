@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { css } from '@emotion/react';
 import { useEditorBubblesContext } from '@decipad/react-contexts';
 import { BubbleFormula } from '@decipad/editor-types';
@@ -11,6 +11,7 @@ import {
   purple500,
 } from '../../primitives';
 import { CodeResult } from '../CodeResult/CodeResult';
+import { useTextAreaAutoFocus } from './useTextAreaAutoFocus';
 
 export const BubbleEditor: React.FC<{
   onClose(): void;
@@ -18,7 +19,43 @@ export const BubbleEditor: React.FC<{
   defaultExpr: string;
   onChange(value: Partial<BubbleFormula>): void;
 }> = (props) => {
+  const { onChange } = props;
   const bubbles = useEditorBubblesContext();
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useTextAreaAutoFocus(textAreaRef);
+
+  const detectDeletion = useCallback(
+    (ev: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      const isEmpty = ev.currentTarget.value === '';
+      const backspacePressed = ev.key === 'Backspace';
+
+      if (isEmpty && backspacePressed) {
+        ev.preventDefault();
+        bubbles.editing?.deleteBubble();
+      }
+    },
+    [bubbles.editing]
+  );
+
+  const applyFormulaChange = useCallback(
+    (ev: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (ev.currentTarget.value === '') return;
+
+      onChange({
+        expression: ev.currentTarget.value,
+      });
+    },
+    [onChange]
+  );
+
+  const applyNameChange = useCallback(
+    (ev: React.KeyboardEvent<HTMLInputElement>) =>
+      onChange({
+        name: ev.currentTarget.value,
+      }),
+    [onChange]
+  );
 
   if (!bubbles.editing) return null;
 
@@ -28,14 +65,12 @@ export const BubbleEditor: React.FC<{
     <div css={bubbleEditorContainer}>
       <div css={bubbleEditorStyles}>
         <textarea
+          ref={textAreaRef}
           css={bubbleTextField}
-          defaultValue={props.defaultExpr}
-          onKeyUp={(ev) =>
-            props.onChange({
-              expression: ev.currentTarget.value,
-            })
-          }
           rows={1}
+          defaultValue={props.defaultExpr}
+          onKeyDown={detectDeletion}
+          onKeyUp={applyFormulaChange}
         />
 
         <div css={bubbleFooterRow}>
@@ -44,11 +79,7 @@ export const BubbleEditor: React.FC<{
             <input
               css={bubbleNameInput}
               defaultValue={props.defaultName}
-              onKeyUp={(ev) =>
-                props.onChange({
-                  name: ev.currentTarget.value,
-                })
-              }
+              onKeyUp={applyNameChange}
             />
           </div>
           <div css={bubbleResult}>

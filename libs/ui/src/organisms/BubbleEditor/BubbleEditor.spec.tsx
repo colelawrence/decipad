@@ -16,6 +16,7 @@ it('shows when editing is present', async () => {
             name: 'sumResult',
             expression: '2 + 2',
           },
+          deleteBubble() {},
           updateValue() {},
         },
       }}

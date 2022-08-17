@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react';
+import { css } from '@emotion/react';
 import {
   BubbleElement,
   PlateComponent,
@@ -11,33 +13,23 @@ import {
 } from '@decipad/react-contexts';
 import { atoms } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
-import { css } from '@emotion/react';
-import { useCallback } from 'react';
+import { findNodePath, focusEditor, removeNodes } from '@udecode/plate';
 
 export const InlineBubble: PlateComponent = ({
   attributes,
   children,
   ...rest
 }) => {
-  const editor = useTEditorRef();
   const element = getDefined(rest?.element as BubbleElement);
 
   const blockId = element.id;
   const result = useResult(blockId);
-  const updateValue = useElementMutatorCallback(editor, element, 'formula');
-
-  const { setEditing } = useEditorBubblesContext();
-  const openEditor = useCallback(() => {
-    setEditing({
-      blockId,
-      updateValue,
-      formula: element.formula,
-    });
-  }, [blockId, element.formula, setEditing, updateValue]);
 
   const readOnly = useIsEditorReadOnly();
   const codeResult = result?.results?.[0];
   const loadingState = !!result?.error;
+
+  const { openEditor } = useOpenCloseEditor(element);
 
   return (
     <span {...attributes} id={blockId}>
@@ -53,4 +45,47 @@ export const InlineBubble: PlateComponent = ({
       </span>
     </span>
   );
+};
+
+const useOpenCloseEditor = (element: BubbleElement) => {
+  const editor = useTEditorRef();
+  const blockId = element.id;
+  const updateOpened = useElementMutatorCallback(editor, element, 'opened');
+  const updateValue = useElementMutatorCallback(editor, element, 'formula');
+
+  const { setEditing } = useEditorBubblesContext();
+  const openEditor = useCallback(() => {
+    const deleteBubble = () => {
+      const path = findNodePath(editor, element);
+      if (!path) return;
+
+      focusEditor(editor);
+      removeNodes(editor, { at: path });
+    };
+    setEditing({
+      blockId,
+      updateValue,
+      deleteBubble,
+      formula: element.formula,
+    });
+  }, [editor, blockId, element, setEditing, updateValue]);
+
+  useEffect(
+    function onOpened() {
+      if (!element.opened) return;
+
+      openEditor();
+      updateOpened(false);
+    },
+    [element.opened, updateOpened, openEditor]
+  );
+
+  useEffect(
+    function onDelete() {
+      return () => setEditing(undefined);
+    },
+    [setEditing]
+  );
+
+  return { openEditor };
 };
