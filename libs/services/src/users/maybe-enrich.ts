@@ -20,6 +20,10 @@ export async function maybeEnrich(
     update = true;
     updateUser.image = newUserProps.image;
   }
+  if (newUserProps.last_login !== existingUser.last_login) {
+    update = true;
+    updateUser.last_login = newUserProps.last_login;
+  }
 
   const data = await tables();
 

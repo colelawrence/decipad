@@ -1,6 +1,9 @@
 import arc from '@architect/functions';
 import { auth } from '@decipad/config';
+import tables from '@decipad/tables';
+import { differenceInHours } from 'date-fns';
 import Email from 'next-auth/providers/email';
+import timestamp from '../../common/timestamp';
 
 type EmailVerificationRequest = {
   identifier: string;
@@ -21,20 +24,44 @@ export default function EmailProvider() {
 async function sendVerificationRequest(
   verificationRequest: EmailVerificationRequest
 ) {
-  const { identifier: email, url, token } = verificationRequest;
+  const {
+    identifier: email,
+    url,
+    token,
+    expires: expiresAt,
+  } = verificationRequest;
 
   if (process.env.ARC_ENV !== 'production') {
     console.log('validation link:');
     console.log(url);
   }
 
+  const data = await tables();
+  const key = await data.userkeys.get({ id: `email:${email}` });
+  let firstTime = false;
+  if (key) {
+    const user = await data.users.get({ id: key.user_id });
+    firstTime = !user?.first_login;
+  }
+
+  const expires = `${differenceInHours(expiresAt, new Date())} hours`;
+
   await arc.queues.publish({
     name: `sendemail`,
     payload: {
-      template: 'auth-magiclink',
+      template: firstTime ? 'auth-magiclink-first' : 'auth-magiclink',
       email,
       url,
       token,
+      expires,
     },
   });
+
+  if (firstTime && key) {
+    const user = await data.users.get({ id: key.user_id });
+    if (user) {
+      user.first_login = timestamp();
+      await data.users.put(user);
+    }
+  }
 }

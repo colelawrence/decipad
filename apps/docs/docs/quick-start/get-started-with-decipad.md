@@ -8,7 +8,7 @@ sidebar_position: 5
 
 Decipad is an interactive notebook where you can gather information, build models and bring data-driven ideas to life.
 
-Our journey of reimagining how people interact with data and numbers just began! You may run into bugs 🐞, glitches ⚡️ and missing features 🧐. Help us along our adventures! Share your findings with our team on our [Discord](https://discord.gg/XQTbStHH) channel or use the Feedback button on Decipad.
+Our journey of reimagining how people interact with data and numbers just began! You may run into bugs 🐞, glitches ⚡️ and missing features 🧐. Help us along our adventures! Share your findings with our team on our [Discord](https://discord.gg/HwDMqwbGmc) channel or use the Feedback button on Decipad.
 
 ## What can I build on Decipad?
 

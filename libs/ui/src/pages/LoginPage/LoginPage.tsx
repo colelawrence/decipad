@@ -34,7 +34,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
   return (
     <div css={wrapperStyles}>
       <AuthContent
-        title="Log in to Decipad"
+        title="Sign in to Decipad"
         description="A new way to make sense of numbers"
       />
       <form

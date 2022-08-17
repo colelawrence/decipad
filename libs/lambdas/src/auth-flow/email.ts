@@ -6,6 +6,7 @@ import {
   maybeEnrich as maybeEnrichUser,
 } from '@decipad/services/users';
 import { isAllowedToLogIn } from './is-allowed';
+import timestamp from '../common/timestamp';
 
 export async function signInEmail(
   user: UserWithSecret & { provider?: string; providerId?: string },
@@ -31,6 +32,7 @@ export async function signInEmail(
     if (!existingUser.name) {
       userInput.name = userInput.email as string | undefined;
     }
+    userInput.last_login = timestamp();
     existingUser = await maybeEnrichUser(existingUser, userInput);
   } else {
     // If the user does not exist, we just create a new one.

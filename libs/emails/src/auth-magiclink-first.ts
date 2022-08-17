@@ -3,7 +3,7 @@ import { EmailGenerator } from './types';
 
 const date = `${format(Date.now(), "PPPP 'at' H:m")} UTC`;
 
-const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
+const authMagiclinkFirst: EmailGenerator<{ url: string; expires: string }> = ({
   url,
   expires,
 }) => ({
@@ -56,29 +56,29 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
     a {
       color:#3266F5;
     }
-	@media (prefers-color-scheme: light) {
-		.darkLogoDefault,
-		.lightLogo {
-			display: none !important;
-		}
+    @media (prefers-color-scheme: light) {
+      .darkLogoDefault,
+      .lightLogo {
+        display: none !important;
+      }
 
-		.darkLogoWrapper,
-		.darkLogo {
-			display: block !important;
-		}
-	}
+      .darkLogoWrapper,
+      .darkLogo {
+        display: block !important;
+      }
+    }
 
-	@media (prefers-color-scheme: dark) {
-		.darkLogoDefault,
-		.darkLogo {
-			display: none !important;
-		}
+    @media (prefers-color-scheme: dark) {
+      .darkLogoDefault,
+      .darkLogo {
+        display: none !important;
+      }
 
-		.lightLogoWrapper,
-		.lightLogo {
-			display: block !important;
-		}
-	}
+      .lightLogoWrapper,
+      .lightLogo {
+        display: block !important;
+      }
+    }
   </style>
   <!--[if mso]>
         <noscript>
@@ -166,13 +166,13 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
                                                       <tbody>
                                                         <tr>
                                                           <td style="width:320px">
-                                                            <img height="auto" src="https://user-images.githubusercontent.com/12210180/185091230-39b38bb6-3fe0-4063-aece-0151e0f925ce.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="320" class="darkLogoDefault" />
-                                                            <div class="darkLogoWrapper" style="mso-hide: all; display: none">
-                                                              <img height="auto" src="https://user-images.githubusercontent.com/12210180/184343483-af937fd7-d4ea-40b9-8ac1-2f8d60d128f1.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:none" width="320" class="darkLogo" />
-                                                            </div>
-                                                            <div class="lightLogoWrapper" style="mso-hide: all; display: none">
-                                                              <img height="auto" src="https://user-images.githubusercontent.com/12210180/185091152-8c75f597-f301-415c-8bf6-a4417bed4b24.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:none" width="320" class="lightLogo" />
-                                                            </div>
+                                                              <img height="auto" src="https://user-images.githubusercontent.com/12210180/185091230-39b38bb6-3fe0-4063-aece-0151e0f925ce.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="320" class="darkLogoDefault" />
+                                                              <div class="darkLogoWrapper" style="mso-hide: all; display: none">
+                                                                <img height="auto" src="https://user-images.githubusercontent.com/12210180/184343483-af937fd7-d4ea-40b9-8ac1-2f8d60d128f1.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:none" width="320" class="darkLogo" />
+                                                              </div>
+                                                              <div class="lightLogoWrapper" style="mso-hide: all; display: none">
+                                                                <img height="auto" src="https://user-images.githubusercontent.com/12210180/185091152-8c75f597-f301-415c-8bf6-a4417bed4b24.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:none" width="320" class="lightLogo" />
+                                                              </div>
                                                           </td>
                                                         </tr>
                                                       </tbody>
@@ -189,17 +189,22 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
-                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:22pt;font-weight:bold;line-height:150%;text-align:left;color:#323B49;">Sign in to Decipad</div>
+                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:22pt;font-weight:bold;line-height:150%;text-align:left;color:#323B49;">Welcome to Decipad!👋</div>
                                                   </td>
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
-                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:12pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#323B49;">You’ve requested to securely sign in to Decipad</div>
+                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:12pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#323B49;">Here is your link to securely sign in and get started with Decipad</div>
                                                   </td>
                                                 </tr>
                                                 <tr>
                                                   <td style="font-size:0px;padding:   ;word-break:break-word;">
                                                     <div style="height:12px;line-height:12px;">&#8202;</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="font-size:0px;padding:   ;word-break:break-word;">
+                                                    <div style="height:5px;line-height:5px;">&#8202;</div>
                                                   </td>
                                                 </tr>
                                                 <tr>
@@ -221,15 +226,15 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
                                                   </td>
                                                 </tr>
                                                 <tr>
-                                                <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
-                                                  <div style="font-family:Arial;font-size:10pt;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">${date}. The link will expire in ${expires}</div>
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
-                                                  <div style="font-family:Arial;font-size:10pt;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Alternatively, you can use this link: </div>
-                                                </td>
-                                              </tr>
+                                                  <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
+                                                    <div style="font-family:Arial;font-size:10pt;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">${date}. The link will expire in ${expires}</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
+                                                    <div style="font-family:Arial;font-size:10pt;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Alternatively, you can use this link: </div>
+                                                  </td>
+                                                </tr>
                                                   <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
                                                     <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:8pt;font-weight:400;line-height:1.7;text-align:left;color:#3266F5;"><a href="${url}">${url}</a></div>
                                                   </td>
@@ -242,11 +247,64 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
 </td></tr></table><![endif]-->
                                                   </td>
                                                 </tr>
-
-
-
-
-
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
+                                                    <div style="font-family:Arial;font-size:15pt;font-style:normal;font-weight:bold;line-height:1.7;text-align:left;color:#323B49;">Tips to get started</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="font-size:0px;padding:   ;word-break:break-word;">
+                                                    <div style="height:24px;line-height:24px;">&#8202;</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
+                                                    <div style="font-family:Arial;font-size:11pt;font-style:normal;font-weight:bold;line-height:1.7;text-align:left;color:#505969;">Explore our examples</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
+                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Get inspired by checking our <a href="https://alpha.decipad.com/docs/examples/">gallery of examples</a></div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="font-size:0px;padding:   ;word-break:break-word;">
+                                                    <div style="height:24px;line-height:24px;">&#8202;</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
+                                                    <div style="font-family:Arial;font-size:11pt;font-style:normal;font-weight:bold;line-height:1.7;text-align:left;color:#505969;">Check our docs</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
+                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Are you the type of person, who reads the manual before pressing the “ON” button? Take a look at our <a href="https://alpha.decipad.com/docs/">docs</a></div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="font-size:0px;padding:   ;word-break:break-word;">
+                                                    <div style="height:24px;line-height:24px;">&#8202;</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
+                                                    <div style="font-family:Arial;font-size:11pt;font-style:normal;font-weight:bold;line-height:1.7;text-align:left;color:#505969;">Join our Discord community</div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
+                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Follow our progress, tell us about your number challenges and meet like-minded people. <a href="https://discord.gg/HwDMqwbGmc">Join Discord</a></div>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td align="center" style="font-size:0px;padding:35px 0px 15px 0px;word-break:break-word;">
+                                                    <p style="border-top:solid 1px #E5E9F0;font-size:1px;margin:0px auto;width:100%;">
+                                                    </p>
+                                                    <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 1px #E5E9F0;font-size:1px;margin:0px auto;width:540px;" role="presentation" width="540px" ><tr><td style="height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]-->
+                                                  </td>
+                                                </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
                                                     <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:9pt;font-weight:400;line-height:1.7;text-align:left;color:#8f97a4;">If you didn&#x27;t try to sign in, you can safely ignore this email</div>
@@ -284,4 +342,4 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
 </html>
 `,
 });
-export default authMagiclink;
+export default authMagiclinkFirst;

@@ -14,6 +14,8 @@ export type User = {
   email?: string | null;
   image?: string | null;
   createdAt?: number | Date;
+  last_login?: number;
+  first_login?: number;
 };
 
 export interface UserInput {
@@ -22,6 +24,8 @@ export interface UserInput {
   image?: string | null;
   provider?: string;
   providerId?: string;
+  last_login?: number;
+  first_login?: number;
 }
 
 export interface GithubUser extends UserInput {
@@ -217,6 +221,7 @@ export interface UserRecord extends TableRecordBase {
   image?: string | null;
   email?: string | null;
   secret?: string;
+  first_login?: number;
 }
 
 export interface UserKeyRecord extends TableRecordBase {

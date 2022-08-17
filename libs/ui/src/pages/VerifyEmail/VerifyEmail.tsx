@@ -16,7 +16,7 @@ export const VerifyEmail = (): ReturnType<FC> => {
     <div css={wrapperStyles}>
       <AuthContent
         title="Check your email"
-        description="We've sent you a login confirmation link to your inbox."
+        description="We've sent you a sign in confirmation link to your inbox."
       />
 
       <Anchor
@@ -27,7 +27,7 @@ export const VerifyEmail = (): ReturnType<FC> => {
           ...setCssVar('currentTextColor', cssVar('weakTextColor')),
         })}
       >
-        Back to login
+        Back to sign in
       </Anchor>
     </div>
   );
