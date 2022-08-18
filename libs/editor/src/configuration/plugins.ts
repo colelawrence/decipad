@@ -34,7 +34,7 @@ import {
   createPlotPlugin,
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
-  createTabIndentPlugin,
+  createNavigationPlugin,
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
@@ -136,7 +136,7 @@ export const plugins = (computer: Computer) =>
       createAutoCompleteMenuPlugin(),
       createSyntaxErrorHighlightPlugin(),
       createAutoPairsPlugin(),
-      createTabIndentPlugin(),
+      createNavigationPlugin(),
 
       // user parse errors
       createDecorateUserParseErrorsPlugin(computer),

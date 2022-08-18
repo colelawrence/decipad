@@ -35,7 +35,7 @@ export * from './Plot';
 export * from './SentryBreadcrumbsPlugin';
 export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
-export * from './TabIndent';
+export * from './KeyboardNavigation';
 export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './WithDocSyncHistory';
