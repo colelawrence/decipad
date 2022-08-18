@@ -1,7 +1,21 @@
-import { ELEMENT_TABLE_CAPTION, PlateComponent } from '@decipad/editor-types';
+import {
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_CAPTION,
+  PlateComponent,
+  TableElement,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
+import { useComputer } from '@decipad/react-contexts';
 import { molecules } from '@decipad/ui';
-import { getNodeString } from '@udecode/plate';
+import {
+  findNodePath,
+  getAboveNode,
+  getNodeChild,
+  getNodeString,
+  isElement,
+} from '@udecode/plate';
+import { insertDataViewBelow } from 'libs/editor-components/src/utils/data-view';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableColumnCount } from '../../hooks';
 
@@ -12,6 +26,34 @@ export const TableCaption: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_TABLE_CAPTION);
   const columnCount = useTableColumnCount(element);
+  const editor = useTEditorRef();
+  const computer = useComputer();
+
+  const onAddDataViewButtonPress = () => {
+    const path = findNodePath(editor, element);
+    const parent = getAboveNode<TableElement>(editor, {
+      at: path,
+      match: (node) => {
+        return isElement(node) && node.type === ELEMENT_TABLE;
+      },
+    });
+
+    if (!parent) {
+      return;
+    }
+
+    const [, parentPath] = parent;
+
+    return (
+      path &&
+      insertDataViewBelow(
+        editor,
+        parentPath,
+        computer.getAvailableIdentifier.bind(computer),
+        getNodeString(getNodeChild(element, 0))
+      )
+    );
+  };
 
   return (
     <div {...attributes}>
@@ -20,6 +62,7 @@ export const TableCaption: PlateComponent = ({
           (columnCount && columnCount >= WIDE_MIN_COL_COUNT) || false
         }
         empty={getNodeString(element.children[0]).length === 0}
+        onAddDataViewButtonPress={onAddDataViewButtonPress}
       >
         {children}
       </molecules.EditableTableCaption>

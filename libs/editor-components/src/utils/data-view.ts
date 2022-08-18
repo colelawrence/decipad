@@ -12,31 +12,39 @@ import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { GetAvailableIdentifier } from './slashCommands';
 
-const initialDataViewElement = {
-  type: ELEMENT_DATA_VIEW,
-  children: [
-    {
-      type: ELEMENT_TABLE_CAPTION,
-      children: [
-        {
-          type: ELEMENT_TABLE_VARIABLE_NAME,
-          children: [{ text: '' }],
-        },
-      ],
-    },
-    {
-      type: ELEMENT_DATA_VIEW_TR,
-      children: [],
-    },
-  ],
-} as const;
+const getInitialDataViewElement = (
+  initialTableVariableName: string | undefined
+) => {
+  return {
+    type: ELEMENT_DATA_VIEW,
+    varName: initialTableVariableName,
+    children: [
+      {
+        type: ELEMENT_TABLE_CAPTION,
+        children: [
+          {
+            type: ELEMENT_TABLE_VARIABLE_NAME,
+            children: [{ text: `` }],
+          },
+        ],
+      },
+      {
+        type: ELEMENT_DATA_VIEW_TR,
+        children: [],
+      },
+    ],
+  };
+};
 
 export const insertDataViewBelow = (
   editor: TEditor,
   path: Path,
-  getAvailableIdentifier: GetAvailableIdentifier
+  getAvailableIdentifier: GetAvailableIdentifier,
+  initialTableVariableName?: string
 ): void => {
-  const table = clone(initialDataViewElement) as unknown as DataViewElement;
+  const table = clone(
+    getInitialDataViewElement(initialTableVariableName)
+  ) as unknown as DataViewElement;
   table.id = nanoid();
   table.children[0].children[0].children[0].text = getAvailableIdentifier(
     'Data View ',

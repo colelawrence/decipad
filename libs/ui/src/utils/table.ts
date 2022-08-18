@@ -80,10 +80,12 @@ interface TableStyleContextValue {
   readonly color: AvailableSwatchColor;
   readonly setIcon: (newIcon: UserIconKey) => void;
   readonly setColor: (newColor: AvailableSwatchColor) => void;
+  readonly hideAddDataViewButton?: boolean;
 }
 export const TableStyleContext = createContext<TableStyleContextValue>({
   icon: 'Table',
   color: 'Catskill',
+  hideAddDataViewButton: false,
   setIcon: () => {
     throw new Error('No way to change the icon provided');
   },

@@ -72,6 +72,7 @@ export const DataView: FC<DataViewProps> = ({
           color,
           setIcon: onChangeIcon,
           setColor: onChangeColor,
+          hideAddDataViewButton: true,
         }}
       >
         <div css={tableCaptionWrapperStyles}>{caption}</div>

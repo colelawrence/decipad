@@ -18,7 +18,11 @@ import { WIDE_MIN_COL_COUNT } from '../../constants';
 const isTable = (name: AutocompleteName): boolean => name.type.kind === 'table';
 const varName = (name: AutocompleteName): string => name.name;
 
-export const DataView: PlateComponent = ({ attributes, children, element }) => {
+export const DataView: PlateComponent<{ variableName: string }> = ({
+  attributes,
+  children,
+  element,
+}) => {
   assertElementType(element, ELEMENT_DATA_VIEW);
   const [deleted, setDeleted] = useState(false);
   const editor = useTEditorRef();
