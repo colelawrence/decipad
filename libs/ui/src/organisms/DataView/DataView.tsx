@@ -40,6 +40,29 @@ const dataViewTableStyles = css(p14Regular, {
     padding: '8px',
   },
 });
+
+const dataViewTableWrapperStyles = css({
+  transform: `translateX(calc((((100vw - 700px) / 2)) * -1 ))`,
+  width: '100vw',
+  minWidth: editorLayout.slimBlockWidth,
+  overflowX: 'auto',
+  paddingBottom: '12px',
+  position: 'relative',
+  whiteSpace: 'nowrap',
+  display: 'flex',
+  [smallScreenQuery]: {
+    maxWidth: `calc(100vw - ${gutterWidth})`,
+    minWidth: '0',
+    transform: `translateX(0)`,
+  },
+});
+
+const dataViewTableOverflowStyles = css({
+  display: 'inline-block',
+  height: '20px',
+  minWidth: `calc((100vw - 700px) / 2)`,
+});
+
 interface DataViewProps {
   readonly availableVariableNames: string[];
   readonly variableName: string;
@@ -82,7 +105,9 @@ export const DataView: FC<DataViewProps> = ({
           selectedVariableName={variableName}
           onChangeVariableName={onChangeVariableName}
         />
-        <div contentEditable={false}>
+        <div css={dataViewTableWrapperStyles} contentEditable={false}>
+          <div css={dataViewTableOverflowStyles} contentEditable={false} />
+
           <table css={dataViewTableStyles}>
             <thead>{thead}</thead>
             <tbody>{data}</tbody>

@@ -67,7 +67,7 @@ const tableWrapperStyles = css({
 const tableOverflowStyles = css({
   display: 'inline-block',
   height: '20px',
-  width: `calc(((100vw - 700px) / 2) - ${tableControlWidth})`,
+  minWidth: `calc(((100vw - 700px) / 2) - ${tableControlWidth})`,
 });
 
 const tableAddColumnButtonStyles = css({
