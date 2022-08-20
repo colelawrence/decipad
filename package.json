@@ -114,7 +114,7 @@
     "@udecode/plate": "^16.0.0",
     "@udecode/plate-juice": "^16.0.0",
     "@urql/devtools": "^2.0.3",
-    "@urql/exchange-graphcache": "^4.4.2",
+    "@urql/exchange-graphcache": "^5.0.0",
     "@xzar90/react-router-hash-link": "^6",
     "analytics-node": "^6.0.0",
     "apache-arrow": "^9.0.0",

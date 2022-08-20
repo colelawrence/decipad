@@ -10664,7 +10664,15 @@
     immer "^9.0.6"
     react-tracked "^1.7.9"
 
-"@urql/core@>=2.5.0", "@urql/core@^2.4.3":
+"@urql/core@>=3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-3.0.0.tgz#181976367ae27e1b36b9864fb3fa1bbfdad3ae71"
+  integrity sha512-C9nVn3+hhht8K0MEr9zLUgzoapkoX7X0crwMB72LrMqerhBjvEEuTngEFlZfALRwOzHjUNXBT9ZVgyzt6cKRhA==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    wonka "^6.0.0"
+
+"@urql/core@^2.4.3":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@urql/core/-/core-2.5.0.tgz#6b7e736dc9d3e9e9d7ea3e711ae8dc52be443b1b"
   integrity sha512-xXdcgb0H3nNTP4OfC+5T3CHJ0iz7Jj0QQYSYhN/hvKrzFnisPz2n6WXmvsHmMXk5bJHsr39kx4eOHcpsJuyCew==
@@ -10679,13 +10687,13 @@
   dependencies:
     wonka ">= 4.0.9"
 
-"@urql/exchange-graphcache@^4.4.2":
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-4.4.2.tgz#9d810063e6c7eef7154b60c7004b550592bb36d3"
-  integrity sha512-EyWH9//iLIjzmqZvRuPVi7K3PuHz2vVEzsHuKAMF4A3too6usg5G7+bt+yAe1wUKA1ksgYEP6iXTcoGKt+tgYQ==
+"@urql/exchange-graphcache@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-5.0.0.tgz#f86f536f016478f4a06d4900b64993cb57c945d9"
+  integrity sha512-REUA1SBrPQukxHq+IpBrLihSAW9J/QOOK3XPCfO5wtkg9FaBp3VV0MlOL/CItZYvfVvgnfLWMzwIDAcUCDZmgA==
   dependencies:
-    "@urql/core" ">=2.5.0"
-    wonka "^4.0.14"
+    "@urql/core" ">=3.0.0"
+    wonka "^6.0.0"
 
 "@urql/introspection@^0.3.2":
   version "0.3.3"
@@ -32749,6 +32757,11 @@ winston@^3.0.0:
   version "4.0.15"
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-4.0.15.tgz#9aa42046efa424565ab8f8f451fcca955bf80b89"
   integrity sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==
+
+wonka@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.0.0.tgz#38cd39a517fc3ff721ea3bf353642b353bf48860"
+  integrity sha512-TEiIOqkhQXbcmL1RrjxPCzTX15V5FSyJvZRSiTxvgTgrJMaOVKmzGTdRVh349CfaNo9dsIhWDyg1/GNq4NWrEg==
 
 word-wrap@^1.2.3, word-wrap@~1.2.3:
   version "1.2.3"
