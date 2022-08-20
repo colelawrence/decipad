@@ -187,7 +187,7 @@
     "react-portal": "^4.2.1",
     "react-resize-detector": "^7.0.0",
     "react-router-dom": "^6.0.0",
-    "react-simple-code-editor": "^0.11.0",
+    "react-simple-code-editor": "^0.13.0",
     "react-titled": "^1.0.1",
     "react-toast-notifications": "^2.4.4",
     "react-vega": "^7.4.4",
