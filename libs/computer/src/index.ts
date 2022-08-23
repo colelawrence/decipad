@@ -27,6 +27,8 @@ export {
   tokenize,
   CompareValues,
   getBuiltinsForAutocomplete,
+  areUnitsConvertible,
+  convertBetweenUnits,
 } from '@decipad/language';
 
 export type { AutocompleteName, ErrSpec } from '@decipad/language';

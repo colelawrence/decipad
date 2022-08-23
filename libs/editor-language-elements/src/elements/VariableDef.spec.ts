@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_VARIABLE_DEF,
   ELEMENT_CAPTION,
@@ -11,7 +12,7 @@ import { createPlateEditor } from '@udecode/plate';
 import { VariableDef } from './VariableDef';
 
 describe('VariableDef expression element', () => {
-  it('converts variable def expression document element into name and expression', () => {
+  it('converts variable def expression document element into name and expression', async () => {
     const editor = createPlateEditor() as MyEditor;
     expect(VariableDef.resultsInNameAndExpression).toBe(true);
     const el = {
@@ -34,7 +35,11 @@ describe('VariableDef expression element', () => {
       ],
     } as VariableDefinitionElement;
     expect(
-      VariableDef.getNameAndExpressionFromElement(editor, el)
+      await VariableDef.getNameAndExpressionFromElement(
+        editor,
+        new Computer(),
+        el
+      )
     ).toMatchObject([
       {
         expression: {
@@ -49,7 +54,7 @@ describe('VariableDef expression element', () => {
 
 describe('VariableDef slider element', () => {
   const editor = createPlateEditor() as MyEditor;
-  it('converts variable def slider document element into name and expression', () => {
+  it('converts variable def slider document element into name and expression', async () => {
     expect(VariableDef.resultsInNameAndExpression).toBe(true);
     const el = {
       id: 'id0',
@@ -80,7 +85,11 @@ describe('VariableDef slider element', () => {
       ],
     } as VariableDefinitionElement;
     expect(
-      VariableDef.getNameAndExpressionFromElement(editor, el)
+      await VariableDef.getNameAndExpressionFromElement(
+        editor,
+        new Computer(),
+        el
+      )
     ).toMatchObject([
       {
         expression: {

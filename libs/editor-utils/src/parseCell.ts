@@ -1,41 +1,120 @@
 import { TableCellType } from '@decipad/editor-types';
-import Fraction from '@decipad/fraction';
-import { AST, parseOneBlock, Time } from '@decipad/computer';
-import { getDefined } from '@decipad/utils';
+import Fraction, { FractionLike } from '@decipad/fraction';
+import {
+  AST,
+  parseOneBlock,
+  Time,
+  Computer,
+  areUnitsConvertible,
+  convertBetweenUnits,
+  convertToMultiplierUnit,
+  Result,
+  Unit,
+} from '@decipad/computer';
 import { parse } from 'date-fns';
-import { simpleFormatUnit } from '@decipad/format';
+import { simpleFormatUnit, formatUnit, formatError } from '@decipad/format';
+import { getDefined } from '@decipad/utils';
 import { astNode } from './astNode';
 
-export function parseCell(
+type ParseCellResult = Promise<AST.Expression | Error>;
+
+const defaultLocale = 'en-US'; // TODO: make this dynamic
+
+const parsing = async (
+  computer: Computer,
+  text: string,
+  afterParse: (result: Result.Result) => ParseCellResult
+): ParseCellResult => {
+  const parseResult = computer.parseStatement(text);
+  if (parseResult.error) {
+    return new Error(parseResult.error.message);
+  }
+  if (!parseResult.statement || !computer.isExpression(parseResult.statement)) {
+    return new Error('is not a valid expression');
+  }
+  const result = await computer.expressionResult(parseResult.statement);
+  if (result.type.kind === 'type-error') {
+    return new Error(formatError(defaultLocale, result.type.errorCause));
+  }
+  return afterParse(result);
+};
+
+const fixFraction = (f: FractionLike): Fraction => {
+  return f instanceof Fraction ? f : new Fraction(f);
+};
+
+const fixCellUnit = (unit: Unit[]): Unit[] => {
+  return unit.map((u): Unit => {
+    return {
+      ...u,
+      multiplier: fixFraction(u.multiplier),
+      exp: fixFraction(u.exp),
+    };
+  });
+};
+
+export async function parseCell(
+  computer: Computer,
   cellType: TableCellType,
   text: string
-): AST.Expression | null {
+): Promise<AST.Expression | Error | null> {
   switch (cellType.kind) {
     case 'number': {
-      const n = Number(text);
-      if (Number.isNaN(n) || !Number.isFinite(n)) {
-        return null;
-      }
+      return parsing(computer, text, async (result) => {
+        if (result.type.kind !== 'number') {
+          return new Error('is not a valid expression for a number');
+        }
 
-      const literal = astNode('literal', 'number' as const, new Fraction(n));
-      const unit = unitToAST(cellType.unit);
+        if (!cellType.unit && result.type.unit) {
+          return new Error('unexpected unit in number');
+        }
+        const cellUnit = cellType.unit && fixCellUnit(cellType.unit);
+        if (result.type.unit && cellUnit) {
+          if (!areUnitsConvertible(result.type.unit, cellUnit)) {
+            return new Error(
+              `cannot convert ${formatUnit(
+                'en-US',
+                result.type.unit
+              )} to ${formatUnit('en-US', cellUnit)} `
+            );
+          }
+          // eslint-disable-next-line no-param-reassign
+          result.value = convertToMultiplierUnit(
+            convertBetweenUnits(
+              result.value as Fraction,
+              result.type.unit,
+              cellUnit
+            ),
+            cellUnit
+          );
+        }
 
-      if (unit == null) {
-        return literal;
-      }
+        const literal = astNode(
+          'literal',
+          'number' as const,
+          new Fraction(result.value as Fraction)
+        );
+        const unit = unitToAST(cellUnit);
 
-      return astNode(
-        'function-call',
-        astNode('funcref', 'implicit*'),
-        astNode('argument-list', literal, unit)
-      );
+        if (unit == null) {
+          return literal;
+        }
+
+        return astNode(
+          'function-call',
+          astNode('funcref', 'implicit*'),
+          astNode('argument-list', literal, unit)
+        );
+      });
     }
     case 'date': {
-      const asDate: Date | null = parseDate(cellType, text);
+      return parsing(computer, `date(${text})`, async (result) => {
+        if (result.type.kind !== 'date' || result.type.date !== cellType.date) {
+          return new Error(`date granularity must be ${cellType.date}`);
+        }
 
-      if (!asDate) return null;
-
-      return dateToAST(cellType, asDate);
+        return dateToAST(cellType, new Date(Number(result.value)));
+      });
     }
     case 'boolean': {
       const n = text === 'true';
@@ -70,20 +149,30 @@ function unitToAST(
   }
 }
 
-export const getNullReplacementValue = (
+export const getExpression = (exp: Error | AST.Expression): AST.Expression => {
+  if (exp instanceof Error) {
+    throw exp;
+  }
+  return exp;
+};
+
+export const getNullReplacementValue = async (
+  computer: Computer,
   cellType: TableCellType
-): AST.Expression => {
+): Promise<AST.Expression> => {
   if (cellType.kind === 'date') {
     return dateToAST(cellType, new Date('2020-01-01'));
   }
   if (cellType.kind === 'number') {
-    return getDefined(parseCell(cellType, '0'));
+    return getExpression(getDefined(await parseCell(computer, cellType, '0')));
   }
   if (cellType.kind === 'boolean') {
-    return getDefined(parseCell(cellType, 'true'));
+    return getExpression(
+      getDefined(await parseCell(computer, cellType, 'true'))
+    );
   }
   if (cellType.kind === 'string') {
-    return getDefined(parseCell(cellType, ''));
+    return getExpression(getDefined(await parseCell(computer, cellType, '')));
   }
   throw new Error(`unexpected cell type ${cellType}`);
 };

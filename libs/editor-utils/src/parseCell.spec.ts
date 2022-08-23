@@ -1,21 +1,23 @@
 import { F } from '@decipad/fraction';
 import { TableCellType } from '@decipad/editor-types';
-import { prettyPrintAST } from '@decipad/computer';
+import { Computer, prettyPrintAST } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
-import { parseCell, parseDate } from './parseCell';
+import { getExpression, parseCell, parseDate } from './parseCell';
 
 type ValidateTest = [string, TableCellType, string];
 type NoValidateTest = [string, TableCellType];
 
-const testParseCell = (type: TableCellType, text: string) =>
-  prettyPrintAST(getDefined(parseCell(type, text)));
+const testParseCell = async (type: TableCellType, text: string) =>
+  prettyPrintAST(
+    getExpression(getDefined(await parseCell(new Computer(), type, text)))
+  );
 
-it('turns cells into AST nodes', () => {
+it('turns cells into AST nodes', async () => {
   expect(
-    testParseCell({ kind: 'number', unit: null }, '123')
+    await testParseCell({ kind: 'number', unit: null }, '123')
   ).toMatchInlineSnapshot(`"123"`);
   expect(
-    testParseCell(
+    await testParseCell(
       {
         kind: 'number',
         unit: [
@@ -41,7 +43,7 @@ it('turns cells into AST nodes', () => {
   );
 
   expect(
-    testParseCell(
+    await testParseCell(
       {
         kind: 'number',
         unit: [
@@ -63,20 +65,23 @@ it('turns cells into AST nodes', () => {
       '123'
     )
   ).toMatchInlineSnapshot(`"(implicit* 123 (* (ref m) (ref s)))"`);
-  expect(testParseCell({ kind: 'string' }, '123')).toMatchInlineSnapshot(
+  expect(await testParseCell({ kind: 'string' }, '123')).toMatchInlineSnapshot(
     `"\\"123\\""`
   );
   expect(
-    testParseCell({ kind: 'date', date: 'year' }, '2021')
+    await testParseCell({ kind: 'date', date: 'year' }, '2021')
   ).toMatchInlineSnapshot(`"(date year 2021)"`);
   expect(
-    testParseCell({ kind: 'date', date: 'day' }, '2021-12-13')
+    await testParseCell({ kind: 'date', date: 'day' }, '2021-12-13')
   ).toMatchInlineSnapshot(`"(date year 2021 month 12 day 13)"`);
   expect(
-    testParseCell({ kind: 'date', date: 'minute' }, '2021-12-13 10:30')
+    await testParseCell({ kind: 'date', date: 'minute' }, '2021-12-13 10:30')
   ).toMatchInlineSnapshot(
     `"(date year 2021 month 12 day 13 hour 10 minute 30)"`
   );
+  expect(
+    await testParseCell({ kind: 'number', unit: null }, '30%')
+  ).toMatchInlineSnapshot(`"0.3"`);
 });
 
 it.each([
@@ -84,8 +89,8 @@ it.each([
   ['3a', { kind: 'number', unit: null }],
   ['99999', { kind: 'date', date: 'year' }],
   ['aaaa', { kind: 'date', date: 'year' }],
-] as NoValidateTest[])('%s is not a valid %s', (format, type) => {
-  expect(parseCell(type, format)).toEqual(null);
+] as NoValidateTest[])('%s is not a valid %s', async (format, type) => {
+  expect(await parseCell(new Computer(), type, format)).toBeInstanceOf(Error);
 });
 
 describe('dates', () => {

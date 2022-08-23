@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import { MyElement, MyEditor, ELEMENT_DATA_VIEW } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { InteractiveLanguageElement } from '../types';
@@ -5,7 +6,11 @@ import { InteractiveLanguageElement } from '../types';
 export const DataView: InteractiveLanguageElement = {
   type: ELEMENT_DATA_VIEW,
   resultsInExpression: true,
-  getExpressionFromElement: (_editor: MyEditor, element: MyElement) => {
+  getExpressionFromElement: async (
+    _editor: MyEditor,
+    _computer: Computer,
+    element: MyElement
+  ) => {
     assertElementType(element, ELEMENT_DATA_VIEW);
 
     if (!element.varName) {

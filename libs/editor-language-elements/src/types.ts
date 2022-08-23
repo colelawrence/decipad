@@ -1,5 +1,5 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { AST, UnparsedBlock } from '@decipad/computer';
+import { AST, Computer, UnparsedBlock } from '@decipad/computer';
 
 interface NameAndExpression {
   name: string;
@@ -25,8 +25,9 @@ type ExpressionInteractiveLanguageElement = InteractiveLanguageElementBase & {
   isStructural?: false;
   getExpressionFromElement: (
     editor: MyEditor,
+    computer: Computer,
     element: MyElement
-  ) => JustExpression[];
+  ) => Promise<JustExpression[]>;
 };
 
 export type NameAndExpressionInteractiveLanguageElement =
@@ -37,8 +38,9 @@ export type NameAndExpressionInteractiveLanguageElement =
     isStructural?: false;
     getNameAndExpressionFromElement: (
       editor: MyEditor,
+      computer: Computer,
       element: MyElement
-    ) => NameAndExpression[];
+    ) => Promise<NameAndExpression[]>;
   };
 
 type UnparsedBlockInteractiveLanguageElement =
@@ -49,8 +51,9 @@ type UnparsedBlockInteractiveLanguageElement =
     isStructural?: false;
     getUnparsedBlockFromElement: (
       editor: MyEditor,
+      computer: Computer,
       element: MyElement
-    ) => UnparsedBlock[];
+    ) => Promise<UnparsedBlock[]>;
   };
 
 type StructuralElement = InteractiveLanguageElementBase & {
@@ -60,8 +63,9 @@ type StructuralElement = InteractiveLanguageElementBase & {
   resultsInUnparsedBlock?: true;
   getUnparsedBlockFromElement?: (
     editor: MyEditor,
+    computer: Computer,
     element: MyElement
-  ) => UnparsedBlock[];
+  ) => Promise<UnparsedBlock[]>;
 };
 
 export type InteractiveLanguageElement =

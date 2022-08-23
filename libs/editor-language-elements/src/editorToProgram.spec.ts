@@ -13,12 +13,12 @@ import {
   ELEMENT_TH,
   ELEMENT_TD,
 } from '@decipad/editor-types';
-import { ParsedBlock, prettyPrintAST } from '@decipad/computer';
+import { Computer, ParsedBlock, prettyPrintAST } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
 import { editorToProgram } from './editorToProgram';
 
 describe('editorToProgram', () => {
-  it('creates a program out of an editor', () => {
+  it('creates a program out of an editor', async () => {
     const editor = createPlateEditor() as MyEditor;
     editor.children = [
       { type: 'h1', id: '1', children: [{ text: '' }] },
@@ -102,7 +102,7 @@ describe('editorToProgram', () => {
         ],
       } as TableElement,
     ];
-    const { program } = editorToProgram(editor);
+    const { program } = await editorToProgram(editor, new Computer());
 
     expect(program.length).toBe(6);
 

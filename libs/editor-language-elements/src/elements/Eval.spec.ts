@@ -1,9 +1,10 @@
+import { Computer } from '@decipad/computer';
 import { MyEditor, EvalElement, ELEMENT_EVAL } from '@decipad/editor-types';
 import { createPlateEditor } from '@udecode/plate';
 import { Eval } from './Eval';
 
 describe('Eval expression element', () => {
-  it('returns result as unparsed block', () => {
+  it('returns result as unparsed block', async () => {
     const editor = createPlateEditor() as MyEditor;
     expect(Eval.resultsInUnparsedBlock).toBe(true);
 
@@ -22,7 +23,9 @@ describe('Eval expression element', () => {
       throw new Error('Show ');
     }
 
-    expect(Eval.getUnparsedBlockFromElement(editor, el)).toMatchObject([
+    expect(
+      await Eval.getUnparsedBlockFromElement(editor, new Computer(), el)
+    ).toMatchObject([
       {
         type: 'unparsed-block',
         id: 'id0',

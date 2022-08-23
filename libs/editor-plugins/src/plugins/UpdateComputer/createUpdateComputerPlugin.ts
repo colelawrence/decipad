@@ -13,10 +13,17 @@ export const createUpdateComputerPlugin = (
   key: 'UPDATE_COMPUTER_PLUGIN',
   withOverrides: (editor) => {
     const { onChange } = editor;
-    computer.pushCompute(editorToProgram(editor));
+    setTimeout(
+      async () => computer.pushCompute(await editorToProgram(editor, computer)),
+      0
+    );
     // eslint-disable-next-line no-param-reassign
     editor.onChange = () => {
-      computer.pushCompute(editorToProgram(editor));
+      setTimeout(
+        async () =>
+          computer.pushCompute(await editorToProgram(editor, computer)),
+        0
+      );
       onChange();
     };
 

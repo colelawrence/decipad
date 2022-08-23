@@ -1,5 +1,5 @@
 import { MyEditor } from '@decipad/editor-types';
-import { Program } from '@decipad/computer';
+import { Computer, Program } from '@decipad/computer';
 import { elementToLanguageBlock } from './elementToLanguageBlock';
 import { ParseError } from './types';
 
@@ -8,7 +8,10 @@ export interface DocumentToProgramReturn {
   parseErrors: ParseError[];
 }
 
-export const editorToProgram = (editor: MyEditor): DocumentToProgramReturn => {
+export const editorToProgram = async (
+  editor: MyEditor,
+  computer: Computer
+): Promise<DocumentToProgramReturn> => {
   let program: Program = [];
   let parseErrors: ParseError[] = [];
 
@@ -17,7 +20,8 @@ export const editorToProgram = (editor: MyEditor): DocumentToProgramReturn => {
       continue;
     }
 
-    const blockResult = elementToLanguageBlock(editor, element);
+    // eslint-disable-next-line no-await-in-loop
+    const blockResult = await elementToLanguageBlock(editor, computer, element);
     if (!blockResult) {
       continue;
     }

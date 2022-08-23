@@ -4,6 +4,7 @@ import {
   MyEditor,
 } from '@decipad/editor-types';
 import {
+  Computer,
   isExpression,
   parseOneBlock,
   parseOneExpression,
@@ -17,7 +18,7 @@ export const VariableDef: NameAndExpressionInteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
-    (_editor: MyEditor, element: MyElement) => {
+    async (_editor: MyEditor, _computer: Computer, element: MyElement) => {
       assertElementType(element, ELEMENT_VARIABLE_DEF);
       if (element.children.length < 2) {
         return [];

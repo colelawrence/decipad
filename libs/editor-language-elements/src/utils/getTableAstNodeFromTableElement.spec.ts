@@ -10,7 +10,7 @@ import {
   MyEditor,
 } from '@decipad/editor-types';
 import { F } from '@decipad/editor-utils';
-import { prettyPrintAST } from '@decipad/computer';
+import { Computer, prettyPrintAST } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
 import {
   formulaSourceToColumn,
@@ -24,7 +24,7 @@ expect.addSnapshotSerializer({
 
 describe('getTableAstNodeFromTableElement', () => {
   const editor = createPlateEditor() as MyEditor;
-  it('converts table element into table AST node', () => {
+  it('converts table element into table AST node', async () => {
     const node: TableElement = {
       id: 'table1',
       type: ELEMENT_TABLE,
@@ -142,8 +142,10 @@ describe('getTableAstNodeFromTableElement', () => {
       ],
     };
 
-    expect(getTableAstNodeFromTableElement(editor, node).expression)
-      .toMatchInlineSnapshot(`
+    expect(
+      (await getTableAstNodeFromTableElement(editor, new Computer(), node))
+        .expression
+    ).toMatchInlineSnapshot(`
       (table
         column1 (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas)))
         column2 (column "string 1" "string 2" "string 3")
@@ -151,7 +153,7 @@ describe('getTableAstNodeFromTableElement', () => {
     `);
   });
 
-  it('converts table formulas correctly', () => {
+  it('converts table formulas correctly', async () => {
     const node: TableElement = {
       id: 'table1',
       type: ELEMENT_TABLE,
@@ -212,8 +214,10 @@ describe('getTableAstNodeFromTableElement', () => {
       ],
     };
 
-    expect(getTableAstNodeFromTableElement(editor, node).expression)
-      .toMatchInlineSnapshot(`
+    expect(
+      (await getTableAstNodeFromTableElement(editor, new Computer(), node))
+        .expression
+    ).toMatchInlineSnapshot(`
         (table
           column1 (column "Hello")
           column2 (+ 1 1))

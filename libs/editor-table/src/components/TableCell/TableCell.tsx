@@ -74,9 +74,14 @@ export const TableCell: PlateComponent = ({
 
   const computer = useComputer();
   // Displaying the unit on an empty cell creates a visual glitch
-  const hasText = getNodeString(element).trim() !== '';
+  const nodeText = getNodeString(element).trim();
+  const hasText = nodeText !== '';
+  const isSoleNumber = nodeText === Number(nodeText).toString();
   const unit =
-    cellType?.kind === 'number' && cellType.unit?.length && hasText
+    cellType?.kind === 'number' &&
+    cellType.unit?.length &&
+    hasText &&
+    isSoleNumber
       ? computer.formatUnit(cellType.unit)
       : undefined;
 

@@ -4,7 +4,12 @@ import {
   SeriesType,
   TableElement,
 } from '@decipad/editor-types';
-import { AST, parseOneExpression } from '@decipad/computer';
+import {
+  AST,
+  Computer,
+  isExpression,
+  parseOneExpression,
+} from '@decipad/computer';
 import {
   astColumn,
   astNode,
@@ -18,66 +23,89 @@ import { getNodeString } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
 import { ParseError } from '../types';
 
-export const getTableAstNodeFromTableElement = (
-  _editor: MyEditor,
-  table: TableElement
-): {
+interface GetTableAstNodeFromTableElementResult {
   id: string;
   name: string;
   expression: AST.Table;
   parseErrors: ParseError[];
-} => {
+}
+
+export const getTableAstNodeFromTableElement = async (
+  _editor: MyEditor,
+  computer: Computer,
+  table: TableElement
+): Promise<GetTableAstNodeFromTableElementResult> => {
   const [caption, headerRow, ...dataRows] = table.children;
   const parseErrors: ParseError[] = [];
-  const columns = headerRow.children.map((th, columnIndex) => {
-    const { cellType } = th;
-    const columnName = getNodeString(th);
+  const columns = await Promise.all(
+    headerRow.children.map(async (th, columnIndex) => {
+      const { cellType } = th;
+      const columnName = getNodeString(th);
 
-    const column = (() => {
-      if (cellType.kind === 'table-formula') {
-        const formula = table.children[0].children.find(
-          (child) =>
-            child.type === ELEMENT_TABLE_COLUMN_FORMULA &&
-            child.columnId === th.id
-        );
+      const column = (async () => {
+        if (cellType.kind === 'table-formula') {
+          const formula = table.children[0].children.find(
+            (child) =>
+              child.type === ELEMENT_TABLE_COLUMN_FORMULA &&
+              child.columnId === th.id
+          );
 
-        return formulaSourceToColumn(
-          formula ? getNodeString(formula) : '',
-          dataRows.length
-        );
-      }
-
-      if (cellType.kind === 'series') {
-        const firstDataRow = dataRows[0];
-        if (firstDataRow) {
-          const content = getNodeString(firstDataRow.children[columnIndex]);
-          return seriesColumn(cellType.seriesType, content, dataRows.length);
+          return formulaSourceToColumn(
+            formula ? getNodeString(formula) : '',
+            dataRows.length
+          );
         }
-      }
 
-      const items = dataRows.map((tr) => {
-        const td = tr.children[columnIndex];
-        let parsed: AST.Expression | null = null;
-        if (td) {
-          const text = getNodeString(td);
-          parsed = parseCell(cellType, text);
-          if (!parsed) {
-            parseErrors.push({
-              error: `Invalid ${cellType.kind}`,
-              elementId: td.id,
-            });
+        if (cellType.kind === 'series') {
+          const firstDataRow = dataRows[0];
+          if (firstDataRow) {
+            const content = getNodeString(firstDataRow.children[columnIndex]);
+            return seriesColumn(
+              computer,
+              cellType.seriesType,
+              content,
+              dataRows.length
+            );
           }
         }
-        if (!parsed) {
-          parsed = getNullReplacementValue(cellType);
-        }
-        return parsed;
-      });
-      return astColumn(...items);
-    })();
 
-    return astNode('table-column', astNode('coldef', columnName), column);
-  });
+        const items = await Promise.all(
+          dataRows.map(async (tr) => {
+            const td = tr.children[columnIndex];
+            let parsed: AST.Expression | Error | null = null;
+            if (td) {
+              const text = getNodeString(td);
+              parsed = await parseCell(computer, cellType, text);
+              if (!parsed) {
+                parseErrors.push({
+                  error: `Invalid ${cellType.kind}`,
+                  elementId: td.id,
+                });
+              }
+              if (parsed instanceof Error) {
+                parseErrors.push({
+                  error: parsed.message,
+                  elementId: td.id,
+                });
+                parsed = null;
+              }
+            }
+            if (!parsed) {
+              parsed = await getNullReplacementValue(computer, cellType);
+            }
+            return parsed;
+          })
+        );
+        return astColumn(...items);
+      })();
+
+      return astNode(
+        'table-column',
+        astNode('coldef', columnName),
+        await column
+      );
+    })
+  );
 
   return {
     id: table.id,
@@ -101,28 +129,34 @@ export function formulaSourceToColumn(
   }
 }
 
-export function seriesColumn(
+export async function seriesColumn(
+  computer: Computer,
   type: SeriesType,
   source: string,
   rowCount: number
-): AST.Expression {
+): Promise<AST.Expression> {
   try {
     const { granularity } = parseSeriesStart(type, source);
     const it = seriesIterator(type, getDefined(granularity), source);
     let v = source.trim();
-    const items = Array.from({ length: rowCount }, () => {
-      const previous = v;
-      v = it.next().value;
-      return getDefined(
-        parseCell(
-          {
-            kind: 'date',
-            date: getDefined(granularity),
-          },
-          previous
-        )
-      );
-    });
+    const items = (
+      await Promise.all(
+        Array.from({ length: rowCount }, async () => {
+          const previous = v;
+          v = it.next().value;
+          return getDefined(
+            await parseCell(
+              computer,
+              {
+                kind: 'date',
+                date: getDefined(granularity),
+              },
+              previous
+            )
+          );
+        })
+      )
+    ).filter(isExpression);
     return astColumn(...items);
   } catch (e) {
     const items = Array.from({ length: rowCount }, () =>

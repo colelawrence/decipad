@@ -1,12 +1,13 @@
 import { ELEMENT_CODE_LINE, MyEditor, MyElement } from '@decipad/editor-types';
-import { UnparsedBlock } from '@decipad/computer';
+import { Computer, UnparsedBlock } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
 
-export const getUnparsedBlockFromCodeLine = (
+export const getUnparsedBlockFromCodeLine = async (
   _editor: MyEditor,
+  _computer: Computer,
   block: MyElement
-): UnparsedBlock[] => {
+): Promise<UnparsedBlock[]> => {
   if (block.type === ELEMENT_CODE_LINE) {
     return [
       {

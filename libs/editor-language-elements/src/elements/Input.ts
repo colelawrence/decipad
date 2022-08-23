@@ -4,7 +4,7 @@ import {
   ELEMENT_INPUT,
   MyEditor,
 } from '@decipad/editor-types';
-import { isExpression, parseOneBlock } from '@decipad/computer';
+import { Computer, isExpression, parseOneBlock } from '@decipad/computer';
 import { InteractiveLanguageElement } from '../types';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
@@ -12,7 +12,7 @@ export const Input: InteractiveLanguageElement = {
   type: ELEMENT_INPUT,
   resultsInNameAndExpression: true,
   getNameAndExpressionFromElement: weakMapMemoizeInteractiveElementOutput(
-    (_editor: MyEditor, element: MyElement) => {
+    async (_editor: MyEditor, _computer: Computer, element: MyElement) => {
       const { variableName, value, id } = element as InputElement;
       if (!variableName) {
         return [];
