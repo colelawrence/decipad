@@ -1,22 +1,15 @@
 /* eslint-disable no-loop-func */
 import { Path } from 'slate';
 import { nanoid } from 'nanoid';
-import {
-  getNode,
-  insertNodes,
-  removeNodes,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { insertNodes } from '@udecode/plate';
 import { format } from 'date-fns';
 import {
-  ELEMENT_IMPORT,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  ImportElement,
   MyEditor,
   TableCellElement,
   TableCellType,
@@ -24,12 +17,10 @@ import {
   TableRowElement,
 } from '@decipad/editor-types';
 import { Computer, Result, SerializedType } from '@decipad/computer';
-import { isElementOfType, requirePathBelowBlock } from '@decipad/editor-utils';
-import Fraction from '@decipad/fraction';
 
 interface ImportTableProps {
   editor: MyEditor;
-  path: Path;
+  insertPath: Path;
   table: Result.Result<'table'>;
   computer: Computer;
 }
@@ -40,7 +31,7 @@ const valueToString = (result: Result.Result): string => {
     return '';
   }
   if (type.kind === 'string') {
-    return value as string;
+    return value.toString();
   }
   if (type.kind === 'date') {
     let fmt: string;
@@ -72,13 +63,7 @@ const valueToString = (result: Result.Result): string => {
     return format(date, fmt);
   }
 
-  if (type.kind === 'number') {
-    if (value instanceof Fraction) {
-      return value.toString();
-    }
-  }
-
-  return result.toString();
+  return value.toString();
 };
 
 const cellType = (type: SerializedType): TableCellType => {
@@ -131,12 +116,11 @@ const dataRows = (table: Result.Result<'table'>): TableRowElement[] => {
 };
 
 const tableElement = (
-  blockId: string,
   computer: Computer,
   table: Result.Result<'table'>
 ): TableElement => {
   return {
-    id: blockId,
+    id: nanoid(),
     type: ELEMENT_TABLE,
     children: [
       {
@@ -173,20 +157,12 @@ const tableElement = (
 
 export const importTable = ({
   editor,
-  path,
+  insertPath,
   table,
   computer,
 }: ImportTableProps): void => {
-  const importElement = getNode<ImportElement>(editor, path);
-  if (importElement && isElementOfType(importElement, ELEMENT_IMPORT)) {
-    const t = tableElement(importElement.id, computer, table);
-    if (importElement) {
-      withoutNormalizing(editor, () => {
-        insertNodes(editor, t, {
-          at: requirePathBelowBlock(editor, path),
-        });
-        removeNodes(editor, { at: path });
-      });
-    }
-  }
+  const t = tableElement(computer, table);
+  insertNodes(editor, t, {
+    at: insertPath,
+  });
 };

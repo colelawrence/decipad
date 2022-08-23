@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { findNodePath } from '@udecode/plate';
+import { removeNodes, withoutNormalizing } from '@udecode/plate';
 import {
   ELEMENT_IMPORT,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  requirePathBelowBlock,
+  useNodePath,
+} from '@decipad/editor-utils';
 import { molecules } from '@decipad/ui';
 import { tryImport } from '@decipad/import';
 import { Result } from '@decipad/computer';
@@ -24,6 +28,7 @@ export const Import: PlateComponent = ({ attributes, element }) => {
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [result, setResult] = useState<Result.Result | undefined>();
+  const path = useNodePath(element);
 
   useEffect(() => {
     (async () => {
@@ -49,16 +54,24 @@ export const Import: PlateComponent = ({ attributes, element }) => {
       setError('Expected result to be a table');
       return;
     }
-    const path = findNodePath(editor, element);
-    if (result && path) {
-      importTable({
-        editor,
-        computer,
-        path,
-        table: result as Result.Result<'table'>,
-      });
+    if (path && result) {
+      try {
+        const insertPath = requirePathBelowBlock(editor, path);
+        withoutNormalizing(editor, () => {
+          importTable({
+            editor,
+            computer,
+            insertPath,
+            table: result as Result.Result<'table'>,
+          });
+          removeNodes(editor, { at: path });
+        });
+      } catch (err) {
+        console.error(err);
+        setError((err as Error).message);
+      }
     }
-  }, [computer, editor, element, result]);
+  }, [computer, editor, element, path, result]);
 
   return (
     <div {...attributes}>
