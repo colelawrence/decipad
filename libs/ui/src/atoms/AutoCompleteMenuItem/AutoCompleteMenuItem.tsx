@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useRef } from 'react';
 import { noop } from '@decipad/utils';
 import { Calendar, Formula, Number, Table, Text } from '../../icons';
 import { setCssVar, cssVar, p14Medium, teal600 } from '../../primitives';
@@ -47,6 +47,8 @@ export const AutoCompleteMenuItem = ({
   type,
   onExecute = noop,
 }: AutoCompleteMenuItemProps): ReturnType<FC> => {
+  const itemRef = useRef<HTMLButtonElement>(null);
+
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (
@@ -63,6 +65,14 @@ export const AutoCompleteMenuItem = ({
   );
   useWindowListener('keydown', onKeyDown, true);
 
+  if (focused) {
+    itemRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'nearest',
+    });
+  }
+
   return (
     <button
       role="menuitem"
@@ -73,6 +83,7 @@ export const AutoCompleteMenuItem = ({
         event.preventDefault();
       }}
       data-focused={focused}
+      ref={itemRef}
     >
       <span css={iconStyles}>
         {{

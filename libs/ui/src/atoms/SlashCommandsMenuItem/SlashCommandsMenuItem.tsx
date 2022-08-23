@@ -105,8 +105,8 @@ export const SlashCommandsMenuItem = ({
   if (focused) {
     itemRef.current?.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',
-      inline: 'center',
+      block: 'nearest',
+      inline: 'nearest',
     });
   }
 
