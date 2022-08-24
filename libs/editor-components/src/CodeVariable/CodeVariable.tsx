@@ -56,6 +56,8 @@ export const CodeVariable: CodeLeaf = ({
   const computer = useComputer();
   const defBlockId = useObservable(() => computer.getBlockId$(variableName));
 
+  const variableResult = computer.getVariable(variableName);
+
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
 
@@ -83,7 +85,7 @@ export const CodeVariable: CodeLeaf = ({
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
         variableType={result?.type}
-        variableValue={result?.value ?? undefined}
+        variableValue={variableResult?.value ?? undefined}
         defBlockId={defBlockId}
         onGoToDefinition={goToDefinition}
       >
