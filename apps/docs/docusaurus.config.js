@@ -48,6 +48,7 @@ const config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
+          breadcrumbs: false,
           /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
           async sidebarItemsGenerator({
             defaultSidebarItemsGenerator,
