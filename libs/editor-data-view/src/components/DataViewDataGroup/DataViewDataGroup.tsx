@@ -6,6 +6,7 @@ import { Element as GroupElement } from '../../utils/treeToTable';
 import { HeaderProps, SmartProps } from '../DataViewDataLayout';
 
 interface DataViewDataGroupElementProps {
+  tableName: string;
   element: GroupElement<DataGroup>;
   Header: FC<HeaderProps>;
   SmartCell: FC<SmartProps>;
@@ -13,6 +14,7 @@ interface DataViewDataGroupElementProps {
 }
 
 const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
+  tableName,
   element,
   Header,
   SmartCell,
@@ -60,6 +62,7 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   ) : (
     element.column && (
       <SmartCell
+        tableName={tableName}
         rowSpan={element.rowspan}
         colSpan={element.colspan}
         column={element.column}
@@ -67,12 +70,14 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
         onHover={onHover}
         hover={parentHover || selfHover}
         alignRight={isCellAlignRight(element.column.type)}
+        subproperties={element.subproperties}
       />
     )
   );
 };
 
 interface DataViewDataGroupProps {
+  tableName: string;
   group: GroupElement<DataGroup>[];
   selectedAggregationTypes: Array<AggregationKind | undefined>;
   Header: FC<HeaderProps>;
@@ -80,6 +85,7 @@ interface DataViewDataGroupProps {
 }
 
 export const DataViewDataGroup: FC<DataViewDataGroupProps> = ({
+  tableName,
   group,
   selectedAggregationTypes,
   Header,
@@ -90,6 +96,7 @@ export const DataViewDataGroup: FC<DataViewDataGroupProps> = ({
       {group.map((element, index) => (
         <DataViewDataGroupElement
           key={index}
+          tableName={tableName}
           element={element}
           aggregationType={selectedAggregationTypes[element.columnIndex]}
           Header={Header}

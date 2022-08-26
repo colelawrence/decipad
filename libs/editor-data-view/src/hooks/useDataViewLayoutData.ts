@@ -9,30 +9,45 @@ const { Column, ResultTransforms } = Result;
 type SmartColumnInput = [SerializedType, Result.ColumnLike<Result.Comparable>];
 
 const smartRow = (
+  columnNames: string[],
   columns: SmartColumnInput[],
   columnIndex: number,
+  subproperties: { value: Result.Comparable; name: string }[],
   parentHighlight$?: BehaviorSubject<boolean>
 ): DataGroup => {
   const [column, ...rest] = columns;
+
   return {
     elementType: 'smartrow',
     children:
       rest.length > 0
-        ? [smartRow(rest, columnIndex + 1, parentHighlight$)]
+        ? [
+            smartRow(
+              columnNames,
+              rest,
+              columnIndex + 1,
+              subproperties,
+              parentHighlight$
+            ),
+          ]
         : [],
     column: column && {
+      name: columnNames[columnIndex],
       type: column[0],
       value: column[1],
     },
     columnIndex,
+    subproperties,
     parentHighlight$,
   };
 };
 
 export const group = (
+  columnNames: string[],
   columnData: Result.ColumnLike<Result.Comparable>[],
   columnTypes: SerializedType[],
   columnIndex: number,
+  subproperties: { value: Result.Comparable; name: string }[],
   parentHighlight$?: BehaviorSubject<boolean>
 ): DataGroup[] => {
   if (columnData.length !== columnTypes.length) {
@@ -55,6 +70,10 @@ export const group = (
 
   return slices.map(([start, end]): DataGroup => {
     const value = sortedFirstColumn.atIndex(start);
+    const newSubproperties = [
+      { value, name: columnNames[columnIndex] },
+      ...subproperties,
+    ];
     const restDataSlice = sortedRestOfColumns.map((column) =>
       ResultTransforms.slice(column, start, end + 1)
     );
@@ -67,8 +86,10 @@ export const group = (
       !restDataSlice || !restDataSlice[0] || smartRowShouldHide
         ? undefined
         : smartRow(
+            columnNames,
             zip(restOfTypes, restDataSlice),
             columnIndex + 1,
+            newSubproperties,
             selfHighlight$
           );
 
@@ -78,7 +99,14 @@ export const group = (
       type,
       children: [
         sRow,
-        ...group(restDataSlice, restOfTypes, columnIndex + 1, selfHighlight$),
+        ...group(
+          columnNames,
+          restDataSlice,
+          restOfTypes,
+          columnIndex + 1,
+          newSubproperties,
+          selfHighlight$
+        ),
       ].filter(Boolean) as DataGroup[],
       columnIndex,
       selfHighlight$,
@@ -88,18 +116,23 @@ export const group = (
 };
 
 export const layoutPowerData = (
+  columnNames: string[],
   columns: Interpreter.ResultTable,
   columnTypes: SerializedType[]
 ) => {
   const sortableColumns = columns.map((column) =>
     Column.fromValues(column as Result.Comparable[])
   );
-  return group(sortableColumns, columnTypes, 0);
+  return group(columnNames, sortableColumns, columnTypes, 0, []);
 };
 
 export const useDataViewLayoutData = (
+  columnNames: string[],
   data: Interpreter.ResultTable,
   columnTypes: SerializedType[]
 ): DataGroup[] => {
-  return useMemo(() => layoutPowerData(data, columnTypes), [data, columnTypes]);
+  return useMemo(
+    () => layoutPowerData(columnNames, data, columnTypes),
+    [columnNames, data, columnTypes]
+  );
 };

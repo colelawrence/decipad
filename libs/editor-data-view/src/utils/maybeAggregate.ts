@@ -1,11 +1,11 @@
-import { Result } from '@decipad/computer';
 import aggregations from '../aggregators';
-import { AggregationKind, SmartRowElement } from '../types';
+import { AggregationKind } from '../types';
 
 export const maybeAggregate = (
-  input: SmartRowElement['column'],
+  expressionFilter: string,
+  columnType: string,
   aggregation: AggregationKind | undefined
-): Result.Result | Error | undefined => {
+): string | Error | undefined => {
   try {
     if (!aggregation) {
       return undefined;
@@ -14,7 +14,8 @@ export const maybeAggregate = (
     if (!aggregator) {
       throw new Error(`No aggregator named ${aggregation} found`);
     }
-    return aggregator(input);
+
+    return aggregator({ expressionFilter, columnType });
   } catch (err) {
     return err as Error;
   }

@@ -15,14 +15,7 @@ export interface DataViewHeaderRowElement extends BaseElement {
 export interface DataViewHeader extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TH;
   cellType: SerializedType;
-  aggregation?:
-    | 'average'
-    | 'frequency'
-    | 'max'
-    | 'median'
-    | 'min'
-    | 'span'
-    | 'sum';
+  aggregation?: 'average' | 'max' | 'median' | 'min' | 'span' | 'sum';
   name: string;
   children: [EmptyText];
 }

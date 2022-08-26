@@ -32,7 +32,7 @@ export interface ColumnAggregation {
 
 export interface SmartRowProps {
   aggregationType?: string;
-  aggregation?: ColumnAggregation | Error;
+  result?: Result.Result;
   rowSpan?: number;
   colSpan?: number;
   onHover?: (hover: boolean) => void;
@@ -41,7 +41,7 @@ export interface SmartRowProps {
 }
 
 export function SmartCell({
-  aggregation = {},
+  result,
   aggregationType,
   rowSpan = 1,
   colSpan = 1,
@@ -52,14 +52,13 @@ export function SmartCell({
   const onMouseOver = useCallback(() => onHover(true), [onHover]);
   const onMouseOut = useCallback(() => onHover(false), [onHover]);
 
-  if (aggregation instanceof Error) {
+  if (result instanceof Error) {
     return (
       <td rowSpan={rowSpan} colSpan={colSpan}>
-        <ErrorMessage message={aggregation.message}></ErrorMessage>
+        <ErrorMessage message={result.message}></ErrorMessage>
       </td>
     );
   }
-  const { type, value } = aggregation;
   return (
     <td
       css={[
@@ -76,9 +75,7 @@ export function SmartCell({
         <span css={labelStyles}>
           {(aggregationType && `${aggregationType}: `) || null}
         </span>
-        {type && value && (
-          <organisms.CodeResult variant="inline" type={type} value={value} />
-        )}
+        {result ? <organisms.CodeResult variant="inline" {...result} /> : null}
       </>
     </td>
   );

@@ -32,6 +32,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const {
     variableNames,
+    tableName,
     onDelete,
     onVariableNameChange,
     sortedColumns,
@@ -42,7 +43,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   });
 
   const wideTable = (sortedColumns?.[0].length || 0) >= WIDE_MIN_COL_COUNT;
-
   return (
     <div {...attributes}>
       {!deleted && (
@@ -65,6 +65,8 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
             data={
               (sortedColumns && (
                 <DataViewData
+                  tableName={tableName}
+                  columnNames={sortedColumns[0]}
                   values={sortedColumns[2]}
                   types={sortedColumns[1]}
                   aggregationTypes={selectedAggregationTypes}

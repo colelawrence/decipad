@@ -1,6 +1,5 @@
 import { AggregationKind, Aggregator } from '../types';
 import { average } from './average';
-import { frequency } from './frequency';
 import { max } from './max';
 import { median } from './median';
 import { min } from './min';
@@ -9,7 +8,6 @@ import { sum } from './sum';
 
 export default {
   average,
-  frequency,
   max,
   median,
   min,

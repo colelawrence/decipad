@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 
 export type ValueCell = Result.Comparable;
 export interface SmartRowColumn {
+  name: string;
   type: SerializedType;
   value: Result.ColumnLike<Result.Comparable>;
 }
@@ -22,6 +23,7 @@ export interface SmartRowElement extends BaseElement {
   children: DataGroup[];
   column: SmartRowColumn;
   columnIndex: number;
+  subproperties: { value: Result.Comparable; name: string }[];
 }
 
 export interface DataGroupElement extends BaseElement {
@@ -50,7 +52,9 @@ export type AggregationKind =
   | 'average'
   | 'median'
   | 'sum'
-  | 'span'
-  | 'frequency';
+  | 'span';
 
-export type Aggregator = (input: SmartRowColumn) => Result.Result | undefined;
+export type Aggregator = (params: {
+  expressionFilter: string;
+  columnType: string;
+}) => string | undefined;

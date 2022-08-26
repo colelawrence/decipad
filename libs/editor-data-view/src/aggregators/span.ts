@@ -1,33 +1,11 @@
 import { Aggregator } from '../types';
-import { max } from './max';
-import { min } from './min';
 
-const allowedMaxMinKinds = ['date', 'number'];
-
-export const span: Aggregator = (input) => {
-  const elMax = max(input);
-  const elMin = min(input);
-  if (elMax == null || elMin == null) {
-    return undefined;
+export const span: Aggregator = ({ expressionFilter, columnType }) => {
+  switch (columnType) {
+    case 'number':
+      return `max(${expressionFilter}) - min(${expressionFilter})`;
   }
-  if (!allowedMaxMinKinds.includes(elMin.type.kind)) {
-    throw new Error(`minimum returned unexpected type ${elMin.type.kind}`);
-  }
-  if (elMin.value == null) {
-    throw new Error(`minimum returned unexpected empty value`);
-  }
-  if (elMax.value == null) {
-    throw new Error(`maximum returned unexpected empty value`);
-  }
-  if (!allowedMaxMinKinds.includes(elMax.type.kind)) {
-    throw new Error(`maximum returned unexpected type ${elMax.type.kind}`);
-  }
-  return {
-    // TODO: make a range
-    type: {
-      kind: 'range',
-      rangeOf: elMax.type,
-    },
-    value: [elMin.value, elMax.value],
-  };
+  throw new Error(
+    `Don't know how to find span for input of type ${columnType}`
+  );
 };

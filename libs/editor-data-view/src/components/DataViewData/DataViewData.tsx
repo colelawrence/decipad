@@ -4,6 +4,8 @@ import { DataViewDataLayout } from '..';
 import { AggregationKind } from '../../types';
 
 interface DataViewDataProps {
+  tableName: string;
+  columnNames: string[];
   values: Interpreter.ResultTable;
   types: SerializedType[];
   aggregationTypes: Array<AggregationKind | undefined>;

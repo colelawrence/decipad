@@ -27,6 +27,7 @@ interface UseDataViewProps {
 
 interface UseDataViewReturnType {
   variableNames: AutocompleteName[];
+  tableName: string;
   onDelete: () => void;
   onVariableNameChange: (newName: string) => void;
   sortedColumns: Columns | undefined;
@@ -39,6 +40,8 @@ export const useDataView = ({
 }: UseDataViewProps): UseDataViewReturnType => {
   const { onDelete, onVariableNameChange, setDataColumns, columnChanges$ } =
     useDataViewActions(editor, element);
+
+  const tableName = element.varName || '';
 
   const variableNames = useNamesDefinedBefore(element.id, false);
 
@@ -117,6 +120,7 @@ export const useDataView = ({
 
   return {
     variableNames,
+    tableName,
     onDelete,
     onVariableNameChange,
     sortedColumns,

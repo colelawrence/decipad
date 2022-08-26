@@ -19,9 +19,11 @@ export interface HeaderProps {
 }
 
 export interface SmartProps {
+  tableName: string;
   column: {
     type: SerializedType;
     value: Result.ColumnLike<Result.Comparable>;
+    name: string;
   };
   columnIndex?: number;
   aggregationType: AggregationKind | undefined;
@@ -29,21 +31,26 @@ export interface SmartProps {
   colSpan?: number;
   onHover: (hover: boolean) => void;
   hover: boolean;
+  subproperties: { value: Result.Comparable; name: string }[];
   alignRight?: boolean;
 }
 
 export interface DataViewLayoutProps {
+  tableName: string;
+  columnNames: string[];
   values: Interpreter.ResultTable;
   types: SerializedType[];
   aggregationTypes: Array<AggregationKind | undefined>;
 }
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
+  tableName,
+  columnNames,
   values,
   types,
   aggregationTypes,
 }: DataViewLayoutProps) => {
-  const groups = useDataViewLayoutData(values, types);
+  const groups = useDataViewLayoutData(columnNames, values, types);
   const table = useMemo(
     () =>
       treeToTable({
@@ -75,6 +82,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
         >
           <DataViewDataGroup
             key={index}
+            tableName={tableName}
             group={row}
             Header={DataViewHeader}
             SmartCell={SmartCell}

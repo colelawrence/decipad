@@ -6,34 +6,39 @@ describe('layoutPowerData', () => {
   it('throws on mismatched values and types', () => {
     const columnValues: Interpreter.ResultTable = [[F(1)]];
     const columnTypes: SerializedType[] = [];
+    const columnNames: string[] = [];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(() => layoutPowerData(table.value, table.type)).toThrow();
+    expect(() =>
+      layoutPowerData(columnNames, table.value, table.type)
+    ).toThrow();
   });
 
   it('lays out an empty table', () => {
     const columnValues: Interpreter.ResultTable = [];
     const columnTypes: SerializedType[] = [];
+    const columnNames: string[] = [];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(table.value, table.type)).toEqual([]);
+    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([]);
   });
 
   it('lays out empty a one-column one-cell table', () => {
     const columnValues: Interpreter.ResultTable = [[F(1)]];
     const columnTypes: SerializedType[] = [{ kind: 'number', unit: null }];
+    const columnNames: string[] = ['Column1'];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
       {
         rest: [],
         rowSpan: 1,
@@ -49,12 +54,13 @@ describe('layoutPowerData', () => {
   it('lays out an un-groupable one-column multi-cell table', () => {
     const columnValues: Interpreter.ResultTable = [[F(1), F(2), F(3)]];
     const columnTypes: SerializedType[] = [{ kind: 'number', unit: null }];
+    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
       {
         value: F(1),
         rowSpan: 1,
@@ -88,12 +94,13 @@ describe('layoutPowerData', () => {
   it('lays out a groupable one-column multi-cell table', () => {
     const columnValues: Interpreter.ResultTable = [[F(1), F(2), F(1)]];
     const columnTypes: SerializedType[] = [{ kind: 'number', unit: null }];
+    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
       {
         rest: [],
         rowSpan: 1,
@@ -124,12 +131,13 @@ describe('layoutPowerData', () => {
       { kind: 'number', unit: null },
       { kind: 'number', unit: null },
     ];
+    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
       {
         value: F(1),
         rowSpan: 2,
@@ -199,12 +207,13 @@ describe('layoutPowerData', () => {
       { kind: 'number', unit: null },
       { kind: 'number', unit: null },
     ];
+    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
 
     const table = {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
       {
         rest: [
           {
