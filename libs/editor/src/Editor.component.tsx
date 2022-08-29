@@ -29,6 +29,7 @@ const InsidePlate = ({
   return (
     <>
       <components.Tooltip />
+      <components.NumberTooltip />
       <components.CursorOverlay containerRef={containerRef} />
     </>
   );

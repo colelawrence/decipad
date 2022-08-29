@@ -1,5 +1,12 @@
 import { Path } from 'slate';
-import { getAboveNode, getNodeEntry, isBlock, TEditor } from '@udecode/plate';
+import {
+  getAboveNode,
+  getNodeEntry,
+  isBlock,
+  isElement,
+  isText,
+  TEditor,
+} from '@udecode/plate';
 
 export const getBlockParentPath = (
   editor: TEditor,
@@ -24,4 +31,20 @@ export const requireBlockParentPath = (editor: TEditor, path: Path): Path => {
 
 export const requirePathBelowBlock = (editor: TEditor, path: Path): Path => {
   return Path.next(requireBlockParentPath(editor, path));
+};
+
+export const getNonTextParentPath = (
+  editor: TEditor,
+  path: Path
+): Path | null => {
+  const nodeEntry = getNodeEntry(editor, path)[0];
+  const currentBlockPath =
+    isElement(nodeEntry) && !isText(nodeEntry)
+      ? path
+      : getAboveNode(editor, {
+          at: path,
+          match: (node) => isElement(node) && !isText(node),
+        })?.[1];
+
+  return currentBlockPath ?? null;
 };

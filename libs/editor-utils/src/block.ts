@@ -1,9 +1,11 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_IMAGE,
+  ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   ElementKind,
+  InlineNumberElement,
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
@@ -17,7 +19,12 @@ import {
   TElement,
 } from '@udecode/plate';
 import { Path } from 'slate';
-import { getBlockParentPath, requirePathBelowBlock } from './path';
+import {
+  getBlockParentPath,
+  getNonTextParentPath,
+  requirePathBelowBlock,
+} from './path';
+import { getPathContainingSelection } from './selection';
 
 export const closestBlockAncestorHasType = (
   editor: MyEditor,
@@ -36,11 +43,30 @@ export const closestBlockAncestorHasType = (
   return block.type === type;
 };
 
+export const closestElementAncestorHasType = (
+  editor: MyEditor,
+  path: Path,
+  type: ElementKind
+) => {
+  const elementParentPath = getNonTextParentPath(editor, path);
+  if (!elementParentPath) {
+    return false;
+  }
+
+  const block = getNode<MyElement>(editor, elementParentPath);
+  if (!block) {
+    throw new Error('Cannot find node at the block path');
+  }
+
+  return block.type === type;
+};
+
 const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementKind> = [
   ELEMENT_PARAGRAPH,
   ELEMENT_LIC,
   ELEMENT_BLOCKQUOTE,
 ];
+
 export const allowsTextStyling = (
   editor: MyEditor,
   path: Path | null
@@ -50,6 +76,30 @@ export const allowsTextStyling = (
         closestBlockAncestorHasType(editor, path, type)
       )
     : false;
+};
+
+export const selectionIsNotBubble = (editor: MyEditor): boolean => {
+  const path = getPathContainingSelection(editor);
+  return path
+    ? !closestElementAncestorHasType(editor, path, ELEMENT_INLINE_NUMBER)
+    : false;
+};
+
+export const getSelectionBubble = (
+  editor: MyEditor
+): InlineNumberElement | null => {
+  const path = getPathContainingSelection(editor);
+  if (!path) return null;
+
+  const blockParentPath = getNonTextParentPath(editor, path);
+  if (!blockParentPath) return null;
+
+  const element = getNode<MyElement>(editor, blockParentPath);
+
+  if (element == null) return null;
+  if (element.type !== ELEMENT_INLINE_NUMBER) return null;
+
+  return element;
 };
 
 export const insertDividerBelow = (

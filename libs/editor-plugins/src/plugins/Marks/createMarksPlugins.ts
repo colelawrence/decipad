@@ -17,6 +17,11 @@ import {
   createMagicNumberPlugin,
   createValueBubblePlugin,
 } from '../MagicNumber';
+import { createInlineNumberPlugin } from '../MagicNumber/createInlineNumberPlugin';
+import {
+  createBubblesHotkeysPlugin,
+  createNumberBubblesPlugin,
+} from '../NumberBubblesPlugin';
 
 export type StrictPlugin = WithRequired<
   MyPlatePlugin,
@@ -72,6 +77,15 @@ const valueBubblePlugin = () =>
     : [
         withHotkeyRestrictedToAllowedBlocks(
           createValueBubblePlugin() as StrictPlugin
+        ),
+        withHotkeyRestrictedToAllowedBlocks(
+          createInlineNumberPlugin() as StrictPlugin
+        ),
+        withHotkeyRestrictedToAllowedBlocks(
+          createNumberBubblesPlugin() as StrictPlugin
+        ),
+        withHotkeyRestrictedToAllowedBlocks(
+          createBubblesHotkeysPlugin() as StrictPlugin
         ),
       ];
 

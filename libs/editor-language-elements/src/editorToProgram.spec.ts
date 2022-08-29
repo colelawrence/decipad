@@ -1,6 +1,7 @@
 import {
   CodeBlockElement,
   ColumnsElement,
+  InlineNumberElement,
   MyEditor,
   ParagraphElement,
   TableElement,
@@ -12,6 +13,9 @@ import {
   ELEMENT_TR,
   ELEMENT_TH,
   ELEMENT_TD,
+  ELEMENT_INLINE_NUMBER,
+  ELEMENT_BUBBLE,
+  BubbleElement,
 } from '@decipad/editor-types';
 import { Computer, ParsedBlock, prettyPrintAST } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
@@ -164,5 +168,54 @@ describe('editorToProgram', () => {
           (table
             ColName (column \\"CellData\\"))))"
     `);
+  });
+
+  it('works with bubbles', async () => {
+    const editor = createPlateEditor() as MyEditor;
+    editor.children = [
+      { type: 'h1', id: '1', children: [{ text: '' }] },
+      {
+        id: 'xqab',
+        type: ELEMENT_INLINE_NUMBER,
+        name: 'inlineNumber',
+        children: [
+          {
+            text: '2 apples',
+          },
+        ],
+      } as InlineNumberElement,
+      {
+        id: 'dcaqx',
+        type: ELEMENT_BUBBLE,
+        formula: {
+          name: 'inlineBubble',
+          expression: '2 + 2',
+        },
+        opened: false,
+        children: [{ text: '' }],
+      } as BubbleElement,
+    ];
+
+    const { program } = await editorToProgram(editor, new Computer());
+
+    expect(program.length).toBe(2);
+
+    const [inlineNumber] = program;
+
+    expect(program.map((p) => [p.id, p.type].join(', ')))
+      .toMatchInlineSnapshot(`
+        Array [
+          "xqab, unparsed-block",
+          "dcaqx, unparsed-block",
+        ]
+      `);
+
+    expect(inlineNumber).toMatchInlineSnapshot(`
+        Object {
+          "id": "xqab",
+          "source": "inlineNumber = 2 apples",
+          "type": "unparsed-block",
+        }
+      `);
   });
 });

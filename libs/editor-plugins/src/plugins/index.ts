@@ -30,6 +30,7 @@ export * from './NormalizeRichTextBlock';
 export * from './NormalizeText';
 export * from './NormalizeVoidPlugin';
 export * from './NotebookTitle';
+export * from './NumberBubblesPlugin';
 export * from './OperationsBlackboxPlugin';
 export * from './Plot';
 export * from './SentryBreadcrumbsPlugin';

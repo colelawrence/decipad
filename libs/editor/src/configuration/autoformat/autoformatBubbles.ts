@@ -4,13 +4,17 @@ import {
   MyAutoformatRule,
   MyEditor,
 } from '@decipad/editor-types';
-import { requireCollapsedSelection } from '@decipad/editor-utils';
+import {
+  requireCollapsedSelection,
+  selectionIsNotBubble,
+} from '@decipad/editor-utils';
 import { insertNodes, isText } from '@udecode/plate';
-import words from 'random-words';
 import { isEnabled } from '@decipad/feature-flags';
+import { allPass } from 'ramda';
+import words from 'random-words';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
-const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
+const convertPrecedingTextToBubble = (editor: MyEditor): void => {
   requireCollapsedSelection(editor);
 
   const emptyElement: Omit<BubbleElement, 'id'> = {
@@ -35,8 +39,8 @@ export const autoformatBubbles: MyAutoformatRule[] = isEnabled('INLINE_BUBBLES')
         type: ELEMENT_BUBBLE,
         triggerAtBlockStart: false,
         match: '+',
-        query: doesSelectionAllowTextStyling,
-        format: convertPrecedingTextWithTriggerToImage,
+        query: allPass([doesSelectionAllowTextStyling, selectionIsNotBubble]),
+        format: convertPrecedingTextToBubble,
       },
     ]
   : [];

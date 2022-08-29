@@ -10,7 +10,7 @@ import { Plate, createPlateEditor } from '@udecode/plate';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
-import { Tooltip } from './components';
+import { NumberTooltip, Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
 import { POPULATE_PLAYGROUND } from './utils/storage';
@@ -57,6 +57,7 @@ export const NoDocSyncEditorInternal: FC = () => {
             }}
           >
             <Tooltip />
+            <NumberTooltip />
           </Plate>
         </LoadingFilter>
       </EditorReadOnlyContext.Provider>

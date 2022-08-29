@@ -14,6 +14,7 @@ import {
   ELEMENT_H3,
   ELEMENT_HR,
   ELEMENT_IMAGE,
+  ELEMENT_INLINE_NUMBER,
   ELEMENT_LI,
   ELEMENT_LIC,
   ELEMENT_LINK,
@@ -158,6 +159,12 @@ export interface BubbleElement extends BaseElement {
   children: [EmptyText];
 }
 
+export interface InlineNumberElement extends BaseElement {
+  type: typeof ELEMENT_INLINE_NUMBER;
+  name: string;
+  children: [PlainText];
+}
+
 // Layout
 export interface ColumnsElement extends BaseElement {
   type: typeof ELEMENT_COLUMNS;
@@ -214,7 +221,7 @@ export type BlockElement =
   | DataViewHeaderRowElement
   | DataViewHeader
   | TableColumnFormulaElement;
-type InlineElement = LinkElement | BubbleElement;
+type InlineElement = LinkElement | BubbleElement | InlineNumberElement;
 
 export type MyValue = [
   H1Element,
@@ -225,6 +232,7 @@ export type MyValue = [
     | ParagraphElement
     | BlockquoteElement
     | BubbleElement
+    | InlineNumberElement
     | CalloutElement
     | DividerElement
     | EvalElement

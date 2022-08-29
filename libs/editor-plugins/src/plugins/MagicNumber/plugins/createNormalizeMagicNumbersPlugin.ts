@@ -4,6 +4,7 @@ import {
   isElement,
   isText,
 } from '@udecode/plate';
+import { ELEMENT_INLINE_NUMBER } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
@@ -29,7 +30,10 @@ export const createNormalizeMagicNumbersPlugin = createNormalizerPluginFactory({
           }
 
           const [lastChild] = children[children.length - 1];
-          if (isText(lastChild) && isMagicNumber(lastChild)) {
+          const isMagic = isText(lastChild) && isMagicNumber(lastChild);
+          const isBubble = lastChild.type === ELEMENT_INLINE_NUMBER;
+
+          if (isMagic || isBubble) {
             const insertAt = [...path, children.length];
             insertNodes(
               editor,
