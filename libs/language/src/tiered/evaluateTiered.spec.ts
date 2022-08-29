@@ -186,7 +186,7 @@ describe('evaluateTiered', () => {
       tieredDef(n('literal', 'number', F(9)), n('literal', 'number', F(0))),
       tieredDef(r('rest'), c('*', r('tier'), n('literal', 'number', F(7))))
     );
-    await expect(() => runAST(block(t))).rejects.toThrowError(
+    await expect(() => runAST(block(t))).rejects.toThrow(
       'Error on tier definition number 2. Each tier level needs to be bigger than the previous one'
     );
   });

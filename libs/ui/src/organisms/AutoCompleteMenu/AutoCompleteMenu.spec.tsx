@@ -56,7 +56,7 @@ it('does not focus menuitems when holding shift', async () => {
   );
 
   await userEvent.keyboard('{Shift>}{arrowdown}{enter}');
-  expect(handleExecute).not.toBeCalled();
+  expect(handleExecute).not.toHaveBeenCalled();
 });
 
 describe('search', () => {

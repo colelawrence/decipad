@@ -41,7 +41,7 @@ it('does not focus menuitems when holding shift', async () => {
   render(<SlashCommandsMenu onExecute={handleExecute} />);
 
   await userEvent.keyboard('{Shift>}{arrowdown}{enter}');
-  expect(handleExecute).not.toBeCalled();
+  expect(handleExecute).not.toHaveBeenCalled();
 });
 it('focuses menuitems using tab and shift+tab', async () => {
   const handleExecute = jest.fn();

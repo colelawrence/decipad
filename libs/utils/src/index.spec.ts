@@ -107,7 +107,7 @@ it('can timeout', (done) => {
 
 it('asserts defined', () => {
   expect(() => assertDefined(true)).not.toThrow();
-  expect(() => assertDefined(null)).toThrowError();
+  expect(() => assertDefined(null)).toThrow();
 });
 
 it('unique', () => {
