@@ -1,6 +1,6 @@
 import { atoms } from '@decipad/ui';
 import { ELEMENT_COLUMNS, PlateComponent } from '@decipad/editor-types';
-import { DraggableBlock } from '..';
+import { DraggableBlock } from '@decipad/editor-components';
 
 export const Columns: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_COLUMNS) {

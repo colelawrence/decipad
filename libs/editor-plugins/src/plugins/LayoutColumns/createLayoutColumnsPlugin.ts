@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createTPluginFactory, ELEMENT_COLUMNS } from '@decipad/editor-types';
-import { Columns } from '@decipad/editor-components';
+import { Columns } from './Columns';
 
 export const createLayoutColumnsPlugin = createTPluginFactory({
   key: ELEMENT_COLUMNS,

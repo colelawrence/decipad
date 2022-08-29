@@ -1,6 +1,6 @@
 import { createPluginFactory } from '@udecode/plate';
-import { AutoCompleteMenu } from '@decipad/editor-components';
 import { DECORATE_AUTO_COMPLETE_MENU } from '../../constants';
+import { AutoCompleteMenu } from './AutoCompleteMenu';
 
 export const createAutoCompleteMenuPlugin = createPluginFactory({
   key: DECORATE_AUTO_COMPLETE_MENU,

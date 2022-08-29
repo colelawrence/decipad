@@ -90,6 +90,9 @@
     "backendtypes": {
       "tags": []
     },
+    "client-config": {
+      "tags": []
+    },
     "client-e2e": {
       "tags": [],
       "implicitDependencies": ["frontend", "backend", "config"]
@@ -173,6 +176,9 @@
     "graphqlserver": {
       "tags": []
     },
+    "import": {
+      "tags": []
+    },
     "initial-workspace": {
       "tags": []
     },
@@ -240,12 +246,6 @@
       "tags": []
     },
     "y-websocket": {
-      "tags": []
-    },
-    "import": {
-      "tags": []
-    },
-    "client-config": {
       "tags": []
     }
   }
