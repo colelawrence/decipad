@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
-import { AST, Time, Date as IDate } from '..';
+import { AST, Time, DateValue } from '..';
 import { getIdentifierString, getOfType } from '../utils';
 import { InferError, build as t, Type } from '../type';
 import {
@@ -68,7 +68,7 @@ export const getDateSequenceLength = (
   by: Time.Unit
 ): number | InferError => {
   // Get the end of the year, month or day.
-  end = IDate.fromDateAndSpecificity(end, boundsSpecificity).getEnd();
+  end = DateValue.fromDateAndSpecificity(end, boundsSpecificity).getEnd();
 
   let [stepUnit, steps] = getJSDateUnitAndMultiplier(by);
   if (start > end) {

@@ -1,10 +1,5 @@
 import { makeContext } from '@decipad/language';
-import {
-  Column,
-  Table,
-  Date as DateValue,
-  fromJS,
-} from '../../interpreter/Value';
+import { Column, Table, DateValue, fromJS } from '../../interpreter/Value';
 import { build as t, Type } from '../../type';
 import { tableOperators as operators } from './table-operators';
 import { F, U } from '../../utils';

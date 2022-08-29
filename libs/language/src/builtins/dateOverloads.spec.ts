@@ -1,5 +1,5 @@
 import { build as t } from '../type';
-import { Date as IDate, FractionValue } from '../interpreter/Value';
+import { DateValue as IDate, FractionValue } from '../interpreter/Value';
 import { parseUTCDate, Time } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';
 import {
@@ -122,7 +122,7 @@ it('date + number', () => {
       ],
       [t.date('day'), t.number(U('month'))]
     )
-  ).toMatchInlineSnapshot(`DeciDate(day 2020-02-01)`);
+  ).toMatchInlineSnapshot(`DateValue(day 2020-02-01)`);
 });
 
 it('date - number', () => {
@@ -143,7 +143,7 @@ it('date - number', () => {
 
       [t.date('minute'), t.number(U('minute'))]
     )
-  ).toMatchInlineSnapshot(`DeciDate(minute 2020-01-01 09:30)`);
+  ).toMatchInlineSnapshot(`DateValue(minute 2020-01-01 09:30)`);
 });
 
 it('date - date => time-quantity', () => {

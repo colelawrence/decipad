@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import Fraction from '@decipad/fraction';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
-import { Date as LanguageDate } from '../interpreter/Value';
+import { DateValue } from '../interpreter/Value';
 
 import * as Time from './time-types';
 
@@ -19,8 +19,8 @@ export { Time };
 /**
  * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
-export const toLuxonUTC = (date: bigint | number | LanguageDate | DateTime) => {
-  if (date instanceof LanguageDate) {
+export const toLuxonUTC = (date: bigint | number | DateValue | DateTime) => {
+  if (date instanceof DateValue) {
     date = date.getData();
   }
   if (typeof date === 'bigint') {
@@ -334,8 +334,8 @@ export const getDateFromAstForm = (
 };
 
 export const subtractDates = (
-  d1: LanguageDate,
-  d2: LanguageDate,
+  d1: DateValue,
+  d2: DateValue,
   specificity: Time.Specificity
 ): Fraction => {
   const dateTime1 = toLuxonUTC(d1.getData());

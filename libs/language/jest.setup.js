@@ -4,7 +4,7 @@ import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
 import Fraction from '@decipad/fraction';
 /* eslint-enable import/no-extraneous-dependencies */
-import { Date as IDate } from './src/interpreter/Value';
+import { DateValue } from './src/interpreter/Value';
 import { stringifyDate } from './src/date';
 
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";
@@ -32,9 +32,9 @@ expect.extend({
 
 // Snapshot serializer for interpreter values
 expect.addSnapshotSerializer({
-  test: (v) => v instanceof IDate,
+  test: (v) => v instanceof DateValue,
   print: (date) =>
-    `DeciDate(${date.specificity} ${stringifyDate(
+    `DateValue(${date.specificity} ${stringifyDate(
       date.getData(),
       date.specificity
     )})`,

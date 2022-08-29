@@ -2,7 +2,7 @@ import { BuiltinSpec } from './interfaces';
 import { InferError, Type, build as t } from '../type';
 import {
   Value,
-  Date,
+  DateValue,
   Range,
   StringValue,
   BooleanValue,
@@ -91,7 +91,7 @@ export const getOverloadedTypeFromValue = (
     return 'boolean';
   } else if (val instanceof FractionValue) {
     return 'number';
-  } else if (val instanceof Date) {
+  } else if (val instanceof DateValue) {
     return 'date';
   } else if (val instanceof Range) {
     return 'range';
@@ -102,7 +102,7 @@ export const getOverloadedTypeFromValue = (
 
 export const getOverloadedTypeFromType = (t: Type): OverloadTypeName | null => {
   if (t.type != null) {
-    return t.type as 'number' | 'string' | 'boolean';
+    return t.type;
   } else if (t.date != null) {
     return 'date';
   } else if (t.rangeOf) {

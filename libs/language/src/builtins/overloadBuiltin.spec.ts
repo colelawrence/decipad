@@ -1,4 +1,4 @@
-import { Date, fromJS } from '../interpreter/Value';
+import { DateValue, fromJS } from '../interpreter/Value';
 import { InferError, build as t } from '../type';
 import { getDefined } from '../utils';
 import {
@@ -46,7 +46,7 @@ describe('utils', () => {
     expect(getOverloadedTypeFromValue(fromJS('hi'))).toEqual('string');
     expect(getOverloadedTypeFromValue(fromJS(10))).toEqual('number');
     expect(
-      getOverloadedTypeFromValue(Date.fromDateAndSpecificity(0n, 'hour'))
+      getOverloadedTypeFromValue(DateValue.fromDateAndSpecificity(0n, 'hour'))
     ).toEqual('date');
   });
 

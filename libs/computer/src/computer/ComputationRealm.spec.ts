@@ -3,7 +3,7 @@
 import {
   Column,
   Table,
-  Date,
+  DateValue,
   fromJS,
   buildType,
   parseUTCDate,
@@ -130,7 +130,7 @@ describe('getIndexLabels', () => {
       Table.fromNamedColumns(
         [
           Column.fromValues([
-            Date.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),
+            DateValue.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),
           ]),
         ],
         ['Dates']

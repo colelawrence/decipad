@@ -6,7 +6,7 @@ import {
   Column,
   Table,
   Range,
-  Date,
+  DateValue,
   fromJS,
   FilteredColumn,
   MappedColumn,
@@ -36,14 +36,14 @@ it('can represent a range', () => {
 const d = parseUTCDate;
 
 it('can represent a date', () => {
-  const date = Date.fromDateAndSpecificity(d('2020-01-04'), 'month');
+  const date = DateValue.fromDateAndSpecificity(d('2020-01-04'), 'month');
   expect(date.getData()).toEqual(d('2020-01'));
 });
 
 it('can represent a column of dates', () => {
   const dates = Column.fromValues([
-    Date.fromDateAndSpecificity(d('2021-02-15'), 'month'),
-    Date.fromDateAndSpecificity(d('2021-06-15'), 'month'),
+    DateValue.fromDateAndSpecificity(d('2021-02-15'), 'month'),
+    DateValue.fromDateAndSpecificity(d('2021-06-15'), 'month'),
   ]);
 
   expect(dates.getData()).toEqual([d('2021-02'), d('2021-06')]);

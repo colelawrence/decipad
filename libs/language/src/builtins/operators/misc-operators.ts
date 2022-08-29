@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { getInstanceof } from '../../utils';
-import { Date, Range, fromJS } from '../../interpreter/Value';
+import { DateValue, Range, fromJS } from '../../interpreter/Value';
 import { Type, build as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
@@ -35,8 +35,8 @@ export const miscOperators: Record<string, BuiltinSpec> = {
     {
       argTypes: ['date', 'date'],
       fnValues: ([a, b]) => {
-        const aVal = getInstanceof(a, Date);
-        const bVal = getInstanceof(b, Date);
+        const aVal = getInstanceof(a, DateValue);
+        const bVal = getInstanceof(b, DateValue);
         return fromJS(
           aVal.getData() <= bVal.getData() && aVal.getEnd() >= bVal.getEnd()
         );
@@ -47,9 +47,9 @@ export const miscOperators: Record<string, BuiltinSpec> = {
       argTypes: ['range', 'date'],
       fnValues: ([rangeV, dateD]) => {
         const { start, end } = getInstanceof(rangeV, Range);
-        const startDate = getInstanceof(start, Date);
-        const endDate = getInstanceof(end, Date);
-        const date = getInstanceof(dateD, Date);
+        const startDate = getInstanceof(start, DateValue);
+        const endDate = getInstanceof(end, DateValue);
+        const date = getInstanceof(dateD, DateValue);
 
         return fromJS(
           startDate.getData() <= date.getData() &&

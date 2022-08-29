@@ -12,7 +12,7 @@ import { resolve as resolveData } from '../data';
 import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
-import { Scalar, Range, Date, Column, Value, UnknownValue } from './Value';
+import { Scalar, Range, DateValue, Column, Value, UnknownValue } from './Value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
 import { evaluateData } from './data';
 import { getDateSequenceIncrement } from '../infer/sequence';
@@ -143,7 +143,7 @@ export async function evaluate(
       const start = await evaluate(realm, getDefined(node.args[0]));
       const end = await evaluate(realm, getDefined(node.args[1]));
 
-      if (start instanceof Date && end instanceof Date) {
+      if (start instanceof DateValue && end instanceof DateValue) {
         const startUnit = dateNodeToTimeUnit(
           getOfType('date', node.args[0]).args
         );
@@ -162,7 +162,7 @@ export async function evaluate(
     }
     case 'date': {
       const [dateMs, specificity] = getDateFromAstForm(node.args);
-      return Date.fromDateAndSpecificity(dateMs, specificity);
+      return DateValue.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
       const values: Value[] = await pSeries(

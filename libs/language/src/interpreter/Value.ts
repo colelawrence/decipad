@@ -8,11 +8,9 @@ import { Dimension, EmptyColumn, lowLevelGet } from '../lazy';
 import { filterUnzipped } from '../utils';
 import { RuntimeError } from '.';
 import { Unknown } from './Unknown';
-import * as ValueTransforms from './ValueTransforms';
 import { getLabelIndex } from '../dimtools';
 
-export { ValueTransforms };
-export { DateValue as Date };
+export * as ValueTransforms from './ValueTransforms';
 
 export interface Value {
   getData(): Interpreter.OneResult;
@@ -137,7 +135,7 @@ export class BooleanValue implements Value {
   }
 }
 
-class DateValue implements Value {
+export class DateValue implements Value {
   specificity: Time.Specificity;
   moment: bigint;
 

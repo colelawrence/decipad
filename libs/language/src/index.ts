@@ -1,14 +1,7 @@
 /* istanbul ignore file: just config and re-export */
 import { operators } from './builtins';
 import { Value } from './interpreter/Value';
-import {
-  build as t,
-  SerializedType,
-  serializeType,
-  Type,
-  Unit,
-  units,
-} from './type';
+import { build as t, SerializedType, serializeType, Type, Unit } from './type';
 
 export { ExternalData } from './data';
 export { parseUTCDate, stringifyDate, Time } from './date';
@@ -39,7 +32,7 @@ export {
 export type { ColumnLike, Interpreter, Value } from './interpreter';
 export {
   Column,
-  Date,
+  DateValue,
   fromJS,
   Range,
   Row,
@@ -81,7 +74,6 @@ export {
   safeNumberForPrecision,
   walkAst,
 } from './utils';
-export { units };
 export type { Unit };
 
 export interface InjectableExternalData {

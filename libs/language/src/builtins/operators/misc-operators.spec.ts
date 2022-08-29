@@ -1,5 +1,9 @@
 import { parseUTCDate } from '../../date';
-import { fromJS, Date as LanguageDate, Range } from '../../interpreter/Value';
+import {
+  fromJS,
+  DateValue as LanguageDate,
+  Range,
+} from '../../interpreter/Value';
 import { miscOperators as operators } from './misc-operators';
 
 it('knows whether a range contains a value', () => {

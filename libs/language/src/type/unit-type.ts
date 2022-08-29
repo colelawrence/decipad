@@ -13,6 +13,3 @@ export interface Unit {
   baseQuantity?: BaseQuantity;
   baseSuperQuantity?: BaseQuantity | 'currency';
 }
-
-// TODO remove
-export const units = (...args: Unit[]): Unit[] => args;

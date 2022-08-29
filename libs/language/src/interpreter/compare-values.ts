@@ -7,7 +7,7 @@ import {
   FractionValue,
   StringValue,
   BooleanValue,
-  Date as DateValue,
+  DateValue,
   isColumnLike,
 } from './Value';
 

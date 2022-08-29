@@ -2,7 +2,7 @@
 import Fraction from '@decipad/fraction';
 import { addTime, getSpecificity } from '../date';
 import type { Time } from '..';
-import { Column, ColumnLike, Date, RuntimeError, Scalar, Value } from '.';
+import { Column, ColumnLike, DateValue, RuntimeError, Scalar, Value } from '.';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
@@ -40,8 +40,8 @@ export function fromSequence(
 }
 
 export function fromDateSequence(
-  startD: Date,
-  endD: Date,
+  startD: DateValue,
+  endD: DateValue,
   by: Time.Unit
 ): ColumnLike {
   let start = startD.getData();
@@ -76,7 +76,7 @@ export function fromDateSequence(
       );
     }
 
-    array.push(Date.fromDateAndSpecificity(cur, spec));
+    array.push(DateValue.fromDateAndSpecificity(cur, spec));
   }
 
   return Column.fromValues(array);

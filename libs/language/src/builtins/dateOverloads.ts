@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 
-import { Date, FractionValue } from '../interpreter/Value';
+import { DateValue, FractionValue } from '../interpreter/Value';
 import {
   addTime,
   cmpSpecificities,
@@ -13,16 +13,14 @@ import { F, getDefined, getInstanceof } from '../utils';
 import { Type, build as t, InferError } from '../type';
 import { OverloadedBuiltinSpec } from './overloadBuiltin';
 
-type OverloadSet = Record<string, OverloadedBuiltinSpec[]>;
-
 export const addDateAndTimeQuantity = (
-  date: Date,
+  date: DateValue,
   unit: Time.Unit,
   amount: bigint
 ) => {
   const newDate = addTime(date.getData(), unit, amount);
 
-  return Date.fromDateAndSpecificity(newDate, date.specificity);
+  return DateValue.fromDateAndSpecificity(newDate, date.specificity);
 };
 
 export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
@@ -73,13 +71,13 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   );
 };
 
-export const dateOverloads: OverloadSet = {
+export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
   '+': [
     {
       argTypes: ['date', 'number'],
       fnValues: ([v1, v2], [, t2] = []) =>
         addDateAndTimeQuantity(
-          getInstanceof(v1, Date),
+          getInstanceof(v1, DateValue),
 
           timeUnitFromUnits(getDefined(t2?.unit)),
           BigInt(getInstanceof(v2, FractionValue).getData().valueOf())
@@ -93,7 +91,7 @@ export const dateOverloads: OverloadSet = {
       argTypes: ['number', 'date'],
       fnValues: ([v1, v2], [t1] = []) =>
         addDateAndTimeQuantity(
-          getInstanceof(v2, Date),
+          getInstanceof(v2, DateValue),
           timeUnitFromUnits(getDefined(t1?.unit)),
           BigInt(getInstanceof(v1, FractionValue).getData().valueOf())
         ),
@@ -112,7 +110,7 @@ export const dateOverloads: OverloadSet = {
         const negatedQuantity = BigInt(number.getData().neg().valueOf());
 
         return addDateAndTimeQuantity(
-          getInstanceof(v1, Date),
+          getInstanceof(v1, DateValue),
           timeUnitFromUnits(getDefined(t2?.unit)),
           negatedQuantity
         );
@@ -122,8 +120,8 @@ export const dateOverloads: OverloadSet = {
     {
       argTypes: ['date', 'date'],
       fnValues: ([v1, v2]) => {
-        const d1 = getInstanceof(v1, Date);
-        const d2 = getInstanceof(v2, Date);
+        const d1 = getInstanceof(v1, DateValue);
+        const d2 = getInstanceof(v2, DateValue);
         const difference = subtractDates(d1, d2, d1.specificity);
 
         return FractionValue.fromValue(difference);

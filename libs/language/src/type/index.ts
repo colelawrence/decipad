@@ -24,7 +24,7 @@ import {
   withMinimumColumnCount,
 } from './checks';
 import { ErrSpec, InferError } from './InferError';
-import { Unit, units } from './unit-type';
+import { Unit } from './unit-type';
 import {
   inverseExponent,
   normalizeUnits,
@@ -39,7 +39,7 @@ export * from './parseType';
 export * from './serialization';
 export { simplifyUnits, pluralizeUnit };
 export type { ErrSpec, Unit };
-export { setUnit, normalizeUnits, units };
+export { setUnit, normalizeUnits };
 export { InferError, inverseExponent, t as build };
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
