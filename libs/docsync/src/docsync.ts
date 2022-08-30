@@ -17,6 +17,7 @@ import { Awareness } from 'y-protocols/awareness';
 import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
+import { nanoid } from 'nanoid';
 import * as DocTypes from './types';
 
 export interface DocSyncOptions {
@@ -70,6 +71,7 @@ function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
         new YMap([
           ['type', 'h1'],
           ['children', YArray.from([new YMap([['text', new YText()]])])],
+          ['id', nanoid()],
         ]),
       ]);
     }
@@ -78,6 +80,7 @@ function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
         new YMap([
           ['type', 'p'],
           ['children', YArray.from([new YMap([['text', new YText()]])])],
+          ['id', nanoid()],
         ]),
       ]);
     }
