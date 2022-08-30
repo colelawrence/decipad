@@ -9,6 +9,7 @@ export type {
   Unit,
   Time,
   Token,
+  UnitOfMeasure,
 } from '@decipad/language';
 
 export {
@@ -29,6 +30,7 @@ export {
   getBuiltinsForAutocomplete,
   areUnitsConvertible,
   convertBetweenUnits,
+  currencyUnits,
 } from '@decipad/language';
 
 export type { AutocompleteName, ErrSpec } from '@decipad/language';

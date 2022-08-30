@@ -1,14 +1,16 @@
 import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import Fraction from '@decipad/fraction';
+import Fraction, { ONE } from '@decipad/fraction';
 import type { TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
+import { Unit, currencyUnits, UnitOfMeasure } from '@decipad/computer';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   All,
   Calendar,
   CheckboxSelected,
+  DollarCircle,
   Formula,
   Leaf,
   Number,
@@ -25,9 +27,14 @@ import {
   getSeriesType,
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
+import {} from '@decipad/language';
 
 const tableColumnMenuStyles = css({
   marginLeft: 'auto',
+});
+
+const presentableCurrencyUnits = currencyUnits.filter((f) => {
+  return !!f.pretty && f.pretty.length <= 3;
 });
 
 interface TableColumnMenuProps
@@ -39,6 +46,29 @@ interface TableColumnMenuProps
   readonly trigger: ReactNode;
   readonly type: TableCellType;
 }
+
+const isCurrencyUnit = (unit?: Unit[]): boolean => {
+  return (
+    (unit && unit.length === 1 && unit[0].baseSuperQuantity === 'currency') ||
+    false
+  );
+};
+
+const sameUnits = (
+  unit: Unit[] | null | undefined,
+  um: UnitOfMeasure
+): boolean => {
+  if (!unit || unit.length !== 1) {
+    return false;
+  }
+  const u = unit[0];
+  return (
+    u.unit === um.name &&
+    u.exp.equals(ONE) &&
+    u.multiplier.equals(ONE) &&
+    u.baseSuperQuantity === um.superBaseQuantity
+  );
+};
 
 export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   open,
@@ -83,17 +113,13 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </TriggerMenuItem>
           }
         >
-          <UnitMenuItem
-            onSelect={(unit) => {
-              onChangeColumnType({ kind: 'number', unit });
-            }}
-            parseUnit={parseUnit}
-          />
-          {type.kind === 'number' && type.unit != null && (
-            <MenuItem icon={<All />} selected>
-              {computer.formatUnit(type.unit, new Fraction(1))}
-            </MenuItem>
-          )}
+          {type.kind === 'number' &&
+            type.unit != null &&
+            !isCurrencyUnit(type.unit) && (
+              <MenuItem icon={<All />} selected>
+                {computer.formatUnit(type.unit, new Fraction(1))}
+              </MenuItem>
+            )}
           <MenuItem
             icon={<Number />}
             onSelect={() => onChangeColumnType(getNumberType())}
@@ -101,6 +127,37 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             Number
           </MenuItem>
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem icon={<DollarCircle />}>
+                <div css={{ minWidth: '132px' }}>Currency</div>
+              </TriggerMenuItem>
+            }
+          >
+            {presentableCurrencyUnits.map((unit) => (
+              <MenuItem
+                icon={<span>{unit.pretty ?? unit.name}</span>}
+                onSelect={() =>
+                  onChangeColumnType(
+                    getNumberType([
+                      {
+                        exp: ONE,
+                        multiplier: ONE,
+                        known: true,
+                        unit: unit.name,
+                        baseSuperQuantity: unit.superBaseQuantity,
+                        baseQuantity: unit.name as Unit['baseQuantity'],
+                      },
+                    ])
+                  )
+                }
+                selected={type.kind === 'number' && sameUnits(type.unit, unit)}
+              >
+                {unit.name}
+              </MenuItem>
+            ))}
+          </MenuList>
+
           {!isFirst && (
             <MenuItem
               icon={<Formula />}
@@ -185,6 +242,13 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               Date
             </MenuItem>
           </MenuList>
+          <UnitMenuItem
+            placeholder="create custom"
+            onSelect={(unit) => {
+              onChangeColumnType({ kind: 'number', unit });
+            }}
+            parseUnit={parseUnit}
+          />
         </MenuList>
         {length > 1 ? (
           <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>

@@ -5,12 +5,16 @@ import {
   All,
   Calendar,
   CheckboxSelected,
+  DollarCircle,
   Formula,
   Number,
   Text,
 } from '../icons';
 import { AvailableSwatchColor } from './swatches';
 import { UserIconKey } from './user-icons';
+
+const isCurrencyUnit = (unit: Unit[] | null | undefined): boolean =>
+  unit?.length === 1 && unit[0].baseSuperQuantity === 'currency';
 
 export function getTypeIcon(
   type: TableCellType | SerializedType
@@ -21,7 +25,11 @@ export function getTypeIcon(
     case 'boolean':
       return CheckboxSelected;
     case 'number':
-      return type.unit == null ? Number : All;
+      return type.unit == null
+        ? Number
+        : isCurrencyUnit(type.unit)
+        ? DollarCircle
+        : All;
     case 'table-formula':
       return Formula;
     case 'series':

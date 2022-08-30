@@ -69,11 +69,13 @@ function reducer(state: UnitsState, action: UnitsAction): UnitsState {
 interface UnitMenuItemProps {
   readonly onSelect?: (unit: Unit[] | null) => void;
   readonly parseUnit?: (value: string) => Promise<Unit[] | null>;
+  readonly placeholder?: string;
 }
 
 export const UnitMenuItem = ({
   onSelect = noop,
   parseUnit = () => Promise.resolve(null),
+  placeholder = 'Create a custom unit',
 }: UnitMenuItemProps): ReturnType<FC> => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
@@ -118,7 +120,7 @@ export const UnitMenuItem = ({
               e.stopPropagation();
             }
           }}
-          placeholder="Create a custom unit"
+          placeholder={placeholder}
         />
         {state.unit != null && (
           <button css={buttonStyles} onClick={() => onSelect(state.unit)}>
