@@ -2,16 +2,9 @@ import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { ElementType, FC, HTMLAttributes } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-import { useSelected } from 'slate-react';
 import { useMergedRef } from '../../hooks';
 import { ConditionalCodeSyntaxError } from '../../molecules/CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
-import {
-  blue300,
-  cssVar,
-  p12Medium,
-  p14Medium,
-  setCssVar,
-} from '../../primitives';
+import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
@@ -76,13 +69,16 @@ const tdDisabledStyles = css({
   ...setCssVar('normalTextColor', cssVar('weakerTextColor')),
 });
 
-const tdEditableFocusedUnselectedStyles = css({
-  cursor: 'text',
-  boxShadow: `inset 0 0 0 2px ${blue300.rgb}`,
-});
-
 const alignRightStyles = css({
   textAlign: 'right',
+});
+
+const selectedStyles = css({
+  backgroundColor: cssVar('tableSelectionBackgroundColor'),
+});
+
+const focusedStyles = css({
+  boxShadow: `0 0 0 2px ${cssVar('tableFocusColor')} inset`,
 });
 
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
@@ -95,6 +91,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   showPlaceholder?: boolean;
   grabbing?: boolean;
   selected?: boolean;
+  focused?: boolean;
   collapsed?: boolean;
   disabled?: boolean;
   unit?: string;
@@ -112,6 +109,7 @@ export const TableData = ({
   draggable,
   grabbing,
   selected,
+  focused,
   collapsed,
   disabled = false,
   dropTarget,
@@ -125,7 +123,6 @@ export const TableData = ({
   const existingRef =
     attributes && 'ref' in attributes ? attributes.ref : undefined;
   const tdRef = useMergedRef(existingRef, dropTarget);
-  const focused = useSelected();
   const additionalProps = isEditable ? {} : { contentEditable: false };
 
   return (
@@ -137,15 +134,12 @@ export const TableData = ({
         isUserContent && editableStyles,
         tdBaseStyles,
         tdGridStyles,
-        isEditable &&
-          focused &&
-          !selected &&
-          collapsed &&
-          tdEditableFocusedUnselectedStyles,
         showPlaceholder && tdPlaceholderStyles,
         disabled && tdDisabledStyles,
         unit ? unitStyles : null,
-        alignRight && alignRightStyles,
+        selected ? selectedStyles : null,
+        focused ? focusedStyles : null,
+        alignRight ? alignRightStyles : null,
       ]}
       data-unit={unit ?? ''}
       {...props}

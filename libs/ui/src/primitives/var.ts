@@ -1,5 +1,7 @@
 import type { Property } from 'csstype';
 import {
+  blue100,
+  blue300,
   brand300,
   grey100,
   grey200,
@@ -50,6 +52,7 @@ export interface CssVariables {
 
   // Table
   readonly tableSelectionBackgroundColor: Property.Color;
+  readonly tableFocusColor: Property.Color;
 }
 
 const defaults: CssVariables = {
@@ -78,7 +81,8 @@ const defaults: CssVariables = {
   variableHighlightColor: grey200.rgb,
   variableHighlightTextColor: teal600.rgb,
 
-  tableSelectionBackgroundColor: grey400.rgb,
+  tableSelectionBackgroundColor: blue100.rgb,
+  tableFocusColor: blue300.rgb,
 };
 
 const cssVariablePrefix = '--deci-';

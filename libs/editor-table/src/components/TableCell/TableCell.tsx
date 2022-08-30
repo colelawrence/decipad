@@ -12,9 +12,15 @@ import {
   useTableColumnFormulaResultForElement,
 } from '@decipad/react-contexts';
 import { atoms, molecules, organisms } from '@decipad/ui';
-import { findNodePath, getNodeString, isCollapsed } from '@udecode/plate';
+import {
+  findNodePath,
+  getNodeString,
+  isCollapsed,
+  selectedCellsAtom,
+} from '@udecode/plate';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
+import { useSelected } from 'slate-react';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import {
   useCellType,
@@ -24,6 +30,7 @@ import {
   useIsColumnSelected,
 } from '../../hooks';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
+import { tableScope } from '../Table/Table';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -31,7 +38,9 @@ export const TableCell: PlateComponent = ({
   element,
 }) => {
   const editor = useTEditorRef();
+  const [selectedCells] = useAtom(selectedCellsAtom, tableScope);
   const selected = useIsCellSelected(element!);
+  const focused = useSelected();
   const collapsed = isCollapsed(useSelection());
   const [dropLine] = useAtom(dropLineAtom, trScope);
 
@@ -98,6 +107,7 @@ export const TableCell: PlateComponent = ({
         result={<organisms.CodeResult {...formulaResult} />}
         resultType={formulaResult.type.kind}
         {...attributes}
+        selected={selected}
       >
         {children}
       </molecules.FormulaTableData>
@@ -113,6 +123,7 @@ export const TableCell: PlateComponent = ({
       attributes={attributes}
       dropTarget={dropTarget}
       selected={selected}
+      focused={selectedCells && selectedCells.length > 1 ? false : focused}
       collapsed={collapsed}
       unit={unit}
       alignRight={isCellAlignRight(cellType)}
@@ -123,7 +134,6 @@ export const TableCell: PlateComponent = ({
         <atoms.ColumnDropLine dropDirection={direction} />
       )}
       {children}
-      {<atoms.TableCellBackground selected={selected} />}
       {direction === 'right' && (
         <atoms.ColumnDropLine dropDirection={direction} />
       )}

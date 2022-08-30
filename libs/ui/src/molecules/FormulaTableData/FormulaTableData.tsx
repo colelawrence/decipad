@@ -1,10 +1,14 @@
 import { ComponentProps, FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { p14Medium } from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
 import { TableFormulaCell } from '../../atoms';
 
 const tdLineStyles = css(p14Medium, {
   marginLeft: '12px',
+});
+
+const selectedStyles = css({
+  backgroundColor: cssVar('tableSelectionBackgroundColor'),
 });
 
 const noEditingStyles = css({ display: 'none' });
@@ -12,10 +16,12 @@ const noEditingStyles = css({ display: 'none' });
 export type FormulaTableDataProps = ComponentProps<typeof TableFormulaCell> & {
   result?: ReactNode;
   resultType?: string;
+  selected?: boolean;
 };
 
 export const FormulaTableData = ({
   children,
+  selected,
   result,
   resultType,
   ...props
@@ -26,7 +32,7 @@ export const FormulaTableData = ({
   // Also, be careful with the element structure:
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
-    <TableFormulaCell {...props}>
+    <TableFormulaCell {...props} css={[selected ? selectedStyles : null]}>
       <span css={noEditingStyles}>{children}</span>
       <span
         css={resultType !== 'table' ? tdLineStyles : null}

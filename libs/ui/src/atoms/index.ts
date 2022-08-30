@@ -52,7 +52,6 @@ export { SlashCommandsMenuItem } from './SlashCommandsMenuItem/SlashCommandsMenu
 export { Slider } from './Slider/Slider';
 export { Spinner } from './Spinner/Spinner';
 export { Strikethrough } from './Strikethrough/Strikethrough';
-export { TableCellBackground } from './TableCellBackground/TableCellBackground';
 export { TableCellWithUnit } from './TableCellWithUnit/TableCellWithUnit';
 export { TableData } from './TableData/TableData';
 export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';
