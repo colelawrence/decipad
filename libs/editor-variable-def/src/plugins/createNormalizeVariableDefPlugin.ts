@@ -108,7 +108,14 @@ const normalize =
 export const createNormalizeVariableDefPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_VARIABLE_DEF_PLUGIN',
   elementType: ELEMENT_VARIABLE_DEF,
-  acceptableElementProperties: ['variant', 'max', 'min', 'step', 'value'],
+  acceptableElementProperties: [
+    'variant',
+    'max',
+    'min',
+    'step',
+    'value',
+    'coerceToType',
+  ],
   acceptableSubElements: [ELEMENT_CAPTION, ELEMENT_EXPRESSION, ELEMENT_SLIDER],
   plugin: normalize,
 });

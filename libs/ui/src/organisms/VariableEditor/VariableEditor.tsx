@@ -1,7 +1,16 @@
 import { css } from '@emotion/react';
-import { Children, ComponentProps, FC, ReactNode } from 'react';
+import {
+  Children,
+  ComponentProps,
+  FC,
+  PropsWithChildren,
+  ReactNode,
+  useMemo,
+} from 'react';
+import { SerializedType } from '@decipad/computer';
+import { noop } from 'lodash';
 import { AddNew } from '../../atoms';
-import { Ellipsis } from '../../icons';
+import { Ellipsis, Virus } from '../../icons';
 import { blockAlignment } from '../../styles';
 import {
   offBlack,
@@ -13,7 +22,9 @@ import {
   white,
 } from '../../primitives';
 import { VariableEditorMenu } from '..';
-import { AvailableSwatchColor, baseSwatches } from '../../utils';
+import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
+import { BooleanEditor } from './BooleanEditor';
+import { DateEditor } from './DateEditor';
 
 const leftBarSize = 6;
 
@@ -110,12 +121,34 @@ const variableNameStyles = css({
   },
 });
 
+interface EditorComponentProps {
+  children: ReactNode;
+  type?: SerializedType;
+  value?: string;
+  onChangeValue?: (
+    value: string | undefined // only booleans for now
+  ) => void;
+}
+
+const editorComponents: Record<string, FC<EditorComponentProps>> = {
+  boolean: BooleanEditor,
+  date: DateEditor,
+};
+
+const DefaultEditor: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
+
 interface VariableEditorProps
   extends Pick<ComponentProps<typeof AddNew>, 'onAdd'>,
     Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
   children?: ReactNode;
   color?: AvailableSwatchColor;
   readOnly?: boolean;
+  type?: SerializedType;
+  onChangeType?: (type: SerializedType | undefined) => void;
+  value?: string;
+  onChangeValue?: (
+    value: string | undefined // only booleans for now
+  ) => void;
 }
 
 export const VariableEditor = ({
@@ -123,34 +156,60 @@ export const VariableEditor = ({
   onAdd,
   readOnly = false,
   color = 'Sulu',
+  type,
+  onChangeType = noop,
+  value,
+  onChangeValue = noop,
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
+  const Icon = useMemo(() => (type && getTypeIcon(type)) ?? Virus, [type]);
+  const EditorComponent = useMemo(
+    () => (type && editorComponents[type?.kind]) ?? DefaultEditor,
+    [type]
+  );
 
   return (
     <div css={spacingStyles}>
       <div css={wrapperStyles(baseSwatches[color].rgb)}>
         <div css={widgetWrapperStyles}>
           <div css={headerWrapperStyles}>
-            <div css={variableNameStyles}>{childrenArray[0]}</div>
-            <div contentEditable={false} css={iconWrapperStyles}>
+            <>
+              <div css={variableNameStyles}>{childrenArray[0]}</div>
               {!readOnly && (
-                // TS can't tell which variant of the union type that composes VariableEditorMenu
-                // is being used at any given moment but we're using these type definitions on
-                // VariableEditor's typings, so we know things will be ok in the end, we just need
-                // TS to shut up.
-                <VariableEditorMenu
-                  {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
-                  trigger={
-                    <button css={buttonWrapperStyles}>
-                      <Ellipsis />
-                    </button>
-                  }
-                />
+                <span contentEditable={false} css={iconWrapperStyles}>
+                  <Icon />
+                </span>
               )}
-            </div>
+              <div contentEditable={false} css={iconWrapperStyles}>
+                {!readOnly && (
+                  // TS can't tell which variant of the union type that composes VariableEditorMenu
+                  // is being used at any given moment but we're using these type definitions on
+                  // VariableEditor's typings, so we know things will be ok in the end, we just need
+                  // TS to shut up.
+                  <VariableEditorMenu
+                    {...(menuProps as ComponentProps<
+                      typeof VariableEditorMenu
+                    >)}
+                    trigger={
+                      <button css={buttonWrapperStyles}>
+                        <Ellipsis />
+                      </button>
+                    }
+                    type={type}
+                    onChangeType={onChangeType}
+                  />
+                )}
+              </div>
+            </>
           </div>
-          {childrenArray.slice(1)}
+          <EditorComponent
+            type={type}
+            value={value}
+            onChangeValue={onChangeValue}
+          >
+            {childrenArray.slice(1)}
+          </EditorComponent>
         </div>
       </div>
       <div css={addNewWrapperStyles} contentEditable={false}>

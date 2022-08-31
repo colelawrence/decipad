@@ -1,4 +1,7 @@
-import { DraggableBlock } from '@decipad/editor-components';
+import {
+  DraggableBlock,
+  useTextTypeInference,
+} from '@decipad/editor-components';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
@@ -9,6 +12,7 @@ import {
   VariableSliderElement,
 } from '@decipad/editor-types';
 import {
+  assertElementType,
   getElementUniqueName,
   insertNodeIntoColumns,
   safeDelete,
@@ -16,7 +20,13 @@ import {
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { findNodePath, PlateEditor, serializeHtml } from '@udecode/plate';
+import {
+  findNodePath,
+  getNodeString,
+  PlateEditor,
+  serializeHtml,
+  insertText,
+} from '@udecode/plate';
 import copy from 'copy-to-clipboard';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { useCallback, useState } from 'react';
@@ -26,10 +36,8 @@ export const VariableDef: PlateComponent = ({
   element,
   children,
 }) => {
+  assertElementType(element, ELEMENT_VARIABLE_DEF);
   const [deleted, setDeleted] = useState(false);
-  if (element?.type !== ELEMENT_VARIABLE_DEF) {
-    throw new Error(`VariableDef is meant to render variable def elements`);
-  }
 
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
@@ -98,6 +106,24 @@ export const VariableDef: PlateComponent = ({
     'step'
   );
 
+  const inferredType = useTextTypeInference(element);
+
+  const onChangeType = useElementMutatorCallback(
+    editor,
+    element,
+    'coerceToType'
+  );
+
+  const onChangeValue = useCallback(
+    (value: string | undefined) => {
+      const path = findNodePath(editor, element);
+      if (path) {
+        insertText(editor, value?.toString() ?? '', { at: [...path, 1] });
+      }
+    },
+    [editor, element]
+  );
+
   if (deleted) {
     return <></>;
   }
@@ -135,6 +161,10 @@ export const VariableDef: PlateComponent = ({
           }
           color={color as AvailableSwatchColor}
           readOnly={readOnly}
+          type={element.coerceToType ?? inferredType}
+          onChangeType={onChangeType}
+          value={getNodeString(element.children[1])}
+          onChangeValue={onChangeValue}
         >
           {children}
         </organisms.VariableEditor>

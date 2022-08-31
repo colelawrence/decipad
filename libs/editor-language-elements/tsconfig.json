@@ -9,6 +9,8 @@
   "references": [
     { "path": "../editor-types" },
     { "path": "../editor-utils" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../format" },
+    { "path": "../fraction" }
   ]
 }

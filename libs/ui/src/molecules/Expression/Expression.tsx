@@ -1,3 +1,4 @@
+import { SerializedType } from '@decipad/language';
 import { css } from '@emotion/react';
 import { FC, ReactNode, ComponentProps, useEffect, useRef } from 'react';
 import { CodeError } from '../../atoms';
@@ -5,6 +6,7 @@ import {
   cssVar,
   display,
   Opacity,
+  p15Regular,
   p32Medium,
   setCssVar,
 } from '../../primitives';
@@ -15,7 +17,7 @@ const baseWrapperStyles = css({
   overflow: 'hidden',
 });
 
-const expressionInputStyles = css(p32Medium, {
+const expressionInputStyles = css({
   color: cssVar('strongTextColor'),
   borderRadius: '8px',
   minWidth: 0,
@@ -31,7 +33,7 @@ const focusedExpressionInputStyles = css({
 
 const placeholderOpacity: Opacity = 0.4;
 
-const placeholderStyles = css(p32Medium, {
+const placeholderStyles = css({
   cursor: 'text',
 
   // overlap content (blinking caret) and placeholder
@@ -62,6 +64,7 @@ const errorContainerStyles = css({
 });
 
 interface VariableEditorProps {
+  type?: SerializedType;
   error?: ComponentProps<typeof CodeError>;
   focused?: boolean;
   placeholder?: string;
@@ -69,6 +72,7 @@ interface VariableEditorProps {
 }
 
 export const Expression = ({
+  type,
   error,
   focused = false,
   placeholder = '',
@@ -90,6 +94,7 @@ export const Expression = ({
     >
       <div
         css={[
+          type?.kind !== 'date' ? p32Medium : p15Regular,
           expressionInputStyles,
           placeholderStyles,
           focused && focusedExpressionInputStyles,

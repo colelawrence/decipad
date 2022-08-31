@@ -94,7 +94,8 @@ export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
       key: DECORATION_EXPRESSION_SYNTAX,
       type: DECORATION_EXPRESSION_SYNTAX,
       isLeaf: true,
-      decorate: decorateExpression(computer),
+      decorate: (editor, plugin) =>
+        decorateExpression(editor, computer)(editor, plugin),
       component: CodeSyntax,
     },
     {

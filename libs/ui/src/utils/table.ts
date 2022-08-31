@@ -5,6 +5,7 @@ import {
   All,
   Calendar,
   CheckboxSelected,
+  Code,
   DollarCircle,
   Formula,
   Number,
@@ -34,6 +35,8 @@ export function getTypeIcon(
       return Formula;
     case 'series':
       return Calendar; // only calendar for now
+    case 'anything':
+      return Code;
     default:
       return Text;
   }

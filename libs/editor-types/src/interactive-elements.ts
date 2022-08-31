@@ -1,3 +1,4 @@
+import type { SerializedType } from '@decipad/computer';
 import { isElement } from '@udecode/plate';
 import {
   BaseElement,
@@ -105,6 +106,7 @@ export interface VariableBaseElement<V extends string, T extends BlockElement[]>
   extends BaseElement {
   type: typeof ELEMENT_VARIABLE_DEF;
   variant: V;
+  coerceToType?: SerializedType;
   children: [CaptionElement, ...T];
 }
 

@@ -15,6 +15,7 @@
     { "path": "../computer" },
     { "path": "../import" },
     { "path": "../format" },
-    { "path": "../fraction" }
+    { "path": "../fraction" },
+    { "path": "../editor-language-elements" }
   ]
 }

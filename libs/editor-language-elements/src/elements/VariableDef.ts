@@ -7,6 +7,7 @@ import { Computer } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
+import { inferType } from '../utils/inferType';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementVariableAssignment } from '../utils/parseElementVariableAssignment';
 
@@ -22,7 +23,12 @@ export const VariableDef: InteractiveLanguageElement = {
 
       const { id, children } = element;
       const variableName = getNodeString(children[0]);
-      const expression = getNodeString(children[1]);
+      let expression = getNodeString(children[1]);
+
+      if (element.variant === 'expression') {
+        const type = inferType(expression, element.coerceToType);
+        expression = type.coerced;
+      }
 
       return [parseElementVariableAssignment(id, variableName, expression)];
     }

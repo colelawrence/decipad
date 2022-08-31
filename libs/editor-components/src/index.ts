@@ -9,3 +9,4 @@ export * from './Media/Image';
 export * from './Media/MediaEmbed';
 export * from './slash-commands';
 export * from './text';
+export * from './hooks';

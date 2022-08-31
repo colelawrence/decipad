@@ -2,6 +2,8 @@ import {
   ELEMENT_EXPRESSION,
   MyDecorate,
   MyDecorateEntry,
+  MyEditor,
+  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import {
   filterDecorate,
@@ -9,8 +11,8 @@ import {
   memoizeDecorate,
 } from '@decipad/editor-utils';
 import { Computer, Token, tokenize } from '@decipad/computer';
-import { getNodeString, isElement } from '@udecode/plate';
-import { Path, Range } from 'slate';
+import { getNodeString, getParentNode, isElement } from '@udecode/plate';
+import { NodeEntry, Path, Range } from 'slate';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 
@@ -69,7 +71,10 @@ const withErrorDecorations =
     return undefined;
   };
 
-export const decorateExpression = (computer: Computer): MyDecorate => {
+export const decorateExpression = (
+  editor: MyEditor,
+  computer: Computer
+): MyDecorate => {
   const errorDecorations = withErrorDecorations(computer);
 
   return filterDecorate(
@@ -81,6 +86,16 @@ export const decorateExpression = (computer: Computer): MyDecorate => {
       }
       return (syntax || []).concat(error || []);
     }),
-    ([node]) => node.type === ELEMENT_EXPRESSION
+    ([node, path]) => {
+      if (node.type === ELEMENT_EXPRESSION) {
+        const varDef = getParentNode(
+          editor,
+          path
+        ) as NodeEntry<VariableDefinitionElement>;
+        const kind = varDef?.[0].coerceToType?.kind;
+        return kind !== 'date';
+      }
+      return false;
+    }
   );
 };
