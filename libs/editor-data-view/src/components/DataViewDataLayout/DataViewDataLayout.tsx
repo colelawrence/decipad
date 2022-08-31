@@ -50,7 +50,12 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   types,
   aggregationTypes,
 }: DataViewLayoutProps) => {
-  const groups = useDataViewLayoutData(columnNames, values, types);
+  const groups = useDataViewLayoutData(
+    columnNames,
+    values,
+    types,
+    aggregationTypes
+  );
   const table = useMemo(
     () =>
       treeToTable({

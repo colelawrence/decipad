@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Interpreter, SerializedType, Result } from '@decipad/computer';
 import { zip } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
-import { DataGroup } from '../types';
+import { AggregationKind, DataGroup } from '../types';
 
 const { Column, ResultTransforms } = Result;
 
@@ -46,6 +46,7 @@ export const group = (
   columnNames: string[],
   columnData: Result.ColumnLike<Result.Comparable>[],
   columnTypes: SerializedType[],
+  aggregationTypes: (AggregationKind | undefined)[],
   columnIndex: number,
   subproperties: { value: Result.Comparable; name: string }[],
   parentHighlight$?: BehaviorSubject<boolean>
@@ -80,7 +81,10 @@ export const group = (
     const selfHighlight$ = new BehaviorSubject<boolean>(false);
 
     const smartRowShouldHide =
-      restDataSlice[0] && restDataSlice[0].rowCount <= 1;
+      !aggregationTypes ||
+      aggregationTypes.filter((aggregationType) => aggregationType).length ===
+        0 ||
+      (restDataSlice[0] && restDataSlice[0].rowCount <= 1);
 
     const sRow =
       !restDataSlice || !restDataSlice[0] || smartRowShouldHide
@@ -103,6 +107,7 @@ export const group = (
           columnNames,
           restDataSlice,
           restOfTypes,
+          aggregationTypes,
           columnIndex + 1,
           newSubproperties,
           selfHighlight$
@@ -118,21 +123,30 @@ export const group = (
 export const layoutPowerData = (
   columnNames: string[],
   columns: Interpreter.ResultTable,
-  columnTypes: SerializedType[]
+  columnTypes: SerializedType[],
+  aggregationTypes: (AggregationKind | undefined)[]
 ) => {
   const sortableColumns = columns.map((column) =>
     Column.fromValues(column as Result.Comparable[])
   );
-  return group(columnNames, sortableColumns, columnTypes, 0, []);
+  return group(
+    columnNames,
+    sortableColumns,
+    columnTypes,
+    aggregationTypes,
+    0,
+    []
+  );
 };
 
 export const useDataViewLayoutData = (
   columnNames: string[],
   data: Interpreter.ResultTable,
-  columnTypes: SerializedType[]
+  columnTypes: SerializedType[],
+  aggregationTypes: (AggregationKind | undefined)[]
 ): DataGroup[] => {
   return useMemo(
-    () => layoutPowerData(columnNames, data, columnTypes),
-    [columnNames, data, columnTypes]
+    () => layoutPowerData(columnNames, data, columnTypes, aggregationTypes),
+    [columnNames, data, columnTypes, aggregationTypes]
   );
 };
