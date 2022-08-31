@@ -23,7 +23,10 @@ interface SmartRowProps {
 
 export const SmartRow: FC<SmartRowProps> = ({ smartCells }) => {
   return (
-    <tr css={[tableRowStyles, css({ position: 'relative' })]}>
+    <tr
+      css={[tableRowStyles, css({ position: 'relative' })]}
+      contentEditable={false}
+    >
       <th key="firstcol"></th>
       {smartCells.map((smartCell, index) => (
         <th key={index}>{index > 0 && smartCell}</th>

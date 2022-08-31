@@ -13,7 +13,7 @@ describe('layoutPowerData', () => {
       type: columnTypes,
     };
     expect(() =>
-      layoutPowerData(columnNames, table.value, table.type)
+      layoutPowerData(columnNames, table.value, table.type, [])
     ).toThrow();
   });
 
@@ -26,7 +26,9 @@ describe('layoutPowerData', () => {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([]);
+    expect(layoutPowerData(columnNames, table.value, table.type, [])).toEqual(
+      []
+    );
   });
 
   it('lays out empty a one-column one-cell table', () => {
@@ -38,7 +40,7 @@ describe('layoutPowerData', () => {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type, [])).toEqual([
       {
         rest: [],
         rowSpan: 1,
@@ -60,7 +62,7 @@ describe('layoutPowerData', () => {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type, [])).toEqual([
       {
         value: F(1),
         rowSpan: 1,
@@ -100,7 +102,7 @@ describe('layoutPowerData', () => {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type, [])).toEqual([
       {
         rest: [],
         rowSpan: 1,
@@ -137,7 +139,7 @@ describe('layoutPowerData', () => {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type, [])).toEqual([
       {
         value: F(1),
         rowSpan: 2,
@@ -213,7 +215,7 @@ describe('layoutPowerData', () => {
       value: columnValues,
       type: columnTypes,
     };
-    expect(layoutPowerData(columnNames, table.value, table.type)).toEqual([
+    expect(layoutPowerData(columnNames, table.value, table.type, [])).toEqual([
       {
         rest: [
           {
