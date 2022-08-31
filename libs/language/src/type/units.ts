@@ -1,7 +1,7 @@
 import Fraction, { pow } from '@decipad/fraction';
 import { lenientZip } from '@decipad/utils';
 import { produce } from 'immer';
-import { Type } from '..';
+import type { Type } from '..';
 import pluralize from '../pluralize';
 import {
   areUnitsCompatible,
@@ -63,8 +63,8 @@ const areUnitQualitiesCompatible = (
 };
 
 export const matchUnitArrays = (
-  units1: Unit[] | null,
-  units2: Unit[] | null
+  units1?: Unit[] | null,
+  units2?: Unit[] | null
 ): boolean => {
   const [expandedUnit1] = expandUnits(units1);
   const expandedUnits1 = expandedUnit1 ?? [];
@@ -97,8 +97,8 @@ export const matchUnitArrays = (
 };
 
 export const matchUnitArraysForColumn = (
-  _units1: Unit[] | null,
-  _units2: Unit[] | null
+  _units1?: Unit[] | null,
+  _units2?: Unit[] | null
 ) => {
   const units1 = normalizeUnits(_units1) ?? [];
   const units2 = normalizeUnits(_units2) ?? [];
@@ -183,7 +183,7 @@ const byUnitName = (a: Unit, b: Unit): number => {
 };
 
 export const normalizeUnits = (
-  units: Unit[] | null,
+  units?: Unit[] | null,
   { mult = false }: { mult?: boolean } = {}
 ): Unit[] | null => {
   if (!units?.length) {

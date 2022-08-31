@@ -132,7 +132,7 @@ function expandUnitArgs(
 }
 
 export function expandUnits(
-  units: Unit[] | null,
+  units?: Unit[] | null,
   nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
   scale: ScaleConverter = identity
 ): [Unit[] | null, Converter] {

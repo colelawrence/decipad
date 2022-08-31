@@ -9,7 +9,11 @@ import {
 
 export type { SerializedType, SerializedTypes, SerializedTypeKind };
 
-export function serializeType(type: Type): SerializedType {
+export function serializeType(type: Type | SerializedType): SerializedType {
+  if (!(type instanceof Type)) {
+    // Already serialized
+    return type;
+  }
   const serializedType = ((): SerializedType | null => {
     if (type.cellType && type.columnSize) {
       return {
@@ -84,7 +88,10 @@ export function serializeType(type: Type): SerializedType {
 }
 
 /* eslint-disable-next-line consistent-return */
-export function deserializeType(type: SerializedType): Type {
+export function deserializeType(type: Type | SerializedType): Type {
+  if (type instanceof Type) {
+    return type;
+  }
   return propagateSymbol(
     type,
     (() => {

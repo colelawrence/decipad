@@ -10,6 +10,7 @@ import { parseOneBlock } from './run';
 import {
   build as t,
   convertToMultiplierUnit,
+  getErrSpec,
   normalizeUnits,
   SerializedType,
   serializeType,
@@ -47,7 +48,7 @@ export const runCodeForVariables = async (
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
-  const erroredType = Object.values(types).find((t) => t.errorCause != null);
+  const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
       `runCodeForVariables found an error\n${erroredType.toString()}`
@@ -111,7 +112,7 @@ export const evaluateForVariables = async (
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
-  const erroredType = Object.values(types).find((t) => t.errorCause != null);
+  const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
       `runCodeForVariables found an error\n${erroredType.toString()}`

@@ -5,52 +5,61 @@ import type { Unit } from '.';
 import type { ErrSpec } from './InferError';
 import type { SerializedType } from './SerializedType';
 
-type SType<Contents> = Readonly<Contents & { symbol?: string }>;
+type Common = { symbol?: string; node?: AST.Statement | AST.Expression };
 
 // Groups
-export type Column = SType<{
-  kind: 'column';
-  indexedBy: string | null;
-  cellType: SerializedType;
-  columnSize: number | 'unknown';
-}>;
-export type Table = SType<{
-  kind: 'table';
-  indexName: string | null;
-  tableLength: number | 'unknown';
-  columnTypes: SerializedType[];
-  columnNames: string[];
-}>;
-export type Row = SType<{
-  kind: 'row';
-  rowCellTypes: SerializedType[];
-  rowCellNames: string[];
-}>;
+export type Column = {
+  readonly kind: 'column';
+  readonly indexedBy: string | null;
+  readonly cellType: SerializedType;
+  readonly columnSize: number | 'unknown';
+} & Common;
+export type Table = {
+  readonly kind: 'table';
+  readonly indexName: string | null;
+  readonly tableLength: number | 'unknown';
+  readonly columnTypes: SerializedType[];
+  readonly columnNames: string[];
+} & Common;
+export type Row = {
+  readonly kind: 'row';
+  readonly rowCellTypes: SerializedType[];
+  readonly rowCellNames: string[];
+} & Common;
 
 // Non-groups
 export type Number =
-  | SType<{
-      kind: 'number';
-      unit: Unit[] | null;
-      numberFormat?: null;
-    }>
-  | SType<{
-      kind: 'number';
-      numberFormat: AST.NumberFormat;
-      unit?: null;
-    }>;
-export type Boolean = SType<{ kind: 'boolean' }>;
-export type String = SType<{ kind: 'string' }>;
-export type Date = SType<{ kind: 'date'; date: Time.Specificity }>;
-export type Range = SType<{ kind: 'range'; rangeOf: SerializedType }>;
+  | ({
+      readonly kind: 'number';
+      readonly unit: Unit[] | null;
+      readonly numberFormat?: null;
+    } & Common)
+  | ({
+      readonly kind: 'number';
+      readonly numberFormat: AST.NumberFormat;
+      readonly unit?: null;
+    } & Common);
+export type Boolean = { readonly kind: 'boolean' } & Common;
+export type String = { readonly kind: 'string' } & Common;
+export type Date = {
+  readonly kind: 'date';
+  readonly date: Time.Specificity;
+} & Common;
+export type Range = {
+  readonly kind: 'range';
+  readonly rangeOf: SerializedType;
+} & Common;
 
 // Oddball
-export type Nothing = SType<{ kind: 'nothing' }>; // No-op
-export type Anything = SType<{ kind: 'anything' }>; // Top type
-export type Function = SType<{
-  kind: 'function';
-  name: string;
-  argCount?: number;
-  ast?: AST.Node | null;
-}>;
-export type TypeError = SType<{ kind: 'type-error'; errorCause: ErrSpec }>;
+export type Nothing = { readonly kind: 'nothing' } & Common; // No-op
+export type Anything = { readonly kind: 'anything' } & Common; // Top type
+export type Function = {
+  readonly kind: 'function';
+  readonly name: string;
+  readonly argCount?: number;
+  readonly ast?: AST.Node | null;
+} & Common;
+export type TypeError = {
+  readonly kind: 'type-error';
+  readonly errorCause: ErrSpec;
+} & Common;

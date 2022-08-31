@@ -1,5 +1,5 @@
 import { inferBlock } from '..';
-import { build as t, InferError } from '../type';
+import { build as t, getErrSpec, InferError } from '../type';
 import { assign, block, c, funcDef, l, r, U } from '../utils';
 import { makeContext } from './context';
 import { inferFunction } from './functions';
@@ -21,7 +21,7 @@ it('cannot infinitely recurse', async () => {
   ];
   const context = await inferProgram(selfReferringProgram);
 
-  expect(context.stack.get('Error')?.errorCause?.spec.errType).toEqual(
+  expect(getErrSpec(context.stack.get('Error'))?.errType).toEqual(
     'formula-cannot-call-itself'
   );
 });
@@ -34,7 +34,7 @@ it('cannot indirectly infinitely recurse', async () => {
   ];
   const context = await inferProgram(selfReferringProgram);
 
-  expect(context.stack.get('Error')?.errorCause?.spec).toEqual({
+  expect(getErrSpec(context.stack.get('Error'))).toEqual({
     errType: 'formula-cannot-call-itself',
     fname: 'Fn',
   });

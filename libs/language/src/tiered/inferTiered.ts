@@ -45,7 +45,7 @@ export const inferTiered = async (
     return initialType;
   }
 
-  return tieredDefs.reduce<Promise<Type>>(async (type, def) => {
+  return tieredDefs.reduce(async (type, def) => {
     const initialType = await type;
     return initialType
       .sameAs(await inferTieredDef(initialType, ctx, def))

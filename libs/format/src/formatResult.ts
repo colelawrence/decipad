@@ -2,22 +2,24 @@ import util from 'util';
 import Fraction from '@decipad/fraction';
 import { getDefined, zip } from '@decipad/utils';
 import {
-  buildType,
   Interpreter,
   stringifyDate,
   Type,
   convertToMultiplierUnit,
   serializeType,
+  SerializedType,
 } from '@decipad/language';
 import { formatType } from './formatType';
 
 export const formatResult = (
   locale: string,
   result: Interpreter.OneResult | undefined | null,
-  type: Type,
+  _type: Type | SerializedType,
   color = (s: string) => s
 ): string => {
-  if (type.rangeOf != null) {
+  const type = serializeType(_type);
+
+  if (type.kind === 'range') {
     const [start, end] = result as Interpreter.OneResult[];
     return `range(${formatResult(
       locale,
@@ -27,11 +29,11 @@ export const formatResult = (
     )} to ${formatResult(locale, end, type.rangeOf, color)})`;
   }
 
-  if (type.date != null) {
+  if (type.kind === 'date') {
     return `${type.date} ${color(stringifyDate(result as bigint, type.date))}`;
   }
 
-  if (type.type === 'number') {
+  if (type.kind === 'number') {
     if (type.numberFormat === 'percentage') {
       return `${color((result as Fraction).mul(100).toString())}%`;
     }
@@ -43,15 +45,11 @@ export const formatResult = (
     return [color(numStr), formatType(locale, serializeType(type))].join(' ');
   }
 
-  if (type.type === 'string' || type.type === 'boolean') {
+  if (type.kind === 'string' || type.kind === 'boolean') {
     return color(util.inspect(result));
   }
 
-  if (
-    type.columnSize != null &&
-    type.cellType != null &&
-    Array.isArray(result)
-  ) {
+  if (type.kind === 'column' && Array.isArray(result)) {
     return `[ ${result
       .map((item) =>
         formatResult(locale, item, getDefined(type.cellType), color)
@@ -59,12 +57,7 @@ export const formatResult = (
       .join(', ')} ]`;
   }
 
-  if (
-    type.columnTypes != null &&
-    type.columnNames != null &&
-    type.tableLength != null &&
-    Array.isArray(result)
-  ) {
+  if (type.kind === 'table' && Array.isArray(result)) {
     const { tableLength } = type;
     const cols = zip(result, zip(type.columnTypes, type.columnNames))
       .map(
@@ -72,7 +65,12 @@ export const formatResult = (
           `  ${name} = ${formatResult(
             locale,
             col,
-            buildType.column(t, tableLength),
+            {
+              kind: 'column',
+              cellType: t,
+              columnSize: tableLength,
+              indexedBy: null,
+            },
             color
           )}`
       )
@@ -80,11 +78,7 @@ export const formatResult = (
     return `{\n${cols}\n}`;
   }
 
-  if (
-    type.rowCellTypes != null &&
-    type.rowCellNames != null &&
-    Array.isArray(result)
-  ) {
+  if (type.kind === 'row' && Array.isArray(result)) {
     const cols = zip(result, zip(type.rowCellTypes, type.rowCellNames))
       .map(
         ([col, [t, name]]) =>
@@ -94,8 +88,5 @@ export const formatResult = (
     return `{\n${cols}\n}`;
   }
 
-  return [
-    color(util.inspect(result)),
-    type && formatType(locale, serializeType(type)),
-  ].join(' ');
+  return [color(util.inspect(result)), formatType(locale, type)].join(' ');
 };
