@@ -17,8 +17,9 @@ import {
   ELEMENT_BUBBLE,
   BubbleElement,
 } from '@decipad/editor-types';
-import { Computer, ParsedBlock, prettyPrintAST } from '@decipad/computer';
+import { Computer, prettyPrintAST, Program } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
+import { getOnly } from '@decipad/utils';
 import { editorToProgram } from './editorToProgram';
 
 describe('editorToProgram', () => {
@@ -110,63 +111,35 @@ describe('editorToProgram', () => {
 
     expect(program.length).toBe(6);
 
-    const [block, input, col1, col2, magicNum, table] = program;
+    const [block, input, col1, col2, magicNum, table] = prettyPrintAll(program);
 
-    expect(program.map((p) => [p.id, p.type].join(', ')))
-      .toMatchInlineSnapshot(`
-        Array [
-          "line, unparsed-block",
-          "input, parsed-block",
-          "columns/1, parsed-block",
-          "columns/2, parsed-block",
-          "paragraph-1, unparsed-block",
-          "table, parsed-block",
-        ]
-      `);
+    expect(block).toMatchInlineSnapshot(`"(+ 1 1)"`);
 
-    expect(block).toMatchInlineSnapshot(`
-      Object {
-        "id": "line",
-        "source": "1 + 1",
-        "type": "unparsed-block",
-      }
+    expect(input).toMatchInlineSnapshot(`
+      "(assign
+        (def varName)
+        123)"
     `);
 
-    expect(prettyPrintAST((input as ParsedBlock).block)).toMatchInlineSnapshot(`
-      "(block
-        (assign
-          (def varName)
-          123))"
+    expect(col1).toMatchInlineSnapshot(`
+      "(assign
+        (def a)
+        12.34)"
     `);
 
-    expect(prettyPrintAST((col1 as ParsedBlock).block)).toMatchInlineSnapshot(`
-      "(block
-        (assign
-          (def a)
-          12.34))"
+    expect(col2).toMatchInlineSnapshot(`
+      "(assign
+        (def b)
+        45.67)"
     `);
 
-    expect(prettyPrintAST((col2 as ParsedBlock).block)).toMatchInlineSnapshot(`
-      "(block
-        (assign
-          (def b)
-          45.67))"
-    `);
+    expect(magicNum).toMatchInlineSnapshot(`"(+ 1 1)"`);
 
-    expect(magicNum).toMatchInlineSnapshot(`
-      Object {
-        "id": "paragraph-1",
-        "source": "1 + 1",
-        "type": "unparsed-block",
-      }
-    `);
-
-    expect(prettyPrintAST((table as ParsedBlock).block)).toMatchInlineSnapshot(`
-      "(block
-        (assign
-          (def TableName)
-          (table
-            ColName (column \\"CellData\\"))))"
+    expect(table).toMatchInlineSnapshot(`
+      "(assign
+        (def TableName)
+        (table
+          ColName (column \\"CellData\\")))"
     `);
   });
 
@@ -200,22 +173,29 @@ describe('editorToProgram', () => {
 
     expect(program.length).toBe(2);
 
-    const [inlineNumber] = program;
-
-    expect(program.map((p) => [p.id, p.type].join(', ')))
-      .toMatchInlineSnapshot(`
-        Array [
-          "xqab, unparsed-block",
-          "dcaqx, unparsed-block",
-        ]
-      `);
+    const [inlineNumber, inlineBubble] = prettyPrintAll(program);
 
     expect(inlineNumber).toMatchInlineSnapshot(`
-        Object {
-          "id": "xqab",
-          "source": "inlineNumber = 2 apples",
-          "type": "unparsed-block",
-        }
-      `);
+      "(assign
+        (def inlineNumber)
+        (implicit* 2 (ref apples)))"
+    `);
+
+    expect(inlineBubble).toMatchInlineSnapshot(`
+      "(assign
+        (def inlineBubble)
+        (+ 2 2))"
+    `);
   });
 });
+
+function prettyPrintAll(program: Program): string[] {
+  return program.map((block) => {
+    if (block.type === 'unparsed-block') {
+      throw new Error('no unparsed blocks');
+    } else {
+      const onlyStatement = getOnly(block.block.args);
+      return prettyPrintAST(onlyStatement);
+    }
+  });
+}

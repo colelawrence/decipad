@@ -1,13 +1,7 @@
 import { BracketError } from '..';
 import * as AST from './ast-types';
 
-export interface UnparsedBlock {
-  id: string;
-  source: string;
-}
-
 export interface ParserError {
-  blockId: string;
   message: string;
   detailMessage?: string;
   bracketError?: BracketError;
@@ -18,10 +12,6 @@ export interface ParserError {
   source?: string;
 }
 
-export interface ParsedBlock {
-  id: string;
-  solutions: Solution[];
-  errors: ParserError[];
-}
-
-export type Solution = AST.Block;
+export type ParsedBlock =
+  | { solution: AST.Block; error?: undefined }
+  | { solution?: undefined; error: ParserError };

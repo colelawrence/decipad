@@ -73,14 +73,14 @@ it('detects circular dependencies', () => {
     },
     {
       id: 'block-A',
-      type: 'identified-error',
+      type: 'computer-parse-error',
       error: {
         message: 'Circular dependency detected',
       },
     },
     {
       id: 'block-B',
-      type: 'identified-error',
+      type: 'computer-parse-error',
       error: {
         message: 'Circular dependency detected',
       },

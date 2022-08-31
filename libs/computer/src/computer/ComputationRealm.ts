@@ -1,37 +1,32 @@
 import {
   AST,
-  Table,
+  ColumnLike,
   ExternalDataMap,
-  Type,
+  isColumnLike,
   makeContext as makeInferContext,
   Realm,
-  Value,
-  ColumnLike,
-  isColumnLike,
   stringifyDate,
+  Table,
+  Type,
+  Value,
 } from '@decipad/language';
-
 import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
 } from '../caching/getStatementsToEvict';
-import { InBlockResult, ValueLocation } from '../types';
-import {
-  parseDefName,
-  getDefinedSymbolAt,
-  LocationSet,
-  LocationMap,
-} from '../utils';
+import type { IdentifiedResult } from '../types';
+import { getDefinedSymbolAt, parseDefName } from '../utils';
 
 export type CacheContents = {
-  result: InBlockResult | null;
+  result: IdentifiedResult;
   value: Value | undefined;
 };
+
 export class ComputationRealm {
   inferContext = makeInferContext();
   interpreterRealm = new Realm(this.inferContext);
-  locCache = new LocationMap<CacheContents>();
-  errorLocs = new LocationSet();
+  locCache = new Map<string, CacheContents>();
+  errorLocs = new Set<string>();
 
   setExternalData(externalData: ExternalDataMap) {
     this.interpreterRealm.externalData = externalData;
@@ -43,18 +38,16 @@ export class ComputationRealm {
       this.evictStatement(oldBlocks, loc);
     }
 
-    const statementsToEvict = getStatementsToEvict({ oldBlocks, ...rest });
-
-    for (const loc of statementsToEvict) {
-      this.evictStatement(oldBlocks, loc);
+    for (const blockId of getStatementsToEvict({ oldBlocks, ...rest })) {
+      this.evictStatement(oldBlocks, blockId);
     }
   }
 
-  evictStatement(program: AST.Block[], loc: ValueLocation) {
-    this.errorLocs.delete(loc);
-    this.locCache.delete(loc);
+  evictStatement(program: AST.Block[], blockId: string) {
+    this.errorLocs.delete(blockId);
+    this.locCache.delete(blockId);
 
-    const sym = getDefinedSymbolAt(program, loc);
+    const sym = getDefinedSymbolAt(program, blockId);
     if (sym) {
       const [type, name] = parseDefName(sym);
 
@@ -68,7 +61,7 @@ export class ComputationRealm {
     }
   }
 
-  getFromCache(loc: ValueLocation) {
+  getFromCache(loc: string) {
     return this.locCache.get(loc) ?? null;
   }
 
@@ -115,8 +108,8 @@ export class ComputationRealm {
     return labels;
   }
 
-  addToCache(loc: ValueLocation, result: CacheContents) {
-    if (result.result?.type?.kind !== 'type-error') {
+  addToCache(loc: string, result: CacheContents) {
+    if (result.result?.result?.type?.kind !== 'type-error') {
       this.locCache.set(loc, result);
     } else {
       this.errorLocs.add(loc);

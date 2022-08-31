@@ -1,108 +1,34 @@
 import { AST, SyntaxError, BracketError, walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { ParseRet } from './computer/parse';
-import { ValueLocation } from './types';
-
-export const stringifyLoc = (loc: ValueLocation) => loc.join('/');
-export const parseLoc = (loc: string) => {
-  const [blockId, strIndex, trash] = loc.split('/');
-  const statementIndex = Number(strIndex);
-
-  if (!blockId || Number.isNaN(statementIndex) || trash != null) {
-    throw new Error(`invalid ValueLocation: ${JSON.stringify(loc)}`);
-  }
-
-  return [blockId, statementIndex] as ValueLocation;
-};
-
-export class LocationSet {
-  set = new Set<string>();
-
-  constructor(contents?: Iterable<ValueLocation>) {
-    for (const v of contents ?? []) this.add(v);
-  }
-
-  add(value: ValueLocation) {
-    this.set.add(stringifyLoc(value));
-    return this;
-  }
-
-  has(value: ValueLocation) {
-    return this.set.has(stringifyLoc(value));
-  }
-
-  delete(value: ValueLocation) {
-    this.set.delete(stringifyLoc(value));
-  }
-
-  [Symbol.iterator]() {
-    return Array.from(this.set)
-      .map((loc) => parseLoc(loc))
-      [Symbol.iterator]();
-  }
-}
-
-export class LocationMap<T> {
-  map = new Map<string, T>();
-
-  constructor(contents?: Iterable<[ValueLocation, T]>) {
-    for (const [k, v] of contents ?? []) this.set(k, v);
-  }
-
-  set(key: ValueLocation, value: T) {
-    this.map.set(stringifyLoc(key), value);
-    return this;
-  }
-
-  get(value: ValueLocation) {
-    return this.map.get(stringifyLoc(value));
-  }
-
-  delete(value: ValueLocation) {
-    this.map.delete(stringifyLoc(value));
-  }
-
-  [Symbol.iterator]() {
-    return [...this.map]
-      .map(([loc, value]) => [parseLoc(loc), value])
-      [Symbol.iterator]();
-  }
-}
 
 export const getStatement = (
   program: AST.Block[],
-  [blockId, stmtIdx]: ValueLocation
+  blockId: string
 ): AST.Statement => {
   return getDefined(
-    program.find((b) => b.id === blockId)?.args[stmtIdx],
-    `ComputationGraph: Could not find location [${blockId}, ${stmtIdx}]`
+    program.find((b) => b.id === blockId)?.args[0],
+    `ComputationGraph: Could not find code line at ${blockId}`
   );
 };
 
 export const iterProgram = (
   program: AST.Block[],
-  fn: (stmt: AST.Statement, loc: [string, number]) => void
+  fn: (stmt: AST.Statement, loc: string) => void
 ) => {
   program.forEach(({ id: blockId, args: statements }) => {
-    statements.forEach((statement, statementIndex) => {
-      fn(statement, [blockId, statementIndex]);
-    });
+    fn(statements[0], blockId);
   });
 };
 
-const blockLocs = (block: AST.Block): ValueLocation[] =>
-  block.args.map((_stmt, i) => [block.id, i]);
+export const getAllBlockIds = (blocks: AST.Block[]) =>
+  blocks.flatMap((block) => block.id);
 
-export const getAllBlockLocations = (blocks: AST.Block[]) =>
-  blocks.flatMap((block) => blockLocs(block));
-
-export const getSomeBlockLocations = (
+export const getExistingBlockIds = (
   blocks: AST.Block[],
-  blockIds: string[]
-): ValueLocation[] =>
-  blocks.flatMap((block) =>
-    blockIds.includes(block.id) ? blockLocs(block) : []
-  );
+  blockIds: Set<string>
+): string[] =>
+  blocks.flatMap((block) => (blockIds.has(block.id) ? [block.id] : []));
 
 export const getIdentifierString = (ident: AST.Identifier): string =>
   ident.args[0];
@@ -130,11 +56,8 @@ export const getGoodBlocks = (parsed: ParseRet[]) =>
     else return [];
   });
 
-export const getDefinedSymbolAt = (
-  program: AST.Block[],
-  loc: ValueLocation
-) => {
-  const stmt = getStatement(program, loc);
+export const getDefinedSymbolAt = (program: AST.Block[], blockId: string) => {
+  const stmt = getStatement(program, blockId);
 
   return stmt != null ? getDefinedSymbol(stmt) : null;
 };
@@ -148,11 +71,11 @@ export const getAllSymbolsDefined = (blocks: AST.Block[]) =>
     })
   );
 
-export function* getSymbolsDefinedInLocs(
+export function* getSymbolsDefinedInBlocks(
   program: AST.Block[],
-  locs: ValueLocation[]
+  blockIds: string[]
 ) {
-  for (const loc of locs) {
+  for (const loc of blockIds) {
     const sym = getDefinedSymbol(getStatement(program, loc));
     if (sym != null) yield sym;
   }

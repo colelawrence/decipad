@@ -12,7 +12,6 @@ import {
   ErrSpec,
   evaluateStatement,
   ExternalDataMap,
-  Unit,
   inferExpression,
   inferStatement,
   isExpression,
@@ -24,6 +23,7 @@ import {
   SerializedTypes,
   serializeResult,
   serializeType,
+  Unit,
   validateResult,
   Value,
 } from '@decipad/language';
@@ -45,14 +45,13 @@ import {
   ComputeResponse,
   ComputerParseStatementResult,
   IdentifiedBlock,
+  IdentifiedError,
   IdentifiedResult,
-  InBlockResult,
-  ResultsContextItem,
+  NotebookResults,
   UserParseError,
-  ValueLocation,
 } from '../types';
 import {
-  getAllBlockLocations,
+  getAllBlockIds,
   getDefinedSymbol,
   getGoodBlocks,
   getStatement,
@@ -81,18 +80,17 @@ type WithVersion<T> = T & {
  */
 const computeStatement = async (
   program: AST.Block[],
-  location: ValueLocation,
+  blockId: string,
   realm: ComputationRealm
-): Promise<[InBlockResult, Value | undefined]> => {
-  const result = realm.getFromCache(location);
+): Promise<[IdentifiedResult, Value | undefined]> => {
+  const cachedResult = realm.getFromCache(blockId);
   let value: Value | undefined;
 
-  if (result) {
-    return [getDefined(result.result), result.value];
+  if (cachedResult) {
+    return [getDefined(cachedResult.result), cachedResult.value];
   }
 
-  const [blockId, statementIndex] = location;
-  const statement = getStatement(program, location);
+  const statement = getStatement(program, blockId);
   const valueType = await inferStatement(
     realm.inferContext,
     statement,
@@ -107,51 +105,20 @@ const computeStatement = async (
     validateResult(valueType, value.getData());
   }
 
-  const newResult = {
-    result: {
-      blockId,
-      statementIndex,
-      ...serializeResult(valueType, value?.getData()),
-      visibleVariables: getVisibleVariables(
-        program,
-        location[0],
-        realm.inferContext
-      ),
-    },
-    value,
+  const result: IdentifiedResult = {
+    type: 'computer-result',
+    id: blockId,
+    result: serializeResult(valueType, value?.getData()),
+    visibleVariables: getVisibleVariables(program, blockId, realm.inferContext),
   };
-  realm.addToCache(location, newResult);
-  return [newResult.result, value];
-};
-
-const resultsToUpdates = (results: InBlockResult[]) => {
-  const ret: IdentifiedResult[] = [];
-
-  for (const result of results) {
-    const { blockId } = result;
-    let identifiedResult = ret.find((r) => r.blockId === blockId);
-
-    if (identifiedResult == null) {
-      identifiedResult = {
-        blockId,
-        isSyntaxError: false,
-        results: [],
-      };
-      ret.push(identifiedResult);
-    }
-
-    identifiedResult.results.push(result);
-  }
-
-  return ret;
+  realm.addToCache(blockId, { result, value });
+  return [result, value];
 };
 
 export const resultFromError = (
   error: Error,
-  location: ValueLocation
-): InBlockResult => {
-  const [blockId, statementIndex] = location;
-
+  blockId: string
+): IdentifiedResult => {
   // Not a user-facing error, so let's hide internal details
   const message = error.message.replace(
     /^panic: (.+)$/,
@@ -163,26 +130,22 @@ export const resultFromError = (
   }
 
   return {
-    blockId,
-    statementIndex,
-    ...serializeResult(t.impossible(message), null),
-    visibleVariables: {
-      global: new Set(),
-      local: new Set(),
-    },
+    type: 'computer-result',
+    id: blockId,
+    result: serializeResult(t.impossible(message), null),
   };
 };
 
 export const computeProgram = async (
   program: AST.Block[],
   realm: ComputationRealm
-): Promise<InBlockResult[]> => {
-  const results: InBlockResult[] = [];
-  for (const location of getAllBlockLocations(program)) {
+): Promise<IdentifiedResult[]> => {
+  const results: IdentifiedResult[] = [];
+  for (const location of getAllBlockIds(program)) {
     try {
       // eslint-disable-next-line no-await-in-loop
       const [result, value] = await computeStatement(program, location, realm);
-      realm.inferContext.previousStatement = result.type;
+      realm.inferContext.previousStatement = result.result.type;
       realm.interpreterRealm.previousStatementValue = value;
       results.push(result);
     } catch (err) {
@@ -260,9 +223,7 @@ export class Computer {
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
-  public results = new BehaviorSubject<ResultsContextItem>(
-    defaultComputerResults
-  );
+  public results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
 
   constructor({ requestDebounceMs = 100 }: Partial<ComputerOpts> = {}) {
     this.requestDebounceMs = requestDebounceMs;
@@ -278,13 +239,13 @@ export class Computer {
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
         concatMap((req) => this.computeRequest(req)),
-        map((res): ResultsContextItem => {
+        map((res): NotebookResults => {
           if (res.type === 'compute-panic') {
             captureException(new Error(res.message));
             return defaultComputerResults;
           }
           const blockResults = Object.fromEntries(
-            res.updates.map((result) => [result.blockId, result])
+            res.updates.map((result) => [result.id, result])
           );
 
           return {
@@ -454,20 +415,15 @@ export class Computer {
         this.computationRealm
       );
 
-      const updates: IdentifiedResult[] = [];
+      const updates: (IdentifiedError | IdentifiedResult)[] = [];
 
       for (const block of blocks) {
-        if (block.type === 'identified-error') {
-          updates.push({
-            blockId: block.id,
-            isSyntaxError: true,
-            error: block.error,
-            results: [],
-          });
+        if (block.type === 'computer-parse-error') {
+          updates.push(block);
         }
       }
 
-      updates.push(...resultsToUpdates(computeResults));
+      updates.push(...computeResults);
 
       return {
         type: 'compute-response',
@@ -501,9 +457,7 @@ export class Computer {
     this.previouslyParsed = [];
     this.previousExternalData = new Map();
     this.computationRealm = new ComputationRealm();
-    this.results = new BehaviorSubject<ResultsContextItem>(
-      defaultComputerResults
-    );
+    this.results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
     this.wireRequestsToResults();
   }
 
@@ -561,8 +515,8 @@ export class Computer {
   }
 
   parseStatement(source: string): ComputerParseStatementResult {
-    const { solutions, errors } = parseBlock({ id: 'block-id', source });
-    return { statement: solutions[0]?.args[0], error: errors[0] };
+    const { solution, error } = parseBlock(source);
+    return { statement: solution?.args[0], error };
   }
 
   isExpression(statement: AST.Statement): statement is AST.Expression {

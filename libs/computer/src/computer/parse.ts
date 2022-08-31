@@ -1,10 +1,10 @@
 import { dequal } from 'dequal';
-import { Parser, parseBlock } from '@decipad/language';
+import { astNode, parseBlock } from '@decipad/language';
 import {
   Program,
   IdentifiedBlock,
   IdentifiedError,
-  ParsedBlock,
+  UnparsedBlock,
 } from '../types';
 
 export type ParseRet = IdentifiedBlock | IdentifiedError;
@@ -12,34 +12,26 @@ export type ParseRet = IdentifiedBlock | IdentifiedError;
 export const wrappedParse = ({
   id,
   source,
-}: Parser.UnparsedBlock): ParseRet => {
-  const parsed = parseBlock({ id, source });
+}: Omit<UnparsedBlock, 'type'>): ParseRet => {
+  const { error, solution } = parseBlock(source);
 
-  if (parsed.errors.length) {
-    return {
-      type: 'identified-error',
-      id,
-      source,
-      error: parsed.errors[0],
-    };
+  if (error) {
+    return { type: 'computer-parse-error', id, source, error };
   }
 
   return {
     type: 'identified-block',
     id,
     source,
-    block: {
-      ...parsed.solutions[0],
-      // AST.Block doesn't *really* have an ID :(
-      id,
-    },
+    // AST.Block doesn't *really* have an ID :(
+    block: { ...solution, id },
   };
 };
 
-const asParsed = ({ id, block }: ParsedBlock): ParseRet => ({
+const asParsed = ({ id, block, source }: IdentifiedBlock): ParseRet => ({
   type: 'identified-block',
   id,
-  source: '',
+  source: source ?? '',
   block: { ...block },
 });
 
@@ -60,7 +52,14 @@ export const updateParse = (
         return prev;
       } else {
         // Block source changed
-        return wrappedParse(block);
+        const oneStatement = wrappedParse(block);
+        if (
+          oneStatement.type === 'identified-block' &&
+          oneStatement.block.args.length !== 1
+        ) {
+          throw new Error('more than one statement is not allowed');
+        }
+        return oneStatement;
       }
     } else {
       const newBlock = asParsed(block);
@@ -71,4 +70,27 @@ export const updateParse = (
       }
     }
   });
+};
+
+/** Create a program for the computer when the source string has multiple statements
+ * The computer doesn't normally support this but sometimes we need it
+ */
+export const createProgramFromMultipleStatements = (
+  source: string
+): Program => {
+  const { error, solution } = parseBlock(source);
+  return error
+    ? [
+        {
+          type: 'unparsed-block',
+          id: '1',
+          source,
+        },
+      ]
+    : solution.args.map((stat, index) => ({
+        type: 'identified-block',
+        id: String(index),
+        source: '',
+        block: { ...astNode('block', stat), id: String(index) },
+      }));
 };

@@ -1,6 +1,8 @@
 import produce from 'immer';
-import { updateParse } from './parse';
-import { UnparsedBlock } from '../types';
+import { getOnly } from '@decipad/utils';
+import { createProgramFromMultipleStatements, updateParse } from './parse';
+import { Program, UnparsedBlock } from '../types';
+import { prettyPrintAST } from '..';
 
 it('parses only the necessary parts', () => {
   const program: UnparsedBlock[] = [
@@ -43,8 +45,41 @@ it('reports syntax errors', () => {
     ])
   ).toMatchObject([
     {
-      type: 'identified-error',
+      type: 'computer-parse-error',
       id: '0',
     },
   ]);
+});
+
+it('creates multiple statements for legacy multi-statement usage', () => {
+  const prettyPrint = (p: Program) =>
+    p.map((block) => {
+      if (block.type === 'unparsed-block') {
+        return `unparsed: ${block.source}`;
+      }
+      const node = getOnly(block.block.args);
+      return prettyPrintAST(node);
+    });
+
+  expect(prettyPrint(createProgramFromMultipleStatements('1\n2')))
+    .toMatchInlineSnapshot(`
+      Array [
+        "1",
+        "2",
+      ]
+    `);
+
+  expect(prettyPrint(createProgramFromMultipleStatements(' ')))
+    .toMatchInlineSnapshot(`
+      Array [
+        "(noop)",
+      ]
+    `);
+
+  expect(prettyPrint(createProgramFromMultipleStatements('syntax --/-- error')))
+    .toMatchInlineSnapshot(`
+      Array [
+        "unparsed: syntax --/-- error",
+      ]
+    `);
 });

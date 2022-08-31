@@ -16,11 +16,11 @@ interface Node {
 type EntityNodeMap = Map<string, Node>;
 
 const badBlock = (block: ParseRet): block is IdentifiedError => {
-  return block.type === 'identified-error';
+  return block.type === 'computer-parse-error';
 };
 
 const goodBlock = (block: ParseRet): block is IdentifiedBlock => {
-  return block.type !== 'identified-error';
+  return block.type !== 'computer-parse-error';
 };
 
 const blockEntity = ({ block }: IdentifiedBlock): string | null => {
@@ -67,11 +67,8 @@ const identifiedErrorFromNode = (
   message: string
 ): IdentifiedError => ({
   ...node.value,
-  type: 'identified-error',
-  error: {
-    blockId: node.value.id,
-    message,
-  },
+  type: 'computer-parse-error',
+  error: { message },
 });
 
 export const topologicalSort = (blocks: ParseRet[]): ParseRet[] => {

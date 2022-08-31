@@ -1,10 +1,10 @@
-import { MyEditor, MyElement } from '@decipad/editor-types';
-import { AST, Computer, UnparsedBlock } from '@decipad/computer';
+import type { MyEditor, MyElement } from '@decipad/editor-types';
+import type { AST, Computer } from '@decipad/computer';
+import { IdentifiedBlock } from 'libs/computer/src/types';
 
-interface NameAndExpression {
-  name: string;
+export interface ParsedStatement {
   id: string;
-  expression?: AST.Expression;
+  statement?: AST.Expression | AST.Statement;
   parseErrors?: ParseError[];
 }
 
@@ -14,67 +14,27 @@ interface JustExpression {
   parseErrors?: ParseError[];
 }
 
-interface InteractiveLanguageElementBase {
-  type: string | string[];
-}
-
-type ExpressionInteractiveLanguageElement = InteractiveLanguageElementBase & {
-  resultsInExpression: true;
-  resultsInNameAndExpression?: false;
-  resultsInUnparsedBlock?: false;
-  isStructural?: false;
-  getExpressionFromElement: (
+export type InteractiveLanguageElement = {
+  getParsedBlockFromElement?: (
+    editor: MyEditor,
+    computer: Computer,
+    element: MyElement
+  ) => Promise<LanguageBlock[]>;
+  getExpressionFromElement?: (
     editor: MyEditor,
     computer: Computer,
     element: MyElement
   ) => Promise<JustExpression[]>;
+  type: string | string[];
+  isStructural?: boolean;
 };
-
-export type NameAndExpressionInteractiveLanguageElement =
-  InteractiveLanguageElementBase & {
-    resultsInExpression?: false;
-    resultsInNameAndExpression: true;
-    resultsInUnparsedBlock?: false;
-    isStructural?: false;
-    getNameAndExpressionFromElement: (
-      editor: MyEditor,
-      computer: Computer,
-      element: MyElement
-    ) => Promise<NameAndExpression[]>;
-  };
-
-type UnparsedBlockInteractiveLanguageElement =
-  InteractiveLanguageElementBase & {
-    resultsInExpression?: false;
-    resultsInNameAndExpression?: false;
-    resultsInUnparsedBlock: true;
-    isStructural?: false;
-    getUnparsedBlockFromElement: (
-      editor: MyEditor,
-      computer: Computer,
-      element: MyElement
-    ) => Promise<UnparsedBlock[]>;
-  };
-
-type StructuralElement = InteractiveLanguageElementBase & {
-  isStructural: true;
-  resultsInExpression?: false;
-  resultsInNameAndExpression?: false;
-  resultsInUnparsedBlock?: true;
-  getUnparsedBlockFromElement?: (
-    editor: MyEditor,
-    computer: Computer,
-    element: MyElement
-  ) => Promise<UnparsedBlock[]>;
-};
-
-export type InteractiveLanguageElement =
-  | ExpressionInteractiveLanguageElement
-  | NameAndExpressionInteractiveLanguageElement
-  | UnparsedBlockInteractiveLanguageElement
-  | StructuralElement;
 
 export interface ParseError {
   elementId: string;
   error: string;
+}
+
+export interface LanguageBlock {
+  program: IdentifiedBlock[];
+  parseErrors: ParseError[];
 }

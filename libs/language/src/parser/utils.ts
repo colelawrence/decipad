@@ -65,8 +65,10 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
     const args = printedArgs.map((a) => '  '.repeat(indent + 1) + a);
 
     return `(${fname}\n${args.join('\n')})`;
-  } else {
+  } else if (printedArgs.length) {
     return `(${fname} ${printedArgs.join(' ')})`;
+  } else {
+    return `(${fname})`;
   }
 };
 

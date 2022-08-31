@@ -1,14 +1,10 @@
 export type {
-  ComputeRequest,
-  ComputeResponse,
-  ComputePanic,
-  ParsedBlock,
   IdentifiedResult,
-  InBlockResult,
+  IdentifiedError,
   Program,
   ProgramBlock,
-  ValueLocation,
   UnparsedBlock,
+  ComputeRequest,
 } from '../types';
 
 export { Computer, getUsedIdentifiers } from './Computer';
@@ -21,3 +17,5 @@ export type { DelayableResult } from './delayErrors';
 export { isSyntaxError, isBracketError } from '../utils';
 
 export { parseNumberWithUnit } from './parseNumberWithUnit';
+
+export { createProgramFromMultipleStatements } from './parse';

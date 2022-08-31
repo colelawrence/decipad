@@ -12,8 +12,8 @@ export const editorToProgram = async (
   editor: MyEditor,
   computer: Computer
 ): Promise<DocumentToProgramReturn> => {
-  let program: Program = [];
-  let parseErrors: ParseError[] = [];
+  const program: Program = [];
+  const parseErrors: ParseError[] = [];
 
   for (const element of editor.children) {
     if (!('type' in element) || !('id' in element)) {
@@ -26,14 +26,8 @@ export const editorToProgram = async (
       continue;
     }
 
-    const { program: elementProgram, parseErrors: elementParseErrors } =
-      blockResult;
-    if (elementProgram != null) {
-      program = program.concat(elementProgram);
-    }
-    if (elementParseErrors) {
-      parseErrors = parseErrors.concat(elementParseErrors);
-    }
+    program.push(...blockResult.program);
+    parseErrors.push(...blockResult.parseErrors);
   }
 
   return { program, parseErrors };

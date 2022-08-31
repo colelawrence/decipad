@@ -5,7 +5,6 @@ import { InteractiveLanguageElement } from '../types';
 
 export const DataView: InteractiveLanguageElement = {
   type: ELEMENT_DATA_VIEW,
-  resultsInExpression: true,
   getExpressionFromElement: async (
     _editor: MyEditor,
     _computer: Computer,

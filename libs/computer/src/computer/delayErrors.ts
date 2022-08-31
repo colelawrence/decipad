@@ -2,7 +2,12 @@ import { from, Observable, of, OperatorFunction, race } from 'rxjs';
 import { filter, mapTo, switchMap, distinctUntilChanged } from 'rxjs/operators';
 
 import { timeout } from '@decipad/utils';
-import type { ComputePanic, ComputeResponse, IdentifiedResult } from '..';
+import type {
+  ComputePanic,
+  ComputeResponse,
+  IdentifiedError,
+  IdentifiedResult,
+} from '../types';
 
 interface DelayErrorsArgs {
   shouldDelay$: Observable<boolean>;
@@ -12,7 +17,7 @@ interface DelayErrorsArgs {
 type SimpleRes = ComputeResponse | ComputePanic;
 
 export interface DelayableResult {
-  result: IdentifiedResult;
+  result: IdentifiedResult | IdentifiedError;
   needsDelay: boolean;
 }
 
@@ -65,12 +70,11 @@ function isErrorUnderCursor(res: SimpleRes, cursorBlockId: string | null) {
     return false;
   }
   const blockUpdate = cursorBlockId
-    ? res.updates.find((up) => up.blockId === cursorBlockId)
+    ? res.updates.find((up) => up.id === cursorBlockId)
     : null;
   if (blockUpdate) {
     return (
-      blockUpdate.error != null ||
-      blockUpdate.results[0]?.type.kind === 'type-error'
+      blockUpdate.error != null || blockUpdate.result.type.kind === 'type-error'
     );
   }
   return false;

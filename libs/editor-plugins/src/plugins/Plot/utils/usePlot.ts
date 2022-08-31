@@ -1,5 +1,5 @@
 import { MyEditor, PlotElement } from '@decipad/editor-types';
-import { Computer, InBlockResult, AutocompleteName } from '@decipad/computer';
+import { Computer, Result, AutocompleteName } from '@decipad/computer';
 import {
   useElementMutatorCallback,
   useNamesDefinedBefore,
@@ -39,7 +39,7 @@ interface UsePlotProps {
   editor: MyEditor;
   computer: Computer;
   element: PlotElement;
-  result: InBlockResult | undefined;
+  result: Result.Result | undefined;
 }
 
 const isTable = (name: AutocompleteName) => name.type.kind === 'table';

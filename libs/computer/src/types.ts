@@ -1,35 +1,46 @@
-import { AnyMapping } from '@decipad/utils';
-import { AST, InjectableExternalData, Result, Parser } from '@decipad/language';
-import { VisibleVariables } from './computer/getVisibleVariables';
+import type { AnyMapping } from '@decipad/utils';
+import type {
+  AST,
+  InjectableExternalData,
+  Result,
+  Parser,
+} from '@decipad/language';
+import type { VisibleVariables } from './computer/getVisibleVariables';
 
 export interface IdentifiedBlock {
   type: 'identified-block';
   id: string;
-  source: string;
   block: AST.Block;
-}
-
-export interface IdentifiedError {
-  type: 'identified-error';
-  id: string;
   source: string;
-  error: Parser.ParserError;
 }
-
-export type ValueLocation = [blockId: string, statementIdx: number];
 
 export type UnparsedBlock = {
   type: 'unparsed-block';
   id: string;
   source: string;
 };
-export type ParsedBlock = {
-  type: 'parsed-block';
+/** A parse error */
+export interface IdentifiedError {
+  type: 'computer-parse-error';
   id: string;
-  block: AST.Block;
-  source?: string;
-};
-export type ProgramBlock = UnparsedBlock | ParsedBlock;
+  source: string;
+  error: Parser.ParserError;
+  // So we can use it interchangeably with IdentifiedResult
+  result?: undefined;
+  visibleVariables?: undefined;
+}
+
+/** Contains the result */
+export interface IdentifiedResult {
+  type: 'computer-result';
+  id: string;
+  result: Result.Result;
+  visibleVariables?: VisibleVariables;
+  // So we can use it interchangeably with IdentifiedError
+  error?: undefined;
+}
+
+export type ProgramBlock = UnparsedBlock | IdentifiedBlock;
 export type Program = ProgramBlock[];
 
 export interface UserParseError {
@@ -39,39 +50,24 @@ export interface UserParseError {
 export interface ComputeRequest {
   program: Program;
   externalData?: AnyMapping<InjectableExternalData>;
-  subscriptions?: string[];
   parseErrors?: UserParseError[];
 }
 
-// User facing
 export interface ComputePanic {
   type: 'compute-panic';
   message?: string;
 }
 
+// User facing
 export interface ComputeResponse {
   type: 'compute-response';
-  updates: IdentifiedResult[];
+  updates: (IdentifiedResult | IdentifiedError)[];
   indexLabels: Map<string, string[]>;
 }
 
-/** Contains the results  */
-export interface IdentifiedResult {
-  blockId: string;
-  error?: Parser.ParserError;
-  isSyntaxError: boolean;
-  results: InBlockResult[];
-}
-
-export interface InBlockResult extends Result.Result {
-  blockId: string;
-  statementIndex: number;
-  visibleVariables: VisibleVariables;
-}
-
-export interface ResultsContextItem {
+export interface NotebookResults {
   readonly blockResults: {
-    readonly [blockId: string]: Readonly<IdentifiedResult>;
+    readonly [blockId: string]: Readonly<IdentifiedResult | IdentifiedError>;
   };
   readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
   readonly delayedResultBlockId: string | null;

@@ -18,6 +18,7 @@ export {
   InferError,
   isExpression,
   parseOneBlock,
+  parseOneStatement,
   parseOneExpression,
   runCode,
   Result,

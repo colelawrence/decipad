@@ -9,8 +9,6 @@ import {
   GetStatementsToEvictArgs,
 } from './getStatementsToEvict';
 import { parse } from '../testUtils';
-import { ValueLocation } from '../types';
-import { parseLoc } from '../utils';
 
 describe('findSymbolErrors', () => {
   it('finds variables which are reassigned', () => {
@@ -47,36 +45,32 @@ describe('findSymbolErrors', () => {
 
 describe('getChangedBlocks', () => {
   it('finds changed blocks', () => {
-    expect(getChangedBlocks(parse('A = 1'), parse('A = 2'))).toEqual([
-      'block-0',
-    ]);
+    expect(getChangedBlocks(parse('A = 1'), parse('A = 2'))).toEqual(
+      new Set(['block-0'])
+    );
 
-    expect(getChangedBlocks(parse('A = 1'), parse('A = 1'))).toEqual([]);
+    expect(getChangedBlocks(parse('A = 1'), parse('A = 1'))).toEqual(
+      new Set([])
+    );
 
-    expect(getChangedBlocks(parse(), parse())).toEqual([]);
+    expect(getChangedBlocks(parse(), parse())).toEqual(new Set([]));
   });
 
   it('tricky cases', () => {
-    // One missing statement
-    expect(getChangedBlocks(parse('A = 1\nB = 2'), parse('A = 1'))).toEqual([
-      'block-0',
-    ]);
-
     // One missing block
-    expect(getChangedBlocks(parse('A = 1', 'B = 2'), parse('A = 1'))).toEqual([
-      'block-1',
-    ]);
+    expect(getChangedBlocks(parse('A = 1', 'B = 2'), parse('A = 1'))).toEqual(
+      new Set(['block-1'])
+    );
 
     // A = 1 adopted a new ID
-    expect(getChangedBlocks(parse('A = 1', 'B = 2'), parse('B = 2'))).toEqual([
-      'block-0',
-      'block-1',
-    ]);
+    expect(getChangedBlocks(parse('A = 1', 'B = 2'), parse('B = 2'))).toEqual(
+      new Set(['block-0', 'block-1'])
+    );
 
     // One block is now empty
     expect(
       getChangedBlocks(parse('A = 1', 'B = 2'), parse('', 'B = 2'))
-    ).toEqual(['block-0']);
+    ).toEqual(new Set(['block-0']));
   });
 });
 
@@ -98,13 +92,12 @@ describe('findSymbolsAffectedByChange', () => {
 
 describe('evictCache', () => {
   interface TestArgs extends GetStatementsToEvictArgs {
-    expectEvicted: (number | string)[];
+    expectEvicted: number[];
   }
 
   const testEvictBlocks = ({ expectEvicted, ...evictOptions }: TestArgs) => {
-    const expected: ValueLocation[] = expectEvicted.map((index) =>
-      typeof index === 'number' ? [`block-${index}`, 0] : parseLoc(index)
-    );
+    const expected = expectEvicted.map((i) => `block-${i}`);
+
     expect(getStatementsToEvict(evictOptions)).toEqual(expected);
   };
 
@@ -155,16 +148,16 @@ describe('evictCache', () => {
   it('propagates through indirect deps', () => {
     testEvictBlocks({
       oldBlocks: parse('A = 0', 'C = B + 10', 'D = C + 100'),
-      newBlocks: parse('A = 0\nB = A + 1', 'C = B + 10', ''),
+      newBlocks: parse('A = 0', 'B = A + 1', 'C = B + 10', ''),
 
-      expectEvicted: [0, 1, 2],
+      expectEvicted: [1, 2],
     });
 
     testEvictBlocks({
-      oldBlocks: parse('A = 0\nB = A + 1', 'C = B + 10', 'D = C + 100'),
+      oldBlocks: parse('A = 0', 'B = A + 1', 'C = B + 10', 'D = C + 100'),
       newBlocks: parse('A = 0', 'C = B + 10', ''),
 
-      expectEvicted: ['block-0/0', 'block-0/1', 1, 2],
+      expectEvicted: [1, 2, 3],
     });
   });
 

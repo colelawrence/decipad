@@ -12,7 +12,13 @@
       "path": "../../libs/ui"
     },
     {
-      "path": "../../libs/language"
+      "path": "../../libs/computer"
+    },
+    {
+      "path": "../../libs/react-contexts"
+    },
+    {
+      "path": "../../libs/format"
     }
   ]
 }

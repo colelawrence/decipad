@@ -123,20 +123,12 @@ it('shows a plot if has data and options', async () => {
       element={{ sourceVarName: 'varName' }}
       blockResults={{
         [blockId]: {
-          blockId,
-          isSyntaxError: false,
-          results: [
-            {
-              blockId,
-              statementIndex: 0,
-              type: tableType,
-              value: tableData,
-              visibleVariables: {
-                global: new Set(),
-                local: new Set(),
-              },
-            },
-          ],
+          type: 'computer-result',
+          id: blockId,
+          result: {
+            type: tableType,
+            value: tableData,
+          },
         },
       }}
     ></PlotWithProviders>

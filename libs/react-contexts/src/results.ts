@@ -17,12 +17,13 @@ import {
   AST,
   Result,
   Computer,
+  IdentifiedError,
 } from '@decipad/computer';
 import { ComputerContextProvider, useComputer } from './computer';
 
 export interface ResultsContextItem {
   readonly blockResults: {
-    readonly [blockId: string]: Readonly<IdentifiedResult>;
+    readonly [blockId: string]: Readonly<IdentifiedResult | IdentifiedError>;
   };
   readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
   readonly delayedResultBlockId: string | null;
@@ -59,11 +60,11 @@ export const useResults = (): ResultsContextItem => {
 export const useResult = (
   blockId: string,
   element?: Element | null
-): IdentifiedResult | null => {
+): IdentifiedError | IdentifiedResult | null => {
   const subject = useComputer().results;
-  const [result, setResult] = useState<IdentifiedResult | null>(
-    () => subject.getValue().blockResults[blockId] ?? null
-  );
+  const [result, setResult] = useState<
+    IdentifiedResult | IdentifiedError | null
+  >(() => subject.getValue().blockResults[blockId] ?? null);
 
   useEffect(() => {
     const results$ = subject.pipe(

@@ -6,13 +6,13 @@ import { parseBlock } from './parser';
 import { OneResult, validateResult } from './result';
 
 export const parseOneBlock = (source: string): AST.Block => {
-  const parsed = parseBlock({ id: 'block-id', source });
+  const parsed = parseBlock(source);
 
-  if (parsed.errors.length > 0) {
-    throw new TypeError(parsed.errors[0].message);
+  if (parsed.error) {
+    throw new TypeError(parsed.error.message);
   }
 
-  return parsed.solutions[0];
+  return parsed.solution;
 };
 
 export const parseOneStatement = (source: string): AST.Statement => {

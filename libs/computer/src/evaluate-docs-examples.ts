@@ -1,61 +1,49 @@
 /* istanbul ignore file */
-import { nanoid } from 'nanoid';
-
-import { getDefined } from '@decipad/utils';
-import { deserializeType, RuntimeError } from '@decipad/language';
-
 import { formatError, formatResult } from '@decipad/format';
-import { Computer, ComputeResponse } from '.';
+import { deserializeType, RuntimeError } from '@decipad/language';
+import { getDefined, last } from '@decipad/utils';
+
+import { Computer } from '.';
+import { createProgramFromMultipleStatements } from './computer/parse';
+import type { ComputeResponse } from './types';
 
 type EvaluatedDoc = string | { crash: string };
 
 const DEFAULT_LOCALE = 'en-US';
 
-function resultFromComputerResult(
-  blockId: string,
-  result: ComputeResponse
-): string {
+function resultFromComputerResult(result: ComputeResponse): string {
   for (const update of result.updates) {
-    if (update.blockId === blockId) {
-      const error = update.error && update.error.message;
-      if (error) {
-        return error;
-      }
-      const { results } = update;
-      const lastResult = results[results.length - 1];
-      if (lastResult.type.kind === 'type-error') {
-        return formatError(DEFAULT_LOCALE, lastResult.type.errorCause);
-      }
-
-      return formatResult(
-        DEFAULT_LOCALE,
-        lastResult.value,
-        deserializeType(lastResult.type)
-      );
+    if (update.error) {
+      return update.error.message;
     }
   }
-  throw new Error(`could not find a result in block ${blockId}`);
+
+  const lastResult = last(result.updates)?.result;
+  if (!lastResult) {
+    throw new Error(`could not find a result`);
+  }
+
+  if (lastResult.type.kind === 'type-error') {
+    return formatError(DEFAULT_LOCALE, lastResult.type.errorCause);
+  }
+
+  return formatResult(
+    DEFAULT_LOCALE,
+    lastResult.value,
+    deserializeType(lastResult.type)
+  );
 }
 
 async function getDocTestString(codeExample: string): Promise<EvaluatedDoc> {
   try {
-    const blockId = nanoid();
+    const program = createProgramFromMultipleStatements(codeExample);
     const computer = new Computer();
-    const result = await computer.computeRequest({
-      program: [
-        {
-          type: 'unparsed-block',
-          id: blockId,
-          source: codeExample,
-        },
-      ],
-      subscriptions: [blockId],
-    });
+    const result = await computer.computeRequest({ program });
     if (result.type === 'compute-panic') {
       throw new Error(result.message);
     }
 
-    return resultFromComputerResult(blockId, result);
+    return resultFromComputerResult(result);
   } catch (error) {
     if (error instanceof TypeError || error instanceof RuntimeError) {
       return error.message;

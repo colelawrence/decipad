@@ -8,41 +8,23 @@ import { delayErrors, DelayableResult } from './delayErrors';
 
 const goodRes: DelayableResult = {
   result: {
-    blockId: 'blockId',
-    error: undefined,
-    isSyntaxError: false,
-    results: [
-      {
-        type: serializeType(t.number()),
-        blockId: 'blockId',
-        statementIndex: 0,
-        value: null,
-        visibleVariables: {
-          global: new Set(),
-          local: new Set(),
-        },
-      },
-    ],
+    type: 'computer-result',
+    id: 'blockId',
+    result: {
+      type: serializeType(t.number()),
+      value: null,
+    },
   },
   needsDelay: false,
 };
 const errorRes: DelayableResult = {
   result: {
-    blockId: 'blockId',
-    error: undefined,
-    isSyntaxError: false,
-    results: [
-      {
-        type: serializeType(t.impossible('type error!')),
-        blockId: 'blockId',
-        statementIndex: 0,
-        value: null,
-        visibleVariables: {
-          global: new Set(),
-          local: new Set(),
-        },
-      },
-    ],
+    type: 'computer-result',
+    id: 'blockId',
+    result: {
+      type: serializeType(t.impossible('type error!')),
+      value: null,
+    },
   },
   needsDelay: true,
 };

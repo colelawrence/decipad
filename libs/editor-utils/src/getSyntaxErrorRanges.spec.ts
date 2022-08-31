@@ -1,4 +1,4 @@
-import { IdentifiedResult } from '@decipad/computer';
+import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 
@@ -11,25 +11,22 @@ it('should return no range when there is no line result', () => {
 
 it('should return no range when there is no syntax error', () => {
   expect(
-    getSyntaxErrorRanges(path, { isSyntaxError: false } as IdentifiedResult)
+    getSyntaxErrorRanges(path, { type: 'computer-result' } as IdentifiedResult)
   ).toEqual([]);
 });
 
 it('should return no range for invalid error constructs', () => {
   expect(
-    getSyntaxErrorRanges(path, { isSyntaxError: true } as IdentifiedResult)
-  ).toEqual([]);
-  expect(
     getSyntaxErrorRanges(path, {
-      isSyntaxError: true,
+      type: 'computer-parse-error',
       error: { message: 'some error' },
-    } as IdentifiedResult)
+    } as IdentifiedError)
   ).toEqual([]);
   expect(
     getSyntaxErrorRanges(path, {
-      isSyntaxError: true,
+      type: 'computer-parse-error',
       error: { bracketError: { open: {} } },
-    } as IdentifiedResult)
+    } as IdentifiedError)
   ).toEqual([]);
 });
 
@@ -37,13 +34,13 @@ describe('when it is a syntax error', () => {
   it('should return a range', () => {
     expect(
       getSyntaxErrorRanges(path, {
-        isSyntaxError: true,
+        type: 'computer-parse-error',
         error: {
           blockId: '123',
           message: 'some error',
           token: { offset },
         },
-      } as IdentifiedResult)
+      } as never as IdentifiedError)
     ).toEqual([
       {
         anchor: { offset, path },
@@ -59,7 +56,7 @@ describe('when it is a bracket error', () => {
     const offset2 = offset * 2;
     expect(
       getSyntaxErrorRanges(path, {
-        isSyntaxError: true,
+        type: 'computer-parse-error',
         error: {
           blockId: '123',
           message: 'some error',
@@ -69,7 +66,7 @@ describe('when it is a bracket error', () => {
             open: { offset },
           },
         },
-      } as IdentifiedResult)
+      } as never as IdentifiedError)
     ).toEqual([
       {
         anchor: { offset, path },
@@ -92,7 +89,7 @@ describe('when it is a bracket error', () => {
   ])('should return a range for a %s error', (variant, errorProp) => {
     expect(
       getSyntaxErrorRanges(path, {
-        isSyntaxError: true,
+        type: 'computer-parse-error',
         error: {
           blockId: '123',
           message: 'some error',
@@ -101,7 +98,7 @@ describe('when it is a bracket error', () => {
             [errorProp]: { offset },
           },
         },
-      } as IdentifiedResult)
+      } as never as IdentifiedError)
     ).toEqual([
       {
         anchor: { offset, path },

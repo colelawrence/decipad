@@ -54,17 +54,17 @@ const withErrorDecorations =
   (computer: Computer): MyDecorateEntry =>
   ([node, path]) => {
     if (isElement(node) && node.type === ELEMENT_EXPRESSION) {
-      const { error } = expressionFromEditorSource(
-        computer,
-        getNodeString(node)
-      );
+      const source = getNodeString(node);
+      const { error } = expressionFromEditorSource(computer, source);
 
-      return getSyntaxErrorRanges(path, {
-        blockId: '',
-        error,
-        isSyntaxError: true,
-        results: [],
-      });
+      return error
+        ? getSyntaxErrorRanges(path, {
+            type: 'computer-parse-error',
+            id: '',
+            source,
+            error,
+          })
+        : [];
     }
     return undefined;
   };

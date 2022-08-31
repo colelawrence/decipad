@@ -57,9 +57,9 @@ it('can parse a def name', () => {
 });
 
 it('finds which symbol was defined at a loc', () => {
-  expect(getDefinedSymbolAt(program, ['block-0', 0])).toEqual('var:A');
-  expect(getDefinedSymbolAt(program, ['block-0', 1])).toEqual('var:Unused');
-  expect(getDefinedSymbolAt(program, ['block-1', 1])).toEqual(null);
-  expect(() => getDefinedSymbolAt(program, ['block-1', 99999])).toThrow();
-  expect(() => getDefinedSymbolAt(program, ['block-99999', 1])).toThrow();
+  expect(getDefinedSymbolAt(program, 'block-0')).toEqual('var:A');
+  expect(getDefinedSymbolAt(program, 'block-1')).toEqual('var:Unused');
+  expect(getDefinedSymbolAt(program, 'block-3')).toEqual(null);
+
+  expect(() => getDefinedSymbolAt(program, 'block-99999')).toThrow();
 });

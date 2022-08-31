@@ -47,7 +47,7 @@ export const CodeVariable: CodeLeaf = ({
 }) => {
   const rootRef = useRef<HTMLSpanElement>(null);
 
-  const result = useResult(blockId, rootRef.current)?.results?.[0];
+  const result = useResult(blockId, rootRef.current);
 
   const vars = result?.visibleVariables;
   const variableScope = getVariableScope(variableName, vars);
@@ -84,7 +84,7 @@ export const CodeVariable: CodeLeaf = ({
       <molecules.CodeVariable
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
-        variableType={result?.type}
+        variableType={result?.result?.type}
         variableValue={variableResult?.value ?? undefined}
         defBlockId={defBlockId}
         onGoToDefinition={goToDefinition}

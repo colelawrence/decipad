@@ -7,47 +7,35 @@ import { SyntaxError } from './SyntaxError';
 
 export { AST, Parser, n, SyntaxError };
 
-export function parseBlock({
-  source,
-  id,
-}: Parser.UnparsedBlock): Parser.ParsedBlock {
-  const ensureId = (block: AST.Block) => ({ ...block, id });
-
+export function parseBlock(source: string): Parser.ParsedBlock {
   if (source.trim() === '') {
-    return { id, solutions: [ensureId(n('block', n('noop')))], errors: [] };
+    return { solution: n('block', n('noop')) };
   } else {
     const bracketError = validateBrackets(source);
     if (bracketError) {
       return {
-        id,
-        solutions: [],
-        errors: [{ blockId: id, message: 'Bracket error', bracketError }],
+        error: { message: 'Bracket error', bracketError },
       };
     }
 
     try {
-      const solutions = (languageParse(source.trimEnd()) as AST.Block[]).map(
-        ensureId
-      );
+      const solution = languageParse(source.trimEnd()) as AST.Block;
 
-      return { id, solutions, errors: [] };
+      return { solution };
     } catch (err) {
       return {
-        id,
-        solutions: [],
-        errors: [fromParseError(id, err as Error)],
+        error: fromParseError(err as Error),
       };
     }
   }
 }
 
-export function parse(blocks: Parser.UnparsedBlock[]): Parser.ParsedBlock[] {
+export function parse(blocks: string[]): Parser.ParsedBlock[] {
   return blocks.map((block) => parseBlock(block));
 }
 
-function fromParseError(blockId: string, err: Error): Parser.ParserError {
+function fromParseError(err: Error): Parser.ParserError {
   const resultError: Parser.ParserError = {
-    blockId,
     message: err.message,
     token: (err as unknown as { token?: moo.Token }).token,
   };

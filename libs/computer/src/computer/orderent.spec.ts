@@ -37,18 +37,18 @@ describe('computer is independent of block-order', () => {
         // eslint-disable-next-line no-await-in-loop
         (await computeOnTestComputer({ program })).sort()
       ).toMatchInlineSnapshot(`
-      Array [
-        "block-0/0 -> 130000",
-        "block-1/0 -> 2500",
-        "block-2/0 -> 0.05",
-        "block-3/0 -> 80.984431715778388",
-        "block-4/0 -> -43395.066090392742278",
-        "block-5/0 -> 10527976.123051190477371",
-        "block-6/0 -> -10571371.189141583219650",
-        "block-7/0 -> 10000000",
-        "block-8/0 -> 169.994296622954495",
-      ]
-    `);
+        Array [
+          "block-0 -> 130000",
+          "block-1 -> 2500",
+          "block-2 -> 0.05",
+          "block-3 -> 80.984431715778388",
+          "block-4 -> -43395.066090392742278",
+          "block-5 -> 10527976.123051190477371",
+          "block-6 -> -10571371.189141583219650",
+          "block-7 -> 10000000",
+          "block-8 -> 169.994296622954495",
+        ]
+      `);
     }
   });
 });

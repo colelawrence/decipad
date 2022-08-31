@@ -1,28 +1,27 @@
 import { previousRefSymbols } from '@decipad/language';
 import { AST } from '..';
-import { ValueLocation } from '../types';
 import {
   iterProgram,
   findSymbolsUsed,
   getDefinedSymbol,
   getStatement,
-  getSymbolsDefinedInLocs,
+  getSymbolsDefinedInBlocks,
 } from '../utils';
 
 const previousSymbols = Array.from(previousRefSymbols).map((s) => `var:${s}`);
 
 export const getDependents = (
   program: AST.Block[],
-  dependentsOf: ValueLocation[],
+  dependentsOf: string[],
   initialSymbols = new Set<string>()
 ) => {
-  const dependents: ValueLocation[] = [];
+  const dependents: string[] = [];
   const dependencySymbols = new Set([
-    ...getSymbolsDefinedInLocs(program, dependentsOf),
+    ...getSymbolsDefinedInBlocks(program, dependentsOf),
     ...initialSymbols,
   ]);
 
-  iterProgram(program, (stmt, loc) => {
+  iterProgram(program, (stmt, blockId) => {
     const usedSymbols = findSymbolsUsed(stmt);
 
     const isDependency =
@@ -30,10 +29,10 @@ export const getDependents = (
       dependencySymbols.has(getDefinedSymbol(stmt) ?? '');
     if (isDependency) {
       // Mark as dep
-      dependents.push(loc);
+      dependents.push(blockId);
 
       // Place the symbol if any in the dependency bag so its uses are identified
-      const sym = getDefinedSymbol(getStatement(program, loc));
+      const sym = getDefinedSymbol(getStatement(program, blockId));
       if (sym != null) {
         dependencySymbols.add(sym);
       }

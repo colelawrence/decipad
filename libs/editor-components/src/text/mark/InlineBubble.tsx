@@ -26,7 +26,7 @@ export const InlineBubble: PlateComponent = ({
   const result = useResult(blockId);
 
   const readOnly = useIsEditorReadOnly();
-  const codeResult = result?.results?.[0];
+  const codeResult = result?.result;
   const loadingState = !!result?.error;
 
   const { openEditor } = useOpenCloseEditor(element);

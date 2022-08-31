@@ -21,7 +21,7 @@ function formulaResult$(
 ): Observable<Result.Result | null> {
   return computer.results.pipe(
     map((computeRes) => {
-      const table = computeRes.blockResults[blockId]?.results[0] as
+      const table = computeRes.blockResults[blockId]?.result as
         | Result.Result<'table'>
         | undefined;
 

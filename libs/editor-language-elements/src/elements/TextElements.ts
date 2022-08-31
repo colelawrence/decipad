@@ -11,6 +11,7 @@ import { magicNumberId } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../types';
+import { parseElementSourceCode } from '../utils/parseElementSourceCode';
 
 export const Paragraph: InteractiveLanguageElement = {
   type: [
@@ -22,15 +23,15 @@ export const Paragraph: InteractiveLanguageElement = {
     ELEMENT_UL,
   ],
   isStructural: true,
-  getUnparsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
+  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
     async (_editor, _computer, element) => {
       return element.children.flatMap((child, index) => {
         if (MARK_MAGICNUMBER in child) {
-          return {
-            type: 'unparsed-block',
-            id: magicNumberId(element, index),
-            source: getNodeString(child),
-          };
+          return parseElementSourceCode(
+            magicNumberId(element, index),
+            getNodeString(child),
+            'expression'
+          );
         }
         return [];
       });

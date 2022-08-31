@@ -1,43 +1,21 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { AST, Computer, ProgramBlock } from '@decipad/computer';
-import { astNode } from '@decipad/editor-utils';
+import type { Computer } from '@decipad/computer';
 import { isElement } from '@udecode/plate';
+
 import * as interactiveLanguageElements from './elements';
-
-import { InteractiveLanguageElement, ParseError } from './types';
-
-const getAssignmentBlock = (
-  id: string,
-  name: string,
-  value: AST.Expression
-): AST.Block => {
-  return {
-    type: 'block',
-    id,
-    args: [astNode('assign', astNode('def', name), value)],
-  };
-};
+import type { InteractiveLanguageElement, LanguageBlock } from './types';
 
 const interactiveElementsByType = (() => {
   const map: Array<[string, InteractiveLanguageElement]> = [];
   for (const el of Object.values(
     interactiveLanguageElements
   ) as InteractiveLanguageElement[]) {
-    if (Array.isArray(el.type)) {
-      for (const t of el.type) {
-        map.push([t, el]);
-      }
-    } else {
-      map.push([el.type, el]);
+    for (const t of [el.type].flat()) {
+      map.push([t, el]);
     }
   }
   return new Map<string, InteractiveLanguageElement>(map);
 })();
-
-interface LanguageBlock {
-  program: ProgramBlock[];
-  parseErrors: ParseError[];
-}
 
 /**
  * Given an element, what are the language expressions, blocks or assignments that it represents?
@@ -54,36 +32,23 @@ export const elementToLanguageBlock = async (
     return null;
   }
 
+  let blocks: LanguageBlock[] = [];
   if (interactiveElement.isStructural) {
-    const blocks = (
+    blocks = (
       await Promise.all(
         element.children.flatMap(async (node) =>
           isElement(node)
             ? (await elementToLanguageBlock(editor, computer, node)) ?? []
-            : Promise.resolve([])
+            : []
         )
       )
     )
       .flat()
       .filter(Boolean);
-
-    // HACK: paragraphs can have non-element decorations (magic numbers) as well as themselves being structural
-    if (interactiveElement.getUnparsedBlockFromElement) {
-      const moreBlocks = (
-        await interactiveElement.getUnparsedBlockFromElement(
-          editor,
-          computer,
-          element
-        )
-      ).map((program) => ({ program: [program], parseErrors: [] }));
-
-      blocks.push(...moreBlocks);
-    }
-    return flattenLanguageBlocks(blocks);
   }
 
-  if (interactiveElement.resultsInExpression) {
-    const result: LanguageBlock[] = (
+  if (interactiveElement.getExpressionFromElement) {
+    const moreBlocks: LanguageBlock[] = (
       await interactiveElement.getExpressionFromElement(
         editor,
         computer,
@@ -94,8 +59,9 @@ export const elementToLanguageBlock = async (
         program: expression
           ? [
               {
-                type: 'parsed-block',
+                type: 'identified-block',
                 id,
+                source: '',
                 block: { type: 'block', id, args: [expression] },
               },
             ]
@@ -104,46 +70,21 @@ export const elementToLanguageBlock = async (
       };
     });
 
-    return flattenLanguageBlocks(result);
-  }
-
-  // blocks that return (name, element) pairs:
-  if (interactiveElement.resultsInNameAndExpression) {
-    const nameAndExpression: LanguageBlock[] = (
-      await interactiveElement.getNameAndExpressionFromElement(
-        editor,
-        computer,
-        element
-      )
-    ).flatMap(({ name, expression, id, parseErrors = [] }) => {
-      return {
-        program: expression
-          ? [
-              {
-                type: 'parsed-block',
-                id,
-                block: getAssignmentBlock(id, name, expression),
-              },
-            ]
-          : [],
-        parseErrors,
-      };
-    });
-
-    return flattenLanguageBlocks(nameAndExpression);
+    blocks.push(...moreBlocks);
   }
 
   // blocks that return unparsed code:
-  if (interactiveElement.resultsInUnparsedBlock) {
-    const program = await interactiveElement.getUnparsedBlockFromElement(
-      editor,
-      computer,
-      element
+  if (interactiveElement.getParsedBlockFromElement) {
+    blocks.push(
+      ...(await interactiveElement.getParsedBlockFromElement(
+        editor,
+        computer,
+        element
+      ))
     );
-    return { program, parseErrors: [] };
   }
 
-  return null;
+  return flattenLanguageBlocks(blocks);
 };
 
 function flattenLanguageBlocks(items: LanguageBlock[]): LanguageBlock {

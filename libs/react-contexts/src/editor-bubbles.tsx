@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { InBlockResult } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { BubbleFormula } from '@decipad/editor-types';
 
 export type EditingBubble = {
@@ -11,7 +11,7 @@ export type EditingBubble = {
 
 export type EditorBubblesContextValue = Readonly<{
   editing?: EditingBubble;
-  codeResult?: InBlockResult;
+  codeResult?: Result.Result;
   setEditing(bubble?: EditingBubble): void;
 }>;
 

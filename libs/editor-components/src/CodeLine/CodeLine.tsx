@@ -1,4 +1,5 @@
 import {
+  IdentifiedError,
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
@@ -32,7 +33,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const { id: lineId } = element;
   const line = useResult(lineId);
-  const lineResult = line?.results[0];
+  const lineResult = line?.result;
 
   const { tips, placeholder } = useCodeLineTutorials(selected, isEmpty);
   const statement = computer.getStatement(lineId, 0);
@@ -58,17 +59,12 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   );
 };
 
-function getSyntaxError(line: IdentifiedResult | null) {
-  if (!line || !line.error) {
+function getSyntaxError(line: IdentifiedResult | IdentifiedError | null) {
+  const error = line?.error;
+  if (!error) {
     return undefined;
   }
-  const { error } = line;
-  if (!line.isSyntaxError) {
-    return {
-      message: error.message,
-      url: docs({}).page({ name: 'errors' }).$,
-    };
-  }
+
   return isSyntaxError(error)
     ? {
         line: isSyntaxError(error) && error.line != null ? error.line : 1,

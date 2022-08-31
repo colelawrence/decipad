@@ -1,22 +1,20 @@
 import Fraction from '@decipad/fraction';
 import { astNode, parseOneStatement } from '@decipad/language';
 import { AST } from '.';
+import { wrappedParse } from './computer/parse';
 import {
   ComputePanic,
   ComputeResponse,
-  InBlockResult,
   IdentifiedBlock,
+  IdentifiedResult,
   Program,
   UnparsedBlock,
 } from './types';
-import { wrappedParse } from './computer/parse';
-
-const block = (...items: AST.Statement[]) => astNode('block', ...items);
 
 export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {
     if (typeof item === 'string') {
-      item = block(parseOneStatement(item));
+      item = astNode('block', parseOneStatement(item));
     }
     item.id = `block-${index}`;
     return item;
@@ -24,24 +22,22 @@ export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
 };
 
 export const program = testBlocks(
-  block(parseOneStatement('A = 1'), parseOneStatement('Unused = 123')),
-  block(
-    parseOneStatement('B = 2'),
-    parseOneStatement('A + 1'),
-    parseOneStatement('A + B')
-  )
+  'A = 1',
+  'Unused = 123',
+  'B = 2',
+  'A + 1',
+  'A + B'
 );
 
-export const deeperProgram = testBlocks(
-  ...program,
-  block(parseOneStatement('C = B'), parseOneStatement('D = C'))
-);
+export const deeperProgram = testBlocks(...program, 'C = B', 'D = C');
 
 export const implicitDepProgram = testBlocks(
-  block(parseOneStatement('A = 1'), parseOneStatement('Unused = 123')),
+  'A = 1',
+  'Unused = 123',
   '1',
   '_ + B',
-  block(parseOneStatement('C = _'), parseOneStatement('D = _')),
+  'C = _',
+  'D = _',
   'E = C',
   'F = A'
 );
@@ -57,9 +53,14 @@ export const programContainingError = testBlocks(
 
 export const unparsedProgram: Program = [
   {
-    id: 'block-AB',
+    id: 'block-A',
     type: 'unparsed-block',
-    source: 'A = 0\nB = A + 1',
+    source: 'A = 0',
+  },
+  {
+    id: 'block-B',
+    type: 'unparsed-block',
+    source: 'B = A + 1',
   },
   {
     id: 'block-C',
@@ -90,10 +91,13 @@ export const parse = (...sources: string[]) =>
     return parsed.block;
   });
 
-export const simplifyInBlockResults = (results: InBlockResult[]) => {
+export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
   const simpleUpdates = [];
-  for (const { blockId, statementIndex, type, value } of results) {
-    const prefix = `${blockId}/${statementIndex} -> `;
+  for (const {
+    id: blockId,
+    result: { type, value },
+  } of results) {
+    const prefix = `${blockId} -> `;
 
     if (type.kind === 'type-error') {
       simpleUpdates.push(`${prefix}Type Error`);
@@ -113,11 +117,11 @@ export const simplifyComputeResponse = (
 
   const simpleUpdates = [];
 
-  for (const { blockId, isSyntaxError, results } of res.updates) {
-    if (isSyntaxError) {
-      simpleUpdates.push(`${blockId} -> Syntax Error`);
+  for (const up of res.updates) {
+    if (up.type === 'computer-parse-error') {
+      simpleUpdates.push(`${up.id} -> Syntax Error`);
     } else {
-      simpleUpdates.push(...simplifyInBlockResults(results));
+      simpleUpdates.push(...simplifyInBlockResults([up]));
     }
   }
 

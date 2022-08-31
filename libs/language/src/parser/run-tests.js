@@ -1,7 +1,6 @@
-import assert from 'assert';
+import { parseBlock } from '.';
 import { walkAst, zip } from '../utils';
 import { prettyPrintAST } from './utils';
-import { parse } from '.';
 
 function cleanSourceMap(ast) {
   walkAst(ast, (node) => {
@@ -42,13 +41,7 @@ function simplifySourceMaps(gots, expecteds) {
   }
 }
 
-function getCleanSolution(results, source, sourceMap, ast) {
-  assert(results.length === 1);
-
-  const result = results[0];
-
-  const solution = result.solutions[0];
-
+function getCleanSolution(solution, source, sourceMap, ast) {
   expect(solution.type).toBe('block');
 
   if (sourceMap === false) {
@@ -72,42 +65,34 @@ export function runTests(tests) {
     const testFunction = skip ? test.skip : only ? test.only : test;
 
     testFunction(name, () => {
-      let results;
-      let parseError;
-      try {
-        results = parse([{ id: name, source }]);
-      } catch (err) {
-        parseError = err;
-      }
+      const { solution, error } = parseBlock(source);
 
-      const resultsWithErrors = results?.filter(
-        (result) => result.errors.length > 0
-      );
-      if ((resultsWithErrors?.length ?? 0) > 0) {
-        [parseError] = resultsWithErrors[0].errors;
-      }
-
-      if (parseError) {
+      if (error) {
         if (!expectError) {
-          throw parseError;
+          throw error;
         } else {
           const testError =
             typeof expectError === 'string'
               ? { message: expectError }
               : expectError;
-          expect(parseError).toMatchObject(testError);
+          expect(error).toMatchObject(testError);
         }
       } else {
         if (expectError) {
           throw new Error(`expected error "${expectError}" to occur`);
         }
 
-        const solution = getCleanSolution(results, source, sourceMap, ast);
+        const cleanSolution = getCleanSolution(
+          solution,
+          source,
+          sourceMap,
+          ast
+        );
 
         try {
-          expect(solution.args).toMatchObject(ast);
+          expect(cleanSolution.args).toMatchObject(ast);
         } catch (err) {
-          console.error(prettyPrintAST(solution));
+          console.error(prettyPrintAST(cleanSolution));
 
           throw err;
         }

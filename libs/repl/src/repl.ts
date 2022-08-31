@@ -14,12 +14,6 @@ import { formatError, formatResult } from '@decipad/format';
 
 const DEFAULT_LOCALE = 'en-US';
 
-const wrappedParse = (source: string): AST.Block | null => {
-  const parsed = parseBlock({ id: '<repl>', source });
-
-  return parsed.solutions[0] ?? null;
-};
-
 let accumulatedSource = '';
 let inferContext = makeInferContext();
 let realm = new Realm(inferContext);
@@ -58,7 +52,7 @@ export const replEval = (
     return;
   }
 
-  const block = wrappedParse(cmd);
+  const block = parseBlock(cmd).solution;
 
   if (block == null) {
     const pleaseContinueTyping = new repl.Recoverable(new Error('continue'));

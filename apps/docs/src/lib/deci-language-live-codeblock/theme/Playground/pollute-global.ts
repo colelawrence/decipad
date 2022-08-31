@@ -1,3 +1,4 @@
+// @ts-nocheck
 // global shenanigans
 const React = require('react');
 const { Buffer } = require('buffer');
@@ -24,3 +25,5 @@ if (TextDecoder && !('TextDecoder' in global)) {
 if (TextEncoder && !('TextEncoder' in global)) {
   global.TextEncoder = TextEncoder;
 }
+
+export {};

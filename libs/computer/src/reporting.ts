@@ -16,7 +16,7 @@ export const captureException: ReporterFn = (error) => {
 /**
  * Call this with Sentry's captureException function
  *
- * The language exposes this instead of importing Sentry, because
+ * The computer exposes this instead of importing Sentry, because
  * there are multiple versions of captureException for browser, node
  * and whatnot.
  */

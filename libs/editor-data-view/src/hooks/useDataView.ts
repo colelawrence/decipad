@@ -45,7 +45,7 @@ export const useDataView = ({
 
   const variableNames = useNamesDefinedBefore(element.id, false);
 
-  const result = useResult(element.id)?.results?.[0];
+  const result = useResult(element.id)?.result;
 
   let data: Interpreter.ResultTable | undefined;
   let columnNames: string[] | undefined;

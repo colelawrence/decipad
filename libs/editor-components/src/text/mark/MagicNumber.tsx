@@ -33,7 +33,7 @@ export const MagicNumber: PlateComponent = ({
 
   const blockId = useMagicNumberId(text);
 
-  const result = useResult(blockId)?.results[0];
+  const result = useResult(blockId)?.result;
 
   const loadingState =
     result?.type?.kind === 'type-error' ||

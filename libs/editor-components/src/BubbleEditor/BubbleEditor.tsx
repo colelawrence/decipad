@@ -15,7 +15,7 @@ export const BubbleEditor: React.FC<BubbleEditorProps> = ({ children }) => {
   const blockId = editing?.blockId || '';
 
   const result = useResult(blockId);
-  const codeResult = result?.results?.[0];
+  const codeResult = result?.result;
 
   const updateFormula = useCallback(
     (value: Partial<BubbleFormula>) => {

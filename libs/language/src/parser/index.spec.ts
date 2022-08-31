@@ -2,19 +2,15 @@
 import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { n, c, l, date, range, col, tableDef, funcDef } from '../utils';
-import { parse, parseBlock } from './index';
+import { parseBlock } from './index';
 
 const testParse = (source: string, ...expected: AST.Statement[]) => {
-  const p = (source: string) => {
-    const parsed = parse([{ id: 'ignored', source }])[0];
-
-    return parsed.solutions[0];
-  };
-
-  expect(p(source)).toMatchObject(n('block', ...expected));
+  expect(parseBlock(source)?.solution).toMatchObject(n('block', ...expected));
 
   const withExtraneousSpace = ` ${source} `;
-  expect(p(withExtraneousSpace)).toMatchObject(n('block', ...expected));
+  expect(parseBlock(withExtraneousSpace)?.solution).toMatchObject(
+    n('block', ...expected)
+  );
 };
 
 it('parses things in multiple lines', () => {
@@ -65,8 +61,7 @@ it('can parse functions with multiline conditions', () => {
   );
 });
 
-const getError = (source: string) =>
-  getDefined(parseBlock({ id: '', source }).errors[0]);
+const getError = (source: string) => getDefined(parseBlock(source).error);
 
 it('can yield syntax errors', () => {
   expect(getError('syntax --/-- error')).toBeDefined();

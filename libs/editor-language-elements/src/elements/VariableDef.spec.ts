@@ -7,6 +7,7 @@ import {
   ELEMENT_SLIDER,
   MyEditor,
 } from '@decipad/editor-types';
+import { astNode } from '@decipad/editor-utils';
 import FFraction from '@decipad/fraction';
 import { createPlateEditor } from '@udecode/plate';
 import { VariableDef } from './VariableDef';
@@ -14,7 +15,6 @@ import { VariableDef } from './VariableDef';
 describe('VariableDef expression element', () => {
   it('converts variable def expression document element into name and expression', async () => {
     const editor = createPlateEditor() as MyEditor;
-    expect(VariableDef.resultsInNameAndExpression).toBe(true);
     const el = {
       id: 'id0',
       type: ELEMENT_VARIABLE_DEF,
@@ -35,19 +35,19 @@ describe('VariableDef expression element', () => {
       ],
     } as VariableDefinitionElement;
     expect(
-      await VariableDef.getNameAndExpressionFromElement(
-        editor,
-        new Computer(),
-        el
-      )
+      (
+        await VariableDef.getParsedBlockFromElement?.(
+          editor,
+          new Computer(),
+          el
+        )
+      )?.[0]?.program[0].block?.args
     ).toMatchObject([
-      {
-        expression: {
-          type: 'ref',
-          args: ['expression'],
-        },
-        name: 'varName',
-      },
+      astNode(
+        'assign',
+        astNode('def', 'varName'),
+        astNode('ref', 'expression')
+      ),
     ]);
   });
 });
@@ -55,7 +55,6 @@ describe('VariableDef expression element', () => {
 describe('VariableDef slider element', () => {
   const editor = createPlateEditor() as MyEditor;
   it('converts variable def slider document element into name and expression', async () => {
-    expect(VariableDef.resultsInNameAndExpression).toBe(true);
     const el = {
       id: 'id0',
       type: ELEMENT_VARIABLE_DEF,
@@ -85,19 +84,19 @@ describe('VariableDef slider element', () => {
       ],
     } as VariableDefinitionElement;
     expect(
-      await VariableDef.getNameAndExpressionFromElement(
-        editor,
-        new Computer(),
-        el
-      )
+      (
+        await VariableDef.getParsedBlockFromElement?.(
+          editor,
+          new Computer(),
+          el
+        )
+      )?.[0].program[0].block.args
     ).toMatchObject([
-      {
-        expression: {
-          type: 'literal',
-          args: ['number', new FFraction(5)],
-        },
-        name: 'varName',
-      },
+      astNode(
+        'assign',
+        astNode('def', 'varName'),
+        astNode('literal', 'number', new FFraction(5))
+      ),
     ]);
   });
 });

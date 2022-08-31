@@ -14,7 +14,6 @@ const astNode = <T extends string, A extends unknown[]>(
 
 export const Plot: InteractiveLanguageElement = {
   type: ELEMENT_PLOT,
-  resultsInExpression: true,
   getExpressionFromElement: async (
     _editor: MyEditor,
     _computer: Computer,

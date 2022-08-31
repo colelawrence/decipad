@@ -28,7 +28,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
   const readOnly = useIsEditorReadOnly();
   const computer = useComputer();
   const identifiedResult = useResult(element.id as string);
-  const result = identifiedResult?.results[identifiedResult.results.length - 1];
+  const result = identifiedResult?.result;
   const { spec, data, plotParams } = usePlot({
     editor,
     element,

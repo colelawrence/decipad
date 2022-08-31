@@ -1,6 +1,6 @@
-import { ResultsContextItem } from '../types';
+import { NotebookResults } from '../types';
 
-export const defaultComputerResults: ResultsContextItem = {
+export const defaultComputerResults: NotebookResults = {
   blockResults: {},
   indexLabels: new Map(),
   delayedResultBlockId: null,

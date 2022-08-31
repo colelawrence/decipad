@@ -1,4 +1,5 @@
 import nearley, { Parser as NearleyParser } from 'nearley';
+import { getDefined } from '@decipad/utils';
 import { compiledGrammar, tokenize } from '../grammar';
 import { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';
@@ -89,12 +90,12 @@ export class Parser extends NearleyParser {
   }
 }
 
-function tryParse(source: string): ParserNode[] {
+function tryParse(source: string): ParserNode {
   const parser = new Parser(grammar);
   parser.feed(source);
   parser.finish();
 
-  const solutions: ParserNode[] = (parser.results as ParserNode[]).map(
+  const solutions = (parser.results as ParserNode[]).map(
     sourceMapDecorator(source)
   ) as ParserNode[];
 
@@ -115,10 +116,10 @@ function tryParse(source: string): ParserNode[] {
     throw new SyntaxError({ message: 'No solutions', token });
   }
 
-  return solutions;
+  return getDefined(solutions[0]);
 }
 
-export function parse(source: string): ParserNode[] {
+export function parse(source: string): ParserNode {
   try {
     return tryParse(source);
   } catch (err) {

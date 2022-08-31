@@ -1,53 +1,66 @@
 /* eslint-disable import/first */
 /* eslint-disable import/no-relative-packages */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { Fragment, useState, useEffect } from 'react';
+import './pollute-global';
+import { useState, useEffect, FC } from 'react';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
-import { nanoid } from 'nanoid';
+import { identity } from 'ramda';
 // eslint-disable-next-line import/no-unresolved
 import useIsBrowser from '@docusaurus/useIsBrowser';
 // eslint-disable-next-line import/no-unresolved
 import { usePrismTheme } from '@docusaurus/theme-common';
+import {
+  Result,
+  createProgramFromMultipleStatements,
+  IdentifiedResult,
+  IdentifiedError,
+} from '@decipad/computer';
+import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
+import { formatError } from '@decipad/format';
+import { CodeResult } from '@decipad/ui/src/organisms/CodeResult/CodeResult';
 import styles from './styles.module.css';
 
-// TODO: hairy and ugly:
-require('./pollute-global');
-const { InferError } = require('../../../../../../../libs/language/src');
-// global shenanigans
-const {
-  CodeResult,
-} = require('../../../../../../../libs/ui/src/organisms/CodeResult/CodeResult');
-const {
-  useComputer,
-  ComputerContextProvider,
-} = require('../../../../../../../libs/react-contexts/src');
-
-function identityFn(o) {
-  return o;
+interface PreviewProps {
+  result: Result.Result;
 }
 
-function Preview({ result }) {
+const Preview: FC<PreviewProps> = ({ result }) => {
   if (!result) {
-    return;
+    return null;
   }
   return (
     <div className={styles.playgroundPreview}>
       {result && <CodeResult type={result.type} value={result.value} />}
     </div>
   );
+};
+
+interface LiveErrorProps {
+  error?: Error | string | null;
 }
 
-function LivePreviewOrError({ code: liveCode }) {
-  const [blockId] = useState(nanoid);
+const LiveError: FC<LiveErrorProps> = ({ error }) => {
+  if (error) {
+    const message = error instanceof Error ? error.message : error;
+    return <pre className={styles.playgroundError}>{message}</pre>;
+  }
+  return null;
+};
+
+interface LivePreviewProps {
+  code: string;
+}
+
+function LivePreviewOrError({ code: liveCode }: LivePreviewProps) {
   const computer = useComputer();
-  const [code, setCode] = useState(null);
+  const [code, setCode] = useState<string | null>(null);
   const [needsCompute, setNeedsCompute] = useState(false);
-  const [error, setError] = useState(null);
-  const [result, setResult] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [result, setResult] = useState<Result.Result | null>(null);
 
   useEffect(() => {
-    let timeout;
+    let timeout: ReturnType<typeof setTimeout>;
 
     if (code !== liveCode) {
       if (code == null) {
@@ -72,51 +85,36 @@ function LivePreviewOrError({ code: liveCode }) {
       try {
         setNeedsCompute(false);
         computer.pushCompute({
-          program: [
-            {
-              type: 'unparsed-block',
-              id: blockId,
-              source: code,
-            },
-          ],
-          subscriptions: [blockId],
+          program: createProgramFromMultipleStatements(code),
         });
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
-        setError(err);
+        setError(err as Error);
       }
     }
-  }, [blockId, code, computer, needsCompute]);
+  }, [code, computer, needsCompute]);
 
   useEffect(() => {
     const subscription = computer.results.subscribe(({ blockResults }) => {
-      const r = blockResults[blockId];
+      const r: IdentifiedResult | IdentifiedError | undefined =
+        Object.values(blockResults).pop();
       if (!r) {
         return;
       }
-      if (r.error) {
-        setError(r.error.message);
-        return;
+      if (r.type === 'computer-parse-error') {
+        setResult(null);
+        setError(new Error(r.error.message));
+      } else if (r.result.type.kind === 'type-error') {
+        setResult(null);
+        setError(new Error(formatError('en-US', r.result.type.errorCause)));
+      } else {
+        setResult(r.result);
+        setError(null);
       }
-      const results = r.results.filter((res) => res.blockId === blockId);
-
-      results.forEach((res) => {
-        if (res.type === 'compute-panic') {
-          setResult(null);
-          setError(new Error(res.message));
-        } else if (res.type.kind === 'type-error') {
-          const inferError = new InferError(res.type.errorCause);
-          setResult(null);
-          setError(new Error(inferError.message));
-        } else {
-          setResult(res);
-          setError(null);
-        }
-      });
     });
     return () => subscription.unsubscribe();
-  }, [blockId, computer, result?.error?.message, result?.message]);
+  }, [computer]);
 
   return (
     <>
@@ -126,15 +124,11 @@ function LivePreviewOrError({ code: liveCode }) {
   );
 }
 
-function LiveError({ error }) {
-  if (error) {
-    const message = error.message || error;
-    return <pre className={styles.playgroundError}>{message}</pre>;
-  }
-  return null;
+interface ResultWithHeaderProps {
+  code: string;
 }
 
-function ResultWithHeader({ code }) {
+const ResultWithHeader: FC<ResultWithHeaderProps> = ({ code }) => {
   return (
     <>
       <div>
@@ -142,14 +136,22 @@ function ResultWithHeader({ code }) {
       </div>
     </>
   );
+};
+
+interface EditorWithHeaderAndResultsProps {
+  code: string;
+  transformCode?: (s: string) => string;
 }
 
-function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
+const EditorWithHeaderAndResults: FC<EditorWithHeaderAndResultsProps> = ({
+  code,
+  transformCode = identity,
+}) => {
   const [codeValue, setCodeValue] = useState(code);
   const prismTheme = usePrismTheme();
 
-  const highlightCode = (c) => (
-    <Highlight Prism={Prism} code={c} theme={prismTheme} language="js">
+  const highlightCode = (c: string) => (
+    <Highlight Prism={Prism} code={c} theme={prismTheme} language="javascript">
       {({ tokens, getLineProps, getTokenProps }) =>
         tokens.map((line, i) => (
           // eslint-disable-next-line react/jsx-key
@@ -176,16 +178,20 @@ function EditorWithHeaderAndResuts({ code, transformCode = identityFn }) {
       <ResultWithHeader code={codeValue} />
     </>
   );
+};
+
+interface PlaygroundProps {
+  children: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function Playground({ children, ...props }) {
+const Playground: FC<PlaygroundProps> = ({ children, ...props }) => {
   const isBrowser = useIsBrowser();
   return (
     <div className={styles.playgroundContainer}>
       {isBrowser && (
         <ComputerContextProvider>
-          <EditorWithHeaderAndResuts
+          <EditorWithHeaderAndResults
             code={isBrowser ? children.replace(/\n$/, '') : ''}
             {...props}
           />
@@ -193,4 +199,6 @@ export default function Playground({ children, ...props }) {
       )}
     </div>
   );
-}
+};
+
+export default Playground;

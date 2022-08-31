@@ -1,17 +1,18 @@
 import {
+  IdentifiedError,
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
 } from '@decipad/computer';
-import { Path, Range } from 'slate';
+import { Path } from 'slate';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';
 
 export function getSyntaxErrorRanges(
   path: Path,
-  lineResult: IdentifiedResult | undefined
-): (Range & SyntaxErrorAnnotation)[] {
-  if (lineResult == null || !lineResult.isSyntaxError) {
+  lineResult: IdentifiedResult | IdentifiedError | undefined
+): SyntaxErrorAnnotation[] {
+  if (lineResult?.type !== 'computer-parse-error') {
     return [];
   }
 

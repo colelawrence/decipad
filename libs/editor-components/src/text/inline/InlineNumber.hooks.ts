@@ -41,10 +41,8 @@ export const useInlineNumberSyntaxFixer = (bubble: InlineNumberElement) => {
 const useIsInvalid = (bubbleId: string) => {
   const result = useResult(bubbleId);
 
-  const hasSyntaxError = result?.isSyntaxError;
-  const hasTypeError = result?.results.some(
-    (r) => r.type.kind === 'type-error'
-  );
+  const hasSyntaxError = result?.type === 'computer-parse-error';
+  const hasTypeError = result?.result?.type.kind === 'type-error';
   return hasTypeError || hasSyntaxError;
 };
 

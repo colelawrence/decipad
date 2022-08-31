@@ -19,6 +19,12 @@
         "cwd": "apps/docs"
       }
     },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b apps/docs"
+      }
+    },
     "test": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
