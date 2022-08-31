@@ -64,8 +64,8 @@ const sameUnits = (
   const u = unit[0];
   return (
     u.unit === um.name &&
-    u.exp.equals(ONE) &&
-    u.multiplier.equals(ONE) &&
+    new Fraction(u.exp).equals(ONE) &&
+    new Fraction(u.multiplier).equals(ONE) &&
     u.baseSuperQuantity === um.superBaseQuantity
   );
 };
@@ -134,8 +134,9 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               </TriggerMenuItem>
             }
           >
-            {presentableCurrencyUnits.map((unit) => (
+            {presentableCurrencyUnits.map((unit, index) => (
               <MenuItem
+                key={index}
                 icon={<span>{unit.pretty ?? unit.name}</span>}
                 onSelect={() =>
                   onChangeColumnType(
@@ -153,7 +154,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 }
                 selected={type.kind === 'number' && sameUnits(type.unit, unit)}
               >
-                {unit.name}
+                {unit.baseQuantity}
               </MenuItem>
             ))}
           </MenuList>
