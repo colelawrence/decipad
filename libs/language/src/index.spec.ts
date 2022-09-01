@@ -2016,8 +2016,8 @@ describe('len', () => {
   });
 });
 
-describe('type cohercion', () => {
-  it('can type coherce column cells to the same unit', async () => {
+describe('type coercion', () => {
+  it('can type coerce column cells to the same unit', async () => {
     expect(await runCode(`[1 centigram, 2]`)).toMatchObject({
       value: [F(1, 100), F(2, 100)],
       type: t.column(t.number(U('grams', { multiplier: F(1, 100) })), 2),
@@ -2025,7 +2025,7 @@ describe('type cohercion', () => {
   });
 
   // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('can coherce the arguments of an autoconverted function', async () => {
+  it.skip('can coerce the arguments of an autoconverted function', async () => {
     expect(await runCode(`1 centigram + 2`)).toMatchObject({
       value: F(3, 100),
       type: t.number(U('grams', { multiplier: F(1, 100) })),

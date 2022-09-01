@@ -35,8 +35,9 @@ export const Import: PlateComponent = ({ attributes, element }) => {
       if (!fetched && !fetching) {
         setFetching(true);
         try {
-          setResult(await tryImport(element.source, new URL(element.url)));
+          setResult(await tryImport(new URL(element.url), element.source));
         } catch (err) {
+          console.error('Error caught while importing', err);
           setError((err as Error).message);
         } finally {
           setFetched(true);

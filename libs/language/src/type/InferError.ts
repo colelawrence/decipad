@@ -100,6 +100,9 @@ export type ErrSpec =
     }
   | {
       errType: 'need-one-only-one-unit';
+    }
+  | {
+      errType: 'unknown-reference';
     };
 
 // exhaustive switch

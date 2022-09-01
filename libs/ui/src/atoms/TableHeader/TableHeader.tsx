@@ -96,6 +96,21 @@ const DropSourceAndTarget = forwardRef<
   );
 });
 
+const thStyles = (color: AvailableSwatchColor) =>
+  css({
+    backgroundColor:
+      color &&
+      transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
+        .rgba,
+    // Keep hover effect when hovered, focused or the dropdown menu is opened.
+    '&:hover, &:focus-within, &[data-highlight="true"]': {
+      backgroundColor: color && baseSwatches[color as AvailableSwatchColor].rgb,
+    },
+
+    boxShadow:
+      color &&
+      `inset 0px -2px 0px ${baseSwatches[color as AvailableSwatchColor].rgb}`,
+  });
 export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   children?: React.ReactNode;
   highlight?: boolean;
@@ -134,31 +149,12 @@ export const TableHeader = ({
 
   const thRef = useMergedRef(attributes?.ref, dropTarget);
 
+  // const useBackGroundColor = variant === 'bland' ? color : 'Perfume';
+
   return (
     <th
       {...attributes}
-      css={[
-        columnStyles,
-        css({
-          backgroundColor:
-            color &&
-            transparency(
-              baseSwatches[color as AvailableSwatchColor],
-              strongOpacity
-            ).rgba,
-          // Keep hover effect when hovered, focused or the dropdown menu is opened.
-          '&:hover, &:focus-within, &[data-highlight="true"]': {
-            backgroundColor:
-              color && baseSwatches[color as AvailableSwatchColor].rgb,
-          },
-
-          boxShadow:
-            color &&
-            `inset 0px -2px 0px ${
-              baseSwatches[color as AvailableSwatchColor].rgb
-            }`,
-        }),
-      ]}
+      css={[columnStyles, thStyles(color)]}
       ref={thRef}
       data-highlight={highlight}
     >

@@ -9,6 +9,7 @@ import { isTabularType, toTableHeaderType } from '../../utils';
 import { defaultMaxRows, tableParentStyles } from '../../styles/table';
 import { table } from '../../styles';
 import { DragHandle } from '../../icons/index';
+import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 
 const recursiveRowCount = (t: SerializedType): number => {
   if (t.kind === 'table' && t.tableLength !== 'unknown') {
@@ -23,12 +24,19 @@ const recursiveRowCount = (t: SerializedType): number => {
   return 1;
 };
 
+const liveTableWrapperStyles = css({
+  marginLeft: '-20px',
+});
+
 export const TableResult = ({
   parentType,
   type,
   value,
   onDragStartCell,
   tooltip = true,
+  isLiveResult = false,
+  firstTableRowControls,
+  onChangeColumnType,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const { columnNames, columnTypes } = type;
   if (!columnNames.length) {
@@ -70,89 +78,114 @@ export const TableResult = ({
   );
 
   return (
-    <Table
-      columnCount={columnNames.length}
-      border={isNested ? 'inner' : 'all'}
-      translateX
-      hiddenRowCount={hiddenRowsCount}
-      setShowAllRows={setShowAllRows}
-      isReadOnly={true}
-      head={
-        <TableHeaderRow readOnly>
-          {columnNames?.map((columnName, index) => (
-            <TableHeader
-              type={toTableHeaderType(columnTypes[index])}
-              key={index}
-              isEditable={false}
-              showIcon={false}
-            >
-              {columnName}
-            </TableHeader>
-          ))}
-        </TableHeaderRow>
-      }
-      body={
-        <>
-          {Array.from({ length: showRowLength }, (_, rowIndex) => (
-            <TableRow key={rowIndex} readOnly>
-              {value.map((column, colIndex) => (
-                <TableData
-                  key={colIndex}
-                  as="td"
-                  isEditable={false}
-                  showPlaceholder={false}
-                  lastBeforeMoreRowsHidden={
-                    hiddenRowsCount > 0 && rowIndex === showRowLength - 1
+    <div css={isLiveResult && liveTableWrapperStyles}>
+      <Table
+        columnCount={columnNames.length}
+        border={isNested ? 'inner' : 'all'}
+        hiddenRowCount={hiddenRowsCount}
+        setShowAllRows={setShowAllRows}
+        isReadOnly={!isLiveResult}
+        isLiveResult={isLiveResult}
+        head={
+          <TableHeaderRow readOnly={!isLiveResult}>
+            {columnNames?.map((columnName, index) =>
+              isLiveResult ? (
+                <TableColumnHeader
+                  key={index}
+                  type={toTableHeaderType(columnTypes[index])}
+                  isFirst={index === 0}
+                  isForImportedColumn={isLiveResult}
+                  onChangeColumnType={(columnType) =>
+                    onChangeColumnType?.(index, columnType)
                   }
-                  css={{ ...tableParentStyles }}
                 >
-                  <div
-                    draggable
-                    onDragStart={(e) => {
-                      onDragStartCell?.({
-                        tableName: (type as SerializedTypes.Table)
-                          .indexName as string,
-                        columnName: columnNames[colIndex],
-                        cellValue: value[0][rowIndex] as string,
-                      })(e);
-                    }}
-                    className="drag-handle"
-                    css={{
-                      display: 'none',
-                      position: 'absolute',
-                      top: 4,
-                      right: 4,
-                    }}
+                  {columnName}
+                </TableColumnHeader>
+              ) : (
+                <TableHeader
+                  type={toTableHeaderType(columnTypes[index])}
+                  key={index}
+                  isEditable={!isLiveResult}
+                  showIcon={isLiveResult}
+                >
+                  {columnName}
+                </TableHeader>
+              )
+            )}
+          </TableHeaderRow>
+        }
+        body={
+          <>
+            {Array.from({ length: showRowLength }, (_, rowIndex) => (
+              <TableRow
+                key={rowIndex}
+                readOnly={!isLiveResult || rowIndex > 0}
+                tableCellControls={
+                  (isLiveResult && rowIndex === 0 && firstTableRowControls) ||
+                  (isLiveResult && <th></th>) ||
+                  false
+                }
+              >
+                {value.map((column, colIndex) => (
+                  <TableData
+                    key={colIndex}
+                    as="td"
+                    isEditable={false}
+                    isLiveResult={isLiveResult}
+                    showPlaceholder={false}
+                    lastBeforeMoreRowsHidden={
+                      hiddenRowsCount > 0 && rowIndex === showRowLength - 1
+                    }
+                    css={{ ...tableParentStyles }}
                   >
-                    <button
+                    <div
+                      draggable
+                      onDragStart={(e) => {
+                        onDragStartCell?.({
+                          tableName: (type as SerializedTypes.Table)
+                            .indexName as string,
+                          columnName: columnNames[colIndex],
+                          cellValue: value[0][rowIndex] as string,
+                        })(e);
+                      }}
+                      className="drag-handle"
                       css={{
-                        width: '16px',
+                        display: 'none',
+                        position: 'absolute',
+                        top: 4,
+                        right: 4,
                       }}
                     >
-                      <DragHandle />
-                    </button>
-                  </div>
+                      <button
+                        css={{
+                          width: '16px',
+                        }}
+                      >
+                        <DragHandle />
+                      </button>
+                    </div>
 
-                  <div
-                    css={[
-                      css(table.getCellWrapperStyles(columnTypes[colIndex])),
-                      colIndex === 0 && table.cellLeftPaddingStyles,
-                    ]}
-                  >
-                    <CodeResult
-                      parentType={type}
-                      type={columnTypes[colIndex]}
-                      value={column[rowIndex]}
-                      variant="block"
-                      tooltip={tooltip}
-                    />
-                  </div>
-                </TableData>
-              ))}
-            </TableRow>
-          ))}
-        </>
-      }
-    ></Table>
+                    <div
+                      css={[
+                        css(table.getCellWrapperStyles(columnTypes[colIndex])),
+                        colIndex === 0 && table.cellLeftPaddingStyles,
+                      ]}
+                    >
+                      <CodeResult
+                        parentType={type}
+                        type={columnTypes[colIndex]}
+                        value={column[rowIndex]}
+                        variant="block"
+                        tooltip={tooltip}
+                      />
+                    </div>
+                  </TableData>
+                ))}
+              </TableRow>
+            ))}
+          </>
+        }
+      ></Table>
+    </div>
   );
 };

@@ -55,5 +55,9 @@ export const ELEMENT_DATA_VIEW = 'data-view';
 export const ELEMENT_DATA_VIEW_TR = 'data-view-tr';
 export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
 
+// live connection
+export const ELEMENT_LIVE_CONNECTION = 'live-conn';
+export const ELEMENT_LIVE_CONNECTION_VARIABLE_NAME = 'live-var-name';
+
 // others
 export const ELEMENT_CAPTION = 'caption';

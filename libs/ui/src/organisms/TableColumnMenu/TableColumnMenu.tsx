@@ -45,6 +45,7 @@ interface TableColumnMenuProps
   readonly isFirst?: boolean;
   readonly trigger: ReactNode;
   readonly type: TableCellType;
+  readonly isForImportedColumn?: boolean;
 }
 
 const isCurrencyUnit = (unit?: Unit[]): boolean => {
@@ -79,6 +80,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   isFirst = false,
   trigger,
   type,
+  isForImportedColumn = false,
 }) => {
   const computer = useComputer();
 
@@ -159,7 +161,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             ))}
           </MenuList>
 
-          {!isFirst && (
+          {!isForImportedColumn && !isFirst && (
             <MenuItem
               icon={<Formula />}
               onSelect={() => onChangeColumnType(getFormulaType())}
@@ -223,26 +225,28 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               Time
             </MenuItem>
           </MenuList>
-          <MenuList
-            itemTrigger={
-              <TriggerMenuItem
-                icon={<Leaf />}
-                selected={type.kind === 'series'}
-              >
-                <div css={{ minWidth: '116px' }}>Series</div>
-              </TriggerMenuItem>
-            }
-            open={seriesOpen}
-            onChangeOpen={setSeriesOpen}
-          >
-            <MenuItem
-              icon={<Calendar />}
-              onSelect={() => onChangeColumnType(getSeriesType('date'))}
-              selected={type.kind === 'series' && type.seriesType === 'date'}
+          {!isForImportedColumn && (
+            <MenuList
+              itemTrigger={
+                <TriggerMenuItem
+                  icon={<Leaf />}
+                  selected={type.kind === 'series'}
+                >
+                  <div css={{ minWidth: '116px' }}>Series</div>
+                </TriggerMenuItem>
+              }
+              open={seriesOpen}
+              onChangeOpen={setSeriesOpen}
             >
-              Date
-            </MenuItem>
-          </MenuList>
+              <MenuItem
+                icon={<Calendar />}
+                onSelect={() => onChangeColumnType(getSeriesType('date'))}
+                selected={type.kind === 'series' && type.seriesType === 'date'}
+              >
+                Date
+              </MenuItem>
+            </MenuList>
+          )}
           <UnitMenuItem
             placeholder="create custom"
             onSelect={(unit) => {

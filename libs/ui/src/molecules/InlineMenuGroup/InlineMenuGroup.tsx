@@ -1,7 +1,7 @@
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { css } from '@emotion/react';
-import { SlashCommandsMenuItem } from '../../atoms';
+import { InlineMenuItem } from '../../atoms';
 import { cssVar, p13Medium, setCssVar } from '../../primitives';
 
 const titleStyles = css(
@@ -16,23 +16,23 @@ const itemsStyles = css({
   rowGap: '16px',
 });
 
-interface SlashCommandsMenuGroupProps {
-  readonly title: string;
+interface InlineMenuGroupProps {
+  readonly title?: string;
   readonly children?: ReactNode;
 }
-export const SlashCommandsMenuGroup = ({
+export const InlineMenuGroup = ({
   title,
   children,
-}: SlashCommandsMenuGroupProps): ReturnType<FC> => {
+}: InlineMenuGroupProps): ReturnType<FC> => {
   return (
     <div role="group">
-      <div css={titleStyles}>{title}</div>
+      {title && <div css={titleStyles}>{title}</div>}
       <div css={itemsStyles}>
         {Children.map(children, (child) => {
           if (child == null) {
             return null;
           }
-          if (isElement(child) && child.type === SlashCommandsMenuItem) {
+          if (isElement(child) && child.type === InlineMenuItem) {
             return child;
           }
           console.error(

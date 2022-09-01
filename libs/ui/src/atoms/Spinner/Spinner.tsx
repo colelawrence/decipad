@@ -2,6 +2,11 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
+const spinnerWrapperStyles = css({
+  width: '100%',
+  display: 'inline',
+});
+
 const spinnerStyles = css({
   animation: 'rotate 2s linear infinite',
   zIndex: 2,
@@ -40,14 +45,16 @@ const circleStyles = css({
 });
 
 export const Spinner: FC = () => (
-  <svg css={spinnerStyles} viewBox="0 0 25 25">
-    <circle
-      css={circleStyles}
-      cx="12.5"
-      cy="12.5"
-      r="10"
-      fill="none"
-      strokeWidth="2.5"
-    ></circle>
-  </svg>
+  <span css={spinnerWrapperStyles}>
+    <svg css={spinnerStyles} viewBox="0 0 25 25">
+      <circle
+        css={circleStyles}
+        cx="12.5"
+        cy="12.5"
+        r="10"
+        fill="none"
+        strokeWidth="2.5"
+      ></circle>
+    </svg>
+  </span>
 );

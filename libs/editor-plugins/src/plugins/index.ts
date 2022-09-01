@@ -14,6 +14,7 @@ export * from './ExternalData';
 export * from './Import';
 export * from './LayoutColumns';
 export * from './Link';
+export * from './LiveConnection';
 export * from './Marks';
 export * from './Media';
 export * from './NormalizeCodeBlock';

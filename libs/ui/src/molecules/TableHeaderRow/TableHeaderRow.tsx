@@ -1,4 +1,4 @@
-import { PlateComponentAttributes } from '@decipad/editor-types';
+import { PlateComponentAttributes, TableCellType } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
 import { tableControlWidth } from '../../styles/table';
 
@@ -6,6 +6,7 @@ interface TableHeaderRowProps {
   readonly children: ReactNode;
   readonly readOnly?: boolean;
   readonly attributes?: PlateComponentAttributes;
+  readonly onChangeColumnType?: (type: TableCellType) => void;
 }
 
 export const TableHeaderRow = ({

@@ -19,7 +19,7 @@ import {
   simplifyInBlockResults,
   unparsedProgram,
 } from '../testUtils';
-import { ComputeRequest, UnparsedBlock } from '../types';
+import { ComputeRequestWithExternalData, UnparsedBlock } from '../types';
 import { ComputationRealm } from './ComputationRealm';
 import { computeProgram, Computer, resultFromError } from './Computer';
 
@@ -31,7 +31,7 @@ beforeEach(() => {
 const testCompute = async (program: AST.Block[]) =>
   simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
 
-const computeOnTestComputer = async (req: ComputeRequest) => {
+const computeOnTestComputer = async (req: ComputeRequestWithExternalData) => {
   const res = await computer.computeRequest(req);
   return simplifyComputeResponse(res);
 };

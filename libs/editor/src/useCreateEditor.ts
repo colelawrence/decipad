@@ -1,7 +1,9 @@
-import { Computer } from '@decipad/computer';
+import type { Computer } from '@decipad/computer';
 import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
+import { UserInteraction } from '@decipad/react-contexts';
 import { useMemo } from 'react';
+import { Subject } from 'rxjs';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
@@ -11,6 +13,7 @@ export interface CreateEditorProps {
   computer?: Computer;
   notebookTitle: string;
   onNotebookTitleChange: (newValue: string) => void;
+  interactions: Subject<UserInteraction>;
 }
 
 export const useCreateEditor = ({
@@ -20,6 +23,7 @@ export const useCreateEditor = ({
   computer,
   notebookTitle,
   onNotebookTitleChange,
+  interactions,
 }: CreateEditorProps) => {
   const notebookTitlePlugin = useNotebookTitlePlugin({
     notebookTitle,
@@ -28,8 +32,12 @@ export const useCreateEditor = ({
   });
 
   const editorPlugins = useMemo(
-    () => computer && [...configuration.plugins(computer), notebookTitlePlugin],
-    [computer, notebookTitlePlugin]
+    () =>
+      computer && [
+        ...configuration.plugins(computer, interactions),
+        notebookTitlePlugin,
+      ],
+    [computer, interactions, notebookTitlePlugin]
   );
 
   const editor = useMemo(

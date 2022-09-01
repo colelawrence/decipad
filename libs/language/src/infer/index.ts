@@ -1,7 +1,7 @@
 import pSeries from 'p-series';
 
 import { AST } from '..';
-import { InferError, Type, build as t, deserializeType } from '../type';
+import { InferError, Type, build as t, deserializeType, build } from '../type';
 import { matchUnitArraysForColumn } from '../type/units';
 import { getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
@@ -76,16 +76,20 @@ export const inferExpression = wrap(
         if (c) {
           return c.type;
         }
-        const value = ctx.stack.get(name);
-        return value ?? t.number([parseUnit(name)]);
+        return (
+          ctx.stack.get(name) ?? t.number([parseUnit(name)]) // defaults to a unit with the ref name
+        );
       }
       case 'externalref': {
         const [id] = expr.args;
-        const { type } = getDefined(
-          ctx.externalData.get(id),
-          `missing external data with ID ${id}`
+        const data = ctx.externalData.get(id);
+        if (data) {
+          return data.type;
+        }
+        return build.impossible(
+          new InferError({ errType: 'unknown-reference' }),
+          expr
         );
-        return type;
       }
       case 'literal': {
         const [litType] = expr.args;

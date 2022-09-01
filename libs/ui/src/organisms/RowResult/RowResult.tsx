@@ -18,7 +18,6 @@ export const RowResult = ({
       isReadOnly={true}
       columnCount={1}
       border={isTabularType(parentType) ? 'inner' : 'all'}
-      translateX
       head={
         <TableHeaderRow readOnly>
           {rowCellNames.map((columnName, colIndex) => (

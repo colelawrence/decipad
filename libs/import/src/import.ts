@@ -1,13 +1,27 @@
 import { Result } from '@decipad/computer';
-import { ImportElementSource } from '@decipad/editor-types';
+import {
+  ColIndex,
+  ImportElementSource,
+  TableCellType,
+} from '@decipad/editor-types';
+import { importFromUnknown } from './importFromUnknown';
 import { gsheets } from './providers';
 
+export interface ImportOptions {
+  useFirstRowAsHeader?: boolean;
+  columnTypeCoercions?: Record<ColIndex, TableCellType>;
+}
+
 export const tryImport = (
-  provider: ImportElementSource,
-  url: URL
+  url: URL,
+  provider?: ImportElementSource,
+  options: ImportOptions = {}
 ): Promise<Result.Result> => {
-  switch (provider) {
-    case 'gsheets':
-      return gsheets.import(url);
+  if (provider) {
+    switch (provider) {
+      case 'gsheets':
+        return gsheets.import(url, options);
+    }
   }
+  return importFromUnknown(url, options);
 };

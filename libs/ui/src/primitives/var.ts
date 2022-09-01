@@ -12,6 +12,7 @@ import {
   grey600,
   offBlack,
   offWhite,
+  purple200,
   red500,
   teal600,
   white,
@@ -53,6 +54,9 @@ export interface CssVariables {
   // Table
   readonly tableSelectionBackgroundColor: Property.Color;
   readonly tableFocusColor: Property.Color;
+
+  // tags
+  readonly liveDataBackgroundColor: Property.Color;
 }
 
 const defaults: CssVariables = {
@@ -83,6 +87,8 @@ const defaults: CssVariables = {
 
   tableSelectionBackgroundColor: blue100.rgb,
   tableFocusColor: blue300.rgb,
+
+  liveDataBackgroundColor: purple200.rgb,
 };
 
 const cssVariablePrefix = '--deci-';

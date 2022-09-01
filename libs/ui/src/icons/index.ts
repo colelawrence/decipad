@@ -57,6 +57,7 @@ export { Health } from './Health/Health';
 export { Heart } from './Heart/Heart';
 export { Hide } from './Hide/Hide';
 export { Highlight } from './Highlight/Highlight';
+export { Import } from './Import/Import';
 export { Info } from './Info/Info';
 export { Input } from './Input/Input';
 export { Italic } from './Italic/Italic';

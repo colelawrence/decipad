@@ -1,7 +1,8 @@
 import { Result } from '@decipad/computer';
 import { getDataUrlFromSheetUrl } from './getDataUrlFromSheetUrl';
-import { toTable } from './toTable';
-import { Sheet } from './types';
+import { toTable } from '../../utils/toTable';
+import { Sheet } from '../../types';
+import { ImportOptions } from '../../import';
 
 const errorResult = (err: string): Result.Result => {
   return {
@@ -17,13 +18,17 @@ const errorResult = (err: string): Result.Result => {
 };
 
 const handleGsheetsResponse = async (
-  resp: Response
+  resp: Response,
+  options: ImportOptions
 ): Promise<Result.Result<'table'>> => {
   const body = (await resp.json()) as unknown as Sheet;
-  return toTable(body);
+  return toTable(body, options);
 };
 
-const importGsheets = async (_url: URL): Promise<Result.Result> => {
+const importGsheets = async (
+  _url: URL,
+  options: ImportOptions
+): Promise<Result.Result> => {
   const url = await getDataUrlFromSheetUrl(_url);
   let resp: Response | undefined;
   try {
@@ -34,7 +39,7 @@ const importGsheets = async (_url: URL): Promise<Result.Result> => {
   if (!resp.ok) {
     return errorResult(resp.statusText);
   }
-  return handleGsheetsResponse(resp) as Promise<Result.Result>;
+  return handleGsheetsResponse(resp, options) as Promise<Result.Result>;
 };
 
 export const gsheets = {

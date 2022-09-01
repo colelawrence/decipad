@@ -3,9 +3,9 @@ import { mockConsoleWarn } from '@decipad/testutils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
-import { SlashCommandsMenuItem } from './SlashCommandsMenuItem';
+import { InlineMenuItem } from './InlineMenuItem';
 
-const props: ComponentProps<typeof SlashCommandsMenuItem> = {
+const props: ComponentProps<typeof InlineMenuItem> = {
   title: 'Title',
   description: 'Description',
   icon: <svg />,
@@ -18,7 +18,7 @@ afterEach(() => cleanup?.());
 
 it('shows a pseudo-focused state', async () => {
   const { rerender } = render(
-    <SlashCommandsMenuItem {...props} focused={false} title="Title" />
+    <InlineMenuItem {...props} focused={false} title="Title" />
   );
   cleanup = await applyCssVars();
   const normalBackgroundColor = findParentWithStyle(
@@ -27,7 +27,7 @@ it('shows a pseudo-focused state', async () => {
   )!.backgroundColor;
   cleanup();
 
-  rerender(<SlashCommandsMenuItem {...props} focused title="Title" />);
+  rerender(<InlineMenuItem {...props} focused title="Title" />);
   cleanup = await applyCssVars();
   const focusedBackgroundColor = findParentWithStyle(
     screen.getByText('Title'),
@@ -41,11 +41,7 @@ describe('an execute event', () => {
   it('is emitted on click', async () => {
     const handleExecute = jest.fn();
     render(
-      <SlashCommandsMenuItem
-        {...props}
-        title="Title"
-        onExecute={handleExecute}
-      />
+      <InlineMenuItem {...props} title="Title" onExecute={handleExecute} />
     );
 
     await userEvent.click(screen.getByText('Title'));
@@ -55,7 +51,7 @@ describe('an execute event', () => {
   it('is emitted on pressing enter when focused', async () => {
     const handleExecute = jest.fn();
     render(
-      <SlashCommandsMenuItem
+      <InlineMenuItem
         {...props}
         title="Title"
         focused
@@ -69,7 +65,7 @@ describe('an execute event', () => {
   it('is not emitted when not focused', async () => {
     const handleExecute = jest.fn();
     render(
-      <SlashCommandsMenuItem
+      <InlineMenuItem
         {...props}
         title="Title"
         focused={false}
@@ -83,7 +79,7 @@ describe('an execute event', () => {
   it('is not emitted when holding shift', async () => {
     const handleExecute = jest.fn();
     render(
-      <SlashCommandsMenuItem
+      <InlineMenuItem
         {...props}
         title="Title"
         focused

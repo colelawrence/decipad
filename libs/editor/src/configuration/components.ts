@@ -41,7 +41,7 @@ import {
   ListItemContent,
   MediaEmbed,
   OrderedList,
-  SlashCommandsParagraph,
+  InteractiveParagraph,
   Strikethrough,
   Title,
   Underline,
@@ -60,7 +60,7 @@ export const components = (computer: Computer): PlateComponents => ({
   [ELEMENT_H3]: Heading2,
 
   // Text blocks
-  [ELEMENT_PARAGRAPH]: SlashCommandsParagraph(computer),
+  [ELEMENT_PARAGRAPH]: InteractiveParagraph(computer),
   [ELEMENT_BLOCKQUOTE]: Blockquote,
   [ELEMENT_CALLOUT]: Callout,
   [ELEMENT_HR]: Divider,

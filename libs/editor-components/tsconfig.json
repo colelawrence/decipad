@@ -13,6 +13,7 @@
     { "path": "../client-events" },
     { "path": "../react-contexts" },
     { "path": "../computer" },
+    { "path": "../live-connect" },
     { "path": "../import" },
     { "path": "../format" },
     { "path": "../fraction" },

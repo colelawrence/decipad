@@ -4,7 +4,15 @@ import { ElementType, FC, HTMLAttributes } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
 import { ConditionalCodeSyntaxError } from '../../molecules/CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
-import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  Opacity,
+  p12Medium,
+  p14Medium,
+  purple100,
+  setCssVar,
+  transparency,
+} from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
@@ -73,6 +81,12 @@ const alignRightStyles = css({
   textAlign: 'right',
 });
 
+const liveResultOpacity: Opacity = 0.4;
+
+const liveResultStyles = css({
+  background: transparency(purple100, liveResultOpacity).rgba,
+});
+
 const selectedStyles = css({
   backgroundColor: cssVar('tableSelectionBackgroundColor'),
 });
@@ -86,6 +100,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   alignRight?: boolean;
   isEditable?: boolean;
   isUserContent?: boolean;
+  isLiveResult?: boolean;
   contentEditable?: boolean;
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
@@ -104,6 +119,7 @@ export const TableData = ({
   as: Component = 'div',
   isEditable = false,
   isUserContent = false,
+  isLiveResult = false,
   attributes,
   showPlaceholder = true,
   draggable,
@@ -136,10 +152,11 @@ export const TableData = ({
         tdGridStyles,
         showPlaceholder && tdPlaceholderStyles,
         disabled && tdDisabledStyles,
-        unit ? unitStyles : null,
-        selected ? selectedStyles : null,
-        focused ? focusedStyles : null,
-        alignRight ? alignRightStyles : null,
+        unit && unitStyles,
+        selected && selectedStyles,
+        focused && focusedStyles,
+        alignRight && alignRightStyles,
+        isLiveResult && liveResultStyles,
       ]}
       data-unit={unit ?? ''}
       {...props}

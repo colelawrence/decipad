@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { circleIcon, inMenu } from '../../storybook-utils';
-import { SlashCommandsMenuItem } from './SlashCommandsMenuItem';
+import { InlineMenuItem } from './InlineMenuItem';
 
 const args = {
   title: 'Title',
@@ -9,8 +9,8 @@ const args = {
 };
 
 export default {
-  title: 'Organisms / Editor / Slash Commands / Item',
-  component: SlashCommandsMenuItem,
+  title: 'Organisms / Editor / Inline Menu / Item',
+  component: InlineMenuItem,
   args,
   parameters: {
     chromatic: { disable: true },
@@ -19,5 +19,5 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <SlashCommandsMenuItem {...props} icon={circleIcon} />
+  <InlineMenuItem {...props} icon={circleIcon} />
 );

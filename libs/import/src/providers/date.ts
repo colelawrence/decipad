@@ -27,6 +27,7 @@ const formatToGranularity: Record<string, DateGranularity> = {
   'yyyy/MM': 'month',
   P: 'day',
   'dd/MM/yyyy': 'day',
+  'yyyy/MM/dd': 'day',
   PP: 'day',
   Pp: 'minute',
   PPpp: 'second',
@@ -37,7 +38,16 @@ function isValidDate(d: Date | undefined): d is Date {
 }
 
 export function parseDate(value: string): number | undefined {
-  const formats = ['yyyy', 'yyyy/MM', 'P', 'dd/MM/yyyy', 'PP', 'Pp', 'PPpp'];
+  const formats = [
+    'yyyy',
+    'yyyy/MM',
+    'P',
+    'dd/MM/yyyy',
+    'yyyy/MM/dd',
+    'PP',
+    'Pp',
+    'PPpp',
+  ];
   let d: Date | undefined;
   do {
     const format = getDefined(formats.shift());

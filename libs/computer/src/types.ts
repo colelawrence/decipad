@@ -49,10 +49,15 @@ export interface UserParseError {
 }
 export interface ComputeRequest {
   program: Program;
-  externalData?: AnyMapping<InjectableExternalData>;
+  subscriptions?: string[];
   parseErrors?: UserParseError[];
 }
 
+export type ComputeRequestWithExternalData = ComputeRequest & {
+  externalData?: AnyMapping<InjectableExternalData>;
+};
+
+// User facing
 export interface ComputePanic {
   type: 'compute-panic';
   message?: string;

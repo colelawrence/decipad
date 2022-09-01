@@ -1,8 +1,18 @@
+import { SerializedStyles } from '@emotion/react';
 import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
-export const Table = (): ReturnType<FC> => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+interface TableIconProps {
+  css?: SerializedStyles;
+}
+
+export const Table: FC<TableIconProps> = ({ css }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    css={css}
+  >
     <title>Table</title>
     <rect
       x="5"

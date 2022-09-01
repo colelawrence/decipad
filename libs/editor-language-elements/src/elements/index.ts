@@ -9,3 +9,4 @@ export * from './Table';
 export * from './Column';
 export * from './VariableDef';
 export * from './DataView';
+export * from './LiveConnection';

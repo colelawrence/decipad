@@ -40,6 +40,7 @@ type TableColumnHeaderProps = PropsWithChildren<
       empty?: boolean;
       focused?: boolean;
       readOnly?: boolean;
+      isForImportedColumn?: boolean;
       attributes?: ElementAttributes;
     }
 >;
@@ -51,6 +52,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   isFirst,
   type = getStringType(),
   readOnly = false,
+  isForImportedColumn = false,
   children,
   ...props
 }) => {
@@ -74,6 +76,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
             parseUnit={parseUnit}
             isFirst={isFirst}
             type={type}
+            isForImportedColumn={isForImportedColumn}
           />
         )
       }

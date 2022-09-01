@@ -109,5 +109,8 @@ export const formatError = (locale: string, spec: ErrSpec): string => {
     case 'need-one-only-one-unit': {
       return 'Need one and only one unit';
     }
+    case 'unknown-reference': {
+      return 'Unknown reference';
+    }
   }
 };

@@ -8,7 +8,7 @@ import {
   ELEMENT_HR,
   MyEditor,
 } from '@decipad/editor-types';
-import { organisms } from '@decipad/ui';
+import { templates } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
 import { ComponentProps } from 'react';
 import { Path } from 'slate';
@@ -24,7 +24,7 @@ import { insertTableBelow } from './table';
 import { insertDataViewBelow } from './data-view';
 
 type SlashCommandHandler = Exclude<
-  ComponentProps<typeof organisms.SlashCommandsMenu>['onExecute'],
+  ComponentProps<typeof templates.SlashCommandsMenu>['onExecute'],
   undefined
 >;
 export type SlashCommand = Parameters<SlashCommandHandler>[0];

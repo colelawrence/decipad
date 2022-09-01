@@ -11,6 +11,7 @@ import {
   grey600,
   grey700,
   offBlack,
+  purple200,
   red500,
   teal500,
   white,
@@ -47,4 +48,5 @@ export const darkTheme: Record<
 
   ...setCssVar('tableSelectionBackgroundColor', blue100.rgb),
   ...setCssVar('tableFocusColor', blue500.rgb),
+  ...setCssVar('liveDataBackgroundColor', purple200.rgb),
 };

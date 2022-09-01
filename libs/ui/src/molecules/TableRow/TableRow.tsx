@@ -28,6 +28,7 @@ interface TableRowProps extends TableCellControlsProps {
   readonly isBeingDragged?: boolean;
   readonly dropLine?: DropLineDirection;
   readonly isVisible?: boolean;
+  readonly tableCellControls?: false | ReactNode;
 
   /**
    * Table cell controls ref
@@ -46,6 +47,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       dragRef,
       isBeingDragged = false,
       isVisible = true,
+      tableCellControls,
     },
     ref
   ): ReturnType<FC> => {
@@ -60,14 +62,15 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
           !isVisible && invisibleTableRowStyles,
         ]}
       >
-        {!readOnly && (
-          <TableCellControls
-            ref={dragRef}
-            readOnly={readOnly}
-            onSelect={onSelect}
-            onRemove={onRemove}
-          />
-        )}
+        {tableCellControls !== false &&
+          (tableCellControls || (
+            <TableCellControls
+              ref={dragRef}
+              readOnly={readOnly}
+              onSelect={onSelect}
+              onRemove={onRemove}
+            />
+          ))}
         {children}
       </tr>
     );

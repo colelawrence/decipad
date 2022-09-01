@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
-import { SlashCommandsMenuItem } from '../../atoms';
+import { InlineMenuItem } from '../../atoms';
 import { circleIcon, inMenu } from '../../storybook-utils';
-import { SlashCommandsMenuGroup } from './SlashCommandsMenuGroup';
+import { InlineMenuGroup } from './InlineMenuGroup';
 
 const args = {
   title: 'Title',
@@ -10,7 +10,7 @@ const args = {
 
 export default {
   title: 'Organisms / Editor / Slash Commands / Group',
-  component: SlashCommandsMenuGroup,
+  component: InlineMenuGroup,
   args,
   parameters: {
     chromatic: { disable: true },
@@ -19,11 +19,11 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = ({ numberOfItems, ...props }) => (
-  <SlashCommandsMenuGroup {...props}>
+  <InlineMenuGroup {...props}>
     {Array(numberOfItems)
       .fill(null)
       .map((_, i) => (
-        <SlashCommandsMenuItem
+        <InlineMenuItem
           key={i}
           title={`Item ${i + 1}`}
           description={`Description ${i + 1} goes here`}
@@ -31,5 +31,5 @@ export const Normal: Story<typeof args> = ({ numberOfItems, ...props }) => (
           enabled
         />
       ))}
-  </SlashCommandsMenuGroup>
+  </InlineMenuGroup>
 );

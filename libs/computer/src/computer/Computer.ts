@@ -26,12 +26,15 @@ import {
   Unit,
   validateResult,
   Value,
+  InjectableExternalData,
 } from '@decipad/language';
 import { anyMappingToMap, getDefined } from '@decipad/utils';
 import assert from 'assert';
 import { dequal } from 'dequal';
+import produce from 'immer';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
+  combineLatestWith,
   concatMap,
   debounceTime,
   distinctUntilChanged,
@@ -42,6 +45,7 @@ import { captureException } from '../reporting';
 import {
   ComputePanic,
   ComputeRequest,
+  ComputeRequestWithExternalData,
   ComputeResponse,
   ComputerParseStatementResult,
   IdentifiedBlock,
@@ -220,6 +224,7 @@ export class Computer {
   private cursorBlockId: string | null = null;
   private requestDebounceMs: number;
   private parseErrors: Map<string, UserParseError> = new Map();
+  private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -233,9 +238,17 @@ export class Computer {
   private wireRequestsToResults() {
     this.computeRequests
       .pipe(
+        combineLatestWith(this.externalData),
         // Debounce to give React an easier time
         debounceTime(this.requestDebounceMs),
         // Make sure the new request is actually different
+        map(
+          ([computeReq, externalData]) =>
+            ({
+              ...computeReq,
+              externalData,
+            } as ComputeRequestWithExternalData)
+        ),
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
         concatMap((req) => this.computeRequest(req)),
@@ -373,10 +386,10 @@ export class Computer {
     program,
     externalData,
     parseErrors,
-  }: ComputeRequest) {
-    const newExternalData = anyMappingToMap(externalData ?? new Map());
+  }: ComputeRequestWithExternalData) {
     const newParse = updateParse(program, this.previouslyParsed);
     const sortedParse = topologicalSort(newParse);
+    const newExternalData = anyMappingToMap(externalData ?? new Map());
 
     this.computationRealm.evictCache({
       oldBlocks: getGoodBlocks(this.previouslyParsed),
@@ -399,7 +412,7 @@ export class Computer {
   }
 
   public async computeRequest(
-    req: ComputeRequest
+    req: ComputeRequestWithExternalData
   ): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
@@ -444,6 +457,23 @@ export class Computer {
 
   public pushCompute(req: ComputeRequest): void {
     this.computeRequests.next(req);
+  }
+
+  public pushExternalDataUpdate(
+    key: string,
+    value: InjectableExternalData
+  ): void {
+    const newValue = new Map(this.externalData.getValue());
+    newValue.set(key, value);
+    this.externalData.next(newValue);
+  }
+
+  public pushExternalDataDelete(key: string): void {
+    this.externalData.next(
+      produce(this.externalData.getValue(), (externalData) => {
+        externalData.delete(key);
+      })
+    );
   }
 
   public setCursorBlockId(blockId: string | null): void {

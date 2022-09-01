@@ -98,14 +98,10 @@ function getResultComponent<T extends SerializedTypeKind>(
 
 // Component
 
-export function CodeResult<T extends SerializedTypeKind>({
-  parentType,
-  type,
-  value,
-  variant = 'block',
-  onDragStartCell,
-  tooltip = true,
-}: CodeResultProps<T>): ReturnType<React.FC> {
+export function CodeResult<T extends SerializedTypeKind>(
+  props: CodeResultProps<T>
+): ReturnType<React.FC> {
+  const { type, value, variant = 'block' } = props;
   const ResultComponent = getResultComponent({ value, variant, type });
 
   // Does not present result when result is not present, except for type errors.
@@ -113,14 +109,5 @@ export function CodeResult<T extends SerializedTypeKind>({
     return null;
   }
 
-  return (
-    <ResultComponent
-      parentType={parentType}
-      type={type}
-      value={value}
-      variant={variant}
-      onDragStartCell={onDragStartCell}
-      tooltip={tooltip}
-    />
-  );
+  return <ResultComponent {...props} />;
 }

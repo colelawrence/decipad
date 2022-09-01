@@ -13,7 +13,6 @@ Select any block by typing its name or scrolling and pressing `enter`.
 
 ![heading](https://user-images.githubusercontent.com/12210180/185147746-c80e405d-b01a-4f9f-a305-aa14f34dec13.gif)
 
-
 ## Delete Blocks
 
 Each block can be deleted by clicking on the drag handle and pressing delete.

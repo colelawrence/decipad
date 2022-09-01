@@ -68,6 +68,9 @@ const valueToString = (result: Result.Result): string => {
 
 const cellType = (type: SerializedType): TableCellType => {
   switch (type.kind) {
+    case 'anything':
+    case 'type-error':
+      return { kind: 'string' };
     case 'boolean':
     case 'date':
     case 'number':

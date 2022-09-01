@@ -67,7 +67,7 @@ const blackFontStyles = css(
   setCssVar('currentTextColor', cssVar('strongTextColor'))
 );
 
-interface SlashCommandsMenuItemProps {
+interface InlineMenuItemProps {
   readonly icon: ReactNode;
   readonly title: string;
   readonly description: string;
@@ -80,14 +80,14 @@ interface SlashCommandsMenuItemProps {
   readonly focused?: boolean;
   readonly onExecute?: () => void;
 }
-export const SlashCommandsMenuItem = ({
+export const InlineMenuItem = ({
   icon,
   title,
   description,
   enabled,
   focused,
   onExecute = noop,
-}: SlashCommandsMenuItemProps): ReturnType<FC> => {
+}: InlineMenuItemProps): ReturnType<FC> => {
   const itemRef = useRef<HTMLButtonElement>(null);
 
   const onKeyDown = useCallback(

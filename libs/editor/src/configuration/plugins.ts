@@ -15,6 +15,7 @@ import {
   createImportPlugin,
   createLayoutColumnsPlugin,
   createLinkPlugin,
+  createLiveConnectionPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
   createNormalizeCodeBlockPlugin,
@@ -63,16 +64,21 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { Computer } from '@decipad/computer';
+import type { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createJuicePlugin } from '@udecode/plate-juice';
+import type { UserInteraction } from '@decipad/react-contexts';
+import { Subject } from 'rxjs';
 import { components } from './components';
 import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
-export const plugins = (computer: Computer) =>
+export const plugins = (
+  computer: Computer,
+  interactions?: Subject<UserInteraction>
+) =>
   createPlugins<MyValue, MyEditor>(
     [
       // basic blocks
@@ -129,7 +135,8 @@ export const plugins = (computer: Computer) =>
         options: { rules: autoformatRules },
       }),
       createAutoFormatCodeBlockPlugin(),
-      createImportPlugin(),
+      createImportPlugin(interactions),
+      createLiveConnectionPlugin(),
 
       // code editing
       createCodeVariableHighlightPlugin(),

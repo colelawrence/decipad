@@ -11,6 +11,10 @@ import { useToast } from '@decipad/toast';
 import { useSession } from 'next-auth/react';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
+import {
+  EditorUserInteractionsProvider,
+  useEditorUserInteractionsContext,
+} from '../../react-contexts/src/editor-user-interactions';
 
 export interface NotebookProps {
   notebookId: string;
@@ -57,6 +61,8 @@ const InsideNotebookState = ({
     return destroy;
   }, [init, destroy, notebookId, secret, slateBaseEditor]);
 
+  const interactions = useEditorUserInteractionsContext();
+
   // Editor
   // Needs to be created last so other editor (e.g. docsync editor) wrapping editor functions
   // (e.g. apply, onChange) can be called with the latest values transformed via plugins. Things
@@ -68,6 +74,7 @@ const InsideNotebookState = ({
     readOnly,
     notebookTitle,
     onNotebookTitleChange,
+    interactions,
   });
 
   useEffect(() => {
@@ -124,7 +131,9 @@ const InsideNotebookState = ({
 export const Notebook: FC<NotebookProps> = (props) => {
   return (
     <NotebookStateProvider>
-      <InsideNotebookState {...props}></InsideNotebookState>
+      <EditorUserInteractionsProvider>
+        <InsideNotebookState {...props}></InsideNotebookState>
+      </EditorUserInteractionsProvider>
     </NotebookStateProvider>
   );
 };

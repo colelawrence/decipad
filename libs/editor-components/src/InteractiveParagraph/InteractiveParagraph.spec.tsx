@@ -24,7 +24,7 @@ import {
 } from '@testing-library/react';
 import { findDomNodePath } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
-import { SlashCommandsParagraph } from './SlashCommandsParagraph';
+import { InteractiveParagraph } from './InteractiveParagraph';
 
 let editor: PlateEditor;
 let plateProps: PlateProps;
@@ -32,7 +32,7 @@ let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {
-      [ELEMENT_PARAGRAPH]: SlashCommandsParagraph(new Computer()),
+      [ELEMENT_PARAGRAPH]: InteractiveParagraph(new Computer()),
     },
   });
 

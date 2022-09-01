@@ -36,6 +36,7 @@ import {
   DataViewHeaderRowElement,
 } from './data-view';
 import {
+  ELEMENT_LIVE_CONNECTION,
   ELEMENT_IMPORT,
   ELEMENT_DATA_VIEW,
   ELEMENT_VARIABLE_DEF,
@@ -43,6 +44,7 @@ import {
 import {
   CaptionElement,
   ExpressionElement,
+  LiveConnectionVarNameElement,
   SliderElement,
 } from './interactive-elements';
 import {
@@ -205,6 +207,7 @@ export type BlockElement =
   | ColumnsElement
   // Special elements
   | InteractiveElement
+  | LiveConnectionVarNameElement
   // Table elements
   | TableInputElement
   | TableElement
@@ -221,6 +224,7 @@ export type BlockElement =
   | DataViewHeaderRowElement
   | DataViewHeader
   | TableColumnFormulaElement;
+
 type InlineElement = LinkElement | BubbleElement | InlineNumberElement;
 
 export type MyValue = [
@@ -279,5 +283,6 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_COLUMNS,
   ELEMENT_EVAL,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_LIVE_CONNECTION,
   ELEMENT_IMPORT,
 ];

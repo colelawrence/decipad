@@ -1,895 +1,895 @@
 {
-	"children": [
-		{
-			"children": [
-				{
-					"text": "Welcome to Decipad 👋 "
-				}
-			],
-			"type": "h1",
-			"id": "36P_VAR1qJQSqxD3o3uhu"
-		},
-		{
-			"children": [
-				{
-					"text": "Bend the world to your favor using numbers"
-				}
-			],
-			"type": "h3",
-			"id": "nasG6-wpTb4LxUfQq1Rb0"
-		},
-		{
-			"children": [
-				{
-					"text": "Decipad is completely free now. We only ask you to"
-				},
-				{
-					"text": " ",
-					"bold": true
-				},
-				{
-					"text": "share your feedback and ideas with the team on "
-				},
-				{
-					"children": [
-						{
-							"text": "Discord"
-						}
-					],
-					"type": "a",
-					"url": "https://discord.com/invite/YT2cuJkHkS",
-					"id": "hMSK_E5fdo9lLVSWXFjxF"
-				},
-				{
-					"text": " or use the feedback"
-				},
-				{
-					"text": " ",
-					"bold": true
-				},
-				{
-					"text": "button on your notebook as you build. "
-				}
-			],
-			"type": "p",
-			"id": "0x2Qyk1QMUihl4M50eboR"
-		},
-		{
-			"children": [
-				{
-					"text": "You always start with a"
-				},
-				{
-					"text": " ",
-					"bold": true
-				},
-				{
-					"text": "notebook, like this one. Drop some numbers, perform calculations and make a story out of it. Duplicate one of our "
-				},
-				{
-					"children": [
-						{
-							"text": "examples"
-						}
-					],
-					"type": "a",
-					"url": "https://alpha.decipad.com/docs/examples/",
-					"id": "xzU4LluG_6BP8n3RRs25g"
-				},
-				{
-					"text": " to get a head-start."
-				}
-			],
-			"type": "p",
-			"id": "KtKXX6RJerpUYToSg8AyT"
-		},
-		{
-			"children": [
-				{
-					"text": "Everything on the notebook is a block, giving you the flexibility to grow your models and experiment with layouts. To add blocks, type"
-				},
-				{
-					"text": "/",
-					"code": true
-				},
-				{
-					"text": "on a blank line."
-				}
-			],
-			"type": "p",
-			"id": "8a__lBCPLLqou9Z0j18NR"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "img",
-			"url": "https://user-images.githubusercontent.com/12210180/185147746-c80e405d-b01a-4f9f-a305-aa14f34dec13.gif",
-			"id": "mhtQTV9TIe7U4yAXS78v-",
-			"width": 468,
-			"caption": [
-				{
-					"text": "Adding Calculations to you Notebook"
-				}
-			]
-		},
-		{
-			"children": [
-				{
-					"text": "Here's an example to get you started"
-				}
-			],
-			"type": "h3",
-			"id": "VhAPerbkVVnBM8g86UMp9"
-		},
-		{
-			"children": [
-				{
-					"text": "Let's start by defining a name for your income amount. \nNotice how it says \"per month\"."
-				}
-			],
-			"type": "p",
-			"id": "DOq4S63qYqSHwKyKhb71X"
-		},
-		{
-			"children": [
-				{
-					"text": "Income = $1000 /month"
-				}
-			],
-			"type": "code_line",
-			"id": "YPWkf60nBZldEsy5G4Yut"
-		},
-		{
-			"children": [
-				{
-					"text": "You can name your numbers as well as use currencies to make calculations more human-friendly. Check how easy they are to read:"
-				}
-			],
-			"type": "p",
-			"id": "rxCxNISouQHHv0jRX8YO1"
-		},
-		{
-			"children": [
-				{
-					"text": "Income_Next3months = Income * 3 months"
-				}
-			],
-			"type": "code_line",
-			"id": "8hioeugl5p6KmVd0OU2h5"
-		},
-		{
-			"children": [
-				{
-					"text": "Add tables to perform calculations quickly. See how organized they look! "
-				}
-			],
-			"type": "p",
-			"id": "NFZa1bhD6634prgMDodxf"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Budget_Month"
-								}
-							],
-							"type": "table-var-name",
-							"id": "dzXlEW7bWrH5BKJXc7t8x"
-						}
-					],
-					"type": "table-caption",
-					"id": "m3hGR25yBJBDAJc57C4qa"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Items"
-								}
-							],
-							"type": "th",
-							"cellType": {
-								"kind": "string"
-							},
-							"id": "-S-qszoeJApOjbnNbMYb6"
-						},
-						{
-							"children": [
-								{
-									"text": "Amount"
-								}
-							],
-							"type": "th",
-							"cellType": {
-								"kind": "number",
-								"unit": [
-									{
-										"unit": "months",
-										"exp": {
-											"s": "-1",
-											"n": "1",
-											"d": "1"
-										},
-										"multiplier": {
-											"s": "1",
-											"n": "1",
-											"d": "1"
-										},
-										"known": true,
-										"baseQuantity": "month",
-										"baseSuperQuantity": "month"
-									},
-									{
-										"unit": "usd",
-										"exp": {
-											"s": "1",
-											"n": "1",
-											"d": "1"
-										},
-										"multiplier": {
-											"s": "1",
-											"n": "1",
-											"d": "1"
-										},
-										"known": true,
-										"baseQuantity": "USD",
-										"baseSuperQuantity": "currency"
-									}
-								]
-							},
-							"id": "y-PgDc5Q3_BU2L_7BzldB",
-							"aggregation": "Sum"
-						}
-					],
-					"type": "tr",
-					"id": "8FjUvoSiy8_-xIrmD_dF2"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Rent"
-								}
-							],
-							"type": "td",
-							"id": "7iZYveqW52mUkjrOdLtpe"
-						},
-						{
-							"children": [
-								{
-									"text": "300"
-								}
-							],
-							"type": "td",
-							"id": "8fDEm9Cf8JOySV_BfsFMo"
-						}
-					],
-					"type": "tr",
-					"id": "cfurx2nB0qt-Rj4L8Q__w"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Food"
-								}
-							],
-							"type": "td",
-							"id": "dHRUBq5MIrXW9Ed_G-W_B"
-						},
-						{
-							"children": [
-								{
-									"text": "100"
-								}
-							],
-							"type": "td",
-							"id": "4K1eqeaLeb_KIJFWlIsUk"
-						}
-					],
-					"type": "tr",
-					"id": "0Fs2ZP2gY7k8fd9QBw4t7"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Fun"
-								}
-							],
-							"type": "td",
-							"id": "WWjk74a5GNeAElXtNWimN"
-						},
-						{
-							"children": [
-								{
-									"text": "300"
-								}
-							],
-							"type": "td",
-							"id": "-E1tDuOMPrFpcin3_Z5ID"
-						}
-					],
-					"type": "tr",
-					"id": "24o1vqDvZ6mV7tQqo12s_"
-				}
-			],
-			"type": "table",
-			"color": "Catskill",
-			"icon": "Wallet",
-			"id": "h7SY4hfnZ74bRcHuKXKxX"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Three_Month_Plan"
-								}
-							],
-							"type": "table-var-name",
-							"id": "p_doP29hRUm4xsmOlZfEz"
-						},
-						{
-							"children": [
-								{
-									"text": "Budget_Month "
-								}
-							],
-							"type": "table-column-formula",
-							"columnId": "yIhzJrsNxiD4EFO2tE-5M",
-							"id": "FRfU5UPMqAkRTN6uRKSNh"
-						},
-						{
-							"children": [
-								{
-									"text": "Income - sum(Budget_Month.Amount )"
-								}
-							],
-							"type": "table-column-formula",
-							"columnId": "XSkAnrWPJBesYnV1KFc0U",
-							"id": "sK24GcJ4NxyzqnM1oPObk"
-						}
-					],
-					"type": "table-caption",
-					"id": "GlsQ1SpFajJtWJr57slcp"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Month"
-								}
-							],
-							"type": "th",
-							"cellType": {
-								"kind": "series",
-								"seriesType": "date"
-							},
-							"id": "grFr-2tCO42skMlU2pryc"
-						},
-						{
-							"children": [
-								{
-									"text": "Budget"
-								}
-							],
-							"type": "th",
-							"cellType": {
-								"kind": "table-formula"
-							},
-							"id": "yIhzJrsNxiD4EFO2tE-5M"
-						},
-						{
-							"children": [
-								{
-									"text": "Savings"
-								}
-							],
-							"type": "th",
-							"cellType": {
-								"kind": "table-formula"
-							},
-							"id": "XSkAnrWPJBesYnV1KFc0U",
-							"aggregation": "Sum"
-						}
-					],
-					"type": "tr",
-					"id": "6nEbgm6DrFLzDUn9jjtWY"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "2022-01"
-								}
-							],
-							"type": "td",
-							"id": "xqx6FeyZ5bYFZNrbn_wyZ"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								}
-							],
-							"type": "td",
-							"id": "4LLYzeTAuvApAz5_nZ3uw"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								}
-							],
-							"type": "td",
-							"id": "HluKP5bZpJbhShL9le9A4"
-						}
-					],
-					"type": "tr",
-					"id": "U2DBphdEx8er6feT493t7"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "2022-02"
-								}
-							],
-							"type": "td",
-							"id": "DXXvn4FuFuruZc5bf0Qj9"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								}
-							],
-							"type": "td",
-							"id": "TD4VDgoyGyoF1zwHpjVmc"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								}
-							],
-							"type": "td",
-							"id": "Plu8UrJixjdnG_P-P9dop"
-						}
-					],
-					"type": "tr",
-					"id": "QcGHoCRm48tJN0zCNTcvd"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "2022-03"
-								}
-							],
-							"type": "td",
-							"id": "UWxgv92W3TXlINy5lcTY1"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								}
-							],
-							"type": "td",
-							"id": "FZ53gdiY8By921cqCX_FU"
-						},
-						{
-							"children": [
-								{
-									"text": ""
-								}
-							],
-							"type": "td",
-							"id": "IlIPuqQQ_SwoQtEH23Yp2"
-						}
-					],
-					"type": "tr",
-					"id": "jnTYWh0K_c9WDeNmkTGID"
-				}
-			],
-			"type": "table",
-			"id": "vBKsY4neq5Y-e1YAZP5_q"
-		},
-		{
-			"children": [
-				{
-					"text": "You can recall your numbers inside your text, to provide context and drive insights."
-				}
-			],
-			"type": "p",
-			"id": "dKNINHFul0QaXy9BnOLib"
-		},
-		{
-			"children": [
-				{
-					"text": "In the next 3 months, you will save "
-				},
-				{
-					"text": "sum(Three_Month_Plan.Savings * month)",
-					"magicnumberz": true
-				},
-				{
-					"text": " based on your model."
-				}
-			],
-			"type": "p",
-			"id": "UvjgrqhohcfEEMtr7mUrM"
-		},
-		{
-			"children": [
-				{
-					"text": "Congratulations. You just created your first notebook!  ",
-					"bold": true
-				}
-			],
-			"type": "p",
-			"id": "9BUly6FPBT-9MqLBrSJNo"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "A3OkDy7YAie9JFWtMZJjr"
-		},
-		{
-			"children": [
-				{
-					"text": "Share your notebooks"
-				}
-			],
-			"type": "h2",
-			"id": "yndi-jxEuwaCA49bnWpQR"
-		},
-		{
-			"children": [
-				{
-					"text": "On Decipad you can share your notebooks by making them public and sharing the link. Everyone with the link will be able to play with your model and"
-				},
-				{
-					"text": " ",
-					"bold": true
-				},
-				{
-					"text": "duplicate to remix,"
-				},
-				{
-					"text": " ",
-					"bold": true
-				},
-				{
-					"text": "while your original notebook stays the same until you decide to change it again."
-				}
-			],
-			"type": "p",
-			"id": "tJXaW6aMVG5_fAq0BtIad"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "rFE13gpNlaU88ij0i1b1m"
-		},
-		{
-			"children": [
-				{
-					"text": "Learn about other cool features"
-				}
-			],
-			"type": "h2",
-			"id": "zhTOZ2ZqLtidCXsWsYoj0"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Create interactive notebooks with "
-								},
-								{
-									"children": [
-										{
-											"text": "widgets"
-										}
-									],
-									"type": "a",
-									"url": "https://alpha.decipad.com/docs/widgets",
-									"id": "JPbCnmRC_NQM-NxsmizVa"
-								},
-								{
-									"text": ""
-								}
-							],
-							"type": "lic",
-							"id": "8owRx_dpnvr6in41nXqY6"
-						}
-					],
-					"type": "li",
-					"id": "tVzcV_vg__PAgSgkrl15s"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Create "
-								},
-								{
-									"children": [
-										{
-											"text": "custom formulas"
-										}
-									],
-									"type": "a",
-									"url": "https://alpha.decipad.com/docs/language/formulas#custom-formulas",
-									"id": "82pGUQo94goGtTZ7FacgO"
-								},
-								{
-									"text": " to help with calculations"
-								}
-							],
-							"type": "lic",
-							"id": "G70SRlutVI8uhXCexwbpD"
-						}
-					],
-					"type": "li",
-					"id": "HuWkKUOhJ0bR0MvPwJCSD"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Create "
-								},
-								{
-									"children": [
-										{
-											"text": "decision tables"
-										}
-									],
-									"type": "a",
-									"url": "https://alpha.decipad.com/docs/language/advanced-concepts/decision-tables",
-									"id": "sbrgJee1eck9nRqa4E3Md"
-								},
-								{
-									"text": " to help with commissions and taxes"
-								}
-							],
-							"type": "lic",
-							"id": "k16d6jsMD33mRQiRVFEAO"
-						}
-					],
-					"type": "li",
-					"id": "r_NCDFJ0HVhpO-sBiwjni"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Create simpler calculations with custom and supported "
-								},
-								{
-									"children": [
-										{
-											"text": "units"
-										}
-									],
-									"type": "a",
-									"url": "https://alpha.decipad.com/docs/language/units/",
-									"id": "T2ID9w9WM2opkaF_rIPKo"
-								},
-								{
-									"text": ""
-								}
-							],
-							"type": "lic",
-							"id": "7z90VAvv8Vc6q_UXkb05v"
-						}
-					],
-					"type": "li",
-					"id": "1yTIjdQfn2DuOAgNFBndv"
-				}
-			],
-			"type": "ul",
-			"id": "doTxHDevbFq7BXiv0uLaZ"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "5ds20uMy8_1PPAMDBEjMs"
-		},
-		{
-			"children": [
-				{
-					"text": "Keep exploring Decipad"
-				}
-			],
-			"type": "h2",
-			"id": "iIpmGrGK4pHBZXTXzbRkv"
-		},
-		{
-			"children": [
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Get inspired by checking our gallery of "
-								},
-								{
-									"children": [
-										{
-											"text": "examples"
-										}
-									],
-									"type": "a",
-									"url": "https://alpha.decipad.com/docs/examples/",
-									"id": "abFSe6_UqUNjMsOS8c6Ev"
-								},
-								{
-									"text": ""
-								}
-							],
-							"type": "lic",
-							"id": "1Ej3IjT2_xQlXmJZcOWDc"
-						}
-					],
-					"type": "li",
-					"id": "hF-4WLpFNXvrGpnIcs5Xm"
-				},
-				{
-					"children": [
-						{
-							"children": [
-								{
-									"text": "Learn more about calculations on our "
-								},
-								{
-									"children": [
-										{
-											"text": "documentation page"
-										}
-									],
-									"type": "a",
-									"url": "https://alpha.decipad.com/docs/quick-start/get-started-with-decipad",
-									"id": "HslfPuhID7VcJyszeXZIv"
-								},
-								{
-									"text": ""
-								}
-							],
-							"type": "lic",
-							"id": "4Kb4DvAUyJMQ_aUUGSLqd"
-						}
-					],
-					"type": "li",
-					"id": "xlpMM5LiCdMeSCH1o_hZB"
-				}
-			],
-			"type": "ul",
-			"id": "bMyQPgecslQo8-PWyP0MU"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "3eV72ccIbML9tD9ngJXwT"
-		},
-		{
-			"children": [
-				{
-					"text": "You Rock!"
-				}
-			],
-			"type": "h2",
-			"id": "igNHzgbJcqrWXoQrEZZ63"
-		},
-		{
-			"children": [
-				{
-					"text": "Thank you for being part of our mission to empower everyone to explore numbers in meaningful ways."
-				}
-			],
-			"type": "p",
-			"id": "_FnxZDSfTQuSYxHAI2J3r"
-		},
-		{
-			"children": [
-				{
-					"text": "We're looking forward to keeping learning from you, so join "
-				},
-				{
-					"children": [
-						{
-							"text": "Discord"
-						}
-					],
-					"type": "a",
-					"url": "https://discord.com/invite/YT2cuJkHkS",
-					"id": "RZecO5lIkGblx1SZMo1HN"
-				},
-				{
-					"text": " and share your needs and ideas with us. "
-				}
-			],
-			"type": "p",
-			"id": "CBwMlRJ3OAD96LK-22jN0"
-		},
-		{
-			"children": [
-				{
-					"text": "Stay Curious, the Decipad Team 💚",
-					"bold": true
-				}
-			],
-			"type": "p",
-			"id": "8GlxBk2h8UqkPcIOa4A4N"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "cCYvROGhJ1ghnEzxq7IuB"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "VHlQTC890M_iHauLXvlqW"
-		},
-		{
-			"children": [
-				{
-					"text": ""
-				}
-			],
-			"type": "p",
-			"id": "PGS1dvDdtDvWMcIvnsDB4"
-		}
-	]
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Welcome to Decipad 👋 "
+        }
+      ],
+      "type": "h1",
+      "id": "36P_VAR1qJQSqxD3o3uhu"
+    },
+    {
+      "children": [
+        {
+          "text": "Bend the world to your favor using numbers"
+        }
+      ],
+      "type": "h3",
+      "id": "nasG6-wpTb4LxUfQq1Rb0"
+    },
+    {
+      "children": [
+        {
+          "text": "Decipad is completely free now. We only ask you to"
+        },
+        {
+          "text": " ",
+          "bold": true
+        },
+        {
+          "text": "share your feedback and ideas with the team on "
+        },
+        {
+          "children": [
+            {
+              "text": "Discord"
+            }
+          ],
+          "type": "a",
+          "url": "https://discord.com/invite/YT2cuJkHkS",
+          "id": "hMSK_E5fdo9lLVSWXFjxF"
+        },
+        {
+          "text": " or use the feedback"
+        },
+        {
+          "text": " ",
+          "bold": true
+        },
+        {
+          "text": "button on your notebook as you build. "
+        }
+      ],
+      "type": "p",
+      "id": "0x2Qyk1QMUihl4M50eboR"
+    },
+    {
+      "children": [
+        {
+          "text": "You always start with a"
+        },
+        {
+          "text": " ",
+          "bold": true
+        },
+        {
+          "text": "notebook, like this one. Drop some numbers, perform calculations and make a story out of it. Duplicate one of our "
+        },
+        {
+          "children": [
+            {
+              "text": "examples"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/docs/examples/",
+          "id": "xzU4LluG_6BP8n3RRs25g"
+        },
+        {
+          "text": " to get a head-start."
+        }
+      ],
+      "type": "p",
+      "id": "KtKXX6RJerpUYToSg8AyT"
+    },
+    {
+      "children": [
+        {
+          "text": "Everything on the notebook is a block, giving you the flexibility to grow your models and experiment with layouts. To add blocks, type"
+        },
+        {
+          "text": "/",
+          "code": true
+        },
+        {
+          "text": "on a blank line."
+        }
+      ],
+      "type": "p",
+      "id": "8a__lBCPLLqou9Z0j18NR"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "img",
+      "url": "https://user-images.githubusercontent.com/12210180/185147746-c80e405d-b01a-4f9f-a305-aa14f34dec13.gif",
+      "id": "mhtQTV9TIe7U4yAXS78v-",
+      "width": 468,
+      "caption": [
+        {
+          "text": "Adding Calculations to you Notebook"
+        }
+      ]
+    },
+    {
+      "children": [
+        {
+          "text": "Here's an example to get you started"
+        }
+      ],
+      "type": "h3",
+      "id": "VhAPerbkVVnBM8g86UMp9"
+    },
+    {
+      "children": [
+        {
+          "text": "Let's start by defining a name for your income amount. \nNotice how it says \"per month\"."
+        }
+      ],
+      "type": "p",
+      "id": "DOq4S63qYqSHwKyKhb71X"
+    },
+    {
+      "children": [
+        {
+          "text": "Income = $1000 /month"
+        }
+      ],
+      "type": "code_line",
+      "id": "YPWkf60nBZldEsy5G4Yut"
+    },
+    {
+      "children": [
+        {
+          "text": "You can name your numbers as well as use currencies to make calculations more human-friendly. Check how easy they are to read:"
+        }
+      ],
+      "type": "p",
+      "id": "rxCxNISouQHHv0jRX8YO1"
+    },
+    {
+      "children": [
+        {
+          "text": "Income_Next3months = Income * 3 months"
+        }
+      ],
+      "type": "code_line",
+      "id": "8hioeugl5p6KmVd0OU2h5"
+    },
+    {
+      "children": [
+        {
+          "text": "Add tables to perform calculations quickly. See how organized they look! "
+        }
+      ],
+      "type": "p",
+      "id": "NFZa1bhD6634prgMDodxf"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Budget_Month"
+                }
+              ],
+              "type": "table-var-name",
+              "id": "dzXlEW7bWrH5BKJXc7t8x"
+            }
+          ],
+          "type": "table-caption",
+          "id": "m3hGR25yBJBDAJc57C4qa"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Items"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "string"
+              },
+              "id": "-S-qszoeJApOjbnNbMYb6"
+            },
+            {
+              "children": [
+                {
+                  "text": "Amount"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "unit": "months",
+                    "exp": {
+                      "s": "-1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "multiplier": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "known": true,
+                    "baseQuantity": "month",
+                    "baseSuperQuantity": "month"
+                  },
+                  {
+                    "unit": "usd",
+                    "exp": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "multiplier": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "known": true,
+                    "baseQuantity": "USD",
+                    "baseSuperQuantity": "currency"
+                  }
+                ]
+              },
+              "id": "y-PgDc5Q3_BU2L_7BzldB",
+              "aggregation": "Sum"
+            }
+          ],
+          "type": "tr",
+          "id": "8FjUvoSiy8_-xIrmD_dF2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Rent"
+                }
+              ],
+              "type": "td",
+              "id": "7iZYveqW52mUkjrOdLtpe"
+            },
+            {
+              "children": [
+                {
+                  "text": "300"
+                }
+              ],
+              "type": "td",
+              "id": "8fDEm9Cf8JOySV_BfsFMo"
+            }
+          ],
+          "type": "tr",
+          "id": "cfurx2nB0qt-Rj4L8Q__w"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Food"
+                }
+              ],
+              "type": "td",
+              "id": "dHRUBq5MIrXW9Ed_G-W_B"
+            },
+            {
+              "children": [
+                {
+                  "text": "100"
+                }
+              ],
+              "type": "td",
+              "id": "4K1eqeaLeb_KIJFWlIsUk"
+            }
+          ],
+          "type": "tr",
+          "id": "0Fs2ZP2gY7k8fd9QBw4t7"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Fun"
+                }
+              ],
+              "type": "td",
+              "id": "WWjk74a5GNeAElXtNWimN"
+            },
+            {
+              "children": [
+                {
+                  "text": "300"
+                }
+              ],
+              "type": "td",
+              "id": "-E1tDuOMPrFpcin3_Z5ID"
+            }
+          ],
+          "type": "tr",
+          "id": "24o1vqDvZ6mV7tQqo12s_"
+        }
+      ],
+      "type": "table",
+      "color": "Catskill",
+      "icon": "Wallet",
+      "id": "h7SY4hfnZ74bRcHuKXKxX"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Three_Month_Plan"
+                }
+              ],
+              "type": "table-var-name",
+              "id": "p_doP29hRUm4xsmOlZfEz"
+            },
+            {
+              "children": [
+                {
+                  "text": "Budget_Month "
+                }
+              ],
+              "type": "table-column-formula",
+              "columnId": "yIhzJrsNxiD4EFO2tE-5M",
+              "id": "FRfU5UPMqAkRTN6uRKSNh"
+            },
+            {
+              "children": [
+                {
+                  "text": "Income - sum(Budget_Month.Amount )"
+                }
+              ],
+              "type": "table-column-formula",
+              "columnId": "XSkAnrWPJBesYnV1KFc0U",
+              "id": "sK24GcJ4NxyzqnM1oPObk"
+            }
+          ],
+          "type": "table-caption",
+          "id": "GlsQ1SpFajJtWJr57slcp"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Month"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "series",
+                "seriesType": "date"
+              },
+              "id": "grFr-2tCO42skMlU2pryc"
+            },
+            {
+              "children": [
+                {
+                  "text": "Budget"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "id": "yIhzJrsNxiD4EFO2tE-5M"
+            },
+            {
+              "children": [
+                {
+                  "text": "Savings"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "id": "XSkAnrWPJBesYnV1KFc0U",
+              "aggregation": "Sum"
+            }
+          ],
+          "type": "tr",
+          "id": "6nEbgm6DrFLzDUn9jjtWY"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2022-01"
+                }
+              ],
+              "type": "td",
+              "id": "xqx6FeyZ5bYFZNrbn_wyZ"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "4LLYzeTAuvApAz5_nZ3uw"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "HluKP5bZpJbhShL9le9A4"
+            }
+          ],
+          "type": "tr",
+          "id": "U2DBphdEx8er6feT493t7"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2022-02"
+                }
+              ],
+              "type": "td",
+              "id": "DXXvn4FuFuruZc5bf0Qj9"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "TD4VDgoyGyoF1zwHpjVmc"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "Plu8UrJixjdnG_P-P9dop"
+            }
+          ],
+          "type": "tr",
+          "id": "QcGHoCRm48tJN0zCNTcvd"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2022-03"
+                }
+              ],
+              "type": "td",
+              "id": "UWxgv92W3TXlINy5lcTY1"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "FZ53gdiY8By921cqCX_FU"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "IlIPuqQQ_SwoQtEH23Yp2"
+            }
+          ],
+          "type": "tr",
+          "id": "jnTYWh0K_c9WDeNmkTGID"
+        }
+      ],
+      "type": "table",
+      "id": "vBKsY4neq5Y-e1YAZP5_q"
+    },
+    {
+      "children": [
+        {
+          "text": "You can recall your numbers inside your text, to provide context and drive insights."
+        }
+      ],
+      "type": "p",
+      "id": "dKNINHFul0QaXy9BnOLib"
+    },
+    {
+      "children": [
+        {
+          "text": "In the next 3 months, you will save "
+        },
+        {
+          "text": "sum(Three_Month_Plan.Savings * month)",
+          "magicnumberz": true
+        },
+        {
+          "text": " based on your model."
+        }
+      ],
+      "type": "p",
+      "id": "UvjgrqhohcfEEMtr7mUrM"
+    },
+    {
+      "children": [
+        {
+          "text": "Congratulations. You just created your first notebook!  ",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "9BUly6FPBT-9MqLBrSJNo"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "A3OkDy7YAie9JFWtMZJjr"
+    },
+    {
+      "children": [
+        {
+          "text": "Share your notebooks"
+        }
+      ],
+      "type": "h2",
+      "id": "yndi-jxEuwaCA49bnWpQR"
+    },
+    {
+      "children": [
+        {
+          "text": "On Decipad you can share your notebooks by making them public and sharing the link. Everyone with the link will be able to play with your model and"
+        },
+        {
+          "text": " ",
+          "bold": true
+        },
+        {
+          "text": "duplicate to remix,"
+        },
+        {
+          "text": " ",
+          "bold": true
+        },
+        {
+          "text": "while your original notebook stays the same until you decide to change it again."
+        }
+      ],
+      "type": "p",
+      "id": "tJXaW6aMVG5_fAq0BtIad"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "rFE13gpNlaU88ij0i1b1m"
+    },
+    {
+      "children": [
+        {
+          "text": "Learn about other cool features"
+        }
+      ],
+      "type": "h2",
+      "id": "zhTOZ2ZqLtidCXsWsYoj0"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Create interactive notebooks with "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "widgets"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/widgets",
+                  "id": "JPbCnmRC_NQM-NxsmizVa"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "8owRx_dpnvr6in41nXqY6"
+            }
+          ],
+          "type": "li",
+          "id": "tVzcV_vg__PAgSgkrl15s"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Create "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "custom formulas"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/language/formulas#custom-formulas",
+                  "id": "82pGUQo94goGtTZ7FacgO"
+                },
+                {
+                  "text": " to help with calculations"
+                }
+              ],
+              "type": "lic",
+              "id": "G70SRlutVI8uhXCexwbpD"
+            }
+          ],
+          "type": "li",
+          "id": "HuWkKUOhJ0bR0MvPwJCSD"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Create "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "decision tables"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/language/advanced-concepts/decision-tables",
+                  "id": "sbrgJee1eck9nRqa4E3Md"
+                },
+                {
+                  "text": " to help with commissions and taxes"
+                }
+              ],
+              "type": "lic",
+              "id": "k16d6jsMD33mRQiRVFEAO"
+            }
+          ],
+          "type": "li",
+          "id": "r_NCDFJ0HVhpO-sBiwjni"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Create simpler calculations with custom and supported "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "units"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/language/units/",
+                  "id": "T2ID9w9WM2opkaF_rIPKo"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "7z90VAvv8Vc6q_UXkb05v"
+            }
+          ],
+          "type": "li",
+          "id": "1yTIjdQfn2DuOAgNFBndv"
+        }
+      ],
+      "type": "ul",
+      "id": "doTxHDevbFq7BXiv0uLaZ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "5ds20uMy8_1PPAMDBEjMs"
+    },
+    {
+      "children": [
+        {
+          "text": "Keep exploring Decipad"
+        }
+      ],
+      "type": "h2",
+      "id": "iIpmGrGK4pHBZXTXzbRkv"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Get inspired by checking our gallery of "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "examples"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/examples/",
+                  "id": "abFSe6_UqUNjMsOS8c6Ev"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "1Ej3IjT2_xQlXmJZcOWDc"
+            }
+          ],
+          "type": "li",
+          "id": "hF-4WLpFNXvrGpnIcs5Xm"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Learn more about calculations on our "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "documentation page"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://alpha.decipad.com/docs/quick-start/get-started-with-decipad",
+                  "id": "HslfPuhID7VcJyszeXZIv"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "4Kb4DvAUyJMQ_aUUGSLqd"
+            }
+          ],
+          "type": "li",
+          "id": "xlpMM5LiCdMeSCH1o_hZB"
+        }
+      ],
+      "type": "ul",
+      "id": "bMyQPgecslQo8-PWyP0MU"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "3eV72ccIbML9tD9ngJXwT"
+    },
+    {
+      "children": [
+        {
+          "text": "You Rock!"
+        }
+      ],
+      "type": "h2",
+      "id": "igNHzgbJcqrWXoQrEZZ63"
+    },
+    {
+      "children": [
+        {
+          "text": "Thank you for being part of our mission to empower everyone to explore numbers in meaningful ways."
+        }
+      ],
+      "type": "p",
+      "id": "_FnxZDSfTQuSYxHAI2J3r"
+    },
+    {
+      "children": [
+        {
+          "text": "We're looking forward to keeping learning from you, so join "
+        },
+        {
+          "children": [
+            {
+              "text": "Discord"
+            }
+          ],
+          "type": "a",
+          "url": "https://discord.com/invite/YT2cuJkHkS",
+          "id": "RZecO5lIkGblx1SZMo1HN"
+        },
+        {
+          "text": " and share your needs and ideas with us. "
+        }
+      ],
+      "type": "p",
+      "id": "CBwMlRJ3OAD96LK-22jN0"
+    },
+    {
+      "children": [
+        {
+          "text": "Stay Curious, the Decipad Team 💚",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "8GlxBk2h8UqkPcIOa4A4N"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "cCYvROGhJ1ghnEzxq7IuB"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "VHlQTC890M_iHauLXvlqW"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "PGS1dvDdtDvWMcIvnsDB4"
+    }
+  ]
 }

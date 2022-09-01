@@ -1,0 +1,1 @@
+export { InteractiveParagraph } from './InteractiveParagraph';

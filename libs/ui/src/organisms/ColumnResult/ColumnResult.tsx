@@ -37,7 +37,6 @@ export const ColumnResult = ({
       isReadOnly={true}
       columnCount={2}
       border={isNested ? 'inner' : 'all'}
-      translateX
       hiddenRowCount={
         isCollapsed && typeof type.columnSize === 'number'
           ? Math.max(0, type.columnSize - defaultMaxRows)

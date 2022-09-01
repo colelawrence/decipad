@@ -40,6 +40,7 @@
     "interfaces": "libs/interfaces",
     "lambdas": "libs/lambdas",
     "language": "libs/language",
+    "live-connect": "libs/live-connect",
     "meta": "libs/meta",
     "nodelambda": "libs/nodelambda",
     "notebook": "libs/notebook",

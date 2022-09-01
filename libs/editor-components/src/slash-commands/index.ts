@@ -1,1 +1,0 @@
-export { SlashCommandsParagraph } from './SlashCommandsParagraph';

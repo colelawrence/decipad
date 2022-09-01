@@ -29,12 +29,19 @@ export {
   tokenize,
   CompareValues,
   getBuiltinsForAutocomplete,
+  deserializeType,
+  Table,
+  Column,
   areUnitsConvertible,
   convertBetweenUnits,
   currencyUnits,
 } from '@decipad/language';
 
-export type { AutocompleteName, ErrSpec } from '@decipad/language';
+export type {
+  AutocompleteName,
+  ErrSpec,
+  InjectableExternalData,
+} from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

@@ -16,19 +16,38 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_IMPORT,
+  ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
-import type { TableElement, TableInputElement } from './table';
+import type { TableCellType, TableElement, TableInputElement } from './table';
 
 export type { TableElement };
 
-export type ImportElementSource = 'gsheets'; // add more as they come
+export type ImportElementSource = 'gsheets' | 'csv' | 'json' | 'arrow';
 export interface ImportElement extends BaseElement {
   type: typeof ELEMENT_IMPORT;
-  source: ImportElementSource;
+  source?: ImportElementSource;
   url: string;
   children: [EmptyText];
+}
+
+export interface LiveConnectionVarNameElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_CONNECTION_VARIABLE_NAME;
+  children: [PlainText];
+}
+
+// live connection
+
+export type ColIndex = number;
+export interface LiveConnectionElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_CONNECTION;
+  url: string;
+  source?: ImportElementSource;
+  isFirstRowHeaderRow: boolean;
+  columnTypeCoercions: Record<ColIndex, TableCellType>;
+  children: [LiveConnectionVarNameElement];
 }
 
 // legacy FetchElement
@@ -129,6 +148,7 @@ export type InteractiveElement =
   | TableElement
   | FetchElement
   | ImportElement
+  | LiveConnectionElement
   | PlotElement
   | EvalElement
   | InputElement

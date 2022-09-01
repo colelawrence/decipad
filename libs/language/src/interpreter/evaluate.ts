@@ -81,6 +81,7 @@ export async function evaluate(
       if (value != null) {
         return value;
       }
+
       const type = realm.getTypeAt(node);
       const unit = getDefined(
         type.unit,
@@ -89,8 +90,11 @@ export async function evaluate(
       return Scalar.fromValue(multiplyMultipliers(unit));
     }
     case 'externalref': {
-      const { value } = getDefined(realm.externalData.get(node.args[0]));
-      return value;
+      const data = realm.externalData.get(node.args[0]);
+      if (data) {
+        return data.value;
+      }
+      return UnknownValue;
     }
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);

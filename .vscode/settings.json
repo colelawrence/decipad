@@ -36,6 +36,7 @@
     "Swappable",
     "testutils",
     "Topbar",
+    "tweakable",
     "typecheck",
     "udecode",
     "urql",
