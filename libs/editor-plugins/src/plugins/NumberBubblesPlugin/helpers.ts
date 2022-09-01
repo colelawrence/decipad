@@ -77,17 +77,16 @@ export const jumpOutInlineNumber = (
   const bubblePath = findNodePath(editor, node);
   if (!bubblePath) return;
 
-  const nextNode = getNextNode(editor, {
-    at: bubblePath,
-  });
+  const nextNode = getNextNode(editor, { at: bubblePath });
   if (!nextNode) return;
 
   const [, nextPath] = nextNode;
-  const endPoint = getEndPoint(editor, nextPath);
+  const endPoint = getStartPoint(editor, nextPath);
+  const skipSpace = { ...endPoint, offset: endPoint.offset + 1 };
 
   focusEditor(editor, {
-    focus: endPoint,
-    anchor: endPoint,
+    focus: skipSpace,
+    anchor: skipSpace,
   });
 };
 

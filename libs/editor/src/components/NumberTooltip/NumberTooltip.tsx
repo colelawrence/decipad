@@ -1,9 +1,10 @@
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { blue500 } from '@decipad/ui';
-import { css } from '@emotion/react';
 import React, { FC } from 'react';
+import { css } from '@emotion/react';
+import { blue500 } from '@decipad/ui';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { InlineNumberElement, useTEditorRef } from '@decipad/editor-types';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
+import { jumpOutInlineNumber } from '@decipad/editor-plugins';
 import { useNumberToolbar } from './hooks/useNumberToolbar';
 import { wrapperStyles } from '../Tooltip/styles/wrapper';
 
@@ -39,6 +40,12 @@ const NameInput: React.FC<{ bubble: InlineNumberElement }> = ({ bubble }) => {
         const newName = event.target.value;
 
         updateName(newName);
+      }}
+      onKeyDown={(event) => {
+        if (/(Enter|Tab)/.test(event.key)) {
+          event.preventDefault();
+          jumpOutInlineNumber(editor, bubble);
+        }
       }}
     />
   );

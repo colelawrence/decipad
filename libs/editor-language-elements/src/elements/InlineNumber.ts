@@ -18,12 +18,19 @@ export const getUnparsedBlockFromInlineNumber = async (
   if (block.type !== ELEMENT_INLINE_NUMBER) return [];
 
   const varName = cleanUpVarName(block.name);
-  const expression = getNodeString(block);
+  const expression = cleanUpExpression(getNodeString(block));
 
   return [parseElementVariableAssignment(block.id, varName, expression)];
 };
 
-const cleanUpVarName = (text: string): string => text.replace(/\s/g, '_');
+const cleanUpVarName = (text: string): string =>
+  text
+    .replace(/[^\p{Letter}\p{Mark}\p{Number} ]/gu, '')
+    .replace(/^([0-9])/g, '_$1')
+    .replace(/\s/g, '_');
+
+const cleanUpExpression = (expr: string): string =>
+  expr.replace(/[\u200B-\u200D\uFEFF]/g, ' ');
 
 export const InlineNumber: InteractiveLanguageElement = {
   type: ELEMENT_INLINE_NUMBER,
