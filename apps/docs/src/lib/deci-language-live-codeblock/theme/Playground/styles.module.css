@@ -3,8 +3,6 @@
   border-radius: var(--ifm-global-radius);
   box-shadow: var(--ifm-global-shadow-lw);
   overflow: hidden;
-
-  max-width: 652px;
 }
 
 .playgroundHeader {

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 350
+sidebar_class_name: hide-from-sidebar
+hide_table_of_contents: true
 ---
 
 # Playground

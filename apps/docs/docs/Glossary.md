@@ -1,5 +1,6 @@
 ---
 sidebar_position: 500
+sidebar_class_name: hide-from-sidebar
 ---
 
 # Glossary
