@@ -4,9 +4,9 @@ import {
   map,
   Observable,
   concat,
-  from,
-  merge,
   debounceTime,
+  of,
+  merge,
 } from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
@@ -39,9 +39,9 @@ export function useEditorChange<T>(
 ): void {
   const editor = getDefined(usePlateEditorRef<MyValue>());
   const editorChanges = useContext(EditorChangeContext);
-  const first = from([undefined]);
-  const editorChanges$ = concat(first, editorChanges);
+
   useEffect(() => {
+    const editorChanges$ = concat(of(undefined), editorChanges);
     const observable = injectObservable
       ? merge(editorChanges$, injectObservable)
       : editorChanges$;
@@ -53,8 +53,6 @@ export function useEditorChange<T>(
       )
       .subscribe(callback);
 
-    // manually trigger the first event
-
     return () => {
       subscription.unsubscribe();
     };
@@ -64,6 +62,6 @@ export function useEditorChange<T>(
     editor,
     debounceTimeMs,
     injectObservable,
-    editorChanges$,
+    editorChanges,
   ]);
 }

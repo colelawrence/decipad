@@ -4,7 +4,6 @@ export * from './BubbleEditor';
 export * from './CodeErrorHighlight';
 export * from './CodeLine';
 export * from './EvalCodeArea';
-export * from './LiveConnection';
 export * from './Import/Import';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';

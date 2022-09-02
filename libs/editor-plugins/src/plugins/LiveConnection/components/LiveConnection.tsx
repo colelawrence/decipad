@@ -15,8 +15,7 @@ import {
 import { atoms, molecules, organisms } from '@decipad/ui';
 import { useLiveConnection } from '@decipad/live-connect';
 import { useComputer } from '@decipad/react-contexts';
-import { DraggableBlock } from '../block-management';
-import { BlockErrorBoundary } from '../BlockErrorBoundary';
+import { DraggableBlock, BlockErrorBoundary } from '@decipad/editor-components';
 
 interface LiveConnectionInnerProps {
   element: LiveConnectionElement;
@@ -83,11 +82,7 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
   );
 };
 
-export const LiveConnection: PlateComponent = ({
-  attributes,
-  children,
-  element,
-}) => {
+const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
 
   return (
@@ -101,3 +96,6 @@ export const LiveConnection: PlateComponent = ({
     </div>
   );
 };
+
+// use export default for React.lazy
+export default LiveConnection;

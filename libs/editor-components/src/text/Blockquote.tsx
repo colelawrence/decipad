@@ -1,4 +1,5 @@
 import { PlateComponent } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import { atoms } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 
@@ -7,9 +8,7 @@ export const Blockquote: PlateComponent = ({
   children,
   element,
 }) => {
-  if (!element) {
-    throw new Error('Blockquote is not a leaf');
-  }
+  assertElementType(element, 'blockquote');
 
   return (
     <div {...attributes}>

@@ -3,19 +3,16 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
 import { atoms } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { DraggableBlock } from '../block-management';
 
 export const Callout: PlateComponent = ({ attributes, children, element }) => {
-  if (!element) {
-    throw new Error('Callout is not a leaf');
-  }
-
-  if (element?.type !== ELEMENT_CALLOUT) {
-    throw new Error(`This should be a callout element, not ${element?.type}.`);
-  }
+  assertElementType(element, ELEMENT_CALLOUT);
 
   const editor = useTEditorRef();
 
