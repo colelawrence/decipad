@@ -56,6 +56,7 @@ type MenuListProps = (
   readonly children: ReactNode;
   readonly open?: boolean;
   readonly onChangeOpen?: (newOpen: boolean) => void;
+  readonly side?: 'top' | 'right' | 'bottom' | 'left';
 };
 
 function getSubElementType(isRoot: boolean | undefined) {
@@ -89,6 +90,7 @@ export const MenuList = ({
   onChangeOpen,
 
   dropdown = !root,
+  side = 'bottom',
 }: MenuListProps): ReturnType<FC> => {
   const depth = useContext(Depth) + 1;
 
@@ -130,6 +132,7 @@ export const MenuList = ({
               css={styles}
               align="start"
               onFocusOutside={(e) => e.preventDefault()}
+              side={side}
             >
               {Children.map(children, (child) => {
                 if (child == null) {

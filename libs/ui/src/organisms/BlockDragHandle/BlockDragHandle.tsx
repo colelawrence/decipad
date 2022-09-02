@@ -94,6 +94,7 @@ export const BlockDragHandle = ({
         onChangeOpen={onChangeMenuOpen}
         trigger={menuButton}
         dropdown
+        side="left"
       >
         {showHideButton}
 
