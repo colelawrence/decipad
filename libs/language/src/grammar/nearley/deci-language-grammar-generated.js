@@ -297,6 +297,23 @@ const unaryMinusHandler = (d) => {
   );
 };
 
+const powHandler = (d, _l, reject) => {
+  const left = d[0];
+  const right = d[4];
+
+  // disambiguate things like `2 - 1` <- this is not `2 * (- 1)`!
+  if (left.type === 'function-call') {
+    const funcRef = left.args[0];
+    if (funcRef.type === 'funcref') {
+      const funcName = funcRef.args[0];
+      if (funcName === 'unary-') {
+        return reject;
+      }
+    }
+  }
+  return basicBinop(d);
+};
+
 function basicBinop([left, _spc, op, _spc2, right]) {
   return addLoc(
     {
@@ -1665,7 +1682,7 @@ let ParserRules = [
   {
     name: 'powOp',
     symbols: ['primary', '_', 'powOperator', '_', 'powOp'],
-    postprocess: basicBinop,
+    postprocess: powHandler,
   },
   { name: 'primary', symbols: ['literal'], postprocess: id },
   { name: 'primary', symbols: ['functionCall'], postprocess: id },
