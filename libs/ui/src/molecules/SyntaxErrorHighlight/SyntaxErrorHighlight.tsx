@@ -8,17 +8,17 @@ const highlightStyles = css({
   color: red600.rgb,
 });
 
-interface CodeSyntaxErrorHighlightProps {
+interface SyntaxErrorHighlightProps {
   children: ReactNode;
   variant?: 'mismatched-brackets' | 'never-closed' | 'never-opened' | 'custom';
   error?: string;
 }
 
-export const CodeSyntaxErrorHighlight = ({
+export const SyntaxErrorHighlight = ({
   children,
   variant,
   error,
-}: CodeSyntaxErrorHighlightProps): ReturnType<FC> => {
+}: SyntaxErrorHighlightProps): ReturnType<FC> => {
   return (
     <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
       {variant === 'never-closed' && 'Did you forget to close this bracket?'}

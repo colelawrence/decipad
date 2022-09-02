@@ -1,17 +1,20 @@
-import { CodeErrorHighlight } from '@decipad/editor-components';
-import {
-  createTPluginFactory,
-  DECORATE_SYNTAX_ERROR,
-} from '@decipad/editor-types';
+import { molecules } from '@decipad/ui';
+import { ComponentProps } from 'react';
+import { PlateComponent } from '@decipad/editor-types';
 
-export const createSyntaxErrorHighlightPlugin = createTPluginFactory({
-  key: DECORATE_SYNTAX_ERROR,
-  isLeaf: true,
-  component: (props) => (
-    <CodeErrorHighlight
-      {...props}
-      variant={props.leaf.variant}
-      error={props.leaf.error}
-    />
-  ),
-});
+export type SyntaxErrorHighlightProps = Pick<
+  ComponentProps<typeof molecules.SyntaxErrorHighlight>,
+  'variant' | 'error'
+>;
+
+export const SyntaxErrorHighlight: PlateComponent<
+  SyntaxErrorHighlightProps
+> = ({ attributes, children, variant, error }) => {
+  return (
+    <span {...attributes}>
+      <molecules.SyntaxErrorHighlight variant={variant} error={error}>
+        {children}
+      </molecules.SyntaxErrorHighlight>
+    </span>
+  );
+};

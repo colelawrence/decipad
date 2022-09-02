@@ -2,7 +2,7 @@ export { AccountAvatar } from './AccountAvatar/AccountAvatar';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
 export { Caption } from './Caption/Caption';
-export { CodeSyntaxErrorHighlight } from './CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
+export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';
 export { CodeVariable } from './CodeVariable/CodeVariable';
 export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
 export { DividerBlock } from './DividerBlock/DividerBlock';

@@ -1,7 +1,7 @@
 import { Computer } from '@decipad/computer';
 import { isEnabled } from '@decipad/feature-flags';
 import { ELEMENT_EVAL, MyPlatePlugin } from '@decipad/editor-types';
-import { EvalCodeArea } from '@decipad/editor-components';
+import { EvalCodeArea } from './component';
 
 export const evalPluginCore: MyPlatePlugin = {
   key: ELEMENT_EVAL,

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { ElementType, FC, HTMLAttributes } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
-import { ConditionalCodeSyntaxError } from '../../molecules/CodeSyntaxErrorHighlight/CodeSyntaxErrorHighlight';
+import { ConditionalCodeSyntaxError } from '../../molecules/SyntaxErrorHighlight/SyntaxErrorHighlight';
 import {
   cssVar,
   Opacity,
