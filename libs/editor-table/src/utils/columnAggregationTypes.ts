@@ -15,22 +15,21 @@ export const columnAggregationTypes = (
       return [
         {
           name: 'Count true',
-          expression: (colRef) => `count(filter(${colRef}, ${colRef} == true))`,
+          expression: (colRef) => `countif(${colRef} == true)`,
         },
         {
           name: 'Count false',
-          expression: (colRef) =>
-            `count(filter(${colRef}, ${colRef} == false))`,
+          expression: (colRef) => `countif(${colRef} == false)`,
         },
         {
           name: 'Percent true',
           expression: (colRef) =>
-            `count(filter(${colRef}, ${colRef} == true)) / count(${colRef})`,
+            `countif(${colRef} == true) / count(${colRef})`,
         },
         {
           name: 'Percent false',
           expression: (colRef) =>
-            `count(filter(${colRef}, ${colRef} == false)) / count(${colRef})`,
+            `countif(${colRef} == false) / count(${colRef})`,
         },
       ];
 
