@@ -29,7 +29,7 @@ They can be defined as follows:
 To illustrate, we will create a formula to determine if a given number is even.
 
 ```deci live
-even (n) = n % 2 == 0
+even (n) = n mod 2 == 0
 even(10)
 ==> true
 ```

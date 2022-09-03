@@ -73,14 +73,14 @@ negPosNumber -> "-" unsignedNumber                      {%
                                                         }
                                                         %}
 
-percentage -> "-" decimal "%"                           {%
+percentage -> "-" decimal _ "%"                         {%
                                                         (d) => {
                                                           const n = new Fraction((d[1].n).neg()).div(new Fraction(100));
                                                           return makeNumber(d, n, 'percentage');
                                                         }
                                                         %}
 
-percentage -> decimal "%"                               {%
+percentage -> decimal _ "%"                             {%
                                                         (d) => {
                                                           const n = new Fraction((d[0].n)).div(new Fraction(100));
                                                           return makeNumber(d, n, 'percentage');

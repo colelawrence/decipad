@@ -157,7 +157,7 @@ HowManyTens = round(Number in 10)
 ```deci live
 Number = 23
 HowManyTens = round(Number in 10)
-HowManyOnes = Number % 10
+HowManyOnes = Number mod 10
 ==> 3
 ```
 
@@ -219,7 +219,6 @@ terrain = 600 m^2 of land
 buildingArea = constructionIndex * terrain
 ==> 960 m² of usefularea
 ```
-
 
 ### Supported units
 

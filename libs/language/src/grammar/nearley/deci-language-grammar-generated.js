@@ -681,7 +681,7 @@ let ParserRules = [
   },
   {
     name: 'percentage',
-    symbols: [{ literal: '-' }, 'decimal', { literal: '%' }],
+    symbols: [{ literal: '-' }, 'decimal', '_', { literal: '%' }],
     postprocess: (d) => {
       const n = new Fraction(d[1].n.neg()).div(new Fraction(100));
       return makeNumber(d, n, 'percentage');
@@ -689,7 +689,7 @@ let ParserRules = [
   },
   {
     name: 'percentage',
-    symbols: ['decimal', { literal: '%' }],
+    symbols: ['decimal', '_', { literal: '%' }],
     postprocess: (d) => {
       const n = new Fraction(d[0].n).div(new Fraction(100));
       return makeNumber(d, n, 'percentage');
@@ -1813,14 +1813,13 @@ let ParserRules = [
     symbols: ['divMulOperator$subexpression$1'],
     postprocess: simpleOperator,
   },
-  { name: 'divMulOperator$subexpression$2', symbols: [{ literal: '%' }] },
   { name: 'divMulOperator$subexpression$2', symbols: [{ literal: 'mod' }] },
   { name: 'divMulOperator$subexpression$2', symbols: [{ literal: 'modulo' }] },
   {
     name: 'divMulOperator',
     symbols: ['__', 'divMulOperator$subexpression$2'],
     postprocess: (d) => {
-      return addArrayLoc({ name: '%' }, d);
+      return addArrayLoc({ name: 'mod' }, d);
     },
   },
   { name: 'powOperator$subexpression$1', symbols: [{ literal: '**' }] },

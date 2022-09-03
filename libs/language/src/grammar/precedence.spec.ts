@@ -3,7 +3,7 @@ import { parseOneBlock, prettyPrintAST, runCode } from '..';
 /* eslint-disable no-await-in-loop */
 /* eslint-disable jest/expect-expect */
 
-const binops = ['+', '-', '*', '/', '**', '%'];
+const binops = ['+', '-', '*', '/', '**'];
 const comparison = ['>', '<', '>=', '<='];
 const logical = ['&&', '||', '==', '!='];
 

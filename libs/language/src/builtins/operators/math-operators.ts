@@ -424,10 +424,14 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     aliasFor: '/',
     operatorKind: 'infix',
   },
-  '%': {
+  mod: {
     argCount: 2,
     fn: ([a, b]) => a.mod(b),
     functor: binopFunctor,
+    operatorKind: 'infix',
+  },
+  modulo: {
+    aliasFor: 'mod',
     operatorKind: 'infix',
   },
   '**': {
