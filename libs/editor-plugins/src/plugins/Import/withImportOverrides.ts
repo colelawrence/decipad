@@ -20,8 +20,8 @@ export const withImportOverrides =
             source,
           });
         }
-        insertData(data);
       })();
+      insertData(data);
     };
 
     return editor;
