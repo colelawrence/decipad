@@ -11,11 +11,12 @@ type DateGranularity =
   | 'month'
   | 'year';
 
-const formatToGranularity: Record<string, DateGranularity> = {
+export const formatToGranularity: Record<string, DateGranularity> = {
   yyyy: 'year',
   'yyyy/MM': 'month',
   'yyyy-MM': 'month',
   'yyyy-MM-dd': 'day',
+  'yyyy/MM/dd': 'day',
   'dd/MM/yyyy': 'day',
   P: 'day',
   PP: 'day',
@@ -30,8 +31,14 @@ function isValidDate(d: Date | undefined): d is Date {
   return d != null && !Number.isNaN(d.valueOf());
 }
 
-export function parseDate(value: string): number | undefined {
-  const formats = Object.keys(formatToGranularity);
+export function parseDate(
+  value: string,
+  innerFormatToGranularity: Record<
+    string,
+    DateGranularity
+  > = formatToGranularity
+): number | undefined {
+  const formats = Object.keys(innerFormatToGranularity);
   let d: Date | undefined;
   do {
     const format = getDefined(formats.shift());
@@ -50,7 +57,7 @@ export function dateGranularityFromString(value: string): DateGranularity {
   throw new Error(`panic: unknown granularity for ${value}`);
 }
 
-const coerceToDate = (text: string): string => {
+export const coerceToDate = (text: string): string => {
   const d = parseDate(text);
   if (d == null) {
     throw new Error(`don't know how to coerce "${text}" to a date`);

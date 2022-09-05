@@ -5,16 +5,19 @@ import { inferDate } from './inferDate';
 import { inferExpression } from './inferExpression';
 import { inferText } from './inferText';
 import { inferNumber } from './inferNumber';
+import { inferDayDate } from './inferDayDate';
 
 const inferParseError = (
   text: string,
-  kind: SerializedType['kind']
+  kind?: SerializedType['kind']
 ): CoercibleType => ({
   type: {
     kind: 'type-error',
     errorCause: {
       errType: 'free-form',
-      message: `Cannot parse ${kind} out of "${text}"`,
+      message: kind
+        ? `Cannot parse ${kind} out of "${text}"`
+        : `Cannot parse "${text}"`,
     },
   },
   coerced: text,
@@ -37,11 +40,12 @@ export const inferType = (
       return inferText(text) ?? inferParseError(text, type.kind);
     default:
       return (
+        inferDayDate(text) ??
         inferBoolean(text) ??
         inferNumber(text) ??
         inferDate(text) ??
         inferExpression(text) ??
-        inferText(text)
+        inferParseError(text)
       );
   }
 };
