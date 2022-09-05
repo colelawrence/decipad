@@ -29,7 +29,7 @@ export const TableCaption: PlateComponent = ({
   const editor = useTEditorRef();
   const computer = useComputer();
 
-  const onAddDataViewButtonPress = () => {
+  const onAddDataViewButtonPress = (e: Event) => {
     const path = findNodePath(editor, element);
     const parent = getAboveNode<TableElement>(editor, {
       at: path,
@@ -43,6 +43,8 @@ export const TableCaption: PlateComponent = ({
     }
 
     const [, parentPath] = parent;
+
+    e.preventDefault();
 
     return (
       path &&
@@ -62,7 +64,7 @@ export const TableCaption: PlateComponent = ({
           (columnCount && columnCount >= WIDE_MIN_COL_COUNT) || false
         }
         empty={getNodeString(element.children[0]).length === 0}
-        onAddDataViewButtonPress={onAddDataViewButtonPress}
+        onAddDataViewButtonPress={(e) => onAddDataViewButtonPress(e)}
       >
         {children}
       </molecules.EditableTableCaption>

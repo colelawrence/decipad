@@ -80,7 +80,7 @@ type EditableTableCaptionProps = PropsWithChildren<{
   isForWideTable?: boolean;
   empty?: boolean;
   formulaEditor?: boolean;
-  onAddDataViewButtonPress: () => void;
+  onAddDataViewButtonPress: (e: any) => void;
 }>;
 
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
