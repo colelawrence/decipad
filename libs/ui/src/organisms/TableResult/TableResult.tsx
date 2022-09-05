@@ -177,6 +177,7 @@ export const TableResult = ({
                         value={column[rowIndex]}
                         variant="block"
                         tooltip={tooltip}
+                        isLiveResult={isLiveResult}
                       />
                     </div>
                   </TableData>

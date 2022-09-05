@@ -55,7 +55,7 @@ export interface CssVariables {
   readonly tableSelectionBackgroundColor: Property.Color;
   readonly tableFocusColor: Property.Color;
 
-  // tags
+  // Live data
   readonly liveDataBackgroundColor: Property.Color;
 }
 

@@ -23,7 +23,6 @@ export * from './data-view';
 export * from './utils';
 export * from './node';
 export * from './plate';
-export * from './external-refs';
 
 export const alwaysWritableElementTypes = [
   elementKinds.ELEMENT_TABLE,

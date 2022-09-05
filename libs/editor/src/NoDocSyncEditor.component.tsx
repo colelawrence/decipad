@@ -5,6 +5,7 @@ import {
   EditorChangeContextProvider,
   EditorReadOnlyContext,
   useComputer,
+  useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
 import { Plate, createPlateEditor } from '@udecode/plate';
 import { FC, useCallback, useMemo, useState } from 'react';
@@ -21,9 +22,11 @@ const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
 
+  const interactions = useEditorUserInteractionsContext();
+
   const editorPlugins = useMemo(
-    () => configuration.plugins(computer),
-    [computer]
+    () => configuration.plugins(computer, interactions),
+    [computer, interactions]
   );
 
   const [editor] = useState(() =>

@@ -80,5 +80,6 @@ export const createWorker = async (): Promise<LiveConnectionWorker> => {
       listeners.clear();
       worker.terminate();
     },
+    worker,
   };
 };

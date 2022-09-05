@@ -5,6 +5,6 @@ export * from './CodeLine';
 export * from './Import/Import';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';
-export * from './InteractiveParagraph';
 export * from './text';
+export * from './InteractiveParagraph';
 export * from './hooks';

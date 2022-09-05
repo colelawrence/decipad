@@ -5,7 +5,7 @@ import {
   TableCellType,
 } from '@decipad/editor-types';
 import { importFromUnknown } from './importFromUnknown';
-import { gsheets } from './providers';
+import { decipad, gsheets } from './providers';
 
 export interface ImportOptions {
   useFirstRowAsHeader?: boolean;
@@ -21,6 +21,8 @@ export const tryImport = (
     switch (provider) {
       case 'gsheets':
         return gsheets.import(url, options);
+      case 'decipad':
+        return decipad.import();
     }
   }
   return importFromUnknown(url, options);

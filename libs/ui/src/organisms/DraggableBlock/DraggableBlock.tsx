@@ -52,6 +52,7 @@ interface DraggableBlockProps {
   readonly onDelete?: (() => void) | false;
   readonly onDuplicate?: () => void;
   readonly onAdd?: () => void;
+  readonly onCopyHref?: () => void;
   readonly showLine?: boolean;
 
   readonly blockKind: keyof typeof blockAlignment;
@@ -74,6 +75,7 @@ export const DraggableBlock = ({
   onAdd,
   showLine = true,
   onShowHide,
+  onCopyHref,
 
   blockKind,
   children,
@@ -150,6 +152,7 @@ export const DraggableBlock = ({
             onDuplicate={onDuplicate}
             onShowHide={onShowHide}
             showEyeLabel={showEyeLabel}
+            onCopyHref={onCopyHref}
           />
         </div>
         <div

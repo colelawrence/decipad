@@ -4,6 +4,7 @@ import { Calculations, Import } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
 const sourceToName: Record<ImportElementSource, string> = {
+  decipad: 'Decipad notebook',
   csv: 'CSV',
   gsheets: 'Google Sheets',
   json: 'a JSON API',

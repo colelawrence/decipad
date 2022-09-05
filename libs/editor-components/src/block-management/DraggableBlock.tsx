@@ -28,6 +28,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import copyToClipboard from 'copy-to-clipboard';
 import {
   clone,
   requirePathBelowBlock,
@@ -116,7 +117,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     }
   }, [computer, editor, element]);
 
-  const onAdd = () => {
+  const onAdd = useCallback(() => {
     const path = findNodePath(editor, element);
     if (path === undefined) return;
     insertNodes(
@@ -130,7 +131,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       }
     );
     select(editor, path);
-  };
+  }, [editor, element]);
+
+  const onCopyHref = useCallback(() => {
+    const url = new URL(window.location.toString());
+    url.hash = element.id;
+    copyToClipboard(url.toString());
+  }, [element.id]);
 
   if (deleted || (readOnly && element.isHidden)) {
     return null;
@@ -169,6 +176,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         a === 'show' ? setIsHidden(false) : setIsHidden(true);
       }}
       onAdd={onAdd}
+      onCopyHref={onCopyHref}
       showLine={
         !(
           editor.children.length === 2 &&

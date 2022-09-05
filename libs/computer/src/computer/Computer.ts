@@ -510,9 +510,10 @@ export class Computer {
   }
 
   getAvailableIdentifier(prefix: string, start: number): string {
-    const existingVars = new Set(
-      this.computationRealm.inferContext.stack.globalVariables.keys()
-    );
+    const existingVars = new Set([
+      ...this.computationRealm.inferContext.stack.globalVariables.keys(),
+      ...this.computationRealm.inferContext.externalData.keys(),
+    ]);
     let num = start;
     const nextProposal = () => `${prefix}${num}`;
     let proposal = nextProposal();

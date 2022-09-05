@@ -3,8 +3,10 @@ import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
 const spinnerWrapperStyles = css({
-  width: '100%',
-  display: 'inline',
+  display: 'block',
+  position: 'relative',
+  height: '25px',
+  width: '100px',
 });
 
 const spinnerStyles = css({

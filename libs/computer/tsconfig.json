@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["esnext", "dom"]
+    "lib": ["esnext", "dom", "WebWorker"]
   },
   "include": ["src"],
   "references": [{ "path": "../language" }, { "path": "../format" }]

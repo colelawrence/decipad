@@ -25,7 +25,12 @@ import type { TableCellType, TableElement, TableInputElement } from './table';
 
 export type { TableElement };
 
-export type ImportElementSource = 'gsheets' | 'csv' | 'json' | 'arrow';
+export type ImportElementSource =
+  | 'decipad'
+  | 'gsheets'
+  | 'csv'
+  | 'json'
+  | 'arrow';
 export interface ImportElement extends BaseElement {
   type: typeof ELEMENT_IMPORT;
   source?: ImportElementSource;
@@ -166,6 +171,7 @@ export const interactiveElementKinds: ReadonlyArray<
   ELEMENT_PLOT,
   ELEMENT_EVAL,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_LIVE_CONNECTION,
 ] as const;
 
 export const isInteractiveElement = (

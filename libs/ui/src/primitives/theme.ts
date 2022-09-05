@@ -47,6 +47,8 @@ export const darkTheme: Record<
   ...setCssVar('variableHighlightTextColor', teal500.rgb),
 
   ...setCssVar('tableSelectionBackgroundColor', blue100.rgb),
+
+  ...setCssVar('liveDataBackgroundColor', purple200.rgb),
   ...setCssVar('tableFocusColor', blue500.rgb),
   ...setCssVar('liveDataBackgroundColor', purple200.rgb),
 };

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { once } from 'ramda';
 import { FC, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
-import { Delete, Hide, Show, DragHandle, Duplicate } from '../../icons';
+import { Delete, Hide, Show, DragHandle, Duplicate, Link } from '../../icons';
 import { MenuList } from '../../molecules';
 import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -47,6 +47,7 @@ interface BlockDragHandleProps {
   readonly onDelete?: (() => void) | false;
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
+  readonly onCopyHref?: () => void;
 }
 
 export const BlockDragHandle = ({
@@ -57,6 +58,7 @@ export const BlockDragHandle = ({
   onChangeMenuOpen = noop,
   onDelete = noop,
   onDuplicate = noop,
+  onCopyHref,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -101,6 +103,12 @@ export const BlockDragHandle = ({
         <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
           Duplicate
         </MenuItem>
+
+        {onCopyHref && (
+          <MenuItem icon={<Link />} onSelect={onCopyHref}>
+            Copy reference
+          </MenuItem>
+        )}
 
         <MenuItem disabled>
           <hr css={{ color: cssVar('highlightColor') }} />

@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": ["esnext", "dom", "dom.iterable", "WebWorker"],
     "module": "esnext"
   },
   "include": ["src"],
@@ -9,6 +9,8 @@
     { "path": "../utils" },
     { "path": "../computer" },
     { "path": "../import" },
-    { "path": "../react-contexts" }
+    { "path": "../react-contexts" },
+    { "path": "../docsync" },
+    { "path": "../editor-language-elements" }
   ]
 }

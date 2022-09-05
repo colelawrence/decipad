@@ -19,6 +19,7 @@ export interface LiveConnectionProps {
   source?: ImportElementSource;
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
+  timeoutMs?: number;
 }
 
 export const useLiveConnectionResponse = ({
@@ -27,6 +28,7 @@ export const useLiveConnectionResponse = ({
   options,
   useFirstRowAsHeader,
   columnTypeCoercions,
+  timeoutMs = 5000,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const worker = useLiveConnectionWorker();
   const [error, setError] = useState<Error | undefined>();
@@ -37,17 +39,22 @@ export const useLiveConnectionResponse = ({
     let canceled = false;
     (async () => {
       if (worker) {
-        unsubscribe = await worker.subscribe(
-          { url, options, source, useFirstRowAsHeader, columnTypeCoercions },
-          (err, res) => {
-            if (!canceled) {
-              setError(err);
-              if (res) {
-                setResult(res);
+        try {
+          unsubscribe = await worker.subscribe(
+            { url, options, source, useFirstRowAsHeader, columnTypeCoercions },
+            (err, res) => {
+              if (!canceled) {
+                setError(err);
+                if (res) {
+                  setResult(res);
+                }
               }
             }
-          }
-        );
+          );
+        } catch (err) {
+          console.error(err);
+          setError(err as Error);
+        }
       }
     })();
 
@@ -58,6 +65,22 @@ export const useLiveConnectionResponse = ({
       }
     };
   }, [columnTypeCoercions, options, source, url, useFirstRowAsHeader, worker]);
+
+  useEffect(() => {
+    worker?.worker.addEventListener('error', (ev) => {
+      console.error('Error detected on worker', ev);
+      setError(new Error(ev.message));
+    });
+  }, [worker?.worker]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!result && !error) {
+        setError(new Error("Could not find the result you're looking for"));
+      }
+    }, timeoutMs);
+    return () => clearTimeout(timeout);
+  }, [error, result, timeoutMs]);
 
   return { error, result };
 };
