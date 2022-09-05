@@ -1,7 +1,7 @@
-import { isEnabled } from '@decipad/feature-flags';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const evalUnsafeCode = async (unsafeCode: string): Promise<string> => {
-  if (!isEnabled('UNSAFE_JS_EVAL'))
+  if (!isFlagEnabled('UNSAFE_JS_EVAL'))
     throw new Error('eval is only available for developers');
 
   // We allow eval only for developers.

@@ -9,7 +9,7 @@ import {
   selectionIsNotBubble,
 } from '@decipad/editor-utils';
 import { insertNodes, isText } from '@udecode/plate';
-import { isEnabled } from '@decipad/feature-flags';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { allPass } from 'ramda';
 import words from 'random-words';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
@@ -32,7 +32,9 @@ const convertPrecedingTextToBubble = (editor: MyEditor): void => {
   });
 };
 
-export const autoformatBubbles: MyAutoformatRule[] = isEnabled('INLINE_BUBBLES')
+export const autoformatBubbles: MyAutoformatRule[] = isFlagEnabled(
+  'INLINE_BUBBLES'
+)
   ? [
       {
         mode: 'block',

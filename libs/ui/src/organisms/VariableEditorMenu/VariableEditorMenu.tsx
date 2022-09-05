@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode, useState } from 'react';
 import { noop } from '@decipad/utils';
-import { isEnabled } from '@decipad/feature-flags';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { SerializedType, tokenRules } from '@decipad/language';
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { InputMenuItem, MenuList } from '../../molecules';
@@ -194,7 +194,9 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
           </MenuItem>
         )}
       </MenuList>
-      {isEnabled('INPUT_COPY') && <MenuItem onSelect={onCopy}>Copy</MenuItem>}
+      {isFlagEnabled('INPUT_COPY') && (
+        <MenuItem onSelect={onCopy}>Copy</MenuItem>
+      )}
 
       <MenuItem onSelect={onDelete}>
         <div css={{ minWidth: '165px' }}>Delete</div>

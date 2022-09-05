@@ -1,4 +1,4 @@
-import { isEnabled } from '@decipad/feature-flags';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
@@ -123,7 +123,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             {caption}
           </div>
         </div>
-        {hideAddDataViewButton || !isEnabled('DATA_VIEW') ? null : (
+        {hideAddDataViewButton || !isFlagEnabled('DATA_VIEW') ? null : (
           <button
             css={addAViewButtonStyles}
             onMouseDown={onAddDataViewButtonPress}

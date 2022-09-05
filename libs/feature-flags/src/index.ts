@@ -16,7 +16,7 @@ const envDefaults: Record<string, boolean> = {
   development: true,
 };
 
-export const isEnabled = (flag: Flag): boolean =>
+export const isFlagEnabled = (flag: Flag): boolean =>
   overrides[flag] ??
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   ('location' in globalThis &&

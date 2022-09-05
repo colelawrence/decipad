@@ -12,7 +12,7 @@ import {
   WithRequired,
 } from '@udecode/plate';
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { isEnabled } from '@decipad/feature-flags';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   createMagicNumberPlugin,
   createValueBubblePlugin,
@@ -72,7 +72,7 @@ const magicNumberPlugin = () =>
   );
 
 const valueBubblePlugin = () =>
-  !isEnabled('INLINE_BUBBLES')
+  !isFlagEnabled('INLINE_BUBBLES')
     ? []
     : [
         withHotkeyRestrictedToAllowedBlocks(

@@ -1,4 +1,4 @@
-import { isEnabled } from '@decipad/feature-flags';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { ComponentProps, FC } from 'react';
 import {
   Blockquote,
@@ -42,7 +42,7 @@ const dataItems = [
     title: 'Data View',
     description: 'Analyze, sort and group data using a table',
     icon: <TableSlash />,
-    enabled: isEnabled('DATA_VIEW'),
+    enabled: isFlagEnabled('DATA_VIEW'),
     extraSearchTerms: ['group', 'sort', 'analyze'],
   },
   {
@@ -55,7 +55,7 @@ const dataItems = [
   },
 ];
 
-const jsEvalCmd = !isEnabled('UNSAFE_JS_EVAL')
+const jsEvalCmd = !isFlagEnabled('UNSAFE_JS_EVAL')
   ? []
   : [
       {
