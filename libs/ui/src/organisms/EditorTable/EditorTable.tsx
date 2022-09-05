@@ -93,6 +93,7 @@ interface EditorTableProps {
   readonly dropRef?: ConnectDropTarget;
   readonly onAddRow?: () => void;
   readonly onAddColumn?: () => void;
+  readonly previewMode?: boolean;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
   readonly hiddenRowCount?: number;
@@ -116,6 +117,7 @@ export const EditorTable: FC<EditorTableProps> = ({
   hiddenRowCount = 0,
   setCollapsed = noop,
   smartRow,
+  previewMode,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
 
@@ -130,7 +132,7 @@ export const EditorTable: FC<EditorTableProps> = ({
     >
       <div css={wrapperStyles}>
         <div css={wrapperInnerStyles}>
-          <div css={tableCaptionWrapperStyles}>{caption}</div>
+          {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 
           <div css={tableWrapperStyles}>
             <div css={tableOverflowStyles} contentEditable={false} />
@@ -145,22 +147,26 @@ export const EditorTable: FC<EditorTableProps> = ({
               head={thead}
               body={tbody}
               foot={
-                <>
-                  {smartRow}
-                  <AddTableRowButton
-                    colSpan={columns.length + 1}
-                    onAddRow={onAddRow}
-                  />
-                </>
+                !previewMode && (
+                  <>
+                    {smartRow}
+                    <AddTableRowButton
+                      colSpan={columns.length + 1}
+                      onAddRow={onAddRow}
+                    />
+                  </>
+                )
               }
             ></Table>
-            <button
-              onClick={onAddColumn}
-              css={tableAddColumnButtonStyles}
-              title="Add Column"
-            >
-              <Add />
-            </button>
+            {!previewMode && (
+              <button
+                onClick={onAddColumn}
+                css={tableAddColumnButtonStyles}
+                title="Add Column"
+              >
+                <Add />
+              </button>
+            )}
           </div>
         </div>
       </div>

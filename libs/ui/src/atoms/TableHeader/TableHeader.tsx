@@ -141,7 +141,6 @@ export const TableHeader = ({
   dragSource,
   dropTarget,
   dropDirection,
-  dragPreview,
   onSelectColumn,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
@@ -162,7 +161,7 @@ export const TableHeader = ({
         <ColumnDropLine dropDirection={dropDirection} />
       )}
 
-      <div css={headerWrapperStyles} ref={dragPreview}>
+      <div css={headerWrapperStyles}>
         {isEditable && draggable && dragSource && (
           <DropSourceAndTarget
             ref={dragSource}

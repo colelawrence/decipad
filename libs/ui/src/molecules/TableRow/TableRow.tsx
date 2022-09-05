@@ -1,7 +1,7 @@
 import { ElementAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { DropLineDirection } from '@udecode/plate';
-import { ReactNode, RefCallback, forwardRef, FC } from 'react';
+import { FC, forwardRef, ReactNode, RefCallback, RefObject } from 'react';
 import { noop } from 'rxjs';
 import { useMergedRef } from '../../hooks';
 import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
@@ -28,12 +28,14 @@ interface TableRowProps extends TableCellControlsProps {
   readonly isBeingDragged?: boolean;
   readonly dropLine?: DropLineDirection;
   readonly isVisible?: boolean;
+  readonly previewMode?: boolean;
   readonly tableCellControls?: false | ReactNode;
 
   /**
    * Table cell controls ref
    */
   readonly dragRef?: RefCallback<HTMLDivElement>;
+  readonly previewRef?: RefObject<HTMLDivElement>;
 }
 
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
@@ -45,13 +47,15 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       onSelect,
       readOnly = false,
       dragRef,
+      previewMode,
+      previewRef,
       isBeingDragged = false,
       isVisible = true,
       tableCellControls,
     },
     ref
   ): ReturnType<FC> => {
-    const trRef = useMergedRef(attributes?.ref, ref);
+    const trRef = useMergedRef(attributes?.ref, ref, previewRef);
 
     return (
       <tr
@@ -62,7 +66,8 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
           !isVisible && invisibleTableRowStyles,
         ]}
       >
-        {tableCellControls !== false &&
+        {!previewMode &&
+          tableCellControls !== false &&
           (tableCellControls || (
             <TableCellControls
               ref={dragRef}

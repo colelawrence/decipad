@@ -5,6 +5,7 @@ import {
   TableCellElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { DRAG_ITEM_COLUMN, TableDndContext } from '../contexts/TableDndContext';
 
 export const useDragColumn = (
@@ -18,6 +19,8 @@ export const useDragColumn = (
     type: DRAG_ITEM_COLUMN,
     end: tableDnd.onCellDragEnd,
   });
+
+  dragPreview(getEmptyImage(), { captureDraggingState: true });
 
   return useMemo(
     () => ({ isDragging, dragSource, dragPreview }),

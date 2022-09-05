@@ -18,6 +18,9 @@ const tdBaseStyles = css(p14Medium, {
 
   // Show line numbers on the first cell of each row.
   position: 'relative',
+});
+
+const tdCounterStyles = css({
   '&:first-of-type': {
     paddingLeft: lineNumberWidth,
   },
@@ -41,12 +44,14 @@ export interface TableDataProps {
   className?: string;
   children?: ReactNode;
   attributes?: PlateComponentAttributes;
+  hiddenCounter?: boolean;
 }
 
 export const TableFormulaCell = ({
   attributes,
   className,
   children,
+  hiddenCounter,
 }: TableDataProps): ReturnType<FC> => {
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers
@@ -54,7 +59,11 @@ export const TableFormulaCell = ({
   // Also, be careful with the element structure:
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
-    <td {...attributes} css={[tdBaseStyles]} className={className}>
+    <td
+      {...attributes}
+      css={[tdBaseStyles, !hiddenCounter && tdCounterStyles]}
+      className={className}
+    >
       {children}
     </td>
   );

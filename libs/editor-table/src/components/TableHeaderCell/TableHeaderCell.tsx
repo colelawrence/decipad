@@ -14,9 +14,9 @@ import { useSelected } from 'slate-react';
 import { selectColumn } from '../../utils/selectColumn';
 import { useDragColumn } from '../../hooks/useDragColumn';
 import {
+  useColumnDropDirection,
   useDropColumn,
   useTableActions,
-  useColumnDropDirection,
 } from '../../hooks';
 
 export const TableHeaderCell: PlateComponent = ({
@@ -38,10 +38,7 @@ export const TableHeaderCell: PlateComponent = ({
   const { onChangeColumnType, onRemoveColumn } = useTableActions(editor, table);
   const focused = useSelected();
 
-  const { dragSource, dragPreview, isDragging } = useDragColumn(
-    editor,
-    element
-  );
+  const { dragSource, isDragging } = useDragColumn(editor, element);
   const [{ isOver }, dropTarget] = useDropColumn(editor, element);
   const dropDirection = useColumnDropDirection(editor, element);
 
@@ -65,7 +62,6 @@ export const TableHeaderCell: PlateComponent = ({
       draggable={true}
       dragSource={dragSource}
       dropTarget={dropTarget}
-      dragPreview={dragPreview}
       draggingOver={!isDragging && isOver}
       dropDirection={dropDirection}
     >

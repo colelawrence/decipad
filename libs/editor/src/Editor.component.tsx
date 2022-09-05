@@ -1,7 +1,7 @@
 import {
+  EditorBlockParentRefProvider,
   EditorChangeContextProvider,
   EditorReadOnlyContext,
-  EditorBlockParentRefProvider,
 } from '@decipad/react-contexts';
 import { atoms, LoadingFilter } from '@decipad/ui';
 import { RefObject, useCallback, useRef, useState } from 'react';
@@ -12,6 +12,7 @@ import { ReactEditor } from 'slate-react';
 import * as components from './components';
 import { useWriteLock } from './utils/useWriteLock';
 import { useAutoAnimate } from './hooks';
+import { DndPreview } from './components/DndPreview/DndPreview';
 
 export interface EditorProps {
   notebookId: string;
@@ -31,6 +32,7 @@ const InsidePlate = ({
       <components.Tooltip />
       <components.NumberTooltip />
       <components.CursorOverlay containerRef={containerRef} />
+      <DndPreview />
     </>
   );
 };

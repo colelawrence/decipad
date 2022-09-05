@@ -1,6 +1,6 @@
 import { getNodeEntry, useDndNode, withProviders } from '@udecode/plate';
 import { Path } from 'slate';
-import { molecules, useMergedRef } from '@decipad/ui';
+import { molecules } from '@decipad/ui';
 import {
   ELEMENT_TR,
   PlateComponent,
@@ -36,11 +36,7 @@ export const TableRow: PlateComponent = withProviders([
   const { id } = element;
   const trRef = useRef<HTMLTableRowElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
-  const {
-    dragRef: dragSource,
-    dropLine,
-    isDragging,
-  } = useDndNode({
+  const { dragRef, dropLine, isDragging } = useDndNode({
     type: DRAG_ITEM_ROW,
     id,
     nodeRef: trRef,
@@ -48,8 +44,6 @@ export const TableRow: PlateComponent = withProviders([
       ref: previewRef,
     },
   });
-
-  const dragRef = useMergedRef<HTMLDivElement>(previewRef, dragSource);
 
   const [, setDropLine] = useAtom(dropLineAtom, trScope);
 
@@ -72,6 +66,7 @@ export const TableRow: PlateComponent = withProviders([
       onRemove={() => onRemoveRow(element.id)}
       onSelect={() => selectRow(editor, path)}
       dragRef={dragRef}
+      previewRef={previewRef}
       ref={trRef}
       isBeingDragged={isDragging}
       isVisible={isVisible}
