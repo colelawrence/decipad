@@ -12,6 +12,14 @@ export function parseElementVariableAssignment(
   try {
     const expression =
       typeof source === 'string' ? parseOneExpression(source) : source;
+
+    const statement: AST.Statement | AST.Expression = varName
+      ? {
+          type: 'assign',
+          args: [{ type: 'def', args: [varName] }, expression],
+        }
+      : expression;
+
     return {
       program: [
         {
@@ -20,12 +28,7 @@ export function parseElementVariableAssignment(
           block: {
             type: 'block',
             id: blockId,
-            args: [
-              {
-                type: 'assign',
-                args: [{ type: 'def', args: [varName] }, expression],
-              },
-            ],
+            args: [statement],
           },
           source: typeof source === 'string' ? source : '',
         },

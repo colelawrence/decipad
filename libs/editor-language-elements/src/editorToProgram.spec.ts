@@ -158,6 +158,16 @@ describe('editorToProgram', () => {
         ],
       } as InlineNumberElement,
       {
+        id: 'xqab2',
+        type: ELEMENT_INLINE_NUMBER,
+        name: '',
+        children: [
+          {
+            text: '123 + 4',
+          },
+        ],
+      } as InlineNumberElement,
+      {
         id: 'dcaqx',
         type: ELEMENT_BUBBLE,
         formula: {
@@ -171,15 +181,17 @@ describe('editorToProgram', () => {
 
     const { program } = await editorToProgram(editor, new Computer());
 
-    expect(program.length).toBe(2);
+    expect(program.length).toBe(3);
 
-    const [inlineNumber, inlineBubble] = prettyPrintAll(program);
+    const [inlineNumber, inlineNumber2, inlineBubble] = prettyPrintAll(program);
 
     expect(inlineNumber).toMatchInlineSnapshot(`
       "(assign
         (def inlineNumber)
         (implicit* 2 (ref apples)))"
     `);
+
+    expect(inlineNumber2).toMatchInlineSnapshot(`"(+ 123 4)"`);
 
     expect(inlineBubble).toMatchInlineSnapshot(`
       "(assign
