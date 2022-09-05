@@ -33,7 +33,9 @@ export const FormulaTableData = ({
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
     <TableFormulaCell {...props} css={[selected ? selectedStyles : null]}>
-      <span css={noEditingStyles}>{children}</span>
+      <span css={noEditingStyles} contentEditable={false}>
+        {children}
+      </span>
       <span
         css={resultType !== 'table' ? tdLineStyles : null}
         contentEditable={false}

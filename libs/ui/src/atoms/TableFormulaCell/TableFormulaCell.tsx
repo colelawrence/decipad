@@ -13,6 +13,8 @@ const tdBaseStyles = css(p14Medium, {
   backgroundColor: cssVar('tintedBackgroundColor'),
   minHeight: table.tdMinHeight,
   verticalAlign: 'middle',
+  cursor: 'default',
+  caretColor: 'transparent',
 
   // Show line numbers on the first cell of each row.
   position: 'relative',
