@@ -22,9 +22,6 @@ const from = (
   if (n instanceof Fraction) {
     return n;
   }
-  if (typeof n === 'object') {
-    console.log('N:', { n: n.n, s: n.s, d: n.d });
-  }
   if (isFractionLike(n)) {
     return new Fraction(n.s * n.n, n.d);
   }
