@@ -9,9 +9,9 @@ import {
   setUp,
   waitForEditorToLoad,
 } from './page-utils/Pad';
+import { getCaretPosition } from './utils';
 
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip('notebook calculation block', () => {
+describe('notebook calculation block', () => {
   beforeAll(() => setUp());
   beforeAll(() => waitForEditorToLoad());
 
@@ -22,7 +22,8 @@ describe.skip('notebook calculation block', () => {
     expect((await page.textContent('[contenteditable] p'))!.trim()).toBe('');
   });
 
-  it('can create a table using a calculation block', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('can create a table using a calculation block', async () => {
     const lineText = 'A = { B = [1,2,3] }';
     await focusOnBody();
     await createCalculationBlockBelow('A = { B = [1,2,3] }');
@@ -41,7 +42,8 @@ describe.skip('notebook calculation block', () => {
     expect(bodyRowsContents).toEqual(['1', '2', '3']);
   });
 
-  it('Get the column `A.B` from the table', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('Get the column `A.B` from the table', async () => {
     const lineText = 'A.B';
     await keyPress('ArrowDown');
     await createCalculationBlockBelow(lineText);
@@ -60,7 +62,8 @@ describe.skip('notebook calculation block', () => {
     expect(cellContents).toEqual(['1', '2', '3']);
   });
 
-  it('Get an error from getting column that doesnt exist `A.C`', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('Get an error from getting column that doesnt exist `A.C`', async () => {
     const lineText = 'A.C';
     await keyPress('ArrowDown');
     await createCalculationBlockBelow(lineText);
@@ -76,7 +79,8 @@ describe.skip('notebook calculation block', () => {
     ]);
   });
 
-  it('Can show a numerical result inline`', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('Can show a numerical result inline`', async () => {
     const lineText = 'total(A.B) miles * hour';
     await keyPress('ArrowDown');
     await createCalculationBlockBelow(lineText);
@@ -90,5 +94,59 @@ describe.skip('notebook calculation block', () => {
     expect(await result.allTextContents()).toMatchObject([
       expect.stringMatching(/6.+miles.+hour/i),
     ]);
+  });
+
+  it('Calculates 1 + 1', async () => {
+    const lineText = '1 + 1';
+    await keyPress('ArrowDown');
+    await createCalculationBlockBelow(lineText);
+
+    lineNo += 1;
+
+    const line = await getCodeLineContent(lineNo);
+    expect(line).toBe(lineText);
+
+    const result = await getResult(lineNo);
+    expect(await result.allTextContents()).toMatchObject([
+      expect.stringMatching(/2/i),
+    ]);
+  });
+
+  it('Enter does a soft break inside parentesis', async () => {
+    const lineText = '(10 + 2)';
+    await keyPress('ArrowDown');
+    await createCalculationBlockBelow(lineText);
+
+    lineNo += 1;
+
+    const lineBefore = await getCodeLineContent(lineNo);
+    expect(lineBefore).toBe(lineText);
+
+    await keyPress('ArrowLeft');
+    await keyPress('ArrowLeft');
+    await keyPress('Enter');
+
+    const [left, right] = [lineText.slice(0, -2), lineText.slice(-2)];
+    const brokenLine = `${left}\n${right}`;
+    const lineAfter = await getCodeLineContent(lineNo);
+    expect(lineAfter).toBe(brokenLine);
+  });
+
+  it('Enter moves caret to the end', async () => {
+    const lineText = '3 + 7';
+    await keyPress('ArrowDown');
+    await createCalculationBlockBelow(lineText);
+
+    lineNo += 1;
+
+    await keyPress('ArrowLeft');
+    await keyPress('ArrowLeft');
+    const caretBefore = await getCaretPosition();
+
+    await keyPress('Enter');
+
+    const caretAfter = await getCaretPosition();
+    expect(caretBefore).toBeDefined();
+    expect(caretAfter).toBe(caretBefore! + 2);
   });
 });

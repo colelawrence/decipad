@@ -6,6 +6,7 @@ import { serializeCodeLineHtml } from './serializeCodeLineHtml';
 import { onDropCodeLine } from './onDropCodeLine';
 import CodeLine from './CodeLine';
 import { withCodeLine } from './withCodeLine';
+import { onKeyDownCodeLine } from './onKeyDownCodeLine';
 
 export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   key: ELEMENT_CODE_LINE,
@@ -17,5 +18,6 @@ export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   withOverrides: withCodeLine,
   handlers: {
     onDrop: onDropCodeLine,
+    onKeyDown: onKeyDownCodeLine,
   },
 });
