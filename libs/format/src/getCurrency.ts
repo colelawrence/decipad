@@ -1,4 +1,4 @@
-import FFraction, { ONE } from '@decipad/fraction';
+import { ONE, toFraction } from '@decipad/fraction';
 import { CurrencyUnits, getUnitByName, Unit } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 
@@ -6,7 +6,7 @@ function isCurrencyUnit(unit: Unit | null): boolean {
   return (
     unit != null &&
     unit.baseSuperQuantity === 'currency' &&
-    new FFraction(unit.exp).equals(ONE)
+    toFraction(unit.exp).equals(ONE)
   );
 }
 

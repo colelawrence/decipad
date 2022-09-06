@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import { unzip, getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import { Interpreter, Time } from '..';
@@ -90,7 +90,7 @@ export class FractionValue implements Value {
       if (Number.isNaN(varValue)) {
         throw new TypeError('not a number');
       }
-      this.value = new Fraction(varValue as number | bigint);
+      this.value = toFraction(varValue as number | bigint);
     } else {
       this.value = varValue as Fraction;
     }

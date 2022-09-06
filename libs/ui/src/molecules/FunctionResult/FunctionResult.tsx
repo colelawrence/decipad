@@ -1,4 +1,4 @@
-import Fraction, { isFractionLike } from '@decipad/fraction';
+import Fraction, { isFractionLike, toFraction } from '@decipad/fraction';
 import { useComputer } from '@decipad/react-contexts';
 import { dequal } from 'dequal';
 import { FC, useCallback, useEffect, useState } from 'react';
@@ -10,10 +10,10 @@ import { CodeResultProps } from '../../types';
 
 type FunctionResultProps = CodeResultProps<'function'>;
 
-const defaultMaxX = new Fraction(10);
-const defaultMaxY = new Fraction(2);
-const maxMaxX = new Fraction(9999999999n);
-const xStep = new Fraction(10);
+const defaultMaxX = toFraction(10);
+const defaultMaxY = toFraction(2);
+const maxMaxX = toFraction(9999999999n);
+const xStep = toFraction(10);
 
 export const FunctionResult: FC<FunctionResultProps> = ({ type }) => {
   const computer = useComputer();
@@ -75,7 +75,7 @@ export const FunctionResult: FC<FunctionResultProps> = ({ type }) => {
       });
       const { type: resType, value } = res;
       if (resType.kind === 'number' && isFractionLike(value)) {
-        const resN = new Fraction(value);
+        const resN = toFraction(value);
         const absResN = resN.abs();
         if (maxY.compare(absResN) < 0) {
           setMaxY(absResN);

@@ -1,4 +1,4 @@
-import Fraction, { pow } from '@decipad/fraction';
+import { pow, toFraction } from '@decipad/fraction';
 import { parseUnit } from '@decipad/language';
 import * as CurrencyUnits from '../../language/src/units/currency-units';
 import { formatNumber, getIsPrecise } from './formatNumber';
@@ -521,10 +521,7 @@ describe('formatNumber', () => {
       });
 
       it('0.45359 kg = 0.45 kg', () => {
-        const [value, unit] = makeFractionUnitTuple(
-          new Fraction(0.45359),
-          'kg'
-        );
+        const [value, unit] = makeFractionUnitTuple(toFraction(0.45359), 'kg');
         const { asString } = formatNumber(locale, unit, value);
         expect(asString).toEqual('≈0.45 kg');
       });
@@ -532,7 +529,7 @@ describe('formatNumber', () => {
       it('0.01 liter/meter = 0.01 liters per meter', () => {
         const { partsOf, asString } = formatNumber(
           locale,
-          [parseUnit('liter'), u('meter', { exp: new Fraction(-1) })],
+          [parseUnit('liter'), u('meter', { exp: toFraction(-1) })],
           F(1, 100)
         );
         expect(asString).toEqual('0.01 liters per meter');
@@ -597,7 +594,7 @@ describe('formatNumber', () => {
       it('$1 / meter = $1 per meter', () => {
         const { partsOf, asString, asStringPrecise } = formatNumber(
           locale,
-          [parseUnit('usd'), u('meter', { exp: new Fraction(-1) })],
+          [parseUnit('usd'), u('meter', { exp: toFraction(-1) })],
           F(1)
         );
         expect(asString).toEqual('$1 per meter');
@@ -623,7 +620,7 @@ describe('formatNumber', () => {
           locale,
           [
             parseUnit('gbp'),
-            u('Wh', { exp: new Fraction(-1), multiplier: F(1000) }),
+            u('Wh', { exp: toFraction(-1), multiplier: F(1000) }),
           ],
           F(5, 1000)
         );
@@ -633,7 +630,7 @@ describe('formatNumber', () => {
       it('£5/$ is £5 per kWh', () => {
         const { asString } = formatNumber(
           locale,
-          [parseUnit('gbp'), u('usd', { exp: new Fraction(-1) })],
+          [parseUnit('gbp'), u('usd', { exp: toFraction(-1) })],
           F(5)
         );
         expect(asString).toEqual('£5 per $');
@@ -1462,34 +1459,34 @@ describe('formatNumber', () => {
 describe('detects if the number can be displayed precisely', () => {
   it('when abbreviated', () => {
     // Precision determined by fractional number length
-    expect(getIsPrecise(new Fraction(123.34))).toEqual(true);
-    expect(getIsPrecise(new Fraction(123.345))).toEqual(false);
-    expect(getIsPrecise(new Fraction(1.256))).toEqual(false);
-    expect(getIsPrecise(new Fraction(10, 4), 2)).toEqual(true);
+    expect(getIsPrecise(toFraction(123.34))).toEqual(true);
+    expect(getIsPrecise(toFraction(123.345))).toEqual(false);
+    expect(getIsPrecise(toFraction(1.256))).toEqual(false);
+    expect(getIsPrecise(toFraction(10, 4), 2)).toEqual(true);
 
     // Larger-than-1000 numbers have 3 digits available for precision,
     // the rest must be zero.
-    expect(getIsPrecise(new Fraction(678n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(6780n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(67800n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(6700n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(67000n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(670000n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(678000n))).toEqual(true);
-    expect(getIsPrecise(new Fraction(678900n))).toEqual(false);
+    expect(getIsPrecise(toFraction(678n))).toEqual(true);
+    expect(getIsPrecise(toFraction(6780n))).toEqual(true);
+    expect(getIsPrecise(toFraction(67800n))).toEqual(true);
+    expect(getIsPrecise(toFraction(6700n))).toEqual(true);
+    expect(getIsPrecise(toFraction(67000n))).toEqual(true);
+    expect(getIsPrecise(toFraction(670000n))).toEqual(true);
+    expect(getIsPrecise(toFraction(678000n))).toEqual(true);
+    expect(getIsPrecise(toFraction(678900n))).toEqual(false);
 
     // Repeating fractions
-    expect(getIsPrecise(new Fraction(1, 3))).toEqual(false);
-    expect(getIsPrecise(new Fraction(1_000, 3))).toEqual(false);
-    expect(getIsPrecise(new Fraction(10_000_000, 3))).toEqual(false);
+    expect(getIsPrecise(toFraction(1, 3))).toEqual(false);
+    expect(getIsPrecise(toFraction(1_000, 3))).toEqual(false);
+    expect(getIsPrecise(toFraction(10_000_000, 3))).toEqual(false);
 
     // Edge cases
-    expect(getIsPrecise(new Fraction(1230))).toEqual(true);
-    expect(getIsPrecise(new Fraction(1234))).toEqual(false);
+    expect(getIsPrecise(toFraction(1230))).toEqual(true);
+    expect(getIsPrecise(toFraction(1234))).toEqual(false);
 
     // Too many integers
-    expect(getIsPrecise(new Fraction(123.34))).toEqual(true);
-    expect(getIsPrecise(new Fraction(1230.34))).toEqual(false);
-    expect(getIsPrecise(new Fraction(1234.34))).toEqual(false);
+    expect(getIsPrecise(toFraction(123.34))).toEqual(true);
+    expect(getIsPrecise(toFraction(1230.34))).toEqual(false);
+    expect(getIsPrecise(toFraction(1234.34))).toEqual(false);
   });
 });

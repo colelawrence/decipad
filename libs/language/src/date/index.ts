@@ -1,7 +1,7 @@
 import { singular } from 'pluralize';
 import { DateTime } from 'luxon';
 
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import { DateValue } from '../interpreter/Value';
@@ -343,13 +343,13 @@ export const subtractDates = (
 
   switch (specificity) {
     case 'year': {
-      return new Fraction(dateTime1.diff(dateTime2, 'years').years * 12);
+      return toFraction(dateTime1.diff(dateTime2, 'years').years * 12);
     }
     case 'month': {
-      return new Fraction(dateTime1.diff(dateTime2, 'months').months);
+      return toFraction(dateTime1.diff(dateTime2, 'months').months);
     }
     default: {
-      return new Fraction(
+      return toFraction(
         dateTime1.diff(dateTime2, 'milliseconds').milliseconds,
         1000n
       );

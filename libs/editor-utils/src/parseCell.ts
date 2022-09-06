@@ -1,5 +1,5 @@
 import { TableCellType } from '@decipad/editor-types';
-import Fraction, { FractionLike } from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import {
   AST,
   parseOneBlock,
@@ -39,16 +39,12 @@ const parsing = async (
   return afterParse(result);
 };
 
-const fixFraction = (f: FractionLike): Fraction => {
-  return f instanceof Fraction ? f : new Fraction(f);
-};
-
 const fixCellUnit = (unit: Unit[]): Unit[] => {
   return unit.map((u): Unit => {
     return {
       ...u,
-      multiplier: fixFraction(u.multiplier),
-      exp: fixFraction(u.exp),
+      multiplier: toFraction(u.multiplier),
+      exp: toFraction(u.exp),
     };
   });
 };
@@ -92,7 +88,7 @@ export async function parseCell(
         const literal = astNode(
           'literal',
           'number' as const,
-          new Fraction(result.value as Fraction)
+          toFraction(result.value as Fraction)
         );
         const unit = unitToAST(cellUnit);
 

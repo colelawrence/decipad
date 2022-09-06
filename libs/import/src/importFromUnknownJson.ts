@@ -1,5 +1,5 @@
 import { Result } from '@decipad/computer';
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { ImportOptions } from './import';
 import { columnNameFromIndex } from './utils/columnNameFromIndex';
 import { errorResult } from './utils/errorResult';
@@ -105,7 +105,7 @@ export const importFromUnknownJson = (
         kind: 'number',
         unit: null,
       },
-      value: new Fraction(json as number | bigint),
+      value: toFraction(json as number | bigint),
     };
   }
   if (tof === 'boolean') {

@@ -1,12 +1,12 @@
-import FFraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { inverseExponent } from '@decipad/language';
 import { formatUnit, simpleFormatUnit } from './formatUnit';
 import { F, U, u } from './testUtils';
 
 const meter = u('meters');
 const second = u('seconds');
-const cm = u('m', { multiplier: new FFraction(1, 100) });
-const kw = u('W', { multiplier: new FFraction(1000) });
+const cm = u('m', { multiplier: toFraction(1, 100) });
+const kw = u('W', { multiplier: toFraction(1000) });
 
 const locale = 'en-US';
 
@@ -19,7 +19,7 @@ describe('base unit tests', () => {
 
   it('crazy multipliers', () => {
     expect(
-      formatUnit(locale, U([u('meter', { multiplier: new FFraction(10000) })]))
+      formatUnit(locale, U([u('meter', { multiplier: toFraction(10000) })]))
     ).toEqual('×10⁴ meters');
   });
 
@@ -29,7 +29,7 @@ describe('base unit tests', () => {
     // cm = 0.01m
     expect(formatUnit(locale, U([cm]))).toEqual('cm');
     expect(
-      formatUnit(locale, U([u('meter', { multiplier: new FFraction(1, 100) })]))
+      formatUnit(locale, U([u('meter', { multiplier: toFraction(1, 100) })]))
     ).toEqual('centimeters');
     expect(formatUnit(locale, U([meter, inverseExponent(second)]))).toEqual(
       'meters per second'
@@ -47,7 +47,7 @@ describe('base unit tests', () => {
     expect(formatUnit(locale, U([u('w'), u('h')]))).toEqual('W·h');
     expect(formatUnit(locale, U([kw, u('h')]))).toEqual('kW·h');
     // cm3 = 0.01m3
-    const cm3 = U([u('m', { multiplier: new FFraction(1, 100), exp: F(3) })]);
+    const cm3 = U([u('m', { multiplier: toFraction(1, 100), exp: F(3) })]);
     expect(formatUnit(locale, cm3)).toEqual('cm³');
     expect(formatUnit(locale, U([u('cubicmeter')]))).toEqual('m³');
     expect(formatUnit(locale, U([u('lightyear')]))).toEqual('light year');

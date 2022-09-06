@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import Fraction, { F, ONE } from '@decipad/fraction';
+import Fraction, { F, ONE, toFraction } from '@decipad/fraction';
 import {
   getUnitByName,
   pluralizeUnit,
@@ -12,7 +12,7 @@ import {
 import produce from 'immer';
 import { DeciNumberPart } from './formatNumber';
 
-const TWO = new Fraction(2);
+const TWO = toFraction(2);
 
 const numberToSubOrSuperscript: Record<string, string[]> = {
   '0': ['₀', '⁰'], // subscript not used for now
@@ -363,8 +363,8 @@ function isUserDefinedUnit(unit: Unit | null): boolean {
   return (
     unit != null &&
     !fullUnit?.baseQuantity &&
-    new Fraction(unit.exp).equals(ONE) &&
-    new Fraction(unit.multiplier).equals(ONE)
+    toFraction(unit.exp).equals(ONE) &&
+    toFraction(unit.multiplier).equals(ONE)
   );
 }
 
@@ -376,12 +376,12 @@ export function isUserDefined(unit: Unit[] | null): boolean {
 }
 
 function simpleFormatUnitPart(unit: Unit): string {
-  const multiplier = new Fraction(unit.multiplier).valueOf();
+  const multiplier = toFraction(unit.multiplier).valueOf();
   const multiplierStr =
     multipliersToPrefixes[
       multiplier as keyof typeof multipliersToPrefixes
     ]?.[0] ?? `${multiplier} * `;
-  const exp = new Fraction(unit.exp).valueOf();
+  const exp = toFraction(unit.exp).valueOf();
   const expStr = exp === 1 ? '' : `^${exp}`;
   const value = `${multiplierStr}${unit.unit}${expStr}`;
   return value;

@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import Fraction, { ONE } from '@decipad/fraction';
+import { ONE, toFraction } from '@decipad/fraction';
 import type { TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
@@ -65,8 +65,8 @@ const sameUnits = (
   const u = unit[0];
   return (
     u.unit === um.name &&
-    new Fraction(u.exp).equals(ONE) &&
-    new Fraction(u.multiplier).equals(ONE) &&
+    toFraction(u.exp).equals(ONE) &&
+    toFraction(u.multiplier).equals(ONE) &&
     u.baseSuperQuantity === um.superBaseQuantity
   );
 };
@@ -119,7 +119,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             type.unit != null &&
             !isCurrencyUnit(type.unit) && (
               <MenuItem icon={<All />} selected>
-                {computer.formatUnit(type.unit, new Fraction(1))}
+                {computer.formatUnit(type.unit, toFraction(1))}
               </MenuItem>
             )}
           <MenuItem

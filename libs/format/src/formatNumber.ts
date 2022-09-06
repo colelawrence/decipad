@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import {
   AST,
   convertToMultiplierUnit,
@@ -126,11 +126,11 @@ export function partsToString(partsOf: DeciNumberPart[]): string {
 }
 
 function isLargeNumber(x: Fraction): boolean {
-  return x.compare(new Fraction(1_000_000_000_000_000n)) > 0;
+  return x.compare(toFraction(1_000_000_000_000_000n)) > 0;
 }
 
 function isLessThan10k(x: Fraction): boolean {
-  return x.compare(new Fraction(10_000n)) < 0;
+  return x.compare(toFraction(10_000n)) < 0;
 }
 
 export const getIsPrecise = (
@@ -256,7 +256,7 @@ function formatUnitless(
     ...DEFAULT_NUMBER_OPTIONS,
     ...(isLargeNumber(fraction) ||
     (fraction.mod(10).compare(0) !== 0 &&
-      fraction.compare(new Fraction(0.01)) < 0)
+      fraction.compare(toFraction(0.01)) < 0)
       ? { notation: 'engineering' }
       : isLessThan10k(fraction)
       ? { notation: 'standard' }
@@ -328,7 +328,7 @@ function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
 
   const otherUnitsMult = (unitsWithoutCurrency || []).reduce(
     (ac, current) => ac.mul(current.multiplier),
-    new Fraction(1)
+    toFraction(1)
   );
 
   const partsOfUnits =
@@ -336,7 +336,7 @@ function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
       ? formatAnyUnit(
           locale,
           unitsWithoutCurrency,
-          new Fraction(1)
+          toFraction(1)
         ).partsOf.filter((e, i) => !(i === 0 && e.value === '1'))
       : [];
 
@@ -344,7 +344,7 @@ function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
     locale,
     produce(currencyUnit, (cu) => {
       // eslint-disable-next-line no-param-reassign
-      cu[0].multiplier = new Fraction(1);
+      cu[0].multiplier = toFraction(1);
     }),
     fraction.mul(otherUnitsMult)
   );
@@ -375,7 +375,7 @@ export function formatNumber(
   number: Fraction,
   numberFormat: AST.NumberFormat | null = undefined
 ): DeciNumber {
-  const fraction = new Fraction(number);
+  const fraction = toFraction(number);
 
   if (numberFormat === 'percentage') {
     const mulFraction = fraction.mul(100);

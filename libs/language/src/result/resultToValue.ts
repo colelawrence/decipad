@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import { Result, Value, Table, Column, SerializedTypes } from '..';
 import { Range, Row, Scalar } from '../interpreter';
 import {
@@ -51,7 +51,7 @@ export const resultToValue = (result: Result.Result): Value => {
     case 'number': {
       let numberValue = value as ResultNumber;
       if (!(numberValue instanceof Fraction)) {
-        numberValue = new Fraction(numberValue);
+        numberValue = toFraction(numberValue);
       }
       return Scalar.fromValue(numberValue);
     }

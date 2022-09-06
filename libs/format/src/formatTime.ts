@@ -1,4 +1,4 @@
-import FFraction, { ONE } from '@decipad/fraction';
+import FFraction, { ONE, toFraction } from '@decipad/fraction';
 import {
   areUnitsConvertible,
   convertBetweenUnits,
@@ -67,6 +67,6 @@ export function isTimeUnit(units: Unit[]): boolean {
     units?.length === 1 &&
     unit != null &&
     (unit.baseQuantity === 'second' || unit.baseQuantity === 'month') &&
-    new FFraction(unit.exp).equals(ONE)
+    toFraction(unit.exp).equals(ONE)
   );
 }

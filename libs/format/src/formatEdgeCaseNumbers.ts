@@ -1,9 +1,9 @@
-import FFraction from '@decipad/fraction';
+import FFraction, { toFraction } from '@decipad/fraction';
 
 import type { DeciNumberPart } from './formatNumber';
 
-export const large = new FFraction(1_000_000_000_000_000_000_000n);
-export const small = new FFraction(1n, 1_000_000_000_000_000_000_000n);
+export const large = toFraction(1_000_000_000_000_000_000_000n);
+export const small = toFraction(1n, 1_000_000_000_000_000_000_000n);
 
 export const isEdgeCaseNumber = (
   f: FFraction

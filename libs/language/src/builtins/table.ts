@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 
 export const approximateSubsetSumIndices = (
   upperBound: Fraction,
@@ -32,7 +32,7 @@ export const approximateSubsetSumIndices = (
       // if y +  ε T/n < z ≤ T then
       if (
         y.value + EPSILON < z.value &&
-        new Fraction(upperBound).compare(z.value) >= 0
+        toFraction(upperBound).compare(z.value) >= 0
       ) {
         y = z;
         l.push(z);

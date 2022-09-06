@@ -1,4 +1,8 @@
-import Fraction, { FractionLike, isFractionLike } from '@decipad/fraction';
+import Fraction, {
+  FractionLike,
+  isFractionLike,
+  toFraction,
+} from '@decipad/fraction';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import { RuntimeError } from './RuntimeError';
@@ -29,7 +33,7 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     if (a instanceof Fraction && b instanceof Fraction) {
       return a.compare(b);
     }
-    return new Fraction(a).compare(new Fraction(b));
+    return toFraction(a).compare(toFraction(b));
   }
   if (typeof a === 'string' && typeof b === 'string') {
     return a > b ? 1 : a === b ? 0 : -1;

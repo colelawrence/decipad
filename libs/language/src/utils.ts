@@ -1,4 +1,4 @@
-import Fraction, { FractionLike, pow } from '@decipad/fraction';
+import Fraction, { FractionLike, pow, toFraction } from '@decipad/fraction';
 import { Class } from 'utility-types';
 import type { AST, Unit } from '.';
 
@@ -41,7 +41,7 @@ export function l(value: LitType): AST.Literal {
   }
   const t = typeof value;
   if (t === 'number' || t === 'bigint') {
-    const fraction = new Fraction(value as number | bigint);
+    const fraction = toFraction(value as number | bigint);
     return n('literal', 'number', fraction);
   } else if (t === 'boolean') {
     return n('literal', 'boolean', value as boolean);
@@ -54,7 +54,7 @@ export function num(
   num: Fraction | number | bigint,
   format?: AST.NumberFormat
 ) {
-  const numberFrac = num instanceof Fraction ? num : new Fraction(num);
+  const numberFrac = num instanceof Fraction ? num : toFraction(num);
 
   if (format) {
     return n('literal', 'number', numberFrac, format);
@@ -410,7 +410,7 @@ export function identity<T>(o: T): T {
 export function invert(
   f: (n: Fraction) => Fraction
 ): (n: Fraction) => Fraction {
-  const reversingFactor = f(new Fraction(1)).inverse();
+  const reversingFactor = f(toFraction(1)).inverse();
   return (n) => n.mul(reversingFactor);
 }
 
@@ -421,16 +421,16 @@ export function F(
   d: number | bigint = 1n
 ) {
   return typeof n === 'number' || typeof n === 'bigint'
-    ? new Fraction(n, d)
-    : new Fraction(n as string);
+    ? toFraction(n, d)
+    : toFraction(n as string);
 }
 
 export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   if (typeof unit === 'string') {
     unit = {
       unit,
-      exp: new Fraction(1),
-      multiplier: new Fraction(1),
+      exp: toFraction(1),
+      multiplier: toFraction(1),
       known: true,
     };
   }

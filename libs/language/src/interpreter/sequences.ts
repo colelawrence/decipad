@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import { addTime, getSpecificity } from '../date';
 import type { Time } from '..';
 import { Column, ColumnLike, DateValue, RuntimeError, Scalar, Value } from '.';
@@ -16,8 +16,8 @@ export function fromSequence(
   const by = byV
     ? (byV.getData() as Fraction)
     : start.compare(end) < 0
-    ? new Fraction(1)
-    : new Fraction(-1);
+    ? toFraction(1)
+    : toFraction(-1);
 
   const array = [];
 

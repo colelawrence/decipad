@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { DefaultFunctionResult } from '../DefaultFunctionResult/DefaultFunctionResult';
 
@@ -41,12 +41,12 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
   const [isDiscontinued, setIsDiscontinued] = useState(false);
 
   const xScale = useMemo(
-    () => new Fraction(width).div(maxX.sub(maxX.neg())).valueOf(),
+    () => toFraction(width).div(maxX.sub(maxX.neg())).valueOf(),
     [maxX, width]
   );
 
   const yScale = useMemo(
-    () => new Fraction(height).div(maxY.sub(maxY.neg())).valueOf(),
+    () => toFraction(height).div(maxY.sub(maxY.neg())).valueOf(),
     [height, maxY]
   );
 

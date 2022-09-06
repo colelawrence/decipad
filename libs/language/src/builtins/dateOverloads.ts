@@ -1,5 +1,3 @@
-import Fraction from '@decipad/fraction';
-
 import { DateValue, FractionValue } from '../interpreter/Value';
 import {
   addTime,
@@ -64,7 +62,7 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
       {
         unit: d1Specificity,
         exp: F(1),
-        multiplier: new Fraction(1),
+        multiplier: F(1),
         known: true,
       },
     ])

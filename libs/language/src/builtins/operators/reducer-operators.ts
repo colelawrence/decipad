@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import type { BuiltinSpec } from '../interfaces';
 import { Value, fromJS } from '../../interpreter/Value';
 
@@ -27,7 +27,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
         numbers.reduce<Fraction>(
           (count, elem, index) =>
             bools[index] ? count.add(elem as Fraction) : count,
-          new Fraction(0)
+          toFraction(0)
         )
       );
     },

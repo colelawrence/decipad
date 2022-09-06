@@ -1,5 +1,4 @@
-import { min } from '.';
-import { F } from './utils';
+import { min, F } from '.';
 
 test('min', () => {
   expect(min(F(1))).toEqual(F(1));

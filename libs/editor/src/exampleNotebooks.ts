@@ -1,5 +1,5 @@
 import { MyValue } from '@decipad/editor-types';
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { nanoid } from 'nanoid';
 
 export const emptyNotebook = (): MyValue => [
@@ -426,8 +426,8 @@ export const introNotebook = (): MyValue => [
             unit: [
               {
                 unit: 'miles',
-                exp: new Fraction(1),
-                multiplier: new Fraction(1),
+                exp: toFraction(1),
+                multiplier: toFraction(1),
                 known: true,
               },
             ],

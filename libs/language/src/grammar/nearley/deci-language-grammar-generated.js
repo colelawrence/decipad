@@ -183,10 +183,10 @@ function addArrayLoc(node, locArray) {
   }
 }
 
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 
 function makeNumber(parentNode, n, numberFormat = undefined) {
-  const fraction = n instanceof Fraction ? n : new Fraction(n);
+  const fraction = toFraction(n);
 
   const node = {
     type: 'literal',
@@ -676,14 +676,14 @@ let ParserRules = [
     name: 'negPosNumber',
     symbols: [{ literal: '-' }, 'unsignedNumber'],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[1].n).neg());
+      return makeNumber(d, toFraction(d[1].n).neg());
     },
   },
   {
     name: 'percentage',
     symbols: [{ literal: '-' }, 'decimal', '_', { literal: '%' }],
     postprocess: (d) => {
-      const n = new Fraction(d[1].n.neg()).div(new Fraction(100));
+      const n = toFraction(d[1].n.neg()).div(toFraction(100));
       return makeNumber(d, n, 'percentage');
     },
   },
@@ -691,7 +691,7 @@ let ParserRules = [
     name: 'percentage',
     symbols: ['decimal', '_', { literal: '%' }],
     postprocess: (d) => {
-      const n = new Fraction(d[0].n).div(new Fraction(100));
+      const n = toFraction(d[0].n).div(toFraction(100));
       return makeNumber(d, n, 'percentage');
     },
   },
@@ -699,28 +699,28 @@ let ParserRules = [
     name: 'permille',
     symbols: [{ literal: '-' }, 'decimal', { literal: '‰' }],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[1].n.neg()).div(new Fraction(1000)));
+      return makeNumber(d, toFraction(d[1].n.neg()).div(toFraction(1000)));
     },
   },
   {
     name: 'permille',
     symbols: ['decimal', { literal: '‰' }],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[0].n).div(new Fraction(1000)));
+      return makeNumber(d, toFraction(d[0].n).div(toFraction(1000)));
     },
   },
   {
     name: 'permyriad',
     symbols: [{ literal: '-' }, 'decimal', { literal: '‱' }],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[1].n.neg()).div(new Fraction(10000)));
+      return makeNumber(d, toFraction(d[1].n.neg()).div(toFraction(10000)));
     },
   },
   {
     name: 'permyriad',
     symbols: ['decimal', { literal: '‱' }],
     postprocess: (d) => {
-      return makeNumber(d, new Fraction(d[0].n).div(new Fraction(10000)));
+      return makeNumber(d, toFraction(d[0].n).div(toFraction(10000)));
     },
   },
   {
@@ -768,7 +768,7 @@ let ParserRules = [
       } else {
         return addLoc(
           {
-            n: new Fraction(number.value),
+            n: toFraction(number.value),
           },
           number
         );

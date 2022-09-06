@@ -1,5 +1,5 @@
 // E2e tests
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { date, parseUTCDate } from './date';
 import { Column, Scalar } from './interpreter/Value';
 import { runCode } from './run';
@@ -399,7 +399,7 @@ describe('Tables', () => {
       }),
       value: objectToTableValue({
         Column1: [F(1), F(2), F(3)],
-        Column2: [new Fraction(1, 2), 1n, new Fraction(3, 2)],
+        Column2: [toFraction(1, 2), 1n, toFraction(3, 2)],
         Column3: [false, false, true],
       }),
     });
@@ -923,13 +923,13 @@ describe('Units', () => {
           {
             exp: F(1),
             known: true,
-            multiplier: new Fraction(1),
+            multiplier: toFraction(1),
             unit: 'meters',
           },
           {
             exp: F(-1),
             known: true,
-            multiplier: new Fraction(1),
+            multiplier: toFraction(1),
             unit: 'seconds',
           },
         ],
@@ -953,13 +953,13 @@ describe('Units', () => {
           {
             exp: F(1),
             known: true,
-            multiplier: new Fraction(1),
+            multiplier: toFraction(1),
             unit: 'meters',
           },
           {
             exp: F(-1),
             known: true,
-            multiplier: new Fraction(1),
+            multiplier: toFraction(1),
             unit: 'seconds',
           },
         ],
@@ -981,7 +981,7 @@ describe('Units', () => {
           {
             exp: F(1),
             known: true,
-            multiplier: new Fraction(1),
+            multiplier: toFraction(1),
             unit: 'meters',
           },
         ],
@@ -1003,7 +1003,7 @@ describe('Units', () => {
           {
             exp: F(-1),
             known: true,
-            multiplier: new Fraction(1),
+            multiplier: toFraction(1),
             unit: 'seconds',
           },
         ],
@@ -1221,7 +1221,7 @@ describe('number units work together', () => {
         {
           unit: 'bananas',
           exp: F(1),
-          multiplier: new Fraction(1),
+          multiplier: toFraction(1),
           known: false,
         },
       ]),
@@ -1235,7 +1235,7 @@ describe('number units work together', () => {
         {
           unit: 'meters',
           exp: F(1),
-          multiplier: new Fraction(1),
+          multiplier: toFraction(1),
           known: true,
         },
       ]),
@@ -1275,7 +1275,7 @@ describe('number units work together', () => {
         {
           unit: 'meters',
           exp: F(1),
-          multiplier: new Fraction(0.01),
+          multiplier: toFraction(0.01),
           known: true,
         },
       ]),
@@ -1300,7 +1300,7 @@ describe('number units work together', () => {
         {
           unit: 'meters',
           exp: F(2),
-          multiplier: new Fraction(1),
+          multiplier: toFraction(1),
           known: true,
         },
       ]),
@@ -1339,7 +1339,7 @@ describe('number units work together', () => {
         {
           unit: 'miles',
           exp: F(1),
-          multiplier: new Fraction(1),
+          multiplier: toFraction(1),
           known: true,
         },
       ]),
@@ -1364,7 +1364,7 @@ describe('number units work together', () => {
 
   it('calculates date difference', async () => {
     expect(await runCode(`date(2021) - date(2020)`)).toMatchObject({
-      value: new Fraction(1),
+      value: toFraction(1),
       type: t.number(U('year')),
     });
   });
@@ -1537,7 +1537,7 @@ describe('number units work together', () => {
       value: F(209216129000, 16129),
       type: t.number(
         U([
-          u('g', { multiplier: new Fraction(1000) }),
+          u('g', { multiplier: toFraction(1000) }),
           u('seconds', { exp: F(-2) }),
         ])
       ),
@@ -1603,7 +1603,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(1000),
-      type: t.number(U([u('w', { multiplier: new Fraction(1000) }), u('h')])),
+      type: t.number(U([u('w', { multiplier: toFraction(1000) }), u('h')])),
     });
   });
 
@@ -1612,7 +1612,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(1, 100),
-      type: t.number(U([u('m', { multiplier: new Fraction(0.001) })])),
+      type: t.number(U([u('m', { multiplier: toFraction(0.001) })])),
     });
   });
 
@@ -1621,7 +1621,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(1, 10),
-      type: t.number(U([u('metre', { multiplier: new Fraction(0.01) })])),
+      type: t.number(U([u('metre', { multiplier: toFraction(0.01) })])),
     });
   });
 
@@ -1630,7 +1630,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(1, 100),
-      type: t.number(U([u('metre', { multiplier: new Fraction(1, 1000) })])),
+      type: t.number(U([u('metre', { multiplier: toFraction(1, 1000) })])),
     });
   });
 
@@ -1639,9 +1639,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(1, 1000),
-      type: t.number(
-        U([u('m', { multiplier: new Fraction(1, 1_000_000_000) })])
-      ),
+      type: t.number(U([u('m', { multiplier: toFraction(1, 1_000_000_000) })])),
     });
   });
 
@@ -1650,7 +1648,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(1, 1000),
-      type: t.number(U([u('m', { multiplier: new Fraction(0.000001) })])),
+      type: t.number(U([u('m', { multiplier: toFraction(0.000001) })])),
     });
   });
 
@@ -1659,7 +1657,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(2, 100),
-      type: t.number(U([u('F', { multiplier: new Fraction(1, 100) })])),
+      type: t.number(U([u('F', { multiplier: toFraction(1, 100) })])),
     });
   });
 
@@ -1668,7 +1666,7 @@ describe('number units work together', () => {
 
     expect(run).toMatchObject({
       value: F(2, 100),
-      type: t.number(U([u('farads', { multiplier: new Fraction(1, 100) })])),
+      type: t.number(U([u('farads', { multiplier: toFraction(1, 100) })])),
     });
   });
 

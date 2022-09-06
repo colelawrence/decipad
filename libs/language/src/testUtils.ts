@@ -1,5 +1,4 @@
-import Fraction from 'fraction.js/bigfraction';
-import FFraction from '@decipad/fraction';
+import FFraction, { toFraction } from '@decipad/fraction';
 import { AnyMapping, zip } from '@decipad/utils';
 import type { AST, InjectableExternalData } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
@@ -163,7 +162,7 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
 export const snapshotUnit = (unit: Unit[]) => {
   return unit
     .map((u) => {
-      const exp = new Fraction(u.exp).valueOf();
+      const exp = toFraction(u.exp).valueOf();
 
       if (exp !== 1) {
         return `${u.unit}^${exp}`;

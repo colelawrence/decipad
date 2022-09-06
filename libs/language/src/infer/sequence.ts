@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import Fraction, { toFraction } from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import { AST, Time, DateValue } from '..';
 import { getIdentifierString, getOfType } from '../utils';
@@ -37,7 +37,7 @@ export const getNumberSequenceCount = (
   } else if (diff > 0) {
     return getNumberSequenceCount(end, start, by.neg());
   } else {
-    return end.sub(start).div(by).add(new Fraction(1)).floor().valueOf();
+    return end.sub(start).div(by).add(toFraction(1)).floor().valueOf();
   }
 };
 
@@ -46,11 +46,7 @@ export const getNumberSequenceCountN = (
   end: number | bigint,
   by: number | bigint
 ): number | InferError =>
-  getNumberSequenceCount(
-    new Fraction(start),
-    new Fraction(end),
-    new Fraction(by)
-  );
+  getNumberSequenceCount(toFraction(start), toFraction(end), toFraction(by));
 
 type SimplerUnit = 'month' | 'day' | 'millisecond';
 
@@ -184,8 +180,8 @@ export const inferSequence = async (
       const by = byN
         ? tryGetNumber(byN)
         : start.compare(end) < 0
-        ? new Fraction(1n)
-        : new Fraction(-1n);
+        ? toFraction(1n)
+        : toFraction(-1n);
       if (by) {
         const countOrError = getNumberSequenceCount(start, end, by);
         return countOrError instanceof InferError

@@ -1,8 +1,8 @@
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
-export const oneInch = new Fraction(254, 10_000);
+export const oneInch = toFraction(254, 10_000);
 export const oneFoot = oneInch.mul(12);
 export const oneYard = oneFoot.mul(3);
 export const oneMile = oneYard.mul(1_760);

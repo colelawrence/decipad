@@ -18,9 +18,9 @@ import {
   parseSeriesStart,
   seriesIterator,
 } from '@decipad/editor-utils';
-import Fraction from '@decipad/fraction';
 import { getNodeString } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
+import { toFraction } from '@decipad/fraction';
 import { ParseError } from '../types';
 
 interface GetTableAstNodeFromTableElementResult {
@@ -123,7 +123,7 @@ export function formulaSourceToColumn(
     return parseOneExpression(source);
   } catch (e) {
     const items = Array.from({ length: dataRowCount }, () =>
-      astNode('literal', 'number', new Fraction(0))
+      astNode('literal', 'number', toFraction(0))
     );
     return astColumn(...items);
   }

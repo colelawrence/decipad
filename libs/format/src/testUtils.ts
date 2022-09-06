@@ -1,4 +1,4 @@
-import FFraction, { FractionLike } from '@decipad/fraction';
+import FFraction, { FractionLike, toFraction } from '@decipad/fraction';
 import { parseUnit, Unit } from '@decipad/language';
 
 export function F(n: number | bigint, d?: number | bigint): FFraction;
@@ -8,8 +8,8 @@ export function F(
   d: number | bigint = 1n
 ) {
   return typeof n === 'number' || typeof n === 'bigint'
-    ? new FFraction(n, d)
-    : new FFraction(n as string);
+    ? toFraction(n, d)
+    : toFraction(n as string | number | bigint);
 }
 
 export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
@@ -29,34 +29,34 @@ export const usd = U('USD', { baseSuperQuantity: 'currency' });
 export const usdShort = U('$', { baseSuperQuantity: 'currency' });
 export const usdPerDay: Unit[] = [
   u('USD', { baseSuperQuantity: 'currency' }),
-  u('days', { exp: new FFraction(-1) }),
+  u('days', { exp: toFraction(-1) }),
 ];
 export const metersPerDay: Unit[] = [
   u('meters'),
-  u('days', { exp: new FFraction(-1) }),
+  u('days', { exp: toFraction(-1) }),
 ];
 
 export const bananasPerDay: Unit[] = [
   u('banana'),
-  u('days', { exp: new FFraction(-1) }),
+  u('days', { exp: toFraction(-1) }),
 ];
 
-export const perDay: Unit[] = [u('days', { exp: new FFraction(-1) })];
+export const perDay: Unit[] = [u('days', { exp: toFraction(-1) })];
 
-export const perBanana: Unit[] = [u('banana', { exp: new FFraction(-1) })];
+export const perBanana: Unit[] = [u('banana', { exp: toFraction(-1) })];
 
-export const perEuros: Unit[] = [u('euro', { exp: new FFraction(-1) })];
+export const perEuros: Unit[] = [u('euro', { exp: toFraction(-1) })];
 
-export const km: Unit[] = U(u('m', { multiplier: new FFraction(1000) }));
+export const km: Unit[] = U(u('m', { multiplier: toFraction(1000) }));
 
 export const kmPerSecond: Unit[] = [
-  u('m', { multiplier: new FFraction(1000) }),
-  u('second', { exp: new FFraction(-1) }),
+  u('m', { multiplier: toFraction(1000) }),
+  u('second', { exp: toFraction(-1) }),
 ];
 
 export const metersPerSecond: Unit[] = [
   u('m'),
-  u('second', { exp: new FFraction(-1) }),
+  u('second', { exp: toFraction(-1) }),
 ];
 
 export function makeFractionUnitTuple(

@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import produce from 'immer';
 import { InferError, PrimitiveTypeName, Type } from '.';
@@ -41,8 +41,8 @@ export const timeQuantity = (timeUnits: (Unit | string)[]) =>
   produce(primitive('number'), (numberType) => {
     numberType.unit = timeUnits.map((unit) => ({
       unit: timeUnitFromUnit(unit),
-      exp: new Fraction(1),
-      multiplier: new Fraction(1),
+      exp: toFraction(1),
+      multiplier: toFraction(1),
       known: true,
     }));
   });

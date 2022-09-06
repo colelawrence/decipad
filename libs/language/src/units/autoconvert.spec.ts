@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { fromJS } from '../interpreter/Value';
 import { F, U, u } from '../utils';
 import { number } from '../type/build';
@@ -21,7 +21,7 @@ describe('autoconvert arguments', () => {
     expect(
       autoconvertArguments(
         [fromJS(F(200))],
-        [number(U('meter', { multiplier: new Fraction(100) }))]
+        [number(U('meter', { multiplier: toFraction(100) }))]
       )
     ).toMatchObject([fromJS(F(200))]);
   });

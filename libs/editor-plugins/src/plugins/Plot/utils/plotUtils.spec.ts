@@ -1,5 +1,5 @@
-import Fraction from '@decipad/fraction';
 import { Computer, SerializedType } from '@decipad/computer';
+import { toFraction } from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
 import {
   DisplayProps,
@@ -9,7 +9,7 @@ import {
 } from './plotUtils';
 
 function F(n: number) {
-  return new Fraction(n);
+  return toFraction(n);
 }
 
 const defaultDisplayProps: DisplayProps = {

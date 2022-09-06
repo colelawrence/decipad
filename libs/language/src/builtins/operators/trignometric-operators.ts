@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { once } from 'ramda';
 import { Type, build as t } from '../../type';
 import { F } from '../../utils';
@@ -28,37 +28,37 @@ export const trignometricOperators: Record<string, BuiltinSpec> = {
   sin: {
     argCount: 1,
     autoConvertArgs: true,
-    fn: ([n]) => Math.sin(new Fraction(n).valueOf()),
+    fn: ([n]) => Math.sin(toFraction(n).valueOf()),
     functor: angleOpFunctor,
   },
   asin: {
     argCount: 1,
     autoConvertArgs: true,
-    fn: ([n]) => Math.asin(new Fraction(n).valueOf()),
+    fn: ([n]) => Math.asin(toFraction(n).valueOf()),
     functor: arcFunctor,
   },
   cos: {
     argCount: 1,
     autoConvertArgs: true,
-    fn: ([n]) => Math.cos(new Fraction(n).valueOf()),
+    fn: ([n]) => Math.cos(toFraction(n).valueOf()),
     functor: angleOpFunctor,
   },
   acos: {
     argCount: 1,
     autoConvertArgs: true,
-    fn: ([n]) => Math.acos(new Fraction(n).valueOf()),
+    fn: ([n]) => Math.acos(toFraction(n).valueOf()),
     functor: arcFunctor,
   },
   tan: {
     argCount: 1,
     autoConvertArgs: true,
-    fn: ([n]) => Math.tan(new Fraction(n).valueOf()),
+    fn: ([n]) => Math.tan(toFraction(n).valueOf()),
     functor: angleOpFunctor,
   },
   atan: {
     argCount: 1,
     autoConvertArgs: true,
-    fn: ([n]) => Math.atan(new Fraction(n).valueOf()),
+    fn: ([n]) => Math.atan(toFraction(n).valueOf()),
     functor: arcFunctor,
   },
 };

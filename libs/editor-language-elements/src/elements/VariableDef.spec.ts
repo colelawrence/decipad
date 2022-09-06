@@ -8,7 +8,7 @@ import {
   MyEditor,
 } from '@decipad/editor-types';
 import { astNode } from '@decipad/editor-utils';
-import FFraction from '@decipad/fraction';
+import { toFraction } from '@decipad/fraction';
 import { createPlateEditor } from '@udecode/plate';
 import { VariableDef } from './VariableDef';
 
@@ -95,7 +95,7 @@ describe('VariableDef slider element', () => {
       astNode(
         'assign',
         astNode('def', 'varName'),
-        astNode('literal', 'number', new FFraction(5))
+        astNode('literal', 'number', toFraction(5))
       ),
     ]);
   });

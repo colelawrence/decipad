@@ -14,7 +14,7 @@ describe('column value', () => {
         Fraction(2),
         Fraction(3),
       ]
-      `);
+    `);
   });
 
   it('can be sorted', () => {
@@ -26,14 +26,14 @@ describe('column value', () => {
         Fraction(1),
         Fraction(2),
       ]
-      `);
+    `);
     expect(sortedColumn.getData()).toMatchInlineSnapshot(`
       Array [
         Fraction(1),
         Fraction(2),
         Fraction(3),
       ]
-      `);
+    `);
   });
 
   it('can derive a column with unique values', () => {
@@ -54,7 +54,7 @@ describe('column value', () => {
         Fraction(3),
         Fraction(0),
       ]
-      `);
+    `);
 
     expect(uniqueValuesColumn.getData()).toMatchInlineSnapshot(`
       Array [
@@ -64,7 +64,7 @@ describe('column value', () => {
         Fraction(3),
         Fraction(5),
       ]
-      `);
+    `);
   });
 
   it('a column can be sliced', () => {

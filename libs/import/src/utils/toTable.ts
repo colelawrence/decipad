@@ -3,8 +3,8 @@ import type {
   SerializedType,
   SerializedTypes,
 } from '@decipad/computer';
-import Fraction from '@decipad/fraction';
 import { getDefined } from '@decipad/utils';
+import { toFraction } from '@decipad/fraction';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import {
   parseDate,
@@ -70,7 +70,7 @@ function toValue(
     return col.map((elem) => {
       switch (type?.kind) {
         case 'number':
-          return new Fraction(elem as number);
+          return toFraction(elem as number);
         case 'date':
           return BigInt(getDefined(parseDate(elem as string)));
         case 'string':

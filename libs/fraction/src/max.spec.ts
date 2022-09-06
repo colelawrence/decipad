@@ -1,5 +1,4 @@
-import { max } from '.';
-import { F } from './utils';
+import { max, F } from '.';
 
 test('max', () => {
   expect(max(F(1))).toEqual(F(1));

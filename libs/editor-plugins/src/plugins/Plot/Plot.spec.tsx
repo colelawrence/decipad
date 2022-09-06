@@ -1,5 +1,4 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
-import Fraction from '@decipad/fraction';
 import { SerializedType } from '@decipad/computer';
 import {
   ResultsContextItem,
@@ -11,6 +10,7 @@ import { Plate } from '@udecode/plate';
 import { createRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { toFraction } from '@decipad/fraction';
 import Plot from './Plot';
 
 interface PlotWithProvidersParams {
@@ -19,7 +19,7 @@ interface PlotWithProvidersParams {
 }
 
 function F(n: number) {
-  return new Fraction(n);
+  return toFraction(n);
 }
 
 const tableType: SerializedType = {

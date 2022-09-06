@@ -29,7 +29,7 @@ function validate(
 
   switch (type.kind) {
     case 'number': {
-      return getTrue(value instanceof Fraction, 'panic: expected bigint');
+      return getTrue(value instanceof Fraction, 'panic: expected fraction');
     }
     case 'boolean':
     case 'string': {

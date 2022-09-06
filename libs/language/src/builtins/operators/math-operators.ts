@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import produce from 'immer';
-import Fraction, { pow } from '@decipad/fraction';
+import Fraction, { pow, toFraction } from '@decipad/fraction';
 import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { F, getInstanceof, multiplyMultipliers } from '../../utils';
@@ -21,7 +21,7 @@ import { Context } from '../../infer';
 
 import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-evaluate';
 
-const ZERO = new Fraction(0);
+const ZERO = toFraction(0);
 
 const binopFunctor = ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -137,7 +137,7 @@ const average = ([value]: Value[]): Value => {
   }
   return fromJS(
     fractions
-      .reduce((acc, n) => acc.add(n), new Fraction(0))
+      .reduce((acc, n) => acc.add(n), toFraction(0))
       .div(fractions.length)
   );
 };
@@ -232,7 +232,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       }
 
       let count = 0;
-      let sum = new Fraction(0);
+      let sum = toFraction(0);
 
       for (const [bool, num] of zip(bools, numbers)) {
         if (bool) {
@@ -275,7 +275,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
             `square root of ${n.toString()} is not a number`
           );
         }
-        result = new Fraction(nonRationalResult);
+        result = toFraction(nonRationalResult);
       }
       return result;
     },
@@ -306,7 +306,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         }
 
         if (frac.compare(2) < 0) {
-          return new FractionValue(new Fraction(1n));
+          return new FractionValue(toFraction(1n));
         }
 
         if (frac.valueOf() !== Math.round(frac.valueOf())) {
@@ -314,7 +314,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         }
 
         if (lookupTable[frac.valueOf()]) {
-          return new FractionValue(new Fraction(lookupTable[frac.valueOf()]));
+          return new FractionValue(toFraction(lookupTable[frac.valueOf()]));
         }
 
         let i = BigInt(frac.valueOf() - 1);
@@ -325,7 +325,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
 
         lookupTable[frac.valueOf()] = fact;
 
-        return new FractionValue(new Fraction(fact));
+        return new FractionValue(toFraction(fact));
       };
     })(),
     functor: ([n]) => n,
@@ -370,7 +370,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
           if (secondArgIsPercentage(types)) {
             return Scalar.fromValue(
               (a.getData() as Fraction).mul(
-                new Fraction(1).sub(b.getData() as Fraction)
+                toFraction(1).sub(b.getData() as Fraction)
               )
             );
           }

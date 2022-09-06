@@ -1,5 +1,4 @@
-import Fraction from 'fraction.js/bigfraction';
-import { FractionLike } from '.';
+import Fraction, { from } from '.';
 
 export const isZero = (f: Fraction): boolean => {
   return f.compare(0) === 0;
@@ -14,33 +13,7 @@ export const pow = (a: Fraction, b: Fraction): Fraction => {
         `**: result of raising to ${b.toString()} is not rational`
       );
     }
-    return new Fraction(resultNumber);
+    return from(resultNumber);
   }
   return result;
 };
-
-const fractionLikeProps = ['n', 'd', 's'] as const;
-
-export const isFractionLike = (f: unknown): f is FractionLike => {
-  return (
-    typeof f === 'object' &&
-    f !== null &&
-    fractionLikeProps.every(
-      (prop) => prop in f && typeof (f as FractionLike)[prop] === 'bigint'
-    )
-  );
-};
-
-export const F = (n: number | bigint | FractionLike): Fraction => {
-  if (isFractionLike(n)) {
-    return new Fraction(n.n * n.s, n.d);
-  }
-  return new Fraction(n);
-};
-
-export const from = (f: FractionLike): Fraction => {
-  return f instanceof Fraction ? f : new Fraction(f);
-};
-
-export const ZERO = F(0);
-export const ONE = F(1);
