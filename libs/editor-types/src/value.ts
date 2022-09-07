@@ -165,6 +165,7 @@ export interface InlineNumberElement extends BaseElement {
   type: typeof ELEMENT_INLINE_NUMBER;
   name: string;
   children: [PlainText];
+  allowEditingName?: boolean;
 }
 
 // Layout

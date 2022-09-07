@@ -52,7 +52,11 @@ export const useNumberToolbar = ({
 
   const formula = bubbleElement ? getNodeString(bubbleElement) : '';
   const isFormulaEmpty = formula.trim() === '';
-  const isOpened = selectionCollapsed && containsBubbles && !isFormulaEmpty;
+  const isOpened =
+    selectionCollapsed &&
+    containsBubbles &&
+    !isFormulaEmpty &&
+    !!bubbleElement.allowEditingName;
 
   useEffect(() => {
     if (isOpened) update();

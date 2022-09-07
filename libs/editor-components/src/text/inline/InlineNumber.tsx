@@ -4,6 +4,7 @@ import { getDefined } from '@decipad/utils';
 import { brand700, cssVar } from '@decipad/ui';
 import {
   useDeleteEmptyInlineNumber,
+  useEditInlineNumberName,
   useInlineNumberSyntaxFixer,
 } from './InlineNumber.hooks';
 
@@ -17,9 +18,15 @@ export const InlineNumber: PlateComponent = ({
 
   useDeleteEmptyInlineNumber(element);
   useInlineNumberSyntaxFixer(element);
+  const { isEditing, allowNameEditing } = useEditInlineNumberName(element);
 
   return (
-    <span {...attributes} id={blockId} css={containerStyle}>
+    <span
+      {...attributes}
+      id={blockId}
+      css={css(containerStyle, isEditing ? {} : { cursor: 'pointer' })}
+      onClick={allowNameEditing}
+    >
       <span contentEditable={false}>{'\u2060'}</span>
       {children}
       <span contentEditable={false}>{'\u2060'}</span>

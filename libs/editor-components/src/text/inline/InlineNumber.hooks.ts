@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelected } from 'slate-react';
-import { InlineNumberElement } from '@decipad/editor-types';
+import { InlineNumberElement, useTEditorRef } from '@decipad/editor-types';
 import { useResult } from '@decipad/react-contexts';
 import {
+  isCollapsed,
   findNodePath,
   getNodeString,
   insertText,
@@ -10,6 +11,7 @@ import {
   TReactEditor,
   useEditorRef,
 } from '@udecode/plate';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
 
 export const useDeleteEmptyInlineNumber = (bubble: InlineNumberElement) => {
   const editor = useEditorRef();
@@ -72,4 +74,32 @@ const cleanUpInlineNumberSyntax = (
     throw new Error('Cannot normalize non-existent inline number');
 
   insertText(editor, expression, { at: nodePath });
+};
+
+export const useEditInlineNumberName = (bubble: InlineNumberElement) => {
+  const editor = useTEditorRef();
+  const isSelected = useSelected();
+  const isSelectionCollapsed = isCollapsed(editor.selection);
+
+  const setNameEditing = useElementMutatorCallback(
+    editor,
+    bubble,
+    'allowEditingName'
+  );
+
+  const isEditing = isSelected && isSelectionCollapsed;
+  const shouldReset = bubble.allowEditingName && !isEditing;
+
+  useEffect(() => {
+    if (shouldReset) {
+      setNameEditing(false);
+    }
+  }, [shouldReset, setNameEditing]);
+
+  const allowNameEditing = useCallback(
+    () => setNameEditing(true),
+    [setNameEditing]
+  );
+
+  return { allowNameEditing, isEditing };
 };
