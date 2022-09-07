@@ -35,6 +35,7 @@ import {
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
 import { useSelected } from 'slate-react';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 const InDraggableBlock = createContext(false);
@@ -176,7 +177,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         a === 'show' ? setIsHidden(false) : setIsHidden(true);
       }}
       onAdd={onAdd}
-      onCopyHref={onCopyHref}
+      onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}
       showLine={
         !(
           editor.children.length === 2 &&
