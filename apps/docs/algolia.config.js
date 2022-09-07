@@ -9,9 +9,9 @@ const configs = {
     contextualSearch: false,
   },
   'docs.alpha.decipad.com': {
-    appId: 'T5O5EB5YRE',
+    appId: 'TV8XZ0RFSZ',
     // Public API key: it is safe to commit it
-    apiKey: '9d26f5ed12e439a985a277527c30749a',
+    apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.alpha.decipad.com',
     contextualSearch: false,
   },
