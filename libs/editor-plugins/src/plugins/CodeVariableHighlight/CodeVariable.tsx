@@ -49,14 +49,14 @@ export const CodeVariable: CodeLeaf = ({
 
   const result = useResult(blockId, rootRef.current);
 
-  const vars = result?.visibleVariables;
-  const variableScope = getVariableScope(variableName, vars);
+  const variableScope = getVariableScope(variableName, result?.visibleVariables);
   const variableMissing = variableScope === 'undefined';
 
   const computer = useComputer();
   const defBlockId = useObservable(() => computer.getBlockId$(variableName));
-
-  const variableResult = computer.getVariable(variableName);
+  const variableResult = useObservable(() =>
+    computer.getVariable$(variableName)
+  );
 
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
@@ -84,7 +84,7 @@ export const CodeVariable: CodeLeaf = ({
       <molecules.CodeVariable
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
-        variableType={result?.result?.type}
+        variableType={variableResult?.type}
         variableValue={variableResult?.value ?? undefined}
         defBlockId={defBlockId}
         onGoToDefinition={goToDefinition}
