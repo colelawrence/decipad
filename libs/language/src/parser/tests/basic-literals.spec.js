@@ -1,5 +1,5 @@
-import { c, F, l, r } from '../utils';
-import { runTests } from './run-tests';
+import { c, F, l, r } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'expression is number literal': {

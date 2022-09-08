@@ -6,7 +6,13 @@ import { RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
 import { FractionValue, fromJS, Value } from '../interpreter/Value';
 import { AST } from '../parser';
-import { build as t, InferError, Type, Unit } from '../type';
+import {
+  build as t,
+  convertToMultiplierUnit,
+  InferError,
+  Type,
+  Unit,
+} from '../type';
 import { matchUnitArrays } from '../type/units';
 import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
 import type { GetTypeCtx, GetValueCtx, Directive } from './types';
@@ -46,6 +52,13 @@ export async function getType(
   if (expressionType.errorCause) {
     return expressionType;
   }
+
+  if (representsPercentage(unitExpr)) {
+    return automapTypes([expressionType.isScalar('number')], (): Type => {
+      return t.number(null, 'percentage');
+    });
+  }
+
   const unitExpressionType = (await infer(unitExpr)).isScalar('number');
   if (unitExpressionType.errorCause) {
     return unitExpressionType;
@@ -104,7 +117,24 @@ export async function getValue(
   { evaluate, getNodeType }: GetValueCtx,
   [expression, unitsExpression]: [AST.Expression, AST.Expression]
 ): Promise<Value> {
-  const evalResult = await evaluate(expression);
+  const expressionType = await getNodeType(expression);
+  const expressionValue = await evaluate(expression);
+  const sourceUnits = inlineUnitAliases(expressionType.reducedToLowest().unit);
+
+  if (representsPercentage(unitsExpression)) {
+    return automapValues(
+      [expressionType],
+      [expressionValue],
+      ([value], [type]) => {
+        const rawNumber = convertToMultiplierUnit(
+          getInstanceof(value, FractionValue).value,
+          type.unit
+        );
+        return FractionValue.fromValue(rawNumber.div(100));
+      }
+    );
+  }
+
   const targetUnitsEvalResult = await evaluate(unitsExpression);
   const targetUnitsData = getInstanceof(
     targetUnitsEvalResult.getData(),
@@ -117,9 +147,6 @@ export async function getValue(
     inlineUnitAliases(returnExpressionType.unit)
   );
 
-  const expressionType = await getNodeType(expression);
-
-  const sourceUnits = inlineUnitAliases(expressionType.reducedToLowest().unit);
   const targetUnitsExpressionType = await getNodeType(unitsExpression);
   const targetUnits = inlineUnitAliases(targetUnitsExpressionType.unit);
 
@@ -130,7 +157,7 @@ export async function getValue(
 
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
-  return automapValues([expressionType], [evalResult], ([value]) => {
+  return automapValues([expressionType], [expressionValue], ([value]) => {
     if (value instanceof FractionValue) {
       if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
         return fromJS(value.getData().div(conversionRate));
@@ -158,3 +185,10 @@ export const as: Directive = {
   getType,
   getValue,
 };
+
+function representsPercentage(
+  unitExpr: AST.Expression | AST.GenericIdentifier
+): unitExpr is AST.GenericIdentifier {
+  // Parser only uses "generic-identifier" to represent percentage here
+  return unitExpr.type === 'generic-identifier';
+}

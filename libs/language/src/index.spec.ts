@@ -1011,6 +1011,15 @@ describe('Units', () => {
     });
   });
 
+  it('per acts as /', async () => {
+    expect(await runCode('kw per hour')).toMatchObject({
+      value: F(1000),
+      type: t.number(
+        U([u('hours', { exp: F(-1) }), u('w', { multiplier: F(1000) })])
+      ),
+    });
+  });
+
   it('can avoid converting months to seconds', async () => {
     const { type, value } = await runCode(
       '(120 meter^2) * (50 USD/meter^2/month)'
@@ -2171,12 +2180,12 @@ describe('percentages', () => {
     });
   });
 
-  it('per acts as /', async () => {
-    expect(await runCode('kw per hour')).toMatchObject({
-      value: F(1000),
-      type: t.number(
-        U([u('hours', { exp: F(-1) }), u('w', { multiplier: F(1000) })])
-      ),
-    });
+  it('can be converted from a number', async () => {
+    expect(await runCode('10 in %')).toMatchInlineSnapshot(`
+      Object {
+        "type": percentage,
+        "value": Fraction(0.1),
+      }
+    `);
   });
 });

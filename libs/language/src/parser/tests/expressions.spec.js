@@ -1,5 +1,5 @@
-import { F, l, as, c, r, assign, num } from '../utils';
-import { runTests } from './run-tests';
+import { F, l, as, c, r, assign, num } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'ref as expression': {
@@ -685,12 +685,13 @@ runTests({
       ),
     ],
   },
-  'No ambiguity between subtraction and implicit multiplication of an exponentiated unary minus': {
-    sourceMap: false,
-    source: 'InterestRate = 1.1%\n1 - InterestRate**360',
-    ast: [
-      assign('InterestRate', num(0.011, 'percentage')),
-      c('-', l(1), c('**', r('InterestRate'), l(360)))
-    ]
-  }
+  'No ambiguity between subtraction and implicit multiplication of an exponentiated unary minus':
+    {
+      sourceMap: false,
+      source: 'InterestRate = 1.1%\n1 - InterestRate**360',
+      ast: [
+        assign('InterestRate', num(0.011, 'percentage')),
+        c('-', l(1), c('**', r('InterestRate'), l(360))),
+      ],
+    },
 });

@@ -88,7 +88,7 @@ overExp       -> overExp _ "over" _ genericIdentifier   {%
                                                         %}
 
 asExp         -> orOp                                   {% id %}
-asExp         -> asExp _ ("as" | "to" | "in") _ orOp    {%
+asExp         -> asExp _ asWord _ orOp                  {%
                                                         (d) => {
                                                           const exp = d[0]
                                                           const unit = d[4]
@@ -98,6 +98,20 @@ asExp         -> asExp _ ("as" | "to" | "in") _ orOp    {%
                                                           }, d);
                                                         }
                                                         %}
+asExp         -> asExp _ asWord _ "%"                   {%
+                                                        (d) => {
+                                                          const percent = addLoc({
+                                                            type: 'generic-identifier',
+                                                            args: ['%']
+                                                          }, d[4]);
+                                                          return addArrayLoc({
+                                                            type: 'directive',
+                                                            args: ['as', d[0], percent]
+                                                          }, d);
+                                                        }
+                                                        %}
+
+asWord        -> ("as" | "to" | "in")                   {% id %}
 
 @{%
 function basicBinop([left, _spc, op, _spc2, right]) {

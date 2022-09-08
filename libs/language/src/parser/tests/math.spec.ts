@@ -1,5 +1,5 @@
-import { assign, c, r } from '../utils';
-import { runTests } from './run-tests';
+import { assign, c, r } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'binops are left-associative': {

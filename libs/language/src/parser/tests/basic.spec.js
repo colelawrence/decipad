@@ -1,5 +1,5 @@
-import { n, c, l, r } from '../utils';
-import { runTests } from './run-tests';
+import { n, c, l, r } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'invalid syntax': {

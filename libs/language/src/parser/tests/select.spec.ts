@@ -1,5 +1,5 @@
-import { r, n } from '../utils';
-import { runTests } from './run-tests';
+import { r, n } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'can use source maps': {

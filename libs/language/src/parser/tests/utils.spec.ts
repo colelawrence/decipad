@@ -1,5 +1,5 @@
-import { assign, block, c, col, l, prop, table } from '../utils';
-import { prettyPrintAST } from './utils';
+import { assign, block, c, col, l, prop, table } from '../../utils';
+import { prettyPrintAST } from '../utils';
 
 it('can pretty print the AST', () => {
   expect(

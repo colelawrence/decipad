@@ -1,5 +1,5 @@
-import { F, col } from '../utils';
-import { runTests } from './run-tests';
+import { F, col } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'empty column': {

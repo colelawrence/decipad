@@ -1,5 +1,5 @@
-import { F, c, l, num } from '../utils';
-import { runTests } from './run-tests';
+import { F, c, l, num, n } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'percentage value': {
@@ -36,5 +36,10 @@ runTests({
     source: ' 10% - 1 ',
     sourceMap: false,
     ast: [c('-', num(0.1, 'percentage'), l(1))],
+  },
+  'in percent': {
+    source: '10 in %',
+    sourceMap: false,
+    ast: [n('directive', 'as', l(10), n('generic-identifier', '%'))],
   },
 });

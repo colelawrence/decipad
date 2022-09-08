@@ -1,5 +1,5 @@
-import { F } from '../utils';
-import { runTests } from './run-tests';
+import { F } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'one statement per line': {

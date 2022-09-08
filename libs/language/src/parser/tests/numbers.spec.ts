@@ -1,5 +1,5 @@
-import { c, l, r } from '../utils';
-import { runTests } from './run-tests';
+import { c, l, r } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'units on the right': {

@@ -1,5 +1,5 @@
-import { col, tableColAssign } from '../utils';
-import { runTests } from './run-tests';
+import { col, tableColAssign } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'can assign cols to tables': {

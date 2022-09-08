@@ -1,5 +1,5 @@
-import { col, r, categories } from '../utils';
-import { runTests } from './run-tests';
+import { col, r, categories } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'can create sets': {

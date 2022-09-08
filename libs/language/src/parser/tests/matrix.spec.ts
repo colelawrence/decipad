@@ -1,5 +1,5 @@
-import { c, l, matrixAssign, matrixRef, r } from '../utils';
-import { runTests } from './run-tests';
+import { c, l, matrixAssign, matrixRef, r } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'can assign to matrices': {

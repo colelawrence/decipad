@@ -1,5 +1,5 @@
-import { SyntaxError } from '.';
-import { parse } from './parser';
+import { SyntaxError } from '..';
+import { parse } from '../parser';
 
 it('includes the last token in "no solutions" errors', () => {
   const error = (() => {

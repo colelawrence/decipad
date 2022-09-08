@@ -1,5 +1,5 @@
-import { runTests } from './run-tests';
-import { c, l, prop } from '../utils';
+import { runTests } from '../run-tests';
+import { c, l, prop } from '../../utils';
 
 runTests({
   'property accessor': {

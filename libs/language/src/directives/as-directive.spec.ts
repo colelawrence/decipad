@@ -1,5 +1,5 @@
 import { build as t } from '../type';
-import { c, col, l, U, u, ne, r, F } from '../utils';
+import { c, col, l, U, u, ne, r, F, n } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue, directiveFor } from './testUtils';
@@ -13,6 +13,16 @@ describe('getType', () => {
     expect(await testGetType(getType, l(1), ne(1, 'hours'))).toMatchObject({
       type: 'number',
       unit: U('hours'),
+    });
+  });
+
+  it('converts to percentage', async () => {
+    expect(
+      await testGetType(getType, l(1), n('generic-identifier', '%'))
+    ).toMatchObject({
+      type: 'number',
+      unit: null,
+      numberFormat: 'percentage',
     });
   });
 
@@ -91,6 +101,27 @@ describe('getValue', () => {
         Fraction(3),
       ]
     `);
+  });
+
+  it('converts to percent', async () => {
+    const quantity = col(
+      c('implicit*', n('literal', 'number', F(1)), r('kilometer'))
+    );
+
+    expect(
+      await (
+        await testGetValue(getValue, quantity, n('generic-identifier', '%'))
+      ).getData()
+    ).toMatchInlineSnapshot(`
+      Array [
+        Fraction(0.01),
+      ]
+    `);
+    expect(
+      await (
+        await testGetValue(getValue, l(10), n('generic-identifier', '%'))
+      ).getData()
+    ).toMatchInlineSnapshot(`Fraction(0.1)`);
   });
 
   it('works on a unitful column', async () => {

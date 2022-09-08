@@ -1,6 +1,6 @@
-import { n } from '.';
-import { col } from '../utils';
-import { runTests } from './run-tests';
+import { n } from '..';
+import { col } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   'empty table': {

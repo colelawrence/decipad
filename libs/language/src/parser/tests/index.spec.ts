@@ -1,8 +1,8 @@
 /* eslint-disable jest/expect-expect */
 import { getDefined } from '@decipad/utils';
-import { AST } from '..';
-import { n, c, l, date, range, col, tableDef, funcDef } from '../utils';
-import { parseBlock } from './index';
+import { AST } from '../..';
+import { n, c, l, date, range, col, tableDef, funcDef } from '../../utils';
+import { parseBlock } from '../index';
 
 const testParse = (source: string, ...expected: AST.Statement[]) => {
   expect(parseBlock(source)?.solution).toMatchObject(n('block', ...expected));

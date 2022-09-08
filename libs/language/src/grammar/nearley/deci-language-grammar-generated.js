@@ -1579,12 +1579,9 @@ let ParserRules = [
     },
   },
   { name: 'asExp', symbols: ['orOp'], postprocess: id },
-  { name: 'asExp$subexpression$1', symbols: [{ literal: 'as' }] },
-  { name: 'asExp$subexpression$1', symbols: [{ literal: 'to' }] },
-  { name: 'asExp$subexpression$1', symbols: [{ literal: 'in' }] },
   {
     name: 'asExp',
-    symbols: ['asExp', '_', 'asExp$subexpression$1', '_', 'orOp'],
+    symbols: ['asExp', '_', 'asWord', '_', 'orOp'],
     postprocess: (d) => {
       const exp = d[0];
       const unit = d[4];
@@ -1597,6 +1594,30 @@ let ParserRules = [
       );
     },
   },
+  {
+    name: 'asExp',
+    symbols: ['asExp', '_', 'asWord', '_', { literal: '%' }],
+    postprocess: (d) => {
+      const percent = addLoc(
+        {
+          type: 'generic-identifier',
+          args: ['%'],
+        },
+        d[4]
+      );
+      return addArrayLoc(
+        {
+          type: 'directive',
+          args: ['as', d[0], percent],
+        },
+        d
+      );
+    },
+  },
+  { name: 'asWord$subexpression$1', symbols: [{ literal: 'as' }] },
+  { name: 'asWord$subexpression$1', symbols: [{ literal: 'to' }] },
+  { name: 'asWord$subexpression$1', symbols: [{ literal: 'in' }] },
+  { name: 'asWord', symbols: ['asWord$subexpression$1'], postprocess: id },
   { name: 'orOp', symbols: ['andOp'], postprocess: id },
   {
     name: 'orOp',

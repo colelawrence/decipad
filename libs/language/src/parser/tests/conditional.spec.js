@@ -1,5 +1,5 @@
-import { c, r } from '../utils';
-import { runTests } from './run-tests';
+import { c, r } from '../../utils';
+import { runTests } from '../run-tests';
 
 runTests({
   conditional: {
