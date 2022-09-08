@@ -52,7 +52,7 @@ export const addColumn = (
   editor: MyEditor,
   {
     tablePath,
-    cellType = { kind: 'string' },
+    cellType = { kind: 'anything' },
   }: {
     tablePath: Path;
     cellType?: TableCellType;

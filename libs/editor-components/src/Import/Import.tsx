@@ -35,7 +35,9 @@ export const Import: PlateComponent = ({ attributes, element }) => {
       if (!fetched && !fetching) {
         setFetching(true);
         try {
-          setResult(await tryImport(new URL(element.url), element.source));
+          setResult(
+            await tryImport(computer, new URL(element.url), element.source)
+          );
         } catch (err) {
           console.error('Error caught while importing', err);
           setError((err as Error).message);
@@ -45,7 +47,7 @@ export const Import: PlateComponent = ({ attributes, element }) => {
         }
       }
     })();
-  }, [element.source, element.url, fetched, fetching]);
+  }, [computer, element.source, element.url, fetched, fetching]);
 
   useEffect(() => {
     if (result?.type.kind === 'type-error') {

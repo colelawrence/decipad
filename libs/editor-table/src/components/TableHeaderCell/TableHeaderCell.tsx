@@ -3,20 +3,22 @@ import {
   ELEMENT_TH,
   PlateComponent,
   TableElement,
-  useTPlateEditorRef,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { organisms } from '@decipad/ui';
-import { assertElementType } from '@decipad/editor-utils';
-import { findNodePath, getNodeEntry, getNodeString } from '@udecode/plate';
+import { assertElementType, useNodePath } from '@decipad/editor-utils';
+import { getNode, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
+import { getDefined } from '@decipad/utils';
 import { selectColumn } from '../../utils/selectColumn';
 import { useDragColumn } from '../../hooks/useDragColumn';
 import {
   useColumnDropDirection,
   useDropColumn,
   useTableActions,
+  useColumnInferredType,
 } from '../../hooks';
 
 export const TableHeaderCell: PlateComponent = ({
@@ -26,15 +28,11 @@ export const TableHeaderCell: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_TH);
   const computer = useComputer();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const editor = useTPlateEditorRef()!;
-  const path = findNodePath(editor, element);
-  if (!path) {
-    throw new Error('no path for th element found');
-  }
+  const editor = useTEditorRef();
+  const path = getDefined(useNodePath(element));
   const nThChild = path[path.length - 1];
   const tablePath = Path.parent(Path.parent(path));
-  const [table] = getNodeEntry<TableElement>(editor, tablePath);
+  const table = getDefined(getNode<TableElement>(editor, tablePath));
   const { onChangeColumnType, onRemoveColumn } = useTableActions(editor, table);
   const focused = useSelected();
 
@@ -47,6 +45,8 @@ export const TableHeaderCell: PlateComponent = ({
     [computer]
   );
 
+  const { type: inferredType } = useColumnInferredType(element);
+
   return (
     <organisms.TableColumnHeader
       attributes={attributes}
@@ -54,11 +54,13 @@ export const TableHeaderCell: PlateComponent = ({
       empty={getNodeString(element).length === 0}
       focused={focused}
       isFirst={nThChild === 0}
-      onChangeColumnType={(type) => onChangeColumnType(nThChild, type)}
+      onChangeColumnType={(newType) => onChangeColumnType(nThChild, newType)}
       onRemoveColumn={() => onRemoveColumn(element.id)}
       onSelectColumn={() => selectColumn(editor, path)}
       parseUnit={parseUnit}
-      type={element.cellType}
+      type={
+        element.cellType?.kind === 'anything' ? inferredType : element.cellType
+      }
       draggable={true}
       dragSource={dragSource}
       dropTarget={dropTarget}

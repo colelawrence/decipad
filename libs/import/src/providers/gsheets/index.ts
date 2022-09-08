@@ -1,6 +1,6 @@
-import { Result } from '@decipad/computer';
+import { Computer, Result } from '@decipad/computer';
+import { inferTable } from '@decipad/parse';
 import { getDataUrlFromSheetUrl } from './getDataUrlFromSheetUrl';
-import { toTable } from '../../utils/toTable';
 import { Sheet } from '../../types';
 import { ImportOptions } from '../../import';
 
@@ -18,14 +18,19 @@ const errorResult = (err: string): Result.Result => {
 };
 
 const handleGsheetsResponse = async (
+  computer: Computer,
   resp: Response,
   options: ImportOptions
 ): Promise<Result.Result<'table'>> => {
   const body = (await resp.json()) as unknown as Sheet;
-  return toTable(body, options);
+  return inferTable(computer, body, {
+    ...options,
+    doNotTryExpressionNumbersParse: true,
+  });
 };
 
 const importGsheets = async (
+  computer: Computer,
   _url: URL,
   options: ImportOptions
 ): Promise<Result.Result> => {
@@ -39,7 +44,11 @@ const importGsheets = async (
   if (!resp.ok) {
     return errorResult(resp.statusText);
   }
-  return handleGsheetsResponse(resp, options) as Promise<Result.Result>;
+  return handleGsheetsResponse(
+    computer,
+    resp,
+    options
+  ) as Promise<Result.Result>;
 };
 
 export const gsheets = {

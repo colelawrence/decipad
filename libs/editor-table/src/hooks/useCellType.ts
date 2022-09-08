@@ -1,6 +1,6 @@
 import {
   TableCellElement,
-  TableCellType,
+  CellValueType,
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -14,9 +14,9 @@ import { useEffect, useState } from 'react';
 
 export const useCellType = (
   element: TableCellElement | TableHeaderElement
-): TableCellType | undefined => {
+): CellValueType | undefined => {
   const table = useEditorTableContext();
-  const [cellType, setCellType] = useState<TableCellType | undefined>();
+  const [cellType, setCellType] = useState<CellValueType | undefined>();
   const editor = useTEditorRef();
 
   useEditorChange(

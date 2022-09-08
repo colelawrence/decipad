@@ -1,16 +1,20 @@
-import { MyEditor, VariableDefinitionElement } from '@decipad/editor-types';
-import { SerializedType } from '@decipad/computer';
-import { useEditorChange } from '@decipad/react-contexts';
+import {
+  MyEditor,
+  CellValueType,
+  VariableDefinitionElement,
+} from '@decipad/editor-types';
+import { useComputer, useEditorChange } from '@decipad/react-contexts';
 import { useCallback, useState } from 'react';
 import { dequal } from 'dequal';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
-import { inferType } from '@decipad/editor-language-elements';
+import { inferType } from '@decipad/parse';
 
 export const useTextTypeInference = (
   element: VariableDefinitionElement
-): SerializedType => {
-  const [inferredType, setInferredType] = useState<SerializedType>(() => ({
+): CellValueType => {
+  const computer = useComputer();
+  const [inferredType, setInferredType] = useState<CellValueType>(() => ({
     kind: 'anything',
   }));
 
@@ -27,14 +31,16 @@ export const useTextTypeInference = (
 
   const inferAndSetType = useCallback(
     (text: string | undefined) => {
-      if (text != null) {
-        const { type: newType } = inferType(text);
-        if (!dequal(newType, inferredType)) {
-          setInferredType(newType);
+      (async () => {
+        if (text != null) {
+          const { type: newType } = await inferType(computer, text);
+          if (!dequal(newType, inferredType)) {
+            setInferredType(newType);
+          }
         }
-      }
+      })();
     },
-    [inferredType]
+    [computer, inferredType]
   );
 
   useEditorChange(inferAndSetType, selectTextValue);

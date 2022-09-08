@@ -75,13 +75,17 @@ export const elementToLanguageBlock = async (
 
   // blocks that return unparsed code:
   if (interactiveElement.getParsedBlockFromElement) {
-    blocks.push(
-      ...(await interactiveElement.getParsedBlockFromElement(
-        editor,
-        computer,
-        element
-      ))
-    );
+    try {
+      blocks.push(
+        ...(await interactiveElement.getParsedBlockFromElement(
+          editor,
+          computer,
+          element
+        ))
+      );
+    } catch (err) {
+      console.error('Error getting parsed block from element', err);
+    }
   }
 
   return flattenLanguageBlocks(blocks);

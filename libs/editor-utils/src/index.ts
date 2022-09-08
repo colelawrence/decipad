@@ -1,5 +1,4 @@
 export * from './astNode';
-export * from './parseCell';
 export * from './block';
 export * from './clone';
 export * from './path';
@@ -28,8 +27,6 @@ export * from './getVariableRanges';
 export * from './magicNumberId';
 export * from './matchNodeType';
 export * from './isElementOfType';
-export * from './parseSeriesStart';
-export * from './seriesIterator';
 export * from './getSlateFragment';
 export * from './selectEventRange';
 export * from './isPath';

@@ -1,7 +1,7 @@
 import { Result } from '@decipad/computer';
 import { toFraction } from '@decipad/fraction';
+import { columnNameFromIndex } from '@decipad/parse';
 import { ImportOptions } from './import';
-import { columnNameFromIndex } from './utils/columnNameFromIndex';
 import { errorResult } from './utils/errorResult';
 import { sameType } from './utils/sameType';
 
@@ -117,11 +117,20 @@ export const importFromUnknownJson = (
     };
   }
   if (tof === 'string') {
+    const value = (json as string).trim();
+    if (value) {
+      return {
+        type: {
+          kind: 'string',
+        },
+        value: json as string,
+      };
+    }
     return {
       type: {
-        kind: 'string',
+        kind: 'anything',
       },
-      value: json as string,
+      value: Result.UnknownValue.getData(),
     };
   }
   if (tof === 'object' && json != null) {

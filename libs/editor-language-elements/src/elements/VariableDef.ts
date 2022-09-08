@@ -6,15 +6,16 @@ import {
 import { Computer } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
+import { inferType } from '@decipad/parse';
+import { getDefined } from '@decipad/utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
-import { inferType } from '../utils/inferType';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementVariableAssignment } from '../utils/parseElementVariableAssignment';
 
 export const VariableDef: InteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor: MyEditor, _computer: Computer, element: MyElement) => {
+    async (_editor: MyEditor, computer: Computer, element: MyElement) => {
       assertElementType(element, ELEMENT_VARIABLE_DEF);
 
       if (element.children.length < 2) {
@@ -26,8 +27,10 @@ export const VariableDef: InteractiveLanguageElement = {
       let expression = getNodeString(children[1]);
 
       if (element.variant === 'expression') {
-        const type = inferType(expression, element.coerceToType);
-        expression = type.coerced;
+        const type = await inferType(computer, expression, {
+          type: element.coerceToType,
+        });
+        expression = getDefined(type.coerced);
       }
 
       return [parseElementVariableAssignment(id, variableName, expression)];

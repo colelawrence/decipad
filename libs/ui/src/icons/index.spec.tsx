@@ -44,7 +44,7 @@ describe.each(iconExports)('the %s icon', (_name, Icon) => {
         variant="down"
       />
     );
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector('svg, span');
     expect(svg).not.toHaveAttribute('width');
     expect(svg).not.toHaveAttribute('height');
   });

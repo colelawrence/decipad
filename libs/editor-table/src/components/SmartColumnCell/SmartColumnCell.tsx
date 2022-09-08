@@ -93,27 +93,34 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
     [editor, expression]
   );
 
+  const showMenu = availableAggregationTypes?.length > 0;
+
   return (
     <organisms.SmartColumnCell
       onDragStart={onDragExpressionStart}
       result={result || undefined}
-      aggregationTypeMenu={[
-        <span key="name">
-          {(selectedAggregationType &&
-            (selectedAggregationType.shortName ||
-              selectedAggregationType.name)) ||
-            'Calculate'}
-        </span>,
-        <organisms.Select
-          key="selectaggregation"
-          variant="transparent"
-          caretColor="weak"
-          options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
-          value={selectedAggregationType?.name}
-          clear={!!selectedAggregationType}
-          onChange={onAggregationTypeNameChange}
-        ></organisms.Select>,
-      ]}
+      aggregationTypeMenu={
+        showMenu &&
+        [
+          <span key="name">
+            {(selectedAggregationType &&
+              (selectedAggregationType.shortName ||
+                selectedAggregationType.name)) ||
+              'Calculate'}
+          </span>,
+          showMenu && (
+            <organisms.Select
+              key="selectaggregation"
+              variant="transparent"
+              caretColor="weak"
+              options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
+              value={selectedAggregationType?.name}
+              clear={!!selectedAggregationType}
+              onChange={onAggregationTypeNameChange}
+            ></organisms.Select>
+          ),
+        ].filter(Boolean)
+      }
     />
   );
 };

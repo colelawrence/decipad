@@ -1,14 +1,15 @@
 import { FC, ReactNode, useCallback, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import { format, parse } from 'date-fns';
-import type { SerializedType, SerializedTypes } from '@decipad/computer';
+import type { SerializedTypes } from '@decipad/computer';
+import { CellValueType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { dateFormatForGranularity } from '../../utils/dateFormatForGranularity';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export interface DateEditorProps {
   children?: ReactNode;
-  type?: SerializedType;
+  type?: CellValueType;
   value?: string;
   onChangeValue?: (
     value: string | undefined // only booleans for now

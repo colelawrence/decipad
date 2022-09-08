@@ -20,6 +20,7 @@ export type TableCellType =
   | SerializedTypes.String
   | SerializedTypes.Boolean
   | SerializedTypes.Date
+  | SerializedTypes.Anything
   | Readonly<{ kind: 'table-formula' }>
   | Readonly<{ kind: 'series'; seriesType: SeriesType }>;
 

@@ -9,6 +9,7 @@
     { "path": "../computer" },
     { "path": "../utils" },
     { "path": "../fraction" },
-    { "path": "../client-config" }
+    { "path": "../client-config" },
+    { "path": "../parse" }
   ]
 }

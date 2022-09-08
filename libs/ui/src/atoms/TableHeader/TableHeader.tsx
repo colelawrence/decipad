@@ -1,4 +1,4 @@
-import type { TableCellType } from '@decipad/editor-types';
+import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, forwardRef, useContext } from 'react';
@@ -114,7 +114,7 @@ const thStyles = (color: AvailableSwatchColor) =>
 export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   children?: React.ReactNode;
   highlight?: boolean;
-  type?: TableCellType;
+  type?: CellValueType;
   menu?: React.ReactNode;
   attributes?: ElementAttributes;
   isEditable?: boolean;

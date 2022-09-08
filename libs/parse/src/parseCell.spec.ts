@@ -2,9 +2,8 @@ import { F } from '@decipad/fraction';
 import { TableCellType } from '@decipad/editor-types';
 import { Computer, prettyPrintAST } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
-import { getExpression, parseCell, parseDate } from './parseCell';
+import { getExpression, parseCell } from './parseCell';
 
-type ValidateTest = [string, TableCellType, string];
 type NoValidateTest = [string, TableCellType];
 
 const testParseCell = async (type: TableCellType, text: string) =>
@@ -91,39 +90,4 @@ it.each([
   ['aaaa', { kind: 'date', date: 'year' }],
 ] as NoValidateTest[])('%s is not a valid %s', async (format, type) => {
   expect(await parseCell(new Computer(), type, format)).toBeInstanceOf(Error);
-});
-
-describe('dates', () => {
-  it.each([
-    ['2020', { kind: 'date', date: 'year' }, '2020-01-01'],
-    ['20', { kind: 'date', date: 'year' }, '2020-01-01'],
-    ['2020-10', { kind: 'date', date: 'month' }, '2020-10-01'],
-    ['12/2020', { kind: 'date', date: 'month' }, '2020-12-01'],
-    ['13/10/2020', { kind: 'date', date: 'day' }, '2020-10-13'],
-    ['14-10-2020', { kind: 'date', date: 'day' }, '2020-10-14'],
-    ['2020-10-13', { kind: 'date', date: 'day' }, '2020-10-13'],
-    ['2020/10/13', { kind: 'date', date: 'day' }, '2020-10-13'],
-    ['2020/10/13 10:30', { kind: 'date', date: 'minute' }, '2020-10-13T10:30Z'],
-    ['2020-10-13 1:30', { kind: 'date', date: 'minute' }, '2020-10-13T01:30Z'],
-    [
-      '2020/10/13 1:30 AM',
-      { kind: 'date', date: 'minute' },
-      '2020-10-13T01:30Z',
-    ],
-  ] as ValidateTest[])('%s is a good %s', (format, type, result) => {
-    expect(parseDate(type, format)).toEqual(new Date(result));
-  });
-
-  it.each([
-    ['20201', { kind: 'date', date: 'year' }],
-    ['13/2020', { kind: 'date', date: 'month' }],
-    ['2020/13', { kind: 'date', date: 'month' }],
-    ['32/10/2020', { kind: 'date', date: 'month' }],
-    ['32/10/2020', { kind: 'date', date: 'day' }],
-    ['10/13/2020', { kind: 'date', date: 'day' }],
-    ['10/13/2020 10:30', { kind: 'date', date: 'day' }],
-    ['10/13/2020', { kind: 'date', date: 'minute' }],
-  ] as NoValidateTest[])('%s is not a %s', (format, type) => {
-    expect(parseDate(type, format)).toEqual(null);
-  });
 });

@@ -33,5 +33,6 @@ module.exports = {
     '<rootDir>/libs/format',
     '<rootDir>/libs/repl',
     '<rootDir>/libs/computer',
+    '<rootDir>/libs/parse',
   ],
 };

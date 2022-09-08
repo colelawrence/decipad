@@ -28,6 +28,8 @@ export type ErrorWithCode = Error & {
 
 export type SpreadsheetValue = string | boolean | number;
 
+export type SpreadsheetRow = SpreadsheetValue[];
+
 export type SpreadsheetColumn = SpreadsheetValue[];
 
 export interface Sheet {

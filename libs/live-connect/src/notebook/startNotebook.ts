@@ -40,7 +40,7 @@ export const startNotebook = async (
   subscription: Subscription,
   observeExternal: Observe,
   onError: OnErrorCallback
-): Promise<void> => {
+): Promise<Computer> => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
   const syncEditor = createDocSyncEditor(createEditor() as MyEditor, docId, {
     readOnly: true,
@@ -110,4 +110,6 @@ export const startNotebook = async (
 
     onChange();
   };
+
+  return computer;
 };

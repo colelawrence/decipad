@@ -1,5 +1,5 @@
 import {
-  TableCellType,
+  CellValueType,
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
@@ -7,10 +7,11 @@ import { useEditorChange } from '@decipad/react-contexts';
 import { getNodeString } from '@udecode/plate';
 import { dequal } from 'dequal';
 import { useCallback, useMemo, useState } from 'react';
+import { useColumnsInferredTypes } from './useColumnsInferredTypes';
 
 export interface TableColumn {
   name: string;
-  cellType: TableCellType;
+  cellType: CellValueType;
 }
 
 export interface TableInfo {
@@ -29,14 +30,16 @@ export const useTable = (element: TableElement): TableInfo => {
     return element.children[1].children;
   }, [element.children]);
 
+  const { types: columnTypes } = useColumnsInferredTypes(element);
+
   const getColumns = useCallback(() => {
     const headers = element.children[1].children;
 
-    return headers.map((th) => ({
+    return headers.map((th, index) => ({
       name: th.children[0].text,
-      cellType: th.cellType,
+      cellType: columnTypes[index],
     }));
-  }, [element.children]);
+  }, [columnTypes, element.children]);
 
   const getRowCount = useCallback(() => {
     return element.children.length - 2;

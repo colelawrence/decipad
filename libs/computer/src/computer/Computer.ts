@@ -27,6 +27,7 @@ import {
   validateResult,
   Value,
   InjectableExternalData,
+  SerializedType,
 } from '@decipad/language';
 import { anyMappingToMap, getDefined } from '@decipad/utils';
 import assert from 'assert';
@@ -368,6 +369,14 @@ export class Computer {
         },
       };
     }
+  }
+
+  async expressionType(expression: AST.Expression): Promise<SerializedType> {
+    const type = await inferExpression(
+      this.computationRealm.inferContext,
+      expression
+    );
+    return serializeType(type);
   }
 
   expressionResult$(

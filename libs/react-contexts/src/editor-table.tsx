@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
-import type { TableCellType } from '../../editor-types/src';
+import type { CellValueType } from '../../editor-types/src';
 
 export type EditorTableContextValue = Readonly<{
   blockId: string;
-  cellTypes: TableCellType[];
+  cellTypes: CellValueType[];
   isCollapsed: boolean;
 }>;
 

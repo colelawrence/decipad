@@ -1,6 +1,6 @@
-import { SpreadsheetValue, SpreadsheetColumn } from '../types';
+import { SpreadsheetColumn, SpreadsheetRow } from '../types';
 
-export const pivot = (rows: SpreadsheetValue[][]): SpreadsheetColumn[] => {
+export const pivot = (rows: SpreadsheetRow[]): SpreadsheetColumn[] => {
   const columns: SpreadsheetColumn[] = [];
   for (const row of rows) {
     row.forEach((cell, columnIndex) => {

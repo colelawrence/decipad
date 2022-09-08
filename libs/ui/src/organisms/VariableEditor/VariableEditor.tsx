@@ -7,7 +7,7 @@ import {
   ReactNode,
   useMemo,
 } from 'react';
-import { SerializedType } from '@decipad/computer';
+import { CellValueType } from '@decipad/editor-types';
 import { noop } from 'lodash';
 import { AddNew } from '../../atoms';
 import { Ellipsis, Virus } from '../../icons';
@@ -123,7 +123,7 @@ const variableNameStyles = css({
 
 interface EditorComponentProps {
   children: ReactNode;
-  type?: SerializedType;
+  type?: CellValueType;
   value?: string;
   onChangeValue?: (
     value: string | undefined // only booleans for now
@@ -143,8 +143,8 @@ interface VariableEditorProps
   children?: ReactNode;
   color?: AvailableSwatchColor;
   readOnly?: boolean;
-  type?: SerializedType;
-  onChangeType?: (type: SerializedType | undefined) => void;
+  type?: CellValueType;
+  onChangeType?: (type: CellValueType | undefined) => void;
   value?: string;
   onChangeValue?: (
     value: string | undefined // only booleans for now
@@ -163,7 +163,10 @@ export const VariableEditor = ({
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
-  const Icon = useMemo(() => (type && getTypeIcon(type)) ?? Virus, [type]);
+  const Icon = useMemo(
+    () => (type && getTypeIcon(type, true)) ?? Virus,
+    [type]
+  );
   const EditorComponent = useMemo(
     () => (type && editorComponents[type?.kind]) ?? DefaultEditor,
     [type]

@@ -1,10 +1,11 @@
-import { Result } from '@decipad/computer';
+import { Computer, Result } from '@decipad/computer';
 import type { ImportOptions } from './import';
 import { importFromArrow } from './importFromArrow';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
 
 const importFromUnknownResponse = async (
+  computer: Computer,
   resp: Response,
   options: ImportOptions
 ): Promise<Result.Result> => {
@@ -13,7 +14,7 @@ const importFromUnknownResponse = async (
     return importFromUnknownJson(await resp.json(), options);
   }
   if (contentType?.startsWith('text/csv')) {
-    return importFromCsv(resp, options);
+    return importFromCsv(computer, resp, options) as Promise<Result.Result>;
   }
   if (contentType?.startsWith('application/vnd.apache.arrow')) {
     return importFromArrow(resp);
@@ -28,11 +29,12 @@ const importFromUnknownResponse = async (
 };
 
 const importFromUnknownUrl = async (
+  computer: Computer,
   url: URL,
   options: ImportOptions = {}
 ): Promise<Result.Result> => {
   try {
-    return importFromUnknownResponse(await fetch(url), options);
+    return importFromUnknownResponse(computer, await fetch(url), options);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(`Error making request to ${url}`, err);
@@ -41,11 +43,12 @@ const importFromUnknownUrl = async (
 };
 
 export const importFromUnknown = (
+  computer: Computer,
   source: URL | Response,
   options: ImportOptions
 ): Promise<Result.Result> => {
   if (source instanceof URL) {
-    return importFromUnknownUrl(source, options);
+    return importFromUnknownUrl(computer, source, options);
   }
-  return importFromUnknownResponse(source as Response, options);
+  return importFromUnknownResponse(computer, source as Response, options);
 };

@@ -1,5 +1,9 @@
 import { SerializedType, SerializedTypes, Unit, Time } from '@decipad/computer';
-import type { SeriesType, TableCellType } from '@decipad/editor-types';
+import type {
+  SeriesType,
+  CellValueType,
+  TableCellType,
+} from '@decipad/editor-types';
 import { createContext, FunctionComponent } from 'react';
 import {
   All,
@@ -9,7 +13,9 @@ import {
   DollarCircle,
   Formula,
   Number,
+  QuestionMark,
   Text,
+  Warning,
 } from '../icons';
 import { AvailableSwatchColor } from './swatches';
 import { UserIconKey } from './user-icons';
@@ -18,7 +24,8 @@ const isCurrencyUnit = (unit: Unit[] | null | undefined): boolean =>
   unit?.length === 1 && unit[0].baseSuperQuantity === 'currency';
 
 export function getTypeIcon(
-  type: TableCellType | SerializedType
+  type: CellValueType,
+  onExpressionEditor = false
 ): FunctionComponent {
   switch (type.kind) {
     case 'date':
@@ -36,7 +43,9 @@ export function getTypeIcon(
     case 'series':
       return Calendar; // only calendar for now
     case 'anything':
-      return Code;
+      return onExpressionEditor ? Code : QuestionMark;
+    case 'type-error':
+      return Warning;
     default:
       return Text;
   }

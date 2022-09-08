@@ -1,6 +1,6 @@
 import { parse as parseCSV } from 'csv-parse';
-import { Result } from '@decipad/computer';
-import { toTable } from './utils/toTable';
+import { Computer, Result } from '@decipad/computer';
+import { inferTable } from '@decipad/parse';
 import { pivot } from './utils/pivot';
 import { Sheet, SpreadsheetValue } from './types';
 import { ImportOptions } from './import';
@@ -12,9 +12,10 @@ const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
 };
 
 export const importFromCsv = async (
+  computer: Computer,
   resp: Response,
   options: ImportOptions
-): Promise<Result.Result> => {
+): Promise<Result.Result<'table'>> => {
   const source = await resp.text();
   return new Promise((resolve, reject) => {
     const data: string[][] = [];
@@ -28,9 +29,18 @@ export const importFromCsv = async (
         }
       }
     });
-    parser.once('end', () => {
+    parser.once('end', async () => {
       isDone = true;
-      resolve(toTable(toColumnOriented(data), options) as Result.Result);
+      try {
+        resolve(
+          await inferTable(computer, toColumnOriented(data), {
+            ...options,
+            doNotTryExpressionNumbersParse: true,
+          })
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
     parser.once('error', reject);
     parser.end(source);

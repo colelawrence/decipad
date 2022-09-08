@@ -10,16 +10,16 @@ import {
   isExpression,
   parseOneExpression,
 } from '@decipad/computer';
+import { astColumn, astNode } from '@decipad/editor-utils';
+import { getNodeString } from '@udecode/plate';
+import { getDefined } from '@decipad/utils';
 import {
-  astColumn,
-  astNode,
   getNullReplacementValue,
+  inferColumn,
   parseCell,
   parseSeriesStart,
   seriesIterator,
-} from '@decipad/editor-utils';
-import { getNodeString } from '@udecode/plate';
-import { getDefined } from '@decipad/utils';
+} from '@decipad/parse';
 import { toFraction } from '@decipad/fraction';
 import { ParseError } from '../types';
 
@@ -69,29 +69,39 @@ export const getTableAstNodeFromTableElement = async (
           }
         }
 
+        const cellTexts: string[] = [];
+        const cellIds: string[] = [];
+        for (const tr of dataRows) {
+          const td = tr.children[columnIndex];
+          if (td) {
+            cellTexts.push(getNodeString(td));
+            cellIds.push(td.id);
+          }
+        }
+
+        const columnType =
+          !th.cellType || th.cellType.kind === 'anything'
+            ? await inferColumn(computer, cellTexts, { userType: th.cellType })
+            : th.cellType;
+
         const items = await Promise.all(
-          dataRows.map(async (tr) => {
-            const td = tr.children[columnIndex];
-            let parsed: AST.Expression | Error | null = null;
-            if (td) {
-              const text = getNodeString(td);
-              parsed = await parseCell(computer, cellType, text);
-              if (!parsed) {
-                parseErrors.push({
-                  error: `Invalid ${cellType.kind}`,
-                  elementId: td.id,
-                });
-              }
-              if (parsed instanceof Error) {
-                parseErrors.push({
-                  error: parsed.message,
-                  elementId: td.id,
-                });
-                parsed = null;
-              }
+          cellTexts.map(async (text, index) => {
+            let parsed = await parseCell(computer, columnType, text);
+            if (!parsed) {
+              parseErrors.push({
+                error: `Invalid ${cellType.kind}`,
+                elementId: cellIds[index],
+              });
+            }
+            if (parsed instanceof Error) {
+              parseErrors.push({
+                error: parsed.message,
+                elementId: cellIds[index],
+              });
+              parsed = null;
             }
             if (!parsed) {
-              parsed = await getNullReplacementValue(computer, cellType);
+              parsed = await getNullReplacementValue(columnType);
             }
             return parsed;
           })

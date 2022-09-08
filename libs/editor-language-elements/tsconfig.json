@@ -12,6 +12,7 @@
     { "path": "../computer" },
     { "path": "../react-contexts" },
     { "path": "../format" },
-    { "path": "../fraction" }
+    { "path": "../fraction" },
+    { "path": "../parse" }
   ]
 }

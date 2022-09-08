@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import './utils/workerPolyfills';
 import { tryImport } from '@decipad/import';
-import { Result } from '@decipad/computer';
+import { Computer, Result } from '@decipad/computer';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
@@ -37,11 +37,15 @@ interface UnsubscribeParams {
 
 const subscriptions = new Map<SubscriptionId, Subscription>();
 
-const tryImportHere = async (subscriptionId: SubscriptionId) => {
+const tryImportHere = async (
+  computer: Computer,
+  subscriptionId: SubscriptionId
+) => {
   const sub = subscriptions.get(subscriptionId);
   if (sub) {
     try {
       const result = await tryImport(
+        computer,
         new URL(sub.params.url),
         sub.params.source,
         {
@@ -51,18 +55,25 @@ const tryImportHere = async (subscriptionId: SubscriptionId) => {
       );
       sub.notify(result);
     } catch (err) {
-      await rpc.call('notify', { subscriptionId, err });
+      console.error(
+        `subscription ${subscriptionId}: caught error while trying to import from ${sub.params.url}`,
+        err
+      );
+      await rpc.call('notify', {
+        subscriptionId,
+        error: (err as Error).message,
+      });
     } finally {
-      schedule(subscriptionId);
+      schedule(computer, subscriptionId);
     }
   }
 };
 
-const schedule = (subscriptionId: SubscriptionId) => {
+const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
   const sub = subscriptions.get(subscriptionId);
   if (sub) {
     setTimeout(
-      () => tryImportHere(subscriptionId),
+      () => tryImportHere(computer, subscriptionId),
       (sub.params.pollIntervalSeconds || 10) * 1000
     );
   }
@@ -165,9 +176,10 @@ const subscribeInternal = async (
       onError(subscriptionId, params)
     );
   } else {
-    schedule(subscriptionId);
+    const computer = new Computer();
+    schedule(computer, subscriptionId);
     setTimeout(() => {
-      tryImportHere(subscriptionId);
+      tryImportHere(computer, subscriptionId);
     }, 0);
   }
 };

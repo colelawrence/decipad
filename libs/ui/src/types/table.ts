@@ -1,6 +1,6 @@
-import { TableColumn } from '@decipad/editor-types';
+import { CellValueType } from '@decipad/editor-types';
 
 export interface Column {
   name: string;
-  cellType: TableColumn['cellType'];
+  cellType: CellValueType;
 }

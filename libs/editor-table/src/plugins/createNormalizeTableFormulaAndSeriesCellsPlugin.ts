@@ -23,11 +23,11 @@ import {
   TableRowElement,
 } from '@decipad/editor-types';
 import { enumerate, getDefined } from '@decipad/utils';
-import { parseSeriesStart, seriesIterator } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 import { Computer } from '@decipad/computer';
 import { dequal } from 'dequal';
+import { parseSeriesStart, seriesIterator } from '@decipad/parse';
 
 const tableIsSquare = ({
   children: [, headerRow, ...dataRows],

@@ -1,4 +1,4 @@
-import { AST, Computer, SerializedType } from '@decipad/computer';
+import { AST, Computer } from '@decipad/computer';
 import { MyEditor, MyElement } from '@decipad/editor-types';
 import { IdentifiedBlock } from 'libs/computer/src/types';
 
@@ -37,9 +37,4 @@ export interface ParseError {
 export interface LanguageBlock {
   program: IdentifiedBlock[];
   parseErrors: ParseError[];
-}
-
-export interface CoercibleType {
-  type: SerializedType;
-  coerced: string;
 }

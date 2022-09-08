@@ -1,4 +1,4 @@
-import { CoercibleType } from '../types';
+import { CoercibleType } from './types';
 
 const coerceToString = (text: string): string => {
   return JSON.stringify(text);

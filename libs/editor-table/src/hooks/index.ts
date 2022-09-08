@@ -8,3 +8,5 @@ export * from './useCellType';
 export * from './useIsColumnSelected';
 export * from './useTable';
 export * from './useColumnAggregationTypes';
+export * from './useColumnInferredType';
+export * from './useColumnsInferredTypes';

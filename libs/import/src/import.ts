@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Computer, Result } from '@decipad/computer';
 import {
   ColIndex,
   ImportElementSource,
@@ -10,9 +10,11 @@ import { decipad, gsheets } from './providers';
 export interface ImportOptions {
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions?: Record<ColIndex, TableCellType>;
+  doNotTryExpressionNumbersParse?: boolean;
 }
 
 export const tryImport = (
+  computer: Computer,
   url: URL,
   provider?: ImportElementSource,
   options: ImportOptions = {}
@@ -20,10 +22,10 @@ export const tryImport = (
   if (provider) {
     switch (provider) {
       case 'gsheets':
-        return gsheets.import(url, options);
+        return gsheets.import(computer, url, options);
       case 'decipad':
         return decipad.import();
     }
   }
-  return importFromUnknown(url, options);
+  return importFromUnknown(computer, url, options);
 };

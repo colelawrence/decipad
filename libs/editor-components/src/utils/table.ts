@@ -37,12 +37,12 @@ const initialTableElement = () => {
           },
           {
             type: ELEMENT_TH,
-            cellType: { kind: 'number' },
+            cellType: { kind: 'anything' },
             children: [{ text: 'Property2' }],
           },
           {
             type: ELEMENT_TH,
-            cellType: { kind: 'number' },
+            cellType: { kind: 'anything' },
             children: [{ text: 'Property3' }],
           },
         ],

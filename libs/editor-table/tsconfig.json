@@ -11,6 +11,7 @@
     { "path": "../editor-components" },
     { "path": "../editor-plugins" },
     { "path": "../editor-utils" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../parse" }
   ]
 }

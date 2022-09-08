@@ -120,7 +120,8 @@
       "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
       "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
       "@decipad/import": ["libs/import/src/index.ts"],
-      "@decipad/client-config": ["libs/client-config/src/index.ts"]
+      "@decipad/client-config": ["libs/client-config/src/index.ts"],
+      "@decipad/parse": ["libs/parse/src/index.ts"]
     }
   },
   "files": [],

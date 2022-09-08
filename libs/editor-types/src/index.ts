@@ -1,5 +1,6 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
+import { SerializedType } from '@decipad/computer';
 
 export * from './decorator-kinds';
 
@@ -8,6 +9,7 @@ import * as markKinds from './mark-kinds';
 export { markKinds };
 
 import * as elementKinds from './element-kinds';
+import type { TableCellType } from './table';
 
 export type MarkKind = typeof markKinds[keyof typeof markKinds];
 
@@ -33,3 +35,5 @@ export const alwaysWritableElementTypes = [
 export const allElementKinds: readonly string[] = Object.freeze(
   Object.values(elementKinds)
 );
+
+export type CellValueType = TableCellType | SerializedType;

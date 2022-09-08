@@ -1,7 +1,8 @@
 import { ComponentProps, ReactNode, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { SerializedType, tokenRules } from '@decipad/language';
+import { tokenRules } from '@decipad/language';
+import { CellValueType } from '@decipad/editor-types';
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { InputMenuItem, MenuList } from '../../molecules';
 import {
@@ -23,8 +24,8 @@ import {
 type VariableEditorMenuProps = {
   readonly onCopy?: () => void;
   readonly onDelete?: () => void;
-  readonly type?: SerializedType;
-  readonly onChangeType?: (type: SerializedType | undefined) => void;
+  readonly type?: CellValueType;
+  readonly onChangeType?: (type: CellValueType | undefined) => void;
   readonly trigger: ReactNode;
 } & (
   | {

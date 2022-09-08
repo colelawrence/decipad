@@ -10,7 +10,7 @@ export const columnAggregationTypes = (
   column: TableColumn
 ): AggregationType[] => {
   const { cellType } = column;
-  switch (cellType.kind) {
+  switch (cellType?.kind) {
     case 'boolean':
       return [
         {
@@ -97,7 +97,7 @@ export const columnAggregationTypes = (
         cellType: { ...cellType, kind: 'date', date: 'day' },
       });
     }
-    case 'table-formula':
+    default:
       return [];
   }
 };

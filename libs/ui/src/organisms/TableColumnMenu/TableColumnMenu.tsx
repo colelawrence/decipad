@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { ONE, toFraction } from '@decipad/fraction';
-import type { TableCellType } from '@decipad/editor-types';
+import type { CellValueType, TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { Unit, currencyUnits, UnitOfMeasure } from '@decipad/computer';
@@ -44,7 +44,7 @@ interface TableColumnMenuProps
   readonly onRemoveColumn?: () => void;
   readonly isFirst?: boolean;
   readonly trigger: ReactNode;
-  readonly type: TableCellType;
+  readonly type: CellValueType;
   readonly isForImportedColumn?: boolean;
 }
 

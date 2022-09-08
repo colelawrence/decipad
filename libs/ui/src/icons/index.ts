@@ -82,6 +82,7 @@ export { Placeholder } from './Placeholder/Placeholder';
 export { Plane } from './Plane/Plane';
 export { Plot } from './Plot/Plot';
 export { Quote } from './Quote/Quote';
+export { QuestionMark } from './QuestionMark/QuestionMark';
 export { Refresh } from './Refresh/Refresh';
 export { Rocket } from './Rocket/Rocket';
 export { Server } from './Server/Server';

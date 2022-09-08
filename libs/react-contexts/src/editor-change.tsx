@@ -7,10 +7,14 @@ import {
   debounceTime,
   of,
   merge,
+  concatMap,
+  from,
+  filter,
 } from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
+import { identity } from 'ramda';
 import type { MyValue } from '../../editor-types/src';
 
 export const EditorChangeContext = createContext<Observable<undefined>>(
@@ -30,12 +34,17 @@ export const EditorChangeContextProvider: FC<{
 interface UseEditorChangeOptions {
   debounceTimeMs?: number;
   injectObservable?: Observable<undefined>;
+  selectsPromise?: boolean;
 }
 
 export function useEditorChange<T>(
   callback: (val: T) => void,
-  selector: (editor: PlateEditor<MyValue>) => T,
-  { debounceTimeMs = 100, injectObservable }: UseEditorChangeOptions = {}
+  selector: (editor: PlateEditor<MyValue>) => T | Promise<T>,
+  {
+    debounceTimeMs = 100,
+    injectObservable,
+    selectsPromise = false,
+  }: UseEditorChangeOptions = {}
 ): void {
   const editor = getDefined(usePlateEditorRef<MyValue>());
   const editorChanges = useContext(EditorChangeContext);
@@ -49,6 +58,11 @@ export function useEditorChange<T>(
       .pipe(
         debounceTime(debounceTimeMs),
         map(() => selector(editor)),
+        filter((v) => v != null),
+        selectsPromise
+          ? concatMap((v) => from(v as unknown as Promise<T>))
+          : map(identity),
+        filter((v) => v != null),
         distinctUntilChanged(dequal)
       )
       .subscribe(callback);
@@ -63,5 +77,6 @@ export function useEditorChange<T>(
     debounceTimeMs,
     injectObservable,
     editorChanges,
+    selectsPromise,
   ]);
 }

@@ -1,6 +1,6 @@
 import { Result, Time } from '@decipad/computer';
 import { SeriesType, TableCellType } from '@decipad/editor-types';
-import { parseDate } from '@decipad/editor-utils';
+import { parseDate } from './parseDate';
 
 export interface ParseSeriesStartResult {
   error?: string;
@@ -28,14 +28,14 @@ export const parseSeriesStart = (
       let lastError: Error | undefined;
       for (const granularityType of dateGranluarityTypes) {
         try {
-          const date = parseDate(granularityType, content);
-          if (date == null) {
+          const parsedDate = parseDate(content, granularityType.date);
+          if (!parsedDate) {
             throw new Error('Could not parse date');
           }
           return {
             type,
             granularity: granularityType.date,
-            value: BigInt(date.getTime()),
+            value: BigInt(parsedDate.date.getTime()),
           };
         } catch (err) {
           lastError = err as Error;

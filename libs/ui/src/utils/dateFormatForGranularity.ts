@@ -1,4 +1,5 @@
-import { SerializedType, SerializedTypes } from '@decipad/computer';
+import { SerializedTypes } from '@decipad/computer';
+import { CellValueType } from '@decipad/editor-types';
 
 const dateFormatsForType: Record<SerializedTypes.Date['date'], string> = {
   year: 'yyyy',
@@ -10,7 +11,7 @@ const dateFormatsForType: Record<SerializedTypes.Date['date'], string> = {
   millisecond: 'yyyy-MM-dd HH:mm:ss',
 };
 
-export const dateFormatForGranularity = (type?: SerializedType): string => {
+export const dateFormatForGranularity = (type?: CellValueType): string => {
   if (type?.kind !== 'date') {
     throw new Error('expected date');
   }
