@@ -137,8 +137,8 @@ export class Type {
     return isScalar(this, type);
   }
 
-  isColumn(size?: number | 'unknown'): Type {
-    return isColumn(this, size);
+  isColumn(): Type {
+    return isColumn(this);
   }
 
   isTable(): Type {

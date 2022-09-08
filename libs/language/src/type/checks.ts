@@ -80,20 +80,27 @@ export const sharePercentage = checker((me: Type, other: Type) => {
   return me;
 });
 
-export const isColumn = checker((me: Type, size?: number | 'unknown') => {
-  if (
-    (size === undefined && me.columnSize != null) ||
-    me.columnSize === size ||
-    me.columnSize === 'unknown' ||
-    size === 'unknown'
-  ) {
+export const isColumn = checker((me: Type) => {
+  if (me.columnSize != null) {
     return me;
   } else {
-    return me.withErrorCause(
-      `Incompatible column sizes: ${me.columnSize} and ${size ?? 'any'}`
-    );
+    return me.expected('column');
   }
 });
+
+export const withColumnSize = checker(
+  (me: Type, columnSize: number | 'unknown' | null) => {
+    return me.isColumn().mapType((me) => {
+      if (equalOrUnknown(me.columnSize ?? 'unknown', columnSize ?? 'unknown')) {
+        return me;
+      } else {
+        return me.withErrorCause(
+          `Incompatible column sizes: ${me.columnSize} and ${columnSize}`
+        );
+      }
+    });
+  }
+);
 
 export const isTable = checker((me: Type) => {
   if (me.columnNames != null && me.columnTypes != null) {
@@ -139,22 +146,6 @@ export const reducedToLowest = checker((me: Type) => {
   return me;
 });
 
-export const withColumnSize = checker(
-  (me: Type, columnSize: number | 'unknown' | null) => {
-    if (
-      me.columnSize === columnSize ||
-      me.columnSize === 'unknown' ||
-      columnSize === 'unknown'
-    ) {
-      return me;
-    } else {
-      return me.withErrorCause(
-        `Incompatible column sizes: ${me.columnSize} and ${columnSize}`
-      );
-    }
-  }
-);
-
 export const withMinimumColumnCount = checker(
   (me: Type, minColumns: number) => {
     const columnCount = (me.columnTypes ?? []).length;
@@ -181,17 +172,23 @@ export const withAtParentIndex = checker((me: Type) => {
 });
 
 export const sameColumnessAs = checker((me: Type, other: Type) => {
-  return me.withColumnSize(other.columnSize).mapType((t) => {
-    if (t.columnSize) {
-      // Recurse to make sure it's a colummn of the same size
-      return t
-        .reduced()
-        .sameAs(other.reduced())
-        .mapType(() => t);
-    } else {
-      return t;
-    }
-  });
+  if (me.columnSize != null && other.columnSize != null) {
+    return me.withColumnSize(other.columnSize).mapType((t) => {
+      if (t.columnSize) {
+        // Recurse to make sure it's a colummn of the same size
+        return t
+          .reduced()
+          .sameAs(other.reduced())
+          .mapType(() => t);
+      } else {
+        return t;
+      }
+    });
+  } else if (me.columnSize == null && other.columnSize == null) {
+    return me;
+  } else {
+    return me.expected(other);
+  }
 });
 
 export const isRange = checker((me: Type) => {

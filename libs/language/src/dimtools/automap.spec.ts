@@ -103,7 +103,7 @@ describe('automapTypes', () => {
       automapTypes(
         [t.column(num, 4), t.column(num, 5)],
         ([scalar, col]: Type[]) =>
-          Type.combine(scalar.isScalar('number'), col.isColumn(5), str),
+          Type.combine(scalar.isScalar('number'), col.isColumn(), str),
         [1, 2]
       )
     ).toEqual(t.column(str, 4));
