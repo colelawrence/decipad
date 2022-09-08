@@ -318,7 +318,7 @@
     "dom-to-playwright": "^0.1.2",
     "domhandler": "^5.0.0",
     "esbuild": "^0.15.0",
-    "eslint": "8.22.0",
+    "eslint": "8.23.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-config-react-app": "^7.0.1",
