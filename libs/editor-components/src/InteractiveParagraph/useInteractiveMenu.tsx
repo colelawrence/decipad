@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useObservable } from 'rxjs-hooks';
 import {
   isInteractionOfType,
-  useComputer,
   useEditorUserInteractions,
   useEditorUserInteractionsContext,
   UserInteraction,
@@ -35,7 +34,6 @@ export const useInteractiveMenu = (
   element: MyElement
 ): UseInteractiveMenuResult => {
   const editor = useTEditorRef();
-  const computer = useComputer();
   const [showInteractionMenu, setShowInteractionMenu] = useState(false);
   const interactions = useEditorUserInteractions('pasted-link');
   const interaction = useObservable(() => interactions);
@@ -111,7 +109,6 @@ export const useInteractiveMenu = (
           ) {
             insertLiveConnection(
               editor,
-              computer,
               lastInterestingUserInteraction.source,
               lastInterestingUserInteraction.url
             );
@@ -121,7 +118,7 @@ export const useInteractiveMenu = (
       }
       cleanupAfterCommand(lastInterestingUserInteraction);
     },
-    [cleanupAfterCommand, computer, editor, lastInterestingUserInteraction]
+    [cleanupAfterCommand, editor, lastInterestingUserInteraction]
   );
 
   const onKeyDown = useCallback(

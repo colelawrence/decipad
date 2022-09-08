@@ -17,11 +17,13 @@ import {
   TableRowElement,
 } from '@decipad/editor-types';
 import { Computer, Result, SerializedType } from '@decipad/computer';
+import { ImportResult } from '@decipad/import';
+import { varNamify } from '@decipad/utils';
 
 interface ImportTableProps {
   editor: MyEditor;
   insertPath: Path;
-  table: Result.Result<'table'>;
+  result: ImportResult;
   computer: Computer;
 }
 
@@ -120,7 +122,8 @@ const dataRows = (table: Result.Result<'table'>): TableRowElement[] => {
 
 const tableElement = (
   computer: Computer,
-  table: Result.Result<'table'>
+  table: Result.Result<'table'>,
+  meta?: ImportResult['meta']
 ): TableElement => {
   return {
     id: nanoid(),
@@ -134,7 +137,11 @@ const tableElement = (
             id: nanoid(),
             type: ELEMENT_TABLE_VARIABLE_NAME,
             children: [
-              { text: computer.getAvailableIdentifier('ImportedTable', 1) },
+              {
+                text: meta?.title
+                  ? varNamify(meta.title)
+                  : computer.getAvailableIdentifier('ImportedTable', 1),
+              },
             ],
           },
         ],
@@ -161,11 +168,18 @@ const tableElement = (
 export const importTable = ({
   editor,
   insertPath,
-  table,
+  result,
   computer,
 }: ImportTableProps): void => {
-  const t = tableElement(computer, table);
-  insertNodes(editor, t, {
-    at: insertPath,
-  });
+  const tableResult = result.result;
+  if (tableResult.type.kind === 'table') {
+    const t = tableElement(
+      computer,
+      tableResult as Result.Result<'table'>,
+      result.meta
+    );
+    insertNodes(editor, t, {
+      at: insertPath,
+    });
+  }
 };

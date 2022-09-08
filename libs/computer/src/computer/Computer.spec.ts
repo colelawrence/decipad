@@ -444,3 +444,12 @@ it('can get a variable block id from a table in streaming', async () => {
 
   expect(firstFoo).toBe('block-1');
 });
+
+it('can get a defined symbol, in block', async () => {
+  await computeOnTestComputer({
+    program: getUnparsed('C = 1', 'C + 2 + A'),
+  });
+
+  expect(computer.getDefinedSymbolInBlock('block-0')).toEqual('C');
+  expect(computer.getDefinedSymbolInBlock('block-1')).toEqual(undefined);
+});

@@ -11,8 +11,7 @@ import {
   useNodePath,
 } from '@decipad/editor-utils';
 import { molecules } from '@decipad/ui';
-import { tryImport } from '@decipad/import';
-import { Result } from '@decipad/computer';
+import { ImportResult, tryImport } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
 import { DraggableBlock } from '../block-management';
@@ -27,7 +26,7 @@ export const Import: PlateComponent = ({ attributes, element }) => {
   const [fetched, setFetched] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [error, setError] = useState<string | undefined>();
-  const [result, setResult] = useState<Result.Result | undefined>();
+  const [result, setResult] = useState<ImportResult | undefined>();
   const path = useNodePath(element);
 
   useEffect(() => {
@@ -50,28 +49,31 @@ export const Import: PlateComponent = ({ attributes, element }) => {
   }, [computer, element.source, element.url, fetched, fetching]);
 
   useEffect(() => {
-    if (result?.type.kind === 'type-error') {
-      setError(formatError('en-US', result.type.errorCause));
-    }
-    if (result && result.type.kind !== 'table') {
-      setError('Expected result to be a table');
-      return;
-    }
-    if (path && result) {
-      try {
-        const insertPath = requirePathBelowBlock(editor, path);
-        withoutNormalizing(editor, () => {
-          importTable({
-            editor,
-            computer,
-            insertPath,
-            table: result as Result.Result<'table'>,
+    if (result) {
+      const computerResult = result.result;
+      if (computerResult?.type.kind === 'type-error') {
+        setError(formatError('en-US', computerResult.type.errorCause));
+      }
+      if (computerResult?.type.kind !== 'table') {
+        setError('Expected result to be a table');
+        return;
+      }
+      if (path && computerResult) {
+        try {
+          const insertPath = requirePathBelowBlock(editor, path);
+          withoutNormalizing(editor, () => {
+            importTable({
+              editor,
+              computer,
+              insertPath,
+              result,
+            });
+            removeNodes(editor, { at: path });
           });
-          removeNodes(editor, { at: path });
-        });
-      } catch (err) {
-        console.error(err);
-        setError((err as Error).message);
+        } catch (err) {
+          console.error(err);
+          setError((err as Error).message);
+        }
       }
     }
   }, [computer, editor, element, path, result]);

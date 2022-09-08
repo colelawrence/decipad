@@ -55,10 +55,14 @@ export const startNotebook = async (
     )
     .subscribe((result: IdentifiedResult | IdentifiedError | undefined) => {
       if (result) {
+        const identifier = computer.getDefinedSymbolInBlock(blockId);
         if (result.type === 'computer-parse-error') {
           onError(new Error(result.error.message));
         } else if (result.type === 'computer-result') {
-          subscription.notify(result.result);
+          subscription.notify({
+            meta: { title: identifier },
+            result: result.result,
+          });
         }
       }
     });

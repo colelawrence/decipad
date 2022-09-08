@@ -1,4 +1,3 @@
-import { Computer } from '@decipad/computer';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -12,13 +11,11 @@ import { nanoid } from 'nanoid';
 
 export const insertLiveConnection = (
   editor: MyEditor,
-  computer: Computer,
   source?: ImportElementSource,
   url?: string
 ) => {
   const { selection } = editor;
   if (isCollapsed(selection) && selection?.anchor && url) {
-    const varName = computer.getAvailableIdentifier('LiveConnection', 1);
     const liveConnEl: LiveConnectionElement = {
       id: nanoid(),
       type: ELEMENT_LIVE_CONNECTION,
@@ -30,7 +27,7 @@ export const insertLiveConnection = (
         {
           id: nanoid(),
           type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-          children: [{ text: varName }],
+          children: [{ text: '' }],
         },
       ],
     };

@@ -3,14 +3,14 @@ import {
   ImportElementSource,
   TableCellType,
 } from '@decipad/editor-types';
-import { Result } from '@decipad/computer';
 import { useEffect, useState } from 'react';
+import { ImportResult } from '@decipad/import';
 import { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 
 export interface LiveConnectionResponseResult {
   error?: Error;
-  result?: Result.Result;
+  result?: ImportResult;
 }
 
 export interface LiveConnectionProps {
@@ -32,7 +32,7 @@ export const useLiveConnectionResponse = ({
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const worker = useLiveConnectionWorker();
   const [error, setError] = useState<Error | undefined>();
-  const [result, setResult] = useState<Result.Result | undefined>();
+  const [result, setResult] = useState<ImportResult | undefined>();
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | undefined;

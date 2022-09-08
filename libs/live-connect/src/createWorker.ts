@@ -14,9 +14,6 @@ interface StartWorkerResult {
 
 const createRPCWorker = async (): Promise<StartWorkerResult> => {
   const worker = new Worker(new URL('./LiveConnect.worker', import.meta.url));
-  worker.onerror = (ev) => {
-    console.error('Live connect worker error:', ev);
-  };
 
   const rpc = new RPC({
     target: {

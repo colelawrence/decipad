@@ -1,4 +1,4 @@
-import { Computer, Result } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import {
   ColIndex,
   ImportElementSource,
@@ -6,6 +6,7 @@ import {
 } from '@decipad/editor-types';
 import { importFromUnknown } from './importFromUnknown';
 import { decipad, gsheets } from './providers';
+import { ImportResult } from './types';
 
 export interface ImportOptions {
   useFirstRowAsHeader?: boolean;
@@ -18,7 +19,7 @@ export const tryImport = (
   url: URL,
   provider?: ImportElementSource,
   options: ImportOptions = {}
-): Promise<Result.Result> => {
+): Promise<ImportResult> => {
   if (provider) {
     switch (provider) {
       case 'gsheets':

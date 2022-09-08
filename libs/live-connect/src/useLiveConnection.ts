@@ -10,11 +10,12 @@ import {
   ImportElementSource,
   TableCellType,
 } from '@decipad/editor-types';
+import { ImportResult } from '@decipad/import';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 
 export interface LiveConnectionResult {
   error?: Error;
-  result?: Result.Result;
+  result?: ImportResult;
 }
 
 export interface LiveConnectionProps {
@@ -55,10 +56,17 @@ export const useLiveConnection = (
   });
 
   useEffect(() => {
-    if (result && result.value != null && typeof result.value !== 'symbol') {
-      const injectable = resultToInjectableExternalData(result);
-      computer.pushExternalDataUpdate(blockId, injectable);
+    if (result) {
+      const computerResult = result.result;
+      if (
+        computerResult.value != null &&
+        typeof computerResult.value !== 'symbol'
+      ) {
+        const injectable = resultToInjectableExternalData(computerResult);
+        computer.pushExternalDataUpdate(blockId, injectable);
+      }
     }
+
     return () => {
       computer.pushExternalDataDelete(blockId);
     };

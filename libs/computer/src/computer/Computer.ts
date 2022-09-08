@@ -305,6 +305,23 @@ export class Computer {
     );
   }
 
+  getDefinedSymbolInBlock(blockId: string): string | undefined {
+    const parsed = this.previouslyParsed.find((p) => p.id === blockId);
+    if (parsed && parsed.type === 'identified-block') {
+      const firstNode = parsed.block.args[0];
+      if (firstNode) {
+        const symbol = getDefinedSymbol(firstNode);
+        if (symbol) {
+          if (symbol.includes(':')) {
+            return symbol.split(':')[1];
+          }
+          return symbol;
+        }
+      }
+    }
+    return undefined;
+  }
+
   getNamesDefined$(): Observable<AutocompleteName[]> {
     return this.results.pipe(
       map(() => this.getNamesDefined()),
@@ -524,6 +541,10 @@ export class Computer {
       ...this.computationRealm.inferContext.externalData.keys(),
     ]);
     let num = start;
+    const firstProposal = prefix;
+    if (existingVars.has(firstProposal)) {
+      return firstProposal;
+    }
     const nextProposal = () => `${prefix}${num}`;
     let proposal = nextProposal();
     while (existingVars.has(proposal)) {

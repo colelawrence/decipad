@@ -12,14 +12,7 @@ export interface SheetMeta {
     sheetId: number;
     title: string;
   };
-}
-
-export interface SpreadsheetMeta {
   sheets: SheetMeta[];
-}
-
-export interface SpreadsheetMetaResponse {
-  body: SpreadsheetMeta;
 }
 
 export type ErrorWithCode = Error & {
@@ -34,4 +27,15 @@ export type SpreadsheetColumn = SpreadsheetValue[];
 
 export interface Sheet {
   values: SpreadsheetColumn[];
+}
+
+export interface ImportResultMeta {
+  title?: string;
+  sourceUrl?: URL;
+  importedAt?: Date;
+}
+
+export interface ImportResult {
+  meta?: ImportResultMeta;
+  result: Result.Result;
 }

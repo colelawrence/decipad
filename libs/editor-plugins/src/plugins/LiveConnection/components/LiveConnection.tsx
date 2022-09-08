@@ -1,5 +1,5 @@
-import { FC, useCallback } from 'react';
-import { setNodes } from '@udecode/plate';
+import { FC, useCallback, useEffect } from 'react';
+import { getNodeString, insertText, setNodes } from '@udecode/plate';
 import {
   ELEMENT_LIVE_CONNECTION,
   LiveConnectionElement,
@@ -16,6 +16,7 @@ import { atoms, molecules, organisms } from '@decipad/ui';
 import { useLiveConnection } from '@decipad/live-connect';
 import { useComputer } from '@decipad/react-contexts';
 import { DraggableBlock, BlockErrorBoundary } from '@decipad/editor-components';
+import { varNamify } from '@decipad/utils';
 
 interface LiveConnectionInnerProps {
   element: LiveConnectionElement;
@@ -59,12 +60,30 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
     'isFirstRowHeaderRow'
   );
 
+  // sync connection metadata title if needed
+  useEffect(() => {
+    if (path && result) {
+      const caption = element.children[0];
+      const currentTitle = getNodeString(caption);
+      if (!currentTitle) {
+        const newTitle = result.meta?.title || 'LiveConnection';
+        insertText(
+          editor,
+          computer.getAvailableIdentifier(varNamify(newTitle), 1),
+          { at: [...path, 0] }
+        );
+      }
+    }
+  }, [computer, editor, element.children, path, result]);
+
+  const computerResult = result?.result;
+
   return (
     <div contentEditable={false}>
-      {result && (
+      {computerResult && (
         <organisms.CodeResult
-          type={result.type}
-          value={result.value}
+          type={computerResult.type}
+          value={computerResult.value}
           variant="block"
           isLiveResult
           firstTableRowControls={

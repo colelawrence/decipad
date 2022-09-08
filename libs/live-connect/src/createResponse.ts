@@ -1,10 +1,10 @@
-import { Result } from '@decipad/computer';
+import { ImportResult } from '@decipad/import';
 import { RPCResponse } from './types';
 
-export const createResponse = (result: Result.Result): Result.Result => {
+export const createResponse = (result: ImportResult): ImportResult => {
   return result; // TODO: un-serialize JSON-unfriendly structs (like Fraction and bigints)
 };
 
-export const createRPCResponse = (result: Result.Result): RPCResponse => {
+export const createRPCResponse = (result: ImportResult): RPCResponse => {
   return result; // TODO: serialize JSON-unfriendly structs (like Fraction and bigints)
 };

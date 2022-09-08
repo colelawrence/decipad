@@ -5,15 +5,15 @@ import {
   TableCellType,
   ColIndex,
 } from '@decipad/editor-types';
-import { Result } from '@decipad/computer';
+import { ImportResult } from '@decipad/import';
 
 export type SubscriptionId = string;
 
-export type RPCResponse = Result.Result;
+export type RPCResponse = ImportResult;
 
 export type SubscriptionListener = (
   error: Error | undefined,
-  newResponse?: Result.Result
+  newResponse?: ImportResult
 ) => void;
 export type Unsubscribe = () => void;
 
@@ -45,7 +45,7 @@ export interface Subscription {
   params: SubscribeParams;
   timer?: ReturnType<typeof setTimeout>;
   subscription?: SubscriptionLike;
-  notify: (result: Result.Result) => void | Promise<void>;
+  notify: (result: ImportResult) => void | Promise<void>;
 }
 
 export type Observe = (
@@ -55,5 +55,5 @@ export type Observe = (
 
 export type ConnectionResult = {
   source: LiveConnectionElement;
-  result: Result.Result;
+  result: ImportResult;
 };

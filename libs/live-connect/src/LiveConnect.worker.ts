@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import './utils/workerPolyfills';
-import { tryImport } from '@decipad/import';
-import { Computer, Result } from '@decipad/computer';
+import { ImportResult, tryImport } from '@decipad/import';
+import { Computer } from '@decipad/computer';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
@@ -80,8 +80,8 @@ const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
 };
 
 const notify = (subscriptionId: string) => {
-  return async (result: Result.Result) => {
-    let lastResult: Result.Result | undefined;
+  return async (result: ImportResult) => {
+    let lastResult: ImportResult | undefined;
     if (!dequal(lastResult, result)) {
       lastResult = result;
       const newResponse = createRPCResponse(result);
