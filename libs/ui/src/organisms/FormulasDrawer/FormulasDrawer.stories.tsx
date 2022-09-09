@@ -6,14 +6,12 @@ import { FormulasDrawer } from './FormulasDrawer';
 
 const lines = [
   {
-    displayInline: true,
     syntaxError: {
       message: 'SyntaxError',
       url: docs({}).$,
     },
   },
   {
-    displayInline: true,
     displayExpanded: true,
     open: true,
     result: {

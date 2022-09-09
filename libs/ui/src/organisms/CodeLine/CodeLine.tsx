@@ -122,7 +122,6 @@ const grabbingStyles = css({
 interface CodeLineProps {
   readonly variant?: 'table' | 'standalone';
   readonly children: ReactNode;
-  readonly displayInline?: boolean;
   readonly highlight?: boolean;
   readonly tip?: string;
   readonly placeholder?: string;
@@ -135,7 +134,6 @@ interface CodeLineProps {
 export const CodeLine = ({
   variant = 'standalone',
   children,
-  displayInline = false,
   highlight = false,
   result,
   tip,
@@ -157,7 +155,7 @@ export const CodeLine = ({
   const renderExpandedResult = !hasError && hasResult && isTableOrColumn;
 
   const renderInlineResult =
-    hasTypeError || (hasResult && displayInline && !renderExpandedResult);
+    hasTypeError || (hasResult && !renderExpandedResult);
 
   return (
     <div css={spacingStyles(variant)} spellCheck={false}>

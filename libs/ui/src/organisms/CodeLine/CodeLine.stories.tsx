@@ -10,7 +10,6 @@ export default {
   component: CodeLine,
   decorators: [withCode('1 + 1')],
   args: {
-    displayInline: true,
     children: '1 + 1',
   },
   parameters: {
@@ -30,7 +29,6 @@ export const WithHighlightedLine: Story<
   <CodeLine {...props} result={{ type, value }} />
 );
 WithHighlightedLine.args = {
-  displayInline: true,
   highlight: true,
 };
 
@@ -41,7 +39,6 @@ export const WithExpandedResult: Story<
 );
 WithExpandedResult.decorators = [withCode('[1, 2, 3]')];
 WithExpandedResult.args = {
-  displayInline: false,
   children: '[1, 2, 3]',
 };
 

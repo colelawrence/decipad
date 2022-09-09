@@ -554,15 +554,6 @@ export class Computer {
     return proposal;
   }
 
-  isLiteralValueOrAssignment(stmt: AST.Statement | null): boolean {
-    return (
-      stmt != null &&
-      (stmt.type === 'literal' ||
-        (stmt.type === 'assign' && stmt.args[1].type === 'literal') ||
-        (stmt.type === 'matrix-assign' && stmt.args[2].type === 'literal'))
-    );
-  }
-
   async getUnitFromText(text: string): Promise<Unit[] | null> {
     const ast = parseOneBlock(text);
     if (!isExpression(ast.args[0])) {

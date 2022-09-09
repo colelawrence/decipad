@@ -4,7 +4,6 @@ import {
   buildType as t,
   Column,
   InjectableExternalData,
-  parseOneStatement,
   RuntimeError,
   Scalar,
 } from '@decipad/language';
@@ -309,22 +308,6 @@ describe('tooling data', () => {
         type: { kind: 'number' },
       },
     ]);
-  });
-
-  it('can figure out if a statement is a basic lit or assignment', () => {
-    expect(computer.isLiteralValueOrAssignment(parseOneStatement('1'))).toEqual(
-      true
-    );
-    expect(
-      computer.isLiteralValueOrAssignment(parseOneStatement('1 + 1'))
-    ).toEqual(false);
-
-    expect(
-      computer.isLiteralValueOrAssignment(parseOneStatement('Var = 1'))
-    ).toEqual(true);
-    expect(
-      computer.isLiteralValueOrAssignment(parseOneStatement('Var = 1 + 1'))
-    ).toEqual(false);
   });
 
   it('can get a statement', () => {

@@ -9,7 +9,7 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useComputer, useResult } from '@decipad/react-contexts';
+import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { isNodeEmpty, organisms } from '@decipad/ui';
 import { useSelected } from 'slate-react';
@@ -26,7 +26,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     throw new Error('CodeLine is not a leaf');
   }
 
-  const computer = useComputer();
   const selected = useSelected();
   const editor = useTEditorRef();
   const isEmpty = isNodeEmpty(children);
@@ -36,14 +35,12 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const lineResult = line?.result;
 
   const { tips, placeholder } = useCodeLineTutorials(selected, isEmpty);
-  const statement = computer.getStatement(lineId, 0);
   const syntaxError = getSyntaxError(line);
 
   return (
     <div {...attributes} id={lineId}>
       <DraggableBlock blockKind="codeLine" element={element}>
         <organisms.CodeLine
-          displayInline={!computer.isLiteralValueOrAssignment(statement)}
           highlight={selected}
           result={lineResult}
           tip={tips}
