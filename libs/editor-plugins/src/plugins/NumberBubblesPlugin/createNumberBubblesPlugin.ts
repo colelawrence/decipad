@@ -26,7 +26,7 @@ export const createNumberBubblesPlugin = createOnKeyDownPluginFactory({
     const { selection } = editor;
     if (!selection) return;
 
-    const cursor = getCollapsedSelection(editor); // change to getCollapsedSelection (no throw)
+    const cursor = getCollapsedSelection(editor);
     if (!cursor) return;
 
     const nodeEntry = getAboveNode(editor, { at: cursor });

@@ -11,7 +11,7 @@ import {
   jumpOutInlineNumber,
 } from './helpers';
 
-const END_EDITING_KEYS = ['Tab', 'Enter'];
+const END_EDITING_KEYS = ['Tab', 'Enter', ' '];
 const NAVIGATION_KEYS = ['ArrowLeft', 'ArrowRight'];
 const DELETE_KEYS = ['Backspace', 'Delete'];
 
@@ -21,7 +21,7 @@ export const createBubblesHotkeysPlugin = createOnKeyDownPluginFactory({
     const { selection } = editor;
     if (!selection) return;
 
-    const cursor = getCollapsedSelection(editor); // change to getCollapsedSelection (no throw)
+    const cursor = getCollapsedSelection(editor);
     if (!cursor) return;
 
     const nodeEntry = getAboveNode(editor, { at: cursor });
