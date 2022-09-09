@@ -43,14 +43,18 @@ const codeLineStyles = (variant: CodeLineProps['variant']) =>
     ':hover': highlightedLineStyles,
     position: 'relative',
 
-    display: 'grid',
-    gridGap: '0 5%',
-    // `minmax(0, 70%)` prevents a grid blowout when code line is made out of huge consecutive text.
-    gridTemplate: `
+    ...(variant === 'standalone'
+      ? {
+          display: 'grid',
+          gridGap: '0 5%',
+          // `minmax(0, 70%)` prevents a grid blowout when code line is made out of huge consecutive text.
+          gridTemplate: `
     "code            inline-res  " 1fr
     "expanded-res    expanded-res" auto
     /minmax(0, 70%)  25%
   `,
+        }
+      : {}),
   });
 
 const inlineStyles = css({
