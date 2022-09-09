@@ -7,7 +7,6 @@ import { useComputer, useEditorChange } from '@decipad/react-contexts';
 import { useCallback, useState } from 'react';
 import { dequal } from 'dequal';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
-import { getDefined } from '@decipad/utils';
 import { inferType } from '@decipad/parse';
 
 export const useTextTypeInference = (
@@ -22,7 +21,10 @@ export const useTextTypeInference = (
     (editor: MyEditor): string | undefined => {
       const path = findNodePath(editor, element);
       if (path) {
-        return getNodeString(getDefined(getNode(editor, [...path, 1])));
+        const node = getNode(editor, [...path, 1]);
+        if (node) {
+          return getNodeString(node);
+        }
       }
       return undefined;
     },
