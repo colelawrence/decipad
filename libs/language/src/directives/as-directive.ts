@@ -126,11 +126,11 @@ export async function getValue(
       [expressionType],
       [expressionValue],
       ([value], [type]) => {
-        const rawNumber = convertToMultiplierUnit(
+        const noMultiplier = convertToMultiplierUnit(
           getInstanceof(value, FractionValue).value,
           type.unit
         );
-        return FractionValue.fromValue(rawNumber.div(100));
+        return FractionValue.fromValue(noMultiplier);
       }
     );
   }

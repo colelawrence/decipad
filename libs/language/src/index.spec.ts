@@ -2181,7 +2181,7 @@ describe('percentages', () => {
   });
 
   it('can be converted from a number', async () => {
-    expect(await runCode('10 in %')).toMatchInlineSnapshot(`
+    expect(await runCode('0.1 in %')).toMatchInlineSnapshot(`
       Object {
         "type": percentage,
         "value": Fraction(0.1),

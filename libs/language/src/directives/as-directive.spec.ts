@@ -105,23 +105,31 @@ describe('getValue', () => {
 
   it('converts to percent', async () => {
     const quantity = col(
-      c('implicit*', n('literal', 'number', F(1)), r('kilometer'))
+      c('implicit*', n('literal', 'number', F(0.1)), r('kilometer'))
     );
 
     expect(
-      await (
+      await testGetType(getType, quantity, n('generic-identifier', '%'))
+    ).toMatchObject({
+      type: 'number',
+      unit: null,
+      numberFormat: 'percentage',
+    });
+
+    expect(
+      (
         await testGetValue(getValue, quantity, n('generic-identifier', '%'))
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(0.01),
+        Fraction(0.1),
       ]
     `);
     expect(
-      await (
+      (
         await testGetValue(getValue, l(10), n('generic-identifier', '%'))
       ).getData()
-    ).toMatchInlineSnapshot(`Fraction(0.1)`);
+    ).toMatchInlineSnapshot(`Fraction(10)`);
   });
 
   it('works on a unitful column', async () => {
