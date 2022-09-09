@@ -91,7 +91,7 @@ export const TableCellControls = forwardRef<
             ) : null}
           </MenuList>
 
-          <Tooltip trigger={menuButton}>
+          <Tooltip trigger={menuButton} side="left">
             <span
               css={css(p12Regular, {
                 whiteSpace: 'nowrap',

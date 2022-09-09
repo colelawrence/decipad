@@ -46,6 +46,7 @@ interface TooltipProps {
   readonly trigger?: React.ReactNode;
 
   readonly variant?: 'normal' | 'small';
+  readonly side?: 'top' | 'right' | 'bottom' | 'left';
 
   readonly open?: boolean;
   readonly onChangeOpen?: (open: boolean) => void;
@@ -57,6 +58,7 @@ export const Tooltip = ({
   open,
   onChangeOpen,
   variant,
+  side,
 }: TooltipProps): ReturnType<FC> => {
   const isDragging = useIsDragging();
   // eslint-disable-next-line no-param-reassign
@@ -83,6 +85,7 @@ export const Tooltip = ({
         {trigger}
       </Trigger>
       <Content
+        side={side}
         css={[contentWrapperStyles, variant === 'small' && smallVariantStyles]}
       >
         <Arrow css={arrowStyles} width={18} height={9} offset={6} />
