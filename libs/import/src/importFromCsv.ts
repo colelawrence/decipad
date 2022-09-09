@@ -4,6 +4,7 @@ import { inferTable } from '@decipad/parse';
 import { pivot } from './utils/pivot';
 import { Sheet, SpreadsheetValue } from './types';
 import { ImportOptions } from './import';
+import { trimSheet } from './utils/trimSheet';
 
 const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
   return {
@@ -33,7 +34,7 @@ export const importFromCsv = async (
       isDone = true;
       try {
         resolve(
-          await inferTable(computer, toColumnOriented(data), {
+          await inferTable(computer, trimSheet(toColumnOriented(data)), {
             ...options,
             doNotTryExpressionNumbersParse: true,
           })

@@ -5,6 +5,7 @@ import { ImportOptions } from '../../import';
 import { getSheetMeta } from './getSheetMeta';
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
 import { getDataUrlFromSheetMeta } from './getDataUrlFromSheetUrl';
+import { trimSheet } from '../../utils/trimSheet';
 
 const errorResult = (err: string): ImportResult => {
   return {
@@ -27,7 +28,7 @@ const handleGsheetsResponse = async (
   options: ImportOptions
 ): Promise<Result.Result<'table'>> => {
   const body = (await resp.json()) as unknown as Sheet;
-  return inferTable(computer, body, {
+  return inferTable(computer, trimSheet(body), {
     ...options,
     doNotTryExpressionNumbersParse: true,
   });

@@ -34,5 +34,6 @@ module.exports = {
     '<rootDir>/libs/repl',
     '<rootDir>/libs/computer',
     '<rootDir>/libs/parse',
+    '<rootDir>/libs/import',
   ],
 };
