@@ -15,6 +15,7 @@ import { astNode } from './utils/astNode';
 import { dateToAST } from './utils/dateToAST';
 import { unitToAST } from './utils/unitToAST';
 import { inferType } from './inferType';
+import { memoize } from './utils/memoize';
 
 type ParseCellResult = Promise<AST.Expression | Error | null>;
 
@@ -77,87 +78,91 @@ export function assertCellType<Kind extends CellValueType['kind']>(
   }
 }
 
-export async function parseCell(
-  computer: Computer,
-  cellType: CellValueType,
-  text: string
-): Promise<AST.Expression | Error | null> {
-  if (
-    cellType.kind === 'table-formula' ||
-    cellType.kind === 'series' ||
-    !text.trim()
-  ) {
-    return null;
-  }
-  try {
-    return await parsing(
-      computer,
-      cellType,
-      text,
-      async (result: Result.Result) => {
-        const { type } = result;
-        switch (type.kind) {
-          case 'number': {
-            assertCellType(cellType, 'number');
-            if (!cellType.unit && type.unit) {
-              return new Error('unexpected unit in number');
-            }
-            const cellUnit = cellType.unit && fixCellUnit(cellType.unit);
-            if (type.unit && cellUnit) {
-              if (!areUnitsConvertible(type.unit, cellUnit)) {
-                return new Error(
-                  `cannot convert ${formatUnit(
-                    'en-US',
-                    type.unit
-                  )} to ${formatUnit('en-US', cellUnit)} `
+export const parseCell = memoize(
+  async (
+    computer: Computer,
+    cellType: CellValueType,
+    text: string
+  ): Promise<AST.Expression | Error | null> => {
+    if (
+      cellType.kind === 'table-formula' ||
+      cellType.kind === 'series' ||
+      !text.trim()
+    ) {
+      return null;
+    }
+    try {
+      return await parsing(
+        computer,
+        cellType,
+        text,
+        async (result: Result.Result) => {
+          const { type } = result;
+          switch (type.kind) {
+            case 'number': {
+              assertCellType(cellType, 'number');
+              if (!cellType.unit && type.unit) {
+                return new Error('unexpected unit in number');
+              }
+              const cellUnit = cellType.unit && fixCellUnit(cellType.unit);
+              if (type.unit && cellUnit) {
+                if (!areUnitsConvertible(type.unit, cellUnit)) {
+                  return new Error(
+                    `cannot convert ${formatUnit(
+                      'en-US',
+                      type.unit
+                    )} to ${formatUnit('en-US', cellUnit)} `
+                  );
+                }
+                // eslint-disable-next-line no-param-reassign
+                result.value = convertToMultiplierUnit(
+                  convertBetweenUnits(
+                    result.value as Fraction,
+                    type.unit,
+                    cellUnit
+                  ),
+                  cellUnit
                 );
               }
-              // eslint-disable-next-line no-param-reassign
-              result.value = convertToMultiplierUnit(
-                convertBetweenUnits(
-                  result.value as Fraction,
-                  type.unit,
-                  cellUnit
-                ),
-                cellUnit
+
+              const literal = astNode(
+                'literal',
+                'number' as const,
+                new Fraction(result.value as Fraction)
               );
+              const unit = unitToAST(cellUnit);
+
+              if (unit == null) {
+                return literal;
+              }
+
+              return astNode(
+                'function-call',
+                astNode('funcref', 'implicit*'),
+                astNode('argument-list', literal, unit)
+              ) as AST.Expression;
             }
+            case 'date':
+              return dateToAST(cellType, new Date(Number(result.value)));
 
-            const literal = astNode(
-              'literal',
-              'number' as const,
-              new Fraction(result.value as Fraction)
-            );
-            const unit = unitToAST(cellUnit);
+            case 'boolean':
+              return astNode('literal', 'boolean', text === 'true');
 
-            if (unit == null) {
-              return literal;
-            }
-
-            return astNode(
-              'function-call',
-              astNode('funcref', 'implicit*'),
-              astNode('argument-list', literal, unit)
-            ) as AST.Expression;
+            case 'string':
+              return astNode('literal', 'string', text);
           }
-          case 'date':
-            return dateToAST(cellType, new Date(Number(result.value)));
-
-          case 'boolean':
-            return astNode('literal', 'boolean', text === 'true');
-
-          case 'string':
-            return astNode('literal', 'string', text);
+          return new Error(
+            `Could not parse a ${cellType.kind} out of "${text}"`
+          );
         }
-        return new Error(`Could not parse a ${cellType.kind} out of "${text}"`);
-      }
-    );
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('error parsing cell:', err);
-    throw err;
+      );
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('error parsing cell:', err);
+      throw err;
+    }
   }
-}
+);
 
 export const getExpression = (exp: Error | AST.Expression): AST.Expression => {
   if (exp instanceof Error) {
