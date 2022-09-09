@@ -11,7 +11,7 @@ export async function createTable() {
     ).not.toHaveLength(0)
   );
 
-  await page.click('text=tableslashTableEmpty table to structure your data');
+  await page.click('text=tableslashTableA table to structure your data');
 }
 
 export async function writeInTable(text: string, line: number, col = 0) {
@@ -37,9 +37,7 @@ export async function createInputBelow(identifier: string, value: number) {
     ).not.toHaveLength(0)
   );
 
-  await page.click(
-    'text=InputInputShare your notebook and have others interact with it'
-  );
+  await page.click('text=InputInputA value that others can interact with');
 
   await page.dblclick('text=Input');
   await page.keyboard.press('Backspace');

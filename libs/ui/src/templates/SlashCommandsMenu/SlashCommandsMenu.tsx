@@ -32,7 +32,7 @@ const dataItems = [
   {
     command: 'table',
     title: 'Table',
-    description: 'Empty table to structure your data',
+    description: 'A table to structure your data',
     icon: <TableSlash />,
     enabled: true,
     extraSearchTerms: [],
@@ -79,7 +79,7 @@ const groups = [
       {
         command: 'input',
         title: 'Input',
-        description: 'Share your notebook and have others interact with it',
+        description: 'A value that others can interact with',
         icon: <Input />,
         enabled: true,
         extraSearchTerms: ['input', 'number', 'publish'],
@@ -87,7 +87,7 @@ const groups = [
       {
         command: 'datepicker',
         title: 'Date',
-        description: 'Interact with your notebook using dates',
+        description: 'An interactive date',
         icon: <DatePicker />,
         enabled: false,
         extraSearchTerms: ['input', 'date', 'calendar', 'publish'],
@@ -95,7 +95,7 @@ const groups = [
       {
         command: 'slider',
         title: 'Slider',
-        description: 'Let users interact with your notebook with a slider',
+        description: 'A number attached to a slider that others can adjust',
         icon: <Slider />,
         enabled: true,
         extraSearchTerms: ['input', 'number', 'slider', 'publish'],
@@ -109,7 +109,7 @@ const groups = [
       {
         command: 'heading1',
         title: 'Heading',
-        description: 'Add main text heading',
+        description: 'Main text heading',
         icon: <Heading1 />,
         enabled: true,
         extraSearchTerms: ['h1'],
@@ -117,7 +117,7 @@ const groups = [
       {
         command: 'heading2',
         title: 'Sub-heading',
-        description: 'Add secondary text heading',
+        description: 'Secondary text heading',
         icon: <Heading2 />,
         enabled: true,
         extraSearchTerms: ['h2'],

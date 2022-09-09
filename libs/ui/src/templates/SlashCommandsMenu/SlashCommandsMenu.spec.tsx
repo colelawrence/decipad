@@ -11,7 +11,7 @@ it('renders menuitems triggering different commands', async () => {
     expect.stringContaining('calculation')
   );
 
-  await userEvent.click(getByText(/main.+heading/));
+  await userEvent.click(getByText(/main.+heading/i));
   expect(handleExecute).toHaveBeenLastCalledWith(
     expect.stringContaining('heading')
   );
@@ -86,8 +86,8 @@ describe('search', () => {
     expect(getAllByRole('group')).toHaveLength(1);
     expect(getAllByRole('menuitem')).toHaveLength(5);
 
-    expect(getByText(/main.+heading/)).toBeInTheDocument();
-    expect(getByText(/secondary.+heading/)).toBeInTheDocument();
+    expect(getByText(/main.+heading/i)).toBeInTheDocument();
+    expect(getByText(/secondary.+heading/i)).toBeInTheDocument();
   });
 
   it('affects arrow key selection', async () => {
