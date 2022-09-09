@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useCallback, useState } from 'react';
 import type { SerializedType } from '@decipad/computer';
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import {
@@ -7,8 +7,10 @@ import {
   ConnectDropTarget,
 } from 'react-dnd';
 import { css } from '@emotion/react';
-import { DropLine } from '../../atoms';
-import { Select } from '../../organisms';
+import { capitalize } from 'lodash';
+import { DropLine, MenuItem, TriggerMenuItem } from '../../atoms';
+import { MenuList } from '../../molecules';
+import { Caret, Code, Trash } from '../../icons';
 
 export interface DataViewColumnHeaderProps<TAggregation extends string> {
   name: string;
@@ -18,6 +20,7 @@ export interface DataViewColumnHeaderProps<TAggregation extends string> {
   selectedAggregation?: TAggregation;
   availableAggregations: Array<TAggregation>;
   onAggregationChange: (aggregation: TAggregation | undefined) => void;
+  onDeleteColumn: (columnName: string) => void;
   connectDragSource?: ConnectDragSource;
   connectDragPreview?: ConnectDragPreview;
   connectDropTarget?: ConnectDropTarget;
@@ -46,11 +49,24 @@ export function DataViewColumnHeader<TAggregation extends string>({
   availableAggregations,
   selectedAggregation,
   onAggregationChange,
+  onDeleteColumn,
   connectDragSource,
   connectDropTarget,
   overDirection,
   alignRight = false,
 }: DataViewColumnHeaderProps<TAggregation>): ReturnType<FC> {
+  const [menuListOpened, setMenuListOpened] = useState(false);
+
+  const onTriggerClick = useCallback(() => {
+    setMenuListOpened(!menuListOpened);
+  }, [menuListOpened]);
+
+  const triggerStyles = css({
+    display: 'grid',
+    alignItems: 'center',
+    width: '16px',
+  });
+
   return (
     <th {...attributes} css={dataViewColumnHeaderStyles}>
       {overDirection === 'left' && (
@@ -69,11 +85,50 @@ export function DataViewColumnHeader<TAggregation extends string>({
         >
           {name}
 
-          <Select
-            options={availableAggregations}
-            value={selectedAggregation}
-            onChange={onAggregationChange}
-          ></Select>
+          <MenuList
+            root
+            dropdown
+            open={menuListOpened}
+            onChangeOpen={setMenuListOpened}
+            trigger={
+              <button css={triggerStyles} onClick={onTriggerClick}>
+                <Caret color="normal" variant="down" />
+              </button>
+            }
+          >
+            <MenuItem onSelect={() => onDeleteColumn(name)} icon={<Trash />}>
+              Remove Column
+            </MenuItem>
+            {availableAggregations.length > 1 ? (
+              <MenuList
+                itemTrigger={
+                  <TriggerMenuItem icon={<Code />}>Aggregate</TriggerMenuItem>
+                }
+              >
+                <MenuItem
+                  onSelect={() => onAggregationChange(undefined)}
+                  selected={selectedAggregation === undefined}
+                >
+                  None
+                </MenuItem>
+                {availableAggregations
+                  .filter((n) => n)
+                  .map((availableAggregation, index) => {
+                    return (
+                      <MenuItem
+                        onSelect={() =>
+                          onAggregationChange(availableAggregation)
+                        }
+                        selected={availableAggregation === selectedAggregation}
+                        key={index}
+                      >
+                        {capitalize(availableAggregation)}
+                      </MenuItem>
+                    );
+                  })}
+              </MenuList>
+            ) : null}
+          </MenuList>
 
           <div>{children}</div>
         </div>

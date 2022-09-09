@@ -42,15 +42,16 @@ export const insertDataViewBelow = (
   getAvailableIdentifier: GetAvailableIdentifier,
   initialTableVariableName?: string
 ): void => {
-  const table = clone(
+  const dataView = clone(
     getInitialDataViewElement(initialTableVariableName)
   ) as unknown as DataViewElement;
-  table.id = nanoid();
-  table.children[0].children[0].children[0].text = getAvailableIdentifier(
+  dataView.id = nanoid();
+  dataView.children[0].children[0].children[0].text = getAvailableIdentifier(
     'Data View ',
     1
   );
-  insertNodes(editor, table, {
+
+  insertNodes(editor, dataView, {
     at: requirePathBelowBlock(editor, path),
   });
 };

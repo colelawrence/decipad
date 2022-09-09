@@ -9,7 +9,12 @@ import {
   assertElementType,
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
-import { organisms, AvailableSwatchColor, UserIconKey } from '@decipad/ui';
+import {
+  organisms,
+  AvailableSwatchColor,
+  UserIconKey,
+  molecules,
+} from '@decipad/ui';
 import { AutocompleteName } from '@decipad/computer';
 import { DataViewData } from '../DataViewData';
 import { useDataView } from '../../hooks';
@@ -37,12 +42,15 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     onVariableNameChange,
     sortedColumns,
     selectedAggregationTypes,
+    onInsertColumn,
+    availableColumns,
   } = useDataView({
     editor,
     element,
   });
 
   const wideTable = (sortedColumns?.[0].length || 0) >= WIDE_MIN_COL_COUNT;
+
   return (
     <div {...attributes}>
       {!deleted && (
@@ -76,6 +84,10 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
             }
           >
             {children}
+            <molecules.DataViewMenu
+              availableColumns={availableColumns}
+              onInsertColumn={onInsertColumn}
+            />
           </organisms.DataView>
         </DraggableBlock>
       )}

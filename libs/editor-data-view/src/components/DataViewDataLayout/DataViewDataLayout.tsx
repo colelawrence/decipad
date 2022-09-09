@@ -56,6 +56,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     types,
     aggregationTypes
   );
+
   const table = useMemo(
     () =>
       treeToTable({

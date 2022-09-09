@@ -8,6 +8,7 @@ export const DataViewColumnHeaderRow: PlateComponent = ({
   element,
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW_TR);
+
   return (
     <atoms.DataViewColumnHeaderRow attributes={attributes}>
       {children}

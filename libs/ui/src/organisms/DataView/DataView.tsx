@@ -86,7 +86,7 @@ export const DataView: FC<DataViewProps> = ({
   data,
   children,
 }): ReturnType<FC> => {
-  const [caption, thead] = Children.toArray(children);
+  const [caption, thead, addNewColumnComponent] = Children.toArray(children);
   return (
     <div>
       <TableStyleContext.Provider
@@ -112,6 +112,7 @@ export const DataView: FC<DataViewProps> = ({
             <thead>{thead}</thead>
             <tbody>{data}</tbody>
           </table>
+          {addNewColumnComponent}
         </div>
       </TableStyleContext.Provider>
     </div>

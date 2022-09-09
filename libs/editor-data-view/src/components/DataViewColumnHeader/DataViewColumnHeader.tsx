@@ -13,7 +13,7 @@ import { getDefined } from '@decipad/utils';
 import { Path } from 'slate';
 import { findNodePath, getNodeEntry } from '@udecode/plate';
 import { isCellAlignRight } from 'libs/editor-table/src/components';
-import { useDragColumn, useDropColumn } from '../../hooks';
+import { useDataView, useDragColumn, useDropColumn } from '../../hooks';
 import { availableAggregationTypesForColumnOf } from '../../utils/availableAggregationTypesForColumnOf';
 
 export const DataViewColumnHeader: PlateComponent = ({
@@ -28,11 +28,11 @@ export const DataViewColumnHeader: PlateComponent = ({
     element.id
   );
   const path = getDefined(findNodePath(editor, element));
-  const tablePath = Path.parent(Path.parent(path));
-  const [table] = getNodeEntry<DataViewElement>(editor, tablePath);
+  const dataViewPath = Path.parent(Path.parent(path));
+  const [dataView] = getNodeEntry<DataViewElement>(editor, dataViewPath);
   const [{ overDirection }, connectDropTarget] = useDropColumn(
     editor,
-    table,
+    dataView,
     element
   );
 
@@ -41,6 +41,12 @@ export const DataViewColumnHeader: PlateComponent = ({
     element,
     'aggregation'
   );
+
+  const { onDeleteColumn } = useDataView({ editor, element: dataView });
+
+  const handleColumnDelete = () => {
+    onDeleteColumn(path);
+  };
 
   return (
     <templates.DataViewColumnHeader
@@ -52,6 +58,7 @@ export const DataViewColumnHeader: PlateComponent = ({
         availableAggregationTypesForColumnOf(element.cellType)
       )}
       onAggregationChange={onAggregationChange}
+      onDeleteColumn={handleColumnDelete}
       connectDragSource={connectDragSource}
       connectDragPreview={connectDragPreview}
       connectDropTarget={connectDropTarget}

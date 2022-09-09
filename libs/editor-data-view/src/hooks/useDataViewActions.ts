@@ -24,6 +24,7 @@ import { SerializedType } from '@decipad/computer';
 import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
 import { Observable, Subject } from 'rxjs';
+import { Path } from 'slate';
 
 interface Column {
   name: string;
@@ -35,6 +36,8 @@ export interface TableActions {
   onVariableNameChange: (newName: string) => void;
   setDataColumns: (columns: Column[]) => void;
   onMoveColumn: (colIndex: number, newColIndex: number) => void;
+  onInsertColumn: (columnName: string, serializedType: SerializedType) => void;
+  onDeleteColumn: (dataViewHeaderPath: Path) => void;
   columnChanges$: Observable<undefined>;
 }
 
@@ -62,28 +65,13 @@ export const useDataViewActions = (
 
   const setDataColumns = useCallback(
     (columns: Column[]) => {
-      let headerRow: DataViewHeaderRowElement | null = element.children[1];
+      const headerRow: DataViewHeaderRowElement | null = element.children[1];
       const headerRowPath = findNodePath(editor, headerRow);
       if (!headerRowPath) {
         return;
       }
-      let existingColumns: DataViewHeader[] | undefined =
+      const existingColumns: DataViewHeader[] | undefined =
         headerRow.children.filter((node) => !isText(node));
-
-      const refreshHeaderRow = () => {
-        headerRow = getNode(editor, headerRowPath);
-        existingColumns = headerRow?.children;
-      };
-
-      const maybeRemoveFirstText = () => {
-        const firstHeaderRowPath = [...headerRowPath, 0];
-        const firstHeaderRowChild = getNode(editor, firstHeaderRowPath);
-        if (firstHeaderRowChild && isText(firstHeaderRowChild)) {
-          removeNodes(editor, { at: firstHeaderRowPath });
-          return true;
-        }
-        return false;
-      };
 
       withoutNormalizing(editor, () => {
         if (!existingColumns) {
@@ -112,53 +100,9 @@ export const useDataViewActions = (
             }
           }
         }
-
-        // add missing columns
-        refreshHeaderRow();
-        if (existingColumns) {
-          let nextColumnIndex = existingColumns.length;
-          for (const column of columns) {
-            if (maybeRemoveFirstText()) {
-              refreshHeaderRow();
-              nextColumnIndex = existingColumns.length;
-            }
-
-            const matchingExistingColumn = existingColumns.find(
-              (existingColumn) => column.name === existingColumn.name
-            );
-            if (!matchingExistingColumn) {
-              const headerPath = [...headerRowPath, nextColumnIndex];
-              const newHeader: DataViewHeader = {
-                id: nanoid(),
-                type: ELEMENT_DATA_VIEW_TH,
-                cellType: column.type,
-                name: column.name,
-                children: [{ text: '' }],
-                aggregation: undefined,
-              };
-              insertNodes(editor, newHeader, { at: headerPath });
-              nextColumnIndex += 1;
-              columnChanges$.next(undefined);
-            } else if (!dequal(matchingExistingColumn.cellType, column.type)) {
-              const headerPath = findNodePath(editor, matchingExistingColumn);
-              if (headerPath) {
-                try {
-                  setNodes<DataViewHeader>(
-                    editor,
-                    { cellType: column.type },
-                    { at: headerPath }
-                  );
-                } catch (err) {
-                  console.error('Error caught while switching columns:', err);
-                }
-                columnChanges$.next(undefined);
-              }
-            }
-          }
-        }
       });
     },
-    [columnChanges$, editor, element.children]
+    [editor, element.children]
   );
 
   const onMoveColumn = useCallback(
@@ -182,11 +126,59 @@ export const useDataViewActions = (
     [columnChanges$, editor, element.children]
   );
 
+  const onInsertColumn = useCallback(
+    (columnName: string, serializedType: SerializedType) => {
+      const headerRow = element.children[1];
+      const headerRowPath = findNodePath(editor, headerRow);
+
+      if (headerRowPath) {
+        const maybeRemoveFirstText = () => {
+          const firstHeaderRowPath = [...headerRowPath, 0];
+          const firstHeaderRowChild = getNode(editor, firstHeaderRowPath);
+          if (firstHeaderRowChild && isText(firstHeaderRowChild)) {
+            removeNodes(editor, { at: firstHeaderRowPath });
+            return true;
+          }
+          return false;
+        };
+
+        withoutNormalizing(editor, () => {
+          let childLength = headerRow.children.length;
+          if (maybeRemoveFirstText()) {
+            childLength -= 1;
+          }
+          const path = [...headerRowPath, childLength];
+          insertNodes(
+            editor,
+            {
+              id: nanoid(),
+              type: ELEMENT_DATA_VIEW_TH,
+              cellType: serializedType,
+              name: columnName,
+              children: [{ text: '' }],
+            },
+            { at: path }
+          );
+        });
+      }
+    },
+    [editor, element.children]
+  );
+
+  const onDeleteColumn = useCallback(
+    (dataViewHeaderPath: Path) => {
+      removeNodes(editor, { at: dataViewHeaderPath });
+    },
+    [editor]
+  );
+
   return {
     onDelete,
     onVariableNameChange,
     setDataColumns,
     onMoveColumn,
+    onInsertColumn,
+    onDeleteColumn,
     columnChanges$: columnChanges$.asObservable(),
   };
 };

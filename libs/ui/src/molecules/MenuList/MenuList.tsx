@@ -1,5 +1,12 @@
 import { css } from '@emotion/react';
-import { ReactNode, Children, FC, createContext, useContext } from 'react';
+import {
+  ReactNode,
+  Children,
+  FC,
+  createContext,
+  useContext,
+  ReactElement,
+} from 'react';
 import { isElement } from 'react-is';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 
@@ -55,8 +62,10 @@ type MenuListProps = (
 ) & {
   readonly children: ReactNode;
   readonly open?: boolean;
+  readonly portal?: boolean;
   readonly onChangeOpen?: (newOpen: boolean) => void;
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
+  readonly container?: HTMLElement;
 };
 
 function getSubElementType(isRoot: boolean | undefined) {
@@ -78,6 +87,27 @@ function getSubElementType(isRoot: boolean | undefined) {
   };
 }
 
+type MenuListPortalComponentProps = {
+  portal: boolean;
+  children: ReactNode;
+  container?: HTMLElement;
+};
+
+const DropdownMenuPortalElement = ({
+  portal,
+  container,
+  children,
+}: MenuListPortalComponentProps): ReactElement<MenuListPortalComponentProps> => {
+  if (portal) {
+    return (
+      <RadixDropdownMenu.Portal container={container}>
+        {children}
+      </RadixDropdownMenu.Portal>
+    );
+  }
+  return <>{children}</>;
+};
+
 export const MenuList = ({
   children,
 
@@ -90,7 +120,9 @@ export const MenuList = ({
   onChangeOpen,
 
   dropdown = !root,
+  portal = true,
   side = 'bottom',
+  container,
 }: MenuListProps): ReturnType<FC> => {
   const depth = useContext(Depth) + 1;
 
@@ -126,7 +158,7 @@ export const MenuList = ({
         modal={dropdown}
       >
         {triggerNode}
-        <RadixDropdownMenu.Portal>
+        <DropdownMenuPortalElement portal={portal} container={container}>
           <div css={dropdown || undropdownifyContentStyles}>
             <DropdownMenuContentElement
               css={styles}
@@ -158,7 +190,7 @@ export const MenuList = ({
               })}
             </DropdownMenuContentElement>
           </div>
-        </RadixDropdownMenu.Portal>
+        </DropdownMenuPortalElement>
       </DropdownMenuTopElement>
     </Depth.Provider>
   );

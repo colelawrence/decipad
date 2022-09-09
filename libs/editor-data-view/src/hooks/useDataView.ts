@@ -16,7 +16,7 @@ import {
   AutocompleteName,
 } from '@decipad/computer';
 import { findNode, findNodePath } from '@udecode/plate';
-import { getDefined } from '@decipad/utils';
+import { Path } from 'slate';
 import { useDataViewActions, useSortColumns } from '.';
 import { AggregationKind, Columns } from '../types';
 
@@ -29,17 +29,28 @@ interface UseDataViewReturnType {
   variableNames: AutocompleteName[];
   tableName: string;
   onDelete: () => void;
+  onInsertColumn: (name: string, serializedType: SerializedType) => void;
+  onDeleteColumn: (dataViewHeaderPath: Path) => void;
   onVariableNameChange: (newName: string) => void;
+  availableColumns: Columns | undefined;
   sortedColumns: Columns | undefined;
   selectedAggregationTypes: Array<AggregationKind | undefined>;
 }
+
+const greaterOrEqualToZero = (n: number): boolean => n >= 0;
 
 export const useDataView = ({
   editor,
   element,
 }: UseDataViewProps): UseDataViewReturnType => {
-  const { onDelete, onVariableNameChange, setDataColumns, columnChanges$ } =
-    useDataViewActions(editor, element);
+  const {
+    onDelete,
+    onInsertColumn,
+    onDeleteColumn,
+    onVariableNameChange,
+    setDataColumns,
+    columnChanges$,
+  } = useDataViewActions(editor, element);
 
   const tableName = element.varName || '';
 
@@ -47,26 +58,31 @@ export const useDataView = ({
 
   const result = useResult(element.id)?.result;
 
-  let data: Interpreter.ResultTable | undefined;
-  let columnNames: string[] | undefined;
-  let columnTypes: SerializedType[] | undefined;
+  let availableColumns: Columns | undefined;
 
   if (result?.type.kind === 'table' && result.value) {
-    data = result.value as Interpreter.ResultTable;
-    columnNames = result?.type.columnNames;
-    columnTypes = result?.type.columnTypes;
+    availableColumns = result
+      ? [
+          [...result.type.columnNames],
+          [...result.type.columnTypes],
+          [...(result.value as Interpreter.ResultTable)],
+        ]
+      : [[], [], []];
   }
 
+  // sort column names and types according to user preferences
+
+  const [sortedColumns, setSortedColumns] = useState<Columns | undefined>();
+
   useEffect(() => {
-    // add missing columns and remove surplus columns from data view
-    if (columnTypes && columnNames) {
-      const types = columnTypes;
-      const names = columnNames;
+    if (availableColumns) {
+      const [names, types] = availableColumns;
       if (types.length !== names.length) {
         throw new Error(
           'Expected column types and names to be of the same length'
         );
       }
+
       setDataColumns(
         types.map((type, index) => ({
           type,
@@ -74,25 +90,21 @@ export const useDataView = ({
         }))
       );
     }
-  }, [columnNames, columnTypes, setDataColumns]);
-
-  // sort column names and types according to user preferences
-
-  const [sortedColumns, setSortedColumns] = useState<Columns | undefined>();
+  }, [availableColumns, setDataColumns, sortedColumns]);
 
   const sortColumns = useSortColumns({
-    columnNames,
-    columnTypes,
-    data,
     sortedColumns,
     setSortedColumns,
+    availableColumns,
   });
 
-  const editorSelector = useCallback((): number[] | undefined => {
-    if (!columnTypes || !columnNames) {
+  const selectColumnOrder = useCallback((): number[] | undefined => {
+    if (!availableColumns) {
       return;
     }
     const tablePath = findNodePath(editor, element);
+    const [columnNames] = availableColumns;
+
     if (tablePath) {
       const columnRowEntry = findNode(editor, {
         at: tablePath,
@@ -102,15 +114,15 @@ export const useDataView = ({
         const [columnRow] = columnRowEntry;
         assertElementType(columnRow, ELEMENT_DATA_VIEW_TR);
         const columnHeaders = columnRow.children;
-        return columnHeaders.map((column) =>
-          getDefined(columnNames).indexOf(column.name)
-        );
+        return columnHeaders
+          .map((column) => columnNames.indexOf(column.name))
+          .filter(greaterOrEqualToZero);
       }
     }
     return undefined;
-  }, [columnNames, columnTypes, editor, element]);
+  }, [availableColumns, editor, element]);
 
-  useEditorChange(sortColumns, editorSelector, {
+  useEditorChange(sortColumns, selectColumnOrder, {
     injectObservable: columnChanges$,
   });
 
@@ -122,8 +134,11 @@ export const useDataView = ({
     variableNames,
     tableName,
     onDelete,
+    onInsertColumn,
+    onDeleteColumn,
     onVariableNameChange,
     sortedColumns,
+    availableColumns,
     selectedAggregationTypes,
   };
 };

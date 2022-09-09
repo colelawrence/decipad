@@ -4,30 +4,31 @@ import { useCallback } from 'react';
 import type { ColumnNames, Columns, ColumnTypes } from '../types';
 
 interface UseSortColumnsProps {
-  columnNames: ColumnNames | undefined;
-  columnTypes: ColumnTypes | undefined;
-  data: Interpreter.ResultTable | undefined;
   sortedColumns: Columns | undefined;
   setSortedColumns: (columns: Columns | undefined) => void;
+  availableColumns: Columns | undefined;
 }
 
 type UseSortColumnsReturn = (columnMap: number[] | undefined) => void;
 
 export const useSortColumns = ({
-  columnNames,
-  columnTypes,
-  data,
   sortedColumns,
   setSortedColumns,
+  availableColumns,
 }: UseSortColumnsProps): UseSortColumnsReturn => {
   return useCallback(
     (columnMap) => {
-      if (!columnMap || !columnNames || !columnTypes || !data) {
+      if (!columnMap || !availableColumns) {
         if (sortedColumns?.[0]) {
           setSortedColumns(undefined);
         }
         return;
       }
+
+      const columnNames = availableColumns && availableColumns[0];
+      const columnTypes = availableColumns && availableColumns[1];
+      const columnData = availableColumns && availableColumns[2];
+
       const sortedColumnNames = Result.ResultTransforms.applyMap(
         Result.Column.fromValues(columnNames),
         columnMap
@@ -39,7 +40,7 @@ export const useSortColumns = ({
       ).getData() as unknown as ColumnTypes;
 
       const sortedData = Result.ResultTransforms.applyMap(
-        Result.Column.fromValues(data as Result.Comparable[]),
+        Result.Column.fromValues(columnData as Result.Comparable[]),
         columnMap
       ).getData() as Interpreter.ResultTable;
 
@@ -54,6 +55,6 @@ export const useSortColumns = ({
 
       setSortedColumns([sortedColumnNames, sortedColumnTypes, sortedData]);
     },
-    [columnNames, columnTypes, data, setSortedColumns, sortedColumns]
+    [availableColumns, setSortedColumns, sortedColumns]
   );
 };

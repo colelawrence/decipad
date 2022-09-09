@@ -12,6 +12,7 @@ export interface DataViewHeaderRowElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TR;
   children: Array<DataViewHeader>;
 }
+
 export interface DataViewHeader extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TH;
   cellType: SerializedType;
