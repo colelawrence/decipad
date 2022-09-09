@@ -22,6 +22,7 @@ export const InlineNumber: PlateComponent = ({
 
   return (
     <span
+      data-highlight-changes
       {...attributes}
       id={blockId}
       css={css(containerStyle, isEditing ? {} : { cursor: 'pointer' })}

@@ -12,7 +12,7 @@ export const RangeResult = ({
   }
 
   return (
-    <span>
+    <span data-highlight-changes>
       <CodeResult type={rangeOf} value={value[0]} variant={variant} /> &rarr;{' '}
       <CodeResult type={rangeOf} value={value[1]} variant={variant} />
     </span>

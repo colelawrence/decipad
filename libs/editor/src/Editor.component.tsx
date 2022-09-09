@@ -66,7 +66,11 @@ export const Editor = (props: EditorProps) => {
       <EditorChangeContextProvider changeSubject={changeSubject}>
         <LoadingFilter loading={isWritingLocked}>
           <EditorBlockParentRefProvider onRefChange={onRefChange}>
-            <div ref={containerRef} style={{ position: 'relative' }}>
+            <div
+              ref={containerRef}
+              style={{ position: 'relative' }}
+              data-stop-animate-query
+            >
               <Plate<MyValue>
                 editor={editor}
                 id={editor.id}

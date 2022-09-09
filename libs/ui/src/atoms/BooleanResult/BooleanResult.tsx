@@ -17,7 +17,11 @@ export const BooleanResult = ({
   value,
 }: CodeResultProps<'boolean'>): ReturnType<FC> => {
   return (
-    <span css={booleanResultStyles} contentEditable={false}>
+    <span
+      data-highlight-changes
+      css={booleanResultStyles}
+      contentEditable={false}
+    >
       {value ? <CheckboxSelected /> : <CheckboxUnselected />}
     </span>
   );

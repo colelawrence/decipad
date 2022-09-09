@@ -17,6 +17,10 @@ import {
 } from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
 import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
+import {
+  animateMutations,
+  stopAnimatingMutations,
+} from './hooks/animateMutations';
 
 const loadTopbar = () =>
   import(/* webpackChunkName: "notebook-topbar" */ './Topbar');
@@ -88,6 +92,11 @@ const Notebook: FC = () => {
       setIconColor(newIconColor as IconColor);
     }
   }, [notebook]);
+
+  useEffect(() => {
+    animateMutations();
+    return () => stopAnimatingMutations();
+  }, []);
 
   if (notebookError) {
     if (/no such/i.test(notebookError?.message))

@@ -39,5 +39,5 @@ export const DateResult = ({
   const string = format
     ? formatUTCDate(date, format, fullUTC)
     : date.toISOString();
-  return <span>{string}</span>;
+  return <span data-highlight-changes>{string}</span>;
 };
