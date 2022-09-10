@@ -24,7 +24,7 @@ describe('onDropInlineResult', () => {
     editor = createTPlateEditor();
 
     codeLine = {
-      id: '1',
+      id: 'codeline1',
       type: ELEMENT_CODE_LINE,
       children: [
         {
@@ -34,7 +34,7 @@ describe('onDropInlineResult', () => {
     };
 
     codeLine2 = {
-      id: '2',
+      id: 'codeline2',
       type: ELEMENT_CODE_LINE,
       children: [
         {
@@ -78,7 +78,7 @@ describe('onDropInlineResult', () => {
       expect(editor.children).toEqual([
         {
           type: ELEMENT_PARAGRAPH,
-          children: [{ [MARK_MAGICNUMBER]: true, text: 'a' }],
+          children: [{ [MARK_MAGICNUMBER]: true, text: 'exprRef_codeline1' }],
         },
         codeLine,
       ]);

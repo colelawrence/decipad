@@ -30,7 +30,6 @@ import {
   SerializedType,
 } from '@decipad/language';
 import { anyMappingToMap, getDefined } from '@decipad/utils';
-import assert from 'assert';
 import { dequal } from 'dequal';
 import produce from 'immer';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -42,6 +41,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
+import { makeNamesFromIds } from '../exprRefs';
 import { captureException } from '../reporting';
 import {
   ComputePanic,
@@ -152,6 +152,7 @@ export const computeProgram = async (
       const [result, value] = await computeStatement(program, location, realm);
       realm.inferContext.previousStatement = result.result.type;
       realm.interpreterRealm.previousStatementValue = value;
+
       results.push(result);
     } catch (err) {
       results.push(resultFromError(err as Error, location));
@@ -442,12 +443,16 @@ export class Computer {
   ): Promise<ComputeResponse | ComputePanic> {
     /* istanbul ignore catch */
     try {
-      assert(
-        !this.computing,
-        'the computer does not allow concurrent requests'
-      );
+      if (this.computing) {
+        throw new Error('the computer does not allow concurrent requests');
+      }
       this.computing = true;
-      const blocks = this.ingestComputeRequest(req);
+      const programWithPrettyNames = makeNamesFromIds(req.program);
+
+      const blocks = this.ingestComputeRequest({
+        ...req,
+        program: programWithPrettyNames,
+      });
       const goodBlocks = getGoodBlocks(blocks);
       const computeResults = await computeProgram(
         goodBlocks,

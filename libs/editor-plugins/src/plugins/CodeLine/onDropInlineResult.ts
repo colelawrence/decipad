@@ -24,6 +24,8 @@ import {
   selectEventRange,
 } from '@decipad/editor-utils';
 import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
+import { getExprRef } from '@decipad/computer';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const onDropInlineResult =
   (editor: MyEditor) => (event: React.DragEvent) => {
@@ -55,14 +57,18 @@ export const onDropInlineResult =
           const [block] = blockAbove;
           if (!block) return;
 
+          const blockId = node.id as string;
+
           const variableRanges = getVariableRanges(
             getNodeString(node),
             path,
-            node.id as string
+            blockId
           );
 
           const variable = variableRanges.find((item) => item.isDeclaration);
+
           if (variable && isDefined(variable.variableName)) {
+            // Code lines need real varnames
             if (block.type === ELEMENT_CODE_LINE) {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               const selection = editor.selection!;
@@ -92,8 +98,16 @@ export const onDropInlineResult =
                 }
               }
             }
+          }
 
-            if (block.type === ELEMENT_PARAGRAPH) {
+          // Paragraphs can have a magic number injected with the pill
+          if (block.type === ELEMENT_PARAGRAPH) {
+            if (isFlagEnabled('EXPR_REFS')) {
+              filteredFragment.push({
+                text: getExprRef(blockId), // 🔴
+                [MARK_MAGICNUMBER]: true,
+              });
+            } else if (variable?.variableName) {
               filteredFragment.push({
                 text: variable.variableName,
                 [MARK_MAGICNUMBER]: true,

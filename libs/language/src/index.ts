@@ -69,6 +69,7 @@ export {
   DEFAULT_PRECISION,
   isAssignment,
   isExpression,
+  isIdentifier,
   MAX_PRECISION,
   n as astNode,
   safeNumberForPrecision,

@@ -21,9 +21,3 @@ it('one call if same object is passed', () => {
 
   expect(memoized).toHaveBeenCalledTimes(1);
 });
-
-it('does not accept non-object arguments', () => {
-  const nonobj = memoize((n: number) => n);
-
-  expect(() => nonobj(1)).toThrow(/invalid cache key/);
-});

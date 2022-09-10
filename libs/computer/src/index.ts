@@ -45,3 +45,5 @@ export type {
 export * from './computer';
 
 export * from './reporting';
+
+export { getExprRef } from './exprRefs';

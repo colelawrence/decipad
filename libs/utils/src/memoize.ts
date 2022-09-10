@@ -3,22 +3,18 @@
  *
  * The first parameter is used as the key of the WeakMap and must extend Object
  */
-export function memoize<Args extends unknown[], Ret>(
-  func: (...a: Args) => Ret
+export function memoize<Key extends object, Args extends unknown[], Ret>(
+  func: (key: Key, ...a: Args) => Ret
 ): typeof func {
-  const cache = new WeakMap<object, Ret>();
-  return (...args) => {
-    const key = args[0];
-    if (key == null || typeof key !== 'object') {
-      throw new Error(`memoize: invalid cache key ${key}`);
-    } else if (cache.has(key)) {
+  const cache = new WeakMap<Key, Ret>();
+  return (key, ...args) => {
+    if (cache.has(key)) {
       return cache.get(key) as Ret;
-    } else {
-      const value = func(...args);
-
-      cache.set(key, value);
-
-      return value;
     }
+    const value = func(key, ...args);
+
+    cache.set(key, value);
+
+    return value;
   };
 }

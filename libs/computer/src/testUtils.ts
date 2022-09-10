@@ -42,6 +42,8 @@ export const implicitDepProgram = testBlocks(
   'F = A'
 );
 
+export const pillProgram = testBlocks('A = 1', 'exprRef_block_0');
+
 export const programContainingReassign = testBlocks('A = 1', 'A = 2');
 
 export const programContainingError = testBlocks(
@@ -80,6 +82,16 @@ export const getUnparsed = (...blockSources: string[]): UnparsedBlock[] =>
     id: `block-${index}`,
     source,
   }));
+
+export const getIdentifiedBlocks = (...sources: string[]) =>
+  sources.map((source, i) => {
+    const parsed = wrappedParse({
+      id: `block-${i}`,
+      source,
+    }) as IdentifiedBlock;
+    expect(parsed.block).toBeDefined();
+    return parsed;
+  });
 
 export const parse = (...sources: string[]) =>
   sources.map((source, i) => {

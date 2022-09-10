@@ -10,8 +10,10 @@ import {
 import { AnyMapping, timeout } from '@decipad/utils';
 import produce from 'immer';
 import { firstValueFrom } from 'rxjs';
+import { getExprRef } from '../exprRefs';
 import {
   deeperProgram,
+  getIdentifiedBlocks,
   getUnparsed,
   programContainingError,
   simplifyComputeResponse,
@@ -181,6 +183,21 @@ describe('caching', () => {
   });
 });
 
+describe('expr refs', () => {
+  it('supports expr refs', async () => {
+    expect(
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks(getExprRef('block-1'), '1 + 1'),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-1 -> 2",
+        "block-0 -> 2",
+      ]
+    `);
+  });
+});
+
 it('creates new, unused identifiers', async () => {
   expect(computer.getAvailableIdentifier('Name', 1)).toMatchInlineSnapshot(
     `"Name1"`
@@ -311,9 +328,9 @@ describe('tooling data', () => {
   });
 
   it('can get a statement', () => {
-    computeOnTestComputer({ program: getUnparsed('1 + 1') });
+    computeOnTestComputer({ program: getIdentifiedBlocks('1 + 1') });
 
-    expect(computer.getStatement('block-0', 0)).toMatchObject({
+    expect(computer.getStatement('block-0', 0)?.args[1]).toMatchObject({
       type: 'function-call',
     });
 
