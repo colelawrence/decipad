@@ -22,7 +22,6 @@ export const testUserAuth = async (url: URL): Promise<HttpResponse> => {
   if (!(await isAllowedToLogIn(email))) {
     throw badRequest();
   }
-  console.log('TEST USER AUTH', email);
 
   let existingUser;
   const data = await tables();
