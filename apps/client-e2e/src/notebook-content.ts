@@ -1,4 +1,5 @@
 import percySnapshot from '@percy/playwright';
+import { Page } from 'playwright-core';
 
 import {
   focusOnBody,
@@ -77,7 +78,7 @@ describe('notebook content', () => {
       expect(strokeWidth).not.toBe(unclickedButtonStroke);
     }
 
-    await percySnapshot(page, 'Notebook: Text Toolbar');
+    await percySnapshot(page as Page, 'Notebook: Text Toolbar');
   });
 
   it('allows to create a new paragraph', async () => {

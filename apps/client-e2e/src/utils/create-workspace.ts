@@ -1,6 +1,6 @@
 import { Page } from 'playwright-core';
 
-export const createWorkspace = async (p: Page = page): Promise<string> => {
+export const createWorkspace = async (p = page as Page): Promise<string> => {
   const resp = await (
     await p.request.post('/graphql', {
       data: JSON.stringify({

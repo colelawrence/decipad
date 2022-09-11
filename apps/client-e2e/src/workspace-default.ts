@@ -1,5 +1,6 @@
 import { initialWorkspace } from '@decipad/initial-workspace';
 import percySnapshot from '@percy/playwright';
+import { Page } from 'playwright-core';
 import waitForExpect from 'wait-for-expect';
 import { getPadList, setUp } from './page-utils/Workspace';
 
@@ -21,6 +22,6 @@ describe('workspace default', () => {
           .sort(byName)
       );
     });
-    await percySnapshot(page, 'Dashboard: Initial Notebooks');
+    await percySnapshot(page as Page, 'Dashboard: Initial Notebooks');
   });
 });

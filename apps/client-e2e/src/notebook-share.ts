@@ -1,5 +1,5 @@
 import percySnapshot from '@percy/playwright';
-import type { Page } from 'playwright';
+import type { BrowserContext, Page } from 'playwright';
 import waitForExpect from 'wait-for-expect';
 import { setUp, waitForEditorToLoad } from './page-utils/Pad';
 import { withTestUser } from './utils';
@@ -19,7 +19,7 @@ describe('notebook share', () => {
     const calculations = await page.$(linkSelector);
     expect(calculations).toBeTruthy();
 
-    await percySnapshot(page, 'Notebook: Slash Command');
+    await percySnapshot(page as Page, 'Notebook: Slash Command');
 
     await page.keyboard.press('Backspace');
   });
@@ -33,13 +33,13 @@ describe('notebook share', () => {
     link = await page.innerText(linkSelector);
     expect(link.length).toBeGreaterThan(0);
 
-    await percySnapshot(page, 'Notebook: Share Popover');
+    await percySnapshot(page as Page, 'Notebook: Share Popover');
   }, 60000);
 
   let otherUserPage: Page;
   test('another user can join on the given link', async () => {
-    const newContext = await browser.newContext();
-    otherUserPage = await newContext.newPage();
+    const newContext = (await browser.newContext()) as BrowserContext;
+    otherUserPage = (await newContext.newPage()) as Page;
 
     // Meet Bob, a new user. Bob, go do your thing.
     await withTestUser({ ctx: newContext, p: otherUserPage });
@@ -64,7 +64,7 @@ describe('notebook share', () => {
   let incognitoUserPage: Page;
   test('incognito browser given link', async () => {
     const newContext = await browser.newContext();
-    incognitoUserPage = await newContext.newPage();
+    incognitoUserPage = (await newContext.newPage()) as Page;
 
     await incognitoUserPage.goto(link);
     await waitForEditorToLoad(incognitoUserPage);

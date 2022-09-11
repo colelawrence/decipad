@@ -1,5 +1,5 @@
 import percySnapshot from '@percy/playwright';
-import { Page } from 'playwright';
+import { BrowserContext, Page } from 'playwright';
 import {
   getPadName,
   navigateToNotebook,
@@ -51,7 +51,7 @@ describe('notebook load json', () => {
       0
     );
 
-    await percySnapshot(page, 'Notebook: All elements');
+    await percySnapshot(page as Page, 'Notebook: All elements');
   });
 
   it('old-style URLs work and pass on search params', async () => {
@@ -72,7 +72,7 @@ describe('notebook load json', () => {
 
     sharedNotebookLink = await page.innerText(linkSelector);
     expect(sharedNotebookLink.length).toBeGreaterThan(0);
-    const newContext = await browser.newContext();
+    const newContext = (await browser.newContext()) as BrowserContext;
     sharedNotebookPage = await newContext.newPage();
 
     await withTestUser({ ctx: newContext, p: sharedNotebookPage });
@@ -85,7 +85,7 @@ describe('notebook load json', () => {
 
   it('navigates to shared notebook link incognito', async () => {
     const newContext = await browser.newContext();
-    sharedNotebookPage = await newContext.newPage();
+    sharedNotebookPage = (await newContext.newPage()) as Page;
 
     await sharedNotebookPage.goto(sharedNotebookLink);
     await waitForEditorToLoad(sharedNotebookPage);

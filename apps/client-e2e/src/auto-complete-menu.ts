@@ -1,4 +1,5 @@
 import percySnapshot from '@percy/playwright';
+import { Page } from 'playwright-core';
 import waitForExpect from 'wait-for-expect';
 import { createCalculationBlockBelow } from './page-utils/Block';
 import { setUp, waitForEditorToLoad } from './page-utils/Pad';
@@ -30,7 +31,7 @@ describe('auto complete menu', () => {
         (await page.$$("span:has-text('1 MyV')")).length
       ).toBeGreaterThanOrEqual(1);
     });
-    await percySnapshot(page, 'Auto Complete Menu: Open');
+    await percySnapshot(page as Page, 'Auto Complete Menu: Open');
   });
 
   it('filters menu based on word before cursor', async () => {

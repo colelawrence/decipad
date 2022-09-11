@@ -7,9 +7,9 @@ function isOnPlayground(page: Page | URL): boolean {
 }
 
 export async function navigateToPlayground() {
-  if (!isOnPlayground(page)) {
+  if (!isOnPlayground(page as Page)) {
     await page.goto('/playground');
-    if (!isOnPlayground(page)) {
+    if (!isOnPlayground(page as Page)) {
       await page.waitForNavigation({
         url: isOnPlayground,
       });

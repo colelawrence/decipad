@@ -1,3 +1,4 @@
+import { Locator } from 'playwright-core';
 import waitForExpect from 'wait-for-expect';
 
 export async function createInputBelow(identifier: string, value: number) {
@@ -48,7 +49,7 @@ export async function createCalculationBlockBelow(decilang: string) {
 }
 
 export function getCodeLineBlockLocator() {
-  return page.locator('//*[@contenteditable][//code]');
+  return page.locator('//*[@contenteditable][//code]') as Locator;
 }
 
 export function getCodeLines() {

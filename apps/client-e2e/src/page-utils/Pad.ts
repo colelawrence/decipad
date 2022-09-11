@@ -1,4 +1,5 @@
 import retry from 'p-retry';
+import { Page } from 'playwright-core';
 import { timeout, withTestUser } from '../utils';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
@@ -7,7 +8,7 @@ interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
 }
 
-export async function waitForEditorToLoad(browserPage = page) {
+export async function waitForEditorToLoad(browserPage = page as Page) {
   await browserPage.waitForSelector('[contenteditable] h1');
   try {
     await browserPage.waitForSelector('[contenteditable] h1', {

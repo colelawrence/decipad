@@ -13,8 +13,8 @@ export interface TestUser {
 }
 
 export async function withTestUser({
-  ctx = context,
-  p = page,
+  ctx = context as BrowserContext,
+  p = page as Page,
   email = randomEmail(),
 }: WithTestUserProps = {}): Promise<TestUser> {
   const Context = ctx || context;

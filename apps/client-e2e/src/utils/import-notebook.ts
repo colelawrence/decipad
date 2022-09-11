@@ -3,7 +3,7 @@ import { Page } from 'playwright-core';
 export const importNotebook = async (
   workspaceId: string,
   source: string,
-  p: Page = page
+  p = page as Page
 ): Promise<string> => {
   const resp = await (
     await p.request.post('/graphql', {

@@ -22,9 +22,9 @@ function isOnWorkspacePage(page: Page | URL): boolean {
 }
 
 export async function navigateToWorkspacePage() {
-  if (!isOnWorkspacePage(page)) {
+  if (!isOnWorkspacePage(page as Page)) {
     await page.goto('/');
-    if (!isOnWorkspacePage(page)) {
+    if (!isOnWorkspacePage(page as Page)) {
       await page.waitForNavigation({
         url: isOnWorkspacePage,
       });
@@ -46,7 +46,9 @@ export async function getPadList(): Promise<PadList> {
   const names = await page.$$('//main//li//a//strong');
   const pads: PadList = [];
   for (const name of names) {
-    const anchor = await name.evaluateHandle((elem) => elem.closest('a')!);
+    const anchor = (await name.evaluateHandle(
+      (elem) => elem.closest('a')!
+    )) as ElementHandle;
     pads.push({
       anchor,
       name: (await name.textContent()) ?? '',
