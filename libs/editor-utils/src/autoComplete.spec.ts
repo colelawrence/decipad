@@ -11,7 +11,7 @@ describe('findWordStart', () => {
         children: [{ text: 'word' }],
       } as never,
     ];
-    expect(findWordStart(editor, { path: [0, 0], offset: 3 })).toEqual({
+    expect(findWordStart(editor, { path: [0, 0], offset: 3 }, true)).toEqual({
       start: {
         offset: 0,
         path: [0, 0],
@@ -25,7 +25,7 @@ describe('findWordStart', () => {
     editor.children = [
       { type: ELEMENT_CODE_LINE, children: [{ text: 'var = 3 +' }] } as never,
     ];
-    expect(findWordStart(editor, { path: [0, 0], offset: 9 })).toEqual({
+    expect(findWordStart(editor, { path: [0, 0], offset: 9 }, true)).toEqual({
       start: {
         offset: 9,
         path: [0, 0],

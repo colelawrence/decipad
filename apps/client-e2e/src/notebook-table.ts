@@ -151,9 +151,12 @@ describe('notebook table', () => {
   it('formula produced desired output', async () => {
     await page.keyboard.type('1 + 1');
 
-    const codeBlock = await page.waitForSelector('section:has-text("=")');
+    const codeBlock = await page.waitForSelector(
+      'section:has-text("="):first-child'
+    );
     const codeBlockText = await codeBlock.innerText();
-    expect(codeBlockText).toBe('Property4 = 1 + 1');
+    // splitting on new line removes the text from auto-complete menu
+    expect(codeBlockText.split('\n')[0]).toBe('Property4 = 1 + 1');
 
     await waitForExpect(async () => {
       const cell = await page

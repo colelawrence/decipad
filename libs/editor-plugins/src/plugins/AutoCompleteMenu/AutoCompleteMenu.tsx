@@ -36,7 +36,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
 
   useEffect(() => {
     if (selection) {
-      const { word: w } = findWordStart(editor, selection.focus);
+      const { word: w } = findWordStart(editor, selection.focus, true);
       setWord(w);
     }
   }, [editor, selection, selection?.focus]);
