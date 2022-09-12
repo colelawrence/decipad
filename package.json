@@ -111,7 +111,7 @@
     "@storybook/react": "6.5.10",
     "@tippyjs/react": "4.2.6",
     "@types/apache-arrow": "npm:@apache-arrow/ts@9.0.0",
-    "@types/lodash": "4.14.182",
+    "@types/lodash": "4.14.185",
     "@udecode/plate": "16.0.0",
     "@udecode/plate-juice": "16.0.0",
     "@urql/devtools": "2.0.3",
