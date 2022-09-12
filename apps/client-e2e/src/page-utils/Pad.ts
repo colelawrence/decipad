@@ -24,6 +24,7 @@ export async function waitForEditorToLoad(browserPage = page as Page) {
 
 export async function setUp(options: SetupOptions = {}) {
   const { createAndNavigateToNewPad = true } = options;
+  await page.goto('/api/auth/signout');
   const newUser = await withTestUser();
   await retry(
     async () => {
