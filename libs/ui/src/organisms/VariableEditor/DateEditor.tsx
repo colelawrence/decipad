@@ -48,16 +48,18 @@ export const DateEditor: FC<DateEditorProps> = ({
   );
 
   return (
-    <DatePicker
-      dateFormat={dateFormat}
-      selected={dateValue}
-      onChange={onChangeValue}
-      customInput={<div>{children}</div>}
-      showTimeSelect={
-        type?.kind === 'date' && showTimeInputForGranularity[type.date]
-      }
-      showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
-      showYearPicker={type?.kind === 'date' && type.date === 'year'}
-    ></DatePicker>
+    <div contentEditable={false}>
+      <DatePicker
+        dateFormat={dateFormat}
+        selected={dateValue}
+        onChange={onChangeValue}
+        customInput={<div>{children}</div>}
+        showTimeSelect={
+          type?.kind === 'date' && showTimeInputForGranularity[type.date]
+        }
+        showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
+        showYearPicker={type?.kind === 'date' && type.date === 'year'}
+      ></DatePicker>
+    </div>
   );
 };
