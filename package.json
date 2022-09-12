@@ -289,7 +289,7 @@
     "@types/pluralize": "^0.0.29",
     "@types/prismjs": "^1.16.5",
     "@types/proper-lockfile": "^4.1.2",
-    "@types/ramda": "^0.28.0",
+    "@types/ramda": "0.28.15",
     "@types/react": "18",
     "@types/react-copy-to-clipboard": "^5.0.2",
     "@types/react-datepicker": "^4.4.2",
