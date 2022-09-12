@@ -290,7 +290,7 @@
     "@types/prismjs": "^1.16.5",
     "@types/proper-lockfile": "^4.1.2",
     "@types/ramda": "0.28.15",
-    "@types/react": "18",
+    "@types/react": "18.0.19",
     "@types/react-copy-to-clipboard": "^5.0.2",
     "@types/react-datepicker": "^4.4.2",
     "@types/react-dom": "17",
@@ -375,7 +375,7 @@
     "ws": "^8.0.0"
   },
   "resolutions": {
-    "@types/react": "^18.0.0",
+    "@types/react": "18.0.19",
     "react-dnd": "^15.0.0",
     "react-dnd-html5-backend": "^15.0.0",
     "@typescript-eslint/eslint-plugin": "5.36.2"
