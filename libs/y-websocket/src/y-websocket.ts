@@ -405,6 +405,7 @@ class WebsocketProvider
       ) {
         // no message received in a long time - not even your own awareness
         // updates (which are updated every 15 seconds)
+        this.shouldConnect = true;
         this.ws?.close();
       }
     }, messageReconnectTimeout / 10);
