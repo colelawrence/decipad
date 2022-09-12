@@ -9164,10 +9164,10 @@
     pad-left "^2.1.0"
     tslib "^2.4.0"
 
-"@types/architect__functions@^3.13.4", "@types/architect__functions@^3.13.6":
-  version "3.13.6"
-  resolved "https://registry.yarnpkg.com/@types/architect__functions/-/architect__functions-3.13.6.tgz#57803b6b05830f736823984df3c7ec6ae0f58f82"
-  integrity sha512-1XggtRqhJ7Hy47gAg3qcPZMSDeJuQNp3obL5OJEVt2oo+8CsfU4vk1GU385AHs/xkBGOp1cfgKcDTyBrDbqJdA==
+"@types/architect__functions@3.13.7":
+  version "3.13.7"
+  resolved "https://registry.yarnpkg.com/@types/architect__functions/-/architect__functions-3.13.7.tgz#9b79a2824f7797fda7ecb40c0203bc3242b138d3"
+  integrity sha512-WN7ZeKdKWjKoR++BRImbrNZyvIKq1LSa6gLOk7nLyg4HyNUV58/NLUUpqCHuCEBuUipwVB8xTgXrfCKhATqVqw==
   dependencies:
     "@types/aws-lambda" "*"
     "@types/express" "*"
