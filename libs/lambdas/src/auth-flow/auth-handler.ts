@@ -37,7 +37,6 @@ export function createAuthHandler(): HttpHandler {
     },
 
     async jwt({ user, token }) {
-      console.log('auth: jwt', { user, token });
       if (user) {
         token.accessToken = user.secret;
         if (!token.accessToken) {
@@ -49,7 +48,6 @@ export function createAuthHandler(): HttpHandler {
     },
 
     async session({ session, user, token }) {
-      console.log('auth: session', { session, user, token });
       if (!user && token.email && session.user) {
         const data = await tables();
         const userKey = await data.userkeys.get({ id: `email:${token.email}` });

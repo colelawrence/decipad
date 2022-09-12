@@ -39,20 +39,17 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
 
   return {
     async createUser(profile: Omit<User, 'id'>): Promise<AdapterUser> {
-      console.log('auth: createUser', profile);
       const name = profile.name || 'unknown';
       return (await createUser({ ...profile, name } as UserInput))
         .user as unknown as AdapterUser;
     },
 
     async getUser(id: string): Promise<User | undefined> {
-      console.log('auth: getUser', id);
       const data = await tables();
       return (await data.users.get({ id })) as User | undefined;
     },
 
     async getUserByEmail(email: string): Promise<User | null> {
-      console.log('auth: getUserByEmail', email);
       const data = await tables();
       const keyId = `email:${email}`;
       const key = await data.userkeys.get({ id: keyId });
@@ -71,8 +68,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
         ).user;
       }
 
-      console.log('auth: getUserByEmail: user: ', user);
-
       return user;
     },
 
@@ -80,7 +75,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
       providerId: string,
       providerAccountId: string
     ): Promise<User | undefined> {
-      console.log('auth: getUserByAccount', providerId, providerAccountId);
       const data = await tables();
       const userkey = await data.userkeys.get({
         id: `${providerId}:${providerAccountId}`,
@@ -94,7 +88,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
     },
 
     async updateUser(user: User & { emailVerified?: Date }) {
-      console.log('auth: updateUser', user);
       const data = await tables();
       if (user.emailVerified) {
         const verifiedAt = new Date(user.emailVerified);
@@ -169,7 +162,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
     async createVerificationToken(
       verification: VerificationRequest & { expires: Date }
     ) {
-      console.log('auth: createVerificationToken', verification);
       const { identifier, expires, token } = verification;
       const data = await tables();
       const hashedToken = hashToken(token);
@@ -186,7 +178,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
     },
 
     async useVerificationToken(verification: VerificationRequest) {
-      console.log('auth: useVerificationToken', verification);
       const { identifier, token } = verification;
       const data = await tables();
       const hashedToken = hashToken(token);
@@ -208,7 +199,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
       token: string,
       secret2: string
     ) {
-      console.log('auth: deleteVerificationRequest', identifier);
       const data = await tables();
       const hashedToken = hashToken(token);
       const id = hashToken(`${identifier}:${hashedToken}:${secret2}`);
