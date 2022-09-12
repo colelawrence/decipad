@@ -5,7 +5,7 @@ import { createCalculationBlockBelow } from './page-utils/Block';
 import { setUp, waitForEditorToLoad } from './page-utils/Pad';
 
 // eslint-disable-next-line jest/no-disabled-tests
-describe('auto complete menu', () => {
+describe.skip('auto complete menu', () => {
   beforeAll(() => setUp());
   beforeAll(() => waitForEditorToLoad());
 
