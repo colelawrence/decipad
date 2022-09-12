@@ -11843,19 +11843,19 @@ apollo-server-lambda@3.8.2:
     apollo-server-express "^3.8.2"
     express "^4.17.1"
 
-apollo-server-plugin-base@^3.0.0, apollo-server-plugin-base@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-plugin-base/-/apollo-server-plugin-base-3.6.0.tgz#f85e19fa4a33866ef1b4235077397a63a9a7343e"
-  integrity sha512-GtXhczRGpTLQyFPWeWSnX1VcN2JaaAU7WT8PzoTQuJKYJ/Aj5mPebHbfG+PXQlDmI8IgyCKf7B1HIRnJqvAZbg==
-  dependencies:
-    apollo-server-types "^3.6.0"
-
-apollo-server-plugin-base@^3.6.2:
+apollo-server-plugin-base@3.6.2, apollo-server-plugin-base@^3.6.2:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/apollo-server-plugin-base/-/apollo-server-plugin-base-3.6.2.tgz#f256e1f274c8fee0d7267b6944f402da71788fb3"
   integrity sha512-erWXjLOO1u7fxQkbxJ2cwSO7p0tYzNied91I1SJ9tikXZ/2eZUyDyvrpI+4g70kOdEi+AmJ5Fo8ahEXKJ75zdg==
   dependencies:
     apollo-server-types "^3.6.2"
+
+apollo-server-plugin-base@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-plugin-base/-/apollo-server-plugin-base-3.6.0.tgz#f85e19fa4a33866ef1b4235077397a63a9a7343e"
+  integrity sha512-GtXhczRGpTLQyFPWeWSnX1VcN2JaaAU7WT8PzoTQuJKYJ/Aj5mPebHbfG+PXQlDmI8IgyCKf7B1HIRnJqvAZbg==
+  dependencies:
+    apollo-server-types "^3.6.0"
 
 apollo-server-types@^3.6.0:
   version "3.6.0"
