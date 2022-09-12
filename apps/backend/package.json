@@ -11,20 +11,20 @@
     "@architect/architect": "10.4.1",
     "@architect/destroy": "decipad/destroy",
     "apollo-server-core": "3.10.2",
-    "aws-sdk": "^2.991.0",
-    "dotenv": "^16.0.0",
-    "form-data": "^4.0.0",
-    "graphql": "^16.0.0",
-    "graphql-ws": "^5.0.0",
-    "lodash.chunk": "^4.2.0",
-    "lodash.merge": "^4.6.2",
-    "mkdirp": "^1.0.4"
+    "aws-sdk": "2.991.0",
+    "dotenv": "16.0.0",
+    "form-data": "4.0.0",
+    "graphql": "16.3.0",
+    "graphql-ws": "5.7.0",
+    "lodash.chunk": "4.2.0",
+    "lodash.merge": "4.6.2",
+    "mkdirp": "1.0.4"
   },
   "devDependencies": {
     "@apollo/client": "3.4.12",
     "@types/architect__functions": "3.13.7",
-    "@types/mkdirp": "^1.0.2",
-    "@types/proper-lockfile": "^4.1.2",
-    "proper-lockfile": "^4.1.2"
+    "@types/mkdirp": "1.0.2",
+    "@types/proper-lockfile": "4.1.2",
+    "proper-lockfile": "4.1.2"
   }
 }
