@@ -16,7 +16,11 @@ export const afterTableMenuInteraction = (
     if (columnIndex != null) {
       selPath.push(columnIndex);
     }
-    const selPoint = getEndPoint(editor, selPath);
-    focusEditor(editor, selPoint);
+    try {
+      const selPoint = getEndPoint(editor, selPath);
+      focusEditor(editor, selPoint);
+    } catch (err) {
+      // do nothing
+    }
   }
 };
