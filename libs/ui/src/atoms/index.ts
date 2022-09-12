@@ -43,6 +43,7 @@ export { NavigationItem } from './NavigationItem/NavigationItem';
 export { NotebookIconButton } from './NotebookIconButton/NotebookIconButton';
 export { NumberResult } from './NumberResult/NumberResult';
 export { Overlay } from './Overlay/Overlay';
+export { OverflowLayout } from './OverflowLayout/OverflowLayout';
 export { Paragraph } from './Paragraph/Paragraph';
 export { Placeholder } from './Placeholder/Placeholder';
 export * from './placeholders';

@@ -12,9 +12,9 @@ import {
 } from '../../utils';
 import { TableWidth } from '../Table/Table';
 import { smallestDesktop } from '../../primitives';
-import { tableControlWidth } from '../../styles/table';
 import { Column } from '../../types';
 import { Add } from '../../icons';
+import { OverflowLayout } from '../../atoms/OverflowLayout/OverflowLayout';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -45,29 +45,6 @@ const tableCaptionWrapperStyles = css({
     maxWidth: `calc(100vw - ${gutterWidth})`,
     minWidth: '0',
   },
-});
-
-const tableWrapperStyles = css({
-  transform: `translateX(calc((((100vw - 700px) / 2) + ${tableControlWidth}) * -1 ))`,
-  width: '100vw',
-  minWidth: editorLayout.slimBlockWidth,
-  overflowX: 'auto',
-  paddingBottom: '12px',
-  position: 'relative',
-  whiteSpace: 'nowrap',
-  left: tableControlWidth,
-  display: 'flex',
-  [smallScreenQuery]: {
-    maxWidth: `calc(100vw - ${gutterWidth})`,
-    transform: `translateX(-${tableControlWidth})`,
-    minWidth: '0',
-  },
-});
-
-const tableOverflowStyles = css({
-  display: 'inline-block',
-  height: '20px',
-  minWidth: `calc(((100vw - 700px) / 2) - ${tableControlWidth})`,
 });
 
 const tableAddColumnButtonStyles = css({
@@ -134,8 +111,7 @@ export const EditorTable: FC<EditorTableProps> = ({
         <div css={wrapperInnerStyles}>
           {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 
-          <div css={tableWrapperStyles}>
-            <div css={tableOverflowStyles} contentEditable={false} />
+          <OverflowLayout>
             <Table
               isReadOnly={false}
               columnCount={columns.length}
@@ -167,7 +143,7 @@ export const EditorTable: FC<EditorTableProps> = ({
                 <Add />
               </button>
             )}
-          </div>
+          </OverflowLayout>
         </div>
       </div>
     </TableStyleContext.Provider>

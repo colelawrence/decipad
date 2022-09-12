@@ -8,6 +8,7 @@ export { EditorIcon } from './EditorIcon/EditorIcon';
 export { ErrorModal } from './ErrorModal/ErrorModal';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
 export { ImportFromLinkMenu } from './ImportFromLinkMenu/ImportFromLinkMenu';
+export { LiveConnectionResult } from './LiveConnectionResult/LiveConnectionResult';
 export { LoadingIndicator } from './LoadingIndicator/LoadingIndicator';
 export { LoadingFilter } from './LoadingFilter/LoadingFilter';
 export { LoadingLogo } from './LoadingLogo/LoadingLogo';

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { FC, useMemo, useState } from 'react';
 import { SerializedType, SerializedTypes } from '@decipad/computer';
 import { CodeResult, Table } from '..';
-import { TableData, TableHeader } from '../../atoms';
+import { OverflowLayout, TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
@@ -24,8 +24,8 @@ const recursiveRowCount = (t: SerializedType): number => {
   return 1;
 };
 
-const liveTableWrapperStyles = css({
-  marginLeft: '-20px',
+const nonLiveResultTableResultWrapperStyles = css({
+  marginLeft: '20px',
 });
 
 export const TableResult = ({
@@ -78,115 +78,119 @@ export const TableResult = ({
   );
 
   return (
-    <div css={isLiveResult && liveTableWrapperStyles}>
-      <Table
-        columnCount={columnNames.length}
-        border={isNested ? 'inner' : 'all'}
-        hiddenRowCount={hiddenRowsCount}
-        setShowAllRows={setShowAllRows}
-        isReadOnly={!isLiveResult}
-        isLiveResult={isLiveResult}
-        head={
-          <TableHeaderRow readOnly={!isLiveResult}>
-            {columnNames?.map((columnName, index) =>
-              isLiveResult ? (
-                <TableColumnHeader
-                  key={index}
-                  type={toTableHeaderType(columnTypes[index])}
-                  isFirst={index === 0}
-                  isForImportedColumn={isLiveResult}
-                  onChangeColumnType={(columnType) =>
-                    onChangeColumnType?.(index, columnType)
+    <div css={!isLiveResult && nonLiveResultTableResultWrapperStyles}>
+      <OverflowLayout>
+        <Table
+          columnCount={columnNames.length}
+          border={isNested ? 'inner' : 'all'}
+          hiddenRowCount={hiddenRowsCount}
+          setShowAllRows={setShowAllRows}
+          isReadOnly={!isLiveResult}
+          isLiveResult={isLiveResult}
+          head={
+            <TableHeaderRow readOnly={!isLiveResult}>
+              {columnNames?.map((columnName, index) =>
+                isLiveResult ? (
+                  <TableColumnHeader
+                    key={index}
+                    type={toTableHeaderType(columnTypes[index])}
+                    isFirst={index === 0}
+                    isForImportedColumn={isLiveResult}
+                    onChangeColumnType={(columnType) =>
+                      onChangeColumnType?.(index, columnType)
+                    }
+                  >
+                    {columnName}
+                  </TableColumnHeader>
+                ) : (
+                  <TableHeader
+                    type={toTableHeaderType(columnTypes[index])}
+                    key={index}
+                    isEditable={!isLiveResult}
+                    showIcon={isLiveResult}
+                  >
+                    {columnName}
+                  </TableHeader>
+                )
+              )}
+            </TableHeaderRow>
+          }
+          body={
+            <>
+              {Array.from({ length: showRowLength }, (_, rowIndex) => (
+                <TableRow
+                  key={rowIndex}
+                  readOnly={!isLiveResult || rowIndex > 0}
+                  tableCellControls={
+                    (isLiveResult && rowIndex === 0 && firstTableRowControls) ||
+                    (isLiveResult && <th></th>) ||
+                    false
                   }
                 >
-                  {columnName}
-                </TableColumnHeader>
-              ) : (
-                <TableHeader
-                  type={toTableHeaderType(columnTypes[index])}
-                  key={index}
-                  isEditable={!isLiveResult}
-                  showIcon={isLiveResult}
-                >
-                  {columnName}
-                </TableHeader>
-              )
-            )}
-          </TableHeaderRow>
-        }
-        body={
-          <>
-            {Array.from({ length: showRowLength }, (_, rowIndex) => (
-              <TableRow
-                key={rowIndex}
-                readOnly={!isLiveResult || rowIndex > 0}
-                tableCellControls={
-                  (isLiveResult && rowIndex === 0 && firstTableRowControls) ||
-                  (isLiveResult && <th></th>) ||
-                  false
-                }
-              >
-                {value.map((column, colIndex) => (
-                  <TableData
-                    key={colIndex}
-                    as="td"
-                    isEditable={false}
-                    isLiveResult={isLiveResult}
-                    showPlaceholder={false}
-                    lastBeforeMoreRowsHidden={
-                      hiddenRowsCount > 0 && rowIndex === showRowLength - 1
-                    }
-                    css={{ ...tableParentStyles }}
-                  >
-                    <div
-                      draggable
-                      onDragStart={(e) => {
-                        onDragStartCell?.({
-                          tableName: (type as SerializedTypes.Table)
-                            .indexName as string,
-                          columnName: columnNames[colIndex],
-                          cellValue: value[0][rowIndex] as string,
-                        })(e);
-                      }}
-                      className="drag-handle"
-                      css={{
-                        display: 'none',
-                        position: 'absolute',
-                        top: 4,
-                        right: 4,
-                      }}
+                  {value.map((column, colIndex) => (
+                    <TableData
+                      key={colIndex}
+                      as="td"
+                      isEditable={false}
+                      isLiveResult={isLiveResult}
+                      showPlaceholder={false}
+                      lastBeforeMoreRowsHidden={
+                        hiddenRowsCount > 0 && rowIndex === showRowLength - 1
+                      }
+                      css={{ ...tableParentStyles }}
                     >
-                      <button
+                      <div
+                        draggable
+                        onDragStart={(e) => {
+                          onDragStartCell?.({
+                            tableName: (type as SerializedTypes.Table)
+                              .indexName as string,
+                            columnName: columnNames[colIndex],
+                            cellValue: value[0][rowIndex] as string,
+                          })(e);
+                        }}
+                        className="drag-handle"
                         css={{
-                          width: '16px',
+                          display: 'none',
+                          position: 'absolute',
+                          top: 4,
+                          right: 4,
                         }}
                       >
-                        <DragHandle />
-                      </button>
-                    </div>
+                        <button
+                          css={{
+                            width: '16px',
+                          }}
+                        >
+                          <DragHandle />
+                        </button>
+                      </div>
 
-                    <div
-                      css={[
-                        css(table.getCellWrapperStyles(columnTypes[colIndex])),
-                        colIndex === 0 && table.cellLeftPaddingStyles,
-                      ]}
-                    >
-                      <CodeResult
-                        parentType={type}
-                        type={columnTypes[colIndex]}
-                        value={column[rowIndex]}
-                        variant="block"
-                        tooltip={tooltip}
-                        isLiveResult={isLiveResult}
-                      />
-                    </div>
-                  </TableData>
-                ))}
-              </TableRow>
-            ))}
-          </>
-        }
-      ></Table>
+                      <div
+                        css={[
+                          css(
+                            table.getCellWrapperStyles(columnTypes[colIndex])
+                          ),
+                          colIndex === 0 && table.cellLeftPaddingStyles,
+                        ]}
+                      >
+                        <CodeResult
+                          parentType={type}
+                          type={columnTypes[colIndex]}
+                          value={column[rowIndex]}
+                          variant="block"
+                          tooltip={tooltip}
+                          isLiveResult={isLiveResult}
+                        />
+                      </div>
+                    </TableData>
+                  ))}
+                </TableRow>
+              ))}
+            </>
+          }
+        ></Table>
+      </OverflowLayout>
     </div>
   );
 };

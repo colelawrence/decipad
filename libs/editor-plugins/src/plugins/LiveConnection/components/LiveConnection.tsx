@@ -12,7 +12,7 @@ import {
   useElementMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
-import { atoms, molecules, organisms } from '@decipad/ui';
+import { atoms, templates } from '@decipad/ui';
 import { useLiveConnection } from '@decipad/live-connect';
 import { useComputer } from '@decipad/react-contexts';
 import { DraggableBlock, BlockErrorBoundary } from '@decipad/editor-components';
@@ -81,19 +81,12 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
   return (
     <div contentEditable={false}>
       {computerResult && (
-        <organisms.CodeResult
-          type={computerResult.type}
-          value={computerResult.value}
-          variant="block"
-          isLiveResult
-          firstTableRowControls={
-            <molecules.ImportTableRowControls
-              isFirstRow={!element.isFirstRowHeaderRow}
-              toggleFirstRowIsHeader={setIsFirstRowHeader}
-            />
-          }
+        <templates.LiveConnectionResult
+          result={computerResult}
+          isFirstRowHeaderRow={element.isFirstRowHeaderRow}
+          setIsFirstRowHeader={setIsFirstRowHeader}
           onChangeColumnType={onChangeColumnType}
-        ></organisms.CodeResult>
+        ></templates.LiveConnectionResult>
       )}
       {error && <atoms.CodeError message={error.message} url="/docs" />}
       {!error && !result && <atoms.Spinner />}
