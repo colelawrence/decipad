@@ -21,11 +21,12 @@ export const SmartCell: FC<SmartProps> = ({
   const [result, setResult] = useState<Result.Result | null>(null);
 
   const expressionFilter = subproperties
+    .slice()
     .reverse()
     .reduce((previous, current) => {
       const escapedValue =
         typeof current.value === 'string'
-          ? `"${current.value}"`
+          ? JSON.stringify(current.value)
           : current.value;
       return previous === ``
         ? `filter(${tableName}, ${tableName}.${current.name} == ${escapedValue})`
