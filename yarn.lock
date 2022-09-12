@@ -442,6 +442,18 @@
     run-parallel "~1.2.0"
     run-waterfall "~1.1.7"
 
+"@architect/destroy@3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@architect/destroy/-/destroy-3.0.7.tgz#a6df89c6e03eb1167ba6d72f902ee892d2431eb0"
+  integrity sha512-JwtB1LmWS1k7CXWnt2dC/8qYQEuQC4ynRn1pOHp7kt5nfFMzwdDxx8nGqCqVA7rvyDIMrKi63nzoEEKgvwjM5w==
+  dependencies:
+    "@architect/inventory" "~3.3.0"
+    "@architect/utils" "~3.1.2"
+    aws-sdk "2.1055.0"
+    minimist "~1.2.6"
+    run-parallel "~1.2.0"
+    run-waterfall "~1.1.7"
+
 "@architect/destroy@decipad/destroy":
   version "2.0.1"
   resolved "https://codeload.github.com/decipad/destroy/tar.gz/0c433c76036add94ea02a7abaec9a82a2f6ada76"
@@ -567,6 +579,16 @@
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.2.1.tgz#62c4966e1193d61a6bf87a5f86f996da7f2680e7"
   integrity sha512-wDyy4EU6ZYY8gGHspEHY+sl1PnVJdnBVzZ5wIILfw/m+Sw1IWxKKUM6MxRwyV7QXk/YMIAtA57Vs5iRykkXlRA==
+  dependencies:
+    "@architect/asap" "~5.0.1"
+    "@architect/parser" "~6.0.0"
+    "@architect/utils" "~3.1.1"
+    lambda-runtimes "~1.1.2"
+
+"@architect/inventory@~3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.3.0.tgz#05ee597329a2b841d0308fa8600adcf14451fef0"
+  integrity sha512-hvEpM0stEP5nhE5VrANf18WuTWMFtsF/XHMSrtSALBgZE/b6sUWx5WmHJDtPKi1lFM/ywwy+XIYZn0QftpTaYQ==
   dependencies:
     "@architect/asap" "~5.0.1"
     "@architect/parser" "~6.0.0"
@@ -11932,6 +11954,21 @@ aws-sdk@2.1001.0:
   version "2.1001.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1001.0.tgz#c4da256aa0058438ba611ae06fa850f4f7d63abc"
   integrity sha512-DpmslPU8myCaaRUwMzB/SqAMtD2zQckxYwq3CguIv8BI+JHxDLeTdPCLfA5jffQ8k6dcvISOuiqdpwCZucU0BA==
+  dependencies:
+    buffer "4.9.2"
+    events "1.1.1"
+    ieee754 "1.1.13"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.3.2"
+    xml2js "0.4.19"
+
+aws-sdk@2.1055.0:
+  version "2.1055.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1055.0.tgz#07beb86650d5a313f7c899807c51b12b5e2f4117"
+  integrity sha512-99drH3mvXakw9we8Rs2cDQmi2pS7PVAC9pvTlB7lHPUwLYftMlko5cFMceZxvTHeyLkdvg98iNIHI3hbnzitoQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
