@@ -1,6 +1,6 @@
-import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright-core';
 import { setUp } from './page-utils/Pad';
+import { snapshot } from './utils';
 
 describe('notebook icon', () => {
   beforeAll(() => setUp());
@@ -23,7 +23,7 @@ describe('notebook icon', () => {
     await green?.click();
 
     await page.waitForTimeout(200);
-    await percySnapshot(page as Page, 'Notebook: Icon selection');
+    await snapshot(page as Page, 'Notebook: Icon selection');
 
     const buttonColor = await page
       .locator('button[aria-haspopup="dialog"]')

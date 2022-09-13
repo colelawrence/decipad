@@ -1,4 +1,3 @@
-import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright-core';
 
 import {
@@ -7,6 +6,7 @@ import {
   setUp,
   waitForEditorToLoad,
 } from './page-utils/Pad';
+import { snapshot } from './utils';
 
 describe('notebook content', () => {
   beforeAll(() => setUp());
@@ -78,7 +78,7 @@ describe('notebook content', () => {
       expect(strokeWidth).not.toBe(unclickedButtonStroke);
     }
 
-    await percySnapshot(page as Page, 'Notebook: Text Toolbar');
+    await snapshot(page as Page, 'Notebook: Text Toolbar');
   });
 
   it('allows to create a new paragraph', async () => {

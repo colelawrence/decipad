@@ -1,4 +1,3 @@
-import percySnapshot from '@percy/playwright';
 import { BrowserContext, Page } from 'playwright';
 import {
   getPadName,
@@ -7,7 +6,7 @@ import {
   setUp,
   waitForEditorToLoad,
 } from './page-utils/Pad';
-import { withTestUser } from './utils';
+import { snapshot, withTestUser } from './utils';
 import notebookSource from './__fixtures__/001-notebook';
 import { createWorkspace } from './utils/create-workspace';
 import { importNotebook } from './utils/import-notebook';
@@ -51,7 +50,7 @@ describe('notebook load json', () => {
       0
     );
 
-    await percySnapshot(page as Page, 'Notebook: All elements');
+    await snapshot(page as Page, 'Notebook: All elements');
   });
 
   it('old-style URLs work and pass on search params', async () => {
@@ -92,9 +91,6 @@ describe('notebook load json', () => {
     // make sure screenshot is captured
     expect(sharedNotebookPage).toBeDefined();
 
-    await percySnapshot(
-      sharedNotebookPage,
-      'Notebook: Published mode (incognito)'
-    );
+    await snapshot(sharedNotebookPage, 'Notebook: Published mode (incognito)');
   });
 });

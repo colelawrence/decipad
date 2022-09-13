@@ -1,7 +1,7 @@
-import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright-core';
 import waitForExpect from 'wait-for-expect';
 import { setUp } from './page-utils/Home';
+import { snapshot } from './utils';
 import { withTestUser } from './utils/with-test-user';
 
 beforeAll(async () => {
@@ -12,7 +12,7 @@ test('Should display welcome message', async () => {
   await waitForExpect(async () =>
     expect(await page.isVisible('text=/make/i')).toBe(true)
   );
-  await percySnapshot(page as Page, 'Auth: Login Window');
+  await snapshot(page as Page, 'Auth: Login Window');
 });
 
 test('should allow the user to type their email for login', async () => {
@@ -25,7 +25,7 @@ test('should show confirmation email on login attempt', async () => {
   await page.fill('[placeholder~="email" i]', 'johndoe123@gmail.com');
   await page.click('text=/continue/i');
   expect(await page.waitForSelector('text=/check.+email/i')).not.toBe(null);
-  await percySnapshot(page as Page, 'Auth: Magic Link Email Sent');
+  await snapshot(page as Page, 'Auth: Magic Link Email Sent');
 });
 
 test('should redirect to workspace if authenticated', async () => {

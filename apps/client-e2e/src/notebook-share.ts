@@ -1,8 +1,7 @@
-import percySnapshot from '@percy/playwright';
 import type { BrowserContext, Page } from 'playwright';
 import waitForExpect from 'wait-for-expect';
 import { setUp, waitForEditorToLoad } from './page-utils/Pad';
-import { withTestUser } from './utils';
+import { snapshot, withTestUser } from './utils';
 
 waitForExpect.defaults.interval = 1000;
 let link: string;
@@ -19,7 +18,7 @@ describe('notebook share', () => {
     const calculations = await page.$(linkSelector);
     expect(calculations).toBeTruthy();
 
-    await percySnapshot(page as Page, 'Notebook: Slash Command');
+    await snapshot(page as Page, 'Notebook: Slash Command');
 
     await page.keyboard.press('Backspace');
   });
@@ -33,7 +32,7 @@ describe('notebook share', () => {
     link = await page.innerText(linkSelector);
     expect(link.length).toBeGreaterThan(0);
 
-    await percySnapshot(page as Page, 'Notebook: Share Popover');
+    await snapshot(page as Page, 'Notebook: Share Popover');
   }, 60000);
 
   let otherUserPage: Page;
