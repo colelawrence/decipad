@@ -33126,10 +33126,10 @@ yesno@~0.4.0:
   resolved "https://registry.yarnpkg.com/yesno/-/yesno-0.4.0.tgz#5d674f14d339f0bd4b0edc47f899612c74fcd895"
   integrity sha512-tdBxmHvbXPBKYIg81bMCB7bVeDmHkRzk5rVJyYYXurwKkHq/MCd8rz4HSJUP7hW0H2NlXiq8IFiWvYKEHhlotA==
 
-yjs@13.5.38:
-  version "13.5.38"
-  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.38.tgz#58dc8d679c69bddaf7c62e74c909ca08a8e592c9"
-  integrity sha512-YCHj6DkgxhIRqdxqTI+htGAhvfmgkS974pz+/OOiuLOj0EgGfUKvtp4yYyQGg1Wf3m4oLet9x7gEvCrxaGiVZQ==
+yjs@13.5.41:
+  version "13.5.41"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.41.tgz#105041cd56bdef154704441c381d80723e072bbe"
+  integrity sha512-4eSTrrs8OeI0heXKKioRY4ag7V5Bk85Z4MeniUyown3o3y0G7G4JpAZWrZWfTp7pzw2b53GkAQWKqHsHi9j9JA==
   dependencies:
     lib0 "^0.2.49"
 
