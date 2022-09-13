@@ -222,7 +222,7 @@
     "vega": "5.22.1",
     "vega-lib": "4.4.0",
     "vega-lite": "5.2.0",
-    "web-vitals": "3.0.0",
+    "web-vitals": "3.0.1",
     "y-protocols": "1.0.5",
     "yjs": "13.5.38",
     "zustand": "4.0.0-rc.1"
