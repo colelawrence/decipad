@@ -85,7 +85,7 @@ export const TableCell: PlateComponent = ({
   // Displaying the unit on an empty cell creates a visual glitch
   const nodeText = getNodeString(element).trim();
   const hasText = nodeText !== '';
-  const isSoleNumber = nodeText === Number(nodeText).toString();
+  const isSoleNumber = !Number.isNaN(Number(nodeText));
   const unit =
     cellType?.kind === 'number' &&
     cellType.unit?.length &&
