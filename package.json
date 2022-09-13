@@ -127,7 +127,7 @@
     "camelcase": "6.3.0",
     "caniuse-lite": "1.0.30001397",
     "chalk": "4.1.2",
-    "copy-to-clipboard": "3.3.1",
+    "copy-to-clipboard": "3.3.2",
     "core-js": "3.19.1",
     "csv-parse": "5.1.0",
     "date-fns": "2.28.0",
