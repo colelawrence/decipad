@@ -72,12 +72,9 @@ const Workspace: FC = () => {
     currentWorkspace?.pads?.items,
     (item) => -Date.parse(item.createdAt)
   ).map((notebook) => {
-    const { newIcon, newIconColor, ok } = parseIconColorFromIdentifier(
-      notebook?.icon
-    );
+    const { icon = 'Rocket', iconColor = 'Catskill' } =
+      parseIconColorFromIdentifier(notebook?.icon);
 
-    const icon = ok && newIcon ? newIcon : 'Rocket';
-    const iconColor = ok && newIconColor ? newIconColor : 'Catskill';
     return {
       ...notebook,
       icon,

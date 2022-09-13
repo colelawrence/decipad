@@ -66,18 +66,18 @@ const badCombos = [
 
 describe.each(validCombos)('With valid combo %s', (combo) => {
   it(`should parse ${combo}`, () => {
-    const { ok, newIcon, newIconColor } = parseIconColorFromIdentifier(combo);
+    const { ok, icon, iconColor } = parseIconColorFromIdentifier(combo);
     expect(ok).toBeTruthy();
-    expect(userIconKeys).toContain(newIcon);
-    expect(swatchNames).toContain(newIconColor);
+    expect(userIconKeys).toContain(icon);
+    expect(swatchNames).toContain(iconColor);
   });
 });
 
 describe.each(badCombos)('With valid combo %s', (combo) => {
   it(`should not parse ${combo} with a bad term`, () => {
-    const { ok, newIcon, newIconColor } = parseIconColorFromIdentifier(combo);
-    expect(newIcon).toBeUndefined();
-    expect(newIconColor).toBeUndefined();
+    const { ok, icon, iconColor } = parseIconColorFromIdentifier(combo);
+    expect(icon).toBeUndefined();
+    expect(iconColor).toBeUndefined();
     expect(ok).toBeFalsy();
   });
 });

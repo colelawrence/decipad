@@ -1,61 +1,35 @@
-import type { DocSyncEditor } from '@decipad/docsync';
-import type { MyEditor } from '@decipad/editor-types';
 import { NotebookTopbar } from '@decipad/ui';
+import { noop } from '@decipad/utils';
 import { FC } from 'react';
-import {
-  useGetNotebookTopbarQuery,
-  useGetWorkspacesIDsQuery,
-  useSetNotebookPublicMutation,
-} from '../../graphql';
-import { ErrorPage } from '../../meta';
-import { useDuplicateNotebook } from './hooks/useDuplicateNotebook';
+import { BehaviorSubject } from 'rxjs';
+import { Notebook } from './hooks/useNotebookStateAndActions';
 
 type TopbarProps = {
   readonly notebookId: string;
-  readonly docsync?: DocSyncEditor;
-  readonly editor?: MyEditor;
+  readonly notebook: Notebook;
+  readonly hasLocalChanges: BehaviorSubject<boolean> | undefined;
+  readonly duplicateNotebook?: () => void;
+  readonly removeLocalChanges?: () => void;
+  readonly isNotebookPublic?: boolean;
+  readonly setNotebookPublic?: (isPublic: boolean) => void;
 };
 
-const Topbar: FC<TopbarProps> = ({ notebookId, docsync, editor }) => {
-  const [result] = useGetNotebookTopbarQuery({
-    variables: {
-      id: notebookId,
-    },
-  });
-  const [workspacesResult] = useGetWorkspacesIDsQuery();
-  const [, setNotebookPublic] = useSetNotebookPublicMutation();
-  const { data, error } = result;
-  const { data: workspacesData, error: workspacesError } = workspacesResult;
-  const [duplicateNotebook] = useDuplicateNotebook({ id: notebookId, editor });
+const Topbar: FC<TopbarProps> = ({
+  notebookId,
+  notebook,
+  hasLocalChanges,
+  duplicateNotebook,
+  removeLocalChanges,
+  isNotebookPublic,
+  setNotebookPublic = noop,
+}) => {
   const handleToggleMakePublic = () => {
-    setNotebookPublic({
-      id: notebookId,
-      isPublic: !notebook.isPublic,
-    });
+    setNotebookPublic(!isNotebookPublic);
   };
 
-  const handleRevertChanges = async () => {
-    await docsync?.removeLocalChanges();
-    window.location.reload();
-  };
-
-  if (error) {
-    if (/no such/i.test(error?.message))
-      return <ErrorPage Heading="h1" wellKnown="404" />;
-    throw error;
+  if (!notebook) {
+    return null;
   }
-  if (!data || !data.getPadById) {
-    throw new Error('Missing notebook');
-  }
-
-  if (workspacesError) {
-    throw workspacesError;
-  }
-  if (!workspacesData) {
-    throw new Error('Missing workspaces');
-  }
-
-  const notebook = data.getPadById;
 
   return (
     <NotebookTopbar
@@ -68,8 +42,8 @@ const Topbar: FC<TopbarProps> = ({ notebookId, docsync, editor }) => {
       permission={notebook.myPermissionType}
       onToggleMakePublic={handleToggleMakePublic}
       isPublic={notebook.isPublic || undefined}
-      onRevertChanges={handleRevertChanges}
-      hasLocalChanges={docsync?.hasLocalChanges()}
+      onRevertChanges={removeLocalChanges}
+      hasLocalChanges={hasLocalChanges}
       onDuplicateNotebook={duplicateNotebook}
     />
   );

@@ -1,6 +1,5 @@
 mutation ImportNotebook($workspaceId: ID!, $source: String!) {
   importPad(workspaceId: $workspaceId, source: $source) {
-    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }

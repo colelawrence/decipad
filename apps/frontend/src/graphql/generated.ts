@@ -15,7 +15,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
 };
 
@@ -636,7 +635,7 @@ export type CreateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
 export type CreateWorkspaceMutationVariables = Exact<{
   name: Scalars['String'];
@@ -666,7 +665,7 @@ export type DuplicateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
 export type ImportNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
@@ -674,7 +673,7 @@ export type ImportNotebookMutationVariables = Exact<{
 }>;
 
 
-export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
 export type RenameNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -723,25 +722,16 @@ export type UpdateNotebookIconMutationVariables = Exact<{
 }>;
 
 
-export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, icon?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
+export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } };
 
-export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null };
+export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null };
 
 export type GetNotebookByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null } | null };
-
-export type TopbarNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null };
-
-export type GetNotebookTopbarQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type GetNotebookTopbarQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } | null };
+export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null } | null };
 
 export type WorkspaceSwitcherWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -765,13 +755,6 @@ export const EditorNotebookFragmentDoc = gql`
   name
   myPermissionType
   icon
-}
-    `;
-export const TopbarNotebookFragmentDoc = gql`
-    fragment TopbarNotebook on Pad {
-  id
-  name
-  myPermissionType
   isPublic
   access {
     users {
@@ -816,13 +799,11 @@ export const DashboardWorkspaceFragmentDoc = gql`
 export const CreateNotebookDocument = gql`
     mutation CreateNotebook($workspaceId: ID!, $name: String!) {
   createPad(workspaceId: $workspaceId, pad: {name: $name}) {
-    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }
 }
-    ${TopbarNotebookFragmentDoc}
-${EditorNotebookFragmentDoc}
+    ${EditorNotebookFragmentDoc}
 ${WorkspaceNotebookFragmentDoc}`;
 
 export function useCreateNotebookMutation() {
@@ -860,13 +841,11 @@ export function useDeleteWorkspaceMutation() {
 export const DuplicateNotebookDocument = gql`
     mutation DuplicateNotebook($id: ID!, $targetWorkspace: ID!, $document: String) {
   duplicatePad(id: $id, targetWorkspace: $targetWorkspace, document: $document) {
-    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }
 }
-    ${TopbarNotebookFragmentDoc}
-${EditorNotebookFragmentDoc}
+    ${EditorNotebookFragmentDoc}
 ${WorkspaceNotebookFragmentDoc}`;
 
 export function useDuplicateNotebookMutation() {
@@ -875,13 +854,11 @@ export function useDuplicateNotebookMutation() {
 export const ImportNotebookDocument = gql`
     mutation ImportNotebook($workspaceId: ID!, $source: String!) {
   importPad(workspaceId: $workspaceId, source: $source) {
-    ...TopbarNotebook
     ...EditorNotebook
     ...WorkspaceNotebook
   }
 }
-    ${TopbarNotebookFragmentDoc}
-${EditorNotebookFragmentDoc}
+    ${EditorNotebookFragmentDoc}
 ${WorkspaceNotebookFragmentDoc}`;
 
 export function useImportNotebookMutation() {
@@ -948,12 +925,10 @@ export function useUnshareNotebookWithSecretMutation() {
 export const UpdateNotebookIconDocument = gql`
     mutation UpdateNotebookIcon($id: ID!, $icon: String!) {
   updatePad(id: $id, pad: {icon: $icon}) {
-    ...TopbarNotebook
     ...EditorNotebook
   }
 }
-    ${TopbarNotebookFragmentDoc}
-${EditorNotebookFragmentDoc}`;
+    ${EditorNotebookFragmentDoc}`;
 
 export function useUpdateNotebookIconMutation() {
   return Urql.useMutation<UpdateNotebookIconMutation, UpdateNotebookIconMutationVariables>(UpdateNotebookIconDocument);
@@ -967,18 +942,7 @@ export const GetNotebookByIdDocument = gql`
     ${EditorNotebookFragmentDoc}`;
 
 export function useGetNotebookByIdQuery(options: Omit<Urql.UseQueryArgs<GetNotebookByIdQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetNotebookByIdQuery>({ query: GetNotebookByIdDocument, ...options });
-};
-export const GetNotebookTopbarDocument = gql`
-    query GetNotebookTopbar($id: ID!) {
-  getPadById(id: $id) {
-    ...TopbarNotebook
-  }
-}
-    ${TopbarNotebookFragmentDoc}`;
-
-export function useGetNotebookTopbarQuery(options: Omit<Urql.UseQueryArgs<GetNotebookTopbarQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetNotebookTopbarQuery>({ query: GetNotebookTopbarDocument, ...options });
+  return Urql.useQuery<GetNotebookByIdQuery, GetNotebookByIdQueryVariables>({ query: GetNotebookByIdDocument, ...options });
 };
 export const GetWorkspacesIDsDocument = gql`
     query GetWorkspacesIDs {
@@ -989,7 +953,7 @@ export const GetWorkspacesIDsDocument = gql`
     ${WorkspaceSwitcherWorkspaceFragmentDoc}`;
 
 export function useGetWorkspacesIDsQuery(options?: Omit<Urql.UseQueryArgs<GetWorkspacesIDsQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetWorkspacesIDsQuery>({ query: GetWorkspacesIDsDocument, ...options });
+  return Urql.useQuery<GetWorkspacesIDsQuery, GetWorkspacesIDsQueryVariables>({ query: GetWorkspacesIDsDocument, ...options });
 };
 export const GetWorkspacesDocument = gql`
     query GetWorkspaces {
@@ -1000,9 +964,9 @@ export const GetWorkspacesDocument = gql`
     ${DashboardWorkspaceFragmentDoc}`;
 
 export function useGetWorkspacesQuery(options?: Omit<Urql.UseQueryArgs<GetWorkspacesQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetWorkspacesQuery>({ query: GetWorkspacesDocument, ...options });
+  return Urql.useQuery<GetWorkspacesQuery, GetWorkspacesQueryVariables>({ query: GetWorkspacesDocument, ...options });
 };
-export type WithTypename<T extends { __typename?: any }> = T & { __typename: NonNullable<T['__typename']> };
+export type WithTypename<T extends { __typename?: any }> = Partial<T> & { __typename: NonNullable<T['__typename']> };
 
 export type GraphCacheKeysConfig = {
   Attachment?: (data: WithTypename<Attachment>) => null | string,
@@ -1036,53 +1000,53 @@ export type GraphCacheKeysConfig = {
 
 export type GraphCacheResolvers = {
   Query?: {
-    version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
-    me?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
-    tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
-    padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
-    self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
-    getWorkspaceById?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceByIdArgs, WithTypename<Workspace> | string>,
-    workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>,
-    getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
-    pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
     getCreateAttachmentForm?: GraphCacheResolver<WithTypename<Query>, QueryGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm> | string>,
     getExternalDataSource?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourceArgs, WithTypename<ExternalDataSource> | string>,
-    getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, WithTypename<PagedResult> | string>
+    getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, WithTypename<PagedResult> | string>,
+    getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
+    getWorkspaceById?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceByIdArgs, WithTypename<Workspace> | string>,
+    me?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
+    pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
+    padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
+    self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
+    tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
+    version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
+    workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
   },
   Attachment?: {
-    id?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['ID'] | string>,
-    fileName?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
-    fileType?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
-    fileSize?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['Int'] | string>,
-    uploadedBy?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<User> | string>,
     createdAt?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['DateTime'] | string>,
-    url?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
-    pad?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<Pad> | string>
+    fileName?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
+    fileSize?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['Int'] | string>,
+    fileType?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>,
+    id?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['ID'] | string>,
+    pad?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<Pad> | string>,
+    uploadedBy?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, WithTypename<User> | string>,
+    url?: GraphCacheResolver<WithTypename<Attachment>, Record<string, never>, Scalars['String'] | string>
   },
   CreateAttachmentForm?: {
-    url?: GraphCacheResolver<WithTypename<CreateAttachmentForm>, Record<string, never>, Scalars['String'] | string>,
+    fields?: GraphCacheResolver<WithTypename<CreateAttachmentForm>, Record<string, never>, Array<WithTypename<KeyValue> | string>>,
     handle?: GraphCacheResolver<WithTypename<CreateAttachmentForm>, Record<string, never>, Scalars['String'] | string>,
-    fields?: GraphCacheResolver<WithTypename<CreateAttachmentForm>, Record<string, never>, Array<WithTypename<KeyValue> | string>>
+    url?: GraphCacheResolver<WithTypename<CreateAttachmentForm>, Record<string, never>, Scalars['String'] | string>
   },
   ExternalDataSource?: {
+    access?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, WithTypename<ExternalDataSourceAccess> | string>,
+    authUrl?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
+    dataUrl?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
+    externalId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>,
     name?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
     padId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>,
-    provider?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, ExternalProvider | string>,
-    externalId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
-    dataUrl?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
-    authUrl?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
-    access?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, WithTypename<ExternalDataSourceAccess> | string>
+    provider?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, ExternalProvider | string>
   },
   ExternalDataSourceAccess?: {
     roles?: GraphCacheResolver<WithTypename<ExternalDataSourceAccess>, Record<string, never>, Array<WithTypename<RoleAccess> | string>>,
     users?: GraphCacheResolver<WithTypename<ExternalDataSourceAccess>, Record<string, never>, Array<WithTypename<UserAccess> | string>>
   },
   ExternalKey?: {
-    id?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['ID'] | string>,
-    lastError?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['String'] | string>,
     createdAt?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['DateTime'] | string>,
     expiresAt?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['DateTime'] | string>,
+    id?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['ID'] | string>,
+    lastError?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['String'] | string>,
     lastUsedAt?: GraphCacheResolver<WithTypename<ExternalKey>, Record<string, never>, Scalars['DateTime'] | string>
   },
   KeyValue?: {
@@ -1090,21 +1054,21 @@ export type GraphCacheResolvers = {
     value?: GraphCacheResolver<WithTypename<KeyValue>, Record<string, never>, Scalars['String'] | string>
   },
   Pad?: {
-    tags?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<Scalars['String'] | string>>,
-    id?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['ID'] | string>,
-    name?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     access?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<PadAccess> | string>,
-    myPermissionType?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, PermissionType | string>,
-    workspace?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<Workspace> | string>,
+    attachments?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<Attachment> | string>>,
     createdAt?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['DateTime'] | string>,
-    isPublic?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     icon?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
-    attachments?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<Attachment> | string>>
+    id?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['ID'] | string>,
+    isPublic?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
+    myPermissionType?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, PermissionType | string>,
+    name?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
+    tags?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<Scalars['String'] | string>>,
+    workspace?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<Workspace> | string>
   },
   PadAccess?: {
     roles?: GraphCacheResolver<WithTypename<PadAccess>, Record<string, never>, Array<WithTypename<RoleAccess> | string>>,
-    users?: GraphCacheResolver<WithTypename<PadAccess>, Record<string, never>, Array<WithTypename<UserAccess> | string>>,
-    secrets?: GraphCacheResolver<WithTypename<PadAccess>, Record<string, never>, Array<WithTypename<SecretAccess> | string>>
+    secrets?: GraphCacheResolver<WithTypename<PadAccess>, Record<string, never>, Array<WithTypename<SecretAccess> | string>>,
+    users?: GraphCacheResolver<WithTypename<PadAccess>, Record<string, never>, Array<WithTypename<UserAccess> | string>>
   },
   PadChanges?: {
     added?: GraphCacheResolver<WithTypename<PadChanges>, Record<string, never>, Array<WithTypename<Pad> | string>>,
@@ -1112,71 +1076,71 @@ export type GraphCacheResolvers = {
     updated?: GraphCacheResolver<WithTypename<PadChanges>, Record<string, never>, Array<WithTypename<Pad> | string>>
   },
   PagedPadResult?: {
-    items?: GraphCacheResolver<WithTypename<PagedPadResult>, Record<string, never>, Array<WithTypename<Pad> | string>>,
     count?: GraphCacheResolver<WithTypename<PagedPadResult>, Record<string, never>, Scalars['Int'] | string>,
+    cursor?: GraphCacheResolver<WithTypename<PagedPadResult>, Record<string, never>, Scalars['String'] | string>,
     hasNextPage?: GraphCacheResolver<WithTypename<PagedPadResult>, Record<string, never>, Scalars['Boolean'] | string>,
-    cursor?: GraphCacheResolver<WithTypename<PagedPadResult>, Record<string, never>, Scalars['String'] | string>
+    items?: GraphCacheResolver<WithTypename<PagedPadResult>, Record<string, never>, Array<WithTypename<Pad> | string>>
   },
   PagedResult?: {
-    items?: GraphCacheResolver<WithTypename<PagedResult>, Record<string, never>, Array<WithTypename<Pageable> | string>>,
     count?: GraphCacheResolver<WithTypename<PagedResult>, Record<string, never>, Scalars['Int'] | string>,
+    cursor?: GraphCacheResolver<WithTypename<PagedResult>, Record<string, never>, Scalars['String'] | string>,
     hasNextPage?: GraphCacheResolver<WithTypename<PagedResult>, Record<string, never>, Scalars['Boolean'] | string>,
-    cursor?: GraphCacheResolver<WithTypename<PagedResult>, Record<string, never>, Scalars['String'] | string>
+    items?: GraphCacheResolver<WithTypename<PagedResult>, Record<string, never>, Array<WithTypename<Pageable> | string>>
   },
   Permission?: {
+    canComment?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, Scalars['Boolean'] | string>,
+    createdAt?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, Scalars['DateTime'] | string>,
+    givenBy?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, WithTypename<User> | string>,
     id?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, Scalars['ID'] | string>,
     resource?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, Scalars['String'] | string>,
-    user?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, WithTypename<User> | string>,
     type?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, PermissionType | string>,
-    givenBy?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, WithTypename<User> | string>,
-    canComment?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, Scalars['Boolean'] | string>,
-    createdAt?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, Scalars['DateTime'] | string>
+    user?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, WithTypename<User> | string>
   },
   Role?: {
+    createdAt?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Scalars['DateTime'] | string>,
     id?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Scalars['ID'] | string>,
     name?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Scalars['String'] | string>,
-    workspace?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, WithTypename<Workspace> | string>,
     users?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Array<WithTypename<User> | string>>,
-    createdAt?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Scalars['DateTime'] | string>
+    workspace?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, WithTypename<Workspace> | string>
   },
   RoleAccess?: {
-    role?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, WithTypename<Role> | string>,
+    canComment?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, PermissionType | string>,
-    canComment?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, Scalars['Boolean'] | string>
+    role?: GraphCacheResolver<WithTypename<RoleAccess>, Record<string, never>, WithTypename<Role> | string>
   },
   RoleInvitation?: {
+    expires_at?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, Scalars['DateTime'] | string>,
     id?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, Scalars['ID'] | string>,
     role?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, WithTypename<Role> | string>,
-    user?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, WithTypename<User> | string>,
-    expires_at?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, Scalars['DateTime'] | string>
+    user?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, WithTypename<User> | string>
   },
   SecretAccess?: {
-    secret?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, Scalars['String'] | string>,
+    canComment?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, PermissionType | string>,
-    canComment?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, Scalars['Boolean'] | string>
+    secret?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, Scalars['String'] | string>
   },
   ShareInvitation?: {
     email?: GraphCacheResolver<WithTypename<ShareInvitation>, Record<string, never>, Scalars['String'] | string>
   },
   SharedResource?: {
-    resource?: GraphCacheResolver<WithTypename<SharedResource>, Record<string, never>, Scalars['String'] | string>,
+    canComment?: GraphCacheResolver<WithTypename<SharedResource>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<SharedResource>, Record<string, never>, PermissionType | string>,
-    canComment?: GraphCacheResolver<WithTypename<SharedResource>, Record<string, never>, Scalars['Boolean'] | string>
+    resource?: GraphCacheResolver<WithTypename<SharedResource>, Record<string, never>, Scalars['String'] | string>
   },
   SharedWith?: {
-    users?: GraphCacheResolver<WithTypename<SharedWith>, Record<string, never>, Array<WithTypename<SharedWithUser> | string>>,
+    pendingInvitations?: GraphCacheResolver<WithTypename<SharedWith>, Record<string, never>, Array<WithTypename<ShareInvitation> | string>>,
     roles?: GraphCacheResolver<WithTypename<SharedWith>, Record<string, never>, Array<WithTypename<SharedWithRole> | string>>,
-    pendingInvitations?: GraphCacheResolver<WithTypename<SharedWith>, Record<string, never>, Array<WithTypename<ShareInvitation> | string>>
+    users?: GraphCacheResolver<WithTypename<SharedWith>, Record<string, never>, Array<WithTypename<SharedWithUser> | string>>
   },
   SharedWithRole?: {
-    role?: GraphCacheResolver<WithTypename<SharedWithRole>, Record<string, never>, WithTypename<Role> | string>,
+    canComment?: GraphCacheResolver<WithTypename<SharedWithRole>, Record<string, never>, Scalars['Boolean'] | string>,
     permissionType?: GraphCacheResolver<WithTypename<SharedWithRole>, Record<string, never>, PermissionType | string>,
-    canComment?: GraphCacheResolver<WithTypename<SharedWithRole>, Record<string, never>, Scalars['Boolean'] | string>
+    role?: GraphCacheResolver<WithTypename<SharedWithRole>, Record<string, never>, WithTypename<Role> | string>
   },
   SharedWithUser?: {
-    user?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, WithTypename<User> | string>,
+    canComment?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, Scalars['Boolean'] | string>,
     permissionType?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, PermissionType | string>,
-    canComment?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, Scalars['Boolean'] | string>
+    user?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, WithTypename<User> | string>
   },
   TagChanges?: {
     added?: GraphCacheResolver<WithTypename<TagChanges>, Record<string, never>, Array<WithTypename<TagRecord> | string>>,
@@ -1187,24 +1151,24 @@ export type GraphCacheResolvers = {
     workspaceId?: GraphCacheResolver<WithTypename<TagRecord>, Record<string, never>, Scalars['ID'] | string>
   },
   User?: {
-    id?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['ID'] | string>,
-    name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
+    createdAt?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['DateTime'] | string>,
     email?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
+    id?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['ID'] | string>,
     image?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
-    createdAt?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['DateTime'] | string>
+    name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>
   },
   UserAccess?: {
-    user?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, WithTypename<User> | string>,
+    canComment?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, PermissionType | string>,
-    canComment?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, Scalars['Boolean'] | string>
+    user?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, WithTypename<User> | string>
   },
   Workspace?: {
-    id?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['ID'] | string>,
-    name?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['String'] | string>,
-    roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>,
-    pads?: GraphCacheResolver<WithTypename<Workspace>, WorkspacePadsArgs, WithTypename<PagedPadResult> | string>,
     createdAt?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['DateTime'] | string>,
-    isPublic?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['Boolean'] | string>
+    id?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['ID'] | string>,
+    isPublic?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['Boolean'] | string>,
+    name?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['String'] | string>,
+    pads?: GraphCacheResolver<WithTypename<Workspace>, WorkspacePadsArgs, WithTypename<PagedPadResult> | string>,
+    roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>
   },
   WorkspacesChanges?: {
     added?: GraphCacheResolver<WithTypename<WorkspacesChanges>, Record<string, never>, Array<WithTypename<Workspace> | string>>,
@@ -1214,93 +1178,93 @@ export type GraphCacheResolvers = {
 };
 
 export type GraphCacheOptimisticUpdaters = {
-  doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
-  removeTagFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveTagFromPadArgs, Maybe<Scalars['Boolean']>>,
-  createUserViaMagicLink?: GraphCacheOptimisticMutationResolver<MutationCreateUserViaMagicLinkArgs, WithTypename<User>>,
-  resendRegistrationMagicLinkEmail?: GraphCacheOptimisticMutationResolver<MutationResendRegistrationMagicLinkEmailArgs, Maybe<Scalars['Boolean']>>,
-  updateSelf?: GraphCacheOptimisticMutationResolver<MutationUpdateSelfArgs, WithTypename<User>>,
-  createRole?: GraphCacheOptimisticMutationResolver<MutationCreateRoleArgs, WithTypename<Role>>,
-  removeRole?: GraphCacheOptimisticMutationResolver<MutationRemoveRoleArgs, Maybe<Scalars['Boolean']>>,
-  inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
-  removeUserFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveUserFromRoleArgs, Maybe<Scalars['Boolean']>>,
-  removeSelfFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveSelfFromRoleArgs, Maybe<Scalars['Boolean']>>,
-  createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
-  updateWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateWorkspaceArgs, WithTypename<Workspace>>,
-  removeWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveWorkspaceArgs, Maybe<Scalars['Boolean']>>,
+  attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
+  createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   createPad?: GraphCacheOptimisticMutationResolver<MutationCreatePadArgs, WithTypename<Pad>>,
-  updatePad?: GraphCacheOptimisticMutationResolver<MutationUpdatePadArgs, WithTypename<Pad>>,
-  removePad?: GraphCacheOptimisticMutationResolver<MutationRemovePadArgs, Maybe<Scalars['Boolean']>>,
+  createRole?: GraphCacheOptimisticMutationResolver<MutationCreateRoleArgs, WithTypename<Role>>,
+  createUserViaMagicLink?: GraphCacheOptimisticMutationResolver<MutationCreateUserViaMagicLinkArgs, WithTypename<User>>,
+  createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
+  doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   duplicatePad?: GraphCacheOptimisticMutationResolver<MutationDuplicatePadArgs, WithTypename<Pad>>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
-  setPadPublic?: GraphCacheOptimisticMutationResolver<MutationSetPadPublicArgs, WithTypename<Pad>>,
-  sharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationSharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
-  unsharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
-  sharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationSharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
-  unsharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
-  sharePadWithEmail?: GraphCacheOptimisticMutationResolver<MutationSharePadWithEmailArgs, Maybe<Scalars['Boolean']>>,
-  sharePadWithSecret?: GraphCacheOptimisticMutationResolver<MutationSharePadWithSecretArgs, Scalars['String']>,
-  unshareNotebookWithSecret?: GraphCacheOptimisticMutationResolver<MutationUnshareNotebookWithSecretArgs, Maybe<Scalars['Boolean']>>,
-  attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
+  inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
+  pretendUser?: GraphCacheOptimisticMutationResolver<MutationPretendUserArgs, Maybe<Scalars['Boolean']>>,
   removeAttachmentFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromPadArgs, Maybe<Scalars['Boolean']>>,
-  createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
-  updateExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationUpdateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
-  shareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
-  unshareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
-  shareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
-  unshareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
+  removePad?: GraphCacheOptimisticMutationResolver<MutationRemovePadArgs, Maybe<Scalars['Boolean']>>,
+  removeRole?: GraphCacheOptimisticMutationResolver<MutationRemoveRoleArgs, Maybe<Scalars['Boolean']>>,
+  removeSelfFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveSelfFromRoleArgs, Maybe<Scalars['Boolean']>>,
+  removeTagFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveTagFromPadArgs, Maybe<Scalars['Boolean']>>,
+  removeUserFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveUserFromRoleArgs, Maybe<Scalars['Boolean']>>,
+  removeWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveWorkspaceArgs, Maybe<Scalars['Boolean']>>,
+  resendRegistrationMagicLinkEmail?: GraphCacheOptimisticMutationResolver<MutationResendRegistrationMagicLinkEmailArgs, Maybe<Scalars['Boolean']>>,
+  setPadPublic?: GraphCacheOptimisticMutationResolver<MutationSetPadPublicArgs, WithTypename<Pad>>,
   shareExternalDataSourceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithEmailArgs, Maybe<Scalars['Boolean']>>,
-  pretendUser?: GraphCacheOptimisticMutationResolver<MutationPretendUserArgs, Maybe<Scalars['Boolean']>>
+  shareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
+  shareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
+  sharePadWithEmail?: GraphCacheOptimisticMutationResolver<MutationSharePadWithEmailArgs, Maybe<Scalars['Boolean']>>,
+  sharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationSharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
+  sharePadWithSecret?: GraphCacheOptimisticMutationResolver<MutationSharePadWithSecretArgs, Scalars['String']>,
+  sharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationSharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
+  unshareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
+  unshareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
+  unshareNotebookWithSecret?: GraphCacheOptimisticMutationResolver<MutationUnshareNotebookWithSecretArgs, Maybe<Scalars['Boolean']>>,
+  unsharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
+  unsharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
+  updateExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationUpdateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
+  updatePad?: GraphCacheOptimisticMutationResolver<MutationUpdatePadArgs, WithTypename<Pad>>,
+  updateSelf?: GraphCacheOptimisticMutationResolver<MutationUpdateSelfArgs, WithTypename<User>>,
+  updateWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateWorkspaceArgs, WithTypename<Workspace>>
 };
 
 export type GraphCacheUpdaters = {
   Mutation?: {
-    doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
-    removeTagFromPad?: GraphCacheUpdateResolver<{ removeTagFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveTagFromPadArgs>,
-    createUserViaMagicLink?: GraphCacheUpdateResolver<{ createUserViaMagicLink: WithTypename<User> }, MutationCreateUserViaMagicLinkArgs>,
-    resendRegistrationMagicLinkEmail?: GraphCacheUpdateResolver<{ resendRegistrationMagicLinkEmail: Maybe<Scalars['Boolean']> }, MutationResendRegistrationMagicLinkEmailArgs>,
-    updateSelf?: GraphCacheUpdateResolver<{ updateSelf: WithTypename<User> }, MutationUpdateSelfArgs>,
-    createRole?: GraphCacheUpdateResolver<{ createRole: WithTypename<Role> }, MutationCreateRoleArgs>,
-    removeRole?: GraphCacheUpdateResolver<{ removeRole: Maybe<Scalars['Boolean']> }, MutationRemoveRoleArgs>,
-    inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
-    removeUserFromRole?: GraphCacheUpdateResolver<{ removeUserFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveUserFromRoleArgs>,
-    removeSelfFromRole?: GraphCacheUpdateResolver<{ removeSelfFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveSelfFromRoleArgs>,
-    createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
-    updateWorkspace?: GraphCacheUpdateResolver<{ updateWorkspace: WithTypename<Workspace> }, MutationUpdateWorkspaceArgs>,
-    removeWorkspace?: GraphCacheUpdateResolver<{ removeWorkspace: Maybe<Scalars['Boolean']> }, MutationRemoveWorkspaceArgs>,
+    attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
+    createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
     createPad?: GraphCacheUpdateResolver<{ createPad: WithTypename<Pad> }, MutationCreatePadArgs>,
-    updatePad?: GraphCacheUpdateResolver<{ updatePad: WithTypename<Pad> }, MutationUpdatePadArgs>,
-    removePad?: GraphCacheUpdateResolver<{ removePad: Maybe<Scalars['Boolean']> }, MutationRemovePadArgs>,
+    createRole?: GraphCacheUpdateResolver<{ createRole: WithTypename<Role> }, MutationCreateRoleArgs>,
+    createUserViaMagicLink?: GraphCacheUpdateResolver<{ createUserViaMagicLink: WithTypename<User> }, MutationCreateUserViaMagicLinkArgs>,
+    createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
+    doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     duplicatePad?: GraphCacheUpdateResolver<{ duplicatePad: WithTypename<Pad> }, MutationDuplicatePadArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
-    setPadPublic?: GraphCacheUpdateResolver<{ setPadPublic: WithTypename<Pad> }, MutationSetPadPublicArgs>,
-    sharePadWithRole?: GraphCacheUpdateResolver<{ sharePadWithRole: Maybe<Scalars['Boolean']> }, MutationSharePadWithRoleArgs>,
-    unsharePadWithRole?: GraphCacheUpdateResolver<{ unsharePadWithRole: Maybe<Scalars['Boolean']> }, MutationUnsharePadWithRoleArgs>,
-    sharePadWithUser?: GraphCacheUpdateResolver<{ sharePadWithUser: Maybe<Scalars['Boolean']> }, MutationSharePadWithUserArgs>,
-    unsharePadWithUser?: GraphCacheUpdateResolver<{ unsharePadWithUser: Maybe<Scalars['Boolean']> }, MutationUnsharePadWithUserArgs>,
-    sharePadWithEmail?: GraphCacheUpdateResolver<{ sharePadWithEmail: Maybe<Scalars['Boolean']> }, MutationSharePadWithEmailArgs>,
-    sharePadWithSecret?: GraphCacheUpdateResolver<{ sharePadWithSecret: Scalars['String'] }, MutationSharePadWithSecretArgs>,
-    unshareNotebookWithSecret?: GraphCacheUpdateResolver<{ unshareNotebookWithSecret: Maybe<Scalars['Boolean']> }, MutationUnshareNotebookWithSecretArgs>,
-    attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
+    inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
+    pretendUser?: GraphCacheUpdateResolver<{ pretendUser: Maybe<Scalars['Boolean']> }, MutationPretendUserArgs>,
     removeAttachmentFromPad?: GraphCacheUpdateResolver<{ removeAttachmentFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveAttachmentFromPadArgs>,
-    createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,
-    updateExternalDataSource?: GraphCacheUpdateResolver<{ updateExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationUpdateExternalDataSourceArgs>,
-    shareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithRoleArgs>,
-    unshareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithRoleArgs>,
-    shareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithUserArgs>,
-    unshareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithUserArgs>,
+    removePad?: GraphCacheUpdateResolver<{ removePad: Maybe<Scalars['Boolean']> }, MutationRemovePadArgs>,
+    removeRole?: GraphCacheUpdateResolver<{ removeRole: Maybe<Scalars['Boolean']> }, MutationRemoveRoleArgs>,
+    removeSelfFromRole?: GraphCacheUpdateResolver<{ removeSelfFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveSelfFromRoleArgs>,
+    removeTagFromPad?: GraphCacheUpdateResolver<{ removeTagFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveTagFromPadArgs>,
+    removeUserFromRole?: GraphCacheUpdateResolver<{ removeUserFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveUserFromRoleArgs>,
+    removeWorkspace?: GraphCacheUpdateResolver<{ removeWorkspace: Maybe<Scalars['Boolean']> }, MutationRemoveWorkspaceArgs>,
+    resendRegistrationMagicLinkEmail?: GraphCacheUpdateResolver<{ resendRegistrationMagicLinkEmail: Maybe<Scalars['Boolean']> }, MutationResendRegistrationMagicLinkEmailArgs>,
+    setPadPublic?: GraphCacheUpdateResolver<{ setPadPublic: WithTypename<Pad> }, MutationSetPadPublicArgs>,
     shareExternalDataSourceWithEmail?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithEmail: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithEmailArgs>,
-    pretendUser?: GraphCacheUpdateResolver<{ pretendUser: Maybe<Scalars['Boolean']> }, MutationPretendUserArgs>
+    shareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithRoleArgs>,
+    shareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithUserArgs>,
+    sharePadWithEmail?: GraphCacheUpdateResolver<{ sharePadWithEmail: Maybe<Scalars['Boolean']> }, MutationSharePadWithEmailArgs>,
+    sharePadWithRole?: GraphCacheUpdateResolver<{ sharePadWithRole: Maybe<Scalars['Boolean']> }, MutationSharePadWithRoleArgs>,
+    sharePadWithSecret?: GraphCacheUpdateResolver<{ sharePadWithSecret: Scalars['String'] }, MutationSharePadWithSecretArgs>,
+    sharePadWithUser?: GraphCacheUpdateResolver<{ sharePadWithUser: Maybe<Scalars['Boolean']> }, MutationSharePadWithUserArgs>,
+    unshareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithRoleArgs>,
+    unshareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithUserArgs>,
+    unshareNotebookWithSecret?: GraphCacheUpdateResolver<{ unshareNotebookWithSecret: Maybe<Scalars['Boolean']> }, MutationUnshareNotebookWithSecretArgs>,
+    unsharePadWithRole?: GraphCacheUpdateResolver<{ unsharePadWithRole: Maybe<Scalars['Boolean']> }, MutationUnsharePadWithRoleArgs>,
+    unsharePadWithUser?: GraphCacheUpdateResolver<{ unsharePadWithUser: Maybe<Scalars['Boolean']> }, MutationUnsharePadWithUserArgs>,
+    updateExternalDataSource?: GraphCacheUpdateResolver<{ updateExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationUpdateExternalDataSourceArgs>,
+    updatePad?: GraphCacheUpdateResolver<{ updatePad: WithTypename<Pad> }, MutationUpdatePadArgs>,
+    updateSelf?: GraphCacheUpdateResolver<{ updateSelf: WithTypename<User> }, MutationUpdateSelfArgs>,
+    updateWorkspace?: GraphCacheUpdateResolver<{ updateWorkspace: WithTypename<Workspace> }, MutationUpdateWorkspaceArgs>
   },
   Subscription?: {
+    hello?: GraphCacheUpdateResolver<{ hello: Maybe<Scalars['String']> }, Record<string, never>>,
+    padsChanged?: GraphCacheUpdateResolver<{ padsChanged: WithTypename<PadChanges> }, SubscriptionPadsChangedArgs>,
     subscribeToNothing?: GraphCacheUpdateResolver<{ subscribeToNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     tagsChanged?: GraphCacheUpdateResolver<{ tagsChanged: WithTypename<TagChanges> }, SubscriptionTagsChangedArgs>,
-    workspacesChanged?: GraphCacheUpdateResolver<{ workspacesChanged: WithTypename<WorkspacesChanges> }, Record<string, never>>,
-    padsChanged?: GraphCacheUpdateResolver<{ padsChanged: WithTypename<PadChanges> }, SubscriptionPadsChangedArgs>,
-    hello?: GraphCacheUpdateResolver<{ hello: Maybe<Scalars['String']> }, Record<string, never>>
+    workspacesChanged?: GraphCacheUpdateResolver<{ workspacesChanged: WithTypename<WorkspacesChanges> }, Record<string, never>>
   },
 };
 

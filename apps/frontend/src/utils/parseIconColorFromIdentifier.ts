@@ -16,18 +16,18 @@ export function parseIconColorFromIdentifier(
       return { ok: false };
     }
 
-    const newIcon = parsedIcon[0] as UserIconKey;
-    const newIconColor = parsedIcon[1] as AvailableSwatchColor;
+    const icon = parsedIcon[0] as UserIconKey;
+    const iconColor = parsedIcon[1] as AvailableSwatchColor;
 
-    if (!userIconKeys.includes(newIcon)) {
+    if (!userIconKeys.includes(icon)) {
       return { ok: false };
     }
 
-    if (!swatchNames.includes(newIconColor)) {
+    if (!swatchNames.includes(iconColor)) {
       return { ok: false };
     }
 
-    return { newIcon, newIconColor, ok: true };
+    return { icon, iconColor, ok: true };
   }
   if (typeof iconIdentifier === 'string') {
     console.error(`bad parameter for iconIdentifier ${iconIdentifier}`);

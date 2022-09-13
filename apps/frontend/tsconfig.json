@@ -7,6 +7,7 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../libs/editor" },
+    { "path": "../../libs/docsync" },
     { "path": "../../libs/ui" },
     { "path": "../../libs/routing" },
     { "path": "../../libs/client-events" },

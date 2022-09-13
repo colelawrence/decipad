@@ -56,6 +56,7 @@ export type DocSyncEditor = MyEditor &
     connect: () => void;
     disconnect: () => void;
     hasLocalChanges: () => BehaviorSubject<boolean>;
+    isSavedRemotely: () => BehaviorSubject<boolean>;
     removeLocalChanges: () => Promise<void>;
     connected: boolean;
     isDocSyncEnabled: boolean;
@@ -116,6 +117,7 @@ function docSyncEditor<E extends MyEditor>(
     });
     ws.on('saved', function onWsSaved() {
       events.emit('saved', 'remote');
+      isSavedRemotely.next(false);
     });
     ws.on('status', function onWsStatus(event: StatusEvent) {
       if (event.status === 'connected') {
@@ -133,6 +135,7 @@ function docSyncEditor<E extends MyEditor>(
   }
 
   const hasLocalChanges = new BehaviorSubject<boolean>(false);
+  const isSavedRemotely = new BehaviorSubject<boolean>(false);
 
   store.once('synced', () => {
     let savedCount = 0;
@@ -140,7 +143,10 @@ function docSyncEditor<E extends MyEditor>(
       savedCount += 1;
       if (savedCount > 1) {
         savedCount = 1;
-        if (ev === 'local') hasLocalChanges.next(true);
+        if (ev === 'local') {
+          hasLocalChanges.next(true);
+          isSavedRemotely.next(false);
+        }
       }
     });
   });
@@ -187,6 +193,9 @@ function docSyncEditor<E extends MyEditor>(
     },
     hasLocalChanges() {
       return hasLocalChanges;
+    },
+    isSavedRemotely() {
+      return isSavedRemotely;
     },
     removeLocalChanges() {
       return store.remove();

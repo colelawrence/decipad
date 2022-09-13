@@ -4,19 +4,16 @@ import {
   GetWorkspacesQuery,
   GraphCacheConfig,
   Pad,
-  WithTypename,
+  Workspace,
 } from './generated';
 import * as schema from './schema.generated.json';
 
-const addNotebookToItsWorkspace = (
-  cache: Cache,
-  notebook: WithTypename<Pad>
-) => {
+const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
   cache.updateQuery<GetWorkspacesQuery>(
     { query: GetWorkspacesDocument },
     (data) => {
       data?.workspaces
-        .find(({ id }) => notebook.workspace?.id === id)
+        .find(({ id }) => notebook?.workspace?.id === id)
         ?.pads.items.push(notebook);
       return data;
     }
@@ -42,7 +39,7 @@ export const graphCacheConfig: GraphCacheConfig = {
         cache.updateQuery<GetWorkspacesQuery>(
           { query: GetWorkspacesDocument },
           (data) => {
-            data?.workspaces.push(result.createWorkspace);
+            data?.workspaces.push(result.createWorkspace as Workspace);
             return data;
           }
         );
@@ -54,13 +51,13 @@ export const graphCacheConfig: GraphCacheConfig = {
         });
       },
       createPad: (result, _args, cache) => {
-        addNotebookToItsWorkspace(cache, result.createPad);
+        addNotebookToItsWorkspace(cache, result.createPad as Pad);
       },
       duplicatePad: (result, _args, cache) => {
-        addNotebookToItsWorkspace(cache, result.duplicatePad);
+        addNotebookToItsWorkspace(cache, result.duplicatePad as Pad);
       },
       importPad: (result, _args, cache) => {
-        addNotebookToItsWorkspace(cache, result.importPad);
+        addNotebookToItsWorkspace(cache, result.importPad as Pad);
       },
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });

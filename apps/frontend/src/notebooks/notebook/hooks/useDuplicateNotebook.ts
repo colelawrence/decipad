@@ -2,6 +2,7 @@ import type { MyEditor } from '@decipad/editor-types';
 import { serializeDocument } from '@decipad/editor-utils';
 import { notebooks } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   useDuplicateNotebookMutation,
@@ -28,7 +29,7 @@ export const useDuplicateNotebook = ({
     throw new Error('Could not fetch workspaces');
   }
 
-  const mutate = async () => {
+  const mutate = useCallback(async () => {
     if (!editor) {
       console.error('Failed to duplicate notebook. Missing editor.');
       toast('Failed to duplicate notebook', 'error');
@@ -63,7 +64,7 @@ export const useDuplicateNotebook = ({
       console.error('Failed to duplicate notebook. Error:', err);
       toast('Failed to duplicate notebook.', 'error');
     }
-  };
+  }, [data.workspaces, duplicateNotebook, editor, id, navigate, toast]);
 
   return [mutate];
 };
