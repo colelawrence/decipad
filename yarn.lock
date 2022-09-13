@@ -10403,10 +10403,10 @@
   dependencies:
     wonka ">= 4.0.9"
 
-"@urql/exchange-graphcache@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-5.0.0.tgz#f86f536f016478f4a06d4900b64993cb57c945d9"
-  integrity sha512-REUA1SBrPQukxHq+IpBrLihSAW9J/QOOK3XPCfO5wtkg9FaBp3VV0MlOL/CItZYvfVvgnfLWMzwIDAcUCDZmgA==
+"@urql/exchange-graphcache@5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-5.0.1.tgz#3c051d971ba79cccf4aadc2cf87b413c6682cbd3"
+  integrity sha512-sbornx6SaAADycfEex0+npdJwhImSKa+76DAnOjF48wls5bYlG+ewDe0ipWdmV+gQ+t9SDFPLAHBzFURTlQacQ==
   dependencies:
     "@urql/core" ">=3.0.0"
     wonka "^6.0.0"
