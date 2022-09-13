@@ -136,7 +136,7 @@
     "discord-api-types": "0.37.2",
     "document-register-element": "1.14.10",
     "docusaurus-plugin-segment": "1.0.4",
-    "dotenv": "16.0.1",
+    "dotenv": "16.0.2",
     "emotion-normalize": "11.0.1",
     "emotion-reset": "3.0.1",
     "form-data": "4.0.0",
