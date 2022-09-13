@@ -8,7 +8,10 @@ import { DndProvider } from 'react-dnd';
 
 describe('Placeholders', () => {
   // @ts-ignore
-  const dumbElement: CodeLineElement = { type: ELEMENT_CODE_LINE };
+  const dumbElement: CodeLineElement = {
+    type: ELEMENT_CODE_LINE,
+    children: [{ text: '' }],
+  };
   const attributes = {
     'data-slate-node': 'element' as 'element',
     ref: createRef(),

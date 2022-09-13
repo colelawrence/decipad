@@ -17,7 +17,12 @@ export const NumberTooltip = (): ReturnType<FC> => {
   if (isClosed) return null;
 
   return (
-    <div ref={floating} style={style} css={wrapperStyles}>
+    <div
+      ref={floating}
+      style={style}
+      css={wrapperStyles}
+      data-testid="tooltip-inline-number"
+    >
       <div css={nameStyle}>Name:</div>
 
       <NameInput bubble={bubble} />

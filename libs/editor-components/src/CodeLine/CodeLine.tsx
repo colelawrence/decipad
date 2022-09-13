@@ -12,10 +12,12 @@ import {
 import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { isNodeEmpty, organisms } from '@decipad/ui';
+import { getNodeString } from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
+import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useCodeLineTutorials } from './useCodeLineTutorials';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
@@ -36,6 +38,9 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const { tips, placeholder } = useCodeLineTutorials(selected, isEmpty);
   const syntaxError = getSyntaxError(line);
+  const codeLineContent = getNodeString(element);
+
+  useCodeLineClickReference(editor, selected, codeLineContent);
 
   return (
     <div {...attributes} id={lineId}>

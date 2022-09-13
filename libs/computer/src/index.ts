@@ -20,6 +20,7 @@ export {
   parseOneBlock,
   parseOneStatement,
   parseOneExpression,
+  parseBlock,
   runCode,
   Result,
   STATEMENT_SEP_TOKEN_TYPE,

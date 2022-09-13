@@ -27,6 +27,7 @@ export const InlineNumber: PlateComponent = ({
       id={blockId}
       css={css(containerStyle, isEditing ? {} : { cursor: 'pointer' })}
       onClick={allowNameEditing}
+      data-testid="inline-number-element"
     >
       <span contentEditable={false}>{'\u2060'}</span>
       {children}
