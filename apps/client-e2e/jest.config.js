@@ -1,3 +1,4 @@
+const os = require('os');
 const {
   setupFilesAfterEnv = [],
   ...baseConfig
@@ -19,8 +20,8 @@ module.exports = {
         acceptDownloads: true,
         strictSelectors: true,
       },
-      actionTimeout: 2_000,
-      navigationTimeout: 10_000,
+      actionTimeout: 5_000,
+      navigationTimeout: 20_000,
 
       launchOptions: { headless: !debug },
       browsers: ['chromium'],
@@ -30,4 +31,5 @@ module.exports = {
   testRegex: 'src/[^/]*\\.ts$',
 
   testTimeout: debug ? 0 : 60_000,
+  maxWorkers: Math.min(os.cpus.length, 4),
 };

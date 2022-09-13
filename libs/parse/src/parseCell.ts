@@ -148,7 +148,11 @@ export const parseCell = memoize(
               return dateToAST(cellType, new Date(Number(result.value)));
 
             case 'boolean':
-              return astNode('literal', 'boolean', text === 'true');
+              return astNode(
+                'literal',
+                'boolean',
+                text === 'true' || text === 'yes'
+              );
 
             case 'string':
               return astNode('literal', 'string', text);
@@ -183,7 +187,7 @@ export const getNullReplacementValue = async (
     return astNode('literal', 'number', ZERO);
   }
   if (cellType.kind === 'boolean') {
-    return astNode('literal', 'boolean', true);
+    return astNode('literal', 'boolean', false);
   }
   return astNode('literal', 'string', '');
 };

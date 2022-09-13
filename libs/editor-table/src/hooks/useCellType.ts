@@ -2,40 +2,27 @@ import {
   TableCellElement,
   CellValueType,
   TableHeaderElement,
-  useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  useEditorChange,
-  useEditorTableContext,
-} from '@decipad/react-contexts';
-import { findNodePath } from '@udecode/plate';
-import { dequal } from 'dequal';
-import { useEffect, useState } from 'react';
+import { useEditorChange } from '@decipad/react-contexts';
+import { findNodePath, getNode } from '@udecode/plate';
+import { useState } from 'react';
+import { useColumnInferredType } from './useColumnInferredType';
 
 export const useCellType = (
   element: TableCellElement | TableHeaderElement
 ): CellValueType | undefined => {
-  const table = useEditorTableContext();
-  const [cellType, setCellType] = useState<CellValueType | undefined>();
-  const editor = useTEditorRef();
+  const [header, setHeader] = useState<TableHeaderElement | undefined>();
 
-  useEditorChange(
-    (newCellType) => {
-      if (!dequal(cellType, newCellType)) {
-        setCellType(newCellType);
-      }
-    },
-    () => {
-      const cellPath = findNodePath(editor, element);
-      if (cellPath) {
-        const columnIndex = cellPath[cellPath.length - 1];
-        return table.cellTypes[columnIndex];
-      }
-      return undefined;
+  useEditorChange(setHeader, (editor) => {
+    const cellPath = findNodePath(editor, element);
+    if (cellPath) {
+      const colIndex = cellPath[cellPath.length - 1];
+      const tablePath = cellPath.slice(0, -2);
+      const headerPath = [...tablePath, 1, colIndex];
+      return getNode<TableHeaderElement>(editor, headerPath) ?? undefined;
     }
-  );
+    return undefined;
+  });
 
-  useEffect(() => {}, [editor, element, table.cellTypes]);
-
-  return cellType;
+  return useColumnInferredType(header)?.type;
 };

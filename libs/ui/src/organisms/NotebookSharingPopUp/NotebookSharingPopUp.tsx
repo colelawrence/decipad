@@ -161,6 +161,7 @@ export const NotebookSharingPopUp = ({
                 <p css={descriptionStyles}>Enable to share this notebook</p>
               </div>
               <Toggle
+                ariaRoleDescription="enable sharing"
                 active={isPublic}
                 onChange={(newIsPublic) => {
                   onToggleMakePublic(newIsPublic);
@@ -189,7 +190,10 @@ export const NotebookSharingPopUp = ({
                           });
                         }}
                       >
-                        <button css={copyButtonStyles}>
+                        <button
+                          css={copyButtonStyles}
+                          aria-roledescription="copy url to clipboard"
+                        >
                           <span css={copyButtonIconStyles}>
                             <Link />
                           </span>{' '}

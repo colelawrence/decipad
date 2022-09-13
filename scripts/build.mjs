@@ -102,8 +102,8 @@ console.log('');
 
 (async () => {
   const buildOptions = await esBuildOptions(env);
-  console.log('esbuild options: ', buildOptions);
-  console.log('');
+  // console.log('esbuild options: ', buildOptions);
+  // console.log('');
   const result = await esbuild.build(buildOptions);
   console.log('Built successfully', result);
   if (buildOptions.watch) {

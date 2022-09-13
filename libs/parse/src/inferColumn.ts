@@ -22,6 +22,10 @@ export const inferColumn = memoize(
   ): Promise<CellValueType> => {
     let lastType: CellValueType | undefined = options.userType;
 
+    if (lastType && lastType?.kind !== 'anything') {
+      return lastType;
+    }
+
     const coalesce = (_newType: CellValueType) => {
       const newType =
         _newType.kind === 'type-error'

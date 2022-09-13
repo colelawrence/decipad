@@ -1,15 +1,10 @@
 import { css } from '@emotion/react';
-import {
-  Children,
-  ComponentProps,
-  FC,
-  PropsWithChildren,
-  ReactNode,
-  useMemo,
-} from 'react';
+import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { CellValueType } from '@decipad/editor-types';
 import { noop } from 'lodash';
+import { useSelected } from 'slate-react';
 import { AddNew } from '../../atoms';
+import { CellEditor } from '../../molecules';
 import { Ellipsis, Virus } from '../../icons';
 import { blockAlignment } from '../../styles';
 import {
@@ -23,8 +18,6 @@ import {
 } from '../../primitives';
 import { VariableEditorMenu } from '..';
 import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
-import { BooleanEditor } from './BooleanEditor';
-import { DateEditor } from './DateEditor';
 
 const leftBarSize = 6;
 
@@ -121,22 +114,6 @@ const variableNameStyles = css({
   },
 });
 
-interface EditorComponentProps {
-  children: ReactNode;
-  type?: CellValueType;
-  value?: string;
-  onChangeValue?: (
-    value: string | undefined // only booleans for now
-  ) => void;
-}
-
-const editorComponents: Record<string, FC<EditorComponentProps>> = {
-  boolean: BooleanEditor,
-  date: DateEditor,
-};
-
-const DefaultEditor: FC<PropsWithChildren> = ({ children }) => <>{children}</>;
-
 interface VariableEditorProps
   extends Pick<ComponentProps<typeof AddNew>, 'onAdd'>,
     Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
@@ -167,10 +144,7 @@ export const VariableEditor = ({
     () => (type && getTypeIcon(type, true)) ?? Virus,
     [type]
   );
-  const EditorComponent = useMemo(
-    () => (type && editorComponents[type?.kind]) ?? DefaultEditor,
-    [type]
-  );
+  const selected = useSelected();
 
   return (
     <div css={spacingStyles}>
@@ -206,13 +180,14 @@ export const VariableEditor = ({
               </div>
             </>
           </div>
-          <EditorComponent
+          <CellEditor
             type={type}
             value={value}
             onChangeValue={onChangeValue}
+            focused={selected}
           >
             {childrenArray.slice(1)}
-          </EditorComponent>
+          </CellEditor>
         </div>
       </div>
       <div css={addNewWrapperStyles} contentEditable={false}>

@@ -1,6 +1,5 @@
 import type { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import { noop } from '@decipad/utils';
 import { Toggle } from '../../atoms';
 
 const hiddenChildrenStyles = css({
@@ -10,7 +9,7 @@ const hiddenChildrenStyles = css({
 export interface BooleanEditorProps {
   children?: ReactNode;
   value?: string;
-  onChangeValue?: (
+  onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
 }
@@ -18,12 +17,12 @@ export interface BooleanEditorProps {
 export const BooleanEditor: FC<BooleanEditorProps> = ({
   children,
   value = 'false',
-  onChangeValue = noop,
+  onChangeValue,
 }) => {
   return (
     <div contentEditable={false}>
       <Toggle
-        active={value === 'true' || value === 'yes'}
+        active={value !== 'false' && value !== 'no' && value.trim() !== ''}
         onChange={(newValue) => onChangeValue(newValue ? 'true' : 'false')}
       />
       <div css={hiddenChildrenStyles}>{children}</div>

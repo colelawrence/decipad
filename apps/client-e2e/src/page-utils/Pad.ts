@@ -23,6 +23,7 @@ export async function waitForEditorToLoad(browserPage = page as Page) {
 }
 
 export async function setUp(options: SetupOptions = {}) {
+  await page.goto('/api/auth/signout');
   const { createAndNavigateToNewPad = true } = options;
   await page.goto('/api/auth/signout');
   const newUser = await withTestUser();
@@ -31,8 +32,8 @@ export async function setUp(options: SetupOptions = {}) {
       await navigateToWorkspacePage();
       if (createAndNavigateToNewPad) {
         await Promise.all([
-          clickNewPadButton(),
           page.waitForNavigation({ url: '/n/*' }),
+          clickNewPadButton(),
         ]);
         await waitForEditorToLoad();
       }

@@ -15,11 +15,12 @@ import { atoms, molecules, organisms } from '@decipad/ui';
 import {
   findNodePath,
   getNodeString,
+  insertText,
   isCollapsed,
   selectedCellsAtom,
 } from '@udecode/plate';
 import { useAtom } from 'jotai';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSelected } from 'slate-react';
 import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import {
@@ -83,8 +84,9 @@ export const TableCell: PlateComponent = ({
 
   const computer = useComputer();
   // Displaying the unit on an empty cell creates a visual glitch
-  const nodeText = getNodeString(element).trim();
-  const hasText = nodeText !== '';
+  const nodeText = getNodeString(element);
+  const nodeTrimmedText = nodeText.trim();
+  const hasText = nodeTrimmedText.length > 0;
   const isSoleNumber = !Number.isNaN(Number(nodeText));
   const unit =
     cellType?.kind === 'number' &&
@@ -95,6 +97,16 @@ export const TableCell: PlateComponent = ({
       : undefined;
 
   const parseError = useInteractiveElementParseError(element.id);
+
+  const onChangeValue = useCallback(
+    (newValue: string | undefined) => {
+      const path = findNodePath(editor, element);
+      if (path && newValue) {
+        insertText(editor, newValue, { at: path });
+      }
+    },
+    [editor, element]
+  );
 
   if (formulaResult != null) {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
@@ -126,6 +138,9 @@ export const TableCell: PlateComponent = ({
       focused={selectedCells && selectedCells.length > 1 ? false : focused}
       collapsed={collapsed}
       unit={unit}
+      type={cellType}
+      value={nodeText}
+      onChangeValue={onChangeValue}
       alignRight={isCellAlignRight(cellType)}
       parseError={parseError}
     >

@@ -1,8 +1,10 @@
-import { PlateComponentAttributes } from '@decipad/editor-types';
+import { CellValueType, PlateComponentAttributes } from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ElementType, FC, HTMLAttributes } from 'react';
+import { ComponentProps, ElementType, FC, HTMLAttributes } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
+import { CellEditor } from '../../molecules';
 import { ConditionalCodeSyntaxError } from '../../molecules/SyntaxErrorHighlight/SyntaxErrorHighlight';
 import {
   cssVar,
@@ -109,6 +111,9 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   focused?: boolean;
   collapsed?: boolean;
   disabled?: boolean;
+  type?: CellValueType;
+  value?: string;
+  onChangeValue?: ComponentProps<typeof CellEditor>['onChangeValue'];
   unit?: string;
   dropTarget?: ConnectDropTarget;
   parseError?: string;
@@ -130,7 +135,10 @@ export const TableData = ({
   disabled = false,
   dropTarget,
   lastBeforeMoreRowsHidden = false,
+  type,
   unit,
+  value,
+  onChangeValue = noop,
   alignRight,
   children,
   parseError,
@@ -161,9 +169,16 @@ export const TableData = ({
       data-unit={unit ?? ''}
       {...props}
     >
-      <ConditionalCodeSyntaxError error={parseError}>
-        {children}
-      </ConditionalCodeSyntaxError>
+      <CellEditor
+        focused={focused}
+        type={type}
+        value={value}
+        onChangeValue={onChangeValue}
+      >
+        <ConditionalCodeSyntaxError error={parseError}>
+          {children}
+        </ConditionalCodeSyntaxError>
+      </CellEditor>
     </Component>
   );
 };

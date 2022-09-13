@@ -29,6 +29,7 @@ test('should show confirmation email on login attempt', async () => {
 });
 
 test('should redirect to workspace if authenticated', async () => {
+  await setUp();
   await withTestUser();
   await page.goto('/');
   await waitForExpect(async () =>

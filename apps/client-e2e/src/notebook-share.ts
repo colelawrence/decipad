@@ -26,7 +26,8 @@ describe('notebook share', () => {
   test('click share button and extract text', async () => {
     const linkSelector = 'text=//n/hello-world/';
     await page.click('text=share');
-    await page.click('[aria-checked="false"]');
+    await page.click('[aria-roledescription="enable sharing"]');
+
     await page.waitForSelector(linkSelector);
 
     link = await page.innerText(linkSelector);

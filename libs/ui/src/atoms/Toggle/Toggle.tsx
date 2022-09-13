@@ -36,14 +36,17 @@ const activeSwitchStyles = css({
 export interface ToggleProps {
   active?: boolean;
   onChange?: (newActive: boolean) => void;
+  ariaRoleDescription?: string;
 }
 
 export const Toggle = ({
   active,
   onChange = noop,
+  ariaRoleDescription,
 }: ToggleProps): ReturnType<FC> => {
   return (
     <button
+      aria-roledescription={ariaRoleDescription}
       css={[toggleStyles, active && activeToggleStyles]}
       onClick={() => {
         onChange(!active);

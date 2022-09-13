@@ -3,6 +3,7 @@ export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
 export { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup/AutoCompleteMenuGroup';
 export { Caption } from './Caption/Caption';
+export { CellEditor } from './CellEditor/CellEditor';
 export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';
 export { CodeVariable } from './CodeVariable/CodeVariable';
 export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';

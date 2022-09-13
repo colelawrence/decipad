@@ -10,7 +10,7 @@ import {
 import { inferColumn } from '@decipad/parse';
 
 interface UseColumnInferredTypeResult {
-  type: CellValueType;
+  type?: CellValueType;
 }
 
 const collectColumnData = (
@@ -39,22 +39,34 @@ const collectColumnData = (
 };
 
 export const useColumnInferredType = (
-  element: TableHeaderElement
+  element?: TableHeaderElement
 ): UseColumnInferredTypeResult => {
   const computer = useComputer();
-  const [type, setType] = useState<CellValueType>(() => element.cellType);
+  const [type, setType] = useState<CellValueType | undefined>(
+    () => element?.cellType
+  );
   const inferColumnType = useCallback(
-    (editor: MyEditor): Promise<CellValueType> =>
-      inferColumn(computer, collectColumnData(editor, element), {
-        userType: element.cellType,
-      }),
+    async (editor: MyEditor): Promise<CellValueType | undefined> => {
+      if (element && element.cellType?.kind !== 'anything') {
+        return element.cellType;
+      }
+      return (
+        element &&
+        inferColumn(computer, collectColumnData(editor, element), {
+          userType: element.cellType,
+        })
+      );
+    },
     [computer, element]
   );
 
-  const settleType = useCallback(async (tableCell: Promise<CellValueType>) => {
-    const cellType = await tableCell;
-    setType(cellType);
-  }, []);
+  const settleType = useCallback(
+    async (tableCell: Promise<CellValueType | undefined>) => {
+      const cellType = await tableCell;
+      setType(cellType);
+    },
+    []
+  );
 
   useEditorChange(settleType, inferColumnType, { selectsPromise: true });
 

@@ -110,7 +110,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
     },
 
     async deleteUser() {
-      console.log('auth: deleteUser');
       return null;
     },
 
