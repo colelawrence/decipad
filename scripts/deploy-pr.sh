@@ -39,4 +39,4 @@ find apps/backend/public/ | grep '\.map$' | xargs rm
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
-nx deploy backend
+../../node_modules/.bin/arc deploy --no-hydrate --name "$DEPLOY_NAME"

@@ -31,13 +31,6 @@
       "options": {
         "command": "yarn tsc -b apps/backend"
       }
-    },
-    "deploy": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "cwd": "apps/backend",
-        "command": "../../node_modules/.bin/arc deploy --no-hydrate --name \"$DEPLOY_NAME\""
-      }
     }
   }
 }
