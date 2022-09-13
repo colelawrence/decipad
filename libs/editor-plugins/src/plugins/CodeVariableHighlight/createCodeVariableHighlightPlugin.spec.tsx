@@ -31,10 +31,7 @@ const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
             children,
           } as never,
         ]}
-        plugins={[
-          createCodeLinePlugin(computer),
-          createCodeVariableHighlightPlugin(),
-        ]}
+        plugins={[createCodeLinePlugin(), createCodeVariableHighlightPlugin()]}
       />
     </ComputerContextProvider>
   </DndProvider>

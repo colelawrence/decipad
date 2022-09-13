@@ -10,7 +10,7 @@ import {
   getSyntaxErrorRanges,
   memoizeDecorate,
 } from '@decipad/editor-utils';
-import { Computer, Token, tokenize } from '@decipad/computer';
+import { Token, tokenize } from '@decipad/computer';
 import { getNodeString, getParentNode, isElement } from '@udecode/plate';
 import { NodeEntry, Path, Range } from 'slate';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
@@ -52,35 +52,21 @@ const syntaxDecorations: MyDecorateEntry = ([node, path]) => {
   return undefined;
 };
 
-const withErrorDecorations =
-  (computer: Computer): MyDecorateEntry =>
-  ([node, path]) => {
-    if (isElement(node) && node.type === ELEMENT_EXPRESSION) {
-      const source = getNodeString(node);
-      const { error } = expressionFromEditorSource(computer, source);
+const withErrorDecorations: MyDecorateEntry = ([node, path]) => {
+  if (isElement(node) && node.type === ELEMENT_EXPRESSION) {
+    const source = getNodeString(node);
+    const { error } = expressionFromEditorSource(source);
 
-      return error
-        ? getSyntaxErrorRanges(path, {
-            type: 'computer-parse-error',
-            id: '',
-            source,
-            error,
-          })
-        : [];
-    }
-    return undefined;
-  };
+    return error ? getSyntaxErrorRanges(path, error) : [];
+  }
+  return undefined;
+};
 
-export const decorateExpression = (
-  editor: MyEditor,
-  computer: Computer
-): MyDecorate => {
-  const errorDecorations = withErrorDecorations(computer);
-
+export const decorateExpression = (editor: MyEditor): MyDecorate => {
   return filterDecorate(
     memoizeDecorate(() => (entry) => {
       const syntax = syntaxDecorations(entry);
-      const error = errorDecorations(entry);
+      const error = withErrorDecorations(entry);
       if (!syntax && !error) {
         return undefined;
       }

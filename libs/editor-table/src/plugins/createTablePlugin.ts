@@ -127,7 +127,7 @@ export const createTablePlugin = (
       key: ELEMENT_TABLE_COLUMN_FORMULA,
       isElement: true,
       component: TableColumnFormula,
-      decorate: decorateCode(computer, ELEMENT_TABLE_COLUMN_FORMULA),
+      decorate: decorateCode(ELEMENT_TABLE_COLUMN_FORMULA),
     },
   ],
 });

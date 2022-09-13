@@ -1,4 +1,3 @@
-import { Computer } from '@decipad/computer';
 import { ELEMENT_CODE_LINE, MyPlatePlugin } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
 import { deserializeCodeLineHtml } from './deserializeCodeLineHtml';
@@ -8,13 +7,13 @@ import CodeLine from './CodeLine';
 import { withCodeLine } from './withCodeLine';
 import { onKeyDownCodeLine } from './onKeyDownCodeLine';
 
-export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
+export const createCodeLinePlugin = (): MyPlatePlugin => ({
   key: ELEMENT_CODE_LINE,
   isElement: true,
   component: CodeLine,
   deserializeHtml: deserializeCodeLineHtml,
   serializeHtml: serializeCodeLineHtml,
-  decorate: decorateCode(computer, ELEMENT_CODE_LINE),
+  decorate: decorateCode(ELEMENT_CODE_LINE),
   withOverrides: withCodeLine,
   handlers: {
     onDrop: onDropCodeLine,

@@ -26,7 +26,7 @@ import { computeProgram, Computer, resultFromError } from './Computer';
 
 let computer: Computer;
 beforeEach(() => {
-  computer = new Computer();
+  computer = new Computer({ requestDebounceMs: 1 });
 });
 
 const testCompute = async (program: AST.Block[]) =>
@@ -452,4 +452,34 @@ it('can get a defined symbol, in block', async () => {
 
   expect(computer.getDefinedSymbolInBlock('block-0')).toEqual('C');
   expect(computer.getDefinedSymbolInBlock('block-1')).toEqual(undefined);
+});
+
+it('can stream imperative and computer-driven errors', async () => {
+  let errors = new Map<string, unknown>();
+
+  computer.getParseError$().subscribe((map) => {
+    errors = new Map([...errors.entries(), ...map.entries()]);
+  });
+
+  computer.pushCompute({
+    program: [],
+    parseErrors: [{ elementId: '1', error: 'err 1' }],
+  });
+
+  computer.setParseError('2', { elementId: '2', error: 'err 2' });
+
+  await timeout(1);
+
+  expect(errors).toMatchInlineSnapshot(`
+    Map {
+      "1" => Object {
+        "elementId": "1",
+        "error": "err 1",
+      },
+      "2" => Object {
+        "elementId": "2",
+        "error": "err 2",
+      },
+    }
+  `);
 });

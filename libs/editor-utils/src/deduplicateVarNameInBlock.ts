@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { Computer, parseStatement } from '@decipad/computer';
 import {
   AnyElement,
   CodeLineElement,
@@ -25,14 +25,10 @@ function deduplicateAssignmentVarName(
   el: CodeLineElement
 ): CodeLineElement {
   const code = getNodeString(el);
-  const parsed = computer.parseStatement(code);
+  const parsed = parseStatement(code);
   return produce(el, (e) => {
-    if (
-      !parsed.error &&
-      parsed.statement &&
-      parsed.statement.type === 'assign'
-    ) {
-      const varName = parsed.statement.args[0].args[0];
+    if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
+      const varName = parsed.solution.args[0].args[0];
       const newVarName = computer.getAvailableIdentifier(`${varName}Copy`, 1);
       e.children[0].text = code.replace(varName, newVarName);
     }

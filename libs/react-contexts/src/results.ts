@@ -92,15 +92,22 @@ export const useResult = (
   return result;
 };
 
-export const useInteractiveElementParseError = (blockId?: string) => {
+/**
+ * Get a parse error registered with computer.setParseError or
+ * returned from editorToProgram under .parseErrors.
+ *
+ * elementId is the usual block ID arrangement. But: errors in table series
+ * are in the ID of the column header.
+ */
+export const useInteractiveElementParseError = (elementId?: string) => {
   const computer = useComputer();
   const [error, setError] = useState<string | undefined>(
-    () => blockId && computer.getParseError(blockId)?.error
+    () => elementId && computer.getParseError(elementId)?.error
   );
 
   useEffect(() => {
-    const error$ = computer.results.pipe(
-      map(() => blockId && computer.getParseError(blockId)?.error),
+    const error$ = computer.getParseError$().pipe(
+      map((errors) => elementId && errors.get(elementId)?.error),
       distinctUntilChanged((a, b) => dequal(a, b))
     );
     const subscription = error$.subscribe(setError);
@@ -108,7 +115,7 @@ export const useInteractiveElementParseError = (blockId?: string) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [computer, blockId]);
+  }, [computer, elementId]);
 
   return error;
 };

@@ -131,3 +131,13 @@ export const isBracketError = (error: unknown): error is BracketError => {
     ('close' in error || 'open' in error)
   );
 };
+
+export const hasBracketError = (
+  error: unknown
+): error is { bracketError: BracketError } => {
+  return (
+    error instanceof Object &&
+    'bracketError' in error &&
+    isBracketError((error as { bracketError: BracketError }).bracketError)
+  );
+};

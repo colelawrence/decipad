@@ -1,23 +1,18 @@
-import {
-  IdentifiedError,
-  IdentifiedResult,
-  isBracketError,
-  isSyntaxError,
-} from '@decipad/computer';
+import { isSyntaxError, Parser, hasBracketError } from '@decipad/computer';
 import { Path } from 'slate';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';
 
 export function getSyntaxErrorRanges(
   path: Path,
-  lineResult: IdentifiedResult | IdentifiedError | undefined
+  error: Parser.ParserError | undefined
 ): SyntaxErrorAnnotation[] {
-  if (lineResult?.type !== 'computer-parse-error') {
+  if (!error) {
     return [];
   }
 
-  if (isSyntaxError(lineResult.error) && lineResult.error.token != null) {
-    const { token } = lineResult.error;
+  if (isSyntaxError(error) && error.token != null) {
+    const { token } = error;
     return [
       {
         anchor: { path, offset: token.offset },
@@ -31,11 +26,8 @@ export function getSyntaxErrorRanges(
     ];
   }
 
-  if (
-    isBracketError(lineResult.error?.bracketError) &&
-    lineResult.error?.bracketError != null
-  ) {
-    const { bracketError } = lineResult.error;
+  if (hasBracketError(error) && error?.bracketError != null) {
+    const { bracketError } = error;
     return [
       (bracketError.type === 'mismatched-brackets' ||
         bracketError.type === 'never-closed') &&

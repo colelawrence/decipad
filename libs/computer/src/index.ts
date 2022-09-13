@@ -20,6 +20,7 @@ export {
   parseOneBlock,
   parseOneStatement,
   parseOneExpression,
+  parseStatement,
   parseBlock,
   runCode,
   Result,

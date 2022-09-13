@@ -15,3 +15,7 @@ export interface ParserError {
 export type ParsedBlock =
   | { solution: AST.Block; error?: undefined }
   | { solution?: undefined; error: ParserError };
+
+export type ParsedStatement =
+  | { solution: AST.Statement; error?: undefined }
+  | { solution?: undefined; error: ParserError };

@@ -1,32 +1,20 @@
-import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import type { Parser } from '@decipad/computer';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 
 const path = [0];
 const offset = 10;
 
-it('should return no range when there is no line result', () => {
+it('should return no range when there is no syntax error', () => {
   expect(getSyntaxErrorRanges(path, undefined)).toEqual([]);
 });
 
-it('should return no range when there is no syntax error', () => {
-  expect(
-    getSyntaxErrorRanges(path, { type: 'computer-result' } as IdentifiedResult)
-  ).toEqual([]);
-});
-
 it('should return no range for invalid error constructs', () => {
+  expect(getSyntaxErrorRanges(path, { message: 'some error' })).toEqual([]);
   expect(
     getSyntaxErrorRanges(path, {
-      type: 'computer-parse-error',
-      error: { message: 'some error' },
-    } as IdentifiedError)
-  ).toEqual([]);
-  expect(
-    getSyntaxErrorRanges(path, {
-      type: 'computer-parse-error',
-      error: { bracketError: { open: {} } },
-    } as IdentifiedError)
+      bracketError: { open: {} },
+    } as never as Parser.ParserError)
   ).toEqual([]);
 });
 
@@ -34,13 +22,10 @@ describe('when it is a syntax error', () => {
   it('should return a range', () => {
     expect(
       getSyntaxErrorRanges(path, {
-        type: 'computer-parse-error',
-        error: {
-          blockId: '123',
-          message: 'some error',
-          token: { offset },
-        },
-      } as never as IdentifiedError)
+        blockId: '123',
+        message: 'some error',
+        token: { offset },
+      } as never as Parser.ParserError)
     ).toEqual([
       {
         anchor: { offset, path },
@@ -56,17 +41,14 @@ describe('when it is a bracket error', () => {
     const offset2 = offset * 2;
     expect(
       getSyntaxErrorRanges(path, {
-        type: 'computer-parse-error',
-        error: {
-          blockId: '123',
-          message: 'some error',
-          bracketError: {
-            type: 'mismatched-brackets',
-            close: { offset: offset2 },
-            open: { offset },
-          },
+        blockId: '123',
+        message: 'some error',
+        bracketError: {
+          type: 'mismatched-brackets',
+          close: { offset: offset2 },
+          open: { offset },
         },
-      } as never as IdentifiedError)
+      } as never as Parser.ParserError)
     ).toEqual([
       {
         anchor: { offset, path },
@@ -89,16 +71,13 @@ describe('when it is a bracket error', () => {
   ])('should return a range for a %s error', (variant, errorProp) => {
     expect(
       getSyntaxErrorRanges(path, {
-        type: 'computer-parse-error',
-        error: {
-          blockId: '123',
-          message: 'some error',
-          bracketError: {
-            type: variant,
-            [errorProp]: { offset },
-          },
+        blockId: '123',
+        message: 'some error',
+        bracketError: {
+          type: variant,
+          [errorProp]: { offset },
         },
-      } as never as IdentifiedError)
+      } as never as Parser.ParserError)
     ).toEqual([
       {
         anchor: { offset, path },

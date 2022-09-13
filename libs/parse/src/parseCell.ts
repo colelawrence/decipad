@@ -9,6 +9,8 @@ import {
   Result,
   Unit,
   SerializedType,
+  parseStatement,
+  isExpression,
 } from '@decipad/computer';
 import { formatUnit, formatError } from '@decipad/format';
 import { astNode } from './utils/astNode';
@@ -34,14 +36,14 @@ const parsing = async (
   if (!inferred.coerced) {
     return null;
   }
-  const parseResult = computer.parseStatement(inferred.coerced);
+  const parseResult = parseStatement(inferred.coerced);
   if (parseResult.error) {
     return new Error(parseResult.error.message);
   }
-  if (!parseResult.statement || !computer.isExpression(parseResult.statement)) {
+  if (!parseResult.solution || !isExpression(parseResult.solution)) {
     return new Error('is not a valid expression');
   }
-  const result = await computer.expressionResult(parseResult.statement);
+  const result = await computer.expressionResult(parseResult.solution);
   if (result.type.kind === 'type-error') {
     return new Error(formatError(defaultLocale, result.type.errorCause));
   }

@@ -4,7 +4,6 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
 import { PluginOptions, WithPlatePlugin } from '@udecode/plate';
 import { createEditor } from 'slate';
 import { decorateExpression } from './decorateExpression';
@@ -20,7 +19,7 @@ it('decorates code line', () => {
   } as ExpressionElement;
   const path = [0];
   expect(
-    decorateExpression(createEditor() as MyEditor, new Computer())(
+    decorateExpression(createEditor() as MyEditor)(
       {} as unknown as MyEditor,
       {} as unknown as WithPlatePlugin<PluginOptions, MyValue>
     )([node, path])

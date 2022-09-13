@@ -1,17 +1,12 @@
 import { MyEditor } from '@decipad/editor-types';
-import { Computer, Program } from '@decipad/computer';
+import type { Computer, ComputeRequest, Program } from '@decipad/computer';
 import { elementToLanguageBlock } from './elementToLanguageBlock';
 import { ParseError } from './types';
-
-export interface DocumentToProgramReturn {
-  program: Program;
-  parseErrors: ParseError[];
-}
 
 export const editorToProgram = async (
   editor: MyEditor,
   computer: Computer
-): Promise<DocumentToProgramReturn> => {
+): Promise<ComputeRequest> => {
   const program: Program = [];
   const parseErrors: ParseError[] = [];
 

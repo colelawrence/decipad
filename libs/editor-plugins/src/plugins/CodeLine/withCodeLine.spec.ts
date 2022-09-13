@@ -3,15 +3,13 @@ import {
   ELEMENT_CODE_LINE,
   MyEditor,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
 import { createCodeLinePlugin } from './createCodeLinePlugin';
 
 describe('withCodeLine', () => {
-  const computer = new Computer();
   let editor: MyEditor;
   beforeEach(() => {
     editor = createTPlateEditor({
-      plugins: [createCodeLinePlugin(computer)],
+      plugins: [createCodeLinePlugin()],
     });
   });
 

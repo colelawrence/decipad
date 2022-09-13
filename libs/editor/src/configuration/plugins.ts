@@ -5,8 +5,6 @@ import {
   createCalloutPlugin,
   createCodeLinePlugin,
   createCodeVariableHighlightPlugin,
-  createCursorsPlugin,
-  createDecorateUserParseErrorsPlugin,
   createDividerPlugin,
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
@@ -145,15 +143,11 @@ export const plugins = (
       createAutoPairsPlugin(),
       createNavigationPlugin(),
 
-      // user parse errors
-      createDecorateUserParseErrorsPlugin(computer),
-
       // language
       ...createEvalPlugin(computer),
-      createCodeLinePlugin(computer),
-      createCursorsPlugin(computer),
+      createCodeLinePlugin(),
       createUpdateComputerPlugin(computer),
-      createVariableDefPlugin(computer),
+      createVariableDefPlugin(),
 
       // tables
       createTablePlugin(computer),

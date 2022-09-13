@@ -30,6 +30,16 @@ export function parseBlock(source: string): Parser.ParsedBlock {
   }
 }
 
+export function parseStatement(source: string): Parser.ParsedStatement {
+  const parsed = parseBlock(source);
+
+  if (parsed.error) return parsed;
+
+  return {
+    solution: parsed.solution.args[0],
+  };
+}
+
 export function parse(blocks: string[]): Parser.ParsedBlock[] {
   return blocks.map((block) => parseBlock(block));
 }

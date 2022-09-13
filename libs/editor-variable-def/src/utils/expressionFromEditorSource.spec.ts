@@ -1,11 +1,8 @@
-import { Computer } from '@decipad/computer';
 import { toFraction } from '@decipad/fraction';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 
 it('turns an editor node into an expression', () => {
-  expect(
-    expressionFromEditorSource(new Computer(), '123 bananas')
-  ).toMatchObject({
+  expect(expressionFromEditorSource('123 bananas')).toMatchObject({
     error: undefined,
     expression: {
       type: 'function-call',

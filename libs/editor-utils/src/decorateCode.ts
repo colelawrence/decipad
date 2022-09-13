@@ -13,7 +13,7 @@ import {
   DECORATE_AUTO_COMPLETE_MENU,
 } from '@decipad/editor-types';
 import { Path, Range } from 'slate';
-import { Computer } from '@decipad/computer';
+import { parseStatement } from '@decipad/computer';
 import { getVariableRanges } from './getVariableRanges';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 import { isElementOfType } from './isElementOfType';
@@ -21,42 +21,37 @@ import { findWordStart, nextIsWordChar } from './autoComplete';
 import { filterDecorate } from './filterDecorate';
 import { memoizeDecorate } from './memoizeDecorate';
 
-export const decorateCode = (
-  computer: Computer,
-  elementType: MyElement['type']
-): MyDecorate =>
+export const decorateCode = (elementType: MyElement['type']): MyDecorate =>
   filterDecorate(
     memoizeDecorate((editor: MyEditor): MyDecorateEntry => {
-      const syntaxErrorDecorations = ([
-        node,
-        path,
-      ]: MyElementEntry): TRange[] => {
-        const lineResult =
-          computer.results.getValue().blockResults[node.id as string];
-        if (!lineResult) {
-          return [];
-        }
-        return getSyntaxErrorRanges(path, lineResult);
+      const syntaxErrorDecorations = (
+        [, path]: MyElementEntry,
+        source: string
+      ): TRange[] => {
+        const { error } = parseStatement(source);
+        return getSyntaxErrorRanges(path, error);
       };
 
       const variableDecorations = (
         nodeId: string,
-        [node, path]: MyNodeEntry
+        [, path]: MyNodeEntry,
+        source: string
       ): Range[] => {
-        return getVariableRanges(getNodeString(node), path, nodeId).map(
-          (range) => ({ ...range, [DECORATE_CODE_VARIABLE]: true })
-        );
+        return getVariableRanges(source, path, nodeId).map((range) => ({
+          ...range,
+          [DECORATE_CODE_VARIABLE]: true,
+        }));
       };
 
-      const autoCompleteMenuDecoration = ([
-        node,
-        path,
-      ]: MyNodeEntry): Range[] => {
+      const autoCompleteMenuDecoration = (
+        [, path]: MyNodeEntry,
+        source: string
+      ): Range[] => {
         const { selection } = editor;
 
         if (
           // Slate seems to have an issue with decorators on empty lines so we're skipping them.
-          getNodeString(node).length > 0 &&
+          source.length > 0 &&
           selection?.focus?.path &&
           Path.isCommon(path, selection.focus.path) &&
           !nextIsWordChar(editor, selection.focus)
@@ -91,9 +86,12 @@ export const decorateCode = (
           }
         }
 
-        const decorations: TRange[] = syntaxErrorDecorations(entry)
-          .concat(variableDecorations(nodeId, entry))
-          .concat(autoCompleteMenuDecoration(entry));
+        const sourceString = getNodeString(node);
+        const decorations: TRange[] = [
+          ...syntaxErrorDecorations(entry, sourceString),
+          ...variableDecorations(nodeId, entry, sourceString),
+          ...autoCompleteMenuDecoration(entry, sourceString),
+        ];
 
         return decorations;
       };

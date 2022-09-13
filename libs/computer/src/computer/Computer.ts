@@ -15,7 +15,6 @@ import {
   inferExpression,
   inferStatement,
   isExpression,
-  parseBlock,
   parseOneBlock,
   parseOneExpression,
   Result,
@@ -43,12 +42,11 @@ import {
 } from 'rxjs/operators';
 import { makeNamesFromIds } from '../exprRefs';
 import { captureException } from '../reporting';
-import {
+import type {
   ComputePanic,
   ComputeRequest,
   ComputeRequestWithExternalData,
   ComputeResponse,
-  ComputerParseStatementResult,
   IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
@@ -217,6 +215,8 @@ interface ComputerOpts {
   requestDebounceMs: number;
 }
 
+type ParseErrorMap = Map<string, UserParseError>;
+
 export class Computer {
   private locale = 'en-US';
   private previouslyParsed: ParseRet[] = [];
@@ -225,8 +225,12 @@ export class Computer {
   private computing = false;
   private cursorBlockId: string | null = null;
   private requestDebounceMs: number;
-  private parseErrors: Map<string, UserParseError> = new Map();
   private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
+
+  // Imperative parse errors
+  private parseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
+  // parseErrors (above) and also errors from editorToComputeRequest
+  private aggregatedParseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -243,7 +247,6 @@ export class Computer {
         combineLatestWith(this.externalData),
         // Debounce to give React an easier time
         debounceTime(this.requestDebounceMs),
-        // Make sure the new request is actually different
         map(
           ([computeReq, externalData]) =>
             ({
@@ -251,6 +254,7 @@ export class Computer {
               externalData,
             } as ComputeRequestWithExternalData)
         ),
+        // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
         concatMap((req) => this.computeRequest(req)),
@@ -272,6 +276,25 @@ export class Computer {
         shareReplay(1)
       )
       .subscribe(this.results);
+
+    this.computeRequests
+      .pipe(
+        combineLatestWith(this.parseErrors),
+        map(([computeRequest, imperativelyAddedParseErrors]) => {
+          const computeReqParseErrorsById =
+            computeRequest.parseErrors?.map(
+              (err) => [err.elementId, err] as const
+            ) ?? [];
+          const imperativeErrorsById =
+            imperativelyAddedParseErrors?.entries() ?? [];
+
+          return new Map([
+            ...computeReqParseErrorsById,
+            ...imperativeErrorsById,
+          ]);
+        })
+      )
+      .subscribe(this.aggregatedParseErrors);
   }
 
   getVariable(varName: string): Result.Result | null {
@@ -412,7 +435,6 @@ export class Computer {
   private ingestComputeRequest({
     program,
     externalData,
-    parseErrors,
   }: ComputeRequestWithExternalData) {
     const newParse = updateParse(program, this.previouslyParsed);
     const sortedParse = topologicalSort(newParse);
@@ -428,12 +450,6 @@ export class Computer {
     this.computationRealm.setExternalData(newExternalData);
     this.previousExternalData = newExternalData;
     this.previouslyParsed = sortedParse;
-
-    if (parseErrors) {
-      this.parseErrors = new Map(
-        parseErrors.map((parseError) => [parseError.elementId, parseError])
-      );
-    }
 
     return sortedParse;
   }
@@ -571,31 +587,34 @@ export class Computer {
     return expr.unit;
   }
 
-  parseStatement(source: string): ComputerParseStatementResult {
-    const { solution, error } = parseBlock(source);
-    return { statement: solution?.args[0], error };
+  private updateParseError(updater: (map: ParseErrorMap) => void): void {
+    const nextValue = produce(this.parseErrors.getValue(), updater);
+    this.parseErrors.next(nextValue);
   }
-
-  isExpression(statement: AST.Statement): statement is AST.Expression {
-    return isExpression(statement);
-  }
-
-  // User parse errors
 
   setParseError(id: string, error: UserParseError): void {
-    this.parseErrors.set(id, error);
+    this.updateParseError((map) => {
+      map.set(id, error);
+    });
   }
 
   unsetParseError(id: string): void {
-    this.parseErrors.delete(id);
+    this.updateParseError((map) => {
+      map.delete(id);
+    });
   }
 
   hasParseError(id: string): boolean {
-    return this.parseErrors.has(id);
+    return this.parseErrors.getValue().has(id);
   }
 
   getParseError(elementId: string): UserParseError | undefined {
-    return this.parseErrors.get(elementId);
+    return this.parseErrors.getValue().get(elementId);
+  }
+
+  getParseError$(): Observable<ParseErrorMap> &
+    Pick<BehaviorSubject<ParseErrorMap>, 'getValue'> {
+    return this.aggregatedParseErrors;
   }
 
   // locale

@@ -4,8 +4,6 @@ export * from './AutoPairs/createAutoPairsPlugin';
 export * from './Callout';
 export * from './CodeLine';
 export * from './CodeVariableHighlight';
-export * from './Cursors';
-export * from './DecorateUserParseErrors';
 export * from './Divider';
 export * from './DragOverCursor';
 export * from './EditorApplyErrorReporter';

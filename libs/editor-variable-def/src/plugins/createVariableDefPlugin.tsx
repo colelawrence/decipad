@@ -6,7 +6,6 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import {
   Caption,
@@ -24,7 +23,7 @@ import { decorateExpression } from '../utils/decorateExpression';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { createSliderExpressionSyncPlugin } from './createSliderExpressionSyncPlugin';
 
-export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
+export const createVariableDefPlugin = (): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
   isElement: true,
   component: VariableDef,
@@ -94,8 +93,7 @@ export const createVariableDefPlugin = (computer: Computer): MyPlatePlugin => ({
       key: DECORATION_EXPRESSION_SYNTAX,
       type: DECORATION_EXPRESSION_SYNTAX,
       isLeaf: true,
-      decorate: (editor, plugin) =>
-        decorateExpression(editor, computer)(editor, plugin),
+      decorate: (editor, plugin) => decorateExpression(editor)(editor, plugin),
       component: CodeSyntax,
     },
     {

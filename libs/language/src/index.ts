@@ -39,7 +39,14 @@ export {
   Scalar,
   Table,
 } from './interpreter/Value';
-export { AST, parse, parseBlock, Parser, SyntaxError } from './parser';
+export {
+  AST,
+  parse,
+  parseBlock,
+  parseStatement,
+  Parser,
+  SyntaxError,
+} from './parser';
 export { prettyPrintAST } from './parser/utils';
 export * from './pluralize';
 export { previousRefSymbols } from './previous-ref';
