@@ -1,16 +1,25 @@
-import { FC, ReactNode, useCallback, useMemo } from 'react';
+import { FC, MouseEvent, ReactNode, useCallback, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import { format, parse } from 'date-fns';
+import { css } from '@emotion/react';
 import type { SerializedTypes } from '@decipad/computer';
 import { CellValueType } from '@decipad/editor-types';
 import { dateFormatForGranularity } from '../../utils/dateFormatForGranularity';
 import 'react-datepicker/dist/react-datepicker.css';
+
+const unitStyles = css({
+  '&::after': {
+    content: 'attr(data-unit)',
+    marginLeft: '0.25rem',
+  },
+});
 
 export interface DateEditorProps {
   open: boolean;
   children?: ReactNode;
   type?: CellValueType;
   value?: string;
+  unit?: string;
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
@@ -32,6 +41,7 @@ export const DateEditor: FC<DateEditorProps> = ({
   open,
   children,
   value = '',
+  unit,
   onChangeValue: _onChangeValue,
   type,
 }) => {
@@ -57,19 +67,34 @@ export const DateEditor: FC<DateEditorProps> = ({
     [_onChangeValue, dateFormat]
   );
 
-  return (
-    <DatePicker
-      open={open && type?.kind === 'date'}
-      dateFormat={dateFormat || 'yyyy-MM-dd'}
-      selected={dateValue}
-      onChange={onChangeValue}
-      customInput={<>{children}</>}
-      showTimeSelect={
-        type?.kind === 'date' && showTimeInputForGranularity[type.date]
+  const onClick = useCallback(
+    (ev: MouseEvent) => {
+      if (open) {
+        ev.stopPropagation();
       }
-      showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
-      showYearPicker={type?.kind === 'date' && type.date === 'year'}
-      portalId="date-picker-portal"
-    ></DatePicker>
+    },
+    [open]
+  );
+
+  return (
+    <span onClick={onClick} className="mydateeditorwrapper">
+      <DatePicker
+        open={open && type?.kind === 'date'}
+        dateFormat={dateFormat || 'yyyy-MM-dd'}
+        selected={dateValue}
+        onChange={onChangeValue}
+        customInput={
+          <span data-unit={unit ?? ''} css={unit && unitStyles}>
+            {children}
+          </span>
+        }
+        showTimeSelect={
+          type?.kind === 'date' && showTimeInputForGranularity[type.date]
+        }
+        showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
+        showYearPicker={type?.kind === 'date' && type.date === 'year'}
+        portalId="date-picker-portal"
+      ></DatePicker>
+    </span>
   );
 };

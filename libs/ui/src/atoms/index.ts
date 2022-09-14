@@ -54,7 +54,6 @@ export { RemoveNodeButton } from './RemoveNodeButton/RemoveNodeButton';
 export { Slider } from './Slider/Slider';
 export { Spinner } from './Spinner/Spinner';
 export { Strikethrough } from './Strikethrough/Strikethrough';
-export { TableCellWithUnit } from './TableCellWithUnit/TableCellWithUnit';
 export { TableData } from './TableData/TableData';
 export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';
 export { TableHeader } from './TableHeader/TableHeader';

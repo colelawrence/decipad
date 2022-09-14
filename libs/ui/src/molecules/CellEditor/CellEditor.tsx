@@ -1,6 +1,6 @@
 import { CellValueType } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
-import {
+import React, {
   FC,
   ReactNode,
   useCallback,
@@ -17,6 +17,7 @@ interface SpecificEditorProps {
   children: ReactNode;
   type?: CellValueType;
   value?: string;
+  unit?: string;
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
@@ -31,6 +32,7 @@ interface CellEditorProps {
   focused?: boolean;
   children: ReactNode;
   type?: CellValueType;
+  unit?: string;
   value?: string;
   onChangeValue: (
     value: string | undefined // only booleans for now
@@ -41,6 +43,7 @@ export const CellEditor: FC<CellEditorProps> = ({
   focused = false,
   value,
   type,
+  unit,
   onChangeValue: _onChangeValue,
   children,
 }) => {
@@ -83,7 +86,7 @@ export const CellEditor: FC<CellEditorProps> = ({
   );
 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const onClick = useCallback(
+  const onGlobalClick = useCallback(
     (event: MouseEvent) => {
       const { target } = event;
       if (
@@ -92,11 +95,7 @@ export const CellEditor: FC<CellEditorProps> = ({
       ) {
         return;
       }
-      if (
-        opened &&
-        target &&
-        !wrapperRef.current?.contains(target as Element)
-      ) {
+      if (opened) {
         toggleOpened();
       }
     },
@@ -104,7 +103,18 @@ export const CellEditor: FC<CellEditorProps> = ({
   );
 
   useWindowListener('keydown', onKeyDown, true);
-  useWindowListener('click', onClick, true);
+  useWindowListener('click', onGlobalClick, true);
+
+  const onClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (event.currentTarget.getAttribute('class')?.includes('datepicker')) {
+        event.stopPropagation();
+        return;
+      }
+      toggleOpened();
+    },
+    [toggleOpened]
+  );
 
   const EditorComponent = useMemo(
     () => (type && editorComponents[type.kind]) || DateEditor,
@@ -112,14 +122,15 @@ export const CellEditor: FC<CellEditorProps> = ({
   );
 
   return (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} onClick={onClick} className="mycelleditorwrapper">
       <EditorComponent
         open={opened}
         type={type}
         value={value}
+        unit={unit}
         onChangeValue={onChangeValue}
       >
-        <div onClick={toggleOpened}>{children}</div>
+        {children}
       </EditorComponent>
     </div>
   );

@@ -68,13 +68,6 @@ const editableStyles = css({
   paddingRight: '12px',
 });
 
-const unitStyles = css({
-  '&::after': {
-    content: 'attr(data-unit)',
-    marginLeft: '0.25rem',
-  },
-});
-
 const tdDisabledStyles = css({
   ...setCssVar('normalTextColor', cssVar('weakerTextColor')),
 });
@@ -160,19 +153,18 @@ export const TableData = ({
         tdGridStyles,
         showPlaceholder && tdPlaceholderStyles,
         disabled && tdDisabledStyles,
-        unit && unitStyles,
         selected && selectedStyles,
         focused && focusedStyles,
         alignRight && alignRightStyles,
         isLiveResult && liveResultStyles,
       ]}
-      data-unit={unit ?? ''}
       {...props}
     >
       <CellEditor
         focused={focused}
         type={type}
         value={value}
+        unit={unit}
         onChangeValue={onChangeValue}
       >
         <ConditionalCodeSyntaxError error={parseError}>
