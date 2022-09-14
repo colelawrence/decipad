@@ -606,10 +606,10 @@
     run-series "~1.1.9"
     symlink-or-copy "~1.3.1"
 
-"@architect/inventory@3.1.1", "@architect/inventory@~3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.1.1.tgz#9782406f264265377762c6514fb05ff8554afe07"
-  integrity sha512-eci85Qi8xZdm6nUDvPz2+2ppqAL4VqGx4CWasqE0bDq2XJ5T49+fpffS6aHI5OORZLXGS7aYe786Ui1oJ/v8dA==
+"@architect/inventory@3.3.0", "@architect/inventory@~3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.3.0.tgz#05ee597329a2b841d0308fa8600adcf14451fef0"
+  integrity sha512-hvEpM0stEP5nhE5VrANf18WuTWMFtsF/XHMSrtSALBgZE/b6sUWx5WmHJDtPKi1lFM/ywwy+XIYZn0QftpTaYQ==
   dependencies:
     "@architect/asap" "~5.0.1"
     "@architect/parser" "~6.0.0"
@@ -625,20 +625,20 @@
     "@architect/parser" "~5.0.0"
     "@architect/utils" "~3.0.2"
 
-"@architect/inventory@~3.2.0":
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.2.1.tgz#62c4966e1193d61a6bf87a5f86f996da7f2680e7"
-  integrity sha512-wDyy4EU6ZYY8gGHspEHY+sl1PnVJdnBVzZ5wIILfw/m+Sw1IWxKKUM6MxRwyV7QXk/YMIAtA57Vs5iRykkXlRA==
+"@architect/inventory@~3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.1.1.tgz#9782406f264265377762c6514fb05ff8554afe07"
+  integrity sha512-eci85Qi8xZdm6nUDvPz2+2ppqAL4VqGx4CWasqE0bDq2XJ5T49+fpffS6aHI5OORZLXGS7aYe786Ui1oJ/v8dA==
   dependencies:
     "@architect/asap" "~5.0.1"
     "@architect/parser" "~6.0.0"
     "@architect/utils" "~3.1.1"
     lambda-runtimes "~1.1.2"
 
-"@architect/inventory@~3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.3.0.tgz#05ee597329a2b841d0308fa8600adcf14451fef0"
-  integrity sha512-hvEpM0stEP5nhE5VrANf18WuTWMFtsF/XHMSrtSALBgZE/b6sUWx5WmHJDtPKi1lFM/ywwy+XIYZn0QftpTaYQ==
+"@architect/inventory@~3.2.0":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.2.1.tgz#62c4966e1193d61a6bf87a5f86f996da7f2680e7"
+  integrity sha512-wDyy4EU6ZYY8gGHspEHY+sl1PnVJdnBVzZ5wIILfw/m+Sw1IWxKKUM6MxRwyV7QXk/YMIAtA57Vs5iRykkXlRA==
   dependencies:
     "@architect/asap" "~5.0.1"
     "@architect/parser" "~6.0.0"
