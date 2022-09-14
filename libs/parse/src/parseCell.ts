@@ -47,7 +47,7 @@ const parsing = async (
   if (result.type.kind === 'type-error') {
     return new Error(formatError(defaultLocale, result.type.errorCause));
   }
-  if (type.kind !== 'anything' && type.kind !== result.type.kind) {
+  if (type.kind && type.kind !== 'anything' && type.kind !== result.type.kind) {
     return new Error(`Could not parse "${text}" into a ${type.kind}`);
   }
   try {
