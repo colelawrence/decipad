@@ -230,7 +230,7 @@
   "devDependencies": {
     "@architect/deploy": "4.2.3",
     "@architect/inventory": "3.3.0",
-    "@architect/sandbox": "5.2.5",
+    "@architect/sandbox": "5.3.4",
     "@babel/core": "7.19.0",
     "@babel/node": "7.18.10",
     "@babel/plugin-proposal-class-properties": "7.18.6",
