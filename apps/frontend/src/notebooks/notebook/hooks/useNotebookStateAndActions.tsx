@@ -28,7 +28,12 @@ interface useNotebookStateAndActionsProps {
   readonly editor?: MyEditor;
   readonly docsync?: DocSyncEditor;
 }
-interface useNotebookStateAndActionsResult {
+
+interface NotebookConnectionParams {
+  url: string;
+  token: string;
+}
+interface UseNotebookStateAndActionsResult {
   error?: Error;
   notebook: Notebook | undefined;
   isReadOnly: boolean;
@@ -37,6 +42,8 @@ interface useNotebookStateAndActionsResult {
   iconColor: IconColor | undefined;
   hasLocalChanges: BehaviorSubject<boolean> | undefined;
   isSavedRemotely: BehaviorSubject<boolean> | undefined;
+  connectionParams?: NotebookConnectionParams;
+  initialState: string | undefined;
 
   duplicate: () => Promise<void>;
   removeLocalChanges: () => Promise<void>;
@@ -49,7 +56,7 @@ export const useNotebookStateAndActions = ({
   notebookId,
   editor,
   docsync,
-}: useNotebookStateAndActionsProps): useNotebookStateAndActionsResult => {
+}: useNotebookStateAndActionsProps): UseNotebookStateAndActionsResult => {
   // ------- internal hooks -------
   const toast = useToast();
 
@@ -192,6 +199,8 @@ export const useNotebookStateAndActions = ({
     iconColor,
     hasLocalChanges,
     isSavedRemotely,
+    connectionParams: notebook?.padConnectionParams,
+    initialState: notebook?.initialState ?? undefined,
 
     duplicate,
     removeLocalChanges,

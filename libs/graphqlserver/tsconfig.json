@@ -10,6 +10,7 @@
     { "path": "../tables" },
     { "path": "../graphqlresource" },
     { "path": "../config" },
-    { "path": "../backend-trace" }
+    { "path": "../backend-trace" },
+    { "path": "../y-dynamodb" }
   ]
 }
