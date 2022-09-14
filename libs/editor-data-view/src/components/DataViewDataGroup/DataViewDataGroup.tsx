@@ -60,19 +60,17 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       alignRight={isCellAlignRight(element.type)}
     />
   ) : (
-    element.column && (
-      <SmartCell
-        tableName={tableName}
-        rowSpan={element.rowspan}
-        colSpan={element.colspan}
-        column={element.column}
-        aggregationType={aggregationType}
-        onHover={onHover}
-        hover={parentHover || selfHover}
-        alignRight={isCellAlignRight(element.column.type)}
-        subproperties={element.subproperties}
-      />
-    )
+    <SmartCell
+      tableName={tableName}
+      rowSpan={element.rowspan}
+      colSpan={element.colspan}
+      column={element.column}
+      aggregationType={aggregationType}
+      onHover={onHover}
+      hover={parentHover || selfHover}
+      alignRight={isCellAlignRight(element.column.type)}
+      subproperties={element.subproperties}
+    />
   );
 };
 

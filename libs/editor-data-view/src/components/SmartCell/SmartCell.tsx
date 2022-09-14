@@ -50,7 +50,9 @@ export const SmartCell: FC<SmartProps> = ({
     return () => sub.unsubscribe();
   }, [computer, expression]);
 
-  return result === null ? null : (
+  return result === null ? (
+    <td />
+  ) : (
     <templates.SmartCell
       aggregationType={aggregationType}
       result={result}

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Interpreter, SerializedType, Result } from '@decipad/computer';
+import { Interpreter, Result, SerializedType } from '@decipad/computer';
 import { zip } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
 import { AggregationKind, DataGroup } from '../types';
@@ -8,33 +8,35 @@ const { Column, ResultTransforms } = Result;
 
 type SmartColumnInput = [SerializedType, Result.ColumnLike<Result.Comparable>];
 
-const smartRow = (
-  columnNames: string[],
+const generateSmartRow = (
   columns: SmartColumnInput[],
+  columnNames: string[],
   columnIndex: number,
+  aggregationTypes: (AggregationKind | undefined)[],
   subproperties: { value: Result.Comparable; name: string }[],
   parentHighlight$?: BehaviorSubject<boolean>
 ): DataGroup => {
-  const [column, ...rest] = columns;
+  const [firstColumn, ...rest] = columns;
 
   return {
     elementType: 'smartrow',
     children:
       rest.length > 0
         ? [
-            smartRow(
-              columnNames,
+            generateSmartRow(
               rest,
+              columnNames,
               columnIndex + 1,
+              aggregationTypes,
               subproperties,
               parentHighlight$
             ),
           ]
         : [],
-    column: column && {
+    column: firstColumn && {
       name: columnNames[columnIndex],
-      type: column[0],
-      value: column[1],
+      type: firstColumn[0],
+      value: firstColumn[1],
     },
     columnIndex,
     subproperties,
@@ -86,23 +88,23 @@ export const group = (
         0 ||
       (restDataSlice[0] && restDataSlice[0].rowCount <= 1);
 
-    const sRow =
+    const smartRow =
       !restDataSlice || !restDataSlice[0] || smartRowShouldHide
         ? undefined
-        : smartRow(
-            columnNames,
+        : generateSmartRow(
             zip(restOfTypes, restDataSlice),
+            columnNames,
             columnIndex + 1,
+            aggregationTypes,
             newSubproperties,
-            selfHighlight$
+            parentHighlight$
           );
-
     return {
       elementType: 'group',
       value,
       type,
       children: [
-        sRow,
+        smartRow,
         ...group(
           columnNames,
           restDataSlice,
@@ -129,6 +131,7 @@ export const layoutPowerData = (
   const sortableColumns = columns.map((column) =>
     Column.fromValues(column as Result.Comparable[])
   );
+
   return group(
     columnNames,
     sortableColumns,
