@@ -7,7 +7,12 @@ import {
   RowResult,
   TableResult,
 } from '..';
-import { BooleanResult, DateResult, NumberResult } from '../../atoms';
+import {
+  AnyResult,
+  BooleanResult,
+  DateResult,
+  NumberResult,
+} from '../../atoms';
 import { FunctionResult, InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
 
@@ -20,7 +25,6 @@ type CodeResultComponentType<T extends SerializedTypeKind> = (
 const DefaultResult: CodeResultComponentType<SerializedTypeKind> = ({
   value,
 }) => <span>{String(value ?? '')}</span>;
-const NothingResult: CodeResultComponentType<'nothing'> = () => null;
 const InlineTableResult: CodeResultComponentType<'table'> = () => (
   <span>Table</span>
 );
@@ -71,10 +75,6 @@ const getResultMatchers = (): ResultMatcher[] => [
     match: ({ type, variant }) => type.kind === 'row' && variant === 'inline',
   },
   {
-    component: NothingResult,
-    match: ({ type }) => type.kind === 'nothing',
-  },
-  {
     component: FunctionResult,
     match: ({ type }) => type.kind === 'function',
   },
@@ -86,6 +86,10 @@ const getResultMatchers = (): ResultMatcher[] => [
     component: InlineCodeError,
     match: ({ type, variant }) =>
       type.kind === 'type-error' && variant === 'inline',
+  },
+  {
+    component: AnyResult,
+    match: ({ type }) => type.kind === 'anything' || type.kind === 'nothing',
   },
 ];
 

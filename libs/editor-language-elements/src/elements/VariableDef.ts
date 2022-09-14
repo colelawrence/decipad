@@ -3,7 +3,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyEditor,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
+import { AST, Computer } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType } from '@decipad/parse';
@@ -24,13 +24,20 @@ export const VariableDef: InteractiveLanguageElement = {
 
       const { id, children } = element;
       const variableName = getNodeString(children[0]);
-      let expression = getNodeString(children[1]);
+      let expression: string | AST.Expression = getNodeString(children[1]);
 
       if (element.variant === 'expression') {
-        const type = await inferType(computer, expression, {
+        const { type, coerced } = await inferType(computer, expression, {
           type: element.coerceToType,
         });
-        expression = getDefined(type.coerced);
+        if (type.kind === 'anything' || type.kind === 'nothing') {
+          expression = {
+            type: 'noop',
+            args: [],
+          };
+        } else {
+          expression = getDefined(coerced);
+        }
       }
 
       return [parseElementVariableAssignment(id, variableName, expression)];
