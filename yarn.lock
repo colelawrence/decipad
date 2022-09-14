@@ -372,6 +372,17 @@
     lambda-runtimes "~1.1.2"
     minimist "~1.2.6"
 
+"@architect/create@~4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@architect/create/-/create-4.1.1.tgz#a3d42c4a38777568bec7be7912172aa5be3971ce"
+  integrity sha512-uZK1AqxUWMC3F8k0UiVBr1gDg1iJijzwDEQqklCYwYSN2rWCgTyjmvESGm1gCdhSn0VtvfxQKxSSweDCLwv5Kg==
+  dependencies:
+    "@architect/inventory" "~3.3.0"
+    "@architect/utils" "~3.1.2"
+    chalk "4.1.2"
+    lambda-runtimes "~1.1.2"
+    minimist "~1.2.6"
+
 "@architect/deploy@4.1.3":
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.1.3.tgz#c3f15c01ed146e4127cd5f4fa34b01f736150b3f"
@@ -404,6 +415,29 @@
     "@architect/hydrate" "~3.0.4"
     "@architect/inventory" "~3.2.0"
     "@architect/package" "~8.1.4"
+    "@architect/utils" "~3.1.2"
+    chalk "4.1.2"
+    fs-extra "~10.1.0"
+    get-folder-size "2.0.1"
+    glob "~8.0.3"
+    mime-types "~2.1.35"
+    minimist "~1.2.6"
+    path-sort "~0.1.0"
+    run-parallel "~1.2.0"
+    run-series "~1.1.9"
+    run-waterfall "~1.1.7"
+    zip-dir "~2.0.0"
+    zipit "~2.0.0"
+
+"@architect/deploy@4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.2.3.tgz#4034106b7b746c9f5bcd2651b806bc9606cdeb96"
+  integrity sha512-q6emqw6HHQy4B7MnAiOV0r4S/pYsxLPgoJkPATpUcQHYQwrs5vQ7807sn9uI6tE7EE6h9LK8tSOKEqB9V8jzLw==
+  dependencies:
+    "@architect/create" "~4.1.1"
+    "@architect/hydrate" "~3.1.3"
+    "@architect/inventory" "~3.3.0"
+    "@architect/package" "~8.1.5"
     "@architect/utils" "~3.1.2"
     chalk "4.1.2"
     fs-extra "~10.1.0"
@@ -556,6 +590,22 @@
     run-series "~1.1.9"
     symlink-or-copy "~1.3.1"
 
+"@architect/hydrate@~3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@architect/hydrate/-/hydrate-3.1.3.tgz#a8888e0d15b2c76d90218739b9e5d8e32c3967e1"
+  integrity sha512-fYc0i/nv5/oZ61YbW8I50XuCnPvQ0LbhSq4GICBx1NtkeQXS9sOzdQxJbQggU/81d8aDE43MPCofxaYFAnJZTA==
+  dependencies:
+    "@architect/inventory" "~3.3.0"
+    "@architect/utils" "~3.1.2"
+    acorn-loose "~8.3.0"
+    chalk "4.1.2"
+    cpr "~3.0.1"
+    esquery "~1.4.0"
+    glob "~8.0.3"
+    minimist "~1.2.6"
+    run-series "~1.1.9"
+    symlink-or-copy "~1.3.1"
+
 "@architect/inventory@3.1.1", "@architect/inventory@~3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.1.1.tgz#9782406f264265377762c6514fb05ff8554afe07"
@@ -637,6 +687,14 @@
   integrity sha512-hMO16PKP6ph9SjuGgSc8J1mN3Jk3Vb8j4I1oNfUJ8mKniIbERHp2VqBBuiLA5mTzmLglJVl5XK+Frtd0kgCAaQ==
   dependencies:
     "@architect/inventory" "~3.2.0"
+    "@architect/utils" "~3.1.2"
+
+"@architect/package@~8.1.5":
+  version "8.1.5"
+  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.1.5.tgz#c9f26fc01efa51c195072352c7ee77d17c9d6077"
+  integrity sha512-hNaEculnvEBXrsTnRzZ3JSfoKbiX13uTmtxt1L7xEW/40Qre+fqOo7HkcHqwXZpRLWABgn2vnhNSdPIykc0dgQ==
+  dependencies:
+    "@architect/inventory" "~3.3.0"
     "@architect/utils" "~3.1.2"
 
 "@architect/parser@~5.0.0":
