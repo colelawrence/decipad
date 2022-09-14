@@ -15,7 +15,7 @@ export const getSheetRequestDataFromUrl = (sheetUrl: URL): SheetRequestData => {
 
   const hashMatch = sheetUrl.hash.match(/gid=([0-9]+)/);
   const gidString = hashMatch && hashMatch[1];
-  const gid = (gidString != null && Number(gidString)) || undefined;
+  const gid = gidString != null ? Number(gidString) : undefined;
 
   return { sheetId, gid };
 };
