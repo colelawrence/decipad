@@ -213,7 +213,7 @@
     "tippy.js": "6.3.7",
     "tslib": "2.3.1",
     "tweetnacl": "1.0.3",
-    "typesafe-routes": "9.0.0",
+    "typesafe-routes": "9.0.1",
     "unified": "9.2.2",
     "unist-util-visit": "2.0.3",
     "urql": "3.0.3",

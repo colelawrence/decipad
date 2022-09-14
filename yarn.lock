@@ -30496,10 +30496,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typesafe-routes@9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/typesafe-routes/-/typesafe-routes-9.0.0.tgz#8ccfa70697dd78486d4213a2f664a1dc74d640a0"
-  integrity sha512-b2rEhqcpzyuLYY9cy0Pqq8g+GVrg33TL6pd8vQnOqKKwjYsPUfpYzxjLRH3M7/yTRrE1s/BuQ8aOpRr6lTPepw==
+typesafe-routes@9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/typesafe-routes/-/typesafe-routes-9.0.1.tgz#74264f44161998a28b7143926968242fd77c2bb9"
+  integrity sha512-CnfSI1QVaJnj/l/Tc0jkQI38YOasOSogNRmLOspFBjTwsLBzko8ukdMnlRL3MbZCBx6a5HxrK5TXlcS3AicF6Q==
   dependencies:
     "@types/qs" "^6.9.7"
     qs "^6.10.3"
