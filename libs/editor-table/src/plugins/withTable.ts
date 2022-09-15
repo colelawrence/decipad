@@ -6,13 +6,18 @@ import {
   ELEMENT_TR,
   getMyEditor,
   MyElement,
+  MyValue,
   MyWithOverride,
   TableHeaderRowElement,
 } from '@decipad/editor-types';
 import {
   isElement,
   someNode,
-  withTable as withPlateTable,
+  withDeleteTable,
+  withGetFragmentTable,
+  withInsertFragmentTable,
+  withInsertTextTable,
+  withSelectionTable,
 } from '@udecode/plate';
 import { createTableCaption } from '../utils/createTableCaption';
 
@@ -25,7 +30,11 @@ const createEmptyTableHeaderCell = () => ({
 });
 
 export const withTable: MyWithOverride = (editor, plugin) => {
-  editor = withPlateTable(editor, plugin);
+  editor = withDeleteTable<MyValue>(editor);
+  editor = withGetFragmentTable<MyValue>(editor);
+  editor = withInsertFragmentTable<MyValue>(editor, plugin);
+  editor = withInsertTextTable<MyValue>(editor, plugin);
+  editor = withSelectionTable<MyValue>(editor);
 
   const myEditor = getMyEditor(editor);
   const { insertFragment } = myEditor;

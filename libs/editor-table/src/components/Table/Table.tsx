@@ -11,8 +11,6 @@ import {
 } from '@decipad/editor-utils';
 import { AvailableSwatchColor, organisms, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
-import { selectedCellsAtom, withProviders } from '@udecode/plate';
-import { Provider, useAtom } from 'jotai';
 import {
   EditorTableContext,
   EditorTableContextValue,
@@ -26,13 +24,9 @@ import { useTable, useTableActions } from '../../hooks';
 import { useSelectedCells } from './useSelectedCells';
 import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
 import { SmartRow } from '../SmartRow';
+import { useTableStore } from '../../contexts/tableStore';
 
-export const tableScope = Symbol('table');
-
-export const Table: PlateComponent = withProviders([
-  Provider,
-  { scope: tableScope },
-])(function Table({ attributes, children, element }) {
+export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
   const editor = useTEditorState();
@@ -42,7 +36,7 @@ export const Table: PlateComponent = withProviders([
 
   const { onDelete, onAddRow, onAddColumn, onChangeColumnAggregation } =
     useTableActions(editor, element);
-  const [selectedCells] = useAtom(selectedCellsAtom, tableScope);
+  const selectedCells = useTableStore().get.selectedCells();
 
   useSelectedCells();
 
@@ -118,4 +112,4 @@ export const Table: PlateComponent = withProviders([
     )) ||
     null
   );
-});
+};

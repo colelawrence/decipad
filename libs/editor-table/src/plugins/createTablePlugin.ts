@@ -19,7 +19,6 @@ import {
   TableHeaderCell,
   TableRow,
 } from '../components';
-import { createArrowCellNavigationPlugin } from './createArrowCellNavigationPlugin';
 import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
@@ -70,7 +69,7 @@ export const createTablePlugin = (
   plugins: [
     createPreventEnterToCreateCellPlugin(),
     createPreventDeleteTableFromCaptionPlugin(),
-    createArrowCellNavigationPlugin(),
+    // createArrowCellNavigationPlugin(),
     createCursorFocusPlugin(),
     // TODO: enable this
     // createExtraColumnPlaceholderPlugin(),

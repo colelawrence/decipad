@@ -1,22 +1,14 @@
 import { useSelected } from 'slate-react';
-import {
-  getTableGridAbove,
-  selectedCellsAtom,
-  useEditorRef,
-} from '@udecode/plate';
-import { useAtom } from 'jotai';
+import { getTableGridAbove, useEditorRef } from '@udecode/plate';
 import { useEffect } from 'react';
 import { dequal } from 'dequal';
-import { tableScope } from './Table';
+import { useTableStore } from '../../contexts/tableStore';
 
 export const useSelectedCells = () => {
   const selected = useSelected();
   const editor = useEditorRef();
 
-  const [selectedCells, setSelectedCells] = useAtom(
-    selectedCellsAtom,
-    tableScope
-  );
+  const [selectedCells, setSelectedCells] = useTableStore().use.selectedCells();
 
   useEffect(() => {
     if (!selected) setSelectedCells(null);
@@ -24,6 +16,7 @@ export const useSelectedCells = () => {
 
   useEffect(() => {
     const cellEntries = getTableGridAbove(editor, { format: 'cell' });
+
     if (cellEntries.length > 1) {
       const cells = cellEntries.map((entry) => entry[0]);
 
