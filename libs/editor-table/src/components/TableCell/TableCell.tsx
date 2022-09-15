@@ -17,12 +17,9 @@ import {
   getNodeString,
   insertText,
   isCollapsed,
-  selectedCellsAtom,
 } from '@udecode/plate';
-import { useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import { useSelected } from 'slate-react';
-import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import {
   useCellType,
   useColumnDropDirection,
@@ -31,7 +28,7 @@ import {
   useIsColumnSelected,
 } from '../../hooks';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
-import { tableScope } from '../Table/Table';
+import { useTableRowStore, useTableStore } from '../../contexts/tableStore';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -39,11 +36,11 @@ export const TableCell: PlateComponent = ({
   element,
 }) => {
   const editor = useTEditorRef();
-  const [selectedCells] = useAtom(selectedCellsAtom, tableScope);
   const selected = useIsCellSelected(element!);
   const focused = useSelected();
   const collapsed = isCollapsed(useSelection());
-  const [dropLine] = useAtom(dropLineAtom, trScope);
+  const selectedCells = useTableStore().get.selectedCells();
+  const dropLine = useTableRowStore().get.dropLine();
 
   const [, dropTarget] = useDropColumn(editor, element!);
   const direction = useColumnDropDirection(editor, element!);

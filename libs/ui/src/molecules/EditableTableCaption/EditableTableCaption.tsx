@@ -127,6 +127,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           <button
             css={addAViewButtonStyles}
             onMouseDown={onAddDataViewButtonPress}
+            contentEditable={false}
           >
             <div css={addAViewButtonIconStyles}>
               <EyeIcon />

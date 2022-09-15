@@ -1,4 +1,4 @@
-import { getNodeEntry, useDndNode, withProviders } from '@udecode/plate';
+import { getNodeEntry, useDndNode } from '@udecode/plate';
 import { Path } from 'slate';
 import { molecules } from '@decipad/ui';
 import {
@@ -11,18 +11,14 @@ import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { useEditorTableContext } from '@decipad/react-contexts';
 import { useEffect, useRef } from 'react';
-import { Provider, useAtom } from 'jotai';
 import { useTableActions } from '../../hooks';
-import { dropLineAtom, trScope } from '../../contexts/tableAtoms';
 import { selectRow } from '../../utils/selectRow';
 import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';
+import { useTableRowStore } from '../../contexts/tableStore';
 
 const DRAG_ITEM_ROW = 'row';
 
-export const TableRow: PlateComponent = withProviders([
-  Provider,
-  { scope: trScope },
-])(({ attributes, children, element }) => {
+export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TR);
   const editor = getDefined(useTPlateEditorRef());
   const path = getDefined(useNodePath(element));
@@ -45,7 +41,7 @@ export const TableRow: PlateComponent = withProviders([
     },
   });
 
-  const [, setDropLine] = useAtom(dropLineAtom, trScope);
+  const setDropLine = useTableRowStore().set.dropLine();
 
   useEffect(() => {
     setDropLine(dropLine);
@@ -74,4 +70,4 @@ export const TableRow: PlateComponent = withProviders([
       {children}
     </molecules.TableRow>
   );
-});
+};

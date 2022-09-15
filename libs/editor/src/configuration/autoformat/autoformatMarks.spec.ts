@@ -48,5 +48,5 @@ it('can highlight a paragraph', () => {
   select(editor, { path: [0, 0], offset: initialText.length });
   editor.insertText('=');
   editor.insertText('=');
-  expect(editor.children[0].children[0]).toHaveProperty('highlight', true);
+  expect(editor.children[0].children[0]).toEqual({ text: '==h==' });
 });
