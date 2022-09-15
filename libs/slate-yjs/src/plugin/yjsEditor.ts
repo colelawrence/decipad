@@ -84,16 +84,15 @@ function trackLocalOperations(editor: YjsEditor, operation: TOperation): void {
  * Applies a slate operations to the bound shared type.
  */
 function applyLocalOperations(editor: YjsEditor): void {
-  const ops = localOperations(editor);
-  const editorLocalOperations = Array.from(ops).flat();
+  const editorLocalOperations = localOperations(editor);
 
   applySlateOps(
     YjsEditor.sharedType(editor),
-    editorLocalOperations,
+    Array.from(editorLocalOperations),
     slateYjsSymbol
   );
 
-  ops.clear();
+  editorLocalOperations.clear();
 }
 
 /**

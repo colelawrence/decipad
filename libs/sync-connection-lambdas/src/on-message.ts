@@ -32,6 +32,8 @@ async function trySend(connId: string, payload: Uint8Array): Promise<void> {
     if (!(err as ErrorWithCode)?.code?.match('Gone')) {
       throw err;
     }
+    // eslint-disable-next-line no-console
+    console.warn(`Could not send message to ${connId}: `, err);
   }
 }
 

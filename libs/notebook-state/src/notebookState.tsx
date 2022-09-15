@@ -30,40 +30,40 @@ const createStore = () =>
   create<NotebookState>((set, get) => ({
     ...initialState,
     init: (editor: MyEditor, notebookId: string, options: DocSyncOptions) => {
-      if (get().syncClientState === 'idle') {
-        const loadTimeout = setTimeout(() => {
-          set({ timedOutLoadingFromRemote: true });
-        }, LOAD_TIMEOUT_MS);
-        const docSyncEditor = createDocSyncEditor(editor, notebookId, {
-          ...options,
-          onError: captureException,
+      // if (get().syncClientState === 'idle') {
+      const loadTimeout = setTimeout(() => {
+        set({ timedOutLoadingFromRemote: true });
+      }, LOAD_TIMEOUT_MS);
+      const docSyncEditor = createDocSyncEditor(editor, notebookId, {
+        ...options,
+        onError: captureException,
+      });
+      docSyncEditor.onConnected(() => {
+        set({ connected: true });
+      });
+      docSyncEditor.onDisconnected(() => {
+        set({ connected: false });
+      });
+      docSyncEditor.onLoaded((source) => {
+        if (source === 'local') {
+          set({ loadedFromLocal: true });
+        } else if (source === 'remote') {
+          clearTimeout(loadTimeout);
+          set({ loadedFromRemote: true });
+        }
+      });
+      docSyncEditor
+        .hasLocalChanges()
+        .pipe(take(1))
+        .subscribe(() => {
+          set({ hasLocalChanges: true });
         });
-        docSyncEditor.onConnected(() => {
-          set({ connected: true });
-        });
-        docSyncEditor.onDisconnected(() => {
-          set({ connected: false });
-        });
-        docSyncEditor.onLoaded((source) => {
-          if (source === 'local') {
-            set({ loadedFromLocal: true });
-          } else if (source === 'remote') {
-            clearTimeout(loadTimeout);
-            set({ loadedFromRemote: true });
-          }
-        });
-        docSyncEditor
-          .hasLocalChanges()
-          .pipe(take(1))
-          .subscribe(() => {
-            set({ hasLocalChanges: true });
-          });
-        set({
-          docSyncEditor,
-          syncClientState: 'created',
-          computer: new Computer(),
-        });
-      }
+      set({
+        docSyncEditor,
+        syncClientState: 'created',
+        computer: new Computer(),
+      });
+      // }
     },
     destroy: () => {
       const { syncClientState, docSyncEditor } = get();

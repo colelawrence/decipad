@@ -14,16 +14,11 @@ import {
 } from '@decipad/y-websocket';
 import EventEmitter from 'events';
 import { Awareness } from 'y-protocols/awareness';
-import { applyUpdate, Doc as YDoc } from 'yjs';
+import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
-
-const tokenTimeoutMs = 60 * 1000;
-
-interface DocSyncConnectionParams {
-  url: string;
-  token: string;
-}
+import { nanoid } from 'nanoid';
+import * as DocTypes from './types';
 
 export interface DocSyncOptions {
   readOnly?: boolean;
@@ -33,8 +28,6 @@ export interface DocSyncOptions {
   ws?: boolean;
   connect?: boolean;
   connectBc?: boolean;
-  connectionParams?: DocSyncConnectionParams;
-  initialState?: string;
 }
 
 interface StatusEvent {
@@ -69,8 +62,35 @@ export type DocSyncEditor = MyEditor &
     isDocSyncEnabled: boolean;
   };
 
+function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
+  doc.transact(() => {
+    if (root.length > 1) {
+      return;
+    }
+    if (root.length < 1) {
+      root.push([
+        new YMap([
+          ['type', 'h1'],
+          ['children', YArray.from([new YMap([['text', new YText()]])])],
+          ['id', nanoid()],
+        ]),
+      ]);
+    }
+    if (root.length < 2) {
+      root.push([
+        new YMap([
+          ['type', 'p'],
+          ['children', YArray.from([new YMap([['text', new YText()]])])],
+          ['id', nanoid()],
+        ]),
+      ]);
+    }
+  });
+}
+
 function docSyncEditor<E extends MyEditor>(
   editor: E & YjsEditor & CursorEditor,
+  shared: YArray<SyncElement>,
   doc: YDoc,
   store: IndexeddbPersistence,
   ws?: TWebSocketProvider
@@ -131,8 +151,6 @@ function docSyncEditor<E extends MyEditor>(
     });
   });
 
-  const { destroy } = editor;
-
   const useEditor = Object.assign(editor, {
     onLoaded(cb: OnLoadedCallback) {
       events.on('loaded', cb);
@@ -163,7 +181,6 @@ function docSyncEditor<E extends MyEditor>(
       doc.destroy();
       store.destroy();
       ws?.destroy();
-      destroy();
     },
     connect() {
       ws?.connect();
@@ -188,6 +205,7 @@ function docSyncEditor<E extends MyEditor>(
 
   const onLoaded = (source: 'local' | 'remote') => {
     if (!ws || source === 'remote') {
+      ensureInitialDocument(doc, shared);
       useEditor.offLoaded(onLoaded);
     }
   };
@@ -226,25 +244,15 @@ export function createDocSyncEditor(
     connect = ws,
     connectBc = true,
     WebSocketPolyfill,
-    connectionParams,
-    initialState,
   } = options;
 
   const doc = new YDoc();
   const store = new IndexeddbPersistence(docId, doc);
-  const initialTokenTime = Date.now();
-
-  const isInitialTokenStale = () =>
-    Date.now() - initialTokenTime > tokenTimeoutMs;
-
-  const getToken = () =>
-    isInitialTokenStale() ? undefined : connectionParams?.url;
 
   const beforeConnect = async (provider: TWebSocketProvider) => {
     try {
-      provider.serverUrl = getToken() || (await wsAddress(docId));
-      provider.protocol =
-        authSecret || connectionParams?.token || (await fetchToken());
+      provider.serverUrl = await wsAddress(docId);
+      provider.protocol = authSecret || (await fetchToken());
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -276,25 +284,9 @@ export function createDocSyncEditor(
   const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
 
   // Sync editor
-  const syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
-  syncEditor.destroy = () => {
-    store.destroy();
-    wsp?.destroy();
-  };
+  const syncEditor = docSyncEditor(cursorEditor, shared, doc, store, wsp);
+  syncEditor.destroy = () => store.destroy();
 
   syncEditor.isDocSyncEnabled = true;
-
-  if (initialState) {
-    setTimeout(() => {
-      try {
-        applyUpdate(doc, Buffer.from(initialState, 'base64'), wsp);
-        wsp?.emit('synced', [true]);
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('error applying update for initial state:', err);
-      }
-    }, 0);
-  }
-
   return syncEditor;
 }

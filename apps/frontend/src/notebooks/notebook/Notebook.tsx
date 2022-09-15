@@ -32,8 +32,6 @@ const Notebook: FC = () => {
   const {
     error,
     notebook,
-    connectionParams,
-    initialState,
     hasLocalChanges,
     isReadOnly,
     isPublic,
@@ -82,8 +80,6 @@ const Notebook: FC = () => {
               notebookId={notebookId}
               readOnly={isReadOnly}
               secret={secret}
-              connectionParams={connectionParams}
-              initialState={initialState}
               onEditor={setEditor}
               onDocsync={setDocsync}
             />

@@ -18,7 +18,7 @@ import {
 } from 'libs/services/src/notebooks';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
-import { getDefined, identity } from '@decipad/utils';
+import { identity } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
@@ -28,8 +28,6 @@ import {
   requireUser,
 } from '../authorization';
 import timestamp from '../utils/timestamp';
-import { accessTokenFor } from '../utils/accessTokenFor';
-import { getNotebookInitialState } from '../utils/getNotebookInitialState';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -224,24 +222,6 @@ const resolvers = {
     async workspace(pad: PadRecord): Promise<WorkspaceRecord | undefined> {
       const data = await tables();
       return data.workspaces.get({ id: pad.workspace_id });
-    },
-
-    async padConnectionParams(
-      pad: PadRecord,
-      __: unknown,
-      context: GraphqlContext
-    ) {
-      return {
-        url: `${getDefined(
-          process.env.ARC_WSS_URL,
-          'need ARC_WSS_URL environment variable to be defined'
-        )}?doc=${encodeURIComponent(pad.id)}`,
-        token: await accessTokenFor(context.event, 'pubsub'),
-      };
-    },
-
-    async initialState(pad: PadRecord): Promise<string> {
-      return getNotebookInitialState(pad.id);
     },
   },
 

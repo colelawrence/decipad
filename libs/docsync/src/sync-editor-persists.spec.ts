@@ -68,17 +68,25 @@ describe('pad editor persistence', () => {
       expect(saved).toBe(true);
     });
 
-    expect(e.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "text": "A new string of text to be inserted.",
-            },
-          ],
-        },
-      ]
-    `);
+    expect(e.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'A new string of text to be inserted.',
+          },
+        ],
+      },
+      {
+        children: [{ text: '' }],
+        type: 'h1',
+        id: expect.any(String),
+      },
+      {
+        children: [{ text: '' }],
+        type: 'p',
+        id: expect.any(String),
+      },
+    ]);
     e.destroy();
   });
 
@@ -97,16 +105,24 @@ describe('pad editor persistence', () => {
       expect(loaded).toBe(true);
     });
 
-    expect(editor2.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "text": "A new string of text to be inserted.",
-            },
-          ],
-        },
-      ]
-    `);
+    expect(editor2.children).toMatchObject([
+      {
+        children: [
+          {
+            text: 'A new string of text to be inserted.',
+          },
+        ],
+      },
+      {
+        children: [{ text: '' }],
+        type: 'h1',
+        id: expect.any(String),
+      },
+      {
+        children: [{ text: '' }],
+        type: 'p',
+        id: expect.any(String),
+      },
+    ]);
   });
 });
