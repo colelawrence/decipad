@@ -112,9 +112,9 @@ const hackilyReduceArgTypes = (
     argTypes,
     (argTypesFromMapTypes) => {
       argTypesLowerDims = argTypesFromMapTypes;
-      return t.impossible(
-        'Just satisfying mapFn protocol, nothing to see here'
-      );
+
+      // Just satisfying mapFn protocol, nothing to see here
+      return t.nothing();
     },
     expectedCardinalities
   );

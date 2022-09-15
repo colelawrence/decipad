@@ -1,10 +1,8 @@
 import {
-  AST,
   astNode,
   buildType as t,
   Column,
   InjectableExternalData,
-  RuntimeError,
   Scalar,
 } from '@decipad/language';
 import { AnyMapping, timeout } from '@decipad/utils';
@@ -12,25 +10,18 @@ import produce from 'immer';
 import { firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
 import {
-  deeperProgram,
   getIdentifiedBlocks,
   getUnparsed,
-  programContainingError,
   simplifyComputeResponse,
-  simplifyInBlockResults,
   unparsedProgram,
 } from '../testUtils';
 import { ComputeRequestWithExternalData, UnparsedBlock } from '../types';
-import { ComputationRealm } from './ComputationRealm';
-import { computeProgram, Computer, resultFromError } from './Computer';
+import { Computer } from './Computer';
 
 let computer: Computer;
 beforeEach(() => {
   computer = new Computer({ requestDebounceMs: 1 });
 });
-
-const testCompute = async (program: AST.Block[]) =>
-  simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
 
 const computeOnTestComputer = async (req: ComputeRequestWithExternalData) => {
   const res = await computer.computeRequest(req);
@@ -62,31 +53,6 @@ it('retrieves syntax errors', async () => {
       ],
     })
   ).toEqual(['wrongblock -> Syntax Error']);
-});
-
-it('infers+evaluates a deep program', async () => {
-  expect(await testCompute(deeperProgram)).toMatchInlineSnapshot(`
-    Array [
-      "block-0 -> 1",
-      "block-1 -> 123",
-      "block-2 -> 2",
-      "block-3 -> 2",
-      "block-4 -> 3",
-      "block-5 -> 2",
-      "block-6 -> 2",
-    ]
-  `);
-});
-
-it('returns type errors', async () => {
-  expect(await testCompute(programContainingError)).toMatchInlineSnapshot(`
-    Array [
-      "block-0 -> 1",
-      "block-1 -> Type Error",
-      "block-2 -> 2",
-      "block-3 -> Type Error",
-    ]
-  `);
 });
 
 describe('caching', () => {
@@ -337,30 +303,6 @@ describe('tooling data', () => {
     expect(computer.getStatement('block-0', 999)).toEqual(null);
     expect(computer.getStatement('block-1', 0)).toEqual(null);
   });
-});
-
-it('creates a result from an error', () => {
-  expect(resultFromError(new RuntimeError('Message!'), 'blockid').result.type)
-    .toMatchInlineSnapshot(`
-    Object {
-      "errorCause": Object {
-        "errType": "free-form",
-        "message": "Message!",
-      },
-      "kind": "type-error",
-    }
-  `);
-
-  expect(resultFromError(new Error('panic: Message!'), 'blockid').result.type)
-    .toMatchInlineSnapshot(`
-    Object {
-      "errorCause": Object {
-        "errType": "free-form",
-        "message": "Internal Error: Message!. Please contact support",
-      },
-      "kind": "type-error",
-    }
-  `);
 });
 
 it('can extract units from text', async () => {

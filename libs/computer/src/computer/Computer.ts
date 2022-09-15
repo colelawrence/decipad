@@ -8,27 +8,21 @@ import FFraction from '@decipad/fraction';
 import {
   AST,
   AutocompleteName,
-  buildType as t,
   ErrSpec,
   evaluateStatement,
   ExternalDataMap,
   inferExpression,
-  inferStatement,
   isExpression,
   parseOneBlock,
   parseOneExpression,
   Result,
-  RuntimeError,
   SerializedTypes,
-  serializeResult,
   serializeType,
   Unit,
-  validateResult,
-  Value,
   InjectableExternalData,
   SerializedType,
 } from '@decipad/language';
-import { anyMappingToMap, getDefined } from '@decipad/utils';
+import { anyMappingToMap } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -40,6 +34,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
+import { computeProgram } from '../compute/computeProgram';
 import { makeNamesFromIds } from '../exprRefs';
 import { captureException } from '../reporting';
 import type {
@@ -53,16 +48,10 @@ import type {
   NotebookResults,
   UserParseError,
 } from '../types';
-import {
-  getAllBlockIds,
-  getDefinedSymbol,
-  getGoodBlocks,
-  getStatement,
-} from '../utils';
+import { getDefinedSymbol, getGoodBlocks } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
 import { getDelayedBlockId } from './delayErrors';
-import { getVisibleVariables } from './getVisibleVariables';
 import { ParseRet, updateParse } from './parse';
 import { topologicalSort } from './topologicalSort';
 
@@ -74,92 +63,6 @@ interface ExpressionResultOptions {
 
 type WithVersion<T> = T & {
   version?: number;
-};
-
-/*
- - Skip cached stuff
- - Infer this statement
- - Evaluate the statement if it's not a type error
- */
-const computeStatement = async (
-  program: AST.Block[],
-  blockId: string,
-  realm: ComputationRealm
-): Promise<[IdentifiedResult, Value | undefined]> => {
-  const cachedResult = realm.getFromCache(blockId);
-  let value: Value | undefined;
-
-  if (cachedResult) {
-    return [getDefined(cachedResult.result), cachedResult.value];
-  }
-
-  const statement = getStatement(program, blockId);
-  const valueType = await inferStatement(
-    realm.inferContext,
-    statement,
-    undefined
-  );
-
-  if (!(valueType.errorCause != null && !valueType.functionness)) {
-    value = await evaluateStatement(realm.interpreterRealm, statement);
-  }
-
-  if (value) {
-    validateResult(valueType, value.getData());
-  }
-
-  const result: IdentifiedResult = {
-    type: 'computer-result',
-    id: blockId,
-    result: serializeResult(valueType, value?.getData()),
-    visibleVariables: getVisibleVariables(program, blockId, realm.inferContext),
-  };
-  realm.addToCache(blockId, { result, value });
-  return [result, value];
-};
-
-export const resultFromError = (
-  error: Error,
-  blockId: string
-): IdentifiedResult => {
-  // Not a user-facing error, so let's hide internal details
-  const message = error.message.replace(
-    /^panic: (.+)$/,
-    'Internal Error: $1. Please contact support'
-  );
-
-  if (!(error instanceof RuntimeError)) {
-    captureException(error);
-  }
-
-  return {
-    type: 'computer-result',
-    id: blockId,
-    result: serializeResult(t.impossible(message), null),
-  };
-};
-
-export const computeProgram = async (
-  program: AST.Block[],
-  realm: ComputationRealm
-): Promise<IdentifiedResult[]> => {
-  const results: IdentifiedResult[] = [];
-  for (const location of getAllBlockIds(program)) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const [result, value] = await computeStatement(program, location, realm);
-      realm.inferContext.previousStatement = result.result.type;
-      realm.interpreterRealm.previousStatementValue = value;
-
-      results.push(result);
-    } catch (err) {
-      results.push(resultFromError(err as Error, location));
-      realm.inferContext.previousStatement = undefined;
-      realm.interpreterRealm.previousStatementValue = undefined;
-    }
-  }
-
-  return results;
 };
 
 function* findNames(

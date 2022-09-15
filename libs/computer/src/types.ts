@@ -34,6 +34,7 @@ export interface IdentifiedError {
 export interface IdentifiedResult {
   type: 'computer-result';
   id: string;
+  variableName?: string;
   result: Result.Result;
   visibleVariables?: VisibleVariables;
   // So we can use it interchangeably with IdentifiedError

@@ -1,0 +1,60 @@
+import { RuntimeError, AST } from '@decipad/language';
+import { computeProgram, resultFromError } from './computeProgram';
+import {
+  deeperProgram,
+  programContainingError,
+  simplifyInBlockResults,
+} from '../testUtils';
+import { ComputationRealm } from '../computer/ComputationRealm';
+
+it('creates a result from an error', () => {
+  expect(resultFromError(new RuntimeError('Message!'), 'blockid').result.type)
+    .toMatchInlineSnapshot(`
+    Object {
+      "errorCause": Object {
+        "errType": "free-form",
+        "message": "Message!",
+      },
+      "kind": "type-error",
+    }
+  `);
+
+  expect(resultFromError(new Error('panic: Message!'), 'blockid').result.type)
+    .toMatchInlineSnapshot(`
+    Object {
+      "errorCause": Object {
+        "errType": "free-form",
+        "message": "Internal Error: Message!. Please contact support",
+      },
+      "kind": "type-error",
+    }
+  `);
+});
+
+const testCompute = async (program: AST.Block[]) =>
+  simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
+
+it('infers+evaluates a deep program', async () => {
+  expect(await testCompute(deeperProgram)).toMatchInlineSnapshot(`
+    Array [
+      "block-0 -> 1",
+      "block-1 -> 123",
+      "block-2 -> 2",
+      "block-3 -> 2",
+      "block-4 -> 3",
+      "block-5 -> 2",
+      "block-6 -> 2",
+    ]
+  `);
+});
+
+it('returns type errors', async () => {
+  expect(await testCompute(programContainingError)).toMatchInlineSnapshot(`
+    Array [
+      "block-0 -> 1",
+      "block-1 -> Type Error",
+      "block-2 -> 2",
+      "block-3 -> Type Error",
+    ]
+  `);
+});
