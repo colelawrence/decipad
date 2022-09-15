@@ -186,6 +186,16 @@ const normalizeTableHeaderCell = (
     return true;
   }
 
+  if (typeof th.cellType === 'string') {
+    const insert: Partial<TableHeaderElement> = {
+      cellType: { kind: th.cellType },
+    };
+    setNodes(editor, insert, {
+      at: path,
+    });
+    return true;
+  }
+
   if (th.cellType.kind === 'number') {
     const newCellType = convertLegacyType(th.cellType);
     if (newCellType) {
