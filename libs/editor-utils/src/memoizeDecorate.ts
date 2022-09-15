@@ -1,11 +1,27 @@
-import { MyDecorate, MyElement } from '@decipad/editor-types';
-import { memoize } from '@decipad/utils';
+import { MyDecorate, MyNodeEntry } from '@decipad/editor-types';
 
-// Memoize uses the first argument to as the cache key, we don't use it in any other way.
-const cacheFnByElement = memoize(<T>(_: MyElement, fn: () => T) => fn());
+interface CacheEntry {
+  /** The same object might deserve a second annotate call */
+  dedupeKey: string;
+  decoratorRet: ReturnType<ReturnType<MyDecorate>>;
+}
 
-export const memoizeDecorate =
-  (decorate: MyDecorate): MyDecorate =>
-  (...args) =>
-  (entry) =>
-    cacheFnByElement(entry[0] as MyElement, () => decorate(...args)(entry));
+export const memoizeDecorate = (decorate: MyDecorate): MyDecorate => {
+  const cache = new WeakMap<MyNodeEntry[0], CacheEntry>();
+
+  return (...args) =>
+    (entry) => {
+      const dedupeKey = JSON.stringify(entry);
+
+      const cacheEntry = cache.get(entry[0]);
+      if (cacheEntry && cacheEntry.dedupeKey === dedupeKey) {
+        return cacheEntry.decoratorRet;
+      }
+
+      const decoratorRet = decorate(...args)(entry);
+
+      cache.set(entry[0], { decoratorRet, dedupeKey });
+
+      return decoratorRet;
+    };
+};
