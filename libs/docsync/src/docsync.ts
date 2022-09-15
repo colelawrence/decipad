@@ -18,6 +18,7 @@ import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
+import { setSelection } from '@udecode/plate';
 import * as DocTypes from './types';
 
 export interface DocSyncOptions {
@@ -280,6 +281,9 @@ export function createDocSyncEditor(
   const shared = doc.getArray<SyncElement>();
   const yjsEditor = withYjs(editor, shared);
 
+  const { selection } = editor;
+  yjsEditor.synchronizeValue();
+
   // Cursor editor
   const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
 
@@ -288,5 +292,21 @@ export function createDocSyncEditor(
   syncEditor.destroy = () => store.destroy();
 
   syncEditor.isDocSyncEnabled = true;
+  let loadedLocally = false;
+  let loadedRemotely = false;
+
+  const onLoaded = (source: string) => {
+    if (source === 'remote') {
+      loadedRemotely = true;
+    }
+    if (source === 'local') {
+      loadedLocally = true;
+    }
+    if (loadedRemotely && loadedLocally && selection) {
+      setSelection(editor, selection);
+      syncEditor.offLoaded(onLoaded);
+    }
+  };
+  syncEditor.onLoaded(onLoaded);
   return syncEditor;
 }

@@ -30,7 +30,6 @@ const createStore = () =>
   create<NotebookState>((set, get) => ({
     ...initialState,
     init: (editor: MyEditor, notebookId: string, options: DocSyncOptions) => {
-      // if (get().syncClientState === 'idle') {
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
       }, LOAD_TIMEOUT_MS);
@@ -62,8 +61,12 @@ const createStore = () =>
         docSyncEditor,
         syncClientState: 'created',
         computer: new Computer(),
+        connected: false,
+        loadedFromLocal: false,
+        loadedFromRemote: false,
+        timedOutLoadingFromRemote: false,
+        hasLocalChanges: false,
       });
-      // }
     },
     destroy: () => {
       const { syncClientState, docSyncEditor } = get();

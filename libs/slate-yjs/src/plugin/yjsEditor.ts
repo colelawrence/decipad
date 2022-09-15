@@ -1,6 +1,4 @@
 import {
-  hasNode,
-  isCollapsed,
   isHistoryEditor,
   TEditor,
   TOperation,
@@ -21,6 +19,7 @@ const SHARED_TYPES: WeakMap<TEditor, SharedType> = new WeakMap();
 export interface YjsEditor extends TEditor {
   sharedType: SharedType;
   destroy: () => void;
+  synchronizeValue: () => void;
 }
 
 export type WithYjsOptions = {
@@ -137,32 +136,13 @@ function applyRemoteYjsEvents(
 
 export function withYjs<T extends TEditor>(
   editor: T,
-  sharedType: SharedType,
-  { synchronizeValue = true }: WithYjsOptions = {}
+  sharedType: SharedType
 ): T & YjsEditor {
   const e = editor as T & YjsEditor;
 
-  let destroyed = false;
   e.sharedType = sharedType;
   SHARED_TYPES.set(editor, sharedType);
   LOCAL_OPERATIONS.set(editor, new Set());
-
-  if (synchronizeValue) {
-    const { selection } = editor;
-    e.selection = null;
-    setTimeout(() => {
-      if (!destroyed) {
-        YjsEditor.synchronizeValue(e);
-        if (
-          selection?.focus &&
-          isCollapsed(selection) &&
-          hasNode(editor, selection.focus.path)
-        ) {
-          e.selection = selection;
-        }
-      }
-    }, 0);
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const observer = (events: Y.YEvent<any>[]) => applyRemoteYjsEvents(e, events);
@@ -183,11 +163,14 @@ export function withYjs<T extends TEditor>(
   };
 
   e.destroy = () => {
-    destroyed = true;
     sharedType.unobserveDeep(observer);
     e.apply = apply;
     e.onChange = onChange;
     destroy.call(e);
+  };
+
+  e.synchronizeValue = () => {
+    YjsEditor.synchronizeValue(e);
   };
 
   return e;
