@@ -75,7 +75,7 @@ export function assertCellType<Kind extends CellValueType['kind']>(
   type: CellValueType,
   kind: Kind
 ): asserts type is Extract<TableCellType, { kind: Kind }> {
-  if (type.kind !== kind) {
+  if (type.kind && type.kind !== kind) {
     throw new Error(`Expected input of type ${kind}`);
   }
 }
