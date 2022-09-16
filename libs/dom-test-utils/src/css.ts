@@ -34,6 +34,7 @@ export const applyCssVars = (): Promise<() => void> => {
     cssVarsPonyfill({
       onError: reject,
       onComplete: () => resolve(cleanup),
+      silent: true,
     });
   });
 };

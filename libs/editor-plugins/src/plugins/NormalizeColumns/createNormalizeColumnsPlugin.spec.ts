@@ -2,10 +2,10 @@ import { insertNodes, normalizeEditor, TEditor } from '@udecode/plate';
 import {
   ColumnsElement,
   createTPlateEditor,
-  ELEMENT_CODE_BLOCK,
   ELEMENT_COLUMNS,
   ELEMENT_PARAGRAPH,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
 import { createNormalizeColumnsPlugin } from './createNormalizeColumnsPlugin';
 
@@ -34,7 +34,7 @@ it('cannot contain elements other than interactive inputs', () => {
       children: [
         { text: 'text' },
         { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
-        { type: ELEMENT_CODE_BLOCK, children: [{ text: '' }] },
+        { type: ELEMENT_CODE_LINE, children: [{ text: '' }] },
       ],
     },
   ];

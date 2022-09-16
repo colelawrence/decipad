@@ -1,6 +1,6 @@
 import {
   createTPlateEditor,
-  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   MyEditor,
   MyPlatePlugin,
@@ -47,7 +47,7 @@ describe('Ctrl+b', () => {
 
   it('is ignored in a code block', () => {
     editor.children = [
-      { type: ELEMENT_CODE_BLOCK, children: [{ text: 'text' }] } as never,
+      { type: ELEMENT_CODE_LINE, children: [{ text: 'text' }] } as never,
     ];
     editor.selection = {
       anchor: { path: [0, 0], offset: 0 },

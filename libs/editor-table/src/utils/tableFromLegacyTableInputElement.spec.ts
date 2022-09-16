@@ -1,12 +1,12 @@
 import {
   ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
   TableData,
-  TableInputElement,
+  DeprecatedTableInputElement,
 } from '@decipad/editor-types';
 import { F } from '@decipad/editor-utils';
 import { tableFromLegacyTableInputElement } from './tableFromLegacyTableInputElement';
@@ -48,9 +48,9 @@ describe('tableFromLegacyTableInputElement', () => {
         },
       ],
     };
-    const tableInput: TableInputElement = {
+    const tableInput: DeprecatedTableInputElement = {
       id: 'tableid',
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       tableData,
       children: [{ text: '' }],
     };

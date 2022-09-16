@@ -1,7 +1,7 @@
 import {
-  CodeBlockElement,
+  DeprecatedCodeBlockElement,
   CodeLineElement,
-  ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
 
@@ -18,9 +18,9 @@ export function codeLine(code: string): CodeLineElement {
 
 export function codeBlock(
   ...codeLines: Omit<CodeLineElement, 'id'>[]
-): CodeBlockElement {
+): DeprecatedCodeBlockElement {
   return {
-    type: ELEMENT_CODE_BLOCK,
+    type: DEPRECATED_ELEMENT_CODE_BLOCK,
     children: codeLines as CodeLineElement[],
-  } as CodeBlockElement;
+  } as DeprecatedCodeBlockElement;
 }

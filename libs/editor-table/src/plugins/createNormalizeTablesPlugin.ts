@@ -1,10 +1,10 @@
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
-  ELEMENT_TABLE_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   MyEditor,
   MyNodeEntry,
-  TableInputElement,
+  DeprecatedTableInputElement,
 } from '@decipad/editor-types';
 import { deleteText, insertNodes, isElement, TNodeEntry } from '@udecode/plate';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
@@ -12,7 +12,7 @@ import { normalizeTable } from '../utils/normalizeTable';
 
 const normalizeTableInput = (
   editor: MyEditor,
-  entry: TNodeEntry<TableInputElement>
+  entry: TNodeEntry<DeprecatedTableInputElement>
 ) => {
   const [element, path] = entry;
   const table = tableFromLegacyTableInputElement(element);
@@ -26,11 +26,12 @@ export const normalizeTables =
     const [node, path] = entry;
     if (
       !isElement(node) ||
-      (node.type !== ELEMENT_TABLE_INPUT && node.type !== ELEMENT_TABLE)
+      (node.type !== DEPRECATED_ELEMENT_TABLE_INPUT &&
+        node.type !== ELEMENT_TABLE)
     ) {
       return false;
     }
-    if (node.type === ELEMENT_TABLE_INPUT) {
+    if (node.type === DEPRECATED_ELEMENT_TABLE_INPUT) {
       normalizeTableInput(editor, [node, path]);
       return true;
     }

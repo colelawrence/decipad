@@ -1,15 +1,12 @@
 import type { SerializedType } from '@decipad/computer';
-import { isElement } from '@udecode/plate';
 import {
   BaseElement,
   BlockElement,
   ELEMENT_EVAL,
   ELEMENT_FETCH,
-  ELEMENT_INPUT,
+  DEPRECATED_ELEMENT_INPUT,
   ELEMENT_PLOT,
-  ELEMENT_TABLE_INPUT,
   EmptyText,
-  MyNode,
   PlainText,
 } from '.';
 import {
@@ -21,7 +18,11 @@ import {
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
-import type { TableCellType, TableElement, TableInputElement } from './table';
+import type {
+  TableCellType,
+  TableElement,
+  DeprecatedTableInputElement,
+} from './table';
 
 export type { TableElement };
 
@@ -90,8 +91,8 @@ export interface PlotElement extends BaseElement {
   thetaColumnName: string;
   children: [EmptyText];
 }
-export interface InputElement extends BaseElement {
-  type: typeof ELEMENT_INPUT;
+export interface DeprecatedInputElement extends BaseElement {
+  type: typeof DEPRECATED_ELEMENT_INPUT;
   children: [EmptyText];
   value: string;
   variableName: string;
@@ -149,33 +150,14 @@ export type VariableDefinitionElement =
   | VariableSliderElement;
 
 export type InteractiveElement =
-  | TableInputElement
+  | DeprecatedTableInputElement
   | TableElement
   | FetchElement
   | ImportElement
   | LiveConnectionElement
   | PlotElement
   | EvalElement
-  | InputElement
+  | DeprecatedInputElement
   | VariableDefinitionElement;
 
 export type VariableElement = VariableDefinitionElement | VariableSliderElement;
-
-export const interactiveElementKinds: ReadonlyArray<
-  InteractiveElement['type']
-> = [
-  ELEMENT_FETCH,
-  ELEMENT_IMPORT,
-  ELEMENT_INPUT,
-  ELEMENT_TABLE_INPUT,
-  ELEMENT_PLOT,
-  ELEMENT_EVAL,
-  ELEMENT_VARIABLE_DEF,
-  ELEMENT_LIVE_CONNECTION,
-] as const;
-
-export const isInteractiveElement = (
-  node: MyNode
-): node is InteractiveElement =>
-  isElement(node) &&
-  interactiveElementKinds.includes(node.type as InteractiveElement['type']);

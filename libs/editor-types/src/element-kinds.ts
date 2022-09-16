@@ -1,7 +1,7 @@
 export {
   ELEMENT_BLOCKQUOTE,
   // Code
-  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_BLOCK as DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -33,7 +33,7 @@ export const ELEMENT_EXPRESSION = 'exp';
 export const ELEMENT_SLIDER = 'slider';
 
 // Interactive
-export const ELEMENT_INPUT = 'input';
+export const DEPRECATED_ELEMENT_INPUT = 'input';
 export const ELEMENT_EVAL = 'eval';
 
 // Inlines
@@ -41,7 +41,7 @@ export const ELEMENT_BUBBLE = 'bubble';
 export const ELEMENT_INLINE_NUMBER = 'inline-number';
 
 // tables
-export const ELEMENT_TABLE_INPUT = 'table-input'; // legacy
+export const DEPRECATED_ELEMENT_TABLE_INPUT = 'table-input'; // legacy
 export const ELEMENT_TABLE = 'table';
 export const ELEMENT_TABLE_CAPTION = 'table-caption';
 export const ELEMENT_TR = 'tr';

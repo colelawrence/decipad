@@ -1,4 +1,7 @@
-import { createTPlateEditor, ELEMENT_TABLE_INPUT } from '@decipad/editor-types';
+import {
+  createTPlateEditor,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
+} from '@decipad/editor-types';
 import { insertNodes, removeNodes, TEditor } from '@udecode/plate';
 import { createUniqueElementIdPlugin } from './createUniqueElementIdPlugin';
 
@@ -12,14 +15,14 @@ beforeEach(() => {
 it('removes duplicate ids when starting', () => {
   editor.children = [
     {
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
       extra: true,
     },
     {
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
@@ -34,7 +37,7 @@ it('removes duplicate ids when starting', () => {
 it('detects duplicate element insertions and corrects them', () => {
   editor.children = [
     {
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
@@ -45,7 +48,7 @@ it('detects duplicate element insertions and corrects them', () => {
   insertNodes(
     editor,
     {
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
@@ -61,7 +64,7 @@ it('detects duplicate element insertions and corrects them', () => {
 it('can reuse id after removal', () => {
   editor.children = [
     {
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },
@@ -73,7 +76,7 @@ it('can reuse id after removal', () => {
   insertNodes(
     editor,
     {
-      type: ELEMENT_TABLE_INPUT,
+      type: DEPRECATED_ELEMENT_TABLE_INPUT,
       id: '42',
       children: [{ text: '' }],
       tableData: { variableName: 'table', columns: [] },

@@ -1,5 +1,4 @@
 import {
-  CodeBlockElement,
   ColumnsElement,
   InlineNumberElement,
   MyEditor,
@@ -15,7 +14,11 @@ import {
   ELEMENT_TD,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_BUBBLE,
+  ELEMENT_CODE_LINE,
   BubbleElement,
+  ELEMENT_VARIABLE_DEF,
+  VariableDefinitionElement,
+  CodeLineElement,
 } from '@decipad/editor-types';
 import { Computer, prettyPrintAST, Program } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
@@ -28,41 +31,17 @@ describe('editorToProgram', () => {
     editor.children = [
       { type: 'h1', id: '1', children: [{ text: '' }] },
       {
-        type: 'code_line',
+        type: ELEMENT_CODE_LINE,
         id: 'line',
         children: [{ text: '1 + 1' }],
-      } as unknown as CodeBlockElement,
-      {
-        type: 'input',
-        id: 'input',
-        value: '123',
-        variableName: 'varName',
-        children: [{ text: '' }],
-        color: '',
-        icon: '',
-      },
+      } as CodeLineElement,
+      mkVariableDef('input', 'varName', '123'),
       {
         type: 'columns',
         id: 'columns',
         children: [
-          {
-            type: 'input',
-            id: 'columns/1',
-            value: '12.34',
-            variableName: 'a',
-            icon: '',
-            color: '',
-            children: [{ text: '' }],
-          },
-          {
-            type: 'input',
-            id: 'columns/2',
-            value: '45.67',
-            variableName: 'b',
-            icon: '',
-            color: '',
-            children: [{ text: '' }],
-          },
+          mkVariableDef('columns/1', 'a', '12.34'),
+          mkVariableDef('columns/2', 'b', '45.67'),
         ],
       } as ColumnsElement,
       {
@@ -210,4 +189,30 @@ function prettyPrintAll(program: Program): string[] {
       return prettyPrintAST(onlyStatement);
     }
   });
+}
+
+function mkVariableDef(
+  id: string,
+  varName = '',
+  exp = ''
+): VariableDefinitionElement {
+  return {
+    type: ELEMENT_VARIABLE_DEF,
+    id,
+    variant: 'expression',
+    children: [
+      {
+        type: 'caption',
+        color: '',
+        icon: '',
+        id: `${id}/caption`,
+        children: [{ text: varName }],
+      },
+      {
+        type: 'exp',
+        id: `${id}/expression`,
+        children: [{ text: exp }],
+      },
+    ],
+  };
 }

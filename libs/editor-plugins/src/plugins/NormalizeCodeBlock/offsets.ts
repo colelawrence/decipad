@@ -1,5 +1,5 @@
 import {
-  CodeBlockElement,
+  DeprecatedCodeBlockElement,
   CodeLineElement,
   MyEditor,
 } from '@decipad/editor-types';
@@ -17,9 +17,9 @@ function getOffsetFromPath(editor: MyEditor, path: Path): number {
   const [codeBlockIndex] = path;
   let offset = 0;
   const codeBlock = getDefined(
-    getNode<CodeBlockElement>(editor, [codeBlockIndex])
+    getNode<DeprecatedCodeBlockElement>(editor, [codeBlockIndex])
   );
-  for (const codeLineEntry of getChildren<CodeBlockElement>([
+  for (const codeLineEntry of getChildren<DeprecatedCodeBlockElement>([
     codeBlock,
     [codeBlockIndex],
   ])) {
@@ -73,10 +73,10 @@ function getPointFromOffset(
   offset: number
 ): Point | null {
   const codeBlock = getDefined(
-    getNode<CodeBlockElement>(editor, codeBlockPath)
+    getNode<DeprecatedCodeBlockElement>(editor, codeBlockPath)
   );
   let currentOffset = 0;
-  for (const entry of getChildren<CodeBlockElement>([
+  for (const entry of getChildren<DeprecatedCodeBlockElement>([
     codeBlock,
     codeBlockPath,
   ])) {

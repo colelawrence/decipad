@@ -1,8 +1,8 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import {
-  CodeBlockElement,
+  DeprecatedCodeBlockElement,
   CodeLineElement,
-  ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   MyValue,
 } from '@decipad/editor-types';
@@ -18,7 +18,7 @@ import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
-type PlateWrapperProps = Pick<CodeBlockElement, 'children'> & {
+type PlateWrapperProps = Pick<DeprecatedCodeBlockElement, 'children'> & {
   computer: Computer;
 };
 const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
@@ -27,7 +27,7 @@ const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
       <Plate<MyValue>
         initialValue={[
           {
-            type: ELEMENT_CODE_BLOCK,
+            type: DEPRECATED_ELEMENT_CODE_BLOCK,
             children,
           } as never,
         ]}
@@ -40,7 +40,7 @@ const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
 describe('variable highlights', () => {
   it('show bubbles in variable declarations', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -79,7 +79,7 @@ describe('variable highlights', () => {
 
   it('show bubbles in usages of defined variables', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -130,7 +130,7 @@ describe('variable highlights', () => {
 
   it('highlights defined columns of a table', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -191,7 +191,7 @@ describe('variable highlights', () => {
 
   it('highlights column access inside table', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -236,7 +236,7 @@ describe('variable highlights', () => {
 
   it('highlights column access with spaces', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -277,7 +277,7 @@ describe('variable highlights', () => {
 
   it('show bubbles in table spreads', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -321,7 +321,7 @@ describe('variable highlights', () => {
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('does not mistake a table column access for another declared variable', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',
@@ -376,7 +376,7 @@ describe('variable highlights', () => {
 
   it('show bubbles for external variables in function declarations', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
-    await computer.pushCompute({
+    computer.pushCompute({
       program: [
         {
           type: 'unparsed-block',

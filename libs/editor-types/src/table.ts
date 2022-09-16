@@ -6,7 +6,7 @@ import type {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TABLE_VARIABLE_NAME,
-  ELEMENT_TABLE_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
@@ -81,8 +81,8 @@ export interface TableElement extends BaseElement {
 }
 
 // legacy
-export interface TableInputElement extends BaseElement {
-  type: typeof ELEMENT_TABLE_INPUT;
+export interface DeprecatedTableInputElement extends BaseElement {
+  type: typeof DEPRECATED_ELEMENT_TABLE_INPUT;
   tableData: TableData; // legacy table data
   children: [EmptyText];
 }

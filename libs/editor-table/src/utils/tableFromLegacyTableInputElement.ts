@@ -8,14 +8,14 @@ import {
   TableRowElement,
   ELEMENT_TD,
   TableElement,
-  TableInputElement,
+  DeprecatedTableInputElement,
   ELEMENT_TABLE_CAPTION,
   TableCaptionElement,
   ELEMENT_TABLE_VARIABLE_NAME,
 } from '@decipad/editor-types';
 
 export const tableFromLegacyTableInputElement = (
-  element: TableInputElement
+  element: DeprecatedTableInputElement
 ): TableElement => {
   const { tableData } = element;
   const headers: TableHeaderElement[] = [];

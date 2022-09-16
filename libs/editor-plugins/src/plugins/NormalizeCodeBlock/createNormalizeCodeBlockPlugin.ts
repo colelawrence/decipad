@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import {
-  CodeBlockElement,
+  DeprecatedCodeBlockElement,
   CodeLineElement,
-  ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   MyEditor,
   MyNodeEntry,
@@ -24,11 +24,10 @@ const normalizeCodeBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
   const [node, path] = entry;
 
   // Code block legacy component
-  if (isElement(node) && node.type === ELEMENT_CODE_BLOCK) {
-    for (const blockChild of getNodeChildren<ChildOf<CodeBlockElement>>(
-      editor,
-      path
-    )) {
+  if (isElement(node) && node.type === DEPRECATED_ELEMENT_CODE_BLOCK) {
+    for (const blockChild of getNodeChildren<
+      ChildOf<DeprecatedCodeBlockElement>
+    >(editor, path)) {
       const [blockChildNode, blockChildPath] = blockChild;
 
       // Element children must be code lines, else unwrap their text
@@ -57,7 +56,7 @@ const normalizeCodeBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
     }
 
     // At this point the normalization has ensured a matching structure
-    const codeBlockNode = node as CodeBlockElement;
+    const codeBlockNode = node as DeprecatedCodeBlockElement;
 
     // Split and merge lines to match statements
     const blockCode = codeBlockToCode(codeBlockNode);
@@ -77,7 +76,7 @@ const normalizeCodeBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
 
 export const createNormalizeCodeBlockPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_CODE_BLOCK_PLUGIN',
-  elementType: ELEMENT_CODE_BLOCK,
+  elementType: DEPRECATED_ELEMENT_CODE_BLOCK,
   acceptableSubElements: [ELEMENT_CODE_LINE],
   plugin: normalizeCodeBlock,
 });

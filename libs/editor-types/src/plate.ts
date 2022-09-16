@@ -16,7 +16,7 @@ import {
   SerializeHtml,
   WithOverride,
 } from '@udecode/plate';
-import { MyEditor } from './node';
+import { MyEditor } from './nodes';
 import { MyValue } from './value';
 
 /**

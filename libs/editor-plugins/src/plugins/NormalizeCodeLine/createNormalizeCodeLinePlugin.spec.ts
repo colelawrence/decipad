@@ -1,7 +1,6 @@
 import {
   CodeLineElement,
   createTPlateEditor,
-  ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
@@ -11,11 +10,7 @@ import { createNormalizeCodeLinePlugin } from './createNormalizeCodeLinePlugin';
 function codeLine(code: string): CodeLineElement {
   return {
     type: ELEMENT_CODE_LINE,
-    children: [
-      {
-        text: code,
-      },
-    ],
+    children: [{ text: code }],
   } as CodeLineElement;
 }
 
@@ -31,43 +26,29 @@ describe('in a code line', () => {
   it('merges all text', () => {
     editor.children = [
       {
-        type: ELEMENT_CODE_BLOCK,
+        type: ELEMENT_CODE_LINE,
         children: [
-          {
-            type: ELEMENT_CODE_LINE,
-            children: [
-              { text: 'code' },
-              { type: ELEMENT_PARAGRAPH, children: [{ text: '1' }] },
-              { text: '2' },
-              { type: ELEMENT_CODE_LINE, children: [{ text: '3' }] },
-            ],
-          },
+          { text: 'code' },
+          { type: ELEMENT_PARAGRAPH, children: [{ text: '1' }] },
+          { text: '2' },
+          { type: ELEMENT_CODE_LINE, children: [{ text: '3' }] },
         ],
       },
     ];
 
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
-      { type: ELEMENT_CODE_BLOCK, children: [codeLine('code123')] },
-    ]);
+    expect(editor.children).toEqual([codeLine('code123')]);
   });
 
   it('does not allow marks', () => {
     editor.children = [
       {
-        type: ELEMENT_CODE_BLOCK,
-        children: [
-          {
-            type: ELEMENT_CODE_LINE,
-            children: [{ text: 'code', bold: true, italic: false }],
-          },
-        ],
+        type: ELEMENT_CODE_LINE,
+        children: [{ text: 'code', bold: true, italic: false }],
       },
     ];
 
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
-      { type: ELEMENT_CODE_BLOCK, children: [codeLine('code')] },
-    ]);
+    expect(editor.children).toEqual([codeLine('code')]);
   });
 });

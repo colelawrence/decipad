@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { RichText } from './value';
-import { MyElement } from './node';
+import { MyElement } from './nodes';
 
 export interface ElementAttributes {
   'data-slate-node': 'element';

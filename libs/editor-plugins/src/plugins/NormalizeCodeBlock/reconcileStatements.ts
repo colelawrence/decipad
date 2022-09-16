@@ -1,5 +1,5 @@
 import {
-  CodeBlockElement,
+  DeprecatedCodeBlockElement,
   CodeLineElement,
   ELEMENT_CODE_LINE,
   MyEditor,
@@ -102,7 +102,7 @@ export function reconcileStatements(
 ): boolean {
   let childIndex = -1;
   let statementIndex = -1;
-  const codeBlock = getNode<CodeBlockElement>(editor, codeBlockPath);
+  const codeBlock = getNode<DeprecatedCodeBlockElement>(editor, codeBlockPath);
   if (!codeBlock) {
     return false;
   }

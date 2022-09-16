@@ -2,13 +2,13 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
-  InputElement,
+  DeprecatedInputElement,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 
 export const inputElementToVariableDef = (
-  inputElement: InputElement
+  inputElement: DeprecatedInputElement
 ): VariableDefinitionElement => {
   return {
     id: inputElement.id,

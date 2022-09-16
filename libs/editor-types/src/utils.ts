@@ -18,7 +18,7 @@ import {
   usePlateSelectors,
 } from '@udecode/plate';
 import { MyValue } from './value';
-import { MyEditor } from './node';
+import { MyEditor } from './nodes';
 import { MyOverrideByKey, MyPlatePlugin } from './plate';
 
 /**

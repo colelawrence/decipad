@@ -4,7 +4,7 @@ import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_BUBBLE,
   ELEMENT_CALLOUT,
-  ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
   ELEMENT_EVAL,
@@ -23,10 +23,9 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
   ELEMENT_TABLE,
-  ELEMENT_TABLE_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
   EvalElement,
-  InputElement,
   InteractiveElement,
   MarkKind,
 } from '.';
@@ -46,6 +45,7 @@ import {
   ExpressionElement,
   LiveConnectionVarNameElement,
   SliderElement,
+  VariableDefinitionElement,
 } from './interactive-elements';
 import {
   TableCaptionElement,
@@ -54,7 +54,7 @@ import {
   TableElement,
   TableHeaderElement,
   TableHeaderRowElement,
-  TableInputElement,
+  DeprecatedTableInputElement,
   TableRowElement,
   TableVariableNameElement,
 } from './table';
@@ -116,8 +116,8 @@ export interface CodeLineElement extends BaseElement {
   type: typeof ELEMENT_CODE_LINE;
   children: PlainTextChildren;
 }
-export interface CodeBlockElement extends BaseElement {
-  type: typeof ELEMENT_CODE_BLOCK;
+export interface DeprecatedCodeBlockElement extends BaseElement {
+  type: typeof DEPRECATED_ELEMENT_CODE_BLOCK;
   children: Array<CodeLineElement>;
 }
 
@@ -171,7 +171,11 @@ export interface InlineNumberElement extends BaseElement {
 // Layout
 export interface ColumnsElement extends BaseElement {
   type: typeof ELEMENT_COLUMNS;
-  children: [InputElement, InputElement, ...Array<InputElement>];
+  children: [
+    VariableDefinitionElement,
+    VariableDefinitionElement,
+    ...Array<VariableDefinitionElement>
+  ];
 }
 
 // Overall node types
@@ -197,7 +201,7 @@ export type BlockElement =
   | ImageElement
   | MediaEmbedElement
   // Code
-  | CodeBlockElement
+  | DeprecatedCodeBlockElement
   | CodeLineElement
   // Lists
   | UnorderedListElement
@@ -210,7 +214,7 @@ export type BlockElement =
   | InteractiveElement
   | LiveConnectionVarNameElement
   // Table elements
-  | TableInputElement
+  | DeprecatedTableInputElement
   | TableElement
   | TableCaptionElement
   | TableVariableNameElement
@@ -239,11 +243,12 @@ export type MyValue = [
     | BubbleElement
     | InlineNumberElement
     | CalloutElement
+    | CodeLineElement
     | DividerElement
     | EvalElement
     | ImageElement
     | MediaEmbedElement
-    | CodeBlockElement
+    | DeprecatedCodeBlockElement
     | UnorderedListElement
     | OrderedListElement
     | ColumnsElement
@@ -272,11 +277,11 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_CALLOUT,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_IMAGE,
-  ELEMENT_CODE_BLOCK, // Legacy
+  DEPRECATED_ELEMENT_CODE_BLOCK, // Legacy
   ELEMENT_CODE_LINE,
   ELEMENT_UL,
   ELEMENT_OL,
-  ELEMENT_TABLE_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_TABLE,
   ELEMENT_DATA_VIEW,
   ELEMENT_FETCH,

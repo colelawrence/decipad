@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import {
+  DEPRECATED_ELEMENT_INPUT,
   ELEMENT_FETCH,
   ELEMENT_IMPORT,
-  ELEMENT_INPUT,
   ELEMENT_PLOT,
-  ELEMENT_TABLE_INPUT,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   MyEditor,
   MyElement,
   MyNodeEntry,
@@ -19,7 +19,7 @@ import {
 } from '../../utils/normalize';
 
 const VOID_TYPE_PROPERTIES = {
-  [ELEMENT_TABLE_INPUT]: ['tableData'],
+  [DEPRECATED_ELEMENT_TABLE_INPUT]: ['tableData'],
   [ELEMENT_FETCH]: [
     'data-auth-url',
     'data-contenttype',
@@ -41,14 +41,14 @@ const VOID_TYPE_PROPERTIES = {
     'colorColumnName',
     'thetaColumnName',
   ],
-  [ELEMENT_INPUT]: ['value', 'variableName'],
+  [DEPRECATED_ELEMENT_INPUT]: ['value', 'variableName'],
   [ELEMENT_IMPORT]: ['url', 'source'],
 };
 
 const emptyString = () => '';
 
 const MISSING_ATTRIBUTE_GENERATOR = {
-  [ELEMENT_TABLE_INPUT]: {
+  [DEPRECATED_ELEMENT_TABLE_INPUT]: {
     tableData: () => ({ variableName: 'table', columns: [] }), // legacy
   },
   [ELEMENT_FETCH]: {
@@ -71,7 +71,7 @@ const MISSING_ATTRIBUTE_GENERATOR = {
     colorColumnName: emptyString,
     thetaColumnName: emptyString,
   },
-  [ELEMENT_INPUT]: {
+  [DEPRECATED_ELEMENT_INPUT]: {
     value: emptyString,
     variableName: emptyString,
   },

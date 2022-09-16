@@ -1,13 +1,16 @@
-import { CodeBlockElement, CodeLineElement } from '@decipad/editor-types';
+import {
+  DeprecatedCodeBlockElement,
+  CodeLineElement,
+} from '@decipad/editor-types';
 
 function codeLineToCode(line: CodeLineElement): string {
   return line.children[0].text;
 }
 
 export function codeBlockToCode(
-  codeBlock: Omit<CodeBlockElement, 'id'>
+  codeBlock: Omit<DeprecatedCodeBlockElement, 'id'>
 ): string {
-  return (codeBlock as CodeBlockElement).children
+  return (codeBlock as DeprecatedCodeBlockElement).children
     .map(codeLineToCode)
     .join('\n');
 }

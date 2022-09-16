@@ -1,7 +1,7 @@
 import {
   createTPlateEditor,
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
@@ -29,7 +29,7 @@ describe('in a code block', () => {
   it('wraps text in a code block in code lines and unwraps code block', () => {
     editor.children = [
       {
-        type: ELEMENT_CODE_BLOCK,
+        type: DEPRECATED_ELEMENT_CODE_BLOCK,
         children: [{ text: 'code' }],
       },
     ];
@@ -40,7 +40,7 @@ describe('in a code block', () => {
   it('unwraps code lines from other elements', () => {
     editor.children = [
       {
-        type: ELEMENT_CODE_BLOCK,
+        type: DEPRECATED_ELEMENT_CODE_BLOCK,
         children: [
           {
             type: ELEMENT_BLOCKQUOTE,
@@ -121,7 +121,7 @@ describe('statement-based line splitting and merging', () => {
   it('applies a split and a merge at once', () => {
     editor.children = [
       {
-        type: ELEMENT_CODE_BLOCK,
+        type: DEPRECATED_ELEMENT_CODE_BLOCK,
         children: [codeLine('123\n(42 +'), codeLine('1337)')],
       },
     ];

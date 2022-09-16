@@ -23,7 +23,7 @@ export * from './table';
 export * from './components';
 export * from './data-view';
 export * from './utils';
-export * from './node';
+export * from './nodes';
 export * from './plate';
 
 export const alwaysWritableElementTypes = [
