@@ -10722,7 +10722,7 @@
   dependencies:
     "@udecode/plate-core" "16.8.0"
 
-"@udecode/plate-juice@^16.8.0":
+"@udecode/plate-juice@16.8.0":
   version "16.8.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-16.8.0.tgz#7fabdb31999b2e4c2527d2db5ab1a3b8041615ef"
   integrity sha512-9dPVgSVykTwQYh/J1hjdLQb7eY0oDUGVlTPzxCKObRfH0xX1tNt60tNJX2CkqeJaaFnDQFuxtpSN4bYgiELCAA==
@@ -11098,7 +11098,7 @@
     "@udecode/plate-ui-table" "16.8.0"
     "@udecode/plate-ui-toolbar" "16.8.0"
 
-"@udecode/plate@^16.9.1":
+"@udecode/plate@16.9.1":
   version "16.9.1"
   resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-16.9.1.tgz#8a9d473e96b4da96befa6a788c488aa5bbee6223"
   integrity sha512-Gs4atVprE+Y3xaY17fTkeN1SSjHAfowmoDbVR+jLLA8DpdG67/qNUVdIJNO81dLBsi9DMKffqi/eMwAuFf6GsQ==
