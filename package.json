@@ -117,7 +117,7 @@
     "@urql/devtools": "2.0.3",
     "@urql/exchange-graphcache": "5.0.1",
     "@xzar90/react-router-hash-link": "6.0.4",
-    "analytics-node": "6.0.0",
+    "analytics-node": "6.2.0",
     "apache-arrow": "9.0.0",
     "apollo": "2.34.0",
     "apollo-server-lambda": "3.10.2",
