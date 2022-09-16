@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { atoms, organisms } from '@decipad/ui';
+import { CodeResult, DataViewTableHeader } from '@decipad/ui';
 import { Result, SerializedType } from '@decipad/computer';
 import { ValueCell } from '../../types';
 
@@ -27,18 +27,18 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   }
 
   return (
-    <atoms.DataViewTableHeader
+    <DataViewTableHeader
       hover={hover}
       rowSpan={rowSpan}
       colSpan={colSpan}
       onHover={onHover}
       alignRight={alignRight}
     >
-      <organisms.CodeResult
+      <CodeResult
         value={value as Result.Result['value']}
         variant="inline"
         type={type}
       />
-    </atoms.DataViewTableHeader>
+    </DataViewTableHeader>
   );
 };

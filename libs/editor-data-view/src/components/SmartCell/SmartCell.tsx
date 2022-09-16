@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { templates } from '@decipad/ui';
+import { SmartCell as UISmartCell } from '@decipad/ui';
 import { useComputer } from '@decipad/react-contexts';
 import { Result } from '@decipad/computer';
 import { EMPTY } from 'rxjs';
@@ -53,7 +53,7 @@ export const SmartCell: FC<SmartProps> = ({
   return result === null ? (
     <td />
   ) : (
-    <templates.SmartCell
+    <UISmartCell
       aggregationType={aggregationType}
       result={result}
       rowSpan={rowSpan}
@@ -61,6 +61,6 @@ export const SmartCell: FC<SmartProps> = ({
       onHover={onHover}
       hover={hover}
       alignRight={alignRight}
-    ></templates.SmartCell>
+    ></UISmartCell>
   );
 };

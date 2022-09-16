@@ -12,7 +12,7 @@ import {
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
-import { atoms } from '@decipad/ui';
+import { MagicNumber as UIMagicNumber } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Element, Path } from 'slate';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
@@ -43,7 +43,7 @@ export const MagicNumber: PlateComponent = ({
 
   return (
     <span {...attributes}>
-      <atoms.MagicNumber
+      <UIMagicNumber
         loadingState={loadingState}
         result={result}
         expression={exp}
@@ -56,7 +56,7 @@ export const MagicNumber: PlateComponent = ({
           }
         }}
         readOnly={readOnly}
-      ></atoms.MagicNumber>
+      ></UIMagicNumber>
       <span contentEditable={false} css={css({ display: 'none' })}>
         {children}
       </span>

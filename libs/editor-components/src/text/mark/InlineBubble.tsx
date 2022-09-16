@@ -11,7 +11,7 @@ import {
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
-import { atoms } from '@decipad/ui';
+import { MagicNumber } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { findNodePath, focusEditor, removeNodes } from '@udecode/plate';
 
@@ -33,12 +33,12 @@ export const InlineBubble: PlateComponent = ({
 
   return (
     <span {...attributes} id={blockId}>
-      <atoms.MagicNumber
+      <MagicNumber
         result={codeResult}
         readOnly={readOnly}
         loadingState={loadingState}
         onClick={openEditor}
-      ></atoms.MagicNumber>
+      ></MagicNumber>
 
       <span contentEditable={false} css={css({ display: 'none' })}>
         {children}

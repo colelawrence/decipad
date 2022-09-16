@@ -1,6 +1,6 @@
 import { MyEditor, MyElement, PlateComponent } from '@decipad/editor-types';
 import { useEditorChange, useIsEditorReadOnly } from '@decipad/react-contexts';
-import { atoms } from '@decipad/ui';
+import { Paragraph as UIParagraph } from '@decipad/ui';
 import { getRange, isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { useState } from 'react';
 import { Range } from 'slate';
@@ -46,13 +46,13 @@ export const Paragraph: PlateComponent = ({
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="paragraph" element={element}>
-        <atoms.Paragraph
+        <UIParagraph
           placeholder={
             !readOnly && showPlaceHolder ? PLACEHOLDER_TEXT : undefined
           }
         >
           {children}
-        </atoms.Paragraph>
+        </UIParagraph>
       </DraggableBlock>
     </div>
   );

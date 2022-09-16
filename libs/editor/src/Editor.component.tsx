@@ -3,7 +3,7 @@ import {
   EditorChangeContextProvider,
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
-import { atoms, LoadingFilter } from '@decipad/ui';
+import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
@@ -56,7 +56,7 @@ export const Editor = (props: EditorProps) => {
   const { onRefChange } = useAutoAnimate();
 
   if (!loaded || !editor) {
-    return <atoms.EditorPlaceholder />;
+    return <EditorPlaceholder />;
   }
 
   return (

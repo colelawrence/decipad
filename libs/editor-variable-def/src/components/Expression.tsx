@@ -1,4 +1,4 @@
-import { molecules } from '@decipad/ui';
+import { Expression as UIExpression } from '@decipad/ui';
 import {
   ELEMENT_EXPRESSION,
   PlateComponent,
@@ -36,13 +36,13 @@ export const Expression: PlateComponent = ({
 
   return (
     <div {...attributes}>
-      <molecules.Expression
+      <UIExpression
         type={type}
         focused={focused}
         placeholder={getNodeString(element) ? '' : DEFAULT_PLACEHOLDER}
       >
         {children}
-      </molecules.Expression>
+      </UIExpression>
     </div>
   );
 };

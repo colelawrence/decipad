@@ -1,6 +1,6 @@
 import { PlateComponent, RichText, useTEditorRef } from '@decipad/editor-types';
 import { useComputer, useResult } from '@decipad/react-contexts';
-import { molecules } from '@decipad/ui';
+import { CodeVariable as UICodeVariable } from '@decipad/ui';
 import { useCallback, useRef } from 'react';
 import { useObservable } from 'rxjs-hooks';
 import {
@@ -49,7 +49,10 @@ export const CodeVariable: CodeLeaf = ({
 
   const result = useResult(blockId, rootRef.current);
 
-  const variableScope = getVariableScope(variableName, result?.visibleVariables);
+  const variableScope = getVariableScope(
+    variableName,
+    result?.visibleVariables
+  );
   const variableMissing = variableScope === 'undefined';
 
   const computer = useComputer();
@@ -81,7 +84,7 @@ export const CodeVariable: CodeLeaf = ({
 
   return (
     <span ref={rootRef} {...attributes}>
-      <molecules.CodeVariable
+      <UICodeVariable
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
         variableType={variableResult?.type}
@@ -90,7 +93,7 @@ export const CodeVariable: CodeLeaf = ({
         onGoToDefinition={goToDefinition}
       >
         {children}
-      </molecules.CodeVariable>
+      </UICodeVariable>
     </span>
   );
 };

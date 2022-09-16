@@ -4,8 +4,8 @@ import {
   EditorBubblesContext,
   useResult,
 } from '@decipad/react-contexts';
-import { organisms } from '@decipad/ui';
 import React, { PropsWithChildren, useCallback, useState } from 'react';
+import { BubbleEditor as UIBubbleEditor } from '@decipad/ui';
 
 type BubbleEditorProps = PropsWithChildren<{}>;
 
@@ -42,7 +42,7 @@ export const BubbleEditor: React.FC<BubbleEditorProps> = ({ children }) => {
       {children}
 
       {editing && (
-        <organisms.BubbleEditor
+        <UIBubbleEditor
           key={blockId}
           onChange={updateFormula}
           defaultName={editing.formula.name}

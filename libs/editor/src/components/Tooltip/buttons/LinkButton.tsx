@@ -7,10 +7,10 @@ import {
 } from '@udecode/plate';
 import { ComponentProps, FC } from 'react';
 import { ELEMENT_LINK, useTEditorRef } from '@decipad/editor-types';
-import { atoms } from '@decipad/ui';
+import { FloatingButton } from '@decipad/ui';
 
 export const LinkButton = (
-  props: ComponentProps<typeof atoms.FloatingButton>
+  props: ComponentProps<typeof FloatingButton>
 ): ReturnType<FC> => {
   const editor = useTEditorRef();
 
@@ -18,7 +18,7 @@ export const LinkButton = (
   const isLink = !!editor?.selection && someNode(editor, { match: { type } });
 
   return (
-    <atoms.FloatingButton
+    <FloatingButton
       isActive={isLink}
       onMouseDown={(event) => {
         event.preventDefault();
@@ -40,6 +40,6 @@ export const LinkButton = (
         }, 0);
       }}
       {...props}
-    ></atoms.FloatingButton>
+    ></FloatingButton>
   );
 };

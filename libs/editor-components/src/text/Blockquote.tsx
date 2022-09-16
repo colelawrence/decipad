@@ -1,6 +1,6 @@
 import { PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { atoms } from '@decipad/ui';
+import { Blockquote as UIBlockquote } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 
 export const Blockquote: PlateComponent = ({
@@ -13,7 +13,7 @@ export const Blockquote: PlateComponent = ({
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="blockquote" element={element}>
-        <atoms.Blockquote>{children}</atoms.Blockquote>
+        <UIBlockquote>{children}</UIBlockquote>
       </DraggableBlock>
     </div>
   );

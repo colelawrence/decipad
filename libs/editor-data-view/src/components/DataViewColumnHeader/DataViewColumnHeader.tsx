@@ -8,7 +8,7 @@ import {
   assertElementType,
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
-import { templates } from '@decipad/ui';
+import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { Path } from 'slate';
 import { findNodePath, getNodeEntry } from '@udecode/plate';
@@ -49,7 +49,7 @@ export const DataViewColumnHeader: PlateComponent = ({
   };
 
   return (
-    <templates.DataViewColumnHeader
+    <UIDataViewColumnHeader
       name={element.name}
       type={element.cellType}
       attributes={attributes}
@@ -66,6 +66,6 @@ export const DataViewColumnHeader: PlateComponent = ({
       alignRight={isCellAlignRight(element.cellType)}
     >
       {children}
-    </templates.DataViewColumnHeader>
+    </UIDataViewColumnHeader>
   );
 };

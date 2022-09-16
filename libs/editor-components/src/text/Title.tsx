@@ -4,7 +4,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { molecules } from '@decipad/ui';
+import { EditorTitle } from '@decipad/ui';
 import { findNodePath, focusEditor, isElementEmpty } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 
@@ -31,7 +31,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
 
   return (
     <div {...attributes} contentEditable={readOnly ? false : undefined}>
-      <molecules.EditorTitle
+      <EditorTitle
         Heading="h1"
         placeholder={
           isElementEmpty(editor, element) && !readOnly
@@ -40,7 +40,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
         }
       >
         {children}
-      </molecules.EditorTitle>
+      </EditorTitle>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { molecules } from '@decipad/ui';
+import { DividerBlock } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
 import { DraggableBlock } from '../block-management';
 
@@ -11,7 +11,7 @@ export const Divider: PlateComponent = ({ attributes, element, children }) => {
     <div {...attributes} contentEditable={false}>
       {children}
       <DraggableBlock blockKind="divider" element={element}>
-        <molecules.DividerBlock />
+        <DividerBlock />
       </DraggableBlock>
     </div>
   );

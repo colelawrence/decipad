@@ -10,7 +10,7 @@ import {
   requirePathBelowBlock,
   useNodePath,
 } from '@decipad/editor-utils';
-import { molecules } from '@decipad/ui';
+import { Import as UIImport } from '@decipad/ui';
 import { ImportResult, tryImport } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
@@ -81,11 +81,11 @@ export const Import: PlateComponent = ({ attributes, element }) => {
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="paragraph" element={element}>
-        <molecules.Import
+        <UIImport
           url={element.url}
           fetching={fetching}
           error={error}
-        ></molecules.Import>
+        ></UIImport>
       </DraggableBlock>
     </div>
   );

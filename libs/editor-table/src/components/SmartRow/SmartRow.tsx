@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { organisms } from '@decipad/ui';
+import { SmartRow as UISmartRow } from '@decipad/ui';
 import { Path } from 'slate';
 import { SmartColumnCell } from '..';
 import { TableColumn } from '../../hooks';
@@ -21,7 +21,7 @@ export const SmartRow: FC<SmartRowProps> = ({
   onAggregationTypeNameChange,
   ...props
 }) => (
-  <organisms.SmartRow
+  <UISmartRow
     {...props}
     smartCells={columns.map((column, index) => {
       return (

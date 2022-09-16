@@ -2,9 +2,9 @@ import { FC, useCallback } from 'react';
 import { css } from '@emotion/react';
 import type { Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
-import { organisms } from '../..';
 import { ErrorMessage } from '../../atoms';
 import { cssVar, p12Medium, p14Medium } from '../../primitives';
+import { CodeResult } from '../../organisms';
 
 const smartCellStyles = css(p14Medium, {
   whiteSpace: 'nowrap',
@@ -75,7 +75,7 @@ export function SmartCell({
         <span css={labelStyles}>
           {(aggregationType && `${aggregationType}: `) || null}
         </span>
-        {result ? <organisms.CodeResult variant="inline" {...result} /> : null}
+        {result ? <CodeResult variant="inline" {...result} /> : null}
       </>
     </td>
   );

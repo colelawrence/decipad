@@ -7,7 +7,7 @@ import {
 import { getNodeString } from '@udecode/plate';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { DraggableBlock } from '@decipad/editor-components';
-import { organisms } from '@decipad/ui';
+import { EvalCodeArea as UIEvalCodeArea } from '@decipad/ui';
 
 import _ from 'lodash';
 import { evalUnsafeCode } from './evalUnsafeCode';
@@ -29,7 +29,7 @@ export const EvalCodeArea: PlateComponent = (props) => {
   return (
     <div {...props.attributes}>
       <DraggableBlock blockKind="codeLine" element={element}>
-        <organisms.EvalCodeArea>{props.children}</organisms.EvalCodeArea>
+        <UIEvalCodeArea>{props.children}</UIEvalCodeArea>
       </DraggableBlock>
     </div>
   );

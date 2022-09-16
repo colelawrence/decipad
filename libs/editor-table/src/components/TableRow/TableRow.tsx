@@ -1,6 +1,6 @@
 import { getNodeEntry, useDndNode } from '@udecode/plate';
 import { Path } from 'slate';
-import { molecules } from '@decipad/ui';
+import { TableHeaderRow, TableRow as UITableRow } from '@decipad/ui';
 import {
   ELEMENT_TR,
   PlateComponent,
@@ -50,13 +50,13 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   const firstRow = path[path.length - 1] === 1;
   if (firstRow) {
     return (
-      <molecules.TableHeaderRow attributes={attributes} readOnly={false}>
+      <TableHeaderRow attributes={attributes} readOnly={false}>
         {children}
-      </molecules.TableHeaderRow>
+      </TableHeaderRow>
     );
   }
   return (
-    <molecules.TableRow
+    <UITableRow
       attributes={attributes}
       readOnly={false}
       onRemove={() => onRemoveRow(element.id)}
@@ -68,6 +68,6 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
       isVisible={isVisible}
     >
       {children}
-    </molecules.TableRow>
+    </UITableRow>
   );
 };

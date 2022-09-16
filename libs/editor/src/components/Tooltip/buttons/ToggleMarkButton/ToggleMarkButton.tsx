@@ -5,7 +5,7 @@ import {
 } from '@udecode/plate';
 import { FC, useState } from 'react';
 import { MyMark, useTEditorRef } from '@decipad/editor-types';
-import { atoms } from '@decipad/ui';
+import { FloatingButton } from '@decipad/ui';
 import { useEditorChange } from '@decipad/react-contexts';
 import { dividerStyle } from '../../styles/divider';
 
@@ -36,7 +36,7 @@ export const ToggleMarkButton = ({
   return (
     <>
       {divider && <div css={dividerStyle} />}
-      <atoms.FloatingButton
+      <FloatingButton
         className="toggle"
         isActive={active}
         onMouseDown={(e) => {
@@ -47,7 +47,7 @@ export const ToggleMarkButton = ({
         }}
       >
         {icon}
-      </atoms.FloatingButton>
+      </FloatingButton>
     </>
   );
 };

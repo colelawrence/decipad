@@ -6,7 +6,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
-import { organisms } from '@decipad/ui';
+import { TableColumnHeader } from '@decipad/ui';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { getNode, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
@@ -48,7 +48,7 @@ export const TableHeaderCell: PlateComponent = ({
   const { type: inferredType } = useColumnInferredType(element);
 
   return (
-    <organisms.TableColumnHeader
+    <TableColumnHeader
       attributes={attributes}
       readOnly={false}
       empty={getNodeString(element).length === 0}
@@ -68,6 +68,6 @@ export const TableHeaderCell: PlateComponent = ({
       dropDirection={dropDirection}
     >
       {children}
-    </organisms.TableColumnHeader>
+    </TableColumnHeader>
   );
 };

@@ -1,4 +1,4 @@
-import { molecules } from '@decipad/ui';
+import { Caption as UICaption } from '@decipad/ui';
 import {
   ELEMENT_CAPTION,
   PlateComponent,
@@ -28,7 +28,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
       contentEditable={isEditable}
       suppressContentEditableWarning
     >
-      <molecules.Caption
+      <UICaption
         color={element.color as AvailableSwatchColor}
         onChangeIcon={setIcon}
         onChangeColor={setColor}
@@ -36,7 +36,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
         empty={getNodeString(element).length === 0}
       >
         {children}
-      </molecules.Caption>
+      </UICaption>
     </div>
   );
 };

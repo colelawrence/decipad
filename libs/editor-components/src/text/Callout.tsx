@@ -7,7 +7,7 @@ import {
   assertElementType,
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
-import { atoms } from '@decipad/ui';
+import { Callout as UICallout } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { DraggableBlock } from '../block-management';
 
@@ -22,14 +22,14 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="callout" element={element}>
-        <atoms.Callout
+        <UICallout
           icon={element.icon as UserIconKey}
           color={element.color as AvailableSwatchColor}
           saveIcon={saveIcon}
           saveColor={saveColor}
         >
           {children}
-        </atoms.Callout>
+        </UICallout>
       </DraggableBlock>
     </div>
   );

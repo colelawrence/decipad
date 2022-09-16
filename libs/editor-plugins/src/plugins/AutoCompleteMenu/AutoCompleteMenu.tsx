@@ -1,5 +1,5 @@
 import { useComputer } from '@decipad/react-contexts';
-import { organisms } from '@decipad/ui';
+import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
 import { useFocused, useSelected } from 'slate-react';
 import { findWordStart, useSelection } from '@decipad/editor-utils';
 import { useCallback, useEffect, useState } from 'react';
@@ -56,7 +56,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
       return (
         <span {...attributes}>
           {/* not rendering children because it would render a non-breaking space */}
-          <organisms.AutoCompleteMenu
+          <UIAutoCompleteMenu
             search={word}
             identifiers={identifiers}
             onExecuteItem={(item) => {

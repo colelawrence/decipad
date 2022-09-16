@@ -7,7 +7,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
-import { molecules } from '@decipad/ui';
+import { EditableLiveDataCaption } from '@decipad/ui';
 
 export const LiveConnectionVarName: PlateComponent = ({
   element,
@@ -23,12 +23,12 @@ export const LiveConnectionVarName: PlateComponent = ({
   );
   return (
     <div {...attributes}>
-      <molecules.EditableLiveDataCaption
+      <EditableLiveDataCaption
         source={parent?.[0].source}
         url={parent?.[0].url}
       >
         {children}
-      </molecules.EditableLiveDataCaption>
+      </EditableLiveDataCaption>
     </div>
   );
 };

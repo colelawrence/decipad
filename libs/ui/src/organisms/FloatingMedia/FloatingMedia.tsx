@@ -1,4 +1,3 @@
-import { atoms } from '@decipad/ui';
 import {
   FloatingMedia as PlateFloatingMedia,
   LinkIcon,
@@ -13,6 +12,12 @@ import {
   floatingRowCss,
   plateButtonCss,
 } from '../../styles/floating';
+import {
+  FloatingIconWrapper,
+  FloatingInputWrapper,
+  FloatingVerticalDivider,
+  RemoveNodeButton,
+} from '../../atoms';
 
 export const FloatingMedia = ({ pluginKey }: { pluginKey?: string }) => {
   const isEditing = useFloatingMediaSelectors().isEditing();
@@ -26,9 +31,9 @@ export const FloatingMedia = ({ pluginKey }: { pluginKey?: string }) => {
             Edit link
           </PlateFloatingMedia.EditButton>
 
-          <atoms.FloatingVerticalDivider />
+          <FloatingVerticalDivider />
 
-          <atoms.RemoveNodeButton element={element} css={floatingButtonCss} />
+          <RemoveNodeButton element={element} css={floatingButtonCss} />
         </div>
       ) : (
         <div
@@ -38,17 +43,17 @@ export const FloatingMedia = ({ pluginKey }: { pluginKey?: string }) => {
             width: 330px;
           `}
         >
-          <atoms.FloatingInputWrapper>
-            <atoms.FloatingIconWrapper>
+          <FloatingInputWrapper>
+            <FloatingIconWrapper>
               <LinkIcon width={18} />
-            </atoms.FloatingIconWrapper>
+            </FloatingIconWrapper>
 
             <PlateFloatingMedia.UrlInput
               css={floatingInputCss}
               placeholder="Paste the embed link..."
               pluginKey={pluginKey}
             />
-          </atoms.FloatingInputWrapper>
+          </FloatingInputWrapper>
         </div>
       )}
     </div>

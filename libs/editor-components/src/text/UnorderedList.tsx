@@ -1,5 +1,5 @@
 import { PlateComponent } from '@decipad/editor-types';
-import { molecules } from '@decipad/ui';
+import { UnorderedList as UIUnorderedList } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 
 export const UnorderedList: PlateComponent = ({
@@ -14,7 +14,7 @@ export const UnorderedList: PlateComponent = ({
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="list" element={element}>
-        <molecules.UnorderedList>{children}</molecules.UnorderedList>
+        <UIUnorderedList>{children}</UIUnorderedList>
       </DraggableBlock>
     </div>
   );

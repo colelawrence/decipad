@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import { molecules } from '@decipad/ui';
+import { EditableTableCaption } from '@decipad/ui';
 import {
   findNodePath,
   getAboveNode,
@@ -59,7 +59,7 @@ export const TableCaption: PlateComponent = ({
 
   return (
     <div {...attributes}>
-      <molecules.EditableTableCaption
+      <EditableTableCaption
         isForWideTable={
           (columnCount && columnCount >= WIDE_MIN_COL_COUNT) || false
         }
@@ -67,7 +67,7 @@ export const TableCaption: PlateComponent = ({
         onAddDataViewButtonPress={(e) => onAddDataViewButtonPress(e)}
       >
         {children}
-      </molecules.EditableTableCaption>
+      </EditableTableCaption>
     </div>
   );
 };

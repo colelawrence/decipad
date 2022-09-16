@@ -14,10 +14,10 @@ import {
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate';
-import { organisms } from '@decipad/ui';
+import { CodeResult } from '@decipad/ui';
 
 type DragCellData = Parameters<
-  NonNullable<ComponentProps<typeof organisms.CodeResult>['onDragStartCell']>
+  NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']>
 >[0];
 
 export const onDropTableCellResult =

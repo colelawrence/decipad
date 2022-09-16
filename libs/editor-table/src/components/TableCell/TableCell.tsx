@@ -11,7 +11,13 @@ import {
   useInteractiveElementParseError,
   useTableColumnFormulaResultForElement,
 } from '@decipad/react-contexts';
-import { atoms, molecules, organisms } from '@decipad/ui';
+import {
+  CodeResult,
+  ColumnDropLine,
+  FormulaTableData,
+  RowDropLine,
+  TableData,
+} from '@decipad/ui';
 import {
   findNodePath,
   getNodeString,
@@ -112,19 +118,19 @@ export const TableCell: PlateComponent = ({
     // Also, be careful with the element structure:
     // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
     return (
-      <molecules.FormulaTableData
-        result={<organisms.CodeResult {...formulaResult} />}
+      <FormulaTableData
+        result={<CodeResult {...formulaResult} />}
         resultType={formulaResult.type.kind}
         {...attributes}
         selected={selected}
       >
         {children}
-      </molecules.FormulaTableData>
+      </FormulaTableData>
     );
   }
 
   return (
-    <atoms.TableData
+    <TableData
       isEditable={editable}
       disabled={disabled}
       isUserContent
@@ -141,15 +147,11 @@ export const TableCell: PlateComponent = ({
       alignRight={isCellAlignRight(cellType)}
       parseError={parseError}
     >
-      {dropLine === 'top' && <atoms.RowDropLine dropLine={dropLine} />}
-      {direction === 'left' && (
-        <atoms.ColumnDropLine dropDirection={direction} />
-      )}
+      {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
+      {direction === 'left' && <ColumnDropLine dropDirection={direction} />}
       {children}
-      {direction === 'right' && (
-        <atoms.ColumnDropLine dropDirection={direction} />
-      )}
-      {dropLine === 'bottom' && <atoms.RowDropLine dropLine={dropLine} />}
-    </atoms.TableData>
+      {direction === 'right' && <ColumnDropLine dropDirection={direction} />}
+      {dropLine === 'bottom' && <RowDropLine dropLine={dropLine} />}
+    </TableData>
   );
 };

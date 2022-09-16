@@ -1,11 +1,11 @@
-import { atoms } from '@decipad/ui';
+import { CodeSyntax as UICodeSyntax } from '@decipad/ui';
 import { PlateComponent } from '@decipad/editor-types';
 import { CodeSyntaxRange } from '../utils/decorateExpression';
 
 export const CodeSyntax: PlateComponent = ({ attributes, children, leaf }) => {
   return (
     <span {...attributes}>
-      <atoms.CodeSyntax
+      <UICodeSyntax
         variant={
           (leaf as unknown as CodeSyntaxRange).tokenType as
             | 'number'
@@ -13,7 +13,7 @@ export const CodeSyntax: PlateComponent = ({ attributes, children, leaf }) => {
         }
       >
         {children}
-      </atoms.CodeSyntax>
+      </UICodeSyntax>
     </span>
   );
 };

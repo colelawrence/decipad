@@ -1,6 +1,6 @@
 import { ELEMENT_DATA_VIEW_TR, PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { atoms } from '@decipad/ui';
+import { DataViewColumnHeaderRow as UIDataViewColumnHeaderRow } from '@decipad/ui';
 
 export const DataViewColumnHeaderRow: PlateComponent = ({
   attributes,
@@ -10,8 +10,8 @@ export const DataViewColumnHeaderRow: PlateComponent = ({
   assertElementType(element, ELEMENT_DATA_VIEW_TR);
 
   return (
-    <atoms.DataViewColumnHeaderRow attributes={attributes}>
+    <UIDataViewColumnHeaderRow attributes={attributes}>
       {children}
-    </atoms.DataViewColumnHeaderRow>
+    </UIDataViewColumnHeaderRow>
   );
 };

@@ -1,6 +1,6 @@
 import { ELEMENT_LINK, PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { atoms } from '@decipad/ui';
+import { Link as UILink } from '@decipad/ui';
 import { useLink } from '@udecode/plate';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 
@@ -14,5 +14,5 @@ export const Link: PlateComponent = (props) => {
     onClick: (e) => !readOnly && e.preventDefault(),
   });
 
-  return <atoms.Link {...htmlProps}>{children}</atoms.Link>;
+  return <UILink {...htmlProps}>{children}</UILink>;
 };

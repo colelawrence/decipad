@@ -10,10 +10,10 @@ import {
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
 import {
-  organisms,
   AvailableSwatchColor,
   UserIconKey,
-  molecules,
+  DataView as UIDataView,
+  DataViewMenu,
 } from '@decipad/ui';
 import { AutocompleteName } from '@decipad/computer';
 import { DataViewData } from '../DataViewData';
@@ -62,7 +62,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
             onDelete();
           }}
         >
-          <organisms.DataView
+          <UIDataView
             availableVariableNames={variableNames.filter(isTable).map(varName)}
             variableName={element.varName || ''}
             onChangeVariableName={onVariableNameChange}
@@ -84,11 +84,11 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
             }
           >
             {children}
-            <molecules.DataViewMenu
+            <DataViewMenu
               availableColumns={availableColumns}
               onInsertColumn={onInsertColumn}
             />
-          </organisms.DataView>
+          </UIDataView>
         </DraggableBlock>
       )}
     </div>

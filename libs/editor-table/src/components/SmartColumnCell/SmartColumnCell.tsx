@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { EMPTY } from 'rxjs';
 import { Path } from 'slate';
-import { organisms } from '@decipad/ui';
+import { SmartColumnCell as UISmartColumnCell, Select } from '@decipad/ui';
 import { useTEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { Result } from '@decipad/computer';
@@ -96,7 +96,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   const showMenu = availableAggregationTypes?.length > 0;
 
   return (
-    <organisms.SmartColumnCell
+    <UISmartColumnCell
       onDragStart={onDragExpressionStart}
       result={result || undefined}
       aggregationTypeMenu={
@@ -109,7 +109,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
               'Calculate'}
           </span>,
           showMenu && (
-            <organisms.Select
+            <Select
               key="selectaggregation"
               variant="transparent"
               caretColor="weak"
@@ -117,7 +117,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
               value={selectedAggregationType?.name}
               clear={!!selectedAggregationType}
               onChange={onAggregationTypeNameChange}
-            ></organisms.Select>
+            ></Select>
           ),
         ].filter(Boolean)
       }

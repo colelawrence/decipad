@@ -9,7 +9,7 @@ import {
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
-import { organisms } from '@decipad/ui';
+import { PlotBlock } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   assertElementType,
@@ -19,7 +19,7 @@ import { usePlot } from './utils/usePlot';
 
 const DEFAULT_TITLE = 'Plot';
 
-type PlotParamsProps = ComponentProps<typeof organisms.PlotBlock>['plotParams'];
+type PlotParamsProps = ComponentProps<typeof PlotBlock>['plotParams'];
 
 const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
@@ -48,7 +48,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
       <div contentEditable={false}>
         {children}
         <DraggableBlock element={element} blockKind="plot">
-          <organisms.PlotBlock
+          <PlotBlock
             readOnly={readOnly}
             errorMessage={identifiedResult?.error?.message || error}
             plotParams={plotParams as unknown as PlotParamsProps}

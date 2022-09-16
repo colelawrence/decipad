@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ClientEventsContext } from '@decipad/client-events';
-import { templates } from '@decipad/ui';
+import { ImportFromLinkMenu, SlashCommandsMenu } from '@decipad/ui';
 import {
   ELEMENT_PARAGRAPH,
   PlateComponent,
@@ -46,7 +46,7 @@ export const InteractiveParagraph =
               userSelect: 'none',
             }}
           >
-            <templates.SlashCommandsMenu
+            <SlashCommandsMenu
               onExecute={(command) => {
                 elementPath &&
                   execute({
@@ -84,7 +84,7 @@ export const InteractiveParagraph =
                 userSelect: 'none',
               }}
             >
-              <templates.ImportFromLinkMenu
+              <ImportFromLinkMenu
                 source={source}
                 onExecute={onInteractionMenuExecute}
               />

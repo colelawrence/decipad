@@ -1,4 +1,4 @@
-import { atoms } from '@decipad/ui';
+import { EditorColumns } from '@decipad/ui';
 import { ELEMENT_COLUMNS, PlateComponent } from '@decipad/editor-types';
 import { DraggableBlock } from '@decipad/editor-components';
 
@@ -13,7 +13,7 @@ export const Columns: PlateComponent = ({ attributes, children, element }) => {
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="interactive" element={element}>
-        <atoms.EditorColumns>{children}</atoms.EditorColumns>
+        <EditorColumns>{children}</EditorColumns>
       </DraggableBlock>
     </div>
   );

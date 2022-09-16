@@ -1,6 +1,11 @@
 import { useRouteParams, workspaces, notebooks } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
-import { Dashboard, atoms, NotebookListPlaceholder } from '@decipad/ui';
+import {
+  Dashboard,
+  DashboardSidebarPlaceholder,
+  NotebookListPlaceholder,
+  TopbarPlaceholder,
+} from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
 import { FC, lazy, useMemo } from 'react';
@@ -122,7 +127,7 @@ const Workspace: FC = () => {
                 <Frame
                   Heading="h1"
                   title={null}
-                  suspenseFallback={<atoms.DashboardSidebarPlaceholder />}
+                  suspenseFallback={<DashboardSidebarPlaceholder />}
                 >
                   <Sidebar
                     Heading="h1"
@@ -152,7 +157,7 @@ const Workspace: FC = () => {
                 <Frame
                   Heading="h1"
                   title={null}
-                  suspenseFallback={<atoms.TopbarPlaceholder />}
+                  suspenseFallback={<TopbarPlaceholder />}
                 >
                   <Topbar
                     name={session.user.name || 'Me'}

@@ -3,10 +3,10 @@ export * from './pages';
 // These should generally not be imported directly and rendered individually in a frontend,
 // instead templates and pages should be composed of them.
 // But in some cases, like when using Slate to render a component tree, direct access is needed.
-export * as atoms from './atoms';
-export * as molecules from './molecules';
-export * as organisms from './organisms';
-export * as templates from './templates';
+export * from './atoms';
+export * from './molecules';
+export * from './organisms';
+export * from './templates';
 
 // TODO temporary while some visual components are not in `ui`
 export * as icons from './icons';

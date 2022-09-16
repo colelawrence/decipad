@@ -20,8 +20,9 @@ import {
 } from '@decipad/react-contexts';
 import {
   AvailableSwatchColor,
-  molecules,
-  organisms,
+  EditorTable,
+  TableColumnHeader,
+  TableRow,
   UserIconKey,
 } from '@decipad/ui';
 import { DndCellPreview } from './DndCellPreview';
@@ -73,7 +74,7 @@ const ColumnPreview = ({
   return (
     <div style={{ ...style, opacity: previewOpacity }}>
       <EditorTableContext.Provider value={contextValue}>
-        <organisms.EditorTable
+        <EditorTable
           columns={columns}
           previewMode
           icon={(tableNode.icon ?? 'Table') as UserIconKey}
@@ -83,13 +84,11 @@ const ColumnPreview = ({
             const children = getNodeString(cell);
 
             return (
-              <molecules.TableRow key={cell.id} previewMode>
+              <TableRow key={cell.id} previewMode>
                 {index === 1 && (
-                  <organisms.TableColumnHeader
-                    type={cell.cellType as TableCellType}
-                  >
+                  <TableColumnHeader type={cell.cellType as TableCellType}>
                     {children}
-                  </organisms.TableColumnHeader>
+                  </TableColumnHeader>
                 )}
 
                 {index > 1 && (
@@ -97,10 +96,10 @@ const ColumnPreview = ({
                     {children}
                   </DndCellPreview>
                 )}
-              </molecules.TableRow>
+              </TableRow>
             );
           })}
-        </organisms.EditorTable>
+        </EditorTable>
       </EditorTableContext.Provider>
     </div>
   );

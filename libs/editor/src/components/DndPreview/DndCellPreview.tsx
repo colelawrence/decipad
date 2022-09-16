@@ -6,7 +6,7 @@ import {
 } from '@decipad/react-contexts';
 import { isCellAlignRight, useCellType } from '@decipad/editor-table';
 import { getNodeString } from '@udecode/plate';
-import { atoms, molecules, organisms } from '@decipad/ui';
+import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
 
 export const DndCellPreview = ({
   element,
@@ -43,18 +43,18 @@ export const DndCellPreview = ({
     // Also, be careful with the element structure:
     // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
     return (
-      <molecules.FormulaTableData
-        result={<organisms.CodeResult {...formulaResult} />}
+      <FormulaTableData
+        result={<CodeResult {...formulaResult} />}
         resultType={formulaResult.type.kind}
         hiddenCounter={colIndex !== 0}
       >
         {children}
-      </molecules.FormulaTableData>
+      </FormulaTableData>
     );
   }
 
   return (
-    <atoms.TableData
+    <TableData
       showPlaceholder={colIndex === 0}
       isUserContent
       as="td"
@@ -62,6 +62,6 @@ export const DndCellPreview = ({
       alignRight={isCellAlignRight(cellType)}
     >
       {children}
-    </atoms.TableData>
+    </TableData>
   );
 };

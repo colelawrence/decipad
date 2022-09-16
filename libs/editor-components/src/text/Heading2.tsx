@@ -1,5 +1,5 @@
 import { PlateComponent } from '@decipad/editor-types';
-import { atoms } from '@decipad/ui';
+import { Heading2 as UIHeading2 } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 
 export const Heading2: PlateComponent = ({ attributes, children, element }) => {
@@ -10,7 +10,7 @@ export const Heading2: PlateComponent = ({ attributes, children, element }) => {
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="heading2" element={element}>
-        <atoms.Heading2 Heading="h3">{children}</atoms.Heading2>
+        <UIHeading2 Heading="h3">{children}</UIHeading2>
       </DraggableBlock>
     </div>
   );

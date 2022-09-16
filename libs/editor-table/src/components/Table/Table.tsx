@@ -9,7 +9,7 @@ import {
   useElementMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
-import { AvailableSwatchColor, organisms, UserIconKey } from '@decipad/ui';
+import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
 import {
   EditorTableContext,
@@ -77,7 +77,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         >
           <EditorTableContext.Provider value={contextValue}>
             <TableDndProvider editor={editor} table={element}>
-              <organisms.EditorTable
+              <EditorTable
                 onChangeIcon={saveIcon}
                 onChangeColor={saveColor}
                 icon={(element.icon ?? 'Table') as UserIconKey}
@@ -104,7 +104,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
                 }
               >
                 {children}
-              </organisms.EditorTable>
+              </EditorTable>
             </TableDndProvider>
           </EditorTableContext.Provider>
         </DraggableBlock>

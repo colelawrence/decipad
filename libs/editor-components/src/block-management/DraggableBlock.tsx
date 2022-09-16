@@ -7,7 +7,6 @@ import {
   ParagraphElement,
 } from '@decipad/editor-types';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
-import { atoms, organisms } from '@decipad/ui';
 import {
   findNodePath,
   getStartPoint,
@@ -36,6 +35,7 @@ import {
 } from '@decipad/editor-utils';
 import { useSelected } from 'slate-react';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { EditorBlock, DraggableBlock as UIDraggableBlock } from '@decipad/ui';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 const InDraggableBlock = createContext(false);
@@ -43,10 +43,7 @@ const InDraggableBlock = createContext(false);
 type DraggableBlockProps = {
   readonly element: MyElement;
   readonly children: ReactNode;
-} & Pick<
-  ComponentProps<typeof organisms.DraggableBlock>,
-  'blockKind' | 'onDelete'
->;
+} & Pick<ComponentProps<typeof UIDraggableBlock>, 'blockKind' | 'onDelete'>;
 
 type OnDelete = (() => void) | false | undefined;
 
@@ -151,9 +148,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         }
         suppressContentEditableWarning
       >
-        <atoms.EditorBlock blockKind={props.blockKind}>
+        <EditorBlock blockKind={props.blockKind}>
           <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
-        </atoms.EditorBlock>
+        </EditorBlock>
       </div>
     );
   }
@@ -162,7 +159,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
   if (isInDraggableBlock) return <>{children}</>;
 
   return (
-    <organisms.DraggableBlock
+    <UIDraggableBlock
       {...props}
       isHidden={element.isHidden}
       isSelected={selected}
@@ -188,6 +185,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       <InDraggableBlock.Provider value={true}>
         <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
       </InDraggableBlock.Provider>
-    </organisms.DraggableBlock>
+    </UIDraggableBlock>
   );
 };

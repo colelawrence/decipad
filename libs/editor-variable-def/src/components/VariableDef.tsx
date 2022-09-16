@@ -19,7 +19,7 @@ import {
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { organisms } from '@decipad/ui';
+import { VariableEditor } from '@decipad/ui';
 import {
   findNodePath,
   getNodeString,
@@ -142,7 +142,7 @@ export const VariableDef: PlateComponent = ({
         element={element}
         onDelete={onDelete}
       >
-        <organisms.VariableEditor
+        <VariableEditor
           variant={element.variant}
           onDelete={onDelete}
           onCopy={onCopy}
@@ -167,7 +167,7 @@ export const VariableDef: PlateComponent = ({
           onChangeValue={onChangeValue}
         >
           {children}
-        </organisms.VariableEditor>
+        </VariableEditor>
       </DraggableBlock>
     </div>
   );

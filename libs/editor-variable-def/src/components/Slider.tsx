@@ -1,4 +1,4 @@
-import { atoms } from '@decipad/ui';
+import { Slider as UISlider } from '@decipad/ui';
 import {
   ELEMENT_SLIDER,
   PlateComponent,
@@ -38,11 +38,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   return (
     <div {...attributes} contentEditable={false}>
       {children}
-      <atoms.Slider
-        {...element}
-        onChange={onValueChange}
-        onFocus={selectElement}
-      />
+      <UISlider {...element} onChange={onValueChange} onFocus={selectElement} />
     </div>
   );
 };

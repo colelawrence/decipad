@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 import { ErrorBoundary } from '@sentry/react';
-import { organisms } from '@decipad/ui';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
 import { findNodePath, removeNodes } from '@udecode/plate';
+import { ErrorBlock } from '@decipad/ui';
 
 interface FallbackProps {
   error: Error;
@@ -20,11 +20,10 @@ const Fallback: FC<FallbackProps> = ({
   const editor = useTEditorRef();
 
   const delPath = findNodePath(editor, element);
-  if (delPath === undefined)
-    return <organisms.ErrorBlock type="complete-error" />;
+  if (delPath === undefined) return <ErrorBlock type="complete-error" />;
 
   return (
-    <organisms.ErrorBlock
+    <ErrorBlock
       type={editor.history.undos.length > 0 ? 'warning' : 'error'}
       onDelete={() => {
         removeNodes(editor, {

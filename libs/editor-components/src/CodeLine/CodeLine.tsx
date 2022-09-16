@@ -11,7 +11,7 @@ import {
 } from '@decipad/editor-types';
 import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
-import { isNodeEmpty, organisms } from '@decipad/ui';
+import { isNodeEmpty, CodeLine as UICodeLine } from '@decipad/ui';
 import { getNodeString } from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
@@ -45,7 +45,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   return (
     <div {...attributes} id={lineId}>
       <DraggableBlock blockKind="codeLine" element={element}>
-        <organisms.CodeLine
+        <UICodeLine
           highlight={selected}
           result={lineResult}
           tip={tips}
@@ -55,7 +55,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           onDragStartCell={onDragStartTableCellResult(editor)}
         >
           {children}
-        </organisms.CodeLine>
+        </UICodeLine>
       </DraggableBlock>
     </div>
   );

@@ -1,9 +1,9 @@
-import { molecules } from '@decipad/ui';
+import { SyntaxErrorHighlight as UISyntaxErrorHighlight } from '@decipad/ui';
 import { ComponentProps } from 'react';
 import { PlateComponent } from '@decipad/editor-types';
 
 export type SyntaxErrorHighlightProps = Pick<
-  ComponentProps<typeof molecules.SyntaxErrorHighlight>,
+  ComponentProps<typeof UISyntaxErrorHighlight>,
   'variant' | 'error'
 >;
 
@@ -12,9 +12,9 @@ export const SyntaxErrorHighlight: PlateComponent<
 > = ({ attributes, children, variant, error }) => {
   return (
     <span {...attributes}>
-      <molecules.SyntaxErrorHighlight variant={variant} error={error}>
+      <UISyntaxErrorHighlight variant={variant} error={error}>
         {children}
-      </molecules.SyntaxErrorHighlight>
+      </UISyntaxErrorHighlight>
     </span>
   );
 };

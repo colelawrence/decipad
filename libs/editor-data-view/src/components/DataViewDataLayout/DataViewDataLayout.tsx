@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import { Interpreter, Result, SerializedType } from '@decipad/computer';
-import { molecules } from '@decipad/ui';
+import { DataViewRow } from '@decipad/ui';
 import { AggregationKind, ValueCell } from '../../types';
 import { DataViewHeader } from '..';
 import { treeToTable } from '../../utils/treeToTable';
@@ -79,7 +79,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   return (
     <>
       {table.map((row, index) => (
-        <molecules.DataViewRow
+        <DataViewRow
           key={index}
           isFullWidth={row.length === maxCols}
           isBeforeFullWidthRow={
@@ -94,7 +94,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
             SmartCell={SmartCell}
             selectedAggregationTypes={aggregationTypes}
           />
-        </molecules.DataViewRow>
+        </DataViewRow>
       ))}
     </>
   );
