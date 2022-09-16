@@ -57,9 +57,7 @@ export const CodeVariable: CodeLeaf = ({
 
   const computer = useComputer();
   const defBlockId = useObservable(() => computer.getBlockId$(variableName));
-  const variableResult = useObservable(() =>
-    computer.getVariable$(variableName)
-  );
+  const variableResult = useResult(defBlockId ?? '', rootRef.current)?.result;
 
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';

@@ -58,16 +58,16 @@ function formulaResult$(
 const findFormulaCoordinates = (
   editor: MyReactEditor,
   element: TableCellElement | TableHeaderElement | undefined
-): [rowIdx: number, colIdx: number] | undefined => {
+) => {
   const path = element && findNodePath(editor, element);
   if (!path) {
-    return;
+    return [undefined, undefined] as const;
   }
   const headerRowCount = 2; // skip caption and column headers
   const rowIndex = path[path.length - 2] - headerRowCount;
   const colIndex = path[path.length - 1];
 
-  return [rowIndex, colIndex];
+  return [rowIndex, colIndex] as const;
 };
 
 export function useTableColumnFormulaResultForElement(
@@ -78,13 +78,12 @@ export function useTableColumnFormulaResultForElement(
   const [result, setResult] = useState<Result.Result | null>(null);
   const tableContext = useEditorTableContext();
 
-  const coordinates = findFormulaCoordinates(editor, element);
+  const [rowIndex, colIndex] = findFormulaCoordinates(editor, element);
 
   useEffect(() => {
-    if (!coordinates || !element) {
+    if (rowIndex == null || colIndex == null || !element) {
       return;
     }
-    const [rowIndex, colIndex] = coordinates;
     let sub: Subscription;
     if (tableContext.cellTypes[colIndex]?.kind === 'table-formula') {
       sub = formulaResult$(
@@ -92,18 +91,14 @@ export function useTableColumnFormulaResultForElement(
         tableContext.blockId,
         colIndex,
         rowIndex
-      ).subscribe((newResult) => {
-        if (!dequal(result, newResult)) {
-          setResult(newResult);
-        }
-      });
+      ).subscribe(setResult);
     } else {
       // When switching away from the "formula" type, remove the CodeResult element.
       setResult(null);
     }
 
     return () => sub?.unsubscribe();
-  }, [computer, element, tableContext, coordinates, result]);
+  }, [computer, element, tableContext, rowIndex, colIndex]);
 
   return result;
 }

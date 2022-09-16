@@ -330,15 +330,6 @@ it('can extract units from text', async () => {
   expect(units).toBeNull();
 });
 
-it('can get a specific variable', async () => {
-  await computeOnTestComputer({
-    program: getUnparsed('Foo = 30'),
-  });
-
-  const foo = await computer.getVariable('Foo');
-  expect(foo?.value?.toString()).toBe('30');
-});
-
 it('can get a expression from text in streaming mode', async () => {
   await computeOnTestComputer({
     program: getUnparsed('Time = 120 minutes'),
@@ -351,40 +342,42 @@ it('can get a expression from text in streaming mode', async () => {
   expect(firstTime?.value?.toString()).toBe('2');
 });
 
-it('can get a variable in streaming', async () => {
-  await computeOnTestComputer({
-    program: getUnparsed('Foo = 420'),
+describe('getBlockId$', () => {
+  it('can get a variable block id in streaming', async () => {
+    await computeOnTestComputer({
+      program: getUnparsed('Foo = 420'),
+    });
+
+    const fooStream = computer.getBlockId$('Foo');
+
+    const firstFoo = await firstValueFrom(fooStream);
+
+    expect(firstFoo).toBe('block-0');
   });
 
-  const fooStream = computer.getVariable$('Foo');
+  it('can get a variable block id from a table in streaming', async () => {
+    await computeOnTestComputer({
+      program: getUnparsed('C = 1', 'A = { B = 420 } '),
+    });
 
-  const firstFoo = await firstValueFrom(fooStream);
+    const fooStream = computer.getBlockId$('A.B');
 
-  expect(firstFoo?.value?.toString()).toBe('420');
-});
+    const firstFoo = await firstValueFrom(fooStream);
 
-it('can get a variable block id in streaming', async () => {
-  await computeOnTestComputer({
-    program: getUnparsed('Foo = 420'),
+    expect(firstFoo).toBe('block-1');
   });
 
-  const fooStream = computer.getBlockId$('Foo');
+  it('can find exprRefs', async () => {
+    await computeOnTestComputer({
+      program: getUnparsed('Foo = 420'),
+    });
 
-  const firstFoo = await firstValueFrom(fooStream);
+    const fooStream = computer.getBlockId$('exprRef_block_0');
 
-  expect(firstFoo).toBe('block-0');
-});
+    const firstFoo = await firstValueFrom(fooStream);
 
-it('can get a variable block id from a table in streaming', async () => {
-  await computeOnTestComputer({
-    program: getUnparsed('C = 1', 'A = { B = 420 } '),
+    expect(firstFoo).toBe('block-0');
   });
-
-  const fooStream = computer.getBlockId$('A.B');
-
-  const firstFoo = await firstValueFrom(fooStream);
-
-  expect(firstFoo).toBe('block-1');
 });
 
 it('can get a defined symbol, in block', async () => {

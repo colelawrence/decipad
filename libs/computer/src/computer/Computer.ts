@@ -35,7 +35,7 @@ import {
   shareReplay,
 } from 'rxjs/operators';
 import { computeProgram } from '../compute/computeProgram';
-import { makeNamesFromIds } from '../exprRefs';
+import { getExprRef, makeNamesFromIds } from '../exprRefs';
 import { captureException } from '../reporting';
 import type {
   ComputePanic,
@@ -87,6 +87,7 @@ function* findNames(
           kind: 'variable',
           type: serializeType(type),
           name: statement.args[0].args[0],
+          blockId: block.id,
         };
 
         if (statement.args[1].type === 'table') {
@@ -108,6 +109,7 @@ function* findNames(
           kind: 'function',
           type: serializeType(type),
           name: statement.args[0].args[0],
+          blockId: block.id,
         };
       }
     }
@@ -200,15 +202,6 @@ export class Computer {
       .subscribe(this.aggregatedParseErrors);
   }
 
-  getVariable(varName: string): Result.Result | null {
-    const { inferContext, interpreterRealm } = this.computationRealm;
-    const type = inferContext.stack.get(varName, 'global');
-    const value = interpreterRealm.stack.get(varName, 'global');
-    return type && value
-      ? { type: serializeType(type), value: value.getData() }
-      : null;
-  }
-
   getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
     return this.computationRealm.inferContext.functionDefinitions.get(funcName);
   }
@@ -220,6 +213,10 @@ export class Computer {
     return this.results.pipe(
       map(() => {
         return this.previouslyParsed.find((p) => {
+          if (varName === getExprRef(p.id)) {
+            return true;
+          }
+
           if (p.type === 'identified-block' && p.block.args.length > 0) {
             const symbol = getDefinedSymbol(p.block.args[0]);
             return symbol === `var:${mainIdentifier}`;
@@ -253,13 +250,6 @@ export class Computer {
     return this.results.pipe(
       map(() => this.getNamesDefined()),
       distinctUntilChanged(dequal)
-    );
-  }
-
-  getVariable$(varName: string): Observable<Result.Result | null> {
-    return this.results.pipe(
-      map(() => this.getVariable(varName)),
-      distinctUntilChanged()
     );
   }
 

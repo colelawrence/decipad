@@ -8,15 +8,18 @@ it('finds variables that are in the context', async () => {
 
   expect(getVisibleVariables(program, 'block-2', inferContext))
     .toMatchInlineSnapshot(`
-    Object {
-      "global": Set {
-        "A",
-        "Table",
-        "Table.Col",
-      },
-      "local": Set {
-        "Col",
-      },
-    }
-  `);
+      Object {
+        "global": Set {
+          "exprRef_block_0",
+          "exprRef_block_1",
+          "A",
+          "exprRef_block_2",
+          "Table",
+          "Table.Col",
+        },
+        "local": Set {
+          "Col",
+        },
+      }
+    `);
 });

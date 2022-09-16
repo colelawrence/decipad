@@ -28,6 +28,7 @@ export interface IdentifiedError {
   // So we can use it interchangeably with IdentifiedResult
   result?: undefined;
   visibleVariables?: undefined;
+  variableName?: undefined;
 }
 
 /** Contains the result */

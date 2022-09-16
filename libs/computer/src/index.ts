@@ -39,6 +39,8 @@ export {
   currencyUnits,
 } from '@decipad/language';
 
+export { isSyntaxError, isBracketError, hasBracketError } from './utils';
+
 export type {
   AutocompleteName,
   ErrSpec,

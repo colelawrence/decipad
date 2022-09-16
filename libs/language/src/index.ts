@@ -94,6 +94,7 @@ export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';
   type: SerializedType;
   name: string;
+  blockId?: string;
 }
 
 let cachedBuiltins: AutocompleteName[] | null = null;
@@ -108,6 +109,7 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
         kind: 'function',
         type: serializeType(t.functionPlaceholder(name, undefined)),
         name,
+        blockId: undefined,
       };
     });
   }
