@@ -177,7 +177,14 @@ function docSyncEditor<E extends MyEditor>(
     offDisconnected(cb: OnLoadedCallback) {
       events.removeListener('disconnected', cb);
     },
+    onDestroyed(cb: () => void) {
+      events.on('destroyed', cb);
+    },
+    offDestroyed(cb: () => void) {
+      events.removeListener('destroyed', cb);
+    },
     destroy() {
+      events.emit('destroyed');
       events.removeAllListeners();
       doc.destroy();
       store.destroy();
@@ -235,9 +242,7 @@ async function wsAddress(docId: string): Promise<string> {
 export function createDocSyncEditor(
   editor: MyEditor,
   docId: string,
-  options: DocSyncOptions = {}
-): DocSyncEditor {
-  const {
+  {
     readOnly = false,
     authSecret,
     onError,
@@ -245,8 +250,8 @@ export function createDocSyncEditor(
     connect = ws,
     connectBc = true,
     WebSocketPolyfill,
-  } = options;
-
+  }: DocSyncOptions = {}
+): DocSyncEditor {
   const doc = new YDoc();
   const store = new IndexeddbPersistence(docId, doc);
 
@@ -266,7 +271,7 @@ export function createDocSyncEditor(
     wsp = createWebsocketProvider(doc, {
       WebSocketPolyfill,
       readOnly,
-      connect,
+      connect: false,
       beforeConnect,
       connectBc,
       resyncInterval: 60000,
@@ -284,12 +289,23 @@ export function createDocSyncEditor(
   const { selection } = editor;
   yjsEditor.synchronizeValue();
 
+  let destroyed = false;
+
+  store.once('synced', () => {
+    if (connect && !destroyed) {
+      wsp?.connect();
+    }
+  });
+
   // Cursor editor
   const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
 
   // Sync editor
   const syncEditor = docSyncEditor(cursorEditor, shared, doc, store, wsp);
-  syncEditor.destroy = () => store.destroy();
+  syncEditor.destroy = () => {
+    destroyed = true;
+    store.destroy();
+  };
 
   syncEditor.isDocSyncEnabled = true;
   let loadedLocally = false;

@@ -60,6 +60,9 @@ async function maybeWithStore<T>(
   write: boolean,
   fn: (store: IDBObjectStore) => Promise<T> | void
 ): Promise<T | void> {
+  if (idbPersistence._destroyed) {
+    return;
+  }
   const store = getUpdatesStore(idbPersistence, write);
   if (store) {
     return fn(store);
@@ -136,11 +139,11 @@ export class IndexeddbPersistence extends Observable<string> {
       true,
       async (store): Promise<IndexeddbPersistence> => {
         await idb.addAutoKey(store, currState);
-        this.emit('synced', [this]);
-        this.synced = true;
         return this;
       }
     ).then((store) => {
+      this.emit('synced', [this]);
+      this.synced = true;
       return new Promise((resolve) => {
         if (store) {
           resolve(store);
