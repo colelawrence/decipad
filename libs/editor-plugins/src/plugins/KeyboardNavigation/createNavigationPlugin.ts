@@ -58,6 +58,7 @@ export const createNavigationPlugin = createOnKeyDownPluginFactory({
 
       if (event.key === 'Tab') {
         event.preventDefault();
+        event.stopPropagation();
         // Move to the next cell (to the right).
         // or to the element below if at the end of the table (bottom right corner).
         // if shift is also pressed, move backwards.
