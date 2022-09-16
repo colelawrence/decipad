@@ -22269,10 +22269,10 @@ junk@^3.1.0:
   resolved "https://registry.yarnpkg.com/junk/-/junk-3.1.0.tgz#31499098d902b7e98c5d9b9c80f43457a88abfa1"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
 
-just-permutations@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/just-permutations/-/just-permutations-2.0.1.tgz#2709f20bc9de6cbf29cdaed9406852e58f9003d0"
-  integrity sha512-i/5Zpw3ByRpecMEt3aUZ5rZWH9X0ZiTX4opcmKHg1i5HqPPj6p+gcrqFQTlFM0WO/BBo7GI5QDibeqCV7NWX4A==
+just-permutations@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/just-permutations/-/just-permutations-2.1.1.tgz#cd42b0b4ea85737e61eedef9d7ef53479fb487b4"
+  integrity sha512-BT31J+EE7G4qFY8AD52I2/84pIfLiMdrL5oml6ktPB7YK5fI5SDSlZCrJKrwsWKLXcap+7LZoyp/js3TQ36ODw==
 
 jwa@^1.4.1:
   version "1.4.1"
