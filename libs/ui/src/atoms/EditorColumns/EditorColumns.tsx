@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { Children, FC } from 'react';
-import { useAutoAnimate } from '../../hooks';
 import { smallestMobile } from '../../primitives';
 
 const styles = css({
@@ -17,9 +16,8 @@ const itemStyles = css({
 export const EditorColumns: FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
-  const [animate] = useAutoAnimate<HTMLUListElement>();
   return (
-    <ul css={styles} ref={animate}>
+    <ul css={styles}>
       {Children.map(children, (child) => (
         <li css={itemStyles}>{child}</li>
       ))}

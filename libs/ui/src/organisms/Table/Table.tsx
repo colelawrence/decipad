@@ -8,7 +8,6 @@ import { tableRowCounter } from '../../utils';
 import { TextAndIconButton } from '../../atoms';
 import { Eye } from '../../icons';
 import { table } from '../../styles';
-import { useAutoAnimate } from '../../hooks';
 
 const regularBorder = `1px solid ${cssVar('strongHighlightColor')}`;
 const liveResultBorder = `1px solid ${cssVar('liveDataBackgroundColor')}`;
@@ -209,7 +208,6 @@ export const Table = ({
   isReadOnly = false,
   isLiveResult = false,
 }: TableProps): ReturnType<FC> => {
-  const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
   const border = isLiveResult ? liveResultBorder : regularBorder;
   return (
     <table
@@ -228,7 +226,7 @@ export const Table = ({
       ]}
     >
       {head && <thead>{head}</thead>}
-      <tbody ref={animateBody}>
+      <tbody>
         {body}
         {hiddenRowCount > 0 && (
           <ShowAllRows
