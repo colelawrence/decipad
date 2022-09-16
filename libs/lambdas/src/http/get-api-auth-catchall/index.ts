@@ -1,16 +1,11 @@
-import { HttpRequest } from '@architect/functions';
 import { app, auth as authConfig } from '@decipad/config';
+import { APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { createAuthHandler, testUserAuth } from '../../auth-flow';
 
 const auth = createAuthHandler();
 const testUserPath = `/api/auth/${authConfig().testUserSecret}`;
 
-type RequestWithRawPath = HttpRequest & {
-  rawPath?: string;
-  rawQueryString?: string;
-};
-
-export const handler = async (req: RequestWithRawPath) => {
+export const handler: APIGatewayProxyHandlerV2 = async (req, ...params) => {
   const url = new URL(
     `${req.rawPath || ''}?${req.rawQueryString || ''}`,
     app().urlBase
@@ -19,5 +14,5 @@ export const handler = async (req: RequestWithRawPath) => {
     return testUserAuth(url);
   }
 
-  return auth(req);
+  return auth(req, ...params) as Promise<APIGatewayProxyResultV2>;
 };

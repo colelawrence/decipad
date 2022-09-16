@@ -1,14 +1,13 @@
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
-import { HttpResponse } from '@architect/functions';
 import { parse as parseCookie } from 'simple-cookie';
 import { parse as qsParse, ParsedUrlQuery } from 'querystring';
 import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';
 
 export default function adaptReqRes(handle: NextApiHandler) {
   return async function respondWithAuth(
-    req: APIGatewayProxyEvent
-  ): Promise<HttpResponse> {
+    req: APIGatewayProxyEventV2
+  ): Promise<APIGatewayProxyResultV2> {
     return new Promise((resolve) => {
       const { method, path } = req.requestContext.http;
       const url = req.rawPath;

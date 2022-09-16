@@ -1,4 +1,3 @@
-import { HttpResponse } from '@architect/functions';
 import { badRequest } from '@hapi/boom';
 import { encode } from 'next-auth/jwt';
 import tables from '@decipad/tables';
@@ -7,6 +6,7 @@ import {
   maybeEnrich as maybeEnrichUser,
 } from '@decipad/services/users';
 import { jwt as jwtConf } from '@decipad/services/authentication';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { isAllowedToLogIn } from './is-allowed';
 import { UserInput } from '../types';
 
@@ -17,7 +17,9 @@ const tokenCookieName = isSecureCookie
   ? '__Secure-next-auth.session-token'
   : 'next-auth.session-token';
 
-export const testUserAuth = async (url: URL): Promise<HttpResponse> => {
+export const testUserAuth = async (
+  url: URL
+): Promise<APIGatewayProxyResultV2> => {
   const email = url.searchParams.get('email') || defaultTestUserEmail;
   if (!(await isAllowedToLogIn(email))) {
     throw badRequest();

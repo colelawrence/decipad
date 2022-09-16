@@ -1,6 +1,5 @@
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
-import { HttpResponse } from '@architect/functions';
-import { Context, Handler } from 'aws-lambda';
+import { Context, Handler, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { boomify } from '@hapi/boom';
 import { WSRequest } from '@decipad/backendtypes';
 import { monitor as monitorConfig } from '@decipad/config';
@@ -31,12 +30,15 @@ const lastHandlerOptions = {
 
 function handleErrors(handle: Handler): Handler {
   return SentryAWSLambda.wrapHandler(
-    async (event: WSRequest, context: Context): Promise<HttpResponse> => {
+    async (
+      event: WSRequest,
+      context: Context
+    ): Promise<APIGatewayProxyResultV2> => {
       try {
         return new Promise((resolve, reject) => {
           const callback = (
             err: Error | null | string | undefined,
-            response: HttpResponse
+            response: APIGatewayProxyResultV2
           ) => {
             if (err) {
               return reject(err);

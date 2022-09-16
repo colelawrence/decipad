@@ -1,13 +1,12 @@
-import { HttpResponse } from '@architect/functions';
 import Boom from '@hapi/boom';
-import { WSRequest } from '@decipad/backendtypes';
 import { onMessage } from '@decipad/sync-connection-lambdas';
 import tables from '@decipad/tables';
 import { trace } from '@decipad/backend-trace';
 import { Buffer } from 'buffer';
+import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 
-export const handler = trace(
-  async (event: WSRequest): Promise<HttpResponse> => {
+export const handler: APIGatewayProxyHandlerV2 = trace(
+  async (event) => {
     const connId = event.requestContext.connectionId;
     if (!event.body) {
       // do nothing

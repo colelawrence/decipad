@@ -1,12 +1,14 @@
 import { Doc as YDoc } from 'yjs';
-import { HttpResponse } from '@architect/functions';
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
 import { getDefined } from '@decipad/utils';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 
-export async function onDisconnect(connId: string): Promise<HttpResponse> {
+export async function onDisconnect(
+  connId: string
+): Promise<APIGatewayProxyResultV2> {
   const data = await tables();
   const conn = await data.connections.get({ id: connId });
   if (!conn) {

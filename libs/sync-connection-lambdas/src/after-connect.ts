@@ -1,5 +1,5 @@
 import { Doc as YDoc } from 'yjs';
-import { HttpResponse } from '@architect/functions';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
@@ -13,7 +13,7 @@ export interface AfterConnectPayload {
 
 export async function afterConnect({
   connectionId,
-}: AfterConnectPayload): Promise<HttpResponse> {
+}: AfterConnectPayload): Promise<APIGatewayProxyResultV2> {
   const data = await tables();
   const conn = await data.connections.get({ id: connectionId });
   if (!conn) {

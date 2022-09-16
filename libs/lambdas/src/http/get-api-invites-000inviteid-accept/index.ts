@@ -1,9 +1,11 @@
-import { HttpResponse } from '@architect/functions';
 import { PermissionType } from '@decipad/backendtypes';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import {
+  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import handle from '../handle';
 
 const permissionTypesToLevels = {
@@ -13,7 +15,7 @@ const permissionTypesToLevels = {
 };
 
 export const handler = handle(
-  async (event: APIGatewayProxyEvent): Promise<HttpResponse> => {
+  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
     const [{ user }] = await expectAuthenticated(event);
     const data = await tables();
 

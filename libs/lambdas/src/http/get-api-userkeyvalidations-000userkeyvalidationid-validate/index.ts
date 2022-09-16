@@ -1,9 +1,12 @@
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
-import assert from 'assert';
-import { HttpResponse } from '@architect/functions';
+import {
+  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
+import {} from '@architect/functions';
 import { encode } from 'next-auth/jwt';
 import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
+import assert from 'assert';
 import timestamp from '../../common/timestamp';
 import handle from '../handle';
 
@@ -14,7 +17,7 @@ const tokenCookieName = isSecureCookie
   : 'next-auth.session-token';
 
 export const handler = handle(
-  async (event: APIGatewayProxyEvent): Promise<HttpResponse> => {
+  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
     if (!event.pathParameters?.userkeyvalidationid) {
       return {
         statusCode: 401,

@@ -1,11 +1,10 @@
-import { HttpResponse } from '@architect/functions';
-import { WSRequest } from '@decipad/backendtypes';
 import { onDisconnect } from '@decipad/sync-connection-lambdas';
 import { trace } from '@decipad/backend-trace';
+import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 
-export const handler = trace(async function ws(
-  event: WSRequest
-): Promise<HttpResponse> {
+export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
+  event
+) {
   const connId = event.requestContext.connectionId;
   return onDisconnect(connId);
 });

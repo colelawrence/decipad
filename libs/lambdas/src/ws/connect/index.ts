@@ -1,19 +1,18 @@
-import { HttpResponse } from '@architect/functions';
-import { WSRequest } from '@decipad/backendtypes';
 import { authenticate, AuthResult } from '@decipad/services/authentication';
 import { onConnect } from '@decipad/sync-connection-lambdas';
 import { getDefined } from '@decipad/utils';
 import { trace } from '@decipad/backend-trace';
 import Boom, { boomify } from '@hapi/boom';
+import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { docIdFromPath } from '../path';
 
 function isValidAuthResult(authResult: AuthResult): boolean {
   return !!authResult.secret || !!authResult.user;
 }
 
-export const handler = trace(async function ws(
-  event: WSRequest
-): Promise<HttpResponse> {
+export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
+  event
+) {
   try {
     const authResult = (await authenticate(event)).filter(isValidAuthResult);
 

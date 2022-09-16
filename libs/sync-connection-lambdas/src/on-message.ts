@@ -1,6 +1,6 @@
 import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
-import arc, { HttpResponse } from '@architect/functions';
+import { ws } from '@architect/functions';
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
@@ -15,6 +15,7 @@ import {
   hasMinimumPermission,
   parsePermissionType,
 } from '@decipad/services/authorization';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 
 type ErrorWithCode = Error & {
   code: string;
@@ -22,7 +23,7 @@ type ErrorWithCode = Error & {
 
 async function send(connId: string, message: Uint8Array): Promise<void> {
   const payload = Buffer.from(message).toString('base64');
-  await arc.ws.send({ id: connId, payload });
+  await ws.send({ id: connId, payload });
 }
 
 async function trySend(connId: string, payload: Uint8Array): Promise<void> {
@@ -111,7 +112,7 @@ async function processMessage(
 export async function onMessage(
   connId: string,
   message: Uint8Array
-): Promise<HttpResponse> {
+): Promise<APIGatewayProxyResultV2> {
   const data = await tables();
   const conn = await data.connections.get({ id: connId });
   if (!conn) {

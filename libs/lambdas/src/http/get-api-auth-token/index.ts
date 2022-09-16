@@ -1,10 +1,12 @@
-import { HttpResponse } from '@architect/functions';
 import {
   authenticate,
   AuthResult,
   jwt as jwtConf,
 } from '@decipad/services/authentication';
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import {
+  APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda';
 import { encode } from 'next-auth/jwt';
 import handle from '../handle';
 
@@ -38,7 +40,9 @@ function credentialHasUserOrSecret(cred: AuthResult): boolean {
 }
 
 export const handler = handle(
-  async (event: APIGatewayProxyEvent): Promise<HttpResponse | string> => {
+  async (
+    event: APIGatewayProxyEvent
+  ): Promise<APIGatewayProxyResultV2 | string> => {
     const credentials = await authenticate(event);
 
     const firstCompleteCredential = credentials.find(credentialHasUserOrSecret);

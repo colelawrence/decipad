@@ -1,9 +1,9 @@
-import { HttpHandler } from '@architect/functions';
 import { UserWithSecret } from '@decipad/backendtypes';
 import { app, auth as authConfig } from '@decipad/config';
 import { jwt } from '@decipad/services/authentication';
 import { identify, track } from '@decipad/backend-analytics';
 import NextAuth, { NextAuthOptions } from 'next-auth';
+import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import tables from '@decipad/tables';
 import adaptReqRes from './adapt-req-res';
 import { adapter } from './db-adapter';
@@ -18,7 +18,7 @@ const {
   jwt: jwtConfig,
 } = authConfig();
 
-export function createAuthHandler(): HttpHandler {
+export function createAuthHandler(): APIGatewayProxyHandlerV2 {
   const providers = [
     // Github(githubConfig), // uncommment this when enabling Github logins
     Email(),
@@ -113,6 +113,5 @@ export function createAuthHandler(): HttpHandler {
     },
   };
 
-  // @ts-expect-error Because next-auth types are apparently mistaken
   return adaptReqRes(NextAuth(options));
 }

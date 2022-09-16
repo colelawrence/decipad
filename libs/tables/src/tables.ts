@@ -70,7 +70,7 @@ export default async function tables(userId?: string): Promise<DataTables> {
             tables,
             enhancedTableName as TableName,
             tables._doc,
-            services
+            services as ArcServices
           );
         }
         for (const observedTable of observedTables) {
