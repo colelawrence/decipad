@@ -77,14 +77,20 @@ describe('pad editor persistence', () => {
         ],
       },
       {
-        children: [{ text: '' }],
+        children: [
+          {
+            text: '',
+          },
+        ],
         type: 'h1',
-        id: expect.any(String),
       },
       {
-        children: [{ text: '' }],
+        children: [
+          {
+            text: '',
+          },
+        ],
         type: 'p',
-        id: expect.any(String),
       },
     ]);
     e.destroy();
@@ -114,14 +120,20 @@ describe('pad editor persistence', () => {
         ],
       },
       {
-        children: [{ text: '' }],
+        children: [
+          {
+            text: '',
+          },
+        ],
         type: 'h1',
-        id: expect.any(String),
       },
       {
-        children: [{ text: '' }],
+        children: [
+          {
+            text: '',
+          },
+        ],
         type: 'p',
-        id: expect.any(String),
       },
     ]);
   });

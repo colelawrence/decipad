@@ -18,6 +18,11 @@ export default gql`
     secrets: [SecretAccess!]
   }
 
+  type PadConnectionParams {
+    url: String!
+    token: String!
+  }
+
   type Pad {
     id: ID!
     name: String!
@@ -27,6 +32,7 @@ export default gql`
     createdAt: DateTime
     isPublic: Boolean
     icon: String
+    padConnectionParams: PadConnectionParams!
   }
 
   type PagedPadResult {

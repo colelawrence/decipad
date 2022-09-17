@@ -16,12 +16,18 @@ import {
   useEditorUserInteractionsContext,
 } from '../../react-contexts/src/editor-user-interactions';
 
+export interface NotebookConnectionParams {
+  url: string;
+  token: string;
+}
+
 export interface NotebookProps {
   notebookId: string;
   notebookTitle: string;
   onNotebookTitleChange: (newValue: string) => void;
   readOnly: boolean;
   secret?: string;
+  connectionParams: NotebookConnectionParams | undefined;
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
 }
@@ -32,6 +38,7 @@ const InsideNotebookState = ({
   onNotebookTitleChange,
   readOnly,
   secret,
+  connectionParams,
   onEditor,
   onDocsync,
 }: NotebookProps) => {
@@ -57,9 +64,10 @@ const InsideNotebookState = ({
   useEffect(() => {
     init(slateBaseEditor as MyEditor, notebookId, {
       authSecret: secret,
+      connectionParams,
     });
     return destroy;
-  }, [init, destroy, notebookId, secret, slateBaseEditor]);
+  }, [init, destroy, notebookId, secret, slateBaseEditor, connectionParams]);
 
   const interactions = useEditorUserInteractionsContext();
 

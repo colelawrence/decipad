@@ -23,7 +23,7 @@ export type TWebSocketProvider = Observable<string> & {
   doc: YDoc;
   ws?: WebSocket;
   _WS: typeof WebSocket;
-  serverUrl: string;
+  serverUrl: string | undefined;
   url?: string;
   protocol?: string;
   awareness: awarenessProtocol.Awareness;

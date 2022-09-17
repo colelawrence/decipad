@@ -415,10 +415,16 @@ class WebsocketProvider
     }
   }
 
-  set serverUrl(serverUrl: string) {
-    const url = new URL(serverUrl).href;
-    this.bcChannel = url;
-    this.url = url;
+  set serverUrl(serverUrl: string | undefined) {
+    if (serverUrl) {
+      const url = new URL(serverUrl).href;
+      this.bcChannel = url;
+      this.url = url;
+    }
+  }
+
+  get serverUrl(): string | undefined {
+    return this.url;
   }
 
   send(message: Uint8Array): void {

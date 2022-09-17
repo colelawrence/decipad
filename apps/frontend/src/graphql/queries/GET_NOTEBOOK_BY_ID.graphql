@@ -17,6 +17,10 @@ fragment EditorNotebook on Pad {
     id
     name
   }
+  padConnectionParams {
+    url
+    token
+  }
 }
 
 query GetNotebookById($id: ID!) {

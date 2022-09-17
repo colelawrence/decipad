@@ -11,8 +11,14 @@ import { Doc as YDoc } from 'yjs';
 import { MyEditor } from '@decipad/editor-types';
 import { setSelection } from '@udecode/plate';
 import { docSyncEditor } from './docSyncEditor';
-import { DocSyncEditor } from './types';
 import { ensureInitialDocument } from './utils/ensureInitialDocument';
+
+const tokenTimeoutMs = 60 * 1000;
+
+interface DocSyncConnectionParams {
+  url: string;
+  token: string;
+}
 
 export interface DocSyncOptions {
   readOnly?: boolean;
@@ -22,6 +28,7 @@ export interface DocSyncOptions {
   ws?: boolean;
   connect?: boolean;
   connectBc?: boolean;
+  connectionParams?: DocSyncConnectionParams;
 }
 
 async function fetchToken(): Promise<string> {
@@ -51,15 +58,23 @@ export function createDocSyncEditor(
     connect = ws,
     connectBc = true,
     WebSocketPolyfill,
-  }: DocSyncOptions = {}
-): DocSyncEditor {
+    connectionParams,
+  }: DocSyncOptions
+) {
   const doc = new YDoc();
   const store = new IndexeddbPersistence(docId, doc);
+  const initialTokenTime = Date.now();
+
+  const isInitialTokenStale = () =>
+    Date.now() - initialTokenTime > tokenTimeoutMs;
+
+  const getToken = () =>
+    isInitialTokenStale() ? undefined : connectionParams?.token;
 
   const beforeConnect = async (provider: TWebSocketProvider) => {
     try {
-      provider.serverUrl = await wsAddress(docId);
-      provider.protocol = authSecret || (await fetchToken());
+      provider.serverUrl = connectionParams?.url || (await wsAddress(docId));
+      provider.protocol = authSecret || getToken() || (await fetchToken());
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -105,10 +120,12 @@ export function createDocSyncEditor(
   const syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
   syncEditor.destroy = () => {
     destroyed = true;
-    store.destroy();
+    store?.destroy();
+    wsp?.destroy();
   };
 
   syncEditor.isDocSyncEnabled = true;
+
   let loadedLocally = false;
   let loadedRemotely = false;
 
