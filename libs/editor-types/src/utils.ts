@@ -4,9 +4,6 @@ import {
   createPlateEditor,
   CreatePlateEditorOptions,
   createPluginFactory,
-  getPlateActions,
-  getPlateEditorRef,
-  getPlateSelectors,
   getTEditor,
   NoInfer,
   PlatePlugin,
@@ -31,16 +28,10 @@ export const useTEditorRef = () => useEditorRef<MyValue, MyEditor>();
 export const useTEditorState = () => useEditorState<MyValue, MyEditor>();
 export const useTPlateEditorRef = (id?: string) =>
   usePlateEditorRef<MyValue, MyEditor>(id);
-export const getTPlateEditorRef = (id?: string) =>
-  getPlateEditorRef<MyValue, MyEditor>(id);
 export const useTPlateEditorState = (id?: string) =>
   usePlateEditorState<MyValue, MyEditor>(id);
 export const useTPlateSelectors = (id?: string) =>
   usePlateSelectors<MyValue, MyEditor>(id);
-export const getTPlateSelectors = (id?: string) =>
-  getPlateSelectors<MyValue, MyEditor>(id);
-export const getTPlateActions = (id?: string) =>
-  getPlateActions<MyValue, MyEditor>(id);
 
 /**
  * Utils

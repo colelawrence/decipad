@@ -7,7 +7,7 @@ import {
   useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
-import { Plate, createPlateEditor } from '@udecode/plate';
+import { createPlateEditor, Plate } from '@udecode/plate';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
@@ -16,8 +16,6 @@ import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
 import { POPULATE_PLAYGROUND } from './utils/storage';
 import { useWriteLock } from './utils/useWriteLock';
-
-const NO_DOC_SYNC_EDITOR_ID = 'nodocsynceditorid';
 
 export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
@@ -47,7 +45,6 @@ export const NoDocSyncEditorInternal: FC = () => {
       >
         <LoadingFilter loading={isWritingLocked}>
           <Plate<MyValue>
-            id={NO_DOC_SYNC_EDITOR_ID}
             editor={editor}
             onChange={onChange}
             initialValue={

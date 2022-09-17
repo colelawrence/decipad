@@ -73,7 +73,6 @@ export const Editor = (props: EditorProps) => {
             >
               <Plate<MyValue>
                 editor={editor}
-                id={editor.id}
                 onChange={onChange}
                 editableProps={{
                   // Only respect write locks here and not the readOnly prop.
