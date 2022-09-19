@@ -34,6 +34,7 @@ import {
   map,
   shareReplay,
 } from 'rxjs/operators';
+import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
 import { getExprRef, makeNamesFromIds } from '../exprRefs';
 import { captureException } from '../reporting';
@@ -65,57 +66,6 @@ type WithVersion<T> = T & {
   version?: number;
 };
 
-function* findNames(
-  realm: ComputationRealm,
-  program: AST.Block[]
-): Iterable<AutocompleteName> {
-  const seenSymbols = new Set<string>();
-  const { nodeTypes } = realm.inferContext;
-  // Our search stops at this statement
-  for (const block of program) {
-    for (const statement of block.args) {
-      const symbol = getDefinedSymbol(statement);
-      if (symbol) {
-        if (seenSymbols.has(symbol)) continue;
-        seenSymbols.add(symbol);
-      }
-
-      const type = nodeTypes.get(statement);
-
-      if (statement.type === 'assign' && type) {
-        yield {
-          kind: 'variable',
-          type: serializeType(type),
-          name: statement.args[0].args[0],
-          blockId: block.id,
-        };
-
-        if (statement.args[1].type === 'table') {
-          for (const col of statement.args[1].args) {
-            const colType = nodeTypes.get(col);
-            if (colType) {
-              yield {
-                kind: 'column',
-                type: serializeType(colType),
-                name: `${statement.args[0].args[0]}.${col.args[0].args[0]}`,
-              };
-            }
-          }
-        }
-      }
-
-      if (statement.type === 'function-definition' && type) {
-        yield {
-          kind: 'function',
-          type: serializeType(type),
-          name: statement.args[0].args[0],
-          blockId: block.id,
-        };
-      }
-    }
-  }
-}
-
 interface ComputerOpts {
   requestDebounceMs: number;
 }
@@ -131,6 +81,7 @@ export class Computer {
   private cursorBlockId: string | null = null;
   private requestDebounceMs: number;
   private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
+  private automaticallyGeneratedNames = new Set<string>();
 
   // Imperative parse errors
   private parseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
@@ -152,13 +103,7 @@ export class Computer {
         combineLatestWith(this.externalData),
         // Debounce to give React an easier time
         debounceTime(this.requestDebounceMs),
-        map(
-          ([computeReq, externalData]) =>
-            ({
-              ...computeReq,
-              externalData,
-            } as ComputeRequestWithExternalData)
-        ),
+        map(([computeReq, externalData]) => ({ ...computeReq, externalData })),
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
@@ -356,7 +301,9 @@ export class Computer {
         throw new Error('the computer does not allow concurrent requests');
       }
       this.computing = true;
-      const programWithPrettyNames = makeNamesFromIds(req.program);
+      const [programWithPrettyNames, automaticallyGeneratedNames] =
+        makeNamesFromIds(req.program);
+      this.automaticallyGeneratedNames = automaticallyGeneratedNames;
 
       const blocks = this.ingestComputeRequest({
         ...req,
@@ -436,7 +383,13 @@ export class Computer {
    */
   getNamesDefined(): AutocompleteName[] {
     const program = getGoodBlocks(this.previouslyParsed);
-    return Array.from(findNames(this.computationRealm, program));
+    return Array.from(
+      findNames(
+        this.computationRealm,
+        program,
+        this.automaticallyGeneratedNames
+      )
+    );
   }
 
   getStatement(blockId: string, statementIndex: number): AST.Statement | null {

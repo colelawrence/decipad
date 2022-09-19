@@ -13,13 +13,17 @@ import { assertIsExprRef, getExprRef, isExprRef } from '.';
 /**
  * Takes exprRef_xxxx references and replaces them with variable names
  */
-export const replaceExprRefsWithPrettyRefs = (program: Program): Program => {
+export const replaceExprRefsWithPrettyRefs = (
+  program: Program
+): [Program, Set<string>] => {
   // 1 + 1  --->  exprRef_1234 = 1 + 1
-  let autoAssigned = plainExpressionsToAssignments(program);
+  const autoAssigned = plainExpressionsToAssignments(program);
+
   // MyVar = 1 + exprRef_4567  --->  MyVar = 1 + TheVariableName
   // exprRef_1234 = 1  --->  Value_1 = 1
-  autoAssigned = replaceAllBlockIdReferences(autoAssigned);
-  return autoAssigned;
+  const [renamed, generatedNames] = replaceAllBlockIdReferences(autoAssigned);
+
+  return [renamed, generatedNames];
 };
 
 /** Make sure every non-assignment is an assignment to a block ID */
@@ -48,10 +52,11 @@ function plainExpressionsToAssignments(program: Program) {
   );
 }
 
-function replaceAllBlockIdReferences(program: Program): Program {
+function replaceAllBlockIdReferences(program: Program): [Program, Set<string>] {
   const genVarName = makeVarNameLookup(program);
 
-  return program.map(
+  const generatedNames = new Set<string>();
+  const newProgram = program.map(
     produce((block) => {
       if (block.type === 'identified-block') {
         walkAst(block.block, (thing) => {
@@ -59,12 +64,15 @@ function replaceAllBlockIdReferences(program: Program): Program {
             const varName = getIdentifierString(thing);
             if (isExprRef(varName)) {
               thing.args[0] = genVarName(varName);
+              generatedNames.add(thing.args[0]);
             }
           }
         });
       }
     })
   );
+
+  return [newProgram, generatedNames];
 }
 
 const makeVarNameLookup = (program: Program) => {

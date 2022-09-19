@@ -27,7 +27,11 @@ const stringify = (b: IdentifiedBlock | UnparsedBlock) =>
   b.type === 'identified-block' ? prettyPrintAST(b.block.args[0]) : b.source;
 
 it('creates names for the computer to use', () => {
-  const result = replaceExprRefsWithPrettyRefs([assignVar1, stat2, stat3]);
+  const [result, renames] = replaceExprRefsWithPrettyRefs([
+    assignVar1,
+    stat2,
+    stat3,
+  ]);
   const stringified = result.map(stringify);
 
   expect(stringified[0]).toMatchInlineSnapshot(`
@@ -45,20 +49,27 @@ it('creates names for the computer to use', () => {
       (def Value_2)
       (+ (ref Var1) (ref Value_1)))"
   `);
+
+  expect(renames).toMatchInlineSnapshot(`
+    Set {
+      "Value_1",
+      "Value_2",
+      "Var1",
+    }
+  `);
 });
 
 it('creates names for the computer to use (2)', () => {
-  const result = replaceExprRefsWithPrettyRefs([assignVar1, assignVar1]).map(
-    stringify
-  );
+  const [result] = replaceExprRefsWithPrettyRefs([assignVar1, assignVar1]);
+  const stringified = result.map(stringify);
 
-  expect(result[0]).toMatchInlineSnapshot(`
+  expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
       (def Var1)
       (noop))"
   `);
 
-  expect(result[1]).toMatchInlineSnapshot(`
+  expect(stringified[1]).toMatchInlineSnapshot(`
     "(assign
       (def Var1)
       (noop))"
@@ -66,17 +77,15 @@ it('creates names for the computer to use (2)', () => {
 });
 
 it('allows messy names', () => {
-  const result = replaceExprRefsWithPrettyRefs([
-    assignVarMessy,
-    useVarMessy,
-  ]).map(stringify);
+  const [result] = replaceExprRefsWithPrettyRefs([assignVarMessy, useVarMessy]);
+  const stringified = result.map(stringify);
 
-  expect(result[0]).toMatchInlineSnapshot(`
+  expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
       (def @ +)
       (noop))"
   `);
-  expect(result[1]).toMatchInlineSnapshot(`
+  expect(stringified[1]).toMatchInlineSnapshot(`
     "(assign
       (def Value_1)
       (ref @ +))"
@@ -84,15 +93,16 @@ it('allows messy names', () => {
 });
 
 it('creates names for the computer to use (3)', () => {
-  const result = replaceExprRefsWithPrettyRefs([stat2, stat2]).map(stringify);
+  const [result] = replaceExprRefsWithPrettyRefs([stat2, stat2]);
+  const stringified = result.map(stringify);
 
-  expect(result[0]).toMatchInlineSnapshot(`
+  expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
       (def Value_1)
       (ref Value_2))"
   `);
 
-  expect(result[1]).toMatchInlineSnapshot(`
+  expect(stringified[1]).toMatchInlineSnapshot(`
     "(assign
       (def Value_1)
       (ref Value_2))"
@@ -101,9 +111,10 @@ it('creates names for the computer to use (3)', () => {
 
 it('tolerates empty var names', () => {
   const emptyVarBlock = b('1', n('assign', n('def', ''), n('noop')));
-  const result = replaceExprRefsWithPrettyRefs([emptyVarBlock]).map(stringify);
+  const [result] = replaceExprRefsWithPrettyRefs([emptyVarBlock]);
+  const stringified = result.map(stringify);
 
-  expect(result[0]).toMatchInlineSnapshot(`
+  expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
       (def Value_1)
       (noop))"
