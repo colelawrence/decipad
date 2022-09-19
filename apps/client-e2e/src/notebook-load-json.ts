@@ -91,6 +91,11 @@ describe('notebook load json', () => {
     // make sure screenshot is captured
     expect(sharedNotebookPage).toBeDefined();
 
+    // Magic numbers are delayed
+    expect((await page.$$('text="This is a string"')).length).toBeGreaterThan(
+      0
+    );
+
     await snapshot(sharedNotebookPage, 'Notebook: Published mode (incognito)');
   });
 });
