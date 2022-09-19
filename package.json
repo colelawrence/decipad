@@ -225,7 +225,7 @@
     "web-vitals": "3.0.2",
     "y-protocols": "1.0.5",
     "yjs": "13.5.41",
-    "zustand": "4.0.0-rc.1"
+    "zustand": "4.1.1"
   },
   "devDependencies": {
     "@architect/deploy": "4.2.3",
