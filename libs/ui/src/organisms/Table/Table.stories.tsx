@@ -67,9 +67,6 @@ const body = (
 export default {
   title: 'Organisms / Editor / Table',
   component: Table,
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
 } as Meta;
 
 export const Normal: Story = () => <Table body={body} />;

@@ -11,9 +11,6 @@ export default {
       'my_table = { VeryLongHeading1 = [1, 2], VeryLongHeading2 = ["A", "B"], VeryLongHeading3 = ["C", "D"]}'
     ),
   ],
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
 } as Meta;
 
 export const Normal: Story<ComponentProps<typeof TableResult>> = (props) => {

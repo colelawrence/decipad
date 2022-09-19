@@ -10,9 +10,6 @@ export default {
   title: 'Atoms / UI / Avatar',
   component: Avatar,
   args,
-  parameters: {
-    chromatic: { disable: true },
-  },
 } as Meta;
 
 export const Initial: Story<typeof args> = (props) => <Avatar {...props} />;

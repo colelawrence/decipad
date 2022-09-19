@@ -12,9 +12,6 @@ export default {
   title: 'Organisms / Editor / Inline Menu / Item',
   component: InlineMenuItem,
   args,
-  parameters: {
-    chromatic: { disable: true },
-  },
   decorators: [inMenu],
 } as Meta;
 

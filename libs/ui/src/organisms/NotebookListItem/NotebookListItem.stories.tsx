@@ -23,9 +23,6 @@ export default {
       control: { type: 'radio' },
     },
   },
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
   decorators: [
     (St) => (
       <div style={{ margin: '5px' }}>

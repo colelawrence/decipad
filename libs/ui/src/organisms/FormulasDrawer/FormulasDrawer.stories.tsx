@@ -29,9 +29,6 @@ const lines = [
 export default {
   title: 'Organisms / Editor / Table / FormulasDrawer',
   component: FormulasDrawer,
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
 } as Meta;
 
 export const Normal: Story = () => (

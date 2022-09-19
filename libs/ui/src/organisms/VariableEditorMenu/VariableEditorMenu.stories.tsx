@@ -4,9 +4,6 @@ import { VariableEditorMenu } from './VariableEditorMenu';
 export default {
   title: 'Organisms / Editor / Variable Editor / Menu',
   component: VariableEditorMenu,
-  parameters: {
-    chromatic: { disable: true },
-  },
 } as Meta;
 
 export const Normal: Story = () => (

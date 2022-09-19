@@ -9,9 +9,6 @@ export default {
   title: 'Atoms / Editor / Columns / Add',
   component: AddNew,
   args,
-  parameters: {
-    chromatic: { disable: true },
-  },
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => <AddNew {...props} />;

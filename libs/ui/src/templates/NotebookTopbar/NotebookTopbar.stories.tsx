@@ -19,9 +19,6 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',
   args,
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (

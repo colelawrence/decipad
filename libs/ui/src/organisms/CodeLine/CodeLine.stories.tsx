@@ -12,9 +12,6 @@ export default {
   args: {
     children: '1 + 1',
   },
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
 } as Meta;
 
 export const Normal: Story<ComponentProps<typeof CodeLine> & Result.Result> = ({

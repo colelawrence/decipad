@@ -7,9 +7,6 @@ import { Dashboard } from './Dashboard';
 export default {
   title: 'Pages / Dashboard',
   component: Dashboard,
-  parameters: {
-    chromatic: { viewports: [320, 1280] },
-  },
 } as Meta;
 
 export const Normal: Story = () => (

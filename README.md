@@ -156,7 +156,7 @@ To contribute with changes, you can edit the documents at [the apps/docs/docs fo
 
 ### Running the end-to-end tests
 
-These tests are powered by cypress and are present in apps/client-e2e.
+These tests are powered by playwright and are present in apps/client-e2e.
 
 `cd` to the root of the repo, and run:
 

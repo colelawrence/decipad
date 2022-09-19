@@ -36,9 +36,6 @@ export default {
   title: 'Organisms / Editor / Charts / Params',
   component: PlotParams,
   args: params,
-  parameters: {
-    chromatic: { disable: true },
-  },
 } as Meta;
 
 export const Normal: Story = () => <PlotParams {...params} />;
