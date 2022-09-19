@@ -16438,11 +16438,6 @@ dom-serializer@^2.0.0:
     domhandler "^5.0.2"
     entities "^4.2.0"
 
-dom-to-playwright@0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/dom-to-playwright/-/dom-to-playwright-0.1.3.tgz#67f6f2c6527f0ff63b61eb234bbd9957eebd50a3"
-  integrity sha512-hS8udPMvVfDzwjjUYq3f4xTgA6edvSP1eJVU0aCNG1Us4BfsC66gwraW34xgpl1A4kwIePTNpOah8UNARMk9Gg==
-
 dom-walk@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.2.tgz#0c548bef048f4d1f2a97249002236060daa3fd84"

@@ -4,24 +4,19 @@ const {
 } = require('../../jest-dom.config');
 
 module.exports = {
-  projects: [
-    {
-      ...domConfig,
-      rootDir: __dirname,
-      displayName: 'ui',
+  ...domConfig,
+  rootDir: __dirname,
+  displayName: 'ui',
 
-      coveragePathIgnorePatterns: [
-        ...coveragePathIgnorePatterns,
-        '<rootDir>/src/lib',
-      ],
-    },
-    require.resolve('./jest-browser.config.js'),
+  coveragePathIgnorePatterns: [
+    ...coveragePathIgnorePatterns,
+    '<rootDir>/src/lib',
   ],
 
   coverageThreshold: {
     global: {
-      statements: 76,
-      branches: 68,
+      statements: 65,
+      branches: 67,
     },
   },
 };
