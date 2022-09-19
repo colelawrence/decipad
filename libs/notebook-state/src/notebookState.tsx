@@ -30,6 +30,28 @@ const createStore = () =>
   create<NotebookState>((set, get) => ({
     ...initialState,
     init: (editor: MyEditor, notebookId: string, options: DocSyncOptions) => {
+      // verify that if we have a matching connected docsync instance
+      const {
+        docSyncEditor: oldDocSyncEditor,
+        syncClientState,
+        connected,
+      } = get();
+      if (oldDocSyncEditor) {
+        if (
+          syncClientState === 'created' &&
+          oldDocSyncEditor.id === notebookId &&
+          connected
+        ) {
+          // the one we have is just fine
+          return;
+        }
+        try {
+          oldDocSyncEditor.destroy();
+        } catch (err) {
+          console.error('error destroying old docsync instance', err);
+        }
+      }
+
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
       }, LOAD_TIMEOUT_MS);
@@ -59,6 +81,7 @@ const createStore = () =>
         });
       set({
         docSyncEditor,
+        notebookHref: window.location.pathname,
         syncClientState: 'created',
         computer: new Computer(),
         connected: false,
@@ -69,8 +92,11 @@ const createStore = () =>
       });
     },
     destroy: () => {
-      const { syncClientState, docSyncEditor } = get();
-      if (syncClientState === 'created') {
+      const { syncClientState, docSyncEditor, notebookHref } = get();
+      if (
+        syncClientState === 'created' &&
+        notebookHref !== window.location.pathname
+      ) {
         docSyncEditor?.disconnect();
         docSyncEditor?.destroy();
         set(initialState);

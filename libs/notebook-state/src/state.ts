@@ -14,4 +14,5 @@ export interface NotebookState {
   loadedFromRemote: boolean;
   timedOutLoadingFromRemote: boolean;
   hasLocalChanges: boolean;
+  notebookHref?: string;
 }
