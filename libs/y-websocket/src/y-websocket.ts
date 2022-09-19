@@ -4,7 +4,6 @@ import { Buffer } from 'buffer';
 import * as bc from 'lib0/broadcastchannel';
 import * as decoding from 'lib0/decoding';
 import * as encoding from 'lib0/encoding';
-import * as math from 'lib0/math';
 import * as mutex from 'lib0/mutex';
 import { Observable } from 'lib0/observable';
 import * as time from 'lib0/time';
@@ -50,7 +49,7 @@ interface AwarenessUpdate {
 }
 
 const reconnectTimeoutBase = 1200;
-const maxReconnectTimeout = 2500;
+const maxReconnectTimeout = 5000;
 // @todo - this should depend on awareness.outdatedTime
 const messageReconnectTimeout = 30000;
 const debounceBroadcast = 1000;
@@ -130,20 +129,14 @@ export const readMessage = (
 
 const setupWS = async (provider: TWebSocketProvider) => {
   const scheduleReconnect = () => {
-    // Start with no reconnect timeout and increase timeout by
-    // log10(wsUnsuccessfulReconnects).
-    // The idea is to increase reconnect timeout slowly and have no reconnect
-    // timeout at the beginning (log(1) = 0)
     if (provider.shouldConnect) {
-      setTimeout(
-        setupWS,
-        math.min(
-          math.log10(provider.wsUnsuccessfulReconnects + 1) *
-            reconnectTimeoutBase,
-          maxReconnectTimeout
-        ),
-        provider
+      const timeout = Math.min(
+        Math.random() *
+          provider.wsUnsuccessfulReconnects *
+          reconnectTimeoutBase,
+        maxReconnectTimeout
       );
+      setTimeout(setupWS, timeout, provider);
     }
   };
 
@@ -594,6 +587,9 @@ class WebsocketProvider
   }
 
   disconnect(): void {
+    if (this.wsconnected) {
+      this.broadcastPendingUpdateMessages();
+    }
     this.shouldConnect = false;
     this.disconnectBc();
     if (this.ws != null) {

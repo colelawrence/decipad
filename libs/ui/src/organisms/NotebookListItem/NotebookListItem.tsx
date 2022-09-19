@@ -107,10 +107,8 @@ type NotebookListItemProps = {
   readonly id: string;
   readonly name: string;
 
-  readonly exportHref: string;
-  readonly exportFileName: string;
-
   readonly actionsOpen?: boolean;
+  readonly onExport?: () => void;
   readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
@@ -120,12 +118,11 @@ type NotebookListItemProps = {
 export const NotebookListItem = ({
   id,
   name,
-  exportHref,
-  exportFileName,
   actionsOpen = false,
   toggleActionsOpen = noop,
   onDuplicate = noop,
   onDelete = noop,
+  onExport = noop,
   icon = 'Rocket',
   iconColor = 'Catskill',
 }: NotebookListItemProps): ReturnType<FC> => {
@@ -163,10 +160,9 @@ export const NotebookListItem = ({
         <div css={actionWrapperStyles}>
           <NotebookListItemActions
             href={href}
-            exportHref={exportHref}
-            exportFileName={exportFileName}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
+            onExport={onExport}
           />
         </div>
       )}

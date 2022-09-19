@@ -5,8 +5,6 @@ import { NotebookListItemActions } from './NotebookListItemActions';
 
 const props: ComponentProps<typeof NotebookListItemActions> = {
   href: '',
-  exportFileName: '',
-  exportHref: '',
 };
 
 it('renders a list of 4 actions', () => {
@@ -19,22 +17,7 @@ it('links to the notebook', () => {
   expect(screen.getByText(/open/i)).toHaveAttribute('href', '/notebook');
 });
 
-it('links to an export download', () => {
-  render(
-    <NotebookListItemActions
-      {...props}
-      exportFileName="export.json"
-      exportHref="/exporthref"
-    />
-  );
-  expect(screen.getByText(/export/i)).toHaveAttribute('href', '/exporthref');
-  expect(screen.getByText(/export/i)).toHaveAttribute(
-    'download',
-    'export.json'
-  );
-});
-
-it('can duplicate an notebook', async () => {
+it('can duplicate a notebook', async () => {
   const handleDuplicate = jest.fn();
   render(<NotebookListItemActions {...props} onDuplicate={handleDuplicate} />);
 
@@ -42,10 +25,18 @@ it('can duplicate an notebook', async () => {
   expect(handleDuplicate).toHaveBeenCalled();
 });
 
-it('can delete an notebook', async () => {
+it('can delete a notebook', async () => {
   const handleDelete = jest.fn();
   render(<NotebookListItemActions {...props} onDelete={handleDelete} />);
 
   await userEvent.click(screen.getByText(/del|rem/i, { selector: 'button' }));
   expect(handleDelete).toHaveBeenCalled();
+});
+
+it('can export a notebook', async () => {
+  const handleExport = jest.fn();
+  render(<NotebookListItemActions {...props} onExport={handleExport} />);
+
+  await userEvent.click(screen.getByText(/export/i));
+  expect(handleExport).toHaveBeenCalled();
 });

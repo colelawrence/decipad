@@ -34,5 +34,5 @@ export default {
 } as Meta<typeof args>;
 
 export const Normal: Story<typeof args> = (props) => (
-  <NotebookListItem {...props} id="nb" exportFileName="" exportHref="" />
+  <NotebookListItem {...props} id="nb" />
 );

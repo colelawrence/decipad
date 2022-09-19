@@ -20,17 +20,15 @@ const actionStyles = css(p14Regular, {
 
 interface NotebookListItemActionsProps {
   readonly href: string;
-  readonly exportHref: string;
-  readonly exportFileName: string;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
+  readonly onExport?: () => void;
 }
 export const NotebookListItemActions = ({
   href,
-  exportHref,
-  exportFileName,
   onDuplicate = noop,
   onDelete = noop,
+  onExport = noop,
 }: NotebookListItemActionsProps): ReturnType<React.FC> => {
   return (
     <nav css={styles}>
@@ -40,7 +38,14 @@ export const NotebookListItemActions = ({
           <Divider />
         </li>
         <li css={actionStyles}>
-          <a href={exportHref} download={exportFileName}>
+          <a
+            href={href}
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              onExport();
+            }}
+          >
             Export
           </a>
           <Divider />

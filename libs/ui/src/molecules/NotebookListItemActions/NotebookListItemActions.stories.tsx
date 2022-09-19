@@ -6,6 +6,4 @@ export default {
   component: NotebookListItemActions,
 } as Meta;
 
-export const Normal: Story = () => (
-  <NotebookListItemActions href="" exportFileName="" exportHref="" />
-);
+export const Normal: Story = () => <NotebookListItemActions href="" />;

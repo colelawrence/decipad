@@ -26,15 +26,17 @@ type NotebookListProps = {
   readonly notebooks: ReadonlyArray<
     Pick<
       ComponentProps<typeof NotebookListItem>,
-      'id' | 'name' | 'exportHref' | 'exportFileName' | 'icon' | 'iconColor'
+      'id' | 'name' | 'onExport' | 'icon' | 'iconColor'
     > & { readonly id: string }
   >;
   readonly onDuplicate?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
+  readonly onExport?: (id: string) => void;
 
   readonly onPointerEnter?: () => void;
 } & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> &
   ComponentProps<typeof EmptyWorkspaceCta>;
+
 export const NotebookList = ({
   notebooks,
   onDuplicate = noop,
@@ -76,6 +78,7 @@ export const NotebookList = ({
                     }
                     onDuplicate={() => onDuplicate(id)}
                     onDelete={() => onDelete(id)}
+                    onExport={notebook.onExport}
                   />
                 </li>
               ))}

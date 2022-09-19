@@ -4,7 +4,7 @@ import { expectAuthorized } from '@decipad/services/authorization';
 import { getDefined } from '@decipad/utils';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import Boom from '@hapi/boom';
-import { Doc as YDoc } from 'yjs';
+import { applyUpdate, Doc as YDoc } from 'yjs';
 import handle from '../handle';
 
 async function checkAccess(
@@ -22,12 +22,16 @@ async function checkAccess(
 const serialize = (_: string, value: unknown): unknown =>
   typeof value === 'bigint' ? value.toString() : value;
 
-function exportPad(id: string): Promise<string> {
+function exportPad(id: string, remoteUpdates?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     try {
       const doc = new YDoc();
       const provider = new DynamodbPersistence(`/pads/${id}`, doc);
       provider.once('fetched', () => {
+        if (remoteUpdates) {
+          const update = Buffer.from(remoteUpdates, 'base64');
+          applyUpdate(doc, update, 'remote');
+        }
         try {
           const json = { children: doc.getArray().toJSON() };
           resolve(JSON.stringify(json, serialize, '\t'));
@@ -47,7 +51,7 @@ export const handler = handle(async (event) => {
   const [{ user }] = await expectAuthenticated(event);
   await checkAccess(user, padId);
 
-  const response = await exportPad(padId);
+  const response = await exportPad(padId, event.body);
   return {
     statusCode: 200,
     body: response,

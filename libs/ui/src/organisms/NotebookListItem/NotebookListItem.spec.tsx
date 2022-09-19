@@ -5,8 +5,6 @@ import { NotebookListItem } from './NotebookListItem';
 const props: ComponentProps<typeof NotebookListItem> = {
   id: 'my-notebook',
   name: 'My Notebook',
-  exportFileName: '',
-  exportHref: '',
   icon: 'Rocket',
   iconColor: 'Catskill',
 };

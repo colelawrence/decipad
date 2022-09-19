@@ -4,7 +4,7 @@ import { Observable } from 'lib0/observable';
 import { getDefined } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 
-const updatesStoreName = 'updates';
+export const updatesStoreName = 'updates';
 
 export const PREFERRED_TRIM_SIZE = 500;
 

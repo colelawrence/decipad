@@ -22,6 +22,7 @@ import {
   useRenameWorkspaceMutation,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
+import { exportNotebook } from '../../utils/exportNotebook';
 import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
 
 const loadTopbar = () =>
@@ -84,8 +85,7 @@ const Workspace: FC = () => {
       ...notebook,
       icon,
       iconColor,
-      exportHref: `/api/pads/${notebook.id}/export`,
-      exportFileName: `notebook-${notebook.id}.json`,
+      onExport: exportNotebook(notebook.id),
     };
   });
 
