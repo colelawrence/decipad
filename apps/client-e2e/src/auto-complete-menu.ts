@@ -5,7 +5,7 @@ import { setUp, waitForEditorToLoad } from './page-utils/Pad';
 import { snapshot } from './utils';
 
 // eslint-disable-next-line jest/no-disabled-tests
-describe.skip('auto complete menu', () => {
+describe('auto complete menu', () => {
   beforeAll(() => setUp());
   beforeAll(() => waitForEditorToLoad());
 
