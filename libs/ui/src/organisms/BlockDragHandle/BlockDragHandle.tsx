@@ -12,8 +12,8 @@ const gridStyles = once(() =>
   css({
     display: 'grid',
     gridTemplate: `
-      ".                          handle                             " ${editorLayout.gutterHandleHeight()}
-      "menu                       .                                  " auto
+      ".                          plus handle                             " ${editorLayout.gutterHandleHeight()}
+      "menu                       .    .                                  " auto
       /minmax(max-content, 144px) ${editorLayout.gutterHandleWidth()}
     `,
     justifyContent: 'end',
@@ -44,6 +44,7 @@ interface BlockDragHandleProps {
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;
   readonly showEyeLabel?: boolean;
+  readonly onPlus?: () => void;
   readonly onDelete?: (() => void) | false;
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
@@ -56,6 +57,7 @@ export const BlockDragHandle = ({
   onShowHide = noop,
   showEyeLabel = false,
   onChangeMenuOpen = noop,
+  onPlus = noop,
   onDelete = noop,
   onDuplicate = noop,
   onCopyHref,
@@ -69,10 +71,17 @@ export const BlockDragHandle = ({
 
   const menuButton = (
     <button
+      data-testid="drag-handle"
       onMouseEnter={setHovered}
       onMouseLeave={setNotHovered}
       onClick={() => onDelete !== false && onChangeMenuOpen(!menuOpen)}
-      css={{ gridArea: 'handle', cursor: 'grab' }}
+      css={{
+        gridArea: 'handle',
+        cursor: 'grab',
+        height: '20px',
+        width: '16px',
+        marginLeft: '8px',
+      }}
     >
       {showEyeLabel && !isHovered ? <EyeLabel /> : <DragHandle />}
     </button>
@@ -88,8 +97,28 @@ export const BlockDragHandle = ({
     </MenuItem>
   );
 
+  const plusButton = (
+    <button
+      onClick={onPlus}
+      css={{
+        gridArea: 'plus',
+        cursor: 'pointer',
+
+        height: '20px',
+        width: '20px',
+        borderRadius: '2px',
+
+        color: cssVar('currentTextColor'),
+        backgroundColor: cssVar('highlightColor'),
+      }}
+    >
+      +
+    </button>
+  );
+
   return (
     <div css={gridStyles()}>
+      {plusButton}
       <MenuList
         root
         open={menuOpen}
@@ -122,7 +151,7 @@ export const BlockDragHandle = ({
         )}
       </MenuList>
 
-      <Tooltip trigger={menuButton} side="left">
+      <Tooltip trigger={menuButton} side="right">
         <span
           css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
         >

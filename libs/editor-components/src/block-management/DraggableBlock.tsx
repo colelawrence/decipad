@@ -3,6 +3,7 @@ import {
   MyElement,
   MyReactEditor,
   useTEditorRef,
+  futureElementId,
   ELEMENT_PARAGRAPH,
   ParagraphElement,
 } from '@decipad/editor-types';
@@ -17,6 +18,10 @@ import {
   select,
   setSelection,
   useDndBlock,
+  getNodeString,
+  insertText,
+  getNextNode,
+  getEndPoint,
 } from '@udecode/plate';
 import {
   ComponentProps,
@@ -121,14 +126,48 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     insertNodes(
       editor,
       {
+        id: futureElementId,
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
-      } as unknown as ParagraphElement,
+      } as ParagraphElement,
       {
         at: path,
       }
     );
     select(editor, path);
+  }, [editor, element]);
+
+  const onPlus = useCallback(() => {
+    const value = getNodeString(element);
+    const isParagraph = element.type === ELEMENT_PARAGRAPH;
+    const path = findNodePath(editor, element);
+
+    const createNewParagraph = value || !isParagraph;
+
+    if (!path) return;
+    if (value === '/') return;
+
+    if (createNewParagraph) {
+      const nextNode = getNextNode(editor, { at: path });
+      const [, nextPath] = nextNode || [];
+      if (!nextPath) return;
+
+      insertNodes(
+        editor,
+        {
+          id: futureElementId,
+          type: ELEMENT_PARAGRAPH,
+          children: [{ text: '/' }],
+        } as ParagraphElement,
+        {
+          at: nextPath,
+        }
+      );
+      select(editor, getEndPoint(editor, nextPath));
+    } else {
+      insertText(editor, '/', { at: path });
+      select(editor, getEndPoint(editor, path));
+    }
   }, [editor, element]);
 
   const onCopyHref = useCallback(() => {
@@ -174,6 +213,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         a === 'show' ? setIsHidden(false) : setIsHidden(true);
       }}
       onAdd={onAdd}
+      onPlus={onPlus}
       onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}
       showLine={
         !(

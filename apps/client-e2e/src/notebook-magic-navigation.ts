@@ -53,7 +53,9 @@ describe('notebook navigation', () => {
   });
 
   it('works even when the variable is re-declared', async () => {
-    const allDraggable = await page.$$('div[draggable="true"] button');
+    const allDraggable = await page.$$(
+      '[draggable="true"] [data-testid=drag-handle]'
+    );
     const nrDraggable = allDraggable.length;
     const toDelete = allDraggable[nrDraggable - 3];
     await toDelete.click();
