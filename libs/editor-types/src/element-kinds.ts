@@ -32,6 +32,8 @@ export const ELEMENT_VARIABLE_DEF = 'def';
 export const ELEMENT_EXPRESSION = 'exp';
 export const ELEMENT_SLIDER = 'slider';
 
+export const ELEMENT_DISPLAY = 'display';
+
 // Interactive
 export const DEPRECATED_ELEMENT_INPUT = 'input';
 export const ELEMENT_EVAL = 'eval';

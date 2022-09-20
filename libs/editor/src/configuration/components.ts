@@ -23,6 +23,7 @@ import {
   MARK_UNDERLINE,
   MarkKind,
   PlateComponent,
+  ELEMENT_DISPLAY,
 } from '@decipad/editor-types';
 import {
   Blockquote,
@@ -46,6 +47,7 @@ import {
   Title,
   Underline,
   UnorderedList,
+  Display,
 } from '@decipad/editor-components';
 import { Computer } from '@decipad/computer';
 
@@ -80,6 +82,8 @@ export const components = (computer: Computer): PlateComponents => ({
 
   // Inlines
   [ELEMENT_LINK]: Link,
+
+  [ELEMENT_DISPLAY]: Display,
 
   // Marks
   [MARK_BOLD]: Bold,

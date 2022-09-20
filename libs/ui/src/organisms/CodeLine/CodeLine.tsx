@@ -133,6 +133,7 @@ interface CodeLineProps {
   readonly syntaxError?: ComponentProps<typeof CodeError>;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
+  readonly onClickedResult?: () => void;
 }
 
 export const CodeLine = ({
@@ -145,6 +146,7 @@ export const CodeLine = ({
   syntaxError,
   onDragStartInlineResult,
   onDragStartCell,
+  onClickedResult,
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
@@ -188,7 +190,7 @@ export const CodeLine = ({
           {renderInlineResult &&
             !hasSyntaxError &&
             result && ( // The typescript gods demand me to this
-              <output css={inlineResultStyles}>
+              <output css={inlineResultStyles} onClick={onClickedResult}>
                 <CodeResult {...result} variant="inline" />
               </output>
             )}
@@ -199,7 +201,11 @@ export const CodeLine = ({
           )}
         </div>
         {renderExpandedResult && result && (
-          <output contentEditable={false} css={expandedResultStyles}>
+          <output
+            contentEditable={false}
+            css={expandedResultStyles}
+            onClick={onClickedResult}
+          >
             <CodeResult
               {...result}
               variant="block"

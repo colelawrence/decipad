@@ -163,7 +163,7 @@ export const VariableDef: PlateComponent = ({
           readOnly={readOnly}
           type={element.coerceToType ?? inferredType}
           onChangeType={onChangeType}
-          value={getNodeString(element.children[1])}
+          value={element.children[1] ? getNodeString(element.children[1]) : ''}
           onChangeValue={onChangeValue}
         >
           {children}

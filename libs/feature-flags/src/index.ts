@@ -5,7 +5,8 @@ export type Flag =
   | 'UNSAFE_JS_EVAL'
   | 'COPY_HREF'
   | 'PERSISTENT_EXAMPLE'
-  | 'DATA_VIEW';
+  | 'DATA_VIEW'
+  | 'RESULT_WIDGET';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

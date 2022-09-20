@@ -1,20 +1,23 @@
 import {
   CaptionElement,
+  DisplayElement,
   ELEMENT_CAPTION,
+  ELEMENT_DISPLAY,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
+  ExpressionElement,
   MyEditor,
   SliderElement,
   VariableDefinitionElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
+import {
+  getElementUniqueName,
+  requirePathBelowBlock,
+} from '@decipad/editor-utils';
 import { insertNodes } from '@udecode/plate';
 import { Path } from 'slate';
-import {
-  requirePathBelowBlock,
-  getElementUniqueName,
-} from '@decipad/editor-utils';
 
 const getInitialInputElement = () => {
   return {
@@ -24,11 +27,11 @@ const getInitialInputElement = () => {
       {
         type: ELEMENT_CAPTION,
         children: [{ text: '' }],
-      },
+      } as CaptionElement,
       {
         type: ELEMENT_EXPRESSION,
         children: [{ text: '' }],
-      },
+      } as ExpressionElement,
     ],
   } as VariableDefinitionElement;
 };
@@ -58,7 +61,7 @@ const getSliderInputElement = () => {
       {
         type: ELEMENT_EXPRESSION,
         children: [{ text: '' }],
-      },
+      } as ExpressionElement,
       {
         type: ELEMENT_SLIDER,
         max: '10',
@@ -86,4 +89,19 @@ export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
       at: requirePathBelowBlock(editor, path),
     }
   );
+};
+
+const getDisplayElement = () => {
+  return {
+    blockId: '',
+    type: ELEMENT_DISPLAY,
+    children: [{ text: '' }],
+  } as DisplayElement;
+};
+
+export const insertDisplayBelow = (editor: MyEditor, path: Path): void => {
+  const display = getDisplayElement();
+  insertNodes(editor, display, {
+    at: requirePathBelowBlock(editor, path),
+  });
 };

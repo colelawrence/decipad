@@ -11,6 +11,7 @@ import {
 } from '.';
 import {
   ELEMENT_CAPTION,
+  ELEMENT_DISPLAY,
   ELEMENT_EXPRESSION,
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
@@ -118,6 +119,12 @@ export interface ExpressionElement extends BaseElement {
   children: [PlainText];
 }
 
+export interface DisplayElement extends BaseElement {
+  type: typeof ELEMENT_DISPLAY;
+  blockId: string;
+  children: [EmptyText];
+}
+
 export interface SliderElement extends BaseElement {
   type: typeof ELEMENT_SLIDER;
   max: string;
@@ -131,8 +138,8 @@ export interface VariableBaseElement<V extends string, T extends BlockElement[]>
   extends BaseElement {
   type: typeof ELEMENT_VARIABLE_DEF;
   variant: V;
-  coerceToType?: SerializedType;
   children: [CaptionElement, ...T];
+  coerceToType?: SerializedType;
 }
 
 export type VariableExpressionElement = VariableBaseElement<
@@ -157,6 +164,7 @@ export type InteractiveElement =
   | LiveConnectionElement
   | PlotElement
   | EvalElement
+  | DisplayElement
   | DeprecatedInputElement
   | VariableDefinitionElement;
 

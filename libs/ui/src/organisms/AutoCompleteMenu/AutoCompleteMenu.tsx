@@ -19,27 +19,28 @@ type AutoCompleteGroup = Omit<
   readonly items: ReadonlyArray<Identifier>;
 };
 
-const styles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  overflowX: 'hidden',
-  overflowY: 'auto',
-  top: '26px',
-  left: 0,
-  userSelect: 'none',
+const styles = (top: boolean) =>
+  css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    top: top ? '26px' : '0px',
+    left: 0,
+    userSelect: 'none',
 
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
-  borderRadius: '0px 12px 12px 12px',
-  boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
-  position: 'absolute',
-  width: '280px',
-  maxHeight: '293px',
-  background: white.rgb,
-  boxSizing: 'border-box',
-  zIndex: 1,
-});
+    backgroundColor: cssVar('backgroundColor'),
+    border: `1px solid ${cssVar('strongHighlightColor')}`,
+    borderRadius: '0px 12px 12px 12px',
+    boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
+    position: 'absolute',
+    width: '280px',
+    maxHeight: '293px',
+    background: white.rgb,
+    boxSizing: 'border-box',
+    zIndex: 1,
+  });
 
 const mainStyles = css({
   padding: '8px',
@@ -56,12 +57,14 @@ export interface AutoCompleteMenuProps {
   readonly identifiers: Identifier[];
   readonly search?: string;
   readonly onExecuteItem?: (identifier: Identifier) => void;
+  readonly top?: boolean;
 }
 
 export const AutoCompleteMenu = ({
   search = '',
   identifiers,
   onExecuteItem,
+  top = true,
 }: AutoCompleteMenuProps): ReturnType<FC> => {
   const groups: ReadonlyArray<AutoCompleteGroup> = useMemo(
     () => [
@@ -147,7 +150,7 @@ export const AutoCompleteMenu = ({
         contentEditable={false}
         role="menu"
         aria-orientation="vertical"
-        css={styles}
+        css={styles(top)}
       >
         <div css={mainStyles}>
           {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) =>

@@ -61,7 +61,6 @@ const widgetWrapperStyles = css({
 const headerWrapperStyles = css({
   display: 'inline-flex',
   gridAutoColumns: 'auto',
-  overflow: 'hidden',
   minWidth: 0,
   gap: '4px',
 });
@@ -148,12 +147,16 @@ export const VariableEditor = ({
 
   return (
     <div css={spacingStyles}>
-      <div css={wrapperStyles(baseSwatches[color].rgb)}>
+      <div
+        css={wrapperStyles(
+          menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
+        )}
+      >
         <div css={widgetWrapperStyles}>
           <div css={headerWrapperStyles}>
             <>
               <div css={variableNameStyles}>{childrenArray[0]}</div>
-              {!readOnly && (
+              {!readOnly && menuProps.variant !== 'display' && (
                 <span contentEditable={false} css={iconWrapperStyles}>
                   <Icon />
                 </span>
@@ -180,14 +183,16 @@ export const VariableEditor = ({
               </div>
             </>
           </div>
-          <CellEditor
-            type={type}
-            value={value}
-            onChangeValue={onChangeValue}
-            focused={selected}
-          >
-            {childrenArray.slice(1)}
-          </CellEditor>
+          {menuProps.variant !== 'display' && (
+            <CellEditor
+              type={type}
+              value={value}
+              onChangeValue={onChangeValue}
+              focused={selected}
+            >
+              {childrenArray.slice(1)}
+            </CellEditor>
+          )}
         </div>
       </div>
       <div css={addNewWrapperStyles} contentEditable={false}>

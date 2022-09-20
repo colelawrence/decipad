@@ -42,6 +42,7 @@ import {
 } from './element-kinds';
 import {
   CaptionElement,
+  DisplayElement,
   ExpressionElement,
   LiveConnectionVarNameElement,
   SliderElement,
@@ -225,6 +226,7 @@ export type BlockElement =
   | TableHeaderElement
   | TableCellElement
   | ExpressionElement
+  | DisplayElement
   | CaptionElement
   | SliderElement
   | DataViewElement
@@ -250,6 +252,7 @@ export type MyValue = [
     | EvalElement
     | ImageElement
     | MediaEmbedElement
+    | CodeLineElement
     | DeprecatedCodeBlockElement
     | UnorderedListElement
     | OrderedListElement

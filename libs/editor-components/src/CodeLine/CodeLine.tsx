@@ -5,14 +5,17 @@ import {
   isSyntaxError,
 } from '@decipad/computer';
 import {
+  DisplayElement,
   ELEMENT_CODE_LINE,
+  ELEMENT_DISPLAY,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { isNodeEmpty, CodeLine as UICodeLine } from '@decipad/ui';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -53,6 +56,26 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           syntaxError={syntaxError}
           onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
           onDragStartCell={onDragStartTableCellResult(editor)}
+          onClickedResult={
+            isFlagEnabled('RESULT_WIDGET')
+              ? () => {
+                  const path = findNodePath(editor, element);
+                  if (!path) return;
+
+                  insertNodes(
+                    editor,
+                    {
+                      type: ELEMENT_DISPLAY,
+                      blockId: element.id,
+                      children: [{ text: '' }],
+                    } as DisplayElement,
+                    {
+                      at: [path[0] + 1],
+                    }
+                  );
+                }
+              : () => {}
+          }
         >
           {children}
         </UICodeLine>

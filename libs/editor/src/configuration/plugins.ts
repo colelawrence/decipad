@@ -6,6 +6,7 @@ import {
   createCodeLinePlugin,
   createCodeVariableHighlightPlugin,
   createDividerPlugin,
+  createDisplayPlugin,
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
   createEvalPlugin,
@@ -87,6 +88,8 @@ export const plugins = (
 
       createCalloutPlugin(),
       createDividerPlugin(),
+
+      createDisplayPlugin(),
 
       // Layout blocks
       createLayoutColumnsPlugin(),

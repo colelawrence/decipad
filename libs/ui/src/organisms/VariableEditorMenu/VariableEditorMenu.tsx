@@ -47,6 +47,15 @@ type VariableEditorMenuProps = {
       readonly min?: string;
       readonly step?: string;
     }
+  | {
+      readonly variant?: 'display';
+      readonly onChangeMax?: never;
+      readonly onChangeMin?: never;
+      readonly onChangeStep?: never;
+      readonly max?: never;
+      readonly min?: never;
+      readonly step?: never;
+    }
 );
 
 export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
@@ -109,92 +118,94 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         />,
         <MenuSeparator key="sep" />,
       ]}
-      <MenuList
-        itemTrigger={
-          <TriggerMenuItem icon={<Shapes />}>
-            <div css={{ minWidth: '132px' }}>Change type</div>
-          </TriggerMenuItem>
-        }
-      >
-        <MenuItem
-          icon={<NumberIcon />}
-          onSelect={() => onChangeType(getNumberType())}
-          selected={type?.kind === 'number' && type.unit == null}
-        >
-          Number
-        </MenuItem>
-        <MenuItem
-          icon={<Formula />}
-          onSelect={() => onChangeType({ kind: 'anything' })}
-          selected={type?.kind === 'anything'}
-        >
-          Formula
-        </MenuItem>
-        <MenuItem
-          icon={<CheckboxSelected />}
-          onSelect={() => onChangeType(getBooleanType())}
-          selected={type?.kind === 'boolean'}
-        >
-          Checkbox
-        </MenuItem>
-        <MenuItem
-          icon={<Text />}
-          onSelect={() => onChangeType(getStringType())}
-          selected={type?.kind === 'string'}
-        >
-          Text
-        </MenuItem>
+      {variant !== 'display' && (
         <MenuList
           itemTrigger={
-            <TriggerMenuItem
-              icon={<Calendar />}
-              selected={type?.kind === 'date'}
-            >
-              <div css={{ minWidth: '116px' }}>Date</div>
+            <TriggerMenuItem icon={<Shapes />}>
+              <div css={{ minWidth: '132px' }}>Change type</div>
             </TriggerMenuItem>
           }
-          open={dateOpen}
-          onChangeOpen={setDateOpen}
         >
           <MenuItem
-            icon={<Calendar />}
-            onSelect={() => onChangeType(getDateType('year'))}
-            selected={type?.kind === 'date' && type.date === 'year'}
+            icon={<NumberIcon />}
+            onSelect={() => onChangeType(getNumberType())}
+            selected={type?.kind === 'number' && type.unit == null}
           >
-            Year
+            Number
           </MenuItem>
           <MenuItem
-            icon={<Calendar />}
-            onSelect={() => onChangeType(getDateType('month'))}
-            selected={type?.kind === 'date' && type.date === 'month'}
+            icon={<Formula />}
+            onSelect={() => onChangeType({ kind: 'anything' })}
+            selected={type?.kind === 'anything'}
           >
-            Month
+            Formula
           </MenuItem>
           <MenuItem
-            icon={<Calendar />}
-            onSelect={() => onChangeType(getDateType('day'))}
-            selected={type?.kind === 'date' && type.date === 'day'}
+            icon={<CheckboxSelected />}
+            onSelect={() => onChangeType(getBooleanType())}
+            selected={type?.kind === 'boolean'}
           >
-            Day
+            Checkbox
           </MenuItem>
           <MenuItem
-            icon={<Calendar />}
-            onSelect={() => onChangeType(getDateType('minute'))}
-            selected={type?.kind === 'date' && type.date === 'minute'}
+            icon={<Text />}
+            onSelect={() => onChangeType(getStringType())}
+            selected={type?.kind === 'string'}
           >
-            Time
+            Text
           </MenuItem>
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem
+                icon={<Calendar />}
+                selected={type?.kind === 'date'}
+              >
+                <div css={{ minWidth: '116px' }}>Date</div>
+              </TriggerMenuItem>
+            }
+            open={dateOpen}
+            onChangeOpen={setDateOpen}
+          >
+            <MenuItem
+              icon={<Calendar />}
+              onSelect={() => onChangeType(getDateType('year'))}
+              selected={type?.kind === 'date' && type.date === 'year'}
+            >
+              Year
+            </MenuItem>
+            <MenuItem
+              icon={<Calendar />}
+              onSelect={() => onChangeType(getDateType('month'))}
+              selected={type?.kind === 'date' && type.date === 'month'}
+            >
+              Month
+            </MenuItem>
+            <MenuItem
+              icon={<Calendar />}
+              onSelect={() => onChangeType(getDateType('day'))}
+              selected={type?.kind === 'date' && type.date === 'day'}
+            >
+              Day
+            </MenuItem>
+            <MenuItem
+              icon={<Calendar />}
+              onSelect={() => onChangeType(getDateType('minute'))}
+              selected={type?.kind === 'date' && type.date === 'minute'}
+            >
+              Time
+            </MenuItem>
+          </MenuList>
+          {type && (
+            <MenuItem
+              icon={<Close />}
+              onSelect={() => onChangeType(undefined)}
+              selected={!type}
+            >
+              Reset
+            </MenuItem>
+          )}
         </MenuList>
-        {type && (
-          <MenuItem
-            icon={<Close />}
-            onSelect={() => onChangeType(undefined)}
-            selected={!type}
-          >
-            Reset
-          </MenuItem>
-        )}
-      </MenuList>
+      )}
       {isFlagEnabled('INPUT_COPY') && (
         <MenuItem onSelect={onCopy}>Copy</MenuItem>
       )}

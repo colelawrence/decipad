@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { createTPluginFactory, ELEMENT_CALLOUT } from '@decipad/editor-types';
 import { Callout } from '@decipad/editor-components';
 import { deserializeCalloutHtml } from './deserializeCalloutHtml';

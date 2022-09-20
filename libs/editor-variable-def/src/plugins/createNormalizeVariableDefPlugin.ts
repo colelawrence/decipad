@@ -50,10 +50,7 @@ const normalize =
       return true;
     }
 
-    if (
-      node.children.length < 2 &&
-      (node.variant === 'expression' || node.variant === 'slider')
-    ) {
+    if (node.children.length < 2) {
       insertNodes<ExpressionElement>(
         editor,
         {
@@ -66,10 +63,7 @@ const normalize =
       return true;
     }
 
-    if (
-      node.children[1].type !== ELEMENT_EXPRESSION &&
-      (node.variant === 'expression' || node.variant === 'slider')
-    ) {
+    if (node.children[1].type !== ELEMENT_EXPRESSION) {
       removeNodes(editor, {
         at: [...path, 1],
       });
@@ -108,6 +102,7 @@ const normalize =
 export const createNormalizeVariableDefPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_VARIABLE_DEF_PLUGIN',
   elementType: ELEMENT_VARIABLE_DEF,
+  acceptableSubElements: [ELEMENT_CAPTION, ELEMENT_EXPRESSION, ELEMENT_SLIDER],
   acceptableElementProperties: [
     'variant',
     'max',
@@ -116,6 +111,5 @@ export const createNormalizeVariableDefPlugin = createNormalizerPluginFactory({
     'value',
     'coerceToType',
   ],
-  acceptableSubElements: [ELEMENT_CAPTION, ELEMENT_EXPRESSION, ELEMENT_SLIDER],
   plugin: normalize,
 });

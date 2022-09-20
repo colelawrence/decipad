@@ -18,7 +18,11 @@ import {
   insertDividerBelow,
   requireBlockParentPath,
 } from '@decipad/editor-utils';
-import { insertInputBelow, insertSliderInputBelow } from './input';
+import {
+  insertDisplayBelow,
+  insertInputBelow,
+  insertSliderInputBelow,
+} from './input';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
 import { insertDataViewBelow } from './data-view';
@@ -52,6 +56,9 @@ export const execute = ({
       break;
     case 'slider':
       insertSliderInputBelow(editor, path);
+      break;
+    case 'display':
+      insertDisplayBelow(editor, path);
       break;
     case 'table':
       insertTableBelow(editor, path, getAvailableIdentifier);

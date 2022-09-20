@@ -39,3 +39,4 @@ export * from './KeyboardNavigation';
 export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './WithDocSyncHistory';
+export * from './Display';

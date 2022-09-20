@@ -1,10 +1,10 @@
-import { MyEditor, ELEMENT_COLUMNS } from '@decipad/editor-types';
+import { MyEditor, ELEMENT_COLUMNS, ElementKind } from '@decipad/editor-types';
 
 // Gets a unique name for Input and Sliders and any other widget type element,
 // regardless of reloads, user deleting elements, slash inserts or column inserts.
 export const getElementUniqueName = (
   editor: MyEditor,
-  type: string,
+  type: ElementKind,
   variant: string,
   name: string
 ): string => {

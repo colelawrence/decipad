@@ -8,3 +8,4 @@ export * from './Media/MediaEmbed';
 export * from './text';
 export * from './InteractiveParagraph';
 export * from './hooks';
+export * from './Display';
