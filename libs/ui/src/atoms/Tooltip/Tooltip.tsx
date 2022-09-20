@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { Arrow, Content, Root, Trigger } from '@radix-ui/react-hover-card';
+import {
+  Arrow,
+  Content,
+  Root,
+  Trigger,
+  Portal,
+} from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { FC } from 'react';
 import {
@@ -21,6 +27,7 @@ const contentWrapperStyles = css({
   maxWidth: '300px',
   padding: '12px 16px',
   wordBreak: 'break-all',
+  zIndex: '1000',
 });
 
 const smallVariantStyles = css({
@@ -84,13 +91,18 @@ export const Tooltip = ({
       >
         {trigger}
       </Trigger>
-      <Content
-        side={side}
-        css={[contentWrapperStyles, variant === 'small' && smallVariantStyles]}
-      >
-        <Arrow css={arrowStyles} width={18} height={9} offset={6} />
-        <div css={contentStyles}>{children}</div>
-      </Content>
+      <Portal>
+        <Content
+          side={side}
+          css={[
+            contentWrapperStyles,
+            variant === 'small' && smallVariantStyles,
+          ]}
+        >
+          <Arrow css={arrowStyles} width={18} height={9} offset={6} />
+          <div css={contentStyles}>{children}</div>
+        </Content>
+      </Portal>
     </Root>
   );
 };

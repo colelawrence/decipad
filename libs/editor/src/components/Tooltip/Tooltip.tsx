@@ -5,12 +5,12 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
-  MyMark,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { FC, ReactElement } from 'react';
+import { MyMark } from 'libs/editor-types/src/nodes';
 import { ToggleMarkButton } from './buttons/ToggleMarkButton/ToggleMarkButton';
 import { useEditorTooltip } from './hooks/useEditorTooltip';
 import { wrapperStyles } from './styles/wrapper';
