@@ -142,8 +142,10 @@ export class IndexeddbPersistence extends Observable<string> {
         return this;
       }
     ).then((store) => {
-      this.emit('synced', [this]);
-      this.synced = true;
+      if (!this._destroyed) {
+        this.emit('synced', [this]);
+        this.synced = true;
+      }
       return new Promise((resolve) => {
         if (store) {
           resolve(store);

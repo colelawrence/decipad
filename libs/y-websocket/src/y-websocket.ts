@@ -436,7 +436,7 @@ class WebsocketProvider
   }
 
   private _updateHandler(update: Uint8Array, origin: unknown) {
-    if (origin !== this && !this.readOnly) {
+    if (origin !== this && !this.readOnly && this.wsconnected) {
       this.outUpdates.push(update);
       this.debouncedBroadcastUpdateMessage();
     }
