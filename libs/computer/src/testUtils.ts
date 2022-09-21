@@ -139,6 +139,3 @@ export const simplifyComputeResponse = (
 
   return simpleUpdates;
 };
-
-export const simplifyLocs = (ids: [string, number][]) =>
-  ids.map((id) => id.join('/'));

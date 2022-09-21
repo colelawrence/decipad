@@ -76,7 +76,7 @@ export class Computer {
   private locale = 'en-US';
   private previouslyParsed: ParseRet[] = [];
   private previousExternalData: ExternalDataMap = new Map();
-  private computationRealm = new ComputationRealm();
+  computationRealm = new ComputationRealm();
   private computing = false;
   private cursorBlockId: string | null = null;
   private requestDebounceMs: number;

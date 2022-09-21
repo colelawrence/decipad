@@ -5,27 +5,24 @@ import { ComputationRealm } from '../computer/ComputationRealm';
 export function* findNames(
   realm: ComputationRealm,
   program: AST.Block[],
-  automaticallyGeneratedNames: Set<string>
+  ignoreNames: Set<string>
 ): Iterable<AutocompleteName> {
   const seenSymbols = new Set<string>();
   const { nodeTypes } = realm.inferContext;
   // Our search stops at this statement
   for (const block of program) {
     for (const statement of block.args) {
-      const symbol = getDefinedSymbol(statement);
-      if (symbol) {
-        if (seenSymbols.has(symbol)) continue;
-        seenSymbols.add(symbol);
-      }
-
-      const identifierName = symbol?.split(':').pop();
-      if (identifierName && automaticallyGeneratedNames.has(identifierName)) {
+      const symbol = getSymbolOrColumn(statement);
+      if (!symbol || seenSymbols.has(symbol) || ignoreNames.has(symbol)) {
         continue;
       }
 
       const type = nodeTypes.get(statement);
+      if (!type) {
+        continue;
+      }
 
-      if (statement.type === 'assign' && type) {
+      if (statement.type === 'assign') {
         yield {
           kind: 'variable',
           type: serializeType(type),
@@ -47,7 +44,15 @@ export function* findNames(
         }
       }
 
-      if (statement.type === 'function-definition' && type) {
+      if (statement.type === 'table-column-assign') {
+        yield {
+          kind: 'column',
+          type: serializeType(type),
+          name: `${statement.args[0].args[0]}.${statement.args[1].args[0]}`,
+        };
+      }
+
+      if (statement.type === 'function-definition') {
         yield {
           kind: 'function',
           type: serializeType(type),
@@ -58,3 +63,13 @@ export function* findNames(
     }
   }
 }
+
+const getSymbolOrColumn = (stat: AST.Statement) => {
+  let symbol = getDefinedSymbol(stat)?.split(':', 2).pop();
+
+  if (symbol && stat.type === 'table-column-assign') {
+    symbol += `.${stat.args[1].args[0]}`;
+  }
+
+  return symbol;
+};
