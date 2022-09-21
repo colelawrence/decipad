@@ -1,14 +1,11 @@
 import {
-  CaptionElement,
   DisplayElement,
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
-  ExpressionElement,
   MyEditor,
-  SliderElement,
   VariableDefinitionElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
@@ -17,21 +14,25 @@ import {
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
 import { insertNodes } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 
 const getInitialInputElement = () => {
   return {
+    id: nanoid(),
     type: ELEMENT_VARIABLE_DEF,
     variant: 'expression',
     children: [
       {
+        id: nanoid(),
         type: ELEMENT_CAPTION,
         children: [{ text: '' }],
-      } as CaptionElement,
+      },
       {
+        id: nanoid(),
         type: ELEMENT_EXPRESSION,
         children: [{ text: '' }],
-      } as ExpressionElement,
+      },
     ],
   } as VariableDefinitionElement;
 };
@@ -51,25 +52,29 @@ export const insertInputBelow = (editor: MyEditor, path: Path): void => {
 
 const getSliderInputElement = () => {
   return {
+    id: nanoid(),
     type: ELEMENT_VARIABLE_DEF,
     variant: 'slider',
     children: [
       {
+        id: nanoid(),
         type: ELEMENT_CAPTION,
         children: [{ text: '' }],
-      } as CaptionElement,
+      },
       {
+        id: nanoid(),
         type: ELEMENT_EXPRESSION,
         children: [{ text: '' }],
-      } as ExpressionElement,
+      },
       {
+        id: nanoid(),
         type: ELEMENT_SLIDER,
         max: '10',
         min: '0',
         step: '1',
         value: '0',
         children: [{ text: '' }],
-      } as SliderElement,
+      },
     ],
   };
 };
@@ -93,6 +98,7 @@ export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
 
 const getDisplayElement = () => {
   return {
+    id: nanoid(),
     blockId: '',
     type: ELEMENT_DISPLAY,
     children: [{ text: '' }],

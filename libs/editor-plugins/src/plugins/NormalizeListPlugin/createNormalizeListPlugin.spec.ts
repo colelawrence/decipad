@@ -213,7 +213,7 @@ describe('a list item', () => {
       },
     ];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       {
         type: ELEMENT_UL,
         children: [
@@ -238,7 +238,7 @@ describe('a list item', () => {
       },
     ];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       {
         type: ELEMENT_UL,
         children: [
@@ -268,7 +268,7 @@ describe('a list item', () => {
       },
     ];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       {
         type: ELEMENT_UL,
         children: [

@@ -9,18 +9,20 @@ import {
   requireBlockParentPath,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
+import { nanoid } from 'nanoid';
 
-const codeLineElement = {
+const codeLineElement = (): CodeLineElement => ({
+  id: nanoid(),
   type: ELEMENT_CODE_LINE,
   children: [{ text: '' }],
-} as CodeLineElement;
+});
 
 export const insertCodeLineBelow = (
   editor: MyEditor,
   path: Path,
   select = false
 ): void => {
-  insertNodes<CodeLineElement>(editor, codeLineElement, {
+  insertNodes<CodeLineElement>(editor, codeLineElement(), {
     at: requirePathBelowBlock(editor, path),
     select,
   });

@@ -2,11 +2,11 @@ import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  TableColumnFormulaElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { hasNode, insertNodes, deleteText } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 
 export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
@@ -39,10 +39,11 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
         insertNodes(
           editor,
           {
+            id: nanoid(),
             type: ELEMENT_TABLE_COLUMN_FORMULA,
             columnId: header.id,
             children: [{ text: '' }],
-          } as TableColumnFormulaElement,
+          },
           { at: insertPath }
         );
         return true;

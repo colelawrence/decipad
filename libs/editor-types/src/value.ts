@@ -62,8 +62,6 @@ import {
 
 // Defining specific elements
 
-export const futureElementId = undefined as unknown as string;
-
 export interface BaseElement extends TElement {
   type: ElementKind;
   id: string;

@@ -17,6 +17,7 @@ import {
   unwrapNodes,
   wrapNodes,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 const normalizeEditor = (editor: MyEditor) => (entry: MyNodeEntry) => {
@@ -27,7 +28,11 @@ const normalizeEditor = (editor: MyEditor) => (entry: MyNodeEntry) => {
     if (!node.children.length) {
       insertNodes(
         editor,
-        { type: ELEMENT_H1, children: [] } as unknown as H1Element,
+        {
+          id: nanoid(),
+          type: ELEMENT_H1,
+          children: [],
+        } as unknown as H1Element,
         {
           at: [...path, 0],
         }
@@ -42,7 +47,11 @@ const normalizeEditor = (editor: MyEditor) => (entry: MyNodeEntry) => {
         if (isText(blockNode)) {
           wrapNodes(
             editor,
-            { type: ELEMENT_H1, children: [] } as unknown as H1Element,
+            {
+              id: nanoid(),
+              type: ELEMENT_H1,
+              children: [],
+            } as unknown as H1Element,
             {
               at: blockPath,
             }
@@ -64,6 +73,7 @@ const normalizeEditor = (editor: MyEditor) => (entry: MyNodeEntry) => {
         wrapNodes(
           editor,
           {
+            id: nanoid(),
             type: ELEMENT_PARAGRAPH,
             children: [],
           } as unknown as ParagraphElement,

@@ -29,6 +29,7 @@ import {
 } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
+import { nanoid } from 'nanoid';
 import { useCallback, useState } from 'react';
 
 export const VariableDef: PlateComponent = ({
@@ -62,10 +63,12 @@ export const VariableDef: PlateComponent = ({
       insertNodeIntoColumns(
         editor,
         {
+          id: nanoid(),
           type: ELEMENT_VARIABLE_DEF,
           variant: element.variant,
           children: [
             {
+              id: nanoid(),
               type: ELEMENT_CAPTION,
               children: [
                 {
@@ -79,6 +82,7 @@ export const VariableDef: PlateComponent = ({
               ],
             },
             {
+              id: nanoid(),
               type: ELEMENT_EXPRESSION,
               children: [{ text: '' }],
             },

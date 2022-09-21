@@ -16,31 +16,38 @@ import { GetAvailableIdentifier } from './slashCommands';
 
 const initialTableElement = () => {
   return {
+    id: nanoid(),
     type: ELEMENT_TABLE,
     children: [
       {
+        id: nanoid(),
         type: ELEMENT_TABLE_CAPTION,
         children: [
           {
+            id: nanoid(),
             type: ELEMENT_TABLE_VARIABLE_NAME,
             children: [{ text: '' }],
           },
         ],
       },
       {
+        id: nanoid(),
         type: ELEMENT_TR,
         children: [
           {
+            id: nanoid(),
             type: ELEMENT_TH,
             cellType: { kind: 'string' },
             children: [{ text: 'Property1' }],
           },
           {
+            id: nanoid(),
             type: ELEMENT_TH,
             cellType: { kind: 'anything' },
             children: [{ text: 'Property2' }],
           },
           {
+            id: nanoid(),
             type: ELEMENT_TH,
             cellType: { kind: 'anything' },
             children: [{ text: 'Property3' }],
@@ -48,34 +55,40 @@ const initialTableElement = () => {
         ],
       },
       {
+        id: nanoid(),
         type: ELEMENT_TR,
         children: [
           {
+            id: nanoid(),
             type: ELEMENT_TD,
             children: [{ text: '' }],
           },
         ],
       },
       {
+        id: nanoid(),
         type: ELEMENT_TR,
         children: [
           {
+            id: nanoid(),
             type: ELEMENT_TD,
             children: [{ text: '' }],
           },
         ],
       },
       {
+        id: nanoid(),
         type: ELEMENT_TR,
         children: [
           {
+            id: nanoid(),
             type: ELEMENT_TD,
             children: [{ text: '' }],
           },
         ],
       },
     ],
-  } as unknown as TableElement;
+  } as TableElement;
 };
 
 export const insertTableBelow = (
@@ -88,7 +101,6 @@ export const insertTableBelow = (
     'Table',
     1
   );
-  table.id = nanoid();
   insertNodes(editor, table, {
     at: requirePathBelowBlock(editor, path),
   });

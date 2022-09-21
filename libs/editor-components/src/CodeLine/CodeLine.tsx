@@ -6,7 +6,6 @@ import {
   Result,
 } from '@decipad/computer';
 import {
-  DisplayElement,
   ELEMENT_CODE_LINE,
   ELEMENT_DISPLAY,
   PlateComponent,
@@ -17,6 +16,7 @@ import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { isNodeEmpty, CodeLine as UICodeLine } from '@decipad/ui';
 import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -76,10 +76,11 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
                   insertNodes(
                     editor,
                     {
+                      id: nanoid(),
                       type: ELEMENT_DISPLAY,
                       blockId: element.id,
                       children: [{ text: '' }],
-                    } as DisplayElement,
+                    },
                     {
                       at: [path[0] + 1],
                     }

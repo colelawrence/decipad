@@ -1,10 +1,10 @@
 import {
   ELEMENT_PARAGRAPH,
-  ParagraphElement,
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { insertNodes, isEditor } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
 /**
@@ -27,13 +27,14 @@ export const createNormalizeNewParagraphPlugin = createNormalizerPluginFactory({
         insertNodes(
           editor,
           {
+            id: nanoid(),
             type: ELEMENT_PARAGRAPH,
             children: [
               {
                 text: '',
               },
             ],
-          } as unknown as ParagraphElement,
+          },
           {
             at: [node.children.length],
           }

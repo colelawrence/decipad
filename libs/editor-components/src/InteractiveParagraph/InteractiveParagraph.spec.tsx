@@ -272,7 +272,7 @@ it('executes a command on click', async () => {
 
   await userEvent.click(await findByText(/sub-head/i));
   await waitFor(() => {
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       { type: ELEMENT_H3, children: [{ text: '' }] },
     ]);
   });

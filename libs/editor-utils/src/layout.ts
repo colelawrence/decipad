@@ -12,6 +12,7 @@ import {
   MyEditor,
   MyElementOrText,
 } from '@decipad/editor-types';
+import { nanoid } from 'nanoid';
 
 export const hasLayoutAncestor = (editor: MyEditor, path: Path): boolean => {
   return !!getAboveNode(editor, {
@@ -31,6 +32,7 @@ export const insertNodeIntoColumns = (
       wrapNodes(
         editor,
         {
+          id: nanoid(),
           type: ELEMENT_COLUMNS,
         } as ColumnsElement,
         { at: path }

@@ -15,6 +15,7 @@ import {
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
 type DragCellData = string;
@@ -58,6 +59,7 @@ export const onDropSmartCellResult =
             removeNodes(editor, { at: blockPath });
           }
           insertNodes(editor, {
+            id: nanoid(),
             type: ELEMENT_CODE_LINE,
             children: [
               {

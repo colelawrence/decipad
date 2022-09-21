@@ -37,7 +37,7 @@ describe('autoformatting images from markdown', () => {
   it('ignores input that is not a valid image', () => {
     editor.insertText('![a]b(c');
     editor.insertText(')');
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       { type: ELEMENT_PARAGRAPH, children: [{ text: '![a]b(c)' }] },
     ]);
   });
@@ -46,7 +46,7 @@ describe('autoformatting images from markdown', () => {
     editor.children = [{ type: ELEMENT_H1, children: [{ text: '' }] }];
     editor.insertText('![a](b');
     editor.insertText(')');
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       { type: ELEMENT_H1, children: [{ text: '![a](b)' }] },
     ]);
   });
@@ -61,7 +61,7 @@ describe('autoformatting images from markdown', () => {
     ];
     select(editor, { path: [0, 0, 0], offset: 2 });
     editor.insertText('![a](b)');
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       {
         type: ELEMENT_PARAGRAPH,
         children: [
@@ -78,7 +78,7 @@ describe('autoformatting images from markdown', () => {
   it('splits off a image at the end', () => {
     editor.insertText('a![b](c');
     editor.insertText(')');
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'a' }],
@@ -94,7 +94,7 @@ describe('autoformatting images from markdown', () => {
   it('can handle line breaks', () => {
     editor.insertText('a\nb![c d](e');
     editor.insertText(')');
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'a\nb' }],

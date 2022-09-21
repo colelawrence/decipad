@@ -15,6 +15,7 @@ import {
   removeNodes,
 } from '@udecode/plate';
 import { CodeResult } from '@decipad/ui';
+import { nanoid } from 'nanoid';
 
 type DragCellData = Parameters<
   NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']>
@@ -54,6 +55,7 @@ export const onDropTableCellResult =
             removeNodes(editor, { at: blockPath });
           }
           insertNodes(editor, {
+            id: nanoid(),
             type: ELEMENT_CODE_LINE,
             children: [
               {

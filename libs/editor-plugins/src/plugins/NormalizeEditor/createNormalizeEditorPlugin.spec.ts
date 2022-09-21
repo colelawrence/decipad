@@ -36,17 +36,17 @@ describe('the title normalization', () => {
       },
     ];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([h1Element()]);
+    expect(editor.children).toMatchObject([h1Element()]);
   });
   it('forces the first H1 to exist', () => {
     editor.children = [];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([h1Element()]);
+    expect(editor.children).toMatchObject([h1Element()]);
   });
   it('forbids H1s in the second to last elements and converts them to paragraphs', () => {
     editor.children = [h1Element(), h1Element()];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       expect.anything(),
       {
         type: ELEMENT_PARAGRAPH,
@@ -58,7 +58,7 @@ describe('the title normalization', () => {
     editor.children = [{ type: ELEMENT_H1, children: [{ text: 'text' }] }];
     select(editor, { path: [0, 0], offset: 0 });
     editor.insertNode({ children: [{ text: '' }] } as never);
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       h1Element(),
       {
         type: ELEMENT_PARAGRAPH,
@@ -79,7 +79,7 @@ it.each([ELEMENT_H2, ELEMENT_UL, ELEMENT_BLOCKQUOTE, ELEMENT_CODE_LINE])(
       },
     ];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       expect.anything(),
       { type, children: [{ text: '' }] },
     ] as MyElement[]);
@@ -96,7 +96,7 @@ it.each([ELEMENT_LI, ELEMENT_LINK, 'asdf'])(
       },
     ];
     normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([
+    expect(editor.children).toMatchObject([
       expect.anything(),
       { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
     ]);
@@ -106,7 +106,7 @@ it.each([ELEMENT_LI, ELEMENT_LINK, 'asdf'])(
 it('converts text at top level to a paragraph', () => {
   editor.children = [h1Element(), { text: '' } as never];
   normalizeEditor(editor, { force: true });
-  expect(editor.children).toEqual([
+  expect(editor.children).toMatchObject([
     expect.anything(),
     { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
   ] as MyElement[]);

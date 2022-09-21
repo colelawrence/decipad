@@ -6,13 +6,15 @@ import {
 } from '@decipad/editor-types';
 import { getCollapsedSelection, isElementOfType } from '@decipad/editor-utils';
 import { getAboveNode, insertNodes, isText } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { isCursorNextToNonSpace } from './helpers';
 
 const CREATE_BUBBLE_REGEX = /([$£€₴₹₽¢฿₮¥]|[0-9])/;
 
 const insertNumberBubble = (editor: MyEditor) => {
-  const emptyElement: Omit<InlineNumberElement, 'id'> = {
+  const emptyElement: InlineNumberElement = {
+    id: nanoid(),
     type: ELEMENT_INLINE_NUMBER,
     name: '',
     children: [{ text: '' }],

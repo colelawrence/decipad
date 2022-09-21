@@ -3,9 +3,7 @@ import {
   MyElement,
   MyReactEditor,
   useTEditorRef,
-  futureElementId,
   ELEMENT_PARAGRAPH,
-  ParagraphElement,
 } from '@decipad/editor-types';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import {
@@ -42,6 +40,7 @@ import {
 import { useSelected } from 'slate-react';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { EditorBlock, DraggableBlock as UIDraggableBlock } from '@decipad/ui';
+import { nanoid } from 'nanoid';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 const InDraggableBlock = createContext(false);
@@ -127,10 +126,10 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
     insertNodes(
       editor,
       {
-        id: futureElementId,
+        id: nanoid(),
         type: ELEMENT_PARAGRAPH,
         children: [{ text: '' }],
-      } as ParagraphElement,
+      },
       {
         at: path,
       }
@@ -156,10 +155,10 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       insertNodes(
         editor,
         {
-          id: futureElementId,
+          id: nanoid(),
           type: ELEMENT_PARAGRAPH,
           children: [{ text: '/' }],
-        } as ParagraphElement,
+        },
         {
           at: nextPath,
         }

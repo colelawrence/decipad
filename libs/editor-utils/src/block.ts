@@ -18,6 +18,7 @@ import {
   TDescendant,
   TElement,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import {
   getBlockParentPath,
@@ -108,7 +109,11 @@ export const insertDividerBelow = (
   type: ElementKind
 ): void => {
   const at = requirePathBelowBlock(editor, path);
-  insertNodes<TElement>(editor, { type, children: [{ text: '' }] }, { at });
+  insertNodes<TElement>(
+    editor,
+    { id: nanoid(), type, children: [{ text: '' }] },
+    { at }
+  );
 
   const next = getNextNode(editor, { at });
   if (next) {
@@ -125,7 +130,7 @@ export const insertBlockOfTypeBelow = (
 ): void => {
   insertNodes<TElement>(
     editor,
-    { type, children: [{ text: '' }] },
+    { id: nanoid(), type, children: [{ text: '' }] },
     { at: requirePathBelowBlock(editor, path) }
   );
 };
@@ -138,7 +143,12 @@ export const insertImageBelow = (
 ): void => {
   insertNodes<TElement>(
     editor,
-    { type: ELEMENT_IMAGE, children: [{ text: alt } as TDescendant], url },
+    {
+      id: nanoid(),
+      type: ELEMENT_IMAGE,
+      children: [{ text: alt } as TDescendant],
+      url,
+    },
     { at: requirePathBelowBlock(editor, path) }
   );
 };

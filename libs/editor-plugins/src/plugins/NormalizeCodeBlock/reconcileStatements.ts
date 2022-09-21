@@ -6,6 +6,7 @@ import {
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { getNode, insertNodes, insertText, mergeNodes } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { getCodeBlockOffsets, reinstateCursorOffsets } from './offsets';
 import { getCodeLineText, incrementLastElementOfPath } from './utils';
@@ -57,7 +58,8 @@ function reconcileBySplitting(
   if (nextLineText.startsWith('\n')) {
     nextLineText = nextLineText.substring(1);
   }
-  const newNode: Omit<CodeLineElement, 'id'> = {
+  const newNode: CodeLineElement = {
+    id: nanoid(),
     type: ELEMENT_CODE_LINE,
     children: [
       {

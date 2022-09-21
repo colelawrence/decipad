@@ -5,7 +5,6 @@ import {
   ELEMENT_OL,
   ELEMENT_UL,
   ListElement,
-  ListItemContentElement,
   ListItemElement,
   MyEditor,
   MyNodeEntry,
@@ -20,6 +19,7 @@ import {
   unwrapNodes,
   wrapNodes,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
@@ -48,7 +48,11 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
       if (isText(childNode)) {
         wrapNodes(
           editor,
-          { type: ELEMENT_LI, children: [] } as unknown as ListItemElement,
+          {
+            id: nanoid(),
+            type: ELEMENT_LI,
+            children: [],
+          } as unknown as ListItemElement,
           { at: childPath }
         );
         return true;
@@ -70,9 +74,10 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
       insertNodes(
         editor,
         {
+          id: nanoid(),
           type: ELEMENT_LIC,
           children: [{ text: '' }],
-        } as ListItemContentElement,
+        },
         { at: [...path, 0] }
       );
       return true;
@@ -89,9 +94,10 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
       wrapNodes(
         editor,
         {
+          id: nanoid(),
           type: ELEMENT_LIC,
           children: [],
-        } as unknown as ListItemContentElement,
+        },
         { at: licChildPath }
       );
       return true;

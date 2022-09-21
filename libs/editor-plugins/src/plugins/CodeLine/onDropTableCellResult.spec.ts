@@ -89,7 +89,7 @@ describe('onDropTableCellResult', () => {
       })(testEvent);
       onDropTableCellResult(editor)(testEvent);
 
-      expect(editor.children).toEqual([
+      expect(editor.children).toMatchObject([
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'ab' }] },
         {
           type: ELEMENT_CODE_LINE,
@@ -122,7 +122,7 @@ describe('onDropTableCellResult', () => {
       })(testEvent);
       onDropTableCellResult(editor)(testEvent);
 
-      expect(editor.children).toEqual([
+      expect(editor.children).toMatchObject([
         {
           type: ELEMENT_CODE_LINE,
           children: [

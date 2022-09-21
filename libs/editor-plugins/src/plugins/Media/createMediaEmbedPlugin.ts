@@ -7,12 +7,14 @@ import {
   Value,
 } from '@udecode/plate';
 import { ELEMENT_MEDIA_EMBED } from '@decipad/editor-types';
+import { nanoid } from 'nanoid';
 
 export const insertMediaEmbed = <V extends Value>(
   editor: PlateEditor<V>,
   url: string | ArrayBuffer
 ) => {
   const node: TMediaEmbedElement = {
+    id: nanoid(),
     type: getPluginType(editor, ELEMENT_MEDIA_EMBED),
     url: url as any,
     children: [{ text: '' }],
