@@ -109,3 +109,53 @@ it.each(types)('highlights selected type %s', async (_, type, textContent) => {
   const { backgroundColor } = findParentWithStyle(menuItem, 'backgroundColor')!;
   expect(backgroundColor).not.toEqual(normalBackgroundColor);
 });
+
+const expandableCols: [string, string][] = [
+  ['Currency', 'EUR'],
+  ['Date', 'Year'],
+];
+
+it.each(expandableCols)(
+  'Expands %s without any other menu open',
+  async (col, content) => {
+    const { getByText, findByText, queryByText } = render(
+      <TableColumnMenu
+        trigger={<button>trigger</button>}
+        type={getNumberType()}
+        open
+      />
+    );
+    await userEvent.click(await findByText(/change type/i), {
+      pointerEventsCheck: 0,
+    });
+    await userEvent.click(getByText(col));
+    expect(getByText(content)).toBeVisible();
+    expandableCols.forEach(([column, columnContent]) => {
+      if (column !== col) {
+        // eslint-disable-next-line
+        expect(queryByText(columnContent)).not.toBeInTheDocument();
+      }
+    });
+  }
+);
+
+// Cannot do this in the test above because there would be 2 elements with the
+// text content 'Date', so it's cleaner to duplicate the text.
+it('Expands the series menu without any other menu opening', async () => {
+  const { getAllByText, queryByText, getByText, findByText } = render(
+    <TableColumnMenu
+      trigger={<button>trigger</button>}
+      type={getNumberType()}
+      open
+    />
+  );
+  await userEvent.click(await findByText(/change type/i), {
+    pointerEventsCheck: 0,
+  });
+  await userEvent.click(getByText('Series'));
+  getAllByText('Date').forEach((el) => expect(el).toBeVisible());
+  expect(getAllByText('Date')).toHaveLength(2);
+  expandableCols.forEach(([, columnContent]) => {
+    expect(queryByText(columnContent)).not.toBeInTheDocument();
+  });
+});
