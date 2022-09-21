@@ -1,10 +1,25 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-console */
+
 const path = require('path');
 const { ProvidePlugin } = require('webpack');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const ForkTsCheckerWarningWebpackPlugin = require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin');
+const serviceWorkerConfig = require('./service-worker.config');
 
+const excludePlugins = ['ForkTsCheckerWarningWebpackPlugin'];
+
+const excludeInProductionPlugins = ['ReactRefreshPlugin'];
+
+const shouldIncludePlugin = (plugin) => {
+  const pluginName = plugin.constructor?.name;
+
+  return (
+    !excludePlugins.includes(pluginName) &&
+    (process.env.NODE_ENV !== 'production' ||
+      !excludeInProductionPlugins.includes(pluginName))
+  );
+};
 module.exports = {
   webpack: {
     configure: (config) => {
@@ -15,9 +30,7 @@ module.exports = {
       );
 
       // Remove expensive and ultimately ignored TS checks
-      config.plugins = config.plugins.filter(
-        (plugin) => !(plugin instanceof ForkTsCheckerWarningWebpackPlugin)
-      );
+      config.plugins = config.plugins.filter(shouldIncludePlugin);
 
       // Add support for importing workspace projects.
       config.resolve.plugins.push(
@@ -27,6 +40,11 @@ module.exports = {
           mainFields: ['module', 'main'],
         })
       );
+
+      // add service worker plugin
+      if (process.env.NODE_ENV === 'production') {
+        config.plugins.push(serviceWorkerConfig());
+      }
 
       // Configure babel-loader to handle workspace projects as well.
       const babelRule = config.module.rules[1].oneOf.find((r) => {

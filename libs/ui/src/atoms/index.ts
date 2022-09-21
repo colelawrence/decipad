@@ -64,3 +64,4 @@ export { Toggle } from './Toggle/Toggle';
 export { Tooltip } from './Tooltip/Tooltip';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
 export { Underline } from './Underline/Underline';
+export { UpdatePrompt } from './UpdatePrompt/UpdatePrompt';

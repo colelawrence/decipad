@@ -3,3 +3,4 @@ coverage
 dist
 apps/backend/src
 apps/frontend/src/graphql/generated.ts
+apps/frontend/src/src/setupProxy.js

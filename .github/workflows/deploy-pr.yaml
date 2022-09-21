@@ -49,6 +49,7 @@ jobs:
 
       - name: Deploy
         env:
+          NODE_ENV: 'production'
           DEPLOY_NAME: '${{ github.event.pull_request.number }}'
           DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.dev.decipad.com'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
