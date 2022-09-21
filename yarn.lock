@@ -8746,10 +8746,10 @@
   dependencies:
     "@udecode/plate-core" "17.0.3"
 
-"@udecode/plate-headless@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-17.0.3.tgz#6ea93346054d903e274b25ec71efc8b060677c01"
-  integrity sha512-kHU+aICDbuEgiBj7VfTtZ5kJXNFywbb+slI75o2V1n/9TpdAXKLRLzlxsvJpvG1DTXimk5Nj/6OJpUds9xIAyQ==
+"@udecode/plate-headless@18.0.0":
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.0.0.tgz#30d989d2e4ef261c925fcb4fdd6468b4a5d2e2f2"
+  integrity sha512-MU1koa8wC0sFPFJ34rcT5fxSMzf21PT91GtwWirX8LZE2XH7NXdg/t5wgOJtQbcgMmSpONOMWJcf4MXbJWu64g==
   dependencies:
     "@udecode/plate-alignment" "17.0.3"
     "@udecode/plate-autoformat" "17.0.3"
@@ -9169,12 +9169,12 @@
     "@udecode/plate-ui-button" "17.0.3"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-17.0.3.tgz#fd637ccf60084d65edbe3a7e7864f75e9dfcf735"
-  integrity sha512-UvRxF6CiZZS7w4q0k80LM/j7jLImG/fGfE8JlOQ+rrO1/OSFqOTClJ1MJKDU6g9C2C7zEXzTwCXTuobzee3dDg==
+"@udecode/plate-ui@18.0.0":
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.0.0.tgz#909f178f6c511adaa5fc3f8a5989085af6724db5"
+  integrity sha512-euxKHrsuz4SJW9kYIaK6WTFLtnjbzIIRHdEQ1s4JhtHgO5MuLs1eKy9QSupw/vleWkdB2/0dYlyY4C8js+ecaw==
   dependencies:
-    "@udecode/plate-headless" "17.0.3"
+    "@udecode/plate-headless" "18.0.0"
     "@udecode/plate-styled-components" "17.0.3"
     "@udecode/plate-ui-alignment" "17.0.3"
     "@udecode/plate-ui-block-quote" "17.0.3"
@@ -9194,13 +9194,13 @@
     "@udecode/plate-ui-table" "17.0.3"
     "@udecode/plate-ui-toolbar" "17.0.3"
 
-"@udecode/plate@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-17.0.3.tgz#7f42432c5db95a1c0090ee0719fff033c7a60796"
-  integrity sha512-JV36/wCJpmJiSTyeic4W4dbcBCjj80Uql//pvjeSQKgFh3f92Y+5h3lrvKA2+YSB2gxjvUYkW1T2BNYhcWnaKw==
+"@udecode/plate@18.0.0":
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.0.0.tgz#9e8e3798dabecc3c10c79e2a845f8ce254c7dcf8"
+  integrity sha512-gpOUByGGtm8yv7yQhn5sEQzF7U3sVNqq/yur3NqAfIowGjbxCPV9E0CFpqc44Cxv/AiySyXvAw/METlYQuUwUg==
   dependencies:
-    "@udecode/plate-headless" "17.0.3"
-    "@udecode/plate-ui" "17.0.3"
+    "@udecode/plate-headless" "18.0.0"
+    "@udecode/plate-ui" "18.0.0"
 
 "@udecode/zustood@^1.1.1":
   version "1.1.1"
