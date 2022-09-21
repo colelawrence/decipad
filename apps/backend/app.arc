@@ -4,6 +4,7 @@ decipad-backend
 @sandbox
 useAws false
 no-hydrate true
+livereload false
 
 @sandbox-startup
 node scripts/sandbox_seed_db.js
