@@ -133,7 +133,7 @@ interface CodeLineProps {
   readonly syntaxError?: ComponentProps<typeof CodeError>;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
-  readonly onClickedResult?: () => void;
+  readonly onClickedResult?: (arg0: Result.Result) => void;
 }
 
 export const CodeLine = ({
@@ -190,7 +190,14 @@ export const CodeLine = ({
           {renderInlineResult &&
             !hasSyntaxError &&
             result && ( // The typescript gods demand me to this
-              <output css={inlineResultStyles} onClick={onClickedResult}>
+              <output
+                css={inlineResultStyles}
+                onClick={() => {
+                  if (onClickedResult) {
+                    onClickedResult(result);
+                  }
+                }}
+              >
                 <CodeResult {...result} variant="inline" />
               </output>
             )}
@@ -201,11 +208,7 @@ export const CodeLine = ({
           )}
         </div>
         {renderExpandedResult && result && (
-          <output
-            contentEditable={false}
-            css={expandedResultStyles}
-            onClick={onClickedResult}
-          >
+          <output contentEditable={false} css={expandedResultStyles}>
             <CodeResult
               {...result}
               variant="block"

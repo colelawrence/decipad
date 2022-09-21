@@ -65,3 +65,42 @@ it('dropdown menu not present', async () => {
   // Using query by text, because get by text throws an error.
   expect(queryByText('Variable #1')).not.toBeInTheDocument();
 });
+
+it('shows dropdown menu', async () => {
+  const code = await runCode('1 + 1');
+  const { getByText } = render(
+    <DisplayWidget
+      {...props}
+      lineResult={{
+        type: 'computer-result',
+        id: 'id',
+        result: {
+          type: code.type,
+          value: code.value,
+        },
+      }}
+      openMenu={true}
+    />
+  );
+  expect(getByText('Variable #1')).toBeInTheDocument();
+});
+
+it('doesnt show dropdown menu in readmode', async () => {
+  const code = await runCode('1 + 1');
+  const { queryByText } = render(
+    <DisplayWidget
+      {...props}
+      lineResult={{
+        type: 'computer-result',
+        id: 'id',
+        result: {
+          type: code.type,
+          value: code.value,
+        },
+      }}
+      openMenu={true}
+      readOnly={true}
+    />
+  );
+  expect(queryByText('Variable #1')).not.toBeInTheDocument();
+});

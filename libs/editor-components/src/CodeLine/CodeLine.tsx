@@ -3,6 +3,7 @@ import {
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
+  Result,
 } from '@decipad/computer';
 import {
   DisplayElement,
@@ -58,7 +59,17 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           onDragStartCell={onDragStartTableCellResult(editor)}
           onClickedResult={
             isFlagEnabled('RESULT_WIDGET')
-              ? () => {
+              ? (result: Result.Result) => {
+                  if (
+                    !(
+                      result.type.kind === 'number' ||
+                      result.type.kind === 'date' ||
+                      result.type.kind === 'string' ||
+                      result.type.kind === 'boolean'
+                    )
+                  )
+                    return;
+
                   const path = findNodePath(editor, element);
                   if (!path) return;
 
@@ -74,7 +85,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
                     }
                   );
                 }
-              : () => {}
+              : undefined
           }
         >
           {children}
