@@ -22,6 +22,7 @@ import {
   insertText,
   getNextNode,
   getEndPoint,
+  focusEditor,
 } from '@udecode/plate';
 import {
   ComponentProps,
@@ -164,9 +165,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
         }
       );
       select(editor, getEndPoint(editor, nextPath));
+      focusEditor(editor);
     } else {
       insertText(editor, '/', { at: path });
       select(editor, getEndPoint(editor, path));
+      focusEditor(editor);
     }
   }, [editor, element]);
 
