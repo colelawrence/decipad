@@ -95,7 +95,7 @@ describe('notebook table', () => {
     );
     const codeBlockText = await codeBlock.innerText();
     // splitting on new line removes the text from auto-complete menu
-    expect(codeBlockText.split('\n')[0]).toBe('Property3 = 1 + 1');
+    expect(codeBlockText.split('\n')[0]).toBe('Property3 =  1 + 1');
 
     // some time for the computer to update
     await page.waitForTimeout(1000);
