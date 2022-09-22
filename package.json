@@ -341,7 +341,7 @@
     "husky": "8.0.1",
     "jest": "27.5.1",
     "jest-canvas-mock": "2.4.0",
-    "jest-config": "^29.0.3",
+    "jest-config": "29.0.3",
     "jest-fetch-mock": "3.0.3",
     "jest-playwright-jsdom": "0.0.4",
     "jest-playwright-preset": "1.7.2",
