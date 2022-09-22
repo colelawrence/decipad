@@ -12,6 +12,7 @@ import {
   Input,
   Slider,
   TableSlash,
+  Result,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
@@ -74,8 +75,8 @@ const displayWidget = !isFlagEnabled('RESULT_WIDGET')
       {
         command: 'display',
         title: 'Result',
-        description: 'Interactive result display',
-        icon: <Input />,
+        description: 'Highlight result in a story',
+        icon: <Result />,
         enabled: true,
         extraSearchTerms: ['display', 'result', 'show'],
       },

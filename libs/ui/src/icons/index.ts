@@ -1,6 +1,7 @@
 export { Actions } from './Actions/Actions';
 export { Add } from './Add/Add';
 export { All } from './All/All';
+export { ArrowOutlined } from './ArrowOutlined/ArrowOutlined';
 export { AnnotationWarning } from './AnnotationWarning/AnnotationWarning';
 export { Announcement } from './Announcement/Announcement';
 export { Bank } from './Bank/Bank';
@@ -84,6 +85,7 @@ export { Plot } from './Plot/Plot';
 export { Quote } from './Quote/Quote';
 export { QuestionMark } from './QuestionMark/QuestionMark';
 export { Refresh } from './Refresh/Refresh';
+export { Result } from './Result/Result';
 export { Rocket } from './Rocket/Rocket';
 export { Server } from './Server/Server';
 export { Settings } from './Settings/Settings';

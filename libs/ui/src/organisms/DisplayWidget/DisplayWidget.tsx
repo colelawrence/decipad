@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { formatResultPreview } from '@decipad/format';
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
 import { grey100, grey200, p16Regular, p32Medium } from '../../primitives';
-import { Bolt } from '../../icons';
+import { ArrowOutlined } from '../../icons';
 import {
   AutoCompleteMenu,
   Identifier,
@@ -31,6 +31,14 @@ const triggerStyles = css({
   ':hover': {
     backgroundColor: grey200.rgb,
   },
+});
+
+const iconStyles = css({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: 24,
+  width: 24,
 });
 
 interface DropdownWidgetOptions {
@@ -68,8 +76,8 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   return (
     <>
       <div css={wrapperStyles}>
-        <div css={{ height: 20, width: 20 }}>
-          <Bolt />
+        <div css={iconStyles}>
+          <ArrowOutlined />
         </div>
         <span css={p16Regular}>
           {result ? `Result: ${result}` : 'Select an option'}
