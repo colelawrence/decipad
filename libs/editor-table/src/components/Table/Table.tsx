@@ -4,17 +4,12 @@ import {
   PlateComponent,
   useTEditorState,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  useElementMutatorCallback,
-  useNodePath,
-} from '@decipad/editor-utils';
+import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
 import {
   EditorTableContext,
   EditorTableContextValue,
-  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import {
   MAX_UNCOLLAPSED_TABLE_ROWS,
@@ -29,13 +24,18 @@ import { useTableStore } from '../../contexts/tableStore';
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
+
   const editor = useTEditorState();
 
-  const saveIcon = useElementMutatorCallback(editor, element, 'icon');
-  const saveColor = useElementMutatorCallback(editor, element, 'color');
-
-  const { onDelete, onAddRow, onAddColumn, onChangeColumnAggregation } =
-    useTableActions(editor, element);
+  const {
+    onDelete,
+    onAddRow,
+    onAddColumn,
+    onChangeColumnAggregation,
+    onSetCollapsed,
+    onSaveColor,
+    onSaveIcon,
+  } = useTableActions(editor, element);
   const selectedCells = useTableStore().get.selectedCells();
 
   useSelectedCells();
@@ -44,16 +44,12 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const blockId = element.id;
 
-  const readOnly = useIsEditorReadOnly();
-  const [isCollapsed, setCollapsed] = useState(() => readOnly);
-
   const contextValue: EditorTableContextValue = useMemo(() => {
     return {
       blockId,
       cellTypes: columns.map((col) => col.cellType),
-      isCollapsed,
     };
-  }, [blockId, columns, isCollapsed]);
+  }, [blockId, columns]);
 
   const tablePath = useNodePath(element);
 
@@ -78,21 +74,22 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
           <EditorTableContext.Provider value={contextValue}>
             <TableDndProvider editor={editor} table={element}>
               <EditorTable
-                onChangeIcon={saveIcon}
-                onChangeColor={saveColor}
+                onChangeIcon={onSaveIcon}
+                onChangeColor={onSaveColor}
+                onSetCollapsed={onSetCollapsed}
                 icon={(element.icon ?? 'Table') as UserIconKey}
                 color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+                isCollapsed={element.isCollapsed}
                 onAddRow={onAddRow}
                 onAddColumn={onAddColumn}
                 columns={columns}
                 tableWidth={wideTable ? 'WIDE' : 'SLIM'}
                 isSelectingCell={!!selectedCells}
                 hiddenRowCount={
-                  isCollapsed
+                  element.isCollapsed
                     ? Math.max(0, rowCount - MAX_UNCOLLAPSED_TABLE_ROWS)
                     : 0
                 }
-                setCollapsed={setCollapsed}
                 smartRow={
                   <SmartRow
                     onAggregationTypeNameChange={onChangeColumnAggregation}

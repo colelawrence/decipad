@@ -85,6 +85,7 @@ const tableAddColumnButtonStyles = css({
 interface EditorTableProps {
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;
+  readonly isCollapsed?: boolean;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
 
@@ -96,8 +97,9 @@ interface EditorTableProps {
   readonly previewMode?: boolean;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
+  readonly showAllRows?: boolean;
   readonly hiddenRowCount?: number;
-  readonly setCollapsed?: (collapsed: boolean) => void;
+  readonly onSetCollapsed?: (collapsed: boolean) => void;
 
   readonly smartRow?: ReactNode;
 }
@@ -110,64 +112,69 @@ export const EditorTable: FC<EditorTableProps> = ({
   dropRef,
   icon,
   color,
+  isCollapsed,
   tableWidth,
   isSelectingCell,
   onChangeIcon = noop,
   onChangeColor = noop,
+  onSetCollapsed = noop,
   hiddenRowCount = 0,
-  setCollapsed = noop,
   smartRow,
   previewMode,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
 
+  const tableStyleContextValue = {
+    icon,
+    color,
+    isCollapsed,
+    setIcon: onChangeIcon,
+    setColor: onChangeColor,
+    setCollapsed: onSetCollapsed,
+  };
+
   return (
-    <TableStyleContext.Provider
-      value={{
-        icon,
-        color,
-        setIcon: onChangeIcon,
-        setColor: onChangeColor,
-      }}
-    >
+    <TableStyleContext.Provider value={tableStyleContextValue}>
       <div css={wrapperStyles}>
         <div css={wrapperInnerStyles}>
           {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 
-          <div css={tableWrapperStyles}>
-            <div css={tableOverflowStyles} contentEditable={false} />
-            <Table
-              isReadOnly={false}
-              columnCount={columns.length}
-              dropRef={dropRef}
-              tableWidth={tableWidth}
-              isSelectingCell={isSelectingCell}
-              hiddenRowCount={hiddenRowCount}
-              setShowAllRows={(showMoreRows) => setCollapsed(!showMoreRows)}
-              head={thead}
-              body={tbody}
-              foot={
-                !previewMode && (
-                  <>
-                    {smartRow}
-                    <AddTableRowButton
-                      colSpan={columns.length + 1}
-                      onAddRow={onAddRow}
-                    />
-                  </>
-                )
-              }
-            ></Table>
-            {!previewMode && (
-              <button
-                onClick={onAddColumn}
-                css={tableAddColumnButtonStyles}
-                title="Add Column"
-              >
-                <Add />
-              </button>
-            )}
-          </div>
+          {!isCollapsed ? (
+            <div css={tableWrapperStyles}>
+              <div css={tableOverflowStyles} contentEditable={false} />
+              <Table
+                isReadOnly={false}
+                columnCount={columns.length}
+                dropRef={dropRef}
+                tableWidth={tableWidth}
+                isSelectingCell={isSelectingCell}
+                hiddenRowCount={hiddenRowCount}
+                head={thead}
+                body={tbody}
+                foot={
+                  !previewMode && (
+                    <>
+                      {smartRow}
+                      <AddTableRowButton
+                        colSpan={columns.length + 1}
+                        onAddRow={onAddRow}
+                      />
+                    </>
+                  )
+                }
+              ></Table>
+
+              {!previewMode && (
+                <button
+                  onClick={onAddColumn}
+                  css={tableAddColumnButtonStyles}
+                  title="Add Column"
+                >
+                  <Add />
+                </button>
+              )}
+            </div>
+          ) : null}
         </div>
       </div>
     </TableStyleContext.Provider>

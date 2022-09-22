@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p13Medium } from '../../primitives';
+import { blue100, blue200, cssVar, p13SemiBold } from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 
 const wrapperStyles = {
@@ -8,7 +8,7 @@ const wrapperStyles = {
 };
 
 const styles = css({
-  borderRadius: '8px',
+  borderRadius: '6px',
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   backgroundColor: cssVar('tintedBackgroundColor'),
 
@@ -17,36 +17,39 @@ const styles = css({
   },
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'flex-end',
+  alignItems: 'center',
   padding: '4px',
-  paddingLeft: '8px',
 });
 
-const buttonTextStyles = css(p13Medium, {
+const buttonTextStyles = css(p13SemiBold, {
   whiteSpace: 'nowrap',
-  color: cssVar('weakTextColor'),
+  padding: '0 4px',
 });
 
-const roundedSquareStyles = css({
-  borderRadius: '6px',
+const blueBackgroundStyles = css({
+  backgroundColor: blue100.rgb,
+
+  ':hover, :focus': {
+    backgroundColor: blue200.rgb,
+  },
 });
 
 const iconStyles = css({
   width: '12px',
-  verticalAlign: 'middle',
-  margin: '3px 7px',
 });
 
 type IconButtonProps = {
   readonly children: ReactNode;
   readonly text: TextChildren;
+  readonly color?: 'blue';
+  readonly iconPosition?: 'left' | 'right';
 } & (
   | {
       readonly href: string;
       readonly onClick?: undefined;
     }
   | {
-      readonly onClick: () => void;
+      readonly onClick: (args?: any) => void;
       readonly href?: undefined;
     }
 );
@@ -56,26 +59,41 @@ export const TextAndIconButton = ({
   text,
   onClick,
   href,
+  color,
+  iconPosition = 'right',
 }: IconButtonProps): ReturnType<FC> => {
-  const t = <span css={buttonTextStyles}>{text}</span>;
-  const i = <span css={iconStyles}>{children}</span>;
+  const textElement = <span css={buttonTextStyles}>{text}</span>;
+  const iconElement = <span css={iconStyles}>{children}</span>;
+  const textAndIcon =
+    iconPosition === 'left' ? (
+      <>
+        {iconElement}
+        {textElement}
+      </>
+    ) : (
+      <>
+        {textElement}
+        {iconElement}
+      </>
+    );
   return (
     <div css={wrapperStyles}>
       {onClick ? (
         <button
-          css={[styles, roundedSquareStyles]}
+          css={[styles, color === 'blue' && blueBackgroundStyles]}
           onClick={(event) => {
+            event.stopPropagation();
             event.preventDefault();
             onClick();
           }}
         >
-          {t}
-          {i}
+          {textAndIcon}
         </button>
       ) : (
-        <Anchor href={href} css={css([styles, roundedSquareStyles])}>
-          {t}
-          {i}
+        <Anchor href={href} css={css([styles])}>
+          {iconPosition === 'left' ? iconElement : null}
+          {textElement}
+          {iconPosition === 'right' ? iconElement : null}
         </Anchor>
       )}
     </div>

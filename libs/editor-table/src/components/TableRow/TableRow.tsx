@@ -1,6 +1,10 @@
 import { getNodeEntry, useDndNode } from '@udecode/plate';
 import { Path } from 'slate';
-import { TableHeaderRow, TableRow as UITableRow } from '@decipad/ui';
+import {
+  TableHeaderRow,
+  TableRow as UITableRow,
+  TableStyleContext,
+} from '@decipad/ui';
 import {
   ELEMENT_TR,
   PlateComponent,
@@ -9,8 +13,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
-import { useEditorTableContext } from '@decipad/react-contexts';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useTableActions } from '../../hooks';
 import { selectRow } from '../../utils/selectRow';
 import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';
@@ -22,7 +25,9 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TR);
   const editor = getDefined(useTPlateEditorRef());
   const path = getDefined(useNodePath(element));
-  const { isCollapsed } = useEditorTableContext();
+
+  const { isCollapsed } = useContext(TableStyleContext);
+
   const isVisible =
     !isCollapsed || path[path.length - 1] <= MAX_UNCOLLAPSED_TABLE_ROWS + 1;
   const tablePath = Path.parent(path);

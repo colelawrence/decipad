@@ -98,18 +98,26 @@ export function toTableHeaderType(
 interface TableStyleContextValue {
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;
+  readonly isCollapsed?: boolean;
+
   readonly setIcon: (newIcon: UserIconKey) => void;
   readonly setColor: (newColor: AvailableSwatchColor) => void;
+  readonly setCollapsed?: (collapsed: boolean) => void;
+
   readonly hideAddDataViewButton?: boolean;
 }
 export const TableStyleContext = createContext<TableStyleContextValue>({
   icon: 'Table',
   color: 'Catskill',
   hideAddDataViewButton: false,
+  isCollapsed: false,
   setIcon: () => {
     throw new Error('No way to change the icon provided');
   },
   setColor: () => {
     throw new Error('No way to change the color provided');
+  },
+  setCollapsed: () => {
+    throw new Error('No way to set collapsed');
   },
 });

@@ -9,3 +9,4 @@ export * from './text';
 export * from './InteractiveParagraph';
 export * from './hooks';
 export * from './Display';
+export * from './utils';

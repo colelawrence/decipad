@@ -3,7 +3,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
-import { FormulasDrawer } from '../../organisms';
+import { FormulasDrawer, ToggleCollapsed } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
@@ -77,10 +77,11 @@ const addAViewButtonIconStyles = css({
 
 const editableTableCaptionStyles = css(p16Bold);
 type EditableTableCaptionProps = PropsWithChildren<{
+  onAddDataViewButtonPress: (e: any) => void;
   isForWideTable?: boolean;
   empty?: boolean;
   formulaEditor?: boolean;
-  onAddDataViewButtonPress: (e: any) => void;
+  showToggleCollapsedButton?: boolean;
 }>;
 
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
@@ -89,9 +90,17 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   isForWideTable = false,
   onAddDataViewButtonPress,
   children,
+  showToggleCollapsedButton = false,
 }) => {
-  const { color, icon, setIcon, setColor, hideAddDataViewButton } =
-    useContext(TableStyleContext);
+  const {
+    color,
+    icon,
+    isCollapsed,
+    setIcon,
+    setColor,
+    setCollapsed,
+    hideAddDataViewButton,
+  } = useContext(TableStyleContext);
   const Icon = icons[icon];
   const EyeIcon = icons.Eye;
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
@@ -122,6 +131,12 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           >
             {caption}
           </div>
+          {showToggleCollapsedButton && setCollapsed ? (
+            <ToggleCollapsed
+              setCollapsed={setCollapsed}
+              isCollapsed={isCollapsed}
+            />
+          ) : null}
         </div>
         {hideAddDataViewButton || !isFlagEnabled('DATA_VIEW') ? null : (
           <button
@@ -137,7 +152,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         )}
       </div>
 
-      {formulaEditor && tableFormulaEditors.length > 0 && (
+      {formulaEditor && !isCollapsed && tableFormulaEditors.length > 0 && (
         <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
       )}
     </div>

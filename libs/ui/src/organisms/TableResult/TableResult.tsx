@@ -50,6 +50,7 @@ export const TableResult = ({
   firstTableRowControls,
   onChangeColumnType,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
+  const [showAllRows, setShowAllRows] = useState(false);
   const { columnNames, columnTypes } = type;
   if (!columnNames.length) {
     throw new Error('Cannot render table with zero columns');
@@ -60,7 +61,9 @@ export const TableResult = ({
     );
   }
 
-  const [showAllRows, setShowAllRows] = useState(false);
+  const handleSetShowALlRowsButtonPress = () => {
+    setShowAllRows(true);
+  };
 
   const tableLength =
     type.tableLength === 'unknown' ? value[0].length : type.tableLength;
@@ -82,7 +85,7 @@ export const TableResult = ({
     const recursiveShowLength = tableRecursiveLength - defaultMaxRows;
     const proportionOfTableToHide = recursiveShowLength / tableRecursiveLength;
     return Math.floor(tableLength * proportionOfTableToHide);
-  }, [isNested, showAllRows, tableLength, tableRecursiveLength]);
+  }, [isNested, tableLength, showAllRows, tableRecursiveLength]);
 
   const showRowLength = useMemo(
     () => tableLength - hiddenRowsCount,
@@ -108,9 +111,9 @@ export const TableResult = ({
         columnCount={columnNames.length}
         border={isNested ? 'inner' : 'all'}
         hiddenRowCount={hiddenRowsCount}
-        setShowAllRows={setShowAllRows}
         isReadOnly={!isLiveResult}
         isLiveResult={isLiveResult}
+        handleSetShowALlRowsButtonPress={handleSetShowALlRowsButtonPress}
         head={
           <TableHeaderRow readOnly={!isLiveResult}>
             {columnNames?.map((columnName, index) =>

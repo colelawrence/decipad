@@ -28,16 +28,15 @@ export const TableCaption: PlateComponent = ({
   const columnCount = useTableColumnCount(element);
   const editor = useTEditorRef();
   const computer = useComputer();
+  const path = findNodePath(editor, element);
+  const parent = getAboveNode<TableElement>(editor, {
+    at: path,
+    match: (node) => {
+      return isElement(node) && node.type === ELEMENT_TABLE;
+    },
+  });
 
   const onAddDataViewButtonPress = (e: Event) => {
-    const path = findNodePath(editor, element);
-    const parent = getAboveNode<TableElement>(editor, {
-      at: path,
-      match: (node) => {
-        return isElement(node) && node.type === ELEMENT_TABLE;
-      },
-    });
-
     if (!parent) {
       return;
     }
@@ -65,6 +64,7 @@ export const TableCaption: PlateComponent = ({
         }
         empty={getNodeString(element.children[0]).length === 0}
         onAddDataViewButtonPress={(e) => onAddDataViewButtonPress(e)}
+        showToggleCollapsedButton={!!parent}
       >
         {children}
       </EditableTableCaption>

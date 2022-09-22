@@ -11,7 +11,7 @@ import {
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { withPath } from '@decipad/editor-utils';
+import { useElementMutatorCallback, withPath } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
@@ -37,6 +37,7 @@ export interface TableActions {
     columnIndex: number,
     newColumnType: TableCellType
   ) => void;
+  onSetCollapsed: (collapsed: boolean) => void;
   onChangeColumnAggregation: (
     columnIndex: number,
     newColumnAggregation: string | undefined
@@ -46,6 +47,8 @@ export interface TableActions {
   onAddRow: () => void;
   onRemoveRow: (rowIndex: string) => void;
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
+  onSaveIcon: (icon: unknown) => void;
+  onSaveColor: (color: unknown) => void;
 }
 
 export const addColumn = (
@@ -196,6 +199,15 @@ export const useTableActions = (
     });
   }, [editor, element]);
 
+  const onSetCollapsed = useElementMutatorCallback(
+    editor,
+    element,
+    'isCollapsed'
+  );
+
+  const onSaveIcon = useElementMutatorCallback(editor, element, 'icon');
+  const onSaveColor = useElementMutatorCallback(editor, element, 'color');
+
   const onRemoveColumn = useCallback(
     (columnHeaderId: string) => {
       withPath(editor, element, (path) => {
@@ -289,5 +301,8 @@ export const useTableActions = (
     onAddRow,
     onRemoveRow,
     onMoveColumn,
+    onSetCollapsed,
+    onSaveIcon,
+    onSaveColor,
   };
 };

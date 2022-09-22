@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
 import { useResults } from '@decipad/react-contexts';
 import { cssVar, setCssVar } from '../../primitives';
@@ -27,22 +27,15 @@ export const ColumnResult = ({
   const labels = indexLabels.get(indexedBy ?? '');
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
-  const [isCollapsed, setIsCollapsed] = useState(!isNested);
   const presentValue = useMemo(() => {
-    return isCollapsed ? value.slice(0, defaultMaxRows) : value;
-  }, [isCollapsed, value]);
+    return value.slice(0, defaultMaxRows);
+  }, [value]);
 
   return (
     <Table
       isReadOnly={true}
       columnCount={2}
       border={isNested ? 'inner' : 'all'}
-      hiddenRowCount={
-        isCollapsed && typeof type.columnSize === 'number'
-          ? Math.max(0, type.columnSize - defaultMaxRows)
-          : 0
-      }
-      setShowAllRows={(showAllRows) => setIsCollapsed(!showAllRows)}
       body={
         <>
           {presentValue.map((row, rowIndex) => {

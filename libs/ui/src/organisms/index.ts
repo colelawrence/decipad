@@ -32,6 +32,7 @@ export { Table } from './Table/Table';
 export { TableColumnHeader } from './TableColumnHeader/TableColumnHeader';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';
 export { TableResult } from './TableResult/TableResult';
+export { ToggleCollapsed } from './ToggleCollapsed/ToggleCollapsed';
 export { VariableEditor } from './VariableEditor/VariableEditor';
 export { VariableEditorMenu } from './VariableEditorMenu/VariableEditorMenu';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';

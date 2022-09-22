@@ -37,8 +37,9 @@ export const BubbleEditor: React.FC<BubbleEditorProps> = ({ children }) => {
     [editing, setEditing]
   );
 
+  const editorBubblesContextValue = { editing, setEditing, codeResult };
   return (
-    <EditorBubblesContext.Provider value={{ editing, setEditing, codeResult }}>
+    <EditorBubblesContext.Provider value={editorBubblesContextValue}>
       {children}
 
       {editing && (

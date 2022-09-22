@@ -1,5 +1,6 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import type { TableCellType } from '@decipad/editor-types';
+import { ONE } from '@decipad/fraction';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -71,6 +72,21 @@ afterEach(() => cleanup?.());
 const types: [string, TableCellType, string][] = [
   ['string', getStringType(), 'Text'],
   ['number', getNumberType(), 'Number'],
+  [
+    'currency eur',
+    getNumberType([
+      {
+        unit: 'euro',
+        exp: ONE,
+        multiplier: ONE,
+        known: true,
+        baseQuantity: 'EUR',
+        baseSuperQuantity: 'currency',
+      },
+    ]),
+    'EUR',
+  ],
+
   ['date time', getDateType('minute'), 'Time'],
   ['date day', getDateType('day'), 'Day'],
   ['date month', getDateType('month'), 'Month'],
@@ -85,10 +101,23 @@ it.each(types)('highlights selected type %s', async (_, type, textContent) => {
   await userEvent.click(await findByText(/change type/i), {
     pointerEventsCheck: 0,
   });
-  await userEvent.click(await findByText(/date/i), {
-    pointerEventsCheck: 0,
-  });
-  await findByText(/month/i);
+
+  if (
+    type.kind === 'number' &&
+    type.unit &&
+    type.unit[0].baseSuperQuantity === 'currency'
+  ) {
+    await userEvent.click(await findByText(/currency/i), {
+      pointerEventsCheck: 0,
+    });
+
+    await findByText(/eur/i);
+  } else {
+    await userEvent.click(await findByText(/date/i), {
+      pointerEventsCheck: 0,
+    });
+    await findByText(/month/i);
+  }
 
   cleanup = await applyCssVars();
 
@@ -96,6 +125,7 @@ it.each(types)('highlights selected type %s', async (_, type, textContent) => {
     (role, element) =>
       role === 'menuitem' && element?.textContent?.includes(textContent)
   );
+
   const [otherMenuItem] = await findAllByRole(
     (role, element) =>
       role === 'menuitem' &&
@@ -158,4 +188,34 @@ it('Expands the series menu without any other menu opening', async () => {
   expandableCols.forEach(([, columnContent]) => {
     expect(queryByText(columnContent)).not.toBeInTheDocument();
   });
+});
+
+it('Successfully changes column type upon click', async () => {
+  const mockOnChangeColumnType = jest.fn((type) => type);
+
+  const { findByRole, findByText } = render(
+    <TableColumnMenu
+      trigger={<button>trigger</button>}
+      type={getNumberType()}
+      open
+      onChangeColumnType={mockOnChangeColumnType}
+    />
+  );
+
+  await userEvent.click(await findByText(/change type/i), {
+    pointerEventsCheck: 0,
+  });
+
+  const menuItem = await findByRole(
+    (role, element) =>
+      role === 'menuitem' && element?.textContent?.includes('Text')
+  );
+
+  expect(mockOnChangeColumnType).not.toHaveBeenCalled();
+
+  await userEvent.click(menuItem, {
+    pointerEventsCheck: 0,
+  });
+
+  expect(mockOnChangeColumnType).toHaveBeenCalled();
 });

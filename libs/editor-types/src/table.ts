@@ -78,6 +78,7 @@ export interface TableElement extends BaseElement {
   children: [TableCaptionElement, TableHeaderRowElement, ...TableRowElement[]];
   color?: string;
   icon?: string;
+  isCollapsed?: boolean;
 }
 
 // legacy

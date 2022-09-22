@@ -140,6 +140,7 @@ export const MenuList = ({
   } = getSubElementType(root);
 
   let triggerNode: ReactNode;
+
   if (root) {
     triggerNode = (
       <DropdownMenuTriggerElement asChild>{trigger}</DropdownMenuTriggerElement>

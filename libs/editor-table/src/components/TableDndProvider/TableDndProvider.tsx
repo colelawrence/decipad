@@ -83,10 +83,15 @@ export const TableDndProvider = ({
     [setColumnDropLine]
   );
 
+  const tableDndContextValue = {
+    onCellHover,
+    onCellDrop,
+    onCellDragEnd,
+    columnDropLine,
+  };
+
   return (
-    <TableDndContext.Provider
-      value={{ onCellHover, onCellDrop, onCellDragEnd, columnDropLine }}
-    >
+    <TableDndContext.Provider value={tableDndContextValue}>
       {children}
     </TableDndContext.Provider>
   );

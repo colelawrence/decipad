@@ -1,13 +1,14 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { ConnectDropTarget } from 'react-dnd';
-import pluralize from 'pluralize';
 import { noop } from '@decipad/utils';
+import pluralize from 'pluralize';
 import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
+import { useAutoAnimate } from '../../hooks';
+import { table } from '../../styles';
 import { TextAndIconButton } from '../../atoms';
 import { Eye } from '../../icons';
-import { table } from '../../styles';
 
 const regularBorder = `1px solid ${cssVar('strongHighlightColor')}`;
 const liveResultBorder = `1px solid ${cssVar('liveDataBackgroundColor')}`;
@@ -85,6 +86,27 @@ const hiddenSelectionStyles = css({
   },
 });
 
+const liveResultStyles = css({
+  '> thead > tr > th': {
+    borderTop: liveResultBorder,
+  },
+  '> thead > tr > th:last-of-type, > tbody > tr > td:last-of-type, > tfoot > tr > td:last-of-type':
+    {
+      borderRight: liveResultBorder,
+    },
+  '> tbody > tr:last-of-type > td': {
+    borderBottom: liveResultBorder,
+  },
+});
+
+interface ShowAllRowsProps {
+  readonly columnCount: number;
+  readonly hiddenRowCount: number;
+  readonly isReadOnly: boolean;
+  readonly isLiveResult: boolean;
+  readonly handleSetShowALlRowsButtonPress: () => void;
+}
+
 const showAllRowsTdStyles = (border: string) =>
   css({
     borderBottom: border,
@@ -120,31 +142,10 @@ const showMoreButtonWrapperStyles = css({
   flexDirection: 'row',
 });
 
-const liveResultStyles = css({
-  '> thead > tr > th': {
-    borderTop: liveResultBorder,
-  },
-  '> thead > tr > th:last-of-type, > tbody > tr > td:last-of-type, > tfoot > tr > td:last-of-type':
-    {
-      borderRight: liveResultBorder,
-    },
-  '> tbody > tr:last-of-type > td': {
-    borderBottom: liveResultBorder,
-  },
-});
-
-interface ShowAllRowsProps {
-  readonly columnCount: number;
-  readonly hiddenRowCount: number;
-  readonly isReadOnly: boolean;
-  readonly isLiveResult: boolean;
-  readonly setShowAllRows: (showMoreRows: boolean) => void;
-}
-
 const ShowAllRows: FC<ShowAllRowsProps> = ({
   columnCount,
   hiddenRowCount,
-  setShowAllRows,
+  handleSetShowALlRowsButtonPress,
   isReadOnly,
   isLiveResult,
 }) => (
@@ -165,7 +166,7 @@ const ShowAllRows: FC<ShowAllRowsProps> = ({
                 'result',
                 hiddenRowCount
               )}`}
-              onClick={() => setShowAllRows(true)}
+              onClick={handleSetShowALlRowsButtonPress}
             >
               <Eye />
             </TextAndIconButton>
@@ -189,7 +190,9 @@ interface TableProps {
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
   readonly hiddenRowCount?: number;
-  readonly setShowAllRows?: (showMoreRows: boolean) => void;
+  readonly handleSetShowALlRowsButtonPress?: () => void;
+  readonly setCollapsed?: (collapsed: boolean) => void;
+  readonly isCollapsed?: boolean;
   readonly isReadOnly?: boolean;
   readonly isLiveResult?: boolean;
 }
@@ -204,10 +207,11 @@ export const Table = ({
   tableWidth,
   isSelectingCell,
   hiddenRowCount = 0,
-  setShowAllRows = noop,
+  handleSetShowALlRowsButtonPress = noop,
   isReadOnly = false,
   isLiveResult = false,
 }: TableProps): ReturnType<FC> => {
+  const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
   const border = isLiveResult ? liveResultBorder : regularBorder;
   return (
     <table
@@ -226,13 +230,14 @@ export const Table = ({
       ]}
     >
       {head && <thead>{head}</thead>}
-      <tbody>
+      <tbody ref={animateBody}>
         {body}
+
         {hiddenRowCount > 0 && (
           <ShowAllRows
             columnCount={columnCount}
             hiddenRowCount={hiddenRowCount}
-            setShowAllRows={setShowAllRows}
+            handleSetShowALlRowsButtonPress={handleSetShowALlRowsButtonPress}
             isReadOnly={isReadOnly}
             isLiveResult={isLiveResult}
           />
