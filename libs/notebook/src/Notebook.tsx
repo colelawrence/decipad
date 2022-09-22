@@ -9,8 +9,7 @@ import {
 import { ComputerContextProvider } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useSession } from 'next-auth/react';
-import { FC, useEffect, useMemo, useState } from 'react';
-import { createEditor } from 'slate';
+import { FC, useEffect, useState } from 'react';
 import {
   EditorUserInteractionsProvider,
   useEditorUserInteractionsContext,
@@ -42,11 +41,7 @@ const InsideNotebookState = ({
   onEditor,
   onDocsync,
 }: NotebookProps) => {
-  // Computer
-  const slateBaseEditor = useMemo(createEditor, [notebookId]);
-
   // User warning
-
   const toast = useToast();
   const { data: session } = useSession();
 
@@ -61,13 +56,17 @@ const InsideNotebookState = ({
     hasLocalChanges,
     destroy,
   } = useNotebookState();
+
   useEffect(() => {
-    init(slateBaseEditor as MyEditor, notebookId, {
+    init(notebookId, {
       authSecret: secret,
       connectionParams,
     });
-    return destroy;
-  }, [init, destroy, notebookId, secret, slateBaseEditor, connectionParams]);
+  }, [init, destroy, notebookId, secret, connectionParams]);
+
+  useEffect(() => {
+    return destroy; // always destroy the editor on unmount
+  }, [destroy]);
 
   const interactions = useEditorUserInteractionsContext();
 

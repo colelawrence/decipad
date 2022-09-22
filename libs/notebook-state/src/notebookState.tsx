@@ -1,5 +1,4 @@
 import { createDocSyncEditor, DocSyncOptions } from '@decipad/docsync';
-import { MyEditor } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
 import create from 'zustand';
 import createContext from 'zustand/context';
@@ -29,23 +28,19 @@ const initialState: Omit<NotebookState, 'init' | 'destroy'> = {
 const createStore = () =>
   create<NotebookState>((set, get) => ({
     ...initialState,
-    init: (editor: MyEditor, notebookId: string, options: DocSyncOptions) => {
+    init: (notebookId: string, options: DocSyncOptions) => {
       // verify that if we have a matching connected docsync instance
-      const {
-        docSyncEditor: oldDocSyncEditor,
-        syncClientState,
-        connected,
-      } = get();
+      const { docSyncEditor: oldDocSyncEditor, syncClientState } = get();
       if (oldDocSyncEditor) {
         if (
           syncClientState === 'created' &&
-          oldDocSyncEditor.id === notebookId &&
-          connected
+          oldDocSyncEditor.id === notebookId
         ) {
           // the one we have is just fine
           return;
         }
         try {
+          oldDocSyncEditor.disconnect();
           oldDocSyncEditor.destroy();
         } catch (err) {
           console.error('error destroying old docsync instance', err);
@@ -55,7 +50,7 @@ const createStore = () =>
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
       }, LOAD_TIMEOUT_MS);
-      const docSyncEditor = createDocSyncEditor(editor, notebookId, {
+      const docSyncEditor = createDocSyncEditor(notebookId, {
         ...options,
         onError: captureException,
       });
@@ -92,11 +87,8 @@ const createStore = () =>
       });
     },
     destroy: () => {
-      const { syncClientState, docSyncEditor, notebookHref } = get();
-      if (
-        syncClientState === 'created' &&
-        notebookHref !== window.location.pathname
-      ) {
+      const { syncClientState, docSyncEditor } = get();
+      if (syncClientState === 'created') {
         docSyncEditor?.disconnect();
         docSyncEditor?.destroy();
         set(initialState);

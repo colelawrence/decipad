@@ -1,9 +1,7 @@
-import { createEditor } from 'slate';
 import { dequal } from 'dequal';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { debounce } from 'lodash';
 import { createDocSyncEditor } from '@decipad/docsync';
-import { MyEditor } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { Computer, IdentifiedError, IdentifiedResult } from '@decipad/computer';
@@ -42,7 +40,7 @@ export const startNotebook = async (
   onError: OnErrorCallback
 ): Promise<Computer> => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
-  const syncEditor = createDocSyncEditor(createEditor() as MyEditor, docId, {
+  const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
   });
 

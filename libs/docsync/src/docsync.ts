@@ -9,7 +9,7 @@ import {
 import { Awareness } from 'y-protocols/awareness';
 import { Doc as YDoc } from 'yjs';
 import { MyEditor } from '@decipad/editor-types';
-import { setSelection } from '@udecode/plate';
+import { createEditor } from 'slate';
 import { docSyncEditor } from './docSyncEditor';
 import { ensureInitialDocument } from './utils/ensureInitialDocument';
 
@@ -48,7 +48,6 @@ async function wsAddress(docId: string): Promise<string> {
 }
 
 export function createDocSyncEditor(
-  editor: MyEditor,
   docId: string,
   {
     readOnly = false,
@@ -98,11 +97,13 @@ export function createDocSyncEditor(
     awareness = new Awareness(doc);
   }
 
+  // slate editor
+  const editor = createEditor();
+
   // Yjs editor
   const shared = doc.getArray<SyncElement>();
-  const yjsEditor = withYjs(editor, shared);
+  const yjsEditor = withYjs(editor as MyEditor, shared);
 
-  const { selection } = editor;
   yjsEditor.synchronizeValue();
 
   let destroyed = false;
@@ -139,8 +140,7 @@ export function createDocSyncEditor(
     if (source === 'local') {
       loadedLocally = true;
     }
-    if (loadedRemotely && loadedLocally && selection) {
-      setSelection(editor, selection);
+    if (loadedRemotely && loadedLocally) {
       syncEditor.offLoaded(onLoaded);
     }
   };
