@@ -120,7 +120,7 @@ describe('Auto format code line plugin', () => {
     expect(editor.children).toMatchObject(makeParagraph('hello ='));
   });
 
-  it('goes back to an empty paragraph when pressing equal and backspace', () => {
+  it('goes back to a paragraph when pressing equal and backspace', () => {
     renderEditorParagraph('');
     pressKey('=');
     pressKey('Backspace');
@@ -140,6 +140,24 @@ describe('Auto format code line plugin', () => {
     expect(editor.children).toEqual(makeCodeLine('a '));
   });
 
+  it('accepts spaces in the name', () => {
+    renderEditorParagraph('my tax rate ');
+
+    pressKey('=');
+
+    expect(editor.children).toEqual(makeCodeLine('my_tax_rate ='));
+
+    pressKey('Backspace');
+
+    expect(editor.children).toEqual(makeParagraph('my tax rate ='));
+  });
+
+  it('does not format a paragraph with five or more words', () => {
+    renderEditorParagraph('hello world i am words ');
+    pressKey('=');
+    expect(editor.children).toEqual(makeParagraph('hello world i am words ='));
+  });
+
   it('when removing a codeline it inserts a paragraph', () => {
     renderEditorCodeLine('');
     pressKey('Backspace');
@@ -150,12 +168,6 @@ describe('Auto format code line plugin', () => {
     renderEditorParagraph('      a ');
     pressKey('=');
     expect(editor.children).toEqual(makeParagraph('      a ='));
-  });
-
-  it('does not format a paragraph with two or more words', () => {
-    renderEditorParagraph('hello world ');
-    pressKey('=');
-    expect(editor.children).toEqual(makeParagraph('hello world ='));
   });
 
   it('does not format a paragraph with number at the start', () => {
