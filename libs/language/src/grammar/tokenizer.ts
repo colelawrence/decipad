@@ -12,6 +12,7 @@ const keywordStrings = [
   'false',
   'and',
   'in',
+  'is',
   'by',
   'date',
   'through',

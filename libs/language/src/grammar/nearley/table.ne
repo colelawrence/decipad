@@ -48,7 +48,7 @@ tableItem -> ("…" | "...") ref                          {%
                                                         }
                                                         %}
 
-tableItem -> identifier _ "=" _ expression              {%
+tableItem -> identifier equalSign expression            {%
                                                         (d) => {
                                                           const ref = d[0]
 
@@ -59,7 +59,7 @@ tableItem -> identifier _ "=" _ expression              {%
 
                                                           return addArrayLoc({
                                                             type: 'table-column',
-                                                            args: [colDef, d[4]]
+                                                            args: [colDef, d[2]]
                                                           }, d)
                                                         }
                                                         %}

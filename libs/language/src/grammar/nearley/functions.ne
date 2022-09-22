@@ -4,13 +4,13 @@
 ### Function definition ###
 ###########################
 
-functionDef -> functionDefName _ functionDefArgs _ "=" _ functionBody {%
+functionDef -> functionDefName _ functionDefArgs equalSign functionBody {%
                                                         (d) => addArrayLoc({
                                                           type: "function-definition",
                                                           args: [
                                                             d[0],
                                                             d[2],
-                                                            d[6]
+                                                            d[4]
                                                           ]
                                                         }, d)
                                                         %}

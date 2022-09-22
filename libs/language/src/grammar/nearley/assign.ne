@@ -1,7 +1,7 @@
 
 @lexer tokenizer
 
-assign              -> assignTarget spacedEq assignable {%
+assign              -> assignTarget equalSign assignable{%
                                                         (d) => addArrayLoc({
                                                           type: 'assign',
                                                           args: [d[0], d[2]]
@@ -10,8 +10,6 @@ assign              -> assignTarget spacedEq assignable {%
 
 assignable          -> expression                       {% id %}
 assignable          -> table                            {% id %}
-
-spacedEq            -> _ "=" _                          {% id %}
 
 assignTarget        -> identifier                       {%
                                                         (d) => {

@@ -372,7 +372,7 @@ let ParserRules = [
   },
   {
     name: 'assign',
-    symbols: ['assignTarget', 'spacedEq', 'assignable'],
+    symbols: ['assignTarget', 'equalSign', 'assignable'],
     postprocess: (d) =>
       addArrayLoc(
         {
@@ -384,7 +384,6 @@ let ParserRules = [
   },
   { name: 'assignable', symbols: ['expression'], postprocess: id },
   { name: 'assignable', symbols: ['table'], postprocess: id },
-  { name: 'spacedEq', symbols: ['_', { literal: '=' }, '_'], postprocess: id },
   {
     name: 'assignTarget',
     symbols: ['identifier'],
@@ -406,9 +405,7 @@ let ParserRules = [
       { literal: '.' },
       '_',
       'identifier',
-      '_',
-      { literal: '=' },
-      '_',
+      'equalSign',
       'expression',
     ],
     postprocess: (d) => {
@@ -430,7 +427,7 @@ let ParserRules = [
       return addArrayLoc(
         {
           type: 'table-column-assign',
-          args: [table, column, d[8]],
+          args: [table, column, d[6]],
         },
         d
       );
@@ -440,9 +437,7 @@ let ParserRules = [
     name: 'categories',
     symbols: [
       'identifier',
-      '_',
-      { literal: '=' },
-      '_',
+      'equalSign',
       { literal: 'categories' },
       '_',
       'expression',
@@ -459,7 +454,7 @@ let ParserRules = [
               },
               d[0]
             ),
-            d[6],
+            d[4],
           ],
         },
         d
@@ -519,7 +514,7 @@ let ParserRules = [
   },
   {
     name: 'matrixAssign',
-    symbols: ['assignTarget', '_', 'matrixMatchers', 'spacedEq', 'expression'],
+    symbols: ['assignTarget', '_', 'matrixMatchers', 'equalSign', 'expression'],
     postprocess: (d) => {
       return addArrayLoc(
         {
@@ -1287,7 +1282,7 @@ let ParserRules = [
   },
   {
     name: 'tableItem',
-    symbols: ['identifier', '_', { literal: '=' }, '_', 'expression'],
+    symbols: ['identifier', 'equalSign', 'expression'],
     postprocess: (d) => {
       const ref = d[0];
 
@@ -1302,7 +1297,7 @@ let ParserRules = [
       return addArrayLoc(
         {
           type: 'table-column',
-          args: [colDef, d[4]],
+          args: [colDef, d[2]],
         },
         d
       );
@@ -1966,16 +1961,14 @@ let ParserRules = [
       'functionDefName',
       '_',
       'functionDefArgs',
-      '_',
-      { literal: '=' },
-      '_',
+      'equalSign',
       'functionBody',
     ],
     postprocess: (d) =>
       addArrayLoc(
         {
           type: 'function-definition',
-          args: [d[0], d[2], d[6]],
+          args: [d[0], d[2], d[4]],
         },
         d
       ),
@@ -2290,6 +2283,13 @@ let ParserRules = [
         return addLoc({ type: 'ref', args: [name] }, d[0]);
       }
     },
+  },
+  { name: 'equalSign$subexpression$1', symbols: [{ literal: '=' }] },
+  { name: 'equalSign$subexpression$1', symbols: [{ literal: 'is' }] },
+  {
+    name: 'equalSign',
+    symbols: ['_', 'equalSign$subexpression$1', '_'],
+    postprocess: (d) => d[1],
   },
   {
     name: 'expression',

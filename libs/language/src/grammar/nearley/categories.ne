@@ -1,6 +1,6 @@
 @lexer tokenizer
 
-categories -> identifier _ "=" _ "categories" _ expression  {%
+categories -> identifier equalSign "categories" _ expression{%
                                                             (d) => {
                                                               return addArrayLoc({
                                                                 type: 'categories',
@@ -9,7 +9,7 @@ categories -> identifier _ "=" _ "categories" _ expression  {%
                                                                     type: 'catdef',
                                                                     args: [d[0].name]
                                                                   }, d[0]),
-                                                                  d[6]
+                                                                  d[4]
                                                                 ]
                                                               }, d);
                                                             }

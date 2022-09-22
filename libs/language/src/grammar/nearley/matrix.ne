@@ -15,7 +15,7 @@ matrixMatchersInner -> matrixMatchersInner (_ "," _) matcherExp {%
                                                           [...accum, exp]
                                                         %}
 
-matrixAssign        -> assignTarget _ matrixMatchers spacedEq expression {%
+matrixAssign        -> assignTarget _ matrixMatchers equalSign expression {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'matrix-assign',
