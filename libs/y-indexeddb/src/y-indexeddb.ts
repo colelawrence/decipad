@@ -18,6 +18,10 @@ export async function fetchUpdates(
         idb.createIDBKeyRangeLowerBound(idbPersistence._dbref, false)
       );
 
+      if (idbPersistence._destroyed) {
+        return;
+      }
+
       idbPersistence.doc.transact(() =>
         updates.forEach((val) => Y.applyUpdate(idbPersistence.doc, val))
       );
