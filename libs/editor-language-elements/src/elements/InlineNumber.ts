@@ -25,7 +25,7 @@ export const getUnparsedBlockFromInlineNumber = async (
 
 const cleanUpVarName = (text: string): string =>
   text
-    .replace(/[^\p{Letter}\p{Mark}\p{Number} ]/gu, '')
+    .replace(/[^\p{Letter}\p{Mark}\p{Number}_ ]/gu, '')
     .replace(/^([0-9])/g, '_$1')
     .replace(/\s/g, '_');
 
