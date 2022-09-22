@@ -48,6 +48,7 @@ export const useCreateEditor = ({
         id: notebookId,
         editor: slateEditor,
         plugins: editorPlugins,
+        disableCorePlugins: { history: true },
       }),
     [slateEditor, editorPlugins, notebookId]
   );
