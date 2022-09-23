@@ -169,7 +169,9 @@ export const TableHeader = ({
             onSelectColumn={onSelectColumn}
           />
         )}
-        <div css={[childrenWrapperStyles]}>{children}</div>
+        <div css={[childrenWrapperStyles]} spellCheck={false}>
+          {children}
+        </div>
         {menu}
         {showIcon && (
           <span contentEditable={false} css={columnTypeStyles}>

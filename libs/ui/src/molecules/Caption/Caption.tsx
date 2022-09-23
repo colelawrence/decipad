@@ -93,6 +93,7 @@ export const Caption = ({
       <div
         css={placeholderStyles}
         aria-placeholder={empty ? 'Name your input' : ''}
+        spellCheck={false}
       >
         <span>
           <span>{children}</span>

@@ -128,6 +128,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           <div
             aria-placeholder={empty ? 'TableName' : ''}
             css={[editableTableCaptionStyles, placeholderStyles]}
+            spellCheck={false}
           >
             {caption}
           </div>
