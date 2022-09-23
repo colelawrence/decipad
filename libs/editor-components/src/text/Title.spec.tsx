@@ -57,9 +57,3 @@ it('shows a placeholder only when empty', async () => {
     expect.stringMatching(/title/i)
   );
 });
-
-it('autofocuses on first render', async () => {
-  const { getByRole } = render(<Plate {...plateProps} editor={editor} />);
-
-  expect(document.activeElement).toBe(getByRole('textbox'));
-});

@@ -40,6 +40,9 @@ export async function setUp(options: SetupOptions = {}) {
     },
     { retries: 3 }
   );
+  if (createAndNavigateToNewPad) {
+    await page.click('[contenteditable] h1');
+  }
 
   return newUser;
 }
@@ -47,6 +50,7 @@ export async function setUp(options: SetupOptions = {}) {
 export async function goToPlayground() {
   await navigateToPlayground();
   await waitForEditorToLoad();
+  await page.click('[contenteditable] h1');
 }
 
 export async function getPadName() {
