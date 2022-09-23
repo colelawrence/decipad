@@ -59,10 +59,7 @@ const tryImportHere = async (
         `subscription ${subscriptionId}: caught error while trying to import from ${sub.params.url}`,
         err
       );
-      await rpc.call('notify', {
-        subscriptionId,
-        error: (err as Error).message,
-      });
+      onError(subscriptionId, sub.params)(err as Error);
     } finally {
       schedule(computer, subscriptionId);
     }

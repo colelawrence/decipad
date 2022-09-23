@@ -68,6 +68,9 @@ export const useLiveConnectionResponse = ({
 
   useEffect(() => {
     worker?.worker.addEventListener('error', (ev) => {
+      if (ev.message.startsWith('Uncaught')) {
+        return;
+      }
       console.error('Error detected on worker', ev);
       setError(new Error(ev.message));
     });

@@ -56,6 +56,9 @@ function createWorkerFor(functionName, env, update) {
   });
 
   fn.worker.once('error', (err) => {
+    if (err.message.startsWith('Uncaught')) {
+      return;
+    }
     update.error(`worker ${functionName} error:\n${err.stack}`);
     while (replyQueue.length > 0) {
       replyWith(err);
