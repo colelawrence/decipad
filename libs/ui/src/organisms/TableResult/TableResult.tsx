@@ -52,9 +52,6 @@ export const TableResult = ({
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const [showAllRows, setShowAllRows] = useState(false);
   const { columnNames, columnTypes } = type;
-  if (!columnNames.length) {
-    throw new Error('Cannot render table with zero columns');
-  }
   if (value.length !== columnNames.length) {
     throw new Error(
       `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
@@ -66,14 +63,14 @@ export const TableResult = ({
   };
 
   const tableLength =
-    type.tableLength === 'unknown' ? value[0].length : type.tableLength;
+    type.tableLength === 'unknown' ? value[0]?.length : type.tableLength;
 
   const tableRecursiveLength = useMemo(() => recursiveRowCount(type), [type]);
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
   const hiddenRowsCount = useMemo(() => {
-    if (isNested || showAllRows) {
+    if (isNested || showAllRows || !tableLength) {
       return 0;
     }
     if (tableRecursiveLength <= defaultMaxRows) {

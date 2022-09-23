@@ -8,6 +8,11 @@ import { runCode } from '../../test-utils';
 import { TableResult } from '..';
 
 const code = 'my_table = { H1 = [1, 2], H2 = ["A", "B"]}';
+it('renders an empty table', async () => {
+  expect(
+    render(<TableResult {...await runCode('empty_table = {}')} />)
+  ).toBeDefined();
+});
 it('renders a table', async () => {
   const { getAllByRole } = render(<TableResult {...await runCode(code)} />);
 
