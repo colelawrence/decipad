@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
@@ -9,11 +9,17 @@ import {
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
 import { useIsEditorReadOnly, useResult } from '@decipad/react-contexts';
-import { getNodeString } from '@udecode/plate';
+import {
+  findNodePath,
+  getNodeString,
+  PlateEditor,
+  serializeHtml,
+} from '@udecode/plate';
 import { DisplayWidget, VariableEditor } from 'libs/ui/src/organisms';
 import { parseStatement } from '@decipad/computer';
 import { DraggableBlock } from '@decipad/editor-components';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import { safeDelete, useElementMutatorCallback } from '@decipad/editor-utils';
+import copy from 'copy-to-clipboard';
 
 interface DropdownWidgetOptions {
   type: 'var' | 'calc';
@@ -26,6 +32,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Expression is meant to render expression elements`);
   }
   const [openMenu, setOpenMenu] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   const selected = useSelected();
   const focused = useFocused();
@@ -42,6 +49,20 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTEditorRef();
   const changeBlockId = useElementMutatorCallback(editor, element, 'blockId');
   const res = useResult(element.blockId);
+
+  const onDelete = useCallback(() => {
+    const path = findNodePath(editor, element);
+    if (path) {
+      setDeleted(true);
+      safeDelete(editor, path);
+    }
+  }, [editor, element]);
+
+  const onCopy = useCallback(() => {
+    copy(serializeHtml(editor as PlateEditor, { nodes: [element] }), {
+      format: 'text/html',
+    });
+  }, [editor, element]);
 
   const codeLines = useMemo(
     () =>
@@ -86,10 +107,12 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const selectedLine = codeLines.find((i) => i.id === element.blockId);
   const readOnly = useIsEditorReadOnly();
 
+  if (deleted) return <></>;
+
   return (
     <div {...attributes} contentEditable={false} id={element.id}>
       <DraggableBlock blockKind="interactive" element={element}>
-        <VariableEditor variant="display">
+        <VariableEditor variant="display" onCopy={onCopy} onDelete={onDelete}>
           <DisplayWidget
             dropdownContent={codeLines}
             openMenu={openMenu && focused && selected}

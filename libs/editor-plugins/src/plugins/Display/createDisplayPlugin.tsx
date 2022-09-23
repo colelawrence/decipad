@@ -15,7 +15,6 @@ export const createDisplayPlugin = createTPluginFactory({
     rules: [
       {
         validNodeName: 'div',
-        validAttribute: { 'data-tyoe': 'display' },
       },
     ],
     getNode: (): DisplayElement | undefined => {
@@ -27,7 +26,7 @@ export const createDisplayPlugin = createTPluginFactory({
       };
     },
   },
-  serializeHtml: () => {
-    return <div data-type="display"></div>;
+  serializeHtml: ({ children }) => {
+    return <div data-type="display">{children}</div>;
   },
 });
