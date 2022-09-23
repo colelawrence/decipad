@@ -304,7 +304,7 @@
     "@types/react-router-hash-link": "2.4.5",
     "@types/rimraf": "3.0.2",
     "@types/slug": "5.0.3",
-    "@types/use-sync-external-store": "^0.0.3",
+    "@types/use-sync-external-store": "0.0.3",
     "@types/uuid": "8.3.4",
     "@types/webpack": "5.28.0",
     "@typescript-eslint/eslint-plugin": "5.38.0",
