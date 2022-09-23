@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
-import { useResults } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { cssVar, setCssVar } from '../../primitives';
 import { TableData } from '../../atoms';
 import { TableRow } from '../../molecules';
@@ -23,8 +23,10 @@ export const ColumnResult = ({
   value,
 }: CodeResultProps<'column'>): ReturnType<FC> => {
   const { indexedBy, cellType } = type;
-  const { indexLabels } = useResults();
-  const labels = indexLabels.get(indexedBy ?? '');
+  const computer = useComputer();
+  const labels = computer.results$.useWithSelector((results) =>
+    results.indexLabels.get(indexedBy ?? '')
+  );
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
   const presentValue = useMemo(() => {

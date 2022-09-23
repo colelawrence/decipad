@@ -1,8 +1,7 @@
 import { PlateComponent, RichText, useTEditorRef } from '@decipad/editor-types';
-import { useComputer, useResult } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { CodeVariable as UICodeVariable } from '@decipad/ui';
-import { useCallback, useRef } from 'react';
-import { useObservable } from 'rxjs-hooks';
+import { useCallback } from 'react';
 import {
   findNodePath,
   focusEditor,
@@ -45,19 +44,15 @@ export const CodeVariable: CodeLeaf = ({
   children,
   leaf: { variableName, blockId, isDeclaration },
 }) => {
-  const rootRef = useRef<HTMLSpanElement>(null);
-
-  const result = useResult(blockId, rootRef.current);
-
-  const variableScope = getVariableScope(
-    variableName,
-    result?.visibleVariables
-  );
-  const variableMissing = variableScope === 'undefined';
-
   const computer = useComputer();
-  const defBlockId = useObservable(() => computer.getBlockId$(variableName));
-  const variableResult = useResult(defBlockId ?? '', rootRef.current)?.result;
+  const defBlockId = computer.getVarBlockId$.use(variableName);
+  const visibleVariables = computer.getBlockIdResult$.useWithSelector(
+    (x) => x?.visibleVariables,
+    blockId
+  );
+
+  const variableScope = getVariableScope(variableName, visibleVariables);
+  const variableMissing = variableScope === 'undefined';
 
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
@@ -81,12 +76,10 @@ export const CodeVariable: CodeLeaf = ({
   }, [defBlockId, editor, provideVariableDefLink]);
 
   return (
-    <span ref={rootRef} {...attributes}>
+    <span {...attributes}>
       <UICodeVariable
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
-        variableType={variableResult?.type}
-        variableValue={variableResult?.value ?? undefined}
         defBlockId={defBlockId}
         onGoToDefinition={goToDefinition}
       >

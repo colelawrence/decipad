@@ -1,9 +1,6 @@
 import { MyEditor, PlotElement } from '@decipad/editor-types';
 import { Computer, Result, AutocompleteName } from '@decipad/computer';
-import {
-  useElementMutatorCallback,
-  useNamesDefinedBefore,
-} from '@decipad/editor-utils';
+import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import type { PlotData, PlotSpec } from './plotUtils';
 import {
@@ -49,11 +46,13 @@ export const usePlot = ({
   element,
   result,
 }: UsePlotProps): UsePlotReturn => {
-  const names = useNamesDefinedBefore(element.id, false).filter(isTable);
+  const computer = useComputer();
+  const names = computer.getNamesDefined$.useWithSelector((n) =>
+    n.filter(isTable)
+  );
   const table = names.find((varName) => varName.name === element.sourceVarName);
   const columns =
     (table?.type.kind === 'table' && table.type.columnNames) || [];
-  const computer = useComputer();
 
   let spec = normalizePlotSpec(
     defaultPlotSpec(

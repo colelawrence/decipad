@@ -4,12 +4,12 @@ import {
   MyEditor,
   DataViewElement,
 } from '@decipad/editor-types';
+import { assertElementType, matchNodeType } from '@decipad/editor-utils';
 import {
-  assertElementType,
-  matchNodeType,
-  useNamesDefinedBefore,
-} from '@decipad/editor-utils';
-import { useEditorChange, useResult } from '@decipad/react-contexts';
+  useComputer,
+  useEditorChange,
+  useResult,
+} from '@decipad/react-contexts';
 import {
   Interpreter,
   SerializedType,
@@ -54,7 +54,7 @@ export const useDataView = ({
 
   const tableName = element.varName || '';
 
-  const variableNames = useNamesDefinedBefore(element.id, false);
+  const variableNames = useComputer().getNamesDefined$.use();
 
   const result = useResult(element.id)?.result;
 

@@ -1,5 +1,11 @@
 import { from, Observable, of, OperatorFunction, race } from 'rxjs';
-import { filter, mapTo, switchMap, distinctUntilChanged } from 'rxjs/operators';
+import {
+  filter,
+  switchMap,
+  distinctUntilChanged,
+  map,
+  take,
+} from 'rxjs/operators';
 
 import { timeout } from '@decipad/utils';
 import type {
@@ -41,15 +47,15 @@ export const delayErrors = ({
 
   return switchMap((res: DelayableResult) => {
     if (res.needsDelay) {
-      return mapTo(res)(
-        race(
-          shouldDelay$.pipe(
-            distinctUntilChanged(),
-            filter((shouldDelay) => !shouldDelay)
-          ),
-          from(waitForNextErrorRevealTime())
-        )
-      );
+      const shouldNotDelayAnymore = race(
+        shouldDelay$.pipe(
+          distinctUntilChanged(),
+          filter((shouldDelay) => !shouldDelay)
+        ),
+        from(waitForNextErrorRevealTime())
+      ).pipe(take(1));
+
+      return shouldNotDelayAnymore.pipe(map(() => res));
     }
     return of(res);
   });

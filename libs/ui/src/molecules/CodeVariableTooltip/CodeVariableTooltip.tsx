@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import type { SerializedType, Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
+import { useComputer } from '@decipad/react-contexts';
 import { Tooltip } from '../../atoms';
 import { p8Regular } from '../../primitives';
 import { CodeResult } from '../../organisms';
@@ -9,8 +9,6 @@ import { CodeResult } from '../../organisms';
 const goToDefStyles = css(p8Regular);
 
 interface CodeVariableTooltipProps {
-  type?: SerializedType;
-  value?: Result.OneResult;
   variableMissing?: boolean;
   children: ReactNode;
   defBlockId?: string | null;
@@ -19,25 +17,18 @@ interface CodeVariableTooltipProps {
 }
 
 export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
-  type,
-  value,
   variableMissing = false,
   children,
   defBlockId,
   provideDefinitionLink,
   onGoToDefinition = noop,
 }): ReturnType<FC> => {
-  const resultIfAvailable =
-    type != null && value != null ? (
-      <CodeResult type={type} value={value} variant="inline" tooltip={false} />
-    ) : null;
-
   return (
     <Tooltip
       trigger={<span>{children}</span>}
       open={variableMissing ? false : undefined}
     >
-      {resultIfAvailable}
+      <TooltipResult defBlockId={defBlockId ?? ''} />
       {provideDefinitionLink && defBlockId && (
         <a
           css={goToDefStyles}
@@ -48,5 +39,22 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
         </a>
       )}
     </Tooltip>
+  );
+};
+
+/**
+ * Subscribes to the result in the tooltip. This separation prevents updates to the
+ * tooltip while it's closed, because a closed tooltip won't mount this component, and
+ * therefore subscribe to computer results.
+ */
+const TooltipResult: FC<{ defBlockId: string }> = ({ defBlockId }) => {
+  const { type, value } =
+    useComputer().getBlockIdResult$.use(defBlockId)?.result ?? {};
+
+  if (type == null || value == null) {
+    return <></>;
+  }
+  return (
+    <CodeResult type={type} value={value} variant="inline" tooltip={false} />
   );
 };

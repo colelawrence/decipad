@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { ReactNode } from 'react';
 import type { TableCellType } from '@decipad/editor-types';
-import { Result, SerializedType } from '@decipad/computer';
 import { grey400, grey500 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
@@ -39,8 +38,6 @@ interface CodeVariableProps {
   readonly provideVariableDefLink?: boolean;
   readonly type?: TableCellType;
   readonly variableScope?: VariableScope;
-  readonly variableType?: SerializedType;
-  readonly variableValue?: Result.OneResult;
   readonly defBlockId?: string | null;
   onGoToDefinition?: () => void;
 }
@@ -52,8 +49,6 @@ export const CodeVariable = ({
   provideVariableDefLink = false,
   onClick = noop,
   type,
-  variableType,
-  variableValue,
   variableScope = 'global',
   defBlockId,
   onGoToDefinition,
@@ -81,8 +76,6 @@ export const CodeVariable = ({
 
   return (
     <CodeVariableTooltip
-      type={variableType}
-      value={variableValue}
       variableMissing={variableScope === 'undefined'}
       defBlockId={defBlockId}
       provideDefinitionLink={provideVariableDefLink}

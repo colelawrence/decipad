@@ -22,10 +22,10 @@ import {
   InjectableExternalData,
   SerializedType,
 } from '@decipad/language';
-import { anyMappingToMap } from '@decipad/utils';
+import { anyMappingToMap, identity } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
   concatMap,
@@ -37,6 +37,7 @@ import {
 import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
 import { getExprRef, makeNamesFromIds } from '../exprRefs';
+import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
 import type {
   ComputePanic,
@@ -57,14 +58,6 @@ import { ParseRet, updateParse } from './parse';
 import { topologicalSort } from './topologicalSort';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
-
-interface ExpressionResultOptions {
-  version?: boolean;
-}
-
-type WithVersion<T> = T & {
-  version?: number;
-};
 
 interface ComputerOpts {
   requestDebounceMs: number;
@@ -147,32 +140,33 @@ export class Computer {
       .subscribe(this.aggregatedParseErrors);
   }
 
-  getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
-    return this.computationRealm.inferContext.functionDefinitions.get(funcName);
-  }
-
-  getBlockId$(varName: string): Observable<string | undefined> {
+  getVarBlockId(varName: string) {
     const mainIdentifier = varName.includes('.') // table.name
       ? varName.split('.')[0]
       : varName;
-    return this.results.pipe(
-      map(() => {
-        return this.previouslyParsed.find((p) => {
-          if (varName === getExprRef(p.id)) {
-            return true;
-          }
 
-          if (p.type === 'identified-block' && p.block.args.length > 0) {
-            const symbol = getDefinedSymbol(p.block.args[0]);
-            return symbol === `var:${mainIdentifier}`;
-          } else {
-            return false;
-          }
-        })?.id;
-      }),
-      distinctUntilChanged()
-    );
+    return this.previouslyParsed.find((p) => {
+      if (varName === getExprRef(p.id)) {
+        return true;
+      } else if (p.type === 'identified-block' && p.block.args.length > 0) {
+        const symbol = getDefinedSymbol(p.block.args[0]);
+        return symbol === `var:${mainIdentifier}`;
+      } else {
+        return false;
+      }
+    })?.id;
   }
+
+  results$ = listenerHelper(this.results, identity);
+
+  getBlockIdResult$ = listenerHelper(
+    this.results,
+    (results, blockId: string) => results.blockResults[blockId]
+  );
+
+  getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
+    this.getVarBlockId(varName)
+  );
 
   getDefinedSymbolInBlock(blockId: string): string | undefined {
     const parsed = this.previouslyParsed.find((p) => p.id === blockId);
@@ -191,29 +185,37 @@ export class Computer {
     return undefined;
   }
 
-  getNamesDefined$(): Observable<AutocompleteName[]> {
-    return this.results.pipe(
-      map(() => this.getNamesDefined()),
-      distinctUntilChanged(dequal)
+  /**
+   * Get names for the autocomplete, and information about them
+   */
+  getNamesDefined(): AutocompleteName[] {
+    const program = getGoodBlocks(this.previouslyParsed);
+    return Array.from(
+      findNames(
+        this.computationRealm,
+        program,
+        this.automaticallyGeneratedNames
+      )
     );
   }
 
-  getFunctionDefinition$(
-    funcName: string
-  ): Observable<AST.FunctionDefinition | null | undefined> {
-    return this.results.pipe(
-      map(() => this.getFunctionDefinition(funcName)),
-      distinctUntilChanged(dequal)
-    );
+  getNamesDefined$ = listenerHelper(this.results, () => this.getNamesDefined());
+
+  getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
+    return this.computationRealm.inferContext.functionDefinitions.get(funcName);
   }
 
-  expressionResultFromText$(
-    decilang: string
-  ): Observable<Result.Result | null> {
-    const computerExpression = this.expressionResult$(
-      parseOneExpression(decilang)
+  getFunctionDefinition$ = listenerHelper(this.results, (_, funcName: string) =>
+    this.getFunctionDefinition(funcName)
+  );
+
+  expressionResultFromText$(decilang: string) {
+    const exp = parseOneExpression(decilang);
+
+    return this.results.pipe(
+      concatMap(async () => this.expressionResult(exp)),
+      distinctUntilChanged(dequal)
     );
-    return computerExpression;
   }
 
   async expressionResult(expression: AST.Expression): Promise<Result.Result> {
@@ -256,18 +258,6 @@ export class Computer {
       expression
     );
     return serializeType(type);
-  }
-
-  expressionResult$(
-    expression: AST.Expression,
-    options: ExpressionResultOptions = {}
-  ): Observable<WithVersion<Result.Result>> {
-    let version = 0;
-    return this.results.pipe(
-      concatMap(async () => this.expressionResult(expression)),
-      map((r) => (options.version ? { version: ++version, ...r } : r)),
-      distinctUntilChanged(dequal)
-    );
   }
 
   private ingestComputeRequest({
@@ -378,20 +368,6 @@ export class Computer {
     this.wireRequestsToResults();
   }
 
-  /**
-   * Get names for the autocomplete, and information about them
-   */
-  getNamesDefined(): AutocompleteName[] {
-    const program = getGoodBlocks(this.previouslyParsed);
-    return Array.from(
-      findNames(
-        this.computationRealm,
-        program,
-        this.automaticallyGeneratedNames
-      )
-    );
-  }
-
   getStatement(blockId: string, statementIndex: number): AST.Statement | null {
     const block = (
       this.previouslyParsed.find(
@@ -454,14 +430,10 @@ export class Computer {
     return this.parseErrors.getValue().has(id);
   }
 
-  getParseError(elementId: string): UserParseError | undefined {
-    return this.parseErrors.getValue().get(elementId);
-  }
-
-  getParseError$(): Observable<ParseErrorMap> &
-    Pick<BehaviorSubject<ParseErrorMap>, 'getValue'> {
-    return this.aggregatedParseErrors;
-  }
+  getParseError$ = listenerHelper(
+    this.aggregatedParseErrors,
+    (errors, blockId: string) => errors.get(blockId)
+  );
 
   // locale
 

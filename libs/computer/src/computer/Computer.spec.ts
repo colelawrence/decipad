@@ -1,3 +1,4 @@
+import { F } from '@decipad/fraction';
 import {
   astNode,
   buildType as t,
@@ -7,7 +8,7 @@ import {
 } from '@decipad/language';
 import { AnyMapping, timeout } from '@decipad/utils';
 import produce from 'immer';
-import { firstValueFrom } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
 import {
   getIdentifiedBlocks,
@@ -15,7 +16,11 @@ import {
   simplifyComputeResponse,
   unparsedProgram,
 } from '../testUtils';
-import { ComputeRequestWithExternalData, UnparsedBlock } from '../types';
+import {
+  ComputeRequestWithExternalData,
+  UnparsedBlock,
+  UserParseError,
+} from '../types';
 import { Computer } from './Computer';
 
 let computer: Computer;
@@ -342,13 +347,41 @@ it('can get a expression from text in streaming mode', async () => {
   expect(firstTime?.value?.toString()).toBe('2');
 });
 
-describe('getBlockId$', () => {
+it('getBlockIdResult$', async () => {
+  computer.pushCompute({
+    program: getUnparsed('123'),
+  });
+
+  const x = await firstValueFrom(
+    computer.getBlockIdResult$
+      .observeWithSelector((item) => item?.result?.type.kind, 'block-0')
+      .pipe(filter((item) => item != null))
+  );
+
+  expect(x).toMatchInlineSnapshot(`"number"`);
+});
+
+it('getFunctionDefinition$', async () => {
+  computer.pushCompute({
+    program: getUnparsed('f(x) = 2'),
+  });
+
+  const x = await firstValueFrom(
+    computer.getFunctionDefinition$
+      .observeWithSelector((item) => item, 'f')
+      .pipe(filter((item) => item != null))
+  );
+
+  expect(x?.args[0].args[0]).toMatchInlineSnapshot(`"f"`);
+});
+
+describe('getVarBlockId$', () => {
   it('can get a variable block id in streaming', async () => {
     await computeOnTestComputer({
       program: getUnparsed('Foo = 420'),
     });
 
-    const fooStream = computer.getBlockId$('Foo');
+    const fooStream = computer.getVarBlockId$.observe('Foo');
 
     const firstFoo = await firstValueFrom(fooStream);
 
@@ -360,7 +393,7 @@ describe('getBlockId$', () => {
       program: getUnparsed('C = 1', 'A = { B = 420 } '),
     });
 
-    const fooStream = computer.getBlockId$('A.B');
+    const fooStream = computer.getVarBlockId$.observe('A.B');
 
     const firstFoo = await firstValueFrom(fooStream);
 
@@ -372,7 +405,7 @@ describe('getBlockId$', () => {
       program: getUnparsed('Foo = 420'),
     });
 
-    const fooStream = computer.getBlockId$('exprRef_block_0');
+    const fooStream = computer.getVarBlockId$.observe('exprRef_block_0');
 
     const firstFoo = await firstValueFrom(fooStream);
 
@@ -390,10 +423,15 @@ it('can get a defined symbol, in block', async () => {
 });
 
 it('can stream imperative and computer-driven errors', async () => {
-  let errors = new Map<string, unknown>();
+  let errors1: UserParseError | undefined;
+  let errors2: UserParseError | undefined;
 
-  computer.getParseError$().subscribe((map) => {
-    errors = new Map([...errors.entries(), ...map.entries()]);
+  computer.getParseError$.observe('1').subscribe((item) => {
+    errors1 = item;
+  });
+
+  computer.getParseError$.observe('2').subscribe((item) => {
+    errors2 = item;
   });
 
   computer.pushCompute({
@@ -405,16 +443,42 @@ it('can stream imperative and computer-driven errors', async () => {
 
   await timeout(1);
 
-  expect(errors).toMatchInlineSnapshot(`
-    Map {
-      "1" => Object {
-        "elementId": "1",
-        "error": "err 1",
-      },
-      "2" => Object {
-        "elementId": "2",
-        "error": "err 2",
-      },
+  expect(errors1).toMatchInlineSnapshot(`
+    Object {
+      "elementId": "1",
+      "error": "err 1",
     }
   `);
+  expect(errors2).toMatchInlineSnapshot(`
+    Object {
+      "elementId": "2",
+      "error": "err 2",
+    }
+  `);
+
+  computer.unsetParseError('2');
+  expect(errors2).toEqual(undefined);
+});
+
+it('formats stuff', () => {
+  expect(
+    computer.formatNumber(
+      { kind: 'number', numberFormat: 'percentage' },
+      F(0.1)
+    ).asString
+  ).toMatchInlineSnapshot(`"10%"`);
+
+  expect(
+    computer.formatError({ errType: 'free-form', message: 'error!' })
+  ).toMatchInlineSnapshot(`"error!"`);
+
+  expect(
+    computer.formatUnit(
+      [{ known: true, multiplier: F(1), unit: 'meter', exp: F(1) }],
+      F(1)
+    )
+  ).toMatchInlineSnapshot(`"meter"`);
+
+  computer.setLocale('pt-PT');
+  expect(computer).toHaveProperty('locale', 'pt-PT');
 });

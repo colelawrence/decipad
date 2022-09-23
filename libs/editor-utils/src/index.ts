@@ -21,7 +21,6 @@ export * from './isDOMNode';
 export * from './hasTarget';
 export * from './setSlateFragment';
 export * from './serializeDocument';
-export * from './useNamesDefinedBefore';
 export * from './assertElementType';
 export * from './getVariableRanges';
 export * from './magicNumberId';

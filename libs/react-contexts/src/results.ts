@@ -1,12 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import {
-  BehaviorSubject,
-  distinctUntilChanged,
-  EMPTY,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { distinctUntilChanged, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { dequal } from 'dequal';
 
 import {
@@ -31,23 +24,11 @@ export const TestResultsProvider: React.FC<
   Partial<ResultsContextItem> & { children?: ReactNode }
 > = ({ children, ...contextItem }) => {
   const computer = new Computer();
-  computer.results = new BehaviorSubject({
+  computer.results.next({
     ...defaultComputerResults,
     ...contextItem,
   });
   return React.createElement(ComputerContextProvider, { computer }, children);
-};
-
-export const useResults = (): ResultsContextItem => {
-  const subject = useComputer().results;
-  const [resultsItem, setResultsItem] = useState(subject.getValue());
-
-  useEffect(() => {
-    const subscription = subject.subscribe(setResultsItem);
-    return () => subscription.unsubscribe();
-  }, [subject]);
-
-  return resultsItem;
 };
 
 /**
@@ -87,34 +68,6 @@ export const useResult = (
   }, [subject, blockId, element]);
 
   return result;
-};
-
-/**
- * Get a parse error registered with computer.setParseError or
- * returned from editorToProgram under .parseErrors.
- *
- * elementId is the usual block ID arrangement. But: errors in table series
- * are in the ID of the column header.
- */
-export const useInteractiveElementParseError = (elementId?: string) => {
-  const computer = useComputer();
-  const [error, setError] = useState<string | undefined>(
-    () => elementId && computer.getParseError(elementId)?.error
-  );
-
-  useEffect(() => {
-    const error$ = computer.getParseError$().pipe(
-      map((errors) => elementId && errors.get(elementId)?.error),
-      distinctUntilChanged((a, b) => dequal(a, b))
-    );
-    const subscription = error$.subscribe(setError);
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [computer, elementId]);
-
-  return error;
 };
 
 const pauseWhenOffScreen =

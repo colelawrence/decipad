@@ -12,7 +12,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useResult } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { isNodeEmpty, CodeLine as UICodeLine } from '@decipad/ui';
 import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
@@ -36,12 +36,14 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const editor = useTEditorRef();
   const isEmpty = isNodeEmpty(children);
 
+  const computer = useComputer();
   const { id: lineId } = element;
-  const line = useResult(lineId);
-  const lineResult = line?.result;
+  const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
+    (line) => [getSyntaxError(line), line?.result] as const,
+    lineId
+  );
 
   const { tips, placeholder } = useCodeLineTutorials(selected, isEmpty);
-  const syntaxError = getSyntaxError(line);
   const codeLineContent = getNodeString(element);
 
   useCodeLineClickReference(editor, selected, codeLineContent);

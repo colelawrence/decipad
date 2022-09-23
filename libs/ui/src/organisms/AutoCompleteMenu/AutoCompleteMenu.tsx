@@ -1,5 +1,6 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
+import { dequal } from 'dequal';
 import {
   ComponentProps,
   FC,
@@ -103,11 +104,13 @@ export const AutoCompleteMenu = ({
   );
 
   useEffect(() => {
-    setMathingIdentifiers(
-      groupsWithItemsFiltered
+    setMathingIdentifiers((old) => {
+      const newMatching = groupsWithItemsFiltered
         .flatMap(({ matchingItems }) => matchingItems)
-        .map(({ identifier }) => identifier)
-    );
+        .map(({ identifier }) => identifier);
+      if (dequal(old, newMatching)) return old;
+      return newMatching;
+    });
   }, [search, groupsWithItemsFiltered]);
 
   // AutoCompleteMenuItems do not use real browser focus, see their docs

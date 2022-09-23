@@ -30,8 +30,8 @@ export const FunctionResult: FC<FunctionResultProps> = ({ type }) => {
   const [fallback, setFallback] = useState(false);
 
   useEffect(() => {
-    const sub = computer
-      .getFunctionDefinition$(type.name)
+    const sub = computer.getFunctionDefinition$
+      .observe(type.name)
       .pipe(debounceTime(1000))
       .subscribe((def) => {
         if (def && !dequal(def, lastFunctionAst)) {

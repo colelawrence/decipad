@@ -8,7 +8,6 @@ import {
 import { isElementOfType, useSelection } from '@decipad/editor-utils';
 import {
   useComputer,
-  useInteractiveElementParseError,
   useTableColumnFormulaResultForElement,
 } from '@decipad/react-contexts';
 import {
@@ -99,7 +98,10 @@ export const TableCell: PlateComponent = ({
       ? computer.formatUnit(cellType.unit)
       : undefined;
 
-  const parseError = useInteractiveElementParseError(element.id);
+  const parseError = computer.getParseError$.useWithSelector(
+    (elm) => elm?.error,
+    element.id
+  );
 
   const onChangeValue = useCallback(
     (newValue: string | undefined) => {

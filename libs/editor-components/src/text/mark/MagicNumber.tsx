@@ -17,7 +17,6 @@ import { css } from '@emotion/react';
 import { Element, Path } from 'slate';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import { useState } from 'react';
-import { useObservable } from 'rxjs-hooks';
 import { magicNumberId } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 
@@ -39,7 +38,7 @@ export const MagicNumber: PlateComponent = ({
     result?.type?.kind === 'type-error' ||
     (result?.type?.kind === 'number' && result?.type?.unit?.[0].unit === exp);
 
-  const defBlockId = useObservable(() => computer.getBlockId$(exp));
+  const defBlockId = computer.getVarBlockId$.use(exp);
 
   return (
     <span {...attributes}>
