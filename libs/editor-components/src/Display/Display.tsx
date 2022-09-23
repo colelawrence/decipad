@@ -8,13 +8,19 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
-import { useIsEditorReadOnly, useResult } from '@decipad/react-contexts';
+import { distinctUntilChanged, map } from 'rxjs';
+import { dequal } from 'dequal';
 import {
   findNodePath,
   getNodeString,
   PlateEditor,
   serializeHtml,
 } from '@udecode/plate';
+import {
+  useComputer,
+  useIsEditorReadOnly,
+  useResult,
+} from '@decipad/react-contexts';
 import { DisplayWidget, VariableEditor } from 'libs/ui/src/organisms';
 import { parseStatement } from '@decipad/computer';
 import { DraggableBlock } from '@decipad/editor-components';
@@ -32,6 +38,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Expression is meant to render expression elements`);
   }
   const [openMenu, setOpenMenu] = useState(false);
+  const [availableIds, setAvailableIds] = useState<string[]>([]);
   const [deleted, setDeleted] = useState(false);
 
   const selected = useSelected();
@@ -49,6 +56,29 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTEditorRef();
   const changeBlockId = useElementMutatorCallback(editor, element, 'blockId');
   const res = useResult(element.blockId);
+  const computer = useComputer();
+
+  useEffect(() => {
+    const sub = computer.results
+      .pipe(
+        map(({ blockResults }) =>
+          Object.keys(blockResults).filter((blockId) => {
+            const kind = blockResults[blockId].result?.type.kind;
+            return (
+              kind === 'string' ||
+              kind === 'number' ||
+              kind === 'boolean' ||
+              kind === 'type-error'
+            );
+          })
+        ),
+        distinctUntilChanged(dequal)
+      )
+      .subscribe(setAvailableIds);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [computer]);
 
   const onDelete = useCallback(() => {
     const path = findNodePath(editor, element);
@@ -73,6 +103,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         .filter(
           (n) => n.type === ELEMENT_CODE_LINE || n.type === ELEMENT_VARIABLE_DEF
         )
+        .filter((n) => availableIds.includes(n.id))
         .map((n) => {
           if (n.type === ELEMENT_VARIABLE_DEF) {
             return {
@@ -101,7 +132,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           };
         })
         .filter((n): n is DropdownWidgetOptions => n !== undefined),
-    [editor.children]
+    [editor.children, availableIds]
   );
 
   const selectedLine = codeLines.find((i) => i.id === element.blockId);

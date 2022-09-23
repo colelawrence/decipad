@@ -84,7 +84,11 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         </span>
       </div>
       {children}
-      <div css={triggerStyles} onClick={() => onChangeOpen(!openMenu)}>
+      <div
+        css={triggerStyles}
+        onClick={() => onChangeOpen(!openMenu)}
+        data-testid="result-widget"
+      >
         {lineResult?.result && (
           <span css={p32Medium}>{formatResultPreview(lineResult.result)}</span>
         )}
