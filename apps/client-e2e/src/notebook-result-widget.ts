@@ -2,7 +2,8 @@ import waitForExpect from 'wait-for-expect';
 import { createCalculationBlockBelow } from './page-utils/Block';
 import { waitForEditorToLoad, setUp, focusOnBody } from './page-utils/Pad';
 
-describe('notebook result widget', () => {
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('notebook result widget', () => {
   beforeAll(() => setUp());
   beforeAll(() => waitForEditorToLoad());
 
@@ -26,7 +27,6 @@ describe('notebook result widget', () => {
     await waitForExpect(async () => {
       expect(await page.locator('button >> span + div').count()).toBe(2);
     });
-
     expect(
       await page.locator('button >> span + div:has-text("Hello")').count()
     ).toBe(1);

@@ -58,6 +58,17 @@ export async function inferColumnAssign(
     return newColumn;
   }
 
+  // When it's the first assignment to a table
+  // Make sure the column has a known length!
+  let newTableLength = tableLength;
+  if (tableLength === 'unknown') {
+    newTableLength = getDefined(newColumn.columnSize);
+
+    if (newTableLength === 'unknown') {
+      return newColumn.withErrorCause('Unknown column size');
+    }
+  }
+
   const updatedTable = table
     .isTable()
     .canAddTableColumn(colName)
@@ -65,6 +76,7 @@ export async function inferColumnAssign(
       produce((table) => {
         table.columnNames = [...columnNames, colName];
         table.columnTypes = [...columnTypes, newColumn.reduced()];
+        table.tableLength = newTableLength;
       })
     );
 

@@ -67,8 +67,8 @@ export class Stack<T> {
     this.getAssignmentScope(varGroup).set(varName, value);
   }
 
-  setMulti(variables: Map<string, T>, varGroup: VarGroup = 'lexical') {
-    for (const [k, v] of variables.entries()) {
+  setMulti(variables: AnyMapping<T>, varGroup: VarGroup = 'lexical') {
+    for (const [k, v] of anyMappingToMap(variables).entries()) {
       this.set(k, v, varGroup);
     }
   }

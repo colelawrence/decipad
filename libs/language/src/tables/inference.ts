@@ -55,7 +55,7 @@ export const findTableSize = async (ctx: Context, table: AST.Table) => {
       }
     }
 
-    return [ctx.inAssignment, table.args.length ? 1 : 0] as const;
+    return [ctx.inAssignment, table.args.length ? 1 : 'unknown'] as const;
   });
 };
 
@@ -73,7 +73,12 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
       const [columnNames, columnTypes] = unzip(columns.entries());
 
       if (columnTypes.length === 0) {
-        return t.impossible(InferError.unexpectedEmptyTable());
+        return t.table({
+          indexName,
+          length: tableLength,
+          columnTypes: [],
+          columnNames: [],
+        });
       } else {
         const [firstType, ...rest] = columnTypes.map((col) => col.reduced());
 

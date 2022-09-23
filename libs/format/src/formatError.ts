@@ -40,9 +40,6 @@ export const formatError = (locale: string, spec: ErrSpec): string => {
     case 'unexpected-empty-column': {
       return `Unexpected empty column`;
     }
-    case 'unexpected-empty-table': {
-      return `Unexpected empty table`;
-    }
     case 'forbidden-inside-function': {
       const opType = { table: 'Table', category: 'Category' }[
         spec.forbiddenThing

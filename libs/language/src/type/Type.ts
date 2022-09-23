@@ -169,8 +169,8 @@ export class Type {
     return withAtParentIndex(this);
   }
 
-  withMinimumColumnCount(columnSize = 1): Type {
-    return withMinimumColumnCount(this, columnSize);
+  withMinimumColumnCount(colCount = 1): Type {
+    return withMinimumColumnCount(this, colCount);
   }
 
   isPrimitive(): Type {

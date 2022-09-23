@@ -12,15 +12,21 @@ expect.addSnapshotSerializer(typeSnapshotSerializer);
 let ctx = makeContext();
 beforeEach(() => {
   ctx = makeContext();
-  ctx.stack.set(
-    'Table',
-    t.table({
+  ctx.stack.setMulti({
+    Table: t.table({
       indexName: 'Table',
       length: 2,
       columnNames: ['Col1'],
       columnTypes: [t.number()],
-    })
-  );
+    }),
+    ColumnOfUnknownLength: t.column(t.number(), 'unknown'),
+    Empty: t.table({
+      indexName: 'Empty',
+      length: 'unknown',
+      columnNames: [],
+      columnTypes: [],
+    }),
+  });
 });
 
 describe('Column assignment inference', () => {
@@ -119,6 +125,33 @@ describe('Column assignment inference', () => {
     expect(ctx.stack.globalVariables.get('Num')).toMatchObject({
       type: 'number',
     });
+  });
+
+  it('defines the table size when the table is empty', async () => {
+    const assignment = tableColAssign('Empty', 'FirstCol', col(1, 2));
+
+    expect(await inferColumnAssign(ctx, assignment)).toMatchInlineSnapshot(
+      `column<number, 2, indexed by Empty>`
+    );
+    expect(ctx.stack.get('Empty')).toMatchInlineSnapshot(
+      `table<FirstCol = number>`
+    );
+    expect(ctx.stack.get('Empty')?.tableLength).toMatchInlineSnapshot(`2`);
+
+    // Places in (AST => type) registry
+    expect(ctx.nodeTypes.get(assignment.args[2])).toBeDefined();
+  });
+
+  it('makes sure that when the table is empty, its new column can inform the table length', async () => {
+    const assignment = tableColAssign(
+      'Empty',
+      'UnknownLengthCol',
+      r('ColumnOfUnknownLength')
+    );
+
+    expect(
+      (await inferColumnAssign(ctx, assignment)).errorCause
+    ).not.toBeNull();
   });
 });
 

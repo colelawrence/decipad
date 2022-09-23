@@ -75,5 +75,9 @@ export async function getResult(n: number) {
   // @ts-ignore
   // eslint-disable-next-line no-underscore-dangle
   await page.waitForSelector(locator._selector);
+
+  await waitForExpect(async () => {
+    expect(await locator.allTextContents()).not.toMatchObject(['?']);
+  });
   return locator;
 }

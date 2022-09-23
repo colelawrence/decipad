@@ -826,6 +826,22 @@ describe('Tables', () => {
       value: F(1),
     });
   });
+
+  it('can be empty and built-up afterwards', async () => {
+    expect(
+      await runCode(`
+        Table = {}
+        Table.Index = [1, 2, 3]
+        Table.Formula = Index + 3
+        sum(Table.Formula)
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": number,
+        "value": Fraction(15),
+      }
+    `);
+  });
 });
 
 describe('Matrices', () => {

@@ -239,14 +239,6 @@ describe('tables', () => {
     expect(tableContext.stack.get('Table')).toEqual(expectedType);
   });
 
-  it('Errors on empty tables', async () => {
-    expect(
-      await inferStatement(makeContext(), tableDef('Table', {}))
-    ).toMatchObject({
-      errorCause: { spec: { errType: 'unexpected-empty-table' } },
-    });
-  });
-
   it('References to table columns', async () => {
     const block = n(
       'block',

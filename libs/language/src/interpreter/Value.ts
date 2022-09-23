@@ -349,9 +349,6 @@ export class Table implements Value {
   columnNames: string[];
 
   constructor(columns: ColumnLike[], columnNames: string[]) {
-    if (columns.length === 0 || columnNames.length === 0) {
-      throw new Error('panic: unexpected empty table');
-    }
     this.columns = columns;
     this.columnNames = columnNames;
   }
@@ -364,7 +361,7 @@ export class Table implements Value {
   }
 
   get tableRowCount() {
-    return this.columns[0].rowCount;
+    return this.columns[0]?.rowCount ?? 0;
   }
 
   static fromMapping(mapping: AnyMapping<ColumnLike>) {

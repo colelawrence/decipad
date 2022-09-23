@@ -33,7 +33,6 @@ export type ErrSpec =
       expectedUnit: [Unit[] | null, Unit[] | null];
     }
   | { errType: 'unexpected-empty-column' }
-  | { errType: 'unexpected-empty-table' }
   | {
       errType: 'forbidden-inside-function';
       forbiddenThing: 'table' | 'category';
@@ -172,12 +171,6 @@ export class InferError extends Error {
   static unexpectedEmptyColumn() {
     return new InferError({
       errType: 'unexpected-empty-column',
-    });
-  }
-
-  static unexpectedEmptyTable() {
-    return new InferError({
-      errType: 'unexpected-empty-table',
     });
   }
 

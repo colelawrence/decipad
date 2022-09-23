@@ -59,9 +59,9 @@ it('puts column types in ether', async () => {
   expect(ctx.nodeTypes.has(col2)).toBe(true);
 });
 
-it('returns zero for an empty table', async () => {
+it('returns unknown for an empty table', async () => {
   const tbl = table({});
-  expect(await findTableSize(nilCtx, tbl)).toEqual(['TableName', 0]);
+  expect(await findTableSize(nilCtx, tbl)).toEqual(['TableName', 'unknown']);
 });
 
 it('finds the size of a table that only uses previous', async () => {
@@ -78,6 +78,15 @@ it('gets the table size from a spread', async () => {
     n('table-spread', n('ref', 'SomeExistingTable'))
   );
   expect(await findTableSize(nilCtx, tbl)).toEqual(['SomeExistingTable', 1234]);
+});
+
+it('allows empty tables', async () => {
+  expect(await inferTable(nilCtx, table({}))).toMatchObject({
+    indexName: 'TableName',
+    tableLength: 'unknown',
+    columnNames: [],
+    columnTypes: [],
+  });
 });
 
 it('forbids tables inside functions', async () => {

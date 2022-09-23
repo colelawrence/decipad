@@ -95,7 +95,11 @@ export const evaluateTable = async (
   const { tableLength, indexName } = realm.getTypeAt(table);
 
   if (typeof tableLength !== 'number') {
-    throw new Error('panic: unknown table length');
+    if (items.length === 0) {
+      return Table.fromMapping({});
+    } else {
+      throw new Error('panic: unknown table length');
+    }
   }
 
   return realm.stack.withPush(async () => {

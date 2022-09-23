@@ -4,7 +4,6 @@ import { jsCol } from '../lazy/testUtils';
 import {
   Scalar,
   Column,
-  Table,
   Range,
   DateValue,
   fromJS,
@@ -47,13 +46,6 @@ it('can represent a column of dates', () => {
   ]);
 
   expect(dates.getData()).toEqual([d('2021-02'), d('2021-06')]);
-});
-
-it('refuses to represent an empty table', () => {
-  expect(() => Table.fromNamedColumns([fromJS([])], [])).toThrow(
-    /empty table/i
-  );
-  expect(() => Table.fromNamedColumns([], ['hi'])).toThrow(/empty table/i);
 });
 
 it('Can retrieve the original index in a filtered column', () => {
