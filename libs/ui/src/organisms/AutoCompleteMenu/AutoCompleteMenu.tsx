@@ -145,6 +145,12 @@ export const AutoCompleteMenu = ({
   );
   useWindowListener('keydown', onKeyDown, true);
 
+  useEffect(() => {
+    if (matchingIdentifiers.length > 0) {
+      setFocusedItem(matchingIdentifiers[0]);
+    }
+  }, [matchingIdentifiers]);
+
   const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
 
   return allItems.length ? (

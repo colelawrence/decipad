@@ -25,15 +25,6 @@ it('renders menuitems triggering different commands', async () => {
   );
 });
 
-it('does not select when pressing enter', async () => {
-  const handleExecute = jest.fn();
-  render(
-    <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
-  );
-
-  expect(handleExecute).not.toHaveBeenCalled();
-});
-
 it('focuses menuitems using the arrow keys', async () => {
   const handleExecute = jest.fn();
   render(
