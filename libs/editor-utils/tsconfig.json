@@ -10,6 +10,7 @@
     { "path": "../editor-types" },
     { "path": "../feature-flags" },
     { "path": "../react-contexts" },
-    { "path": "../format" }
+    { "path": "../format" },
+    { "path": "../parse" }
   ]
 }

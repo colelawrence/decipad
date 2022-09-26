@@ -37,6 +37,7 @@ export {
   areUnitsConvertible,
   convertBetweenUnits,
   currencyUnits,
+  isStatement,
 } from '@decipad/language';
 
 export { isSyntaxError, isBracketError, hasBracketError } from './utils';

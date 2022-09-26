@@ -5,11 +5,12 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { isElementOfType, useSelection } from '@decipad/editor-utils';
 import {
-  useComputer,
+  isElementOfType,
+  useSelection,
   useTableColumnFormulaResultForElement,
-} from '@decipad/react-contexts';
+} from '@decipad/editor-utils';
+import { useComputer } from '@decipad/react-contexts';
 import {
   CodeResult,
   ColumnDropLine,

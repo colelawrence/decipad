@@ -1,5 +1,6 @@
 import {
   CellValueType,
+  TableColumnFormulaElement,
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
@@ -10,6 +11,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useColumnsInferredTypes } from './useColumnsInferredTypes';
 
 export interface TableColumn {
+  blockId: string;
   name: string;
   cellType: CellValueType;
 }
@@ -18,6 +20,7 @@ export interface TableInfo {
   name: string;
   columns: TableColumn[];
   headers: TableHeaderElement[];
+  formulas: TableColumnFormulaElement[];
   rowCount: number;
 }
 
@@ -36,10 +39,15 @@ export const useTable = (element: TableElement): TableInfo => {
     const headers = element.children[1].children;
 
     return headers.map((th, index) => ({
+      blockId: th.id,
       name: th.children[0].text,
       cellType: columnTypes[index],
     }));
   }, [columnTypes, element.children]);
+
+  const getFormulas = useCallback(() => {
+    return element.children[0].children.slice(1) as TableColumnFormulaElement[];
+  }, [element.children]);
 
   const getRowCount = useCallback(() => {
     return element.children.length - 2;
@@ -48,6 +56,7 @@ export const useTable = (element: TableElement): TableInfo => {
   const [name, setName] = useState<TableInfo['name']>(getName);
   const [headers, setHeaders] = useState<TableInfo['headers']>(getHeaders);
   const [columns, setColumns] = useState<TableInfo['columns']>(getColumns);
+  const [formulas, setFormulas] = useState<TableInfo['formulas']>(getFormulas);
   const [rowCount, setRowCount] = useState<number>(getRowCount);
 
   useEditorChange(
@@ -55,6 +64,7 @@ export const useTable = (element: TableElement): TableInfo => {
       name: newName,
       headers: newHeaders,
       columns: newColumns,
+      formulas: newFormulas,
       rowCount: newRowCount,
     }) => {
       if (!dequal(name, newName)) {
@@ -66,6 +76,9 @@ export const useTable = (element: TableElement): TableInfo => {
       if (!dequal(columns, newColumns)) {
         setColumns(newColumns);
       }
+      if (!dequal(formulas, newFormulas)) {
+        setFormulas(newFormulas);
+      }
       if (!dequal(rowCount, newRowCount)) {
         setRowCount(newRowCount);
       }
@@ -74,12 +87,13 @@ export const useTable = (element: TableElement): TableInfo => {
       name: getName(),
       headers: getHeaders(),
       columns: getColumns(),
+      formulas: getFormulas(),
       rowCount: getRowCount(),
     })
   );
 
   return useMemo(
-    () => ({ name, headers, columns, rowCount }),
-    [name, headers, columns, rowCount]
+    () => ({ name, headers, columns, formulas, rowCount }),
+    [name, headers, columns, formulas, rowCount]
   );
 };

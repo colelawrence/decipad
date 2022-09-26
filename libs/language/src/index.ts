@@ -81,6 +81,7 @@ export {
   n as astNode,
   safeNumberForPrecision,
   walkAst,
+  isStatement,
 } from './utils';
 export type { Unit };
 

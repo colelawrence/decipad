@@ -12,10 +12,8 @@ import {
 import { F } from '@decipad/editor-utils';
 import { Computer, prettyPrintAST } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
-import {
-  formulaSourceToColumn,
-  getTableAstNodeFromTableElement,
-} from './getTableAstNodeFromTableElement';
+import { getTableAstNodeFromTableElement } from './getTableAstNodeFromTableElement';
+import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 
 expect.addSnapshotSerializer({
   test: (node) => typeof node?.type === 'string' && Array.isArray(node.args),
@@ -93,7 +91,7 @@ describe('getTableAstNodeFromTableElement', () => {
             {
               type: ELEMENT_TD,
               id: 'td13',
-              children: [{ text: 'date(2022-01-01)' }],
+              children: [{ text: '2022-01-01' }],
             },
           ],
         },
@@ -114,7 +112,7 @@ describe('getTableAstNodeFromTableElement', () => {
             {
               type: ELEMENT_TD,
               id: 'td23',
-              children: [{ text: 'date(2022-02-01)' }],
+              children: [{ text: '2022-02-01' }],
             },
           ],
         },
@@ -135,21 +133,36 @@ describe('getTableAstNodeFromTableElement', () => {
             {
               type: ELEMENT_TD,
               id: 'td33',
-              children: [{ text: 'date(2022-03-01)' }],
+              children: [{ text: '2022-03-01' }],
             },
           ],
         },
       ],
     };
 
-    expect(
-      (await getTableAstNodeFromTableElement(editor, new Computer(), node))
-        .expression
-    ).toMatchInlineSnapshot(`
+    const result = await getTableAstNodeFromTableElement(
+      editor,
+      new Computer(),
+      node
+    );
+    expect(result.expression).toMatchInlineSnapshot(`
       (table
-        column1 (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas)))
-        column2 (column "string 1" "string 2" "string 3")
-        column3 (column (date year 2020 month 1 day 1) (date year 2020 month 1 day 1) (date year 2020 month 1 day 1)))
+        column1 (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas))))
+    `);
+
+    expect(result.columnAssigns).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "blockId": "th2",
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3")),
+          "parseErrors": Array [],
+        },
+        Object {
+          "blockId": "th3",
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1))),
+          "parseErrors": Array [],
+        },
+      ]
     `);
   });
 
@@ -218,17 +231,32 @@ describe('getTableAstNodeFromTableElement', () => {
       (await getTableAstNodeFromTableElement(editor, new Computer(), node))
         .expression
     ).toMatchInlineSnapshot(`
-        (table
-          column1 (column "Hello")
-          column2 (+ 1 1))
-      `);
+      (table
+        column1 (column "Hello"))
+    `);
   });
 });
 
 describe('formulaSourceToColumn', () => {
   it('catches parse errors', () => {
     expect(
-      formulaSourceToColumn('syntax //--// error', 3)
-    ).toMatchInlineSnapshot(`(column 0 0 0)`);
+      formulaSourceToColumnAssign(
+        'columnName',
+        'blockId',
+        'syntax //--// error'
+      )
+    ).toMatchInlineSnapshot(`
+      Object {
+        "columnName": "columnName",
+        "elementId": "blockId",
+        "expression": (noop),
+        "parseErrors": Array [
+          Object {
+            "elementId": "blockId",
+            "error": "Syntax error",
+          },
+        ],
+      }
+    `);
   });
 });
