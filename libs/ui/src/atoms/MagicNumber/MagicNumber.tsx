@@ -1,7 +1,8 @@
 import { Result } from '@decipad/computer';
+import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { FC, MouseEvent, ReactNode, useCallback } from 'react';
 import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
@@ -25,6 +26,37 @@ const baseCreatorStyles = css({
   color: cssVar('variableHighlightTextColor'),
 });
 
+interface ExprRefLinkProps {
+  expression: string;
+}
+
+const ExprRefLink: FC<ExprRefLinkProps> = ({ expression }) => {
+  const computer = useComputer();
+  const blockId = computer.getVarBlockId$.use(expression);
+
+  const onClick = useCallback(
+    (ev: MouseEvent) => {
+      if (typeof blockId === 'string') {
+        const el = document.getElementById(blockId);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el?.focus();
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    },
+    [blockId]
+  );
+
+  return (
+    (blockId && (
+      <a href={`#${blockId}`} onClick={onClick}>
+        Go to definition &rarr;
+      </a>
+    )) ||
+    null
+  );
+};
+
 interface ResultResultProps {
   children?: ReactNode;
   expression?: string;
@@ -35,8 +67,14 @@ const IntrospectMagicNumber: FC<ResultResultProps> = ({
   children,
 }) => {
   return (
-    <Tooltip trigger={children}>
-      expression: <pre>{expression}</pre>
+    <Tooltip trigger={<span>{children}</span>}>
+      {expression?.startsWith('exprRef_') ? (
+        <ExprRefLink expression={expression} />
+      ) : (
+        <span>
+          expression: <pre>{expression}</pre>
+        </span>
+      )}
     </Tooltip>
   );
 };
@@ -58,10 +96,10 @@ export const MagicNumber = ({
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
       >
-        {hasResult ? (
-          <CodeResult variant="inline" {...result} />
-        ) : (
-          <IntrospectMagicNumber expression={expression}>
+        <IntrospectMagicNumber expression={expression}>
+          {hasResult ? (
+            <CodeResult tooltip={false} variant="inline" {...result} />
+          ) : (
             <span
               css={css({
                 margin: 'auto',
@@ -70,8 +108,8 @@ export const MagicNumber = ({
             >
               <Loading />
             </span>
-          </IntrospectMagicNumber>
-        )}
+          )}
+        </IntrospectMagicNumber>
       </span>
     </span>
   );

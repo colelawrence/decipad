@@ -16,7 +16,7 @@ import { MagicNumber as UIMagicNumber } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Element, Path } from 'slate';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { magicNumberId } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 
@@ -40,20 +40,22 @@ export const MagicNumber: PlateComponent = ({
 
   const defBlockId = computer.getVarBlockId$.use(exp);
 
+  const onClick = useCallback(() => {
+    // if it's a variable name, we can navigate to it.
+    if (typeof defBlockId === 'string') {
+      const el = document.getElementById(defBlockId);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el?.focus();
+    }
+  }, [defBlockId]);
+
   return (
     <span {...attributes}>
       <UIMagicNumber
         loadingState={loadingState}
         result={result}
         expression={exp}
-        onClick={() => {
-          // if it's a variable name, we can navigate to it.
-          if (typeof defBlockId === 'string') {
-            const el = document.getElementById(defBlockId);
-            el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            el?.focus();
-          }
-        }}
+        onClick={onClick}
         readOnly={readOnly}
       ></UIMagicNumber>
       <span contentEditable={false} css={css({ display: 'none' })}>
