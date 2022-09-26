@@ -3,6 +3,8 @@ import { Computer, parseBlock } from '@decipad/computer';
 import { MyEditor } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 
+const ENABLE_CLICK_REFERENCING = false;
+
 export const useCodeLineClickReference = (
   editor: MyEditor,
   isSelected: boolean,
@@ -12,6 +14,7 @@ export const useCodeLineClickReference = (
 
   useEffect(() => {
     if (!isSelected) return;
+    if (!ENABLE_CLICK_REFERENCING) return;
 
     const onClick = (ev: MouseEvent) => {
       const elementId = getClickedInlineDef(ev);

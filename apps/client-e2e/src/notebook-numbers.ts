@@ -57,7 +57,23 @@ describe('notebook inline numbers', () => {
     await input.waitForElementState('hidden');
   });
 
-  it('can be referenced by clicking', async () => {
+  it('can be referenced by typing', async () => {
+    await keyPress('ArrowDown');
+
+    lineNo += 1;
+
+    await createCalculationBlockBelow('100 + cookies ');
+
+    const line = await getCodeLineContent(lineNo);
+    expect(line).toBe('100 + cookies ');
+
+    const resultEl = await getResult(lineNo);
+    const result = await resultEl.textContent();
+    expect(result).toBe('103');
+  });
+
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('can be referenced by clicking', async () => {
     await keyPress('ArrowDown');
 
     lineNo += 1;
