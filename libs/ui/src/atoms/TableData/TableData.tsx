@@ -1,7 +1,13 @@
 import { CellValueType, PlateComponentAttributes } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, ElementType, FC, HTMLAttributes } from 'react';
+import {
+  ComponentProps,
+  ElementType,
+  FC,
+  HTMLAttributes,
+  ReactNode,
+} from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
 import { CellEditor } from '../../molecules';
@@ -21,6 +27,7 @@ import { tableRowCounter } from '../../utils';
 const lineNumberWidth = '22px';
 
 const tdBaseStyles = css(p14Medium, {
+  position: 'relative',
   alignItems: 'center',
 
   background: cssVar('backgroundColor'),
@@ -90,6 +97,14 @@ const focusedStyles = css({
   boxShadow: `0 0 0 2px ${cssVar('tableFocusColor')} inset`,
 });
 
+const draggableStyles = css({
+  ':hover': {
+    '.drag-handle': {
+      display: 'block',
+    },
+  },
+});
+
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   alignRight?: boolean;
@@ -110,6 +125,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   unit?: string;
   dropTarget?: ConnectDropTarget;
   parseError?: string;
+  firstChildren?: ReactNode;
   lastBeforeMoreRowsHidden?: boolean;
 }
 
@@ -135,6 +151,7 @@ export const TableData = ({
   alignRight,
   children,
   parseError,
+  firstChildren,
   ...props
 }: TableDataProps): ReturnType<FC> => {
   const existingRef =
@@ -157,9 +174,12 @@ export const TableData = ({
         focused && focusedStyles,
         alignRight && alignRightStyles,
         isLiveResult && liveResultStyles,
+        draggable && draggableStyles,
       ]}
       {...props}
     >
+      {firstChildren}
+
       <CellEditor
         focused={focused}
         type={type}
