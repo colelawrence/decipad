@@ -105,6 +105,13 @@ export type Pad = {
   attachments?: Attachment[];
 };
 
+export type PadSnapshot = {
+  id: ID;
+  name: string;
+  createdAt?: number | Date;
+  updatedAt?: number | Date;
+};
+
 export type PadInput = {
   name: string;
   icon?: string;
@@ -384,6 +391,7 @@ interface ConnectionRecord extends TableRecordBase {
   secret?: string;
   authorizationType?: string;
   gqlstate?: string;
+  versionName?: string;
 }
 
 export interface ExternalDataSourceRecord extends TableRecordBase {
@@ -458,6 +466,7 @@ export interface DataTables extends EnhancedDataTables {
   connections: DataTable<ConnectionRecord>;
   docsync: VersionedDataTable<DocSyncRecord>;
   docsyncupdates: DataTable<DocSyncUpdateRecord>;
+  docsyncsnapshots: DataTable<DocSyncSnapshotRecord>;
   allowlist: DataTable<AllowListRecord>;
   superadminusers: DataTable<SuperAdminUserRecord>;
   superadminactionlogs: DataTable<SuperAdminActionLogRecord>;
@@ -480,7 +489,8 @@ export type ConcreteRecord =
   | VerificationRequestRecord
   | SubscriptionRecord
   | DocSyncRecord
-  | DocSyncUpdateRecord;
+  | DocSyncUpdateRecord
+  | DocSyncSnapshotRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
@@ -515,6 +525,13 @@ export interface DocSyncRecord extends VersionedTableRecord {
 export interface DocSyncUpdateRecord extends TableRecordBase {
   seq: string;
   data: string;
+}
+
+export interface DocSyncSnapshotRecord extends TableRecordBase {
+  docsync_id: ID;
+  name: string;
+  data: string;
+  updatedAt: number;
 }
 
 export type AllowListRecord = TableRecordBase;

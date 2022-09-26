@@ -22,8 +22,9 @@ export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
     if (!docId) {
       throw Boom.notAcceptable('no doc id');
     }
+    const version = docIdFromPath(qs.version || '');
     const resource = `/pads/${docId}`;
-    await onConnect(connId, resource, authResult);
+    await onConnect(connId, resource, version, authResult);
 
     const wsProtocol =
       event.headers['sec-websocket-protocol'] ||

@@ -48,6 +48,13 @@ export default gql`
     updated: [Pad!]!
   }
 
+  type PadSnapshot {
+    name: String!
+    createdAt: DateTime
+    updatedAt: DateTime
+    pad: Pad
+  }
+
   extend type Query {
     getPadById(id: ID!): Pad
     pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
@@ -94,6 +101,8 @@ export default gql`
     ): String!
 
     unshareNotebookWithSecret(id: ID!, secret: String!): Boolean
+
+    createOrUpdateSnapshot(notebookId: ID!, name: String!): PadSnapshot
   }
 
   extend type Subscription {

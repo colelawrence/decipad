@@ -35,6 +35,7 @@ function secretFromAny(authResults: AuthResult[]): string | undefined {
 export async function onConnect(
   connId: string,
   resource: string,
+  versionName: string,
   auth: AuthResult[]
 ): Promise<void> {
   let permissionTypes: PermissionType[];
@@ -64,6 +65,7 @@ export async function onConnect(
     room: resource,
     authorizationType: maximumPermissionIn(permissionTypes),
     secret: secretFromAny(auth),
+    versionName,
   });
 
   await queues.publish({

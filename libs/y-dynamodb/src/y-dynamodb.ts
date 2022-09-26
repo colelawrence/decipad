@@ -6,7 +6,7 @@ import {
   mergeUpdates,
 } from 'yjs';
 import { Observable } from 'lib0/observable';
-import { noop } from '@decipad/utils';
+import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 import { DocSyncRecord } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
@@ -19,15 +19,17 @@ export class DynamodbPersistence extends Observable<string> {
   public name: string;
   public synced = false;
   public whenSynced: Promise<DynamodbPersistence>;
+  public version?: string;
 
   private _mux = fnQueue();
   private _readOnly: boolean;
 
-  constructor(name: string, doc: YDoc, readOnly = false) {
+  constructor(name: string, doc: YDoc, version?: string, readOnly = false) {
     super();
     this.doc = doc;
     this.name = name;
     this._readOnly = readOnly;
+    this.version = version;
     this.whenSynced = this._init();
     this.destroy = this.destroy.bind(this);
     doc.on('destroy', this.destroy);
@@ -35,7 +37,7 @@ export class DynamodbPersistence extends Observable<string> {
 
   private async _init(): Promise<DynamodbPersistence> {
     const currState = encodeStateAsUpdate(this.doc);
-    await this._fetchUpdates();
+    await this._fetchAndProcessUpdates();
     const data = await tables();
     await data.docsync.withLock(
       this.name,
@@ -53,42 +55,75 @@ export class DynamodbPersistence extends Observable<string> {
     return this;
   }
 
-  private async _fetchUpdates(): Promise<void> {
+  private _fetchAndProcessUpdates(): Promise<void> {
     return this._mux.push(async () => {
-      const data = await tables();
-      const updates: Uint8Array[] = [];
-      for await (const docsyncUpdate of allPages(data.docsyncupdates, {
-        KeyConditionExpression: 'id = :id',
-        ExpressionAttributeValues: {
-          ':id': this.name,
-        },
-      })) {
-        if (docsyncUpdate && docsyncUpdate.data) {
-          updates.push(Buffer.from(docsyncUpdate.data, 'base64'));
-        }
-      }
+      const updates = await (this.version
+        ? this._fetchSnapshot()
+        : this._fetchUpdates());
 
-      this.doc.transact(() =>
-        updates
-          .filter(Boolean) // make sure we don't have any sneaky undefineds
-          .filter((buf) => Buffer.isBuffer(buf)) // make sure we only have buffers
-          .filter((buf) => buf.length > 0) // make sure we only have non-empty
-          .forEach((val) => {
-            try {
-              applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN);
-            } catch (err) {
-              // eslint-disable-next-line no-console
-              console.error(`Error applying update ${val}`, err);
-            }
-          })
-      );
-
-      this.emit('fetched', [this]);
+      this._processUpdates(updates);
     });
   }
 
+  private async _fetchSnapshot(): Promise<Uint8Array[]> {
+    const data = await tables();
+    const updates: Uint8Array[] = [];
+    for await (const snapshot of allPages(data.docsyncsnapshots, {
+      IndexName: 'byDocsyncIdAndName',
+      KeyConditionExpression: 'docsync_id = :docsync_id AND name = :name',
+      ExpressionAttributeValues: {
+        ':docsync_id': this.name,
+        ':name': getDefined(this.version),
+      },
+    })) {
+      if (snapshot && snapshot.data) {
+        updates.push(Buffer.from(snapshot.data, 'base64'));
+      }
+    }
+    return updates;
+  }
+
+  private async _fetchUpdates(): Promise<Uint8Array[]> {
+    const data = await tables();
+    const updates: Uint8Array[] = [];
+    for await (const docsyncUpdate of allPages(data.docsyncupdates, {
+      KeyConditionExpression: 'id = :id',
+      ExpressionAttributeValues: {
+        ':id': this.name,
+      },
+    })) {
+      if (docsyncUpdate && docsyncUpdate.data) {
+        updates.push(Buffer.from(docsyncUpdate.data, 'base64'));
+      }
+    }
+    return updates;
+  }
+
+  private _processUpdates(updates: Uint8Array[]): void {
+    this.doc.transact(() =>
+      updates
+        .filter(Boolean) // make sure we don't have any sneaky undefineds
+        .filter((buf) => Buffer.isBuffer(buf)) // make sure we only have buffers
+        .filter((buf) => buf.length > 0) // make sure we only have non-empty
+        .forEach((val) => {
+          try {
+            applyUpdate(this.doc, val, DYNAMODB_PERSISTENCE_ORIGIN);
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(`Error applying update ${val}`, err);
+          }
+        })
+    );
+
+    this.emit('fetched', [this]);
+  }
+
   async storeUpdate(update: Uint8Array, origin: unknown): Promise<void> {
-    if (this._readOnly || origin === DYNAMODB_PERSISTENCE_ORIGIN) {
+    if (
+      this._readOnly ||
+      this.version ||
+      origin === DYNAMODB_PERSISTENCE_ORIGIN
+    ) {
       return;
     }
     await this._mux.push(async () => {
@@ -107,7 +142,7 @@ export class DynamodbPersistence extends Observable<string> {
   }
 
   async compact(): Promise<void> {
-    if (this._readOnly) {
+    if (this._readOnly || this.version) {
       return;
     }
     await this.whenSynced;

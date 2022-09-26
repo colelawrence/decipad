@@ -90,10 +90,11 @@ async function processMessage(
   resource: string,
   message: Uint8Array,
   connId: string,
+  version: string | undefined,
   readOnly: boolean
 ): Promise<void> {
   const doc = new YDoc();
-  const persistence = new DynamodbPersistence(resource, doc, readOnly);
+  const persistence = new DynamodbPersistence(resource, doc, version, readOnly);
   const comms = new LambdaWebsocketProvider(resource, connId, doc);
   await persistence.flush();
 
@@ -130,10 +131,13 @@ export async function onMessage(
     return { statusCode: 401 };
   }
 
-  const canWrite = hasMinimumPermission('WRITE')(permissions);
+  const canWrite =
+    hasMinimumPermission('WRITE')(permissions) && !conn.versionName;
 
   const resource = getDefined(conn.room, 'no room in connection');
-  const ops = [processMessage(resource, message, connId, !!canRead)];
+  const ops = [
+    processMessage(resource, message, connId, conn.versionName, !!canRead),
+  ];
   if (canWrite) {
     ops.push(broadcast(resource, message, connId));
     ops.push(maybeStoreMessage(resource, message));

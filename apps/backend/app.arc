@@ -199,6 +199,12 @@ docsyncupdates
   id *String
   seq **String
 
+docsyncsnapshots
+  id *String
+  docsync_id String
+  name String
+  data String
+
 allowlist
   id *String
 
@@ -325,6 +331,15 @@ fileattachments
 externaldatasourcekeys
   resource_uri *String
   name byResource
+
+docsyncsnapshots
+  docsync_id *String
+  name byDocsyncId
+
+docsyncsnapshots
+  docsync_id *String
+  name **String
+  name byDocsyncIdAndName
 
 @queues
 sendemail

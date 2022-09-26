@@ -1,7 +1,6 @@
 import {
   GraphqlContext,
   ID,
-  Pad,
   PadInput,
   PadRecord,
   PageInput,
@@ -10,16 +9,10 @@ import {
   WorkspaceRecord,
 } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
-import {
-  create as createPad2,
-  duplicate as duplicateSharedDoc,
-  importDoc,
-  getNotebooks,
-} from 'libs/services/src/notebooks';
+import { getNotebooks } from 'libs/services/src/notebooks';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { getDefined, identity } from '@decipad/utils';
-import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
 import {
@@ -29,6 +22,10 @@ import {
 } from '../authorization';
 import timestamp from '../utils/timestamp';
 import { accessTokenFor } from '../utils/accessTokenFor';
+import { duplicatePad } from './duplicatePad';
+import { setPadPublic } from './setPadPublic';
+import { importPad } from './importPad';
+import { createOrUpdateSnapshot } from './createOrUpdateSnapshot';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -103,82 +100,10 @@ const resolvers = {
     sharePadWithSecret: padResource.shareWithSecret,
     unshareNotebookWithSecret: padResource.unshareWithSecret,
 
-    async duplicatePad(
-      _: unknown,
-      {
-        id,
-        targetWorkspace,
-        document,
-      }: { id: ID; targetWorkspace?: string; document?: string },
-      context: GraphqlContext
-    ): Promise<Pad> {
-      const resource = `/pads/${id}`;
-      const data = await tables();
-      const previousPad = await data.pads.get({ id });
-
-      if (!previousPad) {
-        throw new UserInputError('No such pad');
-      }
-
-      if (!previousPad.isPublic) {
-        await isAuthenticatedAndAuthorized(resource, context, 'READ');
-      }
-
-      previousPad.name = `Copy of ${previousPad.name}`;
-
-      const workspaceId = targetWorkspace || previousPad.workspace_id;
-
-      const workspaceResource = `/workspaces/${workspaceId}`;
-      const user = await isAuthenticatedAndAuthorized(
-        workspaceResource,
-        context,
-        'WRITE'
-      );
-
-      const clonedPad = await createPad2(workspaceId, previousPad, user);
-      if (document) {
-        return importDoc({
-          workspaceId,
-          source: document,
-          user,
-          pad: clonedPad,
-        });
-      }
-      await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
-      return clonedPad;
-    },
-
-    async setPadPublic(
-      _: unknown,
-      { id, isPublic }: { id: ID; isPublic: boolean },
-      context: GraphqlContext
-    ): Promise<Pad> {
-      const resource = `/pads/${id}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
-      const data = await tables();
-      const pad = await data.pads.get({ id });
-      if (!pad) {
-        throw new UserInputError('No such pad');
-      }
-      pad.isPublic = isPublic;
-      await data.pads.put(pad);
-      return pad;
-    },
-
-    async importPad(
-      _: unknown,
-      { workspaceId, source }: { workspaceId: ID; source: string },
-      context: GraphqlContext
-    ): Promise<Pad> {
-      const workspaceResource = `/workspaces/${workspaceId}`;
-      const user = await isAuthenticatedAndAuthorized(
-        workspaceResource,
-        context,
-        'WRITE'
-      );
-
-      return importDoc({ workspaceId, source, user });
-    },
+    duplicatePad,
+    setPadPublic,
+    importPad,
+    createOrUpdateSnapshot,
   },
 
   Subscription: {
