@@ -38,6 +38,8 @@ export const PlotResult = ({
 }: PlotResultProps): ReturnType<FC> => {
   const size = useResizeDetector({
     handleHeight: false,
+    refreshMode: 'debounce',
+    refreshRate: 1000,
   });
   const [actualSize, setActualSize] = useState<Size | undefined>();
   useEffect(() => {
