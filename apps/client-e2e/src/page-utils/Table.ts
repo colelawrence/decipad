@@ -59,8 +59,9 @@ export function addRow() {
     .click({ force: true });
 }
 
-export function addColumn() {
-  return page.locator('button[title="Add Column"]').click({ force: true });
+export async function addColumn() {
+  await page.locator('button[title="Add Column"]').click({ force: true });
+  await page.waitForTimeout(1000);
 }
 
 export function openColumnMenu(col: number) {

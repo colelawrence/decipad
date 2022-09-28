@@ -102,4 +102,48 @@ describe('notebook table', () => {
 
     expect((await getFromTable(1, 2, true))?.trim()).toBe('2');
   });
+
+  it('add some numbers', async () => {
+    await openColumnMenu(3);
+    await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
+    await page.press('[role="menuitem"]:has-text("Number")', 'Enter');
+
+    await writeInTable('1', 1, 3);
+    await writeInTable('2', 2, 3);
+    await writeInTable('3', 3, 3);
+
+    expect(await getFromTable(1, 3)).toEqual('1');
+    expect(await getFromTable(2, 3)).toEqual('2');
+    expect(await getFromTable(3, 3)).toEqual('3');
+  });
+
+  it('can add a formula on those numbers', async () => {
+    await addColumn();
+    await openColumnMenu(4);
+    await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
+    await page.press('[role="menuitem"]:has-text("Formula")', 'Enter');
+    const codeBlock = await page.waitForSelector(
+      'section:has-text("Property5 =")'
+    );
+    const codeBlockText = await codeBlock.innerText();
+
+    expect(codeBlockText).toContain('Property5 =');
+
+    // focused on formula
+    await waitForExpect(async () => {
+      const hasFocusOnSection = `
+          document.hasFocus() &&
+          document.getSelection()?.anchorNode?.parentElement?.closest?.('section') != null
+        `;
+      expect(await page.evaluate(hasFocusOnSection)).toBe(true);
+    });
+
+    await page.keyboard.type('2 / Property4');
+  });
+});
+
+it('can add a new row', async () => {
+  await addRow();
+  // get any value from the table, to make sure it has not crashed
+  expect(await getFromTable(1, 3)).toEqual('1');
 });
