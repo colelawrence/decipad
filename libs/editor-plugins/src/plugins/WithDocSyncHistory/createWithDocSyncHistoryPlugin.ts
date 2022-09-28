@@ -19,6 +19,7 @@ export const createWithDocSyncHistoryPlugin = (): MyPlatePlugin => ({
       editor.redo = () => {
         undoManager.redo();
       };
+      editor.undoManager = undoManager;
     }
 
     return editor;

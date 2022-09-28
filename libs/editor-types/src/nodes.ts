@@ -24,7 +24,16 @@ export type MyNodeEntry = ENodeEntry<MyValue>;
  * Editor
  */
 
-export type MyEditor = PlateEditor<MyValue> & { isDragging?: boolean };
+export type UndoManager = {
+  canUndo?: () => boolean;
+  canRedo?: () => boolean;
+};
+export type UndoEditor = {
+  undoManager?: UndoManager;
+};
+export type MyEditor = PlateEditor<MyValue> & {
+  isDragging?: boolean;
+} & UndoEditor;
 export type MyReactEditor = TReactEditor<MyValue>;
 
 /**

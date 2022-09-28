@@ -24,7 +24,7 @@ const Fallback: FC<FallbackProps> = ({
 
   return (
     <ErrorBlock
-      type={editor.history.undos.length > 0 ? 'warning' : 'error'}
+      type={editor.undoManager?.canUndo?.() ? 'warning' : 'error'}
       onDelete={() => {
         removeNodes(editor, {
           at: [delPath[0]],
