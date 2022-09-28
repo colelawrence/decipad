@@ -171,11 +171,18 @@ const send = async (connId: string, message: Uint8Array): Promise<void> => {
   await arc.ws.send({ id: connId, payload });
 };
 
+const isSeriousError = (err: Error) => {
+  const isGone =
+    (err as ErrorWithCode)?.code?.match('Gone') ||
+    (err as Error).message.includes('Gone');
+  return !isGone;
+};
+
 const trySend = async (connId: string, payload: Uint8Array): Promise<void> => {
   try {
     await send(connId, payload);
   } catch (err) {
-    if (!(err as ErrorWithCode)?.code?.match('Gone')) {
+    if (err instanceof Error && isSeriousError(err)) {
       throw err;
     }
   }

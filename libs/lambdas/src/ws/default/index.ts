@@ -1,4 +1,4 @@
-import Boom from '@hapi/boom';
+import Boom, { boomify } from '@hapi/boom';
 import { onMessage } from '@decipad/sync-connection-lambdas';
 import tables from '@decipad/tables';
 import { trace } from '@decipad/backend-trace';
@@ -19,7 +19,17 @@ export const handler: APIGatewayProxyHandlerV2 = trace(
     }
 
     const message = Buffer.from(event.body, 'base64');
-    return onMessage(connId, message);
+    try {
+      return await onMessage(connId, message);
+    } catch (err) {
+      if (err instanceof Error) {
+        const boom = boomify(err);
+        if (boom.isServer) {
+          throw boom;
+        }
+      }
+      return { statusCode: 200 };
+    }
   },
   {
     tracesSampleRate: 0.01,
