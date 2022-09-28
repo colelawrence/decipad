@@ -21,9 +21,6 @@ export const iterProgram = (
   });
 };
 
-export const getAllBlockIds = (blocks: AST.Block[]) =>
-  blocks.flatMap((block) => block.id);
-
 export const getExistingBlockIds = (
   blocks: AST.Block[],
   blockIds: Set<string>

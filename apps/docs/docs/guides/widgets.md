@@ -14,15 +14,15 @@ Input widgets are the best way for you to designate a single data point that any
 
 ### Adding input widgets
 
-1. Type `/` on any paragraph and select **Input**;
-2. Define a name for the newly created widget. You can also pick a custom color and icon by clicking on the pencil icon;
-3. Finally, you can use this data point on your model and calculations by simply using its name as a normal variable.
+1.  Type `/` on any paragraph and select **Input**;
+2.  Define a name for the newly created widget. You can also pick a custom color and icon by clicking on the pencil icon;
+3.  Finally, you can use this data point on your model and calculations by simply using its name as a normal variable.
 
 ### Exploring notebooks with input widgets
 
-1. Access this example Notebook: [Simple Cashflow](https://alpha.decipad.com/n/Simple-Cashflow%3Ak1Zw0l2QmvbU5DIJ_XWxu?secret=vgzyDwDdJhTNN1SccetIe)
-2. Update the _InitialInvestment_ input widget from 100£ to 200£;
-3. Check how the loan amount that you need to quick-start your business changes from 500£ to 400£ at the end of the notebook;
+1.  Access this example Notebook: [Simple Cashflow](https://alpha.decipad.com/n/Simple-Cashflow%3Ak1Zw0l2QmvbU5DIJ_XWxu?secret=vgzyDwDdJhTNN1SccetIe)
+2.  Update the _InitialInvestment_ input widget from 100£ to 200£;
+3.  Check how the loan amount that you need to quick-start your business changes from 500£ to 400£ at the end of the notebook;
 
 ## Slider Widget
 
@@ -34,10 +34,10 @@ When working with data and numbers, most often we want to explore a wide range o
 
 ### Adding slider widgets
 
-1. Type `/` on any paragraph and select **Slider**;
-2. Define a name and optionally pick a color and an icon by clicking on the pencil icon.
-3. Adapt its range to fit your needs by clicking on the "..." button to access the configuration menu;
-4. Connect this widget to your calculation with its name as a normal variable;
+1.  Type `/` on any paragraph and select **Slider**;
+2.  Define a name and optionally pick a color and an icon by clicking on the pencil icon.
+3.  Adapt its range to fit your needs by clicking on the "..." button to access the configuration menu;
+4.  Connect this widget to your calculation with its name as a normal variable;
 
 When you use the slider on your models, everyone will be able to play around with the slider range and experience its effects on the notebook.
 

@@ -23,10 +23,10 @@ All blocks can be rearranged on the notebook.
 
 To mode a block:
 
-1. Hover the block you want to move;
-2. Click the drag handle that shows up;
-3. Move the block to the place you desire while the drag handle is pressed. See where the block can be placed when a blue line appears;
-4. Let go of the drag handle when you find a new spot for you block.
+1.  Hover the block you want to move;
+2.  Click the drag handle that shows up;
+3.  Move the block to the place you desire while the drag handle is pressed. See where the block can be placed when a blue line appears;
+4.  Let go of the drag handle when you find a new spot for you block.
 
 ## Types of Blocks
 

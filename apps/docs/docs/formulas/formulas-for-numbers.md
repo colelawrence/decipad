@@ -160,6 +160,7 @@ stepgrowth(BooksRead.Total)
 ## Trignometric
 
 You must remember our friend Pythagoras; close. Trigonometric formulas relate an angle of a righ-angled triangle with the ratios of two side lengths. By default, they use radians, but you can also play with degrees.
+
 ### sin / asin
 
 ```deci live

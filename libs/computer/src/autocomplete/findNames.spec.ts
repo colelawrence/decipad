@@ -62,13 +62,22 @@ it('finds names', async () => {
         "kind": "column",
         "name": "Table1.Column2",
         "type": Object {
-          "cellType": Object {
-            "kind": "number",
-            "unit": null,
-          },
-          "columnSize": 1,
-          "indexedBy": "Table1",
-          "kind": "column",
+          "columnNames": Array [
+            "Hello",
+            "Column2",
+          ],
+          "columnTypes": Array [
+            Object {
+              "kind": "string",
+            },
+            Object {
+              "kind": "number",
+              "unit": null,
+            },
+          ],
+          "indexName": "Table1",
+          "kind": "table",
+          "tableLength": 1,
         },
       },
       Object {

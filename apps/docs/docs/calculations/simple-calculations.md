@@ -4,7 +4,6 @@ sidebar_position: 0
 
 # Create Simple Calculations
 
-
 Currently, there is just one way of manipulating data on your notebook, and that is with calculations blocks.
 
 On the calculation block you can play with numbers and data using the [Decipad language](/calculations).
@@ -13,8 +12,8 @@ Other blocks such as tables and widgets are useful for data inputting and displa
 
 To add a calculation block to your notebook:
 
-1. Write `/` in a new paragraph;
-2. Select **Calculations**.
+1.  Write `/` in a new paragraph;
+2.  Select **Calculations**.
 
 Here's an example:
 
@@ -109,7 +108,6 @@ Percentages can be added to other numbers, to increase them proportionally:
 200m + 5%
 ==> 210 m
 ```
-
 
 ## Variables
 

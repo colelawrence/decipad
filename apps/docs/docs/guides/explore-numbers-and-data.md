@@ -12,8 +12,8 @@ Other blocks such as tables and widgets are useful for data inputting and displa
 
 To add a calculation block to your notebook:
 
-1. Write `/` in a new paragraph;
-2. Select **Calculations**.
+1.  Write `/` in a new paragraph;
+2.  Select **Calculations**.
 
 On calculation blocks, most operations are intuitive and natural to do since they powered by the [Decipad language](../calculations). Here's an example:
 

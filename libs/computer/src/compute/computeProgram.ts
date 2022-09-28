@@ -11,7 +11,7 @@ import {
 import { getDefined } from '@decipad/utils';
 import { captureException } from '../reporting';
 import { IdentifiedResult } from '../types';
-import { getAllBlockIds, getStatement } from '../utils';
+import { getStatement } from '../utils';
 import { ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 
@@ -47,12 +47,25 @@ const computeStatement = async (
     validateResult(valueType, value.getData());
   }
 
+  const variableName =
+    statement.type === 'assign' ? statement.args[0].args[0] : undefined;
+
   const result: IdentifiedResult = {
     type: 'computer-result',
     id: blockId,
-    variableName:
-      statement.type === 'assign' ? statement.args[0].args[0] : undefined,
-    result: serializeResult(valueType, value?.getData()),
+    variableName,
+    get result() {
+      if (statement.type === 'assign' && statement.args[1].type === 'table') {
+        const type = getDefined(
+          realm.inferContext.stack.get(getDefined(variableName))
+        );
+        const value = getDefined(
+          realm.interpreterRealm.stack.get(getDefined(variableName))
+        );
+        return serializeResult(type, value?.getData());
+      }
+      return serializeResult(valueType, value?.getData());
+    },
     visibleVariables: getVisibleVariables(program, blockId, realm.inferContext),
   };
   realm.addToCache(blockId, { result, value });
@@ -87,17 +100,20 @@ export const computeProgram = async (
   realm.inferContext.previousStatement = undefined;
   realm.interpreterRealm.previousStatementValue = undefined;
 
+  // const tableBlockIds = new Map<string, string>();
+
   const results: IdentifiedResult[] = [];
-  for (const location of getAllBlockIds(program)) {
+  for (const block of program) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const [result, value] = await computeStatement(program, location, realm);
+      const [result, value] = await computeStatement(program, block.id, realm);
+
       realm.inferContext.previousStatement = result.result.type;
       realm.interpreterRealm.previousStatementValue = value;
 
       results.push(result);
     } catch (err) {
-      results.push(resultFromError(err as Error, location));
+      results.push(resultFromError(err as Error, block.id));
       realm.inferContext.previousStatement = undefined;
       realm.interpreterRealm.previousStatementValue = undefined;
     }

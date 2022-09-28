@@ -50,10 +50,8 @@ There are a lot of instances when you need to use a formula on a number until a 
 
 For examples:
 
-* Performance gates in a tiered sales commission structure. When someone sells within a certain range, they may earn a higher percentage of commission. 
-* A progressive tax system where each tax bracket is taxed at a different rate.
-
-
+- Performance gates in a tiered sales commission structure. When someone sells within a certain range, they may earn a higher percentage of commission.
+- A progressive tax system where each tax bracket is taxed at a different rate.
 
 ### Tiers
 
@@ -63,13 +61,11 @@ Its called `tiers` and it slices a number into different levels of tiers, so you
 
 Here's an example for a sales comission scenario.
 
-
-
 ```deci live
 YourSales = $120 000
 
 tiers YourSales  {
-   $50 000 : tier * 5% 
+   $50 000 : tier * 5%
   $100 000 : tier * 7%
   $150 000 : tier * 10%
   rest     : tier * 15%
@@ -78,20 +74,20 @@ tiers YourSales  {
 }
 ==> 8000 $
 ```
-As `YourSales` crosses the `$100,000` mark, the sales comission goes from `5%` to `7%`.
 
+As `YourSales` crosses the `$100,000` mark, the sales comission goes from `5%` to `7%`.
 
 ### Tiers Syntax
 
 Let's unpack the syntax.
 
-* The Tier syntax looks a lot like the table syntax, but you will need to specify `<YourNumber>` for evaluation.
+- The Tier syntax looks a lot like the table syntax, but you will need to specify `<YourNumber>` for evaluation.
 
-* Inside `{}` and before `:`, you can specify each tier threshold.
+- Inside `{}` and before `:`, you can specify each tier threshold.
 
-* After `:` you can specify the formula for each level.
+- After `:` you can specify the formula for each level.
 
-* When defining the formulas, you may use the keyword `tier` to reference `<YourNumber>` on that tier.
+- When defining the formulas, you may use the keyword `tier` to reference `<YourNumber>` on that tier.
 
 **Take a look at this conceptual example:**
 
@@ -127,12 +123,12 @@ Take a look at this example where we calculate income taxes in the UK.
 
 This is the current Income Tax Table in the UK:
 
-|  Income                       |  Income Tax Band |
-|-------------------------------|------------------|
-|  Up to £12,570                |  0%              |
-|  Between £12,571 and £50,270  |  20%             |
-|  Between £50,271 and £150,000 |  40%             |
-|  Over £150,000                |  45%             |
+| Income                       | Income Tax Band |
+| ---------------------------- | --------------- |
+| Up to £12,570                | 0%              |
+| Between £12,571 and £50,270  | 20%             |
+| Between £50,271 and £150,000 | 40%             |
+| Over £150,000                | 45%             |
 
 Here is how you build it on Decipad:
 
@@ -149,16 +145,17 @@ IncomeTaxes(Income) = slices Income {
 IncomeTaxes(MyIncome)
 ==> 8231.8 £
 ```
-On this example, we've combined tiers/slices and a formula definition to make it easier to reuse later. In this case, it allows you to use `ÌncomeTaxes()` each time you want to know how much someone will pay in income tax in the UK. 
+
+On this example, we've combined tiers/slices and a formula definition to make it easier to reuse later. In this case, it allows you to use `ÌncomeTaxes()` each time you want to know how much someone will pay in income tax in the UK.
 
 For this partical situation, since `MyIncome`is `£52,000` my taxes are going to be `£8,231.8`.
 
-|   Income                       |   Income Tax Band | Tax paid                                  |
-|--------------------------------|-------------------|-------------------------------------------|
-|   Up to £12,570                |   0%              | No income tax on the first £12,570        |
-|   Between £12,571 and £50,270  |   20%             | 20% income tax on you next £37,500 income |
-|   Between £50,271 and £150,000 |   40%             | 40% on the final £1,730 of income         |
-|   Over £150,000                |   45%             | No income tax paid at his rate            |
+| Income                       | Income Tax Band | Tax paid                                  |
+| ---------------------------- | --------------- | ----------------------------------------- |
+| Up to £12,570                | 0%              | No income tax on the first £12,570        |
+| Between £12,571 and £50,270  | 20%             | 20% income tax on you next £37,500 income |
+| Between £50,271 and £150,000 | 40%             | 40% on the final £1,730 of income         |
+| Over £150,000                | 45%             | No income tax paid at his rate            |
 
 **Let's see another example:**
 
@@ -175,14 +172,13 @@ IncomeTaxes(Income) = slices Income {
 IncomeTaxes(MyIncome)
 ==> 21431.8 £
 ```
+
 Here `MyIncome`is `£85,000`instead of `£52,000` and my taxes are going to be `£21,431.8` instead of `£8,231.8`.
 
 To make these calculations easier, you can also use a table:
 
-
-
 ![image](https://user-images.githubusercontent.com/12210180/181501145-d4bd8ebd-8e9e-4257-9ab7-81514779a797.png)
 
-------
+---
 
 Give it a try! How do you see yourself using tiers on your notebook?

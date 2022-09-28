@@ -88,7 +88,7 @@ describe('editorToProgram', () => {
     ];
     const { program } = await editorToProgram(editor, new Computer());
 
-    expect(program.length).toBe(7);
+    expect(program.length).toBe(6);
 
     const [block, input, col1, col2, magicNum, table] = prettyPrintAll(program);
 

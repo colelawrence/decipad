@@ -168,6 +168,11 @@ export class Computer {
     this.getVarBlockId(varName)
   );
 
+  getVarResult$ = listenerHelper(this.results, (results, varName: string) => {
+    const blockId = this.getVarBlockId(varName);
+    return blockId ? results.blockResults[blockId] : undefined;
+  });
+
   getDefinedSymbolInBlock(blockId: string): string | undefined {
     const parsed = this.previouslyParsed.find((p) => p.id === blockId);
     if (parsed && parsed.type === 'identified-block') {

@@ -4,13 +4,11 @@ sidebar_position: 5
 
 # First Steps
 
-
-## Getting Started 
+## Getting Started
 
 On [Login](https://alpha.decipad.com/) you will arrive at your workspace were you will find an example notebook to explore titled `👋 Meet Decipad! Learn the basics`. If this is your first time at Decipad this is a great place to start.
 
 ![image](https://user-images.githubusercontent.com/12210180/162472527-41d5da2d-c1bb-413a-8c5e-1cfe25bb4d5f.png)
-
 
 ## Workspaces
 

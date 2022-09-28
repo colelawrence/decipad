@@ -17,7 +17,9 @@ A notebook can be a digital textbook or you can type `/` to add [widgets](/guide
 
 #### Video: Creating your first Notebook
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}><iframe src="https://www.loom.com/embed/62be1d8356f6406089d406690e339d81" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} /></div>
+<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+  <iframe src="https://www.loom.com/embed/62be1d8356f6406089d406690e339d81" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+</div>
 
 ### Duplicate a Notebook
 
@@ -27,11 +29,10 @@ When you duplicate a notebook, a copy of that notebook will be automatically add
 
 Take a look at our [Gallery of examples](/examples) and try to duplicate one:
 
-1. Selection an example;
-2. On the topbar you will find a `Duplicate` button;
-3. Click on it to create a copy of that notebook for yourself;
-4. Adapt it or transform it however you wish since you now own a copy of the original notebook.
-
+1.  Selection an example;
+2.  On the topbar you will find a `Duplicate` button;
+3.  Click on it to create a copy of that notebook for yourself;
+4.  Adapt it or transform it however you wish since you now own a copy of the original notebook.
 
 # Telling Stories
 
@@ -47,7 +48,7 @@ To organize your notebooks and help tell your story, pick a name for you noteboo
 
 Add headings to you notebook with the '/' command in any paragraph by selecting 'Heading' or 'Sub-heading'.
 
-In alternative, you can use the markdown notation. '\#' followed by "Your Heading" or '\#\#' followed by "Your Sub-Heading" to insert them into any paragraph.
+In alternative, you can use the markdown notation. '#' followed by "Your Heading" or '##' followed by "Your Sub-Heading" to insert them into any paragraph.
 
 ### Styling Paragraphs
 
@@ -78,6 +79,7 @@ Besides the styling menu that pops up when you select text, Decipad supports a n
 - Use `![Alt text](https://decipad.com/octopus.png)` to add an **image**.
 - Wrap words between `` ` `` and `` ` `` for **inline code**
 - Wrap a variable name between `%` to get a **magic number**
+
 ---
 
 # Learn More:

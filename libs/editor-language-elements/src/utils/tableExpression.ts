@@ -20,7 +20,7 @@ export const tableExpression = (
     getDefined(firstColumn.expression)
   );
   return {
-    id: getDefined(firstColumn.elementId),
+    id: getDefined(table.id),
     name: tableName,
     expression: astNode('table', firstColumnNode),
     columnAssigns: restColumns.map((col) =>

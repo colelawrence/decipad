@@ -22,7 +22,6 @@ Our journey of reimagining how people interact with data and numbers just began!
   <p>For examples of what is possible and inspiration <a href="/examples/">click here</a>.</p>
 </details>
 
-
 ---
 
 <h3>Learn More:</h3>

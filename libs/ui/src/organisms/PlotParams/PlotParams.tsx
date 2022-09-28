@@ -20,6 +20,7 @@ type MarkType = typeof markTypes[number];
 export interface PlotParamsProps {
   readonly sourceVarName: string;
   readonly sourceVarNameOptions: ReadonlyArray<string>;
+  readonly sourceExprRefOptions?: ReadonlyArray<string>;
   readonly setSourceVarName: StringSetter;
   readonly markType: MarkType;
   readonly setMarkType: StringSetter;
@@ -114,6 +115,7 @@ const ColorSchemeOptions = () => {
 export const PlotParams = ({
   sourceVarName,
   sourceVarNameOptions,
+  sourceExprRefOptions,
   columnNameOptions,
   setSourceVarName,
   markType,
@@ -133,8 +135,11 @@ export const PlotParams = ({
 }: PlotParamsProps): ReturnType<FC> => {
   const emptyColumnOption = <option key="__none" value=""></option>;
   const sourceVarNameOptionsOptions = [emptyColumnOption].concat(
-    sourceVarNameOptions.map((sourceVarNameOption) => (
-      <option key={sourceVarNameOption} value={sourceVarNameOption}>
+    sourceVarNameOptions.map((sourceVarNameOption, index) => (
+      <option
+        key={sourceVarNameOption}
+        value={sourceExprRefOptions?.[index] ?? sourceVarNameOption}
+      >
         {sourceVarNameOption}
       </option>
     ))

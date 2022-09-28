@@ -2,7 +2,6 @@ export * from './CodeLine';
 export * from './Eval';
 export * from './InlineBubble';
 export * from './InlineNumber';
-export * from './Plot';
 export * from './TextElements';
 export * from './Table';
 export * from './Column';

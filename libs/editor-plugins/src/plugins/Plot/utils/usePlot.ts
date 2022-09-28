@@ -1,5 +1,5 @@
-import { MyEditor, PlotElement } from '@decipad/editor-types';
-import { Computer, Result, AutocompleteName } from '@decipad/computer';
+import { PlotElement, useTEditorRef } from '@decipad/editor-types';
+import { Computer, AutocompleteName, getExprRef } from '@decipad/computer';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import type { PlotData, PlotSpec } from './plotUtils';
@@ -15,6 +15,7 @@ type StringSetter = (value: string) => void;
 
 export type PlotParams = Omit<PlotElement, 'children' | 'id' | 'type'> & {
   sourceVarNameOptions: string[];
+  sourceExprRefOptions: string[];
   columnNameOptions: string[];
   setSourceVarName: StringSetter;
   setMarkType: StringSetter;
@@ -32,40 +33,49 @@ type UsePlotReturn = {
   plotParams: PlotParams;
 };
 
-interface UsePlotProps {
-  editor: MyEditor;
-  computer: Computer;
-  element: PlotElement;
-  result: Result.Result | undefined;
-}
+type AutocompleteNameWithExpRef = AutocompleteName & {
+  exprRef: string;
+};
 
-const isTable = (name: AutocompleteName) => name.type.kind === 'table';
+const autocompleteNameToExprRef = (
+  computer: Computer,
+  table: AutocompleteName
+): AutocompleteNameWithExpRef => {
+  return {
+    ...table,
+    exprRef: getExprRef(computer.getVarBlockId(table.name) ?? ''),
+  };
+};
 
-export const usePlot = ({
-  editor,
-  element,
-  result,
-}: UsePlotProps): UsePlotReturn => {
+const isTable = (name: AutocompleteName) =>
+  !name.name.includes('.') && name.type.kind === 'table';
+
+export const usePlot = (element: PlotElement): UsePlotReturn => {
+  const editor = useTEditorRef();
   const computer = useComputer();
+
   const names = computer.getNamesDefined$.useWithSelector((n) =>
-    n.filter(isTable)
+    n.filter(isTable).map((table) => autocompleteNameToExprRef(computer, table))
   );
-  const table = names.find((varName) => varName.name === element.sourceVarName);
+
+  const source = computer.getVarResult$.use(element.sourceVarName)?.result;
+
   const columns =
-    (table?.type.kind === 'table' && table.type.columnNames) || [];
+    (source?.type.kind === 'table' && source.type.columnNames) || [];
 
   let spec = normalizePlotSpec(
     defaultPlotSpec(
       computer,
-      result?.type,
-      specFromType(computer, result?.type, element)
+      source?.type,
+      specFromType(computer, source?.type, element)
     )
   );
-  const data = resultToPlotResultData(result, element);
+  const data = resultToPlotResultData(source, element);
   spec = spec && data && enhanceSpecFromWideData(spec, data);
 
   const plotParams: PlotParams = {
     sourceVarNameOptions: names.map((name) => name.name),
+    sourceExprRefOptions: names.map((name) => name.exprRef),
     columnNameOptions: columns,
     setSourceVarName: useElementMutatorCallback(
       editor,

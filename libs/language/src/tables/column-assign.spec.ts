@@ -31,15 +31,11 @@ beforeEach(() => {
 
 describe('Column assignment inference', () => {
   it('can create a new column with column data', async () => {
-    const justTheColumn = await inferColumnAssign(
+    const table = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', col(1, 2))
     );
-    expect(justTheColumn).toMatchObject({
-      columnSize: 2,
-      cellType: { type: 'number' },
-    });
-    expect(ctx.stack.globalVariables.get('Table')).toMatchObject({
+    expect(table).toMatchObject({
       columnNames: ['Col1', 'Col2'],
       columnTypes: [{ type: 'number' }, { type: 'number' }],
       tableLength: 2,
@@ -50,34 +46,42 @@ describe('Column assignment inference', () => {
       ctx,
       tableColAssign('Table', 'Col2', l(1))
     );
-    expect(expandedNum).toMatchObject({
-      columnSize: 2,
-      cellType: {
-        type: 'number',
-      },
-    });
+    expect(expandedNum).toMatchObject(
+      t.table({
+        indexName: 'Table',
+        length: 2,
+        columnTypes: [t.number(), t.number()],
+        columnNames: ['Col1', 'Col2'],
+      })
+    );
   });
   it('can create a new column with a formula', async () => {
     const expandedFormula = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', r('Col1'), l(1)))
     );
-    expect(expandedFormula).toMatchObject({
-      columnSize: 2,
-      cellType: { type: 'number' },
-    });
+    expect(expandedFormula).toMatchObject(
+      t.table({
+        indexName: 'Table',
+        length: 2,
+        columnTypes: [t.number(), t.number()],
+        columnNames: ['Col1', 'Col2'],
+      })
+    );
   });
   it('can create a new column with a formula using previous', async () => {
     const usingPrevious = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', c('previous', l(1)), l(1)))
     );
-    expect(usingPrevious).toMatchObject({
-      columnSize: 2,
-      cellType: {
-        type: 'number',
-      },
-    });
+    expect(usingPrevious).toMatchObject(
+      t.table({
+        indexName: 'Table',
+        length: 2,
+        columnTypes: [t.number(), t.number()],
+        columnNames: ['Col1', 'Col2'],
+      })
+    );
   });
 
   it('only works in global scope', async () => {
@@ -131,7 +135,7 @@ describe('Column assignment inference', () => {
     const assignment = tableColAssign('Empty', 'FirstCol', col(1, 2));
 
     expect(await inferColumnAssign(ctx, assignment)).toMatchInlineSnapshot(
-      `column<number, 2, indexed by Empty>`
+      `table<FirstCol = number>`
     );
     expect(ctx.stack.get('Empty')).toMatchInlineSnapshot(
       `table<FirstCol = number>`
@@ -178,7 +182,7 @@ describe('Column assignment evaluation', () => {
       realm,
       tableColAssign('Table', 'Col2', col(3, 4))
     );
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"3,4"`);
+    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"1,2,3,4"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 
@@ -187,7 +191,7 @@ describe('Column assignment evaluation', () => {
       realm,
       tableColAssign('Table', 'Col2', l(1))
     );
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"1,1"`);
+    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"1,2,1,1"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 
@@ -196,7 +200,7 @@ describe('Column assignment evaluation', () => {
       realm,
       tableColAssign('Table', 'Col2', columnFormula)
     );
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"3,4"`);
+    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"1,2,3,4"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 
@@ -205,7 +209,7 @@ describe('Column assignment evaluation', () => {
       realm,
       tableColAssign('Table', 'Col2', columnFormulaWithPrevious)
     );
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"3,4"`);
+    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"1,2,3,4"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 });

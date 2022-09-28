@@ -1,14 +1,10 @@
-import { ComponentProps, useState } from 'react';
+import { ComponentProps } from 'react';
 import {
   ELEMENT_PLOT,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  useComputer,
-  useIsEditorReadOnly,
-  useResult,
-} from '@decipad/react-contexts';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { PlotBlock } from '@decipad/ui';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
@@ -23,18 +19,9 @@ type PlotParamsProps = ComponentProps<typeof PlotBlock>['plotParams'];
 
 const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
-  const [error, setError] = useState<string | undefined>();
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
-  const computer = useComputer();
-  const identifiedResult = useResult(element.id as string);
-  const result = identifiedResult?.result;
-  const { spec, data, plotParams } = usePlot({
-    editor,
-    element,
-    result,
-    computer,
-  });
+  const { spec, data, plotParams } = usePlot(element);
   const onTitleChange = useElementMutatorCallback(editor, element, 'title');
 
   // IMPORTANT NOTE: do not remove the children elements from rendering.
@@ -50,14 +37,12 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
         <DraggableBlock element={element} blockKind="plot">
           <PlotBlock
             readOnly={readOnly}
-            errorMessage={identifiedResult?.error?.message || error}
             plotParams={plotParams as unknown as PlotParamsProps}
             result={
               spec &&
               data && {
                 spec,
                 data,
-                onError: (err) => setError(err.message),
               }
             }
             title={element.title || DEFAULT_TITLE}
