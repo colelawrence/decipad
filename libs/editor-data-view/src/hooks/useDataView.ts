@@ -126,9 +126,9 @@ export const useDataView = ({
     injectObservable: columnChanges$,
   });
 
-  const selectedAggregationTypes = element.children[1].children.map(
-    (th) => th.aggregation
-  );
+  const selectedAggregationTypes = (element.children[1]?.children ?? [])
+    .map((th) => th.aggregation)
+    .filter(Boolean);
 
   return {
     variableNames,

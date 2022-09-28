@@ -36,7 +36,7 @@ export const useTable = (element: TableElement): TableInfo => {
   const { types: columnTypes } = useColumnsInferredTypes(element);
 
   const getColumns = useCallback(() => {
-    const headers = element.children[1].children;
+    const headers = element.children[1]?.children ?? [];
 
     return headers.map((th, index) => ({
       blockId: th.id,
