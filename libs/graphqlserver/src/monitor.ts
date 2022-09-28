@@ -4,6 +4,7 @@ import type {
 } from 'apollo-server-plugin-base';
 import { withScope, captureException } from '@sentry/serverless';
 import { GraphqlContext } from '@decipad/backendtypes';
+import { boomify } from '@hapi/boom';
 
 const onError = (rc: GraphQLRequestContext) => {
   withScope((scope) => {
@@ -24,6 +25,14 @@ const onError = (rc: GraphQLRequestContext) => {
           scope.setExtras({
             path: error.path,
           });
+        }
+
+        const { originalError } = error;
+        if (originalError instanceof Error) {
+          const boom = boomify(originalError);
+          if (!boom.isServer) {
+            continue;
+          }
         }
 
         const contextWithUser = rc as unknown as GraphqlContext;
