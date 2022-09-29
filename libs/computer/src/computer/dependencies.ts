@@ -44,13 +44,10 @@ function findRefs(node: AST.Node): string[] {
       return unique(node.args.slice(1).flatMap(findRefs));
     }
     case 'column':
+    case 'property-access':
     case 'sequence': {
       return findRefs(node.args[0]);
     }
-    case 'property-access': {
-      return findRefs(node.args[0]).concat(node.args[1]);
-    }
-
     case 'directive': {
       const [, ...args] = node.args;
       return unique(args.flatMap(findRefs));
@@ -140,7 +137,7 @@ export function findAllTables(nodes: AST.Node[]) {
       const [tableName, colName] = node.args;
       const ns = getIdentifierString(tableName);
 
-      namespaceAdd(getIdentifierString(colName), [ns]);
+      namespaceAdd(ns, [getIdentifierString(colName)]);
     }
   }
 

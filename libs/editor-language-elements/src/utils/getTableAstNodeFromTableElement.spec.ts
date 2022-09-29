@@ -154,12 +154,12 @@ describe('getTableAstNodeFromTableElement', () => {
       Array [
         Object {
           "blockId": "th2",
-          "column": (table-column-assign (tablepartialdef exprRef_table1) (coldef column2) (column "string 1" "string 2" "string 3")),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3")),
           "parseErrors": Array [],
         },
         Object {
           "blockId": "th3",
-          "column": (table-column-assign (tablepartialdef exprRef_table1) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1))),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1))),
           "parseErrors": Array [],
         },
       ]

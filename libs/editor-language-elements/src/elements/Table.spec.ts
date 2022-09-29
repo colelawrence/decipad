@@ -51,12 +51,6 @@ const table = () => {
             cellType: { kind: 'number', unit: null },
             children: [{ text: 'Col3' }],
           },
-          {
-            id: 'th4',
-            type: ELEMENT_TH,
-            cellType: { kind: 'table-column-formula' },
-            children: [{ text: 'Col2 + Col3' }],
-          },
         ],
       },
       {
@@ -218,7 +212,7 @@ describe('Table', () => {
                   args: [
                     {
                       type: 'tablepartialdef',
-                      args: ['exprRef_root'],
+                      args: ['varname'],
                     },
                     {
                       args: ['Col2'],
@@ -286,7 +280,7 @@ describe('Table', () => {
                   args: [
                     {
                       type: 'tablepartialdef',
-                      args: ['exprRef_root'],
+                      args: ['varname'],
                     },
                     {
                       args: ['Col3'],
@@ -342,42 +336,6 @@ describe('Table', () => {
               type: 'block',
             },
             source: '',
-          },
-        ],
-      },
-      {
-        parseErrors: [],
-        program: [
-          {
-            block: {
-              args: [
-                {
-                  args: [
-                    {
-                      type: 'tablepartialdef',
-                      args: ['exprRef_root'],
-                    },
-                    {
-                      args: ['Col2 + Col3'],
-                      type: 'coldef',
-                    },
-                    {
-                      args: [
-                        {
-                          args: [],
-                          type: 'column-items',
-                        },
-                      ],
-                      type: 'column',
-                    },
-                  ],
-                  type: 'table-column-assign',
-                },
-              ],
-              id: 'th4',
-              type: 'block',
-            },
-            id: 'th4',
           },
         ],
       },

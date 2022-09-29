@@ -91,13 +91,11 @@ it('builds up a picture of available names', () => {
     Map {
       "MyTable1" => Set {
         "MyTable1Col",
+        "NewCol",
       },
       "MyTable2" => Set {
         "MyTable1Col",
         "MyTable2Col",
-      },
-      "NewCol" => Set {
-        "MyTable1",
       },
     }
   `);

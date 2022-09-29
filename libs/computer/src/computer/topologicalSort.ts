@@ -31,9 +31,6 @@ const blockEntity = ({ block }: IdentifiedBlock): string | null => {
   if (!statement || !isAssignment(statement)) {
     return null;
   }
-  if (statement.type === 'table-column-assign') {
-    return getIdentifierString(statement.args[1]);
-  }
   // we have a statement
   const arg0 = statement.args[0];
   return getIdentifierString(arg0);

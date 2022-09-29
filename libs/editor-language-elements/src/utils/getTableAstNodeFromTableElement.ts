@@ -1,5 +1,6 @@
 import { MyEditor, TableElement } from '@decipad/editor-types';
 import { AST, Computer } from '@decipad/computer';
+import { getNodeString } from '@udecode/plate';
 import { ParseError } from '../types';
 import { headerToColumn } from './headerToColumn';
 import { tableExpression } from './tableExpression';
@@ -23,19 +24,14 @@ export const getTableAstNodeFromTableElement = async (
   computer: Computer,
   table: TableElement
 ): Promise<GetTableAstNodeFromTableElementResult> => {
-  const [, headerRow, ...dataRows] = table.children;
+  const [caption, headerRow, ...dataRows] = table.children;
+  const tableName = getNodeString(caption.children[0]);
 
   const columns = await Promise.all(
     headerRow.children.map(async (th, columnIndex) =>
-      headerToColumn({
-        computer,
-        th,
-        columnIndex,
-        table,
-        dataRows,
-      })
+      headerToColumn({ computer, th, columnIndex, tableName, table, dataRows })
     )
   );
 
-  return tableExpression(table, columns);
+  return tableExpression(table, tableName, columns);
 };
