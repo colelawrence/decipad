@@ -30,7 +30,10 @@ export const getExistingBlockIds = (
 export const getIdentifierString = (ident: AST.Identifier): string =>
   ident.args[0];
 
-export const getDefinedSymbol = (stmt: AST.Statement) => {
+export const getDefinedSymbol = (
+  stmt: AST.Statement,
+  findIncrementalDefinitions = true
+) => {
   switch (stmt.type) {
     case 'function-definition':
       return `fn:${getIdentifierString(stmt.args[0])}`;
@@ -39,9 +42,13 @@ export const getDefinedSymbol = (stmt: AST.Statement) => {
     case 'categories':
       return `var:${getIdentifierString(stmt.args[0])}`;
     case 'matrix-assign':
-      return `var:${getIdentifierString(stmt.args[0])}`;
+      return findIncrementalDefinitions
+        ? `var:${getIdentifierString(stmt.args[0])}`
+        : null;
     case 'table-column-assign':
-      return `var:${getIdentifierString(stmt.args[0])}`;
+      return findIncrementalDefinitions
+        ? `var:${getIdentifierString(stmt.args[0])}`
+        : null;
     default:
       return null;
   }

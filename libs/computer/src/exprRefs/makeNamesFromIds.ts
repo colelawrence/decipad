@@ -111,7 +111,8 @@ function gatherAllVarNames(program: Program) {
       const exprRef = getExprRef(block.id);
       let symbol =
         getDefinedSymbol(
-          block.block.args[0] ?? { type: 'noop', args: [] }
+          block.block.args[0] ?? { type: 'noop', args: [] },
+          false
         )?.replace(/^var:/, '') ?? '';
 
       if (isExprRef(symbol)) {

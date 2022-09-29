@@ -71,6 +71,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     )
   );
   const data = resultToPlotResultData(source, element);
+
   spec = spec && data && enhanceSpecFromWideData(spec, data);
 
   const plotParams: PlotParams = {

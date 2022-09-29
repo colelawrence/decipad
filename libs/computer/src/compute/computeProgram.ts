@@ -8,11 +8,11 @@ import {
   validateResult,
   Value,
 } from '@decipad/language';
-import { getDefined } from '@decipad/utils';
+import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
 import { IdentifiedResult } from '../types';
 import { getStatement } from '../utils';
-import { ComputationRealm } from '../computer/ComputationRealm';
+import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 
 /*
@@ -68,7 +68,6 @@ const computeStatement = async (
     },
     visibleVariables: getVisibleVariables(program, blockId, realm.inferContext),
   };
-  realm.addToCache(blockId, { result, value });
   return [result, value];
 };
 
@@ -102,7 +101,7 @@ export const computeProgram = async (
 
   // const tableBlockIds = new Map<string, string>();
 
-  const results: IdentifiedResult[] = [];
+  let resultsToCache: CacheContents[] = [];
   for (const block of program) {
     try {
       // eslint-disable-next-line no-await-in-loop
@@ -111,13 +110,25 @@ export const computeProgram = async (
       realm.inferContext.previousStatement = result.result.type;
       realm.interpreterRealm.previousStatementValue = value;
 
-      results.push(result);
+      resultsToCache.push({ result, value });
     } catch (err) {
-      results.push(resultFromError(err as Error, block.id));
+      resultsToCache.push({ result: resultFromError(err as Error, block.id) });
       realm.inferContext.previousStatement = undefined;
       realm.interpreterRealm.previousStatementValue = undefined;
     }
   }
 
-  return results;
+  // copying the result triggers the getter from the identified result,
+  // ... effectively freezing the type
+  // We can only do this after computing the whole program.
+  resultsToCache = resultsToCache.map((result) => ({
+    result: { ...result.result },
+    value: result.value,
+  }));
+
+  for (const [block, result] of zip(program, resultsToCache)) {
+    realm.addToCache(block.id, result);
+  }
+  // same here:
+  return resultsToCache.map((resultToCache) => resultToCache.result);
 };

@@ -19,7 +19,7 @@ import { getDefinedSymbolAt, parseDefName } from '../utils';
 
 export type CacheContents = {
   result: IdentifiedResult;
-  value: Value | undefined;
+  value?: Value;
 };
 
 export class ComputationRealm {
