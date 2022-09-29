@@ -99,8 +99,6 @@ export const computeProgram = async (
   realm.inferContext.previousStatement = undefined;
   realm.interpreterRealm.previousStatementValue = undefined;
 
-  // const tableBlockIds = new Map<string, string>();
-
   let resultsToCache: CacheContents[] = [];
   for (const block of program) {
     try {

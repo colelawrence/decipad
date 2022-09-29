@@ -18,7 +18,6 @@ import { seriesColumn } from './seriesColumn';
 
 interface HeaderToColumnProps {
   computer: Computer;
-  tableName: string;
   table: TableElement;
   th: TableHeaderElement;
   columnIndex: number;
