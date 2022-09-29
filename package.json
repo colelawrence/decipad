@@ -163,7 +163,7 @@
     "nearley": "2.20.1",
     "next-auth": "4.12.2",
     "node-fetch": "3.2.10",
-    "nodemailer": "6.7.8",
+    "nodemailer": "6.8.0",
     "oauth": "0.10.0",
     "p-series": "2.1.0",
     "patch-package": "6.4.7",
