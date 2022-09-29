@@ -51,4 +51,26 @@ describe('computer is independent of block-order', () => {
       `);
     }
   });
+
+  it('orders table column assignments', async () => {
+    const blocks: UnparsedBlock[] = [
+      `HELLO = "hello"`,
+      `T = { A = ["1", "2", "3"] }`,
+      `T.B = ["4", "5", "6"]`,
+      `T.C = A + B + HELLO`,
+    ].map((source, index) => ({
+      type: 'unparsed-block',
+      id: `block-${index}`,
+      source,
+    }));
+    expect((await computeOnTestComputer({ program: blocks })).sort())
+      .toMatchInlineSnapshot(`
+      Array [
+        "block-0 -> \\"hello\\"",
+        "block-1 -> [[\\"1\\",\\"2\\",\\"3\\"],[\\"4\\",\\"5\\",\\"6\\"],[\\"14hello\\",\\"25hello\\",\\"36hello\\"]]",
+        "block-2 -> [[\\"1\\",\\"2\\",\\"3\\"],[\\"4\\",\\"5\\",\\"6\\"]]",
+        "block-3 -> [[\\"1\\",\\"2\\",\\"3\\"],[\\"4\\",\\"5\\",\\"6\\"],[\\"14hello\\",\\"25hello\\",\\"36hello\\"]]",
+      ]
+    `);
+  });
 });

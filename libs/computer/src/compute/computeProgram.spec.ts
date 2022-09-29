@@ -52,9 +52,9 @@ it('returns type errors', async () => {
   expect(await testCompute(programContainingError)).toMatchInlineSnapshot(`
     Array [
       "block-0 -> 1",
-      "block-1 -> Type Error",
+      "block-1 -> The function + cannot be called with (number, string)",
       "block-2 -> 2",
-      "block-3 -> Type Error",
+      "block-3 -> The function + cannot be called with (number, string)",
     ]
   `);
 });

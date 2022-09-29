@@ -13,7 +13,7 @@ interface Node {
   value: IdentifiedBlock;
 }
 
-type EntityNodeMap = Map<string, Node>;
+type EntityNodeMap = Map<string, Node[]>;
 
 const badBlock = (block: ParseRet): block is IdentifiedError => {
   return block.type === 'computer-parse-error';
@@ -54,7 +54,7 @@ const drawEdges = (
   namespaces: TableNamespaces
 ): void => {
   const deps = dependencies(node.value.block, namespaces);
-  let edges = deps.map((dep) => allNodes.get(dep)).filter(Boolean);
+  let edges = deps.flatMap((dep) => allNodes.get(dep)).filter(Boolean);
   const { entity } = node;
   if (entity != null) {
     edges = edges.filter(notSelf(entity)) as Node[];
@@ -78,10 +78,12 @@ export const topologicalSort = (blocks: ParseRet[]): ParseRet[] => {
   const goodBlocks = blocks.filter(goodBlock);
   const nodes = goodBlocks.map(blockToNode);
 
-  const identifiersToNode: EntityNodeMap = nodes.reduce((map, node) => {
+  const identifiersToNode = nodes.reduce<EntityNodeMap>((map, node) => {
     if (node.entity !== null) {
-      map.set(node.entity, node);
+      const existing = map.get(node.entity) ?? [];
+      map.set(node.entity, existing.concat(node));
     }
+
     return map;
   }, new Map());
 

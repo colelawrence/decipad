@@ -1,3 +1,4 @@
+import { formatError } from '@decipad/format';
 import Fraction from '@decipad/fraction';
 import { astNode, parseOneStatement } from '@decipad/language';
 import { AST } from '.';
@@ -112,7 +113,7 @@ export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
     const prefix = `${blockId} -> `;
 
     if (type.kind === 'type-error') {
-      simpleUpdates.push(`${prefix}Type Error`);
+      simpleUpdates.push(`${prefix}${formatError('en-us', type.errorCause)}`);
     } else {
       const asString =
         value instanceof Fraction ? value.toString() : JSON.stringify(value);

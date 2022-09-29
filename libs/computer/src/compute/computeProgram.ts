@@ -3,6 +3,7 @@ import {
   buildType as t,
   evaluateStatement,
   inferStatement,
+  // prettyPrintAST,
   RuntimeError,
   serializeResult,
   validateResult,
@@ -99,7 +100,7 @@ export const computeProgram = async (
   realm.inferContext.previousStatement = undefined;
   realm.interpreterRealm.previousStatementValue = undefined;
 
-  // const tableBlockIds = new Map<string, string>();
+  // console.log('compute program', program.map(prettyPrintAST));
 
   let resultsToCache: CacheContents[] = [];
   for (const block of program) {
