@@ -13,7 +13,6 @@ import {
 import { blockAlignment, codeBlock } from '../../styles';
 import { isTabularType, isNodeEmpty } from '../../utils';
 import { CodeResultProps } from '../../types';
-import { variableStyles } from '../../styles/code-block';
 
 const { lineHeight } = codeBlock;
 
@@ -83,20 +82,6 @@ const placeholderStyles = css(codeStyles('standalone'), {
   pointerEvents: 'none',
 });
 
-const tipsStyles = css(variableStyles, {
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  transform: 'translate(2px, 100%)',
-  paddingLeft: '8px',
-  paddingRight: '8px',
-  borderRadius: '6px',
-  color: cssVar('weakTextColor'),
-  backgroundColor: 'transparent',
-  pointerEvents: 'none',
-  userSelect: 'none',
-});
-
 const inlineResultStyles = css(p14Regular, {
   ':empty': { display: 'none' },
 
@@ -127,7 +112,6 @@ interface CodeLineProps {
   readonly variant?: 'table' | 'standalone';
   readonly children: ReactNode;
   readonly highlight?: boolean;
-  readonly tip?: string;
   readonly placeholder?: string;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
@@ -141,7 +125,6 @@ export const CodeLine = ({
   children,
   highlight = false,
   result,
-  tip,
   placeholder,
   syntaxError,
   onDragStartInlineResult,
@@ -170,11 +153,6 @@ export const CodeLine = ({
         {placeholder && isEmpty && (
           <span css={placeholderStyles} contentEditable={false}>
             {placeholder}
-          </span>
-        )}
-        {tip && (
-          <span css={tipsStyles} contentEditable={false}>
-            {tip}
           </span>
         )}
         <div

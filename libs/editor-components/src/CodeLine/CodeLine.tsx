@@ -14,7 +14,7 @@ import {
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
-import { isNodeEmpty, CodeLine as UICodeLine } from '@decipad/ui';
+import { CodeLine as UICodeLine } from '@decipad/ui';
 import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
@@ -22,7 +22,6 @@ import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
-import { useCodeLineTutorials } from './useCodeLineTutorials';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_CODE_LINE) {
@@ -34,7 +33,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const selected = useSelected();
   const editor = useTEditorRef();
-  const isEmpty = isNodeEmpty(children);
 
   const computer = useComputer();
   const { id: lineId } = element;
@@ -43,7 +41,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     lineId
   );
 
-  const { tips, placeholder } = useCodeLineTutorials(selected, isEmpty);
   const codeLineContent = getNodeString(element);
 
   useCodeLineClickReference(editor, selected, codeLineContent);
@@ -54,8 +51,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
         <UICodeLine
           highlight={selected}
           result={lineResult}
-          tip={tips}
-          placeholder={placeholder}
+          placeholder="Distance = 60 km/h * Time"
           syntaxError={syntaxError}
           onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
           onDragStartCell={onDragStartTableCellResult(editor)}

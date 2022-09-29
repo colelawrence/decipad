@@ -23,7 +23,7 @@ describe('Placeholders', () => {
         <CodeLine element={dumbElement} attributes={attributes} />
       </TestProvider>
     );
-    expect(getByText('Distance = 42 km')).toBeVisible();
+    expect(getByText((text) => text.startsWith('Distance = '))).toBeVisible();
   });
 
   it('should hide if there are content', () => {
