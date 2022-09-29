@@ -10,7 +10,7 @@ import { cssVar } from '../../primitives';
 
 const bubbleStyles = css(codeBlock.variableStyles, {
   display: 'flex',
-  flexWrap: 'wrap',
+  flexWrap: 'nowrap',
   gap: '4px',
 
   padding: '4px 8px',

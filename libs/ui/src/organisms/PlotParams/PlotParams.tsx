@@ -50,6 +50,8 @@ const selectFontStyles = css(p12Medium);
 
 const selectStyles = css({
   backgroundColor: cssVar('highlightColor'),
+  width: '100%',
+  maxWidth: '140px',
 });
 
 const SelectInput = ({
