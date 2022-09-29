@@ -8865,21 +8865,6 @@
     "@udecode/plate-floating" "18.1.1"
     downshift "^6.1.7"
 
-"@udecode/plate-core@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-17.0.3.tgz#13eb540dce9f2e92ec66f058d52890de5fb4544e"
-  integrity sha512-D5UTsi7PWXhVwuIjIQa5TcrsPLrR2ip6QHbBYfsMQang+L2FtZNeh8u0KDeNwGuVzj3Gu01pqcUfObzYaXkyzw==
-  dependencies:
-    "@radix-ui/react-slot" "^0.1.2"
-    "@udecode/zustood" "^1.1.1"
-    clsx "^1.1.1"
-    jotai "^1.7.2"
-    lodash "^4.17.21"
-    nanoid "^3.3.4"
-    react-hotkeys-hook "^3.4.6"
-    use-deep-compare "^1.1.0"
-    zustand "^3.7.2"
-
 "@udecode/plate-core@18.1.1":
   version "18.1.1"
   resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-18.1.1.tgz#40efe379ae0b8fc86c474ab6b9f659d442952a71"
@@ -8996,12 +8981,12 @@
   dependencies:
     "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-juice@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-17.0.3.tgz#8d3679cddc13875d0fa3f41acf34774c3b2ecfd7"
-  integrity sha512-AJOYB9dbqPtSV/8ywan2/Hzze9gzrossowyb+k6D4dh7jtjrLNFE20xEZPXGapEFnmLKQIjXxUtQQad4+JvBIg==
+"@udecode/plate-juice@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-juice/-/plate-juice-18.1.1.tgz#1ac4c473173ff118f7136bef1c9effa6e8ffe229"
+  integrity sha512-azodpoRJm3XyvSoxOj5if03507yymdbKsy3SfM5JtFzCQI1JZelTcdMPONOrFmgSe5A9fLj1E3f+oiUqSCGKhA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
     juice "^8.0.0"
 
 "@udecode/plate-kbd@18.1.1":
