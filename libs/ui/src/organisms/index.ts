@@ -40,4 +40,5 @@ export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';
 export { ErrorBlock } from './ErrorBlock/ErrorBlock';
 export { Select } from './Select/Select';
+export { StarterChecklist } from './StarterChecklist/StarterChecklist';
 export { DisplayWidget } from './DisplayWidget/DisplayWidget';

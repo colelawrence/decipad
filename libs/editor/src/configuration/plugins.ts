@@ -38,6 +38,7 @@ import {
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
+  createUserEventPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -63,7 +64,8 @@ import {
   createTrailingBlockPlugin,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import type { Computer } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
+import { ClientEventContextType } from '@decipad/client-events';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createJuicePlugin } from '@udecode/plate-juice';
@@ -76,6 +78,7 @@ import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
 export const plugins = (
   computer: Computer,
+  events: ClientEventContextType,
   interactions?: Subject<UserInteraction>
 ) =>
   createPlugins<MyValue, MyEditor>(
@@ -174,6 +177,7 @@ export const plugins = (
       createWithDocSyncHistoryPlugin(),
 
       createNormalizeNewParagraphPlugin(),
+      createUserEventPlugin(events),
     ],
     {
       components: components(computer),

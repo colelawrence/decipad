@@ -80,6 +80,10 @@ export enum ExternalProvider {
   Testdatasource = 'testdatasource'
 }
 
+export type GoalFulfilmentInput = {
+  goalName: Scalars['String'];
+};
+
 export type KeyValue = {
   __typename?: 'KeyValue';
   key: Scalars['String'];
@@ -97,6 +101,7 @@ export type Mutation = {
   createWorkspace: Workspace;
   doNothing?: Maybe<Scalars['Boolean']>;
   duplicatePad: Pad;
+  fulfilGoal: Scalars['Boolean'];
   importPad: Pad;
   inviteUserToRole: Array<RoleInvitation>;
   pretendUser?: Maybe<Scalars['Boolean']>;
@@ -170,6 +175,11 @@ export type MutationDuplicatePadArgs = {
   document?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   targetWorkspace: Scalars['ID'];
+};
+
+
+export type MutationFulfilGoalArgs = {
+  props: GoalFulfilmentInput;
 };
 
 
@@ -440,6 +450,7 @@ export type Query = {
   pads: PagedPadResult;
   padsByTag: PagedPadResult;
   self?: Maybe<User>;
+  selfFulfilledGoals: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   workspaces: Array<Workspace>;
@@ -594,6 +605,7 @@ export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
+  hideChecklist?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   image?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -607,6 +619,7 @@ export type UserAccess = {
 };
 
 export type UserInput = {
+  hideChecklist?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
 };
 
@@ -674,6 +687,13 @@ export type DuplicateNotebookMutationVariables = Exact<{
 
 export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, createdAt?: any | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string } } };
 
+export type FulfilGoalMutationVariables = Exact<{
+  props: GoalFulfilmentInput;
+}>;
+
+
+export type FulfilGoalMutation = { __typename?: 'Mutation', fulfilGoal: boolean };
+
 export type ImportNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
   source: Scalars['String'];
@@ -731,6 +751,13 @@ export type UpdateNotebookIconMutationVariables = Exact<{
 
 export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string } } };
 
+export type UpdateUserMutationVariables = Exact<{
+  props: UserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, hideChecklist?: boolean | null } };
+
 export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string } };
 
 export type GetNotebookByIdQueryVariables = Exact<{
@@ -739,6 +766,11 @@ export type GetNotebookByIdQueryVariables = Exact<{
 
 
 export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string } } | null };
+
+export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', hideChecklist?: boolean | null } | null };
 
 export type WorkspaceSwitcherWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -862,6 +894,15 @@ ${WorkspaceNotebookFragmentDoc}`;
 export function useDuplicateNotebookMutation() {
   return Urql.useMutation<DuplicateNotebookMutation, DuplicateNotebookMutationVariables>(DuplicateNotebookDocument);
 };
+export const FulfilGoalDocument = gql`
+    mutation FulfilGoal($props: GoalFulfilmentInput!) {
+  fulfilGoal(props: $props)
+}
+    `;
+
+export function useFulfilGoalMutation() {
+  return Urql.useMutation<FulfilGoalMutation, FulfilGoalMutationVariables>(FulfilGoalDocument);
+};
 export const ImportNotebookDocument = gql`
     mutation ImportNotebook($workspaceId: ID!, $source: String!) {
   importPad(workspaceId: $workspaceId, source: $source) {
@@ -944,6 +985,18 @@ export const UpdateNotebookIconDocument = gql`
 export function useUpdateNotebookIconMutation() {
   return Urql.useMutation<UpdateNotebookIconMutation, UpdateNotebookIconMutationVariables>(UpdateNotebookIconDocument);
 };
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($props: UserInput!) {
+  updateSelf(props: $props) {
+    name
+    hideChecklist
+  }
+}
+    `;
+
+export function useUpdateUserMutation() {
+  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
+};
 export const GetNotebookByIdDocument = gql`
     query GetNotebookById($id: ID!) {
   getPadById(id: $id) {
@@ -954,6 +1007,18 @@ export const GetNotebookByIdDocument = gql`
 
 export function useGetNotebookByIdQuery(options: Omit<Urql.UseQueryArgs<GetNotebookByIdQueryVariables>, 'query'>) {
   return Urql.useQuery<GetNotebookByIdQuery, GetNotebookByIdQueryVariables>({ query: GetNotebookByIdDocument, ...options });
+};
+export const UserDocument = gql`
+    query User {
+  self {
+    hideChecklist
+  }
+  selfFulfilledGoals
+}
+    `;
+
+export function useUserQuery(options?: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserQuery, UserQueryVariables>({ query: UserDocument, ...options });
 };
 export const GetWorkspacesIDsDocument = gql`
     query GetWorkspacesIDs {
@@ -1021,6 +1086,7 @@ export type GraphCacheResolvers = {
     pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
     padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
     self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
+    selfFulfilledGoals?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<Scalars['String'] | string>>,
     tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
     version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
     workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
@@ -1170,6 +1236,7 @@ export type GraphCacheResolvers = {
   User?: {
     createdAt?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['DateTime'] | string>,
     email?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
+    hideChecklist?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['Boolean'] | string>,
     id?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['ID'] | string>,
     image?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>
@@ -1204,6 +1271,7 @@ export type GraphCacheOptimisticUpdaters = {
   createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   duplicatePad?: GraphCacheOptimisticMutationResolver<MutationDuplicatePadArgs, WithTypename<Pad>>,
+  fulfilGoal?: GraphCacheOptimisticMutationResolver<MutationFulfilGoalArgs, Scalars['Boolean']>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
   inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
   pretendUser?: GraphCacheOptimisticMutationResolver<MutationPretendUserArgs, Maybe<Scalars['Boolean']>>,
@@ -1246,6 +1314,7 @@ export type GraphCacheUpdaters = {
     createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     duplicatePad?: GraphCacheUpdateResolver<{ duplicatePad: WithTypename<Pad> }, MutationDuplicatePadArgs>,
+    fulfilGoal?: GraphCacheUpdateResolver<{ fulfilGoal: Scalars['Boolean'] }, MutationFulfilGoalArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
     inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
     pretendUser?: GraphCacheUpdateResolver<{ pretendUser: Maybe<Scalars['Boolean']> }, MutationPretendUserArgs>,

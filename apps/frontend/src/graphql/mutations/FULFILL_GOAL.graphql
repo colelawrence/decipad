@@ -1,0 +1,3 @@
+mutation FulfilGoal($props: GoalFulfilmentInput!) {
+  fulfilGoal(props: $props)
+}

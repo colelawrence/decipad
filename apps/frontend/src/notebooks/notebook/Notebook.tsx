@@ -1,5 +1,6 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
+import { StarterChecklistStateChange } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
   EditorPlaceholder,
@@ -8,8 +9,13 @@ import {
   NotebookPage,
   TopbarPlaceholder,
 } from '@decipad/ui';
-import { FC, lazy, useState } from 'react';
-import { useRenameNotebookMutation } from '../../graphql';
+import { FC, lazy, useCallback, useState } from 'react';
+import {
+  useRenameNotebookMutation,
+  useFulfilGoalMutation,
+  useUpdateUserMutation,
+  useUserQuery,
+} from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
@@ -55,7 +61,33 @@ const Notebook: FC = () => {
     docsync,
   });
 
+  const [checklistResult] = useUserQuery();
+
+  const checklistState = checklistResult.data?.selfFulfilledGoals;
+  const checklistShow = checklistResult.data?.self?.hideChecklist;
+
   const [, renameNotebook] = useRenameNotebookMutation();
+  const [, createGoal] = useFulfilGoalMutation();
+  const [, updateUser] = useUpdateUserMutation();
+
+  const handleChecklistStateChange = useCallback(
+    (props: StarterChecklistStateChange) => {
+      if (props.type === 'newGoal') {
+        createGoal({
+          props: {
+            goalName: props.goalName,
+          },
+        }).catch((err) => console.warn(err));
+      } else {
+        updateUser({
+          props: {
+            hideChecklist: true,
+          },
+        }).catch((err) => console.warn(err));
+      }
+    },
+    [createGoal, updateUser]
+  );
 
   if (error) {
     if (/no such/i.test(error?.message))
@@ -90,6 +122,14 @@ const Notebook: FC = () => {
               connectionParams={connectionParams}
               onEditor={setEditor}
               onDocsync={setDocsync}
+              checklistState={{
+                goals: !checklistState ? [] : checklistState,
+                nonEditorGoals: {
+                  shared: isPublic,
+                },
+                hide: !!checklistShow,
+              }}
+              onChecklistStateChange={handleChecklistStateChange}
             />
           </Frame>
         }
@@ -119,7 +159,13 @@ const Notebook: FC = () => {
               notebook={notebook}
               isNotebookPublic={isPublic}
               hasLocalChanges={hasLocalChanges}
-              duplicateNotebook={duplicate}
+              duplicateNotebook={() => {
+                handleChecklistStateChange({
+                  type: 'newGoal',
+                  goalName: 'Duplicate this notebook',
+                });
+                duplicate();
+              }}
               removeLocalChanges={removeLocalChanges}
               setNotebookPublic={setNotebookPublic}
             />

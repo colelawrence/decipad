@@ -1,8 +1,9 @@
-import type { Computer } from '@decipad/computer';
+import { ClientEventsContext } from '@decipad/client-events';
+import { Computer } from '@decipad/computer';
 import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
+import { useContext, useMemo } from 'react';
 import { UserInteraction } from '@decipad/react-contexts';
-import { useMemo } from 'react';
 import { Subject } from 'rxjs';
 import * as configuration from './configuration';
 
@@ -31,13 +32,17 @@ export const useCreateEditor = ({
     readOnly,
   });
 
+  const events = useContext(ClientEventsContext);
+
   const editorPlugins = useMemo(
     () =>
-      computer && [
-        ...configuration.plugins(computer, interactions),
-        notebookTitlePlugin,
-      ],
-    [computer, interactions, notebookTitlePlugin]
+      !computer || !events
+        ? []
+        : [
+            ...configuration.plugins(computer, events, interactions),
+            notebookTitlePlugin,
+          ],
+    [computer, notebookTitlePlugin, events, interactions]
   );
 
   const editor = useMemo(

@@ -6,6 +6,7 @@ export type Flag =
   | 'COPY_HREF'
   | 'PERSISTENT_EXAMPLE'
   | 'DATA_VIEW'
+  | 'ONBOARDING_CHECKLIST'
   | 'RESULT_WIDGET';
 
 export type Flags = Partial<Record<Flag, boolean>>;
