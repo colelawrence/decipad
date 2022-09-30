@@ -2,7 +2,14 @@ import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { formatResultPreview } from '@decipad/format';
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
-import { grey100, grey200, p16Regular, p32Medium } from '../../primitives';
+import {
+  grey200,
+  grey300,
+  grey400,
+  grey500,
+  p14Regular,
+  p32Medium,
+} from '../../primitives';
 import { ArrowOutlined } from '../../icons';
 import {
   AutoCompleteMenu,
@@ -16,22 +23,24 @@ const wrapperStyles = css({
   position: 'relative',
 });
 
-const triggerStyles = css({
-  width: '100%',
-  borderRadius: 8,
-  padding: 8,
-  fontSize: 24,
-  minHeight: 44,
-  height: '100%',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  transition: 'all 0.2s ease-in-out',
-  backgroundColor: grey100.rgb,
-  ':hover': {
-    backgroundColor: grey200.rgb,
-  },
-});
+const triggerStyles = (readOnly: boolean, selected: boolean) =>
+  css({
+    width: '100%',
+    borderRadius: 8,
+    padding: 8,
+    fontSize: 24,
+    minHeight: 44,
+    height: '100%',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    transition: 'all 0.2s ease-in-out',
+    ...(selected && { backgroundColor: grey200.rgb }),
+    ...(!readOnly && { border: `1px solid ${grey300.rgb}` }),
+    ':hover': {
+      backgroundColor: grey200.rgb,
+    },
+  });
 
 const iconStyles = css({
   display: 'flex',
@@ -70,7 +79,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   children,
 }) => {
   if (readOnly) {
-    return <div css={triggerStyles}>{children}</div>;
+    return <div css={triggerStyles(readOnly, false)}>{children}</div>;
   }
 
   return (
@@ -79,13 +88,18 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         <div css={iconStyles}>
           <ArrowOutlined />
         </div>
-        <span css={p16Regular}>
-          {result ? `Result: ${result}` : 'Select an option'}
+        <span css={[p14Regular, { color: grey500.rgb }]}>
+          {`Result: ${result ?? 'Name'}`}
         </span>
+        {!result && (
+          <span css={[p14Regular, { color: grey400.rgb }]}>
+            (pick from the list)
+          </span>
+        )}
       </div>
       {children}
       <div
-        css={triggerStyles}
+        css={triggerStyles(readOnly, openMenu)}
         onClick={() => onChangeOpen(!openMenu)}
         data-testid="result-widget"
       >
@@ -96,6 +110,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
       {openMenu && (
         <AutoCompleteMenu
           top={false}
+          rounded={true}
           identifiers={dropdownContent.map<Identifier>((item) => ({
             kind: 'variable',
             identifier: item.text,

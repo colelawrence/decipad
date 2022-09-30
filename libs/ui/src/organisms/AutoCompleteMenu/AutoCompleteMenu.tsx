@@ -20,7 +20,7 @@ type AutoCompleteGroup = Omit<
   readonly items: ReadonlyArray<Identifier>;
 };
 
-const styles = (top: boolean) =>
+const styles = (top: boolean, rounded: boolean) =>
   css({
     display: 'flex',
     flexDirection: 'column',
@@ -33,7 +33,7 @@ const styles = (top: boolean) =>
 
     backgroundColor: cssVar('backgroundColor'),
     border: `1px solid ${cssVar('strongHighlightColor')}`,
-    borderRadius: '0px 12px 12px 12px',
+    borderRadius: rounded ? '12px' : '0px 12px 12px 12px',
     boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
     position: 'absolute',
     width: '280px',
@@ -59,6 +59,7 @@ export interface AutoCompleteMenuProps {
   readonly search?: string;
   readonly onExecuteItem?: (identifier: Identifier) => void;
   readonly top?: boolean;
+  readonly rounded?: boolean;
 }
 
 export const AutoCompleteMenu = ({
@@ -66,6 +67,7 @@ export const AutoCompleteMenu = ({
   identifiers,
   onExecuteItem,
   top = true,
+  rounded = false,
 }: AutoCompleteMenuProps): ReturnType<FC> => {
   const groups: ReadonlyArray<AutoCompleteGroup> = useMemo(
     () => [
@@ -159,7 +161,7 @@ export const AutoCompleteMenu = ({
         contentEditable={false}
         role="menu"
         aria-orientation="vertical"
-        css={styles(top)}
+        css={styles(top, rounded)}
       >
         <div css={mainStyles}>
           {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) =>

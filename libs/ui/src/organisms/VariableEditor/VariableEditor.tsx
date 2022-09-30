@@ -90,28 +90,34 @@ const addNewWrapperStyles = css({
   marginLeft: '12px',
 });
 
-const variableNameStyles = css({
-  alignSelf: 'start',
-  flexGrow: 2,
-  minWidth: 0,
-  position: 'relative',
+const variableNameStyles = (
+  props: Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>
+) =>
+  css({
+    alignSelf: 'start',
+    flexGrow: 2,
+    minWidth: 0,
+    position: 'relative',
 
-  '::after': {
-    display: 'block',
-    height: '100%',
-    width: '24px',
-    content: '""',
-    right: 0,
-    top: 0,
-    position: 'absolute',
-    pointerEvents: 'none',
-    background: `linear-gradient(
+    '::after': {
+      display: 'block',
+      height: '100%',
+      width: '24px',
+      content: '""',
+      right: 0,
+      top: 0,
+      position: 'absolute',
+      pointerEvents: 'none',
+      ...(props.variant !== 'display' && {
+        color: 'white',
+        background: `linear-gradient(
       90deg,
       ${transparency(white, 0).rgba},
       ${cssVar('backgroundColor')}
     )`,
-  },
-});
+      }),
+    },
+  });
 
 interface VariableEditorProps
   extends Pick<ComponentProps<typeof AddNew>, 'onAdd'>,
@@ -155,7 +161,13 @@ export const VariableEditor = ({
         <div css={widgetWrapperStyles}>
           <div css={headerWrapperStyles}>
             <>
-              <div css={variableNameStyles}>{childrenArray[0]}</div>
+              <div
+                css={variableNameStyles({
+                  variant: menuProps.variant || 'expression',
+                })}
+              >
+                {childrenArray[0]}
+              </div>
               {!readOnly && menuProps.variant !== 'display' && (
                 <span contentEditable={false} css={iconWrapperStyles}>
                   <Icon />
