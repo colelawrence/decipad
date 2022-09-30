@@ -60,8 +60,8 @@ const computeStatement = async (
         const type = getDefined(
           realm.inferContext.stack.get(getDefined(variableName))
         );
-        const value = getDefined(
-          realm.interpreterRealm.stack.get(getDefined(variableName))
+        const value = realm.interpreterRealm.stack.get(
+          getDefined(variableName)
         );
         return serializeResult(type, value?.getData());
       }
