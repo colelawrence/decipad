@@ -20,6 +20,10 @@ const bubbleStyles = css(codeBlock.variableStyles, {
   border: `solid 1px ${cssVar('strongerHighlightColor')}`,
 });
 
+const labelStyles = css({
+  whiteSpace: 'nowrap',
+});
+
 interface LabelProps {
   readonly children: React.ReactNode;
   readonly renderContent: (id: string) => React.ReactNode;
@@ -28,7 +32,9 @@ export const Label: React.FC<LabelProps> = ({ children, renderContent }) => {
   const id = `label-${useState(nanoid)[0]}`;
   return (
     <div css={bubbleStyles}>
-      <label htmlFor={id}>{children}</label>
+      <label css={labelStyles} htmlFor={id}>
+        {children}
+      </label>
       {renderContent(id)}
     </div>
   );
