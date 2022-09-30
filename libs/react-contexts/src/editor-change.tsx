@@ -1,4 +1,12 @@
-import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import {
   distinctUntilChanged,
   map,
@@ -13,8 +21,8 @@ import {
 } from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
-import { getDefined } from '@decipad/utils';
-import { identity } from 'ramda';
+import { getDefined, identity } from '@decipad/utils';
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 import type { MyValue } from '../../editor-types/src';
 
 export const EditorChangeContext = createContext<Observable<undefined>>(
@@ -49,15 +57,24 @@ export function useEditorChange<T>(
   const editor = getDefined(usePlateEditorRef<MyValue>());
   const editorChanges = useContext(EditorChangeContext);
 
+  const callbackRef = useRef(callback);
+  const selectorRef = useRef(selector);
+
+  useEffect(() => {
+    callbackRef.current = callback;
+    selectorRef.current = selector;
+  }, [callback, selector]);
+
   useEffect(() => {
     const editorChanges$ = concat(of(undefined), editorChanges);
     const observable = injectObservable
       ? merge(editorChanges$, injectObservable)
       : editorChanges$;
+
     const subscription = observable
       .pipe(
         debounceTime(debounceTimeMs),
-        map(() => selector(editor)),
+        map(() => selectorRef.current(editor)),
         filter((v) => v != null),
         selectsPromise
           ? concatMap((v) => from(v as unknown as Promise<T>))
@@ -65,18 +82,50 @@ export function useEditorChange<T>(
         filter((v) => v != null),
         distinctUntilChanged(dequal)
       )
-      .subscribe(callback);
+      .subscribe((value) => {
+        callbackRef.current(value);
+      });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [
-    callback,
-    selector,
-    editor,
-    debounceTimeMs,
-    injectObservable,
-    editorChanges,
-    selectsPromise,
-  ]);
+  }, [editor, debounceTimeMs, injectObservable, editorChanges, selectsPromise]);
+}
+
+export function useEditorSelector<T>(
+  selector: (editor: PlateEditor<MyValue>) => T
+): T {
+  const editor = getDefined(usePlateEditorRef<MyValue>());
+
+  const editorChanges = useContext(EditorChangeContext);
+
+  const selectorRef = useRef(selector);
+
+  useEffect(() => {
+    selectorRef.current = selector;
+  }, [selector]);
+
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      const sub = editorChanges
+        .pipe(
+          map(() => selectorRef.current(editor)),
+          distinctUntilChanged(dequal),
+          map(() => undefined) // We only want to minimize onStoreChange() calls
+        )
+        .subscribe(onStoreChange);
+
+      return () => sub.unsubscribe();
+    },
+    [editorChanges, editor]
+  );
+
+  const getSnapshot = useCallback(() => editor, [editor]);
+
+  return useSyncExternalStoreWithSelector(
+    subscribe,
+    getSnapshot,
+    undefined,
+    selector
+  );
 }

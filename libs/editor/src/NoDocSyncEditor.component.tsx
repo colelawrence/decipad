@@ -33,7 +33,10 @@ export const NoDocSyncEditorInternal: FC = () => {
 
   const [changeSubject] = useState(() => new Subject<undefined>());
   const onChange = useCallback(() => {
-    changeSubject.next(undefined);
+    // Make sure all components have been updated with the new change.
+    setTimeout(() => {
+      changeSubject.next(undefined);
+    });
   }, [changeSubject]);
 
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);

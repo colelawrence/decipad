@@ -24,12 +24,12 @@ export const columnAggregationTypes = (
         {
           name: 'Percent true',
           expression: (colRef) =>
-            `countif(${colRef} == true) / count(${colRef})`,
+            `countif(${colRef} == true) / count(${colRef}) in %`,
         },
         {
           name: 'Percent false',
           expression: (colRef) =>
-            `countif(${colRef} == false) / count(${colRef})`,
+            `countif(${colRef} == false) / count(${colRef}) in %`,
         },
       ];
 

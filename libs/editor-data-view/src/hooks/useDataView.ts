@@ -61,13 +61,11 @@ export const useDataView = ({
   let availableColumns: Columns | undefined;
 
   if (result?.type.kind === 'table' && result.value) {
-    availableColumns = result
-      ? [
-          [...result.type.columnNames],
-          [...result.type.columnTypes],
-          [...(result.value as Interpreter.ResultTable)],
-        ]
-      : [[], [], []];
+    availableColumns = [
+      [...result.type.columnNames],
+      [...result.type.columnTypes],
+      [...(result.value as Interpreter.ResultTable)],
+    ];
   }
 
   // sort column names and types according to user preferences

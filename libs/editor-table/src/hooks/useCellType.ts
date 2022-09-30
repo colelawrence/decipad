@@ -3,17 +3,14 @@ import {
   CellValueType,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useEditorSelector } from '@decipad/react-contexts';
 import { findNodePath, getNode } from '@udecode/plate';
-import { useState } from 'react';
 import { useColumnInferredType } from './useColumnInferredType';
 
 export const useCellType = (
   element: TableCellElement | TableHeaderElement
 ): CellValueType | undefined => {
-  const [header, setHeader] = useState<TableHeaderElement | undefined>();
-
-  useEditorChange(setHeader, (editor) => {
+  const header = useEditorSelector((editor) => {
     const cellPath = findNodePath(editor, element);
     if (cellPath) {
       const colIndex = cellPath[cellPath.length - 1];

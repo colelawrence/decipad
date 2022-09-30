@@ -1,8 +1,10 @@
 import { MyEditor, MyElement, PlateComponent } from '@decipad/editor-types';
-import { useEditorChange, useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  useEditorSelector,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import { Paragraph as UIParagraph } from '@decipad/ui';
 import { getRange, isElementEmpty, isSelectionExpanded } from '@udecode/plate';
-import { useState } from 'react';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { DraggableBlock } from '../block-management';
@@ -32,15 +34,12 @@ export const Paragraph: PlateComponent = ({
   // Performance improvement as opposed to use something like `useTEditorState()`.
   // We couldn't use `useTEditorRef()` because we need the paragraph to re-render
   // when the amount of editor children change.
-  const [showPlaceHolder, setShowPlaceholder] = useState(false);
-  useEditorChange(
-    (value: boolean) => setShowPlaceholder(value),
+  const showPlaceHolder = useEditorSelector(
     (editor) =>
       (editor.children.length === 2 && isElementEmpty(editor, element)) ||
       (isElementEmpty(editor, element) &&
         isSelected(editor, element) &&
-        !isSelectionExpanded(editor)),
-    { debounceTimeMs: 0 }
+        !isSelectionExpanded(editor))
   );
 
   return (

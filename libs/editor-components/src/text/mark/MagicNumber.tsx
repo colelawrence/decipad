@@ -1,22 +1,15 @@
-import {
-  PlateComponent,
-  RichText,
-  useTEditorRef,
-  MyEditor,
-  MyNode,
-  MyElement,
-} from '@decipad/editor-types';
+import { PlateComponent, RichText, MyElement } from '@decipad/editor-types';
 import {
   useComputer,
-  useEditorChange,
+  useEditorSelector,
   useIsEditorReadOnly,
   useResult,
 } from '@decipad/react-contexts';
 import { MagicNumber as UIMagicNumber } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { Element, Path } from 'slate';
-import { findNodePath, getNode, getNodeString } from '@udecode/plate';
-import { useCallback, useState } from 'react';
+import { BaseEditor, Editor, Element } from 'slate';
+import { findNodePath, getNodeString } from '@udecode/plate';
+import { useCallback } from 'react';
 import { magicNumberId } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 
@@ -65,41 +58,20 @@ export const MagicNumber: PlateComponent = ({
   );
 };
 
-function myGetNode(editor: MyEditor, path: Path): MyNode | null {
-  let node: MyNode | null = null;
-  try {
-    node = getNode<MyNode>(editor, path);
-  } catch (err) {
-    // do nothing
-  }
-  return node;
-}
-
 /** Get the ID of the magic number, comprised of paragraph and index */
 function useMagicNumberId(text: RichText) {
-  const editor = useTEditorRef();
-  const [magicNumberBlockId, setMagicNumberBlockId] = useState<string>('');
-
-  useEditorChange(setMagicNumberBlockId, (): string => {
+  return useEditorSelector((editor) => {
     const path = findNodePath(editor, text);
 
     if (!path) return '';
 
-    let pathOfElement = path;
-    while (pathOfElement.length) {
-      const node = myGetNode(editor, pathOfElement);
-      if (Element.isElement(node)) {
-        break;
-      }
-      pathOfElement = Path.parent(pathOfElement);
-    }
-    const element = myGetNode(editor, pathOfElement);
+    const entry = Editor.above(editor as BaseEditor, {
+      at: path,
+      match: (node) => Element.isElement(node),
+    });
 
-    if (element) {
-      return magicNumberId(element as MyElement, path[path.length - 1]);
-    }
-    return '';
+    if (!entry) return '';
+
+    return magicNumberId(entry[0] as MyElement, path[path.length - 1]);
   });
-
-  return magicNumberBlockId;
 }
