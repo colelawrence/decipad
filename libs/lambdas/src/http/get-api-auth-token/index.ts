@@ -31,7 +31,7 @@ interface JWTEncodeParams {
 
 const purposes: Record<string, Partial<JWTEncodeParams>> = {
   pubsub: {
-    maxAge: 5 * 60, // 5 minutes
+    maxAge: 24 * 60 * 60, // 24 hours
   },
 };
 
