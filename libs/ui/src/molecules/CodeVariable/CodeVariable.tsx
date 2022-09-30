@@ -54,7 +54,6 @@ export const CodeVariable = ({
   onGoToDefinition,
 }: CodeVariableProps): ReturnType<React.FC> => {
   const Icon = getTypeIcon(type || { kind: 'string' });
-
   const decoration = (
     <span
       onClick={onClick}

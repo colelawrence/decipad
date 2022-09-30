@@ -6,33 +6,14 @@ import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
-  showChecklist?: boolean;
 }
 
-export async function waitForEditorToLoad(
-  browserPage = page as Page,
-  options: SetupOptions = { showChecklist: false }
-) {
+export async function waitForEditorToLoad(browserPage = page as Page) {
+  await browserPage.waitForSelector('[contenteditable] h1');
   try {
     await browserPage.waitForSelector('[contenteditable] h1', {
       timeout: 20_000,
     });
-
-    // Hides the starter checklist and focuses on the body.
-    // Otherwise the checklist would get in the way, and
-    // after clicking we lose focus on title.
-    if (!options.showChecklist) {
-      const checklist = page.locator('text=Hide this forever');
-      if ((await checklist.count()) > 0) {
-        await browserPage.waitForSelector('text="Hide this forever"');
-        const starterChecklist = browserPage.locator(
-          'text="Hide this forever"'
-        );
-        await starterChecklist.click();
-      }
-    }
-
-    await browserPage.locator('[contenteditable] h1').click();
   } catch {
     browserPage.reload();
     await browserPage.waitForSelector('[contenteditable] h1', {
@@ -54,7 +35,7 @@ export async function setUp(options: SetupOptions = {}) {
           page.waitForNavigation({ url: '/n/*' }),
           clickNewPadButton(),
         ]);
-        await waitForEditorToLoad(page as Page, options);
+        await waitForEditorToLoad();
       }
     },
     { retries: 3 }

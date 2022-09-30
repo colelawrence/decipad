@@ -6,12 +6,7 @@ import {
   NotebookStateProvider,
   useNotebookState,
 } from '@decipad/notebook-state';
-import {
-  ComputerContextProvider,
-  StarterChecklistContextProvider,
-  StarterChecklistInitialState,
-  StarterChecklistStateChange,
-} from '@decipad/react-contexts';
+import { ComputerContextProvider } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useSession } from 'next-auth/react';
 import { FC, useEffect, useState } from 'react';
@@ -35,11 +30,6 @@ export interface NotebookProps {
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
 }
-
-type NotebookStarterChecklistProps = NotebookProps & {
-  checklistState: StarterChecklistInitialState;
-  onChecklistStateChange: (props: StarterChecklistStateChange) => void;
-};
 
 const InsideNotebookState = ({
   notebookId,
@@ -145,27 +135,12 @@ const InsideNotebookState = ({
   return null;
 };
 
-export const Notebook: FC<NotebookStarterChecklistProps> = (props) => {
+export const Notebook: FC<NotebookProps> = (props) => {
   return (
     <NotebookStateProvider>
       <EditorUserInteractionsProvider>
-        <NotebookWithChecklist {...props} />
+        <InsideNotebookState {...props}></InsideNotebookState>
       </EditorUserInteractionsProvider>
     </NotebookStateProvider>
-  );
-};
-
-const NotebookWithChecklist: FC<NotebookStarterChecklistProps> = (props) => {
-  const { loadedFromLocal, loadedFromRemote } = useNotebookState();
-  const { checklistState, onChecklistStateChange, ...rest } = props;
-
-  return (
-    <StarterChecklistContextProvider
-      loaded={loadedFromLocal && loadedFromRemote}
-      initialState={checklistState}
-      onStateChange={onChecklistStateChange}
-    >
-      <InsideNotebookState {...rest}></InsideNotebookState>
-    </StarterChecklistContextProvider>
   );
 };

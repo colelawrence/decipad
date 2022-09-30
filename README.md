@@ -226,7 +226,7 @@ jest apps/backend/tests/<file>.spec.ts --testTimeout=10000 --watch
 If you're also doing client-side stuff that depends on the changes, you will need to run the following commands:
 
 ```bash
-yarn build:graphql
+yarn build:graphql:schema
 ```
 
 This command will build a schema file from your local server schema.

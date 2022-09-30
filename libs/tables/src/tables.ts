@@ -31,7 +31,6 @@ type Arc = typeof arc & {
 const enhancedTables: (keyof EnhancedDataTables)[] = [
   'users',
   'userkeys',
-  'usergoals',
   'permissions',
   'workspaces',
   'pads',
