@@ -8237,13 +8237,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/p-retry@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@types/p-retry/-/p-retry-3.0.1.tgz#44403f405b7b60d108df8ab37d8db81af1ea80f2"
-  integrity sha512-LkZCWg4JxFdQR/nGNZcMiyKAbNG3DKBRS6nn6Hg4dLS82zxkdBJJcvf4zXFvDCEI+e4dZdQX6wreqs9RDGMRfw==
-  dependencies:
-    p-retry "*"
-
 "@types/pad-left@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@types/pad-left/-/pad-left-2.1.1.tgz#17d906fc75804e1cc722da73623f1d978f16a137"
@@ -8425,11 +8418,6 @@
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
-
-"@types/retry@0.12.1":
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.1.tgz#d8f1c0d0dc23afad6dc16a9e993a0865774b4065"
-  integrity sha512-xoDlM2S4ortawSWORYqsdU+2rxdh4LRW9ytc3zmT37RIKQh6IHyKwwtKhKis9ah8ol07DCkZxPt8BBvPjC6v4g==
 
 "@types/rimraf@3.0.2":
   version "3.0.2"
@@ -15360,10 +15348,10 @@ eslint-plugin-react@7.31.8, eslint-plugin-react@^7.23.1, eslint-plugin-react@^7.
     semver "^6.3.0"
     string.prototype.matchall "^4.0.7"
 
-eslint-plugin-testing-library@5.7.0, eslint-plugin-testing-library@^5.0.1:
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.7.0.tgz#08046bce93c63c0d4bf01ec62550130237bb1575"
-  integrity sha512-pI8LKtFiAflBpN4h14vTtfhKqLwtIW40TNhWyw0ckqHm0W/J0VmYtThoxpTAdHrvEWnkALSG1Z8ABBkIncMIHA==
+eslint-plugin-testing-library@5.7.1, eslint-plugin-testing-library@^5.0.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-testing-library/-/eslint-plugin-testing-library-5.7.1.tgz#87852514ad1a2562265108234624ad46c9ede8b1"
+  integrity sha512-oFVtG7zSNowcQgCF9iY8tw/7TbI8m+EzaggaCTTsc220P9pbu+hiqbV2JGA9usmU4hOeuj7qP6YRk3Fo2UHEHg==
   dependencies:
     "@typescript-eslint/utils" "^5.13.0"
 
@@ -23625,14 +23613,6 @@ p-reduce@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/p-reduce/-/p-reduce-2.1.0.tgz#09408da49507c6c274faa31f28df334bc712b64a"
   integrity sha512-2USApvnsutq8uoxZBGbbWM0JIYLiEMJ9RlaN7fAzVNb9OZN0SHjjTTfIcb667XynS5Y1VhwDJVDa72TnPzAYWw==
-
-p-retry@*, p-retry@5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/p-retry/-/p-retry-5.1.1.tgz#1950b9be441474a67f852811c1d4ec955885d2c8"
-  integrity sha512-i69WkEU5ZAL8mrmdmVviWwU+DN+IUF8f4sSJThoJ3z5A7Nn5iuO5ROX3Boye0u+uYQLOSfgFl7SuFZCjlAVbQA==
-  dependencies:
-    "@types/retry" "0.12.1"
-    retry "^0.13.1"
 
 p-retry@^3.0.1:
   version "3.0.1"
