@@ -3,7 +3,7 @@ import { setUp } from './page-utils/Pad';
 import { snapshot } from './utils';
 
 describe('notebook icon', () => {
-  beforeAll(() => setUp());
+  beforeAll(setUp);
 
   it('renders the initial color and icon', async () => {
     const button = page.locator('button[aria-haspopup="dialog"]');

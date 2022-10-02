@@ -9,8 +9,8 @@ import {
 import { snapshot } from './utils';
 
 describe('notebook content', () => {
-  beforeAll(() => setUp());
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   it('starts empty', async () => {
     expect((await page.textContent('[contenteditable] h1'))!.trim()).toBe('');

@@ -1,29 +1,37 @@
-import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
 import { nanoid } from 'nanoid';
-import * as DocTypes from '../types';
+import { H1Element, MyEditor, ParagraphElement } from '@decipad/editor-types';
+import {
+  ELEMENT_H1,
+  ELEMENT_PARAGRAPH,
+  insertNodes,
+  withoutNormalizing,
+} from '@udecode/plate';
 
-export function ensureInitialDocument(doc: YDoc, root: DocTypes.Doc) {
-  doc.transact(() => {
-    if (root.length > 1) {
-      return;
-    }
-    if (root.length < 1) {
-      root.push([
-        new YMap([
-          ['type', 'h1'],
-          ['children', YArray.from([new YMap([['text', new YText()]])])],
-          ['id', nanoid()],
-        ]),
-      ]);
-    }
-    if (root.length < 2) {
-      root.push([
-        new YMap([
-          ['type', 'p'],
-          ['children', YArray.from([new YMap([['text', new YText()]])])],
-          ['id', nanoid()],
-        ]),
-      ]);
-    }
-  });
+export function ensureInitialDocument(editor: MyEditor): void {
+  const { children } = editor;
+  if (children.length > 1) {
+    return;
+  }
+  if (children.length === 0) {
+    withoutNormalizing(editor, () => {
+      insertNodes<H1Element>(
+        editor,
+        {
+          type: ELEMENT_H1,
+          children: [{ text: '' }],
+          id: nanoid(),
+        },
+        { at: [0] }
+      );
+      insertNodes<ParagraphElement>(
+        editor,
+        {
+          type: ELEMENT_PARAGRAPH,
+          children: [{ text: '' }],
+          id: nanoid(),
+        },
+        { at: [1] }
+      );
+    });
+  }
 }

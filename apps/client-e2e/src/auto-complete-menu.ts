@@ -6,8 +6,8 @@ import { snapshot } from './utils';
 
 // eslint-disable-next-line jest/no-disabled-tests
 describe('auto complete menu', () => {
-  beforeAll(() => setUp());
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   it('creates a variable', async () => {
     await createCalculationBlockBelow('MyVar = 68 + 1');

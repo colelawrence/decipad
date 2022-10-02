@@ -13,7 +13,7 @@ import {
 describe('notebook duplicate', () => {
   let padToCopyIndex = -1;
   let padCopyIndex = -1;
-  beforeAll(() => setUp());
+  beforeAll(setUp);
 
   beforeAll(async () => {
     await page.keyboard.type('pad title here');

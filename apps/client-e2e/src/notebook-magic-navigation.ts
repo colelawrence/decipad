@@ -8,7 +8,7 @@ import {
 
 describe('notebook navigation', () => {
   beforeAll(goToPlayground);
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(waitForEditorToLoad);
 
   it('creates some text', async () => {
     await page.keyboard.type('Should you buy a house?');

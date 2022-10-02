@@ -10,14 +10,8 @@ import {
 } from './page-utils/Workspace';
 
 describe('workspace modifications', () => {
-  beforeAll(async () => {
-    await setUp();
-  });
-
-  beforeEach(async () => {
-    // make sure we are in the workspace page
-    await navigateToWorkspacePage();
-  });
+  beforeAll(setUp);
+  beforeEach(navigateToWorkspacePage);
 
   test('creates a new pad and navigates to pad detail', async () => {
     await clickNewPadButton();

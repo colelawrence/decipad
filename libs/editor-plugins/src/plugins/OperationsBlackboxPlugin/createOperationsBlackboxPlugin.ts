@@ -1,19 +1,17 @@
-import { createTPluginFactory } from '@decipad/editor-types';
+import { createOverrideApplyPluginFactory } from '../../pluginFactories';
 
 const logsColor = `
   color: green;
 `;
 
-export const createOperationsBlackboxPlugin = createTPluginFactory({
-  key: 'OPERATIONS_BLACKBOX_PLUGIN',
-  withOverrides: (editor) => {
-    const { apply } = editor;
-
+export const createOperationsBlackboxPlugin = createOverrideApplyPluginFactory({
+  name: 'OPERATIONS_BLACKBOX_PLUGIN',
+  plugin: (editor, apply) => {
     // eslint-disable-next-line no-console
     console.debug('%cInitial Document:', logsColor, editor.children);
 
     // eslint-disable-next-line no-param-reassign
-    editor.apply = (operation) => {
+    return (operation) => {
       const { type } = operation;
 
       // eslint-disable-next-line no-console
@@ -21,7 +19,5 @@ export const createOperationsBlackboxPlugin = createTPluginFactory({
 
       return apply(operation);
     };
-
-    return editor;
   },
 });

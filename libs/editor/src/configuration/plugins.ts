@@ -25,11 +25,11 @@ import {
   createNormalizeImagePlugin,
   createNormalizeLinkPlugin,
   createNormalizeListPlugin,
-  createNormalizeNewParagraphPlugin,
   createNormalizePlainTextBlockPlugin,
   createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
   createNormalizeVoidPlugin,
+  createExitBreakPlugin,
   createOperationsBlackboxPlugin,
   createPlotPlugin,
   createSoftBreakPlugin,
@@ -38,13 +38,13 @@ import {
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
+  createTrailingParagraphPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
   createTAutoformatPlugin,
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
-  ELEMENT_PARAGRAPH,
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
@@ -52,17 +52,13 @@ import {
   createBlockquotePlugin,
   createDeserializeDocxPlugin,
   createDndPlugin,
-  createExitBreakPlugin,
   createHeadingPlugin,
   createListPlugin,
-  createNodeIdPlugin,
   createParagraphPlugin,
   createPlugins,
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
-  createTrailingBlockPlugin,
 } from '@udecode/plate';
-import { nanoid } from 'nanoid';
 import type { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
@@ -80,6 +76,9 @@ export const plugins = (
 ) =>
   createPlugins<MyValue, MyEditor>(
     [
+      // id uniqueness
+      createUniqueElementIdPlugin(),
+
       // basic blocks
       createParagraphPlugin(),
       createBlockquotePlugin(),
@@ -106,9 +105,8 @@ export const plugins = (
       createNormalizeImagePlugin(),
       createNormalizeElementIdPlugin(),
       createNormalizeTextPlugin(),
-      createTrailingBlockPlugin({ type: ELEMENT_PARAGRAPH }),
+      // createTrailingParagraphPlugin(),
       createNormalizeColumnsPlugin(),
-      createNodeIdPlugin({ options: { idCreator: nanoid, reuseId: true } }),
 
       // block manipulation
       createExitBreakPlugin({ options: exitBreakOptions }),
@@ -165,15 +163,12 @@ export const plugins = (
 
       // deserializers
       createDeserializeDocxPlugin(),
-      createJuicePlugin(),
-
-      // id uniqueness
-      createUniqueElementIdPlugin(),
+      createJuicePlugin({}),
 
       // history
       createWithDocSyncHistoryPlugin(),
 
-      createNormalizeNewParagraphPlugin(),
+      createTrailingParagraphPlugin(),
     ],
     {
       components: components(computer),

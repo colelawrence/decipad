@@ -4,8 +4,8 @@ import { waitForEditorToLoad, setUp, focusOnBody } from './page-utils/Pad';
 
 // eslint-disable-next-line jest/no-disabled-tests
 describe.skip('notebook result widget', () => {
-  beforeAll(() => setUp());
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   it('creates an empty result widget', async () => {
     await focusOnBody();

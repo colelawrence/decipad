@@ -40,12 +40,14 @@ services_wait () {
 services_setup () {
   trap "services_teardown" EXIT
 
-  echo " ⌛ ~ starting frontend... ~ "
-  nx serve frontend &
-  SERVICE_PIDS="${SERVICE_PIDS} ${!}"
-
   echo " ⌛ ~ starting backend... ~ "
   nx serve backend &
+  SERVICE_PIDS="${SERVICE_PIDS} ${!}"
+
+  sleep 3
+
+  echo " ⌛ ~ starting frontend... ~ "
+  nx serve frontend &
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
 
   services_wait localhost:3333

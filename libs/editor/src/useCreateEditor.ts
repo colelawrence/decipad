@@ -1,4 +1,5 @@
 import type { Computer } from '@decipad/computer';
+import { DocSyncEditor } from '@decipad/docsync';
 import { useNotebookTitlePlugin } from '@decipad/editor-plugins';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import { UserInteraction } from '@decipad/react-contexts';
@@ -7,7 +8,6 @@ import { Subject } from 'rxjs';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
-  editor?: MyEditor;
   notebookId: string;
   readOnly: boolean;
   computer?: Computer;
@@ -17,14 +17,13 @@ export interface CreateEditorProps {
 }
 
 export const useCreateEditor = ({
-  editor: slateEditor,
   notebookId,
   readOnly = false,
   computer,
   notebookTitle,
   onNotebookTitleChange,
   interactions,
-}: CreateEditorProps) => {
+}: CreateEditorProps): MyEditor | undefined => {
   const notebookTitlePlugin = useNotebookTitlePlugin({
     notebookTitle,
     onNotebookTitleChange,
@@ -40,18 +39,19 @@ export const useCreateEditor = ({
     [computer, interactions, notebookTitlePlugin]
   );
 
-  const editor = useMemo(
-    () =>
-      slateEditor &&
+  const editor = useMemo(() => {
+    const ed =
       editorPlugins &&
       createTPlateEditor({
         id: notebookId,
-        editor: slateEditor,
         plugins: editorPlugins,
         disableCorePlugins: { history: true },
-      }),
-    [slateEditor, editorPlugins, notebookId]
-  );
+      });
+    if (ed) {
+      (ed as DocSyncEditor).isDocSyncEnabled = true;
+    }
+    return ed;
+  }, [editorPlugins, notebookId]);
 
   return editor;
 };

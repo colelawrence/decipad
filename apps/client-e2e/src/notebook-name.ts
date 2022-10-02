@@ -2,7 +2,7 @@ import { timeout } from '@decipad/utils';
 import { getPadName, setUp, waitForEditorToLoad } from './page-utils/Pad';
 
 describe('notebook name', () => {
-  beforeAll(() => setUp());
+  beforeAll(setUp);
 
   test('starts empty', async () => {
     expect(await getPadName()).toBe('');

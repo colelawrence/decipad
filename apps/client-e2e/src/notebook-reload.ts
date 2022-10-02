@@ -6,9 +6,8 @@ import {
 } from './page-utils/Pad';
 
 describe('notebook reload', () => {
-  beforeAll(() => setUp());
-
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   it('type lots of stuff', async () => {
     await focusOnBody();

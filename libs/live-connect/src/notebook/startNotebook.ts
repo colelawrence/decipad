@@ -5,6 +5,7 @@ import { createDocSyncEditor } from '@decipad/docsync';
 import { getDefined } from '@decipad/utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { Computer, IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import { createTPlateEditor } from '@decipad/editor-types';
 import type { Observe, Subscription } from '../types';
 import { liveConnections } from './liveConnections';
 
@@ -42,6 +43,7 @@ export const startNotebook = async (
   const { docId, blockId } = getURLComponents(subscription.params.url);
   const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
+    editor: createTPlateEditor(),
   });
 
   const computer = new Computer();

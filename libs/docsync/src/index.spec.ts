@@ -2,7 +2,7 @@
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
 import { Pad } from '@decipad/backendtypes';
-import { MyEditor } from '@decipad/editor-types';
+import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import fetch from 'jest-fetch-mock';
 import waitForExpect from 'wait-for-expect';
 import { createDocSyncEditor, DocSyncEditor } from '.';
@@ -87,6 +87,7 @@ test('sync many', (ctx) => {
     for (let i = 0; i < replicaCount; i += 1) {
       const editor = createDocSyncEditor(pad.id, {
         connectBc: false,
+        editor: createTPlateEditor(),
       });
       editors.push(editor);
     }

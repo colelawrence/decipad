@@ -7,7 +7,7 @@ waitForExpect.defaults.interval = 1000;
 let link: string;
 
 describe('notebook share', () => {
-  beforeAll(() => setUp());
+  beforeAll(setUp);
 
   test('screenshots the slash commands', async () => {
     await page.keyboard.type('hello world');
@@ -19,6 +19,8 @@ describe('notebook share', () => {
       const calculations = await page.$(linkSelector);
       return expect(calculations).toBeTruthy();
     });
+
+    expect(await page.$$('[contenteditable] p')).toHaveLength(2);
 
     await snapshot(page as Page, 'Notebook: Slash Command');
 

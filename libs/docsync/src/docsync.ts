@@ -9,9 +9,10 @@ import {
 import { Awareness } from 'y-protocols/awareness';
 import { Doc as YDoc } from 'yjs';
 import { MyEditor } from '@decipad/editor-types';
-import { createEditor } from 'slate';
+import { PlateEditor } from '@udecode/plate';
 import { docSyncEditor } from './docSyncEditor';
 import { ensureInitialDocument } from './utils/ensureInitialDocument';
+import { setupUndo } from './setupUndo';
 
 const tokenTimeoutMs = 60 * 1000;
 
@@ -21,6 +22,7 @@ interface DocSyncConnectionParams {
 }
 
 export interface DocSyncOptions {
+  editor: MyEditor;
   readOnly?: boolean;
   authSecret?: string;
   WebSocketPolyfill?: typeof WebSocket;
@@ -50,6 +52,7 @@ async function wsAddress(docId: string): Promise<string> {
 export function createDocSyncEditor(
   docId: string,
   {
+    editor,
     readOnly = false,
     authSecret,
     onError,
@@ -60,6 +63,7 @@ export function createDocSyncEditor(
     connectionParams,
   }: DocSyncOptions
 ) {
+  (editor as PlateEditor).children = [];
   const doc = new YDoc();
   const store = new IndexeddbPersistence(docId, doc);
   const initialTokenTime = Date.now();
@@ -97,9 +101,6 @@ export function createDocSyncEditor(
     awareness = new Awareness(doc);
   }
 
-  // slate editor
-  const editor = createEditor();
-
   // Yjs editor
   const shared = doc.getArray<SyncElement>();
   const yjsEditor = withYjs(editor as MyEditor, shared);
@@ -118,7 +119,7 @@ export function createDocSyncEditor(
   const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
 
   // Sync editor
-  const syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
+  let syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
   syncEditor.destroy = () => {
     destroyed = true;
     store?.destroy();
@@ -132,7 +133,7 @@ export function createDocSyncEditor(
 
   const onLoaded = (source: string) => {
     if (!loadedRemotely && (!ws || source === 'remote')) {
-      ensureInitialDocument(doc, shared);
+      ensureInitialDocument(editor);
     }
     if (source === 'remote') {
       loadedRemotely = true;
@@ -145,5 +146,8 @@ export function createDocSyncEditor(
     }
   };
   syncEditor.onLoaded(onLoaded);
+
+  syncEditor = setupUndo(syncEditor);
+
   return syncEditor;
 }

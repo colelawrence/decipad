@@ -12,8 +12,8 @@ import {
 import { getCaretPosition } from './utils';
 
 describe('notebook calculation block', () => {
-  beforeAll(() => setUp());
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   let lineNo = -1;
 

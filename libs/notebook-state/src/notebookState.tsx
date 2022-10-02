@@ -14,7 +14,10 @@ interface NotebookStateProviderProps {
 const { Provider, useStore } = createContext();
 const LOAD_TIMEOUT_MS = 5000;
 
-const initialState: Omit<NotebookState, 'init' | 'destroy'> = {
+const initialState: Omit<
+  NotebookState,
+  'initComputer' | 'initDocSync' | 'destroy'
+> = {
   syncClientState: 'idle',
   docSyncEditor: undefined,
   computer: undefined,
@@ -28,7 +31,10 @@ const initialState: Omit<NotebookState, 'init' | 'destroy'> = {
 const createStore = () =>
   create<NotebookState>((set, get) => ({
     ...initialState,
-    init: (notebookId: string, options: DocSyncOptions) => {
+    initComputer: () => {
+      set({ computer: new Computer() });
+    },
+    initDocSync: (notebookId: string, options: DocSyncOptions) => {
       // verify that if we have a matching connected docsync instance
       const { docSyncEditor: oldDocSyncEditor, syncClientState } = get();
       if (oldDocSyncEditor) {
@@ -78,7 +84,6 @@ const createStore = () =>
         docSyncEditor,
         notebookHref: window.location.pathname,
         syncClientState: 'created',
-        computer: new Computer(),
         connected: false,
         loadedFromLocal: false,
         loadedFromRemote: false,

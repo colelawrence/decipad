@@ -19,8 +19,8 @@ const getInlineNumberContent = async () => {
 };
 
 describe('notebook inline numbers', () => {
-  beforeAll(() => setUp());
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   let lineNo = -1;
 

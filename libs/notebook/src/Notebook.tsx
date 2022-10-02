@@ -46,37 +46,20 @@ const InsideNotebookState = ({
   const toast = useToast();
   const { data: session } = useSession();
 
-  // DocSync
-
   const {
     docSyncEditor,
     computer,
-    init,
+    initComputer,
+    initDocSync,
     loadedFromRemote,
     timedOutLoadingFromRemote,
     hasLocalChanges,
     destroy,
   } = useNotebookState();
 
-  useEffect(() => {
-    init(notebookId, {
-      authSecret: secret,
-      connectionParams,
-    });
-  }, [init, destroy, notebookId, secret, connectionParams]);
-
-  useEffect(() => {
-    return destroy; // always destroy the editor on unmount
-  }, [destroy]);
-
   const interactions = useEditorUserInteractionsContext();
 
-  // Editor
-  // Needs to be created last so other editor (e.g. docsync editor) wrapping editor functions
-  // (e.g. apply, onChange) can be called with the latest values transformed via plugins. Things
-  // get called from the outside in.
   const editor = useCreateEditor({
-    editor: docSyncEditor,
     notebookId,
     computer,
     readOnly,
@@ -91,6 +74,32 @@ const InsideNotebookState = ({
       onEditor(editor);
     }
   }, [editor, onEditor]);
+
+  useEffect(() => {
+    if (!computer) {
+      initComputer();
+    } else if (!docSyncEditor && editor) {
+      initDocSync(notebookId, {
+        editor,
+        authSecret: secret,
+        connectionParams,
+      });
+    }
+  }, [
+    initComputer,
+    initDocSync,
+    destroy,
+    notebookId,
+    secret,
+    connectionParams,
+    computer,
+    docSyncEditor,
+    editor,
+  ]);
+
+  useEffect(() => {
+    return destroy; // always destroy the editor on unmount
+  }, [destroy]);
 
   // docSync
 

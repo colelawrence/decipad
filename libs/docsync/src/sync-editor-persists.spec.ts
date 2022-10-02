@@ -1,6 +1,7 @@
 import waitForExpect from 'wait-for-expect';
 import { getDefined } from '@decipad/utils';
 import { TElement } from '@udecode/plate';
+import { createTPlateEditor } from '@decipad/editor-types';
 import { createDocSyncEditor, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
@@ -21,6 +22,7 @@ describe('pad editor persistence', () => {
   beforeAll(() => {
     editor = createDocSyncEditor('docid', {
       ws: false,
+      editor: createTPlateEditor(),
     });
     editor.onLoaded(onLoaded);
     editor.onSaved(onSaved);
@@ -104,6 +106,7 @@ describe('pad editor persistence', () => {
     };
     const editor2 = createDocSyncEditor('docid', {
       ws: false,
+      editor: createTPlateEditor(),
     });
     editor2.onLoaded(onLoaded2);
 

@@ -7,11 +7,10 @@ import {
   waitForEditorToLoad,
 } from './page-utils/Pad';
 
-jest.setTimeout(60_000);
-
-describe('notebook input', () => {
-  beforeAll(() => setUp());
-  beforeAll(() => waitForEditorToLoad());
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('notebook input', () => {
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   it('starts empty', async () => {
     expect((await page.textContent('[contenteditable] h1'))!.trim()).toBe('');

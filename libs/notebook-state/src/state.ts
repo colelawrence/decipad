@@ -6,7 +6,8 @@ export interface NotebookState {
   syncClientState: 'idle' | 'created';
   docSyncEditor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
-  init: (notebookId: string, options: DocSyncOptions) => void;
+  initComputer: () => void;
+  initDocSync: (notebookId: string, options: DocSyncOptions) => void;
   destroy: () => void;
   connected: boolean;
   loadedFromLocal: boolean;

@@ -17,7 +17,7 @@ import {
 
 describe('notebook table', () => {
   beforeAll(goToPlayground);
-  beforeAll(() => waitForEditorToLoad());
+  beforeAll(waitForEditorToLoad);
 
   it('creates a table', async () => {
     expect(await page.$('[contenteditable] table')).toBe(null);
