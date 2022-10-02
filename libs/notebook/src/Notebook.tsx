@@ -14,6 +14,7 @@ import {
   EditorUserInteractionsProvider,
   useEditorUserInteractionsContext,
 } from '../../react-contexts/src/editor-user-interactions';
+import { InitialSelection } from './InitialSelection';
 
 export interface NotebookConnectionParams {
   url: string;
@@ -83,6 +84,7 @@ const InsideNotebookState = ({
     onNotebookTitleChange,
     interactions,
   });
+  const loaded = loadedFromRemote || timedOutLoadingFromRemote;
 
   useEffect(() => {
     if (editor) {
@@ -116,18 +118,18 @@ const InsideNotebookState = ({
     }
   }, [editor, hasLocalChanges, toast, toastedWarning, warning]);
 
-  // computer
-
   if (editor) {
     return (
       <ComputerContextProvider computer={computer}>
         <BubbleEditor>
           <Editor
             notebookId={notebookId}
-            loaded={loadedFromRemote || timedOutLoadingFromRemote}
+            loaded={loaded}
             editor={editor}
             readOnly={readOnly}
-          />
+          >
+            <InitialSelection loaded={loaded} editor={editor} />
+          </Editor>
         </BubbleEditor>
       </ComputerContextProvider>
     );

@@ -4,7 +4,7 @@ import {
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
-import { RefObject, useCallback, useRef, useState } from 'react';
+import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
@@ -19,10 +19,12 @@ export interface EditorProps {
   loaded: boolean;
   readOnly: boolean;
   editor: MyEditor;
+  children?: ReactNode;
 }
 
 const InsidePlate = ({
   containerRef,
+  children,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
 }) => {
@@ -33,6 +35,7 @@ const InsidePlate = ({
       <components.NumberTooltip />
       <components.CursorOverlay containerRef={containerRef} />
       <DndPreview />
+      {children}
     </>
   );
 };
