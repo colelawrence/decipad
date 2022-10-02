@@ -1,4 +1,5 @@
 /* eslint-disable jest/expect-expect */
+import waitForExpect from 'wait-for-expect';
 import {
   createCalculationBlockBelow,
   getCodeLineContent,
@@ -86,8 +87,10 @@ describe('notebook inline numbers', () => {
     const line = await getCodeLineContent(lineNo);
     expect(line).toBe('100 + cookies ');
 
-    const resultEl = await getResult(lineNo);
-    const result = await resultEl.textContent();
-    expect(result).toBe('103');
+    await waitForExpect(async () => {
+      const resultEl = await getResult(lineNo);
+      const result = await resultEl.textContent();
+      expect(result).toBe('103');
+    });
   });
 });

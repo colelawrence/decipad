@@ -1,6 +1,7 @@
 import retry from 'p-retry';
 import { Page } from 'playwright-core';
 import { timeout, withTestUser } from '../utils';
+import { signOut } from './Home';
 import { navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
@@ -10,22 +11,11 @@ interface SetupOptions {
 
 export async function waitForEditorToLoad(browserPage = page as Page) {
   await browserPage.waitForSelector('[contenteditable] h1');
-  try {
-    await browserPage.waitForSelector('[contenteditable] h1', {
-      timeout: 20_000,
-    });
-  } catch {
-    browserPage.reload();
-    await browserPage.waitForSelector('[contenteditable] h1', {
-      timeout: 20_000,
-    });
-  }
 }
 
 export async function setUp(options: SetupOptions = {}) {
-  await page.goto('/api/auth/signout');
+  await signOut();
   const { createAndNavigateToNewPad = true } = options;
-  await page.goto('/api/auth/signout');
   const newUser = await withTestUser();
   await retry(
     async () => {
@@ -41,7 +31,7 @@ export async function setUp(options: SetupOptions = {}) {
     { retries: 3 }
   );
   if (createAndNavigateToNewPad) {
-    await page.click('[contenteditable] h1');
+    await page.waitForTimeout(1000);
   }
 
   return newUser;

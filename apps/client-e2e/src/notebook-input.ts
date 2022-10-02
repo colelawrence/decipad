@@ -1,3 +1,4 @@
+import waitForExpect from 'wait-for-expect';
 import { createInputBelow } from './page-utils/Block';
 import {
   focusOnBody,
@@ -29,7 +30,9 @@ describe('notebook input', () => {
     await keyPress('ArrowDown');
     await page.keyboard.type('That foo is %Foo% .');
     await keyPress('Enter');
-    const elem = await page.textContent('text=1,337');
-    expect(elem!.trim()).toBe('1,337');
+    await waitForExpect(async () => {
+      const elem = await page.textContent('text=1,337');
+      return expect(elem!.trim()).toBe('1,337');
+    });
   });
 });

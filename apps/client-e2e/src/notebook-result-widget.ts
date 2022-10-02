@@ -27,12 +27,16 @@ describe.skip('notebook result widget', () => {
     await waitForExpect(async () => {
       expect(await page.locator('button >> span + div').count()).toBe(2);
     });
-    expect(
-      await page.locator('button >> span + div:has-text("Hello")').count()
-    ).toBe(1);
-    expect(
-      await page.locator('button >> span + div:has-text("World")').count()
-    ).toBe(1);
+    await waitForExpect(async () => {
+      expect(
+        await page.locator('button >> span + div:has-text("Hello")').count()
+      ).toBe(1);
+    });
+    await waitForExpect(async () => {
+      expect(
+        await page.locator('button >> span + div:has-text("World")').count()
+      ).toBe(1);
+    });
   });
 
   it('shows the result of a calculation', async () => {

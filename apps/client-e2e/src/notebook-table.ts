@@ -52,7 +52,9 @@ describe('notebook table', () => {
 
   it('can add a new column', async () => {
     await addColumn();
-    expect(await getFromTable(0, 3)).toEqual('Property4');
+    await waitForExpect(async () =>
+      expect(await getFromTable(0, 3)).toEqual('Property4')
+    );
   });
 
   it('can write spaces in a table cell', async () => {
@@ -73,9 +75,10 @@ describe('notebook table', () => {
     await page.press('[role="menuitem"]:has-text("Formula")', 'Enter');
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
-    const codeBlockText = await codeBlock.innerText();
-
-    expect(codeBlockText).toContain('Property3 =');
+    await waitForExpect(async () => {
+      const codeBlockText = await codeBlock.innerText();
+      expect(codeBlockText).toContain('Property3 =');
+    });
 
     // focused on formula
     await waitForExpect(async () => {
@@ -145,5 +148,7 @@ describe('notebook table', () => {
 it('can add a new row', async () => {
   await addRow();
   // get any value from the table, to make sure it has not crashed
-  expect(await getFromTable(1, 3)).toEqual('1');
+  await waitForExpect(async () =>
+    expect(await getFromTable(1, 3)).toEqual('1')
+  );
 });

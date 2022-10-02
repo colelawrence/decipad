@@ -1,3 +1,4 @@
+import waitForExpect from 'wait-for-expect';
 import { createCalculationBlockBelow } from './page-utils/Block';
 import {
   goToPlayground,
@@ -68,8 +69,8 @@ describe('notebook navigation', () => {
     const magic = await page.locator('span[title="42"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
-    await expect(
-      page.locator(`span[title="42"] >> visible=false`)
-    ).toBeTruthy();
+    await waitForExpect(() =>
+      expect(page.locator(`span[title="42"] >> visible=false`)).toBeTruthy()
+    );
   });
 });

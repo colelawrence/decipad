@@ -14,7 +14,7 @@ export async function createInputBelow(identifier: string, value: number) {
 
   await page.click('text=InputInputA value that others can interact with');
 
-  await page.dblclick('text=Input');
+  await page.locator('text=/Input[0-9]+/ >> nth=-1').dblclick();
   await page.keyboard.press('Backspace');
 
   await page.keyboard.type(identifier);

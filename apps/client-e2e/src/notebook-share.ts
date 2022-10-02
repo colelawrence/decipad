@@ -15,8 +15,10 @@ describe('notebook share', () => {
     await page.keyboard.type('/');
 
     const linkSelector = 'text=Calculations';
-    const calculations = await page.$(linkSelector);
-    expect(calculations).toBeTruthy();
+    await waitForExpect(async () => {
+      const calculations = await page.$(linkSelector);
+      return expect(calculations).toBeTruthy();
+    });
 
     await snapshot(page as Page, 'Notebook: Slash Command');
 
@@ -48,7 +50,9 @@ describe('notebook share', () => {
     await waitForEditorToLoad(otherUserPage);
 
     await otherUserPage.waitForSelector('text=hello world');
-    expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(2);
+    await waitForExpect(async () =>
+      expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(2)
+    );
   });
 
   test('the other user can duplicate', async () => {
@@ -58,7 +62,9 @@ describe('notebook share', () => {
     await waitForEditorToLoad(otherUserPage);
     await otherUserPage.waitForSelector('text=hello world');
 
-    expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(2);
+    await waitForExpect(async () =>
+      expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(2)
+    );
   }, 60000);
 
   let incognitoUserPage: Page;
@@ -70,6 +76,8 @@ describe('notebook share', () => {
     await waitForEditorToLoad(incognitoUserPage);
 
     await incognitoUserPage.waitForSelector('text=hello world');
-    expect(await incognitoUserPage.$$('[contenteditable] p')).toHaveLength(2);
+    await waitForExpect(async () =>
+      expect(await incognitoUserPage.$$('[contenteditable] p')).toHaveLength(2)
+    );
   });
 });

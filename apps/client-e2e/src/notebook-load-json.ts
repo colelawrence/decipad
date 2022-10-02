@@ -1,4 +1,5 @@
 import { BrowserContext, Page } from 'playwright';
+import waitForExpect from 'wait-for-expect';
 import {
   getPadName,
   navigateToNotebook,
@@ -44,10 +45,14 @@ describe('notebook load json', () => {
       )
     ).toBeDefined();
 
-    expect(await page.$('text=756,869,701')).toBeDefined();
+    await waitForExpect(async () =>
+      expect(await page.$('text=756,869,701')).toBeDefined()
+    );
     // Magic numbers are delayed
-    expect((await page.$$('text="This is a string"')).length).toBeGreaterThan(
-      0
+    await waitForExpect(async () =>
+      expect((await page.$$('text="This is a string"')).length).toBeGreaterThan(
+        0
+      )
     );
 
     await snapshot(page as Page, 'Notebook: All elements');
