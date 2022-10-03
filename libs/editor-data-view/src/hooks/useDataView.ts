@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ELEMENT_DATA_VIEW_TR,
   MyEditor,
@@ -17,8 +17,14 @@ import {
 } from '@decipad/computer';
 import { findNode, findNodePath } from '@udecode/plate';
 import { Path } from 'slate';
+import { dequal } from 'dequal';
 import { useDataViewActions, useSortColumns } from '.';
 import { AggregationKind, Columns } from '../types';
+
+interface Column {
+  name: string;
+  type: SerializedType;
+}
 
 interface UseDataViewProps {
   editor: MyEditor;
@@ -72,7 +78,7 @@ export const useDataView = ({
 
   const [sortedColumns, setSortedColumns] = useState<Columns | undefined>();
 
-  useEffect(() => {
+  const dataColumns = useMemo((): Column[] | undefined => {
     if (availableColumns) {
       const [names, types] = availableColumns;
       if (types.length !== names.length) {
@@ -81,14 +87,30 @@ export const useDataView = ({
         );
       }
 
-      setDataColumns(
-        types.map((type, index) => ({
-          type,
-          name: names[index],
-        }))
-      );
+      return types.map((type, index) => ({
+        type,
+        name: names[index],
+      }));
     }
-  }, [availableColumns, setDataColumns, sortedColumns]);
+    return undefined;
+  }, [availableColumns]);
+
+  const [previousDataColumns, setPreviousDataColumns] = useState<
+    Column[] | undefined
+  >();
+
+  useEffect(() => {
+    if (dataColumns && !dequal(previousDataColumns, dataColumns)) {
+      setPreviousDataColumns(dataColumns);
+      setDataColumns(dataColumns);
+    }
+  }, [
+    availableColumns,
+    dataColumns,
+    previousDataColumns,
+    setDataColumns,
+    sortedColumns,
+  ]);
 
   const sortColumns = useSortColumns({
     sortedColumns,
