@@ -45,6 +45,7 @@ export { NotebookIconButton } from './NotebookIconButton/NotebookIconButton';
 export { NumberResult } from './NumberResult/NumberResult';
 export { Overlay } from './Overlay/Overlay';
 export { Paragraph } from './Paragraph/Paragraph';
+export { ParagraphPlaceholder } from './ParagraphPlaceholder/ParagraphPlaceholder';
 export { Placeholder } from './Placeholder/Placeholder';
 export * from './placeholders';
 export { PlotFunction } from './PlotFunction/PlotFunction';

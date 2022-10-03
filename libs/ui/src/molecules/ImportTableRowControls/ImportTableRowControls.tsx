@@ -4,9 +4,11 @@ import { FC, useState } from 'react';
 import { MenuItem } from '../../atoms';
 import { Crown, DragHandle } from '../../icons/index';
 import {
+  cssVar,
+  setCssVar,
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
-} from '../../primitives/index';
+} from '../../primitives';
 import { editorLayout } from '../../styles';
 import { MenuList } from '../MenuList/MenuList';
 
@@ -26,6 +28,18 @@ const gridStyles = once(() =>
     justifyContent: 'end',
   })
 );
+
+const dragHandleStyles = css({
+  gridArea: 'handle',
+  cursor: 'grab',
+  width: '16px',
+  borderRadius: '2px',
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
+  ':hover': {
+    background: cssVar('highlightColor'),
+  },
+});
 
 const importTableRowControlsWrapperStyles = css({
   '*:hover > &': {
@@ -55,10 +69,7 @@ export const ImportTableRowControls: FC<ImportTableRowControlsProps> = ({
   };
 
   const menuButton = (
-    <button
-      onClick={() => handleMenuClick()}
-      css={{ gridArea: 'handle', cursor: 'grab', width: '16px' }}
-    >
+    <button onClick={() => handleMenuClick()} css={dragHandleStyles}>
       <DragHandle />
     </button>
   );

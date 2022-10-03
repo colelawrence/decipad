@@ -9,17 +9,15 @@ const placeholderStyles = css({
 
   // overlap content (blinking caret) and placeholder
   display: 'grid',
-  '> span, ::before': {
+  '> span, label': {
     gridArea: '1 / 1',
   },
 
-  '::before': {
+  label: {
     ...p16Regular,
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
     pointerEvents: 'none',
-
-    content: 'attr(aria-placeholder)',
   },
 });
 
@@ -45,7 +43,7 @@ interface ParagraphProps {
    * it is up to the consumer to ensure the placeholder is removed
    * when there is content in the children that it could overlap with.
    */
-  readonly placeholder?: string;
+  readonly placeholder?: JSX.Element | string;
 }
 
 export const Paragraph = ({
@@ -55,11 +53,11 @@ export const Paragraph = ({
   const isBlockActive = useIsBlockActive();
 
   return (
-    <p
-      aria-placeholder={placeholder}
-      css={[styles, isBlockActive && activeStyles]}
-    >
-      <span>{children}</span>
+    <p css={[styles, isBlockActive && activeStyles]}>
+      <label data-testid="paragraph-placeholder" contentEditable={false}>
+        {placeholder}
+      </label>
+      <span data-testid="paragraph-content">{children}</span>
     </p>
   );
 };

@@ -10,8 +10,7 @@ it('renders the children', () => {
 
 it('assigns a given placeholder', () => {
   render(<Paragraph placeholder="text goes here">text</Paragraph>);
-  expect(screen.getByText('text').closest('p')).toHaveAttribute(
-    'aria-placeholder',
+  expect(screen.getByTestId('paragraph-placeholder')).toHaveTextContent(
     'text goes here'
   );
 });

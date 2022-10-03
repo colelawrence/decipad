@@ -82,6 +82,7 @@ export { Pin } from './Pin/Pin';
 export { Placeholder } from './Placeholder/Placeholder';
 export { Plane } from './Plane/Plane';
 export { Plot } from './Plot/Plot';
+export { Plus } from './Plus/Plus';
 export { Quote } from './Quote/Quote';
 export { QuestionMark } from './QuestionMark/QuestionMark';
 export { Refresh } from './Refresh/Refresh';

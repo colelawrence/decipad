@@ -3,13 +3,11 @@ import {
   useEditorSelector,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { Paragraph as UIParagraph } from '@decipad/ui';
+import { Paragraph as UIParagraph, ParagraphPlaceholder } from '@decipad/ui';
 import { getRange, isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { DraggableBlock } from '../block-management';
-
-const PLACEHOLDER_TEXT = 'Type “/” for commands or write text';
 
 const isSelected = (editor: MyEditor, element: MyElement) =>
   !!(
@@ -42,16 +40,13 @@ export const Paragraph: PlateComponent = ({
         !isSelectionExpanded(editor))
   );
 
+  const placeholder =
+    readOnly || !showPlaceHolder ? undefined : <ParagraphPlaceholder />;
+
   return (
     <div {...attributes}>
       <DraggableBlock blockKind="paragraph" element={element}>
-        <UIParagraph
-          placeholder={
-            !readOnly && showPlaceHolder ? PLACEHOLDER_TEXT : undefined
-          }
-        >
-          {children}
-        </UIParagraph>
+        <UIParagraph placeholder={placeholder}>{children}</UIParagraph>
       </DraggableBlock>
     </div>
   );

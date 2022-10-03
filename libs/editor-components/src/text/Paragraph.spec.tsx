@@ -51,9 +51,7 @@ it('shows a placeholder when notebook empty and not selected', async () => {
     }
   );
   const paragraphElement = renderedObject.container.querySelector('p');
-  await waitFor(() =>
-    expect(paragraphElement).toHaveAttribute('aria-placeholder')
-  );
+  await waitFor(() => expect(paragraphElement).toHaveTextContent('Type'));
 });
 
 it('shows a placeholder when empty and selected', async () => {
@@ -71,13 +69,7 @@ it('shows a placeholder when empty and selected', async () => {
     path: findDomNodePath(editor, textElement)!,
     offset: 0,
   });
-  await waitFor(() => expect(paragraphElement).toHaveTextContent(/^$/));
-  await waitFor(() =>
-    expect(paragraphElement).toHaveAttribute(
-      'aria-placeholder',
-      expect.stringMatching(/type/i)
-    )
-  );
+  await waitFor(() => expect(paragraphElement).toHaveTextContent('Type'));
 });
 
 it('does not show a placeholder when not empty', async () => {

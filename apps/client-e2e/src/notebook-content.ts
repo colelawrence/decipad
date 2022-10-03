@@ -13,8 +13,11 @@ describe('notebook content', () => {
   beforeAll(waitForEditorToLoad);
 
   it('starts empty', async () => {
-    expect((await page.textContent('[contenteditable] h1'))!.trim()).toBe('');
-    expect((await page.textContent('[contenteditable] p'))!.trim()).toBe('');
+    const title = '[contenteditable] h1';
+    const paragraph = '[data-testid=paragraph-content]';
+
+    expect((await page.textContent(title))!.trim()).toBe('');
+    expect((await page.textContent(paragraph))!.trim()).toBe('');
   });
 
   it('allows changing the first paragraph on the body', async () => {

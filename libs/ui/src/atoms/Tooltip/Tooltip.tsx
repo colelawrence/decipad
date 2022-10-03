@@ -7,6 +7,7 @@ import {
   Portal,
 } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
+import { noop } from 'lodash';
 import { FC } from 'react';
 import {
   offBlack,
@@ -54,6 +55,7 @@ interface TooltipProps {
 
   readonly variant?: 'normal' | 'small';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
+  readonly hoverOnly?: boolean;
 
   readonly open?: boolean;
   readonly onChangeOpen?: (open: boolean) => void;
@@ -64,6 +66,7 @@ export const Tooltip = ({
   trigger,
   open,
   onChangeOpen,
+  hoverOnly,
   variant,
   side,
 }: TooltipProps): ReturnType<FC> => {
@@ -79,12 +82,22 @@ export const Tooltip = ({
       openDelay={100}
       closeDelay={100}
       open={open && !isDragging}
-      onOpenChange={onChangeOpen}
+      onOpenChange={hoverOnly ? noop : onChangeOpen}
     >
       <Trigger
         onMouseMove={(e) => {
           if (e.buttons) {
             onChangeOpen?.(false);
+          }
+        }}
+        onMouseOut={() => {
+          if (hoverOnly) {
+            onChangeOpen?.(false);
+          }
+        }}
+        onMouseOver={() => {
+          if (hoverOnly) {
+            onChangeOpen?.(true);
           }
         }}
         asChild

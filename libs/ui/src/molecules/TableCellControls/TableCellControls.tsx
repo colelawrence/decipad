@@ -4,11 +4,13 @@ import { forwardRef, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { DragHandle, Trash } from '../../icons/index';
 import {
+  cssVar,
+  setCssVar,
   mouseMovingOverTransitionDelay,
   p12Bold,
   p12Regular,
   shortAnimationDuration,
-} from '../../primitives/index';
+} from '../../primitives';
 import { editorLayout } from '../../styles';
 import { MenuList } from '../MenuList/MenuList';
 
@@ -35,6 +37,18 @@ const gridStyles = once(() =>
   })
 );
 
+const dragHandleStyles = css({
+  gridArea: 'handle',
+  cursor: 'grab',
+  width: '16px',
+  borderRadius: '2px',
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
+  ':hover': {
+    background: cssVar('highlightColor'),
+  },
+});
+
 export const TableCellControls = forwardRef<
   HTMLTableHeaderCellElement,
   TableCellControlsProps
@@ -49,10 +63,7 @@ export const TableCellControls = forwardRef<
   };
 
   const menuButton = (
-    <button
-      onClick={() => handleMenuClick()}
-      css={{ gridArea: 'handle', cursor: 'grab', width: '16px' }}
-    >
+    <button onClick={() => handleMenuClick()} css={dragHandleStyles}>
       <DragHandle />
     </button>
   );

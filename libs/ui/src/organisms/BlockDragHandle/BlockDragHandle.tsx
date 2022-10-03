@@ -3,7 +3,15 @@ import { css } from '@emotion/react';
 import { once } from 'ramda';
 import { FC, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
-import { Delete, Hide, Show, DragHandle, Duplicate, Link } from '../../icons';
+import {
+  Delete,
+  Hide,
+  Show,
+  DragHandle,
+  Plus,
+  Duplicate,
+  Link,
+} from '../../icons';
 import { MenuList } from '../../molecules';
 import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -20,24 +28,43 @@ const gridStyles = once(() =>
   })
 );
 
-const eyeLabelStyles = css(
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
-  {
-    height: '20px',
-    width: '16px',
+const handleButtonStyle = css({
+  borderRadius: '2px',
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-
+  ':hover': {
     background: cssVar('highlightColor'),
-    borderRadius: '2px',
+  },
+});
 
-    '> svg': {
-      height: '100%',
-    },
-  }
-);
+const eyeLabelStyles = css(handleButtonStyle, {
+  height: '20px',
+  width: '16px',
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '> svg': {
+    height: '100%',
+  },
+});
+
+const handleStyle = css(handleButtonStyle, {
+  gridArea: 'handle',
+  cursor: 'grab',
+  height: '20px',
+  width: '16px',
+  marginLeft: '8px',
+});
+
+const plusStyle = css(handleButtonStyle, {
+  gridArea: 'plus',
+  cursor: 'pointer',
+
+  height: '20px',
+  width: '20px',
+});
 
 interface BlockDragHandleProps {
   readonly menuOpen?: boolean;
@@ -75,13 +102,7 @@ export const BlockDragHandle = ({
       onMouseEnter={setHovered}
       onMouseLeave={setNotHovered}
       onClick={() => onDelete !== false && onChangeMenuOpen(!menuOpen)}
-      css={{
-        gridArea: 'handle',
-        cursor: 'grab',
-        height: '20px',
-        width: '16px',
-        marginLeft: '8px',
-      }}
+      css={handleStyle}
     >
       {showEyeLabel && !isHovered ? <EyeLabel /> : <DragHandle />}
     </button>
@@ -98,27 +119,21 @@ export const BlockDragHandle = ({
   );
 
   const plusButton = (
-    <button
-      onClick={onPlus}
-      css={{
-        gridArea: 'plus',
-        cursor: 'pointer',
-
-        height: '20px',
-        width: '20px',
-        borderRadius: '2px',
-
-        color: cssVar('currentTextColor'),
-        backgroundColor: cssVar('highlightColor'),
-      }}
-    >
-      +
+    <button onClick={onPlus} css={plusStyle}>
+      <Plus />
     </button>
   );
 
   return (
     <div css={gridStyles()}>
-      {plusButton}
+      <Tooltip trigger={plusButton} side="bottom" hoverOnly>
+        <span
+          css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
+        >
+          <strong css={css(p12Bold)}>Click</strong> to add block below
+        </span>
+      </Tooltip>
+
       <MenuList
         root
         open={menuOpen}
@@ -151,7 +166,7 @@ export const BlockDragHandle = ({
         )}
       </MenuList>
 
-      <Tooltip trigger={menuButton} side="right">
+      <Tooltip trigger={menuButton} side="bottom" hoverOnly>
         <span
           css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
         >
