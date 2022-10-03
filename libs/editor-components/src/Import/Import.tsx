@@ -79,14 +79,8 @@ export const Import: PlateComponent = ({ attributes, element }) => {
   }, [computer, editor, element, path, result]);
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="paragraph" element={element}>
-        <UIImport
-          url={element.url}
-          fetching={fetching}
-          error={error}
-        ></UIImport>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="paragraph" element={element} {...attributes}>
+      <UIImport url={element.url} fetching={fetching} error={error} />
+    </DraggableBlock>
   );
 };

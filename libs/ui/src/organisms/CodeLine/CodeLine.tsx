@@ -11,34 +11,44 @@ import {
   p14Regular,
   setCssVar,
 } from '../../primitives';
-import { blockAlignment, codeBlock } from '../../styles';
+import { codeBlock } from '../../styles';
 import { isTabularType, isNodeEmpty } from '../../utils';
 import { CodeResultProps } from '../../types';
 
 const { lineHeight } = codeBlock;
 
-const spacingStyles = (variant: CodeLineProps['variant']) =>
-  css({
-    paddingTop:
-      variant === 'standalone' ? blockAlignment.codeLine.paddingTop : undefined,
-  });
-
 const highlightedLineStyles = {
   borderColor: cssVar('strongerHighlightColor'),
 };
 
-const codeLineStyles = (variant: CodeLineProps['variant']) =>
+const codeLineStyles = (
+  variant: CodeLineProps['variant'],
+  hasNext?: boolean,
+  hasPrevious?: boolean
+) =>
   css({
     ...(variant === 'standalone'
       ? {
           border: `1px solid ${cssVar('strongHighlightColor')}`,
-          borderRadius: '10px',
+
           backgroundColor: cssVar('highlightColor'),
           padding: '4px 10px',
         }
       : {
           padding: '0px 10px',
         }),
+
+    // Think this couldn't be done with CSS since one cannot query the next element to influence
+    // the current one, as it would be needed for the effect given by `hasNext`.
+    ...(!hasPrevious
+      ? { borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }
+      : {}),
+    ...(!hasNext
+      ? {
+          borderBottomLeftRadius: '10px',
+          borderBottomRightRadius: '10px',
+        }
+      : {}),
 
     ':hover': highlightedLineStyles,
     position: 'relative',
@@ -119,6 +129,8 @@ interface CodeLineProps {
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onClickedResult?: (arg0: Result.Result) => void;
+  readonly hasNextSibling?: boolean;
+  readonly hasPreviousSibling?: boolean;
 }
 
 export const CodeLine = ({
@@ -131,9 +143,10 @@ export const CodeLine = ({
   onDragStartInlineResult,
   onDragStartCell,
   onClickedResult,
+  hasNextSibling,
+  hasPreviousSibling,
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
-
   const isEmpty = isNodeEmpty(children);
 
   const freshResult = renderPotentiallyExpandedResult({
@@ -148,28 +161,32 @@ export const CodeLine = ({
   );
 
   return (
-    <div css={spacingStyles(variant)} spellCheck={false}>
-      <div css={[codeLineStyles(variant), highlight && highlightedLineStyles]}>
-        <code css={codeStyles(variant)}>{children}</code>
-        {placeholder && isEmpty && (
-          <span css={placeholderStyles} contentEditable={false}>
-            {placeholder}
-          </span>
-        )}
-        <div
-          css={[inlineStyles, grabbing && grabbingStyles]}
-          contentEditable={false}
-          draggable
-          onDragStart={(e) => {
-            onDragStartInlineResult?.(e);
-            setGrabbing(true);
-          }}
-          onDragEnd={() => setGrabbing(false)}
-        >
-          {inline}
-        </div>
-        {expanded}
+    <div
+      css={[
+        codeLineStyles(variant, hasNextSibling, hasPreviousSibling),
+        highlight && highlightedLineStyles,
+      ]}
+      spellCheck={false}
+    >
+      <code css={codeStyles(variant)}>{children}</code>
+      {placeholder && isEmpty && (
+        <span css={placeholderStyles} contentEditable={false}>
+          {placeholder}
+        </span>
+      )}
+      <div
+        css={[inlineStyles, grabbing && grabbingStyles]}
+        contentEditable={false}
+        draggable
+        onDragStart={(e) => {
+          onDragStartInlineResult?.(e);
+          setGrabbing(true);
+        }}
+        onDragEnd={() => setGrabbing(false)}
+      >
+        {inline}
       </div>
+      {expanded}
     </div>
   );
 };

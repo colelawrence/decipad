@@ -62,55 +62,51 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   return (
     (!deleted && (
-      <div
+      <DraggableBlock
+        element={element}
+        blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
+        onDelete={() => {
+          setDeleted(true);
+          onDelete();
+        }}
         {...attributes}
-        contentEditable={true}
         suppressContentEditableWarning
         id={blockId}
       >
-        <DraggableBlock
-          element={element}
-          blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-          onDelete={() => {
-            setDeleted(true);
-            onDelete();
-          }}
-        >
-          <EditorTableContext.Provider value={contextValue}>
-            <TableDndProvider editor={editor} table={element}>
-              <EditorTable
-                onChangeIcon={onSaveIcon}
-                onChangeColor={onSaveColor}
-                onSetCollapsed={onSetCollapsed}
-                icon={(element.icon ?? 'Table') as UserIconKey}
-                color={(element.color ?? 'Catskill') as AvailableSwatchColor}
-                isCollapsed={element.isCollapsed}
-                onAddRow={onAddRow}
-                onAddColumn={onAddColumn}
-                columns={columns}
-                tableWidth={wideTable ? 'WIDE' : 'SLIM'}
-                isSelectingCell={!!selectedCells}
-                hiddenRowCount={
-                  element.isCollapsed
-                    ? Math.max(0, rowCount - MAX_UNCOLLAPSED_TABLE_ROWS)
-                    : 0
-                }
-                smartRow={
-                  <SmartRow
-                    onAggregationTypeNameChange={onChangeColumnAggregation}
-                    aggregationTypeNames={headers.map((h) => h.aggregation)}
-                    tableName={name}
-                    tablePath={tablePath}
-                    columns={columns}
-                  />
-                }
-              >
-                {children}
-              </EditorTable>
-            </TableDndProvider>
-          </EditorTableContext.Provider>
-        </DraggableBlock>
-      </div>
+        <EditorTableContext.Provider value={contextValue}>
+          <TableDndProvider editor={editor} table={element}>
+            <EditorTable
+              onChangeIcon={onSaveIcon}
+              onChangeColor={onSaveColor}
+              onSetCollapsed={onSetCollapsed}
+              icon={(element.icon ?? 'Table') as UserIconKey}
+              color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+              isCollapsed={element.isCollapsed}
+              onAddRow={onAddRow}
+              onAddColumn={onAddColumn}
+              columns={columns}
+              tableWidth={wideTable ? 'WIDE' : 'SLIM'}
+              isSelectingCell={!!selectedCells}
+              hiddenRowCount={
+                element.isCollapsed
+                  ? Math.max(0, rowCount - MAX_UNCOLLAPSED_TABLE_ROWS)
+                  : 0
+              }
+              smartRow={
+                <SmartRow
+                  onAggregationTypeNameChange={onChangeColumnAggregation}
+                  aggregationTypeNames={headers.map((h) => h.aggregation)}
+                  tableName={name}
+                  tablePath={tablePath}
+                  columns={columns}
+                />
+              }
+            >
+              {children}
+            </EditorTable>
+          </TableDndProvider>
+        </EditorTableContext.Provider>
+      </DraggableBlock>
     )) ||
     null
   );

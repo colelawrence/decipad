@@ -8,10 +8,8 @@ export const Heading1: PlateComponent = ({ attributes, children, element }) => {
   }
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="heading1" element={element}>
-        <UIHeading1 Heading="h2">{children}</UIHeading1>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="heading1" element={element} {...attributes}>
+      <UIHeading1 Heading="h2">{children}</UIHeading1>
+    </DraggableBlock>
   );
 };

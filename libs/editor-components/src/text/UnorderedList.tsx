@@ -12,10 +12,8 @@ export const UnorderedList: PlateComponent = ({
   }
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="list" element={element}>
-        <UIUnorderedList>{children}</UIUnorderedList>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="list" element={element} {...attributes}>
+      <UIUnorderedList>{children}</UIUnorderedList>
+    </DraggableBlock>
   );
 };

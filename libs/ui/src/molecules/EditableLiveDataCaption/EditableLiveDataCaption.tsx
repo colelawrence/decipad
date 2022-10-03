@@ -3,7 +3,6 @@ import { Children, FC, PropsWithChildren } from 'react';
 import { Tag } from '../../atoms';
 import * as icons from '../../icons';
 import { cssVar, p16Bold } from '../../primitives';
-import { blockAlignment } from '../../styles';
 import { slimBlockWidth } from '../../styles/editor-layout';
 
 const editableLiveCaptionStyles = css({
@@ -14,7 +13,6 @@ const tableTitleWrapper = css({
   alignItems: 'center',
   display: 'flex',
   gap: '9px',
-  padding: `${blockAlignment.editorTable.paddingTop} 0 12px 0`,
   lineBreak: 'unset',
 });
 

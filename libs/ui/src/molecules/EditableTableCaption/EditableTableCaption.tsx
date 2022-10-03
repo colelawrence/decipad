@@ -5,7 +5,6 @@ import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
 import { FormulasDrawer, ToggleCollapsed } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
-import { blockAlignment } from '../../styles';
 import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
 import { TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
@@ -23,7 +22,6 @@ const tableCaptionInnerStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   gap: '9px',
-  padding: `${blockAlignment.editorTable.paddingTop} 0 12px 0`,
   lineBreak: 'unset',
 });
 

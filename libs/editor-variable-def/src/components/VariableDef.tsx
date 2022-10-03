@@ -3,34 +3,35 @@ import {
   useTextTypeInference,
 } from '@decipad/editor-components';
 import {
-  ELEMENT_CAPTION,
-  ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
   useTEditorRef,
-  VariableDefinitionElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
 import {
+  hasLayoutAncestor,
   assertElementType,
-  getElementUniqueName,
-  insertNodeIntoColumns,
   safeDelete,
   useElementMutatorCallback,
+  wrapIntoColumns,
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
 import {
+  findNode,
   findNodePath,
+  moveNodes,
   getNodeString,
   PlateEditor,
   serializeHtml,
   insertText,
 } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
+import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
-import { nanoid } from 'nanoid';
-import { useCallback, useState } from 'react';
+import { ComponentProps, useCallback, useState } from 'react';
+import { Editor, Path } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -55,42 +56,6 @@ export const VariableDef: PlateComponent = ({
     copy(serializeHtml(editor as PlateEditor, { nodes: [element] }), {
       format: 'text/html',
     });
-  }, [editor, element]);
-
-  const onAdd = useCallback(() => {
-    const at = findNodePath(editor, element);
-    if (at) {
-      insertNodeIntoColumns(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_VARIABLE_DEF,
-          variant: element.variant,
-          children: [
-            {
-              id: nanoid(),
-              type: ELEMENT_CAPTION,
-              children: [
-                {
-                  text: getElementUniqueName(
-                    editor,
-                    ELEMENT_VARIABLE_DEF,
-                    element.variant,
-                    element.variant === 'expression' ? 'Input' : 'Slider'
-                  ),
-                },
-              ],
-            },
-            {
-              id: nanoid(),
-              type: ELEMENT_EXPRESSION,
-              children: [{ text: '' }],
-            },
-          ],
-        } as VariableDefinitionElement,
-        at
-      );
-    }
   }, [editor, element]);
 
   // Slider
@@ -128,6 +93,53 @@ export const VariableDef: PlateComponent = ({
     [editor, element]
   );
 
+  const path = ReactEditor.findPath(editor as ReactEditor, element);
+  // The following line might break if the element was deleted.
+  const isHorizontal = !deleted && hasLayoutAncestor(editor, path);
+
+  const getAxis = useCallback<
+    NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>
+  >(
+    (_, monitor) => ({
+      horizontal: monitor.getItemType() === ELEMENT_VARIABLE_DEF,
+      vertical: !isHorizontal,
+    }),
+    [isHorizontal]
+  );
+
+  const onDrop = useCallback<
+    NonNullable<ComponentProps<typeof DraggableBlock>['onDrop']>
+  >(
+    (item, _, direction) => {
+      if (direction !== 'left' && direction !== 'right') {
+        return defaultMoveNode(editor, item, element.id, direction);
+      }
+
+      Editor.withoutNormalizing(editor as Editor, () => {
+        const dragPath = findNode(editor, {
+          at: [],
+          match: { id: item.id },
+        })?.[1];
+        let dropPath: Path = [];
+
+        if (isHorizontal) {
+          if (direction === 'left') {
+            dropPath = path;
+          }
+          if (direction === 'right') {
+            dropPath = Path.next(path);
+          }
+        } else {
+          dropPath = [...path, direction === 'left' ? 0 : 1];
+          wrapIntoColumns(editor, path);
+        }
+
+        moveNodes(editor, { at: dragPath, to: dropPath });
+      });
+    },
+    [editor, element.id, isHorizontal, path]
+  );
+
   if (deleted) {
     return <></>;
   }
@@ -135,44 +147,43 @@ export const VariableDef: PlateComponent = ({
   const { color } = element.children[0];
 
   return (
-    <div
-      {...attributes}
+    <DraggableBlock
+      blockKind="interactive"
+      element={element}
+      onDelete={onDelete}
+      accept={isHorizontal ? ELEMENT_VARIABLE_DEF : undefined}
+      getAxis={getAxis}
+      onDrop={onDrop}
       contentEditable={true}
       suppressContentEditableWarning
       id={element.id}
+      {...attributes}
     >
-      <DraggableBlock
-        blockKind="interactive"
-        element={element}
+      <VariableEditor
+        variant={element.variant}
         onDelete={onDelete}
+        onCopy={onCopy}
+        onChangeMax={onChangeMax}
+        onChangeMin={onChangeMin}
+        onChangeStep={onChangeStep}
+        max={
+          element.variant === 'slider' ? element.children[2]?.max : undefined
+        }
+        min={
+          element.variant === 'slider' ? element.children[2]?.min : undefined
+        }
+        step={
+          element.variant === 'slider' ? element.children[2]?.step : undefined
+        }
+        color={color as AvailableSwatchColor}
+        readOnly={readOnly}
+        type={element.coerceToType ?? inferredType}
+        onChangeType={onChangeType}
+        value={getNodeString(element.children[1])}
+        onChangeValue={onChangeValue}
       >
-        <VariableEditor
-          variant={element.variant}
-          onDelete={onDelete}
-          onCopy={onCopy}
-          onAdd={onAdd}
-          onChangeMax={onChangeMax}
-          onChangeMin={onChangeMin}
-          onChangeStep={onChangeStep}
-          max={
-            element.variant === 'slider' ? element.children[2]?.max : undefined
-          }
-          min={
-            element.variant === 'slider' ? element.children[2]?.min : undefined
-          }
-          step={
-            element.variant === 'slider' ? element.children[2]?.step : undefined
-          }
-          color={color as AvailableSwatchColor}
-          readOnly={readOnly}
-          type={element.coerceToType ?? inferredType}
-          onChangeType={onChangeType}
-          value={element.children[1] ? getNodeString(element.children[1]) : ''}
-          onChangeValue={onChangeValue}
-        >
-          {children}
-        </VariableEditor>
-      </DraggableBlock>
-    </div>
+        {children}
+      </VariableEditor>
+    </DraggableBlock>
   );
 };

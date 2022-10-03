@@ -1,6 +1,5 @@
 import {
   ELEMENT_CAPTION,
-  ELEMENT_COLUMNS,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
@@ -37,6 +36,10 @@ describe('Variable def expression element', () => {
       plugins,
       editableProps: { scrollSelectionIntoView: noop },
       initialValue: [
+        {
+          type: 'foo',
+          children: [{ text: '' }],
+        },
         {
           type: ELEMENT_VARIABLE_DEF,
           variant: 'expression',
@@ -86,22 +89,7 @@ describe('Variable def expression element', () => {
       pointerEventsCheck: 0,
     });
 
-    expect(editor.children).toHaveLength(0);
-  });
-
-  it('adds a new input element', async () => {
-    const { getByTitle } = render(<Plate {...plateProps} editor={editor} />, {
-      wrapper,
-    });
-
-    await userEvent.click(getByTitle(/add/i), {
-      pointerEventsCheck: 0,
-    });
-
-    expect(editor.children[0].type).toBe(ELEMENT_COLUMNS);
-    expect(editor.children[0].children).toHaveLength(2);
-    expect(editor.children[0].children[0].type).toBe(ELEMENT_VARIABLE_DEF);
-    expect(editor.children[0].children[1].type).toBe(ELEMENT_VARIABLE_DEF);
+    expect(editor.children).toHaveLength(1);
   });
 });
 
@@ -179,20 +167,5 @@ describe('Variable def slider element', () => {
     });
 
     expect(editor.children).toHaveLength(0);
-  });
-
-  it('adds a new input element', async () => {
-    const { getByTitle } = render(<Plate {...plateProps} editor={editor} />, {
-      wrapper,
-    });
-
-    await userEvent.click(getByTitle(/add/i), {
-      pointerEventsCheck: 0,
-    });
-
-    expect(editor.children[0].type).toBe(ELEMENT_COLUMNS);
-    expect(editor.children[0].children).toHaveLength(2);
-    expect(editor.children[0].children[0].type).toBe(ELEMENT_VARIABLE_DEF);
-    expect(editor.children[0].children[1].type).toBe(ELEMENT_VARIABLE_DEF);
   });
 });

@@ -6,16 +6,18 @@ export * from './decorator-kinds';
 
 export * from './mark-kinds';
 import * as markKinds from './mark-kinds';
+import * as elementKindsModule from './element-kinds';
 export { markKinds };
 
-import * as elementKinds from './element-kinds';
 import type { TableCellType } from './table';
 
 export type MarkKind = typeof markKinds[keyof typeof markKinds];
 
 export * from './decorator-kinds';
 export * from './element-kinds';
-export type ElementKind = typeof elementKinds[keyof typeof elementKinds];
+export const elementKinds = Object.values(elementKindsModule);
+export type ElementKind =
+  typeof elementKindsModule[keyof typeof elementKindsModule];
 
 export * from './interactive-elements';
 export * from './value';
@@ -27,9 +29,9 @@ export * from './nodes';
 export * from './plate';
 
 export const alwaysWritableElementTypes = [
-  elementKinds.ELEMENT_TABLE,
-  elementKinds.ELEMENT_VARIABLE_DEF,
-  elementKinds.ELEMENT_COLUMNS,
+  elementKindsModule.ELEMENT_TABLE,
+  elementKindsModule.ELEMENT_VARIABLE_DEF,
+  elementKindsModule.ELEMENT_COLUMNS,
 ];
 
 export const allElementKinds: readonly string[] = Object.freeze(

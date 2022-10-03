@@ -4,18 +4,14 @@ import { ReactNode } from 'react';
 import { cssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
-const { paddingTop } = blockAlignment.heading1;
-const paddingBottom = '16px';
 const styles = css(blockAlignment.heading1.typography, {
-  padding: `${paddingTop} 0 ${paddingBottom}`,
   wordBreak: 'break-word',
 });
 
-const topClipInset = `calc(${paddingTop} - ${paddingBottom})`;
 const activeStyles = css({
   backgroundColor: cssVar('highlightColor'),
   boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
-  clipPath: `inset(${topClipInset} -8px 0 -8px round 8px)`,
+  clipPath: `inset(0 -8px 0 -8px round 8px)`,
 });
 
 interface Heading1Props {

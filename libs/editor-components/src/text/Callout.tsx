@@ -20,17 +20,15 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
   const saveColor = useElementMutatorCallback(editor, element, 'color');
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="callout" element={element}>
-        <UICallout
-          icon={element.icon as UserIconKey}
-          color={element.color as AvailableSwatchColor}
-          saveIcon={saveIcon}
-          saveColor={saveColor}
-        >
-          {children}
-        </UICallout>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="callout" element={element} {...attributes}>
+      <UICallout
+        icon={element.icon as UserIconKey}
+        color={element.color as AvailableSwatchColor}
+        saveIcon={saveIcon}
+        saveColor={saveColor}
+      >
+        {children}
+      </UICallout>
+    </DraggableBlock>
   );
 };

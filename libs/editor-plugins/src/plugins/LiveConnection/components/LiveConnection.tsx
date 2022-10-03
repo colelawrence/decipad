@@ -98,14 +98,12 @@ const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="editorTable" element={element}>
-        <BlockErrorBoundary element={element}>
-          {children}
-          <LiveConnectionInner element={element} />
-        </BlockErrorBoundary>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="editorTable" element={element} {...attributes}>
+      <BlockErrorBoundary element={element}>
+        {children}
+        <LiveConnectionInner element={element} />
+      </BlockErrorBoundary>
+    </DraggableBlock>
   );
 };
 

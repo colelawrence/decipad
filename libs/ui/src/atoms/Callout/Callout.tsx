@@ -11,7 +11,6 @@ import { AvailableSwatchColor, baseSwatches, UserIconKey } from '../../utils';
 const { callout } = blockAlignment;
 
 const verticalPadding = '12px';
-const verticalMargin = `calc(${callout.paddingTop} - ${verticalPadding})`;
 
 const styles = css(
   callout.typography,
@@ -23,7 +22,7 @@ const styles = css(
     gridTemplateColumns: '16px 1fr',
     gridGap: '16px',
 
-    margin: `${verticalMargin} 0 0`,
+    margin: `0`,
     padding: `${verticalPadding} 16px`,
   }
 );

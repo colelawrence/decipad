@@ -3,10 +3,8 @@ import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { CellValueType } from '@decipad/editor-types';
 import { noop } from 'lodash';
 import { useSelected } from 'slate-react';
-import { AddNew } from '../../atoms';
 import { CellEditor } from '../../molecules';
 import { Ellipsis, Virus } from '../../icons';
-import { blockAlignment } from '../../styles';
 import {
   offBlack,
   cssVar,
@@ -20,12 +18,6 @@ import { VariableEditorMenu } from '..';
 import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
 
 const leftBarSize = 6;
-
-const spacingStyles = css({
-  display: 'flex',
-  justifyContent: 'center',
-  margin: `${blockAlignment.interactive.paddingTop} 0`,
-});
 
 const wrapperStyles = (color: string) =>
   css({
@@ -84,12 +76,6 @@ const buttonWrapperStyles = css({
   },
 });
 
-const addNewWrapperStyles = css({
-  display: 'flex',
-  justifyContent: 'center',
-  marginLeft: '12px',
-});
-
 const variableNameStyles = (
   props: Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>
 ) =>
@@ -120,8 +106,7 @@ const variableNameStyles = (
   });
 
 interface VariableEditorProps
-  extends Pick<ComponentProps<typeof AddNew>, 'onAdd'>,
-    Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
+  extends Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
   children?: ReactNode;
   color?: AvailableSwatchColor;
   readOnly?: boolean;
@@ -135,7 +120,6 @@ interface VariableEditorProps
 
 export const VariableEditor = ({
   children,
-  onAdd,
   readOnly = false,
   color = 'Sulu',
   type,
@@ -152,63 +136,56 @@ export const VariableEditor = ({
   const selected = useSelected();
 
   return (
-    <div css={spacingStyles}>
-      <div
-        css={wrapperStyles(
-          menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
-        )}
-      >
-        <div css={widgetWrapperStyles}>
-          <div css={headerWrapperStyles}>
-            <>
-              <div
-                css={variableNameStyles({
-                  variant: menuProps.variant || 'expression',
-                })}
-              >
-                {childrenArray[0]}
-              </div>
-              {!readOnly && menuProps.variant !== 'display' && (
-                <span contentEditable={false} css={iconWrapperStyles}>
-                  <Icon />
-                </span>
-              )}
-              <div contentEditable={false} css={iconWrapperStyles}>
-                {!readOnly && (
-                  // TS can't tell which variant of the union type that composes VariableEditorMenu
-                  // is being used at any given moment but we're using these type definitions on
-                  // VariableEditor's typings, so we know things will be ok in the end, we just need
-                  // TS to shut up.
-                  <VariableEditorMenu
-                    {...(menuProps as ComponentProps<
-                      typeof VariableEditorMenu
-                    >)}
-                    trigger={
-                      <button css={buttonWrapperStyles}>
-                        <Ellipsis />
-                      </button>
-                    }
-                    type={type}
-                    onChangeType={onChangeType}
-                  />
-                )}
-              </div>
-            </>
-          </div>
-          {menuProps.variant !== 'display' && (
-            <CellEditor
-              type={type}
-              value={value}
-              onChangeValue={onChangeValue}
-              focused={selected}
+    <div
+      css={wrapperStyles(
+        menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
+      )}
+    >
+      <div css={widgetWrapperStyles}>
+        <div css={headerWrapperStyles}>
+          <>
+            <div
+              css={variableNameStyles({
+                variant: menuProps.variant || 'expression',
+              })}
             >
-              {childrenArray.slice(1)}
-            </CellEditor>
-          )}
+              {childrenArray[0]}
+            </div>
+            {!readOnly && menuProps.variant !== 'display' && (
+              <span contentEditable={false} css={iconWrapperStyles}>
+                <Icon />
+              </span>
+            )}
+            <div contentEditable={false} css={iconWrapperStyles}>
+              {!readOnly && (
+                // TS can't tell which variant of the union type that composes VariableEditorMenu
+                // is being used at any given moment but we're using these type definitions on
+                // VariableEditor's typings, so we know things will be ok in the end, we just need
+                // TS to shut up.
+                <VariableEditorMenu
+                  {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
+                  trigger={
+                    <button css={buttonWrapperStyles}>
+                      <Ellipsis />
+                    </button>
+                  }
+                  type={type}
+                  onChangeType={onChangeType}
+                />
+              )}
+            </div>
+          </>
         </div>
-      </div>
-      <div css={addNewWrapperStyles} contentEditable={false}>
-        {!readOnly && <AddNew onAdd={onAdd}></AddNew>}
+        {menuProps.variant !== 'display' && (
+          <CellEditor
+            type={type}
+            value={value}
+            onChangeValue={onChangeValue}
+            focused={selected}
+          >
+            {childrenArray.slice(1)}
+          </CellEditor>
+        )}
       </div>
     </div>
   );

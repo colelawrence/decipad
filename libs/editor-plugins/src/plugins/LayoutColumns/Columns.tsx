@@ -11,10 +11,8 @@ export const Columns: PlateComponent = ({ attributes, children, element }) => {
   }
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="interactive" element={element}>
-        <EditorColumns>{children}</EditorColumns>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="columns" element={element} {...attributes}>
+      <EditorColumns>{children}</EditorColumns>
+    </DraggableBlock>
   );
 };

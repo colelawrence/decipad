@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { EditorTitle } from '@decipad/ui';
+import { EditorBlock, EditorTitle } from '@decipad/ui';
 import { isElementEmpty } from '@udecode/plate';
 
 // TODO Title should probably not be a part of the editor in the first place
@@ -17,7 +17,11 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
   const readOnly = useIsEditorReadOnly();
 
   return (
-    <div {...attributes} contentEditable={readOnly ? false : undefined}>
+    <EditorBlock
+      blockKind="title"
+      {...attributes}
+      contentEditable={readOnly ? false : undefined}
+    >
       <EditorTitle
         Heading="h1"
         placeholder={
@@ -28,6 +32,6 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
       >
         {children}
       </EditorTitle>
-    </div>
+    </EditorBlock>
   );
 };

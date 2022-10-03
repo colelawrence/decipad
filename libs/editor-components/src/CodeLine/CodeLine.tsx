@@ -8,17 +8,25 @@ import {
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_DISPLAY,
+  MyElement,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useResult } from '@decipad/react-contexts';
+import { useEditorChangeState, useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { CodeLine as UICodeLine } from '@decipad/ui';
-import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
+import {
+  getNodeString,
+  findNodePath,
+  insertNodes,
+  getNextNode,
+  isElement,
+  getPreviousNode,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { ReactEditor, useSelected } from 'slate-react';
 import { useCallback, useMemo } from 'react';
-import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
@@ -33,7 +41,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   }
 
   const selected = useSelected();
-  const editor = useTEditorRef();
 
   const { id: lineId } = element;
 
@@ -42,6 +49,23 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const codeLineContent = getNodeString(element);
 
+  const siblingCodeLines = useEditorChangeState(
+    (editor) => ({
+      hasNext:
+        getNextNode<MyElement>(editor, {
+          at: ReactEditor.findPath(editor as ReactEditor, element),
+          match: isElement,
+        })?.[0]?.type === ELEMENT_CODE_LINE,
+      hasPrevious:
+        getPreviousNode<MyElement>(editor, {
+          at: ReactEditor.findPath(editor as ReactEditor, element),
+          match: isElement,
+        })?.[0]?.type === ELEMENT_CODE_LINE,
+    }),
+    { hasNext: false, hasPrevious: false }
+  );
+
+  const editor = useTEditorRef();
   useCodeLineClickReference(editor, selected, codeLineContent);
 
   const onClickedResult = useCallback(
@@ -76,23 +100,28 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   );
 
   return (
-    <div {...attributes} id={lineId}>
-      <DraggableBlock blockKind="codeLine" element={element}>
-        <UICodeLine
-          highlight={selected}
-          result={lineResult?.result}
-          placeholder="Distance = 60 km/h * Time"
-          syntaxError={syntaxError}
-          onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
-          onDragStartCell={onDragStartTableCellResult(editor)}
-          onClickedResult={
-            isFlagEnabled('RESULT_WIDGET') ? onClickedResult : undefined
-          }
-        >
-          {children}
-        </UICodeLine>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock
+      blockKind="codeLine"
+      element={element}
+      {...attributes}
+      id={lineId}
+    >
+      <UICodeLine
+        highlight={selected}
+        result={lineResult?.result}
+        placeholder="Distance = 60 km/h * Time"
+        syntaxError={syntaxError}
+        onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
+        onDragStartCell={onDragStartTableCellResult(editor)}
+        onClickedResult={
+          isFlagEnabled('RESULT_WIDGET') ? onClickedResult : undefined
+        }
+        hasNextSibling={siblingCodeLines?.hasNext}
+        hasPreviousSibling={siblingCodeLines?.hasPrevious}
+      >
+        {children}
+      </UICodeLine>
+    </DraggableBlock>
   );
 };
 

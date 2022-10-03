@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useState,
   useRef,
 } from 'react';
 import {
@@ -128,4 +129,26 @@ export function useEditorSelector<T>(
     undefined,
     selector
   );
+}
+
+export function useEditorChangeState<T>(
+  selector: Parameters<typeof useEditorChange<T>>[1],
+  initialState: T,
+  options: Parameters<typeof useEditorChange<T>>[2] = {}
+) {
+  const [value, setValue] = useState<T>(initialState);
+  useEditorChange<T>(
+    useCallback<Parameters<typeof useEditorChange<T>>[0]>(
+      (newValue) => {
+        if (!dequal(value, newValue)) {
+          setValue(newValue);
+        }
+      },
+      [value]
+    ),
+    selector,
+    options
+  );
+
+  return value;
 }

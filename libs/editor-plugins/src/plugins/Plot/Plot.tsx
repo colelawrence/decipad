@@ -31,26 +31,29 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
 
   return (
-    <div {...attributes}>
-      <div contentEditable={false}>
-        {children}
-        <DraggableBlock element={element} blockKind="plot">
-          <PlotBlock
-            readOnly={readOnly}
-            plotParams={plotParams as unknown as PlotParamsProps}
-            result={
-              spec &&
-              data && {
-                spec,
-                data,
-              }
+    <DraggableBlock
+      element={element}
+      blockKind="plot"
+      contentEditable={false}
+      {...attributes}
+    >
+      {children}
+      <DraggableBlock element={element} blockKind="plot">
+        <PlotBlock
+          readOnly={readOnly}
+          plotParams={plotParams as unknown as PlotParamsProps}
+          result={
+            spec &&
+            data && {
+              spec,
+              data,
             }
-            title={element.title || DEFAULT_TITLE}
-            onTitleChange={onTitleChange}
-          />
-        </DraggableBlock>
-      </div>
-    </div>
+          }
+          title={element.title || DEFAULT_TITLE}
+          onTitleChange={onTitleChange}
+        />
+      </DraggableBlock>
+    </DraggableBlock>
   );
 };
 

@@ -1,4 +1,5 @@
 import {
+  display,
   h1,
   h2,
   p14Medium,
@@ -6,85 +7,55 @@ import {
   p8Regular,
   TypographyStyles,
 } from '../primitives';
-import { slimBlockWidth, wideBlockWidth } from './editor-layout';
 
 interface StyleData {
-  paddingTop: string;
+  spacingTop?: string;
+  spacingBottom?: string;
   typography?: TypographyStyles;
-  desiredWidth: number;
-  height?: string;
 }
 
+export const title: StyleData = {
+  typography: display,
+};
 export const paragraph: StyleData = {
-  paddingTop: '20px',
   typography: p16Regular,
-  desiredWidth: slimBlockWidth,
 };
 export const blockquote: StyleData = {
-  paddingTop: '40px',
   typography: p16Regular,
-  desiredWidth: slimBlockWidth,
 };
 export const callout: StyleData = {
-  paddingTop: '40px',
   typography: p14Medium,
-  desiredWidth: slimBlockWidth,
 };
 
 export const media: StyleData = {
-  paddingTop: '40px',
   typography: p14Medium,
-  desiredWidth: slimBlockWidth,
 };
 
 export const heading1: StyleData = {
-  paddingTop: '40px',
   typography: h1,
-  desiredWidth: slimBlockWidth,
 };
 export const heading2: StyleData = {
-  paddingTop: '40px',
   typography: h2,
-  desiredWidth: slimBlockWidth,
 };
 export const list: StyleData = {
-  paddingTop: '20px',
   typography: p16Regular,
-  desiredWidth: slimBlockWidth,
 };
-export const codeBlock: StyleData = {
-  paddingTop: '16px',
-  desiredWidth: wideBlockWidth,
-};
-export const codeLine: StyleData = {
-  paddingTop: '16px',
-  desiredWidth: wideBlockWidth,
-};
+export const codeLine: StyleData = {};
 export const editorTable: StyleData = {
-  paddingTop: '40px',
   typography: h2,
-  desiredWidth: slimBlockWidth,
 };
 export const editorWideTable: StyleData = {
-  paddingTop: '40px',
   typography: h2,
-  desiredWidth: wideBlockWidth,
 };
-export const plot: StyleData = {
-  paddingTop: '16px',
-  desiredWidth: wideBlockWidth,
-};
+export const plot: StyleData = {};
 export const interactive: StyleData = {
-  paddingTop: '40px',
-  desiredWidth: wideBlockWidth,
+  typography: p16Regular,
 };
 export const divider: StyleData = {
-  paddingTop: '24px',
   typography: p8Regular,
-  desiredWidth: slimBlockWidth,
 };
-export const dividerBlock: StyleData = {
-  paddingTop: '28px',
-  desiredWidth: slimBlockWidth,
-  height: '48px',
+export const dividerBlock: StyleData = {};
+export const columns: StyleData = {
+  spacingTop: '0',
+  spacingBottom: '0',
 };

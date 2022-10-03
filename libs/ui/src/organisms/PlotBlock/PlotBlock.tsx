@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import type { ComponentProps } from 'react';
 import { CellInput, ErrorMessage } from '../../atoms';
-import { blockAlignment } from '../../styles';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
 import { Plot as PlotIcon } from '../../icons';
@@ -20,7 +19,6 @@ const plotTitleStyles = css({
 });
 
 const plotBlockStyles = css({
-  padding: `${blockAlignment.plot.paddingTop} 0`,
   display: 'grid',
   rowGap: '16px',
 });

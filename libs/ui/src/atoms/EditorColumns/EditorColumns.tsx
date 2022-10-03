@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Children, FC } from 'react';
-import { smallestMobile } from '../../primitives';
+import { slimBlockWidth } from '../../styles/editor-layout';
 
 const styles = css({
   display: 'flex',
@@ -10,7 +10,7 @@ const styles = css({
 
 const itemStyles = css({
   flexGrow: 1,
-  flexBasis: `calc((${smallestMobile.landscape.width}px - 100%) * 999)`,
+  flexBasis: `calc((${slimBlockWidth}px - 100%) * 999)`,
 });
 
 export const EditorColumns: FC<React.PropsWithChildren<unknown>> = ({

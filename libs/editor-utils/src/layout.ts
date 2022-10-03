@@ -21,6 +21,20 @@ export const hasLayoutAncestor = (editor: MyEditor, path: Path): boolean => {
   });
 };
 
+export const wrapIntoColumns = (editor: MyEditor, path: Path) => {
+  const hasLayoutAncestorElement = hasLayoutAncestor(editor, path);
+  if (!hasLayoutAncestorElement) {
+    wrapNodes(
+      editor,
+      {
+        id: nanoid(),
+        type: ELEMENT_COLUMNS,
+      } as ColumnsElement,
+      { at: path }
+    );
+  }
+};
+
 export const insertNodeIntoColumns = (
   editor: MyEditor,
   node: MyElementOrText,
@@ -29,14 +43,7 @@ export const insertNodeIntoColumns = (
   withoutNormalizing(editor, () => {
     const hasLayoutAncestorElement = hasLayoutAncestor(editor, path);
     if (!hasLayoutAncestorElement) {
-      wrapNodes(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_COLUMNS,
-        } as ColumnsElement,
-        { at: path }
-      );
+      wrapIntoColumns(editor, path);
     }
 
     insertNodes(editor, node, {

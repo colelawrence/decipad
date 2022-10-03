@@ -1,0 +1,329 @@
+import {
+  elementKinds,
+  MyEditor,
+  useTEditorRef,
+  MyElement,
+  ElementKind,
+} from '@decipad/editor-types';
+import {
+  findNode,
+  focusEditor,
+  moveNodes,
+  useDragNode,
+  UseDropNodeOptions,
+} from '@udecode/plate';
+import { useState } from 'react';
+import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
+import { Path } from 'slate';
+import { ReactEditor } from 'slate-react';
+
+export declare type DropDirection =
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right'
+  | undefined;
+
+type ChangeDropDirection = (direction: DropDirection) => void;
+
+interface DragItemNode {
+  id: string;
+  type: ElementKind;
+  getPath: () => Path;
+  [key: string]: unknown;
+}
+
+interface Axis {
+  horizontal?: boolean;
+  vertical?: boolean;
+}
+
+export interface UseDndNodeOptions extends Pick<UseDropNodeOptions, 'nodeRef'> {
+  accept?: UseDropNodeOptions['accept'];
+  element: MyElement;
+  previewRef?: any;
+  getAxis?: (
+    item: DragItemNode,
+    monitor: DropTargetMonitor<DragItemNode>
+  ) => Axis;
+  onDrop?: (
+    item: DragItemNode,
+    monitor: DropTargetMonitor<DragItemNode>,
+    direction: DropDirection
+  ) => void;
+}
+
+const DEFAULT_AXIS: Axis = { horizontal: false, vertical: true };
+
+export const useDnd = ({
+  accept = elementKinds,
+  nodeRef,
+  element,
+  previewRef = nodeRef,
+  getAxis = () => DEFAULT_AXIS,
+  onDrop,
+}: UseDndNodeOptions) => {
+  const { id, type } = element;
+
+  const editor = useTEditorRef();
+
+  const [dropLine, setDropLine] = useState<DropDirection>();
+
+  const [{ isDragging }, dragRef, preview] = useDragNode(editor, {
+    id,
+    type,
+    item: () => ({
+      id,
+      type,
+      // The `item` object is set only once when the component renders so we need `getPath` to be
+      // a function to account for path changes.
+      getPath: () => ReactEditor.findPath(editor as ReactEditor, element),
+    }),
+  });
+
+  const [{ canDrop, isOver }, drop] = useDrop<
+    DragItemNode,
+    unknown,
+    { canDrop: boolean; isOver: boolean }
+  >(
+    {
+      accept,
+      drop: (item, monitor) => {
+        onDropNode(editor, {
+          id,
+          dragItem: item,
+          monitor,
+          onDrop,
+          direction: getDirection({
+            dragItem: item,
+            monitor,
+            nodeRef,
+            id,
+            axis: getAxis(item, monitor),
+          }),
+        });
+      },
+      collect: (monitor) => ({
+        canDrop: monitor.canDrop(),
+        isOver: monitor.isOver(),
+      }),
+      hover: (item: DragItemNode, monitor: DropTargetMonitor) => {
+        onHoverNode({
+          nodeRef,
+          id,
+          dropLine,
+          onChangeDropLine: setDropLine,
+          dragItem: item,
+          monitor,
+          axis: getAxis(item, monitor),
+        });
+      },
+      canDrop: (item, monitor) => {
+        return !!getDirection({
+          dragItem: item,
+          monitor,
+          nodeRef,
+          id,
+          axis: getAxis(item, monitor),
+        });
+      },
+    },
+    [getAxis, id, onDrop, type]
+  );
+
+  if (previewRef) {
+    drop(nodeRef);
+    preview(previewRef);
+  } else {
+    preview(drop(nodeRef));
+  }
+
+  if (!isOver && dropLine) {
+    // Cleanup if dragged item is not over this drop target anymore
+    setDropLine(undefined);
+  }
+
+  return {
+    canDrop,
+    isDragging,
+    isOver,
+    dropLine,
+    dragRef,
+  };
+};
+
+export const onDropNode = (
+  editor: MyEditor,
+  {
+    id,
+    dragItem,
+    monitor,
+    onDrop,
+    direction,
+  }: {
+    id: MyElement['id'];
+    dragItem: DragItemNode;
+    monitor: DropTargetMonitor;
+    direction: DropDirection;
+  } & Pick<UseDndNodeOptions, 'onDrop'>
+) => {
+  if (!direction || monitor.didDrop()) {
+    // No direction or a nested target has already handled the drop.
+    return;
+  }
+
+  focusEditor(editor);
+
+  onDrop?.(dragItem, monitor, direction) ??
+    defaultMoveNode(editor, dragItem, id, direction);
+};
+
+export const defaultMoveNode = (
+  editor: MyEditor,
+  dragItem: DragItemNode,
+  id: MyElement['id'],
+  direction: DropDirection
+) => {
+  const dragPath = dragItem.getPath();
+  let dropPath: Path | undefined;
+
+  if (direction === 'bottom') {
+    dropPath = findNode(editor, { at: [], match: { id } })?.[1];
+    if (!dropPath) return;
+
+    if (Path.equals(dragPath, Path.next(dropPath))) return;
+  }
+
+  if (direction === 'top') {
+    const nodePath = findNode(editor, { at: [], match: { id } })?.[1];
+
+    if (!nodePath) return;
+    dropPath = [...nodePath.slice(0, -1), nodePath[nodePath.length - 1] - 1];
+
+    if (Path.equals(dragPath, dropPath)) return;
+  }
+
+  if (!dropPath) {
+    return;
+  }
+
+  const before =
+    Path.isBefore(dragPath, dropPath) && Path.isSibling(dragPath, dropPath);
+  const to = before ? dropPath : Path.next(dropPath);
+
+  moveNodes(editor, {
+    at: dragPath,
+    to,
+  });
+};
+
+const onHoverNode = ({
+  axis,
+  dragItem,
+  dropLine,
+  monitor,
+  onChangeDropLine,
+  id,
+  nodeRef,
+}: {
+  axis: Axis;
+  dragItem: DragItemNode;
+  dropLine: DropDirection;
+  monitor: DropTargetMonitor;
+  onChangeDropLine: ChangeDropDirection;
+} & Pick<UseDndNodeOptions, 'nodeRef'> &
+  Pick<MyElement, 'id'>) => {
+  const isOverCurrent = monitor.isOver({ shallow: true });
+
+  // The `onHoverNode` method is called even if `canDrop()` is false, so we need to double check if
+  // it can be dropped before doing any side effects.
+  if (!monitor.canDrop()) {
+    onChangeDropLine(undefined);
+    if (isOverCurrent) {
+      // eslint-disable-next-line no-param-reassign
+      dragItem.direction = undefined;
+    }
+    return;
+  }
+
+  const direction = getDirection({
+    dragItem,
+    monitor,
+    nodeRef,
+    id,
+    axis,
+  });
+
+  if (direction !== dropLine) {
+    onChangeDropLine(direction);
+  }
+
+  if (!isOverCurrent && dragItem.direction) {
+    onChangeDropLine(undefined);
+  }
+
+  if (isOverCurrent) {
+    // HACK: In case of nested drop targets with available directions, it avoids showing them all.
+    // By keeping track of the inner-most hovered drop target's direction, we can guarantee only
+    // this direction will be displayed to the user. Only when this target has no drop direction
+    // available will the outer target directions be displayed.
+    // eslint-disable-next-line no-param-reassign
+    dragItem.direction = direction;
+  }
+};
+
+export const getDirection = ({
+  dragItem,
+  id,
+  monitor,
+  nodeRef,
+  axis,
+}: {
+  dragItem: DragItemNode;
+  id: string;
+  monitor: DropTargetMonitor;
+  nodeRef: any;
+  axis: Axis;
+}): DropDirection => {
+  if (!nodeRef.current) return;
+
+  const dragId = dragItem.id;
+
+  // Don't replace items with themselves
+  if (dragId === id) return;
+
+  // Determine rectangle on screen
+  const hoverBoundingRect = nodeRef.current?.getBoundingClientRect();
+
+  // Get vertical middle
+  const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+  // Determine mouse position
+  const clientOffset = monitor.getClientOffset();
+  if (!clientOffset) return;
+
+  // Get pixels to the top
+  const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+  const hoverClientLeft = (clientOffset as XYCoord).x - hoverBoundingRect.left;
+  const hoverClientRigt = hoverBoundingRect.right - (clientOffset as XYCoord).x;
+
+  // Horizontal direction is only returned up 20 pixels close to the edge.
+  if (axis.horizontal && hoverClientLeft < 20) {
+    return 'left';
+  }
+
+  if (axis.horizontal && hoverClientRigt < 20) {
+    return 'right';
+  }
+
+  // Vertical direction is returned when the mouse has crossed half of the item's height.
+  if (axis.vertical && hoverClientY < hoverMiddleY) {
+    return 'top';
+  }
+
+  if (axis.vertical && hoverClientY >= hoverMiddleY) {
+    return 'bottom';
+  }
+
+  return undefined;
+};

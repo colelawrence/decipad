@@ -9,6 +9,7 @@ import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
+import { EditorLayout } from 'libs/ui/src/atoms';
 import * as components from './components';
 import { useWriteLock } from './utils/useWriteLock';
 import { useAutoAnimate } from './hooks';
@@ -72,11 +73,7 @@ export const Editor = (props: EditorProps) => {
       <EditorChangeContextProvider changeSubject={changeSubject}>
         <LoadingFilter loading={isWritingLocked}>
           <EditorBlockParentRefProvider onRefChange={onRefChange}>
-            <div
-              ref={containerRef}
-              style={{ position: 'relative' }}
-              data-stop-animate-query
-            >
+            <EditorLayout ref={containerRef}>
               <Plate<MyValue>
                 editor={editor}
                 onChange={onChange}
@@ -92,7 +89,7 @@ export const Editor = (props: EditorProps) => {
               >
                 <InsidePlate {...props} containerRef={containerRef} />
               </Plate>
-            </div>
+            </EditorLayout>
           </EditorBlockParentRefProvider>
         </LoadingFilter>
       </EditorChangeContextProvider>

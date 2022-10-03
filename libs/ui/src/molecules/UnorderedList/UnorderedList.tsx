@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { listItemCounter } from '../../utils';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
 import { Bullet } from '../../icons';
-import { blockAlignment } from '../../styles';
 
 const Depth = createContext(0);
 
@@ -12,10 +11,6 @@ const styles = css({
   gridTemplateColumns: '24px 1fr',
   gridAutoFlow: 'row',
 
-  padding: `${blockAlignment.list.paddingTop} 0`,
-  'li &': {
-    paddingBottom: 0,
-  },
   rowGap: '6px',
   columnGap: '8px',
 

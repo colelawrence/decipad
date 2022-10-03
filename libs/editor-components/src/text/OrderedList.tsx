@@ -12,10 +12,8 @@ export const OrderedList: PlateComponent = ({
   }
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="list" element={element}>
-        <UIOrderedList>{children}</UIOrderedList>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="list" element={element} {...attributes}>
+      <UIOrderedList>{children}</UIOrderedList>
+    </DraggableBlock>
   );
 };

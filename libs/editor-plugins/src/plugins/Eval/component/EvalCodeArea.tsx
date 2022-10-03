@@ -27,10 +27,12 @@ export const EvalCodeArea: PlateComponent = (props) => {
   }, [updateResult, unsafeCode]);
 
   return (
-    <div {...props.attributes}>
-      <DraggableBlock blockKind="codeLine" element={element}>
-        <UIEvalCodeArea>{props.children}</UIEvalCodeArea>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock
+      blockKind="codeLine"
+      element={element}
+      {...props.attributes}
+    >
+      <UIEvalCodeArea>{props.children}</UIEvalCodeArea>
+    </DraggableBlock>
   );
 };

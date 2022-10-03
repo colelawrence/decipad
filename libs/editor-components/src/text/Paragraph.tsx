@@ -44,10 +44,8 @@ export const Paragraph: PlateComponent = ({
     readOnly || !showPlaceHolder ? undefined : <ParagraphPlaceholder />;
 
   return (
-    <div {...attributes}>
-      <DraggableBlock blockKind="paragraph" element={element}>
-        <UIParagraph placeholder={placeholder}>{children}</UIParagraph>
-      </DraggableBlock>
-    </div>
+    <DraggableBlock blockKind="paragraph" element={element} {...attributes}>
+      <UIParagraph placeholder={placeholder}>{children}</UIParagraph>
+    </DraggableBlock>
   );
 };

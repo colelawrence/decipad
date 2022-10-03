@@ -51,46 +51,43 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const wideTable = (sortedColumns?.[0].length || 0) >= WIDE_MIN_COL_COUNT;
 
-  return (
-    <div {...attributes}>
-      {!deleted && (
-        <DraggableBlock
-          element={element}
-          blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-          onDelete={() => {
-            setDeleted(true);
-            onDelete();
-          }}
-        >
-          <UIDataView
-            availableVariableNames={variableNames.filter(isTable).map(varName)}
-            variableName={element.varName || ''}
-            onChangeVariableName={onVariableNameChange}
-            onChangeIcon={saveIcon}
-            onChangeColor={saveColor}
-            icon={(element.icon ?? 'Table') as UserIconKey}
-            color={(element.color ?? 'Catskill') as AvailableSwatchColor}
-            data={
-              (sortedColumns && (
-                <DataViewData
-                  tableName={tableName}
-                  columnNames={sortedColumns[0]}
-                  values={sortedColumns[2]}
-                  types={sortedColumns[1]}
-                  aggregationTypes={selectedAggregationTypes}
-                />
-              )) ||
-              null
-            }
-          >
-            {children}
-            <DataViewMenu
-              availableColumns={availableColumns}
-              onInsertColumn={onInsertColumn}
+  return !deleted ? (
+    <DraggableBlock
+      element={element}
+      blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
+      onDelete={() => {
+        setDeleted(true);
+        onDelete();
+      }}
+      {...attributes}
+    >
+      <UIDataView
+        availableVariableNames={variableNames.filter(isTable).map(varName)}
+        variableName={element.varName || ''}
+        onChangeVariableName={onVariableNameChange}
+        onChangeIcon={saveIcon}
+        onChangeColor={saveColor}
+        icon={(element.icon ?? 'Table') as UserIconKey}
+        color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+        data={
+          (sortedColumns && (
+            <DataViewData
+              tableName={tableName}
+              columnNames={sortedColumns[0]}
+              values={sortedColumns[2]}
+              types={sortedColumns[1]}
+              aggregationTypes={selectedAggregationTypes}
             />
-          </UIDataView>
-        </DraggableBlock>
-      )}
-    </div>
-  );
+          )) ||
+          null
+        }
+      >
+        {children}
+        <DataViewMenu
+          availableColumns={availableColumns}
+          onInsertColumn={onInsertColumn}
+        />
+      </UIDataView>
+    </DraggableBlock>
+  ) : null;
 };

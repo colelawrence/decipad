@@ -6,7 +6,6 @@ export const rootStyles = css({
 });
 
 export const resizableStyles = css({
-  margin: '0 auto',
   height: 'auto !important',
   padding: 8,
   borderRadius: 8,
@@ -22,7 +21,6 @@ export const figureStyles = css({
 });
 
 export const captionStyles = css({
-  margin: '0 auto',
   cursor: 'text',
 });
 

@@ -23,7 +23,6 @@ import {
   handleSelectedStyles,
   resizableSelectedStyles,
   resizableStyles,
-  rootStyles,
 } from '../MediaEmbed/styles';
 
 export const imgStyles = css({
@@ -65,7 +64,7 @@ export const Image: ImageComponent = ({
       content={<FloatingMedia pluginKey={pluginKey} />}
       floatingOptions={mediaFloatingOptions}
     >
-      <Media.Root css={rootStyles} {...(props as any)}>
+      <Media.Root {...(props as any)}>
         <Draggable
           blockKind="media"
           element={element as ImageElement}

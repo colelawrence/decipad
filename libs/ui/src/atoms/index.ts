@@ -1,4 +1,3 @@
-export { AddNew } from './AddNew/AddNew';
 export { AnyResult } from './AnyResult/AnyResult';
 export { AutoCompleteMenuItem } from './AutoCompleteMenuItem/AutoCompleteMenuItem';
 export { Avatar } from './Avatar/Avatar';
@@ -24,6 +23,7 @@ export { DropLine } from './DropLine/DropLine';
 export { RowDropLine } from './DropLine/RowDropLine';
 export { EditorBlock } from './EditorBlock/EditorBlock';
 export { EditorColumns } from './EditorColumns/EditorColumns';
+export { EditorLayout } from './EditorLayout/EditorLayout';
 export { ErrorMessage } from './ErrorMessage/ErrorMessage';
 export * from './Floating';
 export { FloatingButton } from './FloatingButton/FloatingButton';

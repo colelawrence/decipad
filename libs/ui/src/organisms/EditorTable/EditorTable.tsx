@@ -48,11 +48,10 @@ const tableCaptionWrapperStyles = css({
 });
 
 export const tableWrapperStyles = css({
-  transform: `translateX(calc((((100vw - 700px) / 2) + ${tableControlWidth}) * -1 ))`,
+  transform: `translateX(calc((((100vw - 580px) / 2) + ${tableControlWidth}) * -1 ))`,
   width: '100vw',
   minWidth: editorLayout.slimBlockWidth,
   overflowX: 'auto',
-  paddingBottom: '12px',
   position: 'relative',
   whiteSpace: 'nowrap',
   left: tableControlWidth,
@@ -67,7 +66,7 @@ export const tableWrapperStyles = css({
 export const tableOverflowStyles = css({
   display: 'inline-block',
   height: '20px',
-  minWidth: `calc(((100vw - 700px) / 2) - ${tableControlWidth})`,
+  minWidth: `calc(((100vw - 580px) / 2) - ${tableControlWidth})`,
 });
 
 const tableAddColumnButtonStyles = css({

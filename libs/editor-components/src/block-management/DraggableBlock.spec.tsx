@@ -1,21 +1,13 @@
-import {
-  ELEMENT_LI,
-  ELEMENT_LIC,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_UL,
-  PlateComponent,
-} from '@decipad/editor-types';
+import { ELEMENT_PARAGRAPH, PlateComponent } from '@decipad/editor-types';
 import { noop, thro } from '@decipad/utils';
 import { fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  createListPlugin,
   createPlateEditor,
   createPlugins,
   Plate,
   PlateEditor,
   PlatePlugin,
-  PlatePluginComponent,
   PlateProps,
 } from '@udecode/plate';
 import { PropsWithChildren } from 'react';
@@ -177,51 +169,4 @@ it('can move the block', () => {
     expect.objectContaining({ children: [{ text: 'second' }] }),
     expect.objectContaining({ children: [{ text: 'first' }] }),
   ]);
-});
-
-it('does not render a drag handle when nested in another DraggableBlock', async () => {
-  plateProps.plugins = [createListPlugin()];
-  const DraggableUnorderedList: PlateComponent = ({ element, children }) => (
-    <DraggableBlock blockKind="list" element={element!}>
-      {children}
-    </DraggableBlock>
-  );
-  plateProps.plugins = [
-    {
-      key: ELEMENT_UL,
-      type: ELEMENT_UL,
-      isElement: true,
-      component: DraggableUnorderedList as PlatePluginComponent,
-    },
-  ];
-  plateProps.initialValue = [
-    {
-      type: ELEMENT_UL,
-      id: '0',
-      children: [
-        {
-          type: ELEMENT_LI,
-          children: [{ type: ELEMENT_LIC, children: [{ text: '1' }] }],
-        },
-        {
-          type: ELEMENT_UL,
-          children: [
-            {
-              type: ELEMENT_LI,
-              children: [{ type: ELEMENT_LIC, children: [{ text: '2' }] }],
-            },
-          ],
-        },
-      ],
-    },
-  ];
-  const { editor: _editor, ...restPlateProps } = plateProps;
-  editor = createPlateEditor(restPlateProps);
-  const { getAllByTitle } = render(
-    <Plate {...restPlateProps} editor={editor} />,
-    {
-      wrapper,
-    }
-  );
-  expect(getAllByTitle(/drag/i)).toHaveLength(2);
 });

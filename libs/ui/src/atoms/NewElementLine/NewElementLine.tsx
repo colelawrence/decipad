@@ -3,16 +3,16 @@ import { FC, useState, useEffect } from 'react';
 import { blue200 } from '../../primitives';
 
 const parentWrapper = css({
-  position: 'relative',
+  position: 'absolute',
   width: '100%',
   height: 0,
+  top: 0,
 });
 const addElementLineWrapper = css({
   width: '100%',
   height: 20,
   paddingTop: 4,
   paddingBottom: 4,
-  position: 'absolute',
   justifyContent: 'center',
   alignItems: 'center',
   display: 'flex',
