@@ -1,6 +1,5 @@
 import { Doc as YDoc } from 'yjs';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
-import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
@@ -17,7 +16,7 @@ export async function afterConnect({
   const data = await tables();
   const conn = await data.connections.get({ id: connectionId });
   if (!conn) {
-    throw Boom.resourceGone();
+    return { statusCode: 410 };
   }
   const resource = getDefined(conn.room, 'no room in connection');
   const doc = new YDoc();
