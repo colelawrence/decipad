@@ -17,6 +17,7 @@ import { docs } from '@decipad/routing';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { useCallback } from 'react';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -45,6 +46,37 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   useCodeLineClickReference(editor, selected, codeLineContent);
 
+  const onClickedResult = useCallback(
+    (result: Result.Result) => {
+      if (
+        !(
+          result.type.kind === 'number' ||
+          result.type.kind === 'date' ||
+          result.type.kind === 'string' ||
+          result.type.kind === 'boolean'
+        )
+      )
+        return;
+
+      const path = findNodePath(editor, element);
+      if (!path) return;
+
+      insertNodes(
+        editor,
+        {
+          id: nanoid(),
+          type: ELEMENT_DISPLAY,
+          blockId: element.id,
+          children: [{ text: '' }],
+        },
+        {
+          at: [path[0] + 1],
+        }
+      );
+    },
+    [editor, element]
+  );
+
   return (
     <div {...attributes} id={lineId}>
       <DraggableBlock blockKind="codeLine" element={element}>
@@ -56,35 +88,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
           onDragStartCell={onDragStartTableCellResult(editor)}
           onClickedResult={
-            isFlagEnabled('RESULT_WIDGET')
-              ? (result: Result.Result) => {
-                  if (
-                    !(
-                      result.type.kind === 'number' ||
-                      result.type.kind === 'date' ||
-                      result.type.kind === 'string' ||
-                      result.type.kind === 'boolean'
-                    )
-                  )
-                    return;
-
-                  const path = findNodePath(editor, element);
-                  if (!path) return;
-
-                  insertNodes(
-                    editor,
-                    {
-                      id: nanoid(),
-                      type: ELEMENT_DISPLAY,
-                      blockId: element.id,
-                      children: [{ text: '' }],
-                    },
-                    {
-                      at: [path[0] + 1],
-                    }
-                  );
-                }
-              : undefined
+            isFlagEnabled('RESULT_WIDGET') ? onClickedResult : undefined
           }
         >
           {children}
