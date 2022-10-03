@@ -35,7 +35,7 @@ function handleErrors(handle: Handler): Handler {
       context: Context
     ): Promise<APIGatewayProxyResultV2> => {
       try {
-        return new Promise((resolve, reject) => {
+        const resp = await new Promise((resolve, reject) => {
           const callback = (
             err: Error | null | string | undefined,
             response: APIGatewayProxyResultV2
@@ -53,6 +53,7 @@ function handleErrors(handle: Handler): Handler {
               }
             }).catch((err) => reject(err));
         });
+        return resp as APIGatewayProxyResultV2;
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Error caught', err);
