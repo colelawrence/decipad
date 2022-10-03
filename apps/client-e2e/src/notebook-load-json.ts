@@ -101,6 +101,8 @@ describe('notebook load json', () => {
       0
     );
 
-    await snapshot(sharedNotebookPage, 'Notebook: Published mode (incognito)');
+    await snapshot(sharedNotebookPage, 'Notebook: Published mode (incognito)', {
+      mobile: true,
+    });
   });
 });
