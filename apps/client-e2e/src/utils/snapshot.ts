@@ -9,8 +9,8 @@ export const snapshot = async (
   if (!process.env.PERCY_TOKEN) {
     return;
   }
-  await page.waitForTimeout(3000);
   await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(3000);
 
   return percySnapshot(page, name, {
     widths: [options.mobile && 375, 1280].filter((n): n is number =>

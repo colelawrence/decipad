@@ -1,0 +1,3502 @@
+import { Document } from '@decipad/editor-types';
+
+export default {
+  children: [
+    {
+      children: [
+        {
+          text: '🕯Starting a Candle Business',
+        },
+      ],
+      type: 'h1',
+      id: '3JTr-B84cKMnNOYnvHiFi',
+    },
+    {
+      children: [
+        {
+          text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+        },
+      ],
+      type: 'p',
+      id: '18YPGVFcBkSie3WopWDlo',
+    },
+    {
+      children: [
+        {
+          text: 'It looks like I could make a profit ',
+          highlight: true,
+        },
+        {
+          text: 'and some side income based on my assumptions below. Feedback welcome!',
+        },
+      ],
+      type: 'p',
+      id: 'ngIq_tCJClGugubOIsRKT',
+    },
+    {
+      children: [
+        {
+          text: 'How many candles can I make per year and where would I price them?',
+        },
+      ],
+      type: 'h2',
+      id: 'FwJ4b7bT6w1_ZUrvIY3-Q',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'SalesFirstYear',
+                },
+              ],
+              type: 'caption',
+              id: 'l5J-n3epxPuZbaJthbxpO',
+            },
+            {
+              children: [
+                {
+                  text: '1000 unit',
+                },
+              ],
+              type: 'exp',
+              id: 'Rd0ZlZqGcFEsFOWxWy1vv',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'slider',
+              max: '10000',
+              min: '0',
+              step: '100',
+              value: '1000',
+              id: 'XydwTHoZjsOTDs2RVX-b9',
+            },
+          ],
+          type: 'def',
+          variant: 'slider',
+          id: 'pPgI13tV_TQbSVKBDXpBx',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'SalesGrowth',
+                },
+              ],
+              type: 'caption',
+              id: 'ghpF_YMnKGusmcH3g54rj',
+            },
+            {
+              children: [
+                {
+                  text: '40%',
+                },
+              ],
+              type: 'exp',
+              id: 'eZrnsPtjrkH4zIDhFT5Mz',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'slider',
+              max: '100',
+              min: '0',
+              step: '1',
+              value: '40',
+              id: '8gVu371XrLTuTKf9uey1Q',
+            },
+          ],
+          type: 'def',
+          variant: 'slider',
+          id: '_uLNoxVuRGQR7MLjjqQ4N',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'PriceUnit',
+                },
+              ],
+              type: 'caption',
+              id: 'F85nIumbm8Y3k5ohrv05u',
+            },
+            {
+              children: [
+                {
+                  text: '25$ /unit',
+                },
+              ],
+              type: 'exp',
+              id: '6BVo4ypNhNKCE_TybtWnA',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'slider',
+              max: '30',
+              min: '0',
+              step: '5',
+              value: '25',
+              id: 'dQDbrF91vcH7tOOrMHnd-',
+            },
+          ],
+          type: 'def',
+          variant: 'slider',
+          id: 'ExNqIQEPGtXBMUDiZsoOs',
+        },
+      ],
+      type: 'columns',
+      id: 'HEVtiD74Cj99fChGtq88l',
+    },
+    {
+      children: [
+        {
+          text: '💰 How much would I make before expenses?',
+        },
+      ],
+      type: 'h2',
+      id: 'uksKZatZkX_m75C9UhFwl',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Revenue',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'AwHlajESE7OtYT50KBFeY',
+            },
+            {
+              children: [
+                {
+                  text: 'floor(grow(SalesFirstYear ,SalesGrowth ,Revenue.Year ))',
+                },
+              ],
+              type: 'table-column-formula',
+              id: 'LmHKWBjcx2-TKuXuoH-0x',
+              columnId: 'fW42GOC3mjcWDoFB386CE',
+            },
+            {
+              children: [
+                {
+                  text: 'PriceUnit',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'zPdgOerCCYj6K-E14CYp5',
+              id: 'NRHGTNvPFzqqs06Do76zC',
+            },
+            {
+              children: [
+                {
+                  text: 'Units*Price',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'pF2XmhRPbG81DiO13qilh',
+              id: '2pJnInBzK4lqLxEpHGUEM',
+            },
+          ],
+          type: 'table-caption',
+          id: 'Te1csjhXtiFLYbz1Qy5dU',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: 'c6FNo_imJSEDtWBsgNrXZ',
+            },
+            {
+              children: [
+                {
+                  text: 'Units',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'fW42GOC3mjcWDoFB386CE',
+            },
+            {
+              children: [
+                {
+                  text: 'Price',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'zPdgOerCCYj6K-E14CYp5',
+            },
+            {
+              children: [
+                {
+                  text: 'NetRevenue',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'pF2XmhRPbG81DiO13qilh',
+            },
+          ],
+          type: 'tr',
+          id: '7J-lWf8k2WgUr0vypgpTE',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: 'TY9xCZuHQk-TzkuUiJWI1',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'Wu2cGphesW2RsRxkoBGHT',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'o6WdZMyiPv-vwtxN8pBxt',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '1s-OFBFdwj8CGJfzFl-mO',
+            },
+          ],
+          type: 'tr',
+          id: 'c7IaMCg2tUMBvSh4sw7j2',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'XwPSarOfETkCumNiL8hBt',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '2Ti3ZfPLLk6hFmUGc170E',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'sO71BuQFqSCgC_zsoKdBd',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'pysfsQNe-uD-M0JCovam1',
+            },
+          ],
+          type: 'tr',
+          id: '5jXqQMV52XFFEXHaPXSWy',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: 'VjOkFL4aGWaetptCF7fyj',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'wCv6ObqF6-RMTPd1T3Aif',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '_jYq7wCE5GQpB1BfUKqsu',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '0GeEgGVeMTVad34qCXrIG',
+            },
+          ],
+          type: 'tr',
+          id: 'NRR06mh5tKvgJterQTKJk',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: 'nF4PD2dNerOwADlAgb5LE',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'VTlvPrs0jTLNG4ARNLocr',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '1grby77_qRkyHfuTcHhbQ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'MAsK27gaYW-kbXMaeSyu-',
+            },
+          ],
+          type: 'tr',
+          id: '043JCGDxhuUkS581j0-IC',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'urmLtOjA1t8T325wW2Qum',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'Hv-VLpj7EmjBRuhEfqASo',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'OZsrXg13xtYRCU97cL3QT',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'ZtWHQwp6b0q877khOqvH7',
+            },
+          ],
+          type: 'tr',
+          id: 'NMGXlDLWc7g7JRatvF0jp',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: '8xY4D0YlKVIzKRxVR2yRZ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'ODP56QuTnD8lMVoWCepv8',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'IFCc4CoM6rL0NBNVJqht8',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'u87t2RgMELZzpD8qRAx5K',
+            },
+          ],
+          type: 'tr',
+          id: 'F45p5PCGiQRpuUb20FWgK',
+        },
+      ],
+      type: 'table',
+      id: 'ddTJXSKZzWh56A8NMCZmM',
+    },
+    {
+      children: [
+        {
+          text: '🕑 What is the cost of making a candle?',
+        },
+      ],
+      type: 'h2',
+      id: '6_FMtFea4fz6-kazi7_6O',
+    },
+    {
+      children: [
+        {
+          text: 'What is the average cost per candle, including the development costs, lost candles, and freebies? ',
+        },
+      ],
+      type: 'p',
+      id: 'aNszlIBh8af8WZO9vvZ2_',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'UnitCost',
+                },
+              ],
+              type: 'caption',
+              id: 'WcY7_V5eO1Esmq3Nvgulq',
+            },
+            {
+              children: [
+                {
+                  text: '5$/unit',
+                },
+              ],
+              type: 'exp',
+              id: 'QMz-cZNW4IHG7--8RPcIV',
+            },
+          ],
+          type: 'def',
+          variant: 'expression',
+          id: 'XMYcbjHl8KfIrFWThRBkW',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'UnitCostGrowth',
+                },
+              ],
+              type: 'caption',
+              id: 'S27mfntdV10Bfw6dkRSX0',
+            },
+            {
+              children: [
+                {
+                  text: '-2%',
+                },
+              ],
+              type: 'exp',
+              id: 'AU-mWsWrCV00xspxkNepa',
+            },
+          ],
+          type: 'def',
+          variant: 'expression',
+          id: 'OcOgbmVNoCfO01wmhFkKO',
+        },
+      ],
+      type: 'columns',
+      id: '9L8-Jflx30ZvcjTlYjYr5',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'COGS',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'cBg-kWfTsaGKoYvrDzFNb',
+            },
+            {
+              children: [
+                {
+                  text: 'ceil(grow(UnitCost ,UnitCostGrowth ,COGS.Year ))',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'lpAU-6ZROXQ6fTF-dCoyW',
+              id: '4reKP-_qMQ2Hv3R4lypnT',
+            },
+            {
+              children: [
+                {
+                  text: 'Units*UnitCost ',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: '8rRgO31BB_biu8RpsnF__',
+              id: '8pIlAyWtfp21MofDzBP8n',
+            },
+            {
+              children: [
+                {
+                  text: 'Revenue.Units',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'pbzxLSQGi_Wb44SEUAdyN',
+              id: 'c7nu5nsAOdTE3K2HtkgH0',
+            },
+          ],
+          type: 'table-caption',
+          id: 'gsU3tqrHsmrv4-fJn836a',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: '1T4rQFbMj0oHnACsSYQ5y',
+            },
+            {
+              children: [
+                {
+                  text: 'UnitCost',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'lpAU-6ZROXQ6fTF-dCoyW',
+            },
+            {
+              children: [
+                {
+                  text: 'Units',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'pbzxLSQGi_Wb44SEUAdyN',
+            },
+            {
+              children: [
+                {
+                  text: 'COGS',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: '8rRgO31BB_biu8RpsnF__',
+            },
+          ],
+          type: 'tr',
+          id: 'Mszay5EliJkXH6dtwEPBq',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: 'GKrw9xRN-hPibiRs1WIv5',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'Z6H-3st30fVzrS4_NtcoV',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'Vt7PtCOPFgOKUH7UcLEZb',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'VTgXMyl1V-nUSPjCxmpsw',
+            },
+          ],
+          type: 'tr',
+          id: '9uJg_-XcYL8Ql4sgGosye',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'dUlxf5pU_tR0_1CpOw6E_',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '19eihKn2XYj4INUcwPiBu',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'bzLoI5TJZt4X73TwKanF3',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'furax-UVCIp6NnXjVnMir',
+            },
+          ],
+          type: 'tr',
+          id: '5bYRTMdFuqTHFuhGAjRe7',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: 'uTzmZCzAhMsc2udCHZqZ_',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '2hZy9Z0mH5xv-hsgxgGNS',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'q0GDmbvnmwbEGFxD8iejJ',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'fgAF8kIwMpF_90ErZGpgU',
+            },
+          ],
+          type: 'tr',
+          id: 'cIIr1zUcCf1mC2EogawVv',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: 'DU-RUd8aUJ3Q1kb9azfll',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'JPagjfogzAUBtW2xIIEuH',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'HGge9nF3d-U4j28YE03tw',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '3DRVpyIR1X0BloroUOk74',
+            },
+          ],
+          type: 'tr',
+          id: 'mF-GQgs3xKVunvPre-llI',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'BXum-pytqkwHfJgJuqSDX',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '23fAh-9sRcVTT3xcaS-O4',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'kZIBa4cP8E-rbGy7PNVb1',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'STQ_E3RaMD7bTYGrAWimL',
+            },
+          ],
+          type: 'tr',
+          id: 'hGat78EfBnLJlGlDcfNqI',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: 'O1h5w23rjJq5lTFS3XA7I',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'C-eci0oVZxQhobeXV0RDg',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'tTwF8meVjuLbEgCjSXQtF',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'XZxBWDpN02NRneiWBPy3Z',
+            },
+          ],
+          type: 'tr',
+          id: 'IQ_r2KCfqgEFp-BNoAfHk',
+        },
+      ],
+      type: 'table',
+      id: 'HFm_s7Zp8559ZZsUzDnbH',
+    },
+    {
+      children: [
+        {
+          text: '🤷🏼‍♀️ How much will I make? ',
+        },
+      ],
+      type: 'h2',
+      id: 'P6--obOMy3-KtSL46-b3H',
+    },
+    {
+      children: [
+        {
+          text: 'Looking only at the direct costs involved in the production, how much will I make in revenue throughout the years?',
+        },
+      ],
+      type: 'p',
+      id: 'moCxD9tuThVThjdH_OEux',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'GrossMargin',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'aOO-NFuYhQLsRMWK8oCt6',
+            },
+            {
+              children: [
+                {
+                  text: 'Revenue .NetRevenue',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: '1NNlKhP2trAHQ23YmqOVV',
+              id: 'Bt28gP7z2TOf8cuHGMQuq',
+            },
+            {
+              children: [
+                {
+                  text: 'COGS .COGS',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: '6sMXx81_zzoy-RYoNmAr8',
+              id: 'u7fIMTp60bZg9Hx0LxfV8',
+            },
+            {
+              children: [
+                {
+                  text: 'NetRevenue  - COGS ',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'pQ0XmWlMNhJAezj3ulFU6',
+              id: '2uie1c3GOaJxVO7Vn05Jg',
+            },
+          ],
+          type: 'table-caption',
+          id: 'ObpgO9KLXlqO4pFHdjYI5',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: 'sYA6dOetrEGILdrEUAdS2',
+            },
+            {
+              children: [
+                {
+                  text: 'NetRevenue',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: '1NNlKhP2trAHQ23YmqOVV',
+            },
+            {
+              children: [
+                {
+                  text: 'COGS',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: '6sMXx81_zzoy-RYoNmAr8',
+            },
+            {
+              children: [
+                {
+                  text: 'GrossProfit',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'pQ0XmWlMNhJAezj3ulFU6',
+            },
+          ],
+          type: 'tr',
+          id: 'ejfdtQrtBwokknVESxsGi',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: 'pLZ0NYRp-rJZ4Uqxgs3pa',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'trgGedE9Pr5Hy4vT27AlX',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'ztRfDaCVXh0FFS6Umv5WV',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'i871e29sNuXTLchsezdoA',
+            },
+          ],
+          type: 'tr',
+          id: 'SopMx-xDCJJr1gW11yHpJ',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'pZWT8ktxG15O4Q4DtJfeq',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'c1XhQTgmqPFyEZXbk_4VU',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'fw7Ga9Elyy4imfoXdTunA',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'zxxE0LuLJVOrnz5hSO7Fp',
+            },
+          ],
+          type: 'tr',
+          id: 'ctdYBjt4cNgIcyPdobsdN',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: 'tg6-z_px-hhNIv_pwKz6l',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'tostNxpOcpaoBgE3sMbIi',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'x0HfBeT2PZT3hAEUShh2B',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'ZCCOAxIQViODw-eO2VNy9',
+            },
+          ],
+          type: 'tr',
+          id: 'ZvnYjGDxgERdIqKwqH6JO',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: 'ztfigAdOCsFsf73URCaGG',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'p4aiuNN5qVci7g-BXn6l_',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '0U-b44dIqZmas1ZbHAEMP',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'F8cbc_YzlK0MYqEBUekbL',
+            },
+          ],
+          type: 'tr',
+          id: 'cO8crPUtUyseKp8Za80mb',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'Y76DqhrSTNzIkzbI_GCxu',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'dcHPeUE8iIZVXFmc1X7TY',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'UZnV53KxXHdxgHemZrJFs',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '9tT2xgbmIyoPiCgKWGzxx',
+            },
+          ],
+          type: 'tr',
+          id: '-1O8DigKrwdTkEQs5Cn1k',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: 'GRAb9bc_r41Ylsl8ZYYcF',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'CsTA6qlsK_mc2tfcHNoeG',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '7MgpLE8xMUTlyVhLABYvL',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'qfmYbsrnx0_Gsus9NKTjx',
+            },
+          ],
+          type: 'tr',
+          id: 'PAogCyn-M9dUWqSxyemf7',
+        },
+      ],
+      type: 'table',
+      id: 'hOM1pr8pzdFI19V4lubQD',
+    },
+    {
+      children: [
+        {
+          text: '💸 How much will I pay for the act of candle-making and inflation?',
+        },
+      ],
+      type: 'h2',
+      id: 'P1MO3vjonREmgtamfVbur',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Labor1Year',
+                },
+              ],
+              type: 'caption',
+              id: 'Ao5tEPYcGv63iYXoFXqNt',
+            },
+            {
+              children: [
+                {
+                  text: '5$/unit',
+                },
+              ],
+              type: 'exp',
+              id: 'eC0zcMiV8JSGI8_eYX3zG',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'slider',
+              max: '10',
+              min: '0',
+              step: '1',
+              value: '5',
+              id: '-jSDmq06NkBNyrNyLQfQT',
+            },
+          ],
+          type: 'def',
+          variant: 'slider',
+          id: 'bT8SgkwS53AAiuQcGTcoV',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'LaborCostGrowth',
+                },
+              ],
+              type: 'caption',
+              id: 'LanQnFV0dzJhvmMU6m1P5',
+            },
+            {
+              children: [
+                {
+                  text: '3%',
+                },
+              ],
+              type: 'exp',
+              id: 'o3E0XXTv9o5nOcYuMjOZl',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'slider',
+              max: '100',
+              min: '0',
+              step: '1',
+              value: '3',
+              id: 'ipy1guEEzFNrnB323e0U7',
+            },
+          ],
+          type: 'def',
+          variant: 'slider',
+          id: 'mKGe5gOM7Dd4ci9_JDh-e',
+        },
+      ],
+      type: 'columns',
+      id: 'yrzfyRrxGwVKD-MW_hxkn',
+    },
+    {
+      children: [
+        {
+          text: '🎯 What about marketing?',
+        },
+      ],
+      type: 'h2',
+      id: 'xHCDeKqDxpFqJxDAdXjDI',
+    },
+    {
+      children: [
+        {
+          text: 'What percentage of my net revenue ',
+        },
+        {
+          text: '(before expenses)',
+          italic: true,
+        },
+        {
+          text: ' would I allocate to marketing initiatives? ',
+        },
+      ],
+      type: 'p',
+      id: 'n2uD1VwAOCMN1FQOMngPv',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              text: 'MarketingBudget',
+            },
+          ],
+          type: 'caption',
+          id: 'Rfl-FI-NwWAjirqLg89Ba',
+        },
+        {
+          children: [
+            {
+              text: '20%',
+            },
+          ],
+          type: 'exp',
+          id: '5HNcIi63Tuwl_zX1kiOzr',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          type: 'slider',
+          max: '10',
+          min: '0',
+          step: '0.1',
+          value: '20',
+          id: 'LQiW4T0t-Y2R0iM_M21eB',
+        },
+      ],
+      type: 'def',
+      variant: 'slider',
+      id: '7ufNmdV4GIv-Sjp6RLv7z',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'OPEX',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'rWqpFmrm2VCWkaKgQbw0D',
+            },
+            {
+              children: [
+                {
+                  text: 'ceil(grow(Labor1Year,LaborCostGrowth,OPEX.Year))',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'zdBYsmo2JBLNlrGO_yOPc',
+              id: '-fYOcG8wXNyBX6wjFNTLP',
+            },
+            {
+              children: [
+                {
+                  text: 'Revenue.NetRevenue * MarketingBudget ',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'yIdiIwZrtrXz9Z-6FhpBa',
+              id: 'nMoE_GfCWregNhUnbQYBe',
+            },
+            {
+              children: [
+                {
+                  text: 'Revenue.Units',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'elQTf_RF9VP1T4EFcIm06',
+              id: 'yYVRnjldj2KlSOW_Z57xf',
+            },
+            {
+              children: [
+                {
+                  text: 'Units *LaborItem',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'AjU4So0sYyU8U8gSx_O6T',
+              id: 'kIENVsl9ghhqSkw5NPFDu',
+            },
+            {
+              children: [
+                {
+                  text: 'Labor + Marketing',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'LeraciU6Vy1axysEbM7Zy',
+              id: 'q4pUiON0fjBrtfSXMtzIz',
+            },
+          ],
+          type: 'table-caption',
+          id: '_5c8jm662UwOdcrAcaJjo',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: 'L_O223kPwJDA92Okl-Vcp',
+            },
+            {
+              children: [
+                {
+                  text: 'LaborItem',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'zdBYsmo2JBLNlrGO_yOPc',
+            },
+            {
+              children: [
+                {
+                  text: 'Units',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'elQTf_RF9VP1T4EFcIm06',
+            },
+            {
+              children: [
+                {
+                  text: 'Labor',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'AjU4So0sYyU8U8gSx_O6T',
+            },
+            {
+              children: [
+                {
+                  text: 'Marketing',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'yIdiIwZrtrXz9Z-6FhpBa',
+            },
+            {
+              children: [
+                {
+                  text: 'Total',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'LeraciU6Vy1axysEbM7Zy',
+            },
+          ],
+          type: 'tr',
+          id: 'RJV0DXBtq8TpV1RapHW9F',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: 'MWA_Agp91xDmGK-6KEdrN',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '1EqMkEoO-wSdoF2rZu3Pu',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'BDL8pMpJflmc8q24JPhA-',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'zDghe1PQBLQSAXG6iNfHD',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'tfzxSadZvldFKtDj_8pm-',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'BHHIdiKRjT2r5PDbDkTmS',
+            },
+          ],
+          type: 'tr',
+          id: 'YKrf9SGlAf2lcBxFdZnOb',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'mf_chyq7cvmGNXAvwDCSg',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'hZ1sgKEjtuG39gQpSdpyd',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'Odd53jjbhAyJ66P8r3JjT',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'Jh_UDYfQiNy-PLy8N5maj',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'imSQfYpTOp1coSO0rlbKQ',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '1b9BuNW4MoptMJf3QFSL2',
+            },
+          ],
+          type: 'tr',
+          id: 'R5fZYHKbxNTpnKd9rScAx',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: 'j89v88dxNcpganxc9ScsH',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'XGGC4LFCrfln0ewcbZfVc',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'v0bGFyJ2mnxZhsDbPaTaS',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'pYFSSKfkY0LFXoPQ9VhrR',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '3Y-idhuAZjK22ZED_QhdR',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '3b3tvAgv08NxBrXCMGXIn',
+            },
+          ],
+          type: 'tr',
+          id: 'niHnEZlXPH5G144IA6VKv',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: 'JbdJuVbfgT6Xcn-jdn49G',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'hWY7WaKGiWLJ3gp3KRg4p',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'rVgX2AD4OmHgJ7FQYTc_0',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '4nxlbGDBMYLrgZmVqykvf',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'UmZzSq3f-7HqQnumkJBjQ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '6dYVwvwDsn9jEWprT_ug6',
+            },
+          ],
+          type: 'tr',
+          id: 'Tokw-a7ZjXRXXEMQ0yQuR',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'lu6i_jnRtASzg8bABcXRP',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'gWQooa9obOwOEsONZ-NU2',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'WnJC-M_jKOiGhgzwC7R2G',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '1ERx_g50ftgEZpr0QodMR',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'rw0xez0mkvGvlzZavGXSl',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'j82cSX_A--x13D1QEkfl4',
+            },
+          ],
+          type: 'tr',
+          id: 'tvrNYv1ddfmkZtxK4ae3C',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: 's0C4ynu5VAV8-kGFEE7E8',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'O2DAIrPpOVdSrO4j49fhJ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'iNt1kT7KOP55YwHU8PlcD',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'Hx8-21BUuuPPUueosoTYF',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '2Vi4vaeZqPap0huE7z1ZP',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'rVcHsUYvzFyAuYz3cWo-w',
+            },
+          ],
+          type: 'tr',
+          id: 'bFFPwe-uVW28-sd0J7Xgn',
+        },
+      ],
+      type: 'table',
+      id: 'NOnNrYjbMXL7-mNf0_HYD',
+    },
+    {
+      children: [
+        {
+          text: '💰 After deducting my operating costs from above, how much am I making pre-tax?',
+        },
+      ],
+      type: 'h2',
+      id: 'X9WOVKj4-4SrNgn5PACqr',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'EBIT',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'ynu3m_mmzEZKQTCwd2-On',
+            },
+            {
+              children: [
+                {
+                  text: 'GrossMargin.GrossProfit ',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: '85eSX9Ze_QsLmnEoRi4Z9',
+              id: 'FSG18DJlt9f8hLV5QvODo',
+            },
+            {
+              children: [
+                {
+                  text: 'OPEX.Total',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: '-lcY3eNESmKI33Qw5g7P7',
+              id: 'KyPlHLpDIwLphHApYhRuD',
+            },
+            {
+              children: [
+                {
+                  text: 'GrossProfit - OPEX ',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'oQQlONGTZmYYR0HdpOB9J',
+              id: '8BdcbX4ftFmeFE7RD6uWY',
+            },
+            {
+              children: [
+                {
+                  text: 'GrossMargin.NetRevenue',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'nijg0ftBc2YaIL0KaNeDo',
+              id: 'FhXklQ9H-3_oZKZTnL6oE',
+            },
+          ],
+          type: 'table-caption',
+          id: 'xFSGb2SHCSveYGj2vizCu',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: '4jwFn4fz5HTRzMYFkPbpE',
+            },
+            {
+              children: [
+                {
+                  text: 'NetRevenue',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'nijg0ftBc2YaIL0KaNeDo',
+            },
+            {
+              children: [
+                {
+                  text: 'GrossProfit',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: '85eSX9Ze_QsLmnEoRi4Z9',
+            },
+            {
+              children: [
+                {
+                  text: 'OPEX',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: '-lcY3eNESmKI33Qw5g7P7',
+            },
+            {
+              children: [
+                {
+                  text: 'OperatingIncome',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'oQQlONGTZmYYR0HdpOB9J',
+            },
+          ],
+          type: 'tr',
+          id: 'Z3seGxB-my0vHCimkPQa3',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: '_H7isl-KwD8DyaYx22AlQ',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'VChRtm7PkMFWpzdog60x6',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'H3oUvv-QLTE5GrCpICk7U',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '1-G1hIyVaxASy3Fk22Glr',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'dPFZcLR0wS3ZsyaM6pcmx',
+            },
+          ],
+          type: 'tr',
+          id: 'okLI9YZmcAZcNANpsQDqf',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'jUDXc0_ZhOROP5ehRJwqw',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'GrUsw5meJ4c7GWcy0L9tI',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'tdqNifj9oKsDsO47JN4lw',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'IO5LUthpSLlG8iFv-JFYq',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'qTsZ44C3q3QDHg9AEIsQ7',
+            },
+          ],
+          type: 'tr',
+          id: 'bAlW7JAnY7gCGY9j1ah32',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: '8kIoKIucfaitaHXcxH_uu',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'xvlx555peKBCSp88mYDJN',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'Sk5uNEI3AmvnIkMbQsy6Y',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'VFZ1wpdMMlHgMTcbKBZjO',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'UkGpUwBE48_LFT5JkmyMN',
+            },
+          ],
+          type: 'tr',
+          id: 'QgLrXpY1rI5TgcKMHgZk9',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: 'HOLYOhLUDNiNC4fKL986m',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'OxmfAd163xZ08misKzbr8',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'rlqFhXDM-mpfCfcnfUXi7',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'VFwUnmpTZRH7a8PveR5Yc',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'U_pZcCK-zQV2RsZUHVjdY',
+            },
+          ],
+          type: 'tr',
+          id: 'R1-4Ykj3k9pAcQmej8tdE',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'ArTse1e7-fPT1C_qDYoic',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '2HqWnzYSOUmt7YBxhaEpS',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'thXgxTQkVjCijqwYJaIVu',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'nrNSBE4LgoCEGZCj4RO2q',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'Q0XJbT53qLb4-4eAihnE_',
+            },
+          ],
+          type: 'tr',
+          id: '2fSAU0QpzbaGw9EVQ2FqA',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: 'pmUZjieO0KTgabph8heNt',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '7ysd3hiHSg-6rjr7ZXCu5',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'X9AWmLUlzLE4Tla6OEbqq',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'vm-Y11Jq-0c81FvpeSbSp',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'x50FnmNB3BmtTrg_iuzQC',
+            },
+          ],
+          type: 'tr',
+          id: '3H9WwGzxP8EY32QJ9guDL',
+        },
+      ],
+      type: 'table',
+      id: '-farwyIZskJw6c8lgrotZ',
+    },
+    {
+      children: [
+        {
+          text: '💵 What about after taxes?',
+        },
+      ],
+      type: 'h2',
+      id: 'aBNwZpXpjMtaFAupRYOmN',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              text: 'TaxRate',
+            },
+          ],
+          type: 'caption',
+          id: 'kGOFdcoGZIEoZf5DKwTsT',
+        },
+        {
+          children: [
+            {
+              text: '20%',
+            },
+          ],
+          type: 'exp',
+          id: 'dPk3fVvWZx-PDYOCjGKWh',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          type: 'slider',
+          max: '100',
+          min: '0',
+          step: '1',
+          value: '20',
+          id: 'F6j7didXk5WQ-uM5zn04w',
+        },
+      ],
+      type: 'def',
+      variant: 'slider',
+      id: 'CRC1rx6_RQiGR858xdg_2',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Tax',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'VXVIhJmpySpzVyITG8Vwn',
+            },
+            {
+              children: [
+                {
+                  text: 'EBIT.OperatingIncome',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: '3WOOVaQ3eBiKoJeXPclDa',
+              id: 'AMTslW2s1HfSJBFAamBkj',
+            },
+            {
+              children: [
+                {
+                  text: 'if EBIT > 0 then EBIT * TaxRate  else 0',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'Gy10UJ_AblyC41ZniHrST',
+              id: 'TaRVR6BOpYn4xuMhfWm03',
+            },
+          ],
+          type: 'table-caption',
+          id: 'vtOVzsWd_K6UtWVOr5oUz',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: 'amST0_qoMp6Q-nxr_B1P5',
+            },
+            {
+              children: [
+                {
+                  text: 'EBIT',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: '3WOOVaQ3eBiKoJeXPclDa',
+            },
+            {
+              children: [
+                {
+                  text: 'Taxes',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'Gy10UJ_AblyC41ZniHrST',
+            },
+          ],
+          type: 'tr',
+          id: 'D_fugINwLZZD9S6TiNmp6',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: '5Ned8Z_4cPjlEdSwTCf9Y',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'jZuDmaigG-273z2J10cHP',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'a3sPN3N6UXK92hI-wVAAP',
+            },
+          ],
+          type: 'tr',
+          id: 'tJzUjeghEGJ7uSFKGYQ02',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'T7t8DDTTZZAlt0khmZDHo',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'icqONqspYJZTyc_IpKJ80',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'dacXyFHgPYDGgclNumDlX',
+            },
+          ],
+          type: 'tr',
+          id: 'oO8GKiKnLK-dNMkBpMeXS',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: '5uMWeEC0fhGMlLu-VNB4g',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '7LVV7Y0UhVrR9bisPu8xj',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '7L3GYIDpeL93C5imc7DBJ',
+            },
+          ],
+          type: 'tr',
+          id: 'F6RJFf43RtPvapftRi1JR',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: 'ci8-AieqwvDbsfgf44YqK',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '-SKnvvhtNxIAqFtGxdoR7',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'hKDm5qXfFMi7p_XJErOI-',
+            },
+          ],
+          type: 'tr',
+          id: 'FCtwCbc143gSDlfAfW1cn',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'GoAd5ffdF9Urkh3-VvMAJ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'BNUDT5DcO92Ldz3NeUrV3',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'bdoQZTvOdehCkxOYGmGVz',
+            },
+          ],
+          type: 'tr',
+          id: 'CxiHJQIxpxKB46S5PU7tR',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: 'ZwXDLzB1_REGscYunLfG8',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'e1dissTNDa7zp_pkZh9bT',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '-HzABVETG1LSZFOSflv_5',
+            },
+          ],
+          type: 'tr',
+          id: 'FywRQugsdljICUSKMMfal',
+        },
+      ],
+      type: 'table',
+      id: 'Kqjhk4bqXwF7Y4lKcLZIH',
+    },
+    {
+      children: [
+        {
+          text: '',
+        },
+      ],
+      type: 'p',
+      id: 'pVUWRjVIoGJyegDskAAT1',
+    },
+    {
+      children: [
+        {
+          text: "🤔 So, what's the verdict? Should I start?",
+        },
+      ],
+      type: 'h2',
+      id: 'QSzvEHKJ6_ykiEkp5ClcB',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'NetIncome',
+                },
+              ],
+              type: 'table-var-name',
+              id: 'DdKMcyf6npKN5UiEi1wVh',
+            },
+            {
+              children: [
+                {
+                  text: 'EBIT.OperatingIncome ',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'oqFDAfdh8Tg4fmy1_8kbu',
+              id: '5sKApZ48X5wUamSsCXpfR',
+            },
+            {
+              children: [
+                {
+                  text: 'Tax.Taxes',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'oNqXPFl_emZTsl3UyDOCh',
+              id: 't9C5L2PpXjyMzSyhdGRWx',
+            },
+            {
+              children: [
+                {
+                  text: 'OperatingIncome - Taxes',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'LGjMd7XRPa5jaDmgsUTXp',
+              id: 'kmuhs1e0MDaV_WfRs8Up_',
+            },
+            {
+              children: [
+                {
+                  text: 'EBIT.NetRevenue',
+                },
+              ],
+              type: 'table-column-formula',
+              columnId: 'IUJMEQyzrk63nHnOfnKdf',
+              id: '1xcl51nIfSztI1s83rAVF',
+            },
+          ],
+          type: 'table-caption',
+          id: 'SfcX8c_yRYWzPQhQs6xMI',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Year',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'date',
+                date: 'year',
+              },
+              id: '6DPoA72_52skYJrT9_M25',
+            },
+            {
+              children: [
+                {
+                  text: 'NetRevenue',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'IUJMEQyzrk63nHnOfnKdf',
+            },
+            {
+              children: [
+                {
+                  text: 'OperatingIncome',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'oqFDAfdh8Tg4fmy1_8kbu',
+            },
+            {
+              children: [
+                {
+                  text: 'Taxes',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'oNqXPFl_emZTsl3UyDOCh',
+            },
+            {
+              children: [
+                {
+                  text: 'NetIncome',
+                },
+              ],
+              type: 'th',
+              cellType: {
+                kind: 'table-formula',
+              },
+              id: 'LGjMd7XRPa5jaDmgsUTXp',
+            },
+          ],
+          type: 'tr',
+          id: '9WXOFJVydLnA5zQtoXNDh',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2022',
+                },
+              ],
+              type: 'td',
+              id: 'Z9YGc24FhK2FQM-hj7JuK',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '4aiMrA5lMRD9iEMH7J4wq',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'hDIcW2-R62bh_NqpKkN-F',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'xq4sVL_B7aRWER1Du1qbj',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '9qiT3AiDM_pOIjAEsa9q7',
+            },
+          ],
+          type: 'tr',
+          id: 'nTsvMrmV0kXK7rBLA-NMe',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2023',
+                },
+              ],
+              type: 'td',
+              id: 'G7A7_uLZdPyb-GQsCo_Vz',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '-X9Wox5wCys_e45BDDvsb',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'XfyHLEDfUMz_v-KHnZzGz',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'MgwSnECT8mU9ojcJd_4fu',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '33_wVYOT946dmAjrfq9nq',
+            },
+          ],
+          type: 'tr',
+          id: 'HALFE7SDQHO4lYCAkmWVk',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2024',
+                },
+              ],
+              type: 'td',
+              id: 'dmrRDaqRr-3wo4rOvRGDF',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'B5ZGyt35p3RLZ2N4XjOZj',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: 'c4k0OWcbZSvXZ_nQhgs78',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              id: '-QrE8DzRJlnVChYmTVXpY',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'TpOiDdhf9YjHCOd1xZNSI',
+            },
+          ],
+          type: 'tr',
+          id: '1YklZfmXwO44Boh4eJImN',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2025',
+                },
+              ],
+              id: '-xF41YV3ZKus2yLNWlKgZ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'fQIxkrhZ7sZbK6mr5i7mm',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'HEymDPL-YCS1iFST0t5bs',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'dIWf6S7jnRvRV1-A5JRq1',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'ndTosLYaB--z4ZYW3q0mH',
+            },
+          ],
+          type: 'tr',
+          id: 'STxzYZQbOK-DTo0Kb_0E1',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2026',
+                },
+              ],
+              id: 'zlUjA9td6Srud-0kAqBd1',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'rLBhME98dnFBwqdJKW2y9',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'Rokba0Hfc-LlOy1r8oqnM',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'V7Ul0Fmx8F3QXAKo4AFBI',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'ZD7aXlJW3WZ_1UaBEYUlv',
+            },
+          ],
+          type: 'tr',
+          id: 'jgtp1cTJRbeuPmWBc-bCW',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: '2027',
+                },
+              ],
+              id: 'P69sgBdhnhMBrG1EFupOY',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: '8gN6wr9QOssEgJGYzIiDF',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'mMlqYk53bi0tko-r8oaoZ',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '3Y8IjwNJ5QxIttwWvrpyk',
+              type: 'td',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'td',
+              cellType: {
+                kind: 'string',
+              },
+              id: 'Wf_LPZMvYTZFBT_9aY3Rw',
+            },
+          ],
+          type: 'tr',
+          id: 'eAYWK137pWbA-sE7DPYSX',
+        },
+      ],
+      type: 'table',
+      id: 'dx3xX7M8CauTJALImf5vt',
+    },
+    {
+      children: [
+        {
+          text: 'Looks like I can make',
+        },
+        {
+          text: ' ',
+          highlight: true,
+        },
+        {
+          text: '$8K',
+          highlight: true,
+          bold: true,
+        },
+        {
+          text: ' in profits in my first year ',
+          highlight: true,
+        },
+        {
+          text: 'to reinvest into more candle-making, and could make as much as',
+        },
+        {
+          text: ' ',
+          bold: true,
+        },
+        {
+          text: '$5K',
+          highlight: true,
+          bold: true,
+        },
+        {
+          text: ' as side income (as defined in the labor cost above).',
+          highlight: true,
+        },
+        {
+          text: '  Totaling to',
+        },
+        {
+          text: '$13k ',
+          code: true,
+        },
+        {
+          text: 'in a year! \n\nMaybe not such a bad idea after all …',
+        },
+      ],
+      type: 'p',
+      id: '2gGn0GgKA_L1Bt07MN4V5',
+    },
+    {
+      children: [
+        {
+          text: '',
+        },
+      ],
+      type: 'p',
+      id: 'fWjCbaUynBRB2GTnKD3Fa',
+    },
+  ],
+} as Document;
