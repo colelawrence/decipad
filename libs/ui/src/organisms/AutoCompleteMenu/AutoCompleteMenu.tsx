@@ -44,7 +44,7 @@ const styles = (top: boolean, rounded: boolean) =>
   });
 
 const mainStyles = css({
-  padding: '8px',
+  padding: '4px 2px',
   width: '100%',
 });
 
