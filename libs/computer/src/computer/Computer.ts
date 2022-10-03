@@ -53,7 +53,6 @@ import type {
 import { getDefinedSymbol, getGoodBlocks } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
-import { getDelayedBlockId } from './delayErrors';
 import { ParseRet, updateParse } from './parse';
 import { topologicalSort } from './topologicalSort';
 
@@ -71,7 +70,6 @@ export class Computer {
   private previousExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
   private computing = false;
-  private cursorBlockId: string | null = null;
   private requestDebounceMs: number;
   private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
   private automaticallyGeneratedNames = new Set<string>();
@@ -100,20 +98,19 @@ export class Computer {
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
-        concatMap((req) => this.computeRequest(req)),
-        map((res): NotebookResults => {
+        concatMap(async (req): Promise<NotebookResults> => {
+          const res = await this.computeRequest(req);
+
           if (res.type === 'compute-panic') {
             captureException(new Error(res.message));
             return defaultComputerResults;
           }
-          const blockResults = Object.fromEntries(
-            res.updates.map((result) => [result.id, result])
-          );
 
           return {
-            blockResults,
+            blockResults: Object.fromEntries(
+              res.updates.map((result) => [result.id, result])
+            ),
             indexLabels: res.indexLabels,
-            delayedResultBlockId: getDelayedBlockId(res, this.cursorBlockId),
           };
         }),
         shareReplay(1)
@@ -161,7 +158,11 @@ export class Computer {
 
   getBlockIdResult$ = listenerHelper(
     this.results,
-    (results, blockId: string) => results.blockResults[blockId]
+    (
+      results,
+      blockId: string
+    ): Readonly<IdentifiedError> | Readonly<IdentifiedResult> | undefined =>
+      results.blockResults[blockId]
   );
 
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
@@ -356,10 +357,6 @@ export class Computer {
         externalData.delete(key);
       })
     );
-  }
-
-  public setCursorBlockId(blockId: string | null): void {
-    this.cursorBlockId = blockId;
   }
 
   /**

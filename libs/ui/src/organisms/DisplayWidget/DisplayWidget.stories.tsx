@@ -22,7 +22,6 @@ const args: ComponentProps<typeof DisplayWidget> = {
   onChangeOpen: noop,
   selectedId: '1',
   setSelectedId: noop,
-  lineResult: null,
   result: 'Result',
   readOnly: false,
   children: [],

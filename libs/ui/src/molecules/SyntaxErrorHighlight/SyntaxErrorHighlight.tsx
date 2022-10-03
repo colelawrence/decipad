@@ -12,35 +12,16 @@ interface SyntaxErrorHighlightProps {
   children: ReactNode;
   variant?: 'mismatched-brackets' | 'never-closed' | 'never-opened' | 'custom';
   error?: string;
+  hideError?: boolean;
 }
 
 export const SyntaxErrorHighlight = ({
   children,
   variant,
   error,
+  hideError,
 }: SyntaxErrorHighlightProps): ReturnType<FC> => {
-  return (
-    <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
-      {variant === 'never-closed' && 'Did you forget to close this bracket?'}
-      {variant === 'never-opened' && 'Did you forget the opening bracket?'}
-      {variant === 'mismatched-brackets' &&
-        'This bracket does not match the other one.'}
-      {(variant === 'custom' && error) ?? 'Unknown error'}
-      {variant == null && 'This character is invalid here'}
-    </Tooltip>
-  );
-};
-
-interface ConditionalCodeSyntaxErrorProps {
-  error?: string;
-  children: ReactNode;
-}
-
-export const ConditionalCodeSyntaxError = ({
-  children,
-  error,
-}: ConditionalCodeSyntaxErrorProps) => {
-  if (!error) {
+  if (hideError) {
     // Retain DOM structure for error highlighting
     // To avoid jumping cursor when an error is fixed or caused around it.
     // This keeps happening. Please do not undo.
@@ -54,7 +35,12 @@ export const ConditionalCodeSyntaxError = ({
 
   return (
     <Tooltip trigger={<span css={highlightStyles}>{children}</span>}>
-      {error}
+      {variant === 'never-closed' && 'Did you forget to close this bracket?'}
+      {variant === 'never-opened' && 'Did you forget the opening bracket?'}
+      {variant === 'mismatched-brackets' &&
+        'This bracket does not match the other one.'}
+      {(variant === 'custom' && error) ?? 'Unknown error'}
+      {variant == null && 'This character is invalid here'}
     </Tooltip>
   );
 };

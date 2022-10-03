@@ -62,7 +62,7 @@ interface DisplayWidgetDropdownProps {
   readonly onChangeOpen: (arg0: boolean) => void;
   readonly selectedId: string;
   readonly setSelectedId: (arg0: string) => void;
-  readonly lineResult: IdentifiedResult | IdentifiedError | null;
+  readonly lineResult?: IdentifiedResult | IdentifiedError;
   readonly result: string | null;
   readonly readOnly: boolean;
   readonly children: ReactNode;

@@ -10,8 +10,7 @@ import {
 } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
-import { CellEditor } from '../../molecules';
-import { ConditionalCodeSyntaxError } from '../../molecules/SyntaxErrorHighlight/SyntaxErrorHighlight';
+import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
 import {
   cssVar,
   Opacity,
@@ -187,9 +186,13 @@ export const TableData = ({
         unit={unit}
         onChangeValue={onChangeValue}
       >
-        <ConditionalCodeSyntaxError error={parseError}>
+        <SyntaxErrorHighlight
+          variant="custom"
+          error={parseError}
+          hideError={!parseError}
+        >
           {children}
-        </ConditionalCodeSyntaxError>
+        </SyntaxErrorHighlight>
       </CellEditor>
     </Component>
   );

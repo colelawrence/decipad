@@ -77,5 +77,4 @@ export interface NotebookResults {
     readonly [blockId: string]: Readonly<IdentifiedResult | IdentifiedError>;
   };
   readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
-  readonly delayedResultBlockId: string | null;
 }

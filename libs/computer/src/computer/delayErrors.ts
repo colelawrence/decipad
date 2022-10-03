@@ -23,7 +23,7 @@ interface DelayErrorsArgs {
 type SimpleRes = ComputeResponse | ComputePanic;
 
 export interface DelayableResult {
-  result: IdentifiedResult | IdentifiedError;
+  result?: IdentifiedResult | IdentifiedError;
   needsDelay: boolean;
 }
 
@@ -63,21 +63,19 @@ export const delayErrors = ({
 
 export function getDelayedBlockId(
   res: SimpleRes,
-  cursorBlockId: string | null
-): string | null {
+  cursorBlockId?: string
+): string | undefined {
   if (cursorBlockId != null && isErrorUnderCursor(res, cursorBlockId)) {
     return cursorBlockId;
   }
-  return null;
+  return undefined;
 }
 
-function isErrorUnderCursor(res: SimpleRes, cursorBlockId: string | null) {
+function isErrorUnderCursor(res: SimpleRes, cursorBlockId: string) {
   if (res.type === 'compute-panic') {
     return false;
   }
-  const blockUpdate = cursorBlockId
-    ? res.updates.find((up) => up.id === cursorBlockId)
-    : null;
+  const blockUpdate = res.updates.find((up) => up.id === cursorBlockId);
   if (blockUpdate) {
     return (
       blockUpdate.error != null || blockUpdate.result.type.kind === 'type-error'

@@ -4,16 +4,14 @@ import {
   getAllByRole as getAllDescendantsByRole,
 } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
-import {
-  ResultsContextItem,
-  TestResultsProvider,
-} from '@decipad/react-contexts';
-import { runCode } from '../../test-utils';
+import { TestResultsProvider } from '@decipad/react-contexts';
+import { NotebookResults } from '@decipad/computer';
 
+import { runCode } from '../../test-utils';
 import { ColumnResult } from '..';
 
 function withResultContextWrapper(
-  value: Partial<ResultsContextItem>
+  value: Partial<NotebookResults>
 ): FC<React.PropsWithChildren<unknown>> {
   return ({ children }) => {
     return <TestResultsProvider {...value}>{children}</TestResultsProvider>;

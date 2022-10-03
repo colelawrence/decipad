@@ -12,12 +12,12 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useComputer } from '@decipad/react-contexts';
+import { useResult } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import { getNodeString, findNodePath, insertNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -35,12 +35,10 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const selected = useSelected();
   const editor = useTEditorRef();
 
-  const computer = useComputer();
   const { id: lineId } = element;
-  const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
-    (line) => [getSyntaxError(line), line?.result] as const,
-    lineId
-  );
+
+  const lineResult = useResult(lineId);
+  const syntaxError = useMemo(() => getSyntaxError(lineResult), [lineResult]);
 
   const codeLineContent = getNodeString(element);
 
@@ -82,7 +80,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       <DraggableBlock blockKind="codeLine" element={element}>
         <UICodeLine
           highlight={selected}
-          result={lineResult}
+          result={lineResult?.result}
           placeholder="Distance = 60 km/h * Time"
           syntaxError={syntaxError}
           onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
@@ -98,7 +96,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   );
 };
 
-function getSyntaxError(line: IdentifiedResult | IdentifiedError | null) {
+function getSyntaxError(line?: IdentifiedResult | IdentifiedError) {
   const error = line?.error;
   if (!error) {
     return undefined;
@@ -106,8 +104,8 @@ function getSyntaxError(line: IdentifiedResult | IdentifiedError | null) {
 
   return isSyntaxError(error)
     ? {
-        line: isSyntaxError(error) && error.line != null ? error.line : 1,
-        column: isSyntaxError(error) && error.column != null ? error.column : 1,
+        line: error && error.line != null ? error.line : 1,
+        column: error && error.column != null ? error.column : 1,
         message: error.message,
         detailMessage: error.detailMessage,
         expected: error.expected,

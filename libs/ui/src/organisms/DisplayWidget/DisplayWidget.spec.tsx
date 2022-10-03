@@ -22,7 +22,6 @@ const props: ComponentProps<typeof DisplayWidget> = {
   selectedId: '1',
   setSelectedId: noop,
   result: 'Result',
-  lineResult: null,
   readOnly: false,
   children: [],
 };

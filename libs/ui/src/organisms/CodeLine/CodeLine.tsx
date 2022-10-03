@@ -1,6 +1,7 @@
 import { Result } from '@decipad/computer';
 import { css } from '@emotion/react';
 import React, { ComponentProps, ReactNode, useState } from 'react';
+import { useDelayedValue } from '@decipad/react-utils';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -133,18 +134,18 @@ export const CodeLine = ({
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
-  const hasResult = result != null;
-  const hasTypeError = result != null && result.type.kind === 'type-error';
-  const hasSyntaxError = syntaxError != null;
-  const hasError = hasSyntaxError || hasTypeError;
-
-  const isTableOrColumn = isTabularType(result?.type);
   const isEmpty = isNodeEmpty(children);
 
-  const renderExpandedResult = !hasError && hasResult && isTableOrColumn;
-
-  const renderInlineResult =
-    hasTypeError || (hasResult && !renderExpandedResult);
+  const freshResult = renderPotentiallyExpandedResult({
+    result,
+    syntaxError,
+    onDragStartCell,
+    onClickedResult,
+  });
+  const { inline, expanded } = useDelayedValue(
+    freshResult,
+    freshResult.errored === true
+  );
 
   return (
     <div css={spacingStyles(variant)} spellCheck={false}>
@@ -165,36 +166,68 @@ export const CodeLine = ({
           }}
           onDragEnd={() => setGrabbing(false)}
         >
-          {renderInlineResult &&
-            !hasSyntaxError &&
-            result && ( // The typescript gods demand me to this
-              <output
-                css={inlineResultStyles}
-                onClick={() => {
-                  if (onClickedResult) {
-                    onClickedResult(result);
-                  }
-                }}
-              >
-                <CodeResult {...result} variant="inline" />
-              </output>
-            )}
-          {syntaxError && ( // The typescript gods punish me for using hasSyntaxError here
-            <output css={inlineResultStyles}>
-              <CodeError {...syntaxError} />
-            </output>
-          )}
+          {inline}
         </div>
-        {renderExpandedResult && result && (
-          <output contentEditable={false} css={expandedResultStyles}>
-            <CodeResult
-              {...result}
-              variant="block"
-              onDragStartCell={onDragStartCell}
-            />
-          </output>
-        )}
+        {expanded}
       </div>
     </div>
   );
 };
+
+function renderPotentiallyExpandedResult({
+  result,
+  syntaxError,
+  onDragStartCell,
+  onClickedResult,
+}: Pick<
+  CodeLineProps,
+  'result' | 'syntaxError' | 'onDragStartCell' | 'onClickedResult'
+>): { inline?: ReactNode; expanded?: ReactNode; errored?: boolean } {
+  // Return early when syntax errors
+  if (syntaxError) {
+    return {
+      inline: (
+        <output css={inlineResultStyles}>
+          <CodeError {...syntaxError} />
+        </output>
+      ),
+      errored: true,
+    };
+  }
+
+  if (!result || result.type.kind === 'nothing') {
+    return {};
+  }
+
+  // Tables are expanded
+  if (isTabularType(result.type)) {
+    return {
+      expanded: (
+        <output contentEditable={false} css={expandedResultStyles}>
+          <CodeResult
+            {...result}
+            variant="block"
+            onDragStartCell={onDragStartCell}
+          />
+        </output>
+      ),
+    };
+  }
+
+  // Any other result
+  return {
+    inline: (
+      <output
+        css={inlineResultStyles}
+        onClick={() => {
+          if (onClickedResult) {
+            onClickedResult(result);
+          }
+        }}
+      >
+        <CodeResult {...result} variant="inline" />
+      </output>
+    ),
+    errored: result.type.kind === 'type-error',
+  };
+}

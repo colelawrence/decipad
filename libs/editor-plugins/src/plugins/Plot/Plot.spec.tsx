@@ -1,7 +1,6 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
-import { SerializedType } from '@decipad/computer';
+import { NotebookResults, SerializedType } from '@decipad/computer';
 import {
-  ResultsContextItem,
   TestResultsProvider,
   ComputerContextProvider,
 } from '@decipad/react-contexts';
@@ -15,7 +14,7 @@ import Plot from './Plot';
 
 interface PlotWithProvidersParams {
   element?: Partial<PlotElement>;
-  blockResults?: ResultsContextItem['blockResults'];
+  blockResults?: NotebookResults['blockResults'];
 }
 
 function F(n: number) {

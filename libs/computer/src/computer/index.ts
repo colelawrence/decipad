@@ -5,6 +5,7 @@ export type {
   ProgramBlock,
   UnparsedBlock,
   ComputeRequest,
+  NotebookResults,
 } from '../types';
 
 export { Computer, getUsedIdentifiers } from './Computer';

@@ -1,7 +1,7 @@
 import { EMPTY, firstValueFrom, from, Observable } from 'rxjs';
 
 import { buildType as t, serializeType } from '@decipad/language';
-import { timeout } from '@decipad/utils';
+import { getDefined, timeout } from '@decipad/utils';
 import { getDelayedBlockId } from '.';
 
 import { delayErrors, DelayableResult } from './delayErrors';
@@ -79,17 +79,17 @@ describe('error results', () => {
   it('error delay can be interrupted by a cursor move', async () => {
     expect.assertions(4);
 
-    let firstValue = null;
+    let firstValue;
 
     const stream = incompleteOf(errorRes).pipe(
       delayErrors({
         shouldDelay$: from(
           (function* yieldBlockIdsWhileChecking() {
-            expect(firstValue).toEqual(null);
+            expect(firstValue).toBe(undefined);
             yield true;
-            expect(firstValue).toEqual(null);
+            expect(firstValue).toBe(undefined);
             yield false;
-            expect(false).toEqual(true); // This won't run
+            expect(false).toBe(true); // This won't run
           })()
         ),
         timeoutFn,
@@ -135,7 +135,7 @@ describe('getDelayedBlockId', () => {
         {
           type: 'compute-response',
           indexLabels: new Map(),
-          updates: [errorRes.result],
+          updates: [getDefined(errorRes.result)],
         },
         'blockId'
       )
@@ -147,15 +147,15 @@ describe('getDelayedBlockId', () => {
         {
           type: 'compute-response',
           indexLabels: new Map(),
-          updates: [goodRes.result],
+          updates: [getDefined(goodRes.result)],
         },
         'blockId'
       )
-    ).toEqual(null);
+    ).toBe(undefined);
   });
   it('does not delay panics', () => {
     expect(
       getDelayedBlockId({ type: 'compute-panic', message: '' }, 'blockid')
-    ).toEqual(null);
+    ).toBe(undefined);
   });
 });

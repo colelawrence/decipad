@@ -1,5 +1,6 @@
 import { ComponentProps, FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
+import { useDelayedValue } from '@decipad/react-utils';
 import { cssVar, p14Medium } from '../../primitives';
 import { TableFormulaCell } from '../../atoms';
 
@@ -26,6 +27,17 @@ export const FormulaTableData = ({
   resultType,
   ...props
 }: FormulaTableDataProps): ReturnType<FC> => {
+  const isError = resultType === 'nothing' || resultType === 'type-error';
+  const delayedResult = useDelayedValue(
+    <span
+      css={resultType !== 'table' ? tdLineStyles : null}
+      contentEditable={false}
+    >
+      {result}
+    </span>,
+    isError /* TODO && whether the formula is selected */
+  );
+
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers
   // an uncaught exception in slate-react.
@@ -36,12 +48,7 @@ export const FormulaTableData = ({
       <span css={noEditingStyles} contentEditable={false}>
         {children}
       </span>
-      <span
-        css={resultType !== 'table' ? tdLineStyles : null}
-        contentEditable={false}
-      >
-        {result}
-      </span>
+      {delayedResult}
     </TableFormulaCell>
   );
 };

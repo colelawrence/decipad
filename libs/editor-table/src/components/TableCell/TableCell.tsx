@@ -11,6 +11,7 @@ import {
   useTableColumnFormulaResultForElement,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
+import { useDelayedBoolean } from '@decipad/react-utils';
 import {
   CodeResult,
   ColumnDropLine,
@@ -104,6 +105,8 @@ export const TableCell: PlateComponent = ({
     element.id
   );
 
+  const showParseError = useDelayedBoolean(Boolean(parseError));
+
   const onChangeValue = useCallback(
     (newValue: string | undefined) => {
       const path = findNodePath(editor, element);
@@ -148,7 +151,7 @@ export const TableCell: PlateComponent = ({
       value={nodeText}
       onChangeValue={onChangeValue}
       alignRight={isCellAlignRight(cellType)}
-      parseError={parseError}
+      parseError={showParseError ? parseError : undefined}
     >
       {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
       {direction === 'left' && <ColumnDropLine dropDirection={direction} />}
