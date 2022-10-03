@@ -21,6 +21,7 @@ fragment EditorNotebook on Pad {
     url
     token
   }
+  initialState
 }
 
 query GetNotebookById($id: ID!) {

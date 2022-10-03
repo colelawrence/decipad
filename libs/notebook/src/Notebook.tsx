@@ -28,6 +28,7 @@ export interface NotebookProps {
   readOnly: boolean;
   secret?: string;
   connectionParams: NotebookConnectionParams | undefined;
+  initialState?: string;
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
 }
@@ -39,6 +40,7 @@ const InsideNotebookState = ({
   readOnly,
   secret,
   connectionParams,
+  initialState,
   onEditor,
   onDocsync,
 }: NotebookProps) => {
@@ -83,6 +85,7 @@ const InsideNotebookState = ({
         editor,
         authSecret: secret,
         connectionParams,
+        initialState,
       });
     }
   }, [
@@ -95,6 +98,7 @@ const InsideNotebookState = ({
     computer,
     docSyncEditor,
     editor,
+    initialState,
   ]);
 
   useEffect(() => {

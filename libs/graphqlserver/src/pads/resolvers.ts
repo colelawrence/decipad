@@ -9,7 +9,10 @@ import {
   WorkspaceRecord,
 } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
-import { getNotebooks } from 'libs/services/src/notebooks';
+import {
+  getNotebooks,
+  getNotebookInitialState,
+} from 'libs/services/src/notebooks';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { getDefined, identity } from '@decipad/utils';
@@ -162,6 +165,13 @@ const resolvers = {
         )}?doc=${encodeURIComponent(pad.id)}`,
         token: await accessTokenFor(context.event, 'pubsub'),
       };
+    },
+
+    async initialState(pad: PadRecord) {
+      const initialState = await getNotebookInitialState(pad.id);
+      return initialState
+        ? Buffer.from(initialState).toString('base64')
+        : undefined;
     },
   },
 

@@ -43,6 +43,7 @@ interface UseNotebookStateAndActionsResult {
   hasLocalChanges: BehaviorSubject<boolean> | undefined;
   isSavedRemotely: BehaviorSubject<boolean> | undefined;
   connectionParams?: NotebookConnectionParams;
+  initialState?: string;
 
   duplicate: () => Promise<void>;
   removeLocalChanges: () => Promise<void>;
@@ -199,6 +200,7 @@ export const useNotebookStateAndActions = ({
     hasLocalChanges,
     isSavedRemotely,
     connectionParams: notebook?.padConnectionParams,
+    initialState: notebook?.initialState ?? undefined,
 
     duplicate,
     removeLocalChanges,

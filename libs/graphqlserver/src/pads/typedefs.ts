@@ -33,6 +33,7 @@ export default gql`
     isPublic: Boolean
     icon: String
     padConnectionParams: PadConnectionParams!
+    initialState: String
   }
 
   type PagedPadResult {

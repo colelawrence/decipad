@@ -134,6 +134,9 @@ export function docSyncEditor<E extends MyEditor>(
     removeLocalChanges() {
       return store.remove();
     },
+    setLoadedRemotely() {
+      events.emit('loaded', 'remotely');
+    },
     isDocSyncEnabled: true,
   });
 

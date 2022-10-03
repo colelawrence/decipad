@@ -7,7 +7,7 @@ import {
   createWebsocketProvider,
 } from '@decipad/y-websocket';
 import { Awareness } from 'y-protocols/awareness';
-import { Doc as YDoc } from 'yjs';
+import { applyUpdate, Doc as YDoc } from 'yjs';
 import { MyEditor } from '@decipad/editor-types';
 import { PlateEditor } from '@udecode/plate';
 import { docSyncEditor } from './docSyncEditor';
@@ -31,6 +31,7 @@ export interface DocSyncOptions {
   connect?: boolean;
   connectBc?: boolean;
   connectionParams?: DocSyncConnectionParams;
+  initialState?: string;
 }
 
 async function fetchToken(): Promise<string> {
@@ -61,6 +62,7 @@ export function createDocSyncEditor(
     connectBc = true,
     WebSocketPolyfill,
     connectionParams,
+    initialState,
   }: DocSyncOptions
 ) {
   (editor as PlateEditor).children = [];
@@ -111,6 +113,16 @@ export function createDocSyncEditor(
 
   store.once('synced', () => {
     if (connect && !destroyed) {
+      if (initialState) {
+        try {
+          const update = Buffer.from(initialState, 'base64');
+          applyUpdate(doc, update);
+          syncEditor.setLoadedRemotely();
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error applying initial update', err);
+        }
+      }
       wsp?.connect();
     }
   });

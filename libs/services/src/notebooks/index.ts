@@ -3,3 +3,4 @@ export * from './duplicate';
 export * from './import';
 export * from './get-notebooks';
 export * from './snapshot';
+export * from './initialState';

@@ -32,6 +32,7 @@ export type DocSyncEditor = MyEditor &
     disconnect: () => void;
     hasLocalChanges: () => BehaviorSubject<boolean>;
     isSavedRemotely: () => BehaviorSubject<boolean>;
+    setLoadedRemotely: () => void;
     removeLocalChanges: () => Promise<void>;
     connected: boolean;
     isDocSyncEnabled: boolean;
