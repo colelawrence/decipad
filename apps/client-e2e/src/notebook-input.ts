@@ -8,7 +8,7 @@ import {
 } from './page-utils/Pad';
 
 // eslint-disable-next-line jest/no-disabled-tests
-describe('notebook input', () => {
+describe.skip('notebook input', () => {
   beforeAll(setUp);
   beforeAll(waitForEditorToLoad);
 
