@@ -10,25 +10,28 @@ import { insertNodes, TEditor } from '@udecode/plate';
 import { clone } from 'lodash';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { GetAvailableIdentifier } from './slashCommands';
 
-const getInitialDataViewElement = (
-  initialTableVariableName: string | undefined
-) => {
+const getInitialDataViewElement = (varName?: string): DataViewElement => {
   return {
+    id: nanoid(),
     type: ELEMENT_DATA_VIEW,
-    varName: initialTableVariableName,
+    varName,
     children: [
       {
+        id: nanoid(),
         type: ELEMENT_TABLE_CAPTION,
         children: [
           {
+            id: nanoid(),
             type: ELEMENT_TABLE_VARIABLE_NAME,
-            children: [{ text: `` }],
+            children: [
+              { text: `Data view${varName ? ` for ${varName}` : ''}` },
+            ],
           },
         ],
       },
       {
+        id: nanoid(),
         type: ELEMENT_DATA_VIEW_TR,
         children: [],
       },
@@ -39,18 +42,11 @@ const getInitialDataViewElement = (
 export const insertDataViewBelow = (
   editor: TEditor,
   path: Path,
-  getAvailableIdentifier: GetAvailableIdentifier,
-  initialTableVariableName?: string
+  varName?: string
 ): void => {
   const dataView = clone(
-    getInitialDataViewElement(initialTableVariableName)
+    getInitialDataViewElement(varName)
   ) as unknown as DataViewElement;
-  dataView.id = nanoid();
-  dataView.children[0].children[0].children[0].text = getAvailableIdentifier(
-    'Data View ',
-    1
-  );
-
   insertNodes(editor, dataView, {
     at: requirePathBelowBlock(editor, path),
   });

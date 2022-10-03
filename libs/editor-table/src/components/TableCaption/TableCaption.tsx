@@ -6,7 +6,6 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
 import { EditableTableCaption } from '@decipad/ui';
 import {
   findNodePath,
@@ -27,7 +26,6 @@ export const TableCaption: PlateComponent = ({
   assertElementType(element, ELEMENT_TABLE_CAPTION);
   const columnCount = useTableColumnCount(element);
   const editor = useTEditorRef();
-  const computer = useComputer();
   const path = findNodePath(editor, element);
   const parent = getAboveNode<TableElement>(editor, {
     at: path,
@@ -50,7 +48,6 @@ export const TableCaption: PlateComponent = ({
       insertDataViewBelow(
         editor,
         parentPath,
-        computer.getAvailableIdentifier.bind(computer),
         getNodeString(getNodeChild(element, 0))
       )
     );

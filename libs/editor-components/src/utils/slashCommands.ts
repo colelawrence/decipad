@@ -64,7 +64,7 @@ export const execute = ({
       insertTableBelow(editor, path, getAvailableIdentifier);
       break;
     case 'data-view':
-      insertDataViewBelow(editor, path, getAvailableIdentifier);
+      insertDataViewBelow(editor, path);
       break;
     case 'plot':
       insertPlotBelow(editor, path);

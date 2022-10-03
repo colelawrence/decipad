@@ -36,7 +36,12 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
       { type: ELEMENT_PARAGRAPH, children: [{ text: '/cmd' }] } as never,
     ];
 
-    execute({ editor, path: [0, 0], command, getAvailableIdentifier });
+    execute({
+      editor,
+      path: [0, 0],
+      command,
+      getAvailableIdentifier,
+    });
     expect(editor.children).toEqual([
       expect.objectContaining({ type: expectedType }),
     ]);
