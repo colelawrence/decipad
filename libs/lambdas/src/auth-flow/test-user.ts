@@ -60,7 +60,7 @@ export const testUserAuth = async (
     token: {
       accessToken: existingUser.secret,
     },
-    maxAge: 5 * 60,
+    maxAge: 24 * 60 * 60,
   });
 
   let cookie = `${tokenCookieName}=${token}`;
