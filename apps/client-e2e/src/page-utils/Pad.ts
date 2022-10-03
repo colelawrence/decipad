@@ -1,4 +1,5 @@
 import { Page } from 'playwright-core';
+import waitForExpect from 'wait-for-expect';
 import { timeout, withTestUser } from '../utils';
 import { signOut } from './Home';
 import { navigateToPlayground } from './Playground';
@@ -26,7 +27,13 @@ export async function setUp(options: SetupOptions = {}) {
     await waitForEditorToLoad();
   }
   if (createAndNavigateToNewPad) {
-    await page.waitForTimeout(1000);
+    await waitForExpect(async () =>
+      expect(
+        (
+          await page.$$('[contenteditable] h1')
+        ).length
+      ).toBeGreaterThanOrEqual(1)
+    );
   }
 
   return newUser;

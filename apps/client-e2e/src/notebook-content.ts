@@ -105,16 +105,12 @@ describe('notebook content', () => {
     );
   });
 
-  // TODO figure out how to make less flaky
-  /* eslint-disable jest/no-disabled-tests */
-  it.skip('allows to go back to the previous paragraph and remove some text', async () => {
+  it('allows to go back to the previous paragraph and remove some text', async () => {
     const [, p2] = await page.$$('[contenteditable] p');
 
     // navigate to the element with flake redundancy
     await keyPress('ArrowUp');
-    p2.focus();
     // navigate to the end with flake redundancy
-    await keyPress('End');
     await keyPress('End');
 
     for (let i = 0; i < ' paragraph'.length; i += 1) {
@@ -123,7 +119,7 @@ describe('notebook content', () => {
     expect(await p2.textContent()).toBe('this is the content for the second');
   });
 
-  it.skip('allows appending some text to an existing paragraph', async () => {
+  it('allows appending some text to an existing paragraph', async () => {
     await page.keyboard.type(' para-graph');
     const [, p2] = await page.$$('[contenteditable] p');
     expect(await p2.textContent()).toBe(
@@ -131,12 +127,12 @@ describe('notebook content', () => {
     );
   });
 
-  it.skip('can split a paragraph in two', async () => {
+  it('can split a paragraph in two', async () => {
     for (let i = 0; i < 'second para-graph'.length; i += 1) {
       await keyPress('ArrowLeft');
     }
     await keyPress('Enter');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+    expect(await page.$$('[contenteditable] p')).toHaveLength(5);
 
     const [, p2, p3] = await page.$$('[contenteditable] p');
     expect(await p2.textContent()).toBe('this is the content for the ');

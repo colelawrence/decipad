@@ -30,6 +30,9 @@ export async function navigateToWorkspacePage() {
       });
     }
   }
+  await waitForExpect(async () =>
+    expect((await page.$$('text=notebooks')).length).toBeGreaterThanOrEqual(1)
+  );
 }
 
 export async function setUp() {
