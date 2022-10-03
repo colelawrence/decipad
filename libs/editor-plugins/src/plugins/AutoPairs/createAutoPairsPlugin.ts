@@ -1,4 +1,9 @@
-import { deleteText, getParentNode, moveSelection } from '@udecode/plate';
+import {
+  deleteText,
+  getNodeString,
+  getParentNode,
+  moveSelection,
+} from '@udecode/plate';
 import { ELEMENT_CODE_LINE } from '@decipad/editor-types';
 import { Range } from 'slate';
 import { isElementOfType } from '@decipad/editor-utils';
@@ -28,10 +33,9 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
         if (isElementOfType(node, ELEMENT_CODE_LINE)) {
           const activePair = pairs.find((pair) => pair.start === event.key);
 
-          if (
-            activePair &&
-            isAtEndOfLine(node.children[0].text, cursor.offset)
-          ) {
+          const nodeText = getNodeString(node);
+
+          if (activePair && isAtEndOfLine(nodeText, cursor.offset)) {
             event.preventDefault();
             editor.insertText(activePair.start + activePair.end);
             moveSelection(editor, {
@@ -42,7 +46,7 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
           }
 
           const endPair = pairs.find((pair) => pair.end === event.key);
-          if (endPair && node.children[0].text[cursor.offset] === endPair.end) {
+          if (endPair && nodeText[cursor.offset] === endPair.end) {
             event.preventDefault();
             moveSelection(editor, {
               distance: 1,
@@ -52,11 +56,9 @@ export const createAutoPairsPlugin = createOnKeyDownPluginFactory({
 
           if (event.key === 'Backspace') {
             const startPair = pairs.find(
-              (p) => p.start === node.children[0].text[cursor.offset - 1]
+              (p) => p.start === nodeText[cursor.offset - 1]
             );
-            const end = pairs.find(
-              (p) => p.end === node.children[0].text[cursor.offset]
-            );
+            const end = pairs.find((p) => p.end === nodeText[cursor.offset]);
 
             if (startPair && end && startPair === end) {
               moveSelection(editor, { unit: 'offset', distance: 1 });

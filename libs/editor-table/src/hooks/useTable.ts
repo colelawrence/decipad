@@ -32,7 +32,7 @@ export const useTable = (element: TableElement): TableInfo => {
       columns:
         element.children[1]?.children.map((th, index) => ({
           blockId: th.id,
-          name: th.children[0].text,
+          name: getNodeString(th),
           cellType: columnTypes[index] ?? { kind: 'nothing' },
         })) ?? [],
       formulas: element.children[0].children.slice(

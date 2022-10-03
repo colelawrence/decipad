@@ -109,7 +109,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
             return {
               type: 'var',
               id: n.id,
-              text: n.children[0].children[0].text,
+              text: getNodeString(n.children[0]),
             };
           }
           const text = getNodeString(n);

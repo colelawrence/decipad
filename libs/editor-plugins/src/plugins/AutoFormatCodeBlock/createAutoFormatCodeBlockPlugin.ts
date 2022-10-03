@@ -56,7 +56,7 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
         // Because children.length is 1, we know know there is only a text child
         const paragraph = node as ParagraphElement & { children: [RichText] };
 
-        const nodeText = `${paragraph.children[0].text}=`;
+        const nodeText = `${getNodeString(paragraph)}=`;
 
         const tokens = tokenize(nodeText).filter(
           (token) => token.type !== 'ws'

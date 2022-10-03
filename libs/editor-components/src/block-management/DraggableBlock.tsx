@@ -220,7 +220,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = ({
       showLine={
         !(
           editor.children.length === 2 &&
-          editor.children[1].children[0].text === ''
+          getNodeString(editor.children[1]) === ''
         )
       }
     >
