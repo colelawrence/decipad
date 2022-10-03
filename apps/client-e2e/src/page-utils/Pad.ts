@@ -34,6 +34,11 @@ export async function setUp(options: SetupOptions = {}) {
         ).length
       ).toBeGreaterThanOrEqual(1)
     );
+  } else {
+    // workspace
+    await waitForExpect(async () =>
+      expect((await page.$$('text=notebooks')).length).toBeGreaterThanOrEqual(1)
+    );
   }
 
   return newUser;
