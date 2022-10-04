@@ -24,6 +24,7 @@ import {
   resizableSelectedStyles,
   resizableStyles,
 } from '../MediaEmbed/styles';
+import { Div, FigCaption } from '../../utils/resizing';
 
 export const imgStyles = css({
   display: 'block',
@@ -90,11 +91,16 @@ export const Image: ImageComponent = ({
               }}
               readOnly={readOnly}
               minWidth={150}
+              as={Div}
             >
               <PlateImage css={imgStyles} />
             </Resizable>
 
-            <Caption.Root css={captionStyles} readOnly={readOnly}>
+            <Caption.Root
+              css={captionStyles}
+              readOnly={readOnly}
+              as={FigCaption}
+            >
               <Caption.Textarea
                 readOnly={readOnly}
                 css={captionTextareaStyles}

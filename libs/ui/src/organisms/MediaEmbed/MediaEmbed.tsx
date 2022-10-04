@@ -30,6 +30,7 @@ import {
   resizableStyles,
   rootStyles,
 } from './styles';
+import { Div, FigCaption } from '../../utils/resizing';
 
 type Component = PlateComponent<{
   draggableBlock: FC<
@@ -113,6 +114,7 @@ export const MediaEmbed: Component = ({
                 ),
               }}
               readOnly={readOnly}
+              as={Div}
             >
               <div
                 css={css`
@@ -132,7 +134,11 @@ export const MediaEmbed: Component = ({
               </div>
             </Resizable>
 
-            <Caption.Root css={captionStyles} readOnly={readOnly}>
+            <Caption.Root
+              css={captionStyles}
+              readOnly={readOnly}
+              as={FigCaption}
+            >
               <Caption.Textarea
                 readOnly={readOnly}
                 css={captionTextareaStyles}
