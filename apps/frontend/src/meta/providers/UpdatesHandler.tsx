@@ -48,16 +48,19 @@ export const UpdatesHandler = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!foundUpdate) {
-        tryToUpdate();
-      }
-    }, checkForUpdatesIntervalMs);
+    if (!foundUpdate && 'serviceWorker' in navigator) {
+      const interval = setInterval(async () => {
+        if (!foundUpdate) {
+          tryToUpdate();
+        }
+      }, checkForUpdatesIntervalMs);
 
-    setTimeout(tryToUpdate, initialTimeoutMs);
-    tryToUpdate();
+      setTimeout(tryToUpdate, initialTimeoutMs);
+      tryToUpdate();
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
+    return undefined;
   }, [foundUpdate, tryToUpdate]);
 
   return <></>;
