@@ -102,6 +102,12 @@ const InsideNotebookState = ({
   ]);
 
   useEffect(() => {
+    if (docSyncEditor && docSyncEditor.id !== notebookId) {
+      destroy();
+    }
+  }, [destroy, docSyncEditor, notebookId]);
+
+  useEffect(() => {
     return destroy; // always destroy the editor on unmount
   }, [destroy]);
 
