@@ -5,6 +5,7 @@ import type {
 import { withScope, captureException } from '@sentry/serverless';
 import { GraphqlContext } from '@decipad/backendtypes';
 import { boomify } from '@hapi/boom';
+import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 
 const onError = (rc: GraphQLRequestContext) => {
   withScope((scope) => {
@@ -29,6 +30,12 @@ const onError = (rc: GraphQLRequestContext) => {
 
         const { originalError } = error;
         if (originalError instanceof Error) {
+          if (
+            originalError instanceof UserInputError ||
+            originalError instanceof ForbiddenError
+          ) {
+            continue;
+          }
           const boom = boomify(originalError);
           if (!boom.isServer) {
             continue;
