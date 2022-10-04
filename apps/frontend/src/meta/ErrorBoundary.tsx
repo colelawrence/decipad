@@ -1,4 +1,4 @@
-import { ComponentProps, FC, ReactNode, useCallback } from 'react';
+import { ComponentProps, FC, ReactNode, useCallback, useState } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import * as Sentry from '@sentry/react';
 import { ErrorPage } from './ErrorPage';
@@ -12,18 +12,31 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
   children,
   Heading,
 }) => {
-  const onError = useCallback((error: Error) => {
-    console.error(error);
-    try {
-      Sentry.captureException(error);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  const [errorCount, setErrorCount] = useState(0);
+  const [previousErrorDate, setPreviousErrorDate] = useState<
+    number | undefined
+  >();
+  const onError = useCallback(
+    (error: Error) => {
+      setPreviousErrorDate(Date.now());
+      console.error(error);
+      try {
+        Sentry.captureException(error);
+      } catch (err) {
+        console.error(err);
+      }
+      if (previousErrorDate && Date.now() - previousErrorDate < 1000) {
+        setErrorCount((c) => c + 1);
+      }
+    },
+    [previousErrorDate]
+  );
+
   return (
     <ReactErrorBoundary
       onError={onError}
-      fallback={<ErrorPage Heading={Heading} />}
+      fallbackRender={() => <ErrorPage Heading={Heading} />}
+      resetKeys={[errorCount]}
     >
       {children}
     </ReactErrorBoundary>
