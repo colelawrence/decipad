@@ -22,7 +22,7 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
       result={(isTypeError && perhapsErrorTypedResult.result) || undefined}
     >
       <span contentEditable={false}>
-        <CodeVariable type={{ kind: 'table-formula' }}>
+        <CodeVariable type={{ kind: 'table-formula' }} showTooltip={false}>
           {header && Node.string(header)}
         </CodeVariable>{' '}
         ={' '}

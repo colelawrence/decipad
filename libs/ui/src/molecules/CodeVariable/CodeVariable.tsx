@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import type { TableCellType } from '@decipad/editor-types';
 import { grey400, grey500 } from '../../primitives';
 import { codeBlock } from '../../styles';
@@ -39,6 +39,7 @@ interface CodeVariableProps {
   readonly type?: TableCellType;
   readonly variableScope?: VariableScope;
   readonly defBlockId?: string | null;
+  readonly showTooltip?: boolean;
   onGoToDefinition?: () => void;
 }
 
@@ -46,6 +47,7 @@ export type VariableScope = 'global' | 'local' | 'undefined';
 
 export const CodeVariable = ({
   children,
+  showTooltip = true,
   provideVariableDefLink = false,
   onClick = noop,
   type,
@@ -53,7 +55,7 @@ export const CodeVariable = ({
   defBlockId,
   onGoToDefinition,
 }: CodeVariableProps): ReturnType<React.FC> => {
-  const Icon = getTypeIcon(type || { kind: 'string' });
+  const Icon = useMemo(() => type && getTypeIcon(type), [type]);
   const decoration = (
     <span
       onClick={onClick}
@@ -65,14 +67,18 @@ export const CodeVariable = ({
         ]
       }
     >
-      {type ? (
+      {Icon && (
         <span css={iconStyles} contentEditable={false}>
           <Icon />
         </span>
-      ) : null}
+      )}
       {children}
     </span>
   );
+
+  if (!showTooltip) {
+    return decoration;
+  }
 
   return (
     <CodeVariableTooltip
