@@ -39,6 +39,7 @@ import {
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
   createTrailingParagraphPlugin,
+  createSelectionShortcutPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -169,6 +170,9 @@ export const plugins = (
       createWithDocSyncHistoryPlugin(),
 
       createTrailingParagraphPlugin(),
+
+      // shortcuts
+      createSelectionShortcutPlugin(),
     ],
     {
       components: components(computer),
