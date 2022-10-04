@@ -10,6 +10,7 @@ import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 import { DocSyncRecord } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
+import { nanoid } from 'nanoid';
 
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
 
@@ -132,7 +133,7 @@ export class DynamodbPersistence extends Observable<string> {
       await data.docsyncupdates.put(
         {
           id: this.name,
-          seq: `${Date.now()}:${Math.floor(Math.random() * 10000)}`,
+          seq: `${Date.now()}:${Math.floor(Math.random() * 10000)}:${nanoid()}`,
           data: Buffer.from(update).toString('base64'),
         },
         true
