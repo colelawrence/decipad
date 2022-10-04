@@ -25,7 +25,7 @@ import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormula
 import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
-import { createPreventDeleteTableFromCaptionPlugin } from './createPreventDeleteTableFromCaptionPlugin';
+import { createPreventDestructiveDeleteOnTablePlugin } from './createPreventDestructiveDeleteOnTablePlugin';
 import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
 import { createCursorFocusPlugin } from './createCursorFocusPlugin';
 import { onDropSmartCellResult } from './onDropSmartCellResult';
@@ -68,7 +68,7 @@ export const createTablePlugin = (
   },
   plugins: [
     createPreventEnterToCreateCellPlugin(),
-    createPreventDeleteTableFromCaptionPlugin(),
+    createPreventDestructiveDeleteOnTablePlugin(),
     // createArrowCellNavigationPlugin(),
     createCursorFocusPlugin(),
     // TODO: enable this
