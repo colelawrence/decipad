@@ -6,7 +6,8 @@ export type Flag =
   | 'COPY_HREF'
   | 'PERSISTENT_EXAMPLE'
   | 'DATA_VIEW'
-  | 'RESULT_WIDGET';
+  | 'RESULT_WIDGET'
+  | 'FEATURE_REQUEST';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {

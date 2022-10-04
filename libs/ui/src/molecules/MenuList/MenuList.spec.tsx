@@ -34,16 +34,6 @@ describe('the root MenuList', () => {
       )
     ).toThrow(/root/i);
   });
-
-  it('does not allow children other than MenuItems and MenuLists', () => {
-    expect(() =>
-      render(
-        <MenuList root open>
-          <div />
-        </MenuList>
-      )
-    ).toThrow(/child/i);
-  });
 });
 
 describe('the dropdown root MenuList', () => {

@@ -1,17 +1,9 @@
 import { css } from '@emotion/react';
-import {
-  ReactNode,
-  Children,
-  FC,
-  createContext,
-  useContext,
-  ReactElement,
-} from 'react';
+import { ReactNode, FC, createContext, useContext, ReactElement } from 'react';
 import { isElement } from 'react-is';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 
-import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
-import { InputMenuItem, UnitMenuItem } from '..';
+import { TriggerMenuItem } from '../../atoms';
 import { cssVar, grey500, transparency } from '../../primitives';
 
 export const Depth = createContext(0);
@@ -64,7 +56,9 @@ type MenuListProps = (
   readonly open?: boolean;
   readonly portal?: boolean;
   readonly onChangeOpen?: (newOpen: boolean) => void;
+  readonly align?: 'center' | 'end' | 'start';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
+  readonly sideOffset?: number;
   readonly container?: HTMLElement;
 };
 
@@ -121,7 +115,9 @@ export const MenuList = ({
 
   dropdown = !root,
   portal = true,
+  align = 'start',
   side = 'bottom',
+  sideOffset = 0,
   container,
 }: MenuListProps): ReturnType<FC> => {
   const depth = useContext(Depth) + 1;
@@ -163,32 +159,12 @@ export const MenuList = ({
           <div css={dropdown || undropdownifyContentStyles}>
             <DropdownMenuContentElement
               css={styles}
-              align="start"
+              align={align}
               onFocusOutside={(e) => e.preventDefault()}
               side={side}
+              sideOffset={sideOffset}
             >
-              {Children.map(children, (child) => {
-                if (child == null) {
-                  return null;
-                }
-                if (
-                  isElement(child) &&
-                  (child.type === MenuItem ||
-                    child.type === MenuList ||
-                    child.type === MenuSeparator ||
-                    child.type === InputMenuItem ||
-                    child.type === UnitMenuItem)
-                ) {
-                  return child;
-                }
-                console.error(
-                  'Received child that is not a menu list or menu item',
-                  child
-                );
-                throw new Error(
-                  'Expected all children to be menu lists or menu items'
-                );
-              })}
+              {children}
             </DropdownMenuContentElement>
           </div>
         </DropdownMenuPortalElement>

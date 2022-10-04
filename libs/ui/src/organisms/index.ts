@@ -12,6 +12,7 @@ export { EditorTable } from './EditorTable/EditorTable';
 export { EvalCodeArea } from './EvalCodeArea/EvalCodeArea';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { FloatingMedia } from './FloatingMedia/FloatingMedia';
+export { HelpMenu } from './HelpMenu/HelpMenu';
 export { Image } from './Image/Image';
 export { MediaEmbed } from './MediaEmbed/MediaEmbed';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';
