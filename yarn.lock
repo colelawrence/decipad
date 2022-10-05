@@ -290,13 +290,13 @@
   dependencies:
     xss "^1.0.8"
 
-"@architect/architect@10.6.0":
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.6.0.tgz#b163abbcaad6f69325c54909eb832cc13f0387a4"
-  integrity sha512-p6dLeyrMCK/w/pkQKPjN6jGJqkvZok64vW7tUmVeKmIyTWrDrGYJJlNZTumlNUVw3PI2rToft1t1YZ6vIiprXA==
+"@architect/architect@10.7.0":
+  version "10.7.0"
+  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.7.0.tgz#dbee56d7fffbcf0e197b6563d31d19a7a4e9b12e"
+  integrity sha512-JlyU56aSJc8aRNV0tZms0rwl/wtO/yFHa0i1bwkt05Wj1zW12B9Ionr/qhZ7aPdhVbe2WgDgpT0givrhy8P2kg==
   dependencies:
     "@architect/create" "4.1.1"
-    "@architect/deploy" "4.2.3"
+    "@architect/deploy" "4.2.4"
     "@architect/destroy" "3.0.7"
     "@architect/env" "3.0.6"
     "@architect/hydrate" "3.1.3"
@@ -306,7 +306,7 @@
     "@architect/utils" "~3.1.2"
     aws-sdk "2.1055.0"
     chalk "4.1.2"
-    update-notifier-cjs "5.1.4"
+    update-notifier-cjs "5.1.5"
 
 "@architect/asap@5.0.1", "@architect/asap@~5.0.1":
   version "5.0.1"
@@ -338,6 +338,29 @@
     "@architect/hydrate" "~3.1.3"
     "@architect/inventory" "~3.3.0"
     "@architect/package" "~8.1.5"
+    "@architect/utils" "~3.1.2"
+    chalk "4.1.2"
+    fs-extra "~10.1.0"
+    get-folder-size "2.0.1"
+    glob "~8.0.3"
+    mime-types "~2.1.35"
+    minimist "~1.2.6"
+    path-sort "~0.1.0"
+    run-parallel "~1.2.0"
+    run-series "~1.1.9"
+    run-waterfall "~1.1.7"
+    zip-dir "~2.0.0"
+    zipit "~2.0.0"
+
+"@architect/deploy@4.2.4":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.2.4.tgz#f632b75e81211c0d5ba9287dfc2845456f9c8d13"
+  integrity sha512-+b5KfJ3wahCiVNJ1W7TQS+OtF4y9ywfWNZElRnegQzyGTKoNqzBrOUsPGGbR8CGdlGiyB2uRQ1RoyIso9ARG8w==
+  dependencies:
+    "@architect/create" "~4.1.1"
+    "@architect/hydrate" "~3.1.3"
+    "@architect/inventory" "~3.3.0"
+    "@architect/package" "~8.2.0"
     "@architect/utils" "~3.1.2"
     chalk "4.1.2"
     fs-extra "~10.1.0"
@@ -457,6 +480,14 @@
   version "8.1.5"
   resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.1.5.tgz#c9f26fc01efa51c195072352c7ee77d17c9d6077"
   integrity sha512-hNaEculnvEBXrsTnRzZ3JSfoKbiX13uTmtxt1L7xEW/40Qre+fqOo7HkcHqwXZpRLWABgn2vnhNSdPIykc0dgQ==
+  dependencies:
+    "@architect/inventory" "~3.3.0"
+    "@architect/utils" "~3.1.2"
+
+"@architect/package@~8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.2.0.tgz#cb581790420b37b2bfb851f4dca6c88f17711d7c"
+  integrity sha512-p4/WuFN/YMpe9iXswN1tEAgEneo8hfbjPi7jPu029KnwraMu8IQ5jHFdwK5aYs7mrgP1eesrsOkXqVjsLcBxpw==
   dependencies:
     "@architect/inventory" "~3.3.0"
     "@architect/utils" "~3.1.2"
@@ -29876,29 +29907,7 @@ update-browserslist-db@^1.0.5:
     escalade "^3.1.1"
     picocolors "^1.0.0"
 
-update-notifier-cjs@5.1.4:
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/update-notifier-cjs/-/update-notifier-cjs-5.1.4.tgz#00a1e8fcb8f11076e8c0e39cce0887a35d528821"
-  integrity sha512-yUsR04XCIGCyJaQb0Mqwsv1oAyHwu12zv4Dfb5F0zh0qQ9McE9R6yzK9vUAoN4IGmyodoAG8ZQLTrirBSUB0aw==
-  dependencies:
-    boxen "^5.0.0"
-    chalk "^4.1.0"
-    configstore "^5.0.1"
-    got "^11.8.5"
-    has-yarn "^2.1.0"
-    import-lazy "^2.1.0"
-    is-ci "^2.0.0"
-    is-installed-globally "^0.4.0"
-    is-npm "^5.0.0"
-    is-yarn-global "^0.3.0"
-    pupa "^2.1.1"
-    registry-auth-token "^5.0.1"
-    registry-url "^5.1.0"
-    semver "^7.3.7"
-    semver-diff "^3.1.1"
-    xdg-basedir "^4.0.0"
-
-update-notifier-cjs@~5.1.4:
+update-notifier-cjs@5.1.5, update-notifier-cjs@~5.1.4:
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/update-notifier-cjs/-/update-notifier-cjs-5.1.5.tgz#b03d8458d95d63e502b9377da5070e7afe5bab32"
   integrity sha512-L5hhQ523yhURICqy1fKkS4CRAP0jo3/uKBpi5MYhIYgQtSZFMJT6tSBoxX2JQoxAf1AeJcBFv8xa1uVE1ZyTtw==
