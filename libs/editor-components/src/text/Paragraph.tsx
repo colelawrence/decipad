@@ -1,22 +1,26 @@
 import { MyEditor, MyElement, PlateComponent } from '@decipad/editor-types';
+import { getRangeSafe } from '@decipad/editor-utils';
 import {
   useEditorSelector,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { Paragraph as UIParagraph, ParagraphPlaceholder } from '@decipad/ui';
-import { getRange, isElementEmpty, isSelectionExpanded } from '@udecode/plate';
+import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 
-const isSelected = (editor: MyEditor, element: MyElement) =>
-  !!(
-    editor.selection &&
-    Range.intersection(
-      getRange(editor, ReactEditor.findPath(editor as ReactEditor, element)),
-      editor.selection
-    )
-  );
+const isSelected = (editor: MyEditor, element: MyElement) => {
+  if (!editor.selection) {
+    return false;
+  }
+  const path = ReactEditor.findPath(editor as ReactEditor, element);
+  if (!path) {
+    return false;
+  }
+  const range = getRangeSafe(editor, path);
+  return !!(range && Range.intersection(range, editor.selection));
+};
 
 export const Paragraph: PlateComponent = ({
   attributes,
