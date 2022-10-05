@@ -19,7 +19,7 @@ export const createOnCursorChangePluginFactory = (
       // eslint-disable-next-line no-param-reassign
       editor.onChange = () => {
         if (!dequal(previousSelection, editor.selection)) {
-          onSelectionChange(editor.selection);
+          setTimeout(() => onSelectionChange(editor.selection), 0);
         }
         onChange();
       };

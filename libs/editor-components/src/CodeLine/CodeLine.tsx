@@ -1,23 +1,17 @@
+import { Result } from '@decipad/computer';
 import {
-  IdentifiedError,
-  IdentifiedResult,
-  isBracketError,
-  isSyntaxError,
-  Result,
-} from '@decipad/computer';
-import {
+  DisplayElement,
   ELEMENT_CODE_LINE,
   ELEMENT_DISPLAY,
   MyElement,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { assertElementType, useNodeText } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useEditorChangeState, useResult } from '@decipad/react-contexts';
-import { docs } from '@decipad/routing';
+import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import {
-  getNodeString,
   findNodePath,
   insertNodes,
   getNextNode,
@@ -26,28 +20,19 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { ReactEditor, useSelected } from 'slate-react';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { DraggableBlock } from '../block-management';
+import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
-  if (!element || element.type !== ELEMENT_CODE_LINE) {
-    throw new Error('CodeLine is meant to render code line elements');
-  }
-  if ('data-slate-leaf' in attributes) {
-    throw new Error('CodeLine is not a leaf');
-  }
+  assertElementType(element, ELEMENT_CODE_LINE);
 
   const selected = useSelected();
-
-  const { id: lineId } = element;
-
-  const lineResult = useResult(lineId);
-  const syntaxError = useMemo(() => getSyntaxError(lineResult), [lineResult]);
-
-  const codeLineContent = getNodeString(element);
+  const codeLineContent = useNodeText(element, { debounceTimeMs: 0 }) ?? '';
+  const isEmpty = !codeLineContent.trim() && element.children.length <= 1;
 
   const siblingCodeLines = useEditorChangeState(
     (editor) => ({
@@ -68,33 +53,39 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const editor = useTEditorRef();
   useCodeLineClickReference(editor, selected, codeLineContent);
 
+  const computer = useComputer();
+  const { id: lineId } = element;
+  const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
+    (line) => [getSyntaxError(line), line?.result] as const,
+    lineId
+  );
+
   const onClickedResult = useCallback(
     (result: Result.Result) => {
       if (
-        !(
-          result.type.kind === 'number' ||
-          result.type.kind === 'date' ||
-          result.type.kind === 'string' ||
-          result.type.kind === 'boolean'
-        )
-      )
+        result.type.kind !== 'number' &&
+        result.type.kind !== 'date' &&
+        result.type.kind !== 'string' &&
+        result.type.kind !== 'boolean'
+      ) {
         return;
+      }
 
       const path = findNodePath(editor, element);
-      if (!path) return;
+      if (!path) {
+        return;
+      }
 
-      insertNodes(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_DISPLAY,
-          blockId: element.id,
-          children: [{ text: '' }],
-        },
-        {
-          at: [path[0] + 1],
-        }
-      );
+      const newDisplayElement: DisplayElement = {
+        id: nanoid(),
+        type: ELEMENT_DISPLAY,
+        blockId: element.id,
+        children: [{ text: '' }],
+      };
+
+      insertNodes(editor, newDisplayElement, {
+        at: [path[0] + 1],
+      });
     },
     [editor, element]
   );
@@ -108,9 +99,10 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     >
       <UICodeLine
         highlight={selected}
-        result={lineResult?.result}
+        result={lineResult}
         placeholder="Distance = 60 km/h * Time"
         syntaxError={syntaxError}
+        isEmpty={isEmpty}
         onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
         onDragStartCell={onDragStartTableCellResult(editor)}
         onClickedResult={
@@ -124,30 +116,3 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     </DraggableBlock>
   );
 };
-
-function getSyntaxError(line?: IdentifiedResult | IdentifiedError) {
-  const error = line?.error;
-  if (!error) {
-    return undefined;
-  }
-
-  return isSyntaxError(error)
-    ? {
-        line: error && error.line != null ? error.line : 1,
-        column: error && error.column != null ? error.column : 1,
-        message: error.message,
-        detailMessage: error.detailMessage,
-        expected: error.expected,
-        url: `${docs({}).page({ name: 'errors' }).$}#syntax-error`,
-      }
-    : isBracketError(error.bracketError)
-    ? {
-        message: 'Bracket error',
-        bracketError: error.bracketError,
-        url: `${docs({}).page({ name: 'errors' }).$}#syntax-error`,
-      }
-    : {
-        message: error.message,
-        url: docs({}).page({ name: 'errors' }).$,
-      };
-}

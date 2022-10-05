@@ -14,9 +14,7 @@ export const createMagicNumberPlugin = createTPluginFactory({
   isVoid: true,
   isLeaf: true,
   withOverrides: withMagicNumberOverrides,
-  component: (props) => {
-    return <MagicNumber {...props} />;
-  },
+  component: MagicNumber,
   plugins: [
     createNormalizeMagicNumbersPlugin(),
     createMagicNumberCursorPlugin(),

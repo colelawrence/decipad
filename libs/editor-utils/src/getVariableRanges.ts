@@ -1,7 +1,7 @@
 import { Path, Range } from 'slate';
 import { getUsedIdentifiers } from '@decipad/computer';
 
-type RangeWithVariableInfo = Range & {
+export type RangeWithVariableInfo = Range & {
   readonly variableName?: string;
   readonly blockId?: string;
   readonly isDeclaration?: boolean;

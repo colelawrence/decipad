@@ -1,5 +1,5 @@
 export * from './AutoCompleteMenu';
-export * from './AutoFormatCodeBlock/createAutoFormatCodeBlockPlugin';
+export * from './AutoFormatCodeLine/createAutoFormatCodeLinePlugin';
 export * from './AutoPairs/createAutoPairsPlugin';
 export * from './Callout';
 export * from './CodeLine';
@@ -33,6 +33,7 @@ export * from './OperationsBlackboxPlugin';
 export * from './Plot';
 export * from './SelectionShortcutPlugin';
 export * from './SentryBreadcrumbsPlugin';
+export * from './SmartRef';
 export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
 export * from './KeyboardNavigation';

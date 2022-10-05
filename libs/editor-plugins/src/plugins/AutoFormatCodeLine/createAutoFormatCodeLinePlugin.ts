@@ -24,17 +24,17 @@ type LastFormattedBlock = null | {
   readonly oldText: string;
 };
 
-interface AutoFormatCodeBlockPluginStore {
+interface AutoFormatCodeLinePluginStore {
   lastFormattedBlock?: LastFormattedBlock;
 }
 
-const pluginName = 'AUTO_FORMAT_CODE_BLOCK_PLUGIN';
+const pluginName = 'AUTO_FORMAT_CODE_LINE_PLUGIN';
 
-export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
+export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
   name: pluginName,
   plugin: (editor) => {
     return (event) => {
-      const store = pluginStore<AutoFormatCodeBlockPluginStore>(
+      const store = pluginStore<AutoFormatCodeLinePluginStore>(
         editor,
         pluginName,
         () => ({})
@@ -131,7 +131,7 @@ export const createAutoFormatCodeBlockPlugin = createOnKeyDownPluginFactory({
           );
 
           delete store.lastFormattedBlock;
-        } else if (nodeText === '') {
+        } else if (nodeText === '' && node.children.length === 1) {
           // Empty code blocks get turned into a paragraph when backspace is pressed
           event.preventDefault();
 

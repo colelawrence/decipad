@@ -42,7 +42,7 @@ export const getVariableScope = (
 export const CodeVariable: CodeLeaf = ({
   attributes,
   children,
-  leaf: { variableName, blockId, isDeclaration },
+  leaf: { variableName, blockId, isDeclaration, text },
 }) => {
   const computer = useComputer();
   const defBlockId = computer.getVarBlockId$.use(variableName);
@@ -74,6 +74,14 @@ export const CodeVariable: CodeLeaf = ({
       }
     }
   }, [defBlockId, editor, provideVariableDefLink]);
+
+  if(!text){
+    return  (
+      <span {...attributes}>
+        {children}
+      </span>
+    );
+  }
 
   return (
     <span {...attributes}>

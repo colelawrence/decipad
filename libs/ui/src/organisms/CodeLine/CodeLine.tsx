@@ -12,7 +12,7 @@ import {
   setCssVar,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
-import { isTabularType, isNodeEmpty } from '../../utils';
+import { isTabularType } from '../../utils';
 import { CodeResultProps } from '../../types';
 
 const { lineHeight } = codeBlock;
@@ -126,6 +126,7 @@ interface CodeLineProps {
   readonly placeholder?: string;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
+  readonly isEmpty?: boolean;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onClickedResult?: (arg0: Result.Result) => void;
@@ -140,6 +141,7 @@ export const CodeLine = ({
   result,
   placeholder,
   syntaxError,
+  isEmpty = false,
   onDragStartInlineResult,
   onDragStartCell,
   onClickedResult,
@@ -147,7 +149,6 @@ export const CodeLine = ({
   hasPreviousSibling,
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
-  const isEmpty = isNodeEmpty(children);
 
   const freshResult = renderPotentiallyExpandedResult({
     result,

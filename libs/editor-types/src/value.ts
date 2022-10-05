@@ -39,6 +39,7 @@ import {
   ELEMENT_IMPORT,
   ELEMENT_DATA_VIEW,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_SMART_REF,
 } from './element-kinds';
 import {
   CaptionElement,
@@ -115,7 +116,7 @@ export interface MediaEmbedElement extends TMediaEmbedElement, BaseElement {
 // Code
 export interface CodeLineElement extends BaseElement {
   type: typeof ELEMENT_CODE_LINE;
-  children: PlainTextChildren;
+  children: Array<PlainText | SmartRefElement>;
 }
 export interface DeprecatedCodeBlockElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_CODE_BLOCK;
@@ -167,6 +168,12 @@ export interface InlineNumberElement extends BaseElement {
   name: string;
   children: [PlainText];
   allowEditingName?: boolean;
+}
+
+export interface SmartRefElement extends BaseElement {
+  type: typeof ELEMENT_SMART_REF;
+  blockId: string;
+  children: [PlainText];
 }
 
 // Layout
@@ -232,7 +239,11 @@ export type BlockElement =
   | DataViewHeader
   | TableColumnFormulaElement;
 
-type InlineElement = LinkElement | BubbleElement | InlineNumberElement;
+type InlineElement =
+  | LinkElement
+  | BubbleElement
+  | InlineNumberElement
+  | SmartRefElement;
 
 export type MyValue = [
   H1Element,
@@ -244,6 +255,7 @@ export type MyValue = [
     | BlockquoteElement
     | BubbleElement
     | InlineNumberElement
+    | SmartRefElement
     | CalloutElement
     | CodeLineElement
     | DividerElement

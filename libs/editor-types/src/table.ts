@@ -1,6 +1,6 @@
 import type { SerializedTypes } from '@decipad/computer';
 
-import type { EmptyText, Text } from '.';
+import type { EmptyText, PlainText, SmartRefElement, Text } from '.';
 import type {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -38,7 +38,7 @@ export interface TableData {
 export interface TableColumnFormulaElement extends BaseElement {
   type: typeof ELEMENT_TABLE_COLUMN_FORMULA;
   columnId: string;
-  children: [Text];
+  children: (PlainText | SmartRefElement)[];
 }
 
 export interface TableVariableNameElement extends BaseElement {

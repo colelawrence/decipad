@@ -52,6 +52,7 @@ export { PlotFunction } from './PlotFunction/PlotFunction';
 export { InlineMenuItem } from './InlineMenuItem/InlineMenuItem';
 export { RemoveNodeButton } from './RemoveNodeButton/RemoveNodeButton';
 export { Slider } from './Slider/Slider';
+export { SmartRef } from './SmartRef/SmartRef';
 export { Spinner } from './Spinner/Spinner';
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { TableData } from './TableData/TableData';

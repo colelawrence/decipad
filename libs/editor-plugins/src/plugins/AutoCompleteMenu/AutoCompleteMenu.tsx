@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
 import { useFocused, useSelected } from 'slate-react';
@@ -6,6 +7,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';
 import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import { getBuiltinsForAutocomplete } from '@decipad/computer';
+import { insertText } from '@udecode/plate';
+import { insertSmartRefOrText } from './insertSmartRefOrText';
+
+type MenuItem = Parameters<
+  NonNullable<ComponentProps<typeof UIAutoCompleteMenu>['onExecuteItem']>
+>[0];
 
 export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   const computer = useComputer();
@@ -18,7 +25,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
   const [word, setWord] = useState('');
   const showAutoComplete = selected && focused && word && !menuSuppressed;
 
-  const onKeyDown = useCallback(
+  const onGlobalKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (showAutoComplete && !event.shiftKey) {
         switch (event.key) {
@@ -32,7 +39,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
     },
     [showAutoComplete]
   );
-  useWindowListener('keydown', onKeyDown, true);
+  useWindowListener('keydown', onGlobalKeyDown, true);
 
   useEffect(() => {
     if (selection) {
@@ -40,6 +47,23 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
       setWord(w);
     }
   }, [editor, selection, selection?.focus]);
+
+  const onExecuteItem = useCallback(
+    (item: MenuItem) => {
+      if (word) {
+        // deleteBackword('word') was misbehaving with ^ and + operators.
+        for (let i = 0; i < word.length; i += 1) {
+          editor.deleteBackward('character');
+        }
+      }
+      insertSmartRefOrText(editor, computer, item.identifier);
+
+      if (item.kind !== 'function') {
+        insertText(editor, ' ');
+      }
+    },
+    [computer, editor, word]
+  );
 
   if (selection) {
     const identifiers = [
@@ -59,18 +83,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
           <UIAutoCompleteMenu
             search={word}
             identifiers={identifiers}
-            onExecuteItem={(item) => {
-              if (word) {
-                // deleteBackword('word') was misbehaving with ^ and + operators.
-                for (let i = 0; i < word.length; i += 1) {
-                  editor.deleteBackward('character');
-                }
-              }
-              editor.insertText(item.identifier);
-              if (item.kind !== 'function') {
-                editor.insertText(' ');
-              }
-            }}
+            onExecuteItem={onExecuteItem}
           />
         </span>
       );

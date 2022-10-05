@@ -191,6 +191,11 @@ export class Computer {
     return undefined;
   }
 
+  getDefinedSymbolInBlock$ = listenerHelper(
+    this.results,
+    (_, blockId: string) => this.getDefinedSymbolInBlock(blockId)
+  );
+
   /**
    * Get names for the autocomplete, and information about them
    */

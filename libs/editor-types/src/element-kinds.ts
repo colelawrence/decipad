@@ -61,5 +61,8 @@ export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
 export const ELEMENT_LIVE_CONNECTION = 'live-conn';
 export const ELEMENT_LIVE_CONNECTION_VARIABLE_NAME = 'live-var-name';
 
+// smart refs
+export const ELEMENT_SMART_REF = 'smart-ref';
+
 // others
 export const ELEMENT_CAPTION = 'caption';

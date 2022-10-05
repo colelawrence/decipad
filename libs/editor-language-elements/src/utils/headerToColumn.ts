@@ -5,7 +5,11 @@ import {
   TableHeaderElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { astColumn } from '@decipad/editor-utils';
+import {
+  astColumn,
+  getCodeLineSource,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import {
   inferColumn,
   parseCell,
@@ -42,11 +46,11 @@ const tableFormulaColumnToColumn = ({
       child.type === ELEMENT_TABLE_COLUMN_FORMULA && child.columnId === th.id
   );
 
-  if (formula) {
+  if (isElementOfType(formula, ELEMENT_TABLE_COLUMN_FORMULA)) {
     return formulaSourceToColumnAssign(
       columnName,
       formula.id,
-      formula ? getNodeString(formula) : ''
+      getCodeLineSource(formula)
     );
   }
   return {

@@ -40,7 +40,7 @@ export const EditorChangeContextProvider: FC<{
   );
 };
 
-interface UseEditorChangeOptions {
+export interface UseEditorChangeOptions {
   debounceTimeMs?: number;
   injectObservable?: Observable<undefined>;
   selectsPromise?: boolean;

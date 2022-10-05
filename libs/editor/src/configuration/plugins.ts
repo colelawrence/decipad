@@ -1,6 +1,6 @@
 import {
   createAutoCompleteMenuPlugin,
-  createAutoFormatCodeBlockPlugin,
+  createAutoFormatCodeLinePlugin,
   createAutoPairsPlugin,
   createCalloutPlugin,
   createCodeLinePlugin,
@@ -38,6 +38,7 @@ import {
   createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
+  createSmartRefPlugin,
   createTrailingParagraphPlugin,
   createSelectionShortcutPlugin,
 } from '@decipad/editor-plugins';
@@ -134,7 +135,7 @@ export const plugins = (
       createTAutoformatPlugin({
         options: { rules: autoformatRules },
       }),
-      createAutoFormatCodeBlockPlugin(),
+      createAutoFormatCodeLinePlugin(),
       createImportPlugin(interactions),
       createLiveConnectionPlugin(),
 
@@ -144,6 +145,7 @@ export const plugins = (
       createSyntaxErrorHighlightPlugin(),
       createAutoPairsPlugin(),
       createNavigationPlugin(),
+      createSmartRefPlugin(),
 
       // language
       ...createEvalPlugin(computer),

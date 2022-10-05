@@ -8,20 +8,15 @@ import {
   MyPlatePlugin,
 } from '@decipad/editor-types';
 import React from 'react';
-import { createNormalizeCodeBlockPlugin } from '../NormalizeCodeBlock/createNormalizeCodeBlockPlugin';
-import { createAutoFormatCodeBlockPlugin } from './createAutoFormatCodeBlockPlugin';
+import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 
 let editor: MyEditor;
 let plugin: MyPlatePlugin;
 beforeEach(() => {
-  plugin = createAutoFormatCodeBlockPlugin();
+  plugin = createAutoFormatCodeLinePlugin();
   editor = createTPlateEditor({
-    plugins: [
-      plugin,
-      createNormalizeCodeBlockPlugin(),
-      createNormalizeCodeLinePlugin(),
-    ],
+    plugins: [plugin, createNormalizeCodeLinePlugin()],
   });
 });
 
