@@ -43,7 +43,11 @@ export const UpdatesHandler = () => {
   const tryToUpdate = useCallback(async () => {
     const registration = await navigator.serviceWorker.getRegistration();
     if (registration) {
-      registration.update();
+      try {
+        registration.update();
+      } catch (err) {
+        // ignore
+      }
     }
   }, []);
 
