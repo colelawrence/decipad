@@ -63,8 +63,11 @@ function replaceAllBlockIdReferences(program: Program): [Program, Set<string>] {
           if (isIdentifier(thing)) {
             const varName = getIdentifierString(thing);
             if (isExprRef(varName)) {
-              thing.args[0] = genVarName(varName);
-              generatedNames.add(thing.args[0]);
+              const { newName, wasGenerated } = genVarName(varName);
+              thing.args[0] = newName;
+              if (wasGenerated) {
+                generatedNames.add(thing.args[0]);
+              }
             }
           }
         });
@@ -86,7 +89,7 @@ const makeVarNameLookup = (program: Program) => {
     // First, attempt to use the variable's non-ambiguous name
     const prettyName = idsToPretty.get(asBlockRef);
     if (prettyName && prettyToIds.get(prettyName)?.size === 1) {
-      return prettyName;
+      return { newName: prettyName, wasGenerated: false };
     }
 
     // Generate a new name that's non-ambiguous
@@ -98,7 +101,7 @@ const makeVarNameLookup = (program: Program) => {
       proposal = prefix + i;
     } while (prettyToIds.get(proposal)?.size);
 
-    return proposal;
+    return { newName: proposal, wasGenerated: true };
   });
 };
 

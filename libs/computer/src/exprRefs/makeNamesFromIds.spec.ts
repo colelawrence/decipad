@@ -1,6 +1,7 @@
 import { AST, astNode as n, prettyPrintAST } from '@decipad/language';
 import type { IdentifiedBlock, UnparsedBlock } from '../types';
 import { replaceExprRefsWithPrettyRefs } from './makeNamesFromIds';
+import { getIdentifiedBlocks } from '../testUtils';
 
 const b = (id: string, stat: AST.Statement): IdentifiedBlock => ({
   type: 'identified-block',
@@ -54,7 +55,6 @@ it('creates names for the computer to use', () => {
     Set {
       "Value_1",
       "Value_2",
-      "Var1",
     }
   `);
 });
@@ -119,4 +119,12 @@ it('tolerates empty var names', () => {
       (def Value_1)
       (noop))"
   `);
+});
+
+it('regression: exprRefs with names, do not go in the generatedNames set', () => {
+  const [, generatedNames] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks('one = 1', 'exprRef_block_0')
+  );
+
+  expect(generatedNames.has('one')).toBe(false);
 });
