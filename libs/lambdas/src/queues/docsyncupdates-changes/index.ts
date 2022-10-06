@@ -20,7 +20,11 @@ async function handleDocSyncCreate({ id }: DocSyncUpdateRecord) {
   // let's try and compact docsync entries
   const doc = new YDoc();
   const provider = new DynamodbPersistence(id, doc);
-  await provider.compact();
+  try {
+    await provider.compact();
+  } catch (err) {
+    console.error(err);
+  }
 
   return { statusCode: 200 };
 }
