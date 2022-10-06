@@ -13,6 +13,7 @@ import { PlateEditor } from '@udecode/plate';
 import { docSyncEditor } from './docSyncEditor';
 import { ensureInitialDocument } from './utils/ensureInitialDocument';
 import { setupUndo } from './setupUndo';
+import { asLocalEditor } from './asLocalEditor';
 
 const tokenTimeoutMs = 60 * 1000;
 
@@ -129,6 +130,10 @@ export function createDocSyncEditor(
 
   // Cursor editor
   const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
+
+  const { normalizeNode } = cursorEditor;
+  cursorEditor.normalizeNode = (entry) =>
+    asLocalEditor(cursorEditor, () => normalizeNode(entry));
 
   // Sync editor
   let syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);

@@ -35,7 +35,6 @@ import {
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
   createNavigationPlugin,
-  createUniqueElementIdPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
   createSmartRefPlugin,
@@ -78,9 +77,6 @@ export const plugins = (
 ) =>
   createPlugins<MyValue, MyEditor>(
     [
-      // id uniqueness
-      createUniqueElementIdPlugin(),
-
       // basic blocks
       createParagraphPlugin(),
       createBlockquotePlugin(),

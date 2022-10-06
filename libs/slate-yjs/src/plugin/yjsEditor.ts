@@ -65,6 +65,20 @@ export const YjsEditor = {
       IS_REMOTE.delete(editor);
     }
   },
+  asLocal: <T>(editor: YjsEditor, fn: () => T): T => {
+    const wasRemote = YjsEditor.isRemote(editor);
+    if (wasRemote) {
+      IS_REMOTE.delete(editor);
+    }
+
+    const ret = fn();
+
+    if (wasRemote) {
+      IS_REMOTE.add(editor);
+    }
+
+    return ret;
+  },
 };
 
 function localOperations(editor: YjsEditor): Set<TOperation> {
