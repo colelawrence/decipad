@@ -25,8 +25,8 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
       } catch (err) {
         console.error(err);
       }
-      if (previousErrorDate && Date.now() - previousErrorDate < 1000) {
-        setErrorCount((c) => c + 1);
+      if (previousErrorDate && Date.now() - previousErrorDate < 2000) {
+        setTimeout(() => setErrorCount((c) => c + 1), 1000);
       }
     },
     [previousErrorDate]
