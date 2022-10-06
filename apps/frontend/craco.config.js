@@ -5,6 +5,7 @@ const path = require('path');
 const { ProvidePlugin } = require('webpack');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const SentryPlugin = require('@sentry/webpack-plugin');
 const serviceWorkerConfig = require('./service-worker.config');
 
 const excludePlugins = ['ForkTsCheckerWarningWebpackPlugin'];
@@ -44,6 +45,16 @@ module.exports = {
       // add service worker plugin
       if (process.env.NODE_ENV === 'production') {
         config.plugins.push(serviceWorkerConfig());
+
+        if (process.env.SENTRY_DSN) {
+          config.plugins.push(
+            new SentryPlugin({
+              release: process.env.GIT_COMMIT_HASH,
+              dsn: process.env.SENTRY_DSN,
+              include: '../../dist/apps/frontend',
+            })
+          );
+        }
       }
 
       // Configure babel-loader to handle workspace projects as well.
