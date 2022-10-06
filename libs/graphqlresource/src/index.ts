@@ -53,7 +53,7 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
     _: unknown,
     { id }: { id: ID },
     context: GraphqlContext
-  ) => Promise<GraphqlT>;
+  ) => Promise<GraphqlT | undefined>;
   create: (
     _: unknown,
     create: CreateT,

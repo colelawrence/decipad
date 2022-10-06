@@ -52,10 +52,21 @@ const errorCodeStyles = css(
 );
 const buttonStyles = css({ paddingTop: '36px' });
 
+const message = (errorCode: ErrorPageProps['wellKnown']): string => {
+  switch (errorCode) {
+    case '403':
+      return 'Forbidden';
+    case '404':
+      return 'Not found';
+    default:
+      return 'Sorry, we did something wrong';
+  }
+};
+
 interface ErrorPageProps {
   readonly Heading: 'h1';
   readonly messages?: string[];
-  readonly wellKnown?: '404' | '500';
+  readonly wellKnown?: '403' | '404' | '500';
   readonly authenticated?: boolean;
   readonly backUrl?: string;
   readonly backCall?: string;
@@ -80,12 +91,15 @@ export const ErrorPage = ({
         </>
       ) : (
         <>
-          <Heading css={headingStyles}>
-            {wellKnown === '404'
-              ? 'Something went wrong'
-              : 'Sorry, we did something wrong'}
-          </Heading>
-          {wellKnown === '404' ? (
+          <Heading css={headingStyles}>{message(wellKnown)}</Heading>
+          {wellKnown === '403' ? (
+            <>
+              <p css={subHeadingStyles}>
+                You don't have permissions to access this page.
+              </p>
+              <p css={errorCodeStyles}>The geeks call this a 403 error</p>
+            </>
+          ) : wellKnown === '404' ? (
             <>
               <p css={subHeadingStyles}>
                 The link you tried may be broken, or the page may have been

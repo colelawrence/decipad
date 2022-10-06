@@ -61,6 +61,9 @@ const Notebook: FC = () => {
   if (error) {
     if (/no such/i.test(error?.message))
       return <ErrorPage Heading="h1" wellKnown="404" />;
+    if (/forbidden/i.test(error?.message)) {
+      return <ErrorPage Heading="h1" wellKnown="403" />;
+    }
     throw error;
   }
 

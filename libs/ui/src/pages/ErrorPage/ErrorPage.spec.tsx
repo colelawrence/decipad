@@ -30,12 +30,25 @@ it('shows default text for an unknown error', () => {
   `);
 });
 
+it('shows explanatory text for a 403 error', () => {
+  const { getAllByText } = render(<ErrorPage {...props} wellKnown="403" />);
+  expect(getAllByText(/.+/).map(({ textContent }) => textContent))
+    .toMatchInlineSnapshot(`
+    Array [
+      "Forbidden",
+      "You don't have permissions to access this page.",
+      "The geeks call this a 403 error",
+      "Back to our website",
+    ]
+  `);
+});
+
 it('shows explanatory text for a 404 error', () => {
   const { getAllByText } = render(<ErrorPage {...props} wellKnown="404" />);
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
     Array [
-      "Something went wrong",
+      "Not found",
       "The link you tried may be broken, or the page may have been removed",
       "The geeks call this a 404 error",
       "Back to our website",
