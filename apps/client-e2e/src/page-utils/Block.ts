@@ -43,8 +43,13 @@ export async function createCalculationBlockBelow(decilang: string) {
   await page.keyboard.type(decilang);
 
   await waitForExpect(async () => {
-    const lastCode = await page.$('[contenteditable] code >> nth=-1');
-    expect((await lastCode?.textContent())?.includes(decilang)).toBeTruthy();
+    const lastCodeLine = await page.$('[contenteditable] code >> nth=-1');
+    expect(lastCodeLine).toBeDefined();
+
+    const textContent = await lastCodeLine?.textContent();
+    const cleanContent = textContent?.replace(/\uFEFF/g, '');
+
+    expect(cleanContent).toContain(decilang);
   });
 }
 
@@ -61,7 +66,9 @@ export function getResults() {
 }
 
 export async function getCodeLineContent(n: number) {
-  return (await getCodeLines().nth(n).allTextContents()).join();
+  return (await getCodeLines().nth(n).allTextContents())
+    .join()
+    .replace(/\uFEFF/g, '');
 }
 
 export async function getResult(n: number) {

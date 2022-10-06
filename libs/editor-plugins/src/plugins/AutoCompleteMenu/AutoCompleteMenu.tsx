@@ -14,7 +14,7 @@ type MenuItem = Parameters<
   NonNullable<ComponentProps<typeof UIAutoCompleteMenu>['onExecuteItem']>
 >[0];
 
-export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
+export const AutoCompleteMenu: PlateComponent = ({ attributes, children }) => {
   const computer = useComputer();
   const selected = useSelected();
   const focused = useFocused();
@@ -79,16 +79,16 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes }) => {
     if (showAutoComplete && identifiers.length) {
       return (
         <span {...attributes}>
-          {/* not rendering children because it would render a non-breaking space */}
           <UIAutoCompleteMenu
             search={word}
             identifiers={identifiers}
             onExecuteItem={onExecuteItem}
           />
+          {children}
         </span>
       );
     }
   }
 
-  return null;
+  return <span {...attributes}>{children}</span>;
 };

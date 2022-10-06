@@ -67,7 +67,7 @@ export const insertSmartRefOrText = (
           insertNodes(editor, { text: '' }, { at: [...codeLineEntry[1], 0] });
         }
       }
-      insertNodes(editor, smartRef);
+      insertNodes(editor, [smartRef, { text: '' }]);
       const refEntry = findNode(editor, { match: { id: smartRef.id } });
       if (rest && refEntry) {
         const [, refPath] = refEntry;

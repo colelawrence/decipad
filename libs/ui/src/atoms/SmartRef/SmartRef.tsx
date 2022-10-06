@@ -8,6 +8,7 @@ type SmartRefProps = {
   readonly symbolName?: string;
   readonly defBlockId?: string;
   readonly errorMessage?: string;
+  readonly isSelected?: boolean;
 };
 
 const smartRefWrapperStyles = css({
@@ -20,11 +21,14 @@ export const SmartRef: FC<SmartRefProps> = ({
   symbolName,
   defBlockId,
   errorMessage,
+  isSelected,
 }: SmartRefProps) => {
   return (
     <span css={smartRefWrapperStyles} contentEditable={false}>
       {symbolName && (
-        <CodeVariable defBlockId={defBlockId}>{symbolName}</CodeVariable>
+        <CodeVariable defBlockId={defBlockId} isSelected={isSelected}>
+          {symbolName}
+        </CodeVariable>
       )}
       {errorMessage && <CodeError message={errorMessage} url="/docs" />}
     </span>

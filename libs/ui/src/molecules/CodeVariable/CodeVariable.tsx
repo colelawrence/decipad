@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { ReactNode, useMemo } from 'react';
 import type { TableCellType } from '@decipad/editor-types';
-import { grey400, grey500 } from '../../primitives';
+import { grey400, grey500, teal800, teal200 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
 import { CodeVariableTooltip } from '..';
@@ -32,6 +32,11 @@ const typeStyles = css({
   color: grey500.rgb,
 });
 
+const selectedStyles = css({
+  backgroundColor: teal200.rgb,
+  color: teal800.rgb,
+});
+
 interface CodeVariableProps {
   readonly children: ReactNode;
   readonly onClick?: () => void;
@@ -40,6 +45,7 @@ interface CodeVariableProps {
   readonly variableScope?: VariableScope;
   readonly defBlockId?: string | null;
   readonly showTooltip?: boolean;
+  readonly isSelected?: boolean;
   onGoToDefinition?: () => void;
 }
 
@@ -54,6 +60,7 @@ export const CodeVariable = ({
   variableScope = 'global',
   defBlockId,
   onGoToDefinition,
+  isSelected = false,
 }: CodeVariableProps): ReturnType<React.FC> => {
   const Icon = useMemo(() => type && getTypeIcon(type), [type]);
   const decoration = (
@@ -64,6 +71,7 @@ export const CodeVariable = ({
           varStyles,
           type && typeStyles,
           variableScope === 'local' && localVarStyles,
+          isSelected && selectedStyles,
         ]
       }
     >
