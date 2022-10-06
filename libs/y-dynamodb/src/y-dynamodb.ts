@@ -144,61 +144,66 @@ export class DynamodbPersistence extends Observable<string> {
   }
 
   async compact(): Promise<void> {
-    if (this._readOnly || this.version) {
-      return;
-    }
-    await this.whenSynced;
-    const data = await tables();
-    const updates = (
-      await data.docsyncupdates.query({
-        KeyConditionExpression: 'id = :id',
-        ExpressionAttributeValues: {
-          ':id': this.name,
-        },
-      })
-    ).Items;
-    if (updates.length > 1) {
-      let merged: Uint8Array | undefined;
-      let toDelete: DocSyncUpdateRecord[] = [];
-
-      const mergedSize = () => merged?.length ?? 0;
-
-      const pushToDataBase = async () => {
-        if (merged) {
-          await this.storeUpdate(merged, 'compaction');
-        }
-        if (toDelete.length) {
-          await Promise.all(
-            toDelete.map((update) =>
-              data.docsyncupdates.delete(
-                { id: update.id, seq: update.seq },
-                true
-              )
-            )
-          );
-        }
-        merged = undefined;
-        toDelete = [];
-      };
-
-      for (const update of updates) {
-        const { data: dataString } = update;
-        if (!dataString) {
-          continue;
-        }
-        const dataBuffer = Buffer.from(dataString, 'base64');
-        if (mergedSize() + dataString.length < MAX_ALLOWED_RECORD_SIZE_BYTES) {
-          merged = merged ? mergeUpdates([merged, dataBuffer]) : dataBuffer;
-          toDelete.push(update);
-        } else {
-          // eslint-disable-next-line no-await-in-loop
-          await pushToDataBase();
-          merged = dataBuffer;
-          toDelete.push(update);
-        }
+    await this._mux.push(async () => {
+      if (this._readOnly || this.version) {
+        return;
       }
-      await pushToDataBase();
-    }
+      await this.whenSynced;
+      const data = await tables();
+      const updates = (
+        await data.docsyncupdates.query({
+          KeyConditionExpression: 'id = :id',
+          ExpressionAttributeValues: {
+            ':id': this.name,
+          },
+        })
+      ).Items;
+      if (updates.length > 1) {
+        let merged: Uint8Array | undefined;
+        let toDelete: DocSyncUpdateRecord[] = [];
+
+        const mergedSize = () => merged?.length ?? 0;
+
+        const pushToDataBase = async () => {
+          if (merged) {
+            await this.storeUpdate(merged, 'compaction');
+          }
+          if (toDelete.length) {
+            await Promise.all(
+              toDelete.map((update) =>
+                data.docsyncupdates.delete(
+                  { id: update.id, seq: update.seq },
+                  true
+                )
+              )
+            );
+          }
+          merged = undefined;
+          toDelete = [];
+        };
+
+        for (const update of updates) {
+          const { data: dataString } = update;
+          if (!dataString) {
+            continue;
+          }
+          const dataBuffer = Buffer.from(dataString, 'base64');
+          if (
+            mergedSize() + dataString.length <
+            MAX_ALLOWED_RECORD_SIZE_BYTES
+          ) {
+            merged = merged ? mergeUpdates([merged, dataBuffer]) : dataBuffer;
+            toDelete.push(update);
+          } else {
+            // eslint-disable-next-line no-await-in-loop
+            await pushToDataBase();
+            merged = dataBuffer;
+            toDelete.push(update);
+          }
+        }
+        await pushToDataBase();
+      }
+    });
   }
 
   flush(): Promise<void> {
