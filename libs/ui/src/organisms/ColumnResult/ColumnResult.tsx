@@ -8,7 +8,6 @@ import { CodeResult, Table } from '..';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
-import { defaultMaxRows } from '../../styles/table';
 
 const rowLabelStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
@@ -29,9 +28,6 @@ export const ColumnResult = ({
   );
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
-  const presentValue = useMemo(() => {
-    return value.slice(0, defaultMaxRows);
-  }, [value]);
 
   return (
     <Table
@@ -40,7 +36,7 @@ export const ColumnResult = ({
       border={isNested ? 'inner' : 'all'}
       body={
         <>
-          {presentValue.map((row, rowIndex) => {
+          {value.map((row, rowIndex) => {
             return (
               <TableRow key={rowIndex} readOnly>
                 {labels && (
