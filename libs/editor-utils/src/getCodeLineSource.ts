@@ -1,4 +1,4 @@
-import { getNodeString } from '@udecode/plate';
+import { getNodeString, isText } from '@udecode/plate';
 import {
   CodeLineElement,
   ELEMENT_SMART_REF,
@@ -11,9 +11,16 @@ export const getCodeLineSource = (
   node: CodeLineElement | TableColumnFormulaElement
 ) =>
   node.children
-    .map((c) =>
-      isElementOfType(c, ELEMENT_SMART_REF)
-        ? getExprRef(c.blockId)
-        : getNodeString(c)
-    )
+    .map((c, i) => {
+      if (isElementOfType(c, ELEMENT_SMART_REF)) {
+        const needsWhitespace =
+          i >= 1 &&
+          (!isText(node.children[i - 1]) ||
+            !getNodeString(node.children[i - 1]).endsWith(' '));
+
+        const spc = needsWhitespace ? ' ' : '';
+        return spc + getExprRef(c.blockId);
+      }
+      return getNodeString(c);
+    })
     .join('');
