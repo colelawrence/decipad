@@ -69,19 +69,6 @@ const jsEvalCmd = !isFlagEnabled('UNSAFE_JS_EVAL')
       },
     ];
 
-const displayWidget = !isFlagEnabled('RESULT_WIDGET')
-  ? []
-  : [
-      {
-        command: 'display',
-        title: 'Result',
-        description: 'Highlight result in a story',
-        icon: <Result />,
-        enabled: true,
-        extraSearchTerms: ['display', 'result', 'show'],
-      },
-    ];
-
 const groups = [
   {
     title: 'Numbers',
@@ -114,7 +101,14 @@ const groups = [
         enabled: true,
         extraSearchTerms: ['input', 'number', 'slider', 'publish'],
       },
-      ...displayWidget,
+      {
+        command: 'display',
+        title: 'Result',
+        description: 'Highlight result in a story',
+        icon: <Result />,
+        enabled: true,
+        extraSearchTerms: ['display', 'result', 'show'],
+      },
       ...jsEvalCmd,
     ],
   },

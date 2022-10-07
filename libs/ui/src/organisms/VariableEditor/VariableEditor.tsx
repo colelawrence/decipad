@@ -19,7 +19,9 @@ import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
 
 const leftBarSize = 6;
 
-const wrapperStyles = (color: string) =>
+type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
+
+const wrapperStyles = ({ variant }: Variant, color: string) =>
   css({
     // Because `borderImage` with a linear gradient and `borderRadius` cannot
     // work together, we mimic a border by setting a linear gradient in the
@@ -28,7 +30,9 @@ const wrapperStyles = (color: string) =>
     borderRadius: '8px',
     backgroundImage: `linear-gradient(${cssVar('backgroundColor')}, ${cssVar(
       'backgroundColor'
-    )}), linear-gradient(to right, ${color} 0%, ${grey300.rgb} 18.71%)`,
+    )}), linear-gradient(to right, ${
+      variant === 'display' ? grey300.rgb : color
+    } 0%, ${grey300.rgb} 18.71%)`,
     backgroundOrigin: 'border-box',
     backgroundClip: 'content-box, border-box',
 
@@ -51,34 +55,44 @@ const widgetWrapperStyles = css({
 });
 
 const headerWrapperStyles = css({
+  position: 'relative',
   display: 'inline-flex',
   gridAutoColumns: 'auto',
   minWidth: 0,
   gap: '4px',
 });
 
-const iconWrapperStyles = css(
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
-  {
+const iconWrapperStyles = ({ variant }: Variant) =>
+  css(setCssVar('currentTextColor', cssVar('weakTextColor')), {
     display: 'grid',
     height: '20px',
     width: '20px',
     flexShrink: 0,
-  }
-);
+    ...(variant === 'display' && {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+    }),
+  });
 
-const buttonWrapperStyles = css({
-  padding: '2px',
-  flexShrink: 0,
-  ':hover': {
-    backgroundColor: cssVar('highlightColor'),
-    borderRadius: '50%',
-  },
-});
+const buttonWrapperStyles = ({ variant }: Variant) =>
+  css({
+    padding: '2px',
+    flexShrink: 0,
+    ':hover': {
+      backgroundColor: cssVar('highlightColor'),
+      borderRadius: '50%',
+    },
+    ...(variant === 'display' && {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      width: '20px',
+      height: '20px',
+    }),
+  });
 
-const variableNameStyles = (
-  props: Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>
-) =>
+const variableNameStyles = ({ variant }: Variant) =>
   css({
     alignSelf: 'start',
     flexGrow: 2,
@@ -94,7 +108,7 @@ const variableNameStyles = (
       top: 0,
       position: 'absolute',
       pointerEvents: 'none',
-      ...(props.variant !== 'display' && {
+      ...(variant !== 'display' && {
         color: 'white',
         background: `linear-gradient(
       90deg,
@@ -134,29 +148,42 @@ export const VariableEditor = ({
     [type]
   );
   const selected = useSelected();
-
   return (
     <div
       css={wrapperStyles(
+        { variant: menuProps.variant },
         menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
       )}
     >
       <div css={widgetWrapperStyles}>
-        <div css={headerWrapperStyles}>
+        <div
+          css={[
+            headerWrapperStyles,
+            menuProps.variant === 'display' && {
+              gap: 0,
+            },
+          ]}
+        >
           <>
             <div
               css={variableNameStyles({
-                variant: menuProps.variant || 'expression',
+                variant: menuProps.variant,
               })}
             >
               {childrenArray[0]}
             </div>
             {!readOnly && menuProps.variant !== 'display' && (
-              <span contentEditable={false} css={iconWrapperStyles}>
+              <span
+                contentEditable={false}
+                css={iconWrapperStyles({ variant: menuProps.variant })}
+              >
                 <Icon />
               </span>
             )}
-            <div contentEditable={false} css={iconWrapperStyles}>
+            <div
+              contentEditable={false}
+              css={iconWrapperStyles({ variant: menuProps.variant })}
+            >
               {!readOnly && (
                 // TS can't tell which variant of the union type that composes VariableEditorMenu
                 // is being used at any given moment but we're using these type definitions on
@@ -165,7 +192,11 @@ export const VariableEditor = ({
                 <VariableEditorMenu
                   {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
                   trigger={
-                    <button css={buttonWrapperStyles}>
+                    <button
+                      css={buttonWrapperStyles({
+                        variant: menuProps.variant,
+                      })}
+                    >
                       <Ellipsis />
                     </button>
                   }

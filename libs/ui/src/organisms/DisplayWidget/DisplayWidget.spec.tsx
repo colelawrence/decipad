@@ -103,3 +103,10 @@ it('doesnt show dropdown menu in readmode', async () => {
   );
   expect(queryByText('Variable #1')).not.toBeInTheDocument();
 });
+
+it('shows 0 as a placeholder', async () => {
+  const { getByText } = render(<DisplayWidget {...props} result={null} />);
+
+  expect(getByText('0')).toBeVisible();
+  expect(getByText('Result: Name')).toBeVisible();
+});

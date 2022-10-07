@@ -10,7 +10,7 @@ import {
   p14Regular,
   p32Medium,
 } from '../../primitives';
-import { ArrowOutlined } from '../../icons';
+import { ArrowOutlined, Caret } from '../../icons';
 import {
   AutoCompleteMenu,
   Identifier,
@@ -27,27 +27,38 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
   css({
     width: '100%',
     borderRadius: 8,
-    padding: 8,
+    padding: '0px 6px 0px 8px',
     fontSize: 24,
     minHeight: 44,
     height: '100%',
-    cursor: 'pointer',
     display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
     ...(selected && { backgroundColor: grey200.rgb }),
-    ...(!readOnly && { border: `1px solid ${grey300.rgb}` }),
-    ':hover': {
-      backgroundColor: grey200.rgb,
-    },
+    ...(!readOnly && {
+      border: `1px solid ${grey300.rgb}`,
+      ':hover': {
+        backgroundColor: grey200.rgb,
+      },
+      cursor: 'pointer',
+    }),
   });
 
-const iconStyles = css({
+const textWrapperStyles = css({
   display: 'flex',
+  flexWrap: 'wrap',
+  gap: '2px',
+});
+
+const iconStyles = css({
+  display: 'grid',
   justifyContent: 'center',
   alignItems: 'center',
-  height: 24,
-  width: 24,
+  '> svg': {
+    height: 24,
+    width: 24,
+  },
 });
 
 interface DropdownWidgetOptions {
@@ -78,36 +89,34 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   readOnly,
   children,
 }) => {
-  if (readOnly) {
-    return <div css={triggerStyles(readOnly, false)}>{children}</div>;
-  }
-
   return (
     <>
       <div css={wrapperStyles}>
         <div css={iconStyles}>
           <ArrowOutlined />
         </div>
-        <span css={[p14Regular, { color: grey500.rgb }]}>
-          {`Result: ${result ?? 'Name'}`}
-        </span>
-        {!result && (
-          <span css={[p14Regular, { color: grey400.rgb }]}>
-            (pick from the list)
+        <div css={textWrapperStyles}>
+          <span css={[p14Regular, { color: grey500.rgb }]}>
+            {`Result: ${result ?? 'Name'}`}
           </span>
-        )}
+        </div>
       </div>
       {children}
       <div
         css={triggerStyles(readOnly, openMenu)}
-        onClick={() => onChangeOpen(!openMenu)}
+        onClick={() => !readOnly && onChangeOpen(!openMenu)}
         data-testid="result-widget"
       >
-        {lineResult?.result && (
-          <span css={p32Medium}>{formatResultPreview(lineResult.result)}</span>
+        <span css={[p32Medium, !lineResult?.result && { color: grey400.rgb }]}>
+          {lineResult?.result ? formatResultPreview(lineResult.result) : '0'}
+        </span>
+        {!readOnly && (
+          <div css={{ width: 20, height: 20 }}>
+            <Caret variant={openMenu ? 'up' : 'down'} color="normal" />
+          </div>
         )}
       </div>
-      {openMenu && (
+      {openMenu && !readOnly && (
         <AutoCompleteMenu
           top={false}
           rounded={true}

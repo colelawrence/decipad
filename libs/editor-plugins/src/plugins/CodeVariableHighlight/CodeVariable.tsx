@@ -75,12 +75,8 @@ export const CodeVariable: CodeLeaf = ({
     }
   }, [defBlockId, editor, provideVariableDefLink]);
 
-  if(!text){
-    return  (
-      <span {...attributes}>
-        {children}
-      </span>
-    );
+  if (!text) {
+    return <span {...attributes}>{children}</span>;
   }
 
   return (

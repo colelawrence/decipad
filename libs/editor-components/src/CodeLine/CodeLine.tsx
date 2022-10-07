@@ -8,7 +8,6 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useNodeText } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import {
@@ -105,9 +104,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
         isEmpty={isEmpty}
         onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
         onDragStartCell={onDragStartTableCellResult(editor)}
-        onClickedResult={
-          isFlagEnabled('RESULT_WIDGET') ? onClickedResult : undefined
-        }
+        onClickedResult={onClickedResult}
         hasNextSibling={siblingCodeLines?.hasNext}
         hasPreviousSibling={siblingCodeLines?.hasPrevious}
       >

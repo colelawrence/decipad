@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import {
   ELEMENT_COLUMNS,
+  ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
   MyEditor,
   MyNodeEntry,
@@ -23,7 +24,9 @@ const normalizeColumns = (editor: MyEditor) => (entry: MyNodeEntry) => {
 
       if (
         isText(childNode) ||
-        (isElement(childNode) && childNode.type !== ELEMENT_VARIABLE_DEF)
+        (isElement(childNode) &&
+          childNode.type !== ELEMENT_VARIABLE_DEF &&
+          childNode.type !== ELEMENT_DISPLAY)
       ) {
         liftNodes(editor, { at: childPath });
         return true;

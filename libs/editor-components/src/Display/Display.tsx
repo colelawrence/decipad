@@ -1,15 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
-  ELEMENT_CODE_LINE,
-  ELEMENT_COLUMNS,
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
-  useTEditorRef,
+  useTEditorState,
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
-import { distinctUntilChanged, map } from 'rxjs';
-import { dequal } from 'dequal';
 import {
   findNodePath,
   getNodeString,
@@ -38,7 +34,6 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Expression is meant to render expression elements`);
   }
   const [openMenu, setOpenMenu] = useState(false);
-  const [availableIds, setAvailableIds] = useState<string[]>([]);
   const [deleted, setDeleted] = useState(false);
 
   const selected = useSelected();
@@ -53,32 +48,10 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     }
   }, [selected, focused]);
 
-  const editor = useTEditorRef();
+  const editor = useTEditorState();
   const changeBlockId = useElementMutatorCallback(editor, element, 'blockId');
   const res = useResult(element.blockId);
   const computer = useComputer();
-
-  useEffect(() => {
-    const sub = computer.results
-      .pipe(
-        map(({ blockResults }) =>
-          Object.keys(blockResults).filter((blockId) => {
-            const kind = blockResults[blockId].result?.type.kind;
-            return (
-              kind === 'string' ||
-              kind === 'number' ||
-              kind === 'boolean' ||
-              kind === 'type-error'
-            );
-          })
-        ),
-        distinctUntilChanged(dequal)
-      )
-      .subscribe(setAvailableIds);
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [computer]);
 
   const onDelete = useCallback(() => {
     const path = findNodePath(editor, element);
@@ -94,25 +67,30 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     });
   }, [editor, element]);
 
-  const codeLines = useMemo(
-    () =>
-      editor.children
-        .flatMap((child) =>
-          child.type === ELEMENT_COLUMNS ? child.children : child
-        )
-        .filter(
-          (n) => n.type === ELEMENT_CODE_LINE || n.type === ELEMENT_VARIABLE_DEF
-        )
-        .filter((n) => availableIds.includes(n.id))
-        .map((n) => {
-          if (n.type === ELEMENT_VARIABLE_DEF) {
+  const codeLines = computer.results$
+    .useWithSelector(({ blockResults }) =>
+      Object.keys(blockResults).map((blockId) => {
+        const kind = blockResults[blockId].result?.type.kind;
+        if (
+          kind === 'string' ||
+          kind === 'number' ||
+          kind === 'boolean' ||
+          kind === 'type-error'
+        ) {
+          const node = editor.children.find((block) => block.id === blockId);
+          if (!node) return undefined;
+
+          // Variable Defs are always assignments, so we can just give the Id,
+          // and display the name of the var def.
+          if (node.type === ELEMENT_VARIABLE_DEF) {
             return {
               type: 'var',
-              id: n.id,
-              text: getNodeString(n.children[0]),
+              id: node.id,
+              text: node.children[0].children[0].text,
             };
           }
-          const text = getNodeString(n);
+
+          const text = getNodeString(node);
           if (text.length === 0) return undefined;
 
           const computerParsed = parseStatement(text);
@@ -121,19 +99,20 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           if (computerParsed.solution.type === 'assign') {
             return {
               type: 'var',
-              id: n.id,
+              id: node.id,
               text: computerParsed.solution.args[0].args[0],
             };
           }
           return {
             type: 'calc',
-            id: n.id,
+            id: node.id,
             text,
           };
-        })
-        .filter((n): n is DropdownWidgetOptions => n !== undefined),
-    [editor.children, availableIds]
-  );
+        }
+        return undefined;
+      })
+    )
+    .filter((n): n is DropdownWidgetOptions => n !== undefined);
 
   const selectedLine = codeLines.find((i) => i.id === element.blockId);
   const readOnly = useIsEditorReadOnly();
@@ -143,13 +122,18 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   return (
     <div {...attributes} contentEditable={false} id={element.id}>
       <DraggableBlock blockKind="interactive" element={element}>
-        <VariableEditor variant="display" onCopy={onCopy} onDelete={onDelete}>
+        <VariableEditor
+          variant="display"
+          onCopy={onCopy}
+          onDelete={onDelete}
+          readOnly={readOnly}
+        >
           <DisplayWidget
             dropdownContent={codeLines}
             openMenu={openMenu && focused && selected}
             onChangeOpen={setOpenMenu}
             selectedId={element.blockId}
-            setSelectedId={(id) => changeBlockId(id)}
+            setSelectedId={changeBlockId}
             lineResult={res}
             result={selectedLine ? selectedLine.text : null}
             readOnly={readOnly}
