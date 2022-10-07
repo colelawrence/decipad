@@ -1,5 +1,5 @@
 import { ReactEditor } from 'slate-react';
-import { LoadingFilter } from '@decipad/ui';
+import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import {
   ComputerContextProvider,
   EditorChangeContextProvider,
@@ -8,7 +8,7 @@ import {
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
 import { createPlateEditor, Plate } from '@udecode/plate';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState, useRef } from 'react';
 import { MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import { NumberTooltip, Tooltip } from './components';
@@ -21,6 +21,8 @@ export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
 
   const interactions = useEditorUserInteractionsContext();
+
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const editorPlugins = useMemo(
     () => configuration.plugins(computer, interactions),
@@ -47,21 +49,23 @@ export const NoDocSyncEditorInternal: FC = () => {
         value={{ readOnly: isWritingLocked, lockWriting }}
       >
         <LoadingFilter loading={isWritingLocked}>
-          <Plate<MyValue>
-            editor={editor}
-            onChange={onChange}
-            initialValue={
-              window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-                ? introNotebook()
-                : emptyNotebook()
-            }
-            editableProps={{
-              readOnly: isWritingLocked,
-            }}
-          >
-            <Tooltip />
-            <NumberTooltip />
-          </Plate>
+          <EditorLayout ref={containerRef}>
+            <Plate<MyValue>
+              editor={editor}
+              onChange={onChange}
+              initialValue={
+                window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+                  ? introNotebook()
+                  : emptyNotebook()
+              }
+              editableProps={{
+                readOnly: isWritingLocked,
+              }}
+            >
+              <Tooltip />
+              <NumberTooltip />
+            </Plate>
+          </EditorLayout>
         </LoadingFilter>
       </EditorReadOnlyContext.Provider>
     </EditorChangeContextProvider>
