@@ -18,6 +18,7 @@ const placeholderStyles = css({
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
     pointerEvents: 'none',
+    userSelect: 'none',
   },
 });
 
