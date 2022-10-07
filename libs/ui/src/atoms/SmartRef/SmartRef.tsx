@@ -26,7 +26,11 @@ export const SmartRef: FC<SmartRefProps> = ({
   return (
     <span css={smartRefWrapperStyles} contentEditable={false}>
       {symbolName && (
-        <CodeVariable defBlockId={defBlockId} isSelected={isSelected}>
+        <CodeVariable
+          defBlockId={defBlockId}
+          isSelected={isSelected}
+          provideVariableDefLink
+        >
           {symbolName}
         </CodeVariable>
       )}
