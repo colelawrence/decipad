@@ -1,8 +1,9 @@
 import { FC, ReactNode } from 'react';
 import { ErrorBoundary } from '@sentry/react';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
-import { findNodePath, removeNodes } from '@udecode/plate';
+import { removeNodes } from '@udecode/plate';
 import { ErrorBlock } from '@decipad/ui';
+import { useNodePath } from '@decipad/editor-utils';
 
 interface FallbackProps {
   error: Error;
@@ -19,7 +20,7 @@ const Fallback: FC<FallbackProps> = ({
   console.error(error);
   const editor = useTEditorRef();
 
-  const delPath = findNodePath(editor, element);
+  const delPath = useNodePath(element);
   if (delPath === undefined) return <ErrorBlock type="complete-error" />;
 
   return (
