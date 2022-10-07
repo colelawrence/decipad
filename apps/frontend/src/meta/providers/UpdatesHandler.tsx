@@ -44,7 +44,7 @@ export const UpdatesHandler = () => {
     const registration = await navigator.serviceWorker.getRegistration();
     if (registration) {
       try {
-        registration.update();
+        await registration.update();
       } catch (err) {
         // ignore
       }
