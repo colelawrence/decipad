@@ -41,7 +41,7 @@ export async function signInEmail(
 
     existingUser = (
       await createUser({
-        name: account.userId,
+        name: account.userId ?? '',
         email: account.userId,
         provider: account.provider,
       })

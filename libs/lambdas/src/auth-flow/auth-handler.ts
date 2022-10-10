@@ -30,7 +30,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
       // if (account.provider === 'github' && metadata && metadata.id) {
       //   return signInGithub(user, account, metadata);
       // }
-      if (account.type === 'email') {
+      if (account?.type === 'email') {
         return signInEmail(user as UserWithSecret, account);
       }
       return false;
@@ -38,7 +38,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
 
     async jwt({ user, token }) {
       if (user) {
-        token.accessToken = user.secret;
+        token.accessToken = (user as { secret?: string }).secret;
         if (!token.accessToken) {
           throw new Error('no secret for user');
         }
