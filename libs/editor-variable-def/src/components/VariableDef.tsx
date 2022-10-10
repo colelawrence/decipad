@@ -14,6 +14,8 @@ import {
   safeDelete,
   useElementMutatorCallback,
   wrapIntoColumns,
+  mutateText,
+  useNodePath,
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
@@ -24,14 +26,12 @@ import {
   getNodeString,
   PlateEditor,
   serializeHtml,
-  insertText,
 } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
 import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { ComponentProps, useCallback, useState } from 'react';
 import { Editor, Path } from 'slate';
-import { ReactEditor } from 'slate-react';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -85,17 +85,17 @@ export const VariableDef: PlateComponent = ({
 
   const onChangeValue = useCallback(
     (value: string | undefined) => {
-      const path = findNodePath(editor, element);
+      const path = findNodePath(editor, element.children[1]);
       if (path) {
-        insertText(editor, value?.toString() ?? '', { at: [...path, 1] });
+        mutateText(editor, path)(value?.toString() ?? '');
       }
     },
     [editor, element]
   );
 
-  const path = ReactEditor.findPath(editor as ReactEditor, element);
+  const path = useNodePath(element);
   // The following line might break if the element was deleted.
-  const isHorizontal = !deleted && hasLayoutAncestor(editor, path);
+  const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
 
   const getAxis = useCallback<
     NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>
@@ -111,7 +111,7 @@ export const VariableDef: PlateComponent = ({
     NonNullable<ComponentProps<typeof DraggableBlock>['onDrop']>
   >(
     (item, _, direction) => {
-      if (direction !== 'left' && direction !== 'right') {
+      if (!path || (direction !== 'left' && direction !== 'right')) {
         return defaultMoveNode(editor, item, element.id, direction);
       }
 

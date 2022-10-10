@@ -14,8 +14,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
     throw new Error(`Slider is meant to render slider elements`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const editor = useTPlateEditorRef()!;
+  const editor = useTPlateEditorRef();
 
   const selectElement = useCallback(() => {
     const point = {

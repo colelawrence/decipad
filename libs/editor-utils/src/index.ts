@@ -26,6 +26,7 @@ export * from './getVariableRanges';
 export * from './getCodeLineSource';
 export * from './magicNumberId';
 export * from './matchNodeType';
+export * from './mutateText';
 export * from './isElementOfType';
 export * from './getSlateFragment';
 export * from './selectEventRange';

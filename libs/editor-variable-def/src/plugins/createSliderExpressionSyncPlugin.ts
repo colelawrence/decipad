@@ -13,7 +13,6 @@ import {
   getNodeString,
   getParentNode,
   getPreviousNode,
-  insertText,
   isElement,
   isText,
   setNodes,
@@ -21,6 +20,7 @@ import {
 } from '@udecode/plate';
 import { parseNumberWithUnit } from '@decipad/computer';
 import { Path } from 'slate';
+import { mutateText } from '@decipad/editor-utils';
 
 const isExpression = (n: TNode) =>
   isElement(n) && n.type === ELEMENT_EXPRESSION;
@@ -70,9 +70,10 @@ export const createSliderExpressionSyncPlugin =
             return;
           }
 
-          insertText(editor, `${sliderNode.value}${rest ?? expression ?? ''}`, {
-            at: expressionPath,
-          });
+          mutateText(
+            editor,
+            expressionPath
+          )(`${sliderNode.value}${rest ?? expression ?? ''}`);
         }
 
         if (
