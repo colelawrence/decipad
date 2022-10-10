@@ -16,7 +16,6 @@ export type User = {
   createdAt?: number | Date;
   last_login?: number;
   first_login?: number;
-  hideChecklist?: boolean;
 };
 
 export interface UserInput {
@@ -27,7 +26,6 @@ export interface UserInput {
   providerId?: string;
   last_login?: number;
   first_login?: number;
-  hideChecklist?: boolean;
 }
 
 export interface GithubUser extends UserInput {
@@ -231,8 +229,6 @@ export interface UserRecord extends TableRecordBase {
   email?: string | null;
   secret?: string;
   first_login?: number;
-  hideChecklist?: boolean;
-  completeChecklist?: boolean;
 }
 
 export interface UserKeyRecord extends TableRecordBase {
@@ -405,18 +401,6 @@ export interface ExternalDataSourceRecord extends TableRecordBase {
   externalId: string;
 }
 
-// User goals
-export interface UserGoalRecord extends TableRecordBase {
-  id: string;
-  user_id: ID;
-  goalName: string;
-  fulfilledAt: number;
-}
-
-export interface GoalFulfilmentInput {
-  goalName: string;
-}
-
 export interface ExternalKeyRecord extends TableRecordBase {
   resource_uri: string;
   access_token: string;
@@ -468,7 +452,6 @@ export interface EnhancedDataTables {
   fileattachments: EnhancedDataTable<FileAttachmentRecord>;
   externaldatasources: DataTable<ExternalDataSourceRecord>;
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
-  usergoals: DataTable<UserGoalRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {

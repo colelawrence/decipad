@@ -4,9 +4,8 @@ import { ActionEvent } from './action';
 import { PageEvent } from './page';
 
 export type ClientEvent = PageEvent | ActionEvent;
-export type ClientEventContextType = (arg0: ClientEvent) => void;
 
-export const ClientEventsContext = createContext<ClientEventContextType>(noop);
+export const ClientEventsContext =
+  createContext<(clientEvent: ClientEvent) => void>(noop);
 
 export * from './useAnalytics';
-export * from './action';

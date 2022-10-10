@@ -1,6 +1,5 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
-import { StarterChecklistStateChange } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
   EditorPlaceholder,
@@ -9,13 +8,8 @@ import {
   NotebookPage,
   TopbarPlaceholder,
 } from '@decipad/ui';
-import { FC, lazy, useCallback, useState } from 'react';
-import {
-  useRenameNotebookMutation,
-  useFulfilGoalMutation,
-  useUpdateUserMutation,
-  useUserQuery,
-} from '../../graphql';
+import { FC, lazy, useState } from 'react';
+import { useRenameNotebookMutation } from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
@@ -63,52 +57,7 @@ const Notebook: FC = () => {
     docsync,
   });
 
-  const [checklistResult] = useUserQuery();
-
-  const checklistState = checklistResult.data?.selfFulfilledGoals;
-  const checklistShow = checklistResult.data?.self?.hideChecklist;
-
   const [, renameNotebook] = useRenameNotebookMutation();
-  const [, createGoal] = useFulfilGoalMutation();
-  const [, updateUser] = useUpdateUserMutation();
-
-  const handleChecklistStateChange = useCallback(
-    (props: StarterChecklistStateChange) => {
-      if (props.type === 'newGoal') {
-        createGoal({
-          props: {
-            goalName: props.goalName,
-          },
-        }).catch((err) => console.warn(err));
-      } else {
-        updateUser({
-          props: {
-            hideChecklist: true,
-          },
-        }).catch((err) => console.warn(err));
-      }
-    },
-    [createGoal, updateUser]
-  );
-
-  const duplicateNotebook = useCallback(() => {
-    handleChecklistStateChange({
-      type: 'newGoal',
-      goalName: 'Duplicate this notebook',
-    });
-    duplicate();
-  }, [handleChecklistStateChange, duplicate]);
-
-  const setNotebookPublicCallback = useCallback(
-    (state: boolean) => {
-      handleChecklistStateChange({
-        type: 'newGoal',
-        goalName: 'Share this notebook',
-      });
-      setNotebookPublic(state);
-    },
-    [handleChecklistStateChange, setNotebookPublic]
-  );
 
   useAnimateMutations();
 
@@ -149,14 +98,6 @@ const Notebook: FC = () => {
               initialState={initialState}
               onEditor={setEditor}
               onDocsync={setDocsync}
-              checklistState={{
-                goals: !checklistState ? [] : checklistState,
-                nonEditorGoals: {
-                  shared: isPublic,
-                },
-                hide: !!checklistShow,
-              }}
-              onChecklistStateChange={handleChecklistStateChange}
             />
           </Frame>
         }
@@ -186,9 +127,9 @@ const Notebook: FC = () => {
               notebook={notebook}
               isNotebookPublic={isPublic}
               hasLocalChanges={hasLocalChanges}
-              duplicateNotebook={duplicateNotebook}
+              duplicateNotebook={duplicate}
               removeLocalChanges={removeLocalChanges}
-              setNotebookPublic={setNotebookPublicCallback}
+              setNotebookPublic={setNotebookPublic}
             />
           </Frame>
         }

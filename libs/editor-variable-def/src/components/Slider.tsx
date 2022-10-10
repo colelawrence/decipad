@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { Slider as UISlider } from '@decipad/ui';
 import {
   ELEMENT_SLIDER,
@@ -8,6 +7,7 @@ import {
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { ReactEditor } from 'slate-react';
 import { setSelection } from '@udecode/plate';
+import { useCallback } from 'react';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_SLIDER) {

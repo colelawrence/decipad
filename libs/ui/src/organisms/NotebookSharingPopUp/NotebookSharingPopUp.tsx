@@ -163,7 +163,9 @@ export const NotebookSharingPopUp = ({
               <Toggle
                 ariaRoleDescription="enable sharing"
                 active={isPublic}
-                onChange={(newIsPublic) => onToggleMakePublic(newIsPublic)}
+                onChange={(newIsPublic) => {
+                  onToggleMakePublic(newIsPublic);
+                }}
               />
             </div>
 

@@ -6,5 +6,4 @@ export * from './editor-bubbles';
 export * from './editor-change';
 export * from './editor-table';
 export * from './editor-block-parent-ref';
-export * from './starter-checklist';
 export * from './editor-user-interactions';

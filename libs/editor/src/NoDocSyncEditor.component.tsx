@@ -7,10 +7,9 @@ import {
   useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
-import { Plate, createPlateEditor } from '@udecode/plate';
-import { FC, useCallback, useContext, useMemo, useState, useRef } from 'react';
+import { createPlateEditor, Plate } from '@udecode/plate';
+import { FC, useCallback, useMemo, useState, useRef } from 'react';
 import { MyValue } from '@decipad/editor-types';
-import { ClientEventsContext } from '@decipad/client-events';
 import { Subject } from 'rxjs';
 import { NumberTooltip, Tooltip } from './components';
 import * as configuration from './configuration';
@@ -20,15 +19,14 @@ import { useWriteLock } from './utils/useWriteLock';
 
 export const NoDocSyncEditorInternal: FC = () => {
   const computer = useComputer();
-  const events = useContext(ClientEventsContext);
 
   const interactions = useEditorUserInteractionsContext();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const editorPlugins = useMemo(
-    () => configuration.plugins(computer, events, interactions),
-    [computer, events, interactions]
+    () => configuration.plugins(computer, interactions),
+    [computer, interactions]
   );
 
   const [editor] = useState(() =>

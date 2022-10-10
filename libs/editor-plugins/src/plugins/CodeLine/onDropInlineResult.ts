@@ -1,5 +1,6 @@
 import {
   ELEMENT_CODE_LINE,
+  ELEMENT_DISPLAY,
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
   MyEditor,
@@ -8,6 +9,7 @@ import {
 import React from 'react';
 import {
   findNode,
+  findNodePath,
   focusEditor,
   getBlockAbove,
   getEditorString,
@@ -16,6 +18,7 @@ import {
   getPointBefore,
   isDefined,
   isEditorFocused,
+  setNodes,
   TElement,
 } from '@udecode/plate';
 import {
@@ -113,6 +116,9 @@ export const onDropInlineResult =
                 [MARK_MAGICNUMBER]: true,
               });
             }
+          } else if (block.type === ELEMENT_DISPLAY) {
+            const nodePath = findNodePath(editor, block);
+            setNodes(editor, { blockId }, { at: nodePath });
           }
         }
       });

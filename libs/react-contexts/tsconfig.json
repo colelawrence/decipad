@@ -8,7 +8,6 @@
   "references": [
     { "path": "../computer" },
     { "path": "../editor-types" },
-    { "path": "../utils" },
-    { "path": "../client-events/" }
+    { "path": "../utils" }
   ]
 }

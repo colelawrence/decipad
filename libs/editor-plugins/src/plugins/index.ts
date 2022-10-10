@@ -40,7 +40,6 @@ export * from './KeyboardNavigation';
 export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './WithDocSyncHistory';
-export * from './UserEvent';
 export * from './Display';
 export * from './TrailingParagraph';
 export * from './ExitBreakPlugin';
