@@ -4,7 +4,7 @@ import type {
   CellValueType,
   TableCellType,
 } from '@decipad/editor-types';
-import { createContext, FunctionComponent } from 'react';
+import { createContext, FunctionComponent, ElementType } from 'react';
 import {
   All,
   Calendar,
@@ -13,7 +13,6 @@ import {
   DollarCircle,
   Formula,
   Number,
-  QuestionMark,
   Text,
   Warning,
 } from '../icons';
@@ -26,7 +25,7 @@ const isCurrencyUnit = (unit: Unit[] | null | undefined): boolean =>
 export function getTypeIcon(
   type: CellValueType,
   onExpressionEditor = false
-): FunctionComponent {
+): FunctionComponent | ElementType {
   switch (type.kind) {
     case 'date':
       return Calendar;
@@ -43,7 +42,7 @@ export function getTypeIcon(
     case 'series':
       return Calendar; // only calendar for now
     case 'anything':
-      return onExpressionEditor ? Code : QuestionMark;
+      return onExpressionEditor ? Code : 'span';
     case 'type-error':
       return Warning;
     default:

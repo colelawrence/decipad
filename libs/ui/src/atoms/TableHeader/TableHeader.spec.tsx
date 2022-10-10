@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { FunctionComponent } from 'react';
 import {
   getDateType,
   getNumberType,
@@ -70,6 +71,8 @@ describe('type prop', () => {
       </table>
     );
 
-    expect(screen.getByTitle(new RegExp(Icon.name))).toBeInTheDocument();
+    expect(
+      screen.getByTitle(new RegExp((Icon as FunctionComponent).name))
+    ).toBeInTheDocument();
   });
 });
