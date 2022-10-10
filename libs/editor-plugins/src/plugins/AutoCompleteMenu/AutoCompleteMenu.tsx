@@ -50,7 +50,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes, children }) => {
 
   const onExecuteItem = useCallback(
     (item: MenuItem) => {
-      if (word) {
+      if (word && showAutoComplete) {
         // deleteBackword('word') was misbehaving with ^ and + operators.
         for (let i = 0; i < word.length; i += 1) {
           editor.deleteBackward('character');
@@ -62,7 +62,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes, children }) => {
         insertText(editor, ' ');
       }
     },
-    [computer, editor, word]
+    [computer, editor, showAutoComplete, word]
   );
 
   if (selection) {
