@@ -62,7 +62,6 @@ interface HelpMenuProps {
   readonly docsUrl?: string;
   readonly onSelectSupport?: () => void;
   readonly onSelectFeedback?: () => void;
-  readonly onSelectFeature?: () => void;
 }
 
 export const HelpMenu = ({
@@ -70,7 +69,6 @@ export const HelpMenu = ({
   docsUrl,
   onSelectSupport,
   onSelectFeedback,
-  onSelectFeature,
 }: HelpMenuProps) => {
   return (
     <MenuList
@@ -92,7 +90,7 @@ export const HelpMenu = ({
       <CustomMenuItem
         onSelect={onSelectSupport}
         title="Contact Support"
-        description="Contact us by email or chat"
+        description="Chat with the team"
       />
       <CustomMenuItem
         to={discordUrl}
@@ -103,10 +101,7 @@ export const HelpMenu = ({
         <>
           <MenuSeparator />
           <MenuItem onSelect={onSelectFeedback}>
-            <span css={p14Medium}>Submit feedback</span>
-          </MenuItem>
-          <MenuItem onSelect={onSelectFeature}>
-            <span css={p14Medium}>Request a feature</span>
+            <span css={p14Medium}>Share feedback</span>
           </MenuItem>
         </>
       )}
