@@ -6,6 +6,7 @@ import {
 } from '@decipad/ui';
 import { ComponentProps, lazy, useState } from 'react';
 import { Frame } from '../meta';
+import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';
 
 const loadEditor = () =>
   import(/* webpackChunkName: "playground-editor" */ './Editor');
@@ -22,6 +23,8 @@ const Playground: React.FC = () => {
     useState<ComponentProps<typeof EditorIcon>['icon']>('Rocket');
   const [iconColor, setIconColor] =
     useState<ComponentProps<typeof EditorIcon>['color']>('Catskill');
+
+  useAnimateMutations();
 
   return (
     <NotebookPage

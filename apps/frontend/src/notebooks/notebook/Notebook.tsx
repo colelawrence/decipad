@@ -11,6 +11,7 @@ import {
 import { FC, lazy, useState } from 'react';
 import { useRenameNotebookMutation } from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
+import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
 const loadTopbar = () =>
@@ -57,6 +58,8 @@ const Notebook: FC = () => {
   });
 
   const [, renameNotebook] = useRenameNotebookMutation();
+
+  useAnimateMutations();
 
   if (error) {
     if (/no such/i.test(error?.message))
