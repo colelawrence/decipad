@@ -123,20 +123,6 @@ export const NotebookTopbar = ({
                 Gallery
               </Anchor>
             </em>
-            <em css={helpLinkStyles}>
-              <Anchor
-                href={docs({}).$}
-                // Analytics
-                onClick={() =>
-                  clientEvent({
-                    type: 'action',
-                    action: 'notebook help link clicked',
-                  })
-                }
-              >
-                Help
-              </Anchor>
-            </em>
           </div>
         )}
         <NotebookAvatars
