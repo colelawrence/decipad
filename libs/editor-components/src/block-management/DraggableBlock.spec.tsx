@@ -138,7 +138,7 @@ it('can move the block', () => {
     }
   );
   const dragHandles = getAllByTitle(/drag/i);
-  expect(dragHandles).toHaveLength(4);
+  expect(dragHandles).toHaveLength(2);
   const [firstDragHandle] = dragHandles;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

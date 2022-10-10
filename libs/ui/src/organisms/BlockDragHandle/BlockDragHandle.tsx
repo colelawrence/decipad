@@ -96,12 +96,16 @@ export const BlockDragHandle = ({
   const setHovered = useCallback(() => setIsHovered(true), [setIsHovered]);
   const setNotHovered = useCallback(() => setIsHovered(false), [setIsHovered]);
 
+  const onClick = useCallback(() => {
+    onDelete !== false && onChangeMenuOpen(!menuOpen);
+  }, [menuOpen, onChangeMenuOpen, onDelete]);
+
   const menuButton = (
     <button
       data-testid="drag-handle"
       onMouseEnter={setHovered}
       onMouseLeave={setNotHovered}
-      onClick={() => onDelete !== false && onChangeMenuOpen(!menuOpen)}
+      onClick={onClick}
       css={handleStyle}
     >
       {showEyeLabel && !isHovered ? <EyeLabel /> : <DragHandle />}
@@ -134,37 +138,39 @@ export const BlockDragHandle = ({
         </span>
       </Tooltip>
 
-      <MenuList
-        root
-        open={menuOpen}
-        onChangeOpen={onChangeMenuOpen}
-        trigger={menuButton}
-        dropdown
-        side="left"
-      >
-        {showHideButton}
+      {menuOpen && (
+        <MenuList
+          root
+          open={menuOpen}
+          onChangeOpen={onChangeMenuOpen}
+          trigger={menuButton}
+          dropdown
+          side="left"
+        >
+          {showHideButton}
 
-        <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
-          Duplicate
-        </MenuItem>
-
-        {onCopyHref && (
-          <MenuItem icon={<Link />} onSelect={onCopyHref}>
-            Copy reference
+          <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
+            Duplicate
           </MenuItem>
-        )}
 
-        <MenuItem disabled>
-          <hr css={{ color: cssVar('highlightColor') }} />
-        </MenuItem>
+          {onCopyHref && (
+            <MenuItem icon={<Link />} onSelect={onCopyHref}>
+              Copy reference
+            </MenuItem>
+          )}
 
-        {/* onDelete is only false when disabled by the parent component */}
-        {onDelete !== false && (
-          <MenuItem icon={<Delete />} onSelect={onDelete}>
-            Delete
+          <MenuItem disabled>
+            <hr css={{ color: cssVar('highlightColor') }} />
           </MenuItem>
-        )}
-      </MenuList>
+
+          {/* onDelete is only false when disabled by the parent component */}
+          {onDelete !== false && (
+            <MenuItem icon={<Delete />} onSelect={onDelete}>
+              Delete
+            </MenuItem>
+          )}
+        </MenuList>
+      )}
 
       <Tooltip trigger={menuButton} side="bottom" hoverOnly>
         <span

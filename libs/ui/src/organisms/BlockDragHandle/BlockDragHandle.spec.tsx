@@ -10,10 +10,10 @@ it('shows a tooltip when focussing the handle', async () => {
     expect(queryByText(/for options/i)).not.toBeInTheDocument();
   });
 
-  await userEvent.hover(getAllByTitle(/handle/i)[1]);
+  await userEvent.hover(getAllByTitle(/handle/i)[0]);
   expect(await findByText(/for options/i)).toBeInTheDocument();
 
-  await userEvent.unhover(getAllByTitle(/handle/i)[1]);
+  await userEvent.unhover(getAllByTitle(/handle/i)[0]);
   await waitFor(() => {
     expect(queryByText(/for options/i)).not.toBeInTheDocument();
   });

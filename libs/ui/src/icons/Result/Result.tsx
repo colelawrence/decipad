@@ -13,7 +13,7 @@ export const Result = (): ReturnType<FC> => (
       rx="3.35"
       fill="white"
       stroke={teal500.rgb}
-      stroke-width="1.3"
+      strokeWidth="1.3"
     />
     <rect
       x="13"
@@ -28,8 +28,8 @@ export const Result = (): ReturnType<FC> => (
     <path
       d="M14 26.3H20.0742H22M22 26.3L20.3951 24.3M22 26.3L20.3951 28.3"
       stroke={teal500.rgb}
-      stroke-width="1.3"
-      stroke-linecap="round"
+      strokeWidth="1.3"
+      strokeLinecap="round"
     />
     <rect x="13.5" y="20.5" width="13" height="13" rx="6.5" stroke="#15B9A5" />
   </svg>

@@ -1,4 +1,5 @@
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
@@ -7,6 +8,7 @@ import { DraggableBlock } from './DraggableBlock';
 const props: ComponentProps<typeof DraggableBlock> = {
   blockKind: 'paragraph',
   children: <p>block</p>,
+  onDelete: noop,
 };
 
 it('opens the menu when clicking the drag handle', async () => {
@@ -15,7 +17,7 @@ it('opens the menu when clicking the drag handle', async () => {
   );
   expect(queryByTitle(/delete/i)).not.toBeInTheDocument();
 
-  await userEvent.click(getAllByTitle(/drag/i)[1]);
+  await userEvent.click(getAllByTitle(/drag/i)[0]);
 
   expect(getByTitle(/delete/i)).toBeInTheDocument();
 });
