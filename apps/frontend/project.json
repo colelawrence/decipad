@@ -6,7 +6,7 @@
     "serve": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "DISABLE_ESLINT_PLUGIN=true TSC_COMPILE_ON_ERROR=true craco start",
+        "command": "./scripts/frontend.sh",
         "cwd": "apps/frontend"
       }
     },
