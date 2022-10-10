@@ -1,6 +1,9 @@
 import { FC, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { notebooks, playground, workspaces } from '@decipad/routing';
+import { docs, notebooks, playground, workspaces } from '@decipad/routing';
+import { HelpMenu } from '@decipad/ui';
+import { useIntercom } from 'react-use-intercom';
+import { useSession } from 'next-auth/react';
 import { ErrorPage, RequireSession, LazyRoute, RouteEvents } from './meta';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
@@ -15,45 +18,57 @@ export const loadPlayground = () =>
 const Playground = lazy(loadPlayground);
 
 export const App: FC = () => {
+  const { show } = useIntercom();
+  const session = useSession();
   return (
-    <Routes>
-      <Route path="/" element={<Navigate replace to={workspaces({}).$} />} />
-      <Route
-        path="/workspaces/:workspaceId/pads/*"
-        element={<NotebookRedirect />}
-      />
-      <Route path="/workspaces/*" element={<WorkspaceRedirect />} />
-      <Route
-        path={`${workspaces.template}/*`}
-        element={
-          <RequireSession>
-            <RouteEvents category="workspace">
+    <>
+      <Routes>
+        <Route path="/" element={<Navigate replace to={workspaces({}).$} />} />
+        <Route
+          path="/workspaces/:workspaceId/pads/*"
+          element={<NotebookRedirect />}
+        />
+        <Route path="/workspaces/*" element={<WorkspaceRedirect />} />
+        <Route
+          path={`${workspaces.template}/*`}
+          element={
+            <RequireSession>
+              <RouteEvents category="workspace">
+                <LazyRoute>
+                  <Workspaces />
+                </LazyRoute>
+              </RouteEvents>
+            </RequireSession>
+          }
+        />
+        <Route
+          path={`${notebooks.template}/*`}
+          element={
+            <LazyRoute>
+              <Notebooks />
+            </LazyRoute>
+          }
+        />
+        <Route
+          path={playground.template}
+          element={
+            <RouteEvents category="playground">
               <LazyRoute>
-                <Workspaces />
+                <Playground />
               </LazyRoute>
             </RouteEvents>
-          </RequireSession>
-        }
-      />
-      <Route
-        path={`${notebooks.template}/*`}
-        element={
-          <LazyRoute>
-            <Notebooks />
-          </LazyRoute>
-        }
-      />
-      <Route
-        path={playground.template}
-        element={
-          <RouteEvents category="playground">
-            <LazyRoute>
-              <Playground />
-            </LazyRoute>
-          </RouteEvents>
-        }
-      />
-      <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
-    </Routes>
+          }
+        />
+        <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
+      </Routes>
+
+      {session.status === 'authenticated' && (
+        <HelpMenu
+          discordUrl="https://discord.com/invite/HwDMqwbGmc"
+          docsUrl={docs({}).$}
+          onSelectSupport={show}
+        />
+      )}
+    </>
   );
 };

@@ -53,6 +53,8 @@ interface TooltipProps {
   readonly children?: React.ReactNode;
   readonly trigger?: React.ReactNode;
 
+  readonly align?: 'start' | 'center' | 'end';
+
   readonly variant?: 'normal' | 'small';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
   readonly hoverOnly?: boolean;
@@ -69,6 +71,7 @@ export const Tooltip = ({
   hoverOnly,
   variant,
   side,
+  align,
 }: TooltipProps): ReturnType<FC> => {
   const isDragging = useIsDragging();
   // eslint-disable-next-line no-param-reassign
@@ -107,6 +110,7 @@ export const Tooltip = ({
       <Portal>
         <Content
           side={side}
+          align={align}
           css={[
             contentWrapperStyles,
             variant === 'small' && smallVariantStyles,

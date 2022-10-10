@@ -76,6 +76,7 @@ jobs:
           DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
           REACT_APP_HOTJAR_SITE_ID: '${{secrets.ALPHA_HOTJAR_SITE_ID}}'
           REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
+          REACT_APP_INTERCOM_APP_ID: '${{secrets.ALPHA_INTERCOM_APP_ID}}'
           NODE_OPTIONS: '--enable-source-maps'
           GIT_COMMIT_HASH: '${{github.sha}}'
 

@@ -102,8 +102,12 @@ export const HelpMenu = ({
       {isFlagEnabled('FEATURE_REQUEST') && (
         <>
           <MenuSeparator />
-          <MenuItem onSelect={onSelectFeedback}>Submit feedback</MenuItem>
-          <MenuItem onSelect={onSelectFeature}>Request a feature</MenuItem>
+          <MenuItem onSelect={onSelectFeedback}>
+            <span css={p14Medium}>Submit feedback</span>
+          </MenuItem>
+          <MenuItem onSelect={onSelectFeature}>
+            <span css={p14Medium}>Request a feature</span>
+          </MenuItem>
         </>
       )}
     </MenuList>

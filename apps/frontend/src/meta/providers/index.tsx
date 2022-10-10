@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { AnalyticsProvider } from './AnalyticsProvider';
 import { FeedbackProvider } from './FeedbackProvider';
+import { IntercomProvider } from './IntercomProvider';
 import { GraphqlProvider } from './GraphqlProvider';
 import { UpdatesHandler } from './UpdatesHandler';
 
@@ -20,12 +21,14 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
         <GraphqlProvider>
           <AnalyticsProvider>
             <FeedbackProvider>
-              <DndProvider backend={backendForDND}>
-                <ToastDisplay>
-                  <GlobalStyles>{children}</GlobalStyles>
-                  <UpdatesHandler />
-                </ToastDisplay>
-              </DndProvider>
+              <IntercomProvider>
+                <DndProvider backend={backendForDND}>
+                  <ToastDisplay>
+                    <GlobalStyles>{children}</GlobalStyles>
+                    <UpdatesHandler />
+                  </ToastDisplay>
+                </DndProvider>
+              </IntercomProvider>
             </FeedbackProvider>
           </AnalyticsProvider>
         </GraphqlProvider>

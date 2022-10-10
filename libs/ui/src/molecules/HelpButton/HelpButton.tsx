@@ -43,6 +43,7 @@ export const HelpButton = (): ReturnType<React.FC> => {
           </span>
         </button>
       }
+      align="end"
     >
       Help and resources ✨
     </Tooltip>
