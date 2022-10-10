@@ -1,0 +1,154 @@
+import {
+  ActionEvent,
+  ClientEventContextType,
+  ElementCreation,
+  ElementInteraction,
+} from '@decipad/client-events';
+import {
+  createTPlateEditor,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_CODE_LINE,
+  ELEMENT_VARIABLE_DEF,
+  VariableDefinitionElement,
+  ELEMENT_CAPTION,
+  ELEMENT_EXPRESSION,
+} from '@decipad/editor-types';
+import { insertNodes, TEditor } from '@udecode/plate';
+import { nanoid } from 'nanoid';
+import { createUserEventPlugin } from './createUserEventPlugin';
+
+let editor: TEditor;
+let mockClientEvent: ActionEvent | null;
+const mockEvents: ClientEventContextType = jest.fn((event) => {
+  // Casting is safe because plugin does not return anything except action events.
+  mockClientEvent = event as ActionEvent;
+});
+
+beforeEach(() => {
+  editor = createTPlateEditor({
+    plugins: [createUserEventPlugin(mockEvents)],
+  });
+  mockClientEvent = null;
+  jest.clearAllMocks();
+});
+
+const pElement = () => ({
+  id: nanoid(),
+  type: ELEMENT_PARAGRAPH,
+  children: [
+    {
+      text: '',
+    },
+  ],
+});
+
+const codeLine = () => ({
+  id: nanoid(),
+  type: ELEMENT_CODE_LINE,
+  children: [
+    {
+      text: '',
+    },
+  ],
+});
+
+const inputWidget = (): VariableDefinitionElement => ({
+  id: nanoid(),
+  type: ELEMENT_VARIABLE_DEF,
+  variant: 'expression',
+  children: [
+    {
+      id: nanoid(),
+      type: ELEMENT_CAPTION,
+      icon: 'icon',
+      color: 'color',
+      children: [
+        {
+          text: '',
+        },
+      ],
+    },
+    {
+      id: nanoid(),
+      type: ELEMENT_EXPRESSION,
+      children: [
+        {
+          text: '',
+        },
+      ],
+    },
+  ],
+});
+
+it('emits an event on element creation', () => {
+  insertNodes(editor, pElement(), {
+    at: [0],
+  });
+  expect(mockEvents).toHaveBeenCalled();
+});
+
+it('returns the element type on creation', () => {
+  insertNodes(editor, pElement(), {
+    at: [0],
+  });
+  expect(mockClientEvent).not.toBeNull();
+  expect(mockClientEvent?.type).toBe('action');
+
+  expect(mockClientEvent?.action).toBe('element creation');
+  expect((mockClientEvent as ElementCreation).props.element).toBe(
+    ELEMENT_PARAGRAPH
+  );
+});
+
+it('emits an event on element interaction and text on interaction', () => {
+  insertNodes(editor, codeLine(), {
+    at: [0],
+  });
+  editor.selection = {
+    focus: {
+      path: [0, 0],
+      offset: 0,
+    },
+    anchor: {
+      path: [0, 0],
+      offset: 0,
+    },
+  };
+  editor.insertText('hello world');
+
+  expect(mockClientEvent!.action).toBe('element interaction');
+  expect((mockClientEvent as ElementInteraction).props.element).toBe(
+    ELEMENT_CODE_LINE
+  );
+  expect((mockClientEvent as ElementInteraction).props.text).toBe(
+    'hello world'
+  );
+});
+
+it('returns parent and variant of widgets on interaction', () => {
+  insertNodes(editor, inputWidget(), {
+    at: [0],
+  });
+  editor.selection = {
+    focus: {
+      path: [0, 1, 0],
+      offset: 0,
+    },
+    anchor: {
+      path: [0, 1, 0],
+      offset: 0,
+    },
+  };
+  editor.insertText('123');
+
+  expect(mockClientEvent!.action).toBe('element interaction');
+  expect((mockClientEvent as ElementInteraction).props.element).toBe(
+    ELEMENT_EXPRESSION
+  );
+  expect((mockClientEvent as ElementInteraction).props.parent).toBe(
+    ELEMENT_VARIABLE_DEF
+  );
+  expect((mockClientEvent as ElementInteraction).props.variant).toBe(
+    'expression'
+  );
+});
