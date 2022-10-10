@@ -1,4 +1,4 @@
-import { FC, lazy } from 'react';
+import { FC, lazy, useCallback } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { docs, notebooks, playground, workspaces } from '@decipad/routing';
 import { HelpMenu } from '@decipad/ui';
@@ -18,8 +18,13 @@ export const loadPlayground = () =>
 const Playground = lazy(loadPlayground);
 
 export const App: FC = () => {
-  const { show } = useIntercom();
+  const { show, showNewMessages } = useIntercom();
   const session = useSession();
+  const showFeedback = useCallback(() => {
+    show();
+    showNewMessages();
+  }, [show, showNewMessages]);
+
   return (
     <>
       <Routes>
@@ -67,6 +72,7 @@ export const App: FC = () => {
           discordUrl="https://discord.com/invite/HwDMqwbGmc"
           docsUrl={docs({}).$}
           onSelectSupport={show}
+          onSelectFeedback={showFeedback}
         />
       )}
     </>

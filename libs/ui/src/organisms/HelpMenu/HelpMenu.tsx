@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
 import { ComponentProps } from 'react';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
@@ -97,14 +96,10 @@ export const HelpMenu = ({
         title="Join us on Discord"
         description="Ask or share in the community"
       />
-      {isFlagEnabled('FEATURE_REQUEST') && (
-        <>
-          <MenuSeparator />
-          <MenuItem onSelect={onSelectFeedback}>
-            <span css={p14Medium}>Share feedback</span>
-          </MenuItem>
-        </>
-      )}
+      <MenuSeparator />
+      <MenuItem onSelect={onSelectFeedback}>
+        <span css={p14Medium}>Share feedback</span>
+      </MenuItem>
     </MenuList>
   );
 };
