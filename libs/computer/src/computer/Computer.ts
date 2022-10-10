@@ -199,13 +199,15 @@ export class Computer {
   /**
    * Get names for the autocomplete, and information about them
    */
-  getNamesDefined(): AutocompleteName[] {
+  getNamesDefined(blockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.previouslyParsed);
+    const symbol = blockId && this.getDefinedSymbolInBlock(blockId);
     return Array.from(
       findNames(
         this.computationRealm,
         program,
-        this.automaticallyGeneratedNames
+        this.automaticallyGeneratedNames,
+        symbol
       )
     );
   }

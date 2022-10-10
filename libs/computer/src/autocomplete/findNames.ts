@@ -2,7 +2,36 @@ import { AST, AutocompleteName, serializeType } from '@decipad/language';
 import { getDefinedSymbol } from '../utils';
 import { ComputationRealm } from '../computer/ComputationRealm';
 
+const sortAutocompleteNames =
+  (takesPrecedencePrefix: string) =>
+  (a: AutocompleteName, b: AutocompleteName): number => {
+    const aStarts = (a.name.startsWith(takesPrecedencePrefix) && 1) || 0;
+    const bStarts = (b.name.startsWith(takesPrecedencePrefix) && 1) || 0;
+    return bStarts - aStarts;
+  };
+
 export function* findNames(
+  realm: ComputationRealm,
+  program: AST.Block[],
+  ignoreNames: Set<string>,
+  inSymbol?: string
+): Iterable<AutocompleteName> {
+  const prefix = inSymbol && `${inSymbol}.`;
+  const names = inSymbol
+    ? Array.from(findGlobalNames(realm, program, ignoreNames)).sort(
+        sortAutocompleteNames(inSymbol)
+      )
+    : findGlobalNames(realm, program, ignoreNames);
+  for (const name of names) {
+    if (prefix && name.name.startsWith(prefix)) {
+      yield { ...name, name: name.name.slice(prefix.length) };
+    } else {
+      yield name;
+    }
+  }
+}
+
+function* findGlobalNames(
   realm: ComputationRealm,
   program: AST.Block[],
   ignoreNames: Set<string>
@@ -10,6 +39,7 @@ export function* findNames(
   const seenSymbols = new Set<string>();
   const { nodeTypes } = realm.inferContext;
   // Our search stops at this statement
+
   for (const block of program) {
     for (const statement of block.args) {
       const symbol = getSymbolOrColumn(statement);

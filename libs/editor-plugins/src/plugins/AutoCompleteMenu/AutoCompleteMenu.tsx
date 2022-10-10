@@ -1,13 +1,24 @@
 import type { ComponentProps } from 'react';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useEditorSelector } from '@decipad/react-contexts';
 import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
 import { useFocused, useSelected } from 'slate-react';
 import { findWordStart, useSelection } from '@decipad/editor-utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useWindowListener } from '@decipad/react-utils';
-import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
+import {
+  MyEditor,
+  PlateComponent,
+  useTEditorRef,
+  ELEMENT_TABLE,
+  TableElement,
+} from '@decipad/editor-types';
 import { getBuiltinsForAutocomplete } from '@decipad/computer';
-import { insertText } from '@udecode/plate';
+import {
+  getAboveNode,
+  insertText,
+  isCollapsed,
+  TNodeEntry,
+} from '@udecode/plate';
 import { insertSmartRefOrText } from './insertSmartRefOrText';
 
 type MenuItem = Parameters<
@@ -24,6 +35,21 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes, children }) => {
   const [menuSuppressed, setMenuSuppressed] = useState(false);
   const [word, setWord] = useState('');
   const showAutoComplete = selected && focused && word && !menuSuppressed;
+
+  const selectTable = useCallback(
+    (e: MyEditor) =>
+      (selection &&
+        isCollapsed(selection) &&
+        (getAboveNode(e, {
+          match: { type: ELEMENT_TABLE },
+          at: selection.anchor.path,
+        }) as TNodeEntry<TableElement> | undefined)) ||
+      undefined,
+    [selection]
+  );
+  const tableAncestor = useEditorSelector<TNodeEntry<TableElement> | undefined>(
+    selectTable
+  );
 
   const onGlobalKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -67,7 +93,7 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes, children }) => {
 
   if (selection) {
     const identifiers = [
-      ...computer.getNamesDefined(),
+      ...computer.getNamesDefined(tableAncestor?.[0].id),
       ...getBuiltinsForAutocomplete(),
     ].map((n) => ({
       kind:
