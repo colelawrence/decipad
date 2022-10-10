@@ -28,6 +28,7 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
           const [columnIndex, columnName] = columnIndexAndName(table, column);
 
           const tableWithout = produce(table, (table) => {
+            table.tableLength = 'unknown';
             table.columnTypes?.splice(columnIndex, 1);
             table.columnNames?.splice(columnIndex, 1);
           });

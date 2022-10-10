@@ -802,7 +802,7 @@ describe('Tables', () => {
               },
             ],
             indexName: 'Table',
-            tableLength: 3,
+            tableLength: 'unknown',
           },
         ],
       },

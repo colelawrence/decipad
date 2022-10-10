@@ -68,6 +68,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       >
         {!previewMode &&
           tableCellControls !== false &&
+          !readOnly &&
           (tableCellControls || (
             <TableCellControls
               ref={dragRef}
