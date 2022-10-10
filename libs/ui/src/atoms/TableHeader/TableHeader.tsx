@@ -42,6 +42,13 @@ const columnTypeStyles = css({
   height: '12px',
 });
 
+const iconTypeStyles = css(columnTypeStyles, {
+  svg: {
+    width: '12px',
+    height: '12px',
+  },
+});
+
 const childrenWrapperStyles = css({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
@@ -174,7 +181,7 @@ export const TableHeader = ({
         </div>
         {menu}
         {showIcon && (
-          <span contentEditable={false} css={columnTypeStyles}>
+          <span contentEditable={false} css={iconTypeStyles}>
             <Icon />
           </span>
         )}
