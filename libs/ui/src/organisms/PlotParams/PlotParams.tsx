@@ -3,19 +3,21 @@ import { FC, ReactNode } from 'react';
 import { Label } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
 
-type StringSetter = (str: string) => void;
+type StringSetter<T extends string | undefined = string> = (str: T) => void;
 
-const markTypes = [
-  'bar',
-  'circle',
-  'square',
-  'tick',
-  'line',
-  'area',
-  'point',
-  'arc',
-] as const;
+const markTypes = ['line', 'bar', 'arc', 'area', 'point'] as const;
+
 type MarkType = typeof markTypes[number];
+
+const markTypeNames: Record<MarkType, string> = {
+  bar: 'Bar',
+  line: 'Line',
+  point: 'Point',
+  area: 'Area',
+  arc: 'Pie',
+};
+
+const shapes = ['point', 'circle', 'square', 'tick'];
 
 export interface PlotParamsProps {
   readonly sourceVarName: string;
@@ -37,6 +39,8 @@ export interface PlotParamsProps {
   readonly setThetaColumnName: StringSetter;
   readonly colorScheme?: string;
   readonly setColorScheme: StringSetter;
+  readonly shape: string;
+  readonly setShape: StringSetter;
 }
 
 interface SelectInputProps {
@@ -80,17 +84,19 @@ const SelectInput = ({
   );
 };
 
+const wrapperContainerStyles = css({
+  marginBottom: '20px',
+});
+
 const containerStyles = css({
   display: 'flex',
   flexWrap: 'wrap',
   gap: '4px',
-
-  paddingLeft: '30px',
-  marginBottom: '20px',
-  borderLeft: `4px solid ${cssVar('highlightColor')}`,
+  marginBottom: '4px',
 });
 
 const colorSchemes = [
+  'deciblues',
   'accent',
   'category20',
   'dark2',
@@ -134,6 +140,8 @@ export const PlotParams = ({
   setThetaColumnName,
   colorScheme,
   setColorScheme,
+  shape,
+  setShape,
 }: PlotParamsProps): ReturnType<FC> => {
   const emptyColumnOption = <option key="__none" value=""></option>;
   const sourceVarNameOptionsOptions = [emptyColumnOption].concat(
@@ -158,63 +166,79 @@ export const PlotParams = ({
   const markTypeOptions = [emptyColumnOption].concat(
     markTypes.map((mark) => (
       <option key={mark} value={mark}>
-        {mark}
+        {markTypeNames[mark]}
       </option>
     ))
   );
 
   return (
-    <div css={containerStyles}>
-      <SelectInput
-        labelText="Table"
-        setValue={setSourceVarName}
-        value={sourceVarName}
-      >
-        {sourceVarNameOptionsOptions}
-      </SelectInput>
-      <SelectInput labelText="Chart" setValue={setMarkType} value={markType}>
-        {markTypeOptions}
-      </SelectInput>
-      {markType !== 'arc' && (
-        <>
-          <SelectInput
-            labelText="horizontal"
-            setValue={setXColumnName}
-            value={xColumnName}
-          >
-            {columnOptions}
+    <div css={wrapperContainerStyles}>
+      <div css={containerStyles}>
+        <SelectInput
+          labelText="Table"
+          setValue={setSourceVarName}
+          value={sourceVarName}
+        >
+          {sourceVarNameOptionsOptions}
+        </SelectInput>
+        <SelectInput
+          labelText="Chart"
+          setValue={setMarkType}
+          value={shapes.includes(markType) ? 'point' : markType}
+        >
+          {markTypeOptions}
+        </SelectInput>
+        {shapes.includes(markType) && (
+          <SelectInput labelText="Shape" setValue={setShape} value={shape}>
+            {shapes.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
           </SelectInput>
-          <SelectInput
-            labelText="vertical"
-            setValue={setYColumnName}
-            value={yColumnName}
-          >
-            {columnOptions}
-          </SelectInput>
-          {markType !== 'line' && markType !== 'area' && (
+        )}
+      </div>
+
+      <div css={containerStyles}>
+        {markType !== 'arc' && (
+          <>
             <SelectInput
-              labelText="Sizes"
-              setValue={setSizeColumnName}
-              value={sizeColumnName}
+              labelText="Label"
+              setValue={setXColumnName}
+              value={xColumnName}
             >
               {columnOptions}
             </SelectInput>
-          )}
-        </>
-      )}
+            <SelectInput
+              labelText="Value"
+              setValue={setYColumnName}
+              value={yColumnName}
+            >
+              {columnOptions}
+            </SelectInput>
+            {(shapes.includes(markType) || markType === 'area') && (
+              <SelectInput
+                labelText="Sizes"
+                setValue={setSizeColumnName}
+                value={sizeColumnName}
+              >
+                {columnOptions}
+              </SelectInput>
+            )}
+          </>
+        )}
 
-      {markType === 'arc' && (
-        <SelectInput
-          labelText="Slice size"
-          setValue={setThetaColumnName}
-          value={thetaColumnName}
-        >
-          {columnOptions}
-        </SelectInput>
-      )}
+        {markType === 'arc' && (
+          <SelectInput
+            labelText="Slice size"
+            setValue={setThetaColumnName}
+            value={thetaColumnName}
+          >
+            {columnOptions}
+          </SelectInput>
+        )}
 
-      {(markType === 'bar' || markType === 'arc') && (
-        <>
+        {(markType === 'bar' || markType === 'arc') && (
           <SelectInput
             labelText="Colors"
             setValue={setColorColumnName}
@@ -222,6 +246,8 @@ export const PlotParams = ({
           >
             {columnOptions}
           </SelectInput>
+        )}
+        {(markType === 'bar' || markType === 'arc') && colorColumnName && (
           <SelectInput
             labelText="Color Scheme"
             setValue={setColorScheme}
@@ -229,8 +255,8 @@ export const PlotParams = ({
           >
             <ColorSchemeOptions />
           </SelectInput>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };

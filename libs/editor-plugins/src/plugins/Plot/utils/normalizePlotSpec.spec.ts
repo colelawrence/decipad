@@ -56,7 +56,7 @@ describe('normalizePlotSpec', () => {
     });
   });
 
-  it('removes theta encoding when mark type is not arc', () => {
+  it('removes theta and size encoding when mark type is bar', () => {
     expect(
       normalizePlotSpec({
         mark: { type: 'bar', tooltip: true },
@@ -98,10 +98,7 @@ describe('normalizePlotSpec', () => {
           field: 'field3',
           type: 'quantitative',
         },
-        size: {
-          field: 'field4',
-          type: 'quantitative',
-        },
+        size: undefined,
         color: {
           field: 'field5',
           type: 'nominal',

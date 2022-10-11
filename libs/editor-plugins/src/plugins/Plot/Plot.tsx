@@ -12,10 +12,12 @@ import {
   useElementMutatorCallback,
 } from '@decipad/editor-utils';
 import { usePlot } from './utils/usePlot';
+import { initializeVega } from './initializeVega';
 
 const DEFAULT_TITLE = 'Plot';
 
-type PlotParamsProps = ComponentProps<typeof PlotBlock>['plotParams'];
+type PlotBlockProps = ComponentProps<typeof PlotBlock>;
+type PlotParamsProps = PlotBlockProps['plotParams'];
 
 const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
@@ -44,10 +46,11 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
           plotParams={plotParams as unknown as PlotParamsProps}
           result={
             spec &&
-            data && {
+            data &&
+            ({
               spec,
               data,
-            }
+            } as PlotBlockProps['result'])
           }
           title={element.title || DEFAULT_TITLE}
           onTitleChange={onTitleChange}
@@ -59,3 +62,5 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
 
 // Default export so we can use React.lazy
 export default Plot;
+
+initializeVega();

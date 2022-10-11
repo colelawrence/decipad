@@ -2,6 +2,7 @@ import { PlotElement, useTEditorRef } from '@decipad/editor-types';
 import { Computer, AutocompleteName, getExprRef } from '@decipad/computer';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
+import { useMemo } from 'react';
 import type { PlotData, PlotSpec } from './plotUtils';
 import {
   enhanceSpecFromWideData,
@@ -50,6 +51,10 @@ const autocompleteNameToExprRef = (
 const isTable = (name: AutocompleteName) =>
   !name.name.includes('.') && name.type.kind === 'table';
 
+const shapes = ['point', 'circle', 'square', 'tick'] as const;
+
+export type Shape = typeof shapes[number];
+
 export const usePlot = (element: PlotElement): UsePlotReturn => {
   const editor = useTEditorRef();
   const computer = useComputer();
@@ -74,6 +79,15 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
 
   spec = spec && data && enhanceSpecFromWideData(spec, data);
 
+  const setMarkType = useElementMutatorCallback(editor, element, 'markType');
+
+  const shape = useMemo(() => {
+    if (shapes.includes(element.markType as Shape)) {
+      return element.markType;
+    }
+    return undefined;
+  }, [element.markType]);
+
   const plotParams: PlotParams = {
     sourceVarNameOptions: names.map((name) => name.name),
     sourceExprRefOptions: names.map((name) => name.exprRef),
@@ -83,7 +97,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       element,
       'sourceVarName'
     ),
-    setMarkType: useElementMutatorCallback(editor, element, 'markType'),
+    setMarkType,
     setXColumnName: useElementMutatorCallback(editor, element, 'xColumnName'),
     setYColumnName: useElementMutatorCallback(editor, element, 'yColumnName'),
     setSizeColumnName: useElementMutatorCallback(
@@ -103,6 +117,8 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     ),
     setColorScheme: useElementMutatorCallback(editor, element, 'colorScheme'),
     ...element,
+    setShape: setMarkType,
+    shape,
   };
 
   return { spec, data, plotParams };

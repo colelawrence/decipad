@@ -39,6 +39,7 @@ interface PlotConfig {
   encoding?: {
     color?: {
       scheme?: string;
+      legend?: unknown;
     };
   };
   style?: {
@@ -46,9 +47,15 @@ interface PlotConfig {
       stroke?: string;
     };
   };
-  axis?: {
-    titleColor?: string;
-    gridColor?: string;
+  symbol?: {
+    stroke?: string;
+    fill?: string;
+  };
+  axis?: Axis;
+  mark?: {
+    stroke?: string;
+    fill?: string;
+    strokeWidth?: number;
   };
 }
 
@@ -64,15 +71,25 @@ type Interpolate =
   | 'cardinal'
   | 'cardinal-closed'
   | 'bundle';
+
+type Point =
+  | boolean
+  | {
+      filled?: boolean;
+      fill?: string;
+      size?: number;
+      strokeWidth?: number;
+    };
+
 export interface PlotSpec {
   mark: {
     type: PlotElement['markType'];
     tooltip: boolean;
     cornerRadiusEnd?: number;
     interpolate?: Interpolate;
-    point?: boolean;
     theta?: number;
     innerRadius?: number;
+    point?: Point;
   };
   data: { name: 'table' };
   encoding: Record<EncodingKey, EncodingSpec>;
@@ -96,6 +113,26 @@ type TimeUnit =
   | 'utcyearmonthdatehoursminutes'
   | 'utcyearmonthdatehoursminutesseconds';
 
+type Axis =
+  | undefined
+  | {
+      grid?: boolean;
+      gridDash?: number[];
+      gridColor?: string;
+      labelAngle?: number;
+      labelBaseline?: string;
+      labelAlign?: string;
+      labelColor?: string;
+      labelFontSize?: number;
+      labelFontWeight?: number;
+      labelBound?: boolean;
+      titleColor?: string;
+      domainColor?: string;
+      domainOpacity?: number;
+      label?: number;
+      tickSize?: number;
+    };
+
 type EncodingSpec =
   | undefined
   | {
@@ -111,6 +148,8 @@ type EncodingSpec =
         domainMin?: number;
         domainMax?: number;
       };
+      axis?: Axis;
+      legend?: null | undefined;
     };
 type EncodingKey = 'x' | 'y' | 'size' | 'color' | 'theta';
 
@@ -122,9 +161,33 @@ const displayPropsToEncoding: Record<string, EncodingKey> = {
   thetaColumnName: 'theta',
 };
 
+const hasGrid: Record<EncodingKey, boolean> = {
+  x: false,
+  y: true,
+  size: false,
+  color: false,
+  theta: false,
+};
+
 const relevantDataDisplayProps: Array<keyof DisplayProps> = Object.keys(
   displayPropsToEncoding
 ) as Array<keyof DisplayProps>;
+
+const markTypeToFill = (
+  markType: DisplayProps['markType']
+): string | undefined => {
+  switch (markType) {
+    case 'bar':
+    case 'area':
+    case 'point':
+      return 'rgba(69, 195, 235)';
+    case 'circle':
+    case 'square':
+      return 'white';
+    default:
+      return undefined;
+  }
+};
 
 export function encodingTypeForColumnType(type: SerializedType): DisplayType {
   switch (type.kind) {
@@ -174,35 +237,30 @@ function displayTimeUnitType(type: SerializedType): TimeUnit {
   }
 }
 
-function columnTitle(
-  computer: Computer,
-  columnName: string,
-  columnType: SerializedType
-): string {
-  return columnType.kind === 'number' && columnType.unit != null
-    ? `${columnName} (${computer.formatUnit(columnType.unit)})`
-    : columnName;
-}
-
 export function encodingFor(
-  computer: Computer,
+  _computer: Computer,
   columnName: string,
-  columnType: SerializedType
+  columnType: SerializedType,
+  grid: boolean,
+  markType: PlotElement['markType']
 ): EncodingSpec {
   const type = encodingTypeForColumnType(columnType);
   const spec: EncodingSpec = {
     field: columnName,
     type,
-    title: columnTitle(computer, columnName, columnType),
+    title: '',
     timeUnit:
       columnType.kind === 'date' ? displayTimeUnitType(columnType) : undefined,
+    axis: {
+      grid,
+    },
+    legend: markType !== 'arc' ? null : undefined,
   };
 
   if (type === 'nominal') {
     // remove sort
     spec.sort = null;
   }
-
   return spec;
 }
 
@@ -233,7 +291,13 @@ export function specFromType(
       if (columnType) {
         const channelKey = displayPropsToEncoding[specPropName];
         // eslint-disable-next-line no-param-reassign
-        encodings[channelKey] = encodingFor(computer, columnName, columnType);
+        encodings[channelKey] = encodingFor(
+          computer,
+          columnName,
+          columnType,
+          hasGrid[channelKey],
+          displayProps.markType
+        );
       }
 
       return encodings;
@@ -246,17 +310,58 @@ export function specFromType(
       scheme: displayProps.colorScheme,
     };
   }
+  if (encoding.y && encoding.y.axis) {
+    encoding.y.axis.labelAngle = 0;
+    encoding.y.axis.labelBaseline = 'line-bottom';
+    // encoding.y.axis.offset = -30;
+    encoding.y.axis.labelAlign = 'left';
+  }
+  if (encoding.x && encoding.x.axis) {
+    encoding.x.axis.labelColor = '#777E89';
+    encoding.x.axis.labelFontSize = 14;
+    encoding.x.axis.labelFontWeight = 700;
+  }
+  if (displayProps.markType !== 'bar' && displayProps.markType !== 'arc') {
+    encoding.color = undefined;
+  }
+
+  const markProps =
+    displayProps.markType === 'bar' ? { width: { band: 0.75 } } : {};
 
   return {
-    mark: { type: displayProps.markType, tooltip: true },
+    mark: { type: displayProps.markType, tooltip: true, ...markProps },
     data: { name: 'table' },
     encoding,
     config: {
       encoding: {
         color: {
-          scheme: displayProps.colorScheme,
+          scheme: displayProps.colorScheme || 'deciblues',
         },
       },
+      symbol: {
+        stroke: 'rgba(69, 195, 235)',
+        fill: '0xfff',
+      },
+      mark: {
+        stroke:
+          displayProps.markType !== 'arc' && !encoding.color
+            ? 'rgba(69, 195, 235)'
+            : undefined,
+        fill: markTypeToFill(displayProps.markType),
+        strokeWidth: 6,
+      },
+      axis: {
+        gridColor: '#AAB1BD',
+        gridDash: [5, 5],
+        labelColor: '#D6D6D6',
+        domainColor: '#AAB1BD',
+        domainOpacity: 0,
+        labelAngle: -45,
+        labelBound: true,
+        labelFontSize: 12,
+        tickSize: 0,
+      },
+      autosize: 'fit',
     },
   };
 }

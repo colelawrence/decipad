@@ -5,8 +5,8 @@ import { PlotParams } from './PlotParams';
 const expectedPropToLabelName = {
   sourceVarName: /table/i,
   markType: /chart/i,
-  xColumnName: /horizontal/i,
-  yColumnName: /vertical/i,
+  xColumnName: /label/i,
+  yColumnName: /value/i,
   sizeColumnName: /size/i,
   colorColumnName: /colors/i,
   thetaColumnName: /slice/i,
@@ -27,7 +27,7 @@ describe('PlotParams', () => {
       'source var name option 2',
     ],
     columnNameOptions: ['column name option 1', 'column name option 2'],
-    markType: 'circle',
+    markType: 'bar',
     xColumnName: 'x column name',
     yColumnName: 'y column name',
     sizeColumnName: 'size column name',
@@ -42,6 +42,8 @@ describe('PlotParams', () => {
     setColorColumnName: setter('colorColumnName'),
     setThetaColumnName: setter('thetaColumnName'),
     setColorScheme: setter('colorScheme'),
+    shape: '',
+    setShape: setter('shape'),
   };
 
   it('has right selectors when mark type is bar', () => {
@@ -50,9 +52,6 @@ describe('PlotParams', () => {
     );
     expect(getByLabelText(expectedPropToLabelName.xColumnName)).toBeVisible();
     expect(getByLabelText(expectedPropToLabelName.yColumnName)).toBeVisible();
-    expect(
-      getByLabelText(expectedPropToLabelName.sizeColumnName)
-    ).toBeVisible();
     expect(
       getByLabelText(expectedPropToLabelName.colorColumnName)
     ).toBeVisible();

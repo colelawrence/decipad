@@ -15,7 +15,7 @@ const params: ComponentProps<typeof PlotParams> = {
     'source var name option 2',
   ],
   columnNameOptions: ['column name option 1', 'column name option 2'],
-  markType: 'circle',
+  markType: 'line',
   xColumnName: 'x column name',
   yColumnName: 'y column name',
   sizeColumnName: 'size column name',
@@ -30,6 +30,8 @@ const params: ComponentProps<typeof PlotParams> = {
   setColorColumnName: setter('colorColumnName'),
   setThetaColumnName: setter('thetaColumnName'),
   setColorScheme: setter('colorScheme'),
+  shape: '',
+  setShape: setter('shape'),
 };
 
 export default {

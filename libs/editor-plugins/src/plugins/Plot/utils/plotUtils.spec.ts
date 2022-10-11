@@ -85,11 +85,11 @@ describe('specFromType', () => {
     };
     expect(
       specFromType(computer, type, displayProps({ markType: 'bar' }))
-    ).toEqual({
+    ).toMatchObject({
       config: {
         encoding: {
           color: {
-            scheme: undefined,
+            scheme: 'deciblues',
           },
         },
       },
@@ -143,7 +143,6 @@ describe('specFromType', () => {
         x: {
           field: 'index',
           timeUnit: undefined,
-          title: 'index',
           type: 'nominal',
         },
       },
@@ -164,7 +163,6 @@ describe('specFromType', () => {
       encoding: {
         y: {
           field: 'index',
-          title: 'index',
         },
       },
       mark: {
@@ -188,7 +186,6 @@ describe('specFromType', () => {
       encoding: {
         size: {
           field: 'index',
-          title: 'index',
         },
       },
       mark: {
@@ -212,7 +209,6 @@ describe('specFromType', () => {
       encoding: {
         color: {
           field: 'index',
-          title: 'index',
         },
       },
       mark: {
@@ -236,7 +232,6 @@ describe('specFromType', () => {
       encoding: {
         theta: {
           field: 'index',
-          title: 'index',
         },
       },
       mark: {
@@ -272,7 +267,6 @@ describe('specFromType', () => {
           x: {
             field: `date-${unit}`,
             timeUnit: expectedDateUnitToVegaTimeUnit[unit],
-            title: `date-${unit}`,
             type: 'temporal',
           },
         },

@@ -33,21 +33,23 @@ export const normalizePlotSpec = (
 
   if (spec.mark.type === 'line' || spec.mark.type === 'area') {
     if (!spec.mark.point) {
-      spec.mark.point = true;
-    }
-    if (!spec.mark.interpolate) {
-      spec.mark.interpolate = 'linear';
-    }
-    if (spec.encoding.color) {
-      spec.encoding.color = undefined;
-    }
-    if (spec.encoding.size) {
-      spec.encoding.size = undefined;
+      spec.mark.point = {
+        filled: false,
+        fill: 'white',
+        size: 140,
+        strokeWidth: 5,
+      };
     }
   }
 
   if (spec.mark.type === 'bar' && !spec.mark.cornerRadiusEnd) {
     spec.mark.cornerRadiusEnd = 4;
+    if (spec.encoding?.y?.axis) {
+      spec.encoding.y.axis.labelAlign = 'right';
+    }
+    if (spec.encoding.size) {
+      spec.encoding.size = undefined;
+    }
   }
 
   if (!spec.config) {
@@ -59,7 +61,6 @@ export const normalizePlotSpec = (
   if (!spec.config.axis) {
     spec.config.axis = {
       titleColor: '#999',
-      gridColor: '#eee',
     };
   }
   if (!spec.config.style) {
@@ -79,7 +80,7 @@ export const normalizePlotSpec = (
   if (spec.encoding.color) {
     if (!spec.encoding.color.scale?.scheme) {
       spec.encoding.color.scale = {
-        scheme: 'accent',
+        scheme: 'sameblue',
       };
     }
   }

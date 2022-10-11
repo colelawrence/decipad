@@ -56,13 +56,23 @@ export const defaultPlotSpec = (
       const column = firstQuantitativeColumn(type, exclude);
       if (column) {
         exclude.push(column[0]);
-        spec.encoding.theta = encodingFor(computer, ...column);
+        spec.encoding.theta = encodingFor(
+          computer,
+          ...column,
+          false,
+          spec.mark.type
+        );
       }
     }
     if (!spec.encoding.color) {
       const column = firstNominalColumn(type, exclude);
       if (column) {
-        spec.encoding.theta = encodingFor(computer, ...column);
+        spec.encoding.theta = encodingFor(
+          computer,
+          ...column,
+          false,
+          spec.mark.type
+        );
       }
     }
 
@@ -80,7 +90,7 @@ export const defaultPlotSpec = (
       firstNominalColumn(type, exclusions) ||
       firstQuantitativeColumn(type, exclusions);
     if (column) {
-      spec.encoding.x = encodingFor(computer, ...column);
+      spec.encoding.x = encodingFor(computer, ...column, false, spec.mark.type);
     }
   }
 
@@ -94,14 +104,14 @@ export const defaultPlotSpec = (
       firstQuantitativeColumn(type, exclusions) ||
       firstNominalColumn(type, exclusions);
     if (column) {
-      spec.encoding.y = encodingFor(computer, ...column);
+      spec.encoding.y = encodingFor(computer, ...column, true, spec.mark.type);
     }
   }
 
   if (!spec.encoding.y) {
     const column = firstQuantitativeColumn(type) || firstNominalColumn(type);
     if (column) {
-      spec.encoding.y = encodingFor(computer, ...column);
+      spec.encoding.y = encodingFor(computer, ...column, true, spec.mark.type);
     }
   }
 
