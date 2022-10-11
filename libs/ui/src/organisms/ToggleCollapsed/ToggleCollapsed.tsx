@@ -26,7 +26,6 @@ export const ToggleCollapsed: FC<ToggleCollapsedProps> = ({
       <TextAndIconButton
         text={isCollapsed ? 'Show Table' : 'Hide Table'}
         onClick={handleClick}
-        color="blue"
         iconPosition="left"
       >
         <Chevron type={isCollapsed ? 'expand' : 'collapse'} />

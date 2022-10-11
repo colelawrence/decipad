@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 import { CodeResult, DataViewTableHeader } from '@decipad/ui';
 import { Result, SerializedType } from '@decipad/computer';
+import { Folder, FolderOpen } from 'libs/ui/src/icons';
+import { css } from '@emotion/react';
 import { ValueCell } from '../../types';
 
 interface DataViewTableHeaderProps {
@@ -8,9 +10,13 @@ interface DataViewTableHeaderProps {
   value?: ValueCell;
   rowSpan?: number;
   colSpan?: number;
+  collapsible?: boolean;
   onHover: (hover: boolean) => void;
   hover: boolean;
   alignRight?: boolean;
+  collapsedGroups: string[] | undefined;
+  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  groupId: string;
 }
 
 export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
@@ -21,10 +27,49 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   onHover,
   hover,
   alignRight,
+  collapsedGroups = [],
+  onChangeCollapsedGroups,
+  groupId,
+  collapsible,
 }) => {
   if (type == null || value == null) {
     return null;
   }
+
+  const handleCollapseGroupButtonPress = (
+    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ): void => {
+    e.stopPropagation();
+
+    const matchingGroupIndex = collapsedGroups.indexOf(groupId);
+
+    if (matchingGroupIndex !== -1) {
+      return onChangeCollapsedGroups(
+        collapsedGroups.filter((id) => id !== groupId)
+      );
+    }
+
+    return onChangeCollapsedGroups([...collapsedGroups, groupId]);
+  };
+
+  const groupIsCollapsed = collapsedGroups.includes(groupId);
+
+  const iconStyles = css({
+    height: '24px',
+    width: '24px',
+  });
+
+  const resultWrapperStyles = css({
+    display: 'inline-flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontWeight: '700',
+    justifyContent: 'inherit',
+    cursor: 'pointer',
+    '&:hover': {
+      opacity: 0.5,
+    },
+  });
 
   return (
     <DataViewTableHeader
@@ -34,11 +79,27 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       onHover={onHover}
       alignRight={alignRight}
     >
-      <CodeResult
-        value={value as Result.Result['value']}
-        variant="inline"
-        type={type}
-      />
+      {collapsible ? (
+        <div
+          onClick={(e) => handleCollapseGroupButtonPress(e)}
+          css={resultWrapperStyles}
+        >
+          <CodeResult
+            value={value as Result.Result['value']}
+            variant="inline"
+            type={type}
+          />
+          <span css={iconStyles}>
+            {groupIsCollapsed ? <Folder /> : <FolderOpen />}
+          </span>
+        </div>
+      ) : (
+        <CodeResult
+          value={value as Result.Result['value']}
+          variant="inline"
+          type={type}
+        />
+      )}
     </DataViewTableHeader>
   );
 };

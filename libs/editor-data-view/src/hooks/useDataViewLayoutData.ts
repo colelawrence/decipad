@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { Interpreter, Result, SerializedType } from '@decipad/computer';
 import { zip } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
+import { generateHash } from '@decipad/editor-utils';
 import { AggregationKind, DataGroup } from '../types';
 
 const { Column, ResultTransforms } = Result;
@@ -44,15 +45,17 @@ const generateSmartRow = (
   };
 };
 
-export const group = (
+export const group = async (
   columnNames: string[],
   columnData: Result.ColumnLike<Result.Comparable>[],
   columnTypes: SerializedType[],
   aggregationTypes: (AggregationKind | undefined)[],
+  collapsedGroups: string[] | undefined,
   columnIndex: number,
   subproperties: { value: Result.Comparable; name: string }[],
-  parentHighlight$?: BehaviorSubject<boolean>
-): DataGroup[] => {
+  parentHighlight$?: BehaviorSubject<boolean>,
+  parentGroupId?: string
+): Promise<DataGroup[]> => {
   if (columnData.length !== columnTypes.length) {
     throw new Error(
       `number of columns differs from number of types: ${columnData.length} and ${columnTypes.length}`
@@ -71,63 +74,91 @@ export const group = (
   );
   const slices = ResultTransforms.contiguousSlices(sortedFirstColumn);
 
-  return slices.map(([start, end]): DataGroup => {
-    const value = sortedFirstColumn.atIndex(start);
-    const newSubproperties = [
-      { value, name: columnNames[columnIndex] },
-      ...subproperties,
-    ];
-    const restDataSlice = sortedRestOfColumns.map((column) =>
-      ResultTransforms.slice(column, start, end + 1)
-    );
-    const selfHighlight$ = new BehaviorSubject<boolean>(false);
+  const mappedSlicePromises = slices.map(
+    async ([start, end]): Promise<DataGroup> => {
+      const value = sortedFirstColumn.atIndex(start);
 
-    const smartRowShouldHide =
-      !aggregationTypes ||
-      aggregationTypes.filter((aggregationType) => aggregationType).length ===
-        0 ||
-      (restDataSlice[0] && restDataSlice[0].rowCount <= 1);
+      const generatedHash = await generateHash(value);
+      const groupId = parentGroupId
+        ? `${parentGroupId}/${generatedHash}`
+        : generatedHash;
 
-    const smartRow =
-      !restDataSlice || !restDataSlice[0] || smartRowShouldHide
-        ? undefined
-        : generateSmartRow(
-            zip(restOfTypes, restDataSlice),
-            columnNames,
-            columnIndex + 1,
-            aggregationTypes,
-            newSubproperties,
-            parentHighlight$
-          );
-    return {
-      elementType: 'group',
-      value,
-      type,
-      children: [
-        smartRow,
-        ...group(
-          columnNames,
-          restDataSlice,
-          restOfTypes,
-          aggregationTypes,
-          columnIndex + 1,
-          newSubproperties,
-          selfHighlight$
-        ),
-      ].filter(Boolean) as DataGroup[],
-      columnIndex,
-      selfHighlight$,
-      parentHighlight$,
-    };
-  });
+      const newSubproperties = [
+        { value, name: columnNames[columnIndex] },
+        ...subproperties,
+      ];
+      const restDataSlice = sortedRestOfColumns.map((column) =>
+        ResultTransforms.slice(column, start, end + 1)
+      );
+      const selfHighlight$ = new BehaviorSubject<boolean>(false);
+
+      const smartRowShouldHide =
+        !aggregationTypes ||
+        aggregationTypes.filter((aggregationType) => aggregationType).length ===
+          0 ||
+        (restDataSlice[0] && restDataSlice[0].rowCount <= 1);
+
+      const smartRow =
+        !restDataSlice || !restDataSlice[0] || smartRowShouldHide
+          ? undefined
+          : generateSmartRow(
+              zip(restOfTypes, restDataSlice),
+              columnNames,
+              columnIndex + 1,
+              aggregationTypes,
+              newSubproperties,
+              parentHighlight$
+            );
+
+      const newGroup = await group(
+        columnNames,
+        restDataSlice,
+        restOfTypes,
+        aggregationTypes,
+        collapsedGroups,
+        columnIndex + 1,
+        newSubproperties,
+        selfHighlight$,
+        groupId
+      );
+
+      const includesGroupId =
+        collapsedGroups && collapsedGroups.includes(groupId);
+
+      const smartRowHasLength = smartRow && smartRow.children.length >= 1;
+
+      const children = !includesGroupId
+        ? ([smartRowHasLength ? smartRow : undefined, ...newGroup].filter(
+            Boolean
+          ) as DataGroup[])
+        : smartRow
+        ? [smartRow]
+        : [];
+
+      return {
+        elementType: 'group',
+        id: groupId,
+        value,
+        type,
+        children,
+        collapsible: newGroup.length > 1,
+        selfHighlight$,
+        parentHighlight$,
+        columnIndex,
+      };
+    }
+  );
+
+  return Promise.all(mappedSlicePromises);
 };
 
-export const layoutPowerData = (
+export const layoutPowerData = async (
   columnNames: string[],
   columns: Interpreter.ResultTable,
   columnTypes: SerializedType[],
-  aggregationTypes: (AggregationKind | undefined)[]
-) => {
+  aggregationTypes: (AggregationKind | undefined)[],
+  collapsedGroups: string[] | undefined
+): Promise<DataGroup[]> => {
   const sortableColumns = columns.map((column) =>
     Column.fromValues(column as Result.Comparable[])
   );
@@ -137,6 +168,7 @@ export const layoutPowerData = (
     sortableColumns,
     columnTypes,
     aggregationTypes,
+    collapsedGroups,
     0,
     []
   );
@@ -146,10 +178,24 @@ export const useDataViewLayoutData = (
   columnNames: string[],
   data: Interpreter.ResultTable,
   columnTypes: SerializedType[],
-  aggregationTypes: (AggregationKind | undefined)[]
+  aggregationTypes: (AggregationKind | undefined)[],
+  collapsedGroups: string[] | undefined
 ): DataGroup[] => {
-  return useMemo(
-    () => layoutPowerData(columnNames, data, columnTypes, aggregationTypes),
-    [columnNames, data, columnTypes, aggregationTypes]
-  );
+  const [dataGroups, setDataGroups] = useState<DataGroup[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      setDataGroups(
+        await layoutPowerData(
+          columnNames,
+          data,
+          columnTypes,
+          aggregationTypes,
+          collapsedGroups
+        )
+      );
+    })();
+  }, [aggregationTypes, collapsedGroups, columnNames, columnTypes, data]);
+
+  return dataGroups;
 };

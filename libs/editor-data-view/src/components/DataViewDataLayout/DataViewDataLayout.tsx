@@ -6,16 +6,23 @@ import { DataViewHeader } from '..';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
 import { SmartCell } from '../SmartCell';
-import { DataViewDataGroup } from '../DataViewDataGroup';
+import { DataViewDataGroupElement } from '../DataViewDataGroup';
 
 export interface HeaderProps {
   type?: SerializedType;
   value?: ValueCell;
   rowSpan?: number;
   colSpan?: number;
+  collapsible?: boolean;
   onHover: (hover: boolean) => void;
   hover: boolean;
   alignRight?: boolean;
+  isFullWidthRow: boolean;
+  groupId: string;
+  collapsedGroups: string[] | undefined;
+  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  groupLength: number;
+  index: number;
 }
 
 export interface SmartProps {
@@ -41,6 +48,8 @@ export interface DataViewLayoutProps {
   values: Interpreter.ResultTable;
   types: SerializedType[];
   aggregationTypes: Array<AggregationKind | undefined>;
+  collapsedGroups: string[] | undefined;
+  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
 }
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
@@ -49,12 +58,15 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   values,
   types,
   aggregationTypes,
+  collapsedGroups,
+  onChangeCollapsedGroups,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData(
     columnNames,
     values,
     types,
-    aggregationTypes
+    aggregationTypes,
+    collapsedGroups
   );
 
   const table = useMemo(
@@ -78,24 +90,33 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
 
   return (
     <>
-      {table.map((row, index) => (
-        <DataViewRow
-          key={index}
-          isFullWidth={row.length === maxCols}
-          isBeforeFullWidthRow={
-            table[index + 1] && table[index + 1].length === maxCols
-          }
-        >
-          <DataViewDataGroup
+      {table.map((row, index) => {
+        return (
+          <DataViewRow
             key={index}
-            tableName={tableName}
-            group={row}
-            Header={DataViewHeader}
-            SmartCell={SmartCell}
-            selectedAggregationTypes={aggregationTypes}
-          />
-        </DataViewRow>
-      ))}
+            isFullWidth={row.length === maxCols}
+            isBeforeFullWidthRow={
+              table[index + 1] && table[index + 1].length === maxCols
+            }
+          >
+            {row.map((element) => (
+              <DataViewDataGroupElement
+                key={index}
+                index={index}
+                tableName={tableName}
+                element={element}
+                aggregationType={aggregationTypes[element.columnIndex]}
+                Header={DataViewHeader}
+                SmartCell={SmartCell}
+                isFullWidthRow={row.length === maxCols}
+                collapsedGroups={collapsedGroups}
+                onChangeCollapsedGroups={onChangeCollapsedGroups}
+                groupLength={row.length}
+              />
+            ))}
+          </DataViewRow>
+        );
+      })}
     </>
   );
 };

@@ -18,6 +18,7 @@ interface BaseElement {
 
 export interface SmartRowElement extends BaseElement {
   elementType: 'smartrow';
+  id?: string;
   type?: never;
   value?: never;
   children: DataGroup[];
@@ -28,9 +29,11 @@ export interface SmartRowElement extends BaseElement {
 
 export interface DataGroupElement extends BaseElement {
   elementType: 'group';
+  id?: string;
   type?: SerializedType;
   value?: ValueCell;
   children: DataGroup[];
+  collapsible?: boolean;
   column?: never;
 }
 

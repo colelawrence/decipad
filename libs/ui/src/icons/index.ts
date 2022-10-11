@@ -47,6 +47,7 @@ export { Ellipsis } from './Ellipsis/Ellipsis';
 export { Eye } from './Eye/Eye';
 export { File } from './File/File';
 export { Folder } from './Folder/Folder';
+export { FolderOpen } from './FolderOpen/FolderOpen';
 export { Formula } from './Formula/Formula';
 export { Frame } from './Frame/Frame';
 export { Generic } from './Generic/Generic';

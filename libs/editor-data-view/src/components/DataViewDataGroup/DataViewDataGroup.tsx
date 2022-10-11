@@ -11,14 +11,25 @@ interface DataViewDataGroupElementProps {
   Header: FC<HeaderProps>;
   SmartCell: FC<SmartProps>;
   aggregationType: AggregationKind | undefined;
+  isFullWidthRow: boolean;
+  collapsedGroups: string[] | undefined;
+  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  groupLength: number;
+  index: number;
 }
 
-const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
+export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   tableName,
   element,
   Header,
   SmartCell,
   aggregationType,
+  isFullWidthRow,
+  collapsedGroups,
+  onChangeCollapsedGroups,
+  groupLength,
+
+  index,
 }) => {
   const [parentHover, setParentHover] = useState(false);
   const [selfHover, setSelfHover] = useState(false);
@@ -55,9 +66,16 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       value={element.value}
       rowSpan={element.rowspan}
       colSpan={element.colspan}
+      collapsible={element.collapsible}
       onHover={onHover}
       hover={parentHover || selfHover}
       alignRight={isCellAlignRight(element.type)}
+      isFullWidthRow={isFullWidthRow}
+      collapsedGroups={collapsedGroups}
+      onChangeCollapsedGroups={onChangeCollapsedGroups}
+      groupId={element.id || ''}
+      groupLength={groupLength}
+      index={index}
     />
   ) : (
     <SmartCell
@@ -71,36 +89,5 @@ const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       alignRight={isCellAlignRight(element.column.type)}
       subproperties={element.subproperties}
     />
-  );
-};
-
-interface DataViewDataGroupProps {
-  tableName: string;
-  group: GroupElement<DataGroup>[];
-  selectedAggregationTypes: Array<AggregationKind | undefined>;
-  Header: FC<HeaderProps>;
-  SmartCell: FC<SmartProps>;
-}
-
-export const DataViewDataGroup: FC<DataViewDataGroupProps> = ({
-  tableName,
-  group,
-  selectedAggregationTypes,
-  Header,
-  SmartCell,
-}: DataViewDataGroupProps) => {
-  return (
-    <>
-      {group.map((element, index) => (
-        <DataViewDataGroupElement
-          key={index}
-          tableName={tableName}
-          element={element}
-          aggregationType={selectedAggregationTypes[element.columnIndex]}
-          Header={Header}
-          SmartCell={SmartCell}
-        />
-      ))}
-    </>
   );
 };
