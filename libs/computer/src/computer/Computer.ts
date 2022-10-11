@@ -212,7 +212,9 @@ export class Computer {
     );
   }
 
-  getNamesDefined$ = listenerHelper(this.results, () => this.getNamesDefined());
+  getNamesDefined$ = listenerHelper(this.results, (_, blockId?: string) =>
+    this.getNamesDefined(blockId)
+  );
 
   getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
     return this.computationRealm.inferContext.functionDefinitions.get(funcName);

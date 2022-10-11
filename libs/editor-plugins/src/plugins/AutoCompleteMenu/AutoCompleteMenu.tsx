@@ -12,7 +12,10 @@ import {
   ELEMENT_TABLE,
   TableElement,
 } from '@decipad/editor-types';
-import { getBuiltinsForAutocomplete } from '@decipad/computer';
+import {
+  AutocompleteName,
+  getBuiltinsForAutocomplete,
+} from '@decipad/computer';
 import {
   getAboveNode,
   insertText,
@@ -20,6 +23,29 @@ import {
   TNodeEntry,
 } from '@udecode/plate';
 import { insertSmartRefOrText } from './insertSmartRefOrText';
+
+const compareNames = (a: AutocompleteName, b: AutocompleteName) => {
+  const aScore = a.isLocal ? 1 : 0;
+  const bScore = b.isLocal ? 1 : 0;
+
+  return aScore - bScore;
+};
+
+const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
+  names.sort(compareNames);
+
+const selectNames = (
+  names: AutocompleteName[]
+): ComponentProps<typeof UIAutoCompleteMenu>['identifiers'] => {
+  return [...localNamesFirst(names), ...getBuiltinsForAutocomplete()].map(
+    (n) => ({
+      kind:
+        n.kind === 'variable' ? ('variable' as const) : ('function' as const),
+      identifier: n.kind === 'function' ? `${n.name}(` : n.name,
+      type: n.type.kind,
+    })
+  );
+};
 
 type MenuItem = Parameters<
   NonNullable<ComponentProps<typeof UIAutoCompleteMenu>['onExecuteItem']>
@@ -91,29 +117,22 @@ export const AutoCompleteMenu: PlateComponent = ({ attributes, children }) => {
     [computer, editor, showAutoComplete, word]
   );
 
-  if (selection) {
-    const identifiers = [
-      ...computer.getNamesDefined(tableAncestor?.[0].id),
-      ...getBuiltinsForAutocomplete(),
-    ].map((n) => ({
-      kind:
-        n.kind === 'variable' ? ('variable' as const) : ('function' as const),
-      identifier: n.kind === 'function' ? `${n.name}(` : n.name,
-      type: n.type.kind,
-    }));
+  const identifiers = computer.getNamesDefined$.useWithSelector(
+    selectNames,
+    tableAncestor?.[0].id
+  );
 
-    if (showAutoComplete && identifiers.length) {
-      return (
-        <span {...attributes}>
-          <UIAutoCompleteMenu
-            search={word}
-            identifiers={identifiers}
-            onExecuteItem={onExecuteItem}
-          />
-          {children}
-        </span>
-      );
-    }
+  if (showAutoComplete && identifiers?.length) {
+    return (
+      <span {...attributes}>
+        <UIAutoCompleteMenu
+          search={word}
+          identifiers={identifiers}
+          onExecuteItem={onExecuteItem}
+        />
+        {children}
+      </span>
+    );
   }
 
   return <span {...attributes}>{children}</span>;

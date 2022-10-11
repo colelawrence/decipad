@@ -2,39 +2,11 @@ import { AST, AutocompleteName, serializeType } from '@decipad/language';
 import { getDefinedSymbol } from '../utils';
 import { ComputationRealm } from '../computer/ComputationRealm';
 
-const sortAutocompleteNames =
-  (takesPrecedencePrefix: string) =>
-  (a: AutocompleteName, b: AutocompleteName): number => {
-    const aStarts = (a.name.startsWith(takesPrecedencePrefix) && 1) || 0;
-    const bStarts = (b.name.startsWith(takesPrecedencePrefix) && 1) || 0;
-    return bStarts - aStarts;
-  };
-
 export function* findNames(
   realm: ComputationRealm,
   program: AST.Block[],
   ignoreNames: Set<string>,
   inSymbol?: string
-): Iterable<AutocompleteName> {
-  const prefix = inSymbol && `${inSymbol}.`;
-  const names = inSymbol
-    ? Array.from(findGlobalNames(realm, program, ignoreNames)).sort(
-        sortAutocompleteNames(inSymbol)
-      )
-    : findGlobalNames(realm, program, ignoreNames);
-  for (const name of names) {
-    if (prefix && name.name.startsWith(prefix)) {
-      yield { ...name, name: name.name.slice(prefix.length) };
-    } else {
-      yield name;
-    }
-  }
-}
-
-function* findGlobalNames(
-  realm: ComputationRealm,
-  program: AST.Block[],
-  ignoreNames: Set<string>
 ): Iterable<AutocompleteName> {
   const seenSymbols = new Set<string>();
   const { nodeTypes } = realm.inferContext;
@@ -64,10 +36,15 @@ function* findGlobalNames(
           for (const col of statement.args[1].args) {
             const colType = nodeTypes.get(col);
             if (colType) {
+              const tableName = statement.args[0].args[0];
+              const columnName = col.args[0].args[0];
+              const isLocal = inSymbol != null && inSymbol === tableName;
+              const name = isLocal ? columnName : `${tableName}.${columnName}`;
               yield {
                 kind: 'column',
                 type: serializeType(colType),
-                name: `${statement.args[0].args[0]}.${col.args[0].args[0]}`,
+                name,
+                isLocal,
               };
             }
           }
@@ -75,10 +52,15 @@ function* findGlobalNames(
       }
 
       if (statement.type === 'table-column-assign') {
+        const tableName = statement.args[0].args[0];
+        const columnName = statement.args[1].args[0];
+        const isLocal = inSymbol != null && inSymbol === tableName;
+        const name = isLocal ? columnName : `${tableName}.${columnName}`;
         yield {
           kind: 'column',
           type: serializeType(type),
-          name: `${statement.args[0].args[0]}.${statement.args[1].args[0]}`,
+          name,
+          isLocal,
         };
       }
 

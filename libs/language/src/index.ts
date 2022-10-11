@@ -96,6 +96,7 @@ export interface AutocompleteName {
   type: SerializedType;
   name: string;
   blockId?: string;
+  isLocal?: boolean;
 }
 
 let cachedBuiltins: AutocompleteName[] | null = null;

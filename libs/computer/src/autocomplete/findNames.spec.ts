@@ -47,6 +47,7 @@ it('finds names', async () => {
         },
       },
       Object {
+        "isLocal": false,
         "kind": "column",
         "name": "Table1.Hello",
         "type": Object {
@@ -59,6 +60,7 @@ it('finds names', async () => {
         },
       },
       Object {
+        "isLocal": false,
         "kind": "column",
         "name": "Table1.Column2",
         "type": Object {
