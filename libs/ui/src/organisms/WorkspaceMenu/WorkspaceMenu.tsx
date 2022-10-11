@@ -32,6 +32,9 @@ interface WorkspaceMenuProps {
   readonly activeWorkspace: ComponentProps<typeof WorkspaceItem>;
   readonly otherWorkspaces: ReadonlyArray<ComponentProps<typeof WorkspaceItem>>;
   readonly onCreateWorkspace?: () => void;
+  readonly onEditWorkspace?: ComponentProps<
+    typeof WorkspaceItem
+  >['onClickEdit'];
 }
 
 export const WorkspaceMenu = ({
@@ -39,6 +42,7 @@ export const WorkspaceMenu = ({
   activeWorkspace,
   otherWorkspaces,
   onCreateWorkspace = noop,
+  onEditWorkspace = noop,
 }: WorkspaceMenuProps): ReturnType<FC> => {
   return (
     <nav css={styles}>
@@ -54,7 +58,11 @@ export const WorkspaceMenu = ({
           <Divider />
           <NavigationList>
             {otherWorkspaces.map((workspace) => (
-              <WorkspaceItem key={workspace.id} {...workspace} />
+              <WorkspaceItem
+                key={workspace.id}
+                onClickEdit={onEditWorkspace}
+                {...workspace}
+              />
             ))}
           </NavigationList>
         </>

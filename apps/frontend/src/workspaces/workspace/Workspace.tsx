@@ -147,6 +147,11 @@ const Workspace: FC = () => {
                     onCreateWorkspace={() =>
                       navigate(currentWorkspaceRoute.createNew({}).$)
                     }
+                    onEditWorkspace={(id) => {
+                      navigate(
+                        workspaces({}).workspace({ workspaceId: id }).edit({}).$
+                      );
+                    }}
                     onPointerEnter={() =>
                       loadEditWorkspaceModal().then(loadCreateWorkspaceModal)
                     }

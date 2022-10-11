@@ -41,6 +41,7 @@ export { Docs } from './Docs/Docs';
 export { DollarCircle } from './DollarCircle/DollarCircle';
 export { DragHandle } from './DragHandle/DragHandle';
 export { Duplicate } from './Duplicate/Duplicate';
+export { Edit } from './Edit/Edit';
 export { Education } from './Education/Education';
 export { Ellipsis } from './Ellipsis/Ellipsis';
 export { Eye } from './Eye/Eye';

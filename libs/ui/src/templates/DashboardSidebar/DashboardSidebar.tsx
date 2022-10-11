@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
-import { WorkspaceNavigation, WorkspaceSwitcher } from '../../organisms';
+import { WorkspaceSwitcher } from '../../organisms';
 import { dashboard } from '../../styles';
 
 const styles = css({
@@ -11,10 +11,9 @@ const styles = css({
   rowGap: '20px',
 });
 
-type DashboardSidebarProps = ComponentProps<typeof WorkspaceSwitcher> &
-  ComponentProps<typeof WorkspaceNavigation> & {
-    readonly onPointerEnter?: () => void;
-  };
+type DashboardSidebarProps = ComponentProps<typeof WorkspaceSwitcher> & {
+  readonly onPointerEnter?: () => void;
+};
 
 export const DashboardSidebar = ({
   onPointerEnter,
@@ -23,7 +22,7 @@ export const DashboardSidebar = ({
   return (
     <div css={styles} onPointerEnter={onPointerEnter}>
       <div css={{ gridRow: 'navigation', display: 'grid' }}>
-        <WorkspaceNavigation {...props} />
+        {/* Leaving this here in case we want to add other items in the future */}
       </div>
       <div css={{ gridRow: 'switcher', display: 'grid' }}>
         <WorkspaceSwitcher {...props} />
