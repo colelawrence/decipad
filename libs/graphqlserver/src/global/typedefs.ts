@@ -7,6 +7,7 @@ export default gql`
     email: String
     image: String
     createdAt: DateTime
+    hideChecklist: Boolean
   }
 
   enum PermissionType {

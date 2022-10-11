@@ -1,13 +1,36 @@
 import { AuthenticationError } from 'apollo-server-lambda';
-import { UserInput, User, GraphqlContext } from '@decipad/backendtypes';
+import {
+  UserInput,
+  User,
+  GraphqlContext,
+  GoalFulfilmentInput,
+} from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { identify } from '@decipad/backend-analytics';
 import { requireUser } from '../authorization';
+import timestamp from '../utils/timestamp';
 
 export default {
   Query: {
     self(_: unknown, _args: unknown, context: GraphqlContext) {
       return context.user;
+    },
+    async selfFulfilledGoals(
+      _: unknown,
+      _args: unknown,
+      context: GraphqlContext
+    ): Promise<string[]> {
+      const user = requireUser(context);
+      const data = await tables();
+      const result = await data.usergoals.query({
+        IndexName: 'byUserId',
+        KeyConditionExpression: 'user_id = :user_id',
+        ExpressionAttributeValues: {
+          ':user_id': user.id,
+        },
+      });
+
+      return result.Items.map((goal) => goal.goalName);
     },
   },
 
@@ -31,8 +54,31 @@ export default {
       await data.users.put(self);
 
       await identify(user.id, { fullName: self.name, email: self.email });
-
       return self;
+    },
+
+    async fulfilGoal(
+      _: unknown,
+      { props }: { props: GoalFulfilmentInput },
+      context: GraphqlContext
+    ): Promise<boolean> {
+      const user = requireUser(context);
+
+      const data = await tables();
+
+      const goalId = `/users/${user.id}/goals/${props.goalName}`;
+
+      const fulfilled = await data.usergoals.get({ id: goalId });
+      if (!fulfilled) {
+        await data.usergoals.create({
+          id: goalId,
+          user_id: user.id,
+          goalName: props.goalName,
+          fulfilledAt: timestamp(),
+        });
+        return false;
+      }
+      return true;
     },
   },
 };

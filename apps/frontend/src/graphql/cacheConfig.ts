@@ -13,8 +13,8 @@ const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
     { query: GetWorkspacesDocument },
     (data) => {
       data?.workspaces
-        .find(({ id }) => notebook?.workspace?.id === id)
-        ?.pads.items.push(notebook);
+        .find(({ id }) => notebook.workspace?.id === id)
+        ?.pads.items.push(notebook as Pad);
       return data;
     }
   );

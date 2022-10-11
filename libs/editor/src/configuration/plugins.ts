@@ -37,6 +37,7 @@ import {
   createNavigationPlugin,
   createUpdateComputerPlugin,
   createWithDocSyncHistoryPlugin,
+  createUserEventPlugin,
   createSmartRefPlugin,
   createTrailingParagraphPlugin,
   createSelectionShortcutPlugin,
@@ -60,6 +61,7 @@ import {
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
 } from '@udecode/plate';
+import { ClientEventContextType } from '@decipad/client-events';
 import type { Computer } from '@decipad/computer';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
@@ -73,6 +75,7 @@ import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
 export const plugins = (
   computer: Computer,
+  events: ClientEventContextType,
   interactions?: Subject<UserInteraction>
 ) =>
   createPlugins<MyValue, MyEditor>(
@@ -167,6 +170,7 @@ export const plugins = (
       // history
       createWithDocSyncHistoryPlugin(),
 
+      createUserEventPlugin(events),
       createTrailingParagraphPlugin(),
 
       // shortcuts

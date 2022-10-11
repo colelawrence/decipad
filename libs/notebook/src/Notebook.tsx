@@ -6,10 +6,15 @@ import {
   NotebookStateProvider,
   useNotebookState,
 } from '@decipad/notebook-state';
-import { ComputerContextProvider } from '@decipad/react-contexts';
+import {
+  ComputerContextProvider,
+  StarterChecklistContextProvider,
+  StarterChecklistInitialState,
+  StarterChecklistStateChange,
+} from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useSession } from 'next-auth/react';
-import { FC, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import {
   EditorUserInteractionsProvider,
   useEditorUserInteractionsContext,
@@ -32,6 +37,11 @@ export interface NotebookProps {
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
 }
+
+type NotebookStarterChecklistProps = {
+  checklistState: StarterChecklistInitialState;
+  onChecklistStateChange: (props: StarterChecklistStateChange) => void;
+};
 
 const InsideNotebookState = ({
   notebookId,
@@ -156,12 +166,39 @@ const InsideNotebookState = ({
   return null;
 };
 
-export const Notebook: FC<NotebookProps> = (props) => {
+export const Notebook: FC<NotebookStarterChecklistProps & NotebookProps> = (
+  props
+) => {
+  const { checklistState, onChecklistStateChange, ...rest } = props;
   return (
     <NotebookStateProvider>
       <EditorUserInteractionsProvider>
-        <InsideNotebookState {...props}></InsideNotebookState>
+        <NotebookWithChecklist
+          checklistState={checklistState}
+          onChecklistStateChange={onChecklistStateChange}
+        >
+          <InsideNotebookState {...rest} />
+        </NotebookWithChecklist>
       </EditorUserInteractionsProvider>
     </NotebookStateProvider>
+  );
+};
+
+const NotebookWithChecklist: FC<
+  NotebookStarterChecklistProps & { children: ReactNode }
+> = ({ checklistState, onChecklistStateChange, children }) => {
+  const { loadedFromLocal, loadedFromRemote, timedOutLoadingFromRemote } =
+    useNotebookState();
+
+  return (
+    <StarterChecklistContextProvider
+      loaded={
+        loadedFromLocal && (loadedFromRemote || timedOutLoadingFromRemote)
+      }
+      initialState={checklistState}
+      onStateChange={onChecklistStateChange}
+    >
+      {children}
+    </StarterChecklistContextProvider>
   );
 };

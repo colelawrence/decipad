@@ -2,13 +2,19 @@ import {
   EditorBlockParentRefProvider,
   EditorChangeContextProvider,
   EditorReadOnlyContext,
+  useChecklist,
 } from '@decipad/react-contexts';
-import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
+import {
+  EditorPlaceholder,
+  LoadingFilter,
+  StarterChecklist,
+} from '@decipad/ui';
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { EditorLayout } from 'libs/ui/src/atoms';
 import * as components from './components';
 import { useWriteLock } from './utils/useWriteLock';
@@ -61,6 +67,7 @@ export const Editor = (props: EditorProps) => {
 
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
   const { onRefChange } = useAutoAnimate();
+  const { checklist, hideChecklist } = useChecklist();
 
   if (!loaded || !editor) {
     return <EditorPlaceholder />;
@@ -87,6 +94,14 @@ export const Editor = (props: EditorProps) => {
                   history: true,
                 }}
               >
+                {!checklist.hidden &&
+                  !readOnly &&
+                  isFlagEnabled('ONBOARDING_CHECKLIST') && (
+                    <StarterChecklist
+                      checklist={checklist}
+                      onHideChecklist={hideChecklist}
+                    />
+                  )}
                 <InsidePlate {...props} containerRef={containerRef} />
               </Plate>
             </EditorLayout>

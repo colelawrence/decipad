@@ -1,0 +1,6 @@
+mutation UpdateUser($props: UserInput!) {
+  updateSelf(props: $props) {
+    name
+    hideChecklist
+  }
+}
