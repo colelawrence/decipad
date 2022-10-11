@@ -24,7 +24,7 @@ const innerStyles = css({
   width: '32px',
 
   'button:hover > &': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('strongHighlightColor'),
   },
 
   '> svg': {
