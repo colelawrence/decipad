@@ -11,6 +11,7 @@ const fetchUpdates = async (padId: string): Promise<Uint8Array[]> => {
     ExpressionAttributeValues: {
       ':id': padId,
     },
+    ConsistentRead: true,
   })) {
     if (docsyncUpdate && docsyncUpdate.data) {
       updates.push(Buffer.from(docsyncUpdate.data, 'base64'));
@@ -33,6 +34,7 @@ const fetchSnapshot = async (
       ':docsync_id': padId,
       ':name': getDefined(version),
     },
+    ConsistentRead: true,
   })) {
     if (snapshot && snapshot.data) {
       updates.push(Buffer.from(snapshot.data, 'base64'));

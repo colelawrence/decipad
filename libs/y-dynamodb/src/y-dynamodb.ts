@@ -76,6 +76,7 @@ export class DynamodbPersistence extends Observable<string> {
         ':docsync_id': this.name,
         ':name': getDefined(this.version),
       },
+      ConsistentRead: true,
     })) {
       if (snapshot && snapshot.data) {
         updates.push(Buffer.from(snapshot.data, 'base64'));
@@ -92,6 +93,7 @@ export class DynamodbPersistence extends Observable<string> {
       ExpressionAttributeValues: {
         ':id': this.name,
       },
+      ConsistentRead: true,
     })) {
       if (docsyncUpdate && docsyncUpdate.data) {
         updates.push(Buffer.from(docsyncUpdate.data, 'base64'));
@@ -154,6 +156,7 @@ export class DynamodbPersistence extends Observable<string> {
         ExpressionAttributeValues: {
           ':id': this.name,
         },
+        ConsistentRead: true,
       })
     ).Items;
     if (updates.length > 1) {

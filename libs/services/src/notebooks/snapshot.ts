@@ -11,6 +11,7 @@ export const snapshot = async (notebookId: string): Promise<string> => {
     ExpressionAttributeValues: {
       ':id': resource,
     },
+    ConsistentRead: true,
   })) {
     if (update) {
       updates.push(Buffer.from(update.data, 'base64'));

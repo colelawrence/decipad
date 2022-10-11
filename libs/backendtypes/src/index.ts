@@ -509,6 +509,7 @@ export interface DynamoDbQuery {
   FilterExpression?: string;
   Limit?: number;
   Select?: 'COUNT';
+  ConsistentRead?: boolean;
 }
 
 /* Versioned table records */

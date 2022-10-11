@@ -50,6 +50,7 @@ async function duplicateSharedDoc(
     ExpressionAttributeValues: {
       ':id': oldResource,
     },
+    ConsistentRead: true,
   })) {
     if (update) {
       await data.docsyncupdates.put({

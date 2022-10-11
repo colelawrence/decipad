@@ -48,6 +48,7 @@ async function handlePadDelete({ id }: TableRecordIdentifier) {
     ExpressionAttributeValues: {
       id: resource,
     },
+    ConsistentRead: true,
   })) {
     if (update) {
       await data.docsyncupdates.delete({ id: update.id, seq: update.seq });
