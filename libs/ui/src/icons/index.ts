@@ -93,6 +93,7 @@ export { Rocket } from './Rocket/Rocket';
 export { Server } from './Server/Server';
 export { Settings } from './Settings/Settings';
 export { Shapes } from './Shapes/Shapes';
+export { Sheet } from './Sheet/Sheet';
 export { ShoppingCart } from './ShoppingCart/ShoppingCart';
 export { Show } from './Show/Show';
 export { Slash } from './Slash/Slash';

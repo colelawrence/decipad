@@ -6,7 +6,7 @@ import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Button, IconButton } from '../../atoms';
-import { LeftArrow } from '../../icons';
+import { LeftArrow, Sheet } from '../../icons';
 import { NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp } from '../../organisms';
 import { cssVar, p14Medium, smallestDesktop } from '../../primitives';
@@ -39,22 +39,41 @@ const leftSideStyles = css({
 });
 
 const rightSideStyles = css({
-  display: 'grid',
-  gridTemplateColumns: '1fr max-content max-content',
+  display: 'flex',
   alignItems: 'center',
   gap: '1rem',
-  marginRight: '-1rem',
-  marginLeft: '1rem',
+});
+
+const hideForSmallScreenStyles = css({
+  [smallScreenQuery]: {
+    display: 'none',
+  },
 });
 
 const linksStyles = css({
   display: 'flex',
   gap: '12px',
-  [smallScreenQuery]: {
-    display: 'none',
-  },
 });
 const helpLinkStyles = css(p14Medium);
+
+const iconStyles = css({
+  display: 'grid',
+  height: '16px',
+  width: '16px',
+});
+
+const VerticalDivider = () => (
+  <div
+    css={[
+      {
+        width: '1px',
+        height: '100%',
+        backgroundColor: cssVar('strongerHighlightColor'),
+      },
+      hideForSmallScreenStyles,
+    ]}
+  />
+);
 
 export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookAvatars>,
@@ -108,7 +127,7 @@ export const NotebookTopbar = ({
       {/* Right side */}
       <div css={rightSideStyles}>
         {isWriter && (
-          <div css={linksStyles}>
+          <div css={[linksStyles, hideForSmallScreenStyles]}>
             <em css={helpLinkStyles}>
               <Anchor
                 href={docs({}).page({ name: 'examples' }).$}
@@ -120,11 +139,24 @@ export const NotebookTopbar = ({
                   })
                 }
               >
-                Gallery
+                <span
+                  css={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto',
+                    gap: '4px',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span css={iconStyles}>
+                    <Sheet />
+                  </span>{' '}
+                  Gallery
+                </span>
               </Anchor>
             </em>
           </div>
         )}
+        {isWriter && <VerticalDivider />}
         <NotebookAvatars
           isWriter={isWriter}
           usersWithAccess={usersWithAccess}
