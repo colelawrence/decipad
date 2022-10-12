@@ -16,6 +16,7 @@ import {
   isElement,
   setNodes,
 } from '@udecode/plate';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 type LastFormattedBlock = null | {
@@ -69,6 +70,7 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
           4. The last word is an equal sign.
         */
         const isEqualSignAfterFewWords =
+          !isFlagEnabled('POTENTIAL_FORMULA_DETECTION') &&
           tokens.length >= 2 &&
           tokens.length <= 5 &&
           tokens[0].offset === 0 &&

@@ -21,6 +21,7 @@ export {
   parseOneStatement,
   parseOneExpression,
   parseStatement,
+  parseExpression,
   parseBlock,
   runCode,
   Result,
@@ -36,6 +37,7 @@ export {
   Column,
   areUnitsConvertible,
   convertBetweenUnits,
+  getUnitByName,
   currencyUnits,
   isStatement,
 } from '@decipad/language';

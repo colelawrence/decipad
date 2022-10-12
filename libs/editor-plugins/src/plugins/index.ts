@@ -31,6 +31,7 @@ export * from './NotebookTitle';
 export * from './NumberBubblesPlugin';
 export * from './OperationsBlackboxPlugin';
 export * from './Plot';
+export * from './PotentialFormulaHighlight';
 export * from './SelectionShortcutPlugin';
 export * from './SentryBreadcrumbsPlugin';
 export * from './SmartRef';

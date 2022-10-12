@@ -44,6 +44,7 @@ export {
   parse,
   parseBlock,
   parseStatement,
+  parseExpression,
   Parser,
   SyntaxError,
 } from './parser';

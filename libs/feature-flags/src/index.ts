@@ -1,6 +1,7 @@
 export type Flag =
   | 'INPUT_COPY'
   | 'INLINE_BUBBLES'
+  | 'POTENTIAL_FORMULA_DETECTION'
   | 'EXPR_REFS'
   | 'UNSAFE_JS_EVAL'
   | 'COPY_HREF'
@@ -13,6 +14,7 @@ export type Flags = Partial<Record<Flag, boolean>>;
 let overrides: Flags = {
   // flags already live in prod are set to true here
   // can also be used to manually disable a flag in development by setting to false
+  INLINE_BUBBLES: false,
 };
 
 const envDefaults: Record<string, boolean> = {

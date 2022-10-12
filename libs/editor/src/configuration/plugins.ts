@@ -41,6 +41,7 @@ import {
   createSmartRefPlugin,
   createTrailingParagraphPlugin,
   createSelectionShortcutPlugin,
+  createPotentialFormulaHighlightPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -151,6 +152,7 @@ export const plugins = (
       createCodeLinePlugin(),
       createUpdateComputerPlugin(computer),
       createVariableDefPlugin(),
+      createPotentialFormulaHighlightPlugin(),
 
       // tables
       createTablePlugin(computer),

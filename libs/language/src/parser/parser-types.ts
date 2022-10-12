@@ -19,3 +19,7 @@ export type ParsedBlock =
 export type ParsedStatement =
   | { solution: AST.Statement; error?: undefined }
   | { solution?: undefined; error: ParserError };
+
+export type ParsedExpression =
+  | { solution: AST.Expression; error?: undefined }
+  | { solution?: undefined; error: ParserError };

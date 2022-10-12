@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react-hooks';
-import { useDelayedBoolean, useDelayedValue } from './delay-boolean';
+import { useDelayedTrue, useDelayedValue } from './delay-value';
 
 it('can delay a `true` value, but go `false` instantly', () => {
   jest.useFakeTimers();
 
-  const renderedHook = renderHook(({ bool }) => useDelayedBoolean(bool), {
+  const renderedHook = renderHook(({ bool }) => useDelayedTrue(bool), {
     initialProps: { bool: false },
   });
 

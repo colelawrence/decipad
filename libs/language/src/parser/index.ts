@@ -1,4 +1,4 @@
-import { n } from '../utils';
+import { isExpression, n } from '../utils';
 import * as AST from './ast-types';
 import * as Parser from './parser-types';
 import { tokenizer, BracketCounter } from '../grammar/tokenizer';
@@ -37,6 +37,20 @@ export function parseStatement(source: string): Parser.ParsedStatement {
 
   return {
     solution: parsed.solution.args[0],
+  };
+}
+
+export function parseExpression(source: string): Parser.ParsedExpression {
+  const parsed = parseStatement(source);
+
+  if (parsed.error) return parsed;
+
+  if (!isExpression(parsed.solution)) {
+    return { error: { message: 'Expected expression' } };
+  }
+
+  return {
+    solution: parsed.solution,
   };
 }
 

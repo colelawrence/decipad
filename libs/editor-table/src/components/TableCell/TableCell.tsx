@@ -11,7 +11,7 @@ import {
   useTableColumnFormulaResultForElement,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import { useDelayedBoolean } from '@decipad/react-utils';
+import { useDelayedTrue } from '@decipad/react-utils';
 import {
   CodeResult,
   ColumnDropLine,
@@ -105,7 +105,7 @@ export const TableCell: PlateComponent = ({
     element.id
   );
 
-  const showParseError = useDelayedBoolean(Boolean(parseError));
+  const showParseError = useDelayedTrue(Boolean(parseError));
 
   const onChangeValue = useCallback(
     (newValue: string | undefined) => {

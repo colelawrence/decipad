@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 /**
  * Make `true` only appear 1 second later. Used for delaying the display of errors.
  */
-export const useDelayedBoolean = (currentBoolean: boolean) => {
+export const useDelayedTrue = (currentBoolean: boolean) => {
   const [isTrue, setIsTrue] = useState(false);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const useDelayedValue = <T>(
     }
   }, [freshValue, currentBoolean]);
 
-  const delayedBoolean = useDelayedBoolean(currentBoolean);
+  const delayedBoolean = useDelayedTrue(currentBoolean);
 
   if (currentBoolean && !delayedBoolean) {
     return latestValue.current;

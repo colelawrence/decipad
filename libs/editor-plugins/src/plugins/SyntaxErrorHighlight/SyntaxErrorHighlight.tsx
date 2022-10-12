@@ -1,7 +1,7 @@
 import { SyntaxErrorHighlight as UISyntaxErrorHighlight } from '@decipad/ui';
 import { ComponentProps } from 'react';
 import { PlateComponent } from '@decipad/editor-types';
-import { useDelayedBoolean } from '@decipad/react-utils';
+import { useDelayedTrue } from '@decipad/react-utils';
 
 export type SyntaxErrorHighlightProps = Pick<
   ComponentProps<typeof UISyntaxErrorHighlight>,
@@ -11,7 +11,7 @@ export type SyntaxErrorHighlightProps = Pick<
 export const SyntaxErrorHighlight: PlateComponent<
   SyntaxErrorHighlightProps
 > = ({ attributes, children, variant, error }) => {
-  const errorsVisible = useDelayedBoolean(true);
+  const errorsVisible = useDelayedTrue(true);
 
   return (
     <span {...attributes}>

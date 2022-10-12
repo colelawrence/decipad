@@ -8,6 +8,7 @@ import {
   MyPlatePlugin,
 } from '@decipad/editor-types';
 import React from 'react';
+import { disable, reset } from '@decipad/feature-flags';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 
@@ -18,6 +19,11 @@ beforeEach(() => {
   editor = createTPlateEditor({
     plugins: [plugin, createNormalizeCodeLinePlugin()],
   });
+  disable('POTENTIAL_FORMULA_DETECTION');
+});
+
+afterEach(() => {
+  reset();
 });
 
 const makeParagraph = (text: string): MyElement[] =>

@@ -35,6 +35,7 @@ export { NotebookListItemActions } from './NotebookListItemActions/NotebookListI
 export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/NotebookListItemPlaceholder';
 export { NotebookPath } from './NotebookPath/NotebookPath';
 export { OrderedList } from './OrderedList/OrderedList';
+export { PotentialFormulaHighlight } from './PotentialFormulaHighlight/PotentialFormulaHighlight';
 export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';
 export { TableCellControls } from './TableCellControls/TableCellControls';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
