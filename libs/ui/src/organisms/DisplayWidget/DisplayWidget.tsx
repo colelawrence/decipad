@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { formatResultPreview } from '@decipad/format';
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
 import {
-  grey200,
+  grey100,
   grey300,
   grey400,
   grey500,
@@ -35,11 +35,11 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
-    ...(selected && { backgroundColor: grey200.rgb }),
+    ...(selected && { backgroundColor: grey100.rgb }),
     ...(!readOnly && {
       border: `1px solid ${grey300.rgb}`,
       ':hover': {
-        backgroundColor: grey200.rgb,
+        backgroundColor: grey100.rgb,
       },
       cursor: 'pointer',
     }),
