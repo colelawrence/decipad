@@ -1,6 +1,7 @@
 export { AnyResult } from './AnyResult/AnyResult';
 export { AutoCompleteMenuItem } from './AutoCompleteMenuItem/AutoCompleteMenuItem';
 export { Avatar } from './Avatar/Avatar';
+export { Badge } from './Badge/Badge';
 export { Blockquote } from './Blockquote/Blockquote';
 export { Bold } from './Bold/Bold';
 export { BooleanResult } from './BooleanResult/BooleanResult';

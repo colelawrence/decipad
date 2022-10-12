@@ -6,8 +6,8 @@ import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Button, IconButton } from '../../atoms';
-import { LeftArrow, Sheet } from '../../icons';
-import { NotebookAvatars, NotebookPath } from '../../molecules';
+import { Deci, LeftArrow, Sheet } from '../../icons';
+import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp } from '../../organisms';
 import { cssVar, p14Medium, smallestDesktop } from '../../primitives';
 import { PermissionType } from '../../types';
@@ -112,7 +112,7 @@ export const NotebookTopbar = ({
     <div css={wrapperStyles}>
       {/* Left side */}
       <div css={leftSideStyles}>
-        {isWriter && workspace && (
+        {isWriter && workspace ? (
           <div css={{ width: '32px', display: 'grid' }}>
             <IconButton
               href={workspaces({}).workspace({ workspaceId: workspace.id }).$}
@@ -120,8 +120,18 @@ export const NotebookTopbar = ({
               <LeftArrow />
             </IconButton>
           </div>
+        ) : (
+          <span css={{ display: 'grid', height: '16px', width: '16px' }}>
+            <Deci />
+          </span>
         )}
-        <NotebookPath notebookName={notebook.name} />
+        <NotebookPath
+          notebookName={
+            isWriter ? notebook.name : 'Decipad — interactive notebook'
+          }
+          workspaceName={isWriter ? workspace?.name : undefined}
+        />
+        <BetaBadge />
       </div>
 
       {/* Right side */}
