@@ -8,7 +8,7 @@ import {
 } from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
-import { FC, lazy, useMemo } from 'react';
+import { FC, lazy, useCallback, useMemo } from 'react';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { loadNotebooks } from '../../App';
 import {
@@ -22,6 +22,7 @@ import {
   useRenameWorkspaceMutation,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
+import { CHECKLIST_HIDE } from '../../notebooks/notebook/Notebook';
 import { exportNotebook } from '../../utils/exportNotebook';
 import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
 
@@ -59,6 +60,13 @@ const Workspace: FC = () => {
   const createWorkspace = useCreateWorkspaceMutation()[1];
   const renameWorkspace = useRenameWorkspaceMutation()[1];
   const deleteWorkspace = useDeleteWorkspaceMutation()[1];
+
+  const signoutCallback = useCallback(() => {
+    // Checklist show is stored in db, no longer needed on logout.
+    // Because after any refresh it persists.
+    window.localStorage.removeItem(CHECKLIST_HIDE);
+    signOut();
+  }, []);
 
   const { data: workspaceData } = result;
 
@@ -169,7 +177,7 @@ const Workspace: FC = () => {
                     email={session.user.email || 'me@example.com'}
                     numberOfNotebooks={currentWorkspace.pads.items.length}
                     onCreateNotebook={handleCreateNotebook}
-                    onLogout={signOut}
+                    onLogout={signoutCallback}
                     onPointerEnter={loadNotebooks}
                   />
                 </Frame>
