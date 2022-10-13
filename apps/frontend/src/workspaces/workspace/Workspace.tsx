@@ -22,7 +22,6 @@ import {
   useRenameWorkspaceMutation,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
-import { CHECKLIST_HIDE } from '../../notebooks/notebook/Notebook';
 import { exportNotebook } from '../../utils/exportNotebook';
 import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
 
@@ -64,7 +63,6 @@ const Workspace: FC = () => {
   const signoutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
     // Because after any refresh it persists.
-    window.localStorage.removeItem(CHECKLIST_HIDE);
     signOut();
   }, []);
 

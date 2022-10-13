@@ -4,6 +4,8 @@ import {
   GetWorkspacesQuery,
   GraphCacheConfig,
   Pad,
+  UserDocument,
+  UserQuery,
   Workspace,
 } from './generated';
 import * as schema from './schema.generated.json';
@@ -96,6 +98,21 @@ export const graphCacheConfig: GraphCacheConfig = {
         //     return data;
         //   }
         // );
+      },
+      fulfilGoal: (_result, args, cache) => {
+        cache.updateQuery<UserQuery>({ query: UserDocument }, (data) => {
+          data?.selfFulfilledGoals.push(args.props.goalName);
+          return data;
+        });
+      },
+      updateSelf: (_result, args, cache) => {
+        cache.updateQuery<UserQuery>({ query: UserDocument }, (data) => {
+          if (args.props.hideChecklist && data?.self) {
+            /* eslint-disable no-param-reassign */
+            data.self.hideChecklist = true;
+          }
+          return data;
+        });
       },
     },
   },

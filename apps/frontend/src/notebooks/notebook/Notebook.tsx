@@ -33,9 +33,6 @@ const Editor = lazy(loadEditor);
 // prefetch
 loadTopbar().then(loadEditorIcon).then(loadEditor);
 
-export const CHECKLIST_HIDE = 'checklist_hide';
-const HIDE = 'true';
-
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
@@ -69,9 +66,7 @@ const Notebook: FC = () => {
   const [checklistResult] = useUserQuery();
 
   const checklistState = checklistResult.data?.selfFulfilledGoals;
-  const checklistHide =
-    checklistResult.data?.self?.hideChecklist ||
-    window.localStorage.getItem(CHECKLIST_HIDE) === HIDE;
+  const checklistHide = checklistResult.data?.self?.hideChecklist;
 
   const [, renameNotebook] = useRenameNotebookMutation();
   const [, createGoal] = useFulfilGoalMutation();
@@ -86,7 +81,6 @@ const Notebook: FC = () => {
           },
         }).catch((err) => console.warn(err));
       } else {
-        window.localStorage.setItem(CHECKLIST_HIDE, HIDE);
         updateUser({
           props: {
             hideChecklist: true,
