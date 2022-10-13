@@ -22,11 +22,13 @@ const triggerStyles = css({
   right: '16px',
 });
 
-const linkStyles = css({ textDecoration: 'none' });
+const linkStyles = css({
+  textDecoration: 'none',
+});
 
 interface CustomMenuItemProps
   extends Omit<ComponentProps<typeof MenuItem>, 'children'> {
-  description: string;
+  description?: string;
   title: string;
   to?: string;
 }
@@ -59,15 +61,15 @@ const CustomMenuItem = ({
 interface HelpMenuProps {
   readonly discordUrl?: string;
   readonly docsUrl?: string;
+  readonly feedbackUrl?: string;
   readonly onSelectSupport?: () => void;
-  readonly onSelectFeedback?: () => void;
 }
 
 export const HelpMenu = ({
   discordUrl,
   docsUrl,
   onSelectSupport,
-  onSelectFeedback,
+  feedbackUrl,
 }: HelpMenuProps) => {
   return (
     <MenuList
@@ -97,9 +99,7 @@ export const HelpMenu = ({
         description="Ask or share in the community"
       />
       <MenuSeparator />
-      <MenuItem onSelect={onSelectFeedback}>
-        <span css={p14Medium}>Share feedback</span>
-      </MenuItem>
+      <CustomMenuItem to={feedbackUrl} title="Share feedback" />
     </MenuList>
   );
 };
