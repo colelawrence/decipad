@@ -36,6 +36,8 @@ const leftSideStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '6px',
+
+  maxWidth: '450px',
 });
 
 const rightSideStyles = css({
