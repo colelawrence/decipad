@@ -1,8 +1,8 @@
+import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
-import { css } from '@emotion/react';
 import { AutoCompleteMenuItem } from '../../atoms';
-import { grey400, p13Medium } from '../../primitives';
+import { cssVar, p13Medium } from '../../primitives';
 
 const styles = css({
   display: 'grid',
@@ -11,7 +11,7 @@ const styles = css({
 
 const titleStyles = css(p13Medium, {
   padding: '8px 8px 0px',
-  color: grey400.rgb,
+  color: cssVar('weakerTextColor'),
 });
 
 const itemsStyles = css({

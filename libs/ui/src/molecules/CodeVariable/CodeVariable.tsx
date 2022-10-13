@@ -1,11 +1,11 @@
+import type { TableCellType } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { ReactNode, useMemo } from 'react';
-import type { TableCellType } from '@decipad/editor-types';
-import { grey400, grey500, teal800, teal200 } from '../../primitives';
+import { CodeVariableTooltip } from '..';
+import { cssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
-import { CodeVariableTooltip } from '..';
 
 const varStyles = css(codeBlock.variableStyles, {
   padding: '4px 6px',
@@ -14,7 +14,7 @@ const varStyles = css(codeBlock.variableStyles, {
 });
 
 const localVarStyles = css({
-  color: grey500.rgb,
+  color: cssVar('weakTextColor'),
 });
 
 const iconStyles = css({
@@ -28,13 +28,14 @@ const iconStyles = css({
 const typeStyles = css({
   borderWidth: '1px',
   borderStyle: 'solid',
-  borderColor: grey400.rgb,
-  color: grey500.rgb,
+  borderColor: cssVar('weakerTextColor'),
+  color: cssVar('weakTextColor'),
+  backgroundColor: cssVar('backgroundColor'),
 });
 
 const selectedStyles = css({
-  backgroundColor: teal200.rgb,
-  color: teal800.rgb,
+  backgroundColor: cssVar('bubbleBackground'),
+  color: cssVar('bubbleColor'),
 });
 
 interface CodeVariableProps {

@@ -7,9 +7,8 @@ import { Checkbox } from '../../atoms/Checkbox/Checkbox';
 import { Caret } from '../../icons';
 import { Progress } from '../../molecules/Progress/Progress';
 import {
-  grey100,
-  grey200,
-  grey500,
+  cssVar,
+  mediumShadow,
   p14Medium,
   p14Regular,
   p16Bold,
@@ -28,10 +27,10 @@ const wrapperStyles = css({
 const innerStyles = css({
   width: '100%',
   height: '100%',
-  backgroundColor: grey100.rgb,
+  backgroundColor: cssVar('highlightColor'),
   borderRadius: 8,
   padding: 16,
-  boxShadow: '0px 0px 13px 13px rgba(179,179,179,0.37)',
+  boxShadow: `0px 0px 13px 13px ${mediumShadow.rgba}`,
   display: 'flex',
   flexDirection: 'column',
   gap: 16,
@@ -40,7 +39,7 @@ const innerStyles = css({
 });
 
 const checklistDropdown = css(p16Bold, {
-  backgroundColor: grey200.rgb,
+  backgroundColor: cssVar('strongHighlightColor'),
   borderRadius: 8,
   paddingLeft: 8,
   paddingRight: 8,
@@ -128,7 +127,7 @@ export const StarterChecklist: FC<StarterChecklistProps> = ({
         ) : (
           <>
             <div css={checklistStyles}>
-              <p css={[p14Regular, { color: grey500.rgb }]}>
+              <p css={[p14Regular, { color: cssVar('weakTextColor') }]}>
                 You're in the interactive notebook — browse all contents of this
                 notebook and interact with them to see a result.
               </p>

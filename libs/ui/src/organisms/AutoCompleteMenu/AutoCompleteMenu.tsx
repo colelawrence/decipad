@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
-import { cssVar, mediumShadow, white } from '../../primitives';
+import { cssVar, mediumShadow } from '../../primitives';
 
 type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
@@ -38,7 +38,6 @@ const styles = (top: boolean, rounded: boolean) =>
     position: 'absolute',
     width: '280px',
     maxHeight: '293px',
-    background: white.rgb,
     boxSizing: 'border-box',
     zIndex: 1,
   });

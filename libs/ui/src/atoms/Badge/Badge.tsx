@@ -4,7 +4,7 @@ import { brand400, cssVar, p12Medium, setCssVar } from '../../primitives';
 
 const styles = css(
   p12Medium,
-  setCssVar('currentTextColor', cssVar('strongTextColor')),
+  setCssVar('currentTextColor', cssVar('iconColorDark')),
   {
     padding: '4px 8px',
     borderRadius: '6px',

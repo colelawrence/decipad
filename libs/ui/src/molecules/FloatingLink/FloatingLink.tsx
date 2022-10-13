@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
   FloatingLink as PlateFloatingLink,
   LinkIcon,
@@ -7,13 +7,14 @@ import {
   ShortTextIcon,
   useFloatingLinkSelectors,
 } from '@udecode/plate';
+import { cssVar } from '../../primitives';
 
 const IconWrapper = styled.div`
   display: flex;
   padding-left: 8px;
   padding-right: 8px;
   align-items: center;
-  color: #9ca3af;
+  color: ${cssVar('weakerTextColor')};
 `;
 
 const InputWrapper = styled.div`
@@ -39,7 +40,7 @@ const inputCss = css`
 `;
 
 export const floatingLinkRootCss = css`
-  background: white;
+  background: ${cssVar('backgroundColor')};
   z-index: 20 !important;
   border-radius: 4px;
   box-shadow: rgb(15 15 15 / 5%) 0 0 0 1px, rgb(15 15 15 / 10%) 0 3px 6px,
@@ -51,7 +52,7 @@ const VerticalDivider = () => (
     css={css`
       margin-left: 0.5rem;
       margin-right: 0.5rem;
-      background-color: #e5e7eb;
+      background-color: ${cssVar('strongHighlightColor')};
       width: 1px;
       height: 1.25rem;
     `}
@@ -69,13 +70,13 @@ const buttonCss = css`
   font-weight: 500;
   border-width: 0;
   cursor: pointer;
-  background-color: #ffffff;
+  background-color: ${cssVar('backgroundColor')};
 
   :hover {
-    background-color: #f3f4f6;
+    background-color: ${cssVar('tintedBackgroundColor')};
   }
   :active {
-    background-color: #f3f4f6;
+    background-color: ${cssVar('tintedBackgroundColor')};
   }
 
   font-family: inherit;
@@ -97,6 +98,14 @@ const iconButtonCss = [
   plateButtonCss,
   css`
     padding: 4px;
+    background-color: ${cssVar('backgroundColor')};
+
+    :hover {
+      background-color: ${cssVar('tintedBackgroundColor')};
+    }
+    :active {
+      background-color: ${cssVar('tintedBackgroundColor')};
+    }
   `,
 ];
 
@@ -121,7 +130,7 @@ export const FloatingLink = () => {
 
       <div
         css={css`
-          background-color: #e5e7eb;
+          background-color: ${cssVar('strongHighlightColor')};
           height: 1px;
         `}
       />

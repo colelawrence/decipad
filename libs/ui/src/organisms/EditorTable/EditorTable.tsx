@@ -3,18 +3,18 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
+import { Add } from '../../icons';
 import { AddTableRowButton } from '../../molecules';
+import { cssVar, smallestDesktop } from '../../primitives';
 import { editorLayout } from '../../styles';
+import { tableControlWidth } from '../../styles/table';
+import { Column } from '../../types';
 import {
   AvailableSwatchColor,
   TableStyleContext,
   UserIconKey,
 } from '../../utils';
 import { TableWidth } from '../Table/Table';
-import { smallestDesktop } from '../../primitives';
-import { tableControlWidth } from '../../styles/table';
-import { Column } from '../../types';
-import { Add } from '../../icons';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -72,12 +72,12 @@ export const tableOverflowStyles = css({
 const tableAddColumnButtonStyles = css({
   width: '40px',
   minWidth: '40px',
-  backgroundColor: '#F2F4F7',
+  backgroundColor: cssVar('highlightColor'),
   marginLeft: '8px',
   borderRadius: '8px',
   padding: '8px',
   '&:hover': {
-    backgroundColor: '#DDE0E5',
+    backgroundColor: cssVar('strongHighlightColor'),
   },
 });
 

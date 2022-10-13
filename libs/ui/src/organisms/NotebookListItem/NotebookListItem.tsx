@@ -6,8 +6,8 @@ import { IconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
 import {
-  offBlack,
   cssVar,
+  offBlack,
   p14Medium,
   setCssVar,
   shortAnimationDuration,
@@ -58,7 +58,7 @@ const iconStyles = css({
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '4px',
   backgroundColor: cssVar('backgroundColor'),
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  ...setCssVar('currentTextColor', cssVar('iconColorDark')),
 
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
 });

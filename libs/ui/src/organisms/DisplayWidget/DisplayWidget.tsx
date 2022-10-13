@@ -1,16 +1,9 @@
-import { FC, ReactNode } from 'react';
-import { css } from '@emotion/react';
-import { formatResultPreview } from '@decipad/format';
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
-import {
-  grey100,
-  grey300,
-  grey400,
-  grey500,
-  p14Regular,
-  p32Medium,
-} from '../../primitives';
+import { formatResultPreview } from '@decipad/format';
+import { css } from '@emotion/react';
+import { FC, ReactNode } from 'react';
 import { ArrowOutlined, Caret } from '../../icons';
+import { cssVar, p14Regular, p32Medium } from '../../primitives';
 import {
   AutoCompleteMenu,
   Identifier,
@@ -35,11 +28,11 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
-    ...(selected && { backgroundColor: grey100.rgb }),
+    ...(selected && { backgroundColor: cssVar('highlightColor') }),
     ...(!readOnly && {
-      border: `1px solid ${grey300.rgb}`,
+      border: `1px solid ${cssVar('strongerHighlightColor')}`,
       ':hover': {
-        backgroundColor: grey100.rgb,
+        backgroundColor: cssVar('highlightColor'),
       },
       cursor: 'pointer',
     }),
@@ -96,7 +89,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           <ArrowOutlined />
         </div>
         <div css={textWrapperStyles}>
-          <span css={[p14Regular, { color: grey500.rgb }]}>
+          <span css={[p14Regular, { color: cssVar('weakTextColor') }]}>
             {`Result: ${result ?? 'Name'}`}
           </span>
         </div>
@@ -107,7 +100,12 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         onClick={() => !readOnly && onChangeOpen(!openMenu)}
         data-testid="result-widget"
       >
-        <span css={[p32Medium, !lineResult?.result && { color: grey400.rgb }]}>
+        <span
+          css={[
+            p32Medium,
+            !lineResult?.result && { color: cssVar('weakerTextColor') },
+          ]}
+        >
           {lineResult?.result ? formatResultPreview(lineResult.result) : '0'}
         </span>
         {!readOnly && (

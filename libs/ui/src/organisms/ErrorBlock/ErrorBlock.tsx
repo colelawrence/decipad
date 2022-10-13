@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
-import { orange50, orange700, p16Regular, red50 } from '../../primitives';
+import { cssVar, p16Regular } from '../../primitives';
 
 const centeredFlex = css({
   display: 'flex',
@@ -21,7 +21,7 @@ const errorBlockWrapperStyles = css(centeredFlex, {
 });
 
 const errorMessageStypes = css(p16Regular, {
-  color: orange700.rgb,
+  color: cssVar('errorDialogColor'),
 });
 
 const errorBlockRowStyles = css(centeredFlex, {
@@ -87,8 +87,8 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
     <div
       css={[
         type === 'warning'
-          ? { backgroundColor: orange50.rgb }
-          : { backgroundColor: red50.rgb },
+          ? { backgroundColor: cssVar('errorDialogWarning') }
+          : { backgroundColor: cssVar('errorDialogError') },
         errorBlock,
       ]}
       contentEditable={false}

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { grey100, grey200 } from '../primitives/index';
+import { cssVar } from '../primitives/index';
 
 export const plateButtonCss = css`
   display: inline-flex;
@@ -13,14 +13,14 @@ export const plateButtonCss = css`
   border-width: 0;
   cursor: pointer;
 
-  background-color: #ffffff;
+  background-color: ${cssVar('backgroundColor')};
 
   :hover {
-    background-color: ${grey100.rgb};
+    background-color: ${cssVar('highlightColor')};
   }
 
   :hover {
-    background-color: ${grey200.rgb};
+    background-color: ${cssVar('strongHighlightColor')};
   }
 
   padding: 4px 10px;
@@ -41,7 +41,7 @@ export const plateButtonCss = css`
 `;
 
 export const floatingRootCss = css`
-  background-color: #ffffff;
+  background-color: ${cssVar('backgroundColor')};
   width: auto;
   z-index: 10;
 

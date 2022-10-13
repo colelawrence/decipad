@@ -31,7 +31,7 @@ const iconWrapperStyles = css({
 });
 
 const iconStyles = css(p14Regular, {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  ...setCssVar('currentTextColor', cssVar('iconColorDark')),
   width: '24px',
   height: '24px',
 });

@@ -12,10 +12,16 @@ import {
   grey600,
   offBlack,
   offWhite,
+  orange50,
+  orange700,
   purple200,
+  red50,
   red500,
+  teal200,
   teal600,
+  teal800,
   white,
+  yellow200,
   yellow600,
 } from './color';
 
@@ -47,6 +53,19 @@ export interface CssVariables {
 
   readonly currentTextColor: Property.Color;
 
+  // dark on both modes
+  readonly iconColorDark: Property.Color;
+
+  // error dialog
+  readonly errorDialogColor: Property.Color;
+  readonly errorDialogWarning: Property.Color;
+  readonly errorDialogError: Property.Color;
+
+  readonly bubbleColor: Property.Color;
+  readonly bubbleBackground: Property.Color;
+
+  readonly mutationAnimationColor: Property.Color;
+
   // Code
   readonly variableHighlightTextColor: Property.Color;
   readonly variableHighlightColor: Property.Color;
@@ -77,6 +96,17 @@ const defaults: CssVariables = {
   weakTextColor: grey500.rgb,
   normalTextColor: grey600.rgb,
   strongTextColor: offBlack.rgb,
+
+  iconColorDark: offBlack.rgb,
+
+  errorDialogColor: orange700.rgb,
+  errorDialogWarning: orange50.rgb,
+  errorDialogError: red50.rgb,
+
+  bubbleColor: teal800.rgb,
+  bubbleBackground: teal200.rgb,
+
+  mutationAnimationColor: yellow200.rgb,
 
   get currentTextColor() {
     return cssVar('normalTextColor');

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { grey50 } from '../../primitives';
+import { cssVar, grey50 } from '../../primitives';
 
 const acceptableFileTypes = ['application/json'];
 const maxFileSizeBytes = 300_000;
@@ -46,6 +46,7 @@ const validateItemAndGetFile = (item: DataTransferItem) => {
 
 const dropStyles = css({
   backgroundColor: grey50.rgb,
+  background: cssVar('tintedBackgroundColor'),
 });
 
 interface DragAndDropImportNotebookProps {
