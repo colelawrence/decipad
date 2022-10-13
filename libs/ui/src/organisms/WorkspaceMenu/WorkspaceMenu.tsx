@@ -52,7 +52,7 @@ export const WorkspaceMenu = ({
           <Create />
         </IconButton>
       </div>
-      <WorkspaceItem {...activeWorkspace} />
+      <WorkspaceItem {...activeWorkspace} onClickEdit={onEditWorkspace} />
       {otherWorkspaces.length ? (
         <>
           <Divider />
