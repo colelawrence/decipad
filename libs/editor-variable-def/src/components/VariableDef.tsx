@@ -3,6 +3,7 @@ import {
   useTextTypeInference,
 } from '@decipad/editor-components';
 import {
+  ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
   useTEditorRef,
@@ -101,7 +102,9 @@ export const VariableDef: PlateComponent = ({
     NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>
   >(
     (_, monitor) => ({
-      horizontal: monitor.getItemType() === ELEMENT_VARIABLE_DEF,
+      horizontal:
+        monitor.getItemType() === ELEMENT_VARIABLE_DEF ||
+        monitor.getItemType() === ELEMENT_DISPLAY,
       vertical: !isHorizontal,
     }),
     [isHorizontal]
@@ -151,7 +154,9 @@ export const VariableDef: PlateComponent = ({
       blockKind="interactive"
       element={element}
       onDelete={onDelete}
-      accept={isHorizontal ? ELEMENT_VARIABLE_DEF : undefined}
+      accept={
+        isHorizontal ? [ELEMENT_VARIABLE_DEF, ELEMENT_DISPLAY] : undefined
+      }
       getAxis={getAxis}
       onDrop={onDrop}
       contentEditable={true}

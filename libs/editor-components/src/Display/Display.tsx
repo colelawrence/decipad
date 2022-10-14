@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
+  MyElement,
   PlateComponent,
   useTEditorState,
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
 import {
+  findNode,
   findNodePath,
   getNodeString,
   PlateEditor,
@@ -77,8 +79,13 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           kind === 'boolean' ||
           kind === 'type-error'
         ) {
-          const node = editor.children.find((block) => block.id === blockId);
-          if (!node) return undefined;
+          const entry = findNode<MyElement>(editor, {
+            at: [],
+            match: (n) => n.id === blockId,
+          });
+
+          if (!entry) return undefined;
+          const [node] = entry;
 
           // Variable Defs are always assignments, so we can just give the Id,
           // and display the name of the var def.
