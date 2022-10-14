@@ -1,5 +1,5 @@
 import { DocSyncEditor } from '@decipad/docsync';
-import { Editor, useCreateEditor } from '@decipad/editor';
+import { Editor, useEditorPlugins } from '@decipad/editor';
 import { BubbleEditor } from '@decipad/editor-components';
 import { MyEditor } from '@decipad/editor-types';
 import {
@@ -59,10 +59,10 @@ const InsideNotebookState = ({
   const { data: session } = useSession();
 
   const {
-    docSyncEditor,
-    computer,
     initComputer,
-    initDocSync,
+    initEditor,
+    editor,
+    computer,
     loadedFromRemote,
     timedOutLoadingFromRemote,
     hasLocalChanges,
@@ -71,7 +71,7 @@ const InsideNotebookState = ({
 
   const interactions = useEditorUserInteractionsContext();
 
-  const editor = useCreateEditor({
+  const plugins = useEditorPlugins({
     notebookId,
     computer,
     readOnly,
@@ -90,32 +90,33 @@ const InsideNotebookState = ({
   useEffect(() => {
     if (!computer) {
       initComputer();
-    } else if (!docSyncEditor && editor) {
-      initDocSync(notebookId, {
-        editor,
-        authSecret: secret,
-        connectionParams,
-        initialState,
+    } else if (!editor && plugins) {
+      initEditor(notebookId, {
+        plugins,
+        docsync: {
+          authSecret: secret,
+          connectionParams,
+          initialState,
+        },
       });
     }
   }, [
-    initComputer,
-    initDocSync,
-    destroy,
-    notebookId,
-    secret,
-    connectionParams,
     computer,
-    docSyncEditor,
+    connectionParams,
     editor,
+    initComputer,
+    initEditor,
     initialState,
+    notebookId,
+    plugins,
+    secret,
   ]);
 
   useEffect(() => {
-    if (docSyncEditor && docSyncEditor.id !== notebookId) {
+    if (editor && editor.id !== notebookId) {
       destroy();
     }
-  }, [destroy, docSyncEditor, notebookId]);
+  }, [destroy, editor, notebookId]);
 
   useEffect(() => {
     return destroy; // always destroy the editor on unmount
@@ -124,10 +125,10 @@ const InsideNotebookState = ({
   // docSync
 
   useEffect(() => {
-    if (docSyncEditor) {
-      onDocsync(docSyncEditor);
+    if (editor) {
+      onDocsync(editor);
     }
-  }, [docSyncEditor, onDocsync]);
+  }, [editor, onDocsync]);
 
   // changes warning
 

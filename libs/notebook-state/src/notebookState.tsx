@@ -1,10 +1,11 @@
-import { createDocSyncEditor, DocSyncOptions } from '@decipad/docsync';
+import { createDocSyncEditor } from '@decipad/docsync';
 import { FC, ReactNode } from 'react';
 import create from 'zustand';
 import createContext from 'zustand/context';
 import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
 import { Computer } from '@decipad/computer';
+import { createTPlateEditor } from '@decipad/editor-types';
 import { NotebookState } from './state';
 
 interface NotebookStateProviderProps {
@@ -16,10 +17,10 @@ const LOAD_TIMEOUT_MS = 5000;
 
 const initialState: Omit<
   NotebookState,
-  'initComputer' | 'initDocSync' | 'destroy'
+  'initComputer' | 'initEditor' | 'destroy'
 > = {
   syncClientState: 'idle',
-  docSyncEditor: undefined,
+  editor: undefined,
   computer: undefined,
   connected: false,
   loadedFromLocal: false,
@@ -34,30 +35,34 @@ const createStore = () =>
     initComputer: () => {
       set({ computer: new Computer() });
     },
-    initDocSync: (notebookId: string, options: DocSyncOptions) => {
+    initEditor: (notebookId, { plugins, docsync }) => {
       // verify that if we have a matching connected docsync instance
-      const { docSyncEditor: oldDocSyncEditor, syncClientState } = get();
-      if (oldDocSyncEditor) {
-        if (
-          syncClientState === 'created' &&
-          oldDocSyncEditor.id === notebookId
-        ) {
+      const { editor: oldEditor, syncClientState } = get();
+      if (oldEditor) {
+        if (syncClientState === 'created' && oldEditor.id === notebookId) {
           // the one we have is just fine
           return;
         }
         try {
-          oldDocSyncEditor.disconnect();
-          oldDocSyncEditor.destroy();
+          oldEditor.disconnect();
+          oldEditor.destroy();
         } catch (err) {
           console.error('error destroying old docsync instance', err);
         }
       }
 
+      const editor = createTPlateEditor({
+        id: notebookId,
+        plugins,
+        disableCorePlugins: { history: true },
+      });
+
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
       }, LOAD_TIMEOUT_MS);
       const docSyncEditor = createDocSyncEditor(notebookId, {
-        ...options,
+        ...docsync,
+        editor,
         onError: captureException,
       });
       docSyncEditor.onConnected(() => {
@@ -81,7 +86,7 @@ const createStore = () =>
           set({ hasLocalChanges: true });
         });
       set({
-        docSyncEditor,
+        editor: docSyncEditor,
         notebookHref: window.location.pathname,
         syncClientState: 'created',
         connected: false,
@@ -92,10 +97,10 @@ const createStore = () =>
       });
     },
     destroy: () => {
-      const { syncClientState, docSyncEditor } = get();
+      const { syncClientState, editor } = get();
       if (syncClientState === 'created') {
-        docSyncEditor?.disconnect();
-        docSyncEditor?.destroy();
+        editor?.disconnect();
+        editor?.destroy();
         set(initialState);
       }
     },

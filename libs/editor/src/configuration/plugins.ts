@@ -42,6 +42,7 @@ import {
   createTrailingParagraphPlugin,
   createSelectionShortcutPlugin,
   createPotentialFormulaHighlightPlugin,
+  createNotebookTitlePlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -74,12 +75,23 @@ import { autoformatRules } from './autoformat';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
-export const plugins = (
-  isReadonly: boolean,
-  computer: Computer,
-  events: ClientEventContextType,
-  interactions?: Subject<UserInteraction>
-) =>
+interface PluginOptions {
+  computer: Computer;
+  events: ClientEventContextType;
+  readOnly: boolean;
+  notebookTitle?: string;
+  onNotebookTitleChange?: (newTitle: string) => void;
+  interactions?: Subject<UserInteraction>;
+}
+
+export const plugins = ({
+  computer,
+  events,
+  readOnly,
+  notebookTitle,
+  onNotebookTitleChange,
+  interactions,
+}: PluginOptions) =>
   createPlugins<MyValue, MyEditor>(
     [
       // basic blocks
@@ -92,6 +104,12 @@ export const plugins = (
       createDividerPlugin(),
 
       createDisplayPlugin(),
+
+      createNotebookTitlePlugin({
+        readOnly,
+        notebookTitle,
+        onNotebookTitleChange,
+      }),
 
       // Layout blocks
       createLayoutColumnsPlugin(),
@@ -153,7 +171,7 @@ export const plugins = (
       createCodeLinePlugin(),
       createUpdateComputerPlugin(computer),
       createVariableDefPlugin(),
-      createPotentialFormulaHighlightPlugin(isReadonly),
+      createPotentialFormulaHighlightPlugin(readOnly),
 
       // tables
       createTablePlugin(computer),

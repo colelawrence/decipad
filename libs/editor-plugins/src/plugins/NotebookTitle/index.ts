@@ -1,1 +1,1 @@
-export * from './useNotebookTitlePlugin';
+export * from './createNotebookTitlePlugin';

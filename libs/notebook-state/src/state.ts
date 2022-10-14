@@ -1,13 +1,19 @@
 import { Computer } from '@decipad/computer';
 import { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
+import { MyPlatePlugin } from '@decipad/editor-types';
+
+interface InitNotebookStateOptions {
+  docsync: Omit<DocSyncOptions, 'editor'>;
+  plugins: MyPlatePlugin[];
+}
 
 export interface NotebookState {
   notebookId?: string | undefined;
   syncClientState: 'idle' | 'created';
-  docSyncEditor?: DocSyncEditor | undefined;
+  editor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
   initComputer: () => void;
-  initDocSync: (notebookId: string, options: DocSyncOptions) => void;
+  initEditor: (notebookId: string, options: InitNotebookStateOptions) => void;
   destroy: () => void;
   connected: boolean;
   loadedFromLocal: boolean;
