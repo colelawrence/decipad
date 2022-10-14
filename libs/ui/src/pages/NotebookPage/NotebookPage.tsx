@@ -10,6 +10,10 @@ const styles = css({
   display: 'grid',
   gridTemplateColumns: '100%',
   alignContent: 'start',
+
+  [smallestScreenQuery]: {
+    padding: '0 24px',
+  },
 });
 
 const notebookStyles = css({
@@ -23,6 +27,12 @@ const notebookStyles = css({
   justifyContent: 'center',
   [smallestScreenQuery]: {
     paddingTop: '24px',
+  },
+});
+
+const headerStyles = css({
+  [smallestScreenQuery]: {
+    margin: '0 -4px',
   },
 });
 
@@ -43,7 +53,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
         {notebookIcon}
         {notebook}
       </main>
-      {topbar && <header>{topbar}</header>}
+      {topbar && <header css={headerStyles}>{topbar}</header>}
     </article>
   );
 };
