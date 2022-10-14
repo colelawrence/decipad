@@ -8,8 +8,10 @@ import {
   cssVar,
   display,
   Opacity,
+  p13Regular,
   p16Regular,
   setCssVar,
+  smallestDesktop,
 } from '../../primitives';
 import { AvailableSwatchColor, UserIconKey } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
@@ -25,6 +27,8 @@ interface CaptionProps
   children: ReactNode;
 }
 
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
+
 const nameWrapperStyles = css({
   alignItems: 'center',
   display: 'flex',
@@ -38,6 +42,11 @@ const iconWrapperStyles = css(
     height: '20px',
     width: '20px',
     flexShrink: 0,
+
+    [smallScreenQuery]: {
+      height: '16px',
+      width: '16px',
+    },
   }
 );
 
@@ -60,7 +69,11 @@ const placeholderStyles = css(p16Regular, {
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
     opacity: placeholderOpacity,
+
+    [smallScreenQuery]: p13Regular,
   },
+
+  [smallScreenQuery]: p13Regular,
 });
 
 export const Caption = ({

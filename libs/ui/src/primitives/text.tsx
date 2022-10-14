@@ -190,10 +190,15 @@ export const p20Medium: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   fontWeight: 500,
 };
-export const p24Bold: TypographyStyles = {
+export const p24Medium: TypographyStyles = {
   ...pDefault,
-  fontWeight: 600,
+  fontWeight: 500,
   fontSize: `${24 / usualRemPxs}rem`,
+  lineHeight: 1.3,
+};
+export const p24Bold: TypographyStyles = {
+  ...p24Medium,
+  fontWeight: 600,
 };
 export const p32Medium: TypographyStyles = {
   ...pDefault,

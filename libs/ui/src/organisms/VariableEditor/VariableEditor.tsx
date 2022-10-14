@@ -13,11 +13,13 @@ import {
   setCssVar,
   transparency,
   white,
+  smallestDesktop,
 } from '../../primitives';
 import { VariableEditorMenu } from '..';
 import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
 
 const leftBarSize = 6;
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
 
@@ -42,7 +44,7 @@ const wrapperStyles = ({ variant }: Variant, color: string) =>
      -${leftBarSize}px 0px ${color}`,
     marginLeft: `${leftBarSize}px`,
 
-    maxWidth: `324px`,
+    maxWidth: `262px`,
     minWidth: '175px',
     width: '100%',
   });
@@ -50,8 +52,8 @@ const wrapperStyles = ({ variant }: Variant, color: string) =>
 const widgetWrapperStyles = css({
   alignItems: 'center',
   display: 'grid',
-  gap: '4px',
-  padding: '8px',
+  gap: '8px',
+  padding: '8px 8px 16px',
 });
 
 const headerWrapperStyles = css({
@@ -60,6 +62,7 @@ const headerWrapperStyles = css({
   gridAutoColumns: 'auto',
   minWidth: 0,
   gap: '4px',
+  padding: '0 4px',
 });
 
 const iconWrapperStyles = ({ variant }: Variant) =>
@@ -73,6 +76,11 @@ const iconWrapperStyles = ({ variant }: Variant) =>
       top: 0,
       right: 0,
     }),
+
+    [smallScreenQuery]: {
+      height: '16px',
+      width: '16px',
+    },
   });
 
 const buttonWrapperStyles = ({ variant }: Variant) =>
@@ -214,7 +222,9 @@ export const VariableEditor = ({
             onChangeValue={onChangeValue}
             focused={selected}
           >
-            {childrenArray.slice(1)}
+            <div css={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {childrenArray.slice(1)}
+            </div>
           </CellEditor>
         )}
       </div>

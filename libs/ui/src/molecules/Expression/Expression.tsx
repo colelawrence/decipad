@@ -7,9 +7,13 @@ import {
   display,
   Opacity,
   p15Regular,
+  p24Medium,
   p32Medium,
   setCssVar,
+  smallestDesktop,
 } from '../../primitives';
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const baseWrapperStyles = css({
   width: '100%',
@@ -21,7 +25,7 @@ const expressionInputStyles = css({
   color: cssVar('strongTextColor'),
   borderRadius: '8px',
   minWidth: 0,
-  padding: '3px 8px',
+  padding: '0 8px',
   ':hover': {
     backgroundColor: cssVar('highlightColor'),
   },
@@ -48,7 +52,11 @@ const placeholderStyles = css({
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
     opacity: placeholderOpacity,
+
+    [smallScreenQuery]: p24Medium,
   },
+
+  [smallScreenQuery]: p24Medium,
 });
 
 const lineStyles = css({

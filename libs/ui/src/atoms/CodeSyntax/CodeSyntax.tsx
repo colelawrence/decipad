@@ -1,13 +1,23 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p32Medium, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  p24Medium,
+  p32Medium,
+  setCssVar,
+  smallestDesktop,
+} from '../../primitives';
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const leafStylesByTokenType = {
   number: css(p32Medium, {
     ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+    [smallScreenQuery]: p24Medium,
   }),
   identifier: css(p32Medium, {
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+    [smallScreenQuery]: p24Medium,
   }),
   ws: undefined,
 };
