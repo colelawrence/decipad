@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { grey200 } from '../../primitives/index';
+import { cssVar } from '../../primitives/index';
 
 export const rootStyles = css({
   padding: '10px 10px',
@@ -12,7 +12,7 @@ export const resizableStyles = css({
 });
 
 export const resizableSelectedStyles = css({
-  background: grey200.rgb,
+  background: cssVar('tableSelectionBackgroundColor'),
 });
 
 export const figureStyles = css({

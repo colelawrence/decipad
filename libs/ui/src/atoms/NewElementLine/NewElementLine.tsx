@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { FC, useState, useEffect } from 'react';
-import { blue200 } from '../../primitives';
+import { FC, useEffect, useState } from 'react';
+import { cssVar } from '../../primitives';
 
 const parentWrapper = css({
   position: 'absolute',
@@ -26,7 +26,7 @@ const addElementLineWrapper = css({
 const addElementLine = css({
   width: '100%',
   height: 3,
-  backgroundColor: blue200.rgb,
+  backgroundColor: cssVar('tableSelectionBackgroundColor'),
 });
 
 interface NewElementLineProps {
