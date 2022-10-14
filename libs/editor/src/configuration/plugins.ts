@@ -75,6 +75,7 @@ import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
 export const plugins = (
+  isReadonly: boolean,
   computer: Computer,
   events: ClientEventContextType,
   interactions?: Subject<UserInteraction>
@@ -152,7 +153,7 @@ export const plugins = (
       createCodeLinePlugin(),
       createUpdateComputerPlugin(computer),
       createVariableDefPlugin(),
-      createPotentialFormulaHighlightPlugin(),
+      createPotentialFormulaHighlightPlugin(isReadonly),
 
       // tables
       createTablePlugin(computer),

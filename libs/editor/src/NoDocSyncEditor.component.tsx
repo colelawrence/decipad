@@ -27,7 +27,7 @@ export const NoDocSyncEditorInternal: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const editorPlugins = useMemo(
-    () => configuration.plugins(computer, events, interactions),
+    () => configuration.plugins(false, computer, events, interactions),
     [computer, events, interactions]
   );
 

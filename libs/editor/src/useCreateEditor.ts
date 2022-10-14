@@ -38,10 +38,10 @@ export const useCreateEditor = ({
       !computer || !events
         ? undefined
         : [
-            ...configuration.plugins(computer, events, interactions),
+            ...configuration.plugins(readOnly, computer, events, interactions),
             notebookTitlePlugin,
           ],
-    [computer, notebookTitlePlugin, events, interactions]
+    [readOnly, computer, notebookTitlePlugin, events, interactions]
   );
 
   const editor = useMemo(() => {

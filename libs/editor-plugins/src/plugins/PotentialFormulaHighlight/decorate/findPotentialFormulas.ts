@@ -6,6 +6,8 @@ interface FormulaLoc {
   focus: number;
 }
 
+type MyToken = Token & { followsWhitespace?: boolean };
+
 export function findPotentialFormulas(text: string): FormulaLoc[] {
   const locs: FormulaLoc[] = [];
   const allTokens = errorProofTokenize(text); // Mutated!
@@ -13,11 +15,18 @@ export function findPotentialFormulas(text: string): FormulaLoc[] {
   while (allTokens.length) {
     const anchor = allTokens[0].offset;
 
-    // Potential formula start
+    if (!allTokens[0].followsWhitespace) {
+      allTokens.shift();
+      continue;
+    }
+
+    // Potential formula start and any "-" or "$"
     skipAssignments(allTokens);
+    skipPrefixes(allTokens);
 
     let tok = allTokens.shift();
-    if (!isFormulaStart(tok)) {
+
+    if (tok?.type !== 'number') {
       continue;
     }
 
@@ -49,7 +58,7 @@ export function findPotentialFormulas(text: string): FormulaLoc[] {
   return locs;
 }
 
-const skipAssignments = (tokens: Token[]) => {
+const skipAssignments = (tokens: MyToken[]) => {
   if (
     tokens.at(0)?.type === 'identifier' &&
     tokens.at(1)?.type === 'equalSign'
@@ -59,8 +68,11 @@ const skipAssignments = (tokens: Token[]) => {
   }
 };
 
-const isFormulaStart = (tok: Token | undefined): tok is Token =>
-  tok?.type === 'number' || tok?.type === 'currency';
+const skipPrefixes = (tokens: MyToken[]) => {
+  while (['minus', 'currency'].includes(tokens.at(0)?.type ?? '')) {
+    tokens.shift();
+  }
+};
 
 export function isBasicStatement(exp: AST.Statement): boolean {
   switch (exp.type) {
@@ -110,8 +122,8 @@ export function isPotentialFormula(text: string): true | 'incomplete' | false {
 }
 
 /** Tokenize while skipping "error" tokens */
-function errorProofTokenize(text: string): Token[] {
-  return tokenize(text).flatMap((token) => {
+function errorProofTokenize(text: string): MyToken[] {
+  return tokenize(text).flatMap((token, i, all) => {
     if (token.type === 'ws') {
       return [];
     }
@@ -125,6 +137,7 @@ function errorProofTokenize(text: string): Token[] {
         offset: restTok.offset + offset,
       }));
     }
-    return [token];
+    const followsWhitespace = i === 0 || all.at(i - 1)?.type === 'ws';
+    return [{ ...token, followsWhitespace }];
   });
 }

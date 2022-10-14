@@ -2,6 +2,7 @@ import { Range } from 'slate';
 import {
   DECORATE_POTENTIAL_FORMULA,
   ELEMENT_PARAGRAPH,
+  MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -24,7 +25,9 @@ export const decoratePotentialFormula = filterDecorate(
         }
 
         return node.children.flatMap((child, index) => {
-          if (!isText(child)) return [];
+          if (!isText(child) || child[MARK_MAGICNUMBER]) {
+            return [];
+          }
 
           const path = [...parentPath, index];
 

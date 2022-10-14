@@ -1,6 +1,6 @@
 import {
-  createTPluginFactory,
   DECORATE_POTENTIAL_FORMULA,
+  MyPlatePlugin,
 } from '@decipad/editor-types';
 import { decoratePotentialFormula } from './decorate/decoratePotentialFormula';
 import { PotentialFormulaHighlight } from './component/PotentialFormulaHighlight';
@@ -10,9 +10,11 @@ import { PotentialFormulaHighlight } from './component/PotentialFormulaHighlight
  *
  * Eg: 50 * 10
  */
-export const createPotentialFormulaHighlightPlugin = createTPluginFactory({
+export const createPotentialFormulaHighlightPlugin = (
+  isReadonly: boolean
+): MyPlatePlugin => ({
   key: DECORATE_POTENTIAL_FORMULA,
   isLeaf: true,
   component: PotentialFormulaHighlight,
-  decorate: decoratePotentialFormula,
+  decorate: isReadonly ? undefined : decoratePotentialFormula,
 });

@@ -1,5 +1,11 @@
 import { tokenize } from '@decipad/computer';
-import { ELEMENT_PARAGRAPH, ParagraphElement } from '@decipad/editor-types';
+import {
+  ELEMENT_PARAGRAPH,
+  MARK_MAGICNUMBER,
+  ParagraphElement,
+  RichText,
+} from '@decipad/editor-types';
+import { getNodeString } from '@udecode/plate';
 import { NodeEntry, Range } from 'slate';
 import { decoratePotentialFormula } from './decoratePotentialFormula';
 import { isPotentialFormula } from './findPotentialFormulas';
@@ -39,6 +45,25 @@ it('supports some units', () => {
   `);
 });
 
+it('finds negative numbers', () => {
+  expect(testFindFormulas('-1 also hi = -1')).toMatchInlineSnapshot(`
+    Array [
+      "-1",
+      "hi = -1",
+    ]
+  `);
+});
+
+it('only finds stuff surrounded with whitespace', () => {
+  expect(testFindFormulas('/1 [1]')).toMatchInlineSnapshot(`Array []`);
+});
+
+it('doesnt touch magic numbers', () => {
+  expect(
+    testRunDecoration({ [MARK_MAGICNUMBER]: true, text: '1' })
+  ).toMatchInlineSnapshot(`Array []`);
+});
+
 it('resists token errors', () => {
   // This test only makes sense if ' is an error token
   expect(tokenize("a quote'").find((t) => t.type === 'error')).toBeDefined();
@@ -65,33 +90,32 @@ it('finds whether it can parse some part of the text', () => {
   expect(isPotentialFormula('1 + 123 meters')).toEqual(false);
 });
 
-function testFindFormulas(testStr: string) {
-  const formulasFor = (str: string) => {
-    const entry: NodeEntry<ParagraphElement> = [
-      {
-        type: ELEMENT_PARAGRAPH,
-        id: 'p',
-        children: [{ text: str }],
-      },
-      [9],
-    ];
+const testRunDecoration = (child: RichText) => {
+  const entry: NodeEntry<ParagraphElement> = [
+    {
+      type: ELEMENT_PARAGRAPH,
+      id: 'p',
+      children: [child],
+    },
+    [9],
+  ];
 
-    const decorations = decoratePotentialFormula(
-      {} as never,
-      {} as never
-    )(entry) as (PotentialFormulaDecoration & Range)[];
+  const decorations = decoratePotentialFormula(
+    {} as never,
+    {} as never
+  )(entry) as (PotentialFormulaDecoration & Range)[];
 
-    return decorations.map((range) =>
-      str.slice(range.location.anchor, range.location.focus)
-    );
-  };
-
-  const baseline = formulasFor(testStr);
-  expect(baseline).toEqual(formulasFor(`${testStr} garbage at end`));
-  expect(baseline).toEqual(
-    formulasFor(`garbage at start ${testStr} garbage at end`)
+  return decorations.map((range) =>
+    getNodeString(child).slice(range.location.anchor, range.location.focus)
   );
-  expect(baseline).toEqual(formulasFor(`garbage at start ${testStr}`));
+};
+
+function testFindFormulas(testStr: string) {
+  const dec = (text: string) => testRunDecoration({ text });
+  const baseline = dec(testStr);
+  expect(baseline).toEqual(dec(`${testStr} garbage at end`));
+  expect(baseline).toEqual(dec(`garbage at start ${testStr} garbage at end`));
+  expect(baseline).toEqual(dec(`garbage at start ${testStr}`));
 
   return baseline;
 }
