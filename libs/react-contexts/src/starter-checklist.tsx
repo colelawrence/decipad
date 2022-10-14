@@ -203,7 +203,7 @@ export const StarterChecklistContextProvider: FC<StarterContextProps> = ({
   const confettiRef = useRef(checklist.confettiUsed);
 
   useEffect(() => {
-    if (checklist.confettiUsed && !confettiRef.current) {
+    if (checklist.confettiUsed && !confettiRef.current && !checklist.hidden) {
       confetti({
         particleCount: 150,
       });
