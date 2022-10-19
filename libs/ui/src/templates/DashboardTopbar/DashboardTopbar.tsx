@@ -1,10 +1,13 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
-import { noop } from '@decipad/utils';
 import { Button } from '../../atoms';
 import { AccountAvatar, NotebookListHeader } from '../../molecules';
 import { AccountMenu } from '../../organisms';
+import { cssVar, smallestDesktop } from '../../primitives';
 import { dashboard, notebookList } from '../../styles';
+
+const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const styles = css({
   padding: `
@@ -24,6 +27,12 @@ const leftStyles = css({
 
   display: 'grid',
   alignItems: 'end',
+  [mobileQuery]: {
+    backgroundColor: cssVar('highlightColor'),
+    padding: '16px 16.5px',
+    boxShadow: `0px 0px 0px 12px ${cssVar('highlightColor')}`,
+    borderRadius: '6px',
+  },
 });
 const rightStyles = css({
   flexGrow: 1,
@@ -33,6 +42,9 @@ const rightStyles = css({
   justifyContent: 'space-between',
   alignItems: 'center',
   columnGap: '16px',
+  [mobileQuery]: {
+    display: 'none',
+  },
 });
 
 type DashboardTopbarProps = Pick<

@@ -25,9 +25,9 @@ export const NotebookListHeader = ({
     <div css={styles}>
       <Heading css={css(p15Medium)}>All Notebooks</Heading>
       {typeof numberOfNotebooks === 'number' ? (
-        <em css={css(p12Regular, { alignSelf: 'flex-end' })}>
-          {numberOfNotebooks} result{numberOfNotebooks === 1 || 's'}
-        </em>
+        <span css={css(p12Regular, { alignSelf: 'flex-end' })}>
+          ({numberOfNotebooks} result{numberOfNotebooks === 1 || 's'})
+        </span>
       ) : (
         <div
           css={{ width: '48px', height: '8px', alignSelf: 'center' }}

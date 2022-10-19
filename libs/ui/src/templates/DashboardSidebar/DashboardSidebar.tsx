@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { WorkspaceSwitcher } from '../../organisms';
+import { smallestDesktop } from '../../primitives';
 import { dashboard } from '../../styles';
+
+const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const styles = css({
   padding: `${dashboard.topPadding} 24px 56px`,
@@ -9,6 +12,9 @@ const styles = css({
   display: 'grid',
   gridTemplateRows: '[switcher] auto [navigation] 1fr',
   rowGap: '20px',
+  [mobileQuery]: {
+    padding: `${dashboard.topPadding} 24px 0px`,
+  },
 });
 
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceSwitcher> & {

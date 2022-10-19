@@ -7,18 +7,18 @@ import {
   EmptyWorkspaceCta,
   NotebookListItem,
 } from '../../organisms';
-import { cssVar, p13Regular, setCssVar } from '../../primitives';
+import { smallestDesktop } from '../../primitives';
 import { notebookList } from '../../styles';
+
+const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const notebookListWrapperStyles = css({
   padding: `${notebookList.verticalPadding} ${notebookList.horizontalPadding}`,
   display: 'grid',
+  [mobileQuery]: {
+    paddingTop: '16px',
+  },
 });
-
-const columnNameStyles = css(
-  p13Regular,
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
 
 const listItemStyles = css({ position: 'relative' });
 
@@ -56,7 +56,6 @@ export const NotebookList = ({
       <DragAndDropImportNotebook onImport={onImport}>
         {notebooks.length ? (
           <div css={{ alignSelf: 'start' }}>
-            <strong css={columnNameStyles}>Name</strong>
             <ol className="notebookList">
               {notebooks.map(({ id, ...notebook }, i) => (
                 <li

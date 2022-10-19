@@ -141,16 +141,7 @@ export const NotebookListItem = ({
         <strong css={[nameStyles, name || noNameNameStyles]}>
           {name || 'My notebook title'}
         </strong>
-        <div
-          css={[
-            actionsStyles,
-            actionsOpen || {
-              '@media (pointer: fine)': {
-                '*:not(:hover):not(:focus) > &': { opacity: 0 },
-              },
-            },
-          ]}
-        >
+        <div css={[actionsStyles]}>
           <IconButton roundedSquare onClick={toggleActionsOpen}>
             <icons.Ellipsis />
           </IconButton>
