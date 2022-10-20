@@ -3,6 +3,7 @@ import {
   blue100,
   blue300,
   brand300,
+  brand600,
   grey100,
   grey200,
   grey300,
@@ -70,6 +71,9 @@ export interface CssVariables {
   readonly variableHighlightTextColor: Property.Color;
   readonly variableHighlightColor: Property.Color;
 
+  // inline text
+  readonly magicNumberTextColor: Property.Color;
+
   // Table
   readonly tableSelectionBackgroundColor: Property.Color;
   readonly tableFocusColor: Property.Color;
@@ -114,6 +118,8 @@ const defaults: CssVariables = {
 
   variableHighlightColor: grey200.rgb,
   variableHighlightTextColor: teal600.rgb,
+
+  magicNumberTextColor: brand600.rgb,
 
   tableSelectionBackgroundColor: blue100.rgb,
   tableFocusColor: blue300.rgb,

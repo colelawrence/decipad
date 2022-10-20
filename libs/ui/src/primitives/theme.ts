@@ -2,6 +2,7 @@ import {
   blue500,
   blue700,
   brand100,
+  brand200,
   brand500,
   grey100,
   grey200,
@@ -63,8 +64,9 @@ export const darkTheme: Record<
   ...setCssVar('variableHighlightColor', brand100.rgb),
   ...setCssVar('variableHighlightTextColor', teal500.rgb),
 
-  ...setCssVar('tableSelectionBackgroundColor', blue700.rgb),
+  ...setCssVar('magicNumberTextColor', brand200.rgb),
 
+  ...setCssVar('tableSelectionBackgroundColor', blue700.rgb),
   ...setCssVar('liveDataBackgroundColor', purple200.rgb),
   ...setCssVar('tableFocusColor', blue500.rgb),
   ...setCssVar('liveDataBackgroundColor', purple200.rgb),

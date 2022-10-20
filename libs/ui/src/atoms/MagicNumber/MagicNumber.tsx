@@ -23,7 +23,11 @@ const wrapperStyles = css({
 });
 
 const baseCreatorStyles = css({
-  color: cssVar('variableHighlightTextColor'),
+  color: cssVar('magicNumberTextColor'),
+  textDecoration: 'underline',
+  textDecorationStyle: 'dashed',
+  textDecorationColor: cssVar('magicNumberTextColor'),
+  textDecorationThickness: 1,
 });
 
 interface ExprRefLinkProps {
@@ -59,20 +63,24 @@ const ExprRefLink: FC<ExprRefLinkProps> = ({ expression }) => {
 
 interface ResultResultProps {
   children?: ReactNode;
+  readOnly: boolean;
   expression?: string;
 }
 
 const IntrospectMagicNumber: FC<ResultResultProps> = ({
   expression,
+  readOnly,
   children,
 }) => {
   return (
     <Tooltip trigger={<span>{children}</span>}>
-      {expression?.startsWith('exprRef_') ? (
+      {expression?.startsWith('exprRef_') && !readOnly ? (
         <ExprRefLink expression={expression} />
+      ) : readOnly ? (
+        `Live Result`
       ) : (
         <span>
-          expression: <pre>{expression}</pre>
+          Formula: <pre>{expression}</pre>
         </span>
       )}
     </Tooltip>
@@ -96,7 +104,7 @@ export const MagicNumber = ({
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
       >
-        <IntrospectMagicNumber expression={expression}>
+        <IntrospectMagicNumber expression={expression} readOnly={readOnly}>
           {hasResult ? (
             <CodeResult tooltip={false} variant="inline" {...result} />
           ) : (

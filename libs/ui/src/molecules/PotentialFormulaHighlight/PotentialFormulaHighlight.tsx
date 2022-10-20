@@ -8,7 +8,7 @@ import { cssVar, p8Regular } from '../../primitives';
 const highlightStyles: CSSObject = {
   textDecoration: 'underline',
   textDecorationStyle: 'dashed',
-  textDecorationColor: '#777E89',
+  textDecorationColor: cssVar('normalTextColor'),
   textDecorationThickness: 1,
   color: cssVar('strongTextColor'),
 };
