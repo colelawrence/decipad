@@ -6,7 +6,7 @@ import { NativeTypes } from 'react-dnd-html5-backend';
 import { cssVar, grey50 } from '../../primitives';
 
 const acceptableFileTypes = ['application/json'];
-const maxFileSizeBytes = 300_000;
+const maxFileSizeBytes = 1_000_000;
 
 const validateItemAndGetFile = (item: DataTransferItem) => {
   const file = item.getAsFile();
