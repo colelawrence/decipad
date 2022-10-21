@@ -42,6 +42,12 @@ export const normalizePlotSpec = (
     }
   }
 
+  if (spec.mark.type === 'line') {
+    if (spec.encoding.size) {
+      spec.encoding.size = undefined;
+    }
+  }
+
   if (spec.mark.type === 'bar' && !spec.mark.cornerRadiusEnd) {
     spec.mark.cornerRadiusEnd = 4;
     if (spec.encoding?.y?.axis) {
