@@ -325,7 +325,7 @@
     "diff": "5.1.0",
     "domhandler": "5.0.3",
     "esbuild": "0.15.10",
-    "eslint": "8.25.0",
+    "eslint": "8.26.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-config-react-app": "7.0.1",
