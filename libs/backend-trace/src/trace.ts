@@ -15,7 +15,7 @@ const {
 
 const sentryInitOptions = {
   dsn: sentryDSN,
-  tracesSampleRate: 1,
+  tracesSampleRate: 0.1,
   environment: process.env.SENTRY_ENVIRONMENT,
   release: meta().version,
 };
