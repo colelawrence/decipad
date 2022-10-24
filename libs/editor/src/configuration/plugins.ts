@@ -41,6 +41,7 @@ import {
   createSmartRefPlugin,
   createTrailingParagraphPlugin,
   createSelectionShortcutPlugin,
+  createRenderPerformanceStatsPlugin,
   createPotentialFormulaHighlightPlugin,
   createNotebookTitlePlugin,
 } from '@decipad/editor-plugins';
@@ -196,6 +197,8 @@ export const plugins = ({
 
       // shortcuts
       createSelectionShortcutPlugin(),
+
+      createRenderPerformanceStatsPlugin(),
     ],
     {
       components: components(computer),
