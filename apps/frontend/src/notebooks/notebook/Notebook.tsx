@@ -1,6 +1,5 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
-import { StarterChecklistStateChange } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
   EditorPlaceholder,
@@ -10,14 +9,10 @@ import {
   TopbarPlaceholder,
 } from '@decipad/ui';
 import { FC, lazy, useCallback, useState } from 'react';
-import {
-  useRenameNotebookMutation,
-  useFulfilGoalMutation,
-  useUpdateUserMutation,
-  useUserQuery,
-} from '../../graphql';
+import { useRenameNotebookMutation } from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
+import { useChecklist } from './hooks/useChecklist';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
 const loadTopbar = () =>
@@ -63,33 +58,11 @@ const Notebook: FC = () => {
     docsync,
   });
 
-  const [checklistResult] = useUserQuery();
-
-  const checklistState = checklistResult.data?.selfFulfilledGoals;
-  const checklistHide = checklistResult.data?.self?.hideChecklist;
-
   const [, renameNotebook] = useRenameNotebookMutation();
-  const [, createGoal] = useFulfilGoalMutation();
-  const [, updateUser] = useUpdateUserMutation();
 
-  const handleChecklistStateChange = useCallback(
-    (props: StarterChecklistStateChange) => {
-      if (props.type === 'newGoal') {
-        createGoal({
-          props: {
-            goalName: props.goalName,
-          },
-        }).catch((err) => console.warn(err));
-      } else {
-        updateUser({
-          props: {
-            hideChecklist: true,
-          },
-        }).catch((err) => console.warn(err));
-      }
-    },
-    [createGoal, updateUser]
-  );
+  const { checklistState, handleChecklistStateChange } = useChecklist({
+    isPublic,
+  });
 
   const duplicateNotebook = useCallback(() => {
     handleChecklistStateChange({
@@ -111,6 +84,16 @@ const Notebook: FC = () => {
   );
 
   useAnimateMutations();
+
+  const onNotebookTitleChange = useCallback(
+    (newName: string) => {
+      renameNotebook({
+        id: notebookId,
+        name: newName,
+      });
+    },
+    [notebookId, renameNotebook]
+  );
 
   if (error) {
     if (/no such/i.test(error?.message))
@@ -136,12 +119,7 @@ const Notebook: FC = () => {
           >
             <Editor
               notebookTitle={notebook?.name ?? ''}
-              onNotebookTitleChange={(newName) => {
-                renameNotebook({
-                  id: notebookId,
-                  name: newName,
-                });
-              }}
+              onNotebookTitleChange={onNotebookTitleChange}
               notebookId={notebookId}
               readOnly={isReadOnly}
               secret={secret}
@@ -149,13 +127,7 @@ const Notebook: FC = () => {
               initialState={initialState}
               onEditor={setEditor}
               onDocsync={setDocsync}
-              checklistState={{
-                goals: !checklistState ? [] : checklistState,
-                nonEditorGoals: {
-                  shared: isPublic,
-                },
-                hide: !!checklistHide,
-              }}
+              checklistState={checklistState}
               onChecklistStateChange={handleChecklistStateChange}
             />
           </Frame>

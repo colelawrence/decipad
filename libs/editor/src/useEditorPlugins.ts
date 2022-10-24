@@ -1,7 +1,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { Computer } from '@decipad/computer';
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { useContext, useMemo } from 'react';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 import { UserInteraction } from '@decipad/react-contexts';
 import { Subject } from 'rxjs';
 import * as configuration from './configuration';
@@ -24,6 +24,14 @@ export const useEditorPlugins = ({
 }: CreateEditorProps): MyPlatePlugin[] | undefined => {
   const events = useContext(ClientEventsContext);
 
+  const title = useRef(notebookTitle);
+
+  useEffect(() => {
+    if (title.current !== notebookTitle) {
+      title.current = notebookTitle;
+    }
+  }, [notebookTitle]);
+
   return useMemo(
     () =>
       !computer || !events
@@ -33,17 +41,9 @@ export const useEditorPlugins = ({
             computer,
             events,
             interactions,
-            notebookTitle,
+            notebookTitle: title.current,
             onNotebookTitleChange,
           }),
-
-    [
-      computer,
-      events,
-      interactions,
-      notebookTitle,
-      onNotebookTitleChange,
-      readOnly,
-    ]
+    [computer, events, interactions, onNotebookTitleChange, readOnly]
   );
 };
