@@ -49,6 +49,7 @@ async function broadcast(
       ExpressionAttributeValues: {
         ':room': room,
       },
+      ConsistentRead: true,
     })
   ).Items;
 
