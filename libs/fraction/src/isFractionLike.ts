@@ -11,8 +11,11 @@ export const isFractionLike = (f: unknown): f is FractionLike => {
     typeof f === 'object' &&
     f !== null &&
     fractionLikeProps.every((prop) => {
+      if (!(prop in f)) {
+        return false;
+      }
       const tof = typeof (f as FractionLike)[prop];
-      return prop in f && (tof === 'bigint' || tof === 'string');
+      return tof === 'bigint' || tof === 'string';
     })
   );
 };

@@ -6,10 +6,10 @@ module.exports = {
   displayName: 'fraction',
   coverageThreshold: {
     global: {
-      statements: 63,
-      branches: 31,
-      functions: 50,
-      lines: 63,
+      statements: 74,
+      branches: 59,
+      functions: 75,
+      lines: 72,
     },
   },
 };

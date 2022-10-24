@@ -43,3 +43,4 @@ export * from './utils';
 export * from './isFractionLike';
 export * from './min';
 export * from './max';
+export * from './comparisons';

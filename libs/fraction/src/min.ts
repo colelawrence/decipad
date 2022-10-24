@@ -1,6 +1,10 @@
 import type Fraction from '.';
 
-export const min = (a: Fraction, ...rest: Fraction[]): Fraction => {
+export const min = (...fs: Fraction[]): Fraction => {
+  if (fs.length < 1) {
+    throw new Error('dont know the minimum of an empty set of fractions');
+  }
+  const [a, ...rest] = fs;
   return rest.reduce((a, b) => {
     if (a.compare(b) < 0) {
       return a;
