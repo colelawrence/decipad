@@ -17,6 +17,8 @@ import { formatError } from '@decipad/format';
 import { DraggableBlock } from '../block-management';
 import { importTable } from './importTable';
 
+const MAX_IMPORT_CELL_COUNT = 500;
+
 export const Import: PlateComponent = ({ attributes, element }) => {
   assertElementType(element, ELEMENT_IMPORT);
 
@@ -34,9 +36,24 @@ export const Import: PlateComponent = ({ attributes, element }) => {
       if (!fetched && !fetching) {
         setFetching(true);
         try {
-          setResult(
-            await tryImport(computer, new URL(element.url), element.source)
+          const imported = await tryImport(
+            computer,
+            new URL(element.url),
+            element.source
           );
+          if (
+            imported.result.type.kind === 'table' &&
+            imported.result.type.tableLength !== 'unknown' &&
+            imported.result.type.tableLength *
+              imported.result.type.columnTypes.length >
+              MAX_IMPORT_CELL_COUNT
+          ) {
+            setError(
+              'This table is too big to import. Please use a live connection instead.'
+            );
+          } else {
+            setResult(imported);
+          }
         } catch (err) {
           console.error('Error caught while importing', err);
           setError((err as Error).message);
