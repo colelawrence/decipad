@@ -61,6 +61,19 @@ const importTableFromObject = (
   const results = keys
     .map((key) => obj[key])
     .map((o) => importFromUnknownJson(o, options));
+
+  const value = results.map((res) => {
+    if (res.value == null) {
+      return Result.UnknownValue.getData();
+    }
+    if (res.type.kind === 'column') {
+      return res.value as Result.Result['value'];
+    }
+    if (res.type.kind === 'type-error') {
+      return res.value as Result.Result['value'];
+    }
+    return [res.value] as Result.Result['value'];
+  }) as Result.Result<'table'>['value'];
   const r: Result.Result<'table'> = {
     type: {
       kind: 'table',
@@ -71,21 +84,10 @@ const importTableFromObject = (
         }
         return res.type;
       }),
-      tableLength: keys.length,
+      tableLength: Math.max(...value.map((col) => col.length)),
       indexName: keys[0],
     },
-    value: results.map((res) => {
-      if (res.value == null) {
-        return Result.UnknownValue.getData();
-      }
-      if (res.type.kind === 'column') {
-        return res.value as Result.Result['value'];
-      }
-      if (res.type.kind === 'type-error') {
-        return res.value as Result.Result['value'];
-      }
-      return [res.value] as Result.Result['value'];
-    }) as Result.Result<'table'>['value'],
+    value,
   };
 
   return r as Result.Result;
