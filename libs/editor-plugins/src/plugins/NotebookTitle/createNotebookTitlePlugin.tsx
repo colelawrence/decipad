@@ -1,6 +1,6 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { getNodeEntry, getNodeString } from '@udecode/plate';
+import { getNodeEntry, getNodeString, hasNode } from '@udecode/plate';
 import { debounce } from 'lodash';
 
 export interface UseNotebookTitlePluginOptions {
@@ -31,12 +31,14 @@ export const createNotebookTitlePlugin = ({
       onChange();
       if (!readOnly) {
         try {
-          const [node] = getNodeEntry(editor, [0, 0]);
-          const newTitle = getNodeString(node);
+          if (hasNode(editor, [0, 0])) {
+            const [node] = getNodeEntry(editor, [0, 0]);
+            const newTitle = getNodeString(node);
 
-          if (newTitle !== lastNotebookTitle) {
-            lastNotebookTitle = newTitle;
-            onNotebookTitleChangeDebounced(newTitle);
+            if (newTitle !== lastNotebookTitle) {
+              lastNotebookTitle = newTitle;
+              onNotebookTitleChangeDebounced(newTitle);
+            }
           }
         } catch (err) {
           console.error('Error in onChangeNotebookTitle', err);
