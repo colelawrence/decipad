@@ -39,23 +39,21 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
       contentEditable={false}
       {...attributes}
     >
+      <PlotBlock
+        readOnly={readOnly}
+        plotParams={plotParams as unknown as PlotParamsProps}
+        result={
+          spec &&
+          data &&
+          ({
+            spec,
+            data,
+          } as PlotBlockProps['result'])
+        }
+        title={element.title || DEFAULT_TITLE}
+        onTitleChange={onTitleChange}
+      />
       {children}
-      <DraggableBlock element={element} blockKind="plot">
-        <PlotBlock
-          readOnly={readOnly}
-          plotParams={plotParams as unknown as PlotParamsProps}
-          result={
-            spec &&
-            data &&
-            ({
-              spec,
-              data,
-            } as PlotBlockProps['result'])
-          }
-          title={element.title || DEFAULT_TITLE}
-          onTitleChange={onTitleChange}
-        />
-      </DraggableBlock>
     </DraggableBlock>
   );
 };
