@@ -1,22 +1,13 @@
-import { useEffect, useState } from 'react';
 import { findNodePath, isCollapsed } from '@udecode/plate';
-import {
-  TableCellElement,
-  TableHeaderElement,
-  useTEditorRef,
-} from '@decipad/editor-types';
+import { TableCellElement, TableHeaderElement } from '@decipad/editor-types';
 import { Path } from 'slate';
-import { useSelection } from '@decipad/editor-utils';
+import { useEditorSelector } from '@decipad/react-contexts';
 
 export const useIsColumnSelected = (
   element: TableCellElement | TableHeaderElement
 ): boolean => {
-  const editor = useTEditorRef();
-  const [isColumnSelected, setIsColumnSelected] = useState(false);
-  const selection = useSelection();
-
-  useEffect(() => {
-    let selected = false;
+  return useEditorSelector((editor) => {
+    const { selection } = editor;
     if (selection && isCollapsed(selection)) {
       const path = findNodePath(editor, element);
       if (path) {
@@ -27,16 +18,14 @@ export const useIsColumnSelected = (
           if (Path.equals(selectedTablePath, tablePath)) {
             const selectedSubTablePath = selectedPath[tablePath.length];
             const columnIndex = path[path.length - 1];
-            selected =
+            return (
               selectedSubTablePath >= 2 &&
-              columnIndex === selectedPath[selectedPath.length - 2];
+              columnIndex === selectedPath[selectedPath.length - 2]
+            );
           }
         }
       }
     }
-
-    setIsColumnSelected(selected);
-  }, [editor, element, selection]);
-
-  return isColumnSelected;
+    return false;
+  });
 };

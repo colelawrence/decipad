@@ -150,7 +150,7 @@ export const TableCell: PlateComponent = ({
       type={cellType}
       value={nodeText}
       onChangeValue={onChangeValue}
-      alignRight={isCellAlignRight(cellType)}
+      alignRight={isColumnSelected || isCellAlignRight(cellType)}
       parseError={showParseError ? parseError : undefined}
     >
       {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
