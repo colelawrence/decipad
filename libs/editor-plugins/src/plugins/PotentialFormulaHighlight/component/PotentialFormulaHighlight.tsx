@@ -7,8 +7,9 @@ import {
   PlateComponent,
   RichText,
   useTEditorRef,
+  MyEditor,
 } from '@decipad/editor-types';
-import { isElementOfType } from '@decipad/editor-utils';
+import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { findNodePath, getNodeString, isCollapsed } from '@udecode/plate';
@@ -76,7 +77,7 @@ export const commitPotentialFormula = (
     text: getExprRef(id),
   };
 
-  const insertionPath = Editor.above(editor, {
+  const insertionPath = getAboveNodeSafe(editor as MyEditor, {
     at: path,
     match: (x) => isElementOfType(x, ELEMENT_PARAGRAPH),
   });

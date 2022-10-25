@@ -7,10 +7,10 @@ import {
 } from '@decipad/react-contexts';
 import { MagicNumber as UIMagicNumber } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { BaseEditor, Editor, Element } from 'slate';
+import { Element } from 'slate';
 import { findNodePath, getNodeString } from '@udecode/plate';
 import { useCallback } from 'react';
-import { magicNumberId } from '@decipad/editor-utils';
+import { magicNumberId, getAboveNodeSafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 
 export const MagicNumber: PlateComponent = ({
@@ -65,7 +65,7 @@ function useMagicNumberId(text: RichText) {
 
     if (!path) return '';
 
-    const entry = Editor.above(editor as BaseEditor, {
+    const entry = getAboveNodeSafe(editor, {
       at: path,
       match: (node) => Element.isElement(node),
     });

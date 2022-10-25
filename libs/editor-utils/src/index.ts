@@ -41,3 +41,4 @@ export * from './useNodePath';
 export * from './useNodeText';
 export * from './useTableColumnFormulaResultForColumn';
 export * from './generateHash';
+export * from './getAboveNodeSafe';
