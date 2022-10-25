@@ -111,7 +111,7 @@
     "@tippyjs/react": "4.2.6",
     "@types/apache-arrow": "npm:@apache-arrow/ts@9.0.0",
     "@types/lodash": "4.14.186",
-    "@udecode/plate": "18.4.0",
+    "@udecode/plate": "18.5.0",
     "@udecode/plate-juice": "18.2.0",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-graphcache": "5.0.1",
