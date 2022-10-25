@@ -5,7 +5,7 @@ import { Tooltip } from '../../atoms';
 
 const styles = css(p13Medium, {
   boxShadow: `0px 2px 24px -4px rgba(36, 36, 41, 0.06)`,
-  border: `1px solid ${cssVar('highlightColor')}`,
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '8px',
   padding: '4px',
 
