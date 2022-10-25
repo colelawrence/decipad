@@ -94,6 +94,7 @@ export const DateEditor: FC<DateEditorProps> = ({
         showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
         showYearPicker={type?.kind === 'date' && type.date === 'year'}
         portalId="date-picker-portal"
+        timeClassName={() => 'deci-datepicker-selectable'}
       ></DatePicker>
     </span>
   );
