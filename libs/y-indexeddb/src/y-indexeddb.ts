@@ -121,6 +121,12 @@ export async function clearDocument(name: string): Promise<void> {
   await idb.deleteDB(name);
 }
 
+interface DocumentVersion {
+  name: string;
+  version: string;
+  createdAt: number;
+}
+
 export class IndexeddbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;
   public doc: Y.Doc;
@@ -223,9 +229,10 @@ export class IndexeddbPersistence extends Observable<string> {
 
   async markVersion(versionName: string): Promise<void> {
     const versionsStore = getDefined(getVersionsStore(this, true));
-    const version = {
+    const version: DocumentVersion = {
       name: versionName,
       version: Buffer.from(Y.encodeStateVector(this.doc)).toString('hex'),
+      createdAt: Date.now(),
     };
     await idb.add(versionsStore, JSON.stringify(version), versionName);
   }
