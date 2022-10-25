@@ -5,9 +5,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { BrowserRouter } from 'react-router-dom';
-
 import { AnalyticsProvider } from './AnalyticsProvider';
-import { FeedbackProvider } from './FeedbackProvider';
 import { IntercomProvider } from './IntercomProvider';
 import { GraphqlProvider } from './GraphqlProvider';
 import { UpdatesHandler } from './UpdatesHandler';
@@ -20,16 +18,14 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
       <BrowserRouter>
         <GraphqlProvider>
           <AnalyticsProvider>
-            <FeedbackProvider>
-              <IntercomProvider>
-                <DndProvider backend={backendForDND}>
-                  <ToastDisplay>
-                    <GlobalStyles>{children}</GlobalStyles>
-                    <UpdatesHandler />
-                  </ToastDisplay>
-                </DndProvider>
-              </IntercomProvider>
-            </FeedbackProvider>
+            <IntercomProvider>
+              <DndProvider backend={backendForDND}>
+                <ToastDisplay>
+                  <GlobalStyles>{children}</GlobalStyles>
+                  <UpdatesHandler />
+                </ToastDisplay>
+              </DndProvider>
+            </IntercomProvider>
           </AnalyticsProvider>
         </GraphqlProvider>
       </BrowserRouter>
