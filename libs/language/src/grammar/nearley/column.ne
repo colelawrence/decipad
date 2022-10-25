@@ -18,19 +18,10 @@ column       -> "[" _ "]"                               {%
 
 column       -> "[" columnItems "]"                     {%
                                                         (d, _l, reject) => {
-                                                          if (d[1].args.every((elem) => (
-                                                            elem.type === 'literal' &&
-                                                            elem.args[0] === 'number' &&
-                                                            elem.args[2]?.args.length === 1 &&
-                                                            timeUnitStrings.has(elem.args[2].args[0].unit))
-                                                          )) {
-                                                            return reject
-                                                          } else {
-                                                            return addArrayLoc({
-                                                              type: 'column',
-                                                              args: [d[1]],
-                                                            }, d)
-                                                          }
+                                                          return addArrayLoc({
+                                                            type: 'column',
+                                                            args: [d[1]],
+                                                          }, d)
                                                         }
                                                         %}
 

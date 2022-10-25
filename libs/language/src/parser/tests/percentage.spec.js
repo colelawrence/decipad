@@ -1,4 +1,4 @@
-import { F, c, l, num, n } from '../../utils';
+import { F, c, l, num, n, col } from '../../utils';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -41,5 +41,10 @@ runTests({
     source: '10 in %',
     sourceMap: false,
     ast: [n('directive', 'as', l(10), n('generic-identifier', '%'))],
+  },
+  'percentage in list': {
+    source: '[50%]',
+    sourceMap: false,
+    ast: [col(num(0.5, 'percentage'))],
   },
 });
