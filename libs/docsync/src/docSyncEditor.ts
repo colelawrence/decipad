@@ -138,6 +138,8 @@ export function docSyncEditor<E extends MyEditor>(
       events.emit('loaded', 'remotely');
     },
     isDocSyncEnabled: true,
+    markVersion: (version: string) => store.markVersion(version),
+    sameVersion: (version: string) => store.sameVersion(version),
   });
 
   return useEditor;

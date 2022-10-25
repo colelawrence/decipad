@@ -5,6 +5,7 @@ import { getDefined } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 
 export const updatesStoreName = 'updates';
+export const versionsStoreName = 'versions';
 
 export const PREFERRED_TRIM_SIZE = 500;
 
@@ -51,6 +52,25 @@ function getUpdatesStore(
       write ? 'readwrite' : 'readonly'
     );
     return updatesStore;
+  } catch (err) {
+    if ((err as Error).name === 'InvalidStateError') {
+      return null;
+    }
+    throw err;
+  }
+}
+
+function getVersionsStore(
+  idbPersistence: IndexeddbPersistence,
+  write = false
+): IDBObjectStore | null {
+  try {
+    const [versionsStore] = idb.transact(
+      getDefined(idbPersistence.db),
+      [updatesStoreName],
+      write ? 'readwrite' : 'readonly'
+    );
+    return versionsStore;
   } catch (err) {
     if ((err as Error).name === 'InvalidStateError') {
       return null;
@@ -199,5 +219,27 @@ export class IndexeddbPersistence extends Observable<string> {
     await maybeWithStore(this, true, async (store) => {
       store.clear();
     });
+  }
+
+  async markVersion(versionName: string): Promise<void> {
+    const versionsStore = getDefined(getVersionsStore(this, true));
+    const version = {
+      name: versionName,
+      version: Buffer.from(Y.encodeStateVector(this.doc)).toString('hex'),
+    };
+    await idb.add(versionsStore, JSON.stringify(version), versionName);
+  }
+
+  async sameVersion(versionName: string): Promise<boolean> {
+    const versionsStore = getDefined(getVersionsStore(this, false));
+    const versionString = await idb.get(versionsStore, versionName);
+    if (versionString && typeof versionString === 'string') {
+      const version = JSON.parse(versionString);
+      const currentVersion = Buffer.from(
+        Y.encodeStateVector(this.doc)
+      ).toString('hex');
+      return version.version !== currentVersion;
+    }
+    return false;
   }
 }

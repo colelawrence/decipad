@@ -36,4 +36,6 @@ export type DocSyncEditor = MyEditor &
     removeLocalChanges: () => Promise<void>;
     connected: boolean;
     isDocSyncEnabled: boolean;
+    markVersion: (version: string) => Promise<void>;
+    sameVersion: (version: string) => Promise<boolean>;
   };
