@@ -10,6 +10,15 @@ const coerceToBoolean = (text: string): string => {
   }
 };
 
+export const parseBoolean = (text: string): boolean => {
+  switch (text.toLowerCase()) {
+    case 'true':
+    case 'yes':
+      return true;
+  }
+  return false;
+};
+
 export const inferBoolean = (text: string): CoercibleType | undefined => {
   switch (text.toLowerCase()) {
     case 'true':

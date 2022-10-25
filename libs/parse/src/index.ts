@@ -5,3 +5,6 @@ export { parseCell, getNullReplacementValue } from './parseCell';
 export { columnNameFromIndex } from './columnNameFromIndex';
 export { parseSeriesStart } from './parseSeriesStart';
 export { seriesIterator } from './seriesIterator';
+export * from './inferNumber';
+export * from './inferBoolean';
+export * from './parseDate';

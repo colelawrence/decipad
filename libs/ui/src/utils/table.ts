@@ -88,6 +88,7 @@ export function toTableHeaderType(
     case 'number':
     case 'string':
     case 'date':
+    case 'boolean':
       return type;
     default:
       return undefined;
