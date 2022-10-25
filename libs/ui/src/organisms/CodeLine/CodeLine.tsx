@@ -10,12 +10,15 @@ import {
   p14Medium,
   p14Regular,
   setCssVar,
+  smallestDesktop,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { isTabularType } from '../../utils';
 import { CodeResultProps } from '../../types';
 
 const { lineHeight } = codeBlock;
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const highlightedLineStyles = {
   borderColor: cssVar('strongerHighlightColor'),
@@ -32,10 +35,10 @@ const codeLineStyles = (
           border: `1px solid ${cssVar('strongHighlightColor')}`,
 
           backgroundColor: cssVar('highlightColor'),
-          padding: '4px 10px',
+          padding: '6px 12px',
         }
       : {
-          padding: '0px 10px',
+          padding: '0px 12px',
         }),
 
     // Think this couldn't be done with CSS since one cannot query the next element to influence
@@ -56,12 +59,12 @@ const codeLineStyles = (
     ...(variant === 'standalone'
       ? {
           display: 'grid',
-          gridGap: '0 5%',
-          // `minmax(0, 70%)` prevents a grid blowout when code line is made out of huge consecutive text.
+          gridGap: '0 16px',
+          // `minmax(0, X)` prevents a grid blowout when code line is made out of huge consecutive text.
           gridTemplate: `
     "code            inline-res  " 1fr
     "expanded-res    expanded-res" auto
-    /minmax(0, 70%)  25%
+    /minmax(0, 66%)  34%
   `,
         }
       : {}),
@@ -73,24 +76,40 @@ const inlineStyles = css({
   maxWidth: '100%',
   display: 'flex',
   justifySelf: 'end',
-  alignSelf: 'center',
+  alignSelf: 'flex-start',
+  padding: '5px 0',
 
   userSelect: 'all',
   cursor: 'grab',
+
+  [smallScreenQuery]: {
+    // When in mobile, the inline result, if there is one,  will occupy the space dedicated to
+    // expanded results (i.e. tables, lists, etc.).
+    gridArea: 'expanded-res',
+    width: '100%',
+  },
 });
 
-const codeStyles = (variant: CodeLineProps['variant']) =>
-  css(code, {
-    gridArea: 'code',
-    padding: variant === 'standalone' ? '3px 0' : undefined,
-    ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-    lineHeight,
-    whiteSpace: 'pre-wrap',
-  });
+const codeStyles = css(code, {
+  gridArea: 'code',
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  lineHeight,
+  whiteSpace: 'pre-wrap',
 
-const placeholderStyles = css(codeStyles('standalone'), {
+  [smallScreenQuery]: {
+    // When in mobile we want to use that extra right-space that usually belongs to inline results.
+    gridArea: '1 / span 2',
+  },
+});
+
+const placeholderStyles = css(codeStyles, {
   opacity: 0.4,
   pointerEvents: 'none',
+
+  [smallScreenQuery]: {
+    position: 'absolute',
+    left: '12px',
+  },
 });
 
 const inlineResultStyles = css(p14Regular, {
@@ -106,6 +125,10 @@ const inlineResultStyles = css(p14Regular, {
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '8px',
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
+  [smallScreenQuery]: {
+    width: '100%',
+  },
 });
 
 const expandedResultStyles = css(p14Medium, {
@@ -169,25 +192,27 @@ export const CodeLine = ({
       ]}
       spellCheck={false}
     >
-      <code css={codeStyles(variant)}>{children}</code>
+      <code css={codeStyles}>{children}</code>
       {placeholder && isEmpty && (
         <span css={placeholderStyles} contentEditable={false}>
           {placeholder}
         </span>
       )}
-      <div
-        css={[inlineStyles, grabbing && grabbingStyles]}
-        contentEditable={false}
-        draggable
-        onDragStart={(e) => {
-          onDragStartInlineResult?.(e);
-          setGrabbing(true);
-        }}
-        onDragEnd={() => setGrabbing(false)}
-      >
-        {inline}
-      </div>
-      {expanded}
+      {!isEmpty && (
+        <div
+          css={[inlineStyles, grabbing && grabbingStyles]}
+          contentEditable={false}
+          draggable
+          onDragStart={(e) => {
+            onDragStartInlineResult?.(e);
+            setGrabbing(true);
+          }}
+          onDragEnd={() => setGrabbing(false)}
+        >
+          {inline}
+        </div>
+      )}
+      {!isEmpty && expanded}
     </div>
   );
 };

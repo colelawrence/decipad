@@ -48,3 +48,12 @@ WithError.args = {
   children: '[1, 2,',
   syntaxError: { message: 'Syntax Error', url: docs({}).$ },
 };
+
+export const WithPlaceholder: Story<
+  ComponentProps<typeof CodeLine> & Result.Result
+> = ({ type, value, ...props }) => <CodeLine {...props} />;
+WithPlaceholder.args = {
+  children: '',
+  isEmpty: true,
+  placeholder: 'Distance = 60km/h * Time',
+};
