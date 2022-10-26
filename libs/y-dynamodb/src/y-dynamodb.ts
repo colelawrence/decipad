@@ -41,18 +41,23 @@ export class DynamodbPersistence extends Observable<string> {
     const currState = encodeStateAsUpdate(this.doc);
     await this._fetchAndProcessUpdates();
     const data = await tables();
-    await data.docsync.withLock(
-      this.name,
-      async (
-        docsync = { id: this.name, _version: 0, data: '' }
-      ): Promise<DocSyncRecord> => {
-        return {
-          id: docsync.id,
-          _version: docsync._version + 1,
-          data: Buffer.from(currState).toString('base64'),
-        };
-      }
-    );
+    try {
+      await data.docsync.withLock(
+        this.name,
+        async (
+          docsync = { id: this.name, _version: 0, data: '' }
+        ): Promise<DocSyncRecord> => {
+          return {
+            id: docsync.id,
+            _version: docsync._version + 1,
+            data: Buffer.from(currState).toString('base64'),
+          };
+        }
+      );
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
     this.synced = true;
     return this;
   }
