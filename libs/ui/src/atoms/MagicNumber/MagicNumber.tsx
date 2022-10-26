@@ -22,12 +22,9 @@ const wrapperStyles = css({
   cursor: 'pointer',
 });
 
-const baseCreatorStyles = css({
+const highlightStyles = css({
   color: cssVar('magicNumberTextColor'),
-  textDecoration: 'underline',
-  textDecorationStyle: 'dashed',
-  textDecorationColor: cssVar('magicNumberTextColor'),
-  textDecorationThickness: 1,
+  borderBottom: `1px dashed ${cssVar('magicNumberTextColor')}`,
 });
 
 interface ExprRefLinkProps {
@@ -96,17 +93,16 @@ export const MagicNumber = ({
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
   return (
-    <span
-      onClick={onClick}
-      css={[wrapperStyles, !readOnly && baseCreatorStyles]}
-    >
+    <span onClick={onClick} css={[wrapperStyles]}>
       <span
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
       >
         <IntrospectMagicNumber expression={expression} readOnly={readOnly}>
           {hasResult ? (
-            <CodeResult tooltip={false} variant="inline" {...result} />
+            <span css={!readOnly && highlightStyles}>
+              <CodeResult tooltip={false} variant="inline" {...result} />
+            </span>
           ) : (
             <span
               css={css({

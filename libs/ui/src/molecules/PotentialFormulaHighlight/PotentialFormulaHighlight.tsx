@@ -1,17 +1,15 @@
 import { LeafAttributes } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { css, CSSObject } from '@emotion/react';
+import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from '../../atoms';
 import { cssVar, p8Regular } from '../../primitives';
 
-const highlightStyles: CSSObject = {
-  textDecoration: 'underline',
-  textDecorationStyle: 'dashed',
-  textDecorationColor: cssVar('normalTextColor'),
-  textDecorationThickness: 1,
+const highlightStyles = css({
   color: cssVar('strongTextColor'),
-};
+  borderBottom: `1px dashed ${cssVar('normalTextColor')}`,
+});
+
 const goToDefStyles = css(p8Regular);
 
 interface PotentialFormulaHighlightProps {
