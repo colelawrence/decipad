@@ -1,56 +1,12 @@
-import { BubbleFormula } from '@decipad/editor-types';
-import {
-  EditingBubble,
-  EditorBubblesContext,
-  useResult,
-} from '@decipad/react-contexts';
-import React, { PropsWithChildren, useCallback, useState } from 'react';
-import { BubbleEditor as UIBubbleEditor } from '@decipad/ui';
+import { EditorBubblesContext } from '@decipad/react-contexts';
+import React, { PropsWithChildren } from 'react';
 
 type BubbleEditorProps = PropsWithChildren<{}>;
 
 export const BubbleEditor: React.FC<BubbleEditorProps> = ({ children }) => {
-  const [editing, setEditing] = useState<EditingBubble>();
-
-  const blockId = editing?.blockId || '';
-
-  const result = useResult(blockId);
-  const codeResult = result?.result;
-
-  const updateFormula = useCallback(
-    (value: Partial<BubbleFormula>) => {
-      if (!editing) return;
-
-      setEditing((old) => {
-        if (!old) return old;
-
-        const formula = {
-          ...editing.formula,
-          ...value,
-        };
-
-        editing.updateValue(formula);
-
-        return { ...old, formula };
-      });
-    },
-    [editing, setEditing]
-  );
-
-  const editorBubblesContextValue = { editing, setEditing, codeResult };
   return (
-    <EditorBubblesContext.Provider value={editorBubblesContextValue}>
+    <EditorBubblesContext.Provider value={{}}>
       {children}
-
-      {editing && (
-        <UIBubbleEditor
-          key={blockId}
-          onChange={updateFormula}
-          defaultName={editing.formula.name}
-          defaultExpr={editing.formula.expression}
-          onClose={() => setEditing(undefined)}
-        />
-      )}
     </EditorBubblesContext.Provider>
   );
 };

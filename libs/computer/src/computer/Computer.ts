@@ -165,6 +165,28 @@ export class Computer {
       results.blockResults[blockId]
   );
 
+  getBlockIdResultOrError$ = listenerHelper(
+    this.results,
+    (
+      results,
+      blockId: string
+    ):
+      | { error: 'syntax-error' | 'missing-block'; result?: undefined }
+      | { error?: undefined; result: Result.Result } => {
+      const result = results.blockResults[blockId]?.result;
+
+      if (result == null) {
+        return {
+          error: this.aggregatedParseErrors.getValue().has(blockId)
+            ? 'syntax-error'
+            : 'missing-block',
+        };
+      }
+
+      return { result };
+    }
+  );
+
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
     this.getVarBlockId(varName)
   );

@@ -50,6 +50,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const editor = useTEditorRef();
+
   useCodeLineClickReference(editor, selected, codeLineContent);
 
   const computer = useComputer();

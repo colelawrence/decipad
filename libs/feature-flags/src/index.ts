@@ -11,11 +11,7 @@ export type Flag =
   | 'FEATURE_REQUEST';
 
 export type Flags = Partial<Record<Flag, boolean>>;
-let overrides: Flags = {
-  // flags already live in prod are set to true here
-  // can also be used to manually disable a flag in development by setting to false
-  INLINE_BUBBLES: false,
-};
+let overrides: Flags = {};
 
 const envDefaults: Record<string, boolean> = {
   test: true,

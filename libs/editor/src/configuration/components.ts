@@ -1,7 +1,6 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
-  ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -30,7 +29,6 @@ import {
   Bold,
   Callout,
   Code,
-  CodeLine,
   Divider,
   Heading1,
   Heading2,
@@ -70,9 +68,6 @@ export const components = (computer: Computer): PlateComponents => ({
   // Media
   [ELEMENT_IMAGE]: Image,
   [ELEMENT_MEDIA_EMBED]: MediaEmbed,
-
-  // Code
-  [ELEMENT_CODE_LINE]: CodeLine,
 
   // Lists
   [ELEMENT_UL]: UnorderedList,

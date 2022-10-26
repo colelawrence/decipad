@@ -39,7 +39,6 @@ export const DEPRECATED_ELEMENT_INPUT = 'input';
 export const ELEMENT_EVAL = 'eval';
 
 // Inlines
-export const ELEMENT_BUBBLE = 'bubble';
 export const ELEMENT_INLINE_NUMBER = 'inline-number';
 
 // tables

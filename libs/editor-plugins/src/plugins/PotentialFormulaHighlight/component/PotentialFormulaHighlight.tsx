@@ -1,21 +1,29 @@
 import { getExprRef } from '@decipad/computer';
 import {
   CodeLineElement,
-  MARK_MAGICNUMBER,
+  ELEMENT_INLINE_NUMBER,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   PlateComponent,
   RichText,
   useTEditorRef,
+  InlineNumberElement,
   MyEditor,
+  MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import { findNodePath, getNodeString, isCollapsed } from '@udecode/plate';
+import {
+  findNodePath,
+  getEndPoint,
+  getNodeString,
+  insertNodes,
+  isCollapsed,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
-import { BaseEditor, Editor, Path, Transforms } from 'slate';
+import { BaseRange, Path, Point } from 'slate';
 import { useSelected } from 'slate-react';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
 
@@ -32,7 +40,8 @@ export const PotentialFormulaHighlight: PlateComponent<{
       return;
     }
 
-    commitPotentialFormula(editor as BaseEditor, path, leaf);
+    // FIXME: Opt out to use inline numbers in ENG-1293
+    commitPotentialFormula(editor, path, leaf, 'magic');
   }, [editor, text, leaf]);
 
   useEffect(() => {
@@ -62,21 +71,12 @@ export const PotentialFormulaHighlight: PlateComponent<{
 };
 
 export const commitPotentialFormula = (
-  editor: BaseEditor,
+  editor: MyEditor,
   path: Path,
   leaf: RichText & PotentialFormulaDecoration,
+  mode: 'magic' | 'inline',
   id = nanoid()
 ) => {
-  const codeLineBelow: CodeLineElement = {
-    type: ELEMENT_CODE_LINE,
-    id,
-    children: [{ text: getNodeString(leaf as RichText) }],
-  };
-  const magicNumberInstead = {
-    [MARK_MAGICNUMBER]: true,
-    text: getExprRef(id),
-  };
-
   const insertionPath = getAboveNodeSafe(editor as MyEditor, {
     at: path,
     match: (x) => isElementOfType(x, ELEMENT_PARAGRAPH),
@@ -84,13 +84,38 @@ export const commitPotentialFormula = (
 
   if (!insertionPath) return;
 
-  Transforms.insertNodes(editor, [magicNumberInstead], {
-    at: {
-      anchor: { path, offset: leaf.location.anchor },
-      focus: { path, offset: leaf.location.focus },
-    },
+  const codeLineBelow: CodeLineElement = {
+    type: ELEMENT_CODE_LINE,
+    id,
+    children: [{ text: getNodeString(leaf as RichText) }],
+  };
+
+  const magicNumberInstead = {
+    [MARK_MAGICNUMBER]: true,
+    text: getExprRef(id),
+  };
+
+  const inlineNumberInstead: InlineNumberElement = {
+    type: ELEMENT_INLINE_NUMBER,
+    id: nanoid(),
+    blockId: id,
+    children: [{ text: '' }],
+  };
+
+  const viewInstead =
+    mode === 'inline' ? inlineNumberInstead : magicNumberInstead;
+
+  const expressionRange: BaseRange = {
+    anchor: { path, offset: leaf.location.anchor },
+    focus: { path, offset: leaf.location.focus },
+  };
+
+  insertNodes(editor, viewInstead, {
+    voids: true,
+    at: expressionRange,
   });
-  Transforms.insertNodes(editor, [codeLineBelow], {
-    at: Editor.end(editor, insertionPath[1]),
-  });
+
+  const currentBlockEnd: Point = getEndPoint(editor, [path[0]]);
+
+  insertNodes(editor, codeLineBelow, { at: currentBlockEnd });
 };

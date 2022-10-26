@@ -2,7 +2,6 @@ import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
 import {
   ElementKind,
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_BUBBLE,
   ELEMENT_CALLOUT,
   DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
@@ -151,23 +150,10 @@ export interface LinkElement extends BaseElement {
   url: string;
 }
 
-export interface BubbleFormula {
-  name: string;
-  expression: string;
-}
-
-export interface BubbleElement extends BaseElement {
-  type: typeof ELEMENT_BUBBLE;
-  opened?: boolean;
-  formula: BubbleFormula;
-  children: [EmptyText];
-}
-
 export interface InlineNumberElement extends BaseElement {
   type: typeof ELEMENT_INLINE_NUMBER;
-  name: string;
-  children: [PlainText];
-  allowEditingName?: boolean;
+  blockId: string;
+  children: [EmptyText];
 }
 
 export interface SmartRefElement extends BaseElement {
@@ -239,11 +225,7 @@ export type BlockElement =
   | DataViewHeader
   | TableColumnFormulaElement;
 
-type InlineElement =
-  | LinkElement
-  | BubbleElement
-  | InlineNumberElement
-  | SmartRefElement;
+type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
 export type MyValue = [
   H1Element,
@@ -253,7 +235,6 @@ export type MyValue = [
     | H3Element
     | ParagraphElement
     | BlockquoteElement
-    | BubbleElement
     | InlineNumberElement
     | SmartRefElement
     | CalloutElement

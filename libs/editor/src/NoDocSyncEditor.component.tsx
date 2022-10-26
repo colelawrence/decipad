@@ -12,7 +12,7 @@ import { FC, useCallback, useContext, useMemo, useState, useRef } from 'react';
 import { MyValue } from '@decipad/editor-types';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Subject } from 'rxjs';
-import { NumberTooltip, Tooltip } from './components';
+import { Tooltip } from './components';
 import * as configuration from './configuration';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
 import { POPULATE_PLAYGROUND } from './utils/storage';
@@ -71,7 +71,6 @@ export const NoDocSyncEditorInternal: FC = () => {
               }}
             >
               <Tooltip />
-              <NumberTooltip />
             </Plate>
           </EditorLayout>
         </LoadingFilter>

@@ -1,6 +1,5 @@
 import {
   ColumnsElement,
-  InlineNumberElement,
   MyEditor,
   ParagraphElement,
   TableElement,
@@ -12,10 +11,7 @@ import {
   ELEMENT_TR,
   ELEMENT_TH,
   ELEMENT_TD,
-  ELEMENT_INLINE_NUMBER,
-  ELEMENT_BUBBLE,
   ELEMENT_CODE_LINE,
-  BubbleElement,
   ELEMENT_VARIABLE_DEF,
   VariableDefinitionElement,
   CodeLineElement,
@@ -119,63 +115,6 @@ describe('editorToProgram', () => {
         (def TableName)
         (table
           ColName (column \\"CellData\\")))"
-    `);
-  });
-
-  it('works with bubbles', async () => {
-    const editor = createPlateEditor() as MyEditor;
-    editor.children = [
-      { type: 'h1', id: '1', children: [{ text: '' }] },
-      {
-        id: 'xqab',
-        type: ELEMENT_INLINE_NUMBER,
-        name: 'inlineNumber',
-        children: [
-          {
-            text: '2 apples',
-          },
-        ],
-      } as InlineNumberElement,
-      {
-        id: 'xqab2',
-        type: ELEMENT_INLINE_NUMBER,
-        name: '',
-        children: [
-          {
-            text: '123 + 4',
-          },
-        ],
-      } as InlineNumberElement,
-      {
-        id: 'dcaqx',
-        type: ELEMENT_BUBBLE,
-        formula: {
-          name: 'inlineBubble',
-          expression: '2 + 2',
-        },
-        opened: false,
-        children: [{ text: '' }],
-      } as BubbleElement,
-    ];
-
-    const { program } = await editorToProgram(editor, new Computer());
-
-    expect(program.length).toBe(3);
-
-    const [inlineNumber, inlineNumber2, inlineBubble] = prettyPrintAll(program);
-
-    expect(inlineNumber).toMatchInlineSnapshot(`
-      "(assign
-        (def inlineNumber)
-        (implicit* 2 (ref apples)))"
-    `);
-
-    expect(inlineNumber2).toMatchInlineSnapshot(`"(+ 123 4)"`);
-
-    expect(inlineBubble).toMatchInlineSnapshot(`
-      "(assign
-        (def inlineBubble)
-        (+ 2 2))"
     `);
   });
 });

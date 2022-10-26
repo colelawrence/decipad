@@ -1,23 +1,8 @@
 import { createContext, useContext } from 'react';
-import { Result } from '@decipad/computer';
-import { BubbleFormula } from '@decipad/editor-types';
 
-export type EditingBubble = {
-  blockId: string;
-  formula: BubbleFormula;
-  deleteBubble(): void;
-  updateValue(newFormula: BubbleFormula): void;
-};
-
-export type EditorBubblesContextValue = Readonly<{
-  editing?: EditingBubble;
-  codeResult?: Result.Result;
-  setEditing(bubble?: EditingBubble): void;
-}>;
-
-const defaultValue: EditorBubblesContextValue = {
-  setEditing() {},
-};
+// DO NOT REMOVE YET, will be used in ENG-1249 (Shadow code lines)
+export type EditorBubblesContextValue = Readonly<{}>;
+const defaultValue: EditorBubblesContextValue = {};
 
 export const EditorBubblesContext =
   createContext<EditorBubblesContextValue>(defaultValue);

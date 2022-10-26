@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import {
   ELEMENT_BLOCKQUOTE,
-  ELEMENT_BUBBLE,
   ELEMENT_CALLOUT,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
@@ -20,11 +19,7 @@ const RICH_TEXT_BLOCK_TYPES = [
   ELEMENT_LIC,
   ELEMENT_CALLOUT,
 ];
-const ALLOWED_CHILD_TYPES = [
-  ELEMENT_LINK,
-  ELEMENT_BUBBLE,
-  ELEMENT_INLINE_NUMBER,
-];
+const ALLOWED_CHILD_TYPES = [ELEMENT_LINK, ELEMENT_INLINE_NUMBER];
 
 const normalizeRichTextBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
   const [node, path] = entry;

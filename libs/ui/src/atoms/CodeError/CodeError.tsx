@@ -4,10 +4,10 @@ import { css } from '@emotion/react';
 import { BracketError } from '@decipad/computer';
 import { Warning } from '../../icons';
 import {
-  red600,
+  red100,
+  red500,
   setCssVar,
   p12Regular,
-  red200,
   white,
   p12Medium,
 } from '../../primitives';
@@ -15,8 +15,8 @@ import { Tooltip } from '..';
 import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
-  ...setCssVar('iconBackgroundColor', red200.rgb),
-  ...setCssVar('currentTextColor', red600.rgb),
+  ...setCssVar('iconBackgroundColor', red100.rgb),
+  ...setCssVar('currentTextColor', red500.rgb),
 
   display: 'inline-flex',
   //
