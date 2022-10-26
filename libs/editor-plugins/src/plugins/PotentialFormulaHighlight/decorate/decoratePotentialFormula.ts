@@ -9,7 +9,6 @@ import {
   filterDecorate,
   memoizeDecorate,
 } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { isText } from '@udecode/plate';
 import { findPotentialFormulas } from './findPotentialFormulas';
 import { PotentialFormulaDecoration } from './interface';
@@ -19,10 +18,6 @@ export const decoratePotentialFormula = filterDecorate(
     () =>
       ([node, parentPath]): (PotentialFormulaDecoration & Range)[] => {
         assertElementType(node, ELEMENT_PARAGRAPH);
-
-        if (!isFlagEnabled('POTENTIAL_FORMULA_DETECTION')) {
-          return [];
-        }
 
         return node.children.flatMap((child, index) => {
           if (!isText(child) || child[MARK_MAGICNUMBER]) {

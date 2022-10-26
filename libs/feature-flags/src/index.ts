@@ -1,7 +1,6 @@
 export type Flag =
   | 'INPUT_COPY'
   | 'INLINE_BUBBLES'
-  | 'POTENTIAL_FORMULA_DETECTION'
   | 'EXPR_REFS'
   | 'UNSAFE_JS_EVAL'
   | 'COPY_HREF'
