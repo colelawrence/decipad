@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useObservable } from 'rxjs-hooks';
 import {
   isInteractionOfType,
+  useComputer,
   useEditorUserInteractions,
   useEditorUserInteractionsContext,
   UserInteraction,
@@ -86,39 +87,47 @@ export const useInteractiveMenu = (
     [editor, element]
   );
 
+  const computer = useComputer();
+
   const onInteractionMenuExecute = useCallback(
-    (command: string) => {
+    async (command: string) => {
       setShowInteractionMenu(false);
       switch (command) {
-        case 'import': {
+        case 'import-all':
+        case 'import-islands': {
           if (
             isInteractionOfType(lastInterestingUserInteraction, 'pasted-link')
           ) {
-            insertImport(
+            await insertImport({
+              computer,
               editor,
-              lastInterestingUserInteraction.source,
-              lastInterestingUserInteraction.url
-            );
+              source: lastInterestingUserInteraction.source,
+              url: lastInterestingUserInteraction.url,
+              identifyIslands: command === 'import-islands',
+            });
             setLastInterestingUserInteraction(undefined);
           }
           break;
         }
-        case 'connect': {
+        case 'connect-all':
+        case 'connect-islands': {
           if (
             isInteractionOfType(lastInterestingUserInteraction, 'pasted-link')
           ) {
-            insertLiveConnection(
+            await insertLiveConnection({
+              computer,
               editor,
-              lastInterestingUserInteraction.source,
-              lastInterestingUserInteraction.url
-            );
+              source: lastInterestingUserInteraction.source,
+              url: lastInterestingUserInteraction.url,
+              identifyIslands: command === 'connect-islands',
+            });
             setLastInterestingUserInteraction(undefined);
           }
         }
       }
       cleanupAfterCommand(lastInterestingUserInteraction);
     },
-    [cleanupAfterCommand, editor, lastInterestingUserInteraction]
+    [cleanupAfterCommand, computer, editor, lastInterestingUserInteraction]
   );
 
   const onKeyDown = useCallback(

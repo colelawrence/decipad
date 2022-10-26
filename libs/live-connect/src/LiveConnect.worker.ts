@@ -44,7 +44,7 @@ const tryImportHere = async (
   const sub = subscriptions.get(subscriptionId);
   if (sub) {
     try {
-      const result = await tryImport(
+      const results = await tryImport(
         computer,
         new URL(sub.params.url),
         sub.params.source,
@@ -53,7 +53,9 @@ const tryImportHere = async (
           columnTypeCoercions: sub.params.columnTypeCoercions,
         }
       );
-      sub.notify(result);
+      for (const result of results) {
+        sub.notify(result);
+      }
     } catch (err) {
       console.error(
         `subscription ${subscriptionId}: caught error while trying to import from ${sub.params.url}`,
@@ -71,7 +73,7 @@ const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
   if (sub) {
     setTimeout(
       () => tryImportHere(computer, subscriptionId),
-      (sub.params.pollIntervalSeconds || 10) * 1000
+      (sub.params.pollIntervalSeconds || 30) * 1000
     );
   }
 };

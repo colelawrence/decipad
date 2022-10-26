@@ -9,6 +9,7 @@ import { decipad, gsheets } from './providers';
 import { ImportResult } from './types';
 
 export interface ImportOptions {
+  identifyIslands?: boolean;
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions?: Record<ColIndex, TableCellType>;
   doNotTryExpressionNumbersParse?: boolean;
@@ -19,7 +20,7 @@ export const tryImport = (
   url: URL,
   provider?: ImportElementSource,
   options: ImportOptions = {}
-): Promise<ImportResult> => {
+): Promise<ImportResult[]> => {
   if (provider) {
     switch (provider) {
       case 'gsheets':

@@ -4,7 +4,7 @@ import { SheetMeta } from '../../types';
 
 export const getDataUrlFromSheetMeta = (
   sheetId: string,
-  gid: number | undefined,
+  gid: string,
   sheetMeta: SheetMeta
 ): URL => {
   const { googleSheets } = thirdParty();
@@ -15,14 +15,16 @@ export const getDataUrlFromSheetMeta = (
     key: googleSheets.apiKey,
   });
 
-  const subSheet = sheetMeta.sheets.find(
-    (sheet) => sheet.properties.sheetId === gid
-  );
-  const subSheetName = subSheet?.properties.title ?? 'Sheet1';
+  const subSheet =
+    sheetMeta.sheets.find((sheet) => sheet.properties.sheetId === gid) ??
+    sheetMeta.sheets[Number(gid)];
+
+  const subSheetName =
+    (subSheet?.properties.title &&
+      encodeURIComponent(subSheet.properties.title)) ??
+    gid;
 
   return new URL(
-    `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(
-      subSheetName
-    )}?${qs}`
+    `https://content-sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${subSheetName}?${qs}`
   );
 };

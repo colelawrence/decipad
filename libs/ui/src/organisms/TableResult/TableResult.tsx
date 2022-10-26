@@ -40,6 +40,10 @@ const liveTableOverflowStyles = css({
   minWidth: `calc(((100vw - 700px) / 2) - (${tableControlWidth} * -2))`,
 });
 
+const liveTableEmptyCellStyles = css({
+  border: 0,
+});
+
 export const TableResult = ({
   parentType,
   type,
@@ -151,6 +155,9 @@ export const TableResult = ({
                   false
                 }
               >
+                {isLiveResult && rowIndex > 0 && (
+                  <th css={liveTableEmptyCellStyles}></th>
+                )}
                 {value.map((column, colIndex) => (
                   <TableData
                     key={colIndex}

@@ -6,6 +6,7 @@ import { getSheetMeta } from './getSheetMeta';
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
 import { getDataUrlFromSheetMeta } from './getDataUrlFromSheetUrl';
 import { trimSheet } from '../../utils/trimSheet';
+import { findAllIslands } from '../../utils/sheetIslands';
 
 const errorResult = (err: string): ImportResult => {
   return {
@@ -28,17 +29,70 @@ const handleGsheetsResponse = async (
   options: ImportOptions
 ): Promise<Result.Result<'table'>> => {
   const body = (await resp.json()) as unknown as Sheet;
-  return inferTable(computer, trimSheet(body), {
+  const trimmedBody = options.identifyIslands ? body : trimSheet(body);
+  return inferTable(computer, trimmedBody, {
     ...options,
     doNotTryExpressionNumbersParse: true,
   });
 };
 
-export const importGsheet = async (
+const loadSheet =
+  (computer: Computer, options: ImportOptions) => async (url: URL) => {
+    return handleGsheetsResponse(computer, await fetch(url), options);
+  };
+
+const loadAllSubsheets = async (
   computer: Computer,
   importURL: URL,
   options: ImportOptions
-): Promise<ImportResult> => {
+): Promise<ImportResult[]> => {
+  const { sheetId, gid } = getSheetRequestDataFromUrl(importURL);
+  const meta = await getSheetMeta(sheetId);
+  const loader = loadSheet(computer, options);
+  const results: ImportResult[] = [];
+  for (const subsheet of meta.sheets) {
+    const url = getDataUrlFromSheetMeta(
+      meta.spreadsheetId,
+      subsheet.properties.sheetId,
+      meta
+    );
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await loader(url);
+      const subMeta: ImportResult['meta'] = {
+        title: subsheet.properties.title,
+        importedAt: new Date(),
+        sourceUrl: url,
+        sheetId,
+        gid,
+        sourceMeta: meta,
+      };
+      results.push({
+        meta: subMeta,
+        result: result as Result.Result,
+      });
+    } catch (err) {
+      results.push(errorResult((err as Error).message));
+    }
+  }
+  return results;
+};
+
+const importGsheetIslands = async (
+  computer: Computer,
+  importURL: URL,
+  options: ImportOptions
+): Promise<ImportResult[]> => {
+  return (await loadAllSubsheets(computer, importURL, options)).flatMap(
+    findAllIslands
+  );
+};
+
+const importOneGsheet = async (
+  computer: Computer,
+  importURL: URL,
+  options: ImportOptions
+) => {
   const { sheetId, gid } = getSheetRequestDataFromUrl(importURL);
   const meta = await getSheetMeta(sheetId);
   const url = await getDataUrlFromSheetMeta(sheetId, gid, meta);
@@ -46,10 +100,10 @@ export const importGsheet = async (
   try {
     resp = await fetch(url);
   } catch (err) {
-    return errorResult((err as Error).message);
+    return [errorResult((err as Error).message)];
   }
   if (!resp.ok) {
-    return errorResult(resp.statusText);
+    return [errorResult(resp.statusText)];
   }
   const result = (await handleGsheetsResponse(
     computer,
@@ -57,11 +111,25 @@ export const importGsheet = async (
     options
   )) as Result.Result;
 
-  return {
-    meta: {
-      title: meta.properties.title,
-      importedAt: new Date(),
+  return [
+    {
+      meta: {
+        title: meta.properties.title,
+        importedAt: new Date(),
+      },
+      result,
     },
-    result,
-  };
+  ];
+};
+
+export const importGsheet = async (
+  computer: Computer,
+  importURL: URL,
+  options: ImportOptions
+): Promise<ImportResult[]> => {
+  return (options.identifyIslands ? importGsheetIslands : importOneGsheet)(
+    computer,
+    importURL,
+    options
+  );
 };

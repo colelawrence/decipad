@@ -8,8 +8,9 @@ export interface Provider {
 }
 
 export interface SheetMeta {
+  spreadsheetId: string;
   properties: {
-    sheetId: number;
+    sheetId: string;
     title: string;
   };
   sheets: SheetMeta[];
@@ -33,6 +34,9 @@ export interface ImportResultMeta {
   title?: string;
   sourceUrl?: URL;
   importedAt?: Date;
+  sheetId?: string;
+  gid?: string;
+  sourceMeta?: SheetMeta;
 }
 
 export interface ImportResult {

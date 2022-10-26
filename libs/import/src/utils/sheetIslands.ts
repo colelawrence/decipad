@@ -1,0 +1,170 @@
+/* eslint-disable no-param-reassign */
+import { Result } from '@decipad/computer';
+import { getDefined } from '@decipad/utils';
+import { dequal } from 'dequal';
+import { getDataRangeUrlFromSheet } from '../providers/gsheets/getDataRangeUrlFromSheet';
+import { ImportResult } from '../types';
+import { matrix } from './matrix';
+
+const neighbourDiffs = [
+  [-1, -1],
+  [0, -1],
+  [1, -1],
+  [-1, 0],
+  [1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
+] as const;
+
+export interface Island {
+  firstCol: number;
+  firstRow: number;
+  lastCol: number;
+  lastRow: number;
+}
+
+const makeIsland = (col: number, row: number): Island => {
+  return {
+    firstCol: col,
+    lastCol: col,
+    firstRow: row,
+    lastRow: row,
+  };
+};
+
+const islandExtension = (
+  island: Island,
+  newCol: number,
+  newRow: number
+): Island => ({
+  firstCol: Math.min(newCol, island.firstCol),
+  lastCol: Math.max(newCol, island.lastCol),
+  firstRow: Math.min(newRow, island.firstRow),
+  lastRow: Math.max(newRow, island.lastRow),
+});
+
+const islandToResult =
+  (sheet: Result.Result<'table'>) =>
+  (island: Island): Result.Result => ({
+    type: {
+      ...sheet.type,
+      columnNames: sheet.type.columnNames.slice(
+        island.firstCol,
+        island.lastCol + 1
+      ),
+      columnTypes: sheet.type.columnTypes.slice(
+        island.firstCol,
+        island.lastCol + 1
+      ),
+      tableLength: island.lastRow - island.firstRow + 1,
+    },
+    value: sheet.value
+      .filter(
+        (_, columnIndex) =>
+          columnIndex >= island.firstCol && columnIndex <= island.lastCol
+      )
+      .map((column) => column.slice(island.firstRow, island.lastRow + 1)),
+  });
+
+const partition = (imported: ImportResult): ImportResult[] => {
+  if (imported.result.type.kind !== 'table') {
+    return [];
+  }
+  const sheet = imported.result as Result.Result<'table'>;
+  const columnCount = sheet.type.columnTypes.length;
+  const rowCount = Math.max(...sheet.value.map((col) => col.length));
+  const visited = matrix(columnCount, rowCount, false);
+
+  const { value: sheetColumns } = sheet;
+
+  const islands = new Set<Island>();
+
+  const extendIsland = (island: Island, colIndex: number, rowIndex: number) => {
+    const extension = islandExtension(island, colIndex, rowIndex);
+    if (dequal(island, extension)) {
+      return island;
+    }
+    islands.delete(island);
+    islands.add(extension);
+    return extension;
+  };
+
+  const withinRange = (colIndex: number, rowIndex: number): boolean => {
+    return (
+      colIndex >= 0 &&
+      colIndex < columnCount &&
+      rowIndex >= 0 &&
+      rowIndex < rowCount
+    );
+  };
+
+  const hasValue = (col: number, row: number): boolean => {
+    const value = sheetColumns[col][row];
+    if (value == null) {
+      return false;
+    }
+    if (typeof value === 'string') {
+      return value.trim().length > 0;
+    }
+    if (typeof value === 'number') {
+      return true;
+    }
+    return false;
+  };
+
+  const visitNeighbours = (col: number, row: number, currentIsland: Island) => {
+    for (const diff of neighbourDiffs) {
+      const nextColIndex = col + diff[0];
+      const nextRowIndex = row + diff[1];
+      if (!withinRange(nextColIndex, nextRowIndex)) {
+        continue;
+      }
+      if (
+        !visited[nextColIndex][nextRowIndex] &&
+        hasValue(nextColIndex, nextRowIndex)
+      ) {
+        visited[nextColIndex][nextRowIndex] = true;
+        visitNeighbours(
+          nextColIndex,
+          nextRowIndex,
+          extendIsland(currentIsland, nextColIndex, nextRowIndex)
+        );
+      }
+    }
+  };
+
+  for (let col = 0; col < columnCount; col += 1) {
+    for (let row = 0; row < rowCount; row += 1) {
+      if (!visited[col][row] && hasValue(col, row)) {
+        const island = makeIsland(col, row);
+        islands.add(island);
+        visited[col][row] = true;
+        visitNeighbours(col, row, island);
+      }
+    }
+  }
+
+  const newResults = [...islands].map((island) => {
+    const result = islandToResult(sheet)(island);
+    const meta = getDefined(imported.meta);
+    const { sheetId, gid } = meta;
+    return {
+      result,
+      meta: {
+        ...meta,
+        sourceUrl: getDataRangeUrlFromSheet(
+          getDefined(sheetId),
+          gid,
+          getDefined(meta.sourceMeta),
+          island
+        ),
+      },
+    };
+  });
+
+  return newResults;
+};
+
+export const findAllIslands = (sheet: ImportResult): ImportResult[] =>
+  partition(sheet);

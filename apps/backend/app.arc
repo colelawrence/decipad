@@ -35,6 +35,7 @@ get /api/pads/:padid/attachments/:attachmentid
 any /api/pads/:padid/export
 post /api/discord
 get /api/ws
+get /api/import/url
 
 @static
 folder public

@@ -13,8 +13,10 @@ import {
   StarterChecklistStateChange,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
+import { insertLiveConnection } from 'libs/editor-components/src/InteractiveParagraph/insertLiveConnection';
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   EditorUserInteractionsProvider,
   useEditorUserInteractionsContext,
@@ -147,6 +149,23 @@ const InsideNotebookState = ({
       toast(warning as string, 'warning', { autoDismiss: false });
     }
   }, [editor, hasLocalChanges, toast, toastedWarning, warning]);
+
+  // import external doc
+  const { search } = useLocation();
+  const qs = useMemo(() => new URLSearchParams(search), [search]);
+  useEffect(() => {
+    const importThing = qs.get('import');
+    if (loaded && computer && editor && importThing) {
+      (async () => {
+        await insertLiveConnection({
+          computer,
+          editor,
+          source: 'gsheets',
+          url: importThing,
+        });
+      })();
+    }
+  }, [computer, editor, loaded, qs]);
 
   if (editor) {
     return (

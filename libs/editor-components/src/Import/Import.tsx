@@ -41,18 +41,25 @@ export const Import: PlateComponent = ({ attributes, element }) => {
             new URL(element.url),
             element.source
           );
+          if (imported.length > 0) {
+            setError(undefined);
+            setResult(imported[0]);
+          } else {
+            setError(`Could not load from ${element.url}`);
+          }
+          const firstImported = imported[0];
           if (
-            imported.result.type.kind === 'table' &&
-            imported.result.type.tableLength !== 'unknown' &&
-            imported.result.type.tableLength *
-              imported.result.type.columnTypes.length >
+            firstImported.result.type.kind === 'table' &&
+            firstImported.result.type.tableLength !== 'unknown' &&
+            firstImported.result.type.tableLength *
+              firstImported.result.type.columnTypes.length >
               MAX_IMPORT_CELL_COUNT
           ) {
             setError(
               'This table is too big to import. Please use a live connection instead.'
             );
           } else {
-            setResult(imported);
+            setResult(firstImported);
           }
         } catch (err) {
           console.error('Error caught while importing', err);

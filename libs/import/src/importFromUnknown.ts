@@ -10,7 +10,7 @@ const importFromUnknownResponse = async (
   resp: Response,
   options: ImportOptions,
   url?: URL
-): Promise<ImportResult> => {
+): Promise<ImportResult[]> => {
   const contentType = resp.headers.get('content-type');
   let result: Result.Result | undefined;
   if (contentType?.startsWith('application/json')) {
@@ -28,19 +28,21 @@ const importFromUnknownResponse = async (
     };
   }
 
-  return {
-    meta: {
-      sourceUrl: url,
+  return [
+    {
+      meta: {
+        sourceUrl: url,
+      },
+      result,
     },
-    result,
-  };
+  ];
 };
 
 const importFromUnknownUrl = async (
   computer: Computer,
   url: URL,
   options: ImportOptions = {}
-): Promise<ImportResult> => {
+): Promise<ImportResult[]> => {
   try {
     return importFromUnknownResponse(computer, await fetch(url), options, url);
   } catch (err) {
@@ -54,7 +56,7 @@ export const importFromUnknown = (
   computer: Computer,
   source: URL | Response,
   options: ImportOptions
-): Promise<ImportResult> => {
+): Promise<ImportResult[]> => {
   if (source instanceof URL) {
     return importFromUnknownUrl(computer, source, options);
   }
