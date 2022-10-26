@@ -96,6 +96,7 @@ const InsideNotebookState = ({
       initEditor(notebookId, {
         plugins,
         docsync: {
+          readOnly,
           authSecret: secret,
           connectionParams,
           initialState,
@@ -111,6 +112,7 @@ const InsideNotebookState = ({
     initialState,
     notebookId,
     plugins,
+    readOnly,
     secret,
   ]);
 

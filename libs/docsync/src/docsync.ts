@@ -89,7 +89,9 @@ export function createDocSyncEditor(
 
   let wsp: TWebSocketProvider | undefined;
   let awareness: Awareness | undefined;
-  if (ws) {
+
+  const startWebsocket = ws && (!readOnly || !initialState);
+  if (startWebsocket) {
     wsp = createWebsocketProvider(doc, {
       WebSocketPolyfill,
       readOnly,
@@ -148,7 +150,7 @@ export function createDocSyncEditor(
   let loadedLocally = false;
   let loadedRemotely = false;
 
-  const onLoaded = (source: string) => {
+  const onLoaded = (source: 'remote' | 'local') => {
     if (!loadedRemotely && (!ws || source === 'remote')) {
       ensureInitialDocument(editor);
     }
