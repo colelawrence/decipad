@@ -44,3 +44,4 @@ export { UnitMenuItem } from './UnitMenuItem/UnitMenuItem';
 export { UnorderedList } from './UnorderedList/UnorderedList';
 export { VariableNameSelector } from './VariableNameSelector/VariableNameSelector';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
+export { NotebookState } from './NotebookState/NotebookState';

@@ -176,6 +176,7 @@ const InsideNotebookState = ({
           <Editor
             notebookId={notebookId}
             loaded={loaded}
+            isSavedRemotely={editor.isSavedRemotely()}
             editor={editor}
             readOnly={readOnly}
           >

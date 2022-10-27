@@ -40,11 +40,12 @@ export function docSyncEditor<E extends MyEditor>(
     ws.on('synced', function onWsSynced(synced: boolean) {
       if (synced) {
         events.emit('loaded', 'remote');
+        isSavedRemotely.next(true);
       }
     });
     ws.on('saved', function onWsSaved() {
       events.emit('saved', 'remote');
-      isSavedRemotely.next(false);
+      isSavedRemotely.next(true);
     });
     ws.on('status', function onWsStatus(event: StatusEvent) {
       if (event.status === 'connected') {

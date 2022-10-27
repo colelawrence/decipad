@@ -84,8 +84,9 @@ const baseStyles = css(p14Regular, {
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
 
   padding: '6px 12px',
-  marginRight: '58px', // HACK so toasts are not on top of <HelpMenu>.
-  marginBottom: '8px',
+  // HACK: So the toast is above the help button and undo component.
+  marginRight: '8px',
+  marginBottom: '64px',
   maxWidth: '350px',
   gap: '6px',
 });

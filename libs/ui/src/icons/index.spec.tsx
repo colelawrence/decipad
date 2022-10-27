@@ -30,6 +30,7 @@ describe.each(iconExports)('the %s icon', (_name, Icon) => {
         type="expand"
         direction="right"
         variant="down"
+        active={true}
       />
     );
     expect(screen.getByTitle(/.+/)).toBeInTheDocument();
@@ -42,6 +43,7 @@ describe.each(iconExports)('the %s icon', (_name, Icon) => {
         type="expand"
         direction="right"
         variant="down"
+        active={true}
       />
     );
     const svg = container.querySelector('svg, span');

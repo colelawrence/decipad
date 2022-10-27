@@ -12,7 +12,7 @@ import {
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
 import { MyEditor, MyValue } from '@decipad/editor-types';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { EditorLayout } from 'libs/ui/src/atoms';
@@ -20,10 +20,12 @@ import * as components from './components';
 import { useWriteLock } from './utils/useWriteLock';
 import { useAutoAnimate } from './hooks';
 import { DndPreview } from './components/DndPreview/DndPreview';
+import { NotebookState } from './components/NotebookState/NotebookState';
 
 export interface EditorProps {
   notebookId: string;
   loaded: boolean;
+  isSavedRemotely: BehaviorSubject<boolean>;
   readOnly: boolean;
   editor: MyEditor;
   children?: ReactNode;
@@ -50,7 +52,7 @@ const InsidePlate = ({
  * TODO: remove Plate.id after plate patch
  */
 export const Editor = (props: EditorProps) => {
-  const { loaded, editor, readOnly } = props;
+  const { loaded, isSavedRemotely, editor, readOnly } = props;
 
   // Cursor remote presence
   // useCursors(editor);
@@ -102,6 +104,7 @@ export const Editor = (props: EditorProps) => {
                     />
                   )}
                 <InsidePlate {...props} containerRef={containerRef} />
+                <NotebookState isSavedRemotely={isSavedRemotely} />
               </Plate>
             </EditorLayout>
           </EditorBlockParentRefProvider>
