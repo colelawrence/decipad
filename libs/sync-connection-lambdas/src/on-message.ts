@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
 import { ws } from '@architect/functions';
@@ -16,6 +17,7 @@ import {
   parsePermissionType,
 } from '@decipad/services/authorization';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { captureException } from '@decipad/backend-trace';
 
 type ErrorWithCode = Error & {
   code: string;
@@ -108,7 +110,7 @@ async function processMessage(
   doc.destroy();
 }
 
-export async function onMessage(
+export async function _onMessage(
   connId: string,
   message: Uint8Array
 ): Promise<APIGatewayProxyResultV2> {
@@ -146,3 +148,12 @@ export async function onMessage(
 
   return { statusCode: 200 };
 }
+
+export const onMessage = async (connId: string, message: Uint8Array) => {
+  try {
+    return await _onMessage(connId, message);
+  } catch (err) {
+    await captureException(err as Error);
+    return { statusCode: 200 };
+  }
+};

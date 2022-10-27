@@ -12,6 +12,7 @@
     { "path": "../y-websocket" },
     { "path": "../y-dynamodb" },
     { "path": "../y-lambdawebsocket" },
-    { "path": "../backendtypes" }
+    { "path": "../backendtypes" },
+    { "path": "../backend-trace" }
   ]
 }
