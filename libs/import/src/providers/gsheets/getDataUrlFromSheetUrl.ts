@@ -4,7 +4,7 @@ import { SheetMeta } from '../../types';
 
 export const getDataUrlFromSheetMeta = (
   sheetId: string,
-  gid: string,
+  gid: number,
   sheetMeta: SheetMeta
 ): URL => {
   const { googleSheets } = thirdParty();
@@ -16,8 +16,11 @@ export const getDataUrlFromSheetMeta = (
   });
 
   const subSheet =
-    sheetMeta.sheets.find((sheet) => sheet.properties.sheetId === gid) ??
-    sheetMeta.sheets[Number(gid)];
+    sheetMeta.sheets.find(
+      (sheet) =>
+        sheet.properties.sheetId === gid ||
+        sheet.properties.sheetId === Number(gid)
+    ) ?? sheetMeta.sheets[Number(gid)];
 
   const subSheetName =
     (subSheet?.properties.title &&

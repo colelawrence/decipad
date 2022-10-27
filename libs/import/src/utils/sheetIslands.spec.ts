@@ -13,7 +13,7 @@ const sheetToResult = (
       sourceMeta: {
         spreadsheetId: 'sheetid',
         properties: {
-          sheetId: '1',
+          sheetId: 1,
           title: 'title',
         },
         sheets: [],
@@ -56,7 +56,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],
@@ -96,7 +96,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],
@@ -170,7 +170,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],
@@ -223,7 +223,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],
@@ -293,7 +293,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],
@@ -346,7 +346,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],
@@ -428,7 +428,7 @@ describe('findAllIslands', () => {
             "sheetId": "sheetid",
             "sourceMeta": Object {
               "properties": Object {
-                "sheetId": "1",
+                "sheetId": 1,
                 "title": "title",
               },
               "sheets": Array [],

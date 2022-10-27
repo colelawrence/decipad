@@ -12,7 +12,7 @@ const islandToRange = (sheetName: string, island: Island): string => {
 
 export const getDataRangeUrlFromSheet = (
   sheetId: string,
-  gid: string | undefined,
+  gid: number | undefined,
   sheetMeta: SheetMeta,
   island: Island
 ): URL => {
@@ -24,9 +24,12 @@ export const getDataRangeUrlFromSheet = (
     key: googleSheets.apiKey,
   });
 
-  const subSheet = sheetMeta.sheets.find(
-    (sheet) => sheet.properties.sheetId === gid
-  );
+  const subSheet =
+    sheetMeta.sheets.find(
+      (sheet) =>
+        sheet.properties.sheetId === gid ||
+        sheet.properties.sheetId === Number(gid)
+    ) ?? sheetMeta.sheets[Number(gid)];
   const subSheetName = subSheet?.properties.title ?? 'Sheet1';
 
   const range = islandToRange(subSheetName, island);

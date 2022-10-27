@@ -10,7 +10,7 @@ export interface Provider {
 export interface SheetMeta {
   spreadsheetId: string;
   properties: {
-    sheetId: string;
+    sheetId: number;
     title: string;
   };
   sheets: SheetMeta[];
@@ -35,7 +35,7 @@ export interface ImportResultMeta {
   sourceUrl?: URL;
   importedAt?: Date;
   sheetId?: string;
-  gid?: string;
+  gid?: number;
   sourceMeta?: SheetMeta;
 }
 

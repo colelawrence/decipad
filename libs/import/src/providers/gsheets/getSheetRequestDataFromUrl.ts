@@ -1,6 +1,6 @@
 export interface SheetRequestData {
   sheetId: string;
-  gid: string;
+  gid: number;
 }
 
 const getSheetRequestDataFromApiUrl = (sheetUrl: URL): SheetRequestData => {
@@ -14,7 +14,7 @@ const getSheetRequestDataFromApiUrl = (sheetUrl: URL): SheetRequestData => {
 
   const [, sheetId, gid] = match;
 
-  return { sheetId, gid };
+  return { sheetId, gid: Number(gid) };
 };
 
 const getSheetRequestDataFromUserUrl = (sheetUrl: URL): SheetRequestData => {
@@ -30,7 +30,7 @@ const getSheetRequestDataFromUserUrl = (sheetUrl: URL): SheetRequestData => {
   const hashMatch = sheetUrl.hash.match(/gid=([0-9]+)/);
   const gid = (hashMatch && hashMatch[1]) ?? '';
 
-  return { sheetId, gid };
+  return { sheetId, gid: Number(gid) };
 };
 
 export const getSheetRequestDataFromUrl = (sheetUrl: URL): SheetRequestData => {
