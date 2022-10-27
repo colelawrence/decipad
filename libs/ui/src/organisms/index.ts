@@ -18,6 +18,7 @@ export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';
 export { InlineRowResult } from './InlineRowResult/InlineRowResult';
 export { InlineMenu } from './InlineMenu/InlineMenu';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
+export { NotebookPublishingPopUp } from './NotebookPublishingPopUp/NotebookPublishingPopUp';
 export { NotebookSharingPopUp } from './NotebookSharingPopUp/NotebookSharingPopUp';
 export { PlotBlock } from './PlotBlock/PlotBlock';
 export { PlotParams } from './PlotParams/PlotParams';
