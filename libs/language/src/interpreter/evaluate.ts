@@ -1,5 +1,5 @@
 import pSeries from 'p-series';
-import { AST } from '..';
+import { AST, prettyPrintAST } from '..';
 import { callBuiltin, getConstantByName } from '../builtins';
 import {
   getOfType,
@@ -130,7 +130,10 @@ export async function evaluate(
         });
       } else {
         const argTypes = funcArgs.map((arg) =>
-          getDefined(realm.inferContext.nodeTypes.get(arg))
+          getDefined(
+            realm.inferContext.nodeTypes.get(arg),
+            () => `Could not get type for node ${prettyPrintAST(arg)}`
+          )
         );
         const returnType = getDefined(realm.inferContext.nodeTypes.get(node));
         return callBuiltin(realm, funcName, args, argTypes, returnType);

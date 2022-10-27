@@ -303,12 +303,16 @@ export const getIdentifierString = (node: AST.Identifier): string => {
   return args[0];
 };
 
+export type ErrorMessage = string | (() => string);
+
 export const getDefined = <T>(
   anything: T | null | undefined,
-  message = 'getDefined did not expect null or undefined'
+  message: ErrorMessage = 'getDefined did not expect null or undefined'
 ): T => {
   if (anything == null) {
-    throw new Error(`panic: ${message}`);
+    throw new Error(
+      `panic: ${typeof message === 'function' ? message() : message}`
+    );
   } else {
     return anything;
   }

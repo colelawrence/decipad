@@ -2205,3 +2205,56 @@ describe('percentages', () => {
     `);
   });
 });
+
+describe('tiered function', () => {
+  it('works with no units', async () => {
+    const tiered = `
+    BaseValue = 4
+    T(x) = tiered x {
+      2: tier * BaseValue * 2
+      4: tier * BaseValue * 1
+      6: tier * BaseValue * 20
+    }
+    T(5)`;
+    expect(await runCode(tiered)).toMatchInlineSnapshot(`
+      Object {
+        "type": number,
+        "value": Fraction(104),
+      }
+    `);
+  });
+
+  it('works with units', async () => {
+    const tiered = `
+    BaseValue = 4 EUR / interview * month
+    T(x) = tiered x {
+      2 interviews/month: tier * BaseValue * 2
+      4 interviews/month: tier * BaseValue * 1
+      6 interviews/month: tier * BaseValue * 20
+    }
+    T(5 interviews/month)`;
+    expect(await runCode(tiered)).toMatchInlineSnapshot(`
+      Object {
+        "type": EUR,
+        "value": Fraction(104),
+      }
+    `);
+  });
+
+  it('works with unit conversions', async () => {
+    const tiered = `
+    BaseValue = 4 EUR / interview * month
+    T(x) = tiered x {
+      2 interviews/month: tier * BaseValue * 2
+      4 interviews/month: tier * BaseValue * 1
+      6 interviews/month: tier * BaseValue * 20
+    }
+    T(60 interviews/year)`;
+    expect(await runCode(tiered)).toMatchInlineSnapshot(`
+      Object {
+        "type": EUR,
+        "value": Fraction(104),
+      }
+    `);
+  });
+});

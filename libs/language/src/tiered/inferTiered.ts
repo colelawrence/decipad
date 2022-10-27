@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import { Context, inferExpression } from '../infer';
 import { AST } from '../parser';
-import { Type } from '../type';
+import { Type, build as t } from '../type';
 import { getIdentifierString } from '../utils';
 
 export const predicateSymbols = new Set(['rest', 'max', 'min']);
@@ -23,15 +23,17 @@ const inferTieredDef = async (
     ctx.stack.set('slice', initialType);
 
     const [condition, result] = def.args;
+    let conditionType: Type | undefined;
     if (!isPredicate(condition)) {
-      const conditionType = (await inferExpression(ctx, condition)).isScalar(
-        'number'
-      );
-      if (conditionType.errorCause) {
-        return conditionType;
-      }
+      conditionType = (await inferExpression(ctx, condition))
+        .isScalar('number')
+        .sameAs(initialType);
     }
-    return inferExpression(ctx, result);
+    const resultType = await inferExpression(ctx, result);
+    if (conditionType?.errorCause) {
+      return conditionType;
+    }
+    return resultType;
   });
 };
 
@@ -40,15 +42,14 @@ export const inferTiered = async (
   node: AST.Tiered
 ): Promise<Type> => {
   const [initial, ...tieredDefs] = node.args;
-  const initialType = (await inferExpression(ctx, initial)).isScalar('number');
-  if (initialType.errorCause) {
-    return initialType;
-  }
+  const argType = (await inferExpression(ctx, initial)).isScalar('number');
 
-  return tieredDefs.reduce(async (type, def) => {
-    const initialType = await type;
-    return initialType
-      .sameAs(await inferTieredDef(initialType, ctx, def))
-      .isScalar('number');
-  }, Promise.resolve(initialType));
+  if (!tieredDefs.length) {
+    return t.impossible('tiered definitions are empty');
+  }
+  return (
+    await Promise.all(
+      tieredDefs.map((def) => inferTieredDef(argType, ctx, def))
+    )
+  ).reduce((type, other) => type.sameAs(other));
 };

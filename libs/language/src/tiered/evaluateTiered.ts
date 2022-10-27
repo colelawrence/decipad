@@ -9,7 +9,9 @@ import {
   Value,
 } from '../interpreter';
 import { AST } from '../parser';
-import { getIdentifierString, getInstanceof } from '../utils';
+import { Type } from '../type';
+import { convertBetweenUnits } from '../units';
+import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { predicateSymbols } from './inferTiered';
 
 interface Predicates {
@@ -39,31 +41,7 @@ const collectTieredDef = (
   return [predicateOrTier, result];
 };
 
-const evaluateTier = async (
-  realm: Realm,
-  tierValueExp: AST.Expression,
-  tierSize: FFraction
-): Promise<FFraction> => {
-  return realm.stack.withPush(async () => {
-    const tierSizeValue = FractionValue.fromValue(tierSize);
-    realm.stack.set('tier', tierSizeValue);
-    realm.stack.set('slice', tierSizeValue);
-    return getInstanceof(
-      (await evaluate(realm, tierValueExp)).getData(),
-      FFraction
-    );
-  });
-};
-
-export const evaluateTiered = async (
-  realm: Realm,
-  node: AST.Tiered
-): Promise<Value> => {
-  const [initial, ...tierDefs] = node.args;
-  const initialNumber = getInstanceof(
-    (await evaluate(realm, initial)).getData(),
-    FFraction
-  );
+const collectDefs = (tierDefs: AST.TieredDef[]) => {
   const predicates: Predicates = {};
   const tiers: Array<Tier> = [];
 
@@ -78,6 +56,87 @@ export const evaluateTiered = async (
     }
   }
 
+  return { predicates, tiers };
+};
+
+const evaluateTier = async (
+  realm: Realm,
+  tierValueExp: AST.Expression,
+  tierSize: FFraction,
+  tierResultType: Type
+): Promise<FFraction> => {
+  const tierValueType = getDefined(
+    realm.inferContext.nodeTypes.get(tierValueExp)
+  );
+  const tierSizeValue = FractionValue.fromValue(tierSize);
+  const tierValue = await realm.stack.withPush(async () => {
+    realm.stack.set('tier', tierSizeValue);
+    realm.stack.set('slice', tierSizeValue);
+    return evaluate(realm, tierValueExp);
+  });
+  return convertBetweenUnits(
+    getInstanceof(tierValue.getData(), FFraction),
+    tierValueType.unit ?? [],
+    tierResultType.unit ?? []
+  );
+};
+
+interface IterateTierResult {
+  slice: FFraction;
+  tierResult: FFraction;
+  tierCutOff: FFraction;
+}
+
+const iterateTier = async (
+  realm: Realm,
+  globalTierSizeType: Type,
+  tierResultType: Type,
+  tier: Tier,
+  tierIndex: number,
+  remaining: FFraction,
+  previousCutoff: FFraction
+): Promise<IterateTierResult> => {
+  const [tierSizeExp, tierValueExp] = tier;
+  const tierSizeType = getDefined(
+    realm.inferContext.nodeTypes.get(tierSizeExp)
+  );
+
+  const tierCutOff = convertBetweenUnits(
+    getInstanceof((await evaluate(realm, tierSizeExp)).getData(), FFraction),
+    tierSizeType.unit ?? [],
+    globalTierSizeType.unit ?? []
+  );
+  const tierSize = tierCutOff.sub(previousCutoff);
+  if (tierSize.compare(ZERO) < 0) {
+    throw new RuntimeError(
+      `Error on tier definition number ${tierIndex}. Each tier level needs to be bigger than the previous one`
+    );
+  }
+  const slice = min(remaining, tierSize);
+  const tierResult = await evaluateTier(
+    realm,
+    tierValueExp,
+    slice,
+    tierResultType
+  );
+
+  return { tierResult, slice, tierCutOff };
+};
+
+export const evaluateTiered = async (
+  realm: Realm,
+  node: AST.Tiered
+): Promise<Value> => {
+  const [initial, ...tierDefs] = node.args;
+  const initialNumber = getInstanceof(
+    (await evaluate(realm, initial)).getData(),
+    FFraction
+  );
+  const tierSizeType = getDefined(realm.inferContext.nodeTypes.get(initial));
+  const resultType = getDefined(realm.inferContext.nodeTypes.get(node));
+
+  const { predicates, tiers } = collectDefs(tierDefs);
+
   // evaluate
   let remaining = initialNumber;
   let acc = ZERO;
@@ -87,19 +146,15 @@ export const evaluateTiered = async (
     tierIndex += 1;
     const tier = tiers.shift();
     if (tier) {
-      const [tierSizeExp, tierValueExp] = tier;
-      const tierCutOff = getInstanceof(
-        (await evaluate(realm, tierSizeExp)).getData(),
-        FFraction
+      const { slice, tierResult, tierCutOff } = await iterateTier(
+        realm,
+        tierSizeType,
+        resultType,
+        tier,
+        tierIndex,
+        remaining,
+        previousCutoff
       );
-      const tierSize = tierCutOff.sub(previousCutoff);
-      if (tierSize.compare(ZERO) < 0) {
-        throw new RuntimeError(
-          `Error on tier definition number ${tierIndex}. Each tier level needs to be bigger than the previous one`
-        );
-      }
-      const slice = min(remaining, tierSize);
-      const tierResult = await evaluateTier(realm, tierValueExp, slice);
       acc = acc.add(tierResult);
       remaining = remaining.sub(slice);
       previousCutoff = tierCutOff;
@@ -109,23 +164,37 @@ export const evaluateTiered = async (
   if (remaining.compare(ZERO) > 0) {
     const { rest } = predicates;
     if (rest) {
-      const restValue = await evaluateTier(realm, rest, remaining);
+      const restValue = await evaluateTier(realm, rest, remaining, resultType);
       acc = acc.add(restValue);
     }
   }
 
   if (predicates.min) {
-    const minimumValue = getInstanceof(
-      (await evaluate(realm, predicates.min)).getData(),
-      FFraction
+    const minType = getDefined(
+      realm.inferContext.nodeTypes.get(predicates.min)
+    );
+    const minimumValue = convertBetweenUnits(
+      getInstanceof(
+        (await evaluate(realm, predicates.min)).getData(),
+        FFraction
+      ),
+      minType.unit ?? [],
+      resultType.unit ?? []
     );
     acc = max(acc, minimumValue);
   }
 
   if (predicates.max) {
-    const maximumValue = getInstanceof(
-      (await evaluate(realm, predicates.max)).getData(),
-      FFraction
+    const maxType = getDefined(
+      realm.inferContext.nodeTypes.get(predicates.max)
+    );
+    const maximumValue = convertBetweenUnits(
+      getInstanceof(
+        (await evaluate(realm, predicates.max)).getData(),
+        FFraction
+      ),
+      maxType.unit ?? [],
+      resultType.unit ?? []
     );
     acc = min(acc, maximumValue);
   }
