@@ -37,7 +37,6 @@ export * from './SmartRef';
 export * from './SoftBreakPlugin';
 export * from './SyntaxErrorHighlight';
 export * from './KeyboardNavigation';
-export * from './UniqueElementId';
 export * from './UpdateComputer';
 export * from './WithDocSyncHistory';
 export * from './UserEvent';
