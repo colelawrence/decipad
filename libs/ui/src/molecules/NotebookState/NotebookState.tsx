@@ -164,7 +164,11 @@ export const NotebookState: FC<NotebookStateProps> = ({
             css={stateStyles(readOnly || !saved ? 'unsaved' : 'saved')}
           ></div>
         }
-        align="end"
+        side="top"
+        wrapperStyles={css({
+          marginRight: '16px',
+          borderRadius: '8px',
+        })}
       >
         <div css={[p12Medium, { maxWidth: '200px' }]}>
           {getText(readOnly, saved)}

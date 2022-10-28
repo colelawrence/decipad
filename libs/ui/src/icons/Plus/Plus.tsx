@@ -4,7 +4,7 @@ import { cssVar } from '../../primitives';
 export const Plus = (): ReturnType<FC> => {
   return (
     <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <title>Plot</title>
+      <title>Plus</title>
       <path
         d="M10 6.5V14.5"
         stroke={cssVar('currentTextColor')}

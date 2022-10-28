@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import {
   Arrow,
   Content,
@@ -61,6 +61,8 @@ interface TooltipProps {
 
   readonly open?: boolean;
   readonly onChangeOpen?: (open: boolean) => void;
+
+  readonly wrapperStyles?: SerializedStyles;
 }
 
 export const Tooltip = ({
@@ -72,6 +74,7 @@ export const Tooltip = ({
   variant,
   side,
   align,
+  wrapperStyles = css(),
 }: TooltipProps): ReturnType<FC> => {
   const isDragging = useIsDragging();
   // eslint-disable-next-line no-param-reassign
@@ -114,6 +117,7 @@ export const Tooltip = ({
           css={[
             contentWrapperStyles,
             variant === 'small' && smallVariantStyles,
+            wrapperStyles,
           ]}
         >
           <Arrow css={arrowStyles} width={18} height={9} offset={6} />
