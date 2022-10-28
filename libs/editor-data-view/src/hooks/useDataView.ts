@@ -45,6 +45,9 @@ interface UseDataViewReturnType {
 
 const greaterOrEqualToZero = (n: number): boolean => n >= 0;
 
+const namesThatLookLikeTablesOnly = (name: AutocompleteName) =>
+  name.name.indexOf('.') < 0;
+
 export const useDataView = ({
   editor,
   element,
@@ -146,12 +149,12 @@ export const useDataView = ({
     injectObservable: columnChanges$,
   });
 
-  const selectedAggregationTypes = element.children[1].children.map(
+  const selectedAggregationTypes = element.children[1]?.children.map(
     (th) => th.aggregation
   );
 
   return {
-    variableNames,
+    variableNames: variableNames.filter(namesThatLookLikeTablesOnly),
     tableName,
     onDelete,
     onInsertColumn,

@@ -15,7 +15,7 @@ export const DataView: InteractiveLanguageElement = {
         return [];
       }
 
-      return parseElementAsVariableAssignment(element.id, element.varName, {
+      return parseElementAsVariableAssignment(element.id, '', {
         type: 'ref',
         args: [element.varName],
       });
