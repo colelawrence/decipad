@@ -49,6 +49,10 @@ const arrowStyles = css({
   fill: cssVar('strongTextColor'),
 });
 
+const clickableStyles = css({
+  cursor: 'pointer',
+});
+
 interface TooltipProps {
   readonly children?: React.ReactNode;
   readonly trigger?: React.ReactNode;
@@ -58,6 +62,7 @@ interface TooltipProps {
   readonly variant?: 'normal' | 'small';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
   readonly hoverOnly?: boolean;
+  readonly onClick?: () => void;
 
   readonly open?: boolean;
   readonly onChangeOpen?: (open: boolean) => void;
@@ -72,6 +77,7 @@ export const Tooltip = ({
   onChangeOpen,
   hoverOnly,
   variant,
+  onClick,
   side,
   align,
   wrapperStyles = css(),
@@ -117,8 +123,10 @@ export const Tooltip = ({
           css={[
             contentWrapperStyles,
             variant === 'small' && smallVariantStyles,
+            onClick && clickableStyles,
             wrapperStyles,
           ]}
+          onClick={onClick}
         >
           <Arrow css={arrowStyles} width={18} height={9} offset={6} />
           <div css={contentStyles}>{children}</div>

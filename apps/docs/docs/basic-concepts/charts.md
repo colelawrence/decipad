@@ -16,4 +16,3 @@ Charts are still in development and are available to everyone to experiment with
 3.  Connect you chart block to your table data by selecting the table name and by choosing one of the columns for the horizontal values and another for the vertical's.
 
 Each time your table is updated, the chart will be automatically refreshed.
-

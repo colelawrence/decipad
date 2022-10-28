@@ -20,4 +20,5 @@ These are Decipad’s early days, and your feedback is essential to us!
 Decipad is being built on the web by a small group of tinkerer's alongside the community, and you are now part of it. We believe that crunching numbers is easier together, so join us and other decimates on our journey.
 
 ## How Can I Start?
+
 - [Create your first Notebook](/docs/quick-start/notebooks.md)

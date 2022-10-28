@@ -13,9 +13,8 @@ To **add a new widget** to your notebook:
 
 ![Add Slider](https://user-images.githubusercontent.com/12210180/198076697-455cf53e-09b1-4cac-96a2-3a6e32c8ed4b.gif)
 
-
 1. Click the `+` button next to an empty line,
-2. Select `Input`, `Slider` or `Result` from the menu. 
+2. Select `Input`, `Slider` or `Result` from the menu.
 
 Alternatively, to add a widget with the keyboard, open up the block menu by typing `/` on an empty paragraph, select `Input`, `Slider`, or `Widget` using the `arrow keys`, and press `enter`.
 
@@ -26,22 +25,23 @@ Alternatively, to add a widget with the keyboard, open up the block menu by typi
 New widgets are assigned default names when created (Input1, Slider1, ... ) <br></br>
 Update your widget name, so it is easy to identify.
 
-* To **update a widget name**, replace the old name on the top left of the widget.
+- To **update a widget name**, replace the old name on the top left of the widget.
 
 ## Update a Widget Color and Icon
-New widgets are assigned default colors and icons.  <br></br>
+
+New widgets are assigned default colors and icons. <br></br>
 Pick new widget colors and icons to give personality to your notebook without impacting your model.
 
-* To **update a widget color and icon**, click the pencil icon next to the widget name, and choose a new color and icon from the menu.
-
+- To **update a widget color and icon**, click the pencil icon next to the widget name, and choose a new color and icon from the menu.
 
 ## Place Widgets Side-by-side
 
 Place widgets on the same line to save space.
 
 To **place widgets side-by-side**:
-1. Hover the widget you want to move. 
-2. Hold the **`⋮⋮`** button that appears on the left and move the widget to the side of another widget. 
+
+1. Hover the widget you want to move.
+2. Hold the **`⋮⋮`** button that appears on the left and move the widget to the side of another widget.
 3. A blue vertical line should appear to confirm the new location. Let got of the **`⋮⋮`** button to place the widget on its new location.
 
 <br></br>
@@ -52,10 +52,9 @@ You can add **Inputs**, **Sliders** and **Result** widgets to your Notebooks.
 
 ### Input Widget
 
-Inputs widgets highlight a number in your notebook that you or anyone reading the notebook can update. 
+Inputs widgets highlight a number in your notebook that you or anyone reading the notebook can update.
 
-* To **create a new input widget**, click the `+` button next to an empty line, and select `Input` from the menu.
-
+- To **create a new input widget**, click the `+` button next to an empty line, and select `Input` from the menu.
 
 ### Slider Widget
 
@@ -63,25 +62,24 @@ Slider widgets let you or anyone reading the notebook use a slider to explore a 
 
 #### Create a Slider
 
-* To **create a new slider widget**, click the `+` button next to an empty line, and select `Slider` from the menu.
+- To **create a new slider widget**, click the `+` button next to an empty line, and select `Slider` from the menu.
 
 #### Update Slider Range
 
-* To **update the slider range**, click the `•••` button to access the menu. Update the *Minimum*, *Maximum*, and *Step*
-
+- To **update the slider range**, click the `•••` button to access the menu. Update the _Minimum_, _Maximum_, and _Step_
 
 ### Result Widget
 
 Result widgets let you highlight any result on your notebook.
 
-* To **create an empty result widget**, click the `+` button next to an empty line, and select `Result` from the menu. Once placed, click the dropdown selector to pick a result to display.
+- To **create an empty result widget**, click the `+` button next to an empty line, and select `Result` from the menu. Once placed, click the dropdown selector to pick a result to display.
 
-* To **create a result widget with a calculation result**, click any result on the right side of a calculation block, and a result widget with that value will appear on the notebook.
-
+- To **create a result widget with a calculation result**, click any result on the right side of a calculation block, and a result widget with that value will appear on the notebook.
 
 <br></br>
 
 ---
+
 # Continue Exploring:
 
 Check how inputs work on a notebook:

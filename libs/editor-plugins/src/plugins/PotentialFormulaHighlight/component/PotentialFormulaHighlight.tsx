@@ -19,19 +19,19 @@ import {
   getEndPoint,
   getNodeString,
   insertNodes,
-  isCollapsed,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
 import { BaseRange, Path, Point } from 'slate';
-import { useSelected } from 'slate-react';
+
 import type { PotentialFormulaDecoration } from '../decorate/interface';
+import { useIsPotentialFormulaSelected } from './useIsPotentialFormulaSelected';
 
 export const PotentialFormulaHighlight: PlateComponent<{
   leaf: PotentialFormulaDecoration & RichText;
 }> = ({ attributes, children, text, leaf }) => {
-  const selected = useSelected();
   const editor = useTEditorRef();
+  const selected = useIsPotentialFormulaSelected(editor, leaf);
 
   const onCommit = useCallback(() => {
     const path = text && findNodePath(editor, text);
@@ -50,7 +50,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
     }
 
     const onKeyDown = (ev: KeyboardEvent) => {
-      if (ev.key === 'Tab' && isCollapsed(editor.selection)) {
+      if (ev.key === 'Tab') {
         ev.preventDefault();
         ev.stopPropagation();
         onCommit();
@@ -61,10 +61,14 @@ export const PotentialFormulaHighlight: PlateComponent<{
     return () => {
       document.removeEventListener('keydown', onKeyDown, true);
     };
-  }, [editor, selected, onCommit]);
+  }, [selected, onCommit]);
 
   return (
-    <UIPotentialFormulaHighlight attributes={attributes} onCommit={onCommit}>
+    <UIPotentialFormulaHighlight
+      attributes={attributes}
+      onCommit={onCommit}
+      tooltipOpen={selected}
+    >
       {children}
     </UIPotentialFormulaHighlight>
   );
