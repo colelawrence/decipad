@@ -1,12 +1,11 @@
 import { SerializedType } from '@decipad/language';
 import { css } from '@emotion/react';
-import { FC, ReactNode, ComponentProps, useEffect, useRef } from 'react';
+import { ComponentProps, FC, ReactNode, useEffect, useRef } from 'react';
 import { CodeError } from '../../atoms';
 import {
   cssVar,
   display,
   Opacity,
-  p15Regular,
   p24Medium,
   p32Medium,
   setCssVar,
@@ -102,7 +101,7 @@ export const Expression = ({
     >
       <div
         css={[
-          type?.kind !== 'date' ? p32Medium : p15Regular,
+          type?.kind !== 'date' ? p32Medium : p24Medium,
           expressionInputStyles,
           placeholderStyles,
           focused && focusedExpressionInputStyles,

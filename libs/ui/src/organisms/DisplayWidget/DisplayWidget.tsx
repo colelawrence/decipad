@@ -117,7 +117,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
       {openMenu && !readOnly && (
         <AutoCompleteMenu
           top={false}
-          rounded={true}
+          result={result}
           identifiers={dropdownContent.map<Identifier>((item) => ({
             kind: 'variable',
             identifier: item.text,

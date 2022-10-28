@@ -1,11 +1,11 @@
-import { FC, MouseEvent, ReactNode, useCallback, useMemo } from 'react';
-import DatePicker from 'react-datepicker';
-import { format, parse } from 'date-fns';
-import { css } from '@emotion/react';
 import type { SerializedTypes } from '@decipad/computer';
 import { CellValueType } from '@decipad/editor-types';
-import { dateFormatForGranularity } from '../../utils/dateFormatForGranularity';
+import { css } from '@emotion/react';
+import { format, parse } from 'date-fns';
+import { FC, MouseEvent, ReactNode, useCallback, useMemo } from 'react';
+import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { dateFormatForGranularity } from '../../utils/dateFormatForGranularity';
 
 const unitStyles = css({
   '&::after': {
@@ -94,6 +94,7 @@ export const DateEditor: FC<DateEditorProps> = ({
         showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
         showYearPicker={type?.kind === 'date' && type.date === 'year'}
         portalId="date-picker-portal"
+        todayButton="Today"
         timeClassName={() => 'deci-datepicker-selectable'}
       ></DatePicker>
     </span>

@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
-import { cssVar, mediumShadow } from '../../primitives';
+import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
 
 type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
@@ -20,24 +20,57 @@ type AutoCompleteGroup = Omit<
   readonly items: ReadonlyArray<Identifier>;
 };
 
-const styles = (top: boolean, rounded: boolean) =>
+const hotKeyStyle = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  boxSizing: 'border-box',
+  borderRadius: '6px',
+  padding: '0 6px',
+  border: `1px ${cssVar('strongerHighlightColor')} solid`,
+  backgroundColor: cssVar('backgroundColor'),
+  color: cssVar('weakTextColor'),
+});
+
+const footerStyles = css(
+  p13Medium,
+  {
+    padding: '6px 0px 8px 16px',
+    width: '100%',
+    bottom: '0px',
+    height: '38px',
+    lineHeight: '24px',
+    background: cssVar('highlightColor'),
+    boxShadow: `0px -1px 0px ${cssVar('strongHighlightColor')}`,
+    margin: '0px 0px',
+  },
+  setCssVar('currentTextColor', cssVar('weakTextColor'))
+);
+
+const resultStyles = css({
+  display: 'block',
+  maxWidth: '237px',
+  minWidth: '149px',
+  marginTop: '8px',
+});
+
+const styles = (top: boolean) =>
   css({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
     overflowX: 'hidden',
-    overflowY: 'auto',
     top: top ? '26px' : '0px',
     left: 0,
     userSelect: 'none',
 
     backgroundColor: cssVar('backgroundColor'),
     border: `1px solid ${cssVar('strongHighlightColor')}`,
-    borderRadius: rounded ? '12px' : '0px 12px 12px 12px',
+    borderRadius: '12px',
     boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
     position: 'absolute',
     width: '280px',
-    maxHeight: '293px',
     boxSizing: 'border-box',
     zIndex: 1,
   });
@@ -58,7 +91,7 @@ export interface AutoCompleteMenuProps {
   readonly search?: string;
   readonly onExecuteItem?: (identifier: Identifier) => void;
   readonly top?: boolean;
-  readonly rounded?: boolean;
+  readonly result?: string | null;
 }
 
 export const AutoCompleteMenu = ({
@@ -66,14 +99,20 @@ export const AutoCompleteMenu = ({
   identifiers,
   onExecuteItem,
   top = true,
-  rounded = false,
+  result = '',
 }: AutoCompleteMenuProps): ReturnType<FC> => {
+  const isResult = result !== '';
   const groups: ReadonlyArray<AutoCompleteGroup> = useMemo(
     () => [
       {
         title: 'Variables',
         items: identifiers
           .filter((i) => i.kind === 'variable' || i.kind === 'function')
+          .filter(
+            // in results, dont show currently selected result
+            (i) =>
+              !(isResult && i.kind === 'variable' && i.identifier === result)
+          )
           .map((i) => ({
             identifier: i.identifier,
             kind: 'variable' as const,
@@ -81,7 +120,7 @@ export const AutoCompleteMenu = ({
           })),
       },
     ],
-    [identifiers]
+    [identifiers, isResult, result]
   );
   const groupsWithItemsFiltered = useMemo(
     () =>
@@ -147,22 +186,29 @@ export const AutoCompleteMenu = ({
   useWindowListener('keydown', onKeyDown, true);
 
   useEffect(() => {
-    if (matchingIdentifiers.length > 0) {
+    if (matchingIdentifiers.length > 0 && !isResult) {
       setFocusedItem(matchingIdentifiers[0]);
     }
-  }, [matchingIdentifiers]);
+  }, [isResult, matchingIdentifiers]);
 
   const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
-
   return allItems.length ? (
     <span css={{ position: 'relative' }} className="test-auto-complete-menu">
       <div
         contentEditable={false}
         role="menu"
         aria-orientation="vertical"
-        css={styles(top, rounded)}
+        css={[styles(top), isResult && resultStyles]}
       >
-        <div css={mainStyles}>
+        <div
+          css={[
+            mainStyles,
+            allItems.length > 5 && {
+              height: '200px',
+              overflowY: 'scroll',
+            },
+          ]}
+        >
           {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) =>
             matchingItems.length ? (
               <AutoCompleteMenuGroup key={i} {...group}>
@@ -177,6 +223,10 @@ export const AutoCompleteMenu = ({
               </AutoCompleteMenuGroup>
             ) : null
           )}
+        </div>
+        <div css={footerStyles}>
+          Press <span css={hotKeyStyle}>{isResult ? 'Enter' : 'Esc'}</span> to
+          {isResult ? ' select' : ' dismiss'}
         </div>
       </div>
     </span>

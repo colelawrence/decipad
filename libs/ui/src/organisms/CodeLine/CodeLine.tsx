@@ -1,7 +1,7 @@
 import { Result } from '@decipad/computer';
-import { css } from '@emotion/react';
-import React, { ComponentProps, ReactNode, useState } from 'react';
 import { useDelayedValue } from '@decipad/react-utils';
+import { css, keyframes } from '@emotion/react';
+import React, { ComponentProps, ReactNode, useState } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -13,8 +13,8 @@ import {
   smallestDesktop,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
-import { isTabularType } from '../../utils';
 import { CodeResultProps } from '../../types';
+import { isTabularType } from '../../utils';
 
 const { lineHeight } = codeBlock;
 
@@ -23,6 +23,55 @@ const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px
 const highlightedLineStyles = {
   borderColor: cssVar('strongerHighlightColor'),
 };
+
+const wiggle = keyframes`
+  20% {
+    box-shadow:  inset -5px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(3deg);
+    transform-origin: center center;
+  }
+
+  40% {
+    box-shadow:  inset -11px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(-7deg);
+  }
+
+  60% {
+    box-shadow:  inset -5px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(2deg);
+  }
+
+  80% {
+    box-shadow:  inset -8px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(-1deg);
+  }
+
+  100% {
+    box-shadow:  inset -7px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(0deg);
+  }
+`;
+
+const antiwiggle = keyframes`20% {
+    transform:  rotate(-3deg);
+  }
+
+  40% {
+    transform:   rotate(7deg);
+  }
+
+  60% {
+    transform:   rotate(-2deg);
+  }
+
+  80% {
+    transform:   rotate(1deg);
+  }
+
+  100% {
+    transform:  rotate(0deg);
+  }
+`;
 
 const codeLineStyles = (
   variant: CodeLineProps['variant'],
@@ -72,7 +121,6 @@ const codeLineStyles = (
 
 const inlineStyles = css({
   gridArea: 'inline-res',
-
   maxWidth: '100%',
   display: 'flex',
   justifySelf: 'end',
@@ -114,6 +162,14 @@ const placeholderStyles = css(codeStyles, {
 
 const inlineResultStyles = css(p14Regular, {
   ':empty': { display: 'none' },
+  ':hover': {
+    animation: `${antiwiggle} 0.5s ease-in-out`,
+  },
+
+  ':hover:after': {
+    backgroundColor: 'blue',
+    animation: `${wiggle} 0.5s ease-in-out`,
+  },
 
   overflow: 'hidden',
   textOverflow: 'ellipsis',

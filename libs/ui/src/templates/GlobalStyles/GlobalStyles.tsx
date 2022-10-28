@@ -1,19 +1,19 @@
-import { fromEvent } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
-import { useObservable } from 'rxjs-hooks';
 import { CSSReset as ChakraCssReset } from '@chakra-ui/css-reset';
 import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 import { FC } from 'react';
+import { fromEvent } from 'rxjs';
+import { useObservable } from 'rxjs-hooks';
+import { delay, map } from 'rxjs/operators';
 import {
-  brand500,
   cssVar,
   darkTheme,
   GlobalTextStyles,
-  grey100,
-  grey500,
-  grey300,
+  p12Medium,
+  p13Medium,
+  p13SemiBold,
+  p14Medium,
 } from '../../primitives';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
@@ -36,8 +36,16 @@ const DarkThemeStyles = (): ReturnType<React.FC> => {
 };
 
 const dateCellStyles = {
-  backgroundColor: brand500.rgb,
+  backgroundColor: cssVar('successColor'),
   color: 'black',
+};
+
+const calendarHeaderStyles = {
+  ...p13Medium,
+  color: cssVar('normalTextColor'),
+  paddingBottom: '16px',
+  borderBottom: `solid 1px ${cssVar('highlightColor')}`,
+  margin: 'auto 10px',
 };
 
 const datePickerHeaderStyles = {
@@ -49,25 +57,33 @@ const DatePickerStyles: FC = () => {
     <Global
       styles={{
         'div.react-datepicker': {
-          padding: '8px',
+          padding: '8px 0',
           borderRadius: '8px',
-          border: `1px solid ${grey300.rgb}`,
+          border: `1px solid ${cssVar('strongerHighlightColor')}`,
+        },
+        'button.react-datepicker__navigation': {
+          width: '4px',
+          height: '4px',
+          border: 'none',
+          padding: '22px 2px',
+          margin: '0 10px',
+          color: cssVar('normalTextColor'),
         },
         'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle':
           {
-            borderBottomColor: grey300.rgb,
+            display: 'none',
           },
         'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle':
           {
-            borderTopColor: grey300.rgb,
+            display: 'none',
           },
         'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle::before':
           {
-            borderBottomColor: grey300.rgb,
+            borderBottomColor: cssVar('strongerHighlightColor'),
           },
         'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle::before':
           {
-            borderTopColor: grey300.rgb,
+            borderTopColor: cssVar('strongerHighlightColor'),
           },
         'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle::after':
           {
@@ -99,16 +115,42 @@ const DatePickerStyles: FC = () => {
           datePickerHeaderStyles,
         '.react-datepicker .react-datepicker__header': {
           borderBottom: '1px solid',
-          borderBottomColor: grey100.rgb,
+          borderBottomColor: cssVar('highlightColor'),
         },
+        'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__current-month':
+          calendarHeaderStyles,
+        'div.react-datepicker__year--container > div.react-datepicker__header.react-datepicker-year-header':
+          calendarHeaderStyles,
+        'div.react-datepicker__month-container > div.react-datepicker__header.react-datepicker-year-header':
+          calendarHeaderStyles,
+        'div.react-datepicker__time-container.react-datepicker__time-container--with-today-button > div.react-datepicker__header.react-datepicker__header--time':
+          { display: 'none' },
+        'div.react-datepicker__time-container.react-datepicker__time-container--with-today-button > div.react-datepicker__time':
+          {
+            borderRadius: '8px',
+            border: `1px solid ${cssVar('strongerHighlightColor')}`,
+          },
+        'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__day-names':
+          {
+            paddingTop: '16px',
+          },
+        'div.react-datepicker .react-datepicker__header': { border: 'none' },
         '.react-datepicker .react-datepicker__time-container': {
-          borderLeft: '1px solid',
-          borderLeftColor: grey100.rgb,
+          border: `none`,
+          right: '-95px',
+          backgroundColor: cssVar('backgroundColor'),
+          ...p12Medium,
         },
         '.react-datepicker .react-datepicker__day-name , .react-datepicker .react-datepicker__time-name':
           {
-            color: grey500.rgb,
+            ...p14Medium,
+            color: cssVar('weakerTextColor'),
           },
+        'div.react-datepicker__today-button': {
+          border: 'none',
+          ...p13SemiBold,
+          backgroundColor: cssVar('backgroundColor'),
+        },
       }}
     />
   );
