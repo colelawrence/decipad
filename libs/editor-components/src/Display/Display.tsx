@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ComponentProps, useCallback, useEffect, useState } from 'react';
 import {
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
@@ -11,6 +11,7 @@ import {
   findNode,
   findNodePath,
   getNodeString,
+  moveNodes,
   PlateEditor,
   serializeHtml,
 } from '@udecode/plate';
@@ -22,8 +23,16 @@ import {
 import { DisplayWidget, VariableEditor } from 'libs/ui/src/organisms';
 import { parseStatement } from '@decipad/computer';
 import { DraggableBlock } from '@decipad/editor-components';
-import { safeDelete, useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  hasLayoutAncestor,
+  safeDelete,
+  useElementMutatorCallback,
+  useNodePath,
+  wrapIntoColumns,
+} from '@decipad/editor-utils';
+import { Editor, Path } from 'slate';
 import copy from 'copy-to-clipboard';
+import { defaultMoveNode } from '../utils/useDnd';
 
 interface DropdownWidgetOptions {
   type: 'var' | 'calc';
@@ -121,6 +130,54 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     )
     .filter((n): n is DropdownWidgetOptions => n !== undefined);
 
+  const path = useNodePath(element);
+  const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
+
+  const getAxis = useCallback<
+    NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>
+  >(
+    (_, monitor) => ({
+      horizontal:
+        monitor.getItemType() === ELEMENT_VARIABLE_DEF ||
+        monitor.getItemType() === ELEMENT_DISPLAY,
+      vertical: !isHorizontal,
+    }),
+    [isHorizontal]
+  );
+
+  const onDrop = useCallback<
+    NonNullable<ComponentProps<typeof DraggableBlock>['onDrop']>
+  >(
+    (item, _, direction) => {
+      if (!path || (direction !== 'left' && direction !== 'right')) {
+        return defaultMoveNode(editor, item, element.id, direction);
+      }
+
+      Editor.withoutNormalizing(editor as Editor, () => {
+        const dragPath = findNode(editor, {
+          at: [],
+          match: { id: item.id },
+        })?.[1];
+        let dropPath: Path = [];
+
+        if (isHorizontal) {
+          if (direction === 'left') {
+            dropPath = path;
+          }
+          if (direction === 'right') {
+            dropPath = Path.next(path);
+          }
+        } else {
+          dropPath = [...path, direction === 'left' ? 0 : 1];
+          wrapIntoColumns(editor, path);
+        }
+
+        moveNodes(editor, { at: dragPath, to: dropPath });
+      });
+    },
+    [editor, element.id, isHorizontal, path]
+  );
+
   const selectedLine = codeLines.find((i) => i.id === element.blockId);
   const readOnly = useIsEditorReadOnly();
 
@@ -128,7 +185,13 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   return (
     <div {...attributes} contentEditable={false} id={element.id}>
-      <DraggableBlock blockKind="interactive" element={element}>
+      <DraggableBlock
+        blockKind="interactive"
+        element={element}
+        accept={[ELEMENT_DISPLAY]}
+        getAxis={getAxis}
+        onDrop={onDrop}
+      >
         <VariableEditor
           variant="display"
           onCopy={onCopy}

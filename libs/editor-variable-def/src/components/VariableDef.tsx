@@ -95,7 +95,6 @@ export const VariableDef: PlateComponent = ({
   );
 
   const path = useNodePath(element);
-  // The following line might break if the element was deleted.
   const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
 
   const getAxis = useCallback<
