@@ -65,7 +65,7 @@ export function Select<T extends string>({
               key="clear"
               onSelect={() => onChange(undefined)}
             >
-              <span css={itemStyles}>- clear -</span>
+              <span css={itemStyles}>Reset</span>
             </MenuItem>
           )}
           {options.map((text, index) => (

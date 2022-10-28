@@ -97,7 +97,7 @@ export const TableCellControls = forwardRef<
                 onSelect={() => onRemove()}
                 selected={false}
               >
-                Delete
+                Delete row
               </MenuItem>
             ) : null}
           </MenuList>
