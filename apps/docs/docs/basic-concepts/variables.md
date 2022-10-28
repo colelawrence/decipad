@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Define Variables
+# Name your values
 
 Name your data with variables.
 

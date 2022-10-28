@@ -1,8 +1,8 @@
 ---
-sidebar_position: 140
+sidebar_position: 8
 ---
 
-# Create Lists
+# Define a List
 
 Lists help us organize two-dimensional data.
 
@@ -59,7 +59,7 @@ Units on lists must be consistent:
 
 ## Creating lists from sequences
 
-Create a list by specifying a [sequence](../advanced-concepts/sequences):
+Create a list by specifying a [sequence](/docs/advanced-concepts/sequences):
 
 ```deci live
 [1 .. 10 by 2]

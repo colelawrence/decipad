@@ -1,30 +1,23 @@
 ---
 sidebar_position: 0
 hide_table_of_contents: false
+sidebar_class_name: start-icon
 ---
 
-# Meet Decipad
+# Start Here
 
-![image](https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png)
+Decipad is an interactive notebook where you can create and explain calculations, empowering you to make better decisions with numbers.
 
-## Overview
+## Who is Decipad for?
 
-Decipad is an interactive notebook where you can gather information, build models and bring data-driven ideas to life.
+- **Curious minds** who want to understand and explain numbers in their day-to-day life.
+- **Entrepreneurs**, ops, and other business-minded people that explore and explain numbers in their day-to-day work.
 
-Our journey of reimagining how people interact with data and numbers just began! You may run into bugs 🐞, glitches ⚡️ and missing features 🧐. Help us along our adventures! Share your findings with our team on our [Discord](https://discord.gg/HwDMqwbGmc) channel or use the Feedback button on Decipad.
+## We Are Just Starting
 
-## FAQs
+These are Decipad’s early days, and your feedback is essential to us!
 
-<details class="question">
-  <summary>What can I build on Decipad?</summary>
-  <p>Right now only simple use cases are possible on our editor, we are looking forward to expanding our features alongside our community.</p>
+Decipad is being built on the web by a small group of tinkerer's alongside the community, and you are now part of it. We believe that crunching numbers is easier together, so join us and other decimates on our journey.
 
-  <p>For examples of what is possible and inspiration <a href="/examples/">click here</a>.</p>
-</details>
-
----
-
-<h3>Learn More:</h3>
-
-- [Guides](/guides)
-- [Explore Numbers and Data](/guides/explore-numbers-and-data)
+## How Can I Start?
+- [Create your first Notebook](/docs/quick-start/notebooks.md)

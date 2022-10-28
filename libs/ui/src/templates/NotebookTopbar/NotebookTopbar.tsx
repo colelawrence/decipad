@@ -142,7 +142,7 @@ export const NotebookTopbar = ({
           <div css={[linksStyles, hideForSmallScreenStyles]}>
             <em css={helpLinkStyles}>
               <Anchor
-                href={docs({}).page({ name: 'examples' }).$}
+                href={docs({}).page({ name: 'gallery' }).$}
                 // Analytics
                 onClick={() =>
                   clientEvent({

@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Define Dates
+# Define a Date
 
 Decipad tries to capture time in a natural way for people.
 

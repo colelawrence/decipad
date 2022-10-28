@@ -2,7 +2,7 @@
 sidebar_position: 320
 ---
 
-# Create Decision Tables
+# Define a Decision Table
 
 ## Match
 

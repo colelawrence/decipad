@@ -2,7 +2,7 @@
 sidebar_position: 120
 ---
 
-# Define Time Intervals
+# Define a Time Interval
 
 ## What they are
 

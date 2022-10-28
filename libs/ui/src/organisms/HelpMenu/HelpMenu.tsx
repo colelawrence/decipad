@@ -42,7 +42,9 @@ const CustomMenuItem = ({
   const children = (
     <div css={menuItemWrapperStyles}>
       <span css={p14Medium}>{title}</span>
-      <small css={menuItemSmallTextStyles}>{description}</small>
+      {description !== undefined && (
+        <small css={menuItemSmallTextStyles}>{description}</small>
+      )}
     </div>
   );
   return (
@@ -85,7 +87,7 @@ export const HelpMenu = ({
     >
       <CustomMenuItem
         to={docsUrl}
-        title="Help content"
+        title="Help Content"
         description="Explore the Decipad Docs"
       />
       <CustomMenuItem
@@ -99,7 +101,7 @@ export const HelpMenu = ({
         description="Ask or share in the community"
       />
       <MenuSeparator />
-      <CustomMenuItem to={feedbackUrl} title="Share feedback" />
+      <CustomMenuItem to={feedbackUrl} title="Share Feedback" />
     </MenuList>
   );
 };

@@ -1,5 +1,6 @@
 ---
 sidebar_position: 80
+sidebar_class_name: formula-icon
 ---
 
 # Formulas
@@ -33,7 +34,3 @@ even (n) = n mod 2 == 0
 even(10)
 ==> true
 ```
-
-## Formulas on numbers
-
-[Here you can see some of the supported built-in functions](/docs/formulas/formulas-for-numbers).

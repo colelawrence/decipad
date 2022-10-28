@@ -2,7 +2,7 @@
 sidebar_position: 310
 ---
 
-# Define Dimensions
+# Define a Dimension
 
 A dimension is a characteristic of an object that can be given different values. For example, a geographic location could have dimensions called latitude, longitude, or country.
 
@@ -74,7 +74,7 @@ InMeters = {
 
 ### Supported units
 
-[Here is a list of all the units Decipad knows](/docs/units/supported-units).
+[Here is a list of all the units Decipad knows](/docs/basic-concepts/supported-units).
 
 ## Degrees of freedom
 

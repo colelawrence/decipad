@@ -2,7 +2,7 @@
 sidebar_position: 100
 ---
 
-# Define Ranges
+# Define a Range
 
 A range is all the numbers between two numbers. Let's see how you can work with ranges.
 

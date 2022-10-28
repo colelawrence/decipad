@@ -1,11 +1,12 @@
 ---
-sidebar_position: 150
+sidebar_position: 7
+sidebar_class_name: hide-from-sidebar
 ---
 
-# Create Categories
+# Define a Category
 
 :::caution `Experimental Feature`
-Categories are currently being developed. Limited availability.
+Categories are still in development and are available to everyone to experiment with.
 :::
 
 Categories are collections of elements that share common properties. They are defined with the keyword `categories` and wrapped by `[]`. Each category is separated using `,`:

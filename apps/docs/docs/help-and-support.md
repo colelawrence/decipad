@@ -1,6 +1,7 @@
 ---
 sidebar_position: 550
 hide_table_of_contents: false
+sidebar_class_name: help-icon
 ---
 
 # Help & Support

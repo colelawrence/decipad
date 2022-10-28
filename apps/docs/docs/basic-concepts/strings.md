@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Define Strings
+# Define a String
 
 Text, words, phases, all of these can be data points, but how do you work with them on your notebook?
 The answer is _strings_!

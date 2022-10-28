@@ -293,7 +293,7 @@ export class InferError extends Error {
   }
 
   get url() {
-    return `/docs/language/language-errors#${this.spec.errType}`;
+    return `/docs/basic-concepts/language-errors#${this.spec.errType}`;
   }
 }
 

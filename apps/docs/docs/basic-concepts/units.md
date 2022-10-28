@@ -1,8 +1,8 @@
 ---
-sidebar_position: 30
+sidebar_position: 9
 ---
 
-# Number Units
+# Define a Unit
 
 ## Understanding units
 
@@ -222,4 +222,4 @@ buildingArea = constructionIndex * terrain
 
 ### Supported units
 
-[Here is a list of all the units Decipad knows](/docs/units/supported-units).
+[Here is a list of all the units Decipad knows](/docs/basic-concepts/supported-units).

@@ -78,7 +78,7 @@ const config = {
     ({
       colorMode: {
         defaultMode: 'light',
-        disableSwitch: false,
+        disableSwitch: true,
         respectPrefersColorScheme: false,
         // switchConfig: {
         //   darkIcon: ' ',
@@ -100,9 +100,9 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'examples/examples',
+            docId: 'gallery',
             position: 'left',
-            label: 'Get Inspiration',
+            label: 'Gallery',
           },
           {
             type: 'doc',
@@ -123,26 +123,18 @@ const config = {
                 to: '/docs/quick-start/get-started-with-decipad',
               },
               {
-                label: 'Guides',
-                to: '/docs/guides',
+                label: 'Create a Notebook',
+                to: '/docs/quick-start/notebooks',
               },
               {
-                label: 'Calculations',
-                to: '/docs/calculations',
-              },
-              {
-                label: 'Notebook Examples',
-                to: '/docs/examples',
+                label: 'Create a Table',
+                to: '/docs/quick-start/tables',
               },
             ],
           },
           {
             title: 'Help & Support',
             items: [
-              {
-                label: 'Help Center',
-                to: '/docs/help-and-support',
-              },
               {
                 label: 'Contact Support',
                 href: 'mailto:support@decipad.com',
@@ -153,16 +145,12 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Discord',
+                label: 'Join our Discord',
                 href: 'https://discordapp.com/invite/HwDMqwbGmc',
               },
               {
-                label: 'Twitter',
+                label: 'Follow our Twitter',
                 href: 'https://twitter.com/decipad',
-              },
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/decipad',
               },
             ],
           },
@@ -170,12 +158,16 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Website',
-                to: 'https://decipad.com',
+                label: 'Decipad.com',
+                href: 'https://decipad.com',
               },
               {
-                label: 'Newsletter',
-                to: 'https://www.getrevue.co/profile/Decipad',
+                label: 'Read our Blog',
+                href: 'https://decipad.com/blog',
+              },
+              {
+                label: 'Subscribe our Newsletter',
+                href: 'https://www.getrevue.co/profile/Decipad',
               },
             ],
           },

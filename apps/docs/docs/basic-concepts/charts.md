@@ -1,16 +1,15 @@
 ---
-sidebar_position: 20
+sidebar_position: 11
+draft: true
 ---
 
-# Notebook Charts
+# Create a Chart
 
 :::caution `Experimental Feature`
-Chart Blocks are currently being developed. Limited availability.
+Charts are still in development and are available to everyone to experiment with.
 :::
 
-Charts are the best way for you to convey data relations visually on your notebooks.
-
-## Working with charts
+## Add a Chart
 
 1.  Type `/` on any paragraph and select **Chart**.
 2.  Make sure you have the data you want to plot represented on table with at least 2 columns.
@@ -18,8 +17,3 @@ Charts are the best way for you to convey data relations visually on your notebo
 
 Each time your table is updated, the chart will be automatically refreshed.
 
----
-
-# Learn More:
-
-- [Calculations](/calculations)

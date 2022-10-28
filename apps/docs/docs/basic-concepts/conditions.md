@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Define Conditions
+# Define a Condition
 
 ## If Then Else
 

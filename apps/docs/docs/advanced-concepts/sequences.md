@@ -2,7 +2,7 @@
 sidebar_position: 110
 ---
 
-# Define Sequences
+# Define a Sequence
 
 In Decipad, a sequence is a list of quantities separated by a step.
 

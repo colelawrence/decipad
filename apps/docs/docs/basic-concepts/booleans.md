@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# Define Booleans
+# Define a Boolean
 
 On/Off, 1/0, True/False. Lots of data information comes in pairs. We call this data type a boolean. For simplicity a boolean value can either be _true_ or _false_, but you can use it to define any type of data pair you want.
 
