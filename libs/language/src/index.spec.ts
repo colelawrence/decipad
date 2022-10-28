@@ -2257,4 +2257,18 @@ describe('tiered function', () => {
       }
     `);
   });
+
+  it('infers and converts incomplete units correctly', async () => {
+    const tiered = `
+    Hewwo = tiered 10 {
+      1 : $10,
+      2 : 2
+    }`;
+    expect(await runCode(tiered)).toMatchInlineSnapshot(`
+      Object {
+        "type": $,
+        "value": Fraction(12),
+      }
+    `);
+  });
 });

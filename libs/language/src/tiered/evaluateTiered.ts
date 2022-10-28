@@ -9,10 +9,21 @@ import {
   Value,
 } from '../interpreter';
 import { AST } from '../parser';
-import { Type } from '../type';
+import { Type, Unit } from '../type';
 import { convertBetweenUnits } from '../units';
 import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { predicateSymbols } from './inferTiered';
+
+const maybeConvertBetweenUnits = (
+  f: FFraction,
+  from: Unit[] | null,
+  to: Unit[] | null
+) => {
+  if (!from || !to) {
+    return f;
+  }
+  return convertBetweenUnits(f, from, to);
+};
 
 interface Predicates {
   max?: AST.Expression;
@@ -74,10 +85,10 @@ const evaluateTier = async (
     realm.stack.set('slice', tierSizeValue);
     return evaluate(realm, tierValueExp);
   });
-  return convertBetweenUnits(
+  return maybeConvertBetweenUnits(
     getInstanceof(tierValue.getData(), FFraction),
-    tierValueType.unit ?? [],
-    tierResultType.unit ?? []
+    tierValueType.unit,
+    tierResultType.unit
   );
 };
 
@@ -101,10 +112,10 @@ const iterateTier = async (
     realm.inferContext.nodeTypes.get(tierSizeExp)
   );
 
-  const tierCutOff = convertBetweenUnits(
+  const tierCutOff = maybeConvertBetweenUnits(
     getInstanceof((await evaluate(realm, tierSizeExp)).getData(), FFraction),
-    tierSizeType.unit ?? [],
-    globalTierSizeType.unit ?? []
+    tierSizeType.unit,
+    globalTierSizeType.unit
   );
   const tierSize = tierCutOff.sub(previousCutoff);
   if (tierSize.compare(ZERO) < 0) {
@@ -173,13 +184,13 @@ export const evaluateTiered = async (
     const minType = getDefined(
       realm.inferContext.nodeTypes.get(predicates.min)
     );
-    const minimumValue = convertBetweenUnits(
+    const minimumValue = maybeConvertBetweenUnits(
       getInstanceof(
         (await evaluate(realm, predicates.min)).getData(),
         FFraction
       ),
-      minType.unit ?? [],
-      resultType.unit ?? []
+      minType.unit,
+      resultType.unit
     );
     acc = max(acc, minimumValue);
   }
@@ -188,13 +199,13 @@ export const evaluateTiered = async (
     const maxType = getDefined(
       realm.inferContext.nodeTypes.get(predicates.max)
     );
-    const maximumValue = convertBetweenUnits(
+    const maximumValue = maybeConvertBetweenUnits(
       getInstanceof(
         (await evaluate(realm, predicates.max)).getData(),
         FFraction
       ),
-      maxType.unit ?? [],
-      resultType.unit ?? []
+      maxType.unit,
+      resultType.unit
     );
     acc = min(acc, maximumValue);
   }
