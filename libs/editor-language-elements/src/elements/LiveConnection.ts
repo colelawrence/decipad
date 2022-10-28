@@ -7,7 +7,7 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
-import { parseElementVariableAssignment } from '../utils/parseElementVariableAssignment';
+import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
 export const LiveConnection: InteractiveLanguageElement = {
   type: ELEMENT_LIVE_CONNECTION,
@@ -23,6 +23,6 @@ export const LiveConnection: InteractiveLanguageElement = {
       type: 'externalref',
       args: [id],
     };
-    return [parseElementVariableAssignment(element.id, name, expression)];
+    return parseElementAsVariableAssignment(element.id, name, expression);
   },
 };

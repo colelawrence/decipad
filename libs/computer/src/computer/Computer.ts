@@ -12,15 +12,14 @@ import {
   evaluateStatement,
   ExternalDataMap,
   inferExpression,
-  isExpression,
-  parseOneBlock,
-  parseOneExpression,
+  parseExpressionOrThrow,
   Result,
   SerializedTypes,
   serializeType,
   Unit,
   InjectableExternalData,
   SerializedType,
+  parseExpression,
 } from '@decipad/language';
 import { anyMappingToMap, identity } from '@decipad/utils';
 import { dequal } from 'dequal';
@@ -44,16 +43,16 @@ import type {
   ComputeRequest,
   ComputeRequestWithExternalData,
   ComputeResponse,
-  IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
   NotebookResults,
   UserParseError,
+  ProgramBlock,
 } from '../types';
 import { getDefinedSymbol, getGoodBlocks } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
-import { ParseRet, updateParse } from './parse';
+import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
@@ -66,18 +65,16 @@ type ParseErrorMap = Map<string, UserParseError>;
 
 export class Computer {
   private locale = 'en-US';
-  private previouslyParsed: ParseRet[] = [];
-  private previousExternalData: ExternalDataMap = new Map();
+  private latestProgram: ProgramBlock[] = [];
+  private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
   private computing = false;
   private requestDebounceMs: number;
   private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
   private automaticallyGeneratedNames = new Set<string>();
 
-  // Imperative parse errors
-  private parseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
-  // parseErrors (above) and also errors from editorToComputeRequest
-  private aggregatedParseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
+  /** @deprecated Imperative parse errors */
+  private imperativeParseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -116,25 +113,6 @@ export class Computer {
         shareReplay(1)
       )
       .subscribe(this.results);
-
-    this.computeRequests
-      .pipe(
-        combineLatestWith(this.parseErrors),
-        map(([computeRequest, imperativelyAddedParseErrors]) => {
-          const computeReqParseErrorsById =
-            computeRequest.parseErrors?.map(
-              (err) => [err.elementId, err] as const
-            ) ?? [];
-          const imperativeErrorsById =
-            imperativelyAddedParseErrors?.entries() ?? [];
-
-          return new Map([
-            ...computeReqParseErrorsById,
-            ...imperativeErrorsById,
-          ]);
-        })
-      )
-      .subscribe(this.aggregatedParseErrors);
   }
 
   getVarBlockId(varName: string) {
@@ -142,12 +120,11 @@ export class Computer {
       ? varName.split('.')[0]
       : varName;
 
-    return this.previouslyParsed.find((p) => {
+    return this.latestProgram.find((p) => {
       if (varName === getExprRef(p.id)) {
         return true;
       } else if (p.type === 'identified-block' && p.block.args.length > 0) {
-        const symbol = getDefinedSymbol(p.block.args[0]);
-        return symbol === `var:${mainIdentifier}`;
+        return getDefinedSymbol(p.block.args[0]) === mainIdentifier;
       } else {
         return false;
       }
@@ -165,28 +142,6 @@ export class Computer {
       results.blockResults[blockId]
   );
 
-  getBlockIdResultOrError$ = listenerHelper(
-    this.results,
-    (
-      results,
-      blockId: string
-    ):
-      | { error: 'syntax-error' | 'missing-block'; result?: undefined }
-      | { error?: undefined; result: Result.Result } => {
-      const result = results.blockResults[blockId]?.result;
-
-      if (result == null) {
-        return {
-          error: this.aggregatedParseErrors.getValue().has(blockId)
-            ? 'syntax-error'
-            : 'missing-block',
-        };
-      }
-
-      return { result };
-    }
-  );
-
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
     this.getVarBlockId(varName)
   );
@@ -197,16 +152,15 @@ export class Computer {
   });
 
   getDefinedSymbolInBlock(blockId: string): string | undefined {
-    const parsed = this.previouslyParsed.find((p) => p.id === blockId);
+    const parsed = this.latestProgram.find((p) => p.id === blockId);
     if (parsed && parsed.type === 'identified-block') {
       const firstNode = parsed.block.args[0];
       if (firstNode) {
         const symbol = getDefinedSymbol(firstNode);
         if (symbol) {
-          if (symbol.includes(':')) {
-            return symbol.split(':')[1];
+          if (!this.automaticallyGeneratedNames.has(symbol)) {
+            return symbol;
           }
-          return symbol;
         }
       }
     }
@@ -222,7 +176,7 @@ export class Computer {
    * Get names for the autocomplete, and information about them
    */
   getNamesDefined(blockId?: string): AutocompleteName[] {
-    const program = getGoodBlocks(this.previouslyParsed);
+    const program = getGoodBlocks(this.latestProgram);
     const symbol = blockId && this.getDefinedSymbolInBlock(blockId);
     return Array.from(
       findNames(
@@ -247,7 +201,7 @@ export class Computer {
   );
 
   expressionResultFromText$(decilang: string) {
-    const exp = parseOneExpression(decilang);
+    const exp = parseExpressionOrThrow(decilang);
 
     return this.results.pipe(
       concatMap(async () => this.expressionResult(exp)),
@@ -301,20 +255,20 @@ export class Computer {
     program,
     externalData,
   }: ComputeRequestWithExternalData) {
-    const newParse = updateParse(program, this.previouslyParsed);
+    const newParse = updateChangedProgramBlocks(program, this.latestProgram);
     const sortedParse = topologicalSort(newParse);
     const newExternalData = anyMappingToMap(externalData ?? new Map());
 
     this.computationRealm.evictCache({
-      oldBlocks: getGoodBlocks(this.previouslyParsed),
+      oldBlocks: getGoodBlocks(this.latestProgram),
       newBlocks: getGoodBlocks(sortedParse),
-      oldExternalData: this.previousExternalData,
+      oldExternalData: this.latestExternalData,
       newExternalData,
     });
 
     this.computationRealm.setExternalData(newExternalData);
-    this.previousExternalData = newExternalData;
-    this.previouslyParsed = sortedParse;
+    this.latestExternalData = newExternalData;
+    this.latestProgram = sortedParse;
 
     return sortedParse;
   }
@@ -345,7 +299,7 @@ export class Computer {
       const updates: (IdentifiedError | IdentifiedResult)[] = [];
 
       for (const block of blocks) {
-        if (block.type === 'computer-parse-error') {
+        if (block.type === 'identified-error') {
           updates.push(block);
         }
       }
@@ -394,21 +348,19 @@ export class Computer {
    * Reset computer's state -- called when it panicks
    */
   reset() {
-    this.previouslyParsed = [];
-    this.previousExternalData = new Map();
+    this.latestProgram = [];
+    this.latestExternalData = new Map();
     this.computationRealm = new ComputationRealm();
     this.results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
     this.wireRequestsToResults();
   }
 
-  getStatement(blockId: string, statementIndex: number): AST.Statement | null {
-    const block = (
-      this.previouslyParsed.find(
-        (block) => block.id === blockId
-      ) as IdentifiedBlock
+  getStatement(blockId: string): AST.Statement | undefined {
+    const block = this.latestProgram.find(
+      (block) => block.id === blockId
     )?.block;
 
-    return block?.args[statementIndex] ?? null;
+    return block?.args[0];
   }
 
   getAvailableIdentifier(prefix: string, start: number): string {
@@ -431,40 +383,44 @@ export class Computer {
   }
 
   async getUnitFromText(text: string): Promise<Unit[] | null> {
-    const ast = parseOneBlock(text);
-    if (!isExpression(ast.args[0])) {
+    const ast = parseExpression(text).solution;
+    if (!ast) {
       return null;
     }
-    const expr = await inferExpression(
-      this.computationRealm.inferContext,
-      ast.args[0]
-    );
+    const expr = await inferExpression(this.computationRealm.inferContext, ast);
     return expr.unit;
   }
 
-  private updateParseError(updater: (map: ParseErrorMap) => void): void {
-    const nextValue = produce(this.parseErrors.getValue(), updater);
-    this.parseErrors.next(nextValue);
+  /** @deprecated */
+  private updateImperativeParseError(
+    updater: (map: ParseErrorMap) => void
+  ): void {
+    const nextValue = produce(this.imperativeParseErrors.getValue(), updater);
+    this.imperativeParseErrors.next(nextValue);
   }
 
-  setParseError(id: string, error: UserParseError): void {
-    this.updateParseError((map) => {
+  /** @deprecated */
+  imperativelySetParseError(id: string, error: UserParseError): void {
+    this.updateImperativeParseError((map) => {
       map.set(id, error);
     });
   }
 
-  unsetParseError(id: string): void {
-    this.updateParseError((map) => {
+  /** @deprecated */
+  imperativelyUnsetParseError(id: string): void {
+    this.updateImperativeParseError((map) => {
       map.delete(id);
     });
   }
 
-  hasParseError(id: string): boolean {
-    return this.parseErrors.getValue().has(id);
+  /** @deprecated */
+  hasImperativelySetParseError(id: string): boolean {
+    return this.imperativeParseErrors.getValue().has(id);
   }
 
-  getParseError$ = listenerHelper(
-    this.aggregatedParseErrors,
+  /** @deprecated */
+  getImperativeParseError$ = listenerHelper(
+    this.imperativeParseErrors,
     (errors, blockId: string) => errors.get(blockId)
   );
 

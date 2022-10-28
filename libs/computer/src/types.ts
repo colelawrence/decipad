@@ -11,25 +11,30 @@ export interface IdentifiedBlock {
   type: 'identified-block';
   id: string;
   block: AST.Block;
-  source: string;
 }
 
-export type UnparsedBlock = {
-  type: 'unparsed-block';
-  id: string;
-  source: string;
-};
 /** A parse error */
-export interface IdentifiedError {
-  type: 'computer-parse-error';
+type BaseParseError = {
+  type: 'identified-error';
   id: string;
-  source: string;
-  error: Parser.ParserError;
   // So we can use it interchangeably with IdentifiedResult
   result?: undefined;
   visibleVariables?: undefined;
   variableName?: undefined;
-}
+  // So we can use it interchangeably with IdentifiedBlock
+  block?: undefined;
+};
+export type IdentifiedError =
+  | (BaseParseError & {
+      errorKind: 'parse-error';
+      source: string;
+      error: Parser.ParserError;
+    })
+  | (BaseParseError & {
+      errorKind: 'dependency-cycle';
+      source?: undefined;
+      error?: undefined;
+    });
 
 /** Contains the result */
 export interface IdentifiedResult {
@@ -42,17 +47,15 @@ export interface IdentifiedResult {
   error?: undefined;
 }
 
-export type ProgramBlock = UnparsedBlock | IdentifiedBlock;
+export type ProgramBlock = IdentifiedBlock | IdentifiedError;
 export type Program = ProgramBlock[];
 
 export interface UserParseError {
   elementId: string;
-  error: string;
+  error: Parser.ParserError | string;
 }
 export interface ComputeRequest {
   program: Program;
-  subscriptions?: string[];
-  parseErrors?: UserParseError[];
 }
 
 export type ComputeRequestWithExternalData = ComputeRequest & {

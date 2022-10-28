@@ -121,7 +121,7 @@ describe('editorToProgram', () => {
 
 function prettyPrintAll(program: Program): string[] {
   return program.map((block) => {
-    if (block.type === 'unparsed-block') {
+    if (block.type !== 'identified-block') {
       throw new Error('no unparsed blocks');
     } else {
       const onlyStatement = getOnly(block.block.args);

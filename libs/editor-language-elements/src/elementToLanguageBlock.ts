@@ -1,9 +1,9 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import type { Computer } from '@decipad/computer';
+import type { Computer, Program } from '@decipad/computer';
 import { isElement } from '@udecode/plate';
 
 import * as interactiveLanguageElements from './elements';
-import type { InteractiveLanguageElement, LanguageBlock } from './types';
+import type { InteractiveLanguageElement } from './types';
 
 const interactiveElementsByType = (() => {
   const map: Array<[string, InteractiveLanguageElement]> = [];
@@ -22,55 +22,26 @@ const interactiveElementsByType = (() => {
  *
  * The result of this function, called once an element changes, is fed into the computer.
  */
-export const elementToLanguageBlock = async (
+export const elementToLanguageBlocks = async (
   editor: MyEditor,
   computer: Computer,
   element: MyElement
-): Promise<LanguageBlock | null> => {
+): Promise<Program | null> => {
   const interactiveElement = interactiveElementsByType.get(element.type);
   if (!interactiveElement) {
     return null;
   }
 
-  let blocks: LanguageBlock[] = [];
+  const blocks: Program = [];
   if (interactiveElement.isStructural) {
-    blocks = (
-      await Promise.all(
-        element.children.flatMap(async (node) =>
-          isElement(node)
-            ? (await elementToLanguageBlock(editor, computer, node)) ?? []
-            : []
-        )
-      )
-    )
-      .flat()
-      .filter(Boolean);
-  }
-
-  if (interactiveElement.getExpressionFromElement) {
-    const moreBlocks: LanguageBlock[] = (
-      await interactiveElement.getExpressionFromElement(
-        editor,
-        computer,
-        element
-      )
-    ).map(({ expression, parseErrors = [], id }) => {
-      return {
-        program: expression
-          ? [
-              {
-                type: 'identified-block',
-                id,
-                source: '',
-                block: { type: 'block', id, args: [expression] },
-              },
-            ]
-          : [],
-        parseErrors,
-      };
-    });
-
-    blocks.push(...moreBlocks);
+    for (const child of element.children) {
+      if (isElement(child)) {
+        blocks.push(
+          // eslint-disable-next-line no-await-in-loop
+          ...((await elementToLanguageBlocks(editor, computer, child)) ?? [])
+        );
+      }
+    }
   }
 
   // blocks that return unparsed code:
@@ -88,17 +59,5 @@ export const elementToLanguageBlock = async (
     }
   }
 
-  return flattenLanguageBlocks(blocks);
+  return blocks;
 };
-
-function flattenLanguageBlocks(items: LanguageBlock[]): LanguageBlock {
-  const program: LanguageBlock['program'] = [];
-  const parseErrors: LanguageBlock['parseErrors'] = [];
-
-  for (const item of items) {
-    program.push(...item.program);
-    parseErrors.push(...item.parseErrors);
-  }
-
-  return { program, parseErrors };
-}

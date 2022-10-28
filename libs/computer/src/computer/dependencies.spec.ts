@@ -1,15 +1,16 @@
-import { parseOneBlock, parseOneStatement } from '@decipad/language';
+import { parseBlockOrThrow, parseStatementOrThrow } from '@decipad/language';
 import { dependencies, findAllTables } from './dependencies';
 
 it('Finds variables depended upon by a statement', () => {
-  expect(dependencies(parseOneStatement('A = B / C'))).toMatchInlineSnapshot(`
+  expect(dependencies(parseStatementOrThrow('A = B / C')))
+    .toMatchInlineSnapshot(`
     Array [
       "/",
       "B",
       "C",
     ]
   `);
-  expect(dependencies(parseOneStatement('Table1.Col1 = 1')))
+  expect(dependencies(parseStatementOrThrow('Table1.Col1 = 1')))
     .toMatchInlineSnapshot(`
       Array [
         "Table1",
@@ -19,14 +20,16 @@ it('Finds variables depended upon by a statement', () => {
 
 it('does not show deps local to that statement or belonging to that table', () => {
   expect(
-    dependencies(parseOneStatement('Table = { Inner = 1, Col2 = Inner + Y }'))
+    dependencies(
+      parseStatementOrThrow('Table = { Inner = 1, Col2 = Inner + Y }')
+    )
   ).toMatchInlineSnapshot(`
     Array [
       "+",
       "Y",
     ]
   `);
-  expect(dependencies(parseOneStatement('Fn(Inner) = Inner + Y')))
+  expect(dependencies(parseStatementOrThrow('Fn(Inner) = Inner + Y')))
     .toMatchInlineSnapshot(`
       Array [
         "+",
@@ -39,7 +42,7 @@ it('excludes local refs that are scoped to the table', () => {
   const ns = new Map([['OtherTable', new Set(['Inner'])]]);
   expect(
     dependencies(
-      parseOneStatement('Table = { ...OtherTable, Col2 = Inner + Y }'),
+      parseStatementOrThrow('Table = { ...OtherTable, Col2 = Inner + Y }'),
       ns
     )
   ).toMatchInlineSnapshot(`
@@ -49,8 +52,9 @@ it('excludes local refs that are scoped to the table', () => {
       "Y",
     ]
   `);
-  expect(dependencies(parseOneStatement('OtherTable.NewCol = Inner + Y'), ns))
-    .toMatchInlineSnapshot(`
+  expect(
+    dependencies(parseStatementOrThrow('OtherTable.NewCol = Inner + Y'), ns)
+  ).toMatchInlineSnapshot(`
       Array [
         "OtherTable",
         "+",
@@ -60,7 +64,7 @@ it('excludes local refs that are scoped to the table', () => {
 });
 
 it('excludes func args', () => {
-  expect(dependencies(parseOneStatement('Fn(X) = X + 1')))
+  expect(dependencies(parseStatementOrThrow('Fn(X) = X + 1')))
     .toMatchInlineSnapshot(`
       Array [
         "+",
@@ -69,7 +73,7 @@ it('excludes func args', () => {
 });
 
 it('builds up a picture of available names', () => {
-  const program = parseOneBlock(`
+  const program = parseBlockOrThrow(`
     MyFn(MyFnArg) = 1
 
     MyTable1 = {

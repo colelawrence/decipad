@@ -2,7 +2,7 @@ import { ELEMENT_CODE_LINE, MyEditor, MyElement } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { getCodeLineSource } from '@decipad/editor-utils';
 import { InteractiveLanguageElement } from '../types';
-import { parseElementSourceCode } from '../utils/parseElementSourceCode';
+import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 
 export const getUnparsedBlockFromCodeLine = async (
   _editor: MyEditor,
@@ -10,7 +10,7 @@ export const getUnparsedBlockFromCodeLine = async (
   block: MyElement
 ) => {
   if (block.type === ELEMENT_CODE_LINE) {
-    return [parseElementSourceCode(block.id, getCodeLineSource(block))];
+    return parseElementAsSourceCode(block.id, getCodeLineSource(block));
   }
   return [];
 };

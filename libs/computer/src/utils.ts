@@ -1,6 +1,6 @@
 import { AST, SyntaxError, BracketError, walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
-import { ParseRet } from './computer/parse';
+import { IdentifiedError, IdentifiedResult, ProgramBlock } from './types';
 
 export const getStatement = (
   program: AST.Block[],
@@ -36,42 +36,34 @@ export const getDefinedSymbol = (
 ) => {
   switch (stmt.type) {
     case 'function-definition':
-      return `fn:${getIdentifierString(stmt.args[0])}`;
     case 'assign':
-      return `var:${getIdentifierString(stmt.args[0])}`;
     case 'categories':
-      return `var:${getIdentifierString(stmt.args[0])}`;
+      return getIdentifierString(stmt.args[0]);
     case 'matrix-assign':
       return findIncrementalDefinitions
-        ? `var:${getIdentifierString(stmt.args[0])}`
+        ? getIdentifierString(stmt.args[0])
         : null;
     case 'table-column-assign':
       return findIncrementalDefinitions
-        ? `var:${getIdentifierString(stmt.args[0])}`
+        ? getIdentifierString(stmt.args[0])
         : null;
     default:
       return null;
   }
 };
 
-export const getGoodBlocks = (parsed: ParseRet[]) =>
+export const getGoodBlocks = (parsed: ProgramBlock[]) =>
   parsed.flatMap((b) => {
     if (b.type === 'identified-block') return [b.block];
     else return [];
   });
-
-export const getDefinedSymbolAt = (program: AST.Block[], blockId: string) => {
-  const stmt = getStatement(program, blockId);
-
-  return stmt != null ? getDefinedSymbol(stmt) : null;
-};
 
 export const getAllSymbolsDefined = (blocks: AST.Block[]) =>
   blocks.flatMap((block) =>
     block.args.flatMap((statement) => {
       const sym = getDefinedSymbol(statement);
       if (sym != null) return [sym];
-      return [];
+      else return [];
     })
   );
 
@@ -85,26 +77,15 @@ export function* getSymbolsDefinedInBlocks(
   }
 }
 
-export const getReferredSymbol = (node: AST.Node) => {
+const getReferredSymbol = (node: AST.Node) => {
   switch (node.type) {
     case 'ref':
-      return `var:${getIdentifierString(node)}`;
     case 'funcref':
-      return `fn:${getIdentifierString(node)}`;
     case 'externalref':
-      return `externaldata:${getIdentifierString(node)}`;
+      return getIdentifierString(node);
     default:
       return null;
   }
-};
-
-export const parseDefName = (sym: string): ['var' | 'fn', string] => {
-  const [, type, rest] = getDefined(
-    sym.match(/^(var|fn):(.*)$/),
-    'Expected defname to be in the format var:{name} or fn:{name}'
-  );
-
-  return [type as 'var' | 'fn', rest];
 };
 
 export const findSymbolsUsed = (stmt: AST.Statement) => {
@@ -136,6 +117,18 @@ export const isBracketError = (error: unknown): error is BracketError => {
   );
 };
 
+export const isTypeError = (
+  error?: IdentifiedResult | IdentifiedError | null
+): error is IdentifiedResult & {
+  type: { kind: 'type-error' };
+} => {
+  return Boolean(
+    error &&
+      error.type === 'computer-result' &&
+      error.result.type.kind === 'type-error'
+  );
+};
+
 export const hasBracketError = (
   error: unknown
 ): error is { bracketError: BracketError } => {
@@ -144,4 +137,15 @@ export const hasBracketError = (
     'bracketError' in error &&
     isBracketError((error as { bracketError: BracketError }).bracketError)
   );
+};
+
+export const identifiedErrorToMessage = (error: IdentifiedError): string => {
+  switch (error.errorKind) {
+    case 'parse-error': {
+      return error.error.message;
+    }
+    case 'dependency-cycle': {
+      return "Number's value depends on itself";
+    }
+  }
 };

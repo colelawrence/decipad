@@ -17,6 +17,6 @@ export const toColumnAssign = (
         astNode('coldef', column.columnName),
         column.expression
       ),
-    parseErrors: column.parseErrors,
+    errors: column.errors,
   };
 };

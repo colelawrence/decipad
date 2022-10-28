@@ -15,7 +15,7 @@ import {
   GetStatementsToEvictArgs,
 } from '../caching/getStatementsToEvict';
 import type { IdentifiedResult } from '../types';
-import { getDefinedSymbolAt, parseDefName } from '../utils';
+import { getDefinedSymbol, getStatement } from '../utils';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -47,17 +47,12 @@ export class ComputationRealm {
     this.errorLocs.delete(blockId);
     this.locCache.delete(blockId);
 
-    const sym = getDefinedSymbolAt(program, blockId);
+    const sym = getDefinedSymbol(getStatement(program, blockId));
     if (sym) {
-      const [type, name] = parseDefName(sym);
-
-      if (type === 'var') {
-        this.interpreterRealm.stack.delete(name, 'global');
-        this.inferContext.stack.delete(name, 'global');
-      } else {
-        this.interpreterRealm.functions.delete(name);
-        this.inferContext.functionDefinitions.delete(name);
-      }
+      this.interpreterRealm.stack.delete(sym, 'global');
+      this.inferContext.stack.delete(sym, 'global');
+      this.interpreterRealm.functions.delete(sym);
+      this.inferContext.functionDefinitions.delete(sym);
     }
   }
 

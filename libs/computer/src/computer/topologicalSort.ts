@@ -1,9 +1,8 @@
 import { getDefined } from '@decipad/utils';
 import { isAssignment } from '@decipad/language';
-import { IdentifiedBlock, IdentifiedError } from '../types';
+import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
 import { getIdentifierString } from '../utils';
 import { dependencies, TableNamespaces, findAllTables } from './dependencies';
-import { ParseRet } from './parse';
 
 interface Node {
   entity: string | null;
@@ -15,12 +14,12 @@ interface Node {
 
 type EntityNodeMap = Map<string, Node[]>;
 
-const badBlock = (block: ParseRet): block is IdentifiedError => {
-  return block.type === 'computer-parse-error';
+const badBlock = (block: ProgramBlock): block is IdentifiedError => {
+  return block.type === 'identified-error';
 };
 
-const goodBlock = (block: ParseRet): block is IdentifiedBlock => {
-  return block.type !== 'computer-parse-error';
+const goodBlock = (block: ProgramBlock): block is IdentifiedBlock => {
+  return block.type !== 'identified-error';
 };
 
 const blockEntity = ({ block }: IdentifiedBlock): string | null => {
@@ -62,16 +61,13 @@ const drawEdges = (
   node.edges = edges as Node[];
 };
 
-const identifiedErrorFromNode = (
-  node: Node,
-  message: string
-): IdentifiedError => ({
-  ...node.value,
-  type: 'computer-parse-error',
-  error: { message },
+const identifiedErrorFromNode = (id: string): IdentifiedError => ({
+  type: 'identified-error',
+  id,
+  errorKind: 'dependency-cycle',
 });
 
-export const topologicalSort = (blocks: ParseRet[]): ParseRet[] => {
+export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   const errored = blocks.filter(badBlock);
   const sorted: IdentifiedBlock[] = [];
 
@@ -87,20 +83,19 @@ export const topologicalSort = (blocks: ParseRet[]): ParseRet[] => {
     return map;
   }, new Map());
 
-  const visit = (n: Node): void | Error => {
+  const visit = (n: Node): void | boolean => {
     if (n.permanentMark) {
       return;
     }
     if (n.temporaryMark) {
       // Circular dep
-      const error = new TypeError('Circular dependency detected');
-      const errorNode = identifiedErrorFromNode(n, error.message);
+      const errorNode = identifiedErrorFromNode(n.value.id);
       if (!n.permanentMark) {
         n.permanentMark = true;
         errored.push(errorNode);
       }
 
-      return error;
+      return true;
     }
     n.temporaryMark = true;
 
@@ -109,7 +104,7 @@ export const topologicalSort = (blocks: ParseRet[]): ParseRet[] => {
       if (error) {
         if (!n.permanentMark) {
           n.permanentMark = true;
-          errored.push(identifiedErrorFromNode(n, error.message));
+          errored.push(identifiedErrorFromNode(n.value.id));
         }
         return error;
       }

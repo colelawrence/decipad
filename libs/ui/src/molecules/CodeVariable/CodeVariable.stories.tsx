@@ -16,4 +16,4 @@ export const Normal: Story<ComponentProps<typeof CodeVariable>> = (args) => (
 
 export const VariableMissing: Story<ComponentProps<typeof CodeVariable>> = (
   args
-) => <CodeVariable {...args} variableScope="undefined" />;
+) => <CodeVariable {...args} variableMissing />;

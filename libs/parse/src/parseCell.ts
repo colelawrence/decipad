@@ -177,9 +177,9 @@ export const getExpression = (exp: Error | AST.Expression): AST.Expression => {
   return exp;
 };
 
-export const getNullReplacementValue = async (
+export const getNullReplacementValue = (
   cellType: CellValueType
-): Promise<AST.Expression> => {
+): AST.Expression => {
   if (cellType.kind === 'date') {
     return dateToAST(cellType, new Date('2020-01-01'));
   }

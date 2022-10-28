@@ -155,12 +155,12 @@ describe('getTableAstNodeFromTableElement', () => {
         Object {
           "blockId": "th2",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3")),
-          "parseErrors": Array [],
+          "errors": Array [],
         },
         Object {
           "blockId": "th3",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1))),
-          "parseErrors": Array [],
+          "errors": Array [],
         },
       ]
     `);
@@ -244,19 +244,11 @@ describe('formulaSourceToColumn', () => {
         'columnName',
         'blockId',
         'syntax //--// error'
-      )
-    ).toMatchInlineSnapshot(`
-      Object {
-        "columnName": "columnName",
-        "elementId": "blockId",
-        "expression": (noop),
-        "parseErrors": Array [
-          Object {
-            "elementId": "blockId",
-            "error": "Syntax error",
-          },
-        ],
-      }
-    `);
+      ).errors[0]
+    ).toMatchObject({
+      error: {
+        token: { text: '/' },
+      },
+    });
   });
 });

@@ -8,8 +8,6 @@ import {
   getSymbolsDefinedInBlocks,
 } from '../utils';
 
-const previousSymbols = Array.from(previousRefSymbols).map((s) => `var:${s}`);
-
 export const getDependents = (
   program: AST.Block[],
   dependentsOf: string[],
@@ -37,7 +35,7 @@ export const getDependents = (
         dependencySymbols.add(sym);
       }
     }
-    for (const s of previousSymbols) {
+    for (const s of previousRefSymbols) {
       dependencySymbols.add(s);
     }
   });

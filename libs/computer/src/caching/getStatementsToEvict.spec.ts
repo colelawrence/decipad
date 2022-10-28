@@ -8,31 +8,31 @@ import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
 } from './getStatementsToEvict';
-import { parse } from '../testUtils';
+import { testBlocks } from '../testUtils';
 
 describe('findSymbolErrors', () => {
   it('finds variables which are reassigned', () => {
-    expect(findSymbolErrors(parse('A = 0'))).toEqual(new Set([]));
+    expect(findSymbolErrors(testBlocks('A = 0'))).toEqual(new Set([]));
 
-    expect(findSymbolErrors(parse('A = 1', 'Unrelated = 2', 'A = 4'))).toEqual(
-      new Set(['var:A'])
-    );
+    expect(
+      findSymbolErrors(testBlocks('A = 1', 'Unrelated = 2', 'A = 4'))
+    ).toEqual(new Set(['A']));
 
-    expect(findSymbolErrors(parse('A = 0', 'A = 1'))).toEqual(
-      new Set(['var:A'])
+    expect(findSymbolErrors(testBlocks('A = 0', 'A = 1'))).toEqual(
+      new Set(['A'])
     );
   });
 
   it('finds symbols which are being used before being assigned', () => {
-    expect(findSymbolErrors(parse('A = B', 'B = 1'))).toEqual(
-      new Set(['var:B'])
+    expect(findSymbolErrors(testBlocks('A = B', 'B = 1'))).toEqual(
+      new Set(['B'])
     );
   });
 
   it('works for categories', () => {
     expect(
       findSymbolErrors(
-        parse(
+        testBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix',
@@ -45,48 +45,48 @@ describe('findSymbolErrors', () => {
 
 describe('getChangedBlocks', () => {
   it('finds changed blocks', () => {
-    expect(getChangedBlocks(parse('A = 1'), parse('A = 2'))).toEqual(
+    expect(getChangedBlocks(testBlocks('A = 1'), testBlocks('A = 2'))).toEqual(
       new Set(['block-0'])
     );
 
-    expect(getChangedBlocks(parse('A = 1'), parse('A = 1'))).toEqual(
+    expect(getChangedBlocks(testBlocks('A = 1'), testBlocks('A = 1'))).toEqual(
       new Set([])
     );
 
-    expect(getChangedBlocks(parse(), parse())).toEqual(new Set([]));
+    expect(getChangedBlocks(testBlocks(), testBlocks())).toEqual(new Set([]));
   });
 
   it('tricky cases', () => {
     // One missing block
-    expect(getChangedBlocks(parse('A = 1', 'B = 2'), parse('A = 1'))).toEqual(
-      new Set(['block-1'])
-    );
+    expect(
+      getChangedBlocks(testBlocks('A = 1', 'B = 2'), testBlocks('A = 1'))
+    ).toEqual(new Set(['block-1']));
 
     // A = 1 adopted a new ID
-    expect(getChangedBlocks(parse('A = 1', 'B = 2'), parse('B = 2'))).toEqual(
-      new Set(['block-0', 'block-1'])
-    );
+    expect(
+      getChangedBlocks(testBlocks('A = 1', 'B = 2'), testBlocks('B = 2'))
+    ).toEqual(new Set(['block-0', 'block-1']));
 
     // One block is now empty
     expect(
-      getChangedBlocks(parse('A = 1', 'B = 2'), parse('', 'B = 2'))
+      getChangedBlocks(testBlocks('A = 1', 'B = 2'), testBlocks('', 'B = 2'))
     ).toEqual(new Set(['block-0']));
   });
 });
 
 describe('findSymbolsAffectedByChange', () => {
   it('finds symbols in changed blocks', () => {
-    expect(findSymbolsAffectedByChange(parse('A = 1'), parse('B = 1'))).toEqual(
-      new Set(['var:A', 'var:B'])
-    );
+    expect(
+      findSymbolsAffectedByChange(testBlocks('A = 1'), testBlocks('B = 1'))
+    ).toEqual(new Set(['A', 'B']));
 
-    expect(findSymbolsAffectedByChange(parse('A = 1'), parse())).toEqual(
-      new Set(['var:A'])
-    );
+    expect(
+      findSymbolsAffectedByChange(testBlocks('A = 1'), testBlocks())
+    ).toEqual(new Set(['A']));
 
-    expect(findSymbolsAffectedByChange(parse(), parse('A = 1'))).toEqual(
-      new Set(['var:A'])
-    );
+    expect(
+      findSymbolsAffectedByChange(testBlocks(), testBlocks('A = 1'))
+    ).toEqual(new Set(['A']));
   });
 });
 
@@ -104,24 +104,24 @@ describe('evictCache', () => {
   /* eslint-disable jest/expect-expect */
   it('evicts location and symbol cache for changed stuff and dependent stuff', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'B = A + 10', 'B + 9', 'A + 1'),
-      newBlocks: parse('A = 1', 'B = A + 99', 'B + 9', 'A + 1'),
+      oldBlocks: testBlocks('A = 1', 'B = A + 10', 'B + 9', 'A + 1'),
+      newBlocks: testBlocks('A = 1', 'B = A + 99', 'B + 9', 'A + 1'),
       expectEvicted: [1, 2],
     });
   });
 
   it('evicts non-symbol usages', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'A + 1'),
-      newBlocks: parse('A = 9', 'A + 1'),
+      oldBlocks: testBlocks('A = 1', 'A + 1'),
+      newBlocks: testBlocks('A = 9', 'A + 1'),
       expectEvicted: [0, 1],
     });
   });
 
   it('evicts non-symbol locs which changed', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'A + 1'),
-      newBlocks: parse('A = 1', 'A + 9'),
+      oldBlocks: testBlocks('A = 1', 'A + 1'),
+      newBlocks: testBlocks('A = 1', 'A + 9'),
 
       expectEvicted: [1],
     });
@@ -129,8 +129,8 @@ describe('evictCache', () => {
 
   it('propagates to deps of disappearing variables', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'A + 1'),
-      newBlocks: parse('NotA = 1', 'A + 9'),
+      oldBlocks: testBlocks('A = 1', 'A + 1'),
+      newBlocks: testBlocks('NotA = 1', 'A + 9'),
 
       expectEvicted: [0, 1],
     });
@@ -138,8 +138,8 @@ describe('evictCache', () => {
 
   it('propagates to deps of disappearing variables (2)', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'A + 1'),
-      newBlocks: parse('NotA = 1', 'A + 1'),
+      oldBlocks: testBlocks('A = 1', 'A + 1'),
+      newBlocks: testBlocks('NotA = 1', 'A + 1'),
 
       expectEvicted: [0, 1],
     });
@@ -147,15 +147,15 @@ describe('evictCache', () => {
 
   it('propagates through indirect deps', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 0', 'C = B + 10', 'D = C + 100'),
-      newBlocks: parse('A = 0', 'B = A + 1', 'C = B + 10', ''),
+      oldBlocks: testBlocks('A = 0', 'C = B + 10', 'D = C + 100'),
+      newBlocks: testBlocks('A = 0', 'B = A + 1', 'C = B + 10', ''),
 
       expectEvicted: [1, 2],
     });
 
     testEvictBlocks({
-      oldBlocks: parse('A = 0', 'B = A + 1', 'C = B + 10', 'D = C + 100'),
-      newBlocks: parse('A = 0', 'C = B + 10', ''),
+      oldBlocks: testBlocks('A = 0', 'B = A + 1', 'C = B + 10', 'D = C + 100'),
+      newBlocks: testBlocks('A = 0', 'C = B + 10', ''),
 
       expectEvicted: [1, 2, 3],
     });
@@ -163,8 +163,8 @@ describe('evictCache', () => {
 
   it('deals with a variable being moved elsewhere', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'B = 2', 'A + 1'),
-      newBlocks: parse('B = 2', 'A = 1', 'A + 1'),
+      oldBlocks: testBlocks('A = 1', 'B = 2', 'A + 1'),
+      newBlocks: testBlocks('B = 2', 'A = 1', 'A + 1'),
 
       expectEvicted: [0, 1, 2],
     });
@@ -172,8 +172,8 @@ describe('evictCache', () => {
 
   it('deals with a variable with the same name appearing', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'B = 2', 'A + 1'),
-      newBlocks: parse('A = 1', 'A = 9', 'A + 1'),
+      oldBlocks: testBlocks('A = 1', 'B = 2', 'A + 1'),
+      newBlocks: testBlocks('A = 1', 'A = 9', 'A + 1'),
 
       expectEvicted: [0, 1, 2],
     });
@@ -181,8 +181,8 @@ describe('evictCache', () => {
 
   it('deals with a variable with the same name appearing (2)', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = 1', 'A + 1'),
-      newBlocks: parse('A = 1', 'A + 1', 'A = 9'),
+      oldBlocks: testBlocks('A = 1', 'A + 1'),
+      newBlocks: testBlocks('A = 1', 'A + 1', 'A = 9'),
 
       expectEvicted: [0, 1], // block 2 doesn't exist in the old program
     });
@@ -190,8 +190,8 @@ describe('evictCache', () => {
 
   it('deals with a dependency loop', () => {
     testEvictBlocks({
-      oldBlocks: parse('A = B', 'B = A'),
-      newBlocks: parse('A = B + 9', 'B = A + 9'),
+      oldBlocks: testBlocks('A = B', 'B = A'),
+      newBlocks: testBlocks('A = B + 9', 'B = A + 9'),
 
       expectEvicted: [0, 1],
     });
@@ -200,12 +200,12 @@ describe('evictCache', () => {
   describe('sets/matrices', () => {
     it('deals with matrices', () => {
       testEvictBlocks({
-        oldBlocks: parse(
+        oldBlocks: testBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix[Cat]'
         ),
-        newBlocks: parse(
+        newBlocks: testBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 2',
           'Matrix[Cat]'
@@ -215,12 +215,12 @@ describe('evictCache', () => {
       });
 
       testEvictBlocks({
-        oldBlocks: parse(
+        oldBlocks: testBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix'
         ),
-        newBlocks: parse(
+        newBlocks: testBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 2',
           'Matrix'
@@ -232,26 +232,26 @@ describe('evictCache', () => {
 
     it('propagates changes in the set', () => {
       testEvictBlocks({
-        oldBlocks: parse('Cat = categories [1, 2]', 'Matrix[Cat] = 1'),
-        newBlocks: parse('Cat = categories [1, 2, 3]', 'Matrix[Cat] = 1'),
+        oldBlocks: testBlocks('Cat = categories [1, 2]', 'Matrix[Cat] = 1'),
+        newBlocks: testBlocks('Cat = categories [1, 2, 3]', 'Matrix[Cat] = 1'),
 
         expectEvicted: [0, 1],
       });
 
       testEvictBlocks({
-        oldBlocks: parse('Cat = categories [1, 2]', 'Matrix[Cat] = 1'),
-        newBlocks: parse('Cat = categories [1, 2, 3]', 'Matrix[Cat] = 2'),
+        oldBlocks: testBlocks('Cat = categories [1, 2]', 'Matrix[Cat] = 1'),
+        newBlocks: testBlocks('Cat = categories [1, 2, 3]', 'Matrix[Cat] = 2'),
 
         expectEvicted: [0, 1],
       });
 
       testEvictBlocks({
-        oldBlocks: parse(
+        oldBlocks: testBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix[Cat]'
         ),
-        newBlocks: parse(
+        newBlocks: testBlocks(
           'Cat = categories [1, 2, 3]',
           'Matrix[Cat] = 1',
           'Matrix[Cat]'
@@ -262,7 +262,7 @@ describe('evictCache', () => {
     });
 
     it('deals with nothing having changed', () => {
-      const old = parse(
+      const old = testBlocks(
         'Cat = categories [1, 2]',
         'Matrix[Cat] = 1',
         'Matrix',

@@ -1,4 +1,4 @@
-import { parseOneBlock, prettyPrintAST, runCode } from '..';
+import { parseBlockOrThrow, prettyPrintAST, runCode } from '..';
 
 /* eslint-disable no-await-in-loop */
 /* eslint-disable jest/expect-expect */
@@ -49,7 +49,7 @@ it('correctly precedes logical ops', async () => {
 
 async function check(sourceCode: string) {
   const codeMsg = () =>
-    [`\`${sourceCode}\``, prettyPrintAST(parseOneBlock(sourceCode))].join(
+    [`\`${sourceCode}\``, prettyPrintAST(parseBlockOrThrow(sourceCode))].join(
       '\n\n'
     );
 

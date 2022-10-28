@@ -5,7 +5,7 @@ import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
 import { OneResult, validateResult } from './result';
 
-export const parseOneBlock = (source: string): AST.Block => {
+export const parseBlockOrThrow = (source: string): AST.Block => {
   const parsed = parseBlock(source);
 
   if (parsed.error) {
@@ -15,15 +15,15 @@ export const parseOneBlock = (source: string): AST.Block => {
   return parsed.solution;
 };
 
-export const parseOneStatement = (source: string): AST.Statement => {
-  const block = parseOneBlock(source);
+export const parseStatementOrThrow = (source: string): AST.Statement => {
+  const block = parseBlockOrThrow(source);
   const item = block.args[0];
 
   return item;
 };
 
-export const parseOneExpression = (source: string): AST.Expression => {
-  const block = parseOneBlock(source);
+export const parseExpressionOrThrow = (source: string): AST.Expression => {
+  const block = parseBlockOrThrow(source);
   const item = block.args[0];
   if (!isExpression(item)) {
     throw new TypeError('Expected expression');
@@ -68,6 +68,6 @@ export const runCode = async (
   source: string,
   { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
 ) => {
-  const block = parseOneBlock(source);
+  const block = parseBlockOrThrow(source);
   return runAST(block, { externalData });
 };

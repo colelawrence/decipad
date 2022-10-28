@@ -137,12 +137,12 @@ const normalizeSeriesColumn = (
   );
   const cellId = firstCell[0].id;
   if (error) {
-    computer.setParseError(cellId, { elementId: cellId, error });
+    computer.imperativelySetParseError(cellId, { elementId: cellId, error });
     return false;
   }
   // no parse error
-  if (computer.hasParseError(cellId)) {
-    computer.unsetParseError(cellId);
+  if (computer.hasImperativelySetParseError(cellId)) {
+    computer.imperativelyUnsetParseError(cellId);
   }
 
   // now we need to ensure all the remaining cells have the expected from the next in the series

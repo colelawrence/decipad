@@ -1,4 +1,4 @@
-import { Computer, parseOneExpression } from '@decipad/computer';
+import { Computer, parseExpressionOrThrow } from '@decipad/computer';
 import { CoercibleType } from './types';
 
 interface InferNumberOptions {
@@ -25,7 +25,7 @@ export const inferNumber = async (
     return inferPlainNumber(text);
   }
   try {
-    const exp = parseOneExpression(text);
+    const exp = parseExpressionOrThrow(text);
     const type = await computer.expressionType(exp);
     if ((await type).kind === 'number') {
       return {

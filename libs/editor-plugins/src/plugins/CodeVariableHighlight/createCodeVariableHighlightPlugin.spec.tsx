@@ -8,8 +8,8 @@ import {
 } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate';
-import { Computer } from '@decipad/computer';
-import { timeout } from '@decipad/utils';
+import { Computer, parseBlock } from '@decipad/computer';
+import { getDefined, timeout } from '@decipad/utils';
 import { ComputerContextProvider } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -41,13 +41,7 @@ describe('variable highlights', () => {
   it('show bubbles in variable declarations', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
-      program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'id = 42',
-        },
-      ],
+      program: [getIdentifiedBlock('x1', 'id = 42')],
     });
 
     await timeout(0);
@@ -81,16 +75,8 @@ describe('variable highlights', () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
       program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'x=42',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x2',
-          source: 'y=x',
-        },
+        getIdentifiedBlock('x1', 'x=42'),
+        getIdentifiedBlock('x2', 'y=x'),
       ],
     });
 
@@ -132,16 +118,8 @@ describe('variable highlights', () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
       program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'MyTable = { A = [1] }',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x2',
-          source: 'MyTable.A',
-        },
+        getIdentifiedBlock('x1', 'MyTable = { A = [1] }'),
+        getIdentifiedBlock('x2', 'MyTable.A'),
       ],
     });
 
@@ -193,16 +171,8 @@ describe('variable highlights', () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
       program: [
-        {
-          type: 'unparsed-block',
-          id: 'defining t for test purposes',
-          source: 't = {A = 1}',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'x = {\n  A = 1\n  B = A\n  C = t.A\n}',
-        },
+        getIdentifiedBlock('defining t for test purposes', 't = {A = 1}'),
+        getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = A\n  C = t.A\n}'),
       ],
     });
 
@@ -237,13 +207,7 @@ describe('variable highlights', () => {
   it('highlights column access with spaces', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
-      program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'x = {\n  A = 1\n  B = x . A\n}',
-        },
-      ],
+      program: [getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = x . A\n}')],
     });
 
     await timeout(0);
@@ -279,16 +243,8 @@ describe('variable highlights', () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
       program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'x = { A = [1]}',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x2',
-          source: 'y = { ...x }',
-        },
+        getIdentifiedBlock('x1', 'x = { A = [1]}'),
+        getIdentifiedBlock('x2', 'y = { ...x }'),
       ],
     });
 
@@ -323,21 +279,9 @@ describe('variable highlights', () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
       program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'x = { A = [1]}',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x2',
-          source: 'B = 2',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x3',
-          source: 'x.B',
-        },
+        getIdentifiedBlock('x1', 'x = { A = [1]}'),
+        getIdentifiedBlock('x2', 'B = 2'),
+        getIdentifiedBlock('x3', 'x.B'),
       ],
     });
 
@@ -378,16 +322,8 @@ describe('variable highlights', () => {
     const computer = new Computer({ requestDebounceMs: 0 });
     computer.pushCompute({
       program: [
-        {
-          type: 'unparsed-block',
-          id: 'x1',
-          source: 'X=3',
-        },
-        {
-          type: 'unparsed-block',
-          id: 'x2',
-          source: 'F(A) = A+X',
-        },
+        getIdentifiedBlock('x1', 'X=3'),
+        getIdentifiedBlock('x2', 'F(A) = A+X'),
       ],
     });
 
@@ -417,3 +353,11 @@ describe('variable highlights', () => {
     ).toEqual(findParentWithStyle(xUsage, 'backgroundColor')!.backgroundColor);
   });
 });
+
+const getIdentifiedBlock = (id: string, source: string) =>
+  ({
+    type: 'identified-block',
+    id,
+    source,
+    block: getDefined(parseBlock(source, id).solution),
+  } as const);

@@ -62,7 +62,7 @@ const getInsertableValue = (
 };
 
 const getVariableName = (computer: Computer, elementId: string) => {
-  const res = computer.getStatement(elementId, 0);
+  const res = computer.getStatement(elementId);
   return res?.type === 'assign' ? res.args[0].args[0] : null;
 };
 

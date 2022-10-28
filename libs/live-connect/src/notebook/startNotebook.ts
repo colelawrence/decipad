@@ -4,7 +4,12 @@ import { debounce } from 'lodash';
 import { createDocSyncEditor } from '@decipad/docsync';
 import { getDefined } from '@decipad/utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import { Computer, IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import {
+  Computer,
+  IdentifiedError,
+  IdentifiedResult,
+  identifiedErrorToMessage,
+} from '@decipad/computer';
 import { createTPlateEditor } from '@decipad/editor-types';
 import type { Observe, Subscription } from '../types';
 import { liveConnections } from './liveConnections';
@@ -56,8 +61,8 @@ export const startNotebook = async (
     .subscribe((result: IdentifiedResult | IdentifiedError | undefined) => {
       if (result) {
         const identifier = computer.getDefinedSymbolInBlock(blockId);
-        if (result.type === 'computer-parse-error') {
-          onError(new Error(result.error.message));
+        if (result.type === 'identified-error') {
+          onError(new Error(identifiedErrorToMessage(result)));
         } else if (result.type === 'computer-result') {
           subscription.notify({
             meta: { title: identifier },

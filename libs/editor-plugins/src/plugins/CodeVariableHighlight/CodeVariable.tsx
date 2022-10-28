@@ -84,6 +84,7 @@ export const CodeVariable: CodeLeaf = ({
       <UICodeVariable
         provideVariableDefLink={provideVariableDefLink}
         variableScope={variableScope}
+        variableMissing={variableMissing && !isDeclaration}
         defBlockId={defBlockId}
         onGoToDefinition={goToDefinition}
       >

@@ -26,19 +26,6 @@ const getChangedMapKeys = <T>(
   });
 };
 
-const getChangedExternalData = (
-  oldExternalData: ExternalDataMap,
-  newExternalData: ExternalDataMap
-): string[] => {
-  const changedKeys = getChangedMapKeys(oldExternalData, newExternalData);
-  return [
-    // evict classical references to external data (unused?)
-    ...changedKeys.map((key) => `externaldata:${key}`),
-    // evict normal references to external data
-    ...changedKeys.map((key) => `var:${key}`),
-  ];
-};
-
 const mapify = (blocks: AST.Block[]) => new Map(blocks.map((b) => [b.id, b]));
 export const getChangedBlocks = (
   oldBlocks: AST.Block[],
@@ -115,7 +102,7 @@ export const getStatementsToEvict = ({
   const dirtyLocs = new Set(getExistingBlockIds(oldBlocks, changedBlockIds));
 
   const dirtySymbols = new Set([
-    ...getChangedExternalData(oldExternalData, newExternalData),
+    ...getChangedMapKeys(oldExternalData, newExternalData),
     ...findSymbolsAffectedByChange(oldBlocks, newBlocks),
     ...findSymbolErrors(oldBlocks),
     ...findSymbolErrors(newBlocks),

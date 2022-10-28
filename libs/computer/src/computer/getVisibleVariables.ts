@@ -34,7 +34,7 @@ export const getVisibleVariables = (
 
     globalVars.add(getExprRef(blockId));
 
-    const sym = getDefinedSymbol(stat)?.split(':').pop();
+    const sym = getDefinedSymbol(stat);
     if (sym) {
       globalVars.add(sym);
 

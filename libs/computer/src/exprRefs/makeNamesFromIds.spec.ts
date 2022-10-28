@@ -1,11 +1,10 @@
-import { AST, astNode as n, prettyPrintAST } from '@decipad/language';
-import type { IdentifiedBlock, UnparsedBlock } from '../types';
+import { AST, astNode as n } from '@decipad/language';
+import type { IdentifiedBlock } from '../types';
 import { replaceExprRefsWithPrettyRefs } from './makeNamesFromIds';
-import { getIdentifiedBlocks } from '../testUtils';
+import { getIdentifiedBlocks, prettyPrintProgramBlock } from '../testUtils';
 
 const b = (id: string, stat: AST.Statement): IdentifiedBlock => ({
   type: 'identified-block',
-  source: '',
   id,
   block: n('block', stat),
 });
@@ -24,16 +23,13 @@ const stat3 = b(
 const assignVarMessy = b('1', n('assign', n('def', '@ +'), n('noop')));
 const useVarMessy = b('2', n('ref', 'exprRef_1'));
 
-const stringify = (b: IdentifiedBlock | UnparsedBlock) =>
-  b.type === 'identified-block' ? prettyPrintAST(b.block.args[0]) : b.source;
-
 it('creates names for the computer to use', () => {
   const [result, renames] = replaceExprRefsWithPrettyRefs([
     assignVar1,
     stat2,
     stat3,
   ]);
-  const stringified = result.map(stringify);
+  const stringified = result.map(prettyPrintProgramBlock);
 
   expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
@@ -61,7 +57,7 @@ it('creates names for the computer to use', () => {
 
 it('creates names for the computer to use (2)', () => {
   const [result] = replaceExprRefsWithPrettyRefs([assignVar1, assignVar1]);
-  const stringified = result.map(stringify);
+  const stringified = result.map(prettyPrintProgramBlock);
 
   expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
@@ -78,7 +74,7 @@ it('creates names for the computer to use (2)', () => {
 
 it('allows messy names', () => {
   const [result] = replaceExprRefsWithPrettyRefs([assignVarMessy, useVarMessy]);
-  const stringified = result.map(stringify);
+  const stringified = result.map(prettyPrintProgramBlock);
 
   expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
@@ -94,7 +90,7 @@ it('allows messy names', () => {
 
 it('creates names for the computer to use (3)', () => {
   const [result] = replaceExprRefsWithPrettyRefs([stat2, stat2]);
-  const stringified = result.map(stringify);
+  const stringified = result.map(prettyPrintProgramBlock);
 
   expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign
@@ -112,7 +108,7 @@ it('creates names for the computer to use (3)', () => {
 it('tolerates empty var names', () => {
   const emptyVarBlock = b('1', n('assign', n('def', ''), n('noop')));
   const [result] = replaceExprRefsWithPrettyRefs([emptyVarBlock]);
-  const stringified = result.map(stringify);
+  const stringified = result.map(prettyPrintProgramBlock);
 
   expect(stringified[0]).toMatchInlineSnapshot(`
     "(assign

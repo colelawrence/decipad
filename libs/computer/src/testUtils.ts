@@ -1,21 +1,21 @@
 import { formatError } from '@decipad/format';
 import Fraction from '@decipad/fraction';
-import { astNode, parseOneStatement } from '@decipad/language';
-import { AST } from '.';
-import { wrappedParse } from './computer/parse';
+import { astNode, parseBlock, parseStatementOrThrow } from '@decipad/language';
+import { getOnly } from '@decipad/utils';
+import { AST, prettyPrintAST } from '.';
 import {
   ComputePanic,
   ComputeResponse,
   IdentifiedBlock,
+  IdentifiedError,
   IdentifiedResult,
-  Program,
-  UnparsedBlock,
+  ProgramBlock,
 } from './types';
 
 export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {
     if (typeof item === 'string') {
-      item = astNode('block', parseOneStatement(item));
+      item = astNode('block', parseStatementOrThrow(item));
     }
     item.id = `block-${index}`;
     return item;
@@ -54,55 +54,39 @@ export const programContainingError = testBlocks(
   'Error + 1'
 );
 
-export const unparsedProgram: Program = [
-  {
-    id: 'block-A',
-    type: 'unparsed-block',
-    source: 'A = 0',
-  },
-  {
-    id: 'block-B',
-    type: 'unparsed-block',
-    source: 'B = A + 1',
-  },
-  {
-    id: 'block-C',
-    type: 'unparsed-block',
-    source: 'C = B + 10',
-  },
-  {
-    id: 'block-D',
-    type: 'unparsed-block',
-    source: 'D = C + 100',
-  },
-];
+export function getIdentifiedBlocks(...sources: string[]) {
+  return sources.map((source, i) => getIdentifiedBlock(source, i));
+}
 
-export const getUnparsed = (...blockSources: string[]): UnparsedBlock[] =>
-  blockSources.map((source, index) => ({
-    type: 'unparsed-block',
-    id: `block-${index}`,
-    source,
-  }));
+export const prettyPrintProgramBlock = (block: ProgramBlock) => {
+  if (block.type === 'identified-block') {
+    return prettyPrintAST(getOnly(block.block.args));
+  }
+  return `Syntax error: ${block.error?.message}`;
+};
 
-export const getIdentifiedBlocks = (...sources: string[]) =>
-  sources.map((source, i) => {
-    const parsed = wrappedParse({
-      id: `block-${i}`,
+export function getIdentifiedBlock(
+  source: string,
+  i = 0
+): IdentifiedBlock | IdentifiedError {
+  const { solution: block, error } = parseBlock(source);
+
+  const id = `block-${i}`;
+
+  if (error) {
+    return {
+      type: 'identified-error',
+      id,
+      errorKind: 'parse-error',
       source,
-    }) as IdentifiedBlock;
-    expect(parsed.block).toBeDefined();
-    return parsed;
-  });
+      error,
+    };
+  }
 
-export const parse = (...sources: string[]) =>
-  sources.map((source, i) => {
-    const parsed = wrappedParse({
-      id: `block-${i}`,
-      source,
-    }) as IdentifiedBlock;
-    expect(parsed.block).toBeDefined();
-    return parsed.block;
-  });
+  block.id = id;
+
+  return { type: 'identified-block', id, block };
+}
 
 export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
   const simpleUpdates = [];
@@ -131,7 +115,7 @@ export const simplifyComputeResponse = (
   const simpleUpdates = [];
 
   for (const up of res.updates) {
-    if (up.type === 'computer-parse-error') {
+    if (up.type === 'identified-error') {
       simpleUpdates.push(`${up.id} -> Syntax Error`);
     } else {
       simpleUpdates.push(...simplifyInBlockResults([up]));

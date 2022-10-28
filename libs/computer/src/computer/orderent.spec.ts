@@ -1,7 +1,7 @@
 import permutations from 'just-permutations';
-import { simplifyComputeResponse } from '../testUtils';
+import { simplifyComputeResponse, getIdentifiedBlocks } from '../testUtils';
 import { Computer } from './Computer';
-import { ComputeRequest, UnparsedBlock } from '../types';
+import { ComputeRequest } from '../types';
 
 let computer: Computer;
 beforeEach(() => {
@@ -14,7 +14,7 @@ const computeOnTestComputer = async (req: ComputeRequest) => {
 };
 
 describe('computer is independent of block-order', () => {
-  const blocks: UnparsedBlock[] = [
+  const blocks = getIdentifiedBlocks(
     `MonthlyExpenses = 130000 eur`,
     `InitialMonthlyRevenue = 2500 eur`,
     `MonthlyRevenueGrowthRate = 5.0%`,
@@ -23,12 +23,9 @@ describe('computer is independent of block-order', () => {
     `CumulativeMonthlyExpenses = MonthlyExpenses * TimeToProfitability`,
     `CapitalNeeded = CumulativeMonthlyRevenue - CumulativeMonthlyExpenses`,
     `IPOTargetMonthlyRevenue = 10000000 eur`,
-    `TimeToIPO = ln(IPOTargetMonthlyRevenue / InitialMonthlyRevenue) / ln(1 + MonthlyRevenueGrowthRate)`,
-  ].map((source, index) => ({
-    type: 'unparsed-block',
-    id: `block-${index}`,
-    source,
-  }));
+    `TimeToIPO = ln(IPOTargetMonthlyRevenue / InitialMonthlyRevenue) / ln(1 + MonthlyRevenueGrowthRate)`
+  );
+
   it('can sort blocks and still arrive at the same solution', async () => {
     // const program = blocks;
     // console.log(permutations(blocks).length);
@@ -53,16 +50,12 @@ describe('computer is independent of block-order', () => {
   });
 
   it('orders table column assignments', async () => {
-    const blocks: UnparsedBlock[] = [
+    const blocks = getIdentifiedBlocks(
       `HELLO = "hello"`,
       `T = { A = ["1", "2", "3"] }`,
       `T.B = ["4", "5", "6"]`,
-      `T.C = A + B + HELLO`,
-    ].map((source, index) => ({
-      type: 'unparsed-block',
-      id: `block-${index}`,
-      source,
-    }));
+      `T.C = A + B + HELLO`
+    );
     expect((await computeOnTestComputer({ program: blocks })).sort())
       .toMatchInlineSnapshot(`
       Array [

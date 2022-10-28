@@ -11,7 +11,7 @@ import { magicNumberId } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../types';
-import { parseElementSourceCode } from '../utils/parseElementSourceCode';
+import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 
 export const Paragraph: InteractiveLanguageElement = {
   type: [
@@ -27,7 +27,7 @@ export const Paragraph: InteractiveLanguageElement = {
     async (_editor, _computer, element) => {
       return element.children.flatMap((child, index) => {
         if (MARK_MAGICNUMBER in child) {
-          return parseElementSourceCode(
+          return parseElementAsSourceCode(
             magicNumberId(element, index),
             getNodeString(child),
             'expression'

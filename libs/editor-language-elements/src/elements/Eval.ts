@@ -1,7 +1,7 @@
 import { ELEMENT_EVAL, MyEditor, MyElement } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { InteractiveLanguageElement } from '../types';
-import { parseElementSourceCode } from '../utils/parseElementSourceCode';
+import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 
 export const getUnparsedBlockFromEval = async (
   _editor: MyEditor,
@@ -10,7 +10,7 @@ export const getUnparsedBlockFromEval = async (
 ) => {
   if (block.type !== ELEMENT_EVAL) return [];
 
-  return [parseElementSourceCode(block.id, block.result)];
+  return parseElementAsSourceCode(block.id, block.result);
 };
 
 export const Eval: InteractiveLanguageElement = {

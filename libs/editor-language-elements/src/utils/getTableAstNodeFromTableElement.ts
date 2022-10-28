@@ -1,14 +1,13 @@
 import { MyEditor, TableElement } from '@decipad/editor-types';
-import { AST, Computer } from '@decipad/computer';
+import { AST, Computer, IdentifiedError } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
-import { ParseError } from '../types';
 import { headerToColumn } from './headerToColumn';
 import { tableExpression } from './tableExpression';
 
 export interface ColumnAssign {
   blockId: string;
   column?: AST.TableColumnAssign;
-  parseErrors: ParseError[];
+  errors: IdentifiedError[];
 }
 
 export interface GetTableAstNodeFromTableElementResult {
@@ -16,7 +15,6 @@ export interface GetTableAstNodeFromTableElementResult {
   name: string;
   expression: AST.Table;
   columnAssigns: ColumnAssign[];
-  parseErrors: ParseError[];
 }
 
 export const getTableAstNodeFromTableElement = async (

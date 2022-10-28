@@ -1,4 +1,4 @@
-import { AST, Computer } from '@decipad/computer';
+import { AST, Computer, IdentifiedError } from '@decipad/computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   TableElement,
@@ -16,7 +16,6 @@ import {
   getNullReplacementValue,
 } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate';
-import { ParseError } from '../types';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
 
@@ -30,11 +29,19 @@ interface HeaderToColumnProps {
 }
 
 export interface ColumnParseReturn {
-  parseErrors: ParseError[];
+  errors: IdentifiedError[];
   expression?: AST.Expression;
   columnName: string;
   elementId?: string;
 }
+
+const simpleError = (id: string, message: string): IdentifiedError => ({
+  type: 'identified-error',
+  errorKind: 'parse-error',
+  id,
+  error: { message },
+  source: '',
+});
 
 const tableFormulaColumnToColumn = ({
   table,
@@ -55,12 +62,7 @@ const tableFormulaColumnToColumn = ({
   }
   return {
     columnName,
-    parseErrors: [
-      {
-        elementId: th.id,
-        error: 'Could not find a formula for this column',
-      },
-    ],
+    errors: [simpleError(th.id, 'Could not find a formula for this column')],
   };
 };
 
@@ -88,7 +90,7 @@ const seriesColumnToColumn = async ({
     elementId: th.id,
     expression,
     columnName: getNodeString(th),
-    parseErrors: [],
+    errors: [],
   };
 };
 
@@ -98,7 +100,7 @@ const dataColumnToColumn = async ({
   columnIndex,
   dataRows,
 }: HeaderToColumnProps): Promise<ColumnParseReturn> => {
-  const parseErrors: ParseError[] = [];
+  const errors: IdentifiedError[] = [];
   const cellTexts: string[] = [];
   const cellIds: string[] = [];
   for (const tr of dataRows) {
@@ -118,20 +120,14 @@ const dataColumnToColumn = async ({
     cellTexts.map(async (text, index) => {
       let parsed = await parseCell(computer, columnType, text);
       if (!parsed) {
-        parseErrors.push({
-          error: `Invalid ${columnType.kind}`,
-          elementId: cellIds[index],
-        });
+        errors.push(simpleError(cellIds[index], `Invalid ${columnType.kind}`));
       }
       if (parsed instanceof Error) {
-        parseErrors.push({
-          error: parsed.message,
-          elementId: cellIds[index],
-        });
+        errors.push(simpleError(cellIds[index], parsed.message));
         parsed = null;
       }
       if (!parsed) {
-        parsed = await getNullReplacementValue(columnType);
+        parsed = getNullReplacementValue(columnType);
       }
       return parsed;
     })
@@ -139,7 +135,7 @@ const dataColumnToColumn = async ({
   const expression = astColumn(...items);
   return {
     expression,
-    parseErrors,
+    errors,
     columnName: getNodeString(th),
     elementId: th.id,
   };

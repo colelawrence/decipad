@@ -11,21 +11,22 @@ import produce from 'immer';
 import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
 import {
+  getIdentifiedBlock,
   getIdentifiedBlocks,
-  getUnparsed,
   simplifyComputeResponse,
-  unparsedProgram,
 } from '../testUtils';
-import {
-  ComputeRequestWithExternalData,
-  UnparsedBlock,
-  UserParseError,
-} from '../types';
+import { ComputeRequestWithExternalData, UserParseError } from '../types';
 import { Computer } from './Computer';
 
+const testProgram = getIdentifiedBlocks(
+  'A = 0',
+  'B = A + 1',
+  'C = B + 10',
+  'D = C + 100'
+);
 let computer: Computer;
 beforeEach(() => {
-  computer = new Computer({ requestDebounceMs: 1 });
+  computer = new Computer({ requestDebounceMs: 0 });
 });
 
 const computeOnTestComputer = async (req: ComputeRequestWithExternalData) => {
@@ -34,14 +35,14 @@ const computeOnTestComputer = async (req: ComputeRequestWithExternalData) => {
 };
 
 it('computes a thing', async () => {
-  const res = await computeOnTestComputer({ program: unparsedProgram });
+  const res = await computeOnTestComputer({ program: testProgram });
 
   expect(res).toMatchInlineSnapshot(`
     Array [
-      "block-A -> 0",
-      "block-B -> 1",
-      "block-C -> 11",
-      "block-D -> 111",
+      "block-0 -> 0",
+      "block-1 -> 1",
+      "block-2 -> 11",
+      "block-3 -> 111",
     ]
   `);
 });
@@ -49,73 +50,71 @@ it('computes a thing', async () => {
 it('retrieves syntax errors', async () => {
   expect(
     await computeOnTestComputer({
-      program: [
-        {
-          id: 'wrongblock',
-          type: 'unparsed-block',
-          source: 'Syntax --/-- Error',
-        },
-      ],
+      program: getIdentifiedBlocks('Syntax //-// Error'),
     })
-  ).toEqual(['wrongblock -> Syntax Error']);
+  ).toEqual(['block-0 -> Syntax Error']);
 });
 
 describe('caching', () => {
   it('honours cache', async () => {
     // Fill in cache
-    await computeOnTestComputer({ program: unparsedProgram });
+    await computeOnTestComputer({ program: testProgram });
 
     // Change C
-    const changedC = produce(unparsedProgram, (program) => {
-      (program[2] as UnparsedBlock).source = 'C = B + 10.1';
+    const changedC = produce(testProgram, (program) => {
+      program[2] = getIdentifiedBlock('C = B + 10.1', 2);
     });
     expect(await computeOnTestComputer({ program: changedC }))
       .toMatchInlineSnapshot(`
         Array [
-          "block-A -> 0",
-          "block-B -> 1",
-          "block-C -> 11.1",
-          "block-D -> 111.1",
+          "block-0 -> 0",
+          "block-1 -> 1",
+          "block-2 -> 11.1",
+          "block-3 -> 111.1",
         ]
       `);
 
     computer.reset();
 
     // Break it by removing B
-    const broken = produce(unparsedProgram, (program) => {
-      (program[0] as UnparsedBlock).source = 'A = 0.5';
+    const broken = produce(testProgram, (program) => {
+      program[0] = getIdentifiedBlock('A = 0.5', 0);
       program.splice(1, 1);
     });
     expect(await computeOnTestComputer({ program: broken }))
       .toMatchInlineSnapshot(`
         Array [
-          "block-A -> 0.5",
-          "block-C -> 11",
-          "block-D -> 111",
+          "block-0 -> 0.5",
+          "block-2 -> 11",
+          "block-3 -> 111",
         ]
       `);
 
-    const noD = produce(unparsedProgram, (program) => {
-      (program[3] as UnparsedBlock).source = '';
+    const noD = produce(testProgram, (program) => {
+      program[3] = getIdentifiedBlock('', 3);
     });
     expect(await computeOnTestComputer({ program: noD }))
       .toMatchInlineSnapshot(`
         Array [
-          "block-A -> 0",
-          "block-B -> 1",
-          "block-C -> 11",
-          "block-D -> undefined",
+          "block-0 -> 0",
+          "block-1 -> 1",
+          "block-2 -> 11",
+          "block-3 -> undefined",
         ]
       `);
   });
 
   it('tricky caching problems', async () => {
     expect(
-      await computeOnTestComputer({ program: getUnparsed('= 1', 'A + 1') })
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks('= 1', 'A + 1'),
+      })
     ).toContain('block-1 -> 2');
 
     expect(
-      await computeOnTestComputer({ program: getUnparsed('A = 1', 'A + 1') })
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks('A = 1', 'A + 1'),
+      })
     ).toMatchInlineSnapshot(`
       Array [
         "block-0 -> 1",
@@ -128,7 +127,7 @@ describe('caching', () => {
     // Use a missing variable B
     expect(
       await computeOnTestComputer({
-        program: getUnparsed('A = 1', '', 'A + 1 + B'),
+        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + B'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -141,7 +140,7 @@ describe('caching', () => {
     // Define it out of order
     expect(
       await computeOnTestComputer({
-        program: getUnparsed('A = 1', '', 'A + 1 + B', 'B = 1'),
+        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + B', 'B = 1'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -175,7 +174,7 @@ it('creates new, unused identifiers', async () => {
   );
 
   await computeOnTestComputer({
-    program: getUnparsed('AlreadyUsed1 = 1'),
+    program: getIdentifiedBlocks('AlreadyUsed1 = 1'),
   });
 
   expect(
@@ -187,7 +186,7 @@ describe('uses previous value', () => {
   it('works the first and second time', async () => {
     expect(
       await computeOnTestComputer({
-        program: getUnparsed('A = 3', 'previous'),
+        program: getIdentifiedBlocks('A = 3', 'previous'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -198,7 +197,7 @@ describe('uses previous value', () => {
 
     expect(
       await computeOnTestComputer({
-        program: getUnparsed('A = 4'),
+        program: getIdentifiedBlocks('A = 4'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -208,7 +207,7 @@ describe('uses previous value', () => {
 
     expect(
       await computeOnTestComputer({
-        program: getUnparsed('A = 5', 'previous'),
+        program: getIdentifiedBlocks('A = 5', 'previous'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -221,8 +220,8 @@ describe('uses previous value', () => {
 
 it('can reset itself', async () => {
   // Make the cache dirty
-  await computer.pushCompute({ program: unparsedProgram });
-  await timeout(200); // give time to compute
+  await computer.pushCompute({ program: testProgram });
+  await timeout(0); // give time to compute
   expect(computer.results.getValue().blockResults).not.toEqual({});
 
   computer.reset();
@@ -256,10 +255,9 @@ it('can pass on injected data', async () => {
           type: 'identified-block',
           id: 'injectblock',
           block: injectedBlock,
-          source: '',
         },
 
-        ...getUnparsed('InjectedVar'),
+        ...getIdentifiedBlocks('InjectedVar'),
       ],
 
       externalData,
@@ -275,7 +273,7 @@ it('can pass on injected data', async () => {
 describe('tooling data', () => {
   it('Can get variables and functions available', async () => {
     await computeOnTestComputer({
-      program: getUnparsed('A = 1', 'f(x) = 1', 'C = 3'),
+      program: getIdentifiedBlocks('A = 1', 'f(x) = 1', 'C = 3'),
     });
 
     const names = await computer.getNamesDefined();
@@ -301,18 +299,17 @@ describe('tooling data', () => {
   it('can get a statement', () => {
     computeOnTestComputer({ program: getIdentifiedBlocks('1 + 1') });
 
-    expect(computer.getStatement('block-0', 0)?.args[1]).toMatchObject({
+    expect(computer.getStatement('block-0')?.args[1]).toMatchObject({
       type: 'function-call',
     });
 
-    expect(computer.getStatement('block-0', 999)).toEqual(null);
-    expect(computer.getStatement('block-1', 0)).toEqual(null);
+    expect(computer.getStatement('block-1')).toEqual(undefined);
   });
 });
 
 it('can extract units from text', async () => {
   await computeOnTestComputer({
-    program: getUnparsed('Foo = 30cm', 'Bar = 30'),
+    program: getIdentifiedBlocks('Foo = 30cm', 'Bar = 30'),
   });
 
   // Internal units
@@ -337,7 +334,7 @@ it('can extract units from text', async () => {
 
 it('can get a expression from text in streaming mode', async () => {
   await computeOnTestComputer({
-    program: getUnparsed('Time = 120 minutes'),
+    program: getIdentifiedBlocks('Time = 120 minutes'),
   });
 
   const TimeStream = computer.expressionResultFromText$('Time in hours');
@@ -349,7 +346,7 @@ it('can get a expression from text in streaming mode', async () => {
 
 it('getBlockIdResult$', async () => {
   computer.pushCompute({
-    program: getUnparsed('123'),
+    program: getIdentifiedBlocks('123'),
   });
 
   const x = await firstValueFrom(
@@ -363,7 +360,7 @@ it('getBlockIdResult$', async () => {
 
 it('getFunctionDefinition$', async () => {
   computer.pushCompute({
-    program: getUnparsed('f(x) = 2'),
+    program: getIdentifiedBlocks('f(x) = 2'),
   });
 
   const x = await firstValueFrom(
@@ -378,7 +375,7 @@ it('getFunctionDefinition$', async () => {
 describe('getVarBlockId$', () => {
   it('can get a variable block id in streaming', async () => {
     await computeOnTestComputer({
-      program: getUnparsed('Foo = 420'),
+      program: getIdentifiedBlocks('Foo = 420'),
     });
 
     const fooStream = computer.getVarBlockId$.observe('Foo');
@@ -390,7 +387,7 @@ describe('getVarBlockId$', () => {
 
   it('can get a variable block id from a table in streaming', async () => {
     await computeOnTestComputer({
-      program: getUnparsed('C = 1', 'A = { B = 420 } '),
+      program: getIdentifiedBlocks('C = 1', 'A = { B = 420 } '),
     });
 
     const fooStream = computer.getVarBlockId$.observe('A.B');
@@ -402,7 +399,7 @@ describe('getVarBlockId$', () => {
 
   it('can find exprRefs', async () => {
     await computeOnTestComputer({
-      program: getUnparsed('Foo = 420'),
+      program: getIdentifiedBlocks('Foo = 420'),
     });
 
     const fooStream = computer.getVarBlockId$.observe('exprRef_block_0');
@@ -413,51 +410,47 @@ describe('getVarBlockId$', () => {
   });
 });
 
+it('can get a result by var', async () => {
+  computer.pushCompute({
+    program: getIdentifiedBlocks('Foo = 420'),
+  });
+  await timeout(0);
+
+  expect(computer.getVarResult$.get('Foo')?.variableName).toMatchInlineSnapshot(
+    `"Foo"`
+  );
+});
+
 it('can get a defined symbol, in block', async () => {
   await computeOnTestComputer({
-    program: getUnparsed('C = 1', 'C + 2 + A'),
+    program: getIdentifiedBlocks('C = 1', 'C + 2 + A'),
   });
 
   expect(computer.getDefinedSymbolInBlock('block-0')).toEqual('C');
   expect(computer.getDefinedSymbolInBlock('block-1')).toEqual(undefined);
 });
 
-it('can stream imperative and computer-driven errors', async () => {
-  let errors1: UserParseError | undefined;
-  let errors2: UserParseError | undefined;
+it('can stream imperative errors', async () => {
+  let error: UserParseError | undefined;
 
-  computer.getParseError$.observe('1').subscribe((item) => {
-    errors1 = item;
+  computer.getImperativeParseError$.observe('1').subscribe((item) => {
+    error = item;
   });
 
-  computer.getParseError$.observe('2').subscribe((item) => {
-    errors2 = item;
-  });
+  computer.imperativelySetParseError('1', { elementId: '1', error: 'err' });
 
-  computer.pushCompute({
-    program: [],
-    parseErrors: [{ elementId: '1', error: 'err 1' }],
-  });
+  await timeout(0);
 
-  computer.setParseError('2', { elementId: '2', error: 'err 2' });
-
-  await timeout(1);
-
-  expect(errors1).toMatchInlineSnapshot(`
+  expect(error).toMatchInlineSnapshot(`
     Object {
       "elementId": "1",
-      "error": "err 1",
-    }
-  `);
-  expect(errors2).toMatchInlineSnapshot(`
-    Object {
-      "elementId": "2",
-      "error": "err 2",
+      "error": "err",
     }
   `);
 
-  computer.unsetParseError('2');
-  expect(errors2).toEqual(undefined);
+  computer.imperativelyUnsetParseError('1');
+  await timeout(0);
+  expect(error).toEqual(undefined);
 });
 
 it('formats stuff', () => {

@@ -26,6 +26,5 @@ export const tableExpression = (
     columnAssigns: restColumns.map((col) =>
       toColumnAssign(table.id, tableName, col)
     ),
-    parseErrors: firstColumn.parseErrors,
   };
 };

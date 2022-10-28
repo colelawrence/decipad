@@ -15,6 +15,7 @@ import {
   createProgramFromMultipleStatements,
   IdentifiedResult,
   IdentifiedError,
+  identifiedErrorToMessage,
 } from '@decipad/computer';
 import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
@@ -102,9 +103,9 @@ function LivePreviewOrError({ code: liveCode }: LivePreviewProps) {
       if (!r) {
         return;
       }
-      if (r.type === 'computer-parse-error') {
+      if (r.type === 'identified-error') {
         setResult(null);
-        setError(new Error(r.error.message));
+        setError(new Error(identifiedErrorToMessage(r)));
       } else if (r.result.type.kind === 'type-error') {
         setResult(null);
         setError(new Error(formatError('en-US', r.result.type.errorCause)));

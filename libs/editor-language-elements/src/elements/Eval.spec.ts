@@ -16,8 +16,7 @@ describe('Eval expression element', () => {
       result: '2',
     });
 
-    expect(prettyPrintAST(getDefined(el?.[0].program?.[0].block)))
-      .toMatchInlineSnapshot(`
+    expect(prettyPrintAST(getDefined(el?.[0].block))).toMatchInlineSnapshot(`
         "(block
           2)"
       `);

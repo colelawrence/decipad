@@ -22,7 +22,7 @@ describe('getDependents', () => {
   });
 
   it('additionally finds symbols which are passed in', () => {
-    expect(getDependents(deeperProgram, ['block-0'], new Set(['var:Unused'])))
+    expect(getDependents(deeperProgram, ['block-0'], new Set(['Unused'])))
       .toMatchInlineSnapshot(`
       Array [
         "block-0",

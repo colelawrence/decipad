@@ -139,50 +139,45 @@ describe('Table', () => {
       )
     ).toMatchObject([
       {
-        parseErrors: [],
-        program: [
-          {
-            type: 'identified-block',
-            block: {
-              type: 'block',
-              id: 'root',
+        type: 'identified-block',
+        block: {
+          type: 'block',
+          id: 'root',
+          args: [
+            {
+              type: 'assign',
               args: [
                 {
-                  type: 'assign',
+                  type: 'def',
+                  args: ['varname'],
+                },
+                {
+                  type: 'table',
                   args: [
                     {
-                      type: 'def',
-                      args: ['varname'],
-                    },
-                    {
-                      type: 'table',
+                      type: 'table-column',
                       args: [
                         {
-                          type: 'table-column',
+                          args: ['Col1'],
+                          type: 'coldef',
+                        },
+                        {
+                          type: 'column',
                           args: [
                             {
-                              args: ['Col1'],
-                              type: 'coldef',
-                            },
-                            {
-                              type: 'column',
+                              type: 'column-items',
                               args: [
                                 {
-                                  type: 'column-items',
-                                  args: [
-                                    {
-                                      type: 'literal',
-                                      args: ['string', '1.1'],
-                                    },
-                                    {
-                                      type: 'literal',
-                                      args: ['string', '1.2'],
-                                    },
-                                    {
-                                      type: 'literal',
-                                      args: ['string', '1.3'],
-                                    },
-                                  ],
+                                  type: 'literal',
+                                  args: ['string', '1.1'],
+                                },
+                                {
+                                  type: 'literal',
+                                  args: ['string', '1.2'],
+                                },
+                                {
+                                  type: 'literal',
+                                  args: ['string', '1.3'],
                                 },
                               ],
                             },
@@ -194,70 +189,64 @@ describe('Table', () => {
                 },
               ],
             },
-            source: '',
-          },
-        ],
+          ],
+        },
       },
       {
-        parseErrors: [],
-        program: [
-          {
-            type: 'identified-block',
-            id: 'th2',
-            block: {
-              type: 'block',
+        type: 'identified-block',
+        id: 'th2',
+        block: {
+          type: 'block',
+          args: [
+            {
+              type: 'table-column-assign',
               args: [
                 {
-                  type: 'table-column-assign',
+                  type: 'tablepartialdef',
+                  args: ['varname'],
+                },
+                {
+                  args: ['Col2'],
+                  type: 'coldef',
+                },
+                {
+                  type: 'column',
                   args: [
                     {
-                      type: 'tablepartialdef',
-                      args: ['varname'],
-                    },
-                    {
-                      args: ['Col2'],
-                      type: 'coldef',
-                    },
-                    {
-                      type: 'column',
+                      type: 'column-items',
                       args: [
                         {
-                          type: 'column-items',
+                          type: 'literal',
                           args: [
+                            'number',
                             {
-                              type: 'literal',
-                              args: [
-                                'number',
-                                {
-                                  d: 10n,
-                                  n: 21n,
-                                  s: 1n,
-                                },
-                              ],
-                            },
-                            {
-                              args: [
-                                'number',
-                                {
-                                  d: 5n,
-                                  n: 11n,
-                                  s: 1n,
-                                },
-                              ],
-                              type: 'literal',
-                            },
-                            {
-                              args: [
-                                'number',
-                                {
-                                  d: 10n,
-                                  n: 23n,
-                                  s: 1n,
-                                },
-                              ],
-                              type: 'literal',
+                              d: 10n,
+                              n: 21n,
+                              s: 1n,
                             },
                           ],
+                        },
+                        {
+                          args: [
+                            'number',
+                            {
+                              d: 5n,
+                              n: 11n,
+                              s: 1n,
+                            },
+                          ],
+                          type: 'literal',
+                        },
+                        {
+                          args: [
+                            'number',
+                            {
+                              d: 10n,
+                              n: 23n,
+                              s: 1n,
+                            },
+                          ],
+                          type: 'literal',
                         },
                       ],
                     },
@@ -265,79 +254,73 @@ describe('Table', () => {
                 },
               ],
             },
-          },
-        ],
+          ],
+        },
       },
       {
-        parseErrors: [],
-        program: [
-          {
-            type: 'identified-block',
-            id: 'th3',
-            block: {
+        type: 'identified-block',
+        id: 'th3',
+        block: {
+          args: [
+            {
               args: [
                 {
+                  type: 'tablepartialdef',
+                  args: ['varname'],
+                },
+                {
+                  args: ['Col3'],
+                  type: 'coldef',
+                },
+                {
                   args: [
-                    {
-                      type: 'tablepartialdef',
-                      args: ['varname'],
-                    },
-                    {
-                      args: ['Col3'],
-                      type: 'coldef',
-                    },
                     {
                       args: [
                         {
                           args: [
+                            'number',
                             {
-                              args: [
-                                'number',
-                                {
-                                  d: 10n,
-                                  n: 31n,
-                                  s: 1n,
-                                },
-                              ],
-                              type: 'literal',
-                            },
-                            {
-                              args: [
-                                'number',
-                                {
-                                  d: 5n,
-                                  n: 16n,
-                                  s: 1n,
-                                },
-                              ],
-                              type: 'literal',
-                            },
-                            {
-                              args: [
-                                'number',
-                                {
-                                  d: 10n,
-                                  n: 33n,
-                                  s: 1n,
-                                },
-                              ],
-                              type: 'literal',
+                              d: 10n,
+                              n: 31n,
+                              s: 1n,
                             },
                           ],
-                          type: 'column-items',
+                          type: 'literal',
+                        },
+                        {
+                          args: [
+                            'number',
+                            {
+                              d: 5n,
+                              n: 16n,
+                              s: 1n,
+                            },
+                          ],
+                          type: 'literal',
+                        },
+                        {
+                          args: [
+                            'number',
+                            {
+                              d: 10n,
+                              n: 33n,
+                              s: 1n,
+                            },
+                          ],
+                          type: 'literal',
                         },
                       ],
-                      type: 'column',
+                      type: 'column-items',
                     },
                   ],
-                  type: 'table-column-assign',
+                  type: 'column',
                 },
               ],
-              type: 'block',
+              type: 'table-column-assign',
             },
-            source: '',
-          },
-        ],
+          ],
+          type: 'block',
+        },
       },
     ]);
   });

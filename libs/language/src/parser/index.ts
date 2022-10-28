@@ -7,7 +7,7 @@ import { SyntaxError } from './SyntaxError';
 
 export { AST, Parser, n, SyntaxError };
 
-export function parseBlock(source: string): Parser.ParsedBlock {
+export function parseBlock(source: string, id?: string): Parser.ParsedBlock {
   if (source.trim() === '') {
     return { solution: n('block', n('noop')) };
   } else {
@@ -20,6 +20,10 @@ export function parseBlock(source: string): Parser.ParsedBlock {
 
     try {
       const solution = languageParse(source.trimEnd()) as AST.Block;
+
+      if (id) {
+        solution.id = id;
+      }
 
       return { solution };
     } catch (err) {

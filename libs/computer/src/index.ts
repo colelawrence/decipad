@@ -17,9 +17,9 @@ export {
   identifierRegExpGlobal,
   InferError,
   isExpression,
-  parseOneBlock,
-  parseOneStatement,
-  parseOneExpression,
+  parseBlockOrThrow,
+  parseStatementOrThrow,
+  parseExpressionOrThrow,
   parseStatement,
   parseExpression,
   parseBlock,
@@ -42,7 +42,13 @@ export {
   isStatement,
 } from '@decipad/language';
 
-export { isSyntaxError, isBracketError, hasBracketError } from './utils';
+export {
+  isSyntaxError,
+  isBracketError,
+  hasBracketError,
+  identifiedErrorToMessage,
+  isTypeError,
+} from './utils';
 
 export type {
   AutocompleteName,

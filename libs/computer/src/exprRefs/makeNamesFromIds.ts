@@ -116,7 +116,7 @@ function gatherAllVarNames(program: Program) {
         getDefinedSymbol(
           block.block.args[0] ?? { type: 'noop', args: [] },
           false
-        )?.replace(/^var:/, '') ?? '';
+        ) ?? '';
 
       if (isExprRef(symbol)) {
         symbol = '';

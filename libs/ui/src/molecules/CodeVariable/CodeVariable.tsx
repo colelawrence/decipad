@@ -47,6 +47,7 @@ interface CodeVariableProps {
   readonly defBlockId?: string | null;
   readonly showTooltip?: boolean;
   readonly isSelected?: boolean;
+  readonly variableMissing?: boolean;
   onGoToDefinition?: () => void;
 }
 
@@ -59,6 +60,7 @@ export const CodeVariable = ({
   onClick = noop,
   type,
   variableScope = 'global',
+  variableMissing = false,
   defBlockId,
   onGoToDefinition,
   isSelected = false,
@@ -68,12 +70,14 @@ export const CodeVariable = ({
     <span
       onClick={onClick}
       css={
-        variableScope !== 'undefined' && [
-          varStyles,
-          type && typeStyles,
-          variableScope === 'local' && localVarStyles,
-          isSelected && selectedStyles,
-        ]
+        variableMissing
+          ? null
+          : [
+              varStyles,
+              type && typeStyles,
+              variableScope === 'local' && localVarStyles,
+              isSelected && selectedStyles,
+            ]
       }
     >
       {Icon && (
@@ -91,7 +95,7 @@ export const CodeVariable = ({
 
   return (
     <CodeVariableTooltip
-      variableMissing={variableScope === 'undefined'}
+      variableMissing={variableMissing}
       defBlockId={defBlockId}
       provideDefinitionLink={provideVariableDefLink}
       onGoToDefinition={onGoToDefinition}

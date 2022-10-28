@@ -1,4 +1,4 @@
-import { Computer, parseOneExpression } from '@decipad/computer';
+import { Computer, parseExpressionOrThrow } from '@decipad/computer';
 import { CoercibleType } from './types';
 
 export const inferExpression = async (
@@ -6,7 +6,7 @@ export const inferExpression = async (
   text: string
 ): Promise<CoercibleType | undefined> => {
   try {
-    const parsed = parseOneExpression(text);
+    const parsed = parseExpressionOrThrow(text);
     const type = await computer.expressionType(parsed);
     if (parsed.type !== 'noop') {
       return {

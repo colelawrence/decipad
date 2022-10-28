@@ -1,14 +1,12 @@
 import { MyEditor } from '@decipad/editor-types';
 import type { Computer, ComputeRequest, Program } from '@decipad/computer';
-import { elementToLanguageBlock } from './elementToLanguageBlock';
-import { ParseError } from './types';
+import { elementToLanguageBlocks } from './elementToLanguageBlock';
 
 export const editorToProgram = async (
   editor: MyEditor,
   computer: Computer
 ): Promise<ComputeRequest> => {
   const program: Program = [];
-  const parseErrors: ParseError[] = [];
 
   for (const element of editor.children) {
     if (!('type' in element) || !('id' in element)) {
@@ -16,14 +14,17 @@ export const editorToProgram = async (
     }
 
     // eslint-disable-next-line no-await-in-loop
-    const blockResult = await elementToLanguageBlock(editor, computer, element);
+    const blockResult = await elementToLanguageBlocks(
+      editor,
+      computer,
+      element
+    );
     if (!blockResult) {
       continue;
     }
 
-    program.push(...blockResult.program);
-    parseErrors.push(...blockResult.parseErrors);
+    program.push(...blockResult);
   }
 
-  return { program, parseErrors };
+  return { program };
 };

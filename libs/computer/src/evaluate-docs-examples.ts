@@ -4,7 +4,7 @@ import { deserializeType, RuntimeError } from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 
 import { Computer } from '.';
-import { createProgramFromMultipleStatements } from './computer/parse';
+import { createProgramFromMultipleStatements } from './computer/parseUtils';
 import type { ComputeResponse } from './types';
 
 type EvaluatedDoc = string | { crash: string };

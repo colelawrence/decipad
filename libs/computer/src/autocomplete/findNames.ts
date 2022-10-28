@@ -77,11 +77,11 @@ export function* findNames(
 }
 
 const getSymbolOrColumn = (stat: AST.Statement) => {
-  let symbol = getDefinedSymbol(stat)?.split(':', 2).pop();
+  const symbol = getDefinedSymbol(stat);
 
   if (symbol && stat.type === 'table-column-assign') {
-    symbol += `.${stat.args[1].args[0]}`;
+    return `${symbol}.${stat.args[1].args[0]}`;
+  } else {
+    return symbol;
   }
-
-  return symbol;
 };

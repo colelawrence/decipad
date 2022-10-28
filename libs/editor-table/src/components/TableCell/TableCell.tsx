@@ -100,10 +100,12 @@ export const TableCell: PlateComponent = ({
       ? computer.formatUnit(cellType.unit)
       : undefined;
 
-  const parseError = computer.getParseError$.useWithSelector(
+  const parseError = computer.getImperativeParseError$.useWithSelector(
     (elm) => elm?.error,
     element.id
   );
+  const parseErrorMessage =
+    typeof parseError === 'string' ? parseError : parseError?.message;
 
   const showParseError = useDelayedTrue(Boolean(parseError));
 
@@ -151,7 +153,7 @@ export const TableCell: PlateComponent = ({
       value={nodeText}
       onChangeValue={onChangeValue}
       alignRight={isColumnSelected || isCellAlignRight(cellType)}
-      parseError={showParseError ? parseError : undefined}
+      parseError={showParseError ? parseErrorMessage : undefined}
     >
       {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
       {direction === 'left' && <ColumnDropLine dropDirection={direction} />}

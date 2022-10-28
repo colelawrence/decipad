@@ -1,43 +1,43 @@
 import { MyElement, ELEMENT_TABLE, MyEditor } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
+import { Computer, Program } from '@decipad/computer';
 import { assertElementType } from '@decipad/editor-utils';
 import { InteractiveLanguageElement } from '../types';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { getTableAstNodeFromTableElement } from '../utils/getTableAstNodeFromTableElement';
-import { parseElementVariableAssignment } from '../utils/parseElementVariableAssignment';
-import { statementToProgram } from '../utils/statementToProgram';
+import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
+import { statementToIdentifiedBlock } from '../utils/statementToIdentifiedBlock';
 
 export const Table: InteractiveLanguageElement = {
   type: ELEMENT_TABLE,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (editor: MyEditor, computer: Computer, element: MyElement) => {
+    async (
+      editor: MyEditor,
+      computer: Computer,
+      element: MyElement
+    ): Promise<Program> => {
       assertElementType(element, ELEMENT_TABLE);
-      const {
+      const { id, name, expression, columnAssigns } =
+        await getTableAstNodeFromTableElement(editor, computer, element);
+
+      const tableItself = parseElementAsVariableAssignment(
         id,
         name,
-        expression,
-        columnAssigns,
-        parseErrors: tableParseErrors,
-      } = await getTableAstNodeFromTableElement(editor, computer, element);
-
-      const { program: tableProgram, parseErrors: otherTableParseErrors } =
-        parseElementVariableAssignment(id, name, expression);
-
-      const columnAssignPrograms = columnAssigns.map((columnAssign) =>
-        statementToProgram(
-          columnAssign.blockId,
-          columnAssign.column,
-          columnAssign.parseErrors
-        )
+        expression
       );
 
-      return [
-        {
-          program: tableProgram,
-          parseErrors: [...tableParseErrors, ...otherTableParseErrors],
-        },
-        ...columnAssignPrograms,
-      ];
+      const columnAssignments = columnAssigns.flatMap((columnAssign) => [
+        ...(columnAssign.column
+          ? [
+              statementToIdentifiedBlock(
+                columnAssign.blockId,
+                columnAssign.column
+              ),
+            ]
+          : []),
+        ...columnAssign.errors,
+      ]);
+
+      return [...tableItself, ...columnAssignments];
     }
   ),
 };

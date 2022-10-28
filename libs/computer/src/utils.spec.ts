@@ -1,25 +1,18 @@
-import { parseOneStatement } from '@decipad/language';
-import { program } from './testUtils';
-import {
-  findSymbolsUsed,
-  getDefinedSymbol,
-  getDefinedSymbolAt,
-  parseDefName,
-  setIntersection,
-} from './utils';
+import { parseStatementOrThrow } from '@decipad/language';
+import { findSymbolsUsed, getDefinedSymbol, setIntersection } from './utils';
 
 it('figures out what symbol a statement creates, if any', () => {
-  expect(getDefinedSymbol(parseOneStatement('A=1'))).toEqual('var:A');
-  expect(getDefinedSymbol(parseOneStatement('"no-op"'))).toEqual(null);
+  expect(getDefinedSymbol(parseStatementOrThrow('A=1'))).toEqual('A');
+  expect(getDefinedSymbol(parseStatementOrThrow('"no-op"'))).toEqual(null);
   expect(
-    getDefinedSymbol(parseOneStatement('Set = categories [ Exp ]'))
-  ).toEqual('var:Set');
-  expect(getDefinedSymbol(parseOneStatement('Mat[Set] = Exp'))).toEqual(
-    'var:Mat'
+    getDefinedSymbol(parseStatementOrThrow('Set = categories [ Exp ]'))
+  ).toEqual('Set');
+  expect(getDefinedSymbol(parseStatementOrThrow('Mat[Set] = Exp'))).toEqual(
+    'Mat'
   );
-  expect(getDefinedSymbol(parseOneStatement('Mat[Set]'))).toEqual(null);
-  expect(getDefinedSymbol(parseOneStatement('table.Col = 1'))).toEqual(
-    'var:table'
+  expect(getDefinedSymbol(parseStatementOrThrow('Mat[Set]'))).toEqual(null);
+  expect(getDefinedSymbol(parseStatementOrThrow('table.Col = 1'))).toEqual(
+    'table'
   );
 });
 
@@ -30,36 +23,19 @@ it('intersects two sets of strings', () => {
 });
 
 it('figures out what symbols a statement uses, if any', () => {
-  expect(findSymbolsUsed(parseOneStatement('A + 1'))).toEqual([
-    'fn:+',
-    'var:A',
+  expect(findSymbolsUsed(parseStatementOrThrow('A + 1'))).toEqual(['+', 'A']);
+  expect(findSymbolsUsed(parseStatementOrThrow('"no-op"'))).toEqual([]);
+  expect(findSymbolsUsed(parseStatementOrThrow('Mat[Set]'))).toEqual([
+    'Mat',
+    'Set',
   ]);
-  expect(findSymbolsUsed(parseOneStatement('"no-op"'))).toEqual([]);
-  expect(findSymbolsUsed(parseOneStatement('Mat[Set]'))).toEqual([
-    'var:Mat',
-    'var:Set',
+  expect(findSymbolsUsed(parseStatementOrThrow('Mat[Set] = Exp'))).toEqual([
+    'Set',
+    'Exp',
+    'Mat',
   ]);
-  expect(findSymbolsUsed(parseOneStatement('Mat[Set] = Exp'))).toEqual([
-    'var:Set',
-    'var:Exp',
-    'var:Mat',
+  expect(findSymbolsUsed(parseStatementOrThrow('Table.Col = Hello'))).toEqual([
+    'Hello',
+    'Table',
   ]);
-  expect(findSymbolsUsed(parseOneStatement('Table.Col = Hello'))).toEqual([
-    'var:Hello',
-    'var:Table',
-  ]);
-});
-
-it('can parse a def name', () => {
-  expect(parseDefName('var:A')).toEqual(['var', 'A']);
-  expect(parseDefName('fn:A')).toEqual(['fn', 'A']);
-  expect(() => parseDefName('malformed:A')).toThrow();
-});
-
-it('finds which symbol was defined at a loc', () => {
-  expect(getDefinedSymbolAt(program, 'block-0')).toEqual('var:A');
-  expect(getDefinedSymbolAt(program, 'block-1')).toEqual('var:Unused');
-  expect(getDefinedSymbolAt(program, 'block-3')).toEqual(null);
-
-  expect(() => getDefinedSymbolAt(program, 'block-99999')).toThrow();
 });

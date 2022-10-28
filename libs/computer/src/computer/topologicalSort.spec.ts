@@ -1,89 +1,48 @@
-import { wrappedParse } from './parse';
+import { getIdentifiedBlocks } from '../testUtils';
 import { topologicalSort } from './topologicalSort';
 
 it('sorts two dependencies', async () => {
-  const program = [
-    {
-      id: 'block-A',
-      source: 'A = B + 1',
-    },
-    {
-      id: 'block-B',
-      source: 'B = 42',
-    },
-  ];
-  const parsed = program.map(wrappedParse);
-  const sorted = topologicalSort(parsed);
+  const program = getIdentifiedBlocks('A = B + 1', 'B = 42');
+  const sorted = topologicalSort(program);
   expect(sorted).toHaveLength(program.length);
-  expect(sorted.map((r) => r.id)).toEqual(['block-B', 'block-A']);
+  expect(sorted.map((r) => r.id)).toEqual(['block-1', 'block-0']);
 });
 
 it('sorts transitive dependency', () => {
-  const program = [
-    {
-      id: 'block-A',
-      source: 'A = B + 1',
-    },
-    {
-      id: 'block-B',
-      source: 'B = C + 2',
-    },
-    {
-      id: 'block-C',
-      source: 'C = 42',
-    },
-    {
-      id: 'block-D',
-      source: 'D = 43',
-    },
-  ];
-  const parsed = program.map(wrappedParse);
-  const sorted = topologicalSort(parsed);
+  const program = getIdentifiedBlocks(
+    'A = B + 1',
+    'B = C + 2',
+    'C = 42',
+    'D = 43'
+  );
+  const sorted = topologicalSort(program);
   expect(sorted).toHaveLength(program.length);
   expect(sorted.map((r) => r.id)).toEqual([
-    'block-C',
-    'block-B',
-    'block-A',
-    'block-D',
+    'block-2',
+    'block-1',
+    'block-0',
+    'block-3',
   ]);
 });
 
 it('detects circular dependencies', () => {
-  const program = [
-    {
-      id: 'block-A',
-      source: 'A = B + 1',
-    },
-    {
-      id: 'block-B',
-      source: 'B = A + 2',
-    },
-    {
-      id: 'block-C',
-      source: 'C = 42',
-    },
-  ];
-  const parsed = program.map(wrappedParse);
-  const sorted = topologicalSort(parsed);
+  const program = getIdentifiedBlocks('A = B + 1', 'B = A + 2', 'C = 42');
+  const sorted = topologicalSort(program);
   expect(sorted).toHaveLength(program.length);
   expect(sorted).toMatchObject([
     {
-      id: 'block-C',
+      id: 'block-2',
       type: 'identified-block',
     },
     {
-      id: 'block-A',
-      type: 'computer-parse-error',
-      error: {
-        message: 'Circular dependency detected',
-      },
+      id: 'block-0',
+      type: 'identified-error',
+      errorKind: 'dependency-cycle',
     },
     {
-      id: 'block-B',
-      type: 'computer-parse-error',
-      error: {
-        message: 'Circular dependency detected',
-      },
+      id: 'block-1',
+      type: 'identified-error',
+      errorKind: 'dependency-cycle',
     },
   ]);
 });

@@ -7,7 +7,5 @@ export const createCodeVariableHighlightPlugin = createTPluginFactory({
   isLeaf: true,
   // isElement: true,
 
-  component: (props) => {
-    return <CodeVariable {...props} />;
-  },
+  component: CodeVariable,
 });

@@ -1,7 +1,7 @@
-import { parseOneStatement } from '../..';
+import { parseStatementOrThrow } from '../..';
 
 it('parses of directive', () => {
-  expect(parseOneStatement('grams of butter')).toMatchInlineSnapshot(`
+  expect(parseStatementOrThrow('grams of butter')).toMatchInlineSnapshot(`
     Object {
       "args": Array [
         "of",

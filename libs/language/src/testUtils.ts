@@ -5,7 +5,7 @@ import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { fromJS, FromJSArg, Table } from './interpreter/Value';
 import { OneResult } from './result';
-import { parseOneBlock } from './run';
+import { parseBlockOrThrow } from './run';
 import {
   build as t,
   convertToMultiplierUnit,
@@ -41,7 +41,7 @@ export const runCodeForVariables = async (
   source: string,
   wantedVariables: string[]
 ) => {
-  const program = [parseOneBlock(source)];
+  const program = [parseBlockOrThrow(source)];
 
   const inferResult = await inferProgram(program);
 
@@ -105,7 +105,7 @@ export const evaluateForVariables = async (
   wantedVariables: string[],
   asUser = true
 ) => {
-  const program = [parseOneBlock(source)];
+  const program = [parseBlockOrThrow(source)];
 
   const inferResult = await inferProgram(program);
 

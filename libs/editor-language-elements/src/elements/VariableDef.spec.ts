@@ -41,7 +41,7 @@ describe('VariableDef expression element', () => {
           new Computer(),
           el
         )
-      )?.[0]?.program[0].block?.args
+      )?.[0].block?.args
     ).toMatchObject([
       astNode(
         'assign',
@@ -90,7 +90,7 @@ describe('VariableDef slider element', () => {
           new Computer(),
           el
         )
-      )?.[0].program[0].block.args
+      )?.[0].block?.args
     ).toMatchObject([
       astNode(
         'assign',

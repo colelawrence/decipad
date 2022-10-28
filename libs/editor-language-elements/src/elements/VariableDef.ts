@@ -10,7 +10,7 @@ import { inferType } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../types';
-import { parseElementVariableAssignment } from '../utils/parseElementVariableAssignment';
+import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 
 export const VariableDef: InteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
@@ -40,7 +40,7 @@ export const VariableDef: InteractiveLanguageElement = {
         }
       }
 
-      return [parseElementVariableAssignment(id, variableName, expression)];
+      return parseElementAsVariableAssignment(id, variableName, expression);
     }
   ),
 };
