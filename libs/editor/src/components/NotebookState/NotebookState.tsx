@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, debounceTime } from 'rxjs';
 import { useTEditorState } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { NotebookState as UINotebookState } from '@decipad/ui';
@@ -8,11 +8,16 @@ interface NotebookStateProps {
   isSavedRemotely: BehaviorSubject<boolean>;
 }
 
+// In milliseconds
+const DEBOUNCE_TIME = 2000;
+
 export const NotebookState: FC<NotebookStateProps> = ({ isSavedRemotely }) => {
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState(true);
 
   useEffect(() => {
-    const sub = isSavedRemotely.subscribe((newSaved) => setSaved(newSaved));
+    const sub = isSavedRemotely
+      .pipe(debounceTime(DEBOUNCE_TIME))
+      .subscribe((newSaved) => setSaved(newSaved));
     return () => sub.unsubscribe();
   }, [isSavedRemotely]);
 
