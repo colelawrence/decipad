@@ -258,7 +258,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
         </MenuList>
         {length > 1 ? (
           <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
-            Remove column
+            Delete column
           </MenuItem>
         ) : null}
       </MenuList>

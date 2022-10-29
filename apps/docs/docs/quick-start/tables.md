@@ -51,7 +51,7 @@ Expand your table size with new columns and rows.
 Reduce your table size by removing columns and rows.
 
 - To **remove a column**, click the upside-down triangle button on a column and select `Delete column`.
-- To **remove a row**, hover a row, click the **`⋮⋮`** button that appears on the left, and then click `Delete`.
+- To **remove a row**, hover a row, click the **`⋮⋮`** button that appears on the left, and then click `Delete row`.
 
 ## Rearrange Columns and Rows
 
