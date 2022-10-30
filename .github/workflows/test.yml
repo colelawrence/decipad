@@ -60,7 +60,7 @@ jobs:
       - name: Test
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+        run: npx nx test --parallel=3 --ci --code-coverage --skip-nx-cache
 
   notify:
     name: Discord Notification

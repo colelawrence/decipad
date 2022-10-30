@@ -2,17 +2,17 @@ import { css, SerializedStyles } from '@emotion/react';
 import {
   Arrow,
   Content,
+  Portal,
   Root,
   Trigger,
-  Portal,
 } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { noop } from 'lodash';
 import { FC } from 'react';
 import {
-  offBlack,
   cssVar,
   darkTheme,
+  offBlack,
   p12Medium,
   setCssVar,
   white,
@@ -75,7 +75,7 @@ export const Tooltip = ({
   trigger,
   open,
   onChangeOpen,
-  hoverOnly,
+  hoverOnly = false,
   variant,
   onClick,
   side,

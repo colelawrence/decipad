@@ -1,6 +1,7 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 import { useTEditorState } from '@decipad/editor-types';
+import { useIsOffline } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { NotebookState as UINotebookState } from '@decipad/ui';
 
@@ -27,11 +28,13 @@ export const NotebookState: FC<NotebookStateProps> = ({ isSavedRemotely }) => {
   const canUndo = !!editor.undoManager?.canUndo?.();
   const canRedo = !!editor.undoManager?.canRedo?.();
 
-  const revertChanges = () => {
+  const revertChanges = useCallback(() => {
     while (editor.undoManager?.canUndo?.()) {
       editor.undo();
     }
-  };
+  }, [editor]);
+
+  const { isOffline } = useIsOffline();
 
   return (
     <UINotebookState
@@ -42,6 +45,7 @@ export const NotebookState: FC<NotebookStateProps> = ({ isSavedRemotely }) => {
       canRedo={canRedo}
       readOnly={readOnly}
       saved={saved}
+      isOffline={isOffline}
     />
   );
 };

@@ -373,6 +373,9 @@ class WebsocketProvider
       }, resyncInterval);
     }
 
+    global.addEventListener('online', this._onOfflineOnlineStatusChange);
+    global.addEventListener('offline', this._onOfflineOnlineStatusChange);
+
     this._updateHandler = this._updateHandler.bind(this);
     this._beforeUnloadHandler = this._beforeUnloadHandler.bind(this);
     this._bcSubscriber = this._bcSubscriber.bind(this);
@@ -485,6 +488,20 @@ class WebsocketProvider
     );
   }
 
+  private _onOfflineOnlineStatusChange = () => {
+    // if the navigator turns offline, we need to close the websocket so that
+    // we know the messages are not being able to be sent
+    if (!navigator.onLine && this.ws && (this.ws.CONNECTING || this.ws?.OPEN)) {
+      this.shouldConnect = true;
+      try {
+        this.ws.close();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('Error closing websocket:', err);
+      }
+    }
+  };
+
   get synced(): boolean {
     return this._synced;
   }
@@ -518,6 +535,10 @@ class WebsocketProvider
     }
 
     this.doc.off('update', this._updateHandler);
+
+    global.removeEventListener('online', this._onOfflineOnlineStatusChange);
+    global.removeEventListener('offline', this._onOfflineOnlineStatusChange);
+
     super.destroy();
   }
 

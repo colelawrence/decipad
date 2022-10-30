@@ -4,18 +4,20 @@ import { cssVar } from '../../primitives';
 export interface CurvedArrowProps {
   direction: 'left' | 'right';
   active: boolean;
+  title?: string;
 }
 
 export const CurvedArrow = ({
   direction,
   active,
+  title = 'CurvedArrow',
 }: CurvedArrowProps): ReturnType<FC> => {
   const arrowColor = active
     ? cssVar('currentTextColor')
     : cssVar('weakerTextColor');
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <title>Curved Arrow</title>
+      <title>{title}</title>
       {direction === 'left' ? (
         <>
           <path

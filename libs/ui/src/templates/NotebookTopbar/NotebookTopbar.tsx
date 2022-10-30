@@ -1,10 +1,10 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
-import { ComponentProps, FC, useContext, useEffect, useState } from 'react';
+import { ComponentProps, FC, useContext } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { ClientEventsContext } from '@decipad/client-events';
 import { Button, IconButton } from '../../atoms';
 import { Deci, LeftArrow, Sheet } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
@@ -102,13 +102,6 @@ export const NotebookTopbar = ({
   const { status: sessionStatus } = useSession();
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const clientEvent = useContext(ClientEventsContext);
-  const [hasLocalChanges, setHasLocalChanges] = useState(false);
-  useEffect(() => {
-    const subscription = hasLocalChanges$?.subscribe(setHasLocalChanges);
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, [hasLocalChanges$]);
 
   return (
     <div css={wrapperStyles}>
@@ -173,10 +166,6 @@ export const NotebookTopbar = ({
           isWriter={isWriter}
           usersWithAccess={usersWithAccess}
         />
-
-        {!isWriter && hasLocalChanges && (
-          <Button onClick={() => onRevertChanges()}>Revert changes</Button>
-        )}
 
         {sessionStatus === 'authenticated' ? (
           isWriter ? (

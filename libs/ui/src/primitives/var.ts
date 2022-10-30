@@ -2,6 +2,7 @@ import type { Property } from 'csstype';
 import {
   blue100,
   blue300,
+  brand100,
   brand300,
   brand600,
   grey100,
@@ -13,9 +14,13 @@ import {
   grey600,
   offBlack,
   offWhite,
+  orange100,
+  orange300,
   orange50,
   orange700,
   purple200,
+  red100,
+  red300,
   red50,
   red500,
   teal200,
@@ -32,6 +37,16 @@ export interface CssVariables {
   readonly successColor: Property.Color;
   readonly dangerColor: Property.Color;
   readonly warningColor: Property.Color;
+
+  // States for Undo/Redo
+  readonly notebookStateDangerLight: Property.Color;
+  readonly notebookStateDangerHeavy: Property.Color;
+  readonly notebookStateWarningLight: Property.Color;
+  readonly notebookStateWarningHeavy: Property.Color;
+  readonly notebookStateOkLight: Property.Color;
+  readonly notebookStateOkHeavy: Property.Color;
+  readonly notebookStateDisabledLight: Property.Color;
+  readonly notebookStateDisabledHeavy: Property.Color;
 
   // Fill
 
@@ -86,6 +101,18 @@ const defaults: CssVariables = {
   successColor: brand300.rgb,
   dangerColor: red500.rgb,
   warningColor: yellow600.rgb,
+
+  notebookStateDangerLight: red100.rgb,
+  notebookStateDangerHeavy: red300.rgb,
+
+  notebookStateWarningLight: orange100.rgb,
+  notebookStateWarningHeavy: orange300.rgb,
+
+  notebookStateOkLight: brand100.rgb,
+  notebookStateOkHeavy: brand600.rgb,
+
+  notebookStateDisabledLight: grey100.rgb,
+  notebookStateDisabledHeavy: grey600.rgb,
 
   backgroundColor: white.rgb,
   tintedBackgroundColor: grey50.rgb,

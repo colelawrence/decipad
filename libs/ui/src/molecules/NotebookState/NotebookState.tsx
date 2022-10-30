@@ -1,20 +1,15 @@
-import { FC } from 'react';
 import { css } from '@emotion/react';
+import { FC } from 'react';
+import { Tooltip } from '../../atoms';
+import { CircularArrow } from '../../icons';
+import { CurvedArrow } from '../../icons/CurvedArrow/CurvedArrow';
 import {
-  brand100,
-  brand600,
   cssVar,
-  grey50,
   grey500,
   mediumShadow,
-  orange100,
-  orange300,
   p12Bold,
   p12Medium,
 } from '../../primitives';
-import { CurvedArrow } from '../../icons/CurvedArrow/CurvedArrow';
-import { CircularArrow } from '../../icons';
-import { Tooltip } from '../../atoms';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -38,13 +33,17 @@ const buttonStyles = css({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  transition: 'all 0.5s ease-in-out',
+});
+
+const activeButtonStyles = css({
+  transition: 'all 1.25s ease-in-out',
   ':hover': {
-    backgroundColor: grey50.rgb,
+    border: `1px solid ${cssVar('strongHighlightColor')}`,
   },
 });
 
 const revertChangesStyles = css([
+  p12Bold,
   {
     display: 'flex',
     justifyContent: 'center',
@@ -52,20 +51,50 @@ const revertChangesStyles = css([
     paddingLeft: '16px',
     paddingRight: '16px',
     gap: '4px',
+    borderRadius: '6px',
+    height: '32px',
+    color: cssVar('weakerTextColor'),
   },
-  p12Bold,
 ]);
 
-type State = 'saved' | 'unsaved';
+const activeRevertChangesStyles = css({
+  color: cssVar('normalTextColor'),
+  ':hover': {
+    backgroundColor: cssVar('highlightColor'),
+  },
+});
+
+type State = 'saved' | 'unsaved' | 'offline' | 'error';
+
+// saved: all is ok, being || saved remotely and locally
+// unsaved: after the debouncing 2s we still couldnt save the document, || locally saved
+// offline: we have no access to the internet so things are || locally saved
+// error (unused): an error has happened, you should contact support (e.g. broken block)
 
 const getColour = (
   state: State
 ): { background: string; foreground: string } => {
   switch (state) {
     case 'saved':
-      return { background: brand100.rgb, foreground: brand600.rgb };
+      return {
+        background: cssVar('notebookStateOkLight'),
+        foreground: cssVar('notebookStateOkHeavy'),
+      };
     case 'unsaved':
-      return { background: orange100.rgb, foreground: orange300.rgb };
+      return {
+        background: cssVar('notebookStateWarningLight'),
+        foreground: cssVar('notebookStateWarningHeavy'),
+      };
+    case 'offline':
+      return {
+        background: cssVar('notebookStateDisabledLight'),
+        foreground: cssVar('notebookStateDisabledHeavy'),
+      };
+    case 'error':
+      return {
+        background: cssVar('notebookStateDangerLight'),
+        foreground: cssVar('notebookStateDangerHeavy'),
+      };
   }
 };
 
@@ -100,26 +129,48 @@ export interface NotebookStateProps {
   canRedo: boolean;
   readOnly: boolean;
   saved: boolean;
+  isOffline: boolean;
 }
 
-const getText = (readOnly: boolean, saved: boolean) => {
+const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
   if (readOnly) {
     return (
       <>
-        <p>Changes not saved, just play 🕹️</p>
+        <p>Play with this notebook 🕹️</p>
         <p>
-          <u>Duplicate </u>
           <span css={{ color: grey500.rgb }}>
-            this model to save your changes and edit
+            Duplicate if you have an account. Or sign up for early access.
+          </span>
+        </p>
+      </>
+    );
+  }
+  if (isOffline) {
+    return (
+      <>
+        <p>Offline 🌐</p>
+        <p>
+          <span css={{ color: grey500.rgb }}>
+            We're saving your work and your changes will sync when you are back
+            online. If you think something is wrong contact support.
           </span>
         </p>
       </>
     );
   }
   if (!saved) {
-    return <p>Notebook is being saved ⌛</p>;
+    return (
+      <>
+        <p>Changes not synced</p>
+        <p>
+          <span css={{ color: grey500.rgb }}>
+            If this error persists contact support.
+          </span>
+        </p>
+      </>
+    );
   }
-  return <p>Published and saved 🤝</p>;
+  return <p>Saved</p>;
 };
 
 export const NotebookState: FC<NotebookStateProps> = ({
@@ -130,7 +181,13 @@ export const NotebookState: FC<NotebookStateProps> = ({
   canRedo,
   readOnly,
   saved,
+  isOffline,
 }) => {
+  const state = isOffline
+    ? 'offline'
+    : readOnly || !saved
+    ? 'unsaved'
+    : 'saved';
   return (
     <div
       css={[
@@ -140,38 +197,49 @@ export const NotebookState: FC<NotebookStateProps> = ({
         },
       ]}
     >
-      <div css={buttonStyles}>
+      <div css={[buttonStyles, canUndo && activeButtonStyles]}>
         <button css={{ width: 24, height: 24 }} onClick={undo}>
-          <CurvedArrow direction="left" active={canUndo} />
+          <CurvedArrow
+            title={canUndo ? 'Undo ⌘ + Z' : ''}
+            direction="left"
+            active={canUndo}
+          />
         </button>
       </div>
-      <div css={buttonStyles}>
+      <div css={[buttonStyles, canRedo && activeButtonStyles]}>
         <button css={{ width: 24, height: 24 }} onClick={redo}>
-          <CurvedArrow direction="right" active={canRedo} />
+          <CurvedArrow
+            title={canRedo ? 'Redo ⌘ + SHIFT + Z' : ''}
+            direction="right"
+            active={canRedo}
+          />
         </button>
       </div>
       {readOnly && (
-        <button css={revertChangesStyles} onClick={revertChanges}>
+        <button
+          css={[
+            revertChangesStyles,
+            !(!canUndo && canRedo) && activeRevertChangesStyles,
+          ]}
+          onClick={revertChanges}
+        >
           <div css={{ width: 16, height: 16 }}>
-            <CircularArrow />
+            <CircularArrow active={!canUndo && canRedo} />
           </div>
-          Revert Changes
+          Reset Changes
         </button>
       )}
       <Tooltip
-        trigger={
-          <div
-            css={stateStyles(readOnly || !saved ? 'unsaved' : 'saved')}
-          ></div>
-        }
+        trigger={<div aria-label={state} css={stateStyles(state)}></div>}
         side="top"
+        hoverOnly
         wrapperStyles={css({
           marginRight: '16px',
           borderRadius: '8px',
         })}
       >
         <div css={[p12Medium, { maxWidth: '200px' }]}>
-          {getText(readOnly, saved)}
+          {getText(readOnly, saved, isOffline)}
         </div>
       </Tooltip>
     </div>

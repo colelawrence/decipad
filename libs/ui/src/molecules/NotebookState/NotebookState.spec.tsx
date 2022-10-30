@@ -10,6 +10,7 @@ const args: ComponentProps<typeof NotebookState> = {
   canRedo: true,
   readOnly: true,
   saved: true,
+  isOffline: false,
 };
 
 it('renders', () => {

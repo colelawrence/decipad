@@ -1,17 +1,17 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { FC, useContext } from 'react';
-import { css } from '@emotion/react';
 import { BracketError } from '@decipad/computer';
+import { css } from '@emotion/react';
+import { FC, useContext } from 'react';
+import { Tooltip } from '..';
 import { Warning } from '../../icons';
 import {
+  p12Medium,
+  p12Regular,
   red100,
   red500,
   setCssVar,
-  p12Regular,
   white,
-  p12Medium,
 } from '../../primitives';
-import { Tooltip } from '..';
 import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
@@ -68,6 +68,7 @@ export const CodeError = ({
   const clientEvent = useContext(ClientEventsContext);
   return (
     <Tooltip
+      hoverOnly
       trigger={
         <span css={iconWrapperStyles} title={message}>
           <Warning />
