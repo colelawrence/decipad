@@ -6,6 +6,13 @@ import { getDataRangeUrlFromSheet } from '../providers/gsheets/getDataRangeUrlFr
 import { ImportResult } from '../types';
 import { matrix } from './matrix';
 
+interface VisitStackElement {
+  col: number;
+  row: number;
+}
+
+type VisitStack = Array<VisitStackElement>;
+
 const neighbourDiffs = [
   [-1, -1],
   [0, -1],
@@ -85,8 +92,6 @@ const partition = (imported: ImportResult): ImportResult[] => {
     if (dequal(island, extension)) {
       return island;
     }
-    islands.delete(island);
-    islands.add(extension);
     return extension;
   };
 
@@ -113,34 +118,42 @@ const partition = (imported: ImportResult): ImportResult[] => {
     return false;
   };
 
-  const visitNeighbours = (col: number, row: number, currentIsland: Island) => {
+  const pushNeighbourCells = (col: number, row: number, stack: VisitStack) => {
     for (const diff of neighbourDiffs) {
       const nextColIndex = col + diff[0];
       const nextRowIndex = row + diff[1];
-      if (!withinRange(nextColIndex, nextRowIndex)) {
-        continue;
-      }
       if (
+        withinRange(nextColIndex, nextRowIndex) &&
         !visited[nextColIndex][nextRowIndex] &&
         hasValue(nextColIndex, nextRowIndex)
       ) {
-        visited[nextColIndex][nextRowIndex] = true;
-        visitNeighbours(
-          nextColIndex,
-          nextRowIndex,
-          extendIsland(currentIsland, nextColIndex, nextRowIndex)
-        );
+        stack.push({
+          col: nextColIndex,
+          row: nextRowIndex,
+        });
       }
     }
+  };
+
+  const exploreIsland = (_col: number, _row: number): Island => {
+    let island = makeIsland(_col, _row);
+    const stack: Array<VisitStackElement> = [{ col: _col, row: _row }];
+    do {
+      const { col, row } = getDefined(stack.pop());
+      if (!visited[col][row] && hasValue(col, row)) {
+        visited[col][row] = true;
+        island = extendIsland(island, col, row);
+        pushNeighbourCells(col, row, stack);
+      }
+    } while (stack.length > 0);
+    return island;
   };
 
   for (let col = 0; col < columnCount; col += 1) {
     for (let row = 0; row < rowCount; row += 1) {
       if (!visited[col][row] && hasValue(col, row)) {
-        const island = makeIsland(col, row);
+        const island = exploreIsland(col, row);
         islands.add(island);
-        visited[col][row] = true;
-        visitNeighbours(col, row, island);
       }
     }
   }
