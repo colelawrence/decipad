@@ -118,7 +118,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         />,
         <MenuSeparator key="sep" />,
       ]}
-      {variant !== 'display' && (
+      {variant === 'expression' && (
         <MenuList
           itemTrigger={
             <TriggerMenuItem icon={<Shapes />}>
