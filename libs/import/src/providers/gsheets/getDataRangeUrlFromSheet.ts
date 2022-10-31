@@ -12,7 +12,7 @@ const islandToRange = (sheetName: string, island: Island): string => {
 
 export const getDataRangeUrlFromSheet = (
   sheetId: string,
-  gid: number | undefined,
+  gid: number | string | undefined,
   sheetMeta: SheetMeta,
   island: Island
 ): URL => {

@@ -4,7 +4,7 @@ import { SheetMeta } from '../../types';
 
 export const getDataUrlFromSheetMeta = (
   sheetId: string,
-  gid: number,
+  gid: number | string,
   sheetMeta: SheetMeta
 ): URL => {
   const { googleSheets } = thirdParty();

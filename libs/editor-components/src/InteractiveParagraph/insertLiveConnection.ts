@@ -10,7 +10,7 @@ import {
 } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
 import { tryImport } from '@decipad/import';
-import { getDefined, timeout } from '@decipad/utils';
+import { getDefined, noop, timeout } from '@decipad/utils';
 import { insertNodes, isCollapsed, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -60,7 +60,7 @@ const insertLiveConnectionToGsheets = async ({
   source,
   url,
   identifyIslands,
-}: InsertLiveConnectionProps) => {
+}: InsertLiveConnectionProps): Promise<void> => {
   const selection = getDefined(editor.selection);
 
   let blockPath = [selection.anchor.path[0]];
@@ -74,7 +74,7 @@ const insertLiveConnectionToGsheets = async ({
     identifyIslands,
   });
 
-  await Promise.all(
+  return Promise.all(
     imports.map(async (imp) => {
       const liveConnEl: LiveConnectionElement = {
         id: nanoid(),
@@ -104,19 +104,21 @@ const insertLiveConnectionToGsheets = async ({
           at: nextPath(),
         });
       });
+
       await timeout(2000);
     })
-  );
+  ).then(noop);
 };
 
 export const insertLiveConnection = async (
   props: InsertLiveConnectionProps
-) => {
+): Promise<void> => {
   const { editor, source, url } = props;
   const { selection } = editor;
   if (isCollapsed(selection) && selection?.anchor && url) {
     if (source !== 'gsheets') {
-      justInsertLiveData(props);
-    } else insertLiveConnectionToGsheets(props);
+      return justInsertLiveData(props);
+    }
+    return insertLiveConnectionToGsheets(props);
   }
 };

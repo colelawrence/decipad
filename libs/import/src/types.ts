@@ -35,7 +35,7 @@ export interface ImportResultMeta {
   sourceUrl?: URL;
   importedAt?: Date;
   sheetId?: string;
-  gid?: number;
+  gid?: number | string;
   sourceMeta?: SheetMeta;
 }
 

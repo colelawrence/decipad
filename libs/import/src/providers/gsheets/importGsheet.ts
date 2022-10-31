@@ -103,7 +103,7 @@ const importOneGsheet = async (
     return [errorResult((err as Error).message)];
   }
   if (!resp.ok) {
-    return [errorResult(resp.statusText)];
+    return [errorResult(resp.statusText || (await resp.text()))];
   }
   const result = (await handleGsheetsResponse(
     computer,
