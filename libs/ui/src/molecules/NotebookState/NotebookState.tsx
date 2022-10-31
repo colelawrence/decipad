@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { useSession } from 'next-auth/react';
 import { FC } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow } from '../../icons';
@@ -183,6 +184,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
   saved,
   isOffline,
 }) => {
+  const session = useSession();
   const state = isOffline
     ? 'offline'
     : readOnly || !saved
@@ -193,7 +195,8 @@ export const NotebookState: FC<NotebookStateProps> = ({
       css={[
         wrapperStyles,
         {
-          right: readOnly ? '32px' : '64px',
+          right:
+            readOnly && session.status !== 'authenticated' ? '16px' : '64px',
         },
       ]}
     >
