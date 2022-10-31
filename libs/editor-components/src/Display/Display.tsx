@@ -188,7 +188,9 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
       <DraggableBlock
         blockKind="interactive"
         element={element}
-        accept={[ELEMENT_DISPLAY]}
+        accept={
+          isHorizontal ? [ELEMENT_VARIABLE_DEF, ELEMENT_DISPLAY] : undefined
+        }
         getAxis={getAxis}
         onDrop={onDrop}
       >
