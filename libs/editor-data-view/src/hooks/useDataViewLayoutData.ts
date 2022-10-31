@@ -99,7 +99,7 @@ export const group = async (
         (restDataSlice[0] && restDataSlice[0].rowCount <= 1);
 
       const smartRow = smartRowShouldHide
-        ? undefined
+        ? null
         : generateSmartRow(
             zip(restOfTypes, restDataSlice),
             columnNames,

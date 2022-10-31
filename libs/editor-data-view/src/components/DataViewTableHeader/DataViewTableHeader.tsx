@@ -75,7 +75,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
     <DataViewTableHeader
       hover={hover}
       rowSpan={rowSpan}
-      colSpan={colSpan}
+      colSpan={groupIsCollapsed ? 1 : colSpan}
       onHover={onHover}
       alignRight={alignRight}
     >
