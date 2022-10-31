@@ -1,5 +1,5 @@
 import Fraction from '@decipad/fraction';
-import { zip } from '@decipad/utils';
+import { lenientZip, zip } from '@decipad/utils';
 import { equalOrUnknown } from '../utils';
 import { Type } from '..';
 import { getSpecificity } from '../date';
@@ -68,17 +68,19 @@ function validate(
       return array.every((cell) => validate(type.cellType, cell));
     }
     case 'table': {
-      return zip(
+      return lenientZip(
         type.columnTypes,
         getArray(value as Interpreter.ResultTable)
       ).every(([cellType, value]) => {
-        const implicitColumn: SerializedType = {
-          kind: 'column',
-          cellType,
-          columnSize: 'unknown',
-          indexedBy: null,
-        };
-        return validate(implicitColumn, value);
+        if (cellType) {
+          const implicitColumn: SerializedType = {
+            kind: 'column',
+            cellType,
+            columnSize: 'unknown',
+            indexedBy: null,
+          };
+          validate(implicitColumn, value);
+        }
       });
     }
     case 'row': {
