@@ -1,4 +1,6 @@
 import { camelCase } from 'lodash';
 
+const capitalize = (str: string): string => str[0].toUpperCase() + str.slice(1);
+
 export const varNamify = (text: string): string =>
-  camelCase(text.replaceAll(' ', '_'));
+  capitalize(camelCase(text.replaceAll(' ', '_')));

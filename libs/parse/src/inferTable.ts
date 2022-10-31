@@ -1,6 +1,6 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
 import Fraction from '@decipad/fraction';
-import { getDefined } from '@decipad/utils';
+import { getDefined, varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
 import { parseDate } from './parseDate';
@@ -21,7 +21,7 @@ const withColumnNames = (
 ): WithColumnNamesResult => {
   if (options.useFirstRowAsHeader) {
     return {
-      columnNames: data.values.map((column) => column[0].toString()),
+      columnNames: data.values.map((column) => varNamify(column[0].toString())),
       columnValues: data.values.map((column) => column.slice(1)),
     };
   }
