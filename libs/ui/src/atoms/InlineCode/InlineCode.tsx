@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { codeBlock } from '../../styles';
 
 const styles = css(codeBlock.variableStyles, {
-  margin: '0 6px',
   padding: `4px`,
 
   borderRadius: '4px',
