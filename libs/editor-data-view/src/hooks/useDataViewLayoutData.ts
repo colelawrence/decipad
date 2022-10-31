@@ -98,17 +98,16 @@ export const group = async (
           0 ||
         (restDataSlice[0] && restDataSlice[0].rowCount <= 1);
 
-      const smartRow =
-        !restDataSlice || !restDataSlice[0] || smartRowShouldHide
-          ? undefined
-          : generateSmartRow(
-              zip(restOfTypes, restDataSlice),
-              columnNames,
-              columnIndex + 1,
-              aggregationTypes,
-              newSubproperties,
-              parentHighlight$
-            );
+      const smartRow = smartRowShouldHide
+        ? undefined
+        : generateSmartRow(
+            zip(restOfTypes, restDataSlice),
+            columnNames,
+            columnIndex + 1,
+            aggregationTypes,
+            newSubproperties,
+            parentHighlight$
+          );
 
       const newGroup = await group(
         columnNames,
@@ -125,10 +124,8 @@ export const group = async (
       const includesGroupId =
         collapsedGroups && collapsedGroups.includes(groupId);
 
-      const smartRowHasLength = smartRow && smartRow.children.length >= 1;
-
       const children = !includesGroupId
-        ? ([smartRowHasLength ? smartRow : undefined, ...newGroup].filter(
+        ? ([smartRow?.column ? smartRow : undefined, ...newGroup].filter(
             Boolean
           ) as DataGroup[])
         : smartRow

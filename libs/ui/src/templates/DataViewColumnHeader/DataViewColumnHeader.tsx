@@ -30,12 +30,18 @@ export interface DataViewColumnHeaderProps<TAggregation extends string> {
 
 const dataViewColumnHeaderStyles = css({
   whiteSpace: 'nowrap',
+  position: 'relative',
 });
 
 const dataViewColumnHeaderSelectWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
+});
+
+const dataViewColumnHeaderNameStyles = css({
+  cursor: 'grab',
+  fontWeight: 'bold',
 });
 
 const alignRightStyles = css({
@@ -69,12 +75,12 @@ export function DataViewColumnHeader<TAggregation extends string>({
 
   return (
     <th {...attributes} css={dataViewColumnHeaderStyles}>
-      {overDirection === 'left' && (
-        <div contentEditable={false}>
-          <DropLine variant="inline" />
-        </div>
-      )}
       <div ref={connectDropTarget} contentEditable={false}>
+        {overDirection === 'left' && (
+          <div contentEditable={false}>
+            <DropLine variant="inline" />
+          </div>
+        )}
         <div
           ref={connectDragSource}
           // eslint-disable-next-line no-sparse-arrays
@@ -82,8 +88,9 @@ export function DataViewColumnHeader<TAggregation extends string>({
             dataViewColumnHeaderSelectWrapperStyles,
             alignRight ? alignRightStyles : null,
           ]}
+          contentEditable={false}
         >
-          {name}
+          <span css={dataViewColumnHeaderNameStyles}>{name}</span>
 
           <MenuList
             root
@@ -132,12 +139,12 @@ export function DataViewColumnHeader<TAggregation extends string>({
 
           <div>{children}</div>
         </div>
+        {overDirection === 'right' && (
+          <div contentEditable={false}>
+            <DropLine variant="inline" />
+          </div>
+        )}
       </div>
-      {overDirection === 'right' && (
-        <div contentEditable={false}>
-          <DropLine variant="inline" />
-        </div>
-      )}
     </th>
   );
 }

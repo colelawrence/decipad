@@ -26,7 +26,6 @@ const tableCaptionWrapperStyles = css({
   width: '100%',
   minWidth: editorLayout.slimBlockWidth,
   maxWidth: restWidthBlock,
-  overflowX: 'scroll',
   display: 'inline-block',
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,

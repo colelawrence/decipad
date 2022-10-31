@@ -21,6 +21,8 @@ const dropLineTableStyles = css({
 const dropLineVerticalStyles = css({
   position: 'absolute',
   height: '100%',
+  left: '0',
+  top: '0',
   width: `${dropLineWidth}px`,
 });
 
