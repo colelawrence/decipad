@@ -1,4 +1,6 @@
+import { css } from '@emotion/react';
 import { MouseEvent, useCallback } from 'react';
+import { cssVar } from '../../primitives';
 
 interface UpdatePromptProps {
   onReload: () => void;
@@ -15,13 +17,11 @@ export const UpdatePrompt = ({ onReload }: UpdatePromptProps) => {
   );
 
   return (
-    <div>
-      <p>There is a new version of Deci available.</p>
-      <p>
-        <a href="/" onClick={onReloadClick}>
-          Click here to update
-        </a>
-      </p>
-    </div>
+    <a href="/" onClick={onReloadClick}>
+      Decipad has updated.&nbsp;
+      <span css={css({ color: cssVar('weakerTextColor') })}>
+        Click to refresh ✨
+      </span>
+    </a>
   );
 };

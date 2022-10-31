@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
 import { ToastContext } from '@decipad/toast';
+import { ComponentType } from 'react';
 import * as ReactToastNotifications from 'react-toast-notifications';
 import { Toast } from '../../atoms';
 import { toastTransitionDelay } from '../../primitives';
@@ -29,7 +29,7 @@ export const ToastDisplay: React.FC<React.PropsWithChildren<unknown>> = ({
       }}
       autoDismiss
       autoDismissTimeout={toastTransitionDelay}
-      placement="bottom-right"
+      placement="top-center"
     >
       <ToastProvider>{children}</ToastProvider>
     </ReactToastNotifications.ToastProvider>

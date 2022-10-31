@@ -16,7 +16,7 @@ export const UpdatesHandler = () => {
   const onUpdateFound = useCallback(() => {
     if (!foundUpdate) {
       setFoundUpdate(true);
-      toast(<UpdatePrompt onReload={onReload} />, 'warning', {
+      toast(<UpdatePrompt onReload={onReload} />, 'info', {
         autoDismiss: false,
       });
     }

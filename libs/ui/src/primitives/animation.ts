@@ -7,6 +7,6 @@ export const shortAnimationDurationMs = 120;
 // moving the cursor quickly over the element.
 export const mouseMovingOverTransitionDelay = '20ms';
 
-export const toastTransitionDelay = 5000;
+export const toastTransitionDelay = 7500;
 
 export const easing = 'cubic-bezier(0.42, 0, 0.58, 1)';
