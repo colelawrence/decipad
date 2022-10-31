@@ -17,7 +17,7 @@ import { formatError } from '@decipad/format';
 import { DraggableBlock } from '../block-management';
 import { importTable } from './importTable';
 
-const MAX_IMPORT_CELL_COUNT = 500;
+const MAX_IMPORT_CELL_COUNT = 300;
 
 export const Import: PlateComponent = ({ attributes, element }) => {
   assertElementType(element, ELEMENT_IMPORT);
@@ -39,7 +39,10 @@ export const Import: PlateComponent = ({ attributes, element }) => {
           const imported = await tryImport(
             computer,
             new URL(element.url),
-            element.source
+            element.source,
+            {
+              maxCellCount: MAX_IMPORT_CELL_COUNT,
+            }
           );
           if (imported.length > 0) {
             setError(undefined);
@@ -48,19 +51,7 @@ export const Import: PlateComponent = ({ attributes, element }) => {
             setError(`Could not load from ${element.url}`);
           }
           const firstImported = imported[0];
-          if (
-            firstImported.result.type.kind === 'table' &&
-            firstImported.result.type.tableLength !== 'unknown' &&
-            firstImported.result.type.tableLength *
-              firstImported.result.type.columnTypes.length >
-              MAX_IMPORT_CELL_COUNT
-          ) {
-            setError(
-              'This table is too big to import. Please use a live connection instead.'
-            );
-          } else {
-            setResult(firstImported);
-          }
+          setResult(firstImported);
         } catch (err) {
           console.error('Error caught while importing', err);
           setError((err as Error).message);
@@ -77,12 +68,11 @@ export const Import: PlateComponent = ({ attributes, element }) => {
       const computerResult = result.result;
       if (computerResult?.type.kind === 'type-error') {
         setError(formatError('en-US', computerResult.type.errorCause));
-      }
-      if (computerResult?.type.kind !== 'table') {
+      } else if (computerResult?.type.kind !== 'table') {
         setError('Expected result to be a table');
         return;
       }
-      if (path && computerResult) {
+      if (path && computerResult && computerResult.type.kind === 'table') {
         try {
           const insertPath = requirePathBelowBlock(editor, path);
           withoutNormalizing(editor, () => {

@@ -8,6 +8,10 @@ import { getDataUrlFromSheetMeta } from './getDataUrlFromSheetUrl';
 import { trimSheet } from '../../utils/trimSheet';
 import { findAllIslands } from '../../utils/sheetIslands';
 
+const sumLength = <T>(acc: number, col: T[]): number => {
+  return acc + col.length;
+};
+
 const errorResult = (err: string): ImportResult => {
   return {
     result: {
@@ -27,13 +31,21 @@ const handleGsheetsResponse = async (
   computer: Computer,
   resp: Response,
   options: ImportOptions
-): Promise<Result.Result<'table'>> => {
+): Promise<Result.Result> => {
+  const { identifyIslands = false, maxCellCount } = options;
   const body = (await resp.json()) as unknown as Sheet;
-  const trimmedBody = options.identifyIslands ? body : trimSheet(body);
+  if (maxCellCount) {
+    const cellCount = body.values.reduce(sumLength, 0);
+    if (cellCount > maxCellCount) {
+      return errorResult(`Too many cells to import. maximum is ${maxCellCount}`)
+        .result;
+    }
+  }
+  const trimmedBody = identifyIslands ? body : trimSheet(body);
   return inferTable(computer, trimmedBody, {
     ...options,
     doNotTryExpressionNumbersParse: true,
-  });
+  }) as Promise<Result.Result>;
 };
 
 const loadSheet =

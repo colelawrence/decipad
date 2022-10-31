@@ -31,6 +31,7 @@ export const insertImport = async ({
   identifyIslands,
 }: InsertImportProps) => {
   const { selection } = editor;
+
   if (isCollapsed(selection) && selection?.anchor && url) {
     const imports = await tryImport(computer, new URL(url), source, {
       identifyIslands,

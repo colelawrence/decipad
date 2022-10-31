@@ -13,6 +13,7 @@ export interface ImportOptions {
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions?: Record<ColIndex, TableCellType>;
   doNotTryExpressionNumbersParse?: boolean;
+  maxCellCount?: number;
 }
 
 export const tryImport = (
