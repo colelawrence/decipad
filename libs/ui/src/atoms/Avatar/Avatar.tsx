@@ -10,8 +10,8 @@ import {
 
 const containerStyles = css(p12Bold, {
   aspectRatio: '1 / 1',
-  minWidth: '24px',
-  minHeight: '24px',
+  minWidth: '28px',
+  minHeight: '28px',
 
   display: 'flex',
   flexDirection: 'column',
