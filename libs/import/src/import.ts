@@ -16,7 +16,7 @@ export interface ImportOptions {
   maxCellCount?: number;
 }
 
-export const tryImport = (
+const internalTryImport = (
   computer: Computer,
   url: URL,
   provider?: ImportElementSource,
@@ -31,4 +31,18 @@ export const tryImport = (
     }
   }
   return importFromUnknown(computer, url, options);
+};
+
+export const tryImport = async (
+  computer: Computer,
+  url: URL,
+  provider?: ImportElementSource,
+  options: ImportOptions = {}
+): Promise<ImportResult[]> => {
+  const { identifyIslands, ...restOptions } = options;
+  let result = await internalTryImport(computer, url, provider, options);
+  if (result.length === 1 && identifyIslands) {
+    result = await internalTryImport(computer, url, provider, restOptions);
+  }
+  return result;
 };

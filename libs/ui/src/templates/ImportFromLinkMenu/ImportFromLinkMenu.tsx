@@ -1,4 +1,5 @@
 import { ImportElementSource } from '@decipad/editor-types';
+import pluralize from 'pluralize';
 import { ComponentProps, FC } from 'react';
 import { Calculations, Import } from '../../icons';
 import { InlineMenu } from '../../organisms';
@@ -20,8 +21,8 @@ const groups = (
       items: [
         source === 'gsheets' && {
           command: 'connect-islands',
-          title: 'Connect to islands',
-          description: `Connect as live data from individual items of ${sourceName} `,
+          title: 'Find and connect to ranges',
+          description: `Find individual blocks and create a connection for each one in this gsheet`,
           icon: <Calculations />,
           enabled: true,
           extraSearchTerms: ['connect', 'live'],
@@ -29,7 +30,9 @@ const groups = (
         {
           command: 'connect-all',
           title: 'Connect',
-          description: `Connect to live data from all items from ${sourceName}`,
+          description: `Connect to live data from this ${pluralize.singular(
+            sourceName
+          )}`,
           icon: <Calculations />,
           enabled: true,
           extraSearchTerms: ['connect', 'live'],
@@ -37,7 +40,7 @@ const groups = (
         source === 'gsheets' && {
           command: 'import-islands',
           title: 'Import islands of data',
-          description: `Import each item from ${sourceName}`,
+          description: `Find individual blocks in this gsheet and import each range as a separate table`,
           icon: <Import />,
           enabled: true,
           extraSearchTerms: ['import', 'google', 'sheets'],
@@ -45,7 +48,9 @@ const groups = (
         {
           command: 'import-all',
           title: 'Import',
-          description: `Import all data from ${sourceName}`,
+          description: `Import all data in this ${pluralize.singular(
+            sourceName
+          )}`,
           icon: <Import />,
           enabled: true,
           extraSearchTerms: ['import', 'google', 'sheets'],

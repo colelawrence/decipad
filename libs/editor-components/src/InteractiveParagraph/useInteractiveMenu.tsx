@@ -22,6 +22,7 @@ import {
   isText,
   removeNodes,
 } from '@udecode/plate';
+import { useToast } from '@decipad/toast';
 import { insertImport } from './insertImport';
 import { insertLiveConnection } from './insertLiveConnection';
 
@@ -89,6 +90,8 @@ export const useInteractiveMenu = (
 
   const computer = useComputer();
 
+  const toast = useToast();
+
   const onInteractionMenuExecute = useCallback(
     async (command: string) => {
       setShowInteractionMenu(false);
@@ -114,20 +117,33 @@ export const useInteractiveMenu = (
           if (
             isInteractionOfType(lastInterestingUserInteraction, 'pasted-link')
           ) {
-            await insertLiveConnection({
-              computer,
-              editor,
-              source: lastInterestingUserInteraction.source,
-              url: lastInterestingUserInteraction.url,
-              identifyIslands: command === 'connect-islands',
-            });
+            try {
+              await insertLiveConnection({
+                computer,
+                editor,
+                source: lastInterestingUserInteraction.source,
+                url: lastInterestingUserInteraction.url,
+                identifyIslands: command === 'connect-islands',
+              });
+            } catch (err) {
+              toast(
+                `Error inserting live connection: ${(err as Error).message}`,
+                'error'
+              );
+            }
             setLastInterestingUserInteraction(undefined);
           }
         }
       }
       cleanupAfterCommand(lastInterestingUserInteraction);
     },
-    [cleanupAfterCommand, computer, editor, lastInterestingUserInteraction]
+    [
+      cleanupAfterCommand,
+      computer,
+      editor,
+      lastInterestingUserInteraction,
+      toast,
+    ]
   );
 
   const onKeyDown = useCallback(

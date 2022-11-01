@@ -43,3 +43,8 @@ export interface ImportResult {
   meta?: ImportResultMeta;
   result: Result.Result;
 }
+
+export interface SourceUrlParseResponse {
+  isRange?: boolean;
+  range?: string[];
+}

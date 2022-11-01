@@ -89,7 +89,11 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
         ></LiveConnectionResult>
       )}
       {error && <CodeError message={error.message} url="/docs" />}
-      {!error && !result && <Spinner />}
+      {!error && !result && (
+        <div>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };
