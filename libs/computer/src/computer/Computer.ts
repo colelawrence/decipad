@@ -178,13 +178,12 @@ export class Computer {
   getNamesDefined(blockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.latestProgram);
     const symbol = blockId && this.getDefinedSymbolInBlock(blockId);
+    const toIgnore = new Set(this.automaticallyGeneratedNames);
+    if (symbol) {
+      toIgnore.add(symbol);
+    }
     return Array.from(
-      findNames(
-        this.computationRealm,
-        program,
-        this.automaticallyGeneratedNames,
-        symbol
-      )
+      findNames(this.computationRealm, program, toIgnore, symbol)
     );
   }
 

@@ -1,11 +1,13 @@
 import { Path, Range } from 'slate';
 import { getUsedIdentifiers } from '@decipad/computer';
 
-export type RangeWithVariableInfo = Range & {
-  readonly variableName?: string;
-  readonly blockId?: string;
-  readonly isDeclaration?: boolean;
-};
+export type RangeWithVariableInfo = Range & VariableInfo;
+
+export interface VariableInfo {
+  readonly variableName: string;
+  readonly blockId: string;
+  readonly isDeclaration: boolean;
+}
 
 export const getVariableRanges = (
   code: string,

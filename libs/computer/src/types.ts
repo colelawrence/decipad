@@ -20,7 +20,6 @@ type BaseParseError = {
   // So we can use it interchangeably with IdentifiedResult
   result?: undefined;
   visibleVariables?: undefined;
-  variableName?: undefined;
   // So we can use it interchangeably with IdentifiedBlock
   block?: undefined;
 };
@@ -40,7 +39,6 @@ export type IdentifiedError =
 export interface IdentifiedResult {
   type: 'computer-result';
   id: string;
-  variableName?: string;
   result: Result.Result;
   visibleVariables?: VisibleVariables;
   // So we can use it interchangeably with IdentifiedError

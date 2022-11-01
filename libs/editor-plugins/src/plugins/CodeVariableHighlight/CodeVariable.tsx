@@ -9,6 +9,7 @@ import {
   setSelection,
   toSlateNode,
 } from '@udecode/plate';
+import { VariableInfo } from '@decipad/editor-utils';
 
 type VariableScope = 'local' | 'global' | 'undefined';
 
@@ -17,11 +18,6 @@ type VisibleVariables = {
   local: ReadonlySet<string>;
 };
 
-interface VariableInfo {
-  blockId: string;
-  variableName: string;
-  isDeclaration: boolean;
-}
 type CodeLeaf = PlateComponent<{
   leaf: RichText & VariableInfo;
 }>;

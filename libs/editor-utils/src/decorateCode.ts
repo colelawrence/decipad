@@ -1,4 +1,9 @@
-import { TRange, getAboveNode, getNodeString } from '@udecode/plate';
+import {
+  TRange,
+  getAboveNode,
+  getNodeString,
+  getPointAfter,
+} from '@udecode/plate';
 import {
   MyDecorate,
   MyElementEntry,
@@ -13,20 +18,19 @@ import {
   DECORATE_AUTO_COMPLETE_MENU,
   ELEMENT_SMART_REF,
 } from '@decipad/editor-types';
-import { Path, Range } from 'slate';
+import { BasePoint, Path, Range } from 'slate';
 import { parseStatement } from '@decipad/computer';
+import { isExprRef } from 'libs/computer/src/exprRefs';
 import { getVariableRanges } from './getVariableRanges';
 import type { RangeWithVariableInfo } from './getVariableRanges';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 import { isElementOfType } from './isElementOfType';
-import { findWordStart, nextIsWordChar } from './autoComplete';
 import { filterDecorate } from './filterDecorate';
 import { getCodeLineSource } from './getCodeLineSource';
 import { memoizeDecorate } from './memoizeDecorate';
 
-const isNotExpreRef = (range: RangeWithVariableInfo) => {
-  return !range.variableName?.startsWith('exprRef_');
-};
+const isNotExpreRef = (range: RangeWithVariableInfo) =>
+  !isExprRef(range.variableName);
 
 interface SubNode {
   start: number;
@@ -69,6 +73,11 @@ const subNodeCoords = (entry: MyElementEntry): SubNode[] => {
   });
 };
 
+export interface AutocompleteDecorationProps {
+  variableInfo: RangeWithVariableInfo;
+  [DECORATE_AUTO_COMPLETE_MENU]: true;
+}
+
 export const decorateCode = (
   elementType: typeof ELEMENT_CODE_LINE | typeof ELEMENT_TABLE_COLUMN_FORMULA
 ): MyDecorate =>
@@ -84,46 +93,50 @@ export const decorateCode = (
       };
 
       const variableDecorations = (
-        nodeId: string,
-        [, path]: MyNodeEntry,
-        source: string[]
-      ): Range[] => {
-        // const ranges = [];
-        const ranges = source.flatMap((s, i) => {
-          return getVariableRanges(s, [...path, i], nodeId)
-            .map((range) => ({
-              ...range,
-              [DECORATE_CODE_VARIABLE]: true,
-            }))
-            .filter(isNotExpreRef);
-        });
-        return ranges;
+        variableRanges: RangeWithVariableInfo[]
+      ): RangeWithVariableInfo[] => {
+        return variableRanges
+          .map((range) => ({
+            ...range,
+            [DECORATE_CODE_VARIABLE]: true,
+          }))
+          .filter(isNotExpreRef);
       };
 
       const autoCompleteMenuDecoration = (
         [, path]: MyNodeEntry,
-        source: string
-      ): Range[] => {
+        variableRanges: RangeWithVariableInfo[]
+      ): (Range & AutocompleteDecorationProps)[] => {
         const { selection } = editor;
 
         if (
-          // Slate seems to have an issue with decorators on empty lines so we're skipping them.
-          source.length > 0 &&
           selection?.focus?.path &&
-          Path.isCommon(path, selection.focus.path) &&
-          !nextIsWordChar(editor, selection.focus)
+          Path.isCommon(path, selection.focus.path)
         ) {
-          const { start } = findWordStart(editor, selection.focus);
+          const variableInfo = getVariableUnderCursor(
+            selection.focus,
+            variableRanges
+          );
 
-          const r = [
-            {
-              anchor: start,
-              focus: start,
-              [DECORATE_AUTO_COMPLETE_MENU]: true,
-            },
-          ];
-          return r;
+          if (variableInfo != null) {
+            const pointAfter = getPointAfter(editor, selection.focus, {
+              distance: 1,
+              unit: 'character',
+            });
+
+            if (!cursorInsideVariable(pointAfter, variableInfo)) {
+              return [
+                {
+                  anchor: variableInfo.anchor,
+                  focus: variableInfo.anchor,
+                  variableInfo,
+                  [DECORATE_AUTO_COMPLETE_MENU]: true,
+                },
+              ];
+            }
+          }
         }
+
         return [];
       };
 
@@ -132,6 +145,7 @@ export const decorateCode = (
         if (node.type !== elementType) {
           return [];
         }
+
         let nodeId = node.id as string;
         if (node.type === ELEMENT_TABLE_COLUMN_FORMULA) {
           const table = getAboveNode<TableElement>(editor, {
@@ -144,8 +158,20 @@ export const decorateCode = (
         }
 
         const sourceString = getCodeLineSource(node);
+
+        // Slate seems to have an issue with decorators on empty lines so we're skipping them.
+        if (!sourceString.length) {
+          return [];
+        }
+
         const sourceStrings = node.children.map((c) =>
           isElementOfType(c, ELEMENT_SMART_REF) ? '' : getNodeString(c)
+        );
+        const variableRanges: RangeWithVariableInfo[] = sourceStrings.flatMap(
+          (source, i) => {
+            const varPath = [...path, i];
+            return getVariableRanges(source, varPath, nodeId);
+          }
         );
         const subNodes = subNodeCoords(entry);
 
@@ -153,8 +179,8 @@ export const decorateCode = (
           ...syntaxErrorDecorations(entry, sourceString).map((range) =>
             simpleRangeToSubNodeRange(range, subNodes)
           ),
-          ...variableDecorations(nodeId, entry, sourceStrings),
-          ...autoCompleteMenuDecoration(entry, sourceString),
+          ...variableDecorations(variableRanges),
+          ...autoCompleteMenuDecoration(entry, variableRanges),
         ];
 
         return decorations;
@@ -164,3 +190,19 @@ export const decorateCode = (
     }),
     ([node]) => node.type === elementType
   );
+
+function getVariableUnderCursor(
+  cursor: BasePoint,
+  variableRanges: RangeWithVariableInfo[]
+) {
+  return variableRanges.find((varRange) => {
+    return !varRange.isDeclaration && Range.includes(varRange, cursor);
+  });
+}
+
+function cursorInsideVariable(
+  pointAfter: BasePoint | undefined,
+  varName: Range
+) {
+  return pointAfter != null && Range.includes(varName, pointAfter);
+}

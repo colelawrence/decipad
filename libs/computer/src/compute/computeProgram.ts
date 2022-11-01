@@ -54,7 +54,6 @@ const computeStatement = async (
   const result: IdentifiedResult = {
     type: 'computer-result',
     id: blockId,
-    variableName,
     get result() {
       if (statement.type === 'assign' && statement.args[1].type === 'table') {
         const type = getDefined(

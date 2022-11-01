@@ -1,5 +1,4 @@
 import type { AST, Context } from '@decipad/language';
-import { last } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';
 import { getDefinedSymbol } from '../utils';
 
@@ -14,7 +13,7 @@ export const getVisibleVariables = (
   inferContext: Context
 ): VisibleVariables => {
   const index = program.findIndex((block) => block.id === blockId);
-  if (index === -1) {
+  if (index === -1 || program.length === 0) {
     return {
       global: new Set(),
       local: new Set(),
@@ -22,6 +21,7 @@ export const getVisibleVariables = (
   }
 
   const blocksUntil = program.slice(0, index + 1);
+  const localSymbol = getDefinedSymbol(program[index].args[0]);
 
   const globalVars = new Set<string>();
   const localVars = new Set<string>();
@@ -42,7 +42,7 @@ export const getVisibleVariables = (
       if (type?.columnNames != null) {
         for (const col of type.columnNames) {
           // Columns are visible within a table
-          if (block === last(blocksUntil)) {
+          if (sym === localSymbol) {
             localVars.add(col);
           }
           globalVars.add(`${sym}.${col}`);

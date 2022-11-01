@@ -416,8 +416,8 @@ it('can get a result by var', async () => {
   });
   await timeout(0);
 
-  expect(computer.getVarResult$.get('Foo')?.variableName).toMatchInlineSnapshot(
-    `"Foo"`
+  expect(computer.getVarResult$.get('Foo')?.id).toMatchInlineSnapshot(
+    `"block-0"`
   );
 });
 
