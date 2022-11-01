@@ -33,6 +33,7 @@ import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { ComponentProps, useCallback, useState } from 'react';
 import { Editor, Path } from 'slate';
+import { VariableEditorContextProvider } from './VariableEditorContext';
 
 export const VariableDef: PlateComponent = ({
   attributes,
@@ -146,7 +147,7 @@ export const VariableDef: PlateComponent = ({
     return <></>;
   }
 
-  const { color } = element.children[0];
+  const { color = 'Perfume' } = element.children[0];
 
   return (
     <DraggableBlock
@@ -163,31 +164,37 @@ export const VariableDef: PlateComponent = ({
       id={element.id}
       {...attributes}
     >
-      <VariableEditor
-        variant={element.variant}
-        onDelete={onDelete}
-        onCopy={onCopy}
-        onChangeMax={onChangeMax}
-        onChangeMin={onChangeMin}
-        onChangeStep={onChangeStep}
-        max={
-          element.variant === 'slider' ? element.children[2]?.max : undefined
-        }
-        min={
-          element.variant === 'slider' ? element.children[2]?.min : undefined
-        }
-        step={
-          element.variant === 'slider' ? element.children[2]?.step : undefined
-        }
-        color={color as AvailableSwatchColor}
-        readOnly={readOnly}
-        type={element.coerceToType ?? inferredType}
-        onChangeType={onChangeType}
-        value={getNodeString(element.children[1])}
-        onChangeValue={onChangeValue}
+      <VariableEditorContextProvider
+        value={{
+          color: color as AvailableSwatchColor,
+        }}
       >
-        {children}
-      </VariableEditor>
+        <VariableEditor
+          variant={element.variant}
+          onDelete={onDelete}
+          onCopy={onCopy}
+          onChangeMax={onChangeMax}
+          onChangeMin={onChangeMin}
+          onChangeStep={onChangeStep}
+          max={
+            element.variant === 'slider' ? element.children[2]?.max : undefined
+          }
+          min={
+            element.variant === 'slider' ? element.children[2]?.min : undefined
+          }
+          step={
+            element.variant === 'slider' ? element.children[2]?.step : undefined
+          }
+          color={color as AvailableSwatchColor}
+          readOnly={readOnly}
+          type={element.coerceToType ?? inferredType}
+          onChangeType={onChangeType}
+          value={getNodeString(element.children[1])}
+          onChangeValue={onChangeValue}
+        >
+          {children}
+        </VariableEditor>
+      </VariableEditorContextProvider>
     </DraggableBlock>
   );
 };

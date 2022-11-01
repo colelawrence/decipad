@@ -25,7 +25,7 @@ export const SliderVariant: Story<
     <VariableEditor variant="slider">
       <Caption>Variable</Caption>
       <Expression>5 km^2</Expression>
-      <Slider value="5" max="10" min="0" step="1" />
+      <Slider value={5} max={10} min={0} step={1} />
     </VariableEditor>
   );
 };

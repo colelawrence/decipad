@@ -215,7 +215,7 @@ export const VariableEditor = ({
             </div>
           </>
         </div>
-        {menuProps.variant !== 'display' && (
+        {menuProps.variant !== 'display' && childrenArray.length > 1 && (
           <CellEditor
             type={type}
             value={value}

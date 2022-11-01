@@ -8,6 +8,7 @@ import {
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { ReactEditor } from 'slate-react';
 import { setSelection } from '@udecode/plate';
+import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_SLIDER) {
@@ -34,10 +35,28 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
     selectElement
   );
 
+  const onChange = useCallback(
+    (newValue: number) => {
+      onValueChange(newValue.toString());
+    },
+    [onValueChange]
+  );
+
+  const { color } = useVariableEditorContext();
+
   return (
     <div {...attributes} contentEditable={false}>
       {children}
-      <UISlider {...element} onChange={onValueChange} onFocus={selectElement} />
+      <UISlider
+        {...element}
+        min={Number(element.min)}
+        max={Number(element.max)}
+        step={Number(element.step)}
+        onChange={onChange}
+        value={Number(element.value)}
+        onFocus={selectElement}
+        color={color}
+      />
     </div>
   );
 };

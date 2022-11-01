@@ -6,8 +6,9 @@ import {
 } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
-import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
+import { UserIconKey } from 'libs/ui/src/utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Caption: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_CAPTION) {
@@ -21,6 +22,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
 
   // Captions are not editable in read mode.
   const isEditable = !useIsEditorReadOnly();
+  const { color } = useVariableEditorContext();
 
   return (
     <div
@@ -29,7 +31,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
       suppressContentEditableWarning
     >
       <UICaption
-        color={element.color as AvailableSwatchColor}
+        color={color}
         onChangeIcon={setIcon}
         onChangeColor={setColor}
         icon={element.icon as UserIconKey}
