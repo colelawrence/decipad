@@ -106,6 +106,7 @@ const actionWrapperStyles = css({
 type NotebookListItemProps = {
   readonly id: string;
   readonly name: string;
+  readonly creationDate?: Date;
 
   readonly actionsOpen?: boolean;
   readonly onExport?: () => void;
@@ -118,6 +119,7 @@ type NotebookListItemProps = {
 export const NotebookListItem = ({
   id,
   name,
+  creationDate,
   actionsOpen = false,
   toggleActionsOpen = noop,
   onDuplicate = noop,
@@ -151,6 +153,7 @@ export const NotebookListItem = ({
         <div css={actionWrapperStyles}>
           <NotebookListItemActions
             href={href}
+            creationDate={creationDate}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
             onExport={onExport}

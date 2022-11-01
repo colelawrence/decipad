@@ -92,6 +92,7 @@ const Workspace: FC = () => {
       icon,
       iconColor,
       onExport: exportNotebook(notebook.id),
+      creationDate: new Date(notebook.createdAt),
     };
   });
 

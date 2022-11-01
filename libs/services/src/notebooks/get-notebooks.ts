@@ -8,6 +8,13 @@ interface GetNotebooksProps {
   page: PageInput;
 }
 
+const outputPad = (pad: PadRecord): PadRecord => {
+  return {
+    ...pad,
+    createdAt: Number(pad.createdAt) * 1000,
+  };
+};
+
 export const getNotebooks = async ({
   user,
   workspaceId,
@@ -45,6 +52,6 @@ export const getNotebooks = async ({
   const sortedItems = items.sort(byDesc('createdAt'));
   return {
     ...paged,
-    items: sortedItems,
+    items: sortedItems.map(outputPad),
   };
 };

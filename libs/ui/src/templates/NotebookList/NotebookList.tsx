@@ -26,7 +26,7 @@ type NotebookListProps = {
   readonly notebooks: ReadonlyArray<
     Pick<
       ComponentProps<typeof NotebookListItem>,
-      'id' | 'name' | 'onExport' | 'icon' | 'iconColor'
+      'id' | 'name' | 'onExport' | 'icon' | 'iconColor' | 'creationDate'
     > & { readonly id: string }
   >;
   readonly onDuplicate?: (id: string) => void;
