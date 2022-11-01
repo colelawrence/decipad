@@ -25,14 +25,16 @@ describe('notebook duplicate', () => {
     await page.keyboard.type('this is the third paragraph');
     expect(await page.$$('[contenteditable] p')).toHaveLength(4);
 
-    await timeout(10000);
+    await timeout(4000);
     await navigateToWorkspacePage();
 
     // make sure pad is there
     await waitForExpect(async () => {
       const pads = await getPadList();
       expect(pads).toHaveLength(initialWorkspace.notebooks.length + 1);
-      padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
+      padToCopyIndex = pads.findIndex(
+        (pad) => pad.name === 'My notebook titlepad title here'
+      );
       expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     });
   });
@@ -45,7 +47,9 @@ describe('notebook duplicate', () => {
     await waitForExpect(async () => {
       const pads = await getPadList();
       padCopyIndex = pads.findIndex(
-        (pad) => pad.name.toLocaleLowerCase() === 'copy of pad title here'
+        (pad) =>
+          pad.name.toLocaleLowerCase() ===
+          'copy of my notebook titlepad title here'
       );
       expect(padCopyIndex).toBeGreaterThanOrEqual(0);
     });
@@ -55,7 +59,7 @@ describe('notebook duplicate', () => {
     await waitForEditorToLoad();
     await waitForExpect(async () => {
       expect(await page.textContent('[contenteditable] h1')).toBe(
-        'Copy of pad title here'
+        'Copy of My notebook titlepad title here'
       );
       expect(await page.$$('[contenteditable] p')).toHaveLength(4);
     });

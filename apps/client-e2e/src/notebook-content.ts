@@ -16,7 +16,7 @@ describe('notebook content', () => {
     const title = '[contenteditable] h1';
     const paragraph = '[data-testid=paragraph-content]';
 
-    expect((await page.textContent(title))!.trim()).toBe('');
+    expect((await page.textContent(title))!.trim()).toBe('My notebook title');
     expect((await page.textContent(paragraph))!.trim()).toBe('');
   });
 

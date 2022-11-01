@@ -28,7 +28,9 @@ describe('notebook export', () => {
     await waitForExpect(async () => {
       const pads = await getPadList();
       expect(pads).toHaveLength(initialWorkspace.notebooks.length + 1);
-      padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
+      padToCopyIndex = pads.findIndex(
+        (pad) => pad.name === 'My notebook titlepad title here'
+      );
       expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     });
   });
@@ -40,7 +42,7 @@ describe('notebook export', () => {
         {
           children: [
             {
-              text: 'pad title here',
+              text: 'My notebook titlepad title here',
             },
           ],
           type: 'h1',

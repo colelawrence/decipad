@@ -1,14 +1,41 @@
 import { useEditorSelector } from '@decipad/react-contexts';
-import { focusEditor, getStartPoint, hasNode } from '@udecode/plate';
+import {
+  focusEditor,
+  getNode,
+  getStartPoint,
+  hasNode,
+  isText,
+  isElement,
+  toDOMNode,
+} from '@udecode/plate';
 import { useEffect, useRef } from 'react';
-import { Path, Selection } from 'slate';
+import { BaseSelection, Path, Selection } from 'slate';
 import { MyEditor } from '@decipad/editor-types';
+import { getPersistedSelection } from '@decipad/editor-plugins';
 
-const defaultSelection = [0] as Path;
+const defaultSelection = [1] as Path;
 
-const getSelection = (editor: MyEditor): Selection => {
+const getDefaultSelection = (editor: MyEditor): Selection => {
   const initialPoint = getStartPoint(editor, defaultSelection);
   return { focus: initialPoint, anchor: initialPoint };
+};
+
+const getSelection = (editor: MyEditor): BaseSelection => {
+  const { selection } = editor;
+  return {
+    ...selection,
+    ...getDefaultSelection(editor),
+    ...getPersistedSelection(editor),
+  } as BaseSelection;
+};
+
+const selectPath = (paths: Path[]): Path => {
+  return paths.reduce((path, newPath) => {
+    if (Path.isBefore(newPath, path)) {
+      return newPath;
+    }
+    return path;
+  });
 };
 
 export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
@@ -22,13 +49,40 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
       const initialSel = getSelection(editor);
       if (
         initialSel &&
+        initialSel?.anchor &&
+        initialSel?.focus &&
         hasNode(editor, initialSel?.anchor.path) &&
         hasNode(editor, initialSel?.focus.path) &&
         !selection
       ) {
         setInitialSelection.current = true;
-        const point = getStartPoint(editor, initialSel);
-        focusEditor(editor, point);
+
+        try {
+          focusEditor(editor, initialSel);
+
+          if (initialSel.focus?.path || initialSel.anchor?.path) {
+            const at = selectPath([
+              initialSel.focus?.path,
+              initialSel.anchor?.path,
+            ]);
+            const node = getNode(editor, at);
+            if (node) {
+              const path = at.slice(0, -1);
+              const editorBlock = isText(node) ? getNode(editor, path) : node;
+              if (editorBlock && isElement(editorBlock)) {
+                const block = toDOMNode(editor, editorBlock);
+                if (block) {
+                  const bounding = block.getBoundingClientRect();
+                  if (bounding.top > window.innerHeight) {
+                    block.scrollIntoView();
+                  }
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('error setting the initial selection');
+        }
       }
     }
   }, [editor, loaded, selection]);

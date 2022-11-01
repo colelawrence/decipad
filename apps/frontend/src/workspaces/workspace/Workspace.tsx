@@ -104,7 +104,7 @@ const Workspace: FC = () => {
     try {
       const { data: createdNotebookData, error } = await createNotebook({
         workspaceId,
-        name: '',
+        name: 'My notebook title',
       });
       if (error) {
         console.error('Failed to create notebook. Error:', error);

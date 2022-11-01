@@ -28,7 +28,7 @@ describe('notebook share', () => {
   });
 
   test('click share button and extract text', async () => {
-    const linkSelector = 'text=//n/hello-world/';
+    const linkSelector = 'text=//n/My-notebook-titlehello-world/';
     await page.click('text=share');
     await page.click('[aria-roledescription="enable sharing"]');
 
@@ -59,7 +59,7 @@ describe('notebook share', () => {
 
   test('the other user can duplicate', async () => {
     await otherUserPage.click('text=Duplicate notebook');
-    await otherUserPage.click('text=Copy of hello world');
+    await otherUserPage.click('text=My notebook titlehello world');
 
     await waitForEditorToLoad(otherUserPage);
     await otherUserPage.waitForSelector('text=hello world');

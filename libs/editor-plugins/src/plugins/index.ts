@@ -29,6 +29,7 @@ export * from './NormalizeText';
 export * from './NormalizeVoidPlugin';
 export * from './NotebookTitle';
 export * from './OperationsBlackboxPlugin';
+export * from './PersistSelection';
 export * from './Plot';
 export * from './PotentialFormulaHighlight';
 export * from './SelectionShortcutPlugin';

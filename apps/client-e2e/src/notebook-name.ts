@@ -5,13 +5,13 @@ describe('notebook name', () => {
   beforeAll(setUp);
 
   test('starts empty', async () => {
-    expect(await getPadName()).toBe('');
+    expect(await getPadName()).toBe('My notebook title');
   });
 
   test('can be typed', async () => {
     await page.keyboard.type('hello world');
     await page.keyboard.press('Enter');
-    expect(await getPadName()).toBe('hello world');
+    expect(await getPadName()).toBe('My notebook titlehello world');
     // pause for some time to give a chance to sync
     await timeout(1000);
   });
@@ -19,7 +19,7 @@ describe('notebook name', () => {
   test('got saved, and html title page is there', async () => {
     await page.reload();
     await waitForEditorToLoad();
-    expect(await getPadName()).toBe('hello world');
-    expect(await page.title()).toContain('hello world');
+    expect(await getPadName()).toBe('My notebook titlehello world');
+    expect(await page.title()).toContain('My notebook titlehello world');
   });
 });

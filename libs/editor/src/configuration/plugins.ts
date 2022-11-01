@@ -31,6 +31,7 @@ import {
   createNormalizeVoidPlugin,
   createExitBreakPlugin,
   createOperationsBlackboxPlugin,
+  createPersistSelectionPlugin,
   createPlotPlugin,
   createSoftBreakPlugin,
   createSyntaxErrorHighlightPlugin,
@@ -197,8 +198,10 @@ export const plugins = ({
 
       // shortcuts
       createSelectionShortcutPlugin(),
-
       createRenderPerformanceStatsPlugin(),
+
+      // selection
+      createPersistSelectionPlugin(),
     ],
     {
       components: components(computer),

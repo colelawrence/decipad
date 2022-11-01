@@ -18,7 +18,7 @@ export function ensureInitialDocument(editor: MyEditor): void {
         editor,
         {
           type: ELEMENT_H1,
-          children: [{ text: '' }],
+          children: [{ text: 'My notebook title' }],
           id: nanoid(),
         },
         { at: [0] }
