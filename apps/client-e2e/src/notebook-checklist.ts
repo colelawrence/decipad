@@ -50,7 +50,6 @@ describe('notebook starter checklist', () => {
     await page.keyboard.type('/input');
     await page.locator('svg:has(title:has-text("Input"))').click();
 
-    await page.locator('[aria-placeholder="1 km"]').click();
     await page.keyboard.type('100');
     await page.waitForTimeout(200);
 

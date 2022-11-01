@@ -13,11 +13,17 @@ import {
   getElementUniqueName,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
-import { insertNodes } from '@udecode/plate';
+import {
+  getEndPoint,
+  getStartPoint,
+  insertNodes,
+  setSelection,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 
-const getInitialInputElement = () => {
+const DEFAULT_INPUT_VALUE = '100$';
+const getInitialInputElement = (caption = '', value = '') => {
   return {
     id: nanoid(),
     type: ELEMENT_VARIABLE_DEF,
@@ -26,28 +32,36 @@ const getInitialInputElement = () => {
       {
         id: nanoid(),
         type: ELEMENT_CAPTION,
-        children: [{ text: '' }],
+        children: [{ text: caption }],
       },
       {
         id: nanoid(),
         type: ELEMENT_EXPRESSION,
-        children: [{ text: '' }],
+        children: [{ text: value }],
       },
     ],
   } as VariableDefinitionElement;
 };
 
 export const insertInputBelow = (editor: MyEditor, path: Path): void => {
-  const input = getInitialInputElement();
-  input.children[0].children[0].text = getElementUniqueName(
+  const name = getElementUniqueName(
     editor,
     ELEMENT_VARIABLE_DEF,
     'expression',
     'Input'
   );
+
+  const input = getInitialInputElement(name, DEFAULT_INPUT_VALUE);
+  const insertPath = requirePathBelowBlock(editor, path);
+
   insertNodes<VariableDefinitionElement>(editor, input, {
-    at: requirePathBelowBlock(editor, path),
+    at: insertPath,
   });
+
+  const valuePath = [...insertPath, 1];
+  const valueEnd = getEndPoint(editor, valuePath);
+  const valueStart = getStartPoint(editor, valuePath);
+  setSelection(editor, { anchor: valueStart, focus: valueEnd });
 };
 
 const getSliderInputElement = () => {

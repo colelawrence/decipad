@@ -19,7 +19,7 @@ export async function createInputBelow(identifier: string, value: number) {
 
   await page.keyboard.type(identifier);
 
-  await page.click('div [aria-placeholder="1 km"]');
+  await page.click('div [data-testid="input-widget-name"]');
 
   await page.keyboard.type(value.toString());
 }

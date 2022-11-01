@@ -107,6 +107,7 @@ export const Caption = ({
         css={placeholderStyles}
         aria-placeholder={empty ? 'Name your input' : ''}
         spellCheck={false}
+        data-testid="input-widget-name"
       >
         <span>
           <span>{children}</span>
