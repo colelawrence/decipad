@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { readdirSync } from 'fs';
 import { basename } from 'path';
 import { isValidElementType } from 'react-is';
@@ -23,20 +23,6 @@ it('exports every icon', () => {
 });
 
 describe.each(iconExports)('the %s icon', (_name, Icon) => {
-  it('has a title', () => {
-    render(
-      <Icon
-        // some props that will fulfill every icons mandatory props interface
-        type="expand"
-        direction="right"
-        variant="down"
-        active={true}
-        title="foonar"
-      />
-    );
-    expect(screen.getByTitle(/.+/)).toBeInTheDocument();
-  });
-
   it('does not have fixed dimensions', () => {
     const { container } = render(
       <Icon

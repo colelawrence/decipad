@@ -3,7 +3,7 @@ import { cssVar } from '../../primitives';
 
 export const DragHandle = (): ReturnType<FC> => (
   <svg viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <title>Drag Handle</title>
+    <title></title>
 
     <path
       d="M4.75 6.5C5.44036 6.5 6 5.94036 6 5.25C6 4.55964 5.44036 4 4.75 4C4.05964 4 3.5 4.55964 3.5 5.25C3.5 5.94036 4.05964 6.5 4.75 6.5Z"
