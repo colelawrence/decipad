@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode } from 'react';
+import { Children, FC, ReactNode, useCallback, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { Add } from '../../icons';
@@ -69,16 +69,27 @@ export const tableOverflowStyles = css({
   minWidth: `calc(((100vw - 580px) / 2) - ${tableControlWidth})`,
 });
 
+const tableAddColumnButtonWrapperStyles = css({
+  width: '40px',
+  minWidth: '40px',
+  paddingLeft: '8px',
+  position: 'relative',
+});
+
 const tableAddColumnButtonStyles = css({
   width: '40px',
   minWidth: '40px',
   backgroundColor: cssVar('highlightColor'),
-  marginLeft: '8px',
   borderRadius: '8px',
   padding: '8px',
-  '&:hover': {
-    backgroundColor: cssVar('strongHighlightColor'),
-  },
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  visibility: 'hidden',
+});
+
+const mouseOverAddColumnButtonStyles = css({
+  visibility: 'unset',
 });
 
 interface EditorTableProps {
@@ -132,6 +143,10 @@ export const EditorTable: FC<EditorTableProps> = ({
     setCollapsed: onSetCollapsed,
   };
 
+  const [mouseOver, setMouseOver] = useState(false);
+  const onMouseEnter = useCallback(() => setMouseOver(true), []);
+  const onMouseLeave = useCallback(() => setMouseOver(false), []);
+
   return (
     <TableStyleContext.Provider value={tableStyleContextValue}>
       <div css={wrapperStyles}>
@@ -161,16 +176,26 @@ export const EditorTable: FC<EditorTableProps> = ({
                     </>
                   )
                 }
+                onMouseOver={setMouseOver}
               ></Table>
 
               {!previewMode && (
-                <button
-                  onClick={onAddColumn}
-                  css={tableAddColumnButtonStyles}
-                  title="Add Column"
+                <div
+                  css={tableAddColumnButtonWrapperStyles}
+                  onMouseEnter={onMouseEnter}
+                  onMouseLeave={onMouseLeave}
                 >
-                  <Add />
-                </button>
+                  <button
+                    onClick={onAddColumn}
+                    css={[
+                      tableAddColumnButtonStyles,
+                      mouseOver && mouseOverAddColumnButtonStyles,
+                    ]}
+                    title="Add Column"
+                  >
+                    <Add />
+                  </button>
+                </div>
               )}
             </div>
           ) : null}

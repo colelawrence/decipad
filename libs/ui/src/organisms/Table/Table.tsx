@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 import { css } from '@emotion/react';
 import { ConnectDropTarget } from 'react-dnd';
 import { noop } from '@decipad/utils';
@@ -195,6 +195,7 @@ interface TableProps {
   readonly isCollapsed?: boolean;
   readonly isReadOnly?: boolean;
   readonly isLiveResult?: boolean;
+  readonly onMouseOver?: (over: boolean) => void;
 }
 
 export const Table = ({
@@ -210,9 +211,13 @@ export const Table = ({
   handleSetShowALlRowsButtonPress = noop,
   isReadOnly = false,
   isLiveResult = false,
+  onMouseOver = noop,
 }: TableProps): ReturnType<FC> => {
   const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
   const border = isLiveResult ? liveResultBorder : regularBorder;
+  const onMouseEnter = useCallback(() => onMouseOver(true), [onMouseOver]);
+  const onMouseLeave = useCallback(() => onMouseOver(false), [onMouseOver]);
+
   return (
     <table
       ref={dropRef}
@@ -228,6 +233,8 @@ export const Table = ({
         isReadOnly && readOnlyTableStyles,
         isLiveResult && liveResultStyles,
       ]}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {head && <thead>{head}</thead>}
       <tbody ref={animateBody}>
