@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, useState, lazy, Suspense } from 'react';
 import { Divider } from '../../atoms';
 import {
   DragAndDropImportNotebook,
@@ -9,7 +9,10 @@ import {
 } from '../../organisms';
 import { smallestDesktop, p15Medium, cssVar } from '../../primitives';
 import { notebookList } from '../../styles';
-import { WorkspaceCTACard } from './WorkspaceCTACard';
+
+const loadWorkspaceCta = () =>
+  import(/* webpackChunkName: "workspace-cta" */ './WorkspaceCTACard');
+const WorkspaceCta = lazy(loadWorkspaceCta);
 
 const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
@@ -66,10 +69,12 @@ export const NotebookList = ({
     <div css={notebookListWrapperStyles} onPointerEnter={onPointerEnter}>
       <DragAndDropImportNotebook onImport={onImport}>
         {showCTA && (
-          <WorkspaceCTACard
-            onDismiss={onCTADismiss}
-            onCreateNewNotebook={onCreateNotebook}
-          />
+          <Suspense fallback={<></>}>
+            <WorkspaceCta
+              onDismiss={onCTADismiss}
+              onCreateNewNotebook={onCreateNotebook}
+            />
+          </Suspense>
         )}
         {notebooks.length ? (
           <div css={{ alignSelf: 'start' }}>
