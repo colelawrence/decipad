@@ -137,9 +137,9 @@ export class Computer {
     this.results,
     (
       results,
-      blockId: string
+      blockId?: string | null
     ): Readonly<IdentifiedError> | Readonly<IdentifiedResult> | undefined =>
-      results.blockResults[blockId]
+      results.blockResults[blockId ?? '']
   );
 
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>

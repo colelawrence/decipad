@@ -29,7 +29,8 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
       {fullResult}
     </span>
   );
-  if (!tooltip) {
+
+  if (!tooltip || formatted.asString === formatted.asStringPrecise) {
     return trigger;
   }
 

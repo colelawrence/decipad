@@ -23,21 +23,29 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   provideDefinitionLink,
   onGoToDefinition = noop,
 }): ReturnType<FC> => {
+  const hasValue = useComputer().getBlockIdResult$.useWithSelector(
+    (result) => result?.result?.value != null,
+    defBlockId
+  );
+
+  const tooltipResult = hasValue && (
+    <TooltipResult defBlockId={defBlockId ?? ''} />
+  );
+  const goToDefinition = provideDefinitionLink && defBlockId && (
+    <a css={goToDefStyles} href={`#${defBlockId}`} onClick={onGoToDefinition}>
+      Go to definition &rarr;
+    </a>
+  );
+
+  const enableTooltip = !variableMissing && (tooltipResult || goToDefinition);
+
   return (
     <Tooltip
       trigger={<span>{children}</span>}
-      open={variableMissing ? false : undefined}
+      open={enableTooltip ? undefined : false}
     >
-      <TooltipResult defBlockId={defBlockId ?? ''} />
-      {provideDefinitionLink && defBlockId && (
-        <a
-          css={goToDefStyles}
-          href={`#${defBlockId}`}
-          onClick={onGoToDefinition}
-        >
-          Go to definition &rarr;
-        </a>
-      )}
+      {tooltipResult}
+      {goToDefinition}
     </Tooltip>
   );
 };
