@@ -10,8 +10,8 @@ const islandToRange = (sheetName: string, island: Island): string => {
   }:${sheetColumnName(island.lastCol + 1)}${island.lastRow + 1}`;
 };
 
-export const getDataRangeUrlFromSheet = (
-  sheetId: string,
+export const getDataRangeUrlFromSheetAndIslands = (
+  sheetId: string | number,
   gid: number | string | undefined,
   sheetMeta: SheetMeta,
   island: Island

@@ -1,5 +1,6 @@
 import { Computer, Result } from '@decipad/computer';
 import { inferTable } from '@decipad/parse';
+import { getDefined } from '@decipad/utils';
 import { ImportResult, Sheet } from '../../types';
 import { ImportOptions } from '../../import';
 import { getSheetMeta } from './getSheetMeta';
@@ -58,7 +59,7 @@ const loadAllSubsheets = async (
   importURL: URL,
   options: ImportOptions
 ): Promise<ImportResult[]> => {
-  const { sheetId, gid } = getSheetRequestDataFromUrl(importURL);
+  const { sheetId } = getSheetRequestDataFromUrl(importURL);
   const meta = await getSheetMeta(sheetId);
   const loader = loadSheet(computer, options);
   const results: ImportResult[] = [];
@@ -76,7 +77,7 @@ const loadAllSubsheets = async (
         importedAt: new Date(),
         sourceUrl: url,
         sheetId,
-        gid,
+        gid: subsheet.properties.sheetId,
         sourceMeta: meta,
       };
       results.push({
@@ -96,7 +97,7 @@ const importGsheetIslands = async (
   options: ImportOptions
 ): Promise<ImportResult[]> => {
   return (await loadAllSubsheets(computer, importURL, options)).flatMap(
-    findAllIslands
+    (result) => findAllIslands(getDefined(result.meta?.gid).toString(), result)
   );
 };
 
@@ -107,7 +108,7 @@ const importOneGsheet = async (
 ) => {
   const { sheetId, gid } = getSheetRequestDataFromUrl(importURL);
   const meta = await getSheetMeta(sheetId);
-  const url = await getDataUrlFromSheetMeta(sheetId, gid, meta);
+  const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
   let resp: Response | undefined;
   try {
     resp = await fetch(url);

@@ -34,7 +34,7 @@ export interface ImportResultMeta {
   title?: string;
   sourceUrl?: URL;
   importedAt?: Date;
-  sheetId?: string;
+  sheetId?: string | number;
   gid?: number | string;
   sourceMeta?: SheetMeta;
 }
@@ -45,6 +45,7 @@ export interface ImportResult {
 }
 
 export interface SourceUrlParseResponse {
+  subsheetName?: string;
   isRange?: boolean;
   range?: string[];
 }

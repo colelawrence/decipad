@@ -32,12 +32,13 @@ export const LiveConnectionVarName: PlateComponent = ({
     const sourceParams: SourceUrlParseResponse =
       (source && parentUrl && parseSourceUrl(source, parentUrl)) || {};
 
-    const { isRange, range } = sourceParams;
+    const { isRange, range, subsheetName } = sourceParams;
+    const rangeExplanation = `(${subsheetName}${
+      isRange ? `, from ${range?.join(' to ')}` : ''
+    })`;
     return {
       url: parentUrl,
-      sourceName:
-        pluralize.singular(source) +
-        (isRange ? ` (from ${range?.join(' to ')})` : ''),
+      sourceName: `${pluralize.singular(source)} ${rangeExplanation}`,
     };
   }, [parent]);
 

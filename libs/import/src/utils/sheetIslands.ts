@@ -2,7 +2,7 @@
 import { Result } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { dequal } from 'dequal';
-import { getDataRangeUrlFromSheet } from '../providers/gsheets/getDataRangeUrlFromSheet';
+import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';
 import { ImportResult } from '../types';
 import { matrix } from './matrix';
 
@@ -25,14 +25,16 @@ const neighbourDiffs = [
 ] as const;
 
 export interface Island {
+  sheetName: string;
   firstCol: number;
   firstRow: number;
   lastCol: number;
   lastRow: number;
 }
 
-const makeIsland = (col: number, row: number): Island => {
+const makeIsland = (sheetName: string, col: number, row: number): Island => {
   return {
+    sheetName,
     firstCol: col,
     lastCol: col,
     firstRow: row,
@@ -45,6 +47,7 @@ const islandExtension = (
   newCol: number,
   newRow: number
 ): Island => ({
+  ...island,
   firstCol: Math.min(newCol, island.firstCol),
   lastCol: Math.max(newCol, island.lastCol),
   firstRow: Math.min(newRow, island.firstRow),
@@ -74,7 +77,10 @@ const islandToResult =
       .map((column) => column.slice(island.firstRow, island.lastRow + 1)),
   });
 
-const partition = (imported: ImportResult): ImportResult[] => {
+const partition = (
+  sheetName: string,
+  imported: ImportResult
+): ImportResult[] => {
   if (imported.result.type.kind !== 'table') {
     return [];
   }
@@ -135,8 +141,12 @@ const partition = (imported: ImportResult): ImportResult[] => {
     }
   };
 
-  const exploreIsland = (_col: number, _row: number): Island => {
-    let island = makeIsland(_col, _row);
+  const exploreIsland = (
+    subSheetName: string,
+    _col: number,
+    _row: number
+  ): Island => {
+    let island = makeIsland(subSheetName, _col, _row);
     const stack: Array<VisitStackElement> = [{ col: _col, row: _row }];
     do {
       const { col, row } = getDefined(stack.pop());
@@ -152,7 +162,7 @@ const partition = (imported: ImportResult): ImportResult[] => {
   for (let col = 0; col < columnCount; col += 1) {
     for (let row = 0; row < rowCount; row += 1) {
       if (!visited[col][row] && hasValue(col, row)) {
-        const island = exploreIsland(col, row);
+        const island = exploreIsland(sheetName, col, row);
         islands.add(island);
       }
     }
@@ -161,14 +171,14 @@ const partition = (imported: ImportResult): ImportResult[] => {
   const newResults = [...islands].map((island) => {
     const result = islandToResult(sheet)(island);
     const meta = getDefined(imported.meta);
-    const { sheetId, gid } = meta;
+    const { sheetId } = meta;
     return {
       result,
       meta: {
         ...meta,
-        sourceUrl: getDataRangeUrlFromSheet(
+        sourceUrl: getDataRangeUrlFromSheetAndIslands(
           getDefined(sheetId),
-          gid,
+          island.sheetName,
           getDefined(meta.sourceMeta),
           island
         ),
@@ -179,5 +189,7 @@ const partition = (imported: ImportResult): ImportResult[] => {
   return newResults;
 };
 
-export const findAllIslands = (sheet: ImportResult): ImportResult[] =>
-  partition(sheet);
+export const findAllIslands = (
+  sheetName: string,
+  sheet: ImportResult
+): ImportResult[] => partition(sheetName, sheet);

@@ -43,13 +43,13 @@ const sheet = <T extends Result.OneResult>(
 
 describe('findAllIslands', () => {
   it('works on an empty sheet', () => {
-    expect(findAllIslands(sheet(0, 0, false))).toMatchInlineSnapshot(
+    expect(findAllIslands('Sheet1', sheet(0, 0, false))).toMatchInlineSnapshot(
       `Array []`
     );
   });
 
   it('works on a one cell sheet', () => {
-    expect(findAllIslands(sheet(1, 1, 'hey'))).toMatchInlineSnapshot(`
+    expect(findAllIslands('Sheet1', sheet(1, 1, 'hey'))).toMatchInlineSnapshot(`
       Array [
         Object {
           "meta": Object {
@@ -89,7 +89,7 @@ describe('findAllIslands', () => {
   });
 
   it('works on a one island sheet', () => {
-    expect(findAllIslands(sheet(4, 3, 'hey'))).toMatchInlineSnapshot(`
+    expect(findAllIslands('Sheet1', sheet(4, 3, 'hey'))).toMatchInlineSnapshot(`
       Array [
         Object {
           "meta": Object {
@@ -163,7 +163,7 @@ describe('findAllIslands', () => {
       7
     );
 
-    expect(findAllIslands(r)).toMatchInlineSnapshot(`
+    expect(findAllIslands('Sheet1', r)).toMatchInlineSnapshot(`
       Array [
         Object {
           "meta": Object {
@@ -283,7 +283,7 @@ describe('findAllIslands', () => {
       .map((column) => [...column, '3', '3']);
 
     const r = sheetToResult(columns, columns.length);
-    const islands = findAllIslands(r);
+    const islands = findAllIslands('Sheet1', r);
     expect(islands).toHaveLength(3);
 
     expect(islands).toMatchInlineSnapshot(`

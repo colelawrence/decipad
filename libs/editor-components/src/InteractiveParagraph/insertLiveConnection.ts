@@ -58,7 +58,7 @@ const insertLiveConnectionToGsheets = async ({
   computer,
   editor,
   source,
-  url,
+  url: _url,
   identifyIslands,
 }: InsertLiveConnectionProps): Promise<void> => {
   const selection = getDefined(editor.selection);
@@ -70,7 +70,9 @@ const insertLiveConnectionToGsheets = async ({
     return blockPath;
   };
 
-  const imports = await tryImport(computer, new URL(getDefined(url)), source, {
+  const url = getDefined(_url, 'undefined url');
+
+  const imports = await tryImport(computer, new URL(url), source, {
     identifyIslands,
   });
 
