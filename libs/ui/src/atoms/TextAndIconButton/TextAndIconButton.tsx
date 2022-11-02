@@ -84,7 +84,7 @@ export const TextAndIconButton = ({
           onClick={(event) => {
             event.stopPropagation();
             event.preventDefault();
-            onClick();
+            onClick(event);
           }}
         >
           {textAndIcon}

@@ -1,3 +1,5 @@
+import { keyframes } from '@emotion/react';
+
 export const shortAnimationDuration = '120ms';
 export const shortAnimationDurationMs = 120;
 
@@ -10,3 +12,52 @@ export const mouseMovingOverTransitionDelay = '20ms';
 export const toastTransitionDelay = 7500;
 
 export const easing = 'cubic-bezier(0.42, 0, 0.58, 1)';
+
+export const wiggle = keyframes`
+  20% {
+    box-shadow:  inset -5px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(3deg);
+    transform-origin: center center;
+  }
+
+  40% {
+    box-shadow:  inset -11px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(-7deg);
+  }
+
+  60% {
+    box-shadow:  inset -5px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(2deg);
+  }
+
+  80% {
+    box-shadow:  inset -8px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(-1deg);
+  }
+
+  100% {
+    box-shadow:  inset -7px 0 5px 0 rgba(0,0,0,.4);
+    transform: rotate(0deg);
+  }
+`;
+
+export const antiwiggle = keyframes`20% {
+    transform:  rotate(-3deg);
+  }
+
+  40% {
+    transform:   rotate(7deg);
+  }
+
+  60% {
+    transform:   rotate(-2deg);
+  }
+
+  80% {
+    transform:   rotate(1deg);
+  }
+
+  100% {
+    transform:  rotate(0deg);
+  }
+`;

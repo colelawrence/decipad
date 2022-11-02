@@ -38,14 +38,14 @@ const headerWrapperStyles = css({
 
 const columnTypeStyles = css({
   display: 'inline-block',
-  width: '12px',
-  height: '12px',
+  width: '16px',
+  height: '16px',
 });
 
 const iconTypeStyles = css(columnTypeStyles, {
   svg: {
-    width: '12px',
-    height: '12px',
+    width: '16px',
+    height: '16px',
   },
 });
 
@@ -176,15 +176,17 @@ export const TableHeader = ({
             onSelectColumn={onSelectColumn}
           />
         )}
-        <div css={[childrenWrapperStyles]} spellCheck={false}>
-          {children}
-        </div>
-        {menu}
         {showIcon && (
           <span contentEditable={false} css={iconTypeStyles}>
             <Icon />
           </span>
         )}
+
+        <div css={[childrenWrapperStyles]} spellCheck={false}>
+          {children}
+        </div>
+
+        {menu}
       </div>
 
       {isEditable && dropDirection === 'right' && (

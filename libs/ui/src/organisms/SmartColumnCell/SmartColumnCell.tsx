@@ -1,9 +1,15 @@
-import { css } from '@emotion/react';
 import { Result } from '@decipad/computer';
+import { css } from '@emotion/react';
 import { DragEvent, FC, ReactNode, useState } from 'react';
-import { cssVar, p12Regular } from '../../primitives';
-import { CodeResult } from '../CodeResult/CodeResult';
+import {
+  antiwiggle,
+  cssVar,
+  p12Regular,
+  setCssVar,
+  wiggle,
+} from '../../primitives';
 import { table } from '../../styles';
+import { CodeResult } from '../CodeResult/CodeResult';
 
 const resultWrapperStyles = css({
   userSelect: 'all',
@@ -16,6 +22,29 @@ const grabbingStyles = css({
   cursor: 'grabbing',
 });
 
+const inlineResultStyles = css({
+  ':empty': { display: 'none' },
+  ':hover': {
+    animation: `${antiwiggle} 0.5s ease-in-out`,
+  },
+
+  ':hover:after': {
+    backgroundColor: 'blue',
+    animation: `${wiggle} 0.5s ease-in-out`,
+  },
+
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+
+  padding: '2px 8px',
+
+  backgroundColor: cssVar('backgroundColor'),
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  borderRadius: '8px',
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+});
+
 const smartColumnCellStyles = css(p12Regular, {
   color: cssVar('weakerTextColor'),
   display: 'inline-flex',
@@ -25,6 +54,7 @@ const smartColumnCellStyles = css(p12Regular, {
   maxWidth: table.tdMaxWidth,
   minWidth: table.tdMinWidth,
   width: '100%',
+  justifyContent: 'space-between',
 });
 
 interface SmartColumnCellProps {
@@ -44,10 +74,22 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
 
   return (
     <div css={[smartColumnCellStyles]}>
-      {aggregationTypeMenu}
+      <div
+        css={css({
+          display: 'inline-flex',
+          alignItems: 'center',
+          position: 'relative',
+        })}
+      >
+        {aggregationTypeMenu}
+      </div>
       <span
         key="result"
-        css={[resultWrapperStyles, grabbing && grabbingStyles]}
+        css={[
+          resultWrapperStyles,
+          inlineResultStyles,
+          grabbing && grabbingStyles,
+        ]}
         draggable
         onDragStart={(ev) => {
           setGrabbing(true);

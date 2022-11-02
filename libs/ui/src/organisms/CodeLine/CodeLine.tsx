@@ -1,16 +1,18 @@
 import { Result } from '@decipad/computer';
 import { useDelayedValue } from '@decipad/react-utils';
-import { css, keyframes } from '@emotion/react';
+import { css } from '@emotion/react';
 import React, { ComponentProps, ReactNode, useState } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
+  antiwiggle,
   code,
   cssVar,
   p14Medium,
   p14Regular,
   setCssVar,
   smallestDesktop,
+  wiggle,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { CodeResultProps } from '../../types';
@@ -23,55 +25,6 @@ const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px
 const highlightedLineStyles = {
   borderColor: cssVar('strongerHighlightColor'),
 };
-
-const wiggle = keyframes`
-  20% {
-    box-shadow:  inset -5px 0 5px 0 rgba(0,0,0,.4);
-    transform: rotate(3deg);
-    transform-origin: center center;
-  }
-
-  40% {
-    box-shadow:  inset -11px 0 5px 0 rgba(0,0,0,.4);
-    transform: rotate(-7deg);
-  }
-
-  60% {
-    box-shadow:  inset -5px 0 5px 0 rgba(0,0,0,.4);
-    transform: rotate(2deg);
-  }
-
-  80% {
-    box-shadow:  inset -8px 0 5px 0 rgba(0,0,0,.4);
-    transform: rotate(-1deg);
-  }
-
-  100% {
-    box-shadow:  inset -7px 0 5px 0 rgba(0,0,0,.4);
-    transform: rotate(0deg);
-  }
-`;
-
-const antiwiggle = keyframes`20% {
-    transform:  rotate(-3deg);
-  }
-
-  40% {
-    transform:   rotate(7deg);
-  }
-
-  60% {
-    transform:   rotate(-2deg);
-  }
-
-  80% {
-    transform:   rotate(1deg);
-  }
-
-  100% {
-    transform:  rotate(0deg);
-  }
-`;
 
 const codeLineStyles = (
   variant: CodeLineProps['variant'],

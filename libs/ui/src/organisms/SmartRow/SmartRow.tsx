@@ -31,7 +31,7 @@ export const SmartRow: FC<SmartRowProps> = ({ smartCells }) => {
       {smartCells.map((smartCell, index) => (
         <th key={index}>{index > 0 && smartCell}</th>
       ))}
-      <th></th>
+      <th css={css({ display: 'none' })}></th>
     </tr>
   );
 };

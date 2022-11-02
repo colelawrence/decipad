@@ -3,7 +3,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
-import { FormulasDrawer, ToggleCollapsed } from '../../organisms';
+import { FormulasDrawer, TableButton } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
 import { TableStyleContext } from '../../utils';
@@ -56,23 +56,6 @@ const placeholderStyles = css(p16Bold, {
   },
 });
 
-const addAViewButtonStyles = css({
-  display: 'flex',
-  gap: '8px',
-  alignItems: 'center',
-  fontWeight: '700',
-  '&:hover': {
-    opacity: 0.5,
-  },
-});
-
-const addAViewButtonIconStyles = css({
-  width: '16px',
-  height: '16px',
-  display: 'flex',
-  alignItems: 'center',
-});
-
 const editableTableCaptionStyles = css(p16Bold);
 type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: (e: any) => void;
@@ -100,12 +83,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     hideAddDataViewButton,
   } = useContext(TableStyleContext);
   const Icon = icons[icon];
-  const EyeIcon = icons.Eye;
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
   return (
     <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
-      <div css={tableCaptionInnerStyles}>
+      <div css={[tableCaptionInnerStyles, tableCaptionSlimStyles]}>
         <div css={tableTitleWrapperStyles}>
           <div contentEditable={false} css={tableIconSizeStyles}>
             {useIsEditorReadOnly() ? (
@@ -131,25 +113,23 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           >
             {caption}
           </div>
+        </div>
+        <div css={css({ display: 'inline-flex' })}>
           {showToggleCollapsedButton && setCollapsed ? (
-            <ToggleCollapsed
-              setCollapsed={setCollapsed}
-              isCollapsed={isCollapsed}
+            <TableButton
+              setState={setCollapsed}
+              isInState={isCollapsed}
+              captions={['Show table', 'Hide table']}
+              isExpandButton
             />
           ) : null}
+          {hideAddDataViewButton || !isFlagEnabled('DATA_VIEW') ? null : (
+            <TableButton
+              setState={onAddDataViewButtonPress}
+              captions={['Create view']}
+            />
+          )}
         </div>
-        {hideAddDataViewButton || !isFlagEnabled('DATA_VIEW') ? null : (
-          <button
-            css={addAViewButtonStyles}
-            onMouseDown={onAddDataViewButtonPress}
-            contentEditable={false}
-          >
-            <div css={addAViewButtonIconStyles}>
-              <EyeIcon />
-            </div>
-            add a view
-          </button>
-        )}
       </div>
 
       {formulaEditor && !isCollapsed && tableFormulaEditors.length > 0 && (

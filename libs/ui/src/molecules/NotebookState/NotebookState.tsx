@@ -36,6 +36,14 @@ const buttonStyles = css({
   alignItems: 'center',
 });
 
+const inactiveStyles = {
+  cursor: 'default',
+};
+
+const activeStyles = {
+  cursor: 'pointer',
+};
+
 const activeButtonStyles = css({
   transition: 'all 1.25s ease-in-out',
   ':hover': {
@@ -201,7 +209,14 @@ export const NotebookState: FC<NotebookStateProps> = ({
       ]}
     >
       <div css={[buttonStyles, canUndo && activeButtonStyles]}>
-        <button css={{ width: 24, height: 24 }} onClick={undo}>
+        <button
+          css={[
+            { width: 24, height: 24 },
+            inactiveStyles,
+            canUndo && activeStyles,
+          ]}
+          onClick={undo}
+        >
           <CurvedArrow
             title={canUndo ? 'Undo ⌘ + Z' : ''}
             direction="left"
@@ -210,7 +225,14 @@ export const NotebookState: FC<NotebookStateProps> = ({
         </button>
       </div>
       <div css={[buttonStyles, canRedo && activeButtonStyles]}>
-        <button css={{ width: 24, height: 24 }} onClick={redo}>
+        <button
+          css={[
+            { width: 24, height: 24 },
+            inactiveStyles,
+            canRedo && activeStyles,
+          ]}
+          onClick={redo}
+        >
           <CurvedArrow
             title={canRedo ? 'Redo ⌘ + SHIFT + Z' : ''}
             direction="right"
@@ -222,12 +244,14 @@ export const NotebookState: FC<NotebookStateProps> = ({
         <button
           css={[
             revertChangesStyles,
-            !(!canUndo && canRedo) && activeRevertChangesStyles,
+            inactiveStyles,
+            canUndo && activeStyles,
+            canUndo && activeRevertChangesStyles,
           ]}
           onClick={revertChanges}
         >
           <div css={{ width: 16, height: 16 }}>
-            <CircularArrow active={!canUndo && canRedo} />
+            <CircularArrow active={!canUndo} />
           </div>
           Reset Changes
         </button>

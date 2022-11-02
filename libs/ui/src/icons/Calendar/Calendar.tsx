@@ -1,33 +1,33 @@
 import { cssVar } from '../../primitives';
 
 export const Calendar = (): ReturnType<React.FC> => (
-  <svg viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>Calendar</title>
     <path
-      d="M1.073 3.57877C1.073 2.9033 1.62058 2.35571 2.29606 2.35571H8.71713C9.39263 2.35571 9.9402 2.9033 9.9402 3.57877V8.77679C9.9402 9.45228 9.39263 9.99985 8.71713 9.99985H2.29606C1.62058 9.99985 1.073 9.45228 1.073 8.77679V3.57877Z"
+      d="M2.00095 5.30963C2.00095 4.39545 2.74204 3.65436 3.65622 3.65436H12.3464C13.2606 3.65436 14.0017 4.39545 14.0017 5.30963V12.3445C14.0017 13.2587 13.2606 13.9998 12.3464 13.9998H3.65622C2.74204 13.9998 2.00095 13.2587 2.00095 12.3445V5.30963Z"
       stroke={cssVar('currentTextColor')}
-      strokeWidth="0.7"
+      strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M3.05713 1.1333V3.27366"
+      d="M4.68634 2V4.89672"
       stroke={cssVar('currentTextColor')}
-      strokeWidth="0.7"
+      strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M7.95361 1.1333V3.27366"
+      d="M11.3131 2V4.89672"
       stroke={cssVar('currentTextColor')}
-      strokeWidth="0.7"
+      strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M2.9082 4.80225H8.10622"
+      d="M4.48483 6.96539H11.5197"
       stroke={cssVar('currentTextColor')}
-      strokeWidth="0.7"
+      strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
