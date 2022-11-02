@@ -7,8 +7,9 @@ import {
   EmptyWorkspaceCta,
   NotebookListItem,
 } from '../../organisms';
-import { smallestDesktop } from '../../primitives';
+import { smallestDesktop, p15Medium, cssVar } from '../../primitives';
 import { notebookList } from '../../styles';
+import { WorkspaceCTACard } from './WorkspaceCTACard';
 
 const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
@@ -32,20 +33,30 @@ type NotebookListProps = {
   readonly onDuplicate?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
   readonly onExport?: (id: string) => void;
+  readonly showCTA?: boolean;
+  readonly onCTADismiss?: () => void;
+  readonly onCreateNotebook?: () => void;
 
   readonly onPointerEnter?: () => void;
 } & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> &
   ComponentProps<typeof EmptyWorkspaceCta>;
 
+const listHeadingStyles = css(p15Medium, {
+  color: cssVar('weakerTextColor'),
+  marginBottom: '0.5rem',
+});
+
 export const NotebookList = ({
   notebooks,
   onDuplicate = noop,
   onDelete = noop,
+  showCTA = false,
+  onCTADismiss = noop,
 
   onImport,
 
   Heading,
-  onCreateNotebook,
+  onCreateNotebook = noop,
 
   onPointerEnter,
 }: NotebookListProps): ReturnType<React.FC> => {
@@ -54,8 +65,15 @@ export const NotebookList = ({
   return (
     <div css={notebookListWrapperStyles} onPointerEnter={onPointerEnter}>
       <DragAndDropImportNotebook onImport={onImport}>
+        {showCTA && (
+          <WorkspaceCTACard
+            onDismiss={onCTADismiss}
+            onCreateNewNotebook={onCreateNotebook}
+          />
+        )}
         {notebooks.length ? (
           <div css={{ alignSelf: 'start' }}>
+            <Heading css={listHeadingStyles}>Name</Heading>
             <ol className="notebookList">
               {notebooks.map(({ id, ...notebook }, i) => (
                 <li

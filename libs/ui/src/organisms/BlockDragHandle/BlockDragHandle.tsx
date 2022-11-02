@@ -71,6 +71,7 @@ interface BlockDragHandleProps {
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;
   readonly showEyeLabel?: boolean;
+  readonly showAddBlock?: boolean;
   readonly onPlus?: () => void;
   readonly onDelete?: (() => void) | false;
   readonly onDuplicate?: () => void;
@@ -83,6 +84,7 @@ export const BlockDragHandle = ({
   isHidden = false,
   onShowHide = noop,
   showEyeLabel = false,
+  showAddBlock = true,
   onChangeMenuOpen = noop,
   onPlus = noop,
   onDelete = noop,
@@ -130,13 +132,15 @@ export const BlockDragHandle = ({
 
   return (
     <div css={gridStyles()}>
-      <Tooltip trigger={plusButton} side="bottom" hoverOnly>
-        <span
-          css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
-        >
-          <strong css={css(p12Bold)}>Click</strong> to add block below
-        </span>
-      </Tooltip>
+      {showAddBlock && (
+        <Tooltip trigger={plusButton} side="bottom" hoverOnly>
+          <span
+            css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
+          >
+            <strong css={css(p12Bold)}>Click</strong> to add block below
+          </span>
+        </Tooltip>
+      )}
 
       {menuOpen && (
         <MenuList

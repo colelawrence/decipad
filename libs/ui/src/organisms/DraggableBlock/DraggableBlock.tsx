@@ -171,6 +171,7 @@ export const DraggableBlock = ({
             onDuplicate={onDuplicate}
             onShowHide={onShowHide}
             showEyeLabel={showEyeLabel}
+            showAddBlock={!isHidden}
             onCopyHref={onCopyHref}
           />
         </div>

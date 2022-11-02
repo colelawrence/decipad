@@ -8,7 +8,7 @@ import {
 } from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
-import { FC, lazy, useCallback, useMemo } from 'react';
+import { FC, lazy, useCallback, useMemo, useState } from 'react';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { loadNotebooks } from '../../App';
 import {
@@ -45,6 +45,8 @@ const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
 // prefetch
 loadTopbar().then(loadNotebookList).then(loadSidebar);
 
+const workspaceCtaDismissKey = 'workspace-cta-dismiss';
+
 const Workspace: FC = () => {
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
   const navigate = useNavigate();
@@ -64,6 +66,14 @@ const Workspace: FC = () => {
     // Checklist show is stored in db, no longer needed on logout.
     // Because after any refresh it persists.
     signOut();
+  }, []);
+
+  const [ctaDismissed, setCtaDismissed] = useState(
+    () => global.localStorage.getItem(workspaceCtaDismissKey) === '1'
+  );
+  const onCTADismiss = useCallback(() => {
+    global.localStorage.setItem(workspaceCtaDismissKey, '1');
+    setCtaDismissed(true);
   }, []);
 
   const { data: workspaceData } = result;
@@ -215,6 +225,8 @@ const Workspace: FC = () => {
                         toast('Failed to import notebook.', 'error');
                       })
                     }
+                    onCTADismiss={onCTADismiss}
+                    showCTA={!ctaDismissed}
                     onPointerEnter={loadNotebooks}
                   />
                 </Frame>
