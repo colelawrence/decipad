@@ -12,6 +12,7 @@ import { useEffect, useRef } from 'react';
 import { BaseSelection, Path, Selection } from 'slate';
 import { MyEditor } from '@decipad/editor-types';
 import { getPersistedSelection } from '@decipad/editor-plugins';
+import { getPointSafe } from '@decipad/editor-utils';
 
 const defaultSelection = [1] as Path;
 
@@ -27,15 +28,6 @@ const getSelection = (editor: MyEditor): BaseSelection => {
     ...getDefaultSelection(editor),
     ...getPersistedSelection(editor),
   } as BaseSelection;
-};
-
-const selectPath = (paths: Path[]): Path => {
-  return paths.reduce((path, newPath) => {
-    if (Path.isBefore(newPath, path)) {
-      return newPath;
-    }
-    return path;
-  });
 };
 
 export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
@@ -57,32 +49,42 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
       ) {
         setInitialSelection.current = true;
 
-        try {
-          focusEditor(editor, initialSel);
-
-          if (initialSel.focus?.path || initialSel.anchor?.path) {
-            const at = selectPath([
-              initialSel.focus?.path,
-              initialSel.anchor?.path,
-            ]);
-            const node = getNode(editor, at);
-            if (node) {
-              const path = at.slice(0, -1);
-              const editorBlock = isText(node) ? getNode(editor, path) : node;
-              if (editorBlock && isElement(editorBlock)) {
-                const block = toDOMNode(editor, editorBlock);
-                if (block) {
-                  const bounding = block.getBoundingClientRect();
-                  if (bounding.top > window.innerHeight) {
-                    block.scrollIntoView();
-                  }
-                }
-              }
+        setTimeout(() => {
+          try {
+            const focusSel = initialSel.focus;
+            if (!focusSel) {
+              return;
             }
+            const at = focusSel?.path;
+            if (!at) {
+              return;
+            }
+            const node = getNode(editor, at);
+            if (!node) {
+              return;
+            }
+            const path = at.slice(0, -1);
+            const editorBlock = isText(node) ? getNode(editor, path) : node;
+            if (!editorBlock || !isElement(editorBlock)) {
+              return;
+            }
+            const block = toDOMNode(editor, editorBlock);
+            if (!block) {
+              return;
+            }
+            const point = getPointSafe(editor, initialSel.focus);
+            if (!point) {
+              return;
+            }
+            const bounding = block.getBoundingClientRect();
+            if (bounding.top > window.innerHeight) {
+              block.scrollIntoView();
+            }
+            focusEditor(editor, point);
+          } catch (err) {
+            console.warn('error setting the initial selection', err);
           }
-        } catch (err) {
-          console.warn('error setting the initial selection');
-        }
+        }, 0);
       }
     }
   }, [editor, loaded, selection]);

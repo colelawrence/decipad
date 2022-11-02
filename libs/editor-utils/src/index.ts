@@ -23,6 +23,7 @@ export * from './serializeDocument';
 export * from './assertElementType';
 export * from './getVariableRanges';
 export * from './getCodeLineSource';
+export * from './getPointSafe';
 export * from './magicNumberId';
 export * from './matchNodeType';
 export * from './mutateText';
