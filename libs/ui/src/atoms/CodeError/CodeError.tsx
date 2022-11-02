@@ -68,7 +68,6 @@ export const CodeError = ({
   const clientEvent = useContext(ClientEventsContext);
   return (
     <Tooltip
-      hoverOnly
       trigger={
         <span css={iconWrapperStyles} title={message}>
           <Warning />
