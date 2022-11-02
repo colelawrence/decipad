@@ -10,6 +10,7 @@ import { useMemo, useState } from 'react';
 import {
   EditorTableContext,
   EditorTableContextValue,
+  useEditorStylesContext,
 } from '@decipad/react-contexts';
 import {
   MAX_UNCOLLAPSED_TABLE_ROWS,
@@ -60,6 +61,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
 
+  const { color: defaultColor } = useEditorStylesContext();
+
   return (
     (!deleted && (
       <DraggableBlock
@@ -80,7 +83,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
               onChangeColor={onSaveColor}
               onSetCollapsed={onSetCollapsed}
               icon={(element.icon ?? 'Table') as UserIconKey}
-              color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+              color={(element.color ?? defaultColor) as AvailableSwatchColor}
               isCollapsed={element.isCollapsed}
               onAddRow={onAddRow}
               onAddColumn={onAddColumn}

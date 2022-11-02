@@ -1,6 +1,7 @@
+import { useEditorStylesContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode, useCallback, useState } from 'react';
+import { Children, FC, ReactNode, useCallback, useState, useMemo } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { Add } from '../../icons';
@@ -134,14 +135,27 @@ export const EditorTable: FC<EditorTableProps> = ({
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
 
-  const tableStyleContextValue = {
-    icon,
-    color,
-    isCollapsed,
-    setIcon: onChangeIcon,
-    setColor: onChangeColor,
-    setCollapsed: onSetCollapsed,
-  };
+  const { color: defaultColor } = useEditorStylesContext();
+
+  const tableStyleContextValue = useMemo(
+    () => ({
+      icon,
+      color: color ?? defaultColor,
+      isCollapsed,
+      setIcon: onChangeIcon,
+      setColor: onChangeColor,
+      setCollapsed: onSetCollapsed,
+    }),
+    [
+      color,
+      defaultColor,
+      icon,
+      isCollapsed,
+      onChangeColor,
+      onChangeIcon,
+      onSetCollapsed,
+    ]
+  );
 
   const [mouseOver, setMouseOver] = useState(false);
   const onMouseEnter = useCallback(() => setMouseOver(true), []);

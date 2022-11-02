@@ -155,12 +155,10 @@ export const TableHeader = ({
 
   const thRef = useMergedRef(attributes?.ref, dropTarget);
 
-  // const useBackGroundColor = variant === 'bland' ? color : 'Perfume';
-
   return (
     <th
       {...attributes}
-      css={[columnStyles, thStyles(color)]}
+      css={[columnStyles, thStyles(color as AvailableSwatchColor)]}
       ref={thRef}
       data-highlight={highlight}
     >

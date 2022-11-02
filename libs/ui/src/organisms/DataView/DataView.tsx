@@ -66,7 +66,7 @@ interface DataViewProps {
   readonly availableVariableNames: string[];
   readonly variableName: string;
   readonly icon: UserIconKey;
-  readonly color: AvailableSwatchColor;
+  readonly color?: AvailableSwatchColor;
   readonly onChangeVariableName?: (varName: string) => void;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
@@ -91,7 +91,7 @@ export const DataView: FC<DataViewProps> = ({
       <TableStyleContext.Provider
         value={{
           icon,
-          color,
+          color: color as AvailableSwatchColor,
           setIcon: onChangeIcon,
           setColor: onChangeColor,
           hideAddDataViewButton: true,

@@ -32,7 +32,7 @@ export const Normal: Story<typeof args> = ({ numberOfNotebooks }) => (
           name: `Notebook ${i + 1}`,
           description: 'A really cool notebook',
           icon: 'Rocket',
-          iconColor: 'Catskill',
+          iconColor: 'Sulu',
         }))}
     />
   </DndProvider>

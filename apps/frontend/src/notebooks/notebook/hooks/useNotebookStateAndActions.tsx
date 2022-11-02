@@ -39,7 +39,7 @@ interface UseNotebookStateAndActionsResult {
   isReadOnly: boolean;
   isPublic: boolean;
   icon: Icon | undefined;
-  iconColor: IconColor | undefined;
+  iconColor: IconColor;
   hasLocalChanges: BehaviorSubject<boolean> | undefined;
   isSavedRemotely: BehaviorSubject<boolean> | undefined;
   connectionParams?: NotebookConnectionParams;
@@ -64,7 +64,7 @@ export const useNotebookStateAndActions = ({
   const [error, setError] = useState<Error | undefined>();
   const [notebook, setNotebook] = useState<Notebook | undefined>();
   const [icon, setIcon] = useState<Icon | undefined>();
-  const [iconColor, setIconColor] = useState<IconColor>();
+  const [iconColor, setIconColor] = useState<IconColor>(() => 'Sulu');
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(

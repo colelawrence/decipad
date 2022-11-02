@@ -126,7 +126,7 @@ export const NotebookListItem = ({
   onDelete = noop,
   onExport = noop,
   icon = 'Rocket',
-  iconColor = 'Catskill',
+  iconColor = 'Sulu',
 }: NotebookListItemProps): ReturnType<FC> => {
   const Icon = icons[icon];
 

@@ -83,7 +83,7 @@ const ColumnPreview = ({
           columns={columns}
           previewMode
           icon={(tableNode.icon ?? 'Table') as UserIconKey}
-          color={(tableNode.color ?? 'Catskill') as AvailableSwatchColor}
+          color={tableNode.color as AvailableSwatchColor}
         >
           {tableCells.map((cell, index) => {
             const children = getNodeString(cell);

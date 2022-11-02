@@ -6,7 +6,7 @@ import * as icons from '../../icons';
 import { FormulasDrawer, TableButton } from '../../organisms';
 import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
 import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
-import { TableStyleContext } from '../../utils';
+import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
 
 const tableCaptionWideStyles = css({
@@ -82,6 +82,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     setCollapsed,
     hideAddDataViewButton,
   } = useContext(TableStyleContext);
+
   const Icon = icons[icon];
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
@@ -94,7 +95,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               <Icon />
             ) : (
               <IconPopover
-                color={color}
+                color={color as AvailableSwatchColor}
                 trigger={
                   <button>
                     <Icon />

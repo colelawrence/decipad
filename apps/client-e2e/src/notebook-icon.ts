@@ -12,7 +12,7 @@ describe('notebook icon', () => {
       return getComputedStyle(el).backgroundColor;
     });
 
-    expect(initialColor).toBe('rgb(236, 240, 246)');
+    expect(initialColor).toMatchInlineSnapshot(`"rgb(193, 250, 107)"`);
   });
 
   it('changes the color of the icon', async () => {
@@ -29,7 +29,7 @@ describe('notebook icon', () => {
       .locator('button[aria-haspopup="dialog"]')
       .evaluate((el) => getComputedStyle(el).backgroundColor);
 
-    expect(buttonColor).toBe('rgb(193, 250, 107)');
+    expect(buttonColor).toMatchInlineSnapshot(`"rgb(193, 250, 107)"`);
 
     await button.click();
   });

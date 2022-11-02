@@ -18,7 +18,10 @@ import {
   mutateText,
   useNodePath,
 } from '@decipad/editor-utils';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  useEditorStylesContext,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
 import {
   findNode,
@@ -143,11 +146,13 @@ export const VariableDef: PlateComponent = ({
     [editor, element.id, isHorizontal, path]
   );
 
+  const { color: defaultColor } = useEditorStylesContext();
+
   if (deleted) {
     return <></>;
   }
 
-  const { color = 'Perfume' } = element.children[0];
+  const { color = defaultColor } = element.children[0];
 
   return (
     <DraggableBlock

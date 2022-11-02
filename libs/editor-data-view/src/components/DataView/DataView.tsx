@@ -16,6 +16,7 @@ import {
   DataViewMenu,
 } from '@decipad/ui';
 import { AutocompleteName } from '@decipad/computer';
+import { useEditorStylesContext } from '@decipad/react-contexts';
 import { DataViewData } from '../DataViewData';
 import { useDataView } from '../../hooks';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
@@ -56,6 +57,8 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const wideTable = (sortedColumns?.[0].length || 0) >= WIDE_MIN_COL_COUNT;
 
+  const { color: defaultColor } = useEditorStylesContext();
+
   return !deleted ? (
     <DraggableBlock
       element={element}
@@ -73,7 +76,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         onChangeIcon={saveIcon}
         onChangeColor={saveColor}
         icon={(element.icon ?? 'Table') as UserIconKey}
-        color={(element.color ?? 'Catskill') as AvailableSwatchColor}
+        color={(element.color ?? defaultColor) as AvailableSwatchColor}
         data={
           (sortedColumns && (
             <DataViewData
