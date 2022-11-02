@@ -104,7 +104,7 @@ export function DataViewColumnHeader<TAggregation extends string>({
             }
           >
             <MenuItem onSelect={() => onDeleteColumn(name)} icon={<Trash />}>
-              Remove Column
+              Remove column
             </MenuItem>
             {availableAggregations.length > 1 ? (
               <MenuList
