@@ -30,7 +30,7 @@ export const LiveConnectionVarName: PlateComponent = ({
     const parentUrl = getDefined(parent?.[0].url);
 
     const sourceParams: SourceUrlParseResponse =
-      (source && url && parseSourceUrl(source, parentUrl)) || {};
+      (source && parentUrl && parseSourceUrl(source, parentUrl)) || {};
 
     const { isRange, range } = sourceParams;
     return {
