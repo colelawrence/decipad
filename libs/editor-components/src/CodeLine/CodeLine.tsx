@@ -20,6 +20,7 @@ import {
 import { nanoid } from 'nanoid';
 import { ReactEditor, useSelected } from 'slate-react';
 import { useCallback } from 'react';
+import { Path } from 'slate';
 import { DraggableBlock } from '../block-management';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -34,18 +35,25 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const isEmpty = !codeLineContent.trim() && element.children.length <= 1;
 
   const siblingCodeLines = useEditorChangeState(
-    (editor) => ({
-      hasNext:
-        getNextNode<MyElement>(editor, {
-          at: ReactEditor.findPath(editor as ReactEditor, element),
-          match: isElement,
-        })?.[0]?.type === ELEMENT_CODE_LINE,
-      hasPrevious:
-        getPreviousNode<MyElement>(editor, {
-          at: ReactEditor.findPath(editor as ReactEditor, element),
-          match: isElement,
-        })?.[0]?.type === ELEMENT_CODE_LINE,
-    }),
+    (editor) => {
+      const currentPath = ReactEditor.findPath(editor as ReactEditor, element);
+      const isNearbyCodeLine = (n: unknown, p: Path) =>
+        isElement(n) &&
+        n.type === ELEMENT_CODE_LINE &&
+        (Path.equals(Path.next(currentPath), p) ||
+          Path.equals(Path.previous(currentPath), p));
+
+      return {
+        hasNext: !!getNextNode<MyElement>(editor, {
+          at: currentPath,
+          match: isNearbyCodeLine,
+        }),
+        hasPrevious: !!getPreviousNode<MyElement>(editor, {
+          at: currentPath,
+          match: isNearbyCodeLine,
+        }),
+      };
+    },
     { hasNext: false, hasPrevious: false }
   );
 
