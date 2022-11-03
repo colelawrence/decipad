@@ -16,9 +16,13 @@ import { getPointSafe } from '@decipad/editor-utils';
 
 const defaultSelection = [1] as Path;
 
-const getDefaultSelection = (editor: MyEditor): Selection => {
-  const initialPoint = getStartPoint(editor, defaultSelection);
-  return { focus: initialPoint, anchor: initialPoint };
+const getDefaultSelection = (editor: MyEditor): Selection | undefined => {
+  try {
+    const initialPoint = getStartPoint(editor, defaultSelection);
+    return { focus: initialPoint, anchor: initialPoint };
+  } catch (err) {
+    return undefined;
+  }
 };
 
 const getSelection = (editor: MyEditor): BaseSelection => {
