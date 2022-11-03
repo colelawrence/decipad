@@ -110,6 +110,7 @@ export { Table } from './Table/Table';
 export { TableSlash } from './TableSlash/TableSlash';
 export { Text } from './Text/Text';
 export { TinyArrow } from './TinyArrow/TinyArrow';
+export { Toggle } from './Toggle/Toggle';
 export { Trash } from './Trash/Trash';
 export { Trophy } from './Trophy/Trophy';
 export { Truck } from './Truck/Truck';

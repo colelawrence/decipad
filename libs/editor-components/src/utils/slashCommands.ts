@@ -54,6 +54,12 @@ export const execute = ({
     case 'input':
       insertInputBelow(editor, path);
       break;
+    case 'toggle':
+      insertInputBelow(editor, path, 'boolean');
+      break;
+    case 'datepicker':
+      insertInputBelow(editor, path, 'date');
+      break;
     case 'slider':
       insertSliderInputBelow(editor, path);
       break;

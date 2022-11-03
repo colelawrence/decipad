@@ -134,8 +134,16 @@ export interface SliderElement extends BaseElement {
   children: [EmptyText];
 }
 
-export interface VariableBaseElement<V extends string, T extends BlockElement[]>
-  extends BaseElement {
+export type ElementVariants =
+  | 'expression'
+  | 'toggle'
+  | 'date'
+  | 'slider'
+  | 'display';
+export interface VariableBaseElement<
+  V extends ElementVariants,
+  T extends BlockElement[]
+> extends BaseElement {
   type: typeof ELEMENT_VARIABLE_DEF;
   variant: V;
   children: [CaptionElement, ...T];
@@ -144,6 +152,16 @@ export interface VariableBaseElement<V extends string, T extends BlockElement[]>
 
 export type VariableExpressionElement = VariableBaseElement<
   'expression',
+  [ExpressionElement]
+>;
+
+export type VariableToggleElement = VariableBaseElement<
+  'toggle',
+  [ExpressionElement]
+>;
+
+export type VariableDateElement = VariableBaseElement<
+  'date',
   [ExpressionElement]
 >;
 

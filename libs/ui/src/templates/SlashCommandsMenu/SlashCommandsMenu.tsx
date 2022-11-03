@@ -13,6 +13,7 @@ import {
   Slider,
   TableSlash,
   Result,
+  Toggle,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
@@ -86,11 +87,19 @@ const groups = [
         extraSearchTerms: ['input', 'number', 'publish'],
       },
       {
+        command: 'toggle',
+        title: 'Toggle',
+        description: 'A yes/no value you can interact with',
+        icon: <Toggle />,
+        enabled: true,
+        extraSearchTerms: ['switch', 'toggle', 'boolean'],
+      },
+      {
         command: 'datepicker',
         title: 'Date',
         description: 'An interactive date',
         icon: <DatePicker />,
-        enabled: false,
+        enabled: true,
         extraSearchTerms: ['input', 'date', 'calendar', 'publish'],
       },
       {

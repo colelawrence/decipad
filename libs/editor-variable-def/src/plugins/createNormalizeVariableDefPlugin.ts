@@ -15,7 +15,7 @@ import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
 import { isElementOfType } from '@decipad/editor-utils';
 
-const allowableVariant = new Set(['expression', 'slider']);
+const allowableVariant = new Set(['expression', 'slider', 'toggle', 'date']);
 
 const normalize =
   (editor: MyEditor) =>

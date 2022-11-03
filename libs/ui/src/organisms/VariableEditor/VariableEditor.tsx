@@ -151,6 +151,7 @@ export const VariableEditor = ({
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
+
   const Icon = useMemo(
     () => (type && getTypeIcon(type, true)) ?? Virus,
     [type]

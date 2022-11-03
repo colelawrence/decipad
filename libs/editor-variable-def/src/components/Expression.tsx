@@ -1,17 +1,39 @@
 import { Expression as UIExpression } from '@decipad/ui';
 import {
   ELEMENT_EXPRESSION,
+  MyEditor,
   PlateComponent,
-  useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
+import type { SerializedType } from '@decipad/computer';
 import { useSelected } from 'slate-react';
 import { getNodeString, getParentNode } from '@udecode/plate';
 import { useNodePath } from '@decipad/editor-utils';
-import { useMemo } from 'react';
+import { useCallback, useState } from 'react';
 import { NodeEntry } from 'slate';
+import { useEditorChange } from '@decipad/react-contexts';
 
-const DEFAULT_PLACEHOLDER = '1 km';
+const getPlaceHolder = (type: SerializedType | undefined) => {
+  if (!type) return '1 km';
+  switch (type.kind) {
+    case 'string':
+      return 'Type here...';
+    case 'date':
+      switch (type.date) {
+        case 'hour':
+          return '2001-11-27 17:01';
+        case 'day':
+          return '2001-11-27';
+        case 'month':
+          return '2001-11';
+        case 'year':
+          return '2001';
+        default:
+          return 'date';
+      }
+  }
+  return '1 km';
+};
 
 export const Expression: PlateComponent = ({
   attributes,
@@ -21,25 +43,32 @@ export const Expression: PlateComponent = ({
   if (element?.type !== ELEMENT_EXPRESSION) {
     throw new Error(`Expression is meant to render expression elements`);
   }
-  const editor = useTEditorRef();
+  const [type, setType] = useState<SerializedType | undefined>(undefined);
 
   const focused = useSelected();
-
   const path = useNodePath(element);
-  const parent = useMemo(
-    () =>
-      path &&
-      (getParentNode(editor, path) as NodeEntry<VariableDefinitionElement>),
-    [editor, path]
+
+  const widgetChange = useCallback(
+    (newParent: VariableDefinitionElement | undefined) => {
+      if (!newParent) return;
+      setType(newParent.coerceToType);
+    },
+    []
   );
-  const type = parent?.[0].coerceToType;
+  const getParent = useCallback(
+    (editor: MyEditor) =>
+      path &&
+      (getParentNode(editor, path) as NodeEntry<VariableDefinitionElement>)[0],
+    [path]
+  );
+  useEditorChange(widgetChange, getParent);
 
   return (
     <div {...attributes}>
       <UIExpression
         type={type}
         focused={focused}
-        placeholder={getNodeString(element) ? '' : DEFAULT_PLACEHOLDER}
+        placeholder={getNodeString(element) ? '' : getPlaceHolder(type)}
       >
         {children}
       </UIExpression>

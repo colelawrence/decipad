@@ -185,6 +185,7 @@ export const TableData = ({
         value={value}
         unit={unit}
         onChangeValue={onChangeValue}
+        parentType="table"
       >
         <SyntaxErrorHighlight
           variant="custom"

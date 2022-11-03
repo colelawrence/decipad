@@ -1,5 +1,6 @@
 import {
   DisplayElement,
+  ElementVariants,
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
   ELEMENT_EXPRESSION,
@@ -13,21 +14,33 @@ import {
   getElementUniqueName,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
+import type { SerializedTypeKind } from '@decipad/computer';
 import {
   getEndPoint,
   getStartPoint,
-  insertNodes,
   setSelection,
+  insertNodes,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 
 const DEFAULT_INPUT_VALUE = '100$';
-const getInitialInputElement = (caption = '', value = '') => {
+const getInitialInputElement = (
+  kind?: SerializedTypeKind,
+  caption = '',
+  value = '',
+  variant: ElementVariants = 'expression'
+) => {
   return {
     id: nanoid(),
     type: ELEMENT_VARIABLE_DEF,
-    variant: 'expression',
+    variant,
+    ...(kind && {
+      coerceToType: {
+        kind,
+        date: 'day',
+      },
+    }),
     children: [
       {
         id: nanoid(),
@@ -43,15 +56,27 @@ const getInitialInputElement = (caption = '', value = '') => {
   } as VariableDefinitionElement;
 };
 
-export const insertInputBelow = (editor: MyEditor, path: Path): void => {
+const getVariantAndHolder = (
+  kind: SerializedTypeKind | undefined
+): [ElementVariants, string] => {
+  if (kind === 'boolean') return ['toggle', ''];
+  if (kind === 'date') return ['date', '2022-11-03'];
+  return ['expression', DEFAULT_INPUT_VALUE];
+};
+
+export const insertInputBelow = (
+  editor: MyEditor,
+  path: Path,
+  kind?: SerializedTypeKind
+): void => {
   const name = getElementUniqueName(
     editor,
     ELEMENT_VARIABLE_DEF,
     'expression',
     'Input'
   );
-
-  const input = getInitialInputElement(name, DEFAULT_INPUT_VALUE);
+  const [variant, placeholder] = getVariantAndHolder(kind);
+  const input = getInitialInputElement(kind, name, placeholder, variant);
   const insertPath = requirePathBelowBlock(editor, path);
 
   insertNodes<VariableDefinitionElement>(editor, input, {

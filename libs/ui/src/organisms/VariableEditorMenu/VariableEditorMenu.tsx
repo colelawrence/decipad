@@ -1,25 +1,12 @@
-import { ComponentProps, ReactNode, useState } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { tokenRules } from '@decipad/language';
 import { CellValueType } from '@decipad/editor-types';
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { InputMenuItem, MenuList } from '../../molecules';
-import {
-  Calendar,
-  CheckboxSelected,
-  Close,
-  Formula,
-  Number as NumberIcon,
-  Shapes,
-  Text,
-} from '../../icons';
-import {
-  getBooleanType,
-  getDateType,
-  getNumberType,
-  getStringType,
-} from '../../utils';
+import { Calendar, Number as NumberIcon, Shapes, Text } from '../../icons';
+import { getDateType, getNumberType, getStringType } from '../../utils';
 
 type VariableEditorMenuProps = {
   readonly onCopy?: () => void;
@@ -30,7 +17,7 @@ type VariableEditorMenuProps = {
 } & (
   | {
       // By marking this variant as optional, when not provided it will be assumed as the default.
-      readonly variant?: 'expression';
+      readonly variant?: 'expression' | 'toggle' | 'date';
       readonly onChangeMax?: never;
       readonly onChangeMin?: never;
       readonly onChangeStep?: never;
@@ -72,7 +59,6 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
   trigger,
   variant = 'expression',
 }) => {
-  const [dateOpen, setDateOpen] = useState(false);
   return (
     <MenuList root dropdown trigger={trigger}>
       {variant === 'slider' && [
@@ -118,7 +104,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         />,
         <MenuSeparator key="sep" />,
       ]}
-      {variant === 'expression' && (
+      {variant === 'expression' ? (
         <MenuList
           itemTrigger={
             <TriggerMenuItem icon={<Shapes />}>
@@ -134,37 +120,21 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
             Number
           </MenuItem>
           <MenuItem
-            icon={<Formula />}
-            onSelect={() => onChangeType({ kind: 'anything' })}
-            selected={type?.kind === 'anything'}
-          >
-            Formula
-          </MenuItem>
-          <MenuItem
-            icon={<CheckboxSelected />}
-            onSelect={() => onChangeType(getBooleanType())}
-            selected={type?.kind === 'boolean'}
-          >
-            Checkbox
-          </MenuItem>
-          <MenuItem
             icon={<Text />}
             onSelect={() => onChangeType(getStringType())}
             selected={type?.kind === 'string'}
           >
             Text
           </MenuItem>
+        </MenuList>
+      ) : (
+        variant === 'date' && (
           <MenuList
             itemTrigger={
-              <TriggerMenuItem
-                icon={<Calendar />}
-                selected={type?.kind === 'date'}
-              >
-                <div css={{ minWidth: '116px' }}>Date</div>
+              <TriggerMenuItem icon={<Shapes />}>
+                <div css={{ minWidth: '132px' }}>Change type</div>
               </TriggerMenuItem>
             }
-            open={dateOpen}
-            onChangeOpen={setDateOpen}
           >
             <MenuItem
               icon={<Calendar />}
@@ -195,16 +165,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
               Time
             </MenuItem>
           </MenuList>
-          {type && (
-            <MenuItem
-              icon={<Close />}
-              onSelect={() => onChangeType(undefined)}
-              selected={!type}
-            >
-              Reset
-            </MenuItem>
-          )}
-        </MenuList>
+        )
       )}
       {isFlagEnabled('INPUT_COPY') && (
         <MenuItem onSelect={onCopy}>Copy</MenuItem>

@@ -34,6 +34,7 @@ interface CellEditorProps {
   type?: CellValueType;
   unit?: string;
   value?: string;
+  parentType?: 'table' | 'input';
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
@@ -46,6 +47,7 @@ export const CellEditor: FC<CellEditorProps> = ({
   unit,
   onChangeValue: _onChangeValue,
   children,
+  parentType = 'input',
 }) => {
   const [opened, setOpened] = useState(false);
 
@@ -129,6 +131,7 @@ export const CellEditor: FC<CellEditorProps> = ({
         value={value}
         unit={unit}
         onChangeValue={onChangeValue}
+        parentType={parentType}
       >
         {children}
       </EditorComponent>

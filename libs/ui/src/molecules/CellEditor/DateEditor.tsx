@@ -20,6 +20,7 @@ export interface DateEditorProps {
   type?: CellValueType;
   value?: string;
   unit?: string;
+  parentType?: 'table' | 'input';
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
