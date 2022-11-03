@@ -5,8 +5,9 @@ const args = {
   notebook: {
     id: 'nbid',
     name: 'My notebook',
+    snapshots: [{ createdAt: '1970-01-20T07:09:01.191Z' }],
   },
-  hasLocalChanges: false,
+  hasUnpublishedChanges: false,
   isPublished: false,
 };
 
@@ -36,6 +37,6 @@ export const Republish: Story<typeof args> = (props) => (
   <NotebookPublishingPopUp {...props} />
 );
 Republish.args = {
-  hasLocalChanges: true,
+  hasUnpublishedChanges: true,
   isPublished: true,
 };

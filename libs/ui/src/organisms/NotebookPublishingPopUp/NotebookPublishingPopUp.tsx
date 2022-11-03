@@ -3,17 +3,16 @@ import { useWindowListener } from '@decipad/react-utils';
 import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { format } from 'date-fns';
+import { isEmpty } from 'lodash';
 import { FC, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Button, Tooltip } from '../../atoms';
+import { Button, Dot, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
 import {
   black,
   cssVar,
-  p12Regular,
-  p13Medium,
   p13Regular,
-  p13SemiBold,
   p14Medium,
   setCssVar,
   smallestDesktop,
@@ -54,7 +53,7 @@ const innerPopUpStyles = css({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  gap: '30px',
+  gap: '16px',
 });
 
 const groupStyles = css({
@@ -63,16 +62,17 @@ const groupStyles = css({
   gap: '8px',
 });
 
+const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
+
+const titleAndToggleStyles = css(horizontalGroupStyles, {
+  justifyContent: 'space-between',
+});
+
 /**
  * The styles for the description of the pop up.
  */
 const descriptionStyles = css(p13Regular, {
   ...setCssVar('currentTextColor', cssVar('weakerTextColor')),
-});
-
-const unpublishStyles = css(p12Regular, {
-  textAlign: 'center',
-  cursor: 'pointer',
 });
 
 /**
@@ -125,10 +125,11 @@ const padLinkTextStyles = css(
 );
 
 interface NotebookSharingPopUpProps {
-  notebook: { id: string; name: string };
-  hasLocalChanges?: boolean;
+  notebook: { id: string; name: string; snapshots?: { createdAt: string }[] };
+  hasUnpublishedChanges?: boolean;
   isPublished?: boolean;
   onPublish?: () => void;
+  onRestore?: () => void;
   onUnpublish?: () => void;
 }
 
@@ -139,9 +140,10 @@ interface NotebookSharingPopUpProps {
  */
 export const NotebookPublishingPopUp = ({
   notebook,
-  hasLocalChanges = false,
+  hasUnpublishedChanges = false,
   isPublished = false,
   onPublish = noop,
+  onRestore = noop,
   onUnpublish = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
@@ -159,66 +161,54 @@ export const NotebookPublishingPopUp = ({
     window.location.origin
   ).toString();
 
+  const buttonProps = {
+    onClick: () => setShareMenuOpen(!shareMenuOpen),
+  };
+
   return (
     <div css={wrapperStyles} onClick={(e) => e.stopPropagation()}>
-      <Button
-        type="primaryBrand"
-        onClick={() => setShareMenuOpen(!shareMenuOpen)}
-      >
-        Share & Publish
-      </Button>
+      {isPublished ? (
+        hasUnpublishedChanges ? (
+          <Dot>
+            <Button type="primaryBrand" {...buttonProps}>
+              Republish
+            </Button>
+          </Dot>
+        ) : (
+          <Button type="primaryBrand" {...buttonProps}>
+            Published
+          </Button>
+        )
+      ) : (
+        <Button type="secondary" {...buttonProps}>
+          Publish
+        </Button>
+      )}
 
       <div>
         {shareMenuOpen && (
           <div css={[popUpStyles]}>
             <div css={innerPopUpStyles}>
               <div css={groupStyles}>
-                <p css={css(p14Medium)}>Share & Publish space</p>
-                {!isPublished ? (
-                  <>
-                    <p css={descriptionStyles}>
-                      Your notebook is{' '}
-                      <strong css={css(p13Medium)}>unpublished</strong>. Publish
-                      your changes to make it discoverable by anyone via sharing
-                    </p>
-                    <Button type="primaryBrand" onClick={onPublish}>
-                      Publish notebook
-                    </Button>
-                  </>
-                ) : hasLocalChanges ? (
-                  <>
-                    <p css={descriptionStyles}>
-                      Your notebook is{' '}
-                      <strong css={css(p13Medium)}>published</strong>, but it
-                      has been changed and needs to be republished to show those
-                      changes
-                    </p>
-                    <Button type="primaryBrand" onClick={onPublish}>
-                      Republish
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <p css={descriptionStyles}>
-                      Your notebook is{' '}
-                      <strong css={css(p13Medium)}>published</strong>
-                    </p>
-                    <Button onClick={onUnpublish}>Unpublish</Button>
-                  </>
-                )}
-                {hasLocalChanges && isPublished && (
-                  <p css={css(unpublishStyles)} onClick={onUnpublish}>
-                    You can always{' '}
-                    <strong css={css(p13SemiBold)}>Unpublish</strong>
-                  </p>
-                )}
+                <div css={titleAndToggleStyles}>
+                  <p css={css(p14Medium)}>Publish Notebook</p>
+                  <Toggle
+                    ariaRoleDescription="enable publishing"
+                    active={isPublished}
+                    onChange={(newIsPublished) =>
+                      newIsPublished ? onUnpublish() : onPublish()
+                    }
+                  />
+                </div>
+                <p css={descriptionStyles}>
+                  {isPublished
+                    ? 'Anyone with this link can view your notebook.'
+                    : 'Notebook is only visible to you.'}
+                </p>
               </div>
+
               {isPublished && (
                 <div css={groupStyles}>
-                  <p css={css(p14Medium)}>Share your work</p>
-                  <p css={descriptionStyles}>
-                    Only people with the link will be able to view this notebook
-                  </p>
                   <div css={clipboardWrapperStyles}>
                     <Tooltip
                       variant="small"
@@ -258,6 +248,28 @@ export const NotebookPublishingPopUp = ({
                   </div>
                 </div>
               )}
+
+              {isPublished &&
+                hasUnpublishedChanges &&
+                !isEmpty(notebook.snapshots) && (
+                  <div css={groupStyles}>
+                    <p css={descriptionStyles}>
+                      Previous version from{' '}
+                      {format(
+                        new Date(notebook.snapshots?.[0].createdAt ?? ''),
+                        'LLL do, HH:mm'
+                      )}
+                    </p>
+                    <div css={horizontalGroupStyles}>
+                      <Button type="secondary" onClick={onRestore}>
+                        Restore
+                      </Button>
+                      <Button type="primaryBrand" onClick={onPublish}>
+                        Publish New Changes
+                      </Button>
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         )}

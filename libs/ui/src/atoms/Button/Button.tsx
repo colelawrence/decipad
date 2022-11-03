@@ -1,5 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css, CSSObject } from '@emotion/react';
+import { ReactNode } from 'react';
 import {
   offBlack,
   brand500,
@@ -21,7 +22,7 @@ import {
   orange800,
   orange300,
 } from '../../primitives';
-import { Anchor, TextChildren } from '../../utils';
+import { Anchor } from '../../utils';
 
 const styles = css(p13SemiBold, {
   flexGrow: 1,
@@ -151,7 +152,7 @@ type ButtonProps = {
     | 'darkDanger'
     | 'darkWarning'
     | 'darkWarningText';
-  readonly children: TextChildren;
+  readonly children: ReactNode;
   readonly disabled?: boolean;
   readonly size?: 'normal' | 'extraSlim' | 'extraLarge';
 
