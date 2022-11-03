@@ -1,5 +1,5 @@
 import { useToast } from '@decipad/toast';
-import { UpdatePrompt } from '@decipad/ui';
+import { toastTransitionDelay, UpdatePrompt } from '@decipad/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 const initialTimeoutMs = 10_000;
@@ -17,8 +17,9 @@ export const UpdatesHandler = () => {
     if (!foundUpdate) {
       setFoundUpdate(true);
       toast(<UpdatePrompt onReload={onReload} />, 'info', {
-        autoDismiss: false,
+        autoDismiss: true,
       });
+      setTimeout(onReload, toastTransitionDelay);
     }
   }, [foundUpdate, onReload, toast]);
 

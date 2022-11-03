@@ -20,7 +20,7 @@ export const UpdatePrompt = ({ onReload }: UpdatePromptProps) => {
     <a href="/" onClick={onReloadClick}>
       Decipad has updated.&nbsp;
       <span css={css({ color: cssVar('weakerTextColor') })}>
-        Click to refresh ✨
+        Auto-refreshing ✨
       </span>
     </a>
   );
