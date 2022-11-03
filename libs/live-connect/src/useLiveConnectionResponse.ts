@@ -20,6 +20,7 @@ export interface LiveConnectionProps {
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   timeoutMs?: number;
+  maxCellCount?: number;
 }
 
 export const useLiveConnectionResponse = ({
@@ -29,6 +30,7 @@ export const useLiveConnectionResponse = ({
   useFirstRowAsHeader,
   columnTypeCoercions,
   timeoutMs = 5000,
+  maxCellCount,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const worker = useLiveConnectionWorker();
   const [error, setError] = useState<Error | undefined>();
@@ -41,7 +43,14 @@ export const useLiveConnectionResponse = ({
       if (worker) {
         try {
           unsubscribe = await worker.subscribe(
-            { url, options, source, useFirstRowAsHeader, columnTypeCoercions },
+            {
+              url,
+              options,
+              source,
+              useFirstRowAsHeader,
+              columnTypeCoercions,
+              maxCellCount,
+            },
             (err, res) => {
               if (!canceled) {
                 setError(err);
@@ -64,7 +73,15 @@ export const useLiveConnectionResponse = ({
         unsubscribe();
       }
     };
-  }, [columnTypeCoercions, options, source, url, useFirstRowAsHeader, worker]);
+  }, [
+    columnTypeCoercions,
+    maxCellCount,
+    options,
+    source,
+    url,
+    useFirstRowAsHeader,
+    worker,
+  ]);
 
   useEffect(() => {
     worker?.worker.addEventListener('error', (ev) => {

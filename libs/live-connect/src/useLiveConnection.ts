@@ -20,6 +20,7 @@ export interface LiveConnectionProps {
   source?: ImportElementSource;
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
+  maxCellCount: number;
 }
 
 export const useLiveConnection = (
@@ -31,6 +32,7 @@ export const useLiveConnection = (
     source,
     useFirstRowAsHeader,
     columnTypeCoercions,
+    maxCellCount,
   }: LiveConnectionProps
 ): LiveConnectionResult => {
   const { error, result } = useLiveConnectionResponse({
@@ -39,6 +41,7 @@ export const useLiveConnection = (
     source,
     useFirstRowAsHeader,
     columnTypeCoercions,
+    maxCellCount,
   });
 
   useEffect(() => {

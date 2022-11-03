@@ -51,6 +51,7 @@ const tryImportHere = async (
         {
           useFirstRowAsHeader: sub.params.useFirstRowAsHeader,
           columnTypeCoercions: sub.params.columnTypeCoercions,
+          maxCellCount: sub.params.maxCellCount,
         }
       );
       for (const result of results) {

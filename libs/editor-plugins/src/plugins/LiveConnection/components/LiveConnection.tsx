@@ -18,6 +18,8 @@ import { useComputer } from '@decipad/react-contexts';
 import { DraggableBlock, BlockErrorBoundary } from '@decipad/editor-components';
 import { varNamify } from '@decipad/utils';
 
+const MAX_CELL_COUNT = 3000;
+
 interface LiveConnectionInnerProps {
   element: LiveConnectionElement;
 }
@@ -34,6 +36,7 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
     source: element.source,
     useFirstRowAsHeader: element.isFirstRowHeaderRow,
     columnTypeCoercions: element.columnTypeCoercions,
+    maxCellCount: MAX_CELL_COUNT,
   });
 
   const onChangeColumnType = useCallback(

@@ -25,6 +25,7 @@ export interface LiveConnectionWorker {
       options: RequestInit | undefined;
       useFirstRowAsHeader?: boolean;
       columnTypeCoercions: Record<ColIndex, TableCellType>;
+      maxCellCount?: number;
     },
     listener: SubscriptionListener
   ) => Promise<Unsubscribe>;
@@ -39,6 +40,7 @@ export interface SubscribeParams {
   pollIntervalSeconds?: number;
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<number, TableCellType>;
+  maxCellCount?: number;
 }
 
 export interface Subscription {
