@@ -46,15 +46,16 @@ const inlineResultStyles = css({
 });
 
 const smartColumnCellStyles = css(p12Regular, {
-  color: cssVar('weakerTextColor'),
+  color: cssVar('normalTextColor'),
   display: 'inline-flex',
-  padding: '10px',
+  padding: '0 6px 0 10px',
   alignItems: 'center',
   position: 'relative',
   maxWidth: table.tdMaxWidth,
   minWidth: table.tdMinWidth,
   width: '100%',
   justifyContent: 'space-between',
+  marginTop: `${table.smartRowHorizontalPadding}`,
 });
 
 interface SmartColumnCellProps {

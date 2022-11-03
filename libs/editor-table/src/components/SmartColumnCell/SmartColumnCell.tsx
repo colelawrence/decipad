@@ -1,3 +1,7 @@
+import { Result } from '@decipad/computer';
+import { useTEditorRef } from '@decipad/editor-types';
+import { useComputer } from '@decipad/react-contexts';
+import { Select, SmartColumnCell as UISmartColumnCell } from '@decipad/ui';
 import {
   DragEvent,
   FC,
@@ -8,10 +12,6 @@ import {
 } from 'react';
 import { EMPTY } from 'rxjs';
 import { Path } from 'slate';
-import { SmartColumnCell as UISmartColumnCell, Select } from '@decipad/ui';
-import { useTEditorRef } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
-import { Result } from '@decipad/computer';
 import { TableColumn, useColumnAggregationTypes } from '../../hooks';
 import { AggregationType } from '../../utils';
 import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
@@ -100,26 +100,25 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
       onDragStart={onDragExpressionStart}
       result={result || undefined}
       aggregationTypeMenu={
-        showMenu &&
-        [
-          <span key="name">
-            {(selectedAggregationType &&
-              (selectedAggregationType.shortName ||
-                selectedAggregationType.name)) ||
-              'Calculate'}
-          </span>,
-          showMenu && (
-            <Select
-              key="selectaggregation"
-              variant="transparent"
-              caretColor="weak"
-              options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
-              value={selectedAggregationType?.name}
-              clear={!!selectedAggregationType}
-              onChange={onAggregationTypeNameChange}
-            ></Select>
-          ),
-        ].filter(Boolean)
+        showMenu && (
+          <Select
+            key="selectaggregation"
+            variant="transparent"
+            caretColor="weak"
+            label={
+              <span key="name">
+                {(selectedAggregationType &&
+                  (selectedAggregationType.shortName ||
+                    selectedAggregationType.name)) ||
+                  'Calculate'}
+              </span>
+            }
+            options={availableAggregationTypes?.map((agg) => agg.name) ?? []}
+            value={selectedAggregationType?.name}
+            clear={!!selectedAggregationType}
+            onChange={onAggregationTypeNameChange}
+          ></Select>
+        )
       }
     />
   );

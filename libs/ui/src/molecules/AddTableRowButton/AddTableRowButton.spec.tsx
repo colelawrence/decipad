@@ -6,7 +6,7 @@ it('renders the text', () => {
   render(
     <table>
       <tbody>
-        <AddTableRowButton colSpan={1} />
+        <AddTableRowButton />
       </tbody>
     </table>
   );
@@ -20,7 +20,7 @@ describe('onAddRow prop', () => {
     render(
       <table>
         <tbody>
-          <AddTableRowButton colSpan={1} onAddRow={onAddRow} />
+          <AddTableRowButton onAddRow={onAddRow} />
         </tbody>
       </table>
     );

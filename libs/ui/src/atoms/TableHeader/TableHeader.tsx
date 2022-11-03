@@ -9,7 +9,12 @@ import {
 } from 'react-dnd';
 import { useMergedRef } from '../../hooks/index';
 import { DragHandle as DragHandleIcon } from '../../icons';
-import { p13Medium, strongOpacity, transparency } from '../../primitives';
+import {
+  cssVar,
+  p13Medium,
+  strongOpacity,
+  transparency,
+} from '../../primitives';
 import { table } from '../../styles';
 import {
   AvailableSwatchColor,
@@ -53,6 +58,9 @@ const childrenWrapperStyles = css({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textAlign: 'left',
+  minWidth: '5px',
+  padding: '0 4px',
+  borderRadius: '6px',
 });
 
 const dragHandleStyles = css({
@@ -105,10 +113,10 @@ const DropSourceAndTarget = forwardRef<
 
 const thStyles = (color: AvailableSwatchColor) =>
   css({
-    backgroundColor:
-      color &&
-      transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
-        .rgba,
+    backgroundColor: color
+      ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
+          .rgba
+      : cssVar('strongHighlightColor'),
     // Keep hover effect when hovered, focused or the dropdown menu is opened.
     '&:hover, &:focus-within, &[data-highlight="true"]': {
       backgroundColor: color && baseSwatches[color as AvailableSwatchColor].rgb,
@@ -174,7 +182,7 @@ export const TableHeader = ({
             onSelectColumn={onSelectColumn}
           />
         )}
-        {showIcon && (
+        {showIcon && type.kind !== 'anything' && (
           <span contentEditable={false} css={iconTypeStyles}>
             <Icon />
           </span>

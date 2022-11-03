@@ -6,6 +6,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditableTableCaption } from '@decipad/ui';
 import {
   findNodePath,
@@ -23,6 +24,8 @@ export const TableCaption: PlateComponent = ({
   attributes,
   children,
 }) => {
+  const readOnly = useIsEditorReadOnly();
+
   assertElementType(element, ELEMENT_TABLE_CAPTION);
   const columnCount = useTableColumnCount(element);
   const editor = useTEditorRef();
@@ -56,6 +59,7 @@ export const TableCaption: PlateComponent = ({
   return (
     <div {...attributes}>
       <EditableTableCaption
+        readOnly={readOnly}
         isForWideTable={
           (columnCount && columnCount >= WIDE_MIN_COL_COUNT) || false
         }

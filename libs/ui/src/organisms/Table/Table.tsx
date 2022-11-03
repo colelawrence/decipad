@@ -1,16 +1,17 @@
-import { FC, ReactNode, useCallback } from 'react';
-import { css } from '@emotion/react';
-import { ConnectDropTarget } from 'react-dnd';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import pluralize from 'pluralize';
-import { cssVar } from '../../primitives';
-import { tableRowCounter } from '../../utils';
-import { useAutoAnimate } from '../../hooks';
-import { table } from '../../styles';
+import { FC, ReactNode, useCallback } from 'react';
+import { ConnectDropTarget } from 'react-dnd';
 import { TextAndIconButton } from '../../atoms';
+import { useAutoAnimate } from '../../hooks';
 import { Eye } from '../../icons';
+import { cssVar, tableBorderColor } from '../../primitives';
+import { table } from '../../styles';
+import { tableRowCounter } from '../../utils';
 
-const regularBorder = `1px solid ${cssVar('strongHighlightColor')}`;
+const regularBorder = `1px solid ${tableBorderColor}`;
+const tableResultBorder = `0px`;
 const liveResultBorder = `1px solid ${cssVar('liveDataBackgroundColor')}`;
 const borderRadius = '6px';
 
@@ -46,12 +47,16 @@ const borderRadiusStyles = css({
     {
       borderTopRightRadius: borderRadius,
     },
-  '> tfoot > tr:last-of-type > td:first-of-type': {
+  '> tbody > tr:last-of-type > td:first-of-type': {
     borderBottomLeftRadius: borderRadius,
   },
-  '> tfoot > tr:last-of-type > td:last-of-type': {
+  '> tbody > tr:last-of-type > td:last-of-type': {
     borderBottomRightRadius: borderRadius,
   },
+});
+
+const readOnlyBorderStyles = css({
+  border: tableResultBorder,
 });
 
 // Tables inside another table cell should only render their inner borders.
@@ -183,7 +188,9 @@ export type TableWidth = 'SLIM' | 'WIDE';
 interface TableProps {
   readonly head?: ReactNode;
   readonly body: ReactNode;
-  readonly foot?: ReactNode;
+  readonly addTable?: ReactNode;
+  readonly smartRow?: ReactNode;
+  readonly previewMode?: boolean;
   readonly columnCount?: number;
   readonly border?: Border;
   readonly dropRef?: ConnectDropTarget;
@@ -201,7 +208,9 @@ interface TableProps {
 export const Table = ({
   head,
   body,
-  foot,
+  smartRow,
+  addTable,
+  previewMode = true,
   border: b = 'all',
   columnCount = 1,
   dropRef,
@@ -223,15 +232,17 @@ export const Table = ({
       ref={dropRef}
       css={[
         tableBaseStyles,
-        b === 'all' && [
-          borderRadiusStyles,
-          allBorderStyles(border, regularBorder),
-        ],
+        b === 'all' &&
+          !isReadOnly && [
+            borderRadiusStyles,
+            allBorderStyles(border, regularBorder),
+          ],
         b === 'inner' && innerBorderStyles,
         tableWidth === 'WIDE' && wideTableStyles,
         isSelectingCell && hiddenSelectionStyles,
         isReadOnly && readOnlyTableStyles,
         isLiveResult && liveResultStyles,
+        isReadOnly && readOnlyBorderStyles,
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -251,7 +262,14 @@ export const Table = ({
         )}
       </tbody>
 
-      <tfoot>{foot}</tfoot>
+      <tfoot>
+        {previewMode && (
+          <tr contentEditable={false} css={[css({ position: 'relative' })]}>
+            {addTable}
+            {smartRow}
+          </tr>
+        )}
+      </tfoot>
     </table>
   );
 };

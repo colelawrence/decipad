@@ -4,7 +4,13 @@ import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import * as icons from '../../icons';
 import { FormulasDrawer, TableButton } from '../../organisms';
-import { cssVar, display, p16Bold, setCssVar } from '../../primitives';
+import {
+  cssVar,
+  display,
+  p16Bold,
+  placeholderOpacity,
+  setCssVar,
+} from '../../primitives';
 import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
@@ -39,20 +45,14 @@ const tableIconSizeStyles = css({
 
 const placeholderStyles = css(p16Bold, {
   cursor: 'text',
-
-  // overlap content (blinking caret) and placeholder
-  display: 'grid',
-  '> span, ::before': {
-    gridArea: '1 / 1',
-  },
-
+  display: 'flex',
   '&::before': {
     ...display,
     ...p16Bold,
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
-    opacity: 0.5,
+    opacity: placeholderOpacity,
   },
 });
 
@@ -61,6 +61,7 @@ type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: (e: any) => void;
   isForWideTable?: boolean;
   empty?: boolean;
+  readOnly?: boolean;
   formulaEditor?: boolean;
   showToggleCollapsedButton?: boolean;
 }>;
@@ -69,6 +70,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
   formulaEditor = true,
   isForWideTable = false,
+  readOnly = false,
   onAddDataViewButtonPress,
   children,
   showToggleCollapsedButton = false,
@@ -107,7 +109,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             )}
           </div>
           <div
-            aria-placeholder={empty ? 'TableName' : ''}
+            aria-placeholder={empty ? 'Name your table' : ''}
             aria-roledescription="table name"
             css={[editableTableCaptionStyles, placeholderStyles]}
             spellCheck={false}
@@ -124,7 +126,9 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               isExpandButton
             />
           ) : null}
-          {hideAddDataViewButton || !isFlagEnabled('DATA_VIEW') ? null : (
+          {hideAddDataViewButton ||
+          !isFlagEnabled('DATA_VIEW') ||
+          readOnly ? null : (
             <TableButton
               setState={onAddDataViewButtonPress}
               captions={['Create view']}

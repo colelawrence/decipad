@@ -1,58 +1,50 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { noop } from '@decipad/utils';
-import { cssVar, p13Medium, setCssVar } from '../../primitives';
 import { Create } from '../../icons';
+import { cssVar, p13Medium } from '../../primitives';
 import { table } from '../../styles';
 
-const tdStyles = css({
-  backgroundColor: cssVar('backgroundColor'),
-  '&:hover, &:focus-within': {
-    backgroundColor: cssVar('highlightColor'),
-  },
-  height: '36px',
-});
-
 const buttonStyles = css(p13Medium, {
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-
   cursor: 'pointer',
-
   display: 'flex',
   alignItems: 'center',
   gap: '6px',
-  width: '100%',
-  height: '100%',
-  padding: `0 ${table.tdHorizontalPadding}`,
+  width: 'auto',
+  padding: `6px ${table.tdHorizontalPadding}`,
+  marginTop: `${table.smartRowHorizontalPadding}`,
+  borderRadius: '6px',
+
+  backgroundColor: cssVar('highlightColor'),
 });
 
 const iconWrapperStyles = css({
-  ...setCssVar('strongTextColor', cssVar('weakTextColor')),
-
   height: '16px',
   width: '16px',
 });
 
 interface AddTableRowButtonProps {
-  readonly colSpan: number;
   readonly onAddRow?: () => void;
+  readonly mouseOver?: boolean;
 }
 
 export const AddTableRowButton = ({
-  colSpan,
   onAddRow = noop,
+  mouseOver = false,
 }: AddTableRowButtonProps): ReturnType<FC> => {
   return (
-    <tr contentEditable={false} css={{}}>
-      <th css={{}} />
-      <td css={tdStyles} colSpan={colSpan}>
-        <button css={buttonStyles} onClick={onAddRow}>
-          <span css={iconWrapperStyles}>
-            <Create />
-          </span>
-          <span>Add row</span>
-        </button>
-      </td>
-    </tr>
+    <>
+      <th></th>
+      <th key="firstcol" css={css({ height: '36px' })}>
+        {mouseOver ? (
+          <button css={buttonStyles} onClick={onAddRow}>
+            <span css={iconWrapperStyles}>
+              <Create />
+            </span>
+            <span>Add row</span>
+          </button>
+        ) : null}
+      </th>
+    </>
   );
 };

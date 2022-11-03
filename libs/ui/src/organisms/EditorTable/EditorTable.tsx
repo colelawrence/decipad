@@ -1,7 +1,7 @@
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode, useCallback, useState, useMemo } from 'react';
+import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { Add } from '../../icons';
@@ -53,13 +53,14 @@ export const tableWrapperStyles = css({
   width: '100vw',
   minWidth: editorLayout.slimBlockWidth,
   overflowX: 'auto',
+  overflowY: 'hidden',
   position: 'relative',
   whiteSpace: 'nowrap',
   left: tableControlWidth,
   display: 'flex',
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
-    transform: `translateX(-${tableControlWidth})`,
+    transform: `translateX(-40px)`,
     minWidth: '0',
   },
 });
@@ -179,17 +180,14 @@ export const EditorTable: FC<EditorTableProps> = ({
                 hiddenRowCount={hiddenRowCount}
                 head={thead}
                 body={tbody}
-                foot={
-                  !previewMode && (
-                    <>
-                      {smartRow}
-                      <AddTableRowButton
-                        colSpan={columns.length + 1}
-                        onAddRow={onAddRow}
-                      />
-                    </>
-                  )
+                previewMode={previewMode}
+                addTable={
+                  <AddTableRowButton
+                    mouseOver={mouseOver}
+                    onAddRow={onAddRow}
+                  />
                 }
+                smartRow={smartRow}
                 onMouseOver={setMouseOver}
               ></Table>
 

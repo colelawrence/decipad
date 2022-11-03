@@ -7,9 +7,9 @@ import * as icons from '../../icons';
 import {
   cssVar,
   display,
-  Opacity,
   p13Regular,
   p16Regular,
+  placeholderOpacity,
   setCssVar,
   smallestDesktop,
 } from '../../primitives';
@@ -49,8 +49,6 @@ const iconWrapperStyles = css(
     },
   }
 );
-
-const placeholderOpacity: Opacity = 0.4;
 
 const placeholderStyles = css(p16Regular, {
   display: 'grid',

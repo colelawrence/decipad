@@ -6,6 +6,10 @@
   xmlns="http://www.w3.org/2000/svg"
 >
   <title>Grid Tile</title>
-  <line x1="90" x2="90" y1="0" y2="90" stroke="rgba(215, 224, 237, 1)" />
-  <line x1="0" x2="90" y1="90" y2="90" stroke="rgba(215, 224, 237, 1)" />
+  <style>
+    line { stroke: rgba(215, 224, 237, 1); }
+    @media (prefers-color-scheme: dark) { line { stroke: rgba(50, 59, 73, 1); } }
+</style>
+  <line x1="90" x2="90" y1="0" y2="90" />
+  <line x1="0" x2="90" y1="90" y2="90" />
 </svg>

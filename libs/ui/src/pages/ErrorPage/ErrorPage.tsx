@@ -40,7 +40,7 @@ const styles = css({
     center repeat url(${gridTile}),
     linear-gradient(
       180deg, ${cssVar('tintedBackgroundColor')} 30.41%, ${cssVar(
-    'bubbleBackground'
+    'errorPageGradientEnd'
   )} 90.69%
     )
   `,

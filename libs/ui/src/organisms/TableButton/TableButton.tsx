@@ -30,16 +30,16 @@ export const TableButton: FC<TableButtonProps> = ({
     setState(!isInState);
   };
 
+  const textToShow = captions[1]
+    ? isInState && isExpandButton
+      ? captions[0]
+      : captions[1]
+    : captions[0];
+
   return (
     <div css={showMoreButtonWrapperStyles} contentEditable={false}>
       <TextAndIconButton
-        text={
-          isInState && isExpandButton
-            ? captions && captions[0] && captions[1]
-              ? captions[0]
-              : captions[1]
-            : captions[0]
-        }
+        text={textToShow}
         onClick={isExpandButton ? handleClick : setState}
         iconPosition="left"
       >

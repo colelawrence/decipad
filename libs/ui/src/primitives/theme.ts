@@ -71,6 +71,8 @@ export const darkTheme: Record<
   ...setCssVar('bubbleColor', teal200.rgb),
   ...setCssVar('bubbleBackground', teal800.rgb),
 
+  ...setCssVar('errorPageGradientEnd', teal800.rgb),
+
   ...setCssVar('mutationAnimationColor', yellow700.rgb),
 
   ...setCssVar('currentTextColor', cssVar('normalTextColor')),

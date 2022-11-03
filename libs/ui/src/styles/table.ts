@@ -14,6 +14,8 @@ export const tdMaxWidth = '240px';
 export const tdVerticalPadding = '8px';
 export const tdHorizontalPadding = '12px';
 
+export const smartRowHorizontalPadding = '5px';
+
 export const firstTdLeftPadding = '20px';
 
 export const cellLeftPaddingStyles = css({

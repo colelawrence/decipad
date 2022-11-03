@@ -80,6 +80,8 @@ export interface CssVariables {
   readonly bubbleColor: Property.Color;
   readonly bubbleBackground: Property.Color;
 
+  readonly errorPageGradientEnd: Property.Color;
+
   readonly mutationAnimationColor: Property.Color;
 
   // Code
@@ -133,6 +135,8 @@ const defaults: CssVariables = {
   errorDialogColor: orange700.rgb,
   errorDialogWarning: orange50.rgb,
   errorDialogError: red50.rgb,
+
+  errorPageGradientEnd: grey200.rgb,
 
   bubbleColor: teal800.rgb,
   bubbleBackground: teal200.rgb,

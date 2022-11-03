@@ -1,3 +1,5 @@
+import { Opacity } from './color';
+
 export interface Viewport {
   readonly width: number;
   readonly height: number;
@@ -15,6 +17,9 @@ export function device(side0: number, side1: number): Device {
     landscape: { width: max, height: min },
   };
 }
+
+export const tableBorderColor = 'rgba(0, 0, 0, 0.1)';
+export const placeholderOpacity: Opacity = 0.4;
 
 export const smallestMobile = device(360, 640);
 export const smallestDesktop = device(1280, 720);

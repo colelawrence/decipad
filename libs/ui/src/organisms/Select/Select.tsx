@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { MenuItem } from '../../atoms';
 import { Caret } from '../../icons';
 import { MenuList } from '../../molecules';
@@ -18,6 +18,11 @@ const itemStyles = css(p12Regular, {
   whiteSpace: 'nowrap',
 });
 
+const selectButtonStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+});
+
 const triggerStyles = css({
   display: 'grid',
   alignItems: 'center',
@@ -29,6 +34,7 @@ interface SelectProps<T extends string> {
   caretColor?: 'weak' | 'normal';
   options: T[];
   value?: T;
+  label?: ReactNode;
   onChange: (newSelected: T | undefined) => void;
   clear?: boolean;
 }
@@ -37,6 +43,7 @@ export function Select<T extends string>({
   options,
   value,
   onChange,
+  label,
   caretColor = 'normal',
   clear = false,
 }: SelectProps<T>) {
@@ -53,8 +60,11 @@ export function Select<T extends string>({
           open={opened}
           onChangeOpen={setOpened}
           trigger={
-            <button css={triggerStyles} onClick={onTriggerClick}>
-              <Caret color={caretColor} variant="down" />
+            <button css={selectButtonStyles} onClick={onTriggerClick}>
+              {label}
+              <span css={triggerStyles}>
+                <Caret color={caretColor} variant="down" />
+              </span>
             </button>
           }
         >
