@@ -9,6 +9,13 @@
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+@font-face {
+  font-family: 'Alliance';
+  src: url('https://uploads-ssl.webflow.com/61dda5267f2552f1a1c52b1f/61fbb09d6a0fe918c078bdf8_font.woff2') format('woff2'), url('https://uploads-ssl.webflow.com/61dda5267f2552f1a1c52b1f/61fbb09d40b1997bbd1503fe_font.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* font-family */
@@ -85,6 +92,16 @@ h1 {
   letter-spacing: -0.035em;
   font-feature-settings: 'ss04' on, 'ss08' on, 'ss06' on;
 
+}
+
+@media only screen and (max-width: 700px) {
+  .card-gallery {
+    min-width: 100%;
+  }
+
+  .title-gallery {
+    font-size: 15vw !important;
+  }
 }
 
 h2 {
