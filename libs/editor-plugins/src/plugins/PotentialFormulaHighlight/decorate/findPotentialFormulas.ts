@@ -34,7 +34,7 @@ export function findPotentialFormulas(text: string): FormulaLoc[] {
 
     // Look for large strings of tokens that are valid exprs together
     formulaEndFinder: do {
-      const focus = tok.offset + tok.text.length;
+      const focus = tok.offset + (tok.text ?? '').length;
 
       switch (isPotentialFormula(text.slice(anchor, focus))) {
         case 'incomplete': {
