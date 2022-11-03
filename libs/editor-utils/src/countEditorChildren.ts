@@ -5,27 +5,24 @@ import { MyEditor, ELEMENT_COLUMNS, ElementKind } from '@decipad/editor-types';
 export const getElementUniqueName = (
   editor: MyEditor,
   type: ElementKind,
-  variant: string,
   name: string
 ): string => {
   try {
     // Get all relevant children from the editor.
     const elements = [];
     for (const child of editor.children) {
-      if (child.type === type && child.variant === variant) {
+      if (child.type === type) {
         elements.push((child as any).children[0].children[0].text);
       } else if (child.type === ELEMENT_COLUMNS) {
         for (const childCol of child.children) {
-          if (childCol.type === type && childCol.variant === variant) {
+          if (childCol.type === type) {
             elements.push((childCol as any).children[0].children[0].text);
           }
         }
       }
     }
 
-    // if the name exists already (due to user deleting some), return new
-    // + 1 because i'd rather have Slider1, Slider2 instead of Slider0, Slider1.
-    let count = elements.length + 1;
+    let count = 1;
     let returnName = name + count;
     while (elements.includes(returnName)) {
       count += 1;

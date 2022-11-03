@@ -171,6 +171,8 @@ export type VariableSliderElement = VariableBaseElement<
 >;
 
 export type VariableDefinitionElement =
+  | VariableToggleElement
+  | VariableDateElement
   | VariableExpressionElement
   | VariableSliderElement;
 

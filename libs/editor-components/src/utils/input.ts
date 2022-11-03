@@ -69,13 +69,9 @@ export const insertInputBelow = (
   path: Path,
   kind?: SerializedTypeKind
 ): void => {
-  const name = getElementUniqueName(
-    editor,
-    ELEMENT_VARIABLE_DEF,
-    'expression',
-    'Input'
-  );
   const [variant, placeholder] = getVariantAndHolder(kind);
+  const name = getElementUniqueName(editor, ELEMENT_VARIABLE_DEF, 'Input');
+
   const input = getInitialInputElement(kind, name, placeholder, variant);
   const insertPath = requirePathBelowBlock(editor, path);
 
@@ -123,7 +119,6 @@ export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
   input.children[0].children[0].text = getElementUniqueName(
     editor,
     ELEMENT_VARIABLE_DEF,
-    'slider',
     'Slider'
   );
   insertNodes<VariableSliderElement>(
