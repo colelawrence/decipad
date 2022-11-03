@@ -2,7 +2,7 @@ import { DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_TABLE,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
@@ -26,7 +26,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
   const [deleted, setDeleted] = useState(false);
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
 
   const {
     onDelete,

@@ -15,6 +15,12 @@ module.exports = {
             message: 'Use editor element/mark kinds definition',
           },
           {
+            name: '@udecode/plate',
+            importNames: ['useEditorState'],
+            message:
+              'useEditorState updates the calling component everytime anything changes anywhere else in the editor.',
+          },
+          {
             name: '@decipad/language',
             message: 'Import language helpers from @decipad/computer',
           },

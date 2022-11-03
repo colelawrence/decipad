@@ -9,7 +9,6 @@ import {
   PlatePlugin,
   PluginOptions,
   useEditorRef,
-  useEditorState,
   usePlateEditorRef,
   usePlateEditorState,
   usePlateSelectors,
@@ -25,7 +24,6 @@ import { MyOverrideByKey, MyPlatePlugin } from './plate';
 export const getMyEditor = (editor: MyEditor) =>
   getTEditor<MyValue, MyEditor>(editor);
 export const useTEditorRef = () => useEditorRef<MyValue, MyEditor>();
-export const useTEditorState = () => useEditorState<MyValue, MyEditor>();
 export const useTPlateEditorRef = (id?: string) =>
   usePlateEditorRef<MyValue, MyEditor>(id);
 export const useTPlateEditorState = (id?: string) =>

@@ -1,4 +1,4 @@
-import { LinkElement, MyElement, useTEditorState } from '@decipad/editor-types';
+import { LinkElement, MyElement, useTEditorRef } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -16,7 +16,7 @@ describe('useElementMutatorCallback', () => {
     sideEffects,
   }) => {
     const [text, setText] = useState('');
-    const editor = useTEditorState();
+    const editor = useTEditorRef();
     const mutateElement = useElementMutatorCallback(
       editor,
       element as LinkElement,

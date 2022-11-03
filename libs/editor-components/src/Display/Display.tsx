@@ -4,7 +4,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyElement,
   PlateComponent,
-  useTEditorState,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
 import {
@@ -59,7 +59,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     }
   }, [selected, focused]);
 
-  const editor = useTEditorState();
+  const editor = useTEditorRef();
   const changeBlockId = useElementMutatorCallback(editor, element, 'blockId');
   const res = useResult(element.blockId);
   const computer = useComputer();
