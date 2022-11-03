@@ -37,7 +37,7 @@ const initialTableElement = () => {
           {
             id: nanoid(),
             type: ELEMENT_TH,
-            cellType: { kind: 'string' },
+            cellType: { kind: 'anything' },
             children: [{ text: 'Property1' }],
           },
           {
