@@ -8,7 +8,7 @@ import {
   getColumnLike,
   isColumnLike,
   Value,
-} from '../interpreter/Value';
+} from '../value';
 import { build as t } from '../type';
 import { ColumnSlice } from './ColumnSlice';
 import { HypercubeAtIndex } from './HypercubeAtIndex';

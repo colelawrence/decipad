@@ -1,9 +1,9 @@
 import { AnyMapping } from '@decipad/utils';
-import { AST, InjectableExternalData, isExpression, Type } from '.';
+import { AST, isExpression, Type } from '.';
 import { Context, inferBlock, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
-import { OneResult, validateResult } from './result';
+import { OneResult, Result, validateResult } from './result';
 
 export const parseBlockOrThrow = (source: string): AST.Block => {
   const parsed = parseBlock(source);
@@ -32,7 +32,7 @@ export const parseExpressionOrThrow = (source: string): AST.Expression => {
 };
 
 interface RunAstOptions {
-  externalData?: AnyMapping<InjectableExternalData>;
+  externalData?: AnyMapping<Result>;
   ctx?: Context;
   throwOnError?: boolean;
 }
@@ -66,7 +66,7 @@ export const runAST = async (
 
 export const runCode = async (
   source: string,
-  { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
+  { externalData }: { externalData?: AnyMapping<Result> } = {}
 ) => {
   const block = parseBlockOrThrow(source);
   return runAST(block, { externalData });

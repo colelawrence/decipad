@@ -1,5 +1,5 @@
 import Fraction from '@decipad/fraction';
-import * as Values from '../interpreter/Value';
+import * as Values from '../value';
 import { Type, build as t } from '../type';
 import {
   automapTypes,

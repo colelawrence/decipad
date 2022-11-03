@@ -7,7 +7,7 @@ import {
   StringValue,
   BooleanValue,
   FractionValue,
-} from '../interpreter/Value';
+} from '../value';
 import { getDefined } from '../utils';
 import { AST } from '..';
 import { parseFunctor } from './parseFunctor';

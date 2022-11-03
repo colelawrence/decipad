@@ -1,6 +1,7 @@
 import { Type } from '..';
-import { Interpreter, UnknownValue } from '../interpreter';
+import type { Interpreter } from '../interpreter';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
+import { UnknownValue } from '../value';
 import { validateResult } from './validate';
 
 export { validateResult } from './validate';

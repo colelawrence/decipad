@@ -1,14 +1,7 @@
 import { getDefined, zip } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
-import {
-  Column,
-  ColumnLike,
-  isColumnLike,
-  Row,
-  Table,
-  Value,
-} from '../interpreter/Value';
+import { Column, ColumnLike, isColumnLike, Row, Table, Value } from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
   walkAst,

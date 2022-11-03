@@ -1,10 +1,10 @@
 import FFraction, { toFraction } from '@decipad/fraction';
 import { AnyMapping, zip } from '@decipad/utils';
-import type { AST, InjectableExternalData } from '.';
+import type { AST } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
-import { fromJS, FromJSArg, Table } from './interpreter/Value';
-import { OneResult } from './result';
+import { fromJS, FromJSArg, Table } from './value';
+import { OneResult, Result } from './result';
 import { parseBlockOrThrow } from './run';
 import {
   build as t,
@@ -20,7 +20,7 @@ import { isSerializedType } from './type/SerializedType';
 
 export const runAST = async (
   block: AST.Block,
-  { externalData }: { externalData?: AnyMapping<InjectableExternalData> } = {}
+  { externalData }: { externalData?: AnyMapping<Result> } = {}
 ) => {
   const ctx = makeContext({ externalData });
 

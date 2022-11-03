@@ -1,10 +1,5 @@
 import { useEffect } from 'react';
-import {
-  Result,
-  InjectableExternalData,
-  deserializeType,
-  Computer,
-} from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import {
   ColIndex,
   ImportElementSource,
@@ -27,15 +22,6 @@ export interface LiveConnectionProps {
   columnTypeCoercions: Record<ColIndex, TableCellType>;
 }
 
-const resultToInjectableExternalData = (
-  result: Result.Result
-): InjectableExternalData => {
-  return {
-    type: deserializeType(result.type),
-    value: Result.resultToValue(result),
-  };
-};
-
 export const useLiveConnection = (
   computer: Computer,
   {
@@ -56,21 +42,22 @@ export const useLiveConnection = (
   });
 
   useEffect(() => {
-    if (result) {
-      const computerResult = result.result;
-      if (
-        computerResult.value != null &&
-        typeof computerResult.value !== 'symbol'
-      ) {
-        const injectable = resultToInjectableExternalData(computerResult);
-        computer.pushExternalDataUpdate(blockId, injectable);
-      }
+    const computerResult = result?.result;
+    if (
+      computerResult?.value != null &&
+      typeof computerResult.value !== 'symbol'
+    ) {
+      computer.pushExternalDataUpdate(blockId, computerResult);
+    } else {
+      computer.pushExternalDataDelete(blockId);
     }
+  }, [blockId, computer, result]);
 
+  useEffect(() => {
     return () => {
       computer.pushExternalDataDelete(blockId);
     };
-  }, [blockId, computer, result]);
+  }, [computer, blockId]);
 
   return { error, result };
 };

@@ -1,8 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { Class } from 'utility-types';
-import { Value } from '../interpreter';
 import { OneResult } from '../interpreter/interpreter-types';
-import { ColumnLike } from '../interpreter/Value';
+import type { ColumnLike, Value } from '../value';
 import { HypercubeAtIndex } from './HypercubeAtIndex';
 import { materialize } from './materialize';
 import { MinimalHypercube } from './types';

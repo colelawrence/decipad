@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import Fraction, { toFraction } from '@decipad/fraction';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
-import { DateValue } from '../interpreter/Value';
+import { DateValue } from '../value';
 
 import * as Time from './time-types';
 

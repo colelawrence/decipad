@@ -1,5 +1,5 @@
 import { build as t } from '../type';
-import { DateValue as IDate, FractionValue } from '../interpreter/Value';
+import { DateValue as IDate, FractionValue } from '../value';
 import { parseUTCDate, Time } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';
 import {

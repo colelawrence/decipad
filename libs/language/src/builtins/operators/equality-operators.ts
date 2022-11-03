@@ -1,5 +1,5 @@
 import { BuiltinSpec } from '../interfaces';
-import { compare } from '../../interpreter/compare-values';
+import { compare } from '../../value';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isEqual = (a: any, b: any) => {

@@ -4,7 +4,7 @@ import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
-import { FractionValue, fromJS, Value } from '../interpreter/Value';
+import { FractionValue, fromJS, Value } from '../value';
 import { AST } from '../parser';
 import {
   build as t,

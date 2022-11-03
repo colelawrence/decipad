@@ -1,5 +1,5 @@
 import { RuntimeError } from '../interpreter';
-import { Comparable } from '../interpreter/compare-values';
+import { Comparable } from '../value';
 import { ColumnLike } from './Column';
 
 export class ColumnSlice<T = Comparable> implements ColumnLike<T> {

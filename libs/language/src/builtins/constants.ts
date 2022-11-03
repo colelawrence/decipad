@@ -1,6 +1,6 @@
 import { toFraction } from '@decipad/fraction';
 import { once } from 'ramda';
-import { fromJS, Value } from '../interpreter';
+import { fromJS, Value } from '../value';
 import { Type, build as T } from '../type';
 
 export interface Constant {

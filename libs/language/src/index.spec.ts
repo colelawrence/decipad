@@ -1,7 +1,6 @@
 // E2e tests
 import { toFraction } from '@decipad/fraction';
 import { date, parseUTCDate } from './date';
-import { Column, Scalar } from './interpreter/Value';
 import { runCode } from './run';
 import {
   objectToTableType,
@@ -10,7 +9,7 @@ import {
   runCodeForVariables,
   typeSnapshotSerializer,
 } from './testUtils';
-import { build as t, InferError } from './type';
+import { build as t, InferError, serializeType } from './type';
 import { number } from './type/build';
 import { block, c, F, n, U, u } from './utils';
 
@@ -1216,11 +1215,8 @@ describe('Injected external data', () => {
       await runAST(block(n('externalref', 'random-id')), {
         externalData: {
           'random-id': {
-            type: t.column(t.string(), 2),
-            value: Column.fromValues([
-              Scalar.fromValue('Hello'),
-              Scalar.fromValue('World'),
-            ]),
+            type: serializeType(t.column(t.string(), 2)),
+            value: ['Hello', 'World'],
           },
         },
       })

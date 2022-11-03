@@ -1,4 +1,4 @@
-import { Column, fromJS, ValueTransforms } from './Value';
+import { Column, fromJS, ValueTransforms } from '.';
 
 describe('column value', () => {
   it('can be constructed from values', () => {

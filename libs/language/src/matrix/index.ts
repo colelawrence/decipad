@@ -12,7 +12,7 @@ import {
 } from './assignMultidim';
 import { evaluateVariable, inferVariable } from './getVariable';
 import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
-import { ColumnLike, ValueTransforms } from '../interpreter/Value';
+import { ColumnLike, ValueTransforms } from '../value';
 
 export async function inferMatrixRef(
   context: Context,

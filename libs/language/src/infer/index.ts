@@ -1,11 +1,10 @@
 import pSeries from 'p-series';
 
 import { AST } from '..';
-import { InferError, Type, build as t, deserializeType, build } from '../type';
+import { InferError, Type, build as t, deserializeType } from '../type';
 import { matchUnitArraysForColumn } from '../type/units';
 import { getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
-import { resolve as resolveData } from '../data';
 import { expandDirectiveToType } from '../directives';
 import { parseUnit } from '../units';
 import { inferTable } from '../tables/inference';
@@ -13,7 +12,6 @@ import { inferColumnAssign } from '../tables/column-assign';
 
 import { Context, makeContext } from './context';
 import { inferSequence } from './sequence';
-import { inferData } from './data';
 import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';
 import { inferCategories } from '../categories';
@@ -84,9 +82,9 @@ export const inferExpression = wrap(
         const [id] = expr.args;
         const data = ctx.externalData.get(id);
         if (data) {
-          return data.type;
+          return deserializeType(data.type);
         }
-        return build.impossible(
+        return t.impossible(
           new InferError({ errType: 'unknown-reference' }),
           expr
         );
@@ -211,22 +209,6 @@ export const inferExpression = wrap(
       }
       case 'function-call': {
         return inferFunctionCall(ctx, expr);
-      }
-      case 'fetch-data': {
-        const [url, contentType] = expr.args;
-        if (!url) {
-          return t.impossible('No data URL defined');
-        }
-        try {
-          const data = await resolveData({
-            url,
-            contentType,
-            fetch: ctx.fetch,
-          });
-          return inferData(ctx.inAssignment, data);
-        } catch (err) {
-          return t.impossible((err as Error).message);
-        }
       }
       case 'directive': {
         const [name, ...args] = expr.args;

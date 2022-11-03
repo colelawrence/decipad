@@ -1,4 +1,4 @@
-import { ColumnLike } from '../interpreter/Value';
+import type { ColumnLike } from '../value';
 
 /**
  * Turns an output index (IE an index in a Interpreter.Result array) into an index of a label

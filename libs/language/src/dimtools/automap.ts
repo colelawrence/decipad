@@ -1,4 +1,4 @@
-import * as Value from '../interpreter/Value';
+import * as Value from '../value';
 import { createLazyOperation } from '../lazy';
 import { build as t, Type } from '../type';
 import { allMatch } from '../utils';

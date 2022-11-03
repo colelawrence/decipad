@@ -1,4 +1,4 @@
-import { fromJS, FromJSArg, getColumnLike } from '../interpreter/Value';
+import { fromJS, FromJSArg, getColumnLike } from '../value';
 import { HypercubeArg } from './Hypercube';
 import { DimensionId } from './types';
 

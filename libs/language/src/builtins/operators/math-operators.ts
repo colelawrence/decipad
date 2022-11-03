@@ -11,12 +11,12 @@ import {
   Value,
   isColumnLike,
   FractionValue,
-} from '../../interpreter/Value';
+  compare,
+} from '../../value';
 import { AST } from '../../parser';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
 import { BuiltinSpec } from '../interfaces';
-import { compare } from '../../interpreter/compare-values';
 import { Context } from '../../infer';
 
 import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-evaluate';

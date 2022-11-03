@@ -6,7 +6,7 @@ import {
 } from '.';
 import { Context, makeContext } from '..';
 import { Realm } from '../interpreter';
-import { fromJS } from '../interpreter/Value';
+import { fromJS } from '../value';
 import { build as t, InferError } from '../type';
 import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
 

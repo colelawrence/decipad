@@ -1,5 +1,6 @@
 import type { AST, Context, Type } from '..';
-import { Realm, Value } from '../interpreter';
+import type { Realm } from '../interpreter';
+import type { Value } from '../value';
 
 import { directives } from './directives';
 import * as expand from './expand';

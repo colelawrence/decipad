@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
-import { evaluate, Realm, RuntimeError, Value } from '../interpreter';
+import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { AST } from '../parser';
+import { Value } from '../value';
 
 const evaluateMatchDef = async (
   realm: Realm,

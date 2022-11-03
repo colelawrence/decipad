@@ -1,7 +1,7 @@
 import { singular } from 'pluralize';
 import { Time, timeUnitToJSDateUnit, toLuxonUTC, getTimeUnit } from '.';
 import type { Unit } from '..';
-import { RuntimeError } from '../interpreter/RuntimeError';
+import { RuntimeError } from '../value';
 import { getDefined } from '../utils';
 
 export const addTime = (

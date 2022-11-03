@@ -8,13 +8,20 @@ import {
   multiplyMultipliers,
 } from '../utils';
 import { dateNodeToTimeUnit, getDateFromAstForm } from '../date';
-import { resolve as resolveData } from '../data';
 import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
-import { Scalar, Range, DateValue, Column, Value, UnknownValue } from './Value';
+import {
+  Scalar,
+  Range,
+  DateValue,
+  Column,
+  Value,
+  UnknownValue,
+  columnFromDateSequence,
+  columnFromSequence,
+} from '../value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
-import { evaluateData } from './data';
 import { getDateSequenceIncrement } from '../infer/sequence';
 import { isPreviousRef } from '../previous-ref';
 import { evaluateMatrixRef, evaluateMatrixAssign } from '../matrix';
@@ -23,7 +30,7 @@ import { evaluateColumnAssign } from '../tables/column-assign';
 import { evaluateMatch } from '../match/evaluateMatch';
 import { evaluateTiered } from '../tiered/evaluateTiered';
 import { RuntimeError } from '.';
-import { fromDateSequence, fromSequence } from './sequences';
+import { resultToValue } from '../result';
 
 // Gets a single value from an expanded AST.
 
@@ -92,7 +99,7 @@ export async function evaluate(
     case 'externalref': {
       const data = realm.externalData.get(node.args[0]);
       if (data) {
-        return data.value;
+        return resultToValue(data);
       }
       return UnknownValue;
     }
@@ -159,12 +166,12 @@ export async function evaluate(
         );
 
         const step = getDateSequenceIncrement(node.args[2], startUnit, endUnit);
-        return fromDateSequence(start, end, step);
+        return columnFromDateSequence(start, end, step);
       } else {
         const step = node.args[2]
           ? await evaluate(realm, node.args[2])
           : undefined;
-        return fromSequence(start, end, step);
+        return columnFromSequence(start, end, step);
       }
     }
     case 'date': {
@@ -204,12 +211,6 @@ export async function evaluate(
       // Typecheck ensures this isn't used as a result
       // but we want to always return something
       return UnknownValue;
-    }
-    case 'fetch-data': {
-      const [url, contentType] = node.args;
-      return evaluateData(
-        await resolveData({ url, contentType, fetch: realm.inferContext.fetch })
-      );
     }
     case 'directive': {
       const [name, ...args] = node.args;

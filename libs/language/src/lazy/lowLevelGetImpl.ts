@@ -1,5 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import { isColumnLike, Value } from '../interpreter/Value';
+import { isColumnLike, Value } from '../value';
 
 export function lowLevelGet(valueHere: Value, keys: number[]) {
   getDefined(valueHere, 'panic: lowLevelGet called with undefined value');

@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction, { toFraction } from '@decipad/fraction';
 import type { BuiltinSpec } from '../interfaces';
-import { Value, fromJS } from '../../interpreter/Value';
+import { Value, fromJS } from '../../value';
 
 export const reducerOperators: { [fname: string]: BuiltinSpec } = {
   total: {

@@ -2,9 +2,8 @@ import { F } from '@decipad/fraction';
 import {
   astNode,
   buildType as t,
-  Column,
-  InjectableExternalData,
-  Scalar,
+  Result,
+  serializeType,
 } from '@decipad/language';
 import { AnyMapping, timeout } from '@decipad/utils';
 import produce from 'immer';
@@ -239,13 +238,10 @@ it('can pass on injected data', async () => {
   );
   injectedBlock.id = 'injectblock';
 
-  const externalData: AnyMapping<InjectableExternalData> = {
+  const externalData: AnyMapping<Result.Result> = {
     'external-reference-id': {
-      type: t.column(t.string(), 2),
-      value: Column.fromValues([
-        Scalar.fromValue('Hello'),
-        Scalar.fromValue('World'),
-      ]),
+      type: serializeType(t.column(t.string(), 2)),
+      value: ['Hello', 'World'],
     },
   };
   expect(

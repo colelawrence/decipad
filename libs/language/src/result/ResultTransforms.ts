@@ -1,5 +1,4 @@
-import { CompareValues } from '../interpreter';
-import { SlicesMap } from '../interpreter/Value';
+import { SlicesMap, CompareValues } from '../value';
 import { ColumnLike } from './Column';
 import { ColumnSlice } from './ColumnSlice';
 import { MappedColumn } from './MappedColumn';

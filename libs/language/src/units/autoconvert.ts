@@ -1,7 +1,6 @@
 import { getDefined } from '@decipad/utils';
-import { Type } from '..';
-import { Value } from '../interpreter';
-import { FractionValue } from '../interpreter/Value';
+import type { Type } from '..';
+import { FractionValue, Value } from '../value';
 import { toExpandedBaseQuantity, fromExpandedBaseQuantity } from './convert';
 import { zip } from '../utils';
 import { automapValues } from '../dimtools';

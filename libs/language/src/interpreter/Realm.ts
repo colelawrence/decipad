@@ -1,6 +1,5 @@
-import { Value } from './Value';
-
-import { AST, ExternalDataMap, Context } from '..';
+import type { Value } from '../value';
+import type { AST, ExternalDataMap, Context } from '..';
 import { Stack } from '../stack';
 import { getDefined } from '../utils';
 

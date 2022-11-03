@@ -1,13 +1,8 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
 import FFraction, { min, max, ZERO } from '@decipad/fraction';
-import {
-  evaluate,
-  FractionValue,
-  Realm,
-  RuntimeError,
-  Value,
-} from '../interpreter';
+import { FractionValue, Value } from '../value';
+import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { AST } from '../parser';
 import { Type, Unit } from '../type';
 import { convertBetweenUnits } from '../units';

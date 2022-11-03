@@ -1,6 +1,6 @@
 import Fraction from '@decipad/fraction';
 import { Hypercube, uniqDimensions } from './Hypercube';
-import { FractionValue, fromJS, Value } from '../interpreter/Value';
+import { FractionValue, fromJS, Value } from '../value';
 import { F, getInstanceof } from '../utils';
 
 import { hcArg } from './testUtils';

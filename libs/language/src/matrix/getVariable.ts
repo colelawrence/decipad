@@ -1,6 +1,6 @@
 import { AST, Context } from '..';
 import { Realm, RuntimeError } from '../interpreter';
-import { isColumnLike } from '../interpreter/Value';
+import { isColumnLike } from '../value';
 import { build as t, Type, InferError } from '../type';
 import { getIdentifierString } from '../utils';
 

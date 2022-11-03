@@ -1,4 +1,4 @@
-import { DateValue, FractionValue } from '../interpreter/Value';
+import { DateValue, FractionValue } from '../value';
 import {
   addTime,
   cmpSpecificities,

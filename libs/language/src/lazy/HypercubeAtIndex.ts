@@ -1,4 +1,4 @@
-import { ColumnLike } from '../interpreter/Value';
+import { ColumnLike } from '../value';
 import { implementColumnLike } from './implementColumnLike';
 import { MinimalHypercube } from './types';
 

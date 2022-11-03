@@ -1,7 +1,12 @@
-import { Value } from '.';
+import { Value } from './types';
 import { ColumnSlice } from '../lazy/ColumnSlice';
-import { compare } from './compare-values';
-import { ColumnLike, FilteredColumn, MappedColumn, SlicesMap } from './Value';
+import {
+  compare,
+  ColumnLike,
+  FilteredColumn,
+  MappedColumn,
+  SlicesMap,
+} from '.';
 
 export function sortMap(col: ColumnLike): number[] {
   const unsortedIndexes = Array.from({ length: col.rowCount }, (_, i) => i);

@@ -1,4 +1,4 @@
-import { InferError } from '..';
+import type { InferError } from '..';
 
 export class RuntimeError extends Error {
   public inferError: InferError | undefined;
@@ -7,7 +7,7 @@ export class RuntimeError extends Error {
     if (typeof message === 'string') {
       super(message);
     } else {
-      super('Runtime error');
+      super('Type error');
       this.inferError = message;
     }
   }

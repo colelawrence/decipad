@@ -1,16 +1,16 @@
 import { getDefined } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
-import { compare } from '../../interpreter/compare-values';
-import { OneResult } from '../../interpreter/interpreter-types';
-import { RuntimeError } from '../../interpreter/RuntimeError';
 import {
+  compare,
   getColumnLike,
   isColumnLike,
   Row,
   Table,
   ValueTransforms,
-} from '../../interpreter/Value';
+  RuntimeError,
+} from '../../value';
+import { OneResult } from '../../interpreter/interpreter-types';
 import { ConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
 import { build as t, Type } from '../../type';
 import { getInstanceof, zip } from '../../utils';

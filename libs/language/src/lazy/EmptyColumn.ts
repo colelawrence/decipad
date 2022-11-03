@@ -1,5 +1,5 @@
 import { Dimension } from '.';
-import { Value } from '../interpreter';
+import { Value } from '../value';
 import { implementColumnLike } from './implementColumnLike';
 import { MinimalHypercube } from './types';
 

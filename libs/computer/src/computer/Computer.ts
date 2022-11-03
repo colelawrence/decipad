@@ -17,7 +17,6 @@ import {
   SerializedTypes,
   serializeType,
   Unit,
-  InjectableExternalData,
   SerializedType,
   parseExpression,
 } from '@decipad/language';
@@ -326,21 +325,16 @@ export class Computer {
     this.computeRequests.next(req);
   }
 
-  public pushExternalDataUpdate(
-    key: string,
-    value: InjectableExternalData
-  ): void {
+  public pushExternalDataUpdate(key: string, value: Result.Result): void {
     const newValue = new Map(this.externalData.getValue());
     newValue.set(key, value);
     this.externalData.next(newValue);
   }
 
   public pushExternalDataDelete(key: string): void {
-    this.externalData.next(
-      produce(this.externalData.getValue(), (externalData) => {
-        externalData.delete(key);
-      })
-    );
+    const newValue = new Map(this.externalData.getValue());
+    newValue.delete(key);
+    this.externalData.next(newValue);
   }
 
   /**

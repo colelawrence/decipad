@@ -1,6 +1,6 @@
 import Fraction, { toFraction } from '@decipad/fraction';
 import { Result, Value, Table, Column, SerializedTypes } from '..';
-import { Range, Row, Scalar } from '../interpreter';
+import { Range, Row, Scalar } from '../value';
 import {
   ResultBoolean,
   ResultColumn,

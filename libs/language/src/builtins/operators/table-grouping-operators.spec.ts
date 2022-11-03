@@ -1,4 +1,4 @@
-import { Column, Table, fromJS } from '../../interpreter/Value';
+import { Column, Table, fromJS } from '../../value';
 import { build as t } from '../../type';
 import { tableGroupingOperators as operators } from './table-grouping-operators';
 

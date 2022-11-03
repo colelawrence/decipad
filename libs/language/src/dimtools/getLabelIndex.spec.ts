@@ -1,4 +1,4 @@
-import { ColumnLike } from '../interpreter/Value';
+import { ColumnLike } from '../value';
 import { jsCol } from '../lazy/testUtils';
 import { getLabelIndex } from './getLabelIndex';
 

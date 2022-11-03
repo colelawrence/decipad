@@ -9,7 +9,7 @@ import {
   fromJS,
   getColumnLike,
   ValueTransforms,
-} from '../../interpreter/Value';
+} from '../../value';
 import { SwappedHypercube, ConcatenatedColumn } from '../../lazy';
 import { Type, build as t } from '../../type';
 import { getInstanceof } from '../../utils';

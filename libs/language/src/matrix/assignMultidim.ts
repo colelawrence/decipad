@@ -2,7 +2,7 @@ import { getDefined } from '@decipad/utils';
 
 import { AST, Column, Type } from '..';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
-import { ColumnLike, isColumnLike } from '../interpreter/Value';
+import { ColumnLike, isColumnLike } from '../value';
 import { build as t, InferError } from '../type';
 import { equalOrUnknown } from '../utils';
 import { getIndexName } from './getVariable';

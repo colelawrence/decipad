@@ -1,5 +1,5 @@
 import { BuiltinSpec } from '../interfaces';
-import { RuntimeError } from '../../interpreter/RuntimeError';
+import { RuntimeError } from '../../value';
 
 export const contractOperators: Record<string, BuiltinSpec> = {
   assert: {

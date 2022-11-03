@@ -2,12 +2,7 @@ import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { BuiltinSpec } from '../interfaces';
 import { Type, build as t, InferError } from '../../type';
-import {
-  Column,
-  getColumnLike,
-  Table,
-  ValueTransforms,
-} from '../../interpreter/Value';
+import { Column, getColumnLike, Table, ValueTransforms } from '../../value';
 import { getInstanceof } from '../../utils';
 
 export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {

@@ -3,11 +3,11 @@ import { getOnly } from '@decipad/utils';
 import { AST, Column, Context } from '..';
 import { getCardinality } from '../dimtools/common';
 import { inferExpression } from '../infer';
-import { evaluate, Realm, Value } from '../interpreter';
-import { compare } from '../interpreter/compare-values';
+import { evaluate, Realm } from '../interpreter';
+import { compare } from '../value';
 import { build as t, Type, InferError } from '../type';
 import { getIdentifierString, getOfType } from '../utils';
-import { FractionValue } from '../interpreter/Value';
+import type { FractionValue, Value } from '../value';
 import { evaluateVariable, getIndexName } from './getVariable';
 
 /** Read inside the square brackets */

@@ -1,5 +1,5 @@
 import { buildType as t } from '..';
-import { fromJS } from '../interpreter/Value';
+import { fromJS } from '../value';
 import { dimSwapTypes, dimSwapValues } from './dimSwap';
 
 const twoDColumn = t.column(t.column(t.number(), 2, 'X'), 3, 'Y');

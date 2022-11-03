@@ -1,5 +1,5 @@
 import { getOnly } from '@decipad/utils';
-import type { Value } from '../interpreter/Value';
+import type { Value } from '../value';
 import { implementColumnLike } from './implementColumnLike';
 import type { Dimension, MinimalHypercube } from './types';
 

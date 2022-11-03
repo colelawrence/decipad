@@ -2,7 +2,8 @@ import { getDefined } from '@decipad/utils';
 
 import type { AST, Context, Type } from '..';
 import { inferExpression } from '../infer';
-import { evaluate, Realm, Value } from '../interpreter';
+import { evaluate, Realm } from '../interpreter';
+import { Value } from '../value';
 
 import type { Directive, GetTypeCtx, GetValueCtx } from './types';
 

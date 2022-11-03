@@ -1927,23 +1927,6 @@ let ParserRules = [
     postprocess: () => null,
   },
   {
-    name: 'fetchData',
-    symbols: [
-      { literal: 'fetch' },
-      '__',
-      tokenizer.has('string') ? { type: 'string' } : string,
-    ],
-    postprocess: (d) => {
-      return addArrayLoc(
-        {
-          type: 'fetch-data',
-          args: [d[2].value],
-        },
-        d
-      );
-    },
-  },
-  {
     name: 'functionDef',
     symbols: [
       'functionDefName',

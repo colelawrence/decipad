@@ -1,12 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import Fraction, { toFraction } from '@decipad/fraction';
+import { RuntimeError, Time } from '..';
 import { addTime, getSpecificity } from '../date';
-import type { Time } from '..';
-import { Column, ColumnLike, DateValue, RuntimeError, Scalar, Value } from '.';
+
+import { Column, DateValue, Scalar } from './Value';
+import { Value, ColumnLike } from './types';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
-export function fromSequence(
+export function columnFromSequence(
   startV: Value,
   endV: Value,
   byV?: Value
@@ -39,7 +41,7 @@ export function fromSequence(
   return Column.fromValues(array);
 }
 
-export function fromDateSequence(
+export function columnFromDateSequence(
   startD: DateValue,
   endD: DateValue,
   by: Time.Unit

@@ -1,6 +1,6 @@
 import { F } from '../utils';
 import { compare } from './compare-values';
-import { fromJS } from './Value';
+import { fromJS } from '.';
 
 it('can compare columns', () => {
   expect(compare(fromJS([1, 2]), fromJS([1, 2]))).toEqual(0);

@@ -3,7 +3,7 @@ import { build as t } from '../type';
 import { inferCategories } from '.';
 import { Realm } from '../interpreter';
 import { Context, makeContext } from '..';
-import { fromJS } from '../interpreter/Value';
+import { fromJS } from '../value';
 
 let testRealm: Realm;
 let testContext: Context;

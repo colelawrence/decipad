@@ -75,7 +75,6 @@ const powHandler = (d, _l, reject) => {
 expression    -> tiered                                 {% id %}
 expression    -> match                                  {% id %}
 expression    -> overExp                                {% id %}
-expression    -> fetchData                              {% id %}
 
 overExp       -> asExp                                  {% id %}
 overExp       -> overExp _ "over" _ genericIdentifier   {%

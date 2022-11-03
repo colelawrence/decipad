@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { getDefined } from '@decipad/utils';
-import { Comparable } from '../interpreter/compare-values';
+import { Comparable } from '../value';
 
 export type { Comparable };
 

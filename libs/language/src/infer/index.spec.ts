@@ -15,7 +15,6 @@ import {
   date,
   tableDef,
   prop,
-  fetchData,
   assign,
   block,
 } from '../utils';
@@ -560,42 +559,6 @@ describe('inferProgram', () => {
         B: t.number(),
       })
     );
-  });
-});
-
-jest.mock('../data', () => ({
-  // Mock fetchData
-  resolve: jest.fn(() => ({
-    numCols: 0,
-    length: 0,
-  })),
-}));
-
-describe('Data', () => {
-  // eslint-disable-next-line jest/no-disabled-tests
-  it('infers imported data', async () => {
-    const ctx = makeContext();
-    expect(
-      await inferStatement(
-        ctx,
-        assign(
-          'IndexName',
-          fetchData(
-            'data:text/csv;base64,TnVtYmEsU3RyYWluZyxCdWxpYW4sRG9pdGUKMSxoZXlhLHRydWUsMjAyMC0wMS0wMQoyLHRoZXJlLGZhbHNlLDIwMjAtMDEtMzE=',
-            'text/csv'
-          )
-        )
-      )
-    ).toMatchObject({
-      columnNames: ['Numba', 'Straing', 'Bulian', 'Doite'],
-      columnTypes: [
-        { type: 'number' },
-        { type: 'string' },
-        { type: 'boolean' },
-        { date: 'millisecond' },
-      ],
-      tableLength: 2,
-    });
   });
 });
 

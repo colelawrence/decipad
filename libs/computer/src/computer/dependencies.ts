@@ -21,7 +21,6 @@ function findRefs(node: AST.Node): string[] {
     case 'date':
     case 'def':
     case 'externalref':
-    case 'fetch-data':
     case 'funcdef':
     case 'generic-identifier':
     case 'literal':

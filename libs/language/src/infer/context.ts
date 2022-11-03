@@ -1,9 +1,9 @@
 import { AnyMapping, anyMappingToMap } from '@decipad/utils';
 
-import { AST, ExternalData, ExternalDataMap, InjectableExternalData } from '..';
+import { AST, ExternalDataMap } from '..';
 import { Type, SerializedType } from '../type';
 import { Stack } from '../stack';
-import defaultFetch from '../data/default-fetch';
+import { Result } from '../result';
 
 export interface Context {
   stack: Stack<Type>;
@@ -11,21 +11,18 @@ export interface Context {
   previous?: Type;
   inAssignment: string | null;
   nodeTypes: Map<AST.Node, Type>;
-  fetch: ExternalData.FetchFunction;
   externalData: ExternalDataMap;
   previousStatement?: SerializedType;
 }
 
 interface MakeContextArgs {
   initialGlobalScope: AnyMapping<Type>;
-  fetch: ExternalData.FetchFunction;
-  externalData: AnyMapping<InjectableExternalData>;
+  externalData: AnyMapping<Result>;
   inAssignment: string | null;
 }
 
 export const makeContext = ({
   initialGlobalScope = new Map(),
-  fetch = defaultFetch,
   externalData = new Map(),
   inAssignment = null,
 }: Partial<MakeContextArgs> = {}): Context => {
@@ -34,7 +31,6 @@ export const makeContext = ({
     functionDefinitions: new Map(),
     inAssignment,
     nodeTypes: new Map(),
-    fetch,
     externalData: anyMappingToMap(externalData),
   };
 };

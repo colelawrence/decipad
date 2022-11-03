@@ -50,11 +50,7 @@ export {
   isTypeError,
 } from './utils';
 
-export type {
-  AutocompleteName,
-  ErrSpec,
-  InjectableExternalData,
-} from '@decipad/language';
+export type { AutocompleteName, ErrSpec } from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

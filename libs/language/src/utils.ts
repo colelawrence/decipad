@@ -89,10 +89,6 @@ export function indexedCol(
   );
 }
 
-export function fetchData(url: string, contentType?: string) {
-  return n('fetch-data', url, contentType);
-}
-
 export function seq(
   start: AST.Expression,
   end: AST.Expression,

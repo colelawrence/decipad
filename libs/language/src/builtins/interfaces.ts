@@ -1,4 +1,4 @@
-import type { Value } from '../interpreter/Value';
+import type { Value } from '../value';
 import type { Type } from '../type';
 import type { AST } from '../parser';
 import type { Context } from '../infer';

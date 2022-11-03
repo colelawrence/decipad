@@ -1,4 +1,4 @@
-import { ColumnLike, Value } from '../interpreter/Value';
+import { ColumnLike, Value } from '../value';
 
 export type DimensionId = string | number;
 export interface Dimension {

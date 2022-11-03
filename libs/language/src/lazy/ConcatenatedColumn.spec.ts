@@ -1,5 +1,5 @@
 import { getLabelIndex } from '../dimtools';
-import { FilteredColumn } from '../interpreter/Value';
+import { FilteredColumn } from '../value';
 import { ConcatenatedColumn } from './ConcatenatedColumn';
 import { jsCol } from './testUtils';
 

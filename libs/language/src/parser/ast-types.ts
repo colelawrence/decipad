@@ -262,15 +262,6 @@ export interface GenericList {
   end?: Pos;
 }
 
-// Imported data
-
-export interface FetchData {
-  type: 'fetch-data';
-  args: [string, string?];
-  start?: Pos;
-  end?: Pos;
-}
-
 // Function calls and operators
 
 export interface ArgList {
@@ -338,7 +329,6 @@ export type Expression =
   | Sequence
   | Date
   | Table
-  | FetchData
   | Directive
   | MatrixRef
   | Match
@@ -403,7 +393,6 @@ export interface TypeToNode {
   'argument-names': FunctionArgumentNames;
   'function-definition': FunctionDefinition;
   block: Block;
-  'fetch-data': FetchData;
   match: Match;
   matchdef: MatchDef;
   tiered: Tiered;

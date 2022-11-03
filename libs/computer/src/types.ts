@@ -1,10 +1,5 @@
 import type { AnyMapping } from '@decipad/utils';
-import type {
-  AST,
-  InjectableExternalData,
-  Result,
-  Parser,
-} from '@decipad/language';
+import type { AST, Result, Parser } from '@decipad/language';
 import type { VisibleVariables } from './computer/getVisibleVariables';
 
 export interface IdentifiedBlock {
@@ -57,7 +52,7 @@ export interface ComputeRequest {
 }
 
 export type ComputeRequestWithExternalData = ComputeRequest & {
-  externalData?: AnyMapping<InjectableExternalData>;
+  externalData?: AnyMapping<Result.Result>;
 };
 
 // User facing

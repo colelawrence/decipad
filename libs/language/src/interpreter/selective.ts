@@ -4,7 +4,7 @@ import { AST } from '..';
 import { getDefined, getIdentifierString } from '../utils';
 import { evaluateStatement } from './evaluate';
 import { Realm } from './Realm';
-import { UnknownValue, Value } from './Value';
+import { UnknownValue, Value } from '../value';
 
 // (object identity equality) of the returned statements.
 const desiredTargetsToStatements = (

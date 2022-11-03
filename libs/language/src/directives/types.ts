@@ -1,5 +1,5 @@
 import type { AST, SerializedType, Type } from '..';
-import type { Value } from '../interpreter';
+import type { Value } from '../value';
 import { OneResult } from '../interpreter/interpreter-types';
 
 export interface GetTypeCtx {

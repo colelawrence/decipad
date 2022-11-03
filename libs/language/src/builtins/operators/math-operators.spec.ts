@@ -1,5 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import { fromJS } from '../../interpreter/Value';
+import { fromJS } from '../../value';
 import { InferError, build as t } from '../../type';
 import { col, c, n, l, F, U } from '../../utils';
 import { mathOperators, mathOperators as operators } from './math-operators';

@@ -1,5 +1,5 @@
 import { createLazyOperation } from '.';
-import { fromJS, getColumnLike } from '../interpreter/Value';
+import { fromJS, getColumnLike } from '../value';
 import { build } from '../type';
 import { EmptyColumn } from './EmptyColumn';
 

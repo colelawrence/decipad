@@ -4,7 +4,7 @@ import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
 import Fraction from '@decipad/fraction';
 /* eslint-enable import/no-extraneous-dependencies */
-import { DateValue } from './src/interpreter/Value';
+import { DateValue } from './src/value/Value';
 import { stringifyDate } from './src/date';
 
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";

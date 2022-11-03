@@ -1,5 +1,5 @@
 import { toFraction } from '@decipad/fraction';
-import { fromJS } from '../interpreter/Value';
+import { fromJS } from '../value';
 import { F, U, u } from '../utils';
 import { number } from '../type/build';
 import { autoconvertArguments, autoconvertResult } from './autoconvert';

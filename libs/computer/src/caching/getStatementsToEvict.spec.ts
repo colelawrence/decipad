@@ -1,4 +1,4 @@
-import { AST, InjectableExternalData, astNode } from '@decipad/language';
+import { AST, astNode, Result } from '@decipad/language';
 
 import { anyMappingToMap } from '@decipad/utils';
 import {
@@ -279,10 +279,10 @@ describe('evictCache', () => {
 
   it('evicts blocks if the external data changed', () => {
     const externalDataMap1 = anyMappingToMap({
-      extDataId: 1 as unknown as InjectableExternalData,
+      extDataId: 1 as unknown as Result.Result,
     });
     const externalDataMap2 = anyMappingToMap({
-      extDataId: 2 as unknown as InjectableExternalData,
+      extDataId: 2 as unknown as Result.Result,
     });
 
     const useExternalData: AST.Block[] = [

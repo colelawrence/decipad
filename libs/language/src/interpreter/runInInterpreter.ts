@@ -1,0 +1,38 @@
+import { getDefined } from '@decipad/utils';
+import type { AST } from '..';
+import { block } from '../utils';
+import { inferProgram } from '../infer';
+import { evaluate, Realm, Interpreter } from './index';
+import { evaluateTargets } from './selective';
+// TODO replace these with the ones in src/run, or move them there
+
+export const run = async (
+  program: AST.Block[],
+  desiredTargets: Array<string | number | [number, number]>,
+  realm?: Realm
+): Promise<Interpreter.OneResult[]> => {
+  realm = realm ?? new Realm(await inferProgram(program));
+
+  return (await evaluateTargets(program, desiredTargets, realm)).map((v) => {
+    return v.getData();
+  });
+};
+
+export const runOne = async (statement: AST.Statement, realm?: Realm) => {
+  realm = realm ?? new Realm(await inferProgram([block(statement)]));
+
+  const value = await evaluate(realm, statement);
+  return value.getData();
+};
+
+export const runBlock = async (block: AST.Block, realm?: Realm) => {
+  realm = realm ?? new Realm(await inferProgram([block]));
+
+  let last;
+  for (const stmt of block.args) {
+    // eslint-disable-next-line no-await-in-loop
+    last = await evaluate(realm, stmt);
+  }
+
+  return getDefined(last, 'Unexpected empty block').getData();
+};

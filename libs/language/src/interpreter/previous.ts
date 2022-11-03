@@ -1,6 +1,6 @@
 // Accumulate values into a list by consuming an async iterable.
 
-import { Value } from './Value';
+import { Value } from '../value';
 import { Realm } from './Realm';
 
 // Accumulates values into an array by consuming async iterable of values.

@@ -1,9 +1,8 @@
 /* istanbul ignore file: just config and re-export */
 import { operators } from './builtins';
-import { Value } from './interpreter/Value';
-import { build as t, SerializedType, serializeType, Type, Unit } from './type';
+import type { Result } from './result';
+import { build as t, SerializedType, serializeType, Unit } from './type';
 
-export { ExternalData } from './data';
 export { parseUTCDate, stringifyDate, Time } from './date';
 export {
   identifierRegExpGlobal,
@@ -21,24 +20,16 @@ export {
   makeContext,
 } from './infer';
 export type { Context } from './infer';
+export type { ColumnLike, Value } from './value';
+export { isColumnLike, CompareValues, getColumnLike } from './value';
 export {
-  CompareValues,
   evaluateStatement,
-  isColumnLike,
   Realm,
   runBlock,
   RuntimeError,
 } from './interpreter';
-export type { ColumnLike, Interpreter, Value } from './interpreter';
-export {
-  Column,
-  DateValue,
-  fromJS,
-  Range,
-  Row,
-  Scalar,
-  Table,
-} from './interpreter/Value';
+export type { Interpreter } from './interpreter';
+export { Column, DateValue, fromJS, Range, Row, Scalar, Table } from './value';
 export {
   AST,
   parse,
@@ -86,11 +77,7 @@ export {
 } from './utils';
 export type { Unit };
 
-export interface InjectableExternalData {
-  type: Type;
-  value: Value;
-}
-export type ExternalDataMap = Map<string, InjectableExternalData>;
+export type ExternalDataMap = Map<string, Result>;
 
 export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';

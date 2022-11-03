@@ -9,7 +9,7 @@ import {
   fromJS,
   FilteredColumn,
   MappedColumn,
-} from './Value';
+} from '.';
 import { getLabelIndex } from '../dimtools';
 
 it('can get from JS for testing', () => {

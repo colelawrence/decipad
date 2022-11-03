@@ -2,7 +2,7 @@ import FFraction from '@decipad/fraction';
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
-import { Value, fromJS } from '../interpreter/Value';
+import { Value, fromJS } from '../value';
 import { getDefined } from '../utils';
 import { Realm, RuntimeError } from '../interpreter';
 import { convertToMultiplierUnit, Type } from '../type';

@@ -9,7 +9,7 @@ import { Context } from './context';
 export function inferFunctionDefinition(
   ctx: Context,
   statement: AST.FunctionDefinition
-): Type | PromiseLike<Type> {
+): Type {
   const [name, args] = statement.args;
   const fName = getIdentifierString(name);
 

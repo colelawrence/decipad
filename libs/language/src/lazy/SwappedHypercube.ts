@@ -1,5 +1,5 @@
 import { chooseFirst } from '../dimtools/common';
-import { ColumnLike } from '../interpreter/Value';
+import { ColumnLike } from '../value';
 import { implementColumnLike } from './implementColumnLike';
 import { Dimension, MinimalHypercube } from './types';
 

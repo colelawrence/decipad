@@ -3,7 +3,7 @@ import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 
 import { Realm } from './Realm';
-import { FractionValue } from './Value';
+import { FractionValue } from '../value';
 
 import { InferError } from '../type';
 

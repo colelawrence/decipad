@@ -5,15 +5,15 @@ import Fraction, {
 } from '@decipad/fraction';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
-import { RuntimeError } from './RuntimeError';
 import {
+  RuntimeError,
   Value,
   FractionValue,
   StringValue,
   BooleanValue,
   DateValue,
   isColumnLike,
-} from './Value';
+} from '.';
 
 export type CompareResult = -1 | 0 | 1;
 

@@ -1,8 +1,7 @@
 import { getDefined } from '@decipad/utils';
-import { Value } from '../interpreter';
 import { InferError, Type, build as t } from '../type';
 import { SwappedHypercube } from '../lazy';
-import { getColumnLike } from '../interpreter/Value';
+import { getColumnLike, Value } from '../value';
 import { chooseFirst, deLinearizeType, linearizeType } from './common';
 
 export const dimSwapTypes = (dominantIndexName: string, type: Type) => {

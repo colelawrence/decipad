@@ -4,7 +4,7 @@ import { equalOrUnknown } from '../utils';
 import { Type } from '..';
 import { getSpecificity } from '../date';
 import { Interpreter } from '../interpreter';
-import { Unknown } from '../interpreter/Unknown';
+import { Unknown } from '../value';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 
 function validate(
