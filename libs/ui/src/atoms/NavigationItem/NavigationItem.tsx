@@ -17,6 +17,7 @@ const styles = css(p14Regular, {
 
   display: 'flex',
   alignItems: 'center',
+  columnGap: '4px',
 
   clipPath: 'inset(0 -8px 0 -8px round 8px)',
   ':hover, :focus': activeStyles,
