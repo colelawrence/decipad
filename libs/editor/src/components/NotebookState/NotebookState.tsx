@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useCallback } from 'react';
 import { BehaviorSubject, debounceTime } from 'rxjs';
-import { useTEditorRef } from '@decipad/editor-types';
+import { useTPlateEditorState } from '@decipad/editor-types';
 import { useIsOffline } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { NotebookState as UINotebookState } from '@decipad/ui';
@@ -22,7 +22,8 @@ export const NotebookState: FC<NotebookStateProps> = ({ isSavedRemotely }) => {
     return () => sub.unsubscribe();
   }, [isSavedRemotely]);
 
-  const editor = useTEditorRef();
+  // State editor because this component needs to re-render on state changes.
+  const editor = useTPlateEditorState();
   const readOnly = useIsEditorReadOnly();
 
   const canUndo = !!editor.undoManager?.canUndo?.();
