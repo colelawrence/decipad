@@ -27,10 +27,10 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
   concatMap,
-  debounceTime,
   distinctUntilChanged,
   map,
   shareReplay,
+  throttleTime,
 } from 'rxjs/operators';
 import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
@@ -89,7 +89,10 @@ export class Computer {
       .pipe(
         combineLatestWith(this.externalData),
         // Debounce to give React an easier time
-        debounceTime(this.requestDebounceMs),
+        throttleTime(this.requestDebounceMs, undefined, {
+          leading: false,
+          trailing: true,
+        }),
         map(([computeReq, externalData]) => ({ ...computeReq, externalData })),
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
