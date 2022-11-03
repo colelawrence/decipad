@@ -1,6 +1,7 @@
 import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
+import { track } from '@decipad/backend-analytics';
 import { isAuthenticatedAndAuthorized } from '../authorization';
 
 export const setPadPublic = async (
@@ -9,7 +10,7 @@ export const setPadPublic = async (
   context: GraphqlContext
 ): Promise<Pad> => {
   const resource = `/pads/${id}`;
-  await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+  const user = await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
   const data = await tables();
   const pad = await data.pads.get({ id });
   if (!pad) {
@@ -17,5 +18,9 @@ export const setPadPublic = async (
   }
   pad.isPublic = isPublic;
   await data.pads.put(pad);
+
+  const event = isPublic ? 'notebook published' : 'notebook unpublished';
+  await track({ userId: user.id, event }, context);
+
   return pad;
 };
