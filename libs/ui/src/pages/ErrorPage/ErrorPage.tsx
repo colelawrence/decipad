@@ -4,12 +4,10 @@ import { Button } from '../../atoms';
 import { gridTile } from '../../images';
 import {
   banner,
-  offBlack,
-  grey200,
-  grey400,
-  grey50,
+  cssVar,
   largestDesktop,
   lavender000,
+  offBlack,
   p16Regular,
   p18Regular,
   setCssVar,
@@ -25,20 +23,29 @@ const styles = css({
   justifyItems: 'center',
   textAlign: 'center',
 
+  position: 'absolute',
+  zIndex: 1000,
+  minWidth: '100%',
+  minHeight: '100%',
+  left: 0,
+  right: 0,
+  top: 0,
+
   background: `
     radial-gradient(
       ellipse at center,
-      ${grey50.rgb} 0%,
+      ${cssVar('tintedBackgroundColor')} 0%,
       transparent 100%
     ),
     center repeat url(${gridTile}),
     linear-gradient(
-      180deg, ${grey50.rgb} 30.41%, ${grey200.rgb} 90.69%
+      180deg, ${cssVar('tintedBackgroundColor')} 30.41%, ${cssVar(
+    'bubbleBackground'
+  )} 90.69%
     )
   `,
 });
 
-// TODO no dark mode on this page atm
 const headingStyles = css(banner, setCssVar('currentTextColor', offBlack.rgb));
 const subHeadingStyles = css(
   p18Regular,
@@ -47,7 +54,7 @@ const subHeadingStyles = css(
 );
 const errorCodeStyles = css(
   p16Regular,
-  setCssVar('currentTextColor', grey400.rgb),
+  setCssVar('currentTextColor', cssVar('weakerTextColor')),
   { paddingTop: '8px' }
 );
 const buttonStyles = css({ paddingTop: '36px' });
