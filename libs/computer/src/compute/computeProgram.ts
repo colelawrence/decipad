@@ -3,7 +3,6 @@ import {
   buildType as t,
   evaluateStatement,
   inferStatement,
-  // prettyPrintAST,
   RuntimeError,
   serializeResult,
   validateResult,
@@ -66,7 +65,9 @@ const computeStatement = async (
       }
       return serializeResult(valueType, value?.getData());
     },
-    visibleVariables: getVisibleVariables(program, blockId, realm.inferContext),
+    get visibleVariables() {
+      return getVisibleVariables(program, blockId, realm.inferContext);
+    },
   };
   return [result, value];
 };
