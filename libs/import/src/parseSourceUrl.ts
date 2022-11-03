@@ -13,6 +13,7 @@ export const parseSourceUrl = (
     default:
       return {
         isRange: false,
+        userUrl: url,
       };
   }
 };

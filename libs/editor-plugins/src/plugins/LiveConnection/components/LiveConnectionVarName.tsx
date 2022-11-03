@@ -29,15 +29,17 @@ export const LiveConnectionVarName: PlateComponent = ({
     const source = parent?.[0].source ?? '';
     const parentUrl = getDefined(parent?.[0].url);
 
-    const sourceParams: SourceUrlParseResponse =
-      (source && parentUrl && parseSourceUrl(source, parentUrl)) || {};
+    const sourceParams: SourceUrlParseResponse = (source &&
+      parentUrl &&
+      parseSourceUrl(source, parentUrl)) || { userUrl: parentUrl };
 
-    const { isRange, range, subsheetName } = sourceParams;
-    const rangeExplanation = `(${subsheetName}${
-      isRange ? `, from ${range?.join(' to ')}` : ''
-    })`;
+    const { isRange, range, subsheetName, userUrl } = sourceParams;
+    const rangeExplanation =
+      subsheetName && subsheetName !== '0'
+        ? `(${subsheetName}${isRange ? `, from ${range?.join(' to ')}` : ''})`
+        : '';
     return {
-      url: parentUrl,
+      url: userUrl,
       sourceName: `${pluralize.singular(source)} ${rangeExplanation}`,
     };
   }, [parent]);

@@ -48,4 +48,5 @@ export interface SourceUrlParseResponse {
   subsheetName?: string;
   isRange?: boolean;
   range?: string[];
+  userUrl: string;
 }

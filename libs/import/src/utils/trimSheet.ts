@@ -9,6 +9,10 @@ interface NeedsTrimming {
 const isEmpty = (cell: SpreadsheetValue): boolean =>
   typeof cell === 'string' && cell.trim().length === 0;
 
+const columnIsNotEmpty = (column: SpreadsheetColumn): boolean => {
+  return column.find((cell) => !isEmpty(cell)) != null;
+};
+
 const columnNeedsTrimming = (column: SpreadsheetColumn): NeedsTrimming => {
   let alreadyHasData = false;
   let trimTopRowCount = 0;
@@ -79,7 +83,8 @@ const createTrimmer = ({
 };
 
 export const trimSheet = (sheet: Sheet): Sheet => {
-  const trimmingNeeds = sheet.values.map(columnNeedsTrimming);
+  const columns = sheet.values.filter(columnIsNotEmpty);
+  const trimmingNeeds = columns.map(columnNeedsTrimming);
   const finalTrimTopRowCount = Math.min(
     ...trimmingNeeds.map((tn) => tn.trimTopRowCount)
   );
@@ -95,6 +100,6 @@ export const trimSheet = (sheet: Sheet): Sheet => {
     finalRowCount,
   });
   return {
-    values: sheet.values.map(trimmer),
+    values: columns.map(trimmer),
   };
 };

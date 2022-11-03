@@ -124,15 +124,15 @@ const importOneGsheet = async (
     options
   )) as Result.Result;
 
-  return [
-    {
-      meta: {
-        title: meta.properties.title,
-        importedAt: new Date(),
-      },
-      result,
+  const importResult = {
+    meta: {
+      title: meta.properties.title,
+      importedAt: new Date(),
     },
-  ];
+    result,
+  };
+
+  return [importResult];
 };
 
 export const importGsheet = async (
