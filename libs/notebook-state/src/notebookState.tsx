@@ -17,7 +17,7 @@ const LOAD_TIMEOUT_MS = 5000;
 
 const initialState: Omit<
   NotebookState,
-  'initComputer' | 'initEditor' | 'destroy'
+  'initComputer' | 'initEditor' | 'destroy' | 'setInitialFocusDone'
 > = {
   syncClientState: 'idle',
   editor: undefined,
@@ -27,6 +27,7 @@ const initialState: Omit<
   loadedFromRemote: false,
   timedOutLoadingFromRemote: false,
   hasLocalChanges: false,
+  initialFocusDone: false,
 };
 
 const createStore = () =>
@@ -95,6 +96,9 @@ const createStore = () =>
         timedOutLoadingFromRemote: false,
         hasLocalChanges: false,
       });
+    },
+    setInitialFocusDone: () => {
+      set({ initialFocusDone: true });
     },
     destroy: () => {
       const { syncClientState, editor } = get();

@@ -8,11 +8,12 @@ import {
   isElement,
   toDOMNode,
 } from '@udecode/plate';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { BaseSelection, Path, Selection } from 'slate';
 import { MyEditor } from '@decipad/editor-types';
 import { getPersistedSelection } from '@decipad/editor-plugins';
 import { getPointSafe } from '@decipad/editor-utils';
+import { useNotebookState } from '@decipad/notebook-state';
 
 const defaultSelection = [1] as Path;
 
@@ -35,13 +36,11 @@ const getSelection = (editor: MyEditor): BaseSelection => {
 };
 
 export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
-  // cursor
   const selection = useEditorSelector((ed) => ed.selection);
+  const { initialFocusDone, setInitialFocusDone } = useNotebookState();
 
-  // place the cursor on the notebook
-  const setInitialSelection = useRef(false);
   useEffect(() => {
-    if (!setInitialSelection.current && editor && loaded) {
+    if (!initialFocusDone && editor && loaded) {
       const initialSel = getSelection(editor);
       if (
         initialSel &&
@@ -51,7 +50,7 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
         hasNode(editor, initialSel?.focus.path) &&
         !selection
       ) {
-        setInitialSelection.current = true;
+        setInitialFocusDone();
 
         setTimeout(() => {
           try {
@@ -91,5 +90,5 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
         }, 0);
       }
     }
-  }, [editor, loaded, selection]);
+  }, [editor, initialFocusDone, loaded, selection, setInitialFocusDone]);
 };

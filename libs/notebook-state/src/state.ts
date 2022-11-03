@@ -21,4 +21,6 @@ export interface NotebookState {
   timedOutLoadingFromRemote: boolean;
   hasLocalChanges: boolean;
   notebookHref?: string;
+  setInitialFocusDone: () => void;
+  initialFocusDone: boolean;
 }
