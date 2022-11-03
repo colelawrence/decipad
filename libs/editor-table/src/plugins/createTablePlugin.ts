@@ -76,7 +76,7 @@ export const createTablePlugin = (
     // TODO: enable this
     // createExtraRowPlaceholderPlugin(),
     createCellFormulaShortcutPlugin(),
-    createNormalizeTableFormulaPlugin(),
+    createNormalizeTableFormulaPlugin(computer),
     createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
     createNormalizeTablesPlugin(),
     {

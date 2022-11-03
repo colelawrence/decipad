@@ -122,8 +122,8 @@ export const functionPlaceholder = (
   });
 
 export const nothing = () =>
-  produce(new Type(), (fType) => {
-    fType.nothingness = true;
+  produce(new Type(), (nothingType) => {
+    nothingType.nothingness = true;
   });
 
 export const anything = () =>

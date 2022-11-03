@@ -67,7 +67,7 @@ describe.skip('notebook inline numbers', () => {
     await createCalculationBlockBelow('100 + cookies ');
 
     const line = await getCodeLineContent(lineNo);
-    expect(line).toBe('100 + cookies ');
+    expect(line).toEqual('100 + cookies ');
 
     const resultEl = await getResult(lineNo);
     const result = await resultEl.textContent();

@@ -26,6 +26,7 @@ import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
+import { useOnBlurNormalize } from '../hooks';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CODE_LINE);
@@ -60,6 +61,9 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const editor = useTEditorRef();
 
   useCodeLineClickReference(editor, selected, codeLineContent);
+
+  // transform variable references into smart refs on blur
+  useOnBlurNormalize(editor, element);
 
   const computer = useComputer();
   const { id: lineId } = element;

@@ -1,17 +1,28 @@
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import { Computer } from '@decipad/computer';
+import { createNormalizerPlugin } from '@decipad/editor-plugins';
 import {
+  ELEMENT_SMART_REF,
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
+  MyEditor,
+  MyNodeEntry,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
-import { hasNode, insertNodes, deleteText } from '@udecode/plate';
+import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import {
+  hasNode,
+  insertNodes,
+  deleteText,
+  getNodeChildren,
+  isElement,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
-export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
-  name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
-  elementType: ELEMENT_TABLE,
-  plugin: (editor) => (entry) => {
+export const normalizeTableFormula =
+  (computer: Computer) =>
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
     const [element, path] = entry;
     assertElementType(element, ELEMENT_TABLE);
 
@@ -52,8 +63,8 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
 
     // delete formulas that don't have a column
     for (const formula of formulas) {
+      const formulaPath = [...path, 0, caption.children.indexOf(formula)];
       if (!columnIdToHeader.has(formula.columnId)) {
-        const formulaPath = [...path, 0, caption.children.indexOf(formula)];
         if (hasNode(editor, formulaPath)) {
           deleteText(editor, {
             at: formulaPath,
@@ -61,10 +72,30 @@ export const createNormalizeTableFormulaPlugin = createNormalizerPluginFactory({
           return true;
         }
       }
+      for (const lineChild of getNodeChildren(editor, formulaPath)) {
+        const [lineChildNode, lineChildPath] = lineChild;
+        if (
+          !isElement(lineChildNode) ||
+          lineChildNode.type === ELEMENT_SMART_REF
+        ) {
+          if (
+            isFlagEnabled('EXPR_REFS') &&
+            normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
+          ) {
+            return true;
+          }
+        }
+      }
     }
 
     // TODO: sort formulas like the columns
 
     return false;
-  },
-});
+  };
+
+export const createNormalizeTableFormulaPlugin = (computer: Computer) =>
+  createNormalizerPlugin({
+    name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
+    elementType: ELEMENT_TABLE,
+    plugin: normalizeTableFormula(computer),
+  });

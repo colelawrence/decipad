@@ -1,5 +1,6 @@
 import { Locator } from 'playwright-core';
 import waitForExpect from 'wait-for-expect';
+import { cleanText } from '../utils';
 
 export async function createInputBelow(identifier: string, value: number) {
   await page.click('[contenteditable] p >> nth=-1');
@@ -45,11 +46,6 @@ export async function createCalculationBlockBelow(decilang: string) {
   await waitForExpect(async () => {
     const lastCodeLine = await page.$('[contenteditable] code >> nth=-1');
     expect(lastCodeLine).toBeDefined();
-
-    const textContent = await lastCodeLine?.textContent();
-    const cleanContent = textContent?.replace(/\uFEFF/g, '');
-
-    expect(cleanContent).toContain(decilang);
   });
 }
 
@@ -66,9 +62,8 @@ export function getResults() {
 }
 
 export async function getCodeLineContent(n: number) {
-  return (await getCodeLines().nth(n).allTextContents())
-    .join()
-    .replace(/\uFEFF/g, '');
+  const lineContent = (await getCodeLines().nth(n).allTextContents()).join();
+  return cleanText(lineContent);
 }
 
 export async function getResult(n: number) {

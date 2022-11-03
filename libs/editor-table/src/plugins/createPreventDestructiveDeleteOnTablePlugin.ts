@@ -1,5 +1,9 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
-import { BlockElement, ELEMENT_TABLE } from '@decipad/editor-types';
+import {
+  BlockElement,
+  ELEMENT_TABLE,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+} from '@decipad/editor-types';
 import {
   getBlockAbove,
   getEndPoint,
@@ -16,9 +20,14 @@ export const createPreventDestructiveDeleteOnTablePlugin =
         const isInsideTable = getBlockAbove<BlockElement>(editor, {
           match: { type: ELEMENT_TABLE },
         });
+        const isInsideTableColumnFormula = getBlockAbove<BlockElement>(editor, {
+          match: { type: ELEMENT_TABLE_COLUMN_FORMULA },
+        });
+
         if (
           !editor.selection ||
           !isCollapsed(editor.selection) ||
+          isInsideTableColumnFormula ||
           !isInsideTable
         ) {
           return false;

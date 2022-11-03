@@ -12,7 +12,6 @@ import {
 import { insertText } from '@udecode/plate';
 import { BaseEditor, Transforms } from 'slate';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
-import { insertSmartRefOrText } from './insertSmartRefOrText';
 
 const compareNames = (a: AutocompleteName, b: AutocompleteName) => {
   const aScore = a.isLocal ? 1 : 0;
@@ -72,17 +71,17 @@ export const AutoCompleteMenu: PlateComponent<{
 
   const onExecuteItem = useCallback(
     (item: MenuItem) => {
-      if (word && showAutoComplete) {
+      if (showAutoComplete) {
         Transforms.select(editor as BaseEditor, variableInfo);
         Transforms.delete(editor as BaseEditor);
       }
-      insertSmartRefOrText(editor, computer, item.identifier);
+      insertText(editor, item.identifier);
 
       if (item.kind !== 'function') {
         insertText(editor, ' ');
       }
     },
-    [computer, editor, showAutoComplete, word, variableInfo]
+    [computer, editor, showAutoComplete, variableInfo]
   );
 
   const identifiers = computer.getNamesDefined$.useWithSelector(

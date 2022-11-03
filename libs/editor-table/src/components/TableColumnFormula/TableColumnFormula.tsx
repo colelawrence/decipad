@@ -1,10 +1,14 @@
+import { useOnBlurNormalize } from '@decipad/editor-components';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   PlateComponent,
+  TableElement,
+  useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import { assertElementType, isElementOfType } from '@decipad/editor-utils';
 import { useResult } from '@decipad/react-contexts';
 import { CodeLine, CodeVariable } from '@decipad/ui';
+import { ELEMENT_TABLE, findNodePath, getAboveNode } from '@udecode/plate';
 import { Node } from 'slate';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 
@@ -15,6 +19,16 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
 
   const isTypeError =
     perhapsErrorTypedResult?.result?.type.kind === 'type-error';
+
+  const editor = useTEditorRef();
+  const path = findNodePath(editor, element)!;
+  const entry = getAboveNode<TableElement>(editor, {
+    at: path,
+    match: (n) => isElementOfType(n, ELEMENT_TABLE),
+  })!;
+
+  // transform variable references in column formulas into smart refs on blur
+  useOnBlurNormalize(editor, element, entry[0]);
 
   return (
     <CodeLine

@@ -42,4 +42,7 @@ export * from './useElementAbove';
 export * from './useNodePath';
 export * from './useNodeText';
 export * from './useTableColumnFormulaResultForColumn';
+export * from './normalizeSmartRefs';
+export * from './generateHash';
+export * from './getAboveNodeSafe';
 export * from './useIsOffline';
