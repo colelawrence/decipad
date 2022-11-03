@@ -25,7 +25,7 @@ import {
   insertText,
   isCollapsed,
 } from '@udecode/plate';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import {
   useCellType,
@@ -119,6 +119,18 @@ export const TableCell: PlateComponent = ({
     [editor, element]
   );
 
+  // When I start editing and the cell type is anything, align right until I unfocus.
+  const [forceAlignRight, setForceAlignRight] = useState(false);
+  useEffect(() => {
+    if (isColumnSelected && cellType?.kind === 'anything') {
+      setForceAlignRight(true);
+    }
+
+    if (!isColumnSelected && forceAlignRight) {
+      setForceAlignRight(false);
+    }
+  }, [cellType?.kind, isColumnSelected, forceAlignRight]);
+
   if (formulaResult != null) {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
@@ -152,7 +164,7 @@ export const TableCell: PlateComponent = ({
       type={cellType}
       value={nodeText}
       onChangeValue={onChangeValue}
-      alignRight={isColumnSelected || isCellAlignRight(cellType)}
+      alignRight={forceAlignRight || isCellAlignRight(cellType)}
       parseError={showParseError ? parseErrorMessage : undefined}
     >
       {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
