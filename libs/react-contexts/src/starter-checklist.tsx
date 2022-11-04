@@ -14,6 +14,7 @@ import { ElementKind } from '@decipad/editor-types';
 import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
 import { cloneDeep } from 'lodash';
 import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 // Restrict to element kinds, or a pretend "duplicate notebook" component
 export type ComponentList = ElementKind | 'duplicateButton' | 'shareButton';
@@ -203,11 +204,13 @@ export const StarterChecklistContextProvider: FC<StarterContextProps> = ({
   const confettiRef = useRef(checklist.confettiUsed);
 
   useEffect(() => {
-    if (checklist.confettiUsed && !confettiRef.current && !checklist.hidden) {
-      confetti({
-        particleCount: 150,
-      });
-      confettiRef.current = true;
+    if (isFlagEnabled('ONBOARDING_CHECKLIST')) {
+      if (checklist.confettiUsed && !confettiRef.current && !checklist.hidden) {
+        confetti({
+          particleCount: 150,
+        });
+        confettiRef.current = true;
+      }
     }
   }, [checklist]);
 
