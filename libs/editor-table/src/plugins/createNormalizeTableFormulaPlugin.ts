@@ -9,7 +9,6 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   hasNode,
   insertNodes,
@@ -79,7 +78,6 @@ export const normalizeTableFormula =
           lineChildNode.type === ELEMENT_SMART_REF
         ) {
           if (
-            isFlagEnabled('EXPR_REFS') &&
             normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
           ) {
             return true;

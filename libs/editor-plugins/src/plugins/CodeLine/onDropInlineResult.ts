@@ -25,7 +25,6 @@ import {
 } from '@decipad/editor-utils';
 import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
 import { getExprRef } from '@decipad/computer';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const onDropInlineResult =
   (editor: MyEditor) => (event: React.DragEvent) => {
@@ -102,17 +101,10 @@ export const onDropInlineResult =
 
           // Paragraphs can have a magic number injected with the pill
           if (block.type === ELEMENT_PARAGRAPH) {
-            if (isFlagEnabled('EXPR_REFS')) {
-              filteredFragment.push({
-                text: getExprRef(blockId), // 🔴
-                [MARK_MAGICNUMBER]: true,
-              });
-            } else if (variable?.variableName) {
-              filteredFragment.push({
-                text: variable.variableName,
-                [MARK_MAGICNUMBER]: true,
-              });
-            }
+            filteredFragment.push({
+              text: getExprRef(blockId), // 🔴
+              [MARK_MAGICNUMBER]: true,
+            });
           }
         }
       });

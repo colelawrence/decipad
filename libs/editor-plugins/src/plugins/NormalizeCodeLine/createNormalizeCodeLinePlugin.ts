@@ -7,7 +7,6 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
 import { createNormalizerPlugin } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
@@ -32,10 +31,7 @@ const normalizeCodeLine =
       }
 
       // add or extend smart refs
-      if (
-        isFlagEnabled('EXPR_REFS') &&
-        normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
-      ) {
+      if (normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)) {
         return true;
       }
 
