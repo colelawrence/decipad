@@ -25,12 +25,17 @@ import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 
 const DEFAULT_INPUT_VALUE = '100$';
-const getInitialInputElement = (
-  kind?: SerializedTypeKind,
+const getInitialInputElement = ({
   caption = '',
   value = '',
-  variant: ElementVariants = 'expression'
-) => {
+  variant = 'expression',
+  kind = 'number',
+}: {
+  caption: string;
+  value: string;
+  variant: ElementVariants;
+  kind: SerializedTypeKind;
+}) => {
   return {
     id: nanoid(),
     type: ELEMENT_VARIABLE_DEF,
@@ -67,12 +72,17 @@ const getVariantAndHolder = (
 export const insertInputBelow = (
   editor: MyEditor,
   path: Path,
-  kind?: SerializedTypeKind
+  kind: SerializedTypeKind = 'number'
 ): void => {
   const [variant, placeholder] = getVariantAndHolder(kind);
   const name = getElementUniqueName(editor, ELEMENT_VARIABLE_DEF, 'Input');
 
-  const input = getInitialInputElement(kind, name, placeholder, variant);
+  const input = getInitialInputElement({
+    kind,
+    caption: name,
+    value: placeholder,
+    variant,
+  });
   const insertPath = requirePathBelowBlock(editor, path);
 
   insertNodes<VariableDefinitionElement>(editor, input, {
