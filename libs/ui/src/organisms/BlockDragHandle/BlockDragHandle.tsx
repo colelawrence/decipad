@@ -5,16 +5,17 @@ import { FC, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,
-  Hide,
-  Show,
   DragHandle,
-  Plus,
   Duplicate,
+  Hide,
   Link,
+  Plus,
+  Show,
 } from '../../icons';
 import { MenuList } from '../../molecules';
 import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const gridStyles = once(() =>
   css({
@@ -131,7 +132,7 @@ export const BlockDragHandle = ({
   );
 
   return (
-    <div css={gridStyles()}>
+    <div css={[gridStyles(), hideOnPrint]}>
       {showAddBlock && (
         <Tooltip trigger={plusButton} side="bottom" hoverOnly>
           <span

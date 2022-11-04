@@ -11,6 +11,7 @@ import {
   p12Bold,
   p12Medium,
 } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -202,6 +203,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
     <div
       css={[
         wrapperStyles,
+        hideOnPrint,
         {
           right:
             readOnly && session.status !== 'authenticated' ? '16px' : '64px',

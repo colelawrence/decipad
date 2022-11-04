@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { TextAndIconButton } from '../../atoms';
 import { Chevron, Eye } from '../../icons';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const showMoreButtonWrapperStyles = css({
   display: 'flex',
@@ -37,7 +38,10 @@ export const TableButton: FC<TableButtonProps> = ({
     : captions[0];
 
   return (
-    <div css={showMoreButtonWrapperStyles} contentEditable={false}>
+    <div
+      css={[showMoreButtonWrapperStyles, hideOnPrint]}
+      contentEditable={false}
+    >
       <TextAndIconButton
         text={textToShow}
         onClick={isExpandButton ? handleClick : setState}

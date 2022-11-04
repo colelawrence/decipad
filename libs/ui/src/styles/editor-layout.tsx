@@ -1,6 +1,7 @@
+import { css } from '@emotion/react';
 import { once } from 'ramda';
-import { p14Regular } from '../primitives';
 import { DragHandle } from '../icons';
+import { p14Regular } from '../primitives';
 import { getSvgAspectRatio } from '../utils';
 
 export const slimBlockWidth = 580;
@@ -19,3 +20,9 @@ export const gutterGap = 16;
 export const gutterWidth = once(
   () => `calc(${gutterHandleWidth()} + ${gutterGap}px)`
 );
+
+export const hideOnPrint = css({
+  '@media print': {
+    display: 'none',
+  },
+});

@@ -4,6 +4,7 @@ import { MenuItem } from '../../atoms';
 import { Caret } from '../../icons';
 import { MenuList } from '../../molecules';
 import { p12Regular } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const selectWrapperStyles = css({
   position: 'relative',
@@ -60,9 +61,15 @@ export function Select<T extends string>({
           open={opened}
           onChangeOpen={setOpened}
           trigger={
-            <button css={selectButtonStyles} onClick={onTriggerClick}>
+            <button
+              css={[
+                selectButtonStyles,
+                label === 'Calculate' ? hideOnPrint : null,
+              ]}
+              onClick={onTriggerClick}
+            >
               {label}
-              <span css={triggerStyles}>
+              <span css={[triggerStyles, hideOnPrint]}>
                 <Caret color={caretColor} variant="down" />
               </span>
             </button>

@@ -3,6 +3,7 @@ import { ComponentProps } from 'react';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
 import { HelpButton, MenuList } from '../../molecules';
 import { p12Regular, p14Medium, setCssVar } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const menuItemWrapperStyles = css({
   display: 'flex',
@@ -78,7 +79,7 @@ export const HelpMenu = ({
       root
       dropdown
       trigger={
-        <div css={triggerStyles}>
+        <div css={[triggerStyles, hideOnPrint]}>
           <HelpButton />
         </div>
       }

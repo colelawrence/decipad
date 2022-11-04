@@ -13,6 +13,7 @@ import {
   p14Regular,
   p16Bold,
 } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const wrapperStyles = css({
   width: 356,
@@ -97,7 +98,9 @@ export const StarterChecklist: FC<StarterChecklistProps> = ({
   );
 
   return (
-    <div css={[wrapperStyles, hide && { height: COLLAPSED_HEIGHT }]}>
+    <div
+      css={[wrapperStyles, hideOnPrint, hide && { height: COLLAPSED_HEIGHT }]}
+    >
       <div css={innerStyles}>
         <div css={checklistDropdown} onClick={() => setHide(!hide)}>
           <p>👋 Welcome to Decipad!</p>
