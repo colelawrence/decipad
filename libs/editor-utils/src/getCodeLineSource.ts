@@ -9,18 +9,26 @@ import { isElementOfType } from './isElementOfType';
 
 export const getCodeLineSource = (
   node: CodeLineElement | TableColumnFormulaElement
-) =>
-  node.children
+) => {
+  const childCount = node.children.length;
+  const res = node.children
     .map((c, i) => {
       if (isElementOfType(c, ELEMENT_SMART_REF)) {
-        const needsWhitespace =
+        const needsWhitespaceBefore =
           i >= 1 &&
           (!isText(node.children[i - 1]) ||
             !getNodeString(node.children[i - 1]).endsWith(' '));
+        const needsWhitespaceAfter =
+          i < childCount - 1 &&
+          (!isText(node.children[i + 1]) ||
+            !getNodeString(node.children[i + 1]).startsWith(' '));
 
-        const spc = needsWhitespace ? ' ' : '';
-        return spc + getExprRef(c.blockId);
+        const bspc = needsWhitespaceBefore ? ' ' : '';
+        const aspc = needsWhitespaceAfter ? ' ' : '';
+        return bspc + getExprRef(c.blockId) + aspc;
       }
       return getNodeString(c);
     })
     .join('');
+  return res;
+};

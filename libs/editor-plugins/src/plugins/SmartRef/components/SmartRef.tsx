@@ -31,8 +31,9 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
         at: ReactEditor.findPath(editor as ReactEditor, element),
         match: (node) => isElement(node),
       })?.[0];
-      const hasPrevious =
-        !/\s$/.test(previousStr) || previousElement?.type === ELEMENT_SMART_REF;
+      const hasPrevious = previousStr.length
+        ? /\w$/.test(previousStr)
+        : previousElement?.type === ELEMENT_SMART_REF;
 
       const nextNode = getNextNode<MyElement>(editor, {
         at: ReactEditor.findPath(editor as ReactEditor, element),
@@ -42,8 +43,9 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
         at: ReactEditor.findPath(editor as ReactEditor, element),
         match: (node) => isElement(node),
       })?.[0];
-      const hasNext =
-        !/^\s/.test(nextStr) || nextElement?.type === ELEMENT_SMART_REF;
+      const hasNext = nextStr.length
+        ? /^\w/.test(nextStr)
+        : nextElement?.type === ELEMENT_SMART_REF;
 
       return {
         hasPrevious,
@@ -58,8 +60,7 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   const [lastVariableName, setLastVariableName] = useState(() => symbolName);
   const errorMessage =
     (symbolName == null &&
-      `The variable ${
-        (lastVariableName != null && `"${lastVariableName}"`) || ''
+      `The variable ${(lastVariableName != null && `"${lastVariableName}"`) || ''
       } is no longer defined`) ||
     undefined;
 

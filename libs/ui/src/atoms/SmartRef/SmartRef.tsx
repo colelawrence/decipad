@@ -17,12 +17,12 @@ const smartRefWrapperStyles = (hasPrevious: boolean, hasNext: boolean) =>
   css({
     ...(hasPrevious
       ? {
-          marginLeft: '3px',
+          marginLeft: '1px',
         }
       : {}),
     ...(hasNext
       ? {
-          marginRight: '3px',
+          marginRight: '1px',
         }
       : {}),
     display: 'inline-flex',
