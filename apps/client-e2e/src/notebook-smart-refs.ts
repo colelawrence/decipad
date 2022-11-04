@@ -1,9 +1,8 @@
 import { createCalculationBlockBelow } from './page-utils/Block';
 import { keyPress, setUp, waitForEditorToLoad } from './page-utils/Pad';
-import { cleanText } from './utils';
+import { cleanText, timeout } from './utils';
 
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip('normalize smart refs', () => {
+describe('normalize smart refs', () => {
   beforeAll(setUp);
   beforeAll(waitForEditorToLoad);
 
@@ -26,6 +25,11 @@ describe.skip('normalize smart refs', () => {
       .length;
     expect(newSrCount).toBe(1); // no new smart refs
   });
+});
+
+describe('smart refs in code tables', () => {
+  beforeAll(setUp);
+  beforeAll(waitForEditorToLoad);
 
   it('no infinite loops on code table column declaration', async () => {
     await createCalculationBlockBelow('A = 5');
@@ -34,13 +38,14 @@ describe.skip('normalize smart refs', () => {
     await createCalculationBlockBelow('Tab = {Col1 = A, Col2 = A}');
     await page.keyboard.press('Enter');
 
+    await timeout(10000);
+
     const srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(2); // no new smart refs
+    expect(srCount).toBe(2);
   });
 });
 
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip('deleting smart refs', () => {
+describe('deleting smart refs', () => {
   beforeAll(setUp);
   beforeAll(waitForEditorToLoad);
 
