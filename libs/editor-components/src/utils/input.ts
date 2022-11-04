@@ -64,7 +64,7 @@ const getInitialInputElement = ({
 const getVariantAndHolder = (
   kind: SerializedTypeKind | undefined
 ): [ElementVariants, string] => {
-  if (kind === 'boolean') return ['toggle', ''];
+  if (kind === 'boolean') return ['toggle', 'false'];
   if (kind === 'date') return ['date', '2022-11-03'];
   return ['expression', DEFAULT_INPUT_VALUE];
 };

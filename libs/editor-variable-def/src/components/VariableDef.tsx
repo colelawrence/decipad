@@ -151,7 +151,6 @@ export const VariableDef: PlateComponent = ({
   if (deleted) {
     return <></>;
   }
-
   const { color = defaultColor } = element.children[0];
 
   return (

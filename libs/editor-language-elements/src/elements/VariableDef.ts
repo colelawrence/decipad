@@ -26,7 +26,11 @@ export const VariableDef: InteractiveLanguageElement = {
       const variableName = getNodeString(children[0]);
       let expression: string | AST.Expression = getNodeString(children[1]);
 
-      if (element.variant === 'expression') {
+      if (
+        element.variant === 'expression' ||
+        element.variant === 'date' ||
+        element.variant === 'toggle'
+      ) {
         const { type, coerced } = await inferType(computer, expression, {
           type: element.coerceToType,
         });
