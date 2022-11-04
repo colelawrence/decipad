@@ -1,3 +1,5 @@
+import { ImageElement, MyElement, PlateComponent } from '@decipad/editor-types';
+import { css } from '@emotion/react';
 import {
   Box,
   Caption,
@@ -8,9 +10,8 @@ import {
   Resizable,
 } from '@udecode/plate';
 import { ComponentProps, FC, ReactNode } from 'react';
-import { ImageElement, MyElement, PlateComponent } from '@decipad/editor-types';
-import { css } from '@emotion/react';
 import { useFocused, useSelected } from 'slate-react';
+import { Div, FigCaption } from '../../utils/resizing';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
 import { FloatingMedia } from '../FloatingMedia/FloatingMedia';
 import {
@@ -24,7 +25,6 @@ import {
   resizableSelectedStyles,
   resizableStyles,
 } from '../MediaEmbed/styles';
-import { Div, FigCaption } from '../../utils/resizing';
 
 export const imgStyles = css({
   display: 'block',
@@ -103,7 +103,7 @@ export const Image: ImageComponent = ({
             >
               <Caption.Textarea
                 readOnly={readOnly}
-                css={captionTextareaStyles}
+                css={[captionTextareaStyles]}
                 placeholder="Description of your image..."
               />
             </Caption.Root>

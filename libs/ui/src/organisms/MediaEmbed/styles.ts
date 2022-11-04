@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cssVar } from '../../primitives/index';
+import { cssVar, p14Regular } from '../../primitives';
 
 export const rootStyles = css({
   padding: '10px 10px',
@@ -25,13 +25,15 @@ export const captionStyles = css({
 });
 
 export const captionTextareaStyles = css({
+  ...p14Regular,
   padding: '0',
   marginTop: 8,
   width: '100%',
   borderStyle: 'none',
   resize: 'none',
-  font: 'inherit',
+
   color: 'inherit',
+  overflowY: 'hidden',
   backgroundColor: 'inherit',
   textAlign: 'center',
   ':focus': { '::placeholder': { opacity: 0 } },
