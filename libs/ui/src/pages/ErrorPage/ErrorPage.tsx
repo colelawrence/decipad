@@ -26,7 +26,7 @@ const styles = css({
   position: 'absolute',
   zIndex: 1000,
   minWidth: '100%',
-  minHeight: '100%',
+  minHeight: '100vh',
   left: 0,
   right: 0,
   top: 0,
