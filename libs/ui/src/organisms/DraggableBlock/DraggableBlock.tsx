@@ -68,6 +68,8 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly showLine?: boolean;
 
   readonly children: ReactNode;
+
+  readonly disableDrag?: boolean;
 }
 export const DraggableBlock = ({
   isSelected = false,
@@ -91,6 +93,8 @@ export const DraggableBlock = ({
 
   blockKind,
   children,
+
+  disableDrag = false,
 
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
@@ -162,18 +166,20 @@ export const DraggableBlock = ({
             draggableCss,
           ]}
         >
-          <BlockDragHandle
-            menuOpen={menuOpen}
-            isHidden={isHidden}
-            onChangeMenuOpen={setMenuOpen}
-            onPlus={onPlus}
-            onDelete={onDelete}
-            onDuplicate={onDuplicate}
-            onShowHide={onShowHide}
-            showEyeLabel={showEyeLabel}
-            showAddBlock={!isHidden}
-            onCopyHref={onCopyHref}
-          />
+          {!disableDrag && (
+            <BlockDragHandle
+              menuOpen={menuOpen}
+              isHidden={isHidden}
+              onChangeMenuOpen={setMenuOpen}
+              onPlus={onPlus}
+              onDelete={onDelete}
+              onDuplicate={onDuplicate}
+              onShowHide={onShowHide}
+              showEyeLabel={showEyeLabel}
+              showAddBlock={!isHidden}
+              onCopyHref={onCopyHref}
+            />
+          )}
         </div>
         <div
           css={[

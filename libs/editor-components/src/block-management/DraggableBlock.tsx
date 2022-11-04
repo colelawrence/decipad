@@ -50,7 +50,10 @@ type DraggableBlockProps = {
   readonly element: MyElement;
   readonly children: ReactNode;
   readonly [key: string]: unknown; // For organisms.DraggableBlock
-} & Pick<ComponentProps<typeof UIDraggableBlock>, 'blockKind' | 'onDelete'> &
+} & Pick<
+  ComponentProps<typeof UIDraggableBlock>,
+  'blockKind' | 'disableDrag' | 'onDelete'
+> &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 
 type OnDelete = (() => void) | false | undefined;
