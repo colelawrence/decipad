@@ -1,7 +1,7 @@
 import { MyEditor, MyElement, PlateComponent } from '@decipad/editor-types';
 import { getRangeSafe } from '@decipad/editor-utils';
 import {
-  useEditorSelector,
+  useEditorChangeState,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { Paragraph as UIParagraph, ParagraphPlaceholder } from '@decipad/ui';
@@ -36,12 +36,16 @@ export const Paragraph: PlateComponent = ({
   // Performance improvement as opposed to use something like `useTEditorState()`.
   // We couldn't use `useTEditorRef()` because we need the paragraph to re-render
   // when the amount of editor children change.
-  const showPlaceHolder = useEditorSelector(
+  const showPlaceHolder = useEditorChangeState(
     (editor) =>
       (editor.children.length === 2 && isElementEmpty(editor, element)) ||
       (isElementEmpty(editor, element) &&
         isSelected(editor, element) &&
-        !isSelectionExpanded(editor))
+        !isSelectionExpanded(editor)),
+    false,
+    {
+      debounceTimeMs: 0,
+    }
   );
 
   const placeholder =
