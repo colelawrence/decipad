@@ -86,7 +86,7 @@ const reducer = (
   if (newState.items.filter((n) => n.state).length === newState.items.length) {
     newState.confettiUsed = true;
   }
-  if (item) {
+  if (item && isFlagEnabled('ONBOARDING_CHECKLIST')) {
     newState.onStateChange({
       type: 'newGoal',
       goalName: item.text,
@@ -254,7 +254,9 @@ export const StarterChecklistContextProvider: FC<StarterContextProps> = ({
 
   const hideChecklist = useCallback(() => {
     checklistDispatch({ type: 'hide checklist', goal: 'Hide checklist' });
-    onStateChange({ type: 'hide' });
+    if (isFlagEnabled('ONBOARDING_CHECKLIST')) {
+      onStateChange({ type: 'hide' });
+    }
   }, [onStateChange]);
 
   return (
