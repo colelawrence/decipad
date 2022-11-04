@@ -1,19 +1,19 @@
 /* eslint-disable no-param-reassign */
-// import { Computer } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
-// import { isFlagEnabled } from '@decipad/feature-flags';
+import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
 import { createNormalizerPlugin } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 const normalizeCodeLine =
-  (/* computer: Computer */) => (editor: MyEditor) => (entry: MyNodeEntry) => {
+  (computer: Computer) => (editor: MyEditor) => (entry: MyNodeEntry) => {
     const [node, path] = entry;
 
     assertElementType(node, ELEMENT_CODE_LINE);
@@ -32,12 +32,12 @@ const normalizeCodeLine =
       }
 
       // add or extend smart refs
-      // if (
-      //   isFlagEnabled('EXPR_REFS') &&
-      //   normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
-      // ) {
-      //   return true;
-      // }
+      if (
+        isFlagEnabled('EXPR_REFS') &&
+        normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
+      ) {
+        return true;
+      }
 
       // Text must be plain
       if (
@@ -51,9 +51,9 @@ const normalizeCodeLine =
     return false;
   };
 
-export const createNormalizeCodeLinePlugin = (/* computer: Computer */) =>
+export const createNormalizeCodeLinePlugin = (computer: Computer) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_CODE_LINE_PLUGIN',
     elementType: ELEMENT_CODE_LINE,
-    plugin: normalizeCodeLine(/* computer */),
+    plugin: normalizeCodeLine(computer),
   });
