@@ -1,5 +1,6 @@
 import { SerializedType } from '@decipad/computer';
 import { css, CSSObject } from '@emotion/react';
+import { cssVar, setCssVar } from '../primitives';
 import { isTabularType } from '../utils';
 
 export const buttonColumnWidth = '44px';
@@ -28,6 +29,19 @@ export const tableParentStyles = css({
   overflow: 'hidden',
   table: {
     width: '100%',
+  },
+});
+
+export const importTableDragHandleStyles = css({
+  gridArea: 'handle',
+  cursor: 'grab',
+  width: '18px',
+  height: '18px',
+  borderRadius: '6px',
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+  padding: '5px',
+  ':hover': {
+    background: cssVar('highlightColor'),
   },
 });
 

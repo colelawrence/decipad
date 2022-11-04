@@ -1,23 +1,24 @@
+import { SerializedType, SerializedTypes } from '@decipad/computer';
 import { css } from '@emotion/react';
 import { FC, useMemo, useState } from 'react';
-import { SerializedType, SerializedTypes } from '@decipad/computer';
 import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
+import { DragHandle } from '../../icons/index';
 import { TableHeaderRow, TableRow } from '../../molecules';
-import { CodeResultProps } from '../../types';
-import { isTabularType, toTableHeaderType } from '../../utils';
+import { cssVar } from '../../primitives';
+import { table } from '../../styles';
 import {
   defaultMaxRows,
   tableControlWidth,
   tableParentStyles,
 } from '../../styles/table';
-import { table } from '../../styles';
-import { DragHandle } from '../../icons/index';
-import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
+import { CodeResultProps } from '../../types';
+import { isTabularType, toTableHeaderType } from '../../utils';
 import {
   tableOverflowStyles,
   tableWrapperStyles,
 } from '../EditorTable/EditorTable';
+import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 
 const recursiveRowCount = (t: SerializedType): number => {
   if (t.kind === 'table' && t.tableLength !== 'unknown') {
@@ -185,14 +186,25 @@ export const TableResult = ({
                         css={{
                           display: 'none',
                           position: 'absolute',
-                          top: 4,
+                          top: 8,
                           right: 4,
                           zIndex: 1,
+                          height: 18,
+                          width: 18,
+                          borderRadius: 6,
+                          ':hover': {
+                            background: cssVar('highlightColor'),
+                          },
                         }}
                       >
                         <button
                           css={{
-                            width: '16px',
+                            width: '8px',
+                            height: 9,
+                            transform: 'translateY(50%)',
+                            display: 'block',
+                            margin: 'auto',
+                            cursor: 'grab',
                           }}
                         >
                           <DragHandle />

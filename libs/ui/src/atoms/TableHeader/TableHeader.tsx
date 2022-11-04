@@ -11,6 +11,7 @@ import { useMergedRef } from '../../hooks/index';
 import { DragHandle as DragHandleIcon } from '../../icons';
 import {
   cssVar,
+  dragHandleHighlight,
   p13Medium,
   strongOpacity,
   transparency,
@@ -64,14 +65,17 @@ const childrenWrapperStyles = css({
 });
 
 const dragHandleStyles = css({
-  width: '12px',
-  height: '14px',
+  width: '8px',
+  height: 9,
+  transform: 'translateY(50%)',
+  display: 'block',
+  margin: 'auto',
+  cursor: 'grab',
   pointerEvents: 'all',
-  marginTop: '-1px',
+  marginTop: 0,
   'svg > rect': {
     fill: 'transparent',
   },
-  cursor: 'grab',
 });
 
 const DragHandle = () => {
@@ -97,9 +101,14 @@ const DropSourceAndTarget = forwardRef<
         columnTypeStyles,
         {
           pointerEvents: draggingOver ? 'all' : 'none', // IMPORTANT!
-          height: '32px',
+          height: '18px',
+          width: '18px',
           display: 'flex',
           alignItems: 'center',
+          borderRadius: '6px',
+          ':hover': {
+            background: dragHandleHighlight,
+          },
         },
       ])}
       ref={ref}

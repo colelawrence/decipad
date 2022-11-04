@@ -19,6 +19,7 @@ export function device(side0: number, side1: number): Device {
 }
 
 export const tableBorderColor = 'rgba(0, 0, 0, 0.1)';
+export const dragHandleHighlight = 'rgba(0, 0, 0, 0.05)';
 export const placeholderOpacity: Opacity = 0.4;
 
 export const smallestMobile = device(360, 640);

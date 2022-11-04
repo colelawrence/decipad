@@ -4,12 +4,11 @@ import { FC, useState } from 'react';
 import { MenuItem } from '../../atoms';
 import { Crown, DragHandle } from '../../icons/index';
 import {
-  cssVar,
-  setCssVar,
   mouseMovingOverTransitionDelay,
   shortAnimationDuration,
 } from '../../primitives';
 import { editorLayout } from '../../styles';
+import { importTableDragHandleStyles } from '../../styles/table';
 import { MenuList } from '../MenuList/MenuList';
 
 export interface ImportTableRowControlsProps {
@@ -29,25 +28,12 @@ const gridStyles = once(() =>
   })
 );
 
-const dragHandleStyles = css({
-  gridArea: 'handle',
-  cursor: 'grab',
-  width: '16px',
-  borderRadius: '2px',
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-
-  ':hover': {
-    background: cssVar('highlightColor'),
-  },
-});
-
 const importTableRowControlsWrapperStyles = css({
   '*:hover > &': {
     opacity: 'unset',
   },
   transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
   verticalAlign: 'middle',
-  paddingRight: '6px',
 });
 
 const menuOpenedStyles = css({
@@ -69,7 +55,7 @@ export const ImportTableRowControls: FC<ImportTableRowControlsProps> = ({
   };
 
   const menuButton = (
-    <button onClick={() => handleMenuClick()} css={dragHandleStyles}>
+    <button onClick={() => handleMenuClick()} css={importTableDragHandleStyles}>
       <DragHandle />
     </button>
   );

@@ -30,7 +30,7 @@ const gridStyles = once(() =>
 );
 
 const handleButtonStyle = css({
-  borderRadius: '2px',
+  borderRadius: '6px',
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
   ':hover': {
@@ -40,8 +40,8 @@ const handleButtonStyle = css({
 
 const eyeLabelStyles = css(handleButtonStyle, {
   height: '20px',
-  width: '16px',
-
+  width: '20px',
+  padding: '2px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -55,8 +55,8 @@ const handleStyle = css(handleButtonStyle, {
   gridArea: 'handle',
   cursor: 'grab',
   height: '20px',
-  width: '16px',
-  marginLeft: '8px',
+  width: '20px',
+  marginLeft: '2px',
 });
 
 const plusStyle = css(handleButtonStyle, {
@@ -103,15 +103,16 @@ export const BlockDragHandle = ({
     onDelete !== false && onChangeMenuOpen(!menuOpen);
   }, [menuOpen, onChangeMenuOpen, onDelete]);
 
+  const showHidden = showEyeLabel && !isHovered;
   const menuButton = (
     <button
       data-testid="drag-handle"
       onMouseEnter={setHovered}
       onMouseLeave={setNotHovered}
       onClick={onClick}
-      css={handleStyle}
+      css={[handleStyle, !showHidden && css({ padding: '5px' })]}
     >
-      {showEyeLabel && !isHovered ? <EyeLabel /> : <DragHandle />}
+      {showHidden ? <EyeLabel /> : <DragHandle />}
     </button>
   );
 

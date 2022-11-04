@@ -8,13 +8,13 @@ export const Plus = (): ReturnType<FC> => {
       <path
         d="M10 6.5V14.5"
         stroke={cssVar('currentTextColor')}
-        strokeWidth="1.2"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
       <path
         d="M6 10.5H14"
         stroke={cssVar('currentTextColor')}
-        strokeWidth="1.2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
