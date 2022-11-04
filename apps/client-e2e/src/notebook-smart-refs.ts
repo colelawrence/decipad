@@ -43,6 +43,11 @@ describe('smart refs in code tables', () => {
     const srCount = (await page.$$('span[data-slate-node="element"]')).length;
     expect(srCount).toBe(2);
   });
+
+  it('no highlight in column declarations in code tables', async () => {
+    const srCount = (await page.$$('code [data-state="closed"]')).length; // var decorations
+    expect(srCount).toMatchInlineSnapshot(`4`);
+  });
 });
 
 describe('deleting smart refs', () => {

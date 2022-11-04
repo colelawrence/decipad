@@ -167,12 +167,27 @@ export const decorateCode = (
         const sourceStrings = node.children.map((c) =>
           isElementOfType(c, ELEMENT_SMART_REF) ? '' : getNodeString(c)
         );
+        let firstDeclarationFound = false;
         const variableRanges: RangeWithVariableInfo[] = sourceStrings.flatMap(
           (source, i) => {
             const varPath = [...path, i];
-            return getVariableRanges(source, varPath, nodeId);
+
+            const varRanges = getVariableRanges(source, varPath, nodeId);
+            const res = [];
+            for (const vr of varRanges) {
+              // if previously on this line there was a declaration,
+              // following declarations are column declarations and should be ignored
+              // THIS IS UGLY AND SHOULD BE DONE IN A BETTER WAY
+              if (!firstDeclarationFound || !vr.isDeclaration) res.push(vr);
+              if (vr.isDeclaration) {
+                firstDeclarationFound = true;
+              }
+            }
+
+            return res;
           }
         );
+
         const subNodes = subNodeCoords(entry);
 
         const decorations: TRange[] = [
