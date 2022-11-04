@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+// import { Computer } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import {
   createTPlateEditor,
@@ -15,10 +15,10 @@ import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
 let editor: MyEditor;
 let plugin: MyPlatePlugin;
 beforeEach(() => {
-  const computer = new Computer();
+  // const computer = new Computer();
   plugin = createAutoFormatCodeLinePlugin();
   editor = createTPlateEditor({
-    plugins: [plugin, createNormalizeCodeLinePlugin(computer)],
+    plugins: [plugin, createNormalizeCodeLinePlugin(/* computer */)],
   });
 });
 

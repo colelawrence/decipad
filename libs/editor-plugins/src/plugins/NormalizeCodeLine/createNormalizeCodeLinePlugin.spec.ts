@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+// import { Computer } from '@decipad/computer';
 import {
   CodeLineElement,
   createTPlateEditor,
@@ -17,8 +17,10 @@ function codeLine(code: string): CodeLineElement {
 
 let editor: PlateEditor;
 beforeEach(() => {
-  const computer = new Computer();
-  const plugins = createPlugins([createNormalizeCodeLinePlugin(computer)]);
+  // const computer = new Computer();
+  const plugins = createPlugins([
+    createNormalizeCodeLinePlugin(/* computer */),
+  ]);
   editor = createTPlateEditor({
     plugins,
   }) as never;
