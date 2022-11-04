@@ -23,8 +23,6 @@ export const inferBoolean = (text: string): CoercibleType | undefined => {
   switch (text.toLowerCase()) {
     case 'true':
     case 'false':
-    case 'yes':
-    case 'no':
       return { type: { kind: 'boolean' }, coerced: coerceToBoolean(text) };
   }
   return undefined;
