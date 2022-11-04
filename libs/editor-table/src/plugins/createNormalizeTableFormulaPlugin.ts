@@ -1,26 +1,26 @@
-import { Computer } from '@decipad/computer';
+// import { Computer } from '@decipad/computer';
 import { createNormalizerPlugin } from '@decipad/editor-plugins';
 import {
-  ELEMENT_SMART_REF,
+  // ELEMENT_SMART_REF,
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
   MyEditor,
   MyNodeEntry,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import { assertElementType } from '@decipad/editor-utils';
+// import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   hasNode,
   insertNodes,
   deleteText,
-  getNodeChildren,
-  isElement,
+  // getNodeChildren,
+  // isElement,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
 export const normalizeTableFormula =
-  (computer: Computer) =>
+  (/* computer: Computer */) =>
   (editor: MyEditor) =>
   (entry: MyNodeEntry): boolean => {
     const [element, path] = entry;
@@ -72,20 +72,20 @@ export const normalizeTableFormula =
           return true;
         }
       }
-      for (const lineChild of getNodeChildren(editor, formulaPath)) {
-        const [lineChildNode, lineChildPath] = lineChild;
-        if (
-          !isElement(lineChildNode) ||
-          lineChildNode.type === ELEMENT_SMART_REF
-        ) {
-          if (
-            isFlagEnabled('EXPR_REFS') &&
-            normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
-          ) {
-            return true;
-          }
-        }
-      }
+      // for (const lineChild of getNodeChildren(editor, formulaPath)) {
+      //   const [lineChildNode, lineChildPath] = lineChild;
+      //   if (
+      //     !isElement(lineChildNode) ||
+      //     lineChildNode.type === ELEMENT_SMART_REF
+      //   ) {
+      //     if (
+      //       isFlagEnabled('EXPR_REFS') &&
+      //       normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
+      //     ) {
+      //       return true;
+      //     }
+      //   }
+      // }
     }
 
     // TODO: sort formulas like the columns
@@ -93,9 +93,9 @@ export const normalizeTableFormula =
     return false;
   };
 
-export const createNormalizeTableFormulaPlugin = (computer: Computer) =>
+export const createNormalizeTableFormulaPlugin = (/* computer: Computer */) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
     elementType: ELEMENT_TABLE,
-    plugin: normalizeTableFormula(computer),
+    plugin: normalizeTableFormula(/* computer */),
   });
