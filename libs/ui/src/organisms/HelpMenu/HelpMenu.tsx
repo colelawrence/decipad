@@ -87,8 +87,8 @@ export const HelpMenu = ({
     >
       <CustomMenuItem
         to={docsUrl}
-        title="Help Content"
-        description="Explore the Decipad Docs"
+        title="Help Center"
+        description="Documentation and tutorials"
       />
       <CustomMenuItem
         onSelect={onSelectSupport}
