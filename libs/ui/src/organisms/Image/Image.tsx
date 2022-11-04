@@ -11,6 +11,8 @@ import {
 } from '@udecode/plate';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { useFocused, useSelected } from 'slate-react';
+import { imageLoad } from '../../images';
+import { cssVar } from '../../primitives';
 import { Div, FigCaption } from '../../utils/resizing';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
 import { FloatingMedia } from '../FloatingMedia/FloatingMedia';
@@ -22,7 +24,6 @@ import {
   handleLeftStyles,
   handleRightStyles,
   handleSelectedStyles,
-  resizableSelectedStyles,
   resizableStyles,
 } from '../MediaEmbed/styles';
 
@@ -35,6 +36,30 @@ export const imgStyles = css({
   cursor: 'pointer',
   objectFit: 'cover',
   borderRadius: 8,
+  border: 0,
+});
+
+const imagePlaceholderStyles = css({
+  background: `
+  url(${imageLoad}) no-repeat center,
+  radial-gradient(
+    ellipse at center,
+    ${cssVar('tintedBackgroundColor')} 0%,
+    transparent 100%
+  ),
+  linear-gradient(
+    180deg, ${cssVar('highlightColor')} 30.41%, ${cssVar(
+    'tintedBackgroundColor'
+  )} 100%
+  )
+`,
+});
+
+const resizableImagePlaceholderStyles = css({
+  background: `
+  url(${imageLoad}) no-repeat center ${cssVar(
+    'tableSelectionBackgroundColor'
+  )}`,
 });
 
 type ImageComponent = PlateComponent<{
@@ -73,7 +98,11 @@ export const Image: ImageComponent = ({
         >
           <figure css={figureStyles} contentEditable={false}>
             <Resizable
-              css={[resizableStyles, isSelected && resizableSelectedStyles]}
+              css={[
+                resizableStyles,
+                imagePlaceholderStyles,
+                isSelected && resizableImagePlaceholderStyles,
+              ]}
               handleComponent={{
                 left: (
                   <Box
@@ -90,10 +119,19 @@ export const Image: ImageComponent = ({
                 ),
               }}
               readOnly={readOnly}
-              minWidth={150}
+              minWidth={200}
+              minHeight={200}
               as={Div}
             >
-              <PlateImage css={imgStyles} />
+              <PlateImage
+                css={imgStyles}
+                onError={(event: {
+                  target: { style: { display: string } };
+                }) => {
+                  // eslint-disable-next-line no-param-reassign
+                  event.target.style.display = 'none';
+                }}
+              />
             </Resizable>
 
             <Caption.Root
