@@ -41,8 +41,8 @@ Place widgets on the same line to save space.
 To **place widgets side-by-side**:
 
 1. Hover the widget you want to move.
-2. Hold the **`⋮⋮`** button that appears on the left and move the widget to the side of another widget.
-3. A blue vertical line should appear to confirm the new location. Let got of the **`⋮⋮`** button to place the widget on its new location.
+2. Hold the **`⸬`** button that appears on the left and move the widget to the side of another widget.
+3. A blue vertical line should appear to confirm the new location. Let got of the **`⸬`** button to place the widget on its new location.
 
 <br></br>
 

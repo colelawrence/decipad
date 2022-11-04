@@ -25,25 +25,25 @@ Rearrange all blocks in the notebook.
 To **move a block** on your notebook:
 
 1. Hover the block you want to move,
-2. Hold the **`⋮⋮`** button that appears on the left and move the block to the place you desire. See where the block can be placed when a blue line appears.
-3. Let go of the **`⋮⋮`** button when you find a new spot for your block.
+2. Hold the **`⸬`** button that appears on the left and move the block to the place you desire. See where the block can be placed when a blue line appears.
+3. Let go of the **`⸬`** button when you find a new spot for your block.
 
 ## Delete a Block
 
-- To **delete a block**, hover the block you want to delete, click the **`⋮⋮`** button that appears on the left, and then click `Delete`.
+- To **delete a block**, hover the block you want to delete, click the **`⸬`** button that appears on the left, and then click `Delete`.
 
 ## Duplicate a Block
 
-- To **duplicate a block**, hover the block you want to duplicate. Click the **`⋮⋮`** button that appears on the left and select `Duplicate`.
+- To **duplicate a block**, hover the block you want to duplicate. Click the **`⸬`** button that appears on the left and select `Duplicate`.
 
 ## Hide a Block from a Reader
 
 Hide blocks from readers when you [publish your notebook](/docs/quick-start/publish).
 
-- To **hide a block from a reader**, hover the block you want to hide. Click the **`⋮⋮`** button that appears on the left and select `Hide from reader`. <br></br>
+- To **hide a block from a reader**, hover the block you want to hide. Click the **`⸬`** button that appears on the left and select `Hide from reader`. <br></br>
   Notice how your block fades and a new hidden icon appears on the left of the block.
 
-- To **show a block to the reader again**, hover the block you want to show. Click the **`⋮⋮`** button that appears on the left and select `Show to reader`. <br></br>
+- To **show a block to the reader again**, hover the block you want to show. Click the **`⸬`** button that appears on the left and select `Show to reader`. <br></br>
   Notice how the hidden icon disappears.
 
 <br></br>
