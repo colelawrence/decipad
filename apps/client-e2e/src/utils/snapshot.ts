@@ -12,9 +12,14 @@ export const snapshot = async (
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(3000);
 
-  return percySnapshot(page, name, {
-    widths: [options.mobile && 375, 1280].filter((n): n is number =>
-      Number.isInteger(n)
-    ),
-  });
+  try {
+    await percySnapshot(page, name, {
+      widths: [options.mobile && 375, 1280].filter((n): n is number =>
+        Number.isInteger(n)
+      ),
+    });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('error taking snapshot:', err);
+  }
 };
