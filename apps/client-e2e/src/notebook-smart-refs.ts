@@ -3,7 +3,7 @@ import { keyPress, setUp, waitForEditorToLoad } from './page-utils/Pad';
 import { cleanText } from './utils';
 
 // eslint-disable-next-line jest/no-disabled-tests
-describe('normalize smart refs', () => {
+describe.skip('normalize smart refs', () => {
   beforeAll(setUp);
   beforeAll(waitForEditorToLoad);
 
@@ -28,7 +28,8 @@ describe('normalize smart refs', () => {
   });
 });
 
-describe('deleting smart refs', () => {
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('deleting smart refs', () => {
   beforeAll(setUp);
   beforeAll(waitForEditorToLoad);
 

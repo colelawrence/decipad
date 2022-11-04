@@ -6,6 +6,7 @@ const {
 const { baseUrl } = require('./testConfig');
 
 const debug = process.env.DEBUG === 'true';
+const ci = !!process.env.CI;
 
 module.exports = {
   ...baseConfig,
@@ -31,5 +32,5 @@ module.exports = {
   testRegex: 'src/[^/]*\\.ts$',
 
   testTimeout: debug ? 0 : 60_000,
-  maxWorkers: Math.min(os.cpus.length, 4),
+  maxWorkers: ci ? 1 : Math.min(os.cpus.length, 4),
 };

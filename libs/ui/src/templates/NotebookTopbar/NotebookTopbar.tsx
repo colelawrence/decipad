@@ -177,7 +177,7 @@ export const NotebookTopbar = ({
           )
         ) : (
           <Button
-            href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd"
+            href="/"
             // Analytics
             onClick={() =>
               clientEvent({

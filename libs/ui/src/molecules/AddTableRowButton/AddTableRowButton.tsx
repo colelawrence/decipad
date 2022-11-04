@@ -18,6 +18,10 @@ const buttonStyles = css(p13Medium, {
   backgroundColor: cssVar('highlightColor'),
 });
 
+const hiddenStyles = css({
+  visibility: 'hidden',
+});
+
 const iconWrapperStyles = css({
   height: '16px',
   width: '16px',
@@ -36,14 +40,15 @@ export const AddTableRowButton = ({
     <>
       <th></th>
       <th key="firstcol" css={css({ height: '36px' })}>
-        {mouseOver ? (
-          <button css={buttonStyles} onClick={onAddRow}>
-            <span css={iconWrapperStyles}>
-              <Create />
-            </span>
-            <span>Add row</span>
-          </button>
-        ) : null}
+        <button
+          css={[buttonStyles, !mouseOver && hiddenStyles]}
+          onClick={onAddRow}
+        >
+          <span css={iconWrapperStyles}>
+            <Create />
+          </span>
+          <span>Add row</span>
+        </button>
       </th>
     </>
   );

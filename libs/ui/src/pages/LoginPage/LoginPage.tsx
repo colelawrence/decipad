@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, useRef, useState } from 'react';
 import { InputField, Button } from '../../atoms';
-import { AuthContent } from '../../molecules';
+import { AuthContent, SignUpContent } from '../../molecules';
 
 const wrapperStyles = css({
   display: 'grid',
@@ -34,7 +34,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
   return (
     <div css={wrapperStyles}>
       <AuthContent
-        title="Sign in to Decipad"
+        title="Log in to Decipad"
         description="A new way to make sense of numbers"
       />
       <form
@@ -42,6 +42,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
         css={{
           justifySelf: 'stretch',
           padding: '24px 8px',
+          paddingBottom: '8px',
 
           display: 'grid',
           gridGap: '12px',
@@ -72,6 +73,7 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
           Continue
         </Button>
       </form>
+      <SignUpContent />
     </div>
   );
 };

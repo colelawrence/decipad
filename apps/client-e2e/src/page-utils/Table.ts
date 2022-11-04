@@ -55,7 +55,7 @@ export function openRowMenu(line: number) {
 
 export function addRow() {
   return page
-    .locator('table > tfoot > tr > td > button')
+    .locator('table > tfoot > tr > th > button')
     .click({ force: true });
 }
 

@@ -20,7 +20,7 @@ export const Login: FC = () => {
               // User will likely click the link in the email now, so let's get workspaces cached already for faster load
               loadWorkspaces();
             } catch (error) {
-              console.error('Failed to sign in', error);
+              console.error('Failed to log in', error);
               setStatus('error');
             }
           }}

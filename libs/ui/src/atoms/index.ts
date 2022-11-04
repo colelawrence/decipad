@@ -12,6 +12,7 @@ export { Chip } from './Chip/Chip';
 export { CodeError } from './CodeError/CodeError';
 export { CodeSyntax } from './CodeSyntax/CodeSyntax';
 export { ColorPicker } from './ColorPicker/ColorPicker';
+export { ContentSeparator } from './ContentSeparator/ContentSeparator';
 export { DataViewColumnHeaderRow } from './DataViewColumnHeaderRow/DataViewColumnHeaderRow';
 export { DataViewHeader } from './DataViewHeader/DataViewHeader';
 export { DataViewTableHeader } from './DataViewTableHeader/DataViewTableHeader';

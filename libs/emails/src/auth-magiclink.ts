@@ -7,7 +7,7 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
   url,
   expires,
 }) => ({
-  subject: `Sign in to Decipad`,
+  subject: `Log in to Decipad`,
   body: `
   <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -189,12 +189,12 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
-                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:22pt;font-weight:bold;line-height:150%;text-align:left;color:#323B49;">Sign in to Decipad</div>
+                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:22pt;font-weight:bold;line-height:150%;text-align:left;color:#323B49;">Log in to Decipad</div>
                                                   </td>
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
-                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:12pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#323B49;">You’ve requested to securely sign in to Decipad</div>
+                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:12pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#323B49;">You’ve requested to securely log in to Decipad</div>
                                                   </td>
                                                 </tr>
                                                 <tr>
@@ -208,7 +208,7 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
                                                       <tbody>
                                                         <tr>
                                                           <td align="center" bgcolor="#C1FA6B" role="presentation" style="border:none;border-radius:6px;cursor:auto;mso-padding-alt:15px 25pt 15px 23pt;text-align:center;background:#C1FA6B;" valign="middle">
-                                                            <a href="${url}" style="display:inline-block;background:#C1FA6B;color:#161F2C;font-family:Arial;font-size:11pt;font-weight:600;line-height:140%;margin:0;text-decoration:none;text-transform:none;padding:15px 25pt 15px 23pt;mso-padding-alt:0px;border-radius:6px;" target="_blank"> Sign in to Decipad </a>
+                                                            <a href="${url}" style="display:inline-block;background:#C1FA6B;color:#161F2C;font-family:Arial;font-size:11pt;font-weight:600;line-height:140%;margin:0;text-decoration:none;text-transform:none;padding:15px 25pt 15px 23pt;mso-padding-alt:0px;border-radius:6px;" target="_blank"> Log in to Decipad </a>
                                                           </td>
                                                         </tr>
                                                       </tbody>
@@ -249,7 +249,7 @@ const authMagiclink: EmailGenerator<{ url: string; expires: string }> = ({
 
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;">
-                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:9pt;font-weight:400;line-height:1.7;text-align:left;color:#8f97a4;">If you didn&#x27;t try to sign in, you can safely ignore this email</div>
+                                                    <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:9pt;font-weight:400;line-height:1.7;text-align:left;color:#8f97a4;">If you didn&#x27;t try to log in, you can safely ignore this email</div>
                                                   </td>
                                                 </tr>
                                               </tbody>
