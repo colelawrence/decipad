@@ -1,4 +1,4 @@
-// import { Computer } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_BLOCKQUOTE,
@@ -17,10 +17,10 @@ import { codeBlock, codeLine } from './testUtils';
 
 let editor: PlateEditor;
 beforeEach(() => {
-  // const computer = new Computer();
+  const computer = new Computer();
   const plugins = createPlugins([
     createNormalizeCodeBlockPlugin(),
-    createNormalizeCodeLinePlugin(/* computer */),
+    createNormalizeCodeLinePlugin(computer),
   ]);
   editor = createTPlateEditor({
     plugins,

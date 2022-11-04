@@ -63,7 +63,7 @@ const handleSmartRefNode = (
     const nextTokens = tokenize(nextNodeStr);
 
     // turn smart ref into text if it's in the LHS of a declaration
-    if (nextTokens.some((t) => t.type === 'equalSign')) {
+    if (nextTokens[0]?.type === 'equalSign') {
       withoutNormalizing(editor, () => {
         insertText(editor, curName, {
           at: { path: nextPath, offset: 0 },
@@ -82,16 +82,16 @@ const handleTextNode = (
   namesToIds: { [name: string]: string }
 ) => {
   const fullStr = getNodeString(node);
-  const nextTokens = tokenize(fullStr);
+  const allTokens = tokenize(fullStr);
+  const tokenPositions = Object.fromEntries(
+    allTokens.map((t, i) => [t.offset, i])
+  );
+  const identifs = getUsedIdentifiers(fullStr);
 
-  const eqSignStart =
-    nextTokens.find((t) => t.type === 'equalSign')?.offset || -1;
-
-  const tokens = getUsedIdentifiers(fullStr);
-
-  for (const token of tokens) {
-    // dont turn token in the LHS of a declaration into smart ref
-    if (token.start < eqSignStart) {
+  for (const token of identifs) {
+    // don't turn token in the LHS of a declaration into smart ref
+    const tPos = tokenPositions[token.start];
+    if (allTokens[tPos + 1]?.type === 'equalSign') {
       continue;
     }
     if (!token.isDeclaration) {

@@ -26,6 +26,17 @@ describe.skip('normalize smart refs', () => {
       .length;
     expect(newSrCount).toBe(1); // no new smart refs
   });
+
+  it('no infinite loops on code table column declaration', async () => {
+    await createCalculationBlockBelow('A = 5');
+    await page.keyboard.press('Enter');
+
+    await createCalculationBlockBelow('Tab = {Col1 = A, Col2 = A}');
+    await page.keyboard.press('Enter');
+
+    const srCount = (await page.$$('span[data-slate-node="element"]')).length;
+    expect(srCount).toBe(2); // no new smart refs
+  });
 });
 
 // eslint-disable-next-line jest/no-disabled-tests

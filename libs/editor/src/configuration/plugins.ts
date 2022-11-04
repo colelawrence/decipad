@@ -122,7 +122,7 @@ export const plugins = ({
       createNormalizeRichTextBlockPlugin(),
       createNormalizePlainTextBlockPlugin(),
       createNormalizeCodeBlockPlugin(),
-      createNormalizeCodeLinePlugin(/* computer */),
+      createNormalizeCodeLinePlugin(computer),
       createNormalizeListPlugin(),
       createNormalizeLinkPlugin(),
       createNormalizeImagePlugin(),
