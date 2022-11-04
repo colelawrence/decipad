@@ -1,6 +1,7 @@
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { DraggableBlock } from './DraggableBlock';
 
@@ -9,6 +10,18 @@ const props: ComponentProps<typeof DraggableBlock> = {
   children: <p>block</p>,
   onDelete: noop,
 };
+
+it('opens the menu when clicking the drag handle', async () => {
+  const { getByTitle, getAllByTitle, queryByTitle } = render(
+    <DraggableBlock {...props} />
+  );
+  expect(queryByTitle(/delete/i)).not.toBeInTheDocument();
+
+  await userEvent.click(getAllByTitle(/drag/i)[0]);
+
+  expect(getByTitle(/delete/i)).toBeInTheDocument();
+});
+
 it('changes opacity when being dragged', () => {
   const { getByText, rerender } = render(
     <DraggableBlock {...props} isBeingDragged={false} />

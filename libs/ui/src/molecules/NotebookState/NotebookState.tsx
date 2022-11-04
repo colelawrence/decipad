@@ -2,8 +2,7 @@ import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { FC } from 'react';
 import { Tooltip } from '../../atoms';
-import { CircularArrow } from '../../icons';
-import { CurvedArrow } from '../../icons/CurvedArrow/CurvedArrow';
+import { CircularArrow, CurvedArrow } from '../../icons';
 import {
   cssVar,
   grey500,
@@ -218,12 +217,9 @@ export const NotebookState: FC<NotebookStateProps> = ({
             canUndo && activeStyles,
           ]}
           onClick={undo}
+          title={canUndo ? 'Undo ⌘ + Z' : ''}
         >
-          <CurvedArrow
-            title={canUndo ? 'Undo ⌘ + Z' : ''}
-            direction="left"
-            active={canUndo}
-          />
+          <CurvedArrow direction="left" active={canUndo} />
         </button>
       </div>
       <div css={[buttonStyles, canRedo && activeButtonStyles]}>
@@ -234,12 +230,9 @@ export const NotebookState: FC<NotebookStateProps> = ({
             canRedo && activeStyles,
           ]}
           onClick={redo}
+          title={canRedo ? 'Redo ⌘ + SHIFT + Z' : ''}
         >
-          <CurvedArrow
-            title={canRedo ? 'Redo ⌘ + SHIFT + Z' : ''}
-            direction="right"
-            active={canRedo}
-          />
+          <CurvedArrow direction="right" active={canRedo} />
         </button>
       </div>
       {readOnly && (
@@ -251,6 +244,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
             canUndo && activeRevertChangesStyles,
           ]}
           onClick={revertChanges}
+          title={!canUndo ? 'Reset all changes to the document' : ''}
         >
           <div css={{ width: 16, height: 16 }}>
             <CircularArrow active={!canUndo} />
