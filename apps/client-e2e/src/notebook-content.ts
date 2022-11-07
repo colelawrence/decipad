@@ -13,7 +13,7 @@ describe('notebook content', () => {
   beforeAll(waitForEditorToLoad);
 
   it('starts empty', async () => {
-    const title = '[contenteditable] h1';
+    const title = '[data-slate-editor] h1';
     const paragraph = '[data-testid=paragraph-content]';
 
     expect((await page.textContent(title))!.trim()).toBe('My notebook title');
@@ -24,7 +24,7 @@ describe('notebook content', () => {
     await focusOnBody();
     await page.keyboard.type('this is the content for the first paragraph');
     const firstParagraph = await page.waitForSelector(
-      '[contenteditable] p >> nth=0'
+      '[data-slate-editor] p >> nth=0'
     );
     expect(await firstParagraph.textContent()).toBe(
       'this is the content for the first paragraph'
@@ -86,11 +86,11 @@ describe('notebook content', () => {
 
   it('allows to create a new paragraph', async () => {
     await keyPress('Enter');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(3);
+    expect(await page.$$('[data-slate-editor] p')).toHaveLength(3);
   });
   it('allows to type in the second paragraph', async () => {
     await page.keyboard.type('this is the content for the second paragraph');
-    const [, p2] = await page.$$('[contenteditable] p');
+    const [, p2] = await page.$$('[data-slate-editor] p');
     expect(await p2.textContent()).toBe(
       'this is the content for the second paragraph'
     );
@@ -98,18 +98,18 @@ describe('notebook content', () => {
 
   it('allows to create even another new paragraph', async () => {
     await keyPress('Enter');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+    expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
   });
   it('allows to type in the third paragraph', async () => {
     await page.keyboard.type('this is the content for the third paragraph');
-    const [, , p3] = await page.$$('[contenteditable] p');
+    const [, , p3] = await page.$$('[data-slate-editor] p');
     expect(await p3.textContent()).toBe(
       'this is the content for the third paragraph'
     );
   });
 
   it('allows to go back to the previous paragraph and remove some text', async () => {
-    const [, p2] = await page.$$('[contenteditable] p');
+    const [, p2] = await page.$$('[data-slate-editor] p');
 
     // navigate to the element with flake redundancy
     await keyPress('ArrowUp');
@@ -124,7 +124,7 @@ describe('notebook content', () => {
 
   it('allows appending some text to an existing paragraph', async () => {
     await page.keyboard.type(' para-graph');
-    const [, p2] = await page.$$('[contenteditable] p');
+    const [, p2] = await page.$$('[data-slate-editor] p');
     expect(await p2.textContent()).toBe(
       'this is the content for the second para-graph'
     );
@@ -135,9 +135,9 @@ describe('notebook content', () => {
       await keyPress('ArrowLeft');
     }
     await keyPress('Enter');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(5);
+    expect(await page.$$('[data-slate-editor] p')).toHaveLength(5);
 
-    const [, p2, p3] = await page.$$('[contenteditable] p');
+    const [, p2, p3] = await page.$$('[data-slate-editor] p');
     expect(await p2.textContent()).toBe('this is the content for the ');
     expect(await p3.textContent()).toBe('second para-graph');
   });

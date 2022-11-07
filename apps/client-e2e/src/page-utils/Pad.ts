@@ -14,7 +14,7 @@ export async function waitForEditorToLoad(
   browserPage = page as Page,
   options: SetupOptions = { showChecklist: false }
 ) {
-  await browserPage.waitForSelector('[contenteditable] h1', {
+  await browserPage.waitForSelector('[data-slate-editor] h1', {
     timeout: 20_000,
   });
 
@@ -30,7 +30,7 @@ export async function waitForEditorToLoad(
     }
   }
 
-  await browserPage.locator('[contenteditable] h1').click();
+  await browserPage.locator('[data-slate-editor] h1').click();
   await page.waitForTimeout(2000);
 }
 
@@ -50,7 +50,7 @@ export async function setUp(options: SetupOptions = {}) {
     await waitForExpect(async () =>
       expect(
         (
-          await page.$$('[contenteditable] h1')
+          await page.$$('[data-slate-editor] h1')
         ).length
       ).toBeGreaterThanOrEqual(1)
     );
@@ -67,17 +67,17 @@ export async function setUp(options: SetupOptions = {}) {
 export async function goToPlayground() {
   await navigateToPlayground();
   await waitForEditorToLoad();
-  await page.click('[contenteditable] h1');
+  await page.click('[data-slate-editor] h1');
 }
 
 export async function getPadName() {
-  const $name = await page.$('[contenteditable] h1');
+  const $name = await page.$('[data-slate-editor] h1');
   expect($name).not.toBeNull();
   return (await $name!.textContent())!.trim();
 }
 
 export async function focusOnBody() {
-  const firstP = await page.waitForSelector('[contenteditable] p >> nth=0');
+  const firstP = await page.waitForSelector('[data-slate-editor] p >> nth=0');
   await firstP.click();
 }
 

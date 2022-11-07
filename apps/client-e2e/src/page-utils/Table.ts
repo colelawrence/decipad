@@ -1,18 +1,18 @@
 import waitForExpect from 'wait-for-expect';
 
 export async function createTable() {
-  await page.click('[contenteditable] p >> nth=-1');
+  await page.click('[data-slate-editor] p >> nth=-1');
 
   await page.keyboard.insertText('/table');
 
   await waitForExpect(async () =>
     expect(
-      await page.$$('[contenteditable] [role="menuitem"]')
+      await page.$$('[data-slate-editor] [role="menuitem"]')
     ).not.toHaveLength(0)
   );
 
   await page.click('text=tableslashTableA table to structure your data');
-  await page.waitForSelector('[contenteditable] table');
+  await page.waitForSelector('[data-slate-editor] table');
 }
 
 export function tableRowLocator(line: number) {

@@ -13,7 +13,7 @@ describe.skip('notebook input', () => {
   beforeAll(waitForEditorToLoad);
 
   it('starts empty', async () => {
-    const title = '[contenteditable] h1';
+    const title = '[data-slate-editor] h1';
     const paragraph = '[data-testid=paragraph-content]';
 
     expect((await page.textContent(title))!.trim()).toBe('');

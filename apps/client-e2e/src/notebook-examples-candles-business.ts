@@ -26,7 +26,7 @@ describe('important notebook examples', () => {
 
     await page.goto(`/n/${notebookId}`);
 
-    await page.waitForSelector('[contenteditable] h1');
+    await page.waitForSelector('[data-slate-editor] h1');
 
     await page.waitForTimeout(1000);
 

@@ -3,13 +3,13 @@ import waitForExpect from 'wait-for-expect';
 import { cleanText } from '../utils';
 
 export async function createInputBelow(identifier: string, value: number) {
-  await page.click('[contenteditable] p >> nth=-1');
+  await page.click('[data-slate-editor] p >> nth=-1');
 
   await page.keyboard.insertText('/input');
 
   await waitForExpect(async () =>
     expect(
-      await page.$$('[contenteditable] [role="menuitem"]')
+      await page.$$('[data-slate-editor] [role="menuitem"]')
     ).not.toHaveLength(0)
   );
 
@@ -26,16 +26,16 @@ export async function createInputBelow(identifier: string, value: number) {
 }
 
 export async function createCalculationBlockBelow(decilang: string) {
-  await page.click('[contenteditable] p >> nth=-1');
+  await page.click('[data-slate-editor] p >> nth=-1');
 
-  const { length: numCodeElements } = await page.$$('[contenteditable] code');
+  const { length: numCodeElements } = await page.$$('[data-slate-editor] code');
 
   await page.waitForTimeout(100);
   await page.keyboard.type('=');
 
   await waitForExpect(
     async () =>
-      expect(await page.$$('[contenteditable] code')).toHaveLength(
+      expect(await page.$$('[data-slate-editor] code')).toHaveLength(
         numCodeElements + 1
       ),
     10_000
@@ -44,13 +44,13 @@ export async function createCalculationBlockBelow(decilang: string) {
   await page.keyboard.type(decilang);
 
   await waitForExpect(async () => {
-    const lastCodeLine = await page.$('[contenteditable] code >> nth=-1');
+    const lastCodeLine = await page.$('[data-slate-editor] code >> nth=-1');
     expect(lastCodeLine).toBeDefined();
   });
 }
 
 export function getCodeLineBlockLocator() {
-  return page.locator('//*[@contenteditable][//code]') as Locator;
+  return page.locator('//*[@data-slate-editor][//code]') as Locator;
 }
 
 export function getCodeLines() {

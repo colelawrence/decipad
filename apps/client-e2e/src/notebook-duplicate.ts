@@ -23,7 +23,7 @@ describe('notebook duplicate', () => {
     await page.keyboard.type('this is the second paragraph');
     await page.keyboard.press('Enter');
     await page.keyboard.type('this is the third paragraph');
-    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+    expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
 
     await timeout(4000);
     await navigateToWorkspacePage();
@@ -58,10 +58,10 @@ describe('notebook duplicate', () => {
     await followPad(padCopyIndex);
     await waitForEditorToLoad();
     await waitForExpect(async () => {
-      expect(await page.textContent('[contenteditable] h1')).toBe(
+      expect(await page.textContent('[data-slate-editor] h1')).toBe(
         'Copy of My notebook titlepad title here'
       );
-      expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+      expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
     });
   });
 });

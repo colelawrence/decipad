@@ -18,7 +18,7 @@ describe('notebook reload', () => {
     await page.keyboard.type('this is the third paragraph');
 
     // an empty paragraph is now created under non-empty paragraphs.
-    expect(await page.$$('[contenteditable] p')).toHaveLength(4);
+    expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
     await waitForSaveFlush();
   });
 
@@ -26,7 +26,7 @@ describe('notebook reload', () => {
     await page.reload();
     await waitForEditorToLoad();
     const lastParagraph = await page.waitForSelector(
-      '[contenteditable] p >> nth=-2'
+      '[data-slate-editor] p >> nth=-2'
     );
     expect(await lastParagraph.textContent()).toBe(
       'this is the third paragraph'

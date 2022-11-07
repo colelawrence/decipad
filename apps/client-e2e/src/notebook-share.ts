@@ -20,7 +20,7 @@ describe('notebook share', () => {
       return expect(calculations).toBeTruthy();
     });
 
-    expect(await page.$$('[contenteditable] p')).toHaveLength(2);
+    expect(await page.$$('[data-slate-editor] p')).toHaveLength(2);
 
     await snapshot(page as Page, 'Notebook: Slash Command');
 
@@ -53,7 +53,7 @@ describe('notebook share', () => {
 
     await otherUserPage.waitForSelector('text=hello world');
     await waitForExpect(async () =>
-      expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(2)
+      expect(await otherUserPage.$$('[data-slate-editor] p')).toHaveLength(2)
     );
   });
 
@@ -65,7 +65,7 @@ describe('notebook share', () => {
     await otherUserPage.waitForSelector('text=hello world');
 
     await waitForExpect(async () =>
-      expect(await otherUserPage.$$('[contenteditable] p')).toHaveLength(2)
+      expect(await otherUserPage.$$('[data-slate-editor] p')).toHaveLength(2)
     );
   }, 60000);
 
@@ -79,7 +79,9 @@ describe('notebook share', () => {
 
     await incognitoUserPage.waitForSelector('text=hello world');
     await waitForExpect(async () =>
-      expect(await incognitoUserPage.$$('[contenteditable] p')).toHaveLength(2)
+      expect(await incognitoUserPage.$$('[data-slate-editor] p')).toHaveLength(
+        2
+      )
     );
   });
 });

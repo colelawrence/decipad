@@ -20,7 +20,7 @@ describe('notebook table', () => {
   beforeAll(waitForEditorToLoad);
 
   it('creates a table', async () => {
-    expect(await page.$('[contenteditable] table')).toBe(null);
+    expect(await page.$('[data-slate-editor] table')).toBe(null);
 
     await focusOnBody();
     await page.keyboard.insertText('This is some text.');
