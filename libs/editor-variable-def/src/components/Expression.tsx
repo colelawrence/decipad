@@ -10,7 +10,6 @@ import { useSelected } from 'slate-react';
 import { getNodeString, getParentNode } from '@udecode/plate';
 import { useNodePath } from '@decipad/editor-utils';
 import { useCallback, useState } from 'react';
-import { NodeEntry } from 'slate';
 import { useEditorChange } from '@decipad/react-contexts';
 
 const getPlaceHolder = (type: SerializedType | undefined) => {
@@ -56,9 +55,15 @@ export const Expression: PlateComponent = ({
     []
   );
   const getParent = useCallback(
-    (editor: MyEditor) =>
-      path &&
-      (getParentNode(editor, path) as NodeEntry<VariableDefinitionElement>)[0],
+    (editor: MyEditor): VariableDefinitionElement | undefined => {
+      if (path) {
+        const parent = getParentNode<VariableDefinitionElement>(editor, path);
+        if (parent) {
+          return parent[0];
+        }
+      }
+      return undefined;
+    },
     [path]
   );
   useEditorChange(widgetChange, getParent);
