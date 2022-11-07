@@ -18,6 +18,8 @@ module.exports = {
             DistributionDomainName: customDomain,
           }
         };
+      } else {
+        delete cloudformation.Resources.HTTP.Properties.Domain;
       }
 
       return cloudformation;
