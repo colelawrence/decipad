@@ -36,9 +36,6 @@ yarn build:backend
 echo "Clearing sourcemaps..."
 find apps/backend/public/ | grep '\.map$' | xargs rm
 
-echo "Setting some very important env vars..."
-export DECI_APP_URL_BASE 'https://app.decipad.com'
-
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
