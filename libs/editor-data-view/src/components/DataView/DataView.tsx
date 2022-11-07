@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_DATA_VIEW,
@@ -59,14 +59,16 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const { color: defaultColor } = useEditorStylesContext();
 
+  const onBlockDelete = useCallback(() => {
+    setDeleted(true);
+    onDelete();
+  }, [onDelete]);
+
   return !deleted ? (
     <DraggableBlock
       element={element}
       blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-      onDelete={() => {
-        setDeleted(true);
-        onDelete();
-      }}
+      onDelete={onBlockDelete}
       {...attributes}
     >
       <UIDataView
@@ -85,7 +87,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
               values={sortedColumns[2]}
               types={sortedColumns[1]}
               aggregationTypes={selectedAggregationTypes}
-              collapsedGroups={element.collapsedGroups || []}
+              collapsedGroups={element.collapsedGroups}
               onChangeCollapsedGroups={saveCollapsedGroups}
             />
           )) ||

@@ -1,4 +1,4 @@
-import { ComponentProps, FC, ReactNode } from 'react';
+import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import { css } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { menu } from '../../styles';
@@ -35,10 +35,19 @@ export const MenuItem: FC<MenuItemProps> = ({
   disabled,
   itemAlignment,
 }) => {
+  const onSelectItem = useCallback(
+    (event: Event) => {
+      event.stopPropagation();
+      if (onSelect) {
+        onSelect();
+      }
+    },
+    [onSelect]
+  );
   return (
     <RadixDropdownMenu.Item
       css={disabled ? menu.itemDisabledStyles : menu.itemStyles}
-      onSelect={onSelect}
+      onSelect={onSelectItem}
       data-selected={selected}
       onPointerMove={onPointerMove}
       onFocus={onFocus}

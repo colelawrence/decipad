@@ -58,7 +58,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   values,
   types,
   aggregationTypes,
-  collapsedGroups,
+  collapsedGroups = [],
   onChangeCollapsedGroups,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData(
@@ -79,12 +79,16 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     [groups]
   );
 
-  const cols = table.map((row) => {
-    return row.reduce((previous, current) => {
-      const colspan = current && current.colspan ? current.colspan : 0;
-      return previous + colspan;
-    }, 0);
-  });
+  const cols = useMemo(
+    () =>
+      table.map((row) => {
+        return row.reduce((previous, current) => {
+          const colspan = current && current.colspan ? current.colspan : 0;
+          return previous + colspan;
+        }, 0);
+      }),
+    [table]
+  );
 
   const maxCols = Math.max(...cols);
 

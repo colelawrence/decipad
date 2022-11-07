@@ -1,9 +1,14 @@
-import { FC, MouseEvent } from 'react';
+import { FC, MouseEvent, useCallback } from 'react';
 import { CodeResult, DataViewTableHeader } from '@decipad/ui';
 import { Result, SerializedType } from '@decipad/computer';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { css } from '@emotion/react';
 import { ValueCell } from '../../types';
+
+const iconStyles = css({
+  height: '24px',
+  width: '24px',
+});
 
 interface DataViewTableHeaderProps {
   type?: SerializedType;
@@ -32,32 +37,29 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   groupId,
   collapsible,
 }) => {
+  const handleCollapseGroupButtonPress = useCallback(
+    (e: MouseEvent): void => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const matchingGroupIndex = collapsedGroups.indexOf(groupId);
+
+      if (matchingGroupIndex !== -1) {
+        return onChangeCollapsedGroups(
+          collapsedGroups.filter((id) => id !== groupId)
+        );
+      }
+
+      return onChangeCollapsedGroups([...collapsedGroups, groupId]);
+    },
+    [collapsedGroups, groupId, onChangeCollapsedGroups]
+  );
+
   if (type == null || value == null) {
     return null;
   }
 
-  const handleCollapseGroupButtonPress = (
-    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
-  ): void => {
-    e.stopPropagation();
-
-    const matchingGroupIndex = collapsedGroups.indexOf(groupId);
-
-    if (matchingGroupIndex !== -1) {
-      return onChangeCollapsedGroups(
-        collapsedGroups.filter((id) => id !== groupId)
-      );
-    }
-
-    return onChangeCollapsedGroups([...collapsedGroups, groupId]);
-  };
-
   const groupIsCollapsed = collapsedGroups.includes(groupId);
-
-  const iconStyles = css({
-    height: '24px',
-    width: '24px',
-  });
 
   const resultWrapperStyles = css({
     display: 'inline-flex',
@@ -80,10 +82,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       alignRight={alignRight}
     >
       {collapsible ? (
-        <div
-          onClick={(e) => handleCollapseGroupButtonPress(e)}
-          css={resultWrapperStyles}
-        >
+        <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>
           <CodeResult
             value={value as Result.Result['value']}
             variant="inline"

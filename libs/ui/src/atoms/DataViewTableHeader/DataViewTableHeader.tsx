@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, MouseEvent, ReactNode, useCallback } from 'react';
 
 interface DataViewTableHeaderProps {
   children?: ReactNode;
@@ -26,8 +26,22 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   onHover = noop,
   alignRight = false,
 }) => {
-  const onMouseOver = useCallback(() => onHover(true), [onHover]);
-  const onMouseOut = useCallback(() => onHover(false), [onHover]);
+  const onMouseOver = useCallback(
+    (ev: MouseEvent) => {
+      ev.stopPropagation();
+      ev.preventDefault();
+      onHover(true);
+    },
+    [onHover]
+  );
+  const onMouseOut = useCallback(
+    (ev: MouseEvent) => {
+      ev.stopPropagation();
+      ev.preventDefault();
+      onHover(false);
+    },
+    [onHover]
+  );
   return (
     <th
       rowSpan={rowSpan}

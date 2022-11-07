@@ -8,6 +8,7 @@ import { assertElementType, matchNodeType } from '@decipad/editor-utils';
 import {
   useComputer,
   useEditorChange,
+  useEditorSelector,
   useResult,
 } from '@decipad/react-contexts';
 import {
@@ -149,8 +150,11 @@ export const useDataView = ({
     injectObservable: columnChanges$,
   });
 
-  const selectedAggregationTypes = element.children[1]?.children.map(
-    (th) => th.aggregation
+  const selectedAggregationTypes = useEditorSelector(
+    useCallback(
+      () => element.children[1]?.children.map((th) => th.aggregation),
+      [element.children]
+    )
   );
 
   return {

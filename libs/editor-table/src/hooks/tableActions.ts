@@ -28,7 +28,6 @@ import {
 import { Path } from 'slate';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
-import { afterTableMenuInteraction } from '../utils/afterTableMenuInteraction';
 
 export interface TableActions {
   onDelete: () => void;
@@ -136,7 +135,6 @@ export const useTableActions = (
     withPath(editor, element, (path) => {
       withoutNormalizing(editor, () => {
         removeNodes(editor, { at: path });
-        afterTableMenuInteraction(editor, path);
       });
     });
   }, [editor, element]);
@@ -160,7 +158,6 @@ export const useTableActions = (
       withPath(editor, element, (path) => {
         withoutNormalizing(editor, () => {
           changeColumnType(editor, path, cellType, columnIndex);
-          afterTableMenuInteraction(editor, path, columnIndex);
         });
       });
     },
@@ -180,7 +177,6 @@ export const useTableActions = (
                 at: columnHeaderPath,
               }
             );
-            afterTableMenuInteraction(editor, path, columnIndex);
           });
         }
       });
@@ -194,7 +190,6 @@ export const useTableActions = (
         addColumn(editor, {
           tablePath: path,
         });
-        afterTableMenuInteraction(editor, path);
       });
     });
   }, [editor, element]);
@@ -230,7 +225,6 @@ export const useTableActions = (
               removeNodes(editor, {
                 at: cellToDeletePath,
               });
-              afterTableMenuInteraction(editor, path);
             });
           });
         }
@@ -243,7 +237,6 @@ export const useTableActions = (
     withPath(editor, element, (path) => {
       withoutNormalizing(editor, () => {
         addRow(editor, path);
-        afterTableMenuInteraction(editor, path);
       });
     });
   }, [editor, element]);
@@ -258,7 +251,6 @@ export const useTableActions = (
         if (hasNode(editor, rowPath)) {
           withoutNormalizing(editor, () => {
             removeNodes(editor, { at: rowPath });
-            afterTableMenuInteraction(editor, path);
           });
         }
       });
@@ -284,7 +276,6 @@ export const useTableActions = (
               moveNodes(editor, { at: sourcePath, to: targetPath });
             }
           }
-          afterTableMenuInteraction(editor, path, toIndex);
         });
       });
     },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Interpreter, Result, SerializedType } from '@decipad/computer';
 import { zip } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
@@ -178,21 +178,25 @@ export const useDataViewLayoutData = (
   aggregationTypes: (AggregationKind | undefined)[],
   collapsedGroups: string[] | undefined
 ): DataGroup[] => {
-  const [dataGroups, setDataGroups] = useState<DataGroup[]>([]);
+  const dataGroups = useMemo(
+    () =>
+      layoutPowerData(
+        columnNames,
+        data,
+        columnTypes,
+        aggregationTypes,
+        collapsedGroups
+      ),
+    [aggregationTypes, collapsedGroups, columnNames, columnTypes, data]
+  );
+
+  const [resolvedDataGroups, setResolvedDataGroups] = useState<DataGroup[]>([]);
 
   useEffect(() => {
     (async () => {
-      setDataGroups(
-        await layoutPowerData(
-          columnNames,
-          data,
-          columnTypes,
-          aggregationTypes,
-          collapsedGroups
-        )
-      );
+      setResolvedDataGroups(await dataGroups);
     })();
-  }, [aggregationTypes, collapsedGroups, columnNames, columnTypes, data]);
+  }, [dataGroups]);
 
-  return dataGroups;
+  return resolvedDataGroups;
 };

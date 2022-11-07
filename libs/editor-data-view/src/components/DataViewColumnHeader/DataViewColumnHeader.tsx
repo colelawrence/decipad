@@ -7,11 +7,13 @@ import {
 import {
   assertElementType,
   useElementMutatorCallback,
+  useNodePath,
 } from '@decipad/editor-utils';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
-import { getDefined } from '@decipad/utils';
 import { Path } from 'slate';
-import { findNodePath, getNodeEntry } from '@udecode/plate';
+import { getNodeEntry } from '@udecode/plate';
+import { useCallback, useMemo } from 'react';
+import { getDefined } from '@decipad/utils';
 import { isCellAlignRight } from 'libs/editor-table/src/components';
 import { useDataView, useDragColumn, useDropColumn } from '../../hooks';
 import { availableAggregationTypesForColumnOf } from '../../utils/availableAggregationTypesForColumnOf';
@@ -27,13 +29,21 @@ export const DataViewColumnHeader: PlateComponent = ({
     editor,
     element.id
   );
-  const path = getDefined(findNodePath(editor, element));
-  const dataViewPath = Path.parent(Path.parent(path));
-  const [dataView] = getNodeEntry<DataViewElement>(editor, dataViewPath);
+  const path = getDefined(useNodePath(element));
+  const dataView = useMemo(() => {
+    const dataViewPath = Path.parent(Path.parent(path));
+    return getNodeEntry<DataViewElement>(editor, dataViewPath)[0];
+  }, [editor, path]);
+
   const [{ overDirection }, connectDropTarget] = useDropColumn(
     editor,
     dataView,
     element
+  );
+
+  const availableAggregations = useMemo(
+    () => [''].concat(availableAggregationTypesForColumnOf(element.cellType)),
+    [element.cellType]
   );
 
   const onAggregationChange = useElementMutatorCallback(
@@ -44,9 +54,11 @@ export const DataViewColumnHeader: PlateComponent = ({
 
   const { onDeleteColumn } = useDataView({ editor, element: dataView });
 
-  const handleColumnDelete = () => {
-    onDeleteColumn(path);
-  };
+  const handleColumnDelete = useCallback(() => {
+    if (path) {
+      onDeleteColumn(path);
+    }
+  }, [onDeleteColumn, path]);
 
   return (
     <UIDataViewColumnHeader
@@ -54,9 +66,7 @@ export const DataViewColumnHeader: PlateComponent = ({
       type={element.cellType}
       attributes={attributes}
       selectedAggregation={element.aggregation}
-      availableAggregations={[''].concat(
-        availableAggregationTypesForColumnOf(element.cellType)
-      )}
+      availableAggregations={availableAggregations}
       onAggregationChange={onAggregationChange}
       onDeleteColumn={handleColumnDelete}
       connectDragSource={connectDragSource}
