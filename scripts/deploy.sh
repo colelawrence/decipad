@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-
 echo "Preparing the public files folder...";
 rm -rf apps/backend/public
 mkdir apps/backend/public
@@ -17,7 +16,6 @@ echo "REACT_APP_SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}" >> apps/frontend/.env.
 echo "REACT_APP_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}" >> apps/frontend/.env.production
 echo "REACT_APP_ANALYTICS_WRITE_KEY=${REACT_APP_ANALYTICS_WRITE_KEY:-}" >> apps/frontend/.env.production
 echo "REACT_APP_GOOGLE_SHEETS_KEY=${REACT_APP_GOOGLE_SHEETS_KEY:-}" >> apps/frontend/.env.production
-
 
 echo "Building frontend..."
 yarn build:frontend
@@ -37,6 +35,9 @@ yarn build:backend
 
 echo "Clearing sourcemaps..."
 find apps/backend/public/ | grep '\.map$' | xargs rm
+
+echo "Setting some very important env vars..."
+export DECI_APP_URL_BASE = 'https://app.decipad.com'
 
 echo "Deploying..."
 mkdir -p tmp/deploy
