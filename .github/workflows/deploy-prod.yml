@@ -46,6 +46,7 @@ jobs:
         env:
           DEPLOY_NAME: 'alpha'
           NODE_ENV: 'production'
+          DECI_CUSTOM_DOMAIN: 'app.decipad.com'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_ALPHA_CERTIFICATE_ARN}}'
           SENTRY_DSN: '${{secrets.SENTRY_DSN}}'
