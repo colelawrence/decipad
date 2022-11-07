@@ -366,6 +366,7 @@ allowlist-changes
 
 @plugins
 s3
+custom-domain
 
 @aws
 region eu-west-2
