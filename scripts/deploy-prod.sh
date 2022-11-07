@@ -39,4 +39,7 @@ find apps/backend/public/ | grep '\.map$' | xargs rm
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy
 cd apps/backend
+arc env staging DECI_APP_URL_BASE "$DECI_APP_URL_BASE"
+arc env staging NEXTAUTH_URL "${DECI_APP_URL_BASE}/api/auth"
+
 ../../node_modules/.bin/arc deploy --no-hydrate --name "$DEPLOY_NAME"
