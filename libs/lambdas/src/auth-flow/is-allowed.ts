@@ -2,7 +2,7 @@ import tables from '@decipad/tables';
 import { app } from '@decipad/config';
 
 const ALLOWLIST_REQUIRED_URL_BASES = [
-  'https://alpha.decipad.com',
+  'https://app.decipad.com',
   'https://dev.decipad.com',
 ];
 

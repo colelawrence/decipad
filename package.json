@@ -40,7 +40,7 @@
     "deploy:private": "./scripts/deploy-private.sh",
     "deploy:private:client": "./scripts/deploy-private-client.sh",
     "deploy:pr": "./scripts/deploy-pr.sh",
-    "deploy:alpha": "./scripts/deploy-alpha.sh",
+    "deploy:prod": "./scripts/deploy-prod.sh",
     "deploy:discord-customer-support-bot": "./scripts/deploy-discord-customer-support-bot-commands.mjs",
     "repl": "babel-node --inspect --extensions=.js,.jsx,.ts,.tsx libs/repl/src/repl.ts",
     "nx": "nx",
