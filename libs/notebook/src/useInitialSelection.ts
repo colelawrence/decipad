@@ -83,7 +83,7 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
             if (bounding.top > window.innerHeight) {
               block.scrollIntoView();
             }
-            focusEditor(editor, point.path);
+            focusEditor(editor, { path: point.path, offset: 0 });
           } catch (err) {
             console.warn('error setting the initial selection', err);
           }
