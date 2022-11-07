@@ -42,4 +42,7 @@ export DECI_APP_URL_BASE = 'https://app.decipad.com'
 echo "Deploying..."
 mkdir -p tmp/deploy
 cd apps/backend
+arc env staging DECI_APP_URL_BASE "$DECI_APP_URL_BASE"
+arc env staging NEXTAUTH_URL "${DECI_APP_URL_BASE}/api/auth"
+
 ../../node_modules/.bin/arc deploy --no-hydrate
