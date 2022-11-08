@@ -35,6 +35,12 @@ export const getUsedIdentifiers = (code: string): TokenPos[] => {
       continue;
     }
 
+    // if table is a smart ref, text will be just .column
+    // skip
+    if (tokens[i - 1]?.type === 'dot') {
+      continue;
+    }
+
     // table column or assignment to it (TableName.ColumnName)
     const identDotIdent =
       tokens[i + 1]?.type === 'dot' && tokens[i + 2]?.type === 'identifier';

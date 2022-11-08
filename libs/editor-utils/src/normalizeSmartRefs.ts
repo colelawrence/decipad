@@ -60,7 +60,7 @@ const handleSmartRefNode = (
   if (nextEntry) {
     const [nextNode, nextPath] = nextEntry;
     const nextNodeStr = getNodeString(nextNode);
-    const nextTokens = tokenize(nextNodeStr);
+    const nextTokens = tokenize(nextNodeStr).filter((t) => t?.type !== 'ws');
 
     // turn smart ref into text if it's in the LHS of a declaration
     if (nextTokens[0]?.type === 'equalSign') {
@@ -82,16 +82,20 @@ const handleTextNode = (
   namesToIds: { [name: string]: string }
 ) => {
   const fullStr = getNodeString(node);
-  const allTokens = tokenize(fullStr);
+  const allTokens = tokenize(fullStr).filter((t) => t?.type !== 'ws');
   const tokenPositions = Object.fromEntries(
     allTokens.map((t, i) => [t.offset, i])
   );
   const identifs = getUsedIdentifiers(fullStr);
 
   for (const token of identifs) {
-    // don't turn token in the LHS of a declaration into smart ref
     const tPos = tokenPositions[token.start];
+    // don't turn token in the LHS of a declaration into smart ref
     if (allTokens[tPos + 1]?.type === 'equalSign') {
+      continue;
+    }
+    // don't turn column name in table.column into a smart ref
+    if (allTokens[tPos - 1]?.type === 'dot') {
       continue;
     }
     if (!token.isDeclaration) {
