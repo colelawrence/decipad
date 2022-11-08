@@ -33,7 +33,7 @@ export const SignUpContent: FC = () => {
       <div css={signupTeaserWrapperStyles}>
         <p css={teaserStyles}>Don't have an account?</p>
         <p css={joinStyles}>
-          <a href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd">
+          <a href="https://rcagp49qi5w.typeform.com/to/tGwQLkbI">
             Join our private beta waitlist
           </a>
         </p>
