@@ -573,17 +573,6 @@ export default function Terms() {
               practices, please feel free to contact us at privacy@decipad.com.
             </p>
             <br></br>
-            <hr></hr>
-            <br></br>
-            <center>
-              <br></br>
-              <p>
-                Have any questions? Send us an email at{' '}
-                <u>
-                  <a href="mailto:support@decipad.com">support@decipad.com</a>
-                </u>{' '}
-              </p>
-            </center>
           </div>
         </div>
       </div>
