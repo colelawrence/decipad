@@ -4,7 +4,7 @@ import { dropLineWidth } from '../../styles/drop-line';
 
 const dropLineCommonStyles = css({
   backgroundColor: blue300.rgb,
-  zIndex: 1,
+  zIndex: 2,
 });
 
 const dropLineBlockStyles = css({

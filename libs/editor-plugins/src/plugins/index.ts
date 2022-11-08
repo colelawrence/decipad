@@ -1,6 +1,7 @@
 export * from './AutoCompleteMenu';
 export * from './AutoFormatCodeLine/createAutoFormatCodeLinePlugin';
 export * from './AutoPairs/createAutoPairsPlugin';
+export * from './BlockSelection';
 export * from './Callout';
 export * from './CodeLine';
 export * from './CodeVariableHighlight';

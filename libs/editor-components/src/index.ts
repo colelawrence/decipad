@@ -1,5 +1,6 @@
 export * from './block-management';
 export * from './BlockErrorBoundary';
+export * from './BlockSelection/BlockSelectable';
 export * from './BubbleEditor';
 export * from './CodeLine';
 export * from './Import/Import';

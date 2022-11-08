@@ -183,6 +183,10 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         'button, [type="button"], [type="reset"], [type="submit"]': {
           WebkitAppearance: 'none',
         },
+        '.slate-selection-area': {
+          background: '#4f90f22d',
+          border: '1px solid #4f90f2',
+        },
         // further resets
         '*:focus-visible': {
           outline: 'none',
@@ -197,6 +201,10 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
           header: {
             display: 'none',
           },
+        },
+
+        'body>textarea + div': {
+          zIndex: '100 !important',
         },
       }}
     />

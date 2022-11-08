@@ -188,7 +188,7 @@ export const TableResult = ({
                           position: 'absolute',
                           top: 8,
                           right: 4,
-                          zIndex: 1,
+                          zIndex: 2,
                           height: 18,
                           width: 18,
                           borderRadius: 6,

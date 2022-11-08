@@ -28,6 +28,7 @@ const iconWrapperStyles = css({
   placeItems: 'center',
   borderRadius: '6px',
   transition: `background-color ${shortAnimationDuration} ease-out`,
+  zIndex: 2,
 });
 
 const iconStyles = css(p14Regular, {

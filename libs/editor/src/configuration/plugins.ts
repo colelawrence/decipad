@@ -2,6 +2,7 @@ import {
   createAutoCompleteMenuPlugin,
   createAutoFormatCodeLinePlugin,
   createAutoPairsPlugin,
+  createBlockSelectionPlugin,
   createCalloutPlugin,
   createCodeLinePlugin,
   createCodeVariableHighlightPlugin,
@@ -142,6 +143,7 @@ export const plugins = ({
         },
       }),
       createDragOverCursorPlugin(),
+      createBlockSelectionPlugin(),
 
       // media elements
       createSelectOnBackspacePlugin({

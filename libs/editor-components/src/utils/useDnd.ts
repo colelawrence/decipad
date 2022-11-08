@@ -1,20 +1,30 @@
 import {
+  ElementKind,
   elementKinds,
   MyEditor,
-  useTEditorRef,
   MyElement,
-  ElementKind,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import {
+  createPathRef,
+  createStore,
   findNode,
   focusEditor,
+  getNode,
+  getNodeEntries,
+  isElement,
   moveNodes,
   useDragNode,
   UseDropNodeOptions,
+  withoutNormalizing,
 } from '@udecode/plate';
-import { useRef, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
-import { Path } from 'slate';
+import { Path, PathRef } from 'slate';
+import {
+  blockSelectionActions,
+  blockSelectionSelectors,
+} from '@udecode/plate-selection';
 import { ReactEditor } from 'slate-react';
 
 export declare type DropDirection =
@@ -28,8 +38,8 @@ type ChangeDropDirection = (direction: DropDirection) => void;
 
 interface DragItemNode {
   id: string;
+  selectedIds: Set<string>;
   type: ElementKind;
-  getPath: () => Path;
   [key: string]: unknown;
 }
 
@@ -55,6 +65,10 @@ export interface UseDndNodeOptions extends Pick<UseDropNodeOptions, 'nodeRef'> {
 
 const DEFAULT_AXIS: Axis = { horizontal: false, vertical: true };
 
+export const dndStore = createStore('dnd')({
+  draggingIds: new Set<string>(),
+});
+
 export const useDnd = ({
   accept = elementKinds,
   nodeRef,
@@ -74,15 +88,34 @@ export const useDnd = ({
   const [{ isDragging }, dragRef, preview] = useDragNode(editor, {
     id,
     type,
-    item: () => ({
-      id,
-      type,
-      // The `item` object is set only once when the component renders so we need `getPath` to be
-      // a function to account for path changes.
-      getPath: () =>
-        ReactEditor.findPath(editor as ReactEditor, elementRef.current),
-    }),
+    item: () => {
+      const selectedIds = blockSelectionSelectors.selectedIds();
+
+      if (blockSelectionSelectors.isSelecting() && !selectedIds.has(id)) {
+        blockSelectionActions.unselect();
+      }
+
+      return {
+        id,
+        type,
+        selectedIds,
+        // The `item` object is set only once when the component renders so we need `getPath` to be
+        // a function to account for path changes.
+        getPath: () =>
+          ReactEditor.findPath(editor as ReactEditor, elementRef.current),
+      };
+    },
   });
+
+  useEffect(() => {
+    if (isDragging) {
+      dndStore.set.draggingIds(
+        blockSelectionSelectors.selectedIds() as Set<string>
+      );
+    } else {
+      dndStore.set.draggingIds(new Set<string>());
+    }
+  }, [isDragging]);
 
   const [{ canDrop, isOver }, drop] = useDrop<
     DragItemNode,
@@ -187,36 +220,84 @@ export const defaultMoveNode = (
   id: MyElement['id'],
   direction: DropDirection
 ) => {
-  const dragPath = dragItem.getPath();
-  let dropPath: Path | undefined;
+  const { selectedIds, id: dragId } = dragItem;
+  let dropId = id;
 
-  if (direction === 'bottom') {
-    dropPath = findNode(editor, { at: [], match: { id } })?.[1];
-    if (!dropPath) return;
+  const pathRefs: PathRef[] = [];
 
-    if (Path.equals(dragPath, Path.next(dropPath))) return;
+  if (selectedIds.has(dragId)) {
+    const entries = [
+      ...getNodeEntries(editor, {
+        match: (n) => isElement(n) && selectedIds.has(n.id),
+        at: [],
+      }),
+    ];
+
+    entries.forEach(([, path]) => {
+      pathRefs.push(createPathRef(editor, path));
+    });
+  } else {
+    const entry = findNode(editor, { at: [], match: { id: dragId } });
+    if (!entry) return;
+    const [, path] = entry;
+
+    pathRefs.push(createPathRef(editor, path));
   }
 
-  if (direction === 'top') {
-    const nodePath = findNode(editor, { at: [], match: { id } })?.[1];
+  withoutNormalizing(editor, () => {
+    let dropPath: Path | undefined;
 
-    if (!nodePath) return;
-    dropPath = [...nodePath.slice(0, -1), nodePath[nodePath.length - 1] - 1];
+    pathRefs.forEach((pathRef) => {
+      const path = pathRef.unref();
+      if (!path) return;
 
-    if (Path.equals(dragPath, dropPath)) return;
-  }
+      const dragNode = getNode<MyElement>(editor, path);
+      if (!dragNode) return;
 
-  if (!dropPath) {
-    return;
-  }
+      if (direction === 'bottom') {
+        dropPath = findNode(editor, { at: [], match: { id: dropId } })?.[1];
+        if (!dropPath) return;
 
-  const before =
-    Path.isBefore(dragPath, dropPath) && Path.isSibling(dragPath, dropPath);
-  const to = before ? dropPath : Path.next(dropPath);
+        // if dropping at the same path as the drag node, skip it
+        if (Path.equals(path, Path.next(dropPath))) {
+          const nextNode = getNode<MyElement>(editor, path);
+          if (!nextNode) return;
 
-  moveNodes(editor, {
-    at: dragPath,
-    to,
+          // the next node should be moved after it
+          dropId = nextNode.id;
+          return;
+        }
+
+        // the next node should be moved after it
+        dropId = dragNode.id;
+      }
+
+      if (direction === 'top') {
+        const nodePath = findNode(editor, {
+          at: [],
+          match: { id: dropId },
+        })?.[1];
+        if (!nodePath) return;
+
+        dropPath = [
+          ...nodePath.slice(0, -1),
+          nodePath[nodePath.length - 1] - 1,
+        ];
+
+        if (Path.equals(path, dropPath)) return;
+      }
+
+      if (!dropPath) return;
+
+      const before =
+        Path.isBefore(path, dropPath) && Path.isSibling(path, dropPath);
+      const to = before ? dropPath : Path.next(dropPath);
+
+      moveNodes(editor, {
+        at: path,
+        to,
+      });
+    });
   });
 };
 

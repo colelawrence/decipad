@@ -23,6 +23,7 @@ const wrapperStyles = css({
   left: 0,
   padding: 16,
   transition: 'all 0.75s',
+  zIndex: 1,
 });
 
 const innerStyles = css({

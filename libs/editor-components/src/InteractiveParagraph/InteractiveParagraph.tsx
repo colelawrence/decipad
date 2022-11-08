@@ -41,7 +41,7 @@ export const InteractiveParagraph =
             contentEditable={false}
             css={{
               position: 'absolute',
-              zIndex: 1,
+              zIndex: 2,
               // To prevent blurring the editor when clicking around in the menu
               userSelect: 'none',
             }}
@@ -79,7 +79,7 @@ export const InteractiveParagraph =
               contentEditable={false}
               css={{
                 position: 'absolute',
-                zIndex: 1,
+                zIndex: 2,
                 // To prevent blurring the editor when clicking around in the menu
                 userSelect: 'none',
               }}

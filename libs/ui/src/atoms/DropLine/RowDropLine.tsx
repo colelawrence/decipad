@@ -11,7 +11,7 @@ export const RowDropLine = ({ dropLine }: { dropLine: DropLineDirection }) => {
         top: dropLine === 'top' ? -(dropLineWidth / 2) - 0.5 : undefined,
         bottom: dropLine === 'bottom' ? -(dropLineWidth / 2) - 1 : undefined,
         width: 'calc(100% + 1px)',
-        zIndex: 1,
+        zIndex: 2,
       }}
     >
       <DropLine variant="table" />

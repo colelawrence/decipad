@@ -1,25 +1,25 @@
 import {
   alwaysWritableElementTypes,
+  ELEMENT_PARAGRAPH,
   MyElement,
   MyReactEditor,
   useTEditorRef,
-  ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import {
   findNodePath,
+  focusEditor,
+  getEndPoint,
+  getNextNode,
+  getNodeString,
   getStartPoint,
   hasNode,
   insertElements,
-  removeNodes,
   insertNodes,
+  insertText,
+  removeNodes,
   select,
   setSelection,
-  getNodeString,
-  insertText,
-  getNextNode,
-  getEndPoint,
-  focusEditor,
 } from '@udecode/plate';
 import {
   ComponentProps,
@@ -38,13 +38,14 @@ import {
 import { useSelected } from 'slate-react';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
-  EditorBlock,
   DraggableBlock as UIDraggableBlock,
+  EditorBlock,
   useMergedRef,
 } from '@decipad/ui';
 import { nanoid } from 'nanoid';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
-import { useDnd, UseDndNodeOptions } from '../utils/useDnd';
+import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
+import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -119,6 +120,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       previewRef,
       nodeRef: blockRef,
     });
+    const draggingIds = dndStore.use.draggingIds();
 
     const ref = useMergedRef(blockRef, forwardedRef);
 
@@ -222,7 +224,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         blockRef={ref}
         previewRef={previewRef}
         dropLine={dropLine || undefined}
-        isBeingDragged={isDragging}
+        isBeingDragged={isDragging || draggingIds.has(element.id)}
         onDelete={parentOnDelete === false ? false : onDelete}
         onDuplicate={onDuplicate}
         onShowHide={(a) => {
@@ -238,7 +240,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           )
         }
       >
-        <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
+        <BlockSelectable element={element}>
+          <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
+        </BlockSelectable>
       </UIDraggableBlock>
     );
   }

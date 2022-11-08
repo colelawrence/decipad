@@ -21,7 +21,7 @@ export const draggingOpacity: Opacity = 0.4;
 const horizontalDropLineStyle = css({
   position: 'absolute',
   width: '100%',
-  zIndex: 1,
+  zIndex: 2,
 });
 
 // This positioning puts the dropLine in line with the NewElementLine.
@@ -33,7 +33,7 @@ const verticalDropLineStyle = css({
   width: 'auto',
   height: '100%',
   top: 0,
-  zIndex: 1,
+  zIndex: 2,
 });
 const leftDropLineStyle = css({ left: `-6px` });
 const rightDropLineStyle = css({ right: '-6px' });

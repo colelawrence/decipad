@@ -16,4 +16,5 @@ export const wrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   padding: '6px',
+  zIndex: 2,
 });

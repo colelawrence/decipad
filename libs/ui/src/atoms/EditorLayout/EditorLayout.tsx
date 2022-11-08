@@ -7,15 +7,18 @@ export const EditorLayout = forwardRef<HTMLDivElement, { children: ReactNode }>(
       <div
         ref={ref}
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-
           position: 'relative',
+        }}
+        css={{
+          '[data-slate-editor]': {
+            maxWidth: slimBlockWidth,
+            margin: '0 auto',
+            zIndex: 1,
+          },
         }}
         data-stop-animate-query
       >
-        <div css={{ maxWidth: slimBlockWidth, width: '100%' }}>{children}</div>
+        {children}
       </div>
     );
   }

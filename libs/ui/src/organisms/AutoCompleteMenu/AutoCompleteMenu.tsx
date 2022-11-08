@@ -72,7 +72,7 @@ const styles = (top: boolean) =>
     position: 'absolute',
     width: '280px',
     boxSizing: 'border-box',
-    zIndex: 1,
+    zIndex: 2,
   });
 
 const mainStyles = css({
