@@ -2,7 +2,7 @@ import { CursorEditor, YjsEditor } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
-import { Doc as YDoc } from 'yjs';
+import { Doc as YDoc, encodeStateVector } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
 import {
@@ -141,6 +141,9 @@ export function docSyncEditor<E extends MyEditor>(
     isDocSyncEnabled: true,
     markVersion: (version: string) => store.markVersion(version),
     sameVersion: (version: string) => store.sameVersion(version),
+    equals: (version: string) => {
+      return Buffer.from(encodeStateVector(doc)).toString('hex') === version;
+    },
   });
 
   return useEditor;

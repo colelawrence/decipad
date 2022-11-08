@@ -342,14 +342,15 @@ externaldatasourcekeys
 usergoals
   user_id *String
   name byUserId
+
 docsyncsnapshots
   docsync_id *String
   name byDocsyncId
 
 docsyncsnapshots
   docsync_id *String
-  name **String
-  name byDocsyncIdAndName
+  snapshotName **String
+  name byDocsyncIdAndSnapshotName
 
 @queues
 sendemail

@@ -13,8 +13,8 @@ import { createWorkspace } from './utils/create-workspace';
 import { importNotebook } from './utils/import-notebook';
 
 describe('notebook load json', () => {
-  let sharedNotebookLink: string;
-  let sharedNotebookPage: Page;
+  let publishedNotebookLink: string;
+  let publishedNotebookPage: Page;
   let notebookId: string;
 
   beforeAll(async () => {
@@ -67,42 +67,46 @@ describe('notebook load json', () => {
     expect(new URL(page.url()).searchParams.get('searchParam')).toEqual('foo');
   });
 
-  it('navigates to shared notebook link', async () => {
+  it('navigates to published notebook link', async () => {
     const linkSelector = 'text=//n/Everything-everywhere-all-at-once/';
-    await page.click('button:has-text("Share")');
-    await page.click('[aria-roledescription="enable sharing"]');
+    await page.click('button:has-text("Publish")');
+    await page.click('[aria-roledescription="enable publishing"]');
 
     await page.waitForSelector(linkSelector);
 
-    sharedNotebookLink = await page.innerText(linkSelector);
-    expect(sharedNotebookLink.length).toBeGreaterThan(0);
+    publishedNotebookLink = await page.innerText(linkSelector);
+    expect(publishedNotebookLink.length).toBeGreaterThan(0);
     const newContext = (await browser.newContext()) as BrowserContext;
-    sharedNotebookPage = await newContext.newPage();
+    publishedNotebookPage = await newContext.newPage();
 
-    await withTestUser({ ctx: newContext, p: sharedNotebookPage });
+    await withTestUser({ ctx: newContext, p: publishedNotebookPage });
 
-    await sharedNotebookPage.goto(sharedNotebookLink);
-    await waitForEditorToLoad(sharedNotebookPage);
+    await publishedNotebookPage.goto(publishedNotebookLink);
+    await waitForEditorToLoad(publishedNotebookPage);
     // make sure screenshot is captured
     expect(page).toBeDefined();
   });
 
-  it('navigates to shared notebook link incognito', async () => {
+  it('navigates to published notebook link incognito', async () => {
     const newContext = await browser.newContext();
-    sharedNotebookPage = (await newContext.newPage()) as Page;
+    publishedNotebookPage = (await newContext.newPage()) as Page;
 
-    await sharedNotebookPage.goto(sharedNotebookLink);
-    await waitForEditorToLoad(sharedNotebookPage);
+    await publishedNotebookPage.goto(publishedNotebookLink);
+    await waitForEditorToLoad(publishedNotebookPage);
     // make sure screenshot is captured
-    expect(sharedNotebookPage).toBeDefined();
+    expect(publishedNotebookPage).toBeDefined();
 
     // Magic numbers are delayed
     expect(
-      (await sharedNotebookPage.$$('text="This is a string"')).length
+      (await publishedNotebookPage.$$('text="This is a string"')).length
     ).toBeGreaterThan(0);
 
-    await snapshot(sharedNotebookPage, 'Notebook: Published mode (incognito)', {
-      mobile: true,
-    });
+    await snapshot(
+      publishedNotebookPage,
+      'Notebook: Published mode (incognito)',
+      {
+        mobile: true,
+      }
+    );
   });
 });

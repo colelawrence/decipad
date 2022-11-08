@@ -6,7 +6,7 @@ import { snapshot, withTestUser } from './utils';
 waitForExpect.defaults.interval = 1000;
 let link: string;
 
-describe('notebook share', () => {
+describe('notebook publish', () => {
   beforeAll(setUp);
 
   test('screenshots the slash commands', async () => {
@@ -27,17 +27,18 @@ describe('notebook share', () => {
     await page.keyboard.press('Backspace');
   });
 
-  test('click share button and extract text', async () => {
-    const linkSelector = 'text=//n/My-notebook-titlehello-world/';
-    await page.click('text=share');
-    await page.click('[aria-roledescription="enable sharing"]');
+  test('click publish button and extract text', async () => {
+    await page.waitForTimeout(1000);
+    await page.click('text=Publish');
+    await page.click('[aria-roledescription="enable publishing"]');
 
+    const linkSelector = 'text=//n/My-notebook-titlehello-world/';
     await page.waitForSelector(linkSelector);
 
     link = await page.innerText(linkSelector);
     expect(link.length).toBeGreaterThan(0);
 
-    await snapshot(page as Page, 'Notebook: Share Popover');
+    await snapshot(page as Page, 'Notebook: Publish Popover');
   }, 60000);
 
   let otherUserPage: Page;

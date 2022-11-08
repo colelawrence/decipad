@@ -28,13 +28,12 @@ const fetchSnapshot = async (
   const data = await tables();
   const updates: Uint8Array[] = [];
   for await (const snapshot of allPages(data.docsyncsnapshots, {
-    IndexName: 'byDocsyncIdAndName',
-    KeyConditionExpression: 'docsync_id = :docsync_id AND name = :name',
+    IndexName: 'byDocsyncIdAndSnapshotName',
+    KeyConditionExpression: 'docsync_id = :docsync_id AND snapshotName = :n',
     ExpressionAttributeValues: {
       ':docsync_id': padId,
-      ':name': getDefined(version),
+      ':n': getDefined(version),
     },
-    ConsistentRead: true,
   })) {
     if (snapshot && snapshot.data) {
       updates.push(Buffer.from(snapshot.data, 'base64'));
@@ -50,7 +49,7 @@ export const getNotebookInitialState = async (
   const id = `/pads/${padId}`;
 
   const updates = await (version
-    ? fetchSnapshot(id, version)
+    ? fetchSnapshot(padId, version)
     : fetchUpdates(id));
 
   if (updates.length) {

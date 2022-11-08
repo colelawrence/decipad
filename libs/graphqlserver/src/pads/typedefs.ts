@@ -34,6 +34,7 @@ export default gql`
     icon: String
     padConnectionParams: PadConnectionParams!
     initialState: String
+    snapshots: [PadSnapshot!]!
   }
 
   type PagedPadResult {
@@ -50,14 +51,15 @@ export default gql`
   }
 
   type PadSnapshot {
-    name: String!
+    snapshotName: String!
     createdAt: DateTime
     updatedAt: DateTime
-    pad: Pad
+    data: String
+    version: String
   }
 
   extend type Query {
-    getPadById(id: ID!): Pad
+    getPadById(id: ID!, snapshotName: String): Pad
     pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
   }
 
@@ -103,7 +105,7 @@ export default gql`
 
     unshareNotebookWithSecret(id: ID!, secret: String!): Boolean
 
-    createOrUpdateSnapshot(notebookId: ID!, name: String!): PadSnapshot
+    createOrUpdateSnapshot(notebookId: ID!, snapshotName: String!): Pad!
   }
 
   extend type Subscription {

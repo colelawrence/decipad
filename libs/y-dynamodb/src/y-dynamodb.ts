@@ -76,8 +76,9 @@ export class DynamodbPersistence extends Observable<string> {
     const data = await tables();
     const updates: Uint8Array[] = [];
     for await (const snapshot of allPages(data.docsyncsnapshots, {
-      IndexName: 'byDocsyncIdAndName',
-      KeyConditionExpression: 'docsync_id = :docsync_id AND name = :name',
+      IndexName: 'byDocsyncIdAndSnapshotName',
+      KeyConditionExpression:
+        'docsync_id = :docsync_id AND snapshotName = :name',
       ExpressionAttributeValues: {
         ':docsync_id': this.name,
         ':name': getDefined(this.version),

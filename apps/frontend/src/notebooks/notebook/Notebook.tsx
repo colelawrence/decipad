@@ -47,6 +47,7 @@ const Notebook: FC = () => {
     initialState,
     connectionParams,
     hasLocalChanges,
+    hasUnpublishedChanges,
     isReadOnly,
     isPublic,
     icon,
@@ -55,7 +56,8 @@ const Notebook: FC = () => {
     updateIconColor,
     duplicate,
     removeLocalChanges,
-    setNotebookPublic,
+    publishNotebook,
+    unpublishNotebook,
   } = useNotebookStateAndActions({
     notebookId,
     editor,
@@ -76,16 +78,13 @@ const Notebook: FC = () => {
     duplicate();
   }, [handleChecklistStateChange, duplicate]);
 
-  const setNotebookPublicCallback = useCallback(
-    (state: boolean) => {
-      handleChecklistStateChange({
-        type: 'newGoal',
-        goalName: 'Share this notebook',
-      });
-      setNotebookPublic(state);
-    },
-    [handleChecklistStateChange, setNotebookPublic]
-  );
+  const publishNotebookWithMetrics = useCallback(() => {
+    handleChecklistStateChange({
+      type: 'newGoal',
+      goalName: 'Share this notebook',
+    });
+    publishNotebook();
+  }, [handleChecklistStateChange, publishNotebook]);
 
   useAnimateMutations();
 
@@ -164,13 +163,13 @@ const Notebook: FC = () => {
               suspenseFallback={<TopbarPlaceholder />}
             >
               <Topbar
-                notebookId={notebookId}
                 notebook={notebook}
-                isNotebookPublic={isPublic}
                 hasLocalChanges={hasLocalChanges}
+                hasUnpublishedChanges={hasUnpublishedChanges}
                 duplicateNotebook={duplicateNotebook}
                 removeLocalChanges={removeLocalChanges}
-                setNotebookPublic={setNotebookPublicCallback}
+                publishNotebook={publishNotebookWithMetrics}
+                unpublishNotebook={unpublishNotebook}
               />
             </Frame>
           }

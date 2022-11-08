@@ -1,3 +1,11 @@
+fragment NotebookSnapshot on PadSnapshot {
+  snapshotName
+  createdAt
+  updatedAt
+  data
+  version
+}
+
 fragment EditorNotebook on Pad {
   id
   name
@@ -22,10 +30,13 @@ fragment EditorNotebook on Pad {
     token
   }
   initialState
+  snapshots {
+    ...NotebookSnapshot
+  }
 }
 
-query GetNotebookById($id: ID!) {
-  getPadById(id: $id) {
+query GetNotebookById($id: ID!, $snapshotName: String) {
+  getPadById(id: $id, snapshotName: $snapshotName) {
     ...EditorNotebook
   }
 }

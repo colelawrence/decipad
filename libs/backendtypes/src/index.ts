@@ -109,9 +109,11 @@ export type Pad = {
 
 export type PadSnapshot = {
   id: ID;
-  name: string;
+  snapshotName: string;
   createdAt?: number | Date;
   updatedAt?: number | Date;
+  data?: string;
+  version?: string;
 };
 
 export type PadInput = {
@@ -547,9 +549,10 @@ export interface DocSyncUpdateRecord extends TableRecordBase {
 
 export interface DocSyncSnapshotRecord extends TableRecordBase {
   docsync_id: ID;
-  name: string;
+  snapshotName: string;
   data: string;
   updatedAt: number;
+  version: string;
 }
 
 export type AllowListRecord = TableRecordBase;
@@ -591,6 +594,7 @@ export type GraphqlContext = {
   user?: User;
   subscriptionId?: ID;
   connectionId?: ID;
+  snapshotName?: string;
   event: APIGatewayProxyEventV2;
 };
 

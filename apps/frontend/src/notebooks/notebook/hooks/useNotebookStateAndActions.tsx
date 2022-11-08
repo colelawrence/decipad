@@ -9,9 +9,11 @@ import { BehaviorSubject } from 'rxjs';
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
+import { isEmpty } from 'lodash';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
   GetNotebookByIdQuery,
+  useCreateOrUpdateNotebookSnapshotMutation,
   useGetNotebookByIdQuery,
   useSetNotebookPublicMutation,
   useUpdateNotebookIconMutation,
@@ -44,13 +46,18 @@ interface UseNotebookStateAndActionsResult {
   isSavedRemotely: BehaviorSubject<boolean> | undefined;
   connectionParams?: NotebookConnectionParams;
   initialState?: string;
+  hasUnpublishedChanges: boolean;
 
   duplicate: () => Promise<void>;
   removeLocalChanges: () => Promise<void>;
   updateIcon: (icon: Icon) => void;
   updateIconColor: (icon: IconColor) => void;
   setNotebookPublic: (isPublic: boolean) => void;
+  publishNotebook: () => void;
+  unpublishNotebook: () => void;
 }
+
+const SNAPSHOT_NAME = 'Published 1';
 
 export const useNotebookStateAndActions = ({
   notebookId,
@@ -78,7 +85,10 @@ export const useNotebookStateAndActions = ({
 
   // ------- remote api -------
   const [getNotebookResult] = useGetNotebookByIdQuery({
-    variables: { id: notebookId },
+    variables: {
+      id: notebookId,
+      snapshotName: isReadOnly ? SNAPSHOT_NAME : undefined,
+    },
   });
   const [remoteDuplicateNotebook] = useDuplicateNotebook({
     id: notebookId,
@@ -86,6 +96,9 @@ export const useNotebookStateAndActions = ({
   });
   const [, remoteUpdateNotebookIcon] = useUpdateNotebookIconMutation();
   const [, remoteUpdateNotebookIsPublic] = useSetNotebookPublicMutation();
+
+  const [, createOrUpdateSnapshot] =
+    useCreateOrUpdateNotebookSnapshotMutation();
 
   // ------- actions -------
   const duplicate = useCallback(async () => {
@@ -180,6 +193,32 @@ export const useNotebookStateAndActions = ({
     ]
   );
 
+  // -------- publishing -------------
+
+  const [hasUnpublishedChanges, setHasUnpublishedChanges] = useState(false);
+
+  // Grabbing the snapshot here so the effect can depend on it instead of the whole notebook. The
+  // notebook appears to be a mutable reference from the local cache and so we'd miss effects.
+  const snapshot = notebook?.snapshots[0];
+  useEffect(() => {
+    if (!docsync || !snapshot || !isPublic) {
+      return;
+    }
+
+    const listener = () =>
+      setHasUnpublishedChanges(
+        !(snapshot?.version && docsync.equals(snapshot?.version))
+      );
+
+    // Trigger one initial run for good measure.
+    if (!isEmpty(docsync.children)) {
+      listener();
+    }
+
+    docsync.onSaved(listener);
+    return () => docsync?.offSaved(listener);
+  }, [docsync, isPublic, snapshot, setHasUnpublishedChanges]);
+
   const setNotebookPublic = useCallback(
     async (newIsPublic: boolean) => {
       await remoteUpdateNotebookIsPublic({
@@ -189,6 +228,23 @@ export const useNotebookStateAndActions = ({
     },
     [notebookId, remoteUpdateNotebookIsPublic]
   );
+
+  const publishNotebook = useCallback(() => {
+    // TODO: this must invalidate the Pad since snapshots are a property of Pad. One way to do
+    // this is if the mutation returns a Pad instead of a PadSnapshot. Another way to do it is to
+    // programatically invalidate/update cache, either here or in the urql config.
+    createOrUpdateSnapshot({ notebookId, snapshotName: SNAPSHOT_NAME })
+      .then(() => {
+        return setNotebookPublic(true);
+      })
+      .catch((err) => {
+        toast(`Error publishing notebook: ${(err as Error).message}`, 'error');
+      });
+  }, [createOrUpdateSnapshot, notebookId, setNotebookPublic, toast]);
+
+  const unpublishNotebook = useCallback(() => {
+    setNotebookPublic(false);
+  }, [setNotebookPublic]);
 
   return {
     error,
@@ -201,11 +257,15 @@ export const useNotebookStateAndActions = ({
     isSavedRemotely,
     connectionParams: notebook?.padConnectionParams,
     initialState: notebook?.initialState ?? undefined,
+    hasUnpublishedChanges,
 
     duplicate,
     removeLocalChanges,
     setNotebookPublic,
     updateIcon,
     updateIconColor,
+
+    publishNotebook,
+    unpublishNotebook,
   };
 };

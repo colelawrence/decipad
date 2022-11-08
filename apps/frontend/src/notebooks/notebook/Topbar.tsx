@@ -5,46 +5,41 @@ import { BehaviorSubject } from 'rxjs';
 import { Notebook } from './hooks/useNotebookStateAndActions';
 
 type TopbarProps = {
-  readonly notebookId: string;
   readonly notebook: Notebook;
   readonly hasLocalChanges: BehaviorSubject<boolean> | undefined;
+  readonly hasUnpublishedChanges: boolean;
   readonly duplicateNotebook?: () => void;
   readonly removeLocalChanges?: () => void;
-  readonly isNotebookPublic?: boolean;
-  readonly setNotebookPublic?: (isPublic: boolean) => void;
+  readonly publishNotebook?: () => void;
+  readonly unpublishNotebook?: () => void;
 };
 
 const Topbar: FC<TopbarProps> = ({
-  notebookId,
   notebook,
   hasLocalChanges,
+  hasUnpublishedChanges,
   duplicateNotebook,
   removeLocalChanges,
-  isNotebookPublic,
-  setNotebookPublic = noop,
+  publishNotebook = noop,
+  unpublishNotebook = noop,
 }) => {
-  const handleToggleMakePublic = () => {
-    setNotebookPublic(!isNotebookPublic);
-  };
-
   if (!notebook) {
     return null;
   }
 
   return (
     <NotebookTopbar
-      notebook={{
-        id: notebookId,
-        name: notebook.name,
-      }}
+      notebook={notebook}
       workspace={notebook.workspace}
       usersWithAccess={notebook.access.users}
       permission={notebook.myPermissionType}
-      onToggleMakePublic={handleToggleMakePublic}
-      isPublic={notebook.isPublic || undefined}
+      isPublished={notebook.isPublic || undefined}
       onRevertChanges={removeLocalChanges}
       hasLocalChanges={hasLocalChanges}
+      hasUnpublishedChanges={hasUnpublishedChanges}
       onDuplicateNotebook={duplicateNotebook}
+      onPublish={publishNotebook}
+      onUnpublish={unpublishNotebook}
     />
   );
 };

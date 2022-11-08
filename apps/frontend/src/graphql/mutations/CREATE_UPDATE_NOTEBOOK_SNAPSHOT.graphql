@@ -1,0 +1,11 @@
+mutation CreateOrUpdateNotebookSnapshot(
+  $notebookId: ID!
+  $snapshotName: String!
+) {
+  createOrUpdateSnapshot(notebookId: $notebookId, snapshotName: $snapshotName) {
+    id
+    snapshots {
+      ...NotebookSnapshot
+    }
+  }
+}

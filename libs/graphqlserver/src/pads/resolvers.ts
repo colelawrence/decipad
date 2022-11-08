@@ -28,7 +28,7 @@ import { accessTokenFor } from '../utils/accessTokenFor';
 import { duplicatePad } from './duplicatePad';
 import { setPadPublic } from './setPadPublic';
 import { importPad } from './importPad';
-import { createOrUpdateSnapshot } from './createOrUpdateSnapshot';
+import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -76,7 +76,15 @@ const padResource = Resource({
 
 const resolvers = {
   Query: {
-    getPadById: padResource.getById,
+    async getPadById(
+      _: unknown,
+      params: { id: ID; snapshotName?: string },
+      context: GraphqlContext
+    ) {
+      // So we can set `initialState` to be the last published snapshot.
+      context.snapshotName = params.snapshotName;
+      return padResource.getById(_, params, context);
+    },
 
     async pads(
       _: unknown,
@@ -167,11 +175,20 @@ const resolvers = {
       };
     },
 
-    async initialState(pad: PadRecord) {
-      const initialState = await getNotebookInitialState(pad.id);
+    async initialState(pad: PadRecord, __: unknown, context: GraphqlContext) {
+      const initialState = await getNotebookInitialState(
+        pad.id,
+        context.snapshotName // Defined in `getPadById` query
+      );
       return initialState
         ? Buffer.from(initialState).toString('base64')
         : undefined;
+    },
+
+    async snapshots(pad: PadRecord) {
+      return getSnapshots({
+        notebookId: pad.id,
+      });
     },
   },
 

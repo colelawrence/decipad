@@ -125,7 +125,7 @@ const padLinkTextStyles = css(
 );
 
 interface NotebookSharingPopUpProps {
-  notebook: { id: string; name: string; snapshots?: { createdAt: string }[] };
+  notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
   hasUnpublishedChanges?: boolean;
   isPublished?: boolean;
   onPublish?: () => void;
@@ -143,7 +143,7 @@ export const NotebookPublishingPopUp = ({
   hasUnpublishedChanges = false,
   isPublished = false,
   onPublish = noop,
-  onRestore = noop,
+  // onRestore = noop,
   onUnpublish = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
@@ -196,7 +196,7 @@ export const NotebookPublishingPopUp = ({
                     ariaRoleDescription="enable publishing"
                     active={isPublished}
                     onChange={(newIsPublished) =>
-                      newIsPublished ? onUnpublish() : onPublish()
+                      newIsPublished ? onPublish() : onUnpublish()
                     }
                   />
                 </div>
@@ -261,9 +261,9 @@ export const NotebookPublishingPopUp = ({
                       )}
                     </p>
                     <div css={horizontalGroupStyles}>
-                      <Button type="secondary" onClick={onRestore}>
+                      {/* <Button type="secondary" onClick={onRestore}>
                         Restore
-                      </Button>
+                      </Button> */}
                       <Button type="primaryBrand" onClick={onPublish}>
                         Publish New Changes
                       </Button>

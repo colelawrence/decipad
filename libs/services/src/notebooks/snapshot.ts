@@ -1,7 +1,9 @@
 import tables, { allPages } from '@decipad/tables';
-import { mergeUpdates } from 'yjs';
+import { applyUpdate, Doc, encodeStateVector, mergeUpdates } from 'yjs';
 
-export const snapshot = async (notebookId: string): Promise<string> => {
+export const snapshot = async (
+  notebookId: string
+): Promise<{ data: string; version: string }> => {
   const data = await tables();
 
   const updates: Buffer[] = [];
@@ -18,5 +20,12 @@ export const snapshot = async (notebookId: string): Promise<string> => {
     }
   }
 
-  return Buffer.from(mergeUpdates(updates)).toString('base64');
+  const mergedUpdates = mergeUpdates(updates);
+  const doc = new Doc();
+  applyUpdate(doc, mergedUpdates);
+
+  return {
+    data: Buffer.from(mergedUpdates).toString('base64'),
+    version: Buffer.from(encodeStateVector(doc)).toString('hex'),
+  };
 };

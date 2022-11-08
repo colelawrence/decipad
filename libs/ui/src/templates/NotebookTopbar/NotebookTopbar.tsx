@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
 import { Deci, LeftArrow, Sheet } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
-import { NotebookSharingPopUp } from '../../organisms';
+import { NotebookPublishingPopUp } from '../../organisms';
 import { cssVar, p14Medium, smallestDesktop } from '../../primitives';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
@@ -81,7 +81,7 @@ export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookAvatars>,
   'usersWithAccess'
 > &
-  ComponentProps<typeof NotebookSharingPopUp> & {
+  ComponentProps<typeof NotebookPublishingPopUp> & {
     permission?: PermissionType | null;
     workspace?: { id: string; name: string } | null;
     onDuplicateNotebook?: () => void;
@@ -172,7 +172,7 @@ export const NotebookTopbar = ({
 
         {sessionStatus === 'authenticated' ? (
           isWriter ? (
-            <NotebookSharingPopUp notebook={notebook} {...sharingProps} />
+            <NotebookPublishingPopUp notebook={notebook} {...sharingProps} />
           ) : (
             <Button onClick={() => onDuplicateNotebook()}>
               Duplicate notebook

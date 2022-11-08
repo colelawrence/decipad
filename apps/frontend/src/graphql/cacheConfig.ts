@@ -35,6 +35,14 @@ export const graphCacheConfig: GraphCacheConfig = {
       return null;
     },
   },
+  resolvers: {
+    PadSnapshot: {
+      createdAt: (parent) => {
+        // Correct server timestamps
+        return new Date(new Date(parent.createdAt).getTime() * 1000);
+      },
+    },
+  },
   updates: {
     Mutation: {
       createWorkspace: (result, _args, cache) => {
