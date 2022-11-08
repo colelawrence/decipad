@@ -9371,15 +9371,16 @@
     "@udecode/plate-core" "18.7.0"
     "@udecode/plate-styled-components" "18.7.0"
 
-"@udecode/plate-ui-dnd@18.7.0":
-  version "18.7.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-dnd/-/plate-ui-dnd-18.7.0.tgz#14f2d1593579ab59960b390e369b65e5b3bf79a5"
-  integrity sha512-n6GIm56EreOb7MYxvA1Dwj3yL8p32+Q3+/5+ccca238G8THlC7v8ac+x8kAgLs0EetWfn0reFe+OpSBL2EIPKw==
+"@udecode/plate-ui-dnd@18.8.0":
+  version "18.8.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-dnd/-/plate-ui-dnd-18.8.0.tgz#3800438c9dbb3a83390ff17792fbd8c669e2d849"
+  integrity sha512-q9c94+Dj6hpOFrIWIv4TKZUtJAO3HFXUzmsIjGoFQGPcQEeUBN1KwsGawnJ0ziSFHC5aT1HHoXBsnoAa6UH2mQ==
   dependencies:
     "@react-hook/merged-ref" "^1.3.2"
     "@tippyjs/react" "^4.2.6"
     "@udecode/plate-core" "18.7.0"
     "@udecode/plate-styled-components" "18.7.0"
+    raf "^3.4.1"
 
 "@udecode/plate-ui-find-replace@18.7.0":
   version "18.7.0"
@@ -9491,10 +9492,10 @@
     "@udecode/plate-ui-button" "18.7.0"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@18.7.0":
-  version "18.7.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.7.0.tgz#f19d335d18c0e84e563f71ed15f5f29ce4098f6d"
-  integrity sha512-APDICRVwJQbo0pfJd6oI9Kxp+1Wla3cDT5ShN9agLzP9luXvJceosXL2yS//pIB7qgS+442ce/C+Fu9tUUJ2jA==
+"@udecode/plate-ui@18.8.0":
+  version "18.8.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.8.0.tgz#2d8c1aad960fd5c2dfcfae6e9332fce70931e9c6"
+  integrity sha512-6WP6c1L8LtMNMcplqTXjJ70HqNsk/SCzjyFD9Kw+cqACoHG69n0+bSa925iOPhyV2HAik7xwr3Z9DOdpkyk1Ow==
   dependencies:
     "@udecode/plate-headless" "18.7.0"
     "@udecode/plate-styled-components" "18.7.0"
@@ -9504,7 +9505,7 @@
     "@udecode/plate-ui-code-block" "18.7.0"
     "@udecode/plate-ui-combobox" "18.7.0"
     "@udecode/plate-ui-cursor" "18.7.0"
-    "@udecode/plate-ui-dnd" "18.7.0"
+    "@udecode/plate-ui-dnd" "18.8.0"
     "@udecode/plate-ui-find-replace" "18.7.0"
     "@udecode/plate-ui-font" "18.7.0"
     "@udecode/plate-ui-line-height" "18.7.0"
@@ -9516,13 +9517,13 @@
     "@udecode/plate-ui-table" "18.7.0"
     "@udecode/plate-ui-toolbar" "18.7.0"
 
-"@udecode/plate@18.7.0":
-  version "18.7.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.7.0.tgz#02e04c660100660df0f16a6cc971713a2b92ba96"
-  integrity sha512-QgwzZAIqpfYl2V6yxYsX189TYYuiQRz2IdGZ7D9B0sNZBg7OeJ8YO+XYlHo4u7nORzsRhMzlqIr4/vfxFVNeeQ==
+"@udecode/plate@18.8.0":
+  version "18.8.0"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.8.0.tgz#caba6ec2133b144a28528034e7e7bf4374b08507"
+  integrity sha512-N0lvmRkHttHHpT1trIvw3RE7WA+CiFqzwaPYW0VNShHZSWQrFdvic3GLWlUs3IOkU9XKZsknrWPJU7NJgaHEJA==
   dependencies:
     "@udecode/plate-headless" "18.7.0"
-    "@udecode/plate-ui" "18.7.0"
+    "@udecode/plate-ui" "18.8.0"
 
 "@udecode/zustood@^1.1.1":
   version "1.1.1"
