@@ -5,6 +5,7 @@ import { FC, forwardRef, ReactNode, RefCallback, RefObject } from 'react';
 import { noop } from 'rxjs';
 import { useMergedRef } from '../../hooks';
 import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
+import { regularBorder } from '../../organisms/Table/Table';
 import {
   TableCellControls,
   TableCellControlsProps,
@@ -13,6 +14,9 @@ import {
 const tableRowStyles = (isBeingDragged: boolean) =>
   css({
     opacity: isBeingDragged ? draggingOpacity : 'unset',
+    '&:not(:last-child) > td': {
+      borderBottom: regularBorder,
+    },
   });
 
 const invisibleTableRowStyles = css({

@@ -10,8 +10,7 @@ import { cssVar, tableBorderColor } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
-const regularBorder = `1px solid ${tableBorderColor}`;
-const tableResultBorder = `0px`;
+export const regularBorder = `1px solid ${tableBorderColor}`;
 const liveResultBorder = `1px solid ${cssVar('liveDataBackgroundColor')}`;
 const borderRadius = '6px';
 
@@ -25,10 +24,42 @@ const tableBaseStyles = css({
   counterReset: tableRowCounter,
   display: 'inline-table',
   backgroundColor: cssVar('backgroundColor'),
+  'tr td': {
+    borderBottom: regularBorder,
+  },
+  td: {
+    borderLeft: regularBorder,
+  },
+  'td:last-child': {
+    borderRight: regularBorder,
+  },
+  table: {
+    marginBottom: 0,
+    'tr:last-child td': {
+      borderBottom: 0,
+    },
+    'tr td:first-child': {
+      borderLeft: 0,
+    },
+    'tr td:last-child': {
+      borderRight: 0,
+    },
+  },
+});
+
+const nestedStyles = css({
+  borderBottom: 0,
+  'tr:last-child td': {
+    borderBottom: 0,
+  },
+  'td:first-child': {
+    borderLeft: 0,
+  },
 });
 
 const readOnlyTableStyles = css({
   width: '100%',
+  marginBottom: '12px',
 });
 
 const wideTableStyles = css({
@@ -55,24 +86,9 @@ const borderRadiusStyles = css({
   },
 });
 
-const readOnlyBorderStyles = css({
-  border: tableResultBorder,
-});
-
-// Tables inside another table cell should only render their inner borders.
-const innerBorderStyles = css({
-  '> thead > tr > th, > tbody > tr:not(:last-child) > td, > tfoot > tr > td': {
-    borderBottom: regularBorder,
-  },
-  '> thead > tr > th:not(:last-child), > tbody > tr > td:not(:last-child), > tfoot > tr > td:not(:last-child)':
-    {
-      borderRight: regularBorder,
-    },
-});
-
 const allBorderStyles = (outerBorder: string, innerBorder: string) =>
-  css(innerBorderStyles, {
-    '> thead > tr > th, > tbody > tr > td, > tfoot > tr > td': {
+  css({
+    '': {
       borderRight: innerBorder,
       borderBottom: innerBorder,
     },
@@ -237,12 +253,11 @@ export const Table = ({
             borderRadiusStyles,
             allBorderStyles(border, regularBorder),
           ],
-        b === 'inner' && innerBorderStyles,
         tableWidth === 'WIDE' && wideTableStyles,
         isSelectingCell && hiddenSelectionStyles,
-        isReadOnly && readOnlyTableStyles,
         isLiveResult && liveResultStyles,
-        isReadOnly && readOnlyBorderStyles,
+        b === 'inner' && nestedStyles,
+        isReadOnly && readOnlyTableStyles,
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

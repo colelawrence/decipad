@@ -8,8 +8,9 @@ import { CodeResult, Table } from '..';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
+import { cellLeftPaddingStyles } from '../../styles/table';
 
-const rowLabelStyles = css({
+const rowLabelStyles = css(cellLeftPaddingStyles, {
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   color: cssVar('currentTextColor'),
   display: 'inline-block',
