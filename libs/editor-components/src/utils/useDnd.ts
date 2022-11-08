@@ -12,7 +12,7 @@ import {
   useDragNode,
   UseDropNodeOptions,
 } from '@udecode/plate';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
 import { Path } from 'slate';
 import { ReactEditor } from 'slate-react';
@@ -66,6 +66,8 @@ export const useDnd = ({
   const { id, type } = element;
 
   const editor = useTEditorRef();
+  const elementRef = useRef<MyElement>(element);
+  elementRef.current = element;
 
   const [dropLine, setDropLine] = useState<DropDirection>();
 
@@ -77,7 +79,8 @@ export const useDnd = ({
       type,
       // The `item` object is set only once when the component renders so we need `getPath` to be
       // a function to account for path changes.
-      getPath: () => ReactEditor.findPath(editor as ReactEditor, element),
+      getPath: () =>
+        ReactEditor.findPath(editor as ReactEditor, elementRef.current),
     }),
   });
 
