@@ -591,4 +591,82 @@ runTests({
       },
     ],
   },
+  'table with spreads and space after spread operator': {
+    source: ' Table = {... A } ',
+    ast: [
+      {
+        type: 'assign',
+        args: [
+          {
+            type: 'def',
+            args: ['Table'],
+            start: {
+              char: 1,
+              line: 1,
+              column: 2,
+            },
+            end: {
+              char: 5,
+              line: 1,
+              column: 6,
+            },
+          },
+          {
+            type: 'table',
+            args: [
+              {
+                type: 'table-spread',
+                args: [
+                  {
+                    type: 'ref',
+                    args: ['A'],
+                    start: {
+                      char: 14,
+                      line: 1,
+                      column: 15,
+                    },
+                    end: {
+                      char: 14,
+                      line: 1,
+                      column: 15,
+                    },
+                  },
+                ],
+                start: {
+                  char: 10,
+                  line: 1,
+                  column: 11,
+                },
+                end: {
+                  char: 14,
+                  line: 1,
+                  column: 15,
+                },
+              },
+            ],
+            start: {
+              char: 9,
+              line: 1,
+              column: 10,
+            },
+            end: {
+              char: 16,
+              line: 1,
+              column: 17,
+            },
+          },
+        ],
+        start: {
+          char: 1,
+          line: 1,
+          column: 2,
+        },
+        end: {
+          char: 16,
+          line: 1,
+          column: 17,
+        },
+      },
+    ],
+  },
 });

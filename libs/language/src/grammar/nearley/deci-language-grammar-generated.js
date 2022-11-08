@@ -1257,12 +1257,12 @@ let ParserRules = [
   { name: 'tableItem$subexpression$1', symbols: [{ literal: '...' }] },
   {
     name: 'tableItem',
-    symbols: ['tableItem$subexpression$1', 'ref'],
+    symbols: ['tableItem$subexpression$1', '_', 'ref'],
     postprocess: (d) => {
       return addArrayLoc(
         {
           type: 'table-spread',
-          args: [d[1]],
+          args: [d[2]],
         },
         d
       );
@@ -1546,7 +1546,6 @@ let ParserRules = [
   { name: 'expression', symbols: ['tiered'], postprocess: id },
   { name: 'expression', symbols: ['match'], postprocess: id },
   { name: 'expression', symbols: ['overExp'], postprocess: id },
-  { name: 'expression', symbols: ['fetchData'], postprocess: id },
   { name: 'overExp', symbols: ['asExp'], postprocess: id },
   {
     name: 'overExp',

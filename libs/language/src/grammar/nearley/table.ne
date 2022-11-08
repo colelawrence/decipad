@@ -39,11 +39,11 @@ tableItem -> identifier                                 {%
                                                         }
                                                         %}
 
-tableItem -> ("…" | "...") ref                          {%
+tableItem -> ("…" | "...") _ ref                          {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'table-spread',
-                                                            args: [d[1]]
+                                                            args: [d[2]]
                                                           }, d)
                                                         }
                                                         %}
