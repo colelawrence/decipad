@@ -347,10 +347,10 @@ docsyncsnapshots
   docsync_id *String
   name byDocsyncId
 
-docsyncsnapshots
-  docsync_id *String
-  snapshotName **String
-  name byDocsyncIdAndSnapshotName
+# docsyncsnapshots
+#   docsync_id *String
+#   snapshotName **String
+#   name byDocsyncIdAndSnapshotName
 
 @queues
 sendemail
