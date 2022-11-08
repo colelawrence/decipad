@@ -264,7 +264,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string; expires: string }> = ({
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
-                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Get inspired by checking our <a href="https://alpha.decipad.com/docs/examples/">gallery of examples</a></div>
+                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Get inspired by checking our <a href="https://app.decipad.com/docs/gallery">gallery of examples</a></div>
                                                   </td>
                                                 </tr>
                                                 <tr>
@@ -279,7 +279,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string; expires: string }> = ({
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="font-size:0px;padding:5px 0px 0px 0px;word-break:break-word;">
-                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Are you the type of person, who reads the manual before pressing the “ON” button? Take a look at our <a href="https://alpha.decipad.com/docs/">docs</a></div>
+                                                  <div style="font-family:-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif;font-size:11pt;font-style:normal;font-weight:normal;line-height:1.7;text-align:left;color:#777E89;">Are you the type of person, who reads the manual before pressing the “ON” button? Take a look at our <a href="https://app.decipad.com/docs/">docs</a></div>
                                                   </td>
                                                 </tr>
                                                 <tr>

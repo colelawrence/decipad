@@ -94,16 +94,6 @@ h1 {
 
 }
 
-@media only screen and (max-width: 700px) {
-  .card-gallery {
-    min-width: 100%;
-  }
-
-  .title-gallery {
-    font-size: 15vw !important;
-  }
-}
-
 h2 {
   font-style: normal;
   font-weight: 600;
@@ -502,3 +492,148 @@ summary{
   display: none !important;
  }
 
+
+
+
+ /*Gallery*/
+
+
+@media only screen and (max-width: 700px) {
+  .card-gallery {
+    min-width: 100%;
+  }
+
+}
+.logo-gallery{
+  transform: scale(1);
+}
+
+.header-gallery {
+  margin-top: 19.5px;
+  margin-left: 40px;
+}
+
+.login-gallery{
+  margin-right: 40px;
+  margin-top: 10px;
+}
+
+.navbar-gallery {
+  background: #f4f6fa;
+  display: grid;
+  grid-auto-columns: 1fr;
+  -ms-grid-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media screen and (min-width: 1440px) {
+.navbar-gallery {
+  position: absolute;
+  left: auto;
+  top: 0%;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  max-width: 1440px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: transparent;
+}
+.navbar-gallery-wrapper{
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.header-gallery {
+  margin-left: 40px;
+}
+
+.login-gallery{
+  margin-right: 40px;
+  margin-top: 11px;
+}
+
+.logo-gallery{
+  transform: scale(0.95);
+  margin-left: -2.5px;
+  margin-top: -1.5px;
+}
+
+}
+
+@media only screen and (max-width: 991px) {
+  .header-gallery {
+    margin-top: 34px;
+    margin-left: 32px;
+  }
+  .login-gallery{
+    margin-right: 40px;
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .header-gallery {
+    margin-top: 33px;
+    margin-left: 32px;
+  }
+
+  .login-gallery{
+    margin-right: 40px;
+    margin-top: 20px;
+  }
+  .title-gallery {
+    font-size: 10vw !important;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .header-gallery {
+    margin-top: 28px;
+    margin-left: 11px;
+    transform: scale(0.95);
+  }
+  .login-gallery{
+    margin-right: 20px;
+  }
+
+  .title-gallery {
+    font-size: 10vw !important;
+  }
+}
+
+.fadeIn {
+  animation: fadeInAnimation 0.5s ease-in;
+}
+
+.zoom {
+  transition: 0.3s all ease-in-out;
+}
+
+.zoom:hover {
+  transform: scale(1.02);
+}
+
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
