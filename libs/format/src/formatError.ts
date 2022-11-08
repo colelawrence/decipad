@@ -87,7 +87,7 @@ export const formatError = (locale: string, spec: ErrSpec): string => {
       return `Expected table and associated column`;
     }
     case 'duplicated-name': {
-      return `The name ${spec.duplicatedName} is already being used. You cannot have duplicate names`;
+      return `This name is already being used. You cannot have duplicated names`;
     }
     case 'complex-expression-exponent': {
       return `Complex expressions not supported in exponents`;
