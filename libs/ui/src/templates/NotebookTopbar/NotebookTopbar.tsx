@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useContext } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { Button, IconButton } from '../../atoms';
+import { Button, IconButton, Link } from '../../atoms';
 import { Deci, LeftArrow, Sheet } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookSharingPopUp } from '../../organisms';
@@ -117,7 +117,9 @@ export const NotebookTopbar = ({
           </div>
         ) : (
           <span css={{ display: 'grid', height: '16px', width: '16px' }}>
-            <Deci />
+            <Link href="https://decipad.com">
+              <Deci />
+            </Link>
           </span>
         )}
         <NotebookPath
@@ -125,6 +127,7 @@ export const NotebookTopbar = ({
             isWriter ? notebook.name : 'Decipad — interactive notebook'
           }
           workspaceName={isWriter ? workspace?.name : undefined}
+          href={!isWriter ? 'https://decipad.com' : undefined}
         />
         <BetaBadge />
       </div>

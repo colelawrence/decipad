@@ -23,19 +23,34 @@ const notebookNameStyles = css(p14Medium, {
   cursor: 'default',
 });
 
+const anchorStyles = css({
+  textDecoration: 'none',
+  cursor: 'pointer',
+});
+
 interface NotebookPathProps {
   notebookName: string;
   workspaceName?: string;
+  href?: string;
 }
 
 export const NotebookPath = ({
-  notebookName,
+  notebookName: _notebookName,
   workspaceName,
+  href,
 }: NotebookPathProps): ReturnType<FC> => {
+  const notebookName = _notebookName || '<unnamed-notebook>';
+  const link = href ? (
+    <a css={anchorStyles} href={href}>
+      <em css={[notebookNameStyles, anchorStyles]}>{notebookName}</em>
+    </a>
+  ) : (
+    <em css={notebookNameStyles}>{notebookName}</em>
+  );
   return (
     <div css={wrapperStyles}>
       {workspaceName && <em css={workspaceNameStyles}>{workspaceName} / </em>}
-      <em css={notebookNameStyles}>{notebookName || '<unnamed-notebook>'}</em>
+      {link}
     </div>
   );
 };
