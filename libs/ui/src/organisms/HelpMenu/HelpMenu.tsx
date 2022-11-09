@@ -17,10 +17,11 @@ const menuItemSmallTextStyles = css(
   setCssVar('normalTextColor', 'weakerTextColor')
 );
 
-const triggerStyles = css({
+const helpMenuStyles = css({
   position: 'fixed',
   bottom: '16px',
   right: '16px',
+  zIndex: 2,
 });
 
 const linkStyles = css({
@@ -79,7 +80,7 @@ export const HelpMenu = ({
       root
       dropdown
       trigger={
-        <div css={[triggerStyles, hideOnPrint]}>
+        <div css={[helpMenuStyles, hideOnPrint]}>
           <HelpButton />
         </div>
       }

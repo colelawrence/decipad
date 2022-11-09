@@ -24,6 +24,7 @@ const wrapperStyles = css({
   boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
   borderRadius: '8px',
   bottom: '16px',
+  zIndex: 2,
 });
 
 const buttonStyles = css({
