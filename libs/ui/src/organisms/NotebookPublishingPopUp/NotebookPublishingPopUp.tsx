@@ -21,6 +21,7 @@ import {
 
 const wrapperStyles = css({
   position: 'relative',
+  zIndex: 3,
 });
 
 const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
