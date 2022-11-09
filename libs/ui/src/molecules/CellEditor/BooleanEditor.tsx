@@ -1,5 +1,5 @@
-import type { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
+import type { FC, ReactNode } from 'react';
 import { Toggle } from '../../atoms';
 import { p12Medium, p24Bold } from '../../primitives';
 
@@ -37,7 +37,7 @@ export const BooleanEditor: FC<BooleanEditorProps> = ({
         parentType={parentType}
       />
       <span css={parentType === 'input' ? p24Bold : p12Medium}>
-        {value === 'true' ? 'On' : 'Off'}
+        {parentType !== 'input' ? '' : value === 'true' ? 'On' : 'Off'}
       </span>
       <div css={hiddenChildrenStyles}>{children}</div>
     </div>

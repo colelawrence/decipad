@@ -1,42 +1,70 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { noop } from '@decipad/utils';
 import { cssVar, shortAnimationDuration } from '../../primitives';
 
 // Skinny = true means the toggle will be in a table.
 // Therefore needs to be smaller
-const toggleStyles = (skinny: boolean) =>
-  css({
-    backgroundColor: cssVar('strongHighlightColor'),
-    width: skinny ? '34px' : '46px',
-    height: skinny ? '18px' : '24px',
-    borderRadius: '100vmax',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '2px',
-    transition: `background-color ${shortAnimationDuration} ease-in-out`,
-    position: 'relative',
-  });
+const toggleStyles = (skinny: boolean) => (skinny ? makeCheckbox : makeToggle);
 
-const activeToggleStyles = css({
+const makeCheckbox = css({
+  backgroundColor: cssVar('backgroundColor'),
+  border: `1px solid ${cssVar('weakTextColor')}`,
+  width: '16px',
+  height: '16px',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
+});
+
+const makeToggle = css({
+  backgroundColor: cssVar('strongHighlightColor'),
+  width: '46px',
+  height: '24px',
+  borderRadius: '100vmax',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '2px',
+  transition: `background-color ${shortAnimationDuration} ease-in-out`,
+  position: 'relative',
+});
+
+const activeSwitchBgStyles = css({
   backgroundColor: cssVar('normalTextColor'),
 });
 
-const toggleSwitchStyles = (skinny: boolean) =>
-  css({
-    backgroundColor: cssVar('backgroundColor'),
-    width: skinny ? '14px' : '18px',
-    height: skinny ? '14px' : '18px',
-    borderRadius: '100vmax',
-    position: 'absolute',
-    left: '2px',
-    transition: `left ${shortAnimationDuration} ease-out`,
-  });
+const activeCheckboxBgStyles = css({
+  backgroundColor: cssVar('strongTextColor'),
+  border: `1px solid ${cssVar('strongTextColor')}`,
+});
 
-const activeSwitchStyles = (skinny: boolean) =>
-  css({
-    left: `calc(100% - ${skinny ? '16px' : '20px'})`,
-  });
+const toggleSwitchStyles = css({
+  backgroundColor: cssVar('backgroundColor'),
+  width: '18px',
+  height: '18px',
+  borderRadius: '100vmax',
+  position: 'absolute',
+  left: '2px',
+  transition: `left ${shortAnimationDuration} ease-out`,
+});
+
+const checkboxSwitchStyles = css({
+  backgroundColor: cssVar('backgroundColor'),
+  width: '8px',
+  height: '8px',
+  margin: '3.1px',
+  position: 'absolute',
+});
+
+const activeSwitchStyles = css({
+  left: `calc(100% - 20px)`,
+});
+
+const activeCheckboxStyles = css({
+  transformX: 'rotate(12deg)',
+  clipPath: 'polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%)',
+});
 
 export interface ToggleProps {
   parentType?: 'table' | 'input';
@@ -55,7 +83,12 @@ export const Toggle = ({
   return (
     <button
       aria-roledescription={ariaRoleDescription}
-      css={[toggleStyles(skinny), active && activeToggleStyles]}
+      css={[
+        toggleStyles(skinny),
+        skinny
+          ? active && activeCheckboxBgStyles
+          : active && activeSwitchBgStyles,
+      ]}
       onClick={() => {
         onChange(!active);
       }}
@@ -63,7 +96,12 @@ export const Toggle = ({
       <span
         role="checkbox"
         aria-checked={active}
-        css={[toggleSwitchStyles(skinny), active && activeSwitchStyles(skinny)]}
+        css={[
+          skinny ? checkboxSwitchStyles : toggleSwitchStyles,
+          skinny
+            ? active && activeCheckboxStyles
+            : active && activeSwitchStyles,
+        ]}
       />
     </button>
   );
