@@ -11,8 +11,9 @@ import {
 import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
 import { ComponentProps } from 'react';
-import { Path } from 'slate';
+import { Path, Location } from 'slate';
 import {
+  focusAndSetSelection,
   insertBlockOfTypeBelow,
   insertCodeLineBelow,
   insertDividerBelow,
@@ -37,6 +38,7 @@ export type GetAvailableIdentifier = (prefix: string, start: number) => string;
 export interface ExecuteProps {
   editor: MyEditor;
   path: Path;
+  deleteFragment?: Location;
   command: SlashCommand;
   getAvailableIdentifier: GetAvailableIdentifier;
 }
@@ -46,6 +48,7 @@ export const execute = ({
   editor,
   path,
   getAvailableIdentifier,
+  deleteFragment,
 }: ExecuteProps): void => {
   switch (command) {
     case 'calculation-block':
@@ -97,5 +100,12 @@ export const execute = ({
       insertBlockOfTypeBelow(editor, path, ELEMENT_EVAL);
       break;
   }
-  deleteText(editor, { at: requireBlockParentPath(editor, path) });
+
+  if (deleteFragment) {
+    const nextBlock = [path[0] + 1, 0];
+    focusAndSetSelection(editor, nextBlock);
+    deleteText(editor, { at: deleteFragment });
+  } else {
+    deleteText(editor, { at: requireBlockParentPath(editor, path) });
+  }
 };

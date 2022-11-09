@@ -9,7 +9,7 @@ import {
 } from '@udecode/plate';
 import { dequal } from 'dequal';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import { Path } from 'slate';
+import { BaseRange, Range, Location, Path } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
 
 interface UseSlashCommandMenuResult {
@@ -17,11 +17,13 @@ interface UseSlashCommandMenuResult {
   menuRef: RefObject<HTMLDivElement>;
   elementPath?: Path;
   search?: string;
+  deleteFragment?: Location;
 }
 
 export const useSlashMenu = (
   element: ParagraphElement
 ): UseSlashCommandMenuResult => {
+  const selection = useSelection();
   const selected = useSelected();
   const focused = useFocused();
   const text = getNodeString(element);
@@ -44,9 +46,9 @@ export const useSlashMenu = (
     }
   }, [selected]);
 
-  const search = /^\/([a-z ]*)$/i.exec(text)?.[1];
+  const { search, deleteFragment } = findSlashCommand(text, selection);
   const showSlashCommands =
-    selected && focused && !slashMenuSuppressed && search !== undefined;
+    selected && focused && !slashMenuSuppressed && search != null;
 
   const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -69,7 +71,6 @@ export const useSlashMenu = (
   );
   useWindowListener('keydown', onKeyDown, true);
 
-  const selection = useSelection();
   const editor = useTEditorRef();
 
   useEffect(() => {
@@ -88,6 +89,46 @@ export const useSlashMenu = (
     showSlashCommands,
     menuRef,
     elementPath,
+    deleteFragment,
     search,
   };
+};
+
+const findSlashCommand = (text: string, selection: BaseRange | null) => {
+  const inline = findInlineSlashCommand(text, selection);
+  const standalone = findStandaloneSlashCommand(text);
+
+  return {
+    search: inline?.command ?? standalone,
+    deleteFragment: inline?.selection,
+  };
+};
+
+const findStandaloneSlashCommand = (text: string): string | undefined =>
+  /^\/([a-z ]*)$/i.exec(text)?.[1];
+
+const findInlineSlashCommand = (
+  text: string,
+  selection: BaseRange | null
+): { command: string; selection: Range } | undefined => {
+  if (!selection) return;
+  if (!isCollapsed(selection)) return;
+  if (text.startsWith('/')) return;
+
+  const { offset } = selection.anchor;
+  const leftSegment = text.slice(0, offset);
+  const slashCommand = leftSegment.split('/').slice(1).at(-1);
+
+  if (slashCommand == null) return;
+  if (slashCommand.match(/\s/)) return;
+
+  const cmdSelection: Range = {
+    anchor: {
+      offset: offset - slashCommand.length - 1,
+      path: selection.anchor.path,
+    },
+    focus: { offset, path: selection.anchor.path },
+  };
+
+  return { command: slashCommand, selection: cmdSelection };
 };

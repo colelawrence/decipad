@@ -25,7 +25,7 @@ export const InteractiveParagraph =
     const clientEvent = useContext(ClientEventsContext);
 
     // slash commands menu
-    const { showSlashCommands, menuRef, elementPath, search } =
+    const { showSlashCommands, menuRef, elementPath, deleteFragment, search } =
       useSlashMenu(paragraphElement);
 
     // interactions
@@ -52,6 +52,7 @@ export const InteractiveParagraph =
                   execute({
                     editor,
                     path: elementPath,
+                    deleteFragment,
                     command,
                     getAvailableIdentifier:
                       computer.getAvailableIdentifier.bind(computer),
