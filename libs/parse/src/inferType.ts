@@ -1,5 +1,6 @@
 import type { Computer, SerializedType } from '@decipad/computer';
 import { CellValueType } from '@decipad/editor-types';
+import { containsNumber } from '@decipad/utils';
 import { CoercibleType } from './types';
 import { inferBoolean } from './inferBoolean';
 import { inferDate } from './inferDate';
@@ -27,6 +28,32 @@ interface InferTypeOptions {
   type?: CellValueType;
   doNotTryExpressionNumbersParse?: boolean;
 }
+
+const tryInferChain = async (
+  computer: Computer,
+  text: string,
+  options: InferTypeOptions
+): Promise<CoercibleType> => {
+  let inferResult = inferDate(text, 'month') ??
+    inferDate(text, 'day') ??
+    inferBoolean(text) ??
+    (await inferNumber(computer, text, options)) ??
+    inferDate(text) ??
+    (options.doNotTryExpressionNumbersParse
+      ? undefined
+      : await inferExpression(computer, text)) ?? {
+      type: { kind: 'string' },
+      coerced: text,
+    };
+
+  if (inferResult.type.kind === 'number' && !containsNumber(text)) {
+    inferResult = {
+      type: { kind: 'string' },
+      coerced: text,
+    };
+  }
+  return inferResult;
+};
 
 export const inferType = async (
   computer: Computer,
@@ -57,17 +84,7 @@ export const inferType = async (
       if (!text) {
         return { type: { kind: 'anything' }, coerced: text };
       }
-      return (
-        inferDate(text, 'month') ??
-        inferDate(text, 'day') ??
-        inferBoolean(text) ??
-        (await inferNumber(computer, text, options)) ??
-        inferDate(text) ??
-        (options.doNotTryExpressionNumbersParse
-          ? undefined
-          : await inferExpression(computer, text)) ??
-        inferParseError(text)
-      );
+      return tryInferChain(computer, text, options);
     }
     default:
       return { type: type ?? inferParseError(text) } as CoercibleType;

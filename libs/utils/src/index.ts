@@ -1,4 +1,5 @@
 export * from './any-mapping-to-map';
+export * from './containsNumber';
 export * from './get-defined';
 export * from './get-only';
 export * from './get-defined-promise';

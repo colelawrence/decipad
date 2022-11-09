@@ -1,4 +1,5 @@
 import { Computer, parseExpressionOrThrow } from '@decipad/computer';
+import { containsNumber } from '@decipad/utils';
 import { CoercibleType } from './types';
 
 interface InferNumberOptions {
@@ -24,17 +25,19 @@ export const inferNumber = async (
   if (options.doNotTryExpressionNumbersParse) {
     return inferPlainNumber(text);
   }
-  try {
-    const exp = parseExpressionOrThrow(text);
-    const type = await computer.expressionType(exp);
-    if ((await type).kind === 'number') {
-      return {
-        type,
-        coerced: text,
-      };
+  if (containsNumber(text)) {
+    try {
+      const exp = parseExpressionOrThrow(text);
+      const type = await computer.expressionType(exp);
+      if ((await type).kind === 'number') {
+        return {
+          type,
+          coerced: text,
+        };
+      }
+    } catch (err) {
+      // do nothing
     }
-  } catch (err) {
-    // do nothing
   }
 
   return undefined;

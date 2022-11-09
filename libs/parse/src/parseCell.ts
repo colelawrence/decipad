@@ -1,5 +1,5 @@
 import { CellValueType, TableCellType } from '@decipad/editor-types';
-import Fraction, { FractionLike, ZERO } from '@decipad/fraction';
+import Fraction, { ZERO, from as toFraction } from '@decipad/fraction';
 import {
   AST,
   Computer,
@@ -43,12 +43,18 @@ const parsing = async (
   if (!parseResult.solution || !isExpression(parseResult.solution)) {
     return new Error('is not a valid expression');
   }
-  const result = await computer.expressionResult(parseResult.solution);
+  let result = await computer.expressionResult(parseResult.solution);
   if (result.type.kind === 'type-error') {
     return new Error(formatError(defaultLocale, result.type.errorCause));
   }
   if (type.kind && type.kind !== 'anything' && type.kind !== result.type.kind) {
     return new Error(`Could not parse "${text}" into a ${type.kind}`);
+  }
+  if (result.type.kind === 'number' && Number.isNaN(Number(text))) {
+    result = {
+      type: { kind: 'string' },
+      value: text,
+    };
   }
   try {
     return afterParse(result);
@@ -57,16 +63,12 @@ const parsing = async (
   }
 };
 
-const fixFraction = (f: FractionLike): Fraction => {
-  return f instanceof Fraction ? f : new Fraction(f);
-};
-
 const fixCellUnit = (unit: Unit[]): Unit[] => {
   return unit.map((u): Unit => {
     return {
       ...u,
-      multiplier: fixFraction(u.multiplier),
-      exp: fixFraction(u.exp),
+      multiplier: toFraction(u.multiplier),
+      exp: toFraction(u.exp),
     };
   });
 };

@@ -4,6 +4,7 @@ import {
   SerializedTypes,
 } from '@decipad/computer';
 import { CellValueType } from '@decipad/editor-types';
+import { containsNumber } from '@decipad/utils';
 import { inferType } from '.';
 import { highestTimeSpecificity } from './parseDate';
 import { SpreadsheetColumn } from './types';
@@ -80,7 +81,11 @@ export const inferColumn = memoize(
           coalesce({ kind: 'boolean' });
           break;
         case 'number':
-          coalesce({ kind: 'number', unit: null });
+          if (typeof value === 'string' && !containsNumber(value)) {
+            coalesce({ kind: 'string' });
+          } else {
+            coalesce({ kind: 'number', unit: null });
+          }
           break;
         case 'string': {
           // eslint-disable-next-line no-await-in-loop
