@@ -135,6 +135,10 @@ const DatePickerStyles: FC = () => {
             paddingTop: '16px',
           },
         'div.react-datepicker .react-datepicker__header': { border: 'none' },
+        '.react-datepicker__day--outside-month': {
+          color: `${cssVar('strongHighlightColor')} !important`,
+          pointerEvents: 'none',
+        },
         '.react-datepicker .react-datepicker__time-container': {
           border: `none`,
           right: '-95px',
