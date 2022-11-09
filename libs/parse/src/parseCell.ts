@@ -13,6 +13,7 @@ import {
   isExpression,
 } from '@decipad/computer';
 import { formatUnit, formatError } from '@decipad/format';
+import { containsNumber } from '@decipad/utils';
 import { astNode } from './utils/astNode';
 import { dateToAST } from './utils/dateToAST';
 import { unitToAST } from './utils/unitToAST';
@@ -50,7 +51,7 @@ const parsing = async (
   if (type.kind && type.kind !== 'anything' && type.kind !== result.type.kind) {
     return new Error(`Could not parse "${text}" into a ${type.kind}`);
   }
-  if (result.type.kind === 'number' && Number.isNaN(Number(text))) {
+  if (result.type.kind === 'number' && !containsNumber(text)) {
     result = {
       type: { kind: 'string' },
       value: text,
