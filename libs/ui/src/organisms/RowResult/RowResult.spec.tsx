@@ -24,6 +24,7 @@ it('renders a single body row table', async () => {
   expect(rows.map((row) => row.parentElement?.tagName)).toEqual([
     'THEAD',
     'TBODY',
+    'TFOOT',
   ]);
 });
 
@@ -45,8 +46,8 @@ describe('dimensions', () => {
       Names = ["Adam", "Eve"]
     }
     Table
-    
-    lookup(Table, Table.Names == "Adam")  
+
+    lookup(Table, Table.Names == "Adam")
   `;
 
   it('renders tables inside tables', async () => {

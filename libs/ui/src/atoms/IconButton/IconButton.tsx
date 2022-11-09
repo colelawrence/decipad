@@ -31,6 +31,7 @@ const iconStyles = css({
 type IconButtonProps = {
   readonly children: ReactNode;
   readonly roundedSquare?: boolean;
+  readonly roleDescription?: string;
 } & (
   | {
       readonly href: string;
@@ -45,12 +46,14 @@ type IconButtonProps = {
 export const IconButton = ({
   children,
   roundedSquare = false,
+  roleDescription = 'button',
 
   onClick,
   href,
 }: IconButtonProps): ReturnType<FC> => {
   return onClick ? (
     <button
+      aria-roledescription={roleDescription}
       css={[styles, roundedSquare && roundedSquareStyles]}
       onClick={(event) => {
         event.preventDefault();

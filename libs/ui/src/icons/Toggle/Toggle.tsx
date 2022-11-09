@@ -3,7 +3,7 @@ import { teal100, teal200, teal500 } from '../../primitives';
 
 export const Toggle: FC = () => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_3618_49203)">
+    <g clipPath="url(#clip0_3618_49203)">
       <rect width="40" height="40" rx="6" fill={teal100.rgb} />
       <rect x="8" y="15" width="20" height="11" rx="5.5" fill={teal200.rgb} />
       <g filter="url(#filter0_dd_3618_49203)">
@@ -15,7 +15,7 @@ export const Toggle: FC = () => (
           height="13.3"
           rx="6.65"
           stroke={teal500.rgb}
-          stroke-width="1.3"
+          strokeWidth="1.3"
         />
       </g>
     </g>
@@ -27,9 +27,9 @@ export const Toggle: FC = () => (
         width="36.5996"
         height="36.6"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"

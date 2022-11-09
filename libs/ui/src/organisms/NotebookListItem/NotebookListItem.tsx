@@ -144,7 +144,11 @@ export const NotebookListItem = ({
           {name || 'My notebook title'}
         </strong>
         <div css={[actionsStyles]}>
-          <IconButton roundedSquare onClick={toggleActionsOpen}>
+          <IconButton
+            roleDescription="open menu"
+            roundedSquare
+            onClick={toggleActionsOpen}
+          >
             <icons.Ellipsis />
           </IconButton>
         </div>

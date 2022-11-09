@@ -4,7 +4,8 @@ import { LoginPage } from './LoginPage';
 
 describe('Login page', () => {
   it('disables the button when the input value is not a valid email', async () => {
-    const { getByRole } = render(<LoginPage onSubmit={jest.fn()} />);
+    const { getByRole, getByText } = render(<LoginPage onSubmit={jest.fn()} />);
+    act(() => getByText('Continue with email').click());
 
     const input = getByRole('textbox');
     const submitButton = getByRole('button');
@@ -20,6 +21,7 @@ describe('Login page', () => {
 
   it('emits a submit event when typing an email and clicking continue', async () => {
     const { getByText, getByRole } = render(<LoginPage onSubmit={jest.fn()} />);
+    act(() => getByText('Continue with email').click());
 
     const input = getByRole('textbox');
     expect(input).toHaveAttribute('type', 'email');
@@ -35,21 +37,18 @@ describe('Login page', () => {
         resolveSubmit = resolve;
       })
     );
-    const { findByText, getByRole } = render(
+    const { findByText, getByRole, getByText } = render(
       <LoginPage onSubmit={handleSubmit} />
     );
+    act(() => getByText('Continue with email').click());
 
     const input = getByRole('textbox');
     expect(input).toHaveAttribute('type', 'email');
 
     await userEvent.type(input, 'johndoe@example.com');
-    await userEvent.click(await findByText(/continue/i));
+    await userEvent.click(await findByText(/submit/i));
 
-    expect(await findByText(/continue/i)).toBeDisabled();
-
-    await act(async () => {
-      resolveSubmit();
-    });
-    expect(await findByText(/continue/i)).not.toBeDisabled();
+    expect(await findByText(/wait/i)).toBeDisabled();
+    act(resolveSubmit);
   });
 });

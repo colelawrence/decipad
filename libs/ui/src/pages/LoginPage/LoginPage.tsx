@@ -1,26 +1,49 @@
 import { css } from '@emotion/react';
-import { FC, useRef, useState } from 'react';
+import { FC, useCallback, useRef, useState } from 'react';
 import { InputField, Button } from '../../atoms';
-import { AuthContent, SignUpContent } from '../../molecules';
+import {
+  AuthContent,
+  SignUpContent,
+  SignUpConditionsContent,
+} from '../../molecules';
+import { cssVar } from '../../primitives';
 
-const wrapperStyles = css({
+const outerBorderStyles = css({
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  boxShadow: `0px 2px 16px ${cssVar('highlightColor')}`,
+  borderRadius: '8px',
+});
+
+const outerWrapperStyles = css({
   display: 'grid',
-  gridTemplateColumns: 'min(374px, 100%)',
-
   justifyContent: 'center',
   justifyItems: 'center',
   alignContent: 'center',
 });
 
-export interface LoginPageProps {
-  onSubmit: (email: string) => void | Promise<void>;
-}
+const wrapperStyles = css({
+  display: 'grid',
+  width: '440px',
+  gridTemplateColumns: 'min(400px, 100%)',
 
-export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
+  justifyContent: 'center',
+  justifyItems: 'center',
+  alignContent: 'center',
+  gridGap: '12px',
+
+  padding: '24px 12px',
+});
+
+const actionWrapperStyles = css({
+  marginTop: '10px',
+  display: 'grid',
+  width: '100%',
+});
+
+const LoginForm = ({ onSubmit }: LoginPageProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [formValid, setFormValid] = useState(false);
   const [email, setEmail] = useState('');
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onChangeEmail = (newEmail: string) => {
@@ -32,17 +55,11 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
   };
 
   return (
-    <div css={wrapperStyles}>
-      <AuthContent
-        title="Log in to Decipad"
-        description="A new way to make sense of numbers"
-      />
+    <>
       <form
         ref={formRef}
         css={{
           justifySelf: 'stretch',
-          padding: '24px 8px',
-          paddingBottom: '8px',
 
           display: 'grid',
           gridGap: '12px',
@@ -65,15 +82,46 @@ export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
           value={email}
           onChange={onChangeEmail}
         />
-        <Button
-          type="primaryBrand"
-          size="extraLarge"
-          disabled={!formValid || isSubmitting}
-        >
-          Continue
+        <Button submit disabled={!formValid || isSubmitting}>
+          {isSubmitting ? 'Please wait...' : 'Submit'}
         </Button>
       </form>
-      <SignUpContent />
+      <SignUpConditionsContent />
+    </>
+  );
+};
+
+export interface LoginPageProps {
+  onSubmit: (email: string) => void | Promise<void>;
+}
+
+export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
+  const [usingEmail, setUsingEmail] = useState(false);
+
+  const continueWithEmail = useCallback(() => setUsingEmail(true), []);
+
+  return (
+    <div css={outerWrapperStyles}>
+      <div css={[wrapperStyles, outerBorderStyles]}>
+        <AuthContent
+          title={
+            usingEmail ? 'Continue with an email link' : 'Log in to Decipad'
+          }
+          description={
+            usingEmail
+              ? 'Enter your email and we will send you a link'
+              : 'A new way to make sense of numbers'
+          }
+        />
+        {usingEmail ? (
+          <LoginForm onSubmit={onSubmit} />
+        ) : (
+          <div css={actionWrapperStyles}>
+            <Button onClick={continueWithEmail}>Continue with email</Button>
+            <SignUpContent />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

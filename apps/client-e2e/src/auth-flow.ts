@@ -19,14 +19,14 @@ describe('auth flow', () => {
   });
 
   test('should allow the user to type their email for login', async () => {
+    await page.click('text=/continue/i');
     await page.type('input', 'johndoe123@gmail.com');
     const inputValue = await page.inputValue('input');
     expect(inputValue).toBe('johndoe123@gmail.com');
   });
 
   test('should show confirmation email on login attempt', async () => {
-    await page.fill('[placeholder~="email" i]', 'johndoe123@gmail.com');
-    await page.click('text=/continue/i');
+    page.click('text=/submit/i');
     expect(await page.waitForSelector('text=/check.+email/i')).not.toBe(null);
     await snapshot(page as Page, 'Auth: Magic Link Email Sent');
   });

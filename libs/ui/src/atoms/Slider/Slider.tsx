@@ -74,10 +74,10 @@ interface SliderProps {
 export const Slider = ({
   onChange = noop,
   onFocus = noop,
-  max,
-  min,
-  step,
-  value,
+  max = 10,
+  min = 0,
+  step = 1,
+  value = 0,
   color: colorName,
 }: SliderProps): ReturnType<FC> => {
   const color = baseSwatches[colorName || 'Sulu'];

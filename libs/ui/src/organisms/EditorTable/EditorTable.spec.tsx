@@ -46,7 +46,7 @@ it('renders the add row button', () => {
       </tr>
     </EditorTable>
   );
-  expect(getByText(/add.+row/i)).toBeVisible();
+  expect(getByText(/add.+row/i)).not.toBeVisible();
 });
 
 it('renders the add new column button', () => {
@@ -62,5 +62,5 @@ it('renders the add new column button', () => {
     </EditorTable>
   );
 
-  expect(getByTitle('Add Column')).toBeVisible();
+  expect(getByTitle('Add Column')).not.toBeVisible();
 });

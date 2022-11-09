@@ -64,7 +64,7 @@ describe('Notebook Topbar', () => {
       );
       expect(getByText(/try decipad/i)).toHaveAttribute(
         'href',
-        expect.stringMatching(/typeform/i)
+        expect.stringMatching('/')
       );
     }
   });
@@ -85,19 +85,19 @@ describe('Notebook Topbar', () => {
     expect(getByText(/dup/i)).toBeVisible();
   });
 
-  it('renders the share button only when write or admin', () => {
+  it('renders the publish button only when write or admin', () => {
     const { getByText, queryByText, rerender } = render(
       <WithProviders>
         <NotebookTopbar {...props} permission="WRITE" />
       </WithProviders>
     );
-    expect(queryByText(/share/i)).toBeVisible();
+    expect(queryByText(/publish/i)).toBeVisible();
 
     rerender(
       <WithProviders>
         <NotebookTopbar {...props} permission="ADMIN" />
       </WithProviders>
     );
-    expect(getByText(/share/i)).toBeVisible();
+    expect(getByText(/publish/i)).toBeVisible();
   });
 });

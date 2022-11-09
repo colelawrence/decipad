@@ -38,7 +38,7 @@ const tableBaseStyles = css({
     'tr:last-child td': {
       borderBottom: 0,
     },
-    'tr td:first-child': {
+    'tr td:first-of-type': {
       borderLeft: 0,
     },
     'tr td:last-child': {
@@ -52,7 +52,7 @@ const nestedStyles = css({
   'tr:last-child td': {
     borderBottom: 0,
   },
-  'td:first-child': {
+  'td:first-of-type': {
     borderLeft: 0,
   },
 });

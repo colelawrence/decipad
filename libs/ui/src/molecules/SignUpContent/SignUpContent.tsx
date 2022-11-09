@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { ContentSeparator } from '../../atoms';
-import { cssVar, p13Regular, p14Medium } from '../../primitives';
+import { cssVar, p13Regular, p13SemiBold } from '../../primitives';
 
 const signupContentWrapperStyles = css({
   width: '100%',
@@ -13,27 +12,29 @@ const signupContentWrapperStyles = css({
 
 const signupTeaserWrapperStyles = css({
   width: '100%',
-  marginTop: '1rem',
   textAlign: 'center',
+  marginTop: '0.5rem',
 });
 
 const teaserStyles = css(p13Regular, {
   color: cssVar('weakTextColor'),
 });
 
-const joinStyles = css(p14Medium, {
-  fontWeight: 'bold',
+const joinStyles = css(p13SemiBold, {
   marginTop: '0.25rem',
+  color: cssVar('normalTextColor'),
 });
 
 export const SignUpContent: FC = () => {
   return (
     <div css={signupContentWrapperStyles}>
-      <ContentSeparator />
       <div css={signupTeaserWrapperStyles}>
-        <p css={teaserStyles}>Don't have an account?</p>
-        <p css={joinStyles}>
-          <a href="https://rcagp49qi5w.typeform.com/to/tGwQLkbI">
+        <p css={teaserStyles}>
+          No account?{' '}
+          <a
+            css={joinStyles}
+            href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd"
+          >
             Join our private beta waitlist
           </a>
         </p>

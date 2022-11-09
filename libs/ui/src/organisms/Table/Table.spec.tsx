@@ -30,7 +30,7 @@ it('renders children', () => {
   const rows = getAllByRole('row');
   const cells = getAllByRole('cell');
 
-  expect(rows).toHaveLength(2);
+  expect(rows).toHaveLength(3);
   expect(cells).toHaveLength(4);
   [...rows, ...cells].forEach((element) => expect(element).toBeVisible());
 });

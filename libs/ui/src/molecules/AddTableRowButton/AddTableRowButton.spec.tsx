@@ -6,12 +6,14 @@ it('renders the text', () => {
   render(
     <table>
       <tbody>
-        <AddTableRowButton />
+        <tr>
+          <AddTableRowButton />
+        </tr>
       </tbody>
     </table>
   );
 
-  expect(screen.getByText('Add row')).toBeVisible();
+  expect(screen.getByText('Add row')).not.toBeVisible();
 });
 
 describe('onAddRow prop', () => {
@@ -20,7 +22,9 @@ describe('onAddRow prop', () => {
     render(
       <table>
         <tbody>
-          <AddTableRowButton onAddRow={onAddRow} />
+          <tr>
+            <AddTableRowButton onAddRow={onAddRow} />
+          </tr>
         </tbody>
       </table>
     );

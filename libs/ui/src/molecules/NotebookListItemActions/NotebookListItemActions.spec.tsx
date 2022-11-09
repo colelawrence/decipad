@@ -9,12 +9,7 @@ const props: ComponentProps<typeof NotebookListItemActions> = {
 
 it('renders a list of 4 actions', () => {
   render(<NotebookListItemActions {...props} />);
-  expect(screen.getAllByRole('listitem')).toHaveLength(4);
-});
-
-it('links to the notebook', () => {
-  render(<NotebookListItemActions {...props} href="/notebook" />);
-  expect(screen.getByText(/open/i)).toHaveAttribute('href', '/notebook');
+  expect(screen.getAllByRole('listitem')).toHaveLength(3);
 });
 
 it('can duplicate a notebook', async () => {

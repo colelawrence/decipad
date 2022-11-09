@@ -46,3 +46,4 @@ export { VariableNameSelector } from './VariableNameSelector/VariableNameSelecto
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
 export { NotebookState } from './NotebookState/NotebookState';
 export { SignUpContent } from './SignUpContent/SignUpContent';
+export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
