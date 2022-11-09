@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { ReactNode, FC, createContext, useContext, ReactElement } from 'react';
-import { isElement } from 'react-is';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
+import { createContext, FC, ReactElement, ReactNode, useContext } from 'react';
+import { isElement } from 'react-is';
 
 import { TriggerMenuItem } from '../../atoms';
 import { cssVar, grey500, transparency } from '../../primitives';
@@ -21,6 +21,10 @@ const styles = css({
 
 const undropdownifyContentStyles = css({
   '>[data-radix-popper-content-wrapper]': { display: 'contents' },
+});
+
+const alwaysTopContentStyles = css({
+  zIndex: 3,
 });
 
 interface RootMenuListProps {
@@ -156,7 +160,12 @@ export const MenuList = ({
       >
         {triggerNode}
         <DropdownMenuPortalElement portal={portal} container={container}>
-          <div css={dropdown || undropdownifyContentStyles}>
+          <div
+            css={[
+              dropdown || undropdownifyContentStyles,
+              alwaysTopContentStyles,
+            ]}
+          >
             <DropdownMenuContentElement
               css={styles}
               align={align}
