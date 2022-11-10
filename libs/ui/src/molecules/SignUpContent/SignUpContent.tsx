@@ -33,7 +33,7 @@ export const SignUpContent: FC = () => {
           No account?{' '}
           <a
             css={joinStyles}
-            href="https://rcagp49qi5w.typeform.com/to/i8uXYEtd"
+            href="https://rcagp49qi5w.typeform.com/to/JUOinTMW"
           >
             Join our private beta waitlist
           </a>
@@ -42,3 +42,4 @@ export const SignUpContent: FC = () => {
     </div>
   );
 };
+
