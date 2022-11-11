@@ -234,11 +234,20 @@ export default function Templates() {
               <Card
                 author="Kelly McEttrick"
                 cardColor="--card-yellow"
+                icon="✨"
+                title="Performance summary letter. Template"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/-Template-Performance-summary-letter-%3AjuzNZDn4zNSqn2Rz14pKn"
+                description="A template for communicating performance-based compensation adjustments"
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-yellow"
                 icon="📝"
-                title="Offer letter template"
+                title="Offer letter. Template"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/You-re-hired-Offer-Letter%3Am5plUls5fkWflsneZcJNQ"
-                description="A template for communicating performance-based compensation adjustments"
+                description="A template to send an offer letter, explain stock base compensation and next steps"
               />
               <Card
                 author="Nuno Job"
@@ -355,15 +364,15 @@ export default function Templates() {
                 notebook="https://app.decipad.com"
                 description="Missing"
         /> */}
-              {/* <Card
+              <Card
                 author="Nuno Job"
                 cardColor="--card-green"
-                icon="🤒"
+                icon="🤔"
                 title="A founders guide to pricing your first round"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                notebook="https://app.decipad.com"
-                description="Missing"
-      /> */}
+                notebook="https://app.decipad.com/n/A-founders-guide-to-pricing-your-first-round%3AEIfsPUrmoNZDMtGHYuxMW"
+                description="Before you negotiate your first VC round, you might have a simple cap. This Notebook goes over the math and breaks it down"
+      />
               <Card
                 author="Nuno Job"
                 cardColor="--card-yellow"
@@ -448,15 +457,15 @@ export default function Templates() {
                 notebook="https://alpha.decipad.com/n/Interest-Rates-How-much-are-they-costing-me-%3AKQ6BCwfuv1ijdQcSmiki7"
                 description="It's important to understand how much of your monthly payment is going to the principal (ie. to repay your owed money) and how much is going to fees and interest"
               />
-              {/* <Card
+               <Card
                 author="Nuno Job"
                 cardColor="--card-green"
-                icon="🤒"
-                title="Should we put money in a savings account"
+                icon="🏦"
+                title="How much money do I get on a savings account? Template"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                notebook="https://app.decipad.com"
-                description="Missing"
-            /> */}
+                notebook="https://app.decipad.com/n/How-much-money-do-I-get-on-a-savings-account-Template%3AynrEw3tTP1a6MVrUYbM_3"
+                description="Some institutions pay interest when you open a savings account. Use this template to check how much money you will get after taxes"
+            />
             </GridContainer>
 
             <br></br>
