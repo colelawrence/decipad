@@ -36,7 +36,7 @@ const config = {
   baseUrl: '/docs/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-  favicon: '/img/deci-logo-brand.png',
+  favicon: '/img/favicon.png',
   organizationName: 'decipad', // Usually your GitHub org/user name.
   projectName: 'decipad', // Usually your repo name.
 

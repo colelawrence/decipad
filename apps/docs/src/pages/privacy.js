@@ -3,7 +3,7 @@ import '../css/custom.css';
 
 export default function Terms() {
   return (
-    <>
+    <div class="gallery">
       <div class="navbar-gallery-wrapper">
         <div class="navbar-gallery">
           <div class="header-gallery">
@@ -576,6 +576,6 @@ export default function Terms() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
