@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["esnext", "dom", "dom.iterable"]
+  },
+  "include": ["./utils", "./__fixtures__/*.json"],
+  "references": [
+    { "path": "../../libs/config" },
+    { "path": "../../libs/utils" },
+    { "path": "../../libs/initial-workspace" }
+  ]
+}

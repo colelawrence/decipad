@@ -45,7 +45,13 @@ export const PotentialFormulaHighlight = forwardRef<
     ref
   ) => {
     return (
-      <span {...attributes} css={highlightStyles} ref={ref} onClick={onClick}>
+      <span
+        data-testid="inline-number-element"
+        {...attributes}
+        css={highlightStyles}
+        ref={ref}
+        onClick={onClick}
+      >
         <Tooltip
           onClick={onCommit}
           trigger={<span>{children}</span>}

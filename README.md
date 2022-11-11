@@ -108,10 +108,6 @@ The project is currently maintained by the nx cli, the nx cli is the one to use 
 
 `nx test <lib> --watch` # Runs jest on a library or an application in watch mode.
 
-`nx e2e client-e2e` # Runs the e2e tests (headless)
-
-`PWDEBUG=1 nx e2e client-e2e` # Runs the e2e tests (headed)
-
 `nx lint <lib>` # Runs the linter on an app or a library.
 
 `nx typecheck <lib>` # Runs typescript check on an app or library.

@@ -1,0 +1,26 @@
+{
+  "root": "apps/e2e",
+  "sourceRoot": "apps/e2e/tests",
+  "projectType": "application",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "./scripts/e2e.sh"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/e2e/**/*.{js,ts}"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b apps/e2e"
+      }
+    }
+  }
+}

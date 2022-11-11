@@ -1,0 +1,78 @@
+import { Page } from 'playwright';
+
+export async function createTable(page: Page) {
+  await page.click('[data-slate-editor] p >> nth=-1');
+
+  await page.keyboard.insertText('/table');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.click('text=tableslashTableA table to structure your data');
+  await page.waitForSelector('[data-slate-editor] table');
+}
+
+export function tableRowLocator(line: number) {
+  const parentType = line === 0 ? 'thead' : 'tbody';
+  const lineNumber = line > 0 ? line - 1 : line;
+  return `table > ${parentType} > tr:nth-child(${lineNumber + 1})`;
+}
+
+export function tableCellLocator(line: number, col = 0) {
+  const cellType = line === 0 ? 'th' : 'td';
+  return `${tableRowLocator(line)} > ${cellType}:nth-child(${col + 2})`;
+}
+
+export function tableCellTextLocator(line: number, col = 0) {
+  return `${tableCellLocator(line, col)} span[data-slate-string="true"]`;
+}
+
+export async function getFromTable(
+  page: Page,
+  line: number,
+  col = 0,
+  formula = false
+) {
+  return page
+    .locator(
+      formula ? tableCellLocator(line, col) : tableCellTextLocator(line, col)
+    )
+    .textContent();
+}
+
+export function clickCell(page: Page, line: number, col = 0) {
+  return page.locator(tableCellLocator(line, col)).click();
+}
+
+export async function writeInTable(
+  page: Page,
+  text: string,
+  line: number,
+  col = 0
+) {
+  await clickCell(page, line, col);
+  await page.keyboard.type(text);
+}
+
+export function openRowMenu(page: Page, line: number) {
+  return page
+    .locator(`${tableRowLocator(line)} > th > div > button:nth-child(2)`)
+    .click();
+}
+
+export function addRow(page: Page) {
+  return page
+    .locator('table > tfoot > tr > th > button')
+    .click({ force: true });
+}
+
+export async function addColumn(page: Page) {
+  await page.locator('button[title="Add Column"]').click({ force: true });
+}
+
+export function openColumnMenu(page: Page, col: number) {
+  return page.click(
+    `${tableRowLocator(0)} > th:nth-child(${
+      col + 2
+    }) button:has-text("Caret down")`
+  );
+}

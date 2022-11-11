@@ -60,7 +60,7 @@ The `frontend` was called `client` until mid-2022, when it was mostly re-written
 - consistent loading and error state handling, and
 - normalized GraphQL caching.
 
-If you find explicit references to the `client` or implicit references such as `client-e2e` (meaning end-to-end tests for the `client`), they now mean the `frontend`.
+If you find explicit references to the `client` or implicit references such as `e2e` (meaning end-to-end tests for the `client`), they now mean the `frontend`.
 
 The re-write improved first contentful paint on slow networks from ~8s to ~1s, and largest contentful paint / time to interactive on the login and dashboard entry pages from ~8s to ~4s. The notebook page did not see big metrics improvement, but subjective improvement from earlier loading of the topbar.
 Later, a start was made lazy-loading parts of the editor (such as plots) to reduce editor hot path bundle size as well, but the editor is still an exceptionally big chunk and optimizations to it tend to be significantly more expensive in than usual due to its special technical constraints.

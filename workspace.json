@@ -7,7 +7,7 @@
     "backend-trace": "libs/backend-trace",
     "backendtypes": "libs/backendtypes",
     "client-config": "libs/client-config",
-    "client-e2e": "apps/client-e2e",
+    "e2e": "apps/e2e",
     "client-events": "libs/client-events",
     "computer": "libs/computer",
     "config": "libs/config",

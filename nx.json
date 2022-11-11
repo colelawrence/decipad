@@ -93,7 +93,7 @@
     "client-config": {
       "tags": []
     },
-    "client-e2e": {
+    "e2e": {
       "tags": [],
       "implicitDependencies": ["frontend", "backend", "config"]
     },

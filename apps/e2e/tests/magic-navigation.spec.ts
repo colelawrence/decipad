@@ -1,0 +1,82 @@
+import { expect, Page, test } from '@playwright/test';
+import { createCalculationBlockBelow } from '../utils/page/Block';
+import {
+  goToPlayground,
+  keyPress,
+  waitForEditorToLoad,
+} from '../utils/page/Editor';
+
+test.describe('Navigating with magic numbers', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  let page: Page;
+
+  test.beforeAll(async ({ browser }) => {
+    page = await browser.newPage();
+    await goToPlayground(page);
+    await waitForEditorToLoad(page);
+  });
+
+  test.afterAll(async () => {
+    await page.close();
+  });
+
+  test('creates some text', async () => {
+    await page.keyboard.type('Should you buy a house?');
+    await keyPress(page, 'Enter');
+    await page.keyboard.type('Price is %Price');
+    await keyPress(page, '%');
+    await keyPress(page, 'Enter');
+    await createCalculationBlockBelow(page, 'Fees = 5 gbp');
+
+    await page.waitForSelector('text=Should you buy a house?');
+  });
+
+  test('goes all the way down to australia', async () => {
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'Enter');
+    await keyPress(page, '=');
+    await page.keyboard.type('Price = Fees + 30 gbp');
+    await page.waitForSelector('text=is £35');
+    const magic = await page.locator('span[title="35"]');
+    await magic.scrollIntoViewIfNeeded();
+    await magic.click();
+    await page.waitForSelector('span[title="35"] >> visible=false');
+  });
+
+  test('works even when the variable is re-declared', async () => {
+    const allDraggable = await page.$$(
+      '[draggable="true"] [data-testid=drag-handle]'
+    );
+    const nrDraggable = allDraggable.length;
+    const toDelete = allDraggable[nrDraggable - 2];
+    await toDelete.click();
+    const deleteButton = page.locator(`:nth-match(:text("Delete"), 2)`);
+    await deleteButton.click();
+    await keyPress(page, 'Enter');
+    await keyPress(page, '=');
+    await page.keyboard.type('Price = 42 gbp');
+    await keyPress(page, 'Enter');
+    expect((await page.textContent('text=is £42'))!.trim()).not.toBeNull();
+    const magic = await page.locator('span[title="42"]');
+    await magic.scrollIntoViewIfNeeded();
+    await magic.click();
+  });
+});

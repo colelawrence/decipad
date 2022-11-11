@@ -44,7 +44,7 @@ jobs:
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
-        run: ./node_modules/.bin/percy exec -- ./scripts/e2e.sh
+        run: ./scripts/e2e.sh
 
   notify:
     name: Discord Notification

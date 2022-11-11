@@ -55,11 +55,11 @@ jobs:
       - name: Lint
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-        run: npx nx affected --target=lint --parallel=2
+        run: npx nx lint --parallel=2
       - name: Typecheck
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
-        run: npx nx affected --target=typecheck --parallel=2
+        run: npx nx typecheck --parallel=2
 
   notify:
     name: Discord Notification

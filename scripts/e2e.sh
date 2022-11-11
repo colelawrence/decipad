@@ -21,4 +21,6 @@ fi
 
 services_setup
 
-nx e2e client-e2e --skip-nx-cache
+echo "running E2E tests and snapshots..."
+cd apps/e2e
+npx percy exec -- npx playwright test --retries=3
