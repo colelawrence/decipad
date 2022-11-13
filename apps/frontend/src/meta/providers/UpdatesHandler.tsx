@@ -1,6 +1,7 @@
 import { useToast } from '@decipad/toast';
 import { toastTransitionDelay, UpdatePrompt } from '@decipad/ui';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const initialTimeoutMs = 10_000;
 const checkForUpdatesIntervalMs = 60_000;
@@ -8,20 +9,20 @@ const checkForUpdatesIntervalMs = 60_000;
 export const UpdatesHandler = () => {
   const toast = useToast();
   const [foundUpdate, setFoundUpdate] = useState(false);
+  const onReload = useCallback(() => window.location.reload(), []);
+  const onUpdateFound = useCallback(() => setFoundUpdate(true), []);
+  const { pathname } = useLocation();
+  const reloading = useRef(false);
 
-  const onReload = useCallback(() => {
-    window.location.reload();
-  }, []);
-
-  const onUpdateFound = useCallback(() => {
-    if (!foundUpdate) {
-      setFoundUpdate(true);
+  useEffect(() => {
+    if (foundUpdate && !reloading.current && !pathname.startsWith('/n/')) {
+      reloading.current = true;
       toast(<UpdatePrompt onReload={onReload} />, 'info', {
         autoDismiss: true,
       });
       setTimeout(onReload, toastTransitionDelay);
     }
-  }, [foundUpdate, onReload, toast]);
+  }, [foundUpdate, onReload, pathname, toast]);
 
   useEffect(() => {
     let registration: ServiceWorkerRegistration | undefined;
