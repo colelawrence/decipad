@@ -79,7 +79,7 @@ export const decorateExpression = (editor: MyEditor): MyDecorate => {
           path
         ) as NodeEntry<VariableDefinitionElement>;
         const kind = varDef?.[0].coerceToType?.kind;
-        return kind !== 'date';
+        return kind !== 'date' && kind !== 'string';
       }
       return false;
     }
