@@ -21,7 +21,7 @@ const errorBlockWrapperStyles = css(centeredFlex, {
 });
 
 const errorMessageStypes = css(p16Regular, {
-  color: cssVar('errorDialogColor'),
+  color: cssVar('errorBlockColor'),
 });
 
 const errorBlockRowStyles = css(centeredFlex, {
@@ -87,8 +87,8 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
     <div
       css={[
         type === 'warning'
-          ? { backgroundColor: cssVar('errorDialogWarning') }
-          : { backgroundColor: cssVar('errorDialogError') },
+          ? { backgroundColor: cssVar('errorBlockWarning') }
+          : { backgroundColor: cssVar('errorBlockError') },
         errorBlock,
       ]}
       contentEditable={false}

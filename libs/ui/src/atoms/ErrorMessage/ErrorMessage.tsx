@@ -1,10 +1,10 @@
-import { FC } from 'react';
 import { css } from '@emotion/react';
+import { FC } from 'react';
 import { cssVar, p16Bold, setCssVar } from '../../primitives';
 
 const errorStyles = css(
   p16Bold,
-  setCssVar('currentTextColor', cssVar('dangerColor'))
+  setCssVar('currentTextColor', cssVar('errorColor'))
 );
 
 export const ErrorMessage = ({

@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { blue300 } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { dropLineWidth } from '../../styles/drop-line';
 
 const dropLineCommonStyles = css({
-  backgroundColor: blue300.rgb,
+  backgroundColor: cssVar('droplineColor'),
   zIndex: 2,
 });
 
@@ -11,7 +11,7 @@ const dropLineBlockStyles = css({
   height: `${dropLineWidth}px`,
   border: 'none',
   borderRadius: '4px',
-  backgroundColor: blue300.rgb,
+  backgroundColor: cssVar('droplineColor'),
 });
 
 const dropLineTableStyles = css({

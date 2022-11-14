@@ -1,6 +1,6 @@
-import { findEventRange } from '@udecode/plate';
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { blue300 } from '@decipad/ui';
+import { cssVar } from '@decipad/ui';
+import { findEventRange } from '@udecode/plate';
 import { cursorStore } from './cursorStore';
 
 export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
@@ -17,7 +17,7 @@ export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
           key: 'drag',
           data: {
             style: {
-              backgroundColor: blue300.rgb,
+              backgroundColor: cssVar('droplineColor'),
               width: 2,
             },
           },

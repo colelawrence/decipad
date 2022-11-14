@@ -119,7 +119,7 @@ const collapsedBaseStyles = css(baseStyles, {
 });
 
 const errorStyle = css(baseStyles, {
-  backgroundColor: cssVar('dangerColor'),
+  backgroundColor: cssVar('toastDanger'),
   color: cssVar('backgroundColor'),
 });
 
@@ -129,12 +129,12 @@ const infoStyle = css(baseStyles, {
 });
 
 const successStyle = css(baseStyles, {
-  backgroundColor: cssVar('successColor'),
+  backgroundColor: cssVar('toastOk'),
   color: cssVar('strongTextColor'),
 });
 
 const warningStyle = css(baseStyles, {
-  backgroundColor: cssVar('warningColor'),
+  backgroundColor: cssVar('toastWarning'),
   color: cssVar('strongTextColor'),
 });
 

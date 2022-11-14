@@ -36,7 +36,7 @@ const DarkThemeStyles = (): ReturnType<React.FC> => {
 };
 
 const dateCellStyles = {
-  backgroundColor: cssVar('successColor'),
+  backgroundColor: cssVar('cellDateSelected'),
   color: 'black',
 };
 
