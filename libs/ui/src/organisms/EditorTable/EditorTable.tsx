@@ -33,10 +33,6 @@ const wrapperStyles = css({
   margin: '0',
 });
 
-const wrapperInnerStyles = css({
-  width: 'min-content',
-});
-
 const tableCaptionWrapperStyles = css({
   width: '100%',
   minWidth: editorLayout.slimBlockWidth,
@@ -165,7 +161,7 @@ export const EditorTable: FC<EditorTableProps> = ({
   return (
     <TableStyleContext.Provider value={tableStyleContextValue}>
       <div css={wrapperStyles}>
-        <div css={wrapperInnerStyles}>
+        <div>
           {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 
           {!isCollapsed ? (
