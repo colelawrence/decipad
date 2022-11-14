@@ -29,7 +29,9 @@ export function toSlateNode(element: SyncElement): MyNode {
     ) as BlockElement['children'];
   }
 
-  Array.from(element.entries()).forEach(([key, value]) => {
+  const entries = element.entries();
+
+  Array.from(entries).forEach(([key, value]) => {
     if (key !== 'children' && key !== 'text') {
       (node as Record<string, unknown>)[key] = value;
     }

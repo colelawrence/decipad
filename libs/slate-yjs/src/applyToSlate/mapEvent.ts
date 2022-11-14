@@ -16,6 +16,9 @@ export default function translateMapEvent(
   const targetPath = toSlatePath(event.path);
   const targetSyncElement = event.target as SyncElement;
   const targetElement = getNode(editor, targetPath);
+  if (!targetElement) {
+    return [];
+  }
 
   const keyChanges = Array.from(event.changes.keys.entries());
   const newProperties = Object.fromEntries(

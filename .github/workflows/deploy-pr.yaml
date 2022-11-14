@@ -2,8 +2,7 @@ name: Deploy PR
 
 on:
   pull_request:
-    branches:
-      - main
+    types: [opened, reopened, synchronize]
 
 jobs:
   deploy:

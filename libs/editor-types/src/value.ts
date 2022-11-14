@@ -1,9 +1,10 @@
 import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
 import {
+  DEPRECATED_ELEMENT_CODE_BLOCK,
+  DEPRECATED_ELEMENT_TABLE_INPUT,
   ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
-  DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
   ELEMENT_EVAL,
@@ -22,7 +23,6 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_PLOT,
   ELEMENT_TABLE,
-  DEPRECATED_ELEMENT_TABLE_INPUT,
   ELEMENT_UL,
   EvalElement,
   InteractiveElement,
@@ -34,11 +34,12 @@ import {
   DataViewHeaderRowElement,
 } from './data-view';
 import {
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_IMPORT,
   ELEMENT_DATA_VIEW,
-  ELEMENT_VARIABLE_DEF,
+  ELEMENT_DRAW,
+  ELEMENT_IMPORT,
+  ELEMENT_LIVE_CONNECTION,
   ELEMENT_SMART_REF,
+  ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import {
   CaptionElement,
@@ -49,16 +50,19 @@ import {
   VariableDefinitionElement,
 } from './interactive-elements';
 import {
+  DeprecatedTableInputElement,
   TableCaptionElement,
   TableCellElement,
   TableColumnFormulaElement,
   TableElement,
   TableHeaderElement,
   TableHeaderRowElement,
-  DeprecatedTableInputElement,
   TableRowElement,
   TableVariableNameElement,
 } from './table';
+import { DrawElement, DrawElements, DrawElementDescendant } from './draw';
+
+export type { DrawElement, DrawElements, DrawElementDescendant };
 
 // Defining specific elements
 
@@ -194,6 +198,7 @@ export type BlockElement =
   // Media
   | ImageElement
   | MediaEmbedElement
+  | DrawElement
   // Code
   | DeprecatedCodeBlockElement
   | CodeLineElement
@@ -223,7 +228,9 @@ export type BlockElement =
   | DataViewElement
   | DataViewHeaderRowElement
   | DataViewHeader
-  | TableColumnFormulaElement;
+  | TableColumnFormulaElement
+  // Draw Elements
+  | DrawElementDescendant;
 
 type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
@@ -243,6 +250,7 @@ export type MyValue = [
     | EvalElement
     | ImageElement
     | MediaEmbedElement
+    | DrawElement
     | CodeLineElement
     | DeprecatedCodeBlockElement
     | UnorderedListElement
@@ -287,4 +295,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_VARIABLE_DEF,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_IMPORT,
+  ELEMENT_DRAW,
 ];

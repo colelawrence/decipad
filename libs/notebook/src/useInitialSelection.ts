@@ -1,4 +1,7 @@
-import { useEditorSelector } from '@decipad/react-contexts';
+import {
+  useEditorSelector,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import {
   focusEditor,
   getNode,
@@ -7,6 +10,7 @@ import {
   isText,
   isElement,
   toDOMNode,
+  isVoid,
 } from '@udecode/plate';
 import { useEffect } from 'react';
 import { BaseSelection, Path, Selection } from 'slate';
@@ -38,8 +42,10 @@ const getSelection = (editor: MyEditor): BaseSelection => {
 export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
   const selection = useEditorSelector((ed) => ed.selection);
   const { initialFocusDone, setInitialFocusDone } = useNotebookState();
+  const readOnly = useIsEditorReadOnly();
 
   useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     if (!initialFocusDone && editor && loaded) {
       const initialSel = getSelection(editor);
       if (
@@ -48,11 +54,12 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
         initialSel?.focus &&
         hasNode(editor, initialSel?.anchor.path) &&
         hasNode(editor, initialSel?.focus.path) &&
-        !selection
+        !selection &&
+        !readOnly
       ) {
         setInitialFocusDone();
 
-        setTimeout(() => {
+        timeout = setTimeout(() => {
           try {
             const focusSel = initialSel.focus;
             if (!focusSel) {
@@ -71,6 +78,10 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
             if (!editorBlock || !isElement(editorBlock)) {
               return;
             }
+            if (isVoid(editor, editorBlock)) {
+              return;
+            }
+
             const block = toDOMNode(editor, editorBlock);
             if (!block) {
               return;
@@ -87,8 +98,20 @@ export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
           } catch (err) {
             console.warn('error setting the initial selection', err);
           }
-        }, 0);
+        }, 500);
       }
     }
-  }, [editor, initialFocusDone, loaded, selection, setInitialFocusDone]);
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [
+    editor,
+    initialFocusDone,
+    loaded,
+    readOnly,
+    selection,
+    setInitialFocusDone,
+  ]);
 };

@@ -1,0 +1,29 @@
+import { FC } from 'react';
+import { teal100, teal500 } from '../../primitives';
+
+export const CodeBlock = (): ReturnType<FC> => (
+  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <title>Code Block</title>
+    <path
+      d="M0 9.6C0 6.23969 0 4.55953 0.653961 3.27606C1.2292 2.14708 2.14708 1.2292 3.27606 0.653961C4.55953 0 6.23969 0 9.6 0H30.4C33.7603 0 35.4405 0 36.7239 0.653961C37.8529 1.2292 38.7708 2.14708 39.346 3.27606C40 4.55953 40 6.23969 40 9.6V30.4C40 33.7603 40 35.4405 39.346 36.7239C38.7708 37.8529 37.8529 38.7708 36.7239 39.346C35.4405 40 33.7603 40 30.4 40H9.6C6.23969 40 4.55953 40 3.27606 39.346C2.14708 38.7708 1.2292 37.8529 0.653961 36.7239C0 35.4405 0 33.7603 0 30.4V9.6Z"
+      fill={teal100.rgb}
+    />
+    <rect
+      x="8.65"
+      y="11.65"
+      width="22.7"
+      height="16.7"
+      rx="3.35"
+      fill="white"
+      stroke={teal500.rgb}
+      strokeWidth="1.3"
+    />
+    <path
+      d="M13 20L15 22L13 24"
+      stroke={teal100.rgb}
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

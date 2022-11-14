@@ -10,6 +10,7 @@ import {
   cssVar,
   darkTheme,
   GlobalTextStyles,
+  mediumShadow,
   p12Medium,
   p13Medium,
   p13SemiBold,
@@ -206,7 +207,39 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
             display: 'none',
           },
         },
+        // excalidraw
 
+        '.excalidraw button[aria-label="Menu"], .excalidraw button[aria-label="Undo"], .excalidraw button[aria-label="Redo"], .excalidraw .popover ul, .excalidraw label.ToolIcon:has(.ToolIcon_lock, .ToolIcon_type_checkbox), .excalidraw label[title="Insert image — 9"], .excalidraw .ToolIcon__keybinding, .excalidraw label.color-input-container':
+          {
+            display: 'none',
+          },
+        '.excalidraw main': {
+          backgroundColor: cssVar('backgroundColor'),
+          width: '100%',
+          height: '100%',
+        },
+        '.excalidraw div .ToolIcon__icon': {
+          width: '32px',
+          height: '32px',
+          backgroundColor: cssVar('highlightColor'),
+          borderRadius: 6,
+        },
+        'div.App-bottom-bar > div.Island, div.App-bottom-bar > div.Island > footer.App-toolbar':
+          {
+            boxShadow: 'none',
+            border: '0',
+            backgroundColor: 'transparent',
+          },
+        '.excalidraw button.ToolIcon': {
+          border: `1px solid ${cssVar('strongHighlightColor')}`,
+        },
+        '.excalidraw .Island.App-toolbar': {
+          padding: '4px',
+          border: `1px solid ${cssVar('strongHighlightColor')}`,
+          boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
+          borderRadius: '8px',
+        },
+        // other stuff
         'body>textarea + div': {
           zIndex: '100 !important',
         },

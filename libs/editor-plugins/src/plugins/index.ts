@@ -8,6 +8,7 @@ export * from './CodeVariableHighlight';
 export * from './Divider';
 export * from './DndSmartRef';
 export * from './DragOverCursor';
+export * from './Draw';
 export * from './EditorApplyErrorReporter';
 export * from './Eval';
 export * from './ExternalData';

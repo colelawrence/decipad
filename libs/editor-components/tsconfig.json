@@ -17,6 +17,7 @@
     { "path": "../import" },
     { "path": "../format" },
     { "path": "../fraction" },
-    { "path": "../parse" }
+    { "path": "../parse" },
+    { "path": "../docsync" }
   ]
 }

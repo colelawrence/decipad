@@ -7,11 +7,11 @@ export {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_IMAGE,
-  ELEMENT_MEDIA_EMBED,
   ELEMENT_LI,
   ELEMENT_LIC,
   // Inline
   ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   // Text blocks
   ELEMENT_PARAGRAPH,
@@ -62,6 +62,18 @@ export const ELEMENT_LIVE_CONNECTION_VARIABLE_NAME = 'live-var-name';
 
 // smart refs
 export const ELEMENT_SMART_REF = 'smart-ref';
+
+// draws
+export const ELEMENT_DRAW = 'draw';
+export const ELEMENT_SELECTION = 'selection';
+export const ELEMENT_RECTANGLE = 'rectangle';
+export const ELEMENT_DIAMOND = 'diamond';
+export const ELEMENT_ELLIPSE = 'ellipse';
+export const ELEMENT_TEXT = 'text';
+export const ELEMENT_LINEAR = 'linear';
+export const ELEMENT_LINE = 'line';
+export const ELEMENT_FREEDRAW = 'freedraw';
+export const ELEMENT_DRAW_IMAGE = 'image';
 
 // others
 export const ELEMENT_CAPTION = 'caption';

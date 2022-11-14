@@ -113,8 +113,13 @@ export function createDocSyncEditor(
   yjsEditor.synchronizeValue();
 
   let destroyed = false;
+  let synced = false;
 
   store.once('synced', () => {
+    if (synced) {
+      return;
+    }
+    synced = true;
     if (connect && !destroyed) {
       if (initialState) {
         try {

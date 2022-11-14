@@ -42,4 +42,3 @@ export const SignUpContent: FC = () => {
     </div>
   );
 };
-

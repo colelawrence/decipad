@@ -13,6 +13,7 @@ import {
   createDividerPlugin,
   createDndSmartRefPlugin,
   createDragOverCursorPlugin,
+  createDrawPlugin,
   createEditorApplyErrorReporterPlugin,
   createEvalPlugin,
   createExitBreakPlugin,
@@ -54,6 +55,7 @@ import {
 import { createTablePlugin } from '@decipad/editor-table';
 import {
   createTAutoformatPlugin,
+  ELEMENT_DRAW,
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
   MyEditor,
@@ -130,7 +132,7 @@ export const plugins = ({
       createNormalizeImagePlugin(),
       createNormalizeElementIdPlugin(),
       createNormalizeTextPlugin(),
-      // createTrailingParagraphPlugin(),
+      createTrailingParagraphPlugin(),
       createNormalizeColumnsPlugin(),
 
       // Drag and drop entities
@@ -153,7 +155,7 @@ export const plugins = ({
       createSelectOnBackspacePlugin({
         options: {
           query: {
-            allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED],
+            allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_DRAW],
           },
         },
       }),
@@ -213,6 +215,9 @@ export const plugins = ({
 
       // selection
       createPersistSelectionPlugin(),
+
+      // drawings
+      createDrawPlugin(),
     ],
     {
       components: components(computer),

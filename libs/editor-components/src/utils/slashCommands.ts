@@ -8,10 +8,6 @@ import {
   ELEMENT_HR,
   MyEditor,
 } from '@decipad/editor-types';
-import { SlashCommandsMenu } from '@decipad/ui';
-import { deleteText } from '@udecode/plate';
-import { ComponentProps } from 'react';
-import { Path, Location } from 'slate';
 import {
   focusAndSetSelection,
   insertBlockOfTypeBelow,
@@ -19,6 +15,12 @@ import {
   insertDividerBelow,
   requireBlockParentPath,
 } from '@decipad/editor-utils';
+import { SlashCommandsMenu } from '@decipad/ui';
+import { deleteText } from '@udecode/plate';
+import { ComponentProps } from 'react';
+import { Location, Path } from 'slate';
+import { insertDataViewBelow } from './data-view';
+import { insertDrawBelow } from './draw';
 import {
   insertDisplayBelow,
   insertInputBelow,
@@ -26,7 +28,6 @@ import {
 } from './input';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
-import { insertDataViewBelow } from './data-view';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof SlashCommandsMenu>['onExecute'],
@@ -98,6 +99,9 @@ export const execute = ({
       break;
     case 'eval':
       insertBlockOfTypeBelow(editor, path, ELEMENT_EVAL);
+      break;
+    case 'sketch':
+      insertDrawBelow(editor, path);
       break;
   }
 

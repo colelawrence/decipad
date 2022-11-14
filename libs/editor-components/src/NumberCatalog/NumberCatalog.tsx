@@ -1,26 +1,31 @@
-import { ComponentProps, useEffect, useMemo, useState } from 'react';
 import { useTEditorRef } from '@decipad/editor-types';
-import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import {AutocompleteName} from '@decipad/language';
-import {useComputer} from '@decipad/react-contexts';
+import { AutocompleteName } from '@decipad/language';
+import { useComputer } from '@decipad/react-contexts';
+import { delayValueTimeout } from '@decipad/react-utils';
+import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
+import { ComponentProps, useEffect, useMemo, useState } from 'react';
 import { debounceTime } from 'rxjs';
-import {delayValueTimeout} from '@decipad/react-utils';
 
-type NamesProp = ComponentProps<typeof UINumberCatalog>['names']
+type NamesProp = ComponentProps<typeof UINumberCatalog>['names'];
 
 export function NumberCatalog() {
   const editor = useTEditorRef();
   const onDragStart = useMemo(() => onDragStartSmartRef(editor), [editor]);
 
   const computer = useComputer();
-  const [names, setNames] = useState<NamesProp>([]) 
+  const [names, setNames] = useState<NamesProp>([]);
 
-  useEffect(()=>{
-    const sub = computer.getNamesDefined$.observeWithSelector(selectCatalogNames).pipe(debounceTime(delayValueTimeout)).subscribe(setNames)
-    return () => {sub.unsubscribe()}
-  },[computer])
+  useEffect(() => {
+    const sub = computer.getNamesDefined$
+      .observeWithSelector(selectCatalogNames)
+      .pipe(debounceTime(delayValueTimeout))
+      .subscribe(setNames);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [computer]);
 
   if (!isFlagEnabled('NUMBER_CATALOG')) {
     return null;

@@ -9,6 +9,7 @@ export { DataView } from './DataView/DataView';
 export { DisplayWidget } from './DisplayWidget/DisplayWidget';
 export { DragAndDropImportNotebook } from './DragAndDropImportNotebook/DragAndDropImportNotebook';
 export { DraggableBlock } from './DraggableBlock/DraggableBlock';
+export { Draw } from './Draw/Draw';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { ErrorBlock } from './ErrorBlock/ErrorBlock';

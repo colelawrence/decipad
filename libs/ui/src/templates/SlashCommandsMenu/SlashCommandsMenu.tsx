@@ -5,14 +5,16 @@ import {
   Calculations,
   Callout,
   Chart,
+  CodeBlock,
   DatePicker,
   Divider,
   Heading1,
   Heading2,
   Input,
+  Result,
+  Sketch,
   Slider,
   TableSlash,
-  Result,
   Toggle,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
@@ -58,15 +60,46 @@ const dataItems = [
 ];
 
 const jsEvalCmd = !isFlagEnabled('UNSAFE_JS_EVAL')
-  ? []
+  ? [
+      {
+        command: 'eval',
+        title: 'Javascript',
+        icon: <CodeBlock />,
+        description: 'Let users to run javascript code',
+        enabled: !isFlagEnabled('UNSAFE_JS_EVAL'),
+        extraSearchTerms: ['eval', 'javascript', 'js'],
+      },
+    ]
   : [
       {
         command: 'eval',
-        title: 'Eval',
-        icon: <Slider />,
-        description: 'Let users to run unsafe code',
+        title: 'Javascript',
+        icon: <CodeBlock />,
+        description: 'Let users to run javascript code',
         enabled: true,
-        extraSearchTerms: ['eval', 'fork-bomb', 'shit-bomb'],
+        extraSearchTerms: ['eval', 'javascript', 'js'],
+      },
+    ];
+
+const sketchCmd = !isFlagEnabled('SKETCH')
+  ? [
+      {
+        command: 'sketch',
+        title: 'Sketch',
+        icon: <Sketch />,
+        description: 'Express yourself with a drawing',
+        enabled: !isFlagEnabled('SKETCH'),
+        extraSearchTerms: ['draw', 'paint'],
+      },
+    ]
+  : [
+      {
+        command: 'sketch',
+        title: 'Sketch',
+        icon: <Sketch />,
+        description: 'Express yourself with a drawing',
+        enabled: true,
+        extraSearchTerms: ['draw', 'paint'],
       },
     ];
 
@@ -122,7 +155,7 @@ const groups = [
     ],
   },
   {
-    title: 'Text',
+    title: 'Writing',
     items: [
       {
         command: 'heading1',
@@ -164,6 +197,7 @@ const groups = [
         enabled: true,
         extraSearchTerms: ['hr', 'divider', '-'],
       },
+      ...sketchCmd,
     ],
   },
 ];

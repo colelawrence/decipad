@@ -36,6 +36,8 @@ const slashIcons = allIcons.filter((Icon) =>
     'Divider',
     'Callout',
     'Blockquote',
+    'CodeBlock',
+    'Sketch',
   ].includes(Icon.name)
 );
 const markIcons = allIcons.filter((Icon) =>

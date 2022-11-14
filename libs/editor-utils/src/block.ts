@@ -100,7 +100,7 @@ export const getSelectionBubble = (
   if (element == null) return null;
   if (element.type !== ELEMENT_INLINE_NUMBER) return null;
 
-  return element;
+  return element as InlineNumberElement;
 };
 
 export const insertDividerBelow = (

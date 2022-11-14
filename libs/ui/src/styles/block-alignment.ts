@@ -59,3 +59,4 @@ export const columns: StyleData = {
   spacingTop: '0',
   spacingBottom: '0',
 };
+export const draw: StyleData = {};
