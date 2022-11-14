@@ -29,6 +29,7 @@ export * from './matchNodeType';
 export * from './mutateText';
 export * from './isElementOfType';
 export * from './getSlateFragment';
+export * from './onDragStartSmartRef';
 export * from './selectEventRange';
 export * from './isPath';
 export * from './countEditorChildren';

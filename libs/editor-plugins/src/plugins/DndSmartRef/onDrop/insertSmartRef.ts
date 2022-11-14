@@ -1,0 +1,86 @@
+import { getExprRef, parseStatement } from '@decipad/computer';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_SMART_REF,
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  MARK_MAGICNUMBER,
+  MyElement,
+  RichText,
+  SmartRefElement,
+} from '@decipad/editor-types';
+import { last } from '@decipad/utils';
+import { nanoid } from 'nanoid';
+import { Text } from 'slate';
+
+/**
+ * Attempt to parse surrounded with +, suffixed with +, and prefixed with +.
+ * The first good parse gets used.
+ *
+ * Allows people to drag "a + b + c" without using the keyboard
+ */
+const surroundWithPlusSigns = (
+  precedingText: string,
+  followingText: string
+) => {
+  const hypotheses = [
+    [' + ', ' + '],
+    [' ', ' + '],
+    [' + ', ' '],
+  ];
+  for (let [textBefore, textAfter] of hypotheses) {
+    if (
+      parseStatement(
+        `${precedingText + textBefore}smartRef${textAfter}${followingText}`
+      ).solution
+    ) {
+      if (textBefore[0] === ' ' && last(precedingText) === ' ') {
+        textBefore = textBefore.slice(1);
+      }
+      if (last(textAfter) === ' ' && followingText[0] === ' ') {
+        textAfter = textAfter.slice(0, -1);
+      }
+      return { textBefore, textAfter };
+    }
+  }
+
+  return { textBefore: ' ', textAfter: ' ' };
+};
+
+export function insertSmartRef(
+  blockType: MyElement['type'],
+  blockId: string,
+  precedingText = '',
+  followingText = ''
+): (MyElement | Text)[] | undefined {
+  switch (blockType) {
+    case ELEMENT_CODE_LINE:
+    case ELEMENT_TABLE_COLUMN_FORMULA: {
+      const { textBefore, textAfter } = surroundWithPlusSigns(
+        precedingText,
+        followingText
+      );
+
+      const smartRef: SmartRefElement = {
+        id: nanoid(),
+        type: ELEMENT_SMART_REF,
+        blockId,
+        children: [{ text: '' }],
+      };
+
+      return [{ text: textBefore }, smartRef, { text: textAfter }];
+    }
+
+    case ELEMENT_PARAGRAPH: {
+      const magicNum: RichText = {
+        text: getExprRef(blockId),
+        [MARK_MAGICNUMBER]: true,
+      };
+
+      return [magicNum];
+    }
+    default: {
+      return undefined;
+    }
+  }
+}

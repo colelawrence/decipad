@@ -11,6 +11,7 @@ import {
 import * as plate from '@udecode/plate-core';
 import { DragEvent } from 'react';
 import { onDragStartInlineResult } from '@decipad/editor-components';
+import { reset, disable } from '@decipad/feature-flags';
 import { onDropInlineResult } from './onDropInlineResult';
 
 const testStorage = new Map();
@@ -21,6 +22,8 @@ describe('onDropInlineResult', () => {
   let codeLine2: CodeLineElement;
   let testEvent: DragEvent;
   beforeEach(() => {
+    disable('EXPR_REFS');
+
     editor = createTPlateEditor();
 
     codeLine = {
@@ -55,6 +58,10 @@ describe('onDropInlineResult', () => {
     jest.spyOn(plate, 'isEditorFocused').mockReturnValue(true);
   });
 
+  afterEach(() => {
+    reset();
+  });
+
   describe('when dragging a code line into a paragraph', () => {
     it('should insert a magic number', () => {
       editor.children = [
@@ -78,7 +85,7 @@ describe('onDropInlineResult', () => {
       expect(editor.children).toEqual([
         {
           type: ELEMENT_PARAGRAPH,
-          children: [{ [MARK_MAGICNUMBER]: true, text: 'exprRef_codeline1' }],
+          children: [{ [MARK_MAGICNUMBER]: true, text: 'a' }],
         },
         codeLine,
       ]);

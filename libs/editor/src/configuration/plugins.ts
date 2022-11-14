@@ -1,3 +1,6 @@
+import { ClientEventContextType } from '@decipad/client-events';
+import type { Computer } from '@decipad/computer';
+import { createDataViewPlugin } from '@decipad/editor-data-view';
 import {
   createAutoCompleteMenuPlugin,
   createAutoFormatCodeLinePlugin,
@@ -8,6 +11,7 @@ import {
   createCodeVariableHighlightPlugin,
   createDisplayPlugin,
   createDividerPlugin,
+  createDndSmartRefPlugin,
   createDragOverCursorPlugin,
   createEditorApplyErrorReporterPlugin,
   createEvalPlugin,
@@ -55,6 +59,8 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
+import { createVariableDefPlugin } from '@decipad/editor-variable-def';
+import type { UserInteraction } from '@decipad/react-contexts';
 import {
   createBlockquotePlugin,
   createDeserializeDocxPlugin,
@@ -66,15 +72,10 @@ import {
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
 } from '@udecode/plate';
-import { ClientEventContextType } from '@decipad/client-events';
-import type { Computer } from '@decipad/computer';
-import { createVariableDefPlugin } from '@decipad/editor-variable-def';
-import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createJuicePlugin } from '@udecode/plate-juice';
-import type { UserInteraction } from '@decipad/react-contexts';
 import { Subject } from 'rxjs';
-import { components } from './components';
 import { autoformatRules } from './autoformat';
+import { components } from './components';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
@@ -131,6 +132,9 @@ export const plugins = ({
       createNormalizeTextPlugin(),
       // createTrailingParagraphPlugin(),
       createNormalizeColumnsPlugin(),
+
+      // Drag and drop entities
+      createDndSmartRefPlugin(computer),
 
       // block manipulation
       createExitBreakPlugin({ options: exitBreakOptions }),

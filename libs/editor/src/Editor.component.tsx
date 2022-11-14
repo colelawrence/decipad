@@ -1,3 +1,6 @@
+import { NumberCatalog } from '@decipad/editor-components';
+import { MyEditor, MyValue } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   EditorBlockParentRefProvider,
   EditorChangeContextProvider,
@@ -9,18 +12,16 @@ import {
   LoadingFilter,
   StarterChecklist,
 } from '@decipad/ui';
-import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { Plate } from '@udecode/plate';
-import { MyEditor, MyValue } from '@decipad/editor-types';
+import { EditorLayout } from 'libs/ui/src/atoms';
+import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { EditorLayout } from 'libs/ui/src/atoms';
 import * as components from './components';
-import { useWriteLock } from './utils/useWriteLock';
-import { useAutoAnimate } from './hooks';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { NotebookState } from './components/NotebookState/NotebookState';
+import { useAutoAnimate } from './hooks';
+import { useWriteLock } from './utils/useWriteLock';
 
 export interface EditorProps {
   notebookId: string;
@@ -34,6 +35,7 @@ export interface EditorProps {
 const InsidePlate = ({
   containerRef,
   children,
+  readOnly,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
 }) => {
@@ -42,6 +44,7 @@ const InsidePlate = ({
     <>
       <components.Tooltip />
       <components.CursorOverlay containerRef={containerRef} />
+      {readOnly ? null : <NumberCatalog />}
       <DndPreview />
       {children}
     </>

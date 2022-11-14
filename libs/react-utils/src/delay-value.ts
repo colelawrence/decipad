@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 
+export const delayValueTimeout = 1000;
+
 /**
  * Make `true` only appear 1 second later. Used for delaying the display of errors.
  */
@@ -11,7 +13,7 @@ export const useDelayedTrue = (currentBoolean: boolean) => {
       setIsTrue(false);
       const timeout = setTimeout(() => {
         setIsTrue(true);
-      }, 1000);
+      }, delayValueTimeout);
 
       return () => {
         clearTimeout(timeout);

@@ -23,6 +23,7 @@ export { InlineRowResult } from './InlineRowResult/InlineRowResult';
 export { MediaEmbed } from './MediaEmbed/MediaEmbed';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookPublishingPopUp } from './NotebookPublishingPopUp/NotebookPublishingPopUp';
+export { NumberCatalog } from './NumberCatalog/NumberCatalog';
 export { PlotBlock } from './PlotBlock/PlotBlock';
 export { PlotParams } from './PlotParams/PlotParams';
 export { PlotResult } from './PlotResult/PlotResult';

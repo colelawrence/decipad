@@ -10,6 +10,7 @@ import {
 import { Plate, createPlateEditor } from '@udecode/plate';
 import { FC, useCallback, useContext, useMemo, useState, useRef } from 'react';
 import { MyValue } from '@decipad/editor-types';
+import { NumberCatalog } from '@decipad/editor-components';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Subject } from 'rxjs';
 import { Tooltip } from './components';
@@ -70,6 +71,7 @@ export const NoDocSyncEditorInternal: FC = () => {
                 readOnly: isWritingLocked,
               }}
             >
+              <NumberCatalog />
               <Tooltip />
             </Plate>
           </EditorLayout>

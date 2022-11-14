@@ -3,6 +3,7 @@ export * from './BlockErrorBoundary';
 export * from './BlockSelection/BlockSelectable';
 export * from './BubbleEditor';
 export * from './CodeLine';
+export * from './NumberCatalog';
 export * from './Import/Import';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';

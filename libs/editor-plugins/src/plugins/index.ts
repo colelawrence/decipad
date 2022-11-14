@@ -6,6 +6,7 @@ export * from './Callout';
 export * from './CodeLine';
 export * from './CodeVariableHighlight';
 export * from './Divider';
+export * from './DndSmartRef';
 export * from './DragOverCursor';
 export * from './EditorApplyErrorReporter';
 export * from './Eval';

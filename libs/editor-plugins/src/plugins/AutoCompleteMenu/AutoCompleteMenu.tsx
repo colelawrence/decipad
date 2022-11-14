@@ -1,17 +1,17 @@
-import type { ComponentProps } from 'react';
-import { useComputer } from '@decipad/react-contexts';
-import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
-import { useFocused, useSelected } from 'slate-react';
-import { useCallback, useState } from 'react';
-import { useWindowListener } from '@decipad/react-utils';
-import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import {
   AutocompleteName,
   getBuiltinsForAutocomplete,
 } from '@decipad/computer';
-import { insertText } from '@udecode/plate';
-import { BaseEditor, Transforms } from 'slate';
+import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
+import { useComputer } from '@decipad/react-contexts';
+import { useWindowListener } from '@decipad/react-utils';
+import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
+import { insertText } from '@udecode/plate';
+import type { ComponentProps } from 'react';
+import { useCallback, useState } from 'react';
+import { BaseEditor, Transforms } from 'slate';
+import { useFocused, useSelected } from 'slate-react';
 
 const compareNames = (a: AutocompleteName, b: AutocompleteName) => {
   const aScore = a.isLocal ? 1 : 0;
@@ -81,7 +81,7 @@ export const AutoCompleteMenu: PlateComponent<{
         insertText(editor, ' ');
       }
     },
-    [computer, editor, showAutoComplete, variableInfo]
+    [editor, showAutoComplete, variableInfo]
   );
 
   const identifiers = computer.getNamesDefined$.useWithSelector(
