@@ -81,7 +81,7 @@ describe('pad editor persistence', () => {
       {
         children: [
           {
-            text: '',
+            text: 'My notebook title',
           },
         ],
         type: 'h1',
@@ -125,7 +125,7 @@ describe('pad editor persistence', () => {
       {
         children: [
           {
-            text: '',
+            text: 'My notebook title',
           },
         ],
         type: 'h1',

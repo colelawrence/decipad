@@ -122,5 +122,5 @@ it('byDesc', () => {
 });
 
 it('varnamify', () => {
-  expect(varNamify('a % bc_d   e')).toEqual('aBcDE');
+  expect(varNamify('a % bc_d   e')).toEqual('ABcDE');
 });

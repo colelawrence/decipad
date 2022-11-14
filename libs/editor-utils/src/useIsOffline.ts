@@ -13,12 +13,15 @@ export const useIsOffline = () => {
   }, []);
 
   useEffect(() => {
-    global.addEventListener('online', handleOfflineStatusChange);
-    global.addEventListener('offline', handleOfflineStatusChange);
-
+    if ('addEventListener' in global) {
+      global.addEventListener('online', handleOfflineStatusChange);
+      global.addEventListener('offline', handleOfflineStatusChange);
+    }
     return () => {
-      global.removeEventListener('online', handleOfflineStatusChange);
-      global.removeEventListener('offline', handleOfflineStatusChange);
+      if ('removeEventListener' in global) {
+        global.removeEventListener('online', handleOfflineStatusChange);
+        global.removeEventListener('offline', handleOfflineStatusChange);
+      }
     };
   }, [handleOfflineStatusChange]);
 

@@ -373,8 +373,10 @@ class WebsocketProvider
       }, resyncInterval);
     }
 
-    global.addEventListener('online', this._onOfflineOnlineStatusChange);
-    global.addEventListener('offline', this._onOfflineOnlineStatusChange);
+    if ('addEventListener' in global) {
+      global.addEventListener('online', this._onOfflineOnlineStatusChange);
+      global.addEventListener('offline', this._onOfflineOnlineStatusChange);
+    }
 
     this._updateHandler = this._updateHandler.bind(this);
     this._beforeUnloadHandler = this._beforeUnloadHandler.bind(this);
@@ -536,8 +538,10 @@ class WebsocketProvider
 
     this.doc.off('update', this._updateHandler);
 
-    global.removeEventListener('online', this._onOfflineOnlineStatusChange);
-    global.removeEventListener('offline', this._onOfflineOnlineStatusChange);
+    if ('removeEventListener' in global) {
+      global.removeEventListener('online', this._onOfflineOnlineStatusChange);
+      global.removeEventListener('offline', this._onOfflineOnlineStatusChange);
+    }
 
     super.destroy();
   }

@@ -32,7 +32,7 @@ describe('insertInputBelow', () => {
         },
         {
           type: ELEMENT_EXPRESSION,
-          children: [{ text: '' }],
+          children: [{ text: '100$' }],
         },
       ],
     });
@@ -51,7 +51,7 @@ describe('insertInputBelow', () => {
         },
         {
           type: ELEMENT_EXPRESSION,
-          children: [{ text: '' }],
+          children: [{ text: '100$' }],
         },
       ],
     });
@@ -65,7 +65,7 @@ describe('insertInputBelow', () => {
         },
         {
           type: ELEMENT_EXPRESSION,
-          children: [{ text: '' }],
+          children: [{ text: '100$' }],
         },
       ],
     });

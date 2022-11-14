@@ -85,7 +85,7 @@ describe('onDropInlineResult', () => {
       expect(editor.children).toEqual([
         {
           type: ELEMENT_PARAGRAPH,
-          children: [{ [MARK_MAGICNUMBER]: true, text: 'a' }],
+          children: [{ [MARK_MAGICNUMBER]: true, text: expect.any(String) }],
         },
         codeLine,
       ]);

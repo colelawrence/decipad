@@ -3,7 +3,7 @@
   "sourceRoot": "apps/e2e/tests",
   "projectType": "application",
   "targets": {
-    "test": {
+    "e2e": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
         "command": "./scripts/e2e.sh"
