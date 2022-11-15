@@ -46,7 +46,10 @@ export const useSlashMenu = (
     }
   }, [selected]);
 
-  const { search, deleteFragment } = findSlashCommand(text, selection);
+  const { search, isInline, deleteFragment } = findSlashCommand(
+    text,
+    selection
+  );
   const showSlashCommands =
     selected && focused && !slashMenuSuppressed && search != null;
 
@@ -72,18 +75,22 @@ export const useSlashMenu = (
   useWindowListener('keydown', onKeyDown, true);
 
   const editor = useTEditorRef();
+  const selectionFocus = selection?.focus;
+  const shouldJumpToEnd =
+    !isInline && showSlashCommands && elementPath && isCollapsed(selection);
 
   useEffect(() => {
-    if (showSlashCommands && elementPath && isCollapsed(selection)) {
+    if (shouldJumpToEnd) {
       const endPoint = getEndPoint(editor, elementPath);
-      if (!dequal(selection?.focus, endPoint)) {
+
+      if (!dequal(selectionFocus, endPoint)) {
         setSelection(editor, {
           focus: endPoint,
           anchor: endPoint,
         });
       }
     }
-  }, [editor, elementPath, selection, selection?.focus, showSlashCommands]);
+  }, [editor, elementPath, selectionFocus, shouldJumpToEnd]);
 
   return {
     showSlashCommands,
@@ -99,6 +106,7 @@ const findSlashCommand = (text: string, selection: BaseRange | null) => {
   const standalone = findStandaloneSlashCommand(text);
 
   return {
+    isInline: inline != null,
     search: inline?.command ?? standalone,
     deleteFragment: inline?.selection,
   };
