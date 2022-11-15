@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar } from '../../primitives';
 import { Anchor } from '../../utils';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const styles = css({
   display: 'inline-block',
@@ -51,14 +52,12 @@ export const IconButton = ({
   onClick,
   href,
 }: IconButtonProps): ReturnType<FC> => {
+  const onButtonClick = useMouseEventNoEffect(onClick);
   return onClick ? (
     <button
       aria-roledescription={roleDescription}
       css={[styles, roundedSquare && roundedSquareStyles]}
-      onClick={(event) => {
-        event.preventDefault();
-        onClick();
-      }}
+      onClick={onButtonClick}
     >
       <span css={iconStyles}>{children}</span>
     </button>

@@ -3,7 +3,7 @@ import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
-import { ComponentProps, FC, useContext } from 'react';
+import { ComponentProps, FC, useCallback, useContext } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
 import { Deci, LeftArrow, Sheet } from '../../icons';
@@ -102,6 +102,20 @@ export const NotebookTopbar = ({
   const { status: sessionStatus } = useSession();
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const clientEvent = useContext(ClientEventsContext);
+  const onGalleryClick = useCallback(
+    () =>
+      clientEvent({
+        type: 'action',
+        action: 'notebook get inspiration link clicked',
+      }),
+    [clientEvent]
+  );
+  const onTryDecipadClick = useCallback(() => {
+    clientEvent({
+      type: 'action',
+      action: 'try decipad',
+    });
+  }, [clientEvent]);
 
   return (
     <div css={wrapperStyles}>
@@ -140,12 +154,7 @@ export const NotebookTopbar = ({
               <Anchor
                 href={docs({}).page({ name: 'gallery' }).$}
                 // Analytics
-                onClick={() =>
-                  clientEvent({
-                    type: 'action',
-                    action: 'notebook get inspiration link clicked',
-                  })
-                }
+                onClick={onGalleryClick}
               >
                 <span
                   css={{
@@ -174,20 +183,13 @@ export const NotebookTopbar = ({
           isWriter ? (
             <NotebookPublishingPopUp notebook={notebook} {...sharingProps} />
           ) : (
-            <Button onClick={() => onDuplicateNotebook()}>
-              Duplicate notebook
-            </Button>
+            <Button onClick={onDuplicateNotebook}>Duplicate notebook</Button>
           )
         ) : (
           <Button
             href="/"
             // Analytics
-            onClick={() =>
-              clientEvent({
-                type: 'action',
-                action: 'try decipad',
-              })
-            }
+            onClick={onTryDecipadClick}
           >
             Try Decipad
           </Button>

@@ -11,6 +11,7 @@ import {
   setCssVar,
   shortAnimationDuration,
 } from '../../primitives';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const styles = css(p12Bold, {
   display: 'grid',
@@ -40,8 +41,13 @@ export const AccountAvatar = ({
 }: AccountAvatarProps): ReturnType<React.FC> => {
   const [hoverTargetClassName] = useState(`account-avatar-${nanoid()}`);
   const hoverSelector = menuOpen ? '' : `.${hoverTargetClassName}:hover`;
+  const onAccountAvatarClick = useMouseEventNoEffect(onClick);
   return (
-    <button onClick={onClick} className={hoverTargetClassName} css={styles}>
+    <button
+      onClick={onAccountAvatarClick}
+      className={hoverTargetClassName}
+      css={styles}
+    >
       <Avatar hoverSelector={hoverSelector} {...props} />
       <div css={chevronStyles(hoverSelector)}>
         <Chevron type={menuOpen ? 'collapse' : 'expand'} />

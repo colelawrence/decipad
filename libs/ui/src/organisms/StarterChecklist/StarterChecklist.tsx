@@ -1,7 +1,7 @@
 import { StarterChecklistType } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { nanoid } from 'nanoid';
-import { FC, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { Button } from '../../atoms';
 import { Checkbox } from '../../atoms/Checkbox/Checkbox';
 import { Caret } from '../../icons';
@@ -14,6 +14,7 @@ import {
   p16Bold,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const wrapperStyles = css({
   width: 356,
@@ -98,12 +99,16 @@ export const StarterChecklist: FC<StarterChecklistProps> = ({
     [checklist.items]
   );
 
+  const toggleHide = useMouseEventNoEffect(
+    useCallback(() => setHide((h) => !h), [])
+  );
+
   return (
     <div
       css={[wrapperStyles, hideOnPrint, hide && { height: COLLAPSED_HEIGHT }]}
     >
       <div css={innerStyles}>
-        <div css={checklistDropdown} onClick={() => setHide(!hide)}>
+        <div css={checklistDropdown} onClick={toggleHide}>
           <p>👋 Welcome to Decipad!</p>
           <div
             css={[
@@ -163,7 +168,7 @@ export const StarterChecklist: FC<StarterChecklistProps> = ({
             </div>
             <div css={buttonStyles}>
               <div>
-                <Button type="text" onClick={() => onHideChecklist()}>
+                <Button type="text" onClick={onHideChecklist}>
                   Hide this forever
                 </Button>
               </div>

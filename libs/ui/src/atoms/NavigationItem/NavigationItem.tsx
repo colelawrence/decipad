@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, p14Regular, setCssVar } from '../../primitives';
 import { Anchor } from '../../utils';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const containerStyles = css({
   display: 'grid',
@@ -69,10 +70,11 @@ export const NavigationItem = ({
   onClick,
 }: NavigationItemProps): ReturnType<FC> => {
   const styledIcon = icon && <span css={iconStyles}>{icon}</span>;
+  const onButtonClick = useMouseEventNoEffect(onClick);
   return (
     <div css={containerStyles}>
       {onClick ? (
-        <button css={styles} onClick={onClick}>
+        <button css={styles} onClick={onButtonClick}>
           {styledIcon}
           {children}
         </button>

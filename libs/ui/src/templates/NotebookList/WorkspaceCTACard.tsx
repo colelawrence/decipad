@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
-import { FC, useCallback, MouseEvent } from 'react';
+import { FC } from 'react';
 import { Button } from '../../atoms';
 import { Close } from '../../icons';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 import background from './cta-background.png';
 
 const smallScreenQuery = `@media (max-width: 1000px)`;
@@ -54,14 +55,7 @@ const WorkspaceCTACard: FC<WorkspaceCTACardProps> = ({
   onDismiss,
   onCreateNewNotebook,
 }) => {
-  const onDismissClick = useCallback(
-    (event: MouseEvent) => {
-      event.stopPropagation();
-      event.preventDefault();
-      onDismiss();
-    },
-    [onDismiss]
-  );
+  const onDismissClick = useMouseEventNoEffect(onDismiss);
   return (
     <div css={workspaceCTACardSuperWrapperStyles}>
       <div css={dismissWrapperStyles} onClick={onDismissClick}>

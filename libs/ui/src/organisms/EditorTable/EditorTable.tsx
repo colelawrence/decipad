@@ -15,6 +15,7 @@ import {
   TableStyleContext,
   UserIconKey,
 } from '../../utils';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 import { TableWidth } from '../Table/Table';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
@@ -158,6 +159,8 @@ export const EditorTable: FC<EditorTableProps> = ({
   const onMouseEnter = useCallback(() => setMouseOver(true), []);
   const onMouseLeave = useCallback(() => setMouseOver(false), []);
 
+  const onAddColumnClick = useMouseEventNoEffect(onAddColumn);
+
   return (
     <TableStyleContext.Provider value={tableStyleContextValue}>
       <div css={wrapperStyles}>
@@ -194,7 +197,7 @@ export const EditorTable: FC<EditorTableProps> = ({
                   onMouseLeave={onMouseLeave}
                 >
                   <button
-                    onClick={onAddColumn}
+                    onClick={onAddColumnClick}
                     css={[
                       tableAddColumnButtonStyles,
                       mouseOver && mouseOverAddColumnButtonStyles,

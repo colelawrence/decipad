@@ -1,7 +1,7 @@
 import { Result } from '@decipad/computer';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import React, { ComponentProps, ReactNode, useState } from 'react';
+import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -17,6 +17,7 @@ import {
 import { codeBlock } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const { lineHeight } = codeBlock;
 
@@ -187,7 +188,7 @@ export const CodeLine = ({
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
-  const freshResult = renderPotentiallyExpandedResult({
+  const freshResult = PotentiallyExpandedResult({
     result,
     syntaxError,
     onDragStartCell,
@@ -231,7 +232,7 @@ export const CodeLine = ({
   );
 };
 
-function renderPotentiallyExpandedResult({
+function PotentiallyExpandedResult({
   result,
   syntaxError,
   onDragStartCell,
@@ -240,6 +241,14 @@ function renderPotentiallyExpandedResult({
   CodeLineProps,
   'result' | 'syntaxError' | 'onDragStartCell' | 'onClickedResult'
 >): { inline?: ReactNode; expanded?: ReactNode; errored?: boolean } {
+  const onOutputClick = useMouseEventNoEffect(
+    useCallback(() => {
+      if (onClickedResult && result) {
+        onClickedResult(result);
+      }
+    }, [onClickedResult, result])
+  );
+
   // Return early when syntax errors
   if (syntaxError) {
     return {
@@ -274,14 +283,7 @@ function renderPotentiallyExpandedResult({
   // Any other result
   return {
     inline: (
-      <output
-        css={inlineResultStyles}
-        onClick={() => {
-          if (onClickedResult) {
-            onClickedResult(result);
-          }
-        }}
-      >
+      <output css={inlineResultStyles} onClick={onOutputClick}>
         <CodeResult {...result} variant="inline" />
       </output>
     ),

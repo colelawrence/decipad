@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { blue100, blue200, cssVar, p13SemiBold } from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const wrapperStyles = {
   display: 'inline-block',
@@ -62,6 +63,7 @@ export const TextAndIconButton = ({
   color,
   iconPosition = 'right',
 }: IconButtonProps): ReturnType<FC> => {
+  const onButtonClick = useMouseEventNoEffect(onClick);
   const textElement = <span css={buttonTextStyles}>{text}</span>;
   const iconElement = <span css={iconStyles}>{children}</span>;
   const textAndIcon =
@@ -81,11 +83,7 @@ export const TextAndIconButton = ({
       {onClick ? (
         <button
           css={[styles, color === 'blue' && blueBackgroundStyles]}
-          onClick={(event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            onClick(event);
-          }}
+          onClick={onButtonClick}
         >
           {textAndIcon}
         </button>

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ComponentProps, FC, useState } from 'react';
+import { ComponentProps, FC, useCallback, useState } from 'react';
 import { WorkspaceMenu } from '..';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Chevron } from '../../icons';
@@ -34,11 +34,13 @@ export const WorkspaceSwitcher = (
   props: WorkspaceSwitcherProps
 ): ReturnType<FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenuOpen = useCallback(() => setMenuOpen((open) => !open), []);
   return (
     <div css={{ position: 'relative' }}>
       <NavigationItem
         icon={<Avatar name={props.activeWorkspace.name} roundedSquare />}
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={toggleMenuOpen}
       >
         <strong css={nameStyles}>
           {props.activeWorkspace.name}

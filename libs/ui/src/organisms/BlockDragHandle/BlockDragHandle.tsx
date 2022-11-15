@@ -16,6 +16,7 @@ import { MenuList } from '../../molecules';
 import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const gridStyles = once(() =>
   css({
@@ -127,7 +128,7 @@ export const BlockDragHandle = ({
   );
 
   const plusButton = (
-    <button onClick={onPlus} css={plusStyle}>
+    <button onClick={useMouseEventNoEffect(onPlus)} css={plusStyle}>
       <Plus />
     </button>
   );

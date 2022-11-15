@@ -1,4 +1,3 @@
-import { noop } from '@decipad/utils';
 import { css, CSSObject } from '@emotion/react';
 import { ReactNode } from 'react';
 import {
@@ -23,6 +22,7 @@ import {
   orange300,
 } from '../../primitives';
 import { Anchor } from '../../utils';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const styles = css(p13SemiBold, {
   flexGrow: 1,
@@ -168,9 +168,11 @@ export const Button = ({
   disabled = false,
 
   children,
-  onClick = noop,
+  onClick,
   href,
 }: ButtonProps): ReturnType<React.FC> => {
+  const onButtonClick = useMouseEventNoEffect(onClick);
+
   return href ? (
     <Anchor
       href={disabled ? '' : href}
@@ -194,7 +196,7 @@ export const Button = ({
         sizeStyles[size],
         disabled ? disabledStyles : enabledStyles,
       ])}
-      onClick={onClick}
+      onClick={submit ? onClick : onButtonClick}
     >
       {children}
     </button>

@@ -5,9 +5,9 @@ import {
   triggerFloatingLink,
   unwrapLink,
 } from '@udecode/plate';
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, MouseEvent, useCallback } from 'react';
 import { ELEMENT_LINK, useTEditorRef } from '@decipad/editor-types';
-import { FloatingButton } from '@decipad/ui';
+import { FloatingButton, useMouseEventNoEffect } from '@decipad/ui';
 
 export const LinkButton = (
   props: ComponentProps<typeof FloatingButton>
@@ -20,25 +20,24 @@ export const LinkButton = (
   return (
     <FloatingButton
       isActive={isLink}
-      onMouseDown={(event) => {
+      onMouseDown={useCallback((event: MouseEvent) => {
         event.preventDefault();
-      }}
-      onClick={(event) => {
-        if (!editor) return;
+      }, [])}
+      onClick={useMouseEventNoEffect(
+        useCallback(() => {
+          if (!editor) return;
 
-        event.preventDefault();
-        event.stopPropagation();
+          focusEditor(editor, editor.selection ?? editor.prevSelection!);
 
-        focusEditor(editor, editor.selection ?? editor.prevSelection!);
-
-        setTimeout(() => {
-          if (isLink) {
-            unwrapLink(editor);
-            return;
-          }
-          triggerFloatingLink(editor, { focused: true });
-        }, 0);
-      }}
+          setTimeout(() => {
+            if (isLink) {
+              unwrapLink(editor);
+              return;
+            }
+            triggerFloatingLink(editor, { focused: true });
+          }, 0);
+        }, [editor, isLink])
+      )}
       {...props}
     ></FloatingButton>
   );

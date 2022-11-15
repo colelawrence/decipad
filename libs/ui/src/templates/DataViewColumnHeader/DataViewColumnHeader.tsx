@@ -11,6 +11,7 @@ import { capitalize } from 'lodash';
 import { DropLine, MenuItem, TriggerMenuItem } from '../../atoms';
 import { MenuList } from '../../molecules';
 import { Caret, Code, Trash } from '../../icons';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 export interface DataViewColumnHeaderProps<TAggregation extends string> {
   name: string;
@@ -63,9 +64,11 @@ export function DataViewColumnHeader<TAggregation extends string>({
 }: DataViewColumnHeaderProps<TAggregation>): ReturnType<FC> {
   const [menuListOpened, setMenuListOpened] = useState(false);
 
-  const onTriggerClick = useCallback(() => {
-    setMenuListOpened(!menuListOpened);
-  }, [menuListOpened]);
+  const onTriggerClick = useMouseEventNoEffect(
+    useCallback(() => {
+      setMenuListOpened(!menuListOpened);
+    }, [menuListOpened])
+  );
 
   const triggerStyles = css({
     display: 'grid',

@@ -5,7 +5,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
-import { FC, useContext, useState } from 'react';
+import { FC, MouseEvent, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, Dot, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
@@ -167,7 +167,10 @@ export const NotebookPublishingPopUp = ({
   };
 
   return (
-    <div css={wrapperStyles} onClick={(e) => e.stopPropagation()}>
+    <div
+      css={wrapperStyles}
+      onClick={useCallback((ev: MouseEvent) => ev.stopPropagation(), [])}
+    >
       {isPublished ? (
         hasUnpublishedChanges ? (
           <Dot>

@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, useCallback, useState } from 'react';
 import { Button } from '../../atoms';
 import { AccountAvatar, NotebookListHeader } from '../../molecules';
 import { AccountMenu } from '../../organisms';
@@ -70,6 +70,8 @@ export const DashboardTopbar = ({
   onPointerEnter,
 }: DashboardTopbarProps): ReturnType<React.FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenuOpen = useCallback(() => setMenuOpen((o) => !o), []);
+
   return (
     <div css={styles} onPointerEnter={onPointerEnter}>
       <div css={leftStyles}>
@@ -86,7 +88,7 @@ export const DashboardTopbar = ({
           <AccountAvatar
             menuOpen={menuOpen}
             name={name}
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={toggleMenuOpen}
           />
           {menuOpen && (
             <div

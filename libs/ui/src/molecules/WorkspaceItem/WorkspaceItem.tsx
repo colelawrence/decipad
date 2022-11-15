@@ -1,10 +1,11 @@
 import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Edit } from '../../icons';
 import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const maxWidth = '176px';
 const iconSize = '24px';
@@ -80,12 +81,13 @@ export const WorkspaceItem = ({
         </span>
         <button
           css={iconStyles}
-          onClick={(e) => {
-            // Doing navigation programatically instead of using an <Anchor> component because <a>
-            // inside of an <a> is semantically forbidden.
-            onClickEdit(id);
-            e.preventDefault();
-          }}
+          onClick={useMouseEventNoEffect(
+            useCallback(() => {
+              // Doing navigation programatically instead of using an <Anchor> component because <a>
+              // inside of an <a> is semantically forbidden.
+              onClickEdit(id);
+            }, [id, onClickEdit])
+          )}
         >
           <Edit />
         </button>

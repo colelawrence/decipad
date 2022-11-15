@@ -7,6 +7,7 @@ import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 type MagicNumberProps = {
   readonly result?: Result.Result | undefined;
@@ -93,7 +94,7 @@ export const MagicNumber = ({
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
   return (
-    <span onClick={onClick} css={[wrapperStyles]}>
+    <span onClick={useMouseEventNoEffect(onClick)} css={[wrapperStyles]}>
       <span
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
