@@ -21,6 +21,7 @@ export type MessageHandler = (
 
 export type TWebSocketProvider = Observable<string> & {
   doc: YDoc;
+  readOnly: boolean;
   ws?: WebSocket;
   _WS: typeof WebSocket;
   serverUrl: string | undefined;

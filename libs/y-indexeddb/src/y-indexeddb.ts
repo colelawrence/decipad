@@ -127,6 +127,10 @@ interface DocumentVersion {
   createdAt: number;
 }
 
+interface IndexeddbPersistenceOptions {
+  readOnly?: boolean;
+}
+
 export class IndexeddbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;
   public doc: Y.Doc;
@@ -146,11 +150,15 @@ export class IndexeddbPersistence extends Observable<string> {
    */
   private _storeTimeout = 1000;
 
-  constructor(name: string, doc: Y.Doc) {
+  constructor(
+    name: string,
+    doc: Y.Doc,
+    { readOnly = false }: IndexeddbPersistenceOptions = {}
+  ) {
     super();
     this.doc = doc;
-    this.name = name;
-    this._db = idb.openDB(name, (db) =>
+    this.name = readOnly ? `${name}:readonly` : name;
+    this._db = idb.openDB(this.name, (db) =>
       idb.createStores(db, [['updates', { autoIncrement: true }]])
     );
     this.whenSynced = this._init();

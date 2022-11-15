@@ -1,6 +1,6 @@
 import { dequal } from 'dequal';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { debounce } from 'lodash';
+import { debounce, noop } from 'lodash';
 import { createDocSyncEditor } from '@decipad/docsync';
 import { getDefined } from '@decipad/utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
@@ -46,9 +46,11 @@ export const startNotebook = async (
   onError: OnErrorCallback
 ): Promise<Computer> => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
+  const editor = createTPlateEditor();
+  editor.normalizeNode = noop;
   const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
-    editor: createTPlateEditor(),
+    editor,
   });
 
   const computer = new Computer();

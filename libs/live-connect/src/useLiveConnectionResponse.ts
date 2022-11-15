@@ -55,7 +55,7 @@ export const useLiveConnectionResponse = ({
             },
             (err, res) => {
               if (!canceled) {
-                if (err && !isFatalError(err)) {
+                if (err && !isFatalError(err.message)) {
                   return;
                 }
                 setError(err);
@@ -74,7 +74,7 @@ export const useLiveConnectionResponse = ({
             }
           );
         } catch (err) {
-          if (err && !isFatalError(err as Error)) {
+          if (err && !isFatalError((err as Error).message)) {
             return;
           }
           console.error(err);
@@ -101,7 +101,7 @@ export const useLiveConnectionResponse = ({
 
   useEffect(() => {
     worker?.worker.addEventListener('error', (ev) => {
-      if (!isFatalError(ev.error)) {
+      if (!isFatalError(ev.message)) {
         return;
       }
       console.error('Error detected on worker', ev);

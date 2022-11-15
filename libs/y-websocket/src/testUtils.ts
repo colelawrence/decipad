@@ -7,6 +7,7 @@ import { TWebSocketProvider } from './types';
 
 class TestProvider extends Observable<string> implements TWebSocketProvider {
   doc: Doc;
+  readOnly = false;
   awareness: awarenessProtocol.Awareness;
   ws?: WebSocket | undefined;
   _WS = WebSocket;

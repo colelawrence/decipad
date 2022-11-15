@@ -128,7 +128,6 @@ test('connection', (ctx) => {
       doc = new YDoc();
       provider = createWebsocketProvider(doc, {
         protocol: user.token,
-        connectBc: false,
         beforeConnect: (p) => {
           // eslint-disable-next-line no-param-reassign
           p.serverUrl = `${ctx.websocketURL()}?doc=${pad.id}`;

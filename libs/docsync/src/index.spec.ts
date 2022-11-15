@@ -86,7 +86,6 @@ test('sync many', (ctx) => {
 
     for (let i = 0; i < replicaCount; i += 1) {
       const editor = createDocSyncEditor(pad.id, {
-        connectBc: false,
         editor: createTPlateEditor(),
       });
       editors.push(editor);

@@ -30,7 +30,6 @@ export interface DocSyncOptions {
   onError?: (event: Error | Event) => void;
   ws?: boolean;
   connect?: boolean;
-  connectBc?: boolean;
   connectionParams?: DocSyncConnectionParams;
   initialState?: string;
 }
@@ -60,7 +59,6 @@ export function createDocSyncEditor(
     onError,
     ws = true,
     connect = ws,
-    connectBc = true,
     WebSocketPolyfill,
     connectionParams,
     initialState,
@@ -68,7 +66,7 @@ export function createDocSyncEditor(
 ) {
   (editor as PlateEditor).children = [];
   const doc = new YDoc();
-  const store = new IndexeddbPersistence(docId, doc);
+  const store = new IndexeddbPersistence(docId, doc, { readOnly });
   const initialTokenTime = Date.now();
 
   const isInitialTokenStale = () =>
@@ -97,7 +95,6 @@ export function createDocSyncEditor(
       readOnly,
       connect: false,
       beforeConnect,
-      connectBc,
       resyncInterval: 60000,
       onError,
     });

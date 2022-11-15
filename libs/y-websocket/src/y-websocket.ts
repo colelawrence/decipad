@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { getDefined } from '@decipad/utils';
 import { Buffer } from 'buffer';
-import * as bc from 'lib0/broadcastchannel';
 import * as decoding from 'lib0/decoding';
 import * as encoding from 'lib0/encoding';
 import * as mutex from 'lib0/mutex';
@@ -15,7 +14,6 @@ import { messageHandlers } from './messageHandlers';
 import {
   messageAwareness,
   MessageHandler,
-  messageQueryAwareness,
   messageSync,
   MessageType,
   TWebSocketProvider,
@@ -30,7 +28,6 @@ export interface WSStatus {
 export interface Options {
   readOnly?: boolean;
   connect?: boolean;
-  connectBc?: boolean;
   awareness?: awarenessProtocol.Awareness;
   params?: Record<string, string>;
   WebSocketPolyfill?: typeof WebSocket;
@@ -173,7 +170,7 @@ const setupWS = async (provider: TWebSocketProvider) => {
         provider.wsLastMessageReceived = time.getUnixTime();
         try {
           const encoder = readMessage(provider, event.data, true, true);
-          if (encoder && encoding.length(encoder) > 1) {
+          if (!provider.readOnly && encoder && encoding.length(encoder) > 1) {
             const message = encoding.toUint8Array(encoder);
             provider.send(message);
           }
@@ -256,7 +253,7 @@ const setupWS = async (provider: TWebSocketProvider) => {
 };
 
 const broadcastMessage = (provider: WebsocketProvider, buf: Uint8Array) => {
-  if (provider.destroyed) {
+  if (provider.destroyed || provider.readOnly) {
     return;
   }
   if (provider.wsconnected) {
@@ -271,11 +268,6 @@ const broadcastMessage = (provider: WebsocketProvider, buf: Uint8Array) => {
       }
     }
   }
-  if (provider.bcconnected) {
-    provider.mux(() => {
-      bc.publish(getDefined(provider.bcChannel), buf);
-    });
-  }
 };
 
 class WebsocketProvider
@@ -287,8 +279,6 @@ class WebsocketProvider
   beforeConnect: Options['beforeConnect'];
   _WS: typeof WebSocket;
   awareness: awarenessProtocol.Awareness;
-  willConnectBc: boolean;
-  bcChannel?: string;
   url?: string;
   readOnly: boolean;
   shouldConnect: boolean;
@@ -296,7 +286,6 @@ class WebsocketProvider
   ws: WebSocket | undefined;
   wsconnected = false;
   wsconnecting = false;
-  bcconnected = false;
   wsLastMessageReceived = 0;
   wsUnsuccessfulReconnects = 0;
   messageHandlers: MessageHandler[];
@@ -323,7 +312,6 @@ class WebsocketProvider
     const {
       readOnly = false,
       connect = true,
-      connectBc = true,
       awareness,
       WebSocketPolyfill = WebSocket,
       resyncInterval = -1,
@@ -332,7 +320,6 @@ class WebsocketProvider
       onError,
     } = options;
 
-    // ensure that url is always ends with /
     this.readOnly = readOnly;
     this.doc = doc;
     this.protocol = protocol;
@@ -350,7 +337,6 @@ class WebsocketProvider
     this.messageHandlers = messageHandlers.slice();
     this.mux = mutex.createMutex();
     this.shouldConnect = connect;
-    this.willConnectBc = connectBc;
 
     if (resyncInterval > 0) {
       this._resyncInterval = setInterval(() => {
@@ -380,7 +366,6 @@ class WebsocketProvider
 
     this._updateHandler = this._updateHandler.bind(this);
     this._beforeUnloadHandler = this._beforeUnloadHandler.bind(this);
-    this._bcSubscriber = this._bcSubscriber.bind(this);
     this._awarenessUpdateHandler = this._awarenessUpdateHandler.bind(this);
 
     if (!this.readOnly) {
@@ -416,7 +401,6 @@ class WebsocketProvider
   set serverUrl(serverUrl: string | undefined) {
     if (serverUrl) {
       const url = new URL(serverUrl).href;
-      this.bcChannel = url;
       this.url = url;
     }
   }
@@ -429,15 +413,6 @@ class WebsocketProvider
     if (this.wsconnected && this.ws) {
       this.ws.send(encodeMessage(message));
     }
-  }
-
-  private _bcSubscriber(data: ArrayBuffer) {
-    this.mux(() => {
-      const encoder = readMessage(this, new Uint8Array(data), false);
-      if (encoder && encoding.length(encoder) > 1) {
-        bc.publish(getDefined(this.bcChannel), encoding.toUint8Array(encoder));
-      }
-    });
   }
 
   private _updateHandler(update: Uint8Array, origin: unknown) {
@@ -546,77 +521,11 @@ class WebsocketProvider
     super.destroy();
   }
 
-  connectBc(): void {
-    if (!this.bcconnected) {
-      bc.subscribe(getDefined(this.bcChannel), this._bcSubscriber);
-      this.bcconnected = true;
-    }
-    // send sync step1 to bc
-    this.mux(() => {
-      // write sync step 1
-      const encoderSync = encoding.createEncoder();
-      encoding.writeVarUint(encoderSync, messageSync);
-      syncProtocol.writeSyncStep1(encoderSync, this.doc);
-      bc.publish(
-        getDefined(this.bcChannel),
-        encoding.toUint8Array(encoderSync)
-      );
-      // broadcast local state
-      const encoderState = encoding.createEncoder();
-      encoding.writeVarUint(encoderState, messageSync);
-      syncProtocol.writeSyncStep2(encoderState, this.doc);
-      bc.publish(
-        getDefined(this.bcChannel),
-        encoding.toUint8Array(encoderState)
-      );
-      // write queryAwareness
-      const encoderAwarenessQuery = encoding.createEncoder();
-      encoding.writeVarUint(encoderAwarenessQuery, messageQueryAwareness);
-      bc.publish(
-        getDefined(this.bcChannel),
-        encoding.toUint8Array(encoderAwarenessQuery)
-      );
-      // broadcast local awareness state
-      const encoderAwarenessState = encoding.createEncoder();
-      encoding.writeVarUint(encoderAwarenessState, messageAwareness);
-      encoding.writeVarUint8Array(
-        encoderAwarenessState,
-        awarenessProtocol.encodeAwarenessUpdate(this.awareness, [
-          this.doc.clientID,
-        ])
-      );
-      bc.publish(
-        getDefined(this.bcChannel),
-        encoding.toUint8Array(encoderAwarenessState)
-      );
-    });
-  }
-
-  disconnectBc(): void {
-    // broadcast message with local awareness state set to null (indicating disconnect)
-    const encoder = encoding.createEncoder();
-    encoding.writeVarUint(encoder, messageAwareness);
-    encoding.writeVarUint8Array(
-      encoder,
-      awarenessProtocol.encodeAwarenessUpdate(
-        this.awareness,
-        [this.doc.clientID],
-        new Map()
-      )
-    );
-    broadcastMessage(this, encoding.toUint8Array(encoder));
-    if (this.bcconnected) {
-      bc.unsubscribe(getDefined(this.bcChannel), this._bcSubscriber);
-      this.bcconnected = false;
-    }
-  }
-
   disconnect(): void {
     if (this.wsconnected) {
       this.broadcastPendingUpdateMessages();
     }
     this.shouldConnect = false;
-    this.disconnectBc();
     if (this.ws != null) {
       try {
         this.ws.close();
@@ -635,9 +544,6 @@ class WebsocketProvider
     this.shouldConnect = true;
     if (!this.wsconnected && !this.ws) {
       await setupWS(this);
-      if (this.willConnectBc) {
-        this.connectBc();
-      }
     }
   }
 }
