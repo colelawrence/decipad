@@ -38,7 +38,7 @@ export const NumberCatalog = ({
       ]}
     >
       <div css={menuStyles}>
-        <div css={gridHeaderNumberCatStyles}>
+        <div css={gridHeaderNumberCatStyles} onClick={handleCollapsedClick}>
           <div css={menuHeaderStyles}>
             <span css={css({ color: cssVar('normalTextColor') })}>Numbers</span>
             <span
@@ -52,7 +52,7 @@ export const NumberCatalog = ({
               {names.length}
             </span>
           </div>
-          <div onClick={handleCollapsedClick} css={menuHeaderChevronStyles}>
+          <div css={menuHeaderChevronStyles}>
             <Chevron type={collapsed ? 'expand' : 'collapse'} />
           </div>
         </div>
@@ -82,6 +82,7 @@ const floatyStyles = css({
   [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
     display: 'none',
   },
+  zIndex: 1000,
 });
 
 const borderRadius = '12px';
@@ -92,6 +93,7 @@ const gridHeaderNumberCatStyles = css({
   gridColumnGap: '16px',
   borderRadius,
   backgroundColor: cssVar('tintedBackgroundColor'),
+  cursor: 'pointer',
 });
 
 const menuStyles = css({
@@ -123,5 +125,6 @@ const menuBodyStyles = css({
   borderTopRightRadius: 0,
   maxHeight: '50vh',
   minHeight: '40px',
-  overflowY: 'scroll',
+  overflowY: 'auto',
+  overflowX: 'hidden',
 });
