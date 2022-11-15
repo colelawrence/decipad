@@ -153,35 +153,47 @@ describe('Table', () => {
                 },
                 {
                   type: 'table',
+                  args: [],
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: 'identified-block',
+        id: 'th1',
+        block: {
+          type: 'block',
+          args: [
+            {
+              type: 'table-column-assign',
+              args: [
+                {
+                  type: 'tablepartialdef',
+                  args: ['varname'],
+                },
+                {
+                  args: ['Col1'],
+                  type: 'coldef',
+                },
+                {
+                  type: 'column',
                   args: [
                     {
-                      type: 'table-column',
+                      type: 'column-items',
                       args: [
                         {
-                          args: ['Col1'],
-                          type: 'coldef',
+                          type: 'literal',
+                          args: ['string', '1.1'],
                         },
                         {
-                          type: 'column',
-                          args: [
-                            {
-                              type: 'column-items',
-                              args: [
-                                {
-                                  type: 'literal',
-                                  args: ['string', '1.1'],
-                                },
-                                {
-                                  type: 'literal',
-                                  args: ['string', '1.2'],
-                                },
-                                {
-                                  type: 'literal',
-                                  args: ['string', '1.3'],
-                                },
-                              ],
-                            },
-                          ],
+                          type: 'literal',
+                          args: ['string', '1.2'],
+                        },
+                        {
+                          type: 'literal',
+                          args: ['string', '1.3'],
                         },
                       ],
                     },

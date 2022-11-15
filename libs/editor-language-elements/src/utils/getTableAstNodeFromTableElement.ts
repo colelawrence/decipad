@@ -1,8 +1,10 @@
 import { MyEditor, TableElement } from '@decipad/editor-types';
 import { AST, Computer, IdentifiedError } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
+import { astNode } from '@decipad/editor-utils';
+import { getDefined } from '@decipad/utils';
 import { headerToColumn } from './headerToColumn';
-import { tableExpression } from './tableExpression';
+import { toColumnAssign } from './toColumnAssign';
 
 export interface ColumnAssign {
   blockId: string;
@@ -25,11 +27,25 @@ export const getTableAstNodeFromTableElement = async (
   const [caption, headerRow, ...dataRows] = table.children;
   const tableName = getNodeString(caption.children[0]);
 
-  const columns = await Promise.all(
-    headerRow.children.map(async (th, columnIndex) =>
-      headerToColumn({ computer, th, columnIndex, tableName, table, dataRows })
-    )
+  const columnAssigns = await Promise.all(
+    headerRow.children.map(async (th, columnIndex) => {
+      const col = await headerToColumn({
+        computer,
+        th,
+        columnIndex,
+        tableName,
+        table,
+        dataRows,
+      });
+
+      return toColumnAssign(table.id, tableName, col);
+    })
   );
 
-  return tableExpression(table, tableName, columns);
+  return {
+    id: getDefined(table.id),
+    name: tableName,
+    expression: astNode('table'),
+    columnAssigns,
+  };
 };

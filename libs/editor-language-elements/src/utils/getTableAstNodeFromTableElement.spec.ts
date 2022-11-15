@@ -145,13 +145,14 @@ describe('getTableAstNodeFromTableElement', () => {
       new Computer(),
       node
     );
-    expect(result.expression).toMatchInlineSnapshot(`
-      (table
-        column1 (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas))))
-    `);
 
     expect(result.columnAssigns).toMatchInlineSnapshot(`
       Array [
+        Object {
+          "blockId": "th1",
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas)))),
+          "errors": Array [],
+        },
         Object {
           "blockId": "th2",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3")),
@@ -229,10 +230,20 @@ describe('getTableAstNodeFromTableElement', () => {
 
     expect(
       (await getTableAstNodeFromTableElement(editor, new Computer(), node))
-        .expression
+        .columnAssigns
     ).toMatchInlineSnapshot(`
-      (table
-        column1 (column "Hello"))
+      Array [
+        Object {
+          "blockId": "th1",
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column "Hello")),
+          "errors": Array [],
+        },
+        Object {
+          "blockId": "formula",
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (+ 1 1)),
+          "errors": Array [],
+        },
+      ]
     `);
   });
 });

@@ -84,9 +84,10 @@ describe('editorToProgram', () => {
     ];
     const { program } = await editorToProgram(editor, new Computer());
 
-    expect(program.length).toBe(6);
+    expect(program.length).toBe(7);
 
-    const [block, input, col1, col2, magicNum, table] = prettyPrintAll(program);
+    const [block, input, col1, col2, magicNum, table, tableCol] =
+      prettyPrintAll(program);
 
     expect(block).toMatchInlineSnapshot(`"(+ 1 1)"`);
 
@@ -113,9 +114,12 @@ describe('editorToProgram', () => {
     expect(table).toMatchInlineSnapshot(`
       "(assign
         (def TableName)
-        (table
-          ColName (column \\"CellData\\")))"
+        (table))"
     `);
+
+    expect(tableCol).toMatchInlineSnapshot(
+      `"(table-column-assign (tablepartialdef TableName) (coldef ColName) (column \\"CellData\\"))"`
+    );
   });
 });
 

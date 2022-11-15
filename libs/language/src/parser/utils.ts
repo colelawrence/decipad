@@ -61,7 +61,7 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
     }
   }
 
-  if (perLine) {
+  if (perLine && printedArgs.length > 0) {
     const args = printedArgs.map((a) => '  '.repeat(indent + 1) + a);
 
     return `(${fname}\n${args.join('\n')})`;
