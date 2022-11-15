@@ -30,7 +30,7 @@ export const Draw: PlateComponent = ({ element, attributes }) => {
 
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
-  const [, setIsInteracting] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
   const elementRef = useRef(element);
   elementRef.current = element;
   const updating = useRef(false);
@@ -70,13 +70,13 @@ export const Draw: PlateComponent = ({ element, attributes }) => {
             elements
           );
         }
-        if (needsUpdate.current) {
+        if (needsUpdate.current && !isInteracting) {
           needsUpdate.current = false;
           nextElements.current = cloneDeep(elementRef.current.children);
           updateScene();
         }
       },
-      [editor, element, updateScene]
+      [editor, element, isInteracting, updateScene]
     ),
     DEBOUNCE_SAVE_SKETCH_MS
   );
