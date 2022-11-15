@@ -131,6 +131,15 @@ export const TableCell: PlateComponent = ({
     }
   }, [cellType?.kind, isColumnSelected, forceAlignRight]);
 
+  const DropLine = (
+    <>
+      {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
+      {direction === 'left' && <ColumnDropLine dropDirection={direction} />}
+      {direction === 'right' && <ColumnDropLine dropDirection={direction} />}
+      {dropLine === 'bottom' && <RowDropLine dropLine={dropLine} />}
+    </>
+  );
+
   if (formulaResult != null) {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
@@ -143,6 +152,7 @@ export const TableCell: PlateComponent = ({
         resultType={formulaResult.type.kind}
         {...attributes}
         selected={selected}
+        firstChildren={DropLine}
       >
         {children}
       </FormulaTableData>
@@ -166,12 +176,9 @@ export const TableCell: PlateComponent = ({
       onChangeValue={onChangeValue}
       alignRight={forceAlignRight || isCellAlignRight(cellType)}
       parseError={showParseError ? parseErrorMessage : undefined}
+      firstChildren={DropLine}
     >
-      {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
-      {direction === 'left' && <ColumnDropLine dropDirection={direction} />}
       {children}
-      {direction === 'right' && <ColumnDropLine dropDirection={direction} />}
-      {dropLine === 'bottom' && <RowDropLine dropLine={dropLine} />}
     </TableData>
   );
 };

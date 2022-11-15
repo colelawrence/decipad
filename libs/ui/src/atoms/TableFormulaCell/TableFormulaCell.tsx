@@ -8,7 +8,6 @@ import { tableRowCounter } from '../../utils';
 const lineNumberWidth = '22px';
 
 const tdBaseStyles = css(p14Medium, {
-  overflowX: 'hidden',
   alignItems: 'center',
   backgroundColor: cssVar('tintedBackgroundColor'),
   minHeight: table.tdMinHeight,

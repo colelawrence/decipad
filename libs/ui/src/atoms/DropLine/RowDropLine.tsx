@@ -9,6 +9,7 @@ export const RowDropLine = ({ dropLine }: { dropLine: DropLineDirection }) => {
       css={{
         position: 'absolute',
         top: dropLine === 'top' ? -(dropLineWidth / 2) - 0.5 : undefined,
+        left: 0,
         bottom: dropLine === 'bottom' ? -(dropLineWidth / 2) - 1 : undefined,
         width: 'calc(100% + 1px)',
         zIndex: 2,

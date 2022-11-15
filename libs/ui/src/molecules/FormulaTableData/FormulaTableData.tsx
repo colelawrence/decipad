@@ -18,6 +18,7 @@ export type FormulaTableDataProps = ComponentProps<typeof TableFormulaCell> & {
   result?: ReactNode;
   resultType?: string;
   selected?: boolean;
+  firstChildren?: ReactNode;
 };
 
 export const FormulaTableData = ({
@@ -25,6 +26,7 @@ export const FormulaTableData = ({
   selected,
   result,
   resultType,
+  firstChildren,
   ...props
 }: FormulaTableDataProps): ReturnType<FC> => {
   const isError = resultType === 'nothing' || resultType === 'type-error';
@@ -45,6 +47,7 @@ export const FormulaTableData = ({
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
     <TableFormulaCell {...props} css={[selected ? selectedStyles : null]}>
+      {firstChildren}
       <span css={noEditingStyles} contentEditable={false}>
         {children}
       </span>
