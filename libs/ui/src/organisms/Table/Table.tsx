@@ -11,7 +11,7 @@ import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
 export const regularBorder = `1px solid ${tableBorderColor}`;
-const liveResultBorder = `1px solid ${cssVar('liveDataBackgroundColor')}`;
+const liveResultBorder = `1px solid ${tableBorderColor}`;
 const borderRadius = '6px';
 
 const tableBaseStyles = css({

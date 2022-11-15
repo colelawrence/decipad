@@ -3,10 +3,12 @@ import {
   ImportElementSource,
   TableCellType,
 } from '@decipad/editor-types';
-import { useEffect, useState } from 'react';
+import { formatError } from '@decipad/format';
 import { ImportResult } from '@decipad/import';
+import { useEffect, useState } from 'react';
 import { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
+import { isFatalError } from './utils/isFatalError';
 
 export interface LiveConnectionResponseResult {
   error?: Error;
@@ -53,14 +55,28 @@ export const useLiveConnectionResponse = ({
             },
             (err, res) => {
               if (!canceled) {
+                if (err && !isFatalError(err)) {
+                  return;
+                }
                 setError(err);
                 if (res) {
-                  setResult(res);
+                  if (res.result.type.kind === 'type-error') {
+                    setError(
+                      new Error(
+                        formatError('en-US', res.result.type.errorCause)
+                      )
+                    );
+                  } else {
+                    setResult(res);
+                  }
                 }
               }
             }
           );
         } catch (err) {
+          if (err && !isFatalError(err as Error)) {
+            return;
+          }
           console.error(err);
           setError(err as Error);
         }
@@ -85,7 +101,7 @@ export const useLiveConnectionResponse = ({
 
   useEffect(() => {
     worker?.worker.addEventListener('error', (ev) => {
-      if (ev.message.startsWith('Uncaught')) {
+      if (!isFatalError(ev.error)) {
         return;
       }
       console.error('Error detected on worker', ev);

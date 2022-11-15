@@ -19,6 +19,20 @@ export interface CssVariables {
   readonly tableFocusColor: Property.Color;
   readonly tableSelectionBackgroundColor: Property.Color;
   readonly liveDataBackgroundColor: Property.Color;
+  readonly liveDataTextColor: Property.Color;
+
+  //
+  // Live Data Icons
+  //
+  readonly liveDataIconStrokeColor: Property.Color;
+  readonly liveDataIconAccentColor: Property.Color;
+  readonly liveDataIconDarkStrokeColor: Property.Color;
+  readonly liveDataIconBgColor: Property.Color;
+
+  readonly importDataIconStrokeColor: Property.Color;
+  readonly importDataIconAccentColor: Property.Color;
+  readonly importDataIconDarkStrokeColor: Property.Color;
+  readonly importDataIconBgColor: Property.Color;
 
   //
   // Errors

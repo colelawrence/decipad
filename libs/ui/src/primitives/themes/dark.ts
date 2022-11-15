@@ -18,8 +18,11 @@ import {
   offBlack,
   orange100,
   orange300,
+  orange500,
+  orange600,
   orange700,
   purple200,
+  purple800,
   red100,
   red300,
   red50,
@@ -29,6 +32,8 @@ import {
   teal500,
   teal800,
   white,
+  yellow200,
+  yellow300,
   yellow500,
   yellow700,
 } from '../color';
@@ -101,5 +106,16 @@ export const theme: CssVariables = {
   tableSelectionBackgroundColor: blue700.rgb,
   tableFocusColor: blue500.rgb,
 
-  liveDataBackgroundColor: purple200.rgb,
+  liveDataBackgroundColor: purple800.rgb,
+  liveDataTextColor: purple200.rgb,
+
+  liveDataIconStrokeColor: yellow500.rgb,
+  liveDataIconBgColor: yellow200.rgb,
+  liveDataIconDarkStrokeColor: yellow700.rgb,
+  liveDataIconAccentColor: yellow300.rgb,
+
+  importDataIconStrokeColor: orange500.rgb,
+  importDataIconBgColor: orange100.rgb,
+  importDataIconDarkStrokeColor: orange600.rgb,
+  importDataIconAccentColor: orange300.rgb,
 };

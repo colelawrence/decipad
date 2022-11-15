@@ -1,9 +1,11 @@
 import { Result } from '@decipad/computer';
 import { TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { FC } from 'react';
 import { ImportTableRowControls } from '../../molecules';
 import { CodeResult } from '../../organisms';
+import { code } from '../../primitives';
 
 interface LiveConnectionResultProps {
   result: Result.Result;
@@ -20,19 +22,21 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
 }) => {
   return (
     result && (
-      <CodeResult
-        type={result.type}
-        value={result.value}
-        variant="block"
-        isLiveResult
-        firstTableRowControls={
-          <ImportTableRowControls
-            isFirstRow={!isFirstRowHeaderRow}
-            toggleFirstRowIsHeader={setIsFirstRowHeader}
-          />
-        }
-        onChangeColumnType={onChangeColumnType}
-      ></CodeResult>
+      <div css={css(code)}>
+        <CodeResult
+          type={result.type}
+          value={result.value}
+          variant="block"
+          isLiveResult
+          firstTableRowControls={
+            <ImportTableRowControls
+              isFirstRow={!isFirstRowHeaderRow}
+              toggleFirstRowIsHeader={setIsFirstRowHeader}
+            />
+          }
+          onChangeColumnType={onChangeColumnType}
+        ></CodeResult>
+      </div>
     )
   );
 };

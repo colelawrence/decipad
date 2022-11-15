@@ -1,16 +1,16 @@
-import { useMemo } from 'react';
-import { getParentNode } from '@udecode/plate';
 import {
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   LiveConnectionElement,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
-import { EditableLiveDataCaption } from '@decipad/ui';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
+import { EditableLiveDataCaption } from '@decipad/ui';
+import { getDefined } from '@decipad/utils';
+import { getNodeString, getParentNode } from '@udecode/plate';
 import pluralize from 'pluralize';
+import { useMemo } from 'react';
 
 export const LiveConnectionVarName: PlateComponent = ({
   element,
@@ -25,7 +25,7 @@ export const LiveConnectionVarName: PlateComponent = ({
     [editor, path]
   );
 
-  const { sourceName, url } = useMemo(() => {
+  const { sourceName, url, returnRange } = useMemo(() => {
     const source = parent?.[0].source ?? '';
     const parentUrl = getDefined(parent?.[0].url);
 
@@ -34,19 +34,26 @@ export const LiveConnectionVarName: PlateComponent = ({
       parseSourceUrl(source, parentUrl)) || { userUrl: parentUrl };
 
     const { isRange, range, subsheetName, userUrl } = sourceParams;
+    const formattedRange = range?.join(':') || '';
     const rangeExplanation =
       subsheetName && subsheetName !== '0'
-        ? `(${subsheetName}${isRange ? `, from ${range?.join(' to ')}` : ''})`
+        ? `(${subsheetName}${isRange ? `, ${formattedRange}` : ''})`
         : '';
     return {
       url: userUrl,
       sourceName: `${pluralize.singular(source)} ${rangeExplanation}`,
+      returnRange: subsheetName && subsheetName !== '0' ? formattedRange : '',
     };
   }, [parent]);
 
   return (
     <div {...attributes}>
-      <EditableLiveDataCaption source={sourceName} url={url}>
+      <EditableLiveDataCaption
+        source={sourceName}
+        url={url}
+        empty={getNodeString(element).length === 0}
+        range={returnRange}
+      >
         {children}
       </EditableLiveDataCaption>
     </div>

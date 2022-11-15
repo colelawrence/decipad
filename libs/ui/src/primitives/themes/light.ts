@@ -19,8 +19,9 @@ import {
   orange100,
   orange300,
   orange50,
+  orange500,
+  orange600,
   orange700,
-  purple200,
   red100,
   red300,
   red50,
@@ -30,7 +31,12 @@ import {
   teal800,
   white,
   yellow200,
+  yellow300,
+  yellow400,
+  yellow500,
   yellow600,
+  yellow700,
+  yellow800,
 } from '../color';
 import { cssVar, CssVariables } from '../var';
 
@@ -100,5 +106,16 @@ export const theme: CssVariables = {
   tableSelectionBackgroundColor: blue100.rgb,
   tableFocusColor: blue300.rgb,
 
-  liveDataBackgroundColor: purple200.rgb,
+  liveDataBackgroundColor: yellow400.rgb,
+  liveDataTextColor: yellow800.rgb,
+
+  liveDataIconStrokeColor: yellow500.rgb,
+  liveDataIconBgColor: yellow200.rgb,
+  liveDataIconDarkStrokeColor: yellow700.rgb,
+  liveDataIconAccentColor: yellow300.rgb,
+
+  importDataIconStrokeColor: orange500.rgb,
+  importDataIconBgColor: orange100.rgb,
+  importDataIconDarkStrokeColor: orange600.rgb,
+  importDataIconAccentColor: orange300.rgb,
 };

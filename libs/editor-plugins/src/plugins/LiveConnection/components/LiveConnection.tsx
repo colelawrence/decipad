@@ -1,5 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
-import { getNodeString, insertText, setNodes } from '@udecode/plate';
+import { BlockErrorBoundary, DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_LIVE_CONNECTION,
   LiveConnectionElement,
@@ -12,11 +11,12 @@ import {
   useElementMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
-import { CodeError, LiveConnectionResult, Spinner } from '@decipad/ui';
 import { useLiveConnection } from '@decipad/live-connect';
 import { useComputer } from '@decipad/react-contexts';
-import { DraggableBlock, BlockErrorBoundary } from '@decipad/editor-components';
+import { CodeError, LiveConnectionResult, Spinner } from '@decipad/ui';
 import { varNamify } from '@decipad/utils';
+import { getNodeString, insertText, setNodes } from '@udecode/plate';
+import { FC, useCallback, useEffect } from 'react';
 
 const MAX_CELL_COUNT = 3000;
 
@@ -91,7 +91,22 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
           onChangeColumnType={onChangeColumnType}
         ></LiveConnectionResult>
       )}
-      {error && <CodeError message={error.message} url="/docs" />}
+      {error ? (
+        error.message?.includes('Could not find the result') ? (
+          <CodeError
+            message={"We don't support importing this block type yet"}
+            url={'/docs/'}
+          />
+        ) : (
+          <CodeError
+            message={
+              error?.message || "There's an error in the source document"
+            }
+            defaultDocsMessage={'Go to source'}
+            url={element.url || '/docs/'}
+          />
+        )
+      ) : null}
       {!error && !result && (
         <div>
           <Spinner />

@@ -34,7 +34,7 @@ const recursiveRowCount = (t: SerializedType): number => {
 };
 
 const liveTableWrapperStyles = css({
-  left: '-40px',
+  left: '20px',
 });
 
 const liveTableOverflowStyles = css({

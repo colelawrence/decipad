@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cssVar, p8Medium } from '../../primitives';
+import { p8Medium } from '../../primitives';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 // If we get further types of labels,
@@ -8,10 +8,6 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 const tagStyles = css(p8Medium, {
   position: 'relative',
-  padding: '4px 8px',
-  borderRadius: '4px',
-  backgroundColor: cssVar('liveDataBackgroundColor'),
-  color: cssVar('normalTextColor'),
 });
 
 interface TagProps {

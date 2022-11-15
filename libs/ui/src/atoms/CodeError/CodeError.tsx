@@ -46,6 +46,7 @@ interface CodeErrorProps {
   url: string;
   detailMessage?: string;
   bracketError?: BracketError;
+  defaultDocsMessage?: string;
 }
 
 const bracketErrorMessage = (err: BracketError) => {
@@ -64,6 +65,7 @@ export const CodeError = ({
   detailMessage,
   url,
   bracketError,
+  defaultDocsMessage = 'Check our docs',
 }: CodeErrorProps): ReturnType<FC> => {
   const clientEvent = useContext(ClientEventsContext);
   return (
@@ -90,7 +92,7 @@ export const CodeError = ({
           })
         }
       >
-        Check our docs
+        {defaultDocsMessage}
       </Anchor>
     </Tooltip>
   );

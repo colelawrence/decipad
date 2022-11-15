@@ -1,12 +1,21 @@
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren } from 'react';
+import { useSelected } from 'slate-react';
 import { Tag } from '../../atoms';
 import * as icons from '../../icons';
-import { cssVar, p16Bold } from '../../primitives';
+import {
+  cssVar,
+  normalOpacity,
+  offBlack,
+  p13Medium,
+  setCssVar,
+  transparency,
+} from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
 
 const editableLiveCaptionStyles = css({
   maxWidth: `${slimBlockWidth}px`,
+  marginBottom: '8px',
 });
 
 const tableTitleWrapper = css({
@@ -14,34 +23,45 @@ const tableTitleWrapper = css({
   display: 'flex',
   gap: '9px',
   lineBreak: 'unset',
+  width: 'min-content',
+  background: cssVar('liveDataBackgroundColor'),
+  borderRadius: '6px',
+  padding: '2px 8px',
+  marginTop: '2.5px',
 });
 
 const iconWrapperStyles = css({
-  backgroundColor: cssVar('liveDataBackgroundColor'),
   padding: '4px',
-  borderRadius: '4px',
-  height: '20px',
-  width: '20px',
+  height: '16px',
+  width: '16px',
   marginTop: '0',
+  transform: 'translateY(-7%)',
+});
+
+const iconSvgStyles = css({
   'svg > path': {
-    fill: cssVar('normalTextColor'),
+    fill: cssVar('liveDataBackgroundColor'),
+    stroke: cssVar('liveDataTextColor'),
   },
 });
 
-const inlineArrowStyles = css({
-  fontWeight: 'bolder',
-  bottom: '4px',
+const editableTableCaptionStyles = css({
+  ...p13Medium,
+  color: cssVar('liveDataTextColor'),
+  minWidth: '1rem',
 });
 
-const arrowStyles = css(inlineArrowStyles, {
-  fontSize: '6px',
-  position: 'absolute',
+const notSelectedAriaStyles = css({
+  '::before': {
+    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+    content: 'attr(aria-placeholder)',
+  },
 });
 
-const editableTableCaptionStyles = css(p16Bold);
 type EditableTableCaptionProps = PropsWithChildren<{
   empty?: boolean;
   source?: string;
+  range?: string;
   url?: string;
 }>;
 
@@ -49,18 +69,21 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
   empty = false,
   source,
   url,
+  range,
   children,
 }) => {
   const [caption] = Children.toArray(children);
+  const selected = useSelected();
+
   return (
     <div css={editableLiveCaptionStyles}>
-      <div css={tableTitleWrapper}>
-        <div css={iconWrapperStyles} contentEditable={false}>
-          <icons.Bolt />
+      <div css={tableTitleWrapper} contentEditable={!empty}>
+        <div css={[iconWrapperStyles, iconSvgStyles]} contentEditable={false}>
+          <icons.Zap />
         </div>
         <div
           aria-placeholder={empty ? 'LiveConnection' : ''}
-          css={[editableTableCaptionStyles]}
+          css={[editableTableCaptionStyles, !selected && notSelectedAriaStyles]}
         >
           {caption}
         </div>
@@ -69,12 +92,22 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
             explanation={
               url && (
                 <a href={url} rel="noreferrer" target="_blank">
-                  {url} <span css={inlineArrowStyles}>↗</span>
+                  {url}
+                  <br />
+                  <br />
+                  {source.trim()}
                 </a>
               )
             }
           >
-            {source} <span css={arrowStyles}>↗</span>
+            <span
+              css={css({
+                textTransform: 'uppercase',
+                color: `${transparency(offBlack, normalOpacity).rgba}`,
+              })}
+            >
+              {range !== '' ? `${range}` : 'LIVE'}
+            </span>
           </Tag>
         )}
       </div>
