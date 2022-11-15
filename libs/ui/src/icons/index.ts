@@ -10,6 +10,8 @@ export { Beach } from './Beach/Beach';
 export { Blockquote } from './Blockquote/Blockquote';
 export { Bold } from './Bold/Bold';
 export { Bolt } from './Bolt/Bolt';
+export { BooleanCheckboxSelected } from './BooleanCheckboxSelected/BooleanCheckboxSelected';
+export { BooleanCheckboxUnselected } from './BooleanCheckboxUnselected/BooleanCheckboxUnselected';
 export { BuildingStore } from './BuildingStore/BuildingStore';
 export { Bullet } from './Bullet/Bullet';
 export { Calculations } from './Calculations/Calculations';

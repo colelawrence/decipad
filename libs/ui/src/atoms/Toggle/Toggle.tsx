@@ -1,18 +1,31 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { cssVar, shortAnimationDuration } from '../../primitives';
+import {
+  BooleanCheckboxSelected,
+  BooleanCheckboxUnselected,
+} from '../../icons';
 
 // Skinny = true means the toggle will be in a table.
 // Therefore needs to be smaller
 const toggleStyles = (skinny: boolean) => (skinny ? makeCheckbox : makeToggle);
 
+const BooleanCheckboxSelectedsvgString = encodeURIComponent(
+  renderToStaticMarkup(<BooleanCheckboxSelected />)
+);
+const BooleanCheckboxSelectedsvgStringdataUri = `url("data:image/svg+xml,${BooleanCheckboxSelectedsvgString}")`;
+
+const BooleanCheckboxUnselectedsvgString = encodeURIComponent(
+  renderToStaticMarkup(<BooleanCheckboxUnselected />)
+);
+const BooleanCheckboxUnselectedsvgStringdataUri = `url("data:image/svg+xml,${BooleanCheckboxUnselectedsvgString}")`;
+
 const makeCheckbox = css({
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('weakTextColor')}`,
+  background: BooleanCheckboxUnselectedsvgStringdataUri,
   width: '16px',
   height: '16px',
-  borderRadius: '4px',
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
@@ -35,8 +48,12 @@ const activeSwitchBgStyles = css({
 });
 
 const activeCheckboxBgStyles = css({
-  backgroundColor: cssVar('strongTextColor'),
-  border: `1px solid ${cssVar('strongTextColor')}`,
+  background: BooleanCheckboxUnselectedsvgStringdataUri,
+  width: '16px',
+  height: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
 });
 
 const toggleSwitchStyles = css({
@@ -50,11 +67,12 @@ const toggleSwitchStyles = css({
 });
 
 const checkboxSwitchStyles = css({
-  backgroundColor: cssVar('backgroundColor'),
-  width: '8px',
-  height: '8px',
-  margin: '3.1px',
-  position: 'absolute',
+  background: BooleanCheckboxUnselectedsvgStringdataUri,
+  width: '16px',
+  height: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
 });
 
 const activeSwitchStyles = css({
@@ -62,8 +80,12 @@ const activeSwitchStyles = css({
 });
 
 const activeCheckboxStyles = css({
-  transformX: 'rotate(12deg)',
-  clipPath: 'polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%)',
+  background: BooleanCheckboxSelectedsvgStringdataUri,
+  width: '16px',
+  height: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
 });
 
 export interface ToggleProps {

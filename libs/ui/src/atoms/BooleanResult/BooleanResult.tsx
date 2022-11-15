@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { CheckboxSelected, CheckboxUnselected } from '../../icons';
+import {
+  BooleanCheckboxSelected,
+  BooleanCheckboxUnselected,
+} from '../../icons';
 import { CodeResultProps } from '../../types';
 
 const booleanResultStyles = css({
@@ -22,7 +25,7 @@ export const BooleanResult = ({
       css={booleanResultStyles}
       contentEditable={false}
     >
-      {value ? <CheckboxSelected /> : <CheckboxUnselected />}
+      {value ? <BooleanCheckboxSelected /> : <BooleanCheckboxUnselected />}
     </span>
   );
 };
