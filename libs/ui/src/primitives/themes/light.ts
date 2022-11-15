@@ -6,6 +6,7 @@ import {
   brand100,
   brand300,
   brand600,
+  gleb700,
   grey100,
   grey200,
   grey300,
@@ -94,7 +95,7 @@ export const theme: CssVariables = {
   variableHighlightColor: grey200.rgb,
   variableHighlightTextColor: teal600.rgb,
 
-  magicNumberTextColor: brand600.rgb,
+  magicNumberTextColor: gleb700.rgb,
 
   tableSelectionBackgroundColor: blue100.rgb,
   tableFocusColor: blue300.rgb,

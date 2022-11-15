@@ -198,6 +198,11 @@ export const sun900 = color(77, 67, 15);
 export const lavender000 = color(95, 100, 134);
 
 //
+// gleb's colours
+//
+export const gleb700 = color(72, 122, 0);
+
+//
 // Opacity
 //
 export const weakOpacity: Opacity = 0.08;

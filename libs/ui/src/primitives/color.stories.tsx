@@ -123,6 +123,8 @@ const colorNames: Record<ColorId, string> = {
 
   lavender000: 'Lavender 000',
 
+  gleb700: 'Gleb 700',
+
   normalOpacity: 'Normal Opacity',
   weakOpacity: 'Weak Opacity',
   strongOpacity: 'Strong Opacity',
