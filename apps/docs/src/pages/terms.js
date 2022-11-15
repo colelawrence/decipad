@@ -4,7 +4,12 @@ import '../css/gallery-styles.css';
 
 export default function Terms() {
   return (
-    <div class="gallery">
+    <div
+      class="gallery"
+      style={{
+        backgroundColor: '#f4f6fa',
+      }}
+    >
       <div class="navbar-gallery-wrapper">
         <div class="navbar-gallery">
           <div class="header-gallery">
@@ -67,7 +72,7 @@ export default function Terms() {
             maxWidth: '800px',
             margin: 'auto',
             marginTop: '100px',
-            marginBottom: '120px',
+            paddingBottom: '120px',
           }}
         >
           <div
@@ -128,19 +133,22 @@ export default function Terms() {
             </p>
 
             <p>
-              <b><i>
-                PLEASE READ THESE TERMS OF SERVICE CAREFULLY, AS THEY CONTAIN AN
-                AGREEMENT TO ARBITRATE AND OTHER IMPORTANT INFORMATION REGARDING
-                YOUR LEGAL RIGHTS, REMEDIES, AND OBLIGATIONS. THE AGREEMENT TO
-                ARBITRATE REQUIRES (WITH LIMITED EXCEPTION) THAT YOU SUBMIT
-                CLAIMS YOU HAVE AGAINST US TO BINDING AND FINAL ARBITRATION, AND
-                FURTHER (1) YOU WILL ONLY BE PERMITTED TO PURSUE CLAIMS AGAINST
-                DECIPAD ON AN INDIVIDUAL BASIS, NOT AS A PLAINTIFF OR CLASS
-                MEMBER IN ANY CLASS OR REPRESENTATIVE ACTION OR PROCEEDING, (2)
-                YOU WILL ONLY BE PERMITTED TO SEEK RELIEF (INCLUDING MONETARY,
-                INJUNCTIVE, AND DECLARATORY RELIEF) ON AN INDIVIDUAL BASIS, AND
-                (3) YOU MAY NOT BE ABLE TO HAVE ANY CLAIMS YOU HAVE AGAINST US
-                RESOLVED BY A JURY OR IN A COURT OF LAW.</i>
+              <b>
+                <i>
+                  PLEASE READ THESE TERMS OF SERVICE CAREFULLY, AS THEY CONTAIN
+                  AN AGREEMENT TO ARBITRATE AND OTHER IMPORTANT INFORMATION
+                  REGARDING YOUR LEGAL RIGHTS, REMEDIES, AND OBLIGATIONS. THE
+                  AGREEMENT TO ARBITRATE REQUIRES (WITH LIMITED EXCEPTION) THAT
+                  YOU SUBMIT CLAIMS YOU HAVE AGAINST US TO BINDING AND FINAL
+                  ARBITRATION, AND FURTHER (1) YOU WILL ONLY BE PERMITTED TO
+                  PURSUE CLAIMS AGAINST DECIPAD ON AN INDIVIDUAL BASIS, NOT AS A
+                  PLAINTIFF OR CLASS MEMBER IN ANY CLASS OR REPRESENTATIVE
+                  ACTION OR PROCEEDING, (2) YOU WILL ONLY BE PERMITTED TO SEEK
+                  RELIEF (INCLUDING MONETARY, INJUNCTIVE, AND DECLARATORY
+                  RELIEF) ON AN INDIVIDUAL BASIS, AND (3) YOU MAY NOT BE ABLE TO
+                  HAVE ANY CLAIMS YOU HAVE AGAINST US RESOLVED BY A JURY OR IN A
+                  COURT OF LAW.
+                </i>
               </b>
             </p>
             <p>
@@ -584,8 +592,7 @@ export default function Terms() {
             <h2>
               Dispute Resolution By Binding Arbitration:
               <br></br>
-              PLEASE READ THIS
-              SECTION CAREFULLY AS IT
+              PLEASE READ THIS SECTION CAREFULLY AS IT
             </h2>
             <br></br>
             <h2>AFFECTS YOUR RIGHTS.</h2>
@@ -619,21 +626,24 @@ export default function Terms() {
             </h3>
 
             <p>
-              <b><i>
-                YOU AND DECIPAD AGREE THAT EACH OF US MAY BRING CLAIMS AGAINST
-                THE OTHER ONLY ON AN INDIVIDUAL BASIS AND NOT AS A PLAINTIFF OR
-                CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE ACTION OR
-                PROCEEDING. UNLESS BOTH YOU AND DECIPAD AGREE OTHERWISE, THE
-                ARBITRATOR MAY NOT CONSOLIDATE OR JOIN MORE THAN ONE PERSON’S OR
-                PARTY’S CLAIMS AND MAY NOT OTHERWISE PRESIDE OVER ANY FORM OF A
-                CONSOLIDATED, REPRESENTATIVE, OR CLASS PROCEEDING. ALSO, THE
-                ARBITRATOR MAY AWARD RELIEF (INCLUDING MONETARY, INJUNCTIVE, AND
-                DECLARATORY RELIEF) ONLY IN FAVOR OF THE INDIVIDUAL PARTY
-                SEEKING RELIEF AND ONLY TO THE EXTENT NECESSARY TO PROVIDE
-                RELIEF NECESSITATED BY THAT PARTY’S INDIVIDUAL CLAIM(S), EXCEPT
-                THAT YOU MAY PURSUE A CLAIM FOR AND THE ARBITRATOR MAY AWARD
-                PUBLIC INJUNCTIVE RELIEF UNDER APPLICABLE LAW TO THE EXTENT
-                REQUIRED FOR THE ENFORCEABILITY OF THIS PROVISION.</i>
+              <b>
+                <i>
+                  YOU AND DECIPAD AGREE THAT EACH OF US MAY BRING CLAIMS AGAINST
+                  THE OTHER ONLY ON AN INDIVIDUAL BASIS AND NOT AS A PLAINTIFF
+                  OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE
+                  ACTION OR PROCEEDING. UNLESS BOTH YOU AND DECIPAD AGREE
+                  OTHERWISE, THE ARBITRATOR MAY NOT CONSOLIDATE OR JOIN MORE
+                  THAN ONE PERSON’S OR PARTY’S CLAIMS AND MAY NOT OTHERWISE
+                  PRESIDE OVER ANY FORM OF A CONSOLIDATED, REPRESENTATIVE, OR
+                  CLASS PROCEEDING. ALSO, THE ARBITRATOR MAY AWARD RELIEF
+                  (INCLUDING MONETARY, INJUNCTIVE, AND DECLARATORY RELIEF) ONLY
+                  IN FAVOR OF THE INDIVIDUAL PARTY SEEKING RELIEF AND ONLY TO
+                  THE EXTENT NECESSARY TO PROVIDE RELIEF NECESSITATED BY THAT
+                  PARTY’S INDIVIDUAL CLAIM(S), EXCEPT THAT YOU MAY PURSUE A
+                  CLAIM FOR AND THE ARBITRATOR MAY AWARD PUBLIC INJUNCTIVE
+                  RELIEF UNDER APPLICABLE LAW TO THE EXTENT REQUIRED FOR THE
+                  ENFORCEABILITY OF THIS PROVISION.
+                </i>
               </b>
             </p>
 

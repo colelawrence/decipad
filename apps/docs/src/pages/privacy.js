@@ -3,7 +3,12 @@ import '../css/custom.css';
 
 export default function Terms() {
   return (
-    <div class="gallery">
+    <div
+      class="gallery"
+      style={{
+        backgroundColor: '#f4f6fa',
+      }}
+    >
       <div class="navbar-gallery-wrapper">
         <div class="navbar-gallery">
           <div class="header-gallery">
@@ -66,7 +71,7 @@ export default function Terms() {
             maxWidth: '800px',
             margin: 'auto',
             marginTop: '100px',
-            marginBottom: '120px',
+            paddingBottom: '120px',
           }}
         >
           <div
@@ -84,7 +89,7 @@ export default function Terms() {
                 <h1
                   class="title-gallery"
                   style={{
-                    fontFamily: 'Alliance, sans-serif',
+                    fontFamily: 'Alliance, sans-serif !important',
                     fontSize: '70px',
                     lineHeight: '120%',
                     fontWeight: '500',
@@ -121,11 +126,13 @@ export default function Terms() {
             </p>
             <p>
               Before using the Service or submitting any Personal Data to us,
-              please review this Privacy Policy carefully and contact us at
-              privacy@decipad.com if you have any questions. By using the
-              Service, you agree to the practices described in this Privacy
-              Policy. If you do not agree to this Privacy Policy, you may not
-              access or use the Service.
+              please review this Privacy Policy carefully and contact us at{' '}
+              <u>
+                <a href="mailto:privacy@decipad.com">privacy@decipad.com</a>
+              </u>{' '}
+              if you have any questions. By using the Service, you agree to the
+              practices described in this Privacy Policy. If you do not agree to
+              this Privacy Policy, you may not access or use the Service.
             </p>
             <br></br>
 
@@ -384,11 +391,14 @@ export default function Terms() {
               to you. For instance, if you elect to provide your email, we may
               use that information to send you certain offers. You may opt out
               of receiving emails by following the instructions contained in
-              each promotional email we send you, or by emailing us at
-              privacy@decipad.com. If you unsubscribe from our marketing lists
-              you will no longer receive marketing communications, but we will
-              continue to contact you regarding management of your account,
-              other administrative matters, and to respond to your requests.
+              each promotional email we send you, or by emailing us at{' '}
+              <u>
+                <a href="mailto:privacy@decipad.com">privacy@decipad.com</a>
+              </u>
+              . If you unsubscribe from our marketing lists you will no longer
+              receive marketing communications, but we will continue to contact
+              you regarding management of your account, other administrative
+              matters, and to respond to your requests.
             </p>
             <br></br>
             <h2>3. SHARING AND DISCLOSURE OF PERSONAL DATA</h2>
@@ -473,10 +483,14 @@ export default function Terms() {
             <h2>5. UPDATE YOUR INFORMATION</h2>
 
             <p>
-              Please contact us at privacy@decipad.com if you need to change or
-              correct your Personal Data. Note that there may be instances in
-              which you are unable to modify your Personal Data, including those
-              specified in the above “Data Retention” section.
+              Please contact us at{' '}
+              <u>
+                <a href="mailto:privacy@decipad.com">privacy@decipad.com</a>
+              </u>{' '}
+              if you need to change or correct your Personal Data. Note that
+              there may be instances in which you are unable to modify your
+              Personal Data, including those specified in the above “Data
+              Retention” section.
             </p>
             <br></br>
             <h2>6. CHILDREN</h2>
@@ -486,8 +500,12 @@ export default function Terms() {
               18. Decipad does not knowingly collect Personal Data from children
               under the age of 13. If you have reason to believe that a child
               under the age of 13 has provided Personal Data to us through the
-              Service please contact us at privacy@decipad.com and we will
-              endeavor to delete that information from our databases.
+              Service please contact us at{' '}
+              <u>
+                <a href="mailto:privacy@decipad.com">privacy@decipad.com</a>
+              </u>{' '}
+              and we will endeavor to delete that information from our
+              databases.
             </p>
             <br></br>
             <h2>7. LINKS TO OTHER WEBSITES AND THIRD PARTY FUNCTIONALITY</h2>
@@ -570,7 +588,11 @@ export default function Terms() {
 
             <p>
               If you have any questions about our Privacy Policy or information
-              practices, please feel free to contact us at privacy@decipad.com.
+              practices, please feel free to contact us at{' '}
+              <u>
+                <a href="mailto:privacy@decipad.com">privacy@decipad.com</a>
+              </u>
+              .
             </p>
             <br></br>
           </div>

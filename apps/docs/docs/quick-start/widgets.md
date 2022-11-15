@@ -14,9 +14,9 @@ To **add a new widget** to your notebook:
 ![Add Slider](https://user-images.githubusercontent.com/12210180/198076697-455cf53e-09b1-4cac-96a2-3a6e32c8ed4b.gif)
 
 1. Click the `+` button next to an empty line,
-2. Select `Input`, `Slider` or `Result` from the menu.
+2. Select `Input`, `Toogle`, `Date`, `Slider` or `Result` from the menu.
 
-Alternatively, to add a widget with the keyboard, open up the block menu by typing `/` on an empty paragraph, select `Input`, `Slider`, or `Widget` using the `arrow keys`, and press `enter`.
+Alternatively, to add a widget with the keyboard, open up the block menu by typing `/` on an empty paragraph, select `Input`, `Toogle`, `Date`, `Slider`, or `Widget` using the `arrow keys`, and press `enter`.
 
 <br></br>
 
@@ -55,6 +55,21 @@ You can add **Inputs**, **Sliders** and **Result** widgets to your Notebooks.
 Inputs widgets highlight a number in your notebook that you or anyone reading the notebook can update.
 
 - To **create a new input widget**, click the `+` button next to an empty line, and select `Input` from the menu.
+
+### Toggle Widget
+Toggle widgets let you or anyone reading the notebook switch between `on` or `off`.
+
+- To **create a new toggle widget**, click the `+` button next to an empty line, and select `Toggle` from the menu.
+
+### Date Widget
+Date widgets let you or anyone reading the notebook pick a date.
+
+#### Create a Date Widget
+- To **create a new date widget**, click the `+` button next to an empty line, and select `Date` from the menu.<br></br>
+
+#### Update a Date Widget Range
+
+- To **update a date widget range**, click the `•••` button, `Change type` and pick a range from `Year`, `Month`, `Date` or `Time`.
 
 ### Slider Widget
 
