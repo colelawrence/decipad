@@ -84,6 +84,7 @@ export type Identifier = {
   kind: 'variable' | 'function';
   identifier: string;
   type: string;
+  focused?: boolean;
 };
 
 export interface AutoCompleteMenuProps {
@@ -108,15 +109,12 @@ export const AutoCompleteMenu = ({
         title: 'Variables',
         items: identifiers
           .filter((i) => i.kind === 'variable' || i.kind === 'function')
-          .filter(
-            // in results, dont show currently selected result
-            (i) =>
-              !(isResult && i.kind === 'variable' && i.identifier === result)
-          )
           .map((i) => ({
             identifier: i.identifier,
             kind: 'variable' as const,
             type: i.type,
+            focused:
+              isResult && i.kind === 'variable' && i.identifier === result,
           })),
       },
     ],
@@ -216,7 +214,7 @@ export const AutoCompleteMenu = ({
                   <AutoCompleteMenuItem
                     {...item}
                     key={item.identifier}
-                    focused={focusedItem === item.identifier}
+                    focused={focusedItem === item.identifier || item.focused}
                     onExecute={() => onExecuteItem?.(item)}
                   />
                 ))}

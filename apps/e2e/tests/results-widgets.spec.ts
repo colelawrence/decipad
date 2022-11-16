@@ -70,6 +70,6 @@ test.describe('Results widgets', () => {
       .count();
 
     // only one different variable available
-    expect(count).toBe(1);
+    expect(count).toBe(2);
   });
 });

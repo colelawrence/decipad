@@ -4,6 +4,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyElement,
   PlateComponent,
+  SmartRefElement,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
@@ -106,7 +107,20 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
             };
           }
 
-          const text = getNodeString(node);
+          // Smart refs are used instead of variable names,
+          // and in order to display these properly, we need to get the
+          // smart ref name and create a string from this.
+          let text = '';
+          for (const c of node.children) {
+            if ((c as MyElement)?.type === 'smart-ref') {
+              const varName = computer.getDefinedSymbolInBlock(
+                (c as SmartRefElement).blockId
+              );
+              text += varName;
+            }
+            text += getNodeString(c);
+          }
+
           if (text.length === 0) return undefined;
 
           const computerParsed = parseStatement(text);
