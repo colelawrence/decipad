@@ -90,7 +90,6 @@ export default function Terms() {
                 <h1
                   class="title-gallery"
                   style={{
-                    fontFamily: 'Alliance, sans-serif',
                     fontSize: '70px',
                     lineHeight: '120%',
                     fontWeight: '500',

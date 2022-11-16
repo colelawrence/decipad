@@ -1483,7 +1483,6 @@ export default function Templates() {
                 <h1
                   class="title-gallery"
                   style={{
-                    fontFamily: 'Alliance, sans-serif',
                     fontSize: '60px',
                     lineHeight: '120%',
                     fontWeight: '500',
