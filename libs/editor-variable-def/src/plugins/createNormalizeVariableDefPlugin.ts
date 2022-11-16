@@ -96,6 +96,24 @@ const normalize =
       }
     }
 
+    if (
+      (node.variant === 'slider' && node.children.length > 3) ||
+      node.children.length > 2
+    ) {
+      removeNodes(editor, {
+        at: {
+          anchor: {
+            path: [...path, node.variant === 'slider' ? 3 : 2],
+            offset: 0,
+          },
+          focus: {
+            path: [...path, node.children.length - 1],
+            offset: 0,
+          },
+        },
+      });
+    }
+
     return false;
   };
 
