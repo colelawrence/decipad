@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
-import { cssVar, p16Regular } from '../../primitives';
+import { cssVar, p16Regular, smallestDesktop } from '../../primitives';
+import { slimBlockWidth } from '../../styles/editor-layout';
+
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const centeredFlex = css({
   display: 'flex',
@@ -12,7 +15,12 @@ const errorBlock = css(centeredFlex, {
   padding: '16px 24px 16px 24px',
   gap: 8,
   borderRadius: 8,
-  width: 716,
+  width: slimBlockWidth,
+  [smallScreenQuery]: {
+    minWidth: '360px',
+    maxWidth: slimBlockWidth,
+    width: '100%',
+  },
 });
 
 const errorBlockWrapperStyles = css(centeredFlex, {
