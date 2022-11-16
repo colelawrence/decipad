@@ -1,3 +1,4 @@
+import { Result } from '@decipad/computer';
 import { BlockErrorBoundary, DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_LIVE_CONNECTION,
@@ -8,6 +9,7 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
+  pluginStore,
   useElementMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
@@ -16,13 +18,20 @@ import { useComputer } from '@decipad/react-contexts';
 import { CodeError, LiveConnectionResult, Spinner } from '@decipad/ui';
 import { varNamify } from '@decipad/utils';
 import { getNodeString, insertText, setNodes } from '@udecode/plate';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 const MAX_CELL_COUNT = 3000;
 
 interface LiveConnectionInnerProps {
   element: LiveConnectionElement;
 }
+
+interface StoreResult {
+  result?: Result.Result;
+  error?: Error;
+}
+
+const createStore = () => new WeakMap<LiveConnectionElement, StoreResult>();
 
 const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
@@ -79,20 +88,43 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
     }
   }, [computer, editor, element.children, path, result]);
 
-  const computerResult = result?.result;
+  // persist results
+
+  const store = useMemo(
+    () => pluginStore(editor, 'PLUGIN_LIVE_CONNECTION_COMPONENT', createStore),
+    [editor]
+  );
+
+  const [, setVersion] = useState(0);
+
+  useEffect(() => {
+    const persistedResult = store.get(element);
+    if (result && persistedResult?.result !== result.result) {
+      store.set(element, { result: result.result, error: undefined });
+      setVersion((v) => v + 1);
+    } else if (error && persistedResult?.error !== error) {
+      store.set(element, { result: undefined, error });
+      setVersion((v) => v + 1);
+    }
+  }, [element, error, result, store]);
+
+  const {
+    result: persistedResult = result?.result,
+    error: persistedError = error,
+  } = store.get(element) ?? {};
 
   return (
     <div contentEditable={false}>
-      {computerResult && (
+      {persistedResult && (
         <LiveConnectionResult
-          result={computerResult}
+          result={persistedResult}
           isFirstRowHeaderRow={element.isFirstRowHeaderRow}
           setIsFirstRowHeader={setIsFirstRowHeader}
           onChangeColumnType={onChangeColumnType}
         ></LiveConnectionResult>
       )}
-      {error ? (
-        error.message?.includes('Could not find the result') ? (
+      {persistedError ? (
+        persistedError.message?.includes('Could not find the result') ? (
           <CodeError
             message={"We don't support importing this block type yet"}
             url={'/docs/'}
@@ -100,14 +132,15 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
         ) : (
           <CodeError
             message={
-              error?.message || "There's an error in the source document"
+              persistedError?.message ||
+              "There's an error in the source document"
             }
             defaultDocsMessage={'Go to source'}
             url={element.url || '/docs/'}
           />
         )
       ) : null}
-      {!error && !result && (
+      {!persistedError && !persistedResult && (
         <div>
           <Spinner />
         </div>
@@ -118,12 +151,13 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
 
 const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
+  const lc = <LiveConnectionInner element={element} />;
 
   return (
     <DraggableBlock blockKind="editorTable" element={element} {...attributes}>
       <BlockErrorBoundary element={element}>
         {children}
-        <LiveConnectionInner element={element} />
+        {lc}
       </BlockErrorBoundary>
     </DraggableBlock>
   );
