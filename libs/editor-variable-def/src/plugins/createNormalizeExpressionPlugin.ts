@@ -6,7 +6,8 @@ import {
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
-  getNodeChildren,
+  deleteText,
+  insertText,
   isElement,
   isText,
   unwrapNodes,
@@ -24,15 +25,19 @@ const normalize =
       return true;
     }
 
-    const children = Array.from(getNodeChildren(editor, path));
-    for (const lineChild of children) {
-      const [lineChildNode, lineChildPath] = lineChild;
+    if (node.children.length > 1) {
+      deleteText(editor, { at: [...path, 1] });
+      return true;
+    }
 
-      // Children must be text
-      if (!isText(lineChildNode)) {
-        unwrapNodes(editor, { at: lineChildPath });
-        return true;
-      }
+    if (!isText(node.children[0])) {
+      deleteText(editor, { at: [...path, 0] });
+      return true;
+    }
+
+    if (node.children.length < 1) {
+      insertText(editor, '', { at: path });
+      return true;
     }
 
     return false;
