@@ -93,10 +93,6 @@
     "client-config": {
       "tags": []
     },
-    "e2e": {
-      "tags": [],
-      "implicitDependencies": ["frontend", "backend", "config"]
-    },
     "client-events": {
       "tags": []
     },
@@ -118,6 +114,10 @@
     },
     "dynamodb-lock": {
       "tags": []
+    },
+    "e2e": {
+      "tags": [],
+      "implicitDependencies": ["frontend", "backend", "config"]
     },
     "editor": {
       "tags": []
