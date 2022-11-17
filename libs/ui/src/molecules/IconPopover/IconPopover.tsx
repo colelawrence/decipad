@@ -85,6 +85,7 @@ export const IconPopover = ({
           css={{
             display: 'flex',
             gap: '8px',
+            justifyContent: 'space-between',
           }}
         >
           {swatchNames.map((key) => {

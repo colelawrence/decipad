@@ -26,7 +26,7 @@ const iconWrapperStyles = css({
   height: '32px',
   display: 'grid',
   placeItems: 'center',
-  borderRadius: '6px',
+  borderRadius: '8px',
   transition: `background-color ${shortAnimationDuration} ease-out`,
   zIndex: 2,
 });

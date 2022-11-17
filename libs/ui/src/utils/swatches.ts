@@ -7,6 +7,9 @@ import {
   malibu700,
   malibu900,
   OpaqueColor,
+  orange300,
+  orange700,
+  orange900,
   perfume200,
   perfume700,
   perfume900,
@@ -24,6 +27,7 @@ export type AvailableSwatchColor =
   | 'Catskill'
   | 'Sulu'
   | 'Sun'
+  | 'Grapefruit'
   | 'Rose'
   | 'Perfume'
   | 'Malibu';
@@ -52,6 +56,11 @@ export const colorSwatches: Swatches = {
     base: sun500,
     highlight: sun700,
     dark: sun900,
+  },
+  Grapefruit: {
+    base: orange300,
+    highlight: orange700,
+    dark: orange900,
   },
   Rose: {
     base: pink200,

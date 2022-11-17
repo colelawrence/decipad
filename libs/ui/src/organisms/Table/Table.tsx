@@ -12,7 +12,7 @@ import { tableRowCounter } from '../../utils';
 
 export const regularBorder = `1px solid ${tableBorderColor}`;
 const liveResultBorder = `1px solid ${tableBorderColor}`;
-const borderRadius = '6px';
+const borderRadius = '8px';
 
 const tableBaseStyles = css({
   // NOTE: border radius on the table does not work with `borderCollapse: collapse`,

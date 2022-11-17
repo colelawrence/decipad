@@ -4,7 +4,13 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
-import { cssVar, setCssVar, transparency } from '../../primitives';
+import {
+  black,
+  cssVar,
+  setCssVar,
+  strongOpacity,
+  transparency,
+} from '../../primitives';
 import { blockAlignment } from '../../styles';
 import { AvailableSwatchColor, baseSwatches, UserIconKey } from '../../utils';
 
@@ -16,7 +22,7 @@ const styles = css(
   callout.typography,
   setCssVar('currentTextColor', cssVar('weakTextColor')),
   {
-    borderRadius: '8px',
+    borderRadius: '12px',
 
     display: 'grid',
     gridTemplateColumns: '16px 1fr',
@@ -32,8 +38,9 @@ const iconWrapperStyles = css({
   display: 'grid',
   height: `calc(${callout.typography?.fontSize} * ${callout.typography?.lineHeight})`,
   width: '16px',
+  mixBlendMode: 'overlay',
   'svg > path': {
-    stroke: cssVar('currentTextColor'),
+    stroke: `${transparency(black, strongOpacity).rgba}`,
   },
 });
 
@@ -57,7 +64,11 @@ export const Callout = ({
     <p
       css={[
         styles,
-        { backgroundColor: transparency(baseSwatches[color], 0.4).rgba },
+        {
+          backgroundColor: transparency(baseSwatches[color], 0.4).rgba,
+          color: transparency(black, 0.5).rgba,
+          mixBlendMode: 'overlay',
+        },
       ]}
     >
       {useIsEditorReadOnly() ? (
