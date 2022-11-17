@@ -4,6 +4,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
   MyEditor,
+  MyValue,
   TableCellElement,
   TableCellType,
   TableElement,
@@ -15,10 +16,12 @@ import { useElementMutatorCallback, withPath } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
+  findNodePath,
   getNodeChildren,
   getNodeEntry,
   hasNode,
   insertNodes,
+  InsertNodesOptions,
   insertText,
   moveNodes,
   removeNodes,
@@ -102,7 +105,11 @@ export const addColumn = (
   });
 };
 
-export const addRow = (editor: MyEditor, tablePath: Path) => {
+export const addRow = (
+  editor: MyEditor,
+  tablePath: Path,
+  options?: InsertNodesOptions<MyValue>
+) => {
   const headerRowPath = [...tablePath, 1];
   const [table] = getNodeEntry(editor, tablePath);
   const elementCount = (table as TableElement).children.length;
@@ -122,8 +129,30 @@ export const addRow = (editor: MyEditor, tablePath: Path) => {
     type: ELEMENT_TR,
     children: emptyCells,
   };
+  // @ts-ignore
   insertNodes<TableRowElement>(editor, newRow, {
     at: [...tablePath, elementCount],
+    ...options,
+  });
+};
+
+export const addRowFromCell = (
+  editor: MyEditor,
+  {
+    cellElement,
+    offset = 0,
+  }: { cellElement: TableCellElement; offset?: number }
+) => {
+  const cellPath = findNodePath(editor, cellElement);
+  if (!cellPath) return;
+
+  const rowPath = cellPath.slice(0, cellPath.length - 1);
+  const rowIndex = rowPath[rowPath.length - 1];
+  const tablePath = rowPath.slice(0, rowPath.length - 1);
+
+  addRow(editor, tablePath, {
+    at: [...tablePath, rowIndex + offset],
+    select: true,
   });
 };
 

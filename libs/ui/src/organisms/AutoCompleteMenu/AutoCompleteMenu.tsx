@@ -191,7 +191,10 @@ export const AutoCompleteMenu = ({
 
   const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
   return allItems.length ? (
-    <span css={{ position: 'relative' }} className="test-auto-complete-menu">
+    <span
+      css={{ position: 'relative', zIndex: 3 }}
+      className="test-auto-complete-menu"
+    >
       <div
         contentEditable={false}
         role="menu"

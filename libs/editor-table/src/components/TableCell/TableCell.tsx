@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
+  ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TH,
+  ELEMENT_TR,
   PlateComponent,
+  TableCellElement,
+  TableRowElement,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -24,10 +28,13 @@ import {
   getNodeString,
   insertText,
   isCollapsed,
+  useElement,
 } from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
+import { NewElementLine } from '@decipad/ui/src/atoms/NewElementLine/NewElementLine';
 import {
+  addRowFromCell,
   useCellType,
   useColumnDropDirection,
   useDropColumn,
@@ -51,6 +58,16 @@ export const TableCell: PlateComponent = ({
 
   const [, dropTarget] = useDropColumn(editor, element!);
   const direction = useColumnDropDirection(editor, element!);
+  const hoveredRowId = useTableStore().get.hoveredRowId();
+  const setHoveredRowId = useTableStore().set.hoveredRowId();
+  const hoveredRowBottomId = useTableStore().get.hoveredRowBottomId();
+  const setHoveredRowBottomId = useTableStore().set.hoveredRowBottomId();
+  const table = useElement(ELEMENT_TABLE);
+  const row = useElement<TableRowElement>(ELEMENT_TR);
+
+  const isRowHovered = hoveredRowId === row.id;
+  const isLastRow = table.children[table.children.length - 1] === row;
+  const isLastRowHovered = hoveredRowBottomId === row.id && isLastRow;
 
   if (
     !isElementOfType(element, ELEMENT_TH) &&
@@ -133,6 +150,42 @@ export const TableCell: PlateComponent = ({
 
   const DropLine = (
     <>
+      {!dropLine && (
+        <NewElementLine
+          onMouseEnter={() => setHoveredRowId(row.id)}
+          onMouseLeave={() => setHoveredRowId(null)}
+          onClick={() => setHoveredRowId(null)}
+          onAdd={() =>
+            addRowFromCell(editor, {
+              cellElement: element as TableCellElement,
+            })
+          }
+          show={isRowHovered}
+          isTable
+        />
+      )}
+
+      {!dropLine && isLastRow && (
+        <NewElementLine
+          onMouseEnter={() => {
+            setHoveredRowBottomId(row.id);
+          }}
+          onMouseLeave={() => {
+            setHoveredRowBottomId(null);
+          }}
+          onClick={() => setHoveredRowBottomId(null)}
+          onAdd={() =>
+            addRowFromCell(editor, {
+              offset: 1,
+              cellElement: element as TableCellElement,
+            })
+          }
+          show={isLastRowHovered}
+          isTable
+          reverse
+        />
+      )}
+
       {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
       {direction === 'left' && <ColumnDropLine dropDirection={direction} />}
       {direction === 'right' && <ColumnDropLine dropDirection={direction} />}
