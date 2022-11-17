@@ -11,7 +11,7 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
     functorNoAutomap: ([table, column]) =>
       Type.combine(
         table.isTableOrRow(),
-        column.isColumn().withColumnSize(table.tableLength).withAtParentIndex(),
+        column.isColumn().withAtParentIndex(),
         table.withMinimumColumnCount(1),
         (table) => {
           if (column.indexedBy !== table.indexName) {
@@ -23,13 +23,11 @@ export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
           const [columnIndex, columnName] = columnIndexAndName(table, column);
 
           const tableWithout = produce(table, (table) => {
-            table.tableLength = 'unknown';
             table.columnTypes?.splice(columnIndex, 1);
             table.columnNames?.splice(columnIndex, 1);
           });
 
           return t.table({
-            length: 'unknown',
             columnNames: [columnName, 'Values'],
             columnTypes: [getDefined(column.cellType), tableWithout],
           });

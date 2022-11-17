@@ -20,7 +20,7 @@ export const select: Directive = {
     const table = (await infer(tableRef)).isTable();
 
     return table.mapType((table) => {
-      const { indexName, tableLength } = table;
+      const { indexName } = table;
 
       const [columnNames, columnTypes] = filterUnzipped(
         getDefined(table.columnNames),
@@ -36,7 +36,6 @@ export const select: Directive = {
 
       return t.table({
         indexName,
-        length: getDefined(tableLength),
         columnNames,
         columnTypes,
       });

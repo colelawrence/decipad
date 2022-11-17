@@ -38,23 +38,18 @@ describe('table operators', () => {
       ]
     `);
 
-    const tNumber = (length: number) =>
-      t.table({
-        length,
-        columnNames: ['Hello'],
-        columnTypes: [t.number()],
-      });
+    const tNumber = t.table({
+      columnNames: ['Hello'],
+      columnTypes: [t.number()],
+    });
 
-    expect(
-      operators.concatenate.functor?.([tNumber(1), tNumber(2)])
-    ).toMatchObject({
-      tableLength: 3,
+    expect(operators.concatenate.functor?.([tNumber, tNumber])).toMatchObject({
+      errorCause: null,
     });
   });
 
   it('looks things up with a string', () => {
     const tableType = t.table({
-      length: 123,
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.number()],
     });
@@ -82,7 +77,6 @@ describe('table operators', () => {
 
   it('looks things up with a date', () => {
     const tableType = t.table({
-      length: 123,
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.date('day')],
     });
@@ -118,7 +112,6 @@ describe('table operators', () => {
 
   it('can lookup a column', () => {
     const table = t.table({
-      length: 3,
       columnNames: ['indexcolumn', 'booooleans'],
       columnTypes: [t.number(U('bananas')), t.boolean()],
     });
@@ -161,7 +154,6 @@ describe('table operators', () => {
 
   it('looks things up with a condition', () => {
     const tableType = t.table({
-      length: 3,
       columnNames: ['col1', 'col2'],
       columnTypes: [t.string(), t.number()],
     });
@@ -188,7 +180,6 @@ describe('table operators', () => {
 
   it('sorts a table by a column', () => {
     const table = t.table({
-      length: 3,
       columnNames: ['indexcolumn'],
       columnTypes: [t.number(U('bananas'))],
     });
@@ -219,14 +210,12 @@ describe('table operators', () => {
 
   it('filters a table by a column', () => {
     const table = t.table({
-      length: 3,
       columnNames: ['indexcolumn', 'booooleans'],
       columnTypes: [t.number(U('bananas')), t.boolean()],
     });
     const column = t.column(t.boolean(), 3, undefined, 1);
     expect(operators.filter.functorNoAutomap?.([table, column])).toMatchObject(
       t.table({
-        length: 'unknown',
         columnNames: ['indexcolumn', 'booooleans'],
         columnTypes: [t.number(U('bananas')), t.boolean()],
       })

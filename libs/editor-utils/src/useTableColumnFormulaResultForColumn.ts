@@ -40,7 +40,7 @@ function formulaResult$(
           type = {
             kind: 'column',
             cellType: type,
-            columnSize: table.type.tableLength,
+            columnSize: 'unknown',
             indexedBy: table.type.indexName,
           };
         }

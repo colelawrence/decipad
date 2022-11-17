@@ -58,7 +58,6 @@ export const formatResult = (
   }
 
   if (type.kind === 'table' && Array.isArray(result)) {
-    const { tableLength } = type;
     const cols = zip(result, zip(type.columnTypes, type.columnNames))
       .map(
         ([col, [t, name]]) =>
@@ -68,7 +67,7 @@ export const formatResult = (
             {
               kind: 'column',
               cellType: t,
-              columnSize: tableLength,
+              columnSize: 'unknown',
               indexedBy: null,
             },
             color

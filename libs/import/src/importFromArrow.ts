@@ -87,7 +87,6 @@ const inferData = (data: Table): SerializedType => {
   return {
     kind: 'table',
     indexName: columnNames[0],
-    tableLength: data.numRows,
     columnTypes,
     columnNames,
   };

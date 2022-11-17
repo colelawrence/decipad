@@ -220,7 +220,6 @@ describe('tables', () => {
 
     const expectedType = t.table({
       indexName: 'Table',
-      length: 3,
       columnTypes: [t.number(), t.number()],
       columnNames: ['Col1', 'Col2'],
     });
@@ -250,14 +249,13 @@ describe('tables', () => {
     );
 
     expect((await inferProgram([block])).stack.get('Col')).toEqual(
-      t.column(t.number(), 3, 'Table', 0)
+      t.column(t.number(), 'unknown', 'Table', 0)
     );
   });
 
   it('"previous" references', async () => {
     const expectedType = t.table({
       indexName: 'Table',
-      length: 3,
       columnTypes: [t.number(), t.number(), t.string()],
       columnNames: ['Col1', 'Col2', 'Col3'],
     });
@@ -280,22 +278,10 @@ describe('tables', () => {
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
         indexName: 'Table',
-        length: 2,
         columnTypes: [t.number(), t.number()],
         columnNames: ['Col1', 'Col2'],
       })
     );
-  });
-
-  it('complains about incompatible table sizes', async () => {
-    const table = tableDef('Table', {
-      Col1: col(1),
-      Col2: col(1, 2),
-    });
-
-    expect(
-      (await inferStatement(makeContext(), table)).errorCause
-    ).not.toBeNull();
   });
 
   it('Supports single items tables', async () => {
@@ -307,7 +293,6 @@ describe('tables', () => {
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
         indexName: 'Table',
-        length: 1,
         columnTypes: [t.string(), t.number()],
         columnNames: ['Col1', 'Col2'],
       })
@@ -323,7 +308,6 @@ describe('tables', () => {
     expect(await inferStatement(makeContext(), table)).toEqual(
       t.table({
         indexName: 'Table',
-        length: 1,
         columnTypes: [t.string(), t.number()],
         columnNames: ['Col1', 'Col2'],
       })
@@ -360,7 +344,6 @@ describe('tables', () => {
         { type: 'number' },
         { type: 'boolean' },
       ],
-      tableLength: 3,
     });
   });
 
@@ -373,7 +356,6 @@ describe('tables', () => {
       expect(await inferBlock(block(base, extend()))).toMatchObject({
         columnNames: ['Idx'],
         columnTypes: [{ type: 'string' }],
-        tableLength: 2,
       });
     });
 
@@ -385,7 +367,6 @@ describe('tables', () => {
       ).toMatchObject({
         columnNames: ['Idx', 'New'],
         columnTypes: [{ type: 'string' }, { type: 'number' }],
-        tableLength: 2,
       });
     });
 
@@ -416,7 +397,6 @@ describe('tables', () => {
       ).toMatchObject({
         columnNames: ['Idx', 'WithPrev'],
         columnTypes: [{ type: 'string' }, { type: 'boolean' }],
-        tableLength: 2,
       });
     });
   });
@@ -433,7 +413,6 @@ describe('tables', () => {
     expect((await inferProgram([block])).stack.get('Table')).toMatchObject({
       columnNames: ['MaybeNegative', 'Positive'],
       columnTypes: [{ type: 'number' }, { type: 'number' }],
-      tableLength: 3,
     });
   });
 });
@@ -441,7 +420,7 @@ describe('tables', () => {
 describe('Property access', () => {
   const scopeWithTable = makeContext({
     initialGlobalScope: [
-      ['Table', objectToTableType('Table', 3, { Col: t.number() })],
+      ['Table', objectToTableType('Table', { Col: t.number() })],
       ['Row', t.row([t.string()], ['Name'])],
       ['NotATable', t.number()],
     ],
@@ -452,7 +431,6 @@ describe('Property access', () => {
       await inferExpression(scopeWithTable, prop('Table', 'Col'))
     ).toMatchObject({
       cellType: { type: 'number' },
-      columnSize: 3,
     });
 
     expect(
@@ -477,7 +455,7 @@ describe('Property access', () => {
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
         .errorCause?.spec
     ).toMatchInlineSnapshot(
-      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":[{"unit":"MissingVar","exp":{"s":"1","n":"1","d":"1"},"multiplier":{"s":"1","n":"1","d":"1"},"known":false}],"numberFormat":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"tableLength":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"nothingness":false,"anythingness":false,"symbol":null}])`
+      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":[{"unit":"MissingVar","exp":{"s":"1","n":"1","d":"1"},"multiplier":{"s":"1","n":"1","d":"1"},"known":false}],"numberFormat":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"nothingness":false,"anythingness":false,"symbol":null}])`
     );
   });
 });

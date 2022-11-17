@@ -53,7 +53,6 @@ export class Type {
   atParentIndex: number | null = null;
 
   // Table
-  tableLength: number | 'unknown' | null = null;
   columnTypes: Type[] | null = null;
   columnNames: string[] | null = null;
 

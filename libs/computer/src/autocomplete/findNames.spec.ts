@@ -43,7 +43,6 @@ it('finds names', async () => {
           ],
           "indexName": "Table1",
           "kind": "table",
-          "tableLength": 1,
         },
       },
       Object {
@@ -55,7 +54,7 @@ it('finds names', async () => {
             "kind": "string",
           },
           "columnSize": 1,
-          "indexedBy": null,
+          "indexedBy": "Table1",
           "kind": "column",
         },
       },
@@ -79,7 +78,6 @@ it('finds names', async () => {
           ],
           "indexName": "Table1",
           "kind": "table",
-          "tableLength": 1,
         },
       },
       Object {

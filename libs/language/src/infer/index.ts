@@ -187,21 +187,12 @@ export const inferExpression = wrap(
 
         if (table.errorCause) {
           return table;
-        } else if (
-          table?.columnNames != null &&
-          table?.columnTypes != null &&
-          table?.tableLength != null
-        ) {
+        } else if (table.columnNames != null && table.columnTypes != null) {
           const [column, columnIndex] = getFromTableOrRow(
             table.columnNames,
             table.columnTypes
           );
-          return t.column(
-            column,
-            table.tableLength,
-            table.indexName,
-            columnIndex
-          );
+          return t.column(column, 'unknown', table.indexName, columnIndex);
         } else {
           const { rowCellNames, rowCellTypes } = table;
           const [type] = getFromTableOrRow(

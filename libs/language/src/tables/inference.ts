@@ -1,62 +1,20 @@
 import { getDefined, unzip, zip } from '@decipad/utils';
-import { produce } from 'immer';
 
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
-import {
-  equalOrUnknown,
-  getIdentifierString,
-  getOfType,
-  walkAst,
-} from '../utils';
+import { getIdentifierString, getOfType, walkAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { Context, pushStackAndPrevious } from '../infer/context';
-import { linearizeType } from '../dimtools/common';
+import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 
-const coerceIndices = (
-  type: Type,
-  indexName: string | null,
-  tableLength: 'unknown' | number
-) => {
-  if (type.columnSize == null) {
-    // Because we're so very nice, allow `Column = 1` as syntax sugar.
-    return t.column(type, tableLength, indexName);
-  }
-
-  // We want our table index on top
-  const hasIndex = linearizeType(type).some((t) => t.indexedBy === indexName);
-  if (!hasIndex && !equalOrUnknown(type.columnSize ?? -1, tableLength)) {
-    // The column size isn't equivalent!
-    return t.impossible('Incompatible column sizes');
-  }
-
-  return produce(type, (t) => {
-    t.indexedBy = indexName;
-  });
-};
-
-export const findTableSize = async (ctx: Context, table: AST.Table) => {
+const getIndexName = async (ctx: Context, table: AST.Table) => {
   const spread = table.args.find((col) => col.type === 'table-spread');
   if (spread) {
-    const tableName = getIdentifierString(spread.args[0]);
-    const existingTable = ctx.stack.get(tableName);
     // If the table doesn't exist or isn't a table, this is dealt with in inferTable
-    return [tableName, existingTable?.tableLength ?? 'unknown'] as const;
+    return getIdentifierString(spread.args[0]);
   }
 
-  return pushStackAndPrevious(ctx, async () => {
-    for (const col of table.args) {
-      const expression = getOfType('table-column', col).args[1];
-
-      /* eslint-disable-next-line no-await-in-loop */
-      const inferred = await inferExpression(ctx, expression);
-      if (inferred.columnSize != null) {
-        return [ctx.inAssignment, inferred.columnSize] as const;
-      }
-    }
-
-    return [ctx.inAssignment, table.args.length ? 1 : 'unknown'] as const;
-  });
+  return ctx.inAssignment;
 };
 
 export const inferTable = async (ctx: Context, table: AST.Table) => {
@@ -64,7 +22,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const [indexName, tableLength] = await findTableSize(ctx, table);
+  const indexName = await getIndexName(ctx, table);
 
   return pushStackAndPrevious(ctx, async () => {
     const columns = new Map<string, Type>();
@@ -75,7 +33,6 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
       if (columnTypes.length === 0) {
         return t.table({
           indexName,
-          length: tableLength,
           columnTypes: [],
           columnNames: [],
         });
@@ -85,7 +42,6 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
         return Type.combine(firstType, ...rest).mapType(() =>
           t.table({
             indexName,
-            length: tableLength,
             columnTypes: [firstType, ...rest],
             columnNames,
           })
@@ -94,24 +50,19 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     };
 
     const addColumn = (name: string, type: Type) => {
-      type = coerceIndices(type, indexName, tableLength);
-
       columns.set(name, type);
       ctx.stack.set(getDefined(indexName), getCurrentTable());
     };
 
     for (const tableItem of table.args) {
       if (tableItem.type === 'table-column') {
-        const [colDef, expr] = tableItem.args;
-        const name = getIdentifierString(colDef);
+        const name = getIdentifierString(tableItem.args[0]);
 
         // eslint-disable-next-line no-await-in-loop
         const type = await inferTableColumn(ctx, {
-          indexName,
+          indexName: getDefined(indexName),
           otherColumns: columns,
-          columnAst: expr,
-          linkTo: tableItem,
-          tableLength,
+          columnAst: tableItem,
         });
 
         // Bail on error
@@ -123,7 +74,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
 
         // eslint-disable-next-line no-await-in-loop
         const source = (await inferExpression(ctx, ref)).isTable();
-        const { tableLength, columnNames, columnTypes } = source;
+        const { columnNames, columnTypes } = source;
 
         if (source.errorCause) return source;
 
@@ -131,7 +82,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
           getDefined(columnNames),
           getDefined(columnTypes)
         )) {
-          addColumn(name, t.column(type, getDefined(tableLength), indexName));
+          addColumn(name, t.column(type, 'unknown', indexName));
         }
       } else {
         throw new Error('panic: unreachable');
@@ -147,29 +98,29 @@ export async function inferTableColumn(
   {
     otherColumns,
     columnAst,
-    linkTo = columnAst,
-    tableLength,
     indexName,
   }: {
     otherColumns: Map<string, Type>;
-    columnAst: AST.Expression;
-    linkTo?: AST.Node;
-    tableLength: number | 'unknown';
-    indexName: string | null;
+    columnAst: AST.TableColumnAssign | AST.TableColumn;
+    indexName: string;
   }
 ): Promise<Type> {
-  const type = refersToOtherColumnsByName(columnAst, otherColumns)
-    ? await inferTableColumnPerCell(ctx, otherColumns, columnAst, tableLength)
-    : await inferExpression(ctx, columnAst);
+  const exp: AST.Expression =
+    columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
-  return coerceIndices(linkToAST(ctx, linkTo, type), indexName, tableLength);
+  const type = refersToOtherColumnsByName(exp, otherColumns)
+    ? await inferTableColumnPerCell(ctx, otherColumns, exp)
+    : coerceTableColumnTypeIndices(await inferExpression(ctx, exp), indexName);
+
+  linkToAST(ctx, columnAst, type);
+
+  return type;
 }
 
 export async function inferTableColumnPerCell(
   ctx: Context,
   otherColumns: Map<string, Type>,
-  columnAst: AST.Expression,
-  tableLength: number | 'unknown'
+  columnAst: AST.Expression
 ) {
   const cellType = await pushStackAndPrevious(ctx, async () => {
     // Make other cells in this row available
@@ -180,7 +131,7 @@ export async function inferTableColumnPerCell(
     return inferExpression(ctx, columnAst);
   });
 
-  return t.column(cellType, tableLength);
+  return t.column(cellType, 'unknown');
 }
 
 export function refersToOtherColumnsByName(

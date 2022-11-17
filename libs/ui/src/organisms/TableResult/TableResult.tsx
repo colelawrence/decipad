@@ -1,4 +1,5 @@
-import { SerializedType, SerializedTypes } from '@decipad/computer';
+import { Result, SerializedTypes } from '@decipad/computer';
+import { zip } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useMemo, useState } from 'react';
 import { CodeResult, Table } from '..';
@@ -20,15 +21,24 @@ import {
 } from '../EditorTable/EditorTable';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 
-const recursiveRowCount = (t: SerializedType): number => {
-  if (t.kind === 'table' && t.tableLength !== 'unknown') {
+const recursiveRowCount = (r: Result.Result): number => {
+  if (r.type.kind === 'table') {
+    const { type, value } = r as Result.Result<'table'>;
+
+    const tableLength = Math.max(...value.map((v) => v.length));
     return (
-      Math.max(...t.columnTypes.map((ct) => recursiveRowCount(ct))) *
-      t.tableLength
+      Math.max(
+        ...zip(type.columnTypes, value).map(([ct, cv]) =>
+          recursiveRowCount({ type: ct, value: cv[0] })
+        )
+      ) * tableLength
     );
   }
-  if (t.kind === 'column' && t.columnSize !== 'unknown') {
-    return recursiveRowCount(t.cellType) * t.columnSize;
+  if (r.type.kind === 'column') {
+    const { type, value } = r as Result.Result<'column'>;
+    return (
+      recursiveRowCount({ type: type.cellType, value: value[0] }) * value.length
+    );
   }
   return 1;
 };
@@ -67,10 +77,12 @@ export const TableResult = ({
     setShowAllRows(true);
   };
 
-  const tableLength =
-    type.tableLength === 'unknown' ? value[0]?.length : type.tableLength;
+  const tableLength = value.at(0)?.length;
 
-  const tableRecursiveLength = useMemo(() => recursiveRowCount(type), [type]);
+  const tableRecursiveLength = useMemo(
+    () => recursiveRowCount({ type, value }),
+    [type, value]
+  );
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
@@ -89,10 +101,11 @@ export const TableResult = ({
     return Math.floor(tableLength * proportionOfTableToHide);
   }, [isNested, tableLength, showAllRows, tableRecursiveLength]);
 
-  const showRowLength = useMemo(
-    () => tableLength - hiddenRowsCount,
-    [hiddenRowsCount, tableLength]
-  );
+  if (tableLength == null) {
+    return null;
+  }
+
+  const showRowLength = tableLength - hiddenRowsCount;
 
   return (
     <div

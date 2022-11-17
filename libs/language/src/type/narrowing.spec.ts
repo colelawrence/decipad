@@ -203,7 +203,6 @@ describe('narrow func call', () => {
 
 it('cant narrow tables, rows, functions', () => {
   const table = t.table({
-    length: 'unknown',
     columnNames: ['X'],
     columnTypes: [t.boolean()],
   });

@@ -61,7 +61,6 @@ it('can stringify a type', () => {
     serializeType(
       t.table({
         indexName: 'Idx',
-        length: 123,
         columnTypes: [t.number()],
         columnNames: ['hi'],
       })
@@ -79,7 +78,6 @@ it('can stringify a type', () => {
       ],
       "indexName": "Idx",
       "kind": "table",
-      "tableLength": 123,
     }
   `);
   expect(serializeType(t.row([t.number(), t.string()], ['Num', 'S'])))
@@ -197,14 +195,12 @@ it('can parse a type', () => {
     testDeserialize({
       kind: 'table',
       indexName: null,
-      tableLength: 123,
       columnTypes: [unitlessNumber, unitlessNumber],
       columnNames: ['Hi', 'Hi2'],
     })
   ).toMatchObject({
     columnNames: ['Hi', 'Hi2'],
     columnTypes: [{ type: 'number' }, { type: 'number' }],
-    tableLength: 123,
   });
 
   expect(

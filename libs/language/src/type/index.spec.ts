@@ -30,7 +30,6 @@ describe('sameAs', () => {
     sameAsItself(t.column(t.row([t.number(), t.string()], ['A', 'B']), 6));
     sameAsItself(
       t.table({
-        length: 123,
         columnNames: ['A', 'B'],
         columnTypes: [t.number([meter]), t.column(t.boolean(), 10)],
       })
@@ -64,7 +63,6 @@ describe('sameAs', () => {
 
   it('checks tables are the same', () => {
     const table = t.table({
-      length: 123,
       columnNames: ['A', 'B'],
       columnTypes: [t.number([meter]), t.column(t.boolean(), 10)],
       indexName: 'Table1',
@@ -79,18 +77,6 @@ describe('sameAs', () => {
         table.columnTypes?.push(t.number());
       })
     ).not.toBeNull();
-    expect(
-      getError((table) => {
-        table.tableLength = 1234;
-      })
-    ).not.toBeNull();
-
-    // Unknown lengths should be fine
-    expect(
-      getError((table) => {
-        table.tableLength = 'unknown';
-      })
-    ).toBeNull();
 
     // Column comparisons are done with sameAs
     expect(
@@ -124,7 +110,6 @@ describe('new columns and tables', () => {
     expect(
       t
         .table({
-          length: 1,
           columnNames: ['A'],
           columnTypes: [t.number()],
         })
@@ -132,42 +117,6 @@ describe('new columns and tables', () => {
     ).not.toBeNull();
 
     expect(t.row([t.string()], ['X']).reduced().errorCause).not.toBeNull();
-  });
-
-  it('can have unknown lengths', () => {
-    expect(
-      t.column(t.string(), 'unknown').sameAs(t.column(t.string(), 3))
-    ).toMatchObject({
-      columnSize: 'unknown',
-      cellType: {
-        type: 'string',
-      },
-    });
-    expect(
-      t.column(t.string(), 3).sameAs(t.column(t.string(), 'unknown'))
-    ).toMatchObject({
-      columnSize: 3,
-      cellType: {
-        type: 'string',
-      },
-    });
-
-    const fixedTable = t.table({
-      length: 3,
-      columnTypes: [t.string()],
-      columnNames: ['Hi'],
-    });
-    const unknownLengthTable = t.table({
-      length: 'unknown',
-      columnTypes: [t.string()],
-      columnNames: ['Hi'],
-    });
-    expect(
-      unknownLengthTable.sameAs(fixedTable).tableLength
-    ).toMatchInlineSnapshot(`"unknown"`);
-    expect(
-      fixedTable.sameAs(unknownLengthTable).tableLength
-    ).toMatchInlineSnapshot(`3`);
   });
 });
 

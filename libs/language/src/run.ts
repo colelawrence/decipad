@@ -64,10 +64,7 @@ export const runAST = async (
   return { type, value };
 };
 
-export const runCode = async (
-  source: string,
-  { externalData }: { externalData?: AnyMapping<Result> } = {}
-) => {
+export const runCode = async (source: string, opts: RunAstOptions = {}) => {
   const block = parseBlockOrThrow(source);
-  return runAST(block, { externalData });
+  return runAST(block, opts);
 };

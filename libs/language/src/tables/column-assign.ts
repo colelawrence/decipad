@@ -6,7 +6,7 @@ import { Context } from '../infer';
 import { build as t, InferError } from '../type';
 import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { Realm } from '../interpreter';
-import { getColumnLike, Table, Value } from '../value';
+import { Table, Value } from '../value';
 import { pushStackAndPrevious } from '../infer/context';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
@@ -19,7 +19,7 @@ export async function inferColumnAssign(
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const [tableNameAst, colNameAst, columnAst] = assign.args;
+  const [tableNameAst, colNameAst] = assign.args;
   const tableName = getIdentifierString(tableNameAst);
   const colName = getIdentifierString(colNameAst);
 
@@ -31,13 +31,12 @@ export async function inferColumnAssign(
 
   const columnNames = getDefined(table.columnNames);
   const columnTypes = getDefined(table.columnTypes);
-  const tableLength = getDefined(table.tableLength);
-  const { indexName } = table;
+  const indexName = getDefined(table.indexName);
 
   const newColumn = await pushStackAndPrevious(ctx, async () => {
     const otherColumnsEntries = zip(columnNames, columnTypes).map(
       ([name, type]) => {
-        return [name, t.column(type, tableLength, indexName)] as const;
+        return [name, t.column(type, 'unknown', indexName)] as const;
       }
     );
 
@@ -48,25 +47,13 @@ export async function inferColumnAssign(
 
     return inferTableColumn(ctx, {
       otherColumns,
-      columnAst,
+      columnAst: assign,
       indexName,
-      tableLength,
     });
   });
 
   if (newColumn.errorCause) {
     return newColumn;
-  }
-
-  // When it's the first assignment to a table
-  // Make sure the column has a known length!
-  let newTableLength = tableLength;
-  if (tableLength === 'unknown') {
-    newTableLength = getDefined(newColumn.columnSize);
-
-    if (newTableLength === 'unknown') {
-      return newColumn.withErrorCause('Unknown column size');
-    }
   }
 
   const updatedTable = table
@@ -76,7 +63,6 @@ export async function inferColumnAssign(
       produce((table) => {
         table.columnNames = [...columnNames, colName];
         table.columnTypes = [...columnTypes, newColumn.reduced()];
-        table.tableLength = newTableLength;
       })
     );
 
@@ -100,9 +86,14 @@ export async function evaluateColumnAssign(
 
   const columns = new Map(zip(table.columnNames, table.columns));
 
-  const newColumn = getColumnLike(
-    await evaluateTableColumn(realm, columns, expAst, table.tableRowCount)
+  const newColumn = await evaluateTableColumn(
+    realm,
+    columns,
+    expAst,
+    tableName,
+    table.tableRowCount
   );
+
   columns.set(getIdentifierString(tableColAst), newColumn);
 
   const newTable = Table.fromMapping(columns);

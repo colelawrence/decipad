@@ -17,7 +17,6 @@ export type Column = {
 export type Table = {
   readonly kind: 'table';
   readonly indexName: string | null;
-  readonly tableLength: number | 'unknown';
   readonly columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;

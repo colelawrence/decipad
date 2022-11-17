@@ -1,5 +1,5 @@
 import { buildType as t } from '..';
-import { fromJS } from '../value';
+import { ColumnLike, fromJS } from '../value';
 import { dimSwapTypes, dimSwapValues } from './dimSwap';
 
 const twoDColumn = t.column(t.column(t.number(), 2, 'X'), 3, 'Y');
@@ -7,7 +7,7 @@ const twoDColumnVal = fromJS([
   [1n, 2n],
   [3n, 4n],
   [5n, 6n],
-]);
+]) as ColumnLike;
 
 it('does nothing if wanted dimension is already dominant', async () => {
   expect(await dimSwapTypes('Y', twoDColumn)).toEqual(

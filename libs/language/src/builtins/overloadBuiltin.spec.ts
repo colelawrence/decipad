@@ -56,9 +56,7 @@ describe('utils', () => {
     expect(getOverloadedTypeFromType(t.boolean())).toEqual('boolean');
     expect(getOverloadedTypeFromType(t.date('day'))).toEqual('date');
     expect(
-      getOverloadedTypeFromType(
-        t.table({ length: 1, columnTypes: [], columnNames: [] })
-      )
+      getOverloadedTypeFromType(t.table({ columnTypes: [], columnNames: [] }))
     ).toEqual(null);
     expect(getOverloadedTypeFromType(t.row([t.string()], ['A']))).toEqual(null);
     expect(getOverloadedTypeFromType(t.column(t.number(), 123))).toEqual(null);

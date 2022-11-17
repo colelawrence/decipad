@@ -103,16 +103,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         ) {
           return t.impossible('Incompatible tables');
         } else {
-          return produce(tab1, (tab1) => {
-            if (
-              typeof tab1.tableLength === 'number' &&
-              typeof tab2.tableLength === 'number'
-            ) {
-              tab1.tableLength += tab2.tableLength;
-            } else {
-              tab1.tableLength = 'unknown';
-            }
-          });
+          return tab1;
         }
       }),
     fnValues: ([tab1, tab2]) => {
@@ -146,7 +137,6 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         column.isColumn().reduced().isScalar('boolean'),
         table.isTable(),
         produce((table) => {
-          table.tableLength = 'unknown';
           table.indexName = null;
         })
       ),

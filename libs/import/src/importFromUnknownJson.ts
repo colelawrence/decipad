@@ -94,7 +94,6 @@ const importTableFromObject = (
         }
         return res.type;
       }),
-      tableLength: Math.max(...value.map((col) => col.length)),
       indexName: columnNames[0],
     },
     value,

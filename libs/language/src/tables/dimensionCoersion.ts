@@ -1,0 +1,73 @@
+import { produce } from 'immer';
+import { Type, build as t } from '../type';
+import { linearizeType } from '../dimtools/common';
+import { dimSwapTypes, dimSwapValues } from '../dimtools';
+import {
+  Column,
+  ColumnLike,
+  isColumnLike,
+  Value,
+  RuntimeError,
+} from '../value';
+
+/**
+ * This module specifies how tables work with 0-dimensional and 2+ dimensional columns.
+ *
+ * Here's how they work!
+ *
+ * ```
+ * Tbl = { A = 1 }  # Has 1 row
+ * Tbl = { Sizer = [1, 2, 3], A = 1 }  # A turns into [1, 2, 3]
+ * Tbl = { A = 1, Sizer = [1, 2, 3] }  # Crash! Inconsistent column sizes
+ * Tbl = { Nums = [1, 2], TwoD = Tbl.Nums * OtherTable.Nums }  # TwoD indexed by [Tbl, OtherTable.Nums]
+ * Tbl = { Nums = [1, 2], TwoD = OtherTable.Nums * Tbl.Nums }  # Same as above even though the operation would've flipped dims
+ * ```
+ *
+ * Extending is the same as defining col by col
+ *
+ * ```
+ * Tbl.MoreColumn = ...  # Exact same semantics as defining a column inside the {}
+ * Tbl = { ...BaseTbl }  # Same as defining all cols manually but the table's index is "BaseTbl"
+ * ```
+ */
+
+/** Make {type} columnar and place {indexName} on top if {type} more than 1D */
+export const coerceTableColumnTypeIndices = (type: Type, indexName: string) => {
+  if (type.columnSize == null) {
+    // Because we're so very nice, allow `Column = 1` as syntax sugar.
+    return t.column(type, 'unknown', indexName);
+  } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
+    return dimSwapTypes(indexName, type);
+  } else {
+    // We want our table index on top
+    return produce(type, (t) => {
+      t.indexedBy = indexName;
+    });
+  }
+};
+
+export const coerceTableColumnIndices = (
+  type: Type,
+  value: ColumnLike | Value,
+  indexName: string,
+  tableLength?: number
+): ColumnLike => {
+  if (!isColumnLike(value)) {
+    return Column.fromValues(repeat(value, tableLength ?? 1));
+  } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
+    return validateLength(dimSwapValues(indexName, type, value), tableLength);
+  } else {
+    return validateLength(value, tableLength);
+  }
+};
+
+const repeat = <T>(value: T, length: number) =>
+  Array.from({ length }, () => value);
+
+const validateLength = (value: ColumnLike, wanted: number | undefined) => {
+  if (wanted != null && wanted !== value.rowCount) {
+    // UI tables will never place us in this situation
+    throw new RuntimeError('Inconsistent table column sizes');
+  }
+  return value;
+};

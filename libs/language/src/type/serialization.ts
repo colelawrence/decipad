@@ -22,11 +22,10 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         cellType: serializeType(type.cellType),
         columnSize: type.columnSize,
       };
-    } else if (type.columnTypes && type.columnNames && type.tableLength) {
+    } else if (type.columnTypes && type.columnNames) {
       return {
         kind: 'table',
         indexName: type.indexName,
-        tableLength: type.tableLength,
         columnTypes: type.columnTypes.map((t) => serializeType(t)),
         columnNames: type.columnNames,
       };
@@ -109,9 +108,8 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'column':
           return t.column(deserializeType(type.cellType), type.columnSize);
         case 'table':
-          const { tableLength, columnTypes, columnNames } = type;
+          const { columnTypes, columnNames } = type;
           return t.table({
-            length: tableLength,
             columnTypes: columnTypes.map((t) => deserializeType(t)),
             columnNames,
           });

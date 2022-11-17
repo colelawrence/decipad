@@ -1,5 +1,5 @@
-import { chooseFirst } from '../dimtools/common';
 import { ColumnLike } from '../value';
+import { chooseFirst, undoChooseFirst } from '../dimtools/common';
 import { implementColumnLike } from './implementColumnLike';
 import { Dimension, MinimalHypercube } from './types';
 
@@ -39,7 +39,7 @@ export const SwappedHypercube = implementColumnLike(
 
     lowLevelGet(...indices: number[]) {
       return this.unswappedHC.lowLevelGet(
-        ...chooseFirst(this.dominantDimensionIndex, indices)
+        ...undoChooseFirst(this.dominantDimensionIndex, indices)
       );
     }
   }

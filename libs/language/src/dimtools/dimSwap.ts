@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
-import { InferError, Type, build as t } from '../type';
 import { SwappedHypercube } from '../lazy';
-import { getColumnLike, Value } from '../value';
+import { ColumnLike, getColumnLike } from '../value';
+import { build as t, InferError, Type } from '../type';
 import { chooseFirst, deLinearizeType, linearizeType } from './common';
 
 export const dimSwapTypes = (dominantIndexName: string, type: Type) => {
@@ -21,11 +21,26 @@ export const dimSwapTypes = (dominantIndexName: string, type: Type) => {
 export const dimSwapValues = (
   dominantIndexName: string,
   type: Type,
-  value: Value
+  value: ColumnLike
 ) => {
-  const indexOfDominantDimension = linearizeType(type).findIndex(
+  const linear = linearizeType(type).slice(0, -1);
+
+  if (linear.length !== value.dimensions.length) {
+    throw new Error('panic: incorrect amount of dimensions');
+  }
+
+  const indexOfDominantDimension = linear.findIndex(
     (t) => t.indexedBy === dominantIndexName
   );
+
+  if (indexOfDominantDimension === 0) {
+    return value;
+  }
+
+  if (indexOfDominantDimension < 0) {
+    throw new Error('panic: dominant dimension not found');
+  }
+
   const swapped = new SwappedHypercube(
     getColumnLike(value),
     indexOfDominantDimension

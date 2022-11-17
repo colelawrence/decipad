@@ -1,7 +1,7 @@
 import { dequal } from 'dequal';
 import { PrimitiveTypeName, Type } from '.';
 import type { Time } from '..';
-import { equalOrUnknown, getDefined, zip } from '../utils';
+import { equalOrUnknown, zip } from '../utils';
 import * as t from './build';
 import { InferError } from './InferError';
 import { propagatePercentage } from './percentages';
@@ -219,8 +219,7 @@ export const sameTablenessAs = checker((me: Type, other: Type) => {
       dequal(me.columnNames, other.columnNames) &&
       zip(me.columnTypes, other.columnTypes).every(
         ([myT, otherT]) => myT.sameAs(otherT).errorCause == null
-      ) &&
-      equalOrUnknown(getDefined(me.tableLength), getDefined(other.tableLength))
+      )
     ) {
       return me;
     } else {

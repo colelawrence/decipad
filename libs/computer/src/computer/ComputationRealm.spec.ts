@@ -43,7 +43,6 @@ describe('getIndexLabels', () => {
       'DimName',
       buildType.table({
         indexName: 'DimName',
-        length: 1,
         columnTypes: [buildType.string(), buildType.number()],
         columnNames: ['Names', 'Numbers'],
       })
@@ -93,7 +92,6 @@ describe('getIndexLabels', () => {
       'Diabetes',
       buildType.table({
         indexName: 'Diabetes',
-        length: 1,
         columnTypes: [buildType.number()],
         columnNames: ['Nums'],
       })
@@ -119,7 +117,6 @@ describe('getIndexLabels', () => {
       'Dates',
       buildType.table({
         indexName: 'Dates',
-        length: 1,
         columnTypes: [buildType.date('month')],
         columnNames: ['Dates'],
       })

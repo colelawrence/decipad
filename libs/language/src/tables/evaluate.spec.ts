@@ -66,4 +66,17 @@ describe('evaluateTableColumn', () => {
 
     expect(form.join(', ')).toMatchInlineSnapshot(`"2, 3, 4, 5"`);
   });
+
+  it('ensures columns are consistently sized', async () => {
+    await expect(
+      runAST(
+        block(
+          tableDef('Table', {
+            oneThing: l(1),
+            twoThings: col(1, 2),
+          })
+        )
+      )
+    ).rejects.toThrow();
+  });
 });

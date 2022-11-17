@@ -6,7 +6,6 @@ describe('table splitting and grouping operators', () => {
   it('splitby column', () => {
     const groupByColumnType = t.column(t.number(), 3, undefined, 1);
     const tableType = t.table({
-      length: 3,
       columnNames: ['initial_index', 'other_column'],
       columnTypes: [t.string(), groupByColumnType],
     });
@@ -16,7 +15,6 @@ describe('table splitting and grouping operators', () => {
     ).toMatchObject({
       columnNames: ['other_column', 'Values'],
       errorCause: null,
-      tableLength: 'unknown',
     });
 
     const groupByColumn = Column.fromValues(

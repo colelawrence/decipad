@@ -67,7 +67,6 @@ const islandToResult =
         island.firstCol,
         island.lastCol + 1
       ),
-      tableLength: island.lastRow - island.firstRow + 1,
     },
     value: sheet.value
       .filter(

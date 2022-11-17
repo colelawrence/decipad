@@ -208,7 +208,7 @@ describe('automapTypes', () => {
   });
 
   it('can take tables as arguments', () => {
-    const table = t.table({ columnNames: [], columnTypes: [], length: 123 });
+    const table = t.table({ columnNames: [], columnTypes: [] });
     const callee = jest.fn(([x]: Type[]) => x);
 
     expect(automapTypes([table], callee)).toEqual(table);
@@ -564,7 +564,6 @@ describe('automapValues', () => {
     const table = t.table({
       columnNames: ['Col'],
       columnTypes: [t.number()],
-      length: 123,
     });
     const tableVal = Values.Table.fromNamedColumns(
       [Values.fromJS([1])],

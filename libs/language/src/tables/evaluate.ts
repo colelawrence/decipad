@@ -1,7 +1,7 @@
 import { getDefined, zip } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
-import { Column, ColumnLike, isColumnLike, Row, Table, Value } from '../value';
+import { Column, ColumnLike, Row, RuntimeError, Table, Value } from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
   walkAst,
@@ -10,6 +10,7 @@ import {
   getInstanceof,
 } from '../utils';
 import { Realm, evaluate } from '../interpreter';
+import { coerceTableColumnIndices } from './dimensionCoersion';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -31,7 +32,8 @@ export const evaluateTableColumn = async (
   realm: Realm,
   tableColumns: Map<string, ColumnLike>,
   column: AST.Expression,
-  rowCount: number
+  indexName: string,
+  rowCount?: number
 ): Promise<ColumnLike> => {
   if (
     refersToOtherColumnsByName(column, tableColumns) ||
@@ -41,12 +43,17 @@ export const evaluateTableColumn = async (
       realm,
       tableColumns,
       column,
-      rowCount
+      rowCount ?? 1
     );
   }
 
   // Evaluate the column as a whole
-  return coerceToColumn(await evaluate(realm, column), rowCount);
+  return coerceTableColumnIndices(
+    realm.getTypeAt(column),
+    await evaluate(realm, column),
+    indexName,
+    rowCount
+  );
 };
 
 export const evaluateTableColumnIteratively = async (
@@ -70,36 +77,31 @@ export const evaluateTableColumnIteratively = async (
     return Column.fromValues(cells);
   });
 
-const repeat = <T>(value: T, length: number) =>
-  Array.from({ length }, () => value);
-
-const coerceToColumn = (
-  value: ColumnLike | Value,
-  tableLength: number
-): ColumnLike =>
-  !isColumnLike(value) ? Column.fromValues(repeat(value, tableLength)) : value;
-
 export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
 ): Promise<Table> => {
   const tableColumns = new Map<string, ColumnLike>();
   const { args: items } = table;
-  const { tableLength, indexName } = realm.getTypeAt(table);
+  const tableName = getDefined(realm.getTypeAt(table).indexName);
 
-  if (typeof tableLength !== 'number') {
-    if (items.length === 0) {
-      return Table.fromMapping({});
-    } else {
-      throw new Error('panic: unknown table length');
-    }
+  if (items.length === 0) {
+    return Table.fromMapping({});
   }
 
+  let tableLength: number | undefined;
   return realm.stack.withPush(async () => {
     const addColumn = (name: string, value: ColumnLike) => {
+      tableLength ??= value.rowCount;
+
+      if (tableLength !== value.rowCount) {
+        // UI tables will never place us in this situation
+        throw new RuntimeError('Inconsistent table column sizes');
+      }
+
       tableColumns.set(name, value);
       realm.stack.set(name, value);
-      realm.stack.set(getDefined(indexName), Table.fromMapping(tableColumns));
+      realm.stack.set(tableName, Table.fromMapping(tableColumns));
     };
 
     for (const item of items) {
@@ -111,6 +113,7 @@ export const evaluateTable = async (
           realm,
           tableColumns,
           column,
+          tableName,
           tableLength
         );
 

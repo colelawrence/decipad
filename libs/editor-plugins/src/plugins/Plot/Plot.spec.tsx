@@ -23,7 +23,6 @@ function F(n: number) {
 
 const tableType: SerializedType = {
   kind: 'table',
-  tableLength: 3,
   indexName: 'index',
   columnTypes: [
     { kind: 'string' },

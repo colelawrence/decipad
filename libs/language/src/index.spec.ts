@@ -256,7 +256,12 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (X.Col / 10)
       `)
     ).toMatchObject({
-      type: t.column(t.column(t.number(), 2, 'Y', 0), 3, 'X', 0),
+      type: t.column(
+        t.column(t.number(), 'unknown', 'Y', 0),
+        'unknown',
+        'X',
+        0
+      ),
       value: [
         [F(1011, 10), F(2011, 10)],
         [F(511, 5), F(1011, 5)],
@@ -272,7 +277,12 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (Y.Col / 1000)
       `)
     ).toMatchObject({
-      type: t.column(t.column(t.number(), 2, 'Y', 0), 3, 'X', 0),
+      type: t.column(
+        t.column(t.number(), 'unknown', 'Y', 0),
+        'unknown',
+        'X',
+        0
+      ),
       value: [
         [F(1011, 10), F(1006, 5)],
         [F(1021, 10), F(1011, 5)],
@@ -306,7 +316,7 @@ describe('Multidimensional operations', () => {
         cellType: {
           type: 'number',
         },
-        columnSize: 3,
+        columnSize: 'unknown',
       },
       value: [F(1100), F(2200), F(3300)],
     });
@@ -333,7 +343,7 @@ describe('Tables', () => {
         `Table = { Column1 = [1.1, 2.2, 3.3], Column2 = Column1 * 2 }`
       )
     ).toMatchObject({
-      type: objectToTableType('Table', 3, {
+      type: objectToTableType('Table', {
         Column1: t.number(),
         Column2: t.number(),
       }),
@@ -353,7 +363,7 @@ describe('Tables', () => {
         }
       `)
     ).toEqual({
-      type: objectToTableType('Table', 3, {
+      type: objectToTableType('Table', {
         Column1: t.number(),
         Column2: t.number(),
       }),
@@ -373,7 +383,7 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: { columnNames: ['Index', 'Cell'], tableLength: 4 },
+      type: { columnNames: ['Index', 'Cell'] },
       value: [
         [F(1), F(2), F(3), F(4)],
         [F(2), F(2), F(3), F(4)],
@@ -391,7 +401,7 @@ describe('Tables', () => {
         }
       `)
     ).toMatchObject({
-      type: objectToTableType('Table', 3, {
+      type: objectToTableType('Table', {
         Column1: t.number(),
         Column2: t.number(),
         Column3: t.boolean(),
@@ -414,7 +424,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3, 'Table', 0),
+      type: t.column(t.number(), 'unknown', 'Table', 0),
       value: [F(1), F(2), F(3)],
     });
   });
@@ -430,21 +440,7 @@ describe('Tables', () => {
         Table.Col2
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 3, 'Table', 1),
-      value: [F(1), F(1), F(1)],
-    });
-
-    expect(
-      await runCode(`
-        Table = {
-          Col = 1,
-          Col2 = [1, 2, 3]
-        }
-
-        Table.Col
-      `)
-    ).toMatchObject({
-      type: t.column(t.number(), 3, 'Table', 0),
+      type: t.column(t.number(), 'unknown', 'Table', 1),
       value: [F(1), F(1), F(1)],
     });
   });
@@ -466,7 +462,6 @@ describe('Tables', () => {
           { type: 'number' },
           { type: 'number' },
         ],
-        tableLength: 3,
       },
       value: [
         [F(1), F(2), F(3)],
@@ -492,7 +487,7 @@ describe('Tables', () => {
       type: {
         columnNames: ['Numbers', 'Values'],
         columnTypes: [
-          { cellType: { type: 'number' }, columnSize: 2 },
+          { cellType: { type: 'number' }, columnSize: 'unknown' },
           { columnNames: ['Names'], columnTypes: [{ type: 'string' }] },
         ],
       },
@@ -542,7 +537,6 @@ describe('Tables', () => {
           { type: 'number', unit: U('USD', { known: true }) },
           { type: 'number', unit: U('USD', { known: true }) },
         ],
-        tableLength: 3,
       },
       value: [
         [F(1), F(2), F(3)],
@@ -564,7 +558,6 @@ describe('Tables', () => {
       type: {
         columnNames: ['Column', 'CumulativeSum'],
         columnTypes: [{ type: 'number' }, { type: 'number' }],
-        tableLength: 7,
       },
       value: [
         [F(1), F(2), F(0), F(0), F(3), F(-3), F(-3)],
@@ -595,7 +588,6 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.table({
-        length: 2,
         indexName: 'OldTable',
         columnNames: ['Idx', 'NewCol'],
         columnTypes: [t.string(), t.string()],
@@ -621,7 +613,6 @@ describe('Tables', () => {
       type: {
         columnNames: ['ThisOne'],
         columnTypes: [{ type: 'number' }],
-        tableLength: 1,
       },
       value: [[F(1)]],
     });
@@ -643,7 +634,6 @@ describe('Tables', () => {
       type: {
         columnNames: ['Col', 'Item'],
         columnTypes: [{ type: 'number' }, { type: 'number' }],
-        tableLength: 3,
       },
       value: [
         [F(1), F(2), F(3)],
@@ -668,9 +658,9 @@ describe('Tables', () => {
         columnNames: ['Years', 'Cost'],
         columnTypes: [
           { type: 'number' },
-          { cellType: { type: 'number' }, columnSize: 2 },
+          { cellType: { type: 'number' }, indexedBy: 'Cars' },
         ],
-        tableLength: 3,
+        indexName: 'Fuel',
       },
       value: [
         [F(1), F(2), F(3)],
@@ -689,24 +679,17 @@ describe('Tables', () => {
       type: {
         columnNames: ['Years', 'Cost'],
         columnTypes: [
-          {
-            type: 'number',
-          },
-          {
-            cellType: {
-              type: 'number',
-            },
-            columnSize: 3,
-          },
+          { type: 'number' },
+          { cellType: { type: 'number' }, indexedBy: 'Cars' },
         ],
         indexName: 'Fuel',
-        tableLength: 3,
       },
       value: [
         [F(1), F(2), F(3)],
         [
-          [F(100), F(200), F(300)],
-          [F(200), F(400), F(600)],
+          [F(100), F(200)],
+          [F(200), F(400)],
+          [F(300), F(600)],
         ],
       ],
     });
@@ -722,24 +705,18 @@ describe('Tables', () => {
             type: 'number',
           },
           {
-            cellType: {
-              cellType: {
-                type: 'number',
-              },
-              columnSize: 1,
-            },
-            columnSize: 3,
-            indexedBy: 'Fuel',
+            cellType: { cellType: { type: 'number' }, indexedBy: null },
+            indexedBy: 'Cars',
           },
         ],
         indexName: 'Fuel',
-        tableLength: 3,
       },
       value: [
         [F(1), F(2), F(3)],
         [
-          [[F(100)], [F(200)], [F(300)]],
-          [[F(200)], [F(400)], [F(600)]],
+          [[F(100)], [F(200)]],
+          [[F(200)], [F(400)]],
+          [[F(300)], [F(600)]],
         ],
       ],
     });
@@ -755,25 +732,47 @@ describe('Tables', () => {
             type: 'number',
           },
           {
-            cellType: {
-              cellType: {
-                type: 'number',
-              },
-              columnSize: 3,
-              indexedBy: 'Fuel',
-            },
-            columnSize: 1,
+            cellType: { cellType: { type: 'number' }, indexedBy: null },
+            indexedBy: 'Cars',
           },
         ],
         indexName: 'Fuel',
-        tableLength: 3,
       },
       value: [
         [F(1), F(2), F(3)],
-        [[[F(100), F(200), F(300)]], [[F(200), F(400), F(600)]]],
+        [
+          [[F(100)], [F(200)]],
+          [[F(200)], [F(400)]],
+          [[F(300)], [F(600)]],
+        ],
       ],
     });
   });
+
+  /**
+   * TODO Test these examples
+   * > Table2 = { A = [ 1, 2, 3 ] }
+   * > Table.As = Table2.A
+   * > Table
+   * > Table.Bs = [1,2]
+   * > Table
+   * {
+   *   As = [ 1, 2, 3 ],
+   *   Bs = [ 1, 2 ]
+   * }
+   *
+   * ----
+   *
+   * > Table = {}
+   * > Table.A = 1
+   * > Table
+   *
+   * ----
+   *
+   * Table = {}
+   * Table.WithPrev = 1 + previous(0)
+   */
+  it.todo('empty table behavior');
 
   it('Regression: splitby + lookup issue', async () => {
     expect(
@@ -801,7 +800,6 @@ describe('Tables', () => {
               },
             ],
             indexName: 'Table',
-            tableLength: 'unknown',
           },
         ],
       },
@@ -1046,7 +1044,7 @@ describe('Units', () => {
         u('months', { known: true, exp: F(-1) }),
       ]),
     });
-    expect(value.valueOf()).toEqual(6000);
+    expect(value?.valueOf()).toEqual(6000);
   });
 });
 
@@ -1109,7 +1107,6 @@ describe('Dates', () => {
             type: 'boolean',
           },
         ],
-        tableLength: 3,
       },
       value: [
         [1598918400000n, 1601510400000n, 1604188800000n],
@@ -1821,7 +1818,6 @@ describe('number units work together', () => {
       ],
       type: t.table({
         indexName: 'Fuel',
-        length: 2,
         columnTypes: [
           t.number(),
           t.number(),
@@ -1884,7 +1880,7 @@ describe('unit conversion', () => {
         F(2461375, 2950464),
         F(12306875, 5900928),
       ],
-      type: t.column(t.number(U('hours')), 3, 'Animals'),
+      type: t.column(t.number(U('hours')), 'unknown', 'Animals'),
     });
   });
 
@@ -1925,7 +1921,7 @@ describe('unit conversion', () => {
             type: 'number',
             unit: U('hours', { known: true }),
           },
-          columnSize: 2,
+          columnSize: 'unknown',
           indexedBy: 'Animals',
         },
         columnSize: 3,

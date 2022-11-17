@@ -75,7 +75,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 1,
             },
             "value": Array [
               Array [
@@ -127,7 +126,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 3,
             },
             "value": Array [
               Array [
@@ -197,7 +195,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 3,
             },
             "value": Array [
               Array [
@@ -250,7 +247,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 3,
             },
             "value": Array [
               Array [
@@ -320,7 +316,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 3,
             },
             "value": Array [
               Array [
@@ -389,7 +384,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 2,
             },
             "value": Array [
               Array [
@@ -455,7 +449,6 @@ describe('findAllIslands', () => {
                 },
               ],
               "kind": "table",
-              "tableLength": 3,
             },
             "value": Array [
               Array [

@@ -41,7 +41,6 @@ it('type can be stringified', () => {
 
   const table = serializeType(
     t.table({
-      length: 123,
       columnTypes: [t.number([meter]), t.string()],
       columnNames: ['Col1', 'Col2'],
     })
@@ -111,7 +110,6 @@ it('can be stringified in basic form', () => {
 
   const table = serializeType(
     t.table({
-      length: 123,
       columnTypes: [t.number([meter]), t.string()],
       columnNames: ['Col1', 'Col2'],
     })

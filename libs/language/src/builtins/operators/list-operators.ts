@@ -167,7 +167,6 @@ export const listOperators: Record<string, BuiltinSpec> = {
         columnName.isScalar('string')
       ).mapType(() =>
         t.table({
-          length: 'unknown',
           columnNames: getDefined(table.columnNames),
           columnTypes: getDefined(table.columnTypes),
         })

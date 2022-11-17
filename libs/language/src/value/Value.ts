@@ -323,8 +323,8 @@ export class Table implements Value {
     );
   }
 
-  get tableRowCount() {
-    return this.columns[0]?.rowCount ?? 0;
+  get tableRowCount(): number | undefined {
+    return this.columns.at(0)?.rowCount;
   }
 
   static fromMapping(mapping: AnyMapping<ColumnLike>) {

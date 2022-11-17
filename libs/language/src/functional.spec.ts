@@ -34,7 +34,7 @@ describe('use of funds document', () => {
     `);
 
     expect(result.type).toMatchObject(
-      objectToTableType('SalaryStaff', 12, {
+      objectToTableType('SalaryStaff', {
         Months: t.date('month'),
         Exec: t.number(),
         Product: t.number(),
@@ -291,7 +291,6 @@ describe('more models', () => {
     ).toMatchObject({
       value: [years, [F(5200), F(5404), F(140302, 25)]],
       type: {
-        tableLength: 3,
         columnNames: ['Years', 'Value'],
         columnTypes: [
           { date: 'year' },

@@ -45,7 +45,7 @@ export function formatTypeInner(
           `${name} = ${formatType(locale, col, { isTableColumn: true })}`
       );
 
-      return `table (${type.tableLength}) { ${columnStrings.join(', ')} }`;
+      return `table { ${columnStrings.join(', ')} }`;
     }
     case 'row': {
       const rowCellStrings = zip(type.rowCellNames, type.rowCellTypes).map(

@@ -129,12 +129,10 @@ export const evaluateForVariables = async (
 
 export const objectToTableType = (
   indexName: string,
-  length: number,
   obj: Record<string, Type>
 ) =>
   t.table({
     indexName,
-    length,
     columnTypes: Object.values(obj),
     columnNames: Object.keys(obj),
   });

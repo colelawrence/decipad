@@ -49,21 +49,17 @@ export const timeQuantity = (timeUnits: (Unit | string)[]) =>
 
 interface BuildTableArgs {
   indexName?: string | null;
-  length: number | 'unknown';
   columnTypes: Type[];
   columnNames: string[];
 }
 
-// TODO: use produce
 export const table = ({
   indexName,
-  length,
   columnTypes,
   columnNames,
 }: BuildTableArgs) => {
   const tableT = produce(new Type(), (t) => {
     t.indexName = indexName ?? null;
-    t.tableLength = length;
     t.columnTypes = columnTypes;
     t.columnNames = columnNames;
   });

@@ -11,10 +11,6 @@ interface WithColumnNamesResult {
   columnValues: Sheet['values'];
 }
 
-function tableLength(columns: SpreadsheetColumn[]): number {
-  return Math.max(...columns.map((col) => col.length));
-}
-
 const withColumnNames = (
   data: Sheet,
   options: InferTableOptions
@@ -72,7 +68,6 @@ export const inferTable = async (
   return {
     type: {
       kind: 'table',
-      tableLength: tableLength(columnValues),
       columnTypes,
       columnNames,
       indexName: columnNames[0],

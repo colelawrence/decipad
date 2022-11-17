@@ -1,4 +1,4 @@
-import { AST } from '..';
+import { AST, getColumnLike } from '..';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 import { getIdentifierString, getOfType } from '../utils';
 import { Directive } from './types';
@@ -22,6 +22,6 @@ export const over: Directive = {
     const value = await evaluate(matrix);
     const type = await getNodeType(matrix);
 
-    return dimSwapValues(indexName, type, value);
+    return dimSwapValues(indexName, type, getColumnLike(value));
   },
 };

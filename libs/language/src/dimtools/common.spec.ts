@@ -1,5 +1,5 @@
 import { buildType as t } from '..';
-import { getCardinality } from './common';
+import { chooseFirst, getCardinality, undoChooseFirst } from './common';
 
 it('can get cardinality', () => {
   expect(getCardinality(t.number())).toEqual(1);
@@ -19,10 +19,21 @@ it('can get cardinality', () => {
   expect(
     getCardinality(
       t.table({
-        length: 123,
         columnNames: ['A', 'B'],
         columnTypes: [t.number(), t.column(t.number(), 6)],
       })
     )
   ).toEqual(1);
 });
+
+test.each([0, 1, 2, 3])(
+  'chooseFirst(%d, [a,b,c,d]) is reversed with undoChooseFirst',
+  (a) => {
+    expect(undoChooseFirst(a, chooseFirst(a, ['a', 'b', 'c', 'd']))).toEqual([
+      'a',
+      'b',
+      'c',
+      'd',
+    ]);
+  }
+);

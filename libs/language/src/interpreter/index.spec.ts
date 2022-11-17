@@ -382,7 +382,6 @@ describe('Tables', () => {
       type: {
         columnNames: ['MaybeNegative', 'Positive'],
         columnTypes: [{ type: 'number' }, { type: 'number' }],
-        tableLength: 3,
       },
       value: [
         [F(1), F(-2), F(3)],

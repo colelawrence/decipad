@@ -31,7 +31,6 @@ const displayProps = (props: Partial<DisplayProps> = {}): DisplayProps => {
 
 const tableType: SerializedType = {
   kind: 'table',
-  tableLength: 3,
   indexName: 'index',
   columnTypes: [
     { kind: 'string' },
@@ -81,7 +80,6 @@ describe('specFromType', () => {
       columnNames: ['col1', 'col2'],
       columnTypes: [{ kind: 'string' }, { kind: 'number', unit: null }],
       indexName: 'col1',
-      tableLength: 3,
     };
     expect(
       specFromType(computer, type, displayProps({ markType: 'bar' }))
