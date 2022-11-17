@@ -30,7 +30,10 @@ export function clone<T extends AnyElement | Text>(
   }
   if (isElement(el)) {
     return produce(el, (e) => {
-      deduplicateVarNameInBlock(computer, deduplicateId(e));
+      e.children = deduplicateVarNameInBlock(
+        computer,
+        deduplicateId(e)
+      ).children;
       if (Array.isArray(e.children)) {
         const children = new Array(e.children.length);
         let i = -1;
