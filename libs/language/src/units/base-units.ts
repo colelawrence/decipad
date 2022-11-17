@@ -63,6 +63,7 @@ const baseQuantityToBaseUnit: Record<BaseQuantity, string> = {
   RON: 'RON',
   BTC: 'BTC',
   ETH: 'ETH',
+  UAH: 'UAH',
 };
 
 export function baseUnitForBaseQuantity(baseQuantity: BaseQuantity): string {

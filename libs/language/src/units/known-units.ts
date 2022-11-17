@@ -58,6 +58,7 @@ export type BaseQuantity =
   | 'SEK'
   | 'XXX'
   | 'NOK'
+  | 'UAH'
   | 'JPY'
   | 'CNY'
   | 'PHP'

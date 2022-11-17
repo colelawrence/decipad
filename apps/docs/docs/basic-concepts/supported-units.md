@@ -394,3 +394,4 @@ Currencies can be expressed as their symbol or by their name.
 | 🇸🇦 Saudi riyal          | SAR  | ﷼      |
 | 🇲🇾 Malaysian ringgit    | MYR  | RM     |
 | 🇷🇴 Romanian leu         | RON  | L      |
+| 🇺🇦 Ukrainian hryvnia    | UAH  | ₴      |

@@ -323,4 +323,13 @@ export const units: UnitOfMeasure[] = [
     fromBaseQuantity: identity,
     superBaseQuantity,
   },
+  {
+    name: 'ukrainianhryvnia',
+    symbols: ['₴', 'uah'],
+    baseQuantity: 'UAH',
+    pretty: 'ua',
+    toBaseQuantity: identity,
+    fromBaseQuantity: identity,
+    superBaseQuantity,
+  },
 ];
