@@ -14,6 +14,7 @@ const styles = css({
   width: '27px', // 3px of border
   height: '27px',
   borderRadius: '50%',
+  position: 'relative',
 });
 
 const iconWrapperStyles = css({

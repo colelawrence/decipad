@@ -18,6 +18,8 @@ const styles = css({
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '8px',
   boxShadow: `3px 3px 24px ${cssVar('highlightColor')}`,
+
+  zIndex: '2',
 });
 
 const textStyles = css({

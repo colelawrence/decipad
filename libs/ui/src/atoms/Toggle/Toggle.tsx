@@ -29,6 +29,7 @@ const makeCheckbox = css({
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
+  backgroundRepeat: 'no-repeat',
 });
 
 const makeToggle = css({
@@ -73,6 +74,7 @@ const checkboxSwitchStyles = css({
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
+  backgroundRepeat: 'no-repeat',
 });
 
 const activeSwitchStyles = css({
@@ -86,6 +88,7 @@ const activeCheckboxStyles = css({
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
+  backgroundRepeat: 'no-repeat',
 });
 
 export interface ToggleProps {
