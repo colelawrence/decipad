@@ -1,16 +1,21 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
+import {
+  AvailableColorStatus,
+  TColorStatus,
+} from '../../atoms/ColorStatus/ColorStatus';
 import { UserIconKey } from '../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
 import { NotebookListItem } from './NotebookListItem';
 
 const args: Pick<
   ComponentProps<typeof NotebookListItem>,
-  'name' | 'iconColor' | 'icon'
+  'name' | 'iconColor' | 'icon' | 'status'
 > = {
   iconColor: 'Malibu' as AvailableSwatchColor,
   icon: 'Rocket' as UserIconKey,
   name: 'Getting started with Decipad',
+  status: 'To Do' as TColorStatus,
 };
 
 export default {
@@ -18,6 +23,7 @@ export default {
   component: NotebookListItem,
   argTypes: {
     iconColor: { options: swatchNames, control: { type: 'radio' } },
+    status: { options: AvailableColorStatus, control: { type: 'radio' } },
     icon: {
       options: ['Rocket' as UserIconKey, 'Coffee' as UserIconKey],
       control: { type: 'radio' },

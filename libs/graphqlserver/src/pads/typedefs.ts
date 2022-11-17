@@ -4,6 +4,7 @@ export default gql`
   input PadInput {
     name: String
     icon: String
+    status: String
     tags: [String!]
   }
 
@@ -32,6 +33,7 @@ export default gql`
     createdAt: DateTime
     isPublic: Boolean
     icon: String
+    status: String
     padConnectionParams: PadConnectionParams!
     initialState: String
     snapshots: [PadSnapshot!]!

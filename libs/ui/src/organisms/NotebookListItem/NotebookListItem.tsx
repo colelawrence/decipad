@@ -1,8 +1,9 @@
 import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
-import { IconButton } from '../../atoms';
+import { FC, useState } from 'react';
+import { ColorStatusCircle, IconButton } from '../../atoms';
+import { TColorStatus } from '../../atoms/ColorStatus/ColorStatus';
 import * as icons from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
 import {
@@ -113,24 +114,30 @@ type NotebookListItemProps = {
   readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
+  readonly onChangeStatus?: (status: TColorStatus) => void;
+
   readonly icon: UserIconKey;
   readonly iconColor: AvailableSwatchColor;
+  readonly status: TColorStatus;
 };
 export const NotebookListItem = ({
   id,
   name,
+  status,
   creationDate,
   actionsOpen = false,
   toggleActionsOpen = noop,
   onDuplicate = noop,
   onDelete = noop,
   onExport = noop,
+  onChangeStatus = noop,
   icon = 'Rocket',
   iconColor = 'Sulu',
 }: NotebookListItemProps): ReturnType<FC> => {
   const Icon = icons[icon];
 
   const href = notebooks({}).notebook({ notebook: { id, name } }).$;
+  const [feStatus, setFeStatus] = useState<TColorStatus>(status);
 
   return (
     <div css={wrapperStyles}>
@@ -138,6 +145,19 @@ export const NotebookListItem = ({
         <div
           css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
         >
+          <div
+            css={css({
+              position: 'absolute',
+              display: 'inline-flex',
+              top: '11px',
+              transform: 'translateX(15px)',
+            })}
+          >
+            {feStatus !== 'No Status' ? (
+              <ColorStatusCircle name={feStatus} variantStyles={true} />
+            ) : null}
+          </div>
+
           <Icon />
         </div>
         <strong css={[nameStyles, name || noNameNameStyles]}>
@@ -157,10 +177,16 @@ export const NotebookListItem = ({
         <div css={actionWrapperStyles}>
           <NotebookListItemActions
             href={href}
+            status={feStatus}
             creationDate={creationDate}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
             onExport={onExport}
+            toggleActionsOpen={toggleActionsOpen}
+            onChangeStatus={(changeStatus: TColorStatus) => {
+              onChangeStatus(changeStatus);
+              setFeStatus(changeStatus);
+            }}
           />
         </div>
       )}

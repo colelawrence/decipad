@@ -1,5 +1,5 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 /* Basic */
 
@@ -119,6 +119,7 @@ export type PadSnapshot = {
 export type PadInput = {
   name: string;
   icon?: string;
+  status?: string;
 };
 
 export type VerificationRequest = {

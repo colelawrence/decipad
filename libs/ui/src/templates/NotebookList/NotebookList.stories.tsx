@@ -33,6 +33,7 @@ export const Normal: Story<typeof args> = ({ numberOfNotebooks }) => (
           description: 'A really cool notebook',
           icon: 'Rocket',
           iconColor: 'Sulu',
+          status: 'To Do',
         }))}
     />
   </DndProvider>

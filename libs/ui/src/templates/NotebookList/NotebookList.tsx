@@ -1,13 +1,14 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, useState, lazy, Suspense } from 'react';
+import { ComponentProps, lazy, Suspense, useState } from 'react';
 import { Divider } from '../../atoms';
+import { TColorStatus } from '../../atoms/ColorStatus/ColorStatus';
 import {
   DragAndDropImportNotebook,
   EmptyWorkspaceCta,
   NotebookListItem,
 } from '../../organisms';
-import { smallestDesktop, p15Medium, cssVar } from '../../primitives';
+import { cssVar, p15Medium, smallestDesktop } from '../../primitives';
 import { notebookList } from '../../styles';
 
 const loadWorkspaceCta = () =>
@@ -30,11 +31,18 @@ type NotebookListProps = {
   readonly notebooks: ReadonlyArray<
     Pick<
       ComponentProps<typeof NotebookListItem>,
-      'id' | 'name' | 'onExport' | 'icon' | 'iconColor' | 'creationDate'
+      | 'id'
+      | 'name'
+      | 'onExport'
+      | 'icon'
+      | 'iconColor'
+      | 'creationDate'
+      | 'status'
     > & { readonly id: string }
   >;
   readonly onDuplicate?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
+  readonly onChangeStatus?: (id: string, status: TColorStatus) => void;
   readonly onExport?: (id: string) => void;
   readonly showCTA?: boolean;
   readonly onCTADismiss?: () => void;
@@ -52,6 +60,7 @@ const listHeadingStyles = css(p15Medium, {
 export const NotebookList = ({
   notebooks,
   onDuplicate = noop,
+  onChangeStatus = noop,
   onDelete = noop,
   showCTA = false,
   onCTADismiss = noop,
@@ -101,6 +110,9 @@ export const NotebookList = ({
                     onDuplicate={() => onDuplicate(id)}
                     onDelete={() => onDelete(id)}
                     onExport={notebook.onExport}
+                    onChangeStatus={(status: TColorStatus) => {
+                      onChangeStatus(id, status as TColorStatus);
+                    }}
                   />
                 </li>
               ))}

@@ -5,6 +5,7 @@ import tutorialNotebook from './tutorialNotebook.json';
 export interface Notebook {
   title: string;
   icon?: string;
+  status?: string;
   content: Document;
 }
 export interface InitialWorkspace {
@@ -17,11 +18,13 @@ export const initialWorkspace: InitialWorkspace = {
       title: 'Weekend Trip - Example Notebook',
       content: tutorialNotebook as Document,
       icon: 'Beach-Sulu',
+      status: 'No Status',
     },
     {
       title: 'Meet Decipad! Learn the basics',
       content: gettingStarted as Document,
       icon: 'Message-Sun',
+      status: 'No Status',
     },
   ],
 };

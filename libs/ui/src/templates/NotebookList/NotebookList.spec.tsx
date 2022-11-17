@@ -19,6 +19,32 @@ it('renders a CTA to create a notebook if there are none', () => {
   );
   expect(getByText(/create/i)).toBeVisible();
 });
+
+it('does not crash if notebook has no status', () => {
+  const { getByText } = render(
+    <DndProvider backend={HTML5Backend}>
+      <NotebookList
+        {...props}
+        notebooks={[
+          {
+            id: '0',
+            name: 'First',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
+          } as any,
+          {
+            id: '1',
+            name: 'Second',
+            icon: 'Rocket',
+            iconColor: 'Catskill',
+            status: undefined,
+          } as any,
+        ]}
+      />
+    </DndProvider>
+  );
+  expect(getByText(/first/i)).toBeVisible();
+});
 it('renders a list of notebooks', () => {
   const { getAllByRole } = render(
     <DndProvider backend={HTML5Backend}>
@@ -30,12 +56,14 @@ it('renders a list of notebooks', () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
         ]}
       />
@@ -60,12 +88,14 @@ it('renders an item with actions open on top', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
         ]}
       />
@@ -93,12 +123,14 @@ it('only allows one open actions menu at a time', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
         ]}
       />
@@ -126,12 +158,14 @@ it('emits duplicate events', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
         ]}
         onDuplicate={handleDuplicate}
@@ -157,12 +191,14 @@ it('emits delete events', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
+            status: 'To Do',
           },
         ]}
         onDelete={handleDelete}

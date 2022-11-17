@@ -1,0 +1,5 @@
+mutation UpdateNotebookStatus($id: ID!, $status: String!) {
+  updatePad(id: $id, pad: { status: $status }) {
+    ...EditorNotebook
+  }
+}

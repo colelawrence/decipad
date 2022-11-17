@@ -9,6 +9,7 @@ export type Flag =
   | 'EXPR_REFS'
   | 'ONBOARDING_CHECKLIST'
   | 'NUMBER_CATALOG'
+  | 'DASHBOARD_STATUS'
   | 'FEATURE_REQUEST';
 
 export type Flags = Partial<Record<Flag, boolean>>;

@@ -2,6 +2,7 @@ fragment WorkspaceNotebook on Pad {
   id
   name
   icon
+  status
   createdAt
 }
 

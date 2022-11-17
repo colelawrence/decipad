@@ -6,6 +6,7 @@ const props: ComponentProps<typeof NotebookListItem> = {
   id: 'my-notebook',
   name: 'My Notebook',
   icon: 'Rocket',
+  status: 'To Do',
   iconColor: 'Catskill',
 };
 

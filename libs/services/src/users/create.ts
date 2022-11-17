@@ -1,20 +1,20 @@
+import { track } from '@decipad/backend-analytics';
 import {
-  UserInput,
+  PadRecord,
   User,
+  UserInput,
   UserWithSecret,
   WorkspaceRecord,
-  PadRecord,
 } from '@decipad/backendtypes';
-import { nanoid } from 'nanoid';
+import { MyElement } from '@decipad/editor-types';
 import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
-import { MyElement } from '@decipad/editor-types';
-import { track } from '@decipad/backend-analytics';
 import { timeout } from '@decipad/utils';
-import { create as createWorkspace } from '../workspaces/create';
+import { nanoid } from 'nanoid';
+import timestamp from '../common/timestamp';
 import { create as createPad } from '../notebooks';
 import { create as createContent } from '../pad-content';
-import timestamp from '../common/timestamp';
+import { create as createWorkspace } from '../workspaces/create';
 
 export interface UserCreationResult {
   user: UserWithSecret;
@@ -41,6 +41,7 @@ async function createInitialWorkspace(
       {
         name: notebook.title,
         icon: notebook.icon,
+        status: notebook.status,
       },
       user
     );

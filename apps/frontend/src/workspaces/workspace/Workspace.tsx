@@ -1,4 +1,4 @@
-import { useRouteParams, workspaces, notebooks } from '@decipad/routing';
+import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
   Dashboard,
@@ -6,6 +6,7 @@ import {
   NotebookListPlaceholder,
   TopbarPlaceholder,
 } from '@decipad/ui';
+import { TColorStatus } from 'libs/ui/src/atoms/ColorStatus/ColorStatus';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
 import { FC, lazy, useCallback, useMemo, useState } from 'react';
@@ -20,6 +21,7 @@ import {
   useGetWorkspacesQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
+  useUpdateNotebookStatusMutation,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { exportNotebook } from '../../utils/exportNotebook';
@@ -61,6 +63,7 @@ const Workspace: FC = () => {
   const createWorkspace = useCreateWorkspaceMutation()[1];
   const renameWorkspace = useRenameWorkspaceMutation()[1];
   const deleteWorkspace = useDeleteWorkspaceMutation()[1];
+  const changeNotebookStatus = useUpdateNotebookStatusMutation()[1];
 
   const signoutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -96,11 +99,13 @@ const Workspace: FC = () => {
   ).map((notebook) => {
     const { icon = 'Rocket', iconColor = 'Catskill' } =
       parseIconColorFromIdentifier(notebook?.icon);
+    const status: string = notebook?.status || 'No Status';
 
     return {
       ...notebook,
       icon,
       iconColor,
+      status: status as TColorStatus,
       onExport: exportNotebook(notebook.id),
       creationDate: new Date(notebook.createdAt),
     };
@@ -219,6 +224,15 @@ const Workspace: FC = () => {
                         toast('Failed to duplicate notebook.', 'error');
                       })
                     }
+                    onChangeStatus={(id, status: TColorStatus) => {
+                      changeNotebookStatus({
+                        id,
+                        status,
+                      }).catch((err) => {
+                        console.error('Failed to change status. Error:', err);
+                        toast('Failed to change notebook status', 'error');
+                      });
+                    }}
                     onImport={(source) =>
                       importNotebook({ workspaceId, source }).catch((err) => {
                         console.error('Failed to import notebook. Error:', err);

@@ -9,26 +9,26 @@ import {
   WorkspaceRecord,
 } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
-import {
-  getNotebooks,
-  getNotebookInitialState,
-} from 'libs/services/src/notebooks';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { getDefined, identity } from '@decipad/utils';
 import assert from 'assert';
+import {
+  getNotebookInitialState,
+  getNotebooks,
+} from 'libs/services/src/notebooks';
 import { nanoid } from 'nanoid';
 import {
   isAuthenticatedAndAuthorized,
   loadUser,
   requireUser,
 } from '../authorization';
-import timestamp from '../utils/timestamp';
 import { accessTokenFor } from '../utils/accessTokenFor';
-import { duplicatePad } from './duplicatePad';
-import { setPadPublic } from './setPadPublic';
-import { importPad } from './importPad';
+import timestamp from '../utils/timestamp';
 import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
+import { duplicatePad } from './duplicatePad';
+import { importPad } from './importPad';
+import { setPadPublic } from './setPadPublic';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -47,6 +47,7 @@ const padResource = Resource({
     id: nanoid(),
     name: pad.name,
     icon: pad.icon,
+    status: pad.status,
     workspace_id: workspaceId,
     createdAt: timestamp(),
   }),
