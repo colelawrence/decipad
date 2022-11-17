@@ -24,6 +24,7 @@ const MAX_CELL_COUNT = 3000;
 
 interface LiveConnectionInnerProps {
   element: LiveConnectionElement;
+  deleted: boolean;
 }
 
 interface StoreResult {
@@ -33,7 +34,10 @@ interface StoreResult {
 
 const createStore = () => new WeakMap<LiveConnectionElement, StoreResult>();
 
-const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
+const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({
+  element,
+  deleted,
+}) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
   const editor = useTEditorRef();
   const computer = useComputer();
@@ -46,6 +50,7 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
     useFirstRowAsHeader: element.isFirstRowHeaderRow,
     columnTypeCoercions: element.columnTypeCoercions,
     maxCellCount: MAX_CELL_COUNT,
+    deleted,
   });
 
   const onChangeColumnType = useCallback(
@@ -151,13 +156,18 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({ element }) => {
 
 const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
-  const lc = <LiveConnectionInner element={element} />;
-
+  const [deleted, setDeleted] = useState(false);
+  const onceDeleted = useCallback(() => setDeleted(true), []);
   return (
-    <DraggableBlock blockKind="editorTable" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="editorTable"
+      element={element}
+      {...attributes}
+      onceDeleted={onceDeleted}
+    >
       <BlockErrorBoundary element={element}>
         {children}
-        {lc}
+        <LiveConnectionInner element={element} deleted={deleted} />
       </BlockErrorBoundary>
     </DraggableBlock>
   );

@@ -6,6 +6,7 @@ import {
   TableCellType,
 } from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
+import { useCache } from '@decipad/editor-utils';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 
 export interface LiveConnectionResult {
@@ -21,6 +22,7 @@ export interface LiveConnectionProps {
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   maxCellCount: number;
+  deleted: boolean;
 }
 
 export const useLiveConnection = (
@@ -33,15 +35,22 @@ export const useLiveConnection = (
     useFirstRowAsHeader,
     columnTypeCoercions,
     maxCellCount,
+    deleted,
   }: LiveConnectionProps
 ): LiveConnectionResult => {
-  const { error, result } = useLiveConnectionResponse({
+  const { error, result: liveConnectionResult } = useLiveConnectionResponse({
     url,
     options,
     source,
     useFirstRowAsHeader,
     columnTypeCoercions,
     maxCellCount,
+  });
+
+  const result = useCache({
+    blockId,
+    deleted,
+    value: liveConnectionResult,
   });
 
   useEffect(() => {

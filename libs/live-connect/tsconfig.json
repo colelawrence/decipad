@@ -11,6 +11,7 @@
     { "path": "../import" },
     { "path": "../react-contexts" },
     { "path": "../docsync" },
-    { "path": "../editor-language-elements" }
+    { "path": "../editor-language-elements" },
+    { "path": "../editor-utils" }
   ]
 }

@@ -43,6 +43,7 @@ import {
   useMergedRef,
 } from '@decipad/ui';
 import { nanoid } from 'nanoid';
+import { noop } from 'lodash';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
@@ -51,6 +52,7 @@ type DraggableBlockProps = {
   readonly element: MyElement;
   readonly children: ReactNode;
   readonly [key: string]: unknown; // For organisms.DraggableBlock
+  readonly onceDeleted?: () => void;
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
   'blockKind' | 'disableDrag' | 'onDelete'
@@ -95,6 +97,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       children,
       element,
       onDelete: parentOnDelete,
+      onceDeleted = noop,
       accept,
       getAxis,
       onDrop,
@@ -127,7 +130,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const onDelete = useCallback(() => {
       setDeleted(true);
       defaultOnDelete(editor, element, parentOnDelete);
-    }, [parentOnDelete, editor, element]);
+      onceDeleted();
+    }, [editor, element, parentOnDelete, onceDeleted]);
 
     const onDuplicate = useCallback(() => {
       const path = findNodePath(editor, element);
