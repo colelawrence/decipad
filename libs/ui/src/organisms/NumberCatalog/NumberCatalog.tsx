@@ -38,7 +38,18 @@ export const NumberCatalog = ({
       ]}
     >
       <div css={menuStyles}>
-        <div css={gridHeaderNumberCatStyles} onClick={handleCollapsedClick}>
+        <div
+          css={[
+            gridHeaderNumberCatStyles,
+            collapsed
+              ? css({
+                  borderBottomLeftRadius: borderRadius,
+                  borderBottomRightRadius: borderRadius,
+                })
+              : null,
+          ]}
+          onClick={handleCollapsedClick}
+        >
           <div css={menuHeaderStyles}>
             <span css={css({ color: cssVar('normalTextColor') })}>Numbers</span>
             <span
@@ -91,7 +102,8 @@ const gridHeaderNumberCatStyles = css({
   display: 'grid',
   gridTemplateColumns: 'auto 32px',
   gridColumnGap: '16px',
-  borderRadius,
+  borderTopLeftRadius: borderRadius,
+  borderTopRightRadius: borderRadius,
   backgroundColor: cssVar('tintedBackgroundColor'),
   cursor: 'pointer',
 });
