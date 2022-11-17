@@ -1,6 +1,7 @@
 import {
   alwaysWritableElementTypes,
   ELEMENT_PARAGRAPH,
+  MyEditor,
   MyElement,
   MyReactEditor,
   useTEditorRef,
@@ -11,6 +12,7 @@ import {
   focusEditor,
   getEndPoint,
   getNextNode,
+  getNode,
   getNodeString,
   getStartPoint,
   hasNode,
@@ -160,40 +162,10 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       select(editor, path);
     }, [editor, element]);
 
-    const onPlus = useCallback(() => {
-      const value = getNodeString(element);
-      const isParagraph = element.type === ELEMENT_PARAGRAPH;
-      const path = findNodePath(editor, element);
-
-      const createNewParagraph = value || !isParagraph;
-
-      if (!path) return;
-      if (value === '/') return;
-
-      if (createNewParagraph) {
-        const nextNode = getNextNode(editor, { at: path });
-        const [, nextPath] = nextNode || [];
-        if (!nextPath) return;
-
-        insertNodes(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_PARAGRAPH,
-            children: [{ text: '/' }],
-          },
-          {
-            at: nextPath,
-          }
-        );
-        select(editor, getEndPoint(editor, nextPath));
-        focusEditor(editor);
-      } else {
-        insertText(editor, '/', { at: path });
-        select(editor, getEndPoint(editor, path));
-        focusEditor(editor);
-      }
-    }, [editor, element]);
+    const onPlus = useCallback(
+      () => openSlashMenu(editor, element),
+      [editor, element]
+    );
 
     const onCopyHref = useCallback(() => {
       const url = new URL(window.location.toString());
@@ -251,3 +223,49 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     );
   }
 );
+
+const openSlashMenu = (editor: MyEditor, element: MyElement) => {
+  const selectedBlock = editor.selection?.anchor.path[0];
+  const selectedNode = selectedBlock ? getNode(editor, [selectedBlock]) : null;
+  const selectedLine = selectedNode ? getNodeString(selectedNode) : null;
+  const slashAlreadyCreated = selectedLine === '/' && selectedBlock;
+
+  if (slashAlreadyCreated) {
+    select(editor, getEndPoint(editor, [selectedBlock]));
+    focusEditor(editor);
+    return;
+  }
+
+  const path = findNodePath(editor, element);
+  const currentLine = getNodeString(element);
+  const isParagraph = element.type === ELEMENT_PARAGRAPH;
+
+  if (!path) return;
+  if (currentLine === '/') return;
+
+  const createNewParagraph = currentLine || !isParagraph;
+
+  if (createNewParagraph) {
+    const nextNode = getNextNode(editor, { at: path });
+    const [, nextPath] = nextNode || [];
+    if (!nextPath) return;
+
+    insertNodes(
+      editor,
+      {
+        id: nanoid(),
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: '/' }],
+      },
+      {
+        at: nextPath,
+      }
+    );
+    select(editor, getEndPoint(editor, nextPath));
+    focusEditor(editor);
+  } else {
+    insertText(editor, '/', { at: path });
+    select(editor, getEndPoint(editor, path));
+    focusEditor(editor);
+  }
+};
