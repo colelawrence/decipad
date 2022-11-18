@@ -25,6 +25,7 @@ Keyboard shortcuts make editing and writing faster.
 - For **Strike-through**, wrap any words between `~~` and `~~`
 - For **Highlight**, wrap words between `==` and `==`
 - For **Inline Code**, wrap words between `` ` `` and `` ` ``
-- To create a** Magic Number**, wrap a variable name between `%`
+- To create a **Magic Number**, wrap a variable name between `%`
+- You can mark **Spoilers** by wrapping text between `||` and `||`.
 - For **a Link**, use the notation `[link name](url)`
 - To add an **Image**, use the notation `![Alt text](https://media.giphy.com/media/krkrHAEodHgzP72rTI/giphy.gif)`

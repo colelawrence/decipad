@@ -63,6 +63,7 @@ export const theme: CssVariables = {
   tintedBackgroundColor: grey50.rgb,
   iconBackgroundColor: grey200.rgb,
   offColor: offWhite.rgb,
+  spoilerColor: offBlack.rgb,
 
   highlightColor: grey100.rgb,
   strongHighlightColor: grey200.rgb,

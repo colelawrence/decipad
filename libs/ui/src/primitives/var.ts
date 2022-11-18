@@ -87,6 +87,7 @@ export interface CssVariables {
   //
   readonly mutationAnimationColor: Property.Color;
   readonly offColor: Property.Color;
+  readonly spoilerColor: Property.Color;
 
   //
   // Background

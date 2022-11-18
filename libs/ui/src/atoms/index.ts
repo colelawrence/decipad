@@ -59,6 +59,7 @@ export { RemoveNodeButton } from './RemoveNodeButton/RemoveNodeButton';
 export { Slider } from './Slider/Slider';
 export { SmartRef } from './SmartRef/SmartRef';
 export { Spinner } from './Spinner/Spinner';
+export { Spoiler } from './Spoiler/Spoiler';
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { TableData } from './TableData/TableData';
 export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';

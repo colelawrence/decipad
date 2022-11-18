@@ -4,6 +4,7 @@ import {
   MARK_HIGHLIGHT,
   MARK_ITALIC,
   MARK_MAGICNUMBER,
+  MARK_SPOILER,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
   MyAutoformatRule,
@@ -81,6 +82,12 @@ export const autoformatMarks: MyAutoformatRule[] = [
     mode: 'mark',
     type: MARK_MAGICNUMBER,
     match: '%',
+    query: doesSelectionAllowTextStyling,
+  },
+  {
+    mode: 'mark',
+    type: MARK_SPOILER,
+    match: '||',
     query: doesSelectionAllowTextStyling,
   },
 ];

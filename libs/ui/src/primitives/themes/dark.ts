@@ -16,6 +16,7 @@ import {
   grey600,
   grey700,
   offBlack,
+  offWhite,
   orange100,
   orange300,
   orange500,
@@ -65,6 +66,7 @@ export const theme: CssVariables = {
   tintedBackgroundColor: grey700.rgb,
   iconBackgroundColor: grey500.rgb,
   offColor: grey600.rgb,
+  spoilerColor: offWhite.rgb,
 
   highlightColor: grey600.rgb,
   strongHighlightColor: grey500.rgb,

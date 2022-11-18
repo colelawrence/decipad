@@ -8,3 +8,4 @@ export {
 } from '@udecode/plate';
 
 export const MARK_MAGICNUMBER = 'magicnumberz';
+export const MARK_SPOILER = 'spoiler';
