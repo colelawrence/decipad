@@ -8,7 +8,11 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useNodeText } from '@decipad/editor-utils';
-import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
+import {
+  useComputer,
+  useEditorChangeState,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import {
   findNodePath,
@@ -102,6 +106,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     [editor, element]
   );
 
+  const isReadOnly = useIsEditorReadOnly();
+
   return (
     <DraggableBlock
       blockKind="codeLine"
@@ -115,9 +121,13 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
         placeholder="Distance = 60 km/h * Time"
         syntaxError={syntaxError}
         isEmpty={isEmpty}
-        onDragStartInlineResult={onDragStartInlineResult(editor, { element })}
-        onDragStartCell={onDragStartTableCellResult(editor)}
-        onClickedResult={onClickedResult}
+        onDragStartInlineResult={
+          isReadOnly ? undefined : onDragStartInlineResult(editor, { element })
+        }
+        onDragStartCell={
+          isReadOnly ? undefined : onDragStartTableCellResult(editor)
+        }
+        onClickedResult={isReadOnly ? undefined : onClickedResult}
         hasNextSibling={siblingCodeLines?.hasNext}
         hasPreviousSibling={siblingCodeLines?.hasPrevious}
       >

@@ -87,7 +87,6 @@ const inlineStyles = css({
   padding: '5px 0',
 
   userSelect: 'all',
-  cursor: 'grab',
 
   [smallScreenQuery]: {
     // When in mobile, the inline result, if there is one,  will occupy the space dedicated to
@@ -121,14 +120,6 @@ const placeholderStyles = css(codeStyles, {
 
 const inlineResultStyles = css(p14Regular, {
   ':empty': { display: 'none' },
-  ':hover': {
-    animation: `${antiwiggle} 0.5s ease-in-out`,
-  },
-
-  ':hover:after': {
-    backgroundColor: 'blue',
-    animation: `${wiggle} 0.5s ease-in-out`,
-  },
 
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -151,6 +142,19 @@ const expandedResultStyles = css(p14Medium, {
   display: 'grid',
   marginTop: '4px',
   overflowX: 'auto',
+});
+
+const canGrabStyles = css({
+  cursor: 'grab',
+
+  ':hover': {
+    animation: `${antiwiggle} 0.5s ease-in-out`,
+  },
+
+  ':hover:after': {
+    backgroundColor: 'blue',
+    animation: `${wiggle} 0.5s ease-in-out`,
+  },
 });
 
 const grabbingStyles = css({
@@ -215,7 +219,12 @@ export const CodeLine = ({
       )}
       {!isEmpty && (
         <div
-          css={[inlineStyles, grabbing && grabbingStyles]}
+          css={[
+            inlineStyles,
+            (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
+              canGrabStyles,
+            grabbing && grabbingStyles,
+          ]}
           contentEditable={false}
           draggable
           onDragStart={(e) => {

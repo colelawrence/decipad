@@ -7,6 +7,7 @@ import {
   EditorReadOnlyContext,
   useChecklist,
 } from '@decipad/react-contexts';
+import { useWindowListener } from '@decipad/react-utils';
 import {
   EditorPlaceholder,
   LoadingFilter,
@@ -72,6 +73,18 @@ export const Editor = (props: EditorProps) => {
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
   const { onRefChange } = useAutoAnimate();
   const { checklist, hideChecklist } = useChecklist();
+
+  // When in read-mode, disallow any kind of drag & drop.
+  useWindowListener(
+    'dragstart',
+    (e) => {
+      if (readOnly) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    true
+  );
 
   if (!loaded || !editor) {
     return <EditorPlaceholder />;
