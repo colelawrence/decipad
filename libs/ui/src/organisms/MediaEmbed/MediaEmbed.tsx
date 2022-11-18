@@ -72,7 +72,7 @@ export const MediaEmbed: Component = ({
 
   return (
     <ElementPopover
-      content={<FloatingMedia pluginKey={pluginKey} />}
+      content={!readOnly && <FloatingMedia pluginKey={pluginKey} />}
       floatingOptions={mediaFloatingOptions}
     >
       <Media.Root css={rootStyles} {...(props as any)}>

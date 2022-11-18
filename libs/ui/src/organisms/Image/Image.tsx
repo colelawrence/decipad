@@ -87,7 +87,7 @@ export const Image: ImageComponent = ({
 
   return (
     <ElementPopover
-      content={<FloatingMedia pluginKey={pluginKey} />}
+      content={!readOnly && <FloatingMedia pluginKey={pluginKey} />}
       floatingOptions={mediaFloatingOptions}
     >
       <Media.Root {...(props as any)}>
