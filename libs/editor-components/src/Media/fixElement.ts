@@ -7,8 +7,8 @@ const notDeleted = (element: DrawElementDescendant): boolean =>
 
 // undoes Slate fixes (converts elements back to Excalidraw form)
 const unfixElement = (
-  element: DrawElementDescendant
-): DrawElementDescendant => {
+  element: Partial<DrawElementDescendant>
+): ExcalidrawDrawElement => {
   // eslint-disable-next-line no-prototype-builtins
   if (element.hasOwnProperty('__text')) {
     const { __text: text, ...rest } = element;
@@ -22,7 +22,7 @@ const unfixElement = (
 
 export const unfixElements = (
   elements: Readonly<DrawElements>
-): DrawElements => {
+): ExcalidrawDrawElement[] => {
   return elements.filter(notDeleted).map(unfixElement);
 };
 
