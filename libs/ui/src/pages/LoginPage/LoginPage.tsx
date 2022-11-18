@@ -16,19 +16,18 @@ const outerBorderStyles = css({
 
 const outerWrapperStyles = css({
   display: 'grid',
-  justifyContent: 'center',
   justifyItems: 'center',
   alignContent: 'center',
+
+  padding: '16px',
 });
 
 const wrapperStyles = css({
-  display: 'grid',
-  width: '440px',
-  gridTemplateColumns: 'min(400px, 100%)',
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  maxWidth: '440px',
 
-  justifyContent: 'center',
-  justifyItems: 'center',
-  alignContent: 'center',
   gridGap: '12px',
 
   padding: '24px 12px',

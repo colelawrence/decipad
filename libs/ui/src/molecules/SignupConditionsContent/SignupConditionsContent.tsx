@@ -4,8 +4,11 @@ import { cssVar, p12Regular } from '../../primitives';
 
 const conditionLinksWrapperStyles = css(p12Regular, {
   marginTop: '10px',
+  textAlign: 'center',
   fontSize: '75%',
   color: cssVar('weakerTextColor'),
+
+  lineHeight: 1.36,
 });
 
 const linkStyles = css({

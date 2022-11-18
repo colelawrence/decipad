@@ -35,6 +35,7 @@ const headingStyles = css(
   setCssVar('currentTextColor', cssVar('strongTextColor')),
   {
     paddingBottom: '6px',
+    textAlign: 'center',
   }
 );
 
