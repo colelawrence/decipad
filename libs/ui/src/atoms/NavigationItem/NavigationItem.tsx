@@ -20,6 +20,9 @@ const styles = css(p14Regular, {
   alignItems: 'center',
   columnGap: '4px',
 
+  margin: '0 8px',
+  width: 'calc(100% - 16px)',
+
   clipPath: 'inset(0 -8px 0 -8px round 8px)',
   ':hover, :focus': activeStyles,
 });

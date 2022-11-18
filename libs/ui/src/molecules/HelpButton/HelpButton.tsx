@@ -1,7 +1,13 @@
 import { css } from '@emotion/react';
-import { QuestionMark } from '../../icons';
-import { cssVar, p13Medium } from '../../primitives';
 import { Tooltip } from '../../atoms';
+import { QuestionMark } from '../../icons';
+import {
+  cssVar,
+  offBlack,
+  p13Medium,
+  transparency,
+  weakOpacity,
+} from '../../primitives';
 
 const styles = css(p13Medium, {
   boxShadow: `0px 2px 24px -4px rgba(36, 36, 41, 0.06)`,
@@ -22,9 +28,10 @@ const innerStyles = css({
   borderRadius: '6px',
   height: '32px',
   width: '32px',
+  backgroundColor: cssVar('highlightColor'),
 
   'button:hover > &': {
-    backgroundColor: cssVar('highlightColor'),
+    boxShadow: `inset 0 0 0 1px ${transparency(offBlack, weakOpacity).rgba}`,
   },
 
   '> svg': {
