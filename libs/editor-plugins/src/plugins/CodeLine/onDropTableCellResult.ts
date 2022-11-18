@@ -9,6 +9,7 @@ import React, { ComponentProps } from 'react';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
 import {
+  dndStore,
   getBlockAbove,
   insertNodes,
   isElementEmpty,
@@ -27,6 +28,7 @@ export const onDropTableCellResult =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();
 

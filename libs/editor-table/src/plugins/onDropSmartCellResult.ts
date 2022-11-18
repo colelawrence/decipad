@@ -10,6 +10,7 @@ import {
 } from '@decipad/editor-types';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import {
+  dndStore,
   getBlockAbove,
   insertNodes,
   isElementEmpty,
@@ -26,6 +27,7 @@ export const onDropSmartCellResult =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();
 

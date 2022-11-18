@@ -7,6 +7,7 @@ import {
 } from '@decipad/editor-types';
 import React from 'react';
 import {
+  dndStore,
   findNode,
   focusEditor,
   getBlockAbove,
@@ -32,6 +33,7 @@ export const onDropInlineResult =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();
 

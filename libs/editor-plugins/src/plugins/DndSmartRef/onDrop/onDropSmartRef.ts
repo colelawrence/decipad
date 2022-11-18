@@ -12,6 +12,7 @@ import {
   selectEventRange,
 } from '@decipad/editor-utils';
 import {
+  dndStore,
   focusEditor,
   getBlockAbove,
   getNodeString,
@@ -29,6 +30,7 @@ export const onDropSmartRef =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();
 
