@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
 import { FC, MouseEvent, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Button, Dot, Toggle, Tooltip } from '../../atoms';
+import { Button, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
 import {
   black,
@@ -173,11 +173,9 @@ export const NotebookPublishingPopUp = ({
     >
       {isPublished ? (
         hasUnpublishedChanges ? (
-          <Dot>
-            <Button type="primaryBrand" {...buttonProps}>
-              Republish
-            </Button>
-          </Dot>
+          <Button type="primaryBrand" {...buttonProps}>
+            Republish
+          </Button>
         ) : (
           <Button type="primaryBrand" {...buttonProps}>
             Published
