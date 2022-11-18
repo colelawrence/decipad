@@ -1,11 +1,12 @@
 import { nanoid } from 'nanoid';
 import { AnyElement, Text } from '@decipad/editor-types';
 import { AnyObject, isText } from '@udecode/plate';
-import produce, { Draft } from 'immer';
+import { Draft } from 'immer';
 import { Computer } from '@decipad/computer';
 import { Element } from 'slate';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 import { isElement } from './isElement';
+import { cloneDeep } from 'lodash';
 
 type WithId = { id: string };
 
@@ -29,21 +30,21 @@ export function clone<T extends AnyElement | Text>(
     return el;
   }
   if (isElement(el)) {
-    return produce(el, (e) => {
-      e.children = deduplicateVarNameInBlock(
-        computer,
-        deduplicateId(e)
-      ).children;
-      if (Array.isArray(e.children)) {
-        const children = new Array(e.children.length);
-        let i = -1;
-        for (const c of e.children) {
-          i += 1;
-          children[i] = clone(computer, c);
-        }
-        e.children = children;
+    let clonedEl = cloneDeep(el);
+    clonedEl.children = deduplicateVarNameInBlock(
+      computer,
+      deduplicateId(clonedEl)
+    ).children;
+    if (Array.isArray(clonedEl.children)) {
+      const children = new Array(clonedEl.children.length);
+      let i = -1;
+      for (const c of clonedEl.children) {
+        i += 1;
+        children[i] = clone(computer, c);
       }
-    });
+      clonedEl.children = children;
+    }
+    return clonedEl;
   }
 
   return el;
