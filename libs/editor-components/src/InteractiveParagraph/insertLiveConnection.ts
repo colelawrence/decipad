@@ -8,7 +8,11 @@ import {
   MyEditor,
   ParagraphElement,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
+import {
+  getNotebook,
+  getURLComponents,
+  requirePathBelowBlock,
+} from '@decipad/editor-utils';
 import { tryImport } from '@decipad/import';
 import { getDefined, noop, timeout } from '@decipad/utils';
 import { insertNodes, isCollapsed, withoutNormalizing } from '@udecode/plate';
@@ -28,11 +32,25 @@ export interface InsertLiveConnectionProps {
   identifyIslands?: boolean;
 }
 
-const justInsertLiveData = ({
+const justInsertLiveData = async ({
   editor,
   source,
   url,
 }: InsertLiveConnectionProps) => {
+  if (source === 'decipad' && url) {
+    const { docId } = getURLComponents(url);
+    const { hasAccess, exists, isPublic } = await getNotebook(docId);
+    const error = !exists
+      ? 'Notebook does not exist'
+      : !hasAccess
+      ? "You don't have access to this notebook"
+      : !isPublic
+      ? 'You can only create live connections to public notebooks'
+      : undefined;
+    if (error) {
+      throw new Error(error);
+    }
+  }
   const selection = getDefined(editor.selection);
   const liveConnEl: LiveConnectionElement = {
     id: nanoid(),

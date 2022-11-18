@@ -18,6 +18,7 @@
     { "path": "../format" },
     { "path": "../fraction" },
     { "path": "../parse" },
-    { "path": "../docsync" }
+    { "path": "../docsync" },
+    { "path": "../toast" }
   ]
 }

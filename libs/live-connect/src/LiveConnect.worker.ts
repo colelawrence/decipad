@@ -2,6 +2,7 @@
 import './utils/workerPolyfills';
 import { ImportResult, tryImport } from '@decipad/import';
 import { Computer } from '@decipad/computer';
+import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
@@ -158,18 +159,37 @@ const onError =
     );
     rpc.call('notify', {
       subscriptionId,
-      error: (err as Error).message,
+      error: err.message,
     });
+  };
+
+const deferringError =
+  (subscriptionId: string, params: SubscribeParams) => (message: string) => {
+    setTimeout(() => {
+      onError(subscriptionId, params)(new Error(message));
+    }, 0);
   };
 
 const subscribeInternal = async (
   subscriptionId: string,
   subscription: Subscription
 ) => {
+  const deferError = deferringError(subscriptionId, subscription.params);
   subscriptions.set(subscriptionId, subscription);
   const { params } = subscription;
   if (params.source === 'decipad') {
     const { startNotebook } = await import('./notebook');
+    const { docId } = getURLComponents(subscription.params.url);
+    const { hasAccess, exists } = await getNotebook(docId);
+    const error = !exists
+      ? 'Notebook does not exist'
+      : !hasAccess
+      ? "You don't have access to this notebook"
+      : undefined;
+    if (error) {
+      deferError(error);
+      return;
+    }
     await startNotebook(
       subscription,
       observe(subscriptionId),

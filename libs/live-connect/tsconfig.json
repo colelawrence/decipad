@@ -12,6 +12,7 @@
     { "path": "../react-contexts" },
     { "path": "../docsync" },
     { "path": "../editor-language-elements" },
+    { "path": "../fetch" },
     { "path": "../editor-utils" }
   ]
 }

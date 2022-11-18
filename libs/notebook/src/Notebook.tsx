@@ -159,15 +159,19 @@ const InsideNotebookState = ({
     const importThing = qs.get('import');
     if (loaded && computer && editor && importThing) {
       (async () => {
-        await insertLiveConnection({
-          computer,
-          editor,
-          source: 'gsheets',
-          url: importThing,
-        });
+        try {
+          await insertLiveConnection({
+            computer,
+            editor,
+            source: 'gsheets',
+            url: importThing,
+          });
+        } catch (err) {
+          toast((err as Error).message, 'error');
+        }
       })();
     }
-  }, [computer, editor, loaded, qs]);
+  }, [computer, editor, loaded, qs, toast]);
 
   if (editor) {
     return (

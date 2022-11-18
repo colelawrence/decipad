@@ -11,6 +11,7 @@
     { "path": "../feature-flags" },
     { "path": "../react-contexts" },
     { "path": "../format" },
-    { "path": "../parse" }
+    { "path": "../parse" },
+    { "path": "../fetch" }
   ]
 }

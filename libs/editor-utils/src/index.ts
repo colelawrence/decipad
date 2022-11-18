@@ -24,6 +24,8 @@ export * from './assertElementType';
 export * from './getVariableRanges';
 export * from './getCodeLineSource';
 export * from './getPointSafe';
+export * from './getNotebook';
+export * from './getUrlComponents';
 export * from './magicNumberId';
 export * from './matchNodeType';
 export * from './mutateText';

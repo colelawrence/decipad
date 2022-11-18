@@ -33,6 +33,7 @@ get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 get /api/pads/:padid/attachments/:attachmentid
 any /api/pads/:padid/export
+get /api/pads/:padid
 post /api/discord
 get /api/ws
 get /api/import/url
