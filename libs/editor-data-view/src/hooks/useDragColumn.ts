@@ -6,11 +6,16 @@ interface CollectedProps {
   isDragging: boolean;
 }
 
+export type ColumnType = 'TableColumn' | 'DataViewColumn';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useDragColumn = (_editor: TEditor, id: string) => {
+export const useDragColumn = (
+  _editor: TEditor,
+  id: string,
+  columnType: ColumnType = 'TableColumn'
+) => {
   return useDrag<DragColumnItem, void, CollectedProps>(
     () => ({
-      type: 'column',
+      type: columnType,
       item() {
         return { id };
       },

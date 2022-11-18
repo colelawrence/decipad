@@ -1,6 +1,7 @@
 import { MyReactEditor } from '@decipad/editor-types';
 import { DropTargetMonitor } from 'react-dnd';
 import { TElement, toDOMNode } from '@udecode/plate';
+import { MutableRefObject } from 'react';
 import { ColumnDndDirection, DragColumnItem } from '../types';
 
 export interface GetHoverDirectionOptions {
@@ -8,7 +9,9 @@ export interface GetHoverDirectionOptions {
 
   monitor: DropTargetMonitor;
 
-  element: TElement;
+  element?: TElement;
+
+  ref?: MutableRefObject<HTMLTableCellElement | null>;
 }
 
 /**
@@ -17,18 +20,21 @@ export interface GetHoverDirectionOptions {
  */
 export const getHoverDirection = (
   editor: MyReactEditor,
-  { monitor, element, dragItem }: GetHoverDirectionOptions
+  { monitor, element, dragItem, ref }: GetHoverDirectionOptions
 ): ColumnDndDirection => {
   if (dragItem) {
     // Don't replace items with themselves
-    if (dragItem.id === element.id) return;
+    if (element && dragItem.id === element.id) return;
   }
 
-  const node = toDOMNode(editor, element);
-  if (!node) return;
+  const node = element && toDOMNode(editor, element);
+  if (!node && !ref) return;
 
   // Determine rectangle on screen
-  const hoverBoundingRect = node.getBoundingClientRect();
+  const hoverBoundingRect = node
+    ? node.getBoundingClientRect()
+    : ref && ref.current?.getBoundingClientRect();
+  if (!hoverBoundingRect) return;
 
   // Get middle
   const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
@@ -38,6 +44,7 @@ export const getHoverDirection = (
   if (!clientOffset) return;
 
   const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+
   if (hoverClientX < hoverMiddleX) {
     return 'left';
   }

@@ -18,6 +18,7 @@ export const createDataViewPlugin = createPluginFactory({
     {
       key: ELEMENT_DATA_VIEW_TR,
       isElement: true,
+      isVoid: false,
       component: DataViewColumnHeaderRow,
     },
     {

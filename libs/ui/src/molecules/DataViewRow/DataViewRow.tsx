@@ -13,13 +13,13 @@ interface TableRowProps {
 const dataViewRowStyles = css({
   borderBottom: `1px solid ${cssVar('strongHighlightColor')}`,
 
-  '&:last-child': {
+  '&:last-of-type': {
     borderBottomColor: cssVar('normalTextColor'),
   },
 });
 
 const dataViewRowFullWidthStyles = css({
-  '& > *:first-child': {
+  '& > *:first-of-type': {
     fontWeight: '700',
   },
 

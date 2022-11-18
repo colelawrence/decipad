@@ -97,15 +97,15 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
       {table.map((row, index) => {
         return (
           <DataViewRow
-            key={index}
+            key={`${table.indexOf(row)}-${index}}`}
             isFullWidth={row.length === maxCols}
             isBeforeFullWidthRow={
               table[index + 1] && table[index + 1].length === maxCols
             }
           >
-            {row.map((element) => (
+            {row.map((element, elementIndex) => (
               <DataViewDataGroupElement
-                key={index}
+                key={`${table.indexOf(row)}-${index}-${elementIndex}}`}
                 index={index}
                 tableName={tableName}
                 element={element}

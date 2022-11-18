@@ -19,7 +19,6 @@ const dropLineTableStyles = css({
 });
 
 const dropLineVerticalStyles = css({
-  position: 'absolute',
   height: '100%',
   left: '0',
   top: '0',
@@ -37,7 +36,7 @@ export const DropLine = ({
 }: DropLineProps = {}): ReturnType<React.FC> => {
   if (['block', 'table'].includes(variant)) {
     return (
-      <hr
+      <div
         contentEditable={false}
         role="presentation"
         aria-label="Drop Line"
