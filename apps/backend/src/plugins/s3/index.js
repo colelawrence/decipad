@@ -36,11 +36,13 @@ function pkg({ arc, cloudformation, stage='staging', inventory, createFunction }
 }
 
 function start({ arc, inventory, invokeFunction, services }) {
+  console.log('starting s3rver...', options)
   s3rver = new S3rver(options);
   return s3rver.run();
 }
 
 function end({ arc, inventory, services }, callback) {
+  console.log('stopping s3rver...')
   if (!s3rver) {
     return callback();
   }

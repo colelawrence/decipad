@@ -528,8 +528,9 @@ export interface DynamoDbQuery {
   ExclusiveStartKey?: string;
   FilterExpression?: string;
   Limit?: number;
-  Select?: 'COUNT';
   ConsistentRead?: boolean;
+  Select?: 'COUNT' | 'SPECIFIC_ATTRIBUTES';
+  ProjectionExpression?: string;
 }
 
 /* Versioned table records */
@@ -551,7 +552,8 @@ export interface DocSyncUpdateRecord extends TableRecordBase {
 export interface DocSyncSnapshotRecord extends TableRecordBase {
   docsync_id: ID;
   snapshotName: string;
-  data: string;
+  data?: string;
+  data_file_path?: string;
   updatedAt: number;
   version: string;
 }

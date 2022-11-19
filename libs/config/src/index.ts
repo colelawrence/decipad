@@ -94,11 +94,31 @@ function env(name: SupportedEnvKey): string {
   }
 }
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+const defaultPort = () => (process.env.NODE_ENV === 'production' ? 443 : 80);
+
+const awsEndpoint = (_url: string) => {
+  let url = _url;
+  if (!url.startsWith('http')) {
+    url =
+      (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + url;
+  }
+  const parsed = new URL(url);
+  const href = parsed.href.endsWith('/')
+    ? parsed.href.slice(0, -1)
+    : parsed.href;
+  const port = Number(parsed.port);
+  return {
+    host: parsed.host,
+    hostname: parsed.hostname,
+    href,
+    protocol: parsed.protocol,
+    port: Number.isNaN(port) ? defaultPort() : port,
+  };
+};
 
 export function s3() {
   return {
-    endpoint: env('DECI_S3_ENDPOINT'),
+    endpoint: awsEndpoint(env('DECI_S3_ENDPOINT')),
     accessKeyId: env('DECI_S3_ACCESS_KEY_ID'),
     secretAccessKey: env('DECI_S3_SECRET_ACCESS_KEY'),
     buckets: {

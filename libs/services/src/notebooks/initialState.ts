@@ -2,6 +2,7 @@ import tables, { allPages } from '@decipad/tables';
 import { Buffer } from 'buffer';
 import { mergeUpdates } from 'yjs';
 import { getDefined } from '@decipad/utils';
+import { fetchSnapshotFromFile } from './fetchSnapshotFromFile';
 
 const fetchUpdates = async (padId: string): Promise<Uint8Array[]> => {
   const data = await tables();
@@ -35,8 +36,15 @@ const fetchSnapshot = async (
       ':n': getDefined(version),
     },
   })) {
-    if (snapshot && snapshot.data) {
-      updates.push(Buffer.from(snapshot.data, 'base64'));
+    if (snapshot) {
+      if (snapshot.data) {
+        updates.push(Buffer.from(snapshot.data, 'base64'));
+      } else if (snapshot.data_file_path) {
+        const snap = await fetchSnapshotFromFile(snapshot.data_file_path);
+        if (snap) {
+          updates.push(snap);
+        }
+      }
     }
   }
   return updates;

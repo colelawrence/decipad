@@ -3,7 +3,7 @@ import { applyUpdate, Doc, encodeStateVector, mergeUpdates } from 'yjs';
 
 export const snapshot = async (
   notebookId: string
-): Promise<{ data: string; version: string }> => {
+): Promise<{ data: Buffer; version: string }> => {
   const data = await tables();
 
   const updates: Buffer[] = [];
@@ -25,7 +25,7 @@ export const snapshot = async (
   applyUpdate(doc, mergedUpdates);
 
   return {
-    data: Buffer.from(mergedUpdates).toString('base64'),
+    data: Buffer.from(mergedUpdates),
     version: Buffer.from(encodeStateVector(doc)).toString('hex'),
   };
 };

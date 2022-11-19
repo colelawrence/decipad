@@ -5,6 +5,10 @@ import { snapshot } from '@decipad/services/notebooks';
 import Boom from '@hapi/boom';
 import timestamp from '../utils/timestamp';
 import { isAuthenticatedAndAuthorized } from '../authorization';
+import { storeFileData } from './fileDataStore';
+import { snapshotFilePath } from './snapshotFilePath';
+
+const MAX_DATA_SIZE_BYTES = 100_000;
 
 export const createOrUpdateSnapshot = async (
   _: unknown,
@@ -34,12 +38,20 @@ export const createOrUpdateSnapshot = async (
       updatedAt: timestamp(),
       docsync_id: notebookId,
       snapshotName,
-      ...snapshotData,
+      version: snapshotData.version,
     };
   } else {
-    existingSnapshot.data = snapshotData.data;
+    delete existingSnapshot.data;
     existingSnapshot.version = snapshotData.version;
     existingSnapshot.updatedAt = timestamp();
+  }
+
+  if (snapshotData.data.length > MAX_DATA_SIZE_BYTES) {
+    const path = snapshotFilePath(notebookId, snapshotName);
+    await storeFileData(path, snapshotData.data);
+    existingSnapshot.data_file_path = path;
+  } else {
+    existingSnapshot.data = snapshotData.data.toString('base64');
   }
 
   await data.docsyncsnapshots.put(existingSnapshot);
