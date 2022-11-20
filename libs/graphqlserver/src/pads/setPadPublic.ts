@@ -20,7 +20,10 @@ export const setPadPublic = async (
   await data.pads.put(pad);
 
   const event = isPublic ? 'notebook published' : 'notebook unpublished';
-  await track({ userId: user.id, event }, context);
+  await track(
+    { userId: user.id, event, properties: { notebookdId: id } },
+    context
+  );
 
   return pad;
 };
