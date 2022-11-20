@@ -1,16 +1,10 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar } from '../../primitives';
 import { ColorStatusProps, statusColors } from './ColorStatus';
 
 export const ColorStatusCircle = ({
   name = 'No Status',
-  variantStyles = false,
 }: ColorStatusProps): ReturnType<FC> => {
-  const strokeColor = variantStyles
-    ? cssVar('backgroundColor')
-    : statusColors[name].rgb;
-  const strokeWidth = variantStyles ? '2px' : '1.1px';
   return (
     <span
       css={css({
@@ -18,9 +12,9 @@ export const ColorStatusCircle = ({
         width: '12px',
         borderRadius: 999999,
         backgroundColor: statusColors[name].rgb,
-        border: `${strokeWidth} solid ${strokeColor}`,
+        border: `1.1px solid ${statusColors[name].rgb}`,
         '> svg > path': {
-          stroke: `${strokeColor}`,
+          stroke: `${statusColors[name].rgb}`,
         },
         '> svg': {
           height: '100%',

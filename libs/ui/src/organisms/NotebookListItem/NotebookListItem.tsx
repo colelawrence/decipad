@@ -2,8 +2,11 @@ import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useState } from 'react';
-import { ColorStatusCircle, IconButton } from '../../atoms';
-import { TColorStatus } from '../../atoms/ColorStatus/ColorStatus';
+import { Dot, IconButton } from '../../atoms';
+import {
+  statusColors,
+  TColorStatus,
+} from '../../atoms/ColorStatus/ColorStatus';
 import * as icons from '../../icons';
 import { NotebookListItemActions } from '../../molecules';
 import {
@@ -142,24 +145,13 @@ export const NotebookListItem = ({
   return (
     <div css={wrapperStyles}>
       <Anchor href={href} css={anchorStyles}>
-        <div
-          css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
-        >
+        <Dot left={26} top={12} color={statusColors[feStatus]}>
           <div
-            css={css({
-              position: 'absolute',
-              display: 'inline-flex',
-              top: '11px',
-              transform: 'translateX(15px)',
-            })}
+            css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
           >
-            {feStatus !== 'No Status' ? (
-              <ColorStatusCircle name={feStatus} variantStyles={true} />
-            ) : null}
+            <Icon />
           </div>
-
-          <Icon />
-        </div>
+        </Dot>
         <strong css={[nameStyles, name || noNameNameStyles]}>
           {name || 'My notebook title'}
         </strong>
