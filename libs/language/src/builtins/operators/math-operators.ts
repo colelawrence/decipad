@@ -409,6 +409,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     aliasFor: '*',
     operatorKind: 'prefix',
   },
+  for: {
+    aliasFor: '*',
+    operatorKind: 'prefix',
+  },
   '/': {
     argCount: 2,
     fn: ([a, b]) => getInstanceof(a, Fraction).div(b),

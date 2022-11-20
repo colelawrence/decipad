@@ -14,6 +14,7 @@ const initialReservedWords = new Set([
   'categories',
   'true',
   'false',
+  'for',
   'if',
   'then',
   'else',

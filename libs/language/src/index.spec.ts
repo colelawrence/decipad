@@ -2264,3 +2264,18 @@ describe('tiered function', () => {
     `);
   });
 });
+
+describe('grammar extensions', () => {
+  it('for is an alias for *', async () => {
+    const tiered = `
+    Cost = $100 per month
+    Yearly = Cost for 1 year
+    `;
+    expect(await runCode(tiered)).toMatchInlineSnapshot(`
+      Object {
+        "type": $,
+        "value": Fraction(1200),
+      }
+    `);
+  });
+});
