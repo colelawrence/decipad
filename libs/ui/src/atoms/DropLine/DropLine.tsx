@@ -4,7 +4,7 @@ import { dropLineWidth } from '../../styles/drop-line';
 
 const dropLineCommonStyles = css({
   backgroundColor: cssVar('droplineColor'),
-  zIndex: 2,
+  zIndex: 1,
 });
 
 const dropLineBlockStyles = css({
@@ -18,12 +18,16 @@ const dropLineTableStyles = css({
   borderRadius: 'unset',
 });
 
-const dropLineVerticalStyles = css({
-  height: '100%',
-  left: '0',
-  top: '0',
-  width: `${dropLineWidth}px`,
-});
+const dropLineVerticalStyles = ({ variant }: DropLineProps = {}) =>
+  css([
+    variant !== 'table' ? { position: 'absolute' } : null,
+    {
+      height: '100%',
+      left: '0',
+      top: '0',
+      width: `${dropLineWidth}px`,
+    },
+  ]);
 
 export type DropLineProps =
   | undefined
@@ -53,7 +57,7 @@ export const DropLine = ({
       contentEditable={false}
       role="presentation"
       aria-label="Drop"
-      css={[dropLineCommonStyles, dropLineVerticalStyles]}
+      css={[dropLineCommonStyles, dropLineVerticalStyles({ variant })]}
     >
       &nbsp;
     </span>

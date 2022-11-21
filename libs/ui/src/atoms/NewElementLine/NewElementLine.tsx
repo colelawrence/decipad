@@ -7,7 +7,7 @@ const parentWrapper = css({
   width: '100%',
   height: 0,
   top: 0,
-  zIndex: 2,
+  zIndex: 1,
 });
 
 const tableStyles = css({
@@ -39,7 +39,7 @@ const addElementLineWrapper = css({
 const addElementLine = css({
   width: '100%',
   height: 3,
-  backgroundColor: cssVar('tableSelectionBackgroundColor'),
+  backgroundColor: cssVar('tableSelectionBackgroundColor'), // droplineColor too dark
 });
 
 interface NewElementLineProps
