@@ -30,7 +30,6 @@ export const Paragraph: PlateComponent = ({
   if (!element) {
     throw new Error('Paragraph is not a leaf');
   }
-
   const readOnly = useIsEditorReadOnly();
 
   // Performance improvement as opposed to use something like `useTEditorState()`.

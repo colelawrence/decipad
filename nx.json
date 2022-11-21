@@ -122,6 +122,9 @@
     "editor": {
       "tags": []
     },
+    "editor-tests": {
+      "tags": []
+    },
     "editor-components": {
       "tags": []
     },

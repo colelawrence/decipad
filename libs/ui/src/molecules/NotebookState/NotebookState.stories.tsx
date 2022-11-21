@@ -11,6 +11,7 @@ const args: ComponentProps<typeof NotebookState> = {
   readOnly: true,
   saved: true,
   isOffline: false,
+  authed: true,
 };
 
 export default {

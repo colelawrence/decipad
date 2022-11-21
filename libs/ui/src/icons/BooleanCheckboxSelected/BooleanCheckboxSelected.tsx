@@ -7,8 +7,8 @@ export const BooleanCheckboxSelected = (): ReturnType<React.FC> => (
     <path
       d="M4.5 7.75L7 10.25L11.5 5.75"
       stroke="#FFFFFF"
-      stroke-width="1.5"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
     />
   </svg>
 );

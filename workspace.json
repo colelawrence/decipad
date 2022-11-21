@@ -17,6 +17,7 @@
     "dynamodb-lock": "libs/dynamodb-lock",
     "e2e": "apps/e2e",
     "editor": "libs/editor",
+    "editor-tests": "libs/editor-tests",
     "editor-components": "libs/editor-components",
     "editor-language-elements": "libs/editor-language-elements",
     "editor-plugins": "libs/editor-plugins",

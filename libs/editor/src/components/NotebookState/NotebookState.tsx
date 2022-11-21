@@ -4,6 +4,7 @@ import { useTPlateEditorState } from '@decipad/editor-types';
 import { useIsOffline } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { NotebookState as UINotebookState } from '@decipad/ui';
+import { useSession } from 'next-auth/react';
 
 interface NotebookStateProps {
   isSavedRemotely: BehaviorSubject<boolean>;
@@ -14,6 +15,7 @@ const DEBOUNCE_TIME = 2000;
 
 export const NotebookState: FC<NotebookStateProps> = ({ isSavedRemotely }) => {
   const [saved, setSaved] = useState(true);
+  const session = useSession();
 
   useEffect(() => {
     const sub = isSavedRemotely
@@ -47,6 +49,7 @@ export const NotebookState: FC<NotebookStateProps> = ({ isSavedRemotely }) => {
       readOnly={readOnly}
       saved={saved}
       isOffline={isOffline}
+      authed={session.status === 'authenticated'}
     />
   );
 };

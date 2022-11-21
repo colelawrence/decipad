@@ -1,0 +1,54 @@
+import { MyEditor } from '@decipad/editor-types';
+import { Editor } from '@decipad/editor';
+import { FC } from 'react';
+import { BubbleEditor } from '@decipad/editor-components';
+import {
+  ComputerContextProvider,
+  EditorUserInteractionsProvider,
+} from '@decipad/react-contexts';
+import { Computer } from '@decipad/computer';
+import { NotebookStateProvider } from '@decipad/notebook-state';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { BehaviorSubject } from 'rxjs';
+import { SessionProvider } from 'next-auth/react';
+
+interface EditorStackProps {
+  notebookId: string;
+  editor: MyEditor;
+  computer: Computer;
+}
+
+export const EditorStack: FC<EditorStackProps> = ({
+  notebookId,
+  editor,
+  computer,
+}) => {
+  const remoteSaved = new BehaviorSubject<boolean>(false);
+  return (
+    <SessionProvider
+      session={{
+        user: {},
+        expires: new Date(Date.now() + 100000000).toISOString(),
+      }}
+    >
+      <DndProvider backend={HTML5Backend}>
+        <NotebookStateProvider>
+          <EditorUserInteractionsProvider>
+            <ComputerContextProvider computer={computer}>
+              <BubbleEditor>
+                <Editor
+                  notebookId={notebookId}
+                  editor={editor}
+                  loaded
+                  readOnly={false}
+                  isSavedRemotely={remoteSaved}
+                ></Editor>
+              </BubbleEditor>
+            </ComputerContextProvider>
+          </EditorUserInteractionsProvider>
+        </NotebookStateProvider>
+      </DndProvider>
+    </SessionProvider>
+  );
+};

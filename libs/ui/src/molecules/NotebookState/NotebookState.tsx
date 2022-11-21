@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { useSession } from 'next-auth/react';
 import { FC } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow, CurvedArrow } from '../../icons';
@@ -140,6 +139,7 @@ export interface NotebookStateProps {
   readOnly: boolean;
   saved: boolean;
   isOffline: boolean;
+  authed: boolean;
 }
 
 const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
@@ -192,8 +192,8 @@ export const NotebookState: FC<NotebookStateProps> = ({
   readOnly,
   saved,
   isOffline,
+  authed,
 }) => {
-  const session = useSession();
   const state = isOffline
     ? 'offline'
     : readOnly || !saved
@@ -205,8 +205,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
         wrapperStyles,
         hideOnPrint,
         {
-          right:
-            readOnly && session.status !== 'authenticated' ? '16px' : '64px',
+          right: readOnly && authed ? '16px' : '64px',
         },
       ]}
     >

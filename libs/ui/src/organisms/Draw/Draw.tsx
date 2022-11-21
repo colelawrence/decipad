@@ -78,7 +78,7 @@ const excalidrawContainerStyles = css({
   '.excalidraw.theme--dark': {
     '--theme-filter': 'invert(1) hue-rotate(180deg)',
     canvas: {
-      'mix-blend-mode': 'screen',
+      mixBlendMode: 'screen',
     },
   },
 });
