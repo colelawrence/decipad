@@ -4,13 +4,21 @@ import { render, screen } from '@testing-library/react';
 import { Heading2 } from './Heading2';
 
 it('renders the children', () => {
-  const { container } = render(<Heading2 Heading="h3">text</Heading2>);
+  const { container } = render(
+    <Heading2 id="1" Heading="h3">
+      text
+    </Heading2>
+  );
   expect(container).toHaveTextContent('text');
 });
 
 describe('when active', () => {
   it('has a different background', () => {
-    const { rerender } = render(<Heading2 Heading="h3">text</Heading2>);
+    const { rerender } = render(
+      <Heading2 id="1" Heading="h3">
+        text
+      </Heading2>
+    );
     const normalBoxShadow = findParentWithStyle(
       screen.getByText('text'),
       'boxShadow'
@@ -18,7 +26,9 @@ describe('when active', () => {
 
     rerender(
       <BlockIsActiveProvider>
-        <Heading2 Heading="h3">text</Heading2>
+        <Heading2 id="1" Heading="h3">
+          text
+        </Heading2>
       </BlockIsActiveProvider>
     );
     const activeBoxShadow = findParentWithStyle(

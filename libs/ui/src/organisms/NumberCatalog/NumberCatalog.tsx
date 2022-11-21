@@ -1,27 +1,71 @@
 import { SmartRefDragCallback } from '@decipad/editor-utils';
+import { useEditorStylesContext } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Chevron } from '../../icons';
-import { cssVar, p12Bold, smallestDesktop } from '../../primitives';
+import {
+  black,
+  boldOpacity,
+  p14Bold,
+  smallestDesktop,
+  strongOpacity,
+  transparency,
+  white,
+} from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
+import { AvailableSwatchColor, baseSwatches } from '../../utils';
+import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
+
+type NumberCatalogItemType = {
+  name: string;
+  blockId: string;
+  type: 'h2' | 'h3' | 'var';
+};
 
 interface NumberCatalogProps {
   onDragStart: SmartRefDragCallback;
-  names: { name: string; blockId: string }[];
+  items: NumberCatalogItemType[];
   alignment?: 'right' | 'left';
   startCollapsed?: boolean;
 }
 
 export const NumberCatalog = ({
   onDragStart,
-  names = [],
+  items = [],
   alignment = 'left',
   startCollapsed = true,
 }: NumberCatalogProps) => {
   const [collapsed, setCollapsed] = useState(startCollapsed);
+  const { color } = useEditorStylesContext();
 
-  if (!names.length) {
+  function getNumberCatalogItemComponent(
+    item: NumberCatalogItemType
+  ): ReactNode {
+    switch (item.type) {
+      case 'h2':
+        return (
+          <NumberCatalogHeading key={item.blockId} {...item} headingLevel={2} />
+        );
+
+      case 'h3':
+        return (
+          <NumberCatalogHeading key={item.blockId} {...item} headingLevel={3} />
+        );
+      case 'var':
+        return (
+          <NumberCatalogItem
+            key={item.blockId}
+            name={item.name}
+            color={color}
+            blockId={item.blockId}
+            onDragStart={onDragStart}
+          />
+        );
+    }
+  }
+
+  if (!items.length) {
     return null;
   }
 
@@ -37,7 +81,7 @@ export const NumberCatalog = ({
         alignment === 'left' ? css({ left: '32px' }) : css({ right: '-12px' }),
       ]}
     >
-      <div css={menuStyles}>
+      <div css={numberCatalogMenuStyles(color as AvailableSwatchColor)}>
         <div
           css={[
             gridHeaderNumberCatStyles,
@@ -51,17 +95,7 @@ export const NumberCatalog = ({
           onClick={handleCollapsedClick}
         >
           <div css={menuHeaderStyles}>
-            <span css={css({ color: cssVar('normalTextColor') })}>Numbers</span>
-            <span
-              css={css({
-                padding: '4px 6px',
-                background: cssVar('highlightColor'),
-                borderRadius: '4px',
-                marginLeft: '6px',
-              })}
-            >
-              {names.length}
-            </span>
+            <span css={numberFontStyles}>Numbers</span>
           </div>
           <div css={menuHeaderChevronStyles}>
             <Chevron type={collapsed ? 'expand' : 'collapse'} />
@@ -70,14 +104,7 @@ export const NumberCatalog = ({
         <div
           css={[menuBodyStyles, collapsed ? css({ display: 'none' }) : null]}
         >
-          {names.map(({ name, blockId }) => (
-            <NumberCatalogItem
-              key={blockId}
-              name={name}
-              blockId={blockId}
-              onDragStart={onDragStart}
-            />
-          ))}
+          {items.map((item) => getNumberCatalogItemComponent(item))}
         </div>
       </div>
     </div>
@@ -93,49 +120,49 @@ const floatyStyles = css({
   [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
     display: 'none',
   },
-  zIndex: 1000,
+  zIndex: 2,
 });
 
-const borderRadius = '12px';
+const borderRadius = '16px';
 
 const gridHeaderNumberCatStyles = css({
   display: 'grid',
   gridTemplateColumns: 'auto 32px',
   gridColumnGap: '16px',
-  borderTopLeftRadius: borderRadius,
-  borderTopRightRadius: borderRadius,
-  backgroundColor: cssVar('tintedBackgroundColor'),
-  cursor: 'pointer',
 });
 
-const menuStyles = css({
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
-  borderRadius,
-  width: '260px',
-  userSelect: 'none',
-});
+const numberCatalogMenuStyles = (color: AvailableSwatchColor) =>
+  css({
+    borderRadius,
+    backgroundColor: transparency(baseSwatches[color], 0.3).rgba,
+    padding: '8px',
+    width: '300px',
+    userSelect: 'none',
+  });
 
 const menuHeaderStyles = css({
-  ...p12Bold,
+  ...p14Bold,
   padding: '11px 15px 9px',
-  textTransform: 'uppercase',
   borderRadius,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
-  color: cssVar('weakerTextColor'),
 });
 
 const menuHeaderChevronStyles = css({
   padding: '14.5px 12px',
-  color: cssVar('weakerTextColor'),
+  color: transparency(black, boldOpacity).rgba,
+  mixBlendMode: 'overlay',
+});
+
+const numberFontStyles = css({
+  color: transparency(black, boldOpacity).rgba,
+  mixBlendMode: 'overlay',
 });
 
 const menuBodyStyles = css({
-  background: cssVar('backgroundColor'),
-  borderRadius,
-  borderTopLeftRadius: 0,
-  borderTopRightRadius: 0,
-  maxHeight: '50vh',
+  backgroundColor: transparency(white, strongOpacity).rgba,
+  borderRadius: '10px',
+  maxHeight: '54vh',
   minHeight: '40px',
   overflowY: 'auto',
   overflowX: 'hidden',

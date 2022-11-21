@@ -11,11 +11,11 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <Heading2 Heading="h3" {...props} />
+  <Heading2 id="1" Heading="h3" {...props} />
 );
 
 export const Active: Story<typeof args> = (props) => (
   <BlockIsActiveProvider>
-    <Heading2 Heading="h3" {...props} />
+    <Heading2 id="1" Heading="h3" {...props} />
   </BlockIsActiveProvider>
 );

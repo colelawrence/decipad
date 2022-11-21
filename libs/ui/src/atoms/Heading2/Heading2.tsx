@@ -17,14 +17,18 @@ const activeStyles = css({
 interface Heading2Props {
   readonly children: ReactNode;
   readonly Heading: 'h3';
+  readonly id: string;
 }
 
 export const Heading2 = ({
   children,
   Heading,
+  id,
 }: Heading2Props): ReturnType<React.FC> => {
   const isBlockActive = useIsBlockActive();
   return (
-    <Heading css={[styles, isBlockActive && activeStyles]}>{children}</Heading>
+    <Heading id={id} css={[styles, isBlockActive && activeStyles]}>
+      {children}
+    </Heading>
   );
 };

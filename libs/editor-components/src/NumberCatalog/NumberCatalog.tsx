@@ -1,50 +1,59 @@
 import { useTEditorRef } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { AutocompleteName } from '@decipad/language';
 import { useComputer } from '@decipad/react-contexts';
-import { delayValueTimeout } from '@decipad/react-utils';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
-import { ComponentProps, useEffect, useMemo, useState } from 'react';
-import { debounceTime } from 'rxjs';
+import {
+  useEffect,
+  useMemo,
+  ComponentProps,
+  useState,
+  useContext,
+} from 'react';
+import { debounceTime, map, concat, of, combineLatestWith, filter } from 'rxjs';
+import { selectCatalogNames } from './selectCatalogNames';
+import { catalogItems } from './catalogItems';
+import { toVar } from './toVar';
+import { EditorChangeContext } from '../../../react-contexts/src/editor-change';
 
-type NamesProp = ComponentProps<typeof UINumberCatalog>['names'];
+const debounceEditorChangesMs = 1_000;
 
 export function NumberCatalog() {
   const editor = useTEditorRef();
   const onDragStart = useMemo(() => onDragStartSmartRef(editor), [editor]);
 
   const computer = useComputer();
-  const [names, setNames] = useState<NamesProp>([]);
+
+  const [items, setItems] = useState<
+    ComponentProps<typeof UINumberCatalog>['items']
+  >([]);
+
+  const editorChanges = useContext(EditorChangeContext);
 
   useEffect(() => {
-    const sub = computer.getNamesDefined$
-      .observeWithSelector(selectCatalogNames)
-      .pipe(debounceTime(delayValueTimeout))
-      .subscribe(setNames);
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [computer]);
+    const catalog = catalogItems(editor);
+    const editorChanges$ = concat(of(undefined), editorChanges);
+    const sub = editorChanges$
+      .pipe(
+        combineLatestWith(
+          concat(
+            of(undefined),
+            computer.getNamesDefined$.observeWithSelector(selectCatalogNames)
+          )
+        ),
+        debounceTime(debounceEditorChangesMs),
+        map(([, e]) => Array.isArray(e) && e.map(toVar)),
+        filter(Boolean),
+        map(catalog)
+      )
+      .subscribe(setItems);
+
+    return () => sub.unsubscribe();
+  }, [computer, editor, editorChanges]);
 
   if (!isFlagEnabled('NUMBER_CATALOG')) {
     return null;
   }
 
-  return <UINumberCatalog names={names} onDragStart={onDragStart} />;
-}
-
-function selectCatalogNames(items: AutocompleteName[]) {
-  return items.flatMap(({ kind, type, name, blockId }) => {
-    if (
-      kind === 'variable' &&
-      name &&
-      blockId &&
-      ['boolean', 'date', 'number', 'string', 'range'].includes(type.kind)
-    ) {
-      return [{ name, blockId }];
-    }
-
-    return [];
-  });
+  return <UINumberCatalog items={items} onDragStart={onDragStart} />;
 }

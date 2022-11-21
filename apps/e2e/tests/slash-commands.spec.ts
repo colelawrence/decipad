@@ -2,7 +2,7 @@ import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { keyPress, setUp } from '../utils/page/Editor';
 import { snapshot } from '../utils/src';
 
-test.describe('Loading and snapshot of big notebook', () => {
+test.describe('Slash commands', () => {
   let page: Page;
   let context: BrowserContext;
 

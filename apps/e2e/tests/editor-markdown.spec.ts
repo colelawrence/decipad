@@ -12,6 +12,24 @@ test.describe('Editor markdown marks', () => {
     await waitForEditorToLoad(page);
   });
 
+  test('can create a heading', async ({ page }) => {
+    await focusOnBody(page);
+    await keyPress(page, 'Enter');
+    await page.keyboard.type('# Heading');
+    await keyPress(page, 'Enter');
+    const eyeIcon = await page.locator('svg title:has-text("Hide")');
+    expect(await eyeIcon.count()).toBe(0);
+    await page.keyboard.type('The sentence meaning of life.');
+    await page.waitForSelector('[data-slate-editor] h2');
+    const krillin = page.locator('[data-type="heading1"] div button >> nth=1');
+    krillin.click();
+    const hideFromReader = page.locator(
+      '[role="menuitem"] >> text=Hide from reader'
+    );
+    await hideFromReader.click();
+    expect(await eyeIcon.count()).toBe(1);
+  });
+
   test('inserts a link using markdown syntax', async ({ page }) => {
     await focusOnBody(page);
     await page.keyboard.type('[text](https://example.com/)');

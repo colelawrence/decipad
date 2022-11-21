@@ -210,6 +210,7 @@ export const gleb700 = color(72, 122, 0);
 export const weakOpacity: Opacity = 0.08;
 export const normalOpacity: Opacity = 0.4;
 export const strongOpacity: Opacity = 0.65;
+export const boldOpacity: Opacity = 0.8;
 
 //
 // shadows

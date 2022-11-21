@@ -13,7 +13,7 @@ import {
 } from '@udecode/plate';
 
 const baseProps = {
-  element: ['type', 'children', 'id'],
+  element: ['type', 'children', 'id', 'isHidden'],
   text: ['text'],
 };
 

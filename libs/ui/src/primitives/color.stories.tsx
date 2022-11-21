@@ -128,6 +128,7 @@ const colorNames: Record<ColorId, string> = {
   normalOpacity: 'Normal Opacity',
   weakOpacity: 'Weak Opacity',
   strongOpacity: 'Strong Opacity',
+  boldOpacity: 'Bold Opacity',
   smallShadow: 'SmallShadow',
   mediumShadow: 'MediumShadow',
 };

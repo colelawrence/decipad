@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useObservable } from 'rxjs-hooks';
+import {
+  ImportElementSource,
+  MyElement,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import {
   isInteractionOfType,
   useComputer,
@@ -7,13 +10,8 @@ import {
   useEditorUserInteractionsContext,
   UserInteraction,
 } from '@decipad/react-contexts';
-import { useSelected } from 'slate-react';
-import {
-  ImportElementSource,
-  MyElement,
-  useTEditorRef,
-} from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
+import { useToast } from '@decipad/toast';
 import {
   findNode,
   findNodePath,
@@ -22,7 +20,9 @@ import {
   isText,
   removeNodes,
 } from '@udecode/plate';
-import { useToast } from '@decipad/toast';
+import { useCallback, useEffect, useState } from 'react';
+import { useObservable } from 'rxjs-hooks';
+import { useSelected } from 'slate-react';
 import { insertImport } from './insertImport';
 import { insertLiveConnection } from './insertLiveConnection';
 
@@ -126,10 +126,7 @@ export const useInteractiveMenu = (
                 identifyIslands: command === 'connect-islands',
               });
             } catch (err) {
-              toast(
-                `Error inserting live connection: ${(err as Error).message}`,
-                'error'
-              );
+              toast((err as Error).message, 'error');
             }
             setLastInterestingUserInteraction(undefined);
           }

@@ -3,24 +3,31 @@ import { formatResultPreview } from '@decipad/format';
 import { useComputer } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { DragHandle } from '../../icons/DragHandle/DragHandle';
+import { DragHandle, NestIndicator } from '../../icons';
 import {
+  black,
+  boldOpacity,
   cssVar,
-  mouseMovingOverTransitionDelay,
-  p14Bold,
-  shortAnimationDuration,
+  p12Medium,
+  p14Medium,
+  transparency,
+  weakOpacity,
+  white,
 } from '../../primitives';
+import { AvailableSwatchColor, baseSwatches } from '../../utils';
 import { CodeResult } from '../CodeResult/CodeResult';
 
 interface NumberProps {
   name: string;
   blockId: string;
+  color: string;
   onDragStart: SmartRefDragCallback;
 }
 
 export const NumberCatalogItem = ({
   name,
   blockId,
+  color,
   onDragStart,
 }: NumberProps) => {
   const undebouncedResult = useComputer().getBlockIdResult$.use(blockId);
@@ -37,18 +44,63 @@ export const NumberCatalogItem = ({
   const asText = formatResultPreview(result.result);
 
   return (
-    <div css={gridWrapperStylesForNumberCat}>
+    <div>
       <div
-        css={numberItemStyles}
         draggable
         onDragStart={onDragStart({ blockId, asText })}
+        css={numberCatalogListItemStyles}
       >
-        <span css={varNameStyles}>{name}</span>{' '}
-        <span css={resultStyles}>
-          <CodeResult {...result.result} />
+        <span
+          css={css({
+            display: 'inline-flex',
+            gap: '6px',
+            alignItems: 'center',
+            svg: {
+              width: '16px',
+              height: '16px',
+            },
+          })}
+        >
+          <span
+            css={css({
+              svg: {
+                transform: 'translateY(-4px)',
+              },
+              'svg > path': {
+                stroke: baseSwatches[color as AvailableSwatchColor].rgb,
+              },
+            })}
+          >
+            <NestIndicator />
+          </span>
+
+          <span
+            css={css({
+              position: 'relative',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              minWidth: 0,
+              display: 'inherit',
+            })}
+          >
+            {name}
+            <span
+              css={css(p12Medium, {
+                marginLeft: '8px',
+                alignSelf: 'center',
+                color: transparency(black, boldOpacity).rgba,
+                mixBlendMode: 'overlay',
+              })}
+            >
+              {result.result.type.kind === 'table' ? (
+                'Table'
+              ) : (
+                <CodeResult {...result.result} />
+              )}
+            </span>
+          </span>
         </span>
-      </div>
-      <div css={dragHandleGridStyles}>
         <span data-drag-handle css={dragHandleStyles}>
           <DragHandle />
         </span>
@@ -57,60 +109,44 @@ export const NumberCatalogItem = ({
   );
 };
 
-const gridWrapperStylesForNumberCat = css({
-  display: 'grid',
-  borderTop: `1px solid ${cssVar('strongHighlightColor')}`,
-  gridTemplateColumns: 'repeat(8, 1fr)',
-  gap: '1px',
-  maxHeight: '40px',
-  gridAutoColumns: 'minmax(auto, 20px)',
-});
-
-const numberItemStyles = css({
-  ...p14Bold,
-  padding: '11px 0px 9px 15px',
-  display: 'flex',
-  cursor: 'grab',
-  gridColumn: '1 / 8',
-  gridRow: '1',
-});
-
-const varNameStyles = css({
-  ...p14Bold,
-  textAlign: 'left',
-  verticalAlign: 'top',
-  color: cssVar('strongTextColor'),
-});
-
-const resultStyles = css({
-  textAlign: 'left',
-  verticalAlign: 'top',
-  pointerEvents: 'none',
-  margin: '0 4px',
-  width: '100%',
-  textOverflow: 'ellipsis',
-  flexShrink: '0',
-  overflowX: 'hidden',
-  color: cssVar('magicNumberTextColor'),
-});
-
-const dragHandleGridStyles = css({
-  gridColumn: '8',
-  gridRow: 1,
-  display: 'flex',
-  margin: 'auto',
-});
-
 const dragHandleStyles = css({
   opacity: 0,
+  borderRadius: '4px',
+  padding: '5px',
   height: '20px',
   width: '20px',
-  borderRadius: 4,
-  padding: '5px',
-  transition: `opacity ${shortAnimationDuration} ease-in-out ${mouseMovingOverTransitionDelay}`,
-  backgroundColor: cssVar('highlightColor'),
-  ':hover': {
-    opacity: 1,
-    cursor: 'grab',
+  display: 'inline-flex',
+  backgroundColor: transparency(black, weakOpacity).rgba,
+  color: 'black',
+  svg: {
+    width: '10px',
+    height: '10px',
+  },
+  'svg > path': {
+    fill: cssVar('weakTextColor'),
+  },
+});
+
+export const numberCatalogListItemStyles = css(p14Medium, {
+  padding: '11px 0px 9px 15px',
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr) 24px',
+  alignItems: 'center',
+  gap: '8px',
+  cursor: 'grab',
+  minWidth: 0,
+  minHeight: 0,
+  '*:hover > &': {
+    backgroundColor: transparency(white, 0.5).rgba,
+    'span:last-child': {
+      opacity: 1,
+    },
+    span: {
+      color: transparency(black, boldOpacity).rgba,
+    },
+    'span:last-child span': {
+      mixBlendMode: 'initial',
+      color: cssVar('magicNumberTextColor'),
+    },
   },
 });
