@@ -40,6 +40,7 @@ export interface TableActions {
     newColumnType: TableCellType
   ) => void;
   onSetCollapsed: (collapsed: boolean) => void;
+  onSetHideFormulas: (isHidden: boolean) => void;
   onChangeColumnAggregation: (
     columnIndex: number,
     newColumnAggregation: string | undefined
@@ -229,6 +230,12 @@ export const useTableActions = (
     'isCollapsed'
   );
 
+  const onSetHideFormulas = useElementMutatorCallback(
+    editor,
+    element,
+    'hideFormulas'
+  );
+
   const onSaveIcon = useElementMutatorCallback(editor, element, 'icon');
   const onSaveColor = useElementMutatorCallback(editor, element, 'color');
 
@@ -322,6 +329,7 @@ export const useTableActions = (
     onRemoveRow,
     onMoveColumn,
     onSetCollapsed,
+    onSetHideFormulas,
     onSaveIcon,
     onSaveColor,
   };

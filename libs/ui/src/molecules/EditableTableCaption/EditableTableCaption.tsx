@@ -79,9 +79,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     color,
     icon,
     isCollapsed,
+    hideFormulas,
     setIcon,
     setColor,
     setCollapsed,
+    setHideFormulas,
     hideAddDataViewButton,
   } = useContext(TableStyleContext);
 
@@ -126,6 +128,14 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               isExpandButton
             />
           ) : null}
+          {!hideAddDataViewButton && setHideFormulas ? (
+            <TableButton
+              setState={setHideFormulas}
+              isInState={hideFormulas}
+              captions={['Show formulas', 'Hide formulas']}
+              isExpandButton
+            />
+          ) : null}
           {hideAddDataViewButton ||
           !isFlagEnabled('DATA_VIEW') ||
           readOnly ? null : (
@@ -137,9 +147,10 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         </div>
       </div>
 
-      {formulaEditor && !isCollapsed && tableFormulaEditors.length > 0 && (
-        <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
-      )}
+      {formulaEditor &&
+        !isCollapsed &&
+        tableFormulaEditors.length > 0 &&
+        !hideFormulas && <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>}
     </div>
   );
 };

@@ -79,6 +79,7 @@ export interface TableElement extends BaseElement {
   color?: string;
   icon?: string;
   isCollapsed?: boolean;
+  hideFormulas?: boolean;
 }
 
 // legacy
