@@ -145,7 +145,12 @@ export const NotebookListItem = ({
   return (
     <div css={wrapperStyles}>
       <Anchor href={href} css={anchorStyles}>
-        <Dot left={26} top={12} color={statusColors[feStatus]}>
+        <Dot
+          left={26}
+          top={12}
+          visible={feStatus !== 'No Status'}
+          color={statusColors[feStatus]}
+        >
           <div
             css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
           >
