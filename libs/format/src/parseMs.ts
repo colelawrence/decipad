@@ -21,7 +21,6 @@ export interface Options {
   separateTime?: boolean;
   formatSubTime?: boolean;
   colonNotation?: boolean;
-  base: 'millisecond' | 'month';
 }
 
 export function parseMilliseconds(milliseconds: number) {
@@ -49,14 +48,8 @@ const SECOND_ROUNDING_EPSILON = 0.000_000_1;
 
 export default function prettyTime(
   time: number,
-  options: Options = {
-    base: 'millisecond',
-  }
+  options: Options
 ): DeciNumberPart[] {
-  if (options.base !== 'millisecond') {
-    options.colonNotation = false;
-  }
-
   if (options.colonNotation) {
     options.formatSubTime = false;
     options.separateTime = false;
@@ -77,7 +70,7 @@ export default function prettyTime(
     value: number,
     long: string,
     short: string,
-    valueString?: string
+    valueString: string = value.toString()
   ) => {
     if (
       (result.length === 0 || !options.colonNotation) &&
@@ -87,7 +80,6 @@ export default function prettyTime(
       return;
     }
 
-    valueString = (valueString || value || '0').toString();
     let prefix;
     let suffix;
     if (options.colonNotation) {
@@ -122,89 +114,69 @@ export default function prettyTime(
     }
   };
 
-  let parsed;
+  const parsed = parseMilliseconds(time);
 
-  if (options.base === 'millisecond') {
-    parsed = parseMilliseconds(time);
-    add(Math.trunc(parsed.days / 365), 'year', 'y');
-    add(parsed.days % 365, 'day', 'd');
-    add(parsed.hours, 'hour', 'h');
-    add(parsed.minutes, 'minute', 'm');
+  add(Math.trunc(parsed.days / 365), 'year', 'y');
+  add(parsed.days % 365, 'day', 'd');
+  add(parsed.hours, 'hour', 'h');
+  add(parsed.minutes, 'minute', 'm');
 
-    if (
-      options.separateTime ||
-      options.formatSubTime ||
-      (!options.colonNotation && time < 1000)
-    ) {
-      add(parsed.seconds, 'second', 's');
-      if (options.formatSubTime) {
-        add(parsed.milliseconds, 'millisecond', 'ms');
-        add(parsed.microseconds, 'microsecond', 'µs');
-        add(parsed.nanoseconds, 'nanosecond', 'ns');
-      } else {
-        const millisecondsAndBelow =
-          parsed.milliseconds +
-          parsed.microseconds / 1000 +
-          parsed.nanoseconds / 1e6;
-
-        const millisecondsDecimalDigits =
-          typeof options.timeDecimalDigits === 'number'
-            ? options.timeDecimalDigits
-            : 0;
-
-        const roundedMiliseconds =
-          millisecondsAndBelow >= 1
-            ? Math.round(millisecondsAndBelow)
-            : Math.ceil(millisecondsAndBelow);
-
-        const millisecondsString = millisecondsDecimalDigits
-          ? millisecondsAndBelow.toFixed(millisecondsDecimalDigits)
-          : roundedMiliseconds;
-
-        add(
-          Number.parseFloat(millisecondsString.toString()),
-          'millisecond',
-          'ms',
-          millisecondsString.toString()
-        );
-      }
+  if (
+    options.separateTime ||
+    options.formatSubTime ||
+    (!options.colonNotation && time < 1000)
+  ) {
+    add(parsed.seconds, 'second', 's');
+    if (options.formatSubTime) {
+      add(parsed.milliseconds, 'millisecond', 'ms');
+      add(parsed.microseconds, 'microsecond', 'µs');
+      add(parsed.nanoseconds, 'nanosecond', 'ns');
     } else {
-      const seconds = (time / 1000) % 60;
-      const secondsDecimalDigits =
-        typeof options.secondsDecimalDigits === 'number'
-          ? options.secondsDecimalDigits
-          : 1;
-      const secondsFixed = floorDecimals(seconds, secondsDecimalDigits);
-      const secondsString = options.keepDecimalsOnWholeTime
-        ? secondsFixed
-        : secondsFixed.replace(/\.0+$/, '');
-      add(Number.parseFloat(secondsString), 'second', 's', secondsString);
+      const millisecondsAndBelow =
+        parsed.milliseconds +
+        parsed.microseconds / 1000 +
+        parsed.nanoseconds / 1e6;
+
+      const millisecondsDecimalDigits =
+        typeof options.timeDecimalDigits === 'number'
+          ? options.timeDecimalDigits
+          : 0;
+
+      const roundedMiliseconds =
+        millisecondsAndBelow >= 1
+          ? Math.round(millisecondsAndBelow)
+          : Math.ceil(millisecondsAndBelow);
+
+      const millisecondsString = millisecondsDecimalDigits
+        ? millisecondsAndBelow.toFixed(millisecondsDecimalDigits)
+        : roundedMiliseconds;
+
+      add(
+        Number.parseFloat(millisecondsString.toString()),
+        'millisecond',
+        'ms',
+        millisecondsString.toString()
+      );
     }
   } else {
-    parsed = parseMonths(time);
-    add(parsed.millennium, 'millennium', 'mil');
-    add(parsed.century, 'century', 'cen');
-    add(parsed.decade, 'decade', 'dec');
-    add(parsed.year, 'year', 'yea');
-
-    const months = (time / 1) % 12;
+    const seconds = (time / 1000) % 60;
     const secondsDecimalDigits =
       typeof options.secondsDecimalDigits === 'number'
         ? options.secondsDecimalDigits
         : 1;
-    const secondsFixed = floorDecimals(months, secondsDecimalDigits);
+    const secondsFixed = floorDecimals(seconds, secondsDecimalDigits);
     const secondsString = options.keepDecimalsOnWholeTime
       ? secondsFixed
       : secondsFixed.replace(/\.0+$/, '');
-    add(Number.parseFloat(secondsString), 'month', 'mon', secondsString);
+    add(Number.parseFloat(secondsString), 'second', 's', secondsString);
   }
 
   return result;
 }
 
-export function prettyPartsOf(
+export function prettifyTimeMs(
   time: number,
-  options: Options = { base: 'millisecond' }
+  options: Options = {}
 ): DeciNumberPart[] {
   const partsOf = prettyTime(time, options);
   return partsOf.filter((v, i) => {

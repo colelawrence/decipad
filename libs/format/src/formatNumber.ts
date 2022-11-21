@@ -298,7 +298,11 @@ function formatUserDefinedUnit(
   );
 }
 
-function formatAnyUnit(locale: string, units: Unit[], fraction: Fraction) {
+export function formatAnyUnit(
+  locale: string,
+  units: Unit[],
+  fraction: Fraction
+) {
   const args = { ...DEFAULT_NUMBER_OPTIONS };
 
   // dont show smart `thousand` instead of K if things are too big
@@ -326,7 +330,7 @@ function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
   const unitsWithoutCurrency = [...units];
   unitsWithoutCurrency.splice(currencyIndex, 1);
 
-  const otherUnitsMult = (unitsWithoutCurrency || []).reduce(
+  const otherUnitsMult = unitsWithoutCurrency.reduce(
     (ac, current) => ac.mul(current.multiplier),
     toFraction(1)
   );
@@ -414,5 +418,3 @@ export function formatNumber(
 
   return { ...deciNumber, asString: partsToString(ret), partsOf: ret };
 }
-
-export type FormatNumber = typeof formatNumber;
