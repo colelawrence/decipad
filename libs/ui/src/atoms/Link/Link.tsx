@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { HTMLPropsAs } from '@udecode/plate';
-import { malibu700, p16Regular } from '../../primitives';
+import { malibu700 } from '../../primitives';
 import { Anchor } from '../../utils';
 
-const styles = css(p16Regular, {
+const styles = css({
   display: 'inline',
   color: malibu700.rgb,
   textDecoration: 'underline',
