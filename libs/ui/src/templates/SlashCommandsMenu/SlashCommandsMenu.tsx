@@ -16,6 +16,7 @@ import {
   Slider,
   TableSlash,
   Toggle,
+  Dropdown,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
@@ -106,6 +107,14 @@ const groups = [
         icon: <Result />,
         enabled: true,
         extraSearchTerms: ['display', 'result', 'show'],
+      },
+      {
+        command: 'dropdown',
+        title: 'Dropdown',
+        description: 'Specify and select from a range of values',
+        icon: <Dropdown />,
+        enabled: true,
+        extraSearchTerms: ['dropdown', 'droppy', 'select'],
       },
       {
         command: 'eval',

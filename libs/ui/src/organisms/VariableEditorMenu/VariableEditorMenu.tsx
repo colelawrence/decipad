@@ -17,7 +17,7 @@ type VariableEditorMenuProps = {
 } & (
   | {
       // By marking this variant as optional, when not provided it will be assumed as the default.
-      readonly variant?: 'expression' | 'toggle' | 'date';
+      readonly variant?: 'expression' | 'toggle' | 'date' | 'dropdown';
       readonly onChangeMax?: never;
       readonly onChangeMin?: never;
       readonly onChangeStep?: never;
@@ -104,7 +104,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
         />,
         <MenuSeparator key="sep" />,
       ]}
-      {variant === 'expression' ? (
+      {variant === 'expression' || variant === 'dropdown' ? (
         <MenuList
           itemTrigger={
             <TriggerMenuItem icon={<Shapes />}>

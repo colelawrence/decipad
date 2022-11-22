@@ -23,6 +23,7 @@ import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
   insertDisplayBelow,
+  insertDropdownBelow,
   insertInputBelow,
   insertSliderInputBelow,
 } from './input';
@@ -69,6 +70,9 @@ export const execute = ({
       break;
     case 'display':
       insertDisplayBelow(editor, path);
+      break;
+    case 'dropdown':
+      insertDropdownBelow(editor, path);
       break;
     case 'table':
       insertTableBelow(editor, path, getAvailableIdentifier);

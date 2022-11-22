@@ -5,17 +5,28 @@ import { noop } from '@decipad/utils';
 import { Calendar, Formula, Number, Table, Text } from '../../icons';
 import { setCssVar, cssVar, p14Medium, teal600 } from '../../primitives';
 
+const wrapperStyles = (focused: boolean) =>
+  css({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '6px',
+    ':hover': {
+      backgroundColor: cssVar('highlightColor'),
+      borderRadius: '6px',
+    },
+    ...(focused && {
+      backgroundColor: cssVar('highlightColor'),
+      borderRadius: '6px',
+    }),
+  });
+
 const styles = css({
+  width: '100%',
   display: 'grid',
   gridTemplateColumns: 'auto 1fr',
   alignItems: 'center',
   columnGap: '4px',
-  padding: '6px 4px',
-  margin: '2px 0',
-  ':hover, &[data-focused="true"]': {
-    backgroundColor: cssVar('highlightColor'),
-    borderRadius: '6px',
-  },
 });
 
 const iconStyles = css(setCssVar('currentTextColor', teal600.rgb), {
@@ -41,24 +52,23 @@ interface AutoCompleteMenuItemProps {
   readonly focused?: boolean;
   readonly onExecute?: () => void;
 }
+
 export const AutoCompleteMenuItem = ({
   identifier,
-  focused,
   type,
+  focused = false,
   onExecute = noop,
 }: AutoCompleteMenuItemProps): ReturnType<FC> => {
   const itemRef = useRef<HTMLButtonElement>(null);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (
-        focused &&
-        (event.key === 'Enter' || event.key === 'Tab') &&
-        !event.shiftKey
-      ) {
-        onExecute();
-        event.stopPropagation();
-        event.preventDefault();
+      if ((event.key === 'Enter' || event.key === 'Tab') && !event.shiftKey) {
+        if (focused) {
+          onExecute();
+          event.stopPropagation();
+          event.preventDefault();
+        }
       }
     },
     [onExecute, focused]
@@ -74,29 +84,30 @@ export const AutoCompleteMenuItem = ({
   }
 
   return (
-    <button
-      role="menuitem"
-      css={styles}
-      onMouseDown={(event) => {
-        onExecute();
-        event.stopPropagation();
-        event.preventDefault();
-      }}
-      data-focused={focused}
-      ref={itemRef}
-    >
-      <span css={iconStyles}>
-        {{
-          number: <Number />,
-          string: <Text />,
-          date: <Calendar />,
-          table: <Table />,
-          function: <Formula />,
-        }[type] || <Number />}
-      </span>
-      <div css={textStyles}>
-        <strong css={css(p14Medium)}>{identifier}</strong>
-      </div>
-    </button>
+    <div css={wrapperStyles(focused)}>
+      <button
+        role="menuitem"
+        css={styles}
+        onMouseDown={(event) => {
+          onExecute();
+          event.stopPropagation();
+          event.preventDefault();
+        }}
+        ref={itemRef}
+      >
+        <span css={iconStyles}>
+          {{
+            number: <Number />,
+            string: <Text />,
+            date: <Calendar />,
+            table: <Table />,
+            function: <Formula />,
+          }[type] || <Number />}
+        </span>
+        <div css={textStyles}>
+          <strong css={css(p14Medium)}>{identifier}</strong>
+        </div>
+      </button>
+    </div>
   );
 };

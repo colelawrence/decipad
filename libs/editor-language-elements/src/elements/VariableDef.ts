@@ -29,7 +29,8 @@ export const VariableDef: InteractiveLanguageElement = {
       if (
         element.variant === 'expression' ||
         element.variant === 'date' ||
-        element.variant === 'toggle'
+        element.variant === 'toggle' ||
+        element.variant === 'dropdown'
       ) {
         const { type, coerced } = await inferType(computer, expression, {
           type: element.coerceToType,

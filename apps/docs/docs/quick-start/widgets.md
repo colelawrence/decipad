@@ -57,14 +57,17 @@ Inputs widgets highlight a number in your notebook that you or anyone reading th
 - To **create a new input widget**, click the `+` button next to an empty line, and select `Input` from the menu.
 
 ### Toggle Widget
+
 Toggle widgets let you or anyone reading the notebook switch between `on` or `off`.
 
 - To **create a new toggle widget**, click the `+` button next to an empty line, and select `Toggle` from the menu.
 
 ### Date Widget
+
 Date widgets let you or anyone reading the notebook pick a date.
 
 #### Create a Date Widget
+
 - To **create a new date widget**, click the `+` button next to an empty line, and select `Date` from the menu.<br></br>
 
 #### Update a Date Widget Range

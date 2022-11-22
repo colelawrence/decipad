@@ -56,6 +56,7 @@ export { Placeholder } from './Placeholder/Placeholder';
 export * from './placeholders';
 export { PlotFunction } from './PlotFunction/PlotFunction';
 export { RemoveNodeButton } from './RemoveNodeButton/RemoveNodeButton';
+export * from './SelectItem/SelectItem';
 export { Slider } from './Slider/Slider';
 export { SmartRef } from './SmartRef/SmartRef';
 export { Spinner } from './Spinner/Spinner';

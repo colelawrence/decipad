@@ -12,6 +12,7 @@ import {
 import {
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
+  ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
@@ -125,6 +126,12 @@ export interface DisplayElement extends BaseElement {
   children: [EmptyText];
 }
 
+export interface DropdownElement extends BaseElement {
+  type: typeof ELEMENT_DROPDOWN;
+  options: Array<string>;
+  children: [PlainText];
+}
+
 export interface SliderElement extends BaseElement {
   type: typeof ELEMENT_SLIDER;
   max: string;
@@ -139,6 +146,7 @@ export type ElementVariants =
   | 'toggle'
   | 'date'
   | 'slider'
+  | 'dropdown'
   | 'display';
 export interface VariableBaseElement<
   V extends ElementVariants,
@@ -165,6 +173,11 @@ export type VariableDateElement = VariableBaseElement<
   [ExpressionElement]
 >;
 
+export type VariableDropdownElement = VariableBaseElement<
+  'dropdown',
+  [DropdownElement]
+>;
+
 export type VariableSliderElement = VariableBaseElement<
   'slider',
   [ExpressionElement, SliderElement]
@@ -174,6 +187,7 @@ export type VariableDefinitionElement =
   | VariableToggleElement
   | VariableDateElement
   | VariableExpressionElement
+  | VariableDropdownElement
   | VariableSliderElement;
 
 export type InteractiveElement =

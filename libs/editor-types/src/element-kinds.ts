@@ -30,6 +30,7 @@ export const ELEMENT_IMPORT = 'import';
 export const ELEMENT_PLOT = 'plot';
 export const ELEMENT_VARIABLE_DEF = 'def';
 export const ELEMENT_EXPRESSION = 'exp';
+export const ELEMENT_DROPDOWN = 'dropdown';
 export const ELEMENT_SLIDER = 'slider';
 
 export const ELEMENT_DISPLAY = 'display';

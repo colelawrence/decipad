@@ -48,6 +48,7 @@ export { Divider } from './Divider/Divider';
 export { Docs } from './Docs/Docs';
 export { DollarCircle } from './DollarCircle/DollarCircle';
 export { DragHandle } from './DragHandle/DragHandle';
+export { Dropdown } from './Dropdown/Dropdown';
 export { Duplicate } from './Duplicate/Duplicate';
 export { Edit } from './Edit/Edit';
 export { Education } from './Education/Education';

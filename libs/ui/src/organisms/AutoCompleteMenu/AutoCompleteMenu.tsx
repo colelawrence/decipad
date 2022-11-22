@@ -39,18 +39,21 @@ const footerStyles = css(
     padding: '6px 0px 8px 16px',
     width: '100%',
     bottom: '0px',
-    height: '38px',
+    height: '32px',
     lineHeight: '24px',
     background: cssVar('highlightColor'),
     boxShadow: `0px -1px 0px ${cssVar('strongHighlightColor')}`,
     margin: '0px 0px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
   },
   setCssVar('currentTextColor', cssVar('weakTextColor'))
 );
 
 const resultStyles = css({
   display: 'block',
-  maxWidth: '237px',
+  maxWidth: '244px',
   minWidth: '149px',
   marginTop: '8px',
 });
@@ -76,7 +79,7 @@ const styles = (top: boolean) =>
   });
 
 const mainStyles = css({
-  padding: '4px 2px',
+  padding: '6px',
   width: '100%',
 });
 
@@ -84,6 +87,7 @@ export type Identifier = {
   kind: 'variable' | 'function';
   identifier: string;
   type: string;
+  editing?: boolean;
   focused?: boolean;
 };
 
@@ -154,6 +158,8 @@ export const AutoCompleteMenu = ({
   // AutoCompleteMenuItems do not use real browser focus, see their docs
   const [focusedItem, setFocusedItem] = useState<string>();
 
+  const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
+
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       switch (true) {
@@ -189,7 +195,6 @@ export const AutoCompleteMenu = ({
     }
   }, [isResult, matchingIdentifiers]);
 
-  const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
   return allItems.length ? (
     <span
       css={{ position: 'relative', zIndex: 3 }}

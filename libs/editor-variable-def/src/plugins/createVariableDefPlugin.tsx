@@ -1,6 +1,7 @@
 import { isElement } from '@udecode/plate';
 import {
   ELEMENT_CAPTION,
+  ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
@@ -22,6 +23,7 @@ import { createEnterOnExpressionPlugin } from './createEnterOnExpressionPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { createSliderExpressionSyncPlugin } from './createSliderExpressionSyncPlugin';
+import { Dropdown } from '../components/Dropdown';
 
 export const createVariableDefPlugin = (): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
@@ -77,6 +79,22 @@ export const createVariableDefPlugin = (): MyPlatePlugin => ({
       key: ELEMENT_EXPRESSION,
       isElement: true,
       component: Expression,
+      deserializeHtml: {
+        rules: [
+          {
+            validNodeName: 'caption',
+            validAttribute: { 'data-type': 'expression' },
+          },
+        ],
+      },
+      serializeHtml: (props) => (
+        <div data-type="expression">{props.children}</div>
+      ),
+    },
+    {
+      key: ELEMENT_DROPDOWN,
+      isElement: true,
+      component: Dropdown,
       deserializeHtml: {
         rules: [
           {

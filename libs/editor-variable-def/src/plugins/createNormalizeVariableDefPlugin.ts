@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid';
 import {
   CaptionElement,
   ELEMENT_CAPTION,
+  ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
@@ -15,7 +16,13 @@ import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
 import { isElementOfType } from '@decipad/editor-utils';
 
-const allowableVariant = new Set(['expression', 'slider', 'toggle', 'date']);
+const allowableVariant = new Set([
+  'expression',
+  'slider',
+  'toggle',
+  'date',
+  'dropdown',
+]);
 
 const normalize =
   (editor: MyEditor) =>
@@ -63,7 +70,10 @@ const normalize =
       return true;
     }
 
-    if (node.children[1].type !== ELEMENT_EXPRESSION) {
+    if (
+      node.children[1].type !== ELEMENT_EXPRESSION &&
+      node.variant !== 'dropdown'
+    ) {
       removeNodes(editor, {
         at: [...path, 1],
       });
@@ -102,7 +112,12 @@ const normalize =
 export const createNormalizeVariableDefPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_VARIABLE_DEF_PLUGIN',
   elementType: ELEMENT_VARIABLE_DEF,
-  acceptableSubElements: [ELEMENT_CAPTION, ELEMENT_EXPRESSION, ELEMENT_SLIDER],
+  acceptableSubElements: [
+    ELEMENT_CAPTION,
+    ELEMENT_EXPRESSION,
+    ELEMENT_SLIDER,
+    ELEMENT_DROPDOWN,
+  ],
   acceptableElementProperties: [
     'variant',
     'max',

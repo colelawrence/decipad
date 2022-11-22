@@ -114,7 +114,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
     expect(
       await publishedNotebookPage.$$('[data-slate-editor] p')
-    ).toHaveLength(30);
+    ).toHaveLength(28);
   });
 
   test('navigates to published notebook link incognito', async () => {

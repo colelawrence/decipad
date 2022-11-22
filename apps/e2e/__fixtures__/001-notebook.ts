@@ -1916,11 +1916,60 @@ export default {
     {
       children: [
         {
-          text: '',
+          children: [
+            {
+              children: [
+                {
+                  text: 'Dropdown',
+                },
+              ],
+              id: 'SG8dB8J1WV9j1PRBmEPqo',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '10%',
+                },
+              ],
+              id: '7AoJVf65__rzXHXU-rgod',
+              type: 'dropdown',
+              options: ['10%', '20%', '30%'],
+            },
+          ],
+          id: 'jehhj52So16CuMph8MetL',
+          type: 'def',
+          variant: 'dropdown',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Positions',
+                },
+              ],
+              id: 'RWiGmdTZaJLVLTw32R3my',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '"Software Dev"',
+                },
+              ],
+              id: 'WMQ3aJYSwdRBG-i7DF_he',
+              type: 'dropdown',
+              options: ['"Software Dev"', '"Designer"'],
+            },
+          ],
+          id: 'raa5P2mcs31Gucz53wPyC',
+          type: 'def',
+          variant: 'dropdown',
         },
       ],
-      type: 'p',
-      id: '3yrXnsRJNFgZThMayrYWu',
+      id: 'RWFVGUdm3sjwSFXdNdbJF',
+      type: 'columns',
     },
     {
       children: [
@@ -1934,11 +1983,28 @@ export default {
     {
       children: [
         {
-          text: '',
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'UDshOVUEjKlRNSMg_7Z1l',
+          blockId: 'raa5P2mcs31Gucz53wPyC',
+          type: 'display',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'rROdjvSDEgws60WiOHuiq',
+          blockId: 'yefTkLRP9UcbATNZBZGPJ',
+          type: 'display',
         },
       ],
-      type: 'p',
-      id: 'BS5QILr98ifCzAk-1DyzM',
+      id: 'UT_PDtrAab8KYAQwbYobY',
+      type: 'columns',
     },
     {
       children: [
@@ -2815,7 +2881,6 @@ export default {
       ],
       type: 'img',
       url: 'https://memegenerator.net/img/instances/80423445.jpg',
-      alt: 'Foo',
       id: 'yGFskX6GEZnf6Es3ofE69',
     },
     {

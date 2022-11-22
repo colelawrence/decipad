@@ -44,6 +44,7 @@ import {
 import {
   CaptionElement,
   DisplayElement,
+  DropdownElement,
   ExpressionElement,
   LiveConnectionVarNameElement,
   SliderElement,
@@ -228,6 +229,7 @@ export type BlockElement =
   | DataViewElement
   | DataViewHeaderRowElement
   | DataViewHeader
+  | DropdownElement
   | TableColumnFormulaElement
   // Draw Elements
   | DrawElementDescendant;

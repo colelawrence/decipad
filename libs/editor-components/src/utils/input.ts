@@ -1,13 +1,16 @@
 import {
   DisplayElement,
+  DropdownElement,
   ElementVariants,
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
+  ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
   MyEditor,
   VariableDefinitionElement,
+  VariableDropdownElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
 import {
@@ -152,6 +155,41 @@ const getDisplayElement = () => {
 export const insertDisplayBelow = (editor: MyEditor, path: Path): void => {
   const display = getDisplayElement();
   insertNodes(editor, display, {
+    at: requirePathBelowBlock(editor, path),
+  });
+};
+
+const getDropdownElement = () =>
+  ({
+    id: nanoid(),
+    type: ELEMENT_VARIABLE_DEF,
+    variant: 'dropdown',
+    coerceToType: {
+      kind: 'string',
+    },
+    children: [
+      {
+        id: nanoid(),
+        type: ELEMENT_CAPTION,
+        children: [{ text: 'Dropdown' }],
+      },
+      {
+        id: nanoid(),
+        type: ELEMENT_DROPDOWN,
+        options: [],
+        children: [{ text: 'Select' }],
+      } as DropdownElement,
+    ],
+  } as VariableDropdownElement);
+
+export const insertDropdownBelow = (editor: MyEditor, path: Path): void => {
+  const dropdown = getDropdownElement();
+  dropdown.children[0].children[0].text = getElementUniqueName(
+    editor,
+    ELEMENT_VARIABLE_DEF,
+    'Dropdown'
+  );
+  insertNodes(editor, dropdown, {
     at: requirePathBelowBlock(editor, path),
   });
 };

@@ -62,7 +62,6 @@ const headerWrapperStyles = css({
   gridAutoColumns: 'auto',
   minWidth: 0,
   gap: '4px',
-  padding: '0 4px',
 });
 
 const iconWrapperStyles = ({ variant }: Variant) =>

@@ -15,7 +15,6 @@ const titleStyles = css(p13Medium, {
 });
 
 const itemsStyles = css({
-  padding: '0px 4px',
   display: 'grid',
 });
 
