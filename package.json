@@ -321,7 +321,7 @@
     "ascii-table": "^0.0.9",
     "babel-eslint": "10.1.0",
     "babel-jest": "27.5.1",
-    "babel-loader": "8.2.5",
+    "babel-loader": "8.3.0",
     "babel-plugin-tsconfig-paths": "1.0.3",
     "chokidar-cli": "3.0.0",
     "css-vars-ponyfill": "2.4.8",
