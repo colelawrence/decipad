@@ -1,6 +1,5 @@
 import { useTEditorRef } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
 import {
@@ -50,10 +49,6 @@ export function NumberCatalog() {
 
     return () => sub.unsubscribe();
   }, [computer, editor, editorChanges]);
-
-  if (!isFlagEnabled('NUMBER_CATALOG')) {
-    return null;
-  }
 
   return <UINumberCatalog items={items} onDragStart={onDragStart} />;
 }

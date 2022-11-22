@@ -12,7 +12,7 @@ const searchNodeTypes = new Set([ELEMENT_H2, ELEMENT_H3]);
 export const findParent = (
   editor: MyEditor,
   entry: NodeEntry<MyValue[number]>
-): H2Element | H3Element | undefined => {
+): NodeEntry<H2Element | H3Element> | undefined => {
   const [node, path] = entry;
   if (path.length > 1) {
     const parent = getParentNode(editor, path);
@@ -22,7 +22,7 @@ export const findParent = (
   }
   // root element
   if (searchNodeTypes.has(node.type)) {
-    return node as H2Element | H3Element;
+    return entry as NodeEntry<H2Element | H3Element>;
   }
   const before = path[path.length - 1] - 1;
   if (before >= 0) {

@@ -1,15 +1,35 @@
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { findNode, getNodeString } from '@udecode/plate';
-import { NodeEntry } from 'slate';
-import { CatalogItemsReturnType, CatalogItemVar } from './types';
+import { NodeEntry, Path } from 'slate';
+import { CatalogHeadingItem, CatalogItems, CatalogItemVar } from './types';
 import { findParent } from './findParent';
+
+const insertInOrder = (
+  items: CatalogItems,
+  heading: CatalogHeadingItem,
+  name: CatalogItemVar
+): CatalogItems => {
+  let insertAt = -1;
+  let found = false;
+  while (insertAt < items.length && !found) {
+    insertAt += 1;
+    const current = items[insertAt];
+    if (
+      !current ||
+      (current.type !== 'var' && Path.isAfter(current.path, heading.path))
+    ) {
+      found = true;
+    }
+  }
+  while (items[insertAt]?.type === 'var') {
+    insertAt += 1;
+  }
+  return [...items.slice(0, insertAt), heading, name, ...items.slice(insertAt)];
+};
 
 const catalogItem =
   (editor: MyEditor) =>
-  (
-    curr: CatalogItemsReturnType,
-    name: CatalogItemVar
-  ): CatalogItemsReturnType => {
+  (curr: CatalogItems, name: CatalogItemVar): CatalogItems => {
     const entry = findNode(editor, {
       at: [],
       match: { id: name.blockId },
@@ -22,17 +42,19 @@ const catalogItem =
       return [...curr, name];
     }
 
-    const parentIndex = curr.findIndex((el) => el.blockId === parent.id);
+    const [parentNode, parentPath] = parent;
+    const parentIndex = curr.findIndex((el) => el.blockId === parentNode.id);
     if (parentIndex < 0) {
-      return [
-        ...curr,
+      return insertInOrder(
+        curr,
         {
-          type: parent.type,
-          blockId: parent.id,
-          name: getNodeString(parent),
+          type: parentNode.type,
+          blockId: parentNode.id,
+          name: getNodeString(parentNode),
+          path: parentPath,
         },
-        name,
-      ];
+        name
+      );
     }
     let insertAtIndex = parentIndex + 1;
     while (curr[insertAtIndex]?.type === 'var') {
@@ -47,5 +69,5 @@ const catalogItem =
 
 export const catalogItems =
   (editor: MyEditor) =>
-  (names: CatalogItemVar[]): CatalogItemsReturnType =>
-    names.reduce<CatalogItemsReturnType>(catalogItem(editor), []);
+  (names: CatalogItemVar[]): CatalogItems =>
+    names.reduce<CatalogItems>(catalogItem(editor), []);
