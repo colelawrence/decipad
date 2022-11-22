@@ -16,6 +16,7 @@ import {
   isElement,
 } from '@udecode/plate';
 import { insertDataViewBelow } from 'libs/editor-components/src/utils/data-view';
+import { useCallback } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableColumnCount } from '../../hooks';
 
@@ -37,14 +38,12 @@ export const TableCaption: PlateComponent = ({
     },
   });
 
-  const onAddDataViewButtonPress = (e: Event) => {
+  const onAddDataViewButtonPress = useCallback(() => {
     if (!parent) {
       return;
     }
 
     const [, parentPath] = parent;
-
-    e.preventDefault();
 
     return (
       path &&
@@ -54,7 +53,7 @@ export const TableCaption: PlateComponent = ({
         getNodeString(getNodeChild(element, 0))
       )
     );
-  };
+  }, [editor, element, parent, path]);
 
   return (
     <div {...attributes}>
@@ -64,7 +63,7 @@ export const TableCaption: PlateComponent = ({
           (columnCount && columnCount >= WIDE_MIN_COL_COUNT) || false
         }
         empty={getNodeString(element.children[0]).length === 0}
-        onAddDataViewButtonPress={(e) => onAddDataViewButtonPress(e)}
+        onAddDataViewButtonPress={onAddDataViewButtonPress}
         showToggleCollapsedButton={!!parent}
       >
         {children}

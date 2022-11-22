@@ -50,7 +50,7 @@ type IconButtonProps = {
       readonly onClick?: undefined;
     }
   | {
-      readonly onClick: (args?: any) => void;
+      readonly onClick: () => void;
       readonly href?: undefined;
     }
 );

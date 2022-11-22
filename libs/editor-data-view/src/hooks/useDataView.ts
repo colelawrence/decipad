@@ -152,7 +152,7 @@ export const useDataView = ({
 
   const selectedAggregationTypes = useEditorSelector(
     useCallback(
-      () => element.children[1]?.children.map((th) => th.aggregation),
+      () => element.children[1]?.children?.map((th) => th.aggregation),
       [element.children]
     )
   );

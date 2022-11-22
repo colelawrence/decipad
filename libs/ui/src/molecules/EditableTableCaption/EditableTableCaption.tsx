@@ -58,7 +58,7 @@ const placeholderStyles = css(p16Bold, {
 
 const editableTableCaptionStyles = css(p16Bold);
 type EditableTableCaptionProps = PropsWithChildren<{
-  onAddDataViewButtonPress: (e: any) => void;
+  onAddDataViewButtonPress: () => void;
   isForWideTable?: boolean;
   empty?: boolean;
   readOnly?: boolean;
@@ -140,7 +140,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           !isFlagEnabled('DATA_VIEW') ||
           readOnly ? null : (
             <TableButton
-              setState={onAddDataViewButtonPress}
+              onClick={onAddDataViewButtonPress}
               captions={['Create view']}
             />
           )}

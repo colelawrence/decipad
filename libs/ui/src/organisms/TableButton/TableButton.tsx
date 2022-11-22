@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { TextAndIconButton } from '../../atoms';
 import { Chevron, Eye } from '../../icons';
 import { hideOnPrint } from '../../styles/editor-layout';
@@ -15,7 +15,8 @@ const showMoreButtonWrapperStyles = css({
 });
 
 interface TableButtonProps {
-  readonly setState: (state?: any) => void;
+  readonly setState?: (state: boolean) => void;
+  readonly onClick?: () => void;
   readonly isInState?: boolean;
   readonly captions: string[];
   readonly isExpandButton?: boolean;
@@ -24,12 +25,14 @@ interface TableButtonProps {
 export const TableButton: FC<TableButtonProps> = ({
   isInState,
   setState,
+  onClick,
   captions,
   isExpandButton = false,
 }) => {
-  const handleClick = () => {
-    setState(!isInState);
-  };
+  const handleClick = useCallback(() => {
+    onClick?.();
+    setState?.(!isInState);
+  }, [isInState, onClick, setState]);
 
   const textToShow = captions[1]
     ? isInState && isExpandButton
@@ -44,7 +47,7 @@ export const TableButton: FC<TableButtonProps> = ({
     >
       <TextAndIconButton
         text={textToShow}
-        onClick={isExpandButton ? handleClick : setState}
+        onClick={handleClick}
         iconPosition="left"
       >
         {isExpandButton ? (

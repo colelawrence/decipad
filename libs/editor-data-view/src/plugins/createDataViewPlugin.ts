@@ -9,6 +9,7 @@ import {
   DataViewColumnHeader,
   DataViewColumnHeaderRow,
 } from '../components';
+import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 
 export const createDataViewPlugin = createPluginFactory({
   key: ELEMENT_DATA_VIEW,
@@ -26,5 +27,6 @@ export const createDataViewPlugin = createPluginFactory({
       isElement: true,
       component: DataViewColumnHeader,
     },
+    createNormalizeDataViewPlugin(),
   ],
 });
