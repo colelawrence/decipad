@@ -3,13 +3,13 @@ import { VerifyEmail } from './VerifyEmail';
 
 describe('Email confirmation page', () => {
   it('renders the correct title', () => {
-    const { getByText } = render(<VerifyEmail />);
+    const { getByText } = render(<VerifyEmail email="foobar@decipad.com" />);
 
     expect(getByText(/check.+inbox/i)).toBeInTheDocument();
   });
 
   it('renders a back to login page button', () => {
-    const { getByRole } = render(<VerifyEmail />);
+    const { getByRole } = render(<VerifyEmail email="foobar@decipad.com" />);
 
     expect(getByRole('link')).toHaveAttribute('href', '/');
   });

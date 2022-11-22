@@ -36,13 +36,13 @@ const wrapperStyles = css({
   padding: '24px 12px',
 });
 
-export const VerifyEmail = (): ReturnType<FC> => {
+export const VerifyEmail = ({ email }: { email: string }): ReturnType<FC> => {
   return (
     <div css={outerWrapperStyles}>
       <div css={[wrapperStyles, outerBorderStyles]}>
         <AuthContent
           title="Check your inbox!"
-          description="We've sent you an email with a confirmation link"
+          description={`Open the link sent to ${email}`}
         />
 
         <div css={buttonWrapperStyles}>

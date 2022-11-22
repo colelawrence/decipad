@@ -50,7 +50,7 @@ it('shows a message when the signin request is processed', async () => {
   act(async () =>
     resolveSignIn({ ok: true, error: undefined, status: 200, url: null })
   );
-  expect(await findByText(/confirmation.+link/i)).toBeVisible();
+  expect(await findByText(/open.+link/i)).toBeVisible();
 });
 
 describe('if the signin request fails', () => {
