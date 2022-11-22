@@ -62,6 +62,7 @@ const childrenWrapperStyles = css({
   minWidth: '5px',
   padding: '0 4px',
   borderRadius: '6px',
+  mixBlendMode: 'luminosity',
 });
 
 const dragHandleStyles = css({
@@ -73,6 +74,7 @@ const dragHandleStyles = css({
   cursor: 'grab',
   pointerEvents: 'all',
   marginTop: 0,
+  mixBlendMode: 'luminosity',
   'svg > rect': {
     fill: 'transparent',
   },

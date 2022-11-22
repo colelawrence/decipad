@@ -3,15 +3,15 @@ import { FC, ReactNode } from 'react';
 import {
   grey200,
   normalOpacity,
-  offBlack,
   OpaqueColor,
   setCssVar,
   transparency,
+  cssVar,
 } from '../../primitives';
 import { baseSwatches } from '../../utils';
 
 const buttonStyles = css({
-  ...setCssVar('currentTextColor', offBlack.rgb),
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   width: '24px',
   height: '24px',
   borderRadius: '4px',
@@ -21,6 +21,8 @@ const buttonStyles = css({
 });
 
 const iconSize = css({
+  mixBlendMode: 'luminosity',
+  opacity: '90%',
   display: 'inline-block',
   width: '22px',
   height: '22px',

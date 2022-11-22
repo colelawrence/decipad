@@ -31,6 +31,7 @@ import {} from '@decipad/language';
 
 const tableColumnMenuStyles = css({
   marginLeft: 'auto',
+  mixBlendMode: 'luminosity',
 });
 
 const presentableCurrencyUnits = currencyUnits.filter((f) => {

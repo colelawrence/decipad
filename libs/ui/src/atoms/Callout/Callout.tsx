@@ -4,13 +4,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
-import {
-  black,
-  cssVar,
-  setCssVar,
-  strongOpacity,
-  transparency,
-} from '../../primitives';
+import { black, cssVar, setCssVar, transparency } from '../../primitives';
 import { blockAlignment } from '../../styles';
 import { AvailableSwatchColor, baseSwatches, UserIconKey } from '../../utils';
 
@@ -34,14 +28,12 @@ const styles = css(
 );
 
 const iconWrapperStyles = css({
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   alignItems: 'center',
   display: 'grid',
   height: `calc(${callout.typography?.fontSize} * ${callout.typography?.lineHeight})`,
   width: '16px',
-  mixBlendMode: 'overlay',
-  'svg > path': {
-    stroke: `${transparency(black, strongOpacity).rgba}`,
-  },
+  mixBlendMode: 'luminosity',
 });
 
 interface CalloutProps {
@@ -67,7 +59,6 @@ export const Callout = ({
         {
           backgroundColor: transparency(baseSwatches[color], 0.4).rgba,
           color: transparency(black, 0.5).rgba,
-          mixBlendMode: 'overlay',
         },
       ]}
     >

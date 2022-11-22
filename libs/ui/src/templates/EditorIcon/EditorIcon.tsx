@@ -32,9 +32,11 @@ const iconWrapperStyles = css({
 });
 
 const iconStyles = css(p14Regular, {
-  ...setCssVar('currentTextColor', cssVar('iconColorDark')),
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   width: '24px',
   height: '24px',
+  mixBlendMode: 'luminosity',
+  opacity: '90%',
 });
 
 type EditorIconProps = {
