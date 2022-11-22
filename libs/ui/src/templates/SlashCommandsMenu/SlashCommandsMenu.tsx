@@ -59,50 +59,6 @@ const dataItems = [
   },
 ];
 
-const jsEvalCmd = !isFlagEnabled('UNSAFE_JS_EVAL')
-  ? [
-      {
-        command: 'eval',
-        title: 'Javascript',
-        icon: <CodeBlock />,
-        description: 'Let users to run javascript code',
-        enabled: !isFlagEnabled('UNSAFE_JS_EVAL'),
-        extraSearchTerms: ['eval', 'javascript', 'js'],
-      },
-    ]
-  : [
-      {
-        command: 'eval',
-        title: 'Javascript',
-        icon: <CodeBlock />,
-        description: 'Let users to run javascript code',
-        enabled: true,
-        extraSearchTerms: ['eval', 'javascript', 'js'],
-      },
-    ];
-
-const sketchCmd = !isFlagEnabled('SKETCH')
-  ? [
-      {
-        command: 'sketch',
-        title: 'Sketch',
-        icon: <Sketch />,
-        description: 'Express yourself with a drawing',
-        enabled: !isFlagEnabled('SKETCH'),
-        extraSearchTerms: ['draw', 'paint'],
-      },
-    ]
-  : [
-      {
-        command: 'sketch',
-        title: 'Sketch',
-        icon: <Sketch />,
-        description: 'Express yourself with a drawing',
-        enabled: true,
-        extraSearchTerms: ['draw', 'paint'],
-      },
-    ];
-
 const groups = [
   {
     title: 'Numbers',
@@ -151,7 +107,14 @@ const groups = [
         enabled: true,
         extraSearchTerms: ['display', 'result', 'show'],
       },
-      ...jsEvalCmd,
+      {
+        command: 'eval',
+        title: 'Javascript',
+        icon: <CodeBlock />,
+        description: 'Let users to run javascript code',
+        enabled: isFlagEnabled('UNSAFE_JS_EVAL'),
+        extraSearchTerms: ['eval', 'javascript', 'js'],
+      },
     ],
   },
   {
@@ -197,7 +160,14 @@ const groups = [
         enabled: true,
         extraSearchTerms: ['hr', 'divider', '-'],
       },
-      ...sketchCmd,
+      {
+        command: 'sketch',
+        title: 'Sketch',
+        icon: <Sketch />,
+        description: 'Express yourself with a drawing',
+        enabled: isFlagEnabled('SKETCH'),
+        extraSearchTerms: ['draw', 'paint'],
+      },
     ],
   },
 ];
