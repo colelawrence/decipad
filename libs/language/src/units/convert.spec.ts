@@ -1,4 +1,5 @@
 import { F, U, u } from '../utils';
+import { Unit } from '../type';
 import { convertBetweenUnits, normalizeUnitName } from '.';
 
 describe('convert', () => {
@@ -616,5 +617,37 @@ describe('convert', () => {
         ])
       )
     ).toMatchObject(F(1));
+  });
+});
+
+describe('imprecise conversions', () => {
+  const loose = (f: number, from: Unit[], to: Unit[]) =>
+    convertBetweenUnits(F(f), from, to, { tolerateImprecision: true });
+
+  it('converts months to days', () => {
+    expect(loose(-1, U('month'), U('day'))).toMatchInlineSnapshot(
+      `Fraction(-30)`
+    );
+    expect(loose(1, U('month'), U('day'))).toMatchInlineSnapshot(
+      `Fraction(30)`
+    );
+    expect(loose(1.5, U('month'), U('day'))).toMatchInlineSnapshot(
+      `Fraction(45)`
+    );
+    expect(loose(2, U('month'), U('day'))).toMatchInlineSnapshot(
+      `Fraction(60)`
+    );
+    expect(loose(1, U('month'), U('second'))).toMatchInlineSnapshot(
+      `Fraction(2592000)`
+    );
+  });
+
+  it('converts days to months', () => {
+    expect(loose(30, U('day'), U('month'))).toMatchInlineSnapshot(
+      `Fraction(1)`
+    );
+    expect(loose(15, U('day'), U('month'))).toMatchInlineSnapshot(
+      `Fraction(0.5)`
+    );
   });
 });

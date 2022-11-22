@@ -429,7 +429,13 @@ export class Computer {
   }
 
   formatNumber(type: SerializedTypes.Number, value: FFraction): DeciNumber {
-    return formatNumber(this.locale, type.unit, value, type.numberFormat);
+    return formatNumber(
+      this.locale,
+      type.unit,
+      value,
+      type.numberFormat,
+      type.numberError === 'month-day-conversion'
+    );
   }
 
   formatUnit(unit: Unit[], value?: FFraction): string {

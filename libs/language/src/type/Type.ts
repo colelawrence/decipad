@@ -38,6 +38,7 @@ export class Type {
   type: PrimitiveTypeName | null = null;
   unit: Unit[] | null = null;
   numberFormat: AST.NumberFormat | null = null;
+  numberError: 'month-day-conversion' | null = null;
 
   date: Time.Specificity | null = null;
 

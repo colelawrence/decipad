@@ -36,15 +36,6 @@ export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
     }
   });
 
-export const timeQuantityBinopFunctor = ([t1, t2]: Type[]) =>
-  Type.combine(t1.isTimeQuantity(), t2.isTimeQuantity()).mapType(() => {
-    const allTimeUnits = new Set([
-      ...getDefined(t1.unit),
-      ...getDefined(t2.unit),
-    ]);
-    return t.timeQuantity(Array.from(allTimeUnits));
-  });
-
 export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   const d1Specificity = getDefined(t1.date);
   const d2Specificity = getDefined(t2.date);

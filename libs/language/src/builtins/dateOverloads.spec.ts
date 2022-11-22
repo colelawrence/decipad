@@ -5,7 +5,6 @@ import { overloadBuiltin } from './overloadBuiltin';
 import {
   dateOverloads,
   dateAndTimeQuantityFunctor,
-  timeQuantityBinopFunctor,
   addDateAndTimeQuantity,
 } from './dateOverloads';
 import { F, U } from '../utils';
@@ -16,54 +15,24 @@ const minus = overloadBuiltin('-', 2, dateOverloads['-']);
 describe('common functions', () => {
   it('dateAndTimeQuantityFunctor', () => {
     expect(
-      dateAndTimeQuantityFunctor([t.date('month'), t.timeQuantity(['day'])])
+      dateAndTimeQuantityFunctor([t.date('month'), t.timeQuantity('day')])
         .errorCause
     ).toMatchInlineSnapshot(`[Error: Inference Error: mismatched-specificity]`);
 
     expect(
-      dateAndTimeQuantityFunctor([t.date('day'), t.timeQuantity(['quarter'])])
+      dateAndTimeQuantityFunctor([t.date('day'), t.timeQuantity('quarter')])
         .date
     ).toMatchInlineSnapshot(`"day"`);
 
     expect(
-      dateAndTimeQuantityFunctor([t.date('second'), t.timeQuantity(['minute'])])
+      dateAndTimeQuantityFunctor([t.date('second'), t.timeQuantity('minute')])
         .date
     ).toMatchInlineSnapshot(`"second"`);
 
     expect(
-      dateAndTimeQuantityFunctor([t.date('second'), t.timeQuantity(['minute'])])
+      dateAndTimeQuantityFunctor([t.date('second'), t.timeQuantity('minute')])
         .date
     ).toMatchInlineSnapshot(`"second"`);
-  });
-
-  it('timeQuantityBinopFunctor', () => {
-    expect(
-      timeQuantityBinopFunctor([
-        t.timeQuantity(['day', 'month']),
-        t.timeQuantity(['quarter']),
-      ]).unit
-    ).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "exp": Fraction(1),
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "day",
-        },
-        Object {
-          "exp": Fraction(1),
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "month",
-        },
-        Object {
-          "exp": Fraction(1),
-          "known": true,
-          "multiplier": Fraction(1),
-          "unit": "quarter",
-        },
-      ]
-    `);
   });
 
   it('addDateAndTimeQuantity', () => {

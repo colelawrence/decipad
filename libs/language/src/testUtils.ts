@@ -190,12 +190,13 @@ export const snapshotType = (type: Type | SerializedType): string => {
     }
 
     case 'number': {
+      const precision = type.numberError ? '~' : '';
       if (type.numberFormat) {
-        return type.numberFormat;
+        return precision + type.numberFormat;
       } else if (type.unit) {
-        return snapshotUnit(type.unit);
+        return precision + snapshotUnit(type.unit);
       } else {
-        return 'number';
+        return `${precision}number`;
       }
     }
 

@@ -47,6 +47,14 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         };
       }
 
+      if (type.numberError) {
+        return {
+          kind: 'number',
+          unit: type.unit?.length ? type.unit : null,
+          numberError: type.numberError,
+        };
+      }
+
       return {
         kind: 'number',
         unit: type.unit?.length ? type.unit : null,
@@ -96,7 +104,7 @@ export function deserializeType(type: Type | SerializedType): Type {
     (() => {
       switch (type.kind) {
         case 'number':
-          return t.number(type.unit, type.numberFormat);
+          return t.number(type.unit, type.numberFormat, type.numberError);
         case 'string':
           return t.string();
         case 'boolean':

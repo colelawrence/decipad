@@ -31,12 +31,14 @@ export type Number =
   | ({
       readonly kind: 'number';
       readonly unit: Unit[] | null;
+      readonly numberError?: 'month-day-conversion';
       readonly numberFormat?: null;
     } & Common)
   | ({
       readonly kind: 'number';
       readonly numberFormat: AST.NumberFormat;
       readonly unit?: null;
+      readonly numberError?: null;
     } & Common);
 export type Boolean = { readonly kind: 'boolean' } & Common;
 export type String = { readonly kind: 'string' } & Common;

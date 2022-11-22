@@ -2039,6 +2039,15 @@ describe('type coercion', () => {
     });
   });
 
+  it('can coerce imprecise numbers', async () => {
+    expect(await runCode('(30 days in month) + 1')).toMatchInlineSnapshot(`
+      Object {
+        "type": ~month,
+        "value": Fraction(2),
+      }
+    `);
+  });
+
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('can coerce the arguments of an autoconverted function', async () => {
     expect(await runCode(`1 centigram + 2`)).toMatchObject({

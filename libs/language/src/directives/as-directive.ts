@@ -80,6 +80,12 @@ export async function getType(
       }
 
       if (unit && !areUnitsConvertible(sourceUnits, unit)) {
+        if (
+          areUnitsConvertible(sourceUnits, unit, { tolerateImprecision: true })
+        ) {
+          // Only imprecision available today
+          return t.number(targetUnit, undefined, 'month-day-conversion');
+        }
         return t.impossible(
           InferError.cannotConvertBetweenUnits(sourceUnits, unit)
         );
@@ -166,7 +172,8 @@ export async function getValue(
       const converted = convertBetweenUnits(
         value.getData(),
         sourceUnits,
-        targetUnits
+        targetUnits,
+        { tolerateImprecision: true }
       );
 
       return fromJS(converted.div(conversionRate));

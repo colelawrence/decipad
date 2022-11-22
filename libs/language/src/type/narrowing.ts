@@ -1,17 +1,10 @@
 import { getDefined, zip } from '@decipad/utils';
 import produce from 'immer';
-import {
-  build as t,
-  deserializeType,
-  SerializedTypes,
-  serializeType,
-  Type,
-} from '.';
+import { deserializeType, SerializedTypes, serializeType, Type } from '.';
 import { equalOrUndefined, equalOrUnknown } from '../utils';
-import { InferError } from './InferError';
 import { onlyOneIsPercentage } from './percentages';
 import { traverseType } from './traverseType';
-import { matchUnitArrays } from './units';
+import { propagateTypeUnits } from './units';
 
 export interface FunctionSignature {
   expectedArgs: Type[];
@@ -61,7 +54,7 @@ export function narrowTypes(
             number.numberFormat = null;
           });
         }
-        return narrowUnitsOf(t1, t2);
+        return propagateTypeUnits(t1, t2);
       }
 
       case 'date': {
@@ -146,25 +139,6 @@ interface NarrowFunctionCallArgs {
   args: Type[];
   expectedArgs: Type[];
   returnType: Type;
-}
-
-function narrowUnitsOf(t1: Type, t2: Type): Type {
-  const s1 = t1.unit;
-  const s2 = t2.unit;
-
-  if (s1 == null || s2 == null) {
-    // Either unit wins, if any
-    return produce(t1, (number) => {
-      number.unit = s1 || s2;
-    });
-  }
-
-  if (matchUnitArrays(s1, s2)) {
-    // Must be the same unit
-    return t1;
-  }
-
-  return t.impossible(InferError.expectedUnit(s1, s2));
 }
 
 export function narrowFunctionCall({

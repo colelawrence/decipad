@@ -377,7 +377,8 @@ export function formatNumber(
   locale: string,
   unit: Unit[] | null | undefined,
   number: Fraction,
-  numberFormat: AST.NumberFormat | null = undefined
+  numberFormat: AST.NumberFormat | null = undefined,
+  imprecise = false
 ): DeciNumber {
   const fraction = toFraction(number);
 
@@ -413,8 +414,12 @@ export function formatNumber(
     deciNumber = formatUnitless(locale, fraction);
   }
 
-  const { partsOf } = deciNumber;
-  const ret: DeciNumberPart[] = beautifyExponents(partsOf);
+  let { partsOf } = deciNumber;
+  partsOf = beautifyExponents(partsOf);
 
-  return { ...deciNumber, asString: partsToString(ret), partsOf: ret };
+  if (imprecise && partsOf[0]?.type !== 'roughly') {
+    partsOf = [{ type: 'roughly', value: '≈' }, ...partsOf];
+  }
+
+  return { ...deciNumber, asString: partsToString(partsOf), partsOf };
 }

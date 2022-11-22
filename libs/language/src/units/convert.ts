@@ -6,9 +6,28 @@ import { Unit } from '../type/unit-type';
 import { normalizeUnits, simplifyUnits } from '../type/units';
 import { zip } from '../utils';
 import { InferError } from '../type';
+import { getImpreciseConversionFactor } from './imprecise-conversions';
 
-function areQuantityUnitsCompatible(a: Unit, b: Unit): boolean {
-  return a.unit === b.unit && a.exp.compare(b.exp) === 0;
+const getBaseQuantity = (u: Unit) => getUnitByName(u.unit)?.baseQuantity;
+
+interface ImprecisionOpts {
+  tolerateImprecision?: boolean;
+}
+
+function areQuantityUnitsCompatible(
+  a: Unit,
+  b: Unit,
+  { tolerateImprecision }: ImprecisionOpts = {}
+): boolean {
+  if (a.unit === b.unit && a.exp.equals(b.exp)) {
+    return true;
+  } else if (tolerateImprecision && a.exp.equals(b.exp)) {
+    const baseA = getBaseQuantity(a);
+    const baseB = getBaseQuantity(b);
+    return getImpreciseConversionFactor(baseA, baseB) != null;
+  } else {
+    return false;
+  }
 }
 
 function areQuantityUnitsReversible(
@@ -45,7 +64,11 @@ function baseQuantityUnits(units: Unit[] | null): Unit[] | null {
   );
 }
 
-export function areUnitsConvertible(unitsA: Unit[], unitsB: Unit[]): boolean {
+export function areUnitsConvertible(
+  unitsA: Unit[],
+  unitsB: Unit[],
+  { tolerateImprecision }: ImprecisionOpts = {}
+): boolean {
   const [sourceUnits] = expandUnits(unitsA);
   const [targetUnits] = expandUnits(unitsB);
   const baseQuantitySourceUnits = baseQuantityUnits(sourceUnits);
@@ -66,7 +89,9 @@ export function areUnitsConvertible(unitsA: Unit[], unitsB: Unit[]): boolean {
   for (const baseQuantitySourceUnit of baseQuantitySourceUnits ?? []) {
     for (const pendingMatchUnit of pendingMatchUnits) {
       if (
-        areQuantityUnitsCompatible(baseQuantitySourceUnit, pendingMatchUnit)
+        areQuantityUnitsCompatible(baseQuantitySourceUnit, pendingMatchUnit, {
+          tolerateImprecision,
+        })
       ) {
         pendingMatchUnits.delete(pendingMatchUnit);
         break;
@@ -95,10 +120,16 @@ export function fromExpandedBaseQuantity(
 export function convertBetweenUnits(
   n: Fraction,
   from: Unit[],
-  to: Unit[]
+  to: Unit[],
+  { tolerateImprecision }: ImprecisionOpts = {}
 ): Fraction {
-  if (!areUnitsConvertible(from, to)) {
+  if (!areUnitsConvertible(from, to, { tolerateImprecision })) {
     throw InferError.cannotConvertBetweenUnits(from, to);
+  }
+
+  if (tolerateImprecision && !areUnitsConvertible(from, to)) {
+    // It's not convertible precisely, let's go imprecise
+    return impreciselyConvertBetweenUnits(n, from, to);
   }
 
   const [expandedUnits, expandedN] = toExpandedBaseQuantity(n, from);
@@ -114,4 +145,34 @@ export function convertBetweenUnits(
   }
 
   return revertedN;
+}
+
+function impreciselyConvertBetweenUnits(n: Fraction, from: Unit[], to: Unit[]) {
+  for (const fromU of from) {
+    for (const toU of to) {
+      const basicCompat = areQuantityUnitsCompatible(fromU, toU);
+      if (basicCompat) {
+        continue;
+      }
+
+      const fromBase = getUnitByName(fromU.unit);
+      const toBase = getUnitByName(toU.unit);
+
+      const conv =
+        fromBase?.baseQuantity &&
+        toBase?.baseQuantity &&
+        getImpreciseConversionFactor(
+          fromBase.baseQuantity,
+          toBase.baseQuantity
+        );
+      if (!conv) {
+        continue;
+      }
+
+      // Convert fromU to something compatible with toU
+      n = toBase.fromBaseQuantity(fromBase.toBaseQuantity(n).mul(conv));
+    }
+  }
+
+  return n;
 }

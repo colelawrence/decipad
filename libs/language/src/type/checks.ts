@@ -9,11 +9,10 @@ import { Unit } from './unit-type';
 import {
   combineUnits,
   inverseExponent,
-  matchUnitArrays,
   multiplyExponent,
-  removeSingleUnitless,
   setUnit,
   timeUnits,
+  propagateTypeUnits,
 } from './units';
 
 const checker = <Args extends unknown[]>(
@@ -36,21 +35,6 @@ export const isScalar = checker((me: Type, type: PrimitiveTypeName) => {
   }
 });
 
-const sameNumbernessAs = (me: Type, other: Type) => {
-  me = propagatePercentage(me, other);
-
-  const matchingUnits = matchUnitArrays(me.unit, other.unit);
-  if (matchingUnits) {
-    return me;
-  }
-
-  const onlyOneHasAUnit = removeSingleUnitless(me, other);
-  if (onlyOneHasAUnit) {
-    return setUnit(me, onlyOneHasAUnit);
-  }
-  return me.withErrorCause(InferError.expectedUnit(other.unit, me.unit));
-};
-
 export const sameScalarnessAs = checker((me: Type, other: Type) => {
   const meScalar = me.type != null;
   const theyScalar = me.type != null;
@@ -62,7 +46,7 @@ export const sameScalarnessAs = checker((me: Type, other: Type) => {
     }
 
     if (me.type === 'number') {
-      return sameNumbernessAs(me, other);
+      return propagateTypeUnits(me, other);
     }
 
     return me;

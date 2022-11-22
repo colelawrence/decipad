@@ -271,8 +271,8 @@ describe('dates', () => {
 });
 
 it('time quantities', () => {
-  const q = t.timeQuantity(['quarter', 'month']);
-  expect(q.unit).toEqual(U(['quarter', 'month'].map((unit) => u(unit))));
+  const q = t.timeQuantity('quarter');
+  expect(q.unit).toEqual(U(['quarter'].map((unit) => u(unit))));
 
   expect(q.isTimeQuantity()).toEqual(q);
 

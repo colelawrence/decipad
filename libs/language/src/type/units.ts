@@ -11,6 +11,8 @@ import {
 } from '../units';
 import { F, getDefined } from '../utils';
 import type { Unit } from './unit-type';
+import { InferError } from './InferError';
+import { propagatePercentage } from './percentages';
 
 export const timeUnits = new Set([
   'millennium',
@@ -129,6 +131,26 @@ export const removeSingleUnitless = (a: Type, b: Type) => {
   } else {
     return null;
   }
+};
+
+export const propagateTypeUnits = (me: Type, other: Type) => {
+  me = propagatePercentage(me, other);
+
+  me = produce(me, (me) => {
+    me.numberError ??= other.numberError;
+  });
+
+  const matchingUnits = matchUnitArrays(me.unit, other.unit);
+  if (matchingUnits) {
+    return me;
+  }
+
+  const onlyOneHasAUnit = removeSingleUnitless(me, other);
+  if (onlyOneHasAUnit) {
+    return setUnit(me, onlyOneHasAUnit);
+  }
+
+  return me.withErrorCause(InferError.expectedUnit(other.unit, me.unit));
 };
 
 export const simplifyUnits = (units: Unit[]): Unit[] =>

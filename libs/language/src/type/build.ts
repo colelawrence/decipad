@@ -13,7 +13,8 @@ const primitive = (type: PrimitiveTypeName) =>
 
 export const number = (
   unit: Unit[] | null = null,
-  numberFormat: AST.NumberFormat | null = undefined
+  numberFormat: Type['numberFormat'] | undefined = undefined,
+  numberError: Type['numberError'] | undefined = undefined
 ) =>
   produce(primitive('number'), (t) => {
     if (unit != null && numberFormat != null) {
@@ -21,6 +22,7 @@ export const number = (
     }
     t.unit = unit?.length ? unit : null;
     t.numberFormat = numberFormat ?? null;
+    t.numberError = numberError ?? null;
   });
 
 export const string = () => primitive('string');
@@ -37,14 +39,16 @@ export const date = (specificity: Time.Specificity) =>
     t.date = specificity;
   });
 
-export const timeQuantity = (timeUnits: (Unit | string)[]) =>
+export const timeQuantity = (timeUnit: Unit | string) =>
   produce(primitive('number'), (numberType) => {
-    numberType.unit = timeUnits.map((unit) => ({
-      unit: timeUnitFromUnit(unit),
-      exp: toFraction(1),
-      multiplier: toFraction(1),
-      known: true,
-    }));
+    numberType.unit = [
+      {
+        unit: timeUnitFromUnit(timeUnit),
+        exp: toFraction(1),
+        multiplier: toFraction(1),
+        known: true,
+      },
+    ];
   });
 
 interface BuildTableArgs {

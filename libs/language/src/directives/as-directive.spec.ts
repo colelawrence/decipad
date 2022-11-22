@@ -62,6 +62,12 @@ describe('getType', () => {
       )
     );
   });
+
+  it('converts time imprecisely', async () => {
+    expect(
+      await testGetType(getType, ne(1, 'month'), ne(1, 'days'))
+    ).toMatchObject(t.number(U('days'), undefined, 'month-day-conversion'));
+  });
 });
 
 describe('getValue', () => {
@@ -143,5 +149,11 @@ describe('getValue', () => {
         Fraction(1.8(641135767120019088523025530899546647578143)),
       ]
     `);
+  });
+
+  it('converts imprecisely', async () => {
+    expect(
+      (await testGetValue(getValue, ne(30, 'days'), ne(1, 'months'))).getData()
+    ).toMatchInlineSnapshot(`Fraction(1)`);
   });
 });
