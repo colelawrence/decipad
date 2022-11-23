@@ -1,5 +1,5 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
-import Fraction from '@decipad/fraction';
+import { toFraction, ZERO } from '@decipad/fraction';
 import { getDefined, varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
@@ -36,7 +36,14 @@ function toValue(
     return col.map((elem) => {
       switch (type?.kind) {
         case 'number':
-          return new Fraction(elem as number);
+          try {
+            return toFraction(elem as number);
+          } catch (err) {
+            if (typeof elem === 'string' && !elem.trim().length) {
+              return ZERO;
+            }
+            throw err;
+          }
         case 'date':
           return BigInt(getDefined(parseDate(elem as string)).date.getTime());
         case 'string':

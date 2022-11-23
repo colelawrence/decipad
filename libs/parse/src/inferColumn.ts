@@ -89,7 +89,8 @@ export const inferColumn = memoize(
           break;
         case 'string': {
           // eslint-disable-next-line no-await-in-loop
-          coalesce((await inferType(computer, value, options)).type);
+          const inferredType = await inferType(computer, value, options);
+          coalesce(inferredType.type);
           break;
         }
         case 'undefined':

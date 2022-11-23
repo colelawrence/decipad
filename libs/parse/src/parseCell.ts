@@ -133,7 +133,7 @@ export const parseCell = memoize(
               const literal = astNode(
                 'literal',
                 'number' as const,
-                new Fraction(result.value as Fraction)
+                toFraction(result.value as Fraction)
               );
               const unit = unitToAST(cellUnit);
 
