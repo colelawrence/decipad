@@ -1,4 +1,4 @@
-import { getDefined, zip } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
 import { Column, ColumnLike, Row, RuntimeError, Table, Value } from '../value';
@@ -105,31 +105,18 @@ export const evaluateTable = async (
     };
 
     for (const item of items) {
-      if (item.type === 'table-column') {
-        const [def, column] = item.args;
-        const colName = getIdentifierString(def);
-        // eslint-disable-next-line no-await-in-loop
-        const columnData = await evaluateTableColumn(
-          realm,
-          tableColumns,
-          column,
-          tableName,
-          tableLength
-        );
+      const [def, column] = item.args;
+      const colName = getIdentifierString(def);
+      // eslint-disable-next-line no-await-in-loop
+      const columnData = await evaluateTableColumn(
+        realm,
+        tableColumns,
+        column,
+        tableName,
+        tableLength
+      );
 
-        addColumn(colName, columnData);
-      } else if (item.type === 'table-spread') {
-        // eslint-disable-next-line no-await-in-loop
-        const baseTable = await evaluate(realm, item.args[0]);
-
-        const { columnNames, columns } = getInstanceof(baseTable, Table);
-        for (const [name, value] of zip(getDefined(columnNames), columns)) {
-          addColumn(name, value);
-        }
-        // istanbul ignore else
-      } else {
-        throw new Error('panic: unreachable');
-      }
+      addColumn(colName, columnData);
     }
 
     return Table.fromMapping(tableColumns);

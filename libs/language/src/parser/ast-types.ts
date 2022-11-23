@@ -158,16 +158,9 @@ export interface TableColumn {
   end?: Pos;
 }
 
-export interface TableSpread {
-  type: 'table-spread';
-  args: [spreadTableRef: Ref];
-  start?: Pos;
-  end?: Pos;
-}
-
 export interface Table {
   type: 'table';
-  args: (TableColumn | TableSpread)[];
+  args: TableColumn[];
   start?: Pos;
   end?: Pos;
 }
@@ -355,7 +348,6 @@ export type Node =
   | Identifier
   | Lists
   | TableColumn
-  | TableSpread
   | MatchDef
   | TieredDef;
 
@@ -381,7 +373,6 @@ export interface TypeToNode {
   column: Column;
   'generic-list': GenericList;
   'table-column': TableColumn;
-  'table-spread': TableSpread;
   table: Table;
   'property-access': PropertyAccess;
   'table-column-assign': TableColumnAssign;

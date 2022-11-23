@@ -1254,21 +1254,6 @@ let ParserRules = [
       );
     },
   },
-  { name: 'tableItem$subexpression$1', symbols: [{ literal: '…' }] },
-  { name: 'tableItem$subexpression$1', symbols: [{ literal: '...' }] },
-  {
-    name: 'tableItem',
-    symbols: ['tableItem$subexpression$1', '_', 'ref'],
-    postprocess: (d) => {
-      return addArrayLoc(
-        {
-          type: 'table-spread',
-          args: [d[2]],
-        },
-        d
-      );
-    },
-  },
   {
     name: 'tableItem',
     symbols: ['identifier', 'equalSign', 'expression'],
@@ -1363,119 +1348,6 @@ let ParserRules = [
     name: 'tieredSep',
     symbols: ['tieredSep$subexpression$1'],
     postprocess: id,
-  },
-  {
-    name: 'select',
-    symbols: [
-      { literal: 'select' },
-      '_',
-      { literal: '(' },
-      '_',
-      'selectedColumns',
-      '_',
-      { literal: ')' },
-    ],
-    postprocess: (d) => {
-      const ref = d[4];
-
-      return addArrayLoc(
-        {
-          type: 'directive',
-          args: ['select', ...ref],
-        },
-        d
-      );
-    },
-  },
-  {
-    name: 'selectedColumns$ebnf$1',
-    symbols: [{ literal: ',' }],
-    postprocess: id,
-  },
-  {
-    name: 'selectedColumns$ebnf$1',
-    symbols: [],
-    postprocess: function (d) {
-      return null;
-    },
-  },
-  {
-    name: 'selectedColumns$ebnf$2$subexpression$1$ebnf$1',
-    symbols: [{ literal: ',' }],
-    postprocess: id,
-  },
-  {
-    name: 'selectedColumns$ebnf$2$subexpression$1$ebnf$1',
-    symbols: [],
-    postprocess: function (d) {
-      return null;
-    },
-  },
-  {
-    name: 'selectedColumns$ebnf$2$subexpression$1',
-    symbols: [
-      'genericIdentifier',
-      '_',
-      'selectedColumns$ebnf$2$subexpression$1$ebnf$1',
-      '_',
-    ],
-  },
-  {
-    name: 'selectedColumns$ebnf$2',
-    symbols: ['selectedColumns$ebnf$2$subexpression$1'],
-  },
-  {
-    name: 'selectedColumns$ebnf$2$subexpression$2$ebnf$1',
-    symbols: [{ literal: ',' }],
-    postprocess: id,
-  },
-  {
-    name: 'selectedColumns$ebnf$2$subexpression$2$ebnf$1',
-    symbols: [],
-    postprocess: function (d) {
-      return null;
-    },
-  },
-  {
-    name: 'selectedColumns$ebnf$2$subexpression$2',
-    symbols: [
-      'genericIdentifier',
-      '_',
-      'selectedColumns$ebnf$2$subexpression$2$ebnf$1',
-      '_',
-    ],
-  },
-  {
-    name: 'selectedColumns$ebnf$2',
-    symbols: [
-      'selectedColumns$ebnf$2',
-      'selectedColumns$ebnf$2$subexpression$2',
-    ],
-    postprocess: function arrpush(d) {
-      return d[0].concat([d[1]]);
-    },
-  },
-  {
-    name: 'selectedColumns',
-    symbols: [
-      'ref',
-      '_',
-      'selectedColumns$ebnf$1',
-      '_',
-      'selectedColumns$ebnf$2',
-    ],
-    postprocess: (d) => {
-      const ref = d[0];
-      const cols = addArrayLoc(
-        {
-          type: 'generic-list',
-          args: d[4].map(([ident]) => ident),
-        },
-        d[4]
-      );
-
-      return [ref, cols];
-    },
   },
   {
     name: 'match',
@@ -1690,7 +1562,6 @@ let ParserRules = [
   },
   { name: 'primary', symbols: ['literal'], postprocess: id },
   { name: 'primary', symbols: ['functionCall'], postprocess: id },
-  { name: 'primary', symbols: ['select'], postprocess: id },
   { name: 'primary', symbols: ['matrixRef'], postprocess: id },
   { name: 'primary', symbols: ['ref'], postprocess: id },
   { name: 'primary', symbols: ['currency'], postprocess: id },
@@ -1738,7 +1609,6 @@ let ParserRules = [
   { name: 'primary$subexpression$2', symbols: ['ref'] },
   { name: 'primary$subexpression$2', symbols: ['functionCall'] },
   { name: 'primary$subexpression$2', symbols: ['parenthesizedExpression'] },
-  { name: 'primary$subexpression$2', symbols: ['select'] },
   {
     name: 'primary',
     symbols: [

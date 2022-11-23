@@ -111,7 +111,9 @@ export function callBuiltin(
       ? autoconvertResult(resultBeforeConvertingBack, returnType)
       : resultBeforeConvertingBack;
   } catch (err) {
-    console.error(`Error at stage ${stages[stage]}`, err);
+    if (typeof jest === 'undefined') {
+      console.error(`Error at stage ${stages[stage]}`, err);
+    }
     throw new RuntimeError((err as Error)?.message || 'Unknown error');
   }
 }

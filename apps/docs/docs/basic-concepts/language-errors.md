@@ -91,8 +91,8 @@ This operation requires a range and a number was entered
 You are calling a function with a wrong argument. For instance in the function below we are trying to see if a number contains a date, which doesn't make sense.
 
 ```deci live
-splitby(1, 2)
-==> This operation requires a table or row and a number was entered
+lookup(1, 2)
+==> This operation requires a table and a number was entered
 ```
 
 ## Expected primitive
@@ -248,34 +248,28 @@ You passed a column that's not associated with that table.
 When creating a table, its columns are inherently associated with it. Functions such as `splitby` need this association.
 
 ```deci live
-OtherTable = {
-  Column
+Column = [1]
+
+TableToSortBy = {
+  SortKey = [1, 2, 3]
 }
 
-TableToSplitBy = {
-  SplitKey = [1, 2, 3]
-}
-
-splitby(TableToSplitBy, OtherTable.Column)
-==> Incompatible column sizes: 1 and 3
+sortby(TableToSortBy, Column)
+==> Expected table and associated column
 ```
 
-Make sure this association exists by using a table, and then its column, `splitby()`
+Make sure this association exists by using a table, and then its column, `sortby()`
 
 ```deci live
-TableToSplitBy = {
-  Name = ["group 1: A", "group 1: B", "group 2"]
-  SplitKey = [1, 1, 2]
+TableToSortBy = {
+  Name = ["A", "B", "C"]
+  SortKey = [3, 2, 1]
 }
 
-splitby(TableToSplitBy, TableToSplitBy.SplitKey)
+sortby(TableToSortBy, TableToSortBy.SortKey)
 ==> {
-  SplitKey = [ 1, 2 ],
-  Values = [ {
-  Name = [ 'group 1: A', 'group 1: B' ]
-}, {
-  Name = [ 'group 2' ]
-} ]
+  Name = [ 'C', 'B', 'A' ],
+  SortKey = [ 1, 2, 3 ]
 }
 ```
 
@@ -295,10 +289,7 @@ You need to choose another name for your new column:
 ```deci live
 Table = { Names = ["Anna", "Kate"] }
 Table.NewNames = ["Other", "Names"]
-==> {
-  Names = [ 'Anna', 'Kate' ],
-  NewNames = [ 'Other', 'Names' ]
-}
+==> [ 'Other', 'Names' ]
 ```
 
 ## Syntax error

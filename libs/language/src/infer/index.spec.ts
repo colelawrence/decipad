@@ -17,13 +17,13 @@ import {
   prop,
   assign,
   block,
+  tableColAssign,
 } from '../utils';
 import {
   objectToMap,
   objectToTableType,
   typeSnapshotSerializer,
 } from '../testUtils';
-import { TableColumn, TableSpread } from '../parser/ast-types';
 
 import { inferStatement, inferExpression, inferProgram } from './index';
 import { makeContext } from './context';
@@ -349,35 +349,11 @@ describe('tables', () => {
 
   describe('table spreads', () => {
     const base = tableDef('Base', { Idx: col('1', '2') });
-    const extend = (...cols: (TableColumn | TableSpread)[]) =>
-      assign('Extended', n('table', n('table-spread', r('Base')), ...cols));
-
-    it('extending with no new columns is just a copy', async () => {
-      expect(await inferBlock(block(base, extend()))).toMatchObject({
-        columnNames: ['Idx'],
-        columnTypes: [{ type: 'string' }],
-      });
-    });
 
     it('can add a column', async () => {
       expect(
-        await inferBlock(
-          block(base, extend(n('table-column', n('coldef', 'New'), col(1, 2))))
-        )
-      ).toMatchObject({
-        columnNames: ['Idx', 'New'],
-        columnTypes: [{ type: 'string' }, { type: 'number' }],
-      });
-    });
-
-    it('needs the source table to be a table', async () => {
-      expect(
-        await inferBlock(block(assign('Base', l(1)), extend()))
-      ).toMatchObject({
-        errorCause: {
-          spec: { errType: 'expected-but-got' },
-        },
-      });
+        await inferBlock(block(base, tableColAssign('Base', 'New', col(1, 2))))
+      ).toMatchObject({ cellType: t.number() });
     });
 
     it('supports (previous)', async () => {
@@ -385,19 +361,10 @@ describe('tables', () => {
         await inferBlock(
           block(
             base,
-            extend(
-              n(
-                'table-column',
-                n('coldef', 'WithPrev'),
-                c('previous', l(false))
-              )
-            )
+            tableColAssign('Base', 'WithPrev', c('previous', l(false)))
           )
         )
-      ).toMatchObject({
-        columnNames: ['Idx', 'WithPrev'],
-        columnTypes: [{ type: 'string' }, { type: 'boolean' }],
-      });
+      ).toMatchObject({ cellType: t.boolean() });
     });
   });
 

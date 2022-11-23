@@ -186,7 +186,6 @@ powOp              -> primary _ powOperator _ powOp     {% powHandler %}
 
 primary            -> literal                           {% id %}
 primary            -> functionCall                      {% id %}
-primary            -> select                            {% id %}
 primary            -> matrixRef                         {% id %}
 primary            -> ref                               {% id %}
 primary            -> currency                          {% id %}
@@ -213,7 +212,7 @@ primary            -> ("!" | "not") _ expression        {%
                                                         }
                                                         %}
 
-primary       -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
+primary       -> (ref | functionCall | parenthesizedExpression) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',

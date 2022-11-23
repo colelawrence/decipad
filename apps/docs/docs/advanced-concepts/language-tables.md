@@ -154,18 +154,35 @@ Table = {
 Add new columns to a defined table with `.` followed by their name. Their sizes must match the existing table columns.
 
 ```deci live
- MyTable = {
-   A = [1, 2, 3]
-   B = [4, 5, 6]
- }
- MyTable.C = [7, 8, 9]
- MyTable
+MyTable = {
+  A = [1, 2, 3]
+  B = [4, 5, 6]
+}
+MyTable.C = [7, 8, 9]
+MyTable
 ==> {
   A = [ 1, 2, 3 ],
   B = [ 4, 5, 6 ],
   C = [ 7, 8, 9 ]
 }
 ```
+
+## Extend tables (deprecated)
+
+It used to be possible to extend existing tables and create a new one:
+
+```
+MyTable = {
+  A = [1, 2, 3]
+  B = [4, 5, 6]
+}
+MyTableWithC = {
+  ...MyTable
+  C = [7, 8, 9]
+}
+```
+
+But the preferred way to do this is the `MyTable.C = ...` method which is described above
 
 ## Index column
 
@@ -206,44 +223,6 @@ Flights.PassengerCount - 100
 ==> [ 0, 50, 100 ]
 ```
 
-## Augmenting tables
-
-If you have a table, you can copy it to another table using the `...` sign:
-
-```deci live
-Flights = {
-  Number = ["TP123", "BA456", "EJ789"]
-  PassengerCount = [100, 150, 200]
-}
-
-Flights2 = {
-  ...Flights
-}
-==> {
-  Number = [ 'TP123', 'BA456', 'EJ789' ],
-  PassengerCount = [ 100, 150, 200 ]
-}
-```
-
-Now you can add some columns of their own:
-
-```deci live
-Flights = {
-  Number = ["TP123", "BA456", "EJ789"]
-  PassengerCount = [100, 150, 200]
-}
-
-Flights2 = {
-  ...Flights
-  AccumulatedPassengerCount = previous(0) + PassengerCount
-}
-==> {
-  Number = [ 'TP123', 'BA456', 'EJ789' ],
-  PassengerCount = [ 100, 150, 200 ],
-  AccumulatedPassengerCount = [ 100, 250, 450 ]
-}
-```
-
 ## Re-using columns
 
 If you want to display just the flight number and `AccumulatedPassengerCount` you can:
@@ -254,14 +233,11 @@ Flights = {
   PassengerCount = [100, 150, 200]
 }
 
-Flights2 = {
-  ...Flights
-  AccumulatedPassengerCount = previous(0) + PassengerCount
-}
+Flights.AccumulatedPassengerCount = previous(0) + PassengerCount
 
-Flights3 = {
-  Number = Flights2.Number,
-  Acc = Flights2.AccumulatedPassengerCount
+Flights2 = {
+  Number = Flights.Number,
+  Acc = Flights.AccumulatedPassengerCount
 }
 ==> {
   Number = [ 'TP123', 'BA456', 'EJ789' ],
