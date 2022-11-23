@@ -47,6 +47,11 @@ Series can be spaced in years, months, or days (YYYY, YYYY/MM, YYYY/MM/DD).
 - To **add a series to a column**, click the down triangle button on a column, click `Change type`, and select `Series` and then `Date`.<br></br>
   Then you will be able to specify a moment in time on the first cell of that column (YYYY, YYYY/MM, YYYY/MM/DD).
 
+### Hide Table Formulas
+
+- To **hide table formulas**, click the `Hide formulas` button on top of the table. 
+- To **show table formulas**, click the `Show formulas` button on top of the table.
+
 <br></br>
 
 ---
