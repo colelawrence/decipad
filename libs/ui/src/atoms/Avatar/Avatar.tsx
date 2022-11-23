@@ -63,7 +63,11 @@ export const Avatar = ({
   greyedOut = false,
 }: AvatarProps): ReturnType<FC> => {
   return (
-    <div role="img" aria-label={`Avatar of user ${name}`} css={containerStyles}>
+    <div
+      role="img"
+      aria-label={`Avatar of user ${name[0]}`}
+      css={containerStyles}
+    >
       <svg
         css={{
           width: '100%',
