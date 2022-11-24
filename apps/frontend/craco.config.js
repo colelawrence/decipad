@@ -3,6 +3,7 @@
 
 const path = require('path');
 const { ProvidePlugin } = require('webpack');
+const open = require('open');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const SentryPlugin = require('@sentry/webpack-plugin');
@@ -117,8 +118,13 @@ module.exports = {
   eslint: { enable: false },
   typescript: { enableTypeChecking: false },
   devServer: {
-    open: [
-      'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
-    ],
+    open: {
+      target: [
+        'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
+      ],
+      app: {
+        name: open.apps.chrome,
+      },
+    },
   },
 };

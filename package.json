@@ -172,6 +172,7 @@
     "node-fetch": "3.2.10",
     "nodemailer": "6.8.0",
     "oauth": "0.10.0",
+    "open": "^8.4.0",
     "p-series": "2.1.0",
     "patch-package": "6.4.7",
     "pluralize": "8.0.0",
