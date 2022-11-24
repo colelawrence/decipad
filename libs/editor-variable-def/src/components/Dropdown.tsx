@@ -84,6 +84,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   return (
     <div {...attributes} contentEditable={false} id={element.id}>
       <WidgetDisplay
+        allowOpen={true}
         openMenu={dropdownOpen}
         setOpenMenu={setDropdownOpen}
         readOnly={readOnly}
@@ -92,6 +93,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
       </WidgetDisplay>
       <DropdownMenu
         open={dropdownOpen}
+        isReadOnly={readOnly}
         items={dropdownIds}
         addOption={addOption}
         removeOption={removeOption}

@@ -65,6 +65,7 @@ const hotKeyStyle = css({
 
 interface DropdownMenuProps {
   readonly open: boolean;
+  readonly isReadOnly: boolean;
   readonly items: Array<SelectItems>;
   readonly addOption: (a: string) => void;
   readonly removeOption: (a: string) => void;
@@ -75,6 +76,7 @@ interface DropdownMenuProps {
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({
   open,
+  isReadOnly,
   items,
   addOption,
   removeOption,
@@ -161,13 +163,15 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             editOption={editOptions}
           />
         ))}
-        <DropdownOption
-          ref={ref}
-          value={inputValue}
-          setValue={setInputValue}
-          show={showInput}
-          error={error}
-        />
+        {!isReadOnly && (
+          <DropdownOption
+            ref={ref}
+            value={inputValue}
+            setValue={setInputValue}
+            show={showInput}
+            error={error}
+          />
+        )}
       </div>
       <div
         css={footerStyles}

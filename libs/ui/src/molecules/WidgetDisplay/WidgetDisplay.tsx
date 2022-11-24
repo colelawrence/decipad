@@ -38,6 +38,7 @@ export interface WidgetDisplayProps {
   readonly openMenu: boolean;
   readonly setOpenMenu: (a: boolean) => void;
   readonly readOnly: boolean;
+  readonly allowOpen: boolean;
   readonly children: ReactNode;
 }
 
@@ -45,15 +46,17 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
   openMenu,
   setOpenMenu,
   readOnly,
+  allowOpen,
   children,
 }) => {
+  const showMenu = !readOnly || allowOpen;
   return (
     <div
-      css={mainStyles(readOnly, openMenu)}
-      onClick={() => !readOnly && setOpenMenu(!openMenu)}
+      css={mainStyles(!allowOpen && readOnly, openMenu)}
+      onClick={() => showMenu && setOpenMenu(!openMenu)}
     >
       <span css={lineStyles}>{children}</span>
-      {!readOnly && (
+      {showMenu && (
         <div css={{ width: '20px' }}>
           <div css={{ width: 20, height: 20 }}>
             <Caret variant={openMenu ? 'up' : 'down'} color="normal" />

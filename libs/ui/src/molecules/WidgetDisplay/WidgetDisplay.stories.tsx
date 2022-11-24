@@ -6,6 +6,7 @@ const args: WidgetDisplayProps = {
   openMenu: false,
   setOpenMenu: noop,
   readOnly: false,
+  allowOpen: true,
   children: <></>,
 };
 
