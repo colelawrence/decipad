@@ -12,18 +12,18 @@ const parentWrapper = css({
 
 const tableStyles = css({
   left: 0,
-  top: -10,
+  top: -5,
 });
 
 const tableReverseStyles = css({
   left: 0,
   top: 'auto',
-  bottom: 10,
+  bottom: 5,
 });
 
 const addElementLineWrapper = css({
   width: '100%',
-  height: 20,
+  height: 10,
   paddingTop: 4,
   paddingBottom: 4,
   justifyContent: 'center',
@@ -38,7 +38,7 @@ const addElementLineWrapper = css({
 
 const addElementLine = css({
   width: '100%',
-  height: 3,
+  height: 2,
   backgroundColor: cssVar('tableSelectionBackgroundColor'), // droplineColor too dark
 });
 
