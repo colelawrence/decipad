@@ -241,7 +241,7 @@
   "devDependencies": {
     "@architect/deploy": "4.2.3",
     "@architect/inventory": "3.3.0",
-    "@architect/sandbox": "5.3.4",
+    "@architect/sandbox": "5.4.0",
     "@babel/core": "7.20.2",
     "@babel/node": "7.20.0",
     "@babel/plugin-proposal-class-properties": "7.18.6",
