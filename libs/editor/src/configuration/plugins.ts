@@ -183,7 +183,7 @@ export const plugins = ({
 
       // language
       ...createEvalPlugin(computer),
-      createCodeLinePlugin(),
+      createCodeLinePlugin(computer),
       createUpdateComputerPlugin(computer),
       createVariableDefPlugin(),
       createPotentialFormulaHighlightPlugin(readOnly),

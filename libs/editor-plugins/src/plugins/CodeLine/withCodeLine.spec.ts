@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE,
@@ -7,9 +8,11 @@ import { createCodeLinePlugin } from './createCodeLinePlugin';
 
 describe('withCodeLine', () => {
   let editor: MyEditor;
+  let computer: Computer;
   beforeEach(() => {
+    computer = new Computer();
     editor = createTPlateEditor({
-      plugins: [createCodeLinePlugin()],
+      plugins: [createCodeLinePlugin(computer)],
     });
   });
 

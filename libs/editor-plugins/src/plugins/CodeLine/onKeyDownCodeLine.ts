@@ -8,6 +8,7 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate';
+import { Computer } from '@decipad/computer';
 import { filterStatementSeparator } from './filterStatementSeparator';
 
 const jumpToCodeLineEnd = (editor: MyEditor, nodeEntry: MyNodeEntry) => {
@@ -33,13 +34,18 @@ const findCodeLineParentEntry = (editor: MyEditor) => {
 };
 
 export const onKeyDownCodeLine =
-  (editor: MyEditor) => (event: React.KeyboardEvent<Element>) => {
+  (computer: Computer) =>
+  (editor: MyEditor) =>
+  (event: React.KeyboardEvent<Element>) => {
     if (event.key !== 'Enter') return;
 
     const codeLine = findCodeLineParentEntry(editor);
     if (!codeLine) return;
 
-    const shouldSoftBreak = filterStatementSeparator(editor)(codeLine);
+    const shouldSoftBreak = filterStatementSeparator(editor)(
+      codeLine,
+      computer
+    );
 
     if (shouldSoftBreak) {
       event.preventDefault();
