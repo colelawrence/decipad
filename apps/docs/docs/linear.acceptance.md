@@ -234,6 +234,47 @@ round(1/2 pint in ml)
 ==> 1000 Wh
 ```
 
+## [ENG-327](https://linear.app/decipad/issue/ENG-327)
+
+```deci live
+Table = { A = 1 }
+select(Table, B)
+==> The selected column does not exist in the reference table
+```
+
+```deci live
+Table = { A = 1 }
+select(Table, A)
+==> {
+  A = [ 1 ]
+}
+```
+
+```deci live
+Table = { A = 1 }
+select(Table, B, A)
+==> The selected column does not exist in the reference table
+```
+
+## [ENG-297](https://linear.app/decipad/issue/ENG-297)
+
+Part 1: splitby was malfunctioning
+
+```deci live
+People = {
+  Name = ["Peter", "Paul", "Mary"]
+  Origin = ["US", "UK", "US"]
+}
+Countries = splitby(People, People.Origin)
+lookup(Countries, Countries.Origin == "UK")
+==> {
+  Origin = 'UK',
+  Values = {
+  Name = [ 'Paul' ]
+}
+}
+```
+
 ## [ENG-332](https://linear.app/decipad/issue/ENG-332)
 
 ```deci live

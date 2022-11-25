@@ -34,7 +34,8 @@ function findRefs(node: AST.Node): string[] {
     case 'matrix-matchers':
     case 'range':
     case 'table':
-    case 'table-column-assign': {
+    case 'table-column-assign':
+    case 'table-spread': {
       return unique(node.args.flatMap(findRefs));
     }
     case 'assign':

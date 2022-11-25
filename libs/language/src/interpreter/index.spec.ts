@@ -11,8 +11,8 @@ import {
   tableDef,
   prop,
   block,
+  assign,
   r,
-  tableColAssign,
 } from '../utils';
 import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
@@ -340,20 +340,33 @@ describe('Tables', () => {
   it('can spread another table and add columns', async () => {
     const { value } = await runAST(
       block(
-        tableDef('Table', {
+        tableDef('OldTable', {
           Idx: col('One', 'Two'),
         }),
-        tableColAssign('Table', 'Col', col(1, 2)),
-        tableColAssign(
-          'Table',
-          'UsingPrevious',
-          c('+', l(1), c('previous', l(10)))
-        ),
-        tableColAssign('Table', 'JustOne', l(1))
+
+        assign(
+          'Extended',
+          n(
+            'table',
+            n('table-spread', r('OldTable')),
+            n('table-column', n('coldef', 'Col'), col(1, 2)),
+            n(
+              'table-column',
+              n('coldef', 'UsingPrevious'),
+              c('+', l(1), c('previous', l(10)))
+            ),
+            n('table-column', n('coldef', 'JustOne'), l(1))
+          )
+        )
       )
     );
 
-    expect(value).toEqual([F(1), F(1)]);
+    expect(value).toEqual([
+      ['One', 'Two'],
+      [F(1), F(2)],
+      [F(11), F(12)],
+      [F(1), F(1)],
+    ]);
   });
 
   it('Refers to other columns by name (and gets a cell)', async () => {

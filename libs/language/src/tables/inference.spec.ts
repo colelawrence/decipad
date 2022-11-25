@@ -57,28 +57,27 @@ describe('table with formulae', () => {
     inferTableColumnPerCell(
       makeContext(),
       objectToMap({ OtherColumn: t.column(t.number(), 'unknown') }),
-      expression,
-      'TableName'
+      expression
     );
 
   it('can run a formula', async () => {
     expect(await testComputed(l('a string'))).toEqual(
-      t.column(t.string(), 'unknown', 'TableName')
+      t.column(t.string(), 'unknown')
     );
     expect(await testComputed(col('one', 'two'))).toEqual(
-      t.column(t.column(t.string(), 2), 'unknown', 'TableName')
+      t.column(t.column(t.string(), 2), 'unknown')
     );
   });
 
   it('can run a formula with previous', async () => {
     expect(await testComputed(c('previous', l('hello')))).toEqual(
-      t.column(t.string(), 'unknown', 'TableName')
+      t.column(t.string(), 'unknown')
     );
   });
 
   it('can use another column', async () => {
     expect(await testComputed(c('+', r('OtherColumn'), l(1)))).toEqual(
-      t.column(t.number(), 'unknown', 'TableName')
+      t.column(t.number(), 'unknown')
     );
   });
 

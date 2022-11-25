@@ -72,7 +72,7 @@ export async function inferColumnAssign(
 
   ctx.stack.set(tableName, updatedTable, 'global');
 
-  return newColumn;
+  return updatedTable;
 }
 
 export async function evaluateColumnAssign(
@@ -99,5 +99,5 @@ export async function evaluateColumnAssign(
   const newTable = Table.fromMapping(columns);
   realm.stack.set(tableName, newTable);
 
-  return newColumn;
+  return newTable;
 }

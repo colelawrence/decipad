@@ -16,6 +16,7 @@ const typesWithArgs = new Set<AST.Node['type']>([
   'column-items',
   'table',
   'table-column',
+  'table-spread',
   'generic-list',
   'range',
   'sequence',

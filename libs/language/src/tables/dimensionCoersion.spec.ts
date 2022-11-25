@@ -278,7 +278,6 @@ async function testGrowTable({
       ${startingColumns.join(', ')}
     }
     Table.NewCol = ${newColumn}
-    Table
   `;
   const resultAddingOneColumn = await runCode(codeAddingOneColumn, {}).catch(
     String
@@ -291,10 +290,34 @@ async function testGrowTable({
     Table = {}
     ${startingColumns.map((colAssign) => `Table.${colAssign}`).join('\n')}
     Table.NewCol = ${newColumn}
-    Table
   `;
   const resultColByCol = await runCode(codeColByCol, {}).catch(String);
   expect(resultColByCol).toEqual(resultAllInOneTable);
+
+  const codeExtending = `
+    ${prefixCode}
+    Table = {
+      ${startingColumns.join(', ')}
+    }
+    ExtendedTable = {
+      ...Table
+      NewCol = ${newColumn}
+    }
+  `;
+  const resultExtending = await runCode(codeExtending, {}).catch(String);
+  expect(resultExtending).toEqual(resultAllInOneTable);
+
+  // Evaluate by inheriting from another table and adding one column
+  const codeJustCopying = `
+    ${prefixCode}
+    Table = {
+      ${startingColumns.join(', ')}
+      NewCol = ${newColumn}
+    }
+    NewTable = { ...Table }
+  `;
+  const resultJustCopying = await runCode(codeJustCopying, {}).catch(String);
+  expect(resultJustCopying).toEqual(resultAllInOneTable);
 
   return resultAllInOneTable;
 }

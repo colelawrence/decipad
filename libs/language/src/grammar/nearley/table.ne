@@ -39,6 +39,15 @@ tableItem -> identifier                                 {%
                                                         }
                                                         %}
 
+tableItem -> ("…" | "...") _ ref                          {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            type: 'table-spread',
+                                                            args: [d[2]]
+                                                          }, d)
+                                                        }
+                                                        %}
+
 tableItem -> identifier equalSign expression            {%
                                                         (d) => {
                                                           const ref = d[0]

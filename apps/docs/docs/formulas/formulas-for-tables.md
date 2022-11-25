@@ -10,6 +10,24 @@ Built-in functions that operate on tables:
 
 [Here is documentation on the lookup function](/docs/formulas/lookups).
 
+## select
+
+You can use the `select` directive to pick some columns from your table, and create a smaller table.
+
+```deci live
+Flights = {
+  Number = ["TP123", "BA456", "EJ789"]
+  PassengerCount = [100, 150, 200]
+  UnwantedColumn = ["Let's", "keep this", "out"]
+}
+
+Flights2 = select(Flights, Number, PassengerCount)
+==> {
+  Number = [ 'TP123', 'BA456', 'EJ789' ],
+  PassengerCount = [ 100, 150, 200 ]
+}
+```
+
 ## sortby
 
 This formula sorts a table by the values of a column:
@@ -24,6 +42,29 @@ sortby(Flights, Flights.DepartureTime)
 ==> {
   FlightNumber = [ 'BA789', 'EZJ123', 'BA765', 'TP456', 'TP098' ],
   DepartureTime = [ minute 2022-03-10 10:05, minute 2022-03-11 15:20, minute 2022-03-11 15:20, minute 2022-03-11 16:20, minute 2022-03-13 12:20 ]
+}
+```
+
+## splitby
+
+This formula splits the table into several different tables, split by the unique values of a column:
+
+```deci live
+Flights = {
+  Company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
+  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+}
+
+splitby(Flights, Flights.Company)
+==> {
+  Company = [ 'BA', 'EZJ', 'TAP' ],
+  Values = [ {
+  FlightNumber = [ 'BA789', 'BA765' ]
+}, {
+  FlightNumber = [ 'EZJ123', 'EZJ432' ]
+}, {
+  FlightNumber = [ 'TP456', 'TP098', 'TP210' ]
+} ]
 }
 ```
 

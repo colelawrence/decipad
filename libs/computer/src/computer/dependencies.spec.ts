@@ -39,11 +39,15 @@ it('does not show deps local to that statement or belonging to that table', () =
 });
 
 it('excludes local refs that are scoped to the table', () => {
-  const ns = new Map([['Table', new Set(['Inner'])]]);
-  expect(dependencies(parseStatementOrThrow('Table.Col2 = Inner + Y'), ns))
-    .toMatchInlineSnapshot(`
+  const ns = new Map([['OtherTable', new Set(['Inner'])]]);
+  expect(
+    dependencies(
+      parseStatementOrThrow('Table = { ...OtherTable, Col2 = Inner + Y }'),
+      ns
+    )
+  ).toMatchInlineSnapshot(`
     Array [
-      "Table",
+      "OtherTable",
       "+",
       "Y",
     ]
@@ -51,13 +55,12 @@ it('excludes local refs that are scoped to the table', () => {
   expect(
     dependencies(parseStatementOrThrow('OtherTable.NewCol = Inner + Y'), ns)
   ).toMatchInlineSnapshot(`
-    Array [
-      "OtherTable",
-      "+",
-      "Inner",
-      "Y",
-    ]
-  `);
+      Array [
+        "OtherTable",
+        "+",
+        "Y",
+      ]
+    `);
 });
 
 it('excludes func args', () => {
@@ -74,11 +77,14 @@ it('builds up a picture of available names', () => {
     MyFn(MyFnArg) = 1
 
     MyTable1 = {
-      MyTable2Col = MyTable2.MyTable2Col,
+      ...MyTable2,
       MyTable1Col = 1
     }
 
-    MyTable2.MyTable2Col = 1
+    MyTable2 = {
+      ...MyTable1,
+      MyTable2Col = 1
+    }
 
     MyTable1.NewCol = 1
   `).args;
@@ -88,11 +94,11 @@ it('builds up a picture of available names', () => {
   expect(namespaces).toMatchInlineSnapshot(`
     Map {
       "MyTable1" => Set {
-        "MyTable2Col",
         "MyTable1Col",
         "NewCol",
       },
       "MyTable2" => Set {
+        "MyTable1Col",
         "MyTable2Col",
       },
     }

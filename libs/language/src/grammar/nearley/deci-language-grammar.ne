@@ -23,6 +23,7 @@ import { tokenizer } from '../tokenizer'
 @include "./column.ne"
 @include "./table.ne"
 @include "./tiered.ne"
+@include "./select.ne"
 @include "./match.ne"
 @include "./expression.ne"
 @include "./range.ne"
