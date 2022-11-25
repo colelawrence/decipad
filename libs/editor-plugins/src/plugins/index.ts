@@ -11,6 +11,7 @@ export * from './DragOverCursor';
 export * from './Draw';
 export * from './EditorApplyErrorReporter';
 export * from './Eval';
+export * from './EventInterception';
 export * from './ExternalData';
 export * from './Import';
 export * from './LayoutColumns';

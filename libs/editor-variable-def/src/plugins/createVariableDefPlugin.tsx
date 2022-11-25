@@ -7,6 +7,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyPlatePlugin,
 } from '@decipad/editor-types';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import {
   Caption,
@@ -133,5 +134,12 @@ export const createVariableDefPlugin = (): MyPlatePlugin => ({
     },
     createNormalizeSliderPlugin(),
     createSliderExpressionSyncPlugin(),
+    createEventInterceptorPluginFactory({
+      name: 'INTERCEPT_VAR_DEF',
+      elementTypes: [ELEMENT_VARIABLE_DEF],
+      interceptor: () => {
+        return true;
+      },
+    })(),
   ],
 });

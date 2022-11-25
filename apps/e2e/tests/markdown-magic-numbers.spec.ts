@@ -25,7 +25,7 @@ test.describe('Inputs and magic numbers', () => {
   test('can create an input', async () => {
     await focusOnBody(page);
     await createInputBelow(page, 'Foo', 1337);
-    await keyPress(page, 'Enter');
+    await keyPress(page, 'ArrowRight');
     expect((await page.textContent('text=1337'))!.trim()).toBe('1337');
   });
 

@@ -16,6 +16,7 @@ import {
   createDrawPlugin,
   createEditorApplyErrorReporterPlugin,
   createEvalPlugin,
+  createEventInterceptionSuperHandlerPlugin,
   createExitBreakPlugin,
   createImagePlugin,
   createImportPlugin,
@@ -218,6 +219,9 @@ export const plugins = ({
 
       // drawings
       createDrawPlugin(),
+
+      // event interception
+      createEventInterceptionSuperHandlerPlugin(),
     ],
     {
       components: components(computer),

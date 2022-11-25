@@ -1,7 +1,13 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { getNodeEntry, getNodeString, hasNode } from '@udecode/plate';
+import {
+  ELEMENT_H1,
+  getNodeEntry,
+  getNodeString,
+  hasNode,
+} from '@udecode/plate';
 import { debounce } from 'lodash';
+import { createEventInterceptorPluginFactory } from '../../pluginFactories';
 
 export interface UseNotebookTitlePluginOptions {
   readOnly: boolean;
@@ -47,4 +53,13 @@ export const createNotebookTitlePlugin = ({
     };
     return editor;
   },
+  plugins: [
+    createEventInterceptorPluginFactory({
+      name: 'INTERCEPT_TITLE',
+      elementTypes: [ELEMENT_H1],
+      interceptor: () => {
+        return true;
+      },
+    })(),
+  ],
 });

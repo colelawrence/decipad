@@ -11,6 +11,7 @@ import {
   PlateEditor,
   TReactEditor,
 } from '@udecode/plate';
+import { EventInterceptor } from './event-interception';
 import { MyValue } from './value';
 
 /**
@@ -33,6 +34,7 @@ export type UndoEditor = {
 };
 export type MyEditor = PlateEditor<MyValue> & {
   isDragging?: boolean;
+  interceptEvent?: EventInterceptor
 } & UndoEditor;
 export type MyReactEditor = TReactEditor<MyValue>;
 

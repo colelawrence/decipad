@@ -11,6 +11,7 @@ import {
 import { Computer } from '@decipad/computer';
 import { decorateCode } from '@decipad/editor-utils';
 import { TablePlugin } from '@udecode/plate';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   Table,
   TableCaption,
@@ -128,5 +129,12 @@ export const createTablePlugin = (
       component: TableColumnFormula,
       decorate: decorateCode(ELEMENT_TABLE_COLUMN_FORMULA),
     },
+    createEventInterceptorPluginFactory({
+      name: 'INTERCEPT_TABLE',
+      elementTypes: [ELEMENT_TABLE],
+      interceptor: () => {
+        return true;
+      },
+    })(),
   ],
 });

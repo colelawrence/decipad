@@ -2,6 +2,7 @@
 /* eslint-disable import/first */
 import { SerializedType } from '@decipad/computer';
 
+export * from './event-interception';
 export * from './decorator-kinds';
 
 export * from './mark-kinds';

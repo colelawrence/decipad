@@ -4,6 +4,7 @@ import {
   ELEMENT_DATA_VIEW_TR,
 } from '@decipad/editor-types';
 import { createPluginFactory } from '@udecode/plate';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   DataView,
   DataViewColumnHeader,
@@ -28,5 +29,12 @@ export const createDataViewPlugin = createPluginFactory({
       component: DataViewColumnHeader,
     },
     createNormalizeDataViewPlugin(),
+    createEventInterceptorPluginFactory({
+      name: 'INTERCEPT_DATA_VIEW',
+      elementTypes: [ELEMENT_DATA_VIEW],
+      interceptor: () => {
+        return true;
+      },
+    })(),
   ],
 });
