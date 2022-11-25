@@ -89,8 +89,7 @@ export const NumberCatalogItem = ({
               css={css(p12Medium, {
                 marginLeft: '8px',
                 alignSelf: 'center',
-                color: transparency(black, boldOpacity).rgba,
-                mixBlendMode: 'overlay',
+                color: cssVar('weakTextColor'),
               })}
             >
               {result.result.type.kind === 'table' ? (

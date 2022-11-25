@@ -4,8 +4,6 @@ import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 import { Chevron } from '../../icons';
 import {
-  black,
-  boldOpacity,
   p14Bold,
   smallestDesktop,
   strongOpacity,
@@ -13,7 +11,7 @@ import {
   white,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { AvailableSwatchColor, baseSwatches } from '../../utils';
+import { AvailableSwatchColor, baseSwatches, colorSwatches } from '../../utils';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
 
@@ -95,9 +93,20 @@ export const NumberCatalog = ({
           onClick={handleCollapsedClick}
         >
           <div css={menuHeaderStyles}>
-            <span css={numberFontStyles}>Numbers</span>
+            <span css={numberFontStyles(color as AvailableSwatchColor)}>
+              Numbers
+            </span>
           </div>
-          <div css={menuHeaderChevronStyles}>
+          <div
+            css={[
+              menuHeaderChevronStyles,
+              {
+                'svg > path': {
+                  stroke: baseSwatches[color as AvailableSwatchColor].rgb,
+                },
+              },
+            ]}
+          >
             <Chevron type={collapsed ? 'expand' : 'collapse'} />
           </div>
         </div>
@@ -134,7 +143,7 @@ const gridHeaderNumberCatStyles = css({
 const numberCatalogMenuStyles = (color: AvailableSwatchColor) =>
   css({
     borderRadius,
-    backgroundColor: transparency(baseSwatches[color], 0.3).rgba,
+    backgroundColor: colorSwatches[color].light.rgb,
     padding: '8px',
     width: '300px',
     userSelect: 'none',
@@ -150,14 +159,12 @@ const menuHeaderStyles = css({
 
 const menuHeaderChevronStyles = css({
   padding: '14.5px 12px',
-  color: transparency(black, boldOpacity).rgba,
-  mixBlendMode: 'overlay',
 });
 
-const numberFontStyles = css({
-  color: transparency(black, boldOpacity).rgba,
-  mixBlendMode: 'overlay',
-});
+const numberFontStyles = (color: AvailableSwatchColor) =>
+  css({
+    color: colorSwatches[color].highlight.rgb,
+  });
 
 const menuBodyStyles = css({
   backgroundColor: transparency(white, strongOpacity).rgba,
