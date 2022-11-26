@@ -2,13 +2,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow, CurvedArrow } from '../../icons';
-import {
-  cssVar,
-  grey500,
-  mediumShadow,
-  p12Bold,
-  p12Medium,
-} from '../../primitives';
+import { cssVar, grey500, mediumShadow, p12Medium } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const wrapperStyles = css({
@@ -52,7 +46,7 @@ const activeButtonStyles = css({
 });
 
 const revertChangesStyles = css([
-  p12Bold,
+  p12Medium,
   {
     display: 'flex',
     justifyContent: 'center',

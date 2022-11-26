@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import type { FC, ReactNode } from 'react';
 import { Toggle } from '../../atoms';
-import { p12Medium, p24Bold } from '../../primitives';
+import { p12Medium, p24Medium } from '../../primitives';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -36,7 +36,7 @@ export const BooleanEditor: FC<BooleanEditorProps> = ({
         onChange={(newValue) => onChangeValue(newValue ? 'true' : 'false')}
         parentType={parentType}
       />
-      <span css={parentType === 'input' ? p24Bold : p12Medium}>
+      <span css={parentType === 'input' ? p24Medium : p12Medium}>
         {parentType !== 'input' ? '' : value === 'true' ? 'On' : 'Off'}
       </span>
       <div css={hiddenChildrenStyles}>{children}</div>

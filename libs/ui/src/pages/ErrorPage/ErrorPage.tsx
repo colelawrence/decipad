@@ -31,33 +31,20 @@ const styles = css({
   right: 0,
   top: 0,
 
-  background: `
-    radial-gradient(
-      ellipse at center,
-      ${cssVar('tintedBackgroundColor')} 0%,
-      transparent 100%
-    ),
-    center repeat url(${gridTile}),
-    linear-gradient(
-      180deg, ${cssVar('tintedBackgroundColor')} 30.41%, ${cssVar(
-    'errorPageGradientEnd'
-  )} 90.69%
-    )
-  `,
+  background: `no-repeat bottom url(${gridTile})`,
 });
 
 const headingStyles = css(banner, setCssVar('currentTextColor', offBlack.rgb));
 const subHeadingStyles = css(
   p18Regular,
-  setCssVar('currentTextColor', lavender000.rgb),
-  { paddingTop: '20px' }
+  setCssVar('currentTextColor', lavender000.rgb)
 );
 const errorCodeStyles = css(
   p16Regular,
   setCssVar('currentTextColor', cssVar('weakerTextColor')),
   { paddingTop: '8px' }
 );
-const buttonStyles = css({ paddingTop: '36px' });
+const buttonStyles = css({ paddingTop: '24px' });
 
 const message = (errorCode: ErrorPageProps['wellKnown']): string => {
   switch (errorCode) {

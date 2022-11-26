@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
-import { cssVar, p12Regular, p13SemiBold, setCssVar } from '../../primitives';
+import { cssVar, p12Regular, p13Medium, setCssVar } from '../../primitives';
 import { PermissionType } from '../../types';
 
 interface NotebookAvatar {
@@ -36,7 +36,7 @@ const avatarStyles = css({
 });
 
 const tooltipNameStyles = css({
-  ...p13SemiBold,
+  ...p13Medium,
   marginBottom: '3px',
 });
 

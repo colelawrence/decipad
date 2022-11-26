@@ -7,13 +7,13 @@ import { Avatar } from '../../atoms';
 import { Chevron } from '../../icons';
 import {
   cssVar,
-  p12Bold,
+  p12Medium,
   setCssVar,
   shortAnimationDuration,
 } from '../../primitives';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
-const styles = css(p12Bold, {
+const styles = css(p12Medium, {
   display: 'grid',
   alignItems: 'center',
   gridTemplateColumns: '28px 6px',

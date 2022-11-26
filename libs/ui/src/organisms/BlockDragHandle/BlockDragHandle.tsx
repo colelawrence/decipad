@@ -13,7 +13,7 @@ import {
   Show,
 } from '../../icons';
 import { MenuList } from '../../molecules';
-import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
+import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
@@ -140,7 +140,7 @@ export const BlockDragHandle = ({
           <span
             css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
           >
-            <strong css={css(p12Bold)}>Click</strong> to add block below
+            <strong css={css(p12Medium)}>Click</strong> to add block below
           </span>
         </Tooltip>
       )}
@@ -183,9 +183,9 @@ export const BlockDragHandle = ({
         <span
           css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
         >
-          <strong css={css(p12Bold)}>Drag</strong> to move
+          <strong css={css(p12Medium)}>Drag</strong> to move
           <br />
-          <strong css={css(p12Bold)}>Click</strong> for options
+          <strong css={css(p12Medium)}>Click</strong> for options
         </span>
       </Tooltip>
     </div>

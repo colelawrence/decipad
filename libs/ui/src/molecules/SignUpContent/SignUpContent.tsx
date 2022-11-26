@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, p13Regular, p13SemiBold } from '../../primitives';
+import { cssVar, p13Regular, p13Bold } from '../../primitives';
 
 const signupContentWrapperStyles = css({
   width: '100%',
@@ -20,7 +20,7 @@ const teaserStyles = css(p13Regular, {
   color: cssVar('weakTextColor'),
 });
 
-const joinStyles = css(p13SemiBold, {
+const joinStyles = css(p13Bold, {
   marginTop: '0.25rem',
   color: cssVar('normalTextColor'),
 });

@@ -7,7 +7,7 @@ import { FormulasDrawer, TableButton } from '../../organisms';
 import {
   cssVar,
   display,
-  p16Bold,
+  p16Medium,
   placeholderOpacity,
   setCssVar,
 } from '../../primitives';
@@ -43,12 +43,12 @@ const tableIconSizeStyles = css({
   height: '16px',
 });
 
-const placeholderStyles = css(p16Bold, {
+const placeholderStyles = css(p16Medium, {
   cursor: 'text',
   display: 'flex',
   '&::before': {
     ...display,
-    ...p16Bold,
+    ...p16Medium,
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
@@ -56,7 +56,7 @@ const placeholderStyles = css(p16Bold, {
   },
 });
 
-const editableTableCaptionStyles = css(p16Bold);
+const editableTableCaptionStyles = css(p16Medium);
 type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: () => void;
   isForWideTable?: boolean;

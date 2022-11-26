@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import {
   offBlack,
   brand500,
-  p13SemiBold,
+  p13Bold,
   transparency,
   white,
   setCssVar,
@@ -24,7 +24,7 @@ import {
 import { Anchor } from '../../utils';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
-const styles = css(p13SemiBold, {
+const styles = css(p13Bold, {
   flexGrow: 1,
 
   display: 'flex',

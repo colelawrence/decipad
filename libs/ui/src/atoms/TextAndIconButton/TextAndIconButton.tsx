@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { blue100, blue200, cssVar, p13SemiBold } from '../../primitives';
+import { blue100, blue200, cssVar, p13Medium } from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
@@ -22,7 +22,7 @@ const styles = css({
   padding: '4px',
 });
 
-const buttonTextStyles = css(p13SemiBold, {
+const buttonTextStyles = css(p13Medium, {
   whiteSpace: 'nowrap',
   padding: '0 4px',
 });

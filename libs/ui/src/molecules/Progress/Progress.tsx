@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { brand500, grey300, p12Bold } from '../../primitives';
+import { brand500, grey300, p12Medium } from '../../primitives';
 
 const wrapper = css({
   width: '100%',
@@ -37,7 +37,7 @@ export const Progress: FC<ProgressProps> = ({ progress, label }) => {
           progressStyles,
         ]}
       >
-        <span css={p12Bold}>{label}</span>
+        <span css={p12Medium}>{label}</span>
       </div>
     </div>
   );

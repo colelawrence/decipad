@@ -7,12 +7,10 @@ import {
   display,
   h1,
   h2,
-  p12Bold,
   p12Medium,
   p12Regular,
   p13Medium,
   p13Regular,
-  p13SemiBold,
   p14Medium,
   p14Regular,
   p15Medium,
@@ -20,7 +18,7 @@ import {
   p16Regular,
   p18Regular,
   p20Medium,
-  p24Bold,
+  p24Medium,
   p32Medium,
   p8Regular,
   p8Medium,
@@ -63,18 +61,12 @@ export const P8Medium: React.FC<React.PropsWithChildren<unknown>> = ({
 export const P12Medium: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p12Medium)}>{children}</p>;
-export const P12Bold: React.FC<React.PropsWithChildren<unknown>> = ({
-  children,
-}) => <p css={css(p12Bold)}>{children}</p>;
 export const P13Regular: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p13Regular)}>{children}</p>;
 export const P13Medium: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p13Medium)}>{children}</p>;
-export const P13SemiBold: React.FC<React.PropsWithChildren<unknown>> = ({
-  children,
-}) => <p css={css(p13SemiBold)}>{children}</p>;
 export const P14Regular: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p14Regular)}>{children}</p>;
@@ -101,7 +93,7 @@ export const P20Medium: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => <p css={css(p20Medium)}>{children}</p>;
 export const P24Bold: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
-}) => <p css={css(p24Bold)}>{children}</p>;
+}) => <p css={css(p24Medium)}>{children}</p>;
 export const P32Medium: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p32Medium)}>{children}</p>;

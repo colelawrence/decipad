@@ -2,13 +2,13 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import {
   grey200,
-  p12Bold,
+  p12Medium,
   purple300,
   shortAnimationDuration,
   transparency,
 } from '../../primitives';
 
-const containerStyles = css(p12Bold, {
+const containerStyles = css(p12Medium, {
   aspectRatio: '1 / 1',
   minWidth: '28px',
   minHeight: '28px',
@@ -41,7 +41,7 @@ const initialBackgroundStyles = (
       fill: transparency(greyedOut ? grey200 : purple300, 0.65).rgba,
     },
   });
-const initialTextStyles = css(p12Bold, {
+const initialTextStyles = css(p12Medium, {
   dominantBaseline: 'central',
   textAnchor: 'middle',
 

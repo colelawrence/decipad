@@ -5,7 +5,7 @@ import { MenuItem, Tooltip } from '../../atoms';
 import { DragHandle, Trash } from '../../icons/index';
 import {
   mouseMovingOverTransitionDelay,
-  p12Bold,
+  p12Medium,
   p12Regular,
   shortAnimationDuration,
 } from '../../primitives';
@@ -95,9 +95,9 @@ export const TableCellControls = forwardRef<
                 textAlign: 'center',
               })}
             >
-              <strong css={css(p12Bold)}>Drag</strong> to move
+              <strong css={css(p12Medium)}>Drag</strong> to move
               <br />
-              <strong css={css(p12Bold)}>Click</strong> for options
+              <strong css={css(p12Medium)}>Click</strong> for options
             </span>
           </Tooltip>
         </div>

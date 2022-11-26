@@ -1,7 +1,7 @@
-import woff from './font.woff';
-import woff2 from './font.woff2';
+import woff from './ABCDiatypeMono-Regular.woff';
+import woff2 from './ABCDiatypeMono-Regular.woff2';
 
-export const name = '"AllianceNo1-Medium"';
+export const name = '"ABCDiatypeMono"';
 export const atRule = `
   @font-face {
     font-family: ${name};

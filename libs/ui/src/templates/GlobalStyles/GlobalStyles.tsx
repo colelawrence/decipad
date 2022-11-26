@@ -13,7 +13,6 @@ import {
   mediumShadow,
   p12Medium,
   p13Medium,
-  p13SemiBold,
   p14Medium,
 } from '../../primitives';
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
@@ -153,7 +152,7 @@ const DatePickerStyles: FC = () => {
           },
         'div.react-datepicker__today-button': {
           border: 'none',
-          ...p13SemiBold,
+          ...p13Medium,
           backgroundColor: cssVar('backgroundColor'),
         },
       }}

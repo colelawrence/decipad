@@ -11,7 +11,7 @@ import {
   mediumShadow,
   p14Medium,
   p14Regular,
-  p16Bold,
+  p16Medium,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
@@ -41,7 +41,7 @@ const innerStyles = css({
   transition: 'all 0.5s ease-in',
 });
 
-const checklistDropdown = css(p16Bold, {
+const checklistDropdown = css(p16Medium, {
   backgroundColor: cssVar('strongHighlightColor'),
   borderRadius: 8,
   paddingLeft: 8,
