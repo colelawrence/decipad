@@ -4,12 +4,14 @@ import {
   getPointBefore,
   getRange,
   isCollapsed,
+  isVoid,
   moveSelection,
   someNode,
 } from '@udecode/plate';
+import { normalizeInsertNodeText } from './normalizeInsertNodeText';
 
 export const withCodeLine: MyWithOverride = (editor) => {
-  const { insertText } = editor;
+  const { insertText, apply } = editor;
 
   // eslint-disable-next-line no-param-reassign
   editor.insertText = (text) => {
@@ -39,6 +41,15 @@ export const withCodeLine: MyWithOverride = (editor) => {
     }
 
     insertText(text);
+  };
+
+  // eslint-disable-next-line no-param-reassign
+  editor.apply = (op) => {
+    if (op.type === 'insert_node' && !isVoid(editor, op.node)) {
+      normalizeInsertNodeText(editor, op.node);
+    }
+
+    apply(op);
   };
 
   return editor;

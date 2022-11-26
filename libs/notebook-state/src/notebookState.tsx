@@ -66,6 +66,7 @@ const createStore = () =>
         editor,
         onError: captureException,
       });
+
       docSyncEditor.onConnected(() => {
         set({ connected: true });
       });
