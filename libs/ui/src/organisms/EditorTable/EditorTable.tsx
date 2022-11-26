@@ -30,6 +30,8 @@ const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${
 
 const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
+const scrollRightOffset = `(((100vw - 610px) / 2) + ${tableControlWidth})`;
+
 const wrapperStyles = css({
   margin: '0',
 });
@@ -51,14 +53,67 @@ export const tableWrapperStyles = css({
   minWidth: editorLayout.slimBlockWidth,
   overflowX: 'auto',
   overflowY: 'hidden',
+  scrollbarWidth: 'none',
+  msOverflowStyle: 'none',
   position: 'relative',
   whiteSpace: 'nowrap',
   left: tableControlWidth,
   display: 'flex',
+  '&:hover': {
+    scrollbarWidth: 'inherit',
+    msOverflowStyle: 'inherit',
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: cssVar('highlightColor'),
+    },
+  },
+  '&::-webkit-scrollbar': {
+    width: '100px',
+    height: '8px',
+  },
+
+  '&::-webkit-scrollbar-thumb': {
+    width: '3px',
+    height: '3px',
+    backgroundColor: 'transparent',
+    borderRadius: '8px',
+  },
+
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: 'transparent',
+    height: '3px',
+  },
+
+  '&::-webkit-scrollbar-button': {
+    width: `calc((100vw - 580px)/4)`,
+  },
+
+  '&::-ms-scrollbar-thumb': {
+    width: '3px',
+    height: '3px',
+    backgroundColor: cssVar('highlightColor'),
+    borderRadius: '8px',
+  },
+
+  '&::-ms-scrollbar-track': {
+    backgroundColor: 'transparent',
+    height: '3px',
+  },
+
+  '&::-ms-scrollbar-button': {
+    width: `calc((100vw - 580px)/4)`,
+  },
+
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
     transform: `translateX(-40px)`,
     minWidth: '0',
+  },
+});
+
+export const tableScroll = css({
+  paddingRight: `calc(${scrollRightOffset})`,
+  [smallScreenQuery]: {
+    paddingRight: '0px',
   },
 });
 
@@ -73,6 +128,10 @@ const tableAddColumnButtonWrapperStyles = css({
   minWidth: '40px',
   paddingLeft: '8px',
   position: 'relative',
+  marginLeft: `calc(${scrollRightOffset} *-1)`,
+  [smallScreenQuery]: {
+    marginLeft: '0px',
+  },
 });
 
 const tableAddColumnButtonStyles = css({
@@ -178,26 +237,27 @@ export const EditorTable: FC<EditorTableProps> = ({
           {!isCollapsed ? (
             <div css={tableWrapperStyles}>
               <div css={tableOverflowStyles} contentEditable={false} />
-              <Table
-                isReadOnly={false}
-                columnCount={columns.length}
-                dropRef={dropRef}
-                tableWidth={tableWidth}
-                isSelectingCell={isSelectingCell}
-                hiddenRowCount={hiddenRowCount}
-                head={thead}
-                body={tbody}
-                previewMode={previewMode}
-                addTable={
-                  <AddTableRowButton
-                    mouseOver={mouseOver}
-                    onAddRow={onAddRow}
-                  />
-                }
-                smartRow={smartRow}
-                onMouseOver={setMouseOver}
-              ></Table>
-
+              <div css={tableScroll}>
+                <Table
+                  isReadOnly={false}
+                  columnCount={columns.length}
+                  dropRef={dropRef}
+                  tableWidth={tableWidth}
+                  isSelectingCell={isSelectingCell}
+                  hiddenRowCount={hiddenRowCount}
+                  head={thead}
+                  body={tbody}
+                  previewMode={previewMode}
+                  addTable={
+                    <AddTableRowButton
+                      mouseOver={mouseOver}
+                      onAddRow={onAddRow}
+                    />
+                  }
+                  smartRow={smartRow}
+                  onMouseOver={setMouseOver}
+                ></Table>
+              </div>
               {!previewMode && (
                 <div
                   css={tableAddColumnButtonWrapperStyles}
