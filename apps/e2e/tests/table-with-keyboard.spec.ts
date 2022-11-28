@@ -9,6 +9,7 @@ import {
   addColumn,
   addRow,
   createTable,
+  focusOnTable,
   getFromTable,
   openColumnMenu,
   openRowMenu,
@@ -57,12 +58,14 @@ test.describe('Adding tables with keyboard (and more)', () => {
   });
 
   test('can add a new row', async () => {
+    await focusOnTable(page);
     await addRow(page);
     await writeInTable(page, '7', 3);
     expect(await getFromTable(page, 3)).toBe('7');
   });
 
   test('can add a new column', async () => {
+    await focusOnTable(page);
     await addColumn(page);
     await page.waitForSelector('text="Property4"');
   });

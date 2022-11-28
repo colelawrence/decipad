@@ -4,7 +4,10 @@ import { getDefined } from '@decipad/utils';
 import { trace } from '@decipad/backend-trace';
 import Boom, { boomify } from '@hapi/boom';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import EventEmitter from 'events';
 import { docIdFromPath } from '../path';
+
+EventEmitter.setMaxListeners(1000);
 
 function isValidAuthResult(authResult: AuthResult): boolean {
   return !!authResult.secret || !!authResult.user;

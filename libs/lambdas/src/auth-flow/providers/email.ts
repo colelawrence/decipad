@@ -46,16 +46,18 @@ async function sendVerificationRequest(
 
   const expires = `${differenceInHours(expiresAt, new Date())} hours`;
 
-  await arc.queues.publish({
-    name: `sendemail`,
-    payload: {
-      template: firstTime ? 'auth-magiclink-first' : 'auth-magiclink',
-      email,
-      url,
-      token,
-      expires,
-    },
-  });
+  if (!process.env.DECI_E2E) {
+    await arc.queues.publish({
+      name: `sendemail`,
+      payload: {
+        template: firstTime ? 'auth-magiclink-first' : 'auth-magiclink',
+        email,
+        url,
+        token,
+        expires,
+      },
+    });
+  }
 
   if (firstTime && key) {
     const user = await data.users.get({ id: key.user_id });

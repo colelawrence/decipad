@@ -72,11 +72,14 @@ function handleErrors(handle: Handler): Handler {
         });
         return resp as APIGatewayProxyResultV2;
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Error caught', err);
-        const error = await captureException(err as Error);
+        const boomed = boomify(err as Error);
+        if (boomed.isServer) {
+          // eslint-disable-next-line no-console
+          console.error('Error caught', err);
+          await captureException(boomed);
+        }
         return {
-          statusCode: error.output.statusCode,
+          statusCode: boomed.output.statusCode,
         };
       }
     },

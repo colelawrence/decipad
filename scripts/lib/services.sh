@@ -4,14 +4,32 @@ set -euo pipefail
 
 SERVICE_PIDS=""
 
+function kill_recurse() {
+  cpids=`pgrep -P $1|xargs`
+  for cpid in $cpids;
+  do
+      kill_recurse $cpid
+  done
+  kill -s SIGINT $1
+}
+
 # Kill the services at the end, placed in a trap EXIT by services_setup
 services_teardown () {
   echo "tearing down services..."
   if [ -n "$SERVICE_PIDS" ]; then
     # Intentionally not wrapping $SERVICE_PIDS in quotes here because
     # it's an (air quotes) array. Bash will split in spaces into multiple args.
-    echo "Killing these PIDEs:" $SERVICE_PIDS
-    kill -s SIGINT -- $SERVICE_PIDS
+    echo "Killing services..."
+
+    KILLING=$SERVICE_PIDS
+    SERVICE_PIDS=""
+    for pid in $KILLING
+    do
+      set +e
+      kill_recurse $pid
+      set -e
+    done
+    echo "Killed."
     true
   fi
 }
@@ -43,8 +61,6 @@ services_setup () {
   echo " ⌛ ~ starting backend... ~ "
   nx serve backend &
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
-
-  sleep 3
 
   echo " ⌛ ~ starting frontend... ~ "
   nx serve frontend &

@@ -1,6 +1,7 @@
 import { dequal } from 'dequal';
 import { useCallback, useEffect, useState } from 'react';
 import { StarterChecklistStateChange } from '@decipad/react-contexts';
+import { useSession } from 'next-auth/react';
 import {
   useUserQuery,
   useFulfilGoalMutation,
@@ -30,6 +31,8 @@ export const useChecklist = ({
   isPublic,
 }: UseChecklistProps): UseChecklistValue => {
   const [checklistResult] = useUserQuery();
+  const { status } = useSession();
+  const hasUser = status === 'authenticated';
 
   const [, createGoal] = useFulfilGoalMutation();
   const [, updateUser] = useUpdateUserMutation();
@@ -53,29 +56,33 @@ export const useChecklist = ({
   const [checklistState, setChecklistState] = useState(getState);
 
   useEffect(() => {
-    const newState = getState();
-    if (!dequal(checklistState, newState)) {
-      setChecklistState(newState);
+    if (hasUser) {
+      const newState = getState();
+      if (!dequal(checklistState, newState)) {
+        setChecklistState(newState);
+      }
     }
-  }, [checklistState, getState]);
+  }, [checklistState, getState, hasUser]);
 
   const handleChecklistStateChange = useCallback(
     (props: StarterChecklistStateChange) => {
-      if (props.type === 'newGoal') {
-        createGoal({
-          props: {
-            goalName: props.goalName,
-          },
-        }).catch((err) => console.warn(err));
-      } else {
-        updateUser({
-          props: {
-            hideChecklist: true,
-          },
-        }).catch((err) => console.warn(err));
+      if (hasUser) {
+        if (props.type === 'newGoal') {
+          createGoal({
+            props: {
+              goalName: props.goalName,
+            },
+          }).catch((err) => console.warn(err));
+        } else {
+          updateUser({
+            props: {
+              hideChecklist: true,
+            },
+          }).catch((err) => console.warn(err));
+        }
       }
     },
-    [createGoal, updateUser]
+    [createGoal, updateUser, hasUser]
   );
 
   return { checklistState, handleChecklistStateChange };

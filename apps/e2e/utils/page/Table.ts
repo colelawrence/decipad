@@ -59,6 +59,12 @@ export function openRowMenu(page: Page, line: number) {
     .click();
 }
 
+export function focusOnTable(page: Page) {
+  return page
+    .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
+    .click();
+}
+
 export function addRow(page: Page) {
   return page
     .locator('table > tfoot > tr > th > button')

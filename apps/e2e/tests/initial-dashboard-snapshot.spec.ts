@@ -58,10 +58,11 @@ test.describe('Dashboard operations', () => {
   });
 
   test('creates a new pad and navigates to pad detail', async () => {
-    await clickNewPadButton(page);
-    await expect(
-      page.waitForNavigation({ url: '/n/*' })
-    ).resolves.not.toThrow();
+    await Promise.all([
+      clickNewPadButton(page),
+      page.waitForNavigation({ url: '/n/*' }),
+    ]);
+
     await page.goBack();
   });
 

@@ -22,6 +22,26 @@ const shouldIncludePlugin = (plugin) => {
       !excludeInProductionPlugins.includes(pluginName))
   );
 };
+
+const shouldOpen = !process.env.DECI_E2E;
+let devServer;
+if (shouldOpen) {
+  devServer = {
+    open: {
+      target: [
+        'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
+      ],
+      app: {
+        name: open.apps.chrome,
+      },
+    },
+  };
+} else {
+  devServer = {
+    open: false,
+  };
+}
+
 module.exports = {
   webpack: {
     configure: (config) => {
@@ -117,14 +137,5 @@ module.exports = {
   },
   eslint: { enable: false },
   typescript: { enableTypeChecking: false },
-  devServer: {
-    open: {
-      target: [
-        'http://localhost:3000/api/auth/8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
-      ],
-      app: {
-        name: open.apps.chrome,
-      },
-    },
-  },
+  devServer,
 };

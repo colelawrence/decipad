@@ -7,7 +7,7 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { identify } from '@decipad/backend-analytics';
-import { requireUser } from '../authorization';
+import { loadUser, requireUser } from '../authorization';
 import timestamp from '../utils/timestamp';
 
 export default {
@@ -20,7 +20,10 @@ export default {
       _args: unknown,
       context: GraphqlContext
     ): Promise<string[]> {
-      const user = requireUser(context);
+      const user = loadUser(context);
+      if (!user) {
+        return [];
+      }
       const data = await tables();
       const result = await data.usergoals.query({
         IndexName: 'byUserId',
