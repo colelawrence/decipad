@@ -2,7 +2,6 @@ import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
   getPadName,
   navigateToNotebook,
-  navigateToNotebookWithClassicUrl,
   setUp,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
@@ -66,31 +65,13 @@ test.describe('Loading and snapshot of big notebook', () => {
   });
 
   test('click publish button and extract text', async () => {
-    await page.click('text=Publish');
-    await page.click('[aria-roledescription="enable publishing"]');
+    await page.getByRole('button', { name: 'Publish' }).click();
+    await page.locator('[aria-roledescription="enable publishing"]').click();
 
     await snapshot(page as Page, 'Notebook: Publish Popover');
   });
 
-  test('old-style URLs work and pass on search params', async () => {
-    await navigateToNotebookWithClassicUrl(
-      page,
-      notebookId,
-      '?searchParam=foo'
-    );
-    // some time for the notebook to render
-    await waitForEditorToLoad(page);
-    expect(await getPadName(page)).toBe('Everything, everywhere, all at once');
-    expect(new URL(page.url()).searchParams.get('searchParam')).toEqual('foo');
-  });
-
   test('navigates to published notebook link', async () => {
-    await page.click('button:has-text("Publish")');
-    await page.waitForSelector(
-      '[aria-roledescription="enable publishing"] >> visible=true'
-    );
-    await page.click('[aria-roledescription="enable publishing"]');
-    await page.click('[aria-roledescription="enable publishing"]');
     await page.waitForSelector('role=button[name="Link Copy"]');
 
     publishedNotebookPage = await randomUser.newPage();

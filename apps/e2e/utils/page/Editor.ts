@@ -1,4 +1,4 @@
-import { Page, BrowserContext } from 'playwright';
+import { BrowserContext, Page } from 'playwright';
 import { Timeouts, withTestUser } from '../src';
 import { signOut } from './Home';
 import { navigateToPlayground } from './Playground';
@@ -14,7 +14,7 @@ export async function waitForEditorToLoad(
   options: SetupOptions = { showChecklist: false }
 ) {
   await page.waitForSelector('[data-slate-editor] h1', {
-    timeout: 20_000,
+    timeout: 30_000,
   });
 
   if (!options.showChecklist) {
