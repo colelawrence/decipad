@@ -5,7 +5,10 @@ import {
   Result,
   serializeType,
 } from '@decipad/language';
-import { AnyMapping, timeout } from '@decipad/utils';
+import { AnyMapping, getDefined, timeout } from '@decipad/utils';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import AsciiTable from 'ascii-table';
 import produce from 'immer';
 import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
@@ -14,6 +17,7 @@ import {
   getIdentifiedBlocks,
   simplifyComputeResponse,
 } from '../testUtils';
+import { unnestTableRows } from '../tools/unnestTableRows';
 import { ComputeRequestWithExternalData, UserParseError } from '../types';
 import { Computer } from './Computer';
 
@@ -403,6 +407,84 @@ describe('getVarBlockId$', () => {
     const firstFoo = await firstValueFrom(fooStream);
 
     expect(firstFoo).toBe('block-0');
+  });
+});
+
+describe('can provide information for rendering matrices', () => {
+  let computer: Computer;
+  beforeEach(async () => {
+    computer = new Computer({ requestDebounceMs: 0 });
+    computer.pushCompute({
+      program: getIdentifiedBlocks(
+        `Table = { Xs = [10, 20, 30] }`,
+        `Matrix = [100, 200] * Table.Xs`
+      ),
+    });
+    await timeout(0);
+  });
+
+  it('can retrieve labels', () => {
+    expect(
+      computer.explainDimensions$.get(
+        computer.getBlockIdResult$.get('block-1')
+          ?.result as Result.Result<'column'>
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "dimensionLength": 2,
+          "indexedBy": undefined,
+          "labels": undefined,
+        },
+        Object {
+          "dimensionLength": 3,
+          "indexedBy": "Table",
+          "labels": Array [
+            "10",
+            "20",
+            "30",
+          ],
+        },
+      ]
+    `);
+  });
+
+  it('can turn nested matrices to a tabular data format', () => {
+    const result = getDefined(
+      computer.getBlockIdResult$.get('block-1')?.result
+    ) as Result.Result<'column'>;
+    const dimExplanation = getDefined(computer.explainDimensions$.get(result));
+
+    const aTable = new AsciiTable('Matrix');
+
+    aTable.setHeading(
+      ...dimExplanation.map((v) => v.indexedBy ?? '(no dimension)')
+    );
+
+    for (const {
+      labelInfo,
+      result: { value },
+    } of unnestTableRows(dimExplanation, result)) {
+      aTable.addRow(
+        ...labelInfo.map((label) => label.label ?? label.indexAtThisDimension),
+        value
+      );
+    }
+
+    expect(aTable.toString()).toMatchInlineSnapshot(`
+      ".-------------------------------.
+      |            Matrix             |
+      |-------------------------------|
+      | (no dimension) | Table |      |
+      |----------------|-------|------|
+      |              0 | 10    | 1000 |
+      |              0 | 20    | 2000 |
+      |              0 | 30    | 3000 |
+      |              1 | 10    | 2000 |
+      |              1 | 20    | 4000 |
+      |              1 | 30    | 6000 |
+      '-------------------------------'"
+    `);
   });
 });
 

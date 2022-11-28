@@ -19,8 +19,10 @@ import {
   Unit,
   SerializedType,
   parseExpression,
+  deserializeType,
+  linearizeType,
 } from '@decipad/language';
-import { anyMappingToMap, identity } from '@decipad/utils';
+import { anyMappingToMap, identity, zip } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -55,6 +57,12 @@ import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
+
+export interface DimensionExplanation {
+  indexedBy: string | undefined;
+  labels: readonly string[] | undefined;
+  dimensionLength: number;
+}
 
 interface ComputerOpts {
   requestDebounceMs: number;
@@ -199,6 +207,38 @@ export class Computer {
 
   getFunctionDefinition$ = listenerHelper(this.results, (_, funcName: string) =>
     this.getFunctionDefinition(funcName)
+  );
+
+  /**
+   * Finds a Column, and identifies its 1 or more dimensions in an array.
+   *
+   * The array contains how many values each dimension has.
+   */
+  explainDimensions$ = listenerHelper(
+    this.results,
+    (
+      results,
+      result: Result.Result<'column'>
+    ): DimensionExplanation[] | undefined => {
+      // We now have a column or matrix
+
+      const getDeepLengths = (value: Result.OneResult): number[] =>
+        Array.isArray(value) ? [value.length, ...getDeepLengths(value[0])] : [];
+
+      const dimensions = linearizeType(deserializeType(result.type));
+
+      dimensions.pop(); // remove tip
+
+      const deepLengths = getDeepLengths(result.value);
+
+      return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
+        return {
+          indexedBy: type.indexedBy ?? undefined,
+          labels: results.indexLabels.get(type.indexedBy ?? ''),
+          dimensionLength,
+        };
+      });
+    }
   );
 
   expressionResultFromText$(decilang: string) {

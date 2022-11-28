@@ -4,5 +4,9 @@
     "lib": ["esnext", "dom", "WebWorker"]
   },
   "include": ["src"],
-  "references": [{ "path": "../language" }, { "path": "../format" }]
+  "references": [
+    { "path": "../language" },
+    { "path": "../format" },
+    { "path": "../fraction" }
+  ]
 }

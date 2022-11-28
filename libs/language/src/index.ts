@@ -75,6 +75,7 @@ export {
   walkAst,
   isStatement,
 } from './utils';
+export { linearizeType } from './dimtools/common';
 export type { Unit };
 
 export type ExternalDataMap = Map<string, Result>;

@@ -119,6 +119,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   collapsed?: boolean;
   disabled?: boolean;
   type?: CellValueType;
+  rowSpan?: number;
   value?: string;
   onChangeValue?: ComponentProps<typeof CellEditor>['onChangeValue'];
   unit?: string;
@@ -140,6 +141,7 @@ export const TableData = ({
   selected,
   focused,
   collapsed,
+  rowSpan,
   disabled = false,
   dropTarget,
   lastBeforeMoreRowsHidden = false,
@@ -163,6 +165,7 @@ export const TableData = ({
       {...attributes}
       {...additionalProps}
       ref={tdRef}
+      rowSpan={rowSpan}
       css={[
         isUserContent && editableStyles,
         tdBaseStyles,

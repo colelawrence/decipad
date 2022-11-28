@@ -114,7 +114,11 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'range':
           return t.range(deserializeType(type.rangeOf));
         case 'column':
-          return t.column(deserializeType(type.cellType), type.columnSize);
+          return t.column(
+            deserializeType(type.cellType),
+            type.columnSize,
+            type.indexedBy
+          );
         case 'table':
           const { columnTypes, columnNames } = type;
           return t.table({

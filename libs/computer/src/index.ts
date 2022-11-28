@@ -50,6 +50,8 @@ export {
   isTypeError,
 } from './utils';
 
+export { unnestTableRows } from './tools';
+
 export type { AutocompleteName, ErrSpec } from '@decipad/language';
 export * from './computer';
 

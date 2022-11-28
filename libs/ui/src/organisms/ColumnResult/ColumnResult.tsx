@@ -1,13 +1,13 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { css } from '@emotion/react';
 import { useComputer } from '@decipad/react-contexts';
+import { unnestTableRows } from '@decipad/computer';
 import { cssVar, setCssVar } from '../../primitives';
 import { TableData } from '../../atoms';
 import { TableRow } from '../../molecules';
 import { CodeResult, Table } from '..';
 import { table } from '../../styles';
 import { CodeResultProps } from '../../types';
-import { isTabularType } from '../../utils';
 import { cellLeftPaddingStyles } from '../../styles/table';
 
 const rowLabelStyles = css(cellLeftPaddingStyles, {
@@ -18,57 +18,60 @@ const rowLabelStyles = css(cellLeftPaddingStyles, {
 });
 
 export const ColumnResult = ({
-  parentType,
   type,
   value,
 }: CodeResultProps<'column'>): ReturnType<FC> => {
-  const { indexedBy, cellType } = type;
   const computer = useComputer();
-  const labels = computer.results$.useWithSelector((results) =>
-    results.indexLabels.get(indexedBy ?? '')
-  );
 
-  const isNested = useMemo(() => isTabularType(parentType), [parentType]);
+  const labels = computer.explainDimensions$.use({ type, value });
 
-  return (
+  return labels ? (
     <Table
       isReadOnly={true}
-      columnCount={2}
-      border={isNested ? 'inner' : 'all'}
+      columnCount={labels[0].dimensionLength}
       body={
         <>
-          {value.map((row, rowIndex) => {
-            return (
-              <TableRow key={rowIndex} readOnly>
-                {labels && (
+          {Array.from(unnestTableRows(labels, { type, value })).map(
+            (matrixValue) => {
+              return (
+                <TableRow readOnly>
+                  {matrixValue.labelInfo.map((labelInfo) => {
+                    return labelInfo.indexesOfRemainingLengthsAreZero ? (
+                      <TableData
+                        as="td"
+                        rowSpan={labelInfo.productOfRemainingLengths}
+                        showPlaceholder={false}
+                      >
+                        <span
+                          css={[
+                            css(table.getCellWrapperStyles(type.cellType)),
+                            // In case there is a nested dimension but no labels (ie. the nested dimension
+                            // will render in the first column), we need to give it some space from the row
+                            // number
+                            !labels && table.cellLeftPaddingStyles,
+                            rowLabelStyles,
+                          ]}
+                        >
+                          {labelInfo.label ??
+                            labelInfo.indexAtThisDimension + 1}
+                        </span>
+                      </TableData>
+                    ) : null;
+                  })}
                   <TableData as="td" showPlaceholder={false}>
-                    <span css={[rowLabelStyles]}>{labels[rowIndex]}</span>
+                    <span css={rowLabelStyles}>
+                      <CodeResult
+                        type={matrixValue.result.type}
+                        value={matrixValue.result.value}
+                      />
+                    </span>
                   </TableData>
-                )}
-                <TableData as="td" showPlaceholder={!labels}>
-                  <div
-                    css={[
-                      css(table.getCellWrapperStyles(type.cellType)),
-                      // In case there is a nested dimension but no labels (ie. the nested dimension
-                      // will render in the first column), we need to give it some space from the row
-                      // number
-                      !labels && table.cellLeftPaddingStyles,
-                      rowLabelStyles,
-                    ]}
-                  >
-                    <CodeResult
-                      parentType={type}
-                      type={cellType}
-                      value={row}
-                      variant="block"
-                    />
-                  </div>
-                </TableData>
-              </TableRow>
-            );
-          })}
+                </TableRow>
+              );
+            }
+          )}
         </>
       }
     />
-  );
+  ) : null;
 };

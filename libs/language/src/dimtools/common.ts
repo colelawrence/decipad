@@ -1,7 +1,7 @@
 import { produce } from 'immer';
-import { equalOrUnknown } from '../utils';
-import { Type } from '../type';
 import { DimensionId } from '../lazy';
+import { Type } from '../type';
+import { equalOrUnknown } from '../utils';
 
 export type IndexNames = (string | null)[];
 
