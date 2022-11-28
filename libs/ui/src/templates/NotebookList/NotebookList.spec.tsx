@@ -7,8 +7,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { NotebookList } from './NotebookList';
 
 const props: ComponentProps<typeof NotebookList> = {
-  Heading: 'h1',
   notebooks: [],
+  Heading: 'h1',
 };
 
 it('renders a CTA to create a notebook if there are none', () => {

@@ -8,6 +8,7 @@ export type Flag =
   | 'DATA_VIEW'
   | 'EXPR_REFS'
   | 'ONBOARDING_CHECKLIST'
+  | 'COLOR_SIDEBAR'
   | 'DASHBOARD_STATUS'
   | 'FEATURE_REQUEST';
 

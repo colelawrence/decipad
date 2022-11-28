@@ -10,7 +10,7 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   },
   usersWithAccess: [
     {
-      user: { id: '1', name: 'John Doe' },
+      user: { id: '1', name: 'John Doe', email: 'foo@nar.com' },
       permission: 'ADMIN',
     },
   ],

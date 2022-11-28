@@ -1,6 +1,6 @@
+import { css } from '@emotion/react';
 import { nanoid } from 'nanoid';
 import { ComponentProps, useState } from 'react';
-import { css } from '@emotion/react';
 
 import { noop } from '@decipad/utils';
 import { Avatar } from '../../atoms';
@@ -13,10 +13,10 @@ import {
 } from '../../primitives';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
-const styles = css(p12Medium, {
+const avatarGridStyles = css(p12Medium, {
   display: 'grid',
   alignItems: 'center',
-  gridTemplateColumns: '28px 6px',
+  gridTemplateColumns: '28px',
   columnGap: '6px',
 });
 
@@ -31,12 +31,14 @@ const chevronStyles = (hoverSelector: string) =>
 
 type AccountAvatarProps = Pick<ComponentProps<typeof Avatar>, 'name'> & {
   readonly menuOpen: boolean;
+  readonly variant?: boolean;
   readonly onClick?: () => void;
 };
 
 export const AccountAvatar = ({
   menuOpen,
   onClick = noop,
+  variant = false,
   ...props
 }: AccountAvatarProps): ReturnType<React.FC> => {
   const [hoverTargetClassName] = useState(`account-avatar-${nanoid()}`);
@@ -46,12 +48,15 @@ export const AccountAvatar = ({
     <button
       onClick={onAccountAvatarClick}
       className={hoverTargetClassName}
-      css={styles}
+      css={avatarGridStyles}
     >
-      <Avatar hoverSelector={hoverSelector} {...props} />
-      <div css={chevronStyles(hoverSelector)}>
-        <Chevron type={menuOpen ? 'collapse' : 'expand'} />
-      </div>
+      <Avatar email={props.name} hoverSelector={hoverSelector} {...props} />
+
+      {variant && (
+        <div css={chevronStyles(hoverSelector)}>
+          <Chevron type={menuOpen ? 'collapse' : 'expand'} />
+        </div>
+      )}
     </button>
   );
 };

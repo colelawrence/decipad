@@ -3,7 +3,9 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { cssVar, grey50 } from '../../primitives';
+import { GenericTable } from '../../icons';
+import { emptywRapperStyles } from '../../templates/NotebookList/NotebookList';
+import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
 
 const acceptableFileTypes = ['application/json'];
 const maxFileSizeBytes = 1_000_000;
@@ -45,17 +47,18 @@ const validateItemAndGetFile = (item: DataTransferItem) => {
 };
 
 const dropStyles = css({
-  backgroundColor: grey50.rgb,
-  background: cssVar('tintedBackgroundColor'),
+  zIndex: 2,
 });
 
 interface DragAndDropImportNotebookProps {
+  readonly enabled?: boolean;
   readonly onImport?: (source: string) => void;
   readonly children?: ReactNode;
 }
 
 export const DragAndDropImportNotebook = ({
   onImport = noop,
+  enabled = true,
   children,
 }: DragAndDropImportNotebookProps): ReturnType<FC> => {
   const [{ canDrop, isOver }, drop] = useDrop({
@@ -88,9 +91,23 @@ export const DragAndDropImportNotebook = ({
       };
     },
   });
-  return (
+  return !enabled ? (
+    <div>{children}</div>
+  ) : (
     <div css={isOver && canDrop && dropStyles} ref={drop}>
-      {children}
+      {isOver ? (
+        <div css={emptywRapperStyles}>
+          <DashboardDialogCTA
+            icon={<GenericTable />}
+            primaryText={'Drag and drop your notebooks here'}
+            secondaryText={
+              'Quickly import decipad notebooks, csv, and other files...'
+            }
+          />
+        </div>
+      ) : (
+        children
+      )}
     </div>
   );
 };

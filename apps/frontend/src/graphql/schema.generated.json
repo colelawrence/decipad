@@ -2516,6 +2516,18 @@
             "deprecationReason": null
           },
           {
+            "name": "archived",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "attachments",
             "description": null,
             "args": [],
@@ -2928,6 +2940,18 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "archived",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "icon",
             "description": null,

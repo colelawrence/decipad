@@ -2,6 +2,7 @@ import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
+import { Counter } from '../../atoms';
 import { Chevron } from '../../icons';
 import {
   p14Bold,
@@ -95,6 +96,18 @@ export const NumberCatalog = ({
           <div css={menuHeaderStyles}>
             <span css={numberFontStyles(color as AvailableSwatchColor)}>
               Numbers
+            </span>
+
+            <span
+              css={css({
+                marginLeft: '6px',
+              })}
+            >
+              <Counter
+                variant
+                n={items.filter((item) => item.type === 'var').length}
+                color={baseSwatches[color as AvailableSwatchColor]}
+              ></Counter>
             </span>
           </div>
           <div

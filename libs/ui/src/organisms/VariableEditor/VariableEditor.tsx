@@ -1,25 +1,24 @@
-import { css } from '@emotion/react';
-import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { CellValueType } from '@decipad/editor-types';
+import { css } from '@emotion/react';
 import { noop } from 'lodash';
+import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { useSelected } from 'slate-react';
-import { CellEditor } from '../../molecules';
+import { VariableEditorMenu } from '..';
 import { Ellipsis, Virus } from '../../icons';
+import { CellEditor } from '../../molecules';
 import {
-  offBlack,
   cssVar,
   grey300,
   grey700,
+  offBlack,
   setCssVar,
+  smallScreenQuery,
   transparency,
   white,
-  smallestDesktop,
 } from '../../primitives';
-import { VariableEditorMenu } from '..';
 import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
 
 const leftBarSize = 6;
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
 

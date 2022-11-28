@@ -5,10 +5,8 @@ import {
   p24Medium,
   p32Medium,
   setCssVar,
-  smallestDesktop,
+  smallScreenQuery,
 } from '../../primitives';
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const leafStylesByTokenType = {
   number: css(p32Medium, {

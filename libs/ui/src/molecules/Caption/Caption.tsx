@@ -11,7 +11,7 @@ import {
   p16Regular,
   placeholderOpacity,
   setCssVar,
-  smallestDesktop,
+  smallScreenQuery,
 } from '../../primitives';
 import { AvailableSwatchColor, UserIconKey } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
@@ -26,8 +26,6 @@ interface CaptionProps
   empty?: boolean;
   children: ReactNode;
 }
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const nameWrapperStyles = css({
   alignItems: 'center',

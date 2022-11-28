@@ -22,11 +22,13 @@ export const getNotebooks = async ({
 }: GetNotebooksProps): Promise<PagedResult<PadRecord>> => {
   const data = await tables();
 
+  const filterExpression = 'parent_resource_uri = :parent_resource_uri';
+
   const query = {
     IndexName: 'byUserId',
     KeyConditionExpression:
       'user_id = :user_id and resource_type = :resource_type',
-    FilterExpression: 'parent_resource_uri = :parent_resource_uri',
+    FilterExpression: filterExpression,
     ExpressionAttributeValues: {
       ':user_id': user?.id || 'null',
       ':resource_type': 'pads',
@@ -41,7 +43,6 @@ export const getNotebooks = async ({
     (perm) => perm.resource_id
   );
   const { items: notebookIds } = paged;
-
   let items: PadRecord[] = [];
   for (let i = 0; i < notebookIds.length; i += 99) {
     const notebookIdsSlice = notebookIds.slice(i, i + 99);

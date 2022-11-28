@@ -1,10 +1,10 @@
-import { FC, lazy } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
 import { docs, notebooks, playground, workspaces } from '@decipad/routing';
 import { HelpMenu } from '@decipad/ui';
-import { useIntercom } from 'react-use-intercom';
 import { useSession } from 'next-auth/react';
-import { ErrorPage, RequireSession, LazyRoute, RouteEvents } from './meta';
+import { FC, lazy } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { useIntercom } from 'react-use-intercom';
+import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
 export const loadWorkspaces = () =>

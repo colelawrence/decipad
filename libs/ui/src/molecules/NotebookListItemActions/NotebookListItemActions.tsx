@@ -8,7 +8,7 @@ import {
   ColorStatus,
   TColorStatus,
 } from '../../atoms/ColorStatus/ColorStatus';
-import { Calendar } from '../../icons';
+import { Archive, Calendar, Copy, Download, Trash } from '../../icons';
 import { cssVar, p12Medium, p14Medium } from '../../primitives';
 import { card } from '../../styles';
 
@@ -26,7 +26,7 @@ const actionStyles = css(p14Medium, {
   '&:hover': {
     backgroundColor: cssVar('highlightColor'),
   },
-  '& button, & a': {
+  '& button, & a button': {
     ...p14Medium,
     padding: '6px',
     lineHeight: '20px',
@@ -57,6 +57,7 @@ const creationDateStyles = css(p12Medium, {
 interface NotebookListItemActionsProps {
   readonly href: string;
   readonly status?: TColorStatus;
+  readonly archivePage?: boolean;
 
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
@@ -75,6 +76,7 @@ export const NotebookListItemActions = ({
   onChangeStatus = noop,
   toggleActionsOpen = noop,
   creationDate,
+  archivePage,
 }: NotebookListItemActionsProps): ReturnType<React.FC> => {
   const currentStatus = status;
 
@@ -83,13 +85,48 @@ export const NotebookListItemActions = ({
       <ul>
         <li css={actionStyles}>
           <button
-            css={{ display: 'flex' }}
+            css={css({ display: 'inline-flex', gap: '5px' })}
             onClick={() => {
               onDuplicate();
               toggleActionsOpen();
             }}
           >
+            <span css={css({ height: '20px', width: '20px' })}>
+              <Copy />
+            </span>
             Duplicate
+          </button>
+        </li>
+        <li css={actionStyles}>
+          <a
+            href={href}
+            onClick={(ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              onExport();
+              toggleActionsOpen();
+            }}
+          >
+            <button css={css({ display: 'inline-flex', gap: '5px' })}>
+              <span css={css({ height: '20px', width: '20px' })}>
+                <Download />
+              </span>
+              Download
+            </button>
+          </a>
+        </li>
+        <li css={actionStyles}>
+          <button
+            onClick={() => {
+              onDelete();
+              toggleActionsOpen();
+            }}
+            css={css({ display: 'inline-flex', gap: '5px' })}
+          >
+            <span css={css({ height: '20px', width: '20px' })}>
+              {archivePage ? <Trash /> : <Archive />}
+            </span>
+            {archivePage ? 'Delete' : 'Archive'}
           </button>
         </li>
         {isFlagEnabled('DASHBOARD_STATUS')
@@ -109,39 +146,12 @@ export const NotebookListItemActions = ({
               )),
             ]
           : null}
-        <li css={actionStyles}>
-          <Divider />
-        </li>
-        <li css={actionStyles}>
-          <a
-            href={href}
-            onClick={(ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              onExport();
-              toggleActionsOpen();
-            }}
-          >
-            Export
-          </a>
-        </li>
-        <li css={actionStyles}>
-          <button
-            onClick={() => {
-              onDelete();
-              toggleActionsOpen();
-            }}
-            css={{ display: 'flex', alignItems: 'center' }}
-          >
-            Delete
-          </button>
-        </li>
         {creationDate && (
           <li css={creationDateStyles}>
             <span css={calendarIconStyles}>
               <Calendar />
             </span>{' '}
-            <span>{format(creationDate, 'E, MMM do Y')}</span>
+            <span>Created: {format(creationDate, 'd MMM Y')}</span>
           </li>
         )}
       </ul>

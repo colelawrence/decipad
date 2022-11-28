@@ -15,7 +15,7 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   permission: 'ADMIN',
   usersWithAccess: [
     {
-      user: { id: '1', name: 'John Doe' },
+      user: { id: '1', name: 'John Doe', email: 'foo@nar.com' },
       permission: 'ADMIN',
     },
   ],

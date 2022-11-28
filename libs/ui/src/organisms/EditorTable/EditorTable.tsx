@@ -6,7 +6,7 @@ import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
 import { Add } from '../../icons';
 import { AddTableRowButton } from '../../molecules';
-import { cssVar, smallestDesktop } from '../../primitives';
+import { cssVar, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { tableControlWidth } from '../../styles/table';
 import { Column } from '../../types';
@@ -27,8 +27,6 @@ const wideToSlimBlockWidthDifference = `${
 const gutterWidth = '60px';
 const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
 const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const scrollRightOffset = `(((100vw - 610px) / 2) + ${tableControlWidth})`;
 

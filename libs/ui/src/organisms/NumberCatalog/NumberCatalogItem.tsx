@@ -75,7 +75,7 @@ export const NumberCatalogItem = ({
           </span>
 
           <span
-            css={css({
+            css={css(p14Medium, {
               position: 'relative',
               whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',

@@ -1,9 +1,9 @@
 import {
+  ConcreteRecord,
   DataTable,
   DynamoDbQuery,
-  PageInput,
   PagedResult,
-  ConcreteRecord,
+  PageInput,
 } from '@decipad/backendtypes';
 
 export async function paginate<T1 extends ConcreteRecord, T2>(
@@ -22,6 +22,7 @@ export async function paginate<T1 extends ConcreteRecord, T2>(
   }
 
   const result = await table.query(query);
+
   const items = result.Items;
   let retItems: T2[];
   if (map) {

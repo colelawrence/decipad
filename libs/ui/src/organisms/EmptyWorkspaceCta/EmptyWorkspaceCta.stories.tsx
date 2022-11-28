@@ -6,5 +6,5 @@ export default {
   component: EmptyWorkspaceCta,
 } as Meta;
 
-export const Normal: Story = () => <EmptyWorkspaceCta Heading="h1" />;
+export const Normal: Story = () => <EmptyWorkspaceCta />;
 Normal.storyName = 'Empty Workspace CTA';

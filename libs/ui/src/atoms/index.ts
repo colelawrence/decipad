@@ -15,6 +15,7 @@ export { ColorPicker } from './ColorPicker/ColorPicker';
 export { ColorStatus } from './ColorStatus/ColorStatus';
 export { ColorStatusCircle } from './ColorStatus/ColorStatusCircle';
 export { ContentSeparator } from './ContentSeparator/ContentSeparator';
+export { Counter } from './Counter/Counter';
 export { DataViewColumnHeaderRow } from './DataViewColumnHeaderRow/DataViewColumnHeaderRow';
 export { DataViewHeader } from './DataViewHeader/DataViewHeader';
 export { DataViewTableHeader } from './DataViewTableHeader/DataViewTableHeader';

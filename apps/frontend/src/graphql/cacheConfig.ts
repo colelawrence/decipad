@@ -69,6 +69,9 @@ export const graphCacheConfig: GraphCacheConfig = {
       importPad: (result, _args, cache) => {
         addNotebookToItsWorkspace(cache, result.importPad as Pad);
       },
+      updatePad: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Pad', id: args.id });
+      },
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },

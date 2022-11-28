@@ -1,9 +1,7 @@
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
-import { cssVar, p16Regular, smallestDesktop } from '../../primitives';
+import { cssVar, p16Regular, smallScreenQuery } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const centeredFlex = css({
   display: 'flex',

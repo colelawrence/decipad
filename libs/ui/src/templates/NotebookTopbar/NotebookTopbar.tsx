@@ -9,11 +9,9 @@ import { Button, IconButton, Link } from '../../atoms';
 import { Deci, LeftArrow, Sheet } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookPublishingPopUp } from '../../organisms';
-import { cssVar, p14Medium, smallestDesktop } from '../../primitives';
+import { cssVar, p14Medium, smallScreenQuery } from '../../primitives';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const wrapperStyles = css({
   display: 'flex',
@@ -166,7 +164,7 @@ export const NotebookTopbar = ({
                 >
                   <span css={iconStyles}>
                     <Sheet />
-                  </span>{' '}
+                  </span>
                   Gallery
                 </span>
               </Anchor>

@@ -1,14 +1,12 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, p14Medium, smallestMobile } from '../../primitives';
-
-const smallestScreenQuery = `@media (max-width: ${smallestMobile.landscape.width}px)`;
+import { cssVar, mobileQuery, p14Medium } from '../../primitives';
 
 const wrapperStyles = css({
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
-  [smallestScreenQuery]: {
+  [mobileQuery]: {
     display: 'none',
   },
 });

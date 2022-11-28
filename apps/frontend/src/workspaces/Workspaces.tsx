@@ -1,6 +1,6 @@
 import { workspaces } from '@decipad/routing';
 import { lazy } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ErrorPage, LazyRoute } from '../meta';
 import RedirectToDefaultWorkspace from './RedirectToDefaultWorkspace';
 

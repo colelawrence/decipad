@@ -8,6 +8,7 @@ const args: ComponentProps<typeof NotebookAvatars> = {
       user: {
         id: '0',
         name: 'Doe John',
+        email: 'dough@nar.com',
       },
       permission: 'READ',
     },
@@ -15,6 +16,7 @@ const args: ComponentProps<typeof NotebookAvatars> = {
       user: {
         id: '0',
         name: 'John Doe',
+        email: 'foo@nar.com',
       },
       permission: 'ADMIN',
     },

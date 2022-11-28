@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ComponentProps } from 'react';
 
 import { WorkspaceMenu } from './WorkspaceMenu';
 
@@ -11,7 +11,7 @@ const props: ComponentProps<typeof WorkspaceMenu> = {
     name: 'Active Workspace',
     numberOfMembers: 1,
   },
-  otherWorkspaces: [],
+  allWorkspaces: [],
 };
 
 it('renders a heading at given level', () => {
@@ -49,7 +49,7 @@ it('links to the other workspaces', () => {
   const { getByText } = render(
     <WorkspaceMenu
       {...props}
-      otherWorkspaces={[
+      allWorkspaces={[
         {
           id: '42',
           numberOfMembers: 2,
@@ -75,14 +75,14 @@ it('links to the other workspaces', () => {
 
 it('shows a separator if there are other workspaces', () => {
   const { getByRole, queryByRole, rerender } = render(
-    <WorkspaceMenu {...props} otherWorkspaces={[]} />
+    <WorkspaceMenu {...props} allWorkspaces={[]} />
   );
   expect(queryByRole('separator')).not.toBeInTheDocument();
 
   rerender(
     <WorkspaceMenu
       {...props}
-      otherWorkspaces={[
+      allWorkspaces={[
         {
           id: '0',
           numberOfMembers: 2,

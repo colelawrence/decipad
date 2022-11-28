@@ -67,7 +67,6 @@ test.describe('Loading and snapshot of big notebook', () => {
   test('click publish button and extract text', async () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
-
     await snapshot(page as Page, 'Notebook: Publish Popover');
   });
 

@@ -8,6 +8,7 @@ const props: NotebookAvatarsProps = {
       user: {
         id: '0',
         name: 'John Doe',
+        email: 'foo@nar.com',
       },
       permission: 'WRITE',
     },
@@ -15,6 +16,7 @@ const props: NotebookAvatarsProps = {
       user: {
         id: '1',
         name: 'Blake Doe',
+        email: 'blake@nar.com',
       },
       permission: 'READ',
     },
@@ -22,6 +24,7 @@ const props: NotebookAvatarsProps = {
       user: {
         id: '2',
         name: 'Chris Doe',
+        email: 'chris@nar.com',
       },
       permission: 'ADMIN',
     },

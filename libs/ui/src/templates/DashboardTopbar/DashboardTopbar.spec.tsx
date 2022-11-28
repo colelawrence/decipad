@@ -4,10 +4,7 @@ import { ComponentProps } from 'react';
 
 import { DashboardTopbar } from './DashboardTopbar';
 
-const props: ComponentProps<typeof DashboardTopbar> = {
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-};
+const props: ComponentProps<typeof DashboardTopbar> = {};
 
 it('renders a level 1 notebook list header', () => {
   const { getByText } = render(<DashboardTopbar {...props} />);
@@ -22,23 +19,4 @@ it('renders a button to create a new notebook', async () => {
 
   await userEvent.click(getByText(/create.+notebook/i));
   expect(handleCreateNotebook).toHaveBeenCalled();
-});
-
-it('renders an account menu avatar', () => {
-  const { getByLabelText } = render(<DashboardTopbar {...props} />);
-  expect(getByLabelText(/avatar/i)).toBeVisible();
-});
-describe('when clicking the account menu avatar', () => {
-  it('opens and closes the account menu', async () => {
-    const { getByLabelText, getByText, queryByText } = render(
-      <DashboardTopbar {...props} />
-    );
-    expect(queryByText(/log.*out/i)).not.toBeInTheDocument();
-
-    await userEvent.click(getByLabelText(/avatar/i));
-    expect(getByText(/log.*out/i, { selector: 'nav li button' })).toBeVisible();
-
-    await userEvent.click(getByLabelText(/avatar/i));
-    expect(queryByText(/log.*out/i)).not.toBeInTheDocument();
-  });
 });

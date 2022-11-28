@@ -8,17 +8,17 @@ import {
   WorkspaceInput,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
+import { getNotebooks } from '@decipad/services/notebooks';
 import {
   queryAccessibleResources,
   removeAllPermissionsFor,
 } from '@decipad/services/permissions';
 import { notifyAllWithAccessTo, subscribe } from '@decipad/services/pubsub';
 import { create as createWorkspace2 } from '@decipad/services/workspaces';
-import { getNotebooks } from '@decipad/services/notebooks';
 import tables from '@decipad/tables';
+import { byDesc } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
-import { byDesc } from '@decipad/utils';
 import {
   isAuthenticatedAndAuthorized,
   isAuthorized,

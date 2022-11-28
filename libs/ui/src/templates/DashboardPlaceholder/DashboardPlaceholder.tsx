@@ -6,7 +6,7 @@ import {
 
 export const DashboardPlaceholder: React.FC = () => (
   <Dashboard
-    topbar={<DashboardTopbar name="" email="" />}
+    topbar={<DashboardTopbar />}
     sidebar={<></>}
     notebookList={<NotebookListPlaceholder />}
   />

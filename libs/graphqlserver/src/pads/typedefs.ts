@@ -5,6 +5,7 @@ export default gql`
     name: String
     icon: String
     status: String
+    archived: Boolean
     tags: [String!]
   }
 
@@ -34,6 +35,7 @@ export default gql`
     isPublic: Boolean
     icon: String
     status: String
+    archived: Boolean
     padConnectionParams: PadConnectionParams!
     initialState: String
     snapshots: [PadSnapshot!]!

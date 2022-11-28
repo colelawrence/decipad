@@ -6,7 +6,7 @@ import { grey100, p18Medium } from '../../primitives';
 import background from './card-image.svg';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
-const smallScreenQuery = `@media (max-width: 1000px)`;
+const workspaceCTAScreenQuery = `@media (max-width: 1000px)`;
 
 const workspaceCTACardSuperWrapperStyles = css({
   marginBottom: '2rem',
@@ -20,7 +20,7 @@ const workspaceCTACardSuperWrapperStyles = css({
   backgroundImage: `url(${background})`,
   backgroundPosition: 'right 20px bottom',
   backgroundRepeat: 'no-repeat',
-  [smallScreenQuery]: {
+  [workspaceCTAScreenQuery]: {
     display: 'none',
   },
 });

@@ -1,89 +1,136 @@
 import { css } from '@emotion/react';
+import md5 from 'md5';
 import { FC } from 'react';
+import Gravatar from 'react-gravatar';
 import {
+  cssVar,
   grey200,
+  OpaqueColor,
   p12Medium,
   purple300,
   shortAnimationDuration,
   transparency,
 } from '../../primitives';
 
-const containerStyles = css(p12Medium, {
-  aspectRatio: '1 / 1',
-  minWidth: '28px',
-  minHeight: '28px',
+interface AvatarProps {
+  readonly name: string;
+  readonly email?: string;
+  readonly roundedSquare?: boolean;
+  readonly hoverSelector?: string;
+  readonly greyedOut?: boolean;
+  readonly variant?: boolean;
+}
 
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  cursor: 'default',
+export const Avatar = ({
+  name,
+  email = 'thisemaildoesnthaveagravatar@n1n.co',
+  roundedSquare = false,
+  hoverSelector,
+  greyedOut = false,
+  variant = false,
+}: AvatarProps): ReturnType<FC> => {
+  const hashString = name
+    .split('')
+    .map((c: string) => c.charCodeAt(0))
+    .reduce((a: number, b: number) => a + b, 0);
+  const avatarColor = baseColors[hashString % baseColors.length];
+  return (
+    <div
+      role="img"
+      aria-label={`Avatar of user ${name[0]}`}
+      css={containerStyles(variant)}
+    >
+      <div css={{ display: 'flex', height: '100%', width: '100%' }}>
+        <div
+          css={[
+            { width: '100%', borderRadius: roundedSquare ? '8px' : '50%' },
+            variant && {
+              border: `1px solid ${cssVar('strongHighlightColor')}`,
+            },
+          ]}
+        >
+          <svg
+            css={{
+              width: '100%',
+              height: '100%',
+              borderRadius: roundedSquare ? '8px' : '50%',
+              zIndex: 1,
+            }}
+          >
+            <rect
+              width="100"
+              height="100"
+              css={initialBackgroundStyles(
+                avatarColor,
+                greyedOut,
+                variant,
+                hoverSelector
+              )}
+            />
+            <text x="50%" y="50%" css={initialTextStyles}>
+              {name[0]}
+            </text>
+          </svg>
+        </div>
+      </div>
+      <div css={{ position: 'absolute' }}>
+        <Gravatar
+          md5={md5(email, { encoding: 'binary' })}
+          style={{ borderRadius: roundedSquare ? '8px' : '50%', zIndex: 2 }}
+          default={'blank'}
+        />
+      </div>
+    </div>
+  );
+};
 
-  '@supports not (aspect-ratio: 1 / 1)': {
-    position: 'relative',
-    paddingBottom: '100%',
-    '> *': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
+const containerStyles = (variant: boolean) =>
+  css([
+    p12Medium,
+    variant && { cursor: 'pointer' },
+    {
+      aspectRatio: '1 / 1',
+      minWidth: '28px',
+      minHeight: '28px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      position: 'relative',
+
+      '@supports not (aspect-ratio: 1 / 1)': {
+        position: 'relative',
+        paddingBottom: '100%',
+        '> *': {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        },
+      },
     },
-  },
-});
+  ]);
+
+const baseColors = [purple300];
 
 const initialBackgroundStyles = (
-  // eslint-disable-next-line default-param-last
-  hoverSelector = 'svg:hover',
-  greyedOut: boolean
+  color: OpaqueColor,
+  greyedOut: boolean,
+  variant: boolean,
+  hoverSelector = 'svg:hover'
 ) =>
   css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
-    fill: greyedOut ? grey200.rgb : purple300.rgb,
+    fill: variant
+      ? cssVar('backgroundColor')
+      : greyedOut
+      ? grey200.rgb
+      : color.rgb,
     [`${hoverSelector} &`]: {
-      fill: transparency(greyedOut ? grey200 : purple300, 0.65).rgba,
+      fill: transparency(greyedOut ? grey200 : color, 0.65).rgba,
     },
   });
 const initialTextStyles = css(p12Medium, {
   dominantBaseline: 'central',
   textAnchor: 'middle',
-
   textTransform: 'uppercase',
+  fontSize: '1.2em',
 });
-
-interface AvatarProps {
-  readonly name: string;
-  readonly roundedSquare?: boolean;
-
-  readonly hoverSelector?: string;
-  readonly greyedOut?: boolean;
-}
-
-export const Avatar = ({
-  name,
-  roundedSquare = false,
-  hoverSelector,
-  greyedOut = false,
-}: AvatarProps): ReturnType<FC> => {
-  return (
-    <div
-      role="img"
-      aria-label={`Avatar of user ${name[0]}`}
-      css={containerStyles}
-    >
-      <svg
-        css={{
-          width: '100%',
-          height: '100%',
-          borderRadius: roundedSquare ? '8px' : '50%',
-        }}
-      >
-        <rect
-          width="100%"
-          height="100%"
-          css={initialBackgroundStyles(hoverSelector, greyedOut)}
-        />
-        <text x="50%" y="50%" css={initialTextStyles}>
-          {name[0]}
-        </text>
-      </svg>
-    </div>
-  );
-};

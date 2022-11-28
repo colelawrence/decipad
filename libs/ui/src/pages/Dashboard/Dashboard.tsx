@@ -20,7 +20,7 @@ const styles = css({
     gridTemplate: `
       "sidebar topbar       " auto
       "sidebar notebook-list" 1fr
-      /272px   1fr
+      /347px   1fr
     `,
   },
 
@@ -30,7 +30,7 @@ const styles = css({
 });
 const sidebarStyles = css({
   [crossBarsQuery]: {
-    borderRight: `1px solid ${cssVar('highlightColor')}`,
+    borderRight: `1px solid ${cssVar('strongerHighlightColor')}`,
   },
 });
 

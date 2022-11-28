@@ -11,7 +11,7 @@ import {
   p14Medium,
   p14Regular,
   setCssVar,
-  smallestDesktop,
+  smallScreenQuery,
   wiggle,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
@@ -20,8 +20,6 @@ import { isTabularType } from '../../utils';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 const { lineHeight } = codeBlock;
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const highlightedLineStyles = {
   borderColor: cssVar('strongerHighlightColor'),

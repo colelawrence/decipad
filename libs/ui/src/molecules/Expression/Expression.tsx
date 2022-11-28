@@ -9,10 +9,8 @@ import {
   p24Medium,
   p32Medium,
   setCssVar,
-  smallestDesktop,
+  smallScreenQuery,
 } from '../../primitives';
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const baseWrapperStyles = css({
   width: '100%',

@@ -17,6 +17,7 @@ fragment EditorNotebook on Pad {
       user {
         id
         name
+        email
       }
       permission
     }

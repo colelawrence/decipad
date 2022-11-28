@@ -48,6 +48,7 @@ const padResource = Resource({
     name: pad.name,
     icon: pad.icon,
     status: pad.status,
+    archived: pad.archived,
     workspace_id: workspaceId,
     createdAt: timestamp(),
   }),

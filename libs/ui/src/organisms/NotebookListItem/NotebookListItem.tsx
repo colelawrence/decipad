@@ -111,6 +111,7 @@ type NotebookListItemProps = {
   readonly id: string;
   readonly name: string;
   readonly creationDate?: Date;
+  readonly archivePage?: boolean;
 
   readonly actionsOpen?: boolean;
   readonly onExport?: () => void;
@@ -123,6 +124,7 @@ type NotebookListItemProps = {
   readonly iconColor: AvailableSwatchColor;
   readonly status: TColorStatus;
 };
+
 export const NotebookListItem = ({
   id,
   name,
@@ -136,6 +138,7 @@ export const NotebookListItem = ({
   onChangeStatus = noop,
   icon = 'Rocket',
   iconColor = 'Sulu',
+  archivePage,
 }: NotebookListItemProps): ReturnType<FC> => {
   const Icon = icons[icon];
 
@@ -173,6 +176,7 @@ export const NotebookListItem = ({
       {actionsOpen && (
         <div css={actionWrapperStyles}>
           <NotebookListItemActions
+            archivePage={archivePage}
             href={href}
             status={feStatus}
             creationDate={creationDate}

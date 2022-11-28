@@ -27,11 +27,17 @@ Notebooks are a place where you can combine numbers and narrative.
 
 - To **duplicate your notebook**, on your workspace, hover the notebook you wish to duplicate, click the `•••` button on the right, and click `Duplicate`.
 
+## Archive a Notebook
+
+Archive a notebook.
+
+- To **archive a notebook**, on your workspace, hover the notebook you wish to delete, click the `•••` button on the right, and click `Archive`.
+
 ## Delete a Notebook
 
-Delete a notebook forever.
+Delete a notebook forever. You can only delete notebooks that have been archived, to prevent accidental loss of data.
 
-- To **delete a notebook**, on your workspace, hover the notebook you wish to delete, click the `•••` button on the right, and click `Delete`.
+- To **delete a notebook**, in the dashboard, on your archived notebooks section, hover the notebook you wish to delete, click the `•••` button on the right, and click `Delete`.
 
 ## Export a Notebook
 

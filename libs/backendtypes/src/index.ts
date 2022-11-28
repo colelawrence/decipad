@@ -120,6 +120,7 @@ export type PadInput = {
   name: string;
   icon?: string;
   status?: string;
+  archived?: boolean;
 };
 
 export type VerificationRequest = {
@@ -293,6 +294,7 @@ export interface PadRecord extends TableRecordBase {
   isPublic?: boolean;
   icon?: string;
   createdAt: number;
+  archived?: boolean;
 }
 
 export interface WorkspaceRecord extends TableRecordBase {

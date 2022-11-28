@@ -1,26 +1,25 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, lazy, Suspense, useState } from 'react';
-import { Divider } from '../../atoms';
 import { TColorStatus } from '../../atoms/ColorStatus/ColorStatus';
+import { Generic } from '../../icons';
 import {
+  DashboardDialogCTA,
   DragAndDropImportNotebook,
   EmptyWorkspaceCta,
   NotebookListItem,
 } from '../../organisms';
-import { cssVar, p15Medium, smallestDesktop } from '../../primitives';
+import { cssVar, p15Medium, smallScreenQuery } from '../../primitives';
 import { notebookList } from '../../styles';
 
 const loadWorkspaceCta = () =>
   import(/* webpackChunkName: "workspace-cta" */ './WorkspaceCTACard');
 const WorkspaceCta = lazy(loadWorkspaceCta);
 
-const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
-
 const notebookListWrapperStyles = css({
-  padding: `${notebookList.verticalPadding} ${notebookList.horizontalPadding}`,
+  padding: `2px ${notebookList.horizontalPadding}`,
   display: 'grid',
-  [mobileQuery]: {
+  [smallScreenQuery]: {
     paddingTop: '16px',
   },
 });
@@ -49,8 +48,11 @@ type NotebookListProps = {
   readonly onCreateNotebook?: () => void;
 
   readonly onPointerEnter?: () => void;
-} & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> &
-  ComponentProps<typeof EmptyWorkspaceCta>;
+} & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> & {
+    readonly Heading: 'h1';
+    readonly archivePage?: boolean;
+    readonly mainWorkspaceRoute?: boolean;
+  };
 
 const listHeadingStyles = css(p15Medium, {
   color: cssVar('weakerTextColor'),
@@ -64,7 +66,8 @@ export const NotebookList = ({
   onDelete = noop,
   showCTA = false,
   onCTADismiss = noop,
-
+  archivePage = false,
+  mainWorkspaceRoute = false,
   onImport,
 
   Heading,
@@ -76,7 +79,10 @@ export const NotebookList = ({
 
   return (
     <div css={notebookListWrapperStyles} onPointerEnter={onPointerEnter}>
-      <DragAndDropImportNotebook onImport={onImport}>
+      <DragAndDropImportNotebook
+        enabled={mainWorkspaceRoute}
+        onImport={onImport}
+      >
         {showCTA && (
           <Suspense fallback={<></>}>
             <WorkspaceCta
@@ -86,12 +92,17 @@ export const NotebookList = ({
           </Suspense>
         )}
         {notebooks.length ? (
-          <div css={{ alignSelf: 'start' }}>
+          <div
+            css={{
+              alignSelf: 'start',
+              paddingTop: '2px',
+            }}
+          >
             <Heading css={listHeadingStyles}>Name</Heading>
             <ol className="notebookList">
               {notebooks.map(({ id, ...notebook }, i) => (
                 <li
-                  key={id}
+                  key={i}
                   css={[
                     listItemStyles,
                     {
@@ -99,7 +110,6 @@ export const NotebookList = ({
                     },
                   ]}
                 >
-                  {i === 0 || <Divider />}
                   <NotebookListItem
                     {...notebook}
                     id={id}
@@ -109,6 +119,7 @@ export const NotebookList = ({
                     }
                     onDuplicate={() => onDuplicate(id)}
                     onDelete={() => onDelete(id)}
+                    archivePage={archivePage}
                     onExport={notebook.onExport}
                     onChangeStatus={(status: TColorStatus) => {
                       onChangeStatus(id, status as TColorStatus);
@@ -118,11 +129,18 @@ export const NotebookList = ({
               ))}
             </ol>
           </div>
+        ) : mainWorkspaceRoute ? (
+          <div css={emptywRapperStyles}>
+            <EmptyWorkspaceCta onCreateNotebook={onCreateNotebook} />
+          </div>
         ) : (
-          <div css={{ alignSelf: 'center' }}>
-            <EmptyWorkspaceCta
-              Heading={Heading}
-              onCreateNotebook={onCreateNotebook}
+          <div css={emptywRapperStyles}>
+            <DashboardDialogCTA
+              icon={<Generic />}
+              primaryText={'No documents to list'}
+              secondaryText={
+                'When you create a document they will show up here'
+              }
             />
           </div>
         )}
@@ -130,3 +148,13 @@ export const NotebookList = ({
     </div>
   );
 };
+
+export const emptywRapperStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  flexWrap: 'nowrap',
+  alignContent: 'space-around',
+  justifyContent: 'space-around',
+  alignItems: 'center',
+  height: '100%',
+});

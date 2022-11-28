@@ -1,54 +1,38 @@
-import { css } from '@emotion/react';
-import { FC } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { docs } from '@decipad/routing';
 import { noop } from '@decipad/utils';
-import { Button } from '../../atoms';
+import { FC, useCallback, useContext } from 'react';
+import { GenericCursorAdd } from '../../icons';
 
-import { computerScreen } from '../../images';
-import { cssVar, h1, p14Regular, setCssVar } from '../../primitives';
-
-const styles = css({
-  display: 'grid',
-  gridTemplateRows: `
-    [banner] 68px
-    24px
-    [heading] auto
-    16px
-    [text] auto
-    20px
-    [button] auto
-  `,
-  justifyItems: 'center',
-  alignContent: 'center',
-});
+import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
 
 interface EmptyWorkspaceCtaProps {
-  readonly Heading: 'h1';
   readonly onCreateNotebook?: () => void;
 }
 
 export const EmptyWorkspaceCta = ({
-  Heading,
   onCreateNotebook = noop,
 }: EmptyWorkspaceCtaProps): ReturnType<FC> => {
+  const clientEvent = useContext(ClientEventsContext);
+
+  const onGalleryClick = useCallback(
+    () =>
+      clientEvent({
+        type: 'action',
+        action: 'notebook get inspiration link clicked',
+      }),
+    [clientEvent]
+  );
   return (
-    <div css={styles}>
-      <img css={{ gridRow: 'banner' }} alt="" src={computerScreen} />
-      <Heading css={css(h1, { gridRow: 'heading' })}>
-        Start modelling right away
-      </Heading>
-      <p
-        css={css(p14Regular, {
-          ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-          gridRow: 'text',
-        })}
-      >
-        Start modelling your finances, runway and others
-      </p>
-      <div css={{ gridRow: 'button' }}>
-        <Button type="primary" onClick={onCreateNotebook}>
-          Create new notebook
-        </Button>
-      </div>
-    </div>
+    <DashboardDialogCTA
+      icon={<GenericCursorAdd />}
+      primaryAction={onCreateNotebook}
+      primaryText={'Create your first document'}
+      primaryActionLabel={'Create new notebook'}
+      secondaryText={'Start modelling your finances, your work, etc'}
+      secondaryActionLabel={'Explore our gallery'}
+      secondaryAction={onGalleryClick}
+      secondaryActionHref={docs({}).page({ name: 'gallery' }).$}
+    />
   );
 };

@@ -1,22 +1,22 @@
-import { ComponentProps } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ComponentProps } from 'react';
 
-import { WorkspaceSwitcher } from './WorkspaceSwitcher';
+import { WorkspaceOptions } from './WorkspaceOptions';
 
-const props: ComponentProps<typeof WorkspaceSwitcher> = {
+const props: ComponentProps<typeof WorkspaceOptions> = {
   Heading: 'h1',
   activeWorkspace: {
     id: '42',
     name: 'Active Workspace',
     numberOfMembers: 2,
   },
-  otherWorkspaces: [],
+  allWorkspaces: [],
 };
 
 it('shows the active workspace name', () => {
   const { getByText } = render(
-    <WorkspaceSwitcher
+    <WorkspaceOptions
       {...props}
       activeWorkspace={{ ...props.activeWorkspace, name: 'My WS' }}
     />
@@ -26,9 +26,9 @@ it('shows the active workspace name', () => {
 
 it('opens and closes a workspace menu', async () => {
   const { getByText, queryByText, getByTitle } = render(
-    <WorkspaceSwitcher
+    <WorkspaceOptions
       {...props}
-      otherWorkspaces={[{ name: 'Other WS', id: '0', numberOfMembers: 1 }]}
+      allWorkspaces={[{ name: 'Other WS', id: '0', numberOfMembers: 1 }]}
     />
   );
 

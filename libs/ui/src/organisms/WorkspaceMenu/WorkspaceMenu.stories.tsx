@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { WorkspaceMenu } from './WorkspaceMenu';
 
 const args = {
-  numberOfOtherWorkspaces: 2,
+  numberOfallWorkspaces: 2,
 };
 
 export default {
@@ -11,11 +11,11 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = ({ numberOfOtherWorkspaces }) => (
+export const Normal: Story<typeof args> = ({ numberOfallWorkspaces }) => (
   <WorkspaceMenu
     Heading="h1"
     activeWorkspace={{ name: 'Active Workspace', id: '42', numberOfMembers: 1 }}
-    otherWorkspaces={Array(numberOfOtherWorkspaces)
+    allWorkspaces={Array(numberOfallWorkspaces)
       .fill(null)
       .map((_, i) => ({
         id: String(i),

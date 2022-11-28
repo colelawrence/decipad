@@ -1,9 +1,7 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { smallestMobile } from '../../primitives';
+import { mobileQuery, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
-
-const smallestScreenQuery = `@media (max-width: ${smallestMobile.landscape.width}px)`;
 
 const styles = css({
   padding: '0 32px',
@@ -11,7 +9,7 @@ const styles = css({
   gridTemplateColumns: '100%',
   alignContent: 'start',
 
-  [smallestScreenQuery]: {
+  [mobileQuery]: {
     padding: '0 24px',
   },
 });
@@ -25,13 +23,13 @@ const notebookStyles = css({
   display: 'grid',
   gridTemplateColumns: `minmax(100%, ${editorLayout.wideBlockWidth}px)`,
   justifyContent: 'center',
-  [smallestScreenQuery]: {
+  [smallScreenQuery]: {
     paddingTop: '24px',
   },
 });
 
 const headerStyles = css({
-  [smallestScreenQuery]: {
+  [smallScreenQuery]: {
     margin: '0 -4px',
   },
 });

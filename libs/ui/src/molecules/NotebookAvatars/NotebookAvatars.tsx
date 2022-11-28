@@ -8,6 +8,7 @@ interface NotebookAvatar {
   user: {
     id: string;
     name: string;
+    email?: string | null;
   };
   permission: PermissionType;
 }
@@ -56,14 +57,16 @@ export const NotebookAvatars = ({
 }: NotebookAvatarsProps): ReturnType<FC> => {
   return (
     <div css={avatarsWrapperStyles}>
-      {usersWithAccess?.map((avatar, index) =>
-        isWriter ? (
+      {usersWithAccess?.map((avatar, index) => {
+        const email = avatar.user.email || avatar.user.name;
+        return isWriter ? (
           <Tooltip
             key={index}
             trigger={
               <div css={avatarStyles}>
                 <Avatar
                   name={avatar.user.name}
+                  email={email}
                   greyedOut={avatar.permission !== 'ADMIN'}
                 />
               </div>
@@ -78,11 +81,12 @@ export const NotebookAvatars = ({
           <div key={index} css={avatarStyles}>
             <Avatar
               name={avatar.user.name}
+              email={email}
               greyedOut={avatar.permission !== 'ADMIN'}
             />
           </div>
-        )
-      )}
+        );
+      })}
     </div>
   );
 };

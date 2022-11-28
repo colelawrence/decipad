@@ -1,14 +1,14 @@
-import { Children, FC, ReactNode } from 'react';
-import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { Children, FC, ReactNode } from 'react';
+import { VariableNameSelector } from '../../molecules';
+import { p14Regular, smallScreenQuery } from '../../primitives';
+import { editorLayout } from '../../styles';
 import {
   AvailableSwatchColor,
   TableStyleContext,
   UserIconKey,
 } from '../../utils';
-import { VariableNameSelector } from '../../molecules';
-import { p14Regular, smallestDesktop } from '../../primitives';
-import { editorLayout } from '../../styles';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
@@ -19,8 +19,6 @@ const wideToSlimBlockWidthDifference = `${
 const gutterWidth = '60px';
 const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
 const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 const tableCaptionWrapperStyles = css({
   width: '100%',

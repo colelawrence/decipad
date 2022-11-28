@@ -5,10 +5,4 @@ export default {
   title: 'Templates / Dashboard / Topbar',
 } as Meta;
 
-export const Normal: Story = () => (
-  <DashboardTopbar
-    name="John Doe"
-    email="john.doe@example.com"
-    numberOfNotebooks={2}
-  />
-);
+export const Normal: Story = () => <DashboardTopbar numberOfNotebooks={2} />;

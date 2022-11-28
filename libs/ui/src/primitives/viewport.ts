@@ -25,3 +25,6 @@ export const placeholderOpacity: Opacity = 0.4;
 export const smallestMobile = device(360, 640);
 export const smallestDesktop = device(1280, 720);
 export const largestDesktop = device(3840, 2160);
+
+export const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
+export const mobileQuery = `@media (max-width: ${smallestMobile.landscape.width}px)`;

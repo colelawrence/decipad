@@ -8,8 +8,10 @@ export default {
 
 export const Normal: Story = () => (
   <DashboardSidebar
+    name="John Doe"
+    email="john.doe@example.com"
     Heading="h1"
     activeWorkspace={{ name: 'Active Workspace', id: '42', numberOfMembers: 1 }}
-    otherWorkspaces={[]}
+    allWorkspaces={[]}
   />
 );

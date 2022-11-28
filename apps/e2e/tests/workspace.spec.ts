@@ -1,0 +1,63 @@
+import { expect, test } from '@playwright/test';
+import { setUp } from '../utils/page/Home';
+import { withTestUser } from '../utils/src';
+
+test.describe('Workspace flows', () => {
+  test.beforeEach(async ({ page, context }) => {
+    await setUp(page);
+    await withTestUser({ page, context });
+    await page.goto('/');
+    await page.waitForSelector('text=/Workspace/i');
+  });
+
+  test('You can list published notebooks', async ({ page }) => {
+    const link = await page
+      .locator('main a[href] >> nth=0')
+      .getAttribute('href');
+    expect(typeof link).toBe('string');
+    await page.goto(link || '');
+    await page.getByRole('button', { name: 'Publish' }).click();
+    await page.locator('[aria-roledescription="enable publishing"]').click();
+    const workspaceLink = await page
+      .locator('header a[href] >> nth=0')
+      .getAttribute('href');
+    await page.goto(workspaceLink || '');
+    await page.getByRole('link', { name: 'Globe Published' }).click();
+    const archivedDocuments = await page.locator('main a[href]').count();
+    expect(archivedDocuments).toBe(1);
+  });
+
+  test('Archive & delete a notebook', async ({ page }) => {
+    await page
+      .getByRole('link', {
+        name: 'Message Meet Decipad! Learn the basics Ellipsis',
+      })
+      .getByRole('button', { name: 'Ellipsis' })
+      .click();
+    await page.click('main li > button:has-text("Archive")');
+    await page.click('aside nav > ul > li a span:has-text("Archived")');
+    await page.getByRole('button', { name: 'Ellipsis' }).click();
+    await page.click('main li > button:has-text("Delete")');
+    await page.waitForSelector('span:has-text("generic")');
+  });
+
+  test('Create a workspace', async ({ page }) => {
+    const avatarsInPage = await page.locator('[role=img]');
+    expect(await avatarsInPage.count()).toBe(2);
+    await page.getByRole('button', { name: 'Create' }).click();
+    await page.getByPlaceholder('My Workspace').click();
+    await page.getByPlaceholder('My Workspace').fill('Wtf');
+    await page.getByRole('button', { name: 'Create Workspace' }).click();
+    const title = await page.getByText('Wtf');
+    await expect(title).toBeVisible();
+  });
+
+  test('user can logout', async ({ page }) => {
+    await page.getByRole('button', { name: 'Avatar of user M' }).click();
+    await page.getByRole('button', { name: 'Logout Log out' }).click();
+    const loginHeading = await page.getByRole('heading', {
+      name: 'Log in to Decipad',
+    });
+    await expect(loginHeading).toBeVisible();
+  });
+});

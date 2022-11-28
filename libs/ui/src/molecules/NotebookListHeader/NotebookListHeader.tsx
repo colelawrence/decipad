@@ -1,15 +1,16 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Placeholder } from '../../atoms';
+import { Counter, Placeholder } from '../../atoms';
 
 import { p12Regular, p15Medium } from '../../primitives';
 
-const styles = css({
+const notebookListHeaderWrapperStyles = css({
   display: 'flex',
   columnGap: '8px',
 
   flexWrap: 'wrap',
   rowGap: '4px',
+  alignItems: 'center',
 });
 
 interface NotebookListHeaderProps {
@@ -22,11 +23,11 @@ export const NotebookListHeader = ({
   numberOfNotebooks,
 }: NotebookListHeaderProps): ReturnType<FC> => {
   return (
-    <div css={styles}>
-      <Heading css={css(p15Medium)}>All Notebooks</Heading>
+    <div css={notebookListHeaderWrapperStyles}>
+      <Heading css={css(p15Medium)}>Notebooks</Heading>
       {typeof numberOfNotebooks === 'number' ? (
         <span css={css(p12Regular, { alignSelf: 'flex-end' })}>
-          ({numberOfNotebooks} result{numberOfNotebooks === 1 || 's'})
+          <Counter n={numberOfNotebooks} />
         </span>
       ) : (
         <div

@@ -4,13 +4,65 @@ import { cssVar } from '../../primitives';
 import { Anchor } from '../../utils';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
-const styles = css({
+type IconButtonProps = {
+  readonly children: ReactNode;
+  readonly roundedSquare?: boolean;
+  readonly roleDescription?: string;
+  readonly transparent?: boolean;
+} & (
+  | {
+      readonly href: string;
+      readonly onClick?: undefined;
+    }
+  | {
+      readonly onClick: () => void;
+      readonly href?: undefined;
+    }
+);
+
+export const IconButton = ({
+  children,
+  roundedSquare = false,
+  roleDescription = 'button',
+  transparent = false,
+
+  onClick,
+  href,
+}: IconButtonProps): ReturnType<FC> => {
+  const onButtonClick = useMouseEventNoEffect(onClick);
+  return onClick ? (
+    <button
+      aria-roledescription={roleDescription}
+      css={[
+        mainIconButtonStyles,
+        roundedSquare && roundedSquareStyles,
+        transparent && { backgroundColor: 'transparent' },
+      ]}
+      onClick={onButtonClick}
+    >
+      <span css={iconStyles}>{children}</span>
+    </button>
+  ) : (
+    <Anchor
+      href={href}
+      css={css([
+        mainIconButtonStyles,
+        roundedSquare && roundedSquareStyles,
+        transparent && { backgroundColor: 'transparent' },
+      ])}
+    >
+      <span css={iconStyles}>{children}</span>
+    </Anchor>
+  );
+};
+
+const mainIconButtonStyles = css({
   display: 'inline-block',
   borderRadius: '100vmax',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('strongHighlightColor'),
 
   ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: cssVar('strongerHighlightColor'),
   },
 });
 const roundedSquareStyles = css({
@@ -28,45 +80,3 @@ const iconStyles = css({
 
   padding: `20%`,
 });
-
-type IconButtonProps = {
-  readonly children: ReactNode;
-  readonly roundedSquare?: boolean;
-  readonly roleDescription?: string;
-} & (
-  | {
-      readonly href: string;
-      readonly onClick?: undefined;
-    }
-  | {
-      readonly onClick: () => void;
-      readonly href?: undefined;
-    }
-);
-
-export const IconButton = ({
-  children,
-  roundedSquare = false,
-  roleDescription = 'button',
-
-  onClick,
-  href,
-}: IconButtonProps): ReturnType<FC> => {
-  const onButtonClick = useMouseEventNoEffect(onClick);
-  return onClick ? (
-    <button
-      aria-roledescription={roleDescription}
-      css={[styles, roundedSquare && roundedSquareStyles]}
-      onClick={onButtonClick}
-    >
-      <span css={iconStyles}>{children}</span>
-    </button>
-  ) : (
-    <Anchor
-      href={href}
-      css={css([styles, roundedSquare && roundedSquareStyles])}
-    >
-      <span css={iconStyles}>{children}</span>
-    </Anchor>
-  );
-};

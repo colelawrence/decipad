@@ -4,6 +4,8 @@ fragment WorkspaceNotebook on Pad {
   icon
   status
   createdAt
+  archived
+  isPublic
 }
 
 fragment DashboardWorkspace on Workspace {

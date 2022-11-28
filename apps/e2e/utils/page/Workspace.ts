@@ -3,7 +3,7 @@ import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 import os from 'os';
 import path from 'path';
-import { ElementHandle, Page, BrowserContext } from 'playwright';
+import { BrowserContext, ElementHandle, Page } from 'playwright';
 import { URL } from 'url';
 import { withTestUser } from '../src/with-test-user';
 
@@ -87,7 +87,7 @@ export async function clickNewPadButton(page: Page) {
 
 export async function removePad(page: Page, index = 0) {
   await page.click(`//main//li[${index + 1}]//button`);
-  const removeButton = (await page.$(`button:has-text("Delete")`))!;
+  const removeButton = (await page.$(`button:has-text("Archive")`))!;
   await Promise.all([page.waitForRequest('/graphql'), removeButton.click()]);
 }
 
@@ -99,7 +99,7 @@ export async function duplicatePad(page: Page, index = 0) {
 
 export async function exportPad(page: Page, index = 0): Promise<string> {
   await page.click(`//main//li[${index + 1}]//button`);
-  const exportButton = (await page.$(`a:has-text("Export")`))!;
+  const exportButton = (await page.$(`a:has-text("Download")`))!;
   const [fileContent] = await Promise.all([
     waitForDownload(page),
     exportButton.click(),

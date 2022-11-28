@@ -15,7 +15,7 @@ import {
   p13Regular,
   p14Medium,
   setCssVar,
-  smallestDesktop,
+  smallScreenQuery,
   transparency,
 } from '../../primitives';
 
@@ -23,8 +23,6 @@ const wrapperStyles = css({
   position: 'relative',
   zIndex: 3,
 });
-
-const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
