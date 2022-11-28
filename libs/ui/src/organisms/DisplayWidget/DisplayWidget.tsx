@@ -1,5 +1,5 @@
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
-import { formatResultPreview } from '@decipad/format';
+import { CodeResult } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { ArrowOutlined, Caret } from '../../icons';
@@ -106,9 +106,12 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
             !lineResult?.result && { color: cssVar('weakerTextColor') },
           ]}
         >
-          {lineResult?.result?.type.kind !== 'type-error' && lineResult?.result
-            ? formatResultPreview(lineResult.result)
-            : '0'}
+          {lineResult?.result?.type.kind !== 'type-error' &&
+          lineResult?.result ? (
+            <CodeResult {...lineResult.result} />
+          ) : (
+            '0'
+          )}
         </span>
         {!readOnly && (
           <div css={{ width: 20, height: 20 }}>
