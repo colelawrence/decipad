@@ -11,6 +11,7 @@ import { useEditorStylesContext } from '@decipad/react-contexts';
 import { Callout as UICallout } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { DraggableBlock } from '../block-management';
+import { useTurnIntoProps } from '../utils';
 
 export const Callout: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CALLOUT);
@@ -21,8 +22,15 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
   const saveColor = useElementMutatorCallback(editor, element, 'color');
   const { color: defaultColor } = useEditorStylesContext();
 
+  const turnIntoProps = useTurnIntoProps(element);
+
   return (
-    <DraggableBlock blockKind="callout" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="callout"
+      element={element}
+      {...turnIntoProps}
+      {...attributes}
+    >
       <UICallout
         icon={element.icon as UserIconKey}
         color={(element.color ?? defaultColor) as AvailableSwatchColor}

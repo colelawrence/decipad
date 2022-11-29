@@ -3,7 +3,7 @@ import { ComponentProps, FC, Fragment, ReactNode, Ref, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';
 import { css, SerializedStyles } from '@emotion/react';
 import { BlockDragHandle } from '..';
-import { DropLine, EditorBlock } from '../../atoms';
+import { DropLine, EditorBlock, MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   mouseMovingOverTransitionDelay,
   Opacity,
@@ -12,6 +12,8 @@ import {
 import { blockAlignment, editorLayout } from '../../styles';
 import { NewElementLine } from '../../atoms/NewElementLine/NewElementLine';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { MenuList } from '../../molecules';
+import { CircularArrow } from '../../icons';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -67,6 +69,9 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly onCopyHref?: () => void;
   readonly showLine?: boolean;
 
+  readonly onTurnInto?: (value: string) => void;
+  readonly turnInto?: { title: string; value: string }[];
+
   readonly children: ReactNode;
 
   readonly disableDrag?: boolean;
@@ -90,6 +95,9 @@ export const DraggableBlock = ({
   showLine = true,
   onShowHide,
   onCopyHref,
+
+  onTurnInto,
+  turnInto,
 
   blockKind,
   children,
@@ -178,7 +186,26 @@ export const DraggableBlock = ({
               showEyeLabel={showEyeLabel}
               showAddBlock={!isHidden}
               onCopyHref={onCopyHref}
-            />
+            >
+              {turnInto != null && turnInto.length > 0 && (
+                <MenuList
+                  itemTrigger={
+                    <TriggerMenuItem icon={<CircularArrow />}>
+                      Turn into
+                    </TriggerMenuItem>
+                  }
+                >
+                  {turnInto.map((option) => (
+                    <MenuItem
+                      key={option.value}
+                      onSelect={() => onTurnInto?.(option.value)}
+                    >
+                      {option.title}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              )}
+            </BlockDragHandle>
           )}
         </div>
         <div

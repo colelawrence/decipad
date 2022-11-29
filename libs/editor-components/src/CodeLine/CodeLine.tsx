@@ -31,6 +31,7 @@ import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useOnBlurNormalize } from '../hooks';
+import { useTurnIntoProps } from '../utils';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CODE_LINE);
@@ -108,10 +109,13 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const isReadOnly = useIsEditorReadOnly();
 
+  const turnIntoProps = useTurnIntoProps(element);
+
   return (
     <DraggableBlock
       blockKind="codeLine"
       element={element}
+      {...turnIntoProps}
       {...attributes}
       id={lineId}
     >

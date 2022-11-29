@@ -57,7 +57,7 @@ type DraggableBlockProps = {
   readonly onceDeleted?: () => void;
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
-  'blockKind' | 'disableDrag' | 'onDelete'
+  'blockKind' | 'disableDrag' | 'onDelete' | 'onTurnInto' | 'turnInto'
 > &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 

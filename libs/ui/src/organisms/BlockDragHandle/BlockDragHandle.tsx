@@ -1,7 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { once } from 'ramda';
-import { FC, useCallback, useState } from 'react';
+import { FC, ReactNode, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,
@@ -69,6 +69,7 @@ const plusStyle = css(handleButtonStyle, {
 });
 
 interface BlockDragHandleProps {
+  readonly children?: ReactNode;
   readonly menuOpen?: boolean;
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;
@@ -82,6 +83,7 @@ interface BlockDragHandleProps {
 }
 
 export const BlockDragHandle = ({
+  children,
   menuOpen = false,
   isHidden = false,
   onShowHide = noop,
@@ -165,6 +167,8 @@ export const BlockDragHandle = ({
               Copy reference
             </MenuItem>
           )}
+
+          {children}
 
           <MenuItem disabled>
             <hr css={{ color: cssVar('highlightColor') }} />

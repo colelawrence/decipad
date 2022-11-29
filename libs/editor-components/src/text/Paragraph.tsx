@@ -9,6 +9,7 @@ import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { DraggableBlock } from '../block-management';
+import { useTurnIntoProps } from '../utils';
 
 const isSelected = (editor: MyEditor, element: MyElement) => {
   if (!editor.selection) {
@@ -50,8 +51,15 @@ export const Paragraph: PlateComponent = ({
   const placeholder =
     readOnly || !showPlaceHolder ? undefined : <ParagraphPlaceholder />;
 
+  const turnIntoProps = useTurnIntoProps(element);
+
   return (
-    <DraggableBlock blockKind="paragraph" element={element} {...attributes}>
+    <DraggableBlock
+      blockKind="paragraph"
+      element={element}
+      {...turnIntoProps}
+      {...attributes}
+    >
       <UIParagraph placeholder={placeholder}>{children}</UIParagraph>
     </DraggableBlock>
   );

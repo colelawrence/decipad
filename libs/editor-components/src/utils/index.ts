@@ -3,3 +3,4 @@ export * from './plot';
 export * from './slashCommands';
 export * from './table';
 export * from './draw';
+export * from './useTurnIntoProps';

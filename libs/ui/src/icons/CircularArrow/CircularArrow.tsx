@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
 export interface CircularArrowProps {
-  active: boolean;
+  active?: boolean;
 }
 
 export const CircularArrow: FC<CircularArrowProps> = ({ active }) => {
