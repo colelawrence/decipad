@@ -130,6 +130,15 @@ export const parseCell = memoize(
                 );
               }
 
+              if (type.numberFormat) {
+                return astNode(
+                  'literal',
+                  'number' as const,
+                  toFraction(result.value as Fraction),
+                  type.numberFormat
+                );
+              }
+
               const literal = astNode(
                 'literal',
                 'number' as const,
