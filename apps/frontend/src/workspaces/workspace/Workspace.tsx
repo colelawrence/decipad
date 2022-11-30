@@ -113,9 +113,14 @@ const Workspace: FC = () => {
         (item) => -Date.parse(item.createdAt)
       )
         .filter((notebook) =>
+          (maybeWorkspaceFolder || '') === ''
+            ? notebook.archived !== true
+            : true
+        )
+        .filter((notebook) =>
           maybeWorkspaceFolder === 'archived'
             ? notebook.archived === true
-            : notebook.archived !== true
+            : true
         )
         .filter((notebook) =>
           maybeWorkspaceFolder && maybeWorkspaceFolder === 'published'
