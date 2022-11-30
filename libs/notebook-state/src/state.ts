@@ -15,7 +15,6 @@ export interface NotebookState {
   initComputer: () => void;
   initEditor: (notebookId: string, options: InitNotebookStateOptions) => void;
   destroy: () => void;
-  connected: boolean;
   loadedFromLocal: boolean;
   loadedFromRemote: boolean;
   timedOutLoadingFromRemote: boolean;

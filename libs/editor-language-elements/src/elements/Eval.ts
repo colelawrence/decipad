@@ -2,6 +2,7 @@ import { ELEMENT_EVAL, MyEditor, MyElement } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
+import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
 export const getUnparsedBlockFromEval = async (
   _editor: MyEditor,
@@ -15,5 +16,7 @@ export const getUnparsedBlockFromEval = async (
 
 export const Eval: InteractiveLanguageElement = {
   type: ELEMENT_EVAL,
-  getParsedBlockFromElement: getUnparsedBlockFromEval,
+  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
+    getUnparsedBlockFromEval
+  ),
 };

@@ -22,7 +22,6 @@ const initialState: Omit<
   syncClientState: 'idle',
   editor: undefined,
   computer: undefined,
-  connected: false,
   loadedFromLocal: false,
   loadedFromRemote: false,
   timedOutLoadingFromRemote: false,
@@ -67,12 +66,6 @@ const createStore = () =>
         onError: captureException,
       });
 
-      docSyncEditor.onConnected(() => {
-        set({ connected: true });
-      });
-      docSyncEditor.onDisconnected(() => {
-        set({ connected: false });
-      });
       docSyncEditor.onLoaded((source) => {
         if (source === 'local') {
           set({ loadedFromLocal: true });
@@ -91,7 +84,6 @@ const createStore = () =>
         editor: docSyncEditor,
         notebookHref: window.location.pathname,
         syncClientState: 'created',
-        connected: false,
         loadedFromLocal: false,
         loadedFromRemote: false,
         timedOutLoadingFromRemote: false,

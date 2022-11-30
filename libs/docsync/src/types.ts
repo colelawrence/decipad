@@ -24,9 +24,6 @@ export type DocSyncEditor = MyEditor &
     onSaved: (cb: OnSavedCallback) => void;
     offSaved: (cb: OnSavedCallback) => void;
     onConnected: (cb: OnConnectedCallback) => void;
-    offConnected: (cb: OnConnectedCallback) => void;
-    onDisconnected: (cb: OnDisconnectedCallback) => void;
-    offDisconnected: (cb: OnDisconnectedCallback) => void;
     destroy: () => void;
     connect: () => void;
     disconnect: () => void;
@@ -34,7 +31,6 @@ export type DocSyncEditor = MyEditor &
     isSavedRemotely: () => BehaviorSubject<boolean>;
     setLoadedRemotely: () => void;
     removeLocalChanges: () => Promise<void>;
-    connected: boolean;
     isDocSyncEnabled: boolean;
     markVersion: (version: string) => Promise<void>;
     sameVersion: (version: string) => Promise<boolean>;

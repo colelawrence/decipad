@@ -27,7 +27,7 @@ import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 import { isElementOfType } from './isElementOfType';
 import { filterDecorate } from './filterDecorate';
 import { getCodeLineSource } from './getCodeLineSource';
-import { memoizeDecorate } from './memoizeDecorate';
+import { memoizeDecorateWithSelection } from './memoizeDecorate';
 
 const isNotExpreRef = (range: RangeWithVariableInfo) =>
   !isExprRef(range.variableName);
@@ -82,7 +82,7 @@ export const decorateCode = (
   elementType: typeof ELEMENT_CODE_LINE | typeof ELEMENT_TABLE_COLUMN_FORMULA
 ): MyDecorate =>
   filterDecorate(
-    memoizeDecorate((editor: MyEditor): MyDecorateEntry => {
+    memoizeDecorateWithSelection((editor: MyEditor): MyDecorateEntry => {
       const syntaxErrorDecorations = (
         [, path]: MyElementEntry,
         source: string

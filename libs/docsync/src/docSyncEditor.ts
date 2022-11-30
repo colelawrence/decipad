@@ -10,11 +10,8 @@ import {
   OnLoadedCallback,
   OnSavedCallback,
   SyncSource,
+  OnConnectedCallback,
 } from './types';
-
-export interface StatusEvent {
-  status: 'connected' | 'disconnected';
-}
 
 export function docSyncEditor<E extends MyEditor>(
   editor: E & YjsEditor & CursorEditor,
@@ -23,7 +20,6 @@ export function docSyncEditor<E extends MyEditor>(
   ws?: TWebSocketProvider
 ): E & DocSyncEditor {
   const events = new EventEmitter();
-  let isConnected = false;
 
   store.on('synced', function onStoreSynced() {
     events.emit('loaded', 'local');
@@ -47,13 +43,9 @@ export function docSyncEditor<E extends MyEditor>(
       events.emit('saved', 'remote');
       isSavedRemotely.next(true);
     });
-    ws.on('status', function onWsStatus(event: StatusEvent) {
+    ws.on('status', function onWsStatus(event: { status: string }) {
       if (event.status === 'connected') {
-        isConnected = true;
         events.emit('connected');
-      } else if (event.status === 'disconnected') {
-        isConnected = false;
-        events.emit('disconnected');
       }
     });
     ws.on('error', (err: Error) => {
@@ -92,17 +84,8 @@ export function docSyncEditor<E extends MyEditor>(
     offSaved(cb: OnSavedCallback) {
       events.removeListener('saved', cb);
     },
-    onConnected(cb: OnLoadedCallback) {
+    onConnected(cb: OnConnectedCallback) {
       events.on('connected', cb);
-    },
-    offConnected(cb: OnLoadedCallback) {
-      events.removeListener('connected', cb);
-    },
-    onDisconnected(cb: OnLoadedCallback) {
-      events.on('disconnected', cb);
-    },
-    offDisconnected(cb: OnLoadedCallback) {
-      events.removeListener('disconnected', cb);
     },
     onDestroyed(cb: () => void) {
       events.on('destroyed', cb);
@@ -122,9 +105,6 @@ export function docSyncEditor<E extends MyEditor>(
     },
     disconnect() {
       ws?.disconnect();
-    },
-    get connected() {
-      return isConnected;
     },
     hasLocalChanges() {
       return hasLocalChanges;

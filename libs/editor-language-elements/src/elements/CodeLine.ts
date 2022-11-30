@@ -3,6 +3,7 @@ import { Computer } from '@decipad/computer';
 import { getCodeLineSource } from '@decipad/editor-utils';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
+import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
 export const getUnparsedBlockFromCodeLine = async (
   _editor: MyEditor,
@@ -17,5 +18,7 @@ export const getUnparsedBlockFromCodeLine = async (
 
 export const CodeLine: InteractiveLanguageElement = {
   type: ELEMENT_CODE_LINE,
-  getParsedBlockFromElement: getUnparsedBlockFromCodeLine,
+  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
+    getUnparsedBlockFromCodeLine
+  ),
 };
