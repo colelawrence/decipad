@@ -17,6 +17,7 @@ export const createMagicNumberCursorPlugin = createOnCursorChangePluginFactory(
       const path = selection?.focus.path;
       if (path && hasNode(editor, path)) {
         const [node] = getNodeEntry(editor, path);
+
         if (isText(node) && isMagicNumber(node)) {
           const next = getNextNode(editor, { at: path });
           if (next) {

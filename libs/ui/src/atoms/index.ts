@@ -16,6 +16,8 @@ export { ColorStatus } from './ColorStatus/ColorStatus';
 export { ColorStatusCircle } from './ColorStatus/ColorStatusCircle';
 export { ContentSeparator } from './ContentSeparator/ContentSeparator';
 export { Counter } from './Counter/Counter';
+export { CodeLineFloat } from './CodeLineFloat/CodeLineFloat';
+export { CodeLinePlaceholder } from './CodeLinePlaceholder/CodeLinePlaceholder';
 export { DataViewColumnHeaderRow } from './DataViewColumnHeaderRow/DataViewColumnHeaderRow';
 export { DataViewHeader } from './DataViewHeader/DataViewHeader';
 export { DataViewTableHeader } from './DataViewTableHeader/DataViewTableHeader';

@@ -1,8 +1,14 @@
 import { css } from '@emotion/react';
-import { InlineNumberElement, PlateComponent } from '@decipad/editor-types';
+import {
+  ElementAttributes,
+  InlineNumberElement,
+  PlateComponent,
+} from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { brand700, cssVar } from '@decipad/ui';
+import { brand700, CodeResult, cssVar } from '@decipad/ui';
+import { useComputer, useShadowCodeLine } from '@decipad/react-contexts';
 import { useSelected } from 'slate-react';
+import { useMergedRef } from '@decipad/ui/src/hooks/useMergedRef';
 
 export const InlineNumber: PlateComponent = ({
   attributes,
@@ -12,20 +18,38 @@ export const InlineNumber: PlateComponent = ({
   const element = getDefined(rest?.element as InlineNumberElement);
   const blockId = element.id;
 
+  const elementRef = (attributes as ElementAttributes).ref;
+
+  const calcId = element.blockId || '';
+  const result = useComputer().getBlockIdResult$.use(calcId);
+
   const isSelected = useSelected();
+  const shadow = useShadowCodeLine(element.id);
 
   return (
     <>
       <span
-        data-highlight-changes
         {...attributes}
         id={blockId}
-        css={css(containerStyle, [isSelected && selectedStyle])}
+        data-highlight-changes
+        css={css(containerStyle, [
+          isSelected && selectedStyle,
+          shadow.isEditing && { cursor: 'pointer' },
+        ])}
+        onClick={() => shadow.editSource(calcId)}
         data-testid="inline-number-element"
+        ref={useMergedRef(shadow.numberRef, elementRef)}
       >
-        <span contentEditable={false}>🚧</span>
+        {result?.result ? (
+          <span contentEditable={false}>
+            <CodeResult {...result.result} />
+          </span>
+        ) : (
+          '...'
+        )}
         {children}
       </span>
+      {shadow.portal}
     </>
   );
 };

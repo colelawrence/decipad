@@ -1,6 +1,7 @@
 export type Flag =
   | 'INPUT_COPY'
   | 'INLINE_BUBBLES'
+  | 'SHADOW_CODE_LINES'
   | 'UNSAFE_JS_EVAL'
   | 'SKETCH'
   | 'COPY_HREF'
@@ -13,7 +14,24 @@ export type Flag =
   | 'FEATURE_REQUEST';
 
 export type Flags = Partial<Record<Flag, boolean>>;
-let overrides: Flags = {};
+
+const queryStringFlags: Flag[] = ['SHADOW_CODE_LINES'];
+
+const getQueryStringOverrides = (): Flags => {
+  const flags: Flags = {};
+  const search = 'location' in globalThis ? globalThis.location.search : '';
+  const params = new URLSearchParams(search);
+
+  for (const key of queryStringFlags) {
+    flags[key] = params.get(key) === 'true';
+  }
+
+  return flags;
+};
+
+let overrides: Flags = {
+  ...getQueryStringOverrides(),
+};
 
 const envDefaults: Record<string, boolean> = {
   test: true,

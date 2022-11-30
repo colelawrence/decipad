@@ -121,6 +121,7 @@ export interface MediaEmbedElement extends TMediaEmbedElement, BaseElement {
 export interface CodeLineElement extends BaseElement {
   type: typeof ELEMENT_CODE_LINE;
   children: Array<PlainText | SmartRefElement>;
+  isUnpinned?: boolean;
 }
 export interface DeprecatedCodeBlockElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_CODE_BLOCK;

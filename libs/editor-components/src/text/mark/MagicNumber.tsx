@@ -4,6 +4,7 @@ import {
   useEditorSelector,
   useIsEditorReadOnly,
   useResult,
+  useShadowCodeLine,
 } from '@decipad/react-contexts';
 import { MagicNumber as UIMagicNumber } from '@decipad/ui';
 import { css } from '@emotion/react';
@@ -12,6 +13,7 @@ import { findNodePath, getNodeString } from '@udecode/plate';
 import { useCallback } from 'react';
 import { magicNumberId, getAboveNodeSafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const MagicNumber: PlateComponent = ({
   attributes,
@@ -24,8 +26,8 @@ export const MagicNumber: PlateComponent = ({
   const exp = getNodeString(text);
 
   const blockId = useMagicNumberId(text);
-
   const result = useResult(blockId)?.result;
+  const shadow = useShadowCodeLine(blockId);
 
   const loadingState =
     result?.type?.kind === 'type-error' ||
@@ -33,24 +35,33 @@ export const MagicNumber: PlateComponent = ({
 
   const defBlockId = computer.getVarBlockId$.use(exp);
 
+  const { editSource } = shadow;
+
   const onClick = useCallback(() => {
-    // if it's a variable name, we can navigate to it.
-    if (typeof defBlockId === 'string') {
+    if (typeof defBlockId !== 'string') return;
+
+    if (isFlagEnabled('SHADOW_CODE_LINES')) {
+      editSource(defBlockId);
+    } else {
       const el = document.getElementById(defBlockId);
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el?.focus();
     }
-  }, [defBlockId]);
+  }, [defBlockId, editSource]);
 
   return (
     <span {...attributes}>
-      <UIMagicNumber
-        loadingState={loadingState}
-        result={result}
-        expression={exp}
-        onClick={onClick}
-        readOnly={readOnly}
-      ></UIMagicNumber>
+      <span ref={shadow.numberRef}>
+        <UIMagicNumber
+          tempId={blockId}
+          loadingState={loadingState}
+          result={result}
+          expression={exp}
+          onClick={onClick}
+          readOnly={readOnly}
+        ></UIMagicNumber>
+        {shadow.portal}
+      </span>
       <span contentEditable={false} css={css({ display: 'none' })}>
         {children}
       </span>

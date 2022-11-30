@@ -4,6 +4,7 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { TEditor } from '@udecode/plate';
+import { noop } from 'lodash';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 
@@ -31,6 +32,7 @@ it('turns a decoration into a magic number and a code line', () => {
       location: { anchor: 3, focus: 8 },
     },
     'inline',
+    noop,
     'id-of-thingy'
   );
 

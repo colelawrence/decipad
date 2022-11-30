@@ -10,6 +10,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
 type MagicNumberProps = {
+  readonly tempId?: string;
   readonly result?: Result.Result | undefined;
   readonly loadingState?: boolean;
   readOnly?: boolean;
@@ -70,6 +71,10 @@ const IntrospectMagicNumber: FC<ResultResultProps> = ({
   readOnly,
   children,
 }) => {
+  if (expression?.startsWith('exprRef_')) {
+    return <span>{children}</span>;
+  }
+
   return (
     <Tooltip trigger={<span>{children}</span>}>
       {expression?.startsWith('exprRef_') && !readOnly ? (
@@ -86,6 +91,7 @@ const IntrospectMagicNumber: FC<ResultResultProps> = ({
 };
 
 export const MagicNumber = ({
+  tempId,
   result,
   loadingState = false,
   readOnly = false,
@@ -93,8 +99,13 @@ export const MagicNumber = ({
   expression,
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
+
   return (
-    <span onClick={useMouseEventNoEffect(onClick)} css={[wrapperStyles]}>
+    <span
+      onClick={useMouseEventNoEffect(onClick)}
+      css={[wrapperStyles]}
+      data-number-id={tempId}
+    >
       <span
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
@@ -107,6 +118,9 @@ export const MagicNumber = ({
           ) : (
             <span
               css={css({
+                paddingTop: '3px',
+                minHeight: '19px',
+                display: 'inline-block',
                 margin: 'auto',
                 '> svg': { height: '16px', display: 'block', margin: '0 auto' },
               })}

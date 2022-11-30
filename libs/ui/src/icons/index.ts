@@ -50,6 +50,7 @@ export { Divider } from './Divider/Divider';
 export { Docs } from './Docs/Docs';
 export { DollarCircle } from './DollarCircle/DollarCircle';
 export { Download } from './Download/Download';
+export { DrawingPin } from './DrawingPin/DrawingPin';
 export { DragHandle } from './DragHandle/DragHandle';
 export { Dropdown } from './Dropdown/Dropdown';
 export { Duplicate } from './Duplicate/Duplicate';

@@ -1,8 +1,29 @@
 import { createContext, useContext } from 'react';
 
-// DO NOT REMOVE YET, will be used in ENG-1249 (Shadow code lines)
-export type EditorBubblesContextValue = Readonly<{}>;
-const defaultValue: EditorBubblesContextValue = {};
+export type ShadowCalcReference = {
+  numberId: string;
+  codeLineId: string;
+};
+
+export type ShadowCalcPortal = {
+  element: HTMLElement;
+  offsetY: number;
+};
+
+export type EditorBubblesContextValue = Readonly<{
+  editing?: ShadowCalcReference;
+  portal?: ShadowCalcPortal;
+
+  setPortal(portal: ShadowCalcPortal): void;
+  openEditor(params: ShadowCalcReference): void;
+  closeEditor(codeLineId?: string): void;
+}>;
+
+const defaultValue: EditorBubblesContextValue = {
+  setPortal() {},
+  openEditor() {},
+  closeEditor() {},
+};
 
 export const EditorBubblesContext =
   createContext<EditorBubblesContextValue>(defaultValue);
