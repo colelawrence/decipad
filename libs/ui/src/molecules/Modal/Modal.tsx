@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import { ComponentProps, ReactNode } from 'react';
 import { Overlay } from '../../atoms';
 import {
-  offBlack,
   cssVar,
   grey300,
   grey700,
+  offBlack,
   transparency,
 } from '../../primitives';
 
@@ -30,7 +30,7 @@ const dialogStyles = css({
   gridArea: '1 / 1',
   justifySelf: 'center',
   alignSelf: 'center',
-  maxWidth: 'min(100% - 24px, 432px)',
+  maxWidth: 'min(100% - 24px, 480px)',
   maxHeight: '75%',
   overflowY: 'auto',
 
@@ -38,6 +38,7 @@ const dialogStyles = css({
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${grey300.rgb}`,
   borderRadius: '10px',
+  width: '480px',
   boxShadow: `
     0px 2px 20px ${transparency(grey700, 0.04).rgba},
     0px 2px 8px ${transparency(offBlack, 0.02).rgba}

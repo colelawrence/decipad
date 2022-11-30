@@ -4,8 +4,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, useState } from 'react';
 import { Button, InputField } from '../../atoms';
 import { ClosableModal } from '../../organisms';
-import { p16Regular } from '../../primitives';
-import { nextHeading } from '../../utils';
+import { cssVar, p13Medium, p13Regular, setCssVar } from '../../primitives';
 
 type EditWorkspaceModalProps = {
   readonly name: string;
@@ -33,8 +32,6 @@ export const EditWorkspaceModal = ({
     useState('');
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
 
-  const Subheading = nextHeading[props.Heading];
-
   return (
     <ClosableModal
       {...props}
@@ -54,7 +51,7 @@ export const EditWorkspaceModal = ({
             }
           }}
         >
-          <Subheading>Rename Workspace</Subheading>
+          <h3 css={headingStyles}>Rename Workspace</h3>
           <InputField
             required
             placeholder="My Renamed Workspace"
@@ -82,8 +79,8 @@ export const EditWorkspaceModal = ({
               }
             }}
           >
-            <Subheading>Delete Workspace</Subheading>
-            <p css={css(p16Regular)}>
+            <h3 css={headingStyles}>Delete Workspace</h3>
+            <p css={css(p13Regular)}>
               Are you sure you want to delete your workspace? This will also
               delete all of the notebooks associated with the workspace. Type
               the workspace name to confirm.
@@ -107,3 +104,8 @@ export const EditWorkspaceModal = ({
     </ClosableModal>
   );
 };
+
+const headingStyles = css(
+  p13Medium,
+  setCssVar('currentTextColor', cssVar('weakTextColor'))
+);

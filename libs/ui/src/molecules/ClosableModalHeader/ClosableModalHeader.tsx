@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Divider } from '../../atoms';
 import { Close } from '../../icons';
-import { cssVar, p13Regular, setCssVar } from '../../primitives';
+import { p15Medium } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const styles = css({
@@ -18,11 +18,7 @@ const closeStyles = css({
   height: '16px',
   display: 'grid',
 });
-const titleStyles = css(
-  p13Regular,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
-  { flexGrow: 1 }
-);
+const titleStyles = css(p15Medium, { flexGrow: 1 });
 
 interface ClosableModalHeaderProps {
   readonly Heading: 'h1' | 'h2';
