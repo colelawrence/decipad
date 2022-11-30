@@ -160,7 +160,17 @@ These tests are powered by playwright and are present in apps/client-e2e.
 yarn e2e
 ```
 
-> To run the E2E tests you will need the local sandbox server running (which you can start with `yarn serve:all` on a different terminal).
+### Running individual e2e tests
+
+**Important:** use npx and cd to e2e folder before running the command.
+
+`cd` to the `apps/e2e` folder, and run:
+
+```bash
+npx playwright test <<test-name-pattern>>  [--debug]
+```
+
+> To run the E2E tests individually you will need the local sandbox server running (which you can start with `yarn serve:all` on a different terminal).
 
 Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
 
