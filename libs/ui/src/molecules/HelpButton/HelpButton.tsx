@@ -3,10 +3,10 @@ import { Tooltip } from '../../atoms';
 import { QuestionMark } from '../../icons';
 import {
   cssVar,
-  offBlack,
   p13Medium,
+  strongOpacity,
+  sun500,
   transparency,
-  weakOpacity,
 } from '../../primitives';
 
 const styles = css(p13Medium, {
@@ -15,9 +15,13 @@ const styles = css(p13Medium, {
   borderRadius: '8px',
   padding: '4px',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('highlightColor'),
 
   fontWeight: 900,
+
+  '&:hover': {
+    boxShadow: `1px -1px 1px ${transparency(sun500, strongOpacity).rgba}`,
+  },
 });
 
 const innerStyles = css({
@@ -29,10 +33,6 @@ const innerStyles = css({
   height: '32px',
   width: '32px',
   backgroundColor: cssVar('highlightColor'),
-
-  'button:hover > &': {
-    boxShadow: `inset 0 0 0 1px ${transparency(offBlack, weakOpacity).rgba}`,
-  },
 
   '> svg': {
     width: '16px',
