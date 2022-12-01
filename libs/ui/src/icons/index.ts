@@ -1,5 +1,6 @@
 export { Actions } from './Actions/Actions';
 export { Add } from './Add/Add';
+export { AddToWorkspace } from './AddToWorkspace/AddToWorkspace';
 export { All } from './All/All';
 export { AnnotationWarning } from './AnnotationWarning/AnnotationWarning';
 export { Announcement } from './Announcement/Announcement';
@@ -127,6 +128,7 @@ export { Star } from './Star/Star';
 export { Strikethrough } from './Strikethrough/Strikethrough';
 export { Success } from './Success/Success';
 export { Sunrise } from './Sunrise/Sunrise';
+export { Switch } from './Switch/Switch';
 export { Table } from './Table/Table';
 export { TableSlash } from './TableSlash/TableSlash';
 export { Text } from './Text/Text';

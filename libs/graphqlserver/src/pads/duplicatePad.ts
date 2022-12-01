@@ -1,11 +1,11 @@
 import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
+import tables from '@decipad/tables';
+import { UserInputError } from 'apollo-server-lambda';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
   importDoc,
 } from 'libs/services/src/notebooks';
-import tables from '@decipad/tables';
-import { UserInputError } from 'apollo-server-lambda';
 import { isAuthenticatedAndAuthorized } from '../authorization';
 
 export const duplicatePad = async (
@@ -25,11 +25,16 @@ export const duplicatePad = async (
     throw new UserInputError('No such pad');
   }
 
+  const newName =
+    targetWorkspace === previousPad.workspace_id
+      ? `Copy of ${previousPad.name}`
+      : previousPad.name;
+
   if (!previousPad.isPublic) {
     await isAuthenticatedAndAuthorized(resource, context, 'READ');
   }
 
-  previousPad.name = `Copy of ${previousPad.name}`;
+  previousPad.name = newName;
   previousPad.isPublic = false;
 
   const workspaceId = targetWorkspace || previousPad.workspace_id;

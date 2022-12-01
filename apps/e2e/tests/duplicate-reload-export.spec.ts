@@ -95,6 +95,7 @@ test.describe('Duplicating a notebook', () => {
 
   test('Can export a notebook', async () => {
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
+
     expect(JSON.parse(await exportPad(page, padToCopyIndex))).toMatchObject({
       children: [
         {

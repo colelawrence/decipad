@@ -170,6 +170,7 @@ export const MenuList = ({
               css={styles}
               align={align}
               onFocusOutside={(e) => e.preventDefault()}
+              onClick={(e) => e.preventDefault()}
               side={side}
               sideOffset={sideOffset}
             >

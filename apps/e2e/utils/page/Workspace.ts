@@ -85,21 +85,31 @@ export async function clickNewPadButton(page: Page) {
   await page.locator('text=/create notebook/i').click();
 }
 
+const ellipsisSelector = (n: number): string => {
+  return `//main//li >> nth=${n} >> div[type=button]`;
+};
+
 export async function removePad(page: Page, index = 0) {
-  await page.click(`//main//li[${index + 1}]//button`);
-  const removeButton = (await page.$(`button:has-text("Archive")`))!;
+  await page.click(ellipsisSelector(index));
+  const removeButton = (await page.$(
+    'div[role="menuitem"] span:has-text("Archive")'
+  ))!;
   await Promise.all([page.waitForRequest('/graphql'), removeButton.click()]);
 }
 
 export async function duplicatePad(page: Page, index = 0) {
-  await page.click(`//main//li[${index + 1}]//button`);
-  const duplicateButton = (await page.$(`button:has-text("Duplicate")`))!;
+  await page.click(ellipsisSelector(index));
+  const duplicateButton = (await page.$(
+    'div[role="menuitem"] span:has-text("Duplicate")'
+  ))!;
   await Promise.all([page.waitForRequest('/graphql'), duplicateButton.click()]);
 }
 
 export async function exportPad(page: Page, index = 0): Promise<string> {
-  await page.click(`//main//li[${index + 1}]//button`);
-  const exportButton = (await page.$(`a:has-text("Download")`))!;
+  await page.click(ellipsisSelector(index));
+  const exportButton = (await page.$(
+    'div[role="menuitem"] span:has-text("Download")'
+  ))!;
   const [fileContent] = await Promise.all([
     waitForDownload(page),
     exportButton.click(),

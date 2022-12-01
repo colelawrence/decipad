@@ -28,16 +28,11 @@ test.describe('Workspace flows', () => {
   });
 
   test('Archive & delete a notebook', async ({ page }) => {
-    await page
-      .getByRole('link', {
-        name: 'Message Meet Decipad! Learn the basics Ellipsis',
-      })
-      .getByRole('button', { name: 'Ellipsis' })
-      .click();
-    await page.click('main li > button:has-text("Archive")');
+    await page.click('main div[type=button] >> nth=0'); // click first ellipsis
+    await page.click('div[role="menuitem"] span:has-text("Archive")');
     await page.click('aside nav > ul > li a span:has-text("Archived")');
-    await page.getByRole('button', { name: 'Ellipsis' }).click();
-    await page.click('main li > button:has-text("Delete")');
+    await page.click('main div[type=button] >> nth=0'); // click first ellipsis
+    await page.click('div[role="menuitem"] span:has-text("Delete")');
     await page.waitForSelector('span:has-text("generic")');
   });
 

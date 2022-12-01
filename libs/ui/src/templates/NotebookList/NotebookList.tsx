@@ -37,9 +37,12 @@ type NotebookListProps = {
       | 'iconColor'
       | 'creationDate'
       | 'status'
-    > & { readonly id: string }
+    > & {
+      readonly id: string;
+    }
   >;
   readonly onDuplicate?: (id: string) => void;
+  readonly onMoveToWorkspace?: (id: string, workspaceId: string) => void;
   readonly onUnarchive?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
   readonly onChangeStatus?: (id: string, status: TColorStatus) => void;
@@ -47,7 +50,7 @@ type NotebookListProps = {
   readonly showCTA?: boolean;
   readonly onCTADismiss?: () => void;
   readonly onCreateNotebook?: () => void;
-
+  readonly otherWorkspaces?: { id: string; name: string }[];
   readonly onPointerEnter?: () => void;
 } & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> & {
     readonly Heading: 'h1';
@@ -64,6 +67,7 @@ export const NotebookList = ({
   notebooks,
   onDuplicate = noop,
   onChangeStatus = noop,
+  onMoveToWorkspace = noop,
   onDelete = noop,
   onUnarchive = noop,
   showCTA = false,
@@ -74,7 +78,7 @@ export const NotebookList = ({
 
   Heading,
   onCreateNotebook = noop,
-
+  otherWorkspaces = [],
   onPointerEnter,
 }: NotebookListProps): ReturnType<React.FC> => {
   const [openActionsId, setOpenActionsId] = useState<string>();
@@ -119,8 +123,12 @@ export const NotebookList = ({
                     toggleActionsOpen={() =>
                       setOpenActionsId(openActionsId === id ? undefined : id)
                     }
+                    otherWorkspaces={otherWorkspaces}
                     onDuplicate={() => onDuplicate(id)}
                     onDelete={() => onDelete(id)}
+                    onMoveToWorkspace={(workspaceId) =>
+                      onMoveToWorkspace(id, workspaceId)
+                    }
                     onUnarchive={() => onUnarchive(id)}
                     archivePage={archivePage}
                     onExport={notebook.onExport}

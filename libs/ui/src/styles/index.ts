@@ -1,12 +1,13 @@
 export * as blockAlignment from './block-alignment';
+export * as buttons from './buttons';
 export * as card from './card';
 export * as codeBlock from './code-block';
 export * as dashboard from './dashboard';
 export * as dropline from './drop-line';
-export * as highlight from './highlight';
 export * as editorLayout from './editor-layout';
+export * as editorViewportBreakpoints from './editor-viewport-breakpoints';
+export * as floating from './floating';
+export * as highlight from './highlight';
 export * as menu from './menu';
 export * as notebookList from './notebook-list';
 export * as table from './table';
-export * as editorViewportBreakpoints from './editor-viewport-breakpoints';
-export * as floating from './floating';

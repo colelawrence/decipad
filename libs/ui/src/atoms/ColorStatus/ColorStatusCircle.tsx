@@ -8,6 +8,7 @@ export const ColorStatusCircle = ({
   return (
     <span
       css={css({
+        display: 'block',
         height: '12px',
         width: '12px',
         borderRadius: 999999,

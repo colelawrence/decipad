@@ -8,6 +8,7 @@ import { NotebookList } from './NotebookList';
 
 const props: ComponentProps<typeof NotebookList> = {
   notebooks: [],
+  otherWorkspaces: [],
   Heading: 'h1',
 };
 

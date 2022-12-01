@@ -115,7 +115,10 @@ export const NumberCatalog = ({
               menuHeaderChevronStyles,
               {
                 'svg > path': {
-                  stroke: baseSwatches[color as AvailableSwatchColor].rgb,
+                  stroke:
+                    colorSwatches[color as AvailableSwatchColor].highlight.rgb,
+                  fill: colorSwatches[color as AvailableSwatchColor].highlight
+                    .rgb,
                 },
               },
             ]}

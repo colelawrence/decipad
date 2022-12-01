@@ -21,6 +21,7 @@ export default {
 export const Normal: Story<typeof args> = ({ numberOfNotebooks }) => (
   <DndProvider backend={HTML5Backend}>
     <NotebookList
+      otherWorkspaces={[]}
       Heading="h1"
       notebooks={Array(numberOfNotebooks)
         .fill(null)

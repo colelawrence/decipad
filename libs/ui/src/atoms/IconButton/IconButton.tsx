@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar } from '../../primitives';
+import {
+  mainIconButtonStyles,
+  roundedSquareStyles,
+} from '../../styles/buttons';
 import { Anchor } from '../../utils';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
 
@@ -55,19 +58,6 @@ export const IconButton = ({
     </Anchor>
   );
 };
-
-const mainIconButtonStyles = css({
-  display: 'inline-block',
-  borderRadius: '100vmax',
-  backgroundColor: cssVar('strongHighlightColor'),
-
-  ':hover, :focus': {
-    backgroundColor: cssVar('strongerHighlightColor'),
-  },
-});
-const roundedSquareStyles = css({
-  borderRadius: '6px',
-});
 
 const iconStyles = css({
   display: 'flex',

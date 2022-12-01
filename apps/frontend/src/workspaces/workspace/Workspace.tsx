@@ -179,6 +179,16 @@ const Workspace: FC = () => {
       toast('Failed to create notebook.', 'error');
     }
   };
+
+  const allWorkspaces =
+    workspaceData?.workspaces?.map((workspace) => ({
+      ...workspace,
+      href: workspaces({}).workspace({
+        workspaceId: workspace.id,
+      }).$,
+      numberOfMembers: 1,
+    })) ?? [];
+
   const sidebarWrapper = (
     <Frame
       Heading="h1"
@@ -194,15 +204,7 @@ const Workspace: FC = () => {
           ...currentWorkspace,
           numberOfMembers: 1,
         }}
-        allWorkspaces={
-          workspaceData?.workspaces?.map((workspace) => ({
-            ...workspace,
-            href: workspaces({}).workspace({
-              workspaceId: workspace.id,
-            }).$,
-            numberOfMembers: 1,
-          })) ?? []
-        }
+        allWorkspaces={allWorkspaces}
         onCreateWorkspace={() =>
           navigate(currentWorkspaceRoute.createNew({}).$)
         }
@@ -241,14 +243,27 @@ const Workspace: FC = () => {
         archivePage={maybeWorkspaceFolder === 'archived'}
         mainWorkspaceRoute={!maybeWorkspaceFolder}
         onCreateNotebook={handleCreateNotebook}
+        otherWorkspaces={allWorkspaces.filter(
+          (workspace) => workspace.id !== currentWorkspace.id
+        )}
         onDelete={(id) => {
           const fn =
             maybeWorkspaceFolder === 'archived'
               ? finalDeleteNotebook
               : deleteNotebook;
           return fn({ id }).catch((err) => {
-            console.error('Failed to archive notebook. Error:', err);
-            toast('Failed to archive notebook.', 'error');
+            console.error(
+              `Failed to ${
+                maybeWorkspaceFolder === 'archived' ? 'delete' : 'archive'
+              } notebook. Error:`,
+              err
+            );
+            toast(
+              `Failed to ${
+                maybeWorkspaceFolder === 'archived' ? 'delete' : 'archive'
+              } notebook`,
+              'error'
+            );
           });
         }}
         onDuplicate={(id) =>
@@ -260,6 +275,22 @@ const Workspace: FC = () => {
             toast('Failed to duplicate notebook.', 'error');
           })
         }
+        onMoveToWorkspace={(id, targetWorkspaceId) => {
+          duplicateNotebook({
+            id,
+            targetWorkspace: targetWorkspaceId,
+          })
+            .catch((err) => {
+              console.error('Failed to duplicate notebook. Error:', err);
+              toast('Failed to move notebook to workspace.', 'error');
+            })
+            .then(() => {
+              finalDeleteNotebook({ id }).catch((err) => {
+                console.error('Failed to delete notebook. Error:', err);
+                toast('Failed to move notebook to workspace.', 'error');
+              });
+            });
+        }}
         onChangeStatus={(id, status: TColorStatus) => {
           changeNotebookStatus({
             id,
