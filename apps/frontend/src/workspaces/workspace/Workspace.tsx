@@ -28,6 +28,7 @@ import {
   useGetWorkspacesQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
+  useUnarchiveNotebookMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
 } from '../../graphql';
@@ -84,6 +85,7 @@ const Workspace: FC = () => {
   const renameWorkspace = useRenameWorkspaceMutation()[1];
   const deleteWorkspace = useDeleteWorkspaceMutation()[1];
   const changeNotebookStatus = useUpdateNotebookStatusMutation()[1];
+  const unarchiveNotebook = useUnarchiveNotebookMutation()[1];
 
   const signoutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -271,6 +273,14 @@ const Workspace: FC = () => {
           importNotebook({ workspaceId, source }).catch((err) => {
             console.error('Failed to import notebook. Error:', err);
             toast('Failed to import notebook.', 'error');
+          })
+        }
+        onUnarchive={(id: string) =>
+          unarchiveNotebook({
+            id,
+          }).catch((err) => {
+            console.error('Failed to un-archive notebook. Error:', err);
+            toast('Failed to move notebook to all notebooks.', 'error');
           })
         }
         onCTADismiss={onCTADismiss}

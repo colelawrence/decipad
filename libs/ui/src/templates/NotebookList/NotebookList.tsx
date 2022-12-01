@@ -40,6 +40,7 @@ type NotebookListProps = {
     > & { readonly id: string }
   >;
   readonly onDuplicate?: (id: string) => void;
+  readonly onUnarchive?: (id: string) => void;
   readonly onDelete?: (id: string) => void;
   readonly onChangeStatus?: (id: string, status: TColorStatus) => void;
   readonly onExport?: (id: string) => void;
@@ -64,6 +65,7 @@ export const NotebookList = ({
   onDuplicate = noop,
   onChangeStatus = noop,
   onDelete = noop,
+  onUnarchive = noop,
   showCTA = false,
   onCTADismiss = noop,
   archivePage = false,
@@ -119,6 +121,7 @@ export const NotebookList = ({
                     }
                     onDuplicate={() => onDuplicate(id)}
                     onDelete={() => onDelete(id)}
+                    onUnarchive={() => onUnarchive(id)}
                     archivePage={archivePage}
                     onExport={notebook.onExport}
                     onChangeStatus={(status: TColorStatus) => {

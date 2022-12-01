@@ -8,7 +8,14 @@ import {
   ColorStatus,
   TColorStatus,
 } from '../../atoms/ColorStatus/ColorStatus';
-import { Archive, Calendar, Copy, Download, Trash } from '../../icons';
+import {
+  Archive,
+  Calendar,
+  Copy,
+  Download,
+  FolderOpen,
+  Trash,
+} from '../../icons';
 import { cssVar, p12Medium, p14Medium } from '../../primitives';
 import { card } from '../../styles';
 
@@ -61,6 +68,7 @@ interface NotebookListItemActionsProps {
 
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
+  readonly onUnarchive?: () => void;
   readonly onExport?: () => void;
   readonly onChangeStatus?: (status: TColorStatus) => void;
   readonly toggleActionsOpen?: () => void;
@@ -73,6 +81,7 @@ export const NotebookListItemActions = ({
   onDuplicate = noop,
   onDelete = noop,
   onExport = noop,
+  onUnarchive = noop,
   onChangeStatus = noop,
   toggleActionsOpen = noop,
   creationDate,
@@ -115,6 +124,26 @@ export const NotebookListItemActions = ({
             </button>
           </a>
         </li>
+        {archivePage ? (
+          <li css={actionStyles}>
+            <a
+              href={href}
+              onClick={(ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                onUnarchive();
+                toggleActionsOpen();
+              }}
+            >
+              <button css={css({ display: 'inline-flex', gap: '5px' })}>
+                <span css={css({ height: '20px', width: '20px' })}>
+                  <FolderOpen />
+                </span>
+                Put back
+              </button>
+            </a>
+          </li>
+        ) : null}
         <li css={actionStyles}>
           <button
             onClick={() => {

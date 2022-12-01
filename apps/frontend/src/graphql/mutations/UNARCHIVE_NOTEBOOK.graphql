@@ -1,0 +1,5 @@
+mutation UnarchiveNotebook($id: ID!) {
+  updatePad(id: $id, pad: { archived: false }) {
+    ...EditorNotebook
+  }
+}

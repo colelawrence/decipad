@@ -766,6 +766,13 @@ export type ShareNotebookWithSecretMutationVariables = Exact<{
 
 export type ShareNotebookWithSecretMutation = { __typename?: 'Mutation', sharePadWithSecret: string };
 
+export type UnarchiveNotebookMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnarchiveNotebookMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
+
 export type UnshareNotebookWithSecretMutationVariables = Exact<{
   id: Scalars['ID'];
   secret: Scalars['String'];
@@ -1044,6 +1051,17 @@ export const ShareNotebookWithSecretDocument = gql`
 
 export function useShareNotebookWithSecretMutation() {
   return Urql.useMutation<ShareNotebookWithSecretMutation, ShareNotebookWithSecretMutationVariables>(ShareNotebookWithSecretDocument);
+};
+export const UnarchiveNotebookDocument = gql`
+    mutation UnarchiveNotebook($id: ID!) {
+  updatePad(id: $id, pad: {archived: false}) {
+    ...EditorNotebook
+  }
+}
+    ${EditorNotebookFragmentDoc}`;
+
+export function useUnarchiveNotebookMutation() {
+  return Urql.useMutation<UnarchiveNotebookMutation, UnarchiveNotebookMutationVariables>(UnarchiveNotebookDocument);
 };
 export const UnshareNotebookWithSecretDocument = gql`
     mutation UnshareNotebookWithSecret($id: ID!, $secret: String!) {

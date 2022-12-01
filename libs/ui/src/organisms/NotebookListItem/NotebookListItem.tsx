@@ -118,6 +118,7 @@ type NotebookListItemProps = {
   readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
+  readonly onUnarchive?: () => void;
   readonly onChangeStatus?: (status: TColorStatus) => void;
 
   readonly icon: UserIconKey;
@@ -135,6 +136,7 @@ export const NotebookListItem = ({
   onDuplicate = noop,
   onDelete = noop,
   onExport = noop,
+  onUnarchive = noop,
   onChangeStatus = noop,
   icon = 'Rocket',
   iconColor = 'Sulu',
@@ -182,6 +184,7 @@ export const NotebookListItem = ({
             creationDate={creationDate}
             onDuplicate={onDuplicate}
             onDelete={onDelete}
+            onUnarchive={onUnarchive}
             onExport={onExport}
             toggleActionsOpen={toggleActionsOpen}
             onChangeStatus={(changeStatus: TColorStatus) => {
