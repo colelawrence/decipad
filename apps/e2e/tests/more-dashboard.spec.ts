@@ -48,8 +48,8 @@ test.describe('Workspace flows', () => {
   });
 
   test('user can logout', async ({ page }) => {
-    await page.getByRole('button', { name: 'Avatar of user M' }).click();
-    await page.getByRole('button', { name: 'Logout Log out' }).click();
+    await page.click('aside button div[role=img] >> nth=1');
+    await page.click('aside button:has-text("Log out")');
     const loginHeading = await page.getByRole('heading', {
       name: 'Log in to Decipad',
     });

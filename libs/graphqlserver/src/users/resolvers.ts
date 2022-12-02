@@ -1,14 +1,19 @@
-import { AuthenticationError } from 'apollo-server-lambda';
+import { identify } from '@decipad/backend-analytics';
 import {
-  UserInput,
-  User,
-  GraphqlContext,
   GoalFulfilmentInput,
+  GraphqlContext,
+  SetUsernameInput,
+  User,
+  UserInput,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { identify } from '@decipad/backend-analytics';
+import Boom from '@hapi/boom';
+import { AuthenticationError } from 'apollo-server-lambda';
 import { loadUser, requireUser } from '../authorization';
 import timestamp from '../utils/timestamp';
+import { forbiddenUsernamePrefixes } from './forbiddenUsernamePrefixes';
+
+const minimumUsernameCharCount = 1;
 
 export default {
   Query: {
@@ -81,6 +86,53 @@ export default {
         });
         return false;
       }
+      return true;
+    },
+
+    async setUsername(
+      _: unknown,
+      { props }: { props: SetUsernameInput },
+      context: GraphqlContext
+    ): Promise<boolean> {
+      const user = requireUser(context);
+
+      let { username } = props;
+
+      if (username.startsWith('@')) {
+        username = username.replace(/^@(.*)/, '$1');
+      }
+      if (!username.match(/^[a-z,0-9]+$/)) {
+        throw Boom.notAcceptable(
+          `Username must be lower case and contain only numbers or letters`
+        );
+      }
+      if (username.length < minimumUsernameCharCount) {
+        throw Boom.notAcceptable(
+          `Username must have at least ${minimumUsernameCharCount} letters or numbers`
+        );
+      }
+
+      if (
+        forbiddenUsernamePrefixes.some((forbiddenPrefix) =>
+          username.startsWith(forbiddenPrefix)
+        )
+      ) {
+        throw Boom.notAcceptable(`Selected username is reserved`);
+      }
+
+      const key = `username:${username}`;
+      const data = await tables();
+
+      const existingKey = await data.userkeys.get({ id: key });
+      if (existingKey) {
+        return existingKey.user_id === user.id;
+      }
+      await data.userkeys.put({
+        id: key,
+        user_id: user.id,
+        createdAt: timestamp(),
+      });
+
       return true;
     },
   },

@@ -4,6 +4,7 @@ export { DashboardSidebar } from './DashboardSidebar/DashboardSidebar';
 export { DashboardTopbar } from './DashboardTopbar/DashboardTopbar';
 export { DataViewColumnHeader } from './DataViewColumnHeader/DataViewColumnHeader';
 export { EditorIcon } from './EditorIcon/EditorIcon';
+export { EditUserModal } from './EditUserModal/EditUserModal';
 export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
 export { ErrorModal } from './ErrorModal/ErrorModal';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';

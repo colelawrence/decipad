@@ -16,6 +16,10 @@ export default gql`
     goalName: String!
   }
 
+  input UsernameInput {
+    username: String!
+  }
+
   extend type Query {
     self: User
     selfFulfilledGoals: [String!]!
@@ -24,5 +28,6 @@ export default gql`
   extend type Mutation {
     updateSelf(props: UserInput!): User!
     fulfilGoal(props: GoalFulfilmentInput!): Boolean! ## returns false if already fulfilled
+    setUsername(props: UsernameInput!): Boolean! ## returns false if another user with that name already exists
   }
 `;

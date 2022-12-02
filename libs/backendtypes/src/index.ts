@@ -422,6 +422,10 @@ export interface GoalFulfilmentInput {
   goalName: string;
 }
 
+export interface SetUsernameInput {
+  username: string;
+}
+
 export interface ExternalKeyRecord extends TableRecordBase {
   resource_uri: string;
   access_token: string;

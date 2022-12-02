@@ -11,7 +11,14 @@ const section = route('/section/:sectionId', { sectionId: stringParser }, {});
 const workspace = route(
   '/:workspaceId',
   { workspaceId: stringParser },
-  { createNew, edit, archived, section, published, privateNotebooks }
+  {
+    createNew,
+    edit,
+    archived,
+    section,
+    published,
+    privateNotebooks,
+  }
 );
 
 export default route('/w', {}, { workspace });

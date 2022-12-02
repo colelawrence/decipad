@@ -1,3 +1,4 @@
+import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
 
@@ -52,6 +53,7 @@ const props: ComponentProps<typeof DashboardSidebar> = {
   name: 'John Doe',
   email: 'john.doe@example.com',
   Heading: 'h1',
+  onOpenSettings: noop,
   activeWorkspace: aWorkspace,
   allWorkspaces: [aWorkspace].map((workspace) => ({
     ...workspace,

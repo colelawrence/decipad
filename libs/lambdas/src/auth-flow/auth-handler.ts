@@ -1,17 +1,15 @@
+import { identify, track } from '@decipad/backend-analytics';
 import { UserWithSecret } from '@decipad/backendtypes';
 import { app, auth as authConfig } from '@decipad/config';
 import { jwt } from '@decipad/services/authentication';
-import { identify, track } from '@decipad/backend-analytics';
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import tables from '@decipad/tables';
+import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import { extend, pick } from 'lodash';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import adaptReqRes from './adapt-req-res';
 import { adapter } from './db-adapter';
-import {
-  Email,
-  // Github // uncommment this when enabling Github logins
-} from './providers';
 import { signInEmail } from './email';
+import { Email } from './providers';
 
 const {
   // providers: { github: githubConfig }, // uncommment this when enabling Github logins
@@ -47,13 +45,45 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
       return token;
     },
 
-    async session({ session, user, token }) {
-      if (!user && token.email && session.user) {
+    async session({ session, token }) {
+      console.log('session', { session, token });
+      if (token.accessToken) {
         const data = await tables();
-        const userKey = await data.userkeys.get({ id: `email:${token.email}` });
-        if (userKey) {
-          (session.user as { id?: string }).id = userKey.user_id;
+        const users = (
+          await data.users.query({
+            IndexName: 'bySecret',
+            KeyConditionExpression: 'secret = :secret',
+            ExpressionAttributeValues: {
+              ':secret': token.accessToken as string,
+            },
+          })
+        ).Items;
+        if (users.length !== 1) {
+          return session;
         }
+        const [user] = users;
+        extend(session.user, pick(user, 'email', 'name', 'image'));
+
+        const userKeys = (
+          await data.userkeys.query({
+            IndexName: 'byUserId',
+            KeyConditionExpression: 'user_id = :user_id',
+            ExpressionAttributeValues: {
+              ':user_id': user.id,
+            },
+          })
+        ).Items.filter((key) => key.id.startsWith('username:'));
+
+        if (userKeys.length) {
+          const [userKey] = userKeys;
+          const username = userKey.id.split(':')[1];
+          if (username) {
+            extend(session.user, {
+              username: `@${username}`,
+            });
+          }
+        }
+        console.log(userKeys);
       }
       return session;
     },

@@ -1,0 +1,3 @@
+mutation SetUsername($props: UsernameInput!) {
+  setUsername(props: $props)
+}

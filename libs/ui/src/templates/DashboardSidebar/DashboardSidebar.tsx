@@ -21,6 +21,7 @@ export const DashboardSidebar = ({
   name,
   email,
   onLogout,
+  onOpenSettings,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -41,7 +42,7 @@ export const DashboardSidebar = ({
                 <div
                   css={{
                     position: 'absolute',
-                    minWidth: '120px',
+                    minWidth: '240px',
                     width: 'max-content',
                     maxWidth: '50vw',
                     bottom: 20,
@@ -49,7 +50,12 @@ export const DashboardSidebar = ({
                     zIndex: 2,
                   }}
                 >
-                  <AccountMenu name={name} email={email} onLogout={onLogout} />
+                  <AccountMenu
+                    onOpenSettings={onOpenSettings}
+                    name={name}
+                    email={email}
+                    onLogout={onLogout}
+                  />
                 </div>
               )}
             </div>

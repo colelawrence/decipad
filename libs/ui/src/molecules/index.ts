@@ -29,6 +29,7 @@ export { InputMenuItem } from './InputMenuItem/InputMenuItem';
 export { LabeledSelect } from './LabeledSelect/LabeledSelect';
 export { MenuList } from './MenuList/MenuList';
 export { Modal } from './Modal/Modal';
+export { ModalForm } from './ModalForm/ModalForm';
 export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookAvatars } from './NotebookAvatars/NotebookAvatars';
 export { NotebookListHeader } from './NotebookListHeader/NotebookListHeader';

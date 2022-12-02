@@ -3,9 +3,9 @@ import { FC } from 'react';
 
 import { noop } from '@decipad/utils';
 import { Divider, NavigationItem } from '../../atoms';
-import { Logout } from '../../icons';
+import { Logout, Settings } from '../../icons';
 import { NavigationList } from '../../molecules';
-import { cssVar, p14Medium, p12Regular } from '../../primitives';
+import { cssVar, p12Regular, p14Medium } from '../../primitives';
 
 const styles = css({
   display: 'grid',
@@ -30,11 +30,13 @@ export interface AccountMenuProps {
   readonly onLogout?: () => void;
   readonly name: string;
   readonly email: string;
+  readonly onOpenSettings: (a: boolean) => void;
 }
 
 export const AccountMenu = ({
   name,
   email,
+  onOpenSettings,
   onLogout = noop,
 }: AccountMenuProps): ReturnType<FC> => {
   return (
@@ -45,6 +47,12 @@ export const AccountMenu = ({
         <Divider />
       </div>
       <NavigationList>
+        <NavigationItem
+          icon={<Settings />}
+          onClick={() => onOpenSettings(true)}
+        >
+          Account Settings
+        </NavigationItem>
         <NavigationItem icon={<Logout />} onClick={onLogout}>
           Log out
         </NavigationItem>

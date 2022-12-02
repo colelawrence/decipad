@@ -116,6 +116,7 @@ export type Mutation = {
   removeWorkspace?: Maybe<Scalars['Boolean']>;
   resendRegistrationMagicLinkEmail?: Maybe<Scalars['Boolean']>;
   setPadPublic: Pad;
+  setUsername: Scalars['Boolean'];
   shareExternalDataSourceWithEmail?: Maybe<Scalars['Boolean']>;
   shareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
   shareExternalDataSourceWithUser?: Maybe<Scalars['Boolean']>;
@@ -258,6 +259,11 @@ export type MutationResendRegistrationMagicLinkEmailArgs = {
 export type MutationSetPadPublicArgs = {
   id: Scalars['ID'];
   isPublic: Scalars['Boolean'];
+};
+
+
+export type MutationSetUsernameArgs = {
+  props: UsernameInput;
 };
 
 
@@ -646,6 +652,10 @@ export type UserInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export type UsernameInput = {
+  username: Scalars['String'];
+};
+
 export type Workspace = {
   __typename?: 'Workspace';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -756,6 +766,13 @@ export type SetNotebookPublicMutationVariables = Exact<{
 
 
 export type SetNotebookPublicMutation = { __typename?: 'Mutation', setPadPublic: { __typename?: 'Pad', id: string, isPublic?: boolean | null } };
+
+export type SetUsernameMutationVariables = Exact<{
+  props: UsernameInput;
+}>;
+
+
+export type SetUsernameMutation = { __typename?: 'Mutation', setUsername: boolean };
 
 export type ShareNotebookWithSecretMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1038,6 +1055,15 @@ export const SetNotebookPublicDocument = gql`
 
 export function useSetNotebookPublicMutation() {
   return Urql.useMutation<SetNotebookPublicMutation, SetNotebookPublicMutationVariables>(SetNotebookPublicDocument);
+};
+export const SetUsernameDocument = gql`
+    mutation SetUsername($props: UsernameInput!) {
+  setUsername(props: $props)
+}
+    `;
+
+export function useSetUsernameMutation() {
+  return Urql.useMutation<SetUsernameMutation, SetUsernameMutationVariables>(SetUsernameDocument);
 };
 export const ShareNotebookWithSecretDocument = gql`
     mutation ShareNotebookWithSecret($id: ID!, $permissionType: PermissionType!, $canComment: Boolean!) {
@@ -1418,6 +1444,7 @@ export type GraphCacheOptimisticUpdaters = {
   removeWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   resendRegistrationMagicLinkEmail?: GraphCacheOptimisticMutationResolver<MutationResendRegistrationMagicLinkEmailArgs, Maybe<Scalars['Boolean']>>,
   setPadPublic?: GraphCacheOptimisticMutationResolver<MutationSetPadPublicArgs, WithTypename<Pad>>,
+  setUsername?: GraphCacheOptimisticMutationResolver<MutationSetUsernameArgs, Scalars['Boolean']>,
   shareExternalDataSourceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithEmailArgs, Maybe<Scalars['Boolean']>>,
   shareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
   shareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
@@ -1462,6 +1489,7 @@ export type GraphCacheUpdaters = {
     removeWorkspace?: GraphCacheUpdateResolver<{ removeWorkspace: Maybe<Scalars['Boolean']> }, MutationRemoveWorkspaceArgs>,
     resendRegistrationMagicLinkEmail?: GraphCacheUpdateResolver<{ resendRegistrationMagicLinkEmail: Maybe<Scalars['Boolean']> }, MutationResendRegistrationMagicLinkEmailArgs>,
     setPadPublic?: GraphCacheUpdateResolver<{ setPadPublic: WithTypename<Pad> }, MutationSetPadPublicArgs>,
+    setUsername?: GraphCacheUpdateResolver<{ setUsername: Scalars['Boolean'] }, MutationSetUsernameArgs>,
     shareExternalDataSourceWithEmail?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithEmail: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithEmailArgs>,
     shareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithRoleArgs>,
     shareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithUserArgs>,

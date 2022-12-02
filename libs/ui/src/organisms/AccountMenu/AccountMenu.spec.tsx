@@ -1,3 +1,4 @@
+import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
@@ -7,6 +8,7 @@ import { AccountMenu } from './AccountMenu';
 const props: ComponentProps<typeof AccountMenu> = {
   name: 'John Doe',
   email: 'john.doe@example.com',
+  onOpenSettings: noop,
 };
 
 it('shows the username', () => {

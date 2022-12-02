@@ -28,9 +28,11 @@ import {
   useGetWorkspacesQuery,
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
+  useSetUsernameMutation,
   useUnarchiveNotebookMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
+  useUpdateUserMutation,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { exportNotebook } from '../../utils/exportNotebook';
@@ -52,6 +54,9 @@ const CreateWorkspaceModal = lazy(loadCreateWorkspaceModal);
 const loadEditWorkspaceModal = () =>
   import(/* webpackChunkName: "edit-workspace-modal" */ './EditWorkspaceModal');
 const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
+const loadEditUserModal = () =>
+  import(/* webpackChunkName: "edit-user-modal" */ './EditUserModal');
+const EditUserModal = lazy(loadEditUserModal);
 
 // prefetch
 loadTopbar().then(loadNotebookList).then(loadSidebar);
@@ -74,6 +79,11 @@ const Workspace: FC = () => {
   const { data: session } = useSession();
   const toast = useToast();
 
+  const [userSettings, setUserSettings] = useState(false);
+
+  const [name, setName] = useState(session?.user.name || '');
+  // fixme: not working
+  const [username, setUsername] = useState(session?.user.username || '');
   const [result] = useGetWorkspacesQuery();
 
   const createNotebook = useCreateNotebookMutation()[1];
@@ -85,6 +95,8 @@ const Workspace: FC = () => {
   const renameWorkspace = useRenameWorkspaceMutation()[1];
   const deleteWorkspace = useDeleteWorkspaceMutation()[1];
   const changeNotebookStatus = useUpdateNotebookStatusMutation()[1];
+  const updateUser = useUpdateUserMutation()[1];
+  const setUsernameMutation = useSetUsernameMutation()[1];
   const unarchiveNotebook = useUnarchiveNotebookMutation()[1];
 
   const signoutCallback = useCallback(() => {
@@ -217,6 +229,7 @@ const Workspace: FC = () => {
         onPointerEnter={() =>
           loadEditWorkspaceModal().then(loadCreateWorkspaceModal)
         }
+        onOpenSettings={setUserSettings}
       />
     </Frame>
   );
@@ -322,102 +335,155 @@ const Workspace: FC = () => {
   );
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <LazyRoute title={currentWorkspace.name}>
-            <Dashboard
-              sidebar={sidebarWrapper}
-              topbar={topBarWrapper}
-              notebookList={notebookListWrapper}
-            />
-            <Outlet />
-          </LazyRoute>
-        }
-      >
-        <Route path={currentWorkspaceRoute.archived.template} element={<></>} />
+    <>
+      <Routes>
         <Route
-          path={currentWorkspaceRoute.privateNotebooks.template}
-          element={<></>}
-        />
-        <Route
-          path={currentWorkspaceRoute.published.template}
-          element={<></>}
-        />
-        <Route
-          path={currentWorkspaceRoute.section.templateWithQuery}
-          element={<></>}
-        />
-        <Route
-          path={currentWorkspaceRoute.createNew.template}
+          path="/"
           element={
-            <CreateWorkspaceModal
-              Heading="h2"
-              closeHref={currentWorkspaceRoute.$}
-              onCreate={(name) => {
-                createWorkspace({ name })
-                  .then((res) => {
-                    if (res.data) {
-                      navigate(
-                        workspaces({}).workspace({
-                          workspaceId: res.data.createWorkspace.id,
-                        }).$
-                      );
-                    } else {
-                      console.error(
-                        'Failed to create workspace. Received empty response.',
-                        res
-                      );
+            <LazyRoute title={currentWorkspace.name}>
+              <Dashboard
+                sidebar={sidebarWrapper}
+                topbar={topBarWrapper}
+                notebookList={notebookListWrapper}
+              />
+              <Outlet />
+            </LazyRoute>
+          }
+        >
+          <Route
+            path={currentWorkspaceRoute.archived.template}
+            element={<></>}
+          />
+          <Route
+            path={currentWorkspaceRoute.privateNotebooks.template}
+            element={<></>}
+          />
+          <Route
+            path={currentWorkspaceRoute.published.template}
+            element={<></>}
+          />
+          <Route
+            path={currentWorkspaceRoute.section.templateWithQuery}
+            element={<></>}
+          />
+          <Route
+            path={currentWorkspaceRoute.createNew.template}
+            element={
+              <CreateWorkspaceModal
+                Heading="h2"
+                closeHref={currentWorkspaceRoute.$}
+                onCreate={(workspaceName) => {
+                  createWorkspace({ name: workspaceName })
+                    .then((res) => {
+                      if (res.data) {
+                        navigate(
+                          workspaces({}).workspace({
+                            workspaceId: res.data.createWorkspace.id,
+                          }).$
+                        );
+                      } else {
+                        console.error(
+                          'Failed to create workspace. Received empty response.',
+                          res
+                        );
+                        toast('Failed to create workspace.', 'error');
+                      }
+                    })
+                    .catch((err) => {
+                      console.error('Failed to create workspace. Error:', err);
                       toast('Failed to create workspace.', 'error');
-                    }
-                  })
-                  .catch((err) => {
-                    console.error('Failed to create workspace. Error:', err);
-                    toast('Failed to create workspace.', 'error');
-                  });
-              }}
-            />
-          }
+                    });
+                }}
+              />
+            }
+          />
+          <Route
+            path={currentWorkspaceRoute.edit.template}
+            element={
+              <EditWorkspaceModal
+                Heading="h1"
+                name={currentWorkspace.name}
+                allowDelete={
+                  workspaceData?.workspaces &&
+                  workspaceData?.workspaces?.length > 1
+                }
+                closeHref={currentWorkspaceRoute.$}
+                onRename={(newName) =>
+                  renameWorkspace({ id: currentWorkspace.id, name: newName })
+                    .then(() => {
+                      navigate(currentWorkspaceRoute.$);
+                    })
+                    .catch((err) => {
+                      console.error('Failed to rename workspace. Error:', err);
+                      toast('Failed to rename workspace.', 'error');
+                    })
+                }
+                onDelete={() => {
+                  navigate(workspaces({}).$);
+                  return deleteWorkspace({ id: currentWorkspace.id })
+                    .then(() => {
+                      toast('Workspace deleted.', 'success');
+                    })
+                    .catch((err) => {
+                      console.error('Failed to delete workspace. Error:', err);
+                      toast('Failed to delete workspace.', 'error');
+                    });
+                }}
+              />
+            }
+          />
+        </Route>
+        <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
+      </Routes>
+      <div style={{ display: userSettings ? 'block' : 'none' }}>
+        <EditUserModal
+          name={name !== session.user.email ? name : ''}
+          username={username}
+          // closeHref={currentWorkspaceRoute.$}
+          onClose={() => setUserSettings(false)}
+          onChangeName={(newName) => {
+            setName(newName);
+            updateUser({
+              props: {
+                name: newName,
+              },
+            }).catch((err) => {
+              console.error('Failed to update user. Error:', err);
+              toast('Could not change your name', 'error');
+            });
+          }}
+          onChangeUsername={(newUsername) => {
+            setUsernameMutation({
+              props: {
+                username: newUsername,
+              },
+            })
+              .then((res) => {
+                const dta = res.data;
+                const err = res.error;
+
+                if (dta) {
+                  const { setUsername: usenameChangeSuccessful } = dta;
+                  if (usenameChangeSuccessful) {
+                    toast(`You are now ${newUsername}`, 'success');
+                    setUsername(newUsername);
+                  } else {
+                    toast(`Username ${newUsername} is already taken`, 'error');
+                  }
+                } else if (err) {
+                  console.error('Failed change username. Error:', err);
+                  // this are created by us, not generic error messages.
+                  toast(err.graphQLErrors.toString(), 'error');
+                }
+              })
+              .catch((err) => {
+                console.error('Failed change username. Error:', err);
+                toast('Could not change your username', 'error');
+              });
+          }}
         />
-        <Route
-          path={currentWorkspaceRoute.edit.template}
-          element={
-            <EditWorkspaceModal
-              Heading="h1"
-              name={currentWorkspace.name}
-              allowDelete={
-                workspaceData?.workspaces &&
-                workspaceData?.workspaces?.length > 1
-              }
-              closeHref={currentWorkspaceRoute.$}
-              onRename={(newName) =>
-                renameWorkspace({ id: currentWorkspace.id, name: newName })
-                  .then(() => {
-                    navigate(currentWorkspaceRoute.$);
-                  })
-                  .catch((err) => {
-                    console.error('Failed to rename workspace. Error:', err);
-                    toast('Failed to rename workspace.', 'error');
-                  })
-              }
-              onDelete={() => {
-                navigate(workspaces({}).$);
-                return deleteWorkspace({ id: currentWorkspace.id })
-                  .then(() => {
-                    toast('Workspace deleted.', 'success');
-                  })
-                  .catch((err) => {
-                    console.error('Failed to delete workspace. Error:', err);
-                    toast('Failed to delete workspace.', 'error');
-                  });
-              }}
-            />
-          }
-        />
-      </Route>
-      <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
-    </Routes>
+      </div>
+    </>
   );
 };
 export default Workspace;
