@@ -143,6 +143,7 @@ export const NotebookListItem = ({
               >
                 {otherWorkspaces?.map((workspace) => (
                   <MenuItem
+                    key={workspace.id}
                     icon={<icons.AddToWorkspace />}
                     onSelect={() => onMoveToWorkspace(workspace.id)}
                   >
@@ -182,11 +183,12 @@ export const NotebookListItem = ({
             </MenuItem>
             {isFlagEnabled('DASHBOARD_STATUS')
               ? [
-                  <li css={menuActionHRStyles}>
+                  <li css={menuActionHRStyles} key="divider">
                     <Divider />
                   </li>,
                   AvailableColorStatus.map((label) => (
                     <MenuItem
+                      key={label}
                       icon={<ColorStatusCircle name={label} />}
                       onSelect={() => {
                         onChangeStatus(label);
