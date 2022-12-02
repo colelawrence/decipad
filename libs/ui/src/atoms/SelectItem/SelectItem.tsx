@@ -1,4 +1,4 @@
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import { useWindowListener } from '@decipad/react-utils';
@@ -66,44 +66,25 @@ export const SelectItem: FC<SelectItemProps> = ({
   removeOption = noop,
   editOption = noop,
 }) => {
-  const itemRef = useRef<HTMLInputElement>(null);
-
   const [newValue, setNewValue] = useState(item.item);
   const [editing, setEditing] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   const keydown = useCallback(
     (event: KeyboardEvent) => {
-      if (
-        (event.key === 'Enter' || event.key === 'Tab') &&
-        !editing &&
-        focused
-      ) {
-        onSelect(item.item);
-      } else if ((event.key === 'Enter' || event.key === 'Escape') && editing) {
+      if ((event.key === 'Enter' || event.key === 'Escape') && editing) {
+        event.preventDefault();
+        event.stopPropagation();
         setEditing(false);
         editOption(item.item, newValue);
       }
     },
-    [editOption, editing, item, newValue, onSelect, focused]
+    [editOption, editing, item, newValue]
   );
   useWindowListener('keydown', keydown, true);
 
-  useEffect(() => {
-    if (editing) {
-      itemRef.current?.focus();
-    }
-  }, [editing]);
-
   if (editing) {
-    return (
-      <DropdownOption
-        ref={itemRef}
-        show={true}
-        value={newValue}
-        setValue={setNewValue}
-      />
-    );
+    return <DropdownOption value={newValue} setValue={setNewValue} />;
   }
 
   return (

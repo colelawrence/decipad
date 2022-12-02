@@ -1,4 +1,4 @@
-import { FC, forwardRef } from 'react';
+import { FC } from 'react';
 import { css } from '@emotion/react';
 import {
   cssVar,
@@ -30,29 +30,24 @@ const inputOptionStyles = css(p13Medium, {
 });
 
 interface DropdownAddOptionProps {
-  readonly show: boolean;
   readonly value: string;
   readonly error?: boolean;
   readonly setValue: (a: string) => void;
 }
 
-export const DropdownOption = forwardRef<
-  HTMLInputElement,
-  DropdownAddOptionProps
->(({ show, value, setValue, error = false }, ref): ReturnType<FC> => {
+export const DropdownOption = ({
+  value,
+  setValue,
+  error = false,
+}: DropdownAddOptionProps): ReturnType<FC> => {
   return (
     <div css={wrapperStyles}>
       <input
-        ref={ref}
+        autoFocus
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Type here"
-        css={[
-          inputOptionStyles,
-          !show && {
-            display: 'none',
-          },
-        ]}
+        css={inputOptionStyles}
       />
       {error && (
         <Tooltip
@@ -72,4 +67,4 @@ export const DropdownOption = forwardRef<
       )}
     </div>
   );
-});
+};

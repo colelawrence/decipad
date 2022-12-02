@@ -108,7 +108,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             focusedIndex === 0 ? items.length - 1 : focusedIndex - 1
           );
           break;
-        case event.key === 'Enter' && showInput && inputValue.length > 0:
+        case event.key === 'Enter' && inputValue.length > 0 && showInput:
           if (items.some((i) => i.item === inputValue)) {
             setError(true);
           } else {
@@ -119,14 +119,25 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             event.stopPropagation();
           }
           break;
+        case event.key === 'Enter' && !showInput:
+          onExecute(items[focusedIndex].item);
+          break;
         case event.key === 'Escape':
           dropdownOpen(false);
       }
     },
-    [addOption, inputValue, items, focusedIndex, showInput, dropdownOpen]
+    [
+      addOption,
+      inputValue,
+      items,
+      focusedIndex,
+      showInput,
+      dropdownOpen,
+      onExecute,
+    ]
   );
 
-  useWindowListener('keydown', onKeyDown, true);
+  useWindowListener('keydown', onKeyDown);
 
   useEffect(() => {
     if (showInput && open) {
@@ -163,41 +174,42 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             editOption={editOptions}
           />
         ))}
-        {!isReadOnly && (
+        {!isReadOnly && showInput && (
           <DropdownOption
-            ref={ref}
             value={inputValue}
             setValue={setInputValue}
-            show={showInput}
             error={error}
           />
         )}
       </div>
-      <div
-        css={footerStyles}
-        onClick={() => {
-          if (addingNew) {
-            addOption(inputValue);
-            setInputValue('');
-            setAddingNew(false);
-          } else {
-            setAddingNew(true);
-          }
-        }}
-      >
-        {addingNew ? (
-          <>
-            Press <span css={hotKeyStyle}>Enter</span> to save
-          </>
-        ) : (
-          <>
-            <div css={{ width: 16, height: 16 }}>
-              <Plus />
-            </div>
-            Add new
-          </>
-        )}
-      </div>
+
+      {!isReadOnly && (
+        <div
+          css={footerStyles}
+          onClick={() => {
+            if (addingNew) {
+              addOption(inputValue);
+              setInputValue('');
+              setAddingNew(false);
+            } else {
+              setAddingNew(true);
+            }
+          }}
+        >
+          {addingNew ? (
+            <>
+              Press <span css={hotKeyStyle}>Enter</span> to save
+            </>
+          ) : (
+            <>
+              <div css={{ width: 16, height: 16 }}>
+                <Plus />
+              </div>
+              Add new
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
