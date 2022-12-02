@@ -95,7 +95,7 @@
     "@graphql-codegen/cli": "^2.15.0",
     "@graphql-tools/schema": "9.0.4",
     "@hapi/boom": "10.0.0",
-    "@lhci/cli": "0.9.0",
+    "@lhci/cli": "0.10.0",
     "@mixer/postmessage-rpc": "1.1.4",
     "@playwright/test": "^1.27.1",
     "@radix-ui/react-dropdown-menu": "2.0.1",
