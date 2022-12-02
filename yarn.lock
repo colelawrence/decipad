@@ -21382,10 +21382,10 @@ jose@^4.1.4, jose@^4.9.3:
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.9.3.tgz#890abd3f26725fe0f2aa720bc2f7835702b624db"
   integrity sha512-f8E/z+T3Q0kA9txzH2DKvH/ds2uggcw0m3vVPSB9HrSkrQ7mojjifvS7aR8cw+lQl2Fcmx9npwaHpM/M3GD8UQ==
 
-jotai@1.9.0, jotai@^1.7.2:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.9.0.tgz#488aac16fb5b527e2af2efd76d28768ec1fd0386"
-  integrity sha512-XYpSlxbxujUCTA8PNkzfj3+zF6XVyzo6XMZIEic3gXQCpTDPfmqhUj2FR8kwUACK5weosFrSBhesrjwfILUCoQ==
+jotai@1.11.0, jotai@^1.7.2:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.11.0.tgz#d2a666f16935797743eb41a3b75583ea4e17fefb"
+  integrity sha512-8OzJmRxcTZoAOJSz6uTnmofmjAOgNOdAOy26rvyw3OBxt6XIoklNnfUTCm8wgp84SSLJbPZA01VS5O/SUz+QYg==
 
 jpeg-js@^0.4.1, jpeg-js@^0.4.3:
   version "0.4.3"

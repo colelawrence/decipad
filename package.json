@@ -160,7 +160,7 @@
     "immer": "9.0.15",
     "is-hotkey": "0.2.0",
     "isomorphic-fetch": "3.0.0",
-    "jotai": "1.9.0",
+    "jotai": "1.11.0",
     "jq.node": "2.4.0",
     "just-permutations": "2.1.1",
     "lib0": "0.2.52",
