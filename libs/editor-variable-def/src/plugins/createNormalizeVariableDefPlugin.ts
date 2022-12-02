@@ -71,8 +71,10 @@ const normalize =
     }
 
     if (
-      node.children[1].type !== ELEMENT_EXPRESSION &&
-      node.variant !== 'dropdown'
+      (node.children[1].type !== ELEMENT_EXPRESSION &&
+        node.variant !== 'dropdown') ||
+      (node.children[1].type !== ELEMENT_DROPDOWN &&
+        node.variant === 'dropdown')
     ) {
       removeNodes(editor, {
         at: [...path, 1],
@@ -104,6 +106,13 @@ const normalize =
         });
         return true;
       }
+    }
+
+    const num = node.variant === 'slider' ? 3 : 2;
+    if (node.children.length > num) {
+      removeNodes(editor, {
+        at: [...path, node.children.length - 1],
+      });
     }
 
     return false;

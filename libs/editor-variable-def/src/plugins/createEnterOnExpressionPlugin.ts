@@ -1,6 +1,16 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
-import { MyElement, ELEMENT_EXPRESSION } from '@decipad/editor-types';
-import { getAboveNode, getNextNode, setSelection } from '@udecode/plate';
+import {
+  MyElement,
+  ELEMENT_EXPRESSION,
+  ELEMENT_CAPTION,
+} from '@decipad/editor-types';
+import {
+  getAboveNode,
+  getNextNode,
+  getNodeString,
+  isSelectionExpanded,
+  setSelection,
+} from '@udecode/plate';
 
 export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
   name: 'ENTER_ON_EXPRESSION_PLUGIN',
@@ -21,6 +31,20 @@ export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
             const [, path] = next;
             const anchor = { offset: 0, path };
             setSelection(editor, { anchor, focus: anchor });
+          }
+        } else if (
+          (node as MyElement)?.type === ELEMENT_CAPTION &&
+          event.code === 'Enter'
+        ) {
+          const title = getNodeString(node);
+          // If the user is at the end of the title
+          // And also their selection is collapsed (Anchor and Focus are the same).
+          if (
+            isSelectionExpanded(editor) ||
+            title.length !== editor.selection?.anchor.offset
+          ) {
+            event.preventDefault();
+            event.stopPropagation();
           }
         }
       }
