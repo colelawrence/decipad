@@ -5606,25 +5606,25 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@segment/analytics-core@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-core/-/analytics-core-1.1.0.tgz#a27477a35d1a005ea6b3ee9842f6870bc5260498"
-  integrity sha512-Ccjt0cewP9QQU7g2p342QQ48mOaGlFNa9DTyQlEDoyRuInnVDcW6mPFS7RlNXEnmw3F2fi3YONNktn5Ja63xcw==
+"@segment/analytics-core@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-core/-/analytics-core-1.1.4.tgz#7d7e59de596d519939d27a11da799fb5b40bead3"
+  integrity sha512-qW6NkxFArqiURiJv7f0BV+bN14ZBiDj1ir3QkYf/CKrtRCu4ct85LxkPNTBIwq3GDACUkwVwCH251Nl5yjrjcg==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     dset "^3.1.2"
     tslib "^2.4.0"
 
-"@segment/analytics-next@1.45.0":
-  version "1.45.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.45.0.tgz#458efc0b07421051a2f75ccc9f50e00ac62f17c4"
-  integrity sha512-dgMo5epHmQnQjtEWSSmFmWWq4lsaxoKlhJcfcVJ91CNuCDnGCZyjubL9I6F7A+3AydIpptzJKo+b7zztC/2Lew==
+"@segment/analytics-next@1.47.0":
+  version "1.47.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.47.0.tgz#ebff09b7c2bc00312a04b464a639717b3ce3e47e"
+  integrity sha512-1X4A8EZ3k2UjOIj/Il+aCbz+OpZr1o/B8FRG9IKMmQS1QxTHP3WKXMITHek+5YIuWb3g9SuzLAYrXR1zCjreqw==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
-    "@segment/analytics-core" "1.1.0"
+    "@segment/analytics-core" "1.1.4"
     "@segment/analytics.js-video-plugins" "^0.2.1"
     "@segment/facade" "^3.4.9"
-    "@segment/tsub" "^0.1.12"
+    "@segment/tsub" "1.0.1"
     dset "^3.1.2"
     js-cookie "3.0.1"
     node-fetch "^2.6.7"
@@ -5676,10 +5676,10 @@
   dependencies:
     "@ndhoule/map" "^2.0.1"
 
-"@segment/tsub@^0.1.12":
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/@segment/tsub/-/tsub-0.1.12.tgz#1c301a8b81e5dbda54eb0435ae808fbe65553f23"
-  integrity sha512-35JB0+HuMZrn7mus/s4yOHAcuid+MzaOYxV8YAogTR4Z7AsHwn/Zn/y9XdoHp2kKdn54s6jO4IaO826v0j7qmw==
+"@segment/tsub@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@segment/tsub/-/tsub-1.0.1.tgz#4d7fad9eb84b354eec559020da7408fac3046b33"
+  integrity sha512-rUpvlj/rRfOolk5rjwyrsbl0qzGLsaYgFNEiOSrwrWDryDPq1ZGdo+3Eb+E8+EC0yZOAO4F1DjJfLtaSifpx7w==
   dependencies:
     "@stdlib/math-base-special-ldexp" "^0.0.5"
     dlv "^1.1.3"
