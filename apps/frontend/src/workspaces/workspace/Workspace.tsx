@@ -253,7 +253,7 @@ const Workspace: FC = () => {
       <NotebookList
         Heading="h1"
         notebooks={allNotebooks}
-        archivePage={maybeWorkspaceFolder === 'archived'}
+        page={maybeWorkspaceFolder}
         mainWorkspaceRoute={!maybeWorkspaceFolder}
         onCreateNotebook={handleCreateNotebook}
         otherWorkspaces={allWorkspaces.filter(

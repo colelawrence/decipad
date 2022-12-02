@@ -1,29 +1,34 @@
+import { docs } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Button } from '../../atoms';
 import { Close } from '../../icons';
-import { grey100, p18Medium } from '../../primitives';
-import background from './card-image.svg';
+import { cssVar, grey100, p18Medium } from '../../primitives';
+import { dashboard } from '../../styles';
 import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import backgroundPublish from './dashboard-cta-card-publish.png';
+import background from './dashboard-cta-card.png';
 
 const workspaceCTAScreenQuery = `@media (max-width: 1000px)`;
 
-const workspaceCTACardSuperWrapperStyles = css({
-  marginBottom: '2rem',
-  borderRadius: '12px',
-  padding: '24px',
-  height: '210px',
+const workspaceCTACardSuperWrapperStyles = (variant: boolean) =>
+  css({
+    marginBottom: '2rem',
+    borderRadius: '12px',
+    padding: '24px',
+    height: dashboard.CTAHeight,
 
-  position: 'relative',
+    position: 'relative',
 
-  backgroundColor: grey100.rgb,
-  backgroundImage: `url(${background})`,
-  backgroundPosition: 'right 20px bottom',
-  backgroundRepeat: 'no-repeat',
-  [workspaceCTAScreenQuery]: {
-    display: 'none',
-  },
-});
+    backgroundColor: grey100.rgb,
+    backgroundImage: `url(${variant ? backgroundPublish : background})`,
+    backgroundPosition: 'right 0px bottom',
+    backgroundSize: '1057px 210px',
+    backgroundRepeat: 'no-repeat',
+    [workspaceCTAScreenQuery]: {
+      display: 'none',
+    },
+  });
 
 const dismissWrapperStyles = css({
   position: 'absolute',
@@ -33,7 +38,11 @@ const dismissWrapperStyles = css({
   width: '18px',
 });
 
-const titleStyles = css(p18Medium, { lineHeight: '22px', maxWidth: '370px' });
+const titleStyles = css(p18Medium, {
+  lineHeight: '22px',
+  maxWidth: '370px',
+  color: cssVar('strongTextColor'),
+});
 
 const ctaStyles = css({
   display: 'flex',
@@ -45,26 +54,44 @@ const ctaStyles = css({
 interface WorkspaceCTACardProps {
   readonly onDismiss: () => void;
   readonly onCreateNewNotebook: () => void;
+  readonly canDismiss: boolean;
+  readonly variant?: boolean;
 }
 
 const WorkspaceCTACard: FC<WorkspaceCTACardProps> = ({
   onDismiss,
+  canDismiss,
   onCreateNewNotebook,
+  variant = false,
 }) => {
   const onDismissClick = useMouseEventNoEffect(onDismiss);
   return (
-    <div css={workspaceCTACardSuperWrapperStyles}>
-      <div css={dismissWrapperStyles} onClick={onDismissClick}>
-        <Close />
-      </div>
+    <div css={workspaceCTACardSuperWrapperStyles(variant)}>
+      {canDismiss ? (
+        <div css={dismissWrapperStyles} onClick={onDismissClick}>
+          <Close />
+        </div>
+      ) : null}
       <div css={ctaStyles}>
         <h2 css={titleStyles}>
-          Gather information, build models in minutes and bring data-driven
-          ideas to life
+          {variant
+            ? 'When you publish a notebook it shows up here'
+            : 'Gather information, build models in minutes and bring data-driven ideas to life'}
         </h2>
-        <Button type="primaryBrand" onClick={onCreateNewNotebook}>
-          Start with new notebook
-        </Button>
+        {variant ? (
+          <p>
+            Share notebooks with all of your followers so they customize and
+            make it their own
+          </p>
+        ) : null}
+        <div css={{ display: 'inline-flex', gap: '8px' }}>
+          <Button type="primaryBrand" onClick={onCreateNewNotebook}>
+            Start with new notebook
+          </Button>
+          <Button type="secondary" href={docs({}).page({ name: 'gallery' }).$}>
+            Explore our gallery
+          </Button>
+        </div>
       </div>
     </div>
   );

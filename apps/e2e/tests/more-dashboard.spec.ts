@@ -12,7 +12,7 @@ test.describe('Workspace flows', () => {
 
   test('You can list published notebooks', async ({ page }) => {
     const link = await page
-      .locator('main a[href] >> nth=0')
+      .locator('main a[href] >> nth=1')
       .getAttribute('href');
     expect(typeof link).toBe('string');
     await page.goto(link || '');
@@ -24,7 +24,8 @@ test.describe('Workspace flows', () => {
     await page.goto(workspaceLink || '');
     await page.getByRole('link', { name: 'Globe Published' }).click();
     const archivedDocuments = await page.locator('main a[href]').count();
-    expect(archivedDocuments).toBe(1);
+    // document plus cta link
+    expect(archivedDocuments).toBe(2);
   });
 
   test('Archive & delete a notebook', async ({ page }) => {
@@ -33,7 +34,7 @@ test.describe('Workspace flows', () => {
     await page.click('aside nav > ul > li a span:has-text("Archived")');
     await page.click('main div[type=button] >> nth=0'); // click first ellipsis
     await page.click('div[role="menuitem"] span:has-text("Delete")');
-    await page.waitForSelector('span:has-text("generic")');
+    await page.waitForSelector('button:has-text("Start with new notebook")');
   });
 
   test('Create a workspace', async ({ page }) => {

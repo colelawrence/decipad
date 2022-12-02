@@ -234,7 +234,6 @@ const menuActionHRStyles = css(p14Medium, {
 const { gridStyles } = notebookList;
 
 const wrapperStyles = css({
-  // height: '72px',
   position: 'relative',
 });
 

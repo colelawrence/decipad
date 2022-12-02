@@ -96,7 +96,7 @@ export const DragAndDropImportNotebook = ({
   ) : (
     <div css={isOver && canDrop && dropStyles} ref={drop}>
       {isOver ? (
-        <div css={emptywRapperStyles}>
+        <div css={emptywRapperStyles(false)}>
           <DashboardDialogCTA
             icon={<GenericTable />}
             primaryText={'Drag and drop your notebooks here'}

@@ -10,7 +10,7 @@ import {
   NotebookListItem,
 } from '../../organisms';
 import { cssVar, p15Medium, smallScreenQuery } from '../../primitives';
-import { notebookList } from '../../styles';
+import { dashboard, notebookList } from '../../styles';
 
 const loadWorkspaceCta = () =>
   import(/* webpackChunkName: "workspace-cta" */ './WorkspaceCTACard');
@@ -54,7 +54,7 @@ type NotebookListProps = {
   readonly onPointerEnter?: () => void;
 } & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> & {
     readonly Heading: 'h1';
-    readonly archivePage?: boolean;
+    readonly page?: string;
     readonly mainWorkspaceRoute?: boolean;
   };
 
@@ -72,7 +72,7 @@ export const NotebookList = ({
   onUnarchive = noop,
   showCTA = false,
   onCTADismiss = noop,
-  archivePage = false,
+  page = '',
   mainWorkspaceRoute = false,
   onImport,
 
@@ -93,7 +93,9 @@ export const NotebookList = ({
           <Suspense fallback={<></>}>
             <WorkspaceCta
               onDismiss={onCTADismiss}
+              canDismiss={notebooks.length > 5}
               onCreateNewNotebook={onCreateNotebook}
+              variant={page === 'published'}
             />
           </Suspense>
         )}
@@ -130,7 +132,7 @@ export const NotebookList = ({
                       onMoveToWorkspace(id, workspaceId)
                     }
                     onUnarchive={() => onUnarchive(id)}
-                    archivePage={archivePage}
+                    archivePage={page === 'archived'}
                     onExport={notebook.onExport}
                     onChangeStatus={(status: TColorStatus) => {
                       onChangeStatus(id, status as TColorStatus);
@@ -140,12 +142,12 @@ export const NotebookList = ({
               ))}
             </ol>
           </div>
-        ) : mainWorkspaceRoute ? (
-          <div css={emptywRapperStyles}>
+        ) : showCTA ? null : mainWorkspaceRoute ? (
+          <div css={emptywRapperStyles(showCTA)}>
             <EmptyWorkspaceCta onCreateNotebook={onCreateNotebook} />
           </div>
         ) : (
-          <div css={emptywRapperStyles}>
+          <div css={emptywRapperStyles(showCTA)}>
             <DashboardDialogCTA
               icon={<Generic />}
               primaryText={'No documents to list'}
@@ -160,12 +162,13 @@ export const NotebookList = ({
   );
 };
 
-export const emptywRapperStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  flexWrap: 'nowrap',
-  alignContent: 'space-around',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-  height: '100%',
-});
+export const emptywRapperStyles = (showCTA: boolean) =>
+  css({
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    alignContent: 'space-around',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: showCTA ? `calc(100%-${dashboard.CTAHeight})` : '100%',
+  });

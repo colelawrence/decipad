@@ -1,4 +1,4 @@
-import { smallestMobile, smallestDesktop } from '../primitives';
+import { smallestDesktop, smallestMobile } from '../primitives';
 import { viewportCalc } from '../utils';
 
 export const topPadding = viewportCalc(
@@ -9,3 +9,5 @@ export const topPadding = viewportCalc(
   'px',
   'vmax'
 );
+
+export const CTAHeight = 210;
