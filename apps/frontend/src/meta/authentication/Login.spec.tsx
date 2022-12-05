@@ -66,6 +66,6 @@ describe('if the signin request fails', () => {
     await userEvent.click(await findByText(/submit/i));
 
     rejectSignIn(new Error('oopsie'));
-    expect(await findByText(/sorry.+wrong/i)).toBeVisible();
+    expect(await findByText(/oopsie/i)).toBeVisible();
   });
 });

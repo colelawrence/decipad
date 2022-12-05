@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { parse as parseCookie } from 'simple-cookie';
 import { parse as qsParse, ParsedUrlQuery } from 'querystring';
 import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';
+import { boomify } from '@hapi/boom';
 
 export default function adaptReqRes(handle: NextApiHandler) {
   return async function respondWithAuth(
@@ -104,16 +105,23 @@ export default function adaptReqRes(handle: NextApiHandler) {
           reply();
         },
       };
-      handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
 
       function reply(
         replyBody: string | Record<string, any> | undefined = undefined
       ) {
         if (typeof replyBody === 'object') {
-          replyBody = JSON.stringify(replyBody);
+          if (replyBody.url) {
+            const replyUrl = new URL(replyBody.url);
+            const error = replyUrl.searchParams.get('error');
+            if (error) {
+              statusCode = 400;
+              replyBody = { error, url: replyBody.url };
+            }
+          }
           if (!headers['content-type']) {
             headers['content-type'] = 'application/json; charset=utf-8';
           }
+          replyBody = JSON.stringify(replyBody);
         }
         const response = {
           statusCode,
@@ -124,6 +132,15 @@ export default function adaptReqRes(handle: NextApiHandler) {
         };
 
         resolve(response);
+      }
+
+      try {
+        handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
+      } catch (err) {
+        console.log('caught', err);
+        const boomed = boomify(err as Error);
+        statusCode = boomed.output.statusCode;
+        reply(boomed.output.payload);
       }
     });
   };

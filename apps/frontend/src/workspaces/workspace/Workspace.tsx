@@ -102,7 +102,10 @@ const Workspace: FC = () => {
   const signoutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
     // Because after any refresh it persists.
-    signOut();
+
+    signOut({ redirect: false }).then(() => {
+      window.location.pathname = '/';
+    });
   }, []);
 
   const [ctaDismissed, setCtaDismissed] = useState(

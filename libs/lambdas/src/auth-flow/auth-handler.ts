@@ -3,6 +3,7 @@ import { UserWithSecret } from '@decipad/backendtypes';
 import { app, auth as authConfig } from '@decipad/config';
 import { jwt } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
+import Boom from '@hapi/boom';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { extend, pick } from 'lodash';
 import NextAuth, { NextAuthOptions } from 'next-auth';
@@ -29,7 +30,12 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
       //   return signInGithub(user, account, metadata);
       // }
       if (account?.type === 'email') {
-        return signInEmail(user as UserWithSecret, account);
+        if (!(await signInEmail(user as UserWithSecret, account))) {
+          throw Boom.forbidden(
+            'This email is not allowed to log in. We are in closed beta, so please sign up to the wait list.'
+          );
+        }
+        return true;
       }
       return false;
     },
