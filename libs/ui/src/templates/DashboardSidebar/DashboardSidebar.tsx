@@ -1,5 +1,6 @@
+import { useActiveElement } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { ComponentProps, FC, useCallback, useState } from 'react';
+import { ComponentProps, FC, useState } from 'react';
 import { AccountAvatar } from '../../molecules';
 import {
   AccountMenu,
@@ -24,21 +25,25 @@ export const DashboardSidebar = ({
   onOpenSettings,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const toggleMenuOpen = useCallback(() => setMenuOpen((o) => !o), []);
+  const [openMenu, setOpenMenu] = useState(false);
+
+  const ref = useActiveElement(() => {
+    setOpenMenu(false);
+  });
+
   return (
     <div css={dashboardMainSidebarStyles} onPointerEnter={onPointerEnter}>
       <div css={workspaceSwitcherStyles}>
         <div css={workspaceSwitcherFlexyStyles}>
           <WorkspaceSelector {...props}></WorkspaceSelector>
           <div css={themeSwitcherAndConfigStyles}>
-            <div>
+            <div ref={ref}>
               <AccountAvatar
-                menuOpen={menuOpen}
+                menuOpen={openMenu}
                 name={name}
-                onClick={toggleMenuOpen}
+                onClick={() => setOpenMenu(!openMenu)}
               />
-              {menuOpen && (
+              {openMenu && (
                 <div
                   css={{
                     position: 'absolute',
