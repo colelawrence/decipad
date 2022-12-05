@@ -22,7 +22,7 @@ import {
   orange300,
 } from '../../primitives';
 import { Anchor } from '../../utils';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const styles = css(p13Bold, {
   flexGrow: 1,
@@ -171,7 +171,7 @@ export const Button = ({
   onClick,
   href,
 }: ButtonProps): ReturnType<React.FC> => {
-  const onButtonClick = useMouseEventNoEffect(onClick);
+  const onButtonClick = useEventNoEffect(onClick);
 
   return href ? (
     <Anchor

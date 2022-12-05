@@ -7,7 +7,7 @@ import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 type MagicNumberProps = {
   readonly tempId?: string;
@@ -102,7 +102,7 @@ export const MagicNumber = ({
 
   return (
     <span
-      onClick={useMouseEventNoEffect(onClick)}
+      onClick={useEventNoEffect(onClick)}
       css={[wrapperStyles]}
       data-number-id={tempId}
     >

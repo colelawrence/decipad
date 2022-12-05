@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import type { ComponentProps } from 'react';
-import { CellInput, ErrorMessage } from '../../atoms';
+import { CellInput, ErrorMessage, VoidBlock } from '../../atoms';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
 import { Plot as PlotIcon } from '../../icons';
@@ -57,13 +57,15 @@ export const PlotBlock = ({
           variant="heading"
         />
       </div>
-      {!readOnly && <PlotParams {...plotParams} />}
-      {errorMessage && <ErrorMessage message={errorMessage} />}
-      {result && (
-        <output css={plotStyles}>
-          <PlotResult {...result} />
-        </output>
-      )}
+      <VoidBlock>
+        {!readOnly && <PlotParams {...plotParams} />}
+        {errorMessage && <ErrorMessage message={errorMessage} />}
+        {result && (
+          <output css={plotStyles}>
+            <PlotResult {...result} />
+          </output>
+        )}
+      </VoidBlock>
     </section>
   );
 };

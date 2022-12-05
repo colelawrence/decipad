@@ -14,7 +14,7 @@ import {
   p16Medium,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const wrapperStyles = css({
   width: 356,
@@ -99,7 +99,7 @@ export const StarterChecklist: FC<StarterChecklistProps> = ({
     [checklist.items]
   );
 
-  const toggleHide = useMouseEventNoEffect(
+  const toggleHide = useEventNoEffect(
     useCallback(() => setHide((h) => !h), [])
   );
 

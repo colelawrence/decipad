@@ -10,7 +10,7 @@ import {
   transparency,
 } from '../../primitives';
 import { Anchor } from '../../utils';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 export type NavigationItemProps = {
   readonly children: ReactNode;
@@ -42,7 +42,7 @@ export const NavigationItem = ({
   onClick,
 }: NavigationItemProps): ReturnType<FC> => {
   const styledIcon = icon && <span css={iconStyles}>{icon}</span>;
-  const onButtonClick = useMouseEventNoEffect(onClick);
+  const onButtonClick = useEventNoEffect(onClick);
   const ellipsisElement =
     typeof ellipsisClick === 'function' ? (
       <div css={workspaceColorActionsStyles}>

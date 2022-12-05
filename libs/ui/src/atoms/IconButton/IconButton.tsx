@@ -5,7 +5,7 @@ import {
   roundedSquareStyles,
 } from '../../styles/buttons';
 import { Anchor } from '../../utils';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 type IconButtonProps = {
   readonly children: ReactNode;
@@ -32,7 +32,7 @@ export const IconButton = ({
   onClick,
   href,
 }: IconButtonProps): ReturnType<FC> => {
-  const onButtonClick = useMouseEventNoEffect(onClick);
+  const onButtonClick = useEventNoEffect(onClick);
   return onClick ? (
     <button
       aria-roledescription={roleDescription}

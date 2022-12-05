@@ -7,7 +7,7 @@ import {
 } from '@udecode/plate';
 import { ComponentProps, FC, MouseEvent, useCallback } from 'react';
 import { ELEMENT_LINK, useTEditorRef } from '@decipad/editor-types';
-import { FloatingButton, useMouseEventNoEffect } from '@decipad/ui';
+import { FloatingButton, useEventNoEffect } from '@decipad/ui';
 
 export const LinkButton = (
   props: ComponentProps<typeof FloatingButton>
@@ -23,7 +23,7 @@ export const LinkButton = (
       onMouseDown={useCallback((event: MouseEvent) => {
         event.preventDefault();
       }, [])}
-      onClick={useMouseEventNoEffect(
+      onClick={useEventNoEffect(
         useCallback(() => {
           if (!editor) return;
 

@@ -5,7 +5,7 @@ import { Caret } from '../../icons';
 import { MenuList } from '../../molecules';
 import { p12Regular } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const selectWrapperStyles = css({
   position: 'relative',
@@ -50,7 +50,7 @@ export function Select<T extends string>({
   clear = false,
 }: SelectProps<T>) {
   const [opened, setOpened] = useState(false);
-  const onTriggerClick = useMouseEventNoEffect(
+  const onTriggerClick = useEventNoEffect(
     useCallback(() => {
       setOpened((o) => !o);
     }, [])

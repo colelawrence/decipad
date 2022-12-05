@@ -15,4 +15,4 @@ export * from './hooks';
 export * from './primitives';
 
 // Some useful utilities
-export * from './utils/useMouseEventNoEffect';
+export * from './utils/useEventNoEffect';

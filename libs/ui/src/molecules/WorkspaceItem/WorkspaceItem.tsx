@@ -5,7 +5,7 @@ import { FC, useCallback } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Edit } from '../../icons';
 import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const maxWidth = '176px';
 const iconSize = '24px';
@@ -81,7 +81,7 @@ export const WorkspaceItem = ({
         </span>
         <button
           css={iconStyles}
-          onClick={useMouseEventNoEffect(
+          onClick={useEventNoEffect(
             useCallback(() => {
               // Doing navigation programatically instead of using an <Anchor> component because <a>
               // inside of an <a> is semantically forbidden.

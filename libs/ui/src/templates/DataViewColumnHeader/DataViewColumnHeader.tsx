@@ -11,7 +11,7 @@ import { capitalize } from 'lodash';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { MenuList } from '../../molecules';
 import { Caret, Code, Trash } from '../../icons';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { useMergedRef } from '../../hooks';
 
 export interface DataViewColumnHeaderProps {
@@ -94,7 +94,7 @@ export const DataViewColumnHeader = forwardRef<
 ): ReturnType<FC> {
   const [menuListOpened, setMenuListOpened] = useState(false);
 
-  const onTriggerClick = useMouseEventNoEffect(
+  const onTriggerClick = useEventNoEffect(
     useCallback(() => {
       setMenuListOpened(!menuListOpened);
     }, [menuListOpened])

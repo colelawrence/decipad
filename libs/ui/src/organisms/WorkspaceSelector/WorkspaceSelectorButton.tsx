@@ -4,7 +4,7 @@ import { ComponentProps, FC, useCallback } from 'react';
 import { Avatar } from '../../atoms';
 import { WorkspaceItem } from '../../molecules';
 import { purple300, smallScreenQuery } from '../../primitives';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 interface WorkspaceSelectorButtonProps {
   readonly activeWorkspace: ComponentProps<typeof WorkspaceItem>;
@@ -20,7 +20,7 @@ export const WorkspaceButtonSelector = ({
   return (
     <div css={workspaceButtonWrapperStyles}>
       <button
-        onClick={useMouseEventNoEffect(
+        onClick={useEventNoEffect(
           useCallback(() => {
             // Doing navigation programatically instead of using an <Anchor> component because <a>
             // inside of an <a> is semantically forbidden.

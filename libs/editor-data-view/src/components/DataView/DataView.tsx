@@ -14,6 +14,7 @@ import {
   UserIconKey,
   DataView as UIDataView,
   DataViewMenu,
+  VoidBlock,
 } from '@decipad/ui';
 import { AutocompleteName } from '@decipad/computer';
 import { useEditorStylesContext } from '@decipad/react-contexts';
@@ -95,10 +96,12 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         }
       >
         {children}
-        <DataViewMenu
-          availableColumns={availableColumns}
-          onInsertColumn={onInsertColumn}
-        />
+        <VoidBlock>
+          <DataViewMenu
+            availableColumns={availableColumns}
+            onInsertColumn={onInsertColumn}
+          />
+        </VoidBlock>
       </UIDataView>
     </DraggableBlock>
   ) : null;

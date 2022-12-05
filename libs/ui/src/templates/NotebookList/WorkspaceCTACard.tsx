@@ -5,7 +5,7 @@ import { Button } from '../../atoms';
 import { Close } from '../../icons';
 import { cssVar, grey100, p18Medium } from '../../primitives';
 import { dashboard } from '../../styles';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import backgroundPublish from './dashboard-cta-card-publish.png';
 import background from './dashboard-cta-card.png';
 
@@ -64,7 +64,7 @@ const WorkspaceCTACard: FC<WorkspaceCTACardProps> = ({
   onCreateNewNotebook,
   variant = false,
 }) => {
-  const onDismissClick = useMouseEventNoEffect(onDismiss);
+  const onDismissClick = useEventNoEffect(onDismiss);
   return (
     <div css={workspaceCTACardSuperWrapperStyles(variant)}>
       {canDismiss ? (

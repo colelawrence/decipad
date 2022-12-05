@@ -11,7 +11,7 @@ import {
   setCssVar,
   shortAnimationDuration,
 } from '../../primitives';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const avatarGridStyles = css(p12Medium, {
   display: 'grid',
@@ -43,7 +43,7 @@ export const AccountAvatar = ({
 }: AccountAvatarProps): ReturnType<React.FC> => {
   const [hoverTargetClassName] = useState(`account-avatar-${nanoid()}`);
   const hoverSelector = menuOpen ? '' : `.${hoverTargetClassName}:hover`;
-  const onAccountAvatarClick = useMouseEventNoEffect(onClick);
+  const onAccountAvatarClick = useEventNoEffect(onClick);
   return (
     <button
       onClick={onAccountAvatarClick}

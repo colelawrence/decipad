@@ -19,7 +19,7 @@ import { codeBlock } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
 import { DrawingPin } from '../../icons';
-import { useMouseEventNoEffect } from '../../utils/useMouseEventNoEffect';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const { lineHeight } = codeBlock;
 
@@ -277,7 +277,7 @@ function PotentiallyExpandedResult({
   CodeLineProps,
   'result' | 'syntaxError' | 'onDragStartCell' | 'onClickedResult'
 >): { inline?: ReactNode; expanded?: ReactNode; errored?: boolean } {
-  const onOutputClick = useMouseEventNoEffect(
+  const onOutputClick = useEventNoEffect(
     useCallback(() => {
       if (onClickedResult && result) {
         onClickedResult(result);
