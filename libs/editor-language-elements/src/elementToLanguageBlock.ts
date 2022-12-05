@@ -44,7 +44,7 @@ export const elementToLanguageBlocks = async (
     }
   }
 
-  // blocks that return unparsed code:
+  // blocks that return code:
   if (interactiveElement.getParsedBlockFromElement) {
     try {
       blocks.push(

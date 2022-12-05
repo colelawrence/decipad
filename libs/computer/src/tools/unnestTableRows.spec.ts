@@ -22,8 +22,10 @@ it('unnests table rows', () => {
           Object {
             "indexAtThisDimension": 0,
             "indexName": "Table",
+            "indexesOfRemainingLengthsAreZero": true,
             "label": "label1",
             "lengthAtThisDimension": 1,
+            "productOfRemainingLengths": 1,
           },
         ],
         "result": Object {
@@ -39,8 +41,10 @@ it('unnests table rows', () => {
           Object {
             "indexAtThisDimension": 1,
             "indexName": "Table",
+            "indexesOfRemainingLengthsAreZero": true,
             "label": "label2",
             "lengthAtThisDimension": 1,
+            "productOfRemainingLengths": 1,
           },
         ],
         "result": Object {

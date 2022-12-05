@@ -1,20 +1,17 @@
 import { getDefined } from '@decipad/utils';
 import type { Type } from '..';
 import { FractionValue, Value } from '../value';
-import { toExpandedBaseQuantity, fromExpandedBaseQuantity } from './convert';
+import { expandUnits, contractUnits } from './expand';
 import { zip } from '../utils';
 import { automapValues } from '../dimtools';
 
 function autoconvertArgument(value: Value, type: Type): Value {
   const typeLowestDims = type.reducedToLowest();
   if (typeLowestDims.unit) {
+    const [, expander] = expandUnits(getDefined(typeLowestDims.unit));
     return automapValues([type], [value], ([value]) => {
       if (value instanceof FractionValue) {
-        const [, convertedValue] = toExpandedBaseQuantity(
-          value.value,
-          getDefined(typeLowestDims.unit)
-        );
-        return FractionValue.fromValue(convertedValue);
+        return FractionValue.fromValue(expander(value.value));
       }
       return value;
     });
@@ -25,13 +22,10 @@ function autoconvertArgument(value: Value, type: Type): Value {
 export function autoconvertResult(value: Value, type: Type): Value {
   const typeLowestDims = type.reducedToLowest();
   if (typeLowestDims.unit) {
+    const [, contractor] = contractUnits(getDefined(typeLowestDims.unit));
     return automapValues([type], [value], ([value]) => {
       if (value instanceof FractionValue) {
-        const [, reconvertedValue] = fromExpandedBaseQuantity(
-          value.value,
-          getDefined(typeLowestDims.unit)
-        );
-        return FractionValue.fromValue(reconvertedValue);
+        return FractionValue.fromValue(contractor(value.value));
       }
       return value;
     });

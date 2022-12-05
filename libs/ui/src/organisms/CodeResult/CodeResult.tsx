@@ -12,9 +12,10 @@ import {
   AnyResult,
   BooleanResult,
   DateResult,
+  DefaultFunctionResult,
   NumberResult,
 } from '../../atoms';
-import { FunctionResult, InlineCodeError } from '../../molecules';
+import { InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
 
 // Simple result components
@@ -77,7 +78,7 @@ const getResultMatchers = (): ResultMatcher[] => [
     match: ({ type, variant }) => type.kind === 'row' && variant === 'inline',
   },
   {
-    component: FunctionResult,
+    component: DefaultFunctionResult,
     match: ({ type }) => type.kind === 'function',
   },
   {

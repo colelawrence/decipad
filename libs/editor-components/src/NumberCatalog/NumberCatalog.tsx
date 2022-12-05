@@ -1,6 +1,6 @@
 import { useTEditorRef } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, EditorChangeContext } from '@decipad/react-contexts';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
 import {
   useEffect,
@@ -9,11 +9,19 @@ import {
   useState,
   useContext,
 } from 'react';
-import { debounceTime, map, concat, of, combineLatestWith, filter } from 'rxjs';
+import { dequal } from 'dequal';
+import {
+  debounceTime,
+  map,
+  concat,
+  of,
+  combineLatestWith,
+  filter,
+  distinctUntilChanged,
+} from 'rxjs';
 import { selectCatalogNames } from './selectCatalogNames';
 import { catalogItems } from './catalogItems';
 import { toVar } from './toVar';
-import { EditorChangeContext } from '../../../react-contexts/src/editor-change';
 
 const debounceEditorChangesMs = 1_000;
 
@@ -43,7 +51,8 @@ export function NumberCatalog() {
         debounceTime(debounceEditorChangesMs),
         map(([, e]) => Array.isArray(e) && e.map(toVar)),
         filter(Boolean),
-        map(catalog)
+        map(catalog),
+        distinctUntilChanged(dequal)
       )
       .subscribe(setItems);
 

@@ -80,8 +80,6 @@ export function* unnestTableRows(
             labelInfoIndex + 1
           );
 
-          console.log({ restLabelInfoRecur: restLabelInfo });
-
           const indexesOfRemainingLengthsAreZero = restLabelInfo.every(
             ({ indexAtThisDimension }) => indexAtThisDimension === 0
           );

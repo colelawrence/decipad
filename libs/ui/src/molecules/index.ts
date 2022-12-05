@@ -18,7 +18,6 @@ export { EditorTitle } from './EditorTitle/EditorTitle';
 export { Expression } from './Expression/Expression';
 export { FloatingLink } from './FloatingLink/FloatingLink';
 export { FormulaTableData } from './FormulaTableData/FormulaTableData';
-export { FunctionResult } from './FunctionResult/FunctionResult';
 export { HelpButton } from './HelpButton/HelpButton';
 export { IconPopover } from './IconPopover/IconPopover';
 export { Import } from './Import/Import';
