@@ -62,6 +62,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   const editor = useTEditorRef();
   const changeBlockId = useElementMutatorCallback(editor, element, 'blockId');
+  const changeVarName = useElementMutatorCallback(editor, element, 'varName');
+
   const res = useResult(element.blockId);
   const computer = useComputer();
 
@@ -79,9 +81,13 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     });
   }, [editor, element]);
 
+  // Results from computer are NOT calculated until the menu is actually open.
+  // Saving a lot of CPU when the editor is re-rendering when the user is busy
+  // doing other work.
   const codeLines = computer.results$
     .useWithSelector(({ blockResults }) =>
       Object.keys(blockResults).map((blockId) => {
+        if (!openMenu) return undefined;
         const kind = blockResults[blockId].result?.type.kind;
         if (
           kind === 'string' ||
@@ -192,7 +198,19 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     [editor, element.id, isHorizontal, path]
   );
 
-  const selectedLine = codeLines.find((i) => i.id === element.blockId);
+  // Performance improvement: Because results are only calculated when
+  // menu is open, we no longer have access to them all the time. So we
+  // need to store a bit more information about it.
+  const changeResult = useCallback(
+    (blockId: string) => {
+      const newRes = codeLines.find((i) => i.id === blockId);
+      changeVarName(newRes?.text || '');
+      changeBlockId(blockId);
+      setOpenMenu(false);
+    },
+    [changeBlockId, changeVarName, codeLines]
+  );
+
   const readOnly = useIsEditorReadOnly();
 
   if (deleted) return <></>;
@@ -219,9 +237,9 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
             openMenu={openMenu && focused && selected}
             onChangeOpen={setOpenMenu}
             selectedId={element.blockId}
-            setSelectedId={changeBlockId}
+            setSelectedId={changeResult}
             lineResult={res}
-            result={selectedLine ? selectedLine.text : null}
+            result={element.varName || 'Name'}
             readOnly={readOnly}
           >
             {children}

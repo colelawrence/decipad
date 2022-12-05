@@ -130,7 +130,6 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           }))}
           onExecuteItem={(i) => {
             setSelectedId(i.type);
-            onChangeOpen(false);
           }}
         />
       )}

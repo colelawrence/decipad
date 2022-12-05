@@ -123,6 +123,7 @@ export interface ExpressionElement extends BaseElement {
 export interface DisplayElement extends BaseElement {
   type: typeof ELEMENT_DISPLAY;
   blockId: string;
+  varName?: string;
   children: [EmptyText];
 }
 
