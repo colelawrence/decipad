@@ -110,8 +110,13 @@ const normalize =
 
     const num = node.variant === 'slider' ? 3 : 2;
     if (node.children.length > num) {
-      removeNodes(editor, {
-        at: [...path, node.children.length - 1],
+      // HACK: This particular removal seems to always happen concurrently during a re-render that
+      // will then fail to get the node and break the app. Using a timeout fixes it. Unfortunately
+      // it cannot fix my pride.
+      setTimeout(() => {
+        removeNodes(editor, {
+          at: [...path, node.children.length - 1],
+        });
       });
     }
 

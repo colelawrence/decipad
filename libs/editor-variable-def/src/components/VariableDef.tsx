@@ -36,6 +36,7 @@ import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { ComponentProps, useCallback, useState } from 'react';
 import { Editor, Path } from 'slate';
+import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
 
 export const VariableDef: PlateComponent = ({
@@ -148,6 +149,8 @@ export const VariableDef: PlateComponent = ({
 
   const { color: defaultColor } = useEditorStylesContext();
 
+  const turnIntoProps = useTurnIntoProps(element);
+
   if (deleted) {
     return <></>;
   }
@@ -166,6 +169,7 @@ export const VariableDef: PlateComponent = ({
       contentEditable={true}
       suppressContentEditableWarning
       id={element.id}
+      {...turnIntoProps}
       {...attributes}
     >
       <VariableEditorContextProvider

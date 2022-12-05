@@ -5,7 +5,7 @@ import { keyPress } from './Editor';
 export async function createInputBelow(
   page: Page,
   identifier: string,
-  value: number
+  value: number | string
 ) {
   await page.click('[data-slate-editor] p >> nth=-1');
 
@@ -30,6 +30,36 @@ export async function createInputBelow(
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(value.toString());
+}
+
+export async function createToggleBelow(page: Page, identifier: string) {
+  await page.click('[data-slate-editor] p >> nth=-1');
+
+  await page.keyboard.insertText('/toggle');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'toggle' }).click();
+
+  await page.locator('text=/Input[0-9]+/ >> nth=-1').dblclick();
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createDateBelow(page: Page, identifier: string) {
+  await page.click('[data-slate-editor] p >> nth=-1');
+
+  await page.keyboard.insertText('/date');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'date' }).click();
+
+  await page.locator('text=/Input[0-9]+/ >> nth=-1').dblclick();
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
 }
 
 export async function createCalculationBlockBelow(
