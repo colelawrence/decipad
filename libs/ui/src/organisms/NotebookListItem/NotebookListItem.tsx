@@ -243,6 +243,10 @@ const anchorStyles = css(gridStyles, {
 
   clipPath: 'inset(0 -12px 0 -12px round 12px)',
   transition: `background-color ${shortAnimationDuration} ease-out, box-shadow ${shortAnimationDuration} ease-out`,
+  ':hover, :focus': {
+    backgroundColor: cssVar('highlightColor'),
+    boxShadow: `0px 0px 0px 12px ${cssVar('highlightColor')}`,
+  },
 });
 
 const iconStyles = css({
