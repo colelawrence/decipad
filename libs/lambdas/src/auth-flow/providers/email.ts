@@ -1,4 +1,5 @@
 import arc from '@architect/functions';
+import { track } from '@decipad/backend-analytics';
 import { auth } from '@decipad/config';
 import tables from '@decipad/tables';
 import { differenceInHours } from 'date-fns';
@@ -46,16 +47,17 @@ async function sendVerificationRequest(
 
   const expires = `${differenceInHours(expiresAt, new Date())} hours`;
 
+  const payload = {
+    template: firstTime ? 'auth-magiclink-first' : 'auth-magiclink',
+    email,
+    url,
+    token,
+    expires,
+  };
   if (!process.env.DECI_E2E) {
     await arc.queues.publish({
       name: `sendemail`,
-      payload: {
-        template: firstTime ? 'auth-magiclink-first' : 'auth-magiclink',
-        email,
-        url,
-        token,
-        expires,
-      },
+      payload,
     });
   }
 
@@ -66,4 +68,9 @@ async function sendVerificationRequest(
       await data.users.put(user);
     }
   }
+
+  await track({
+    event: `send ${firstTime ? 'first ' : ''}verification request`,
+    properties: payload,
+  });
 }

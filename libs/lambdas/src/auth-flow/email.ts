@@ -5,6 +5,7 @@ import {
   create as createUser,
   maybeEnrich as maybeEnrichUser,
 } from '@decipad/services/users';
+import { track } from '@decipad/backend-analytics';
 import { isAllowedToLogIn } from './is-allowed';
 import timestamp from '../common/timestamp';
 
@@ -14,6 +15,7 @@ export async function signInEmail(
 ) {
   const { email } = user;
   if (!email || !(await isAllowedToLogIn(email))) {
+    track({ event: 'user denied logging in', properties: { email } });
     console.log(`user ${email} not allowed to log in`);
     return false;
   }

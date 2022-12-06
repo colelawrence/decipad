@@ -1,3 +1,4 @@
+import { track } from '@decipad/backend-analytics';
 import templates from '@decipad/emails';
 import { sendEmail } from '@decipad/services/email';
 import handle from '../handle';
@@ -31,6 +32,8 @@ async function handleSendEmail({
     body,
     subject,
   });
+
+  await track({ event: 'email sent', properties: params });
 }
 
 export const handler = handle(handleSendEmail);

@@ -43,6 +43,7 @@ export function sendEmail({
       },
       FromEmailAddress: senderEmailAddress,
       ReplyToAddresses: [senderEmailAddress],
+      FeedbackForwardingEmailAddress: senderEmailAddress,
     };
 
     service.sendEmail(params, (err) => {
