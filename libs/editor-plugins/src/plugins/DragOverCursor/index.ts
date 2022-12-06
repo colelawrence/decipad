@@ -1,2 +1,2 @@
 export * from './createDragOverCursorPlugin';
-export * from './cursorStore';
+export * from '../../stores/cursorStore';

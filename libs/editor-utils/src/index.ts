@@ -30,6 +30,8 @@ export * from './magicNumberId';
 export * from './matchNodeType';
 export * from './mutateText';
 export * from './isElementOfType';
+export * from './isTopLevelBlock';
+export * from './isPotentiallyWideElement';
 export * from './getSlateFragment';
 export * from './onDragStartSmartRef';
 export * from './selectEventRange';

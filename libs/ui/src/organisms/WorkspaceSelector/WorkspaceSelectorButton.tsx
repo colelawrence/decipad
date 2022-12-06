@@ -28,7 +28,12 @@ export const WorkspaceButtonSelector = ({
           }, [thisWorkspace.id, onClickWorkspace])
         )}
       >
-        <Avatar name={thisWorkspace.name} variant roundedSquare />
+        <Avatar
+          name={thisWorkspace.name}
+          title={`Workspace "${thisWorkspace.name}"`}
+          variant
+          roundedSquare
+        />
       </button>
       <span
         css={

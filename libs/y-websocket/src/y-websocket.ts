@@ -437,7 +437,7 @@ class WebsocketProvider
   private _awarenessUpdateHandler(changes: AwarenessUpdate) {
     const { added, updated, removed } = changes;
     const changedClients = added.concat(updated).concat(removed);
-    this.outAwarenessUpdates.concat(changedClients);
+    this.outAwarenessUpdates = this.outAwarenessUpdates.concat(changedClients);
     this.debouncedBroadcastAwarenessUpdateMessage();
   }
 
@@ -450,6 +450,7 @@ class WebsocketProvider
         changedClients
       );
       const encoder = encoding.createEncoder();
+      encoding.writeVarUint(encoder, messageAwareness);
       encoding.writeVarUint8Array(encoder, update);
       if (encoding.length(encoder) > 1) {
         broadcastMessage(this, encoding.toUint8Array(encoder));

@@ -1,0 +1,28 @@
+import { cursorStore } from '@decipad/editor-plugins';
+import { ComponentProps, FC, RefObject } from 'react';
+import { RemoteAvatarOverlay as UIRemoteAvatarOverlay } from '@decipad/ui';
+import { RemoteAvatar } from './RemoteAvatar';
+
+interface RemoteAvatarOverlayProps {
+  containerRef: RefObject<HTMLElement>;
+}
+
+export const RemoteAvatarOverlay: FC<RemoteAvatarOverlayProps> = ({
+  containerRef,
+}) => {
+  const cursors = cursorStore.use.cursors();
+
+  return (
+    <UIRemoteAvatarOverlay>
+      {Object.entries(cursors)
+        .filter(([cursorName]) => cursorName !== 'drag')
+        .map(([key, cursor]) => (
+          <RemoteAvatar
+            key={key}
+            containerRef={containerRef}
+            cursor={cursor as ComponentProps<typeof RemoteAvatar>['cursor']}
+          />
+        ))}
+    </UIRemoteAvatarOverlay>
+  );
+};

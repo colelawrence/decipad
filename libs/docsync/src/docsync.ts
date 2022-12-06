@@ -1,6 +1,5 @@
 import { fetch } from '@decipad/fetch';
 import { SyncElement, withCursor, withYjs } from '@decipad/slate-yjs';
-import { getDefined } from '@decipad/utils';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import {
   TWebSocketProvider,
@@ -10,6 +9,7 @@ import { Awareness } from 'y-protocols/awareness';
 import { applyUpdate, Doc as YDoc } from 'yjs';
 import { MyEditor } from '@decipad/editor-types';
 import { PlateEditor } from '@udecode/plate';
+import { Session } from 'next-auth';
 import { docSyncEditor } from './docSyncEditor';
 import { ensureInitialDocument } from './utils/ensureInitialDocument';
 import { setupUndo } from './setupUndo';
@@ -47,7 +47,9 @@ async function fetchToken(): Promise<string> {
 }
 
 async function wsAddress(docId: string): Promise<string> {
-  return `${await (await fetch('/api/ws'))?.text()}?doc=${docId}`;
+  return `${await (await fetch('/api/ws'))?.text()}?doc=${encodeURIComponent(
+    docId
+  )}`;
 }
 
 export function createDocSyncEditor(
@@ -62,7 +64,8 @@ export function createDocSyncEditor(
     WebSocketPolyfill,
     connectionParams,
     initialState,
-  }: DocSyncOptions
+  }: DocSyncOptions,
+  getSession: () => Session | undefined = () => undefined
 ) {
   (editor as PlateEditor).children = [];
   const doc = new YDoc();
@@ -77,7 +80,9 @@ export function createDocSyncEditor(
 
   const beforeConnect = async (provider: TWebSocketProvider) => {
     try {
-      provider.serverUrl = connectionParams?.url || (await wsAddress(docId));
+      provider.serverUrl = connectionParams?.url
+        ? `${connectionParams.url}`
+        : await wsAddress(docId);
       provider.protocol = authSecret || getToken() || (await fetchToken());
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -133,7 +138,7 @@ export function createDocSyncEditor(
   });
 
   // Cursor editor
-  const cursorEditor = withCursor(yjsEditor, getDefined(awareness));
+  const cursorEditor = withCursor(yjsEditor, awareness, getSession);
 
   const { normalizeNode } = cursorEditor;
   cursorEditor.normalizeNode = (entry) =>

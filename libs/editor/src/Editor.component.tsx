@@ -18,7 +18,7 @@ import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
-import * as components from './components';
+import { Tooltip, CursorOverlay, RemoteAvatarOverlay } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { NotebookState } from './components/NotebookState/NotebookState';
 import { useAutoAnimate } from './hooks';
@@ -43,8 +43,9 @@ const InsidePlate = ({
   // upload / fetch data
   return (
     <>
-      <components.Tooltip />
-      <components.CursorOverlay containerRef={containerRef} />
+      <Tooltip />
+      <CursorOverlay containerRef={containerRef} />
+      <RemoteAvatarOverlay containerRef={containerRef} />
       {readOnly ? null : <NumberCatalog />}
       <DndPreview />
       {children}

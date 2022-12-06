@@ -1,7 +1,7 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
 import { cssVar } from '@decipad/ui';
 import { findEventRange } from '@udecode/plate';
-import { cursorStore } from './cursorStore';
+import { cursorStore } from '../../stores/cursorStore';
 
 export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
   key: 'drag-over-cursor',

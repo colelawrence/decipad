@@ -1,10 +1,13 @@
 import { TEditor } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import { Awareness } from 'y-protocols/awareness';
-import { absolutePositionToRelativePosition } from '../cursor/utils';
+import { debounce } from 'lodash';
+import { Session } from 'next-auth';
 import { YjsEditor } from './yjsEditor';
 
 const AWARENESS: WeakMap<TEditor, Awareness> = new WeakMap();
+
+const cursorChangeDebounceMs = 2_000;
 
 export interface CursorEditor extends YjsEditor {
   awareness: Awareness;
@@ -18,30 +21,37 @@ export const CursorEditor = {
     return awareness;
   },
 
-  updateCursor: (editor: CursorEditor): void => {
+  updateCursor: (editor: CursorEditor, session: Session | undefined): void => {
     try {
-      const sharedType = YjsEditor.sharedType(editor);
       const { selection } = editor;
 
-      const anchor =
-        selection &&
-        absolutePositionToRelativePosition(sharedType, selection.anchor);
-
-      const focus =
-        selection &&
-        absolutePositionToRelativePosition(sharedType, selection.focus);
+      const { anchor } = selection ?? {};
+      const { focus } = selection ?? {};
 
       const awareness = CursorEditor.awareness(editor);
-      awareness.setLocalState({ ...awareness.getLocalState(), anchor, focus });
+      const localState = awareness.getLocalState();
+      const { user } = session ?? {};
+      const newState = {
+        ...localState,
+        anchor,
+        focus,
+        user: user && {
+          email: user.email,
+          name: user.name,
+        },
+      };
+      awareness.setLocalState(newState);
     } catch (err) {
-      // don't care for now
+      // eslint-disable-next-line no-console
+      console.error(err);
     }
   },
 };
 
 export function withCursor<T extends YjsEditor>(
   editor: T,
-  awareness: Awareness
+  awareness: Awareness,
+  getSession: () => Session | undefined
 ): T & CursorEditor {
   const e = editor as T & CursorEditor;
 
@@ -50,14 +60,16 @@ export function withCursor<T extends YjsEditor>(
 
   const { onChange, destroy } = editor;
 
+  const debouncedOnChange = debounce(async () => {
+    try {
+      CursorEditor.updateCursor(e, getSession());
+    } catch (err) {
+      // do nothing, not important
+    }
+  }, cursorChangeDebounceMs);
+
   e.onChange = () => {
-    setTimeout(() => {
-      try {
-        CursorEditor.updateCursor(e);
-      } catch (err) {
-        // do nothing, not important
-      }
-    }, 0);
+    debouncedOnChange();
 
     onChange();
   };

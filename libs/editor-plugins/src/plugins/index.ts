@@ -49,3 +49,4 @@ export * from './Display';
 export * from './TrailingParagraph';
 export * from './ExitBreakPlugin';
 export * from './RenderPerformanceStats';
+export * from './RemoteCursors';

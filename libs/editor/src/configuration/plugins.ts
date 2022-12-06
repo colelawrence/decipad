@@ -43,6 +43,7 @@ import {
   createPersistSelectionPlugin,
   createPlotPlugin,
   createPotentialFormulaHighlightPlugin,
+  createRemoteCursorsPlugin,
   createRenderPerformanceStatsPlugin,
   createSelectionShortcutPlugin,
   createSmartRefPlugin,
@@ -219,6 +220,9 @@ export const plugins = ({
 
       // drawings
       createDrawPlugin(),
+
+      // remote cursors,
+      createRemoteCursorsPlugin(),
 
       // event interception
       createEventInterceptionSuperHandlerPlugin(),

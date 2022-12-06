@@ -93,15 +93,19 @@ const InsideNotebookState = ({
     if (!computer) {
       initComputer();
     } else if (!editor && plugins) {
-      initEditor(notebookId, {
-        plugins,
-        docsync: {
-          readOnly,
-          authSecret: secret,
-          connectionParams,
-          initialState,
+      initEditor(
+        notebookId,
+        {
+          plugins,
+          docsync: {
+            readOnly,
+            authSecret: secret,
+            connectionParams,
+            initialState,
+          },
         },
-      });
+        () => session ?? undefined
+      );
     }
   }, [
     computer,
@@ -114,6 +118,7 @@ const InsideNotebookState = ({
     plugins,
     readOnly,
     secret,
+    session,
   ]);
 
   useEffect(() => {

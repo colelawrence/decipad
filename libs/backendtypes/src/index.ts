@@ -396,6 +396,7 @@ interface CollabRecord extends TableRecordBase {
 
 interface ConnectionRecord extends TableRecordBase {
   user_id?: ID;
+  client_id?: number;
   room?: string;
   secret?: string;
   authorizationType?: string;

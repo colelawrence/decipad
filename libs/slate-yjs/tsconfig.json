@@ -4,5 +4,9 @@
     "lib": ["esnext", "dom"]
   },
   "include": ["src"],
-  "references": [{ "path": "../utils" }, { "path": "../editor-types" }]
+  "references": [
+    { "path": "../utils" },
+    { "path": "../editor-types" },
+    { "path": "../backendtypes" }
+  ]
 }

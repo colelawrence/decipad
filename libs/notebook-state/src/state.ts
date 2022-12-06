@@ -1,6 +1,7 @@
 import { Computer } from '@decipad/computer';
 import { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
 import { MyPlatePlugin } from '@decipad/editor-types';
+import { Session } from 'next-auth';
 
 interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor'>;
@@ -13,7 +14,11 @@ export interface NotebookState {
   editor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
   initComputer: () => void;
-  initEditor: (notebookId: string, options: InitNotebookStateOptions) => void;
+  initEditor: (
+    notebookId: string,
+    options: InitNotebookStateOptions,
+    getSession: () => Session | undefined
+  ) => void;
   destroy: () => void;
   loadedFromLocal: boolean;
   loadedFromRemote: boolean;

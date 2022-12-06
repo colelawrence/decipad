@@ -37,6 +37,7 @@ export { NotebookPath } from './NotebookPath/NotebookPath';
 export { NotebookState } from './NotebookState/NotebookState';
 export { OrderedList } from './OrderedList/OrderedList';
 export { PotentialFormulaHighlight } from './PotentialFormulaHighlight/PotentialFormulaHighlight';
+export { RemoteAvatar } from './RemoteAvatar/RemoteAvatar';
 export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
 export { SignUpContent } from './SignUpContent/SignUpContent';
 export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';

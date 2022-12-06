@@ -12,78 +12,6 @@ import {
   transparency,
 } from '../../primitives';
 
-interface AvatarProps {
-  readonly name: string;
-  readonly email?: string;
-  readonly roundedSquare?: boolean;
-  readonly hoverSelector?: string;
-  readonly greyedOut?: boolean;
-  readonly variant?: boolean;
-}
-
-export const Avatar = ({
-  name,
-  email = 'thisemaildoesnthaveagravatar@n1n.co',
-  roundedSquare = false,
-  hoverSelector,
-  greyedOut = false,
-  variant = false,
-}: AvatarProps): ReturnType<FC> => {
-  const hashString = name
-    .split('')
-    .map((c: string) => c.charCodeAt(0))
-    .reduce((a: number, b: number) => a + b, 0);
-  const avatarColor = baseColors[hashString % baseColors.length];
-  return (
-    <div
-      role="img"
-      aria-label={`Avatar of user ${name[0]}`}
-      css={containerStyles(variant)}
-    >
-      <div css={{ display: 'flex', height: '100%', width: '100%' }}>
-        <div
-          css={[
-            { width: '100%', borderRadius: roundedSquare ? '8px' : '50%' },
-            variant && {
-              border: `1px solid ${cssVar('strongHighlightColor')}`,
-            },
-          ]}
-        >
-          <svg
-            css={{
-              width: '100%',
-              height: '100%',
-              borderRadius: roundedSquare ? '8px' : '50%',
-              zIndex: 1,
-            }}
-          >
-            <rect
-              width="100"
-              height="100"
-              css={initialBackgroundStyles(
-                avatarColor,
-                greyedOut,
-                variant,
-                hoverSelector
-              )}
-            />
-            <text x="50%" y="50%" css={initialTextStyles}>
-              {name[0]}
-            </text>
-          </svg>
-        </div>
-      </div>
-      <div css={{ position: 'absolute' }}>
-        <Gravatar
-          md5={md5(email, { encoding: 'binary' })}
-          style={{ borderRadius: roundedSquare ? '8px' : '50%', zIndex: 2 }}
-          default={'blank'}
-        />
-      </div>
-    </div>
-  );
-};
-
 const containerStyles = (variant: boolean) =>
   css([
     p12Medium,
@@ -111,13 +39,20 @@ const containerStyles = (variant: boolean) =>
 
 const baseColors = [purple300];
 
-const initialBackgroundStyles = (
-  color: OpaqueColor,
-  greyedOut: boolean,
-  variant: boolean,
-  hoverSelector = 'svg:hover'
-) =>
-  css({
+interface InitialBackgroundStylesProps {
+  color: OpaqueColor;
+  greyedOut: boolean;
+  variant: boolean;
+  hoverSelector?: string;
+}
+
+const initialBackgroundStyles = ({
+  color,
+  greyedOut,
+  variant,
+  hoverSelector,
+}: InitialBackgroundStylesProps) => {
+  return css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
     fill: variant
       ? cssVar('backgroundColor')
@@ -128,9 +63,88 @@ const initialBackgroundStyles = (
       fill: transparency(greyedOut ? grey200 : color, 0.65).rgba,
     },
   });
+};
+
 const initialTextStyles = css(p12Medium, {
   dominantBaseline: 'central',
   textAnchor: 'middle',
   textTransform: 'uppercase',
   fontSize: '1.2em',
 });
+
+interface AvatarProps {
+  readonly name: string;
+  readonly email?: string;
+  readonly roundedSquare?: boolean;
+  readonly hoverSelector?: string;
+  readonly greyedOut?: boolean;
+  readonly backgroundColor?: OpaqueColor;
+  readonly variant?: boolean;
+  readonly title?: string;
+}
+
+export const Avatar = ({
+  name,
+  email = 'thisemaildoesnthaveagravatar@n1n.co',
+  roundedSquare = false,
+  hoverSelector,
+  greyedOut = false,
+  backgroundColor,
+  variant = false,
+  title,
+}: AvatarProps): ReturnType<FC> => {
+  const hashString = name
+    .split('')
+    .map((c: string) => c.charCodeAt(0))
+    .reduce((a: number, b: number) => a + b, 0);
+  const avatarColor =
+    backgroundColor ?? baseColors[hashString % baseColors.length];
+  return (
+    <div
+      role="img"
+      aria-label={title ?? `Avatar of user ${name[0]}`}
+      css={containerStyles(variant)}
+    >
+      <div css={{ display: 'flex', height: '100%', width: '100%' }}>
+        <div
+          css={[
+            { width: '100%', borderRadius: roundedSquare ? '8px' : '50%' },
+            variant && {
+              border: `1px solid ${cssVar('strongHighlightColor')}`,
+            },
+          ]}
+        >
+          <svg
+            css={{
+              width: '100%',
+              height: '100%',
+              borderRadius: roundedSquare ? '8px' : '50%',
+              zIndex: 1,
+            }}
+          >
+            <rect
+              width="100"
+              height="100"
+              css={initialBackgroundStyles({
+                color: avatarColor,
+                greyedOut,
+                variant,
+                hoverSelector,
+              })}
+            />
+            <text x="50%" y="50%" css={initialTextStyles}>
+              {name[0]}
+            </text>
+          </svg>
+        </div>
+      </div>
+      <div css={{ position: 'absolute' }}>
+        <Gravatar
+          md5={md5(email, { encoding: 'binary' })}
+          style={{ borderRadius: roundedSquare ? '8px' : '50%', zIndex: 2 }}
+          default={'blank'}
+        />
+      </div>
+    </div>
+  );
+};

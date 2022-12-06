@@ -19,6 +19,7 @@
     { "path": "../editor-utils" },
     { "path": "../editor-components" },
     { "path": "../editor-language-elements" },
-    { "path": "../import" }
+    { "path": "../import" },
+    { "path": "../slate-yjs" }
   ]
 }

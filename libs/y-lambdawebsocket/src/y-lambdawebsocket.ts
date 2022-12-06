@@ -313,29 +313,11 @@ export class LambdaWebsocketProvider extends Observable<string> {
       encoding.writeVarUint(encoder, messageSync);
       syncProtocol.writeSyncStep1(encoder, this.doc);
       this.send(encoding.toUint8Array(encoder));
-      // broadcast local awareness state
-      if (this.awareness.getLocalState() !== null) {
-        const encoderAwarenessState = encoding.createEncoder();
-        encoding.writeVarUint(encoderAwarenessState, messageAwareness);
-        encoding.writeVarUint8Array(
-          encoderAwarenessState,
-          awarenessProtocol.encodeAwarenessUpdate(this.awareness, [
-            this.doc.clientID,
-          ])
-        );
-        await this.send(encoding.toUint8Array(encoderAwarenessState));
-      }
     });
   }
 
   onClose(): void {
-    awarenessProtocol.removeAwarenessStates(
-      this.awareness,
-      Array.from(this.awareness.getStates().keys()).filter(
-        (client) => client !== this.doc.clientID
-      ),
-      this
-    );
+    this.awareness.setLocalState(null);
     this.emit('status', [
       {
         status: 'disconnected',

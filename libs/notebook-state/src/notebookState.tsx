@@ -35,7 +35,7 @@ const createStore = () =>
     initComputer: () => {
       set({ computer: new Computer() });
     },
-    initEditor: (notebookId, { plugins, docsync }) => {
+    initEditor: (notebookId, { plugins, docsync }, getSession) => {
       // verify that if we have a matching connected docsync instance
       const { editor: oldEditor, syncClientState } = get();
       if (oldEditor) {
@@ -60,11 +60,15 @@ const createStore = () =>
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
       }, LOAD_TIMEOUT_MS);
-      const docSyncEditor = createDocSyncEditor(notebookId, {
-        ...docsync,
-        editor,
-        onError: captureException,
-      });
+      const docSyncEditor = createDocSyncEditor(
+        notebookId,
+        {
+          ...docsync,
+          editor,
+          onError: captureException,
+        },
+        getSession
+      );
 
       docSyncEditor.onLoaded((source) => {
         if (source === 'local') {
