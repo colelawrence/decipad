@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ComponentProps } from 'react';
+import { ComponentProps, useCallback } from 'react';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
 import { HelpButton, MenuList } from '../../molecules';
 import { p12Regular, p14Medium, setCssVar } from '../../primitives';
@@ -41,6 +41,12 @@ const CustomMenuItem = ({
   title,
   to,
 }: CustomMenuItemProps) => {
+  const followLink = useCallback(() => {
+    if (to) {
+      window.location.href = to;
+    }
+  }, [to]);
+
   const children = (
     <div css={menuItemWrapperStyles}>
       <span css={p14Medium}>{title}</span>
@@ -50,7 +56,7 @@ const CustomMenuItem = ({
     </div>
   );
   return (
-    <MenuItem onSelect={onSelect}>
+    <MenuItem onSelect={onSelect ?? followLink}>
       {to !== undefined ? (
         <Link css={linkStyles} href={to}>
           {children}
