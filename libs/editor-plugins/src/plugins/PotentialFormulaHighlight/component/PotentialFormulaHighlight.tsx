@@ -24,7 +24,10 @@ import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
 import { BaseRange, Path, Point } from 'slate';
 import { getExprRef } from '@decipad/computer';
-import { useEditorBubblesContext } from '@decipad/react-contexts';
+import {
+  useEditorTeleportContext,
+  ShadowCalcReference,
+} from '@decipad/react-contexts';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
 import { useIsPotentialFormulaSelected } from './useIsPotentialFormulaSelected';
@@ -35,7 +38,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
   const editor = useTEditorRef();
   const selected = useIsPotentialFormulaSelected(editor, leaf);
 
-  const { openEditor } = useEditorBubblesContext();
+  const { openEditor } = useEditorTeleportContext();
 
   const onCommit = useCallback(() => {
     const path = text && findNodePath(editor, text);
@@ -85,7 +88,7 @@ export const commitPotentialFormula = (
   path: Path,
   leaf: RichText & PotentialFormulaDecoration,
   mode: 'magic' | 'inline',
-  onCommit: (ref: { codeLineId: string; numberId: string }) => void,
+  onCommit: (ref: ShadowCalcReference) => void,
   id = nanoid()
 ) => {
   const insertionPath = getAboveNodeSafe(editor as MyEditor, {
@@ -99,7 +102,6 @@ export const commitPotentialFormula = (
     type: ELEMENT_CODE_LINE,
     id,
     children: [{ text: getNodeString(leaf as RichText) }],
-    isUnpinned: isFlagEnabled('SHADOW_CODE_LINES'),
   };
 
   const magicNumberInstead = {
@@ -141,6 +143,8 @@ export const commitPotentialFormula = (
     onCommit({
       numberId,
       codeLineId: codeLineBelow.id,
+      numberNode: magicNumberInstead,
+      codeLineNode: codeLineBelow,
     });
   }, 100);
 };

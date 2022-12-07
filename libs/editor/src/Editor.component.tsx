@@ -1,4 +1,4 @@
-import { NumberCatalog } from '@decipad/editor-components';
+import { TeleportEditor, NumberCatalog } from '@decipad/editor-components';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -99,30 +99,32 @@ export const Editor = (props: EditorProps) => {
         <LoadingFilter loading={isWritingLocked}>
           <EditorBlockParentRefProvider onRefChange={onRefChange}>
             <EditorLayout ref={containerRef}>
-              <Plate<MyValue>
-                editor={editor}
-                onChange={onChange}
-                editableProps={{
-                  // Only respect write locks here and not the readOnly prop.
-                  // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                  // The rest are controlled via EditorReadOnlyContext.
-                  readOnly: isWritingLocked,
-                }}
-                disableCorePlugins={{
-                  history: true,
-                }}
-              >
-                {!checklist.hidden &&
-                  !readOnly &&
-                  isFlagEnabled('ONBOARDING_CHECKLIST') && (
-                    <StarterChecklist
-                      checklist={checklist}
-                      onHideChecklist={hideChecklist}
-                    />
-                  )}
-                <InsidePlate {...props} containerRef={containerRef} />
-                <NotebookState isSavedRemotely={isSavedRemotely} />
-              </Plate>
+              <TeleportEditor editor={editor}>
+                <Plate<MyValue>
+                  editor={editor}
+                  onChange={onChange}
+                  editableProps={{
+                    // Only respect write locks here and not the readOnly prop.
+                    // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                    // The rest are controlled via EditorReadOnlyContext.
+                    readOnly: isWritingLocked,
+                  }}
+                  disableCorePlugins={{
+                    history: true,
+                  }}
+                >
+                  {!checklist.hidden &&
+                    !readOnly &&
+                    isFlagEnabled('ONBOARDING_CHECKLIST') && (
+                      <StarterChecklist
+                        checklist={checklist}
+                        onHideChecklist={hideChecklist}
+                      />
+                    )}
+                  <InsidePlate {...props} containerRef={containerRef} />
+                  <NotebookState isSavedRemotely={isSavedRemotely} />
+                </Plate>
+              </TeleportEditor>
             </EditorLayout>
           </EditorBlockParentRefProvider>
         </LoadingFilter>

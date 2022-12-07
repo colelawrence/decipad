@@ -6,21 +6,16 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  useNodeText,
-  useElementMutatorCallback,
-  focusAndSetSelection,
-} from '@decipad/editor-utils';
+import { assertElementType, useNodeText } from '@decipad/editor-utils';
 import {
   useComputer,
   useIsEditorReadOnly,
-  useEditorBubblesContext,
+  useEditorTeleportContext,
 } from '@decipad/react-contexts';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import { findNodePath, insertNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { ReactEditor, useSelected } from 'slate-react';
+import { useSelected } from 'slate-react';
 import { useCallback, useMemo } from 'react';
 import { DraggableBlock } from '../block-management';
 import { CodeLineTeleport } from './CodeLineTeleport';
@@ -42,7 +37,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const siblingCodeLines = useSiblingCodeLines(element);
 
   const editor = useTEditorRef();
-  const setUnpinned = useElementMutatorCallback(editor, element, 'isUnpinned');
 
   useCodeLineClickReference(editor, selected, codeLineContent);
 
@@ -99,29 +93,20 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     [editor, element, isReadOnly]
   );
 
-  const { closeEditor, portal, editing } = useEditorBubblesContext();
+  const { closeEditor, focusNumber, portal, editing, useWatchTeleported } =
+    useEditorTeleportContext();
+
+  useWatchTeleported(lineId, element);
 
   const teleport = editing?.codeLineId === element.id ? portal : undefined;
 
-  const draggableBlockStyle = element.isUnpinned
-    ? { display: 'none' }
-    : undefined;
-
   const turnIntoProps = useTurnIntoProps(element);
 
-  const onPinButtonClick = useCallback(() => {
-    setUnpinned(!element.isUnpinned);
-    closeEditor();
-  }, [setUnpinned, closeEditor, element.isUnpinned]);
-
-  const onTeleport = useCallback(() => {
-    const currentPath = ReactEditor.findPath(editor as ReactEditor, element);
-    focusAndSetSelection(editor, currentPath);
-  }, [editor, element]);
-
-  const onCodeTeleportBlur = useCallback(() => {
-    closeEditor(element.id);
-  }, [closeEditor, element.id]);
+  const onTeleportDismiss = useCallback(() => {
+    closeEditor(element.id, () => {
+      focusNumber();
+    });
+  }, [focusNumber, closeEditor, element.id]);
 
   return (
     <DraggableBlock
@@ -130,27 +115,19 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       {...turnIntoProps}
       {...attributes}
       id={lineId}
-      css={draggableBlockStyle}
     >
-      <CodeLineTeleport
-        codeLine={teleport}
-        onBlur={onCodeTeleportBlur}
-        onTeleport={onTeleport}
-      >
+      <CodeLineTeleport codeLine={teleport} onDismiss={onTeleportDismiss}>
         <UICodeLine
           highlight={selected}
           result={lineResult}
           placeholder="Distance = 60 km/h * Time"
           syntaxError={syntaxError}
           isEmpty={isEmpty}
-          isUnpinned={element.isUnpinned}
-          onPinButtonClick={onPinButtonClick}
-          isEditable={teleport != null || !element.isUnpinned}
           onDragStartInlineResult={handleDragStartInlineResult}
           onDragStartCell={handleDragStartCell}
           onClickedResult={isReadOnly ? undefined : onClickedResult}
-          hasNextSibling={siblingCodeLines?.hasNext}
-          hasPreviousSibling={siblingCodeLines?.hasPrevious}
+          hasNextSibling={!teleport && siblingCodeLines?.hasNext}
+          hasPreviousSibling={!teleport && siblingCodeLines?.hasPrevious}
         >
           {children}
         </UICodeLine>

@@ -1,6 +1,5 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useEditorPlugins } from '@decipad/editor';
-import { BubbleEditor } from '@decipad/editor-components';
 import { MyEditor } from '@decipad/editor-types';
 import {
   NotebookStateProvider,
@@ -181,17 +180,15 @@ const InsideNotebookState = ({
   if (editor) {
     return (
       <ComputerContextProvider computer={computer}>
-        <BubbleEditor>
-          <Editor
-            notebookId={notebookId}
-            loaded={loaded}
-            isSavedRemotely={editor.isSavedRemotely()}
-            editor={editor}
-            readOnly={readOnly}
-          >
-            <InitialSelection loaded={loaded} editor={editor} />
-          </Editor>
-        </BubbleEditor>
+        <Editor
+          notebookId={notebookId}
+          loaded={loaded}
+          isSavedRemotely={editor.isSavedRemotely()}
+          editor={editor}
+          readOnly={readOnly}
+        >
+          <InitialSelection loaded={loaded} editor={editor} />
+        </Editor>
       </ComputerContextProvider>
     );
   }

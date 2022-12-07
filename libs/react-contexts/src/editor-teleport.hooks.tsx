@@ -1,24 +1,31 @@
+import { TNode, useEditorRef } from '@udecode/plate';
 import { useCallback, useRef, useEffect } from 'react';
-import { useEditorBubblesContext } from './editor-bubbles';
+import { useEditorTeleportContext } from './editor-teleport';
 
 export const useShadowCodeLine = (elementId: string) => {
   const numberRef = useRef<HTMLSpanElement>(null);
   const portalRef = useRef<HTMLSpanElement>(null);
 
-  const { setPortal, openEditor, editing } = useEditorBubblesContext();
+  const editor = useEditorRef();
+  const { setPortal, openEditor, editing } = useEditorTeleportContext();
 
   const isEditing = elementId === editing?.numberId;
 
   const editSource = useCallback(
-    (calcId: string) => {
+    (calcId: string, numberNode: TNode) => {
       if (isEditing) return;
 
+      const codeLine = editor.children.find((ch) => ch.id === calcId);
+      if (!codeLine) return;
+
       openEditor({
-        codeLineId: calcId,
+        numberNode,
+        codeLineNode: codeLine,
         numberId: elementId,
+        codeLineId: calcId,
       });
     },
-    [isEditing, openEditor, elementId]
+    [editor, isEditing, openEditor, elementId]
   );
 
   useEffect(() => {

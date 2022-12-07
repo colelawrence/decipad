@@ -7,8 +7,9 @@ import {
 import { getDefined } from '@decipad/utils';
 import { brand700, CodeResult, cssVar } from '@decipad/ui';
 import { useComputer, useShadowCodeLine } from '@decipad/react-contexts';
-import { useSelected } from 'slate-react';
 import { useMergedRef } from '@decipad/ui/src/hooks/useMergedRef';
+import { useSelected } from 'slate-react';
+import { useCallback } from 'react';
 
 export const InlineNumber: PlateComponent = ({
   attributes,
@@ -26,17 +27,23 @@ export const InlineNumber: PlateComponent = ({
   const isSelected = useSelected();
   const shadow = useShadowCodeLine(element.id);
 
+  const { editSource } = shadow;
+
+  const openEditor = useCallback(() => {
+    editSource(calcId, element);
+  }, [editSource, element, calcId]);
+
   return (
     <>
       <span
         {...attributes}
         id={blockId}
         data-highlight-changes
+        onClick={openEditor}
         css={css(containerStyle, [
           isSelected && selectedStyle,
           shadow.isEditing && { cursor: 'pointer' },
         ])}
-        onClick={() => shadow.editSource(calcId)}
         data-testid="inline-number-element"
         ref={useMergedRef(shadow.numberRef, elementRef)}
       >

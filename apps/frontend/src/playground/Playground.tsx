@@ -1,4 +1,3 @@
-import { BubbleEditor } from '@decipad/editor-components';
 import {
   EditorPlaceholder,
   NotebookIconPlaceholder,
@@ -34,9 +33,7 @@ const Playground: React.FC = () => {
           title={null}
           suspenseFallback={<EditorPlaceholder />}
         >
-          <BubbleEditor>
-            <Editor />
-          </BubbleEditor>
+          <Editor />
         </Frame>
       }
       notebookIcon={

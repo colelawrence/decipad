@@ -1,7 +1,6 @@
 import { Result } from '@decipad/computer';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
@@ -18,7 +17,6 @@ import {
 import { codeBlock } from '../../styles';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
-import { DrawingPin } from '../../icons';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const { lineHeight } = codeBlock;
@@ -137,18 +135,6 @@ const inlineResultStyles = css(p14Regular, {
   },
 });
 
-const pinButtonStyles = css({
-  position: 'absolute',
-  top: '8px',
-  left: '-1.5rem',
-
-  width: '1.5rem',
-  height: '1.5rem',
-  display: 'inline-block',
-
-  cursor: 'pointer',
-});
-
 const expandedResultStyles = css(p14Medium, {
   gridArea: 'expanded-res',
   display: 'grid',
@@ -181,9 +167,6 @@ interface CodeLineProps {
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
   readonly isEmpty?: boolean;
-  readonly isEditable?: boolean;
-  readonly isUnpinned?: boolean;
-  readonly onPinButtonClick?: () => void;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onClickedResult?: (arg0: Result.Result) => void;
@@ -199,9 +182,6 @@ export const CodeLine = ({
   placeholder,
   syntaxError,
   isEmpty = false,
-  isEditable = true,
-  isUnpinned,
-  onPinButtonClick,
   onDragStartInlineResult,
   onDragStartCell,
   onClickedResult,
@@ -221,12 +201,6 @@ export const CodeLine = ({
     freshResult.errored === true
   );
 
-  const pinIcon = isFlagEnabled('SHADOW_CODE_LINES') ? (
-    <span css={pinButtonStyles} onClick={onPinButtonClick}>
-      <DrawingPin isOutline={isUnpinned} />
-    </span>
-  ) : null;
-
   return (
     <div
       css={[
@@ -235,10 +209,7 @@ export const CodeLine = ({
       ]}
       spellCheck={false}
     >
-      {pinIcon}
-      <code css={codeStyles} contentEditable={isEditable ? undefined : false}>
-        {children}
-      </code>
+      <code css={codeStyles}>{children}</code>
       {placeholder && isEmpty && (
         <span css={placeholderStyles} contentEditable={false}>
           {placeholder}

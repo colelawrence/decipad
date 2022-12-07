@@ -1,7 +1,7 @@
 import { MyEditor } from '@decipad/editor-types';
 import { Editor } from '@decipad/editor';
 import { FC } from 'react';
-import { BubbleEditor } from '@decipad/editor-components';
+import { TeleportEditor } from '@decipad/editor-components';
 import {
   ComputerContextProvider,
   EditorUserInteractionsProvider,
@@ -36,7 +36,7 @@ export const EditorStack: FC<EditorStackProps> = ({
         <NotebookStateProvider>
           <EditorUserInteractionsProvider>
             <ComputerContextProvider computer={computer}>
-              <BubbleEditor>
+              <TeleportEditor editor={editor}>
                 <Editor
                   notebookId={notebookId}
                   editor={editor}
@@ -44,7 +44,7 @@ export const EditorStack: FC<EditorStackProps> = ({
                   readOnly={false}
                   isSavedRemotely={remoteSaved}
                 ></Editor>
-              </BubbleEditor>
+              </TeleportEditor>
             </ComputerContextProvider>
           </EditorUserInteractionsProvider>
         </NotebookStateProvider>

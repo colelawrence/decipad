@@ -41,13 +41,13 @@ export const MagicNumber: PlateComponent = ({
     if (typeof defBlockId !== 'string') return;
 
     if (isFlagEnabled('SHADOW_CODE_LINES')) {
-      editSource(defBlockId);
+      editSource(defBlockId, text);
     } else {
       const el = document.getElementById(defBlockId);
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el?.focus();
     }
-  }, [defBlockId, editSource]);
+  }, [text, defBlockId, editSource]);
 
   return (
     <span {...attributes}>
