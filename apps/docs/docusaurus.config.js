@@ -59,7 +59,14 @@ const config = {
           },
         },
         blog: {
-          showReadingTime: true,
+          showReadingTime: false,
+          routeBasePath: '/release-notes',
+          blogSidebarCount: 'ALL',
+          postsPerPage: 20,
+          blogTitle: 'Decipad Releases',
+          blogSidebarTitle: 'All Releases',
+          blogDescription:
+          'Keep yourself up-to-date about new features in every release',
           /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
         },
         theme: {
@@ -68,8 +75,6 @@ const config = {
       }),
     ],
   ],
-
-  plugins,
 
   themes: ['./src/lib/deci-language-live-codeblock'],
 
@@ -109,6 +114,11 @@ const config = {
             docId: 'help-and-support',
             position: 'left',
             label: 'Support',
+          },
+          {
+            to: 'release-notes',
+            position: 'left',
+            label: 'Releases',
           },
         ],
       },

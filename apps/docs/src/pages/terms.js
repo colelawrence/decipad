@@ -47,7 +47,7 @@ export default function Terms() {
                 }}
               >
                 <a
-                  href="https://alpha.decipad.com/"
+                  href="https://app.decipad.com/"
                   style={{
                     color: '#121213',
                     fontSize: '14px',
