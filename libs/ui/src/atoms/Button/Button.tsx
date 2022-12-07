@@ -1,25 +1,23 @@
 import { css, CSSObject } from '@emotion/react';
 import { ReactNode } from 'react';
 import {
-  offBlack,
+  brand200,
+  brand300,
   brand500,
+  cssVar,
+  grey400,
+  grey700,
+  offBlack,
+  orange300,
+  orange800,
   p13Bold,
+  red200,
+  red400,
+  red500,
+  red800,
+  setCssVar,
   transparency,
   white,
-  setCssVar,
-  red200,
-  grey700,
-  grey600,
-  grey400,
-  brand300,
-  brand200,
-  red500,
-  grey200,
-  grey100,
-  red400,
-  red800,
-  orange800,
-  orange300,
 } from '../../primitives';
 import { Anchor } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
@@ -41,15 +39,15 @@ const typeStyles: Record<
 > = {
   primary: {
     enabled: {
-      backgroundColor: offBlack.rgb,
-      ...setCssVar('currentTextColor', white.rgb),
+      backgroundColor: cssVar('strongTextColor'),
+      ...setCssVar('currentTextColor', cssVar('backgroundColor')),
       ':hover, :focus': {
-        backgroundColor: grey600.rgb,
+        backgroundColor: cssVar('normalTextColor'),
       },
     },
     disabled: {
-      backgroundColor: grey400.rgb,
-      ...setCssVar('currentTextColor', white.rgb),
+      backgroundColor: cssVar('weakTextColor'),
+      ...setCssVar('currentTextColor', cssVar('backgroundColor')),
     },
   },
   primaryBrand: {
@@ -67,15 +65,15 @@ const typeStyles: Record<
   },
   secondary: {
     enabled: {
-      backgroundColor: grey200.rgb,
-      ...setCssVar('currentTextColor', offBlack.rgb),
+      backgroundColor: cssVar('strongHighlightColor'),
+      ...setCssVar('currentTextColor', cssVar('strongTextColor')),
       ':hover, :focus': {
-        backgroundColor: grey100.rgb,
+        backgroundColor: cssVar('highlightColor'),
       },
     },
     disabled: {
-      backgroundColor: grey200.rgb,
-      ...setCssVar('currentTextColor', grey400.rgb),
+      backgroundColor: cssVar('strongHighlightColor'),
+      ...setCssVar('currentTextColor', cssVar('weakerTextColor')),
     },
   },
   danger: {

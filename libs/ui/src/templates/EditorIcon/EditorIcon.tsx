@@ -3,7 +3,7 @@ import { FC } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules';
 import {
-  cssVar,
+  black,
   p14Regular,
   setCssVar,
   shortAnimationDuration,
@@ -32,7 +32,7 @@ const iconWrapperStyles = css({
 });
 
 const iconStyles = css(p14Regular, {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  ...setCssVar('currentTextColor', black.rgb),
   width: '24px',
   height: '24px',
   mixBlendMode: 'luminosity',

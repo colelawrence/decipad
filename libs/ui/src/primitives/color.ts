@@ -87,8 +87,8 @@ export const purple400 = color(143, 135, 251);
 export const purple500 = color(115, 105, 250);
 export const purple600 = color(92, 84, 200);
 export const purple700 = color(69, 63, 150);
-export const purple800 = color(46, 42, 100);
-export const purple900 = color(23, 21, 50);
+export const purple800 = color(41, 40, 58);
+export const purple900 = color(27, 26, 40);
 
 //
 // blue

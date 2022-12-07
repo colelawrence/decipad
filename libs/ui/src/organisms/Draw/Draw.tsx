@@ -10,10 +10,11 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { THEME } from '@excalidraw/excalidraw';
 import {
+  ExcalidrawDataState,
   ExcalidrawElement,
   ExcalidrawElementProps,
-  ExcalidrawDataState,
 } from '@udecode/plate-ui-excalidraw';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import {
   ComponentProps,
   FC,
@@ -22,10 +23,7 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { delay, fromEvent, map } from 'rxjs';
-import { useObservable } from 'rxjs-hooks';
 import { blue200, blue300, cssVar } from '../../primitives';
-import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
 
 const drawStyles = css({
@@ -36,9 +34,6 @@ const drawStyles = css({
   borderRadius: 8,
   border: 0,
 });
-
-const allowDarkTheme = () =>
-  window.localStorage.getItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY) === 'true';
 
 type ExcalidrawProps = NonNullable<
   ExcalidrawElementProps<DrawElementDescendant[]>['excalidrawProps']
@@ -125,10 +120,7 @@ export const Draw: DrawComponent = ({
     [onChange, onInteractingChange]
   );
 
-  const darkTheme = useObservable(
-    () => fromEvent(window, 'storage').pipe(delay(0), map(allowDarkTheme)),
-    allowDarkTheme()
-  );
+  const [darkTheme] = useThemeFromStore();
 
   const stopClickPropagation = useCallback((event: MouseEvent) => {
     event.stopPropagation();

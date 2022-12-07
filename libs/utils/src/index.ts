@@ -18,3 +18,4 @@ export * from './assert-defined';
 export * from './unique';
 export * from './byDesc';
 export * from './varnamify';
+export * from './storage';

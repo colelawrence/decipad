@@ -1,10 +1,14 @@
 import { SmartRefDragCallback } from '@decipad/editor-utils';
-import { useEditorStylesContext } from '@decipad/react-contexts';
+import {
+  useEditorStylesContext,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode, useState } from 'react';
 import { Counter } from '../../atoms';
 import { Chevron } from '../../icons';
 import {
+  black,
   p14Bold,
   smallestDesktop,
   strongOpacity,
@@ -37,6 +41,7 @@ export const NumberCatalog = ({
 }: NumberCatalogProps) => {
   const [collapsed, setCollapsed] = useState(startCollapsed);
   const { color } = useEditorStylesContext();
+  const [darkTheme] = useThemeFromStore();
 
   function getNumberCatalogItemComponent(
     item: NumberCatalogItemType
@@ -80,7 +85,9 @@ export const NumberCatalog = ({
         alignment === 'left' ? css({ left: '32px' }) : css({ right: '-12px' }),
       ]}
     >
-      <div css={numberCatalogMenuStyles(color as AvailableSwatchColor)}>
+      <div
+        css={numberCatalogMenuStyles(color as AvailableSwatchColor, darkTheme)}
+      >
         <div
           css={[
             gridHeaderNumberCatStyles,
@@ -127,7 +134,10 @@ export const NumberCatalog = ({
           </div>
         </div>
         <div
-          css={[menuBodyStyles, collapsed ? css({ display: 'none' }) : null]}
+          css={[
+            menuBodyStyles(darkTheme),
+            collapsed ? css({ display: 'none' }) : null,
+          ]}
         >
           {items.map((item) => getNumberCatalogItemComponent(item))}
         </div>
@@ -156,10 +166,16 @@ const gridHeaderNumberCatStyles = css({
   gridColumnGap: '16px',
 });
 
-const numberCatalogMenuStyles = (color: AvailableSwatchColor) =>
+const numberCatalogMenuStyles = (
+  color: AvailableSwatchColor,
+  darkTheme: boolean
+) =>
   css({
     borderRadius,
-    backgroundColor: colorSwatches[color].light.rgb,
+    backgroundColor: (darkTheme
+      ? colorSwatches[color].dark
+      : colorSwatches[color].light
+    ).rgb,
     padding: '8px',
     width: '300px',
     userSelect: 'none',
@@ -182,11 +198,13 @@ const numberFontStyles = (color: AvailableSwatchColor) =>
     color: colorSwatches[color].highlight.rgb,
   });
 
-const menuBodyStyles = css({
-  backgroundColor: transparency(white, strongOpacity).rgba,
-  borderRadius: '10px',
-  maxHeight: '54vh',
-  minHeight: '40px',
-  overflowY: 'auto',
-  overflowX: 'hidden',
-});
+const menuBodyStyles = (darkTheme: boolean) =>
+  css({
+    backgroundColor: transparency(darkTheme ? black : white, strongOpacity)
+      .rgba,
+    borderRadius: '10px',
+    maxHeight: '54vh',
+    minHeight: '40px',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+  });

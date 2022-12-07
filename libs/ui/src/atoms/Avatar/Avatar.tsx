@@ -70,6 +70,7 @@ const initialTextStyles = css(p12Medium, {
   textAnchor: 'middle',
   textTransform: 'uppercase',
   fontSize: '1.2em',
+  fill: cssVar('strongTextColor'),
 });
 
 interface AvatarProps {

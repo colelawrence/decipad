@@ -72,6 +72,7 @@ export { TableHeader } from './TableHeader/TableHeader';
 export { Tag } from './Tag/Tag';
 export { TextAndIconButton } from './TextAndIconButton/TextAndIconButton';
 export { TextButton } from './TextButton/TextButton';
+export { ThemePicker } from './ThemePicker/ThemePicker';
 export { Toast } from './Toast/Toast';
 export { Toggle } from './Toggle/Toggle';
 export { Tooltip } from './Tooltip/Tooltip';

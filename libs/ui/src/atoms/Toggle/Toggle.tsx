@@ -15,6 +15,7 @@ const toggleStyles = (skinny: boolean) => (skinny ? makeCheckbox : makeToggle);
 const BooleanCheckboxSelectedsvgString = encodeURIComponent(
   renderToStaticMarkup(<BooleanCheckboxSelected />)
 );
+
 const BooleanCheckboxSelectedsvgStringdataUri = `url("data:image/svg+xml,${BooleanCheckboxSelectedsvgString}")`;
 
 const BooleanCheckboxUnselectedsvgString = encodeURIComponent(

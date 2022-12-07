@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Button } from '../../atoms';
 import { Close } from '../../icons';
-import { cssVar, grey100, p18Medium } from '../../primitives';
+import { cssVar, p18Medium } from '../../primitives';
 import { dashboard } from '../../styles';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import backgroundPublish from './dashboard-cta-card-publish.png';
@@ -20,7 +20,7 @@ const workspaceCTACardSuperWrapperStyles = (variant: boolean) =>
 
     position: 'relative',
 
-    backgroundColor: grey100.rgb,
+    backgroundColor: cssVar('highlightColor'),
     backgroundImage: `url(${variant ? backgroundPublish : background})`,
     backgroundPosition: 'right 0px bottom',
     backgroundSize: '1057px 210px',

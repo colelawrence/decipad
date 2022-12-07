@@ -1,4 +1,5 @@
-import { DecoratorFn, Parameters, ArgTypes } from '@storybook/react';
+import { ArgTypes, DecoratorFn, Parameters } from '@storybook/react';
+import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '@decipad/utils';
 import { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
 import { GlobalStyles } from '../src';
@@ -8,7 +9,6 @@ import {
   smallestMobile,
 } from '../src/primitives';
 
-import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../src/utils';
 import { dark, light } from './theme';
 
 const withGlobalStyles: DecoratorFn = (StoryFn, context) => {

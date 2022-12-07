@@ -1,11 +1,9 @@
 import { CSSReset as ChakraCssReset } from '@chakra-ui/css-reset';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import emotionReset from 'emotion-reset';
 import { FC } from 'react';
-import { fromEvent } from 'rxjs';
-import { useObservable } from 'rxjs-hooks';
-import { delay, map } from 'rxjs/operators';
 import {
   cssVar,
   darkTheme,
@@ -15,21 +13,13 @@ import {
   p13Medium,
   p14Medium,
 } from '../../primitives';
-import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '../../utils';
 
-const allowDarkTheme = () =>
-  window.localStorage.getItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY) === 'true';
 const DarkThemeStyles = (): ReturnType<React.FC> => {
-  const darkThemeAllowed = useObservable(
-    () => fromEvent(window, 'storage').pipe(delay(0), map(allowDarkTheme)),
-    allowDarkTheme()
-  );
+  const [darkThemeAllowed] = useThemeFromStore();
   return darkThemeAllowed ? (
     <Global
       styles={{
-        '@media (prefers-color-scheme: dark)': {
-          ':root': darkTheme,
-        },
+        ':root': darkTheme,
       }}
     />
   ) : null;

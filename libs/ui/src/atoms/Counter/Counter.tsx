@@ -1,3 +1,4 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import {
   black,
@@ -6,11 +7,13 @@ import {
   strongOpacity,
   transparency,
   weakOpacity,
+  white,
 } from '../../primitives';
 
 const counterWrapperStyles = (
   color: string | OpaqueColor | undefined,
-  variant: boolean
+  variant: boolean,
+  darkTheme: boolean
 ) =>
   css({
     padding: '4px 6px',
@@ -19,8 +22,11 @@ const counterWrapperStyles = (
       ? typeof color === 'string'
         ? color
         : transparency(color, variant ? normalOpacity : weakOpacity).rgba
-      : transparency(black, weakOpacity).rgba,
-    color: transparency(black, variant ? normalOpacity : strongOpacity).rgba,
+      : transparency(darkTheme ? white : black, weakOpacity).rgba,
+    color: transparency(
+      darkTheme ? white : black,
+      variant ? normalOpacity : strongOpacity
+    ).rgba,
     borderRadius: '6px',
   });
 
@@ -35,5 +41,6 @@ export const Counter: React.FC<CounterProps> = ({
   color,
   variant = false,
 }) => {
-  return <span css={counterWrapperStyles(color, variant)}>{n}</span>;
+  const [darkTheme] = useThemeFromStore();
+  return <span css={counterWrapperStyles(color, variant, darkTheme)}>{n}</span>;
 };

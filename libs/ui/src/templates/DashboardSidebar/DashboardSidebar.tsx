@@ -1,7 +1,10 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { useActiveElement } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useState } from 'react';
+import { ThemePicker } from '../../atoms';
 import { AccountAvatar } from '../../molecules';
+
 import {
   AccountMenu,
   WorkspaceNavigation,
@@ -25,6 +28,8 @@ export const DashboardSidebar = ({
   onOpenSettings,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
+  const [darkTheme, setDarkTheme] = useThemeFromStore();
+
   const [openMenu, setOpenMenu] = useState(false);
 
   const ref = useActiveElement(() => {
@@ -37,32 +42,47 @@ export const DashboardSidebar = ({
         <div css={workspaceSwitcherFlexyStyles}>
           <WorkspaceSelector {...props}></WorkspaceSelector>
           <div css={themeSwitcherAndConfigStyles}>
-            <div ref={ref}>
-              <AccountAvatar
-                menuOpen={openMenu}
-                name={name}
-                onClick={() => setOpenMenu(!openMenu)}
-              />
-              {openMenu && (
-                <div
-                  css={{
-                    position: 'absolute',
-                    minWidth: '240px',
-                    width: 'max-content',
-                    maxWidth: '50vw',
-                    bottom: 20,
-                    left: '60px',
-                    zIndex: 2,
-                  }}
-                >
-                  <AccountMenu
-                    onOpenSettings={onOpenSettings}
-                    name={name}
-                    email={email}
-                    onLogout={onLogout}
-                  />
-                </div>
-              )}
+            <div
+              css={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                alignItems: 'center',
+                gap: 32,
+              }}
+            >
+              <ThemePicker
+                active={darkTheme}
+                onChange={setDarkTheme}
+                ariaRoleDescription={'theme picker'}
+              ></ThemePicker>
+              <div ref={ref}>
+                <AccountAvatar
+                  menuOpen={openMenu}
+                  name={name}
+                  onClick={() => setOpenMenu(!openMenu)}
+                />
+                {openMenu && (
+                  <div
+                    css={{
+                      position: 'absolute',
+                      minWidth: '240px',
+                      width: 'max-content',
+                      maxWidth: '50vw',
+                      bottom: 20,
+                      left: '60px',
+                      zIndex: 2,
+                    }}
+                  >
+                    <AccountMenu
+                      onOpenSettings={onOpenSettings}
+                      name={name}
+                      email={email}
+                      onLogout={onLogout}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
