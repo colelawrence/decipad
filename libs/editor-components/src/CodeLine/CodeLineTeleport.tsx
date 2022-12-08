@@ -15,8 +15,15 @@ export const CodeLineTeleport: React.FC<
     codeLine?: ShadowCalcPortal;
     onDismiss?(): void;
     onTeleport?(): void;
+    onBringBack?(): void;
   }>
-> = ({ codeLine, children, onDismiss = noop, onTeleport = noop }) => {
+> = ({
+  codeLine,
+  children,
+  onDismiss = noop,
+  onTeleport = noop,
+  onBringBack = noop,
+}) => {
   const portal = codeLine?.element;
   const isVisible = codeLine != null && portal != null;
 
@@ -65,7 +72,7 @@ export const CodeLineTeleport: React.FC<
 
   return (
     <>
-      <CodeLinePlaceholder height={contentHeight} />
+      <CodeLinePlaceholder height={contentHeight} onBringBack={onBringBack} />
       {createPortal(editable, portal)}
     </>
   );

@@ -1,24 +1,30 @@
 import { css } from '@emotion/react';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { cssVar, mediumShadow } from '../../primitives';
 
 export const CodeLineFloat: React.FC<
   PropsWithChildren<{ offsetTop: number }>
-> = ({ children, offsetTop }) => (
-  <div
-    css={wrapperStyle(offsetTop)}
-    onClick={(ev) => {
-      ev.stopPropagation();
-    }}
-  >
-    <div css={codeLineStyle}>{children}</div>
+> = ({ children, offsetTop }) => {
+  const [cssAnim, setCssAnim] = useState(appearStyle);
 
-    <div css={instructionsStyle}>
-      <div css={{ width: '1.5rem' }}></div>
-      <div>Close with ESC or ENTER</div>
+  useEffect(() => setCssAnim(css({})), []);
+
+  return (
+    <div
+      css={[wrapperStyle(offsetTop), cssAnim]}
+      onClick={(ev) => {
+        ev.stopPropagation();
+      }}
+    >
+      <div css={codeLineStyle}>{children}</div>
+
+      <div css={instructionsStyle}>
+        <div css={{ width: '1.5rem' }}></div>
+        <div>Close with ESC or ENTER</div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const wrapperStyle = (offsetTop: number) =>
   css({
@@ -31,11 +37,18 @@ const wrapperStyle = (offsetTop: number) =>
 
     cursor: 'initial',
 
+    transition: 'opacity 60ms ease-in, transform 60ms ease-in',
+
     borderRadius: '12px',
     backgroundColor: cssVar('backgroundColor'),
 
     boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
   });
+
+const appearStyle = css({
+  opacity: 0,
+  transform: 'translateY(32px)',
+});
 
 const codeLineStyle = css({
   pointerEvents: 'all',

@@ -21,6 +21,7 @@ export type EditorTeleportContextValue = Readonly<{
   setPortal(portal: ShadowCalcPortal): void;
   openEditor(params: ShadowCalcReference): void;
   focusNumber(): void;
+  focusCodeLine(): void;
   closeEditor(codeLineId?: string, onClose?: () => void): void;
   useWatchTeleported(elementId: string, element: MyElement): void;
 }>;
@@ -29,6 +30,7 @@ const defaultValue: EditorTeleportContextValue = {
   setPortal() {},
   openEditor() {},
   focusNumber() {},
+  focusCodeLine() {},
   closeEditor() {},
   useWatchTeleported() {},
 };

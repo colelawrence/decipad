@@ -12,6 +12,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { ensureSelectionHack } from './ensureSelectionHack';
 import { useFocusControl } from './useFocusControl';
 
 type TeleportEditorProps = PropsWithChildren<{ editor: MyEditor }>;
@@ -32,6 +33,16 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
     }
   }, [editor, editing?.numberNode]);
 
+  const focusCodeLine = useCallback(() => {
+    const node = editing?.codeLineNode;
+    const path = node ? findNodePath(editor, node) : null;
+
+    if (!path) return;
+
+    ensureSelectionHack(editor, true);
+    focusAndSetSelection(editor, path);
+  }, [editor, editing?.codeLineNode]);
+
   const closeEditor = useCallback(
     (codeLineId?: string, onClose?: () => void) =>
       setEditing((old) => {
@@ -50,12 +61,8 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
     [setEditing]
   );
 
+  const onBlur = useCallback(() => closeEditor(), [closeEditor]);
   const { useWatchTeleported } = useFocusControl(editing, closeEditor);
-
-  const onBlur = useCallback(() => {
-    closeEditor();
-    focusNumber();
-  }, [closeEditor, focusNumber]);
 
   const value = useMemo(
     () => ({
@@ -63,6 +70,7 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
       editing,
       setPortal,
       focusNumber,
+      focusCodeLine,
       closeEditor,
       openEditor: setEditing,
       useWatchTeleported,
@@ -73,6 +81,7 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
       setPortal,
       setEditing,
       focusNumber,
+      focusCodeLine,
       closeEditor,
       useWatchTeleported,
     ]

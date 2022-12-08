@@ -93,8 +93,14 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     [editor, element, isReadOnly]
   );
 
-  const { closeEditor, focusNumber, portal, editing, useWatchTeleported } =
-    useEditorTeleportContext();
+  const {
+    closeEditor,
+    focusNumber,
+    focusCodeLine,
+    portal,
+    editing,
+    useWatchTeleported,
+  } = useEditorTeleportContext();
 
   useWatchTeleported(lineId, element);
 
@@ -103,9 +109,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const turnIntoProps = useTurnIntoProps(element);
 
   const onTeleportDismiss = useCallback(() => {
-    closeEditor(element.id, () => {
-      focusNumber();
-    });
+    closeEditor(element.id, focusNumber);
   }, [focusNumber, closeEditor, element.id]);
 
   return (
@@ -116,7 +120,11 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       {...attributes}
       id={lineId}
     >
-      <CodeLineTeleport codeLine={teleport} onDismiss={onTeleportDismiss}>
+      <CodeLineTeleport
+        codeLine={teleport}
+        onDismiss={onTeleportDismiss}
+        onBringBack={focusCodeLine}
+      >
         <UICodeLine
           highlight={selected}
           result={lineResult}
