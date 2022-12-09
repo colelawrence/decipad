@@ -64,7 +64,8 @@ export const DragAndDropImportNotebook = ({
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: [NativeTypes.FILE],
     drop: (data: DataTransfer) => {
-      Array.from(data.items).forEach(async (item) => {
+      const items = data?.items || [];
+      Array.from(items).forEach(async (item) => {
         // Async fire and forget
         try {
           const file = validateItemAndGetFile(item);
@@ -75,7 +76,8 @@ export const DragAndDropImportNotebook = ({
       });
     },
     canDrop: (data: DataTransfer) => {
-      return Array.from(data.items).some((item) => {
+      const items = data?.items || [];
+      return Array.from(items).some((item) => {
         try {
           validateItemAndGetFile(item);
           return true;
