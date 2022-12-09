@@ -41,7 +41,7 @@ export const findSymbolErrors = (program: AST.Block[]) => {
   const seenDefinitions = new Set<string>();
 
   iterProgram(program, (stmt) => {
-    const sym = getDefinedSymbol(stmt, false);
+    const sym = getDefinedSymbol(stmt);
 
     for (const usedSym of findSymbolsUsed(stmt)) {
       if (sym === usedSym) continue;
