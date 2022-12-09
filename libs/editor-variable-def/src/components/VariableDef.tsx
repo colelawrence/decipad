@@ -3,10 +3,12 @@ import {
   useTextTypeInference,
 } from '@decipad/editor-components';
 import {
+  CellValueType,
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
   useTEditorRef,
+  VariableDropdownElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
 import {
@@ -81,12 +83,38 @@ export const VariableDef: PlateComponent = ({
     'step'
   );
 
+  const onChangeSmartSelection = useElementMutatorCallback(
+    editor,
+    (element as VariableDropdownElement).children[1],
+    'smartSelection'
+  );
+
   const inferredType = useTextTypeInference(element);
 
-  const onChangeType = useElementMutatorCallback(
+  const onChangeTypeMutator = useElementMutatorCallback(
     editor,
     element,
     'coerceToType'
+  );
+  const onChangeType = useCallback(
+    (type: CellValueType | 'smart-selection' | undefined) => {
+      // Used for dropdown widget
+      if (type === 'smart-selection') {
+        onChangeSmartSelection(
+          !(element as VariableDropdownElement).children[1].smartSelection
+        );
+        onChangeTypeMutator({
+          kind: 'number',
+        });
+      } else {
+        // When dropdown widget changes to text ot input, it is no longer a smart selection
+        if (element.variant === 'dropdown') {
+          onChangeSmartSelection(false);
+        }
+        onChangeTypeMutator(type);
+      }
+    },
+    [onChangeTypeMutator, onChangeSmartSelection, element]
   );
 
   const onChangeValue = useCallback(
@@ -199,6 +227,11 @@ export const VariableDef: PlateComponent = ({
           onChangeType={onChangeType}
           value={getNodeString(element.children[1])}
           onChangeValue={onChangeValue}
+          smartSelection={
+            element.variant === 'dropdown'
+              ? element.children[1].smartSelection
+              : false
+          }
         >
           {children}
         </VariableEditor>

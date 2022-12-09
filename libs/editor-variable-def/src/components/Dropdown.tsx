@@ -1,31 +1,98 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
   ELEMENT_DROPDOWN,
   PlateComponent,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
 import { useElementMutatorCallback, useNodePath } from '@decipad/editor-utils';
-import { DropdownMenu, SelectItems, WidgetDisplay } from '@decipad/ui';
+import {
+  DropdownMenu,
+  SelectItems,
+  SelectItemTypes,
+  WidgetDisplay,
+} from '@decipad/ui';
 import { getNodeString, insertText } from '@udecode/plate';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  EditorChangeContext,
+  useComputer,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
+import { formatResultPreview } from '@decipad/format';
+import { Table } from 'libs/ui/src/icons';
+import { useActiveElement } from '@decipad/react-utils';
+import { concat, of, combineLatestWith, map, distinctUntilChanged } from 'rxjs';
+import { dequal } from 'dequal';
+import { Result, SerializedType } from '@decipad/computer';
 
 export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_DROPDOWN) {
     throw new Error('Dropdown is meant to render dropdown element');
   }
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedCol, setSelectedCol] = useState<string | null>(null);
+  const [columns, setColumns] = useState<
+    Array<{
+      name: string;
+      colValues: Result.OneResult[];
+      type: SerializedType;
+    }>
+  >([]);
 
   const selected = getNodeString(element);
-  const dropdownIds: SelectItems[] = element.options.map((n) => ({
-    item: n,
-    focused: selected === n,
-    editing: false,
-  }));
+  const computer = useComputer();
+
+  const editorChanges = useContext(EditorChangeContext);
+
+  useEffect(() => {
+    const editorChanges$ = concat(of(undefined), editorChanges);
+    const sub = editorChanges$
+      .pipe(
+        combineLatestWith(
+          concat(
+            of(undefined),
+            computer.getAllColumns$.observeWithSelector((cols) => {
+              if (!dropdownOpen || !element.smartSelection) return [];
+              // STUB: Computer getAllColumns returns duplicates. There is a fix inbound.
+              return cols.filter(
+                (c, pos) => cols.findIndex((i) => c.name === i.name) === pos
+              );
+            })
+          )
+        ),
+        map(([, c]) => Array.isArray(c) && c),
+        distinctUntilChanged(dequal)
+      )
+      .subscribe(setColumns);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [
+    computer.getAllColumns$,
+    editorChanges,
+    dropdownOpen,
+    element.smartSelection,
+  ]);
+
+  const dropdownIds: SelectItems[] = useMemo(
+    () =>
+      element.options.map((n) => ({
+        item: n,
+        focused: n === selected,
+      })),
+    [element.options, selected]
+  );
 
   const editor = useTPlateEditorRef();
   const path = useNodePath(element);
   const readOnly = useIsEditorReadOnly();
+  const ref = useActiveElement(() => {
+    setDropdownOpen(false);
+  });
 
+  // For the dropdown options to be permenant in the editor state,
+  // I save to a field in the dropdown child, this array can be
+  // modifiedwith this functions
   const elementChangeOptions = useElementMutatorCallback(
     editor,
     element,
@@ -68,21 +135,65 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         }
         return e;
       });
+
+      if (old === selected) {
+        changeOptions(newV);
+      }
       elementChangeOptions(newOps);
     },
-    [element.options, elementChangeOptions]
+    [element.options, elementChangeOptions, changeOptions, selected]
   );
 
   const onExecute = useCallback(
-    (item: string) => {
-      changeOptions(item);
-      setDropdownOpen(false);
+    (item: string, type?: SelectItemTypes) => {
+      if (type === 'column') {
+        if (selectedCol === item) {
+          setSelectedCol(null);
+        } else {
+          setSelectedCol(item);
+        }
+      } else {
+        if (selected === item) {
+          changeOptions('Select');
+        } else {
+          changeOptions(item);
+        }
+        setDropdownOpen(false);
+      }
     },
-    [changeOptions]
+    [changeOptions, selected, selectedCol]
   );
 
+  const otherItems = useMemo(() => {
+    const colValues = columns.find((c) => c.name === selectedCol);
+    return [
+      {
+        title: 'Table category',
+        items: columns.map((c) => ({
+          item: c.name,
+          type: 'column',
+          focused: selectedCol === c.name,
+          icon: <Table />,
+        })),
+      },
+      ...(colValues
+        ? [
+            {
+              title: 'Values',
+              items: colValues.colValues.map((v) => ({
+                item: formatResultPreview({
+                  value: v,
+                  type: colValues.type,
+                }),
+              })),
+            },
+          ]
+        : []),
+    ];
+  }, [columns, selectedCol]);
+
   return (
-    <div {...attributes} contentEditable={false} id={element.id}>
+    <div {...attributes} contentEditable={false} id={element.id} ref={ref}>
       <WidgetDisplay
         allowOpen={true}
         openMenu={dropdownOpen}
@@ -94,10 +205,11 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
       <DropdownMenu
         open={dropdownOpen}
         isReadOnly={readOnly}
-        items={dropdownIds}
+        items={!element.smartSelection ? dropdownIds : []}
+        otherItems={element.smartSelection ? otherItems : []}
         addOption={addOption}
-        removeOption={removeOption}
-        editOptions={editOption}
+        onRemoveOption={removeOption}
+        onEditOption={editOption}
         onExecute={onExecute}
         dropdownOpen={setDropdownOpen}
       />

@@ -131,11 +131,12 @@ interface VariableEditorProps
   color?: AvailableSwatchColor;
   readOnly?: boolean;
   type?: CellValueType;
-  onChangeType?: (type: CellValueType | undefined) => void;
+  onChangeType?: (type: CellValueType | 'smart-selection' | undefined) => void;
   value?: string;
   onChangeValue?: (
     value: string | undefined // only booleans for now
   ) => void;
+  smartSelection?: boolean;
 }
 
 export const VariableEditor = ({

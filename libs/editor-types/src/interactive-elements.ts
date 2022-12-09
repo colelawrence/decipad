@@ -130,6 +130,7 @@ export interface DisplayElement extends BaseElement {
 export interface DropdownElement extends BaseElement {
   type: typeof ELEMENT_DROPDOWN;
   options: Array<string>;
+  smartSelection?: boolean;
   children: [PlainText];
 }
 

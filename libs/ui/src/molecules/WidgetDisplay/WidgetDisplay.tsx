@@ -1,7 +1,9 @@
 import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
+import { Result } from '@decipad/computer';
 import { cssVar } from '../../primitives';
 import { Caret } from '../../icons';
+import { CodeResult } from '../../organisms';
 
 const mainStyles = (readOnly: boolean, selected: boolean) =>
   css({
@@ -40,6 +42,7 @@ export interface WidgetDisplayProps {
   readonly readOnly: boolean;
   readonly allowOpen: boolean;
   readonly children: ReactNode;
+  readonly result?: Result.Result;
 }
 
 export const WidgetDisplay: FC<WidgetDisplayProps> = ({
@@ -48,6 +51,7 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
   readOnly,
   allowOpen,
   children,
+  result,
 }) => {
   const showMenu = !readOnly || allowOpen;
   return (
@@ -55,7 +59,13 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
       css={mainStyles(!allowOpen && readOnly, openMenu)}
       onClick={() => showMenu && setOpenMenu(!openMenu)}
     >
-      <span css={lineStyles}>{children}</span>
+      {result ? (
+        <span css={lineStyles}>
+          <CodeResult value={result.value} type={result.type} />
+        </span>
+      ) : (
+        <span css={lineStyles}>{children}</span>
+      )}
       {showMenu && (
         <div css={{ width: '20px' }}>
           <div css={{ width: 20, height: 20 }}>

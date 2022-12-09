@@ -1,10 +1,13 @@
 import { useWindowListener } from '@decipad/react-utils';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { nanoid } from 'nanoid';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { SelectItem, SelectItems } from '../../atoms';
+import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
 import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
+import { DropdownMenuGroup } from '../DropdownMenuGroup/DropdownMenuGroup';
 
 const styles = css({
   display: 'flex',
@@ -31,6 +34,8 @@ const mainStyles = css({
   marginTop: '2px',
   marginBottom: '2px',
   width: '100%',
+  overflowY: 'auto',
+  maxHeight: '300px',
 });
 
 const footerStyles = css(
@@ -63,26 +68,25 @@ const hotKeyStyle = css({
   color: cssVar('weakTextColor'),
 });
 
-interface DropdownMenuProps {
+type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
   readonly isReadOnly: boolean;
   readonly items: Array<SelectItems>;
+  readonly otherItems: Array<{ title?: string; items: Array<SelectItems> }>;
   readonly addOption: (a: string) => void;
-  readonly removeOption: (a: string) => void;
-  readonly editOptions: (a: string, b: string) => void;
-  readonly onExecute: (a: string) => void;
   readonly dropdownOpen: (b: boolean) => void;
-}
+};
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({
   open,
   isReadOnly,
   items,
+  otherItems,
   addOption,
-  removeOption,
-  editOptions,
   onExecute,
   dropdownOpen,
+  onEditOption = noop,
+  onRemoveOption = noop,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -154,26 +158,30 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   if (!open) return null;
 
   return (
-    <div css={[styles, !open && { display: 'none' }]}>
-      <div
-        css={[
-          mainStyles,
-          items.length > 5 && {
-            height: '200px',
-            overflowY: 'scroll',
-          },
-        ]}
-      >
-        {items.map((item, index) => (
-          <SelectItem
-            key={item.item}
-            item={item}
-            focused={!addingNew && index === focusedIndex}
-            onSelect={onExecute}
-            removeOption={removeOption}
-            editOption={editOptions}
+    <div css={styles}>
+      <div css={mainStyles}>
+        {otherItems.length > 0 &&
+          otherItems.map((group) => (
+            <DropdownMenuGroup
+              key={nanoid()}
+              items={group.items}
+              onExecute={onExecute}
+              title={group.title}
+              onEditOption={onEditOption}
+              onRemoveOption={onRemoveOption}
+            />
+          ))}
+        {items.length > 0 && (
+          <DropdownMenuGroup
+            key={nanoid()}
+            items={items}
+            onExecute={onExecute}
+            title="Variables"
+            onEditOption={onEditOption}
+            onRemoveOption={onRemoveOption}
+            isEditingAllowed={true}
           />
-        ))}
+        )}
         {!isReadOnly && showInput && (
           <DropdownOption
             value={inputValue}

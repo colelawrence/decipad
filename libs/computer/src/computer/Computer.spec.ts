@@ -410,6 +410,53 @@ describe('getVarBlockId$', () => {
   });
 });
 
+it('can list tables and columns', async () => {
+  const computer = new Computer({ requestDebounceMs: 0 });
+
+  computer.pushCompute({
+    program: getIdentifiedBlocks(
+      `table = { A = [1], B = ["a"] }`,
+      `anotherVar = "Not a table"`
+    ),
+  });
+
+  await timeout(0);
+
+  const columns = computer.getAllColumns$.get();
+  const tables = computer.getAllTables$.get();
+  expect(columns).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "colValues": Array [
+          Fraction(1),
+        ],
+        "name": "table.A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+      },
+      Object {
+        "colValues": Array [
+          "a",
+        ],
+        "name": "table.B",
+        "type": Object {
+          "kind": "string",
+        },
+      },
+    ]
+  `);
+  expect(tables).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "id": "block-0",
+        "tableName": "table",
+      },
+    ]
+  `);
+});
+
 describe('can provide information for rendering matrices', () => {
   let computer: Computer;
   beforeEach(async () => {

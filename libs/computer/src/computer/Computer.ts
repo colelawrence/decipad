@@ -256,6 +256,33 @@ export class Computer {
     }
   );
 
+  public getAllTables$ = listenerHelper(this.results, (results) => {
+    return Object.entries(results.blockResults).flatMap(([id, b]) => {
+      if (!b.result) return [];
+
+      if (b.result.type.kind === 'table') {
+        return { id, tableName: b.result.type.indexName || '' };
+      }
+      return [];
+    });
+  });
+
+  public getAllColumns$ = listenerHelper(this.results, (results) => {
+    return Object.values(results.blockResults).flatMap((b) => {
+      if (!b.result) return [];
+
+      if (b.result.type.kind === 'table') {
+        const tableName = b.result.type.indexName || '';
+        return b.result.type.columnNames.map((c, i) => ({
+          name: `${tableName}.${c}`,
+          colValues: (b.result as Result.Result<'table'>).value[i],
+          type: (b.result as Result.Result<'table'>).type.columnTypes[i],
+        }));
+      }
+      return [];
+    });
+  });
+
   expressionResultFromText$(decilang: string) {
     const exp = parseExpressionOrThrow(decilang);
 

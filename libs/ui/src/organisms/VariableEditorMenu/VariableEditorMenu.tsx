@@ -1,19 +1,28 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, ReactNode, useCallback } from 'react';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { tokenRules } from '@decipad/language';
 import { CellValueType } from '@decipad/editor-types';
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { InputMenuItem, MenuList } from '../../molecules';
-import { Calendar, Number as NumberIcon, Shapes, Text } from '../../icons';
+import {
+  Calendar,
+  Number as NumberIcon,
+  Shapes,
+  Table,
+  Text,
+} from '../../icons';
 import { getDateType, getNumberType, getStringType } from '../../utils';
 
 type VariableEditorMenuProps = {
   readonly onCopy?: () => void;
   readonly onDelete?: () => void;
   readonly type?: CellValueType;
-  readonly onChangeType?: (type: CellValueType | undefined) => void;
+  readonly onChangeType?: (
+    type: CellValueType | 'smart-selection' | undefined
+  ) => void;
   readonly trigger: ReactNode;
+  readonly smartSelection?: boolean;
 } & (
   | {
       // By marking this variant as optional, when not provided it will be assumed as the default.
@@ -58,7 +67,12 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
   step,
   trigger,
   variant = 'expression',
+  smartSelection = false,
 }) => {
+  const onSmartSelection = useCallback(() => {
+    onChangeType('smart-selection');
+  }, [onChangeType]);
+
   return (
     <MenuList root dropdown trigger={trigger}>
       {variant === 'slider' && [
@@ -115,17 +129,28 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
           <MenuItem
             icon={<NumberIcon />}
             onSelect={() => onChangeType(getNumberType())}
-            selected={type?.kind === 'number' && type.unit == null}
+            selected={
+              type?.kind === 'number' && type.unit == null && !smartSelection
+            }
           >
             Number
           </MenuItem>
           <MenuItem
             icon={<Text />}
             onSelect={() => onChangeType(getStringType())}
-            selected={type?.kind === 'string'}
+            selected={type?.kind === 'string' && !smartSelection}
           >
             Text
           </MenuItem>
+          {variant === 'dropdown' && (
+            <MenuItem
+              icon={<Table />}
+              onSelect={onSmartSelection}
+              selected={smartSelection}
+            >
+              Smart Selection
+            </MenuItem>
+          )}
         </MenuList>
       ) : (
         variant === 'date' && (
