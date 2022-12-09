@@ -173,6 +173,17 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       copyToClipboard(url.toString());
     }, [element.id]);
 
+    // Only show the Blue line to add element on these conditions.
+    // If its a nested element (Such as a list, don't show it in between).
+    const nodePath = findNodePath(editor, element);
+    const showLine =
+      nodePath &&
+      nodePath.length === 1 &&
+      !(
+        editor.children.length === 2 &&
+        editor.children[1].children[0].text === ''
+      );
+
     if (deleted || (readOnly && element.isHidden)) {
       return null;
     }
@@ -209,12 +220,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         onAdd={onAdd}
         onPlus={onPlus}
         onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}
-        showLine={
-          !(
-            editor.children.length === 2 &&
-            editor.children[1].children[0].text === ''
-          )
-        }
+        showLine={showLine}
       >
         <BlockSelectable element={element}>
           <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
