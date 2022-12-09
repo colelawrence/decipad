@@ -35,6 +35,7 @@ import {
   shareReplay,
   throttleTime,
 } from 'rxjs/operators';
+import { astToParseable } from './astToParseable';
 import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
 import { getExprRef, makeNamesFromIds } from '../exprRefs';
@@ -181,6 +182,19 @@ export class Computer {
   getDefinedSymbolInBlock$ = listenerHelper(
     this.results,
     (_, blockId: string) => this.getDefinedSymbolInBlock(blockId)
+  );
+
+  getParseableTypeInBlock(blockId: string) {
+    const parsed = this.latestProgram.find((p) => p.id === blockId);
+    if (parsed && parsed.type === 'identified-block') {
+      return astToParseable(parsed.block.args[0]);
+    }
+    return null;
+  }
+
+  getParseableTypeInBlock$ = listenerHelper(
+    this.results,
+    (_, blockId: string) => this.getParseableTypeInBlock(blockId)
   );
 
   /**

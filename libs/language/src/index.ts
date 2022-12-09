@@ -3,7 +3,7 @@ import { operators } from './builtins';
 import type { Result } from './result';
 import { build as t, SerializedType, serializeType, Unit } from './type';
 
-export { parseUTCDate, stringifyDate, Time } from './date';
+export { parseUTCDate, stringifyDate, Time, getDateFromAstForm } from './date';
 export {
   identifierRegExpGlobal,
   STATEMENT_SEP_TOKEN_TYPE,

@@ -66,7 +66,7 @@ const config = {
           blogTitle: 'Decipad Releases',
           blogSidebarTitle: 'All Releases',
           blogDescription:
-          'Keep yourself up-to-date about new features in every release',
+            'Keep yourself up-to-date about new features in every release',
           /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
         },
         theme: {

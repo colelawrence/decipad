@@ -25,7 +25,7 @@ import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useOnBlurNormalize } from '../hooks';
-import { useTurnIntoProps } from '../utils';
+import { useTurnIntoProps } from './useTurnIntoProps';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CODE_LINE);
@@ -106,7 +106,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const teleport = editing?.codeLineId === element.id ? portal : undefined;
 
-  const turnIntoProps = useTurnIntoProps(element);
+  const turnIntoProps = useTurnIntoProps(element, computer, lineId);
 
   const onTeleportDismiss = useCallback(() => {
     closeEditor(element.id, focusNumber);

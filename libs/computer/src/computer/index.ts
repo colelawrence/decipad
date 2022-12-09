@@ -14,3 +14,5 @@ export { defaultComputerResults } from './defaultComputerResults';
 export { parseNumberWithUnit } from './parseNumberWithUnit';
 
 export { createProgramFromMultipleStatements } from './parseUtils';
+
+export type { Parseable, ParseableDate } from './astToParseable';
