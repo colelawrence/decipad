@@ -7,7 +7,7 @@ import {
   ELEMENT_PARAGRAPH,
   MyEditor,
 } from '@decipad/editor-types';
-import { setNodes } from '@udecode/plate';
+import { focusEditor, setNodes } from '@udecode/plate';
 import { Path } from 'slate';
 
 export const defaultTextConversions: { title: string; value: string }[] = [
@@ -22,4 +22,5 @@ export const defaultTextConversions: { title: string; value: string }[] = [
 export const defaultConvertInto =
   (editor: MyEditor, at?: Path) => (value: string) => {
     setNodes(editor, { type: value }, { at });
+    focusEditor(editor);
   };

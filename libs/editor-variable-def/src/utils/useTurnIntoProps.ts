@@ -12,6 +12,7 @@ import {
   getNodeString,
   insertNodes,
   removeNodes,
+  focusEditor,
 } from '@udecode/plate';
 import { Path } from 'slate';
 import { useMemo } from 'react';
@@ -73,6 +74,7 @@ export const defaultConvertInto =
       { variant: value, coerceToType: { kind: coercedKind, date: 'day' } },
       { at }
     );
+    focusEditor(editor);
   };
 
 export const useTurnIntoProps = (element: MyElement) => {
