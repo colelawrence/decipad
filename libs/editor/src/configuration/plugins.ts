@@ -179,7 +179,7 @@ export const plugins = ({
       createCodeVariableHighlightPlugin(),
       createAutoCompleteMenuPlugin(),
       createSyntaxErrorHighlightPlugin(),
-      createAutoPairsPlugin(),
+      createAutoPairsPlugin(computer),
       createNavigationPlugin(),
       createSmartRefPlugin(),
 

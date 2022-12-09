@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE,
@@ -9,7 +10,7 @@ import { createAutoPairsPlugin } from './createAutoPairsPlugin';
 const insert = (editor: MyEditor, key: string) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true });
   // @ts-expect-error DOM KeyboardEvent vs React event
-  createAutoPairsPlugin().handlers?.onKeyDown?.(editor)(event);
+  createAutoPairsPlugin(new Computer()).handlers?.onKeyDown?.(editor)(event);
   if (!event.defaultPrevented) {
     switch (true) {
       case '()[]{}'.includes(key):
