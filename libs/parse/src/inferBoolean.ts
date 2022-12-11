@@ -1,6 +1,6 @@
 import { CoercibleType } from './types';
 
-const coerceToBoolean = (text: string): string => {
+export const coerceToBoolean = (text: string): string => {
   switch (text.toLowerCase().trim()) {
     case 'true':
     case 'yes':

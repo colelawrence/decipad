@@ -1,10 +1,16 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { useComputer } from '@decipad/react-contexts';
 import { Result } from '@decipad/computer';
 import { EMPTY } from 'rxjs';
+import { css } from '@emotion/react';
+import { textify } from '@decipad/parse';
 import { SmartProps } from '../DataViewDataLayout';
 import { maybeAggregate } from '../../utils/maybeAggregate';
+
+const emptyCellStyles = css({
+  borderBottom: 0,
+});
 
 export const SmartCell: FC<SmartProps> = ({
   column,
@@ -15,29 +21,37 @@ export const SmartCell: FC<SmartProps> = ({
   onHover,
   hover,
   alignRight,
-  subproperties,
+  subProperties,
 }: SmartProps) => {
   const computer = useComputer();
   const [result, setResult] = useState<Result.Result | null>(null);
 
-  const expressionFilter = subproperties
-    .slice()
-    .reverse()
-    .reduce((previous, current) => {
-      const escapedValue =
-        typeof current.value === 'string'
-          ? JSON.stringify(current.value)
-          : current.value;
-      return previous === ``
-        ? `filter(${tableName}, ${tableName}.${current.name} == ${escapedValue})`
-        : `filter(${previous}, ${previous}.${current.name} == ${escapedValue})`;
-    }, ``);
+  const expressionFilter = useMemo(() => {
+    return (
+      column &&
+      subProperties.reduce((previous, current) => {
+        const escapedValue = textify({
+          type: current.type,
+          value: current.value as Result.Result['value'],
+        });
+        return previous === ``
+          ? `filter(${tableName}, ${tableName}.${current.name} == ${escapedValue})`
+          : `filter(${previous}, ${previous}.${current.name} == ${escapedValue})`;
+      }, ``)
+    );
+  }, [column, subProperties, tableName]);
 
-  const expression = maybeAggregate(
-    `${expressionFilter}.${column.name}`,
-    column.type.kind,
-    aggregationType
-  );
+  const expression = useMemo(() => {
+    return (
+      column &&
+      expressionFilter &&
+      maybeAggregate(
+        `${expressionFilter}.${column.name}`,
+        column.type.kind,
+        aggregationType
+      )
+    );
+  }, [aggregationType, column, expressionFilter]);
 
   useEffect(() => {
     const sub = (
@@ -51,7 +65,7 @@ export const SmartCell: FC<SmartProps> = ({
   }, [computer, expression]);
 
   return result === null || aggregationType === undefined ? (
-    <td />
+    <td css={emptyCellStyles} />
   ) : (
     <UISmartCell
       aggregationType={aggregationType}

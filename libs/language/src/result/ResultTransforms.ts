@@ -42,7 +42,10 @@ export function contiguousSlices(column: ColumnLike): SlicesMap {
   let lastValue: undefined | CompareValues.Comparable;
   let nextSliceBeginsAt = 0;
   column.values.forEach((currentValue, index) => {
-    if (lastValue && CompareValues.compare(lastValue, currentValue) !== 0) {
+    if (
+      lastValue != null &&
+      CompareValues.compare(lastValue, currentValue) !== 0
+    ) {
       // at the beginning of a new slice
       slices.push([nextSliceBeginsAt, index - 1]);
       nextSliceBeginsAt = index;

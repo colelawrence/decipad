@@ -8,3 +8,4 @@ export { seriesIterator } from './seriesIterator';
 export * from './inferNumber';
 export * from './inferBoolean';
 export * from './parseDate';
+export * from './textify';

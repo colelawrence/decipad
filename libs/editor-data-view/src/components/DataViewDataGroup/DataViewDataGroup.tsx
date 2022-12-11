@@ -87,7 +87,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       onHover={onHover}
       hover={parentHover || selfHover}
       alignRight={isCellAlignRight(element.column.type)}
-      subproperties={element.subproperties}
+      subProperties={element.subProperties}
     />
   );
 };

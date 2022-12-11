@@ -24,7 +24,11 @@ export interface SmartRowElement extends BaseElement {
   children: DataGroup[];
   column: SmartRowColumn;
   columnIndex: number;
-  subproperties: { value: Result.Comparable; name: string }[];
+  subProperties: {
+    type: SerializedType;
+    value: Result.Comparable;
+    name: string;
+  }[];
 }
 
 export interface DataGroupElement extends BaseElement {

@@ -52,7 +52,12 @@ export {
 
 export { unnestTableRows } from './tools';
 
-export type { AutocompleteName, ErrSpec } from '@decipad/language';
+export type {
+  AutocompleteName,
+  ErrSpec,
+  SliceRange,
+  SlicesMap,
+} from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

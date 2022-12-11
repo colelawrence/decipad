@@ -2,6 +2,7 @@ import { Aggregator } from '../types';
 
 export const min: Aggregator = ({ expressionFilter, columnType }) => {
   switch (columnType) {
+    case 'date':
     case 'number':
       return `min(${expressionFilter})`;
   }

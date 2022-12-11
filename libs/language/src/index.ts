@@ -30,6 +30,7 @@ export {
 } from './interpreter';
 export type { Interpreter } from './interpreter';
 export { Column, DateValue, fromJS, Range, Row, Scalar, Table } from './value';
+export type { SliceRange, SlicesMap } from './value';
 export {
   AST,
   parse,

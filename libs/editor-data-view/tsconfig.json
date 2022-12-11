@@ -13,6 +13,7 @@
     { "path": "../editor-utils" },
     { "path": "../editor-table" },
     { "path": "../computer" },
-    { "path": "../fraction" }
+    { "path": "../fraction" },
+    { "path": "../parse" }
   ]
 }

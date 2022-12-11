@@ -6,6 +6,7 @@ export const availableAggregationTypesForColumnOf = (
 ): AggregationKind[] => {
   switch (columnType.kind) {
     case 'date':
+      return ['min', 'max', 'span'];
     case 'number':
       return ['sum', 'average', 'min', 'max', 'median', 'span'];
 

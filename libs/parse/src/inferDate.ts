@@ -1,4 +1,4 @@
-import { format as formatDate } from 'date-fns';
+import { format as formatDate, isValid } from 'date-fns';
 import { Time } from '@decipad/computer';
 import { parseDate } from './parseDate';
 import { CoercibleType, DateGranularity } from './types';
@@ -7,6 +7,9 @@ export const coerceToDate = (
   d: Date,
   specificity: Time.Specificity
 ): string => {
+  if (!isValid(d)) {
+    throw new Error('invalid date');
+  }
   switch (specificity) {
     case 'year':
       return `date(${formatDate(d, 'yyyy')})`;

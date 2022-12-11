@@ -38,7 +38,11 @@ export interface SmartProps {
   colSpan?: number;
   onHover: (hover: boolean) => void;
   hover: boolean;
-  subproperties: { value: Result.Comparable; name: string }[];
+  subProperties: {
+    type: SerializedType;
+    value: Result.Comparable;
+    name: string;
+  }[];
   alignRight?: boolean;
 }
 
