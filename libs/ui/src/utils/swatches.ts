@@ -103,3 +103,22 @@ export const baseSwatches: Swatch = swatchNames.reduce((store, currentKey) => {
   store[currentKey] = colorSwatches[currentKey].base;
   return store;
 }, {} as Swatch);
+
+/**
+ * Returns either the base swatch colour or the highlight depending on dark mode.
+ *
+ * @param isDarkNode
+ */
+export const swatchesThemed: (isDarkMode: boolean) => Swatch = (
+  isDarkMode: boolean
+) =>
+  swatchNames.reduce((store, currentKey) => {
+    if (isDarkMode) {
+      // eslint-disable-next-line no-param-reassign
+      store[currentKey] = colorSwatches[currentKey].highlight;
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      store[currentKey] = colorSwatches[currentKey].base;
+    }
+    return store;
+  }, {} as Swatch);

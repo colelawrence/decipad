@@ -1,5 +1,6 @@
 import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC, forwardRef, useContext } from 'react';
 import {
@@ -22,6 +23,7 @@ import {
   baseSwatches,
   getStringType,
   getTypeIcon,
+  swatchesThemed,
   TableStyleContext,
 } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
@@ -122,7 +124,7 @@ const DropSourceAndTarget = forwardRef<
   );
 });
 
-const thStyles = (color: AvailableSwatchColor) =>
+const thStyles = (color: AvailableSwatchColor, darkMode: boolean) =>
   css({
     backgroundColor: color
       ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
@@ -130,7 +132,8 @@ const thStyles = (color: AvailableSwatchColor) =>
       : cssVar('strongHighlightColor'),
     // Keep hover effect when hovered, focused or the dropdown menu is opened.
     '&:hover, &:focus-within, &[data-highlight="true"]': {
-      backgroundColor: color && baseSwatches[color as AvailableSwatchColor].rgb,
+      backgroundColor:
+        color && swatchesThemed(darkMode)[color as AvailableSwatchColor].rgb,
     },
 
     boxShadow:
@@ -170,6 +173,8 @@ export const TableHeader = ({
   onSelectColumn,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
+
+  const [darkTheme] = useThemeFromStore();
   const { color } = useContext(TableStyleContext);
 
   const thRef = useMergedRef(attributes?.ref, dropTarget);
@@ -177,7 +182,7 @@ export const TableHeader = ({
   return (
     <th
       {...attributes}
-      css={[columnStyles, thStyles(color as AvailableSwatchColor)]}
+      css={[columnStyles, thStyles(color as AvailableSwatchColor, darkTheme)]}
       ref={thRef}
       data-highlight={highlight}
     >
