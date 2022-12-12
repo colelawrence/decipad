@@ -58,7 +58,7 @@ export interface SelectItems {
 
 export type EditItemsOptions = {
   readonly onRemoveOption?: (a: string) => void;
-  readonly onEditOption?: (a: string, b: string) => void;
+  readonly onEditOption?: (a: string, b: string) => boolean;
   readonly onExecute: (a: string, t?: SelectItemTypes) => void;
 };
 
@@ -81,14 +81,19 @@ export const SelectItem: FC<SelectItemProps> = ({
 }) => {
   const [newValue, setNewValue] = useState(item.item);
   const [editing, setEditing] = useState(false);
+  const [editingError, setEditingError] = useState(false);
 
   const keydown = useCallback(
     (event: KeyboardEvent) => {
       if ((event.key === 'Enter' || event.key === 'Escape') && editing) {
         event.preventDefault();
         event.stopPropagation();
-        setEditing(false);
-        onEditOption(item.item, newValue);
+        const changed = onEditOption(item.item, newValue);
+        if (changed) {
+          setEditing(false);
+        } else {
+          setEditingError(true);
+        }
       }
     },
     [onEditOption, editing, item, newValue]
@@ -112,7 +117,13 @@ export const SelectItem: FC<SelectItemProps> = ({
   );
 
   if (editing) {
-    return <DropdownOption value={newValue} setValue={setNewValue} />;
+    return (
+      <DropdownOption
+        value={newValue}
+        setValue={setNewValue}
+        error={editingError}
+      />
+    );
   }
 
   return (

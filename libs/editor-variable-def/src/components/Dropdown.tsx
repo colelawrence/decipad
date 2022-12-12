@@ -127,8 +127,15 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
     [element.options, elementChangeOptions, editor, path, selected]
   );
 
-  const editOption = useCallback(
-    (old: string, newV: string) => {
+  // Return true when the option was changes, false when it wasn't
+  const onEditOption = useCallback(
+    (old: string, newV: string): boolean => {
+      if (old === newV) return true;
+      const exists = element.options.some((v) => v === newV);
+
+      // If there already exists an option, we don't want duplicates.
+      if (exists) return false;
+
       const newOps = element.options.map((e) => {
         if (e === old) {
           return newV;
@@ -140,6 +147,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         changeOptions(newV);
       }
       elementChangeOptions(newOps);
+      return true;
     },
     [element.options, elementChangeOptions, changeOptions, selected]
   );
@@ -209,7 +217,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         otherItems={element.smartSelection ? otherItems : []}
         addOption={addOption}
         onRemoveOption={removeOption}
-        onEditOption={editOption}
+        onEditOption={onEditOption}
         onExecute={onExecute}
         dropdownOpen={setDropdownOpen}
       />

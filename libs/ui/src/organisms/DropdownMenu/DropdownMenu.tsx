@@ -1,5 +1,4 @@
 import { useWindowListener } from '@decipad/react-utils';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { nanoid } from 'nanoid';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
@@ -85,8 +84,8 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   addOption,
   onExecute,
   dropdownOpen,
-  onEditOption = noop,
-  onRemoveOption = noop,
+  onEditOption,
+  onRemoveOption,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -179,7 +178,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             title="Variables"
             onEditOption={onEditOption}
             onRemoveOption={onRemoveOption}
-            isEditingAllowed={true}
+            isEditingAllowed={!isReadOnly}
           />
         )}
         {!isReadOnly && showInput && (
