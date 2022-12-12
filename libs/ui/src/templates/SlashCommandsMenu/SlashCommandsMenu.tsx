@@ -111,7 +111,7 @@ const groups = [
       {
         command: 'dropdown',
         title: 'Dropdown',
-        description: 'Specify and select from a range of values',
+        description: 'Specify and select from a set of values',
         icon: <Dropdown />,
         enabled: true,
         extraSearchTerms: ['dropdown', 'droppy', 'select'],
