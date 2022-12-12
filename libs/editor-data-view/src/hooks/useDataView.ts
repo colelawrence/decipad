@@ -11,14 +11,11 @@ import {
   useEditorSelector,
   useResult,
 } from '@decipad/react-contexts';
-import {
-  Interpreter,
-  SerializedType,
-  AutocompleteName,
-} from '@decipad/computer';
+import { SerializedType, AutocompleteName, Result } from '@decipad/computer';
 import { findNode, findNodePath } from '@udecode/plate';
 import { Path } from 'slate';
 import { dequal } from 'dequal';
+import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
 import { useDataViewActions, useSortColumns } from '.';
 import { AggregationKind, Columns } from '../types';
 
@@ -49,6 +46,8 @@ const greaterOrEqualToZero = (n: number): boolean => n >= 0;
 const namesThatLookLikeTablesOnly = (name: AutocompleteName) =>
   name.name.indexOf('.') < 0;
 
+const isTable = (name: AutocompleteName): boolean => name.type.kind === 'table';
+
 export const useDataView = ({
   editor,
   element,
@@ -63,20 +62,38 @@ export const useDataView = ({
   } = useDataViewActions(editor, element);
 
   const tableName = element.varName || '';
+  const [tableNames, setTableNames] = useState<AutocompleteName[]>([]);
 
-  const variableNames = useComputer().getNamesDefined$.use();
+  const computer = useComputer();
+  useEffect(() => {
+    const sub = computer.getNamesDefined$
+      .observeWithSelector((names) =>
+        names.filter(isTable).filter(namesThatLookLikeTablesOnly)
+      )
+      .subscribe(setTableNames);
 
-  const result = useResult(element.id)?.result;
+    return () => sub.unsubscribe();
+  }, [computer.getNamesDefined$]);
 
-  let availableColumns: Columns | undefined;
+  const result = useResult(element.varName || '')?.result as
+    | Result.Result<'table'>
+    | undefined;
 
-  if (result?.type.kind === 'table' && result.value) {
-    availableColumns = [
-      [...result.type.columnNames],
-      [...result.type.columnTypes],
-      [...(result.value as Interpreter.ResultTable)],
-    ];
-  }
+  const availableColumns: Columns | undefined = useMemo(() => {
+    if (result?.type.kind === 'table' && result.value) {
+      return [
+        [...result.type.columnNames],
+        [...result.type.columnTypes],
+        [...(result.value as ResultTable)],
+      ];
+    }
+    return undefined;
+  }, [
+    result?.type.columnNames,
+    result?.type.columnTypes,
+    result?.type.kind,
+    result?.value,
+  ]);
 
   // sort column names and types according to user preferences
 
@@ -158,7 +175,7 @@ export const useDataView = ({
   );
 
   return {
-    variableNames: variableNames.filter(namesThatLookLikeTablesOnly),
+    variableNames: tableNames,
     tableName,
     onDelete,
     onInsertColumn,

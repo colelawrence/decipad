@@ -1,3 +1,4 @@
+import { AutocompleteName } from '@decipad/computer';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Label } from '../../atoms';
@@ -44,7 +45,7 @@ const SelectInput = ({
 
 interface VariableNameProps {
   label?: string;
-  variableNames: string[];
+  variableNames: AutocompleteName[];
   selectedVariableName?: string;
   onChangeVariableName: (varName: string) => void;
 }
@@ -65,9 +66,9 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
         <option key="empty" value={undefined}>
           -
         </option>
-        {variableNames.map((varName, index) => (
-          <option key={index} value={varName}>
-            {varName}
+        {variableNames.map((varName) => (
+          <option key={varName.blockId} value={varName.blockId}>
+            {varName.name}
           </option>
         ))}
       </SelectInput>

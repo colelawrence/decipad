@@ -1,3 +1,4 @@
+import { AutocompleteName } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
@@ -61,7 +62,7 @@ const dataViewTableOverflowStyles = css({
 });
 
 interface DataViewProps {
-  readonly availableVariableNames: string[];
+  readonly availableVariableNames: AutocompleteName[];
   readonly variableName: string;
   readonly icon: UserIconKey;
   readonly color?: AvailableSwatchColor;

@@ -16,14 +16,10 @@ import {
   DataViewMenu,
   VoidBlock,
 } from '@decipad/ui';
-import { AutocompleteName } from '@decipad/computer';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import { DataViewData } from '../DataViewData';
 import { useDataView } from '../../hooks';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
-
-const isTable = (name: AutocompleteName): boolean => name.type.kind === 'table';
-const varName = (name: AutocompleteName): string => name.name;
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -73,7 +69,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
       {...attributes}
     >
       <UIDataView
-        availableVariableNames={variableNames.filter(isTable).map(varName)}
+        availableVariableNames={variableNames}
         variableName={element.varName || ''}
         onChangeVariableName={onVariableNameChange}
         onChangeIcon={saveIcon}
