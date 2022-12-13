@@ -122,9 +122,13 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             event.stopPropagation();
           }
           break;
-        case event.key === 'Enter' && !showInput:
-          onExecute(items[focusedIndex].item);
+        case event.key === 'Enter' && !showInput: {
+          const item = items[focusedIndex];
+          if (item) {
+            onExecute(item.item);
+          }
           break;
+        }
         case event.key === 'Escape':
           dropdownOpen(false);
       }
