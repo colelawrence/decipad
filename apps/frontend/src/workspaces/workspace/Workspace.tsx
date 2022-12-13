@@ -84,6 +84,9 @@ const Workspace: FC = () => {
   const [name, setName] = useState(session?.user.name || '');
   // fixme: not working
   const [username, setUsername] = useState(session?.user.username || '');
+  const [description, setDescription] = useState(
+    session?.user.description || ''
+  );
   const [result] = useGetWorkspacesQuery();
 
   const createNotebook = useCreateNotebookMutation()[1];
@@ -442,6 +445,7 @@ const Workspace: FC = () => {
         <EditUserModal
           name={name !== session.user.email ? name : ''}
           username={username}
+          description={description}
           // closeHref={currentWorkspaceRoute.$}
           onClose={() => setUserSettings(false)}
           onChangeName={(newName) => {
@@ -482,6 +486,28 @@ const Workspace: FC = () => {
               .catch((err) => {
                 console.error('Failed change username. Error:', err);
                 toast('Could not change your username', 'error');
+              });
+          }}
+          onChangeDescription={(newDescription) => {
+            updateUser({
+              props: {
+                description: newDescription,
+              },
+            })
+              .then((r) => {
+                if (r.error) {
+                  console.error(
+                    'Failed to update user description. Error:',
+                    r.error
+                  );
+                  toast('Could not change your description', 'error');
+                } else {
+                  setDescription(newDescription);
+                }
+              })
+              .catch((err) => {
+                console.error('Failed to update user description. Error:', err);
+                toast('Could not change your description', 'error');
               });
           }}
         />

@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-lambda';
 export default gql`
   input UserInput {
     name: String
+    description: String
     hideChecklist: Boolean
   }
 

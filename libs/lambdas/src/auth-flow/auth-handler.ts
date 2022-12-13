@@ -68,7 +68,10 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
           return session;
         }
         const [user] = users;
-        extend(session.user, pick(user, 'email', 'name', 'image'));
+        extend(
+          session.user,
+          pick(user, 'email', 'name', 'image', 'description')
+        );
 
         const userKeys = (
           await data.userkeys.query({

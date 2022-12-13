@@ -47,6 +47,7 @@ folder public
 users
   id *String
   name String
+  description String
   last_login Number
   image String
   email String

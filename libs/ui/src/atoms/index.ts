@@ -71,6 +71,7 @@ export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';
 export { TableHeader } from './TableHeader/TableHeader';
 export { Tag } from './Tag/Tag';
 export { TextAndIconButton } from './TextAndIconButton/TextAndIconButton';
+export { TextareaField } from './TextareaField/TextareaField';
 export { TextButton } from './TextButton/TextButton';
 export { ThemePicker } from './ThemePicker/ThemePicker';
 export { Toast } from './Toast/Toast';

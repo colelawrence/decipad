@@ -1,6 +1,7 @@
 mutation UpdateUser($props: UserInput!) {
   updateSelf(props: $props) {
     name
+    description
     hideChecklist
   }
 }

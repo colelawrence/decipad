@@ -633,6 +633,7 @@ export type TagRecord = {
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   hideChecklist?: Maybe<Scalars['Boolean']>;
   id: Scalars['ID'];
@@ -648,6 +649,7 @@ export type UserAccess = {
 };
 
 export type UserInput = {
+  description?: InputMaybe<Scalars['String']>;
   hideChecklist?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
 };
@@ -826,7 +828,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, hideChecklist?: boolean | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, hideChecklist?: boolean | null } };
 
 export type NotebookSnapshotFragment = { __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null };
 
@@ -1135,6 +1137,7 @@ export const UpdateUserDocument = gql`
     mutation UpdateUser($props: UserInput!) {
   updateSelf(props: $props) {
     name
+    description
     hideChecklist
   }
 }
@@ -1393,6 +1396,7 @@ export type GraphCacheResolvers = {
   },
   User?: {
     createdAt?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['DateTime'] | string>,
+    description?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     email?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     hideChecklist?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['Boolean'] | string>,
     id?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['ID'] | string>,

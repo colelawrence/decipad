@@ -4,6 +4,7 @@ export default gql`
   type User {
     id: ID!
     name: String!
+    description: String
     email: String
     image: String
     createdAt: DateTime

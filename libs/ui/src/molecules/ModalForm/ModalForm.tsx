@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { useState } from 'react';
-import { Button, InputField } from '../../atoms';
+import { Button, InputField, TextareaField } from '../../atoms';
 
 type ModalFormProps = {
   readonly onSubmit: (label: string) => void;
@@ -9,6 +9,7 @@ type ModalFormProps = {
   readonly placeholderLabel?: string;
   readonly setIsSubmitting?: (isIt: boolean) => void;
   readonly isSubmitting?: boolean;
+  readonly multiline?: boolean;
 };
 
 export const ModalForm = ({
@@ -18,8 +19,10 @@ export const ModalForm = ({
   placeholderLabel = 'Insert here',
   setIsSubmitting = noop,
   isSubmitting = false,
+  multiline = false,
 }: ModalFormProps): ReturnType<React.FC> => {
   const [newLabel, setNewLabel] = useState(label);
+  const Field = multiline ? TextareaField : InputField;
   return (
     <form
       css={{ display: 'grid', rowGap: '12px' }}
@@ -34,7 +37,7 @@ export const ModalForm = ({
       }}
     >
       <h1>{title}</h1>
-      <InputField
+      <Field
         required
         placeholder={placeholderLabel}
         value={newLabel}

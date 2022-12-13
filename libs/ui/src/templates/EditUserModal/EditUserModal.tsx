@@ -10,15 +10,19 @@ type EditUserModalProps = {
   readonly onChangeName: (newName: string) => void;
   readonly username?: string;
   readonly onChangeUsername?: (newUsername: string) => void;
+  readonly description?: string;
+  readonly onChangeDescription?: (newDescription: string) => void;
   readonly onClose: () => void;
 };
 
 export const EditUserModal = ({
   name,
   username,
+  description,
   onClose,
   onChangeName = noop,
   onChangeUsername = noop,
+  onChangeDescription = noop,
 
   ...props
 }: EditUserModalProps): ReturnType<React.FC> => {
@@ -47,6 +51,15 @@ export const EditUserModal = ({
           isSubmitting={isSubmitting}
           placeholderLabel={'@aspen'}
           setIsSubmitting={setIsSubmitting}
+        />
+        <ModalForm
+          label={description}
+          title="Description"
+          onSubmit={onChangeDescription}
+          isSubmitting={isSubmitting}
+          placeholderLabel={'Share something about yourself'}
+          setIsSubmitting={setIsSubmitting}
+          multiline
         />
         <h3>Avatar</h3>
         <p css={css(p13Regular)}>

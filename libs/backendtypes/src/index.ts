@@ -11,6 +11,7 @@ export type ID = string;
 export type User = {
   id: ID;
   name: string;
+  description?: string;
   email?: string | null;
   image?: string | null;
   createdAt?: number | Date;
@@ -21,6 +22,7 @@ export type User = {
 
 export interface UserInput {
   name: string;
+  description?: string;
   email?: string | null;
   image?: string | null;
   provider?: string;
