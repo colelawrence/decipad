@@ -5,6 +5,7 @@ import { findNodePath } from '@udecode/plate';
 import { useEffect, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { ensureSelectionHack } from './ensureSelectionHack';
+import { useDeletionTrap } from './useDeletionTrap';
 import { useSelectionTrap } from './useSelectionTrap';
 
 enum FocusStatus {
@@ -39,7 +40,10 @@ export const useFocusControl = (
     const shouldPreventArrowKeys =
       isTeleported && focusState === FocusStatus.Focused;
 
+    const shouldPreventDeletion = isTeleported && isInsideBlock;
+
     useSelectionTrap(editor, shouldPreventArrowKeys);
+    useDeletionTrap(shouldPreventDeletion);
 
     useEffect(() => {
       if (!isTeleported) {
