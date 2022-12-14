@@ -1,4 +1,5 @@
 import FFraction from '@decipad/fraction';
+import { getOnly } from '@decipad/utils';
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
@@ -56,7 +57,16 @@ function callBuiltinAfterAutoconvert(
   };
 
   if (builtin.isReducer) {
-    return automapValuesForReducer(argTypes[0], args[0], lowerDimFn);
+    const onlyArgType = getOnly(
+      argTypes,
+      'panic: isReducer used in a function with multiple arguments'
+    );
+    const onlyArg = getOnly(
+      args,
+      'panic: isReducer used in a function with multiple arguments'
+    );
+
+    return automapValuesForReducer(onlyArgType, onlyArg, lowerDimFn);
   }
 
   return automapValues(argTypes, args, lowerDimFn, builtin.argCardinalities);

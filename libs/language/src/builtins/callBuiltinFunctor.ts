@@ -1,3 +1,4 @@
+import { getOnly } from '@decipad/utils';
 import type { AST, Context } from '..';
 import { Type, build as t, InferError } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
@@ -33,7 +34,11 @@ export const callBuiltinFunctor = (
 
     if (op.isReducer) {
       const lowerDimFunctor = getFunctor(op);
-      return automapTypesForReducer(givenArguments[0], (types: Type[]) =>
+      const onlyArg = getOnly(
+        givenArguments,
+        'panic: isReducer used in a function with multiple arguments'
+      );
+      return automapTypesForReducer(onlyArg, (types: Type[]) =>
         lowerDimFunctor(types, givenValues, context)
       );
     }

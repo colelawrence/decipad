@@ -43,12 +43,14 @@ export const listOperators: Record<string, BuiltinSpec> = {
   first: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     fnValues: ([arg]: Value[]) => getColumnLike(arg).atIndex(0),
     functionSignature: 'column<A> -> A',
   },
   last: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     fnValues: ([arg]: Value[]) => {
       const col = getColumnLike(arg);
       return col.atIndex(col.rowCount - 1);
@@ -61,6 +63,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   countif: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     fnValues: ([a]: Value[]) => {
       const aData = getColumnLike(a).getData() as OneResult[];
       return fromJS(

@@ -201,18 +201,21 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   max: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: max,
   },
   min: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: min,
   },
   average: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     fnValues: average,
     functionSignature: 'column<R> -> R',
   },
@@ -254,6 +257,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   median: {
     argCount: 1,
     argCardinalities: [2],
+    isReducer: true,
     fnValues: median,
     functionSignature: 'column<R> -> R',
   },
