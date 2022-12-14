@@ -94,6 +94,10 @@ export class Computer {
     this.wireRequestsToResults();
   }
 
+  public pushCompute(req: ComputeRequest): void {
+    this.computeRequests.next(req);
+  }
+
   private wireRequestsToResults() {
     this.computeRequests
       .pipe(
@@ -163,7 +167,7 @@ export class Computer {
     return blockId ? results.blockResults[blockId] : undefined;
   });
 
-  getDefinedSymbolInBlock(blockId: string): string | undefined {
+  getSymbolDefinedInBlock(blockId: string): string | undefined {
     const parsed = this.latestProgram.find((p) => p.id === blockId);
     if (parsed && parsed.type === 'identified-block') {
       const firstNode = parsed.block.args[0];
@@ -179,9 +183,9 @@ export class Computer {
     return undefined;
   }
 
-  getDefinedSymbolInBlock$ = listenerHelper(
+  getSymbolDefinedInBlock$ = listenerHelper(
     this.results,
-    (_, blockId: string) => this.getDefinedSymbolInBlock(blockId)
+    (_, blockId: string) => this.getSymbolDefinedInBlock(blockId)
   );
 
   getParseableTypeInBlock(blockId: string) {
@@ -202,7 +206,7 @@ export class Computer {
    */
   getNamesDefined(blockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.latestProgram);
-    const symbol = blockId && this.getDefinedSymbolInBlock(blockId);
+    const symbol = blockId && this.getSymbolDefinedInBlock(blockId);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
     if (symbol) {
       toIgnore.add(symbol);
@@ -425,10 +429,6 @@ export class Computer {
         };
       }
     }, true);
-  }
-
-  public pushCompute(req: ComputeRequest): void {
-    this.computeRequests.next(req);
   }
 
   public pushExternalDataUpdate(key: string, value: Result.Result): void {

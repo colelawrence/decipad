@@ -41,7 +41,7 @@ export const startNotebook = async (
     )
     .subscribe((result: IdentifiedResult | IdentifiedError | undefined) => {
       if (result) {
-        const identifier = computer.getDefinedSymbolInBlock(blockId);
+        const identifier = computer.getSymbolDefinedInBlock(blockId);
         if (result.type === 'identified-error') {
           onError(new Error(identifiedErrorToMessage(result)));
         } else if (result.type === 'computer-result') {

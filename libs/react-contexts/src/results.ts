@@ -19,9 +19,6 @@ export const TestResultsProvider: React.FC<
   return React.createElement(ComputerContextProvider, { computer }, children);
 };
 
-/**
- * Obtain a code line's result from the results context.
- * Errors are debounced if the cursor is in this line, for UX reasons.
- * */
+/** Obtain a code line's result from the results context. * */
 export const useResult = (blockId: string) =>
   useComputer().getBlockIdResult$.use(blockId);

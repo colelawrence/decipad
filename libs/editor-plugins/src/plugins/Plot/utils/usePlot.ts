@@ -65,9 +65,6 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
 
   const source = computer.getVarResult$.use(element.sourceVarName)?.result;
 
-  const columns =
-    (source?.type.kind === 'table' && source.type.columnNames) || [];
-
   let spec = normalizePlotSpec(
     defaultPlotSpec(
       computer,
@@ -75,6 +72,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       specFromType(computer, source?.type, element)
     )
   );
+
   const data = resultToPlotResultData(source, element);
 
   spec = spec && data && enhanceSpecFromWideData(spec, data);
@@ -91,7 +89,8 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
   const plotParams: PlotParams = {
     sourceVarNameOptions: names.map((name) => name.name),
     sourceExprRefOptions: names.map((name) => name.exprRef),
-    columnNameOptions: columns,
+    columnNameOptions:
+      (source?.type.kind === 'table' && source.type.columnNames) || [],
     setSourceVarName: useElementMutatorCallback(
       editor,
       element,

@@ -551,8 +551,8 @@ it('can get a defined symbol, in block', async () => {
     program: getIdentifiedBlocks('C = 1', 'C + 2 + A'),
   });
 
-  expect(computer.getDefinedSymbolInBlock('block-0')).toEqual('C');
-  expect(computer.getDefinedSymbolInBlock('block-1')).toEqual(undefined);
+  expect(computer.getSymbolDefinedInBlock('block-0')).toEqual('C');
+  expect(computer.getSymbolDefinedInBlock('block-1')).toEqual(undefined);
 });
 
 it('can stream imperative errors', async () => {

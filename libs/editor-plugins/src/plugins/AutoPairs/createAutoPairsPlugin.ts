@@ -8,8 +8,8 @@ import {
 import { ELEMENT_CODE_LINE, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { Path, Range } from 'slate';
 import { isElementOfType } from '@decipad/editor-utils';
-import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { Computer } from '@decipad/computer';
+import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 const pairs = [
   { start: '{', end: '}' },
@@ -43,8 +43,8 @@ export const createAutoPairsPlugin = (computer: Computer) =>
                   (acc, [n]) =>
                     isElementOfType(n, ELEMENT_SMART_REF)
                       ? acc +
-                      (computer.getDefinedSymbolInBlock(n.blockId) || '')
-                        .length
+                        (computer.getSymbolDefinedInBlock(n.blockId) || '')
+                          .length
                       : acc + getNodeString(n).length,
                   0
                 ) + cursorOffset;
@@ -54,7 +54,7 @@ export const createAutoPairsPlugin = (computer: Computer) =>
             const nodeText = getChildren(parentEntry).reduce(
               (acc, [n]) =>
                 isElementOfType(n, ELEMENT_SMART_REF)
-                  ? acc + (computer.getDefinedSymbolInBlock(n.blockId) || '')
+                  ? acc + (computer.getSymbolDefinedInBlock(n.blockId) || '')
                   : acc + getNodeString(n),
               ''
             );

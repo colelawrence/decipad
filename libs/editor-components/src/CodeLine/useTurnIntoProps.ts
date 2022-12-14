@@ -25,7 +25,7 @@ export const useTurnIntoProps = (
 ) => {
   const editor = useTEditorRef();
 
-  const symbol = computer.getDefinedSymbolInBlock$.use(lineId);
+  const symbol = computer.getSymbolDefinedInBlock$.use(lineId);
   const parseableType = computer.getParseableTypeInBlock$.use(lineId);
 
   const onTurnInto = useCallback(

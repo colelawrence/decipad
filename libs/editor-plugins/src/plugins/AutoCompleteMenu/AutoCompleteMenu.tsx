@@ -45,7 +45,6 @@ export const AutoCompleteMenu: PlateComponent<{
 }> = ({ attributes, children, leaf: { variableInfo } }) => {
   const word = variableInfo.variableName;
 
-  const computer = useComputer();
   const selected = useSelected();
   const focused = useFocused();
   const editor = useTEditorRef();
@@ -84,17 +83,12 @@ export const AutoCompleteMenu: PlateComponent<{
     [editor, showAutoComplete, variableInfo]
   );
 
-  const identifiers = computer.getNamesDefined$.useWithSelector(
-    selectNames,
-    variableInfo.blockId
-  );
-
-  if (showAutoComplete && identifiers?.length) {
+  if (showAutoComplete) {
     return (
       <span {...attributes}>
-        <UIAutoCompleteMenu
+        <AutoCompleteWrapper
           search={word}
-          identifiers={identifiers}
+          blockId={variableInfo.blockId}
           onExecuteItem={onExecuteItem}
         />
         {children}
@@ -103,4 +97,31 @@ export const AutoCompleteMenu: PlateComponent<{
   }
 
   return <span {...attributes}>{children}</span>;
+};
+
+/** Subscribes to getNamesDefined$ only when necessary */
+const AutoCompleteWrapper = ({
+  blockId,
+  search,
+  onExecuteItem,
+}: { blockId: string } & Omit<
+  ComponentProps<typeof UIAutoCompleteMenu>,
+  'identifiers'
+>) => {
+  const identifiers = useComputer().getNamesDefined$.useWithSelector(
+    selectNames,
+    blockId
+  );
+
+  if (!identifiers.length) {
+    return null;
+  }
+
+  return (
+    <UIAutoCompleteMenu
+      search={search}
+      identifiers={identifiers}
+      onExecuteItem={onExecuteItem}
+    />
+  );
 };

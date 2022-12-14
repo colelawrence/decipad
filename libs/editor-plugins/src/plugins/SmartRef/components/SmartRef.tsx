@@ -56,11 +56,12 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const computer = useComputer();
-  const symbolName = computer.getDefinedSymbolInBlock$.use(element.blockId);
+  const symbolName = computer.getSymbolDefinedInBlock$.use(element.blockId);
   const [lastVariableName, setLastVariableName] = useState(() => symbolName);
   const errorMessage =
     (symbolName == null &&
-      `The variable ${(lastVariableName != null && `"${lastVariableName}"`) || ''
+      `The variable ${
+        (lastVariableName != null && `"${lastVariableName}"`) || ''
       } is no longer defined`) ||
     undefined;
 

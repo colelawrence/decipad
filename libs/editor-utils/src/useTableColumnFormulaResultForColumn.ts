@@ -1,9 +1,15 @@
 import { findNodePath } from '@udecode/plate';
 import { dequal } from 'dequal';
 import { useEffect, useState } from 'react';
-import { distinctUntilChanged, map, Observable, Subscription } from 'rxjs';
+import {
+  distinctUntilChanged,
+  map,
+  mergeMap,
+  Observable,
+  Subscription,
+} from 'rxjs';
 
-import { Computer, Result, SerializedType } from '@decipad/computer';
+import { IdentifiedError, IdentifiedResult, Result } from '@decipad/computer';
 import {
   MyReactEditor,
   TableCellElement,
@@ -14,42 +20,34 @@ import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { OneResult } from 'libs/language/src/result';
 
 function formulaResult$(
-  computer: Computer,
-  blockId: string,
+  blockResult$: Observable<
+    Readonly<IdentifiedResult> | Readonly<IdentifiedError> | undefined
+  >,
   columnIndex: number,
   rowIndex?: number
 ): Observable<Result.Result | null> {
-  return computer.results.pipe(
-    map((computeRes) => {
-      const table = computeRes.blockResults[blockId]?.result as
-        | Result.Result<'table'>
-        | undefined;
-
-      if (table == null || table.type.kind !== 'table') {
-        return null;
+  return blockResult$.pipe(
+    mergeMap((result) => {
+      if (result?.result?.type.kind === 'table') {
+        return [result.result as Result.Result<'table'>];
       }
-      return table;
+      return [];
     }),
     map((table) => {
-      if (table) {
-        let type: SerializedType = table.type.columnTypes[columnIndex];
-        let value: OneResult = table.value[columnIndex];
-        if (value && rowIndex != null) {
-          value = value[rowIndex];
-        } else {
-          type = {
-            kind: 'column',
-            cellType: type,
-            columnSize: 'unknown',
-            indexedBy: table.type.indexName,
-          };
-        }
-
-        if (type != null && value != null) {
-          return { type, value };
-        }
+      let type = table.type.columnTypes.at(columnIndex);
+      let value: OneResult | undefined = table.value.at(columnIndex);
+      if (value && rowIndex != null) {
+        value = value[rowIndex];
+      } else if (type) {
+        type = {
+          kind: 'column',
+          cellType: type,
+          columnSize: 'unknown',
+          indexedBy: table.type.indexName,
+        };
       }
-      return null;
+
+      return type && value && { type, value };
     }),
     distinctUntilChanged(dequal)
   );
@@ -87,8 +85,7 @@ export function useTableColumnFormulaResultForElement(
     let sub: Subscription;
     if (tableContext.cellTypes[colIndex]?.kind === 'table-formula') {
       sub = formulaResult$(
-        computer,
-        tableContext.blockId,
+        computer.getBlockIdResult$.observe(tableContext.blockId),
         colIndex,
         rowIndex
       ).subscribe(setResult);
@@ -116,9 +113,10 @@ export function useTableColumnFormulaResultForColumn(
       colIndex &&
       tableContext.cellTypes[colIndex]?.kind === 'table-formula'
     ) {
-      sub = formulaResult$(computer, tableContext.blockId, colIndex).subscribe(
-        setResult
-      );
+      sub = formulaResult$(
+        computer.getBlockIdResult$.observe(tableContext.blockId),
+        colIndex
+      ).subscribe(setResult);
     } else {
       // When switching away from the "formula" type, remove the CodeResult element.
       setResult(null);

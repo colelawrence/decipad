@@ -40,7 +40,7 @@ export const filterStatementSeparator =
     const nText = children.reduce(
       (acc, [n]) =>
         isElement(n) && n.type === ELEMENT_SMART_REF
-          ? acc + (computer.getDefinedSymbolInBlock(n.blockId) || '')
+          ? acc + (computer.getSymbolDefinedInBlock(n.blockId) || '')
           : acc + getNodeString(n),
       ''
     );
@@ -53,7 +53,7 @@ export const filterStatementSeparator =
         .reduce(
           (acc, [n]) =>
             isElement(n) && n.type === ELEMENT_SMART_REF
-              ? acc + (computer.getDefinedSymbolInBlock(n.blockId) || '').length
+              ? acc + (computer.getSymbolDefinedInBlock(n.blockId) || '').length
               : acc + getNodeString(n).length,
           0
         ) + cursorStart;

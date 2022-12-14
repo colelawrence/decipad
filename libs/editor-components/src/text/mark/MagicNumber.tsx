@@ -33,11 +33,11 @@ export const MagicNumber: PlateComponent = ({
     result?.type?.kind === 'type-error' ||
     (result?.type?.kind === 'number' && result?.type?.unit?.[0].unit === exp);
 
-  const defBlockId = computer.getVarBlockId$.use(exp);
-
   const { editSource } = shadow;
 
   const onClick = useCallback(() => {
+    const defBlockId = computer.getVarBlockId$.get(exp);
+
     if (typeof defBlockId !== 'string') return;
 
     if (isFlagEnabled('SHADOW_CODE_LINES')) {
@@ -47,7 +47,7 @@ export const MagicNumber: PlateComponent = ({
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el?.focus();
     }
-  }, [text, defBlockId, editSource]);
+  }, [computer, exp, text, editSource]);
 
   return (
     <span {...attributes}>
@@ -59,7 +59,7 @@ export const MagicNumber: PlateComponent = ({
           expression={exp}
           onClick={onClick}
           readOnly={readOnly}
-        ></UIMagicNumber>
+        />
         {shadow.portal}
       </span>
       <span contentEditable={false} css={css({ display: 'none' })}>

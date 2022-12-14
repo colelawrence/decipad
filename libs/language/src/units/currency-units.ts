@@ -325,9 +325,9 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'ukrainianhryvnia',
-    symbols: ['₴', 'uah'],
+    symbols: ['₴', 'ua', 'uah'],
     baseQuantity: 'UAH',
-    pretty: 'ua',
+    pretty: '₴',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
     superBaseQuantity,

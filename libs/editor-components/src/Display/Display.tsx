@@ -119,7 +119,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           let text = '';
           for (const c of node.children) {
             if ((c as MyElement)?.type === 'smart-ref') {
-              const varName = computer.getDefinedSymbolInBlock(
+              const varName = computer.getSymbolDefinedInBlock(
                 (c as SmartRefElement).blockId
               );
               text += varName;
