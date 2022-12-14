@@ -1,7 +1,6 @@
 import { produce } from 'immer';
 import { DimensionId } from '../lazy';
 import { Type } from '../type';
-import { equalOrUnknown } from '../utils';
 
 export type IndexNames = (string | null)[];
 
@@ -19,14 +18,6 @@ export const findInvalidCardinality = (
   args: Type[],
   expectedCardinalities: number[]
 ) => args.find((arg, i) => getCardinality(arg) < expectedCardinalities[i]);
-
-export const compareDimensions = (a: Type, b: Type) => {
-  if (a.columnSize != null && b.columnSize != null) {
-    return equalOrUnknown(a.columnSize, b.columnSize);
-  }
-
-  return false;
-};
 
 export const linearizeType = (type: Type): Type[] =>
   type.cellType ? [type, ...linearizeType(type.cellType)] : [type];

@@ -25,7 +25,6 @@ it('infers sets', async () => {
   expect(
     await inferCategories(testContext, categories('Name', col(1, 2)))
   ).toMatchObject({
-    columnSize: 2,
     cellType: {
       type: 'number',
     },

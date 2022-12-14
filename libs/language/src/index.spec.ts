@@ -135,7 +135,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { columnSize: 4, cellType: { type: 'number' } },
+      type: { cellType: { type: 'number' } },
       value: [F(0), F(2), F(4), F(12)],
     });
   });
@@ -168,7 +168,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { columnSize: 3 },
+      type: { columnSize: 'unknown' },
       value: [F(2), F(4), F(6)],
     });
 
@@ -178,7 +178,7 @@ describe('basic code', () => {
     `);
 
     expect(results2).toMatchObject({
-      type: { columnSize: 3 },
+      type: { columnSize: 'unknown' },
       value: [F(2), F(1), F(1, 2)],
     });
   });
@@ -190,7 +190,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { columnSize: 3, cellType: { type: 'number' } },
+      type: { cellType: { type: 'number' } },
       value: [F(2), F(4), F(6)],
     });
   });
@@ -202,7 +202,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { columnSize: 3, cellType: { type: 'number' } },
+      type: { cellType: { type: 'number' } },
       value: [F(1), F(4), F(0)],
     });
   });
@@ -316,7 +316,6 @@ describe('Multidimensional operations', () => {
         cellType: {
           type: 'number',
         },
-        columnSize: 'unknown',
       },
       value: [F(1100), F(2200), F(3300)],
     });
@@ -487,7 +486,7 @@ describe('Tables', () => {
       type: {
         columnNames: ['Numbers', 'Values'],
         columnTypes: [
-          { cellType: { type: 'number' }, columnSize: 'unknown' },
+          { cellType: { type: 'number' } },
           { columnNames: ['Names'], columnTypes: [{ type: 'string' }] },
         ],
       },
@@ -858,7 +857,6 @@ describe('Matrices', () => {
           type: 'number',
           unit: U('EUR', { known: true }),
         },
-        columnSize: 2,
         indexedBy: 'Cities',
       },
       value: [F(12, 10), F(12, 10)],
@@ -877,7 +875,6 @@ describe('Matrices', () => {
           type: 'number',
           unit: U('EUR', { known: true }),
         },
-        columnSize: 2,
       },
       value: [F(7, 10), F(12, 10)],
     });
@@ -896,7 +893,6 @@ describe('Matrices', () => {
           type: 'number',
           unit: U('EUR', { known: true }),
         },
-        columnSize: 'unknown',
         indexedBy: 'Cities',
       },
       value: [F(7, 10), F(12, 10)],
@@ -916,7 +912,6 @@ describe('Matrices', () => {
           type: 'number',
           unit: U('EUR', { known: true }),
         },
-        columnSize: 'unknown',
         indexedBy: 'Cities',
       },
       value: [F(12, 10)],
@@ -1191,7 +1186,6 @@ describe('Dates', () => {
         cellType: {
           date: 'month',
         },
-        columnSize: 1,
       },
       value: [1609459200000n],
     });
@@ -1921,10 +1915,8 @@ describe('unit conversion', () => {
             type: 'number',
             unit: U('hours', { known: true }),
           },
-          columnSize: 'unknown',
           indexedBy: 'Animals',
         },
-        columnSize: 3,
       },
       value: [
         [F(168, 100), F(83, 100)],

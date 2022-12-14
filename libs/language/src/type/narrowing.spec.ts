@@ -34,13 +34,13 @@ it('can narrow percentages', () => {
 it('can narrow `anything`', () => {
   expect(
     narrowTypes(parseType('column<number, 2>'), parseType('anything'))
-  ).toMatchInlineSnapshot(`column<number, 2>`);
+  ).toMatchInlineSnapshot(`column<number>`);
   expect(
     narrowTypes(
       parseType('column<number, 2>'),
       parseType('column<anything, 2>')
     )
-  ).toMatchInlineSnapshot(`column<number, 2>`);
+  ).toMatchInlineSnapshot(`column<number>`);
 });
 
 it('can narrow units', () => {
@@ -89,17 +89,12 @@ it('can narrow dates', () => {
 it('can narrow columns', () => {
   expect(
     narrowTypes(parseType('column<number>'), parseType('column<number, 2>'))
-      .columnSize
-  ).toMatchInlineSnapshot(`2`);
+      .cellType
+  ).toMatchInlineSnapshot(`number`);
   expect(
     narrowTypes(parseType('column<number, 2>'), parseType('column<number>'))
-      .columnSize
-  ).toMatchInlineSnapshot(`2`);
-
-  expect(
-    narrowTypes(parseType('column<number, 2>'), parseType('column<number, 3>'))
-      .errorCause
-  ).toMatchInlineSnapshot(`[Error: Inference Error: free-form]`);
+      .cellType
+  ).toMatchInlineSnapshot(`number`);
 });
 
 it('explains where the error came from', () => {
@@ -160,7 +155,7 @@ describe('narrow func call', () => {
         args: [parseType('column<number, 2>')],
         ...parseFunctionSignature('column<A>:B -> B'),
       })
-    ).toMatchInlineSnapshot(`column<number, 2>`);
+    ).toMatchInlineSnapshot(`column<number>`);
   });
 
   it('propagates symbols to other args', () => {

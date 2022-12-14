@@ -46,7 +46,7 @@ it('type can be stringified', () => {
     })
   );
   expect(formatType(locale, table)).toEqual(
-    'table (123) { Col1 = meters, Col2 = <string> }'
+    'table { Col1 = meters, Col2 = <string> }'
   );
 
   const row = serializeType(
@@ -57,10 +57,10 @@ it('type can be stringified', () => {
   );
 
   const col = serializeType(t.column(t.string(), 4));
-  expect(formatType(locale, col)).toEqual('<string> x 4');
+  expect(formatType(locale, col)).toEqual('<string>[]');
 
   const nestedCol = serializeType(t.column(t.column(t.string(), 4), 6));
-  expect(formatType(locale, nestedCol)).toEqual('<string> x 4 x 6');
+  expect(formatType(locale, nestedCol)).toEqual('<string>[][]');
 });
 
 it('annotates symbol if present', () => {

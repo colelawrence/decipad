@@ -53,7 +53,7 @@ it('finds names', async () => {
           "cellType": Object {
             "kind": "string",
           },
-          "columnSize": 1,
+          "columnSize": "unknown",
           "indexedBy": "Table1",
           "kind": "column",
         },

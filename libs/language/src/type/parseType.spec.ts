@@ -20,10 +20,10 @@ it('creates primitives', () => {
 
 it('creates columns', () => {
   expect(parseType('column<number, 2>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":2}`
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"}`
   );
   expect(parseType('column<column<number, 2>, 7>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":2},"columnSize":7}`
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"},"columnSize":"unknown"}`
   );
   expect(parseType('column<number>')).toMatchInlineSnapshot(
     `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"}`
@@ -36,7 +36,7 @@ it('creates columns', () => {
 it('constructs anything', () => {
   expect(parseType('anything')).toMatchInlineSnapshot(`{"kind":"anything"}`);
   expect(parseType('column<anything, 2>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"columnSize":2}`
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"columnSize":"unknown"}`
   );
 });
 
@@ -45,10 +45,10 @@ it('understands symbols', () => {
     `{"kind":"number","unit":null,"symbol":"A"}`
   );
   expect(parseType('column<anything:A, 3>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything","symbol":"A"},"columnSize":3}`
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything","symbol":"A"},"columnSize":"unknown"}`
   );
   expect(parseType('column<anything, 2>:A')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"columnSize":2,"symbol":"A"}`
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"columnSize":"unknown","symbol":"A"}`
   );
   expect(parseType('A')).toMatchInlineSnapshot(
     `{"kind":"anything","symbol":"A"}`

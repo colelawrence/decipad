@@ -55,9 +55,7 @@ export function formatTypeInner(
       return `row [ ${rowCellStrings.join(', ')} ]`;
     }
     case 'column': {
-      const columnStr = `${formatType(locale, type.cellType)} x ${
-        type.columnSize
-      }`;
+      const columnStr = `${formatType(locale, type.cellType)}[]`;
 
       if (!isTableColumn && type.indexedBy) {
         return `${columnStr} (${type.indexedBy})`;

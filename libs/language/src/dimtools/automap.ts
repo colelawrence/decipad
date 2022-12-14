@@ -1,10 +1,8 @@
 import * as Value from '../value';
 import { createLazyOperation } from '../lazy';
 import { build as t, Type } from '../type';
-import { allMatch } from '../utils';
 import {
   arrayOfOnes,
-  compareDimensions,
   deLinearizeType,
   getCardinality,
   linearizeType,
@@ -44,10 +42,6 @@ export const automapTypes = (
     const allDimensions = groupTypesByDimension(
       ...linearTypedArgs.map((item) => item.slice(0, -1))
     );
-
-    if (!allDimensions.every((types) => allMatch(types, compareDimensions))) {
-      return t.impossible('Mismatched dimensions');
-    }
 
     return deLinearizeType([
       ...allDimensions.map((t) => t[0]),

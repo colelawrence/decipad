@@ -18,14 +18,14 @@ import { Context } from './context';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 
-export const getNumberSequenceCount = (
+export const getNumberSequenceError = (
   start: Fraction,
   end: Fraction,
   by: Fraction
-): number | InferError => {
+): InferError | undefined => {
   const diff = start.compare(end);
   if (diff === 0) {
-    return 1;
+    return undefined;
   } else if (by.equals(0)) {
     return InferError.sequenceStepZero();
   } else if (Math.sign(diff) === by.compare(0)) {
@@ -35,18 +35,18 @@ export const getNumberSequenceCount = (
       by.valueOf()
     );
   } else if (diff > 0) {
-    return getNumberSequenceCount(end, start, by.neg());
+    return getNumberSequenceError(end, start, by.neg());
   } else {
-    return end.sub(start).div(by).add(toFraction(1)).floor().valueOf();
+    return undefined;
   }
 };
 
-export const getNumberSequenceCountN = (
+export const getNumberSequenceErrorN = (
   start: number | bigint,
   end: number | bigint,
   by: number | bigint
-): number | InferError =>
-  getNumberSequenceCount(toFraction(start), toFraction(end), toFraction(by));
+): InferError | undefined =>
+  getNumberSequenceError(toFraction(start), toFraction(end), toFraction(by));
 
 type SimplerUnit = 'month' | 'day' | 'millisecond';
 
@@ -57,12 +57,12 @@ const toSimpleTimeUnit: Record<string, [SimplerUnit, number]> = {
   second: ['millisecond', 1000],
 };
 
-export const getDateSequenceLength = (
+export const getDateSequenceError = (
   start: bigint,
   end: bigint,
   boundsSpecificity: Time.Specificity,
   by: Time.Unit
-): number | InferError => {
+): InferError | undefined => {
   // Get the end of the year, month or day.
   end = DateValue.fromDateAndSpecificity(end, boundsSpecificity).getEnd();
 
@@ -84,7 +84,7 @@ export const getDateSequenceLength = (
       const [endYear, endMonth] = dateToArray(end);
 
       const monthDiff = (endYear - startYear) * 12n + (endMonth - startMonth);
-      return getNumberSequenceCountN(0, monthDiff, steps);
+      return getNumberSequenceErrorN(0, monthDiff, steps);
     }
     case 'day': {
       // Taken from date-fns differenceInCalendarDays
@@ -93,10 +93,10 @@ export const getDateSequenceLength = (
         Number(end - start) / millisecondsInDay
       );
 
-      return getNumberSequenceCountN(0, differenceInDays - 1, steps);
+      return getNumberSequenceErrorN(0, differenceInDays - 1, steps);
     }
     case 'millisecond': {
-      return getNumberSequenceCountN(start, end, steps);
+      return getNumberSequenceErrorN(start, end, steps);
     }
     /* istanbul ignore next */
     default: {
@@ -158,16 +158,16 @@ export const inferSequence = async (
       return t.impossible(`An increment clause of ${increment} is too broad`);
     }
 
-    const countOrError = getDateSequenceLength(
+    const countOrError = getDateSequenceError(
       start,
       end,
       boundsSpecificity,
       increment
     );
 
-    return countOrError instanceof InferError
+    return countOrError
       ? t.impossible(countOrError)
-      : t.column(t.date(specificity), countOrError);
+      : t.column(t.date(specificity));
   } else {
     const type = startType.isScalar('number');
     if (type.errorCause) {
@@ -183,7 +183,7 @@ export const inferSequence = async (
         ? toFraction(1n)
         : toFraction(-1n);
       if (by) {
-        const countOrError = getNumberSequenceCount(start, end, by);
+        const countOrError = getNumberSequenceError(start, end, by);
         return countOrError instanceof InferError
           ? t.impossible(countOrError)
           : t.column(boundTypes, countOrError);

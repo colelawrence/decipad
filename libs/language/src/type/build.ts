@@ -93,14 +93,14 @@ export const row = (cells: Type[], cellNames: string[]) => {
 
 export const column = (
   cellType: Type,
-  columnSize?: number | 'unknown',
+  _columnSize?: number | 'unknown',
   indexedBy?: string | null,
   atParentIndex?: number | null
 ) => {
   const colT = produce(new Type(), (t) => {
     t.indexedBy = indexedBy ?? null;
     t.cellType = cellType;
-    t.columnSize = columnSize ?? 'unknown';
+    t.columnSize = 'unknown';
     t.atParentIndex = atParentIndex ?? null;
   });
 

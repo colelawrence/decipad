@@ -379,20 +379,6 @@ export function* pairwise<T1, T2>(array: (T1 | T2)[]) {
   }
 }
 
-export const allMatch = <T>(array: T[], matchFn: (a: T, b: T) => boolean) =>
-  array.every((thisItem, index) => {
-    const nextItem = array[index + 1];
-
-    return nextItem != null ? matchFn(thisItem, nextItem) : true;
-  });
-
-export function equalOrUnknown(a: number | 'unknown', b: number | 'unknown') {
-  if (a === 'unknown' || b === 'unknown') {
-    return true;
-  }
-  return a === b;
-}
-
 export function equalOrUndefined<T>(
   a: T | null | undefined,
   b: T | null | undefined

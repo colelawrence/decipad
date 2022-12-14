@@ -81,14 +81,6 @@ describe('automapTypes', () => {
     });
   });
 
-  it('errors with incompatible dims', () => {
-    const diffColLengths = automapTypes(
-      [t.column(num, 1), t.column(num, 2)],
-      typeId
-    );
-    expect(diffColLengths.errorCause).not.toBeNull();
-  });
-
   /* eslint-disable-next-line jest/no-disabled-tests */
   it.skip('can automap types', () => {
     const total = ([a]: Type[]) => a.reduced();
@@ -148,9 +140,7 @@ describe('automapTypes', () => {
     const indicesTwo = t.column(t.column(str, 1, 'Idx2d'), 5, 'Idx1');
     expect(automapTypes([indicesTwo], () => str)).toMatchObject({
       indexedBy: 'Idx1',
-      columnSize: 5,
       cellType: {
-        columnSize: 1,
         indexedBy: 'Idx2d',
       },
     });
@@ -633,7 +623,6 @@ describe('automap for reducers', () => {
       const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
 
       expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
-        columnSize: 2,
         indexedBy: 'Y',
         cellType: {
           type: 'number',
@@ -648,7 +637,6 @@ describe('automap for reducers', () => {
         cellType: {
           type: 'number',
         },
-        columnSize: 1,
         indexedBy: 'Y',
       });
     });

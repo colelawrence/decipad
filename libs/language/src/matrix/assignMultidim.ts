@@ -4,7 +4,6 @@ import { AST, Column, Type } from '..';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { ColumnLike, isColumnLike } from '../value';
 import { build as t, InferError } from '../type';
-import { equalOrUnknown } from '../utils';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
 
@@ -16,10 +15,8 @@ export function inferMultidimAssignment(
   previousMatrix?: Type
 ) {
   let returnedCellType = assignee;
-  if (assignee.columnSize) {
-    returnedCellType = equalOrUnknown(assignee.columnSize, assignee.columnSize)
-      ? assignee.reduced()
-      : t.impossible('Expected compatible column size');
+  if (assignee.cellType != null) {
+    returnedCellType = assignee.reduced();
   } else {
     returnedCellType = assignee;
   }

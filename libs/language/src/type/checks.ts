@@ -1,7 +1,7 @@
 import { dequal } from 'dequal';
 import { PrimitiveTypeName, Type } from '.';
 import type { Time } from '..';
-import { equalOrUnknown, zip } from '../utils';
+import { zip } from '../utils';
 import * as t from './build';
 import { InferError } from './InferError';
 import { propagatePercentage } from './percentages';
@@ -71,20 +71,6 @@ export const isColumn = checker((me: Type) => {
     return me.expected('column');
   }
 });
-
-export const withColumnSize = checker(
-  (me: Type, columnSize: number | 'unknown' | null) => {
-    return me.isColumn().mapType((me) => {
-      if (equalOrUnknown(me.columnSize ?? 'unknown', columnSize ?? 'unknown')) {
-        return me;
-      } else {
-        return me.withErrorCause(
-          `Incompatible column sizes: ${me.columnSize} and ${columnSize}`
-        );
-      }
-    });
-  }
-);
 
 export const isTable = checker((me: Type) => {
   if (me.columnNames != null && me.columnTypes != null) {
@@ -157,17 +143,10 @@ export const withAtParentIndex = checker((me: Type) => {
 
 export const sameColumnessAs = checker((me: Type, other: Type) => {
   if (me.columnSize != null && other.columnSize != null) {
-    return me.withColumnSize(other.columnSize).mapType((t) => {
-      if (t.columnSize) {
-        // Recurse to make sure it's a colummn of the same size
-        return t
-          .reduced()
-          .sameAs(other.reduced())
-          .mapType(() => t);
-      } else {
-        return t;
-      }
-    });
+    return me
+      .reduced()
+      .sameAs(other.reduced())
+      .mapType(() => me);
   } else if (me.columnSize == null && other.columnSize == null) {
     return me;
   } else {

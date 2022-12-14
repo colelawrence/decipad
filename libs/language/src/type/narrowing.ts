@@ -1,7 +1,7 @@
 import { getDefined, zip } from '@decipad/utils';
 import produce from 'immer';
 import { deserializeType, SerializedTypes, serializeType, Type } from '.';
-import { equalOrUndefined, equalOrUnknown } from '../utils';
+import { equalOrUndefined } from '../utils';
 import { onlyOneIsPercentage } from './percentages';
 import { traverseType } from './traverseType';
 import { propagateTypeUnits } from './units';
@@ -96,10 +96,6 @@ export function narrowTypes(
 
         if (narrowedCell.errorCause) {
           return narrowedCell;
-        }
-
-        if (!equalOrUnknown(s1.columnSize, s2.columnSize)) {
-          return t1.withErrorCause('mismatched column size');
         }
 
         if (!equalOrUndefined(s1.indexedBy, s2.indexedBy)) {

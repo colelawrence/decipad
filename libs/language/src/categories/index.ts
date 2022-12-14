@@ -24,9 +24,6 @@ export const inferCategories = async (
     .reduced()
     .isPrimitive()
     .mapType((setCell) => {
-      if (contents.columnSize === 'unknown') {
-        return t.impossible('Expected column with known length');
-      }
       if (ctx.stack.has(name)) {
         return t.impossible(InferError.duplicatedName(name));
       }

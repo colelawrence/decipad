@@ -254,17 +254,10 @@ describe('more models', () => {
           unit,
         },
         Years: {
-          columnSize: 4,
-          cellType: {
-            date: 'year',
-          },
+          cellType: { date: 'year' },
         },
         YearlyCashFlows: {
-          columnSize: 4,
-          cellType: {
-            type: 'number',
-            unit,
-          },
+          cellType: { type: 'number', unit },
         },
       },
     });

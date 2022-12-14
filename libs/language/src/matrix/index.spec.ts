@@ -98,9 +98,7 @@ describe('matrix op inference', () => {
       )
     ).toMatchObject({
       columnSize: 'unknown',
-      cellType: {
-        type: 'number',
-      },
+      cellType: { type: 'number' },
     });
   });
 
@@ -211,11 +209,8 @@ describe('matrix op inference', () => {
       matrixAssign('CreatedVar', [r('City')], l(1))
     );
     expect(newVariable).toMatchObject({
-      columnSize: 2,
       indexedBy: 'City',
-      cellType: {
-        type: 'number',
-      },
+      cellType: { type: 'number' },
     });
     expect(testContext.stack.get('CreatedVar')).toBe(newVariable);
   });
@@ -277,10 +272,7 @@ describe('assigning multidimensional values', () => {
         matrixAssign('CoffeePrice', [r('City')], col(1, 2))
       )
     ).toMatchObject({
-      columnSize: 2,
-      cellType: {
-        type: 'number',
-      },
+      cellType: { type: 'number' },
       indexedBy: 'City',
     });
   });
@@ -292,10 +284,7 @@ describe('assigning multidimensional values', () => {
         matrixAssign('CoffeePrice', [c('==', r('City'), l('Faro'))], col(123))
       )
     ).toMatchObject({
-      columnSize: 2,
-      cellType: {
-        type: 'number',
-      },
+      cellType: { type: 'number' },
       indexedBy: 'City',
     });
   });

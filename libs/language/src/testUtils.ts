@@ -210,10 +210,6 @@ export const snapshotType = (type: Type | SerializedType): string => {
     case 'column': {
       let contents = snapshotType(type.cellType);
 
-      if (type.columnSize !== 'unknown') {
-        contents += `, ${type.columnSize}`;
-      }
-
       if (type.indexedBy != null) {
         contents += `, indexed by ${type.indexedBy}`;
       }

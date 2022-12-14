@@ -7,7 +7,7 @@ describe('list operators', () => {
   it('concatenates lists', async () => {
     expect(await runCode('cat([1, 2], [3, 4])')).toMatchInlineSnapshot(`
       Object {
-        "type": column<number, 4>,
+        "type": column<number>,
         "value": Array [
           Fraction(1),
           Fraction(2),
@@ -58,7 +58,7 @@ describe('list operators', () => {
   it('sorts a list', async () => {
     expect(await runCode('sort([2, -1, 11])')).toMatchInlineSnapshot(`
       Object {
-        "type": column<number, 3>,
+        "type": column<number>,
         "value": Array [
           Fraction(-1),
           Fraction(2),
@@ -85,7 +85,7 @@ describe('list operators', () => {
   it('reverses a list', async () => {
     expect(await runCode('reverse([3, 2, 1])')).toMatchInlineSnapshot(`
       Object {
-        "type": column<number, 3>,
+        "type": column<number>,
         "value": Array [
           Fraction(1),
           Fraction(2),

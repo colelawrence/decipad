@@ -46,16 +46,16 @@ it('can stringify a type', () => {
   `);
   expect(serializeType(t.column(t.number(), 2, 'Index')))
     .toMatchInlineSnapshot(`
-      Object {
-        "cellType": Object {
-          "kind": "number",
-          "unit": null,
-        },
-        "columnSize": 2,
-        "indexedBy": "Index",
-        "kind": "column",
-      }
-    `);
+    Object {
+      "cellType": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "columnSize": "unknown",
+      "indexedBy": "Index",
+      "kind": "column",
+    }
+  `);
 
   expect(
     serializeType(
@@ -174,7 +174,6 @@ it('can parse a type', () => {
       columnSize: 123,
     })
   ).toMatchObject({
-    columnSize: 123,
     cellType: {
       type: 'number',
     },

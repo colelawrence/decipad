@@ -19,7 +19,6 @@ import {
   sameAs,
   sharePercentage,
   withAtParentIndex,
-  withColumnSize,
   withMinimumColumnCount,
 } from './checks';
 import { InferError } from './InferError';
@@ -159,10 +158,6 @@ export class Type {
 
   reducedToLowest(): Type {
     return reducedToLowest(this);
-  }
-
-  withColumnSize(columnSize: number | 'unknown' | null): Type {
-    return withColumnSize(this, columnSize);
   }
 
   withAtParentIndex(): Type {

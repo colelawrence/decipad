@@ -1,6 +1,5 @@
 import Fraction from '@decipad/fraction';
 import { lenientZip, zip } from '@decipad/utils';
-import { equalOrUnknown } from '../utils';
 import { Type } from '..';
 import { getSpecificity } from '../date';
 import { Interpreter } from '../interpreter';
@@ -64,7 +63,6 @@ function validate(
     }
     case 'column': {
       const array = getArray(value as Interpreter.ResultColumn);
-      equalOrUnknown(array.length, type.columnSize);
       return array.every((cell) => validate(type.cellType, cell));
     }
     case 'table': {
