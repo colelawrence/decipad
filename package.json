@@ -231,7 +231,7 @@
     "unified": "9.2.2",
     "unist-util-visit": "2.0.3",
     "urql": "3.0.3",
-    "use-debounce": "^8.0.4",
+    "use-debounce": "^9.0.2",
     "use-sync-external-store": "1.2.0",
     "utility-types": "3.10.0",
     "vega": "5.22.1",
