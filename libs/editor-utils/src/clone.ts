@@ -4,9 +4,9 @@ import { AnyObject, isText } from '@udecode/plate';
 import { Draft } from 'immer';
 import { Computer } from '@decipad/computer';
 import { Element } from 'slate';
+import { cloneDeep } from 'lodash';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 import { isElement } from './isElement';
-import { cloneDeep } from 'lodash';
 
 type WithId = { id: string };
 
@@ -30,7 +30,7 @@ export function clone<T extends AnyElement | Text>(
     return el;
   }
   if (isElement(el)) {
-    let clonedEl = cloneDeep(el);
+    const clonedEl = cloneDeep(el);
     clonedEl.children = deduplicateVarNameInBlock(
       computer,
       deduplicateId(clonedEl)

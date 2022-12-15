@@ -11,12 +11,15 @@ import { clone } from 'lodash';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 
-const getInitialDataViewElement = (varName?: string): DataViewElement => {
+const getInitialDataViewElement = (
+  blockId?: string,
+  varName?: string
+): DataViewElement => {
   return {
     id: nanoid(),
     type: ELEMENT_DATA_VIEW,
     collapsedGroups: [],
-    varName,
+    varName: blockId,
     children: [
       {
         id: nanoid(),
@@ -43,10 +46,11 @@ const getInitialDataViewElement = (varName?: string): DataViewElement => {
 export const insertDataViewBelow = (
   editor: TEditor,
   path: Path,
+  blockId?: string,
   varName?: string
 ): void => {
   const dataView = clone(
-    getInitialDataViewElement(varName)
+    getInitialDataViewElement(blockId, varName)
   ) as unknown as DataViewElement;
   insertNodes(editor, dataView, {
     at: requirePathBelowBlock(editor, path),

@@ -31,7 +31,7 @@ interface UseDataViewProps {
 
 interface UseDataViewReturnType {
   variableNames: AutocompleteName[];
-  tableName: string;
+  tableName?: string;
   onDelete: () => void;
   onInsertColumn: (name: string, serializedType: SerializedType) => void;
   onDeleteColumn: (dataViewHeaderPath: Path) => void;
@@ -61,10 +61,11 @@ export const useDataView = ({
     columnChanges$,
   } = useDataViewActions(editor, element);
 
-  const tableName = element.varName || '';
   const [tableNames, setTableNames] = useState<AutocompleteName[]>([]);
 
   const computer = useComputer();
+  const blockId = element.varName || '';
+  const tableName = computer.getSymbolDefinedInBlock$.use(blockId);
   useEffect(() => {
     const sub = computer.getNamesDefined$
       .observeWithSelector((names) =>

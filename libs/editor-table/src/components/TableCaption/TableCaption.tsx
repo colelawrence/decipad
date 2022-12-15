@@ -43,13 +43,14 @@ export const TableCaption: PlateComponent = ({
       return;
     }
 
-    const [, parentPath] = parent;
+    const [tableElement, parentPath] = parent;
 
     return (
       path &&
       insertDataViewBelow(
         editor,
         parentPath,
+        tableElement.id,
         getNodeString(getNodeChild(element, 0))
       )
     );

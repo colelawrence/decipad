@@ -77,7 +77,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         icon={(element.icon ?? 'Table') as UserIconKey}
         color={(element.color ?? defaultColor) as AvailableSwatchColor}
         data={
-          (sortedColumns && (
+          (sortedColumns && tableName && (
             <DataViewData
               tableName={tableName}
               columnNames={sortedColumns[0]}

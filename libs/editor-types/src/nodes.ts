@@ -34,7 +34,7 @@ export type UndoEditor = {
 };
 export type MyEditor = PlateEditor<MyValue> & {
   isDragging?: boolean;
-  interceptEvent?: EventInterceptor
+  interceptEvent?: EventInterceptor;
 } & UndoEditor;
 export type MyReactEditor = TReactEditor<MyValue>;
 
