@@ -1,14 +1,21 @@
 import { MyEditor, MyPlatePlugin } from '@decipad/editor-types';
 import { CursorEditor } from '@decipad/slate-yjs';
+import { debounce } from 'lodash';
 import { cursorStore } from '../../stores/cursorStore';
 import { cursorColor } from './cursorColor';
 
-export const createRemoteCursorsPlugin = (): MyPlatePlugin => ({
-  key: 'PLUGIN_REMOTE_CURSORS',
-  then: (_editor: MyEditor) => {
-    setTimeout(() => {
-      const editor = _editor as unknown as CursorEditor;
-      editor.awareness.on('update', () => {
+const RETRY_INTERVAL_MS = 1000;
+const DEBOUNCE_MS = 1000;
+
+const schedule = (_editor: MyEditor) => {
+  setTimeout(() => {
+    const editor = _editor as unknown as CursorEditor;
+    if (!editor.awareness) {
+      return schedule(_editor);
+    }
+    editor.awareness.on(
+      'update',
+      debounce(() => {
         const newCursorData = Array.from(editor.awareness.getStates())
           .filter(([clientId]) => clientId !== editor.sharedType.doc?.clientID)
           .map(([clientID, awareness]) => {
@@ -36,7 +43,12 @@ export const createRemoteCursorsPlugin = (): MyPlatePlugin => ({
           );
 
         cursorStore.set.cursors(newCursorData);
-      });
-    }, 0);
-  },
+      }, DEBOUNCE_MS)
+    );
+  }, RETRY_INTERVAL_MS);
+};
+
+export const createRemoteCursorsPlugin = (): MyPlatePlugin => ({
+  key: 'PLUGIN_REMOTE_CURSORS',
+  then: schedule,
 });
