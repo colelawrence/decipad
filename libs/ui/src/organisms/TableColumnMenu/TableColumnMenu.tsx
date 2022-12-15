@@ -157,8 +157,9 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                   )
                 }
                 selected={type.kind === 'number' && sameUnits(type.unit, unit)}
+                itemAlignment="center"
               >
-                {unit.baseQuantity}
+                <span css={{ marginLeft: '2px' }}>{unit.baseQuantity}</span>
               </MenuItem>
             ))}
           </MenuList>

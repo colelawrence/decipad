@@ -178,6 +178,7 @@ export const units: UnitOfMeasure[] = [
     name: 'canadiandollar',
     symbols: ['C$', 'CAN$', 'cad'],
     baseQuantity: 'CAD',
+    pretty: 'C$',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
     superBaseQuantity,
