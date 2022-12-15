@@ -25,6 +25,12 @@ const alignRightStyles = css({
   textAlign: 'right',
 });
 
+const globalStyles = css({
+  color: cssVar('weakTextColor'),
+  backgroundColor: cssVar('highlightColor'),
+  fontWeight: 'bold',
+});
+
 export interface ColumnAggregation {
   type?: Result.Result['type'];
   value?: Result.Result['value'];
@@ -38,6 +44,7 @@ export interface SmartRowProps {
   onHover?: (hover: boolean) => void;
   hover?: boolean;
   alignRight?: boolean;
+  global?: boolean;
 }
 
 export function SmartCell({
@@ -48,6 +55,7 @@ export function SmartCell({
   onHover = noop,
   hover = false,
   alignRight = false,
+  global = false,
 }: SmartRowProps): ReturnType<FC> {
   const onMouseOver = useCallback(() => onHover(true), [onHover]);
   const onMouseOut = useCallback(() => onHover(false), [onHover]);
@@ -65,6 +73,7 @@ export function SmartCell({
         smartCellStyles,
         hover && hoverCellStyles,
         alignRight && alignRightStyles,
+        global && globalStyles,
       ]}
       rowSpan={rowSpan}
       colSpan={colSpan}

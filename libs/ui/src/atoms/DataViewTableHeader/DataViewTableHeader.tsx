@@ -1,6 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, MouseEvent, ReactNode, useCallback } from 'react';
+import { cssVar } from '../../primitives';
 
 interface DataViewTableHeaderProps {
   children?: ReactNode;
@@ -9,6 +10,7 @@ interface DataViewTableHeaderProps {
   colSpan?: number;
   onHover?: (hover: boolean) => void;
   alignRight?: boolean;
+  global?: boolean;
 }
 
 const dataViewTableHeaderStyles = css({
@@ -19,12 +21,18 @@ const alignRightStyles = css({
   textAlign: 'right',
 });
 
+const globalStyles = css({
+  color: cssVar('weakTextColor'),
+  backgroundColor: cssVar('highlightColor'),
+});
+
 export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   rowSpan,
   colSpan,
   children,
   onHover = noop,
   alignRight = false,
+  global = false,
 }) => {
   const onMouseOver = useCallback(
     (ev: MouseEvent) => {
@@ -48,7 +56,11 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
       colSpan={colSpan}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      css={[dataViewTableHeaderStyles, alignRight ? alignRightStyles : null]}
+      css={[
+        dataViewTableHeaderStyles,
+        alignRight && alignRightStyles,
+        global && globalStyles,
+      ]}
     >
       {children}
     </th>

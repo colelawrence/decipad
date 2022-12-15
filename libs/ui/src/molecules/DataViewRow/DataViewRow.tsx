@@ -8,6 +8,7 @@ interface TableRowProps {
   readonly children?: ReactNode;
   readonly isFullWidth: boolean;
   readonly isBeforeFullWidthRow: boolean;
+  readonly global: boolean;
 }
 
 const dataViewRowStyles = css({
@@ -26,6 +27,11 @@ const dataViewRowFullWidthStyles = css({
   borderTop: `1px solid ${cssVar('normalTextColor')}`,
 });
 
+const dataViewRowGlobalStyles = css({
+  color: cssVar('weakTextColor'),
+  backgroundColor: cssVar('highlightColor'),
+});
+
 const dataViewBeforeFullWidthRowStyles = css({
   border: 'none',
 });
@@ -35,14 +41,16 @@ export const DataViewRow = ({
   children,
   isFullWidth,
   isBeforeFullWidthRow,
+  global = false,
 }: TableRowProps): ReturnType<FC> => {
   return (
     <tr
       {...attributes}
       css={[
         dataViewRowStyles,
-        isBeforeFullWidthRow ? dataViewBeforeFullWidthRowStyles : null,
-        isFullWidth ? dataViewRowFullWidthStyles : null,
+        isBeforeFullWidthRow && dataViewBeforeFullWidthRowStyles,
+        isFullWidth && dataViewRowFullWidthStyles,
+        global && dataViewRowGlobalStyles,
       ]}
     >
       {children}

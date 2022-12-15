@@ -22,22 +22,24 @@ export const SmartCell: FC<SmartProps> = ({
   hover,
   alignRight,
   subProperties,
+  global = false,
 }: SmartProps) => {
   const computer = useComputer();
   const [result, setResult] = useState<Result.Result | null>(null);
 
   const expressionFilter = useMemo(() => {
     return (
-      column &&
-      subProperties.reduce((previous, current) => {
-        const escapedValue = textify({
-          type: current.type,
-          value: current.value as Result.Result['value'],
-        });
-        return previous === ``
-          ? `filter(${tableName}, ${tableName}.${current.name} == ${escapedValue})`
-          : `filter(${previous}, ${previous}.${current.name} == ${escapedValue})`;
-      }, ``)
+      (column &&
+        subProperties.reduce((previous, current) => {
+          const escapedValue = textify({
+            type: current.type,
+            value: current.value as Result.Result['value'],
+          });
+          return previous === ``
+            ? `filter(${tableName}, ${tableName}.${current.name} == ${escapedValue})`
+            : `filter(${previous}, ${previous}.${current.name} == ${escapedValue})`;
+        }, '')) ||
+      tableName
     );
   }, [column, subProperties, tableName]);
 
@@ -56,6 +58,7 @@ export const SmartCell: FC<SmartProps> = ({
   useEffect(() => {
     const sub = (
       (typeof expression === 'string' &&
+        expression &&
         computer.expressionResultFromText$(expression)) ||
       EMPTY
     ).subscribe((r) => {
@@ -75,6 +78,7 @@ export const SmartCell: FC<SmartProps> = ({
       onHover={onHover}
       hover={hover}
       alignRight={alignRight}
+      global={global}
     ></UISmartCell>
   );
 };

@@ -13,6 +13,7 @@ import { MenuList } from '../../molecules';
 import { Caret, Code, Trash } from '../../icons';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { useMergedRef } from '../../hooks';
+import { cssVar } from '../../primitives';
 
 export interface DataViewColumnHeaderProps {
   name: string;
@@ -29,6 +30,7 @@ export interface DataViewColumnHeaderProps {
   hoverDirection?: 'left' | 'right';
   isOverCurrent?: boolean;
   alignRight?: boolean;
+  global?: boolean;
 }
 
 export type Ref = HTMLTableCellElement;
@@ -72,6 +74,11 @@ const alignRightStyles = css({
   justifyContent: 'flex-end',
 });
 
+const globalStyles = {
+  color: cssVar('weakTextColor'),
+  backgroundColor: cssVar('highlightColor'),
+};
+
 export const DataViewColumnHeader = forwardRef<
   HTMLTableCellElement,
   DataViewColumnHeaderProps
@@ -89,6 +96,7 @@ export const DataViewColumnHeader = forwardRef<
     hoverDirection,
     isOverCurrent,
     alignRight = false,
+    global = false,
   }: DataViewColumnHeaderProps,
   ref
 ): ReturnType<FC> {
@@ -122,6 +130,7 @@ export const DataViewColumnHeader = forwardRef<
         dataViewColumnHeaderStyles,
         isOverCurrent && hoverDirection === 'left' && borderLeftStyles,
         isOverCurrent && hoverDirection === 'right' && borderRightStyles,
+        global && globalStyles,
       ]}
       contentEditable={false}
       ref={refs}

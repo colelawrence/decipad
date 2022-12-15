@@ -76,6 +76,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       groupId={element.id || ''}
       groupLength={groupLength}
       index={index}
+      global={element.global}
     />
   ) : (
     <SmartCell
@@ -88,6 +89,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       hover={parentHover || selfHover}
       alignRight={isCellAlignRight(element.column.type)}
       subProperties={element.subProperties}
+      global={element.global}
     />
   );
 };

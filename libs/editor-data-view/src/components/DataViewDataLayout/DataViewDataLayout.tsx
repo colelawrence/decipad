@@ -23,6 +23,7 @@ export interface HeaderProps {
   onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
   groupLength: number;
   index: number;
+  global?: boolean;
 }
 
 export interface SmartProps {
@@ -44,6 +45,7 @@ export interface SmartProps {
     name: string;
   }[];
   alignRight?: boolean;
+  global?: boolean;
 }
 
 export interface DataViewLayoutProps {
@@ -106,6 +108,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
             isBeforeFullWidthRow={
               table[index + 1] && table[index + 1].length === maxCols
             }
+            global={row.some((r) => r.global)}
           >
             {row.map((element, elementIndex) => (
               <DataViewDataGroupElement

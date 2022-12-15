@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Interpreter, Result, SerializedType } from '@decipad/computer';
 import { AggregationKind, DataGroup } from '../../types';
 import { generateGroups } from './generateGroups';
+import { generateTotalGroup } from './generateTotalGroup';
 
 const { Column } = Result;
 
-export const layoutPowerData = (
+export const layoutPowerData = async (
   columnNames: string[],
   columns: Interpreter.ResultTable,
   columnTypes: SerializedType[],
@@ -16,7 +17,14 @@ export const layoutPowerData = (
     Column.fromValues(column as Result.Comparable[])
   );
 
-  return generateGroups({
+  const totalGroup = generateTotalGroup({
+    columnNames,
+    columns: sortableColumns,
+    columnTypes,
+    aggregationTypes,
+  });
+
+  const rootGroups = await generateGroups({
     columnNames,
     columnData: sortableColumns,
     columnTypes,
@@ -25,6 +33,11 @@ export const layoutPowerData = (
     columnIndex: 0,
     subProperties: [],
   });
+
+  return Promise.all([
+    ...rootGroups,
+    ...(totalGroup != null ? [totalGroup] : []),
+  ]);
 };
 
 export const useDataViewLayoutData = (

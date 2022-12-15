@@ -15,6 +15,7 @@ export interface GenerateSmartRowProps {
     name: string;
   }[];
   parentHighlight$?: BehaviorSubject<boolean>;
+  global?: boolean;
 }
 
 export const generateSmartRow = ({
@@ -24,6 +25,7 @@ export const generateSmartRow = ({
   aggregationTypes,
   subProperties,
   parentHighlight$,
+  global = false,
 }: GenerateSmartRowProps): DataGroup => {
   const [firstColumn, ...rest] = columns;
 
@@ -39,6 +41,7 @@ export const generateSmartRow = ({
               aggregationTypes,
               subProperties,
               parentHighlight$,
+              global,
             }),
           ]
         : [],
@@ -50,5 +53,6 @@ export const generateSmartRow = ({
     columnIndex,
     subProperties,
     parentHighlight$,
+    global,
   };
 };

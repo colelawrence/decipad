@@ -29,6 +29,7 @@ export interface SmartRowElement extends BaseElement {
     value: Result.Comparable;
     name: string;
   }[];
+  global?: boolean;
 }
 
 export interface DataGroupElement extends BaseElement {
@@ -39,6 +40,7 @@ export interface DataGroupElement extends BaseElement {
   children: DataGroup[];
   collapsible?: boolean;
   column?: never;
+  global?: boolean;
 }
 
 export type DataGroup = DataGroupElement | SmartRowElement;

@@ -22,6 +22,7 @@ interface DataViewTableHeaderProps {
   collapsedGroups: string[] | undefined;
   onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
   groupId: string;
+  global?: boolean;
 }
 
 export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
@@ -36,6 +37,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   onChangeCollapsedGroups,
   groupId,
   collapsible,
+  global,
 }) => {
   const handleCollapseGroupButtonPress = useCallback(
     (e: MouseEvent): void => {
@@ -80,6 +82,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       colSpan={groupIsCollapsed ? 1 : colSpan}
       onHover={onHover}
       alignRight={alignRight}
+      global={global}
     >
       {collapsible ? (
         <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>
