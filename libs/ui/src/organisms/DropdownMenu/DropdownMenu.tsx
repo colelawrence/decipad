@@ -100,6 +100,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   // Enter press when user is adding new option
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
+      if (!open) return;
       switch (true) {
         case event.key === 'ArrowDown' && !event.shiftKey:
           setFocusedIndex(
@@ -134,6 +135,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
       }
     },
     [
+      open,
       addOption,
       inputValue,
       items,
