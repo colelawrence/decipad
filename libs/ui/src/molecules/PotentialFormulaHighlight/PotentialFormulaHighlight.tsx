@@ -46,7 +46,7 @@ export const PotentialFormulaHighlight = forwardRef<
   ) => {
     return (
       <span
-        data-testid="inline-number-element"
+        data-testid="potential-formula"
         {...attributes}
         css={highlightStyles}
         ref={ref}

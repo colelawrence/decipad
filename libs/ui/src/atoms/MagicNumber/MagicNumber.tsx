@@ -105,6 +105,7 @@ export const MagicNumber = ({
       onClick={useEventNoEffect(onClick)}
       css={[wrapperStyles]}
       data-number-id={tempId}
+      data-testid="magic-number"
     >
       <span
         title={result ? result.value?.toString() : 'Loading'}

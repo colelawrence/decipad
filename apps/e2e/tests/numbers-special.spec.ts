@@ -1,24 +1,29 @@
 import { expect, Page, test } from '@playwright/test';
-import {
-  createCalculationBlockBelow,
-  getCodeLineContent,
-  getResult,
-} from '../utils/page/Block';
+import { getResult } from '../utils/page/Block';
 import {
   goToPlayground,
   keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
 
-const findInlineNumber = (page: Page) =>
-  page.waitForSelector(`[data-testid=inline-number-element]`);
+const findMagicNumber = (page: Page) =>
+  page.waitForSelector(`[data-testid=magic-number]`);
 
-const getInlineNumberContent = async (page: Page) => {
-  const content = await (await findInlineNumber(page)).textContent();
+const findPotentialFormula = (page: Page) =>
+  page.waitForSelector(`[data-testid=potential-formula]`);
+
+const getHighlightContent = async (page: Page) => {
+  const content = await (await findPotentialFormula(page)).textContent();
   return content?.replace(/\u2060/gi, '');
 };
 
-test.describe('Inline numbers', () => {
+const getMagicNumberContent = async (page: Page) => {
+  const content = await (await findMagicNumber(page)).textContent();
+  // TODO: we don't use zero-width spaces in magic numbers, so we can remove this
+  return content?.replace(/\u2060/gi, '');
+};
+
+test.describe('Formula highlighting', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;
@@ -33,48 +38,56 @@ test.describe('Inline numbers', () => {
     await page.close();
   });
 
-  let lineNo = -1;
+  const lineNo = -1;
 
-  test('creates a number while typing', async () => {
+  test('highlights a number while typing', async () => {
     await keyPress(page, 'Enter');
     await page.keyboard.type('We have bought 3');
-    const inlineNumber = await getInlineNumberContent(page);
-    expect(inlineNumber).toEqual('3');
+    const potentialFormula = await getHighlightContent(page);
+    expect(potentialFormula).toEqual('3');
   });
 
-  test('jumps out on Enter key', async () => {
+  test('editable when TAB pressed', async () => {
+    await keyPress(page, 'Tab');
+    await page.keyboard.type('+1');
+    await page.waitForTimeout(500);
+    const potentialFormula = await getMagicNumberContent(page);
+    expect(potentialFormula).toEqual('4');
+  });
+
+  test('you can continue typing after pressing ENTER', async () => {
     await keyPress(page, 'Enter');
     await page.keyboard.type('tickets to Paris.');
-
-    const inlineNumber = await getInlineNumberContent(page);
-    expect(inlineNumber).toEqual('3');
+    const potentialFormula = await getMagicNumberContent(page);
+    expect(potentialFormula).toEqual('4');
   });
 
-  test('opens a name field on click', async () => {
-    // TODO: is there better way to focus?
-    for (let i = 19; i > 0; i -= 1) {
-      await page.keyboard.press('ArrowLeft');
-    }
-    const number = await findInlineNumber(page);
-    await number.click();
-    await keyPress(page, 'Tab');
+  test('result could be dragged out', async () => {
     await keyPress(page, 'ArrowDown');
-    await keyPress(page, 'ArrowLeft');
-    await page.keyboard.type('cookies = ');
-  });
-
-  test('can be referenced by typing', async () => {
+    await keyPress(page, 'ArrowDown');
     await keyPress(page, 'ArrowDown');
 
-    lineNo += 1;
-
-    await createCalculationBlockBelow(page, '100 + cookies ');
-
-    const line = await getCodeLineContent(page, lineNo);
-    expect(line).toEqual('cookies = 3');
+    const selector = '[data-type="paragraph"]:last-child';
+    const lastParagraphNode = page.locator(selector);
 
     const resultEl = await getResult(page, lineNo);
-    const result = await resultEl.textContent();
-    expect(result).toBe('3');
+    resultEl.dragTo(lastParagraphNode);
+
+    await page.waitForTimeout(10000);
+  });
+
+  test('second instance editable by click', async () => {
+    await page
+      .getByTestId('paragraph-content')
+      .nth(1)
+      .getByTestId('magic-number')
+      .click();
+
+    await page.keyboard.type('+1');
+    await page.waitForTimeout(500);
+    const potentialFormula = await getMagicNumberContent(page);
+    expect(potentialFormula).toEqual('5');
+
+    await page.waitForTimeout(10000);
   });
 });

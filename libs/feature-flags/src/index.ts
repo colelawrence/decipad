@@ -15,7 +15,7 @@ export type Flag =
 
 export type Flags = Partial<Record<Flag, boolean>>;
 
-const queryStringFlags: Flag[] = ['SHADOW_CODE_LINES'];
+const queryStringFlags: Flag[] = [];
 
 const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};
