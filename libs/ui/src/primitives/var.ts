@@ -101,6 +101,7 @@ export interface CssVariables {
   readonly highlightColor: Property.Color;
   readonly strongHighlightColor: Property.Color;
   readonly strongerHighlightColor: Property.Color;
+  readonly evenStrongerHighlightColor: Property.Color;
 
   //
   // Text

@@ -68,6 +68,7 @@ export const theme: CssVariables = {
   highlightColor: grey100.rgb,
   strongHighlightColor: grey200.rgb,
   strongerHighlightColor: grey300.rgb,
+  evenStrongerHighlightColor: grey400.rgb,
 
   weakerTextColor: grey400.rgb,
   weakTextColor: grey500.rgb,

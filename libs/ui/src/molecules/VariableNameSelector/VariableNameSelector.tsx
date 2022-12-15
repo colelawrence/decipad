@@ -1,13 +1,23 @@
 import { AutocompleteName } from '@decipad/computer';
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { Label } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
 
 const selectFontStyles = css(p12Medium);
 
+const hoveredStyles = css({
+  backgroundColor: cssVar('strongHighlightColor'),
+});
+
 const selectStyles = css({
   backgroundColor: cssVar('highlightColor'),
+  fontWeight: 'bold',
+  ':hover': { ...hoveredStyles },
+});
+
+const unselectedValueStyles = css({
+  color: cssVar('evenStrongerHighlightColor'),
 });
 
 interface SelectInputProps {
@@ -23,11 +33,18 @@ const SelectInput = ({
   value,
   setValue,
 }: SelectInputProps): ReturnType<FC> => {
+  const [hovered, setHovered] = useState(false);
   return (
     <Label
+      onHover={setHovered}
       renderContent={(id) => (
         <select
-          css={[selectFontStyles, selectStyles]}
+          css={[
+            selectFontStyles,
+            selectStyles,
+            !value && unselectedValueStyles,
+            hovered && hoveredStyles,
+          ]}
           id={id}
           onChange={(ev) => {
             setValue(ev.target.value);
@@ -63,8 +80,8 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
         value={selectedVariableName}
         setValue={onChangeVariableName}
       >
-        <option key="empty" value={undefined}>
-          -
+        <option key="empty" value={''}>
+          Choose...
         </option>
         {variableNames.map((varName) => (
           <option key={varName.blockId} value={varName.blockId}>

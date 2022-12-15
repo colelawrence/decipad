@@ -23,6 +23,7 @@ import {
   orange600,
   orange700,
   purple200,
+  purple500,
   purple600,
   purple700,
   purple800,
@@ -73,6 +74,7 @@ export const theme: CssVariables = {
   highlightColor: purple800.rgb,
   strongHighlightColor: purple700.rgb,
   strongerHighlightColor: purple600.rgb,
+  evenStrongerHighlightColor: purple500.rgb,
 
   weakerTextColor: grey300.rgb,
   weakTextColor: grey200.rgb,

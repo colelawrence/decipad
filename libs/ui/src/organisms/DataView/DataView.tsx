@@ -11,6 +11,16 @@ import {
   UserIconKey,
 } from '../../utils';
 
+const dataViewWrapperStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const dataViewControlsStyles = css({
+  display: 'flex',
+  flexFlow: 'row wrap',
+});
+
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = '100vw';
 const halfTotalWidth = '50vw';
@@ -22,8 +32,6 @@ const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSli
 const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
 
 const tableCaptionWrapperStyles = css({
-  width: '100%',
-  minWidth: editorLayout.slimBlockWidth,
   maxWidth: restWidthBlock,
   display: 'inline-block',
   [smallScreenQuery]: {
@@ -86,23 +94,25 @@ export const DataView: FC<DataViewProps> = ({
 }): ReturnType<FC> => {
   const [caption, thead, addNewColumnComponent] = Children.toArray(children);
   return (
-    <div>
-      <TableStyleContext.Provider
-        value={{
-          icon,
-          color: color as AvailableSwatchColor,
-          setIcon: onChangeIcon,
-          setColor: onChangeColor,
-          hideAddDataViewButton: true,
-        }}
-      >
-        <div css={tableCaptionWrapperStyles}>{caption}</div>
-        <VariableNameSelector
-          label="Table"
-          variableNames={availableVariableNames}
-          selectedVariableName={variableName}
-          onChangeVariableName={onChangeVariableName}
-        />
+    <TableStyleContext.Provider
+      value={{
+        icon,
+        color: color as AvailableSwatchColor,
+        setIcon: onChangeIcon,
+        setColor: onChangeColor,
+        hideAddDataViewButton: true,
+      }}
+    >
+      <div css={dataViewWrapperStyles}>
+        <div css={dataViewControlsStyles}>
+          <div css={tableCaptionWrapperStyles}>{caption}</div>
+          <VariableNameSelector
+            label="Source"
+            variableNames={availableVariableNames}
+            selectedVariableName={variableName}
+            onChangeVariableName={onChangeVariableName}
+          />
+        </div>
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
 
@@ -110,9 +120,9 @@ export const DataView: FC<DataViewProps> = ({
             <thead>{thead}</thead>
             <tbody>{data}</tbody>
           </table>
-          {addNewColumnComponent}
+          {variableName && addNewColumnComponent}
         </div>
-      </TableStyleContext.Provider>
-    </div>
+      </div>
+    </TableStyleContext.Provider>
   );
 };
