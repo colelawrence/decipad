@@ -1,5 +1,6 @@
+import { noop } from '@decipad/utils';
 import { css, CSSObject } from '@emotion/react';
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode, useCallback } from 'react';
 import {
   brand200,
   brand300,
@@ -20,7 +21,6 @@ import {
   white,
 } from '../../primitives';
 import { Anchor } from '../../utils';
-import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const styles = css(p13Bold, {
   flexGrow: 1,
@@ -166,10 +166,17 @@ export const Button = ({
   disabled = false,
 
   children,
-  onClick,
+  onClick = noop,
   href,
 }: ButtonProps): ReturnType<React.FC> => {
-  const onButtonClick = useEventNoEffect(onClick);
+  const onButtonClick = useCallback(
+    (ev: MouseEvent) => {
+      ev.stopPropagation();
+      ev.preventDefault();
+      onClick();
+    },
+    [onClick]
+  );
 
   return href ? (
     <Anchor

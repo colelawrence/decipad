@@ -1,8 +1,10 @@
-import { FC, MouseEvent, useCallback } from 'react';
-import { CodeResult, DataViewTableHeader } from '@decipad/ui';
+import { FC, useCallback } from 'react';
+import { CodeResult, DataViewTableHeader, useEventNoEffect } from '@decipad/ui';
 import { Result, SerializedType } from '@decipad/computer';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { css } from '@emotion/react';
+import { useTEditorRef } from '@decipad/editor-types';
+import { deselect } from '@udecode/plate';
 import { ValueCell } from '../../types';
 
 const iconStyles = css({
@@ -39,11 +41,13 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   collapsible,
   global,
 }) => {
-  const handleCollapseGroupButtonPress = useCallback(
-    (e: MouseEvent): void => {
-      e.stopPropagation();
-      e.preventDefault();
-
+  const editor = useTEditorRef();
+  const handleCollapseGroupButtonPress = useEventNoEffect(
+    useCallback((): void => {
+      const { selection } = editor;
+      if (selection) {
+        deselect(editor);
+      }
       const matchingGroupIndex = collapsedGroups.indexOf(groupId);
 
       if (matchingGroupIndex !== -1) {
@@ -53,8 +57,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       }
 
       return onChangeCollapsedGroups([...collapsedGroups, groupId]);
-    },
-    [collapsedGroups, groupId, onChangeCollapsedGroups]
+    }, [collapsedGroups, editor, groupId, onChangeCollapsedGroups])
   );
 
   if (type == null || value == null) {

@@ -47,7 +47,7 @@ export const LiveConnectionVarName: PlateComponent = ({
   }, [parent]);
 
   return (
-    <div {...attributes}>
+    <div {...attributes} contentEditable={false}>
       <EditableLiveDataCaption
         source={sourceName}
         url={url}

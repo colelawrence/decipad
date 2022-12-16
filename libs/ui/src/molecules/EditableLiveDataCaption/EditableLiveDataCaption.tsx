@@ -77,7 +77,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
 
   return (
     <div css={editableLiveCaptionStyles}>
-      <div css={tableTitleWrapper} contentEditable={!empty}>
+      <div css={tableTitleWrapper}>
         <div css={[iconWrapperStyles, iconSvgStyles]} contentEditable={false}>
           <icons.Zap />
         </div>

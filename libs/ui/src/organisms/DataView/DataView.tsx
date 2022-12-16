@@ -116,7 +116,7 @@ export const DataView: FC<DataViewProps> = ({
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
 
-          <table css={dataViewTableStyles}>
+          <table css={dataViewTableStyles} contentEditable={false}>
             <thead>{thead}</thead>
             <tbody>{data}</tbody>
           </table>
