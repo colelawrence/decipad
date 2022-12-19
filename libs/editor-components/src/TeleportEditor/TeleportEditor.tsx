@@ -9,13 +9,17 @@ import { findNodePath } from '@udecode/plate';
 import React, {
   PropsWithChildren,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
+import { Subject } from 'rxjs';
 import { ensureSelectionHack } from './ensureSelectionHack';
 import { useFocusControl } from './useFocusControl';
 
 type TeleportEditorProps = PropsWithChildren<{ editor: MyEditor }>;
+
+export const openEditor$ = new Subject<ShadowCalcReference>();
 
 export const TeleportEditor: React.FC<TeleportEditorProps> = ({
   children,
@@ -63,6 +67,14 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
 
   const onBlur = useCallback(() => closeEditor(), [closeEditor]);
   const { useWatchTeleported } = useFocusControl(editing, closeEditor);
+
+  useEffect(() => {
+    const sub = openEditor$.subscribe((ref) => {
+      setEditing(ref);
+    });
+
+    return () => sub.unsubscribe();
+  }, [setEditing]);
 
   const value = useMemo(
     () => ({

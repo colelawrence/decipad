@@ -1,4 +1,4 @@
-import { BaseEditor, Transforms } from 'slate';
+import { BaseEditor, Transforms, BaseRange, Point } from 'slate';
 import {
   BlockElement,
   CodeLineElement,
@@ -6,14 +6,29 @@ import {
   ELEMENT_PARAGRAPH,
   ParagraphElement,
   RichText,
+  MyEditor,
+  MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
-import { pluginStore } from '@decipad/editor-utils';
+import {
+  pluginStore,
+  getAboveNodeSafe,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import {
   getBlockAbove,
   getNodeString,
+  isCollapsed,
   isElement,
   setNodes,
+  getEndPoint,
+  insertNodes,
+  toDOMNode,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
+import { getExprRef } from '@decipad/computer';
+import { ShadowCalcReference } from '@decipad/react-contexts';
+import { openEditor$ } from '@decipad/editor-components';
+import { getTextBeforeCursor } from './utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 type LastFormattedBlock = null | {
@@ -41,12 +56,15 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
 
       if (!hasModifiers && event.key === '=') {
         const entry = getBlockAbove<BlockElement>(editor);
-
         if (!entry) return;
 
-        const [node] = entry;
+        const { selection } = editor;
+        if (!selection || !isCollapsed(selection)) {
+          return;
+        }
 
-        if (node.type !== ELEMENT_PARAGRAPH || node.children.length !== 1) {
+        const [node] = entry;
+        if (node.type !== ELEMENT_PARAGRAPH) {
           return;
         }
 
@@ -54,6 +72,7 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
         const paragraph = node as ParagraphElement & { children: [RichText] };
 
         const nodeText = `${getNodeString(paragraph)}=`;
+        const textBefore = `${getTextBeforeCursor(editor, selection.focus)}=`;
 
         if (nodeText.trim() === '=') {
           event.preventDefault();
@@ -64,6 +83,20 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
             id: node.id,
             oldText: nodeText,
           };
+        } else if (textBefore.endsWith(' =')) {
+          event.preventDefault();
+
+          const { path } = selection.focus;
+          const offset = editor.selection?.focus.offset || 0;
+
+          const expressionRange: BaseRange = {
+            anchor: { path, offset },
+            focus: { path, offset },
+          };
+
+          commitPotentialFormula(editor, expressionRange, (ref) => {
+            openEditor$.next(ref);
+          });
         }
       } else if (!hasModifiers && event.key === 'Backspace') {
         const entry = getBlockAbove<CodeLineElement>(editor, {
@@ -103,3 +136,56 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
     };
   },
 });
+
+const commitPotentialFormula = (
+  editor: MyEditor,
+  expressionRange: BaseRange,
+  onCommit: (ref: ShadowCalcReference) => void,
+  id = nanoid()
+) => {
+  const insertionPath = getAboveNodeSafe(editor as MyEditor, {
+    at: expressionRange,
+    match: (x) => isElementOfType(x, ELEMENT_PARAGRAPH),
+  });
+
+  if (!insertionPath) return;
+
+  const codeLineBelow: CodeLineElement = {
+    type: ELEMENT_CODE_LINE,
+    id,
+    children: [{ text: '' }],
+  };
+
+  const magicNumberInstead = {
+    [MARK_MAGICNUMBER]: true,
+    text: getExprRef(id),
+  };
+
+  const viewInstead = magicNumberInstead;
+
+  insertNodes(editor, viewInstead, {
+    voids: true,
+    at: expressionRange,
+  });
+
+  const currentBlockEnd: Point = getEndPoint(editor, [
+    expressionRange.anchor.path[0],
+  ]);
+
+  insertNodes(editor, codeLineBelow, { at: currentBlockEnd });
+
+  setTimeout(() => {
+    const domNode = toDOMNode(editor, magicNumberInstead);
+    const dataNode = domNode?.querySelector<HTMLElement>('[data-number-id]');
+    const numberId = dataNode?.dataset.numberId;
+
+    if (!numberId) return;
+
+    onCommit({
+      numberId,
+      codeLineId: codeLineBelow.id,
+      numberNode: magicNumberInstead,
+      codeLineNode: codeLineBelow,
+    });
+  }, 100);
+};
