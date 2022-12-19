@@ -73,7 +73,7 @@ test.describe('SmartRefs in code tables', () => {
 
   test('no highlight in column declarations in code tables', async () => {
     const srCount = (await page.$$('code [data-state="closed"]')).length; // var decorations
-    expect(srCount).toBe(4);
+    expect(srCount).toBe(11);
   });
 });
 

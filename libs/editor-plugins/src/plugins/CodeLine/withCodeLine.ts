@@ -9,6 +9,7 @@ import {
   someNode,
 } from '@udecode/plate';
 import { normalizeInsertNodeText } from './normalizeInsertNodeText';
+import { applyCodeLineSelection } from './applyCodeLineSelection';
 
 export const withCodeLine: MyWithOverride = (editor) => {
   const { insertText, apply } = editor;
@@ -48,6 +49,8 @@ export const withCodeLine: MyWithOverride = (editor) => {
     if (op.type === 'insert_node' && !isVoid(editor, op.node)) {
       normalizeInsertNodeText(editor, op.node);
     }
+
+    applyCodeLineSelection(editor, op);
 
     apply(op);
   };

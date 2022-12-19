@@ -25,32 +25,92 @@ beforeEach(() => {
 });
 
 describe('in a code line', () => {
-  it('merges all text', () => {
-    editor.children = [
-      {
-        type: ELEMENT_CODE_LINE,
-        children: [
-          { text: 'code' },
-          { type: ELEMENT_PARAGRAPH, children: [{ text: '1' }] },
-          { text: '2' },
-          { type: ELEMENT_CODE_LINE, children: [{ text: '3' }] },
-        ],
-      },
-    ];
+  describe('when there is multiple children', () => {
+    it('should merge all text', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [
+            { text: 'code' },
+            { type: ELEMENT_PARAGRAPH, children: [{ text: '1' }] },
+            { text: '2' },
+            { type: ELEMENT_CODE_LINE, children: [{ text: '3' }] },
+          ],
+        },
+      ];
 
-    normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([codeLine('code123')]);
+      normalizeEditor(editor, { force: true });
+      expect(editor.children).toEqual([codeLine('code123')]);
+    });
   });
 
-  it('does not allow marks', () => {
-    editor.children = [
-      {
-        type: ELEMENT_CODE_LINE,
-        children: [{ text: 'code', bold: true, italic: false }],
-      },
-    ];
+  describe('when there is marks', () => {
+    it('should remove marks', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [{ text: 'code', bold: true, italic: false }],
+        },
+      ];
 
-    normalizeEditor(editor, { force: true });
-    expect(editor.children).toEqual([codeLine('code')]);
+      normalizeEditor(editor, { force: true });
+      expect(editor.children).toEqual([codeLine('code')]);
+    });
+  });
+
+  describe('when code line has {b', () => {
+    it('should insert "\n  " after {', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [{ text: 'a = {b' }],
+        },
+      ];
+
+      normalizeEditor(editor, { force: true });
+      expect(editor.children).toEqual([codeLine('a = {\n  b')]);
+    });
+  });
+
+  describe('when code line has {}', () => {
+    it('should not insert "\n  " after {', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [{ text: 'a = {}' }],
+        },
+      ];
+
+      normalizeEditor(editor, { force: true });
+      expect(editor.children).toEqual([codeLine('a = {}')]);
+    });
+  });
+
+  describe('when code line has a}', () => {
+    it('should insert "\n" before }', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [{ text: 'a = {\n  b}' }],
+        },
+      ];
+
+      normalizeEditor(editor, { force: true });
+      expect(editor.children).toEqual([codeLine('a = {\n  b\n}')]);
+    });
+  });
+
+  describe('when code line has tab', () => {
+    it('should replace it by double space', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [{ text: 'a = {\n\tb' }],
+        },
+      ];
+
+      normalizeEditor(editor, { force: true });
+      expect(editor.children).toEqual([codeLine('a = {\n  b')]);
+    });
   });
 });

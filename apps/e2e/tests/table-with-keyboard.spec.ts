@@ -95,9 +95,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
   test('formula produced desired output', async () => {
     await page.keyboard.type('1 + 1');
 
-    const codeBlock = await page.waitForSelector(
-      'section:has-text("="):first-child'
-    );
+    const codeBlock = await page.waitForSelector('section:has-text("=")');
     const codeBlockText = await codeBlock.innerText();
     // splitting on new line removes the text from auto-complete menu
     expect(codeBlockText.split('\n')[0]).toBe('Property3 =  1 + 1');
