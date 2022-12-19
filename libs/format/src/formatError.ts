@@ -109,5 +109,8 @@ export const formatError = (locale: string, spec: ErrSpec): string => {
     case 'unknown-reference': {
       return 'Unknown reference';
     }
+    case 'retired-feature': {
+      return "You're using a feature that's been retired";
+    }
   }
 };

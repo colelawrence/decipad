@@ -22,13 +22,6 @@ import {
  * Tbl = { Nums = [1, 2], TwoD = Tbl.Nums * OtherTable.Nums }  # TwoD indexed by [Tbl, OtherTable.Nums]
  * Tbl = { Nums = [1, 2], TwoD = OtherTable.Nums * Tbl.Nums }  # Same as above even though the operation would've flipped dims
  * ```
- *
- * Extending is the same as defining col by col
- *
- * ```
- * Tbl.MoreColumn = ...  # Exact same semantics as defining a column inside the {}
- * Tbl = { ...BaseTbl }  # Same as defining all cols manually but the table's index is "BaseTbl"
- * ```
  */
 
 /** Make {type} columnar and place {indexName} on top if {type} more than 1D */

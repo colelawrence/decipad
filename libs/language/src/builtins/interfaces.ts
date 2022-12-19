@@ -24,6 +24,7 @@ export interface BuiltinSpec {
   noAutoconvert?: boolean;
   autoConvertArgs?: boolean;
   absoluteNumberInput?: boolean;
+  hidden?: boolean;
   // Variant that operates on Value specifically
 
   fnValuesNoAutomap?: (

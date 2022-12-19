@@ -470,36 +470,6 @@ describe('Tables', () => {
     });
   });
 
-  it('can be splitby() a 2d column', async () => {
-    expect(
-      await runCode(`
-        A = { B = [ 1, 2 ] }
-        X = { Y = [ 3, 4 ] }
-        Table = {
-          Names = ["First", "Second"]
-          Numbers = A.B * X.Y
-        }
-
-        splitby(Table, Table.Numbers)
-      `)
-    ).toMatchObject({
-      type: {
-        columnNames: ['Numbers', 'Values'],
-        columnTypes: [
-          { cellType: { type: 'number' } },
-          { columnNames: ['Names'], columnTypes: [{ type: 'string' }] },
-        ],
-      },
-      value: [
-        [
-          [F(3), F(4)],
-          [F(6), F(8)],
-        ],
-        [[['First']], [['Second']]],
-      ],
-    });
-  });
-
   it('Regression: tables inside tables', async () => {
     expect(
       await runCode(`
@@ -573,72 +543,6 @@ describe('Tables', () => {
         }
       `)
     ).rejects.not.toBeNull();
-  });
-
-  it('Can spread new tables', async () => {
-    expect(
-      await runCode(`
-        OldTable = { Idx = ["One", "Two"] }
-
-        NewTable = {
-          ...OldTable,
-          NewCol = Idx + " Apples"
-        }
-      `)
-    ).toMatchObject({
-      type: t.table({
-        indexName: 'OldTable',
-        columnNames: ['Idx', 'NewCol'],
-        columnTypes: [t.string(), t.string()],
-      }),
-      value: [
-        ['One', 'Two'],
-        ['One Apples', 'Two Apples'],
-      ],
-    });
-  });
-
-  it('can create a new table with a few columns', async () => {
-    expect(
-      await runCode(`
-        SourceTable = {
-          ThisOne = [1],
-          NotThisOne = ["No"]
-        }
-
-        select(SourceTable, ThisOne)
-      `)
-    ).toMatchObject({
-      type: {
-        columnNames: ['ThisOne'],
-        columnTypes: [{ type: 'number' }],
-      },
-      value: [[F(1)]],
-    });
-  });
-
-  it('Can use a spread table to dictate the tables length', async () => {
-    expect(
-      await runCode(`
-        LengthDictator = {
-          Col = [1, 2, 3]
-        }
-
-        DictatedLength = {
-          ...LengthDictator,
-          Item = 1
-        }
-      `)
-    ).toMatchObject({
-      type: {
-        columnNames: ['Col', 'Item'],
-        columnTypes: [{ type: 'number' }, { type: 'number' }],
-      },
-      value: [
-        [F(1), F(2), F(3)],
-        [F(1), F(1), F(1)],
-      ],
-    });
   });
 
   it('can have multidimensional columns', async () => {
@@ -772,39 +676,6 @@ describe('Tables', () => {
    * Table.WithPrev = 1 + previous(0)
    */
   it.todo('empty table behavior');
-
-  it('Regression: splitby + lookup issue', async () => {
-    expect(
-      await runCode(`
-        Table = {
-          Name = ["Ava", "Eva", "Adam"],
-          Country = ["🇵🇹", "🇬🇧", "🇬🇧"]
-        }
-        Countries = splitby(Table, Table.Country)
-        lookup(Countries, Countries.Country == "🇬🇧")
-      `)
-    ).toMatchObject({
-      type: {
-        rowCellNames: ['Country', 'Values'],
-        rowCellTypes: [
-          {
-            type: 'string',
-          },
-          {
-            columnNames: ['Name'],
-            columnSize: null,
-            columnTypes: [
-              {
-                type: 'string',
-              },
-            ],
-            indexName: 'Table',
-          },
-        ],
-      },
-      value: ['🇬🇧', [['Eva', 'Adam']]],
-    });
-  });
 
   it('looked-up rows can be accessed', async () => {
     expect(

@@ -10,8 +10,6 @@ import {
   funcDef,
   tableDef,
   prop,
-  block,
-  assign,
   r,
 } from '../utils';
 import { parseUTCDate } from '../date';
@@ -334,38 +332,6 @@ describe('Tables', () => {
     ).toEqual([
       [F(1), F(2), F(3)],
       [F(1), F(2), F(3)],
-    ]);
-  });
-
-  it('can spread another table and add columns', async () => {
-    const { value } = await runAST(
-      block(
-        tableDef('OldTable', {
-          Idx: col('One', 'Two'),
-        }),
-
-        assign(
-          'Extended',
-          n(
-            'table',
-            n('table-spread', r('OldTable')),
-            n('table-column', n('coldef', 'Col'), col(1, 2)),
-            n(
-              'table-column',
-              n('coldef', 'UsingPrevious'),
-              c('+', l(1), c('previous', l(10)))
-            ),
-            n('table-column', n('coldef', 'JustOne'), l(1))
-          )
-        )
-      )
-    );
-
-    expect(value).toEqual([
-      ['One', 'Two'],
-      [F(1), F(2)],
-      [F(11), F(12)],
-      [F(1), F(1)],
     ]);
   });
 

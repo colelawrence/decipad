@@ -1,4 +1,4 @@
-import { getDefined, zip } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
 import { Column, ColumnLike, Row, RuntimeError, Table, Value } from '../value';
@@ -119,14 +119,7 @@ export const evaluateTable = async (
 
         addColumn(colName, columnData);
       } else if (item.type === 'table-spread') {
-        // eslint-disable-next-line no-await-in-loop
-        const baseTable = await evaluate(realm, item.args[0]);
-
-        const { columnNames, columns } = getInstanceof(baseTable, Table);
-        for (const [name, value] of zip(getDefined(columnNames), columns)) {
-          addColumn(name, value);
-        }
-        // istanbul ignore else
+        throw new Error('unreachable retired feature');
       } else {
         throw new Error('panic: unreachable');
       }

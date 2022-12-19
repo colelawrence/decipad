@@ -102,6 +102,10 @@ export type ErrSpec =
     }
   | {
       errType: 'unknown-reference';
+    }
+  | {
+      errType: 'retired-feature';
+      featureName: string;
     };
 
 // exhaustive switch
@@ -292,7 +296,17 @@ export class InferError extends Error {
     });
   }
 
+  static retiredFeature(featureName: string) {
+    return new InferError({
+      errType: 'retired-feature',
+      featureName,
+    });
+  }
+
   get url() {
+    if (this.spec.errType === 'retired-feature') {
+      return `/docs/basic-concepts/retired-features#${this.spec.featureName}`;
+    }
     return `/docs/basic-concepts/language-errors#${this.spec.errType}`;
   }
 }

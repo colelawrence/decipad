@@ -1,28 +1,18 @@
-import { getDefined, unzip, zip } from '@decipad/utils';
+import { getDefined, unzip } from '@decipad/utils';
 
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
-import { getIdentifierString, getOfType, walkAst } from '../utils';
+import { getIdentifierString, walkAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { Context, pushStackAndPrevious } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
-
-const getIndexName = async (ctx: Context, table: AST.Table) => {
-  const spread = table.args.find((col) => col.type === 'table-spread');
-  if (spread) {
-    // If the table doesn't exist or isn't a table, this is dealt with in inferTable
-    return getIdentifierString(spread.args[0]);
-  }
-
-  return ctx.inAssignment;
-};
 
 export const inferTable = async (ctx: Context, table: AST.Table) => {
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const indexName = await getIndexName(ctx, table);
+  const indexName = ctx.inAssignment;
 
   return pushStackAndPrevious(ctx, async () => {
     const columns = new Map<string, Type>();
@@ -70,20 +60,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
 
         addColumn(name, type);
       } else if (tableItem.type === 'table-spread') {
-        const ref = getOfType('ref', tableItem.args[0]);
-
-        // eslint-disable-next-line no-await-in-loop
-        const source = (await inferExpression(ctx, ref)).isTable();
-        const { columnNames, columnTypes } = source;
-
-        if (source.errorCause) return source;
-
-        for (const [name, type] of zip(
-          getDefined(columnNames),
-          getDefined(columnTypes)
-        )) {
-          addColumn(name, t.column(type, 'unknown', indexName));
-        }
+        return t.impossible(InferError.retiredFeature('table-spread'));
       } else {
         throw new Error('panic: unreachable');
       }

@@ -151,7 +151,4 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
   grab: {
     aliasFor: 'filter',
   },
-  select: {
-    aliasFor: 'filter',
-  },
 };

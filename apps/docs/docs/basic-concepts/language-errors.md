@@ -88,11 +88,11 @@ DaysInMonth + 1 day
 This operation requires a range and a number was entered
 :::
 
-You are calling a function with a wrong argument. For instance in the function below we are trying to see if a number contains a date, which doesn't make sense.
+You are calling a function, or using an operator, with a wrong argument. For instance in the formula below we are mixing a boolean and a number.
 
 ```deci live
-splitby(1, 2)
-==> This operation requires a table or row and a number was entered
+false or 1234
+==> This operation requires a boolean and a number was entered
 ```
 
 ## Expected primitive
@@ -245,37 +245,25 @@ Expected table and associated column
 
 You passed a column that's not associated with that table.
 
-When creating a table, its columns are inherently associated with it. Functions such as `splitby` need this association.
+When creating a table, its columns are inherently associated with it. Functions such as `sortby` need this association.
 
 ```deci live
-OtherTable = {
-  Column
+MyTable = {
+  Items = [3, 1, 2]
 }
-
-TableToSplitBy = {
-  SplitKey = [1, 2, 3]
-}
-
-splitby(TableToSplitBy, OtherTable.Column)
-==> Incompatible column sizes: 1 and 3
+sortby(MyTable, [1, 2, 3])
+==> Expected table and associated column
 ```
 
-Make sure this association exists by using a table, and then its column, `splitby()`
+Make sure this association exists by using a table, and then its column.
 
 ```deci live
-TableToSplitBy = {
-  Name = ["group 1: A", "group 1: B", "group 2"]
-  SplitKey = [1, 1, 2]
+MyTable = {
+  Items = [3, 1, 2]
 }
-
-splitby(TableToSplitBy, TableToSplitBy.SplitKey)
+sortby(MyTable, MyTable.Items)
 ==> {
-  SplitKey = [ 1, 2 ],
-  Values = [ {
-  Name = [ 'group 1: A', 'group 1: B' ]
-}, {
-  Name = [ 'group 2' ]
-} ]
+  Items = [1, 2, 3]
 }
 ```
 

@@ -77,14 +77,14 @@ it('builds up a picture of available names', () => {
     MyFn(MyFnArg) = 1
 
     MyTable1 = {
-      ...MyTable2,
       MyTable1Col = 1
     }
+    MyTable1.MyTable2Col = MyTable2.MyTable2Col
 
     MyTable2 = {
-      ...MyTable1,
       MyTable2Col = 1
     }
+    MyTable2.MyTable1Col = MyTable1.MyTable1Col
 
     MyTable1.NewCol = 1
   `).args;
@@ -95,11 +95,12 @@ it('builds up a picture of available names', () => {
     Map {
       "MyTable1" => Set {
         "MyTable1Col",
+        "MyTable2Col",
         "NewCol",
       },
       "MyTable2" => Set {
-        "MyTable1Col",
         "MyTable2Col",
+        "MyTable1Col",
       },
     }
   `);
