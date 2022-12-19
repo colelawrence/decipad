@@ -2,6 +2,7 @@ import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { nanoid } from 'nanoid';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import * as Popover from '@radix-ui/react-popover';
 import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
@@ -13,19 +14,15 @@ const styles = css({
   flexDirection: 'column',
   alignItems: 'flex-start',
   overflowX: 'hidden',
-  top: '50px',
-  left: 0,
-  userSelect: 'none',
-
+  marginTop: '8px',
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '12px',
   boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
-  position: 'absolute',
   width: '100%',
   maxWidth: '244px',
+  minWidth: '244px',
   boxSizing: 'border-box',
-  zIndex: 3,
 });
 
 const mainStyles = css({
@@ -69,23 +66,25 @@ const hotKeyStyle = css({
 
 type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
+  readonly setOpen: (a: boolean) => void;
   readonly isReadOnly: boolean;
   readonly items: Array<SelectItems>;
   readonly otherItems: Array<{ title?: string; items: Array<SelectItems> }>;
   readonly addOption: (a: string) => void;
-  readonly dropdownOpen: (b: boolean) => void;
+  readonly children: JSX.Element;
 };
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({
   open,
+  setOpen,
   isReadOnly,
   items,
   otherItems,
   addOption,
   onExecute,
-  dropdownOpen,
   onEditOption,
   onRemoveOption,
+  children,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -131,7 +130,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
           break;
         }
         case event.key === 'Escape':
-          dropdownOpen(false);
+          setOpen(false);
       }
     },
     [
@@ -141,7 +140,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
       items,
       focusedIndex,
       showInput,
-      dropdownOpen,
+      setOpen,
       onExecute,
     ]
   );
@@ -160,69 +159,72 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     }
   }, [error, inputValue, items]);
 
-  if (!open) return null;
-
   return (
-    <div css={styles}>
-      <div css={mainStyles}>
-        {otherItems.length > 0 &&
-          otherItems.map((group) => (
-            <DropdownMenuGroup
-              key={nanoid()}
-              items={group.items}
-              onExecute={onExecute}
-              title={group.title}
-              onEditOption={onEditOption}
-              onRemoveOption={onRemoveOption}
-            />
-          ))}
-        {items.length > 0 && (
-          <DropdownMenuGroup
-            key={nanoid()}
-            items={items}
-            onExecute={onExecute}
-            title="Variables"
-            onEditOption={onEditOption}
-            onRemoveOption={onRemoveOption}
-            isEditingAllowed={!isReadOnly}
-          />
-        )}
-        {!isReadOnly && showInput && (
-          <DropdownOption
-            value={inputValue}
-            setValue={setInputValue}
-            error={error}
-          />
-        )}
-      </div>
+    <Popover.Root open={open}>
+      <Popover.Trigger css={{ width: '100%' }}>{children}</Popover.Trigger>
+      <Popover.Content>
+        <div css={styles}>
+          <div css={mainStyles}>
+            {otherItems.length > 0 &&
+              otherItems.map((group) => (
+                <DropdownMenuGroup
+                  key={nanoid()}
+                  items={group.items}
+                  onExecute={onExecute}
+                  title={group.title}
+                  onEditOption={onEditOption}
+                  onRemoveOption={onRemoveOption}
+                />
+              ))}
+            {items.length > 0 && (
+              <DropdownMenuGroup
+                key={nanoid()}
+                items={items}
+                onExecute={onExecute}
+                title="Variables"
+                onEditOption={onEditOption}
+                onRemoveOption={onRemoveOption}
+                isEditingAllowed={!isReadOnly}
+              />
+            )}
+            {!isReadOnly && showInput && (
+              <DropdownOption
+                value={inputValue}
+                setValue={setInputValue}
+                error={error}
+              />
+            )}
+          </div>
 
-      {!isReadOnly && (
-        <div
-          css={footerStyles}
-          onClick={() => {
-            if (addingNew) {
-              addOption(inputValue);
-              setInputValue('');
-              setAddingNew(false);
-            } else {
-              setAddingNew(true);
-            }
-          }}
-        >
-          {addingNew ? (
-            <>
-              Press <span css={hotKeyStyle}>Enter</span> to save
-            </>
-          ) : (
-            <>
-              <div css={{ width: 16, height: 16 }}>
-                <Plus />
-              </div>
-              Add new
-            </>
+          {!isReadOnly && (
+            <div
+              css={footerStyles}
+              onClick={() => {
+                if (addingNew) {
+                  addOption(inputValue);
+                  setInputValue('');
+                  setAddingNew(false);
+                } else {
+                  setAddingNew(true);
+                }
+              }}
+            >
+              {addingNew ? (
+                <>
+                  Press <span css={hotKeyStyle}>Enter</span> to save
+                </>
+              ) : (
+                <>
+                  <div css={{ width: 16, height: 16 }}>
+                    <Plus />
+                  </div>
+                  Add new
+                </>
+              )}
+            </div>
           )}
         </div>
-      )}
-    </div>
+      </Popover.Content>
+    </Popover.Root>
   );
 };

@@ -19,7 +19,6 @@ import {
 } from '@decipad/react-contexts';
 import { formatResultPreview } from '@decipad/format';
 import { Table } from 'libs/ui/src/icons';
-import { useActiveElement } from '@decipad/react-utils';
 import { concat, of, combineLatestWith, map, distinctUntilChanged } from 'rxjs';
 import { dequal } from 'dequal';
 import { Result, SerializedType } from '@decipad/computer';
@@ -86,9 +85,6 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTPlateEditorRef();
   const path = useNodePath(element);
   const readOnly = useIsEditorReadOnly();
-  const ref = useActiveElement(() => {
-    setDropdownOpen(false);
-  });
 
   // For the dropdown options to be permenant in the editor state,
   // I save to a field in the dropdown child, this array can be
@@ -201,17 +197,10 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   }, [columns, selectedCol]);
 
   return (
-    <div {...attributes} contentEditable={false} id={element.id} ref={ref}>
-      <WidgetDisplay
-        allowOpen={true}
-        openMenu={dropdownOpen}
-        setOpenMenu={setDropdownOpen}
-        readOnly={readOnly}
-      >
-        {children}
-      </WidgetDisplay>
+    <div {...attributes} contentEditable={false} id={element.id}>
       <DropdownMenu
         open={dropdownOpen}
+        setOpen={setDropdownOpen}
         isReadOnly={readOnly}
         items={!element.smartSelection ? dropdownIds : []}
         otherItems={element.smartSelection ? otherItems : []}
@@ -219,8 +208,16 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         onRemoveOption={removeOption}
         onEditOption={onEditOption}
         onExecute={onExecute}
-        dropdownOpen={setDropdownOpen}
-      />
+      >
+        <WidgetDisplay
+          allowOpen={true}
+          openMenu={dropdownOpen}
+          setOpenMenu={setDropdownOpen}
+          readOnly={readOnly}
+        >
+          {children}
+        </WidgetDisplay>
+      </DropdownMenu>
     </div>
   );
 };

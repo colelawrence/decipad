@@ -29,7 +29,6 @@ const mainStyles = (readOnly: boolean, selected: boolean) =>
   });
 
 const lineStyles = css({
-  width: '100%',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   scrollSnapAlign: 'start',
