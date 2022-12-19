@@ -19,39 +19,20 @@ const dataViewRowStyles = css({
   },
 });
 
-const dataViewRowFullWidthStyles = css({
-  '& > *:first-of-type': {
-    fontWeight: '700',
-  },
-
-  borderTop: `1px solid ${cssVar('normalTextColor')}`,
-});
-
 const dataViewRowGlobalStyles = css({
   color: cssVar('weakTextColor'),
   backgroundColor: cssVar('highlightColor'),
 });
 
-const dataViewBeforeFullWidthRowStyles = css({
-  border: 'none',
-});
-
 export const DataViewRow = ({
   attributes,
   children,
-  isFullWidth,
-  isBeforeFullWidthRow,
   global = false,
 }: TableRowProps): ReturnType<FC> => {
   return (
     <tr
       {...attributes}
-      css={[
-        dataViewRowStyles,
-        isBeforeFullWidthRow && dataViewBeforeFullWidthRowStyles,
-        isFullWidth && dataViewRowFullWidthStyles,
-        global && dataViewRowGlobalStyles,
-      ]}
+      css={[dataViewRowStyles, global && dataViewRowGlobalStyles]}
     >
       {children}
     </tr>

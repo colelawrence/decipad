@@ -9,8 +9,8 @@ interface DataViewDataProps {
   values: Interpreter.ResultTable;
   types: SerializedType[];
   aggregationTypes: Array<AggregationKind | undefined>;
-  collapsedGroups: string[] | undefined;
-  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  expandedGroups: string[] | undefined;
+  onChangeExpandedGroups: (expandedGroups: string[]) => void;
 }
 
 export const DataViewData: FC<DataViewDataProps> = (props) => {

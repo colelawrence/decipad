@@ -18,7 +18,7 @@ const getInitialDataViewElement = (
   return {
     id: nanoid(),
     type: ELEMENT_DATA_VIEW,
-    collapsedGroups: [],
+    expandedGroups: [],
     varName: blockId,
     children: [
       {

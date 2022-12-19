@@ -39,14 +39,14 @@ export const generateGroups = async ({
   columnData,
   columnTypes,
   aggregationTypes,
-  collapsedGroups = [],
+  expandedGroups = [],
   columnIndex,
   subProperties,
   parentHighlight$,
   parentGroupId,
 }: GenerateGroupsProps & {
   aggregationTypes: (AggregationKind | undefined)[];
-  collapsedGroups?: string[];
+  expandedGroups?: string[];
 }): Promise<DataGroup[]> => {
   if (columnData.length !== columnTypes.length) {
     throw new Error(
@@ -67,7 +67,7 @@ export const generateGroups = async ({
   const slices = ResultTransforms.contiguousSlices(sortedFirstColumn);
 
   const subGenerateGroups: GenerateGroups = (props) =>
-    generateGroups({ ...props, aggregationTypes, collapsedGroups });
+    generateGroups({ ...props, aggregationTypes, expandedGroups });
 
   const subGenerateSmartRow: GenerateSubSmartRow = (props) =>
     generateSmartRow({ ...props, aggregationTypes });
@@ -79,7 +79,7 @@ export const generateGroups = async ({
       ? `${parentGroupId}/${generatedHash}`
       : generatedHash;
 
-    const isExpanded = !collapsedGroups.includes(groupId);
+    const isExpanded = expandedGroups.includes(groupId);
 
     const restOfData = sortedRestOfColumns.map((column) =>
       ResultTransforms.slice(column, start, end + 1)

@@ -24,7 +24,7 @@ export interface DataViewHeader extends BaseElement {
 export interface DataViewElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW;
   children: [TableCaptionElement, DataViewHeaderRowElement];
-  collapsedGroups?: string[];
+  expandedGroups?: string[];
   varName?: string;
   color?: string;
   icon?: string;

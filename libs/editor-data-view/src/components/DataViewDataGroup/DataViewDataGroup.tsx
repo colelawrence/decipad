@@ -12,8 +12,8 @@ interface DataViewDataGroupElementProps {
   SmartCell: FC<SmartProps>;
   aggregationType: AggregationKind | undefined;
   isFullWidthRow: boolean;
-  collapsedGroups: string[] | undefined;
-  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  expandedGroups: string[] | undefined;
+  onChangeExpandedGroups: (expandedGroups: string[]) => void;
   groupLength: number;
   index: number;
 }
@@ -25,8 +25,8 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   SmartCell,
   aggregationType,
   isFullWidthRow,
-  collapsedGroups,
-  onChangeCollapsedGroups,
+  expandedGroups,
+  onChangeExpandedGroups,
   groupLength,
 
   index,
@@ -71,8 +71,8 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       hover={parentHover || selfHover}
       alignRight={isCellAlignRight(element.type)}
       isFullWidthRow={isFullWidthRow}
-      collapsedGroups={collapsedGroups}
-      onChangeCollapsedGroups={onChangeCollapsedGroups}
+      expandedGroups={expandedGroups}
+      onChangeExpandedGroups={onChangeExpandedGroups}
       groupId={element.id || ''}
       groupLength={groupLength}
       index={index}

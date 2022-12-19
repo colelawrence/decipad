@@ -24,8 +24,6 @@ interface SliceToGroupProps {
   generateSmartRow: GenerateSubSmartRow;
 }
 
-const isLeaf = (group: DataGroup) => group.children.length === 0;
-
 export const sliceToGroup = async ({
   isExpanded,
   restOfData,
@@ -53,11 +51,11 @@ export const sliceToGroup = async ({
     parentGroupId: groupId,
   });
 
-  const collapsible = newGroups.length > 0 && !newGroups.some(isLeaf);
+  const expandable = newGroups.length > 1;
 
   const smartRow =
     (!hideSmartRow &&
-      collapsible &&
+      expandable &&
       columnIndex + 1 < columnNames.length &&
       generateSmartRow({
         columns: zip(restOfTypes, restOfData),
@@ -68,9 +66,10 @@ export const sliceToGroup = async ({
       })) ||
     null;
 
-  const children = [smartRow, ...(isExpanded ? newGroups : [])].filter(
-    Boolean
-  ) as DataGroup[];
+  const children = [
+    smartRow,
+    ...(isExpanded || !expandable ? newGroups : []),
+  ].filter(Boolean) as DataGroup[];
 
   return {
     elementType: 'group',
@@ -78,7 +77,7 @@ export const sliceToGroup = async ({
     value,
     type,
     children,
-    collapsible,
+    collapsible: expandable,
     selfHighlight$,
     parentHighlight$,
     columnIndex,

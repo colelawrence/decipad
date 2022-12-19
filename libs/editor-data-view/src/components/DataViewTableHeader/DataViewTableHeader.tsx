@@ -21,8 +21,8 @@ interface DataViewTableHeaderProps {
   onHover: (hover: boolean) => void;
   hover: boolean;
   alignRight?: boolean;
-  collapsedGroups: string[] | undefined;
-  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  expandedGroups: string[] | undefined;
+  onChangeExpandedGroups: (collapsedGroups: string[]) => void;
   groupId: string;
   global?: boolean;
 }
@@ -35,8 +35,8 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   onHover,
   hover,
   alignRight,
-  collapsedGroups = [],
-  onChangeCollapsedGroups,
+  expandedGroups = [],
+  onChangeExpandedGroups,
   groupId,
   collapsible,
   global,
@@ -48,23 +48,23 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       if (selection) {
         deselect(editor);
       }
-      const matchingGroupIndex = collapsedGroups.indexOf(groupId);
+      const matchingGroupIndex = expandedGroups.indexOf(groupId);
 
       if (matchingGroupIndex !== -1) {
-        return onChangeCollapsedGroups(
-          collapsedGroups.filter((id) => id !== groupId)
+        return onChangeExpandedGroups(
+          expandedGroups.filter((id) => id !== groupId)
         );
       }
 
-      return onChangeCollapsedGroups([...collapsedGroups, groupId]);
-    }, [collapsedGroups, editor, groupId, onChangeCollapsedGroups])
+      return onChangeExpandedGroups([...expandedGroups, groupId]);
+    }, [expandedGroups, editor, groupId, onChangeExpandedGroups])
   );
 
   if (type == null || value == null) {
     return null;
   }
 
-  const groupIsCollapsed = collapsedGroups.includes(groupId);
+  const groupIsExpanded = !collapsible || expandedGroups.includes(groupId);
 
   const resultWrapperStyles = css({
     display: 'inline-flex',
@@ -82,7 +82,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
     <DataViewTableHeader
       hover={hover}
       rowSpan={rowSpan}
-      colSpan={groupIsCollapsed ? 1 : colSpan}
+      colSpan={groupIsExpanded ? colSpan : 1}
       onHover={onHover}
       alignRight={alignRight}
       global={global}
@@ -95,7 +95,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
             type={type}
           />
           <span css={iconStyles}>
-            {groupIsCollapsed ? <Folder /> : <FolderOpen />}
+            {groupIsExpanded ? <FolderOpen /> : <Folder />}
           </span>
         </div>
       ) : (

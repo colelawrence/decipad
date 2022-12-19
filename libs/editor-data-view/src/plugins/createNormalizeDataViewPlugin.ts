@@ -105,12 +105,7 @@ export const createNormalizeDataViewPlugin = () =>
   createNormalizerPlugin({
     name: 'PLUGIN_NORMALIZE_DATA_VIEW',
     elementType: ELEMENT_DATA_VIEW,
-    acceptableElementProperties: [
-      'collapsedGroups',
-      'varName',
-      'color',
-      'icon',
-    ],
+    acceptableElementProperties: ['expandedGroups', 'varName', 'color', 'icon'],
     acceptableSubElements: [ELEMENT_TABLE_CAPTION, ELEMENT_DATA_VIEW_TR],
     plugin: normalizeDataViewPlugin,
   });

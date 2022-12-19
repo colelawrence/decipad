@@ -11,7 +11,7 @@ export const layoutPowerData = async (
   columns: Interpreter.ResultTable,
   columnTypes: SerializedType[],
   aggregationTypes: (AggregationKind | undefined)[],
-  collapsedGroups: string[] | undefined
+  expandedGroups: string[] | undefined
 ): Promise<DataGroup[]> => {
   const sortableColumns = columns.map((column) =>
     Column.fromValues(column as Result.Comparable[])
@@ -29,7 +29,7 @@ export const layoutPowerData = async (
     columnData: sortableColumns,
     columnTypes,
     aggregationTypes,
-    collapsedGroups,
+    expandedGroups,
     columnIndex: 0,
     subProperties: [],
   });
@@ -45,7 +45,7 @@ export const useDataViewLayoutData = (
   data: Interpreter.ResultTable,
   columnTypes: SerializedType[],
   aggregationTypes: (AggregationKind | undefined)[],
-  collapsedGroups: string[] | undefined
+  expandedGroups: string[] | undefined
 ): DataGroup[] => {
   const dataGroups = useMemo(
     () =>
@@ -54,9 +54,9 @@ export const useDataViewLayoutData = (
         data,
         columnTypes,
         aggregationTypes,
-        collapsedGroups
+        expandedGroups
       ),
-    [aggregationTypes, collapsedGroups, columnNames, columnTypes, data]
+    [aggregationTypes, expandedGroups, columnNames, columnTypes, data]
   );
 
   const [resolvedDataGroups, setResolvedDataGroups] = useState<DataGroup[]>([]);

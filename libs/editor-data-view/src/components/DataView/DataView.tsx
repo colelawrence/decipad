@@ -32,10 +32,10 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
 
   const saveIcon = useElementMutatorCallback(editor, element, 'icon');
   const saveColor = useElementMutatorCallback(editor, element, 'color');
-  const saveCollapsedGroups = useElementMutatorCallback(
+  const saveExpandedGroups = useElementMutatorCallback(
     editor,
     element,
-    'collapsedGroups'
+    'expandedGroups'
   );
 
   const {
@@ -84,8 +84,8 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
               values={sortedColumns[2]}
               types={sortedColumns[1]}
               aggregationTypes={selectedAggregationTypes}
-              collapsedGroups={element.collapsedGroups}
-              onChangeCollapsedGroups={saveCollapsedGroups}
+              expandedGroups={element.expandedGroups}
+              onChangeExpandedGroups={saveExpandedGroups}
             />
           )) ||
           null

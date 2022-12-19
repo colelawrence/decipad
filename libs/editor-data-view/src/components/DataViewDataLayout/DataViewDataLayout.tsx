@@ -19,8 +19,8 @@ export interface HeaderProps {
   alignRight?: boolean;
   isFullWidthRow: boolean;
   groupId: string;
-  collapsedGroups: string[] | undefined;
-  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  expandedGroups: string[] | undefined;
+  onChangeExpandedGroups: (expandedGroups: string[]) => void;
   groupLength: number;
   index: number;
   global?: boolean;
@@ -54,8 +54,8 @@ export interface DataViewLayoutProps {
   values: Interpreter.ResultTable;
   types: SerializedType[];
   aggregationTypes: Array<AggregationKind | undefined>;
-  collapsedGroups: string[] | undefined;
-  onChangeCollapsedGroups: (collapsedGroups: string[]) => void;
+  expandedGroups: string[] | undefined;
+  onChangeExpandedGroups: (expandedGroups: string[]) => void;
 }
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
@@ -64,15 +64,15 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   values,
   types,
   aggregationTypes,
-  collapsedGroups = [],
-  onChangeCollapsedGroups,
+  expandedGroups = [],
+  onChangeExpandedGroups,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData(
     columnNames,
     values,
     types,
     aggregationTypes,
-    collapsedGroups
+    expandedGroups
   );
 
   const table = useMemo(
@@ -120,8 +120,8 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
                 Header={DataViewHeader}
                 SmartCell={SmartCell}
                 isFullWidthRow={row.length === maxCols}
-                collapsedGroups={collapsedGroups}
-                onChangeCollapsedGroups={onChangeCollapsedGroups}
+                expandedGroups={expandedGroups}
+                onChangeExpandedGroups={onChangeExpandedGroups}
                 groupLength={row.length}
               />
             ))}

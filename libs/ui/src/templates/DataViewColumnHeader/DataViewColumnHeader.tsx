@@ -45,6 +45,8 @@ const dataViewColumnHeaderStyles = css({
     position: 'absolute',
     top: 0,
   },
+  borderBottom: '1px solid',
+  borderBottomColor: cssVar('evenStrongerHighlightColor'),
 });
 
 const triggerStyles = css({
