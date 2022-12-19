@@ -48,6 +48,12 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
+  // Because we only calculate results when the dropdown is open,
+  // we must have the exception for this when the component hasn't yet rendered.
+  // Otherwise you get `Result: Name`, because the component doesn't actually know
+  // the name of the variable/result.
+  const [loaded, setLoaded] = useState(false);
+
   const selected = useSelected();
   const focused = useFocused();
 
@@ -87,7 +93,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const codeLines = computer.results$
     .useWithSelector(({ blockResults }) =>
       Object.keys(blockResults).map((blockId) => {
-        if (!openMenu) return undefined;
+        if (!openMenu && loaded) return undefined;
         const kind = blockResults[blockId].result?.type.kind;
         if (
           kind === 'string' ||
@@ -210,6 +216,15 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     },
     [changeBlockId, changeVarName, codeLines]
   );
+
+  // When the component is mounted, and the result has not yet been loaded,
+  // we set the result name and value, this only happens once.
+  useEffect(() => {
+    if (codeLines.length > 0 && !loaded) {
+      changeResult(element.blockId);
+      setLoaded(true);
+    }
+  }, [changeResult, element.blockId, codeLines.length, loaded]);
 
   const readOnly = useIsEditorReadOnly();
 

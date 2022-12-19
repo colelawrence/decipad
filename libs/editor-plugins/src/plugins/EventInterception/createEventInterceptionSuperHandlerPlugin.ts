@@ -19,15 +19,14 @@ import {
 import { BaseEditor, Editor, Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
 
+const ALLOW_DELETE = new Set([ELEMENT_UL, ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL]);
+
 /**
  * Prevents default slate/browser weird behavior through allowing to intercept events.
  * Interceptor functions are registered with `createEventInterceptorPluginFactory`
  *
  * This plugin must be the first in the chain, because it has to be the first to see user events.
  */
-
-const ALLOW_DELETE = new Set([ELEMENT_UL, ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL]);
-
 export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
   return {
     key: 'EVENT_INTERCEPTION_PLUGIN',
@@ -77,11 +76,9 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
                   { type: 'delete-text-start', event },
                   cursorPath
                 );
-
                 if (!wasHandled && prevBlock != null) {
                   // Didn't handle it locally!
                   // What does the block *before* me think about this?
-
                   bubbleCancelableEvent(
                     editor,
                     { type: 'delete-block', event },

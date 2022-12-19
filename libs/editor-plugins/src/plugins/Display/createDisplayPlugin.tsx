@@ -5,12 +5,22 @@ import {
 } from '@decipad/editor-types';
 import { Display } from '@decipad/editor-components';
 import { nanoid } from 'nanoid';
+import { createEventInterceptorPluginFactory } from '../../pluginFactories';
 
 export const createDisplayPlugin = createTPluginFactory({
   key: ELEMENT_DISPLAY,
   isElement: true,
   isVoid: true,
   component: Display,
+  plugins: [
+    createEventInterceptorPluginFactory({
+      name: 'INTERCEPT_DISPLAY',
+      elementTypes: [ELEMENT_DISPLAY],
+      interceptor: () => {
+        return true;
+      },
+    })(),
+  ],
   deserializeHtml: {
     rules: [
       {
