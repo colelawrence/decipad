@@ -4,9 +4,10 @@ import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
   DataViewElement,
+  MyEditor,
 } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { insertNodes, TEditor } from '@udecode/plate';
+import { findNode, focusEditor, insertNodes, TEditor } from '@udecode/plate';
 import { clone } from 'lodash';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -52,7 +53,19 @@ export const insertDataViewBelow = (
   const dataView = clone(
     getInitialDataViewElement(blockId, varName)
   ) as unknown as DataViewElement;
+  const newPath = requirePathBelowBlock(editor, path);
   insertNodes(editor, dataView, {
-    at: requirePathBelowBlock(editor, path),
+    at: newPath,
   });
+  setTimeout(() => {
+    const findPath = [...newPath, 0];
+    const node = findNode(editor, {
+      at: findPath,
+      block: true,
+      match: (_e, p) => Path.equals(findPath, p),
+    });
+    if (node) {
+      focusEditor(editor as MyEditor, { path: findPath, offset: 0 });
+    }
+  }, 0);
 };
