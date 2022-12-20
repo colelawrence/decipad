@@ -1,4 +1,4 @@
-import { TableColumn } from '../hooks';
+import { TableCellType } from '@decipad/editor-types';
 
 export interface AggregationType {
   name: string;
@@ -86,10 +86,8 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
 };
 
 export const columnAggregationTypes = (
-  column: TableColumn
+  type: TableCellType
 ): AggregationType[] => {
-  let type = column.cellType?.kind;
-  if (type === 'series') type = 'date';
-
-  return aggregationTypes[type];
+  const kind = type.kind === 'series' ? 'date' : type.kind;
+  return aggregationTypes[kind];
 };

@@ -3,6 +3,7 @@ import {
   PlateComponent,
   DataViewElement,
   useTEditorRef,
+  TableCellType,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -14,9 +15,11 @@ import { Path } from 'slate';
 import { getNodeEntry } from '@udecode/plate';
 import { useCallback, useMemo, useRef } from 'react';
 import { getDefined } from '@decipad/utils';
-import { isCellAlignRight } from 'libs/editor-table/src/components';
+import {
+  columnAggregationTypes,
+  isCellAlignRight,
+} from '@decipad/editor-table';
 import { useDataView, useDragColumn, useDropColumn } from '../../hooks';
-import { availableAggregationTypesForColumnOf } from '../../utils/availableAggregationTypesForColumnOf';
 
 export const DataViewColumnHeader: PlateComponent = ({
   attributes,
@@ -46,7 +49,12 @@ export const DataViewColumnHeader: PlateComponent = ({
   );
 
   const availableAggregations = useMemo(
-    () => [''].concat(availableAggregationTypesForColumnOf(element.cellType)),
+    () =>
+      [''].concat(
+        columnAggregationTypes(element.cellType as TableCellType).map(
+          (agg) => agg.name
+        )
+      ),
     [element.cellType]
   );
 

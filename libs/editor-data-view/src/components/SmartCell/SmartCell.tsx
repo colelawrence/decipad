@@ -49,7 +49,7 @@ export const SmartCell: FC<SmartProps> = ({
       expressionFilter &&
       maybeAggregate(
         `${expressionFilter}.${column.name}`,
-        column.type.kind,
+        column.type,
         aggregationType
       )
     );

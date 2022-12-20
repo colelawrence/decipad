@@ -1,7 +1,8 @@
 import { Path } from 'slate';
 import { useMemo } from 'react';
-import { Result } from '@decipad/computer';
 import { useTableColumnFormulaResultForColumn } from '@decipad/editor-utils';
+import { TableCellType } from '@decipad/editor-types';
+import { Result } from '@decipad/computer';
 import {
   AggregationType,
   columnAggregationTypes,
@@ -14,14 +15,14 @@ interface UseAggregationTypeProps {
   columnIndex: number;
 }
 
-const cellType = (column: TableColumn, result: Result.Result): TableColumn => {
+const cellType = (
+  column: TableColumn,
+  result: Result.Result
+): TableCellType => {
   if (result.type.kind === 'column') {
-    return {
-      ...column,
-      cellType: result.type.cellType as TableColumn['cellType'],
-    };
+    return result.type.cellType as TableCellType;
   }
-  return column;
+  return column.cellType as TableCellType;
 };
 
 export const useColumnAggregationTypes = ({
@@ -31,9 +32,11 @@ export const useColumnAggregationTypes = ({
   const formulaResult = useTableColumnFormulaResultForColumn(columnIndex);
   return useMemo(
     () =>
-      formulaResult
-        ? columnAggregationTypes(cellType(column, formulaResult))
-        : columnAggregationTypes(column),
+      columnAggregationTypes(
+        formulaResult
+          ? cellType(column, formulaResult)
+          : (column.cellType as TableCellType)
+      ),
     [column, formulaResult]
   );
 };

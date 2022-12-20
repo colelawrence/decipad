@@ -55,13 +55,7 @@ export type Columns = [ColumnNames, ColumnTypes, Interpreter.ResultTable];
 
 // Aggregations
 
-export type AggregationKind =
-  | 'min'
-  | 'max'
-  | 'average'
-  | 'median'
-  | 'sum'
-  | 'span';
+export type AggregationKind = string;
 
 export type Aggregator = (params: {
   expressionFilter: string;
