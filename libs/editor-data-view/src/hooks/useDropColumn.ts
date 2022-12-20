@@ -58,7 +58,12 @@ export const useDropColumn = (
         );
       },
       drop: (columnItem, monitor) => {
-        const columns = findSwappableColumns(swapCtx, columnItem, monitor);
+        const columns = findSwappableColumns(
+          swapCtx,
+          columnItem,
+          monitor,
+          hoverDirection
+        );
         if (columns) {
           onMoveColumn(...columns);
         }
