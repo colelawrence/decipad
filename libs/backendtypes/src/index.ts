@@ -448,7 +448,13 @@ export interface DataTable<T extends TableRecordBase> {
   ): Promise<void>;
   get(key: Record<string, string>): Promise<T | undefined>;
   create(doc: T, noEvents?: boolean): Promise<void>;
-  put(doc: T, noEvents?: boolean): Promise<void>;
+
+  /**
+   * Puts thew whole document (either creating or updating it).
+   * - eventProbability: if a number, the probability of itr creating an event into the queue,
+   *   to be handled by a `<tablename>-changes` lambda in libs/lambdas/src/queues
+   */
+  put(doc: T, eventProbability?: boolean | number): Promise<void>;
   query(params: DynamoDbQuery): Promise<{
     Items: Array<T>;
     Count: number;

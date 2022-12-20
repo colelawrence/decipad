@@ -110,16 +110,25 @@ function observe(
   table.delete = deleteReplacer(table, tableName, table.delete, userId);
 }
 
+function randomPublish(eventProbability: number): boolean {
+  return Math.random() >= eventProbability;
+}
+
 function putReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
   method: (doc: T) => Promise<void>,
   userId?: string
-): (doc: T, noEvents?: boolean) => Promise<void> {
-  return async function replacePut(args: T, noEvents = false) {
+): (doc: T, eventProbability?: boolean | number) => Promise<void> {
+  return async function replacePut(args: T, eventProbability = false) {
     const ret = await method.call(table, args);
 
-    if (!noEvents) {
+    const publishEvent =
+      typeof eventProbability === 'boolean'
+        ? eventProbability
+        : randomPublish(eventProbability);
+
+    if (publishEvent) {
       await arc.queues.publish({
         name: `${tableName}-changes`,
         payload: {

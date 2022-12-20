@@ -145,7 +145,7 @@ export class DynamodbPersistence extends Observable<string> {
           seq: `${Date.now()}:${Math.floor(Math.random() * 10000)}:${nanoid()}`,
           data: Buffer.from(update).toString('base64'),
         },
-        true
+        0.2
       );
       this.emit('saved', [this]);
     });

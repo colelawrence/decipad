@@ -78,11 +78,14 @@ async function maybeStoreMessage(
       const update = decoding.readVarUint8Array(decoder);
       if (update.length > 0) {
         const data = await tables();
-        await data.docsyncupdates.put({
-          id: resource,
-          seq: `${Date.now()}:${nanoid()}`,
-          data: Buffer.from(update).toString('base64'),
-        });
+        await data.docsyncupdates.put(
+          {
+            id: resource,
+            seq: `${Date.now()}:${nanoid()}`,
+            data: Buffer.from(update).toString('base64'),
+          },
+          0.2
+        );
       }
     }
   }
