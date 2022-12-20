@@ -279,6 +279,6 @@ apps/docs/build
 # We don't use npm
 package-lock.json
 
-# Playwright
+# Tests
 playwright-report
 test-results
