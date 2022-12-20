@@ -83,10 +83,7 @@ export const TableCell: PlateComponent = ({
   // series
   const cellType = useCellType(element);
   const isColumnSelected = useIsColumnSelected(element);
-  const isSeriesColumn = useMemo(
-    () => cellType && cellType.kind === 'series',
-    [cellType]
-  );
+  const isSeriesColumn = useMemo(() => cellType?.kind === 'series', [cellType]);
   const editable = useMemo(() => {
     const path = findNodePath(editor, element);
     if (path && path[path.length - 2] !== 2 && isSeriesColumn) {

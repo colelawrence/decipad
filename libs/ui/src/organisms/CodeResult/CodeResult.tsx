@@ -99,8 +99,10 @@ const getResultMatchers = (): ResultMatcher[] => [
 function getResultComponent<T extends SerializedTypeKind>(
   props: CodeResultProps<T>
 ): CodeResultComponentType<T> {
-  return (getResultMatchers().find(({ match }) => match(props))?.component ??
-    DefaultResult) as CodeResultComponentType<T>;
+  return (
+    ((getResultMatchers().find(({ match }) => match(props))?.component ??
+      DefaultResult) as CodeResultComponentType<T>) || null
+  );
 }
 
 // Component

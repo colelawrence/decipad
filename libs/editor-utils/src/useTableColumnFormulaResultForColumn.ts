@@ -47,7 +47,7 @@ function formulaResult$(
         };
       }
 
-      return type && value && { type, value };
+      return (type && value != null && { type, value }) || undefined;
     }),
     distinctUntilChanged(dequal)
   );

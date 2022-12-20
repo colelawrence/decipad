@@ -1,6 +1,8 @@
 import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright-core';
 
+const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 2_000;
+
 const snapshotsTaken = new Set<string>();
 
 export const snapshot = async (
@@ -13,6 +15,7 @@ export const snapshot = async (
   }
   snapshotsTaken.add(name);
   await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
 
   try {
     await percySnapshot(page, name, {
