@@ -7,13 +7,51 @@ import {
   markKinds,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor, upsertLink } from '@udecode/plate';
 import { createNormalizeRichTextBlockPlugin } from './createNormalizeRichTextBlockPlugin';
+import { createLinkPlugin } from '../Link/index';
 
 let editor: TEditor;
 beforeEach(() => {
   editor = createTPlateEditor({
-    plugins: [createNormalizeRichTextBlockPlugin()],
+    plugins: [createNormalizeRichTextBlockPlugin(), createLinkPlugin() as any],
+  });
+});
+
+describe('when wrapLink when it has a link at start of a block', () => {
+  it('should wrap correctly', () => {
+    editor.children = [{ type: 'paragraph', children: [{ text: '123 456' }] }];
+    editor.selection = {
+      anchor: { path: [0, 0], offset: 0 },
+      focus: { path: [0, 0], offset: 3 },
+    };
+
+    upsertLink(editor as any, {
+      url: 'https://google.com',
+      isUrl: () => true,
+    });
+
+    normalizeEditor(editor, { force: true });
+
+    expect(editor.children).toEqual([
+      {
+        type: 'paragraph',
+        children: [
+          { text: '' },
+          {
+            type: 'a',
+            url: 'https://google.com',
+            target: undefined,
+            children: [
+              {
+                text: '123',
+              },
+            ],
+          },
+          { text: ' 456' },
+        ],
+      },
+    ]);
   });
 });
 

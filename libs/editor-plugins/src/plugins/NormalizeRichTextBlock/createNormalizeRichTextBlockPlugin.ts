@@ -7,7 +7,6 @@ import {
   ELEMENT_LINK,
   ELEMENT_PARAGRAPH,
   MyEditor,
-  MyElement,
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
@@ -45,7 +44,5 @@ export const createNormalizeRichTextBlockPlugin = createNormalizerPluginFactory(
   {
     name: 'NORMALIZE_RICH_TEXT_BLOCK_PLUGIN',
     plugin: normalizeRichTextBlock,
-    elementType: RICH_TEXT_BLOCK_TYPES as unknown as MyElement['type'],
-    acceptableElementProperties: ['icon', 'color'],
   }
 );
