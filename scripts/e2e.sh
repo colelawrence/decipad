@@ -21,12 +21,19 @@ fi
 
 services_setup
 
+# Take a TEST_SHARD env variable from CI, and if it exists it becomes an argument to playwright
+# https://playwright.dev/docs/test-parallel#shard-tests-between-multiple-machines
+SHARD_ARG=
+if [ -n "${TEST_SHARD:-}" ]; then
+  SHARD_ARG="--shard=${TEST_SHARD}"
+fi
+
 echo "running E2E tests and snapshots..."
 cd apps/e2e
 if [ -n "${CI:-}" ]; then
-  npx percy exec -- npx playwright test --retries=3
+  npx percy exec -- npx playwright test --retries=3 $SHARD_ARG
 else
-  npx playwright test --retries=3
+  npx playwright test --retries=3 $SHARD_ARG
 fi
 
 services_teardown

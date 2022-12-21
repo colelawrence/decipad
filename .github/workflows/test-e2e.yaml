@@ -14,8 +14,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [16.x]
+        # Shard of our playwright test, see scripts/e2e.sh and
+        # https://playwright.dev/docs/test-parallel#shard-tests-between-multiple-machines
+        shard: ['1/3', '2/3', '3/3']
 
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +46,7 @@ jobs:
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
+          TEST_SHARD: '${{ matrix.shard }}'
         run: ./scripts/e2e.sh
 
   notify:
