@@ -3,7 +3,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { VariableNameSelector } from '../../molecules';
-import { p14Regular, smallScreenQuery } from '../../primitives';
+import { cssVar, p14Regular, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
 import {
   AvailableSwatchColor,
@@ -48,18 +48,76 @@ const dataViewTableStyles = css(p14Regular, {
 });
 
 const dataViewTableWrapperStyles = css({
-  transform: `translateX(calc((((100vw - 700px) / 2)) * -1 ))`,
+  transform: `translateX(calc((((100vw - 580px) / 2)) * -1 ))`,
   width: '100vw',
   minWidth: editorLayout.slimBlockWidth,
   overflowX: 'auto',
+  scrollbarWidth: 'none',
+  msOverflowStyle: 'none',
   paddingBottom: '12px',
   position: 'relative',
   whiteSpace: 'nowrap',
   display: 'flex',
+  '&:hover': {
+    scrollbarWidth: 'inherit',
+    msOverflowStyle: 'inherit',
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: cssVar('highlightColor'),
+    },
+  },
+  '&::-webkit-scrollbar': {
+    width: '100px',
+    height: '8px',
+  },
+
+  '&::-webkit-scrollbar-thumb': {
+    width: '3px',
+    height: '3px',
+    backgroundColor: 'transparent',
+    borderRadius: '8px',
+  },
+
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: 'transparent',
+    height: '3px',
+  },
+
+  '&::-webkit-scrollbar-button': {
+    width: `calc((100vw - 580px)/4)`,
+  },
+
+  '&::-ms-scrollbar-thumb': {
+    width: '3px',
+    height: '3px',
+    backgroundColor: cssVar('highlightColor'),
+    borderRadius: '8px',
+  },
+
+  '&::-ms-scrollbar-track': {
+    backgroundColor: 'transparent',
+    height: '3px',
+  },
+
+  '&::-ms-scrollbar-button': {
+    width: `calc((100vw - 580px)/4)`,
+  },
   [smallScreenQuery]: {
     maxWidth: `calc(100vw - ${gutterWidth})`,
     minWidth: '0',
     transform: `translateX(0)`,
+  },
+});
+
+const scrollRightOffset = `(((100vw - 1055px) / 2) + 200px)`;
+
+export const tableScroll = css({
+  display: 'flex',
+  flexDirection: 'row',
+  marginLeft: '60px',
+  paddingRight: `calc(${scrollRightOffset})`,
+  [smallScreenQuery]: {
+    paddingRight: '0px',
+    marginLeft: '0px',
   },
 });
 
@@ -115,12 +173,13 @@ export const DataView: FC<DataViewProps> = ({
         </div>
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
-
-          <table css={dataViewTableStyles} contentEditable={false}>
-            <thead>{thead}</thead>
-            <tbody>{data}</tbody>
-          </table>
-          {variableName && addNewColumnComponent}
+          <div css={tableScroll}>
+            <table css={dataViewTableStyles} contentEditable={false}>
+              <thead>{thead}</thead>
+              <tbody>{data}</tbody>
+            </table>
+            {variableName && addNewColumnComponent}
+          </div>
         </div>
       </div>
     </TableStyleContext.Provider>

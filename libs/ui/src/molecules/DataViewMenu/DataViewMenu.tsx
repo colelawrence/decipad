@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { ReactElement, useState } from 'react';
 import { MenuItem } from '../../atoms';
 import { Add } from '../../icons';
-import { grey100 } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { MenuList } from '../MenuList/MenuList';
 
 // Data
@@ -22,7 +22,7 @@ const dataViewMenuWrapperStyles = css({
 });
 
 const menuButtonStyles = css({
-  backgroundColor: grey100.rgb,
+  backgroundColor: `${cssVar('highlightColor')}`,
   width: '36px',
   height: '36px',
   borderRadius: '8px',
