@@ -8,6 +8,7 @@ import {
   MyDecorate,
   MyElementEntry,
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
   DECORATE_CODE_VARIABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TABLE,
@@ -79,7 +80,10 @@ export interface AutocompleteDecorationProps {
 }
 
 export const decorateCode = (
-  elementType: typeof ELEMENT_CODE_LINE | typeof ELEMENT_TABLE_COLUMN_FORMULA
+  elementType:
+    | typeof ELEMENT_CODE_LINE
+    | typeof ELEMENT_TABLE_COLUMN_FORMULA
+    | typeof ELEMENT_CODE_LINE_V2_CODE
 ): MyDecorate =>
   filterDecorate(
     memoizeDecorateWithSelection((editor: MyEditor): MyDecorateEntry => {

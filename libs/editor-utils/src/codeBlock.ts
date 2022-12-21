@@ -1,7 +1,10 @@
 import {
-  CodeLineElement,
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE_V2_VARNAME,
   MyEditor,
+  MyElement,
 } from '@decipad/editor-types';
 import { deleteText, getEditorString, insertNodes } from '@udecode/plate';
 import { Path } from 'slate';
@@ -10,19 +13,38 @@ import {
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
-const codeLineElement = (): CodeLineElement => ({
-  id: nanoid(),
-  type: ELEMENT_CODE_LINE,
-  children: [{ text: '' }],
-});
+const codeLineElement = (): MyElement =>
+  isFlagEnabled('CODE_LINE_NAME_SEPARATED')
+    ? {
+        id: nanoid(),
+        type: ELEMENT_CODE_LINE_V2,
+        children: [
+          {
+            id: nanoid(),
+            type: ELEMENT_CODE_LINE_V2_VARNAME,
+            children: [{ text: '' }],
+          },
+          {
+            id: nanoid(),
+            type: ELEMENT_CODE_LINE_V2_CODE,
+            children: [{ text: '' }],
+          },
+        ],
+      }
+    : {
+        id: nanoid(),
+        type: ELEMENT_CODE_LINE,
+        children: [{ text: '' }],
+      };
 
 export const insertCodeLineBelow = (
   editor: MyEditor,
   path: Path,
   select = false
 ): void => {
-  insertNodes<CodeLineElement>(editor, codeLineElement(), {
+  insertNodes(editor, codeLineElement(), {
     at: requirePathBelowBlock(editor, path),
     select,
   });

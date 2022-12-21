@@ -2,10 +2,10 @@
 /* tested in apps/client-e2e/src/notebook-calculation-block.ts */
 import React from 'react';
 import {
-  BlockElement,
   MyEditor,
   ELEMENT_CODE_LINE,
   MyNodeEntry,
+  ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
@@ -24,11 +24,16 @@ const jumpToCodeLineEnd = (editor: MyEditor, nodeEntry: MyNodeEntry) => {
 };
 
 const findCodeLineParentEntry = (editor: MyEditor) => {
-  const entry = getBlockAbove<BlockElement>(editor);
+  const entry = getBlockAbove(editor);
   if (!entry) return;
 
   const [node] = entry;
-  if (node.type !== ELEMENT_CODE_LINE) return null;
+  if (
+    node.type !== ELEMENT_CODE_LINE &&
+    node.type !== ELEMENT_CODE_LINE_V2_CODE
+  ) {
+    return;
+  }
 
   return entry;
 };

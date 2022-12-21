@@ -1,6 +1,7 @@
 import { getNodeString, isText } from '@udecode/plate';
 import {
   CodeLineElement,
+  CodeLineV2ElementCode,
   ELEMENT_SMART_REF,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
@@ -8,7 +9,7 @@ import { getExprRef } from '@decipad/computer';
 import { isElementOfType } from './isElementOfType';
 
 export const getCodeLineSource = (
-  node: CodeLineElement | TableColumnFormulaElement
+  node: CodeLineElement | TableColumnFormulaElement | CodeLineV2ElementCode
 ) => {
   const childCount = node.children.length;
   const res = node.children

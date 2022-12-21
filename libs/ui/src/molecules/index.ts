@@ -7,6 +7,7 @@ export { Caption } from './Caption/Caption';
 export { CellEditor } from './CellEditor/CellEditor';
 export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';
 export { CodeVariable } from './CodeVariable/CodeVariable';
+export { CodeVariableDefinition } from './CodeVariableDefinition/CodeVariableDefinition';
 export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
 export { DataViewMenu } from './DataViewMenu/DataViewMenu';
 export { DataViewRow } from './DataViewRow/DataViewRow';

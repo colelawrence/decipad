@@ -2,6 +2,7 @@ export type Flag =
   | 'INPUT_COPY'
   | 'INLINE_BUBBLES'
   | 'SHADOW_CODE_LINES'
+  | 'CODE_LINE_NAME_SEPARATED'
   | 'UNSAFE_JS_EVAL'
   | 'SKETCH'
   | 'COPY_HREF'
@@ -15,7 +16,7 @@ export type Flag =
 
 export type Flags = Partial<Record<Flag, boolean>>;
 
-const queryStringFlags: Flag[] = [];
+const queryStringFlags: Flag[] = ['CODE_LINE_NAME_SEPARATED'];
 
 const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};

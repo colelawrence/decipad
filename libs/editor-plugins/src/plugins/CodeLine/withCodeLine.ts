@@ -1,4 +1,8 @@
-import { ELEMENT_CODE_LINE, MyWithOverride } from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
+  MyWithOverride,
+} from '@decipad/editor-types';
 import {
   getEditorString,
   getPointBefore,
@@ -20,9 +24,12 @@ export const withCodeLine: MyWithOverride = (editor) => {
       text === '\n' &&
       editor.selection &&
       isCollapsed(editor.selection) &&
-      someNode(editor, {
+      (someNode(editor, {
         match: { type: ELEMENT_CODE_LINE },
-      })
+      }) ||
+        someNode(editor, {
+          match: { type: ELEMENT_CODE_LINE_V2_CODE },
+        }))
     ) {
       const previousChar = getEditorString(
         editor,

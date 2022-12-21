@@ -1,6 +1,7 @@
 import { getExprRef, parseStatement } from '@decipad/computer';
 import {
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_PARAGRAPH,
   ELEMENT_SMART_REF,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -54,6 +55,7 @@ export function insertSmartRef(
   followingText = ''
 ): (MyElement | Text)[] | undefined {
   switch (blockType) {
+    case ELEMENT_CODE_LINE_V2_CODE:
     case ELEMENT_CODE_LINE:
     case ELEMENT_TABLE_COLUMN_FORMULA: {
       const { textBefore, textAfter } = surroundWithPlusSigns(

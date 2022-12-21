@@ -12,9 +12,13 @@ import {
   ELEMENT_TH,
   ELEMENT_TD,
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_VARNAME,
   ELEMENT_VARIABLE_DEF,
   VariableDefinitionElement,
   CodeLineElement,
+  CodeLineV2Element,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import { Computer, prettyPrintAST, Program } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
@@ -31,6 +35,22 @@ describe('editorToProgram', () => {
         id: 'line',
         children: [{ text: '1 + 1' }],
       } as CodeLineElement,
+      {
+        type: ELEMENT_CODE_LINE_V2,
+        id: 'line-v2',
+        children: [
+          {
+            type: ELEMENT_CODE_LINE_V2_VARNAME,
+            id: 'line-v2-var',
+            children: [{ text: 'SeparateVarName' }],
+          },
+          {
+            type: ELEMENT_CODE_LINE_V2_CODE,
+            id: 'line-v2-code',
+            children: [{ text: '1' }],
+          },
+        ],
+      } as CodeLineV2Element,
       mkVariableDef('input', 'varName', '123'),
       {
         type: 'columns',
@@ -84,12 +104,18 @@ describe('editorToProgram', () => {
     ];
     const { program } = await editorToProgram(editor, new Computer());
 
-    expect(program.length).toBe(7);
+    expect(program.length).toBe(8);
 
-    const [block, input, col1, col2, magicNum, table, tableCol] =
+    const [block, blockV2, input, col1, col2, magicNum, table, tableCol] =
       prettyPrintAll(program);
 
     expect(block).toMatchInlineSnapshot(`"(+ 1 1)"`);
+
+    expect(blockV2).toMatchInlineSnapshot(`
+      "(assign
+        (def SeparateVarName)
+        1)"
+    `);
 
     expect(input).toMatchInlineSnapshot(`
       "(assign

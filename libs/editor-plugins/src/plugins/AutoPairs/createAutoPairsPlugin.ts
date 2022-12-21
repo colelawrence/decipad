@@ -1,3 +1,10 @@
+import { Computer } from '@decipad/computer';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_SMART_REF,
+} from '@decipad/editor-types';
+import { isElementOfType } from '@decipad/editor-utils';
 import {
   deleteText,
   getChildren,
@@ -5,10 +12,7 @@ import {
   getParentNode,
   moveSelection,
 } from '@udecode/plate';
-import { ELEMENT_CODE_LINE, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { Path, Range } from 'slate';
-import { isElementOfType } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 const pairs = [
@@ -32,7 +36,10 @@ export const createAutoPairsPlugin = (computer: Computer) =>
         if (parentEntry) {
           const [node] = parentEntry;
 
-          if (isElementOfType(node, ELEMENT_CODE_LINE)) {
+          if (
+            isElementOfType(node, ELEMENT_CODE_LINE) ||
+            isElementOfType(node, ELEMENT_CODE_LINE_V2_CODE)
+          ) {
             let cursorOffset = cursor.offset;
             cursorOffset =
               getChildren(parentEntry)

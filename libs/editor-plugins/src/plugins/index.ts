@@ -4,6 +4,7 @@ export * from './AutoPairs/createAutoPairsPlugin';
 export * from './BlockSelection';
 export * from './Callout';
 export * from './CodeLine';
+export * from './CodeLineV2';
 export * from './CodeVariableHighlight';
 export * from './Divider';
 export * from './DndSmartRef';

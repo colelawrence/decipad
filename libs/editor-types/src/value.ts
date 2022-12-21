@@ -34,6 +34,9 @@ import {
   DataViewHeaderRowElement,
 } from './data-view';
 import {
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE_V2_VARNAME,
   ELEMENT_DATA_VIEW,
   ELEMENT_DRAW,
   ELEMENT_IMPORT,
@@ -122,6 +125,18 @@ export interface CodeLineElement extends BaseElement {
   type: typeof ELEMENT_CODE_LINE;
   children: Array<PlainText | SmartRefElement>;
 }
+export interface CodeLineV2Element extends BaseElement {
+  type: typeof ELEMENT_CODE_LINE_V2;
+  children: [CodeLineV2ElementVarname, CodeLineV2ElementCode];
+}
+export interface CodeLineV2ElementVarname extends BaseElement {
+  type: typeof ELEMENT_CODE_LINE_V2_VARNAME;
+  children: [PlainText];
+}
+export interface CodeLineV2ElementCode extends BaseElement {
+  type: typeof ELEMENT_CODE_LINE_V2_CODE;
+  children: Array<PlainText | SmartRefElement>;
+}
 export interface DeprecatedCodeBlockElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_CODE_BLOCK;
   children: Array<CodeLineElement>;
@@ -203,6 +218,7 @@ export type BlockElement =
   // Code
   | DeprecatedCodeBlockElement
   | CodeLineElement
+  | CodeLineV2Element
   // Lists
   | UnorderedListElement
   | OrderedListElement
@@ -248,12 +264,12 @@ export type MyValue = [
     | SmartRefElement
     | CalloutElement
     | CodeLineElement
+    | CodeLineV2Element
     | DividerElement
     | EvalElement
     | ImageElement
     | MediaEmbedElement
     | DrawElement
-    | CodeLineElement
     | DeprecatedCodeBlockElement
     | UnorderedListElement
     | OrderedListElement
@@ -272,7 +288,11 @@ type InlineDescendant = InlineElement | RichText;
 type InlineChildren = Array<InlineDescendant>;
 type PlainTextChildren = [PlainText];
 
-export type AnyElement = BlockElement | InlineElement;
+export type AnyElement =
+  | BlockElement
+  | InlineElement
+  | CodeLineV2ElementCode
+  | CodeLineV2ElementVarname;
 
 export const topLevelBlockKinds: string[] = [
   ELEMENT_H1,
@@ -285,6 +305,7 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_IMAGE,
   DEPRECATED_ELEMENT_CODE_BLOCK, // Legacy
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_UL,
   ELEMENT_OL,
   DEPRECATED_ELEMENT_TABLE_INPUT,

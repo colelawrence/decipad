@@ -1,4 +1,8 @@
-import { ELEMENT_CODE_LINE, MyAutoformatRule } from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
+  MyAutoformatRule,
+} from '@decipad/editor-types';
 import {
   autoformatArrow,
   autoformatPunctuation,
@@ -14,9 +18,14 @@ import { autoformatMarks } from './autoformatMarks';
 /** Prevent arrow rules to be applied in codelines,
  * like <= becoming ⇐ */
 function disableCodelineFormatting(editor: TEditor) {
-  return !someNode(editor, {
-    match: { type: ELEMENT_CODE_LINE },
-  });
+  return (
+    !someNode(editor, {
+      match: { type: ELEMENT_CODE_LINE },
+    }) &&
+    !someNode(editor, {
+      match: { type: ELEMENT_CODE_LINE_V2_CODE },
+    })
+  );
 }
 
 const rulesForbiddenInCodeLines = [

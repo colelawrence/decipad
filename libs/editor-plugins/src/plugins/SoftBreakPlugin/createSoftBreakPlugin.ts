@@ -1,5 +1,8 @@
 import {
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE_V2_VARNAME,
   ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
@@ -16,7 +19,13 @@ export const createSoftBreakPlugin = createOnKeyDownPluginFactory({
       {
         hotkey: 'shift+enter',
         query: {
-          exclude: [ELEMENT_CODE_LINE, ELEMENT_TABLE_COLUMN_FORMULA],
+          exclude: [
+            ELEMENT_CODE_LINE,
+            ELEMENT_CODE_LINE_V2,
+            ELEMENT_CODE_LINE_V2_CODE,
+            ELEMENT_CODE_LINE_V2_VARNAME,
+            ELEMENT_TABLE_COLUMN_FORMULA,
+          ],
         },
       },
     ],

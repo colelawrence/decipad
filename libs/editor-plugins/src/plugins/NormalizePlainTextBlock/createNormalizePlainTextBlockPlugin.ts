@@ -6,14 +6,10 @@ import {
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import {
-  getNodeChildren,
-  isElement,
-  isText,
-  unwrapNodes,
-} from '@udecode/plate';
+import { getNodeChildren, isElement } from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
+import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
 const PLAIN_TEXT_BLOCK_TYPES = [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3];
 
@@ -25,19 +21,8 @@ const normalizePlainTextBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
       return true;
     }
 
-    for (const childEntry of getNodeChildren(editor, path)) {
-      const [childNode, childPath] = childEntry;
-
-      if (isElement(childNode)) {
-        unwrapNodes(editor, { at: childPath });
-        return true;
-      }
-
-      if (isText(childNode)) {
-        if (normalizeExcessProperties(editor, childEntry)) {
-          return true;
-        }
-      }
+    if (normalizePlainTextChildren(editor, getNodeChildren(editor, path))) {
+      return true;
     }
   }
   return false;

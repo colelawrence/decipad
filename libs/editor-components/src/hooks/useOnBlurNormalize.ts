@@ -1,5 +1,6 @@
 import {
   CodeLineElement,
+  CodeLineV2Element,
   MyEditor,
   MyElement,
   TableColumnFormulaElement,
@@ -11,7 +12,11 @@ import { useSelected } from 'slate-react';
 
 export const useOnBlurNormalize = (
   editor: MyEditor,
-  element: CodeLineElement | TableColumnFormulaElement | TableElement,
+  element:
+    | CodeLineV2Element
+    | CodeLineElement
+    | TableColumnFormulaElement
+    | TableElement,
   targetNode?: MyElement
 ) => {
   const selected = useSelected();
@@ -22,7 +27,7 @@ export const useOnBlurNormalize = (
       const path = findNodePath(editor, nodeToNormalize);
       // in some CodeLine component tests path won't be defined
       if (path) {
-        editor.normalizeNode([nodeToNormalize, path!]);
+        editor.normalizeNode([nodeToNormalize, path]);
       }
     }
   }, [selected, editor, element, targetNode]);

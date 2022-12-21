@@ -2,6 +2,8 @@ import { Computer, parseStatement } from '@decipad/computer';
 import {
   AnyElement,
   CodeLineElement,
+  CodeLineV2Element,
+  ELEMENT_CODE_LINE_V2,
   TableElement,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
@@ -35,6 +37,18 @@ function deduplicateAssignmentVarName(
   });
 }
 
+function deduplicateVarNameInCodeLineV2(
+  computer: Computer,
+  el: CodeLineV2Element
+): CodeLineV2Element {
+  return produce(el, (e) => {
+    e.children[0].children[0].text = computer.getAvailableIdentifier(
+      `${getNodeString(e.children[0])}Copy`,
+      1
+    );
+  });
+}
+
 function deduplicateTableVarName(
   computer: Computer,
   el: TableElement
@@ -56,6 +70,8 @@ export function deduplicateVarNameInBlock<T extends AnyElement>(
       return deduplicateVarNameInDef(computer, el) as T;
     case 'code_line':
       return deduplicateAssignmentVarName(computer, el) as T;
+    case ELEMENT_CODE_LINE_V2:
+      return deduplicateVarNameInCodeLineV2(computer, el) as T;
     case 'table':
       return deduplicateTableVarName(computer, el) as T;
   }

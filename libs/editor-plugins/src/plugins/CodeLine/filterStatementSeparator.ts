@@ -3,15 +3,16 @@ import {
   STATEMENT_SEP_TOKEN_TYPE,
   tokenize,
 } from '@decipad/computer';
+import { getDefined } from '@decipad/utils';
 import {
-  ELEMENT_CODE_LINE,
   getBlockAbove,
   getChildren,
   getNodeString,
   isElement,
 } from '@udecode/plate';
 import {
-  CodeLineElement,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
   MyEditor,
   MyNodeEntry,
@@ -30,9 +31,14 @@ export const filterStatementSeparator =
       return false;
     }
 
-    const codeLineEntry = getBlockAbove<CodeLineElement>(editor, {
-      match: (n) => isElement(n) && n.type === ELEMENT_CODE_LINE,
-    })!;
+    const codeLineEntry = getDefined(
+      getBlockAbove(editor, {
+        match: (n) =>
+          isElement(n) &&
+          (n.type === ELEMENT_CODE_LINE ||
+            n.type === ELEMENT_CODE_LINE_V2_CODE),
+      })
+    );
 
     // if there are smart refs in this code line we need to get text from all code line children, and adjust the cursortStart
     const children = getChildren(codeLineEntry);

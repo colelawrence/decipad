@@ -8,6 +8,10 @@ import {
   RichText,
   MyEditor,
   MARK_MAGICNUMBER,
+  ELEMENT_CODE_LINE_V2,
+  CodeLineV2Element,
+  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import {
   pluginStore,
@@ -28,6 +32,7 @@ import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
 import { ShadowCalcReference } from '@decipad/react-contexts';
 import { openEditor$ } from '@decipad/editor-components';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { getTextBeforeCursor } from './utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
@@ -63,7 +68,7 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
           return;
         }
 
-        const [node] = entry;
+        const [node, paragraphPath] = entry;
         if (node.type !== ELEMENT_PARAGRAPH) {
           return;
         }
@@ -76,6 +81,30 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
 
         if (nodeText.trim() === '=') {
           event.preventDefault();
+
+          if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
+            // Normalizer will do the rest
+            const newCodeLine: CodeLineV2Element = {
+              type: ELEMENT_CODE_LINE_V2,
+              id: nanoid(),
+              children: [
+                {
+                  type: ELEMENT_CODE_LINE_V2_VARNAME,
+                  id: nanoid(),
+                  children: [{ text: '' }],
+                },
+                {
+                  type: ELEMENT_CODE_LINE_V2_CODE,
+                  id: nanoid(),
+                  children: [{ text: '' }],
+                },
+              ],
+            };
+            insertNodes(editor, newCodeLine, { at: paragraphPath });
+            const codeTextPath = [...paragraphPath, 1];
+            Transforms.select(editor as BaseEditor, codeTextPath);
+            return;
+          }
 
           setNodes(editor, { type: ELEMENT_CODE_LINE });
 

@@ -8,6 +8,7 @@ import {
   createBlockSelectionPlugin,
   createCalloutPlugin,
   createCodeLinePlugin,
+  createCodeLineV2Plugin,
   createCodeVariableHighlightPlugin,
   createDisplayPlugin,
   createDividerPlugin,
@@ -186,6 +187,7 @@ export const plugins = ({
       // language
       ...createEvalPlugin(computer),
       createCodeLinePlugin(computer),
+      createCodeLineV2Plugin(computer),
       createUpdateComputerPlugin(computer),
       createVariableDefPlugin(),
       createPotentialFormulaHighlightPlugin(readOnly),

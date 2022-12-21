@@ -9,6 +9,10 @@ import {
   InlineNumberElement,
   MyEditor,
   MARK_MAGICNUMBER,
+  CodeLineV2Element,
+  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE_V2,
 } from '@decipad/editor-types';
 import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
@@ -98,11 +102,30 @@ export const commitPotentialFormula = (
 
   if (!insertionPath) return;
 
-  const codeLineBelow: CodeLineElement = {
-    type: ELEMENT_CODE_LINE,
-    id,
-    children: [{ text: getNodeString(leaf as RichText) }],
-  };
+  const codeLineBelow: CodeLineElement | CodeLineV2Element = isFlagEnabled(
+    'CODE_LINE_NAME_SEPARATED'
+  )
+    ? {
+        type: ELEMENT_CODE_LINE_V2,
+        id,
+        children: [
+          {
+            type: ELEMENT_CODE_LINE_V2_VARNAME,
+            id: nanoid(),
+            children: [{ text: '' }],
+          },
+          {
+            type: ELEMENT_CODE_LINE_V2_CODE,
+            id: nanoid(),
+            children: [{ text: getNodeString(leaf as RichText) }],
+          },
+        ],
+      }
+    : {
+        type: ELEMENT_CODE_LINE,
+        id,
+        children: [{ text: getNodeString(leaf as RichText) }],
+      };
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,
