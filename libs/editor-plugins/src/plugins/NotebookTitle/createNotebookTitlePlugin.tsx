@@ -1,4 +1,5 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
+import { setSelectionNext } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';
 import {
   ELEMENT_H1,
@@ -57,7 +58,11 @@ export const createNotebookTitlePlugin = ({
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_TITLE',
       elementTypes: [ELEMENT_H1],
-      interceptor: () => {
+      interceptor: (editor, entry, event) => {
+        if (event.type === 'on-enter') {
+          setSelectionNext(editor, entry);
+          return true;
+        }
         return true;
       },
     })(),

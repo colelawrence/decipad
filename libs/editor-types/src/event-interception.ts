@@ -10,4 +10,5 @@ export type EventInterceptor = (
 export type InterceptableEvent =
   | { type: 'delete-text-start'; event: KeyboardEvent }
   | { type: 'delete-text-end'; event: KeyboardEvent }
-  | { type: 'delete-block'; event: KeyboardEvent };
+  | { type: 'delete-block'; event: KeyboardEvent }
+  | { type: 'on-enter'; event: KeyboardEvent };

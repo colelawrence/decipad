@@ -8,6 +8,7 @@ import {
   MyPlatePlugin,
 } from '@decipad/editor-types';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
+import { setSelectionNext } from '@decipad/editor-utils';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import {
   Caption,
@@ -20,7 +21,6 @@ import { createNormalizeVariableDefPlugin } from './createNormalizeVariableDefPl
 import { createMigrateElementInputToVariableDefPlugin } from './createMigrateElementInputToVariableDefPlugin';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
-import { createEnterOnExpressionPlugin } from './createEnterOnExpressionPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { createSliderExpressionSyncPlugin } from './createSliderExpressionSyncPlugin';
@@ -66,7 +66,7 @@ export const createVariableDefPlugin = (): MyPlatePlugin => ({
     createNormalizeVariableDefPlugin(),
     createNormalizeCaptionPlugin(),
     createNormalizeExpressionPlugin(),
-    createEnterOnExpressionPlugin(),
+    // createEnterOnExpressionPlugin(),
     {
       key: ELEMENT_CAPTION,
       isElement: true,
@@ -136,8 +136,23 @@ export const createVariableDefPlugin = (): MyPlatePlugin => ({
     createSliderExpressionSyncPlugin(),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_VAR_DEF',
-      elementTypes: [ELEMENT_VARIABLE_DEF],
-      interceptor: () => {
+      elementTypes: [
+        ELEMENT_VARIABLE_DEF,
+        ELEMENT_CAPTION,
+        ELEMENT_EXPRESSION,
+        ELEMENT_DROPDOWN,
+      ],
+      interceptor: (editor, entry, event) => {
+        if (event.type === 'on-enter' && entry[0].type === ELEMENT_DROPDOWN) {
+          return false;
+        }
+        if (
+          event.type !== 'on-enter' ||
+          entry[0].type === ELEMENT_VARIABLE_DEF
+        ) {
+          return true;
+        }
+        setSelectionNext(editor, entry);
         return true;
       },
     })(),
