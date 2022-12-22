@@ -6,12 +6,14 @@ import {
   ShadowCalcReference,
 } from '@decipad/react-contexts';
 import { findNodePath } from '@udecode/plate';
-import React, {
+import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
+import {
   PropsWithChildren,
   useCallback,
   useEffect,
   useMemo,
   useState,
+  useContext,
 } from 'react';
 import { Subject } from 'rxjs';
 import { ensureSelectionHack } from './ensureSelectionHack';
@@ -20,6 +22,7 @@ import { useFocusControl } from './useFocusControl';
 type TeleportEditorProps = PropsWithChildren<{ editor: MyEditor }>;
 
 export const openEditor$ = new Subject<ShadowCalcReference>();
+export const editorAnalytics$ = new Subject<ClientEvent>();
 
 export const TeleportEditor: React.FC<TeleportEditorProps> = ({
   children,
@@ -27,6 +30,7 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
 }) => {
   const [portal, setPortal] = useState<ShadowCalcPortal>();
   const [editing, setEditing] = useState<ShadowCalcReference>();
+  const clientEvent = useContext(ClientEventsContext);
 
   const focusNumber = useCallback(() => {
     const node = editing?.numberNode;
@@ -60,21 +64,42 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
           return undefined;
         }
 
+        clientEvent({
+          type: 'action',
+          action: 'code line teleported back',
+        });
+
         return old;
       }),
-    [setEditing]
+    [setEditing, clientEvent]
   );
 
   const onBlur = useCallback(() => closeEditor(), [closeEditor]);
   const { useWatchTeleported } = useFocusControl(editing, closeEditor);
 
-  useEffect(() => {
-    const sub = openEditor$.subscribe((ref) => {
+  const openEditor = useCallback(
+    (ref: ShadowCalcReference) => {
       setEditing(ref);
-    });
+
+      clientEvent({
+        type: 'action',
+        action: 'code line teleported',
+      });
+    },
+    [setEditing, clientEvent]
+  );
+
+  useEffect(() => {
+    const sub = openEditor$.subscribe((ref) => openEditor(ref));
 
     return () => sub.unsubscribe();
-  }, [setEditing]);
+  }, [openEditor]);
+
+  useEffect(() => {
+    const sub = editorAnalytics$.subscribe((event) => clientEvent(event));
+
+    return () => sub.unsubscribe();
+  }, [clientEvent]);
 
   const value = useMemo(
     () => ({
@@ -84,17 +109,17 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
       focusNumber,
       focusCodeLine,
       closeEditor,
-      openEditor: setEditing,
+      openEditor,
       useWatchTeleported,
     }),
     [
       portal,
       editing,
       setPortal,
-      setEditing,
       focusNumber,
       focusCodeLine,
       closeEditor,
+      openEditor,
       useWatchTeleported,
     ]
   );

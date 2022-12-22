@@ -25,9 +25,10 @@ import {
   toDOMNode,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useContext } from 'react';
 import { BaseRange, Path, Point } from 'slate';
 import { getExprRef } from '@decipad/computer';
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   useEditorTeleportContext,
   ShadowCalcReference,
@@ -43,6 +44,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
   const selected = useIsPotentialFormulaSelected(editor, leaf);
 
   const { openEditor } = useEditorTeleportContext();
+  const clientEvent = useContext(ClientEventsContext);
 
   const onCommit = useCallback(() => {
     const path = text && findNodePath(editor, text);
@@ -55,7 +57,12 @@ export const PotentialFormulaHighlight: PlateComponent<{
 
     // FIXME: Opt out to use inline numbers in ENG-1401
     commitPotentialFormula(editor, path, leaf, 'magic', afterCommit);
-  }, [editor, text, leaf, openEditor]);
+
+    clientEvent({
+      type: 'action',
+      action: 'number converted to code line',
+    });
+  }, [editor, text, leaf, clientEvent, openEditor]);
 
   useEffect(() => {
     if (!selected) {

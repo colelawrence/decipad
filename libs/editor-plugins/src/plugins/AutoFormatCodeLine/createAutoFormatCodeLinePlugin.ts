@@ -31,7 +31,7 @@ import {
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
 import { ShadowCalcReference } from '@decipad/react-contexts';
-import { openEditor$ } from '@decipad/editor-components';
+import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { getTextBeforeCursor } from './utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
@@ -125,6 +125,10 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
 
           commitPotentialFormula(editor, expressionRange, (ref) => {
             openEditor$.next(ref);
+            editorAnalytics$.next({
+              type: 'action',
+              action: 'number created with =',
+            });
           });
         }
       } else if (!hasModifiers && event.key === 'Backspace') {
