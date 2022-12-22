@@ -171,7 +171,7 @@
     "moo": "0.5.1",
     "nanoid": "3.3.4",
     "nearley": "2.20.1",
-    "next-auth": "4.17.0",
+    "next-auth": "4.18.7",
     "node-fetch": "3.3.0",
     "nodemailer": "6.8.0",
     "oauth": "0.10.0",
