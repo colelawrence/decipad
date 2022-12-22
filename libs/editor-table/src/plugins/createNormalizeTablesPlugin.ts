@@ -6,7 +6,8 @@ import {
   MyNodeEntry,
   DeprecatedTableInputElement,
 } from '@decipad/editor-types';
-import { deleteText, insertNodes, isElement, TNodeEntry } from '@udecode/plate';
+import { deleteText, isElement, TNodeEntry } from '@udecode/plate';
+import { insertNodes } from '@decipad/editor-utils';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
 import { normalizeTable } from '../utils/normalizeTable';
 

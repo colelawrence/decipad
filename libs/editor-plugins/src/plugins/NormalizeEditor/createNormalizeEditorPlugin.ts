@@ -8,9 +8,9 @@ import {
   ParagraphElement,
   topLevelBlockKinds as allowedTopLevelBlockTypes,
 } from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
 import {
   getNodeChildren,
-  insertNodes,
   isEditor,
   isElement,
   isText,

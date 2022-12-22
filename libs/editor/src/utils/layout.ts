@@ -1,6 +1,5 @@
 import {
   getAboveNode,
-  insertNodes,
   isElement,
   withoutNormalizing,
   wrapNodes,
@@ -12,6 +11,7 @@ import {
   MyEditor,
   MyElementOrText,
 } from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
 
 export const hasLayoutAncestor = (editor: MyEditor, path: Path): boolean => {
   return !!getAboveNode(editor, {

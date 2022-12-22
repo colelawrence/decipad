@@ -2,7 +2,6 @@ import {
   getChildren,
   getNodeString,
   hasNode,
-  insertNodes,
   insertText,
   isElement,
   setSelection,
@@ -28,6 +27,7 @@ import { NodeEntry } from 'slate';
 import { Computer } from '@decipad/computer';
 import { dequal } from 'dequal';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
+import { insertNodes } from '@decipad/editor-utils';
 
 const tableIsSquare = ({
   children: [, headerRow, ...dataRows],

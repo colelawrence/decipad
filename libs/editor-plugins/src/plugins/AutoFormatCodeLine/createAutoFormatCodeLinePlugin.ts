@@ -1,4 +1,4 @@
-import { BaseEditor, Transforms, BaseRange, Point } from 'slate';
+import { BaseEditor, BaseRange, Point, Transforms } from 'slate';
 import {
   BlockElement,
   CodeLineElement,
@@ -17,6 +17,7 @@ import {
   pluginStore,
   getAboveNodeSafe,
   isElementOfType,
+  insertNodes,
 } from '@decipad/editor-utils';
 import {
   getBlockAbove,
@@ -25,8 +26,8 @@ import {
   isElement,
   setNodes,
   getEndPoint,
-  insertNodes,
   toDOMNode,
+  insertText,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/computer';
@@ -150,11 +151,9 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
           event.preventDefault();
 
           setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
-          Transforms.insertText(
-            editor as BaseEditor,
-            lastFormattedBlock.oldText,
-            { at: path }
-          );
+          insertText(editor as MyEditor, lastFormattedBlock.oldText, {
+            at: path,
+          });
 
           delete store.lastFormattedBlock;
         } else if (nodeText === '' && node.children.length === 1) {

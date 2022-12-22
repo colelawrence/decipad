@@ -10,13 +10,13 @@ import {
   DRAG_SMART_REF,
   getCollapsedSelection,
   selectEventRange,
+  insertNodes,
 } from '@decipad/editor-utils';
 import {
   dndStore,
   focusEditor,
   getBlockAbove,
   getNodeString,
-  insertNodes,
   isEditorFocused,
   isElement,
 } from '@udecode/plate';

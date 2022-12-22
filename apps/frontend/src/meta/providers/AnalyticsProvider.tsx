@@ -1,25 +1,17 @@
 /* eslint-disable no-console */
-import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
-import { AnalyticsBrowser } from '@segment/analytics-next';
+import {
+  ClientEvent,
+  ClientEventsContext,
+  getAnalytics,
+} from '@decipad/client-events';
 import { useSession } from 'next-auth/react';
 import { ReactNode, useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react';
 
-export const useAnalytics = (): AnalyticsBrowser | undefined => {
-  const [analytics] = useState<AnalyticsBrowser | undefined>(() => {
-    const writeKey = process.env.REACT_APP_ANALYTICS_WRITE_KEY;
-    if (writeKey) {
-      return AnalyticsBrowser.load({ writeKey });
-    }
-    return undefined;
-  });
-  return analytics;
-};
-
 const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const analytics = useAnalytics();
+  const analytics = getAnalytics();
   const { data: session } = useSession();
   const [userId, setUserId] = useState<string | undefined>();
   const [userEmail, setUserEmail] = useState<string | undefined>();
@@ -54,7 +46,7 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
 const ClientEventsAnalytics: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const analytics = useAnalytics();
+  const analytics = getAnalytics();
 
   const handleClientEvent = (clientEvent: ClientEvent) => {
     if (!analytics) {

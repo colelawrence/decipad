@@ -6,9 +6,10 @@ import {
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
-import { deleteText, getEditorString, insertNodes } from '@udecode/plate';
+import { deleteText, getEditorString } from '@udecode/plate';
 import { Path } from 'slate';
 import {
+  insertNodes,
   requireBlockParentPath,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';

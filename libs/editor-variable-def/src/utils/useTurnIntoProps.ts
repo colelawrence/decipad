@@ -10,13 +10,12 @@ import {
   getNodeEntry,
   ELEMENT_CODE_LINE,
   getNodeString,
-  insertNodes,
   removeNodes,
   focusEditor,
 } from '@udecode/plate';
 import { Path } from 'slate';
 import { useMemo } from 'react';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [

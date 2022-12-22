@@ -7,12 +7,11 @@ import {
   useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import {
   findNodePath,
   focusEditor,
   getNodeString,
-  insertNodes,
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate';

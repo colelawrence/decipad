@@ -8,8 +8,7 @@ import {
   MyEditor,
   TableElement,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { insertNodes } from '@udecode/plate';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { GetAvailableIdentifier } from './slashCommands';

@@ -5,15 +5,10 @@ import {
   CodeLineV2ElementVarname,
   CodeLineV2ElementCode,
 } from '@decipad/editor-types';
-import { isElementOfType } from '@decipad/editor-utils';
+import { isElementOfType, insertNodes } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
 import { nanoid } from 'nanoid';
-import {
-  getNodeChildren,
-  insertNodes,
-  removeNodes,
-  setNodes,
-} from '@udecode/plate';
+import { getNodeChildren, removeNodes, setNodes } from '@udecode/plate';
 import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeLinePlugin';
 import { createNormalizerPlugin } from '../../pluginFactories';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';

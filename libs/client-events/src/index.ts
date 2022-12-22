@@ -9,5 +9,5 @@ export type ClientEventContextType = (arg0: ClientEvent) => void;
 
 export const ClientEventsContext = createContext<ClientEventContextType>(noop);
 
-export * from './useAnalytics';
+export * from './getAnalytics';
 export * from './action';

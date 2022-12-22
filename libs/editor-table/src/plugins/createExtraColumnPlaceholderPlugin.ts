@@ -3,7 +3,6 @@ import {
   getAboveNode,
   getNodeEntry,
   hasNode,
-  insertNodes,
   isCollapsed,
   isElement,
   removeNodes,
@@ -18,6 +17,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
+import { insertNodes } from '@decipad/editor-utils';
 import { getTableColumnCount } from '../utils/getTableColumnCount';
 import { isTableColumnEmpty } from '../utils/isTableColumnEmpty';
 

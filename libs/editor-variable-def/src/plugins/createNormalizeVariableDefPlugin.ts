@@ -13,8 +13,8 @@ import {
   SliderElement,
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
-import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
-import { isElementOfType } from '@decipad/editor-utils';
+import { removeNodes, setNodes } from '@udecode/plate';
+import { insertNodes, isElementOfType } from '@decipad/editor-utils';
 
 const allowableVariant = new Set([
   'expression',

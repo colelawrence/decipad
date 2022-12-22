@@ -15,15 +15,11 @@ import {
 } from '@decipad/editor-types';
 import {
   getElementUniqueName,
+  insertNodes,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
 import type { SerializedTypeKind } from '@decipad/computer';
-import {
-  getEndPoint,
-  getStartPoint,
-  setSelection,
-  insertNodes,
-} from '@udecode/plate';
+import { getEndPoint, getStartPoint, setSelection } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 

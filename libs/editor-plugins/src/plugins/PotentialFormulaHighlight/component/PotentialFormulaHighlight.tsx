@@ -14,14 +14,17 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_CODE_LINE_V2,
 } from '@decipad/editor-types';
-import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
+import {
+  getAboveNodeSafe,
+  isElementOfType,
+  insertNodes,
+} from '@decipad/editor-utils';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import {
   findNodePath,
   getEndPoint,
   getNodeString,
-  insertNodes,
   toDOMNode,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';

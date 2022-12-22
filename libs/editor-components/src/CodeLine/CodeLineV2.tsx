@@ -8,14 +8,18 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import { Result, SerializedType } from '@decipad/computer';
-import { assertElementType, useNodeText } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useNodeText,
+  insertNodes,
+} from '@decipad/editor-utils';
 import {
   useComputer,
   useIsEditorReadOnly,
   useEditorTeleportContext,
 } from '@decipad/react-contexts';
 import { CodeLine as UICodeLine, CodeVariableDefinition } from '@decipad/ui';
-import { findNodePath, getNodeString, insertNodes } from '@udecode/plate';
+import { findNodePath, getNodeString } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
 import {

@@ -15,6 +15,7 @@ import {
   TableVariableNameElement,
 } from '@decipad/editor-types';
 import {
+  insertNodes,
   isElementOfType,
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
@@ -24,7 +25,6 @@ import {
   getChildren,
   getNodeChildren,
   hasNode,
-  insertNodes,
   isElement,
   isText,
   setNodes,

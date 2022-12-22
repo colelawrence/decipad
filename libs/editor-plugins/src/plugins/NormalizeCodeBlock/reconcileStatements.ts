@@ -4,8 +4,9 @@ import {
   ELEMENT_CODE_LINE,
   MyEditor,
 } from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
-import { getNode, insertNodes, insertText, mergeNodes } from '@udecode/plate';
+import { getNode, insertText, mergeNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { getCodeBlockOffsets, reinstateCursorOffsets } from './offsets';

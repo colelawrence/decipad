@@ -9,11 +9,11 @@ import {
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
 import {
   ChildOf,
   deleteText,
   getNodeChildren,
-  insertNodes,
   isElement,
   isText,
   unwrapNodes,

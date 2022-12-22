@@ -54,3 +54,4 @@ export * from './getAboveNodeSafe';
 export * from './useIsOffline';
 export * from './useCache';
 export * from './turnInto';
+export * from './insertNodes';

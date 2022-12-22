@@ -1,4 +1,4 @@
-import { insertNodes, normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate';
 import {
   ColumnsElement,
   createTPlateEditor,
@@ -7,6 +7,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
 import { createNormalizeColumnsPlugin } from './createNormalizeColumnsPlugin';
 
 let editor: TEditor;

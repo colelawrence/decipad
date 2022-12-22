@@ -5,14 +5,9 @@ import {
   ImportElementSource,
   MyEditor,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { tryImport } from '@decipad/import';
-import {
-  insertNodes,
-  isCollapsed,
-  setSelection,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { isCollapsed, setSelection, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
 export interface InsertImportProps {

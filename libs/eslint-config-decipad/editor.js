@@ -30,6 +30,12 @@ module.exports = {
             message:
               'We do not usually set the entire editor to readOnly. Import useIsEditorReadOnly instead.',
           },
+          {
+            name: '@udecode/plate',
+            importNames: ['insertNodes'],
+            message:
+              'Node insertion should be done through @decipad/editor-utils',
+          },
         ],
       },
     ],

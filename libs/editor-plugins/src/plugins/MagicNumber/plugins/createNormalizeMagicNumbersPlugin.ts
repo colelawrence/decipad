@@ -1,9 +1,5 @@
-import {
-  getNodeChildren,
-  insertNodes,
-  isElement,
-  isText,
-} from '@udecode/plate';
+import { insertNodes } from '@decipad/editor-utils';
+import { getNodeChildren, isElement, isText } from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 

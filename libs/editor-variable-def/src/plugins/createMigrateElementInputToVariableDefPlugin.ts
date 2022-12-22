@@ -5,7 +5,8 @@ import {
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import { deleteText, insertNodes } from '@udecode/plate';
+import { insertNodes } from '@decipad/editor-utils';
+import { deleteText } from '@udecode/plate';
 import { inputElementToVariableDef } from '../utils/inputElementToVariableDef';
 
 const normalize =

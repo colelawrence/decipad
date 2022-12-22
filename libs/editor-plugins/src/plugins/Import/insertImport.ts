@@ -3,8 +3,8 @@ import {
   ImportElement,
   ImportElementSource,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { insertNodes, isCollapsed, PlateEditor } from '@udecode/plate';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
+import { isCollapsed, PlateEditor } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
 export const insertImport = (

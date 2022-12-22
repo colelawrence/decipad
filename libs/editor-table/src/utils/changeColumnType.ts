@@ -1,11 +1,5 @@
 import { getDefined } from '@decipad/utils';
-import {
-  getNode,
-  hasNode,
-  insertNodes,
-  setNodes,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { getNode, hasNode, setNodes, withoutNormalizing } from '@udecode/plate';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   MyEditor,
@@ -16,6 +10,7 @@ import {
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 import { nanoid } from 'nanoid';
+import { insertNodes } from '@decipad/editor-utils';
 import { findTableFormulaPath } from './findTableFormulaPath';
 import { focusCursorOnPath } from '../plugins/createCursorFocusPlugin';
 

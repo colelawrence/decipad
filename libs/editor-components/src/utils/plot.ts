@@ -1,7 +1,6 @@
 import { ELEMENT_PLOT, MyEditor, PlotElement } from '@decipad/editor-types';
-import { insertNodes } from '@udecode/plate';
 import { Path } from 'slate';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 
 const getPlotElement = () =>

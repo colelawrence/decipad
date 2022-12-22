@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { InferError } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
-import { useAnalytics } from '@decipad/client-events';
+import { getAnalytics } from '@decipad/client-events';
 import { useSession } from 'next-auth/react';
 import { CodeError } from '../../atoms';
 import { CodeResultProps } from '../../types';
@@ -12,7 +12,7 @@ export const InlineCodeError = ({
   const computer = useComputer();
   const { url } = new InferError(type.errorCause);
   const message = computer.formatError(type.errorCause);
-  const analytics = useAnalytics();
+  const analytics = getAnalytics();
   const userId = (useSession()?.data?.user as undefined | { id: string })?.id;
 
   useEffect(() => {

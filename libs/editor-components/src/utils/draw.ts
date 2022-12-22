@@ -1,8 +1,8 @@
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { MyEditor, DrawElement, ELEMENT_DRAW } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { insertNodes, setSelection, withoutNormalizing } from '@udecode/plate';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
+import { setSelection, withoutNormalizing } from '@udecode/plate';
 import { drawDummyElement } from '../Media/drawDummyElement';
 
 const getDrawElement = (): DrawElement => ({

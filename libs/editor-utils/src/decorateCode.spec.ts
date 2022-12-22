@@ -9,8 +9,9 @@ import {
 } from '@decipad/editor-types';
 import { getOnly } from '@decipad/utils';
 import { createPlateEditor, getSelectionText } from '@udecode/plate';
-import { BaseEditor, NodeEntry, Path, Transforms } from 'slate';
+import { BaseEditor, NodeEntry, Path } from 'slate';
 import { decorateCode } from './decorateCode';
+import { insertNodes } from './insertNodes';
 
 let editor: MyEditor = createPlateEditor({});
 let codeLine: CodeLineElement;
@@ -24,13 +25,10 @@ const testDecorate = (text: string, override: Partial<BaseEditor> = {}) => {
     id: 'codeline',
     children: [{ text }],
   };
-  Transforms.insertNodes(
-    editor as BaseEditor,
-    [
-      { type: ELEMENT_H1, id: 'h1', children: [{ text: '' }] },
-      codeLine,
-    ] as MyValue
-  );
+  insertNodes(editor, [
+    { type: ELEMENT_H1, id: 'h1', children: [{ text: '' }] },
+    codeLine,
+  ] as MyValue);
 
   Object.assign(editor, override);
 

@@ -6,12 +6,15 @@ import {
   MyText,
 } from '@decipad/editor-types';
 import React, { ComponentProps } from 'react';
-import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
+import {
+  getSlateFragment,
+  insertNodes,
+  selectEventRange,
+} from '@decipad/editor-utils';
 import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
 import {
   dndStore,
   getBlockAbove,
-  insertNodes,
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate';

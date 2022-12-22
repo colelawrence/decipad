@@ -5,10 +5,10 @@ import {
   DrawElementDescendant,
   MyEditor,
 } from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
 import {
   deleteText,
   findNode,
-  insertNodes,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';

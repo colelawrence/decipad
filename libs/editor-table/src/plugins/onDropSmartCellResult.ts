@@ -9,11 +9,14 @@ import {
   MyElement,
   MyText,
 } from '@decipad/editor-types';
-import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
+import {
+  getSlateFragment,
+  insertNodes,
+  selectEventRange,
+} from '@decipad/editor-utils';
 import {
   dndStore,
   getBlockAbove,
-  insertNodes,
   isElementEmpty,
   removeNodes,
 } from '@udecode/plate';

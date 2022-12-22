@@ -6,8 +6,8 @@ import {
   DataViewElement,
   MyEditor,
 } from '@decipad/editor-types';
-import { requirePathBelowBlock } from '@decipad/editor-utils';
-import { findNode, focusEditor, insertNodes, TEditor } from '@udecode/plate';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
+import { findNode, focusEditor, TEditor } from '@udecode/plate';
 import { clone } from 'lodash';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';

@@ -11,11 +11,12 @@ import {
 import {
   getNotebook,
   getURLComponents,
+  insertNodes,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
 import { tryImport } from '@decipad/import';
 import { getDefined, noop, timeout } from '@decipad/utils';
-import { insertNodes, isCollapsed, withoutNormalizing } from '@udecode/plate';
+import { isCollapsed, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 

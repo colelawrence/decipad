@@ -8,7 +8,6 @@ import {
 import {
   getNextNode,
   getNodeString,
-  insertNodes,
   insertText,
   isElement,
   removeNodes,
@@ -17,6 +16,7 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Location, Path, Point, Range } from 'slate';
+import { insertNodes } from './insertNodes';
 
 export const normalizeSmartRefs = (
   node: MyNode,

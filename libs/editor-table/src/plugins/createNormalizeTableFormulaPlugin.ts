@@ -8,10 +8,13 @@ import {
   MyNodeEntry,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  insertNodes,
+  normalizeSmartRefs,
+} from '@decipad/editor-utils';
 import {
   hasNode,
-  insertNodes,
   deleteText,
   getNodeChildren,
   isElement,

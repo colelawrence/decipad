@@ -13,13 +13,13 @@ import {
   getEndPoint,
   getNextNode,
   getNode,
-  insertNodes,
   setSelection,
   TDescendant,
   TElement,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
+import { insertNodes } from './insertNodes';
 import {
   getBlockParentPath,
   getNonTextParentPath,

@@ -1,7 +1,6 @@
 /* eslint-disable no-loop-func */
 import { Path } from 'slate';
 import { nanoid } from 'nanoid';
-import { insertNodes } from '@udecode/plate';
 import { format } from 'date-fns';
 import {
   ELEMENT_TABLE,
@@ -19,6 +18,7 @@ import {
 import { Computer, Result, SerializedType } from '@decipad/computer';
 import { ImportResult } from '@decipad/import';
 import { varNamify } from '@decipad/utils';
+import { insertNodes } from '@decipad/editor-utils';
 
 interface ImportTableProps {
   editor: MyEditor;

@@ -8,7 +8,8 @@ import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
 } from '@decipad/editor-types';
-import { insertNodes, TEditor } from '@udecode/plate';
+import { insertNodes } from '@decipad/editor-utils';
+import { TEditor } from '@udecode/plate';
 import { ChecklistEvent } from 'libs/client-events/src/checklist';
 import { nanoid } from 'nanoid';
 import { createUserEventPlugin } from './createUserEventPlugin';

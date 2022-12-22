@@ -1,13 +1,13 @@
 import {
   createMediaEmbedPlugin as _createMediaEmbedPlugin,
   getPluginType,
-  insertNodes,
   PlateEditor,
   TMediaEmbedElement,
   Value,
 } from '@udecode/plate';
 import { ELEMENT_MEDIA_EMBED } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
+import { insertNodes } from '@decipad/editor-utils';
 
 export const insertMediaEmbed = <V extends Value>(
   editor: PlateEditor<V>,

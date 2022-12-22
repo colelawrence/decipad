@@ -12,7 +12,11 @@ import {
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { useElementMutatorCallback, withPath } from '@decipad/editor-utils';
+import {
+  insertNodes,
+  useElementMutatorCallback,
+  withPath,
+} from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
@@ -20,7 +24,6 @@ import {
   getNodeChildren,
   getNodeEntry,
   hasNode,
-  insertNodes,
   InsertNodesOptions,
   insertText,
   moveNodes,

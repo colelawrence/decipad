@@ -12,6 +12,7 @@
     { "path": "../react-contexts" },
     { "path": "../format" },
     { "path": "../parse" },
-    { "path": "../fetch" }
+    { "path": "../fetch" },
+    { "path": "../client-events" }
   ]
 }
