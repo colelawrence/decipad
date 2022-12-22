@@ -110,8 +110,7 @@ const config = {
             label: 'Gallery',
           },
           {
-            type: 'doc',
-            docId: 'help-and-support',
+            to: 'help',
             position: 'left',
             label: 'Support',
           },
