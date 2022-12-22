@@ -183,7 +183,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
       const id = hashToken(`${identifier}:${hashedToken}`);
       const verificationRequest = await data.verificationrequests.get({ id });
       if (verificationRequest) {
-        await data.verificationrequests.delete({ id });
         const expirationDate = new Date(verificationRequest.expires * 1000);
         return {
           ...verificationRequest,
@@ -191,17 +190,6 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
         };
       }
       return null;
-    },
-
-    async deleteVerificationRequest(
-      identifier: string,
-      token: string,
-      secret2: string
-    ) {
-      const data = await tables();
-      const hashedToken = hashToken(token);
-      const id = hashToken(`${identifier}:${hashedToken}:${secret2}`);
-      await data.verificationrequests.delete({ id });
     },
   } as unknown as Adapter;
 };
