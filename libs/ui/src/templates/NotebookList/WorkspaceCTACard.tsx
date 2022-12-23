@@ -1,3 +1,4 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC } from 'react';
@@ -6,12 +7,17 @@ import { Close } from '../../icons';
 import { cssVar, p18Medium } from '../../primitives';
 import { dashboard } from '../../styles';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import backgroundDark from './dashboard-cta-card-dark.png';
 import backgroundPublish from './dashboard-cta-card-publish.png';
+
 import background from './dashboard-cta-card.png';
 
 const workspaceCTAScreenQuery = `@media (max-width: 1000px)`;
 
-const workspaceCTACardSuperWrapperStyles = (variant: boolean) =>
+const workspaceCTACardSuperWrapperStyles = (
+  variant: boolean,
+  darkTheme: boolean
+) =>
   css({
     marginBottom: '2rem',
     borderRadius: '12px',
@@ -21,7 +27,9 @@ const workspaceCTACardSuperWrapperStyles = (variant: boolean) =>
     position: 'relative',
 
     backgroundColor: cssVar('highlightColor'),
-    backgroundImage: `url(${variant ? backgroundPublish : background})`,
+    backgroundImage: `url(${
+      variant ? backgroundPublish : darkTheme ? backgroundDark : background
+    })`,
     backgroundPosition: 'right 0px bottom',
     backgroundSize: '1057px 210px',
     backgroundRepeat: 'no-repeat',
@@ -65,8 +73,10 @@ const WorkspaceCTACard: FC<WorkspaceCTACardProps> = ({
   variant = false,
 }) => {
   const onDismissClick = useEventNoEffect(onDismiss);
+  const [darkTheme] = useThemeFromStore();
+
   return (
-    <div css={workspaceCTACardSuperWrapperStyles(variant)}>
+    <div css={workspaceCTACardSuperWrapperStyles(variant, darkTheme)}>
       {canDismiss ? (
         <div css={dismissWrapperStyles} onClick={onDismissClick}>
           <Close />
@@ -85,7 +95,7 @@ const WorkspaceCTACard: FC<WorkspaceCTACardProps> = ({
           </p>
         ) : null}
         <div css={{ display: 'inline-flex', gap: '8px' }}>
-          <Button type="primaryBrand" onClick={onCreateNewNotebook}>
+          <Button type="primary" onClick={onCreateNewNotebook}>
             Start with new notebook
           </Button>
           <Button type="secondary" href={docs({}).page({ name: 'gallery' }).$}>

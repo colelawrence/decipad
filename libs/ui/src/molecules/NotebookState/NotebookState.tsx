@@ -13,7 +13,7 @@ const wrapperStyles = css({
   position: 'fixed',
   height: '42px',
   backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
   borderRadius: '8px',
   bottom: '16px',
@@ -41,7 +41,7 @@ const activeStyles = {
 const activeButtonStyles = css({
   transition: 'all 1.25s ease-in-out',
   ':hover': {
-    border: `1px solid ${cssVar('strongHighlightColor')}`,
+    border: `1px solid ${cssVar('borderColor')}`,
   },
 });
 
@@ -255,7 +255,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
           borderRadius: '8px',
         })}
       >
-        <div css={[p12Medium, { maxWidth: '200px' }]}>
+        <div css={[{ maxWidth: '200px' }]}>
           {getText(readOnly, saved, isOffline)}
         </div>
       </Tooltip>

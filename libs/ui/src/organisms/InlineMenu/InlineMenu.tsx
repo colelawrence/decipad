@@ -22,7 +22,7 @@ const styles = css({
   padding: '12px',
 
   backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '8px',
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
 

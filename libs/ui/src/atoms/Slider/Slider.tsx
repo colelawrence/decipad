@@ -1,15 +1,16 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, InputHTMLAttributes } from 'react';
 import * as SliderUI from '@radix-ui/react-slider';
+import { FC, InputHTMLAttributes } from 'react';
 import {
-  offBlack,
+  brand400,
   cssVar,
   grey700,
+  offBlack,
   transparency,
-  brand400,
 } from '../../primitives';
-import { AvailableSwatchColor, baseSwatches } from '../../utils';
+import { AvailableSwatchColor, swatchesThemed } from '../../utils';
 
 const thumbBorderWidth = 1;
 const thumbSize = 20;
@@ -49,13 +50,13 @@ const thumbStyles = css({
   boxShadow: `0px 2px 20px ${transparency(grey700, 0.04)},
   0px 2px 8px ${transparency(offBlack, 0.02)}`,
 
-  border: `${thumbBorderWidth}px solid ${cssVar('strongerHighlightColor')}`,
+  border: `${thumbBorderWidth}px solid ${cssVar('borderColor')}`,
   borderRadius: '8px',
 
   height: `${thumbSize}px`,
   width: `${thumbSize}px`,
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('iconColorLight'),
 
   cursor: 'pointer',
   display: 'block',
@@ -80,6 +81,8 @@ export const Slider = ({
   value = 0,
   color: colorName,
 }: SliderProps): ReturnType<FC> => {
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
   const color = baseSwatches[colorName || 'Sulu'];
   return (
     <div css={sliderWrapperStyles}>

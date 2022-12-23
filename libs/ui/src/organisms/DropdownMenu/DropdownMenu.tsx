@@ -1,8 +1,8 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
+import * as Popover from '@radix-ui/react-popover';
 import { nanoid } from 'nanoid';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import * as Popover from '@radix-ui/react-popover';
 import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
@@ -16,7 +16,7 @@ const styles = css({
   overflowX: 'hidden',
   marginTop: '8px',
   backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '12px',
   boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
   width: '100%',
@@ -43,7 +43,7 @@ const footerStyles = css(
     height: '32px',
     lineHeight: '24px',
     background: cssVar('highlightColor'),
-    boxShadow: `0px -1px 0px ${cssVar('strongHighlightColor')}`,
+    boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
     display: 'flex',
     alignItems: 'center',
     gap: '4px',

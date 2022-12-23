@@ -1,4 +1,5 @@
 import {
+  black,
   blue100,
   blue200,
   blue300,
@@ -8,10 +9,15 @@ import {
   brand200,
   brand500,
   brand600,
-  brand700,
+  dark100,
+  dark200,
+  dark300,
+  dark400,
+  dark500,
+  dark600,
+  dark700,
   grey100,
   grey200,
-  grey300,
   grey500,
   grey600,
   grey700,
@@ -23,11 +29,11 @@ import {
   orange600,
   orange700,
   purple200,
+  purple300,
   purple500,
   purple600,
   purple700,
   purple800,
-  purple900,
   red100,
   red300,
   red50,
@@ -53,6 +59,10 @@ export const theme: CssVariables = {
 
   errorColor: red500.rgb,
 
+  borderColor: dark500.rgb,
+  borderHighlightColor: purple700.rgb,
+  borderTable: dark500.rgb,
+
   notebookStateDangerLight: red300.rgb,
   notebookStateDangerHeavy: red100.rgb,
 
@@ -65,28 +75,49 @@ export const theme: CssVariables = {
   notebookStateDisabledLight: grey600.rgb,
   notebookStateDisabledHeavy: grey100.rgb,
 
-  backgroundColor: purple900.rgb,
+  backgroundColor: dark700.rgb,
   tintedBackgroundColor: grey700.rgb,
   iconBackgroundColor: grey500.rgb,
   offColor: grey600.rgb,
   spoilerColor: offWhite.rgb,
 
-  highlightColor: purple800.rgb,
-  strongHighlightColor: purple700.rgb,
-  strongerHighlightColor: purple600.rgb,
-  evenStrongerHighlightColor: purple500.rgb,
+  highlightColor: dark600.rgb,
+  strongHighlightColor: dark500.rgb,
+  strongerHighlightColor: dark400.rgb,
+  evenStrongerHighlightColor: dark300.rgb,
 
-  weakerTextColor: grey300.rgb,
-  weakTextColor: grey200.rgb,
-  normalTextColor: grey100.rgb,
+  weakerTextColor: dark400.rgb,
+  weakTextColor: dark300.rgb,
+  normalTextColor: dark200.rgb,
   strongTextColor: white.rgb,
 
   iconColorDark: offBlack.rgb,
+  iconColorLight: offWhite.rgb,
+
+  tooltipBackground: dark300.rgb,
 
   // slash icons
   weakerSlashIconColor: blue100.rgb,
   weakSlashIconColor: blue200.rgb,
   strongSlashIconColor: blue500.rgb,
+
+  buttonPrimaryText: dark700.rgb,
+  buttonPrimaryBackground: dark400.rgb,
+  buttonPrimaryHover: dark500.rgb,
+  buttonPrimaryDisabledText: dark700.rgb,
+  buttonPrimaryDisabledBackground: grey200.rgb,
+
+  buttonSecondaryText: dark300.rgb,
+  buttonSecondaryBackground: dark500.rgb,
+  buttonSecondaryHover: black.rgb,
+  buttonSecondaryDisabledText: dark500.rgb,
+  buttonSecondaryDisabledBackground: dark600.rgb,
+
+  buttonBrandText: offBlack.rgb,
+  buttonBrandBackground: purple300.rgb,
+  buttonBrandHover: purple500.rgb,
+  buttonBrandDisabledText: purple300.rgb,
+  buttonBrandDisabledBackground: purple600.rgb,
 
   // dropline
   droplineColor: blue300.rgb,
@@ -95,7 +126,7 @@ export const theme: CssVariables = {
   errorBlockWarning: orange700.rgb,
   errorBlockError: red700.rgb,
 
-  errorPageGradientEnd: teal800.rgb,
+  errorPageGradientEnd: dark500.rgb,
 
   bubbleColor: teal200.rgb,
   bubbleBackground: teal800.rgb,
@@ -104,8 +135,8 @@ export const theme: CssVariables = {
 
   currentTextColor: cssVar('normalTextColor'),
 
-  variableHighlightColor: brand700.rgb,
-  variableHighlightTextColor: white.rgb,
+  variableHighlightColor: teal800.rgb,
+  variableHighlightTextColor: dark100.rgb,
 
   magicNumberTextColor: brand200.rgb,
 

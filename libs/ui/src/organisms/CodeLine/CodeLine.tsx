@@ -22,7 +22,7 @@ import { useEventNoEffect } from '../../utils/useEventNoEffect';
 const { lineHeight } = codeBlock;
 
 const highlightedLineStyles = {
-  borderColor: cssVar('strongerHighlightColor'),
+  borderColor: cssVar('borderHighlightColor'),
 };
 
 const codeLineStyles = (
@@ -33,7 +33,7 @@ const codeLineStyles = (
   css({
     ...(variant === 'standalone'
       ? {
-          border: `1px solid ${cssVar('strongHighlightColor')}`,
+          border: `1px solid ${cssVar('borderColor')}`,
 
           backgroundColor: cssVar('highlightColor'),
           padding: '6px 12px',
@@ -126,7 +126,7 @@ const inlineResultStyles = css(p14Regular, {
   padding: '2px 8px',
 
   backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '8px',
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 

@@ -1,3 +1,4 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ArrowDiagonalTopRight, Heading1, Heading2 } from '../../icons';
 import {
@@ -19,9 +20,10 @@ export const NumberCatalogHeading = ({
   blockId,
   name,
 }: NumberCatalogHeadingProps) => {
+  const [darkTheme] = useThemeFromStore();
   return (
     <a href={`#${blockId}`}>
-      <span css={numberCatalogListStyles}>
+      <span css={numberCatalogListStyles(darkTheme)}>
         <span
           css={css({
             display: 'inline-flex',
@@ -56,7 +58,10 @@ export const NumberCatalogHeading = ({
               height: '20px',
               width: '20px',
               display: 'inline-flex',
-              backgroundColor: transparency(black, weakOpacity).rgba,
+              backgroundColor: transparency(
+                darkTheme ? white : black,
+                weakOpacity
+              ).rgba,
               color: 'black',
               svg: {
                 width: '12px',
@@ -72,20 +77,21 @@ export const NumberCatalogHeading = ({
   );
 };
 
-export const numberCatalogListStyles = css(p14Medium, {
-  padding: '11px 0px 9px 15px',
-  display: 'grid',
-  gridTemplateColumns: 'minmax(0, 1fr) 24px',
-  alignItems: 'center',
-  gap: '8px',
-  cursor: 'grab',
-  minWidth: 0,
-  minHeight: 0,
-  '*:hover > &': {
-    backgroundColor: transparency(white, 0.5).rgba,
-    'span:last-child span:last-child': {
-      opacity: 1,
-      cursor: 'pointer',
+export const numberCatalogListStyles = (darkTheme: boolean) =>
+  css(p14Medium, {
+    padding: '11px 0px 9px 15px',
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr) 24px',
+    alignItems: 'center',
+    gap: '8px',
+    cursor: 'grab',
+    minWidth: 0,
+    minHeight: 0,
+    '*:hover > &': {
+      backgroundColor: transparency(darkTheme ? black : white, 0.5).rgba,
+      'span:last-child span:last-child': {
+        opacity: 1,
+        cursor: 'pointer',
+      },
     },
-  },
-});
+  });

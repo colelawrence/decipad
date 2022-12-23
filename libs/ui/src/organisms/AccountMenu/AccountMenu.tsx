@@ -15,7 +15,7 @@ const styles = css({
   paddingBottom: '8px',
 
   backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '8px',
   boxShadow: `3px 3px 24px ${cssVar('highlightColor')}`,
 

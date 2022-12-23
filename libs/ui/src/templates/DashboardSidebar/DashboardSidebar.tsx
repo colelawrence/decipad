@@ -123,7 +123,7 @@ const dashboardSidebarStyles = css({
   display: 'grid',
   gridTemplateRows: '[switcher] auto [navigation] 1fr',
   rowGap: '20px',
-  borderLeft: `1px solid ${cssVar('strongerHighlightColor')}`,
+  borderLeft: `1px solid ${cssVar('borderColor')}`,
   borderTopLeftRadius: '20px',
   borderBottomLeftRadius: '20px',
   backgroundColor: cssVar('backgroundColor'),

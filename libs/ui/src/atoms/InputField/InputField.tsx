@@ -1,6 +1,6 @@
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { noop } from '@decipad/utils';
 import { cssVar, p14Regular, setCssVar } from '../../primitives';
 
 const inputStyles = css({
@@ -8,7 +8,7 @@ const inputStyles = css({
 
   backgroundColor: cssVar('backgroundColor'),
 
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '6px',
 
   ...p14Regular,

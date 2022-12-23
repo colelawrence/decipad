@@ -42,7 +42,7 @@ const footerStyles = css(
     height: '32px',
     lineHeight: '24px',
     background: cssVar('highlightColor'),
-    boxShadow: `0px -1px 0px ${cssVar('strongHighlightColor')}`,
+    boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
     margin: '0px 0px',
     display: 'flex',
     alignItems: 'center',
@@ -69,7 +69,7 @@ const styles = (top: boolean) =>
     userSelect: 'none',
 
     backgroundColor: cssVar('backgroundColor'),
-    border: `1px solid ${cssVar('strongHighlightColor')}`,
+    border: `1px solid ${cssVar('borderColor')}`,
     borderRadius: '12px',
     boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
     position: 'absolute',

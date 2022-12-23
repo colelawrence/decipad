@@ -102,6 +102,14 @@ const colorNames: Record<ColorId, string> = {
   blue800: 'Blue 800',
   blue900: 'Blue 900',
 
+  dark100: 'Dark 100',
+  dark200: 'Dark 200',
+  dark300: 'Dark 300',
+  dark400: 'Dark 400',
+  dark500: 'Dark 500',
+  dark600: 'Dark 600',
+  dark700: 'Dark 700',
+
   sulu700: 'Color Swatch Sulu 700',
   sulu900: 'Color Swatch Sulu 900',
 

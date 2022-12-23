@@ -72,6 +72,29 @@ export interface CssVariables {
   readonly strongSlashIconColor: Property.Color;
   readonly iconBackgroundColor: Property.Color;
   readonly iconColorDark: Property.Color;
+  readonly iconColorLight: Property.Color;
+  readonly tooltipBackground: Property.Color;
+
+  //
+  // Buttons
+  //
+  readonly buttonPrimaryText: Property.Color;
+  readonly buttonPrimaryBackground: Property.Color;
+  readonly buttonPrimaryHover: Property.Color;
+  readonly buttonPrimaryDisabledText: Property.Color;
+  readonly buttonPrimaryDisabledBackground: Property.Color;
+
+  readonly buttonSecondaryText: Property.Color;
+  readonly buttonSecondaryBackground: Property.Color;
+  readonly buttonSecondaryHover: Property.Color;
+  readonly buttonSecondaryDisabledText: Property.Color;
+  readonly buttonSecondaryDisabledBackground: Property.Color;
+
+  readonly buttonBrandText: Property.Color;
+  readonly buttonBrandBackground: Property.Color;
+  readonly buttonBrandHover: Property.Color;
+  readonly buttonBrandDisabledText: Property.Color;
+  readonly buttonBrandDisabledBackground: Property.Color;
 
   //
   // Numbers & Bubbles
@@ -88,6 +111,9 @@ export interface CssVariables {
   readonly mutationAnimationColor: Property.Color;
   readonly offColor: Property.Color;
   readonly spoilerColor: Property.Color;
+  readonly borderColor: Property.Color;
+  readonly borderHighlightColor: Property.Color;
+  readonly borderTable: Property.Color;
 
   //
   // Background

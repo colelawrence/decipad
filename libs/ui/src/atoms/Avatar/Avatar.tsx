@@ -65,12 +65,11 @@ const initialBackgroundStyles = ({
   });
 };
 
-const initialTextStyles = css(p12Medium, {
+const initialTextStyles = css({
   dominantBaseline: 'central',
   textAnchor: 'middle',
   textTransform: 'uppercase',
   fontSize: '1.2em',
-  fill: cssVar('strongTextColor'),
 });
 
 interface AvatarProps {
@@ -111,7 +110,7 @@ export const Avatar = ({
           css={[
             { width: '100%', borderRadius: roundedSquare ? '8px' : '50%' },
             variant && {
-              border: `1px solid ${cssVar('strongHighlightColor')}`,
+              border: `1px solid ${cssVar('borderColor')}`,
             },
           ]}
         >
@@ -133,7 +132,17 @@ export const Avatar = ({
                 hoverSelector,
               })}
             />
-            <text x="50%" y="50%" css={initialTextStyles}>
+            <text
+              x="50%"
+              y="50%"
+              css={css([
+                p12Medium,
+                initialTextStyles,
+                variant
+                  ? { fill: cssVar('currentTextColor') }
+                  : { fill: cssVar('iconColorDark') },
+              ])}
+            >
               {name[0]}
             </text>
           </svg>

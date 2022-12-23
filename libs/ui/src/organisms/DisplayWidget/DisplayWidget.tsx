@@ -30,7 +30,7 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     transition: 'all 0.2s ease-in-out',
     ...(selected && { backgroundColor: cssVar('highlightColor') }),
     ...(!readOnly && {
-      border: `1px solid ${cssVar('strongerHighlightColor')}`,
+      border: `1px solid ${cssVar('borderColor')}`,
       ':hover': {
         backgroundColor: cssVar('highlightColor'),
       },

@@ -1,8 +1,8 @@
-import { FC, InputHTMLAttributes } from 'react';
-import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
-import { cssVar, p13Medium, red200, setCssVar } from '../../primitives';
+import { css } from '@emotion/react';
+import { FC, InputHTMLAttributes } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
+import { cssVar, p13Medium, red200, setCssVar } from '../../primitives';
 import { menu } from '../../styles';
 
 const menuItemStyles = css({
@@ -31,7 +31,7 @@ const inputStyles = css(p13Medium, {
     ...setCssVar('currentTextColor', cssVar('normalTextColor')),
   },
 
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '6px',
   '*:hover > &, :focus': {
     borderColor: `${cssVar('strongerHighlightColor')}`,
@@ -97,8 +97,8 @@ export const InputMenuItem = ({
     >
       <div css={menuItemStyles}>
         {label && <span css={labelStyles}>{label}</span>}
-        {/* Tooltip is always rendered and explicitly set to not opened when 
-            there's no error to avoid changing the DOM tree and losing focus on 
+        {/* Tooltip is always rendered and explicitly set to not opened when
+            there's no error to avoid changing the DOM tree and losing focus on
             the input */}
         <Tooltip open={error ? undefined : false} trigger={input}>
           <p>{error}</p>

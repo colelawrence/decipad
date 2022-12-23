@@ -4,14 +4,7 @@ import { css } from '@emotion/react';
 import { FC, useContext } from 'react';
 import { Tooltip } from '..';
 import { Warning } from '../../icons';
-import {
-  p12Medium,
-  p12Regular,
-  red100,
-  red500,
-  setCssVar,
-  white,
-} from '../../primitives';
+import { red100, red500, setCssVar } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
@@ -32,12 +25,11 @@ const iconWrapperStyles = css({
   cursor: 'pointer',
 });
 
-const messageStyles = css(p12Medium, {
-  color: white.rgb,
+const messageStyles = css({
   textAlign: 'center',
 });
 
-const urlStyles = css(p12Regular, {
+const urlStyles = css({
   textDecoration: 'underline',
 });
 

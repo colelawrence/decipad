@@ -4,9 +4,11 @@ import { forwardRef, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { DragHandle, Trash } from '../../icons/index';
 import {
+  cssVar,
   mouseMovingOverTransitionDelay,
   p12Medium,
   p12Regular,
+  setCssVar,
   shortAnimationDuration,
 } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -90,10 +92,14 @@ export const TableCellControls = forwardRef<
 
           <Tooltip trigger={menuButton} side="left">
             <span
-              css={css(p12Regular, {
-                whiteSpace: 'nowrap',
-                textAlign: 'center',
-              })}
+              css={css(
+                p12Regular,
+                setCssVar('currentTextColor', cssVar('backgroundColor')),
+                {
+                  whiteSpace: 'nowrap',
+                  textAlign: 'center',
+                }
+              )}
             >
               <strong css={css(p12Medium)}>Drag</strong> to move
               <br />

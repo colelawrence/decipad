@@ -21,7 +21,7 @@ const wrapperStyle = css([
     borderRadius: '10px',
     padding: '6px 12px',
 
-    border: `1px solid ${cssVar('strongHighlightColor')}`,
+    border: `1px solid ${cssVar('borderColor')}`,
     backgroundColor: cssVar('highlightColor'),
 
     display: 'flex',

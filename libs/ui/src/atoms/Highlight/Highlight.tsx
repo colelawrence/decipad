@@ -1,4 +1,5 @@
-import { AvailableSwatchColor, baseSwatches } from '@decipad/ui';
+import { useThemeFromStore } from '@decipad/react-contexts';
+import { AvailableSwatchColor, Swatch, swatchesThemed } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import {
@@ -9,7 +10,7 @@ import {
 } from '../../primitives';
 import { highlight } from '../../styles';
 
-const styles = (color: AvailableSwatchColor) => {
+const styles = (color: AvailableSwatchColor, baseSwatches: Swatch) => {
   return css(highlight.highlightStyles, {
     borderRadius: '0.9em 0.3em',
     margin: '0 -0.45em',
@@ -34,5 +35,7 @@ export const Highlight = ({
   children,
   color = 'Sun',
 }: HighlightProps): ReturnType<React.FC> => {
-  return <span css={styles(color)}>{children}</span>;
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
+  return <span css={styles(color, baseSwatches)}>{children}</span>;
 };

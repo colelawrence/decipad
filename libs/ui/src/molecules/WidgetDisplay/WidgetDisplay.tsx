@@ -1,9 +1,9 @@
-import { FC, ReactNode } from 'react';
-import { css } from '@emotion/react';
 import { Result } from '@decipad/computer';
-import { cssVar } from '../../primitives';
+import { css } from '@emotion/react';
+import { FC, ReactNode } from 'react';
 import { Caret } from '../../icons';
 import { CodeResult } from '../../organisms';
+import { cssVar } from '../../primitives';
 
 const mainStyles = (readOnly: boolean, selected: boolean) =>
   css({
@@ -20,7 +20,7 @@ const mainStyles = (readOnly: boolean, selected: boolean) =>
     transition: 'all 0.2s ease-in-out',
     ...(selected && { backgroundColor: cssVar('highlightColor') }),
     ...(!readOnly && {
-      border: `1px solid ${cssVar('strongerHighlightColor')}`,
+      border: `1px solid ${cssVar('borderColor')}`,
       ':hover': {
         backgroundColor: cssVar('highlightColor'),
       },

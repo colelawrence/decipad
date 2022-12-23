@@ -9,6 +9,7 @@ import { Counter } from '../../atoms';
 import { Chevron } from '../../icons';
 import {
   black,
+  normalOpacity,
   p14Bold,
   smallestDesktop,
   strongOpacity,
@@ -16,7 +17,7 @@ import {
   white,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { AvailableSwatchColor, baseSwatches, colorSwatches } from '../../utils';
+import { AvailableSwatchColor, Swatch, swatchesThemed } from '../../utils';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
 
@@ -42,6 +43,7 @@ export const NumberCatalog = ({
   const [collapsed, setCollapsed] = useState(startCollapsed);
   const { color } = useEditorStylesContext();
   const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
 
   function getNumberCatalogItemComponent(
     item: NumberCatalogItemType
@@ -86,7 +88,10 @@ export const NumberCatalog = ({
       ]}
     >
       <div
-        css={numberCatalogMenuStyles(color as AvailableSwatchColor, darkTheme)}
+        css={numberCatalogMenuStyles(
+          color as AvailableSwatchColor,
+          baseSwatches
+        )}
       >
         <div
           css={[
@@ -101,9 +106,7 @@ export const NumberCatalog = ({
           onClick={handleCollapsedClick}
         >
           <div css={menuHeaderStyles}>
-            <span css={numberFontStyles(color as AvailableSwatchColor)}>
-              Numbers
-            </span>
+            <span css={numberFontStyles(darkTheme)}>Numbers</span>
 
             <span
               css={css({
@@ -113,7 +116,6 @@ export const NumberCatalog = ({
               <Counter
                 variant
                 n={items.filter((item) => item.type === 'var').length}
-                color={baseSwatches[color as AvailableSwatchColor]}
               ></Counter>
             </span>
           </div>
@@ -122,10 +124,8 @@ export const NumberCatalog = ({
               menuHeaderChevronStyles,
               {
                 'svg > path': {
-                  stroke:
-                    colorSwatches[color as AvailableSwatchColor].highlight.rgb,
-                  fill: colorSwatches[color as AvailableSwatchColor].highlight
-                    .rgb,
+                  stroke: baseSwatches[color as AvailableSwatchColor].rgb,
+                  fill: baseSwatches[color as AvailableSwatchColor].rgb,
                 },
               },
             ]}
@@ -168,14 +168,12 @@ const gridHeaderNumberCatStyles = css({
 
 const numberCatalogMenuStyles = (
   color: AvailableSwatchColor,
-  darkTheme: boolean
+  baseSwatches: Swatch
 ) =>
   css({
     borderRadius,
-    backgroundColor: (darkTheme
-      ? colorSwatches[color].dark
-      : colorSwatches[color].light
-    ).rgb,
+    backgroundColor: transparency(baseSwatches[color], 0.4).rgba,
+
     padding: '8px',
     width: '300px',
     userSelect: 'none',
@@ -193,15 +191,17 @@ const menuHeaderChevronStyles = css({
   padding: '14.5px 12px',
 });
 
-const numberFontStyles = (color: AvailableSwatchColor) =>
+const numberFontStyles = (darkTheme: boolean) =>
   css({
-    color: colorSwatches[color].highlight.rgb,
+    color: transparency(darkTheme ? white : black, normalOpacity).rgba,
   });
 
 const menuBodyStyles = (darkTheme: boolean) =>
   css({
-    backgroundColor: transparency(darkTheme ? black : white, strongOpacity)
-      .rgba,
+    backgroundColor: transparency(
+      darkTheme ? black : white,
+      darkTheme ? normalOpacity : strongOpacity
+    ).rgba,
     borderRadius: '10px',
     maxHeight: '54vh',
     minHeight: '40px',

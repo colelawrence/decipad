@@ -4,7 +4,9 @@ import {
   blue300,
   blue500,
   brand100,
+  brand200,
   brand300,
+  brand500,
   brand600,
   gleb700,
   grey100,
@@ -50,6 +52,10 @@ export const theme: CssVariables = {
 
   errorColor: red500.rgb,
 
+  borderColor: grey200.rgb,
+  borderHighlightColor: grey300.rgb,
+  borderTable: grey200.rgb,
+
   notebookStateDangerLight: red100.rgb,
   notebookStateDangerHeavy: red300.rgb,
   notebookStateWarningLight: orange100.rgb,
@@ -76,11 +82,33 @@ export const theme: CssVariables = {
   strongTextColor: offBlack.rgb,
 
   iconColorDark: offBlack.rgb,
+  iconColorLight: offWhite.rgb,
+
+  tooltipBackground: offBlack.rgb,
 
   // slash icons
   weakerSlashIconColor: blue100.rgb,
   weakSlashIconColor: blue200.rgb,
   strongSlashIconColor: blue500.rgb,
+
+  // buttons
+  buttonPrimaryText: white.rgb,
+  buttonPrimaryBackground: offBlack.rgb,
+  buttonPrimaryHover: grey600.rgb,
+  buttonPrimaryDisabledText: grey500.rgb,
+  buttonPrimaryDisabledBackground: offBlack.rgb,
+
+  buttonBrandText: offBlack.rgb,
+  buttonBrandBackground: brand500.rgb,
+  buttonBrandHover: brand300.rgb,
+  buttonBrandDisabledText: brand500.rgb,
+  buttonBrandDisabledBackground: brand200.rgb,
+
+  buttonSecondaryText: offBlack.rgb,
+  buttonSecondaryBackground: grey300.rgb,
+  buttonSecondaryHover: grey200.rgb,
+  buttonSecondaryDisabledText: grey500.rgb,
+  buttonSecondaryDisabledBackground: grey200.rgb,
 
   // dropline
   droplineColor: blue300.rgb,

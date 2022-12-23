@@ -1,12 +1,15 @@
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  useIsEditorReadOnly,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
-import { black, cssVar, setCssVar, transparency } from '../../primitives';
+import { cssVar, setCssVar, transparency } from '../../primitives';
 import { blockAlignment } from '../../styles';
-import { AvailableSwatchColor, baseSwatches, UserIconKey } from '../../utils';
+import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
 
 const { callout } = blockAlignment;
 
@@ -52,13 +55,15 @@ export const Callout = ({
   saveColor = noop,
 }: CalloutProps): ReturnType<FC> => {
   const Icon = icons[icon];
+  const [darkTheme] = useThemeFromStore();
   return (
     <p
       css={[
         styles,
         {
-          backgroundColor: transparency(baseSwatches[color], 0.4).rgba,
-          color: transparency(black, 0.5).rgba,
+          backgroundColor: transparency(swatchesThemed(darkTheme)[color], 0.4)
+            .rgba,
+          color: cssVar('weakTextColor'),
         },
       ]}
     >

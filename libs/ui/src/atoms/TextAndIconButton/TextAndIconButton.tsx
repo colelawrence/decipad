@@ -10,7 +10,7 @@ const wrapperStyles = {
 
 const styles = css({
   borderRadius: '6px',
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   backgroundColor: cssVar('tintedBackgroundColor'),
 
   ':hover, :focus': {

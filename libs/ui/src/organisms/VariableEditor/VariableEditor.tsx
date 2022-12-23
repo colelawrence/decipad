@@ -1,4 +1,5 @@
 import { CellValueType } from '@decipad/editor-types';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
@@ -16,24 +17,24 @@ import {
   transparency,
   white,
 } from '../../primitives';
-import { AvailableSwatchColor, baseSwatches, getTypeIcon } from '../../utils';
+import { AvailableSwatchColor, getTypeIcon, swatchesThemed } from '../../utils';
 
 const leftBarSize = 6;
 
 type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
 
-const wrapperStyles = ({ variant }: Variant, color: string) =>
-  css({
+const wrapperStyles = ({ variant }: Variant, color: string) => {
+  const bgColor = cssVar('backgroundColor');
+  const targetColor = variant === 'display' ? grey300.rgb : color;
+  const finalColor = cssVar('borderColor');
+  const gradient = `linear-gradient(${bgColor}, ${bgColor}), linear-gradient(to right, ${targetColor} 0%, ${finalColor} 18.71%)`;
+  return css({
     // Because `borderImage` with a linear gradient and `borderRadius` cannot
     // work together, we mimic a border by setting a linear gradient in the
     // background and clipping the content box.
     border: '1px solid transparent',
     borderRadius: '8px',
-    backgroundImage: `linear-gradient(${cssVar('backgroundColor')}, ${cssVar(
-      'backgroundColor'
-    )}), linear-gradient(to right, ${
-      variant === 'display' ? grey300.rgb : color
-    } 0%, ${grey300.rgb} 18.71%)`,
+    backgroundImage: gradient,
     backgroundOrigin: 'border-box',
     backgroundClip: 'content-box, border-box',
 
@@ -47,6 +48,7 @@ const wrapperStyles = ({ variant }: Variant, color: string) =>
     minWidth: '175px',
     width: '100%',
   });
+};
 
 const widgetWrapperStyles = css({
   alignItems: 'center',
@@ -150,6 +152,8 @@ export const VariableEditor = ({
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
 
   const Icon = useMemo(
     () => (type && getTypeIcon(type, true)) ?? Virus,

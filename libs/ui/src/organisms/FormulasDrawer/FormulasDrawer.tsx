@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import { cssVar } from '../../primitives';
 
 const formulasDrawerStyles = css({
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '10px',
   margin: '4px 0 16px',
   padding: '6px 0',

@@ -1,4 +1,5 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -32,7 +33,7 @@ import { mainIconButtonStyles } from '../../styles/buttons';
 import {
   Anchor,
   AvailableSwatchColor,
-  baseSwatches,
+  swatchesThemed,
   UserIconKey,
 } from '../../utils';
 
@@ -78,6 +79,7 @@ export const NotebookListItem = ({
 
   const href = notebooks({}).notebook({ notebook: { id, name } }).$;
   const [feStatus, setFeStatus] = useState<TColorStatus>(status);
+  const [darkTheme] = useThemeFromStore();
 
   return (
     <div css={wrapperStyles}>
@@ -89,7 +91,10 @@ export const NotebookListItem = ({
           color={statusColors[feStatus]}
         >
           <div
-            css={[iconStyles, { backgroundColor: baseSwatches[iconColor].rgb }]}
+            css={[
+              iconStyles,
+              { backgroundColor: swatchesThemed(darkTheme)[iconColor].rgb },
+            ]}
           >
             <Icon />
           </div>
@@ -264,7 +269,6 @@ const iconStyles = css({
     width: '18px',
   },
 
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '4px',
   backgroundColor: cssVar('backgroundColor'),
   ...setCssVar('currentTextColor', cssVar('iconColorDark')),
@@ -316,7 +320,7 @@ const creationDateStyles = css(p12Medium, {
   paddingTop: '8px',
   lineHeight: '20px',
   backgroundColor: cssVar('highlightColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   color: cssVar('weakTextColor'),
   margin: '-7px',
   borderRadius: '0 0 8px 8px',

@@ -1,3 +1,4 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import * as icons from '../../icons';
@@ -9,7 +10,7 @@ import {
   shortAnimationDuration,
 } from '../../primitives';
 import { editorLayout } from '../../styles';
-import { AvailableSwatchColor, baseSwatches, UserIconKey } from '../../utils';
+import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
 
 const blockStyles = css({
   display: 'grid',
@@ -53,6 +54,8 @@ export const EditorIcon = ({
   ...props
 }: EditorIconProps): ReturnType<FC> => {
   const Icon = icons[icon];
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
 
   const iconElement = (
     <button

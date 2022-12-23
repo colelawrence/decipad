@@ -22,7 +22,7 @@ const counterWrapperStyles = (
       ? typeof color === 'string'
         ? color
         : transparency(color, variant ? normalOpacity : weakOpacity).rgba
-      : transparency(darkTheme ? white : black, weakOpacity).rgba,
+      : transparency(darkTheme ? black : white, normalOpacity).rgba,
     color: transparency(
       darkTheme ? white : black,
       variant ? normalOpacity : strongOpacity

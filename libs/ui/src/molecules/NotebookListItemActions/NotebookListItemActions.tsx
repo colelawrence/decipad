@@ -52,7 +52,7 @@ const creationDateStyles = css(p12Medium, {
   paddingTop: '8px',
   lineHeight: '20px',
   backgroundColor: cssVar('highlightColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   color: cssVar('weakTextColor'),
   margin: '-7px',
   marginTop: 0,

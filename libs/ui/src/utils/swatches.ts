@@ -1,33 +1,32 @@
 import {
   blue100,
+  blue700,
   brand200,
   brand500,
+  brand700,
   grey100,
   grey200,
   grey500,
-  grey600,
+  grey700,
   malibu200,
   malibu700,
-  malibu900,
   OpaqueColor,
   orange100,
   orange300,
   orange700,
-  orange900,
   perfume200,
   perfume700,
-  perfume900,
   pink200,
   pink700,
-  pink900,
   purple100,
+  purple700,
   red100,
+  red700,
   sulu700,
-  sulu900,
   sun500,
   sun700,
-  sun900,
   yellow200,
+  yellow700,
 } from '../primitives';
 
 export type AvailableSwatchColor =
@@ -48,50 +47,50 @@ interface SwatchColor {
 }
 
 type Swatches = Record<AvailableSwatchColor, SwatchColor>;
-type Swatch = Record<AvailableSwatchColor, OpaqueColor>;
+export type Swatch = Record<AvailableSwatchColor, OpaqueColor>;
 
 export const colorSwatches: Swatches = {
   Catskill: {
     light: grey100,
     base: grey200,
     highlight: grey500,
-    dark: grey600,
+    dark: grey700,
   },
   Sulu: {
     light: brand200,
     base: brand500,
     highlight: sulu700,
-    dark: sulu900,
+    dark: brand700,
   },
   Sun: {
     light: yellow200,
     base: sun500,
     highlight: sun700,
-    dark: sun900,
+    dark: yellow700,
   },
   Grapefruit: {
     light: orange100,
     base: orange300,
     highlight: orange700,
-    dark: orange900,
+    dark: orange700,
   },
   Rose: {
     light: red100,
     base: pink200,
     highlight: pink700,
-    dark: pink900,
+    dark: red700,
   },
   Perfume: {
     light: purple100,
     base: perfume200,
     highlight: perfume700,
-    dark: perfume900,
+    dark: purple700,
   },
   Malibu: {
     light: blue100,
     base: malibu200,
     highlight: malibu700,
-    dark: malibu900,
+    dark: blue700,
   },
 };
 
@@ -115,7 +114,7 @@ export const swatchesThemed: (isDarkMode: boolean) => Swatch = (
   swatchNames.reduce((store, currentKey) => {
     if (isDarkMode) {
       // eslint-disable-next-line no-param-reassign
-      store[currentKey] = colorSwatches[currentKey].highlight;
+      store[currentKey] = colorSwatches[currentKey].dark;
     } else {
       // eslint-disable-next-line no-param-reassign
       store[currentKey] = colorSwatches[currentKey].base;

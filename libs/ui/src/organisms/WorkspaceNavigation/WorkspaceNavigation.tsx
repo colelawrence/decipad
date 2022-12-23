@@ -1,4 +1,5 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -16,7 +17,7 @@ import {
 } from '../../icons';
 import { NavigationList } from '../../molecules';
 import { cssVar, p13Medium } from '../../primitives';
-import { baseSwatches, swatchNames } from '../../utils';
+import { swatchesThemed, swatchNames } from '../../utils';
 
 const workspaceNavContainerStyles = (flagEnabled: boolean) =>
   css({
@@ -31,6 +32,9 @@ const hrStyles = css({
   padding: '12px 0',
   transform: 'translateX(-15px)',
   width: 'calc(100% + 30px)',
+  hr: {
+    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+  },
 });
 
 interface WorkspaceNavigationProps {
@@ -43,6 +47,8 @@ export const WorkspaceNavigation = ({
     workspaceId: activeWorkspace.id,
   });
   const sectionsEnabled = isFlagEnabled('COLOR_SIDEBAR') && false;
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
   return (
     <nav css={workspaceNavContainerStyles(sectionsEnabled)}>
       <NavigationList key={0}>

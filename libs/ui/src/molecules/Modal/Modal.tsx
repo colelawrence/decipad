@@ -1,13 +1,7 @@
 import { css } from '@emotion/react';
 import { ComponentProps, ReactNode } from 'react';
 import { Overlay } from '../../atoms';
-import {
-  cssVar,
-  grey300,
-  grey700,
-  offBlack,
-  transparency,
-} from '../../primitives';
+import { cssVar, grey700, offBlack, transparency } from '../../primitives';
 
 const pageCoverStyles = css({
   position: 'fixed',
@@ -36,7 +30,7 @@ const dialogStyles = css({
 
   padding: '24px',
   backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${grey300.rgb}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '10px',
   width: '480px',
   boxShadow: `

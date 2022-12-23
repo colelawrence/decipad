@@ -1,6 +1,6 @@
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { DragHandle, NestIndicator } from '../../icons';
@@ -14,7 +14,7 @@ import {
   weakOpacity,
   white,
 } from '../../primitives';
-import { AvailableSwatchColor, baseSwatches } from '../../utils';
+import { AvailableSwatchColor, swatchesThemed } from '../../utils';
 import { CodeResult } from '../CodeResult/CodeResult';
 
 interface NumberProps {
@@ -36,6 +36,8 @@ export const NumberCatalogItem = ({
     undebouncedResult,
     undebouncedResult?.result == null
   );
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
 
   if (!result?.result) {
     return null;
@@ -48,7 +50,7 @@ export const NumberCatalogItem = ({
       <div
         draggable
         onDragStart={onDragStart({ blockId, asText })}
-        css={numberCatalogListItemStyles}
+        css={numberCatalogListItemStyles(darkTheme)}
       >
         <span
           css={css({
@@ -126,26 +128,27 @@ const dragHandleStyles = css({
   },
 });
 
-export const numberCatalogListItemStyles = css(p14Medium, {
-  padding: '11px 0px 9px 15px',
-  display: 'grid',
-  gridTemplateColumns: 'minmax(0, 1fr) 24px',
-  alignItems: 'center',
-  gap: '8px',
-  cursor: 'grab',
-  minWidth: 0,
-  minHeight: 0,
-  '*:hover > &': {
-    backgroundColor: transparency(white, 0.5).rgba,
-    'span:last-child': {
-      opacity: 1,
+export const numberCatalogListItemStyles = (darkTheme: boolean) =>
+  css(p14Medium, {
+    padding: '11px 0px 9px 15px',
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr) 24px',
+    alignItems: 'center',
+    gap: '8px',
+    cursor: 'grab',
+    minWidth: 0,
+    minHeight: 0,
+    '*:hover > &': {
+      backgroundColor: transparency(darkTheme ? black : white, 0.5).rgba,
+      'span:last-child': {
+        opacity: 1,
+      },
+      span: {
+        color: transparency(darkTheme ? white : black, boldOpacity).rgba,
+      },
+      'span:last-child span': {
+        mixBlendMode: 'initial',
+        color: cssVar('magicNumberTextColor'),
+      },
     },
-    span: {
-      color: transparency(black, boldOpacity).rgba,
-    },
-    'span:last-child span': {
-      mixBlendMode: 'initial',
-      color: cssVar('magicNumberTextColor'),
-    },
-  },
-});
+  });

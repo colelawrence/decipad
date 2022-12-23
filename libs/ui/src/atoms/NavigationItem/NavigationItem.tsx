@@ -104,7 +104,7 @@ const activeStyles = (backgroundColor: OpaqueColor | string) =>
 
 const navigationItemButtonStyles = (backgroundColor: OpaqueColor | string) =>
   css(p14Regular, {
-    ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+    ...setCssVar('currentTextColor', cssVar('normalTextColor')),
 
     display: 'flex',
     alignItems: 'center',

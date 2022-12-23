@@ -6,12 +6,12 @@ import { ConnectDropTarget } from 'react-dnd';
 import { TextAndIconButton } from '../../atoms';
 import { useAutoAnimate } from '../../hooks';
 import { Eye } from '../../icons';
-import { cssVar, tableBorderColor } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
-export const regularBorder = `1px solid ${tableBorderColor}`;
-const liveResultBorder = `1px solid ${tableBorderColor}`;
+export const regularBorder = `1px solid ${cssVar('borderTable')}`;
+const liveResultBorder = `1px solid ${cssVar('borderTable')}`;
 const borderRadius = '8px';
 
 const tableBaseStyles = css({

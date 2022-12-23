@@ -12,7 +12,7 @@ const buttonWrapperStyles = css({
 });
 
 const outerBorderStyles = css({
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   boxShadow: `0px 2px 16px ${cssVar('highlightColor')}`,
   borderRadius: '8px',
 });

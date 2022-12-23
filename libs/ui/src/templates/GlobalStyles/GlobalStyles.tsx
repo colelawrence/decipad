@@ -49,7 +49,7 @@ const DatePickerStyles: FC = () => {
         'div.react-datepicker': {
           padding: '8px 0',
           borderRadius: '8px',
-          border: `1px solid ${cssVar('strongerHighlightColor')}`,
+          border: `1px solid ${cssVar('borderColor')}`,
         },
         'button.react-datepicker__navigation': {
           width: '4px',
@@ -118,7 +118,7 @@ const DatePickerStyles: FC = () => {
         'div.react-datepicker__time-container.react-datepicker__time-container--with-today-button > div.react-datepicker__time':
           {
             borderRadius: '8px',
-            border: `1px solid ${cssVar('strongerHighlightColor')}`,
+            border: `1px solid ${cssVar('borderColor')}`,
           },
         'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__day-names':
           {
@@ -220,11 +220,11 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
             backgroundColor: 'transparent',
           },
         '.excalidraw button.ToolIcon': {
-          border: `1px solid ${cssVar('strongHighlightColor')}`,
+          border: `1px solid ${cssVar('borderColor')}`,
         },
         '.excalidraw .Island.App-toolbar': {
           padding: '4px',
-          border: `1px solid ${cssVar('strongHighlightColor')}`,
+          border: `1px solid ${cssVar('borderColor')}`,
           boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
           borderRadius: '8px',
         },

@@ -9,20 +9,13 @@ import {
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { noop } from 'lodash';
 import { FC } from 'react';
-import {
-  cssVar,
-  darkTheme,
-  offBlack,
-  p12Medium,
-  setCssVar,
-  white,
-} from '../../primitives';
+import { cssVar, p12Medium } from '../../primitives';
 import { useIsDragging } from './useIsDragging';
 
 const contentWrapperStyles = css({
-  background: offBlack.rgb,
+  background: cssVar('tooltipBackground'),
 
-  outline: `1px solid ${white.rgb}`,
+  outline: `1px solid ${cssVar('currentTextColor')}`,
   borderRadius: '6px',
 
   maxWidth: '300px',
@@ -36,9 +29,7 @@ const smallVariantStyles = css({
 });
 
 const contentStyles = css(p12Medium, {
-  ...darkTheme,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-
+  color: cssVar('backgroundColor'),
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
@@ -46,7 +37,7 @@ const contentStyles = css(p12Medium, {
 });
 
 const arrowStyles = css({
-  fill: cssVar('strongTextColor'),
+  fill: cssVar('tooltipBackground'),
 });
 
 const clickableStyles = css({

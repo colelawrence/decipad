@@ -1,14 +1,14 @@
-import { FC, useEffect, useReducer, useRef } from 'react';
-import { css } from '@emotion/react';
-import { noop } from '@decipad/utils';
 import type { Unit } from '@decipad/computer';
-import { cssVar, p12Medium, p13Medium, setCssVar } from '../../primitives';
+import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { FC, useEffect, useReducer, useRef } from 'react';
 import { MenuItem } from '../../atoms';
+import { cssVar, p12Medium, p13Medium, setCssVar } from '../../primitives';
 import { menu } from '../../styles';
 
 const menuItemStyles = css({
   background: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '6px',
   ':hover, :focus-within': {
     borderColor: `${cssVar('strongerHighlightColor')}`,

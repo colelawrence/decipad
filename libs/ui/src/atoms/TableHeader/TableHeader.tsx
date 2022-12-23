@@ -20,9 +20,9 @@ import {
 import { table } from '../../styles';
 import {
   AvailableSwatchColor,
-  baseSwatches,
   getStringType,
   getTypeIcon,
+  Swatch,
   swatchesThemed,
   TableStyleContext,
 } from '../../utils';
@@ -124,7 +124,11 @@ const DropSourceAndTarget = forwardRef<
   );
 });
 
-const thStyles = (color: AvailableSwatchColor, darkMode: boolean) =>
+const thStyles = (
+  color: AvailableSwatchColor,
+  darkMode: boolean,
+  baseSwatches: Swatch
+) =>
   css({
     backgroundColor: color
       ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
@@ -176,13 +180,17 @@ export const TableHeader = ({
 
   const [darkTheme] = useThemeFromStore();
   const { color } = useContext(TableStyleContext);
+  const baseSwatches = swatchesThemed(darkTheme);
 
   const thRef = useMergedRef(attributes?.ref, dropTarget);
 
   return (
     <th
       {...attributes}
-      css={[columnStyles, thStyles(color as AvailableSwatchColor, darkTheme)]}
+      css={[
+        columnStyles,
+        thStyles(color as AvailableSwatchColor, darkTheme, baseSwatches),
+      ]}
       ref={thRef}
       data-highlight={highlight}
     >

@@ -1,15 +1,15 @@
 import { css } from '@emotion/react';
 import { FC, useCallback, useRef, useState } from 'react';
-import { InputField, Button } from '../../atoms';
+import { Button, InputField } from '../../atoms';
 import {
   AuthContent,
-  SignUpContent,
   SignUpConditionsContent,
+  SignUpContent,
 } from '../../molecules';
 import { cssVar } from '../../primitives';
 
 const outerBorderStyles = css({
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
   boxShadow: `0px 2px 16px ${cssVar('highlightColor')}`,
   borderRadius: '8px',
 });

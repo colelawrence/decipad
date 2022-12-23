@@ -38,12 +38,13 @@ const avatarStyles = css({
 
 const tooltipNameStyles = css({
   ...p13Medium,
+  ...setCssVar('currentTextColor', cssVar('backgroundColor')),
   marginBottom: '3px',
 });
 
 const tooltipRoleStyles = css({
   ...p12Regular,
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+  ...setCssVar('currentTextColor', cssVar('highlightColor')),
 });
 
 export interface NotebookAvatarsProps {

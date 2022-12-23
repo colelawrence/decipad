@@ -1,3 +1,4 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
@@ -14,7 +15,7 @@ import {
 } from '../../primitives';
 import {
   AvailableSwatchColor,
-  baseSwatches,
+  swatchesThemed,
   swatchNames,
   UserIconKey,
   userIconKeys,
@@ -68,6 +69,8 @@ export const IconPopover = ({
   onChangeIcon = noop,
   onChangeColor = noop,
 }: IconPopoverProps): ReturnType<FC> => {
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
   return (
     <Popover.Root>
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>

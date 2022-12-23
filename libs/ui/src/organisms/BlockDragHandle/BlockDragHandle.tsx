@@ -32,7 +32,6 @@ const gridStyles = once(() =>
 
 const handleButtonStyle = css({
   borderRadius: '6px',
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
   ':hover': {
     background: cssVar('highlightColor'),
@@ -139,10 +138,8 @@ export const BlockDragHandle = ({
     <div css={[gridStyles(), hideOnPrint]}>
       {showAddBlock && (
         <Tooltip trigger={plusButton} side="bottom" hoverOnly>
-          <span
-            css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
-          >
-            <strong css={css(p12Medium)}>Click</strong> to add block below
+          <span css={css({ whiteSpace: 'nowrap', textAlign: 'center' })}>
+            <strong>Click</strong> to add block below
           </span>
         </Tooltip>
       )}
@@ -185,11 +182,31 @@ export const BlockDragHandle = ({
 
       <Tooltip trigger={menuButton} side="bottom" hoverOnly>
         <span
-          css={css(p12Regular, { whiteSpace: 'nowrap', textAlign: 'center' })}
+          css={css([
+            p12Regular,
+            setCssVar('currentTextColor', cssVar('backgroundColor')),
+            { whiteSpace: 'nowrap', textAlign: 'center' },
+          ])}
         >
-          <strong css={css(p12Medium)}>Drag</strong> to move
+          <strong
+            css={css([
+              p12Medium,
+              setCssVar('currentTextColor', cssVar('backgroundColor')),
+            ])}
+          >
+            Drag
+          </strong>{' '}
+          to move
           <br />
-          <strong css={css(p12Medium)}>Click</strong> for options
+          <strong
+            css={css([
+              p12Medium,
+              setCssVar('currentTextColor', cssVar('backgroundColor')),
+            ])}
+          >
+            Click
+          </strong>{' '}
+          for options
         </span>
       </Tooltip>
     </div>

@@ -174,6 +174,17 @@ export const pink700 = color(145, 102, 111);
 export const pink900 = color(78, 45, 52);
 
 //
+// dark shades
+//
+export const dark100 = color(242, 241, 248);
+export const dark200 = color(229, 228, 241);
+export const dark300 = color(198, 197, 221);
+export const dark400 = color(155, 154, 172);
+export const dark500 = color(106, 104, 133);
+export const dark600 = color(41, 40, 58);
+export const dark700 = color(27, 26, 40);
+
+//
 // perfume
 //
 export const perfume200 = color(193, 199, 248);

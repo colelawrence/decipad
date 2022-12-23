@@ -19,7 +19,7 @@ const dashboardTopbarWrapperStyles = css({
   flexWrap: 'wrap-reverse',
   rowGap: '32px',
   [smallScreenQuery]: {
-    borderTop: `1px solid ${cssVar('strongerHighlightColor')}`,
+    borderTop: `1px solid ${cssVar('borderColor')}`,
     borderTopLeftRadius: '20px',
     borderTopRightRadius: '20px',
     backgroundColor: cssVar('backgroundColor'),
@@ -75,7 +75,11 @@ export const DashboardTopbar = ({
           />
         </div>
         <div css={rightStyles}>
-          <Button type="primary" size="extraSlim" onClick={onCreateNotebook}>
+          <Button
+            type="primaryBrand"
+            size="extraSlim"
+            onClick={onCreateNotebook}
+          >
             Create Notebook
           </Button>
         </div>

@@ -1,6 +1,6 @@
-import { FC, ReactNode } from 'react';
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
+import { FC, ReactNode } from 'react';
 import { cssVar } from '../../primitives';
 
 interface TableRowProps {
@@ -12,7 +12,7 @@ interface TableRowProps {
 }
 
 const dataViewRowStyles = css({
-  borderBottom: `1px solid ${cssVar('strongHighlightColor')}`,
+  borderBottom: `1px solid ${cssVar('borderColor')}`,
 
   '&:last-of-type': {
     borderBottomColor: cssVar('normalTextColor'),

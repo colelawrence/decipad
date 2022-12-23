@@ -1,5 +1,5 @@
-import React from 'react';
 import { css } from '@emotion/react';
+import React from 'react';
 import { code, cssVar } from '../../primitives';
 
 export const EvalCodeArea: React.FC<React.PropsWithChildren> = (props) => {
@@ -16,5 +16,5 @@ const containerStyles = css(code, {
   marginTop: '16px',
   padding: '4px 10px',
   borderRadius: '10px',
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
+  border: `1px solid ${cssVar('borderColor')}`,
 });

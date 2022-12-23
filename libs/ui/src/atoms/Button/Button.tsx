@@ -2,9 +2,6 @@ import { noop } from '@decipad/utils';
 import { css, CSSObject } from '@emotion/react';
 import { MouseEvent, ReactNode, useCallback } from 'react';
 import {
-  brand200,
-  brand300,
-  brand500,
   cssVar,
   grey400,
   grey700,
@@ -39,41 +36,41 @@ const typeStyles: Record<
 > = {
   primary: {
     enabled: {
-      backgroundColor: cssVar('strongTextColor'),
-      ...setCssVar('currentTextColor', cssVar('backgroundColor')),
+      backgroundColor: cssVar('buttonPrimaryBackground'),
+      ...setCssVar('currentTextColor', cssVar('buttonPrimaryText')),
       ':hover, :focus': {
-        backgroundColor: cssVar('normalTextColor'),
+        backgroundColor: cssVar('buttonPrimaryHover'),
       },
     },
     disabled: {
-      backgroundColor: cssVar('weakTextColor'),
-      ...setCssVar('currentTextColor', cssVar('backgroundColor')),
+      backgroundColor: cssVar('buttonPrimaryDisabledBackground'),
+      ...setCssVar('currentTextColor', cssVar('buttonPrimaryDisabledText')),
     },
   },
   primaryBrand: {
     enabled: {
-      backgroundColor: brand500.rgb,
-      ...setCssVar('currentTextColor', offBlack.rgb),
+      backgroundColor: cssVar('buttonBrandBackground'),
+      ...setCssVar('currentTextColor', cssVar('buttonBrandText')),
       ':hover, :focus': {
-        backgroundColor: brand300.rgb,
+        backgroundColor: cssVar('buttonBrandHover'),
       },
     },
     disabled: {
-      backgroundColor: brand200.rgb,
-      ...setCssVar('currentTextColor', grey400.rgb),
+      backgroundColor: cssVar('buttonBrandDisabledBackground'),
+      ...setCssVar('currentTextColor', cssVar('buttonBrandDisabledText')),
     },
   },
   secondary: {
     enabled: {
-      backgroundColor: cssVar('strongHighlightColor'),
-      ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+      backgroundColor: cssVar('buttonSecondaryBackground'),
+      ...setCssVar('currentTextColor', cssVar('buttonSecondaryText')),
       ':hover, :focus': {
-        backgroundColor: cssVar('highlightColor'),
+        backgroundColor: cssVar('buttonSecondaryHover'),
       },
     },
     disabled: {
-      backgroundColor: cssVar('strongHighlightColor'),
-      ...setCssVar('currentTextColor', cssVar('weakerTextColor')),
+      backgroundColor: cssVar('buttonSecondaryDisabledBackground'),
+      ...setCssVar('currentTextColor', cssVar('buttonSecondaryDisabledText')),
     },
   },
   danger: {

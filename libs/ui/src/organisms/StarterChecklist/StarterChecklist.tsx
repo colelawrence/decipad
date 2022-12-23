@@ -168,7 +168,7 @@ export const StarterChecklist: FC<StarterChecklistProps> = ({
             </div>
             <div css={buttonStyles}>
               <div>
-                <Button type="text" onClick={onHideChecklist}>
+                <Button type="primary" onClick={onHideChecklist}>
                   Hide this forever
                 </Button>
               </div>
