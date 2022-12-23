@@ -161,7 +161,7 @@ export const DataView: FC<DataViewProps> = ({
         hideAddDataViewButton: true,
       }}
     >
-      <div css={dataViewWrapperStyles}>
+      <div css={dataViewWrapperStyles} aria-roledescription="data view">
         <div css={dataViewControlsStyles}>
           <div css={tableCaptionWrapperStyles}>{caption}</div>
           <VariableNameSelector
@@ -176,7 +176,7 @@ export const DataView: FC<DataViewProps> = ({
           <div css={tableScroll}>
             <table css={dataViewTableStyles} contentEditable={false}>
               <thead>{thead}</thead>
-              <tbody>{data}</tbody>
+              <tbody aria-roledescription="data view data">{data}</tbody>
             </table>
             {variableName && addNewColumnComponent}
           </div>

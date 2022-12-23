@@ -108,11 +108,13 @@ const schedule = () => {
 };
 
 export const animateMutations = () => {
-  if (initialized) {
-    return;
+  if (process.env.NODE_ENV === 'production') {
+    if (initialized) {
+      return;
+    }
+    schedule();
+    initialized = true;
   }
-  schedule();
-  initialized = true;
 };
 
 export const stopAnimatingMutations = () => {
