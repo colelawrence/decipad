@@ -22,6 +22,7 @@ import { Tooltip, CursorOverlay, RemoteAvatarOverlay } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { NotebookState } from './components/NotebookState/NotebookState';
 import { useAutoAnimate } from './hooks';
+import { useUndo } from './hooks/useUndo';
 import { useWriteLock } from './utils/useWriteLock';
 
 export interface EditorProps {
@@ -40,6 +41,9 @@ const InsidePlate = ({
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
 }) => {
+  // setup undo
+  useUndo();
+
   // upload / fetch data
   return (
     <>
