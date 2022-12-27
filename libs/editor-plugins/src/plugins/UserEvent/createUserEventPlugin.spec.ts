@@ -19,6 +19,7 @@ let mockClientEvent: ChecklistEvent | null;
 const mockEvents: ClientEventContextType = jest.fn((event) => {
   // Casting is safe because plugin does not return anything except action events.
   mockClientEvent = event as ChecklistEvent;
+  return Promise.resolve();
 });
 
 beforeEach(() => {

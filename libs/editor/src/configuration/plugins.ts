@@ -1,6 +1,7 @@
 import { ClientEventContextType } from '@decipad/client-events';
 import type { Computer } from '@decipad/computer';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
+import { noopPromise } from '@decipad/editor-utils';
 import {
   createAutoCompleteMenuPlugin,
   createAutoFormatCodeLinePlugin,
@@ -86,7 +87,7 @@ import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
 interface PluginOptions {
   computer: Computer;
-  events: ClientEventContextType;
+  events?: ClientEventContextType;
   readOnly: boolean;
   notebookTitle?: string;
   onNotebookTitleChange?: (newTitle: string) => void;
@@ -95,7 +96,7 @@ interface PluginOptions {
 
 export const plugins = ({
   computer,
-  events,
+  events = noopPromise,
   readOnly,
   notebookTitle,
   onNotebookTitleChange,

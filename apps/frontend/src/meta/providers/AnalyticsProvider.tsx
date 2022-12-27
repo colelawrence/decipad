@@ -48,17 +48,17 @@ const ClientEventsAnalytics: React.FC<{ children: ReactNode }> = ({
 }) => {
   const analytics = getAnalytics();
 
-  const handleClientEvent = (clientEvent: ClientEvent) => {
+  const handleClientEvent = async (clientEvent: ClientEvent) => {
     if (!analytics) {
       return;
     }
     switch (clientEvent.type) {
       case 'page': {
-        analytics.page(clientEvent.category);
+        await analytics.page(clientEvent.category);
         break;
       }
       case 'action': {
-        analytics.track(clientEvent.action, clientEvent.props);
+        await analytics.track(clientEvent.action, clientEvent.props);
       }
     }
   };

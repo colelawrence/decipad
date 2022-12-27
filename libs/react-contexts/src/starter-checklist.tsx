@@ -216,7 +216,7 @@ export const StarterChecklistContextProvider: FC<StarterContextProps> = ({
 
   const analytics = useContext(ClientEventsContext);
   const userEvents = useCallback(
-    (clientEvent: ClientEvent) => {
+    async (clientEvent: ClientEvent) => {
       // Send analytics to client events context above it events are not of checklist type.
       // Or the checklist isn't loaded yet.
       if (!loadedRef.current || clientEvent.type !== 'checklist') {

@@ -17,7 +17,6 @@ import {
   getStartPoint,
   hasNode,
   insertElements,
-  insertNodes,
   insertText,
   removeNodes,
   select,
@@ -28,6 +27,7 @@ import {
   forwardRef,
   ReactNode,
   useCallback,
+  useContext,
   useRef,
   useState,
 } from 'react';
@@ -36,6 +36,7 @@ import {
   clone,
   requirePathBelowBlock,
   useElementMutatorCallback,
+  insertNodes,
 } from '@decipad/editor-utils';
 import { useSelected } from 'slate-react';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -46,6 +47,7 @@ import {
 } from '@decipad/ui';
 import { nanoid } from 'nanoid';
 import { noop } from 'lodash';
+import { ClientEventsContext } from '@decipad/client-events';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
@@ -129,11 +131,18 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const ref = useMergedRef(blockRef, forwardedRef);
 
+    const event = useContext(ClientEventsContext);
+
     const onDelete = useCallback(() => {
+      event({
+        type: 'action',
+        action: 'block deleted',
+        props: { blockType: element.type },
+      });
       setDeleted(true);
       defaultOnDelete(editor, element, parentOnDelete);
       onceDeleted();
-    }, [editor, element, parentOnDelete, onceDeleted]);
+    }, [editor, element, parentOnDelete, event, onceDeleted]);
 
     const onDuplicate = useCallback(() => {
       const path = findNodePath(editor, element);
@@ -142,8 +151,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         insertElements(editor, newEl, {
           at: requirePathBelowBlock(editor, path),
         });
+        event({
+          type: 'action',
+          action: 'block duplicated',
+          props: { blockType: newEl.type },
+        });
       }
-    }, [computer, editor, element]);
+    }, [computer, editor, element, event]);
 
     const onAdd = useCallback(() => {
       const path = findNodePath(editor, element);
@@ -162,16 +176,46 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       select(editor, path);
     }, [editor, element]);
 
-    const onPlus = useCallback(
-      () => openSlashMenu(editor, element),
-      [editor, element]
-    );
+    const onPlus = useCallback(() => {
+      openSlashMenu(editor, element);
+      event({
+        type: 'action',
+        action: 'click +',
+        props: { blockType: element.type },
+      });
+    }, [editor, element, event]);
 
     const onCopyHref = useCallback(() => {
       const url = new URL(window.location.toString());
       url.hash = element.id;
       copyToClipboard(url.toString());
-    }, [element.id]);
+      event({
+        type: 'action',
+        action: 'copy block href',
+        props: { blockType: element.type },
+      });
+    }, [element.id, element.type, event]);
+
+    const onShowHide = useCallback(
+      (a: 'show' | 'hide') => {
+        if (a === 'show') {
+          setIsHidden(false);
+          event({
+            type: 'action',
+            action: 'show block',
+            props: { blockType: element.type },
+          });
+        } else {
+          setIsHidden(true);
+          event({
+            type: 'action',
+            action: 'hide block',
+            props: { blockType: element.type },
+          });
+        }
+      },
+      [element.type, event, setIsHidden]
+    );
 
     // Only show the Blue line to add element on these conditions.
     // If its a nested element (Such as a list, don't show it in between).
@@ -214,9 +258,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         isBeingDragged={isDragging || draggingIds.has(element.id)}
         onDelete={parentOnDelete === false ? false : onDelete}
         onDuplicate={onDuplicate}
-        onShowHide={(a) => {
-          a === 'show' ? setIsHidden(false) : setIsHidden(true);
-        }}
+        onShowHide={onShowHide}
         onAdd={onAdd}
         onPlus={onPlus}
         onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}

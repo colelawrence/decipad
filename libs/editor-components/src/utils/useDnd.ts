@@ -26,6 +26,7 @@ import {
   blockSelectionSelectors,
 } from '@udecode/plate-selection';
 import { ReactEditor } from 'slate-react';
+import { getAnalytics } from '@decipad/client-events';
 
 export declare type DropDirection =
   | 'top'
@@ -297,6 +298,11 @@ export const defaultMoveNode = (
         at: path,
         to,
       });
+
+      const analytics = getAnalytics();
+      if (analytics) {
+        analytics.track('move block');
+      }
     });
   });
 };

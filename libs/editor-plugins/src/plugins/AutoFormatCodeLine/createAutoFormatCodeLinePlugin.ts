@@ -34,6 +34,7 @@ import { getExprRef } from '@decipad/computer';
 import { ShadowCalcReference } from '@decipad/react-contexts';
 import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { getAnalytics } from '@decipad/client-events';
 import { getTextBeforeCursor } from './utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
@@ -82,6 +83,11 @@ export const createAutoFormatCodeLinePlugin = createOnKeyDownPluginFactory({
 
         if (nodeText.trim() === '=') {
           event.preventDefault();
+
+          const analytics = getAnalytics();
+          if (analytics) {
+            analytics.track('convert paragraph to code line because =');
+          }
 
           if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
             // Normalizer will do the rest

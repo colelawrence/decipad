@@ -1,6 +1,7 @@
 import {
   ComponentProps,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -10,6 +11,7 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { isEmpty } from 'lodash';
+import { ClientEventsContext } from '@decipad/client-events';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
   GetNotebookByIdQuery,
@@ -100,15 +102,20 @@ export const useNotebookStateAndActions = ({
   const [, createOrUpdateSnapshot] =
     useCreateOrUpdateNotebookSnapshotMutation();
 
+  // ------- analytics -------
+  const event = useContext(ClientEventsContext);
+
   // ------- actions -------
   const duplicate = useCallback(async () => {
     await remoteDuplicateNotebook();
-  }, [remoteDuplicateNotebook]);
+    event({ type: 'action', action: 'notebook duplicated' });
+  }, [remoteDuplicateNotebook, event]);
 
   const removeLocalChanges = useCallback(async () => {
     await docsync?.removeLocalChanges();
+    await event({ type: 'action', action: 'notebook local changes removed' });
     window.location.reload();
-  }, [docsync]);
+  }, [docsync, event]);
 
   // ------- effects -------
   useEffect(() => {
@@ -153,10 +160,12 @@ export const useNotebookStateAndActions = ({
           }).catch((err) => {
             toast(`Error updating icon: ${(err as Error).message}`, 'error');
           });
+          event({ type: 'action', action: 'notebook icon changed' });
         }
       }
     },
     [
+      event,
       icon,
       iconColor,
       notebook?.icon,
@@ -180,10 +189,12 @@ export const useNotebookStateAndActions = ({
           }).catch((err) => {
             toast(`Error updating icon: ${(err as Error).message}`, 'error');
           });
+          event({ type: 'action', action: 'notebook icon color changed' });
         }
       }
     },
     [
+      event,
       icon,
       iconColor,
       notebook?.icon,
@@ -240,17 +251,29 @@ export const useNotebookStateAndActions = ({
           toast('Error publishing notebook', 'error');
           return;
         }
-        return setNotebookPublic(true);
+        return setNotebookPublic(true).then(() => {
+          event({
+            type: 'action',
+            action: 'publish notebook',
+            props: { id: notebookId },
+          });
+        });
       })
       .catch((err) => {
         console.error(err);
         toast('Error publishing notebook', 'error');
       });
-  }, [createOrUpdateSnapshot, notebookId, setNotebookPublic, toast]);
+  }, [createOrUpdateSnapshot, event, notebookId, setNotebookPublic, toast]);
 
   const unpublishNotebook = useCallback(() => {
-    setNotebookPublic(false);
-  }, [setNotebookPublic]);
+    setNotebookPublic(false).then(() => {
+      event({
+        type: 'action',
+        action: 'unpublish notebook',
+        props: { id: notebookId },
+      });
+    });
+  }, [event, notebookId, setNotebookPublic]);
 
   return {
     error,

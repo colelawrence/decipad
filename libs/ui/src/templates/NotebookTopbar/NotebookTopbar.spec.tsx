@@ -1,6 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { mockConsoleError } from '@decipad/testutils';
-import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import { SessionProvider } from 'next-auth/react';
 import { ComponentProps, FC, ReactNode } from 'react';
@@ -25,6 +24,8 @@ interface WithProvidersProps {
   children: ReactNode;
   noSession?: boolean;
 }
+
+const noop = () => Promise.resolve();
 
 const WithProviders: FC<WithProvidersProps> = ({ children, noSession }) => (
   <ClientEventsContext.Provider value={noop}>
