@@ -6,13 +6,16 @@ import {
   DataViewHeader,
   DataViewHeaderRowElement,
 } from '@decipad/editor-types';
-import { useElementMutatorCallback, withPath } from '@decipad/editor-utils';
+import {
+  useElementMutatorCallback,
+  withPath,
+  insertNodes,
+} from '@decipad/editor-utils';
 import { useCallback, useMemo } from 'react';
 import {
   deleteText,
   findNodePath,
   getNode,
-  insertNodes,
   isText,
   setNodes,
   withoutNormalizing,
@@ -57,12 +60,6 @@ export const useDataViewActions = (
     [editor, element]
   );
 
-  const onVariableNameChange = useElementMutatorCallback(
-    editor,
-    element,
-    'varName'
-  );
-
   const setDataColumns = useCallback(
     (columns: Column[]) => {
       const headerRow: DataViewHeaderRowElement | null = element.children[1];
@@ -103,6 +100,16 @@ export const useDataViewActions = (
       });
     },
     [editor, element.children]
+  );
+
+  const setVarName = useElementMutatorCallback(editor, element, 'varName');
+
+  const onVariableNameChange = useCallback(
+    (varName: string) => {
+      setDataColumns([]);
+      setVarName(varName);
+    },
+    [setDataColumns, setVarName]
   );
 
   const onMoveColumn = useCallback(
