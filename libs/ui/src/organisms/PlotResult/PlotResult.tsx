@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { VegaLite } from 'react-vega';
 import type { VegaProps } from 'react-vega/lib/Vega';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { usePlotTheme } from './usePlotTheme';
 
 const styles = css({
   // Couldn't find another way to attach styles to the underlying SVG for responsiveness.
@@ -37,6 +38,7 @@ export const PlotResult = ({
       height={width / GOLDEN_RATIO}
       onError={onError}
       actions={false}
+      config={usePlotTheme()}
     />
   );
 };
