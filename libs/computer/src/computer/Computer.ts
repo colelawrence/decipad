@@ -167,6 +167,22 @@ export class Computer {
     return blockId ? results.blockResults[blockId] : undefined;
   });
 
+  getAllColumnsIndexedBy$ = listenerHelper(
+    this.results,
+    (results, tableName: string) => {
+      return Object.values(results.blockResults).flatMap((br) => {
+        if (
+          br.type === 'computer-result' &&
+          br.result.type.kind === 'column' &&
+          br.result.type.indexedBy === tableName
+        ) {
+          return [br];
+        }
+        return [];
+      });
+    }
+  );
+
   getSymbolDefinedInBlock(blockId: string): string | undefined {
     const parsed = this.latestProgram.find((p) => p.id === blockId);
     if (parsed && parsed.type === 'identified-block') {

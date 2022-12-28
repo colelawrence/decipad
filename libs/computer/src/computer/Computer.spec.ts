@@ -344,6 +344,26 @@ it('can get a expression from text in streaming mode', async () => {
   expect(firstTime?.value?.toString()).toBe('2');
 });
 
+it('regression: can describe tables correctly', async () => {
+  const res = await computeOnTestComputer({
+    program: getIdentifiedBlocks(
+      `Table = {}`,
+      `Table.One = ["A", "B"]`,
+      `Table.Two = ["c", "d"]`
+    ),
+  });
+
+  await timeout(100);
+
+  expect(res).toMatchInlineSnapshot(`
+    Array [
+      "block-0 -> [[\\"A\\",\\"B\\"],[\\"c\\",\\"d\\"]]",
+      "block-1 -> [\\"A\\",\\"B\\"]",
+      "block-2 -> [\\"c\\",\\"d\\"]",
+    ]
+  `);
+});
+
 it('getBlockIdResult$', async () => {
   computer.pushCompute({
     program: getIdentifiedBlocks('123'),
@@ -407,6 +427,31 @@ describe('getVarBlockId$', () => {
     const firstFoo = await firstValueFrom(fooStream);
 
     expect(firstFoo).toBe('block-0');
+  });
+});
+
+describe('can retrieve columns indexed by a table', () => {
+  let computer: Computer;
+  beforeEach(async () => {
+    computer = new Computer({ requestDebounceMs: 0 });
+    computer.pushCompute({
+      program: getIdentifiedBlocks(
+        `Table = {  }`,
+        'Table.Xs = [10, 20, 30]',
+        `Table.Xs * 2`
+      ),
+    });
+    await timeout(0);
+  });
+
+  it('can get columns indexed by a table', () => {
+    expect(computer.getAllColumnsIndexedBy$.get('Table').map(({ id }) => id))
+      .toMatchInlineSnapshot(`
+        Array [
+          "block-1",
+          "block-2",
+        ]
+      `);
   });
 });
 

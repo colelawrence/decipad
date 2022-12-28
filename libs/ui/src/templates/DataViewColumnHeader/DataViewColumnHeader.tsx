@@ -174,7 +174,7 @@ export const DataViewColumnHeader = forwardRef<
                 None
               </MenuItem>
               {availableAggregations
-                .filter((n) => n)
+                .filter(Boolean)
                 .map((availableAggregation, index) => {
                   return (
                     <MenuItem

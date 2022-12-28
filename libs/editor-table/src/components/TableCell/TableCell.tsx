@@ -12,7 +12,7 @@ import {
 import {
   isElementOfType,
   useSelection,
-  useTableColumnFormulaResultForElement,
+  useTableColumnFormulaResultForCell,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
@@ -78,7 +78,7 @@ export const TableCell: PlateComponent = ({
     );
   }
 
-  const formulaResult = useTableColumnFormulaResultForElement(element);
+  const formulaResult = useTableColumnFormulaResultForCell(element);
 
   // series
   const cellType = useCellType(element);

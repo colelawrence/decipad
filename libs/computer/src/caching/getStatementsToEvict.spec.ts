@@ -197,6 +197,27 @@ describe('evictCache', () => {
     });
   });
 
+  describe('tables', () => {
+    it('evicts table columns', () => {
+      testEvictBlocks({
+        oldBlocks: testBlocks(
+          'Table = {}',
+          'Table.Column = [1, 2, 3]',
+          'Table2 = {}',
+          'Table2.Column = Table.Column'
+        ),
+        newBlocks: testBlocks(
+          'Table = {}',
+          'Table.Column = [1, 2, 4]',
+          'Table2 = {}',
+          'Table2.Column = Table.Column'
+        ),
+
+        expectEvicted: [0, 1, 2, 3],
+      });
+    });
+  });
+
   describe('sets/matrices', () => {
     it('deals with matrices', () => {
       testEvictBlocks({

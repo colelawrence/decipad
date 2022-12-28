@@ -283,10 +283,7 @@ You need to choose another name for your new column:
 ```deci live
 Table = { Names = ["Anna", "Kate"] }
 Table.NewNames = ["Other", "Names"]
-==> {
-  Names = [ 'Anna', 'Kate' ],
-  NewNames = [ 'Other', 'Names' ]
-}
+==> [ 'Other', 'Names' ]
 ```
 
 ## Syntax error

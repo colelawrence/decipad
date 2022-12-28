@@ -4,7 +4,7 @@ import { useComputer } from '@decipad/react-contexts';
 import { isCellAlignRight, useCellType } from '@decipad/editor-table';
 import { getNodeString } from '@udecode/plate';
 import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
-import { useTableColumnFormulaResultForElement } from '@decipad/editor-utils';
+import { useTableColumnFormulaResultForCell } from '@decipad/editor-utils';
 
 export const DndCellPreview = ({
   element,
@@ -16,7 +16,7 @@ export const DndCellPreview = ({
   children: ReactNode;
 }) => {
   const computer = useComputer();
-  const formulaResult = useTableColumnFormulaResultForElement(element);
+  const formulaResult = useTableColumnFormulaResultForCell(element);
 
   const cellType = useCellType(element);
   const nodeText = getNodeString(element).trim();

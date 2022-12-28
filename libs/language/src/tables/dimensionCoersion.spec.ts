@@ -278,6 +278,7 @@ async function testGrowTable({
       ${startingColumns.join(', ')}
     }
     Table.NewCol = ${newColumn}
+    Table
   `;
   const resultAddingOneColumn = await runCode(codeAddingOneColumn, {}).catch(
     String
@@ -290,6 +291,7 @@ async function testGrowTable({
     Table = {}
     ${startingColumns.map((colAssign) => `Table.${colAssign}`).join('\n')}
     Table.NewCol = ${newColumn}
+    Table
   `;
   const resultColByCol = await runCode(codeColByCol, {}).catch(String);
   expect(resultColByCol).toEqual(resultAllInOneTable);

@@ -26,9 +26,9 @@ export type SerializedTypeKind = SerializedType['kind'];
 
 export const isSerializedType = (thing: unknown): thing is SerializedType => {
   return (
+    thing != null &&
     !(thing instanceof Type) &&
     typeof thing === 'object' &&
-    thing !== null &&
     'kind' in thing
   );
 };

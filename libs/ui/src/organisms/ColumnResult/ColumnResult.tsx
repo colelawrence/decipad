@@ -32,12 +32,13 @@ export const ColumnResult = ({
       body={
         <>
           {Array.from(unnestTableRows(labels, { type, value })).map(
-            (matrixValue) => {
+            (matrixValue, index) => {
               return (
-                <TableRow readOnly>
-                  {matrixValue.labelInfo.map((labelInfo) => {
+                <TableRow readOnly key={index}>
+                  {matrixValue.labelInfo.map((labelInfo, i) => {
                     return labelInfo.indexesOfRemainingLengthsAreZero ? (
                       <TableData
+                        key={i}
                         as="td"
                         rowSpan={labelInfo.productOfRemainingLengths}
                         showPlaceholder={false}

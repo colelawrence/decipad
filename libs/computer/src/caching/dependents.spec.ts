@@ -1,5 +1,5 @@
 import { getDependents } from './dependents';
-import { deeperProgram, implicitDepProgram } from '../testUtils';
+import { deeperProgram, implicitDepProgram, testBlocks } from '../testUtils';
 
 describe('getDependents', () => {
   it('finds dependents of a set of locs', () => {
@@ -29,6 +29,29 @@ describe('getDependents', () => {
         "block-1",
         "block-3",
         "block-4",
+      ]
+    `);
+  });
+
+  it('marks definitions of tables when any of their columns is involved', () => {
+    expect(
+      getDependents(
+        testBlocks(
+          'Table = {}',
+          'Table.Column = 1',
+          'Table2 = {}',
+          'Table2.Column = Table.Column'
+        ),
+
+        ['block-1'],
+        new Set(['Unused'])
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0",
+        "block-1",
+        "block-2",
+        "block-3",
       ]
     `);
   });
