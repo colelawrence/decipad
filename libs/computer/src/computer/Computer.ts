@@ -222,13 +222,13 @@ export class Computer {
    */
   getNamesDefined(blockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.latestProgram);
-    const symbol = blockId && this.getSymbolDefinedInBlock(blockId);
+    const inSymbol = blockId && this.getSymbolDefinedInBlock(blockId);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
-    if (symbol) {
-      toIgnore.add(symbol);
+    if (inSymbol) {
+      toIgnore.add(inSymbol);
     }
     return Array.from(
-      findNames(this.computationRealm, program, toIgnore, symbol)
+      findNames(this.computationRealm, program, toIgnore, inSymbol)
     );
   }
 
@@ -243,6 +243,22 @@ export class Computer {
   getFunctionDefinition$ = listenerHelper(this.results, (_, funcName: string) =>
     this.getFunctionDefinition(funcName)
   );
+
+  /** Does `name` exist? Ignores a block ID if you pass the second argument */
+  variableExists(name: string, inBlockId?: string) {
+    return this.latestProgram.some((p) => {
+      // Skip own block
+      if (p.id === inBlockId) {
+        return false;
+      }
+
+      if (p.type === 'identified-block' && p.block.args.length > 0) {
+        return getDefinedSymbol(p.block.args[0], false) === name;
+      } else {
+        return false;
+      }
+    });
+  }
 
   /**
    * Finds a Column, and identifies its 1 or more dimensions in an array.

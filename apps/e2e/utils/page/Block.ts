@@ -84,12 +84,52 @@ export async function createCalculationBlockBelow(
   await page.waitForSelector('[data-slate-editor] code >> nth=-1');
 }
 
+export async function createCodeLineV2Below(
+  page: Page,
+  variableName: string,
+  decilang: string
+) {
+  await page.click('[data-slate-editor] p >> nth=-1');
+
+  await page.waitForSelector(
+    'p:has-text("Type / for new blocks = to start calculation")'
+  );
+  await page.click(
+    'p:has-text("Type / for new blocks = to start calculation")'
+  );
+
+  await keyPress(page, '=');
+
+  await page.waitForSelector(
+    '[data-slate-editor] [data-testid="codeline-varname"]'
+  );
+
+  // Click the varname (we default to the code itself)
+  await page.click(
+    '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
+  );
+
+  await page.keyboard.type(variableName);
+
+  await page.keyboard.press('ArrowRight');
+
+  await page.keyboard.type(decilang);
+
+  await page.waitForSelector('[data-slate-editor] code >> nth=-1');
+}
+
 export function getCodeLineBlockLocator(page: Page) {
   return page.locator('//*[@data-slate-editor][//code]') as Locator;
 }
 
 export function getCodeLines(page: Page) {
   return getCodeLineBlockLocator(page).locator('code');
+}
+
+export function getCodeV2VarNames(page: Page) {
+  return getCodeLineBlockLocator(page).locator(
+    '[data-testid=codeline-varname]'
+  );
 }
 
 export function getResults(page: Page) {
@@ -99,6 +139,13 @@ export function getResults(page: Page) {
 export async function getCodeLineContent(page: Page, n: number) {
   const lineContent = (
     await getCodeLines(page).nth(n).allTextContents()
+  ).join();
+  return cleanText(lineContent);
+}
+
+export async function getCodeLineV2VarName(page: Page, n: number) {
+  const lineContent = (
+    await getCodeV2VarNames(page).nth(n).allTextContents()
   ).join();
   return cleanText(lineContent);
 }

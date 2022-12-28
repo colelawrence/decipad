@@ -30,23 +30,33 @@ export const useDelayedTrue = (
 };
 
 /**
- * Until it's time to reveal an error, show the latest good thing
+ * Until it's time to reveal an error, show the latest good thing.
+ *
+ * Used to delay showing type errors in language results.
+ *
+ * @example
+ * const someValue = useSomeValueThatMayBeOk()
+ *
+ * // Return `someValue` if OK, otherwise returns current error after a delay
+ * const delayedValue = useDelayedValue(someValue, !isOk(someValue));
  */
 export const useDelayedValue = <T>(
+  /** The value to be returned (now or later) */
   freshValue: T,
-  currentBoolean: boolean
+  /** When true, the value is shown later. When false, value is immediately shown */
+  shouldDelayAtTheMoment: boolean
 ): T => {
   const latestValue = useRef(freshValue);
 
   useEffect(() => {
-    if (!currentBoolean) {
+    if (!shouldDelayAtTheMoment) {
       latestValue.current = freshValue;
     }
-  }, [freshValue, currentBoolean]);
+  }, [freshValue, shouldDelayAtTheMoment]);
 
-  const delayedBoolean = useDelayedTrue(currentBoolean);
+  const delayedBoolean = useDelayedTrue(shouldDelayAtTheMoment);
 
-  if (currentBoolean && !delayedBoolean) {
+  if (shouldDelayAtTheMoment && !delayedBoolean) {
     return latestValue.current;
   }
   return freshValue;

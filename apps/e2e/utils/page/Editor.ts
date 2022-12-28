@@ -1,4 +1,5 @@
 import { BrowserContext, Page } from 'playwright';
+import { Flag } from '@decipad/feature-flags';
 import { Timeouts, withTestUser } from '../src';
 import { signOut } from './Home';
 import { navigateToPlayground } from './Playground';
@@ -7,6 +8,7 @@ import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
   showChecklist?: boolean;
+  featureFlags?: Record<Flag, boolean>;
 }
 
 export async function waitForEditorToLoad(
@@ -39,7 +41,7 @@ export async function setUp(
   options: SetupOptions = {}
 ) {
   await signOut(page);
-  const { createAndNavigateToNewPad = true } = options;
+  const { createAndNavigateToNewPad = true, featureFlags } = options;
   const newUser = await withTestUser({ page, context });
   await navigateToWorkspacePage(page);
   if (createAndNavigateToNewPad) {
@@ -47,6 +49,14 @@ export async function setUp(
       page.waitForNavigation({ url: '/n/*' }),
       clickNewPadButton(page),
     ]);
+    await waitForEditorToLoad(page, options);
+  }
+  if (featureFlags) {
+    const url = new URL(page.url());
+    for (const [flagName, value] of Object.entries(featureFlags)) {
+      url.searchParams.set(flagName, value.toString());
+    }
+    page.goto(url.toString());
     await waitForEditorToLoad(page, options);
   }
   if (createAndNavigateToNewPad) {

@@ -1,13 +1,13 @@
+import { IdentifiedError, IdentifiedResult, Result } from '@decipad/computer';
 import {
-  PlateComponent,
   DisplayElement,
-  ELEMENT_DISPLAY,
-  useTEditorRef,
   ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_VARNAME,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_DISPLAY,
+  PlateComponent,
+  useTEditorRef,
 } from '@decipad/editor-types';
-import { Result, SerializedType } from '@decipad/computer';
 import {
   assertElementType,
   useNodeText,
@@ -18,7 +18,12 @@ import {
   useIsEditorReadOnly,
   useEditorTeleportContext,
 } from '@decipad/react-contexts';
-import { CodeLine as UICodeLine, CodeVariableDefinition } from '@decipad/ui';
+import { useDelayedValue } from '@decipad/react-utils';
+import {
+  CodeLine as UICodeLine,
+  CodeVariableDefinition,
+  Tooltip,
+} from '@decipad/ui';
 import { findNodePath, getNodeString } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
@@ -30,13 +35,15 @@ import {
   useMemo,
 } from 'react';
 import { DraggableBlock } from '../block-management';
+import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
+// TODO import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useOnBlurNormalize } from '../hooks';
-import { useTurnIntoProps } from '../utils';
-import { CodeLineTeleport } from './CodeLineTeleport';
+import { useTurnIntoProps } from './useTurnIntoProps';
+import { useRevertBadVarNames } from './useRevertBadNames';
 
 export const CodeLineV2: PlateComponent = ({
   attributes,
@@ -55,13 +62,10 @@ export const CodeLineV2: PlateComponent = ({
 
   useCodeLineClickReference(editor, selected, codeLineContent);
 
-  // transform variable references into smart refs on blur
-  useOnBlurNormalize(editor, element);
-
   const computer = useComputer();
   const { id: lineId } = element;
   const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
-    (line) => [getSyntaxError(line), line?.result] as const,
+    (line) => [getSyntaxError(line), line] as const,
     lineId
   );
 
@@ -102,7 +106,7 @@ export const CodeLineV2: PlateComponent = ({
     [editor, isReadOnly]
   );
 
-  /* TODO
+  /*
   const handleDragStartInlineResult = useMemo(
     () =>
       isReadOnly ? undefined : onDragStartInlineResult(editor, { element }),
@@ -110,19 +114,23 @@ export const CodeLineV2: PlateComponent = ({
   );
   */
 
-  const { closeEditor, focusNumber, portal, editing, useWatchTeleported } =
-    useEditorTeleportContext();
+  const {
+    closeEditor,
+    focusNumber,
+    focusCodeLine,
+    portal,
+    editing,
+    useWatchTeleported,
+  } = useEditorTeleportContext();
 
   useWatchTeleported(lineId, element);
 
   const teleport = editing?.codeLineId === element.id ? portal : undefined;
 
-  const turnIntoProps = useTurnIntoProps(element);
+  const turnIntoProps = useTurnIntoProps(element, computer, lineId);
 
   const onTeleportDismiss = useCallback(() => {
-    closeEditor(element.id, () => {
-      focusNumber();
-    });
+    closeEditor(element.id, focusNumber);
   }, [focusNumber, closeEditor, element.id]);
 
   const childrenArray = Children.toArray(children);
@@ -138,10 +146,14 @@ export const CodeLineV2: PlateComponent = ({
       {...attributes}
       id={lineId}
     >
-      <CodeLineTeleport codeLine={teleport} onDismiss={onTeleportDismiss}>
+      <CodeLineTeleport
+        codeLine={teleport}
+        onDismiss={onTeleportDismiss}
+        onBringBack={focusCodeLine}
+      >
         <UICodeLine
           highlight={selected}
-          result={lineResult}
+          result={lineResult?.result}
           placeholder="Distance = 60 km/h * Time"
           syntaxError={syntaxError}
           isEmpty={isEmpty}
@@ -151,9 +163,9 @@ export const CodeLineV2: PlateComponent = ({
           hasNextSibling={!teleport && siblingCodeLines?.hasNext}
           hasPreviousSibling={!teleport && siblingCodeLines?.hasPrevious}
         >
-          <VarTypeContext.Provider value={lineResult?.type}>
+          <VarResultContext.Provider value={lineResult}>
             <span>{childrenArray[0]}</span>
-          </VarTypeContext.Provider>
+          </VarResultContext.Provider>
 
           <span contentEditable={false} css={{ userSelect: 'none' }}>
             {' = '}
@@ -165,26 +177,51 @@ export const CodeLineV2: PlateComponent = ({
   );
 };
 
-const VarTypeContext = createContext<SerializedType | undefined>(undefined);
+const VarResultContext = createContext<
+  IdentifiedResult | IdentifiedError | undefined
+>(undefined);
 
 export const CodeLineV2Varname: PlateComponent = (props) => {
   assertElementType(props.element, ELEMENT_CODE_LINE_V2_VARNAME);
-  const type = useContext(VarTypeContext);
 
-  const contents = getNodeString(props.element);
+  const varResult = useContext(VarResultContext);
 
-  const empty = contents.trim() === '';
+  const errorMessage = useRevertBadVarNames(props.element, varResult?.id);
+
+  const empty = getNodeString(props.element).trim() === '';
+
+  const delayedType = useDelayedValue(
+    varResult?.result?.type,
+    varResult?.result?.type == null ||
+      varResult?.result?.type?.kind === 'type-error'
+  );
   return (
-    <span {...props.attributes}>
-      <CodeVariableDefinition empty={empty} type={type}>
-        {props.children}
-      </CodeVariableDefinition>
-    </span>
+    <Tooltip
+      trigger={
+        <span {...props.attributes} data-testid="codeline-varname">
+          <CodeVariableDefinition empty={empty} type={delayedType}>
+            {props.children}
+          </CodeVariableDefinition>
+        </span>
+      }
+      open={errorMessage != null}
+    >
+      {errorMessage}
+    </Tooltip>
   );
 };
 
-export const CodeLineV2Code: PlateComponent = (props) => {
-  assertElementType(props.element, ELEMENT_CODE_LINE_V2_CODE);
+export const CodeLineV2Code: PlateComponent = ({
+  element,
+  attributes,
+  children,
+}) => {
+  assertElementType(element, ELEMENT_CODE_LINE_V2_CODE);
 
-  return <span {...props.attributes}>{props.children}</span>;
+  const editor = useTEditorRef();
+
+  // transform variable references into smart refs on blur
+  useOnBlurNormalize(editor, element);
+
+  return <span {...attributes}>{children}</span>;
 };
