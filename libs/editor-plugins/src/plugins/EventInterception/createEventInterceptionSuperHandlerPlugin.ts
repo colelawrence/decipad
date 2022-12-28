@@ -2,18 +2,29 @@ import {
   ELEMENT_COLUMNS,
   InterceptableEvent,
   MyEditor,
+  MyElement,
   MyElementEntry,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { getNode, isCollapsed, isEditor, isElement } from '@udecode/plate';
+import {
+  ELEMENT_LI,
+  ELEMENT_LIC,
+  ELEMENT_OL,
+  ELEMENT_UL,
+  getNode,
+  isCollapsed,
+  isEditor,
+  isElement,
+} from '@udecode/plate';
 import { BaseEditor, Editor, Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
+
+const ALLOW_DELETE = new Set([ELEMENT_UL, ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL]);
 
 /**
  * Prevents default slate/browser weird behavior through allowing to intercept events.
  * Interceptor functions are registered with `createEventInterceptorPluginFactory`
  *
- * Currently the interceptor by default cancels: Backspace, Delete and Enter.
  * This plugin must be the first in the chain, because it has to be the first to see user events.
  */
 export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
@@ -48,18 +59,17 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
             at: topLevel[1],
           });
 
-          // Input elements are used in elements such as:
-          // Slider (Max and min), and dropdown.
-          // Preventing backspace and other events in them causes
-          // strange behavior.
-          if (document.activeElement?.tagName === 'INPUT') return;
-
           switch (event.key) {
             case 'Backspace': {
               // Handle problematic delete (at start of text node)
+
+              // Some nodes are ok to delete
+              const node = getNode(editor, [cursorPath[0]]);
+
               if (
                 leafNodeInCollapsedSelection() &&
-                editor.selection?.focus.offset === 0
+                editor.selection?.focus.offset === 0 &&
+                !ALLOW_DELETE.has((node as MyElement).type)
               ) {
                 const wasHandled = bubbleCancelableEvent(
                   editor,
@@ -108,15 +118,6 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
               }
 
               // TODO handle problematic delete of whole selection
-              return;
-            }
-            case 'Enter': {
-              // Let the interceptor for this event handle the enter press
-              bubbleCancelableEvent(
-                editor,
-                { type: 'on-enter', event },
-                cursorPath
-              );
             }
           }
         }

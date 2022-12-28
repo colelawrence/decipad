@@ -132,10 +132,7 @@ export const createTablePlugin = (
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_TABLE',
       elementTypes: [ELEMENT_TABLE],
-      interceptor: (_, _1, event) => {
-        if (event.type === 'on-enter') {
-          return false;
-        }
+      interceptor: () => {
         return true;
       },
     })(),
