@@ -120,16 +120,30 @@ export interface ExpressionElement extends BaseElement {
   children: [PlainText];
 }
 
+/**
+ * Display Element is what we call the Result widget.
+ * It can display variables and calculations defined in the document
+ */
 export interface DisplayElement extends BaseElement {
   type: typeof ELEMENT_DISPLAY;
+  /** blockId of the calculation/widget it is displaying */
   blockId: string;
+  /**
+    varName the last known variable name of the result, this is here
+    because calculating it is expensive, so we need to cache it.
+  */
   varName?: string;
   children: [EmptyText];
 }
 
+/**
+ * Dropdown element defines the element that lives in a VariableDef
+ * to enable dropdown behavior.
+ */
 export interface DropdownElement extends BaseElement {
   type: typeof ELEMENT_DROPDOWN;
   options: Array<string>;
+  /** Are we taking the values from a table? */
   smartSelection?: boolean;
   children: [PlainText];
 }

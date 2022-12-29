@@ -282,3 +282,6 @@ package-lock.json
 # Tests
 playwright-report
 test-results
+
+# Obsidian Vaults
+.obsidian

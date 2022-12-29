@@ -262,4 +262,5 @@ Some packages (both `apps` and `libs`) and sometimes even subdirectories may con
 
 There is also documentation available for larger areas of the codebase that span more than one package:
 
+- [Code structure](docs/CODE_STRUCTURE.md)
 - [Frontend](docs/FRONTEND.md)
