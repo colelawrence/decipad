@@ -135,7 +135,7 @@
     "canvas-confetti": "^1.6.0",
     "chalk": "4.1.2",
     "copy-to-clipboard": "3.3.2",
-    "core-js": "3.26.0",
+    "core-js": "3.27.0",
     "csv-parse": "5.3.0",
     "date-fns": "2.29.3",
     "deepmerge": "4.2.2",
