@@ -16,7 +16,6 @@ const getColumnType = (type: SerializedType): SerializedType => {
 
 export const useAvailableColumns = (blockId: string): Column[] | undefined => {
   const computer = useComputer();
-  const tableName = computer.getSymbolDefinedInBlock$.use(blockId);
 
   const [availableColumns, setAvailableColumns] = useState<
     Column[] | undefined
@@ -24,7 +23,7 @@ export const useAvailableColumns = (blockId: string): Column[] | undefined => {
 
   useEffect(() => {
     const sub = computer.getAllColumns$
-      .observe(tableName ?? '')
+      .observe(blockId)
       .pipe(
         map((columns) => {
           return columns.map((column) => ({
@@ -40,7 +39,7 @@ export const useAvailableColumns = (blockId: string): Column[] | undefined => {
       .subscribe(setAvailableColumns);
 
     return () => sub.unsubscribe();
-  }, [computer.getAllColumns$, tableName]);
+  }, [blockId, computer.getAllColumns$]);
 
   return availableColumns;
 };

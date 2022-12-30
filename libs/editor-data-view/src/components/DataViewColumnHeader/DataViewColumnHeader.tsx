@@ -74,7 +74,8 @@ export const DataViewColumnHeader: PlateComponent = ({
   }, [onDeleteColumn, path]);
 
   const computer = useComputer();
-  const columnName = computer.getColumnNameDefinedInBlock$.use(element.name);
+  const columnName =
+    computer.getColumnNameDefinedInBlock$.use(element.name) || element.name;
 
   if (!columnName) {
     return null;

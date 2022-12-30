@@ -23,7 +23,7 @@ import {
   deserializeType,
   linearizeType,
 } from '@decipad/language';
-import { anyMappingToMap, identity, zip } from '@decipad/utils';
+import { anyMappingToMap, getDefined, identity, zip } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -60,6 +60,13 @@ import { topologicalSort } from './topologicalSort';
 import { dropWhileComputing } from './dropWhileComputing';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
+
+export interface ColumnDesc {
+  tableName: string;
+  columnName: string;
+  result: Result.Result<'column'>;
+  blockId?: string;
+}
 
 export interface DimensionExplanation {
   indexedBy: string | undefined;
@@ -305,9 +312,35 @@ export class Computer {
 
   public getAllColumns$ = listenerHelper(
     this.results,
-    (results, filterForTableName?: string) =>
-      Object.values(results.blockResults).flatMap((b) => {
-        if (b.result?.type.kind === 'column') {
+    (results, filterForBlockId?: string): ColumnDesc[] => {
+      return Object.values(results.blockResults).flatMap((b) => {
+        if (b.result?.type.kind === 'table') {
+          if (filterForBlockId && b.id !== filterForBlockId) {
+            return [];
+          }
+          // external data results in a single table
+          if (this.latestExternalData.has(b.id)) {
+            const extData = getDefined(this.latestExternalData.get(b.id));
+            if (extData.type.kind !== 'table') {
+              return [];
+            }
+            return b.result.type.columnNames.map((columnName, columnIndex) => {
+              const result = {
+                type: (extData.type as SerializedTypes.Table).columnTypes[
+                  columnIndex
+                ],
+                value: (extData.value as Result.Result<'table'>['value'])[
+                  columnIndex
+                ],
+              } as Result.Result<'column'>;
+              return {
+                tableName: b.id,
+                columnName,
+                result,
+              };
+            });
+          }
+        } else if (b.result?.type.kind === 'column') {
           const statement = this.latestProgram.find((p) => p.id === b.id)?.block
             ?.args[0];
           if (statement?.type !== 'table-column-assign') {
@@ -315,8 +348,11 @@ export class Computer {
           }
 
           const tableName = getIdentifierString(statement.args[0]);
-          if (filterForTableName != null && filterForTableName !== tableName) {
-            return [];
+          if (filterForBlockId) {
+            const blockId = this.getVarBlockId(tableName);
+            if (blockId !== filterForBlockId) {
+              return [];
+            }
           }
           const columnName = getIdentifierString(statement.args[1]);
           return [
@@ -330,7 +366,8 @@ export class Computer {
         }
 
         return [];
-      })
+      });
+    }
   );
 
   public getColumnNameDefinedInBlock$ = listenerHelper(

@@ -10,7 +10,7 @@ import { MenuList } from '../MenuList/MenuList';
 
 export type Column = {
   name: string;
-  blockId: string;
+  blockId?: string;
   type: SerializedType;
 };
 
@@ -69,7 +69,7 @@ export const DataViewMenu = ({
                   key={index}
                   onSelect={() =>
                     onInsertColumn(
-                      availableColumn.blockId,
+                      availableColumn.blockId ?? availableColumn.name,
                       availableColumn.type
                     )
                   }

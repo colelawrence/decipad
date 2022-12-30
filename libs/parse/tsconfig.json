@@ -8,6 +8,7 @@
     { "path": "../../libs/computer" },
     { "path": "../../libs/utils" },
     { "path": "../../libs/editor-types" },
-    { "path": "../../libs/format" }
+    { "path": "../../libs/format" },
+    { "path": "../../libs/fraction" }
   ]
 }

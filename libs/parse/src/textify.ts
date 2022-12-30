@@ -1,5 +1,6 @@
 import { Result } from '@decipad/computer';
 import { simpleFormatUnit } from '@decipad/format';
+import { from as toFraction } from '@decipad/fraction';
 import { coerceToDate } from './inferDate';
 
 const textifyBoolean = (result: Result.Result<'boolean'>) =>
@@ -9,7 +10,7 @@ const textifyDate = (result: Result.Result<'date'>) =>
   coerceToDate(new Date(Number(result.value)), result.type.date);
 
 const textifyNumber = (result: Result.Result<'number'>) =>
-  `(${result.value.toFraction()}) ${
+  `(${toFraction(result.value).toFraction()}) ${
     result.type.unit ? simpleFormatUnit(result.type.unit) : ''
   }`;
 

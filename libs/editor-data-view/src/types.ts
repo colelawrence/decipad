@@ -52,14 +52,14 @@ export type DataViewDataLayout = DataGroup[];
 
 export interface Column {
   name: string;
-  blockId: string;
+  blockId?: string;
   type: SerializedType;
   value: Result.OneResult[];
 }
 
 export interface VirtualColumn {
   name: string;
-  blockId: string;
+  blockId?: string;
   type: SerializedType;
   value: ColumnLike<Result.Comparable>;
 }

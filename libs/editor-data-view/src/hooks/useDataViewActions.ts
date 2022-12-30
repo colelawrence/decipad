@@ -71,8 +71,10 @@ export const useDataViewActions = (
           return;
         }
         for (const existingColumn of existingColumns) {
-          const matchingDataColumn = columns.find(
-            (column) => column.blockId === existingColumn.name
+          const matchingDataColumn = columns.find((column) =>
+            column.blockId != null
+              ? column.blockId === existingColumn.name
+              : column.name === existingColumn.name
           );
           const columnPath = findNodePath(editor, existingColumn);
           // remove columns not present

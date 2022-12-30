@@ -81,7 +81,11 @@ export const useDataView = ({
         const columnHeaders = columnRow.children;
         return columnHeaders
           .map((column) =>
-            availableColumns.findIndex((c) => c.blockId === column.name)
+            availableColumns.findIndex((c) =>
+              c.blockId != null
+                ? c.blockId === column.name
+                : c.name === column.name
+            )
           )
           .filter(greaterOrEqualToZero);
       }
