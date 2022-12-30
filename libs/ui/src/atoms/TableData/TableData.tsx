@@ -127,6 +127,10 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   parseError?: string;
   firstChildren?: ReactNode;
   lastBeforeMoreRowsHidden?: boolean;
+  dropdownOptions?: Pick<
+    ComponentProps<typeof CellEditor>,
+    'dropdownOptions' | 'dropdownResult'
+  >;
 }
 
 export const TableData = ({
@@ -153,6 +157,7 @@ export const TableData = ({
   children,
   parseError,
   firstChildren,
+  dropdownOptions,
   ...props
 }: TableDataProps): ReturnType<FC> => {
   const existingRef =
@@ -189,6 +194,7 @@ export const TableData = ({
         unit={unit}
         onChangeValue={onChangeValue}
         parentType="table"
+        {...dropdownOptions}
       >
         <SyntaxErrorHighlight
           variant="custom"

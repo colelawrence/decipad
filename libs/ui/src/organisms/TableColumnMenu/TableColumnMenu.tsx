@@ -1,10 +1,15 @@
 import { ComponentProps, ReactNode, useState } from 'react';
 import { css } from '@emotion/react';
 import { ONE, toFraction } from '@decipad/fraction';
-import type { CellValueType, TableCellType } from '@decipad/editor-types';
+import type {
+  CellValueType,
+  ColumnMenuDropdown,
+  TableCellType,
+} from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { Unit, currencyUnits, UnitOfMeasure } from '@decipad/computer';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   All,
@@ -38,7 +43,7 @@ const presentableCurrencyUnits = currencyUnits.filter((f) => {
   return !!f.pretty && f.pretty.length <= 3;
 });
 
-type ExpandableColumns = 'currency' | 'date' | 'series' | null;
+type ExpandableColumns = 'currency' | 'date' | 'series' | 'dropdowns' | null;
 
 interface TableColumnMenuProps
   extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'>,
@@ -49,6 +54,7 @@ interface TableColumnMenuProps
   readonly trigger: ReactNode;
   readonly type: CellValueType;
   readonly isForImportedColumn?: boolean;
+  readonly dropdownNames?: ColumnMenuDropdown[];
 }
 
 const isCurrencyUnit = (unit?: Unit[]): boolean => {
@@ -84,6 +90,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   trigger,
   type,
   isForImportedColumn = false,
+  dropdownNames = [],
 }) => {
   const computer = useComputer();
 
@@ -187,6 +194,37 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           >
             Text
           </MenuItem>
+
+          {!isFirst && isFlagEnabled('DROPDOWN_TABLES') && (
+            <MenuList
+              itemTrigger={
+                <TriggerMenuItem
+                  icon={<Calendar />}
+                  selected={type.kind === 'date'}
+                >
+                  <div css={{ minWidth: '116px' }}>Dropdowns</div>
+                </TriggerMenuItem>
+              }
+              open={currentOpen === 'dropdowns'}
+              onChangeOpen={() => onColumnExpand('dropdowns')}
+            >
+              {dropdownNames.map((d) => (
+                <MenuItem
+                  icon={<Calendar />}
+                  onSelect={() =>
+                    onChangeColumnType({
+                      kind: 'dropdown',
+                      id: d.id,
+                      type: d.type,
+                    })
+                  }
+                  selected={false}
+                >
+                  {d.value}
+                </MenuItem>
+              ))}
+            </MenuList>
+          )}
           <MenuList
             itemTrigger={
               <TriggerMenuItem

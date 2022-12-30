@@ -12,6 +12,7 @@ export type Flag =
   | 'ONBOARDING_CHECKLIST'
   | 'COLOR_SIDEBAR'
   | 'DASHBOARD_STATUS'
+  | 'DROPDOWN_TABLES'
   | 'FEATURE_REQUEST';
 
 export type Flags = Partial<Record<Flag, boolean>>;

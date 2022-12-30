@@ -23,7 +23,7 @@ export const useColumnAggregationTypes = ({
     () =>
       columnAggregationTypes(
         formulaResult
-          ? formulaResult.type.cellType as TableCellType
+          ? (formulaResult.type.cellType as TableCellType)
           : (column.cellType as TableCellType)
       ),
     [column, formulaResult]

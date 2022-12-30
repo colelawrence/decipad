@@ -94,6 +94,45 @@ const seriesColumnToColumn = async ({
   };
 };
 
+const dropdownColumnToColumn = async ({
+  th,
+  columnIndex,
+  dataRows,
+}: HeaderToColumnProps): Promise<ColumnParseReturn> => {
+  const errors: IdentifiedError[] = [];
+  const cellTexts: string[] = [];
+  const cellIds: string[] = [];
+  for (const tr of dataRows) {
+    const td = tr.children[columnIndex];
+    if (td) {
+      cellTexts.push(getNodeString(td));
+      cellIds.push(td.id);
+    }
+  }
+
+  if (th.cellType.kind !== 'dropdown') {
+    throw new Error('Dropdown column should have dropdown type');
+  }
+
+  const items = cellTexts.map((text): AST.Expression => {
+    if (text) {
+      return {
+        type: 'ref',
+        args: [text],
+      };
+    }
+    return getNullReplacementValue(th.cellType);
+  });
+
+  const expression = astColumn(...items);
+  return {
+    expression,
+    errors,
+    columnName: getNodeString(th),
+    elementId: th.id,
+  };
+};
+
 const dataColumnToColumn = async ({
   computer,
   th,
@@ -150,5 +189,7 @@ export const headerToColumn = async (
     ? tableFormulaColumnToColumn(props)
     : cellType.kind === 'series' && dataRows.length > 0
     ? seriesColumnToColumn(props)
+    : cellType.kind === 'dropdown'
+    ? dropdownColumnToColumn(props)
     : dataColumnToColumn(props);
 };

@@ -82,6 +82,30 @@ const normalize =
       return true;
     }
 
+    // Dropdown options used to just be an array of strings.
+    // So we have to normalize them to be the objects they are now.
+    if (node.children[1].type === ELEMENT_DROPDOWN) {
+      const newOptions: Array<{ id: string; value: string }> = [];
+      let changed = false;
+      for (const op of node.children[1].options) {
+        if (typeof op === 'string') {
+          newOptions.push({
+            id: nanoid(),
+            value: op as string, // Safe casting, they used to be strings.
+          });
+          changed = true;
+          continue;
+        }
+        newOptions.push(op);
+      }
+      if (changed) {
+        setNodes(editor, { options: newOptions } as Partial<MyNode>, {
+          at: [...path, 1],
+        });
+        return true;
+      }
+    }
+
     if (node.variant === 'slider') {
       if (node.children.length < 3) {
         insertNodes<SliderElement>(

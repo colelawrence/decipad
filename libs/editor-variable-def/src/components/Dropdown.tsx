@@ -11,7 +11,7 @@ import {
   SelectItemTypes,
   WidgetDisplay,
 } from '@decipad/ui';
-import { getNodeString, insertText } from '@udecode/plate';
+import { getNodeString, insertText, nanoid } from '@udecode/plate';
 import {
   EditorChangeContext,
   useComputer,
@@ -77,8 +77,8 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const dropdownIds: SelectItems[] = useMemo(
     () =>
       element.options.map((n) => ({
-        item: n,
-        focused: n === selected,
+        item: n.value,
+        focused: n.value === selected,
       })),
     [element.options, selected]
   );
@@ -98,7 +98,13 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
 
   const addOption = useCallback(
     (newOption: string) => {
-      elementChangeOptions([...element.options, newOption]);
+      elementChangeOptions([
+        ...element.options,
+        {
+          id: nanoid(),
+          value: newOption,
+        },
+      ]);
     },
     [element.options, elementChangeOptions]
   );
@@ -114,7 +120,9 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
 
   const removeOption = useCallback(
     (removeOptionn: string) => {
-      elementChangeOptions(element.options.filter((n) => n !== removeOptionn));
+      elementChangeOptions(
+        element.options.filter((n) => n.value !== removeOptionn)
+      );
       if (removeOptionn === selected) {
         insertText(editor, 'Select', {
           at: path,
@@ -128,14 +136,14 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const onEditOption = useCallback(
     (old: string, newV: string): boolean => {
       if (old === newV) return true;
-      const exists = element.options.some((v) => v === newV);
+      const exists = element.options.some((v) => v.value === newV);
 
       // If there already exists an option, we don't want duplicates.
       if (exists) return false;
 
       const newOps = element.options.map((e) => {
-        if (e === old) {
-          return newV;
+        if (e.value === old) {
+          return { id: e.id, value: newV };
         }
         return e;
       });
@@ -198,7 +206,12 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   }, [columns, selectedCol]);
 
   return (
-    <div {...attributes} contentEditable={false} id={element.id}>
+    <div
+      {...attributes}
+      contentEditable={false}
+      id={element.id}
+      aria-roledescription="dropdown-open"
+    >
       <DropdownMenu
         open={dropdownOpen}
         setOpen={setDropdownOpen}

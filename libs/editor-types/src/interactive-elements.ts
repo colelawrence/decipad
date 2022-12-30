@@ -142,8 +142,7 @@ export interface DisplayElement extends BaseElement {
  */
 export interface DropdownElement extends BaseElement {
   type: typeof ELEMENT_DROPDOWN;
-  options: Array<string>;
-  /** Are we taking the values from a table? */
+  options: Array<{ id: string; value: string }>;
   smartSelection?: boolean;
   children: [PlainText];
 }

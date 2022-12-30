@@ -136,7 +136,7 @@ export const SelectItem: FC<SelectItemProps> = ({
         },
       ]}
       onClick={onExecuteItem}
-      data-testid="dropdownOption"
+      aria-roledescription="dropdownOption"
     >
       <div css={{ display: 'flex', gap: '4px', maxWidth: '100%' }}>
         {item.icon && <div css={{ width: 16, height: 16 }}>{item.icon}</div>}
@@ -144,10 +144,18 @@ export const SelectItem: FC<SelectItemProps> = ({
       </div>
       {isEditAllowed && (
         <aside css={[iconWrapper]}>
-          <div css={iconStyles} onClick={onEdit}>
+          <div
+            css={iconStyles}
+            onClick={onEdit}
+            aria-roledescription="dropdown-edit"
+          >
             <Edit />
           </div>
-          <div css={[iconStyles, { width: 14, height: 14 }]} onClick={onRemove}>
+          <div
+            css={[iconStyles, { width: 14, height: 14 }]}
+            onClick={onRemove}
+            aria-roledescription="dropdown-delete"
+          >
             <Trash />
           </div>
         </aside>

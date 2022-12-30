@@ -2,6 +2,7 @@ import { normalizeEditor } from '@udecode/plate';
 import {
   createTPlateEditor,
   ELEMENT_CAPTION,
+  ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
@@ -107,5 +108,67 @@ describe('createNormalizeVariablePlugin for variable def slider', () => {
     ];
     normalizeEditor(editor, { force: true });
     expect(editor.children[0].abc).toBeUndefined();
+  });
+});
+
+const dropdownVarDef = (name = '') => ({
+  type: ELEMENT_VARIABLE_DEF,
+  variant: 'dropdown',
+  children: [
+    {
+      type: ELEMENT_CAPTION,
+      children: [{ text: name }],
+    },
+    {
+      type: ELEMENT_DROPDOWN,
+      children: [{ text: '' }],
+      options: [] as any[],
+    },
+  ],
+});
+
+describe('createNormalizeVariablePlugin for dropdown elements', () => {
+  it('changes options array from strings to objects', () => {
+    const editor = createTPlateEditor({
+      plugins: [createNormalizeVariableDefPlugin()],
+    });
+    const myDropdown = dropdownVarDef('hello');
+    myDropdown.children[1].options = ['25%', '50%'];
+    editor.children = [myDropdown as any];
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[0]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "text": "hello",
+              },
+            ],
+            "type": "caption",
+          },
+          Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "options": Array [
+              Object {
+                "id": "vLgbmLtmHax1vS9uKcRWV",
+                "value": "25%",
+              },
+              Object {
+                "id": "mHLwhkoP43_aGTh5tm4uj",
+                "value": "50%",
+              },
+            ],
+            "type": "dropdown",
+          },
+        ],
+        "type": "def",
+        "variant": "dropdown",
+      }
+    `);
   });
 });

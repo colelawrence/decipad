@@ -1,4 +1,5 @@
 import { useWindowListener } from '@decipad/react-utils';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
 import { nanoid } from 'nanoid';
@@ -69,8 +70,8 @@ type DropdownMenuProps = EditItemsOptions & {
   readonly setOpen: (a: boolean) => void;
   readonly isReadOnly: boolean;
   readonly items: Array<SelectItems>;
-  readonly otherItems: Array<{ title?: string; items: Array<SelectItems> }>;
-  readonly addOption: (a: string) => void;
+  readonly otherItems?: Array<{ title?: string; items: Array<SelectItems> }>;
+  readonly addOption?: (a: string) => void;
   readonly children: JSX.Element;
 };
 
@@ -79,8 +80,8 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   setOpen,
   isReadOnly,
   items,
-  otherItems,
-  addOption,
+  otherItems = [],
+  addOption = noop,
   onExecute,
   onEditOption,
   onRemoveOption,
@@ -181,7 +182,6 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 key={nanoid()}
                 items={items}
                 onExecute={onExecute}
-                title="Variables"
                 onEditOption={onEditOption}
                 onRemoveOption={onRemoveOption}
                 isEditingAllowed={!isReadOnly}

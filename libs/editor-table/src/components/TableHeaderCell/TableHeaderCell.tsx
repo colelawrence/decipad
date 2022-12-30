@@ -1,17 +1,25 @@
-import { useMemo } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import {
+  ColumnMenuDropdown,
   ELEMENT_TH,
+  ELEMENT_VARIABLE_DEF,
   PlateComponent,
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
+import { EditorChangeContext, useComputer } from '@decipad/react-contexts';
 import { TableColumnHeader } from '@decipad/ui';
-import { assertElementType, useNodePath } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useElementMutatorCallback,
+  useNodePath,
+} from '@decipad/editor-utils';
 import { getNode, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
 import { getDefined } from '@decipad/utils';
+import { concat, of } from 'rxjs';
+import { dequal } from 'dequal';
 import { selectColumn } from '../../utils/selectColumn';
 import { useDragColumn } from '../../hooks/useDragColumn';
 import {
@@ -45,6 +53,68 @@ export const TableHeaderCell: PlateComponent = ({
     [computer]
   );
 
+  const editorChanges = useContext(EditorChangeContext);
+
+  const [cols, setCols] = useState<ColumnMenuDropdown[]>([]);
+
+  const mutateDropdownType = useElementMutatorCallback(
+    editor,
+    element,
+    'cellType'
+  );
+
+  useEffect(() => {
+    const editorChanges$ = concat(of(undefined), editorChanges);
+    const sub = editorChanges$.subscribe(() => {
+      const dropdowns = editor.children.filter(
+        (c) => c.type === ELEMENT_VARIABLE_DEF && c.variant === 'dropdown'
+      );
+      const dropdownContent = dropdowns.map((d) => {
+        assertElementType(d, ELEMENT_VARIABLE_DEF);
+        return {
+          id: d.id,
+          value: d.children[0].children[0].text,
+          type:
+            d.coerceToType?.kind === 'string'
+              ? ('string' as const)
+              : ('number' as const),
+        };
+      });
+
+      if (element.cellType.kind === 'dropdown') {
+        const selectedDropdown = dropdownContent.find((d) => {
+          if (element.cellType.kind === 'dropdown') {
+            return element.cellType.id === d.id;
+          }
+          return undefined;
+        });
+        if (
+          selectedDropdown?.type !== element.cellType.type &&
+          selectedDropdown
+        ) {
+          mutateDropdownType({
+            kind: 'dropdown',
+            id: selectedDropdown.id,
+            type: selectedDropdown.type,
+          });
+        }
+      }
+
+      if (!dequal(cols, dropdownContent)) {
+        setCols(dropdownContent);
+      }
+    });
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [
+    editor.children,
+    editorChanges,
+    element.cellType,
+    mutateDropdownType,
+    cols,
+  ]);
+
   const { type: inferredType } = useColumnInferredType(element);
 
   return (
@@ -66,6 +136,7 @@ export const TableHeaderCell: PlateComponent = ({
       dropTarget={dropTarget}
       draggingOver={!isDragging && isOver}
       dropDirection={dropDirection}
+      dropdownNames={cols}
     >
       {children}
     </TableColumnHeader>

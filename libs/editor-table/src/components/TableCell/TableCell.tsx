@@ -4,12 +4,14 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  ELEMENT_VARIABLE_DEF,
   PlateComponent,
   TableCellElement,
   TableRowElement,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
+  assertElementType,
   isElementOfType,
   useSelection,
   useTableColumnFormulaResultForCell,
@@ -82,6 +84,7 @@ export const TableCell: PlateComponent = ({
 
   // series
   const cellType = useCellType(element);
+
   const isColumnSelected = useIsColumnSelected(element);
   const isSeriesColumn = useMemo(() => cellType?.kind === 'series', [cellType]);
   const editable = useMemo(() => {
@@ -144,6 +147,17 @@ export const TableCell: PlateComponent = ({
       setForceAlignRight(false);
     }
   }, [cellType?.kind, isColumnSelected, forceAlignRight]);
+
+  const dropdownResult = computer.getVarResult$.use(nodeText)?.result;
+  const dropdownOptions = useMemo(() => {
+    if (!cellType || cellType.kind !== 'dropdown') return [];
+
+    const dropdown = editor.children.find((child) => child.id === cellType.id);
+    assertElementType(dropdown, ELEMENT_VARIABLE_DEF);
+    if (dropdown.variant !== 'dropdown') return [];
+
+    return dropdown.children[1].options;
+  }, [cellType, editor.children]);
 
   const DropLine = (
     <>
@@ -227,6 +241,10 @@ export const TableCell: PlateComponent = ({
       alignRight={forceAlignRight || isCellAlignRight(cellType)}
       parseError={showParseError ? parseErrorMessage : undefined}
       firstChildren={DropLine}
+      dropdownOptions={{
+        dropdownOptions,
+        dropdownResult,
+      }}
     >
       {children}
     </TableData>

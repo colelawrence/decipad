@@ -32,6 +32,7 @@ import {
   withoutNormalizing,
 } from '@udecode/plate';
 import { Path } from 'slate';
+import { useComputer } from '@decipad/react-contexts';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 
@@ -186,15 +187,16 @@ export const useTableActions = (
     [editor, element]
   );
 
+  const computer = useComputer();
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType: TableCellType) => {
       withPath(editor, element, (path) => {
         withoutNormalizing(editor, () => {
-          changeColumnType(editor, path, cellType, columnIndex);
+          changeColumnType(editor, path, cellType, columnIndex, computer);
         });
       });
     },
-    [editor, element]
+    [editor, element, computer]
   );
 
   const onChangeColumnAggregation = useCallback(

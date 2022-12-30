@@ -41,6 +41,8 @@ export function getTypeIcon(
       return Formula;
     case 'series':
       return Calendar; // only calendar for now
+    case 'dropdown':
+      return type.type === 'number' ? Number : Text;
     case 'anything':
       return onExpressionEditor ? Code : 'span';
     case 'type-error':

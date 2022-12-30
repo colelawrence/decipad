@@ -34,7 +34,11 @@ type TableColumnHeaderProps = PropsWithChildren<
   > &
     Pick<
       ComponentProps<typeof TableColumnMenu>,
-      'onChangeColumnType' | 'onRemoveColumn' | 'parseUnit' | 'isFirst'
+      | 'onChangeColumnType'
+      | 'onRemoveColumn'
+      | 'parseUnit'
+      | 'isFirst'
+      | 'dropdownNames'
     > & {
       as?: ElementType;
       empty?: boolean;
@@ -54,6 +58,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   readOnly = false,
   isForImportedColumn = false,
   children,
+  dropdownNames = [],
   ...props
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -77,6 +82,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
             isFirst={isFirst}
             type={type}
             isForImportedColumn={isForImportedColumn}
+            dropdownNames={dropdownNames}
           />
         )
       }

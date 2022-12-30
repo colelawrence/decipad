@@ -92,6 +92,7 @@ export const parseCell = memoize(
     if (
       cellType.kind === 'table-formula' ||
       cellType.kind === 'series' ||
+      cellType.kind === 'dropdown' ||
       !text.trim()
     ) {
       return null;
@@ -200,6 +201,9 @@ export const getNullReplacementValue = (
   }
   if (cellType.kind === 'boolean') {
     return astNode('literal', 'boolean', false);
+  }
+  if (cellType.kind === 'dropdown' && cellType.type === 'number') {
+    return astNode('literal', 'number', ZERO);
   }
   return astNode('literal', 'string', '');
 };

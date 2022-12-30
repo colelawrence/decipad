@@ -4,6 +4,12 @@ import {
   goToPlayground,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
+import {
+  createTable,
+  openColumnMenu,
+  clickCell,
+  tableCellLocator,
+} from '../utils/page/Table';
 
 test.describe('Dropdown widget', () => {
   test.describe.configure({ mode: 'serial' });
@@ -42,7 +48,9 @@ test.describe('Dropdown widget', () => {
     await page.keyboard.type('50%');
     await page.keyboard.press('Enter');
 
-    const dropdownOptions = page.locator('[data-testid="dropdownOption"]');
+    const dropdownOptions = page.locator(
+      '[aria-roledescription="dropdownOption"]'
+    );
     expect(await dropdownOptions.count()).toBe(1);
   });
 
@@ -54,18 +62,71 @@ test.describe('Dropdown widget', () => {
     await page.keyboard.type('75%');
     await page.keyboard.press('Enter');
 
-    const dropdownOptions = page.locator('[data-testid="dropdownOption"]');
+    const dropdownOptions = page.locator(
+      '[aria-roledescription="dropdownOption"]'
+    );
     expect(await dropdownOptions.count()).toBe(2);
   });
 
   test('Select option', async () => {
     const textEl = page.locator('text=50%');
     await textEl.click();
-    const dropdownOptions = page.locator('[data-testid="dropdownOption"]');
+    const dropdownOptions = page.locator(
+      '[aria-roledescription="dropdownOption"]'
+    );
 
     // Dropdown should have hidden.
     expect(await dropdownOptions.count()).toBe(0);
+  });
 
-    expect(await textEl.isVisible()).toBeTruthy();
+  test('Dropdown option should appear in table column manu', async () => {
+    await createTable(page);
+    await openColumnMenu(page, 2);
+    await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
+
+    const dropdownMenu = page.locator(
+      '[role="menuitem"]:has-text("Dropdowns")'
+    );
+    expect(await dropdownMenu.isVisible()).toBeTruthy();
+  });
+
+  test('You can open dropdown in the cell', async () => {
+    await page.press('[role="menuitem"]:has-text("Dropdowns")', 'Enter');
+    await page.press('[role="menuitem"]:has-text("Dropdown1")', 'Enter');
+
+    await page.waitForSelector('[aria-roledescription="dropdown-editor"]');
+    await clickCell(page, 1, 2);
+
+    const dropdownOptions = page.locator(
+      '[aria-roledescription="dropdownOption"]'
+    );
+    expect(await dropdownOptions.count()).toBe(2);
+
+    await page.click('[aria-roledescription="dropdownOption"]:has-text("50%")');
+
+    expect(await dropdownOptions.isVisible()).toBeFalsy();
+
+    const dropdownCell = await page.waitForSelector(tableCellLocator(1, 2));
+    expect(await dropdownCell.textContent()).toContain('50%');
+  });
+
+  test('Changing original dropdown value, also changes the cells value', async () => {
+    const dropdownOpen = page.locator('[aria-roledescription="dropdown-open"]');
+    await dropdownOpen.click();
+
+    await page
+      .locator('[aria-roledescription="dropdownOption"]:has-text("50%")')
+      .hover();
+    const dropdownOption = await page.waitForSelector(
+      '[aria-roledescription="dropdown-edit"]'
+    );
+    await dropdownOption.click();
+
+    await page.keyboard.press('ArrowLeft');
+    await page.keyboard.insertText('0');
+    await page.keyboard.press('Enter');
+
+    const dropdownCell = page.locator(tableCellLocator(1, 2));
+    await expect(dropdownCell).toHaveText(/500%/, { timeout: 5000 });
   });
 });

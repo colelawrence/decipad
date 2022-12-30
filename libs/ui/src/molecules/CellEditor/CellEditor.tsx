@@ -1,4 +1,5 @@
 import { CellValueType } from '@decipad/editor-types';
+import { Result } from '@decipad/computer';
 import { useWindowListener } from '@decipad/react-utils';
 import React, {
   FC,
@@ -11,6 +12,7 @@ import React, {
 } from 'react';
 import { BooleanEditor } from './BooleanEditor';
 import { DateEditor } from './DateEditor';
+import { DropdownEditor } from './DropdownEditor';
 
 interface SpecificEditorProps {
   open: boolean;
@@ -26,6 +28,7 @@ interface SpecificEditorProps {
 const editorComponents: Record<string, FC<SpecificEditorProps>> = {
   boolean: BooleanEditor,
   date: DateEditor,
+  dropdown: DropdownEditor,
 };
 
 interface CellEditorProps {
@@ -38,6 +41,8 @@ interface CellEditorProps {
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
+  dropdownOptions?: Array<{ id: string; value: string }>;
+  dropdownResult?: Result.Result;
 }
 
 export const CellEditor: FC<CellEditorProps> = ({
@@ -47,6 +52,8 @@ export const CellEditor: FC<CellEditorProps> = ({
   unit,
   onChangeValue: _onChangeValue,
   children,
+  dropdownOptions,
+  dropdownResult,
   parentType = 'input',
 }) => {
   const [opened, setOpened] = useState(false);
@@ -118,10 +125,12 @@ export const CellEditor: FC<CellEditorProps> = ({
     [toggleOpened]
   );
 
-  const EditorComponent = useMemo(
-    () => (type && editorComponents[type.kind]) || DateEditor,
-    [type]
-  );
+  const EditorComponent = useMemo(() => {
+    if (type?.kind === 'dropdown') {
+      return DropdownEditor;
+    }
+    return (type && editorComponents[type.kind]) || DateEditor;
+  }, [type]);
 
   return (
     <div ref={wrapperRef} onClick={onClick} className="mycelleditorwrapper">
@@ -132,6 +141,8 @@ export const CellEditor: FC<CellEditorProps> = ({
         unit={unit}
         onChangeValue={onChangeValue}
         parentType={parentType}
+        dropdownOptions={dropdownOptions}
+        dropdownResult={dropdownResult}
       >
         {children}
       </EditorComponent>

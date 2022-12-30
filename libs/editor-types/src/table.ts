@@ -15,12 +15,35 @@ import type { BaseElement } from './value';
 
 export type SeriesType = 'date'; // only date for now, but we could have others
 
+/**
+ * Used throughout the table header menu
+ * @field value is the name of the dropdown
+ */
+export type ColumnMenuDropdown = {
+  id: string;
+  value: string;
+  type: 'string' | 'number';
+};
+
+/**
+ * Dropdown type for table columns.
+ * @field id is the reference to the actual dropdown component.
+ * @field type is the current type of the dropdown component, stored here so we can
+ * use it for changing the icon, instead of asking the computer.
+ */
+export type TableDropdownType = Readonly<{
+  kind: 'dropdown';
+  id: string;
+  type: 'string' | 'number';
+}>;
+
 export type TableCellType =
   | SerializedTypes.Number
   | SerializedTypes.String
   | SerializedTypes.Boolean
   | SerializedTypes.Date
   | SerializedTypes.Anything
+  | TableDropdownType
   | Readonly<{ kind: 'table-formula' }>
   | Readonly<{ kind: 'series'; seriesType: SeriesType }>;
 

@@ -1,7 +1,16 @@
 import { getDefined } from '@decipad/utils';
-import { getNode, hasNode, setNodes, withoutNormalizing } from '@udecode/plate';
+import {
+  ELEMENT_TD,
+  getNode,
+  getNodeEntry,
+  hasNode,
+  insertText,
+  setNodes,
+  withoutNormalizing,
+} from '@udecode/plate';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TH,
   MyEditor,
   TableCaptionElement,
   TableCellType,
@@ -10,7 +19,9 @@ import {
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 import { nanoid } from 'nanoid';
-import { insertNodes } from '@decipad/editor-utils';
+import { assertElementType, insertNodes } from '@decipad/editor-utils';
+import { Computer } from '@decipad/computer';
+import { formatResultPreview } from '@decipad/format';
 import { findTableFormulaPath } from './findTableFormulaPath';
 import { focusCursorOnPath } from '../plugins/createCursorFocusPlugin';
 
@@ -18,7 +29,8 @@ export const changeColumnType = (
   editor: MyEditor,
   path: Path,
   cellType: TableCellType,
-  columnIndex: number
+  columnIndex: number,
+  computer?: Computer // Needed when changing from dropdown to other types
 ) => {
   withoutNormalizing(editor, () => {
     if (cellType.kind === 'table-formula') {
@@ -30,6 +42,9 @@ export const changeColumnType = (
 
     const columnHeaderPath = [...path, 1, columnIndex];
     if (hasNode(editor, columnHeaderPath)) {
+      const [node] = getNodeEntry(editor, columnHeaderPath);
+      assertElementType(node, ELEMENT_TH);
+
       setNodes<TableHeaderElement>(
         editor,
         { cellType },
@@ -37,6 +52,43 @@ export const changeColumnType = (
           at: columnHeaderPath,
         }
       );
+
+      if (cellType.kind === 'dropdown') {
+        let counter = 2;
+        let entry = getNodeEntry(editor, [...path, counter, columnIndex]);
+        while (entry) {
+          entry = getNodeEntry(editor, [...path, counter, columnIndex]);
+          counter += 1;
+          if (!entry) continue;
+          assertElementType(entry[0], ELEMENT_TD);
+
+          insertText(editor, '', {
+            at: [...path, counter - 1, columnIndex, 0],
+          });
+        }
+      }
+
+      if (node.cellType.kind === 'dropdown' && computer) {
+        let counter = 2;
+        let entry = getNodeEntry(editor, [...path, counter, columnIndex]);
+        while (entry) {
+          entry = getNodeEntry(editor, [...path, counter, columnIndex]);
+          counter += 1;
+          if (!entry) continue;
+          assertElementType(entry[0], ELEMENT_TD);
+
+          const result = computer.getVarResult$.get(
+            entry[0].children[0].text
+          )?.result;
+          if (!result) continue;
+
+          const textResult = formatResultPreview(result);
+          insertText(editor, textResult, {
+            at: [...path, counter - 1, columnIndex, 0],
+          });
+        }
+      }
+
       const tableCaptionPath = [...path, 0];
       const caption = getDefined(
         getNode<TableCaptionElement>(editor, tableCaptionPath)
