@@ -52,7 +52,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     element,
   });
 
-  const wideTable = (sortedColumns?.[0].length || 0) >= WIDE_MIN_COL_COUNT;
+  const wideTable = (sortedColumns?.length || 0) >= WIDE_MIN_COL_COUNT;
 
   const { color: defaultColor } = useEditorStylesContext();
 
@@ -80,9 +80,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
           (sortedColumns && tableName && (
             <DataViewData
               tableName={tableName}
-              columnNames={sortedColumns[0]}
-              values={sortedColumns[2]}
-              types={sortedColumns[1]}
+              columns={sortedColumns}
               aggregationTypes={selectedAggregationTypes}
               expandedGroups={element.expandedGroups}
               onChangeExpandedGroups={saveExpandedGroups}

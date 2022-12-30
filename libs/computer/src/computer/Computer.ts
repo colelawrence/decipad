@@ -52,7 +52,7 @@ import type {
   UserParseError,
   ProgramBlock,
 } from '../types';
-import { getDefinedSymbol, getGoodBlocks } from '../utils';
+import { getDefinedSymbol, getGoodBlocks, getIdentifierString } from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
@@ -303,21 +303,50 @@ export class Computer {
     });
   });
 
-  public getAllColumns$ = listenerHelper(this.results, (results) => {
-    return Object.values(results.blockResults).flatMap((b) => {
-      if (!b.result) return [];
+  public getAllColumns$ = listenerHelper(
+    this.results,
+    (results, filterForTableName?: string) =>
+      Object.values(results.blockResults).flatMap((b) => {
+        if (b.result?.type.kind === 'column') {
+          const statement = this.latestProgram.find((p) => p.id === b.id)?.block
+            ?.args[0];
+          if (statement?.type !== 'table-column-assign') {
+            return [];
+          }
 
-      if (b.result.type.kind === 'table') {
-        const tableName = b.result.type.indexName || '';
-        return b.result.type.columnNames.map((c, i) => ({
-          name: `${tableName}.${c}`,
-          colValues: (b.result as Result.Result<'table'>).value[i],
-          type: (b.result as Result.Result<'table'>).type.columnTypes[i],
-        }));
+          const tableName = getIdentifierString(statement.args[0]);
+          if (filterForTableName != null && filterForTableName !== tableName) {
+            return [];
+          }
+          const columnName = getIdentifierString(statement.args[1]);
+          return [
+            {
+              tableName,
+              columnName,
+              result: b.result as Result.Result<'column'>,
+              blockId: b.id,
+            },
+          ];
+        }
+
+        return [];
+      })
+  );
+
+  public getColumnNameDefinedInBlock$ = listenerHelper(
+    this.results,
+    (results, blockId: string): string | undefined => {
+      const block = results.blockResults[blockId];
+      if (block?.result?.type.kind === 'column') {
+        const statement = this.latestProgram.find((p) => p.id === block.id)
+          ?.block?.args[0];
+        if (statement?.type === 'table-column-assign') {
+          return getIdentifierString(statement.args[1]);
+        }
       }
-      return [];
-    });
-  });
+      return undefined;
+    }
+  );
 
   expressionResultFromText$(decilang: string) {
     const exp = parseExpressionOrThrow(decilang);

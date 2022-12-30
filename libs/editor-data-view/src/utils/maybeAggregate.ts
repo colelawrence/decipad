@@ -15,7 +15,9 @@ export const maybeAggregate = (
     const aggregations = columnAggregationTypes(columnType as TableCellType);
     const aggregator = aggregations.find((agg) => agg.name === aggregation);
     if (!aggregator) {
-      throw new Error(`No aggregator named ${aggregation} found`);
+      throw new Error(
+        `No aggregator named ${aggregation} for column type ${columnType.kind} found`
+      );
     }
 
     return aggregator.expression(expressionFilter);

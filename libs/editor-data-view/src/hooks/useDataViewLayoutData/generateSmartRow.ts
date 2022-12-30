@@ -1,29 +1,25 @@
-import { Result, SerializedType } from '@decipad/computer';
 import { BehaviorSubject } from 'rxjs';
-import { AggregationKind, DataGroup } from '../../types';
-
-type SmartColumnInput = [SerializedType, Result.ColumnLike<Result.Comparable>];
+import {
+  AggregationKind,
+  DataGroup,
+  PreviousColumns,
+  VirtualColumn,
+} from '../../types';
 
 export interface GenerateSmartRowProps {
-  columns: SmartColumnInput[];
-  columnNames: string[];
+  columns: VirtualColumn[];
   columnIndex: number;
   aggregationTypes: (AggregationKind | undefined)[];
-  subProperties: {
-    type: SerializedType;
-    value: Result.Comparable;
-    name: string;
-  }[];
+  previousColumns: PreviousColumns;
   parentHighlight$?: BehaviorSubject<boolean>;
   global?: boolean;
 }
 
 export const generateSmartRow = ({
   columns,
-  columnNames,
   columnIndex,
   aggregationTypes,
-  subProperties,
+  previousColumns,
   parentHighlight$,
   global = false,
 }: GenerateSmartRowProps): DataGroup => {
@@ -32,26 +28,21 @@ export const generateSmartRow = ({
   return {
     elementType: 'smartrow',
     children:
-      rest.length > 0 && columnIndex + 1 < columnNames.length
+      rest.length > 0
         ? [
             generateSmartRow({
               columns: rest,
-              columnNames,
               columnIndex: columnIndex + 1,
               aggregationTypes,
-              subProperties,
+              previousColumns,
               parentHighlight$,
               global,
             }),
           ]
         : [],
-    column: firstColumn && {
-      name: columnNames[columnIndex],
-      type: firstColumn[0],
-      value: firstColumn[1],
-    },
+    column: firstColumn,
     columnIndex,
-    subProperties,
+    previousColumns,
     parentHighlight$,
     global,
   };

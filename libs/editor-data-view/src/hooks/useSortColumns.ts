@@ -1,12 +1,12 @@
-import { Result, Interpreter } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { dequal } from 'dequal';
 import { useCallback } from 'react';
-import type { ColumnNames, Columns, ColumnTypes } from '../types';
+import { Column } from '../types';
 
 interface UseSortColumnsProps {
-  sortedColumns: Columns | undefined;
-  setSortedColumns: (columns: Columns | undefined) => void;
-  availableColumns: Columns | undefined;
+  sortedColumns?: Column[];
+  availableColumns?: Column[];
+  setSortedColumns: (columns: Column[] | undefined) => void;
 }
 
 type UseSortColumnsReturn = (columnMap: number[] | undefined) => void;
@@ -19,41 +19,22 @@ export const useSortColumns = ({
   return useCallback(
     (columnMap) => {
       if (!columnMap || !availableColumns) {
-        if (sortedColumns?.[0]) {
-          setSortedColumns(undefined);
-        }
+        setSortedColumns(undefined);
         return;
       }
 
-      const columnNames = availableColumns && availableColumns[0];
-      const columnTypes = availableColumns && availableColumns[1];
-      const columnData = availableColumns && availableColumns[2];
-
-      const sortedColumnNames = Result.ResultTransforms.applyMap(
-        Result.Column.fromValues(columnNames),
+      const newSortedColumns = Result.ResultTransforms.applyMap(
+        Result.Column.fromValues(
+          availableColumns as unknown as Result.Comparable[]
+        ),
         columnMap
-      ).getData() as ColumnNames;
+      )
+        .getData()
+        .filter(Boolean) as unknown as typeof availableColumns;
 
-      const sortedColumnTypes = Result.ResultTransforms.applyMap(
-        Result.Column.fromValues(columnTypes as unknown as Result.Comparable[]),
-        columnMap
-      ).getData() as unknown as ColumnTypes;
-
-      const sortedData = Result.ResultTransforms.applyMap(
-        Result.Column.fromValues(columnData as Result.Comparable[]),
-        columnMap
-      ).getData() as Interpreter.ResultTable;
-
-      if (
-        sortedColumns &&
-        dequal(sortedColumns[0], sortedColumnNames) &&
-        dequal(sortedColumns[1], sortedColumnTypes) &&
-        dequal(sortedColumns[2], sortedData)
-      ) {
-        return;
+      if (!dequal(sortedColumns, newSortedColumns)) {
+        setSortedColumns(newSortedColumns);
       }
-
-      setSortedColumns([sortedColumnNames, sortedColumnTypes, sortedData]);
     },
     [availableColumns, setSortedColumns, sortedColumns]
   );

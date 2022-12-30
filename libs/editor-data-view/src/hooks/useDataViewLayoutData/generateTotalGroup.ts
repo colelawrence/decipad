@@ -1,22 +1,17 @@
-import { Result, SerializedType } from '@decipad/computer';
-import { zip } from '@decipad/utils';
-import { AggregationKind, DataGroupElement } from '../../types';
+import { Result } from '@decipad/computer';
+import { AggregationKind, DataGroupElement, VirtualColumn } from '../../types';
 import { generateSmartRow } from './generateSmartRow';
 
 interface GenerateTotalGroupProps {
-  columnNames: string[];
-  columns: Result.ColumnLike<Result.Comparable>[];
-  columnTypes: SerializedType[];
+  columns: VirtualColumn[];
   aggregationTypes: (AggregationKind | undefined)[];
 }
 
 export const generateTotalGroup = ({
-  columnNames,
   columns,
-  columnTypes,
   aggregationTypes,
 }: GenerateTotalGroupProps): DataGroupElement | undefined => {
-  if (!aggregationTypes.some(Boolean)) {
+  if (!aggregationTypes.slice(1).some(Boolean)) {
     return undefined;
   }
   return {
@@ -26,11 +21,10 @@ export const generateTotalGroup = ({
     value: 'Total' as Result.Comparable,
     children: [
       generateSmartRow({
-        columns: zip(columnTypes.slice(1), columns.slice(1)),
-        columnNames,
+        columns: columns.slice(1),
         columnIndex: 1,
-        aggregationTypes,
-        subProperties: [],
+        aggregationTypes: aggregationTypes.slice(1),
+        previousColumns: [],
         global: true,
       }),
     ],

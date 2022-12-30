@@ -1,13 +1,10 @@
 import { FC } from 'react';
-import { SerializedType, Interpreter } from '@decipad/computer';
 import { DataViewDataLayout } from '..';
-import { AggregationKind } from '../../types';
+import { AggregationKind, Column } from '../../types';
 
 interface DataViewDataProps {
   tableName: string;
-  columnNames: string[];
-  values: Interpreter.ResultTable;
-  types: SerializedType[];
+  columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;

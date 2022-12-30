@@ -10,6 +10,7 @@ export type {
   Time,
   Token,
   UnitOfMeasure,
+  ColumnLike,
 } from '@decipad/language';
 
 export {

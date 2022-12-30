@@ -1,5 +1,9 @@
 import { FC, useCallback } from 'react';
-import { CodeResult, DataViewTableHeader, useEventNoEffect } from '@decipad/ui';
+import {
+  CodeResult,
+  DataViewTableHeader as DataViewTableHeaderUI,
+  useEventNoEffect,
+} from '@decipad/ui';
 import { Result, SerializedType } from '@decipad/computer';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { css } from '@emotion/react';
@@ -79,7 +83,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   });
 
   return (
-    <DataViewTableHeader
+    <DataViewTableHeaderUI
       hover={hover}
       rowSpan={rowSpan}
       colSpan={groupIsExpanded ? colSpan : 1}
@@ -89,14 +93,18 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
     >
       {collapsible ? (
         <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>
-          <CodeResult
-            value={value as Result.Result['value']}
-            variant="inline"
-            type={type}
-          />
-          <span css={iconStyles}>
-            {groupIsExpanded ? <FolderOpen /> : <Folder />}
-          </span>
+          <>
+            {value != null && (
+              <CodeResult
+                value={value as Result.Result['value']}
+                variant="inline"
+                type={type}
+              />
+            )}
+            <span css={iconStyles}>
+              {groupIsExpanded ? <FolderOpen /> : <Folder />}
+            </span>
+          </>
         </div>
       ) : (
         <CodeResult
@@ -105,6 +113,6 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
           type={type}
         />
       )}
-    </DataViewTableHeader>
+    </DataViewTableHeaderUI>
   );
 };

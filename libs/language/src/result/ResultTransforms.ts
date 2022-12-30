@@ -1,4 +1,4 @@
-import { SlicesMap, CompareValues } from '../value';
+import { SlicesMap, CompareValues, Comparable } from '../value';
 import { ColumnLike } from './Column';
 import { ColumnSlice } from './ColumnSlice';
 import { MappedColumn } from './MappedColumn';
@@ -29,7 +29,11 @@ export function reverse(col: ColumnLike): ColumnLike {
   return MappedColumn.fromColumnAndMap(col, reverseMap(col));
 }
 
-export function slice(col: ColumnLike, begin: number, end: number): ColumnLike {
+export function slice<T extends Comparable = Comparable>(
+  col: ColumnLike<T>,
+  begin: number,
+  end: number
+): ColumnLike<T> {
   return ColumnSlice.fromColumnAndRange(col, begin, end);
 }
 

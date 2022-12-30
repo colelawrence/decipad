@@ -23,7 +23,7 @@ export interface DataViewColumnHeaderProps {
   selectedAggregation?: string;
   availableAggregations: Array<string>;
   onAggregationChange: (aggregation: string | undefined) => void;
-  onDeleteColumn: (columnName: string) => void;
+  onDeleteColumn: () => void;
   connectDragSource?: ConnectDragSource;
   connectDragPreview?: ConnectDragPreview;
   connectDropTarget?: ConnectDropTarget;
@@ -158,10 +158,10 @@ export const DataViewColumnHeader = forwardRef<
             </button>
           }
         >
-          <MenuItem onSelect={() => onDeleteColumn(name)} icon={<Trash />}>
+          <MenuItem onSelect={() => onDeleteColumn()} icon={<Trash />}>
             Remove column
           </MenuItem>
-          {availableAggregations.length > 1 ? (
+          {availableAggregations.length > 0 ? (
             <MenuList
               itemTrigger={
                 <TriggerMenuItem icon={<Code />}>Aggregate</TriggerMenuItem>
@@ -173,19 +173,17 @@ export const DataViewColumnHeader = forwardRef<
               >
                 None
               </MenuItem>
-              {availableAggregations
-                .filter(Boolean)
-                .map((availableAggregation, index) => {
-                  return (
-                    <MenuItem
-                      onSelect={() => onAggregationChange(availableAggregation)}
-                      selected={availableAggregation === selectedAggregation}
-                      key={index}
-                    >
-                      {capitalize(availableAggregation)}
-                    </MenuItem>
-                  );
-                })}
+              {availableAggregations.map((availableAggregation, index) => {
+                return (
+                  <MenuItem
+                    onSelect={() => onAggregationChange(availableAggregation)}
+                    selected={availableAggregation === selectedAggregation}
+                    key={index}
+                  >
+                    {capitalize(availableAggregation)}
+                  </MenuItem>
+                );
+              })}
             </MenuList>
           ) : null}
         </MenuList>

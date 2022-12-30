@@ -54,7 +54,8 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
               if (!dropdownOpen || !element.smartSelection) return [];
               // STUB: Computer getAllColumns returns duplicates. There is a fix inbound.
               return cols.filter(
-                (c, pos) => cols.findIndex((i) => c.name === i.name) === pos
+                (c, pos) =>
+                  cols.findIndex((i) => c.columnName === i.columnName) === pos
               );
             })
           )

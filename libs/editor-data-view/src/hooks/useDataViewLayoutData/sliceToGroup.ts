@@ -1,7 +1,6 @@
 import { Result, SerializedType } from '@decipad/computer';
-import { zip } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
-import { DataGroup } from '../../types';
+import { DataGroup, PreviousColumns, VirtualColumn } from '../../types';
 import { GenerateGroups, GenerateSubSmartRow } from './generateGroups';
 
 interface SliceToGroupProps {
@@ -9,44 +8,34 @@ interface SliceToGroupProps {
   value: Result.Comparable;
   type: SerializedType;
   hideSmartRow: boolean;
-  columnNames: string[];
-  restOfData: Result.ColumnLike<Result.Comparable>[];
-  restOfTypes: SerializedType[];
+  columns: VirtualColumn[];
   groupId: string;
   columnIndex: number;
   parentHighlight$?: BehaviorSubject<boolean>;
-  subProperties: {
-    type: SerializedType;
-    value: Result.Comparable;
-    name: string;
-  }[];
+  previousColumns: PreviousColumns;
   generateGroups: GenerateGroups;
   generateSmartRow: GenerateSubSmartRow;
 }
 
 export const sliceToGroup = async ({
   isExpanded,
-  restOfData,
   value,
   type,
-  columnNames,
-  restOfTypes,
+  columns,
   hideSmartRow,
   groupId,
   columnIndex,
   parentHighlight$,
-  subProperties,
+  previousColumns,
   generateGroups,
   generateSmartRow,
 }: SliceToGroupProps): Promise<DataGroup> => {
   const selfHighlight$ = new BehaviorSubject<boolean>(false);
 
   const newGroups = await generateGroups({
-    columnNames,
-    columnData: restOfData,
-    columnTypes: restOfTypes,
+    columns,
     columnIndex: columnIndex + 1,
-    subProperties,
+    previousColumns,
     parentHighlight$: selfHighlight$,
     parentGroupId: groupId,
   });
@@ -56,12 +45,10 @@ export const sliceToGroup = async ({
   const smartRow =
     (!hideSmartRow &&
       expandable &&
-      columnIndex + 1 < columnNames.length &&
       generateSmartRow({
-        columns: zip(restOfTypes, restOfData),
-        columnNames,
+        columns,
         columnIndex: columnIndex + 1,
-        subProperties,
+        previousColumns,
         parentHighlight$,
       })) ||
     null;

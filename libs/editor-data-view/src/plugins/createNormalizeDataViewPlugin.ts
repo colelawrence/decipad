@@ -5,8 +5,8 @@ import {
   MyNodeEntry,
   TableCaptionElement,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
-import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
+import { assertElementType, insertNodes } from '@decipad/editor-utils';
+import { removeNodes, setNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 import {

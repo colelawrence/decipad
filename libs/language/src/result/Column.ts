@@ -34,7 +34,7 @@ export class Column<T = Comparable> implements ColumnLike<T> {
   /**
    * Create a column from the values inside. Empty columns return a special value.
    */
-  public static fromValues(values: Comparable[]): ColumnLike {
+  public static fromValues<T extends Comparable>(values: T[]): ColumnLike<T> {
     return new Column(values);
   }
 }

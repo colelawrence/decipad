@@ -1,4 +1,5 @@
-import { Result, SerializedType, Interpreter } from '@decipad/computer';
+import { Result, SerializedType } from '@decipad/computer';
+import { ColumnLike } from 'libs/language/src/result';
 import { Subject } from 'rxjs';
 
 // Row layout
@@ -24,7 +25,7 @@ export interface SmartRowElement extends BaseElement {
   children: DataGroup[];
   column: SmartRowColumn;
   columnIndex: number;
-  subProperties: {
+  previousColumns: {
     type: SerializedType;
     value: Result.Comparable;
     name: string;
@@ -49,9 +50,19 @@ export type DataViewDataLayout = DataGroup[];
 
 // Data
 
-export type ColumnNames = string[];
-export type ColumnTypes = SerializedType[];
-export type Columns = [ColumnNames, ColumnTypes, Interpreter.ResultTable];
+export interface Column {
+  name: string;
+  blockId: string;
+  type: SerializedType;
+  value: Result.OneResult[];
+}
+
+export interface VirtualColumn {
+  name: string;
+  blockId: string;
+  type: SerializedType;
+  value: ColumnLike<Result.Comparable>;
+}
 
 // Aggregations
 
@@ -61,3 +72,9 @@ export type Aggregator = (params: {
   expressionFilter: string;
   columnType: string;
 }) => string | undefined;
+
+export type PreviousColumns = Array<{
+  type: SerializedType;
+  value: Result.Comparable;
+  name: string;
+}>;

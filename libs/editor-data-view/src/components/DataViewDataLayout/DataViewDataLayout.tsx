@@ -1,12 +1,17 @@
 import { FC, useMemo } from 'react';
-import { Interpreter, Result, SerializedType } from '@decipad/computer';
+import { Result, SerializedType } from '@decipad/computer';
 import { DataViewRow } from '@decipad/ui';
-import { AggregationKind, ValueCell } from '../../types';
-import { DataViewHeader } from '..';
+import {
+  AggregationKind,
+  Column,
+  PreviousColumns,
+  ValueCell,
+} from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
-import { SmartCell } from '../SmartCell';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';
+import { DataViewHeader } from '..';
+import { SmartCell } from '../SmartCell';
 
 export interface HeaderProps {
   type?: SerializedType;
@@ -39,20 +44,14 @@ export interface SmartProps {
   colSpan?: number;
   onHover: (hover: boolean) => void;
   hover: boolean;
-  subProperties: {
-    type: SerializedType;
-    value: Result.Comparable;
-    name: string;
-  }[];
+  previousColumns: PreviousColumns;
   alignRight?: boolean;
   global?: boolean;
 }
 
 export interface DataViewLayoutProps {
   tableName: string;
-  columnNames: string[];
-  values: Interpreter.ResultTable;
-  types: SerializedType[];
+  columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
@@ -60,17 +59,13 @@ export interface DataViewLayoutProps {
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   tableName,
-  columnNames,
-  values,
-  types,
+  columns,
   aggregationTypes,
   expandedGroups = [],
   onChangeExpandedGroups,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData(
-    columnNames,
-    values,
-    types,
+    columns,
     aggregationTypes,
     expandedGroups
   );

@@ -32,11 +32,11 @@ export class ColumnSlice<T = Comparable> implements ColumnLike<T> {
     return this.memo;
   }
 
-  static fromColumnAndRange(
-    col: ColumnLike,
+  static fromColumnAndRange<T extends Comparable = Comparable>(
+    col: ColumnLike<T>,
     begin: number,
     end: number
-  ): ColumnLike {
+  ): ColumnLike<T> {
     return new ColumnSlice(col, begin, end);
   }
 }

@@ -15,6 +15,13 @@
       "options": {
         "command": "yarn tsc -b libs/editor-data-view"
       }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/editor-data-view"],
+      "options": {
+        "jestConfig": "libs/editor-data-view/jest.config.js"
+      }
     }
   }
 }

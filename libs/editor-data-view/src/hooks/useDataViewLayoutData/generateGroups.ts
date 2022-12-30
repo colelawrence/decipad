@@ -1,22 +1,21 @@
 import { BehaviorSubject } from 'rxjs';
 import { generateHash } from '@decipad/editor-utils';
-import { Result, SerializedType } from '@decipad/computer';
-import { AggregationKind, DataGroup } from '../../types';
+import { Result } from '@decipad/computer';
+import {
+  AggregationKind,
+  DataGroup,
+  PreviousColumns,
+  VirtualColumn,
+} from '../../types';
 import { generateSmartRow, GenerateSmartRowProps } from './generateSmartRow';
 import { sliceToGroup } from './sliceToGroup';
 
 const { ResultTransforms } = Result;
 
 export interface GenerateGroupsProps {
-  columnNames: string[];
-  columnData: Result.ColumnLike<Result.Comparable>[];
-  columnTypes: SerializedType[];
+  columns: VirtualColumn[];
   columnIndex: number;
-  subProperties: {
-    type: SerializedType;
-    value: Result.Comparable;
-    name: string;
-  }[];
+  previousColumns: PreviousColumns;
   parentGroupId?: string;
   parentHighlight$?: BehaviorSubject<boolean>;
 }
@@ -35,35 +34,31 @@ export type GenerateGroups = (
 ) => Promise<DataGroup[]>;
 
 export const generateGroups = async ({
-  columnNames,
-  columnData,
-  columnTypes,
+  columns,
   aggregationTypes,
   expandedGroups = [],
   columnIndex,
-  subProperties,
+  previousColumns,
   parentHighlight$,
   parentGroupId,
 }: GenerateGroupsProps & {
   aggregationTypes: (AggregationKind | undefined)[];
   expandedGroups?: string[];
 }): Promise<DataGroup[]> => {
-  if (columnData.length !== columnTypes.length) {
-    throw new Error(
-      `number of columns differs from number of types: ${columnData.length} and ${columnTypes.length}`
-    );
-  }
-  if (columnData.length < 1) {
+  if (columns.length < 1) {
     return [];
   }
-  const [firstColumn, ...restOfColumns] = columnData;
-  const [firstType, ...restOfTypes] = columnTypes;
+  const [firstColumn, ...restOfColumns] = columns;
 
-  const sortMap = ResultTransforms.sortMap(firstColumn);
-  const sortedFirstColumn = ResultTransforms.applyMap(firstColumn, sortMap);
-  const sortedRestOfColumns = restOfColumns.map((column) =>
-    ResultTransforms.applyMap(column, sortMap)
+  const sortMap = ResultTransforms.sortMap(firstColumn.value);
+  const sortedFirstColumn = ResultTransforms.applyMap(
+    firstColumn.value,
+    sortMap
   );
+  const sortedRestOfColumns: VirtualColumn[] = restOfColumns.map((column) => ({
+    ...column,
+    value: ResultTransforms.applyMap(column.value, sortMap),
+  }));
   const slices = ResultTransforms.contiguousSlices(sortedFirstColumn);
 
   const subGenerateGroups: GenerateGroups = (props) =>
@@ -81,30 +76,29 @@ export const generateGroups = async ({
 
     const isExpanded = expandedGroups.includes(groupId);
 
-    const restOfData = sortedRestOfColumns.map((column) =>
-      ResultTransforms.slice(column, start, end + 1)
-    );
+    const groupColumns: VirtualColumn[] = sortedRestOfColumns.map((column) => ({
+      ...column,
+      value: ResultTransforms.slice(column.value, start, end + 1),
+    }));
 
     const hideSmartRow =
       !aggregationTypes || aggregationTypes.filter(Boolean).length === 0;
 
-    const sliceSubProperties = [
-      ...subProperties,
-      { type: firstType, value, name: columnNames[columnIndex] },
+    const slicePreviousColumns = [
+      ...previousColumns,
+      { ...firstColumn, value },
     ];
 
     return sliceToGroup({
       isExpanded,
       value,
-      type: firstType,
-      restOfData,
-      columnNames,
-      restOfTypes,
+      type: firstColumn.type,
+      columns: groupColumns,
       groupId,
       columnIndex,
       hideSmartRow,
       parentHighlight$,
-      subProperties: sliceSubProperties,
+      previousColumns: slicePreviousColumns,
       generateGroups: subGenerateGroups,
       generateSmartRow: subGenerateSmartRow,
     });

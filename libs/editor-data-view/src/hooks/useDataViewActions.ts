@@ -28,11 +28,7 @@ import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
 import { Observable, Subject } from 'rxjs';
 import { Path } from 'slate';
-
-interface Column {
-  name: string;
-  type: SerializedType;
-}
+import { Column } from '../types';
 
 export interface TableActions {
   onDelete: () => void;
@@ -76,7 +72,7 @@ export const useDataViewActions = (
         }
         for (const existingColumn of existingColumns) {
           const matchingDataColumn = columns.find(
-            (column) => column.name === existingColumn.name
+            (column) => column.blockId === existingColumn.name
           );
           const columnPath = findNodePath(editor, existingColumn);
           // remove columns not present

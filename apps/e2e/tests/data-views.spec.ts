@@ -70,6 +70,8 @@ test.describe('Data views', () => {
   });
 
   test('data view configuration', async () => {
+    // wait for results debounce
+    await page.waitForTimeout(1000);
     const dataViewContent = await page
       .locator('[aria-roledescription="data view data"]')
       .screenshot();
@@ -78,6 +80,8 @@ test.describe('Data views', () => {
 
   test('expand data view group', async () => {
     await page.click('role=cell[name="a Folder"] >> span:has-text("Folder")');
+    // wait for results debounce
+    await page.waitForTimeout(1000);
     const dataViewContent = await page
       .locator('[aria-roledescription="data view data"]')
       .screenshot();
@@ -96,6 +100,8 @@ test.describe('Data views', () => {
     );
     await page.click('text=Aggregate');
     await page.click('text=Average');
+    // wait for results debounce
+    await page.waitForTimeout(1000);
     const dataViewContent = await page
       .locator('[aria-roledescription="data view data"]')
       .screenshot();

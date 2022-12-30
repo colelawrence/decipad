@@ -25,6 +25,7 @@
     "editor-types": "libs/editor-types",
     "editor-utils": "libs/editor-utils",
     "editor-variable-def": "libs/editor-variable-def",
+    "editor-data-view": "libs/editor-data-view",
     "emails": "libs/emails",
     "eslint-config-decipad": "libs/eslint-config-decipad",
     "externaldata": "libs/externaldata",

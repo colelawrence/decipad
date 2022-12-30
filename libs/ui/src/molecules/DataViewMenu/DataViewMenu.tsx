@@ -1,4 +1,4 @@
-import { Interpreter, SerializedType } from '@decipad/language';
+import { SerializedType } from '@decipad/language';
 import { css } from '@emotion/react';
 import { ReactElement, useState } from 'react';
 import { MenuItem } from '../../atoms';
@@ -8,12 +8,14 @@ import { MenuList } from '../MenuList/MenuList';
 
 // Data
 
-export type ColumnNames = string[];
-export type ColumnTypes = SerializedType[];
-export type Columns = [ColumnNames, ColumnTypes, Interpreter.ResultTable];
+export type Column = {
+  name: string;
+  blockId: string;
+  type: SerializedType;
+};
 
 export interface DataViewMenuProps {
-  availableColumns: Columns | undefined;
+  availableColumns: Column[] | undefined;
   onInsertColumn: (name: string, serializedType: SerializedType) => void;
 }
 
@@ -61,27 +63,20 @@ export const DataViewMenu = ({
           dropdown
         >
           {availableColumns &&
-            availableColumns[0].map((availableColumnName, index) => {
-              const matchingColumnIndex = availableColumns[0].findIndex(
-                (columnName) => columnName === availableColumnName
+            availableColumns.map((availableColumn, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  onSelect={() =>
+                    onInsertColumn(
+                      availableColumn.blockId,
+                      availableColumn.type
+                    )
+                  }
+                >
+                  {availableColumn.name}
+                </MenuItem>
               );
-
-              if (matchingColumnIndex !== -1) {
-                return (
-                  <MenuItem
-                    key={index}
-                    onSelect={() =>
-                      onInsertColumn(
-                        availableColumnName,
-                        availableColumns[1][matchingColumnIndex]
-                      )
-                    }
-                  >
-                    {availableColumnName}
-                  </MenuItem>
-                );
-              }
-              return null;
             })}
         </MenuList>
       </div>

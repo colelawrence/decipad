@@ -1,51 +1,29 @@
-import { Interpreter, SerializedType } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { F } from '@decipad/editor-utils';
+import { VirtualColumn } from '../types';
 import { layoutPowerData } from './useDataViewLayoutData';
 
 describe('layoutPowerData', () => {
-  it('throws on mismatched values and types', () => {
-    const columnValues: Interpreter.ResultTable = [[F(1)]];
-    const columnTypes: SerializedType[] = [];
-    const columnNames: string[] = [];
-
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(() =>
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toThrow();
+  it('lays out an empty table', async () => {
+    expect(await layoutPowerData([], [], [])).toEqual([]);
   });
 
-  it('lays out an empty table', () => {
-    const columnValues: Interpreter.ResultTable = [];
-    const columnTypes: SerializedType[] = [];
-    const columnNames: string[] = [];
-
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toEqual([]);
-  });
-
-  it('lays out empty a one-column one-cell table', () => {
-    const columnValues: Interpreter.ResultTable = [[F(1)]];
-    const columnTypes: SerializedType[] = [{ kind: 'number', unit: null }];
-    const columnNames: string[] = ['Column1'];
-
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toEqual([
+  it('lays out empty a one-column one-cell table', async () => {
+    const columns: Array<VirtualColumn> = [
       {
-        rest: [],
-        rowSpan: 1,
+        name: 'columnName',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(1)]),
+        type: { kind: 'number', unit: null },
+      },
+    ];
+
+    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+      {
+        children: [],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,
@@ -55,63 +33,68 @@ describe('layoutPowerData', () => {
     ]);
   });
 
-  it('lays out an un-groupable one-column multi-cell table', () => {
-    const columnValues: Interpreter.ResultTable = [[F(1), F(2), F(3)]];
-    const columnTypes: SerializedType[] = [{ kind: 'number', unit: null }];
-    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
+  it('lays out an un-groupable one-column multi-cell table', async () => {
+    const columns: Array<VirtualColumn> = [
+      {
+        name: 'columnName',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(1), F(2), F(3)]),
+        type: { kind: 'number', unit: null },
+      },
+    ];
 
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toEqual([
+    expect(await layoutPowerData(columns, [], [])).toMatchObject([
       {
+        children: [],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
+        type: {
+          kind: 'number',
+          unit: null,
+        },
         value: F(1),
-        rowSpan: 1,
+      },
+      {
+        children: [],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,
         },
-        rest: [],
-      },
-      {
         value: F(2),
-        rowSpan: 1,
+      },
+      {
+        children: [],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,
         },
-        rest: [],
-      },
-      {
         value: F(3),
-        rowSpan: 1,
-        type: {
-          kind: 'number',
-          unit: null,
-        },
-        rest: [],
       },
     ]);
   });
 
-  it('lays out a groupable one-column multi-cell table', () => {
-    const columnValues: Interpreter.ResultTable = [[F(1), F(2), F(1)]];
-    const columnTypes: SerializedType[] = [{ kind: 'number', unit: null }];
-    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
-
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toEqual([
+  it('lays out a groupable one-column multi-cell table', async () => {
+    const columns: Array<VirtualColumn> = [
       {
-        rest: [],
-        rowSpan: 1,
+        name: 'columnName',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(1), F(2), F(1)]),
+        type: { kind: 'number', unit: null },
+      },
+    ];
+    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+      {
+        children: [],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,
@@ -119,8 +102,10 @@ describe('layoutPowerData', () => {
         value: F(1),
       },
       {
-        rest: [],
-        rowSpan: 1,
+        children: [],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,
@@ -130,35 +115,30 @@ describe('layoutPowerData', () => {
     ]);
   });
 
-  it('lays out a un-groupable two-column multi-cell table', () => {
-    const columnValues: Interpreter.ResultTable = [
-      [F(1), F(2), F(3)],
-      [F(4), F(5), F(6)],
-    ];
-    const columnTypes: SerializedType[] = [
-      { kind: 'number', unit: null },
-      { kind: 'number', unit: null },
-    ];
-    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
-
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toEqual([
+  it('lays out a un-groupable two-column multi-cell table', async () => {
+    const columns: Array<VirtualColumn> = [
       {
-        value: F(1),
-        rowSpan: 2,
-        type: {
-          kind: 'number',
-          unit: null,
-        },
-        rest: [
+        name: 'Column1',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(1), F(2), F(3)]),
+        type: { kind: 'number', unit: null },
+      },
+      {
+        name: 'Column2',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(4), F(5), F(6)]),
+        type: { kind: 'number', unit: null },
+      },
+    ];
+
+    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+      {
+        children: [
           {
-            rest: [],
-            rowSpan: 1,
+            children: [],
+            collapsible: false,
+            columnIndex: 1,
+            elementType: 'group',
             type: {
               kind: 'number',
               unit: null,
@@ -166,88 +146,9 @@ describe('layoutPowerData', () => {
             value: F(4),
           },
         ],
-      },
-      {
-        value: F(2),
-        rowSpan: 2,
-        type: {
-          kind: 'number',
-          unit: null,
-        },
-        rest: [
-          {
-            rest: [],
-            rowSpan: 1,
-            type: {
-              kind: 'number',
-              unit: null,
-            },
-            value: F(5),
-          },
-        ],
-      },
-      {
-        value: F(3),
-        rowSpan: 2,
-        type: {
-          kind: 'number',
-          unit: null,
-        },
-        rest: [
-          {
-            rest: [],
-            rowSpan: 1,
-            type: {
-              kind: 'number',
-              unit: null,
-            },
-            value: F(6),
-          },
-        ],
-      },
-    ]);
-  });
-
-  it('lays out a groupable two-column multi-cell table', () => {
-    const columnValues: Interpreter.ResultTable = [
-      [F(1), F(2), F(1)],
-      [F(4), F(5), F(6)],
-    ];
-    const columnTypes: SerializedType[] = [
-      { kind: 'number', unit: null },
-      { kind: 'number', unit: null },
-    ];
-    const columnNames: string[] = ['Column1', 'Column2', 'Column3'];
-
-    const table = {
-      value: columnValues,
-      type: columnTypes,
-    };
-    expect(
-      layoutPowerData(columnNames, table.value, table.type, [], [])
-    ).toEqual([
-      {
-        rest: [
-          {
-            rest: [],
-            rowSpan: 1,
-            type: {
-              kind: 'number',
-              unit: null,
-            },
-            value: F(4),
-          },
-          {
-            rest: [],
-            rowSpan: 1,
-            type: {
-              kind: 'number',
-              unit: null,
-            },
-            value: F(6),
-          },
-        ],
-        rowSpan: 3,
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,
@@ -255,10 +156,12 @@ describe('layoutPowerData', () => {
         value: F(1),
       },
       {
-        rest: [
+        children: [
           {
-            rest: [],
-            rowSpan: 1,
+            children: [],
+            collapsible: false,
+            columnIndex: 1,
+            elementType: 'group',
             type: {
               kind: 'number',
               unit: null,
@@ -266,7 +169,90 @@ describe('layoutPowerData', () => {
             value: F(5),
           },
         ],
-        rowSpan: 2,
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
+        type: {
+          kind: 'number',
+          unit: null,
+        },
+        value: F(2),
+      },
+      {
+        children: [
+          {
+            children: [],
+            collapsible: false,
+            columnIndex: 1,
+            elementType: 'group',
+            type: {
+              kind: 'number',
+              unit: null,
+            },
+            value: F(6),
+          },
+        ],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
+        type: {
+          kind: 'number',
+          unit: null,
+        },
+        value: F(3),
+      },
+    ]);
+  });
+
+  it('lays out a groupable two-column multi-cell table', async () => {
+    const columns: Array<VirtualColumn> = [
+      {
+        name: 'Column1',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(1), F(2), F(1)]),
+        type: { kind: 'number', unit: null },
+      },
+      {
+        name: 'Column2',
+        blockId: 'A',
+        value: Result.Column.fromValues([F(4), F(5), F(6)]),
+        type: { kind: 'number', unit: null },
+      },
+    ];
+
+    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+      {
+        children: [],
+        collapsible: true,
+        columnIndex: 0,
+        elementType: 'group',
+        type: {
+          kind: 'number',
+          unit: null,
+        },
+        value: {
+          d: 1n,
+          n: 1n,
+          s: 1n,
+        },
+      },
+      {
+        children: [
+          {
+            children: [],
+            collapsible: false,
+            columnIndex: 1,
+            elementType: 'group',
+            type: {
+              kind: 'number',
+              unit: null,
+            },
+            value: F(5),
+          },
+        ],
+        collapsible: false,
+        columnIndex: 0,
+        elementType: 'group',
         type: {
           kind: 'number',
           unit: null,

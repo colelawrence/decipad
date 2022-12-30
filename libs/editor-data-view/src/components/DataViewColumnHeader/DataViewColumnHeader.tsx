@@ -12,13 +12,14 @@ import {
 } from '@decipad/editor-utils';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { Path } from 'slate';
-import { getNodeEntry } from '@udecode/plate';
+import { getNodeEntry, isFirstChild } from '@udecode/plate';
 import { useCallback, useMemo, useRef } from 'react';
 import { getDefined } from '@decipad/utils';
 import {
   columnAggregationTypes,
   isCellAlignRight,
 } from '@decipad/editor-table';
+import { useComputer } from '@decipad/react-contexts';
 import { useDataView, useDragColumn, useDropColumn } from '../../hooks';
 
 export const DataViewColumnHeader: PlateComponent = ({
@@ -48,15 +49,15 @@ export const DataViewColumnHeader: PlateComponent = ({
     'DataViewColumn'
   );
 
-  const availableAggregations = useMemo(
-    () =>
-      [''].concat(
-        columnAggregationTypes(element.cellType as TableCellType).map(
-          (agg) => agg.name
-        )
-      ),
-    [element.cellType]
-  );
+  const availableAggregations = useMemo(() => {
+    if (isFirstChild(path)) {
+      // first column: do not present aggregation choices
+      return [];
+    }
+    return columnAggregationTypes(element.cellType as TableCellType).map(
+      (agg) => agg.name
+    );
+  }, [element.cellType, path]);
 
   const onAggregationChange = useElementMutatorCallback(
     editor,
@@ -72,9 +73,16 @@ export const DataViewColumnHeader: PlateComponent = ({
     }
   }, [onDeleteColumn, path]);
 
+  const computer = useComputer();
+  const columnName = computer.getColumnNameDefinedInBlock$.use(element.name);
+
+  if (!columnName) {
+    return null;
+  }
+
   return (
     <UIDataViewColumnHeader
-      name={element.name}
+      name={columnName}
       type={element.cellType}
       attributes={attributes}
       selectedAggregation={element.aggregation}
