@@ -18,6 +18,7 @@ export * from './memoizeDecorate';
 export * from './normalizeIdentifierElement';
 export * from './isDOMNode';
 export * from './hasTarget';
+export * from './setSelectionNext';
 export * from './setSlateFragment';
 export * from './serializeDocument';
 export * from './assertElementType';

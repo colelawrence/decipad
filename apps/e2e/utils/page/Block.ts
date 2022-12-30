@@ -15,7 +15,7 @@ export async function createInputBelow(
 
   await page.click('text=InputInputA value that others can interact with');
 
-  await page.locator('text=/Input[0-9]+/ >> nth=-1').dblclick();
+  await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
@@ -41,7 +41,7 @@ export async function createToggleBelow(page: Page, identifier: string) {
 
   await page.locator('role=menuitem', { hasText: 'toggle' }).click();
 
-  await page.locator('text=/Input[0-9]+/ >> nth=-1').dblclick();
+  await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
@@ -56,7 +56,7 @@ export async function createDateBelow(page: Page, identifier: string) {
 
   await page.locator('role=menuitem', { hasText: 'date' }).click();
 
-  await page.locator('text=/Input[0-9]+/ >> nth=-1').dblclick();
+  await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);

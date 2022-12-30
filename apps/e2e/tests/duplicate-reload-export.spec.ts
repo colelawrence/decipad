@@ -19,8 +19,8 @@ test.describe('Duplicating a notebook', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
-    await setUp({ page, context }, { showChecklist: true });
+    context = page.context();
+    await setUp({ page, context }, { showChecklist: false });
     await waitForEditorToLoad(page, {
       showChecklist: true,
     });
@@ -47,11 +47,9 @@ test.describe('Duplicating a notebook', () => {
     await page.reload();
     await waitForEditorToLoad(page);
     const lastParagraph = await page.waitForSelector(
-      '[data-slate-editor] p >> nth=-2'
+      'text=this is the third paragraph'
     );
-    expect(await lastParagraph.textContent()).toBe(
-      'this is the third paragraph'
-    );
+    expect(await lastParagraph.isVisible()).toBeTruthy();
     await navigateToWorkspacePage(page);
   });
 
