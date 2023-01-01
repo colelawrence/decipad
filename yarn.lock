@@ -27179,12 +27179,10 @@ react-textarea-autosize@^8.3.2, react-textarea-autosize@^8.3.3:
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
 
-react-titled@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-titled/-/react-titled-1.1.1.tgz#d6b8e12699cf0e281109afc0e542fb24d2339526"
-  integrity sha512-q4/w1oXdOl4OOVxxv3TRpZo33tWHfzzQLGsHwcIoKov1F3KOdKWBjsjJ8a5SV0G3jHwziuvgzk5ZFBgYShJ83Q==
-  dependencies:
-    prop-types "^15.5.8"
+react-titled@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-titled/-/react-titled-2.0.0.tgz#135eeba683390b47b6a0dd6bc066da71d2c338d1"
+  integrity sha512-WzSKv8zIklE/6Z9APqUJutMTbTej54vpymjl0NMAZyxDxT8s+NS8GI+a6ocl2NYCqWd6vkahKdZFxaZfzEioGQ==
 
 react-toast-notifications@2.5.1:
   version "2.5.1"
