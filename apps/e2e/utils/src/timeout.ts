@@ -6,6 +6,6 @@ export function timeout(ms: number) {
 
 export const Timeouts = {
   typing: 100,
-  syncDelay: 2000,
+  syncDelay: 3000,
   computerDelay: 250,
 };
