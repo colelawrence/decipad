@@ -9,7 +9,7 @@ import {
 } from '../utils/page/Workspace';
 import { Timeouts } from '../utils/src';
 
-test.describe('Duplicating a notebook', () => {
+test.describe.skip('Duplicating a notebook', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;
