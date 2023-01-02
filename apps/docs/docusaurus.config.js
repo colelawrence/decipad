@@ -1,7 +1,21 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github').default;
 const darkCodeTheme = require('prism-react-renderer/themes/dracula').default;
 
-const plugins = [];
+const plugins = [
+  [
+    './plugins/blog-plugin.js',
+    {
+      showReadingTime: false,
+      routeBasePath: '/releases',
+      blogSidebarCount: 'ALL',
+      postsPerPage: 5,
+      blogTitle: 'Decipad Releases',
+      blogSidebarTitle: 'Recent Releases',
+      blogDescription: 'Decipad Releases',
+      /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
+    },
+  ],
+];
 
 // Reverse the sidebar items ordering (including nested category items)
 function removeAcceptanceTests(items) {
@@ -58,17 +72,7 @@ const config = {
             return removeAcceptanceTests(sidebarItems);
           },
         },
-        blog: {
-          showReadingTime: false,
-          routeBasePath: '/release-notes',
-          blogSidebarCount: 'ALL',
-          postsPerPage: 20,
-          blogTitle: 'Decipad Releases',
-          blogSidebarTitle: 'All Releases',
-          blogDescription:
-            'Keep yourself up-to-date about new features in every release',
-          /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -78,6 +82,7 @@ const config = {
 
   themes: ['./src/lib/deci-language-live-codeblock'],
 
+  plugins: plugins,
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -115,7 +120,7 @@ const config = {
             label: 'Support',
           },
           {
-            to: 'release-notes',
+            to: 'releases',
             position: 'left',
             label: 'Releases',
           },

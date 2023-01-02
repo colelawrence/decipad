@@ -1608,7 +1608,7 @@ export default function Templates() {
                 icon={IconStar}
                 title="Pricing a consulting project"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                notebook="https://app.decipad.com/n/-Consulting-Projects-Fee-Estimation%3A8Kx9X0612rXUElUSVFl0S?secret=qdQBEsgCdMvnh-D6_JGxp"
+                notebook="https://app.decipad.com/n/Pricing-a-consulting-project%3AXvFir3R2H_GvTfsy5bA4Q"
                 description="Landed a new project? Use this model to understand how to calculate staff allocation, project expenses, and target rates"
                 avatar={avatarGiulia}
               />

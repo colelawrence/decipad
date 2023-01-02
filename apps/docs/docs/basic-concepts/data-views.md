@@ -1,6 +1,7 @@
 ---
 sidebar_position: 11
 draft: true
+sidebar_class_name: new
 ---
 
 # Create a Data View
