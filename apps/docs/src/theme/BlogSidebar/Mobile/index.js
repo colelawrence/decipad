@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import { NavbarSecondaryMenuFiller } from '@docusaurus/theme-common';
-import type { Props } from '@theme/BlogSidebar/Mobile';
 
-function BlogSidebarMobileSecondaryMenu({ sidebar }: Props): JSX.Element {
+function BlogSidebarMobileSecondaryMenu({ sidebar }) {
   const maxPosts = 8;
   return (
     <ul className="menu__list">
