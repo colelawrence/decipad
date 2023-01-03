@@ -50,7 +50,9 @@ export function parseExpression(source: string): Parser.ParsedExpression {
   if (parsed.error) return parsed;
 
   if (!isExpression(parsed.solution)) {
-    return { error: { message: 'Expected expression' } };
+    return {
+      error: { message: 'Expected expression', isEmptyExpressionError: true },
+    };
   }
 
   return {

@@ -26,9 +26,7 @@ const iconStyles = css({
 const emptyStyles = css({
   '::after': {
     display: 'inline',
-    content: '"Unnamed"',
-    pointerEvents: 'none',
-    color: cssVar('weakTextColor'),
+    content: '" "',
   },
   // Slate creates a <br> for us. Pls no
   br: { display: 'none' },

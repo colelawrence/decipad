@@ -52,7 +52,12 @@ import type {
   UserParseError,
   ProgramBlock,
 } from '../types';
-import { getDefinedSymbol, getGoodBlocks, getIdentifierString } from '../utils';
+import {
+  getDefinedSymbol,
+  getGoodBlocks,
+  getIdentifierString,
+  findSymbolsUsed,
+} from '../utils';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
@@ -206,6 +211,22 @@ export class Computer {
     return undefined;
   }
 
+  getIsVariableUsed$ = listenerHelper(
+    this.results,
+    (_, blockId: string, varName: string) =>
+      this.getIsVariableUsed(blockId, varName)
+  );
+
+  getIsVariableUsed(blockId: string, varName: string) {
+    const varNames = [getExprRef(blockId), varName];
+    return this.latestProgram.some((p) => {
+      const stat = p.block?.args.at(0);
+      return stat
+        ? findSymbolsUsed(stat).some((sym) => varNames.includes(sym))
+        : false;
+    });
+  }
+
   getSymbolDefinedInBlock$ = listenerHelper(
     this.results,
     (_, blockId: string) => this.getSymbolDefinedInBlock(blockId)
@@ -257,6 +278,10 @@ export class Computer {
       // Skip own block
       if (p.id === inBlockId) {
         return false;
+      }
+
+      if (p.definesVariable && p.definesVariable === name) {
+        return true;
       }
 
       if (p.type === 'identified-block' && p.block.args.length > 0) {
@@ -564,14 +589,25 @@ export class Computer {
     return block?.args[0];
   }
 
-  getAvailableIdentifier(prefix: string, start: number): string {
+  /**
+   * Get a unique identifier that starts with `prefix` and is not already in use.
+   *
+   * If `attemptNumberless` is true, then the first proposal will be `prefix` and
+   * not `prefix1`.
+   */
+  getAvailableIdentifier(
+    prefix: string,
+    start: number,
+    attemptNumberless = false
+  ): string {
     const existingVars = new Set([
       ...this.computationRealm.inferContext.stack.globalVariables.keys(),
       ...this.computationRealm.inferContext.externalData.keys(),
+      ...this.latestProgram.map((block) => block.definesVariable),
     ]);
     let num = start;
     const firstProposal = prefix;
-    if (existingVars.has(firstProposal)) {
+    if (attemptNumberless && !existingVars.has(firstProposal)) {
       return firstProposal;
     }
     const nextProposal = () => `${prefix}${num}`;

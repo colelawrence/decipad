@@ -22,6 +22,7 @@ export function parseElementAsVariableAssignment(
         id: blockId,
         source: typeof source === 'string' ? source : '',
         error,
+        definesVariable: varName,
       },
     ];
   }
@@ -33,5 +34,5 @@ export function parseElementAsVariableAssignment(
       }
     : expression;
 
-  return [statementToIdentifiedBlock(blockId, statement)];
+  return [statementToIdentifiedBlock(blockId, statement, varName)];
 }

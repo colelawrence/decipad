@@ -14,11 +14,9 @@ export const getSyntaxError = (line?: IdentifiedResult | IdentifiedError) => {
 
   return isSyntaxError(error)
     ? {
-        line: isSyntaxError(error) && error.line != null ? error.line : 1,
-        column: isSyntaxError(error) && error.column != null ? error.column : 1,
-        message: error.message,
-        detailMessage: error.detailMessage,
-        expected: error.expected,
+        ...error,
+        line: error.line != null ? error.line : 1,
+        column: error.column != null ? error.column : 1,
         url: `${docs({}).page({ name: 'errors' }).$}#syntax-error`,
       }
     : isBracketError(error.bracketError)

@@ -171,9 +171,9 @@ export const plugins = ({
       createImagePlugin(),
       createMediaEmbedPlugin(),
       createTAutoformatPlugin({
-        options: { rules: autoformatRules },
+        options: { rules: autoformatRules(computer) },
       }),
-      createAutoFormatCodeLinePlugin(),
+      createAutoFormatCodeLinePlugin(computer)(),
       createImportPlugin(interactions),
       createLiveConnectionPlugin(),
 

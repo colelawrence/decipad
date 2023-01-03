@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   createTAutoformatPlugin,
   ELEMENT_CODE_LINE,
@@ -16,7 +17,7 @@ beforeEach(() => {
   editor = createPlateEditor({
     plugins: [
       createTAutoformatPlugin({
-        options: { rules: autoformatBlocks },
+        options: { rules: autoformatBlocks(new Computer()) },
       }),
     ],
   });

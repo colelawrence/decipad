@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -36,11 +37,12 @@ const rulesForbiddenInCodeLines = [
   query: disableCodelineFormatting,
 }));
 
-export const autoformatRules = [
-  ...autoformatBlocks,
-  ...autoformatLists,
-  ...autoformatMarks,
-  ...autoformatLinks,
-  ...autoformatImages,
-  ...rulesForbiddenInCodeLines,
-] as MyAutoformatRule[];
+export const autoformatRules = (computer: Computer) =>
+  [
+    ...autoformatBlocks(computer),
+    ...autoformatLists,
+    ...autoformatMarks,
+    ...autoformatLinks,
+    ...autoformatImages,
+    ...rulesForbiddenInCodeLines,
+  ] as MyAutoformatRule[];

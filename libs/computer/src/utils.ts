@@ -107,7 +107,9 @@ export const setIntersection = <T>(setA: Set<T>, setB: Set<T>) =>
   new Set([...setA].filter((itemA) => setB.has(itemA)));
 
 export const isSyntaxError = (error: unknown): error is SyntaxError =>
-  error instanceof Object && 'message' in error && 'token' in error;
+  error instanceof Object &&
+  'message' in error &&
+  ('token' in error || 'isEmptyExpressionError' in error);
 
 export const isBracketError = (error: unknown): error is BracketError => {
   return (

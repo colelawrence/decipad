@@ -190,7 +190,7 @@ export const CodeLine = ({
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
-  const freshResult = PotentiallyExpandedResult({
+  const freshResult = useResultInfo({
     result,
     syntaxError,
     onDragStartCell,
@@ -239,7 +239,7 @@ export const CodeLine = ({
   );
 };
 
-function PotentiallyExpandedResult({
+function useResultInfo({
   result,
   syntaxError,
   onDragStartCell,
@@ -258,6 +258,16 @@ function PotentiallyExpandedResult({
 
   // Return early when syntax errors
   if (syntaxError) {
+    if (syntaxError.isEmptyExpressionError) {
+      return {
+        inline: (
+          <output css={inlineResultStyles}>
+            <CodeError {...syntaxError} message="There is an empty variable" />
+          </output>
+        ),
+        errored: true,
+      };
+    }
     return {
       inline: (
         <output css={inlineResultStyles}>

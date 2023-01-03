@@ -54,7 +54,7 @@ export const execute = ({
 }: ExecuteProps): void => {
   switch (command) {
     case 'calculation-block':
-      insertCodeLineBelow(editor, path);
+      insertCodeLineBelow(editor, path, false, getAvailableIdentifier);
       break;
     case 'input':
       insertInputBelow(editor, path);

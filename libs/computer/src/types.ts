@@ -6,6 +6,8 @@ export interface IdentifiedBlock {
   type: 'identified-block';
   id: string;
   block: AST.Block;
+  definesVariable?: string;
+  definesTableColumn?: [string, string];
 }
 
 /** A parse error */
@@ -17,6 +19,8 @@ type BaseParseError = {
   visibleVariables?: undefined;
   // So we can use it interchangeably with IdentifiedBlock
   block?: undefined;
+  definesVariable?: string;
+  definesTableColumn?: [string, string];
 };
 export type IdentifiedError =
   | (BaseParseError & {

@@ -63,7 +63,7 @@ type DraggableBlockProps = {
 > &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 
-type OnDelete = (() => void) | false | undefined;
+type OnDelete = (() => void) | 'name-used' | 'none' | undefined;
 
 const defaultOnDelete = (
   editor: MyReactEditor,
@@ -256,7 +256,9 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         previewRef={previewRef}
         dropLine={dropLine || undefined}
         isBeingDragged={isDragging || draggingIds.has(element.id)}
-        onDelete={parentOnDelete === false ? false : onDelete}
+        onDelete={
+          typeof parentOnDelete !== 'function' ? parentOnDelete : onDelete
+        }
         onDuplicate={onDuplicate}
         onShowHide={onShowHide}
         onAdd={onAdd}

@@ -39,6 +39,7 @@ interface CodeErrorProps {
   detailMessage?: string;
   bracketError?: BracketError;
   defaultDocsMessage?: string;
+  isEmptyExpressionError?: boolean;
 }
 
 const bracketErrorMessage = (err: BracketError) => {

@@ -62,7 +62,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly draggableCss?: SerializedStyles;
 
   readonly onShowHide?: (action: 'show' | 'hide') => void;
-  readonly onDelete?: (() => void) | false;
+  readonly onDelete?: (() => void) | 'name-used' | 'none';
   readonly onDuplicate?: () => void;
   readonly onAdd?: () => void;
   readonly onPlus?: () => void;

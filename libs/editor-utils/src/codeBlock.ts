@@ -15,8 +15,11 @@ import {
 } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { Computer } from '@decipad/computer';
 
-const codeLineElement = (): MyElement =>
+const codeLineElement = (
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
+): MyElement =>
   isFlagEnabled('CODE_LINE_NAME_SEPARATED')
     ? {
         id: nanoid(),
@@ -25,7 +28,7 @@ const codeLineElement = (): MyElement =>
           {
             id: nanoid(),
             type: ELEMENT_CODE_LINE_V2_VARNAME,
-            children: [{ text: '' }],
+            children: [{ text: getAvailableIdentifier('Name', 1) }],
           },
           {
             id: nanoid(),
@@ -43,9 +46,10 @@ const codeLineElement = (): MyElement =>
 export const insertCodeLineBelow = (
   editor: MyEditor,
   path: Path,
-  select = false
+  select: boolean,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): void => {
-  insertNodes(editor, codeLineElement(), {
+  insertNodes(editor, codeLineElement(getAvailableIdentifier), {
     at: requirePathBelowBlock(editor, path),
     select,
   });
@@ -54,12 +58,13 @@ export const insertCodeLineBelow = (
 export const insertCodeLineBelowOrReplace = (
   editor: MyEditor,
   path: Path,
-  select = false
+  select: boolean,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): void => {
   const blockPath = requireBlockParentPath(editor, path);
   const isBlockEmpty = !getEditorString(editor, blockPath);
 
-  insertCodeLineBelow(editor, blockPath, select);
+  insertCodeLineBelow(editor, blockPath, select, getAvailableIdentifier);
   if (isBlockEmpty) {
     deleteText(editor, { at: blockPath });
   }

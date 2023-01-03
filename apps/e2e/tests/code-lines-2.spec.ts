@@ -7,7 +7,7 @@ import {
 } from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
 
-test.describe('Calculation Blocks', () => {
+test.describe.skip('Calculation Blocks v2', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;

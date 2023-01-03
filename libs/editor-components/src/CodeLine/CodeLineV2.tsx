@@ -43,7 +43,7 @@ import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useOnBlurNormalize } from '../hooks';
 import { useTurnIntoProps } from './useTurnIntoProps';
-import { useRevertBadVarNames } from './useRevertBadNames';
+import { useEnsureValidVariableName } from './useEnsureValidVariableName';
 
 export const CodeLineV2: PlateComponent = ({
   attributes,
@@ -138,12 +138,18 @@ export const CodeLineV2: PlateComponent = ({
     throw new Error('panic: expected only 2 children');
   }
 
+  const isNameUsed = computer.getIsVariableUsed$.use(
+    element.id,
+    getNodeString(element.children[0])
+  );
+
   return (
     <DraggableBlock
       blockKind="codeLine"
       element={element}
       {...turnIntoProps}
       {...attributes}
+      onDelete={isNameUsed ? 'name-used' : undefined}
       id={lineId}
     >
       <CodeLineTeleport
@@ -186,7 +192,7 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
 
   const varResult = useContext(VarResultContext);
 
-  const errorMessage = useRevertBadVarNames(props.element, varResult?.id);
+  const errorMessage = useEnsureValidVariableName(props.element, varResult?.id);
 
   const empty = getNodeString(props.element).trim() === '';
 

@@ -3,8 +3,22 @@ import { IdentifiedBlock } from 'libs/computer/src/types';
 
 export function statementToIdentifiedBlock(
   id: string,
-  stat: AST.Statement
+  stat: AST.Statement,
+  definesVariable?: string,
+  definesTableColumn?: string
 ): IdentifiedBlock {
+  const defs =
+    definesTableColumn && definesVariable
+      ? {
+          definesTableColumn: [definesVariable, definesTableColumn] as [
+            string,
+            string
+          ],
+        }
+      : definesVariable
+      ? { definesVariable }
+      : {};
+
   return {
     type: 'identified-block',
     id,
@@ -13,5 +27,6 @@ export function statementToIdentifiedBlock(
       type: 'block',
       args: [stat],
     },
+    ...defs,
   };
 }

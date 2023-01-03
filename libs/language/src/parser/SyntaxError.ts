@@ -3,6 +3,7 @@ import { Token } from 'moo';
 export interface ISyntaxError {
   message: string;
   token?: Token;
+  isEmptyExpressionError?: boolean;
   detailMessage?: string;
   source?: string;
   line?: number;

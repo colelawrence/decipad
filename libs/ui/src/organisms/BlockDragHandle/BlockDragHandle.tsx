@@ -75,7 +75,7 @@ interface BlockDragHandleProps {
   readonly showEyeLabel?: boolean;
   readonly showAddBlock?: boolean;
   readonly onPlus?: () => void;
-  readonly onDelete?: (() => void) | false;
+  readonly onDelete?: (() => void) | 'none' | 'name-used';
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onCopyHref?: () => void;
@@ -102,7 +102,7 @@ export const BlockDragHandle = ({
   const setNotHovered = useCallback(() => setIsHovered(false), [setIsHovered]);
 
   const onClick = useCallback(() => {
-    onDelete !== false && onChangeMenuOpen(!menuOpen);
+    onDelete !== 'none' && onChangeMenuOpen(!menuOpen);
   }, [menuOpen, onChangeMenuOpen, onDelete]);
 
   const showHidden = showEyeLabel && !isHovered;
@@ -171,12 +171,22 @@ export const BlockDragHandle = ({
             <hr css={{ color: cssVar('highlightColor') }} />
           </MenuItem>
 
-          {/* onDelete is only false when disabled by the parent component */}
-          {onDelete !== false && (
+          {/* onDelete can be disabled by the parent component */}
+          {typeof onDelete === 'function' ? (
             <MenuItem icon={<Delete />} onSelect={onDelete}>
               Delete
             </MenuItem>
-          )}
+          ) : onDelete === 'name-used' ? (
+            <MenuItem icon={<Delete />} disabled onSelect={noop}>
+              <Tooltip
+                trigger={
+                  <div css={{ color: cssVar('weakTextColor') }}>Delete</div>
+                }
+              >
+                Cannot delete because this name is used elsewhere
+              </Tooltip>
+            </MenuItem>
+          ) : null}
         </MenuList>
       )}
 

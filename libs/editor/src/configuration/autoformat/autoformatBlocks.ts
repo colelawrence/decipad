@@ -14,9 +14,10 @@ import {
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
 import { Path } from 'slate';
+import { Computer } from '@decipad/computer';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
-export const autoformatBlocks: MyAutoformatRule[] = [
+export const autoformatBlocks = (computer: Computer): MyAutoformatRule[] => [
   {
     mode: 'block',
     type: ELEMENT_H2,
@@ -62,7 +63,8 @@ export const autoformatBlocks: MyAutoformatRule[] = [
       insertCodeLineBelowOrReplace(
         editor,
         requireCollapsedSelection(editor).path,
-        true
+        true,
+        computer.getAvailableIdentifier.bind(computer)
       ),
   },
 ];

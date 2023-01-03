@@ -16,7 +16,7 @@ let editor: MyEditor;
 let plugin: MyPlatePlugin;
 beforeEach(() => {
   const computer = new Computer();
-  plugin = createAutoFormatCodeLinePlugin();
+  plugin = createAutoFormatCodeLinePlugin(computer)();
   editor = createTPlateEditor({
     plugins: [plugin, createNormalizeCodeLinePlugin(computer)],
   });

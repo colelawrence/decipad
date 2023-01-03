@@ -1,60 +1,75 @@
-import { CodeLineV2ElementVarname, useTEditorRef } from '@decipad/editor-types';
+import { MyElement, PlainText, useTEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, getNodeString, insertText } from '@udecode/plate';
 import { useSelected } from 'slate-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { useBehaviorSubject } from '@decipad/react-utils';
-import { timeout } from '@decipad/utils';
+import { noop, timeout } from '@decipad/utils';
 import { identifierRegExpGlobal } from '@decipad/computer';
 
 /**
- * Reverts a CodeLineV2's variable name to the last one if the current one is invalid
+ * Makes sure a variable name is not empty or duplicate
  *
- * Special cases if previously empty, or newly empty
+ * When that happens a new name is given to it
+ *
+ * Returns an error message meant to be placed in a tooltip.
+ * Error message becomes undefined after a while
+ *
+ * useSelected() is called within this hook, so it should
+ * be called in a slate element component
  */
-export function useRevertBadVarNames(
-  element: CodeLineV2ElementVarname,
-  blockId?: string
+export function useEnsureValidVariableName(
+  element: MyElement & { children: [PlainText] },
+  blockId?: string,
+  defaultVarName = 'Name'
 ): string | undefined {
   const editor = useTEditorRef();
   const computer = useComputer();
 
   const varName = getNodeString(element);
-  const prevVarName = useRef(varName);
 
   const [validationMessage$] = useState(
     () => new BehaviorSubject<string | undefined>(undefined)
   );
 
   useOnSlateFocusBlur(
-    useCallback(() => {
-      prevVarName.current = varName;
-    }, [varName]),
+    noop,
     useCallback(() => {
       const path = findNodePath(editor, element);
       const currentVarName = getNodeString(element);
 
       const varExists = computer.variableExists(currentVarName, blockId);
-      const varExisted = computer.variableExists(prevVarName.current, blockId);
 
-      const [shouldRevert, message] = getVariableValidationErrorMessage({
+      const message = getVariableValidationErrorMessage({
         varName: currentVarName,
-        oldVarName: prevVarName.current,
         varExists,
-        oldVarExists: varExisted,
       });
+      const shouldRename = message != null;
 
       validationMessage$.next(message);
 
       // Revert varname to previously good one
-      if (shouldRevert && path) {
+      if (shouldRename && path) {
+        const newName = computer.getAvailableIdentifier(
+          varName.replace(/\d+$/, '') || defaultVarName,
+          1
+        );
+
         // Insert text later so as to not mess with cursor
         setTimeout(() => {
-          insertText(editor, prevVarName.current, { at: path });
+          insertText(editor, newName, { at: path });
         });
       }
-    }, [editor, element, blockId, validationMessage$, computer])
+    }, [
+      editor,
+      element,
+      blockId,
+      validationMessage$,
+      defaultVarName,
+      varName,
+      computer,
+    ])
   );
 
   return useBehaviorSubject(validationMessage$, hideMessageLater);
@@ -69,42 +84,22 @@ export const variableValidationErrors = {
 /** Get whether we should revert to the previous varname, and an error message if any */
 export const getVariableValidationErrorMessage = ({
   varName,
-  oldVarName,
   varExists,
-  oldVarExists,
 }: {
   varName: string;
-  oldVarName: string;
   varExists: boolean;
-  oldVarExists: boolean;
-}): [shouldRevert: boolean, message: string | undefined] => {
+}): string | undefined => {
   const validIdentifierParts =
     varName.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
   if (validIdentifierParts !== varName) {
-    return [true, variableValidationErrors.varInvalid];
+    return variableValidationErrors.varInvalid;
   }
 
-  if (oldVarName === '') {
-    return varExists
-      ? [true, variableValidationErrors.varExists(varName)]
-      : [false, undefined];
-  }
   if (varName === '') {
-    return oldVarExists
-      ? [false, variableValidationErrors.varEmpty]
-      : [true, variableValidationErrors.varEmpty];
-  }
-  // Already existed; didn't become less valid
-  if (oldVarExists) {
-    return [
-      false,
-      varExists ? variableValidationErrors.varExists(varName) : undefined,
-    ];
+    return variableValidationErrors.varEmpty;
   }
 
-  return varExists
-    ? [true, variableValidationErrors.varExists(varName)]
-    : [false, undefined];
+  return varExists ? variableValidationErrors.varExists(varName) : undefined;
 };
 
 /** When there's a message, hide it later */
