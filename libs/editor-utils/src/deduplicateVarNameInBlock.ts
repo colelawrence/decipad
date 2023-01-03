@@ -3,7 +3,10 @@ import {
   AnyElement,
   CodeLineElement,
   CodeLineV2Element,
+  ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_TABLE,
+  ELEMENT_VARIABLE_DEF,
   TableElement,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
@@ -61,19 +64,18 @@ function deduplicateTableVarName(
   });
 }
 
-export function deduplicateVarNameInBlock<T extends AnyElement>(
-  computer: Computer,
-  el: T
-): T {
-  switch (el.type) {
-    case 'def':
-      return deduplicateVarNameInDef(computer, el) as T;
-    case 'code_line':
-      return deduplicateAssignmentVarName(computer, el) as T;
-    case ELEMENT_CODE_LINE_V2:
-      return deduplicateVarNameInCodeLineV2(computer, el) as T;
-    case 'table':
-      return deduplicateTableVarName(computer, el) as T;
-  }
-  return el;
-}
+export const deduplicateVarNameInBlock =
+  (computer: Computer) =>
+  <T extends AnyElement>(el: T): T => {
+    switch (el.type) {
+      case ELEMENT_VARIABLE_DEF:
+        return deduplicateVarNameInDef(computer, el) as T;
+      case ELEMENT_CODE_LINE:
+        return deduplicateAssignmentVarName(computer, el) as T;
+      case ELEMENT_CODE_LINE_V2:
+        return deduplicateVarNameInCodeLineV2(computer, el) as T;
+      case ELEMENT_TABLE:
+        return deduplicateTableVarName(computer, el) as T;
+    }
+    return el;
+  };

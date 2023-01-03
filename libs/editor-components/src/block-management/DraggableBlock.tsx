@@ -147,7 +147,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const onDuplicate = useCallback(() => {
       const path = findNodePath(editor, element);
       if (path) {
-        const newEl = clone(computer, element);
+        const newEl = clone(computer)(element);
         insertElements(editor, newEl, {
           at: requirePathBelowBlock(editor, path),
         });
