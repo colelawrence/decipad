@@ -526,6 +526,14 @@ summary{
   transform: scale(1.02);
 }
 
+.zoomRating {
+  transition: 0.3s all ease-in-out;
+}
+
+.zoomRating:hover {
+  transform: scale(1.3) ;
+}
+
 
 @keyframes fadeInAnimation {
   0% {
