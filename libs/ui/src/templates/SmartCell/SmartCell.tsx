@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { DragEvent, FC, useCallback } from 'react';
 import { css } from '@emotion/react';
 import type { Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
@@ -7,6 +7,7 @@ import { cssVar, p12Medium, p14Medium } from '../../primitives';
 import { CodeResult } from '../../organisms';
 
 const smartCellStyles = css(p14Medium, {
+  position: 'relative',
   whiteSpace: 'nowrap',
   textAlign: 'left',
   fontWeight: '700',
@@ -31,6 +32,14 @@ const globalStyles = css({
   fontWeight: 'bold',
 });
 
+const draggableStyles = css({
+  cursor: 'grab',
+
+  ':active': {
+    cursor: 'grabbing',
+  },
+});
+
 export interface ColumnAggregation {
   type?: Result.Result['type'];
   value?: Result.Result['value'];
@@ -42,6 +51,7 @@ export interface SmartRowProps {
   rowSpan?: number;
   colSpan?: number;
   onHover?: (hover: boolean) => void;
+  onDragStart?: (e: DragEvent) => void;
   hover?: boolean;
   alignRight?: boolean;
   global?: boolean;
@@ -50,6 +60,7 @@ export interface SmartRowProps {
 export function SmartCell({
   result,
   aggregationType,
+  onDragStart,
   rowSpan = 1,
   colSpan = 1,
   onHover = noop,
@@ -67,25 +78,27 @@ export function SmartCell({
       </td>
     );
   }
+
   return (
     <td
       css={[
         smartCellStyles,
+        onDragStart && draggableStyles,
         hover && hoverCellStyles,
         alignRight && alignRightStyles,
         global && globalStyles,
       ]}
       rowSpan={rowSpan}
       colSpan={colSpan}
+      draggable
+      onDragStart={onDragStart}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <>
-        <span css={labelStyles}>
-          {(aggregationType && `${aggregationType}: `) || null}
-        </span>
-        {result ? <CodeResult variant="inline" {...result} /> : null}
-      </>
+      <span css={labelStyles}>
+        {(aggregationType && `${aggregationType}: `) || null}
+      </span>
+      {result ? <CodeResult variant="inline" {...result} /> : null}
     </td>
   );
 }

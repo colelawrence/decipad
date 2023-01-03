@@ -28,7 +28,6 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   expandedGroups,
   onChangeExpandedGroups,
   groupLength,
-
   index,
 }) => {
   const [parentHover, setParentHover] = useState(false);
@@ -87,7 +86,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       aggregationType={aggregationType}
       onHover={onHover}
       hover={parentHover || selfHover}
-      alignRight={isCellAlignRight(element.column.type)}
+      alignRight={isCellAlignRight(element.column?.type)}
       previousColumns={element.previousColumns}
       global={element.global}
     />

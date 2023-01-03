@@ -1,4 +1,4 @@
-import { PlateComponent, RichText, MyElement } from '@decipad/editor-types';
+import { MyElement, PlateComponent, RichText } from '@decipad/editor-types';
 import {
   useComputer,
   useEditorSelector,
@@ -11,7 +11,7 @@ import { css } from '@emotion/react';
 import { Element } from 'slate';
 import { findNodePath, getNodeString } from '@udecode/plate';
 import { useCallback } from 'react';
-import { magicNumberId, getAboveNodeSafe } from '@decipad/editor-utils';
+import { getAboveNodeSafe, magicNumberId } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 

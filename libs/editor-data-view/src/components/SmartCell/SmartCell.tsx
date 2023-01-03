@@ -1,11 +1,20 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import {
+  DragEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { useComputer } from '@decipad/react-contexts';
 import { Result, SerializedType } from '@decipad/computer';
 import { debounceTime, EMPTY } from 'rxjs';
 import { css } from '@emotion/react';
 import { textify } from '@decipad/parse';
+import { useTEditorRef } from '@decipad/editor-types';
 import { maybeAggregate } from '../../utils/maybeAggregate';
+import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { AggregationKind, PreviousColumns } from '../../types';
 
 const DEBOUNCE_RESULT_MS = 500;
@@ -45,6 +54,7 @@ export const SmartCell: FC<SmartProps> = ({
   global = false,
 }: SmartProps) => {
   const computer = useComputer();
+  const editor = useTEditorRef();
   const [result, setResult] = useState<Result.Result | null>(null);
 
   const expressionFilter = useMemo(() => {
@@ -87,6 +97,15 @@ export const SmartCell: FC<SmartProps> = ({
     return () => sub.unsubscribe();
   }, [computer, expression]);
 
+  const onDragStart = useCallback(
+    (ev: DragEvent) => {
+      expression &&
+        typeof expression === 'string' &&
+        onDragStartSmartCell(editor)(expression)(ev);
+    },
+    [editor, expression]
+  );
+
   return result == null || aggregationType == null ? (
     <td css={emptyCellStyles} />
   ) : (
@@ -99,6 +118,7 @@ export const SmartCell: FC<SmartProps> = ({
       hover={hover}
       alignRight={alignRight}
       global={global}
+      onDragStart={onDragStart}
     ></UISmartCell>
   );
 };
