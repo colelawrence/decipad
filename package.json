@@ -177,7 +177,7 @@
     "oauth": "0.10.0",
     "open": "^8.4.0",
     "p-series": "2.1.0",
-    "patch-package": "6.4.7",
+    "patch-package": "6.5.1",
     "pluralize": "8.0.0",
     "polished": "4.2.2",
     "postinstall-postinstall": "2.1.0",
