@@ -201,6 +201,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
         {
           right: readOnly && authed ? '16px' : '64px',
         },
+        !canUndo && readOnly && { display: 'none' },
       ]}
     >
       <div css={[buttonStyles, canUndo && activeButtonStyles]}>
