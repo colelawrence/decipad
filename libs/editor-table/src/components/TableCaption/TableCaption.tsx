@@ -5,9 +5,12 @@ import {
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useEnsureValidVariableName,
+} from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { EditableTableCaption } from '@decipad/ui';
+import { EditableTableCaption, Tooltip } from '@decipad/ui';
 import {
   findNodePath,
   getAboveNode,
@@ -38,6 +41,10 @@ export const TableCaption: PlateComponent = ({
     },
   });
 
+  // ensure name is unique
+  const varNameElement = element.children[0];
+  const tooltip = useEnsureValidVariableName(varNameElement, parent?.[0].id);
+
   const onAddDataViewButtonPress = useCallback(() => {
     if (!parent) {
       return;
@@ -56,7 +63,7 @@ export const TableCaption: PlateComponent = ({
     );
   }, [editor, element, parent, path]);
 
-  return (
+  const caption = (
     <div {...attributes}>
       <EditableTableCaption
         readOnly={readOnly}
@@ -70,5 +77,13 @@ export const TableCaption: PlateComponent = ({
         {children}
       </EditableTableCaption>
     </div>
+  );
+
+  return tooltip ? (
+    <Tooltip side="left" hoverOnly open trigger={caption}>
+      {tooltip}
+    </Tooltip>
+  ) : (
+    caption
   );
 };

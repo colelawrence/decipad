@@ -12,6 +12,7 @@ import {
   assertElementType,
   useNodeText,
   insertNodes,
+  useEnsureValidVariableName,
 } from '@decipad/editor-utils';
 import {
   useComputer,
@@ -43,7 +44,6 @@ import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useOnBlurNormalize } from '../hooks';
 import { useTurnIntoProps } from './useTurnIntoProps';
-import { useEnsureValidVariableName } from './useEnsureValidVariableName';
 
 export const CodeLineV2: PlateComponent = ({
   attributes,

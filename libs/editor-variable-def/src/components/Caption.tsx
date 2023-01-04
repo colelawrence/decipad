@@ -1,11 +1,21 @@
-import { Caption as UICaption } from '@decipad/ui';
+import { Caption as UICaption, Tooltip } from '@decipad/ui';
 import {
   ELEMENT_CAPTION,
+  ELEMENT_VARIABLE_DEF,
   PlateComponent,
   useTEditorRef,
+  VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  getNodeString,
+  findNodePath,
+  getAboveNode,
+  isElement,
+} from '@udecode/plate';
+import {
+  useElementMutatorCallback,
+  useEnsureValidVariableName,
+} from '@decipad/editor-utils';
 import { UserIconKey } from 'libs/ui/src/utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useVariableEditorContext } from './VariableEditorContext';
@@ -24,7 +34,17 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const isEditable = !useIsEditorReadOnly();
   const { color } = useVariableEditorContext();
 
-  return (
+  // ensure variable name is unique
+  const path = findNodePath(editor, element);
+  const parent = getAboveNode<VariableDefinitionElement>(editor, {
+    at: path,
+    match: (node) => {
+      return isElement(node) && node.type === ELEMENT_VARIABLE_DEF;
+    },
+  });
+  const tooltip = useEnsureValidVariableName(element, parent?.[0].id);
+
+  const caption = (
     <div
       {...attributes}
       contentEditable={isEditable}
@@ -40,5 +60,13 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
         {children}
       </UICaption>
     </div>
+  );
+
+  return tooltip ? (
+    <Tooltip side="left" hoverOnly open trigger={caption}>
+      {tooltip}
+    </Tooltip>
+  ) : (
+    caption
   );
 };

@@ -13,6 +13,7 @@
     { "path": "../format" },
     { "path": "../parse" },
     { "path": "../fetch" },
-    { "path": "../client-events" }
+    { "path": "../client-events" },
+    { "path": "../react-utils" }
   ]
 }

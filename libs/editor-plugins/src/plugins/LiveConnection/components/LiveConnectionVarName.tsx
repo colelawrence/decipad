@@ -4,9 +4,13 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, useNodePath } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useEnsureValidVariableName,
+  useNodePath,
+} from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
-import { EditableLiveDataCaption } from '@decipad/ui';
+import { EditableLiveDataCaption, Tooltip } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { getNodeString, getParentNode } from '@udecode/plate';
 import pluralize from 'pluralize';
@@ -46,8 +50,11 @@ export const LiveConnectionVarName: PlateComponent = ({
     };
   }, [parent]);
 
-  return (
-    <div {...attributes} contentEditable={false}>
+  // ensure var name is unique
+  const tooltip = useEnsureValidVariableName(element, parent?.[0].id);
+
+  const caption = (
+    <div {...attributes}>
       <EditableLiveDataCaption
         source={sourceName}
         url={url}
@@ -57,5 +64,13 @@ export const LiveConnectionVarName: PlateComponent = ({
         {children}
       </EditableLiveDataCaption>
     </div>
+  );
+
+  return tooltip ? (
+    <Tooltip side="left" hoverOnly open trigger={caption}>
+      {tooltip}
+    </Tooltip>
+  ) : (
+    caption
   );
 };
