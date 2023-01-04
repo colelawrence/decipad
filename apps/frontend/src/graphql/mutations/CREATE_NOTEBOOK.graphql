@@ -1,5 +1,9 @@
-mutation CreateNotebook($workspaceId: ID!, $name: String!) {
-  createPad(workspaceId: $workspaceId, pad: { name: $name }) {
+mutation CreateNotebook($workspaceId: ID!, $name: String!, $sectionId: ID) {
+  createPad(
+    workspaceId: $workspaceId
+    pad: { name: $name }
+    sectionId: $sectionId
+  ) {
     ...EditorNotebook
     ...WorkspaceNotebook
   }

@@ -1,0 +1,11 @@
+mutation CreateSection($workspaceId: ID!, $name: String!, $color: String!) {
+  addSectionToWorkspace(
+    workspaceId: $workspaceId
+    section: { name: $name, color: $color }
+  ) {
+    id
+    name
+    color
+    createdAt
+  }
+}

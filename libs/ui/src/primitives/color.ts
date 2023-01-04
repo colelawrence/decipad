@@ -6,6 +6,7 @@ interface Color {
 
 export interface OpaqueColor extends Color {
   readonly rgb: string;
+  readonly hex: string;
 }
 export function color(red: number, green: number, blue: number): OpaqueColor {
   return {
@@ -13,7 +14,38 @@ export function color(red: number, green: number, blue: number): OpaqueColor {
     green,
     blue,
     rgb: `rgb(${red}, ${green}, ${blue})`,
+    hex: opaqueColorToHex({ red, green, blue }),
   };
+}
+
+function componentToHex(c: number): string {
+  const hex = c.toString(16);
+  return hex.length === 1 ? `0${hex}` : hex;
+}
+
+export function hexToOpaqueColor(hex: string): OpaqueColor | null {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return null;
+  const [red, green, blue] = [
+    parseInt(result[1], 16),
+    parseInt(result[2], 16),
+    parseInt(result[3], 16),
+  ];
+  return {
+    red,
+    green,
+    blue,
+    rgb: `rgb(${red}, ${green}, ${blue})`,
+    hex,
+  };
+}
+
+export function opaqueColorToHex(
+  clr: Pick<OpaqueColor, 'red' | 'green' | 'blue'>
+): string {
+  return `#${componentToHex(clr.red)}${componentToHex(
+    clr.green
+  )}${componentToHex(clr.blue)}`;
 }
 
 export interface TransparentColor extends Color {

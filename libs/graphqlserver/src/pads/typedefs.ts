@@ -6,6 +6,7 @@ export default gql`
     icon: String
     status: String
     archived: Boolean
+    section_id: String
     tags: [String!]
   }
 
@@ -36,6 +37,7 @@ export default gql`
     icon: String
     status: String
     archived: Boolean
+    section: Section
     padConnectionParams: PadConnectionParams!
     initialState: String
     snapshots: [PadSnapshot!]!
@@ -68,7 +70,7 @@ export default gql`
   }
 
   extend type Mutation {
-    createPad(workspaceId: ID!, pad: PadInput!): Pad!
+    createPad(workspaceId: ID!, pad: PadInput!, sectionId: ID): Pad!
     updatePad(id: ID!, pad: PadInput!): Pad!
     removePad(id: ID!): Boolean
     duplicatePad(id: ID!, targetWorkspace: ID!, document: String): Pad!
@@ -114,5 +116,9 @@ export default gql`
 
   extend type Subscription {
     padsChanged(workspaceId: ID!): PadChanges!
+  }
+
+  extend type Section {
+    pads: [Pad!]!
   }
 `;

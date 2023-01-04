@@ -5,6 +5,8 @@ import {
   PadRecord,
   PageInput,
   RoleRecord,
+  Section,
+  SectionRecord,
   User,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
@@ -50,6 +52,7 @@ const padResource = Resource({
     status: pad.status,
     archived: pad.archived,
     workspace_id: workspaceId,
+    section_id: pad.section_id,
     createdAt: timestamp(),
   }),
 
@@ -102,7 +105,28 @@ const resolvers = {
   },
 
   Mutation: {
-    createPad: padResource.create,
+    async createPad(
+      _: unknown,
+      opts: { workspaceId: ID; pad: PadInput; sectionId: ID },
+      context: GraphqlContext
+    ) {
+      const resource = `/workspaces/${opts.workspaceId}`;
+      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+
+      const notebook = opts.pad;
+
+      if (opts.sectionId) {
+        notebook.section_id = opts.sectionId;
+      }
+
+      const newPad = await padResource.create(
+        _,
+        { workspaceId: opts.workspaceId, pad: notebook },
+        context
+      );
+
+      return newPad;
+    },
     updatePad: padResource.update,
     removePad: padResource.remove,
     sharePadWithRole: padResource.shareWithRole,
@@ -163,6 +187,14 @@ const resolvers = {
       return data.workspaces.get({ id: pad.workspace_id });
     },
 
+    async section(pad: PadRecord): Promise<SectionRecord | undefined> {
+      if (!pad.section_id) {
+        return;
+      }
+      const data = await tables();
+      return data.sections.get({ id: pad.section_id });
+    },
+
     async padConnectionParams(
       pad: PadRecord,
       __: unknown,
@@ -200,6 +232,23 @@ const resolvers = {
     async role({ role_id }: { role_id: ID }): Promise<RoleRecord | undefined> {
       const data = await tables();
       return data.workspaceroles.get({ id: role_id });
+    },
+  },
+
+  Section: {
+    async pads(section: Section): Promise<PadRecord[]> {
+      const data = await tables();
+
+      const query = {
+        IndexName: 'bySection',
+        KeyConditionExpression: 'section_id = :section_id',
+        ExpressionAttributeValues: {
+          ':section_id': section.id,
+        },
+      };
+
+      const padIds = (await data.pads.query(query)).Items.map((e) => e.id);
+      return data.pads.batchGet(padIds);
     },
   },
 

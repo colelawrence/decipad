@@ -1,0 +1,12 @@
+mutation UpdateSection(
+  $workspaceId: ID!
+  $sectionId: ID!
+  $name: String!
+  $color: String!
+) {
+  updateSectionInWorkspace(
+    workspaceId: $workspaceId
+    sectionId: $sectionId
+    section: { name: $name, color: $color }
+  )
+}

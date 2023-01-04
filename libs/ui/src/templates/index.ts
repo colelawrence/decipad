@@ -1,3 +1,4 @@
+export { CreateOrEditSectionModal } from './CreateOrEditSectionModal/CreateOrEditSectionModal';
 export { CreateWorkspaceModal } from './CreateWorkspaceModal/CreateWorkspaceModal';
 export { DashboardPlaceholder } from './DashboardPlaceholder/DashboardPlaceholder';
 export { DashboardSidebar } from './DashboardSidebar/DashboardSidebar';

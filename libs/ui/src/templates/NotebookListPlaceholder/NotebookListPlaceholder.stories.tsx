@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { NotebookListPlaceholder } from './NotebookListPlaceholder';
 
 export default {
-  title: 'Templates / Dashboard / Notebook List / Placeholder',
+  title: 'Templates / Dashboard / Notebook List / Item Placeholder',
   component: NotebookListPlaceholder,
 } as Meta;
 

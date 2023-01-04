@@ -27,6 +27,7 @@
     "graphqlserver",
     "groupable",
     "indexeddb",
+    "jsurl",
     "lambdawebsocket",
     "NEXTAUTH",
     "nrwl",

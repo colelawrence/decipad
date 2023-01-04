@@ -5,9 +5,11 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { AnalyticsProvider } from './AnalyticsProvider';
-import { IntercomProvider } from './IntercomProvider';
 import { GraphqlProvider } from './GraphqlProvider';
+import { IntercomProvider } from './IntercomProvider';
 import { UpdatesHandler } from './UpdatesHandler';
 
 const backendForDND = 'ontouchstart' in window ? TouchBackend : HTML5Backend;
@@ -16,18 +18,20 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <SessionProvider>
       <BrowserRouter>
-        <GraphqlProvider>
-          <AnalyticsProvider>
-            <IntercomProvider>
-              <DndProvider backend={backendForDND}>
-                <ToastDisplay>
-                  <GlobalStyles>{children}</GlobalStyles>
-                  <UpdatesHandler />
-                </ToastDisplay>
-              </DndProvider>
-            </IntercomProvider>
-          </AnalyticsProvider>
-        </GraphqlProvider>
+        <QueryParamProvider adapter={ReactRouter6Adapter}>
+          <GraphqlProvider>
+            <AnalyticsProvider>
+              <IntercomProvider>
+                <DndProvider backend={backendForDND}>
+                  <ToastDisplay>
+                    <GlobalStyles>{children}</GlobalStyles>
+                    <UpdatesHandler />
+                  </ToastDisplay>
+                </DndProvider>
+              </IntercomProvider>
+            </AnalyticsProvider>
+          </GraphqlProvider>
+        </QueryParamProvider>
       </BrowserRouter>
     </SessionProvider>
   );

@@ -1,3 +1,4 @@
+import { noop } from '@decipad/utils';
 import { Meta, Story } from '@storybook/react';
 import { WorkspaceNavigation } from './WorkspaceNavigation';
 
@@ -7,5 +8,10 @@ export default {
 } as Meta;
 
 export const Normal: Story = () => (
-  <WorkspaceNavigation activeWorkspace={{ id: '42' }} />
+  <WorkspaceNavigation
+    onDeleteSection={noop}
+    onCreateSection={() => new Promise(noop)}
+    onUpdateSection={() => new Promise(noop)}
+    activeWorkspace={{ id: '42', sections: [] }}
+  />
 );

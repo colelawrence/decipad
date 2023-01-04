@@ -2,27 +2,8 @@ import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { FC } from 'react';
 import { normalOpacity, transparency } from '../../primitives';
-import { baseSwatches } from '../../utils';
+import { statusColors, TColorStatus } from '../../utils';
 import { ColorStatusCircle } from './ColorStatusCircle';
-
-export type TColorStatus =
-  | 'No Status'
-  | 'To Do'
-  | 'In Progress'
-  | 'Review'
-  | 'Done';
-
-export const statusColors = {
-  'No Status': baseSwatches.Catskill,
-  'To Do': baseSwatches.Malibu,
-  'In Progress': baseSwatches.Perfume,
-  Review: baseSwatches.Grapefruit,
-  Done: baseSwatches.Sulu,
-};
-
-export const AvailableColorStatus: TColorStatus[] = Object.keys(
-  statusColors
-) as TColorStatus[];
 
 export type ColorStatusProps = {
   readonly name: TColorStatus;
@@ -33,7 +14,7 @@ export type ColorStatusProps = {
 };
 
 export const ColorStatus = ({
-  name = 'No Status',
+  name = 'draft',
   selected = false,
   onChangeStatus = noop,
   toggleActionsOpen = noop,
@@ -41,7 +22,6 @@ export const ColorStatus = ({
   return (
     <button
       css={[
-        { display: 'flex', alignItems: 'center', gap: '5px' },
         selected &&
           css({
             backgroundColor: transparency(statusColors[name], normalOpacity)

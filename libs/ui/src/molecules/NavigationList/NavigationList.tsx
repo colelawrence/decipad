@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { WorkspaceItem } from '..';
@@ -11,13 +11,15 @@ const styles = css({
 
 interface NavigationListProps {
   readonly children: ReactNode;
+  readonly wrapperStyles?: SerializedStyles;
 }
 
 export const NavigationList = ({
   children,
+  wrapperStyles,
 }: NavigationListProps): ReturnType<FC> => {
   return (
-    <ul css={styles}>
+    <ul css={[styles, wrapperStyles]}>
       {Children.map(children, (child) => {
         if (child == null) {
           return null;

@@ -109,6 +109,13 @@ export type Pad = {
   attachments?: Attachment[];
 };
 
+export type Section = {
+  id: ID;
+  name: string;
+  color: string;
+  workspace_id: ID;
+};
+
 export type PadSnapshot = {
   id: ID;
   snapshotName: string;
@@ -122,7 +129,13 @@ export type PadInput = {
   name: string;
   icon?: string;
   status?: string;
+  section_id?: string;
   archived?: boolean;
+};
+
+export type SectionInput = {
+  name: string;
+  color: string;
 };
 
 export type VerificationRequest = {
@@ -296,7 +309,15 @@ export interface PadRecord extends TableRecordBase {
   isPublic?: boolean;
   icon?: string;
   createdAt: number;
+  section_id?: string;
   archived?: boolean;
+}
+
+export interface SectionRecord extends TableRecordBase {
+  name: string;
+  color: string;
+  workspace_id: ID;
+  createdAt: number;
 }
 
 export interface WorkspaceRecord extends TableRecordBase {
@@ -315,7 +336,6 @@ export interface UserTaggedResourceRecord extends TableRecordBase {
   workspace_id: ID;
   resource_uri: string;
 }
-
 export interface UserTagRecord extends TableRecordBase {
   workspace_id: ID;
   user_id: ID;
@@ -480,6 +500,7 @@ export interface EnhancedDataTables {
   permissions: EnhancedDataTable<PermissionRecord>;
   workspaces: EnhancedDataTable<WorkspaceRecord>;
   pads: EnhancedDataTable<PadRecord>;
+  sections: EnhancedDataTable<SectionRecord>;
   workspaceroles: EnhancedDataTable<RoleRecord>;
   invites: EnhancedDataTable<InviteRecord>;
   futurefileattachments: EnhancedDataTable<FutureFileAttachmentRecord>;
@@ -513,6 +534,7 @@ export type ConcreteRecord =
   | UserKeyRecord
   | PermissionRecord
   | WorkspaceRecord
+  | SectionRecord
   | PadRecord
   | RoleRecord
   | InviteRecord

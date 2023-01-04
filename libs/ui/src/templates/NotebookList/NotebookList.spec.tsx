@@ -57,14 +57,14 @@ it('renders a list of notebooks', () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
         ]}
       />
@@ -89,14 +89,14 @@ it('renders an item with actions open on top', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
         ]}
       />
@@ -124,14 +124,14 @@ it('only allows one open actions menu at a time', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
         ]}
       />
@@ -159,14 +159,14 @@ it('emits duplicate events', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'review',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'done',
           },
         ]}
         onDuplicate={handleDuplicate}
@@ -192,14 +192,14 @@ it('emits delete events', async () => {
             name: 'First',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
           {
             id: '1',
             name: 'Second',
             icon: 'Rocket',
             iconColor: 'Catskill',
-            status: 'To Do',
+            status: 'draft',
           },
         ]}
         onDelete={handleDelete}

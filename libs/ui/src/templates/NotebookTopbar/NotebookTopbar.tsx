@@ -1,12 +1,13 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { docs, workspaces } from '@decipad/routing';
+import { docs } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useCallback, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
-import { Deci, LeftArrow, Sheet } from '../../icons';
+import { Deci, LeftArrow, Sparkles } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookPublishingPopUp } from '../../organisms';
 import { cssVar, p14Medium, smallScreenQuery } from '../../primitives';
@@ -98,6 +99,7 @@ export const NotebookTopbar = ({
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
   const { status: sessionStatus } = useSession();
+  const navigate = useNavigate();
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const clientEvent = useContext(ClientEventsContext);
   const onGalleryClick = useCallback(
@@ -121,9 +123,7 @@ export const NotebookTopbar = ({
       <div css={leftSideStyles}>
         {isWriter && workspace ? (
           <div css={{ width: '32px', display: 'grid' }}>
-            <IconButton
-              href={workspaces({}).workspace({ workspaceId: workspace.id }).$}
-            >
+            <IconButton onClick={() => navigate(-1)}>
               <LeftArrow />
             </IconButton>
           </div>
@@ -163,9 +163,9 @@ export const NotebookTopbar = ({
                   }}
                 >
                   <span css={iconStyles}>
-                    <Sheet />
+                    <Sparkles />
                   </span>
-                  Gallery
+                  Templates
                 </span>
               </Anchor>
             </em>

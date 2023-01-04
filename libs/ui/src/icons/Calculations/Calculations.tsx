@@ -4,7 +4,7 @@ import { offWhite, orange100, orange300, orange500 } from '../../primitives';
 export const Calculations = (): ReturnType<FC> => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>SlashCommandCal</title>
-    <rect width={40} height={40} rx={6} fill={orange100.rgb} />
+    <rect width="40" height="40" rx="6" fill={orange100.rgb} />
     <path
       d="M23 28.3125V24.5625C23 23.6996 23.6996 23 24.5625 23H28.3125C29.1754 23 29.875 23.6996 29.875 24.5625V28.3125C29.875 29.1754 29.1754 29.875 28.3125 29.875H24.5625C23.6996 29.875 23 29.1754 23 28.3125Z"
       fill="white"

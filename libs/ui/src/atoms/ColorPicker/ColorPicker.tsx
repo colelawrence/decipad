@@ -2,12 +2,12 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Check } from '../../icons';
 import {
-  offBlack,
   cssVar,
   normalOpacity,
-  weakOpacity,
-  transparency,
+  offBlack,
   OpaqueColor,
+  transparency,
+  weakOpacity,
 } from '../../primitives';
 
 const styles = css({
@@ -39,7 +39,7 @@ export const ColorPicker = ({
       css={[
         styles,
         {
-          backgroundColor: color.rgb,
+          backgroundColor: color.hex,
           border: `1px solid ${cssVar('backgroundColor')}`,
           boxShadow: `inset 0 0 0 1px ${
             transparency(offBlack, weakOpacity).rgba

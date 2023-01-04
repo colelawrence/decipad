@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Home';
+import { ellipsisSelector } from '../utils/page/Workspace';
 import { withTestUser } from '../utils/src';
 
 test.describe('Workspace flows', () => {
@@ -10,29 +11,11 @@ test.describe('Workspace flows', () => {
     await page.waitForSelector('text=/Workspace/i');
   });
 
-  test('You can list published notebooks', async ({ page }) => {
-    const link = await page
-      .locator('main a[href] >> nth=1')
-      .getAttribute('href');
-    expect(typeof link).toBe('string');
-    await page.goto(link || '');
-    await page.getByRole('button', { name: 'Publish' }).click();
-    await page.locator('[aria-roledescription="enable publishing"]').click();
-    const workspaceLink = await page
-      .locator('header a[href] >> nth=0')
-      .getAttribute('href');
-    await page.goto(workspaceLink || '');
-    await page.getByRole('link', { name: 'Globe Published' }).click();
-    const archivedDocuments = await page.locator('main a[href]').count();
-    // document plus cta link
-    expect(archivedDocuments).toBe(2);
-  });
-
   test('Archive & delete a notebook', async ({ page }) => {
-    await page.click('main div[type=button] >> nth=0'); // click first ellipsis
+    await page.click(ellipsisSelector(0)); // click first ellipsis
     await page.click('div[role="menuitem"] span:has-text("Archive")');
     await page.click('aside nav > ul > li a span:has-text("Archived")');
-    await page.click('main div[type=button] >> nth=0'); // click first ellipsis
+    await page.click(ellipsisSelector(0)); // click first ellipsis
     await page.click('div[role="menuitem"] span:has-text("Delete")');
     await page.waitForSelector('button:has-text("Start with new notebook")');
   });

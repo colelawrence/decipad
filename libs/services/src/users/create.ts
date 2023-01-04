@@ -1,6 +1,7 @@
 import { track } from '@decipad/backend-analytics';
 import {
   PadRecord,
+  SectionRecord,
   User,
   UserInput,
   UserWithSecret,
@@ -20,6 +21,7 @@ export interface UserCreationResult {
   user: UserWithSecret;
   workspaces: WorkspaceRecord[];
   notebooks: PadRecord[];
+  sections: SectionRecord[];
 }
 
 async function createInitialWorkspace(
@@ -54,9 +56,25 @@ async function createInitialWorkspace(
   }
   /* eslint-enable no-await-in-loop */
 
+  const data = await tables();
+
+  const sections = [];
+  /* eslint-disable no-await-in-loop */
+  for (const section of initialWorkspace.sections) {
+    const newSection = {
+      ...section,
+      id: nanoid(),
+      workspace_id: workspace.id,
+      createdAt: timestamp(),
+    };
+    await data.sections.put(newSection);
+    sections.push(newSection);
+  }
+
   return {
     workspaces: [workspace],
     notebooks,
+    sections,
   };
 }
 
@@ -110,6 +128,7 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
     user: newUser,
     workspaces,
     notebooks,
+    sections: [],
   };
 }
 

@@ -92,6 +92,8 @@ export type KeyValue = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addNotebookToSection?: Maybe<Scalars['Boolean']>;
+  addSectionToWorkspace?: Maybe<Section>;
   addTagToPad?: Maybe<Scalars['Boolean']>;
   attachFileToPad?: Maybe<Attachment>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
@@ -110,6 +112,7 @@ export type Mutation = {
   removeExternalDataSource?: Maybe<Scalars['Boolean']>;
   removePad?: Maybe<Scalars['Boolean']>;
   removeRole?: Maybe<Scalars['Boolean']>;
+  removeSectionFromWorkspace?: Maybe<Scalars['Boolean']>;
   removeSelfFromRole?: Maybe<Scalars['Boolean']>;
   removeTagFromPad?: Maybe<Scalars['Boolean']>;
   removeUserFromRole?: Maybe<Scalars['Boolean']>;
@@ -131,8 +134,21 @@ export type Mutation = {
   unsharePadWithUser?: Maybe<Scalars['Boolean']>;
   updateExternalDataSource?: Maybe<ExternalDataSource>;
   updatePad: Pad;
+  updateSectionInWorkspace?: Maybe<Scalars['Boolean']>;
   updateSelf: User;
   updateWorkspace: Workspace;
+};
+
+
+export type MutationAddNotebookToSectionArgs = {
+  notebookId: Scalars['ID'];
+  sectionId: Scalars['ID'];
+};
+
+
+export type MutationAddSectionToWorkspaceArgs = {
+  section: SectionInput;
+  workspaceId: Scalars['ID'];
 };
 
 
@@ -160,6 +176,7 @@ export type MutationCreateOrUpdateSnapshotArgs = {
 
 export type MutationCreatePadArgs = {
   pad: PadInput;
+  sectionId?: InputMaybe<Scalars['ID']>;
   workspaceId: Scalars['ID'];
 };
 
@@ -226,6 +243,12 @@ export type MutationRemovePadArgs = {
 
 export type MutationRemoveRoleArgs = {
   roleId: Scalars['ID'];
+};
+
+
+export type MutationRemoveSectionFromWorkspaceArgs = {
+  sectionId: Scalars['ID'];
+  workspaceId: Scalars['ID'];
 };
 
 
@@ -361,6 +384,13 @@ export type MutationUpdatePadArgs = {
 };
 
 
+export type MutationUpdateSectionInWorkspaceArgs = {
+  section: SectionInput;
+  sectionId: Scalars['ID'];
+  workspaceId: Scalars['ID'];
+};
+
+
 export type MutationUpdateSelfArgs = {
   props: UserInput;
 };
@@ -384,6 +414,7 @@ export type Pad = {
   myPermissionType?: Maybe<PermissionType>;
   name: Scalars['String'];
   padConnectionParams: PadConnectionParams;
+  section?: Maybe<Section>;
   snapshots: Array<PadSnapshot>;
   status?: Maybe<Scalars['String']>;
   tags: Array<Scalars['String']>;
@@ -414,6 +445,7 @@ export type PadInput = {
   archived?: InputMaybe<Scalars['Boolean']>;
   icon?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
+  section_id?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
 };
@@ -477,6 +509,7 @@ export type Query = {
   me?: Maybe<User>;
   pads: PagedPadResult;
   padsByTag: PagedPadResult;
+  sections: Array<Section>;
   self?: Maybe<User>;
   selfFulfilledGoals: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
@@ -526,6 +559,11 @@ export type QueryPadsByTagArgs = {
 };
 
 
+export type QuerySectionsArgs = {
+  workspaceId: Scalars['ID'];
+};
+
+
 export type QueryTagsArgs = {
   workspaceId: Scalars['ID'];
 };
@@ -566,6 +604,28 @@ export type SecretAccess = {
   secret: Scalars['String'];
 };
 
+export type Section = {
+  __typename?: 'Section';
+  color: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  pads: Array<Pad>;
+  workspace_id: Scalars['ID'];
+};
+
+export type SectionChanges = {
+  __typename?: 'SectionChanges';
+  added: Array<Section>;
+  removed: Array<Scalars['ID']>;
+  updated: Array<Section>;
+};
+
+export type SectionInput = {
+  color?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type ShareInvitation = {
   __typename?: 'ShareInvitation';
   email?: Maybe<Scalars['String']>;
@@ -603,6 +663,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   hello?: Maybe<Scalars['String']>;
   padsChanged: PadChanges;
+  sectionsChanged: SectionChanges;
   subscribeToNothing?: Maybe<Scalars['Boolean']>;
   tagsChanged: TagChanges;
   workspacesChanged: WorkspacesChanges;
@@ -610,6 +671,11 @@ export type Subscription = {
 
 
 export type SubscriptionPadsChangedArgs = {
+  workspaceId: Scalars['ID'];
+};
+
+
+export type SubscriptionSectionsChangedArgs = {
   workspaceId: Scalars['ID'];
 };
 
@@ -666,6 +732,7 @@ export type Workspace = {
   name: Scalars['String'];
   pads: PagedPadResult;
   roles: Array<Role>;
+  sections: Array<Section>;
 };
 
 
@@ -687,10 +754,20 @@ export type WorkspacesChanges = {
 export type CreateNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
   name: Scalars['String'];
+  sectionId?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
+export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
+
+export type CreateSectionMutationVariables = Exact<{
+  workspaceId: Scalars['ID'];
+  name: Scalars['String'];
+  color: Scalars['String'];
+}>;
+
+
+export type CreateSectionMutation = { __typename?: 'Mutation', addSectionToWorkspace?: { __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null } | null };
 
 export type CreateOrUpdateNotebookSnapshotMutationVariables = Exact<{
   notebookId: Scalars['ID'];
@@ -705,7 +782,7 @@ export type CreateWorkspaceMutationVariables = Exact<{
 }>;
 
 
-export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null }> } } };
+export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }> } };
 
 export type DeleteNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -713,6 +790,14 @@ export type DeleteNotebookMutationVariables = Exact<{
 
 
 export type DeleteNotebookMutation = { __typename?: 'Mutation', removePad?: boolean | null };
+
+export type DeleteSectionMutationVariables = Exact<{
+  workspaceId: Scalars['ID'];
+  sectionId: Scalars['ID'];
+}>;
+
+
+export type DeleteSectionMutation = { __typename?: 'Mutation', removeSectionFromWorkspace?: boolean | null };
 
 export type DeleteWorkspaceMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -728,7 +813,7 @@ export type DuplicateNotebookMutationVariables = Exact<{
 }>;
 
 
-export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
+export type DuplicateNotebookMutation = { __typename?: 'Mutation', duplicatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
 export type FulfilGoalMutationVariables = Exact<{
   props: GoalFulfilmentInput;
@@ -743,7 +828,7 @@ export type ImportNotebookMutationVariables = Exact<{
 }>;
 
 
-export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
+export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
 export type RenameNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -823,6 +908,24 @@ export type UpdateNotebookStatusMutationVariables = Exact<{
 
 export type UpdateNotebookStatusMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
 
+export type UpdateSectionMutationVariables = Exact<{
+  workspaceId: Scalars['ID'];
+  sectionId: Scalars['ID'];
+  name: Scalars['String'];
+  color: Scalars['String'];
+}>;
+
+
+export type UpdateSectionMutation = { __typename?: 'Mutation', updateSectionInWorkspace?: boolean | null };
+
+export type UpdateSectionAddNotebookMutationVariables = Exact<{
+  sectionId: Scalars['ID'];
+  notebookId: Scalars['ID'];
+}>;
+
+
+export type UpdateSectionAddNotebookMutation = { __typename?: 'Mutation', addNotebookToSection?: boolean | null };
+
 export type UpdateUserMutationVariables = Exact<{
   props: UserInput;
 }>;
@@ -854,14 +957,16 @@ export type GetWorkspacesIDsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetWorkspacesIDsQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
 
-export type WorkspaceNotebookFragment = { __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null };
+export type WorkspaceNotebookFragment = { __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null };
 
-export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null }> } };
+export type WorkspaceSectionFragment = { __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> };
+
+export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }> };
 
 export type GetWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null }> } }> };
+export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }> }> };
 
 export const NotebookSnapshotFragmentDoc = gql`
     fragment NotebookSnapshot on PadSnapshot {
@@ -918,8 +1023,23 @@ export const WorkspaceNotebookFragmentDoc = gql`
   createdAt
   archived
   isPublic
+  section {
+    id
+    name
+  }
 }
     `;
+export const WorkspaceSectionFragmentDoc = gql`
+    fragment WorkspaceSection on Section {
+  id
+  name
+  color
+  pads {
+    ...WorkspaceNotebook
+  }
+  createdAt
+}
+    ${WorkspaceNotebookFragmentDoc}`;
 export const DashboardWorkspaceFragmentDoc = gql`
     fragment DashboardWorkspace on Workspace {
   id
@@ -929,11 +1049,15 @@ export const DashboardWorkspaceFragmentDoc = gql`
       ...WorkspaceNotebook
     }
   }
+  sections {
+    ...WorkspaceSection
+  }
 }
-    ${WorkspaceNotebookFragmentDoc}`;
+    ${WorkspaceNotebookFragmentDoc}
+${WorkspaceSectionFragmentDoc}`;
 export const CreateNotebookDocument = gql`
-    mutation CreateNotebook($workspaceId: ID!, $name: String!) {
-  createPad(workspaceId: $workspaceId, pad: {name: $name}) {
+    mutation CreateNotebook($workspaceId: ID!, $name: String!, $sectionId: ID) {
+  createPad(workspaceId: $workspaceId, pad: {name: $name}, sectionId: $sectionId) {
     ...EditorNotebook
     ...WorkspaceNotebook
   }
@@ -943,6 +1067,23 @@ ${WorkspaceNotebookFragmentDoc}`;
 
 export function useCreateNotebookMutation() {
   return Urql.useMutation<CreateNotebookMutation, CreateNotebookMutationVariables>(CreateNotebookDocument);
+};
+export const CreateSectionDocument = gql`
+    mutation CreateSection($workspaceId: ID!, $name: String!, $color: String!) {
+  addSectionToWorkspace(
+    workspaceId: $workspaceId
+    section: {name: $name, color: $color}
+  ) {
+    id
+    name
+    color
+    createdAt
+  }
+}
+    `;
+
+export function useCreateSectionMutation() {
+  return Urql.useMutation<CreateSectionMutation, CreateSectionMutationVariables>(CreateSectionDocument);
 };
 export const CreateOrUpdateNotebookSnapshotDocument = gql`
     mutation CreateOrUpdateNotebookSnapshot($notebookId: ID!, $snapshotName: String!) {
@@ -977,6 +1118,15 @@ export const DeleteNotebookDocument = gql`
 
 export function useDeleteNotebookMutation() {
   return Urql.useMutation<DeleteNotebookMutation, DeleteNotebookMutationVariables>(DeleteNotebookDocument);
+};
+export const DeleteSectionDocument = gql`
+    mutation DeleteSection($workspaceId: ID!, $sectionId: ID!) {
+  removeSectionFromWorkspace(workspaceId: $workspaceId, sectionId: $sectionId)
+}
+    `;
+
+export function useDeleteSectionMutation() {
+  return Urql.useMutation<DeleteSectionMutation, DeleteSectionMutationVariables>(DeleteSectionDocument);
 };
 export const DeleteWorkspaceDocument = gql`
     mutation DeleteWorkspace($id: ID!) {
@@ -1133,6 +1283,28 @@ export const UpdateNotebookStatusDocument = gql`
 export function useUpdateNotebookStatusMutation() {
   return Urql.useMutation<UpdateNotebookStatusMutation, UpdateNotebookStatusMutationVariables>(UpdateNotebookStatusDocument);
 };
+export const UpdateSectionDocument = gql`
+    mutation UpdateSection($workspaceId: ID!, $sectionId: ID!, $name: String!, $color: String!) {
+  updateSectionInWorkspace(
+    workspaceId: $workspaceId
+    sectionId: $sectionId
+    section: {name: $name, color: $color}
+  )
+}
+    `;
+
+export function useUpdateSectionMutation() {
+  return Urql.useMutation<UpdateSectionMutation, UpdateSectionMutationVariables>(UpdateSectionDocument);
+};
+export const UpdateSectionAddNotebookDocument = gql`
+    mutation UpdateSectionAddNotebook($sectionId: ID!, $notebookId: ID!) {
+  addNotebookToSection(sectionId: $sectionId, notebookId: $notebookId)
+}
+    `;
+
+export function useUpdateSectionAddNotebookMutation() {
+  return Urql.useMutation<UpdateSectionAddNotebookMutation, UpdateSectionAddNotebookMutationVariables>(UpdateSectionAddNotebookDocument);
+};
 export const UpdateUserDocument = gql`
     mutation UpdateUser($props: UserInput!) {
   updateSelf(props: $props) {
@@ -1212,6 +1384,8 @@ export type GraphCacheKeysConfig = {
   RoleAccess?: (data: WithTypename<RoleAccess>) => null | string,
   RoleInvitation?: (data: WithTypename<RoleInvitation>) => null | string,
   SecretAccess?: (data: WithTypename<SecretAccess>) => null | string,
+  Section?: (data: WithTypename<Section>) => null | string,
+  SectionChanges?: (data: WithTypename<SectionChanges>) => null | string,
   ShareInvitation?: (data: WithTypename<ShareInvitation>) => null | string,
   SharedResource?: (data: WithTypename<SharedResource>) => null | string,
   SharedWith?: (data: WithTypename<SharedWith>) => null | string,
@@ -1235,6 +1409,7 @@ export type GraphCacheResolvers = {
     me?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
     padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
+    sections?: GraphCacheResolver<WithTypename<Query>, QuerySectionsArgs, Array<WithTypename<Section> | string>>,
     self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     selfFulfilledGoals?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<Scalars['String'] | string>>,
     tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
@@ -1293,6 +1468,7 @@ export type GraphCacheResolvers = {
     myPermissionType?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, PermissionType | string>,
     name?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     padConnectionParams?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<PadConnectionParams> | string>,
+    section?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<Section> | string>,
     snapshots?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<PadSnapshot> | string>>,
     status?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     tags?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<Scalars['String'] | string>>,
@@ -1363,6 +1539,19 @@ export type GraphCacheResolvers = {
     permission?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, PermissionType | string>,
     secret?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, Scalars['String'] | string>
   },
+  Section?: {
+    color?: GraphCacheResolver<WithTypename<Section>, Record<string, never>, Scalars['String'] | string>,
+    createdAt?: GraphCacheResolver<WithTypename<Section>, Record<string, never>, Scalars['DateTime'] | string>,
+    id?: GraphCacheResolver<WithTypename<Section>, Record<string, never>, Scalars['ID'] | string>,
+    name?: GraphCacheResolver<WithTypename<Section>, Record<string, never>, Scalars['String'] | string>,
+    pads?: GraphCacheResolver<WithTypename<Section>, Record<string, never>, Array<WithTypename<Pad> | string>>,
+    workspace_id?: GraphCacheResolver<WithTypename<Section>, Record<string, never>, Scalars['ID'] | string>
+  },
+  SectionChanges?: {
+    added?: GraphCacheResolver<WithTypename<SectionChanges>, Record<string, never>, Array<WithTypename<Section> | string>>,
+    removed?: GraphCacheResolver<WithTypename<SectionChanges>, Record<string, never>, Array<Scalars['ID'] | string>>,
+    updated?: GraphCacheResolver<WithTypename<SectionChanges>, Record<string, never>, Array<WithTypename<Section> | string>>
+  },
   ShareInvitation?: {
     email?: GraphCacheResolver<WithTypename<ShareInvitation>, Record<string, never>, Scalars['String'] | string>
   },
@@ -1414,7 +1603,8 @@ export type GraphCacheResolvers = {
     isPublic?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['Boolean'] | string>,
     name?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['String'] | string>,
     pads?: GraphCacheResolver<WithTypename<Workspace>, WorkspacePadsArgs, WithTypename<PagedPadResult> | string>,
-    roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>
+    roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>,
+    sections?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Section> | string>>
   },
   WorkspacesChanges?: {
     added?: GraphCacheResolver<WithTypename<WorkspacesChanges>, Record<string, never>, Array<WithTypename<Workspace> | string>>,
@@ -1424,6 +1614,8 @@ export type GraphCacheResolvers = {
 };
 
 export type GraphCacheOptimisticUpdaters = {
+  addNotebookToSection?: GraphCacheOptimisticMutationResolver<MutationAddNotebookToSectionArgs, Maybe<Scalars['Boolean']>>,
+  addSectionToWorkspace?: GraphCacheOptimisticMutationResolver<MutationAddSectionToWorkspaceArgs, Maybe<WithTypename<Section>>>,
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
   attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
   createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
@@ -1442,6 +1634,7 @@ export type GraphCacheOptimisticUpdaters = {
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
   removePad?: GraphCacheOptimisticMutationResolver<MutationRemovePadArgs, Maybe<Scalars['Boolean']>>,
   removeRole?: GraphCacheOptimisticMutationResolver<MutationRemoveRoleArgs, Maybe<Scalars['Boolean']>>,
+  removeSectionFromWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveSectionFromWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   removeSelfFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveSelfFromRoleArgs, Maybe<Scalars['Boolean']>>,
   removeTagFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveTagFromPadArgs, Maybe<Scalars['Boolean']>>,
   removeUserFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveUserFromRoleArgs, Maybe<Scalars['Boolean']>>,
@@ -1463,12 +1656,15 @@ export type GraphCacheOptimisticUpdaters = {
   unsharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
   updateExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationUpdateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   updatePad?: GraphCacheOptimisticMutationResolver<MutationUpdatePadArgs, WithTypename<Pad>>,
+  updateSectionInWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateSectionInWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   updateSelf?: GraphCacheOptimisticMutationResolver<MutationUpdateSelfArgs, WithTypename<User>>,
   updateWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateWorkspaceArgs, WithTypename<Workspace>>
 };
 
 export type GraphCacheUpdaters = {
   Mutation?: {
+    addNotebookToSection?: GraphCacheUpdateResolver<{ addNotebookToSection: Maybe<Scalars['Boolean']> }, MutationAddNotebookToSectionArgs>,
+    addSectionToWorkspace?: GraphCacheUpdateResolver<{ addSectionToWorkspace: Maybe<WithTypename<Section>> }, MutationAddSectionToWorkspaceArgs>,
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
     attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
     createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
@@ -1487,6 +1683,7 @@ export type GraphCacheUpdaters = {
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,
     removePad?: GraphCacheUpdateResolver<{ removePad: Maybe<Scalars['Boolean']> }, MutationRemovePadArgs>,
     removeRole?: GraphCacheUpdateResolver<{ removeRole: Maybe<Scalars['Boolean']> }, MutationRemoveRoleArgs>,
+    removeSectionFromWorkspace?: GraphCacheUpdateResolver<{ removeSectionFromWorkspace: Maybe<Scalars['Boolean']> }, MutationRemoveSectionFromWorkspaceArgs>,
     removeSelfFromRole?: GraphCacheUpdateResolver<{ removeSelfFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveSelfFromRoleArgs>,
     removeTagFromPad?: GraphCacheUpdateResolver<{ removeTagFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveTagFromPadArgs>,
     removeUserFromRole?: GraphCacheUpdateResolver<{ removeUserFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveUserFromRoleArgs>,
@@ -1508,12 +1705,14 @@ export type GraphCacheUpdaters = {
     unsharePadWithUser?: GraphCacheUpdateResolver<{ unsharePadWithUser: Maybe<Scalars['Boolean']> }, MutationUnsharePadWithUserArgs>,
     updateExternalDataSource?: GraphCacheUpdateResolver<{ updateExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationUpdateExternalDataSourceArgs>,
     updatePad?: GraphCacheUpdateResolver<{ updatePad: WithTypename<Pad> }, MutationUpdatePadArgs>,
+    updateSectionInWorkspace?: GraphCacheUpdateResolver<{ updateSectionInWorkspace: Maybe<Scalars['Boolean']> }, MutationUpdateSectionInWorkspaceArgs>,
     updateSelf?: GraphCacheUpdateResolver<{ updateSelf: WithTypename<User> }, MutationUpdateSelfArgs>,
     updateWorkspace?: GraphCacheUpdateResolver<{ updateWorkspace: WithTypename<Workspace> }, MutationUpdateWorkspaceArgs>
   },
   Subscription?: {
     hello?: GraphCacheUpdateResolver<{ hello: Maybe<Scalars['String']> }, Record<string, never>>,
     padsChanged?: GraphCacheUpdateResolver<{ padsChanged: WithTypename<PadChanges> }, SubscriptionPadsChangedArgs>,
+    sectionsChanged?: GraphCacheUpdateResolver<{ sectionsChanged: WithTypename<SectionChanges> }, SubscriptionSectionsChangedArgs>,
     subscribeToNothing?: GraphCacheUpdateResolver<{ subscribeToNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     tagsChanged?: GraphCacheUpdateResolver<{ tagsChanged: WithTypename<TagChanges> }, SubscriptionTagsChangedArgs>,
     workspacesChanged?: GraphCacheUpdateResolver<{ workspacesChanged: WithTypename<WorkspacesChanges> }, Record<string, never>>

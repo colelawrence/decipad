@@ -151,6 +151,12 @@ pads
   icon String
   workspace_id String
 
+sections
+  id *String
+  name String
+  color String
+  workspace_id String
+
 tags
   id *String
   tag String
@@ -251,6 +257,14 @@ pads
   workspace_id *String
   sequence **Number
   name byWorkspace
+
+sections
+  workspace_id *String
+  name byWorkspace
+
+pads
+  section_id *String
+  name bySection
 
 permissions
   resource_uri *String

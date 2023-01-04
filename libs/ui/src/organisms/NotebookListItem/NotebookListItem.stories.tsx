@@ -1,10 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';
-import {
-  AvailableColorStatus,
-  TColorStatus,
-} from '../../atoms/ColorStatus/ColorStatus';
-import { UserIconKey } from '../../utils';
+import { AvailableColorStatus, TColorStatus, UserIconKey } from '../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
 import { NotebookListItem } from './NotebookListItem';
 

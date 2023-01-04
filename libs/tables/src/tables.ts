@@ -1,24 +1,24 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import arc from '@architect/functions';
 import {
   ConcreteDataTable,
   ConcreteRecord,
   DataTable,
   DataTables,
-  EnhancedDataTables,
   EnhancedDataTable,
+  EnhancedDataTables,
+  TableName,
   TableRecordIdentifier,
   VersionedDataTable,
-  VersionedTableRecord,
   VersionedDataTables,
-  TableName,
+  VersionedTableRecord,
 } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
-import assert from 'assert';
-import { timestamp } from './timestamp';
 import { unique } from '@decipad/utils';
+import assert from 'assert';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { timestamp } from './timestamp';
 
 interface ArcServices {
   tables: Record<TableName, string>;
@@ -35,6 +35,7 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'permissions',
   'workspaces',
   'pads',
+  'sections',
   'workspaceroles',
   'invites',
   'futurefileattachments',

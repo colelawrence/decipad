@@ -1,27 +1,10 @@
-import { css } from '@emotion/react';
 import { FC } from 'react';
-import { ColorStatusProps, statusColors } from './ColorStatus';
+import { Dot } from '..';
+import { statusColors } from '../../utils';
+import { ColorStatusProps } from './ColorStatus';
 
 export const ColorStatusCircle = ({
-  name = 'No Status',
+  name = 'draft',
 }: ColorStatusProps): ReturnType<FC> => {
-  return (
-    <span
-      css={css({
-        display: 'block',
-        height: '12px',
-        width: '12px',
-        borderRadius: 999999,
-        backgroundColor: statusColors[name].rgb,
-        border: `1.1px solid ${statusColors[name].rgb}`,
-        '> svg > path': {
-          stroke: `${statusColors[name].rgb}`,
-        },
-        '> svg': {
-          height: '100%',
-          width: '100%',
-        },
-      })}
-    ></span>
-  );
+  return <Dot color={statusColors[name]} variant />;
 };

@@ -4,6 +4,7 @@ import {
   GetWorkspacesQuery,
   GraphCacheConfig,
   Pad,
+  Section,
   UserDocument,
   UserQuery,
   Workspace,
@@ -17,6 +18,22 @@ const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
       data?.workspaces
         .find(({ id }) => notebook.workspace?.id === id)
         ?.pads.items.push(notebook as Pad);
+      return data;
+    }
+  );
+};
+
+const addSectionToItsWorkspace = (
+  cache: Cache,
+  section: Section,
+  workspaceId: string
+) => {
+  cache.updateQuery<GetWorkspacesQuery>(
+    { query: GetWorkspacesDocument },
+    (data) => {
+      data?.workspaces
+        .find(({ id }) => workspaceId === id)
+        ?.sections.push(section as Section);
       return data;
     }
   );
@@ -74,6 +91,22 @@ export const graphCacheConfig: GraphCacheConfig = {
       },
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
+      },
+      addSectionToWorkspace: (result, args, cache) => {
+        addSectionToItsWorkspace(
+          cache,
+          result.addSectionToWorkspace as Section,
+          args.workspaceId
+        );
+      },
+      updateSectionInWorkspace: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Section', id: args.sectionId });
+      },
+      addNotebookToSection: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Section', id: args.sectionId });
+      },
+      removeSectionFromWorkspace: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Section', id: args.sectionId });
       },
       sharePadWithSecret: () => {
         // No need to update secret access since we're currently not fetching secret access

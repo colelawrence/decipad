@@ -124,12 +124,17 @@ module.exports = {
           );
         },
       ];
-
       // workaround while react-dnd@^15 is still in our transitive dependency tree
       // https://github.com/react-dnd/react-dnd/issues/3433#issuecomment-1102144912
       config.resolve.alias = {
         'react/jsx-runtime.js': 'react/jsx-runtime',
         'react/jsx-dev-runtime.js': 'react/jsx-dev-runtime',
+        'styled-components': path.resolve(
+          '..',
+          '..',
+          'node_modules',
+          'styled-components'
+        ),
       };
 
       return config;

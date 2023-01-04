@@ -35,7 +35,7 @@ export const EditWorkspaceModal = ({
   return (
     <ClosableModal
       {...props}
-      title={`Workspace settings: ${name}`}
+      title="Workspace settings"
       closeAction={closeHref}
     >
       <div css={{ display: 'grid', rowGap: '24px' }}>

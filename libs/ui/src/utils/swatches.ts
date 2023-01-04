@@ -11,6 +11,7 @@ import {
   malibu200,
   malibu700,
   OpaqueColor,
+  opaqueColorToHex,
   orange100,
   orange300,
   orange700,
@@ -48,6 +49,7 @@ interface SwatchColor {
 
 type Swatches = Record<AvailableSwatchColor, SwatchColor>;
 export type Swatch = Record<AvailableSwatchColor, OpaqueColor>;
+type HexSwatch = Record<string, AvailableSwatchColor>;
 
 export const colorSwatches: Swatches = {
   Catskill: {
@@ -102,6 +104,16 @@ export const baseSwatches: Swatch = swatchNames.reduce((store, currentKey) => {
   store[currentKey] = colorSwatches[currentKey].base;
   return store;
 }, {} as Swatch);
+export const hexBaseSwatches: HexSwatch = swatchNames.reduce(
+  (store, currentKey) => {
+    const color = colorSwatches[currentKey].base;
+    const key = opaqueColorToHex(color);
+    // eslint-disable-next-line no-param-reassign
+    store[key] = currentKey;
+    return store;
+  },
+  {} as HexSwatch
+);
 
 /**
  * Returns either the base swatch colour or the highlight depending on dark mode.

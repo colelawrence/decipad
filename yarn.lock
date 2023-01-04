@@ -18083,6 +18083,11 @@ functions-have-names@^1.2.2:
   resolved "https://registry.npmjs.org/functions-have-names/-/functions-have-names-1.2.2.tgz"
   integrity sha512-bLgc3asbWdwPbx2mNk2S49kmJCuQeu0nfmaOgbs8WIyzzkw3r4htszdIi9Q9EMezDPTYuJx2wvjZ/EwgAthpnA==
 
+fuse.js@^6.6.2:
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.6.2.tgz#fe463fed4b98c0226ac3da2856a415576dc9a111"
+  integrity sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==
+
 gar@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/gar/-/gar-1.0.4.tgz#f777bc7db425c0572fdeb52676172ca1ae9888b8"
@@ -21690,6 +21695,11 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.4.0"
     verror "1.10.0"
+
+jsurl@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/jsurl/-/jsurl-0.1.5.tgz#2a5c8741de39cacafc12f448908bf34e960dcee8"
+  integrity sha512-HyrafsIRCa+VlJAsvuvxWUM0iMeZd6+2J4JngECGF0JTRi5moUFV/mLxgyYfDizGF4ofLLYRpvD/Kt1d9wlUUg==
 
 "jsx-ast-utils@^2.4.1 || ^3.0.0", jsx-ast-utils@^3.2.1:
   version "3.3.0"
@@ -28449,6 +28459,11 @@ scuid@^1.1.0:
   resolved "https://registry.yarnpkg.com/scuid/-/scuid-1.1.0.tgz#d3f9f920956e737a60f72d0e4ad280bf324d5dab"
   integrity sha512-MuCAyrGZcTLfQoH2XoBlQ8C6bzwN88XT/0slOGz0pn8+gIP85BOAfYa44ZXQUTOwRwPU0QvgU+V+OSajl/59Xg==
 
+search-query-parser@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/search-query-parser/-/search-query-parser-1.6.0.tgz#d69ade33f3685cae25613a70189b7b18970b46f1"
+  integrity sha512-bhf+phLlKF38nuniwLcVHWPArHGdzenlPhPi955CR3vm1QQifXIuPHwAffhjapojdVVzmv4hgIJ6NOX1d/w+Uw==
+
 section-matter@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/section-matter/-/section-matter-1.0.0.tgz#e9041953506780ec01d59f292a19c7b850b84167"
@@ -28572,6 +28587,11 @@ serialize-javascript@^6.0.0:
   integrity sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==
   dependencies:
     randombytes "^2.1.0"
+
+serialize-query-params@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/serialize-query-params/-/serialize-query-params-2.0.2.tgz#598a3fb9e13f4ea1c1992fbd20231aa16b31db81"
+  integrity sha512-1chMo1dST4pFA9RDXAtF0Rbjaut4is7bzFbI1Z26IuMub68pNCILku85aYmeFhvnY//BXUPUhoRMjYcsT93J/Q==
 
 serve-favicon@^2.5.0:
   version "2.5.0"
@@ -31237,6 +31257,13 @@ use-latest@^1.2.1:
   integrity sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==
   dependencies:
     use-isomorphic-layout-effect "^1.1.1"
+
+use-query-params@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/use-query-params/-/use-query-params-2.1.2.tgz#0bd100a0839e5195106cfb291b43d2159618ca9d"
+  integrity sha512-evg64srKaILvKyRQ1zpXvekTC7rktAT7OAekU7x6naHrOMqLHtq0MHR/PtKIQAP4d7HrkYNVOS8exHhiWy7m3A==
+  dependencies:
+    serialize-query-params "^2.0.2"
 
 use-sidecar@^1.1.2:
   version "1.1.2"

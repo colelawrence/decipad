@@ -48,12 +48,16 @@ const sampleWorkspace = {
 const aWorkspace = {
   ...sampleWorkspace,
   numberOfMembers: 1,
+  sections: [],
 };
 const props: ComponentProps<typeof DashboardSidebar> = {
   name: 'John Doe',
   email: 'john.doe@example.com',
   Heading: 'h1',
   onOpenSettings: noop,
+  onDeleteSection: noop,
+  onCreateSection: () => new Promise(noop),
+  onUpdateSection: () => new Promise(noop),
   activeWorkspace: aWorkspace,
   allWorkspaces: [aWorkspace].map((workspace) => ({
     ...workspace,

@@ -19,7 +19,7 @@ const workspaceCTACardSuperWrapperStyles = (
   darkTheme: boolean
 ) =>
   css({
-    marginBottom: '2rem',
+    margin: '2rem 0',
     borderRadius: '12px',
     padding: '24px',
     height: dashboard.CTAHeight,

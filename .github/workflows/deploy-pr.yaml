@@ -6,6 +6,7 @@ on:
 
 jobs:
   deploy:
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     concurrency:
       group: 'deploy-pr-${{ github.event.pull_request.number }}'

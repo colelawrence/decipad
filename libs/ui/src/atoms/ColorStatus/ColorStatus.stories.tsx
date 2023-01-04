@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import { ColorStatus } from './ColorStatus';
 
 const args: ComponentProps<typeof ColorStatus> = {
-  name: 'To Do',
+  name: 'draft',
   selected: false,
 };
 
@@ -22,18 +22,16 @@ export default {
 
 export const Normal: Story<typeof args> = (props) => (
   <>
-    <ColorStatus {...props} name={'No Status'} />
-    <ColorStatus {...props} name={'To Do'} />
-    <ColorStatus {...props} name={'In Progress'} />
-    <ColorStatus {...props} name={'Done'} />
+    <ColorStatus {...props} name={'draft'} />
+    <ColorStatus {...props} name={'review'} />
+    <ColorStatus {...props} name={'approval'} />
   </>
 );
 
 export const Selected: Story<typeof args> = (props) => (
   <>
-    <ColorStatus {...props} selected={true} name={'No Status'} />
-    <ColorStatus {...props} selected={true} name={'To Do'} />
-    <ColorStatus {...props} selected={true} name={'In Progress'} />
-    <ColorStatus {...props} selected={true} name={'Done'} />
+    <ColorStatus {...props} selected={true} name={'draft'} />
+    <ColorStatus {...props} selected={true} name={'review'} />
+    <ColorStatus {...props} selected={true} name={'done'} />
   </>
 );

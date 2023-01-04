@@ -19,7 +19,7 @@ export const Copy = (): ReturnType<React.FC> => (
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
-      rx="{2}"
+      rx="2"
     />
   </svg>
 );

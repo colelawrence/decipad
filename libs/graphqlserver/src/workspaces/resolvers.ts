@@ -8,7 +8,7 @@ import {
   WorkspaceInput,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
-import { getNotebooks } from '@decipad/services/notebooks';
+import { pads } from '@decipad/services';
 import {
   queryAccessibleResources,
   removeAllPermissionsFor,
@@ -214,12 +214,12 @@ export default {
       { page }: { page: PageInput },
       context: GraphqlContext
     ): Promise<PagedResult<PadRecord>> {
-      const notebooks = await getNotebooks({
+      const nbs = await pads.getNotebooks({
         user: loadUser(context),
         workspaceId: workspace.id,
         page,
       });
-      return notebooks;
+      return nbs;
     },
   },
 };

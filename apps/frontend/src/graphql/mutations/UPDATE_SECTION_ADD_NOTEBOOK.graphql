@@ -1,0 +1,3 @@
+mutation UpdateSectionAddNotebook($sectionId: ID!, $notebookId: ID!) {
+  addNotebookToSection(sectionId: $sectionId, notebookId: $notebookId)
+}

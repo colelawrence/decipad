@@ -1,10 +1,78 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button } from '../../atoms';
-import { NotebookListHeader } from '../../molecules';
+import { Plus } from '../../icons';
+import { SearchBar } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { dashboard, notebookList } from '../../styles';
+
+type DashboardTopbarProps = {
+  readonly onCreateNotebook?: () => void;
+
+  readonly onPointerEnter?: () => void;
+};
+
+export const DashboardTopbar = ({
+  onCreateNotebook = noop,
+
+  onPointerEnter,
+}: DashboardTopbarProps): ReturnType<React.FC> => {
+  const { '*': maybeWorkspaceFolder } = useParams();
+  const displaySearchBoxBorder =
+    isFlagEnabled('DASHBOARD_SEARCH') && maybeWorkspaceFolder === '';
+  return (
+    <div
+      css={css({
+        [smallScreenQuery]: {
+          backgroundColor: cssVar('highlightColor'),
+        },
+      })}
+    >
+      <div
+        css={[
+          dashboardTopbarWrapperStyles,
+          displaySearchBoxBorder && {
+            borderBottom: `1px solid ${cssVar('borderColor')}`,
+            [smallScreenQuery]: {
+              borderBottom: 0,
+            },
+          },
+        ]}
+        onPointerEnter={onPointerEnter}
+      >
+        <div css={leftStyles}>
+          <SearchBar />
+        </div>
+        <div css={rightStyles}>
+          <Button
+            type="primaryBrand"
+            size="extraSlim"
+            onClick={onCreateNotebook}
+          >
+            <div
+              css={{
+                display: 'inline-flex',
+                gap: 8,
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                alignItems: 'center',
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <span css={{ height: '18px', width: '18px' }}>
+                <Plus />
+              </span>
+              <span>New Notebook</span>
+            </div>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const dashboardTopbarWrapperStyles = css({
   padding: `
@@ -27,6 +95,7 @@ const dashboardTopbarWrapperStyles = css({
 });
 const leftStyles = css({
   display: 'grid',
+  width: 'calc(100% - 180px)',
   alignItems: 'baseline',
   [smallScreenQuery]: {
     padding: '16px 16.5px',
@@ -42,48 +111,3 @@ const rightStyles = css({
     display: 'none',
   },
 });
-
-type DashboardTopbarProps = Pick<
-  ComponentProps<typeof NotebookListHeader>,
-  'numberOfNotebooks'
-> & {
-  readonly onCreateNotebook?: () => void;
-
-  readonly onPointerEnter?: () => void;
-};
-
-export const DashboardTopbar = ({
-  numberOfNotebooks,
-
-  onCreateNotebook = noop,
-
-  onPointerEnter,
-}: DashboardTopbarProps): ReturnType<React.FC> => {
-  return (
-    <div
-      css={css({
-        [smallScreenQuery]: {
-          backgroundColor: cssVar('highlightColor'),
-        },
-      })}
-    >
-      <div css={dashboardTopbarWrapperStyles} onPointerEnter={onPointerEnter}>
-        <div css={leftStyles}>
-          <NotebookListHeader
-            Heading="h1"
-            numberOfNotebooks={numberOfNotebooks}
-          />
-        </div>
-        <div css={rightStyles}>
-          <Button
-            type="primaryBrand"
-            size="extraSlim"
-            onClick={onCreateNotebook}
-          >
-            Create Notebook
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};

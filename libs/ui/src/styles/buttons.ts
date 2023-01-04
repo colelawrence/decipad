@@ -1,13 +1,21 @@
 import { css } from '@emotion/react';
-import { cssVar } from '../primitives';
+import {
+  black,
+  cssVar,
+  hexToOpaqueColor,
+  transparency,
+  weakOpacity,
+} from '../primitives';
 
 export const mainIconButtonStyles = css({
   display: 'inline-block',
   borderRadius: '100vmax',
-  backgroundColor: cssVar('strongHighlightColor'),
 
   ':hover, :focus': {
-    backgroundColor: cssVar('strongerHighlightColor'),
+    backgroundColor: transparency(
+      hexToOpaqueColor(cssVar('strongerHighlightColor')) || black,
+      weakOpacity
+    ).rgba,
   },
 });
 

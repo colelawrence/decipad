@@ -3,13 +3,22 @@ import { useToast } from '@decipad/toast';
 import {
   Dashboard,
   DashboardSidebarPlaceholder,
+  NotebookListItem,
   NotebookListPlaceholder,
+  TColorKeys,
+  TColorStatus,
   TopbarPlaceholder,
 } from '@decipad/ui';
-import { TColorStatus } from 'libs/ui/src/atoms/ColorStatus/ColorStatus';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
-import { FC, lazy, useCallback, useMemo, useState } from 'react';
+import {
+  ComponentProps,
+  FC,
+  lazy,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import {
   matchPath,
   Outlet,
@@ -21,8 +30,10 @@ import {
 import { loadNotebooks } from '../../App';
 import {
   useCreateNotebookMutation,
+  useCreateSectionMutation,
   useCreateWorkspaceMutation,
   useDeleteNotebookMutation,
+  useDeleteSectionMutation,
   useDeleteWorkspaceMutation,
   useDuplicateNotebookMutation,
   useGetWorkspacesQuery,
@@ -32,11 +43,12 @@ import {
   useUnarchiveNotebookMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
+  useUpdateSectionAddNotebookMutation,
+  useUpdateSectionMutation,
   useUpdateUserMutation,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
-import { exportNotebook } from '../../utils/exportNotebook';
-import { parseIconColorFromIdentifier } from '../../utils/parseIconColorFromIdentifier';
+import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
 
 const loadTopbar = () =>
   import(/* webpackChunkName: "workspace-topbar" */ './Topbar');
@@ -61,8 +73,6 @@ const EditUserModal = lazy(loadEditUserModal);
 // prefetch
 loadTopbar().then(loadNotebookList).then(loadSidebar);
 
-const workspaceCtaDismissKey = 'workspace-cta-dismiss';
-
 const Workspace: FC = () => {
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
   const currentWorkspaceRoute = workspaces({}).workspace({
@@ -75,14 +85,14 @@ const Workspace: FC = () => {
       currentWorkspaceRoute.section.templateWithQuery,
       `/${maybeWorkspaceFolder}`
     )) || { params: { sectionId: null } };
-  const sectionId = params && params.sectionId;
+  const sectionId = params?.sectionId;
+  const isArchivePage = maybeWorkspaceFolder === 'archived';
   const { data: session } = useSession();
   const toast = useToast();
 
   const [userSettings, setUserSettings] = useState(false);
 
   const [name, setName] = useState(session?.user.name || '');
-  // fixme: not working
   const [username, setUsername] = useState(session?.user.username || '');
   const [description, setDescription] = useState(
     session?.user.description || ''
@@ -101,6 +111,10 @@ const Workspace: FC = () => {
   const updateUser = useUpdateUserMutation()[1];
   const setUsernameMutation = useSetUsernameMutation()[1];
   const unarchiveNotebook = useUnarchiveNotebookMutation()[1];
+  const createSection = useCreateSectionMutation()[1];
+  const deleteSection = useDeleteSectionMutation()[1];
+  const editSection = useUpdateSectionMutation()[1];
+  const movePadToSection = useUpdateSectionAddNotebookMutation()[1];
 
   const signoutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -126,49 +140,46 @@ const Workspace: FC = () => {
     [workspaceData?.workspaces, workspaceId]
   );
 
+  const pageInfo: ComponentProps<typeof NotebookListItem>['page'] =
+    useMemo(() => {
+      return {
+        type: isArchivePage ? 'archived' : sectionId ? 'section' : 'workspace',
+        sections: currentWorkspace?.sections || [],
+      };
+    }, [isArchivePage, sectionId, currentWorkspace]);
+
+  const filterNotebooks = useMemo(() => {
+    return filterPads({ page: pageInfo.type });
+  }, [pageInfo]);
+
+  const allSectionNotebooks = useMemo(
+    () =>
+      currentWorkspace?.sections
+        .find((sct) => sct.id === sectionId)
+        ?.pads?.filter(filterNotebooks)
+        .map(makeIcons),
+    [currentWorkspace?.sections, filterNotebooks, sectionId]
+  );
+
   const allNotebooks = useMemo(
     () =>
       sortBy(
         currentWorkspace?.pads?.items,
         (item) => -Date.parse(item.createdAt)
       )
-        .filter((notebook) =>
-          (maybeWorkspaceFolder || '') === ''
-            ? notebook.archived !== true
-            : true
-        )
-        .filter((notebook) =>
-          maybeWorkspaceFolder === 'archived'
-            ? notebook.archived === true
-            : true
-        )
-        .filter((notebook) =>
-          maybeWorkspaceFolder && maybeWorkspaceFolder === 'published'
-            ? notebook.isPublic === true
-            : true
-        )
-        .filter((notebook) =>
-          maybeWorkspaceFolder && maybeWorkspaceFolder === 'private'
-            ? notebook.isPublic !== true
-            : true
-        )
-        .map((notebook) => {
-          const { icon = 'Rocket', iconColor = 'Catskill' } =
-            parseIconColorFromIdentifier(notebook?.icon);
-          const status: string = notebook?.status || 'No Status';
-          return {
-            ...notebook,
-            icon,
-            iconColor,
-            status: status as TColorStatus,
-            onExport: exportNotebook(notebook.id),
-            creationDate: new Date(notebook.createdAt),
-          };
-        })
-        .filter((notebook) =>
-          sectionId ? notebook.iconColor === sectionId : true
-        ),
-    [maybeWorkspaceFolder, sectionId, currentWorkspace?.pads?.items]
+        .filter(filterNotebooks)
+        .map(makeIcons),
+    [currentWorkspace?.pads?.items, filterNotebooks]
+  );
+
+  const showNotebooks = useMemo(
+    () =>
+      sectionId
+        ? allSectionNotebooks && allSectionNotebooks.length > 0
+          ? allSectionNotebooks
+          : []
+        : allNotebooks,
+    [allNotebooks, allSectionNotebooks, sectionId]
   );
 
   if (!currentWorkspace || !session) {
@@ -177,10 +188,13 @@ const Workspace: FC = () => {
 
   const handleCreateNotebook = async () => {
     try {
-      const { data: createdNotebookData, error } = await createNotebook({
+      const args = {
         workspaceId,
+        sectionId,
         name: 'My notebook title',
-      });
+      };
+
+      const { data: createdNotebookData, error } = await createNotebook(args);
       if (error) {
         console.error('Failed to create notebook. Error:', error);
         toast('Failed to create notebook.', 'error');
@@ -189,7 +203,9 @@ const Workspace: FC = () => {
         toast('Failed to create notebook.', 'error');
       } else {
         navigate(
-          notebooks({}).notebook({ notebook: createdNotebookData.createPad }).$
+          notebooks({}).notebook({
+            notebook: createdNotebookData.createPad,
+          }).$
         );
       }
     } catch (err) {
@@ -232,6 +248,28 @@ const Workspace: FC = () => {
         onClickWorkspace={(id) => {
           navigate(workspaces({}).workspace({ workspaceId: id }).$);
         }}
+        onCreateSection={createSection}
+        onUpdateSection={editSection}
+        onDeleteSection={(sId: string) => {
+          deleteSection({
+            workspaceId,
+            sectionId: sId,
+          })
+            .then((res) => {
+              if (res.data) {
+                if (res.data.removeSectionFromWorkspace) {
+                  toast('Section removed', 'success');
+                }
+              } else {
+                console.error('Failed to remove section.', res);
+                toast('Failed to remove section.', 'error');
+              }
+            })
+            .catch((err) => {
+              console.error('Failed to remove section. Error:', err);
+              toast('Failed to remove section.', 'error');
+            });
+        }}
         onPointerEnter={() =>
           loadEditWorkspaceModal().then(loadCreateWorkspaceModal)
         }
@@ -243,7 +281,6 @@ const Workspace: FC = () => {
   const topBarWrapper = (
     <Frame Heading="h1" title={null} suspenseFallback={<TopbarPlaceholder />}>
       <Topbar
-        numberOfNotebooks={allNotebooks.length}
         onCreateNotebook={handleCreateNotebook}
         onPointerEnter={loadNotebooks}
       />
@@ -258,28 +295,34 @@ const Workspace: FC = () => {
     >
       <NotebookList
         Heading="h1"
-        notebooks={allNotebooks}
-        page={maybeWorkspaceFolder}
+        notebooks={showNotebooks}
+        page={pageInfo}
         mainWorkspaceRoute={!maybeWorkspaceFolder}
         onCreateNotebook={handleCreateNotebook}
         otherWorkspaces={allWorkspaces.filter(
           (workspace) => workspace.id !== currentWorkspace.id
         )}
+        onMoveToSection={(pId, sId) => {
+          return movePadToSection({ sectionId: sId, notebookId: pId }).catch(
+            (err) => {
+              console.error(`Failed to add notebook to section. Error:`, err);
+              toast('Failed to add notebook to section', 'error');
+            }
+          );
+        }}
         onDelete={(id) => {
           const fn =
-            maybeWorkspaceFolder === 'archived'
-              ? finalDeleteNotebook
-              : deleteNotebook;
+            pageInfo.type === 'archived' ? finalDeleteNotebook : deleteNotebook;
           return fn({ id }).catch((err) => {
             console.error(
               `Failed to ${
-                maybeWorkspaceFolder === 'archived' ? 'delete' : 'archive'
+                pageInfo.type === 'archived' ? 'delete' : 'archive'
               } notebook. Error:`,
               err
             );
             toast(
               `Failed to ${
-                maybeWorkspaceFolder === 'archived' ? 'delete' : 'archive'
+                pageInfo.type === 'archived' ? 'delete' : 'archive'
               } notebook`,
               'error'
             );
@@ -310,14 +353,25 @@ const Workspace: FC = () => {
               });
             });
         }}
-        onChangeStatus={(id, status: TColorStatus) => {
-          changeNotebookStatus({
-            id,
-            status,
-          }).catch((err) => {
-            console.error('Failed to change status. Error:', err);
+        onChangeStatus={(id, st: TColorStatus) => {
+          if (TColorKeys.includes(st)) {
+            changeNotebookStatus({
+              id,
+              status: st,
+            }).catch((err) => {
+              console.error('Failed to change status. Error:', err);
+              toast('Failed to change notebook status', 'error');
+            });
+          } else {
+            console.error(
+              `Bad status. Error: ${st} is not valid ${JSON.stringify(
+                TColorKeys,
+                null,
+                2
+              )}`
+            );
             toast('Failed to change notebook status', 'error');
-          });
+          }
         }}
         onImport={(source) =>
           importNotebook({ workspaceId, source }).catch((err) => {
@@ -357,19 +411,11 @@ const Workspace: FC = () => {
           }
         >
           <Route
-            path={currentWorkspaceRoute.archived.template}
-            element={<></>}
-          />
-          <Route
-            path={currentWorkspaceRoute.privateNotebooks.template}
-            element={<></>}
-          />
-          <Route
-            path={currentWorkspaceRoute.published.template}
-            element={<></>}
-          />
-          <Route
             path={currentWorkspaceRoute.section.templateWithQuery}
+            element={<></>}
+          />
+          <Route
+            path={currentWorkspaceRoute.archived.template}
             element={<></>}
           />
           <Route

@@ -16,7 +16,11 @@ import { dashboard } from '../../styles';
 
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
   Pick<ComponentProps<typeof AccountAvatar>, 'name'> &
-  ComponentProps<typeof AccountMenu> & {
+  ComponentProps<typeof AccountMenu> &
+  Pick<
+    ComponentProps<typeof WorkspaceNavigation>,
+    'onDeleteSection' | 'onCreateSection' | 'onUpdateSection'
+  > & {
     readonly onPointerEnter?: () => void;
   };
 
@@ -29,7 +33,6 @@ export const DashboardSidebar = ({
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
   const [darkTheme, setDarkTheme] = useThemeFromStore();
-
   const [openMenu, setOpenMenu] = useState(false);
 
   const ref = useActiveElement(() => {
@@ -101,7 +104,13 @@ export const DashboardSidebar = ({
         <div css={{ gridRow: 'navigation', display: 'grid' }}>
           <WorkspaceNavigation {...props} />
         </div>
-        <div css={{ gridRow: 'switcher', display: 'grid' }}>
+        <div
+          css={{
+            gridRow: 'switcher',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(150px, 100%)',
+          }}
+        >
           <WorkspaceOptions {...props} />
         </div>
       </div>

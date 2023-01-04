@@ -10,6 +10,7 @@ const props: ComponentProps<typeof WorkspaceMenu> = {
     id: '42',
     name: 'Active Workspace',
     numberOfMembers: 1,
+    sections: [],
   },
   allWorkspaces: [],
 };

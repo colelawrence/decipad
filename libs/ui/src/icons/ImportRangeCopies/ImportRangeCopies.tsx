@@ -89,7 +89,7 @@ export const ImportRangeCopies = (): ReturnType<FC> => (
     </g>
     <defs>
       <clipPath id="clip0_7225_25548">
-        <rect width={40} height={40} rx={6} fill="white" />
+        <rect width="40" height="40" rx="6" fill="white" />
       </clipPath>
     </defs>
   </svg>

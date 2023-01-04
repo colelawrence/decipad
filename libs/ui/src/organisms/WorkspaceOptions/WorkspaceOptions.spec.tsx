@@ -9,6 +9,7 @@ const props: ComponentProps<typeof WorkspaceOptions> = {
   activeWorkspace: {
     id: '42',
     name: 'Active Workspace',
+    sections: [],
     numberOfMembers: 2,
   },
   allWorkspaces: [],

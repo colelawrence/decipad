@@ -6,6 +6,20 @@ fragment WorkspaceNotebook on Pad {
   createdAt
   archived
   isPublic
+  section {
+    id
+    name
+  }
+}
+
+fragment WorkspaceSection on Section {
+  id
+  name
+  color
+  pads {
+    ...WorkspaceNotebook
+  }
+  createdAt
 }
 
 fragment DashboardWorkspace on Workspace {
@@ -15,6 +29,9 @@ fragment DashboardWorkspace on Workspace {
     items {
       ...WorkspaceNotebook
     }
+  }
+  sections {
+    ...WorkspaceSection
   }
 }
 

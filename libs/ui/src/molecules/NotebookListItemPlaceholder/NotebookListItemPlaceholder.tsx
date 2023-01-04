@@ -51,7 +51,7 @@ export const NotebookListItemPlaceholder = (): ReturnType<FC> => {
       <div css={[middleAndRightStyles, { gridArea: 'updated' }]}>
         <Placeholder />
       </div>
-      <div css={[middleAndRightStyles, { gridArea: 'emptycol' }]}>
+      <div css={[middleAndRightStyles, { gridArea: 'tags' }]}>
         <Placeholder />
       </div>
     </div>

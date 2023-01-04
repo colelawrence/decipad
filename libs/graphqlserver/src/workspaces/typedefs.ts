@@ -10,6 +10,7 @@ export default gql`
     name: String!
     roles: [Role!]!
     pads(page: PageInput!): PagedPadResult!
+    sections: [Section!]!
     createdAt: DateTime
     isPublic: Boolean
   }

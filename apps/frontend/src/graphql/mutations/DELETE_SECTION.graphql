@@ -1,0 +1,3 @@
+mutation DeleteSection($workspaceId: ID!, $sectionId: ID!) {
+  removeSectionFromWorkspace(workspaceId: $workspaceId, sectionId: $sectionId)
+}

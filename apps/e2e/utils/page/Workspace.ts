@@ -82,11 +82,11 @@ function waitForDownload(page: Page): Promise<Buffer> {
 }
 
 export async function clickNewPadButton(page: Page) {
-  await page.locator('text=/create notebook/i').click();
+  await page.locator('text=/New Notebook/').click();
 }
 
-const ellipsisSelector = (n: number): string => {
-  return `//main//li >> nth=${n} >> div[type=button]`;
+export const ellipsisSelector = (n: number): string => {
+  return `//main//li >> nth=${n} >> div[type=button] svg`;
 };
 
 export async function removePad(page: Page, index = 0) {

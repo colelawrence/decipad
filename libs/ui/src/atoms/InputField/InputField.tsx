@@ -8,9 +8,6 @@ const inputStyles = css({
 
   backgroundColor: cssVar('backgroundColor'),
 
-  border: `1px solid ${cssVar('borderColor')}`,
-  borderRadius: '6px',
-
   ...p14Regular,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   '&::placeholder': {
@@ -30,6 +27,7 @@ export type InputFieldProps = {
   readonly type?: FieldType;
   readonly required?: boolean;
   readonly autoFocus?: boolean;
+  readonly disabled?: boolean;
 
   readonly placeholder?: string;
 
@@ -41,6 +39,7 @@ export const InputField = ({
   type = 'text',
   required = false,
   autoFocus = false,
+  disabled = false,
 
   placeholder,
 
@@ -50,7 +49,16 @@ export const InputField = ({
   return (
     <input
       autoFocus={autoFocus}
-      css={inputStyles}
+      disabled={disabled}
+      css={[
+        inputStyles,
+        type !== 'search'
+          ? {
+              border: `1px solid ${cssVar('borderColor')}`,
+              borderRadius: '6px',
+            }
+          : { width: '100%', padding: 0 },
+      ]}
       type={type}
       required={required}
       placeholder={placeholder}

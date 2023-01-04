@@ -12,8 +12,16 @@ export const Normal: Story = () => (
     name="John Doe"
     email="john.doe@example.com"
     onOpenSettings={noop}
+    onDeleteSection={noop}
+    onUpdateSection={() => new Promise(noop)}
+    onCreateSection={() => new Promise(noop)}
     Heading="h1"
-    activeWorkspace={{ name: 'Active Workspace', id: '42', numberOfMembers: 1 }}
+    activeWorkspace={{
+      name: 'Active Workspace',
+      id: '42',
+      numberOfMembers: 1,
+      sections: [],
+    }}
     allWorkspaces={[]}
   />
 );

@@ -2,12 +2,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import format from 'date-fns/format';
-import { Divider } from '../../atoms';
-import {
-  AvailableColorStatus,
-  ColorStatus,
-  TColorStatus,
-} from '../../atoms/ColorStatus/ColorStatus';
+import { ColorStatus, Divider } from '../../atoms';
 import {
   Archive,
   Calendar,
@@ -18,6 +13,7 @@ import {
 } from '../../icons';
 import { cssVar, p12Medium, p14Medium } from '../../primitives';
 import { card } from '../../styles';
+import { AvailableColorStatus, TColorStatus } from '../../utils';
 
 const styles = css({
   ...card.styles,
@@ -77,7 +73,7 @@ interface NotebookListItemActionsProps {
 }
 export const NotebookListItemActions = ({
   href,
-  status = 'No Status',
+  status = 'draft',
   onDuplicate = noop,
   onDelete = noop,
   onExport = noop,

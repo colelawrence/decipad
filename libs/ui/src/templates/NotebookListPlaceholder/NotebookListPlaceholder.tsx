@@ -33,10 +33,10 @@ export const NotebookListPlaceholder = (): ReturnType<FC> => {
         <div css={{ gridArea: 'icon', maxWidth: '32px' }}>
           <Placeholder lessRound />
         </div>
-        <div css={{ gridArea: 'updated', maxWidth: '32px' }}>
+        <div css={{ gridArea: 'title', maxWidth: '32px' }}>
           <Placeholder lessRound />
         </div>
-        <div css={{ gridArea: 'emptycol', maxWidth: '32px' }}>
+        <div css={{ gridArea: 'tags', maxWidth: '32px' }}>
           <Placeholder lessRound />
         </div>
       </div>

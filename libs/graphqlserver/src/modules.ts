@@ -10,6 +10,7 @@ import pads from './pads';
 import pagination from './pagination';
 import registration from './registration';
 import roles from './roles';
+import sections from './sections';
 import share from './share';
 import tags from './tags';
 import users from './users';
@@ -24,6 +25,7 @@ const modules: GraphqlModule[] = [
   date,
   glob,
   tags,
+  sections,
   pagination,
   registration,
   users,

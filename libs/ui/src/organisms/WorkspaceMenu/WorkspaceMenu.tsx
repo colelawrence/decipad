@@ -7,6 +7,7 @@ import { Create } from '../../icons';
 import { NavigationList, WorkspaceItem } from '../../molecules';
 import { p13Regular } from '../../primitives';
 import { card } from '../../styles';
+import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 
 const styles = css({
   ...card.styles,
@@ -29,7 +30,9 @@ const headerStyles = css({
 interface WorkspaceMenuProps {
   readonly Heading: 'h1';
 
-  readonly activeWorkspace: ComponentProps<typeof WorkspaceItem>;
+  readonly activeWorkspace: ComponentProps<typeof WorkspaceItem> & {
+    sections: Section[];
+  };
   readonly allWorkspaces: ReadonlyArray<ComponentProps<typeof WorkspaceItem>>;
   readonly onCreateWorkspace?: () => void;
   readonly onEditWorkspace?: ComponentProps<

@@ -24,9 +24,18 @@ const contentWrapperStyles = css({
   zIndex: '1000',
 });
 
-const smallVariantStyles = css({
-  padding: '8px 12px',
-});
+const smallVariantStyles = (
+  side: 'top' | 'right' | 'bottom' | 'left' | undefined
+) =>
+  css([
+    {
+      padding: '8px 12px',
+    },
+    side === 'left' && { marginLeft: '-1px' },
+    side === 'top' && { marginTop: '-1px' },
+    side === 'right' && { marginRight: '-1px' },
+    side === 'bottom' && { marginBottom: '-1px' },
+  ]);
 
 const contentStyles = css(p12Medium, {
   color: cssVar('backgroundColor'),
@@ -113,7 +122,7 @@ export const Tooltip = ({
           align={align}
           css={[
             contentWrapperStyles,
-            variant === 'small' && smallVariantStyles,
+            variant === 'small' && smallVariantStyles(side),
             onClick && clickableStyles,
             wrapperStyles,
           ]}

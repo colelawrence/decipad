@@ -4,50 +4,129 @@ import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import format from 'date-fns/format';
-import { FC, useState } from 'react';
-import {
-  ColorStatusCircle,
-  Divider,
-  Dot,
-  MenuItem,
-  TriggerMenuItem,
-} from '../../atoms';
-import {
-  AvailableColorStatus,
-  statusColors,
-  TColorStatus,
-} from '../../atoms/ColorStatus/ColorStatus';
+import { FC, useEffect, useState } from 'react';
+import { useDrag, useDragLayer, XYCoord } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import { ColorStatusCircle, MenuItem, TriggerMenuItem } from '../../atoms';
 import * as icons from '../../icons';
-import { MenuList } from '../../molecules';
+import { FilterBubbles, MenuList, NotebookIcon } from '../../molecules';
 import {
   cssVar,
-  offBlack,
   p12Medium,
   p14Medium,
   setCssVar,
   shortAnimationDuration,
-  transparency,
+  smallestDesktop,
 } from '../../primitives';
 import { notebookList } from '../../styles';
 import { mainIconButtonStyles } from '../../styles/buttons';
 import {
   Anchor,
+  AvailableColorStatus,
   AvailableSwatchColor,
+  ColorStatusNames,
+  DNDItemTypes,
   swatchesThemed,
+  TColorStatus,
   UserIconKey,
 } from '../../utils';
+import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
+
+type PageInfo = {
+  type: 'archived' | 'section' | 'workspace';
+  sections: Section[];
+};
+
+function CustomDragLayer() {
+  const {
+    itemType,
+    isDragging,
+    item,
+    initialOffset,
+    mousePosition,
+    currentOffset,
+  } = useDragLayer((monitor) => ({
+    item: monitor.getItem(),
+    itemType: monitor.getItemType(),
+    initialOffset: monitor.getInitialSourceClientOffset(),
+    currentOffset: monitor.getInitialClientOffset(),
+    mousePosition: monitor.getDifferenceFromInitialOffset(),
+    isDragging: monitor.isDragging(),
+  }));
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
+
+  const renderItem = () => {
+    const color = baseSwatches[item.color as AvailableSwatchColor];
+    const Icon = icons[item.icon as UserIconKey];
+
+    switch (itemType) {
+      case DNDItemTypes.ICON:
+        return (
+          <div
+            style={{
+              backgroundColor: color.hex,
+              opacity: 1,
+              color: cssVar('currentTextColor'),
+              padding: 6,
+              borderRadius: 6,
+              display: 'inline-flex',
+              gap: 4,
+              zIndex: 1000,
+              transform: 'rotate(3deg)',
+            }}
+          >
+            <span
+              css={{
+                height: 16,
+                width: 16,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Icon />
+            </span>
+            <span css={{ alignItems: 'center', justifyContent: 'center' }}>
+              {item.title}
+            </span>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  if (!isDragging) {
+    return null;
+  }
+
+  return (
+    <div
+      css={getDragLayerStyles(
+        initialOffset,
+        currentOffset,
+        mousePosition,
+        isDragging
+      )}
+    >
+      {renderItem()}
+    </div>
+  );
+}
 
 type NotebookListItemProps = {
   readonly id: string;
   readonly name: string;
   readonly creationDate?: Date;
-  readonly archivePage?: boolean;
-
+  readonly page?: PageInfo;
+  readonly isPublic?: boolean;
+  readonly section?: Section;
   readonly actionsOpen?: boolean;
   readonly onExport?: () => void;
   readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
+  readonly onMoveToSection?: (padId: string, sectionId: string) => void;
   readonly onChangeStatus?: (status: TColorStatus) => void;
   readonly onMoveToWorkspace?: (workspaceId: string) => void;
   readonly onUnarchive?: () => void;
@@ -57,184 +136,230 @@ type NotebookListItemProps = {
   readonly otherWorkspaces?: { id: string; name: string }[];
 };
 
+interface DropResult {
+  id: string;
+  title: string;
+  icon: UserIconKey;
+  color: AvailableSwatchColor;
+}
+
 export const NotebookListItem = ({
   id,
   name,
   status,
   creationDate,
+  isPublic,
+  section,
   actionsOpen = false,
   toggleActionsOpen = noop,
   onDuplicate = noop,
   onMoveToWorkspace = noop,
+  onMoveToSection = noop,
   onDelete = noop,
   onExport = noop,
   onUnarchive = noop,
   onChangeStatus = noop,
   icon = 'Rocket',
   iconColor = 'Sulu',
-  archivePage,
+  page,
   otherWorkspaces,
 }: NotebookListItemProps): ReturnType<FC> => {
-  const Icon = icons[icon];
-
   const href = notebooks({}).notebook({ notebook: { id, name } }).$;
   const [feStatus, setFeStatus] = useState<TColorStatus>(status);
-  const [darkTheme] = useThemeFromStore();
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [{ isDragging }, drag, preview] = useDrag(() => ({
+    type: DNDItemTypes.ICON,
+    item: { id, title: name, icon, color: iconColor },
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult<DropResult>();
+      if (item && dropResult) {
+        onMoveToSection(item.id, dropResult.id);
+      }
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+      handlerId: monitor.getHandlerId(),
+    }),
+  }));
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, [preview]);
 
   return (
-    <div css={wrapperStyles}>
-      <Anchor href={href} css={anchorStyles}>
-        <Dot
-          left={26}
-          top={12}
-          visible={feStatus !== 'No Status'}
-          color={statusColors[feStatus]}
-        >
-          <div
-            css={[
-              iconStyles,
-              { backgroundColor: swatchesThemed(darkTheme)[iconColor].rgb },
-            ]}
-          >
-            <Icon />
-          </div>
-        </Dot>
-        <strong css={[nameStyles, name || noNameNameStyles]}>
-          {name || 'My notebook title'}
-        </strong>
-        <div css={[menuActionsStyles]}>
-          <MenuList
-            root
-            dropdown
-            align="end"
-            side="bottom"
-            sideOffset={10}
-            open={actionsOpen}
-            onChangeOpen={toggleActionsOpen}
-            trigger={
-              <div css={[mainIconButtonStyles, { borderRadius: '6px' }]}>
-                <span
-                  css={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minWidth: '16px',
-                    minHeight: '16px',
-                    maxWidth: '32px',
-                    maxHeight: '32px',
-                    padding: '20%',
-                  }}
+    <>
+      {isDragging ? <CustomDragLayer /> : null}
+      <div
+        ref={drag}
+        className="dragitem"
+        css={[wrapperStyles, isDragging && notebookIconGrabbingStyles]}
+      >
+        <Anchor href={href} css={anchorStyles}>
+          <NotebookIcon color={iconColor} icon={icon} />
+
+          <strong css={[nameStyles, name || noNameNameStyles]}>
+            {name || 'My notebook title'}
+          </strong>
+          <div css={notebookListTagsStyles}>
+            <span css={notebookListInlineTags}>
+              {isFlagEnabled('DASHBOARD_STATUS') ? (
+                <MenuList
+                  root
+                  dropdown
+                  align="end"
+                  side="bottom"
+                  sideOffset={10}
+                  open={statusOpen}
+                  onChangeOpen={setStatusOpen}
+                  trigger={
+                    <div>
+                      <FilterBubbles
+                        description={ColorStatusNames[feStatus]}
+                        iconStyles={css({ transform: 'translateY(1px)' })}
+                        icon={<ColorStatusCircle name={feStatus} />}
+                      />
+                    </div>
+                  }
                 >
-                  <icons.Ellipsis />
-                </span>
-              </div>
-            }
-          >
-            <MenuItem
-              icon={<icons.Copy />}
-              onSelect={() => {
-                onDuplicate();
-                toggleActionsOpen();
-              }}
-            >
-              <div css={{ minWidth: '132px' }}>Duplicate</div>
-            </MenuItem>
-            {otherWorkspaces?.length !== 0 ? (
-              <MenuList
-                itemTrigger={
-                  <TriggerMenuItem icon={<icons.Switch />}>
-                    <div css={{ minWidth: '132px' }}>Move to workspace</div>
-                  </TriggerMenuItem>
-                }
-              >
-                {otherWorkspaces?.map((workspace) => (
-                  <MenuItem
-                    key={workspace.id}
-                    icon={<icons.AddToWorkspace />}
-                    onSelect={() => onMoveToWorkspace(workspace.id)}
-                  >
-                    {workspace.name}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            ) : null}
-            <MenuItem
-              icon={<icons.Download />}
-              onSelect={() => {
-                onExport();
-                toggleActionsOpen();
-              }}
-            >
-              Download
-            </MenuItem>
-            {archivePage ? (
-              <MenuItem
-                icon={<icons.FolderOpen />}
-                onSelect={() => {
-                  onUnarchive();
-                  toggleActionsOpen();
-                }}
-              >
-                Put back
-              </MenuItem>
-            ) : null}
-            <MenuItem
-              icon={archivePage ? <icons.Trash /> : <icons.Archive />}
-              onSelect={() => {
-                onDelete();
-                toggleActionsOpen();
-              }}
-            >
-              {archivePage ? 'Delete' : 'Archive'}
-            </MenuItem>
-            {isFlagEnabled('DASHBOARD_STATUS')
-              ? [
-                  <li css={menuActionHRStyles} key="divider">
-                    <Divider />
-                  </li>,
-                  AvailableColorStatus.map((label) => (
+                  {AvailableColorStatus.map((label) => (
                     <MenuItem
                       key={label}
                       icon={<ColorStatusCircle name={label} />}
                       onSelect={() => {
-                        onChangeStatus(label);
+                        onChangeStatus(label as TColorStatus);
                         setFeStatus(label);
-                        toggleActionsOpen();
+                        setStatusOpen(!statusOpen);
                       }}
                       selected={feStatus === label}
                     >
-                      <span>{label}</span>
+                      <span>{ColorStatusNames[label]}</span>
                     </MenuItem>
-                  )),
-                ]
-              : null}
-            {creationDate && (
-              <li css={creationDateStyles}>
-                <span css={calendarIconStyles}>
-                  <icons.Calendar />
-                </span>
-                <span> Created: {format(creationDate, 'd MMM Y')}</span>
-              </li>
-            )}
-          </MenuList>
-        </div>
-      </Anchor>
-    </div>
+                  ))}
+                </MenuList>
+              ) : null}
+
+              {isPublic ? (
+                <FilterBubbles description="Published" icon={<icons.Globe />} />
+              ) : null}
+
+              {section?.name ? (
+                <FilterBubbles
+                  description={section.name}
+                  icon={<icons.Folder />}
+                />
+              ) : null}
+
+              {page?.type === 'archived' ? (
+                <FilterBubbles description="Archive" icon={<icons.Archive />} />
+              ) : null}
+            </span>
+          </div>
+          <div css={[menuActionsStyles]}>
+            <MenuList
+              root
+              dropdown
+              align="end"
+              side="bottom"
+              sideOffset={10}
+              open={actionsOpen}
+              onChangeOpen={toggleActionsOpen}
+              trigger={
+                <div css={[mainIconButtonStyles, { borderRadius: '6px' }]}>
+                  <span
+                    css={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      minWidth: '16px',
+                      minHeight: '16px',
+                      maxWidth: '32px',
+                      maxHeight: '32px',
+                      padding: '20%',
+                    }}
+                  >
+                    <icons.Ellipsis />
+                  </span>
+                </div>
+              }
+            >
+              <MenuItem
+                icon={<icons.Copy />}
+                onSelect={() => {
+                  onDuplicate();
+                  toggleActionsOpen();
+                }}
+              >
+                <div css={{ minWidth: '132px' }}>Duplicate</div>
+              </MenuItem>
+              {otherWorkspaces?.length !== 0 ? (
+                <MenuList
+                  itemTrigger={
+                    <TriggerMenuItem icon={<icons.Switch />}>
+                      <div css={{ minWidth: '132px' }}>Move to workspace</div>
+                    </TriggerMenuItem>
+                  }
+                >
+                  {otherWorkspaces?.map((workspace) => (
+                    <MenuItem
+                      key={workspace.id}
+                      icon={<icons.AddToWorkspace />}
+                      onSelect={() => onMoveToWorkspace(workspace.id)}
+                    >
+                      {workspace.name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              ) : null}
+              <MenuItem
+                icon={<icons.Download />}
+                onSelect={() => {
+                  onExport();
+                  toggleActionsOpen();
+                }}
+              >
+                Download
+              </MenuItem>
+              {page?.type === 'archived' ? (
+                <MenuItem
+                  icon={<icons.FolderOpen />}
+                  onSelect={() => {
+                    onUnarchive();
+                    toggleActionsOpen();
+                  }}
+                >
+                  Put back
+                </MenuItem>
+              ) : null}
+              <MenuItem
+                icon={
+                  page?.type === 'archived' ? (
+                    <icons.Trash />
+                  ) : (
+                    <icons.Archive />
+                  )
+                }
+                onSelect={() => {
+                  onDelete();
+                  toggleActionsOpen();
+                }}
+              >
+                {page?.type === 'archived' ? 'Delete' : 'Archive'}
+              </MenuItem>
+
+              {creationDate && (
+                <li css={creationDateStyles}>
+                  <span css={calendarIconStyles}>
+                    <icons.Calendar />
+                  </span>
+                  <span> Created: {format(creationDate, 'd MMM Y')}</span>
+                </li>
+              )}
+            </MenuList>
+          </div>
+        </Anchor>
+      </div>
+    </>
   );
 };
-
-const menuActionHRStyles = css(p14Medium, {
-  display: 'grid',
-  borderRadius: '8px',
-  '&:hover': {
-    backgroundColor: cssVar('highlightColor'),
-  },
-  '& button, & a button': {
-    ...p14Medium,
-    padding: '6px',
-    lineHeight: '20px',
-  },
-  margin: '4px 0',
-});
 
 const { gridStyles } = notebookList;
 
@@ -254,31 +379,9 @@ const anchorStyles = css(gridStyles, {
   },
 });
 
-const iconStyles = css({
-  gridArea: 'icon',
-  height: '38px',
-
-  display: 'grid',
-  placeItems: 'center',
-  justifyContent: 'center',
-  alignContent: 'center',
-  gridTemplateColumns: '14px',
-
-  '> svg': {
-    height: '18px',
-    width: '18px',
-  },
-
-  borderRadius: '4px',
-  backgroundColor: cssVar('backgroundColor'),
-  ...setCssVar('currentTextColor', cssVar('iconColorDark')),
-
-  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
-});
-
 const nameStyles = css({
   gridArea: 'title',
-  gridColumnEnd: 'emptycol',
+  gridColumnEnd: 'tags',
   alignSelf: 'center',
 
   overflowX: 'clip',
@@ -293,6 +396,20 @@ const nameStyles = css({
 
 const noNameNameStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+});
+
+const notebookListInlineTags = css({
+  display: 'flex',
+  gap: 8,
+});
+
+const notebookListTagsStyles = css({
+  gridArea: 'tags',
+  display: 'grid',
+  paddingLeft: 36,
+  [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
+    display: 'none',
+  },
 });
 
 const menuActionsStyles = css({
@@ -328,3 +445,38 @@ const creationDateStyles = css(p12Medium, {
   listStyle: 'none',
   marginTop: '4px',
 });
+
+const notebookIconGrabbingStyles = css({
+  cursor: 'grabbing',
+});
+
+function getDragLayerStyles(
+  initialOffset: XYCoord | null,
+  currentOffset: XYCoord | null,
+  mousePosition: XYCoord | null,
+  isDragging: boolean
+) {
+  if (!initialOffset || !currentOffset || !mousePosition) {
+    return {
+      display: 'none',
+    };
+  }
+
+  const { x, y } = mousePosition;
+  const { x: iX, y: iY } = initialOffset;
+  const { x: jX, y: jY } = currentOffset;
+  const xDelta = Math.round(jX - iX + x);
+  const yDelta = Math.round(jY - iY + y);
+  const trailingBy = 5;
+  const transform = `translate3d(${xDelta + trailingBy}px, ${
+    yDelta + trailingBy
+  }px, 0)`;
+  return css({
+    transform,
+    position: 'fixed',
+    opacity: isDragging ? 1 : 0,
+    height: isDragging ? '' : 0,
+    WebkitTransform: transform,
+    zIndex: '10',
+  });
+}

@@ -3,7 +3,7 @@ import { ColorStatus } from './ColorStatus';
 
 describe('Color status', () => {
   it('renders the color status as the background', () => {
-    render(<ColorStatus name={'To Do'} selected={false} />);
+    render(<ColorStatus name={'draft'} selected={false} />);
     expect(getComputedStyle(screen.getByText('To Do')).visibility).toBe(
       'visible'
     );
