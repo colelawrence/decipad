@@ -143,6 +143,57 @@ describe('withCodeLine', () => {
     });
   });
 
+  describe('when there is = after assignment', () => {
+    it('should normalize only the first = (assignment)', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [
+            {
+              text: 'A =lookup(B,\nBudget_Month.Amount == "3")',
+            },
+            {
+              text: 'invalid but test == here',
+              bold: true,
+            },
+          ],
+        },
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ] as any;
+      editor.selection = {
+        anchor: { path: [0, 0], offset: 0 },
+        focus: { path: [0, 0], offset: 0 },
+      };
+
+      setSelection(editor, {
+        anchor: { path: [1, 0], offset: 0 },
+        focus: { path: [1, 0], offset: 0 },
+      });
+
+      expect(editor.children).toEqual([
+        {
+          type: ELEMENT_CODE_LINE,
+          children: [
+            {
+              text: 'A = lookup(B,\nBudget_Month.Amount == "3")',
+            },
+            {
+              text: 'invalid but test == here',
+              bold: true,
+            },
+          ],
+        },
+        {
+          type: 'paragraph',
+          children: [{ text: '' }],
+        },
+      ]);
+    });
+  });
+
   describe('when there is no space before "="', () => {
     it('should insert space before', () => {
       editor.children = [

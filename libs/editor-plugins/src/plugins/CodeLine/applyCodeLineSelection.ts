@@ -46,8 +46,10 @@ export const applyCodeLineSelection = (editor: MyEditor, op: TOperation) => {
 
   const children = Array.from(getNodeChildren(editor, path));
 
-  const index = 0;
+  let index = -1;
   for (const lineChild of children) {
+    index += 1;
+
     const [lineChildNode, lineChildPath] = lineChild;
 
     if (!index && isText(lineChildNode)) {
