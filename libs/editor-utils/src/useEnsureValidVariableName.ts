@@ -5,8 +5,8 @@ import { useSelected } from 'slate-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { useBehaviorSubject } from '@decipad/react-utils';
-import { noop, timeout } from '@decipad/utils';
-import { identifierRegExpGlobal } from '@decipad/computer';
+import { timeout } from '@decipad/utils';
+import { Computer, identifierRegExpGlobal } from '@decipad/computer';
 
 /**
  * Makes sure a variable name is not empty or duplicate
@@ -27,14 +27,12 @@ export function useEnsureValidVariableName(
   const editor = useTEditorRef();
   const computer = useComputer();
 
-  const varName = getNodeString(element);
-
   const [validationMessage$] = useState(
     () => new BehaviorSubject<string | undefined>(undefined)
   );
 
-  useOnSlateFocusBlur(
-    noop,
+  useSlateOnBlur(
+    computer,
     useCallback(() => {
       const path = findNodePath(editor, element);
       const currentVarName = getNodeString(element);
@@ -49,27 +47,18 @@ export function useEnsureValidVariableName(
 
       validationMessage$.next(message);
 
-      // Revert varname to previously good one
+      // Get next available and valid name
       if (shouldRename && path) {
-        const newName = computer.getAvailableIdentifier(
-          varName.replace(/\d+$/, '') || defaultVarName,
-          1
-        );
+        const tentativeNewName =
+          stripOffInvalidIdentifierCharacters(currentVarName).replace(
+            /\d+$/,
+            ''
+          ) || defaultVarName;
+        const newName = computer.getAvailableIdentifier(tentativeNewName, 2);
 
-        // Insert text later so as to not mess with cursor
-        setTimeout(() => {
-          insertText(editor, newName, { at: path });
-        });
+        insertText(editor, newName, { at: path });
       }
-    }, [
-      editor,
-      element,
-      blockId,
-      validationMessage$,
-      defaultVarName,
-      varName,
-      computer,
-    ])
+    }, [editor, element, blockId, validationMessage$, defaultVarName, computer])
   );
 
   return useBehaviorSubject(validationMessage$, hideMessageLater);
@@ -89,9 +78,7 @@ export const getVariableValidationErrorMessage = ({
   varName: string;
   varExists: boolean;
 }): string | undefined => {
-  const validIdentifierParts =
-    varName.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
-  if (validIdentifierParts !== varName) {
+  if (stripOffInvalidIdentifierCharacters(varName) !== varName) {
     return variableValidationErrors.varInvalid;
   }
 
@@ -116,8 +103,13 @@ const hideMessageLater: (
     })
   );
 
-/** Calls callbacks when slate useSelected() changes */
-function useOnSlateFocusBlur(onFocus: () => void, onBlur: () => void) {
+/** "bad: identifier! " => "badidentifier" */
+function stripOffInvalidIdentifierCharacters(varName: string) {
+  return varName.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
+}
+
+/** Calls callback when slate useSelected() changes to false */
+function useSlateOnBlur(computer: Computer, onBlur: () => void) {
   const selected = useSelected();
   const previouslySelected = useRef(selected);
 
@@ -129,9 +121,8 @@ function useOnSlateFocusBlur(onFocus: () => void, onBlur: () => void) {
     previouslySelected.current = selected;
 
     if (selected === false) {
-      onBlur();
-    } else {
-      onFocus();
+      // Invoke later to make sure to have Computer's latest state
+      setTimeout(onBlur, computer.requestDebounceMs);
     }
-  }, [selected, onBlur, onFocus]);
+  }, [selected, onBlur, computer]);
 }

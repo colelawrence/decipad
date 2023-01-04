@@ -91,7 +91,7 @@ export class Computer {
   private latestProgram: ProgramBlock[] = [];
   private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
-  private requestDebounceMs: number;
+  public readonly requestDebounceMs: number;
   private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
   private automaticallyGeneratedNames = new Set<string>();
 
