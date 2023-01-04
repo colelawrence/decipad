@@ -461,6 +461,7 @@ it('can list tables and columns', async () => {
   computer.pushCompute({
     program: getIdentifiedBlocks(
       `table = { A = [1], B = ["a"] }`,
+      `table.C = [date(2020-01-01)]`,
       `anotherVar = "Not a table"`
     ),
   });
@@ -472,23 +473,54 @@ it('can list tables and columns', async () => {
   expect(columns).toMatchInlineSnapshot(`
     Array [
       Object {
-        "colValues": Array [
-          Fraction(1),
-        ],
-        "name": "table.A",
-        "type": Object {
-          "kind": "number",
-          "unit": null,
+        "columnName": "A",
+        "result": Object {
+          "type": Object {
+            "cellType": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "kind": "column",
+          },
+          "value": Array [
+            Fraction(1),
+          ],
         },
+        "tableName": "table",
       },
       Object {
-        "colValues": Array [
-          "a",
-        ],
-        "name": "table.B",
-        "type": Object {
-          "kind": "string",
+        "columnName": "B",
+        "result": Object {
+          "type": Object {
+            "cellType": Object {
+              "kind": "string",
+            },
+            "kind": "column",
+          },
+          "value": Array [
+            "a",
+          ],
         },
+        "tableName": "table",
+      },
+      Object {
+        "blockId": "block-1",
+        "columnName": "C",
+        "result": Object {
+          "type": Object {
+            "cellType": Object {
+              "date": "day",
+              "kind": "date",
+            },
+            "columnSize": "unknown",
+            "indexedBy": "table",
+            "kind": "column",
+          },
+          "value": Array [
+            1577836800000n,
+          ],
+        },
+        "tableName": "table",
       },
     ]
   `);
