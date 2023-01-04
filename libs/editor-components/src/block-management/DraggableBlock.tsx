@@ -71,7 +71,6 @@ const defaultOnDelete = (
   parentOnDelete?: OnDelete
 ): void => {
   const path = findNodePath(editor, element);
-
   const onDelete = () => {
     if (path) {
       removeNodes(editor, {
@@ -257,7 +256,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         dropLine={dropLine || undefined}
         isBeingDragged={isDragging || draggingIds.has(element.id)}
         onDelete={
-          typeof parentOnDelete !== 'function' ? parentOnDelete : onDelete
+          typeof parentOnDelete === 'string' ? parentOnDelete : onDelete
         }
         onDuplicate={onDuplicate}
         onShowHide={onShowHide}
