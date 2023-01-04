@@ -131,6 +131,8 @@ export const theme: CssVariables = {
   variableHighlightColor: grey200.rgb,
   variableHighlightTextColor: teal600.rgb,
 
+  structuredCalculationVariableColor: yellow400.rgb,
+
   magicNumberTextColor: gleb700.rgb,
 
   tableSelectionBackgroundColor: blue100.rgb,

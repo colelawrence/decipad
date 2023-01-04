@@ -239,7 +239,7 @@ export const CodeLine = ({
   );
 };
 
-function useResultInfo({
+export function useResultInfo({
   result,
   syntaxError,
   onDragStartCell,

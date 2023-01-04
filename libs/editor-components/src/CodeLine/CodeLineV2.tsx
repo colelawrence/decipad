@@ -19,9 +19,8 @@ import {
   useIsEditorReadOnly,
   useEditorTeleportContext,
 } from '@decipad/react-contexts';
-import { useDelayedValue } from '@decipad/react-utils';
 import {
-  CodeLine as UICodeLine,
+  CodeLineStructured,
   CodeVariableDefinition,
   Tooltip,
 } from '@decipad/ui';
@@ -38,7 +37,7 @@ import {
 import { DraggableBlock } from '../block-management';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
-// TODO import { onDragStartInlineResult } from './onDragStartInlineResult';
+import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
@@ -61,6 +60,9 @@ export const CodeLineV2: PlateComponent = ({
   const editor = useTEditorRef();
 
   useCodeLineClickReference(editor, selected, codeLineContent);
+
+  // transform variable references into smart refs on blur
+  useOnBlurNormalize(editor, element);
 
   const computer = useComputer();
   const { id: lineId } = element;
@@ -106,13 +108,11 @@ export const CodeLineV2: PlateComponent = ({
     [editor, isReadOnly]
   );
 
-  /*
   const handleDragStartInlineResult = useMemo(
     () =>
       isReadOnly ? undefined : onDragStartInlineResult(editor, { element }),
     [editor, element, isReadOnly]
   );
-  */
 
   const {
     closeEditor,
@@ -157,27 +157,23 @@ export const CodeLineV2: PlateComponent = ({
         onDismiss={onTeleportDismiss}
         onBringBack={focusCodeLine}
       >
-        <UICodeLine
+        <CodeLineStructured
           highlight={selected}
           result={lineResult?.result}
           placeholder="Distance = 60 km/h * Time"
           syntaxError={syntaxError}
           isEmpty={isEmpty}
-          /* onDragStartInlineResult={handleDragStartInlineResult} */
+          onDragStartInlineResult={handleDragStartInlineResult}
           onDragStartCell={handleDragStartCell}
           onClickedResult={isReadOnly ? undefined : onClickedResult}
           hasNextSibling={!teleport && siblingCodeLines?.hasNext}
-          hasPreviousSibling={!teleport && siblingCodeLines?.hasPrevious}
-        >
-          <VarResultContext.Provider value={lineResult}>
-            <span>{childrenArray[0]}</span>
-          </VarResultContext.Provider>
-
-          <span contentEditable={false} css={{ userSelect: 'none' }}>
-            {' = '}
-          </span>
-          <span>{childrenArray[1]}</span>
-        </UICodeLine>
+          variableNameChild={
+            <VarResultContext.Provider value={lineResult}>
+              {childrenArray[0]}
+            </VarResultContext.Provider>
+          }
+          codeChild={childrenArray[1]}
+        />
       </CodeLineTeleport>
     </DraggableBlock>
   );
@@ -196,16 +192,14 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
 
   const empty = getNodeString(props.element).trim() === '';
 
-  const delayedType = useDelayedValue(
-    varResult?.result?.type,
-    varResult?.result?.type == null ||
-      varResult?.result?.type?.kind === 'type-error'
-  );
   return (
     <Tooltip
       trigger={
         <span {...props.attributes} data-testid="codeline-varname">
-          <CodeVariableDefinition empty={empty} type={delayedType}>
+          <CodeVariableDefinition
+            empty={empty}
+            type={{ kind: 'table-formula' }}
+          >
             {props.children}
           </CodeVariableDefinition>
         </span>

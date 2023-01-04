@@ -1,5 +1,6 @@
 import {
   CodeLineElement,
+  CodeLineV2Element,
   CodeLineV2ElementCode,
   MyEditor,
   MyElement,
@@ -13,6 +14,7 @@ import { useSelected } from 'slate-react';
 export const useOnBlurNormalize = (
   editor: MyEditor,
   element:
+    | CodeLineV2Element
     | CodeLineV2ElementCode
     | CodeLineElement
     | TableColumnFormulaElement

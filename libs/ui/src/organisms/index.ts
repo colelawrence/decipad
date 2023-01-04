@@ -3,6 +3,7 @@ export { AutoCompleteMenu } from './AutoCompleteMenu/AutoCompleteMenu';
 export { BlockDragHandle } from './BlockDragHandle/BlockDragHandle';
 export { ClosableModal } from './ClosableModal/ClosableModal';
 export { CodeLine } from './CodeLine/CodeLine';
+export { CodeLineStructured } from './CodeLineStructured/CodeLineStructured';
 export { CodeResult } from './CodeResult/CodeResult';
 export { ColumnResult } from './ColumnResult/ColumnResult';
 export { DashboardDialogCTA } from './DashboardDialogCTA/DashboardDialogCTA';

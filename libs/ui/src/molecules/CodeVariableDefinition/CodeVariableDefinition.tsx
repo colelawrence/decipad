@@ -1,16 +1,17 @@
 import { SerializedType } from '@decipad/computer';
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
+import { CellValueType } from '@decipad/editor-types';
 import { getTypeIcon } from '../../utils';
-import { cssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
+import { cssVar } from '../../primitives';
 
-const varStyles = css(codeBlock.variableStyles, {
-  padding: '4px 6px',
+const varStyles = css(codeBlock.structuredVariableStyles, {
+  padding: '4px 8px',
   borderRadius: '6px',
-  fontSize: '13px',
-  backgroundColor: cssVar('bubbleBackground'),
-  color: cssVar('bubbleColor'),
+  background: cssVar('structuredCalculationVariableColor'),
+  display: 'flex',
+  alignItems: 'center',
 });
 
 const iconStyles = css({
@@ -35,7 +36,7 @@ const emptyStyles = css({
 interface NonInteractiveCodeVariableProps {
   readonly children: ReactNode;
   readonly empty: boolean;
-  readonly type?: SerializedType;
+  readonly type?: SerializedType | CellValueType;
 }
 
 export const CodeVariableDefinition = ({

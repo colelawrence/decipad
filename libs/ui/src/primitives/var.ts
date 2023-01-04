@@ -105,6 +105,8 @@ export interface CssVariables {
   readonly variableHighlightTextColor: Property.Color;
   readonly variableHighlightColor: Property.Color;
 
+  readonly structuredCalculationVariableColor: Property.Color;
+
   //
   // UI
   //
