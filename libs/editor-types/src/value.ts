@@ -29,9 +29,11 @@ import {
   MarkKind,
 } from '.';
 import {
+  DataViewCaptionElement,
   DataViewElement,
   DataViewHeader,
   DataViewHeaderRowElement,
+  DataViewNameElement,
 } from './data-view';
 import {
   ELEMENT_CODE_LINE_V2,
@@ -292,7 +294,9 @@ export type AnyElement =
   | BlockElement
   | InlineElement
   | CodeLineV2ElementCode
-  | CodeLineV2ElementVarname;
+  | CodeLineV2ElementVarname
+  | DataViewCaptionElement
+  | DataViewNameElement;
 
 export const topLevelBlockKinds: string[] = [
   ELEMENT_H1,

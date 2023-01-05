@@ -1,5 +1,6 @@
 export * from './DataViewTableHeader';
 export * from './DataView';
+export * from './DataViewCaption';
 export * from './DataViewColumnHeader';
 export * from './DataViewColumnHeaderRow';
 export * from './DataViewData';

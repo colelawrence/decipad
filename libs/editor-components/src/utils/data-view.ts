@@ -1,10 +1,10 @@
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_TR,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_VARIABLE_NAME,
   DataViewElement,
   MyEditor,
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { findNode, focusEditor, TEditor } from '@udecode/plate';
@@ -24,11 +24,11 @@ const getInitialDataViewElement = (
     children: [
       {
         id: nanoid(),
-        type: ELEMENT_TABLE_CAPTION,
+        type: ELEMENT_DATA_VIEW_CAPTION,
         children: [
           {
             id: nanoid(),
-            type: ELEMENT_TABLE_VARIABLE_NAME,
+            type: ELEMENT_DATA_VIEW_NAME,
             children: [
               { text: `Data view${varName ? ` for ${varName}` : ''}` },
             ],

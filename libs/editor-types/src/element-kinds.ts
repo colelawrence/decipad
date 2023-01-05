@@ -57,6 +57,8 @@ export const ELEMENT_TABLE_VARIABLE_NAME = 'table-var-name';
 
 // data-views
 export const ELEMENT_DATA_VIEW = 'data-view';
+export const ELEMENT_DATA_VIEW_CAPTION = 'data-view-caption';
+export const ELEMENT_DATA_VIEW_NAME = 'data-view-name';
 export const ELEMENT_DATA_VIEW_TR = 'data-view-tr';
 export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
 

@@ -3,7 +3,6 @@ import {
   ELEMENT_DATA_VIEW,
   MyEditor,
   MyNodeEntry,
-  TableCaptionElement,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
 import { removeNodes, setNodes } from '@udecode/plate';
@@ -12,11 +11,14 @@ import { NodeEntry } from 'slate';
 import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_DATA_VIEW_TR,
-  ELEMENT_TABLE_VARIABLE_NAME,
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
 } from '../../../editor-types/src/element-kinds';
 import {
+  DataViewCaptionElement,
   DataViewElement,
   DataViewHeaderRowElement,
+  DataViewNameElement,
 } from '../../../editor-types/src/data-view';
 
 const normalizeDataViewElement = (
@@ -31,16 +33,16 @@ const normalizeDataViewElement = (
   }
 
   if (node.children.length < 1) {
-    insertNodes<TableCaptionElement>(
+    insertNodes<DataViewCaptionElement>(
       editor,
       [
         {
           id: nanoid(),
-          type: ELEMENT_TABLE_CAPTION,
+          type: ELEMENT_DATA_VIEW_CAPTION,
           children: [
             {
               id: nanoid(),
-              type: ELEMENT_TABLE_VARIABLE_NAME,
+              type: ELEMENT_DATA_VIEW_NAME,
               children: [{ text: '' }],
             },
           ],
@@ -65,8 +67,25 @@ const normalizeDataViewElement = (
     return true;
   }
 
-  if (node.children[0].type !== ELEMENT_TABLE_CAPTION) {
-    removeNodes(editor, { at: [...path, 0] });
+  if (node.children[0].type !== ELEMENT_DATA_VIEW_CAPTION) {
+    setNodes(editor, { type: ELEMENT_DATA_VIEW_CAPTION }, { at: [...path, 0] });
+    return true;
+  }
+
+  if (node.children[0].children.length < 1) {
+    insertNodes<DataViewNameElement>(
+      editor,
+      {
+        id: nanoid(),
+        type: ELEMENT_DATA_VIEW_NAME,
+        children: [{ text: '' }],
+      },
+      { at: [...path, 0, 0] }
+    );
+    return true;
+  }
+  if (node.children[0].children[0]?.type !== ELEMENT_DATA_VIEW_NAME) {
+    setNodes(editor, { type: ELEMENT_DATA_VIEW_NAME }, { at: [...path, 0, 0] });
     return true;
   }
 

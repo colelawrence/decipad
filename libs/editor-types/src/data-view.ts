@@ -1,12 +1,13 @@
 import type { SerializedType } from '@decipad/language';
-import { EmptyText } from '.';
+import { EmptyText, Text } from '.';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_TR,
   ELEMENT_DATA_VIEW_TH,
+  ELEMENT_DATA_VIEW_CAPTION,
+  ELEMENT_DATA_VIEW_NAME,
 } from './element-kinds';
 import type { BaseElement } from '.';
-import { TableCaptionElement } from './table';
 
 export interface DataViewHeaderRowElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TR;
@@ -21,9 +22,19 @@ export interface DataViewHeader extends BaseElement {
   children: [EmptyText];
 }
 
+export interface DataViewNameElement extends BaseElement {
+  type: typeof ELEMENT_DATA_VIEW_NAME;
+  children: [Text];
+}
+
+export interface DataViewCaptionElement extends BaseElement {
+  type: typeof ELEMENT_DATA_VIEW_CAPTION;
+  children: [DataViewNameElement];
+}
+
 export interface DataViewElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW;
-  children: [TableCaptionElement, DataViewHeaderRowElement];
+  children: [DataViewCaptionElement, DataViewHeaderRowElement];
   expandedGroups?: string[];
   varName?: string;
   color?: string;
