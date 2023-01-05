@@ -29,10 +29,10 @@ describe('createNormalizeDataViewPlugin', () => {
                     text: '',
                   },
                 ],
-                type: 'table-var-name',
+                type: 'data-view-name',
               },
             ],
-            type: 'table-caption',
+            type: 'data-view-caption',
           },
           {
             children: [
