@@ -15,6 +15,7 @@ mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
+// eslint-disable-next-line jest/no-disabled-tests
 it.skip('shows a pseudo-focused state', async () => {
   const { rerender } = render(
     <AutoCompleteMenuItem {...props} focused={false} />

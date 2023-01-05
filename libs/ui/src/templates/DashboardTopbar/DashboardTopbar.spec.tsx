@@ -16,6 +16,7 @@ const WithProviders: FC<PropsWithChildren> = ({ children }) => (
   </BrowserRouter>
 );
 
+// eslint-disable-next-line jest/no-disabled-tests
 it.skip('renders a level 1 notebook list header', () => {
   const { getByText } = render(
     <WithProviders>

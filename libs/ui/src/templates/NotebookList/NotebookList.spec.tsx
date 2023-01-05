@@ -147,6 +147,7 @@ it('renders an item with actions open on top', async () => {
   );
 });
 
+// eslint-disable-next-line jest/no-disabled-tests
 it.skip('only allows one open actions menu at a time', async () => {
   const container = document.createElement('div');
   container.style.pointerEvents = 'all';
@@ -184,6 +185,7 @@ it.skip('only allows one open actions menu at a time', async () => {
   expect(getByText('First').closest('li')).toContainElement(getByText(/dup/i));
 });
 
+// eslint-disable-next-line jest/no-disabled-tests
 it.skip('emits duplicate events', async () => {
   const handleDuplicate = jest.fn();
   const container = document.createElement('div');
@@ -221,6 +223,7 @@ it.skip('emits duplicate events', async () => {
   expect(handleDuplicate).toHaveBeenCalledWith('1');
 });
 
+// eslint-disable-next-line jest/no-disabled-tests
 it.skip('emits delete events', async () => {
   const handleDelete = jest.fn();
   const container = document.createElement('div');

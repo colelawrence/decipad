@@ -66,6 +66,7 @@ describe('with a router', () => {
   let cleanup: undefined | (() => void);
   afterEach(() => cleanup?.());
 
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('shows when it is active', async () => {
     render(
       <WithProviders>
@@ -92,6 +93,7 @@ describe('with a router', () => {
   });
 
   describe('and the exact prop', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('is not considered active on sub-routes', async () => {
       const NavigateToChild: FC = () => {
         const navigate = useNavigate();
