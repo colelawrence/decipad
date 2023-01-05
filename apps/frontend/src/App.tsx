@@ -68,7 +68,6 @@ export const App: FC = () => {
           discordUrl="https://discord.com/invite/HwDMqwbGmc"
           docsUrl={docs({}).$}
           onSelectSupport={show}
-          feedbackUrl="https://feedback.decipad.com/"
         />
       )}
     </>

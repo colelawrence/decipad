@@ -33,9 +33,14 @@ export type NavigationItemProps = {
   readonly isActive?: boolean;
 } & (
   | {
-      readonly href: string;
+      readonly href?: string;
       readonly exact?: boolean;
       readonly onClick?: undefined;
+    }
+  | {
+      readonly href?: string;
+      readonly onClick?: () => void;
+      readonly exact?: boolean;
     }
   | {
       readonly onClick: () => void;
@@ -196,6 +201,8 @@ const activeStyles = (backgroundColor: OpaqueColor | string) =>
 const navigationItemButtonStyles = (backgroundColor: OpaqueColor | string) =>
   css(p14Regular, {
     ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+
+    cursor: 'pointer',
 
     display: 'flex',
     alignItems: 'center',

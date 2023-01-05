@@ -199,7 +199,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
         wrapperStyles,
         hideOnPrint,
         {
-          right: readOnly && authed ? '16px' : '64px',
+          right: !authed ? '14px' : '104px',
         },
         !canUndo && readOnly && { display: 'none' },
       ]}

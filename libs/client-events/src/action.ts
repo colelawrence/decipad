@@ -26,7 +26,6 @@ type Action =
   | { action: 'number field updated'; props: { isReadOnly: boolean } }
   | { action: 'notebook share link copied'; props?: undefined }
   | { action: 'notebook get inspiration link clicked'; props?: undefined }
-  | { action: 'notebook help link clicked'; props?: undefined }
   | { action: 'notebook code error docs link clicked'; props?: undefined }
   | { action: 'slash command'; props: { command: string } }
   | { action: 'block duplicated'; props: { blockType: string } }
@@ -40,6 +39,12 @@ type Action =
   | { action: 'number created with ='; props?: undefined }
   | { action: 'code line teleported'; props?: undefined }
   | { action: 'code line teleported back'; props?: undefined }
+  // Customer Support
+  | { action: 'contact live support'; props?: undefined }
+  | { action: 'send feedback'; props?: undefined }
+  | { action: 'visit docs'; props?: undefined }
+  | { action: 'help button clicked'; props?: undefined }
+  | { action: 'join discord'; props?: undefined }
   | { action: 'user code error'; props: { message: string; url: string } };
 
 export type ActionEvent = {

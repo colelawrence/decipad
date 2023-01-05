@@ -13,7 +13,6 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
       autoBootProps={{
         email: session.data?.user.email,
         name: session.data?.user.name,
-        userId: session.data?.user.id,
       }}
       shouldInitialize={session.status === 'authenticated'}
     >

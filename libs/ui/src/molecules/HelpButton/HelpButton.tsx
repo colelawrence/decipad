@@ -1,52 +1,55 @@
 import { css } from '@emotion/react';
+import { useContext } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
 import { Tooltip } from '../../atoms';
 import { QuestionMark } from '../../icons';
-import {
-  cssVar,
-  p13Medium,
-  strongOpacity,
-  sun500,
-  transparency,
-} from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
 
-const styles = css(p13Medium, {
+const styles = css(p14Medium, {
   boxShadow: `0px 2px 24px -4px rgba(36, 36, 41, 0.06)`,
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
   borderRadius: '8px',
-  padding: '4px',
+  padding: '5px 15px',
+  color: cssVar('backgroundColor'),
 
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('strongTextColor'),
 
   fontWeight: 900,
-
-  '&:hover': {
-    boxShadow: `1px -1px 1px ${transparency(sun500, strongOpacity).rgba}`,
-  },
 });
 
-const innerStyles = css({
+const innerStyles = css(p14Medium, {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  color: cssVar('backgroundColor'),
 
-  borderRadius: '6px',
+  borderRadius: '8px',
   height: '32px',
-  width: '32px',
-  backgroundColor: cssVar('highlightColor'),
+  gap: '6px',
+  backgroundColor: cssVar('strongTextColor'),
 
   '> svg': {
-    width: '16px',
-    height: '16px',
+    width: '12px',
+    height: '12px',
   },
 });
 
 export const HelpButton = (): ReturnType<React.FC> => {
+  const clientEvent = useContext(ClientEventsContext);
   return (
     <Tooltip
       trigger={
-        <button css={styles}>
+        <button
+          css={styles}
+          onClick={() =>
+            clientEvent({
+              type: 'action',
+              action: 'help button clicked',
+            })
+          }
+        >
           <span css={innerStyles}>
-            <QuestionMark />
+            <QuestionMark /> <span>Help</span>
           </span>
         </button>
       }
