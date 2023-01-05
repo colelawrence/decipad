@@ -7,6 +7,8 @@ import {
   display,
   h1,
   h2,
+  p10Regular,
+  p10Medium,
   p12Medium,
   p12Regular,
   p13Medium,
@@ -58,6 +60,12 @@ export const P8Regular: React.FC<React.PropsWithChildren<unknown>> = ({
 export const P8Medium: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p8Medium)}>{children}</p>;
+export const P10Regular: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p10Regular)}>{children}</p>;
+export const P10Medium: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <p css={css(p10Medium)}>{children}</p>;
 export const P12Medium: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(p12Medium)}>{children}</p>;

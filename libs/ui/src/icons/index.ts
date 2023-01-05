@@ -44,6 +44,7 @@ export { Create } from './Create/Create';
 export { Crown } from './Crown/Crown';
 export { CurvedArrow } from './CurvedArrow/CurvedArrow';
 export { DatePicker } from './DatePicker/DatePicker';
+export { Date } from './Date/Date';
 export { Deci } from './Deci/Deci';
 export { Delete } from './Delete/Delete';
 export { Disk } from './Disk/Disk';

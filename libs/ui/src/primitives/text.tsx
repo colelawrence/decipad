@@ -97,6 +97,16 @@ export const p8Medium: TypographyStyles = {
   ...p8Regular,
   fontWeight: 500,
 };
+export const p10Regular: TypographyStyles = {
+  ...pDefault,
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+  fontSize: `${10 / usualRemPxs}rem`,
+  lineHeight: 1,
+};
+export const p10Medium: TypographyStyles = {
+  ...p10Regular,
+  fontWeight: 500,
+};
 export const p12Regular: TypographyStyles = {
   ...pDefault,
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),

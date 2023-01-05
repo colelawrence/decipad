@@ -5,7 +5,7 @@ export const Deci = (): ReturnType<FC> => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 135.8752 135.8809"
-    fill={cssVar('spoilerColor')}
+    fill={cssVar('strongTextColor')}
   >
     <title>Decipad Logo</title>
     <g>

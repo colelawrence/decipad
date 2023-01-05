@@ -1,3 +1,4 @@
+export * from './AccountSetupFlow';
 export { Dashboard } from './Dashboard/Dashboard';
 export { ErrorPage } from './ErrorPage/ErrorPage';
 export { LoginPage } from './LoginPage/LoginPage';

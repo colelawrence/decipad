@@ -1,3 +1,4 @@
+export { AccountSetup } from './AccountSetup/AccountSetup';
 export { CreateOrEditSectionModal } from './CreateOrEditSectionModal/CreateOrEditSectionModal';
 export { CreateWorkspaceModal } from './CreateWorkspaceModal/CreateWorkspaceModal';
 export { DashboardPlaceholder } from './DashboardPlaceholder/DashboardPlaceholder';
