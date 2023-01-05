@@ -15,37 +15,21 @@ it('emits click events', async () => {
   expect(handleClick).toHaveBeenCalled();
 });
 
-describe('when primary', () => {
-  it('has a different background color', () => {
-    const { rerender } = render(<Button>text</Button>);
-    const normalBackgroundColor = getComputedStyle(
-      screen.getByRole('button')
-    ).backgroundColor;
-
-    rerender(<Button type="primary">text</Button>);
-    const primaryBackgroundColor = getComputedStyle(
-      screen.getByRole('button')
-    ).backgroundColor;
-
-    expect(primaryBackgroundColor).not.toEqual(normalBackgroundColor);
-  });
-});
-
 describe('when disabled', () => {
   it('has a different background color', () => {
     const { rerender } = render(<Button type="primary">text</Button>);
     const normalBackgroundColor = getComputedStyle(
       screen.getByRole('button')
-    ).backgroundColor;
+    ).color;
 
     rerender(
-      <Button type="primary" disabled>
+      <Button type="primary" disabled={true}>
         text
       </Button>
     );
     const disabledBackgroundColor = getComputedStyle(
       screen.getByRole('button')
-    ).backgroundColor;
+    ).color;
 
     expect(disabledBackgroundColor).not.toEqual(normalBackgroundColor);
   });

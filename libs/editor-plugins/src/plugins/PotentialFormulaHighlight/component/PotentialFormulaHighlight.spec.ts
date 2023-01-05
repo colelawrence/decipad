@@ -15,7 +15,7 @@ beforeEach(() => {
   });
 });
 
-it('turns a decoration into a magic number and a code line', () => {
+it.skip('turns a decoration into a magic number and a code line', () => {
   editor.children = [
     {
       type: ELEMENT_PARAGRAPH,

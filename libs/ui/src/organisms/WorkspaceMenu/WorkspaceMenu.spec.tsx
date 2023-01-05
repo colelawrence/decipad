@@ -1,7 +1,11 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ComponentProps } from 'react';
-
+import { ComponentProps, FC, PropsWithChildren } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { QueryParamProvider } from 'use-query-params';
+import { BrowserRouter } from 'react-router-dom';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { WorkspaceMenu } from './WorkspaceMenu';
 
 const props: ComponentProps<typeof WorkspaceMenu> = {
@@ -15,15 +19,31 @@ const props: ComponentProps<typeof WorkspaceMenu> = {
   allWorkspaces: [],
 };
 
+const WithContexts: FC<PropsWithChildren> = ({ children }) => (
+  <DndProvider backend={HTML5Backend}>
+    <BrowserRouter>
+      <QueryParamProvider adapter={ReactRouter6Adapter}>
+        {children}
+      </QueryParamProvider>
+    </BrowserRouter>
+  </DndProvider>
+);
+
 it('renders a heading at given level', () => {
-  const { getByRole } = render(<WorkspaceMenu {...props} Heading="h1" />);
+  const { getByRole } = render(
+    <WithContexts>
+      <WorkspaceMenu {...props} Heading="h1" />
+    </WithContexts>
+  );
   expect(getByRole('heading').tagName).toBe('H1');
 });
 
 it('renders a button to create a workspace', async () => {
   const handleCreateWorkspace = jest.fn();
   const { getByTitle } = render(
-    <WorkspaceMenu {...props} onCreateWorkspace={handleCreateWorkspace} />
+    <WithContexts>
+      <WorkspaceMenu {...props} onCreateWorkspace={handleCreateWorkspace} />
+    </WithContexts>
   );
 
   await userEvent.click(getByTitle(/create/i));
@@ -32,14 +52,16 @@ it('renders a button to create a workspace', async () => {
 
 it('links to the active workspace', () => {
   const { getByText } = render(
-    <WorkspaceMenu
-      {...props}
-      activeWorkspace={{
-        ...props.activeWorkspace,
-        id: '42',
-        name: 'Some Workspace',
-      }}
-    />
+    <WithContexts>
+      <WorkspaceMenu
+        {...props}
+        activeWorkspace={{
+          ...props.activeWorkspace,
+          id: '42',
+          name: 'Some Workspace',
+        }}
+      />
+    </WithContexts>
   );
   expect(getByText('Some Workspace').closest('a')).toHaveAttribute(
     'href',
@@ -48,21 +70,23 @@ it('links to the active workspace', () => {
 });
 it('links to the other workspaces', () => {
   const { getByText } = render(
-    <WorkspaceMenu
-      {...props}
-      allWorkspaces={[
-        {
-          id: '42',
-          numberOfMembers: 2,
-          name: 'Some Workspace',
-        },
-        {
-          id: '1337',
-          numberOfMembers: 2,
-          name: 'Other Workspace',
-        },
-      ]}
-    />
+    <WithContexts>
+      <WorkspaceMenu
+        {...props}
+        allWorkspaces={[
+          {
+            id: '42',
+            numberOfMembers: 2,
+            name: 'Some Workspace',
+          },
+          {
+            id: '1337',
+            numberOfMembers: 2,
+            name: 'Other Workspace',
+          },
+        ]}
+      />
+    </WithContexts>
   );
   expect(getByText('Some Workspace').closest('a')).toHaveAttribute(
     'href',
@@ -76,21 +100,25 @@ it('links to the other workspaces', () => {
 
 it('shows a separator if there are other workspaces', () => {
   const { getByRole, queryByRole, rerender } = render(
-    <WorkspaceMenu {...props} allWorkspaces={[]} />
+    <WithContexts>
+      <WorkspaceMenu {...props} allWorkspaces={[]} />
+    </WithContexts>
   );
   expect(queryByRole('separator')).not.toBeInTheDocument();
 
   rerender(
-    <WorkspaceMenu
-      {...props}
-      allWorkspaces={[
-        {
-          id: '0',
-          numberOfMembers: 2,
-          name: 'Some Workspace',
-        },
-      ]}
-    />
+    <WithContexts>
+      <WorkspaceMenu
+        {...props}
+        allWorkspaces={[
+          {
+            id: '0',
+            numberOfMembers: 2,
+            name: 'Some Workspace',
+          },
+        ]}
+      />
+    </WithContexts>
   );
   expect(getByRole('separator')).toBeVisible();
 });

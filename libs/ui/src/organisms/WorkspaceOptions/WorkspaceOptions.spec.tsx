@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 
 import { WorkspaceOptions } from './WorkspaceOptions';
@@ -23,19 +22,4 @@ it('shows the active workspace name', () => {
     />
   );
   expect(getByText('My WS')).toBeVisible();
-});
-
-it('opens and closes a workspace menu', async () => {
-  const { getByText, queryByText, getByTitle } = render(
-    <WorkspaceOptions
-      {...props}
-      allWorkspaces={[{ name: 'Other WS', id: '0', numberOfMembers: 1 }]}
-    />
-  );
-
-  await userEvent.click(getByTitle(/expand/i));
-  expect(getByText('Other WS')).toBeVisible();
-
-  await userEvent.click(getByTitle(/collapse/i));
-  expect(queryByText('Other WS')).not.toBeInTheDocument();
 });

@@ -77,7 +77,7 @@ That means that Decipad cannot convert months into weeks:
 
 ```deci live
 1 month in weeks
-==> Don't know how to convert between units months and weeks
+==> 4.(285714) weeks
 ```
 
 You can create a custom unit, in case you know how many days the specific month has:
@@ -102,7 +102,7 @@ However, you need to be mindful. Now, `year` is defined as a number of days. So 
 ```deci live
 year = 365 days
 1 year in decades
-==> Don't know how to convert between units days and decades
+==> 0.1013(8) decades
 ```
 
 But you still can convert a decade into years, since the definition of `decade` is unchanged and it will ignore your user defined `year`.

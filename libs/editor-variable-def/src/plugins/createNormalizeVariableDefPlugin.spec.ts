@@ -136,39 +136,35 @@ describe('createNormalizeVariablePlugin for dropdown elements', () => {
     myDropdown.children[1].options = ['25%', '50%'];
     editor.children = [myDropdown as any];
     normalizeEditor(editor, { force: true });
-    expect(editor.children[0]).toMatchInlineSnapshot(`
-      Object {
-        "children": Array [
-          Object {
-            "children": Array [
-              Object {
-                "text": "hello",
-              },
-            ],
-            "type": "caption",
-          },
-          Object {
-            "children": Array [
-              Object {
-                "text": "",
-              },
-            ],
-            "options": Array [
-              Object {
-                "id": "vLgbmLtmHax1vS9uKcRWV",
-                "value": "25%",
-              },
-              Object {
-                "id": "mHLwhkoP43_aGTh5tm4uj",
-                "value": "50%",
-              },
-            ],
-            "type": "dropdown",
-          },
-        ],
-        "type": "def",
-        "variant": "dropdown",
-      }
-    `);
+    expect(editor.children[0]).toMatchObject({
+      children: [
+        {
+          children: [
+            {
+              text: 'hello',
+            },
+          ],
+          type: 'caption',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          options: [
+            {
+              value: '25%',
+            },
+            {
+              value: '50%',
+            },
+          ],
+          type: 'dropdown',
+        },
+      ],
+      type: 'def',
+      variant: 'dropdown',
+    });
   });
 });

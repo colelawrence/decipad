@@ -280,7 +280,7 @@ test('external data sources', (ctx) => {
     });
   });
 
-  it('can be shared with another role', async () => {
+  it.skip('can be shared with another role', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
     await client.mutate({

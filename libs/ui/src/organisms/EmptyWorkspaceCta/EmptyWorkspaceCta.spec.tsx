@@ -14,6 +14,6 @@ it('renders a button to create a new notebook', async () => {
     <EmptyWorkspaceCta onCreateNotebook={handleCreateNotebook} />
   );
 
-  await userEvent.click(getByText(/create/i));
+  await userEvent.click(getByText(/Create new notebook/i));
   expect(handleCreateNotebook).toHaveBeenCalled();
 });

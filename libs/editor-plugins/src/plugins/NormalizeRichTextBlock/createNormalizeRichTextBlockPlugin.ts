@@ -12,25 +12,21 @@ import {
 import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
 
-const RICH_TEXT_BLOCK_TYPES = [
+const RICH_TEXT_BLOCK_TYPES = new Set([
   ELEMENT_PARAGRAPH,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_LIC,
   ELEMENT_CALLOUT,
-];
-const ALLOWED_CHILD_TYPES = [ELEMENT_LINK, ELEMENT_INLINE_NUMBER];
+]);
+const ALLOWED_CHILD_TYPES = new Set([ELEMENT_LINK, ELEMENT_INLINE_NUMBER]);
 
 const normalizeRichTextBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
   const [node, path] = entry;
 
-  if (isElement(node) && RICH_TEXT_BLOCK_TYPES.includes(node.type)) {
+  if (isElement(node) && RICH_TEXT_BLOCK_TYPES.has(node.type)) {
     for (const childEntry of getNodeChildren(editor, path)) {
       const [childNode, childPath] = childEntry;
-
-      if (
-        isElement(childNode) &&
-        !ALLOWED_CHILD_TYPES.includes(childNode.type)
-      ) {
+      if (isElement(childNode) && !ALLOWED_CHILD_TYPES.has(childNode.type)) {
         unwrapNodes(editor, { at: childPath });
         return true;
       }

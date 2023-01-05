@@ -1,6 +1,5 @@
 import {
   createTPlateEditor,
-  ELEMENT_CODE_LINE,
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -9,6 +8,7 @@ import {
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
   ElementKind,
+  ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
 import { createCodeBlockPlugin } from '@udecode/plate';
 import { execute, SlashCommand } from './slashCommands';

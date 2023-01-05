@@ -3,6 +3,11 @@ import { mockConsoleError } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import { SessionProvider } from 'next-auth/react';
 import { ComponentProps, FC, ReactNode } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { QueryParamProvider } from 'use-query-params';
+import { BrowserRouter } from 'react-router-dom';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
 
 const props: ComponentProps<typeof NotebookTopbar> = {
@@ -34,12 +39,18 @@ const WithProviders: FC<WithProvidersProps> = ({ children, noSession }) => (
         noSession
           ? null
           : {
-              user: {},
+              user: { email: 'test@decipad.com' },
               expires: new Date(Date.now() + 100000000).toISOString(),
             }
       }
     >
-      {children}
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>
+          <QueryParamProvider adapter={ReactRouter6Adapter}>
+            {children}
+          </QueryParamProvider>
+        </BrowserRouter>
+      </DndProvider>
     </SessionProvider>
   </ClientEventsContext.Provider>
 );
@@ -63,7 +74,7 @@ describe('Notebook Topbar', () => {
           <NotebookTopbar {...props} permission="READ" />
         </WithProviders>
       );
-      expect(getByText(/try decipad/i)).toHaveAttribute(
+      expect(getByText(/try decipad/i).parentNode).toHaveAttribute(
         'href',
         expect.stringMatching('/')
       );

@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { ComponentProps } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { WorkspaceItem } from './WorkspaceItem';
 
 const props: ComponentProps<typeof WorkspaceItem> = {
@@ -9,12 +11,20 @@ const props: ComponentProps<typeof WorkspaceItem> = {
 };
 
 it('shows the workspace name', () => {
-  render(<WorkspaceItem {...props} name="Some Workspace" />);
+  render(
+    <DndProvider backend={HTML5Backend}>
+      <WorkspaceItem {...props} name="Some Workspace" />
+    </DndProvider>
+  );
   expect(screen.getByText('Some Workspace')).toBeVisible();
 });
 
 it('renders an avatar with the initial of the workspace', () => {
-  render(<WorkspaceItem {...props} name="Some Workspace" />);
+  render(
+    <DndProvider backend={HTML5Backend}>
+      <WorkspaceItem {...props} name="Some Workspace" />
+    </DndProvider>
+  );
   expect(screen.getByLabelText(/avatar/i)).toHaveTextContent(/^s$/i);
 });
 
@@ -23,6 +33,10 @@ it.each([
   [1, 'member'],
   [2, 'members'],
 ])('shows that there is/are %i member(s)', (numberOfMembers, pluralization) => {
-  render(<WorkspaceItem {...props} numberOfMembers={numberOfMembers} />);
+  render(
+    <DndProvider backend={HTML5Backend}>
+      <WorkspaceItem {...props} numberOfMembers={numberOfMembers} />
+    </DndProvider>
+  );
   expect(screen.getByText(`${numberOfMembers} ${pluralization}`)).toBeVisible();
 });

@@ -1,8 +1,7 @@
-import { FC, useEffect } from 'react';
+import { FC, useContext, useEffect } from 'react';
 import { InferError } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
-import { getAnalytics } from '@decipad/client-events';
-import { useSession } from 'next-auth/react';
+import { ClientEventsContext } from '@decipad/client-events';
 import { CodeError } from '../../atoms';
 import { CodeResultProps } from '../../types';
 
@@ -12,16 +11,17 @@ export const InlineCodeError = ({
   const computer = useComputer();
   const { url } = new InferError(type.errorCause);
   const message = computer.formatError(type.errorCause);
-  const analytics = getAnalytics();
-  const userId = (useSession()?.data?.user as undefined | { id: string })?.id;
-
+  const events = useContext(ClientEventsContext);
   useEffect(() => {
-    analytics?.track('user code error', {
-      message,
-      url,
-      userId,
+    events({
+      type: 'action',
+      action: 'user code error',
+      props: {
+        message,
+        url,
+      },
     });
-  }, [analytics, message, userId, url]);
+  }, [events, message, url]);
 
   return <CodeError message={message} url={url} />;
 };

@@ -1,5 +1,12 @@
 import { mockLocation } from '@decipad/dom-test-utils';
-import { isFlagEnabled, disable, reset, getOverrides } from '.';
+import {
+  isFlagEnabled,
+  disable,
+  reset,
+  getOverrides,
+  getQueryStringOverrides,
+  Flag,
+} from '.';
 
 const originalNodeEnv = process.env.NODE_ENV;
 beforeEach(() => {
@@ -84,5 +91,16 @@ describe('in test', () => {
     it('automatically resets between tests', () => {
       expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(true);
     });
+  });
+
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('(meta test) query string flags are disabled in tests', () => {
+    const qsOverrides = getQueryStringOverrides();
+    const oneQsOverrideFlag = Object.keys(qsOverrides).at(0);
+    if (oneQsOverrideFlag) {
+      // Only run this test when there is at least one QS flag
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(isFlagEnabled(oneQsOverrideFlag as Flag)).toBe(false);
+    }
   });
 });

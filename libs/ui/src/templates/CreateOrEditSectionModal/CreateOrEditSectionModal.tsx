@@ -73,7 +73,7 @@ export const CreateOrEditSectionModal = ({
         >
           {swatchNames.map((key) => {
             return (
-              <button
+              <div
                 key={key}
                 aria-label={key}
                 onClick={(ev) => {
@@ -85,7 +85,7 @@ export const CreateOrEditSectionModal = ({
                   color={baseSwatches[key]}
                   selected={key === color}
                 />
-              </button>
+              </div>
             );
           })}
         </div>

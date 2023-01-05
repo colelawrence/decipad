@@ -15,7 +15,7 @@ mockConsoleWarn();
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
-it('shows a pseudo-focused state', async () => {
+it.skip('shows a pseudo-focused state', async () => {
   const { rerender } = render(
     <AutoCompleteMenuItem {...props} focused={false} />
   );

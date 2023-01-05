@@ -39,7 +39,8 @@ type Action =
   | { action: 'number converted to code line'; props?: undefined }
   | { action: 'number created with ='; props?: undefined }
   | { action: 'code line teleported'; props?: undefined }
-  | { action: 'code line teleported back'; props?: undefined };
+  | { action: 'code line teleported back'; props?: undefined }
+  | { action: 'user code error'; props: { message: string; url: string } };
 
 export type ActionEvent = {
   type: 'action';

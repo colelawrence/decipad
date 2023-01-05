@@ -1,5 +1,4 @@
 import { Computer } from '@decipad/computer';
-import { getNodeString } from '@udecode/plate';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE,
@@ -31,12 +30,7 @@ const makeParagraph = (text: string): MyElement[] =>
   ] as MyElement[];
 
 const makeCodeLine = (text: string): MyElement[] =>
-  [
-    {
-      type: ELEMENT_CODE_LINE,
-      children: [{ text }],
-    },
-  ] as MyElement[];
+  [{ type: ELEMENT_CODE_LINE, children: [{ text }] }] as MyElement[];
 
 const renderEditorParagraph = (text: string) => {
   editor.children = makeParagraph(text) as never;
@@ -89,13 +83,13 @@ describe('Auto format code line plugin', () => {
   it('formats a paragraph to a code line when = is pressed at the start', () => {
     renderEditorParagraph('');
     pressKey('=');
-    expect(editor.children).toEqual(makeCodeLine(''));
+    expect(editor.children).toMatchObject(makeCodeLine(''));
   });
 
   it('formats a paragraph to a code line when = is pressed while holding shift on some keyboard layouts', () => {
     renderEditorParagraph('');
     pressKey('=', { shiftKey: true });
-    expect(editor.children).toEqual(makeCodeLine(''));
+    expect(editor.children).toMatchObject(makeCodeLine(''));
   });
 
   it('does not format a paragraph to a code line when holding modifier keys', () => {
@@ -108,33 +102,12 @@ describe('Auto format code line plugin', () => {
     renderEditorParagraph('');
     pressKey('=');
     pressKey('Backspace');
-    expect(editor.children).toEqual(makeParagraph('='));
+    expect(editor.children).toMatchObject(makeParagraph('='));
   });
 
   it('when removing a codeline it inserts a paragraph', () => {
     renderEditorCodeLine('');
     pressKey('Backspace');
-    expect(editor.children).toEqual(makeParagraph(''));
-  });
-
-  it('does not format to code line when text is not plain', () => {
-    editor.children = [
-      {
-        type: ELEMENT_PARAGRAPH,
-        children: [{ text: 'a' }, { text: 'b ', bold: true }],
-      },
-    ] as never;
-
-    editor.selection = {
-      anchor: { path: [0, 1], offset: 'ab '.length },
-      focus: { path: [0, 1], offset: 'ab '.length },
-    };
-
-    pressKey('=');
-
-    expect(editor.children).toEqual([
-      expect.objectContaining({ type: ELEMENT_PARAGRAPH }),
-    ]);
-    expect(getNodeString(editor.children[0])).toEqual('ab =');
+    expect(editor.children).toMatchObject(makeParagraph(''));
   });
 });

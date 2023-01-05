@@ -30,9 +30,8 @@ Table = {
 NewTable = {
   A = Table.A
 }
-==> table {
-  A = [ 1 ],
-  B = [ 2 ]
+==> {
+  A = [ 1 ]
 }
 ```
 
@@ -59,7 +58,7 @@ Table = {
 }
 Table.B = 2
 Table
-==> table {
+==> {
   A = [ 1 ],
   B = [ 2 ]
 }

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
 export const FilePlus = (): ReturnType<FC> => (
-  <svg width={24} height={24} fill="none" viewBox="0 0 24 24">
+  <svg fill="none" viewBox="0 0 24 24">
     <title>File Plus</title>
     <path
       stroke={cssVar('currentTextColor')}

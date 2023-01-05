@@ -20,7 +20,7 @@ export type Flags = Partial<Record<Flag, boolean>>;
 
 const queryStringFlags: Flag[] = ['CODE_LINE_NAME_SEPARATED'];
 
-const getQueryStringOverrides = (): Flags => {
+export const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};
   const search = 'location' in globalThis ? globalThis.location.search : '';
   const params = new URLSearchParams(search);
@@ -32,9 +32,9 @@ const getQueryStringOverrides = (): Flags => {
   return flags;
 };
 
-let overrides: Flags = {
-  ...getQueryStringOverrides(),
-};
+let overrides: Flags = {};
+
+const queryStringOverrides: Flags = getQueryStringOverrides();
 
 const envDefaults: Record<string, boolean> = {
   test: true,
@@ -43,6 +43,7 @@ const envDefaults: Record<string, boolean> = {
 
 export const isFlagEnabled = (flag: Flag): boolean =>
   overrides[flag] ??
+  queryStringOverrides[flag] ??
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   ('location' in globalThis &&
     /localhost|.*dev.decipad.com/.test(globalThis.location.hostname));

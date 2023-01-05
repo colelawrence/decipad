@@ -263,7 +263,7 @@ MyTable = {
 }
 sortby(MyTable, MyTable.Items)
 ==> {
-  Items = [1, 2, 3]
+  Items = [ 1, 2, 3 ]
 }
 ```
 

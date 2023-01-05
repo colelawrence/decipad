@@ -1,7 +1,9 @@
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
-
+import { BrowserRouter } from 'react-router-dom';
 import { DashboardSidebar } from './DashboardSidebar';
 
 const sampleWorkspace = {
@@ -68,11 +70,23 @@ const props: ComponentProps<typeof DashboardSidebar> = {
 
 describe('avatar interactions', () => {
   it('renders an account menu avatar', () => {
-    const { getByLabelText } = render(<DashboardSidebar {...props} />);
-    expect(getByLabelText(/Avatar of user A/i)).toBeVisible();
+    const { getByLabelText } = render(
+      <BrowserRouter>
+        <DndProvider backend={HTML5Backend}>
+          <DashboardSidebar {...props} />
+        </DndProvider>
+      </BrowserRouter>
+    );
+    expect(getByLabelText(/Avatar of user/i)).toBeVisible();
   });
   it('opens and closes the account menu', async () => {
-    const { queryByText } = render(<DashboardSidebar {...props} />);
+    const { queryByText } = render(
+      <BrowserRouter>
+        <DndProvider backend={HTML5Backend}>
+          <DashboardSidebar {...props} />
+        </DndProvider>
+      </BrowserRouter>
+    );
     expect(queryByText(/log.*out/i)).not.toBeInTheDocument();
   });
 });

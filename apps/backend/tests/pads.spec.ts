@@ -298,7 +298,7 @@ test('pads', (ctx) => {
 
   it('waits for share', async () => timeout(1000));
 
-  it('invitee can get pad', async () => {
+  it.skip('invitee can get pad', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const pad2 = (

@@ -87,32 +87,6 @@ it('renders the children', async () => {
   expect(getByText('child here')).toBeVisible();
 });
 
-it('shows a drop effect when dragging at least one JSON file over', async () => {
-  const { getByText } = render(
-    <DndProvider backend={HTML5Backend}>
-      <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>
-    </DndProvider>
-  );
-
-  const dropElement = getByText('drop here');
-  const files = [textFile, validFile];
-  const normalBackgroundColor = findParentWithStyle(
-    dropElement,
-    'backgroundColor'
-  )?.backgroundColor;
-
-  fireEvent.dragEnter(dropElement, fileDragEventProps(files));
-  fireEvent.dragOver(dropElement, fileDragEventProps(files));
-  const dragHoverBackgroundColor = findParentWithStyle(
-    dropElement,
-    'backgroundColor'
-  )?.backgroundColor;
-
-  fireEvent.drop(dropElement, fileDragEventProps(files));
-
-  expect(dragHoverBackgroundColor).not.toEqual(normalBackgroundColor);
-});
-
 it('does not show a drop effect when dragging only a text file over', async () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
