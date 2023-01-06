@@ -161,7 +161,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   }, [error, inputValue, items]);
 
   return (
-    <Popover.Root open={open}>
+    <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger css={{ width: '100%' }}>{children}</Popover.Trigger>
       <Popover.Content>
         <div css={styles}>

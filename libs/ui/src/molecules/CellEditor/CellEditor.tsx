@@ -41,7 +41,7 @@ interface CellEditorProps {
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
-  dropdownOptions?: Array<{ id: string; value: string }>;
+  dropdownOptions?: Array<{ id: string; value: string; focused?: boolean }>;
   dropdownResult?: Result.Result;
 }
 

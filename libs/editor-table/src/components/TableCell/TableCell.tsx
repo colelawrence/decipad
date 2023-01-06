@@ -35,6 +35,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { NewElementLine } from '@decipad/ui/src/atoms/NewElementLine/NewElementLine';
+import { getExprRef } from '@decipad/computer';
 import {
   addRowFromCell,
   useCellType,
@@ -156,8 +157,11 @@ export const TableCell: PlateComponent = ({
     assertElementType(dropdown, ELEMENT_VARIABLE_DEF);
     if (dropdown.variant !== 'dropdown') return [];
 
-    return dropdown.children[1].options;
-  }, [cellType, editor.children]);
+    return dropdown.children[1].options.map((o) => ({
+      ...o,
+      focused: nodeText === getExprRef(o.id),
+    }));
+  }, [cellType, editor.children, nodeText]);
 
   const DropLine = (
     <>

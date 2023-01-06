@@ -20,7 +20,7 @@ export interface DropdownEditorPros {
   type?: CellValueType;
   parentType?: 'table' | 'input';
   onChangeValue: (value: string | undefined) => void;
-  dropdownOptions?: Array<{ id: string; value: string }>;
+  dropdownOptions?: Array<{ id: string; value: string; focused?: boolean }>;
   dropdownResult?: Result.Result;
 }
 
@@ -37,7 +37,12 @@ export const DropdownEditor: FC<DropdownEditorPros> = ({
         open={open}
         isReadOnly={true}
         setOpen={setOpen}
-        items={dropdownOptions?.map((v) => ({ item: v.value })) || []}
+        items={
+          dropdownOptions?.map((v) => ({
+            item: v.value,
+            focused: v.focused,
+          })) || []
+        }
         onExecute={(i) => {
           const id = dropdownOptions?.find((v) => v.value === i);
           if (!id) return;
