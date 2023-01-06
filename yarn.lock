@@ -10719,6 +10719,15 @@
     "@viselect/vanilla" "^3.1.0"
     copy-to-clipboard "^3.3.2"
 
+"@udecode/plate-selection@18.14.3":
+  version "18.14.3"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-selection/-/plate-selection-18.14.3.tgz#0e02e0b53035522bb07b1fc51115f846f3de1ace"
+  integrity sha512-bOiyqoVDqqkEvkoFK/Xjd1gBtdslKgH7nCk+5mozbudZfKXD1wyqW91yntSHLkMrWBd81+kBfaBDhocrOld6Ug==
+  dependencies:
+    "@udecode/plate-core" "18.13.0"
+    "@viselect/vanilla" "^3.1.0"
+    copy-to-clipboard "^3.3.2"
+
 "@udecode/plate-serializer-csv@18.13.0":
   version "18.13.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-18.13.0.tgz#7704636c9d0b26357e9813733332346d8c63c8dd"

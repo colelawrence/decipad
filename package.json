@@ -118,7 +118,7 @@
     "@types/react-gravatar": "^2.6.10",
     "@udecode/plate": "18.14.0",
     "@udecode/plate-juice": "18.13.0",
-    "@udecode/plate-selection": "18.13.0",
+    "@udecode/plate-selection": "18.14.3",
     "@udecode/plate-ui-excalidraw": "^18.13.0",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-graphcache": "5.0.1",
