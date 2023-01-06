@@ -1,4 +1,10 @@
-import { ComponentProps, useCallback, useEffect, useState } from 'react';
+import {
+  ComponentProps,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
@@ -33,6 +39,7 @@ import {
 } from '@decipad/editor-utils';
 import { Editor, Path } from 'slate';
 import copy from 'copy-to-clipboard';
+import { ClientEventsContext } from '@decipad/client-events';
 import { defaultMoveNode } from '../utils/useDnd';
 
 interface DropdownWidgetOptions {
@@ -56,6 +63,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   const selected = useSelected();
   const focused = useFocused();
+  const userEvents = useContext(ClientEventsContext);
+  const readOnly = useIsEditorReadOnly();
 
   // Avoids flickers, if the user clicked away when menu is open,
   // the state still thinks it is open, so if the user clicked again,
@@ -213,8 +222,18 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
       changeVarName(newRes?.text || '');
       changeBlockId(blockId);
       setOpenMenu(false);
+
+      // Analytics
+      userEvents({
+        type: 'action',
+        action: 'widget value updated',
+        props: {
+          variant: 'display',
+          isReadOnly: readOnly,
+        },
+      });
     },
-    [changeBlockId, changeVarName, codeLines]
+    [changeBlockId, changeVarName, codeLines, readOnly, userEvents]
   );
 
   // When the component is mounted, and the result has not yet been loaded,
@@ -225,8 +244,6 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
       setLoaded(true);
     }
   }, [changeResult, element.blockId, codeLines.length, loaded]);
-
-  const readOnly = useIsEditorReadOnly();
 
   if (deleted) return <></>;
 

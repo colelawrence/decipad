@@ -22,6 +22,7 @@ import { Table } from 'libs/ui/src/icons';
 import { concat, of, combineLatestWith, map, distinctUntilChanged } from 'rxjs';
 import { dequal } from 'dequal';
 import { Result, SerializedType } from '@decipad/computer';
+import { ClientEventsContext } from '@decipad/client-events';
 
 export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_DROPDOWN) {
@@ -86,6 +87,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTPlateEditorRef();
   const path = useNodePath(element);
   const readOnly = useIsEditorReadOnly();
+  const userEvents = useContext(ClientEventsContext);
 
   // For the dropdown options to be permenant in the editor state,
   // I save to a field in the dropdown child, this array can be
@@ -171,10 +173,18 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         } else {
           changeOptions(item);
         }
+        userEvents({
+          type: 'action',
+          action: 'widget value updated',
+          props: {
+            variant: 'dropdown',
+            isReadOnly: readOnly,
+          },
+        });
         setDropdownOpen(false);
       }
     },
-    [changeOptions, selected, selectedCol]
+    [changeOptions, selected, selectedCol, userEvents, readOnly]
   );
 
   const otherItems = useMemo(() => {

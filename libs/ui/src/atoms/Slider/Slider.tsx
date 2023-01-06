@@ -70,11 +70,14 @@ interface SliderProps {
   readonly step?: number;
   readonly value?: number;
   readonly color?: AvailableSwatchColor;
+  /** Callback for when the user is no longer dragging */
+  readonly onCommit?: () => void;
 }
 
 export const Slider = ({
   onChange = noop,
   onFocus = noop,
+  onCommit = noop,
   max = 10,
   min = 0,
   step = 1,
@@ -94,6 +97,7 @@ export const Slider = ({
         min={min}
         max={Math.max(Number(max), Number(value))}
         step={step}
+        onValueCommit={onCommit}
       >
         <SliderUI.Track css={trackStyles}>
           <SliderUI.Range

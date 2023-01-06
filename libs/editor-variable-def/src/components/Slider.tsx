@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { Slider as UISlider } from '@decipad/ui';
 import {
   ELEMENT_SLIDER,
@@ -8,6 +8,8 @@ import {
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { ReactEditor } from 'slate-react';
 import { setSelection } from '@udecode/plate';
+import { ClientEventsContext } from '@decipad/client-events';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
@@ -42,6 +44,20 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
     [onValueChange]
   );
 
+  // Analytics
+  const userEvents = useContext(ClientEventsContext);
+  const isReadOnly = useIsEditorReadOnly();
+  const onCommit = useCallback(() => {
+    userEvents({
+      type: 'action',
+      action: 'widget value updated',
+      props: {
+        variant: 'slider',
+        isReadOnly,
+      },
+    });
+  }, [isReadOnly, userEvents]);
+
   const { color } = useVariableEditorContext();
 
   return (
@@ -56,6 +72,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
         value={Number(element.value)}
         onFocus={selectElement}
         color={color}
+        onCommit={onCommit}
       />
     </div>
   );

@@ -3,14 +3,16 @@ import {
   ELEMENT_EXPRESSION,
   MyEditor,
   PlateComponent,
+  useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/computer';
 import { useSelected } from 'slate-react';
 import { getNodeString, getParentNode } from '@udecode/plate';
 import { useNodePath } from '@decipad/editor-utils';
-import { useCallback, useState } from 'react';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useCallback, useContext, useRef, useState } from 'react';
+import { useEditorChange, useIsEditorReadOnly } from '@decipad/react-contexts';
+import { ClientEventsContext } from '@decipad/client-events';
 
 const getPlaceHolder = (type: SerializedType | undefined) => {
   if (!type) return '1 km';
@@ -46,6 +48,9 @@ export const Expression: PlateComponent = ({
 
   const focused = useSelected();
   const path = useNodePath(element);
+  const ed = useTEditorRef();
+  const userEvents = useContext(ClientEventsContext);
+  const isReadOnly = useIsEditorReadOnly();
 
   const widgetChange = useCallback(
     (newParent: VariableDefinitionElement | undefined) => {
@@ -67,6 +72,27 @@ export const Expression: PlateComponent = ({
     [path]
   );
   useEditorChange(widgetChange, getParent);
+
+  const nodeText = getNodeString(element);
+  const oldStr = useRef(nodeText);
+
+  // Not focused because we don't want to update everytime the user types,
+  // just when they are done typing, which we assume is when they click away.
+  // Sliders can be spammy, so they are handled seperately.
+  if (nodeText !== oldStr.current && !focused) {
+    oldStr.current = nodeText;
+    const parent = getParent(ed);
+    if (parent && parent.variant !== 'slider') {
+      userEvents({
+        type: 'action',
+        action: 'widget value updated',
+        props: {
+          variant: parent.variant,
+          isReadOnly,
+        },
+      });
+    }
+  }
 
   return (
     <div {...attributes}>

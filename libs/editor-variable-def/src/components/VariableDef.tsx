@@ -1,3 +1,4 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   DraggableBlock,
   useTextTypeInference,
@@ -36,7 +37,7 @@ import {
 import copy from 'copy-to-clipboard';
 import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps, useCallback, useContext, useState } from 'react';
 import { Editor, Path } from 'slate';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
@@ -51,6 +52,7 @@ export const VariableDef: PlateComponent = ({
 
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
+  const userEvents = useContext(ClientEventsContext);
 
   const onDelete = useCallback(() => {
     const path = findNodePath(editor, element);
@@ -98,6 +100,23 @@ export const VariableDef: PlateComponent = ({
   );
   const onChangeType = useCallback(
     (type: CellValueType | 'smart-selection' | undefined) => {
+      // Analytics
+      userEvents({
+        type: 'action',
+        action: 'widget type changed',
+        props: {
+          variant: element.variant,
+          ...(element.variant === 'date' &&
+            type !== 'smart-selection' &&
+            type?.kind === 'date' && {
+              subVar: type.date,
+            }),
+          isReadOnly: readOnly,
+          newType:
+            type === 'smart-selection' ? 'smart-selection' : type?.kind || '',
+        },
+      });
+
       // Used for dropdown widget
       if (type === 'smart-selection') {
         onChangeSmartSelection(
@@ -114,7 +133,7 @@ export const VariableDef: PlateComponent = ({
         onChangeTypeMutator(type);
       }
     },
-    [onChangeTypeMutator, onChangeSmartSelection, element]
+    [onChangeTypeMutator, onChangeSmartSelection, element, userEvents, readOnly]
   );
 
   const onChangeValue = useCallback(

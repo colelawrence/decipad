@@ -1,3 +1,5 @@
+import { ElementVariants } from '@decipad/editor-types';
+
 type Action =
   // Notebook operations
   | { action: 'notebook duplicated'; props?: undefined }
@@ -45,7 +47,25 @@ type Action =
   | { action: 'visit docs'; props?: undefined }
   | { action: 'help button clicked'; props?: undefined }
   | { action: 'join discord'; props?: undefined }
-  | { action: 'user code error'; props: { message: string; url: string } };
+  | { action: 'user code error'; props: { message: string; url: string } }
+  // Widget actions
+  | {
+      action: 'widget value updated';
+      props: { variant: ElementVariants; isReadOnly: boolean };
+    }
+  | {
+      action: 'widget type changed';
+      props: {
+        variant: ElementVariants;
+        subVar?: string;
+        isReadOnly: boolean;
+        newType: string;
+      };
+    }
+  | {
+      action: 'widget renamed';
+      props: { variant: ElementVariants };
+    };
 
 export type ActionEvent = {
   type: 'action';

@@ -18,6 +18,9 @@ import {
 } from '@decipad/editor-utils';
 import { UserIconKey } from 'libs/ui/src/utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { useContext, useRef } from 'react';
+import { useFocused } from 'slate-react';
+import { ClientEventsContext } from '@decipad/client-events';
 import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Caption: PlateComponent = ({ attributes, element, children }) => {
@@ -26,6 +29,8 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   }
 
   const editor = useTEditorRef();
+  const focused = useFocused();
+  const userEvents = useContext(ClientEventsContext);
 
   const setIcon = useElementMutatorCallback(editor, element, 'icon');
   const setColor = useElementMutatorCallback(editor, element, 'color');
@@ -43,6 +48,23 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
     },
   });
   const tooltip = useEnsureValidVariableName(element, parent?.[0].id);
+
+  // Analytics
+  const nodeText = getNodeString(element);
+  const oldStr = useRef(nodeText);
+
+  // Not focused because we don't want to update everytime the user types,
+  // just when they are done typing, which we assume is when they click away.
+  if (nodeText !== oldStr.current && !focused) {
+    oldStr.current = getNodeString(element);
+    userEvents({
+      type: 'action',
+      action: 'widget renamed',
+      props: {
+        variant: parent?.[0].variant || 'expression',
+      },
+    });
+  }
 
   const caption = (
     <div
