@@ -3,15 +3,13 @@ import { css } from '@emotion/react';
 import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { getExprRef, Result } from '@decipad/computer';
 import { CodeResult, DropdownMenu } from '../../organisms';
-import { purple700 } from '../../primitives';
+import { blue500 } from '../../primitives';
+import { Caret } from '../../icons';
 
 const dropdownPill = css({
-  borderRadius: '16px',
-  borderWidth: '2px',
-  borderStyle: 'solid',
-  borderColor: purple700.rgb,
   display: 'flex',
   alignItems: 'center',
+  color: blue500.rgb,
 });
 
 export interface DropdownEditorProps {
@@ -52,13 +50,7 @@ export const DropdownEditor: FC<DropdownEditorProps> = ({
           setOpen(false);
         }}
       >
-        <div
-          onClick={() => setOpen(!open)}
-          css={[
-            { minHeight: '20px', paddingLeft: '8px' },
-            dropdownResult && dropdownPill,
-          ]}
-        >
+        <div onClick={() => setOpen(!open)} css={dropdownPill}>
           {dropdownResult && (
             <CodeResult
               {...dropdownResult}
@@ -66,6 +58,9 @@ export const DropdownEditor: FC<DropdownEditorProps> = ({
               element={element}
             />
           )}
+          <div css={{ width: 16, height: 16, marginLeft: 'auto' }}>
+            <Caret variant={open ? 'up' : 'down'} />
+          </div>
           <div css={{ display: 'none' }}>{children}</div>
         </div>
       </DropdownMenu>

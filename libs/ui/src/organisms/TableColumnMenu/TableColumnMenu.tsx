@@ -12,6 +12,7 @@ import { Unit, currencyUnits, UnitOfMeasure } from '@decipad/computer';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
+  AddToWorkspace,
   All,
   Calendar,
   CheckboxSelected,
@@ -195,36 +196,38 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             Text
           </MenuItem>
 
-          {!isFirst && isFlagEnabled('DROPDOWN_TABLES') && (
-            <MenuList
-              itemTrigger={
-                <TriggerMenuItem
-                  icon={<Calendar />}
-                  selected={type.kind === 'date'}
-                >
-                  <div css={{ minWidth: '116px' }}>Dropdowns</div>
-                </TriggerMenuItem>
-              }
-              open={currentOpen === 'dropdowns'}
-              onChangeOpen={() => onColumnExpand('dropdowns')}
-            >
-              {dropdownNames.map((d) => (
-                <MenuItem
-                  icon={<Calendar />}
-                  onSelect={() =>
-                    onChangeColumnType({
-                      kind: 'dropdown',
-                      id: d.id,
-                      type: d.type,
-                    })
-                  }
-                  selected={false}
-                >
-                  {d.value}
-                </MenuItem>
-              ))}
-            </MenuList>
-          )}
+          {!isFirst &&
+            isFlagEnabled('DROPDOWN_TABLES') &&
+            dropdownNames.length > 0 && (
+              <MenuList
+                itemTrigger={
+                  <TriggerMenuItem
+                    icon={<AddToWorkspace />}
+                    selected={type.kind === 'date'}
+                  >
+                    <div css={{ minWidth: '116px' }}>Categories</div>
+                  </TriggerMenuItem>
+                }
+                open={currentOpen === 'dropdowns'}
+                onChangeOpen={() => onColumnExpand('dropdowns')}
+              >
+                {dropdownNames.map((d) => (
+                  <MenuItem
+                    icon={<AddToWorkspace />}
+                    onSelect={() =>
+                      onChangeColumnType({
+                        kind: 'dropdown',
+                        id: d.id,
+                        type: d.type,
+                      })
+                    }
+                    selected={false}
+                  >
+                    {d.value}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            )}
           <MenuList
             itemTrigger={
               <TriggerMenuItem

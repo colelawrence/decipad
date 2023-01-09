@@ -85,13 +85,13 @@ test.describe('Dropdown widget', () => {
     await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
 
     const dropdownMenu = page.locator(
-      '[role="menuitem"]:has-text("Dropdowns")'
+      '[role="menuitem"]:has-text("Categories")'
     );
     expect(await dropdownMenu.isVisible()).toBeTruthy();
   });
 
   test('You can open dropdown in the cell', async () => {
-    await page.press('[role="menuitem"]:has-text("Dropdowns")', 'Enter');
+    await page.press('[role="menuitem"]:has-text("Categories")', 'Enter');
     await page.press('[role="menuitem"]:has-text("Dropdown1")', 'Enter');
 
     await page.waitForSelector('[aria-roledescription="dropdown-editor"]');
