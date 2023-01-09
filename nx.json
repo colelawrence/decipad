@@ -1,17 +1,4 @@
 {
-  "implicitDependencies": {
-    "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
-    "tsconfig.json": "*",
-    "tslint.json": "*",
-    "libs/eslint-config-decipad/index.js": "*",
-    "libs/eslint-config-decipad/react.js": "*",
-    "nx.json": "*",
-    "storybook/**": ["ui"]
-  },
   "affected": {
     "defaultBase": "main"
   },
@@ -63,202 +50,40 @@
           "echo DISCORD_PUBLIC_KEY=$DISCORD_PUBLIC_KEY",
           "echo DISCORD_APP_ID=$DISCORD_APP_ID",
           "echo ARC_STATIC_SPA=$ARC_STATIC_SPA"
-        ]
+        ],
+        "parallel": 3
       }
     }
   },
-  "projects": {
-    "backend": {
-      "tags": [],
-      "implicitDependencies": [
-        "nodelambda",
-        "lambdas",
-        "utils",
-        "interfaces",
-        "backendtypes"
-      ]
+  "defaultProject": "frontend",
+  "targetDefaults": {
+    "lint": {
+      "inputs": ["default"]
     },
-    "backend-analytics": {
-      "tags": []
+    "build": {
+      "inputs": ["production", "^production"]
     },
-    "backend-test-sandbox": {
-      "tags": []
-    },
-    "backend-trace": {
-      "tags": []
-    },
-    "backendtypes": {
-      "tags": []
-    },
-    "client-config": {
-      "tags": []
-    },
-    "client-events": {
-      "tags": []
-    },
-    "config": {
-      "tags": []
-    },
-    "discord-customerservice-lambda": {
-      "tags": []
-    },
-    "docs": {
-      "tags": [],
-      "implicitDependencies": ["ui", "language", "computer", "react-contexts"]
-    },
-    "docsync": {
-      "tags": []
-    },
-    "dom-test-utils": {
-      "tags": []
-    },
-    "dynamodb-lock": {
-      "tags": []
-    },
-    "e2e": {
-      "tags": [],
-      "implicitDependencies": ["frontend", "backend", "config"]
-    },
-    "editor": {
-      "tags": []
-    },
-    "editor-tests": {
-      "tags": []
-    },
-    "editor-components": {
-      "tags": []
-    },
-    "editor-language-elements": {
-      "tags": []
-    },
-    "editor-plugins": {
-      "tags": []
-    },
-    "editor-table": {
-      "tags": []
-    },
-    "editor-types": {
-      "tags": []
-    },
-    "editor-utils": {
-      "tags": []
-    },
-    "editor-variable-def": {
-      "tags": []
-    },
-    "editor-data-view": {
-      "tags": []
-    },
-    "emails": {
-      "tags": []
-    },
-    "eslint-config-decipad": {
-      "tags": []
-    },
-    "externaldata": {
-      "tags": []
-    },
-    "feature-flags": {
-      "tags": []
-    },
-    "fetch": {
-      "tags": []
-    },
-    "fnqueue": {
-      "tags": []
-    },
-    "format": {
-      "tags": []
-    },
-    "fraction": {
-      "tags": []
-    },
-    "frontend": {
-      "tags": []
-    },
-    "graphqlresource": {
-      "tags": []
-    },
-    "graphqlserver": {
-      "tags": []
-    },
-    "import": {
-      "tags": []
-    },
-    "initial-workspace": {
-      "tags": []
-    },
-    "interfaces": {
-      "tags": []
-    },
-    "lambdas": {
-      "tags": []
-    },
-    "language": {
-      "tags": []
-    },
-    "live-connect": {
-      "tags": []
-    },
-    "meta": {
-      "tags": []
-    },
-    "nodelambda": {
-      "tags": []
-    },
-    "notebook": {
-      "tags": []
-    },
-    "notebook-state": {
-      "tags": []
-    },
-    "parse": {
-      "tags": []
-    },
-    "queries": {
-      "tags": []
-    },
-    "react-contexts": {
-      "tags": []
-    },
-    "react-utils": {
-      "tags": []
-    },
-    "repl": {
-      "tags": []
-    },
-    "routing": {
-      "tags": []
-    },
-    "services": {
-      "tags": []
-    },
-    "slate-yjs": {
-      "tags": []
-    },
-    "testutils": {
-      "tags": []
-    },
-    "toast": {
-      "tags": []
-    },
-    "ui": {
-      "tags": []
-    },
-    "utils": {
-      "tags": []
-    },
-    "y-dynamodb": {
-      "tags": []
-    },
-    "y-indexeddb": {
-      "tags": []
-    },
-    "y-lambdawebsocket": {
-      "tags": []
-    },
-    "y-websocket": {
-      "tags": []
+    "test": {
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals", "projectSpecificFiles"],
+    "sharedGlobals": [
+      "{workspaceRoot}/workspace.json",
+      "{workspaceRoot}/tsconfig.json",
+      "{workspaceRoot}/tslint.json",
+      "{workspaceRoot}/libs/eslint-config-decipad/index.js",
+      "{workspaceRoot}/libs/eslint-config-decipad/react.js",
+      "{workspaceRoot}/nx.json"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s"
+    ],
+    "projectSpecificFiles": []
   }
 }

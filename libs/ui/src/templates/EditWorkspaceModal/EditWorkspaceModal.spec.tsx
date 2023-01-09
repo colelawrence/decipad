@@ -35,13 +35,13 @@ it('emits a rename event when typing a new workspace name and submitting', async
     <EditWorkspaceModal {...props} onRename={handleRename} />
   );
 
-  await userEvent.type(getByPlaceholderText(/renamed/i), 'new');
-  await userEvent.click(getByText(/rename/i, { selector: 'button' }));
   await act(async () => {
-    await waitFor(() =>
-      expect(handleRename).toHaveBeenCalledWith(expect.stringMatching(/new$/))
-    );
+    await userEvent.type(getByPlaceholderText(/renamed/i), 'new');
+    await userEvent.click(getByText(/rename/i, { selector: 'button' }));
   });
+  await waitFor(() =>
+    expect(handleRename).toHaveBeenCalledWith(expect.stringMatching(/new$/))
+  );
 });
 
 describe('with allowDelete', () => {
@@ -96,20 +96,17 @@ describe('with allowDelete', () => {
       />
     );
 
-    try {
+    await act(async () => {
       await userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
       await userEvent.click(getByText(/delete/i, { selector: 'button' }));
-      expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
-      expect(getByText(/delete/i, { selector: 'button' })).toBeDisabled();
-    } finally {
-      await act(async () => {
-        resolveDeletion();
-        await waitFor(() => {
-          expect(
-            getByText(/delete/i, { selector: 'button' })
-          ).not.toBeDisabled();
-        });
-      });
-    }
+    });
+    expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
+    expect(getByText(/delete/i, { selector: 'button' })).toBeDisabled();
+    await act(async () => {
+      resolveDeletion();
+    });
+    await waitFor(() => {
+      expect(getByText(/delete/i, { selector: 'button' })).not.toBeDisabled();
+    });
   });
 });

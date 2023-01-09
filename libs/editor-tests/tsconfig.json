@@ -7,10 +7,20 @@
   },
   "include": ["src", "storybook"],
   "references": [
-    { "path": "../editor-types" },
-    { "path": "../editor" },
-    { "path": "../computer" },
-    { "path": "../utils" },
-    { "path": "../notebook-state" }
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../editor"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../notebook-state"
+    }
   ]
 }

@@ -7,19 +7,47 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../dom-test-utils" },
-    { "path": "../computer" },
-    { "path": "../docsync" },
-    { "path": "../queries" },
-    { "path": "../utils" },
-    { "path": "../client-events" },
-    { "path": "../editor-types" },
-    { "path": "../ui" },
-    { "path": "../react-contexts" },
-    { "path": "../editor-utils" },
-    { "path": "../editor-components" },
-    { "path": "../editor-language-elements" },
-    { "path": "../import" },
-    { "path": "../slate-yjs" }
+    {
+      "path": "../dom-test-utils"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../docsync"
+    },
+    {
+      "path": "../queries"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../client-events"
+    },
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../ui"
+    },
+    {
+      "path": "../react-contexts"
+    },
+    {
+      "path": "../editor-utils"
+    },
+    {
+      "path": "../editor-components"
+    },
+    {
+      "path": "../editor-language-elements"
+    },
+    {
+      "path": "../import"
+    },
+    {
+      "path": "../slate-yjs"
+    }
   ]
 }

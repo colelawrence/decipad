@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-disabled-tests */
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
 

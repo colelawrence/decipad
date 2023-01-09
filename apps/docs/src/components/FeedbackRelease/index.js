@@ -10,7 +10,6 @@ export const FeedbackRelease = (
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
-        height: '45px',
         position: 'relative',
         maxWidth: '407px',
         height: '45px',

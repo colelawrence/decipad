@@ -1,8 +1,24 @@
 import React from 'react';
+// eslint-disable-next-line import/no-unresolved
 import Link from '@docusaurus/Link';
 import { NavbarSecondaryMenuFiller } from '@docusaurus/theme-common';
 
-function BlogSidebarMobileSecondaryMenu({ sidebar }) {
+interface SidebarItem {
+  permalink: string;
+  date: string;
+  title: string;
+  formattedDate: string;
+}
+
+interface SidebarMobileSecondaryMenuProps {
+  sidebar: {
+    items: SidebarItem[];
+  };
+}
+
+function BlogSidebarMobileSecondaryMenu({
+  sidebar,
+}: SidebarMobileSecondaryMenuProps): JSX.Element {
   const maxPosts = 8;
   return (
     <ul className="menu__list">
@@ -12,7 +28,6 @@ function BlogSidebarMobileSecondaryMenu({ sidebar }) {
             isNavLink
             to={item.permalink}
             className="menu__link"
-            activeClassName="menu__link--active"
             style={{
               flexDirection: 'column',
               alignItems: 'flex-start',
@@ -39,7 +54,7 @@ function BlogSidebarMobileSecondaryMenu({ sidebar }) {
   );
 }
 
-export default function MobileWrapper(props) {
+export default function MobileWrapper(props: SidebarMobileSecondaryMenuProps) {
   return (
     <NavbarSecondaryMenuFiller
       component={BlogSidebarMobileSecondaryMenu}

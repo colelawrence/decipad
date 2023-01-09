@@ -50,7 +50,11 @@ export const DataViewMenu = ({
   return (
     <div css={{}}>
       {menuIsOpen ? null : (
-        <button onClick={() => handleMenuClick()} css={menuButtonStyles}>
+        <button
+          aria-roledescription="Add column"
+          onClick={() => handleMenuClick()}
+          css={menuButtonStyles}
+        >
           <Add />
         </button>
       )}

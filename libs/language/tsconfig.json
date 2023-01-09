@@ -6,7 +6,11 @@
   },
   "include": ["src", "types"],
   "references": [
-    { "path": "../../libs/utils" },
-    { "path": "../../libs/fraction" }
+    {
+      "path": "../../libs/utils"
+    },
+    {
+      "path": "../../libs/fraction"
+    }
   ]
 }

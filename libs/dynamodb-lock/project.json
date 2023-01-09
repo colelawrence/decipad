@@ -1,5 +1,6 @@
 {
-  "root": "libs/dynamodb-lock",
+  "name": "dynamodb-lock",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/dynamodb-lock/src",
   "projectType": "library",
   "targets": {
@@ -12,16 +13,17 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/dynamodb-lock"],
+      "outputs": ["{workspaceRoot}/coverage/libs/dynamodb-lock"],
       "options": {
         "jestConfig": "libs/dynamodb-lock/jest.config.js"
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/dynamodb-lock"
       }
     }
-  }
+  },
+  "tags": []
 }

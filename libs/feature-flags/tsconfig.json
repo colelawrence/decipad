@@ -4,5 +4,9 @@
   "compilerOptions": {
     "lib": ["esnext", "dom", "dom.iterable"]
   },
-  "references": [{ "path": "../dom-test-utils" }]
+  "references": [
+    {
+      "path": "../dom-test-utils"
+    }
+  ]
 }

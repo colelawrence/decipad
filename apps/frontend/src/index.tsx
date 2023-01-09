@@ -1,7 +1,5 @@
 import { lazy, StrictMode, Suspense } from 'react';
-// React 18
-// import { createRoot } from 'react-dom/client';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { GlobalStyles, LoadingLogo } from '@decipad/ui';
 import reportWebVitals from './reportWebVitals';
 import suppressWarnings from './suppressWarnings';
@@ -25,14 +23,11 @@ const AppLoader: React.FC = () => {
 
 const container = document.getElementById('root');
 if (container) {
-  // React 18
-  // const root = createRoot(container);
-  // root.render(
-  render(
+  const root = createRoot(container);
+  root.render(
     <StrictMode>
       <AppLoader />
-    </StrictMode>,
-    container
+    </StrictMode>
   );
 } else {
   document.body.innerHTML = 'Fatal error: Cannot find root container element.';

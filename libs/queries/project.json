@@ -1,5 +1,6 @@
 {
-  "root": "libs/queries",
+  "name": "queries",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/queries/src",
   "projectType": "library",
   "targets": {
@@ -10,5 +11,6 @@
         "maxWarnings": 0
       }
     }
-  }
+  },
+  "tags": []
 }

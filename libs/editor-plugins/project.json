@@ -1,5 +1,6 @@
 {
-  "root": "libs/editor-plugins",
+  "name": "editor-plugins",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/editor-plugins/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/editor-plugins"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/editor-plugins"],
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-plugins"],
       "options": {
         "jestConfig": "libs/editor-plugins/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

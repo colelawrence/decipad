@@ -1,36 +1,38 @@
 {
-  "root": "apps/docs",
+  "name": "docs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/docs/src",
   "projectType": "application",
   "prefix": "docs",
   "implicitDependencies": ["language", "computer"],
   "targets": {
     "serve": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": ["../../node_modules/.bin/docusaurus start"],
         "cwd": "apps/docs"
       }
     },
     "build": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": ["../../node_modules/.bin/docusaurus build"],
         "cwd": "apps/docs"
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b apps/docs"
       }
     },
     "test": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "node apps/docs/snapshots.mjs",
         "cwd": "."
       }
     }
-  }
+  },
+  "tags": []
 }

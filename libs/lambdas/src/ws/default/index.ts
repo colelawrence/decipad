@@ -6,7 +6,7 @@ import { Buffer } from 'buffer';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import EventEmitter from 'events';
 
-EventEmitter.setMaxListeners(1000);
+EventEmitter.defaultMaxListeners = 1000;
 
 export const handler: APIGatewayProxyHandlerV2 = trace(
   async (event) => {

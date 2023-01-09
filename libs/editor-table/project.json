@@ -1,5 +1,6 @@
 {
-  "root": "libs/editor-table",
+  "name": "editor-table",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/editor-table/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/editor-table"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/editor-table"],
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-table"],
       "options": {
         "jestConfig": "libs/editor-table/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

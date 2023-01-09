@@ -7,18 +7,44 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../ui" },
-    { "path": "../editor-types" },
-    { "path": "../editor-utils" },
-    { "path": "../client-events" },
-    { "path": "../react-contexts" },
-    { "path": "../computer" },
-    { "path": "../live-connect" },
-    { "path": "../import" },
-    { "path": "../format" },
-    { "path": "../fraction" },
-    { "path": "../parse" },
-    { "path": "../docsync" },
-    { "path": "../toast" }
+    {
+      "path": "../ui"
+    },
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../editor-utils"
+    },
+    {
+      "path": "../client-events"
+    },
+    {
+      "path": "../react-contexts"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../live-connect"
+    },
+    {
+      "path": "../import"
+    },
+    {
+      "path": "../format"
+    },
+    {
+      "path": "../fraction"
+    },
+    {
+      "path": "../parse"
+    },
+    {
+      "path": "../docsync"
+    },
+    {
+      "path": "../toast"
+    }
   ]
 }

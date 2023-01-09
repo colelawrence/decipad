@@ -1,5 +1,6 @@
 {
-  "root": "libs/initial-workspace",
+  "name": "initial-workspace",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/initial-workspace/src",
   "projectType": "library",
   "targets": {
@@ -11,10 +12,11 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/client-events"
       }
     }
-  }
+  },
+  "tags": []
 }

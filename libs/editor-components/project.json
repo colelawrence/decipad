@@ -1,5 +1,6 @@
 {
-  "root": "libs/editor-components",
+  "name": "editor-components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/editor-components/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/editor-components"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/editor-components"],
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-components"],
       "options": {
         "jestConfig": "libs/editor-components/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

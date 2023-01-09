@@ -1,5 +1,6 @@
 {
-  "root": "libs/format",
+  "name": "format",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/format/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/format"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/format"],
+      "outputs": ["{workspaceRoot}/coverage/libs/format"],
       "options": {
         "jestConfig": "libs/format/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

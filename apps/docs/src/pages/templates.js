@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React from 'react';
 import '../css/custom.css';
 
@@ -11,54 +12,24 @@ import {
   avatarJohn,
   avatarNuno,
   avatarAnna,
-} from '@site/src/components/GalleryCards';
-
-/* Icons */
-import {
   IconAnnouncement,
-  IconHeart,
-  IconPin,
-  IconShoppingCart,
   IconCoffee,
   IconWorld,
-  IconTable,
   IconAnnotationWarning,
-  IconFrame,
-  IconPaperclip,
-  IconWallet,
   IconStar,
-  IconCrown,
-  IconBattery,
-  IconHappy,
   IconKey,
   IconMoon,
-  IconLightBulb,
-  IconHealth,
   IconCard,
-  IconMusic,
-  IconMovie,
-  IconPeople,
   IconServer,
   IconLeaf,
-  IconClock,
   IconPercentage,
-  IconBolt,
   IconCar,
-  IconMessage,
-  IconSunrise,
-  IconCompass,
-  IconTrophy,
   IconVirus,
-  IconPlane,
-  IconEducation,
-  IconSpider,
   IconRocket,
   IconSparkles,
-  IconBeach,
+  GridContainer,
+  Card,
 } from '@site/src/components/GalleryCards';
-
-/* Cards */
-import { GridContainer, Card } from '@site/src/components/GalleryCards';
 
 export default function Templates() {
   return (

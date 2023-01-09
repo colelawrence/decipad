@@ -5,10 +5,20 @@
   },
   "include": ["tests"],
   "references": [
-    { "path": "../../libs/interfaces" },
-    { "path": "../../libs/services" },
-    { "path": "../../libs/backendtypes" },
-    { "path": "../../libs/backend-test-sandbox" },
-    { "path": "../../libs/utils" }
+    {
+      "path": "../../libs/interfaces"
+    },
+    {
+      "path": "../../libs/services"
+    },
+    {
+      "path": "../../libs/backendtypes"
+    },
+    {
+      "path": "../../libs/backend-test-sandbox"
+    },
+    {
+      "path": "../../libs/utils"
+    }
   ]
 }

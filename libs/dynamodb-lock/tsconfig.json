@@ -5,8 +5,14 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../../libs/backendtypes" },
-    { "path": "../../libs/utils" },
-    { "path": "../../libs/backend-test-sandbox" }
+    {
+      "path": "../../libs/backendtypes"
+    },
+    {
+      "path": "../../libs/utils"
+    },
+    {
+      "path": "../../libs/backend-test-sandbox"
+    }
   ]
 }

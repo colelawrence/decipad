@@ -36,6 +36,9 @@ export function useSafeState<S>(
     (value: S) => {
       if (mounted.current) {
         setState(value);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('not mounted');
       }
     },
     [mounted]

@@ -1,5 +1,6 @@
 {
-  "root": "libs/y-dynamodb",
+  "name": "y-dynamodb",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/y-dynamodb/src",
   "projectType": "library",
   "targets": {
@@ -16,5 +17,6 @@
         }
       }
     }
-  }
+  },
+  "tags": []
 }

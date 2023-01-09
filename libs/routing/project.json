@@ -1,5 +1,6 @@
 {
-  "root": "libs/routing",
+  "name": "routing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/routing/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/routing"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/routing"],
+      "outputs": ["{workspaceRoot}/coverage/libs/routing"],
       "options": {
         "jestConfig": "libs/routing/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

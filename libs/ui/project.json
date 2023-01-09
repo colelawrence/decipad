@@ -1,5 +1,6 @@
 {
-  "root": "libs/ui",
+  "name": "ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/src",
   "projectType": "library",
   "targets": {
@@ -12,13 +13,13 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui"],
       "options": {
         "jestConfig": "libs/ui/jest.config.js"
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/ui"
       }
@@ -54,5 +55,9 @@
         }
       }
     }
+  },
+  "tags": [],
+  "namedInputs": {
+    "projectSpecificFiles": ["{workspaceRoot}/storybook/**"]
   }
 }

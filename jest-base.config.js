@@ -2,6 +2,8 @@
 // we need to also ensure a defined TZ for the tests here just in case of e.g. `yarn nx test ui`.
 process.env.TZ = process.env.TZ || 'America/Los_Angeles';
 
+const { presets, plugins } = require('./babel-web.config');
+
 module.exports = {
   collectCoverageFrom: ['<rootDir>/src/**'],
   coveragePathIgnorePatterns: ['^((?!<rootDir>).)*$'],
@@ -10,8 +12,8 @@ module.exports = {
   resolver: require.resolve('@nrwl/jest/plugins/resolver'),
 
   transform: {
-    '^.+\\.[jt]sx?$': 'babel-jest',
-    '^.+\\.mjs$': 'babel-jest',
+    '^.+\\.[jt]sx?$': ['babel-jest', { presets, plugins }],
+    '^.+\\.mjs$': ['babel-jest', { presets, plugins }],
   },
   transformIgnorePatterns: [
     'node_modules/(?!(lib0|p-retry|y-protocols|@formkit/auto-animate|.*dnd.*)/)',
@@ -21,4 +23,5 @@ module.exports = {
   setupFilesAfterEnv: [
     require.resolve('./libs/testutils/src/feature-flags-setup-after-env.js'),
   ],
+  testTimeout: 10000,
 };

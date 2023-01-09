@@ -7,12 +7,26 @@
   },
   "include": ["src", "storybook"],
   "references": [
-    { "path": "../editor-types" },
-    { "path": "../editor-utils" },
-    { "path": "../computer" },
-    { "path": "../react-contexts" },
-    { "path": "../format" },
-    { "path": "../fraction" },
-    { "path": "../parse" }
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../editor-utils"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../react-contexts"
+    },
+    {
+      "path": "../format"
+    },
+    {
+      "path": "../fraction"
+    },
+    {
+      "path": "../parse"
+    }
   ]
 }

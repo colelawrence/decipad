@@ -15,7 +15,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { ELEMENT_H3, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { noop } from '@decipad/utils';
+import { noop, timeout } from '@decipad/utils';
 import {
   act,
   getDefaultNormalizer,
@@ -57,69 +57,79 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
     }
   );
 
-  act(() => {
+  await act(async () => {
     focusEditor(editor);
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
+      offset: '/'.length,
+    });
+    insertText(editor, 'a');
+    await timeout(500);
   });
-  select(editor, {
-    path: findDomNodePath(editor, getByText('/'))!,
-    offset: '/'.length,
-  });
-  insertText(editor, 'a');
 
   await findByText('/a');
   expect(getByText(/sub-head/i)).toBeVisible();
 });
+
 it('does not render the menu when the editor is not focused', async () => {
   const { getByText, queryByText, findByText } = render(
     <Plate {...plateProps} editor={editor} />,
     { wrapper }
   );
 
-  select(editor, {
-    path: findDomNodePath(editor, getByText('/'))!,
-    offset: '/'.length,
+  await act(async () => {
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
+      offset: '/'.length,
+    });
+    insertText(editor, 'a');
+    await timeout(500);
   });
-  insertText(editor, 'a');
 
   await findByText('/a');
   expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 });
+
 it('does not render the menu when the paragraph is not selected', async () => {
   const { getByText, queryByText, findByText } = render(
     <Plate {...plateProps} editor={editor} />,
     { wrapper }
   );
 
-  act(() => {
+  await act(async () => {
     focusEditor(editor);
-  });
-  insertText(editor, 'a', {
-    at: {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    },
+    insertText(editor, 'a', {
+      at: {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      },
+    });
+    await timeout(500);
   });
 
   await findByText('/a');
   expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 });
+
 it('does not render the menu before typing', async () => {
   const { getByText, queryByText, findByText } = render(
     <Plate {...plateProps} editor={editor} />,
     { wrapper }
   );
 
-  act(() => {
+  await act(async () => {
     focusEditor(editor);
-  });
-  select(editor, {
-    path: findDomNodePath(editor, getByText('/'))!,
-    offset: '/'.length,
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
+      offset: '/'.length,
+    });
+    await timeout(500);
   });
 
   await findByText('/');
   expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 });
+
 it.each([' /cmd', '/cmd#', '/42'])(
   'does not render the menu for the non-command text "%s"',
   async (text) => {
@@ -128,25 +138,26 @@ it.each([' /cmd', '/cmd#', '/42'])(
       { wrapper }
     );
 
-    act(() => {
+    await act(async () => {
       focusEditor(editor);
+      const textPath = findDomNodePath(editor, getByText('/'))!;
+      select(editor, {
+        anchor: {
+          path: textPath,
+          offset: 0,
+        },
+        focus: {
+          path: textPath,
+          offset: '/'.length,
+        },
+      });
+      insertText(editor, text);
+      await timeout(500);
     });
-    const textPath = findDomNodePath(editor, getByText('/'))!;
-    select(editor, {
-      anchor: {
-        path: textPath,
-        offset: 0,
-      },
-      focus: {
-        path: textPath,
-        offset: '/'.length,
-      },
-    });
-    insertText(editor, text);
-
     await findByText(text, {
       normalizer: getDefaultNormalizer({ trim: false }),
     });
+
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
   }
 );
@@ -160,16 +171,17 @@ describe('the menu', () => {
       }
     );
 
-    act(() => {
+    await act(async () => {
       focusEditor(editor);
+      select(editor, {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      });
+      insertText(editor, 'a');
+      await timeout(500);
     });
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    });
-    insertText(editor, 'a');
-
     await findByText('/a');
+
     expect(
       findParentWithStyle(getByText(/sub-head/i), 'zIndex')!.element
         .scrollIntoView
@@ -184,23 +196,29 @@ describe('the menu', () => {
       }
     );
 
-    act(() => {
+    await act(async () => {
       focusEditor(editor);
+      select(editor, {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      });
+      insertText(editor, 'a');
+      await timeout(500);
     });
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    });
-    insertText(editor, 'a');
-
     await findByText('/a');
+
     const menuElement = findParentWithStyle(
       getByText(/sub-head/i),
       'zIndex'
     )!.element;
-    menuElement.scrollIntoView = jest.fn();
 
-    insertText(editor, 'b');
+    await act(async () => {
+      menuElement.scrollIntoView = jest.fn();
+
+      insertText(editor, 'b');
+      await timeout(500);
+    });
+
     await findByText('/ab');
     expect(menuElement.scrollIntoView).toHaveBeenCalled();
   });
@@ -213,17 +231,18 @@ describe('the escape key', () => {
       { wrapper }
     );
 
-    act(() => {
+    await act(async () => {
       focusEditor(editor);
+      select(editor, {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      });
+      insertText(editor, 'a');
+      await timeout(500);
     });
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    });
-    insertText(editor, 'a');
     await findByText(/sub-head/i);
 
-    await userEvent.keyboard('{Escape}');
+    await act(() => userEvent.keyboard('{Escape}'));
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 
     insertText(editor, 'd');
@@ -238,17 +257,18 @@ describe('the escape key', () => {
       }
     );
 
-    act(() => {
+    await act(async () => {
       focusEditor(editor);
+      select(editor, {
+        path: findDomNodePath(editor, getByText('/'))!,
+        offset: '/'.length,
+      });
+      insertText(editor, 'a');
+      await timeout(500);
     });
-    select(editor, {
-      path: findDomNodePath(editor, getByText('/'))!,
-      offset: '/'.length,
-    });
-    insertText(editor, 'a');
     await findByText(/sub-head/i);
 
-    await userEvent.keyboard('{Shift>}{Escape}');
+    await act(() => userEvent.keyboard('{Shift>}{Escape}'));
     expect(getByText(/sub-head/i)).toBeVisible();
   });
 });
@@ -261,16 +281,17 @@ it('executes a command on click', async () => {
     }
   );
 
-  act(() => {
+  await act(async () => {
     focusEditor(editor);
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
+      offset: '/'.length,
+    });
+    insertText(editor, 'a');
+    await timeout(500);
   });
-  select(editor, {
-    path: findDomNodePath(editor, getByText('/'))!,
-    offset: '/'.length,
-  });
-  insertText(editor, 'a');
 
-  await userEvent.click(await findByText(/sub-head/i));
+  await act(async () => userEvent.click(await findByText(/sub-head/i)));
   await waitFor(() => {
     expect(editor.children).toMatchObject([
       { type: ELEMENT_H3, children: [{ text: '' }] },
@@ -284,14 +305,15 @@ it('uses the text after the slash to search for commands', async () => {
     { wrapper }
   );
 
-  act(() => {
+  await act(async () => {
     focusEditor(editor);
+    select(editor, {
+      path: findDomNodePath(editor, getByText('/'))!,
+      offset: '/'.length,
+    });
+    insertText(editor, 'secondary');
+    await timeout(500);
   });
-  select(editor, {
-    path: findDomNodePath(editor, getByText('/'))!,
-    offset: '/'.length,
-  });
-  insertText(editor, 'secondary');
 
   expect(await findByText(/secondary.+heading/i)).toBeVisible();
   expect(queryByText(/calculation/i)).not.toBeInTheDocument();

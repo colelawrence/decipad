@@ -10,7 +10,6 @@ export const feedbackDocs = (
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
-        height: '45px',
         position: 'relative',
         maxWidth: '407px',
         height: '45px',
@@ -24,14 +23,14 @@ export const feedbackDocs = (
         }}
       >
         <input
-        class="zoomRating"
+          class="zoomRating"
           value="👍"
           style={{
             width: '60px',
           }}
         ></input>
         <input
-        class="zoomRating"
+          class="zoomRating"
           value="👎"
           style={{
             width: '60px',

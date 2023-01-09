@@ -1,5 +1,6 @@
 {
-  "root": "libs/docsync",
+  "name": "docsync",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/docsync/src",
   "projectType": "library",
   "targets": {
@@ -12,16 +13,17 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/docsync"],
+      "outputs": ["{workspaceRoot}/coverage/libs/docsync"],
       "options": {
         "jestConfig": "libs/docsync/jest.config.js"
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/docsync"
       }
     }
-  }
+  },
+  "tags": []
 }

@@ -5,14 +5,32 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../testutils" },
-    { "path": "../utils" },
-    { "path": "../y-indexeddb" },
-    { "path": "../y-websocket" },
-    { "path": "../slate-yjs" },
-    { "path": "../fetch" },
-    { "path": "../sync-connection-lambdas" },
-    { "path": "../backend-test-sandbox" },
-    { "path": "../editor-types" }
+    {
+      "path": "../testutils"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../y-indexeddb"
+    },
+    {
+      "path": "../y-websocket"
+    },
+    {
+      "path": "../slate-yjs"
+    },
+    {
+      "path": "../fetch"
+    },
+    {
+      "path": "../sync-connection-lambdas"
+    },
+    {
+      "path": "../backend-test-sandbox"
+    },
+    {
+      "path": "../editor-types"
+    }
   ]
 }

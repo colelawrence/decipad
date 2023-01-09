@@ -1,3 +1,4 @@
+import { timeout } from '@decipad/utils';
 import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
@@ -21,11 +22,10 @@ it('emits a create event when typings a workspace name and submitting', async ()
 
   await userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
   await userEvent.click(getByRole('button'));
-  await act(async () => {
-    await waitFor(() =>
-      expect(handleCreate).toHaveBeenCalledWith('My Workspace')
-    );
-  });
+  await act(() => timeout(500));
+  await waitFor(() =>
+    expect(handleCreate).toHaveBeenCalledWith('My Workspace')
+  );
 });
 
 it('disables workspace creation while already submitting', async () => {
@@ -39,16 +39,15 @@ it('disables workspace creation while already submitting', async () => {
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
 
-  try {
+  await act(async () => {
     await userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
     await userEvent.click(getByRole('button'));
-    expect(getByRole('button')).toBeDisabled();
-  } finally {
-    await act(async () => {
-      resolveCreation();
-      await waitFor(() => {
-        expect(getByRole('button')).not.toBeDisabled();
-      });
-    });
-  }
+  });
+  expect(getByRole('button')).toBeDisabled();
+  await act(async () => {
+    resolveCreation();
+  });
+  await waitFor(() => {
+    expect(getByRole('button')).not.toBeDisabled();
+  });
 });

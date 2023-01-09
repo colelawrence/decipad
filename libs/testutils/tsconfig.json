@@ -4,5 +4,5 @@
   "compilerOptions": {
     "lib": ["esnext", "dom"]
   },
-  "references": [{ "path": "../interfaces" }]
+  "references": [{ "path": "../interfaces" }, { "path": "../feature-flags" }]
 }

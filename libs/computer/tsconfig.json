@@ -5,8 +5,14 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../language" },
-    { "path": "../format" },
-    { "path": "../fraction" }
+    {
+      "path": "../language"
+    },
+    {
+      "path": "../format"
+    },
+    {
+      "path": "../fraction"
+    }
   ]
 }

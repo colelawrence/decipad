@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-disabled-tests */
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { getByTitle, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

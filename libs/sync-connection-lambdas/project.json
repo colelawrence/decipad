@@ -1,5 +1,6 @@
 {
-  "root": "libs/sync-connection-lambdas",
+  "name": "sync-connection-lambdas",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/sync-connection-lambdas/src",
   "projectType": "library",
   "targets": {
@@ -12,13 +13,13 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/sync-connection-lambdas"],
+      "outputs": ["{workspaceRoot}/coverage/libs/sync-connection-lambdas"],
       "options": {
         "jestConfig": "libs/sync-connection-lambdas/jest.config.js"
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/sync-connection-lambdas"
       }

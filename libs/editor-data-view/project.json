@@ -1,5 +1,6 @@
 {
-  "root": "libs/editor-data-view",
+  "name": "editor-data-view",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/editor-data-view/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/editor-data-view"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/editor-data-view"],
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-data-view"],
       "options": {
         "jestConfig": "libs/editor-data-view/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

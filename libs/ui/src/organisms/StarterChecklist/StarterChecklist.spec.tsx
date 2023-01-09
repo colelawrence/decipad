@@ -1,11 +1,10 @@
 import { StarterChecklistType } from '@decipad/react-contexts';
-import { noop } from '@decipad/utils';
-import { render } from '@testing-library/react';
-import { cloneDeep } from 'lodash';
+import { noop, timeout } from '@decipad/utils';
+import { act, render } from '@testing-library/react';
 import { StarterChecklist } from './StarterChecklist';
 
 // The text is just a placeholder, it has no significance.
-const testChecklist: StarterChecklistType = {
+const testChecklist = (): StarterChecklistType => ({
   items: [
     {
       component: 'exp',
@@ -29,36 +28,38 @@ const testChecklist: StarterChecklistType = {
   hidden: false,
   confettiUsed: false,
   onStateChange: () => {},
-};
+});
 
 it('renders the full checklist menu', () => {
+  const cl = testChecklist();
   const { getByText } = render(
-    <StarterChecklist onHideChecklist={noop} checklist={testChecklist} />
+    <StarterChecklist onHideChecklist={noop} checklist={cl} />
   );
 
-  expect(getByText(testChecklist.items[0].text)).toBeVisible();
-  expect(getByText(testChecklist.items[1].text)).toBeVisible();
-  expect(getByText(testChecklist.items[2].text)).toBeVisible();
+  expect(getByText(cl.items[0].text)).toBeVisible();
+  expect(getByText(cl.items[1].text)).toBeVisible();
+  expect(getByText(cl.items[2].text)).toBeVisible();
 });
 
 it('shows text NOT crossed out when state is false', () => {
+  const cl = testChecklist();
   const { getByText } = render(
-    <StarterChecklist onHideChecklist={noop} checklist={testChecklist} />
+    <StarterChecklist onHideChecklist={noop} checklist={cl} />
   );
 
-  expect(getByText(testChecklist.items[0].text)).not.toHaveStyle(
+  expect(getByText(cl.items[0].text)).not.toHaveStyle(
     'text-decoration: line-through;'
   );
-  expect(getByText(testChecklist.items[1].text)).not.toHaveStyle(
+  expect(getByText(cl.items[1].text)).not.toHaveStyle(
     'text-decoration: line-through;'
   );
-  expect(getByText(testChecklist.items[2].text)).not.toHaveStyle(
+  expect(getByText(cl.items[2].text)).not.toHaveStyle(
     'text-decoration: line-through;'
   );
 });
 
 it('shows text crossed out when state is true', () => {
-  const crossedChecklist = cloneDeep(testChecklist);
+  const crossedChecklist = testChecklist();
   const widgetExp = crossedChecklist.items.find((i) => i.component === 'exp');
   if (!widgetExp) return;
 
@@ -68,25 +69,29 @@ it('shows text crossed out when state is true', () => {
     <StarterChecklist onHideChecklist={noop} checklist={crossedChecklist} />
   );
 
-  expect(getByText(testChecklist.items[0].text)).toHaveStyle(
+  expect(getByText(crossedChecklist.items[0].text)).toHaveStyle(
     'text-decoration: line-through;'
   );
-  expect(getByText(testChecklist.items[1].text)).not.toHaveStyle(
+  expect(getByText(crossedChecklist.items[1].text)).not.toHaveStyle(
     'text-decoration: line-through;'
   );
-  expect(getByText(testChecklist.items[2].text)).not.toHaveStyle(
+  expect(getByText(crossedChecklist.items[2].text)).not.toHaveStyle(
     'text-decoration: line-through;'
   );
 });
 
-it('collapses when "Starter Checklist" is clicked', () => {
+it('collapses when "Starter Checklist" is clicked', async () => {
+  const cl = testChecklist();
   const { getByText, queryByText } = render(
-    <StarterChecklist onHideChecklist={noop} checklist={testChecklist} />
+    <StarterChecklist onHideChecklist={noop} checklist={cl} />
   );
 
-  getByText('👋 Welcome to Decipad!').click();
+  await act(async () => {
+    getByText('👋 Welcome to Decipad!').click();
+    await timeout(1000);
+  });
 
-  expect(queryByText(testChecklist.items[0].text)).not.toBeInTheDocument();
-  expect(queryByText(testChecklist.items[1].text)).not.toBeInTheDocument();
-  expect(queryByText(testChecklist.items[2].text)).not.toBeInTheDocument();
+  expect(queryByText(cl.items[0].text)).not.toBeInTheDocument();
+  expect(queryByText(cl.items[1].text)).not.toBeInTheDocument();
+  expect(queryByText(cl.items[2].text)).not.toBeInTheDocument();
 });

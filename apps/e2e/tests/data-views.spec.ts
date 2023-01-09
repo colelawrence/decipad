@@ -53,17 +53,19 @@ test.describe('Data views', () => {
   });
 
   test('selects columns on data view', async () => {
-    await page.locator('role=button[name="Add"]').click();
+    const addButton = page.locator('button[aria-roledescription="Add column"]');
+    // await page.pause();
+    await addButton.click();
     await page
       .locator('role=menuitem[name="Property1"] >> text=Property1')
       .click();
 
-    await page.locator('role=button[name="Add"]').click();
+    await addButton.click();
     await page
       .locator('role=menuitem[name="Property2"] >> text=Property2')
       .click();
 
-    await page.locator('role=button[name="Add"]').click();
+    await addButton.click();
     await page
       .locator('role=menuitem[name="Property3"] >> text=Property3')
       .click();
@@ -105,6 +107,7 @@ test.describe('Data views', () => {
     const dataViewContent = await page
       .locator('[aria-roledescription="data view data"]')
       .screenshot();
+
     expect(dataViewContent).toMatchSnapshot(
       'data-view-after-setting-aggregations.png'
     );

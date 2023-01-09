@@ -5,5 +5,12 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
-  "references": [{ "path": "../language" }, { "path": "../format" }]
+  "references": [
+    {
+      "path": "../language"
+    },
+    {
+      "path": "../format"
+    }
+  ]
 }

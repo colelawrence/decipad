@@ -7,11 +7,23 @@
   },
   "include": ["src", "src/__fixtures__/*.json"],
   "references": [
-    { "path": "../editor-types" },
-    { "path": "../editor-components" },
-    { "path": "../editor-plugins" },
-    { "path": "../editor-utils" },
-    { "path": "../computer" },
-    { "path": "../parse" }
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../editor-components"
+    },
+    {
+      "path": "../editor-plugins"
+    },
+    {
+      "path": "../editor-utils"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../parse"
+    }
   ]
 }

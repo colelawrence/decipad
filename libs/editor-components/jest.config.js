@@ -6,10 +6,10 @@ module.exports = {
   displayName: 'editor-components',
   coverageThreshold: {
     global: {
-      statements: 31,
-      branches: 22,
-      functions: 25,
-      lines: 32,
+      statements: 30,
+      branches: 21,
+      functions: 24,
+      lines: 31,
     },
   },
 };

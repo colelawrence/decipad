@@ -5,25 +5,20 @@
     "baseUrl": ".",
     "outDir": "dist",
     "typeRoots": ["node_modules/@types", "@types"],
-
     "composite": true,
     "incremental": true,
-
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "target": "esnext",
-
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "lib": ["esnext"],
-
     "allowJs": false,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
@@ -34,35 +29,59 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
     "noErrorTruncation": true,
-
     "paths": {
+      "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
       "@decipad/backend-test-sandbox": [
         "libs/backend-test-sandbox/src/index.ts"
       ],
+      "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
+      "@decipad/client-config": ["libs/client-config/src/index.ts"],
+      "@decipad/client-events": ["libs/client-events/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
       "@decipad/config": ["libs/config/src/index.ts"],
+      "@decipad/discord-customerservice-lambda": [
+        "libs/discord-customerservice-lambda/src/index.ts"
+      ],
       "@decipad/docsync": ["libs/docsync/src/index.ts"],
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
+      "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
+      "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
+      "@decipad/editor-language-elements": [
+        "libs/editor-language-elements/src/index.ts"
+      ],
+      "@decipad/editor-plugins": ["libs/editor-plugins/src/index.ts"],
+      "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
+      "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
+      "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
+      "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
       "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
       "@decipad/externaldata": ["libs/externaldata/src/index.ts"],
+      "@decipad/feature-flags": ["libs/feature-flags/src/index.ts"],
       "@decipad/fetch": ["libs/fetch/src/index.ts"],
       "@decipad/fnqueue": ["libs/fnqueue/src/index.ts"],
+      "@decipad/format": ["libs/format/src/index.ts"],
+      "@decipad/fraction": ["libs/fraction/src/index.ts"],
       "@decipad/graphqlresource": ["libs/graphqlresource/src/index.ts"],
       "@decipad/graphqlserver": ["libs/graphqlserver/src/index.ts"],
       "@decipad/graphqlserver/resolvers": [
         "libs/graphqlserver/src/resolvers.ts"
       ],
       "@decipad/graphqlserver/schema": ["libs/graphqlserver/src/schema.ts"],
+      "@decipad/import": ["libs/import/src/index.ts"],
+      "@decipad/initial-workspace": ["libs/initial-workspace/src/index.ts"],
       "@decipad/interfaces": ["libs/interfaces/src/index.ts"],
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
+      "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
       "@decipad/meta": ["libs/meta/src/index.ts"],
+      "@decipad/notebook": ["libs/notebook/src/index.ts"],
+      "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
+      "@decipad/parse": ["libs/parse/src/index.ts"],
       "@decipad/queries": ["libs/queries/src/index.ts"],
       "@decipad/react-contexts": ["libs/react-contexts/src/index.ts"],
       "@decipad/react-utils": ["libs/react-utils/src/index.ts"],
@@ -87,41 +106,15 @@
       "@decipad/sync-connection-lambdas": [
         "libs/sync-connection-lambdas/src/index.ts"
       ],
+      "@decipad/tables": ["libs/tables/src/index.ts"],
       "@decipad/testutils": ["libs/testutils/src/index.ts"],
+      "@decipad/toast": ["libs/toast/src/index.ts"],
       "@decipad/ui": ["libs/ui/src/index.ts"],
       "@decipad/utils": ["libs/utils/src/index.ts"],
       "@decipad/y-dynamodb": ["libs/y-dynamodb/src/index.ts"],
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
-      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
-      "@decipad/fraction": ["libs/fraction/src/index.ts"],
-      "@decipad/discord-customerservice-lambda": [
-        "libs/discord-customerservice-lambda/src/index.ts"
-      ],
-      "@decipad/initial-workspace": ["libs/initial-workspace/src/index.ts"],
-      "@decipad/tables": ["libs/tables/src/index.ts"],
-      "@decipad/client-events": ["libs/client-events/src/index.ts"],
-      "@decipad/editor-plugins": ["libs/editor-plugins/src/index.ts"],
-      "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
-      "@decipad/feature-flags": ["libs/feature-flags/src/index.ts"],
-      "@decipad/editor-language-elements": [
-        "libs/editor-language-elements/src/index.ts"
-      ],
-      "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
-      "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
-      "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
-      "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
-      "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
-      "@decipad/toast": ["libs/toast/src/index.ts"],
-      "@decipad/notebook": ["libs/notebook/src/index.ts"],
-      "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
-      "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"],
-      "@decipad/format": ["libs/format/src/index.ts"],
-      "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
-      "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
-      "@decipad/import": ["libs/import/src/index.ts"],
-      "@decipad/client-config": ["libs/client-config/src/index.ts"],
-      "@decipad/parse": ["libs/parse/src/index.ts"]
+      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"]
     }
   },
   "files": [],

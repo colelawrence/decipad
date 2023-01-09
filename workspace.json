@@ -17,15 +17,15 @@
     "dynamodb-lock": "libs/dynamodb-lock",
     "e2e": "apps/e2e",
     "editor": "libs/editor",
-    "editor-tests": "libs/editor-tests",
     "editor-components": "libs/editor-components",
+    "editor-data-view": "libs/editor-data-view",
     "editor-language-elements": "libs/editor-language-elements",
     "editor-plugins": "libs/editor-plugins",
     "editor-table": "libs/editor-table",
+    "editor-tests": "libs/editor-tests",
     "editor-types": "libs/editor-types",
     "editor-utils": "libs/editor-utils",
     "editor-variable-def": "libs/editor-variable-def",
-    "editor-data-view": "libs/editor-data-view",
     "emails": "libs/emails",
     "eslint-config-decipad": "libs/eslint-config-decipad",
     "externaldata": "libs/externaldata",
@@ -66,5 +66,5 @@
     "y-lambdawebsocket": "libs/y-lambdawebsocket",
     "y-websocket": "libs/y-websocket"
   },
-  "defaultProject": "frontend"
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

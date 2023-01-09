@@ -7,13 +7,29 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../editor-types" },
-    { "path": "../editor-components" },
-    { "path": "../editor-plugins" },
-    { "path": "../editor-utils" },
-    { "path": "../editor-table" },
-    { "path": "../computer" },
-    { "path": "../fraction" },
-    { "path": "../parse" }
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../editor-components"
+    },
+    {
+      "path": "../editor-plugins"
+    },
+    {
+      "path": "../editor-utils"
+    },
+    {
+      "path": "../editor-table"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../fraction"
+    },
+    {
+      "path": "../parse"
+    }
   ]
 }

@@ -6,14 +6,32 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../computer" },
-    { "path": "../editor-types" },
-    { "path": "../feature-flags" },
-    { "path": "../react-contexts" },
-    { "path": "../format" },
-    { "path": "../parse" },
-    { "path": "../fetch" },
-    { "path": "../client-events" },
-    { "path": "../react-utils" }
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../feature-flags"
+    },
+    {
+      "path": "../react-contexts"
+    },
+    {
+      "path": "../format"
+    },
+    {
+      "path": "../parse"
+    },
+    {
+      "path": "../fetch"
+    },
+    {
+      "path": "../client-events"
+    },
+    {
+      "path": "../react-utils"
+    }
   ]
 }

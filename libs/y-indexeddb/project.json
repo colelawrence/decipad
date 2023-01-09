@@ -1,5 +1,6 @@
 {
-  "root": "libs/y-indexeddb",
+  "name": "y-indexeddb",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/y-indexeddb/src",
   "projectType": "library",
   "targets": {
@@ -16,5 +17,6 @@
         }
       }
     }
-  }
+  },
+  "tags": []
 }

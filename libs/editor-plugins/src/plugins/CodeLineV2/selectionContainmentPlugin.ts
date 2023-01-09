@@ -10,11 +10,11 @@ export const createSelectionContainmentPlugin = (
   withOverrides: (editor) => {
     const prevOnChange = editor.onChange;
 
+    let selectionFixerTimerHandle: Parameters<typeof clearTimeout>[0];
     // eslint-disable-next-line no-param-reassign
     editor.onChange = () => {
       prevOnChange();
 
-      let selectionFixerTimerHandle: Parameters<typeof clearTimeout>[0];
       clearTimeout(selectionFixerTimerHandle);
       selectionFixerTimerHandle = setTimeout(() => {
         let anchorEntry;

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
 import { useMounted, useSafeState } from './state';
 
@@ -24,28 +23,20 @@ describe('useMounted', () => {
 });
 
 describe('useSafeState', () => {
-  it('updates the state when the component is mounted', () => {
+  it('updates the state when the component is mounted', async () => {
     const { result } = renderHook(useSafeState);
     const [, setState] = result.current;
-    act(() => setState(42));
+    await act(() => setState(42));
     const [state] = result.current;
     expect(state).toBe(42);
   });
 
   const mockedConsoleError = mockConsoleError();
   it('does not error trying to update the state after the component is unmounted', async () => {
-    let { result, unmount } = renderHook(useState);
+    const { result, unmount } = renderHook(useState);
+    const [, setState] = result.current;
     unmount();
-    let [, setState] = result.current;
-    act(() => setState(42));
-    expect(mockedConsoleError).toHaveBeenCalledTimes(1);
-    expect(mockedConsoleError.mock.calls[0][0]).toMatch(/unmount/i);
-    mockedConsoleError.mockClear();
-
-    ({ result, unmount } = renderHook(useSafeState));
-    unmount();
-    [, setState] = result.current;
-    act(() => setState(42));
+    await act(() => setState(42));
     expect(mockedConsoleError).not.toHaveBeenCalled();
   });
 });

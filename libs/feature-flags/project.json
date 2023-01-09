@@ -1,5 +1,6 @@
 {
-  "root": "libs/feature-flags",
+  "name": "feature-flags",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/feature-flags/src",
   "projectType": "library",
   "targets": {
@@ -11,17 +12,18 @@
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/feature-flags"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/feature-flags"],
+      "outputs": ["{workspaceRoot}/coverage/libs/feature-flags"],
       "options": {
         "jestConfig": "libs/feature-flags/jest.config.js"
       }
     }
-  }
+  },
+  "tags": []
 }

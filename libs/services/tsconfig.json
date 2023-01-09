@@ -5,17 +5,41 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../backendtypes" },
-    { "path": "../tables" },
-    { "path": "../config" },
-    { "path": "../dynamodb-lock" },
-    { "path": "../meta" },
-    { "path": "../utils" },
-    { "path": "../dynamodb-lock" },
-    { "path": "../initial-workspace" },
-    { "path": "../y-dynamodb" },
-    { "path": "../slate-yjs" },
-    { "path": "../editor-types" },
-    { "path": "../backend-analytics" }
+    {
+      "path": "../backendtypes"
+    },
+    {
+      "path": "../tables"
+    },
+    {
+      "path": "../config"
+    },
+    {
+      "path": "../dynamodb-lock"
+    },
+    {
+      "path": "../meta"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../dynamodb-lock"
+    },
+    {
+      "path": "../initial-workspace"
+    },
+    {
+      "path": "../y-dynamodb"
+    },
+    {
+      "path": "../slate-yjs"
+    },
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../backend-analytics"
+    }
   ]
 }

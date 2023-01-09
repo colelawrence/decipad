@@ -5,11 +5,23 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../editor-types" },
-    { "path": "../computer" },
-    { "path": "../utils" },
-    { "path": "../fraction" },
-    { "path": "../client-config" },
-    { "path": "../parse" }
+    {
+      "path": "../editor-types"
+    },
+    {
+      "path": "../computer"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../fraction"
+    },
+    {
+      "path": "../client-config"
+    },
+    {
+      "path": "../parse"
+    }
   ]
 }

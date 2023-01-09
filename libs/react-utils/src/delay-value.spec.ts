@@ -1,7 +1,7 @@
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react';
 import { useDelayedTrue, useDelayedValue } from './delay-value';
 
-it('can delay a `true` value, but go `false` instantly', () => {
+it('can delay a `true` value, but go `false` instantly', async () => {
   jest.useFakeTimers();
 
   const renderedHook = renderHook(({ bool }) => useDelayedTrue(bool), {
@@ -12,7 +12,7 @@ it('can delay a `true` value, but go `false` instantly', () => {
   expect(renderedHook.result.current).toEqual(false);
   jest.advanceTimersByTime(10);
   expect(renderedHook.result.current).toEqual(false);
-  act(() => {
+  await act(() => {
     jest.advanceTimersByTime(2000);
   });
   expect(renderedHook.result.current).toEqual(false);
@@ -22,7 +22,7 @@ it('can delay a `true` value, but go `false` instantly', () => {
   expect(renderedHook.result.current).toEqual(false);
   jest.advanceTimersByTime(10);
   expect(renderedHook.result.current).toEqual(false);
-  act(() => {
+  await act(() => {
     jest.advanceTimersByTime(2000);
   });
   expect(renderedHook.result.current).toEqual(true);
@@ -32,7 +32,7 @@ it('can delay a `true` value, but go `false` instantly', () => {
   expect(renderedHook.result.current).toEqual(false);
 });
 
-it('can delay a value as well', () => {
+it('can delay a value as well', async () => {
   jest.useFakeTimers();
 
   const { rerender, result } = renderHook(
@@ -49,7 +49,7 @@ it('can delay a value as well', () => {
   // Delays when `true`
   rerender({ value: 3, bool: true });
   expect(result.current).toEqual(2);
-  act(() => {
+  await act(() => {
     jest.advanceTimersByTime(2000);
   });
   expect(result.current).toEqual(3);

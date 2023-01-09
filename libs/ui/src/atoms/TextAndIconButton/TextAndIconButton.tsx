@@ -66,18 +66,6 @@ export const TextAndIconButton = ({
   const onButtonClick = useEventNoEffect(onClick);
   const textElement = <span css={buttonTextStyles}>{text}</span>;
   const iconElement = <span css={iconStyles}>{children}</span>;
-  const textAndIcon =
-    iconPosition === 'left' ? (
-      <>
-        {iconElement}
-        {textElement}
-      </>
-    ) : (
-      <>
-        {textElement}
-        {iconElement}
-      </>
-    );
   return (
     <div css={wrapperStyles}>
       {onClick ? (
@@ -85,7 +73,17 @@ export const TextAndIconButton = ({
           css={[styles, color === 'blue' && blueBackgroundStyles]}
           onClick={onButtonClick}
         >
-          {textAndIcon}
+          {iconPosition === 'left' ? (
+            <>
+              {iconElement}
+              {textElement}
+            </>
+          ) : (
+            <>
+              {textElement}
+              {iconElement}
+            </>
+          )}
         </button>
       ) : (
         <Anchor href={href} css={css([styles])}>

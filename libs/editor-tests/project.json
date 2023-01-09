@@ -1,5 +1,6 @@
 {
-  "root": "libs/editor-tests",
+  "name": "editor-tests",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/editor-tests/src",
   "projectType": "library",
   "targets": {
@@ -12,16 +13,17 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/editor-tests"],
+      "outputs": ["{workspaceRoot}/coverage/libs/editor-tests"],
       "options": {
         "jestConfig": "libs/editor-tests/jest.config.js"
       }
     },
     "typecheck": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "yarn tsc -b libs/editor-tests"
       }
     }
-  }
+  },
+  "tags": []
 }

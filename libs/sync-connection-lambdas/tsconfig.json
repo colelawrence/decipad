@@ -5,14 +5,32 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../utils" },
-    { "path": "../services" },
-    { "path": "../tables" },
-    { "path": "../backend-test-sandbox" },
-    { "path": "../y-websocket" },
-    { "path": "../y-dynamodb" },
-    { "path": "../y-lambdawebsocket" },
-    { "path": "../backendtypes" },
-    { "path": "../backend-trace" }
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../services"
+    },
+    {
+      "path": "../tables"
+    },
+    {
+      "path": "../backend-test-sandbox"
+    },
+    {
+      "path": "../y-websocket"
+    },
+    {
+      "path": "../y-dynamodb"
+    },
+    {
+      "path": "../y-lambdawebsocket"
+    },
+    {
+      "path": "../backendtypes"
+    },
+    {
+      "path": "../backend-trace"
+    }
   ]
 }
