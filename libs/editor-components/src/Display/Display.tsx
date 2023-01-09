@@ -263,6 +263,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           onCopy={onCopy}
           onDelete={onDelete}
           readOnly={readOnly}
+          element={element}
         >
           <DisplayWidget
             dropdownContent={codeLines}

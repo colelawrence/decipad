@@ -20,6 +20,7 @@ const rowLabelStyles = css(cellLeftPaddingStyles, {
 export const ColumnResult = ({
   type,
   value,
+  element,
 }: CodeResultProps<'column'>): ReturnType<FC> => {
   const computer = useComputer();
 
@@ -42,6 +43,7 @@ export const ColumnResult = ({
                         as="td"
                         rowSpan={labelInfo.productOfRemainingLengths}
                         showPlaceholder={false}
+                        element={element}
                       >
                         <span
                           css={[
@@ -59,11 +61,12 @@ export const ColumnResult = ({
                       </TableData>
                     ) : null;
                   })}
-                  <TableData as="td" showPlaceholder={false}>
+                  <TableData as="td" showPlaceholder={false} element={element}>
                     <span css={rowLabelStyles}>
                       <CodeResult
                         type={matrixValue.result.type}
                         value={matrixValue.result.value}
+                        element={element}
                       />
                     </span>
                   </TableData>

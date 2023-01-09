@@ -7,7 +7,7 @@ import {
 import { Result, SerializedType } from '@decipad/computer';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { css } from '@emotion/react';
-import { useTEditorRef } from '@decipad/editor-types';
+import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import { deselect } from '@udecode/plate';
 import { ValueCell } from '../../types';
 
@@ -29,6 +29,7 @@ interface DataViewTableHeaderProps {
   onChangeExpandedGroups: (collapsedGroups: string[]) => void;
   groupId: string;
   global?: boolean;
+  element?: AnyElement;
 }
 
 export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
@@ -44,6 +45,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   groupId,
   collapsible,
   global,
+  element,
 }) => {
   const editor = useTEditorRef();
   const handleCollapseGroupButtonPress = useEventNoEffect(
@@ -99,6 +101,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
                 value={value as Result.Result['value']}
                 variant="inline"
                 type={type}
+                element={element}
               />
             )}
             <span css={iconStyles}>
@@ -111,6 +114,7 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
           value={value as Result.Result['value']}
           variant="inline"
           type={type}
+          element={element}
         />
       )}
     </DataViewTableHeaderUI>

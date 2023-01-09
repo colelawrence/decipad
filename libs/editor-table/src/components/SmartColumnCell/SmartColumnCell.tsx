@@ -1,5 +1,5 @@
 import { Result } from '@decipad/computer';
-import { useTEditorRef } from '@decipad/editor-types';
+import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { Select, SmartColumnCell as UISmartColumnCell } from '@decipad/ui';
 import {
@@ -25,6 +25,7 @@ interface SmartColumnCellProps {
   readonly onAggregationTypeNameChange: (
     aggTypeName: string | undefined
   ) => void;
+  readonly element: AnyElement;
 }
 
 export const SmartColumnCell: FC<SmartColumnCellProps> = ({
@@ -34,6 +35,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   columnIndex,
   selectedAggregationTypeName,
   onAggregationTypeNameChange,
+  element,
 }) => {
   const editor = useTEditorRef();
   const [selectedAggregationType, setSelectedAggregationType] = useState<
@@ -120,6 +122,7 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
           ></Select>
         )
       }
+      element={element}
     />
   );
 };

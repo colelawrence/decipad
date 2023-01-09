@@ -34,6 +34,7 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
     <CodeLine
       variant="table"
       result={(isTypeError && perhapsErrorTypedResult.result) || undefined}
+      element={element}
     >
       <span contentEditable={false}>
         <CodeVariable type={{ kind: 'table-formula' }} showTooltip={false}>

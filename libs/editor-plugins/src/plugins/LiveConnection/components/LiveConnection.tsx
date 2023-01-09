@@ -126,6 +126,7 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({
           isFirstRowHeaderRow={element.isFirstRowHeaderRow}
           setIsFirstRowHeader={setIsFirstRowHeader}
           onChangeColumnType={onChangeColumnType}
+          element={element}
         ></LiveConnectionResult>
       )}
       {persistedError ? (

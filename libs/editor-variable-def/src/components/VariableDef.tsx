@@ -251,6 +251,7 @@ export const VariableDef: PlateComponent = ({
               ? element.children[1].smartSelection
               : false
           }
+          element={element}
         >
           {children}
         </VariableEditor>

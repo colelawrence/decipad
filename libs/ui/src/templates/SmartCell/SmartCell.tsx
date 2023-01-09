@@ -2,7 +2,7 @@ import { DragEvent, FC, useCallback } from 'react';
 import { css } from '@emotion/react';
 import type { Result } from '@decipad/computer';
 import { noop } from '@decipad/utils';
-import { ErrorMessage } from '../../atoms';
+import { AnyElement } from '@decipad/editor-types';
 import { cssVar, p12Medium, p14Medium } from '../../primitives';
 import { CodeResult } from '../../organisms';
 
@@ -55,6 +55,7 @@ export interface SmartRowProps {
   hover?: boolean;
   alignRight?: boolean;
   global?: boolean;
+  element?: AnyElement;
 }
 
 export function SmartCell({
@@ -67,17 +68,10 @@ export function SmartCell({
   hover = false,
   alignRight = false,
   global = false,
+  element,
 }: SmartRowProps): ReturnType<FC> {
   const onMouseOver = useCallback(() => onHover(true), [onHover]);
   const onMouseOut = useCallback(() => onHover(false), [onHover]);
-
-  if (result instanceof Error) {
-    return (
-      <td rowSpan={rowSpan} colSpan={colSpan}>
-        <ErrorMessage message={result.message}></ErrorMessage>
-      </td>
-    );
-  }
 
   return (
     <td
@@ -98,7 +92,9 @@ export function SmartCell({
       <span css={labelStyles}>
         {(aggregationType && `${aggregationType}: `) || null}
       </span>
-      {result ? <CodeResult variant="inline" {...result} /> : null}
+      {result ? (
+        <CodeResult variant="inline" {...result} element={element} />
+      ) : null}
     </td>
   );
 }

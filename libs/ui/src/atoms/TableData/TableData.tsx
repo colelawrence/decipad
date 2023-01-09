@@ -1,4 +1,8 @@
-import { CellValueType, PlateComponentAttributes } from '@decipad/editor-types';
+import {
+  AnyElement,
+  CellValueType,
+  PlateComponentAttributes,
+} from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
@@ -131,6 +135,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
     ComponentProps<typeof CellEditor>,
     'dropdownOptions' | 'dropdownResult'
   >;
+  element?: AnyElement;
 }
 
 export const TableData = ({
@@ -158,6 +163,7 @@ export const TableData = ({
   parseError,
   firstChildren,
   dropdownOptions,
+  element,
   ...props
 }: TableDataProps): ReturnType<FC> => {
   const existingRef =
@@ -194,6 +200,7 @@ export const TableData = ({
         unit={unit}
         onChangeValue={onChangeValue}
         parentType="table"
+        element={element}
         {...dropdownOptions}
       >
         <SyntaxErrorHighlight

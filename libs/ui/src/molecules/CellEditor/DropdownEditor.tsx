@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from 'react';
 import { css } from '@emotion/react';
-import { CellValueType } from '@decipad/editor-types';
+import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { getExprRef, Result } from '@decipad/computer';
 import { CodeResult, DropdownMenu } from '../../organisms';
 import { purple700 } from '../../primitives';
@@ -14,7 +14,7 @@ const dropdownPill = css({
   alignItems: 'center',
 });
 
-export interface DropdownEditorPros {
+export interface DropdownEditorProps {
   children?: ReactNode;
   value?: string;
   type?: CellValueType;
@@ -22,13 +22,15 @@ export interface DropdownEditorPros {
   onChangeValue: (value: string | undefined) => void;
   dropdownOptions?: Array<{ id: string; value: string; focused?: boolean }>;
   dropdownResult?: Result.Result;
+  element?: AnyElement;
 }
 
-export const DropdownEditor: FC<DropdownEditorPros> = ({
+export const DropdownEditor: FC<DropdownEditorProps> = ({
   children,
   onChangeValue,
   dropdownResult,
   dropdownOptions,
+  element,
 }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -58,7 +60,11 @@ export const DropdownEditor: FC<DropdownEditorPros> = ({
           ]}
         >
           {dropdownResult && (
-            <CodeResult {...dropdownResult} variant="inline" />
+            <CodeResult
+              {...dropdownResult}
+              variant="inline"
+              element={element}
+            />
           )}
           <div css={{ display: 'none' }}>{children}</div>
         </div>

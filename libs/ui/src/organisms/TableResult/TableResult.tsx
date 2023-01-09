@@ -64,6 +64,7 @@ export const TableResult = ({
   isLiveResult = false,
   firstTableRowControls,
   onChangeColumnType,
+  element,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const [showAllRows, setShowAllRows] = useState(false);
   const { columnNames, columnTypes } = type;
@@ -224,6 +225,7 @@ export const TableResult = ({
                         </button>
                       </div>
                     }
+                    element={element}
                   >
                     <div
                       css={[
@@ -238,6 +240,7 @@ export const TableResult = ({
                         variant="block"
                         tooltip={tooltip}
                         isLiveResult={isLiveResult}
+                        element={element}
                       />
                     </div>
                   </TableData>

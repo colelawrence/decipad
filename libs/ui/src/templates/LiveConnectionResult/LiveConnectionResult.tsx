@@ -1,5 +1,5 @@
 import { Result } from '@decipad/computer';
-import { TableCellType } from '@decipad/editor-types';
+import { AnyElement, TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
@@ -12,6 +12,7 @@ interface LiveConnectionResultProps {
   isFirstRowHeaderRow?: boolean;
   setIsFirstRowHeader?: (is: boolean) => void;
   onChangeColumnType?: (columnIndex: number, type: TableCellType) => void;
+  element: AnyElement;
 }
 
 export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
@@ -19,6 +20,7 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
   isFirstRowHeaderRow,
   setIsFirstRowHeader = noop,
   onChangeColumnType = noop,
+  element,
 }) => {
   return (
     result && (
@@ -35,6 +37,7 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
             />
           }
           onChangeColumnType={onChangeColumnType}
+          element={element}
         ></CodeResult>
       </div>
     )

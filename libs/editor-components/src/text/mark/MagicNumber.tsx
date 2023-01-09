@@ -17,6 +17,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const MagicNumber: PlateComponent = ({
   attributes,
+  element,
   text: _text,
   children,
 }) => {
@@ -59,6 +60,7 @@ export const MagicNumber: PlateComponent = ({
           expression={exp}
           onClick={onClick}
           readOnly={readOnly}
+          element={element}
         />
         {shadow.portal}
       </span>

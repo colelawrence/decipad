@@ -6,6 +6,7 @@ import { CodeResultProps } from '../../types';
 export const InlineColumnResult = ({
   value,
   type,
+  element,
 }: CodeResultProps<'column'>): ReturnType<React.FC> => {
   const { cellType } = type;
 
@@ -19,7 +20,12 @@ export const InlineColumnResult = ({
       {columnValue?.map((row, rowIndex) => {
         return (
           <Fragment key={rowIndex}>
-            <CodeResult value={row} variant="inline" type={cellType} />
+            <CodeResult
+              value={row}
+              variant="inline"
+              type={cellType}
+              element={element}
+            />
             {rowIndex < columnValue.length - 1 && ', '}
           </Fragment>
         );

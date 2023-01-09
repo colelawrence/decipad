@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { SmartRow as UISmartRow } from '@decipad/ui';
 import { Path } from 'slate';
+import { SmartRow as UISmartRow } from '@decipad/ui';
+import { AnyElement } from '@decipad/editor-types';
 import { SmartColumnCell } from '..';
 import { TableColumn } from '../../hooks';
 
@@ -14,11 +15,13 @@ interface SmartRowProps {
     aggType: string | undefined
   ) => void;
   readonly selectedSmartCellAggregationTypes?: Array<string | undefined>;
+  readonly element: AnyElement;
 }
 export const SmartRow: FC<SmartRowProps> = ({
   columns,
   aggregationTypeNames,
   onAggregationTypeNameChange,
+  element,
   ...props
 }) => (
   <UISmartRow
@@ -34,6 +37,7 @@ export const SmartRow: FC<SmartRowProps> = ({
           onAggregationTypeNameChange={(agg) =>
             onAggregationTypeNameChange(index, agg)
           }
+          element={element}
         />
       );
     })}

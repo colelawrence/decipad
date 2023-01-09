@@ -1,8 +1,9 @@
+import { FC, MouseEvent, ReactNode, useCallback } from 'react';
 import { Result } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, MouseEvent, ReactNode, useCallback } from 'react';
+import { AnyElement } from '@decipad/editor-types';
 import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
@@ -17,6 +18,7 @@ type MagicNumberProps = {
   readonly onClick?: () => void;
   readonly setPointyStyles?: boolean;
   readonly expression?: string;
+  readonly element?: AnyElement;
 };
 
 const wrapperStyles = css({
@@ -97,6 +99,7 @@ export const MagicNumber = ({
   readOnly = false,
   onClick = noop,
   expression,
+  element,
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
 
@@ -114,7 +117,12 @@ export const MagicNumber = ({
         <IntrospectMagicNumber expression={expression} readOnly={readOnly}>
           {hasResult ? (
             <span css={!readOnly && highlightStyles}>
-              <CodeResult tooltip={false} variant="inline" {...result} />
+              <CodeResult
+                tooltip={false}
+                variant="inline"
+                {...result}
+                element={element}
+              />
             </span>
           ) : (
             <span

@@ -1,4 +1,4 @@
-import { ElementVariants } from '@decipad/editor-types';
+import { AnyElement, ElementVariants } from '@decipad/editor-types';
 
 type Action =
   // Notebook operations
@@ -41,6 +41,16 @@ type Action =
   | { action: 'number created with ='; props?: undefined }
   | { action: 'code line teleported'; props?: undefined }
   | { action: 'code line teleported back'; props?: undefined }
+  // Generic code actions
+  | {
+      action: 'user code error';
+      props: {
+        errorType: string;
+        message: string;
+        url: string;
+        elementType?: AnyElement['type'];
+      };
+    }
   // Customer Support
   | { action: 'contact live support'; props?: undefined }
   | { action: 'send feedback'; props?: undefined }

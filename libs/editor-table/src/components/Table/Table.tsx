@@ -105,6 +105,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
                   tableName={name}
                   tablePath={tablePath}
                   columns={columns}
+                  element={element}
                 />
               }
             >

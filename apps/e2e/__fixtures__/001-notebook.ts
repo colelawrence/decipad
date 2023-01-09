@@ -330,6 +330,26 @@ export default {
               type: 'table-var-name',
               id: 'EI4PBImerQGgs_orDlkvE',
             },
+            {
+              children: [
+                {
+                  text: ' Column2 + 1',
+                },
+              ],
+              id: 'RBTkKEZjAAdtCi-YPwGNV',
+              type: 'table-column-formula',
+              columnId: 'no1HlaSKDQldjf_Oe6tBF',
+            },
+            {
+              children: [
+                {
+                  text: ' Column2 - date(1970-01) in weeks',
+                },
+              ],
+              id: '4Nbq_t5F5Kv6N4nlcIF_8',
+              type: 'table-column-formula',
+              columnId: 'iMAQk6i0MisSFB-UbQo3P',
+            },
           ],
           type: 'table-caption',
           id: 'ZvisFpxbg4JkkODLUd91b',
@@ -384,7 +404,7 @@ export default {
               id: 'no1HlaSKDQldjf_Oe6tBF',
               type: 'th',
               cellType: {
-                kind: 'string',
+                kind: 'table-formula',
               },
             },
             {
@@ -396,7 +416,7 @@ export default {
               id: 'iMAQk6i0MisSFB-UbQo3P',
               type: 'th',
               cellType: {
-                kind: 'string',
+                kind: 'table-formula',
               },
             },
             {
@@ -1584,7 +1604,20 @@ export default {
     {
       children: [
         {
-          text: 'Table2',
+          text: '',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'TZKJ-9lcWNjx4XPGTt-F4',
+          type: 'smart-ref',
+          blockId: 'xXsaBPgqRXdE1DCd6r5qE',
+        },
+        {
+          text: '',
         },
       ],
       type: 'code_line',
@@ -1593,7 +1626,20 @@ export default {
     {
       children: [
         {
-          text: '🔥',
+          text: '',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'dCHJ-IPYmv3MuvK79LODy',
+          type: 'smart-ref',
+          blockId: 'g92Vy36vArwOwDp6LXnFo',
+        },
+        {
+          text: '',
         },
       ],
       type: 'code_line',
@@ -1602,7 +1648,20 @@ export default {
     {
       children: [
         {
-          text: 'Table3',
+          text: '',
+        },
+        {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: 'Cj-lkawdsyQ2BS5hr78f_',
+          type: 'smart-ref',
+          blockId: 'lGrDooXmfNEIZcbGLb26v',
+        },
+        {
+          text: '',
         },
       ],
       type: 'code_line',
@@ -1934,7 +1993,20 @@ export default {
               ],
               id: '7AoJVf65__rzXHXU-rgod',
               type: 'dropdown',
-              options: ['10%', '20%', '30%'],
+              options: [
+                {
+                  id: 'H2HMaFqzQY3glJEONDKzL',
+                  value: '10%',
+                },
+                {
+                  id: 'UZ5RNoRnk1JnLJc43t9sy',
+                  value: '20%',
+                },
+                {
+                  id: 'I6fYGIrCBN5xq9R01B2y3',
+                  value: '30%',
+                },
+              ],
             },
           ],
           id: 'jehhj52So16CuMph8MetL',
@@ -1960,7 +2032,16 @@ export default {
               ],
               id: 'WMQ3aJYSwdRBG-i7DF_he',
               type: 'dropdown',
-              options: ['"Software Dev"', '"Designer"'],
+              options: [
+                {
+                  id: 'AhNihf-z7icWzwFYmtXB8',
+                  value: '"Software Dev"',
+                },
+                {
+                  id: 'zFkM2UwQjzueWZmje0Vg3',
+                  value: '"Designer"',
+                },
+              ],
             },
           ],
           id: 'raa5P2mcs31Gucz53wPyC',
@@ -1969,6 +2050,152 @@ export default {
         },
       ],
       id: 'RWFVGUdm3sjwSFXdNdbJF',
+      type: 'columns',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Input1',
+                },
+              ],
+              id: 'BTRk2yHou9BYJomaquD7t',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '100$ &',
+                },
+              ],
+              id: 'oL3cf9z59isxOouo-mZNS',
+              type: 'exp',
+            },
+          ],
+          type: 'def',
+          variant: 'expression',
+          coerceToType: {
+            kind: 'number',
+            date: 'day',
+          },
+          id: 'WZ3ryNBqdlls5wMzi5FnN',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Input2',
+                },
+              ],
+              id: 'EMpsyjIr4dWiNjLAkmQZo',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '100$ + "a"',
+                },
+              ],
+              id: 'c5O5GOmUONULC2ZFpejF5',
+              type: 'exp',
+            },
+          ],
+          id: 'Ls7ZFh9d1617Irxryu37o',
+          type: 'def',
+          variant: 'expression',
+          coerceToType: {
+            kind: 'number',
+            date: 'day',
+          },
+        },
+      ],
+      id: 'nUE2bkwfUqgcxAHAQ0XMD',
+      type: 'columns',
+    },
+    {
+      children: [
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Slider1',
+                },
+              ],
+              id: '3N-QgTOklI9n-aVF3XySn',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '4 + "a"',
+                },
+              ],
+              id: 'Psi0x7b_zak92DV_80v3H',
+              type: 'exp',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'HqqUb5wxPY9ijeiqtEgit',
+              type: 'slider',
+              max: '10',
+              min: '0',
+              step: '1',
+              value: '4',
+            },
+          ],
+          id: 'TeY_gx-27xvd9LomSGwKw',
+          type: 'def',
+          variant: 'slider',
+        },
+        {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Slider2',
+                },
+              ],
+              id: 'FCcOEISbtJW-CFPRVa977',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '5 &',
+                },
+              ],
+              id: 'eXlnLGMX-351mZo4wJqcG',
+              type: 'exp',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: 'fVfI8B7kEGde8rkXBozW_',
+              type: 'slider',
+              max: '10',
+              min: '0',
+              step: '1',
+              value: '5',
+            },
+          ],
+          id: 'QjHXvhOY6XP21emoB9eVV',
+          type: 'def',
+          variant: 'slider',
+        },
+      ],
+      id: 'vQ-QW5cyxUND2ll-erRt6',
       type: 'columns',
     },
     {
@@ -1983,6 +2210,7 @@ export default {
     {
       children: [
         {
+          varName: 'Positions',
           children: [
             {
               text: '',
@@ -1993,6 +2221,7 @@ export default {
           type: 'display',
         },
         {
+          varName: 'variable2',
           children: [
             {
               text: '',

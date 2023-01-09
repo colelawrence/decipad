@@ -1,4 +1,5 @@
 import { Result } from '@decipad/computer';
+import { AnyElement } from '@decipad/editor-types';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
@@ -172,6 +173,7 @@ interface CodeLineProps {
   readonly onClickedResult?: (arg0: Result.Result) => void;
   readonly hasNextSibling?: boolean;
   readonly hasPreviousSibling?: boolean;
+  readonly element?: AnyElement;
 }
 
 export const CodeLine = ({
@@ -187,6 +189,7 @@ export const CodeLine = ({
   onClickedResult,
   hasNextSibling,
   hasPreviousSibling,
+  element,
 }: CodeLineProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
@@ -195,6 +198,7 @@ export const CodeLine = ({
     syntaxError,
     onDragStartCell,
     onClickedResult,
+    element,
   });
   const { inline, expanded } = useDelayedValue(
     freshResult,
@@ -244,9 +248,10 @@ export function useResultInfo({
   syntaxError,
   onDragStartCell,
   onClickedResult,
+  element,
 }: Pick<
   CodeLineProps,
-  'result' | 'syntaxError' | 'onDragStartCell' | 'onClickedResult'
+  'result' | 'syntaxError' | 'onDragStartCell' | 'onClickedResult' | 'element'
 >): { inline?: ReactNode; expanded?: ReactNode; errored?: boolean } {
   const onOutputClick = useEventNoEffect(
     useCallback(() => {
@@ -291,6 +296,7 @@ export function useResultInfo({
             {...result}
             variant="block"
             onDragStartCell={onDragStartCell}
+            element={element}
           />
         </output>
       ),
@@ -301,7 +307,7 @@ export function useResultInfo({
   return {
     inline: (
       <output css={inlineResultStyles} onClick={onOutputClick}>
-        <CodeResult {...result} variant="inline" />
+        <CodeResult {...result} variant="inline" element={element} />
       </output>
     ),
     errored: result.type.kind === 'type-error',

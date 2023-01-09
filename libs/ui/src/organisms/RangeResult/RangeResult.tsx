@@ -6,6 +6,7 @@ export const RangeResult = ({
   type: { rangeOf },
   value,
   variant,
+  element,
 }: CodeResultProps<'range'>): ReturnType<FC> => {
   if (!rangeOf) {
     return null;
@@ -13,8 +14,19 @@ export const RangeResult = ({
 
   return (
     <span data-highlight-changes>
-      <CodeResult type={rangeOf} value={value[0]} variant={variant} /> &rarr;{' '}
-      <CodeResult type={rangeOf} value={value[1]} variant={variant} />
+      <CodeResult
+        type={rangeOf}
+        value={value[0]}
+        variant={variant}
+        element={element}
+      />{' '}
+      &rarr;{' '}
+      <CodeResult
+        type={rangeOf}
+        value={value[1]}
+        variant={variant}
+        element={element}
+      />
     </span>
   );
 };

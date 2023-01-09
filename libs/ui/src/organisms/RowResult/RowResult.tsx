@@ -11,6 +11,7 @@ export const RowResult = ({
   parentType,
   type,
   value,
+  element,
 }: CodeResultProps<'row'>): ReturnType<FC> => {
   const { rowCellNames, rowCellTypes } = type;
   return (
@@ -35,7 +36,12 @@ export const RowResult = ({
         <TableRow readOnly>
           {value.map((col, colIndex) => {
             return (
-              <TableData as="td" key={colIndex} showPlaceholder={false}>
+              <TableData
+                as="td"
+                key={colIndex}
+                showPlaceholder={false}
+                element={element}
+              >
                 <div
                   css={[
                     css(table.getCellWrapperStyles(rowCellTypes[colIndex])),
@@ -47,6 +53,7 @@ export const RowResult = ({
                     type={rowCellTypes[colIndex]}
                     value={col}
                     variant="block"
+                    element={element}
                   />
                 </div>
               </TableData>

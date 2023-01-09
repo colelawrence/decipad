@@ -216,7 +216,7 @@ export const TableCell: PlateComponent = ({
     // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
     return (
       <FormulaTableData
-        result={<CodeResult {...formulaResult} />}
+        result={<CodeResult {...formulaResult} element={element} />}
         resultType={formulaResult.type.kind}
         {...attributes}
         selected={selected}
@@ -249,6 +249,7 @@ export const TableCell: PlateComponent = ({
         dropdownOptions,
         dropdownResult,
       }}
+      element={element}
     >
       {children}
     </TableData>

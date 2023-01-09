@@ -1,4 +1,4 @@
-import { CellValueType } from '@decipad/editor-types';
+import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
@@ -139,6 +139,7 @@ interface VariableEditorProps
     value: string | undefined // only booleans for now
   ) => void;
   smartSelection?: boolean;
+  element?: AnyElement;
 }
 
 export const VariableEditor = ({
@@ -149,6 +150,7 @@ export const VariableEditor = ({
   onChangeType = noop,
   value,
   onChangeValue = noop,
+  element,
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
@@ -225,6 +227,7 @@ export const VariableEditor = ({
             value={value}
             onChangeValue={onChangeValue}
             focused={selected}
+            element={element}
           >
             <div css={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {childrenArray.slice(1)}

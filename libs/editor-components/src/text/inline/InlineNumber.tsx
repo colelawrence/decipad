@@ -49,7 +49,7 @@ export const InlineNumber: PlateComponent = ({
       >
         {result?.result ? (
           <span contentEditable={false}>
-            <CodeResult {...result.result} />
+            <CodeResult {...result.result} element={element} />
           </span>
         ) : (
           '...'

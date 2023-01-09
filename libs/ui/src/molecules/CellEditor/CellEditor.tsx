@@ -1,4 +1,4 @@
-import { CellValueType } from '@decipad/editor-types';
+import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { Result } from '@decipad/computer';
 import { useWindowListener } from '@decipad/react-utils';
 import React, {
@@ -23,6 +23,7 @@ interface SpecificEditorProps {
   onChangeValue: (
     value: string | undefined // only booleans for now
   ) => void;
+  element?: AnyElement;
 }
 
 const editorComponents: Record<string, FC<SpecificEditorProps>> = {
@@ -43,6 +44,7 @@ interface CellEditorProps {
   ) => void;
   dropdownOptions?: Array<{ id: string; value: string; focused?: boolean }>;
   dropdownResult?: Result.Result;
+  element?: AnyElement;
 }
 
 export const CellEditor: FC<CellEditorProps> = ({
@@ -55,6 +57,7 @@ export const CellEditor: FC<CellEditorProps> = ({
   dropdownOptions,
   dropdownResult,
   parentType = 'input',
+  element,
 }) => {
   const [opened, setOpened] = useState(false);
 
@@ -143,6 +146,7 @@ export const CellEditor: FC<CellEditorProps> = ({
         parentType={parentType}
         dropdownOptions={dropdownOptions}
         dropdownResult={dropdownResult}
+        element={element}
       >
         {children}
       </EditorComponent>

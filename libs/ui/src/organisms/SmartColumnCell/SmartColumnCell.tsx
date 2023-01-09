@@ -1,4 +1,5 @@
 import { Result } from '@decipad/computer';
+import { AnyElement } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { DragEvent, FC, ReactNode, useState } from 'react';
 import {
@@ -62,12 +63,14 @@ interface SmartColumnCellProps {
   readonly aggregationTypeMenu: ReactNode | ReactNode[];
   readonly onDragStart: (e: DragEvent) => void;
   readonly result?: Result.Result;
+  readonly element?: AnyElement;
 }
 
 export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   aggregationTypeMenu,
   onDragStart,
   result,
+  element,
 }) => {
   // Drag and drop
 
@@ -98,7 +101,9 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
         }}
         onDragEnd={() => setGrabbing(false)}
       >
-        {result && <CodeResult variant="inline" {...result} />}
+        {result && (
+          <CodeResult variant="inline" {...result} element={element} />
+        )}
       </span>
     </div>
   );
