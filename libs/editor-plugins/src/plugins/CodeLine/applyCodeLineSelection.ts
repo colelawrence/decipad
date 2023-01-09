@@ -55,7 +55,8 @@ export const applyCodeLineSelection = (editor: MyEditor, op: TOperation) => {
     if (!index && isText(lineChildNode)) {
       const { text } = lineChildNode;
       const equalIndex = text.indexOf('=');
-      if (equalIndex > 0) {
+      const doubleEquals = text.indexOf('==');
+      if (equalIndex > 0 && equalIndex !== doubleEquals) {
         const charBefore = text[equalIndex - 1];
 
         // if there is no space before =
