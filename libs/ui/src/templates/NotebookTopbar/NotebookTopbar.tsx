@@ -99,7 +99,6 @@ export const NotebookTopbar = ({
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
   const { status: sessionStatus } = useSession();
-  const navigate = useNavigate();
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const clientEvent = useContext(ClientEventsContext);
   const onGalleryClick = useCallback(
@@ -117,13 +116,22 @@ export const NotebookTopbar = ({
     });
   }, [clientEvent]);
 
+  const navigate = useNavigate();
+  const onBack = useCallback(() => {
+    if (global.history.length) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
   return (
     <div css={wrapperStyles}>
       {/* Left side */}
       <div css={leftSideStyles}>
         {isWriter && workspace ? (
           <div css={{ width: '32px', display: 'grid' }}>
-            <IconButton onClick={() => navigate(-1)}>
+            <IconButton onClick={onBack}>
               <LeftArrow />
             </IconButton>
           </div>
