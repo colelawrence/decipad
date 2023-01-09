@@ -65,7 +65,7 @@ const hotKeyStyle = css({
   color: cssVar('weakTextColor'),
 });
 
-type DropdownMenuProps = EditItemsOptions & {
+export type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
   readonly setOpen: (a: boolean) => void;
   readonly isReadOnly: boolean;

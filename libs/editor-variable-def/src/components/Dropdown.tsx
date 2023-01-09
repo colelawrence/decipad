@@ -4,7 +4,11 @@ import {
   PlateComponent,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
-import { useElementMutatorCallback, useNodePath } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useElementMutatorCallback,
+  useNodePath,
+} from '@decipad/editor-utils';
 import {
   DropdownMenu,
   SelectItems,
@@ -21,21 +25,20 @@ import { formatResultPreview } from '@decipad/format';
 import { Table } from 'libs/ui/src/icons';
 import { concat, of, combineLatestWith, map, distinctUntilChanged } from 'rxjs';
 import { dequal } from 'dequal';
-import { Result, SerializedType } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { ClientEventsContext } from '@decipad/client-events';
 
 export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
-  if (element?.type !== ELEMENT_DROPDOWN) {
-    throw new Error('Dropdown is meant to render dropdown element');
-  }
+  assertElementType(element, ELEMENT_DROPDOWN);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedCol, setSelectedCol] = useState<string | null>(null);
+
   const [columns, setColumns] = useState<
     Array<{
-      name: string;
-      colValues: Result.OneResult[];
-      type: SerializedType;
+      blockId: string;
+      columnName: string;
+      tableName: string;
+      result: Result.Result<'column'>;
     }>
   >([]);
 
@@ -53,11 +56,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
             of(undefined),
             computer.getAllColumns$.observeWithSelector((cols) => {
               if (!dropdownOpen || !element.smartSelection) return [];
-              // STUB: Computer getAllColumns returns duplicates. There is a fix inbound.
-              return cols.filter(
-                (c, pos) =>
-                  cols.findIndex((i) => c.columnName === i.columnName) === pos
-              );
+              return cols;
             })
           )
         ),
@@ -96,6 +95,12 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
     editor,
     element,
     'options'
+  );
+
+  const elementChangeColumn = useElementMutatorCallback(
+    editor,
+    element,
+    'selectedColumn'
   );
 
   const addOption = useCallback(
@@ -162,11 +167,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const onExecute = useCallback(
     (item: string, type?: SelectItemTypes) => {
       if (type === 'column') {
-        if (selectedCol === item) {
-          setSelectedCol(null);
-        } else {
-          setSelectedCol(item);
-        }
+        elementChangeColumn(element.selectedColumn === item ? null : item);
       } else {
         if (selected === item) {
           changeOptions('Select');
@@ -184,18 +185,30 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         setDropdownOpen(false);
       }
     },
-    [changeOptions, selected, selectedCol, userEvents, readOnly]
+    [
+      changeOptions,
+      selected,
+      elementChangeColumn,
+      element.selectedColumn,
+      userEvents,
+      readOnly,
+    ]
   );
 
   const otherItems = useMemo(() => {
-    const colValues = columns.find((c) => c.name === selectedCol);
+    const colValues = columns.find((c) =>
+      c.blockId
+        ? c.blockId === element.selectedColumn
+        : `${c.tableName}.${c.columnName}` === element.selectedColumn
+    );
     return [
       {
         title: 'Table category',
         items: columns.map((c) => ({
-          item: c.name,
+          item: `${c.tableName}.${c.columnName}`,
+          blockId: c.blockId,
           type: 'column',
-          focused: selectedCol === c.name,
+          focused: element.selectedColumn === c.columnName,
           icon: <Table />,
         })),
       },
@@ -203,17 +216,17 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         ? [
             {
               title: 'Values',
-              items: colValues.colValues.map((v) => ({
+              items: colValues.result.value.map((v) => ({
                 item: formatResultPreview({
                   value: v,
-                  type: colValues.type,
+                  type: colValues.result.type.cellType,
                 }),
               })),
             },
           ]
         : []),
     ];
-  }, [columns, selectedCol]);
+  }, [columns, element.selectedColumn]);
 
   return (
     <div

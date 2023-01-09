@@ -144,6 +144,8 @@ export interface DropdownElement extends BaseElement {
   type: typeof ELEMENT_DROPDOWN;
   options: Array<{ id: string; value: string }>;
   smartSelection?: boolean;
+  /** Used when it's a smart selection, to remember the column that is selected */
+  selectedColumn?: string;
   children: [PlainText];
 }
 

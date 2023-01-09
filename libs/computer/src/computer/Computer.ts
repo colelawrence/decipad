@@ -363,8 +363,9 @@ export class Computer {
                       columnIndex
                     ],
                   } as Result.Result<'column'>;
+                  const tableName = this.getSymbolDefinedInBlock(b.id);
                   return {
-                    tableName: b.id,
+                    tableName: tableName ?? 'unnamed',
                     columnName,
                     result,
                   };

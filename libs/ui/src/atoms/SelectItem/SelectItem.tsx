@@ -50,6 +50,7 @@ const iconStyles = css({
 export type SelectItemTypes = 'column';
 export interface SelectItems {
   item: string;
+  blockId?: string;
   type?: SelectItemTypes;
   focused?: boolean;
   itemValue?: Result.Result;
@@ -101,8 +102,12 @@ export const SelectItem: FC<SelectItemProps> = ({
   useWindowListener('keydown', keydown, true);
 
   const onExecuteItem = useCallback(() => {
-    onExecute(item.item, item.type);
-  }, [onExecute, item.item, item.type]);
+    if (item.type === 'column') {
+      onExecute(item.blockId || item.item, 'column');
+    } else {
+      onExecute(item.item);
+    }
+  }, [onExecute, item.item, item.type, item.blockId]);
 
   const onEdit = useEventNoEffect(
     useCallback(() => {

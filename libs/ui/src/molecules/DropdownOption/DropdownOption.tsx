@@ -29,7 +29,7 @@ const inputOptionStyles = css(p13Medium, {
   alignItems: 'center',
 });
 
-interface DropdownAddOptionProps {
+export interface DropdownAddOptionProps {
   readonly value: string;
   readonly error?: boolean;
   readonly setValue: (a: string) => void;
