@@ -17,59 +17,28 @@ export const highlightedLineStyles = {
 
 export const codeLineStyles = css({
   ':hover': highlightedLineStyles,
-  position: 'relative',
 
   display: 'grid',
   // `minmax(0, X)` prevents a grid blowout when code line is made out of huge consecutive text.
   gridTemplate: `
-    "fadeline-top-left top-border                top-border      top-border     fadeline-top-right" 0
-    ".                 varname                   code            inline-res     .                 " 1fr
-    ".                 mobile-varname            mobile-varname  mobile-varname .                 " auto
-    ".                 mobile-code               mobile-code     mobile-code    .                 " auto
-    ".                 expanded-res              expanded-res    expanded-res   .                 " auto
-    "fadeline-bot-left bot-border                bot-border      bot-border     fadeline-bot-right" 0
-    /0                 minmax(max-content, auto) minmax(0, 66%)  1fr            0
+    "varname                   code            inline-res    " 1fr
+    "mobile-varname            mobile-varname  mobile-varname" auto
+    "mobile-code               mobile-code     mobile-code   " auto
+    "expanded-res              expanded-res    expanded-res  " auto
+    /minmax(max-content, auto) minmax(0, 66%)  1fr
   `,
 
   [smallScreenQuery]: {
     // Layout per-line on mobile
     gridTemplate: `
-      "fadeline-top-left top-border      fadeline-top-right" 0
-      ".                 varname         .                 " auto
-      ".                 code            .                 " auto
-      ".                 inline-res      .                 " auto
-      ".                 expanded-res    .                 " auto
-      "fadeline-bot-left bot-border      fadeline-bot-right" 0
-      /0                 1fr             0
+      "varname         " auto
+      "code            " auto
+      "inline-res      " auto
+      "expanded-res    " auto
+      /1fr
     `,
   },
 });
-
-export const borderStyles = (pos: 'top' | 'bot') =>
-  css({
-    gridArea: `${pos}-border`,
-    pointerEvents: 'none',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    borderTop: `1px solid ${cssVar('borderColor')}`,
-  });
-
-export const fadeLineStyles = (pos: 'top' | 'bot', side: 'left' | 'right') =>
-  css({
-    gridArea: `fadeline-${pos}-${side}`,
-    pointerEvents: 'none',
-    position: 'absolute',
-    left: side === 'right' ? 0 : undefined,
-    right: side === 'left' ? 0 : undefined,
-    width: 64,
-    borderTop: `1px solid ${cssVar('borderColor')}`,
-    // Fade out the fadeline borders using a mask
-    maskImage:
-      side === 'right'
-        ? `linear-gradient(to right, fuchsia, transparent)`
-        : `linear-gradient(to left, fuchsia, transparent)`,
-  });
 
 export const inlineStyles = css({
   gridArea: 'inline-res',

@@ -45,6 +45,7 @@ export { SearchBar } from './SearchBar/SearchBar';
 export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
 export { SignUpContent } from './SignUpContent/SignUpContent';
 export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';
+export { StructuredInputLines } from './StructuredInputLines/StructuredInputLines';
 export { TableCellControls } from './TableCellControls/TableCellControls';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';
