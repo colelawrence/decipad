@@ -1,6 +1,7 @@
 ---
 sidebar_position: 7
 sidebar_class_name: hide-from-sidebar
+draft: true
 ---
 
 # Define a Category
