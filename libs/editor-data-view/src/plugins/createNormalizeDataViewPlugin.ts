@@ -5,7 +5,7 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
-import { removeNodes, setNodes } from '@udecode/plate';
+import { isText, removeNodes, setNodes, wrapNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 import {
@@ -85,7 +85,19 @@ const normalizeDataViewElement = (
     return true;
   }
   if (node.children[0].children[0]?.type !== ELEMENT_DATA_VIEW_NAME) {
-    setNodes(editor, { type: ELEMENT_DATA_VIEW_NAME }, { at: [...path, 0, 0] });
+    if (isText(node.children[0].children[0])) {
+      wrapNodes(
+        editor,
+        { id: nanoid(), type: ELEMENT_DATA_VIEW_NAME, children: [] },
+        { at: [...path, 0, 0] }
+      );
+    } else {
+      setNodes(
+        editor,
+        { type: ELEMENT_DATA_VIEW_NAME },
+        { at: [...path, 0, 0] }
+      );
+    }
     return true;
   }
 
