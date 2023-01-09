@@ -4,6 +4,7 @@ import * as AST from './ast-types';
 export interface ParserError {
   message: string;
   isEmptyExpressionError?: boolean;
+  isDisallowedNodeType?: boolean;
   detailMessage?: string;
   bracketError?: BracketError;
   token?: moo.Token;

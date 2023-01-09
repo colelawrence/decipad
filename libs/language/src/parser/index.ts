@@ -1,9 +1,11 @@
-import { isExpression, n } from '../utils';
+import { isExpression, n, walkAst } from '../utils';
 import * as AST from './ast-types';
 import * as Parser from './parser-types';
 import { tokenizer, BracketCounter } from '../grammar/tokenizer';
 import { parse as languageParse } from './parser';
 import { SyntaxError } from './SyntaxError';
+
+export { nodeTypes } from './ast-types';
 
 export { AST, Parser, n, SyntaxError };
 
@@ -44,7 +46,10 @@ export function parseStatement(source: string): Parser.ParsedStatement {
   };
 }
 
-export function parseExpression(source: string): Parser.ParsedExpression {
+export function parseExpression(
+  source: string,
+  allowedNodeTypes?: AST.Node['type'][]
+): Parser.ParsedExpression {
   const parsed = parseStatement(source);
 
   if (parsed.error) return parsed;
@@ -53,6 +58,23 @@ export function parseExpression(source: string): Parser.ParsedExpression {
     return {
       error: { message: 'Expected expression', isEmptyExpressionError: true },
     };
+  }
+
+  if (allowedNodeTypes) {
+    try {
+      walkAst(parsed.solution, (node) => {
+        if (!allowedNodeTypes.includes(node.type)) {
+          throw new Error('Invalid node type');
+        }
+      });
+    } catch {
+      return {
+        error: {
+          message: 'Invalid expression in this context',
+          isDisallowedNodeType: true,
+        },
+      };
+    }
   }
 
   return {

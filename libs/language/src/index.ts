@@ -37,6 +37,7 @@ export {
   parseBlock,
   parseStatement,
   parseExpression,
+  nodeTypes,
   Parser,
   SyntaxError,
 } from './parser';

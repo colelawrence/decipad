@@ -41,6 +41,7 @@ export {
   getUnitByName,
   currencyUnits,
   isStatement,
+  nodeTypes,
 } from '@decipad/language';
 
 export {
