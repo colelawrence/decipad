@@ -82,7 +82,7 @@ test.describe('Dropdown widget', () => {
   test('Dropdown option should appear in table column manu', async () => {
     await createTable(page);
     await openColumnMenu(page, 2);
-    await page.press('[role="menuitem"]:has-text("Change type")', 'Enter');
+    await page.click('[role="menuitem"]:has-text("Change type")');
 
     const dropdownMenu = page.locator(
       '[role="menuitem"]:has-text("Categories")'
@@ -91,8 +91,8 @@ test.describe('Dropdown widget', () => {
   });
 
   test('You can open dropdown in the cell', async () => {
-    await page.press('[role="menuitem"]:has-text("Categories")', 'Enter');
-    await page.press('[role="menuitem"]:has-text("Dropdown1")', 'Enter');
+    await page.click('[role="menuitem"]:has-text("Categories")');
+    await page.click('[role="menuitem"]:has-text("Dropdown1")');
 
     await page.waitForSelector('[aria-roledescription="dropdown-editor"]');
     await clickCell(page, 1, 2);

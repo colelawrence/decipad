@@ -11,7 +11,9 @@ interface RequireOnboardProps {
 export const RequireOnboard: FC<RequireOnboardProps> = ({ children }) => {
   const requiresOnboarding = useRequiresOnboarding();
 
-  return requiresOnboarding && isFlagEnabled('ONBOARDING_ACCOUNT_SETUP') ? (
+  return requiresOnboarding &&
+    isFlagEnabled('ONBOARDING_ACCOUNT_SETUP') &&
+    !navigator.webdriver ? (
     <Navigate replace to={onboard({}).$} />
   ) : (
     <>{children}</>
