@@ -91,7 +91,7 @@ const InsideNotebookState = ({
   useEffect(() => {
     if (!computer) {
       initComputer();
-    } else if (!editor && plugins) {
+    } else if (plugins) {
       initEditor(
         notebookId,
         {

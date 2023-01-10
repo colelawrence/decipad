@@ -175,5 +175,7 @@ export function createDocSyncEditor(
 
   syncEditor = setupUndo(syncEditor);
 
+  syncEditor.isReadOnly = readOnly;
+
   return syncEditor;
 }

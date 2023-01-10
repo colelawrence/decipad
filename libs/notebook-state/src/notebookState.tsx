@@ -39,7 +39,11 @@ const createStore = () =>
       // verify that if we have a matching connected docsync instance
       const { editor: oldEditor, syncClientState } = get();
       if (oldEditor) {
-        if (syncClientState === 'created' && oldEditor.id === notebookId) {
+        if (
+          syncClientState === 'created' &&
+          oldEditor.id === notebookId &&
+          oldEditor.isReadOnly === docsync.readOnly
+        ) {
           // the one we have is just fine
           return;
         }

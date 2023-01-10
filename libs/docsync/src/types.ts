@@ -19,6 +19,7 @@ export type OnDisconnectedCallback = () => void;
 export type DocSyncEditor = MyEditor &
   YjsEditor &
   CursorEditor & {
+    isReadOnly?: boolean;
     onLoaded: (cb: OnLoadedCallback) => void;
     offLoaded: (cb: OnLoadedCallback) => void;
     onSaved: (cb: OnSavedCallback) => void;

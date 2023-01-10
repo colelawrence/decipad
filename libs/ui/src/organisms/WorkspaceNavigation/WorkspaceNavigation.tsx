@@ -61,8 +61,8 @@ const iconLink = (
     <path
       d="M3.58057 12.6694L10.2981 5.95192"
       stroke={cssVar('weakerTextColor')}
-      stroke-width="1.4"
-      stroke-linecap="round"
+      strokeWidth="1.4"
+      strokeLinecap="round"
     />
     <path
       d="M12.4194 4.43079V9.45333C12.4194 9.98787 11.7731 10.2556 11.3952 9.87759L6.37263 4.85505C5.99465 4.47707 6.26235 3.83079 6.79689 3.83079L11.8194 3.83079C12.1508 3.83079 12.4194 4.09942 12.4194 4.43079Z"
