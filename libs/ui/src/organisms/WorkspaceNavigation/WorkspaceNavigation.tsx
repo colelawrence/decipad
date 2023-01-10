@@ -319,7 +319,7 @@ export const WorkspaceNavigation = ({
           key={'navfoot-docs-0'}
           icon={<Sparkles />}
         >
-          <span css={itemTextStyles}>Templates</span>
+          <span css={itemTextStyles}>Templates {iconLink}</span>
         </NavigationItem>
       </NavigationList>
       <div key="div-1" role="presentation" css={hrStyles}>

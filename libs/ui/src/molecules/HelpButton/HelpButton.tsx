@@ -37,25 +37,27 @@ const innerStyles = css(p14Medium, {
 export const HelpButton = (): ReturnType<React.FC> => {
   const clientEvent = useContext(ClientEventsContext);
   return (
-    <Tooltip
-      trigger={
-        <button
-          css={styles}
-          onClick={() =>
-            clientEvent({
-              type: 'action',
-              action: 'help button clicked',
-            })
-          }
-        >
-          <span css={innerStyles}>
-            <QuestionMark /> <span>Help</span>
-          </span>
-        </button>
-      }
-      align="end"
-    >
-      Help and resources ✨
-    </Tooltip>
+    <span id="HelpButton">
+      <Tooltip
+        trigger={
+          <button
+            css={styles}
+            onClick={() =>
+              clientEvent({
+                type: 'action',
+                action: 'help button clicked',
+              })
+            }
+          >
+            <span css={innerStyles}>
+              <QuestionMark /> <span>Help</span>
+            </span>
+          </button>
+        }
+        align="end"
+      >
+        Help and resources ✨
+      </Tooltip>
+    </span>
   );
 };
