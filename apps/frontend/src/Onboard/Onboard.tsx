@@ -22,7 +22,7 @@ import {
   useSetUsernameMutation,
   useUserQuery,
 } from '../graphql';
-import { useIsOnboarded } from './useIsOnboarded';
+import { useRequiresOnboarding } from './useRequiresOnboarding';
 
 export const Onboard = () => {
   const navigate = useNavigate();
@@ -51,8 +51,8 @@ export const Onboard = () => {
     navigate(onboard({}).step({ step: Number(step) - 1 }).$);
   }, [navigate, step]);
 
-  const isOnboarded = useIsOnboarded();
-  if (isOnboarded) {
+  const requiresOnboarding = useRequiresOnboarding();
+  if (!requiresOnboarding) {
     return <Navigate replace to="/" />;
   }
 
