@@ -63,6 +63,7 @@ export const DashboardSidebar = ({
                 <AccountAvatar
                   menuOpen={openMenu}
                   name={name}
+                  email={email}
                   onClick={() => setOpenMenu(!openMenu)}
                 />
                 {openMenu && (

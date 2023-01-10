@@ -29,7 +29,10 @@ const chevronStyles = (hoverSelector: string) =>
     },
   });
 
-type AccountAvatarProps = Pick<ComponentProps<typeof Avatar>, 'name'> & {
+type AccountAvatarProps = Pick<
+  ComponentProps<typeof Avatar>,
+  'name' | 'email'
+> & {
   readonly menuOpen: boolean;
   readonly variant?: boolean;
   readonly onClick?: () => void;
@@ -50,7 +53,7 @@ export const AccountAvatar = ({
       className={hoverTargetClassName}
       css={avatarGridStyles}
     >
-      <Avatar email={props.name} hoverSelector={hoverSelector} {...props} />
+      <Avatar hoverSelector={hoverSelector} {...props} />
 
       {variant && (
         <div css={chevronStyles(hoverSelector)}>
