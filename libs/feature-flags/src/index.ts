@@ -14,7 +14,8 @@ export type Flag =
   | 'DASHBOARD_STATUS'
   | 'DASHBOARD_SEARCH'
   | 'DROPDOWN_TABLES'
-  | 'FEATURE_REQUEST';
+  | 'FEATURE_REQUEST'
+  | 'ONBOARDING_ACCOUNT_SETUP';
 
 export type Flags = Partial<Record<Flag, boolean>>;
 

@@ -18,6 +18,7 @@ export type User = {
   last_login?: number;
   first_login?: number;
   hideChecklist?: boolean;
+  onboarded?: boolean;
 };
 
 export interface UserInput {
@@ -30,6 +31,7 @@ export interface UserInput {
   last_login?: number;
   first_login?: number;
   hideChecklist?: boolean;
+  onboarded?: boolean;
 }
 
 export interface GithubUser extends UserInput {

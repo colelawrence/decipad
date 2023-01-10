@@ -5,6 +5,7 @@ export default gql`
     name: String
     description: String
     hideChecklist: Boolean
+    onboarded: Boolean
   }
 
   type UserAccess {

@@ -705,6 +705,8 @@ export type User = {
   id: Scalars['ID'];
   image?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  onboarded?: Maybe<Scalars['Boolean']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 export type UserAccess = {
@@ -718,6 +720,7 @@ export type UserInput = {
   description?: InputMaybe<Scalars['String']>;
   hideChecklist?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
+  onboarded?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type UsernameInput = {
@@ -931,7 +934,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, hideChecklist?: boolean | null } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __typename?: 'User', name: string, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null } };
 
 export type NotebookSnapshotFragment = { __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null };
 
@@ -948,7 +951,7 @@ export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __type
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', hideChecklist?: boolean | null } | null };
+export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', name: string, username?: string | null, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null } | null };
 
 export type WorkspaceSwitcherWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -1311,6 +1314,7 @@ export const UpdateUserDocument = gql`
     name
     description
     hideChecklist
+    onboarded
   }
 }
     `;
@@ -1332,7 +1336,11 @@ export function useGetNotebookByIdQuery(options: Omit<Urql.UseQueryArgs<GetNoteb
 export const UserDocument = gql`
     query User {
   self {
+    name
+    username
+    description
     hideChecklist
+    onboarded
   }
   selfFulfilledGoals
 }
@@ -1590,7 +1598,9 @@ export type GraphCacheResolvers = {
     hideChecklist?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['Boolean'] | string>,
     id?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['ID'] | string>,
     image?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
-    name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>
+    name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
+    onboarded?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['Boolean'] | string>,
+    username?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>
   },
   UserAccess?: {
     canComment?: GraphCacheResolver<WithTypename<UserAccess>, Record<string, never>, Scalars['Boolean'] | string>,

@@ -1,10 +1,18 @@
-import { docs, notebooks, playground, workspaces } from '@decipad/routing';
+import {
+  docs,
+  notebooks,
+  onboard,
+  playground,
+  workspaces,
+} from '@decipad/routing';
 import { HelpMenu } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
 import { FC, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
+import { Onboard } from './Onboard/Onboard';
+import { RequireOnboard } from './Onboard/RequireOnboard';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
 export const loadWorkspaces = () =>
@@ -36,7 +44,9 @@ export const App: FC = () => {
             <RequireSession>
               <RouteEvents category="workspace">
                 <LazyRoute>
-                  <Workspaces />
+                  <RequireOnboard>
+                    <Workspaces />
+                  </RequireOnboard>
                 </LazyRoute>
               </RouteEvents>
             </RequireSession>
@@ -46,7 +56,9 @@ export const App: FC = () => {
           path={`${notebooks.template}/*`}
           element={
             <LazyRoute>
-              <Notebooks />
+              <RequireOnboard>
+                <Notebooks />
+              </RequireOnboard>
             </LazyRoute>
           }
         />
@@ -58,6 +70,17 @@ export const App: FC = () => {
                 <Playground />
               </LazyRoute>
             </RouteEvents>
+          }
+        />
+
+        <Route
+          path={`${onboard.template}/*`}
+          element={
+            <RequireSession>
+              <LazyRoute>
+                <Onboard />
+              </LazyRoute>
+            </RequireSession>
           }
         />
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />

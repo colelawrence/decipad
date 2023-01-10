@@ -255,7 +255,7 @@ export const AccountSetupFlow3 = ({
             </div>
             <div css={compactGroupStyles}>
               <label css={inputStyles}>
-                <span>To start, what's your name?</span>
+                <span>Tell us about yourself in a few sentences</span>
                 <TextareaField
                   onChange={onChangeDescription}
                   value={description}

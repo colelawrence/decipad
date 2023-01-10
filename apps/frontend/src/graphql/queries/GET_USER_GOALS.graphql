@@ -1,6 +1,10 @@
 query User {
   self {
+    name
+    username
+    description
     hideChecklist
+    onboarded
   }
   selfFulfilledGoals
 }

@@ -3,5 +3,6 @@ mutation UpdateUser($props: UserInput!) {
     name
     description
     hideChecklist
+    onboarded
   }
 }

@@ -4,11 +4,13 @@ export default gql`
   type User {
     id: ID!
     name: String!
+    username: String
     description: String
     email: String
     image: String
     createdAt: DateTime
     hideChecklist: Boolean
+    onboarded: Boolean
   }
 
   enum PermissionType {

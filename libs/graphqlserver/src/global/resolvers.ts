@@ -18,4 +18,34 @@ export default {
       return data.users.get({ id: permission.given_by_user_id });
     },
   },
+  User: {
+    async username(
+      _: unknown,
+      __: unknown,
+      context: GraphqlContext
+    ): Promise<string | undefined> {
+      if (!context.user) {
+        return;
+      }
+
+      const data = await tables();
+      const userKeys = (
+        await data.userkeys.query({
+          IndexName: 'byUserId',
+          KeyConditionExpression: 'user_id = :user_id',
+          ExpressionAttributeValues: {
+            ':user_id': context.user.id,
+          },
+        })
+      ).Items.filter((key) => key.id.startsWith('username:'));
+
+      if (userKeys.length === 0) {
+        return;
+      }
+
+      const [userKey] = userKeys;
+      const username = userKey.id.split(':')[1];
+      return username;
+    },
+  },
 };

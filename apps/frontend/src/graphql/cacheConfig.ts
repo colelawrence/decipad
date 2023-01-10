@@ -149,11 +149,32 @@ export const graphCacheConfig: GraphCacheConfig = {
           return data;
         });
       },
+      setUsername: (_result, args, cache) => {
+        cache.updateQuery<UserQuery>({ query: UserDocument }, (data) => {
+          if (args.props.username && data?.self) {
+            /* eslint-disable no-param-reassign */
+            data.self.username = args.props.username;
+          }
+          return data;
+        });
+      },
       updateSelf: (_result, args, cache) => {
         cache.updateQuery<UserQuery>({ query: UserDocument }, (data) => {
           if (args.props.hideChecklist && data?.self) {
             /* eslint-disable no-param-reassign */
             data.self.hideChecklist = true;
+          }
+          if (args.props.onboarded && data?.self) {
+            /* eslint-disable no-param-reassign */
+            data.self.onboarded = args.props.onboarded;
+          }
+          if (args.props.name && data?.self) {
+            /* eslint-disable no-param-reassign */
+            data.self.name = args.props.name;
+          }
+          if (args.props.description && data?.self) {
+            /* eslint-disable no-param-reassign */
+            data.self.description = args.props.description;
           }
           return data;
         });

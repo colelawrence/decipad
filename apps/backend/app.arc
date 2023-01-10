@@ -54,6 +54,7 @@ users
   secret String
   encrypt true
   hide_checklist Boolean
+  onboarded Boolean
 
 userprofiles
   user_id *String

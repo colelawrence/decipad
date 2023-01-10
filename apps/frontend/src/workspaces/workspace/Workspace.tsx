@@ -46,6 +46,7 @@ import {
   useUpdateSectionAddNotebookMutation,
   useUpdateSectionMutation,
   useUpdateUserMutation,
+  useUserQuery,
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
@@ -88,15 +89,15 @@ const Workspace: FC = () => {
   const sectionId = params?.sectionId;
   const isArchivePage = maybeWorkspaceFolder === 'archived';
   const { data: session } = useSession();
+  const { data: user } = useUserQuery()[0];
+
   const toast = useToast();
 
   const [userSettings, setUserSettings] = useState(false);
 
-  const [name, setName] = useState(session?.user.name || '');
-  const [username, setUsername] = useState(session?.user.username || '');
-  const [description, setDescription] = useState(
-    session?.user.description || ''
-  );
+  const [name, setName] = useState(user?.self?.name || '');
+  const [username, setUsername] = useState(user?.self?.username || '');
+  const [description, setDescription] = useState(user?.self?.description || '');
   const [result] = useGetWorkspacesQuery();
 
   const createNotebook = useCreateNotebookMutation()[1];
@@ -231,7 +232,7 @@ const Workspace: FC = () => {
     >
       <Sidebar
         Heading="h1"
-        name={session.user.name || 'Me'}
+        name={user?.self?.name || 'Me'}
         email={session.user.email || 'me@example.com'}
         onLogout={signoutCallback}
         activeWorkspace={{
@@ -489,7 +490,7 @@ const Workspace: FC = () => {
       </Routes>
       <div style={{ display: userSettings ? 'block' : 'none' }}>
         <EditUserModal
-          name={name !== session.user.email ? name : ''}
+          name={name}
           username={username}
           description={description}
           // closeHref={currentWorkspaceRoute.$}
