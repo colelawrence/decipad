@@ -1,4 +1,5 @@
-import { F, u, U } from './utils';
+import { N } from '@decipad/number';
+import { u, U } from './utils';
 import { build as t } from './type';
 import { cleanDate } from './date';
 import {
@@ -60,60 +61,60 @@ describe('use of funds document', () => {
           1638316800000n,
         ],
         Array [
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
         ],
         Array [
-          Fraction(0),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
+          DeciNumber(0),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
         ],
         Array [
-          Fraction(0),
-          Fraction(0),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
-          Fraction(12000),
+          DeciNumber(0),
+          DeciNumber(0),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
+          DeciNumber(12000),
         ],
         Array [
-          Fraction(0),
-          Fraction(0),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
-          Fraction(14000),
+          DeciNumber(0),
+          DeciNumber(0),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
+          DeciNumber(14000),
         ],
       ]
     `);
@@ -210,8 +211,8 @@ describe('more models', () => {
         // TODO this unit is million USD,
         // multiplier/exponent should reflect that
         unit: 'usd',
-        exp: F(1),
-        multiplier: F(1, 1000),
+        exp: N(1),
+        multiplier: N(1, 1000),
       },
     ];
 
@@ -242,11 +243,11 @@ describe('more models', () => {
       )
     ).toMatchObject({
       variables: {
-        InitialCashFlow: F(1, 100),
+        InitialCashFlow: N(1, 100),
         Years: years,
-        GrowthRate: F(1, 4),
-        CashFlows: [F(1, 100), F(1, 80), F(1, 64), F(5, 256)],
-        YearlyCashFlows: [F(1, 125), F(1, 100), F(1, 80), F(1, 64)],
+        GrowthRate: N(1, 4),
+        CashFlows: [N(1, 100), N(1, 80), N(1, 64), N(5, 256)],
+        YearlyCashFlows: [N(1, 125), N(1, 100), N(1, 80), N(1, 64)],
       },
       types: {
         InitialCashFlow: {
@@ -282,7 +283,7 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: [years, [F(5200), F(5404), F(140302, 25)]],
+      value: [years, [N(5200), N(5404), N(140302, 25)]],
       type: {
         columnNames: ['Years', 'Value'],
         columnTypes: [
@@ -310,7 +311,7 @@ describe('more models', () => {
         `
       )
     ).toMatchObject({
-      value: F(123, 20),
+      value: N(123, 20),
     });
   });
 });
@@ -364,12 +365,12 @@ ${'' /* Get capital needed */}
       )
     ).toMatchObject({
       variables: {
-        MonthlyRevenueGrowthRate: F(1, 20),
+        MonthlyRevenueGrowthRate: N(1, 20),
         TimeToProfitability: expect.toRoundEqual(81),
         CumulativeMonthlyRevenue: expect.toRoundEqual(-43395),
         CumulativeMonthlyExpenses: expect.toRoundEqual(10527976),
         CapitalNeeded: expect.toRoundEqual(-10571371),
-        IPOTargetMonthlyRevenue: F(10000000),
+        IPOTargetMonthlyRevenue: N(10000000),
         TimeToIPO: expect.toRoundEqual(170),
       },
       types: {
@@ -462,8 +463,8 @@ ${'' /* Get capital needed */}
       )
     ).toMatchObject({
       value: [
-        [F(101), F(102)],
-        [F(201), F(202)],
+        [N(101), N(102)],
+        [N(201), N(202)],
       ],
       type: {
         indexedBy: 'Cars',
@@ -605,62 +606,62 @@ ${'' /* Get capital needed */}
     ).toMatchObject({
       M: {
         // M = 0.05398 kg
-        type: { type: 'number', unit: U('g', { multiplier: F(1000) }) },
-        value: F(2699n, 50000n), // 0,05398 ✓
+        type: { type: 'number', unit: U('g', { multiplier: N(1000) }) },
+        value: N(2699n, 50000n), // 0,05398 ✓
       },
       g: {
         // g = 9.8 meters / (second ^ 2)
         type: {
           type: 'number',
-          unit: U([u('meters'), u('seconds', { exp: F(-2) })]),
+          unit: U([u('meters'), u('seconds', { exp: N(-2) })]),
         },
-        value: F(98, 10), // 9,8 ✓
+        value: N(98, 10), // 9,8 ✓
       },
       D: {
         // D = 0.976 inches
         type: { type: 'number', unit: U('inches') },
-        value: F(976, 1000), // 0,976 ✓
+        value: N(976, 1000), // 0,976 ✓
       },
       A: {
         // A = pi * (D/2) ^2 in m^2
-        type: { type: 'number', unit: U('m', { exp: F(2) }) },
-        value: F(71929846962599n, 149022617187500000n), // 0,000482677383595 ✓
+        type: { type: 'number', unit: U('m', { exp: N(2) }) },
+        value: N(188545852972178898996137n, 390625000000000000000000000n),
       },
       rho: {
         // rho = 1.2 kg / (m^3)
         type: {
           type: 'number',
-          unit: U([u('g', { multiplier: F(1000) }), u('m', { exp: F(-3) })]),
+          unit: U([u('g', { multiplier: N(1000) }), u('m', { exp: N(-3) })]),
         },
-        value: F(6, 5), // 1,2 ✓
+        value: N(6, 5), // 1,2 ✓
       },
       Cd: {
         // Cd = 0.75
         type: { type: 'number' },
-        value: F(75, 100), // 0,75 ✓
+        value: N(75, 100), // 0,75 ✓
       },
       k: {
         // k = 0.5 * rho * Cd * A
         type: {
           type: 'number',
-          unit: U([u('g', { multiplier: F(1000) }), u('m', { exp: F(-1) })]),
+          unit: U([u('g', { multiplier: N(1000) }), u('m', { exp: N(-1) })]),
         },
-        value: F(647368622663391n, 2980452343750000000n), // 0,000217204822618 ✓
+        value: N(1696912676749610090965233n, 7812500000000000000000000000n),
       },
       I: {
         // I = 9 N s
         type: { type: 'number', unit: U([u('N'), u('s')]) },
-        value: F(9), // 9 ✓
+        value: N(9), // 9 ✓
       },
       T: {
         // T = 6 N
         type: { type: 'number', unit: U('N') },
-        value: F(6), // 6  ✓
+        value: N(6), // 6  ✓
       },
       t: {
         // t = I / T
         type: { type: 'number', unit: U('s') },
-        value: F(3, 2), // 1,5 ✓
+        value: N(3, 2), // 1,5 ✓
       },
       gF: {
         // gF = (M * g) in N
@@ -668,51 +669,57 @@ ${'' /* Get capital needed */}
           type: 'number',
           unit: U('N'),
         },
-        value: F(132_251, 250_000), // 0,529004 ✓
+        value: N(132_251, 250_000), // 0,529004 ✓
       },
       q: {
         // q = sqrt((T - gF) / k)
         type: {
           type: 'number',
           unit: U([
-            u('N', { exp: F(1, 2) }),
-            u('g', { multiplier: F(1000), exp: F(-1, 2) }),
-            u('m', { exp: F(1, 2) }),
+            u('N', { exp: N(1, 2) }),
+            u('g', { multiplier: N(1000), exp: N(-1, 2) }),
+            u('m', { exp: N(1, 2) }),
           ]),
         },
-        value: F(132843142604550n, 837029326097n), // 158,707871354863318 ✓
+        value: N(132843142604550n, 837029326097n), // 158,707871354863318 ✓
       },
       x: {
         // x = 2 * k * q / M
         type: {
           type: 'number',
           unit: U([
-            u('N', { exp: F(1, 2) }),
+            u('N', { exp: N(1, 2) }),
             // gram units (g):
-            // k = { multiplier: F(1000) }
-            // q = { multiplier: F(1000), exp: F(-1, 2) }
-            // M = { multiplier: F(1000) }
+            // k = { multiplier: N(1000) }
+            // q = { multiplier: N(1000), exp: N(-1, 2) }
+            // M = { multiplier: N(1000) }
             // x = k * q / M
-            // x = { multiplier: F(1000), exp: F(1) + F(-1, 2) - F(1)}
-            // x = { multiplier: F(1000), exp: F(-1, 2)}
-            u('g', { multiplier: F(1000), exp: F(-1, 2) }),
-            u('m', { exp: F(-1, 2) }),
+            // x = { multiplier: N(1000), exp: N(1) + N(-1, 2) - N(1)}
+            // x = { multiplier: N(1000), exp: N(-1, 2)}
+            u('g', { multiplier: N(1000), exp: N(-1, 2) }),
+            u('m', { exp: N(-1, 2) }),
           ]),
         },
-        value: F(245709949309097056130500083n, 192379014834774879311093750n), // = 2 * 0,000217204822618 * 158,707871354863318 / 0,05398 = 1,277218045413614 ✓
+        value: N(
+          4508464254098342209754082899502352203n,
+          3529909611149692187500000000000000000n
+        ), // = 2 * 0,000217204822618 * 158,707871354863318 / 0,05398 = 1,277218045413614 ✓
       },
       temp1: {
         // -x * t
         type: {
           type: 'number',
           unit: U([
-            u('N', { exp: F(1, 2) }),
-            u('g', { multiplier: F(1000), exp: F(-1, 2) }),
-            u('m', { exp: F(-1, 2) }),
+            u('N', { exp: N(1, 2) }),
+            u('g', { multiplier: N(1000), exp: N(-1, 2) }),
+            u('m', { exp: N(-1, 2) }),
             u('s'),
           ]),
         },
-        value: F(-737129847927291168391500249n, 384758029669549758622187500n), // = -x * t = -1,277218045413614 * 1,5 =  = -1,915827068120421 ☑️
+        value: N(
+          -13525392762295026629262248698507056609n,
+          7059819222299384375000000000000000000n
+        ), // = -x * t = -1,277218045413614 * 1,5 =  = -1,915827068120421 ☑️
       },
       temp2: {
         // e ** temp1
@@ -720,15 +727,15 @@ ${'' /* Get capital needed */}
           type: 'number',
           unit: null,
         },
-        value: F(537148n, 3648607n), // = 2.7182818284 ** -1,915827068120421 = 0,147220021240181
+        value: N(537148n, 3648607n), // = 2.7182818284 ** -1,915827068120421 = 0,147220021240181
       },
       v: {
         // v = q * (1 - temp2) / (1 + temp2) in m / s
         type: {
           type: 'number',
-          unit: U([u('m', { exp: F(1) }), u('s', { exp: F(-1) })]),
+          unit: U([u('m', { exp: N(1) }), u('s', { exp: N(-1) })]),
         },
-        value: F(6328251127759379000n, 53640764699238693n), // 117,974662799844137
+        value: N(6328251127759379000n, 53640764699238693n), // 117,974662799844137
       },
     });
   });

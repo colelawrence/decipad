@@ -18,8 +18,8 @@ describe('reducer operators', () => {
         fromJS([true, false, true]),
       ])
     ).toMatchInlineSnapshot(`
-      FractionValue {
-        "value": Fraction(4),
+      NumberValue {
+        "value": DeciNumber(4),
       }
     `);
   });

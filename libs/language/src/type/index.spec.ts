@@ -1,6 +1,7 @@
 import produce from 'immer';
 
-import { F, l, u, U } from '../utils';
+import { N } from '@decipad/number';
+import { l, u, U } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
 import { Type, build as t } from './index';
@@ -159,11 +160,11 @@ describe('divideUnit', () => {
 
   it('exponentiates units', () => {
     expect(t.number([invSecond]).divideUnit([second])).toEqual(
-      t.number([setExponent(second, F(-2))])
+      t.number([setExponent(second, N(-2))])
     );
 
-    expect(t.number([setExponent(second, F(-2))]).divideUnit([second])).toEqual(
-      t.number([setExponent(second, F(-3))])
+    expect(t.number([setExponent(second, N(-2))]).divideUnit([second])).toEqual(
+      t.number([setExponent(second, N(-3))])
     );
   });
 
@@ -173,7 +174,7 @@ describe('divideUnit', () => {
 
   it('divides units even further', () => {
     expect(t.number([meter, invSecond]).divideUnit([u('USD')]).unit).toEqual([
-      setExponent(u('USD'), F(-1)), // first because of sort
+      setExponent(u('USD'), N(-1)), // first because of sort
       meter,
       invSecond,
     ]);

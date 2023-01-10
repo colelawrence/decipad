@@ -1,4 +1,4 @@
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import produce from 'immer';
 import { InferError, PrimitiveTypeName, Type } from '.';
@@ -44,8 +44,8 @@ export const timeQuantity = (timeUnit: Unit | string) =>
     numberType.unit = [
       {
         unit: timeUnitFromUnit(timeUnit),
-        exp: toFraction(1),
-        multiplier: toFraction(1),
+        exp: N(1),
+        multiplier: N(1),
         known: true,
       },
     ];

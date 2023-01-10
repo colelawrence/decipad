@@ -1,4 +1,4 @@
-import { F } from '../utils';
+import { N } from '@decipad/number';
 import { parseUTCDate } from '../date';
 import { jsCol } from '../lazy/testUtils';
 import {
@@ -26,7 +26,7 @@ it('can get from JS for testing', () => {
 it('can represent a range', () => {
   expect(
     Range.fromBounds(Scalar.fromValue(0), Scalar.fromValue(10)).getData()
-  ).toEqual([F(0), F(10)]);
+  ).toEqual([N(0), N(10)]);
 
   const r = Range.fromBounds(fromJS(0), fromJS(10));
   expect(() => Range.fromBounds(r, r).getData()).toThrow();

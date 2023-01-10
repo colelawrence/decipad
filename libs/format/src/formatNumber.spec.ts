@@ -1,4 +1,4 @@
-import { pow, toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { parseUnit } from '@decipad/language';
 import * as CurrencyUnits from '../../language/src/units/currency-units';
 import { formatNumber, getIsPrecise } from './formatNumber';
@@ -23,7 +23,7 @@ describe('formatNumber', () => {
   describe('default rules', () => {
     describe('unitless', () => {
       it('10 = 10', () => {
-        const { partsOf, asString } = formatNumber(locale, null, F(10));
+        const { partsOf, asString } = formatNumber(locale, null, N(10));
         expect(partsOf).toEqual([{ type: 'integer', value: '10' }]);
         expect(asString).toEqual('10');
       });
@@ -107,7 +107,7 @@ describe('formatNumber', () => {
         const { isPrecise, partsOf, asStringPrecise } = formatNumber(
           locale,
           null,
-          pow(F(1, 1337), F(-200))
+          N(1, 1337).pow(N(-200))
         );
         expect(partsOf).toEqual([
           {
@@ -189,7 +189,7 @@ describe('formatNumber', () => {
       });
 
       it('1,000,000 = 1 million', () => {
-        const { partsOf, asString } = formatNumber(locale, null, F(1000000));
+        const { partsOf, asString } = formatNumber(locale, null, N(1000000));
         expect(partsOf).toEqual([
           { type: 'integer', value: '1' },
           { type: 'literal', value: ' ' },
@@ -216,7 +216,7 @@ describe('formatNumber', () => {
       });
 
       it('1,010,000 = 1.01 million', () => {
-        const { asString } = formatNumber(locale, null, F(1010000));
+        const { asString } = formatNumber(locale, null, N(1010000));
         expect(asString).toEqual('1.01 million');
       });
 
@@ -228,7 +228,7 @@ describe('formatNumber', () => {
         );
         expect(asString).toEqual('≈1 million');
         expect(asStringPrecise).toEqual('1,000,567');
-        expect(formatNumber(locale, null, F(1000567))).toMatchObject({
+        expect(formatNumber(locale, null, N(1000567))).toMatchObject({
           isPrecise: false,
           asString: '≈1 million',
           value: 1000567,
@@ -242,7 +242,7 @@ describe('formatNumber', () => {
       });
 
       it('1,000,000,000 = 1 billion', () => {
-        const { partsOf, asString } = formatNumber(locale, null, F(1000000000));
+        const { partsOf, asString } = formatNumber(locale, null, N(1000000000));
         expect(partsOf).toEqual([
           { type: 'integer', value: '1' },
           { type: 'literal', value: ' ' },
@@ -522,12 +522,12 @@ describe('formatNumber', () => {
       });
 
       it('90.000 m/day = 90K meters per day', () => {
-        const { asString } = formatNumber(locale, metersPerDay, F(90000));
+        const { asString } = formatNumber(locale, metersPerDay, N(90000));
         expect(asString).toEqual('90K meters per day');
       });
 
       it('0.45359 kg = 0.45 kg', () => {
-        const [value, unit] = makeFractionUnitTuple(toFraction(0.45359), 'kg');
+        const [value, unit] = makeFractionUnitTuple(N(0.45359), 'kg');
         const { asString } = formatNumber(locale, unit, value);
         expect(asString).toEqual('≈0.45 kg');
       });
@@ -535,7 +535,7 @@ describe('formatNumber', () => {
       it('0.01 liter/meter = 0.01 liters per meter', () => {
         const { partsOf, asString } = formatNumber(
           locale,
-          [parseUnit('liter'), u('meter', { exp: toFraction(-1) })],
+          [parseUnit('liter'), u('meter', { exp: N(-1) })],
           F(1, 100)
         );
         expect(asString).toEqual('0.01 liters per meter');
@@ -600,7 +600,7 @@ describe('formatNumber', () => {
       it('$1 / meter = $1 per meter', () => {
         const { partsOf, asString, asStringPrecise } = formatNumber(
           locale,
-          [parseUnit('usd'), u('meter', { exp: toFraction(-1) })],
+          [parseUnit('usd'), u('meter', { exp: N(-1) })],
           F(1)
         );
         expect(asString).toEqual('$1 per meter');
@@ -624,10 +624,7 @@ describe('formatNumber', () => {
       it('£5/kWh is £5 per kWh', () => {
         const { asString } = formatNumber(
           locale,
-          [
-            parseUnit('gbp'),
-            u('Wh', { exp: toFraction(-1), multiplier: F(1000) }),
-          ],
+          [parseUnit('gbp'), u('Wh', { exp: N(-1), multiplier: F(1000) })],
           F(5, 1000)
         );
         expect(asString).toEqual('£5 per kWh');
@@ -636,7 +633,7 @@ describe('formatNumber', () => {
       it('£5/$ is £5 per kWh', () => {
         const { asString } = formatNumber(
           locale,
-          [parseUnit('gbp'), u('usd', { exp: toFraction(-1) })],
+          [parseUnit('gbp'), u('usd', { exp: N(-1) })],
           F(5)
         );
         expect(asString).toEqual('£5 per $');
@@ -756,7 +753,7 @@ describe('formatNumber', () => {
         expect(asString).toEqual('10 meters per day');
       });
       it('100/day = 100 per day', () => {
-        const { partsOf, asString } = formatNumber('en-US', perDay, F(100));
+        const { partsOf, asString } = formatNumber('en-US', perDay, N(100));
         expect(asString).toEqual('100 per day');
         expect(partsOf).toEqual([
           { type: 'integer', value: '100' },
@@ -778,7 +775,7 @@ describe('formatNumber', () => {
       test.each(CurrencyUnits.units.map((x) => x.baseQuantity))(
         '%p is monies?',
         (fx) => {
-          const { partsOf } = formatNumber(locale, [parseUnit(fx)], F(100000));
+          const { partsOf } = formatNumber(locale, [parseUnit(fx)], N(100000));
           expect(partsOf.map((x) => x.type)).toContain('currency');
         }
       );
@@ -788,7 +785,7 @@ describe('formatNumber', () => {
         '%p is pretty printed?',
         (fx) => {
           expect(prettyCurrencies.map((x) => x.pretty)).toContain(
-            formatNumber(locale, [parseUnit(fx)], F(100000))
+            formatNumber(locale, [parseUnit(fx)], N(100000))
               .partsOf.filter((x) => x.type === 'currency')
               .map((x) => x.value)[0]
           );
@@ -825,17 +822,17 @@ describe('formatNumber', () => {
       });
 
       it('$11.5/day = $11.5 per day', () => {
-        const { asString } = formatNumber(locale, usdPerDay, F(23, 2));
+        const { asString } = formatNumber(locale, usdPerDay, N(23, 2));
         expect(asString).toEqual('$11.5 per day');
       });
 
       it('$11.5k/day = $11.5K per day', () => {
-        const { asString } = formatNumber(locale, usdPerDay, F(23000, 2));
+        const { asString } = formatNumber(locale, usdPerDay, N(23000, 2));
         expect(asString).toEqual('$11.5K per day');
       });
 
       it('100 usd = $100', () => {
-        const { partsOf, asString } = formatNumber('en-US', usd, F(100));
+        const { partsOf, asString } = formatNumber('en-US', usd, N(100));
         expect(partsOf).toEqual([
           { type: 'currency', value: '$' },
           { type: 'integer', value: '100' },
@@ -1022,12 +1019,12 @@ describe('formatNumber', () => {
       });
 
       it('100 usd/day = $100 per day', () => {
-        const { asString } = formatNumber('en-US', usdPerDay, F(100));
+        const { asString } = formatNumber('en-US', usdPerDay, N(100));
         expect(asString).toEqual('$100 per day');
       });
 
       it('100/eur = 100 per euro', () => {
-        const { partsOf, asString } = formatNumber('en-US', perEuros, F(100));
+        const { partsOf, asString } = formatNumber('en-US', perEuros, N(100));
         expect(asString).toEqual('100 per €');
         expect(partsOf).toEqual([
           { type: 'integer', value: '100' },
@@ -1050,15 +1047,15 @@ describe('formatNumber', () => {
       });
 
       it('$1,000,000,000/day = $1T per day', () => {
-        const { asString } = formatNumber(locale, usdPerDay, F(1000000000000));
+        const { asString } = formatNumber(locale, usdPerDay, N(1000000000000));
         expect(asString).toEqual('$1T per day');
       });
       it('10,000 usd/day = $10K per day', () => {
-        const { asString } = formatNumber('en-US', usdPerDay, F(10000));
+        const { asString } = formatNumber('en-US', usdPerDay, N(10000));
         expect(asString).toEqual('$10K per day');
       });
       it('90,000 usd/day = $90K per day', () => {
-        const { asString } = formatNumber(locale, usdPerDay, F(90000));
+        const { asString } = formatNumber(locale, usdPerDay, N(90000));
         expect(asString).toEqual('$90K per day');
       });
 
@@ -1219,7 +1216,7 @@ describe('formatNumber', () => {
         expect(asString).toEqual('10 bananas per day');
       });
       it('100/banana = 100 per banana', () => {
-        const { partsOf, asString } = formatNumber('en-US', perBanana, F(100));
+        const { partsOf, asString } = formatNumber('en-US', perBanana, N(100));
         expect(asString).toEqual('100 per banana');
         expect(partsOf).toEqual([
           { type: 'integer', value: '100' },
@@ -1236,7 +1233,7 @@ describe('formatNumber', () => {
         ]);
       });
       it('90,000 banana/day = 90K banana per day', () => {
-        const { asString } = formatNumber(locale, bananasPerDay, F(90000));
+        const { asString } = formatNumber(locale, bananasPerDay, N(90000));
         expect(asString).toEqual('90K bananas per day');
       });
 
@@ -1453,7 +1450,7 @@ describe('formatNumber', () => {
     describe('percentages', () => {
       it('formats percentages', () => {
         expect(
-          formatNumber('en-US', null, F(1, 10), 'percentage').asString
+          formatNumber('en-US', null, N(1, 10), 'percentage').asString
         ).toEqual('10%');
       });
     });
@@ -1465,34 +1462,34 @@ describe('formatNumber', () => {
 describe('detects if the number can be displayed precisely', () => {
   it('when abbreviated', () => {
     // Precision determined by fractional number length
-    expect(getIsPrecise(toFraction(123.34))).toEqual(true);
-    expect(getIsPrecise(toFraction(123.345))).toEqual(false);
-    expect(getIsPrecise(toFraction(1.256))).toEqual(false);
-    expect(getIsPrecise(toFraction(10, 4), 2)).toEqual(true);
+    expect(getIsPrecise(N(123.34))).toEqual(true);
+    expect(getIsPrecise(N(123.345))).toEqual(false);
+    expect(getIsPrecise(N(1.256))).toEqual(false);
+    expect(getIsPrecise(N(10, 4), 2)).toEqual(true);
 
     // Larger-than-1000 numbers have 3 digits available for precision,
     // the rest must be zero.
-    expect(getIsPrecise(toFraction(678n))).toEqual(true);
-    expect(getIsPrecise(toFraction(6780n))).toEqual(true);
-    expect(getIsPrecise(toFraction(67800n))).toEqual(true);
-    expect(getIsPrecise(toFraction(6700n))).toEqual(true);
-    expect(getIsPrecise(toFraction(67000n))).toEqual(true);
-    expect(getIsPrecise(toFraction(670000n))).toEqual(true);
-    expect(getIsPrecise(toFraction(678000n))).toEqual(true);
-    expect(getIsPrecise(toFraction(678900n))).toEqual(false);
+    expect(getIsPrecise(N(678n))).toEqual(true);
+    expect(getIsPrecise(N(6780n))).toEqual(true);
+    expect(getIsPrecise(N(67800n))).toEqual(true);
+    expect(getIsPrecise(N(6700n))).toEqual(true);
+    expect(getIsPrecise(N(67000n))).toEqual(true);
+    expect(getIsPrecise(N(670000n))).toEqual(true);
+    expect(getIsPrecise(N(678000n))).toEqual(true);
+    expect(getIsPrecise(N(678900n))).toEqual(false);
 
     // Repeating fractions
-    expect(getIsPrecise(toFraction(1, 3))).toEqual(false);
-    expect(getIsPrecise(toFraction(1_000, 3))).toEqual(false);
-    expect(getIsPrecise(toFraction(10_000_000, 3))).toEqual(false);
+    expect(getIsPrecise(N(1, 3))).toEqual(false);
+    expect(getIsPrecise(N(1_000, 3))).toEqual(false);
+    expect(getIsPrecise(N(10_000_000, 3))).toEqual(false);
 
     // Edge cases
-    expect(getIsPrecise(toFraction(1230))).toEqual(true);
-    expect(getIsPrecise(toFraction(1234))).toEqual(false);
+    expect(getIsPrecise(N(1230))).toEqual(true);
+    expect(getIsPrecise(N(1234))).toEqual(false);
 
     // Too many integers
-    expect(getIsPrecise(toFraction(123.34))).toEqual(true);
-    expect(getIsPrecise(toFraction(1230.34))).toEqual(false);
-    expect(getIsPrecise(toFraction(1234.34))).toEqual(false);
+    expect(getIsPrecise(N(123.34))).toEqual(true);
+    expect(getIsPrecise(N(1230.34))).toEqual(false);
+    expect(getIsPrecise(N(1234.34))).toEqual(false);
   });
 });

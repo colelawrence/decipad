@@ -1,15 +1,15 @@
+import { N } from '@decipad/number';
 import { approximateSubsetSumIndices } from './table';
-import { F } from '../utils';
 
 describe('approximateSubsetSumIndices', () => {
   it('finds the optimal solution for a simple problem', () => {
-    expect(approximateSubsetSumIndices(F(40), [[5, 5, 10, 10, 25]], 0)).toEqual(
+    expect(approximateSubsetSumIndices(N(40), [[5, 5, 10, 10, 25]], 0)).toEqual(
       [0, 2, 4]
     );
   });
 
   it('finds the best imperfect solution', () => {
-    expect(approximateSubsetSumIndices(F(40), [[10, 20, 25]], 0)).toEqual([
+    expect(approximateSubsetSumIndices(N(40), [[10, 20, 25]], 0)).toEqual([
       0, 2,
     ]);
   });
@@ -17,7 +17,7 @@ describe('approximateSubsetSumIndices', () => {
   it('uses the correct column', () => {
     expect(
       approximateSubsetSumIndices(
-        F(40),
+        N(40),
         [
           [40, 5],
           [10, 40],

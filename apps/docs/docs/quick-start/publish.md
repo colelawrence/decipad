@@ -15,6 +15,7 @@ Make a notebook public with a link.
 - To **make a notebook public**, click the `Publish` button on the top right of your notebook and **enable** the `Publish Notebook` switch. You can now share the link with anyone.
 
 ## Publish New Changes
+
 Share adjustments to notebooks you already published.
 
 - To **publish new changes**, click the `Publish` button on the top right of your notebook, and then press `Publish New Changes`.
@@ -25,7 +26,7 @@ Make your notebook private, so only you can access it.
 
 - To **make a notebook private**, click the `Publish` button on the top right of your notebook and **disable** the `Publish Notebook` switch.
 
-<br></br>
+<br />
 
 ---
 

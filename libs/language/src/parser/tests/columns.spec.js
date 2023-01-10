@@ -1,4 +1,5 @@
-import { F, col } from '../../utils';
+import { N } from '@decipad/number';
+import { col } from '../../utils';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -48,7 +49,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1)],
+                args: ['number', N(1)],
                 start: {
                   char: 3,
                   line: 1,
@@ -62,7 +63,7 @@ runTests({
               },
               {
                 type: 'literal',
-                args: ['number', F(3)],
+                args: ['number', N(3)],
                 start: {
                   char: 5,
                   line: 1,
@@ -112,7 +113,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1)],
+                args: ['number', N(1)],
                 start: {
                   char: 3,
                   line: 1,
@@ -163,7 +164,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(1)],
+                args: ['number', N(1)],
               },
               {
                 type: 'function-call',
@@ -177,11 +178,11 @@ runTests({
                     args: [
                       {
                         type: 'literal',
-                        args: ['number', F(2)],
+                        args: ['number', N(2)],
                       },
                       {
                         type: 'literal',
-                        args: ['number', F(3)],
+                        args: ['number', N(3)],
                       },
                     ],
                   },

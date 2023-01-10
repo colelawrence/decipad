@@ -24,35 +24,35 @@ it('can make a dimension dominant', async () => {
 it('can get the value too', async () => {
   expect((await dimSwapValues('X', twoDColumn, twoDColumnVal)).getData())
     .toMatchInlineSnapshot(`
+    Array [
       Array [
-        Array [
-          Fraction(1),
-          Fraction(3),
-          Fraction(5),
-        ],
-        Array [
-          Fraction(2),
-          Fraction(4),
-          Fraction(6),
-        ],
-      ]
-    `);
+        DeciNumber(1),
+        DeciNumber(3),
+        DeciNumber(5),
+      ],
+      Array [
+        DeciNumber(2),
+        DeciNumber(4),
+        DeciNumber(6),
+      ],
+    ]
+  `);
 
   expect((await dimSwapValues('Y', twoDColumn, twoDColumnVal)).getData())
     .toMatchInlineSnapshot(`
+    Array [
       Array [
-        Array [
-          Fraction(1),
-          Fraction(2),
-        ],
-        Array [
-          Fraction(3),
-          Fraction(4),
-        ],
-        Array [
-          Fraction(5),
-          Fraction(6),
-        ],
-      ]
-    `);
+        DeciNumber(1),
+        DeciNumber(2),
+      ],
+      Array [
+        DeciNumber(3),
+        DeciNumber(4),
+      ],
+      Array [
+        DeciNumber(5),
+        DeciNumber(6),
+      ],
+    ]
+  `);
 });

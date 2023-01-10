@@ -1,4 +1,4 @@
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { expressionFromEditorSource } from './expressionFromEditorSource';
 
 it('turns an editor node into an expression', () => {
@@ -16,7 +16,7 @@ it('turns an editor node into an expression', () => {
           args: [
             {
               type: 'literal',
-              args: ['number', toFraction(123)],
+              args: ['number', N(123)],
             },
             {
               type: 'ref',

@@ -1,7 +1,7 @@
-import Fraction, { F } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 
 const dayInSeconds = 86400;
-const monthInSeconds = F(dayInSeconds * 30);
+const monthInSeconds = N(dayInSeconds * 30);
 
 /**
  * Convert between base quantities that are almost equivalent
@@ -11,13 +11,13 @@ export const impreciseConversions: ImpreciseConversions = {
     second: monthInSeconds,
   },
   second: {
-    month: F(1).div(monthInSeconds),
+    month: N(1).div(monthInSeconds),
   },
 };
 
 interface ImpreciseConversions {
   [baseQuantity: string]: {
-    [desiredQuantity: string]: Fraction;
+    [desiredQuantity: string]: DeciNumber;
   };
 }
 

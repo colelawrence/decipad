@@ -6,7 +6,7 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../fraction"
+      "path": "../number"
     },
     {
       "path": "../language"

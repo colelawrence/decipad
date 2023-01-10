@@ -1,5 +1,5 @@
 import util from 'util';
-import Fraction from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { getDefined, zip } from '@decipad/utils';
 import {
   Interpreter,
@@ -35,10 +35,10 @@ export const formatResult = (
 
   if (type.kind === 'number') {
     if (type.numberFormat === 'percentage') {
-      return `${color((result as Fraction).mul(100).toString())}%`;
+      return `${color((result as DeciNumber).mul(N(100)).toString())}%`;
     }
     const numStr = convertToMultiplierUnit(
-      result as Fraction,
+      result as DeciNumber,
       type.unit
     ).toString(4);
     if (type.unit == null) return color(numStr);

@@ -1,16 +1,17 @@
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
-export const oneInch = toFraction(254, 10_000);
-export const oneFoot = oneInch.mul(12);
-export const oneYard = oneFoot.mul(3);
-export const oneMile = oneYard.mul(1_760);
+export const oneInch = N(254, 10_000);
+export const oneFoot = oneInch.mul(N(12));
+export const oneYard = oneFoot.mul(N(3));
+export const oneMile = oneYard.mul(N(1_760));
+const N_1000 = N(1000);
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
 
-const mile: Converter = (x) => x.mul(oneMile).div(1000);
-const knot: Converter = (x) => x.mul(1_852).div(1000);
+const mile: Converter = (x) => x.mul(oneMile).div(N_1000);
+const knot: Converter = (x) => x.mul(N(1_852)).div(N_1000);
 
 export const units: UnitOfMeasure[] = [
   {

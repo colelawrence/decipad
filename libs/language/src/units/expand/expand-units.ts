@@ -1,11 +1,10 @@
-import Fraction, { pow } from '@decipad/fraction';
+import DeciNumber, { ONE } from '@decipad/number';
 import { produce } from 'immer';
-import { getDefined } from '@decipad/utils';
+import { getDefined, identity } from '@decipad/utils';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
 import { normalizeUnits, Unit } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
-import { identity, F } from '../../utils';
 import { Converter, ExpandUnitResult } from '.';
 import { normalizeUnitNames } from '../../type/units';
 
@@ -30,8 +29,8 @@ export function doesNotScaleOnConversion(unit: Unit): boolean {
   return false;
 }
 
-function convertingBy(mul: Fraction): Converter {
-  return (n: Fraction) => n.mul(mul);
+function convertingBy(mul: DeciNumber): Converter {
+  return (n: DeciNumber) => n.mul(mul);
 }
 
 function expandUnitWith(unit: Unit, expansion: BaseQuantityExpansion): Unit[] {
@@ -41,7 +40,7 @@ function expandUnitWith(unit: Unit, expansion: BaseQuantityExpansion): Unit[] {
     const newUnit = {
       unit: targetUnitName,
       exp: expandedUnit.exp.mul(unit.exp),
-      multiplier: first ? pow(unit.multiplier, F(expandedUnit.exp)) : F(1),
+      multiplier: first ? unit.multiplier.pow(expandedUnit.exp) : ONE,
       known: true,
     };
     first = false;
@@ -60,7 +59,7 @@ function convertKnownUnitToBase(
   const newUnit = produce(unit, (unit) => {
     unit.unit = baseUnit;
   });
-  const baseConversionFactor = pow(uom.toBaseQuantity(F(1)), F(unit.exp));
+  const baseConversionFactor = uom.toBaseQuantity(ONE).pow(unit.exp);
   const convert = convertingBy(baseConversionFactor);
   return [newUnit, convert];
 }
@@ -86,10 +85,7 @@ export function expandUnit(
 
       if (expandTo) {
         const newUnits = expandUnitWith(baseUnit, expandTo);
-        const expansionFactor = pow(
-          expandTo.convertToExpanded(F(1)),
-          F(unit.exp)
-        );
+        const expansionFactor = expandTo.convertToExpanded(ONE).pow(unit.exp);
         const convert: Converter = (n) =>
           convertToBaseUnit(n).mul(expansionFactor);
 

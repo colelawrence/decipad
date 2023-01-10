@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { Time } from '..';
 
 export interface Pos {
@@ -86,7 +86,7 @@ export type Identifier =
 
 export type NumberFormat = undefined | 'percentage';
 type LitArgs =
-  | ['number', Fraction, NumberFormat?]
+  | ['number', DeciNumber, NumberFormat?]
   | ['boolean', boolean]
   | ['string', string];
 

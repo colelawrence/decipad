@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import Fraction, { F, ONE, toFraction } from '@decipad/fraction';
+import DeciNumber, { N, ONE, TWO } from '@decipad/number';
 import {
   getUnitByName,
   pluralizeUnit,
@@ -11,8 +11,6 @@ import {
 } from '@decipad/language';
 import produce from 'immer';
 import { DeciNumberPart } from './formatNumber';
-
-const TWO = toFraction(2);
 
 const numberToSubOrSuperscript: Record<string, string[]> = {
   '0': ['₀', '⁰'], // subscript not used for now
@@ -78,19 +76,19 @@ function scriptFromNumber(n: string): string {
   return numberToSubOrSuperscript[n]?.[1] || n;
 }
 
-const byExp = (u1: Unit, u2: Unit): number => Number(F(u2.exp).sub(u1.exp));
+const byExp = (u1: Unit, u2: Unit): number => Number(N(u2.exp).sub(u1.exp));
 
 const produceExp = (unit: Unit, makePositive = false): Unit => {
   return produce(unit, (u) => {
     u.unit = singular(u.unit);
     if (makePositive) {
-      u.exp = F(u.exp).abs();
+      u.exp = N(u.exp).abs();
     }
   });
 };
 
-const isInteger = (f: Fraction): boolean => {
-  return Number(f.d) === 1;
+const isInteger = (f: DeciNumber): boolean => {
+  return f.d === 1n;
 };
 
 export function prettyENumbers(
@@ -128,7 +126,7 @@ const stringifyUnit = (
       ? 'currency'
       : fullUnit?.baseQuantity || 'user-defined-unit';
   const isSymbol = unitIsSymbol(symbol);
-  const multiPrefix = unit.multiplier ? F(unit.multiplier).valueOf() : 1;
+  const multiPrefix = unit.multiplier ? N(unit.multiplier).valueOf() : 1;
   const prefix = multipliersToPrefixes[multiPrefix as AvailablePrefixes];
 
   const result: UnitPart[] = [];
@@ -178,15 +176,15 @@ const stringifyUnit = (
     });
   }
 
-  const { exp: _exp } = unit;
-  const exp = F(_exp);
+  const exp = N(unit.exp);
 
-  if (exp.compare(ONE) !== 0) {
+  if (!exp.equals(ONE)) {
     const strExp = isInteger(exp)
       ? exp.toString()
       : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
           .filter(Boolean)
           .join('')}`;
+
     const prettyExp = prettyENumbers(strExp);
 
     //
@@ -226,7 +224,7 @@ const stringifyUnit = (
 
 export const formatUnitArgs = (
   units: Unit[] | null,
-  value?: Fraction,
+  value?: DeciNumber,
   prettify = true,
   previousLength = 0
 ) => {
@@ -240,7 +238,7 @@ export const formatUnitArgs = (
       // but when you have more previousLength = 0
       // you use international system like `m.s-1`
       //
-      if (unitsLength === 2 && F(unit.exp).compare(F(-1)) === 0) {
+      if (unitsLength === 2 && N(unit.exp).compare(N(-1)) === 0) {
         if (prettify) {
           if (unitIsSymbol(unit.unit)) {
             parts.push({
@@ -267,7 +265,7 @@ export const formatUnitArgs = (
         });
         stringifyUnit(produceExp(unit), prettify).forEach((x) => parts.push(x));
       }
-    } else if (unitsLength === 1 && F(unit.exp).compare(F(-1)) === 0) {
+    } else if (unitsLength === 1 && N(unit.exp).compare(N(-1)) === 0) {
       parts.push({ type: 'unit-literal', value: ' ' });
       parts.push({
         type: 'unit-group',
@@ -316,7 +314,7 @@ function fixSpaces(partsOfUnit: UnitPart[]) {
 export function formatUnitAsParts(
   _locale: string,
   units: Unit[],
-  value: Fraction = TWO,
+  value: DeciNumber = TWO,
   prettify = true,
   previousLength = 0
 ): DeciNumberPart {
@@ -338,7 +336,7 @@ export function formatUnitAsParts(
 export function formatUnit(
   locale: string,
   units: Unit[],
-  value: Fraction = TWO,
+  value: DeciNumber = TWO,
   prettify = true,
   previousLength = 0
 ): string {
@@ -363,8 +361,8 @@ function isUserDefinedUnit(unit: Unit | null): boolean {
   return (
     unit != null &&
     !fullUnit?.baseQuantity &&
-    toFraction(unit.exp).equals(ONE) &&
-    toFraction(unit.multiplier).equals(ONE)
+    N(unit.exp).equals(ONE) &&
+    N(unit.multiplier).equals(ONE)
   );
 }
 
@@ -376,12 +374,12 @@ export function isUserDefined(unit: Unit[] | null): boolean {
 }
 
 function simpleFormatUnitPart(unit: Unit): string {
-  const multiplier = toFraction(unit.multiplier).valueOf();
+  const multiplier = N(unit.multiplier).valueOf();
   const multiplierStr =
     multipliersToPrefixes[
       multiplier as keyof typeof multipliersToPrefixes
     ]?.[0] ?? `${multiplier} * `;
-  const exp = toFraction(unit.exp).valueOf();
+  const exp = N(unit.exp).valueOf();
   const expStr = exp === 1 ? '' : `^${exp}`;
   const value = `${multiplierStr}${unit.unit}${expStr}`;
   return value;

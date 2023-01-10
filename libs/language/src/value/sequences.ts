@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { RuntimeError, Time } from '..';
 import { addTime, getSpecificity } from '../date';
 
@@ -13,18 +13,18 @@ export function columnFromSequence(
   endV: Value,
   byV?: Value
 ): ColumnLike {
-  const [start, end] = [startV, endV].map((val) => val.getData() as Fraction);
+  const [start, end] = [startV, endV].map((val) => val.getData() as DeciNumber);
 
   const by = byV
-    ? (byV.getData() as Fraction)
+    ? (byV.getData() as DeciNumber)
     : start.compare(end) < 0
-    ? toFraction(1)
-    : toFraction(-1);
+    ? N(1)
+    : N(-1);
 
   const array = [];
 
   // helper to allow decreasing sequences
-  const cmpFn = (s: Fraction, e: Fraction, i: Fraction) => {
+  const cmpFn = (s: DeciNumber, e: DeciNumber, i: DeciNumber) => {
     return s.compare(e) < 0 ? i.compare(e) <= 0 : i.compare(e) >= 0;
   };
 

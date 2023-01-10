@@ -1,5 +1,6 @@
+import { N } from '@decipad/number';
 import { buildType as t, Unit } from '..';
-import { F, U } from '../utils';
+import { U } from '../utils';
 import { InferError } from './InferError';
 import {
   deserializeType,
@@ -7,7 +8,7 @@ import {
   serializeType,
 } from './serialization';
 
-const meter: Unit = { unit: 'meter', exp: F(1), multiplier: F(1), known: true };
+const meter: Unit = { unit: 'meter', exp: N(1), multiplier: N(1), known: true };
 const errorCause = InferError.expectedButGot('A', 'B');
 
 it('can stringify a type', () => {
@@ -22,9 +23,9 @@ it('can stringify a type', () => {
       "kind": "number",
       "unit": Array [
         Object {
-          "exp": Fraction(1),
+          "exp": DeciNumber(1),
           "known": true,
-          "multiplier": Fraction(1),
+          "multiplier": DeciNumber(1),
           "unit": "meter",
         },
       ],

@@ -1,6 +1,5 @@
-import { getDefined } from '@decipad/utils';
-import { isZero } from '@decipad/fraction';
-import { identity, F } from '../../utils';
+import { getDefined, identity } from '@decipad/utils';
+import { ONE } from '@decipad/number';
 import { Converter } from '.';
 import { expandUnits } from './expand-units';
 import { Unit } from '../../type';
@@ -8,10 +7,10 @@ import { getUnitByName } from '..';
 
 function scalarInversion(convert: Converter): Converter {
   return (n) => {
-    if (isZero(n)) {
+    if (n.isZero()) {
       return n;
     }
-    const div = convert(F(1));
+    const div = convert(ONE);
     return n.div(div);
   };
 }

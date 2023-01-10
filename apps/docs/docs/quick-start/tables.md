@@ -11,30 +11,30 @@ Tables help you organize your numbers.
 
 To **add a new table** to your notebook:
 
-1. Click the `+` button next to an empty line,
-2. Select `Table` from the menu.
+1.  Click the `+` button next to an empty line,
+2.  Select `Table` from the menu.
 
 Alternatively, to add a table with the keyboard, open up the block menu by typing `/` on an empty paragraph, select `Table` using the `arrow keys`, and press `enter`.
 
-<br></br>
+<br />
 
 ## Update a Table Name
 
-New tables are assigned default names when created(Table1, Table2, ... ) <br></br>
+New tables are assigned default names when created(Table1, Table2, ... ) <br />
 Update your table name, so it is easy to identify.
 
 - To **update a table name**, replace the old name on the top left of the table.
 
 ## Update a Column Name
 
-New columns are always assigned default names (Property1, Property2, ... ) <br></br>
+New columns are always assigned default names (Property1, Property2, ... ) <br />
 Update your column names to make them easier to identify on your calculations.
 
 - To **update a column name**, replace the old name by clicking it and picking a new one.
 
 ## Update a Table Color and Icon
 
-New tables are assigned default colors and icons. <br></br>
+New tables are assigned default colors and icons. <br />
 Pick new table colors and icons to give personality to your notebook without impacting your model.
 
 - To **update a table color and icon**, click the grid icon next to the table name, and choose a new color and icon from the menu.
@@ -64,7 +64,7 @@ Move your table columns and rows to rearrange your table.
 
 - To **delete a table**, hover over the table, click the **`⸬`** button that appears on the left, and then click `Delete`.
 
-<br></br>
+<br />
 
 ---
 

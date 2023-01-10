@@ -1,6 +1,6 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 
-export type ResultNumber = Fraction;
+export type ResultNumber = DeciNumber;
 export type ResultString = string;
 export type ResultBoolean = boolean;
 export type ResultDate = bigint;

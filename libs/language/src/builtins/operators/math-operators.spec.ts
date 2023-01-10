@@ -1,7 +1,8 @@
 import { getDefined } from '@decipad/utils';
+import { N } from '@decipad/number';
 import { fromJS } from '../../value';
 import { InferError, build as t } from '../../type';
-import { col, c, n, l, F, U } from '../../utils';
+import { col, c, n, l, U } from '../../utils';
 import { mathOperators, mathOperators as operators } from './math-operators';
 import { makeContext, inferExpression } from '../../infer';
 import { AST } from '../../parser';
@@ -12,28 +13,28 @@ describe('math operators', () => {
       t.number(U('bananas'))
     );
     expect(
-      operators.round.fn?.([F(1127, 1000), F(2)], [t.number()]).valueOf()
+      operators.round.fn?.([N(1127, 1000), N(2)], [t.number()]).valueOf()
     ).toBe(1.13);
     expect(
-      operators.round.fn?.([F(1127, 10), F(0)], [t.number()]).valueOf()
+      operators.round.fn?.([N(1127, 10), N(0)], [t.number()]).valueOf()
     ).toBe(113);
   });
 
   it('rounds a number and decimal units default to 0', () => {
-    expect(operators.round.fn?.([F(1127, 10)], [t.number()]).valueOf()).toBe(
+    expect(operators.round.fn?.([N(1127, 10)], [t.number()]).valueOf()).toBe(
       113
     );
   });
 
   it('rounds down a number with decimal units', () => {
     expect(
-      operators.rounddown.fn?.([F(112799, 1000), F(1)], [t.number()]).valueOf()
+      operators.rounddown.fn?.([N(112799, 1000), N(1)], [t.number()]).valueOf()
     ).toBe(112.7);
   });
 
   it('rounds down a number', () => {
     expect(
-      operators.rounddown.fn?.([F(1127, 10)], [t.number()]).valueOf()
+      operators.rounddown.fn?.([N(1127, 10)], [t.number()]).valueOf()
     ).toBe(112);
   });
 
@@ -65,8 +66,8 @@ describe('math operators', () => {
         fromJS([true, false, true]),
       ])
     ).toMatchInlineSnapshot(`
-      FractionValue {
-        "value": Fraction(2),
+      NumberValue {
+        "value": DeciNumber(2),
       }
     `);
   });
@@ -81,9 +82,9 @@ describe('math operators', () => {
   it('calculates sqrt', () => {
     expect(operators.sqrt.functor?.([t.number()])).toEqual(t.number());
     expect(operators.sqrt.functor?.([t.number(U('W'))])).toEqual(
-      t.number(U('W', { exp: F(1, 2) }))
+      t.number(U('W', { exp: N(1, 2) }))
     );
-    expect(operators.sqrt.fn?.([F(4)])).toMatchObject(F(2));
+    expect(operators.sqrt.fn?.([N(4)])).toMatchObject(N(2));
   });
 
   it("calculates a number's ln", () => {
@@ -104,8 +105,8 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: F(1),
-              multiplier: F(1),
+              exp: N(1),
+              multiplier: N(1),
               known: false,
             },
           ]),
@@ -115,7 +116,7 @@ describe('math operators', () => {
         ctx
       )
     ).toMatchObject(
-      t.number([{ unit: 'meters', exp: F(2), multiplier: F(1), known: false }])
+      t.number([{ unit: 'meters', exp: N(2), multiplier: N(1), known: false }])
     );
   });
 
@@ -127,8 +128,8 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: F(1),
-              multiplier: F(1),
+              exp: N(1),
+              multiplier: N(1),
               known: false,
             },
           ]),
@@ -152,8 +153,8 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: F(1),
-              multiplier: F(1),
+              exp: N(1),
+              multiplier: N(1),
               known: false,
             },
           ]),
@@ -166,8 +167,8 @@ describe('math operators', () => {
       t.number([
         {
           unit: 'meters',
-          exp: F(4),
-          multiplier: F(1),
+          exp: N(4),
+          multiplier: N(1),
           known: false,
         },
       ])
@@ -182,8 +183,8 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: F(1),
-              multiplier: F(1),
+              exp: N(1),
+              multiplier: N(1),
               known: false,
             },
           ]),
@@ -196,8 +197,8 @@ describe('math operators', () => {
       t.number([
         {
           unit: 'meters',
-          exp: F(1, 2),
-          multiplier: F(1),
+          exp: N(1, 2),
+          multiplier: N(1),
           known: false,
         },
       ])
@@ -214,8 +215,8 @@ describe('math operators', () => {
           t.number([
             {
               unit: 'meters',
-              exp: F(1),
-              multiplier: F(1),
+              exp: N(1),
+              multiplier: N(1),
               known: false,
             },
           ]),

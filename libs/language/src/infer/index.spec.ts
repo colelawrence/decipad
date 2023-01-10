@@ -1,9 +1,9 @@
 import { dequal } from 'dequal';
 
+import { ONE } from '@decipad/number';
 import { AST, inferBlock, Unit } from '..';
 import { InferError, build as t } from '../type';
 import {
-  F,
   l,
   c,
   n,
@@ -30,8 +30,8 @@ import { makeContext } from './context';
 let nilCtx = makeContext();
 const degC: Unit = {
   unit: 'celsius',
-  exp: F(1),
-  multiplier: F(1),
+  exp: ONE,
+  multiplier: ONE,
   known: true,
 };
 expect.addSnapshotSerializer(typeSnapshotSerializer);
@@ -400,7 +400,7 @@ describe('Property access', () => {
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
         .errorCause?.spec
     ).toMatchInlineSnapshot(
-      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":[{"unit":"MissingVar","exp":{"s":"1","n":"1","d":"1"},"multiplier":{"s":"1","n":"1","d":"1"},"known":false}],"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"nothingness":false,"anythingness":false,"symbol":null}])`
+      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":[{"unit":"MissingVar","exp":{"n":"1","d":"1","s":"1","infinite":false},"multiplier":{"n":"1","d":"1","s":"1","infinite":false},"known":false}],"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"nothingness":false,"anythingness":false,"symbol":null}])`
     );
   });
 });

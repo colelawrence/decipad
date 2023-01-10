@@ -1,18 +1,31 @@
+import { N } from '@decipad/number';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
+const N_10 = N(10);
+const N_1000 = N(1000);
+const oneMinute = N(60);
+const oneHour = oneMinute.mul(N(60));
+const oneDay = oneHour.mul(N(24));
+const oneWeek = oneDay.mul(N(7));
+
+const oneYear = N(12);
+const oneDecade = oneYear.mul(N_10);
+const oneCentury = oneDecade.mul(N_10);
+const oneMillennium = oneCentury.mul(N_10);
+
 type Converter = UnitOfMeasure['toBaseQuantity'];
 // base: second
-const ms: Converter = (x) => x.div(1000);
-const minute: Converter = (x) => x.mul(60);
-const hour: Converter = (x) => x.mul(3600); // 60*60
-const day: Converter = (x) => x.mul(86_400); // 60*60*24
-const week: Converter = (x) => x.mul(604_800); // 60*60*24*7
+const ms: Converter = (x) => x.div(N_1000);
+const minute: Converter = (x) => x.mul(oneMinute);
+const hour: Converter = (x) => x.mul(oneHour);
+const day: Converter = (x) => x.mul(oneDay);
+const week: Converter = (x) => x.mul(oneWeek);
 // base: month
-const year: Converter = (x) => x.mul(12); // months * 12
-const decade: Converter = (x) => x.mul(10 * 12); // year * 10
-const century: Converter = (x) => x.mul(100 * 12); // year * 100
-const millennium: Converter = (x) => x.mul(1000 * 12); // year * 1000
+const year: Converter = (x) => x.mul(oneYear);
+const decade: Converter = (x) => x.mul(oneDecade); // year * 10
+const century: Converter = (x) => x.mul(oneCentury); // year * 100
+const millennium: Converter = (x) => x.mul(oneMillennium); // year * 1000
 
 export const units: UnitOfMeasure[] = [
   {

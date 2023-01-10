@@ -1,14 +1,12 @@
-import Fraction, {
-  FractionLike,
-  isFractionLike,
-  toFraction,
-} from '@decipad/fraction';
+// eslint-disable-next-line no-restricted-imports
+import { FractionLike } from '@decipad/fraction';
+import DeciNumber, { isDeciNumberInput, N } from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import {
   RuntimeError,
   Value,
-  FractionValue,
+  NumberValue,
   StringValue,
   BooleanValue,
   DateValue,
@@ -23,17 +21,14 @@ export type Comparable =
   | boolean
   | number
   | bigint
-  | Fraction
+  | DeciNumber
   | FractionLike
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
 function compareToNumber(a: Comparable, b: Comparable): number | bigint {
-  if (isFractionLike(a) && isFractionLike(b)) {
-    if (a instanceof Fraction && b instanceof Fraction) {
-      return a.compare(b);
-    }
-    return toFraction(a).compare(toFraction(b));
+  if (isDeciNumberInput(a) && isDeciNumberInput(b)) {
+    return N(a).compare(N(b));
   }
   if (typeof a === 'string' && typeof b === 'string') {
     return a > b ? 1 : a === b ? 0 : -1;
@@ -47,7 +42,7 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   if (typeof a === 'bigint' && typeof b === 'bigint') {
     return a - b;
   }
-  if (a instanceof FractionValue && b instanceof FractionValue) {
+  if (a instanceof NumberValue && b instanceof NumberValue) {
     return a.value.compare(b.value);
   }
   if (a instanceof StringValue && b instanceof StringValue) {

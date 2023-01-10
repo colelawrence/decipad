@@ -1,5 +1,5 @@
 import { SerializedTypeKind } from '@decipad/computer';
-import { isFractionLike } from '@decipad/fraction';
+import { isDeciNumberInput } from '@decipad/number';
 import {
   ColumnResult,
   InlineColumnResult,
@@ -41,7 +41,8 @@ interface ResultMatcher {
 const getResultMatchers = (): ResultMatcher[] => [
   {
     component: NumberResult,
-    match: ({ type, value }) => type.kind === 'number' && isFractionLike(value),
+    match: ({ type, value }) =>
+      type.kind === 'number' && isDeciNumberInput(value),
   },
   {
     component: BooleanResult,

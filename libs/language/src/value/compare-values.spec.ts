@@ -1,4 +1,4 @@
-import { F } from '../utils';
+import { N } from '@decipad/number';
 import { compare } from './compare-values';
 import { fromJS } from '.';
 
@@ -30,15 +30,15 @@ it('compares bigints', () => {
 });
 
 it('compares fractions', () => {
-  expect(compare(F(2), F(2))).toBe(0);
-  expect(compare(F(1), F(2))).toBe(-1);
-  expect(compare(F(2), F(1))).toBe(1);
+  expect(compare(N(2), N(2))).toBe(0);
+  expect(compare(N(1), N(2))).toBe(-1);
+  expect(compare(N(2), N(1))).toBe(1);
 });
 
 it('compares fraction-likes', () => {
-  expect(compare(F(2), F(2))).toBe(0);
-  expect(compare(F(1), F(2))).toBe(-1);
-  expect(compare(F(2), F(1))).toBe(1);
+  expect(compare(N(2), N(2))).toBe(0);
+  expect(compare(N(1), N(2))).toBe(-1);
+  expect(compare(N(2), N(1))).toBe(1);
 });
 
 it('compares strings', () => {

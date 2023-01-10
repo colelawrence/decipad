@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { inf, minusInf } from './consts';
 import { Domain, getDomain, intersection, makeDomain } from './Domain';
 import { EMPTY_PACKAGE, Package } from './Package';
@@ -11,7 +11,7 @@ import { Goal, makeGoal } from './Goal';
 import { isLogicNumber } from './utils';
 import { equals } from './Infinity';
 
-export const dom = (x: LogicVar, min: Fraction, max: Fraction) => {
+export const dom = (x: LogicVar, min: DeciNumber, max: DeciNumber) => {
   return (p: Package) => {
     const d = makeDomain(min, max);
     // const wx = p.walk(x);

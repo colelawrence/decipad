@@ -1,9 +1,10 @@
+import { N } from '@decipad/number';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
-const calorie: Converter = (x) => x.mul(4184).div(1000);
-const wh: Converter = (x) => x.mul(3_600);
+const calorie: Converter = (x) => x.mul(N(4184)).div(N(1000));
+const wh: Converter = (x) => x.mul(N(3_600));
 
 export const units: UnitOfMeasure[] = [
   {

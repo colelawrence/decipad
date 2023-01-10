@@ -5,7 +5,7 @@ export const isZero = (f: Fraction): boolean => {
 };
 
 export const pow = (a: Fraction, b: Fraction): Fraction => {
-  const result = a.pow(b);
+  const result = Fraction.prototype.pow.call(a, b);
   if (result == null || isZero(result)) {
     const resultNumber = a.valueOf() ** b.valueOf();
     if (Number.isNaN(resultNumber)) {

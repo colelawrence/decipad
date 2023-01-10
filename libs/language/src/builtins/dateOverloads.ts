@@ -1,4 +1,5 @@
-import { DateValue, FractionValue } from '../value';
+import { N } from '@decipad/number';
+import { DateValue, NumberValue } from '../value';
 import {
   addTime,
   cmpSpecificities,
@@ -7,7 +8,7 @@ import {
   Time,
   timeUnitFromUnits,
 } from '../date';
-import { F, getDefined, getInstanceof } from '../utils';
+import { getDefined, getInstanceof } from '../utils';
 import { Type, build as t, InferError } from '../type';
 import { OverloadedBuiltinSpec } from './overloadBuiltin';
 
@@ -52,8 +53,8 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
     t.number([
       {
         unit: d1Specificity,
-        exp: F(1),
-        multiplier: F(1),
+        exp: N(1),
+        multiplier: N(1),
         known: true,
       },
     ])
@@ -69,7 +70,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
           getInstanceof(v1, DateValue),
 
           timeUnitFromUnits(getDefined(t2?.unit)),
-          BigInt(getInstanceof(v2, FractionValue).getData().valueOf())
+          BigInt(getInstanceof(v2, NumberValue).getData().valueOf())
         ),
       functor: ([t1, t2]) =>
         Type.combine(t2.isTimeQuantity(), () =>
@@ -82,7 +83,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
         addDateAndTimeQuantity(
           getInstanceof(v2, DateValue),
           timeUnitFromUnits(getDefined(t1?.unit)),
-          BigInt(getInstanceof(v1, FractionValue).getData().valueOf())
+          BigInt(getInstanceof(v1, NumberValue).getData().valueOf())
         ),
       functor: ([t1, t2]) =>
         Type.combine(t1.isTimeQuantity(), () =>
@@ -94,7 +95,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
     {
       argTypes: ['date', 'number'],
       fnValues: ([v1, v2], [, t2] = []) => {
-        const number = getInstanceof(v2, FractionValue);
+        const number = getInstanceof(v2, NumberValue);
 
         const negatedQuantity = BigInt(number.getData().neg().valueOf());
 
@@ -113,7 +114,7 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
         const d2 = getInstanceof(v2, DateValue);
         const difference = subtractDates(d1, d2, d1.specificity);
 
-        return FractionValue.fromValue(difference);
+        return NumberValue.fromValue(difference);
       },
       functor: subtractDatesFunctor,
     },

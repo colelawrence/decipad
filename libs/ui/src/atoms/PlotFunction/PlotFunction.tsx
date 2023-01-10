@@ -1,15 +1,15 @@
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { DefaultFunctionResult } from '../DefaultFunctionResult/DefaultFunctionResult';
 
 interface PlotFunctionProps {
-  fn: (n: Fraction) => Promise<Fraction | undefined>;
+  fn: (n: DeciNumber) => Promise<DeciNumber | undefined>;
   version: number;
-  sampleInterval?: Fraction;
+  sampleInterval?: DeciNumber;
   height?: number;
   width?: number;
-  maxX: Fraction;
-  maxY: Fraction;
+  maxX: DeciNumber;
+  maxY: DeciNumber;
   lineColor?: string;
   onFinishRender: (version: number, variance: number) => void;
 }
@@ -29,7 +29,7 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
   maxX,
   maxY,
   width = 200,
-  sampleInterval = maxX.sub(maxX.neg()).div(width * 2),
+  sampleInterval = maxX.sub(maxX.neg()).div(N(width * 2)),
   lineColor = 'teal',
   height = 100,
   onFinishRender,
@@ -41,12 +41,12 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
   const [isDiscontinued, setIsDiscontinued] = useState(false);
 
   const xScale = useMemo(
-    () => toFraction(width).div(maxX.sub(maxX.neg())).valueOf(),
+    () => N(width).div(maxX.sub(maxX.neg())).valueOf(),
     [maxX, width]
   );
 
   const yScale = useMemo(
-    () => toFraction(height).div(maxY.sub(maxY.neg())).valueOf(),
+    () => N(height).div(maxY.sub(maxY.neg())).valueOf(),
     [height, maxY]
   );
 
@@ -60,7 +60,7 @@ export const PlotFunction: FC<PlotFunctionProps> = ({
     [height, width, xScale, yScale]
   );
 
-  const [lastResult, setLastResult] = useState<Fraction | undefined>();
+  const [lastResult, setLastResult] = useState<DeciNumber | undefined>();
 
   useEffect(() => {
     setSampleX(maxX.neg());

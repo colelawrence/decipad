@@ -1,5 +1,5 @@
 import { Result } from '@decipad/computer';
-import { F } from '@decipad/editor-utils';
+import { N } from '@decipad/number';
 import { VirtualColumn } from '../types';
 import { layoutPowerData } from './useDataViewLayoutData';
 
@@ -13,7 +13,7 @@ describe('layoutPowerData', () => {
       {
         name: 'columnName',
         blockId: 'A',
-        value: Result.Column.fromValues([F(1)]),
+        value: Result.Column.fromValues([N(1)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -28,7 +28,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(1),
+        value: N(1),
       },
     ]);
   });
@@ -38,7 +38,7 @@ describe('layoutPowerData', () => {
       {
         name: 'columnName',
         blockId: 'A',
-        value: Result.Column.fromValues([F(1), F(2), F(3)]),
+        value: Result.Column.fromValues([N(1), N(2), N(3)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -53,7 +53,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(1),
+        value: N(1),
       },
       {
         children: [],
@@ -64,7 +64,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(2),
+        value: N(2),
       },
       {
         children: [],
@@ -75,7 +75,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(3),
+        value: N(3),
       },
     ]);
   });
@@ -85,7 +85,7 @@ describe('layoutPowerData', () => {
       {
         name: 'columnName',
         blockId: 'A',
-        value: Result.Column.fromValues([F(1), F(2), F(1)]),
+        value: Result.Column.fromValues([N(1), N(2), N(1)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -99,7 +99,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(1),
+        value: N(1),
       },
       {
         children: [],
@@ -110,7 +110,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(2),
+        value: N(2),
       },
     ]);
   });
@@ -120,13 +120,13 @@ describe('layoutPowerData', () => {
       {
         name: 'Column1',
         blockId: 'A',
-        value: Result.Column.fromValues([F(1), F(2), F(3)]),
+        value: Result.Column.fromValues([N(1), N(2), N(3)]),
         type: { kind: 'number', unit: null },
       },
       {
         name: 'Column2',
         blockId: 'A',
-        value: Result.Column.fromValues([F(4), F(5), F(6)]),
+        value: Result.Column.fromValues([N(4), N(5), N(6)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -143,7 +143,7 @@ describe('layoutPowerData', () => {
               kind: 'number',
               unit: null,
             },
-            value: F(4),
+            value: N(4),
           },
         ],
         collapsible: false,
@@ -153,7 +153,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(1),
+        value: N(1),
       },
       {
         children: [
@@ -166,7 +166,7 @@ describe('layoutPowerData', () => {
               kind: 'number',
               unit: null,
             },
-            value: F(5),
+            value: N(5),
           },
         ],
         collapsible: false,
@@ -176,7 +176,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(2),
+        value: N(2),
       },
       {
         children: [
@@ -189,7 +189,7 @@ describe('layoutPowerData', () => {
               kind: 'number',
               unit: null,
             },
-            value: F(6),
+            value: N(6),
           },
         ],
         collapsible: false,
@@ -199,7 +199,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(3),
+        value: N(3),
       },
     ]);
   });
@@ -209,13 +209,13 @@ describe('layoutPowerData', () => {
       {
         name: 'Column1',
         blockId: 'A',
-        value: Result.Column.fromValues([F(1), F(2), F(1)]),
+        value: Result.Column.fromValues([N(1), N(2), N(1)]),
         type: { kind: 'number', unit: null },
       },
       {
         name: 'Column2',
         blockId: 'A',
-        value: Result.Column.fromValues([F(4), F(5), F(6)]),
+        value: Result.Column.fromValues([N(4), N(5), N(6)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -247,7 +247,7 @@ describe('layoutPowerData', () => {
               kind: 'number',
               unit: null,
             },
-            value: F(5),
+            value: N(5),
           },
         ],
         collapsible: false,
@@ -257,7 +257,7 @@ describe('layoutPowerData', () => {
           kind: 'number',
           unit: null,
         },
-        value: F(2),
+        value: N(2),
       },
     ]);
   });

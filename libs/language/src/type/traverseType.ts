@@ -19,14 +19,16 @@ export function traverseType(
     }
 
     case 'range': {
+      const { rangeOf } = type;
       return produce(type, (t) => {
-        t.rangeOf = traverseType(t.rangeOf, fn);
+        t.rangeOf = traverseType(rangeOf, fn);
       });
     }
 
     case 'column': {
+      const { cellType } = type;
       return produce(type, (t) => {
-        t.cellType = traverseType(t.cellType, fn);
+        t.cellType = traverseType(cellType, fn);
       });
     }
 

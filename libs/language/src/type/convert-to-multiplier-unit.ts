@@ -1,22 +1,19 @@
-import Fraction, { pow, toFraction } from '@decipad/fraction';
-import { F } from '../utils';
+import DeciNumber, { ONE } from '@decipad/number';
 import type { Unit } from '.';
 
-function multipliersFor(units: Unit[]): Fraction {
-  let acc = F(1);
+function multipliersFor(units: Unit[]): DeciNumber {
+  let acc = ONE;
   for (const unit of units) {
-    acc = acc.mul(
-      pow(toFraction(unit.multiplier as Fraction), unit.exp as Fraction)
-    );
+    acc = acc.mul(unit.multiplier.pow(unit.exp));
   }
 
   return acc;
 }
 
 export function convertToMultiplierUnit(
-  n: Fraction,
+  n: DeciNumber,
   units?: Unit[] | null
-): Fraction {
+): DeciNumber {
   if (!units) {
     return n;
   }

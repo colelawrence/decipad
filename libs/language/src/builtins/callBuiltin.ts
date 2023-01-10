@@ -1,4 +1,4 @@
-import FFraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { getOnly } from '@decipad/utils';
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
@@ -100,7 +100,7 @@ export function callBuiltin(
         const type = argTypes[index];
         if (type.type === 'number') {
           const data = value.getData();
-          if (data instanceof FFraction) {
+          if (data instanceof DeciNumber) {
             return fromJS(convertToMultiplierUnit(data, type.unit));
           }
         }

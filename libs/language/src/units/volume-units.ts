@@ -1,25 +1,27 @@
+import { N } from '@decipad/number';
 import { identity, invert } from '../utils';
 import { UnitOfMeasure } from './known-units';
 import { oneMile, oneYard, oneFoot, oneInch } from './length-units';
 
-const oneGallon = 454_609;
+const oneGallon = N(454_609);
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
 
-const liters: Converter = (x) => x.div(1_000);
-const ton: Converter = (x) => x.mul(99_108_963_072).div(1e11);
-const cup: Converter = (x) => x.mul(250).div(1_000_000);
-const tablespoon: Converter = (x) => x.mul(15).div(1_000_000);
-const ounce: Converter = (x) => x.mul(284_130_625).div(1e13);
-const pint: Converter = (x) => x.mul(56_826_125).div(1e11);
-const teaspoon: Converter = (x) => x.mul(5).div(1_000_000);
-const pinch: Converter = (x) => x.mul(5).div(1_000_000).div(16);
-const dash: Converter = (x) => x.mul(5).div(1_000_000).div(16).div(2);
-const barrel: Converter = (x) => x.mul(16_365_924).div(1e8);
-const gallon: Converter = (x) => x.mul(oneGallon).div(1e8);
-const bushel: Converter = (x) => x.mul(oneGallon).div(1e8).mul(8);
-const bucket: Converter = (x) => x.mul(oneGallon).div(1e8).mul(4);
-const acrefoot: Converter = (x) => x.mul(123_348_183_754_752).div(1e14);
+const liters: Converter = (x) => x.div(N(1_000));
+const ton: Converter = (x) => x.mul(N(99_108_963_072)).div(N(1e11));
+const cup: Converter = (x) => x.mul(N(250)).div(N(1_000_000));
+const tablespoon: Converter = (x) => x.mul(N(15)).div(N(1_000_000));
+const ounce: Converter = (x) => x.mul(N(284_130_625)).div(N(1e13));
+const pint: Converter = (x) => x.mul(N(56_826_125)).div(N(1e11));
+const teaspoon: Converter = (x) => x.mul(N(5)).div(N(1_000_000));
+const pinch: Converter = (x) => x.mul(N(5)).div(N(1_000_000)).div(N(16));
+const dash: Converter = (x) =>
+  x.mul(N(5)).div(N(1_000_000)).div(N(16)).div(N(2));
+const barrel: Converter = (x) => x.mul(N(16_365_924)).div(N(1e8));
+const gallon: Converter = (x) => x.mul(N(oneGallon)).div(N(1e8));
+const bushel: Converter = (x) => x.mul(N(oneGallon)).div(N(1e8)).mul(N(8));
+const bucket: Converter = (x) => x.mul(oneGallon).div(N(1e8)).mul(N(4));
+const acrefoot: Converter = (x) => x.mul(N(123_348_183_754_752)).div(N(1e14));
 const cubicinch: Converter = (x) => x.mul(oneInch).mul(oneInch).mul(oneInch);
 const cubicfoot: Converter = (x) => x.mul(oneFoot).mul(oneFoot).mul(oneFoot);
 const cubicyard: Converter = (x) => x.mul(oneYard).mul(oneYard).mul(oneYard);

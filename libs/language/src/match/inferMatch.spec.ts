@@ -1,5 +1,6 @@
+import { N } from '@decipad/number';
 import { makeContext } from '../infer';
-import { F, match, matchDef, n } from '../utils';
+import { match, matchDef, n } from '../utils';
 import { build as t } from '../type';
 import { inferMatch } from './inferMatch';
 
@@ -14,7 +15,7 @@ describe('inferMatch', () => {
         await inferMatch(
           makeContext(),
           match(
-            matchDef(n('literal', 'number', F(1)), n('literal', 'number', F(1)))
+            matchDef(n('literal', 'number', N(1)), n('literal', 'number', N(1)))
           )
         )
       ).errorCause
@@ -26,7 +27,7 @@ describe('inferMatch', () => {
       await inferMatch(
         makeContext(),
         match(
-          matchDef(n('literal', 'boolean', true), n('literal', 'number', F(1)))
+          matchDef(n('literal', 'boolean', true), n('literal', 'number', N(1)))
         )
       )
     ).toEqual(t.number());
@@ -40,7 +41,7 @@ describe('inferMatch', () => {
           match(
             matchDef(
               n('literal', 'boolean', true),
-              n('literal', 'number', F(1))
+              n('literal', 'number', N(1))
             ),
             matchDef(
               n('literal', 'boolean', true),

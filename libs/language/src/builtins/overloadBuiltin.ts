@@ -6,7 +6,7 @@ import {
   Range,
   StringValue,
   BooleanValue,
-  FractionValue,
+  NumberValue,
 } from '../value';
 import { getDefined } from '../utils';
 import { AST } from '..';
@@ -89,7 +89,7 @@ export const getOverloadedTypeFromValue = (
     return 'string';
   } else if (val instanceof BooleanValue) {
     return 'boolean';
-  } else if (val instanceof FractionValue) {
+  } else if (val instanceof NumberValue) {
     return 'number';
   } else if (val instanceof DateValue) {
     return 'date';

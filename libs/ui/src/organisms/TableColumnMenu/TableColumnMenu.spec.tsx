@@ -1,6 +1,6 @@
 import { applyCssVars, findParentWithStyle } from '@decipad/dom-test-utils';
 import type { TableCellType } from '@decipad/editor-types';
-import { ONE } from '@decipad/fraction';
+import { ONE } from '@decipad/number';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

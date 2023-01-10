@@ -1,5 +1,5 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
-import { toFraction, ZERO } from '@decipad/fraction';
+import { N, ZERO } from '@decipad/number';
 import { getDefined, varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
@@ -37,7 +37,7 @@ function toValue(
       switch (type?.kind) {
         case 'number':
           try {
-            return toFraction(elem as number);
+            return N(elem as number);
           } catch (err) {
             if (typeof elem === 'string' && !elem.trim().length) {
               return ZERO;

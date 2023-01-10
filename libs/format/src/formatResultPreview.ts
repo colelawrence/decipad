@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { Result, SerializedType } from '@decipad/language';
 import { formatError } from './formatError';
 import { formatNumber } from './formatNumber';
@@ -6,7 +6,7 @@ import { formatNumber } from './formatNumber';
 export function formatResultPreview({ type, value }: Result.Result): string {
   switch (type.kind) {
     case 'number': {
-      return formatNumber('en-US', type.unit, value as Fraction).asString;
+      return formatNumber('en-US', type.unit, value as DeciNumber).asString;
     }
 
     case 'anything':

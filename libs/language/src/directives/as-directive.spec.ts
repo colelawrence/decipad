@@ -1,5 +1,6 @@
+import { N } from '@decipad/number';
 import { build as t } from '../type';
-import { c, col, l, U, u, ne, r, F, n } from '../utils';
+import { c, col, l, U, u, ne, r, n } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue, directiveFor } from './testUtils';
@@ -45,7 +46,7 @@ describe('getType', () => {
     const ctx = makeContext();
     ctx.stack.set(
       'nuno',
-      t.number(U('g', { known: true, multiplier: F(1000) }))
+      t.number(U('g', { known: true, multiplier: N(1000) }))
     );
     const quantity = ne(2, 'ton');
     const ref = r('nuno');
@@ -57,7 +58,7 @@ describe('getType', () => {
     ).toMatchObject(
       t.number(
         U(
-          u('nuno', { known: false, aliasFor: U('g', { multiplier: F(1000) }) })
+          u('nuno', { known: false, aliasFor: U('g', { multiplier: N(1000) }) })
         )
       )
     );
@@ -74,10 +75,10 @@ describe('getValue', () => {
   it('converts number to number', async () => {
     expect(await testGetValue(getValue, ne(2.5, 'hours'), ne(1, 'minutes')))
       .toMatchInlineSnapshot(`
-        FractionValue {
-          "value": Fraction(150),
-        }
-      `);
+      NumberValue {
+        "value": DeciNumber(150),
+      }
+    `);
   });
 
   it('converts time quantity to number', async () => {
@@ -89,10 +90,10 @@ describe('getValue', () => {
 
     expect(await testGetValue(getValue, subtractDates, ne(1, 'year')))
       .toMatchInlineSnapshot(`
-        FractionValue {
-          "value": Fraction(2),
-        }
-      `);
+      NumberValue {
+        "value": DeciNumber(2),
+      }
+    `);
   });
 
   it('works on a unit-less column', async () => {
@@ -102,16 +103,16 @@ describe('getValue', () => {
       await (await testGetValue(getValue, quantity, ne(1, 'watts'))).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
       ]
     `);
   });
 
   it('converts to percent', async () => {
     const quantity = col(
-      c('implicit*', n('literal', 'number', F(0.1)), r('kilometer'))
+      c('implicit*', n('literal', 'number', N(1, 10)), r('kilometer'))
     );
 
     expect(
@@ -128,14 +129,14 @@ describe('getValue', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(0.1),
+        DeciNumber(0.1),
       ]
     `);
     expect(
       (
         await testGetValue(getValue, l(10), n('generic-identifier', '%'))
       ).getData()
-    ).toMatchInlineSnapshot(`Fraction(10)`);
+    ).toMatchInlineSnapshot(`DeciNumber(10)`);
   });
 
   it('works on a unitful column', async () => {
@@ -144,9 +145,9 @@ describe('getValue', () => {
     expect((await testGetValue(getValue, quantity, ne(1, 'miles'))).getData())
       .toMatchInlineSnapshot(`
       Array [
-        Fraction(0.6(213711922373339696174341843633182215859381)),
-        Fraction(1.(242742384474667939234868368726636443171876)),
-        Fraction(1.8(641135767120019088523025530899546647578143)),
+        DeciNumber(0.6(213711922373339696174341843633182215859381)),
+        DeciNumber(1.(242742384474667939234868368726636443171876)),
+        DeciNumber(1.8(641135767120019088523025530899546647578143)),
       ]
     `);
   });
@@ -154,6 +155,6 @@ describe('getValue', () => {
   it('converts imprecisely', async () => {
     expect(
       (await testGetValue(getValue, ne(30, 'days'), ne(1, 'months'))).getData()
-    ).toMatchInlineSnapshot(`Fraction(1)`);
+    ).toMatchInlineSnapshot(`DeciNumber(1)`);
   });
 });

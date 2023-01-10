@@ -1,4 +1,4 @@
-import Fraction, { pow } from '@decipad/fraction';
+import DeciNumber, { N, ZERO } from '@decipad/number';
 import { lenientZip } from '@decipad/utils';
 import { produce } from 'immer';
 import type { Type } from '..';
@@ -9,7 +9,7 @@ import {
   getUnitByName,
   isKnownSymbol,
 } from '../units';
-import { F, getDefined } from '../utils';
+import { getDefined } from '../utils';
 import type { Unit } from './unit-type';
 import { InferError } from './InferError';
 import { propagatePercentage } from './percentages';
@@ -116,8 +116,8 @@ export const matchUnitArraysForColumn = (
 
     return (
       left.unit === right.unit &&
-      F(left.multiplier).compare(right.multiplier as Fraction) === 0 &&
-      F(left.exp).compare(right.exp as Fraction) === 0
+      left.multiplier.compare(right.multiplier) === 0 &&
+      left.exp.compare(right.exp) === 0
     );
   });
 };
@@ -165,12 +165,12 @@ export const simplifyUnits = (units: Unit[]): Unit[] =>
       if (matchingUnitIndex >= 0) {
         const matchingUnit = units[matchingUnitIndex];
         units[matchingUnitIndex] = produce(matchingUnit, (match) => {
-          match.exp = F(match.exp).add(unit.exp);
+          match.exp = match.exp.add(unit.exp);
           //
           // match.multiplier *= unit.multiplier ** Number(unit.exp);
           //
-          match.multiplier = F(match.multiplier).mul(
-            pow(F(unit.multiplier), F(unit.exp))
+          match.multiplier = match.multiplier.mul(
+            unit.multiplier.pow(unit.exp)
           );
         });
         return units;
@@ -178,7 +178,7 @@ export const simplifyUnits = (units: Unit[]): Unit[] =>
         return [...units, unit];
       }
     }, [])
-    .filter((unit) => F(unit.exp).compare(F(0)) !== 0) as Unit[];
+    .filter((unit) => N(unit.exp).compare(ZERO) !== 0) as Unit[];
 
 export const normalizeUnitName = (unit: Unit): Unit => {
   const symbolUnit = getUnitByName(unit.unit);
@@ -223,7 +223,7 @@ export const normalizeUnits = (
   }
 };
 
-export const setExponent = produce((unit: Unit, newExponent: Fraction) => {
+export const setExponent = produce((unit: Unit, newExponent: DeciNumber) => {
   unit.exp = newExponent;
 });
 
@@ -253,7 +253,7 @@ export const combineUnits = (
       outputUnits[existingUnitIndex] = produce(
         outputUnits[existingUnitIndex],
         (inversed) => {
-          inversed.exp = F(inversed.exp).add(thisUnit.exp);
+          inversed.exp = inversed.exp.add(thisUnit.exp);
         }
       );
     } else {
@@ -269,7 +269,7 @@ export const multiplyExponent = (myUnits: Unit[], by: number): Unit[] | null =>
     produce(myUnits, (myUnits) => {
       for (const u of myUnits) {
         try {
-          u.exp = F(u.exp).mul(by);
+          u.exp = u.exp.mul(N(by));
         } catch (err) {
           const error = new Error(
             `error multiplying ${u.exp} by ${by}: ${(err as Error).message}`

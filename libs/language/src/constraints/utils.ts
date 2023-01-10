@@ -1,4 +1,4 @@
-import Fraction from 'fraction.js/bigfraction';
+import DeciNumber from '@decipad/number';
 import { isInfinity } from './Infinity';
 import { LogicNumber } from './types';
 
@@ -15,5 +15,5 @@ export const hasType = (obj: unknown, type: string): boolean => {
 };
 
 export const isLogicNumber = (o: unknown): o is LogicNumber => {
-  return isInfinity(o) || o instanceof Fraction;
+  return isInfinity(o) || o instanceof DeciNumber;
 };

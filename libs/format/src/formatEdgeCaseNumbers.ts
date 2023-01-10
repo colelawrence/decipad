@@ -1,26 +1,25 @@
-import FFraction, { toFraction } from '@decipad/fraction';
-
+import DeciNumber, { N, ZERO } from '@decipad/number';
 import type { DeciNumberPart } from './formatNumber';
 
-export const large = toFraction(1_000_000_000_000_000_000_000n);
-export const small = toFraction(1n, 1_000_000_000_000_000_000_000n);
+export const large = N(1_000_000_000_000_000_000_000n);
+export const small = N(1n, 1_000_000_000_000_000_000_000n);
 
 export const isEdgeCaseNumber = (
-  f: FFraction
+  f: DeciNumber
 ): 'small' | 'large' | undefined => {
   const abs = f.abs();
 
   if (abs.compare(large) >= 0) {
     return 'large';
   }
-  if (abs.compare(0) !== 0 && abs.compare(small) <= 0) {
+  if (!abs.equals(ZERO) && abs.compare(small) <= 0) {
     return 'small';
   }
   return undefined;
 };
 
 export const formatEdgeCaseNumber = (
-  f: FFraction,
+  f: DeciNumber,
   places: number
 ): DeciNumberPart[] => {
   const result = f.toString(places);

@@ -12,8 +12,8 @@ To **add a new calculation block** to your notebook:
 
 ![Calculation](https://user-images.githubusercontent.com/12210180/198014154-40d0b051-a0a1-4f98-8c92-a4f996bef3ba.gif)
 
-1. Click the `+` button next to an empty line,
-2. Select **Calculation** from the menu.
+1.  Click the `+` button next to an empty line,
+2.  Select **Calculation** from the menu.
 
 Alternatively, to add a new calculation block with the keyboard, type `=` on an empty paragraph.
 
@@ -83,7 +83,7 @@ Take a look at this example:
 - Variable names can’t start with a number
 - Variables names are unique, you can’t assign the same one to different values
 
-<br></br>
+<br />
 
 ---
 

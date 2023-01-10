@@ -1,4 +1,5 @@
-import { U, u, F } from '../utils';
+import { N } from '@decipad/number';
+import { U, u } from '../utils';
 import { simplifyUnits } from './units';
 
 describe('simplify units', () => {
@@ -11,10 +12,10 @@ describe('simplify units', () => {
   it('simplifies exponentiated unknown unit', () => {
     expect(
       simplifyUnits(
-        U('bananas', { multiplier: F(1000), exp: F(2), known: false })
+        U('bananas', { multiplier: N(1000), exp: N(2), known: false })
       )
     ).toMatchObject(
-      U('bananas', { multiplier: F(1000), exp: F(2), known: false })
+      U('bananas', { multiplier: N(1000), exp: N(2), known: false })
     );
   });
 
@@ -22,23 +23,23 @@ describe('simplify units', () => {
     expect(
       simplifyUnits(
         U([
-          u('bananas', { known: false, exp: F(2) }),
-          u('bananas', { known: false, exp: F(3) }),
+          u('bananas', { known: false, exp: N(2) }),
+          u('bananas', { known: false, exp: N(3) }),
         ])
       )
-    ).toMatchObject(U('bananas', { exp: F(5), known: false }));
+    ).toMatchObject(U('bananas', { exp: N(5), known: false }));
   });
 
   it('simplifies exponentiated known unit', () => {
     // km^-1.meters^3
     expect(
-      simplifyUnits(U([u('m', { exp: F(-1) }), u('m', { exp: F(3) })]))
-    ).toMatchObject(U('m', { exp: F(2) }));
+      simplifyUnits(U([u('m', { exp: N(-1) }), u('m', { exp: N(3) })]))
+    ).toMatchObject(U('m', { exp: N(2) }));
   });
 
   it('simplifies with fractional exponents', () => {
     expect(
-      simplifyUnits(U([u('m', { exp: F(-1, 2) }), u('m', { exp: F(3, 2) })]))
-    ).toMatchObject(U('m', { exp: F(1) }));
+      simplifyUnits(U([u('m', { exp: N(-1, 2) }), u('m', { exp: N(3, 2) })]))
+    ).toMatchObject(U('m', { exp: N(1) }));
   });
 });

@@ -1,4 +1,4 @@
-import { F } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import {
   astNode,
   buildType as t,
@@ -483,7 +483,7 @@ it('can list tables and columns', async () => {
             "kind": "column",
           },
           "value": Array [
-            Fraction(1),
+            DeciNumber(1),
           ],
         },
         "tableName": "table",
@@ -659,7 +659,7 @@ it('formats stuff', () => {
   expect(
     computer.formatNumber(
       { kind: 'number', numberFormat: 'percentage' },
-      F(0.1)
+      N(0.1)
     ).asString
   ).toMatchInlineSnapshot(`"10%"`);
 
@@ -669,8 +669,8 @@ it('formats stuff', () => {
 
   expect(
     computer.formatUnit(
-      [{ known: true, multiplier: F(1), unit: 'meter', exp: F(1) }],
-      F(1)
+      [{ known: true, multiplier: N(1), unit: 'meter', exp: N(1) }],
+      N(1)
     )
   ).toMatchInlineSnapshot(`"meter"`);
 

@@ -1,4 +1,5 @@
-import { F, l, genericIdent, ne, U, u } from '../utils';
+import { N } from '@decipad/number';
+import { l, genericIdent, ne, U, u } from '../utils';
 import { getType, getValue } from './of-directive';
 import { testGetType, testGetValue } from './testUtils';
 
@@ -14,7 +15,7 @@ describe('getType', () => {
       await testGetType(getType, ne(1, 'kilograms'), genericIdent('flour'))
     ).toMatchObject({
       type: 'number',
-      unit: U([u('grams', { quality: 'flour', multiplier: F(1000) })]),
+      unit: U([u('grams', { quality: 'flour', multiplier: N(1000) })]),
     });
   });
 });
@@ -23,8 +24,8 @@ describe('getValue', () => {
   it('returns left side value', async () => {
     expect(await testGetValue(getValue, l(1), genericIdent('flour')))
       .toMatchInlineSnapshot(`
-      FractionValue {
-        "value": Fraction(1),
+      NumberValue {
+        "value": DeciNumber(1),
       }
     `);
   });

@@ -1,12 +1,13 @@
+import { N } from '@decipad/number';
 import { makeContext } from '../infer';
 import { build as T } from '../type';
-import { c, F, n, r, tiered, tieredDef, U } from '../utils';
+import { c, n, r, tiered, tieredDef, U } from '../utils';
 import { inferTiered } from './inferTiered';
 
 describe('inferTiered', () => {
   it('infers to error if empty', async () => {
     expect(
-      (await inferTiered(makeContext(), tiered(n('literal', 'number', F(1)))))
+      (await inferTiered(makeContext(), tiered(n('literal', 'number', N(1)))))
         .errorCause
     ).toBeDefined();
   });
@@ -25,10 +26,10 @@ describe('inferTiered', () => {
           makeContext(),
           tiered(
             tiered(
-              n('literal', 'number', F(1)),
+              n('literal', 'number', N(1)),
               tieredDef(
                 n('literal', 'boolean', true),
-                n('literal', 'number', F(1))
+                n('literal', 'number', N(1))
               )
             )
           )
@@ -44,9 +45,9 @@ describe('inferTiered', () => {
           makeContext(),
           tiered(
             tiered(
-              n('literal', 'number', F(1)),
+              n('literal', 'number', N(1)),
               tieredDef(
-                n('literal', 'number', F(1)),
+                n('literal', 'number', N(1)),
                 n('literal', 'boolean', true)
               )
             )
@@ -61,14 +62,14 @@ describe('inferTiered', () => {
       await inferTiered(
         makeContext(),
         tiered(
-          n('literal', 'number', F(1)),
+          n('literal', 'number', N(1)),
           tieredDef(
-            n('literal', 'number', F(1)),
-            c('*', n('literal', 'number', F(2)), r('USD'))
+            n('literal', 'number', N(1)),
+            c('*', n('literal', 'number', N(2)), r('USD'))
           ),
           tieredDef(
-            n('literal', 'number', F(2)),
-            c('*', n('literal', 'number', F(2)), r('USD'))
+            n('literal', 'number', N(2)),
+            c('*', n('literal', 'number', N(2)), r('USD'))
           )
         )
       )
@@ -81,14 +82,14 @@ describe('inferTiered', () => {
         await inferTiered(
           makeContext(),
           tiered(
-            n('literal', 'number', F(1)),
+            n('literal', 'number', N(1)),
             tieredDef(
-              n('literal', 'number', F(1)),
-              c('*', n('literal', 'number', F(2)), r('USD'))
+              n('literal', 'number', N(1)),
+              c('*', n('literal', 'number', N(2)), r('USD'))
             ),
             tieredDef(
-              n('literal', 'number', F(1)),
-              c('*', n('literal', 'number', F(2)), r('EUR'))
+              n('literal', 'number', N(1)),
+              c('*', n('literal', 'number', N(2)), r('EUR'))
             )
           )
         )

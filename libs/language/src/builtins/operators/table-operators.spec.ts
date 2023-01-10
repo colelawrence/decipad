@@ -1,8 +1,9 @@
 import { makeContext } from '@decipad/language';
+import { N } from '@decipad/number';
 import { Column, Table, DateValue, fromJS } from '../../value';
 import { build as t, Type } from '../../type';
 import { tableOperators as operators } from './table-operators';
-import { F, U } from '../../utils';
+import { U } from '../../utils';
 import { Realm, RuntimeError } from '../../interpreter';
 
 describe('table operators', () => {
@@ -24,10 +25,10 @@ describe('table operators', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
-          Fraction(4),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(4),
         ],
         Array [
           "Hello",
@@ -66,7 +67,7 @@ describe('table operators', () => {
     });
     expect(fnValues?.([tableValue, fromJS('The Thing')]).getData()).toEqual([
       'The Thing',
-      F(12345),
+      N(12345),
     ]);
     expect(() =>
       fnValues?.([tableValue, fromJS('Not found')])
@@ -174,7 +175,7 @@ describe('table operators', () => {
     });
     expect(fnValues?.([tableValue, conditionColumnValue]).getData()).toEqual([
       'b',
-      F(2),
+      N(2),
     ]);
   });
 
@@ -195,14 +196,14 @@ describe('table operators', () => {
       .toMatchInlineSnapshot(`
       Array [
         Array [
-          Fraction(2),
-          Fraction(3),
-          Fraction(1),
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(1),
         ],
         Array [
-          Fraction(4),
-          Fraction(5),
-          Fraction(6),
+          DeciNumber(4),
+          DeciNumber(5),
+          DeciNumber(6),
         ],
       ]
     `);
@@ -234,9 +235,9 @@ describe('table operators', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Array [
-          Fraction(2),
-          Fraction(3),
-          Fraction(6),
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(6),
         ],
         Array [
           true,

@@ -3,7 +3,7 @@ import { callBuiltin } from '../builtins';
 import { getOfType, getDefined, getIdentifierString } from '../utils';
 
 import { Realm } from './Realm';
-import { FractionValue } from '../value';
+import { NumberValue } from '../value';
 
 import { InferError } from '../type';
 
@@ -14,12 +14,12 @@ import { InferError } from '../type';
 export function simpleExpressionEvaluate(
   realm: Realm,
   node: AST.Statement
-): FractionValue {
+): NumberValue {
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
         case 'number': {
-          return FractionValue.fromValue(node.args[1]);
+          return NumberValue.fromValue(node.args[1]);
         }
         default: {
           throw InferError.expectedButGot('number', node.args[0]);
@@ -38,7 +38,7 @@ export function simpleExpressionEvaluate(
       );
       const returnType = getDefined(realm.inferContext.nodeTypes.get(node));
       const res = callBuiltin(realm, funcName, args, argTypes, returnType);
-      if (!(res instanceof FractionValue)) {
+      if (!(res instanceof NumberValue)) {
         throw InferError.complexExpressionExponent();
       }
       return res;

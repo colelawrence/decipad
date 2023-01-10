@@ -1,4 +1,5 @@
-import Fraction from '@decipad/fraction';
+// eslint-disable-next-line no-restricted-imports
+import DeciNumber from '@decipad/number';
 import { inf, minusInf } from './consts';
 
 export interface ToStringable {
@@ -7,4 +8,4 @@ export interface ToStringable {
 
 export type Infinity = typeof inf | typeof minusInf;
 
-export type LogicNumber = Fraction | Infinity;
+export type LogicNumber = DeciNumber | Infinity;

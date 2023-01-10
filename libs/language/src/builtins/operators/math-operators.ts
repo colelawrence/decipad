@@ -1,16 +1,16 @@
 /* eslint-disable no-underscore-dangle */
 import produce from 'immer';
-import Fraction, { pow, toFraction } from '@decipad/fraction';
+import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
 import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
-import { F, getInstanceof, multiplyMultipliers } from '../../utils';
+import { getInstanceof, multiplyMultipliers } from '../../utils';
 import { InferError, Type, build as t } from '../../type';
 import {
   fromJS,
   Scalar,
   Value,
   isColumnLike,
-  FractionValue,
+  NumberValue,
   compare,
 } from '../../value';
 import { AST } from '../../parser';
@@ -20,8 +20,6 @@ import { BuiltinSpec } from '../interfaces';
 import { Context } from '../../infer';
 
 import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-evaluate';
-
-const ZERO = toFraction(0);
 
 const binopFunctor = ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
@@ -38,7 +36,7 @@ const exponentiationFunctor = (
   const bValue = getDefined(values?.[1]);
   const ctx = getDefined(context, 'context should be defined');
 
-  let u: Fraction;
+  let u: DeciNumber;
   if (a.unit && a.unit.length > 0) {
     const realm = new Realm(ctx);
     try {
@@ -53,7 +51,7 @@ const exponentiationFunctor = (
     return binopFunctor([a, removeUnit(b)]).mapType(
       produce((arg1) => {
         for (const unit of arg1.unit ?? []) {
-          unit.exp = (unit.exp || F(1)).mul(u);
+          unit.exp = (unit.exp || N(1)).mul(u);
         }
       })
     );
@@ -68,13 +66,13 @@ const roundFunctor: BuiltinSpec['functor'] = ([
 ]) => Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number'));
 
 const roundWrap = (
-  round: (f: Fraction, decimalPrecisionValue: number) => Fraction
+  round: (f: DeciNumber, decimalPrecisionValue: number) => DeciNumber
 ): BuiltinSpec['fn'] => {
   return ([nValue, decimalPrecisionValue], [type] = []) => {
-    const n = getInstanceof(nValue, Fraction);
+    const n = getInstanceof(nValue, DeciNumber);
     const multiplier = multiplyMultipliers(type.unit);
     const decimalPrecision = decimalPrecisionValue
-      ? getInstanceof(decimalPrecisionValue, Fraction)
+      ? getInstanceof(decimalPrecisionValue, DeciNumber)
       : ZERO;
     // in order for the round function to round at the correct precision, we need to first divide by
     // the unit multiplier, do the rouding, and *then* multiply by it at the end.
@@ -84,8 +82,8 @@ const roundWrap = (
 
 const firstArgumentReducedFunctor = ([t]: Type[]) => t.reduced();
 
-const coherceToFraction = (value: unknown): Fraction => {
-  return getInstanceof(value, Fraction);
+const coherceToFraction = (value: unknown): DeciNumber => {
+  return getInstanceof(value, DeciNumber);
 };
 
 const max = ([value]: Value[]): Value => {
@@ -131,19 +129,17 @@ const min = ([value]: Value[]): Value => {
 };
 
 const average = ([value]: Value[]): Value => {
-  const fractions = (value.getData() as Fraction[]).map(coherceToFraction);
+  const fractions = (value.getData() as DeciNumber[]).map(coherceToFraction);
   if (fractions.length === 0) {
     throw new RuntimeError('average needs at least one element');
   }
   return fromJS(
-    fractions
-      .reduce((acc, n) => acc.add(n), toFraction(0))
-      .div(fractions.length)
+    fractions.reduce((acc, n) => acc.add(n), ZERO).div(N(fractions.length))
   );
 };
 
 const median = ([value]: Value[]): Value => {
-  const fractions = (value.getData() as Fraction[]).map(coherceToFraction);
+  const fractions = (value.getData() as DeciNumber[]).map(coherceToFraction);
   if (fractions.length === 0) {
     throw new RuntimeError('median needs at least one element');
   }
@@ -155,7 +151,7 @@ const median = ([value]: Value[]): Value => {
     return fromJS(rightCenter);
   }
   const leftCenter = sortedValues[rightCenterPos - 1];
-  return fromJS(leftCenter.add(rightCenter).div(2));
+  return fromJS(leftCenter.add(rightCenter).div(TWO));
 };
 
 const secondArgIsPercentage = (types?: Type[]) =>
@@ -172,7 +168,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundFunctor,
-    fn: roundWrap((n: Fraction, decimalPlaces: number) =>
+    fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.round(decimalPlaces)
     ),
   },
@@ -180,7 +176,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundFunctor,
-    fn: roundWrap((n: Fraction, decimalPlaces: number) =>
+    fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.ceil(decimalPlaces)
     ),
   },
@@ -191,7 +187,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: [1, 2],
     noAutoconvert: true,
     functor: roundFunctor,
-    fn: roundWrap((n: Fraction, decimalPlaces: number) =>
+    fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.floor(decimalPlaces)
     ),
   },
@@ -226,7 +222,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     argCardinalities: [2, 2],
     fnValues: ([_numbers, _bools]: Value[]) => {
-      const numbers = _numbers.getData() as Fraction[];
+      const numbers = _numbers.getData() as DeciNumber[];
       const bools = _bools.getData() as boolean[];
       if (numbers.length === 0) {
         throw new RuntimeError(
@@ -234,12 +230,12 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         );
       }
 
-      let count = 0;
-      let sum = toFraction(0);
+      let count = ZERO;
+      let sum = N(0);
 
       for (const [bool, num] of zip(bools, numbers)) {
         if (bool) {
-          count++;
+          count = count.add(ONE);
           sum = sum.add(num);
         }
       }
@@ -264,9 +260,9 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   sqrt: {
     argCount: 1,
     fn: ([n]) => {
-      let result: Fraction | undefined;
+      let result: DeciNumber | undefined;
       try {
-        result = pow(getInstanceof(n, Fraction), F(1, 2));
+        result = getInstanceof(n, DeciNumber).pow(N(1, 2));
       } catch (err) {
         console.error(err);
       }
@@ -279,7 +275,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
             `square root of ${n.toString()} is not a number`
           );
         }
-        result = toFraction(nonRationalResult);
+        result = N(nonRationalResult);
       }
       return result;
     },
@@ -297,20 +293,20 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       const lookupTable = Array(100_000);
 
       return ([n]) => {
-        const frac = getInstanceof(n.getData(), Fraction);
+        const frac = getInstanceof(n.getData(), DeciNumber);
 
-        if (frac.compare(0) < 0) {
+        if (frac.compare(ZERO) < 0) {
           throw new RuntimeError(
             'factorial() requires a positive number or zero'
           );
         }
 
-        if (frac.compare(100000) > 0) {
+        if (frac.compare(N(100000)) > 0) {
           throw new RuntimeError('factorial() number too large');
         }
 
-        if (frac.compare(2) < 0) {
-          return new FractionValue(toFraction(1n));
+        if (frac.compare(TWO) < 0) {
+          return new NumberValue(ONE);
         }
 
         if (frac.valueOf() !== Math.round(frac.valueOf())) {
@@ -318,7 +314,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         }
 
         if (lookupTable[frac.valueOf()]) {
-          return new FractionValue(toFraction(lookupTable[frac.valueOf()]));
+          return new NumberValue(N(lookupTable[frac.valueOf()]));
         }
 
         let i = BigInt(frac.valueOf() - 1);
@@ -329,7 +325,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
 
         lookupTable[frac.valueOf()] = fact;
 
-        return new FractionValue(toFraction(fact));
+        return new NumberValue(N(fact));
       };
     })(),
     functor: ([n]) => n,
@@ -343,12 +339,14 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         fnValues: ([n1, n2], types) => {
           if (secondArgIsPercentage(types)) {
             return Scalar.fromValue(
-              (n1.getData() as Fraction).mul((n2.getData() as Fraction).add(1))
+              (n1.getData() as DeciNumber).mul(
+                (n2.getData() as DeciNumber).add(ONE)
+              )
             );
           }
 
           return Scalar.fromValue(
-            (n1.getData() as Fraction).add(n2.getData() as Fraction)
+            (n1.getData() as DeciNumber).add(n2.getData() as DeciNumber)
           );
         },
         functor: binopFunctor,
@@ -373,14 +371,14 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         fnValues: ([a, b], types) => {
           if (secondArgIsPercentage(types)) {
             return Scalar.fromValue(
-              (a.getData() as Fraction).mul(
-                toFraction(1).sub(b.getData() as Fraction)
+              (a.getData() as DeciNumber).mul(
+                ONE.sub(b.getData() as DeciNumber)
               )
             );
           }
 
           return Scalar.fromValue(
-            (a.getData() as Fraction).sub(b.getData() as Fraction)
+            (a.getData() as DeciNumber).sub(b.getData() as DeciNumber)
           );
         },
         functor: binopFunctor,
@@ -398,7 +396,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   '*': {
     argCount: 2,
-    fn: ([a, b]) => getInstanceof(a, Fraction).mul(b),
+    fn: ([a, b]) => getInstanceof(a, DeciNumber).mul(b),
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -419,7 +417,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   '/': {
     argCount: 2,
-    fn: ([a, b]) => getInstanceof(a, Fraction).div(b),
+    fn: ([a, b]) => getInstanceof(a, DeciNumber).div(b),
     functor: ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
@@ -444,7 +442,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   '**': {
     argCount: 2,
-    fn: ([a, b]) => pow(a, b),
+    fn: ([a, b]) => getInstanceof(a, DeciNumber).pow(b),
     noAutoconvert: true,
     absoluteNumberInput: true,
     functor: exponentiationFunctor,

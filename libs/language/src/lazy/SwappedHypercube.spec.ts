@@ -16,100 +16,100 @@ const threeAnonDims = jsCol([
 it('can swap dimensions of a hypercube', () => {
   expect(materialize(new SwappedHypercube(twoAnonDims, 1)))
     .toMatchInlineSnapshot(`
+    Array [
       Array [
-        Array [
-          Fraction(11),
-          Fraction(12),
-        ],
-      ]
-    `);
+        DeciNumber(11),
+        DeciNumber(12),
+      ],
+    ]
+  `);
 });
 
 it('or left alone', () => {
   expect(materialize(new SwappedHypercube(twoAnonDims, 0)))
     .toMatchInlineSnapshot(`
+    Array [
       Array [
-        Array [
-          Fraction(11),
-        ],
-        Array [
-          Fraction(12),
-        ],
-      ]
-    `);
+        DeciNumber(11),
+      ],
+      Array [
+        DeciNumber(12),
+      ],
+    ]
+  `);
 });
 
 it('can swap nothing if the dimension is 1D', () => {
   expect(materialize(new SwappedHypercube(multiDimX, 0)))
     .toMatchInlineSnapshot(`
-      Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
-      ]
-    `);
+    Array [
+      DeciNumber(1),
+      DeciNumber(2),
+      DeciNumber(3),
+    ]
+  `);
 });
 
 it('can work with 3d', () => {
   expect(materialize(new SwappedHypercube(threeAnonDims, 0)))
     .toMatchInlineSnapshot(`
+    Array [
       Array [
         Array [
-          Array [
-            Fraction(11),
-            Fraction(101),
-            Fraction(1001),
-          ],
-          Array [
-            Fraction(12),
-            Fraction(102),
-            Fraction(1002),
-          ],
+          DeciNumber(11),
+          DeciNumber(101),
+          DeciNumber(1001),
         ],
-      ]
-    `);
+        Array [
+          DeciNumber(12),
+          DeciNumber(102),
+          DeciNumber(1002),
+        ],
+      ],
+    ]
+  `);
 
   expect(materialize(new SwappedHypercube(threeAnonDims, 1)))
     .toMatchInlineSnapshot(`
+    Array [
       Array [
         Array [
-          Array [
-            Fraction(11),
-            Fraction(101),
-            Fraction(1001),
-          ],
+          DeciNumber(11),
+          DeciNumber(101),
+          DeciNumber(1001),
         ],
+      ],
+      Array [
         Array [
-          Array [
-            Fraction(12),
-            Fraction(102),
-            Fraction(1002),
-          ],
+          DeciNumber(12),
+          DeciNumber(102),
+          DeciNumber(1002),
         ],
-      ]
-    `);
+      ],
+    ]
+  `);
 
   expect(materialize(new SwappedHypercube(threeAnonDims, 2)))
     .toMatchInlineSnapshot(`
+    Array [
       Array [
         Array [
-          Array [
-            Fraction(11),
-            Fraction(12),
-          ],
+          DeciNumber(11),
+          DeciNumber(12),
         ],
+      ],
+      Array [
         Array [
-          Array [
-            Fraction(101),
-            Fraction(102),
-          ],
+          DeciNumber(101),
+          DeciNumber(102),
         ],
+      ],
+      Array [
         Array [
-          Array [
-            Fraction(1001),
-            Fraction(1002),
-          ],
+          DeciNumber(1001),
+          DeciNumber(1002),
         ],
-      ]
-    `);
+      ],
+    ]
+  `);
 });

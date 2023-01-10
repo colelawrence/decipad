@@ -1,20 +1,21 @@
+import { N } from '@decipad/number';
 import { makeContext } from '..';
 import { Type, build as t, Unit } from '../type';
-import { U, F } from '../utils';
+import { U } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
 
 const meter: Unit = {
   unit: 'meter',
-  exp: F(1),
-  multiplier: F(1),
+  exp: N(1),
+  multiplier: N(1),
   known: true,
 };
 
 const second: Unit = {
   unit: 'second',
-  exp: F(1),
-  multiplier: F(1),
+  exp: N(1),
+  multiplier: N(1),
   known: true,
 };
 

@@ -1,3 +1,4 @@
+import { N } from '@decipad/number';
 import { identity } from '../utils';
 import { UnitOfMeasure } from './known-units';
 
@@ -16,8 +17,8 @@ export const units: UnitOfMeasure[] = [
     pretty: '°C',
     baseQuantity: 'temperature',
     doesNotScaleOnConversion: true,
-    toBaseQuantity: (celsius) => celsius.add(273.15),
-    fromBaseQuantity: (kelvin) => kelvin.sub(273.15),
+    toBaseQuantity: (celsius) => celsius.add(N(27315, 100)),
+    fromBaseQuantity: (kelvin) => kelvin.sub(N(27315, 100)),
   },
   {
     name: 'fahrenheit',
@@ -26,7 +27,8 @@ export const units: UnitOfMeasure[] = [
     pretty: '°F',
     doesNotScaleOnConversion: true,
     toBaseQuantity: (fahrenheit) =>
-      fahrenheit.sub(32).mul(5).div(9).add(273.15),
-    fromBaseQuantity: (kelvin) => kelvin.sub(273.15).mul(9).div(5).add(32),
+      fahrenheit.sub(N(32)).mul(N(5)).div(N(9)).add(N(27315, 100)),
+    fromBaseQuantity: (kelvin) =>
+      kelvin.sub(N(27315, 100)).mul(N(9)).div(N(5)).add(N(32)),
   },
 ];

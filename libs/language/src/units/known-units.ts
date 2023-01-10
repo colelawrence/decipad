@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import * as AngleUnits from './angle-units';
 import * as AreaUnits from './area-units';
 import * as CurrencyUnits from './currency-units';
@@ -98,8 +98,8 @@ export type UnitOfMeasure = {
   aliases?: string[];
   pretty?: string;
   doesNotScaleOnConversion?: true;
-  toBaseQuantity: (n: Fraction) => Fraction;
-  fromBaseQuantity: (n: Fraction) => Fraction;
+  toBaseQuantity: (n: DeciNumber) => DeciNumber;
+  fromBaseQuantity: (n: DeciNumber) => DeciNumber;
   superBaseQuantity?: 'currency';
 };
 

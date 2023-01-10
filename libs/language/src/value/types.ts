@@ -3,7 +3,7 @@ import { Interpreter } from '..';
 import { Dimension } from '../lazy';
 import {
   UnknownValue,
-  FractionValue,
+  NumberValue,
   StringValue,
   BooleanValue,
   DateValue,
@@ -46,7 +46,7 @@ export const getColumnLike = (
 
 export type NonColumn =
   | typeof UnknownValue
-  | FractionValue
+  | NumberValue
   | StringValue
   | BooleanValue
   | Range

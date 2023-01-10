@@ -5,11 +5,11 @@ describe('column value', () => {
     const column = Column.fromValues([1, 2, 3].map(fromJS));
     expect(column.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
       ]
-      `);
+    `);
   });
 
   it('can be constructed from other columns', () => {
@@ -19,17 +19,17 @@ describe('column value', () => {
     expect(column.getData()).toMatchInlineSnapshot(`
       Array [
         Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
         ],
         Array [
-          Fraction(4),
-          Fraction(5),
-          Fraction(6),
+          DeciNumber(4),
+          DeciNumber(5),
+          DeciNumber(6),
         ],
       ]
-      `);
+    `);
   });
 
   it('can be sorted', () => {
@@ -37,18 +37,18 @@ describe('column value', () => {
     const sortedColumn = ValueTransforms.sort(originalColumn);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(3),
-        Fraction(1),
-        Fraction(2),
+        DeciNumber(3),
+        DeciNumber(1),
+        DeciNumber(2),
       ]
-      `);
+    `);
     expect(sortedColumn.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
       ]
-      `);
+    `);
   });
 
   it('can derive a column with unique values', () => {
@@ -56,28 +56,28 @@ describe('column value', () => {
     const uniqueValuesColumn = ValueTransforms.unique(originalColumn);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(3),
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
-        Fraction(3),
-        Fraction(5),
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
-        Fraction(0),
+        DeciNumber(3),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
+        DeciNumber(3),
+        DeciNumber(5),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
+        DeciNumber(0),
       ]
-      `);
+    `);
 
     expect(uniqueValuesColumn.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(0),
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
-        Fraction(5),
+        DeciNumber(0),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
+        DeciNumber(5),
       ]
-      `);
+    `);
   });
 
   it('a column can be sliced', () => {
@@ -86,29 +86,29 @@ describe('column value', () => {
     const slice2 = ValueTransforms.slice(originalColumn, 7, 9);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
-        Fraction(4),
-        Fraction(5),
-        Fraction(6),
-        Fraction(7),
-        Fraction(8),
-        Fraction(9),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
+        DeciNumber(4),
+        DeciNumber(5),
+        DeciNumber(6),
+        DeciNumber(7),
+        DeciNumber(8),
+        DeciNumber(9),
       ]
     `);
     expect(slice1.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(4),
-        Fraction(5),
-        Fraction(6),
-        Fraction(7),
+        DeciNumber(4),
+        DeciNumber(5),
+        DeciNumber(6),
+        DeciNumber(7),
       ]
     `);
     expect(slice2.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(8),
-        Fraction(9),
+        DeciNumber(8),
+        DeciNumber(9),
       ]
     `);
   });

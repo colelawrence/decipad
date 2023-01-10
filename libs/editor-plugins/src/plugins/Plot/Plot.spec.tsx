@@ -9,16 +9,12 @@ import { Plate } from '@udecode/plate';
 import { createRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import Plot from './Plot';
 
 interface PlotWithProvidersParams {
   element?: Partial<PlotElement>;
   blockResults?: NotebookResults['blockResults'];
-}
-
-function F(n: number) {
-  return toFraction(n);
 }
 
 const tableType: SerializedType = {
@@ -57,7 +53,7 @@ const tableData = [
   [100n, 200n, 300n], // date-minute
   [100n, 200n, 300n], // date-second
   [100n, 200n, 300n], // date-millisecond
-  [F(1), F(2), F(3)], // simple-number
+  [N(1), N(2), N(3)], // simple-number
 ];
 
 const PlotWithProviders = ({

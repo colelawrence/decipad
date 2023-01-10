@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { unzip, getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import { Interpreter, Time } from '..';
@@ -25,17 +25,17 @@ export const UnknownValue: Value = {
 
 export class Scalar {
   static fromValue(
-    value: number | bigint | Fraction | boolean | string | symbol | Date
+    value: number | bigint | DeciNumber | boolean | string | symbol | Date
   ): NonColumn {
     if (value instanceof Date) {
       return DateValue.fromDateAndSpecificity(value.getTime(), 'millisecond');
     }
-    if (value instanceof Fraction) {
-      return FractionValue.fromValue(value);
+    if (value instanceof DeciNumber) {
+      return NumberValue.fromValue(value);
     }
     const t = typeof value;
     if (t === 'number' || t === 'bigint') {
-      return FractionValue.fromValue(value as number | bigint);
+      return NumberValue.fromValue(value as number | bigint);
     }
     if (t === 'boolean') {
       return BooleanValue.fromValue(value as boolean);
@@ -44,18 +44,15 @@ export class Scalar {
   }
 }
 
-export class FractionValue implements Value {
-  readonly value: Fraction;
+export class NumberValue implements Value {
+  readonly value: DeciNumber;
 
-  constructor(varValue: number | bigint | Fraction) {
+  constructor(varValue: number | bigint | DeciNumber) {
     const t = typeof varValue;
     if (t === 'number' || t === 'bigint') {
-      if (Number.isNaN(varValue)) {
-        throw new TypeError('not a number');
-      }
-      this.value = toFraction(varValue as number | bigint);
+      this.value = N(varValue as number | bigint);
     } else {
-      this.value = varValue as Fraction;
+      this.value = varValue as DeciNumber;
     }
   }
 
@@ -63,8 +60,8 @@ export class FractionValue implements Value {
     return this.value;
   }
 
-  static fromValue(value: number | bigint | Fraction): FractionValue {
-    return new FractionValue(value);
+  static fromValue(value: number | bigint | DeciNumber): NumberValue {
+    return new NumberValue(value);
   }
 }
 
@@ -146,7 +143,7 @@ export class Range implements Value {
         start,
         end: end.getEndDate(),
       });
-    } else if (start instanceof FractionValue && end instanceof FractionValue) {
+    } else if (start instanceof NumberValue && end instanceof NumberValue) {
       return new Range({ start, end });
     } else {
       throw new Error(
@@ -387,7 +384,7 @@ export type FromJSArg =
   | number
   | bigint
   | Date
-  | Fraction
+  | DeciNumber
   | FromJSArg[];
 
 export const fromJS = (thing: FromJSArg): Value => {

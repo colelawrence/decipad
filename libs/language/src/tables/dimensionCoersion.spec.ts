@@ -22,12 +22,12 @@ it('non-indexed columns must have sizes consistent with the table', async () => 
       "type": table<A = number, NewCol = number>,
       "value": Array [
         Array [
-          Fraction(1),
-          Fraction(2),
+          DeciNumber(1),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(1),
-          Fraction(2),
+          DeciNumber(1),
+          DeciNumber(2),
         ],
       ],
     }
@@ -42,12 +42,12 @@ it('single items (non-col) are expanded to fit the currently known table size', 
       "type": table<A = number, NewCol = number>,
       "value": Array [
         Array [
-          Fraction(1),
-          Fraction(2),
+          DeciNumber(1),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(1),
-          Fraction(1),
+          DeciNumber(1),
+          DeciNumber(1),
         ],
       ],
     }
@@ -63,15 +63,15 @@ it('accepts multi-d non-indexed columns as having the tables dimension on top', 
       "value": Array [
         Array [
           Array [
-            Fraction(1),
+            DeciNumber(1),
           ],
           Array [
-            Fraction(2),
+            DeciNumber(2),
           ],
         ],
         Array [
-          Fraction(1),
-          Fraction(1),
+          DeciNumber(1),
+          DeciNumber(1),
         ],
       ],
     }
@@ -89,22 +89,22 @@ it('juggles dimensions so the tables dimension is on top', async () => {
       "type": table<Nums = number, NewCol = column<number, indexed by OtherTable>>,
       "value": Array [
         Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
         ],
         Array [
           Array [
-            Fraction(101),
-            Fraction(201),
+            DeciNumber(101),
+            DeciNumber(201),
           ],
           Array [
-            Fraction(102),
-            Fraction(202),
+            DeciNumber(102),
+            DeciNumber(202),
           ],
           Array [
-            Fraction(103),
-            Fraction(203),
+            DeciNumber(103),
+            DeciNumber(203),
           ],
         ],
       ],
@@ -123,22 +123,22 @@ it('juggles dimensions so the tables dimension is on top (2)', async () => {
       "type": table<Nums = number, NewCol = column<number, indexed by OtherTable>>,
       "value": Array [
         Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
         ],
         Array [
           Array [
-            Fraction(101),
-            Fraction(201),
+            DeciNumber(101),
+            DeciNumber(201),
           ],
           Array [
-            Fraction(102),
-            Fraction(202),
+            DeciNumber(102),
+            DeciNumber(202),
           ],
           Array [
-            Fraction(103),
-            Fraction(203),
+            DeciNumber(103),
+            DeciNumber(203),
           ],
         ],
       ],
@@ -157,19 +157,19 @@ it('juggles dimensions so the tables dimension is on top (3)', async () => {
       "type": table<Nums = number, NewCol = column<column<number>, indexed by OtherTable>>,
       "value": Array [
         Array [
-          Fraction(0.01),
+          DeciNumber(0.01),
         ],
         Array [
           Array [
             Array [
-              Fraction(101.01),
-              Fraction(102.01),
-              Fraction(103.01),
+              DeciNumber(101.01),
+              DeciNumber(102.01),
+              DeciNumber(103.01),
             ],
             Array [
-              Fraction(201.01),
-              Fraction(202.01),
-              Fraction(203.01),
+              DeciNumber(201.01),
+              DeciNumber(202.01),
+              DeciNumber(203.01),
             ],
           ],
         ],
@@ -198,10 +198,10 @@ it('usage of previous() does not affect length rules', async () => {
       "type": table<A = number, NewCol = number>,
       "value": Array [
         Array [
-          Fraction(1),
+          DeciNumber(1),
         ],
         Array [
-          Fraction(100),
+          DeciNumber(100),
         ],
       ],
     }
@@ -217,12 +217,12 @@ it('usage of previous() does not affect length rules', async () => {
       "type": table<A = number, NewCol = number>,
       "value": Array [
         Array [
-          Fraction(1),
-          Fraction(2),
+          DeciNumber(1),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(100),
-          Fraction(200),
+          DeciNumber(100),
+          DeciNumber(200),
         ],
       ],
     }
@@ -238,10 +238,10 @@ it('usage of previous() does not affect length rules', async () => {
       "type": table<A = number, NewCol = number>,
       "value": Array [
         Array [
-          Fraction(1),
+          DeciNumber(1),
         ],
         Array [
-          Fraction(100),
+          DeciNumber(100),
         ],
       ],
     }

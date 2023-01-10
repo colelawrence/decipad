@@ -1,45 +1,57 @@
+import { N } from '@decipad/number';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
-export const oneInch = 0.0254;
-export const oneFoot = 12 * oneInch;
-export const oneYard = 3 * oneFoot;
-export const oneMile = 1_760 * oneYard;
-const oneLightsecond = 299_792_458;
+export const oneInch = N(254, 10 ** 4);
+export const oneFoot = oneInch.mul(N(12));
+export const oneYard = oneFoot.mul(N(3));
+export const oneMile = oneYard.mul(N(1_760));
+const oneFurlong = N(201_168, 1e3);
+const oneNauticalmile = N(1_852);
+const oneNauticalleague = N(5_556);
+const oneAngstrom = N(1, 1e10);
+const oneBohr = N(529_177_210_903, 1e21);
+const oneAttometre = N(1, 1e18);
+const oneFermi = N(1, 1e15);
+const oneSmoot = N(1_702, 1e3);
+const oneAstronomicalunit = N(149_597_870_700);
+const oneLightsecond = N(299_792_458);
+const oneLightyear = N(9_460_730_472_580_800);
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
 
 const inch: Converter = (x) => x.mul(oneInch);
 const foot: Converter = (x) => x.mul(oneFoot);
 const yard: Converter = (x) => x.mul(oneYard);
-const furlong: Converter = (x) => x.mul(201_168).div(1e3);
+const furlong: Converter = (x) => x.mul(oneFurlong);
 const mile: Converter = (x) => x.mul(oneMile);
-const nauticalmile: Converter = (x) => x.mul(1_852);
-const nauticalleague: Converter = (x) => x.mul(5_556);
-const angstrom: Converter = (x) => x.div(1e10);
-const bohr: Converter = (x) => x.mul(529_177_210_903).div(1e21);
-const attometre: Converter = (x) => x.div(1e18);
-const fermi: Converter = (x) => x.div(1e15);
-const smoot: Converter = (x) => x.mul(1_702).div(1e3);
-const astronomicalunit: Converter = (x) => x.mul(149_597_870_700);
+const nauticalmile: Converter = (x) => x.mul(oneNauticalmile);
+const nauticalleague: Converter = (x) => x.mul(oneNauticalleague);
+const angstrom: Converter = (x) => x.mul(oneAngstrom);
+const bohr: Converter = (x) => x.mul(oneBohr);
+const attometre: Converter = (x) => x.mul(oneAttometre);
+const fermi: Converter = (x) => x.mul(oneFermi);
+const smoot: Converter = (x) => x.mul(oneSmoot);
+const astronomicalunit: Converter = (x) => x.mul(oneAstronomicalunit);
 const lightsecond: Converter = (x) => x.mul(oneLightsecond);
-const lightminute: Converter = (x) => lightsecond(x).mul(60);
-const lighthour: Converter = (x) => lightminute(x).mul(60);
-const lightday: Converter = (x) => lighthour(x).mul(24);
-const lightyear: Converter = (x) => x.mul(9_460_730_472_580_800);
-const chain: Converter = (x) => x.mul(oneFoot).mul(66);
-const fathom: Converter = (x) => x.mul(oneFoot).mul(6);
-const link: Converter = (x) => x.mul(oneFoot).mul(66).div(1e2);
-const marathon: Converter = (x) => x.mul(42_195);
+const lightminute: Converter = (x) => lightsecond(x).mul(N(60));
+const lighthour: Converter = (x) => lightminute(x).mul(N(60));
+const lightday: Converter = (x) => lighthour(x).mul(N(24));
+const lightyear: Converter = (x) => x.mul(oneLightyear);
+const chain: Converter = (x) => x.mul(oneFoot).mul(N(66));
+const fathom: Converter = (x) => x.mul(oneFoot).mul(N(6));
+const link: Converter = (x) => x.mul(oneFoot).mul(N(66)).div(N(1e2));
+const marathon: Converter = (x) => x.mul(N(42_195));
 // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-const parsec: Converter = (x) => x.mul(30_856_775_814_913_673);
-const point: Converter = (x) => x.mul(oneInch).div(72_272).mul(1e3);
-const twip: Converter = (x) => x.mul(oneInch).div(1_440);
-const rope: Converter = (x) => x.mul(6_096).div(1e3);
-const rod: Converter = (x) => x.mul(50_292).div(1e4);
-const league: Converter = (x) => x.mul(4_828);
-const hand: Converter = (x) => x.mul(1_016).div(1e4);
-const pica: Converter = (x) => x.mul(12).mul(oneInch).div(72_272).mul(1e3);
+const parsec: Converter = (x) => x.mul(N(30_856_775_814_913_673));
+const point: Converter = (x) => x.mul(oneInch).div(N(72_272)).mul(N(1e3));
+const twip: Converter = (x) => x.mul(oneInch).div(N(1_440));
+const rope: Converter = (x) => x.mul(N(6_096)).div(N(1e3));
+const rod: Converter = (x) => x.mul(N(50_292)).div(N(1e4));
+const league: Converter = (x) => x.mul(N(4_828));
+const hand: Converter = (x) => x.mul(N(1_016)).div(N(1e4));
+const pica: Converter = (x) =>
+  x.mul(N(12)).mul(oneInch).div(N(72_272)).mul(N(1e3));
 
 export const units: UnitOfMeasure[] = [
   {

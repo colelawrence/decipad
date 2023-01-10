@@ -1,5 +1,5 @@
 import { Computer, SerializedType } from '@decipad/computer';
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import {
   DisplayProps,
@@ -7,10 +7,6 @@ import {
   resultToPlotResultData,
   specFromType,
 } from './plotUtils';
-
-function F(n: number) {
-  return toFraction(n);
-}
 
 const defaultDisplayProps: DisplayProps = {
   sourceVarName: '',
@@ -65,7 +61,7 @@ const tableData = [
   [100n, 200n, 300n], // date-minute
   [100n, 200n, 300n], // date-second
   [100n, 200n, 300n], // date-millisecond
-  [F(1), F(2), F(3)], // simple-number
+  [N(1), N(2), N(3)], // simple-number
 ];
 
 describe('specFromType', () => {

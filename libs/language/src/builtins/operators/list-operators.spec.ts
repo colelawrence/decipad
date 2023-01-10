@@ -9,10 +9,10 @@ describe('list operators', () => {
       Object {
         "type": column<number>,
         "value": Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
-          Fraction(4),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(4),
         ],
       }
     `);
@@ -22,7 +22,7 @@ describe('list operators', () => {
     expect(await runCode('len([1, 2, 3])')).toMatchInlineSnapshot(`
       Object {
         "type": number,
-        "value": Fraction(3),
+        "value": DeciNumber(3),
       }
     `);
   });
@@ -31,7 +31,7 @@ describe('list operators', () => {
     expect(await runCode('first([1, 2, 3] meters)')).toMatchInlineSnapshot(`
       Object {
         "type": meters,
-        "value": Fraction(1),
+        "value": DeciNumber(1),
       }
     `);
   });
@@ -40,7 +40,7 @@ describe('list operators', () => {
     expect(await runCode('last([1, 2, 3] meters)')).toMatchInlineSnapshot(`
       Object {
         "type": meters,
-        "value": Fraction(3),
+        "value": DeciNumber(3),
       }
     `);
   });
@@ -48,11 +48,11 @@ describe('list operators', () => {
   it('countif: counts the true elements in a list', async () => {
     expect(await runCode('countif([true, false, true])'))
       .toMatchInlineSnapshot(`
-        Object {
-          "type": number,
-          "value": Fraction(2),
-        }
-      `);
+      Object {
+        "type": number,
+        "value": DeciNumber(2),
+      }
+    `);
   });
 
   it('sorts a list', async () => {
@@ -60,9 +60,9 @@ describe('list operators', () => {
       Object {
         "type": column<number>,
         "value": Array [
-          Fraction(-1),
-          Fraction(2),
-          Fraction(11),
+          DeciNumber(-1),
+          DeciNumber(2),
+          DeciNumber(11),
         ],
       }
     `);
@@ -73,10 +73,10 @@ describe('list operators', () => {
       Object {
         "type": column<number>,
         "value": Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
-          Fraction(4),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(4),
         ],
       }
     `);
@@ -87,9 +87,9 @@ describe('list operators', () => {
       Object {
         "type": column<number>,
         "value": Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
         ],
       }
     `);
@@ -106,14 +106,14 @@ describe('list operators', () => {
         "type": table<A = number, B = number>,
         "value": Array [
           Array [
-            Fraction(3),
-            Fraction(2),
-            Fraction(1),
+            DeciNumber(3),
+            DeciNumber(2),
+            DeciNumber(1),
           ],
           Array [
-            Fraction(5),
-            Fraction(4),
-            Fraction(6),
+            DeciNumber(5),
+            DeciNumber(4),
+            DeciNumber(6),
           ],
         ],
       }

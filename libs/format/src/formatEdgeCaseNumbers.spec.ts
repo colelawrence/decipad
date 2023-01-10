@@ -1,4 +1,4 @@
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import {
   isEdgeCaseNumber,
   formatEdgeCaseNumber,
@@ -11,7 +11,7 @@ it('can detect super large and super smol numbers', () => {
   expect(isEdgeCaseNumber(large.neg())).toMatchInlineSnapshot(`"large"`);
   expect(isEdgeCaseNumber(small)).toMatchInlineSnapshot(`"small"`);
   expect(isEdgeCaseNumber(small.neg())).toMatchInlineSnapshot(`"small"`);
-  expect(isEdgeCaseNumber(toFraction(100))).toMatchInlineSnapshot(`undefined`);
+  expect(isEdgeCaseNumber(N(100))).toMatchInlineSnapshot(`undefined`);
 });
 
 it('can print those numbers', () => {
@@ -39,7 +39,7 @@ it('can print those numbers', () => {
       },
     ]
   `);
-  expect(formatEdgeCaseNumber(toFraction(100n), 2)).toMatchInlineSnapshot(`
+  expect(formatEdgeCaseNumber(N(100n), 2)).toMatchInlineSnapshot(`
     Array [
       Object {
         "type": "integer",
@@ -50,7 +50,7 @@ it('can print those numbers', () => {
 });
 
 it('deals with repeating fractions', () => {
-  expect(formatEdgeCaseNumber(toFraction(1n, 3n), 2)).toMatchInlineSnapshot(`
+  expect(formatEdgeCaseNumber(N(1n, 3n), 2)).toMatchInlineSnapshot(`
     Array [
       Object {
         "type": "integer",

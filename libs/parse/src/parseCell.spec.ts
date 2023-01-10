@@ -1,4 +1,4 @@
-import { F } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { TableCellType } from '@decipad/editor-types';
 import { Computer, prettyPrintAST } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
@@ -21,15 +21,15 @@ it('turns cells into AST nodes', async () => {
         kind: 'number',
         unit: [
           {
-            exp: F(1),
+            exp: N(1),
             known: false,
-            multiplier: F(1),
+            multiplier: N(1),
             unit: 'bananas',
           },
           {
-            exp: F(-2),
+            exp: N(-2),
             known: true,
-            multiplier: F(1000),
+            multiplier: N(1000),
             unit: 'm',
           },
         ],
@@ -47,15 +47,15 @@ it('turns cells into AST nodes', async () => {
         kind: 'number',
         unit: [
           {
-            exp: F(1),
+            exp: N(1),
             known: true,
-            multiplier: F(1),
+            multiplier: N(1),
             unit: 'm',
           },
           {
-            exp: F(1),
+            exp: N(1),
             known: true,
-            multiplier: F(1),
+            multiplier: N(1),
             unit: 's',
           },
         ],

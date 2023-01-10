@@ -1,7 +1,6 @@
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N, ONE } from '@decipad/number';
 import { getUnitByName, knowsUnit, unitUsesPrefixes } from '.';
 import { Unit } from '..';
-import { F } from '../utils';
 
 const abbreviatedPrefixes = {
   y: 'yocto',
@@ -27,31 +26,31 @@ const abbreviatedPrefixes = {
 };
 
 const multiplierPrefixToFraction = {
-  yocto: toFraction(1, 1_000_000_000_000_000_000_000_000), // 1e-24,
-  zepto: toFraction(1, 1_000_000_000_000_000_000_000), // 1e-21,
-  atto: toFraction(1, 1_000_000_000_000_000_000), // 1e-18,
-  femto: toFraction(1, 1_000_000_000_000_000), // 1e-15,
-  pico: toFraction(1, 1_000_000_000_000), // 1e-12,
-  nano: toFraction(1, 1_000_000_000), // 1e-9,
-  micro: toFraction(1, 1_000_000), // 1e-6,
-  milli: toFraction(1, 1_000), // 1e-3,
-  centi: toFraction(1, 100), // 1e-2,
-  deci: toFraction(1, 10), // 1e-1,
-  deca: toFraction(10), // 1e1,
-  hecto: toFraction(100), // 1e2,
-  kilo: toFraction(1_000), // 1e3,
-  mega: toFraction(1_000_000), // 1e6,
-  giga: toFraction(1_000_000_000), // 1e9,
-  tera: toFraction(1_000_000_000_000), // 1e12,
-  peta: toFraction(1_000_000_000_000_000), // 1e15,
-  exa: toFraction(1_000_000_000_000_000_000), // 1e18,
-  zetta: toFraction(1_000_000_000_000_000_000_000), // 1e21,
-  yotta: toFraction(1_000_000_000_000_000_000_000_000), // 1e24,
+  yocto: N(1, 1_000_000_000_000_000_000_000_000), // 1e-24,
+  zepto: N(1, 1_000_000_000_000_000_000_000), // 1e-21,
+  atto: N(1, 1_000_000_000_000_000_000), // 1e-18,
+  femto: N(1, 1_000_000_000_000_000), // 1e-15,
+  pico: N(1, 1_000_000_000_000), // 1e-12,
+  nano: N(1, 1_000_000_000), // 1e-9,
+  micro: N(1, 1_000_000), // 1e-6,
+  milli: N(1, 1_000), // 1e-3,
+  centi: N(1, 100), // 1e-2,
+  deci: N(1, 10), // 1e-1,
+  deca: N(10), // 1e1,
+  hecto: N(100), // 1e2,
+  kilo: N(1_000), // 1e3,
+  mega: N(1_000_000), // 1e6,
+  giga: N(1_000_000_000), // 1e9,
+  tera: N(1_000_000_000_000), // 1e12,
+  peta: N(1_000_000_000_000_000), // 1e15,
+  exa: N(1_000_000_000_000_000_000), // 1e18,
+  zetta: N(1_000_000_000_000_000_000_000), // 1e21,
+  yotta: N(1_000_000_000_000_000_000_000_000), // 1e24,
 };
 
 const multiplierPrefixes = Object.keys(multiplierPrefixToFraction);
 
-function trimPrefix(unitName: string): [Fraction, string] {
+function trimPrefix(unitName: string): [DeciNumber, string] {
   for (const fullPrefix of multiplierPrefixes) {
     if (unitName.startsWith(fullPrefix)) {
       return [
@@ -74,7 +73,7 @@ function trimPrefix(unitName: string): [Fraction, string] {
       unitName.slice(1),
     ];
   }
-  return [toFraction(1), unitName];
+  return [ONE, unitName];
 }
 
 export function parseUnit(unitString: string): Unit {
@@ -82,8 +81,8 @@ export function parseUnit(unitString: string): Unit {
   if (knownUnit) {
     return {
       unit: unitString,
-      exp: F(1),
-      multiplier: F(1),
+      exp: ONE,
+      multiplier: ONE,
       known: true,
       baseQuantity: knownUnit.baseQuantity,
       baseSuperQuantity: knownUnit.superBaseQuantity ?? knownUnit.baseQuantity,
@@ -99,7 +98,7 @@ export function parseUnit(unitString: string): Unit {
 
     if (!known && smallPrefix) {
       name = unitString;
-      multiplier = F(1);
+      multiplier = ONE;
     }
     if (!unitUsesPrefixes(name)) {
       const matchesExponent = name.match(/(.*)([0-9])+$/);
@@ -108,7 +107,7 @@ export function parseUnit(unitString: string): Unit {
 
         return {
           unit: name,
-          exp: F(exponent),
+          exp: N(exponent),
           multiplier,
           known,
         };
@@ -126,7 +125,7 @@ export function parseUnit(unitString: string): Unit {
 
     const ret = {
       unit: name,
-      exp: F(exponent),
+      exp: N(exponent),
       multiplier,
       known,
     };

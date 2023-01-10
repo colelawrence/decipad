@@ -15,7 +15,7 @@ Data Views are table summaries where you can extract insights.
 ## Add a Data View
 
 - To **add an empty data view**, click the `+` button next to an empty line, and select `Data View` from the menu. Once placed, select a source table from the menu.
-- To **add a data view from a table**, click the `Create view` button on the top-right of your [table](/docs/quick-start/tables). <br></br> A new connected table view will be added after your original table.
+- To **add a data view from a table**, click the `Create view` button on the top-right of your [table](/docs/quick-start/tables). <br /> A new connected table view will be added after your original table.
 
 Each time your original table is updated, your data view will automatically update to reflect the changes.
 

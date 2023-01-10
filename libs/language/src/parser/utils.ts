@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { AST } from '..';
 import { getIdentifierString, isNode, isStatement } from '../utils';
 
@@ -11,7 +11,7 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
   switch (node.type) {
     case 'literal': {
       const [, value] = node.args;
-      return value instanceof Fraction
+      return value instanceof DeciNumber
         ? value.toString()
         : JSON.stringify(value);
     }

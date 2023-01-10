@@ -1,5 +1,4 @@
 import { PlotElement } from '@decipad/editor-types';
-import Fraction from '@decipad/fraction';
 import {
   Computer,
   convertToMultiplierUnit,
@@ -7,6 +6,7 @@ import {
   SerializedType,
 } from '@decipad/computer';
 import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
+import DeciNumber from '@decipad/number';
 
 export type DisplayProps = {
   sourceVarName: string;
@@ -374,7 +374,7 @@ function toPlotColumn(
     return column as Array<AllowedPlotValue>;
   }
   if (type.kind === 'number') {
-    return (column as Array<Fraction>).map((f) =>
+    return (column as Array<DeciNumber>).map((f) =>
       convertToMultiplierUnit(f, type.unit).valueOf()
     );
   }

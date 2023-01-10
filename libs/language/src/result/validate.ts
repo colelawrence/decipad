@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { lenientZip, zip } from '@decipad/utils';
 import { Type } from '..';
 import { getSpecificity } from '../date';
@@ -28,7 +28,7 @@ function validate(
 
   switch (type.kind) {
     case 'number': {
-      return getTrue(value instanceof Fraction, 'panic: expected fraction');
+      return getTrue(value instanceof DeciNumber, 'panic: expected fraction');
     }
     case 'boolean':
     case 'string': {
@@ -44,7 +44,7 @@ function validate(
           `invalid date specificity ${type.date}`
         ) &&
         getTrue(
-          typeof value === 'bigint' || value instanceof Fraction,
+          typeof value === 'bigint' || value instanceof DeciNumber,
           'expected date to be represented as a bigint'
         )
       );

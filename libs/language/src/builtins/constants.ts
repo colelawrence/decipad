@@ -1,4 +1,4 @@
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { once } from 'ramda';
 import { fromJS, Value } from '../value';
 import { Type, build as t } from '../type';
@@ -11,12 +11,12 @@ export interface Constant {
 const builtinConstants = once((): Record<string, Constant> => {
   const pi = {
     type: t.number(),
-    value: fromJS(toFraction(Math.PI)),
+    value: fromJS(N(3141592653589793, 10 ** 15)),
   };
   return {
     e: {
       type: t.number(),
-      value: fromJS(toFraction(Math.E)),
+      value: fromJS(N(2718281828459045, 10 ** 15)),
     },
     pi,
     π: pi,

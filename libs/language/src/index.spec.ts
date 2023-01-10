@@ -1,5 +1,5 @@
 // E2e tests
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { date, parseUTCDate } from './date';
 import { runCode } from './run';
 import {
@@ -11,7 +11,7 @@ import {
 } from './testUtils';
 import { build as t, InferError, serializeType } from './type';
 import { number } from './type/build';
-import { block, c, F, n, U, u } from './utils';
+import { block, c, n, U, u } from './utils';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
@@ -33,7 +33,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [F(2), F(-1), F(1), F(101, 100), F(1), F(1), F(1, 4), F(16), F(4)],
+      value: [N(2), N(-1), N(1), N(101, 100), N(1), N(1), N(1, 4), N(16), N(4)],
     });
   });
 
@@ -81,7 +81,7 @@ describe('basic code', () => {
   it('has correct operator precedence', async () => {
     expect(await runCode('1 + 2 / 4 - 5 ** 2 / 4')).toMatchObject({
       type: { type: 'number' },
-      value: F(-19, 4),
+      value: N(-19, 4),
     });
   });
 
@@ -94,7 +94,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: F(2),
+      value: N(2),
     });
   });
 
@@ -107,7 +107,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { type: 'number' },
-      value: F(3),
+      value: N(3),
     });
   });
 
@@ -136,7 +136,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [F(0), F(2), F(4), F(12)],
+      value: [N(0), N(2), N(4), N(12)],
     });
   });
 
@@ -155,7 +155,7 @@ describe('basic code', () => {
         Eleven: t.string(),
       },
       variables: {
-        Two: F(2),
+        Two: N(2),
         Eleven: '11',
       },
     });
@@ -169,7 +169,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { columnSize: 'unknown' },
-      value: [F(2), F(4), F(6)],
+      value: [N(2), N(4), N(6)],
     });
 
     const results2 = await runCode(`
@@ -179,7 +179,7 @@ describe('basic code', () => {
 
     expect(results2).toMatchObject({
       type: { columnSize: 'unknown' },
-      value: [F(2), F(1), F(1, 2)],
+      value: [N(2), N(1), N(1, 2)],
     });
   });
 
@@ -191,7 +191,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [F(2), F(4), F(6)],
+      value: [N(2), N(4), N(6)],
     });
   });
 
@@ -203,7 +203,7 @@ describe('basic code', () => {
 
     expect(results).toMatchObject({
       type: { cellType: { type: 'number' } },
-      value: [F(1), F(4), F(0)],
+      value: [N(1), N(4), N(0)],
     });
   });
 
@@ -216,7 +216,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: F(1),
+      value: N(1),
     });
 
     expect(
@@ -225,7 +225,7 @@ describe('basic code', () => {
       `)
     ).toMatchObject({
       type: { type: 'number' },
-      value: F(0),
+      value: N(0),
     });
   });
 
@@ -263,9 +263,9 @@ describe('Multidimensional operations', () => {
         0
       ),
       value: [
-        [F(1011, 10), F(2011, 10)],
-        [F(511, 5), F(1011, 5)],
-        [F(1033, 10), F(2033, 10)],
+        [N(1011, 10), N(2011, 10)],
+        [N(511, 5), N(1011, 5)],
+        [N(1033, 10), N(2033, 10)],
       ],
     });
 
@@ -284,9 +284,9 @@ describe('Multidimensional operations', () => {
         0
       ),
       value: [
-        [F(1011, 10), F(1006, 5)],
-        [F(1021, 10), F(1011, 5)],
-        [F(1031, 10), F(1016, 5)],
+        [N(1011, 10), N(1006, 5)],
+        [N(1021, 10), N(1011, 5)],
+        [N(1031, 10), N(1016, 5)],
       ],
     });
   });
@@ -303,7 +303,7 @@ describe('Multidimensional operations', () => {
           type: 'number',
         },
       },
-      value: [F(600), F(6000)],
+      value: [N(600), N(6000)],
     });
 
     expect(
@@ -317,7 +317,7 @@ describe('Multidimensional operations', () => {
           type: 'number',
         },
       },
-      value: [F(1100), F(2200), F(3300)],
+      value: [N(1100), N(2200), N(3300)],
     });
   });
 
@@ -347,8 +347,8 @@ describe('Tables', () => {
         Column2: t.number(),
       }),
       value: objectToTableValue({
-        Column1: [F(11, 10), F(22, 10), F(33, 10)],
-        Column2: [F(22, 10), F(44, 10), F(66, 10)],
+        Column1: [N(11, 10), N(22, 10), N(33, 10)],
+        Column2: [N(22, 10), N(44, 10), N(66, 10)],
       }),
     });
   });
@@ -367,8 +367,8 @@ describe('Tables', () => {
         Column2: t.number(),
       }),
       value: objectToTableValue({
-        Column1: [F(11, 10), F(22, 10), F(33, 10)],
-        Column2: [F(11, 10), F(33, 10), F(66, 10)],
+        Column1: [N(11, 10), N(22, 10), N(33, 10)],
+        Column2: [N(11, 10), N(33, 10), N(66, 10)],
       }),
     });
   });
@@ -384,8 +384,8 @@ describe('Tables', () => {
     ).toMatchObject({
       type: { columnNames: ['Index', 'Cell'] },
       value: [
-        [F(1), F(2), F(3), F(4)],
-        [F(2), F(2), F(3), F(4)],
+        [N(1), N(2), N(3), N(4)],
+        [N(2), N(2), N(3), N(4)],
       ],
     });
   });
@@ -406,8 +406,8 @@ describe('Tables', () => {
         Column3: t.boolean(),
       }),
       value: objectToTableValue({
-        Column1: [F(1), F(2), F(3)],
-        Column2: [toFraction(1, 2), 1n, toFraction(3, 2)],
+        Column1: [N(1), N(2), N(3)],
+        Column2: [N(1, 2), 1n, N(3, 2)],
         Column3: [false, false, true],
       }),
     });
@@ -424,7 +424,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.column(t.number(), 'unknown', 'Table', 0),
-      value: [F(1), F(2), F(3)],
+      value: [N(1), N(2), N(3)],
     });
   });
 
@@ -440,7 +440,7 @@ describe('Tables', () => {
       `)
     ).toMatchObject({
       type: t.column(t.number(), 'unknown', 'Table', 1),
-      value: [F(1), F(1), F(1)],
+      value: [N(1), N(1), N(1)],
     });
   });
 
@@ -463,9 +463,9 @@ describe('Tables', () => {
         ],
       },
       value: [
-        [F(1), F(2), F(3)],
-        [F(1), F(1), F(1)],
-        [F(1), F(0), F(0)],
+        [N(1), N(2), N(3)],
+        [N(1), N(1), N(1)],
+        [N(1), N(0), N(0)],
       ],
     });
   });
@@ -485,7 +485,7 @@ describe('Tables', () => {
         },
         indexedBy: 'C',
       },
-      value: [[[F(1), F(2), F(3)]]],
+      value: [[[N(1), N(2), N(3)]]],
     });
   });
 
@@ -508,9 +508,9 @@ describe('Tables', () => {
         ],
       },
       value: [
-        [F(1), F(2), F(3)],
-        [F(500), F(1000), F(1500)],
-        [F(500), F(500), F(500)],
+        [N(1), N(2), N(3)],
+        [N(500), N(1000), N(1500)],
+        [N(500), N(500), N(500)],
       ],
     });
   });
@@ -529,8 +529,8 @@ describe('Tables', () => {
         columnTypes: [{ type: 'number' }, { type: 'number' }],
       },
       value: [
-        [F(1), F(2), F(0), F(0), F(3), F(-3), F(-3)],
-        [F(1), F(3), F(3), F(3), F(6), F(3), F(0)],
+        [N(1), N(2), N(0), N(0), N(3), N(-3), N(-3)],
+        [N(1), N(3), N(3), N(3), N(6), N(3), N(0)],
       ],
     });
 
@@ -566,11 +566,11 @@ describe('Tables', () => {
         indexName: 'Fuel',
       },
       value: [
-        [F(1), F(2), F(3)],
+        [N(1), N(2), N(3)],
         [
-          [F(100), F(200)],
-          [F(200), F(400)],
-          [F(300), F(600)],
+          [N(100), N(200)],
+          [N(200), N(400)],
+          [N(300), N(600)],
         ],
       ],
     });
@@ -588,11 +588,11 @@ describe('Tables', () => {
         indexName: 'Fuel',
       },
       value: [
-        [F(1), F(2), F(3)],
+        [N(1), N(2), N(3)],
         [
-          [F(100), F(200)],
-          [F(200), F(400)],
-          [F(300), F(600)],
+          [N(100), N(200)],
+          [N(200), N(400)],
+          [N(300), N(600)],
         ],
       ],
     });
@@ -615,11 +615,11 @@ describe('Tables', () => {
         indexName: 'Fuel',
       },
       value: [
-        [F(1), F(2), F(3)],
+        [N(1), N(2), N(3)],
         [
-          [[F(100)], [F(200)]],
-          [[F(200)], [F(400)]],
-          [[F(300)], [F(600)]],
+          [[N(100)], [N(200)]],
+          [[N(200)], [N(400)]],
+          [[N(300)], [N(600)]],
         ],
       ],
     });
@@ -642,11 +642,11 @@ describe('Tables', () => {
         indexName: 'Fuel',
       },
       value: [
-        [F(1), F(2), F(3)],
+        [N(1), N(2), N(3)],
         [
-          [[F(100)], [F(200)]],
-          [[F(200)], [F(400)]],
-          [[F(300)], [F(600)]],
+          [[N(100)], [N(200)]],
+          [[N(200)], [N(400)]],
+          [[N(300)], [N(600)]],
         ],
       ],
     });
@@ -690,7 +690,7 @@ describe('Tables', () => {
       type: {
         type: 'number',
       },
-      value: F(1),
+      value: N(1),
     });
   });
 
@@ -705,7 +705,7 @@ describe('Tables', () => {
     ).toMatchInlineSnapshot(`
       Object {
         "type": number,
-        "value": Fraction(15),
+        "value": DeciNumber(15),
       }
     `);
   });
@@ -730,7 +730,7 @@ describe('Matrices', () => {
         },
         indexedBy: 'Cities',
       },
-      value: [F(12, 10), F(12, 10)],
+      value: [N(12, 10), N(12, 10)],
     });
   });
 
@@ -747,7 +747,7 @@ describe('Matrices', () => {
           unit: U('EUR', { known: true }),
         },
       },
-      value: [F(7, 10), F(12, 10)],
+      value: [N(7, 10), N(12, 10)],
     });
   });
 
@@ -766,7 +766,7 @@ describe('Matrices', () => {
         },
         indexedBy: 'Cities',
       },
-      value: [F(7, 10), F(12, 10)],
+      value: [N(7, 10), N(12, 10)],
     });
   });
 
@@ -785,7 +785,7 @@ describe('Matrices', () => {
         },
         indexedBy: 'Cities',
       },
-      value: [F(12, 10)],
+      value: [N(12, 10)],
     });
   });
 });
@@ -800,20 +800,20 @@ describe('Units', () => {
       type: {
         unit: [
           {
-            exp: F(1),
+            exp: N(1),
             known: true,
-            multiplier: toFraction(1),
+            multiplier: N(1),
             unit: 'meters',
           },
           {
-            exp: F(-1),
+            exp: N(-1),
             known: true,
-            multiplier: toFraction(1),
+            multiplier: N(1),
             unit: 'seconds',
           },
         ],
       },
-      value: F(1),
+      value: N(1),
     });
   });
 
@@ -826,19 +826,19 @@ describe('Units', () => {
         Distance / Time
       `)
     ).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: {
         unit: [
           {
-            exp: F(1),
+            exp: N(1),
             known: true,
-            multiplier: toFraction(1),
+            multiplier: N(1),
             unit: 'meters',
           },
           {
-            exp: F(-1),
+            exp: N(-1),
             known: true,
-            multiplier: toFraction(1),
+            multiplier: N(1),
             unit: 'seconds',
           },
         ],
@@ -854,13 +854,13 @@ describe('Units', () => {
         Distance = Speed * 3 second
       `)
     ).toMatchObject({
-      value: F(6),
+      value: N(6),
       type: {
         unit: [
           {
-            exp: F(1),
+            exp: N(1),
             known: true,
-            multiplier: toFraction(1),
+            multiplier: N(1),
             unit: 'meters',
           },
         ],
@@ -876,13 +876,13 @@ describe('Units', () => {
         Frequency = Speed / (3 meter)
       `)
     ).toMatchObject({
-      value: F(2),
+      value: N(2),
       type: {
         unit: [
           {
-            exp: F(-1),
+            exp: N(-1),
             known: true,
-            multiplier: toFraction(1),
+            multiplier: N(1),
             unit: 'seconds',
           },
         ],
@@ -892,9 +892,9 @@ describe('Units', () => {
 
   it('per acts as /', async () => {
     expect(await runCode('kw per hour')).toMatchObject({
-      value: F(1000),
+      value: N(1000),
       type: t.number(
-        U([u('hours', { exp: F(-1) }), u('w', { multiplier: F(1000) })])
+        U([u('hours', { exp: N(-1) }), u('w', { multiplier: N(1000) })])
       ),
     });
   });
@@ -907,7 +907,7 @@ describe('Units', () => {
       type: 'number',
       unit: U([
         u('USD', { known: true }),
-        u('months', { known: true, exp: F(-1) }),
+        u('months', { known: true, exp: N(-1) }),
       ]),
     });
     expect(value?.valueOf()).toEqual(6000);
@@ -999,21 +999,21 @@ describe('Dates', () => {
         type: 'number',
         unit: U('year', { known: true }),
       },
-      value: F(10),
+      value: N(10),
     });
     expect(await runCode(`date(2020-01) - date(2010-01)`)).toMatchObject({
       type: {
         type: 'number',
         unit: U('month', { known: true }),
       },
-      value: F(120),
+      value: N(120),
     });
     expect(await runCode(`date(2020-01-01) - date(2010-01-01)`)).toMatchObject({
       type: {
         type: 'number',
         unit: U('day', { known: true }),
       },
-      value: F(3652),
+      value: N(3652),
     });
     expect(
       await runCode(`date(2020-01-01T10:30) - date(2020-01-01T09:30)`)
@@ -1022,7 +1022,7 @@ describe('Dates', () => {
         type: 'number',
         unit: U('minute', { known: true }),
       },
-      value: F(60),
+      value: N(60),
     });
     expect(
       await runCode(`date(2020-01-01T10:30:16) - date(2020-01-01T10:30:00)`)
@@ -1031,7 +1031,7 @@ describe('Dates', () => {
         type: 'number',
         unit: U('second', { known: true }),
       },
-      value: F(16),
+      value: N(16),
     });
 
     expect(await runCode(`1 year + date(2020)`)).toMatchObject({
@@ -1092,19 +1092,19 @@ describe('Injected external data', () => {
 describe('number units work together', () => {
   it('handles no units', async () => {
     expect(await runCode(`1 + 2`)).toMatchObject({
-      value: F(3),
+      value: N(3),
       type: t.number(),
     });
   });
 
   it('handles unknown units', async () => {
     expect(await runCode(`1 banana + 2 bananas`)).toMatchObject({
-      value: F(3),
+      value: N(3),
       type: t.number([
         {
           unit: 'bananas',
-          exp: F(1),
-          multiplier: toFraction(1),
+          exp: N(1),
+          multiplier: N(1),
           known: false,
         },
       ]),
@@ -1113,12 +1113,12 @@ describe('number units work together', () => {
 
   it('handles known units', async () => {
     expect(await runCode(`1 meter + 2 meters`)).toMatchObject({
-      value: F(3),
+      value: N(3),
       type: t.number([
         {
           unit: 'meters',
-          exp: F(1),
-          multiplier: toFraction(1),
+          exp: N(1),
+          multiplier: N(1),
           known: true,
         },
       ]),
@@ -1131,8 +1131,8 @@ describe('number units work together', () => {
         10 centimeters
       `)
     ).toMatchObject({
-      value: F(10, 100),
-      type: t.number(U('meters', { multiplier: F(1, 100) })),
+      value: N(10, 100),
+      type: t.number(U('meters', { multiplier: N(1, 100) })),
     });
   });
 
@@ -1142,7 +1142,7 @@ describe('number units work together', () => {
         2 meters + 4 meters
       `)
     ).toMatchObject({
-      value: F(6),
+      value: N(6),
       type: t.number(U('meters')),
     });
   });
@@ -1153,12 +1153,12 @@ describe('number units work together', () => {
         10 centimeters + 2 centimeters
       `)
     ).toMatchObject({
-      value: F(12, 100),
+      value: N(12, 100),
       type: t.number([
         {
           unit: 'meters',
-          exp: F(1),
-          multiplier: toFraction(0.01),
+          exp: N(1),
+          multiplier: N(0.01),
           known: true,
         },
       ]),
@@ -1171,19 +1171,19 @@ describe('number units work together', () => {
         10 centimeters + 2 meters
       `)
     ).toMatchObject({
-      value: F(21, 10),
+      value: N(21, 10),
       type: t.number(U('meters')),
     });
   });
 
   it('handles exponentiated known units with multipliers', async () => {
     expect(await runCode(`1 centimeters^2 + 2 meters^2`)).toMatchObject({
-      value: F(20001, 10000),
+      value: N(20001, 10000),
       type: t.number([
         {
           unit: 'meters',
-          exp: F(2),
-          multiplier: toFraction(1),
+          exp: N(2),
+          multiplier: N(1),
           known: true,
         },
       ]),
@@ -1192,37 +1192,37 @@ describe('number units work together', () => {
 
   it('multiplies units', async () => {
     expect(await runCode(`10 kilometers * 3 hours`)).toMatchObject({
-      value: F(30000, 1),
-      type: t.number(U([u('meters', { multiplier: F(1000) }), u('hours')])),
+      value: N(30000, 1),
+      type: t.number(U([u('meters', { multiplier: N(1000) }), u('hours')])),
     });
   });
 
   it('can use divided units', async () => {
     expect(await runCode(`3 kilometers/minute`)).toMatchObject({
-      value: F(3000),
+      value: N(3000),
       type: t.number(
-        U([u('meters', { multiplier: F(1000) }), u('minutes', { exp: F(-1) })])
+        U([u('meters', { multiplier: N(1000) }), u('minutes', { exp: N(-1) })])
       ),
     });
   });
 
   it('divides two simple units', async () => {
     expect(await runCode('3 kilometers / (1 minute)')).toMatchObject({
-      value: F(3000, 1),
+      value: N(3000, 1),
       type: t.number(
-        U([u('meters', { multiplier: F(1000) }), u('minutes', { exp: F(-1) })])
+        U([u('meters', { multiplier: N(1000) }), u('minutes', { exp: N(-1) })])
       ),
     });
   });
 
   it('cancels out units', async () => {
     expect(await runCode(`4 miles/hour * 2 hour`)).toMatchObject({
-      value: F(8),
+      value: N(8),
       type: t.number([
         {
           unit: 'miles',
-          exp: F(1),
-          multiplier: toFraction(1),
+          exp: N(1),
+          multiplier: N(1),
           known: true,
         },
       ]),
@@ -1231,7 +1231,7 @@ describe('number units work together', () => {
 
   it('does the right thing when exponentiating with units', async () => {
     expect(await runCode(`2 ** (4 as years)`)).toMatchObject({
-      value: F(16),
+      value: N(16),
       type: t.number(),
     });
   });
@@ -1247,7 +1247,7 @@ describe('number units work together', () => {
 
   it('calculates date difference', async () => {
     expect(await runCode(`date(2021) - date(2020)`)).toMatchObject({
-      value: toFraction(1),
+      value: N(1),
       type: t.number(U('year')),
     });
   });
@@ -1268,7 +1268,7 @@ describe('number units work together', () => {
 
   it('calculates number from time quantity', async () => {
     expect(await runCode(`(date(2021) - date(2020)) as years`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: number(U('years')),
     });
   });
@@ -1279,34 +1279,34 @@ describe('number units work together', () => {
         type: 'number',
         unit: U('month', { known: true }),
       },
-      value: F(2),
+      value: N(2),
     });
     expect(await runCode(`date(1884-01) - date(1883-01)`)).toMatchObject({
       type: {
         type: 'number',
         unit: U('month', { known: true }),
       },
-      value: F(12),
+      value: N(12),
     });
     expect(await runCode(`date(1900) - date(1883)`)).toMatchObject({
       type: {
         type: 'number',
         unit: U('year', { known: true }),
       },
-      value: F(17),
+      value: N(17),
     });
     expect(await runCode(`date(2200) - date(1883)`)).toMatchObject({
       type: {
         type: 'number',
         unit: U('year', { known: true }),
       },
-      value: F(317),
+      value: N(317),
     });
   });
 
   it('calculates number from time quantity decade', async () => {
     expect(await runCode(`(date(2040) - date(2030)) as decade`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: number(U('decade')),
     });
   });
@@ -1314,7 +1314,7 @@ describe('number units work together', () => {
   it('calculates number from time quantity century', async () => {
     expect(await runCode(`(date(2130) - date(2030)) as century`)).toMatchObject(
       {
-        value: F(1),
+        value: N(1),
         type: number(U('century')),
       }
     );
@@ -1324,7 +1324,7 @@ describe('number units work together', () => {
     expect(
       await runCode(`(date(4000) - date(1000)) as millennia`)
     ).toMatchObject({
-      value: F(3),
+      value: N(3),
       type: number(U('millennia')),
     });
   });
@@ -1333,7 +1333,7 @@ describe('number units work together', () => {
     expect(
       await runCode(`(date(8000) - date(1000)) as millenniums`)
     ).toMatchObject({
-      value: F(7),
+      value: N(7),
       type: number(U('millenniums')),
     });
   });
@@ -1362,14 +1362,14 @@ describe('number units work together', () => {
           1735689600000n,
         ],
         [
-          F(1),
-          F(27, 25),
-          F(729, 625),
-          F(19683, 15625),
-          F(531441, 390625),
-          F(14348907, 9765625),
+          N(1),
+          N(27, 25),
+          N(729, 625),
+          N(19683, 15625),
+          N(531441, 390625),
+          N(14348907, 9765625),
         ],
-        [F(4), F(108, 25), F(467, 100), F(126, 25), F(136, 25), F(147, 25)],
+        [N(4), N(108, 25), N(467, 100), N(126, 25), N(136, 25), N(147, 25)],
       ],
     });
   });
@@ -1378,38 +1378,38 @@ describe('number units work together', () => {
     expect(await runCode(`1K + 2°C + 3°F`)).toMatchObject({
       // 1 + (2 + 273.15) + ((3 - 32) * 5 / 9 + 273.15)
       // = 1 + 275.15 + 257.03(8) =  533.18(8)
-      value: F(50007, 100),
+      value: N(50007, 100),
       type: t.number(U('°F')),
     });
   });
 
   it('handles negative exp unit multipliers when converting', async () => {
     expect(await runCode(`2 liter/km * 3 km`)).toMatchObject({
-      value: F(6),
+      value: N(6),
       type: t.number(U('liters')),
     });
   });
 
   it('converts between complex units', async () => {
     expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
-      value: F(381, 52300),
-      type: t.number(U([u('calories'), u('feet', { exp: F(-1) })])),
+      value: N(381, 52300),
+      type: t.number(U([u('calories'), u('feet', { exp: N(-1) })])),
     });
   });
 
   it('converts between mixed known and unknown units', async () => {
     expect(await runCode(`1 bananas/second as bananas/minute`)).toMatchObject({
-      value: F(60),
+      value: N(60),
       type: t.number(
-        U([u('bananas', { known: false }), u('minutes', { exp: F(-1) })])
+        U([u('bananas', { known: false }), u('minutes', { exp: N(-1) })])
       ),
     });
   });
 
   it('converts between exponentiated and non-exponentiated but expandable to same', async () => {
     expect(await runCode('1 cm^3 in cm3')).toMatchObject({
-      value: F(1, 1000000),
-      type: t.number(U('m', { exp: F(3), multiplier: F(1, 100) })),
+      value: N(1, 1000000),
+      type: t.number(U('m', { exp: N(3), multiplier: N(1, 100) })),
     });
   });
 
@@ -1417,66 +1417,63 @@ describe('number units work together', () => {
     expect(
       await runCode(`1 joule/meter^2 + 2 calories/inch^2 as kg/second^2`)
     ).toMatchObject({
-      value: F(209216129000, 16129),
+      value: N(209216129000, 16129),
       type: t.number(
-        U([
-          u('g', { multiplier: toFraction(1000) }),
-          u('seconds', { exp: F(-2) }),
-        ])
+        U([u('g', { multiplier: N(1000) }), u('seconds', { exp: N(-2) })])
       ),
     });
   });
 
   it('expands expandable units (1)', async () => {
     expect(await runCode(`1 squaremeter + 2 m^2`)).toMatchObject({
-      value: F(3),
-      type: t.number(U('m', { exp: F(2) })),
+      value: N(3),
+      type: t.number(U('m', { exp: N(2) })),
     });
   });
 
   it('autoconverts expanding expandable units (2)', async () => {
     expect(await runCode(`1 newton/meter^2 + 2 bar`)).toMatchObject({
-      value: F(200001, 100000),
+      value: N(200001, 100000),
       type: t.number(U('bars')),
     });
   });
 
   it('autoconverts expanding expandable units (3)', async () => {
     expect(await runCode(`2 bar + 1 newton/meter^2`)).toMatchObject({
-      value: F(200001),
-      type: t.number(U([u('meters', { exp: F(-2) }), u('newtons')])),
+      value: N(200001),
+      type: t.number(U([u('meters', { exp: N(-2) }), u('newtons')])),
     });
   });
 
   it('autoconverts expanding expandable units (4)', async () => {
     expect(await runCode(`2 bar + 1 newton/inch^2 as Pa`)).toMatchObject({
-      value: F(3250800000, 16129),
+      value: N(3250800000, 16129),
       type: t.number(U('Pa')),
     });
   });
 
   it('volume expanding units', async () => {
     expect(await runCode(`(1 ft * 1 ft * 1 ft) as ft3`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: t.number(U('ft3')),
     });
     expect(await runCode(`(1 inch * 1 inch * 1 inch) as in3`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: t.number(U('in3')),
     });
     expect(await runCode(`(1 yd * 1 yd * 1 yd) as yd3`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: t.number(U('yd3')),
     });
     expect(await runCode(`(1 mi * 1 mi * 1 mi) as cumi`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: t.number(U('cumi')),
     });
   });
 
   it('converts to contracted unit (1)', async () => {
     expect(await runCode(`1 newtons/meter^2 in bars`)).toMatchObject({
-      value: F(1, 100000),
+      value: N(1, 100000),
       type: t.number(U('bars')),
     });
   });
@@ -1485,8 +1482,8 @@ describe('number units work together', () => {
     const run = await runCode(`3600 kj in kw h`);
 
     expect(run).toMatchObject({
-      value: F(1000),
-      type: t.number(U([u('w', { multiplier: toFraction(1000) }), u('h')])),
+      value: N(1000),
+      type: t.number(U([u('w', { multiplier: N(1000) }), u('h')])),
     });
   });
 
@@ -1494,8 +1491,8 @@ describe('number units work together', () => {
     const run = await runCode(`1 cm in mm`);
 
     expect(run).toMatchObject({
-      value: F(1, 100),
-      type: t.number(U([u('m', { multiplier: toFraction(0.001) })])),
+      value: N(1, 100),
+      type: t.number(U([u('m', { multiplier: N(0.001) })])),
     });
   });
 
@@ -1503,8 +1500,8 @@ describe('number units work together', () => {
     const run = await runCode(`1 decimetre in centimetre`);
 
     expect(run).toMatchObject({
-      value: F(1, 10),
-      type: t.number(U([u('metre', { multiplier: toFraction(0.01) })])),
+      value: N(1, 10),
+      type: t.number(U([u('metre', { multiplier: N(0.01) })])),
     });
   });
 
@@ -1512,8 +1509,8 @@ describe('number units work together', () => {
     const run = await runCode(`1 cm in millimetre`);
 
     expect(run).toMatchObject({
-      value: F(1, 100),
-      type: t.number(U([u('metre', { multiplier: toFraction(1, 1000) })])),
+      value: N(1, 100),
+      type: t.number(U([u('metre', { multiplier: N(1, 1000) })])),
     });
   });
 
@@ -1521,8 +1518,8 @@ describe('number units work together', () => {
     const run = await runCode(`1 mm in nm`);
 
     expect(run).toMatchObject({
-      value: F(1, 1000),
-      type: t.number(U([u('m', { multiplier: toFraction(1, 1_000_000_000) })])),
+      value: N(1, 1000),
+      type: t.number(U([u('m', { multiplier: N(1, 1_000_000_000) })])),
     });
   });
 
@@ -1530,8 +1527,8 @@ describe('number units work together', () => {
     const run = await runCode(`1 mm in μm`);
 
     expect(run).toMatchObject({
-      value: F(1, 1000),
-      type: t.number(U([u('m', { multiplier: toFraction(0.000001) })])),
+      value: N(1, 1000),
+      type: t.number(U([u('m', { multiplier: N(0.000001) })])),
     });
   });
 
@@ -1539,8 +1536,8 @@ describe('number units work together', () => {
     const run = await runCode(`1 cF + 1 cF`);
 
     expect(run).toMatchObject({
-      value: F(2, 100),
-      type: t.number(U([u('F', { multiplier: toFraction(1, 100) })])),
+      value: N(2, 100),
+      type: t.number(U([u('F', { multiplier: N(1, 100) })])),
     });
   });
 
@@ -1548,43 +1545,43 @@ describe('number units work together', () => {
     const run = await runCode(`1 centifarad + 1 centifarad`);
 
     expect(run).toMatchObject({
-      value: F(2, 100),
-      type: t.number(U([u('farads', { multiplier: toFraction(1, 100) })])),
+      value: N(2, 100),
+      type: t.number(U([u('farads', { multiplier: N(1, 100) })])),
     });
   });
 
   it('converts to contracted unit (2)', async () => {
     expect(await runCode(`10 kg*m/sec^2 in newtons`)).toMatchObject({
-      value: F(10),
+      value: N(10),
       type: t.number(U('newtons')),
     });
   });
 
   it('divides and cancels unknown units', async () => {
     expect(await runCode(`1 banana / ( 3 bananas )`)).toMatchObject({
-      value: F(1, 3),
+      value: N(1, 3),
       type: t.number(),
     });
   });
 
   it('divides and cancels known units', async () => {
     expect(await runCode(`1 hour / ( 3 hours )`)).toMatchObject({
-      value: F(1, 3),
+      value: N(1, 3),
       type: t.number(),
     });
   });
 
   it('divides and cancels time units', async () => {
     expect(await runCode(`1 hour / ( 3 minutes )`)).toMatchObject({
-      value: F(20),
+      value: N(20),
       type: t.number(),
     });
   });
 
   it('autoconverts time units correctly', async () => {
     expect(await runCode(`1 hour / ( 3 minutes^2 )`)).toMatchObject({
-      value: F(20),
-      type: t.number(U('minutes', { exp: F(-1) })),
+      value: N(20),
+      type: t.number(U('minutes', { exp: N(-1) })),
     });
   });
 
@@ -1594,8 +1591,8 @@ describe('number units work together', () => {
         30 watts * 50 hours/month
       `)
     ).toMatchObject({
-      value: F(1500),
-      type: t.number(U([u('hours'), u('months', { exp: F(-1) }), u('watts')])),
+      value: N(1500),
+      type: t.number(U([u('hours'), u('months', { exp: N(-1) }), u('watts')])),
     });
   });
 
@@ -1605,7 +1602,7 @@ describe('number units work together', () => {
         2 usd/watt * 3 watt
       `)
     ).toMatchObject({
-      value: F(6),
+      value: N(6),
       type: t.number(U([u('usd')])),
     });
   });
@@ -1616,8 +1613,8 @@ describe('number units work together', () => {
         2 usd/watt/hour * 3 watt
       `)
     ).toMatchObject({
-      value: F(6),
-      type: t.number(U([u('hours', { exp: F(-1) }), u('usd')])),
+      value: N(6),
+      type: t.number(U([u('hours', { exp: N(-1) }), u('usd')])),
     });
   });
 
@@ -1627,8 +1624,8 @@ describe('number units work together', () => {
       3 watt * 2 usd/watt/hour
       `)
     ).toMatchObject({
-      value: F(6),
-      type: t.number(U([u('hours', { exp: F(-1) }), u('usd')])),
+      value: N(6),
+      type: t.number(U([u('hours', { exp: N(-1) }), u('usd')])),
     });
   });
 
@@ -1638,8 +1635,8 @@ describe('number units work together', () => {
         1500 watt*hours/month * 1 usd/watt/hour
       `)
     ).toMatchObject({
-      value: F(1500),
-      type: t.number(U([u('months', { exp: F(-1) }), u('usd')])),
+      value: N(1500),
+      type: t.number(U([u('months', { exp: N(-1) }), u('usd')])),
     });
   });
 
@@ -1649,20 +1646,20 @@ describe('number units work together', () => {
         round(30 gallons * 1.4 * 100 USD/gallon, 2)
       `)
     ).toMatchObject({
-      value: F(4200),
+      value: N(4200),
       type: t.number(U('USD')),
     });
   });
 
   it('autoconverts units', async () => {
     expect(await runCode(`30 psi + 1 newton/inch^2`)).toMatchObject({
-      value: F(197582111, 1469600),
-      type: t.number(U([u('inches', { exp: F(-2) }), u('newtons')])),
+      value: N(197582111, 1469600),
+      type: t.number(U([u('inches', { exp: N(-2) }), u('newtons')])),
     });
 
     expect(await runCode(`30 bar + 100000 N/m^2`)).toMatchObject({
-      value: F(3100000),
-      type: t.number(U([u('N'), u('m', { exp: F(-2) })])),
+      value: N(3100000),
+      type: t.number(U([u('N'), u('m', { exp: N(-2) })])),
     });
   });
 
@@ -1677,16 +1674,16 @@ describe('number units work together', () => {
       `)
     ).toMatchObject({
       value: [
-        [F(0), F(1)], // YearSeq
-        [F(1), F(27, 25)], // InterestRate
-        [F(4), F(432, 100)], // Price
+        [N(0), N(1)], // YearSeq
+        [N(1), N(27, 25)], // InterestRate
+        [N(4), N(432, 100)], // Price
       ],
       type: t.table({
         indexName: 'Fuel',
         columnTypes: [
           t.number(),
           t.number(),
-          t.number(U([u('USD'), u('gallons', { exp: F(-1) })])),
+          t.number(U([u('USD'), u('gallons', { exp: N(-1) })])),
         ],
         columnNames: ['Seq', 'InterestRate', 'Price'],
       }),
@@ -1695,9 +1692,9 @@ describe('number units work together', () => {
 
   it("nonscalar unit conversions don't get in the way", async () => {
     expect(await runCode(`44 zettabytes/year`)).toMatchObject({
-      value: F(44000000000000000000000),
+      value: N(44000000000000000000000),
       type: t.number(
-        U([u('bytes', { multiplier: F(1e21) }), u('years', { exp: F(-1) })])
+        U([u('bytes', { multiplier: N(1e21) }), u('years', { exp: N(-1) })])
       ),
     });
   });
@@ -1708,7 +1705,7 @@ describe('unit conversion', () => {
     expect(
       await runCode('27.33 miles/hour in kilometer/second in mph')
     ).toMatchObject({
-      value: F(2733, 100),
+      value: N(2733, 100),
       type: t.number(U('mph')),
     });
   });
@@ -1719,7 +1716,7 @@ describe('unit conversion', () => {
         [1, 2, 3] as watts
       `)
     ).toMatchObject({
-      value: [F(1), F(2), F(3)],
+      value: [N(1), N(2), N(3)],
       type: t.column(t.number(U('watts')), 3),
     });
   });
@@ -1741,9 +1738,9 @@ describe('unit conversion', () => {
       `)
     ).toMatchObject({
       value: [
-        F(307671875, 183264048),
-        F(2461375, 2950464),
-        F(12306875, 5900928),
+        N(307671875, 183264048),
+        N(2461375, 2950464),
+        N(12306875, 5900928),
       ],
       type: t.column(t.number(U('hours')), 'unknown', 'Animals'),
     });
@@ -1790,16 +1787,16 @@ describe('unit conversion', () => {
         },
       },
       value: [
-        [F(168, 100), F(83, 100)],
-        [F(168, 100), F(83, 100)],
-        [F(168, 100), F(83, 100)],
+        [N(168, 100), N(83, 100)],
+        [N(168, 100), N(83, 100)],
+        [N(168, 100), N(83, 100)],
       ],
     });
   });
 
   it('converts autoexpanding units correctly', async () => {
     expect(await runCode(`1000 milliliters in liters`)).toMatchObject({
-      value: F(1),
+      value: N(1),
       type: t.number(U('liters')),
     });
   });
@@ -1813,7 +1810,7 @@ describe('user-defined units', () => {
       2 tonnes in nuno
     `)
     ).toMatchObject({
-      value: F(20),
+      value: N(20),
       type: t.number(U('nuno', { known: false })),
     });
   });
@@ -1826,7 +1823,7 @@ describe('user-defined units', () => {
         2 tonnes in fatnuno
       `)
     ).toMatchObject({
-      value: F(10),
+      value: N(10),
       type: t.number(U('fatnuno', { known: false })),
     });
   });
@@ -1838,7 +1835,7 @@ describe('user-defined units', () => {
         FlourDensity * 1 cup
       `)
     ).toMatchObject({
-      value: F(200),
+      value: N(200),
       type: t.number(U('g')),
     });
   });
@@ -1850,7 +1847,7 @@ describe('user-defined units', () => {
       Glass = 0.33 L
       Sugar in Glass`)
     ).toMatchObject({
-      value: F(25, 33),
+      value: N(25, 33),
       type: t.number(U('Glass', { known: false })),
     });
   });
@@ -1859,20 +1856,20 @@ describe('user-defined units', () => {
 describe('math operators', () => {
   it('rounds number', async () => {
     expect(await runCode(`round(1.7 grams)`)).toMatchObject({
-      value: F(2),
+      value: N(2),
       type: t.number(U('grams')),
     });
   });
   it('sqrt works on units', async () => {
     expect(await runCode(`sqrt(1 banana)`)).toMatchObject({
-      value: F(1),
-      type: t.number(U('bananas', { known: false, exp: F(1, 2) })),
+      value: N(1),
+      type: t.number(U('bananas', { known: false, exp: N(1, 2) })),
     });
   });
   it('sqrt works on non-rational results by approximation', async () => {
     expect(await runCode(`sqrt(60 m / (9.8m) / s^2)`)).toMatchObject({
-      value: F(9032400, 3650401),
-      type: t.number(U('s', { exp: F(-1) })),
+      value: N(9032400, 3650401),
+      type: t.number(U('s', { exp: N(-1) })),
     });
   });
 });
@@ -1883,13 +1880,13 @@ describe('len', () => {
       type: {
         type: 'number',
       },
-      value: F(1),
+      value: N(1),
     });
     expect(await runCode('len(["contents"])')).toMatchObject({
       type: {
         type: 'number',
       },
-      value: F(1),
+      value: N(1),
     });
   });
 });
@@ -1897,8 +1894,8 @@ describe('len', () => {
 describe('type coercion', () => {
   it('can type coerce column cells to the same unit', async () => {
     expect(await runCode(`[1 centigram, 2]`)).toMatchObject({
-      value: [F(1, 100), F(2, 100)],
-      type: t.column(t.number(U('grams', { multiplier: F(1, 100) })), 2),
+      value: [N(1, 100), N(2, 100)],
+      type: t.column(t.number(U('grams', { multiplier: N(1, 100) })), 2),
     });
   });
 
@@ -1906,7 +1903,7 @@ describe('type coercion', () => {
     expect(await runCode('(30 days in month) + 1')).toMatchInlineSnapshot(`
       Object {
         "type": ~month,
-        "value": Fraction(2),
+        "value": DeciNumber(2),
       }
     `);
   });
@@ -1914,8 +1911,8 @@ describe('type coercion', () => {
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('can coerce the arguments of an autoconverted function', async () => {
     expect(await runCode(`1 centigram + 2`)).toMatchObject({
-      value: F(3, 100),
-      type: t.number(U('grams', { multiplier: F(1, 100) })),
+      value: N(3, 100),
+      type: t.number(U('grams', { multiplier: N(1, 100) })),
     });
   });
 });
@@ -1926,51 +1923,51 @@ describe('unit qualities', () => {
       type: {
         errorCause: InferError.needOneAndOnlyOneUnit(),
       },
-      value: F(3),
+      value: N(3),
     });
   });
 
   it('applies to numbers with single unit', async () => {
     expect(await runCode('3 grams of sugar')).toMatchObject({
-      value: F(3),
+      value: N(3),
       type: t.number(U('grams', { quality: 'sugar' })),
     });
   });
 
   it('applies to numbers with single unit with exponent', async () => {
     expect(await runCode('600 m^2 of land')).toMatchObject({
-      value: F(600),
-      type: t.number(U('m', { exp: F(2), quality: 'land' })),
+      value: N(600),
+      type: t.number(U('m', { exp: N(2), quality: 'land' })),
     });
   });
 
   it('applies to multi-dimensional values', async () => {
     expect(await runCode('[1, 2, 3] grams of sugar')).toMatchObject({
-      value: [F(1), F(2), F(3)],
+      value: [N(1), N(2), N(3)],
       type: t.column(t.number(U('grams', { quality: 'sugar' })), 3),
     });
   });
 
   it('propagates through addition', async () => {
     expect(await runCode('3 grams of sugar + 1')).toMatchObject({
-      value: F(4),
+      value: N(4),
       type: t.number(U('grams', { quality: 'sugar' })),
     });
   });
 
   it('propagates when divided by unitless number', async () => {
     expect(await runCode('3 grams of sugar / 2')).toMatchObject({
-      value: F(3, 2),
+      value: N(3, 2),
       type: t.number(U('grams', { quality: 'sugar' })),
     });
   });
 
   it('propagates when divided by number with quality', async () => {
     expect(await runCode('3 grams / kilogram of bodymass')).toMatchObject({
-      value: F(3, 1000),
+      value: N(3, 1000),
       type: t.number(
         U([
-          u('grams', { quality: 'bodymass', exp: F(-1), multiplier: F(1000) }),
+          u('grams', { quality: 'bodymass', exp: N(-1), multiplier: N(1000) }),
           u('grams'),
         ])
       ),
@@ -1981,81 +1978,81 @@ describe('unit qualities', () => {
 describe('percentages', () => {
   it('can be added and subtracted from numbers', async () => {
     expect(await runCode('3%')).toMatchObject({
-      value: F(3, 100),
+      value: N(3, 100),
       type: t.number(null, 'percentage'),
     });
     expect(await runCode('3% + 2')).toMatchInlineSnapshot(`
       Object {
         "type": number,
-        "value": Fraction(2.03),
+        "value": DeciNumber(2.03),
       }
     `);
     expect(await runCode('2 + 3%')).toMatchInlineSnapshot(`
       Object {
         "type": number,
-        "value": Fraction(2.06),
+        "value": DeciNumber(2.06),
       }
     `);
     expect(await runCode('3% + 1%')).toMatchInlineSnapshot(`
       Object {
         "type": percentage,
-        "value": Fraction(0.04),
+        "value": DeciNumber(0.04),
       }
     `);
 
     expect(await runCode('100 - 10%')).toMatchInlineSnapshot(`
       Object {
         "type": number,
-        "value": Fraction(90),
+        "value": DeciNumber(90),
       }
     `);
   });
 
   it('multiplies properly', async () => {
     expect(await runCode('3% * 2')).toMatchObject({
-      value: F(6, 100),
+      value: N(6, 100),
       type: t.number(),
     });
     expect(await runCode('2 * 3%')).toMatchObject({
-      value: F(6, 100),
+      value: N(6, 100),
       type: t.number(),
     });
     expect(await runCode('3% * 3%')).toMatchObject({
-      value: F(9, 10000),
+      value: N(9, 10000),
       type: t.number(null, 'percentage'),
     });
   });
 
   it('divides properly', async () => {
     expect(await runCode('3% / 2')).toMatchObject({
-      value: F(15, 1000),
+      value: N(15, 1000),
       type: t.number(),
     });
     expect(await runCode('2 / 50%')).toMatchObject({
-      value: F(4),
+      value: N(4),
       type: t.number(),
     });
     expect(await runCode('100% / 10%')).toMatchObject({
-      value: F(10),
+      value: N(10),
       type: t.number(null, 'percentage'),
     });
   });
 
   it('propagates units correctly', async () => {
     expect(await runCode('3% / 2 meters')).toMatchObject({
-      value: F(15, 1000),
+      value: N(15, 1000),
       type: t.number(U('meters')),
     });
     expect(await runCode('8 meters * 50%')).toMatchObject({
-      value: F(4),
+      value: N(4),
       type: t.number(U('meters')),
     });
     expect(await runCode('100% + 2 meter')).toMatchObject({
-      value: F(3),
+      value: N(3),
       type: t.number(U('meters')),
     });
     expect(await runCode('100% + 50%')).toMatchObject({
-      value: F(3, 2),
+      value: N(3, 2),
       type: t.number(null, 'percentage'),
     });
   });
@@ -2064,7 +2061,7 @@ describe('percentages', () => {
     expect(await runCode('0.1 in %')).toMatchInlineSnapshot(`
       Object {
         "type": percentage,
-        "value": Fraction(0.1),
+        "value": DeciNumber(0.1),
       }
     `);
   });
@@ -2083,7 +2080,7 @@ describe('tiered function', () => {
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
         "type": number,
-        "value": Fraction(104),
+        "value": DeciNumber(104),
       }
     `);
   });
@@ -2100,7 +2097,7 @@ describe('tiered function', () => {
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
         "type": EUR,
-        "value": Fraction(104),
+        "value": DeciNumber(104),
       }
     `);
   });
@@ -2117,7 +2114,7 @@ describe('tiered function', () => {
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
         "type": EUR,
-        "value": Fraction(104),
+        "value": DeciNumber(104),
       }
     `);
   });
@@ -2131,7 +2128,7 @@ describe('tiered function', () => {
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
         "type": $,
-        "value": Fraction(12),
+        "value": DeciNumber(12),
       }
     `);
   });
@@ -2146,7 +2143,7 @@ describe('grammar extensions', () => {
     expect(await runCode(tiered)).toMatchInlineSnapshot(`
       Object {
         "type": $,
-        "value": Fraction(1200),
+        "value": DeciNumber(1200),
       }
     `);
   });

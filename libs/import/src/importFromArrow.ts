@@ -4,7 +4,7 @@ import {
   SerializedType,
   SerializedTypes,
 } from '@decipad/computer';
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { tableFromIPC, Table, Type as ArrowType } from 'apache-arrow';
 import { errorResult } from './utils/errorResult';
@@ -98,7 +98,7 @@ const evaluateCell = (cell: unknown): Result.OneResult => {
     return Result.UnknownValue.getData();
   }
   if (tof === 'number') {
-    return toFraction(cell as number);
+    return N(cell as number);
   }
   if (tof === 'boolean' || tof === 'string') {
     return cell as string | boolean;

@@ -48,6 +48,9 @@
     },
     {
       "path": "../slate-yjs"
+    },
+    {
+      "path": "../number"
     }
   ]
 }

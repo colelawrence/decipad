@@ -9,14 +9,14 @@ Keyboard shortcuts make editing and writing faster.
 
 ## Shortcuts to Create Blocks
 
-- **Heading**, type `#` followed by a `space` <br></br>
-- **Sub-heading**, type `##` followed by a `space` <br></br>
-- **Calculations Block**, type `=` or <code>\`\`\`</code> followed by a`space` <br></br>
-- **Bullet List**, type `-` or `*` followed by a `space` <br></br>
-- **Numbered List**, type `1.` followed by a `space` <br></br>
-- **Block Quote**, type`>` followed by a `space` <br></br>
-- **Callout**, type `>!` followed by a `space` <br></br>
-- **Divider**, type `---` followed by a `space` <br></br>
+- **Heading**, type `#` followed by a `space` <br />
+- **Sub-heading**, type `##` followed by a `space` <br />
+- **Calculations Block**, type `=` or <code>\`\`\`</code> followed by a`space` <br />
+- **Bullet List**, type `-` or `*` followed by a `space` <br />
+- **Numbered List**, type `1.` followed by a `space` <br />
+- **Block Quote**, type`>` followed by a `space` <br />
+- **Callout**, type `>!` followed by a `space` <br />
+- **Divider**, type `---` followed by a `space` <br />
 
 ## Shortcuts to Format Text
 

@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import * as Values from '../value';
 import { Type, build as t } from '../type';
 import {
@@ -7,7 +7,6 @@ import {
   automapValues,
   automapValuesForReducer,
 } from './automap';
-import { F } from '../utils';
 
 // needed because JSON.stringify(BigInt) does not work
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
@@ -231,7 +230,7 @@ describe('automapValues', () => {
       ([v1, v2]) => {
         calledOnValues.push(Values.Column.fromValues([v1, v2]));
         return Values.fromJS(
-          (v1.getData() as Fraction).mul(v2.getData() as Fraction)
+          (v1.getData() as DeciNumber).mul(v2.getData() as DeciNumber)
         );
       }
     );
@@ -240,16 +239,16 @@ describe('automapValues', () => {
       Array [
         Array [
           Array [
-            Fraction(4),
-            Fraction(8),
+            DeciNumber(4),
+            DeciNumber(8),
           ],
           Array [
-            Fraction(16),
-            Fraction(32),
+            DeciNumber(16),
+            DeciNumber(32),
           ],
           Array [
-            Fraction(64),
-            Fraction(128),
+            DeciNumber(64),
+            DeciNumber(128),
           ],
         ],
       ]
@@ -257,28 +256,28 @@ describe('automapValues', () => {
     expect(calledOnValues.map((v) => v.getData())).toMatchInlineSnapshot(`
       Array [
         Array [
-          Fraction(2),
-          Fraction(2),
+          DeciNumber(2),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(4),
-          Fraction(2),
+          DeciNumber(4),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(8),
-          Fraction(2),
+          DeciNumber(8),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(16),
-          Fraction(2),
+          DeciNumber(16),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(32),
-          Fraction(2),
+          DeciNumber(32),
+          DeciNumber(2),
         ],
         Array [
-          Fraction(64),
-          Fraction(2),
+          DeciNumber(64),
+          DeciNumber(2),
         ],
       ]
     `);
@@ -286,7 +285,7 @@ describe('automapValues', () => {
 
   describe('automapping', () => {
     const sumOne = ([val]: Values.Value[]) =>
-      Values.fromJS((val.getData() as Fraction[]).reduce((a, b) => a.add(b)));
+      Values.fromJS((val.getData() as DeciNumber[]).reduce((a, b) => a.add(b)));
 
     const combine = (values: Values.Value[]) =>
       Values.fromJS(
@@ -317,7 +316,7 @@ describe('automapValues', () => {
         [2]
       );
 
-      expect(result.getData()).toEqual(F(7));
+      expect(result.getData()).toEqual(N(7));
     });
 
     /* eslint-disable-next-line jest/no-disabled-tests */
@@ -346,8 +345,8 @@ describe('automapValues', () => {
         [t.column(t.number(), 2), t.column(t.number(), 3)],
         args,
         ([a1, a2]: Values.Value[]) => {
-          const v1 = a1.getData() as Fraction;
-          const v2 = a2.getData() as Fraction[];
+          const v1 = a1.getData() as DeciNumber;
+          const v2 = a2.getData() as DeciNumber[];
 
           calls.push([v1, v2]);
 
@@ -607,7 +606,7 @@ describe('automapValues', () => {
 
 describe('automap for reducers', () => {
   const sum = ([value]: Values.Value[]) =>
-    Values.fromJS((value.getData() as Fraction[]).reduce((a, b) => a.add(b)));
+    Values.fromJS((value.getData() as DeciNumber[]).reduce((a, b) => a.add(b)));
   const sumFunctor = ([type]: Type[]) => type.reduced().isScalar('number');
 
   describe('automapTypesForReducer', () => {
@@ -661,7 +660,7 @@ describe('automap for reducers', () => {
           oneDeeValue as Values.Column,
           sum
         )?.getData()
-      ).toMatchInlineSnapshot(`Fraction(3)`);
+      ).toMatchInlineSnapshot(`DeciNumber(3)`);
     });
 
     it('automapValuesForReducer can reduce', () => {
@@ -676,8 +675,8 @@ describe('automap for reducers', () => {
         )?.getData()
       ).toMatchInlineSnapshot(`
         Array [
-          Fraction(1),
-          Fraction(2),
+          DeciNumber(1),
+          DeciNumber(2),
         ]
       `);
     });
@@ -694,7 +693,7 @@ describe('automap for reducers', () => {
         )?.getData()
       ).toMatchInlineSnapshot(`
         Array [
-          Fraction(3),
+          DeciNumber(3),
         ]
       `);
     });

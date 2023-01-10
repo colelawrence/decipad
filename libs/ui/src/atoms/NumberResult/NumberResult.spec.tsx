@@ -72,19 +72,18 @@ describe('NumberResult', () => {
     expect(container.textContent).toMatchInlineSnapshot(`"≈0.33"`);
   });
 
-  it('shows approximation of long decimal', async () => {
-    {
-      const { container } = render(
-        <NumberResult {...await runCode(`5.81 / 41248.20`)} />
-      );
-      expect(container.textContent).toMatchInlineSnapshot(`"≈140.85×10⁻⁶"`);
-    }
-    {
-      const { container } = render(
-        <NumberResult {...await runCode(`0.000007 / 2`)} />
-      );
-      expect(container.textContent).toMatchInlineSnapshot(`"≈3.5×10⁻⁶"`);
-    }
+  it('shows approximation of long decimal (1)', async () => {
+    const { container } = render(
+      <NumberResult {...await runCode(`5.81 / 41248.20`)} />
+    );
+    expect(container.textContent).toMatchInlineSnapshot(`"≈140.85×10⁻⁶"`);
+  });
+
+  it('shows approximation of long decimal (2)', async () => {
+    const { container } = render(
+      <NumberResult {...await runCode(`0.000007 / 2`)} />
+    );
+    expect(container.textContent).toMatchInlineSnapshot(`"≈3.5×10⁻⁶"`);
   });
 
   describe('units', () => {

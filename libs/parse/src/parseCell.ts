@@ -1,5 +1,5 @@
 import { CellValueType, TableCellType } from '@decipad/editor-types';
-import Fraction, { ZERO, from as toFraction } from '@decipad/fraction';
+import DeciNumber, { N, UNDEFINED } from '@decipad/number';
 import {
   AST,
   Computer,
@@ -68,8 +68,8 @@ const fixCellUnit = (unit: Unit[]): Unit[] => {
   return unit.map((u): Unit => {
     return {
       ...u,
-      multiplier: toFraction(u.multiplier),
-      exp: toFraction(u.exp),
+      multiplier: N(u.multiplier),
+      exp: N(u.exp),
     };
   });
 };
@@ -123,7 +123,7 @@ export const parseCell = memoize(
                 // eslint-disable-next-line no-param-reassign
                 result.value = convertToMultiplierUnit(
                   convertBetweenUnits(
-                    result.value as Fraction,
+                    result.value as DeciNumber,
                     type.unit,
                     cellUnit
                   ),
@@ -135,7 +135,7 @@ export const parseCell = memoize(
                 return astNode(
                   'literal',
                   'number' as const,
-                  toFraction(result.value as Fraction),
+                  N(result.value as DeciNumber),
                   type.numberFormat
                 );
               }
@@ -143,7 +143,7 @@ export const parseCell = memoize(
               const literal = astNode(
                 'literal',
                 'number' as const,
-                toFraction(result.value as Fraction)
+                N(result.value as DeciNumber)
               );
               const unit = unitToAST(cellUnit);
 
@@ -197,13 +197,13 @@ export const getNullReplacementValue = (
     return dateToAST(cellType, new Date('2020-01-01'));
   }
   if (cellType.kind === 'number') {
-    return astNode('literal', 'number', ZERO);
+    return astNode('literal', 'number', UNDEFINED);
   }
   if (cellType.kind === 'boolean') {
     return astNode('literal', 'boolean', false);
   }
   if (cellType.kind === 'dropdown' && cellType.type === 'number') {
-    return astNode('literal', 'number', ZERO);
+    return astNode('literal', 'number', UNDEFINED);
   }
   return astNode('literal', 'string', '');
 };

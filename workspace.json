@@ -47,6 +47,7 @@
     "nodelambda": "libs/nodelambda",
     "notebook": "libs/notebook",
     "notebook-state": "libs/notebook-state",
+    "number": "libs/number",
     "parse": "libs/parse",
     "queries": "libs/queries",
     "react-contexts": "libs/react-contexts",

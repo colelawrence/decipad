@@ -37,8 +37,8 @@ describe('matrix op evaluation', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(70),
-        Fraction(90),
+        DeciNumber(70),
+        DeciNumber(90),
       ]
     `);
 
@@ -51,7 +51,7 @@ describe('matrix op evaluation', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(70),
+        DeciNumber(70),
       ]
     `);
   });
@@ -66,8 +66,8 @@ describe('matrix op evaluation', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(123),
-        Fraction(123),
+        DeciNumber(123),
+        DeciNumber(123),
       ]
     `);
   });
@@ -82,8 +82,8 @@ describe('matrix op evaluation', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(123),
-        Fraction(90),
+        DeciNumber(123),
+        DeciNumber(90),
       ]
     `);
   });
@@ -243,8 +243,8 @@ describe('assigning multidimensional values', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(1),
-        Fraction(2),
+        DeciNumber(1),
+        DeciNumber(2),
       ]
     `);
   });
@@ -259,8 +259,8 @@ describe('assigning multidimensional values', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        Fraction(70),
-        Fraction(150),
+        DeciNumber(70),
+        DeciNumber(150),
       ]
     `);
   });

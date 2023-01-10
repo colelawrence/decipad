@@ -1,4 +1,4 @@
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { AST, Time, DateValue } from '..';
 import { getIdentifierString, getOfType } from '../utils';
@@ -19,16 +19,16 @@ import { Context } from './context';
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 
 export const getNumberSequenceError = (
-  start: Fraction,
-  end: Fraction,
-  by: Fraction
+  start: DeciNumber,
+  end: DeciNumber,
+  by: DeciNumber
 ): InferError | undefined => {
   const diff = start.compare(end);
   if (diff === 0) {
     return undefined;
-  } else if (by.equals(0)) {
+  } else if (by.equals(ZERO)) {
     return InferError.sequenceStepZero();
-  } else if (Math.sign(diff) === by.compare(0)) {
+  } else if (Math.sign(diff) === by.compare(ZERO)) {
     return InferError.invalidSequenceStep(
       start.valueOf(),
       end.valueOf(),
@@ -45,8 +45,7 @@ export const getNumberSequenceErrorN = (
   start: number | bigint,
   end: number | bigint,
   by: number | bigint
-): InferError | undefined =>
-  getNumberSequenceError(toFraction(start), toFraction(end), toFraction(by));
+): InferError | undefined => getNumberSequenceError(N(start), N(end), N(by));
 
 type SimplerUnit = 'month' | 'day' | 'millisecond';
 
@@ -105,7 +104,7 @@ export const getDateSequenceError = (
   }
 };
 
-const tryGetNumber = (n: AST.Expression): Fraction | undefined => {
+const tryGetNumber = (n: AST.Expression): DeciNumber | undefined => {
   if (n.type === 'literal' && n.args[0] === 'number') {
     return n.args[1];
   }
@@ -180,8 +179,8 @@ export const inferSequence = async (
       const by = byN
         ? tryGetNumber(byN)
         : start.compare(end) < 0
-        ? toFraction(1n)
-        : toFraction(-1n);
+        ? ONE
+        : N(-1n);
       if (by) {
         const countOrError = getNumberSequenceError(start, end, by);
         return countOrError instanceof InferError

@@ -1,21 +1,22 @@
+import { N } from '@decipad/number';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 import { oneMile, oneYard, oneFoot, oneInch } from './length-units';
 
-const oneAcre = 40_468_564_224;
+const oneAcre = N(40_468_564_224);
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
 
-const squarekilometre: Converter = (x) => x.mul(1_000_000);
+const squarekilometre: Converter = (x) => x.mul(N(1_000_000));
 const squaremile: Converter = (x) => x.mul(oneMile).mul(oneMile);
 const squareyard: Converter = (x) => x.mul(oneYard).mul(oneYard);
 const squarefoot: Converter = (x) => x.mul(oneFoot).mul(oneFoot);
 const squareinch: Converter = (x) => x.mul(oneInch).mul(oneInch);
-const acre: Converter = (x) => x.mul(oneAcre).div(1e7);
-const barony: Converter = (x) => x.mul(oneAcre).div(1e7).mul(4_000);
-const barn: Converter = (x) => x.div(1e29);
-const are: Converter = (x) => x.mul(100);
-const ha: Converter = (x) => x.mul(10_000);
+const acre: Converter = (x) => x.mul(oneAcre).div(N(1e7));
+const barony: Converter = (x) => x.mul(oneAcre).div(N(1e7)).mul(N(4_000));
+const barn: Converter = (x) => x.div(N(1e29));
+const are: Converter = (x) => x.mul(N(100));
+const ha: Converter = (x) => x.mul(N(10_000));
 
 export const units: UnitOfMeasure[] = [
   {

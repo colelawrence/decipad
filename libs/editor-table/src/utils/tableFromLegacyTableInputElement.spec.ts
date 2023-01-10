@@ -8,7 +8,7 @@ import {
   TableData,
   DeprecatedTableInputElement,
 } from '@decipad/editor-types';
-import { F } from '@decipad/editor-utils';
+import { N } from '@decipad/number';
 import { tableFromLegacyTableInputElement } from './tableFromLegacyTableInputElement';
 
 describe('tableFromLegacyTableInputElement', () => {
@@ -23,8 +23,8 @@ describe('tableFromLegacyTableInputElement', () => {
             unit: [
               {
                 unit: 'bananas',
-                exp: F(1),
-                multiplier: F(1),
+                exp: N(1),
+                multiplier: N(1),
                 known: false,
               },
             ],
@@ -75,9 +75,9 @@ describe('tableFromLegacyTableInputElement', () => {
                 kind: 'number',
                 unit: [
                   {
-                    exp: F(1),
+                    exp: N(1),
                     known: false,
-                    multiplier: F(1),
+                    multiplier: N(1),
                     unit: 'bananas',
                   },
                 ],

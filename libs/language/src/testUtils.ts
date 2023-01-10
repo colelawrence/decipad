@@ -1,4 +1,4 @@
-import FFraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { AnyMapping, zip } from '@decipad/utils';
 import type { AST } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
@@ -63,7 +63,7 @@ export const runCodeForVariables = async (
 };
 
 const userValue = (type: Type, value: OneResult): OneResult => {
-  if (value instanceof FFraction) {
+  if (value instanceof DeciNumber) {
     const units = normalizeUnits(type.unit);
     return convertToMultiplierUnit(value, units);
   }
@@ -160,7 +160,7 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
 export const snapshotUnit = (unit: Unit[]) => {
   return unit
     .map((u) => {
-      const exp = toFraction(u.exp).valueOf();
+      const exp = N(u.exp).valueOf();
 
       if (exp !== 1) {
         return `${u.unit}^${exp}`;

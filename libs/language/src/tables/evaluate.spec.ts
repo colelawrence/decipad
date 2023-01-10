@@ -28,25 +28,25 @@ describe('evaluateTableColumn', () => {
   it('can emulate a quadratic function', async () => {
     expect(await testEvaluate(c('*', l(2), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
-        Array [
-          Fraction(2),
-          Fraction(4),
-          Fraction(8),
-          Fraction(16),
-        ]
-      `);
+      Array [
+        DeciNumber(2),
+        DeciNumber(4),
+        DeciNumber(8),
+        DeciNumber(16),
+      ]
+    `);
   });
 
   it('can be used in a column with inherent size', async () => {
     expect(await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
-        Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(6),
-          Fraction(24),
-        ]
-      `);
+      Array [
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(6),
+        DeciNumber(24),
+      ]
+    `);
   });
 
   it('evaluates formulae', async () => {

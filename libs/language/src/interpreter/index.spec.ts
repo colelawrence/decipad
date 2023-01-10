@@ -1,5 +1,5 @@
+import { N } from '@decipad/number';
 import {
-  F,
   c,
   l,
   n,
@@ -23,13 +23,13 @@ it('evaluates and returns', async () => {
     n('block', n('assign', n('def', 'A'), l(42))),
   ];
 
-  expect(await run(basicProgram, ['A'])).toEqual([F(42)]);
+  expect(await run(basicProgram, ['A'])).toEqual([N(42)]);
 });
 
 it('Gets specific statement', async () => {
   const basicProgram = [n('block', c('+', l(1), l(1)))];
 
-  expect(await run(basicProgram, [[0, 0]])).toEqual([F(2)]);
+  expect(await run(basicProgram, [[0, 0]])).toEqual([N(2)]);
 });
 
 it('can return multiple results', async () => {
@@ -40,22 +40,22 @@ it('can return multiple results', async () => {
   );
 
   expect(await run([multipleResults], ['Variable', [0, 1]])).toEqual([
-    F(1),
-    F(3),
+    N(1),
+    N(3),
   ]);
 });
 
 it('evaluates conditions', async () => {
   const condition = c('if', l(true), l(1), l(0));
 
-  expect(await runOne(condition)).toEqual(F(1));
+  expect(await runOne(condition)).toEqual(N(1));
 });
 
 describe('ranges', () => {
   it('evaluates ranges', async () => {
     const r = range(1, 10);
 
-    expect(await runOne(r)).toEqual([F(1), F(10)]);
+    expect(await runOne(r)).toEqual([N(1), N(10)]);
 
     // Contains
     expect(await runOne(c('contains', r, l(1)))).toEqual(true);
@@ -96,19 +96,19 @@ describe('ranges', () => {
 describe('sequences', () => {
   it('can be evaluated', async () => {
     expect(await runOne(seq(l(1), l(5), l(1)))).toEqual([
-      F(1),
-      F(2),
-      F(3),
-      F(4),
-      F(5),
+      N(1),
+      N(2),
+      N(3),
+      N(4),
+      N(5),
     ]);
 
     expect(await runOne(seq(l(5), l(1), l(-1)))).toEqual([
-      F(5),
-      F(4),
-      F(3),
-      F(2),
-      F(1),
+      N(5),
+      N(4),
+      N(3),
+      N(2),
+      N(1),
     ]);
 
     expect(
@@ -149,8 +149,8 @@ describe('sequences', () => {
       await runOne(seq(date('2020-02', 'month'), date('2020-01', 'month')))
     ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
 
-    expect(await runOne(seq(l(1), l(3)))).toEqual([F(1), F(2), F(3)]);
-    expect(await runOne(seq(l(3), l(1)))).toEqual([F(3), F(2), F(1)]);
+    expect(await runOne(seq(l(1), l(3)))).toEqual([N(1), N(2), N(3)]);
+    expect(await runOne(seq(l(3), l(1)))).toEqual([N(3), N(2), N(1)]);
   });
 });
 
@@ -166,7 +166,7 @@ describe('functions', () => {
       c('Function Name', l(1), l(2))
     );
 
-    expect(await run([usingFunctions], [0])).toEqual([F(3)]);
+    expect(await run([usingFunctions], [0])).toEqual([N(3)]);
   });
 });
 
@@ -177,7 +177,7 @@ it('Can use variables', async () => {
     n('ref', 'Some Variable')
   );
 
-  expect(await run([withVariables], [0])).toEqual([F(1)]);
+  expect(await run([withVariables], [0])).toEqual([N(1)]);
 });
 
 describe('columns', () => {
@@ -189,26 +189,26 @@ describe('columns', () => {
       c('+', n('ref', 'Array'), col(3, c('+', l(1), l(1)), 1))
     );
 
-    expect(await run([programWithArray], [0])).toEqual([[F(4), F(4), F(4)]]);
+    expect(await run([programWithArray], [0])).toEqual([[N(4), N(4), N(4)]]);
   });
 
   it('can perform calculations between columns and single numbers', async () => {
     expect(await runOne(c('*', col(1, 2, 3), l(2)))).toEqual([
-      F(2),
-      F(4),
-      F(6),
+      N(2),
+      N(4),
+      N(6),
     ]);
 
     expect(await runOne(c('/', col(1, 2, 3), l(2)))).toEqual([
-      F(1, 2),
-      F(1),
-      F(3, 2),
+      N(1, 2),
+      N(1),
+      N(3, 2),
     ]);
 
     expect(await runOne(c('+', l(1), col(1, 2, 3)))).toEqual([
-      F(2),
-      F(3),
-      F(4),
+      N(2),
+      N(3),
+      N(4),
     ]);
   });
 
@@ -216,9 +216,9 @@ describe('columns', () => {
     const column = col(range(1, 2), range(3, 4), range(5, 6));
 
     expect(await runOne(column)).toEqual([
-      [F(1), F(2)],
-      [F(3), F(4)],
-      [F(5), F(6)],
+      [N(1), N(2)],
+      [N(3), N(4)],
+      [N(5), N(6)],
     ]);
 
     expect(await runOne(c('contains', column, l(3)))).toEqual([
@@ -264,8 +264,8 @@ describe('Tables', () => {
         })
       )
     ).toEqual([
-      [F(1), F(2), F(3)],
-      [F(2), F(2), F(2)],
+      [N(1), N(2), N(3)],
+      [N(2), N(2), N(2)],
       [false, false, true],
     ]);
 
@@ -276,7 +276,7 @@ describe('Tables', () => {
           Col2: l(2),
         })
       )
-    ).toEqual([[F(1)], [F(2)]]);
+    ).toEqual([[N(1)], [N(2)]]);
 
     expect(
       await runOne(
@@ -286,8 +286,8 @@ describe('Tables', () => {
         })
       )
     ).toEqual([
-      [F(1), F(2), F(3)],
-      [F(2), F(4), F(6)],
+      [N(1), N(2), N(3)],
+      [N(2), N(4), N(6)],
     ]);
   });
 
@@ -298,7 +298,7 @@ describe('Tables', () => {
           Col1: l(101),
         })
       )
-    ).toEqual([[F(101)]]);
+    ).toEqual([[N(101)]]);
 
     expect(
       await runOne(
@@ -306,7 +306,7 @@ describe('Tables', () => {
           Col1: c('previous', l(101)),
         })
       )
-    ).toEqual([[F(101)]]);
+    ).toEqual([[N(101)]]);
   });
 
   it('can get a column from a table', async () => {
@@ -330,8 +330,8 @@ describe('Tables', () => {
         })
       )
     ).toEqual([
-      [F(1), F(2), F(3)],
-      [F(1), F(2), F(3)],
+      [N(1), N(2), N(3)],
+      [N(1), N(2), N(3)],
     ]);
   });
 
@@ -350,8 +350,8 @@ describe('Tables', () => {
         columnTypes: [{ type: 'number' }, { type: 'number' }],
       },
       value: [
-        [F(1), F(-2), F(3)],
-        [F(1), F(0), F(3)],
+        [N(1), N(-2), N(3)],
+        [N(1), N(0), N(3)],
       ],
     });
   });
@@ -362,13 +362,13 @@ describe('higher dimensions', () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
 
     expect(await runOne(column)).toEqual([
-      [F(1), F(2), F(3)],
-      [F(4), F(5), F(6)],
+      [N(1), N(2), N(3)],
+      [N(4), N(5), N(6)],
     ]);
 
     expect(await runOne(c('+', column, column))).toEqual([
-      [F(2), F(4), F(6)],
-      [F(8), F(10), F(12)],
+      [N(2), N(4), N(6)],
+      [N(8), N(10), N(12)],
     ]);
   });
 
@@ -376,17 +376,17 @@ describe('higher dimensions', () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
 
     expect(await runOne(c('+', column, l(1)))).toEqual([
-      [F(2), F(3), F(4)],
-      [F(5), F(6), F(7)],
+      [N(2), N(3), N(4)],
+      [N(5), N(6), N(7)],
     ]);
     expect(await runOne(c('+', l(1), column))).toEqual([
-      [F(2), F(3), F(4)],
-      [F(5), F(6), F(7)],
+      [N(2), N(3), N(4)],
+      [N(5), N(6), N(7)],
     ]);
 
     expect(await runOne(c('/', column, col(l(1), l(2))))).toEqual([
-      [F(1), F(2), F(3)],
-      [F(2), F(5, 2), F(3)],
+      [N(1), N(2), N(3)],
+      [N(2), N(5, 2), N(3)],
     ]);
   });
 });
@@ -397,7 +397,7 @@ it('Can create columns with disparate types / dims', async () => {
       col(col(l(1), l(2), l(3)), col(l('s'), l(5), l(false), col(l(1))))
     )
   ).toEqual([
-    [F(1), F(2), F(3)],
-    ['s', F(5), false, [F(1)]],
+    [N(1), N(2), N(3)],
+    ['s', N(5), false, [N(1)]],
   ]);
 });

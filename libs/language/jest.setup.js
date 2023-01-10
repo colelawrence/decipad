@@ -2,7 +2,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
-import Fraction from '@decipad/fraction';
 /* eslint-enable import/no-extraneous-dependencies */
 import { DateValue } from './src/value/Value';
 import { stringifyDate } from './src/date';
@@ -55,11 +54,6 @@ expect.addSnapshotSerializer({
   },
 });
 
-expect.addSnapshotSerializer({
-  test: (v) => v instanceof Fraction,
-  print: (f) => `Fraction(${f.toString()})`,
-});
-
 function fetch(resource, init) {
   if (typeof resource === 'string' && resource.startsWith('data:')) {
     const result = parseDataUrl(resource);
@@ -77,8 +71,3 @@ function fetch(resource, init) {
 }
 
 global.fetch = fetch;
-
-// eslint-disable-next-line no-undef
-BigInt.prototype.toJSON = function toJSON() {
-  return this.toString();
-};

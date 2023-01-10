@@ -12,7 +12,7 @@ Notebooks are a place where you can combine numbers and narrative.
   <iframe src="https://www.loom.com/embed/27c131850ed54615b246773895147596" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
 </div>
 
-<br></br>
+<br />
 
 ## Create a New Notebook
 
@@ -20,7 +20,7 @@ Notebooks are a place where you can combine numbers and narrative.
 
 ## Duplicate a Published Notebook
 
-- To **duplicate a published notebook**, make sure you're signed in and visit the notebook you want to duplicate, then click `Duplicate Notebook` on the top right. <br></br>
+- To **duplicate a published notebook**, make sure you're signed in and visit the notebook you want to duplicate, then click `Duplicate Notebook` on the top right. <br />
   Take a look at our [Gallery of examples](/gallery) to find notebooks to duplicate.
 
 ## Duplicate Your Notebook
@@ -47,7 +47,7 @@ Download a copy of the contents of your notebook as a `json` file.
 
 - To **import a notebook**, drag the `.json` file from your computer to any Decipad workspace.
 
-<br></br>
+<br />
 
 ---
 

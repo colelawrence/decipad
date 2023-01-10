@@ -1,9 +1,10 @@
+import { ONE } from '@decipad/number';
 import { ConcatenatedColumn, createLazyOperation } from '.';
 import { OneResult } from '../interpreter/interpreter-types';
 import {
   Column,
   ColumnLike,
-  FractionValue,
+  NumberValue,
   fromJS,
   getColumnLike,
   isColumnLike,
@@ -17,7 +18,7 @@ import { jsCol } from './testUtils';
 import { OperationFunction } from './types';
 
 const addOne: OperationFunction = ([x]) =>
-  fromJS((x as FractionValue).value.add(1));
+  fromJS((x as NumberValue).value.add(ONE));
 const testLazyOp = (...args: Parameters<typeof createLazyOperation>) =>
   getColumnLike(createLazyOperation(...args));
 
@@ -50,9 +51,9 @@ describe.each(
   it('can getData()', () => {
     expect(lazyThing.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(1),
-        Fraction(2),
-        Fraction(3),
+        DeciNumber(1),
+        DeciNumber(2),
+        DeciNumber(3),
       ]
     `);
   });
@@ -91,7 +92,7 @@ describe.each(
 
   it('contains .values', () => {
     const numericValues = lazyThing.values.map((value) =>
-      (value as FractionValue).value.valueOf()
+      (value as NumberValue).value.valueOf()
     );
     expect(numericValues).toEqual([1, 2, 3]);
   });
@@ -100,10 +101,7 @@ describe.each(
 const nums = (values: OneResult | Value): unknown => {
   if (Array.isArray(values)) {
     return values.map(nums);
-  } else if (
-    values instanceof FractionValue ||
-    isColumnLike(values as Column)
-  ) {
+  } else if (values instanceof NumberValue || isColumnLike(values as Column)) {
     return nums((values as Value).getData());
   } else {
     return values.valueOf();
@@ -168,14 +166,14 @@ describe.each(
     expect(lazyThing.getData()).toMatchInlineSnapshot(`
       Array [
         Array [
-          Fraction(1),
-          Fraction(2),
-          Fraction(3),
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
         ],
         Array [
-          Fraction(4),
-          Fraction(5),
-          Fraction(6),
+          DeciNumber(4),
+          DeciNumber(5),
+          DeciNumber(6),
         ],
       ]
     `);

@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { getInstanceof } from '../../utils';
 import { DateValue, Range, fromJS, compare } from '../../value';
 import { Type, build as t } from '../../type';
@@ -18,8 +18,8 @@ export const miscOperators: Record<string, BuiltinSpec> = {
     {
       argTypes: ['range', 'number'],
       fnValues: ([a, b]) => {
-        const [aStart, aEnd] = a.getData() as Fraction[];
-        const bNumber = b.getData() as Fraction;
+        const [aStart, aEnd] = a.getData() as DeciNumber[];
+        const bNumber = b.getData() as DeciNumber;
         return fromJS(
           compare(bNumber, aStart) >= 0 && compare(bNumber, aEnd) <= 0
         );

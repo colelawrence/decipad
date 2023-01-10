@@ -1,10 +1,9 @@
-const { setupFilesAfterEnv, ...baseConfig } = require('../../jest-base.config');
+const baseConfig = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
   rootDir: __dirname,
   displayName: 'computer',
-  setupFilesAfterEnv: [...setupFilesAfterEnv, './jest.setup.js'],
 
   coverageThreshold: {
     global: {

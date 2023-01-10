@@ -1,11 +1,11 @@
 import {
-  DeciNumber,
+  DeciNumberRep,
   formatError,
   formatNumber,
   formatUnit,
 } from '@decipad/format';
 import Queue from 'queue';
-import FFraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import {
   AST,
   AutocompleteName,
@@ -708,7 +708,7 @@ export class Computer {
     this.locale = locale;
   }
 
-  formatNumber(type: SerializedTypes.Number, value: FFraction): DeciNumber {
+  formatNumber(type: SerializedTypes.Number, value: DeciNumber): DeciNumberRep {
     return formatNumber(
       this.locale,
       type.unit,
@@ -718,7 +718,7 @@ export class Computer {
     );
   }
 
-  formatUnit(unit: Unit[], value?: FFraction): string {
+  formatUnit(unit: Unit[], value?: DeciNumber): string {
     return formatUnit(this.locale, unit, value);
   }
 

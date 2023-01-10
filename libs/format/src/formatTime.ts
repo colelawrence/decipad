@@ -1,4 +1,4 @@
-import FFraction, { ONE, toFraction } from '@decipad/fraction';
+import DeciNumber, { ONE, N } from '@decipad/number';
 import {
   areUnitsConvertible,
   convertBetweenUnits,
@@ -14,8 +14,8 @@ const ms = [parseUnit('millisecond')] as Unit[];
 
 export function fromTimeUnitToTimeBase(
   unit: Unit[],
-  n: FFraction
-): [FFraction, boolean] {
+  n: DeciNumber
+): [DeciNumber, boolean] {
   const unitLargerThanDay =
     unit[0].baseQuantity === 'month' ||
     normalizeUnitName(unit[0].unit) === 'week';
@@ -31,7 +31,7 @@ export function fromTimeUnitToTimeBase(
 export function formatTime(
   locale: string,
   units: Unit[],
-  n: FFraction,
+  n: DeciNumber,
   args: Partial<Options> = {}
 ): IntermediateDeciNumber {
   const [inMsTF, simplify] = fromTimeUnitToTimeBase(units, n);
@@ -53,7 +53,7 @@ export function formatTime(
       value,
       value < 1 ? { ...args, formatSubTime: true, verbose: false } : args
     ),
-    value: inMsTF.div(1000).valueOf(),
+    value: inMsTF.div(N(1000)).valueOf(),
   };
 }
 
@@ -63,6 +63,6 @@ export function isTimeUnit(units: Unit[]): boolean {
     units?.length === 1 &&
     unit != null &&
     (unit.baseQuantity === 'second' || unit.baseQuantity === 'month') &&
-    toFraction(unit.exp).equals(ONE)
+    N(unit.exp).equals(ONE)
   );
 }

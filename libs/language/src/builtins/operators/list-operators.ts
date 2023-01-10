@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { RuntimeError } from '../../interpreter';
 import { OneResult } from '../../interpreter/interpreter-types';
@@ -151,7 +151,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
       }
 
       const indices = approximateSubsetSumIndices(
-        upperBound.getData() as Fraction,
+        upperBound.getData() as DeciNumber,
         table.getData() as unknown[][],
         columnIndex
       );

@@ -7,7 +7,7 @@ import { evaluate, Realm } from '../interpreter';
 import { compare } from '../value';
 import { build as t, Type, InferError } from '../type';
 import { getIdentifierString, getOfType } from '../utils';
-import type { FractionValue, Value } from '../value';
+import type { NumberValue, Value } from '../value';
 import { evaluateVariable, getIndexName } from './getVariable';
 
 /** Read inside the square brackets */
@@ -42,7 +42,7 @@ export const matchTargets = async (
 
     // We know these are comparable
     const compareScalars = (a: Value, b: Value) =>
-      compare((a as FractionValue).getData(), (b as FractionValue).getData());
+      compare((a as NumberValue).getData(), (b as NumberValue).getData());
 
     let length = 0;
     const matches = await pSeries(

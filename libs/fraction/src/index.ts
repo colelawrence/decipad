@@ -12,6 +12,21 @@ import { FractionLike, isFractionLike } from './isFractionLike';
     return `Fraction { ${options.stylize(this.toString(), 'number')} }`;
   };
 
+const isNumber = (n: unknown): n is number | bigint => {
+  const tof = typeof n;
+  return tof === 'number' || tof === 'bigint';
+};
+
+export const abs = <N extends number | bigint>(n: N): N => {
+  if (typeof n === 'number') {
+    return Math.abs(n) as N;
+  }
+  if (n < 0n) {
+    return -n as N;
+  }
+  return n;
+};
+
 const from = (
   n: Fraction | FractionLike | number | string | bigint,
   d?: bigint | number
@@ -22,10 +37,18 @@ const from = (
   if (n instanceof Fraction) {
     return n;
   }
-  if (isFractionLike(n)) {
-    return new Fraction(n.s * n.n, n.d);
+  if (typeof n === 'string') {
+    return new Fraction(n);
   }
-  return new Fraction(n);
+  if (
+    isFractionLike(n) &&
+    isNumber(n.s) &&
+    isNumber(n.n) &&
+    (n.d === undefined || isNumber(n.d))
+  ) {
+    return new Fraction(BigInt(n.s) * BigInt(n.n), n.d);
+  }
+  return new Fraction(n as number | bigint | string);
 };
 
 export default Fraction;
@@ -37,7 +60,8 @@ export { from, toFraction };
 export const ZERO = from(0);
 export const ONE = from(1);
 
-export const F = (n: number | bigint | FractionLike): Fraction => from(n);
+export const F = (n: number | bigint | FractionLike | string): Fraction =>
+  from(n);
 
 export * from './utils';
 export * from './isFractionLike';

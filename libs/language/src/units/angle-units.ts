@@ -1,8 +1,10 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { identity, invert } from '../utils';
 import { UnitOfMeasure } from './known-units';
 
-const degreeToRadian = (deg: Fraction): Fraction => deg.mul(Math.PI).div(180);
+const PI = N(3141592653589793, 10 ** 15);
+
+const degreeToRadian = (deg: DeciNumber): DeciNumber => deg.mul(PI).div(N(180));
 
 export const units: UnitOfMeasure[] = [
   {

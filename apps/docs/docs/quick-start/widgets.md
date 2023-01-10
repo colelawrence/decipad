@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # Create a Widget
 
-Widgets are blocks everyone can interact with. <br></br>
+Widgets are blocks everyone can interact with. <br />
 They create notebooks with assumptions readers can explore.
 
 ## Create a New Widget
@@ -13,23 +13,23 @@ To **add a new widget** to your notebook:
 
 ![Add Slider](https://user-images.githubusercontent.com/12210180/198076697-455cf53e-09b1-4cac-96a2-3a6e32c8ed4b.gif)
 
-1. Click the `+` button next to an empty line,
-2. Select `Input`, `Toogle`, `Date`, `Slider`, `Dropdown` or `Result` from the menu.
+1.  Click the `+` button next to an empty line,
+2.  Select `Input`, `Toogle`, `Date`, `Slider`, `Dropdown` or `Result` from the menu.
 
 Alternatively, to add a widget with the keyboard, open up the block menu by typing `/` on an empty paragraph, select `Input`, `Toogle`, `Date`, `Slider`, `Dropdown` or `Result` using the `arrow keys`, and press `enter`.
 
-<br></br>
+<br />
 
 ## Update a Widget Name
 
-New widgets are assigned default names when created (Input1, Slider1, ... ) <br></br>
+New widgets are assigned default names when created (Input1, Slider1, ... ) <br />
 Update your widget name, so it is easy to identify.
 
 - To **update a widget name**, replace the old name on the top left of the widget.
 
 ## Update a Widget Color and Icon
 
-New widgets are assigned default colors and icons. <br></br>
+New widgets are assigned default colors and icons. <br />
 Pick new widget colors and icons to give personality to your notebook without impacting your model.
 
 - To **update a widget color and icon**, click the pencil icon next to the widget name, and choose a new color and icon from the menu.
@@ -40,11 +40,11 @@ Place widgets on the same line to save space.
 
 To **place widgets side-by-side**:
 
-1. Hover the widget you want to move.
-2. Hold the **`⸬`** button that appears on the left and move the widget to the side of another widget.
-3. A blue vertical line should appear to confirm the new location. Let got of the **`⸬`** button to place the widget on its new location.
+1.  Hover the widget you want to move.
+2.  Hold the **`⸬`** button that appears on the left and move the widget to the side of another widget.
+3.  A blue vertical line should appear to confirm the new location. Let got of the **`⸬`** button to place the widget on its new location.
 
-<br></br>
+<br />
 
 ## Widget Types
 
@@ -56,7 +56,7 @@ Inputs widgets highlight a number in your notebook that you or anyone reading th
 
 - To **create a new input widget**, click the `+` button next to an empty line, and select `Input` from the menu.
 
-<br></br>
+<br />
 
 ### Toggle Widget
 
@@ -64,7 +64,7 @@ Toggle widgets let you or anyone reading the notebook switch between `on` or `of
 
 - To **create a new toggle widget**, click the `+` button next to an empty line, and select `Toggle` from the menu.
 
-<br></br>
+<br />
 
 ### Date Widget
 
@@ -72,13 +72,13 @@ Date widgets let you or anyone reading the notebook pick a date.
 
 #### Create a Date Widget
 
-- To **create a new date widget**, click the `+` button next to an empty line, and select `Date` from the menu.<br></br>
+- To **create a new date widget**, click the `+` button next to an empty line, and select `Date` from the menu.<br />
 
 #### Update a Date Widget Range
 
 - To **update a date widget range**, click the `•••` button, `Change type` and pick a range from `Year`, `Month`, `Date` or `Time`.
 
-<br></br>
+<br />
 
 ### Slider Widget
 
@@ -92,7 +92,7 @@ Slider widgets let you or anyone reading the notebook use a slider to explore a 
 
 - To **update the slider range**, click the `•••` button to access the menu. Update the _Minimum_, _Maximum_, and _Step_
 
-<br></br>
+<br />
 
 ### Dropdown Widget
 
@@ -108,9 +108,9 @@ Dropdown widgets let you create lists of values anyone can pick from.
 
 #### Edit or Delete a Dropdown Item
 
-- To **edit or delete a dropdown value**, click on the currently selected value to see the list. Then hover any value to get the options to **edit** (*Pencil Icon*) or to **delete** (*Trash Icon*).
+- To **edit or delete a dropdown value**, click on the currently selected value to see the list. Then hover any value to get the options to **edit** (_Pencil Icon_) or to **delete** (_Trash Icon_).
 
-<br></br>
+<br />
 
 ### Result Widget
 
@@ -120,7 +120,7 @@ Result widgets let you highlight any result on your notebook.
 
 - To **create a result widget with a calculation result**, click any result on the right side of a calculation block, and a result widget with that value will appear on the notebook.
 
-<br></br>
+<br />
 
 ---
 

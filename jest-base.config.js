@@ -21,6 +21,8 @@ module.exports = {
   ],
 
   setupFilesAfterEnv: [
+    require.resolve('./libs/testutils/src/serialize-big-int.js'),
+    require.resolve('./libs/testutils/src/deci-number-snapshot-serializer.js'),
     require.resolve('./libs/testutils/src/feature-flags-setup-after-env.js'),
   ],
   testTimeout: 10000,

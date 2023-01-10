@@ -1,5 +1,5 @@
 import { Computer } from '@decipad/computer';
-import { F } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { formatCell } from './formatCell';
 
 it('formats cell value according to the column type', () => {
@@ -17,8 +17,8 @@ it('formats cell value according to the column type', () => {
         unit: [
           {
             unit: 'banana',
-            exp: F(1),
-            multiplier: F(1),
+            exp: N(1),
+            multiplier: N(1),
             known: false,
           },
         ],
@@ -34,8 +34,8 @@ it('formats cell value according to the column type', () => {
         unit: [
           {
             unit: 'banana',
-            exp: F(1),
-            multiplier: F(1),
+            exp: N(1),
+            multiplier: N(1),
             known: false,
           },
         ],
@@ -51,13 +51,13 @@ it('formats cell value according to the column type', () => {
         unit: [
           {
             unit: 'banana',
-            exp: F(1),
-            multiplier: F(1),
+            exp: N(1),
+            multiplier: N(1),
             known: false,
           },
         ],
       },
-      'text'
+      'invalid text'
     )
-  ).toBe('0 bananas');
+  ).toBe('? bananas');
 });

@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode, useState } from 'react';
 import { css } from '@emotion/react';
-import { ONE, toFraction } from '@decipad/fraction';
+import { ONE, N } from '@decipad/number';
 import type {
   CellValueType,
   ColumnMenuDropdown,
@@ -76,8 +76,8 @@ const sameUnits = (
   const u = unit[0];
   return (
     u.unit === um.name &&
-    toFraction(u.exp).equals(ONE) &&
-    toFraction(u.multiplier).equals(ONE) &&
+    N(u.exp).equals(ONE) &&
+    N(u.multiplier).equals(ONE) &&
     u.baseSuperQuantity === um.superBaseQuantity
   );
 };
@@ -128,7 +128,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             type.unit != null &&
             !isCurrencyUnit(type.unit) && (
               <MenuItem icon={<All />} selected>
-                {computer.formatUnit(type.unit, toFraction(1))}
+                {computer.formatUnit(type.unit, N(1))}
               </MenuItem>
             )}
           <MenuItem

@@ -1,8 +1,9 @@
+import { N } from '@decipad/number';
 import { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
 type Converter = UnitOfMeasure['toBaseQuantity'];
-const byte: Converter = (x) => x.mul(8);
+const byte: Converter = (x) => x.mul(N(8));
 
 export const units: UnitOfMeasure[] = [
   {

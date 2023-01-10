@@ -50,6 +50,21 @@ module.exports = {
     'no-cond-assign': ['error', 'except-parens'],
     'no-continue': 'off',
     'no-case-declarations': 'off',
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: '@decipad/fraction',
+            message: 'Use @decipad/number instead of @decipad/fraction',
+          },
+          {
+            name: 'fraction.js',
+            message: 'Use @decipad/number instead of fraction.js',
+          },
+        ],
+      },
+    ],
   },
   overrides: [
     {

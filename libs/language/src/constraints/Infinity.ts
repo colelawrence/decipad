@@ -1,8 +1,8 @@
-import Fraction, {
+import DeciNumber, {
   lessThanOrEqualTo as lessThanOrEqualToF,
   lessThan as lessThanF,
   ZERO,
-} from '@decipad/fraction';
+} from '@decipad/number';
 import { inf, minusInf } from './consts';
 import { LogicNumber, Infinity } from './types';
 
@@ -123,7 +123,7 @@ export const div = (a: LogicNumber, b: LogicNumber): LogicNumber => {
     return a;
   }
   if (
-    b instanceof Fraction &&
+    b instanceof DeciNumber &&
     b.equals(ZERO) &&
     !isInfinity(a) &&
     !a.equals(ZERO)

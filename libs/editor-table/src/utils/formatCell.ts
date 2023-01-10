@@ -1,6 +1,6 @@
 import { TableCellType } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 
 export function formatCell(
   computer: Computer,
@@ -12,6 +12,6 @@ export function formatCell(
   }
 
   const n = Number(text);
-  const f = toFraction(Number.isNaN(n) ? 0 : n);
+  const f = N(n);
   return `${f.toString()} ${computer.formatUnit(cellType.unit, f)}`;
 }

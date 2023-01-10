@@ -1,6 +1,6 @@
 import { Result } from '@decipad/computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
-import { toFraction } from '@decipad/fraction';
+import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
 import { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
@@ -143,7 +143,7 @@ export const importFromUnknownJson = (
         kind: 'number',
         unit: null,
       },
-      value: toFraction(json as number | bigint | string),
+      value: N(json as number | bigint | string),
     };
   }
   if (

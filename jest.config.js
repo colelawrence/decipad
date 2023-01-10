@@ -35,5 +35,6 @@ module.exports = {
     '<rootDir>/libs/computer',
     '<rootDir>/libs/parse',
     '<rootDir>/libs/import',
+    '<rootDir>/libs/number',
   ],
 };

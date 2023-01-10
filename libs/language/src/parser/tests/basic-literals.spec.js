@@ -1,4 +1,5 @@
-import { c, F, l, r } from '../../utils';
+import { N } from '@decipad/number';
+import { c, l, r } from '../../utils';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -7,7 +8,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(41).neg()],
+        args: ['number', N(41).neg()],
         start: {
           char: 1,
           column: 2,
@@ -27,7 +28,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(415, 10).neg()],
+        args: ['number', N(415, 10).neg()],
         start: {
           char: 4,
           column: 3,
@@ -107,7 +108,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(105, 1000), 'percentage'],
+        args: ['number', N(105, 1000), 'percentage'],
         start: {
           char: 0,
           line: 1,
@@ -127,7 +128,7 @@ runTests({
     ast: [
       {
         type: 'literal',
-        args: ['number', F(105, 1000), 'percentage'],
+        args: ['number', N(105, 1000), 'percentage'],
         start: {
           char: 0,
           line: 1,
@@ -157,7 +158,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(10).neg()],
+                args: ['number', N(10).neg()],
               },
               {
                 type: 'ref',

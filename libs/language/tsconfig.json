@@ -10,7 +10,7 @@
       "path": "../../libs/utils"
     },
     {
-      "path": "../../libs/fraction"
+      "path": "../../libs/number"
     }
   ]
 }

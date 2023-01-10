@@ -1,10 +1,10 @@
 @lexer tokenizer
 @{%
 
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 
 function makeNumber(parentNode, n, numberFormat = undefined) {
-  const fraction = toFraction(n);
+  const fraction = N(n);
 
   const node = {
     type: 'literal',
@@ -69,45 +69,45 @@ negPosNumber -> unsignedNumber                          {%
 
 negPosNumber -> "-" unsignedNumber                      {%
                                                         (d) => {
-                                                          return makeNumber(d, toFraction(d[1].n).neg());
+                                                          return makeNumber(d, N(d[1].n).neg());
                                                         }
                                                         %}
 
 percentage -> "-" decimal _ "%"                         {%
                                                         (d) => {
-                                                          const n = toFraction((d[1].n).neg()).div(toFraction(100));
+                                                          const n = N((d[1].n).neg()).div(N(100));
                                                           return makeNumber(d, n, 'percentage');
                                                         }
                                                         %}
 
 percentage -> decimal _ "%"                             {%
                                                         (d) => {
-                                                          const n = toFraction((d[0].n)).div(toFraction(100));
+                                                          const n = N((d[0].n)).div(N(100));
                                                           return makeNumber(d, n, 'percentage');
                                                         }
                                                         %}
 
 permille -> "-" decimal "‰"                             {%
                                                         (d) => {
-                                                          return makeNumber(d, toFraction((d[1].n).neg()).div(toFraction(1000)))
+                                                          return makeNumber(d, N((d[1].n).neg()).div(N(1000)))
                                                         }
                                                         %}
 
 permille -> decimal "‰"                                 {%
                                                         (d) => {
-                                                          return makeNumber(d, toFraction((d[0].n)).div(toFraction(1000)))
+                                                          return makeNumber(d, N((d[0].n)).div(N(1000)))
                                                         }
                                                         %}
 
 permyriad -> "-" decimal "‱"                          {%
                                                         (d) => {
-                                                          return makeNumber(d, toFraction((d[1].n).neg()).div(toFraction(10000)))
+                                                          return makeNumber(d, N((d[1].n).neg()).div(N(10000)))
                                                         }
                                                         %}
 
 permyriad -> decimal "‱"                              {%
                                                         (d) => {
-                                                          return makeNumber(d, toFraction((d[0].n)).div(toFraction(10000)))
+                                                          return makeNumber(d, N((d[0].n)).div(N(10000)))
                                                         }
                                                         %}
 
@@ -145,7 +145,7 @@ decimal -> %number                                      {%
                                                             return reject
                                                           } else {
                                                             return addLoc({
-                                                              n: toFraction(number.value)
+                                                              n: N(number.value)
                                                             }, number)
                                                           }
                                                         }

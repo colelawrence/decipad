@@ -1,5 +1,5 @@
 import { buildType, Result, serializeType } from '@decipad/language';
-import { F } from 'libs/language/src/utils';
+import { N } from '@decipad/number';
 import { unnestTableRows } from './unnestTableRows';
 
 it('unnests table rows', () => {
@@ -12,7 +12,7 @@ it('unnests table rows', () => {
   ];
   const result = {
     type: serializeType(buildType.column(buildType.number())),
-    value: [F(1), F(2)],
+    value: [N(1), N(2)],
   } as Result.Result<'column'>;
 
   expect([...unnestTableRows(explanation, result)]).toMatchInlineSnapshot(`
@@ -33,7 +33,7 @@ it('unnests table rows', () => {
             "kind": "number",
             "unit": null,
           },
-          "value": Fraction(1),
+          "value": DeciNumber(1),
         },
       },
       Object {
@@ -52,7 +52,7 @@ it('unnests table rows', () => {
             "kind": "number",
             "unit": null,
           },
-          "value": Fraction(2),
+          "value": DeciNumber(2),
         },
       },
     ]

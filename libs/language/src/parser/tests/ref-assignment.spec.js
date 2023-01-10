@@ -1,4 +1,4 @@
-import { F } from '../../utils';
+import { N } from '@decipad/number';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -24,7 +24,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', F(12)],
+            args: ['number', N(12)],
             start: {
               char: 14,
               line: 1,
@@ -73,7 +73,7 @@ runTests({
           },
           {
             type: 'literal',
-            args: ['number', F(12)],
+            args: ['number', N(12)],
             start: {
               char: 22,
               line: 1,

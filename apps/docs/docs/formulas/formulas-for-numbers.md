@@ -170,7 +170,7 @@ sin(90degrees)
 
 ```deci live
 asin(1) in degrees
-==> 90 °
+==> 90.0000 °
 ```
 
 ### cos / acos

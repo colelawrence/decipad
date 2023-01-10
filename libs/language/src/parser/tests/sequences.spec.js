@@ -1,4 +1,4 @@
-import { F } from '../../utils';
+import { N } from '@decipad/number';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -10,19 +10,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1)],
+            args: ['number', N(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10)],
+            args: ['number', N(10)],
             start: 8,
             end: 9,
           },
           {
             type: 'literal',
-            args: ['number', F(1)],
+            args: ['number', N(1)],
             start: 14,
             end: 14,
           },
@@ -45,19 +45,19 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1)],
+            args: ['number', N(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10)],
+            args: ['number', N(10)],
             start: 16,
             end: 17,
           },
           {
             type: 'literal',
-            args: ['number', F(1, 2)],
+            args: ['number', N(1, 2)],
             start: 23,
             end: 25,
           },
@@ -108,13 +108,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1)],
+            args: ['number', N(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10)],
+            args: ['number', N(10)],
             start: 8,
             end: 9,
           },
@@ -133,13 +133,13 @@ runTests({
         args: [
           {
             type: 'literal',
-            args: ['number', F(1)],
+            args: ['number', N(1)],
             start: 5,
             end: 5,
           },
           {
             type: 'literal',
-            args: ['number', F(10)],
+            args: ['number', N(10)],
             start: 16,
             end: 17,
           },

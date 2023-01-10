@@ -1,5 +1,5 @@
 import { formatError } from '@decipad/format';
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import { astNode, parseBlock, parseStatementOrThrow } from '@decipad/language';
 import { getOnly } from '@decipad/utils';
 import { AST, prettyPrintAST } from '.';
@@ -100,7 +100,7 @@ export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
       simpleUpdates.push(`${prefix}${formatError('en-us', type.errorCause)}`);
     } else {
       const asString =
-        value instanceof Fraction ? value.toString() : JSON.stringify(value);
+        value instanceof DeciNumber ? value.toString() : JSON.stringify(value);
       simpleUpdates.push(prefix + asString);
     }
   }

@@ -10,9 +10,9 @@ const concatenated = new ConcatenatedColumn(firstHalf, secondHalf);
 it('can concat columns', () => {
   expect(concatenated.getData()).toMatchInlineSnapshot(`
     Array [
-      Fraction(1),
-      Fraction(2),
-      Fraction(3),
+      DeciNumber(1),
+      DeciNumber(2),
+      DeciNumber(3),
     ]
   `);
 

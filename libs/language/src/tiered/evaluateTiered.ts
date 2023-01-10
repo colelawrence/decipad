@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
-import FFraction, { min, max, ZERO } from '@decipad/fraction';
-import { FractionValue, Value } from '../value';
+import DeciNumber, { min, max, ZERO } from '@decipad/number';
+import { NumberValue, Value } from '../value';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { AST } from '../parser';
 import { Type, Unit } from '../type';
@@ -10,7 +10,7 @@ import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { predicateSymbols } from './inferTiered';
 
 const maybeConvertBetweenUnits = (
-  f: FFraction,
+  f: DeciNumber,
   from: Unit[] | null,
   to: Unit[] | null
 ) => {
@@ -68,29 +68,29 @@ const collectDefs = (tierDefs: AST.TieredDef[]) => {
 const evaluateTier = async (
   realm: Realm,
   tierValueExp: AST.Expression,
-  tierSize: FFraction,
+  tierSize: DeciNumber,
   tierResultType: Type
-): Promise<FFraction> => {
+): Promise<DeciNumber> => {
   const tierValueType = getDefined(
     realm.inferContext.nodeTypes.get(tierValueExp)
   );
-  const tierSizeValue = FractionValue.fromValue(tierSize);
+  const tierSizeValue = NumberValue.fromValue(tierSize);
   const tierValue = await realm.stack.withPush(async () => {
     realm.stack.set('tier', tierSizeValue);
     realm.stack.set('slice', tierSizeValue);
     return evaluate(realm, tierValueExp);
   });
   return maybeConvertBetweenUnits(
-    getInstanceof(tierValue.getData(), FFraction),
+    getInstanceof(tierValue.getData(), DeciNumber),
     tierValueType.unit,
     tierResultType.unit
   );
 };
 
 interface IterateTierResult {
-  slice: FFraction;
-  tierResult: FFraction;
-  tierCutOff: FFraction;
+  slice: DeciNumber;
+  tierResult: DeciNumber;
+  tierCutOff: DeciNumber;
 }
 
 const iterateTier = async (
@@ -99,8 +99,8 @@ const iterateTier = async (
   tierResultType: Type,
   tier: Tier,
   tierIndex: number,
-  remaining: FFraction,
-  previousCutoff: FFraction
+  remaining: DeciNumber,
+  previousCutoff: DeciNumber
 ): Promise<IterateTierResult> => {
   const [tierSizeExp, tierValueExp] = tier;
   const tierSizeType = getDefined(
@@ -108,7 +108,7 @@ const iterateTier = async (
   );
 
   const tierCutOff = maybeConvertBetweenUnits(
-    getInstanceof((await evaluate(realm, tierSizeExp)).getData(), FFraction),
+    getInstanceof((await evaluate(realm, tierSizeExp)).getData(), DeciNumber),
     tierSizeType.unit,
     globalTierSizeType.unit
   );
@@ -136,7 +136,7 @@ export const evaluateTiered = async (
   const [initial, ...tierDefs] = node.args;
   const initialNumber = getInstanceof(
     (await evaluate(realm, initial)).getData(),
-    FFraction
+    DeciNumber
   );
   const tierSizeType = getDefined(realm.inferContext.nodeTypes.get(initial));
   const resultType = getDefined(realm.inferContext.nodeTypes.get(node));
@@ -182,7 +182,7 @@ export const evaluateTiered = async (
     const minimumValue = maybeConvertBetweenUnits(
       getInstanceof(
         (await evaluate(realm, predicates.min)).getData(),
-        FFraction
+        DeciNumber
       ),
       minType.unit,
       resultType.unit
@@ -197,7 +197,7 @@ export const evaluateTiered = async (
     const maximumValue = maybeConvertBetweenUnits(
       getInstanceof(
         (await evaluate(realm, predicates.max)).getData(),
-        FFraction
+        DeciNumber
       ),
       maxType.unit,
       resultType.unit
@@ -205,5 +205,5 @@ export const evaluateTiered = async (
     acc = min(acc, maximumValue);
   }
 
-  return FractionValue.fromValue(acc);
+  return NumberValue.fromValue(acc);
 };

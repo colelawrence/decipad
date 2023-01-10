@@ -1,11 +1,9 @@
 import { singular } from 'pluralize';
 import { DateTime } from 'luxon';
-
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import { DateValue } from '../value';
-
 import * as Time from './time-types';
 
 export * from './time-quantities';
@@ -337,22 +335,19 @@ export const subtractDates = (
   d1: DateValue,
   d2: DateValue,
   specificity: Time.Specificity
-): Fraction => {
+): DeciNumber => {
   const dateTime1 = toLuxonUTC(d1.getData());
   const dateTime2 = toLuxonUTC(d2.getData());
 
   switch (specificity) {
     case 'year': {
-      return toFraction(dateTime1.diff(dateTime2, 'years').years * 12);
+      return N(dateTime1.diff(dateTime2, 'years').years * 12);
     }
     case 'month': {
-      return toFraction(dateTime1.diff(dateTime2, 'months').months);
+      return N(dateTime1.diff(dateTime2, 'months').months);
     }
     default: {
-      return toFraction(
-        dateTime1.diff(dateTime2, 'milliseconds').milliseconds,
-        1000n
-      );
+      return N(dateTime1.diff(dateTime2, 'milliseconds').milliseconds, 1000n);
     }
   }
 };

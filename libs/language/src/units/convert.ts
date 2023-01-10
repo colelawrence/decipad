@@ -1,4 +1,4 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber from '@decipad/number';
 import produce from 'immer';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
@@ -102,27 +102,27 @@ export function areUnitsConvertible(
 }
 
 export function toExpandedBaseQuantity(
-  n: Fraction,
+  n: DeciNumber,
   sourceUnits: Unit[]
-): [Unit[] | null, Fraction] {
+): [Unit[] | null, DeciNumber] {
   const [expandedUnits, convert] = expandUnits(sourceUnits);
   return [expandedUnits, convert(n)];
 }
 
 export function fromExpandedBaseQuantity(
-  n: Fraction,
+  n: DeciNumber,
   targetUnits: Unit[]
-): [Unit[] | null, Fraction] {
+): [Unit[] | null, DeciNumber] {
   const [, convert] = contractUnits(targetUnits);
   return [targetUnits, convert(n)];
 }
 
 export function convertBetweenUnits(
-  n: Fraction,
+  n: DeciNumber,
   from: Unit[],
   to: Unit[],
   { tolerateImprecision }: ImprecisionOpts = {}
-): Fraction {
+): DeciNumber {
   if (!areUnitsConvertible(from, to, { tolerateImprecision })) {
     throw InferError.cannotConvertBetweenUnits(from, to);
   }
@@ -147,7 +147,11 @@ export function convertBetweenUnits(
   return revertedN;
 }
 
-function impreciselyConvertBetweenUnits(n: Fraction, from: Unit[], to: Unit[]) {
+function impreciselyConvertBetweenUnits(
+  n: DeciNumber,
+  from: Unit[],
+  to: Unit[]
+) {
   for (const fromU of from) {
     for (const toU of to) {
       const basicCompat = areQuantityUnitsCompatible(fromU, toU);

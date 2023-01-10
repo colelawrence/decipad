@@ -9,7 +9,7 @@ import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   MyEditor,
 } from '@decipad/editor-types';
-import { F } from '@decipad/editor-utils';
+import { N } from '@decipad/number';
 import { Computer, prettyPrintAST } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
 import { getTableAstNodeFromTableElement } from './getTableAstNodeFromTableElement';
@@ -51,8 +51,8 @@ describe('getTableAstNodeFromTableElement', () => {
                 unit: [
                   {
                     unit: 'bananas',
-                    exp: F(1),
-                    multiplier: F(1),
+                    exp: N(1),
+                    multiplier: N(1),
                     known: false,
                   },
                 ],

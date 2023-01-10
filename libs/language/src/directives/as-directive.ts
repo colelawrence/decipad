@@ -1,10 +1,9 @@
-import Fraction, { pow } from '@decipad/fraction';
-
+import DeciNumber, { N } from '@decipad/number';
 import produce from 'immer';
 import { getDefined } from '@decipad/utils';
 import { RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
-import { FractionValue, fromJS, Value } from '../value';
+import { NumberValue, fromJS, Value } from '../value';
 import { AST } from '../parser';
 import {
   build as t,
@@ -16,7 +15,7 @@ import {
 import { matchUnitArrays } from '../type/units';
 import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
 import type { GetTypeCtx, GetValueCtx, Directive } from './types';
-import { F, getIdentifierString, getInstanceof, U } from '../utils';
+import { getIdentifierString, getInstanceof, U } from '../utils';
 
 function isUserUnit(exp: AST.Expression, targetUnit: Unit[]) {
   if (exp.type !== 'ref') {
@@ -26,20 +25,20 @@ function isUserUnit(exp: AST.Expression, targetUnit: Unit[]) {
   return !matchUnitArrays(unit, targetUnit);
 }
 
-function multiplyUnitMultipliers(units: Unit[] | null | undefined): Fraction {
+function multiplyUnitMultipliers(units: Unit[] | null | undefined): DeciNumber {
   return (units || []).reduce(
-    (acc, unit) => acc.mul(pow(unit.multiplier, unit.exp)),
-    F(1)
+    (acc, unit) => acc.mul(unit.multiplier.pow(unit.exp)),
+    N(1)
   );
 }
 
 function multiplyUnitMultipliersIfNeedsEnforcing(
   units: Unit[] | null | undefined
-): Fraction {
+): DeciNumber {
   return (units || []).reduce(
     (acc, unit) =>
-      unit.enforceMultiplier ? acc.mul(pow(unit.multiplier, unit.exp)) : acc,
-    F(1)
+      unit.enforceMultiplier ? acc.mul(unit.multiplier.pow(unit.exp)) : acc,
+    N(1)
   );
 }
 
@@ -133,10 +132,10 @@ export async function getValue(
       [expressionValue],
       ([value], [type]) => {
         const noMultiplier = convertToMultiplierUnit(
-          getInstanceof(value, FractionValue).value,
+          getInstanceof(value, NumberValue).value,
           type.unit
         );
-        return FractionValue.fromValue(noMultiplier);
+        return NumberValue.fromValue(noMultiplier);
       }
     );
   }
@@ -144,7 +143,7 @@ export async function getValue(
   const targetUnitsEvalResult = await evaluate(unitsExpression);
   const targetUnitsData = getInstanceof(
     targetUnitsEvalResult.getData(),
-    Fraction,
+    DeciNumber,
     `units needs to be a number`
   );
 
@@ -164,7 +163,7 @@ export async function getValue(
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
   return automapValues([expressionType], [expressionValue], ([value]) => {
-    if (value instanceof FractionValue) {
+    if (value instanceof NumberValue) {
       if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
         return fromJS(value.getData().div(conversionRate));
       }

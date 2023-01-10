@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
-
-import Fraction, { ZERO } from '@decipad/fraction';
+import DeciNumber, { ZERO } from '@decipad/number';
 import { Val } from './Binding';
 import { inf, minusInf } from './consts';
 import {
@@ -33,7 +32,7 @@ export class Domain {
     this.max = max;
   }
 
-  isMember(v: Fraction) {
+  isMember(v: DeciNumber) {
     return greaterThanOrEqualTo(v, this.min) && lessThanOrEqualTo(v, this.max);
   }
 

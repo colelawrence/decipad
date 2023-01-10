@@ -1,4 +1,5 @@
-import { F, l, as, c, r, assign, num } from '../../utils';
+import { N } from '@decipad/number';
+import { l, as, c, r, assign, num } from '../../utils';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -117,7 +118,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(2)],
+                args: ['number', N(2)],
                 start: {
                   char: 1,
                   line: 1,
@@ -131,7 +132,7 @@ runTests({
               },
               {
                 type: 'literal',
-                args: ['number', F(3)],
+                args: ['number', N(3)],
                 start: {
                   char: 5,
                   line: 1,
@@ -233,7 +234,7 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(2)],
+                args: ['number', N(2)],
                 start: {
                   char: 0,
                   line: 1,
@@ -267,7 +268,7 @@ runTests({
                     args: [
                       {
                         type: 'literal',
-                        args: ['number', F(3)],
+                        args: ['number', N(3)],
                         start: {
                           char: 4,
                           line: 1,
@@ -281,7 +282,7 @@ runTests({
                       },
                       {
                         type: 'literal',
-                        args: ['number', F(4)],
+                        args: ['number', N(4)],
                         start: {
                           char: 8,
                           line: 1,
@@ -373,11 +374,11 @@ runTests({
                 args: [
                   {
                     type: 'literal',
-                    args: ['number', F(1)],
+                    args: ['number', N(1)],
                   },
                   {
                     type: 'literal',
-                    args: ['number', F(2)],
+                    args: ['number', N(2)],
                   },
                 ],
               },
@@ -397,11 +398,11 @@ runTests({
             args: [
               {
                 type: 'literal',
-                args: ['number', F(2)],
+                args: ['number', N(2)],
               },
               {
                 type: 'literal',
-                args: ['number', F(3)],
+                args: ['number', N(3)],
               },
             ],
           },

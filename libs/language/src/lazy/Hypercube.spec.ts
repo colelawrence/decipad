@@ -1,15 +1,15 @@
-import Fraction from '@decipad/fraction';
+import DeciNumber, { N } from '@decipad/number';
 import { Hypercube, uniqDimensions } from './Hypercube';
-import { FractionValue, fromJS, Value } from '../value';
-import { F, getInstanceof } from '../utils';
+import { NumberValue, fromJS, Value } from '../value';
+import { getInstanceof } from '../utils';
 
 import { hcArg } from './testUtils';
 
 const op =
-  (simpleCallback: (...args: Fraction[]) => Fraction) => (args: Value[]) =>
+  (simpleCallback: (...args: DeciNumber[]) => DeciNumber) => (args: Value[]) =>
     fromJS(
       simpleCallback(
-        ...args.map((a) => getInstanceof(a, FractionValue).getData())
+        ...args.map((a) => getInstanceof(a, NumberValue).getData())
       )
     );
 
@@ -33,22 +33,22 @@ const multidimDivision = new Hypercube(
 describe('nesting', () => {
   it('can lowLevelGet into nested hypercubes', () => {
     const nested2 = new Hypercube(
-      op((a) => a.add(100)),
+      op((a) => a.add(N(100))),
       [multiDimX, ['X']]
     );
-    expect(nested2.lowLevelGet(0).getData()).toEqual(F(101));
+    expect(nested2.lowLevelGet(0).getData()).toEqual(N(101));
 
     const nested3 = new Hypercube(
-      op((a, b) => a.mul(100).add(b)),
+      op((a, b) => a.mul(N(100)).add(b)),
       [multiDimX, ['X']],
       [multiDimX, ['X']]
     );
-    expect(nested3.lowLevelGet(0).getData()).toEqual(F(101));
+    expect(nested3.lowLevelGet(0).getData()).toEqual(N(101));
     expect(nested3.getData()).toMatchInlineSnapshot(`
       Array [
-        Fraction(101),
-        Fraction(202),
-        Fraction(303),
+        DeciNumber(101),
+        DeciNumber(202),
+        DeciNumber(303),
       ]
     `);
   });
@@ -78,9 +78,9 @@ it('can operate with one column', () => {
 
   expect(operateWithOneD.getData()).toMatchInlineSnapshot(`
     Array [
-      Fraction(101),
-      Fraction(102),
-      Fraction(103),
+      DeciNumber(101),
+      DeciNumber(102),
+      DeciNumber(103),
     ]
   `);
 
@@ -92,9 +92,9 @@ it('can operate with one column', () => {
 
   expect(operateWithOneDReversed.getData()).toMatchInlineSnapshot(`
     Array [
-      Fraction(101),
-      Fraction(102),
-      Fraction(103),
+      DeciNumber(101),
+      DeciNumber(102),
+      DeciNumber(103),
     ]
   `);
 });

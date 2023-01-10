@@ -1,5 +1,6 @@
+import { ONE } from '@decipad/number';
 import { build as t } from '../type';
-import { DateValue as IDate, FractionValue } from '../value';
+import { DateValue as IDate, NumberValue } from '../value';
 import { parseUTCDate, Time } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';
 import {
@@ -7,7 +8,7 @@ import {
   dateAndTimeQuantityFunctor,
   addDateAndTimeQuantity,
 } from './dateOverloads';
-import { F, U } from '../utils';
+import { U } from '../utils';
 
 const plus = overloadBuiltin('+', 2, dateOverloads['+']);
 const minus = overloadBuiltin('-', 2, dateOverloads['-']);
@@ -87,7 +88,7 @@ it('date + number', () => {
           BigInt(Number(new Date('2020-01-01'))),
           'day'
         ),
-        new FractionValue(F(1)),
+        new NumberValue(ONE),
       ],
       [t.date('day'), t.number(U('month'))]
     )
@@ -107,7 +108,7 @@ it('date - number', () => {
           'minute'
         ),
 
-        FractionValue.fromValue(60),
+        NumberValue.fromValue(60),
       ],
 
       [t.date('minute'), t.number(U('minute'))]
@@ -120,9 +121,9 @@ it('date - date => time-quantity', () => {
     .toMatchInlineSnapshot(`
     Array [
       Object {
-        "exp": Fraction(1),
+        "exp": DeciNumber(1),
         "known": true,
-        "multiplier": Fraction(1),
+        "multiplier": DeciNumber(1),
         "unit": "day",
       },
     ]
@@ -131,9 +132,9 @@ it('date - date => time-quantity', () => {
     .toMatchInlineSnapshot(`
     Array [
       Object {
-        "exp": Fraction(1),
+        "exp": DeciNumber(1),
         "known": true,
-        "multiplier": Fraction(1),
+        "multiplier": DeciNumber(1),
         "unit": "minute",
       },
     ]
@@ -149,32 +150,32 @@ it('date - date => time-quantity', () => {
       minus.fnValues?.([
         IDate.fromDateAndSpecificity(parseUTCDate(date1), date1Specificity),
         IDate.fromDateAndSpecificity(parseUTCDate(date2), date2Specificity),
-      ]) as FractionValue
+      ]) as NumberValue
     ).value;
 
   expect(
     testDateMinus('2021-01', 'year', '2021-01', 'year')
-  ).toMatchInlineSnapshot(`Fraction(0)`);
+  ).toMatchInlineSnapshot(`DeciNumber(0)`);
 
   expect(
     testDateMinus('2022-01', 'year', '2021-01', 'year')
-  ).toMatchInlineSnapshot(`Fraction(12)`);
+  ).toMatchInlineSnapshot(`DeciNumber(12)`);
 
   expect(
     testDateMinus('2021-02', 'month', '2021-01', 'month')
-  ).toMatchInlineSnapshot(`Fraction(1)`);
+  ).toMatchInlineSnapshot(`DeciNumber(1)`);
 
   expect(
     testDateMinus('2022-02', 'month', '2021-01', 'month')
-  ).toMatchInlineSnapshot(`Fraction(13)`);
+  ).toMatchInlineSnapshot(`DeciNumber(13)`);
 
   expect(
     testDateMinus('2021-02-01', 'day', '2021-01-01', 'day')
-  ).toMatchInlineSnapshot(`Fraction(2678400)`);
+  ).toMatchInlineSnapshot(`DeciNumber(2678400)`);
 
   expect(
     testDateMinus('2021-02-01', 'day', '2022-01-01', 'day')
-  ).toMatchInlineSnapshot(`Fraction(-28857600)`);
+  ).toMatchInlineSnapshot(`DeciNumber(-28857600)`);
 
   expect(
     testDateMinus(
@@ -183,5 +184,5 @@ it('date - date => time-quantity', () => {
       '2021-02-01T10:31',
       'millisecond'
     )
-  ).toMatchInlineSnapshot(`Fraction(-60)`);
+  ).toMatchInlineSnapshot(`DeciNumber(-60)`);
 });

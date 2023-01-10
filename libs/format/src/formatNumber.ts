@@ -1,4 +1,4 @@
-import Fraction, { toFraction } from '@decipad/fraction';
+import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import {
   AST,
   convertToMultiplierUnit,
@@ -56,7 +56,7 @@ export type DeciNumberPart = (
   partsOf?: UnitPart[];
 };
 
-export type DeciNumber = {
+export type DeciNumberRep = {
   isPrecise: boolean;
   value: number;
   asString: string;
@@ -64,7 +64,7 @@ export type DeciNumber = {
   partsOf: DeciNumberPart[];
 };
 
-export type IntermediateDeciNumber = Omit<DeciNumber, 'asString'>;
+export type IntermediateDeciNumber = Omit<DeciNumberRep, 'asString'>;
 
 function beautifyExponents(partsOf: DeciNumberPart[]): DeciNumberPart[] {
   let ret: DeciNumberPart[] = [];
@@ -125,16 +125,21 @@ export function partsToString(partsOf: DeciNumberPart[]): string {
     .trim();
 }
 
-function isLargeNumber(x: Fraction): boolean {
-  return x.compare(toFraction(1_000_000_000_000_000n)) > 0;
+const N_LARGE_NUMBER_MIN = N(1_000_000_000_000_000n);
+
+function isLargeNumber(x: DeciNumber): boolean {
+  return x.compare(N_LARGE_NUMBER_MIN) > 0;
 }
 
-function isLessThan10k(x: Fraction): boolean {
-  return x.compare(toFraction(10_000n)) < 0;
+const N_10K = N(10_000);
+
+function isLessThan10k(x: DeciNumber): boolean {
+  const r = x.compare(N_10K) < 0;
+  return r;
 }
 
 export const getIsPrecise = (
-  n: Fraction,
+  n: DeciNumber,
   places = 2,
   largeNumbersGetAbbreviated = true
 ): boolean => {
@@ -175,7 +180,7 @@ export const getIsPrecise = (
 const formatToParts = (
   locale: string,
   args: Intl.NumberFormatOptions,
-  n: Fraction,
+  n: DeciNumber,
   mapParts: (num: DeciNumberPart[]) => DeciNumberPart[]
 ): IntermediateDeciNumber => {
   const [value, useSafeN] = safeNumberForPrecision(n);
@@ -225,7 +230,7 @@ const formatToParts = (
   return { isPrecise, partsOf: mapParts(partsOf), value, asStringPrecise };
 };
 
-function formatCurrency(locale: string, unit: Unit[], fraction: Fraction) {
+function formatCurrency(locale: string, unit: Unit[], fraction: DeciNumber) {
   const currency = getCurrency(unit);
 
   const numberFormatOptions: Intl.NumberFormatOptions = {
@@ -248,15 +253,20 @@ function formatCurrency(locale: string, unit: Unit[], fraction: Fraction) {
   );
 }
 
+const N_10 = N(10);
+const N_ONE_CENT = N(1, 100);
+
 function formatUnitless(
   locale: string,
-  fraction: Fraction
+  fraction: DeciNumber
 ): IntermediateDeciNumber {
+  const isNotMultipleOf10 = !fraction.mod(N_10).equals(ZERO);
+  const enginneringNotation =
+    isLargeNumber(fraction) ||
+    (isNotMultipleOf10 && fraction.compare(N_ONE_CENT) < 0);
   const formattingOptions: Intl.NumberFormatOptions = {
     ...DEFAULT_NUMBER_OPTIONS,
-    ...(isLargeNumber(fraction) ||
-    (fraction.mod(10).compare(0) !== 0 &&
-      fraction.compare(toFraction(0.01)) < 0)
+    ...(enginneringNotation
       ? { notation: 'engineering' }
       : isLessThan10k(fraction)
       ? { notation: 'standard' }
@@ -269,7 +279,7 @@ function formatUnitless(
 function formatUserDefinedUnit(
   locale: string,
   unit: Unit[],
-  fraction: Fraction
+  fraction: DeciNumber
 ) {
   const args: Intl.NumberFormatOptions = { ...DEFAULT_NUMBER_OPTIONS };
 
@@ -301,7 +311,7 @@ function formatUserDefinedUnit(
 export function formatAnyUnit(
   locale: string,
   units: Unit[],
-  fraction: Fraction
+  fraction: DeciNumber
 ) {
   const args = { ...DEFAULT_NUMBER_OPTIONS };
 
@@ -323,7 +333,11 @@ export function formatAnyUnit(
   });
 }
 
-function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
+function formatAnyCurrency(
+  locale: string,
+  units: Unit[],
+  fraction: DeciNumber
+) {
   const currencyIndex = hasCurrency(units);
   const currencyUnit: Unit[] = [units[currencyIndex]];
 
@@ -332,23 +346,21 @@ function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
 
   const otherUnitsMult = unitsWithoutCurrency.reduce(
     (ac, current) => ac.mul(current.multiplier),
-    toFraction(1)
+    ONE
   );
 
   const partsOfUnits =
     unitsWithoutCurrency.length > 0
-      ? formatAnyUnit(
-          locale,
-          unitsWithoutCurrency,
-          toFraction(1)
-        ).partsOf.filter((e, i) => !(i === 0 && e.value === '1'))
+      ? formatAnyUnit(locale, unitsWithoutCurrency, ONE).partsOf.filter(
+          (e, i) => !(i === 0 && e.value === '1')
+        )
       : [];
 
   const partsOfCurrency = formatCurrency(
     locale,
     produce(currencyUnit, (cu) => {
       // eslint-disable-next-line no-param-reassign
-      cu[0].multiplier = toFraction(1);
+      cu[0].multiplier = ONE;
     }),
     fraction.mul(otherUnitsMult)
   );
@@ -376,14 +388,14 @@ function formatAnyCurrency(locale: string, units: Unit[], fraction: Fraction) {
 export function formatNumber(
   locale: string,
   unit: Unit[] | null | undefined,
-  number: Fraction,
+  number: DeciNumber,
   numberFormat: AST.NumberFormat | null = undefined,
   imprecise = false
-): DeciNumber {
-  const fraction = toFraction(number);
+): DeciNumberRep {
+  const fraction = N(number);
 
   if (numberFormat === 'percentage') {
-    const mulFraction = fraction.mul(100);
+    const mulFraction = fraction.mul(N(100));
     const formatted = formatNumber(locale, null, mulFraction);
     const partsOf: DeciNumberPart[] = [
       ...formatted.partsOf,
