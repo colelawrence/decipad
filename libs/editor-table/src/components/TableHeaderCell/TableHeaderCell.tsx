@@ -7,7 +7,11 @@ import {
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { EditorChangeContext, useComputer } from '@decipad/react-contexts';
+import {
+  EditorChangeContext,
+  useComputer,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import { TableColumnHeader } from '@decipad/ui';
 import {
   assertElementType,
@@ -43,6 +47,7 @@ export const TableHeaderCell: PlateComponent = ({
   const table = getDefined(getNode<TableElement>(editor, tablePath));
   const { onChangeColumnType, onRemoveColumn } = useTableActions(editor, table);
   const focused = useSelected();
+  const readOnly = useIsEditorReadOnly();
 
   const { dragSource, isDragging } = useDragColumn(editor, element);
   const [{ isOver }, dropTarget] = useDropColumn(editor, element);
@@ -120,7 +125,7 @@ export const TableHeaderCell: PlateComponent = ({
   return (
     <TableColumnHeader
       attributes={attributes}
-      readOnly={false}
+      readOnly={readOnly}
       empty={getNodeString(element).length === 0}
       focused={focused}
       isFirst={nThChild === 0}

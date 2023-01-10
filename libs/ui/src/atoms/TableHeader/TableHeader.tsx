@@ -193,6 +193,7 @@ export const TableHeader = ({
       ]}
       ref={thRef}
       data-highlight={highlight}
+      contentEditable={isEditable}
     >
       {isEditable && dropDirection === 'left' && (
         <ColumnDropLine dropDirection={dropDirection} />

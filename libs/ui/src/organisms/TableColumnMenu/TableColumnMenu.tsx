@@ -52,6 +52,7 @@ interface TableColumnMenuProps
   readonly onChangeColumnType?: (type: TableCellType) => void;
   readonly onRemoveColumn?: () => void;
   readonly isFirst?: boolean;
+  readonly isReadOnly?: boolean;
   readonly trigger: ReactNode;
   readonly type: CellValueType;
   readonly isForImportedColumn?: boolean;
