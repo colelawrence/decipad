@@ -31,6 +31,7 @@ export type UndoManager = {
 };
 export type UndoEditor = {
   undoManager?: UndoManager;
+  withoutCapturingUndo?: (cb: () => void) => void;
 };
 export type MyEditor = PlateEditor<MyValue> & {
   isDragging?: boolean;

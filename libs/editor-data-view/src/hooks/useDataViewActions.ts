@@ -28,6 +28,7 @@ import { nanoid } from 'nanoid';
 import { dequal } from 'dequal';
 import { Observable, Subject } from 'rxjs';
 import { Path } from 'slate';
+import { getDefined } from '@decipad/utils';
 import { Column } from '../types';
 
 export interface TableActions {
@@ -67,34 +68,36 @@ export const useDataViewActions = (
         headerRow.children.filter((node) => !isText(node));
 
       withoutNormalizing(editor, () => {
-        if (!existingColumns) {
-          return;
-        }
-        for (const existingColumn of existingColumns) {
-          const matchingDataColumn = columns.find((column) =>
-            column.blockId != null
-              ? column.blockId === existingColumn.name
-              : column.name === existingColumn.name
-          );
-          const columnPath = findNodePath(editor, existingColumn);
-          // remove columns not present
-          if (!matchingDataColumn) {
-            if (columnPath && hasNode(editor, columnPath)) {
-              removeNodes(editor, { at: columnPath });
-            }
-          } else if (columnPath && hasNode(editor, columnPath)) {
-            if (!dequal(existingColumn.cellType, matchingDataColumn.type)) {
-              setNodes<DataViewHeader>(
-                editor,
-                {
-                  cellType: matchingDataColumn.type,
-                  aggregation: undefined,
-                },
-                { at: columnPath }
-              );
+        getDefined(editor.withoutCapturingUndo)(() => {
+          if (!existingColumns) {
+            return;
+          }
+          for (const existingColumn of existingColumns) {
+            const matchingDataColumn = columns.find((column) =>
+              column.blockId != null
+                ? column.blockId === existingColumn.name
+                : column.name === existingColumn.name
+            );
+            const columnPath = findNodePath(editor, existingColumn);
+            // remove columns not present
+            if (!matchingDataColumn) {
+              if (columnPath && hasNode(editor, columnPath)) {
+                removeNodes(editor, { at: columnPath });
+              }
+            } else if (columnPath && hasNode(editor, columnPath)) {
+              if (!dequal(existingColumn.cellType, matchingDataColumn.type)) {
+                setNodes<DataViewHeader>(
+                  editor,
+                  {
+                    cellType: matchingDataColumn.type,
+                    aggregation: undefined,
+                  },
+                  { at: columnPath }
+                );
+              }
             }
           }
-        }
+        });
       });
     },
     [editor, element.children]
@@ -184,6 +187,9 @@ export const useDataViewActions = (
     onMoveColumn,
     onInsertColumn,
     onDeleteColumn,
-    columnChanges$: columnChanges$.asObservable(),
+    columnChanges$: useMemo(
+      () => columnChanges$.asObservable(),
+      [columnChanges$]
+    ),
   };
 };
