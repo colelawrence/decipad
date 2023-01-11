@@ -1,6 +1,9 @@
 // eslint-disable-next-line no-restricted-imports
-import { FractionLike } from '@decipad/fraction';
-import DeciNumber, { isDeciNumberInput, N } from '@decipad/number';
+import DeciNumber, {
+  isDeciNumberInput,
+  N,
+  DeciNumberInput,
+} from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import {
@@ -22,7 +25,7 @@ export type Comparable =
   | number
   | bigint
   | DeciNumber
-  | FractionLike
+  | DeciNumberInput
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */

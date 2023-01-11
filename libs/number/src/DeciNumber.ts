@@ -6,6 +6,7 @@ import {
   UndefinedNumber,
   UndefinableOrInfiniteOrFractionLike,
   DeciNumberInputWithNumerator,
+  DeciNumberInput,
 } from './types';
 
 export type { DeciNumberInputWithNumerator };
@@ -42,16 +43,16 @@ const binOp = <B>(
   return fromNumber(result);
 };
 
-export const isDeciNumberInput = (
-  n: unknown
-): n is DeciNumberInputWithNumerator => {
+export const isDeciNumberInput = (n: unknown): n is DeciNumberInput => {
   return (
     typeof n === 'object' &&
     n != null &&
-    'n' in n &&
-    (typeof n.n === 'number' ||
-      typeof n.n === 'bigint' ||
-      typeof n.n === 'string')
+    (n instanceof DeciNumber ||
+      ('n' in n &&
+        (typeof n.n === 'number' ||
+          typeof n.n === 'bigint' ||
+          typeof n.n === 'string')) ||
+      ('infinite' in n && typeof n.infinite === 'boolean'))
   );
 };
 
