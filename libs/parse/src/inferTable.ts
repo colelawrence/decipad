@@ -1,10 +1,11 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
-import { N, ZERO } from '@decipad/number';
+import { UNDEFINED } from '@decipad/number';
 import { getDefined, varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
 import { parseDate } from './parseDate';
 import { Sheet, SpreadsheetColumn, InferTableOptions } from './types';
+import { fastNumber } from './fastNumber';
 
 interface WithColumnNamesResult {
   columnNames: string[];
@@ -17,7 +18,9 @@ const withColumnNames = (
 ): WithColumnNamesResult => {
   if (options.useFirstRowAsHeader) {
     return {
-      columnNames: data.values.map((column) => varNamify(column[0].toString())),
+      columnNames: data.values.map((column) =>
+        varNamify((column[0] ?? '_').toString())
+      ),
       columnValues: data.values.map((column) => column.slice(1)),
     };
   }
@@ -37,10 +40,10 @@ function toValue(
       switch (type?.kind) {
         case 'number':
           try {
-            return N(elem as number);
+            return fastNumber(elem as number);
           } catch (err) {
             if (typeof elem === 'string' && !elem.trim().length) {
-              return ZERO;
+              return UNDEFINED;
             }
             throw err;
           }

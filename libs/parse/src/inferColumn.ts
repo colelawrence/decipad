@@ -15,6 +15,8 @@ interface InferColumnOptions {
   doNotTryExpressionNumbersParse?: boolean;
 }
 
+const INFER_MAX_ROWS = 100;
+
 export const inferColumn = memoize(
   async (
     computer: Computer,
@@ -75,7 +77,7 @@ export const inferColumn = memoize(
       }
     };
 
-    for (const value of column) {
+    for (const value of column.slice(0, INFER_MAX_ROWS)) {
       switch (typeof value) {
         case 'boolean':
           coalesce({ kind: 'boolean' });

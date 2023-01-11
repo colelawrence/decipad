@@ -20,7 +20,7 @@ export const importFromCsv = async (
   const source = await resp.text();
   return new Promise((resolve, reject) => {
     const data: string[][] = [];
-    const parser = parseCSV({ cast: true, trim: true });
+    const parser = parseCSV({ cast: true, trim: true, delimiter: [',', ';'] });
     let isDone = false;
     parser.on('readable', () => {
       let row;
@@ -33,8 +33,9 @@ export const importFromCsv = async (
     parser.once('end', async () => {
       isDone = true;
       try {
+        const sheet = trimSheet(toColumnOriented(data));
         resolve(
-          await inferTable(computer, trimSheet(toColumnOriented(data)), {
+          await inferTable(computer, sheet, {
             ...options,
             doNotTryExpressionNumbersParse: true,
           })

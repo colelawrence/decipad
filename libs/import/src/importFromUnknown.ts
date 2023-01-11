@@ -11,6 +11,11 @@ const importFromUnknownResponse = async (
   options: ImportOptions,
   url?: URL
 ): Promise<ImportResult[]> => {
+  if (!resp.ok) {
+    throw new Error(
+      `failed to fetch from ${url} with response ${resp.status}: ${resp.statusText}`
+    );
+  }
   const contentType = resp.headers.get('content-type');
   let result: Result.Result | undefined;
   if (contentType?.startsWith('application/json')) {
