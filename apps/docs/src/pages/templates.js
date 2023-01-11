@@ -646,7 +646,7 @@ export default function Templates() {
               <p>
                 We can help you build it! Talk to us on{' '}
                 <u>
-                  <a href="https://discord.com/invite/HwDMqwbGmc">Discord</a>
+                  <a href="https://discord.gg/CUtKEd3rBn">Discord</a>
                 </u>
                 , or via email{' '}
                 <u>

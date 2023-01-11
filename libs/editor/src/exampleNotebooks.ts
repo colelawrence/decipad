@@ -267,7 +267,7 @@ export const introNotebook = (): MyValue => [
                 ],
                 type: 'a',
                 id: nanoid(),
-                url: 'https://discord.com/invite/HwDMqwbGmc',
+                url: 'https://discord.gg/CUtKEd3rBn',
               },
               {
                 text: '',

@@ -8,4 +8,4 @@ hide_table_of_contents: false
 
 <br />
 
-Having issues with Decipad? Couldn't find what you needed? We've got you! Ask the team by joining our <a href="https://discord.com/invite/HwDMqwbGmc">Discord channel</a> or by sending us an email to [support@decipad.com](mailto:support@decipad.com).
+Having issues with Decipad? Couldn't find what you needed? We've got you! Ask the team by joining our <a href="https://discord.gg/CUtKEd3rBn">Discord channel</a> or by sending us an email to [support@decipad.com](mailto:support@decipad.com).

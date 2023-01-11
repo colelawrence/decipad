@@ -88,7 +88,7 @@ export const App: FC = () => {
 
       {session.status === 'authenticated' && (
         <HelpMenu
-          discordUrl="https://discord.com/invite/HwDMqwbGmc"
+          discordUrl="https://discord.gg/CUtKEd3rBn"
           docsUrl={docs({}).$}
           onSelectSupport={show}
         />
