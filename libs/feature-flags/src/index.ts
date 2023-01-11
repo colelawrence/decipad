@@ -23,7 +23,8 @@ const queryStringFlags: Flag[] = ['CODE_LINE_NAME_SEPARATED'];
 
 export const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};
-  const search = 'location' in globalThis ? globalThis.location.search : '';
+  const location = 'location' in globalThis ? globalThis.location : undefined;
+  const search = location?.search ?? '';
   const params = new URLSearchParams(search);
 
   for (const key of queryStringFlags) {

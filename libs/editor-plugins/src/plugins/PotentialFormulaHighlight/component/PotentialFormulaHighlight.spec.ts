@@ -15,8 +15,7 @@ beforeEach(() => {
   });
 });
 
-// eslint-disable-next-line jest/no-disabled-tests
-it.skip('turns a decoration into a magic number and a code line', () => {
+it('turns a decoration into a magic number and a code line', () => {
   editor.children = [
     {
       type: ELEMENT_PARAGRAPH,

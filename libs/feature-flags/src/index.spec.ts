@@ -93,8 +93,7 @@ describe('in test', () => {
     });
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('(meta test) query string flags are disabled in tests', () => {
+  it('(meta test) query string flags are disabled in tests', () => {
     const qsOverrides = getQueryStringOverrides();
     const oneQsOverrideFlag = Object.keys(qsOverrides).at(0);
     if (oneQsOverrideFlag) {
