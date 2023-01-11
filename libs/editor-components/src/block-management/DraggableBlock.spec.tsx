@@ -65,7 +65,8 @@ describe('when editor is in readOnly mode', () => {
   it('does not render the drag handle', async () => {
     const props = {
       ...plateProps,
-      editableProps: { ...plateProps.editableProps, readOnly: true },
+      readOnly: true,
+      editableProps: { ...plateProps.editableProps },
     };
     const { queryByTitle } = render(
       <EditorReadOnlyContext.Provider

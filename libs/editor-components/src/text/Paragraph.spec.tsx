@@ -175,19 +175,18 @@ it('does not show a placeholder when selecting more than the paragraph', async (
 });
 
 it('does not show a placeholder when in readOnly mode', async () => {
-  plateProps.editableProps = {
-    readOnly: true,
-  };
+  plateProps.readOnly = true;
   editor = createPlateEditor({ plugins: plateProps.plugins });
   const { editor: _editor, ...restProps } = plateProps;
-  const { container } = render(<Plate {...restProps} editor={editor} />, {
+  const { getByText } = render(<Plate {...restProps} editor={editor} />, {
     wrapper,
   });
-  const paragraphElement = container.querySelector('p')!;
+  const textElement = getByText('text');
+  const paragraphElement = textElement.closest('p');
 
   await act(async () => {
     select(editor, {
-      path: findDomNodePath(editor, paragraphElement)!,
+      path: findDomNodePath(editor, textElement)!,
       offset: 0,
     });
     await timeout(500);

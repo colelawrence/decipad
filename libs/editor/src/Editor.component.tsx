@@ -1,4 +1,4 @@
-import { TeleportEditor, NumberCatalog } from '@decipad/editor-components';
+import { NumberCatalog, TeleportEditor } from '@decipad/editor-components';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -18,7 +18,7 @@ import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
-import { Tooltip, CursorOverlay, RemoteAvatarOverlay } from './components';
+import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { NotebookState } from './components/NotebookState/NotebookState';
 import { useAutoAnimate } from './hooks';
@@ -107,12 +107,12 @@ export const Editor = (props: EditorProps) => {
                 <Plate<MyValue>
                   editor={editor}
                   onChange={onChange}
-                  editableProps={{
+                  readOnly={
                     // Only respect write locks here and not the readOnly prop.
                     // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
                     // The rest are controlled via EditorReadOnlyContext.
-                    readOnly: isWritingLocked,
-                  }}
+                    isWritingLocked
+                  }
                   disableCorePlugins={{
                     history: true,
                   }}

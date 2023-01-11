@@ -12,14 +12,10 @@ import {
   selectEventRange,
 } from '@decipad/editor-utils';
 import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
-import {
-  dndStore,
-  getBlockAbove,
-  isElementEmpty,
-  removeNodes,
-} from '@udecode/plate';
+import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
 import { CodeResult } from '@decipad/ui';
 import { nanoid } from 'nanoid';
+import { dndStore } from '@udecode/plate-ui-dnd';
 
 type DragCellData = Parameters<
   NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']>

@@ -7,10 +7,10 @@ import {
   useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
-import { Plate, createPlateEditor } from '@udecode/plate';
-import { FC, useCallback, useContext, useMemo, useState, useRef } from 'react';
+import { createPlateEditor, Plate } from '@udecode/plate';
+import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { MyValue } from '@decipad/editor-types';
-import { TeleportEditor, NumberCatalog } from '@decipad/editor-components';
+import { NumberCatalog, TeleportEditor } from '@decipad/editor-components';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Subject } from 'rxjs';
 import { Tooltip } from './components';
@@ -68,9 +68,7 @@ export const NoDocSyncEditorInternal: FC = () => {
                     ? introNotebook()
                     : emptyNotebook()
                 }
-                editableProps={{
-                  readOnly: isWritingLocked,
-                }}
+                readOnly={isWritingLocked}
               >
                 <NumberCatalog />
                 <Tooltip />

@@ -14,11 +14,9 @@ import {
   getNodeEntries,
   isElement,
   moveNodes,
-  useDragNode,
-  UseDropNodeOptions,
   withoutNormalizing,
 } from '@udecode/plate';
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
 import { Path, PathRef } from 'slate';
 import {
@@ -27,6 +25,7 @@ import {
 } from '@udecode/plate-selection';
 import { ReactEditor } from 'slate-react';
 import { getAnalytics } from '@decipad/client-events';
+import { useDragNode, UseDropNodeOptions } from '@udecode/plate-ui-dnd';
 
 export declare type DropDirection =
   | 'top'

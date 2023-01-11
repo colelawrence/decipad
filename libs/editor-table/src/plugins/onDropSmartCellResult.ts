@@ -14,13 +14,9 @@ import {
   insertNodes,
   selectEventRange,
 } from '@decipad/editor-utils';
-import {
-  dndStore,
-  getBlockAbove,
-  isElementEmpty,
-  removeNodes,
-} from '@udecode/plate';
+import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { dndStore } from '@udecode/plate-ui-dnd';
 import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
 type DragCellData = string;

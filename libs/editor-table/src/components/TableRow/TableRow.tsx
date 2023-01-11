@@ -1,4 +1,4 @@
-import { getNodeEntry, useDndNode } from '@udecode/plate';
+import { getNodeEntry } from '@udecode/plate';
 import { Path } from 'slate';
 import {
   TableHeaderRow,
@@ -14,6 +14,7 @@ import {
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { useContext, useEffect, useRef } from 'react';
+import { useDndNode } from '@udecode/plate-ui-dnd';
 import { useTableActions } from '../../hooks';
 import { selectRow } from '../../utils/selectRow';
 import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';

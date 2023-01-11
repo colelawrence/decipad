@@ -1,4 +1,4 @@
-import { DropLineDirection } from '@udecode/plate';
+import { DropLineDirection } from '@udecode/plate-ui-dnd';
 import { DropLine } from './DropLine';
 import { dropLineWidth } from '../../styles/drop-line';
 

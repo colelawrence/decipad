@@ -70,7 +70,6 @@ import type { UserInteraction } from '@decipad/react-contexts';
 import {
   createBlockquotePlugin,
   createDeserializeDocxPlugin,
-  createDndPlugin,
   createHeadingPlugin,
   createListPlugin,
   createParagraphPlugin,
@@ -80,6 +79,7 @@ import {
 } from '@udecode/plate';
 import { createJuicePlugin } from '@udecode/plate-juice';
 import { Subject } from 'rxjs';
+import { createDndPlugin } from '@udecode/plate-ui-dnd';
 import { autoformatRules } from './autoformat';
 import { components } from './components';
 import { exitBreakOptions } from './exitBreakOptions';

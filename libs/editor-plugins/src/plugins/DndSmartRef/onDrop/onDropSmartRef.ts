@@ -9,11 +9,10 @@ import {
   DRAG_BLOCK_ID_CONTENT_TYPE,
   DRAG_SMART_REF,
   getCollapsedSelection,
-  selectEventRange,
   insertNodes,
+  selectEventRange,
 } from '@decipad/editor-utils';
 import {
-  dndStore,
   focusEditor,
   getBlockAbove,
   getNodeString,
@@ -22,6 +21,7 @@ import {
 } from '@udecode/plate';
 import React from 'react';
 import { BasePoint, Path } from 'slate';
+import { dndStore } from '@udecode/plate-ui-dnd';
 import { insertSmartRef } from './insertSmartRef';
 
 export const onDropSmartRef =

@@ -6,8 +6,9 @@ import {
   MyText,
 } from '@decipad/editor-types';
 import React from 'react';
-import { dndStore, getBlockAbove } from '@udecode/plate';
+import { getBlockAbove } from '@udecode/plate';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
+import { dndStore } from '@udecode/plate-ui-dnd';
 
 export const DRAG_SMART_CELL = 'smart-cell';
 
