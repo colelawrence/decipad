@@ -1,11 +1,18 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useActiveElement } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ClientEventsContext } from '@decipad/client-events';
-import { Divider, Dot, MenuItem, NavigationItem, Tooltip } from '../../atoms';
+import {
+  Divider,
+  Dot,
+  ExternalHrefIcon,
+  MenuItem,
+  NavigationItem,
+  Tooltip,
+} from '../../atoms';
 import { Archive, Chat, Docs, Home, Plus, Sparkles } from '../../icons';
 import { NavigationList } from '../../molecules';
 import {
@@ -42,34 +49,6 @@ const hrStyles = css({
   },
 });
 
-const iconLink = (
-  <svg
-    css={{
-      float: 'right',
-      marginTop: '1px',
-      marginLeft: '1px',
-      '&:hover': {
-        visibility: 'hidden',
-      },
-    }}
-    width="15"
-    height="15"
-    viewBox="0 0 15 15"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M3.58057 12.6694L10.2981 5.95192"
-      stroke={cssVar('weakerTextColor')}
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    />
-    <path
-      d="M12.4194 4.43079V9.45333C12.4194 9.98787 11.7731 10.2556 11.3952 9.87759L6.37263 4.85505C5.99465 4.47707 6.26235 3.83079 6.79689 3.83079L11.8194 3.83079C12.1508 3.83079 12.4194 4.09942 12.4194 4.43079Z"
-      fill={cssVar('weakerTextColor')}
-    />
-  </svg>
-);
 export interface Section {
   id: string;
   color: string;
@@ -319,7 +298,9 @@ export const WorkspaceNavigation = ({
           key={'navfoot-docs-0'}
           icon={<Sparkles />}
         >
-          <span css={itemTextStyles}>Templates {iconLink}</span>
+          <span css={itemTextStyles}>
+            Templates <ExternalHrefIcon />
+          </span>
         </NavigationItem>
       </NavigationList>
       <div key="div-1" role="presentation" css={hrStyles}>
@@ -331,7 +312,9 @@ export const WorkspaceNavigation = ({
           key={'navfoot-docs-0'}
           icon={<Docs />}
         >
-          <span css={itemTextStyles}>Documentation {iconLink}</span>
+          <span css={itemTextStyles}>
+            Documentation <ExternalHrefIcon />
+          </span>
         </NavigationItem>
         <NavigationItem
           key={'navfoot-feedback-1'}

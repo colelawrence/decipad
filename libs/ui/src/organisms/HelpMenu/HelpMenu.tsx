@@ -1,9 +1,9 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext } from 'react';
-import { ClientEventsContext } from '@decipad/client-events';
-import { Link, MenuItem, MenuSeparator } from '../../atoms';
+import { ExternalHrefIcon, Link, MenuItem, MenuSeparator } from '../../atoms';
 import { HelpButton, MenuList } from '../../molecules';
-import { p12Regular, p14Medium, setCssVar, cssVar } from '../../primitives';
+import { p12Regular, p14Medium, setCssVar } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const menuItemWrapperStyles = css({
@@ -18,32 +18,6 @@ const menuItemWrapperStyles = css({
 const menuItemSmallTextStyles = css(
   p12Regular,
   setCssVar('normalTextColor', 'weakerTextColor')
-);
-
-const iconLink = (
-  <svg
-    css={{
-      float: 'right',
-      marginTop: '1px',
-      marginLeft: '1px',
-    }}
-    width="15"
-    height="15"
-    viewBox="0 0 15 15"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M3.58057 12.6694L10.2981 5.95192"
-      stroke={cssVar('weakerTextColor')}
-      strokeWidth="1.4"
-      strokeLinecap="round"
-    />
-    <path
-      d="M12.4194 4.43079V9.45333C12.4194 9.98787 11.7731 10.2556 11.3952 9.87759L6.37263 4.85505C5.99465 4.47707 6.26235 3.83079 6.79689 3.83079L11.8194 3.83079C12.1508 3.83079 12.4194 4.09942 12.4194 4.43079Z"
-      fill={cssVar('weakerTextColor')}
-    />
-  </svg>
 );
 
 const helpMenuStyles = css({
@@ -113,7 +87,7 @@ const CustomMenuItem = ({
       {chat && <div css={statusIcon}></div>}
       <span css={{ display: 'flex', flexDirection: 'column' }}>
         <span css={p14Medium}>
-          {title} {external && iconLink}
+          {title} {external && <ExternalHrefIcon />}
         </span>
         {description !== undefined && (
           <small css={menuItemSmallTextStyles}>{description}</small>

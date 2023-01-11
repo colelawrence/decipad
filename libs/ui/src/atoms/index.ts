@@ -33,6 +33,7 @@ export { EditorBlock } from './EditorBlock/EditorBlock';
 export { EditorColumns } from './EditorColumns/EditorColumns';
 export { EditorLayout } from './EditorLayout/EditorLayout';
 export { ErrorMessage } from './ErrorMessage/ErrorMessage';
+export { ExternalHrefIcon } from './ExternalHrefIcon/ExternalHrefIcon';
 export * from './Floating';
 export { FloatingButton } from './FloatingButton/FloatingButton';
 export { Heading1 } from './Heading1/Heading1';
