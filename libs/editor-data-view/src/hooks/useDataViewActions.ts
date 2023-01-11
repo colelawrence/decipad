@@ -79,12 +79,11 @@ export const useDataViewActions = (
                 : column.name === existingColumn.name
             );
             const columnPath = findNodePath(editor, existingColumn);
-            // remove columns not present
-            if (!matchingDataColumn) {
-              if (columnPath && hasNode(editor, columnPath)) {
-                removeNodes(editor, { at: columnPath });
-              }
-            } else if (columnPath && hasNode(editor, columnPath)) {
+            if (
+              matchingDataColumn &&
+              columnPath &&
+              hasNode(editor, columnPath)
+            ) {
               if (!dequal(existingColumn.cellType, matchingDataColumn.type)) {
                 setNodes<DataViewHeader>(
                   editor,
@@ -105,12 +104,37 @@ export const useDataViewActions = (
 
   const setVarName = useElementMutatorCallback(editor, element, 'varName');
 
+  const clearColumns = useCallback(() => {
+    getDefined(editor.withoutCapturingUndo)(() => {
+      withoutNormalizing(editor, () => {
+        const headerRow: DataViewHeaderRowElement | null = element.children[1];
+        const headerRowPath = findNodePath(editor, headerRow);
+        if (!headerRowPath) {
+          return;
+        }
+        const existingColumns: DataViewHeader[] | undefined =
+          headerRow.children.filter((node) => !isText(node));
+        if (!existingColumns) {
+          return;
+        }
+        for (const existingColumn of existingColumns) {
+          const columnPath = findNodePath(editor, existingColumn);
+          if (columnPath && hasNode(editor, columnPath)) {
+            removeNodes(editor, { at: columnPath });
+          }
+        }
+      });
+    });
+  }, [editor, element.children]);
+
   const onVariableNameChange = useCallback(
     (varName: string) => {
-      setDataColumns([]);
-      setVarName(varName);
+      withoutNormalizing(editor, () => {
+        clearColumns();
+        setVarName(varName);
+      });
     },
-    [setDataColumns, setVarName]
+    [clearColumns, editor, setVarName]
   );
 
   const onMoveColumn = useCallback(

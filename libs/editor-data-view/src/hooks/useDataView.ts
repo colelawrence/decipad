@@ -68,11 +68,11 @@ export const useDataView = ({
     if (!availableColumns) {
       return;
     }
-    const tablePath = findNodePath(editor, element);
+    const dataViewPath = findNodePath(editor, element);
 
-    if (tablePath) {
+    if (dataViewPath) {
       const columnRowEntry = findNode(editor, {
-        at: tablePath,
+        at: dataViewPath,
         match: matchNodeType(ELEMENT_DATA_VIEW_TR),
       });
       if (columnRowEntry) {
@@ -92,6 +92,10 @@ export const useDataView = ({
     }
     return undefined;
   }, [availableColumns, editor, element]);
+
+  useEffect(() => {
+    sortColumns(selectColumnOrder());
+  }, [selectColumnOrder, sortColumns]);
 
   useEditorChange(sortColumns, selectColumnOrder, {
     injectObservable: columnChanges$,

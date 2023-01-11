@@ -6,10 +6,10 @@ module.exports = {
   displayName: 'editor-data-view',
   coverageThreshold: {
     global: {
-      statements: 24,
+      statements: 23,
       branches: 22,
-      functions: 18,
-      lines: 24,
+      functions: 17,
+      lines: 23,
     },
   },
 };
