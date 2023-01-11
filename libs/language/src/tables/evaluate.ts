@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
-import { Column, ColumnLike, Row, RuntimeError, Table, Value } from '../value';
+import { Column, ColumnLike, Row, Table, Value } from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
   walkAst,
@@ -11,6 +11,7 @@ import {
 } from '../utils';
 import { Realm, evaluate } from '../interpreter';
 import { coerceTableColumnIndices } from './dimensionCoersion';
+import { shouldEvaluate } from './shouldEvaluate';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -82,38 +83,40 @@ export const evaluateTable = async (
   table: AST.Table
 ): Promise<Table> => {
   const tableColumns = new Map<string, ColumnLike>();
-  const { args: items } = table;
-  const tableName = getDefined(realm.getTypeAt(table).indexName);
+  const {
+    args: [tName, ...items],
+  } = table;
 
-  if (items.length === 0) {
-    return Table.fromMapping({});
-  }
+  const tableName = getIdentifierString(tName);
+  const indexName = getDefined(realm.getTypeAt(table).indexName);
+
+  realm.stack.createNamespace(tableName, 'function');
 
   let tableLength: number | undefined;
   return realm.stack.withPush(async () => {
     const addColumn = (name: string, value: ColumnLike) => {
       tableLength ??= value.rowCount;
 
-      if (tableLength !== value.rowCount) {
-        // UI tables will never place us in this situation
-        throw new RuntimeError('Inconsistent table column sizes');
-      }
-
       tableColumns.set(name, value);
-      realm.stack.set(name, value);
-      realm.stack.set(tableName, Table.fromMapping(tableColumns));
+      realm.stack.setNamespaced([tableName, name], value, 'function');
     };
 
     for (const item of items) {
       if (item.type === 'table-column') {
         const [def, column] = item.args;
         const colName = getIdentifierString(def);
+
+        if (!shouldEvaluate(realm, tableName, colName)) {
+          // Avoid differing type and value
+          continue;
+        }
+
         // eslint-disable-next-line no-await-in-loop
         const columnData = await evaluateTableColumn(
           realm,
           tableColumns,
           column,
-          tableName,
+          indexName,
           tableLength
         );
 
@@ -125,7 +128,10 @@ export const evaluateTable = async (
       }
     }
 
-    return Table.fromMapping(tableColumns);
+    return getInstanceof(
+      getDefined(realm.stack.get(tableName, 'function')),
+      Table
+    );
   });
 };
 

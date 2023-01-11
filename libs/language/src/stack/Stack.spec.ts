@@ -1,30 +1,42 @@
 import { Stack, VarGroup } from './index';
 
-it('can push and pop contexts', async () => {
-  const stack = new Stack();
+let stack: Stack<string>;
+beforeEach(() => {
+  stack = new Stack(
+    undefined,
+    (nsContents) => JSON.stringify([...nsContents]),
+    (table) => {
+      try {
+        const names = JSON.parse(table);
+        if (Array.isArray(names)) return new Map(names);
+      } catch {
+        return undefined;
+      }
+      return undefined;
+    }
+  );
+});
 
+it('can push and pop contexts', async () => {
   await stack.withPush(async () => {
-    stack.set('variable', 1);
-    expect(stack.get('variable')).toEqual(1);
+    stack.set('variable', '1');
+    expect(stack.get('variable')).toEqual('1');
   });
 
   expect(stack.get('variable')).toEqual(null);
 });
 
 it('can delete variables', async () => {
-  const stack = new Stack();
-
-  stack.set('someVar', 1);
+  stack.set('someVar', '1');
   stack.delete('someVar');
 
   expect(stack.get('someVar')).toEqual(null);
 });
 
 it('checks for the presence of a variable', async () => {
-  const stack = new Stack({ GlobalScope: 1 });
-
+  stack.set('GlobalScope', '1');
   await stack.withPush(async () => {
-    stack.set('InnerScope', 2);
+    stack.set('InnerScope', '2');
 
     expect(stack.has('InnerScope')).toEqual(true);
     expect(stack.has('GlobalScope')).toEqual(true);
@@ -33,7 +45,7 @@ it('checks for the presence of a variable', async () => {
 });
 
 it('can push a function call', async () => {
-  const stack = new Stack({ GlobalScope: 'GlobalScope' });
+  stack.set('GlobalScope', 'GlobalScope', 'global');
 
   await stack.withPush(async () => {
     stack.set('GlobalScope', 'garbage');
@@ -49,12 +61,49 @@ it('can push a function call', async () => {
   });
 });
 
-describe('scope modifiers', () => {
-  let stack: Stack<string>;
-  beforeEach(() => {
-    stack = new Stack();
-  });
+it('can use namespaces', () => {
+  stack.setNamespaced(['Table', 'A'], 'AVal', 'global');
+  stack.setNamespaced(['Table', 'B'], 'BVal', 'global');
 
+  stack.setNamespaced(['OtherNs', 'A'], 'No', 'global');
+  stack.set('A', 'No');
+
+  expect(stack.get('Table')).toMatchInlineSnapshot(
+    `"[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"BVal\\"]]"`
+  );
+  expect(stack.has('Table')).toMatchInlineSnapshot(`true`);
+
+  expect(() => stack.set('Table', 'fail')).toThrow();
+
+  expect(stack.globalVariables).toMatchInlineSnapshot(`
+    Map {
+      "A" => "No",
+      "Table" => "[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"BVal\\"]]",
+      "OtherNs" => "[[\\"A\\",\\"No\\"]]",
+    }
+  `);
+
+  stack.set('TableToSplit', JSON.stringify([['ColName', '1']]));
+
+  expect(stack.get('TableToSplit')).toMatchInlineSnapshot(
+    `"[[\\"ColName\\",\\"1\\"]]"`
+  );
+  expect(
+    stack.getNamespaced(['TableToSplit', 'ColName'], 'function')
+  ).toMatchInlineSnapshot(`"1"`);
+});
+
+it('can expand an empty namespace', () => {
+  stack.set('Table', JSON.stringify([]), 'global');
+  expect(stack.get('Table')).toMatchInlineSnapshot(`"[]"`);
+  expect(Object.fromEntries(stack.namespaces)).toMatchInlineSnapshot(`
+    Object {
+      "Table": Map {},
+    }
+  `);
+});
+
+describe('scope modifiers', () => {
   const getHas = (name: string, place: VarGroup) => {
     const has = stack.has(name, place);
     const val = stack.get(name, place);

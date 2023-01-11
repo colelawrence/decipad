@@ -45,7 +45,7 @@ export const getTableAstNodeFromTableElement = async (
   return {
     id: getDefined(table.id),
     name: tableName,
-    expression: astNode('table'),
+    expression: astNode('table', astNode('tabledef', tableName)),
     columnAssigns,
   };
 };

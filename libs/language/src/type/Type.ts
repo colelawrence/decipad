@@ -2,7 +2,6 @@ import { immerable, produce } from 'immer';
 import type { AST, Time } from '..';
 import * as t from './build';
 import {
-  canAddTableColumn,
   divideUnit,
   getRangeOf,
   isColumn,
@@ -142,10 +141,6 @@ export class Type {
 
   isTable(): Type {
     return isTable(this);
-  }
-
-  canAddTableColumn(colName: string): Type {
-    return canAddTableColumn(this, colName);
   }
 
   isTableOrRow(): Type {

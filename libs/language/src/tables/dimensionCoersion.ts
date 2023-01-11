@@ -1,5 +1,4 @@
-import { produce } from 'immer';
-import { Type, build as t } from '../type';
+import { Type } from '../type';
 import { linearizeType } from '../dimtools/common';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 import {
@@ -28,14 +27,12 @@ import {
 export const coerceTableColumnTypeIndices = (type: Type, indexName: string) => {
   if (type.columnSize == null) {
     // Because we're so very nice, allow `Column = 1` as syntax sugar.
-    return t.column(type, 'unknown', indexName);
+    return type;
   } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
-    return dimSwapTypes(indexName, type);
+    return dimSwapTypes(indexName, type).reduced();
   } else {
     // We want our table index on top
-    return produce(type, (t) => {
-      t.indexedBy = indexName;
-    });
+    return type.reduced();
   }
 };
 

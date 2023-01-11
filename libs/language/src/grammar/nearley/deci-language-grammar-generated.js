@@ -373,7 +373,7 @@ let ParserRules = [
   },
   {
     name: 'assign',
-    symbols: ['assignTarget', 'equalSign', 'assignable'],
+    symbols: ['assignTarget', 'equalSign', 'expression'],
     postprocess: (d) =>
       addArrayLoc(
         {
@@ -383,8 +383,6 @@ let ParserRules = [
         d
       ),
   },
-  { name: 'assignable', symbols: ['expression'], postprocess: id },
-  { name: 'assignable', symbols: ['table'], postprocess: id },
   {
     name: 'assignTarget',
     symbols: ['identifier'],
@@ -399,7 +397,7 @@ let ParserRules = [
     },
   },
   {
-    name: 'column_assign',
+    name: 'columnAssign',
     symbols: [
       'identifier',
       '_',
@@ -1201,12 +1199,26 @@ let ParserRules = [
   },
   {
     name: 'table',
-    symbols: [{ literal: '{' }, 'tableContents', { literal: '}' }],
+    symbols: [
+      'identifier',
+      'equalSign',
+      { literal: '{' },
+      'tableContents',
+      { literal: '}' },
+    ],
     postprocess: (d) => {
+      const name = addLoc(
+        {
+          type: 'tabledef',
+          args: [d[0].name],
+        },
+        d[0]
+      );
+
       return addArrayLoc(
         {
           type: 'table',
-          args: d[1],
+          args: [name, ...d[3]],
         },
         d
       );
@@ -2194,7 +2206,8 @@ let ParserRules = [
     },
   },
   { name: 'statement', symbols: ['assign'], postprocess: id },
-  { name: 'statement', symbols: ['column_assign'], postprocess: id },
+  { name: 'statement', symbols: ['table'], postprocess: id },
+  { name: 'statement', symbols: ['columnAssign'], postprocess: id },
   { name: 'statement', symbols: ['matrixAssign'], postprocess: id },
   { name: 'statement', symbols: ['functionDef'], postprocess: id },
   { name: 'statement', symbols: ['expression'], postprocess: id },

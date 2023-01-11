@@ -6,24 +6,18 @@ import { objectToMap } from '../testUtils';
 import { inferTable, inferTableColumnPerCell } from './inference';
 
 const nilCtx = makeContext({
-  inAssignment: 'TableName',
-  initialGlobalScope: new Map([
-    ['SomeCol', t.column(t.number(), 2)],
-    [
-      'SomeExistingTable',
-      t.table({
-        indexName: 'SomeExistingTable',
-        columnNames: ['Col'],
-        columnTypes: [t.column(t.number(), 1234, 'SomeExistingTable')],
-      }),
-    ],
-  ]),
+  initialGlobalScope: new Map([['SomeCol', t.column(t.number(), 2)]]),
 });
+nilCtx.stack.setNamespaced(
+  ['SomeExistingTable', 'Col'],
+  t.column(t.number(), 1234, 'SomeExistingTable'),
+  'global'
+);
 
 it('puts column types in ether', async () => {
   const col1 = n('table-column', n('coldef', 'ColA'), col(1, 2));
   const col2 = n('table-column', n('coldef', 'ColA'), col(3, 4));
-  const tbl = n('assign', n('def', 'tbl'), n('table', col1, col2));
+  const tbl = n('table', n('tabledef', 'tbl'), col1, col2);
 
   const ctx = makeContext();
   await inferStatement(ctx, tbl);
@@ -32,7 +26,7 @@ it('puts column types in ether', async () => {
 });
 
 it('allows empty tables', async () => {
-  expect(await inferTable(nilCtx, table({}))).toMatchObject({
+  expect(await inferTable(nilCtx, table('TableName', {}))).toMatchObject({
     indexName: 'TableName',
     columnNames: [],
     columnTypes: [],
@@ -41,7 +35,7 @@ it('allows empty tables', async () => {
 
 it('forbids tables inside functions', async () => {
   await nilCtx.stack.withPushCall(async () => {
-    const tbl = table({
+    const tbl = table('TableName', {
       Calculated: n('ref', 'SomeCol'),
     });
     expect(
@@ -56,28 +50,24 @@ describe('table with formulae', () => {
   const testComputed = (expression: AST.Expression) =>
     inferTableColumnPerCell(
       makeContext(),
-      objectToMap({ OtherColumn: t.column(t.number(), 'unknown') }),
+      objectToMap({ OtherColumn: t.number() }),
       expression
     );
 
   it('can run a formula', async () => {
-    expect(await testComputed(l('a string'))).toEqual(
-      t.column(t.string(), 'unknown')
-    );
+    expect(await testComputed(l('a string'))).toEqual(t.string());
     expect(await testComputed(col('one', 'two'))).toEqual(
-      t.column(t.column(t.string(), 2), 'unknown')
+      t.column(t.string(), 2)
     );
   });
 
   it('can run a formula with previous', async () => {
-    expect(await testComputed(c('previous', l('hello')))).toEqual(
-      t.column(t.string(), 'unknown')
-    );
+    expect(await testComputed(c('previous', l('hello')))).toEqual(t.string());
   });
 
   it('can use another column', async () => {
     expect(await testComputed(c('+', r('OtherColumn'), l(1)))).toEqual(
-      t.column(t.number(), 'unknown')
+      t.number()
     );
   });
 

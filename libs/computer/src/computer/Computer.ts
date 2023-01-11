@@ -33,6 +33,7 @@ import {
   distinctUntilChanged,
   map,
   shareReplay,
+  switchMap,
   throttleTime,
 } from 'rxjs/operators';
 import { astToParseable } from './astToParseable';
@@ -42,10 +43,8 @@ import { getExprRef, makeNamesFromIds } from '../exprRefs';
 import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
 import type {
-  ComputePanic,
   ComputeRequest,
   ComputeRequestWithExternalData,
-  ComputeResponse,
   IdentifiedError,
   IdentifiedResult,
   NotebookResults,
@@ -58,11 +57,11 @@ import {
   getIdentifierString,
   findSymbolsUsed,
 } from '../utils';
+import { dropWhileComputing } from '../tools/dropWhileComputing';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
-import { dropWhileComputing } from './dropWhileComputing';
 import { deduplicateColumnResults } from './deduplicateColumnResults';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
@@ -111,6 +110,11 @@ export class Computer {
     this.computeRequests.next(req);
   }
 
+  /**
+   * Wire our computeRequests stream to the "results" stream.
+   * Timing is handled here too (debouncing, throttling)
+   * And the externalData stream (containing imports) is integrated here.
+   */
   private wireRequestsToResults() {
     this.computeRequests
       .pipe(
@@ -124,21 +128,8 @@ export class Computer {
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
-        dropWhileComputing(async (req): Promise<NotebookResults> => {
-          const res = await this.computeRequest(req);
-
-          if (res.type === 'compute-panic') {
-            captureException(new Error(res.message));
-            return defaultComputerResults;
-          }
-
-          return {
-            blockResults: Object.fromEntries(
-              res.updates.map((result) => [result.id, result])
-            ),
-            indexLabels: res.indexLabels,
-          };
-        }),
+        dropWhileComputing((req) => this.computeRequest(req)),
+        switchMap((item) => (item == null ? [] : [item])),
         shareReplay(1)
       )
       .subscribe(this.results);
@@ -325,7 +316,7 @@ export class Computer {
     }
   );
 
-  public getAllTables$ = listenerHelper(this.results, (results) => {
+  getAllTables$ = listenerHelper(this.results, (results) => {
     return Object.entries(results.blockResults).flatMap(([id, b]) => {
       if (!b.result) return [];
 
@@ -375,7 +366,7 @@ export class Computer {
               const statement = this.latestProgram.find((p) => p.id === b.id)
                 ?.block?.args[0];
               if (
-                statement?.type !== 'assign' ||
+                statement?.type !== 'table' ||
                 !b.result?.value ||
                 !b.result?.type
               ) {
@@ -546,7 +537,7 @@ export class Computer {
 
   public async computeRequest(
     req: ComputeRequestWithExternalData
-  ): Promise<ComputeResponse | ComputePanic> {
+  ): Promise<NotebookResults | null> {
     return this.enqueueComputation(async () => {
       /* istanbul ignore catch */
       try {
@@ -578,17 +569,16 @@ export class Computer {
         updates.push(...computeResults);
 
         return {
-          type: 'compute-response',
-          updates,
+          blockResults: Object.fromEntries(
+            updates.map((result) => [result.id, result])
+          ),
           indexLabels: this.computationRealm.getIndexLabels(),
         };
       } catch (error) {
         console.error(error);
         this.reset();
-        return {
-          type: 'compute-panic',
-          message: (error as Error).message,
-        };
+        captureException(error as Error);
+        return null;
       }
     }, true);
   }

@@ -160,9 +160,6 @@ export const inferExpression = wrap(
           optionalIndex?.args[0]
         );
       }
-      case 'table': {
-        return inferTable(ctx, expr);
-      }
       case 'property-access': {
         const [thing, propName] = expr.args;
         const table = (await inferExpression(ctx, thing)).isTableOrRow();
@@ -231,16 +228,17 @@ export const inferStatement = wrap(
 
         const varName = getIdentifierString(nName);
 
-        ctx.inAssignment = varName;
         const constant = getConstantByName(varName);
         const type =
           constant || ctx.stack.has(varName, 'function')
             ? t.impossible(InferError.duplicatedName(varName))
             : await inferExpression(ctx, nValue);
-        ctx.inAssignment = null;
 
         ctx.stack.set(varName, type, 'function');
         return type;
+      }
+      case 'table': {
+        return inferTable(ctx, statement);
       }
       case 'table-column-assign': {
         return inferColumnAssign(ctx, statement);

@@ -4,33 +4,33 @@ import { deeperProgram, implicitDepProgram, testBlocks } from '../testUtils';
 describe('getDependents', () => {
   it('finds dependents of a set of locs', () => {
     expect(getDependents(deeperProgram, ['block-0'])).toMatchInlineSnapshot(`
-        Array [
-          "block-0",
-          "block-3",
-          "block-4",
-        ]
-      `);
+      Array [
+        "block-0",
+        "block-3",
+        "block-4",
+      ]
+    `);
 
     expect(getDependents(deeperProgram, ['block-2'])).toMatchInlineSnapshot(`
-        Array [
-          "block-2",
-          "block-4",
-          "block-5",
-          "block-6",
-        ]
-      `);
+      Array [
+        "block-2",
+        "block-4",
+        "block-5",
+        "block-6",
+      ]
+    `);
   });
 
   it('additionally finds symbols which are passed in', () => {
     expect(getDependents(deeperProgram, ['block-0'], new Set(['Unused'])))
       .toMatchInlineSnapshot(`
-      Array [
-        "block-0",
-        "block-1",
-        "block-3",
-        "block-4",
-      ]
-    `);
+        Array [
+          "block-0",
+          "block-1",
+          "block-3",
+          "block-4",
+        ]
+      `);
   });
 
   it('marks definitions of tables when any of their columns is involved', () => {

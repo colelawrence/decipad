@@ -62,18 +62,11 @@ export const table = ({
   columnTypes,
   columnNames,
 }: BuildTableArgs) => {
-  const tableT = produce(new Type(), (t) => {
+  return produce(new Type(), (t) => {
     t.indexName = indexName ?? null;
     t.columnTypes = columnTypes;
     t.columnNames = columnNames;
   });
-
-  const errored = tableT.columnTypes?.find((t) => t.errorCause != null);
-  if (errored != null) {
-    return tableT.withErrorCause(getDefined(errored.errorCause));
-  } else {
-    return tableT;
-  }
 };
 
 export const row = (cells: Type[], cellNames: string[]) => {

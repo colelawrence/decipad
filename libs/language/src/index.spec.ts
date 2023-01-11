@@ -533,16 +533,6 @@ describe('Tables', () => {
         [N(1), N(3), N(3), N(3), N(6), N(3), N(0)],
       ],
     });
-
-    await expect(
-      runCode(`
-        Table = {
-          Index = [1,2,3]
-          CannotAccessNextCol = NotYet + 1 meter
-          NotYet = [1, 2, 3]
-        }
-      `)
-    ).rejects.not.toBeNull();
   });
 
   it('can have multidimensional columns', async () => {
@@ -706,6 +696,55 @@ describe('Tables', () => {
       Object {
         "type": number,
         "value": DeciNumber(15),
+      }
+    `);
+  });
+
+  it('can be partially errors', async () => {
+    expect(
+      await runCode(`
+        Table = { A = 1 meter + 1 second, B = 2 }
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": table<B = number>,
+        "value": Array [
+          Array [
+            DeciNumber(2),
+          ],
+        ],
+      }
+    `);
+    expect(
+      await runCode(`
+        Table = {}
+        Table.Index = 1 meter + 1 second
+        Table.Formula = 3
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": column<number, indexed by Table>,
+        "value": Array [
+          DeciNumber(3),
+        ],
+      }
+    `);
+
+    expect(
+      await runCode(`
+        Table = {}
+        Table.Index = 1 meter + 1 second
+        Table.Formula = 3
+        Table
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": table<Formula = number>,
+        "value": Array [
+          Array [
+            DeciNumber(3),
+          ],
+        ],
       }
     `);
   });

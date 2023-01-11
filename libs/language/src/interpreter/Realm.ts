@@ -1,6 +1,7 @@
-import type { Value } from '../value';
+import { zip } from '@decipad/utils';
+import { isColumnLike, ColumnLike, Table, Value } from '../value';
 import type { AST, ExternalDataMap, Context } from '..';
-import { Stack } from '../stack';
+import { Stack, StackNamespaceJoiner, StackNamespaceSplitter } from '../stack';
 import { getDefined } from '../utils';
 
 // The name "realm" comes from V8.
@@ -8,7 +9,7 @@ import { getDefined } from '../utils';
 // contains a stack of variables and a map of
 // function names to AST.FunctionDefinition.
 export class Realm {
-  stack = new Stack<Value>();
+  stack = new Stack<Value>(undefined, tableItemsToTable, tableToTableItems);
   functions = new Map<string, AST.FunctionDefinition>();
   previousValue: Value | null = null;
   inferContext: Context;
@@ -36,3 +37,17 @@ export class Realm {
     this.inferContext = context;
   }
 }
+
+const tableItemsToTable: StackNamespaceJoiner<Value> = (tableItems) => {
+  for (const v of tableItems.values()) {
+    if (!isColumnLike(v)) throw new Error('expected column-like');
+  }
+  return Table.fromMapping(tableItems as Map<string, ColumnLike>);
+};
+
+const tableToTableItems: StackNamespaceSplitter<Value> = (table) => {
+  if (table instanceof Table) {
+    return zip(table.columnNames, table.columns);
+  }
+  return undefined;
+};

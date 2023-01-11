@@ -1,14 +1,19 @@
 import { formatError } from '@decipad/format';
+import {
+  astNode,
+  parseBlock,
+  parseStatementOrThrow,
+  validateResult,
+} from '@decipad/language';
 import DeciNumber from '@decipad/number';
-import { astNode, parseBlock, parseStatementOrThrow } from '@decipad/language';
 import { getOnly } from '@decipad/utils';
+import { Result } from 'libs/language/src/result';
 import { AST, prettyPrintAST } from '.';
 import {
-  ComputePanic,
-  ComputeResponse,
   IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
+  NotebookResults,
   ProgramBlock,
 } from './types';
 
@@ -89,32 +94,36 @@ export function getIdentifiedBlock(
 }
 
 export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
+  const numberToString = (value: Result['value']): string => {
+    if (Array.isArray(value))
+      return `[${value.map(numberToString).join(', ')}]`;
+    return value instanceof DeciNumber
+      ? value.toString()
+      : JSON.stringify(value);
+  };
   const simpleUpdates = [];
   for (const {
     id: blockId,
     result: { type, value },
   } of results) {
+    validateResult(type, value);
     const prefix = `${blockId} -> `;
 
     if (type.kind === 'type-error') {
       simpleUpdates.push(`${prefix}${formatError('en-us', type.errorCause)}`);
     } else {
-      const asString =
-        value instanceof DeciNumber ? value.toString() : JSON.stringify(value);
-      simpleUpdates.push(prefix + asString);
+      simpleUpdates.push(prefix + numberToString(value));
     }
   }
   return simpleUpdates;
 };
 
-export const simplifyComputeResponse = (
-  res: ComputeResponse | ComputePanic
-) => {
-  if (res.type === 'compute-panic') return [`panic: ${res.message ?? ''}`];
+export const simplifyComputeResponse = (res: NotebookResults | null) => {
+  if (res == null) return [`panic`];
 
   const simpleUpdates = [];
 
-  for (const up of res.updates) {
+  for (const [, up] of Object.entries(res.blockResults)) {
     if (up.type === 'identified-error') {
       simpleUpdates.push(`${up.id} -> Syntax Error`);
     } else {

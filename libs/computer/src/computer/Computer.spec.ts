@@ -5,10 +5,7 @@ import {
   Result,
   serializeType,
 } from '@decipad/language';
-import { AnyMapping, getDefined, timeout } from '@decipad/utils';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import AsciiTable from 'ascii-table';
+import { AnyMapping, timeout } from '@decipad/utils';
 import produce from 'immer';
 import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
@@ -17,7 +14,6 @@ import {
   getIdentifiedBlocks,
   simplifyComputeResponse,
 } from '../testUtils';
-import { unnestTableRows } from '../tools/unnestTableRows';
 import { ComputeRequestWithExternalData, UserParseError } from '../types';
 import { Computer } from './Computer';
 
@@ -154,6 +150,64 @@ describe('caching', () => {
       ]
     `);
   });
+
+  it('tricky caching problems (3)', async () => {
+    // Use a missing variable B
+    expect(
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks(
+          'Table = {}',
+          'Table.A = [1]',
+          'Table.B = A + C',
+          'C = 1'
+        ),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0 -> [[1], [2]]",
+        "block-1 -> [1]",
+        "block-3 -> 1",
+        "block-2 -> [2]",
+      ]
+    `);
+
+    // Define it out of order
+    expect(
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks(
+          'Table = {}',
+          'Table.A = [1]',
+          'Table.B = A + C',
+          'C = 2'
+        ),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0 -> [[1], [3]]",
+        "block-1 -> [1]",
+        "block-3 -> 2",
+        "block-2 -> [3]",
+      ]
+    `);
+
+    expect(
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks(
+          'Table = {}',
+          'Table.A = [1]',
+          'Table.B = A + C + 1',
+          'C = 2'
+        ),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0 -> [[1], [4]]",
+        "block-1 -> [1]",
+        "block-3 -> 2",
+        "block-2 -> [4]",
+      ]
+    `);
+  });
 });
 
 describe('expr refs', () => {
@@ -223,7 +277,7 @@ describe('uses previous value', () => {
 
 it('can reset itself', async () => {
   // Make the cache dirty
-  await computer.pushCompute({ program: testProgram });
+  computer.pushCompute({ program: testProgram });
   await timeout(0); // give time to compute
   expect(computer.results.getValue().blockResults).not.toEqual({});
 
@@ -264,8 +318,8 @@ it('can pass on injected data', async () => {
     })
   ).toMatchInlineSnapshot(`
     Array [
-      "injectblock -> [\\"Hello\\",\\"World\\"]",
-      "block-0 -> [\\"Hello\\",\\"World\\"]",
+      "injectblock -> [\\"Hello\\", \\"World\\"]",
+      "block-0 -> [\\"Hello\\", \\"World\\"]",
     ]
   `);
 });
@@ -357,9 +411,29 @@ it('regression: can describe tables correctly', async () => {
 
   expect(res).toMatchInlineSnapshot(`
     Array [
-      "block-0 -> [[\\"A\\",\\"B\\"],[\\"c\\",\\"d\\"]]",
-      "block-1 -> [\\"A\\",\\"B\\"]",
-      "block-2 -> [\\"c\\",\\"d\\"]",
+      "block-0 -> [[\\"A\\", \\"B\\"], [\\"c\\", \\"d\\"]]",
+      "block-1 -> [\\"A\\", \\"B\\"]",
+      "block-2 -> [\\"c\\", \\"d\\"]",
+    ]
+  `);
+});
+
+it('regression: can describe partially good tables', async () => {
+  const res = await computeOnTestComputer({
+    program: getIdentifiedBlocks(
+      `Table = {}`,
+      `Table.One = 1 + "a"`,
+      `Table.Two = ["c", "d"]`
+    ),
+  });
+
+  await timeout(100);
+
+  expect(res).toMatchInlineSnapshot(`
+    Array [
+      "block-0 -> [[\\"c\\", \\"d\\"]]",
+      "block-1 -> The function + cannot be called with (number, string)",
+      "block-2 -> [\\"c\\", \\"d\\"]",
     ]
   `);
 });
@@ -532,84 +606,6 @@ it('can list tables and columns', async () => {
       },
     ]
   `);
-});
-
-describe('can provide information for rendering matrices', () => {
-  let computer: Computer;
-  beforeEach(async () => {
-    computer = new Computer({ requestDebounceMs: 0 });
-    computer.pushCompute({
-      program: getIdentifiedBlocks(
-        `Table = { Xs = [10, 20, 30] }`,
-        `Matrix = [100, 200] * Table.Xs`
-      ),
-    });
-    await timeout(0);
-  });
-
-  it('can retrieve labels', () => {
-    expect(
-      computer.explainDimensions$.get(
-        computer.getBlockIdResult$.get('block-1')
-          ?.result as Result.Result<'column'>
-      )
-    ).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "dimensionLength": 2,
-          "indexedBy": undefined,
-          "labels": undefined,
-        },
-        Object {
-          "dimensionLength": 3,
-          "indexedBy": "Table",
-          "labels": Array [
-            "10",
-            "20",
-            "30",
-          ],
-        },
-      ]
-    `);
-  });
-
-  it('can turn nested matrices to a tabular data format', () => {
-    const result = getDefined(
-      computer.getBlockIdResult$.get('block-1')?.result
-    ) as Result.Result<'column'>;
-    const dimExplanation = getDefined(computer.explainDimensions$.get(result));
-
-    const aTable = new AsciiTable('Matrix');
-
-    aTable.setHeading(
-      ...dimExplanation.map((v) => v.indexedBy ?? '(no dimension)')
-    );
-
-    for (const {
-      labelInfo,
-      result: { value },
-    } of unnestTableRows(dimExplanation, result)) {
-      aTable.addRow(
-        ...labelInfo.map((label) => label.label ?? label.indexAtThisDimension),
-        value
-      );
-    }
-
-    expect(aTable.toString()).toMatchInlineSnapshot(`
-      ".-------------------------------.
-      |            Matrix             |
-      |-------------------------------|
-      | (no dimension) | Table |      |
-      |----------------|-------|------|
-      |              0 | 10    | 1000 |
-      |              0 | 20    | 2000 |
-      |              0 | 30    | 3000 |
-      |              1 | 10    | 2000 |
-      |              1 | 20    | 4000 |
-      |              1 | 30    | 6000 |
-      '-------------------------------'"
-    `);
-  });
 });
 
 it('can get a result by var', async () => {

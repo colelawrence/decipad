@@ -145,15 +145,11 @@ describe('Table', () => {
           id: 'root',
           args: [
             {
-              type: 'assign',
+              type: 'table',
               args: [
                 {
-                  type: 'def',
+                  type: 'tabledef',
                   args: ['varname'],
-                },
-                {
-                  type: 'table',
-                  args: [],
                 },
               ],
             },

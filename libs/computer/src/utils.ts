@@ -37,6 +37,7 @@ export const getDefinedSymbol = (
   switch (stmt.type) {
     case 'function-definition':
     case 'assign':
+    case 'table':
     case 'categories':
       return getIdentifierString(stmt.args[0]);
     case 'matrix-assign':

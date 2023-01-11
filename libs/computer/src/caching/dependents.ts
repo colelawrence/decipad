@@ -57,10 +57,7 @@ function getTablesInBlockIds(program: AST.Block[], blockIdsToCheck: string[]) {
   const tables = new Set<string>();
   for (const blockId of blockIdsToCheck) {
     const stmt = getStatement(program, blockId);
-    if (
-      (stmt.type === 'assign' && stmt.args[1].type === 'table') ||
-      stmt.type === 'table-column-assign'
-    ) {
+    if (stmt.type === 'table' || stmt.type === 'table-column-assign') {
       tables.add(getDefined(getDefinedSymbol(stmt)));
     }
   }

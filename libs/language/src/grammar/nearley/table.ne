@@ -4,11 +4,16 @@
 ### Table ###
 #############
 
-table -> "{" tableContents "}"                          {%
+table -> identifier equalSign "{" tableContents "}"     {%
                                                         (d) => {
+                                                          const name = addLoc({
+                                                            type: 'tabledef',
+                                                            args: [d[0].name]
+                                                          }, d[0])
+
                                                           return addArrayLoc({
                                                             type: 'table',
-                                                            args: d[1],
+                                                            args: [name, ...d[3]],
                                                           }, d)
                                                         }
                                                         %}

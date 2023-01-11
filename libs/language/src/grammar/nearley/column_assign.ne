@@ -1,6 +1,6 @@
 @lexer tokenizer
 
-column_assign -> identifier _ "." _ identifier equalSign expression
+columnAssign -> identifier _ "." _ identifier equalSign expression
                                                   {% (d) => {
                                                     const table = addLoc({
                                                       type: 'tablepartialdef',

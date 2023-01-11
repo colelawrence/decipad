@@ -60,18 +60,6 @@ export type ComputeRequestWithExternalData = ComputeRequest & {
 };
 
 // User facing
-export interface ComputePanic {
-  type: 'compute-panic';
-  message?: string;
-}
-
-// User facing
-export interface ComputeResponse {
-  type: 'compute-response';
-  updates: (IdentifiedResult | IdentifiedError)[];
-  indexLabels: Map<string, string[]>;
-}
-
 export interface NotebookResults {
   readonly blockResults: {
     readonly [blockId: string]: Readonly<IdentifiedResult | IdentifiedError>;

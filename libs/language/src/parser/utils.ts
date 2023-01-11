@@ -27,8 +27,9 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
       break;
     }
     case 'table': {
-      fname = 'table';
-      printedArgs = Array.from(node.args, (item) => {
+      const [tName, ...colItems] = node.args;
+      fname = `table ${tName.args[0]}`;
+      printedArgs = Array.from(colItems, (item) => {
         if (item.type === 'table-column') {
           const [colName, val] = item.args;
           return `${colName.args[0]} ${prettyPrint(val, indent + 1)}`;

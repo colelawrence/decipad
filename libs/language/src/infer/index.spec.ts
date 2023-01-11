@@ -1,31 +1,33 @@
 import { dequal } from 'dequal';
 
 import { ONE } from '@decipad/number';
-import { AST, inferBlock, Unit } from '..';
-import { InferError, build as t } from '../type';
-import {
-  l,
-  c,
-  n,
-  r,
-  ne,
-  as,
-  col,
-  range,
-  date,
-  tableDef,
-  prop,
-  assign,
-  block,
-} from '../utils';
+import { getDefined } from '@decipad/utils';
+import { AST, inferBlock, parseExpressionOrThrow, Unit } from '..';
 import {
   objectToMap,
   objectToTableType,
   typeSnapshotSerializer,
 } from '../testUtils';
+import { build as t, InferError } from '../type';
+import {
+  as,
+  assign,
+  block,
+  c,
+  col,
+  date,
+  l,
+  n,
+  ne,
+  prop,
+  r,
+  range,
+  tableColAssign,
+  tableDef,
+} from '../utils';
 
-import { inferStatement, inferExpression, inferProgram } from './index';
 import { makeContext } from './context';
+import { inferExpression, inferProgram, inferStatement } from './index';
 
 let nilCtx = makeContext();
 const degC: Unit = {
@@ -313,17 +315,37 @@ describe('tables', () => {
     );
   });
 
-  it('Propagates errors in its items', async () => {
+  it('Errors cause the column to not be present', async () => {
     expect(
-      (
-        await inferStatement(
-          makeContext(),
-          tableDef('Table', {
-            Col1: prop(r('MissingVar'), 'nosuchprop'),
-          })
-        )
-      ).errorCause?.spec.errType
-    ).toBe('expected-but-got');
+      getDefined(
+        (
+          await inferStatement(
+            makeContext(),
+            tableDef('Table', {
+              Col1: prop(r('MissingVar'), 'nosuchprop'),
+            })
+          )
+        ).columnTypes
+      )[0]
+    ).toBe(undefined);
+
+    expect(
+      getDefined(
+        (
+          await inferBlock(
+            block(
+              tableDef('Table', {}),
+              tableColAssign(
+                'Table',
+                'NoColumnHere',
+                parseExpressionOrThrow('1 meter + 1 second')
+              ),
+              r('Table')
+            )
+          )
+        ).columnTypes
+      )[0]
+    ).toBe(undefined);
   });
 
   it('tracks the index through columns', async () => {
@@ -399,9 +421,12 @@ describe('Property access', () => {
     expect(
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
         .errorCause?.spec
-    ).toMatchInlineSnapshot(
-      `ErrSpec:expected-but-got("expectedButGot" => ["table or row",{"node":null,"errorCause":null,"type":"number","unit":[{"unit":"MissingVar","exp":{"n":"1","d":"1","s":"1","infinite":false},"multiplier":{"n":"1","d":"1","s":"1","infinite":false},"known":false}],"numberFormat":null,"numberError":null,"date":null,"rangeOf":null,"indexName":null,"indexedBy":null,"cellType":null,"columnSize":null,"atParentIndex":null,"columnTypes":null,"columnNames":null,"rowCellTypes":null,"rowCellNames":null,"functionness":false,"nothingness":false,"anythingness":false,"symbol":null}])`
-    );
+    ).toMatchInlineSnapshot(`
+      ErrSpec:expected-but-got("expectedButGot" => Array [
+        "table or row",
+        MissingVar,
+      ])
+    `);
   });
 });
 

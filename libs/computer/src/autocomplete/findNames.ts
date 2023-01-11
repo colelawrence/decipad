@@ -31,22 +31,31 @@ export function* findNames(
           name: statement.args[0].args[0],
           blockId: block.id,
         };
+      }
 
-        if (statement.args[1].type === 'table') {
-          for (const col of statement.args[1].args) {
-            const colType = nodeTypes.get(col);
-            if (colType) {
-              const tableName = statement.args[0].args[0];
-              const columnName = col.args[0].args[0];
-              const isLocal = inSymbol != null && inSymbol === tableName;
-              const name = isLocal ? columnName : `${tableName}.${columnName}`;
-              yield {
-                kind: 'column',
-                type: serializeType(colType),
-                name,
-                isLocal,
-              };
-            }
+      if (statement.type === 'table') {
+        const [tName, ...colItems] = statement.args;
+
+        yield {
+          kind: 'variable',
+          type: serializeType(type),
+          name: tName.args[0],
+          blockId: block.id,
+        };
+
+        for (const col of colItems) {
+          const colType = nodeTypes.get(col);
+          if (colType) {
+            const tableName = statement.args[0].args[0];
+            const columnName = col.args[0].args[0];
+            const isLocal = inSymbol != null && inSymbol === tableName;
+            const name = isLocal ? columnName : `${tableName}.${columnName}`;
+            yield {
+              kind: 'column',
+              type: serializeType(colType),
+              name,
+              isLocal,
+            };
           }
         }
       }

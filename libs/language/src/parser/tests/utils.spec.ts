@@ -23,13 +23,13 @@ it('can pretty print the AST', () => {
 it('can pretty print tables', () => {
   expect(
     prettyPrintAST(
-      table({
+      table('Table', {
         Col1: col(1, 2, 3),
         Col2: l(1),
       })
     )
   ).toMatchInlineSnapshot(`
-    "(table
+    "(table Table
       Col1 (column 1 2 3)
       Col2 1)"
   `);

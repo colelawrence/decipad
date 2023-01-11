@@ -41,12 +41,12 @@ expect.addSnapshotSerializer({
 
 expect.addSnapshotSerializer({
   test: (v) => v != null && typeof v.errType === 'string',
-  print: ({ errType, ...errData }) => {
+  print: ({ errType, ...errData }, print) => {
     if (errData[errType] != null && Object.keys(errData).length === 1) {
-      return `ErrSpec:${errType}(${JSON.stringify(errData[errType])})`;
+      return `ErrSpec:${errType}(${print(errData[errType])})`;
     } else {
       const errDataString = Object.entries(errData)
-        .map(([key, value]) => `"${key}" => ${JSON.stringify(value)}`)
+        .map(([key, value]) => `"${key}" => ${print(value)}`)
         .join(', ');
 
       return `ErrSpec:${errType}(${errDataString})`;

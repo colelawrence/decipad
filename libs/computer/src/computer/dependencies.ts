@@ -4,99 +4,160 @@ import { getIdentifierString } from '../utils';
 
 export type TableNamespaces = Map<string, Set<string>>;
 
-/** Finds what `node` depends on. `namespaces` can be built in the `findAllTables` function */
+/** Finds what `node` depends on. `namespaces` can be built in the `findAllTables` function.
+ * If we're in a table context (e.g. `Table.Col1 = 1`), then we can use the `namespaces` to
+ * find out what columns are available in the table.
+ *
+ * Table columns are denoted as TableName::ColumnName
+ */
 export const dependencies = (
-  node: AST.Node,
+  initialNode: AST.Node,
   namespaces: TableNamespaces = new Map()
 ): string[] => {
-  const refs = findRefs(node);
-  return excludeLocalNames(refs, getLocalNames(node, namespaces));
-};
+  if (initialNode.type === 'block') {
+    // We need to get to the statement level
+    return unique(
+      initialNode.args.flatMap((node) => dependencies(node, namespaces))
+    );
+  }
 
-function findRefs(node: AST.Node): string[] {
-  switch (node.type) {
-    case 'argument-names':
-    case 'catdef':
-    case 'coldef':
-    case 'date':
-    case 'def':
-    case 'externalref':
-    case 'funcdef':
-    case 'generic-identifier':
-    case 'literal':
-    case 'noop': {
-      return [];
+  const localNames = getLocalNames(initialNode, namespaces) ?? new Set();
+  const localTableName = ((node: AST.Node) => {
+    if (node.type === 'table') {
+      return getIdentifierString(node.args[0]);
     }
-    case 'block':
-    case 'argument-list':
-    case 'column-items':
-    case 'generic-list':
-    case 'matrix-matchers':
-    case 'range':
-    case 'table':
-    case 'table-column-assign':
-    case 'table-spread': {
-      return unique(node.args.flatMap(findRefs));
+    if (node.type === 'table-column-assign') {
+      return getIdentifierString(node.args[0]);
     }
-    case 'assign':
-    case 'categories': {
-      return unique(node.args.slice(1).flatMap(findRefs));
-    }
-    case 'column':
-    case 'property-access':
-    case 'sequence': {
-      return findRefs(node.args[0]);
-    }
-    case 'directive': {
-      const [, ...args] = node.args;
-      return unique(args.flatMap(findRefs));
-    }
-    case 'funcref': {
-      return node.args;
-    }
-    case 'function-call': {
-      const [funcName, argList] = node.args;
-      return [...findRefs(funcName), ...unique(argList.args.flatMap(findRefs))];
-    }
-    case 'function-definition': {
-      const [name, args, body] = node.args;
-      const argNames = findRefs(args);
-      const bodyDeps = findRefs(body);
-      const externalBodyDeps = bodyDeps.filter(
-        (dep) => !argNames.includes(dep)
-      );
-      return [...findRefs(name), ...externalBodyDeps];
-    }
-    case 'matrix-assign': {
-      const [, where, assignee] = node.args;
-      return unique([...findRefs(where), ...findRefs(assignee)]);
-    }
-    case 'matrix-ref':
-    case 'match':
-    case 'matchdef':
-    case 'tiered':
-    case 'tiered-def': {
-      return unique(node.args.flatMap(findRefs));
-    }
-    case 'ref':
-    case 'tablepartialdef': {
-      return node.args;
-    }
-    case 'table-column': {
-      const [, column] = node.args;
-      return findRefs(column);
+    return undefined;
+  })(initialNode);
+
+  function findRefs(node: AST.Node): string[] {
+    switch (node.type) {
+      case 'argument-names':
+      case 'catdef':
+      case 'coldef':
+      case 'date':
+      case 'def':
+      case 'tabledef':
+      case 'externalref':
+      case 'funcdef':
+      case 'generic-identifier':
+      case 'literal':
+      case 'noop': {
+        return [];
+      }
+      case 'block':
+      case 'argument-list':
+      case 'column-items':
+      case 'generic-list':
+      case 'matrix-matchers':
+      case 'range':
+      case 'table-column-assign':
+      case 'table-spread': {
+        return unique(node.args.flatMap(findRefs));
+      }
+      case 'assign':
+      case 'table':
+      case 'categories': {
+        return unique(node.args.slice(1).flatMap(findRefs));
+      }
+      case 'column':
+      case 'sequence': {
+        return findRefs(node.args[0]);
+      }
+      case 'property-access': {
+        const [table, column] = node.args;
+        if (table.type === 'ref') {
+          return unique([...findRefs(table), `${table.args[0]}::${column}`]);
+        }
+
+        // TODO no idea what table this is, let's just do all of them
+        // In the future we can improve this by making sure
+        // That all column names are globally unique!
+        const allPossiblePropertyAccesses = [...namespaces].flatMap(
+          ([table, columns]) => {
+            return columns.has(column) ? [`${table}::${column}`] : [];
+          }
+        );
+        return unique([...allPossiblePropertyAccesses, ...findRefs(table)]);
+      }
+      case 'directive': {
+        const [, ...args] = node.args;
+        return unique(args.flatMap(findRefs));
+      }
+      case 'funcref': {
+        return node.args;
+      }
+      case 'function-call': {
+        const [funcName, argList] = node.args;
+        return [
+          ...findRefs(funcName),
+          ...unique(argList.args.flatMap(findRefs)),
+        ];
+      }
+      case 'function-definition': {
+        const [name, args, body] = node.args;
+        const argNames = findRefs(args);
+        const bodyDeps = findRefs(body);
+        const externalBodyDeps = bodyDeps.filter(
+          (dep) => !argNames.includes(dep)
+        );
+        return [...findRefs(name), ...externalBodyDeps];
+      }
+      case 'matrix-assign': {
+        const [, where, assignee] = node.args;
+        return unique([...findRefs(where), ...findRefs(assignee)]);
+      }
+      case 'matrix-ref':
+      case 'match':
+      case 'matchdef':
+      case 'tiered':
+      case 'tiered-def': {
+        return unique(node.args.flatMap(findRefs));
+      }
+      case 'ref': {
+        if (localNames.has(node.args[0])) {
+          if (localTableName != null) {
+            return [`${localTableName}::${node.args[0]}`];
+          } else {
+            // Ignore function arguments
+            return [];
+          }
+        }
+        return node.args;
+      }
+      case 'tablepartialdef': {
+        return node.args;
+      }
+      case 'table-column': {
+        const [, column] = node.args;
+        return findRefs(column);
+      }
     }
   }
-}
+  return findRefs(initialNode);
+};
 
-function excludeLocalNames(
-  referencesFound: string[],
-  localNames: Set<string> | null
-) {
-  if (localNames == null) return referencesFound;
+export const getDefinedEntity = (statement?: AST.Statement) => {
+  switch (statement?.type) {
+    case 'assign':
+    case 'function-definition':
+    case 'table': {
+      return getIdentifierString(statement.args[0]);
+    }
 
-  return referencesFound.filter((item) => !localNames.has(item));
-}
+    case 'table-column-assign': {
+      return `${getIdentifierString(statement.args[0])}::${getIdentifierString(
+        statement.args[1]
+      )}`;
+    }
+
+    default: {
+      return undefined;
+    }
+  }
+};
 
 const blocksToStatements = (blocksOrStmts: AST.Node[]): AST.Node[] =>
   blocksOrStmts.flatMap((node) => {
@@ -124,11 +185,9 @@ export function findAllTables(nodes: AST.Node[]) {
   }
 
   for (const node of blocksToStatements(nodes)) {
-    if (node.type === 'assign' && node.args[1].type === 'table') {
-      const [name, table] = node.args;
-      const ns = getIdentifierString(name);
-
-      const colNames = getTableColNames(table, namespaces);
+    if (node.type === 'table') {
+      const ns = getIdentifierString(node.args[0]);
+      const colNames = getTableColNames(node);
 
       namespaceAdd(ns, colNames);
     }
@@ -143,13 +202,12 @@ export function findAllTables(nodes: AST.Node[]) {
   return namespaces;
 }
 
-function getTableColNames(table: AST.Table, namespaces: TableNamespaces) {
+function getTableColNames(table: AST.Table) {
   return table.args.flatMap((colDef) => {
     if (colDef.type === 'table-column') {
       return getIdentifierString(colDef.args[0]);
     } else {
-      const spreadTableName = getIdentifierString(colDef.args[0]);
-      return [...(namespaces.get(spreadTableName) ?? [])];
+      return [];
     }
   });
 }
@@ -161,9 +219,9 @@ function getLocalNames(
   const names = [];
 
   for (const node of blocksToStatements([nodeOrBlock])) {
-    if (node.type === 'assign' && node.args[1].type === 'table') {
+    if (node.type === 'table') {
       names.push(getIdentifierString(node.args[0]));
-      names.push(...getTableColNames(node.args[1], namespaces));
+      names.push(...getTableColNames(node));
     }
     if (node.type === 'table-column-assign') {
       const tableName = getIdentifierString(node.args[0]);

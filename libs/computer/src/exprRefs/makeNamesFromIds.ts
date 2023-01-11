@@ -6,7 +6,7 @@ import {
 } from '@decipad/language';
 import { memoizePrimitive } from '@decipad/utils';
 import produce from 'immer';
-import type { Program } from '../types';
+import { Program, ProgramBlock } from '../types';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { assertIsExprRef, getExprRef, isExprRef } from '.';
 
@@ -29,7 +29,7 @@ export const replaceExprRefsWithPrettyRefs = (
 /** Make sure every non-assignment is an assignment to a block ID */
 function plainExpressionsToAssignments(program: Program) {
   return program.map(
-    produce((block) => {
+    produce<ProgramBlock>((block) => {
       if (block.type === 'identified-block') {
         const stats = block.block.args;
 

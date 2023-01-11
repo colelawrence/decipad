@@ -117,7 +117,10 @@ it('can stringify a type', () => {
     `);
   expect(serializeType(t.impossible(errorCause))).toMatchInlineSnapshot(`
     Object {
-      "errorCause": ErrSpec:expected-but-got("expectedButGot" => ["A","B"]),
+      "errorCause": ErrSpec:expected-but-got("expectedButGot" => Array [
+        "A",
+        "B",
+      ]),
       "kind": "type-error",
     }
   `);

@@ -1,5 +1,5 @@
 import { n } from '..';
-import { col } from '../../utils';
+import { col, table } from '../../utils';
 import { runTests } from '../run-tests';
 
 runTests({
@@ -7,10 +7,10 @@ runTests({
     source: ' Table = { } ',
     ast: [
       {
-        type: 'assign',
+        type: 'table',
         args: [
           {
-            type: 'def',
+            type: 'tabledef',
             args: ['Table'],
             start: {
               char: 1,
@@ -21,20 +21,6 @@ runTests({
               char: 5,
               line: 1,
               column: 6,
-            },
-          },
-          {
-            type: 'table',
-            args: [],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 11,
-              line: 1,
-              column: 12,
             },
           },
         ],
@@ -54,95 +40,8 @@ runTests({
 
   'table with one implicit coldef': {
     source: ' Table = { abc } ',
-    ast: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: ['Table'],
-            start: {
-              char: 1,
-              line: 1,
-              column: 2,
-            },
-            end: {
-              char: 5,
-              line: 1,
-              column: 6,
-            },
-          },
-          {
-            type: 'table',
-            args: [
-              {
-                type: 'table-column',
-                args: [
-                  {
-                    type: 'coldef',
-                    args: ['abc'],
-                    start: {
-                      char: 11,
-                      line: 1,
-                      column: 12,
-                    },
-                    end: {
-                      char: 13,
-                      line: 1,
-                      column: 14,
-                    },
-                  },
-                  {
-                    type: 'ref',
-                    args: ['abc'],
-                    start: {
-                      char: 11,
-                      line: 1,
-                      column: 12,
-                    },
-                    end: {
-                      char: 13,
-                      line: 1,
-                      column: 14,
-                    },
-                  },
-                ],
-                start: {
-                  char: 11,
-                  line: 1,
-                  column: 12,
-                },
-                end: {
-                  char: 13,
-                  line: 1,
-                  column: 14,
-                },
-              },
-            ],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 15,
-              line: 1,
-              column: 16,
-            },
-          },
-        ],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 15,
-          line: 1,
-          column: 16,
-        },
-      },
-    ],
+    sourceMap: false,
+    ast: [table('Table', { abc: n('ref', 'abc') })],
   },
 
   /*
@@ -242,156 +141,13 @@ runTests({
 
   'table with three implicit coldefs': {
     source: ' Table = { abc  ,  def,   ghi} ',
+    sourceMap: false,
     ast: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: ['Table'],
-            start: {
-              char: 1,
-              line: 1,
-              column: 2,
-            },
-            end: {
-              char: 5,
-              line: 1,
-              column: 6,
-            },
-          },
-          {
-            type: 'table',
-            args: [
-              {
-                type: 'table-column',
-                args: [
-                  {
-                    type: 'coldef',
-                    args: ['abc'],
-                    start: {
-                      char: 11,
-                      line: 1,
-                      column: 12,
-                    },
-                    end: {
-                      char: 13,
-                      line: 1,
-                      column: 14,
-                    },
-                  },
-                  {
-                    type: 'ref',
-                    args: ['abc'],
-                    start: {
-                      char: 11,
-                      line: 1,
-                      column: 12,
-                    },
-                    end: {
-                      char: 13,
-                      line: 1,
-                      column: 14,
-                    },
-                  },
-                ],
-                start: 11,
-                end: 13,
-              },
-              {
-                type: 'table-column',
-                args: [
-                  {
-                    type: 'coldef',
-                    args: ['def'],
-                    start: {
-                      char: 19,
-                      line: 1,
-                      column: 20,
-                    },
-                    end: {
-                      char: 21,
-                      line: 1,
-                      column: 22,
-                    },
-                  },
-                  {
-                    type: 'ref',
-                    args: ['def'],
-                    start: {
-                      char: 19,
-                      line: 1,
-                      column: 20,
-                    },
-                    end: {
-                      char: 21,
-                      line: 1,
-                      column: 22,
-                    },
-                  },
-                ],
-                start: 19,
-                end: 21,
-              },
-              {
-                type: 'table-column',
-                args: [
-                  {
-                    type: 'coldef',
-                    args: ['ghi'],
-                    start: {
-                      char: 26,
-                      line: 1,
-                      column: 27,
-                    },
-                    end: {
-                      char: 28,
-                      line: 1,
-                      column: 29,
-                    },
-                  },
-                  {
-                    type: 'ref',
-                    args: ['ghi'],
-                    start: {
-                      char: 26,
-                      line: 1,
-                      column: 27,
-                    },
-                    end: {
-                      char: 28,
-                      line: 1,
-                      column: 29,
-                    },
-                  },
-                ],
-                start: 26,
-                end: 28,
-              },
-            ],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 29,
-              line: 1,
-              column: 30,
-            },
-          },
-        ],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 29,
-          line: 1,
-          column: 30,
-        },
-      },
+      table('Table', {
+        abc: n('ref', 'abc'),
+        def: n('ref', 'def'),
+        ghi: n('ref', 'ghi'),
+      }),
     ],
   },
 
@@ -399,32 +155,11 @@ runTests({
     source: ' Table = { abc \n  def    \n   ghi \n } ',
     sourceMap: false,
     ast: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: ['Table'],
-          },
-          {
-            type: 'table',
-            args: [
-              {
-                type: 'table-column',
-                args: [n('coldef', 'abc'), n('ref', 'abc')],
-              },
-              {
-                type: 'table-column',
-                args: [n('coldef', 'def'), n('ref', 'def')],
-              },
-              {
-                type: 'table-column',
-                args: [n('coldef', 'ghi'), n('ref', 'ghi')],
-              },
-            ],
-          },
-        ],
-      },
+      table('Table', {
+        abc: n('ref', 'abc'),
+        def: n('ref', 'def'),
+        ghi: n('ref', 'ghi'),
+      }),
     ],
   },
 
@@ -495,19 +230,11 @@ runTests({
     sourceMap: false,
     ast: [
       {
-        type: 'assign',
+        type: 'table',
         args: [
-          {
-            type: 'def',
-            args: ['Table'],
-          },
-          {
-            type: 'table',
-            args: [
-              n('table-column', n('coldef', 'abc'), n('ref', 'abc')),
-              n('table-column', n('coldef', 'def'), col(1, 2)),
-            ],
-          },
+          n('tabledef', 'Table'),
+          n('table-column', n('coldef', 'abc'), n('ref', 'abc')),
+          n('table-column', n('coldef', 'def'), col(1, 2)),
         ],
       },
     ],
@@ -515,158 +242,12 @@ runTests({
 
   'table with spreads': {
     source: ' Table = {...A } ',
-    ast: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: ['Table'],
-            start: {
-              char: 1,
-              line: 1,
-              column: 2,
-            },
-            end: {
-              char: 5,
-              line: 1,
-              column: 6,
-            },
-          },
-          {
-            type: 'table',
-            args: [
-              {
-                type: 'table-spread',
-                args: [
-                  {
-                    type: 'ref',
-                    args: ['A'],
-                    start: {
-                      char: 13,
-                      line: 1,
-                      column: 14,
-                    },
-                    end: {
-                      char: 13,
-                      line: 1,
-                      column: 14,
-                    },
-                  },
-                ],
-                start: {
-                  char: 10,
-                  line: 1,
-                  column: 11,
-                },
-                end: {
-                  char: 13,
-                  line: 1,
-                  column: 14,
-                },
-              },
-            ],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 15,
-              line: 1,
-              column: 16,
-            },
-          },
-        ],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 15,
-          line: 1,
-          column: 16,
-        },
-      },
-    ],
+    sourceMap: false,
+    ast: [n('table', n('tabledef', 'Table'), n('table-spread', n('ref', 'A')))],
   },
   'table with spreads and space after spread operator': {
     source: ' Table = {... A } ',
-    ast: [
-      {
-        type: 'assign',
-        args: [
-          {
-            type: 'def',
-            args: ['Table'],
-            start: {
-              char: 1,
-              line: 1,
-              column: 2,
-            },
-            end: {
-              char: 5,
-              line: 1,
-              column: 6,
-            },
-          },
-          {
-            type: 'table',
-            args: [
-              {
-                type: 'table-spread',
-                args: [
-                  {
-                    type: 'ref',
-                    args: ['A'],
-                    start: {
-                      char: 14,
-                      line: 1,
-                      column: 15,
-                    },
-                    end: {
-                      char: 14,
-                      line: 1,
-                      column: 15,
-                    },
-                  },
-                ],
-                start: {
-                  char: 10,
-                  line: 1,
-                  column: 11,
-                },
-                end: {
-                  char: 14,
-                  line: 1,
-                  column: 15,
-                },
-              },
-            ],
-            start: {
-              char: 9,
-              line: 1,
-              column: 10,
-            },
-            end: {
-              char: 16,
-              line: 1,
-              column: 17,
-            },
-          },
-        ],
-        start: {
-          char: 1,
-          line: 1,
-          column: 2,
-        },
-        end: {
-          char: 16,
-          line: 1,
-          column: 17,
-        },
-      },
-    ],
+    sourceMap: false,
+    ast: [n('table', n('tabledef', 'Table'), n('table-spread', n('ref', 'A')))],
   },
 });

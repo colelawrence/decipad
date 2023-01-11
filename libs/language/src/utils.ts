@@ -110,8 +110,11 @@ export function range(
   return n('range', startExpr, endExpr);
 }
 
-export function table(items: Record<string, AST.Expression>): AST.Table {
-  const args: AST.Table['args'] = [];
+export function table(
+  name: string,
+  items: Record<string, AST.Expression>
+): AST.Table {
+  const args: AST.Table['args'] = [n('tabledef', name)];
 
   for (const [key, value] of Object.entries(items)) {
     args.push(n('table-column', n('coldef', key), value));
@@ -123,8 +126,8 @@ export function table(items: Record<string, AST.Expression>): AST.Table {
 export function tableDef(
   name: string,
   columns: Record<string, AST.Expression>
-): AST.Assign {
-  return n('assign', n('def', name), table(columns));
+): AST.Table {
+  return table(name, columns);
 }
 
 export function tableColAssign(
@@ -231,7 +234,6 @@ const expressionTypesSet = new Set([
   'property-access',
   'literal',
   'column',
-  'table',
   'range',
   'sequence',
   'date',
@@ -250,6 +252,7 @@ const statementTypesSet = new Set([
   'matrix-assign',
   'categories',
   'assign',
+  'table',
   'function-definition',
 ]);
 
@@ -258,6 +261,7 @@ export const isStatement = (value: unknown): value is AST.Statement =>
 
 const assignmentTypesSet = new Set([
   'assign',
+  'table',
   'matrix-assign',
   'function-definition',
   'table-column-assign',
@@ -270,6 +274,7 @@ const identifierTypesSet = new Set([
   'ref',
   'catdef',
   'def',
+  'tabledef',
   'tablepartialdef',
   'funcdef',
   'generic-identifier',

@@ -48,13 +48,15 @@ const computeStatement = async (
   }
 
   const variableName =
-    statement.type === 'assign' ? statement.args[0].args[0] : undefined;
+    statement.type === 'assign' || statement.type === 'table'
+      ? statement.args[0].args[0]
+      : undefined;
 
   const result: IdentifiedResult = {
     type: 'computer-result',
     id: blockId,
     get result() {
-      if (statement.type === 'assign' && statement.args[1].type === 'table') {
+      if (statement.type === 'table') {
         const type = getDefined(
           realm.inferContext.stack.get(getDefined(variableName))
         );

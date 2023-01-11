@@ -1,17 +1,14 @@
 
 @lexer tokenizer
 
-assign              -> assignTarget equalSign assignable{%
+assign            -> assignTarget equalSign expression  {%
                                                         (d) => addArrayLoc({
                                                           type: 'assign',
                                                           args: [d[0], d[2]]
                                                         }, d)
                                                         %}
 
-assignable          -> expression                       {% id %}
-assignable          -> table                            {% id %}
-
-assignTarget        -> identifier                       {%
+assignTarget      -> identifier                         {%
                                                         (d) => {
                                                           return addLoc({
                                                             type: 'def',

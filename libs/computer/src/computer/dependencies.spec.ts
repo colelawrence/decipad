@@ -18,7 +18,7 @@ it('Finds variables depended upon by a statement', () => {
     `);
 });
 
-it('does not show deps local to that statement or belonging to that table', () => {
+it('does not show dependencies of function arguments, but does show deps inside the table', () => {
   expect(
     dependencies(
       parseStatementOrThrow('Table = { Inner = 1, Col2 = Inner + Y }')
@@ -26,6 +26,7 @@ it('does not show deps local to that statement or belonging to that table', () =
   ).toMatchInlineSnapshot(`
     Array [
       "+",
+      "Table::Inner",
       "Y",
     ]
   `);
@@ -38,29 +39,21 @@ it('does not show deps local to that statement or belonging to that table', () =
     `);
 });
 
-it('excludes local refs that are scoped to the table', () => {
-  const ns = new Map([['OtherTable', new Set(['Inner'])]]);
+it('treats table refs', () => {
+  const ns = new Map([['Table', new Set(['Inner'])]]);
   expect(
-    dependencies(
-      parseStatementOrThrow('Table = { ...OtherTable, Col2 = Inner + Y }'),
-      ns
-    )
-  ).toMatchInlineSnapshot(`
-    Array [
-      "OtherTable",
-      "+",
-      "Y",
-    ]
-  `);
+    dependencies(parseStatementOrThrow('Table.NewCol = Inner + Y'), ns)
+  ).toContain('Table::Inner');
+});
+
+it('deals with table property access in hacky ways', () => {
+  const ns = new Map([['Table', new Set(['Inner'])]]);
   expect(
-    dependencies(parseStatementOrThrow('OtherTable.NewCol = Inner + Y'), ns)
-  ).toMatchInlineSnapshot(`
-      Array [
-        "OtherTable",
-        "+",
-        "Y",
-      ]
-    `);
+    dependencies(parseStatementOrThrow('someExpression(x).Inner'), ns)
+  ).toContain('Table::Inner');
+  expect(
+    dependencies(parseStatementOrThrow('someExpression(x).Inner'), ns)
+  ).toContain('someExpression');
 });
 
 it('excludes func args', () => {

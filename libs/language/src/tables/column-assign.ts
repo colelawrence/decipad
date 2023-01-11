@@ -1,86 +1,63 @@
-import produce from 'immer';
 import { zip } from '@decipad/utils';
-
 import { AST } from '..';
 import { Context } from '../infer';
 import { build as t, InferError } from '../type';
 import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { Realm } from '../interpreter';
-import { Table, Value } from '../value';
-import { pushStackAndPrevious } from '../infer/context';
+import { Table, UnknownValue, Value } from '../value';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
+import { shouldEvaluate } from './shouldEvaluate';
 
-export async function inferColumnAssign(
+export const inferColumnAssign = async (
   ctx: Context,
   assign: AST.TableColumnAssign
-) {
+) => {
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
   const [tableNameAst, colNameAst] = assign.args;
   const tableName = getIdentifierString(tableNameAst);
-  const colName = getIdentifierString(colNameAst);
+  const columnName = getIdentifierString(colNameAst);
 
   const table = ctx.stack.get(tableName)?.isTable();
 
-  if (table == null || table.errorCause) {
+  if (table == null || table?.errorCause) {
     return table ?? t.impossible(InferError.missingVariable(tableName));
   }
 
-  const columnNames = getDefined(table.columnNames);
-  const columnTypes = getDefined(table.columnTypes);
-  const indexName = getDefined(table.indexName);
+  if (ctx.stack.hasNamespaced([tableName, columnName], 'function')) {
+    return t.impossible(InferError.duplicateTableColumn(columnName));
+  }
 
-  const newColumn = await pushStackAndPrevious(ctx, async () => {
-    const otherColumnsEntries = zip(columnNames, columnTypes).map(
-      ([name, type]) => {
-        return [name, t.column(type, 'unknown', indexName)] as const;
-      }
-    );
+  const newColumnAtParentIndex = getDefined(table.columnNames).length;
 
-    const otherColumns = new Map(otherColumnsEntries);
-
-    // Make other columns available
-    ctx.stack.setMulti(otherColumns);
-
-    return inferTableColumn(ctx, {
-      otherColumns,
-      columnAst: assign,
-      indexName,
-    });
+  const newColumn = await inferTableColumn(ctx, {
+    columnAst: assign,
+    tableName,
+    columnName,
   });
 
   if (newColumn.errorCause) {
     return newColumn;
   }
 
-  const updatedTable = table
-    .isTable()
-    .canAddTableColumn(colName)
-    .mapType(
-      produce((table) => {
-        table.columnNames = [...columnNames, colName];
-        table.columnTypes = [...columnTypes, newColumn.reduced()];
-      })
-    );
-
-  if (updatedTable.errorCause) {
-    return updatedTable;
-  }
-
-  ctx.stack.set(tableName, updatedTable, 'global');
-
-  return newColumn;
-}
+  return t.column(newColumn, 'unknown', tableName, newColumnAtParentIndex);
+};
 
 export async function evaluateColumnAssign(
   realm: Realm,
   assign: AST.TableColumnAssign
 ): Promise<Value> {
   const [tableNameAst, tableColAst, expAst] = assign.args;
+
   const tableName = getIdentifierString(tableNameAst);
+  const columnName = getIdentifierString(tableColAst);
+
+  if (!shouldEvaluate(realm, tableName, columnName)) {
+    return UnknownValue;
+  }
 
   const table = getInstanceof(getDefined(realm.stack.get(tableName)), Table);
 
@@ -94,10 +71,9 @@ export async function evaluateColumnAssign(
     table.tableRowCount
   );
 
-  columns.set(getIdentifierString(tableColAst), newColumn);
+  realm.stack.setNamespaced([tableName, columnName], newColumn, 'function');
 
-  const newTable = Table.fromMapping(columns);
-  realm.stack.set(tableName, newTable);
-
-  return newColumn;
+  return getDefined(
+    realm.stack.getNamespaced([tableName, columnName], 'function')
+  );
 }

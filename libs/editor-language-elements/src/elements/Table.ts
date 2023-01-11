@@ -4,7 +4,6 @@ import { assertElementType } from '@decipad/editor-utils';
 import { InteractiveLanguageElement } from '../types';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { getTableAstNodeFromTableElement } from '../utils/getTableAstNodeFromTableElement';
-import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 import { statementToIdentifiedBlock } from '../utils/statementToIdentifiedBlock';
 
 export const Table: InteractiveLanguageElement = {
@@ -16,14 +15,10 @@ export const Table: InteractiveLanguageElement = {
       element: MyElement
     ): Promise<Program> => {
       assertElementType(element, ELEMENT_TABLE);
-      const { id, name, expression, columnAssigns } =
+      const { id, expression, columnAssigns } =
         await getTableAstNodeFromTableElement(editor, computer, element);
 
-      const tableItself = parseElementAsVariableAssignment(
-        id,
-        name,
-        expression
-      );
+      const tableItself = statementToIdentifiedBlock(id, expression);
 
       const columnAssignments = columnAssigns.flatMap((columnAssign) => [
         ...(columnAssign.column
@@ -37,7 +32,7 @@ export const Table: InteractiveLanguageElement = {
         ...columnAssign.errors,
       ]);
 
-      return [...tableItself, ...columnAssignments];
+      return [tableItself, ...columnAssignments];
     }
   ),
 };

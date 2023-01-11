@@ -242,41 +242,6 @@ describe('variable highlights', () => {
     );
   });
 
-  it('show bubbles in table spreads', async () => {
-    const computer = new Computer({ requestDebounceMs: 0 });
-    computer.pushCompute({
-      program: [
-        getIdentifiedBlock('x1', 'x = { A = [1]}'),
-        getIdentifiedBlock('x2', 'y = { ...x }'),
-      ],
-    });
-
-    await timeout(0);
-
-    const children = [
-      {
-        type: ELEMENT_CODE_LINE,
-        id: 'x1',
-        children: [{ text: 'x = { A = [1] }' }],
-      } as CodeLineElement,
-      {
-        type: ELEMENT_CODE_LINE,
-        id: 'x2',
-        children: [{ text: 'y = { ...x }' }],
-      } as CodeLineElement,
-    ];
-
-    const { getAllByText } = render(
-      <PlateWrapper children={children} computer={computer} />
-    );
-
-    const [xDecl, xUsage] = getAllByText(/x/);
-    cleanup = await applyCssVars();
-    expect(
-      findParentWithStyle(xDecl, 'backgroundColor')!.backgroundColor
-    ).toEqual(findParentWithStyle(xUsage, 'backgroundColor')!.backgroundColor);
-  });
-
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('does not mistake a table column access for another declared variable', async () => {
     const computer = new Computer({ requestDebounceMs: 0 });

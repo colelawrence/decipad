@@ -21,6 +21,13 @@ export interface Def {
   end?: Pos;
 }
 
+export interface TableDef {
+  type: 'tabledef';
+  args: [varName: string];
+  start?: Pos;
+  end?: Pos;
+}
+
 /** The table part of a table column definition */
 export interface TablePartialDef {
   type: 'tablepartialdef';
@@ -77,6 +84,7 @@ export type Identifier =
   | ExternalRef
   | GenericIdentifier
   | Def
+  | TableDef
   | TablePartialDef
   | CatDef
   | FuncDef
@@ -167,7 +175,7 @@ export interface TableSpread {
 
 export interface Table {
   type: 'table';
-  args: (TableColumn | TableSpread)[];
+  args: [TableDef, ...(TableColumn | TableSpread)[]];
   start?: Pos;
   end?: Pos;
 }
@@ -313,6 +321,7 @@ export interface Block {
 
 export type GenericAssignment =
   | Assign
+  | Table
   | MatrixAssign
   | FunctionDefinition
   | TableColumnAssign;
@@ -328,7 +337,6 @@ export type Expression =
   | Range
   | Sequence
   | Date
-  | Table
   | Directive
   | MatrixRef
   | Match
@@ -338,6 +346,7 @@ export type Statement =
   | FunctionDefinition
   | Assign
   | TableColumnAssign
+  | Table
   | MatrixAssign
   | Categories
   | Expression;
@@ -363,6 +372,7 @@ export interface TypeToNode {
   noop: Noop;
   directive: Directive;
   def: Def;
+  tabledef: TableDef;
   tablepartialdef: TablePartialDef;
   catdef: CatDef;
   ref: Ref;
@@ -403,6 +413,7 @@ export const nodeTypes: Record<Node['type'], true> = {
   noop: true,
   directive: true,
   def: true,
+  tabledef: true,
   tablepartialdef: true,
   catdef: true,
   ref: true,

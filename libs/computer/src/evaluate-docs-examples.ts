@@ -3,22 +3,21 @@ import { formatError, formatResult } from '@decipad/format';
 import { deserializeType, RuntimeError } from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 
-import { Computer } from '.';
+import { Computer, NotebookResults } from '.';
 import { createProgramFromMultipleStatements } from './computer/parseUtils';
-import type { ComputeResponse } from './types';
 
 type EvaluatedDoc = string | { crash: string };
 
 const DEFAULT_LOCALE = 'en-US';
 
-function resultFromComputerResult(result: ComputeResponse): string {
-  for (const update of result.updates) {
+function resultFromComputerResult(result: NotebookResults): string {
+  for (const update of Object.values(result.blockResults)) {
     if (update.error) {
       return update.error.message;
     }
   }
 
-  const lastResult = last(result.updates)?.result;
+  const lastResult = last(Object.values(result.blockResults))?.result;
   if (!lastResult) {
     throw new Error(`could not find a result`);
   }
@@ -39,8 +38,8 @@ async function getDocTestString(codeExample: string): Promise<EvaluatedDoc> {
     const program = createProgramFromMultipleStatements(codeExample);
     const computer = new Computer();
     const result = await computer.computeRequest({ program });
-    if (result.type === 'compute-panic') {
-      throw new Error(result.message);
+    if (result == null) {
+      throw new Error('compute panic');
     }
 
     return resultFromComputerResult(result);

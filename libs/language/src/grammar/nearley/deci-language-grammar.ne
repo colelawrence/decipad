@@ -50,7 +50,8 @@ block         -> (%statementSep | %ws):? statement (%statementSep statement):* (
                                                         %}
 
 statement     -> assign                                 {% id %}
-statement     -> column_assign                          {% id %}
+statement     -> table                                  {% id %}
+statement     -> columnAssign                           {% id %}
 statement     -> matrixAssign                           {% id %}
 statement     -> functionDef                            {% id %}
 statement     -> expression                             {% id %}

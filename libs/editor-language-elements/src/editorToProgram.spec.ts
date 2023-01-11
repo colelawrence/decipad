@@ -137,11 +137,7 @@ describe('editorToProgram', () => {
 
     expect(magicNum).toMatchInlineSnapshot(`"(+ 1 1)"`);
 
-    expect(table).toMatchInlineSnapshot(`
-      "(assign
-        (def TableName)
-        (table))"
-    `);
+    expect(table).toMatchInlineSnapshot(`"(table TableName)"`);
 
     expect(tableCol).toMatchInlineSnapshot(
       `"(table-column-assign (tablepartialdef TableName) (coldef ColName) (column \\"CellData\\"))"`

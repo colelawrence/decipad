@@ -1,4 +1,4 @@
-import { getDefined, unzip } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 
 import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
@@ -12,84 +12,70 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const indexName = ctx.inAssignment;
+  const tableName = getIdentifierString(table.args[0]);
+  if (ctx.stack.has(tableName, 'function')) {
+    return t.impossible(InferError.duplicatedName(tableName));
+  }
 
-  return pushStackAndPrevious(ctx, async () => {
-    const columns = new Map<string, Type>();
+  if (table.args.some((a) => a.type === 'table-spread')) {
+    const ret = t.impossible(InferError.retiredFeature('table-spread'));
+    ctx.stack.set(tableName, ret, 'function');
+    return ret;
+  }
 
-    const getCurrentTable = () => {
-      const [columnNames, columnTypes] = unzip(columns.entries());
+  const tableType = pushStackAndPrevious(ctx, async () => {
+    ctx.stack.createNamespace(tableName, 'function');
 
-      if (columnTypes.length === 0) {
-        return t.table({
-          indexName,
-          columnTypes: [],
-          columnNames: [],
-        });
-      } else {
-        const [firstType, ...rest] = columnTypes.map((col) => col.reduced());
-
-        return Type.combine(firstType, ...rest).mapType(() =>
-          t.table({
-            indexName,
-            columnTypes: [firstType, ...rest],
-            columnNames,
-          })
-        );
-      }
-    };
-
-    const addColumn = (name: string, type: Type) => {
-      columns.set(name, type);
-      ctx.stack.set(getDefined(indexName), getCurrentTable());
-    };
-
-    for (const tableItem of table.args) {
+    for (const tableItem of table.args.slice(1)) {
       if (tableItem.type === 'table-column') {
-        const name = getIdentifierString(tableItem.args[0]);
-
         // eslint-disable-next-line no-await-in-loop
-        const type = await inferTableColumn(ctx, {
-          indexName: getDefined(indexName),
-          otherColumns: columns,
+        await inferTableColumn(ctx, {
+          tableName,
           columnAst: tableItem,
+          columnName: getIdentifierString(tableItem.args[0]),
         });
-
-        // Bail on error
-        if (type.errorCause) return type;
-
-        addColumn(name, type);
-      } else if (tableItem.type === 'table-spread') {
-        return t.impossible(InferError.retiredFeature('table-spread'));
       } else {
         throw new Error('panic: unreachable');
       }
     }
 
-    return getCurrentTable();
+    return getDefined(ctx.stack.get(tableName, 'function'));
   });
+
+  return tableType;
 };
 
 export async function inferTableColumn(
   ctx: Context,
   {
-    otherColumns,
     columnAst,
-    indexName,
+    tableName,
+    columnName,
   }: {
-    otherColumns: Map<string, Type>;
     columnAst: AST.TableColumnAssign | AST.TableColumn;
-    indexName: string;
+    tableName: string;
+    columnName: string;
   }
 ): Promise<Type> {
+  ctx.stack.createNamespace(tableName, 'function');
+  const otherColumns = getDefined(
+    ctx.stack.getNamespace(tableName, 'function')
+  );
+
   const exp: AST.Expression =
     columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
   const type = refersToOtherColumnsByName(exp, otherColumns)
     ? await inferTableColumnPerCell(ctx, otherColumns, exp)
-    : coerceTableColumnTypeIndices(await inferExpression(ctx, exp), indexName);
+    : coerceTableColumnTypeIndices(await inferExpression(ctx, exp), tableName);
 
   linkToAST(ctx, columnAst, type);
+
+  if (type.errorCause) {
+    return type;
+  }
+
+  ctx.stack.setNamespaced([tableName, columnName], type, 'function');
 
   return type;
 }
@@ -99,16 +85,14 @@ export async function inferTableColumnPerCell(
   otherColumns: Map<string, Type>,
   columnAst: AST.Expression
 ) {
-  const cellType = await pushStackAndPrevious(ctx, async () => {
+  return pushStackAndPrevious(ctx, async () => {
     // Make other cells in this row available
     for (const [otherColumnName, otherColumn] of otherColumns.entries()) {
-      ctx.stack.set(otherColumnName, otherColumn.reduced());
+      ctx.stack.set(otherColumnName, otherColumn);
     }
 
     return inferExpression(ctx, columnAst);
   });
-
-  return t.column(cellType, 'unknown');
 }
 
 export function refersToOtherColumnsByName(
