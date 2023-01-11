@@ -42,11 +42,14 @@ const envDefaults: Record<string, boolean> = {
   development: true,
 };
 
+const inE2E = 'navigator' in globalThis && navigator.webdriver;
+
 export const isFlagEnabled = (flag: Flag): boolean =>
   overrides[flag] ??
   queryStringOverrides[flag] ??
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
-  ('location' in globalThis &&
+  (!inE2E &&
+    'location' in globalThis &&
     /localhost|.*dev.decipad.com/.test(globalThis.location.hostname));
 
 export const getOverrides = (): Flags => overrides;
