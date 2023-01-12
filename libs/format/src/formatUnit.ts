@@ -30,6 +30,8 @@ const numberToSubOrSuperscript: Record<string, string[]> = {
 };
 
 export type AvailablePrefixes =
+  | 1e30
+  | 1e27
   | 1e24
   | 1e21
   | 1_000_000_000_000_000_000
@@ -48,9 +50,17 @@ export type AvailablePrefixes =
   | 1e-9
   | 1e-12
   | 1e-15
-  | 1e-18;
+  | 1e-18
+  | 1e-21
+  | 1e-24
+  | 1e-27
+  | 1e-30;
 
 const multipliersToPrefixes: Record<AvailablePrefixes, string[]> = {
+  1e-30: ['q', 'quecto'],
+  1e-27: ['r', 'ronto'],
+  1e-24: ['y', 'yocto'],
+  1e-21: ['z', 'zepto'],
   1e-18: ['a', 'atto'],
   1e-15: ['f', 'femto'],
   1e-12: ['p', 'pico'],
@@ -70,6 +80,8 @@ const multipliersToPrefixes: Record<AvailablePrefixes, string[]> = {
   1000000000000000000: ['E', 'exa'], // 1e18
   1e21: ['Z', 'zetta'],
   1e24: ['Y', 'yotta'],
+  1e27: ['R', 'ronna'],
+  1e30: ['Q', 'quetta'],
 };
 
 function scriptFromNumber(n: string): string {
@@ -96,18 +108,17 @@ export function prettyENumbers(
   show10 = false,
   coefficient = '1'
 ): string {
-  return `${+coefficient === 1 ? '' : coefficient}${
-    show10 ? ' ×10' : ''
-  }${exponent.replace('+', '').replace(/./g, scriptFromNumber)}`.trim();
+  return `${+coefficient === 1 ? '' : coefficient}${show10 ? ' ×10' : ''
+    }${exponent.replace('+', '').replace(/./g, scriptFromNumber)}`.trim();
 }
 export interface UnitPart {
   type:
-    | 'unit'
-    | 'unit-literal'
-    | 'unit-exponent'
-    | 'unit-quality'
-    | 'unit-group'
-    | 'unit-prefix';
+  | 'unit'
+  | 'unit-literal'
+  | 'unit-exponent'
+  | 'unit-quality'
+  | 'unit-group'
+  | 'unit-prefix';
   value: string;
   originalValue?: string; // for values that are prettified
   base?: string; // for unit conversions in the ui
@@ -182,8 +193,8 @@ const stringifyUnit = (
     const strExp = isInteger(exp)
       ? exp.toString()
       : `${[Math.sign(Number(exp.s)) === -1 && '-', exp.n, '/', exp.d]
-          .filter(Boolean)
-          .join('')}`;
+        .filter(Boolean)
+        .join('')}`;
 
     const prettyExp = prettyENumbers(strExp);
 
@@ -298,11 +309,11 @@ function fixSpaces(partsOfUnit: UnitPart[]) {
       (p, d, i, a) =>
         p +
         (i > 0 &&
-        (a[i - 1].type === 'unit-prefix' || // `km` not `k m`
-          d.type === 'unit-exponent' || // 2^420 not 2 ^420
-          d.type === 'unit-literal' ||
-          (a[i + 1] && a[i + 1].type === 'unit-literal') ||
-          a[i - 1].type === 'unit-literal') // `1 meter per second` not `1 meter  per  second`
+          (a[i - 1].type === 'unit-prefix' || // `km` not `k m`
+            d.type === 'unit-exponent' || // 2^420 not 2 ^420
+            d.type === 'unit-literal' ||
+            (a[i + 1] && a[i + 1].type === 'unit-literal') ||
+            a[i - 1].type === 'unit-literal') // `1 meter per second` not `1 meter  per  second`
           ? ''
           : ' ') +
         d.value,
@@ -377,7 +388,7 @@ function simpleFormatUnitPart(unit: Unit): string {
   const multiplier = N(unit.multiplier).valueOf();
   const multiplierStr =
     multipliersToPrefixes[
-      multiplier as keyof typeof multipliersToPrefixes
+    multiplier as keyof typeof multipliersToPrefixes
     ]?.[0] ?? `${multiplier} * `;
   const exp = N(unit.exp).valueOf();
   const expStr = exp === 1 ? '' : `^${exp}`;
