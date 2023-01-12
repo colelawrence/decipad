@@ -15,7 +15,6 @@ import { useIsDragging } from './useIsDragging';
 const contentWrapperStyles = css({
   background: cssVar('tooltipBackground'),
 
-  outline: `1px solid ${cssVar('currentTextColor')}`,
   borderRadius: '6px',
 
   maxWidth: '300px',

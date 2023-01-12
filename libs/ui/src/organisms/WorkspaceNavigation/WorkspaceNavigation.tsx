@@ -71,12 +71,14 @@ interface WorkspaceNavigationProps {
     id: string;
     sections: Section[];
   };
+  readonly showFeedback?: () => void;
 }
 export const WorkspaceNavigation = ({
   activeWorkspace,
   onDeleteSection,
   onCreateSection,
   onUpdateSection,
+  showFeedback,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
   const activeWorkspaceRoute = workspaces({}).workspace({
     workspaceId: activeWorkspace.id,
@@ -319,12 +321,13 @@ export const WorkspaceNavigation = ({
         <NavigationItem
           key={'navfoot-feedback-1'}
           icon={<Chat />}
-          onClick={() =>
+          onClick={() => {
             clientEvent({
               type: 'action',
               action: 'send feedback',
-            })
-          }
+            });
+            showFeedback?.();
+          }}
         >
           <span css={itemTextStyles}>Feedback</span>
         </NavigationItem>

@@ -19,7 +19,7 @@ type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
   ComponentProps<typeof AccountMenu> &
   Pick<
     ComponentProps<typeof WorkspaceNavigation>,
-    'onDeleteSection' | 'onCreateSection' | 'onUpdateSection'
+    'onDeleteSection' | 'onCreateSection' | 'onUpdateSection' | 'showFeedback'
   > & {
     readonly onPointerEnter?: () => void;
   };

@@ -27,6 +27,7 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
+import { useIntercom } from 'react-use-intercom';
 import { loadNotebooks } from '../../App';
 import {
   useCreateNotebookMutation,
@@ -75,6 +76,13 @@ const EditUserModal = lazy(loadEditUserModal);
 loadTopbar().then(loadNotebookList).then(loadSidebar);
 
 const Workspace: FC = () => {
+  const { show, showNewMessages } = useIntercom();
+
+  const showFeedback = useCallback(() => {
+    show();
+    showNewMessages();
+  }, [show, showNewMessages]);
+
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
   const currentWorkspaceRoute = workspaces({}).workspace({
     workspaceId,
@@ -231,6 +239,7 @@ const Workspace: FC = () => {
       suspenseFallback={<DashboardSidebarPlaceholder />}
     >
       <Sidebar
+        showFeedback={showFeedback}
         Heading="h1"
         name={user?.self?.name || 'Me'}
         email={session.user.email || 'me@example.com'}

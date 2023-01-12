@@ -125,12 +125,14 @@ interface HelpMenuProps {
   readonly discordUrl?: string;
   readonly docsUrl?: string;
   readonly onSelectSupport?: () => void;
+  readonly onSelectFeedback?: () => void;
 }
 
 export const HelpMenu = ({
   discordUrl,
   docsUrl,
   onSelectSupport,
+  onSelectFeedback,
 }: HelpMenuProps) => {
   const clientEvent = useContext(ClientEventsContext);
   return (
@@ -170,6 +172,7 @@ export const HelpMenu = ({
         }
       />
       <CustomMenuItem
+        onSelect={onSelectFeedback}
         title="Share Feedback"
         onClick={() =>
           clientEvent({

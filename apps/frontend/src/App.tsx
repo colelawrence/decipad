@@ -7,7 +7,7 @@ import {
 } from '@decipad/routing';
 import { HelpMenu } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { FC, lazy } from 'react';
+import { FC, lazy, useCallback } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
@@ -26,8 +26,13 @@ export const loadPlayground = () =>
 const Playground = lazy(loadPlayground);
 
 export const App: FC = () => {
-  const { show } = useIntercom();
+  const { show, showNewMessages } = useIntercom();
   const session = useSession();
+
+  const showFeedback = useCallback(() => {
+    show();
+    showNewMessages();
+  }, [show, showNewMessages]);
 
   return (
     <>
@@ -91,6 +96,7 @@ export const App: FC = () => {
           discordUrl="https://discord.gg/CUtKEd3rBn"
           docsUrl={docs({}).$}
           onSelectSupport={show}
+          onSelectFeedback={showFeedback}
         />
       )}
     </>

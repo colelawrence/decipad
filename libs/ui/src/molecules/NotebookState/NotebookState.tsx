@@ -143,7 +143,8 @@ const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
         <p>Play with this notebook 🕹️</p>
         <p>
           <span css={{ color: grey500.rgb }}>
-            Duplicate if you have an account. Or sign up for early access.
+            Duplicate if you have an account. <br /> Or sign up for early
+            access.
           </span>
         </p>
       </>
