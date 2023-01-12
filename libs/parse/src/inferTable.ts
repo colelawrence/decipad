@@ -1,5 +1,5 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
-import { UNDEFINED } from '@decipad/number';
+import { ZERO } from '@decipad/number';
 import { getDefined, varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
@@ -43,7 +43,7 @@ function toValue(
             return fastNumber(elem as number);
           } catch (err) {
             if (typeof elem === 'string' && !elem.trim().length) {
-              return UNDEFINED;
+              return ZERO;
             }
             throw err;
           }

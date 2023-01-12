@@ -1,5 +1,5 @@
 import { CellValueType, TableCellType } from '@decipad/editor-types';
-import DeciNumber, { N, UNDEFINED } from '@decipad/number';
+import DeciNumber, { N, ZERO } from '@decipad/number';
 import {
   AST,
   Computer,
@@ -197,13 +197,13 @@ export const getNullReplacementValue = (
     return dateToAST(cellType, new Date('2020-01-01'));
   }
   if (cellType.kind === 'number') {
-    return astNode('literal', 'number', UNDEFINED);
+    return astNode('literal', 'number', ZERO);
   }
   if (cellType.kind === 'boolean') {
     return astNode('literal', 'boolean', false);
   }
   if (cellType.kind === 'dropdown' && cellType.type === 'number') {
-    return astNode('literal', 'number', UNDEFINED);
+    return astNode('literal', 'number', ZERO);
   }
   return astNode('literal', 'string', '');
 };
