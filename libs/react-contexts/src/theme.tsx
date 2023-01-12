@@ -1,7 +1,7 @@
 import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '@decipad/utils';
 import { noop } from 'lodash';
 import { useCallback } from 'react';
-import create from 'zustand';
+import { create } from 'zustand';
 
 const getItem =
   'localStorage' in global

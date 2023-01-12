@@ -1,6 +1,6 @@
 import { createDocSyncEditor } from '@decipad/docsync';
 import { FC, ReactNode } from 'react';
-import create from 'zustand';
+import { create } from 'zustand';
 import createContext from 'zustand/context';
 import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
