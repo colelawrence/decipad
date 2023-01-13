@@ -107,7 +107,7 @@ export const BlockDragHandle = ({
 
   const showHidden = showEyeLabel && !isHovered;
   const menuButton = (
-    <button
+    <div
       data-testid="drag-handle"
       onMouseEnter={setHovered}
       onMouseLeave={setNotHovered}
@@ -115,7 +115,7 @@ export const BlockDragHandle = ({
       css={[handleStyle, !showHidden && css({ padding: '5px' })]}
     >
       {showHidden ? <EyeLabel /> : <DragHandle />}
-    </button>
+    </div>
   );
 
   const showHideButton = isHidden ? (
