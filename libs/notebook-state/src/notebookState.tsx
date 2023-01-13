@@ -42,7 +42,8 @@ const createStore = () =>
         if (
           syncClientState === 'created' &&
           oldEditor.id === notebookId &&
-          oldEditor.isReadOnly === docsync.readOnly
+          oldEditor.isReadOnly === docsync.readOnly &&
+          !oldEditor.destroyed
         ) {
           // the one we have is just fine
           return;

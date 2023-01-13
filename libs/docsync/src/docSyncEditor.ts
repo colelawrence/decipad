@@ -71,6 +71,11 @@ export function docSyncEditor<E extends MyEditor>(
     });
   });
 
+  let destroyed = false;
+  events.once('destroyed', () => {
+    destroyed = true;
+  });
+
   const useEditor = Object.assign(editor, {
     onLoaded(cb: OnLoadedCallback) {
       events.on('loaded', cb);
@@ -123,6 +128,9 @@ export function docSyncEditor<E extends MyEditor>(
     sameVersion: (version: string) => store.sameVersion(version),
     equals: (version: string) => {
       return Buffer.from(encodeStateVector(doc)).toString('hex') === version;
+    },
+    get destroyed() {
+      return destroyed;
     },
   });
 
