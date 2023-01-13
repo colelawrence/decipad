@@ -366,7 +366,7 @@ export class Computer {
               const statement = this.latestProgram.find((p) => p.id === b.id)
                 ?.block?.args[0];
               if (
-                statement?.type !== 'table' ||
+                (statement?.type !== 'table' && statement?.type !== 'assign') ||
                 !b.result?.value ||
                 !b.result?.type
               ) {
