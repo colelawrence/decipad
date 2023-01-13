@@ -1,3 +1,4 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   docs,
   notebooks,
@@ -5,9 +6,10 @@ import {
   playground,
   workspaces,
 } from '@decipad/routing';
-import { HelpMenu } from '@decipad/ui';
+import { FeatureFlagsSwitcher, HelpMenu } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
 import { FC, lazy, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
@@ -99,6 +101,10 @@ export const App: FC = () => {
           onSelectFeedback={showFeedback}
         />
       )}
+      {/* Feature flagging the feature flag switcher makes it unreacheable in 
+      production, even if you press the shortcut, unless you know how */}
+      {isFlagEnabled('FEATURE_FLAG_SWITCHER') &&
+        createPortal(<FeatureFlagsSwitcher />, document.body)}
     </>
   );
 };

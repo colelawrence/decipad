@@ -17,6 +17,7 @@ export { EditableLiveDataCaption } from './EditableLiveDataCaption/EditableLiveD
 export { EditableTableCaption } from './EditableTableCaption/EditableTableCaption';
 export { EditorTitle } from './EditorTitle/EditorTitle';
 export { Expression } from './Expression/Expression';
+export { FeatureFlagsSwitcher } from './FeatureFlagsSwitcher/FeatureFlagsSwitcher';
 export { FilterBubbles } from './FilterBubbles/FilterBubbles';
 export { FloatingLink } from './FloatingLink/FloatingLink';
 export { FormulaTableData } from './FormulaTableData/FormulaTableData';

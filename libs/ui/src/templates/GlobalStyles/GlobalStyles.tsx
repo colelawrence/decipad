@@ -172,6 +172,8 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
           gridTemplateRows: '100%',
           overflowX: 'hidden',
 
+          position: 'relative',
+
           backgroundColor: cssVar('backgroundColor'),
         },
         'button, [type="button"], [type="reset"], [type="submit"]': {

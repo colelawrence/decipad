@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { onboard } from '@decipad/routing';
 import { FC, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -11,9 +10,7 @@ interface RequireOnboardProps {
 export const RequireOnboard: FC<RequireOnboardProps> = ({ children }) => {
   const requiresOnboarding = useRequiresOnboarding();
 
-  return requiresOnboarding &&
-    isFlagEnabled('ONBOARDING_ACCOUNT_SETUP') &&
-    !navigator.webdriver ? (
+  return requiresOnboarding && !navigator.webdriver ? (
     <Navigate replace to={onboard({}).$} />
   ) : (
     <>{children}</>
