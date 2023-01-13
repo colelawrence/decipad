@@ -1,5 +1,5 @@
-import { BrowserContext, Page } from 'playwright';
 import { Flag } from '@decipad/feature-flags';
+import { BrowserContext, Page } from 'playwright';
 import { Timeouts, withTestUser } from '../src';
 import { signOut } from './Home';
 import { navigateToPlayground } from './Playground';
@@ -89,6 +89,15 @@ export async function focusOnBody(page: Page) {
 export async function keyPress(page: Page, k: string) {
   await page.waitForTimeout(Timeouts.typing);
   await page.keyboard.press(k);
+  await page.waitForTimeout(Timeouts.typing);
+}
+
+export async function ControlPlus(page: Page, key: string) {
+  const platform = await page.evaluate(() => navigator.platform);
+  const isMac = platform.indexOf('Mac') === 0 || platform === 'iPhone';
+  const modifier = isMac ? 'Meta' : 'Control';
+  await page.waitForTimeout(Timeouts.typing);
+  await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
   await page.waitForTimeout(Timeouts.typing);
 }
 
