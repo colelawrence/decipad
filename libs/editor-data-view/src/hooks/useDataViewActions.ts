@@ -68,7 +68,10 @@ export const useDataViewActions = (
         headerRow.children.filter((node) => !isText(node));
 
       withoutNormalizing(editor, () => {
-        getDefined(editor.withoutCapturingUndo)(() => {
+        if (!editor.withoutCapturingUndo) {
+          return;
+        }
+        editor.withoutCapturingUndo(() => {
           if (!existingColumns) {
             return;
           }
@@ -84,7 +87,11 @@ export const useDataViewActions = (
               columnPath &&
               hasNode(editor, columnPath)
             ) {
-              if (!dequal(existingColumn.cellType, matchingDataColumn.type)) {
+              if (
+                existingColumn.cellType.kind !== 'anything' &&
+                existingColumn.cellType.kind !== 'type-error' &&
+                !dequal(existingColumn.cellType, matchingDataColumn.type)
+              ) {
                 setNodes<DataViewHeader>(
                   editor,
                   {
