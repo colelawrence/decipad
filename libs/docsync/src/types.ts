@@ -33,6 +33,7 @@ export type DocSyncEditor = MyEditor &
     setLoadedRemotely: () => void;
     removeLocalChanges: () => Promise<void>;
     isDocSyncEnabled: boolean;
+    destroyed: boolean;
     markVersion: (version: string) => Promise<void>;
     sameVersion: (version: string) => Promise<boolean>;
     equals: (data: string) => boolean;
