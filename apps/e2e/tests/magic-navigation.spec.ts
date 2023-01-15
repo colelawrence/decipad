@@ -62,14 +62,13 @@ test.describe('Navigating with magic numbers', () => {
   });
 
   test('works even when the variable is re-declared', async () => {
-    const allDraggable = await page.$$(
-      '[draggable="true"] [data-testid=drag-handle]'
-    );
+    const allDraggable = await page.$$('[data-testid=drag-handle]');
     const nrDraggable = allDraggable.length;
     const toDelete = allDraggable[nrDraggable - 2];
     await toDelete.click();
     const deleteButton = page.locator(`:nth-match(:text("Delete"), 2)`);
     await deleteButton.click();
+    await page.locator('[data-slate-editor] p').nth(1).click();
     await keyPress(page, 'Enter');
     await keyPress(page, '=');
     await page.keyboard.type('Price = 42 gbp');

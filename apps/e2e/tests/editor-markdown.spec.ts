@@ -21,8 +21,7 @@ test.describe('Editor markdown marks', () => {
     expect(await eyeIcon.count()).toBe(0);
     await page.keyboard.type('The sentence meaning of life.');
     await page.waitForSelector('[data-slate-editor] h2');
-    const krillin = page.locator('[data-type="heading1"] div button >> nth=1');
-    krillin.click();
+    await page.getByTestId('drag-handle').nth(1).click();
     const hideFromReader = page.locator(
       '[role="menuitem"] >> text=Hide from reader'
     );
