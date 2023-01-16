@@ -128,7 +128,8 @@ test.describe('Deleting SmartRefs', () => {
     newSrCount = (await page.$$('span[data-slate-node="element"]')).length;
     expect(newSrCount).toBe(srCount + 1); // did not delete
 
-    await keyPress(page, 'Delete'); // delete smart ref
+    await keyPress(page, 'Backspace');
+    await keyPress(page, 'Backspace'); // delete smart ref
     newSrCount = (await page.$$('span[data-slate-node="element"]')).length;
     expect(newSrCount).toBe(srCount);
   });

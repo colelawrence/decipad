@@ -77,7 +77,7 @@ const ColumnPreview = ({
   }, [blockId, columns, formulas]);
 
   return (
-    <div style={{ ...style, opacity: previewOpacity }}>
+    <div style={{ ...style, opacity: previewOpacity, zIndex: 1 }}>
       <EditorTableContext.Provider value={contextValue}>
         <EditorTable
           columns={columns}

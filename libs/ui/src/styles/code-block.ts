@@ -1,5 +1,5 @@
-import { CSSObject } from '@emotion/react';
-import { code, setCssVar, cssVar, p14Regular } from '../primitives';
+import { CSSObject, css } from '@emotion/react';
+import { code, cssVar, p14Regular, setCssVar } from '../primitives';
 
 export const lineHeight = '36px';
 
@@ -10,6 +10,12 @@ export const variableStyles: CSSObject = {
   fontWeight: 500,
   fontSize: '13px',
 };
+
+export const varStyles = css(variableStyles, {
+  padding: '4px 6px',
+  borderRadius: '6px',
+  fontSize: '13px',
+});
 
 export const structuredVariableStyles: CSSObject = {
   ...p14Regular,

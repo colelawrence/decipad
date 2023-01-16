@@ -7,12 +7,6 @@ import { cssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { getTypeIcon } from '../../utils';
 
-const varStyles = css(codeBlock.variableStyles, {
-  padding: '4px 6px',
-  borderRadius: '6px',
-  fontSize: '13px',
-});
-
 const localVarStyles = css({
   color: cssVar('weakTextColor'),
 });
@@ -73,7 +67,7 @@ export const CodeVariable = ({
         variableMissing
           ? null
           : [
-              varStyles,
+              codeBlock.varStyles,
               type && typeStyles,
               variableScope === 'local' && localVarStyles,
               isSelected && selectedStyles,

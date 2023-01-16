@@ -1,7 +1,7 @@
 import { Result, SerializedTypes } from '@decipad/computer';
 import { zip } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useMemo, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
 import { DragHandle } from '../../icons/index';
@@ -108,6 +108,95 @@ export const TableResult = ({
 
   const showRowLength = tableLength - hiddenRowsCount;
 
+  const Cell = ({
+    cellValue,
+    colIndex,
+    rowIndex,
+  }: {
+    cellValue: any;
+    colIndex: number;
+    rowIndex: number;
+  }) => {
+    const previewRef = useRef<Element>(null);
+
+    return (
+      <TableData
+        ref={previewRef}
+        key={colIndex}
+        as="td"
+        isEditable={false}
+        isLiveResult={isLiveResult}
+        showPlaceholder={false}
+        lastBeforeMoreRowsHidden={
+          hiddenRowsCount > 0 && rowIndex === showRowLength - 1
+        }
+        css={{ ...tableParentStyles }}
+        draggable={!!onDragStartCell}
+        firstChildren={
+          <div
+            draggable
+            onDragStart={(e) => {
+              onDragStartCell?.(
+                {
+                  tableName: (type as SerializedTypes.Table)
+                    .indexName as string,
+                  columnName: columnNames[colIndex],
+                  cellValue: value[0][rowIndex] as string,
+                },
+                { previewRef }
+              )(e);
+            }}
+            className={onDragStartCell && 'drag-handle'}
+            css={{
+              display: 'none',
+              position: 'absolute',
+              top: 8,
+              right: 4,
+              zIndex: 2,
+              height: 18,
+              width: 18,
+              borderRadius: 6,
+              ':hover': {
+                background: cssVar('highlightColor'),
+              },
+            }}
+          >
+            <button
+              css={{
+                width: '8px',
+                height: 9,
+                transform: 'translateY(50%)',
+                display: 'block',
+                margin: 'auto',
+                cursor: 'grab',
+              }}
+            >
+              <DragHandle />
+            </button>
+          </div>
+        }
+        element={element}
+      >
+        <div
+          css={[
+            css(table.getCellWrapperStyles(columnTypes[colIndex])),
+            colIndex === 0 && table.cellLeftPaddingStyles,
+          ]}
+        >
+          <CodeResult
+            parentType={type}
+            type={columnTypes[colIndex]}
+            value={cellValue}
+            variant="block"
+            tooltip={tooltip}
+            isLiveResult={isLiveResult}
+            element={element}
+          />
+        </div>
+      </TableData>
+    );
+  };
+
   return (
     <div
       css={[
@@ -174,76 +263,11 @@ export const TableResult = ({
                   <th css={liveTableEmptyCellStyles}></th>
                 )}
                 {value.map((column, colIndex) => (
-                  <TableData
-                    key={colIndex}
-                    as="td"
-                    isEditable={false}
-                    isLiveResult={isLiveResult}
-                    showPlaceholder={false}
-                    lastBeforeMoreRowsHidden={
-                      hiddenRowsCount > 0 && rowIndex === showRowLength - 1
-                    }
-                    css={{ ...tableParentStyles }}
-                    draggable={!!onDragStartCell}
-                    firstChildren={
-                      <div
-                        draggable
-                        onDragStart={(e) => {
-                          onDragStartCell?.({
-                            tableName: (type as SerializedTypes.Table)
-                              .indexName as string,
-                            columnName: columnNames[colIndex],
-                            cellValue: value[0][rowIndex] as string,
-                          })(e);
-                        }}
-                        className={onDragStartCell && 'drag-handle'}
-                        css={{
-                          display: 'none',
-                          position: 'absolute',
-                          top: 8,
-                          right: 4,
-                          zIndex: 2,
-                          height: 18,
-                          width: 18,
-                          borderRadius: 6,
-                          ':hover': {
-                            background: cssVar('highlightColor'),
-                          },
-                        }}
-                      >
-                        <button
-                          css={{
-                            width: '8px',
-                            height: 9,
-                            transform: 'translateY(50%)',
-                            display: 'block',
-                            margin: 'auto',
-                            cursor: 'grab',
-                          }}
-                        >
-                          <DragHandle />
-                        </button>
-                      </div>
-                    }
-                    element={element}
-                  >
-                    <div
-                      css={[
-                        css(table.getCellWrapperStyles(columnTypes[colIndex])),
-                        colIndex === 0 && table.cellLeftPaddingStyles,
-                      ]}
-                    >
-                      <CodeResult
-                        parentType={type}
-                        type={columnTypes[colIndex]}
-                        value={column[rowIndex]}
-                        variant="block"
-                        tooltip={tooltip}
-                        isLiveResult={isLiveResult}
-                        element={element}
-                      />
-                    </div>
-                  </TableData>
+                  <Cell
+                    cellValue={column[rowIndex]}
+                    rowIndex={rowIndex}
+                    colIndex={colIndex}
+                  />
                 ))}
               </TableRow>
             ))}

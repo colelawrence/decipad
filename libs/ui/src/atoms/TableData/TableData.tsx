@@ -9,6 +9,7 @@ import {
   ComponentProps,
   ElementType,
   FC,
+  forwardRef,
   HTMLAttributes,
   ReactNode,
 } from 'react';
@@ -138,79 +139,84 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   element?: AnyElement;
 }
 
-export const TableData = ({
-  as: Component = 'div',
-  isEditable = false,
-  isUserContent = false,
-  isLiveResult = false,
-  attributes,
-  showPlaceholder = true,
-  draggable,
-  grabbing,
-  selected,
-  focused,
-  collapsed,
-  rowSpan,
-  disabled = false,
-  dropTarget,
-  lastBeforeMoreRowsHidden = false,
-  type,
-  unit,
-  value,
-  onChangeValue = noop,
-  alignRight,
-  children,
-  parseError,
-  firstChildren,
-  dropdownOptions,
-  element,
-  ...props
-}: TableDataProps): ReturnType<FC> => {
-  const existingRef =
-    attributes && 'ref' in attributes ? attributes.ref : undefined;
-  const tdRef = useMergedRef(existingRef, dropTarget);
-  const additionalProps = isEditable ? {} : { contentEditable: false };
+export const TableData = forwardRef(
+  (
+    {
+      as: Component = 'div',
+      isEditable = false,
+      isUserContent = false,
+      isLiveResult = false,
+      attributes,
+      showPlaceholder = true,
+      draggable,
+      grabbing,
+      selected,
+      focused,
+      collapsed,
+      dropTarget,
+      rowSpan,
+      disabled = false,
+      lastBeforeMoreRowsHidden = false,
+      type,
+      unit,
+      value,
+      onChangeValue = noop,
+      alignRight,
+      children,
+      parseError,
+      firstChildren,
+      dropdownOptions,
+      element,
+      ...props
+    }: TableDataProps,
+    ref
+  ): ReturnType<FC> => {
+    const existingRef =
+      attributes && 'ref' in attributes ? attributes.ref : undefined;
+    const tdRef = useMergedRef(existingRef, ref, dropTarget);
+    const additionalProps = isEditable ? {} : { contentEditable: false };
 
-  return (
-    <Component
-      {...attributes}
-      {...additionalProps}
-      ref={tdRef}
-      rowSpan={rowSpan}
-      css={[
-        isUserContent && editableStyles,
-        tdBaseStyles,
-        tdGridStyles,
-        showPlaceholder && tdPlaceholderStyles,
-        disabled && tdDisabledStyles,
-        selected && selectedStyles,
-        focused && focusedStyles,
-        alignRight && alignRightStyles,
-        isLiveResult && liveResultStyles,
-        draggable && draggableStyles,
-      ]}
-      {...props}
-    >
-      {firstChildren}
-
-      <CellEditor
-        focused={focused}
-        type={type}
-        value={value}
-        unit={unit}
-        onChangeValue={onChangeValue}
-        parentType="table"
-        element={element}
-        {...dropdownOptions}
+    return (
+      <Component
+        {...attributes}
+        {...additionalProps}
+        ref={tdRef}
+        rowSpan={rowSpan}
+        css={[
+          isUserContent && editableStyles,
+          tdBaseStyles,
+          tdGridStyles,
+          showPlaceholder && tdPlaceholderStyles,
+          disabled && tdDisabledStyles,
+          selected && selectedStyles,
+          focused && focusedStyles,
+          alignRight && alignRightStyles,
+          isLiveResult && liveResultStyles,
+          draggable && draggableStyles,
+        ]}
+        {...props}
       >
-        <SyntaxErrorHighlight
-          variant="custom"
-          error={parseError}
-          hideError={!parseError}
+        {firstChildren}
+
+        <CellEditor
+          focused={focused}
+          type={type}
+          value={value}
+          unit={unit}
+          onChangeValue={onChangeValue}
+          parentType="table"
+          element={element}
+          {...dropdownOptions}
         >
-          {children}
-        </SyntaxErrorHighlight>
-      </CellEditor>
-    </Component>
-  );
-};
+          <SyntaxErrorHighlight
+            variant="custom"
+            error={parseError}
+            hideError={!parseError}
+          >
+            {children}
+          </SyntaxErrorHighlight>
+        </CellEditor>
+      </Component>
+    );
+  }
+);

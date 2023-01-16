@@ -9,14 +9,15 @@ import {
 import { assertElementType, useNodeText } from '@decipad/editor-utils';
 import {
   useComputer,
-  useIsEditorReadOnly,
   useEditorTeleportContext,
+  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import { findNodePath, insertNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
+import { varStyles } from '@decipad/ui/src/styles/code-block';
 import { DraggableBlock } from '../block-management';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
@@ -87,9 +88,13 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     [editor, isReadOnly]
   );
 
+  const previewRef = useRef(null);
+
   const handleDragStartInlineResult = useMemo(
     () =>
-      isReadOnly ? undefined : onDragStartInlineResult(editor, { element }),
+      isReadOnly
+        ? undefined
+        : onDragStartInlineResult(editor, { element, previewRef }),
     [editor, element, isReadOnly]
   );
 
@@ -120,6 +125,25 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       {...attributes}
       id={lineId}
     >
+      <div
+        ref={previewRef}
+        style={{
+          position: 'absolute',
+          top: -9999,
+          left: -9999,
+          zIndex: 9999,
+        }}
+      >
+        <div
+          css={[
+            varStyles,
+            {
+              transform: 'rotate(3deg)',
+            },
+          ]}
+        />
+      </div>
+
       <CodeLineTeleport
         codeLine={teleport}
         onDismiss={onTeleportDismiss}

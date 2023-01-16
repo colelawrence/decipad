@@ -1,7 +1,7 @@
 import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { DragEvent, FC, ReactNode, useState } from 'react';
+import { DragEvent, FC, ReactNode, RefObject, useState } from 'react';
 import {
   antiwiggle,
   cssVar,
@@ -64,6 +64,7 @@ interface SmartColumnCellProps {
   readonly onDragStart: (e: DragEvent) => void;
   readonly result?: Result.Result;
   readonly element?: AnyElement;
+  readonly previewRef?: RefObject<HTMLDivElement>;
 }
 
 export const SmartColumnCell: FC<SmartColumnCellProps> = ({

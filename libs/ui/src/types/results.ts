@@ -1,6 +1,6 @@
 import { Result, SerializedType, SerializedTypeKind } from '@decipad/computer';
 import { AnyElement, TableCellType } from '@decipad/editor-types';
-import { DragEvent, ReactNode } from 'react';
+import { DragEvent, ReactNode, RefObject } from 'react';
 
 export interface DragCellData {
   tableName: string;
@@ -13,7 +13,8 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   readonly parentType?: SerializedType;
   readonly variant?: 'block' | 'inline';
   readonly onDragStartCell?: (
-    data: DragCellData
+    data: DragCellData,
+    options?: { previewRef?: RefObject<Element> }
   ) => (e: DragEvent<HTMLDivElement>) => void;
   readonly tooltip?: boolean;
   readonly isLiveResult?: boolean;

@@ -10,5 +10,5 @@ export default {
 } as Meta;
 
 export const WithRowNumber: Story<typeof TableData> = (args) => (
-  <TableData {...args} />
+  <TableData {...(args as any)} />
 );

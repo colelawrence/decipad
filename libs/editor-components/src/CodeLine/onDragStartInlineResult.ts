@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { onDragStartSmartRef, setSlateFragment } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import React from 'react';
+import React, { RefObject } from 'react';
 
 export const DRAG_INLINE_RESULT = 'inline-result';
 
@@ -15,13 +15,19 @@ export const onDragStartInlineResult =
     {
       element,
       asText = '',
-    }: { element: CodeLineElement | CodeLineV2Element; asText?: string }
+      previewRef,
+    }: {
+      element: CodeLineElement | CodeLineV2Element;
+      asText?: string;
+      previewRef?: RefObject<HTMLDivElement>;
+    }
   ) =>
   (e: React.DragEvent) => {
     if (isFlagEnabled('EXPR_REFS')) {
       onDragStartSmartRef(editor)({
-        blockId: element.id,
+        element,
         asText,
+        previewRef,
       })(e);
     } else {
       // eslint-disable-next-line no-param-reassign

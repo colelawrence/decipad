@@ -90,7 +90,10 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
 
   const onDragExpressionStart = useCallback(
     (ev: DragEvent) => {
-      expression && onDragSmartCellResultStarted(editor)(expression)(ev);
+      expression &&
+        onDragSmartCellResultStarted(editor)({
+          expression,
+        })(ev);
     },
     [editor, expression]
   );
