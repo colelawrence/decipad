@@ -1,15 +1,13 @@
-import { FC, ReactNode, useState } from 'react';
-import { css } from '@emotion/react';
-import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { getExprRef, Result } from '@decipad/computer';
-import { CodeResult, DropdownMenu } from '../../organisms';
-import { blue500 } from '../../primitives';
+import { AnyElement, CellValueType } from '@decipad/editor-types';
+import { css } from '@emotion/react';
+import { FC, ReactNode, useState } from 'react';
 import { Caret } from '../../icons';
+import { CodeResult, DropdownMenu } from '../../organisms';
 
 const dropdownPill = css({
   display: 'flex',
   alignItems: 'center',
-  color: blue500.rgb,
 });
 
 export interface DropdownEditorProps {
