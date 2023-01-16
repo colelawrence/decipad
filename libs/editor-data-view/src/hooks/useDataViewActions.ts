@@ -25,7 +25,6 @@ import {
 } from '@udecode/plate';
 import { SerializedType } from '@decipad/computer';
 import { nanoid } from 'nanoid';
-import { dequal } from 'dequal';
 import { Observable, Subject } from 'rxjs';
 import { Path } from 'slate';
 import { getDefined } from '@decipad/utils';
@@ -68,10 +67,7 @@ export const useDataViewActions = (
         headerRow.children.filter((node) => !isText(node));
 
       withoutNormalizing(editor, () => {
-        if (!editor.withoutCapturingUndo) {
-          return;
-        }
-        editor.withoutCapturingUndo(() => {
+        const setColumnTypes = () => {
           if (!existingColumns) {
             return;
           }
@@ -88,9 +84,9 @@ export const useDataViewActions = (
               hasNode(editor, columnPath)
             ) {
               if (
-                existingColumn.cellType.kind !== 'anything' &&
-                existingColumn.cellType.kind !== 'type-error' &&
-                !dequal(existingColumn.cellType, matchingDataColumn.type)
+                matchingDataColumn.type.kind !== 'anything' &&
+                matchingDataColumn.type.kind !== 'type-error' &&
+                existingColumn.cellType.kind !== matchingDataColumn.type.kind
               ) {
                 setNodes<DataViewHeader>(
                   editor,
@@ -103,7 +99,12 @@ export const useDataViewActions = (
               }
             }
           }
-        });
+        };
+        if (editor.withoutCapturingUndo) {
+          editor.withoutCapturingUndo(setColumnTypes);
+        } else {
+          setColumnTypes();
+        }
       });
     },
     [editor, element.children]

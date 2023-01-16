@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "decipad",
-  "version": "0.2.3-alpha",
+  "version": "2.3.4-beta",
   "license": "UNLICENSED",
   "workspaces": [
     "apps/backend",
