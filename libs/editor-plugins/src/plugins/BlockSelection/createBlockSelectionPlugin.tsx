@@ -14,7 +14,7 @@ export const createBlockSelectionPlugin = (): MyPlatePlugin =>
           size="50vw"
           style={{
             top: -104,
-            zIndex: 0,
+            zIndex: 1,
           }}
         />
         <BlockStartArea
@@ -22,7 +22,7 @@ export const createBlockSelectionPlugin = (): MyPlatePlugin =>
           size="50vw"
           style={{
             top: -104,
-            zIndex: 0,
+            zIndex: 1,
           }}
         />
         {children}
