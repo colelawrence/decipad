@@ -52,18 +52,6 @@ function printEnv(env) {
   }
 }
 
-function getWatch() {
-  return {
-    onRebuild(error, result) {
-      if (error) {
-        console.error('Watch build failed:', error);
-      } else {
-        console.log('Watch build succeeded:', result);
-      }
-    },
-  };
-}
-
 function envVarDefines(env) {
   const defines = {};
   for (const key of Object.keys(env)) {
@@ -73,7 +61,7 @@ function envVarDefines(env) {
 }
 
 async function esBuildOptions(env) {
-  const watch = process.env.WATCH ? getWatch() : false;
+  const watch = Boolean(process.env.WATCH);
   return {
     bundle: true,
     entryPoints: await globby([
@@ -101,12 +89,16 @@ printEnv(env);
 console.log('');
 
 (async () => {
-  const buildOptions = await esBuildOptions(env);
-  // console.log('esbuild options: ', buildOptions);
-  // console.log('');
-  const result = await esbuild.build(buildOptions);
-  console.log('Built successfully', result);
-  if (buildOptions.watch) {
+  const { watch, ...buildOptions } = await esBuildOptions(env);
+
+  if (watch) {
     console.log('Now watching for changes...');
+    const ctx = await esbuild.context({...buildOptions,});
+    await ctx.watch();
+  } else {
+    // console.log('esbuild options: ', buildOptions);
+    // console.log('');
+    const result = await esbuild.build(buildOptions);
+    console.log('Built successfully', result);
   }
 })();
