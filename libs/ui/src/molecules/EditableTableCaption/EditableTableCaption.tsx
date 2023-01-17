@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
@@ -136,9 +135,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               isExpandButton
             />
           ) : null}
-          {hideAddDataViewButton ||
-          !isFlagEnabled('DATA_VIEW') ||
-          readOnly ? null : (
+          {hideAddDataViewButton || readOnly ? null : (
             <TableButton
               onClick={onAddDataViewButtonPress}
               captions={['Create view']}

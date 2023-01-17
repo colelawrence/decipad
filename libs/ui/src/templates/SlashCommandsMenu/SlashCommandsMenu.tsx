@@ -47,8 +47,8 @@ const dataItems = [
     title: 'Data View',
     description: 'Analyze, sort and group data using a table',
     icon: <TableSlash />,
-    enabled: isFlagEnabled('DATA_VIEW'),
-    extraSearchTerms: ['group', 'sort', 'analyze'],
+    enabled: true,
+    extraSearchTerms: ['group', 'sort', 'analyze', 'pivot'],
   },
   {
     command: 'plot',

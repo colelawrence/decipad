@@ -7,7 +7,6 @@ export const availableFlags = [
   'SKETCH',
   'COPY_HREF',
   'PERSISTENT_EXAMPLE',
-  'DATA_VIEW',
   'EXPR_REFS',
   'ONBOARDING_CHECKLIST',
   'COLOR_SIDEBAR',
