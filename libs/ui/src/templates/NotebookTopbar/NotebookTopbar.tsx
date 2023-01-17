@@ -1,4 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { docs } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -85,6 +86,7 @@ export type NotebookTopbarProps = Pick<
     workspace?: { id: string; name: string } | null;
     onDuplicateNotebook?: () => void;
     onRevertChanges?: () => void;
+    onInvite?: (email: string) => Promise<void>;
     hasLocalChanges?: BehaviorSubject<boolean>;
   };
 
@@ -100,6 +102,9 @@ export const NotebookTopbar = ({
 }: NotebookTopbarProps): ReturnType<FC> => {
   const { status: sessionStatus } = useSession();
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
+  const allowInvitation =
+    permission === 'ADMIN' && isFlagEnabled('SHARE_PAD_WITH_EMAIL');
+
   const clientEvent = useContext(ClientEventsContext);
   const onGalleryClick = useCallback(
     () =>
@@ -181,8 +186,11 @@ export const NotebookTopbar = ({
         )}
         {isWriter && <VerticalDivider />}
         <NotebookAvatars
+          allowInvitation={allowInvitation}
           isWriter={isWriter}
           usersWithAccess={usersWithAccess}
+          notebook={notebook}
+          {...sharingProps}
         />
 
         {sessionStatus === 'authenticated' ? (

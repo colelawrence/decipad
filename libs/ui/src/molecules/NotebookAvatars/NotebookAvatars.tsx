@@ -1,6 +1,8 @@
+import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { ComponentProps, FC, useState } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
+import { NotebookInvitationPopUp } from '../../organisms';
 import { cssVar, p12Regular, p13Medium, setCssVar } from '../../primitives';
 import { PermissionType } from '../../types';
 
@@ -11,6 +13,7 @@ interface NotebookAvatar {
     email?: string | null;
   };
   permission: PermissionType;
+  onClick?: () => void;
 }
 
 const genRole = (permission: PermissionType) => {
@@ -25,15 +28,26 @@ const genRole = (permission: PermissionType) => {
 };
 
 const avatarsWrapperStyles = css({
+  position: 'relative',
   display: 'flex',
   alignItems: 'center',
   marginLeft: '6px',
+});
+
+const popupWrapperStyles = css({
+  position: 'absolute',
+  top: '42px',
+  right: '-88px',
 });
 
 const avatarStyles = css({
   width: '28px',
   height: '28px',
   marginLeft: '-6px',
+});
+
+const plusAvatarStyles = css(avatarStyles, {
+  cursor: 'pointer',
 });
 
 const tooltipNameStyles = css({
@@ -47,17 +61,38 @@ const tooltipRoleStyles = css({
   ...setCssVar('currentTextColor', cssVar('highlightColor')),
 });
 
-export interface NotebookAvatarsProps {
+export type NotebookAvatarsProps = ComponentProps<
+  typeof NotebookInvitationPopUp
+> & {
   isWriter?: boolean;
   usersWithAccess?: NotebookAvatar[] | null;
-}
+  allowInvitation?: boolean;
+};
 
 export const NotebookAvatars = ({
   isWriter,
   usersWithAccess,
+  allowInvitation,
+  ...sharingProps
 }: NotebookAvatarsProps): ReturnType<FC> => {
+  const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
+
+  const handleClickOutside = () => {
+    setShowInvitePopup(false);
+  };
+  useWindowListener('click', handleClickOutside);
+
   return (
-    <div css={avatarsWrapperStyles}>
+    <div css={avatarsWrapperStyles} onClick={(e) => e.stopPropagation()}>
+      {allowInvitation && (
+        <div
+          key="invite"
+          css={plusAvatarStyles}
+          onClick={() => setShowInvitePopup((show) => !show)}
+        >
+          <Avatar name={showInvitePopup ? '×' : '+'} greyedOut={true} />
+        </div>
+      )}
       {usersWithAccess?.map((avatar, index) => {
         const email = avatar.user.email || avatar.user.name;
         return isWriter ? (
@@ -69,6 +104,7 @@ export const NotebookAvatars = ({
                   name={avatar.user.name}
                   email={email}
                   greyedOut={avatar.permission !== 'ADMIN'}
+                  onClick={avatar.onClick}
                 />
               </div>
             }
@@ -88,6 +124,11 @@ export const NotebookAvatars = ({
           </div>
         );
       })}
+      {showInvitePopup && (
+        <div css={popupWrapperStyles}>
+          <NotebookInvitationPopUp {...sharingProps} />
+        </div>
+      )}
     </div>
   );
 };

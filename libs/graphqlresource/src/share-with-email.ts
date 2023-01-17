@@ -5,6 +5,7 @@ import {
   ConcreteRecord,
   GraphqlObjectType,
   PermissionType,
+  PadRecord,
 } from '@decipad/backendtypes';
 import { create as createInvite } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
@@ -24,7 +25,7 @@ export type ShareWithEmailFunction = (
   _: any,
   args: ShareWithEmailArgs,
   context: GraphqlContext
-) => Promise<void>;
+) => Promise<PadRecord>;
 
 export function shareWithEmail<
   RecordT extends ConcreteRecord,
@@ -35,7 +36,11 @@ export function shareWithEmail<
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): (shareWithUser: ShareWithUserFunction) => ShareWithEmailFunction {
   return (shareWithUser: ShareWithUserFunction) =>
-    async function (_: any, args: ShareWithEmailArgs, context: GraphqlContext) {
+    async function (
+      _: any,
+      args: ShareWithEmailArgs,
+      context: GraphqlContext
+    ): Promise<PadRecord> {
       const resource = `/${resourceType.resourceTypeName}/${args.id}`;
       await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
       const actingUser = requireUser(context);
@@ -50,7 +55,7 @@ export function shareWithEmail<
       const { userkeys } = await tables();
       const emailKey = await userkeys.get({ id: emailKeyId });
       if (emailKey) {
-        return await shareWithUser(
+        await shareWithUser(
           _,
           {
             id: args.id,
@@ -60,6 +65,8 @@ export function shareWithEmail<
           },
           context
         );
+
+        return record as PadRecord;
       }
 
       const newUser = (
@@ -84,5 +91,7 @@ export function shareWithEmail<
           resourceType.parentResourceUriFromRecord(record);
       }
       await createInvite(invite);
+
+      return record as PadRecord;
     };
 }

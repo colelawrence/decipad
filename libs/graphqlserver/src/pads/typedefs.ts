@@ -101,7 +101,7 @@ export default gql`
       email: String!
       permissionType: PermissionType!
       canComment: Boolean!
-    ): Boolean
+    ): Pad!
 
     sharePadWithSecret(
       id: ID!

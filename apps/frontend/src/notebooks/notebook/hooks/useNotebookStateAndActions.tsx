@@ -19,9 +19,11 @@ import {
   useGetNotebookByIdQuery,
   useSetNotebookPublicMutation,
   useUpdateNotebookIconMutation,
+  useSharePadWithEmailMutation,
 } from '../../../graphql';
 import { useDuplicateNotebook } from './useDuplicateNotebook';
 import EditorIcon from '../EditorIcon';
+import { PermissionType } from '../../../graphql/generated';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -57,6 +59,7 @@ interface UseNotebookStateAndActionsResult {
   setNotebookPublic: (isPublic: boolean) => void;
   publishNotebook: () => void;
   unpublishNotebook: () => void;
+  inviteEditorByEmail: (email: string) => Promise<void>;
 }
 
 const SNAPSHOT_NAME = 'Published 1';
@@ -98,6 +101,7 @@ export const useNotebookStateAndActions = ({
   });
   const [, remoteUpdateNotebookIcon] = useUpdateNotebookIconMutation();
   const [, remoteUpdateNotebookIsPublic] = useSetNotebookPublicMutation();
+  const [, shareNotebookWithEmail] = useSharePadWithEmailMutation();
 
   const [, createOrUpdateSnapshot] =
     useCreateOrUpdateNotebookSnapshotMutation();
@@ -275,6 +279,20 @@ export const useNotebookStateAndActions = ({
     });
   }, [event, notebookId, setNotebookPublic]);
 
+  const inviteEditorByEmail = useCallback(
+    (email: string): Promise<void> => {
+      // TODO: return a correct type instead of void
+      // @ts-ignore
+      return shareNotebookWithEmail({
+        padId: notebookId,
+        email,
+        canComment: true,
+        permissionType: PermissionType.Write,
+      });
+    },
+    [notebookId, shareNotebookWithEmail]
+  );
+
   return {
     error,
     notebook,
@@ -296,5 +314,6 @@ export const useNotebookStateAndActions = ({
 
     publishNotebook,
     unpublishNotebook,
+    inviteEditorByEmail,
   };
 };

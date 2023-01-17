@@ -81,6 +81,7 @@ interface AvatarProps {
   readonly backgroundColor?: OpaqueColor;
   readonly variant?: boolean;
   readonly title?: string;
+  readonly onClick?: () => void;
 }
 
 export const Avatar = ({
@@ -91,6 +92,7 @@ export const Avatar = ({
   greyedOut = false,
   backgroundColor,
   variant = false,
+  onClick,
   title,
 }: AvatarProps): ReturnType<FC> => {
   const hashString = name
@@ -104,6 +106,7 @@ export const Avatar = ({
       role="img"
       aria-label={title ?? `Avatar of user ${name[0]}`}
       css={containerStyles(variant)}
+      onClick={onClick}
     >
       <div css={{ display: 'flex', height: '100%', width: '100%' }}>
         <div

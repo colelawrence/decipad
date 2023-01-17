@@ -15,6 +15,7 @@ export const availableFlags = [
   'DROPDOWN_TABLES',
   'FEATURE_REQUEST',
   'ONBOARDING_ACCOUNT_SETUP',
+  'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
 ] as const;
 

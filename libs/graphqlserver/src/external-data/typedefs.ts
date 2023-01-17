@@ -78,6 +78,6 @@ export default gql`
       id: ID!
       email: String
       permissionType: PermissionType!
-    ): Boolean
+    ): ExternalDataSource
   }
 `;

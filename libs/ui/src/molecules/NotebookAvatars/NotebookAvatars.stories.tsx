@@ -3,6 +3,7 @@ import { ComponentProps } from 'react';
 import { NotebookAvatars } from './NotebookAvatars';
 
 const args: ComponentProps<typeof NotebookAvatars> = {
+  notebook: {} as any,
   usersWithAccess: [
     {
       user: {

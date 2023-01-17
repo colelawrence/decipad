@@ -10,6 +10,7 @@ type TopbarProps = {
   readonly hasUnpublishedChanges: boolean;
   readonly duplicateNotebook?: () => void;
   readonly removeLocalChanges?: () => void;
+  readonly inviteEditorByEmail?: (email: string) => Promise<void>;
   readonly publishNotebook?: () => void;
   readonly unpublishNotebook?: () => void;
 };
@@ -22,6 +23,7 @@ const Topbar: FC<TopbarProps> = ({
   removeLocalChanges,
   publishNotebook = noop,
   unpublishNotebook = noop,
+  inviteEditorByEmail = () => Promise.resolve(),
 }) => {
   if (!notebook) {
     return null;
@@ -40,6 +42,7 @@ const Topbar: FC<TopbarProps> = ({
       onDuplicateNotebook={duplicateNotebook}
       onPublish={publishNotebook}
       onUnpublish={unpublishNotebook}
+      onInvite={inviteEditorByEmail}
     />
   );
 };

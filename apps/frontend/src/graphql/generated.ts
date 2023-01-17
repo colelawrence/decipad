@@ -120,10 +120,10 @@ export type Mutation = {
   resendRegistrationMagicLinkEmail?: Maybe<Scalars['Boolean']>;
   setPadPublic: Pad;
   setUsername: Scalars['Boolean'];
-  shareExternalDataSourceWithEmail?: Maybe<Scalars['Boolean']>;
+  shareExternalDataSourceWithEmail?: Maybe<ExternalDataSource>;
   shareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
   shareExternalDataSourceWithUser?: Maybe<Scalars['Boolean']>;
-  sharePadWithEmail?: Maybe<Scalars['Boolean']>;
+  sharePadWithEmail: Pad;
   sharePadWithRole?: Maybe<Scalars['Boolean']>;
   sharePadWithSecret: Scalars['String'];
   sharePadWithUser?: Maybe<Scalars['Boolean']>;
@@ -873,6 +873,16 @@ export type ShareNotebookWithSecretMutationVariables = Exact<{
 
 export type ShareNotebookWithSecretMutation = { __typename?: 'Mutation', sharePadWithSecret: string };
 
+export type SharePadWithEmailMutationVariables = Exact<{
+  padId: Scalars['ID'];
+  email: Scalars['String'];
+  permissionType: PermissionType;
+  canComment: Scalars['Boolean'];
+}>;
+
+
+export type SharePadWithEmailMutation = { __typename?: 'Mutation', sharePadWithEmail: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null } }> | null } } };
+
 export type UnarchiveNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1232,6 +1242,36 @@ export const ShareNotebookWithSecretDocument = gql`
 
 export function useShareNotebookWithSecretMutation() {
   return Urql.useMutation<ShareNotebookWithSecretMutation, ShareNotebookWithSecretMutationVariables>(ShareNotebookWithSecretDocument);
+};
+export const SharePadWithEmailDocument = gql`
+    mutation sharePadWithEmail($padId: ID!, $email: String!, $permissionType: PermissionType!, $canComment: Boolean!) {
+  sharePadWithEmail(
+    id: $padId
+    email: $email
+    permissionType: $permissionType
+    canComment: $canComment
+  ) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          id
+          image
+          name
+          email
+          username
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useSharePadWithEmailMutation() {
+  return Urql.useMutation<SharePadWithEmailMutation, SharePadWithEmailMutationVariables>(SharePadWithEmailDocument);
 };
 export const UnarchiveNotebookDocument = gql`
     mutation UnarchiveNotebook($id: ID!) {
@@ -1652,10 +1692,10 @@ export type GraphCacheOptimisticUpdaters = {
   resendRegistrationMagicLinkEmail?: GraphCacheOptimisticMutationResolver<MutationResendRegistrationMagicLinkEmailArgs, Maybe<Scalars['Boolean']>>,
   setPadPublic?: GraphCacheOptimisticMutationResolver<MutationSetPadPublicArgs, WithTypename<Pad>>,
   setUsername?: GraphCacheOptimisticMutationResolver<MutationSetUsernameArgs, Scalars['Boolean']>,
-  shareExternalDataSourceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithEmailArgs, Maybe<Scalars['Boolean']>>,
+  shareExternalDataSourceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithEmailArgs, Maybe<WithTypename<ExternalDataSource>>>,
   shareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
   shareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
-  sharePadWithEmail?: GraphCacheOptimisticMutationResolver<MutationSharePadWithEmailArgs, Maybe<Scalars['Boolean']>>,
+  sharePadWithEmail?: GraphCacheOptimisticMutationResolver<MutationSharePadWithEmailArgs, WithTypename<Pad>>,
   sharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationSharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
   sharePadWithSecret?: GraphCacheOptimisticMutationResolver<MutationSharePadWithSecretArgs, Scalars['String']>,
   sharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationSharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
@@ -1701,10 +1741,10 @@ export type GraphCacheUpdaters = {
     resendRegistrationMagicLinkEmail?: GraphCacheUpdateResolver<{ resendRegistrationMagicLinkEmail: Maybe<Scalars['Boolean']> }, MutationResendRegistrationMagicLinkEmailArgs>,
     setPadPublic?: GraphCacheUpdateResolver<{ setPadPublic: WithTypename<Pad> }, MutationSetPadPublicArgs>,
     setUsername?: GraphCacheUpdateResolver<{ setUsername: Scalars['Boolean'] }, MutationSetUsernameArgs>,
-    shareExternalDataSourceWithEmail?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithEmail: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithEmailArgs>,
+    shareExternalDataSourceWithEmail?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithEmail: Maybe<WithTypename<ExternalDataSource>> }, MutationShareExternalDataSourceWithEmailArgs>,
     shareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithRoleArgs>,
     shareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithUserArgs>,
-    sharePadWithEmail?: GraphCacheUpdateResolver<{ sharePadWithEmail: Maybe<Scalars['Boolean']> }, MutationSharePadWithEmailArgs>,
+    sharePadWithEmail?: GraphCacheUpdateResolver<{ sharePadWithEmail: WithTypename<Pad> }, MutationSharePadWithEmailArgs>,
     sharePadWithRole?: GraphCacheUpdateResolver<{ sharePadWithRole: Maybe<Scalars['Boolean']> }, MutationSharePadWithRoleArgs>,
     sharePadWithSecret?: GraphCacheUpdateResolver<{ sharePadWithSecret: Scalars['String'] }, MutationSharePadWithSecretArgs>,
     sharePadWithUser?: GraphCacheUpdateResolver<{ sharePadWithUser: Maybe<Scalars['Boolean']> }, MutationSharePadWithUserArgs>,

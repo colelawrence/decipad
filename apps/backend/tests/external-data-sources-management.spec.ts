@@ -349,7 +349,9 @@ test('external data sources', (ctx) => {
             id: "${externalDataSource!.id}"
             email: "test2@decipad.com"
             permissionType: READ
-          )
+          ) {
+            id
+          }
         }
       `,
     });

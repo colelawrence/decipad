@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { NotebookAvatars, NotebookAvatarsProps } from './NotebookAvatars';
 
 const props: NotebookAvatarsProps = {
+  notebook: {} as any,
   usersWithAccess: [
     {
       user: {
@@ -30,6 +31,7 @@ const props: NotebookAvatarsProps = {
     },
   ],
   isWriter: true,
+  allowInvitation: false,
 };
 
 describe('NotebookAvatars Molecule', () => {

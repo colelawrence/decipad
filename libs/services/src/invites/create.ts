@@ -41,6 +41,7 @@ export async function create(args: ICreateInviteArguments) {
   const { urlBase } = appConfig();
 
   const inviteAcceptLink = `${urlBase}/api/invites/${newInvite.id}/accept`;
+
   await queues.publish({
     name: 'sendemail',
     payload: {

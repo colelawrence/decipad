@@ -58,6 +58,7 @@ const Notebook: FC = () => {
     removeLocalChanges,
     publishNotebook,
     unpublishNotebook,
+    inviteEditorByEmail,
   } = useNotebookStateAndActions({
     notebookId,
     editor,
@@ -170,6 +171,7 @@ const Notebook: FC = () => {
                 removeLocalChanges={removeLocalChanges}
                 publishNotebook={publishNotebookWithMetrics}
                 unpublishNotebook={unpublishNotebook}
+                inviteEditorByEmail={inviteEditorByEmail}
               />
             </Frame>
           }

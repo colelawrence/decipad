@@ -18,7 +18,9 @@ test('pads', (ctx) => {
   let secret: string;
 
   beforeAll(async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
+    const auth = await ctx.auth();
+    const client = ctx.graphql.withAuth(auth);
+
     workspace = (
       await client.mutate({
         mutation: ctx.gql`
@@ -473,16 +475,40 @@ test('pads', (ctx) => {
   it('admin can invite using existing email', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
-    await client.mutate({
+    const result = await client.mutate({
       mutation: ctx.gql`
         mutation {
           sharePadWithEmail (
             id: "${pad.id}"
             email: "test2@decipad.com"
             permissionType: READ
-            canComment: true)
+            canComment: true) {
+              id
+              access {
+                users {
+                  permission
+                }
+              }
+            }
         }
       `,
+    });
+
+    const updatedPad = result.data.sharePadWithEmail;
+    expect(updatedPad).toMatchObject({
+      id: pad.id,
+      access: {
+        users: [
+          {
+            __typename: 'UserAccess',
+            permission: 'READ',
+          },
+          {
+            __typename: 'UserAccess',
+            permission: 'ADMIN',
+          },
+        ],
+      },
     });
   });
 
@@ -504,7 +530,7 @@ test('pads', (ctx) => {
   it('admin can invite unregistered user using email', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
-    await client.mutate({
+    const result = await client.mutate({
       mutation: ctx.gql`
         mutation {
           sharePadWithEmail (
@@ -512,9 +538,15 @@ test('pads', (ctx) => {
             email: "test100@decipad.com"
             permissionType: READ
             canComment: true)
+          {
+            id
+          }
         }
       `,
     });
+
+    const updatedPad = result.data.sharePadWithEmail;
+    expect(updatedPad).toMatchObject({ id: pad.id });
   });
 
   it('unregistered user can accept invite', async () => {

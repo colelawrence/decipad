@@ -1,0 +1,29 @@
+mutation sharePadWithEmail(
+  $padId: ID!
+  $email: String!
+  $permissionType: PermissionType!
+  $canComment: Boolean!
+) {
+  sharePadWithEmail(
+    id: $padId
+    email: $email
+    permissionType: $permissionType
+    canComment: $canComment
+  ) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          id
+          image
+          name
+          email
+          username
+        }
+      }
+    }
+  }
+}

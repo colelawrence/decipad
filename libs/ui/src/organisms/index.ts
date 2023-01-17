@@ -26,6 +26,7 @@ export { InlineMenu } from './InlineMenu/InlineMenu';
 export { InlineRowResult } from './InlineRowResult/InlineRowResult';
 export { MediaEmbed } from './MediaEmbed/MediaEmbed';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
+export { NotebookInvitationPopUp } from './NotebookInvitationPopUp/NotebookInvitationPopUp';
 export { NotebookPublishingPopUp } from './NotebookPublishingPopUp/NotebookPublishingPopUp';
 export { NumberCatalog } from './NumberCatalog/NumberCatalog';
 export { PlotBlock } from './PlotBlock/PlotBlock';
