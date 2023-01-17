@@ -10,6 +10,7 @@
 
 - [Setup](#set-up)
 - [Development cycle](docs/DEVELOPMENT.md)
+- [Feature flags](#feature-flags)
 
 ## Set up
 
@@ -264,3 +265,9 @@ There is also documentation available for larger areas of the codebase that span
 
 - [Code structure](docs/CODE_STRUCTURE.md)
 - [Frontend](docs/FRONTEND.md)
+
+# Feature flags
+
+Decipad uses some feature flags (that you can find listed in `libs/feature-flags`) that you can turn on and off to test multiple features. Most are enabled by default in localhost, dev and PR environments.
+
+Within the app, use Cmd+Shift+F to pop up a feature flag switcher with checkboxes.
