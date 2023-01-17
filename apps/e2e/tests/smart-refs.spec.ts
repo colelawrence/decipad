@@ -5,7 +5,6 @@ import {
   keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
-import { cleanText } from '../utils/src';
 
 test.describe('SmartRefs simple case', () => {
   test.describe.configure({ mode: 'serial' });
@@ -26,20 +25,17 @@ test.describe('SmartRefs simple case', () => {
     await createCalculationBlockBelow(page, 'var = 10');
     await page.keyboard.press('Enter');
     await createCalculationBlockBelow(page, 'x = var ');
-    const smartRef = await page.waitForSelector(
-      'span[data-slate-node="element"]'
+    await expect(page.locator('span[data-slate-node="element"]')).toContainText(
+      'var'
     );
-    const text = await smartRef.textContent();
-    expect(cleanText(text)).toBe('var');
   });
 
   test('does not replace variable name with smart ref if selected', async () => {
-    const srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(1); // from previous test
     await createCalculationBlockBelow(page, 'y = var');
-    const newSrCount = (await page.$$('span[data-slate-node="element"]'))
-      .length;
-    expect(newSrCount).toBe(1); // no new smart refs
+    // no new smart refs
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      1
+    );
   });
 });
 
@@ -65,15 +61,14 @@ test.describe('SmartRefs in code tables', () => {
     await createCalculationBlockBelow(page, 'Tab = {Col1 = A, Col2 = A}');
     await page.keyboard.press('Enter');
 
-    await page.waitForSelector('span[data-slate-node="element"] >> nth=1');
-
-    const srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(2);
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      2
+    );
   });
 
   test('no highlight in column declarations in code tables', async () => {
-    const srCount = (await page.$$('code [data-state="closed"]')).length; // var decorations
-    expect(srCount).toBe(11);
+    // var decorations
+    await expect(page.locator('code [data-state="closed"]')).toHaveCount(11);
   });
 });
 
@@ -93,44 +88,51 @@ test.describe('Deleting SmartRefs', () => {
   });
 
   test('selects, then deletes smart ref on Backspace', async () => {
-    let srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(0);
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      0
+    );
 
     await createCalculationBlockBelow(page, 'var = 10');
     await page.keyboard.press('Enter');
     await createCalculationBlockBelow(page, 'x = var ');
-    srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(1);
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      1
+    );
 
     await keyPress(page, 'Backspace'); // space
     await keyPress(page, 'Backspace'); // select smart ref
-    srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(1);
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      1
+    );
 
     await keyPress(page, 'Backspace'); // delete smart ref
-    srCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(srCount).toBe(0);
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      0
+    );
   });
 
   test('selects, then deletes smart ref on Delete', async () => {
-    const srCount = (await page.$$('span[data-slate-node="element"]')).length;
-
     await createCalculationBlockBelow(page, 'var2 = 10');
     await keyPress(page, 'Enter');
     await createCalculationBlockBelow(page, 'var2 ');
-    let newSrCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(newSrCount).toBe(srCount + 1);
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      1
+    );
 
     await keyPress(page, 'ArrowUp');
     await keyPress(page, 'ArrowRight'); // we're now at the start of the line
     await keyPress(page, 'Delete'); // select smart ref
 
-    newSrCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(newSrCount).toBe(srCount + 1); // did not delete
+    // did not delete
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      1
+    );
 
     await keyPress(page, 'Backspace');
-    await keyPress(page, 'Backspace'); // delete smart ref
-    newSrCount = (await page.$$('span[data-slate-node="element"]')).length;
-    expect(newSrCount).toBe(srCount);
+    await keyPress(page, 'Backspace');
+    // delete smart ref
+    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
+      0
+    );
   });
 });

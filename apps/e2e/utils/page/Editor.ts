@@ -77,6 +77,7 @@ export async function goToPlayground(page: Page) {
 
 export async function getPadName(page: Page) {
   await page.waitForSelector('[data-slate-editor] h1');
+  // eslint-disable-next-line playwright/no-element-handle
   const name = await page.$('[data-slate-editor] h1');
   return (await name!.textContent())!.trim();
 }
@@ -87,8 +88,10 @@ export async function focusOnBody(page: Page) {
 }
 
 export async function keyPress(page: Page, k: string) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
   await page.keyboard.press(k);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
 }
 
@@ -96,8 +99,10 @@ export async function ControlPlus(page: Page, key: string) {
   const platform = await page.evaluate(() => navigator.platform);
   const isMac = platform.indexOf('Mac') === 0 || platform === 'iPhone';
   const modifier = isMac ? 'Meta' : 'Control';
+  // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
   await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
 }
 

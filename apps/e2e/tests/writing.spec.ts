@@ -93,31 +93,27 @@ test.describe('Writing in the editor', () => {
 
   test('allows to create a new paragraph', async () => {
     await keyPress(page, 'Enter');
-    expect(await page.$$('[data-slate-editor] p')).toHaveLength(3);
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(3);
   });
   test('allows to type in the second paragraph', async () => {
     await page.keyboard.type('this is the content for the second paragraph');
-    const [, p2] = await page.$$('[data-slate-editor] p');
-    expect(await p2.textContent()).toBe(
+    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
       'this is the content for the second paragraph'
     );
   });
 
   test('allows to create even another new paragraph', async () => {
     await keyPress(page, 'Enter');
-    expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(4);
   });
   test('allows to type in the third paragraph', async () => {
     await page.keyboard.type('this is the content for the third paragraph');
-    const [, , p3] = await page.$$('[data-slate-editor] p');
-    expect(await p3.textContent()).toBe(
+    await expect(page.locator('[data-slate-editor] p >> nth=2')).toHaveText(
       'this is the content for the third paragraph'
     );
   });
 
   test('allows to go back to the previous paragraph and remove some text', async () => {
-    const [, p2] = await page.$$('[data-slate-editor] p');
-
     // navigate to the element with flake redundancy
     await keyPress(page, 'ArrowUp');
     // navigate to the end with flake redundancy
@@ -126,13 +122,14 @@ test.describe('Writing in the editor', () => {
     for (let i = 0; i < ' paragraph'.length; i += 1) {
       await keyPress(page, 'Backspace');
     }
-    expect(await p2.textContent()).toBe('this is the content for the second');
+    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
+      'this is the content for the second'
+    );
   });
 
   test('allows appending some text to an existing paragraph', async () => {
     await page.keyboard.type(' para-graph');
-    const [, p2] = await page.$$('[data-slate-editor] p');
-    expect(await p2.textContent()).toBe(
+    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
       'this is the content for the second para-graph'
     );
   });
@@ -142,10 +139,13 @@ test.describe('Writing in the editor', () => {
       await keyPress(page, 'ArrowLeft');
     }
     await keyPress(page, 'Enter');
-    expect(await page.$$('[data-slate-editor] p')).toHaveLength(5);
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(5);
 
-    const [, p2, p3] = await page.$$('[data-slate-editor] p');
-    expect(await p2.textContent()).toBe('this is the content for the ');
-    expect(await p3.textContent()).toBe('second para-graph');
+    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
+      'this is the content for the '
+    );
+    await expect(page.locator('[data-slate-editor] p >> nth=2')).toHaveText(
+      'second para-graph'
+    );
   });
 });

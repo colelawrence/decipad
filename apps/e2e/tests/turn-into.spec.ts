@@ -27,8 +27,8 @@ test.describe('Turn Into', () => {
     await keyPress(page, 'ArrowDown');
     await createInputBelow(page, 'Input1', 'true');
 
-    await expect(await page.getByRole('slider')).not.toBeVisible();
-    await expect(await page.getByRole('checkbox')).not.toBeVisible();
+    await expect(await page.getByRole('slider')).toBeHidden();
+    await expect(await page.getByRole('checkbox')).toBeHidden();
 
     await page.click('[data-testid=drag-handle]');
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
@@ -53,9 +53,7 @@ test.describe('Turn Into', () => {
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
     await page.locator('role=menuitem', { hasText: 'calculation' }).click();
 
-    await expect(
-      await page.getByText('Off', { exact: true })
-    ).not.toBeVisible();
+    await expect(await page.getByText('Off', { exact: true })).toBeHidden();
     await expect(await page.getByText('Input2 = false')).toBeVisible();
   });
 

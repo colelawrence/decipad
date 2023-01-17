@@ -73,6 +73,7 @@ test.describe('Dashboard operations', () => {
     expect(padIndex).toBeGreaterThanOrEqual(0);
     await removePad(page, padIndex);
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
     const pads = await getPadList(page);
     expect(pads).toHaveLength(2);
@@ -80,6 +81,7 @@ test.describe('Dashboard operations', () => {
 
   test('can duplicate pad', async () => {
     await duplicatePad(page, 0);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
 
     let pads = await getPadList(page);

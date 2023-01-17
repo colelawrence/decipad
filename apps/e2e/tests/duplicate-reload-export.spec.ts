@@ -31,16 +31,25 @@ test.describe('Duplicating a notebook', () => {
   });
 
   test('Makes up a notebook', async () => {
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
     await page.keyboard.type('pad title here');
     await page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
     await page.keyboard.type('this is the first paragraph');
     await page.keyboard.press('Enter');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
     await page.keyboard.type('this is the second paragraph');
     await page.keyboard.press('Enter');
     await page.keyboard.type('this is the third paragraph');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
 
     await page.waitForSelector('text=this is the third paragraph');
-    await page.waitForTimeout(Timeouts.syncDelay);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.syncDelay * 2);
   });
 
   test('Can reload', async () => {
@@ -55,15 +64,18 @@ test.describe('Duplicating a notebook', () => {
 
   test('Check if notebook has 4 paragraphs', async () => {
     await page.waitForSelector('text=My notebook titlepad title here');
+
     await page.click('text=My notebook titlepad title here');
-    // await page.waitForSelector('text=this is the third paragraph');
-    // expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
+    await expect(
+      page.locator('text=this is the third paragraph')
+    ).toBeVisible();
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(4);
     await navigateToWorkspacePage(page);
   });
 
   test('Notebook is listed', async () => {
-    const pads = await getPadList(page);
     await page.waitForSelector('text=My notebook titlepad title here');
+    const pads = await getPadList(page);
     padToCopyIndex = pads.findIndex(
       (pad) => pad.name === 'My notebook titlepad title here'
     );
@@ -86,9 +98,25 @@ test.describe('Duplicating a notebook', () => {
     expect(padCopyIndex).toBeGreaterThanOrEqual(0);
     await followPad(page, padCopyIndex);
     await waitForEditorToLoad(page);
-    await page.waitForSelector('text=Copy of My notebook titlepad title here');
-    // expect(await page.$$('[data-slate-editor] p')).toHaveLength(4);
+    await expect(
+      page
+        .getByRole('heading', {
+          name: 'Copy of My notebook titlepad title here',
+        })
+        .getByText('Copy of My notebook titlepad title here')
+    ).toBeVisible();
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(4);
     await navigateToWorkspacePage(page);
+  });
+
+  test('Notebook is listed again', async () => {
+    await page.waitForSelector('text=My notebook titlepad title here');
+    const pads = await getPadList(page);
+    padToCopyIndex = pads.findIndex(
+      (pad) => pad.name === 'Copy of My notebook titlepad title here'
+    );
+
+    expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
   });
 
   test('Can export a notebook', async () => {
@@ -106,29 +134,29 @@ test.describe('Duplicating a notebook', () => {
           id: expect.any(String),
         },
         {
-          // children: [
-          //   {
-          //     text: 'this is the first paragraph',
-          //   },
-          // ],
+          children: [
+            {
+              text: 'this is the first paragraph',
+            },
+          ],
           type: 'p',
           id: expect.any(String),
         },
         {
-          // children: [
-          //   {
-          //     text: 'this is the second paragraph',
-          //   },
-          // ],
+          children: [
+            {
+              text: 'this is the second paragraph',
+            },
+          ],
           type: 'p',
           id: expect.any(String),
         },
         {
-          // children: [
-          //   {
-          //     text: 'this is the third paragraph',
-          //   },
-          // ],
+          children: [
+            {
+              text: 'this is the third paragraph',
+            },
+          ],
           type: 'p',
           id: expect.any(String),
         },

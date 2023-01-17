@@ -28,9 +28,7 @@ test.describe('Results widgets', () => {
     await page.keyboard.type('/result');
     await page.locator('button >> span >> svg').click();
 
-    const result = page.locator('text=Result: Name');
-
-    expect(await result.count()).toBe(1);
+    await expect(page.locator('text=Result: Name')).toHaveCount(1);
   });
 
   test('shows the available calculations', async () => {
@@ -40,23 +38,32 @@ test.describe('Results widgets', () => {
 
     await page.locator('[data-testid="result-widget"]').click();
 
-    await page.waitForSelector('button >> span + div:has-text("Hello")');
-    await page.waitForSelector('button >> span + div:has-text("World")');
+    await expect(
+      page.locator('button >> span + div:has-text("Hello")')
+    ).toBeVisible();
+    await expect(
+      page.locator('button >> span + div:has-text("World")')
+    ).toBeVisible();
   });
 
   test('shows the result of a calculation', async () => {
     await page.locator('button >> span + div:has-text("hello")').click();
 
-    await page.waitForSelector('[data-testid="result-widget"]:has-text("6")');
+    await expect(
+      page.locator('[data-testid="result-widget"]:has-text("6")')
+    ).toBeVisible();
   });
 
   test('updates the result when calculation changes', async () => {
     await page.locator('text=Hello = 5 + 1').click();
     await keyPress(page, 'End');
     await page.keyboard.type(' + 4');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.typing);
 
-    await page.waitForSelector('[data-testid="result-widget"]:has-text("10")');
+    await expect(
+      page.locator('[data-testid="result-widget"]:has-text("10")')
+    ).toBeVisible();
   });
 
   test('doesnt show tables nor formulas on widget dropdown', async () => {
@@ -64,12 +71,9 @@ test.describe('Results widgets', () => {
     await createCalculationBlockBelow(page, 'f(x) = x + 10');
 
     await page.locator('[data-testid="result-widget"]').click();
-    await page.waitForSelector('button >> span + div >> visible=true');
-    const count = await page
-      .locator('button >> span + div >> visible=true')
-      .count();
-
     // only one different variable available
-    expect(count).toBe(3);
+    await expect(
+      page.locator('button >> span + div >> visible=true')
+    ).toHaveCount(3);
   });
 });

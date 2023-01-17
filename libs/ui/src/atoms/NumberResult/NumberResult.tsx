@@ -25,7 +25,11 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
   const fullResult = <span css={numberResultStyles}>{formatted.asString}</span>;
 
   const trigger = (
-    <span data-highlight-changes css={numberResultStyles}>
+    <span
+      data-testid={`number-result:${formatted.asString}`}
+      data-highlight-changes
+      css={numberResultStyles}
+    >
       {fullResult}
     </span>
   );

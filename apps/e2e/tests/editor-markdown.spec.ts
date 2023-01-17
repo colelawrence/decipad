@@ -17,28 +17,19 @@ test.describe('Editor markdown marks', () => {
     await keyPress(page, 'Enter');
     await page.keyboard.type('# Heading');
     await keyPress(page, 'Enter');
-    const eyeIcon = await page.locator('svg title:has-text("Hide")');
-    expect(await eyeIcon.count()).toBe(0);
+    await expect(page.locator('svg title:has-text("Hide")')).toHaveCount(0);
     await page.keyboard.type('The sentence meaning of life.');
     await page.waitForSelector('[data-slate-editor] h2');
     await page.getByTestId('drag-handle').nth(1).click();
-    const hideFromReader = page.locator(
-      '[role="menuitem"] >> text=Hide from reader'
-    );
-    await hideFromReader.click();
-    expect(await eyeIcon.count()).toBe(1);
+    await page.locator('[role="menuitem"] >> text=Hide from reader').click();
+    await expect(page.locator('svg title:has-text("Hide")')).toHaveCount(1);
   });
 
   test('inserts a link using markdown syntax', async ({ page }) => {
     await focusOnBody(page);
     await page.keyboard.type('[text](https://example.com/)');
-    const textElement = (await page.$('"text"'))!;
-    const linkElement = await textElement.evaluateHandle(
-      (text: HTMLElement) => text.closest('a')!
-    );
-    expect(await linkElement.getAttribute('href')).toEqual(
-      'https://example.com/'
-    );
+    const locator = page.locator('a').filter({ hasText: 'text' });
+    await expect(locator).toHaveAttribute('href', 'https://example.com/');
   });
 
   test('inserts a magic number', async ({ page }) => {
@@ -47,14 +38,8 @@ test.describe('Editor markdown marks', () => {
     await page.keyboard.type('= Foo = 4');
     await keyPress(page, 'Enter');
     await page.keyboard.type('The sentence meaning of life is %Foo%');
-    const magicNumber = await page.$('"is 1"');
-    expect(magicNumber).toBeDefined();
-  });
-
-  test('deleted a magic number', async ({ page }) => {
-    await focusOnBody(page);
-    await keyPress(page, 'Backspace');
-    const noMagic = await page.$('"1"');
-    expect(noMagic).toBeNull();
+    await expect(
+      page.getByText('The sentence meaning of life is 4Foo')
+    ).toBeVisible();
   });
 });

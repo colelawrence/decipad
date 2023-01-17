@@ -62,18 +62,14 @@ test.describe('Navigating with magic numbers', () => {
   });
 
   test('works even when the variable is re-declared', async () => {
-    const allDraggable = await page.$$('[data-testid=drag-handle]');
-    const nrDraggable = allDraggable.length;
-    const toDelete = allDraggable[nrDraggable - 2];
-    await toDelete.click();
-    const deleteButton = page.locator(`:nth-match(:text("Delete"), 2)`);
-    await deleteButton.click();
+    await page.locator('[data-testid=drag-handle] >> nth=-2').click();
+    await page.locator(`:nth-match(:text("Delete"), 2)`).click();
     await page.locator('[data-slate-editor] p').nth(1).click();
     await keyPress(page, 'Enter');
     await keyPress(page, '=');
     await page.keyboard.type('Price = 42 gbp');
     await keyPress(page, 'Enter');
-    expect((await page.textContent('text=is £42'))!.trim()).not.toBeNull();
+    await expect(page.locator('text=is £42')).toBeVisible();
     const magic = await page.locator('span[title="42"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();

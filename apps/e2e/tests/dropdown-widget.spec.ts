@@ -104,29 +104,29 @@ test.describe('Dropdown widget', () => {
 
     await page.click('[aria-roledescription="dropdownOption"]:has-text("50%")');
 
-    expect(await dropdownOptions.isVisible()).toBeFalsy();
-
-    const dropdownCell = await page.waitForSelector(tableCellLocator(1, 2));
-    expect(await dropdownCell.textContent()).toContain('50%');
+    await expect(dropdownOptions).toBeHidden();
+    await expect(page.locator(tableCellLocator(1, 2))).toContainText('50%');
   });
 
   test('Changing original dropdown value, also changes the cells value', async () => {
-    const dropdownOpen = page.locator('[aria-roledescription="dropdown-open"]');
-    await dropdownOpen.click();
+    await page.locator('[aria-roledescription="dropdown-open"]').click();
 
     await page
       .locator('[aria-roledescription="dropdownOption"]:has-text("50%")')
       .hover();
-    const dropdownOption = await page.waitForSelector(
-      '[aria-roledescription="dropdown-edit"]'
-    );
-    await dropdownOption.click();
+
+    await page
+      .getByRole('complementary')
+      .locator('div')
+      .filter({ hasText: 'Edit' })
+      .click();
 
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.insertText('0');
     await page.keyboard.press('Enter');
 
-    const dropdownCell = page.locator(tableCellLocator(1, 2));
-    await expect(dropdownCell).toHaveText(/500%/, { timeout: 5000 });
+    await expect(page.locator(tableCellLocator(1, 2))).toHaveText(/500%/, {
+      timeout: 5000,
+    });
   });
 });

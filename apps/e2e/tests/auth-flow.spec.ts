@@ -25,8 +25,8 @@ test.describe('Authentication flow', () => {
   test('should show confirmation email on login attempt', async ({ page }) => {
     await page.click('text=/continue/i');
     await page.type('input', 'johndoe123@gmail.com');
-    page.click('text=/submit/i');
-    expect(await page.waitForSelector('text=/open.+link/i')).not.toBe(null);
+    await page.click('text=/submit/i');
+    await expect(page.locator('text=/open.+link/i')).toBeVisible();
     await snapshot(page as Page, 'Auth: Magic Link Email Sent');
   });
 
@@ -37,6 +37,6 @@ test.describe('Authentication flow', () => {
     await setUp(page);
     await withTestUser({ page, context });
     await page.goto('/');
-    await page.waitForSelector('text=/Workspace/i');
+    await expect(page.locator('text=/Workspace/i')).toBeVisible();
   });
 });

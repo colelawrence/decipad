@@ -7,6 +7,7 @@ import {
 } from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
 
+// eslint-disable-next-line playwright/no-skipped-test
 test.describe.skip('Calculation Blocks v2', () => {
   test.describe.configure({ mode: 'serial' });
 

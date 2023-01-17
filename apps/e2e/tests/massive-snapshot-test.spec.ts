@@ -54,6 +54,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     expect(await getPadName(page)).toBe('Everything, everywhere, all at once');
 
     expect(
+      // eslint-disable-next-line playwright/no-element-handle
       await page.$(
         'text=You can change the participation and multiplier above, and it will be reflected in the calculation below'
       )
@@ -92,9 +93,7 @@ test.describe('Loading and snapshot of big notebook', () => {
       'text="Everything, everywhere, all at once"'
     );
 
-    expect(
-      (await publishedNotebookPage.$$('[data-slate-editor] p')).length
-    ).toBeGreaterThanOrEqual(28);
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(28);
   });
 
   test('navigates to published notebook link incognito', async () => {

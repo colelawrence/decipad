@@ -33,7 +33,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
   });
 
   test('creates a table', async () => {
-    expect(await page.$('[data-slate-editor] table')).toBe(null);
+    await expect(page.locator('[data-slate-editor] table')).toBeHidden();
 
     await focusOnBody(page);
     await page.keyboard.insertText('This is some text.');
@@ -100,6 +100,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
     // splitting on new line removes the text from auto-complete menu
     expect(codeBlockText.split('\n')[0]).toBe('Property3 =  1 + 1');
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     expect((await getFromTable(page, 1, 2, true))?.trim()).toBe('2');
   });

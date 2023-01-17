@@ -26,7 +26,7 @@ test.describe('Inputs and magic numbers', () => {
     await focusOnBody(page);
     await createInputBelow(page, 'Foo', 1337);
     await keyPress(page, 'ArrowRight');
-    expect((await page.textContent('text=1337'))!.trim()).toBe('1337');
+    await expect(page.locator('text=1337')).toBeVisible();
   });
 
   test('can retrieve the value of an interactive input', async () => {
@@ -34,8 +34,6 @@ test.describe('Inputs and magic numbers', () => {
     await keyPress(page, 'ArrowDown');
     await page.keyboard.type('That foo is %Foo% .');
     await keyPress(page, 'Enter');
-
-    const elem = await page.waitForSelector('text=1,337');
-    return expect(await elem.textContent()).toBe('1,337');
+    await expect(page.locator('text=1,337')).toBeVisible();
   });
 });

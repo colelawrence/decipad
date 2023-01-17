@@ -66,12 +66,14 @@ export function focusOnTable(page: Page) {
 }
 
 export function addRow(page: Page) {
+  // eslint-disable-next-line playwright/no-force-option
   return page
     .locator('table > tfoot > tr > th > button')
     .click({ force: true });
 }
 
 export async function addColumn(page: Page) {
+  // eslint-disable-next-line playwright/no-force-option
   await page.locator('button[title="Add Column"]').click({ force: true });
 }
 

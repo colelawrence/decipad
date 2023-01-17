@@ -48,6 +48,7 @@ export async function getPadList(page: Page): Promise<PadList> {
   // wait for notebooks to show up
   await page.waitForSelector('//main//li//a//strong');
 
+  // eslint-disable-next-line playwright/no-element-handle
   const names = await page.$$('//main//li//a//strong');
   const pads: PadList = [];
   for (const name of names) {
@@ -91,15 +92,15 @@ export const ellipsisSelector = (n: number): string => {
 
 export async function removePad(page: Page, index = 0) {
   await page.click(ellipsisSelector(index));
-  const removeButton = (await page.$(
+  const removeButton = await page.waitForSelector(
     'div[role="menuitem"] span:has-text("Archive")'
-  ))!;
+  );
   await Promise.all([page.waitForRequest('/graphql'), removeButton.click()]);
 }
 
 export async function duplicatePad(page: Page, index = 0) {
   await page.click(ellipsisSelector(index));
-  const duplicateButton = (await page.$(
+  const duplicateButton = (await page.waitForSelector(
     'div[role="menuitem"] span:has-text("Duplicate")'
   ))!;
   await Promise.all([page.waitForRequest('/graphql'), duplicateButton.click()]);
@@ -107,7 +108,7 @@ export async function duplicatePad(page: Page, index = 0) {
 
 export async function exportPad(page: Page, index = 0): Promise<string> {
   await page.click(ellipsisSelector(index));
-  const exportButton = (await page.$(
+  const exportButton = (await page.waitForSelector(
     'div[role="menuitem"] span:has-text("Download")'
   ))!;
   const [fileContent] = await Promise.all([

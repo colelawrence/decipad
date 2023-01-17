@@ -50,6 +50,7 @@ test.describe('Formula highlighting', () => {
   test('editable when TAB pressed', async () => {
     await keyPress(page, 'Tab');
     await page.keyboard.type('+1');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(500);
     const potentialFormula = await getMagicNumberContent(page);
     expect(potentialFormula).toEqual('4');
@@ -73,6 +74,7 @@ test.describe('Formula highlighting', () => {
     const resultEl = await getResult(page, lineNo);
     resultEl.dragTo(lastParagraphNode);
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(10000);
   });
 
@@ -84,10 +86,12 @@ test.describe('Formula highlighting', () => {
       .click();
 
     await page.keyboard.type('+1');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(500);
     const potentialFormula = await getMagicNumberContent(page);
     expect(potentialFormula).toEqual('5');
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(10000);
   });
 });

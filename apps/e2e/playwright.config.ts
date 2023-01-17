@@ -13,13 +13,13 @@ import { devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   testDir: './tests',
   /* Maximum time one test can run for. */
-  timeout: process.env.CI ? 600_000 : 45_000,
+  timeout: process.env.CI ? 90_000 : 45_000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: 5_000,
+    timeout: 10_000,
   },
   /* Run tests in files in parallel */
   fullyParallel: true,

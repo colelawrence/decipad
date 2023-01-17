@@ -1,7 +1,7 @@
 import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright-core';
 
-const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 2_000;
+const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 3_000;
 
 const snapshotsTaken = new Set<string>();
 
@@ -15,6 +15,7 @@ export const snapshot = async (
   }
   snapshotsTaken.add(name);
   await page.waitForLoadState('networkidle');
+  // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
 
   try {
