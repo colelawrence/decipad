@@ -13,7 +13,7 @@ import tables, { allPages } from '@decipad/tables';
 import { nanoid } from 'nanoid';
 
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
-const MAX_ALLOWED_RECORD_SIZE_BYTES = 350_000;
+const MAX_ALLOWED_RECORD_SIZE_BYTES = 60_000;
 
 export class DynamodbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;
