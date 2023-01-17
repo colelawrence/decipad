@@ -1,4 +1,8 @@
-import { NumberCatalog, TeleportEditor } from '@decipad/editor-components';
+import {
+  TeleportEditor,
+  NumberCatalog,
+  BlockLengthSynchronizationProvider,
+} from '@decipad/editor-components';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -103,32 +107,34 @@ export const Editor = (props: EditorProps) => {
         <LoadingFilter loading={isWritingLocked}>
           <EditorBlockParentRefProvider onRefChange={onRefChange}>
             <EditorLayout ref={containerRef}>
-              <TeleportEditor editor={editor}>
-                <Plate<MyValue>
-                  editor={editor}
-                  onChange={onChange}
-                  readOnly={
-                    // Only respect write locks here and not the readOnly prop.
-                    // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                    // The rest are controlled via EditorReadOnlyContext.
-                    isWritingLocked
-                  }
-                  disableCorePlugins={{
-                    history: true,
-                  }}
-                >
-                  {!checklist.hidden &&
-                    !readOnly &&
-                    isFlagEnabled('ONBOARDING_CHECKLIST') && (
-                      <StarterChecklist
-                        checklist={checklist}
-                        onHideChecklist={hideChecklist}
-                      />
-                    )}
-                  <InsidePlate {...props} containerRef={containerRef} />
-                  <NotebookState isSavedRemotely={isSavedRemotely} />
-                </Plate>
-              </TeleportEditor>
+              <BlockLengthSynchronizationProvider editor={editor}>
+                <TeleportEditor editor={editor}>
+                  <Plate<MyValue>
+                    editor={editor}
+                    onChange={onChange}
+                    readOnly={
+                      // Only respect write locks here and not the readOnly prop.
+                      // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                      // The rest are controlled via EditorReadOnlyContext.
+                      isWritingLocked
+                    }
+                    disableCorePlugins={{
+                      history: true,
+                    }}
+                  >
+                    {!checklist.hidden &&
+                      !readOnly &&
+                      isFlagEnabled('ONBOARDING_CHECKLIST') && (
+                        <StarterChecklist
+                          checklist={checklist}
+                          onHideChecklist={hideChecklist}
+                        />
+                      )}
+                    <InsidePlate {...props} containerRef={containerRef} />
+                    <NotebookState isSavedRemotely={isSavedRemotely} />
+                  </Plate>
+                </TeleportEditor>
+              </BlockLengthSynchronizationProvider>
             </EditorLayout>
           </EditorBlockParentRefProvider>
         </LoadingFilter>

@@ -1,5 +1,7 @@
 export * from './block-management';
 export * from './BlockErrorBoundary';
+export * from './BlockLengthSynchronization/BlockLengthSynchronizationProvider';
+export * from './BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 export * from './BlockSelection/BlockSelectable';
 export * from './TeleportEditor';
 export * from './CodeLine';

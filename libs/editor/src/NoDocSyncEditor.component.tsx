@@ -10,7 +10,11 @@ import {
 import { createPlateEditor, Plate } from '@udecode/plate';
 import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { MyValue } from '@decipad/editor-types';
-import { NumberCatalog, TeleportEditor } from '@decipad/editor-components';
+import {
+  TeleportEditor,
+  NumberCatalog,
+  BlockLengthSynchronizationProvider,
+} from '@decipad/editor-components';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Subject } from 'rxjs';
 import { Tooltip } from './components';
@@ -59,21 +63,23 @@ export const NoDocSyncEditorInternal: FC = () => {
       >
         <LoadingFilter loading={isWritingLocked}>
           <EditorLayout ref={containerRef}>
-            <TeleportEditor editor={editor}>
-              <Plate<MyValue>
-                editor={editor}
-                onChange={onChange}
-                initialValue={
-                  window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
-                    ? introNotebook()
-                    : emptyNotebook()
-                }
-                readOnly={isWritingLocked}
-              >
-                <NumberCatalog />
-                <Tooltip />
-              </Plate>
-            </TeleportEditor>
+            <BlockLengthSynchronizationProvider editor={editor}>
+              <TeleportEditor editor={editor}>
+                <Plate<MyValue>
+                  editor={editor}
+                  onChange={onChange}
+                  initialValue={
+                    window.localStorage.getItem(POPULATE_PLAYGROUND) === 'true'
+                      ? introNotebook()
+                      : emptyNotebook()
+                  }
+                  readOnly={isWritingLocked}
+                >
+                  <NumberCatalog />
+                  <Tooltip />
+                </Plate>
+              </TeleportEditor>
+            </BlockLengthSynchronizationProvider>
           </EditorLayout>
         </LoadingFilter>
       </EditorReadOnlyContext.Provider>

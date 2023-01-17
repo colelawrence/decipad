@@ -50,7 +50,11 @@ export const FeatureFlagsSwitcher = () => {
   useWindowListener(
     'keydown',
     (event: KeyboardEvent) => {
-      if (event.metaKey && event.shiftKey && event.key === 'f') {
+      if (
+        (event.metaKey || event.ctrlKey) &&
+        event.shiftKey &&
+        event.key === 'f'
+      ) {
         setShow((prevShow) => !prevShow);
       }
     },

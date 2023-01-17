@@ -43,6 +43,7 @@ import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useOnBlurNormalize } from '../hooks';
 import { useTurnIntoProps } from './useTurnIntoProps';
+import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 
 export const CodeLineV2: PlateComponent = ({
   attributes,
@@ -200,7 +201,12 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
             empty={empty}
             type={{ kind: 'table-formula' }}
           >
-            {props.children}
+            <BlockLengthSynchronizationReceiver
+              syncGroupName="variableNameColumn"
+              topLevelBlockId={varResult?.id}
+            >
+              {props.children}
+            </BlockLengthSynchronizationReceiver>
           </CodeVariableDefinition>
         </span>
       }
