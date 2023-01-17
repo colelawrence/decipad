@@ -162,7 +162,7 @@ export default function Templates() {
                 title="Offer letter template"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/You-re-hired-Offer-Letter%3Am5plUls5fkWflsneZcJNQ"
-                description="Offer letters at startups most often include stock base compensation. Use this template to explain how these work and next steps"
+                description="Offer letters at startups most often include stock base compensation. Use this template to explain how these work and next steps."
                 template
                 avatar={avatarKelly}
               />
@@ -183,7 +183,7 @@ export default function Templates() {
                 title="Performance summary letter template"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/-Template-Performance-summary-letter-%3AjuzNZDn4zNSqn2Rz14pKn"
-                description="Compensation adjustments are often based on performance and a formula. Use this template to communicate adjustments"
+                description="Compensation adjustments are often based on performance and a formula. Use this template to communicate adjustments."
                 template
                 avatar={avatarKelly}
               />
@@ -194,8 +194,25 @@ export default function Templates() {
                 title="Adjusting employee compensation when moving countries"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Emily-in-Paris%3AmCTaRvBPOskMxCEKeKKxt?secret=Zhm1ToqvarE6ZzXHJU2Cn"
-                description="A notebook that breaks down the calculations behind salary adjustments when moving cities"
+                description="A notebook that breaks down the calculations behind salary adjustments when moving cities."
                 avatar={avatarNuno}
+              />
+            </GridContainer>
+
+            <br></br>
+            <h2>Sales</h2>
+            <GridContainer>
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-yellow"
+                icon={IconLeaf}
+                title="Sales Pipeline Report"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/-Template-Sales-Report-Monthly-Pipeline-Update%3ABxUws8V5ImNdj3feqCevN"
+                description="Build a report to showcase the current and future state of your sales funnel using data views."
+                template
+                avatar={avatarKelly}
+                newNotebook
               />
             </GridContainer>
 
@@ -209,7 +226,7 @@ export default function Templates() {
                 title="Picking the right GitHub plan for your team"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Should-I-upgrade-to-Github-s-Enterprise-plan-%3AFlwvRkd6oiuePyH7MNzan"
-                description="Explores different plan scenarios depending on your team's GitHub usage"
+                description="Explores different plan scenarios depending on your team's GitHub usage."
                 avatar={avatarFabio}
               />
             </GridContainer>
@@ -224,7 +241,7 @@ export default function Templates() {
                 title="Invoice template"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Invoice-for-Professional-Services%3AbvG3oSIDSMoZxx5oFHQ4r"
-                description="This notebook showcases how you can create an invoice on Decipad"
+                description="This notebook showcases how you can create an invoice on Decipad."
                 template
                 avatar={avatarKelly}
               ></Card>
@@ -235,7 +252,7 @@ export default function Templates() {
                 title="Start a business"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/-Starting-a-Candle-Business%3AJTYAmhcwfINZobogKoEbU"
-                description="Example on how to break down and forecast financials of a businees before starting"
+                description="Example on how to break down and forecast financials of a businees before starting."
                 avatar={avatarSimao}
               />
               <Card
@@ -245,7 +262,7 @@ export default function Templates() {
                 title="Pricing a consulting project"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Pricing-a-consulting-project%3AXvFir3R2H_GvTfsy5bA4Q"
-                description="Landed a new project? Use this model to understand how to calculate staff allocation, project expenses, and target rates"
+                description="Landed a new project? Use this model to understand how to calculate staff allocation, project expenses, and target rates."
                 avatar={avatarGiulia}
               />
               {/* <Card
@@ -273,7 +290,7 @@ export default function Templates() {
                 title="Restaurant Pricing"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Is-my-restaurant-profitable-%3AJ0dGd6P-2FCtBN-RaULz4"
-                description="Use this model to understand how you should price the meals at your restaurant in order to be profitable"
+                description="Use this model to understand how you should price the meals at your restaurant in order to be profitable."
                 avatar={avatarGiulia}
               />
               {/* <Card
@@ -307,7 +324,7 @@ export default function Templates() {
                 title="A founders guide to pricing your first round"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/A-founders-guide-to-pricing-your-first-round%3AEIfsPUrmoNZDMtGHYuxMW"
-                description="Before you negotiate your first VC round, you might have a simple cap. This Notebook goes over the math and breaks it down"
+                description="Before you negotiate your first VC round, you might have a simple cap. This Notebook goes over the math and breaks it down."
                 avatar={avatarNuno}
               />
               <Card
@@ -341,7 +358,7 @@ export default function Templates() {
                 title="$AAPL, interest rates and the stock market"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Rising-interest-rates-and-AAPL-share-price%3AGwKX8lzGM5tDFJ3aV6eTJ"
-                description="You’ve probably been hearing a lot about interest rates lately. Check out this model that shows why they have been making the markets go wild"
+                description="You’ve probably been hearing a lot about interest rates lately. Check out this model that shows why they have been making the markets go wild."
                 avatar={avatarKelly}
               />
               {/*
@@ -367,10 +384,22 @@ export default function Templates() {
                 title="How much money do I get on a savings account?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/How-much-money-do-I-get-on-a-savings-account-Template%3AynrEw3tTP1a6MVrUYbM_3"
-                description="Some institutions pay interest when you open a savings account. Use this template to check how much money you will get after taxes"
+                description="Some institutions pay interest when you open a savings account. Use this template to check how much money you will get after taxes."
                 template
                 newNotebook
                 avatar={avatarNuno}
+              />
+              <Card
+                author="Simão Dias"
+                cardColor="--card-green"
+                icon={IconLeaf}
+                title="Finance Tracker"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/-Template-My-Finance-Tracker-2023%3AA5sV922M9Qtn71KoDdHzO"
+                description="Input your expenses and income to get a detailed summary of cashflows using data views."
+                template
+                newNotebook
+                avatar={avatarSimao}
               />
               <Card
                 author="Peyton Swift"
@@ -379,7 +408,7 @@ export default function Templates() {
                 title="When can I retire?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/-Decode-F-I-R-E-%3AD8PUgXa8VQxoCIWi7Tq4A?secret=JTq7qfP3q_qbNGsYAm_Uu"
-                description="Use the F.I.R.E model (Financial Independence, Retire Early) to understand how you can become work optional"
+                description="Use the F.I.R.E model (Financial Independence, Retire Early) to understand how you can become work optional."
                 avatar={avatarPeyton}
               />
               <Card
@@ -389,7 +418,7 @@ export default function Templates() {
                 title="Can I afford all these subscriptions?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/-Subscription-Tracker%3Awy0DuDrADXjoUOsW59iTc?secret=DpImmwlNWuLdw4XYUhldd"
-                description="Everything is using a subscription model nowadays. Use this model to understand your expenses"
+                description="Everything is using a subscription model nowadays. Use this model to understand your expenses."
                 avatar={avatarPeyton}
               />
               <Card
@@ -399,7 +428,7 @@ export default function Templates() {
                 title="Should you negotiate your salary?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/How-much-are-you-losing-during-your-lifetime-if-you-don-t-negotiate-your-salary-%3Ah65Y4c99Swzn9smvVNyMC"
-                description="Your salary is much like investing: where you start impacts your total return. Explore the numbers on this notebook to see how much you would be losing"
+                description="Your salary is much like investing: where you start impacts your total return. Explore the numbers on this notebook to see how much you would be losing."
                 avatar={avatarKelly}
               />
               <Card
@@ -409,7 +438,7 @@ export default function Templates() {
                 title="Interest Rates? How much are they costing me?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Interest-Rates-How-much-are-they-costing-me-%3AKQ6BCwfuv1ijdQcSmiki7"
-                description="It's important to understand how much of your monthly payment is going to the principal (ie. to repay your owed money) and how much is going to fees and interest"
+                description="It's important to understand how much of your monthly payment is going to the principal (ie. to repay your owed money) and how much is going to fees and interest."
                 avatar={avatarSimao}
               />
             </GridContainer>
@@ -433,7 +462,7 @@ export default function Templates() {
                 title="Should I buy an electric car?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/-Should-I-buy-an-electric-car-%3AX94KlVvqJDUvIqt-9mv93"
-                description="Want to make the switch to electric? Use this model to understand how to calculate your savings potential"
+                description="Want to make the switch to electric? Use this model to understand how to calculate your savings potential."
                 avatar={avatarNuno}
               />
               {/* <Card
@@ -452,7 +481,7 @@ export default function Templates() {
                 title="How much can I save if I stop using my air conditioning?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Copy-of-How-much-can-I-save-if-I-stop-using-my-air-conditioning-Yen-%3AuzEyS4KVhhLGRq8RWO0Ua"
-                description="As Europe copes with rising energy prices, the Spanish government has asked citizens to turn down the A/C"
+                description="As Europe copes with rising energy prices, the Spanish government has asked citizens to turn down the A/C."
                 avatar={avatarPeyton}
               />
               <Card
@@ -478,7 +507,7 @@ export default function Templates() {
                 title="How to build up your runs this summer"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/How-to-build-up-your-runs-this-summer-consumer-demo%3ApBMgmhZf4YbMZhvkm1bBM"
-                description="Make a plan to increase the distance you can run"
+                description="Make a plan to increase the distance you can run."
                 avatar={avatarKelly}
               />
               <Card
@@ -488,7 +517,7 @@ export default function Templates() {
                 title="Comparing your triathlon times to Olympic gold winners"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Triathlon-times-demo-consumer%3ABiAU1Doi3hknMbRVJ7wj0"
-                description="Ever wonder how your triathlon time can compare to elite athletes? Explore the calculations"
+                description="Ever wonder how your triathlon time can compare to elite athletes? Explore the calculations."
                 avatar={avatarNuno}
               />
               <Card
@@ -498,7 +527,7 @@ export default function Templates() {
                 title="Improving your 5k time"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Improving-your-5k-time-demo-consumer%3Aauj_wnWdSnuTw2XjNn_nP"
-                description="Simple calculations on how to improve running times"
+                description="Simple calculations on how to improve running times."
                 avatar={avatarPeyton}
               />
               <Card
@@ -508,7 +537,7 @@ export default function Templates() {
                 title="What size should my skis be?"
                 img="https://user-images.githubusercontent.com/12210180/174139877-d558a1ac-b995-4848-a7a7-f42cd53e3401.png"
                 notebook="https://app.decipad.com/n/-What-size-skis-do-I-need-%3AHAxnPfO0e4H9MHoig3zFG?secret=VDoYnnowEi8imsPqvUyWT"
-                description="Going to the mountains? Use this model to learn how to calculate your perfect ski size"
+                description="Going to the mountains? Use this model to learn how to calculate your perfect ski size."
                 avatar={avatarGiulia}
               />
             </GridContainer>
@@ -564,7 +593,7 @@ export default function Templates() {
                 title="How to make the perfect cup of coffee?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/How-to-make-the-perfect-cup-of-coffee-%3AhSp6SmazqhsvafYO9QRsZ"
-                description="Brewing coffee is a science. Understand the math behind it and get personalized instructions to make drip coffee with this notebook"
+                description="Brewing coffee is a science. Understand the math behind it and get personalized instructions to make drip coffee with this notebook."
                 avatar={avatarNuno}
               />
               <Card
@@ -574,7 +603,7 @@ export default function Templates() {
                 title="Bitcoins, or burgers?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Bitcoins-or-Burgers-%3AuMSqYhchnox64XIQm4iwe"
-                description="Find how many hambuergers you can buy with your Bitcoin"
+                description="Find how many hambuergers you can buy with your Bitcoin."
                 avatar={avatarSimao}
               />
               {/*
