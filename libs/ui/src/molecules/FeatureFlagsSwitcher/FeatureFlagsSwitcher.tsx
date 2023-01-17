@@ -53,7 +53,7 @@ export const FeatureFlagsSwitcher = () => {
       if (
         (event.metaKey || event.ctrlKey) &&
         event.shiftKey &&
-        event.key === 'f'
+        event.key?.toLowerCase() === 'f'
       ) {
         setShow((prevShow) => !prevShow);
       }
@@ -66,7 +66,7 @@ export const FeatureFlagsSwitcher = () => {
       <h2 css={h2}>Feature Flags</h2>
       <div css={flagsStyles}>
         {availableFlags.map((flag) => (
-          <label css={flagStyles}>
+          <label key={flag} css={flagStyles}>
             <input
               type="checkbox"
               disabled={flag === 'FEATURE_FLAG_SWITCHER'} // So you cannot disable the switcher itself
