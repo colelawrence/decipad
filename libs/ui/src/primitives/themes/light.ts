@@ -112,6 +112,7 @@ export const theme: CssVariables = {
 
   // dropline
   droplineColor: blue300.hex,
+  droplineGreyColor: grey300.hex,
 
   errorBlockColor: orange700.hex,
   errorBlockWarning: orange50.hex,

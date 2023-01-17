@@ -57,6 +57,7 @@ type DraggableBlockProps = {
   readonly children: ReactNode;
   readonly [key: string]: unknown; // For organisms.DraggableBlock
   readonly onceDeleted?: () => void;
+  readonly hasPreviousSibling?: boolean; // used for code line blocks
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
   'blockKind' | 'disableDrag' | 'onDelete' | 'onTurnInto' | 'turnInto'
@@ -104,6 +105,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       accept,
       getAxis,
       onDrop,
+      hasPreviousSibling,
       ...props
     },
     forwardedRef
@@ -264,6 +266,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         onPlus={onPlus}
         onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}
         showLine={showLine}
+        hasPreviousSibling={hasPreviousSibling}
       >
         <BlockSelectable element={element}>
           <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>

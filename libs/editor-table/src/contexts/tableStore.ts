@@ -14,6 +14,7 @@ export const { useTableRowStore } = createAtomStore(
   {
     // Drop line direction for rows (horizontal)
     dropLine: '',
+    rowWidth: null as number | null,
   },
   { name: 'tableRow', scope: ELEMENT_TR }
 );

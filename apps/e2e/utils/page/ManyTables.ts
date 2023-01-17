@@ -25,9 +25,7 @@ const fetchAllStringElements = async (
 ): Promise<string[]> => {
   const handles = await page.locator(selector).elementHandles();
 
-  const texts = await Promise.all(
-    handles.map((handle) => handle.textContent())
-  );
+  const texts = await Promise.all(handles.map((handle) => handle.innerText()));
   return texts.map((text) => filterCellText(text ?? ''));
 };
 

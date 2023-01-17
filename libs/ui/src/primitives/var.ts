@@ -51,6 +51,7 @@ export interface CssVariables {
   // Drag&Drop: Dropline
   //
   readonly droplineColor: Property.Color;
+  readonly droplineGreyColor: Property.Color;
 
   //
   // Notebook state

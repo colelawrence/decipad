@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, HTMLAttributes, useEffect, useState } from 'react';
-import { cssVar } from '../../primitives';
+import { Create } from '../../icons';
+import { cssVar, p13Medium } from '../../primitives';
 
 const parentWrapper = css({
   position: 'absolute',
@@ -34,12 +35,28 @@ const addElementLineWrapper = css({
   '&:hover': {
     opacity: 1,
   },
+  position: 'relative',
 });
 
 const addElementLine = css({
   width: '100%',
   height: 2,
-  backgroundColor: cssVar('tableSelectionBackgroundColor'), // droplineColor too dark
+  backgroundColor: cssVar('droplineGreyColor'),
+});
+
+const buttonStyles = css(p13Medium, {
+  cursor: 'pointer',
+  display: 'flex',
+  gap: '6px',
+  padding: `7px`,
+  borderRadius: '6px',
+  backgroundColor: cssVar('highlightColor'),
+  border: `1px solid ${cssVar('strongHighlightColor')}`,
+});
+
+const iconWrapperStyles = css({
+  height: '16px',
+  width: '16px',
 });
 
 interface NewElementLineProps
@@ -59,18 +76,33 @@ interface NewElementLineProps
    * Default position is top. If true, set position at bottom.
    */
   readonly reverse?: boolean;
+  /* to be used when isTable is true */
+  readonly tableAdditionalProps?: {
+    isLastColumn: boolean;
+    rowWidth: number;
+  };
+
+  readonly hasPreviousSibling?: boolean;
 }
 
 export const NewElementLine = ({
   onAdd,
   show = true,
   isTable,
+  tableAdditionalProps,
   reverse,
   onMouseLeave,
   onMouseEnter,
   onClick,
+  hasPreviousSibling,
 }: NewElementLineProps): ReturnType<FC> => {
   const [clicked, setClicked] = useState<boolean>(false);
+  /** In order to center the + button , we need to consider the button width:
+   * 16px from the icon size
+   * 12px from the button padding (6px + 6px)
+   * 2px from the button border (1px + 1px)
+   */
+  const buttonWidth = 32;
 
   useEffect(() => {
     if (clicked) {
@@ -96,13 +128,43 @@ export const NewElementLine = ({
       onClick={onClick}
     >
       <div
-        css={[addElementLineWrapper, isTable && show && { opacity: 1 }]}
-        onClick={() => {
-          setClicked(true);
-          if (onAdd !== undefined) onAdd();
-        }}
+        css={[
+          addElementLineWrapper,
+          isTable && show && { opacity: 1 },
+          hasPreviousSibling && { marginTop: '-5px' },
+        ]}
       >
-        <span css={addElementLine} />
+        {(!isTable || (isTable && tableAdditionalProps?.isLastColumn)) && (
+          <>
+            <span css={addElementLine} />
+            <button
+              style={
+                tableAdditionalProps && {
+                  position: 'absolute',
+                  right: `${
+                    Math.round(
+                      (tableAdditionalProps.rowWidth - buttonWidth) / 2
+                    ) - 20 // this magic number comes from the width of the menu on the left side of the row
+                  }px`,
+                }
+              }
+              css={buttonStyles}
+              onClick={() => {
+                setClicked(true);
+                if (onAdd !== undefined) onAdd();
+              }}
+            >
+              <span css={iconWrapperStyles}>
+                <Create />
+              </span>
+            </button>
+            <span css={addElementLine} />
+          </>
+        )}
+        {isTable && tableAdditionalProps?.isLastColumn !== true && (
+          <span css={addElementLine} />
+        )}
+        <span></span>
       </div>
     </div>
   );

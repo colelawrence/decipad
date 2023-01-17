@@ -6,14 +6,18 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, useNodeText } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  insertNodes,
+  useNodeText,
+} from '@decipad/editor-utils';
 import {
   useComputer,
   useEditorTeleportContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { CodeLine as UICodeLine } from '@decipad/ui';
-import { findNodePath, insertNodes } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
 import { useCallback, useMemo, useRef } from 'react';
@@ -124,6 +128,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       {...turnIntoProps}
       {...attributes}
       id={lineId}
+      hasPreviousSibling={siblingCodeLines?.hasPrevious}
     >
       <div
         ref={previewRef}

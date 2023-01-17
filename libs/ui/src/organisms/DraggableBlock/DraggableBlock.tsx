@@ -75,6 +75,8 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly children: ReactNode;
 
   readonly disableDrag?: boolean;
+
+  readonly hasPreviousSibling?: boolean;
 }
 export const DraggableBlock = ({
   isSelected = false,
@@ -103,6 +105,7 @@ export const DraggableBlock = ({
   children,
 
   disableDrag = false,
+  hasPreviousSibling,
 
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
@@ -219,8 +222,11 @@ export const DraggableBlock = ({
           ref={previewRef}
         >
           {(dropLine === 'top' || dropLine === 'left') && dropLineEl}
-
-          <NewElementLine onAdd={onAdd} show={showLine} />
+          <NewElementLine
+            onAdd={onAdd}
+            show={showLine}
+            hasPreviousSibling={hasPreviousSibling}
+          />
           <BlockActiveProvider>{children}</BlockActiveProvider>
           {(dropLine === 'bottom' || dropLine === 'right') && dropLineEl}
         </div>

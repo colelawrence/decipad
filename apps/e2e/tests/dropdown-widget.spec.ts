@@ -29,7 +29,7 @@ test.describe('Dropdown widget', () => {
   test('creates an empty dropdown widget', async () => {
     await focusOnBody(page);
     await page.keyboard.type('/dropdown');
-    await page.locator('button >> span >> svg').click();
+    await page.locator('[role="menuitem"] >> span >> svg').click();
 
     const result = page.locator('text=Dropdown');
     expect(await result.count()).toBe(1);

@@ -58,7 +58,6 @@ export const TableCell: PlateComponent = ({
   const collapsed = isCollapsed(useSelection());
   const selectedCells = useTableStore().get.selectedCells();
   const dropLine = useTableRowStore().get.dropLine();
-
   const [, dropTarget] = useDropColumn(editor, element!);
   const direction = useColumnDropDirection(editor, element!);
   const hoveredRowId = useTableStore().get.hoveredRowId();
@@ -67,10 +66,12 @@ export const TableCell: PlateComponent = ({
   const setHoveredRowBottomId = useTableStore().set.hoveredRowBottomId();
   const table = useElement(ELEMENT_TABLE);
   const row = useElement<TableRowElement>(ELEMENT_TR);
-
   const isRowHovered = hoveredRowId === row.id;
   const isLastRow = table.children[table.children.length - 1] === row;
   const isLastRowHovered = hoveredRowBottomId === row.id && isLastRow;
+  const isLastColumnPerRow =
+    row.children[row.children.length - 1].id === element?.id;
+  const rowWidth = useTableRowStore().get.rowWidth() || 0;
 
   if (
     !isElementOfType(element, ELEMENT_TH) &&
@@ -177,6 +178,10 @@ export const TableCell: PlateComponent = ({
           }
           show={isRowHovered}
           isTable
+          tableAdditionalProps={{
+            isLastColumn: isLastColumnPerRow,
+            rowWidth,
+          }}
         />
       )}
 
@@ -197,6 +202,10 @@ export const TableCell: PlateComponent = ({
           }
           show={isLastRowHovered}
           isTable
+          tableAdditionalProps={{
+            isLastColumn: isLastColumnPerRow,
+            rowWidth,
+          }}
           reverse
         />
       )}

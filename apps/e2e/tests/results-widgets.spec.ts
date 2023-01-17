@@ -26,7 +26,7 @@ test.describe('Results widgets', () => {
   test('creates an empty result widget', async () => {
     await focusOnBody(page);
     await page.keyboard.type('/result');
-    await page.locator('button >> span >> svg').click();
+    await page.locator('[role="menuitem"] >> span >> svg').click();
 
     await expect(page.locator('text=Result: Name')).toHaveCount(1);
   });

@@ -13,7 +13,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
-import { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useDndNode } from '@udecode/plate-ui-dnd';
 import { useTableActions } from '../../hooks';
 import { selectRow } from '../../utils/selectRow';
@@ -48,10 +48,26 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   });
 
   const setDropLine = useTableRowStore().set.dropLine();
+  const setRowWidth = useTableRowStore().set.rowWidth();
+
+  const rowObserver = React.useRef(
+    new ResizeObserver((rowEntries) => {
+      rowEntries.forEach((rowEntry) => {
+        setRowWidth(rowEntry.contentRect.width);
+      });
+    })
+  );
 
   useEffect(() => {
+    const currentRef = rowObserver.current;
     setDropLine(dropLine);
-  }, [dropLine, setDropLine]);
+    // we need to calculate and store the width of the current row for the '+' button
+    if (trRef.current) {
+      currentRef.observe(trRef.current);
+    }
+
+    return () => currentRef.disconnect();
+  }, [dropLine, setDropLine, rowObserver]);
 
   const firstRow = path[path.length - 1] === 1;
   if (firstRow) {
