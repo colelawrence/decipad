@@ -1,15 +1,14 @@
-/* eslint-disable jest/no-disabled-tests */
+import { ClientEventsContext } from '@decipad/client-events';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
+import { noopPromise } from '@decipad/editor-utils';
 import { getByTitle, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { SessionProvider } from 'next-auth/react';
 import { ComponentProps, FC, PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { ClientEventsContext } from '@decipad/client-events';
-import { SessionProvider } from 'next-auth/react';
-import { noopPromise } from '@decipad/editor-utils';
-import { QueryParamProvider } from 'use-query-params';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookList } from './NotebookList';
 
@@ -146,111 +145,4 @@ it('renders an item with actions open on top', async () => {
   ).toBeGreaterThan(
     Number(findParentWithStyle(getByText('Second'), 'zIndex')!.zIndex)
   );
-});
-
-// eslint-disable-next-line jest/no-disabled-tests
-it.skip('only allows one open actions menu at a time', async () => {
-  const container = document.createElement('div');
-  container.style.pointerEvents = 'all';
-  const { getByText } = render(
-    <WithProviders>
-      <NotebookList
-        {...props}
-        notebooks={[
-          {
-            id: '0',
-            name: 'First',
-            icon: 'Rocket',
-            iconColor: 'Catskill',
-            status: 'draft',
-          },
-          {
-            id: '1',
-            name: 'Second',
-            icon: 'Rocket',
-            iconColor: 'Catskill',
-            status: 'draft',
-          },
-        ]}
-      />
-    </WithProviders>,
-    { container }
-  );
-  await userEvent.click(
-    getByTitle(getByText('Second').closest('li')!, /ellipsis/i)
-  );
-  await userEvent.click(
-    getByTitle(getByText('First').closest('li')!, /ellipsis/i)
-  );
-
-  expect(getByText('First').closest('li')).toContainElement(getByText(/dup/i));
-});
-
-// eslint-disable-next-line jest/no-disabled-tests
-it.skip('emits duplicate events', async () => {
-  const handleDuplicate = jest.fn();
-  const container = document.createElement('div');
-  container.style.pointerEvents = 'all';
-  const { getByText } = render(
-    <WithProviders>
-      <NotebookList
-        {...props}
-        notebooks={[
-          {
-            id: '0',
-            name: 'First',
-            icon: 'Rocket',
-            iconColor: 'Catskill',
-            status: 'review',
-          },
-          {
-            id: '1',
-            name: 'Second',
-            icon: 'Rocket',
-            iconColor: 'Catskill',
-            status: 'done',
-          },
-        ]}
-        onDuplicate={handleDuplicate}
-      />
-    </WithProviders>,
-    { container }
-  );
-
-  await userEvent.click(
-    getByTitle(getByText('Second').closest('li')!, /ellipsis/i)
-  );
-  await userEvent.click(getByText(/dup/i, { selector: 'div' }));
-  expect(handleDuplicate).toHaveBeenCalledWith('1');
-});
-
-// eslint-disable-next-line jest/no-disabled-tests
-it.skip('emits delete events', async () => {
-  const handleDelete = jest.fn();
-  const container = document.createElement('div');
-  container.style.pointerEvents = 'all';
-  const { getByText } = render(
-    <WithProviders>
-      <NotebookList
-        {...props}
-        notebooks={[
-          {
-            id: '0',
-            name: 'First',
-            icon: 'Rocket',
-            iconColor: 'Catskill',
-            status: 'draft',
-          },
-        ]}
-        onDelete={handleDelete}
-      />
-    </WithProviders>,
-    { container }
-  );
-
-  await userEvent.click(
-    getByTitle(getByText('First').closest('li')!, /ellipsis/i)
-  );
-  await userEvent.click(getByText(/archive/i));
-  expect(handleDelete).toHaveBeenCalledWith('0');
 });

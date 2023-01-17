@@ -16,16 +16,6 @@ const WithProviders: FC<PropsWithChildren> = ({ children }) => (
   </BrowserRouter>
 );
 
-// eslint-disable-next-line jest/no-disabled-tests
-it.skip('renders a level 1 notebook list header', () => {
-  const { getByText } = render(
-    <WithProviders>
-      <DashboardTopbar {...props} />
-    </WithProviders>
-  );
-  expect(getByText(/notebooks/i).tagName).toBe('H1');
-});
-
 it('renders a button to create a new notebook', async () => {
   const handleCreateNotebook = jest.fn();
   const { getByText } = render(

@@ -86,9 +86,8 @@ describe('when editor is in readOnly mode', () => {
   });
 });
 
-// eslint-disable-next-line jest/no-disabled-tests
-it.skip('can delete the block', async () => {
-  const { getByTitle, getAllByTitle, debug } = render(
+it('can delete the block', async () => {
+  const { getByTitle, getAllByTitle } = render(
     <Plate
       {...plateProps}
       editor={editor}
@@ -102,9 +101,8 @@ it.skip('can delete the block', async () => {
     }
   );
   const dragHandles = getAllByTitle(/drag/i);
-  const [, , , secondDragHandle] = dragHandles;
+  const [, secondDragHandle] = dragHandles;
   await userEvent.click(secondDragHandle);
-  debug();
 
   expect(editor.children).toEqual([
     expect.objectContaining({ children: [{ text: 'first' }] }),
