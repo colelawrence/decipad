@@ -3,15 +3,14 @@ import {
   ID,
   GraphqlContext,
   ConcreteRecord,
-  GraphqlObjectType,
   PermissionType,
-  PadRecord,
+  GraphqlObjectType,
 } from '@decipad/backendtypes';
 import { create as createInvite } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
 import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
-import { Resource } from './';
+import { Resource } from '.';
 import { ShareWithUserFunction } from './share-with-user';
 
 export type ShareWithEmailArgs = {
@@ -21,26 +20,28 @@ export type ShareWithEmailArgs = {
   canComment?: boolean;
 };
 
-export type ShareWithEmailFunction = (
-  _: any,
+export type ShareWithEmailFunction<RecordT extends ConcreteRecord> = (
+  _: unknown,
   args: ShareWithEmailArgs,
   context: GraphqlContext
-) => Promise<PadRecord>;
+) => Promise<RecordT>;
 
-export function shareWithEmail<
+export const shareWithEmail = <
   RecordT extends ConcreteRecord,
   GraphqlT extends GraphqlObjectType,
   CreateInputT,
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): (shareWithUser: ShareWithUserFunction) => ShareWithEmailFunction {
+): ((
+  shareWithUser: ShareWithUserFunction
+) => ShareWithEmailFunction<RecordT>) => {
   return (shareWithUser: ShareWithUserFunction) =>
-    async function (
-      _: any,
+    async (
+      _: unknown,
       args: ShareWithEmailArgs,
       context: GraphqlContext
-    ): Promise<PadRecord> {
+    ): Promise<RecordT> => {
       const resource = `/${resourceType.resourceTypeName}/${args.id}`;
       await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
       const actingUser = requireUser(context);
@@ -66,7 +67,7 @@ export function shareWithEmail<
           context
         );
 
-        return record as PadRecord;
+        return record;
       }
 
       const newUser = (
@@ -92,6 +93,6 @@ export function shareWithEmail<
       }
       await createInvite(invite);
 
-      return record as PadRecord;
+      return record;
     };
-}
+};

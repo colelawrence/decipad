@@ -8,7 +8,7 @@ import {
 } from '@decipad/backendtypes';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
-import { Resource } from './';
+import { Resource } from '.';
 
 export type ShareWithUserArgs = {
   id: ID;
@@ -18,7 +18,7 @@ export type ShareWithUserArgs = {
 };
 
 export type ShareWithUserFunction = (
-  _: any,
+  _: unknown,
   args: ShareWithUserArgs,
   context: GraphqlContext
 ) => Promise<void>;
@@ -31,11 +31,11 @@ export function shareWithUser<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): ShareWithUserFunction {
-  return async function (
-    _: any,
+  return async (
+    _: unknown,
     args: ShareWithUserArgs,
     context: GraphqlContext
-  ) {
+  ) => {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
     await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
     const actorUser = requireUser(context);

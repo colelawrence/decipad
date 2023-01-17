@@ -93,7 +93,7 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
     _: unknown,
     args: ShareWithEmailArgs,
     context: GraphqlContext
-  ) => Promise<GraphqlT>;
+  ) => Promise<DataT>;
   shareWithSecret: (
     _: unknown,
     args: ShareWithSecretArgs,
