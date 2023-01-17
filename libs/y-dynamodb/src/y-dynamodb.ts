@@ -128,7 +128,11 @@ export class DynamodbPersistence extends Observable<string> {
     this.emit('fetched', [this]);
   }
 
-  async storeUpdate(update: Uint8Array, origin: unknown): Promise<void> {
+  async storeUpdate(
+    update: Uint8Array,
+    origin: unknown,
+    skipNotif = false
+  ): Promise<void> {
     if (
       this._readOnly ||
       this.version ||
@@ -145,7 +149,7 @@ export class DynamodbPersistence extends Observable<string> {
           seq: `${Date.now()}:${Math.floor(Math.random() * 10000)}:${nanoid()}`,
           data: Buffer.from(update).toString('base64'),
         },
-        0.2
+        skipNotif ? 0 : 0.2
       );
       this.emit('saved', [this]);
     });
@@ -174,7 +178,7 @@ export class DynamodbPersistence extends Observable<string> {
 
       const pushToDataBase = async () => {
         if (toDelete.length > 1) {
-          await this.storeUpdate(getDefined(merged), 'compaction');
+          await this.storeUpdate(getDefined(merged), 'compaction', true);
           await Promise.all(
             toDelete.map((update) =>
               data.docsyncupdates.delete(
