@@ -79,6 +79,7 @@ interface InlineMenuItemProps {
    */
   readonly focused?: boolean;
   readonly onExecute?: () => void;
+  readonly 'data-testid'?: string;
 }
 export const InlineMenuItem = ({
   icon,
@@ -87,6 +88,7 @@ export const InlineMenuItem = ({
   enabled,
   focused,
   onExecute = noop,
+  'data-testid': testId,
 }: InlineMenuItemProps): ReturnType<FC> => {
   const itemRef = useRef<HTMLButtonElement>(null);
 
@@ -113,6 +115,7 @@ export const InlineMenuItem = ({
   return (
     <button
       role="menuitem"
+      data-testid={testId}
       css={styles}
       onMouseDown={(event) => {
         enabled && onExecute();

@@ -8,16 +8,13 @@ import {
   RichText,
   MyEditor,
   MARK_MAGICNUMBER,
-  ELEMENT_CODE_LINE_V2,
-  CodeLineV2Element,
-  ELEMENT_CODE_LINE_V2_VARNAME,
-  ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import {
   pluginStore,
   getAboveNodeSafe,
   isElementOfType,
   insertNodes,
+  createStructuredCodeLine,
 } from '@decipad/editor-utils';
 import {
   getBlockAbove,
@@ -92,23 +89,11 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
 
             if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
               const autoVarName = computer.getAvailableIdentifier('Name', 1);
-              // Normalizer will do the rest
-              const newCodeLine: CodeLineV2Element = {
-                type: ELEMENT_CODE_LINE_V2,
-                id: nanoid(),
-                children: [
-                  {
-                    type: ELEMENT_CODE_LINE_V2_VARNAME,
-                    id: nanoid(),
-                    children: [{ text: autoVarName }],
-                  },
-                  {
-                    type: ELEMENT_CODE_LINE_V2_CODE,
-                    id: nanoid(),
-                    children: [{ text: '' }],
-                  },
-                ],
-              };
+              const newCodeLine = createStructuredCodeLine({
+                id: node.id,
+                varName: autoVarName,
+              });
+
               insertNodes(editor, newCodeLine, { at: paragraphPath });
               const codeTextPath = [...paragraphPath, 1];
               Transforms.select(editor as BaseEditor, codeTextPath);
@@ -132,7 +117,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
               focus: { path, offset },
             };
 
-            commitPotentialFormula(editor, expressionRange, (ref) => {
+            commitPotentialFormula(editor, computer, expressionRange, (ref) => {
               openEditor$.next(ref);
               editorAnalytics$.next({
                 type: 'action',
@@ -179,6 +164,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
 
 const commitPotentialFormula = (
   editor: MyEditor,
+  computer: Computer,
   expressionRange: BaseRange,
   onCommit: (ref: ShadowCalcReference) => void,
   id = nanoid()
@@ -190,11 +176,10 @@ const commitPotentialFormula = (
 
   if (!insertionPath) return;
 
-  const codeLineBelow: CodeLineElement = {
-    type: ELEMENT_CODE_LINE,
+  const codeLineBelow = createStructuredCodeLine({
     id,
-    children: [{ text: '' }],
-  };
+    varName: computer.getAvailableIdentifier('Name', 1),
+  });
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,

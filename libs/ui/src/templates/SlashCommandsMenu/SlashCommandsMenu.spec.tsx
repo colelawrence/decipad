@@ -1,12 +1,23 @@
+import { enable, reset } from '@decipad/feature-flags';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SlashCommandsMenu } from './SlashCommandsMenu';
 
+beforeEach(() => {
+  reset();
+  // TODO: This is a feature flag that is disabled by default
+  // and affects this test
+  enable('CODE_LINE_NAME_SEPARATED');
+  enable('STRUCTURED_INPUT');
+});
+
 it('renders menuitems triggering different commands', async () => {
   const handleExecute = jest.fn();
-  const { getByText } = render(<SlashCommandsMenu onExecute={handleExecute} />);
+  const { getByText, getByTestId } = render(
+    <SlashCommandsMenu onExecute={handleExecute} />
+  );
 
-  await userEvent.click(getByText(/calculation/i));
+  await userEvent.click(getByTestId('menu-item-calculation-block'));
   expect(handleExecute).toHaveBeenLastCalledWith(
     expect.stringContaining('calculation')
   );
@@ -93,7 +104,7 @@ describe('search', () => {
   it('affects arrow key selection', async () => {
     const handleExecute = jest.fn();
     const { getAllByRole } = render(
-      <SlashCommandsMenu search="calc" onExecute={handleExecute} />
+      <SlashCommandsMenu search="advanced formulas" onExecute={handleExecute} />
     );
 
     expect(getAllByRole('menuitem')).toHaveLength(1);

@@ -128,6 +128,7 @@ export const InlineMenu: FC<InlineMenuProps> = ({
             {matchingItems.map(({ command, extraSearchTerms, ...item }) => (
               <InlineMenuItem
                 {...item}
+                data-testid={`menu-item-${command}`}
                 key={command}
                 focused={focusedCommand === command}
                 onExecute={() => onExecute(command)}

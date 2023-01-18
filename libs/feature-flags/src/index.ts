@@ -45,10 +45,7 @@ export const getLocalStorageOverrides = (): Flags => {
   }
 };
 
-const queryStringFlags: Flag[] = [
-  'CODE_LINE_NAME_SEPARATED',
-  'STRUCTURED_INPUT',
-];
+const queryStringFlags: Flag[] = ['STRUCTURED_INPUT'];
 
 export const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};
@@ -67,6 +64,8 @@ let overrides: Flags = {};
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 
+const testOverrides: Flags = { CODE_LINE_NAME_SEPARATED: false };
+
 const queryStringOverrides: Flags = getQueryStringOverrides();
 
 const envDefaults: Record<string, boolean> = {
@@ -74,12 +73,14 @@ const envDefaults: Record<string, boolean> = {
   development: true,
 };
 
+const inJest = typeof jest !== 'undefined' || process.env.NODE_ENV === 'test';
 const inE2E = 'navigator' in globalThis && navigator.webdriver;
 
 export const isFlagEnabled = (flag: Flag): boolean =>
   overrides[flag] ??
   localStorageOverrides[flag] ??
   queryStringOverrides[flag] ??
+  (inJest || inE2E ? testOverrides[flag] : undefined) ??
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   (!inE2E &&
     'location' in globalThis &&
@@ -92,6 +93,10 @@ export const getOverrides = (): Flags => overrides;
  */
 export const disable = (flag: Flag): void => {
   overrides = { ...overrides, [flag]: false };
+};
+/** Enable a feature flag */
+export const enable = (flag: Flag): void => {
+  overrides = { ...overrides, [flag]: true };
 };
 export const reset = (): void => {
   overrides = {};

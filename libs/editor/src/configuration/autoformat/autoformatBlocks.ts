@@ -9,7 +9,7 @@ import {
 } from '@decipad/editor-types';
 import { deleteText } from '@udecode/plate';
 import {
-  insertCodeLineBelowOrReplace,
+  insertStructuredCodeLineBelowOrReplace,
   insertDividerBelow,
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
@@ -60,7 +60,7 @@ export const autoformatBlocks = (computer: Computer): MyAutoformatRule[] => [
     query: doesSelectionAllowTextStyling,
     triggerAtBlockStart: false,
     format: (editor): void =>
-      insertCodeLineBelowOrReplace(
+      insertStructuredCodeLineBelowOrReplace(
         editor,
         requireCollapsedSelection(editor).path,
         true,

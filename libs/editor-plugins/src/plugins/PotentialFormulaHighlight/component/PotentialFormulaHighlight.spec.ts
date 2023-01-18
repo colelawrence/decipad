@@ -5,14 +5,17 @@ import {
 } from '@decipad/editor-types';
 import { TEditor } from '@udecode/plate';
 import { noop } from 'lodash';
+import { Computer } from '@decipad/computer';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 
 let editor: TEditor;
+let computer: Computer;
 beforeEach(() => {
   editor = createTPlateEditor({
     plugins: [createInlineNumberPlugin()],
   });
+  computer = new Computer();
 });
 
 it('turns a decoration into a magic number and a code line', () => {
@@ -25,6 +28,7 @@ it('turns a decoration into a magic number and a code line', () => {
 
   commitPotentialFormula(
     editor as any,
+    computer,
     [0, 0],
     {
       [DECORATE_POTENTIAL_FORMULA]: true,
@@ -43,7 +47,7 @@ it('turns a decoration into a magic number and a code line', () => {
     Object {
       "children": Array [
         Object {
-          "text": "1 + 1",
+          "text": "Name1 = 1 + 1",
         },
       ],
       "id": "id-of-thingy",

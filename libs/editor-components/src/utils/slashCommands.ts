@@ -11,6 +11,7 @@ import {
 import {
   focusAndSetSelection,
   insertBlockOfTypeBelow,
+  insertStructuredCodeLineBelow,
   insertCodeLineBelow,
   insertDividerBelow,
   requireBlockParentPath,
@@ -54,8 +55,16 @@ export const execute = ({
   deleteFragment,
 }: ExecuteProps): void => {
   switch (command) {
+    case 'structured-code-line':
+      insertStructuredCodeLineBelow(
+        editor,
+        path,
+        false,
+        getAvailableIdentifier
+      );
+      break;
     case 'calculation-block':
-      insertCodeLineBelow(editor, path, false, getAvailableIdentifier);
+      insertCodeLineBelow(editor, path, false);
       break;
     case 'input':
       insertInputBelow(editor, path);

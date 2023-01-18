@@ -1,7 +1,5 @@
 import {
-  CodeLineElement,
   ELEMENT_INLINE_NUMBER,
-  ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   PlateComponent,
   RichText,
@@ -9,15 +7,12 @@ import {
   InlineNumberElement,
   MyEditor,
   MARK_MAGICNUMBER,
-  CodeLineV2Element,
-  ELEMENT_CODE_LINE_V2_VARNAME,
-  ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2,
 } from '@decipad/editor-types';
 import {
   getAboveNodeSafe,
   isElementOfType,
   insertNodes,
+  createStructuredCodeLine,
 } from '@decipad/editor-utils';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { noop } from '@decipad/utils';
@@ -30,11 +25,12 @@ import {
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useContext } from 'react';
 import { BaseRange, Path, Point } from 'slate';
-import { getExprRef } from '@decipad/computer';
+import { Computer, getExprRef } from '@decipad/computer';
 import { ClientEventsContext } from '@decipad/client-events';
 import {
   useEditorTeleportContext,
   ShadowCalcReference,
+  useComputer,
 } from '@decipad/react-contexts';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
@@ -44,6 +40,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
   leaf: PotentialFormulaDecoration & RichText;
 }> = ({ attributes, children, text, leaf }) => {
   const editor = useTEditorRef();
+  const computer = useComputer();
   const selected = useIsPotentialFormulaSelected(editor, leaf);
 
   const { openEditor } = useEditorTeleportContext();
@@ -59,13 +56,13 @@ export const PotentialFormulaHighlight: PlateComponent<{
     const afterCommit = isFlagEnabled('SHADOW_CODE_LINES') ? openEditor : noop;
 
     // FIXME: Opt out to use inline numbers in ENG-1401
-    commitPotentialFormula(editor, path, leaf, 'magic', afterCommit);
+    commitPotentialFormula(editor, computer, path, leaf, 'magic', afterCommit);
 
     clientEvent({
       type: 'action',
       action: 'number converted to code line',
     });
-  }, [editor, text, leaf, clientEvent, openEditor]);
+  }, [editor, text, leaf, clientEvent, computer, openEditor]);
 
   useEffect(() => {
     if (!selected) {
@@ -99,6 +96,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
 
 export const commitPotentialFormula = (
   editor: MyEditor,
+  computer: Computer,
   path: Path,
   leaf: RichText & PotentialFormulaDecoration,
   mode: 'magic' | 'inline',
@@ -112,30 +110,11 @@ export const commitPotentialFormula = (
 
   if (!insertionPath) return;
 
-  const codeLineBelow: CodeLineElement | CodeLineV2Element = isFlagEnabled(
-    'CODE_LINE_NAME_SEPARATED'
-  )
-    ? {
-        type: ELEMENT_CODE_LINE_V2,
-        id,
-        children: [
-          {
-            type: ELEMENT_CODE_LINE_V2_VARNAME,
-            id: nanoid(),
-            children: [{ text: '' }],
-          },
-          {
-            type: ELEMENT_CODE_LINE_V2_CODE,
-            id: nanoid(),
-            children: [{ text: getNodeString(leaf as RichText) }],
-          },
-        ],
-      }
-    : {
-        type: ELEMENT_CODE_LINE,
-        id,
-        children: [{ text: getNodeString(leaf as RichText) }],
-      };
+  const codeLineBelow = createStructuredCodeLine({
+    id,
+    varName: computer.getAvailableIdentifier('Name', 1),
+    code: getNodeString(leaf as RichText),
+  });
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,

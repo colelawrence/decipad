@@ -1,5 +1,5 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useMemo } from 'react';
 import {
   Blockquote,
   Calculations,
@@ -20,28 +20,65 @@ import {
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
-const dataItems = [
-  {
-    command: 'structured_in',
-    title: 'Define a Value',
-    description: 'A structured way of entering data into decipad.',
-    icon: <Calculations />,
-    enabled: isFlagEnabled('STRUCTURED_INPUT'),
-    extraSearchTerms: ['number', 'decinumber', 'johnisverycool'],
-  },
-  {
-    command: 'calculation-block',
-    title: 'Calculations',
-    description: 'Use formulas to derive insight',
-    icon: <Calculations />,
-    enabled: true,
-    extraSearchTerms: [
-      'deci language',
-      'calculation block',
-      'language block',
-      'model block',
-    ],
-  },
+const dataItems = () => [
+  ...(isFlagEnabled('STRUCTURED_INPUT')
+    ? [
+        {
+          command: 'structured_in',
+          title: 'Define a Value',
+          description: 'A structured way of entering data into decipad.',
+          icon: <Calculations />,
+          enabled: true,
+          extraSearchTerms: ['number', 'decinumber', 'johnisverycool'],
+        },
+      ]
+    : []),
+  ...(isFlagEnabled('CODE_LINE_NAME_SEPARATED')
+    ? [
+        {
+          command: 'structured-code-line',
+          title: 'Do A Calculation',
+          description:
+            'Use basic calculations to establish relationships between numbers',
+          icon: <Calculations />,
+          enabled: true,
+          extraSearchTerms: [
+            'formula',
+            'value',
+            'define',
+            'code',
+            'calculation',
+          ],
+        },
+        {
+          command: 'calculation-block',
+          title: 'Decipad Code Block',
+          description: 'Use advanced formulas to derive insight',
+          icon: <Calculations />,
+          enabled: true,
+          extraSearchTerms: [
+            'deci language',
+            'calculation block',
+            'language block',
+            'model block',
+          ],
+        },
+      ]
+    : [
+        {
+          command: 'calculation-block',
+          title: 'Calculations',
+          description: 'Use formulas to derive insight',
+          icon: <Calculations />,
+          enabled: true,
+          extraSearchTerms: [
+            'deci language',
+            'calculation block',
+            'language block',
+            'model block',
+          ],
+        },
+      ]),
   {
     command: 'table',
     title: 'Table',
@@ -68,10 +105,10 @@ const dataItems = [
   },
 ];
 
-const groups = [
+const groups = () => [
   {
     title: 'Numbers',
-    items: dataItems,
+    items: dataItems(),
   },
   {
     title: 'Widgets',
@@ -195,5 +232,7 @@ type SlashCommandsMenuProps = Pick<
 >;
 
 export const SlashCommandsMenu: FC<SlashCommandsMenuProps> = (props) => {
-  return <InlineMenu {...props} groups={groups} />;
+  // It's a function because feature flags can change for each test.
+  const menuGroups = useMemo(() => groups(), []);
+  return <InlineMenu {...props} groups={menuGroups} />;
 };

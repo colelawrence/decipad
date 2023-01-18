@@ -8,15 +8,17 @@ import {
   setNodes,
   findNodePath,
   getNodeEntry,
-  ELEMENT_CODE_LINE,
   getNodeString,
   removeNodes,
   focusEditor,
 } from '@udecode/plate';
 import { Path } from 'slate';
 import { useMemo } from 'react';
-import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { nanoid } from 'nanoid';
+import {
+  createStructuredCodeLine,
+  insertNodes,
+  requirePathBelowBlock,
+} from '@decipad/editor-utils';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Input', value: 'expression' },
@@ -43,15 +45,11 @@ export const defaultConvertInto =
 
       insertNodes(
         editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_CODE_LINE,
-          children: [
-            {
-              text: `${symbol} = ${code}`,
-            },
-          ],
-        },
+        createStructuredCodeLine({
+          id: node.id,
+          varName: symbol,
+          code,
+        }),
         { at: requirePathBelowBlock(editor, at) }
       );
       setTimeout(() => {
