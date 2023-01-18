@@ -70,7 +70,6 @@ test('connection', (ctx) => {
       doc = new YDoc();
       provider = createWebsocketProvider(doc, {
         protocol: user.token,
-        protocolVersion: 2,
         beforeConnect: (p) => {
           // eslint-disable-next-line no-param-reassign
           p.serverUrl = `${ctx.websocketURL()}?doc=${pad.id}`;
@@ -129,10 +128,9 @@ test('connection', (ctx) => {
       doc = new YDoc();
       provider = createWebsocketProvider(doc, {
         protocol: user.token,
-        protocolVersion: 2,
         beforeConnect: (p) => {
           // eslint-disable-next-line no-param-reassign
-          p.serverUrl = `${ctx.websocketURL()}?doc=${pad.id}&protocol=2`;
+          p.serverUrl = `${ctx.websocketURL()}?doc=${pad.id}`;
         },
       });
 

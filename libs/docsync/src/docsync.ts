@@ -32,7 +32,6 @@ export interface DocSyncOptions {
   connect?: boolean;
   connectionParams?: DocSyncConnectionParams;
   initialState?: string;
-  protocolVersion: number;
 }
 
 async function fetchToken(): Promise<string> {
@@ -50,7 +49,7 @@ async function fetchToken(): Promise<string> {
 async function wsAddress(docId: string): Promise<string> {
   return `${await (await fetch('/api/ws'))?.text()}?doc=${encodeURIComponent(
     docId
-  )}&protocol=2`;
+  )}`;
 }
 
 export function createDocSyncEditor(
@@ -65,7 +64,6 @@ export function createDocSyncEditor(
     WebSocketPolyfill,
     connectionParams,
     initialState,
-    protocolVersion,
   }: DocSyncOptions,
   getSession: () => Session | undefined = () => undefined
 ) {
@@ -104,7 +102,6 @@ export function createDocSyncEditor(
       beforeConnect,
       resyncInterval: 60000,
       onError,
-      protocolVersion,
     });
     awareness = wsp.awareness;
   } else {

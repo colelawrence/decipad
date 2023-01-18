@@ -36,6 +36,5 @@ module.exports = {
     '<rootDir>/libs/parse',
     '<rootDir>/libs/import',
     '<rootDir>/libs/number',
-    '<rootDir>/libs/message-packer',
   ],
 };

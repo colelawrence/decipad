@@ -1,14 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
+import { ws } from '@architect/functions';
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import {
   LambdaWebsocketProvider,
   messageSync,
-  trySend,
-  MAX_MESSAGE_BYTES,
 } from '@decipad/y-lambdawebsocket';
 import * as decoding from 'lib0/decoding';
 import { getDefined } from '@decipad/utils';
@@ -19,11 +18,29 @@ import {
 } from '@decipad/services/authorization';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { captureException } from '@decipad/backend-trace';
-import { Sender } from '@decipad/message-packer';
+
+type ErrorWithCode = Error & {
+  code: string;
+};
+
+async function send(connId: string, message: Uint8Array): Promise<void> {
+  const payload = Buffer.from(message).toString('base64');
+  await ws.send({ id: connId, payload });
+}
+
+async function trySend(connId: string, payload: Uint8Array): Promise<void> {
+  try {
+    await send(connId, payload);
+  } catch (err) {
+    if (!(err as ErrorWithCode)?.code?.match('Gone')) {
+      throw err;
+    }
+  }
+}
 
 async function broadcast(
   room: string,
-  message: Buffer,
+  message: Uint8Array,
   from: string
 ): Promise<void> {
   const data = await tables();
@@ -37,24 +54,13 @@ async function broadcast(
     })
   ).Items;
 
-  const messages: Buffer[] = [];
-  const sender = new Sender(MAX_MESSAGE_BYTES);
-  const sub = sender.messages.subscribe((m) => {
-    messages.push(m);
-  });
-  sender.send(message);
-  sub.unsubscribe();
-
-  for (const m of messages) {
-    // eslint-disable-next-line no-await-in-loop
-    await Promise.all(
-      conns
-        .filter((conn) => conn.id !== from)
-        .map((conn) => {
-          return trySend(conn.id, m);
-        })
-    );
-  }
+  await Promise.all(
+    conns
+      .filter((conn) => conn.id !== from)
+      .map((conn) => {
+        return trySend(conn.id, message);
+      })
+  );
 }
 
 async function maybeStoreMessage(
@@ -138,7 +144,7 @@ export async function _onMessage(
     processMessage(resource, message, connId, conn.versionName, !!canRead),
   ];
   if (canWrite) {
-    ops.push(broadcast(resource, Buffer.from(message), connId));
+    ops.push(broadcast(resource, message, connId));
     ops.push(maybeStoreMessage(resource, message));
   }
   await Promise.all(ops);

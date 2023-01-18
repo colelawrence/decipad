@@ -25,19 +25,9 @@ export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
     if (!docId) {
       throw Boom.notAcceptable('no doc id');
     }
-    const versionName = docIdFromPath(qs.version || '');
+    const version = docIdFromPath(qs.version || '');
     const resource = `/pads/${docId}`;
-    const protocol = qs.protocol ? Number(qs.protocol) : 1;
-    if (Number.isNaN(protocol) || protocol < 1 || protocol > 2) {
-      throw new Error(`Invalid protocol version ${protocol}`);
-    }
-    await onConnect({
-      connId,
-      resource,
-      versionName,
-      auth: authResult,
-      protocol,
-    });
+    await onConnect(connId, resource, version, authResult);
 
     const wsProtocol =
       event.headers['sec-websocket-protocol'] ||

@@ -101,7 +101,6 @@ const InsideNotebookState = ({
             authSecret: secret,
             connectionParams,
             initialState,
-            protocolVersion: 2,
           },
         },
         () => session ?? undefined
