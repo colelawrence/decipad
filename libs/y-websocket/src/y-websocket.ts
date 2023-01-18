@@ -10,6 +10,7 @@ import { debounce } from 'lodash';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import * as syncProtocol from 'y-protocols/sync';
 import { Doc as YDoc, mergeUpdates } from 'yjs';
+import { receiver } from './receive';
 import { messageHandlers } from './messageHandlers';
 import {
   messageAwareness,
@@ -33,6 +34,7 @@ export interface Options {
   WebSocketPolyfill?: typeof WebSocket;
   resyncInterval?: number;
   protocol?: string;
+  protocolVersion: number;
   beforeConnect?: (provider: TWebSocketProvider) => Promise<void> | void;
   onError?: (err: Error | Event) => void;
 }
@@ -51,9 +53,13 @@ const maxReconnectTimeout = 5000;
 const messageReconnectTimeout = 30000;
 const debounceBroadcast = 1000;
 
-const encodeMessage = (message: Uint8Array): string => {
-  // we have to do this awful encoding because <backendReasons />...
-  return Buffer.from(message).toString('base64');
+const encodeMessage = (message: Uint8Array): Buffer => Buffer.from(message);
+
+const decodeMessage = (message: string | Uint8Array): Buffer => {
+  if (typeof message === 'string') {
+    return decodeMessage(Buffer.from(message, 'base64'));
+  }
+  return Buffer.from(message);
 };
 
 const isAcceptableMessage = (buf: string | Buffer | Uint8Array): boolean => {
@@ -64,40 +70,16 @@ const isAcceptableMessage = (buf: string | Buffer | Uint8Array): boolean => {
 
 export const readMessage = (
   provider: TWebSocketProvider,
-  buf: string | Uint8Array,
-  emitSynced: boolean,
-  isBase64Encoded = false
+  buf: Uint8Array,
+  emitSynced: boolean
 ): undefined | encoding.Encoder => {
   if (!isAcceptableMessage(buf)) {
+    // eslint-disable-next-line no-console
+    console.warn('message is unnacceptable', buf);
     return;
   }
-  if (isBase64Encoded && typeof buf !== 'string') {
-    // be extremely defensive about the encoding in these messages
-    try {
-      return readMessage(
-        provider,
-        Buffer.from(buf).toString('utf-8'),
-        emitSynced,
-        isBase64Encoded
-      );
-    } catch (err) {
-      return readMessage(
-        provider,
-        Buffer.from(buf).toString('base64'),
-        emitSynced,
-        isBase64Encoded
-      );
-    }
-  }
-  if (typeof buf === 'string') {
-    try {
-      buf = JSON.parse(buf);
-    } catch (err) {
-      // do nothing
-    }
-  }
   try {
-    const message = Buffer.from(buf as string, 'base64');
+    const message = Buffer.from(buf);
     const decoder = decoding.createDecoder(message);
     const encoder = encoding.createEncoder();
     const messageType = decoding.readVarUint(decoder);
@@ -163,16 +145,13 @@ const setupWS = async (provider: TWebSocketProvider) => {
         // do nothing
       };
 
-      websocket.onmessage = (event) => {
-        if (provider.destroyed || !event.data) {
-          return;
-        }
-        provider.wsLastMessageReceived = time.getUnixTime();
+      const { message, receive } = receiver(provider.protocolVersion);
+      const messageSubscription = message.subscribe((m) => {
         try {
-          const encoder = readMessage(provider, event.data, true, true);
+          const encoder = readMessage(provider, m, true);
           if (!provider.readOnly && encoder && encoding.length(encoder) > 1) {
-            const message = encoding.toUint8Array(encoder);
-            provider.send(message);
+            const reply = encoding.toUint8Array(encoder);
+            provider.send(reply);
           }
         } catch (err) {
           // eslint-disable-next-line no-console
@@ -183,9 +162,18 @@ const setupWS = async (provider: TWebSocketProvider) => {
           console.error(err);
           provider.onError?.(err as Error);
         }
+      });
+
+      websocket.onmessage = (event) => {
+        if (provider.destroyed || !event.data) {
+          return;
+        }
+        provider.wsLastMessageReceived = time.getUnixTime();
+        receive(decodeMessage(event.data));
       };
 
       websocket.onclose = () => {
+        messageSubscription.unsubscribe();
         provider.ws = undefined;
         provider.wsconnecting = false;
         if (!provider.destroyed && provider.wsconnected) {
@@ -276,6 +264,7 @@ class WebsocketProvider
 {
   doc: YDoc;
   protocol: string | undefined;
+  protocolVersion: number;
   beforeConnect: Options['beforeConnect'];
   _WS: typeof WebSocket;
   awareness: awarenessProtocol.Awareness;
@@ -307,7 +296,7 @@ class WebsocketProvider
   private _resyncInterval: 0 | ReturnType<typeof setInterval> = 0;
   private _checkInterval: ReturnType<typeof setInterval> | undefined;
 
-  constructor(doc: YDoc, options: Options = {}) {
+  constructor(doc: YDoc, options: Options = { protocolVersion: 1 }) {
     super();
     const {
       readOnly = false,
@@ -318,6 +307,7 @@ class WebsocketProvider
       protocol,
       beforeConnect,
       onError,
+      protocolVersion,
     } = options;
 
     this.readOnly = readOnly;
@@ -326,6 +316,7 @@ class WebsocketProvider
     this.beforeConnect = beforeConnect;
     this._WS = WebSocketPolyfill;
     this.onError = onError;
+    this.protocolVersion = protocolVersion;
 
     if (!awareness) {
       this.awareness = new awarenessProtocol.Awareness(doc);
@@ -551,7 +542,7 @@ class WebsocketProvider
 
 export const createWebsocketProvider = (
   doc: YDoc,
-  options: Options = {}
+  options: Options = { protocolVersion: 1 }
 ): TWebSocketProvider => {
   return new WebsocketProvider(doc, options);
 };

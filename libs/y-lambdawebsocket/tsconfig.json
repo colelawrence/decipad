@@ -8,6 +8,7 @@
     { "path": "../utils" },
     { "path": "../fnqueue" },
     { "path": "../services" },
-    { "path": "../tables" }
+    { "path": "../tables" },
+    { "path": "../message-packer" }
   ]
 }

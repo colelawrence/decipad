@@ -204,7 +204,7 @@ const resolvers = {
         url: `${getDefined(
           process.env.ARC_WSS_URL,
           'need ARC_WSS_URL environment variable to be defined'
-        )}?doc=${encodeURIComponent(pad.id)}`,
+        )}?doc=${encodeURIComponent(pad.id)}&protocol=2`,
         token: await accessTokenFor(context.event, 'pubsub'),
       };
     },
