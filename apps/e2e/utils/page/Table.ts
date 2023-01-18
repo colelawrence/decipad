@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-force-option */
 import { Page } from 'playwright';
 
 export async function createTable(page: Page) {
@@ -66,7 +67,6 @@ export function focusOnTable(page: Page) {
 }
 
 export function addRow(page: Page) {
-  // eslint-disable-next-line playwright/no-force-option
   return page
     .locator('table > tfoot > tr > th > button')
     .click({ force: true });
