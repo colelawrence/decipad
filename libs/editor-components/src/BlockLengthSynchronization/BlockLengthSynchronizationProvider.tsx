@@ -17,6 +17,8 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
+  of,
+  mergeWith,
   Subject,
 } from 'rxjs';
 import {
@@ -49,6 +51,7 @@ export const BlockLengthSynchronizationProvider = ({
     const sub = editorChange$
       .pipe(
         debounceTime(100),
+        mergeWith(of(undefined)),
         map(() => getContiguousGroups(editor.children)),
         distinctUntilChanged(dequal),
         // Take in signals of new lengths
