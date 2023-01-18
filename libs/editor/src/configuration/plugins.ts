@@ -50,6 +50,7 @@ import {
   createSelectionShortcutPlugin,
   createSmartRefPlugin,
   createSoftBreakPlugin,
+  createStructuredInputPlugin,
   createSyntaxErrorHighlightPlugin,
   createTrailingParagraphPlugin,
   createUpdateComputerPlugin,
@@ -114,6 +115,9 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
+      createStructuredInputPlugin(
+        computer.getAvailableIdentifier.bind(computer)
+      ),
 
       createNotebookTitlePlugin({
         readOnly,

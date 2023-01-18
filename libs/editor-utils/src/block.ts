@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_IMAGE,
@@ -8,11 +9,16 @@ import {
   InlineNumberElement,
   MyEditor,
   MyElement,
+  ELEMENT_STRUCTURED_IN,
+  ELEMENT_STRUCTURED_IN_CHILD,
+  ELEMENT_CODE_LINE_V2_VARNAME,
+  StructuredInputElement,
 } from '@decipad/editor-types';
 import {
   getEndPoint,
   getNextNode,
   getNode,
+  getStartPoint,
   setSelection,
   TDescendant,
   TElement,
@@ -133,6 +139,38 @@ export const insertBlockOfTypeBelow = (
     { id: nanoid(), type, children: [{ text: '' }] },
     { at: requirePathBelowBlock(editor, path) }
   );
+};
+
+export const insertStructuredInput = (
+  editor: MyEditor,
+  path: Path,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
+): void => {
+  const insertPath = requirePathBelowBlock(editor, path);
+  insertNodes<TElement>(
+    editor,
+    {
+      id: nanoid(),
+      type: ELEMENT_STRUCTURED_IN,
+      children: [
+        {
+          type: ELEMENT_CODE_LINE_V2_VARNAME,
+          id: nanoid(),
+          children: [{ text: getAvailableIdentifier('Name', 1) }],
+        },
+        {
+          type: ELEMENT_STRUCTURED_IN_CHILD,
+          id: nanoid(),
+          children: [{ text: '100' }],
+        },
+      ],
+    } as StructuredInputElement,
+    { at: insertPath }
+  );
+  const valuePath = [...insertPath, 1];
+  const valueEnd = getEndPoint(editor, valuePath);
+  const valueStart = getStartPoint(editor, valuePath);
+  setSelection(editor, { anchor: valueStart, focus: valueEnd });
 };
 
 export const insertImageBelow = (

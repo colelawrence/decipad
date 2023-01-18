@@ -76,6 +76,10 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
 
   readonly disableDrag?: boolean;
 
+  /** Should the icons on the left be centered?
+   * Tables for example shouldnt be
+   */
+  readonly isCentered?: boolean;
   readonly hasPreviousSibling?: boolean;
 }
 export const DraggableBlock = ({
@@ -105,6 +109,7 @@ export const DraggableBlock = ({
   children,
 
   disableDrag = false,
+  isCentered = false,
   hasPreviousSibling,
 
   ...props
@@ -173,6 +178,12 @@ export const DraggableBlock = ({
 
               // Draw over following blocks instead of increasing the current block's height
               height: 0,
+            },
+            isCentered && {
+              display: 'flex',
+              alignItems: 'center',
+              height: '100%',
+              marginLeft: '-32px',
             },
             draggableCss,
           ]}

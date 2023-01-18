@@ -6,6 +6,7 @@ import {
   brand100,
   brand200,
   brand300,
+  brand400,
   brand500,
   brand600,
   gleb700,
@@ -133,6 +134,7 @@ export const theme: CssVariables = {
   variableHighlightTextColor: teal600.hex,
 
   structuredCalculationVariableColor: yellow400.hex,
+  structuredCalculationSimpleColor: brand400.hex,
 
   magicNumberTextColor: gleb700.hex,
 

@@ -17,6 +17,7 @@ export const availableFlags = [
   'ONBOARDING_ACCOUNT_SETUP',
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
+  'STRUCTURED_INPUT',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
@@ -44,7 +45,10 @@ export const getLocalStorageOverrides = (): Flags => {
   }
 };
 
-const queryStringFlags: Flag[] = ['CODE_LINE_NAME_SEPARATED'];
+const queryStringFlags: Flag[] = [
+  'CODE_LINE_NAME_SEPARATED',
+  'STRUCTURED_INPUT',
+];
 
 export const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};

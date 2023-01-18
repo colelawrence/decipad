@@ -5,6 +5,7 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_CODE_LINE_V2_VARNAME,
   ELEMENT_DISPLAY,
+  ELEMENT_STRUCTURED_IN,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -13,6 +14,7 @@ import {
   useNodeText,
   insertNodes,
   useEnsureValidVariableName,
+  getAboveNodeSafe,
 } from '@decipad/editor-utils';
 import {
   useComputer,
@@ -180,7 +182,7 @@ export const CodeLineV2: PlateComponent = ({
   );
 };
 
-const VarResultContext = createContext<
+export const VarResultContext = createContext<
   IdentifiedResult | IdentifiedError | undefined
 >(undefined);
 
@@ -191,15 +193,30 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
 
   const errorMessage = useEnsureValidVariableName(props.element, varResult?.id);
 
+  const editor = useTEditorRef();
+  const path = findNodePath(editor, props.element);
+  const structuredInputParent = getAboveNodeSafe(editor, {
+    at: path,
+    match: (e) => e.type === ELEMENT_STRUCTURED_IN,
+  });
+
   const empty = getNodeString(props.element).trim() === '';
 
   return (
     <Tooltip
       trigger={
-        <span {...props.attributes} data-testid="codeline-varname">
+        <span
+          {...props.attributes}
+          data-testid="codeline-varname"
+          spellCheck={false}
+        >
           <CodeVariableDefinition
             empty={empty}
-            type={{ kind: 'table-formula' }}
+            type={
+              structuredInputParent
+                ? varResult?.result?.type
+                : { kind: 'table-formula' }
+            }
           >
             <BlockLengthSynchronizationReceiver
               syncGroupName="variableNameColumn"
