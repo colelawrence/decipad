@@ -167,4 +167,39 @@ describe('createNormalizeVariablePlugin for dropdown elements', () => {
       variant: 'dropdown',
     });
   });
+
+  it('adds options array if not present', () => {
+    const editor = createTPlateEditor({
+      plugins: [createNormalizeVariableDefPlugin()],
+    });
+    const myDropdown = dropdownVarDef('hello');
+    editor.children = [myDropdown as any];
+    delete myDropdown.children[1].options;
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[0]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "text": "hello",
+              },
+            ],
+            "type": "caption",
+          },
+          Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "options": Array [],
+            "type": "dropdown",
+          },
+        ],
+        "type": "def",
+        "variant": "dropdown",
+      }
+    `);
+  });
 });

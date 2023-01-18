@@ -1,4 +1,5 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { Result } from '@decipad/computer';
 import {
   ELEMENT_DROPDOWN,
   PlateComponent,
@@ -9,6 +10,12 @@ import {
   useElementMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
+import { formatResultPreview } from '@decipad/format';
+import {
+  EditorChangeContext,
+  useComputer,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import {
   DropdownMenu,
   SelectItems,
@@ -16,17 +23,10 @@ import {
   WidgetDisplay,
 } from '@decipad/ui';
 import { getNodeString, insertText, nanoid } from '@udecode/plate';
-import {
-  EditorChangeContext,
-  useComputer,
-  useIsEditorReadOnly,
-} from '@decipad/react-contexts';
-import { formatResultPreview } from '@decipad/format';
-import { Table } from 'libs/ui/src/icons';
-import { concat, of, combineLatestWith, map, distinctUntilChanged } from 'rxjs';
 import { dequal } from 'dequal';
-import { Result } from '@decipad/computer';
-import { ClientEventsContext } from '@decipad/client-events';
+import { Table } from 'libs/ui/src/icons';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
 
 export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_DROPDOWN);
@@ -80,7 +80,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         item: n.value,
         focused: n.value === selected,
       })),
-    [element.options, selected]
+    [element, selected]
   );
 
   const editor = useTPlateEditorRef();

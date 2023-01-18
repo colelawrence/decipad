@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { getExprRef } from '@decipad/computer';
 import {
   ELEMENT_TABLE,
   ELEMENT_TD,
@@ -25,6 +26,7 @@ import {
   RowDropLine,
   TableData,
 } from '@decipad/ui';
+import { NewElementLine } from '@decipad/ui/src/atoms/NewElementLine/NewElementLine';
 import {
   findNodePath,
   getNodeString,
@@ -34,8 +36,7 @@ import {
 } from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
-import { NewElementLine } from '@decipad/ui/src/atoms/NewElementLine/NewElementLine';
-import { getExprRef } from '@decipad/computer';
+import { useTableRowStore, useTableStore } from '../../contexts/tableStore';
 import {
   addRowFromCell,
   useCellType,
@@ -45,7 +46,6 @@ import {
   useIsColumnSelected,
 } from '../../hooks';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
-import { useTableRowStore, useTableStore } from '../../contexts/tableStore';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -157,8 +157,9 @@ export const TableCell: PlateComponent = ({
     const dropdown = editor.children.find((child) => child.id === cellType.id);
     assertElementType(dropdown, ELEMENT_VARIABLE_DEF);
     if (dropdown.variant !== 'dropdown') return [];
+    const { options } = dropdown.children[1];
 
-    return dropdown.children[1].options.map((o) => ({
+    return options.map((o) => ({
       ...o,
       focused: nodeText === getExprRef(o.id),
     }));

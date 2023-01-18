@@ -87,6 +87,12 @@ const normalize =
     if (node.children[1].type === ELEMENT_DROPDOWN) {
       const newOptions: Array<{ id: string; value: string }> = [];
       let changed = false;
+
+      if (!('options' in node.children[1]) || !node.children[1].options) {
+        setNodes(editor, { options: [] }, { at: [...path, 1] });
+        return true;
+      }
+
       for (const op of node.children[1].options) {
         if (typeof op === 'string') {
           newOptions.push({
