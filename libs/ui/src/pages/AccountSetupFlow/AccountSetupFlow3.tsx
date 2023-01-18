@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import md5 from 'md5';
 import Gravatar from 'react-gravatar';
 import { isEmpty } from 'lodash';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { Button, TextareaField } from '../../atoms';
 import {
   h1,
@@ -18,7 +19,8 @@ import {
   p14Regular,
 } from '../../primitives';
 import { AccountSetup } from '../../templates';
-import model3 from './model3.png';
+import modelDark from './model3_dark.png';
+import model3Light from './model3_light.png';
 import { Date, Sheet } from '../../icons';
 import { backgroundStyles } from './styles';
 
@@ -111,12 +113,17 @@ const stepStyles = css(
   }
 );
 
+const rightBgPosition = 'no-repeat bottom right/80%';
 const rightStyles = css({
   position: 'relative',
 
   height: '100%',
   width: '100%',
-  background: `no-repeat bottom right/80% url('${model3}')`,
+  background: `${rightBgPosition} url('${model3Light}')`,
+});
+
+const rightDarkBackgroundImage = css({
+  background: `${rightBgPosition} url('${modelDark}')`,
 });
 
 const backCardStyles = css({
@@ -124,7 +131,6 @@ const backCardStyles = css({
   top: '176px',
   left: '10%',
 
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
   borderRadius: '16px',
   padding: '16px',
   height: '146px',
@@ -158,7 +164,6 @@ const frontCardStyles = css({
   top: '226px',
   left: '45%',
 
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
   borderRadius: '16px',
   padding: '16px',
   height: '186px',
@@ -222,6 +227,8 @@ export const AccountSetupFlow3 = ({
   finish = noop,
   previous = noop,
 }: AccountSetupFlow2Props) => {
+  const [isDarkMode] = useThemeFromStore();
+
   const placeholder = 'Share something about yourself';
   const avatar = (
     <div css={avatarStyles} data-letter={email[0].toUpperCase()}>
@@ -295,7 +302,7 @@ export const AccountSetupFlow3 = ({
           </div>
         }
         right={
-          <div css={rightStyles}>
+          <div css={[rightStyles, isDarkMode && rightDarkBackgroundImage]}>
             <div css={backCardStyles}>
               <p css={nameStyles}>Data story by: {name}</p>
               <p css={usernameStyles}>{username}</p>

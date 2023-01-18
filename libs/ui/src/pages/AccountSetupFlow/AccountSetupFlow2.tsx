@@ -1,9 +1,11 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Button, InputField } from '../../atoms';
 import { h1, p12Medium, p16Regular, cssVar, setCssVar } from '../../primitives';
 import { AccountSetup } from '../../templates';
-import model2 from './model2.png';
+import modelDark from './model2_dark.png';
+import modelLight from './model2_light.png';
 import { backgroundStyles } from './styles';
 
 const leftStyles = css({
@@ -41,10 +43,15 @@ const stepStyles = css(
   }
 );
 
+const rightBgPosition = 'no-repeat bottom right/80%';
 const rightStyles = css({
   height: '100%',
   width: '100%',
-  background: `no-repeat bottom right/80% url('${model2}')`,
+  background: `${rightBgPosition} url('${modelLight}')`,
+});
+
+const rightDarkBackgroundImage = css({
+  background: `${rightBgPosition} url('${modelDark}')`,
 });
 
 interface AccountSetupFlow2Props {
@@ -64,6 +71,7 @@ export const AccountSetupFlow2 = ({
   next = noop,
   previous = noop,
 }: AccountSetupFlow2Props) => {
+  const [isDarkMode] = useThemeFromStore();
   return (
     <div css={backgroundStyles}>
       <AccountSetup
@@ -107,7 +115,11 @@ export const AccountSetupFlow2 = ({
             </div>
           </div>
         }
-        right={<div css={rightStyles}></div>}
+        right={
+          <div
+            css={[rightStyles, isDarkMode && rightDarkBackgroundImage]}
+          ></div>
+        }
       />
     </div>
   );

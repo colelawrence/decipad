@@ -1,5 +1,4 @@
 import {
-  black,
   blue100,
   blue200,
   blue300,
@@ -111,9 +110,9 @@ export const theme: CssVariables = {
   buttonPrimaryDisabledText: dark700.hex,
   buttonPrimaryDisabledBackground: grey200.hex,
 
-  buttonSecondaryText: dark300.hex,
-  buttonSecondaryBackground: dark500.hex,
-  buttonSecondaryHover: black.hex,
+  buttonSecondaryText: offBlack.hex,
+  buttonSecondaryBackground: dark400.hex,
+  buttonSecondaryHover: dark500.hex,
   buttonSecondaryDisabledText: dark500.hex,
   buttonSecondaryDisabledBackground: dark600.hex,
 
