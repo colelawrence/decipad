@@ -246,7 +246,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
           title={!canUndo ? 'Reset all changes to the document' : ''}
         >
           <div css={{ width: 16, height: 16 }}>
-            <CircularArrow active={!canUndo} />
+            <CircularArrow />
           </div>
           Reset Changes
         </button>

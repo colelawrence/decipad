@@ -8,10 +8,10 @@ import { ComponentProps, FC, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
-import { Deci, LeftArrow, Sparkles } from '../../icons';
+import { Deci, LeftArrow, Cards } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookPublishingPopUp } from '../../organisms';
-import { cssVar, p14Medium, smallScreenQuery } from '../../primitives';
+import { cssVar, p13Bold, smallScreenQuery } from '../../primitives';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
 
@@ -43,7 +43,7 @@ const leftSideStyles = css({
 const rightSideStyles = css({
   display: 'flex',
   alignItems: 'center',
-  gap: '1rem',
+  gap: '1em',
 });
 
 const hideForSmallScreenStyles = css({
@@ -55,8 +55,17 @@ const hideForSmallScreenStyles = css({
 const linksStyles = css({
   display: 'flex',
   gap: '12px',
+  height: '32px',
+  backgroundColor: cssVar('buttonHoverBackground'),
+  ':hover': {
+    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+  },
+  borderRadius: 6,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '8px',
 });
-const helpLinkStyles = css(p14Medium);
+const helpLinkStyles = css(p13Bold);
 
 const iconStyles = css({
   display: 'grid',
@@ -110,7 +119,7 @@ export const NotebookTopbar = ({
     () =>
       clientEvent({
         type: 'action',
-        action: 'notebook get inspiration link clicked',
+        action: 'notebook templates clicked',
       }),
     [clientEvent]
   );
@@ -160,28 +169,35 @@ export const NotebookTopbar = ({
       {/* Right side */}
       <div css={rightSideStyles}>
         {isWriter && (
-          <div css={[linksStyles, hideForSmallScreenStyles]}>
-            <em css={helpLinkStyles}>
-              <Anchor
-                href={docs({}).page({ name: 'gallery' }).$}
-                // Analytics
-                onClick={onGalleryClick}
-              >
-                <span
-                  css={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr auto',
-                    gap: '4px',
-                    alignItems: 'center',
-                  }}
+          <div
+            style={{
+              display: 'flex',
+              gap: '5px',
+            }}
+          >
+            <div css={[linksStyles, hideForSmallScreenStyles]}>
+              <em css={helpLinkStyles}>
+                <Anchor
+                  href={docs({}).page({ name: 'gallery' }).$}
+                  // Analytics
+                  onClick={onGalleryClick}
                 >
-                  <span css={iconStyles}>
-                    <Sparkles />
+                  <span
+                    css={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr auto',
+                      gap: '8px',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <span css={iconStyles}>
+                      <Cards />
+                    </span>
+                    Templates
                   </span>
-                  Templates
-                </span>
-              </Anchor>
-            </em>
+                </Anchor>
+              </em>
+            </div>
           </div>
         )}
         {isWriter && <VerticalDivider />}

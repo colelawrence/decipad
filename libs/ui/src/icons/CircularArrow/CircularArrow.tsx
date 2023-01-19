@@ -1,15 +1,11 @@
 import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
-export interface CircularArrowProps {
-  active?: boolean;
-}
+export interface CircularArrowProps {}
 
-export const CircularArrow: FC<CircularArrowProps> = ({ active }) => {
-  const strokeTop = active ? cssVar('weakTextColor') : cssVar('weakTextColor');
-  const strokeBottom = active
-    ? cssVar('normalTextColor')
-    : cssVar('normalTextColor');
+export const CircularArrow: FC<CircularArrowProps> = () => {
+  const strokeTop = cssVar('weakTextColor');
+  const strokeBottom = cssVar('normalTextColor');
 
   return (
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

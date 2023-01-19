@@ -19,7 +19,7 @@ export const EmptyWorkspaceCta = ({
     () =>
       clientEvent({
         type: 'action',
-        action: 'notebook get inspiration link clicked',
+        action: 'notebook templates clicked',
       }),
     [clientEvent]
   );
@@ -30,7 +30,7 @@ export const EmptyWorkspaceCta = ({
       primaryText={'Create your first document'}
       primaryActionLabel={'Create new notebook'}
       secondaryText={'Start modelling your finances, your work, etc'}
-      secondaryActionLabel={'Explore our gallery'}
+      secondaryActionLabel={'Explore templates'}
       secondaryAction={onGalleryClick}
       secondaryActionHref={docs({}).page({ name: 'gallery' }).$}
     />
