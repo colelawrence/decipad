@@ -21,7 +21,6 @@ describe('pad editor persistence', () => {
 
   beforeAll(() => {
     editor = createDocSyncEditor('docid', {
-      protocolVersion: 2,
       ws: false,
       editor: createTPlateEditor(),
     });
@@ -108,7 +107,6 @@ describe('pad editor persistence', () => {
     const editor2 = createDocSyncEditor('docid', {
       ws: false,
       editor: createTPlateEditor(),
-      protocolVersion: 2,
     });
     editor2.onLoaded(onLoaded2);
 

@@ -32,21 +32,12 @@ function secretFromAny(authResults: AuthResult[]): string | undefined {
   return authResults.find((result) => !!result.secret)?.secret;
 }
 
-interface ConnectParams {
-  connId: string;
-  resource: string;
-  versionName: string;
-  auth: AuthResult[];
-  protocol: number;
-}
-
-export async function onConnect({
-  connId,
-  resource,
-  versionName,
-  auth,
-  protocol,
-}: ConnectParams): Promise<void> {
+export async function onConnect(
+  connId: string,
+  resource: string,
+  versionName: string,
+  auth: AuthResult[]
+): Promise<void> {
   let permissionTypes: PermissionType[];
   if (
     !auth.length &&
@@ -75,7 +66,6 @@ export async function onConnect({
     authorizationType: maximumPermissionIn(permissionTypes),
     secret: secretFromAny(auth),
     versionName,
-    protocol,
   });
 
   await queues.publish({

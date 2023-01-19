@@ -21,9 +21,7 @@ export async function afterConnect({
   const resource = getDefined(conn.room, 'no room in connection');
   const doc = new YDoc();
   const persistence = new DynamodbPersistence(resource, doc);
-  const comms = new LambdaWebsocketProvider(resource, connectionId, doc, {
-    protocolVersion: conn.protocol,
-  });
+  const comms = new LambdaWebsocketProvider(resource, connectionId, doc);
   await persistence.flush();
 
   await comms.onOpen();
