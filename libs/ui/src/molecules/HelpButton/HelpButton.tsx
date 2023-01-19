@@ -3,30 +3,30 @@ import { useContext } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Tooltip } from '../../atoms';
 import { QuestionMark } from '../../icons';
-import { cssVar, p14Medium } from '../../primitives';
+import { cssVar, p13Bold } from '../../primitives';
 
-const styles = css(p14Medium, {
+const styles = css(p13Bold, {
   boxShadow: `0px 2px 24px -4px rgba(36, 36, 41, 0.06)`,
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
-  borderRadius: '8px',
-  padding: '5px 15px',
-  color: cssVar('backgroundColor'),
+  borderRadius: '6px',
+  padding: '0px 8px 0px 10px',
 
-  backgroundColor: cssVar('strongTextColor'),
+  backgroundColor: cssVar('buttonHoverBackground'),
+  ':hover': {
+    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+  },
 
   fontWeight: 900,
 });
 
-const innerStyles = css(p14Medium, {
+const innerStyles = css(p13Bold, {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: cssVar('backgroundColor'),
+  color: cssVar('normalTextColor'),
 
-  borderRadius: '8px',
+  borderRadius: '6px',
   height: '32px',
   gap: '6px',
-  backgroundColor: cssVar('strongTextColor'),
 
   '> svg': {
     width: '12px',

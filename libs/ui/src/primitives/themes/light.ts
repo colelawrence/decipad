@@ -3,7 +3,6 @@ import {
   blue200,
   blue300,
   blue500,
-  brand100,
   brand200,
   brand300,
   brand500,
@@ -59,8 +58,8 @@ export const theme: CssVariables = {
   notebookStateDangerLight: red100.hex,
   notebookStateDangerHeavy: red300.hex,
   notebookStateWarningLight: orange100.hex,
-  notebookStateWarningHeavy: orange300.hex,
-  notebookStateOkLight: brand100.hex,
+  notebookStateWarningHeavy: orange500.hex,
+  notebookStateOkLight: brand200.hex,
   notebookStateOkHeavy: brand600.hex,
   notebookStateDisabledLight: grey100.hex,
   notebookStateDisabledHeavy: grey600.hex,
@@ -109,6 +108,10 @@ export const theme: CssVariables = {
   buttonSecondaryHover: grey200.hex,
   buttonSecondaryDisabledText: grey500.hex,
   buttonSecondaryDisabledBackground: grey200.hex,
+
+  // hover ui buttons
+  buttonHoverBackground: grey200.hex,
+  buttonHoverBackgroundHover: grey300.hex,
 
   // dropline
   droplineColor: blue300.hex,

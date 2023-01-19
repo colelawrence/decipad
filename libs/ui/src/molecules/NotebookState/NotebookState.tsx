@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow, CurvedArrow } from '../../icons';
-import { cssVar, grey500, mediumShadow, p12Medium } from '../../primitives';
+import { cssVar, grey500, mediumShadow, p13Bold } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const wrapperStyles = css({
@@ -12,18 +12,16 @@ const wrapperStyles = css({
   gap: '4px',
   position: 'fixed',
   height: '42px',
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
   boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
   borderRadius: '8px',
-  bottom: '16px',
+  bottom: '11px',
   zIndex: 2,
 });
 
 const buttonStyles = css({
   width: '32px',
   height: '32px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('buttonHoverBackground'),
   borderRadius: 6,
   display: 'flex',
   justifyContent: 'center',
@@ -39,14 +37,14 @@ const activeStyles = {
 };
 
 const activeButtonStyles = css({
-  transition: 'all 1.25s ease-in-out',
+  backgroundColor: cssVar('buttonHoverBackground'),
   ':hover': {
-    border: `1px solid ${cssVar('borderColor')}`,
+    backgroundColor: cssVar('buttonHoverBackgroundHover'),
   },
 });
 
 const revertChangesStyles = css([
-  p12Medium,
+  p13Bold,
   {
     display: 'flex',
     justifyContent: 'center',
@@ -57,13 +55,17 @@ const revertChangesStyles = css([
     borderRadius: '6px',
     height: '32px',
     color: cssVar('weakerTextColor'),
+    backgroundColor: cssVar('buttonHoverBackground'),
+    ':hover': {
+      backgroundColor: cssVar('buttonHoverBackgroundHover'),
+    },
   },
 ]);
 
 const activeRevertChangesStyles = css({
   color: cssVar('normalTextColor'),
   ':hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('buttonHoverBackgroundHover'),
   },
 });
 
@@ -111,6 +113,7 @@ const stateStyles = (state: State) => {
     justifyContent: 'center',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
+    backgroundColor: cssVar('buttonHoverBackground'),
     ':hover': {
       backgroundColor: colours.background,
     },
@@ -157,7 +160,7 @@ const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
         <p>
           <span css={{ color: grey500.rgb }}>
             We're saving your work and your changes will sync when you are back
-            online. If you think something is wrong contact support.
+            online. <br /> If you think something is wrong contact support.
           </span>
         </p>
       </>
@@ -175,7 +178,7 @@ const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
       </>
     );
   }
-  return <p>Saved</p>;
+  return <p>Notebook Saved</p>;
 };
 
 export const NotebookState: FC<NotebookStateProps> = ({
@@ -200,7 +203,7 @@ export const NotebookState: FC<NotebookStateProps> = ({
         wrapperStyles,
         hideOnPrint,
         {
-          right: !authed ? '14px' : '104px',
+          right: !authed ? '14px' : '80px',
         },
         !canUndo && readOnly && { display: 'none' },
       ]}
