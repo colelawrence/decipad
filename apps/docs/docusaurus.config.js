@@ -159,11 +159,11 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Join our Discord',
+                label: 'Discord',
                 href: 'https://discordapp.com/invite/HwDMqwbGmc',
               },
               {
-                label: 'Follow our Twitter',
+                label: 'Twitter',
                 href: 'https://twitter.com/decipad',
               },
             ],
@@ -172,16 +172,8 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Decipad.com',
-                href: 'https://decipad.com',
-              },
-              {
-                label: 'Read our Blog',
+                label: 'Blog',
                 href: 'https://decipad.com/blog',
-              },
-              {
-                label: 'Subscribe our Newsletter',
-                href: 'https://www.getrevue.co/profile/Decipad',
               },
             ],
           },
