@@ -1,6 +1,7 @@
 import { Computer, Parseable, ParseableDate } from '@decipad/computer';
 import {
   ELEMENT_CAPTION,
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_EXPRESSION,
   ELEMENT_VARIABLE_DEF,
   MyElement,
@@ -16,6 +17,13 @@ import {
   withoutNormalizing,
 } from '@udecode/plate';
 import { useCallback, useMemo } from 'react';
+
+const getElementExpression = (element: MyElement): string => {
+  if (element.type === ELEMENT_CODE_LINE_V2) {
+    return getNodeString(element.children[1]);
+  }
+  return getNodeString(element).split('=')[1]?.trim() ?? getNodeString(element);
+};
 
 export const useTurnIntoProps = (
   element: MyElement,
@@ -48,7 +56,7 @@ export const useTurnIntoProps = (
       const expression =
         parseableType.kind === 'date'
           ? parseableType.dateStr
-          : getNodeString(element).split('=')[1].trim();
+          : getElementExpression(element);
 
       withoutNormalizing(editor, () => {
         insertNodes(
