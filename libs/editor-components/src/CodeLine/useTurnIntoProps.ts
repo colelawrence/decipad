@@ -54,6 +54,7 @@ export const useTurnIntoProps = (
         insertNodes(
           editor,
           {
+            id: lineId,
             type: ELEMENT_VARIABLE_DEF,
             variant,
             coerceToType: { kind: coercedKind, date },
@@ -74,7 +75,7 @@ export const useTurnIntoProps = (
         focusEditor(editor);
       });
     },
-    [editor, element, parseableType, symbol]
+    [editor, element, parseableType, symbol, lineId]
   );
 
   const turnInto = useMemo(() => {
