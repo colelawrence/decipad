@@ -29,6 +29,7 @@ export interface NotebookConnectionParams {
 
 export interface NotebookProps {
   notebookId: string;
+  notebookMetaLoaded: boolean;
   notebookTitle: string;
   onNotebookTitleChange: (newValue: string) => void;
   readOnly: boolean;
@@ -46,6 +47,7 @@ type NotebookStarterChecklistProps = {
 
 const InsideNotebookState = ({
   notebookId,
+  notebookMetaLoaded,
   notebookTitle,
   onNotebookTitleChange,
   readOnly,
@@ -91,7 +93,7 @@ const InsideNotebookState = ({
   useEffect(() => {
     if (!computer) {
       initComputer();
-    } else if (plugins) {
+    } else if (notebookMetaLoaded && plugins) {
       initEditor(
         notebookId,
         {
@@ -101,6 +103,7 @@ const InsideNotebookState = ({
             authSecret: secret,
             connectionParams,
             initialState,
+            protocolVersion: 2,
           },
         },
         () => session ?? undefined
@@ -114,6 +117,7 @@ const InsideNotebookState = ({
     initEditor,
     initialState,
     notebookId,
+    notebookMetaLoaded,
     plugins,
     readOnly,
     secret,

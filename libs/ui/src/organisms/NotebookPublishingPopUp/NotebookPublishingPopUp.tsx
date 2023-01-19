@@ -164,6 +164,13 @@ export const NotebookPublishingPopUp = ({
     onClick: () => setShareMenuOpen(!shareMenuOpen),
   };
 
+  const onPublishToggle = useCallback(
+    (newIsPublished: boolean) => {
+      newIsPublished ? onPublish() : onUnpublish();
+    },
+    [onPublish, onUnpublish]
+  );
+
   return (
     <div
       css={wrapperStyles}
@@ -197,9 +204,7 @@ export const NotebookPublishingPopUp = ({
                   <Toggle
                     ariaRoleDescription="enable publishing"
                     active={isPublished}
-                    onChange={(newIsPublished) =>
-                      newIsPublished ? onPublish() : onUnpublish()
-                    }
+                    onChange={onPublishToggle}
                   />
                 </div>
                 <p css={descriptionStyles}>

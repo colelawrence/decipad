@@ -27,6 +27,7 @@ export type TWebSocketProvider = Observable<string> & {
   serverUrl: string | undefined;
   url?: string;
   protocol?: string;
+  protocolVersion: number;
   awareness: awarenessProtocol.Awareness;
   messageHandlers: MessageHandler[];
 
