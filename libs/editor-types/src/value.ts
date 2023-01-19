@@ -44,8 +44,6 @@ import {
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_SMART_REF,
-  ELEMENT_STRUCTURED_IN,
-  ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import {
@@ -144,17 +142,6 @@ export interface CodeLineV2ElementCode extends BaseElement {
 export interface DeprecatedCodeBlockElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_CODE_BLOCK;
   children: Array<CodeLineElement>;
-}
-
-export interface StructuredInputElement extends BaseElement {
-  type: typeof ELEMENT_STRUCTURED_IN;
-  unit?: string;
-  children: [CodeLineV2ElementVarname, StructuredInputElementChildren];
-}
-
-export interface StructuredInputElementChildren extends BaseElement {
-  type: typeof ELEMENT_STRUCTURED_IN_CHILD;
-  children: [PlainText];
 }
 
 // Lists
@@ -261,8 +248,6 @@ export type BlockElement =
   | DataViewHeaderRowElement
   | DataViewHeader
   | DropdownElement
-  | StructuredInputElement
-  | StructuredInputElementChildren
   | TableColumnFormulaElement
   // Draw Elements
   | DrawElementDescendant;
@@ -282,8 +267,6 @@ export type MyValue = [
     | CalloutElement
     | CodeLineElement
     | CodeLineV2Element
-    | StructuredInputElement
-    | StructuredInputElementChildren
     | DividerElement
     | EvalElement
     | ImageElement
@@ -327,7 +310,6 @@ export const topLevelBlockKinds: string[] = [
   DEPRECATED_ELEMENT_CODE_BLOCK, // Legacy
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
-  ELEMENT_STRUCTURED_IN,
   ELEMENT_UL,
   ELEMENT_OL,
   DEPRECATED_ELEMENT_TABLE_INPUT,

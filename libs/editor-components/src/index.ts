@@ -6,7 +6,6 @@ export * from './BlockSelection/BlockSelectable';
 export * from './TeleportEditor';
 export * from './CodeLine';
 export * from './Display';
-export * from './StructuredInput';
 export * from './hooks';
 export * from './Import/Import';
 export * from './InteractiveParagraph';

@@ -6,17 +6,13 @@ import { getTypeIcon } from '../../utils';
 import { codeBlock } from '../../styles';
 import { cssVar } from '../../primitives';
 
-const varStyles = (type: 'simple' | 'formula') =>
-  css(codeBlock.structuredVariableStyles, {
-    padding: '4px 8px',
-    borderRadius: '6px',
-    background:
-      type === 'formula'
-        ? cssVar('structuredCalculationVariableColor')
-        : cssVar('structuredCalculationSimpleColor'),
-    display: 'flex',
-    alignItems: 'center',
-  });
+const varStyles = css(codeBlock.structuredVariableStyles, {
+  padding: '4px 8px',
+  borderRadius: '6px',
+  background: cssVar('structuredCalculationVariableColor'),
+  display: 'flex',
+  alignItems: 'center',
+});
 
 const iconStyles = css({
   display: 'inline-flex',
@@ -51,12 +47,7 @@ export const CodeVariableDefinition = ({
   const Icon = useMemo(() => type && getTypeIcon(type), [type]);
 
   return (
-    <span
-      css={[
-        varStyles(type?.kind === 'table-formula' ? 'formula' : 'simple'),
-        empty && emptyStyles,
-      ]}
-    >
+    <span css={[varStyles, empty && emptyStyles]}>
       <span css={Icon && iconStyles} contentEditable={false}>
         {Icon && <Icon />}
       </span>

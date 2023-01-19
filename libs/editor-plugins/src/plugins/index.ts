@@ -51,4 +51,3 @@ export * from './TrailingParagraph';
 export * from './ExitBreakPlugin';
 export * from './RenderPerformanceStats';
 export * from './RemoteCursors';
-export * from './StructuredInput';

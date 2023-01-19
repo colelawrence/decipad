@@ -9,7 +9,6 @@ import {
   brand500,
   brand600,
   brand700,
-  brand800,
   dark100,
   dark200,
   dark300,
@@ -139,7 +138,6 @@ export const theme: CssVariables = {
 
   currentTextColor: cssVar('normalTextColor'),
 
-  structuredCalculationSimpleColor: brand800.hex,
   structuredCalculationVariableColor: yellow400.hex,
 
   variableHighlightColor: teal800.hex,

@@ -15,7 +15,6 @@ import {
   insertCodeLineBelow,
   insertDividerBelow,
   requireBlockParentPath,
-  insertStructuredInput,
 } from '@decipad/editor-utils';
 import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
@@ -83,9 +82,6 @@ export const execute = ({
       break;
     case 'dropdown':
       insertDropdownBelow(editor, path);
-      break;
-    case 'structured_in':
-      insertStructuredInput(editor, path, getAvailableIdentifier);
       break;
     case 'table':
       insertTableBelow(editor, path, getAvailableIdentifier);

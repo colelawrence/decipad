@@ -19,9 +19,6 @@ import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  StructuredInputElement,
-  ELEMENT_STRUCTURED_IN,
-  ELEMENT_STRUCTURED_IN_CHILD,
 } from '@decipad/editor-types';
 import { Computer, prettyPrintAST, Program } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
@@ -54,22 +51,6 @@ describe('editorToProgram', () => {
           },
         ],
       } as CodeLineV2Element,
-      {
-        type: ELEMENT_STRUCTURED_IN,
-        id: 'struct-in',
-        children: [
-          {
-            type: ELEMENT_CODE_LINE_V2_VARNAME,
-            id: 'struct-in-name',
-            children: [{ text: 'MyVar' }],
-          },
-          {
-            type: ELEMENT_STRUCTURED_IN_CHILD,
-            id: 'struct-in-child',
-            children: [{ text: '250' }],
-          },
-        ],
-      } as StructuredInputElement,
       mkVariableDef('input', 'varName', '123'),
       {
         type: 'columns',
@@ -123,19 +104,10 @@ describe('editorToProgram', () => {
     ];
     const { program } = await editorToProgram(editor, new Computer());
 
-    expect(program.length).toBe(9);
+    expect(program.length).toBe(8);
 
-    const [
-      block,
-      blockV2,
-      structInput,
-      input,
-      col1,
-      col2,
-      magicNum,
-      table,
-      tableCol,
-    ] = prettyPrintAll(program);
+    const [block, blockV2, input, col1, col2, magicNum, table, tableCol] =
+      prettyPrintAll(program);
 
     expect(block).toMatchInlineSnapshot(`"(+ 1 1)"`);
 
@@ -143,12 +115,6 @@ describe('editorToProgram', () => {
       "(assign
         (def SeparateVarName)
         1)"
-    `);
-
-    expect(structInput).toMatchInlineSnapshot(`
-      "(assign
-        (def MyVar)
-        250)"
     `);
 
     expect(input).toMatchInlineSnapshot(`
