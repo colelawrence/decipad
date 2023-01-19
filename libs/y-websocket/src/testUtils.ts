@@ -20,7 +20,6 @@ class TestProvider extends Observable<string> implements TWebSocketProvider {
   wsconnected = false;
   shouldConnect = false;
   destroyed = false;
-  protocolVersion = 2;
   beforeConnect?:
     | ((provider: TWebSocketProvider) => void | Promise<void>)
     | undefined;

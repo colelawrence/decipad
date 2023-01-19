@@ -128,7 +128,6 @@ const Notebook: FC = () => {
               suspenseFallback={<EditorPlaceholder />}
             >
               <Editor
-                notebookMetaLoaded={notebook != null}
                 notebookTitle={notebook?.name ?? ''}
                 onNotebookTitleChange={onNotebookTitleChange}
                 notebookId={notebookId}

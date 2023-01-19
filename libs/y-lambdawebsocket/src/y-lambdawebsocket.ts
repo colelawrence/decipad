@@ -1,21 +1,19 @@
 /* eslint-disable no-param-reassign */
+import { Buffer } from 'buffer';
 import { Doc as YDoc } from 'yjs';
 import * as encoding from 'lib0/encoding';
 import * as decoding from 'lib0/decoding';
 import * as syncProtocol from 'y-protocols/sync';
 import * as authProtocol from 'y-protocols/auth';
 import * as awarenessProtocol from 'y-protocols/awareness';
-import { ws } from '@architect/functions';
 import { Observable } from 'lib0/observable';
+import arc from '@architect/functions';
 import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
-import { Subscription } from 'rxjs';
-import { MessageSender, sender } from './send';
 
 interface Options {
   awareness?: awarenessProtocol.Awareness;
-  protocolVersion?: number;
 }
 
 type ErrorWithCode = Error & {
@@ -134,11 +132,9 @@ const readMessage = (
   return encoder;
 };
 
-export const MAX_MESSAGE_BYTES = 80_000;
-
 const broadcastMessage = async (
   provider: LambdaWebsocketProvider,
-  message: string
+  message: Uint8Array
 ) => {
   if (provider.destroyed) {
     return;
@@ -170,6 +166,11 @@ const broadcastMessage = async (
   );
 };
 
+const send = async (connId: string, message: Uint8Array): Promise<void> => {
+  const payload = Buffer.from(message).toString('base64');
+  await arc.ws.send({ id: connId, payload });
+};
+
 const isSeriousError = (err: Error) => {
   const isGone =
     (err as ErrorWithCode)?.code?.match('Gone') ||
@@ -177,12 +178,9 @@ const isSeriousError = (err: Error) => {
   return !isGone;
 };
 
-export const trySend = async (
-  connId: string,
-  payload: string
-): Promise<void> => {
+const trySend = async (connId: string, payload: Uint8Array): Promise<void> => {
   try {
-    await ws.send({ id: connId, payload });
+    await send(connId, payload);
   } catch (err) {
     if (err instanceof Error && isSeriousError(err)) {
       throw err;
@@ -193,7 +191,6 @@ export const trySend = async (
 export class LambdaWebsocketProvider extends Observable<string> {
   name: string;
   connId: string;
-  protocolVersion: number;
   doc: YDoc;
   awareness: awarenessProtocol.Awareness;
   wsconnected = false;
@@ -203,11 +200,6 @@ export class LambdaWebsocketProvider extends Observable<string> {
   wsUnsuccessfulReconnects = 0;
   messageHandlers: MessageHandler[];
   mux = fnQueue();
-  sendQueue = fnQueue();
-
-  senderSubscription: Subscription;
-  sender: MessageSender;
-
   public destroyed = false;
 
   private _selfAwareness = false;
@@ -217,8 +209,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
     super();
     this.name = name;
     this.connId = connId;
-    const { awareness, protocolVersion } = options;
-    this.protocolVersion = protocolVersion ?? 1;
+    const { awareness } = options;
 
     this.doc = doc;
 
@@ -243,31 +234,13 @@ export class LambdaWebsocketProvider extends Observable<string> {
       process.on('exit', () => this._beforeUnloadHandler);
     }
     this.awareness.on('update', this._awarenessUpdateHandler);
-
-    this.sender = sender(this.protocolVersion);
-    this.senderSubscription = this.sender.message.subscribe(
-      this.lowLevelSend.bind(this)
-    );
   }
 
-  private async lowLevelSend(message: string, to = this.connId): Promise<void> {
+  private async send(message: Uint8Array): Promise<void> {
     if (this.destroyed) {
       return;
     }
-    this.sendQueue.push(() => trySend(to, message));
-  }
-
-  private send(message: Buffer) {
-    this.sender.send(message);
-  }
-
-  private broadcast(message: Buffer) {
-    const s = sender(this.protocolVersion);
-    const sub = s.message.subscribe((m) => {
-      broadcastMessage(this, m);
-    });
-    s.send(message);
-    sub.unsubscribe();
+    await trySend(this.connId, message);
   }
 
   private async _updateHandler(update: Uint8Array, origin: unknown) {
@@ -277,7 +250,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
         encoding.writeVarUint(encoder, messageSync);
         syncProtocol.writeUpdate(encoder, update);
         if (encoding.length(encoder) > 1) {
-          await this.broadcast(Buffer.from(encoding.toUint8Array(encoder)));
+          await broadcastMessage(this, encoding.toUint8Array(encoder));
         }
         this.emit('saved', [this]);
       });
@@ -294,7 +267,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
         encoder,
         awarenessProtocol.encodeAwarenessUpdate(this.awareness, changedClients)
       );
-      await this.broadcast(Buffer.from(encoding.toUint8Array(encoder)));
+      await broadcastMessage(this, encoding.toUint8Array(encoder));
     });
   }
 
@@ -323,7 +296,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
       this.wsLastMessageReceived = Date.now();
       const encoder = readMessage(this, message, true);
       if (encoding.length(encoder) > 1) {
-        await this.send(Buffer.from(encoding.toUint8Array(encoder)));
+        await this.send(encoding.toUint8Array(encoder));
       }
     });
   }
@@ -339,7 +312,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, messageSync);
       syncProtocol.writeSyncStep1(encoder, this.doc);
-      this.send(Buffer.from(encoding.toUint8Array(encoder)));
+      this.send(encoding.toUint8Array(encoder));
     });
   }
 
@@ -353,10 +326,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
   }
 
   flush(): Promise<void> {
-    return this.mux
-      .flush()
-      .then(() => this.sendQueue.flush())
-      .then(noop);
+    return this.mux.flush().then(noop);
   }
 
   destroy(): void {

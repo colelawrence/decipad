@@ -127,12 +127,11 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           {type.kind === 'number' &&
             type.unit != null &&
             !isCurrencyUnit(type.unit) && (
-              <MenuItem key="all" icon={<All />} selected>
+              <MenuItem icon={<All />} selected>
                 {computer.formatUnit(type.unit, N(1))}
               </MenuItem>
             )}
           <MenuItem
-            key="number"
             icon={<Number />}
             onSelect={() => onChangeColumnType(getNumberType())}
             selected={type.kind === 'number' && type.unit == null}
@@ -140,7 +139,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             Number
           </MenuItem>
           <MenuList
-            key="currency"
             itemTrigger={
               <TriggerMenuItem icon={<DollarCircle />}>
                 <div css={{ minWidth: '132px' }}>Currency</div>
@@ -177,7 +175,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
 
           {!isForImportedColumn && !isFirst && (
             <MenuItem
-              key="table-formula"
               icon={<Formula />}
               onSelect={() => onChangeColumnType(getFormulaType())}
               selected={type.kind === 'table-formula'}
@@ -186,7 +183,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             </MenuItem>
           )}
           <MenuItem
-            key="boolean"
             icon={<CheckboxSelected />}
             onSelect={() => onChangeColumnType(getBooleanType())}
             selected={type.kind === 'boolean'}
@@ -194,7 +190,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             Checkbox
           </MenuItem>
           <MenuItem
-            key="string"
             icon={<Text />}
             onSelect={() => onChangeColumnType(getStringType())}
             selected={type.kind === 'string'}
@@ -206,7 +201,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             isFlagEnabled('DROPDOWN_TABLES') &&
             dropdownNames.length > 0 && (
               <MenuList
-                key="dropdown-tables"
                 itemTrigger={
                   <TriggerMenuItem
                     icon={<AddToWorkspace />}
@@ -218,9 +212,8 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                 open={currentOpen === 'dropdowns'}
                 onChangeOpen={() => onColumnExpand('dropdowns')}
               >
-                {dropdownNames.map((d, index) => (
+                {dropdownNames.map((d) => (
                   <MenuItem
-                    key={index}
                     icon={<AddToWorkspace />}
                     onSelect={() =>
                       onChangeColumnType({
@@ -237,7 +230,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               </MenuList>
             )}
           <MenuList
-            key="dates"
             itemTrigger={
               <TriggerMenuItem
                 icon={<Calendar />}
@@ -250,7 +242,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             onChangeOpen={() => onColumnExpand('date')}
           >
             <MenuItem
-              key="year"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('year'))}
               selected={type.kind === 'date' && type.date === 'year'}
@@ -258,7 +249,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               Year
             </MenuItem>
             <MenuItem
-              key="month"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('month'))}
               selected={type.kind === 'date' && type.date === 'month'}
@@ -266,7 +256,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               Month
             </MenuItem>
             <MenuItem
-              key="day"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('day'))}
               selected={type.kind === 'date' && type.date === 'day'}
@@ -274,7 +263,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               Day
             </MenuItem>
             <MenuItem
-              key="minute"
               icon={<Calendar />}
               onSelect={() => onChangeColumnType(getDateType('minute'))}
               selected={type.kind === 'date' && type.date === 'minute'}
@@ -284,7 +272,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           </MenuList>
           {!isForImportedColumn && (
             <MenuList
-              key="series"
               itemTrigger={
                 <TriggerMenuItem
                   icon={<Leaf />}
@@ -314,11 +301,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
           />
         </MenuList>
         {length > 1 ? (
-          <MenuItem
-            key="delete column"
-            icon={<Trash />}
-            onSelect={() => onRemoveColumn()}
-          >
+          <MenuItem icon={<Trash />} onSelect={() => onRemoveColumn()}>
             Delete column
           </MenuItem>
         ) : null}

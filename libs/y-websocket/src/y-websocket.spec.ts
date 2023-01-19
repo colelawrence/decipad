@@ -9,7 +9,7 @@ describe('websocket protocol', () => {
     const provider = createTestProvider(doc);
     expect(() => {
       for (const message of messages) {
-        readMessage(provider, Buffer.from(message, 'base64'), false);
+        readMessage(provider, message, false);
       }
     }).not.toThrow();
   });

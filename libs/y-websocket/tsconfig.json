@@ -4,5 +4,5 @@
     "lib": ["esnext", "dom"]
   },
   "include": ["src", "src/__fixtures__/*.json"],
-  "references": [{ "path": "../utils" }, { "path": "../message-packer" }]
+  "references": [{ "path": "../utils" }]
 }

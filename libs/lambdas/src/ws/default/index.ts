@@ -21,19 +21,7 @@ export const handler: APIGatewayProxyHandlerV2 = trace(
       throw Boom.resourceGone();
     }
 
-    const { body } = event;
-    if (
-      !(body instanceof Uint8Array) &&
-      !Buffer.isBuffer(body) &&
-      typeof body !== 'string'
-    ) {
-      throw new Error(`Unsupported body type ${typeof body}`);
-    }
-    const message =
-      body instanceof Uint8Array || Buffer.isBuffer(body)
-        ? Buffer.from(body)
-        : Buffer.from(body, 'base64');
-
+    const message = Buffer.from(event.body, 'base64');
     try {
       return await onMessage(connId, message);
     } catch (err) {

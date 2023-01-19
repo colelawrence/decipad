@@ -32,7 +32,6 @@ export interface DocSyncOptions {
   connect?: boolean;
   connectionParams?: DocSyncConnectionParams;
   initialState?: string;
-  protocolVersion: number;
 }
 
 async function fetchToken(): Promise<string> {
@@ -50,7 +49,7 @@ async function fetchToken(): Promise<string> {
 async function wsAddress(docId: string): Promise<string> {
   return `${await (await fetch('/api/ws'))?.text()}?doc=${encodeURIComponent(
     docId
-  )}&protocol=2`;
+  )}`;
 }
 
 export function createDocSyncEditor(
@@ -65,7 +64,6 @@ export function createDocSyncEditor(
     WebSocketPolyfill,
     connectionParams,
     initialState,
-    protocolVersion,
   }: DocSyncOptions,
   getSession: () => Session | undefined = () => undefined
 ) {
@@ -95,7 +93,7 @@ export function createDocSyncEditor(
   let wsp: TWebSocketProvider | undefined;
   let awareness: Awareness | undefined;
 
-  const startWebsocket = ws && (!readOnly || initialState == null);
+  const startWebsocket = ws && (!readOnly || !initialState);
   if (startWebsocket) {
     wsp = createWebsocketProvider(doc, {
       WebSocketPolyfill,
@@ -104,7 +102,6 @@ export function createDocSyncEditor(
       beforeConnect,
       resyncInterval: 60000,
       onError,
-      protocolVersion,
     });
     awareness = wsp.awareness;
   } else {
@@ -126,7 +123,7 @@ export function createDocSyncEditor(
     }
     synced = true;
     if (connect && !destroyed) {
-      if (initialState != null) {
+      if (initialState) {
         try {
           const update = Buffer.from(initialState, 'base64');
           applyUpdate(doc, update);
@@ -161,12 +158,7 @@ export function createDocSyncEditor(
   let loadedRemotely = false;
 
   const onLoaded = (source: 'remote' | 'local') => {
-    if (
-      !readOnly &&
-      !destroyed &&
-      !loadedRemotely &&
-      (!ws || source === 'remote')
-    ) {
+    if (!loadedRemotely && (!ws || source === 'remote')) {
       ensureInitialDocument(editor);
     }
     if (source === 'remote') {
