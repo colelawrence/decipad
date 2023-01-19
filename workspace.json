@@ -44,6 +44,7 @@
     "language": "libs/language",
     "live-connect": "libs/live-connect",
     "meta": "libs/meta",
+    "message-packer": "libs/message-packer",
     "nodelambda": "libs/nodelambda",
     "notebook": "libs/notebook",
     "notebook-state": "libs/notebook-state",

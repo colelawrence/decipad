@@ -418,7 +418,7 @@ interface CollabRecord extends TableRecordBase {
   conn: string;
 }
 
-interface ConnectionRecord extends TableRecordBase {
+export interface ConnectionRecord extends TableRecordBase {
   user_id?: ID;
   client_id?: number;
   room?: string;
@@ -426,6 +426,7 @@ interface ConnectionRecord extends TableRecordBase {
   authorizationType?: string;
   gqlstate?: string;
   versionName?: string;
+  protocol?: number;
 }
 
 export interface ExternalDataSourceRecord extends TableRecordBase {

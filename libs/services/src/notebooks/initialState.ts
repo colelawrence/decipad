@@ -47,21 +47,24 @@ const fetchSnapshot = async (
       }
     }
   }
+  if (updates.length < 1) {
+    // eslint-disable-next-line no-console
+    console.warn(`Notebook with id ${padId} had no snapshot updates`);
+    // notebook is public but snapshot hasn't been created (old publish version)
+    return fetchUpdates(padId);
+  }
   return updates;
 };
 
 export const getNotebookInitialState = async (
   padId: string,
   version?: string
-): Promise<Uint8Array | undefined> => {
+): Promise<Uint8Array> => {
   const id = `/pads/${padId}`;
 
   const updates = await (version
     ? fetchSnapshot(padId, version)
     : fetchUpdates(id));
 
-  if (updates.length) {
-    return mergeUpdates(updates);
-  }
-  return undefined;
+  return mergeUpdates(updates);
 };

@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
-import { ws } from '@architect/functions';
 import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import {
   LambdaWebsocketProvider,
   messageSync,
+  trySend,
+  sender,
 } from '@decipad/y-lambdawebsocket';
 import * as decoding from 'lib0/decoding';
 import { getDefined } from '@decipad/utils';
@@ -18,29 +19,26 @@ import {
 } from '@decipad/services/authorization';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { captureException } from '@decipad/backend-trace';
+import { ConnectionRecord } from '@decipad/backendtypes';
 
-type ErrorWithCode = Error & {
-  code: string;
-};
+const send = async (conn: ConnectionRecord, message: Buffer) => {
+  const messages: string[] = [];
+  const s = sender(conn.protocol ?? 1);
+  const sub = s.message.subscribe((m) => {
+    messages.push(m);
+  });
+  s.send(message);
+  sub.unsubscribe();
 
-async function send(connId: string, message: Uint8Array): Promise<void> {
-  const payload = Buffer.from(message).toString('base64');
-  await ws.send({ id: connId, payload });
-}
-
-async function trySend(connId: string, payload: Uint8Array): Promise<void> {
-  try {
-    await send(connId, payload);
-  } catch (err) {
-    if (!(err as ErrorWithCode)?.code?.match('Gone')) {
-      throw err;
-    }
+  for (const m of messages) {
+    // eslint-disable-next-line no-await-in-loop
+    await trySend(conn.id, m);
   }
-}
+};
 
 async function broadcast(
   room: string,
-  message: Uint8Array,
+  message: Buffer,
   from: string
 ): Promise<void> {
   const data = await tables();
@@ -55,11 +53,7 @@ async function broadcast(
   ).Items;
 
   await Promise.all(
-    conns
-      .filter((conn) => conn.id !== from)
-      .map((conn) => {
-        return trySend(conn.id, message);
-      })
+    conns.filter((conn) => conn.id !== from).map((conn) => send(conn, message))
   );
 }
 
@@ -94,13 +88,15 @@ async function maybeStoreMessage(
 async function processMessage(
   resource: string,
   message: Uint8Array,
-  connId: string,
+  conn: ConnectionRecord,
   version: string | undefined,
   readOnly: boolean
 ): Promise<void> {
   const doc = new YDoc();
   const persistence = new DynamodbPersistence(resource, doc, version, readOnly);
-  const comms = new LambdaWebsocketProvider(resource, connId, doc);
+  const comms = new LambdaWebsocketProvider(resource, conn.id, doc, {
+    protocolVersion: conn.protocol,
+  });
   await persistence.flush();
 
   await comms.receive(message);
@@ -141,10 +137,10 @@ export async function _onMessage(
 
   const resource = getDefined(conn.room, 'no room in connection');
   const ops = [
-    processMessage(resource, message, connId, conn.versionName, !!canRead),
+    processMessage(resource, message, conn, conn.versionName, !!canRead),
   ];
   if (canWrite) {
-    ops.push(broadcast(resource, message, connId));
+    ops.push(broadcast(resource, Buffer.from(message), connId));
     ops.push(maybeStoreMessage(resource, message));
   }
   await Promise.all(ops);
