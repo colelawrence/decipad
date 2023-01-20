@@ -1,5 +1,6 @@
 export * from './block';
 export * from './computer';
+export * from './dnd-preview';
 export * from './editor-readonly';
 export * from './results';
 export * from './editor-teleport';

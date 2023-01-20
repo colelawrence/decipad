@@ -30,7 +30,8 @@ export const NumberCatalogItem = ({
   color,
   onDragStart,
 }: NumberProps) => {
-  const undebouncedResult = useComputer().getBlockIdResult$.use(blockId);
+  const computer = useComputer();
+  const undebouncedResult = computer.getBlockIdResult$.use(blockId);
 
   const result = useDelayedValue(
     undebouncedResult,
@@ -49,7 +50,12 @@ export const NumberCatalogItem = ({
     <div>
       <div
         draggable
-        onDragStart={onDragStart({ blockId, asText })}
+        onDragStart={onDragStart({
+          blockId,
+          asText,
+          computer,
+          result: result.result,
+        })}
         css={numberCatalogListItemStyles(darkTheme)}
       >
         <span

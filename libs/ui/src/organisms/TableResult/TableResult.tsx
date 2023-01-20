@@ -143,7 +143,13 @@ export const TableResult = ({
                   columnName: columnNames[colIndex],
                   cellValue: value[0][rowIndex] as string,
                 },
-                { previewRef }
+                {
+                  previewRef,
+                  result: {
+                    type: columnTypes[colIndex],
+                    value: cellValue,
+                  },
+                }
               )(e);
             }}
             className={onDragStartCell && 'drag-handle'}

@@ -14,7 +14,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   readonly variant?: 'block' | 'inline';
   readonly onDragStartCell?: (
     data: DragCellData,
-    options?: { previewRef?: RefObject<Element> }
+    options: { previewRef?: RefObject<Element>; result: Result.Result }
   ) => (e: DragEvent<HTMLDivElement>) => void;
   readonly tooltip?: boolean;
   readonly isLiveResult?: boolean;

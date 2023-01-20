@@ -11,7 +11,7 @@ import {
 import * as plate from '@udecode/plate-core';
 import { DragEvent } from 'react';
 import { onDragStartInlineResult } from '@decipad/editor-components';
-import { reset, disable } from '@decipad/feature-flags';
+import { disable, reset } from '@decipad/feature-flags';
 import { onDropInlineResult } from './onDropInlineResult';
 
 const testStorage = new Map();
@@ -21,10 +21,15 @@ describe('onDropInlineResult', () => {
   let codeLine: CodeLineElement;
   let codeLine2: CodeLineElement;
   let testEvent: DragEvent;
+  let computer: any;
+  let result: any;
+  let asText: string;
   beforeEach(() => {
     disable('EXPR_REFS');
 
     editor = createTPlateEditor();
+
+    asText = '';
 
     codeLine = {
       id: 'codeline1',
@@ -79,6 +84,9 @@ describe('onDropInlineResult', () => {
 
       onDragStartInlineResult(editor, {
         element: codeLine,
+        computer,
+        result,
+        asText,
       })(testEvent);
       onDropInlineResult(editor)(testEvent);
 
@@ -103,6 +111,9 @@ describe('onDropInlineResult', () => {
 
       onDragStartInlineResult(editor, {
         element: codeLine,
+        computer,
+        result,
+        asText,
       })(testEvent);
       onDropInlineResult(editor)(testEvent);
 
@@ -137,6 +148,9 @@ describe('onDropInlineResult', () => {
 
       onDragStartInlineResult(editor, {
         element: codeLine,
+        computer,
+        result,
+        asText,
       })(testEvent);
       onDropInlineResult(editor)(testEvent);
 
@@ -171,6 +185,9 @@ describe('onDropInlineResult', () => {
 
       onDragStartInlineResult(editor, {
         element: codeLine,
+        computer,
+        result,
+        asText,
       })(testEvent);
       onDropInlineResult(editor)(testEvent);
 
@@ -205,6 +222,9 @@ describe('onDropInlineResult', () => {
 
       onDragStartInlineResult(editor, {
         element: codeLine,
+        computer,
+        result,
+        asText,
       })(testEvent);
       onDropInlineResult(editor)(testEvent);
 

@@ -100,10 +100,11 @@ export const SmartCell: FC<SmartProps> = ({
   const onDragStart = useCallback(
     (ev: DragEvent) => {
       expression &&
+        result &&
         typeof expression === 'string' &&
-        onDragStartSmartCell(editor)(expression)(ev);
+        onDragStartSmartCell(editor)({ computer, expression, result })(ev);
     },
-    [editor, expression]
+    [computer, editor, expression, result]
   );
 
   return result == null || aggregationType == null ? (

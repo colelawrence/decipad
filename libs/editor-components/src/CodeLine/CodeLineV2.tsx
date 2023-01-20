@@ -10,14 +10,14 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useNodeText,
   insertNodes,
   useEnsureValidVariableName,
+  useNodeText,
 } from '@decipad/editor-utils';
 import {
   useComputer,
-  useIsEditorReadOnly,
   useEditorTeleportContext,
+  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import {
   CodeLineStructured,
@@ -105,14 +105,21 @@ export const CodeLineV2: PlateComponent = ({
   const isReadOnly = useIsEditorReadOnly();
 
   const handleDragStartCell = useMemo(
-    () => (isReadOnly ? undefined : onDragStartTableCellResult(editor)),
-    [editor, isReadOnly]
+    () =>
+      isReadOnly ? undefined : onDragStartTableCellResult(editor, { computer }),
+    [computer, editor, isReadOnly]
   );
 
   const handleDragStartInlineResult = useMemo(
     () =>
-      isReadOnly ? undefined : onDragStartInlineResult(editor, { element }),
-    [editor, element, isReadOnly]
+      isReadOnly
+        ? undefined
+        : onDragStartInlineResult(editor, {
+            element,
+            computer,
+            result: lineResult as any,
+          }),
+    [computer, editor, element, isReadOnly, lineResult]
   );
 
   const {

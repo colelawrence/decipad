@@ -91,11 +91,14 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   const onDragExpressionStart = useCallback(
     (ev: DragEvent) => {
       expression &&
+        result &&
         onDragSmartCellResultStarted(editor)({
+          computer,
+          result,
           expression,
         })(ev);
     },
-    [editor, expression]
+    [computer, editor, expression, result]
   );
 
   const showMenu = availableAggregationTypes?.length > 0;

@@ -16,6 +16,9 @@ const testStorage = new Map();
 describe('onDropTableCellResult', () => {
   let editor: MyEditor;
   let testEvent: DragEvent<HTMLDivElement>;
+  let computer: any;
+  let result: any;
+
   beforeEach(() => {
     editor = createTPlateEditor();
 
@@ -50,11 +53,18 @@ describe('onDropTableCellResult', () => {
         focus: { path: [0, 0], offset: 0 },
       });
 
-      onDragStartTableCellResult(editor)({
-        columnName: 'col',
-        tableName: 'table',
-        cellValue: 'a',
-      })(testEvent);
+      onDragStartTableCellResult(editor, {
+        computer,
+      })(
+        {
+          columnName: 'col',
+          tableName: 'table',
+          cellValue: 'a',
+        },
+        {
+          result,
+        }
+      )(testEvent);
       onDropTableCellResult(editor)(testEvent);
 
       expect(editor.children).toEqual([
@@ -82,11 +92,18 @@ describe('onDropTableCellResult', () => {
         focus: { path: [0, 0], offset: 2 },
       });
 
-      onDragStartTableCellResult(editor)({
-        columnName: 'col',
-        tableName: 'table',
-        cellValue: 'a',
-      })(testEvent);
+      onDragStartTableCellResult(editor, {
+        computer,
+      })(
+        {
+          columnName: 'col',
+          tableName: 'table',
+          cellValue: 'a',
+        },
+        {
+          result,
+        }
+      )(testEvent);
       onDropTableCellResult(editor)(testEvent);
 
       expect(editor.children).toMatchObject([
@@ -115,11 +132,16 @@ describe('onDropTableCellResult', () => {
         focus: { path: [0, 0], offset: 0 },
       });
 
-      onDragStartTableCellResult(editor)({
-        columnName: 'col',
-        tableName: 'table',
-        cellValue: 'a',
-      })(testEvent);
+      onDragStartTableCellResult(editor, { computer })(
+        {
+          columnName: 'col',
+          tableName: 'table',
+          cellValue: 'a',
+        },
+        {
+          result,
+        }
+      )(testEvent);
       onDropTableCellResult(editor)(testEvent);
 
       expect(editor.children).toMatchObject([

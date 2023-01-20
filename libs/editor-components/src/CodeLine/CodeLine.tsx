@@ -20,8 +20,7 @@ import { CodeLine as UICodeLine } from '@decipad/ui';
 import { findNodePath } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
-import { useCallback, useMemo, useRef } from 'react';
-import { varStyles } from '@decipad/ui/src/styles/code-block';
+import { useCallback, useMemo } from 'react';
 import { DraggableBlock } from '../block-management';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
@@ -88,18 +87,25 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const isReadOnly = useIsEditorReadOnly();
 
   const handleDragStartCell = useMemo(
-    () => (isReadOnly ? undefined : onDragStartTableCellResult(editor)),
-    [editor, isReadOnly]
+    () =>
+      isReadOnly
+        ? undefined
+        : onDragStartTableCellResult(editor, {
+            computer,
+          }),
+    [computer, editor, isReadOnly]
   );
-
-  const previewRef = useRef(null);
 
   const handleDragStartInlineResult = useMemo(
     () =>
       isReadOnly
         ? undefined
-        : onDragStartInlineResult(editor, { element, previewRef }),
-    [editor, element, isReadOnly]
+        : onDragStartInlineResult(editor, {
+            element,
+            computer,
+            result: lineResult as Result.Result,
+          }),
+    [computer, editor, element, isReadOnly, lineResult]
   );
 
   const {
@@ -130,25 +136,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       id={lineId}
       hasPreviousSibling={siblingCodeLines?.hasPrevious}
     >
-      <div
-        ref={previewRef}
-        style={{
-          position: 'absolute',
-          top: -9999,
-          left: -9999,
-          zIndex: 9999,
-        }}
-      >
-        <div
-          css={[
-            varStyles,
-            {
-              transform: 'rotate(3deg)',
-            },
-          ]}
-        />
-      </div>
-
       <CodeLineTeleport
         codeLine={teleport}
         onDismiss={onTeleportDismiss}

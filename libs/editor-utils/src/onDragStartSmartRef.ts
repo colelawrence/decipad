@@ -3,9 +3,10 @@ import {
   CodeLineV2Element,
   MyEditor,
 } from '@decipad/editor-types';
-import React, { RefObject } from 'react';
-import { findNodePath, getNodeString } from '@udecode/plate';
-import { getVariableRanges } from './getVariableRanges';
+import React from 'react';
+import { Computer, Result, SerializedTypes } from '@decipad/computer';
+import { DeciNumber } from '@decipad/number';
+import { dndPreviewActions } from '@decipad/react-contexts';
 
 export const DRAG_SMART_REF = 'smart-ref';
 export const DRAG_BLOCK_ID_CONTENT_TYPE = 'text/x-block-id';
@@ -14,7 +15,8 @@ export type SmartRefDragCallback = (opts: {
   blockId?: string;
   element?: CodeLineElement | CodeLineV2Element;
   asText: string;
-  previewRef?: RefObject<HTMLDivElement>;
+  computer: Computer;
+  result: Result.Result;
 }) => (e: React.DragEvent) => void;
 
 /**
@@ -24,30 +26,28 @@ export type SmartRefDragCallback = (opts: {
  */
 export const onDragStartSmartRef =
   (editor: MyEditor): SmartRefDragCallback =>
-  ({ blockId, element, asText, previewRef }) =>
+  ({ blockId, element, asText, computer, result }) =>
   (e: React.DragEvent) => {
     // eslint-disable-next-line no-param-reassign
     editor.dragging = DRAG_SMART_REF;
 
+    const id = element?.id ?? blockId!;
+
     if (element) {
-      const variableRanges = getVariableRanges(
-        getNodeString(element),
-        findNodePath(editor, element)!,
-        element.id
-      );
+      if (editor.previewRef?.current) {
+        const formatted = computer.formatNumber(
+          result.type as SerializedTypes.Number,
+          result.value as DeciNumber
+        );
 
-      const variable = variableRanges.find((item) => item.isDeclaration);
+        dndPreviewActions.previewText(formatted.asString);
 
-      if (previewRef?.current && variable?.variableName) {
-        const el = previewRef.current.firstChild as HTMLElement;
-        el.innerHTML = `${variable.variableName}`;
-
-        e.dataTransfer.setDragImage(previewRef.current, 0, 0);
+        e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
       }
     }
 
     e.dataTransfer.dropEffect = 'link';
 
-    e.dataTransfer.setData(DRAG_BLOCK_ID_CONTENT_TYPE, element?.id ?? blockId!);
+    e.dataTransfer.setData(DRAG_BLOCK_ID_CONTENT_TYPE, id);
     e.dataTransfer.setData('text/plain', asText);
   };
