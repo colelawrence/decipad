@@ -16,23 +16,24 @@ const backendForDND = 'ontouchstart' in window ? TouchBackend : HTML5Backend;
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <SessionProvider>
-      <BrowserRouter>
-        <QueryParamProvider adapter={ReactRouter6Adapter}>
-          <GraphqlProvider>
-            <AnalyticsProvider>
-              <IntercomProvider>
-                <DndProvider backend={backendForDND}>
-                  <ToastDisplay>
-                    <GlobalStyles>{children}</GlobalStyles>
-                    <UpdatesHandler />
-                  </ToastDisplay>
-                </DndProvider>
-              </IntercomProvider>
-            </AnalyticsProvider>
-          </GraphqlProvider>
-        </QueryParamProvider>
-      </BrowserRouter>
-    </SessionProvider>
+    <ToastDisplay>
+      <SessionProvider>
+        <UpdatesHandler>
+          <BrowserRouter>
+            <QueryParamProvider adapter={ReactRouter6Adapter}>
+              <GraphqlProvider>
+                <AnalyticsProvider>
+                  <IntercomProvider>
+                    <DndProvider backend={backendForDND}>
+                      <GlobalStyles>{children}</GlobalStyles>
+                    </DndProvider>
+                  </IntercomProvider>
+                </AnalyticsProvider>
+              </GraphqlProvider>
+            </QueryParamProvider>
+          </BrowserRouter>
+        </UpdatesHandler>
+      </SessionProvider>
+    </ToastDisplay>
   );
 };

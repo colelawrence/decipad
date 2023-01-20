@@ -16,8 +16,8 @@ export const UpdatePrompt = ({ onReload }: UpdatePromptProps) => {
 
   return (
     <a href="/" onClick={onReloadClick}>
-      Decipad has updated.&nbsp;
-      <span>Auto-refreshing ✨</span>
+      Decipad has a new version.&nbsp;
+      <span>Click here to update ✨</span>
     </a>
   );
 };
