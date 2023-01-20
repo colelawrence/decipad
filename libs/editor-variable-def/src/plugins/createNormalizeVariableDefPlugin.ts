@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import {
   CaptionElement,
+  DropdownElement,
   ELEMENT_CAPTION,
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
@@ -58,15 +59,29 @@ const normalize =
     }
 
     if (node.children.length < 2) {
-      insertNodes<ExpressionElement>(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_EXPRESSION,
-          children: [{ text: '' }],
-        },
-        { at: [...path, 1] }
-      );
+      if (node.variant === 'dropdown') {
+        insertNodes<DropdownElement>(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_DROPDOWN,
+            children: [{ text: '' }],
+            options: [],
+          },
+          { at: [...path, 1] }
+        );
+      } else {
+        insertNodes<ExpressionElement>(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_EXPRESSION,
+            children: [{ text: '' }],
+          },
+          { at: [...path, 1] }
+        );
+      }
+
       return true;
     }
 

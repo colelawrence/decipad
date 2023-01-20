@@ -10,7 +10,6 @@ EventEmitter.defaultMaxListeners = 1000;
 
 export const handler: APIGatewayProxyHandlerV2 = trace(
   async (event) => {
-    console.log('WS DEFAULT', event);
     const connId = event.requestContext.connectionId;
     if (!event.body) {
       // do nothing

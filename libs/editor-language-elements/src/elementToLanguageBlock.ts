@@ -56,6 +56,7 @@ export const elementToLanguageBlocks = async (
       );
     } catch (err) {
       console.error('Error getting parsed block from element', err);
+      console.error('Error happened on element', element);
     }
   }
 

@@ -19,12 +19,12 @@ import {
 } from '../components';
 import { createNormalizeVariableDefPlugin } from './createNormalizeVariableDefPlugin';
 import { createMigrateElementInputToVariableDefPlugin } from './createMigrateElementInputToVariableDefPlugin';
-import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
-import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
 import { createSliderExpressionSyncPlugin } from './createSliderExpressionSyncPlugin';
 import { Dropdown } from '../components/Dropdown';
+import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
+import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
 
 export const createVariableDefPlugin = (): MyPlatePlugin => ({
   key: ELEMENT_VARIABLE_DEF,
