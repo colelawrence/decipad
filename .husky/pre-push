@@ -1,0 +1,9 @@
+#!/bin/sh
+current_branch=$(git branch --show-current)
+
+unpushed_commits=$(git log origin/${current_branch}..HEAD | wc -l)
+
+if [ $unpushed_commits -gt 0 ]
+then
+  npx nx affected --base main --target test --codeCoverage
+fi

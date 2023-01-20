@@ -64,11 +64,6 @@
     "clean:deps": "rm -rf node_modules apps/backend/node_modules",
     "clean:all": "yarn clean && yarn clean:deps"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && nx affected:test"
-    }
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,yml,yaml,md}": [
       "prettier --write"
