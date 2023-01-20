@@ -80,7 +80,7 @@ export const useNotebookStateAndActions = ({
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(
-    () => (notebook ? notebook.myPermissionType === 'READ' : true),
+    () => (notebook ? notebook.myPermissionType === 'READ' : false),
     [notebook]
   );
   const isPublic = useMemo(
@@ -92,7 +92,6 @@ export const useNotebookStateAndActions = ({
   const [getNotebookResult] = useGetNotebookByIdQuery({
     variables: {
       id: notebookId,
-      snapshotName: isReadOnly ? SNAPSHOT_NAME : undefined,
     },
   });
   const [remoteDuplicateNotebook] = useDuplicateNotebook({

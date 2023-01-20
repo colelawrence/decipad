@@ -15,7 +15,6 @@ module.exports = {
     '<rootDir>/libs/utils',
     '<rootDir>/libs/react-utils',
     '<rootDir>/libs/backend-test-sandbox',
-    '<rootDir>/libs/sync-connection-lambdas',
     '<rootDir>/libs/slate-yjs',
     '<rootDir>/libs/client-events',
     '<rootDir>/libs/externaldata',
@@ -36,5 +35,6 @@ module.exports = {
     '<rootDir>/libs/parse',
     '<rootDir>/libs/import',
     '<rootDir>/libs/number',
+    '<rootDir>/libs/message-packer',
   ],
 };

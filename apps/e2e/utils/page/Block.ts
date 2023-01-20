@@ -1,5 +1,5 @@
 import { Locator, Page } from 'playwright';
-import { cleanText } from '../src';
+import { cleanText, Timeouts } from '../src';
 import { keyPress } from './Editor';
 
 export async function createInputBelow(
@@ -66,6 +66,8 @@ export async function createCalculationBlockBelow(
   page: Page,
   decilang: string
 ) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.typing);
   await page.click('[data-slate-editor] p >> nth=-1');
 
   await page.waitForSelector(

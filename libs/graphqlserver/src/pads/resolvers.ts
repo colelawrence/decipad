@@ -204,19 +204,28 @@ const resolvers = {
         url: `${getDefined(
           process.env.ARC_WSS_URL,
           'need ARC_WSS_URL environment variable to be defined'
-        )}?doc=${encodeURIComponent(pad.id)}`,
+        )}?doc=${encodeURIComponent(pad.id)}&protocol=2`,
         token: await accessTokenFor(context.event, 'pubsub'),
       };
     },
 
-    async initialState(pad: PadRecord, __: unknown, context: GraphqlContext) {
-      const initialState = await getNotebookInitialState(
-        pad.id,
-        context.snapshotName // Defined in `getPadById` query
+    async initialState(
+      pad: PadRecord,
+      params: unknown,
+      context: GraphqlContext
+    ) {
+      const permissionType = await padResource.myPermissionType(
+        pad,
+        params,
+        context
       );
-      return initialState
-        ? Buffer.from(initialState).toString('base64')
-        : undefined;
+      const snapshotName =
+        (permissionType == null || permissionType === 'READ') &&
+        !context.snapshotName
+          ? 'Published 1'
+          : context.snapshotName;
+      const initialState = await getNotebookInitialState(pad.id, snapshotName);
+      return Buffer.from(initialState).toString('base64');
     },
 
     async snapshots(pad: PadRecord) {

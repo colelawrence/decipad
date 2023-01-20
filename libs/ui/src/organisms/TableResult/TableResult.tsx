@@ -264,6 +264,7 @@ export const TableResult = ({
                 )}
                 {value.map((column, colIndex) => (
                   <Cell
+                    key={colIndex}
                     cellValue={column[rowIndex]}
                     rowIndex={rowIndex}
                     colIndex={colIndex}

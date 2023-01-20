@@ -8,6 +8,7 @@ EventEmitter.defaultMaxListeners = 1000;
 export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
   event
 ) {
+  console.log('WS DISCONNECT');
   const connId = event.requestContext.connectionId;
   return onDisconnect(connId);
 });

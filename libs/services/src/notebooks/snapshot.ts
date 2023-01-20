@@ -20,9 +20,11 @@ export const snapshot = async (
     }
   }
 
-  const mergedUpdates = mergeUpdates(updates);
+  const mergedUpdates = mergeUpdates(updates) ?? new Uint8Array();
   const doc = new Doc();
-  applyUpdate(doc, mergedUpdates);
+  if (mergedUpdates.length) {
+    applyUpdate(doc, mergedUpdates);
+  }
 
   return {
     data: Buffer.from(mergedUpdates),

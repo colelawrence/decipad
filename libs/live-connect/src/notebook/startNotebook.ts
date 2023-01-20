@@ -30,6 +30,7 @@ export const startNotebook = async (
   const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
     editor,
+    protocolVersion: 2,
   });
 
   const computer = new Computer();

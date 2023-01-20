@@ -36,6 +36,13 @@ const createStore = () =>
       set({ computer: new Computer() });
     },
     initEditor: (notebookId, { plugins, docsync }, getSession) => {
+      if (docsync.initialState == null) {
+        // do not accept initializations without initial state
+        return;
+      }
+
+      console.log('initEditor', docsync);
+
       // verify that if we have a matching connected docsync instance
       const { editor: oldEditor, syncClientState } = get();
       if (oldEditor) {
@@ -105,6 +112,7 @@ const createStore = () =>
     destroy: () => {
       const { syncClientState, editor } = get();
       if (syncClientState === 'created') {
+        console.log('destroy');
         editor?.disconnect();
         editor?.destroy();
         set(initialState);

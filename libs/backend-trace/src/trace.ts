@@ -1,48 +1,18 @@
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import { Context, Handler, APIGatewayProxyResultV2 } from 'aws-lambda';
-import { Boom, boomify } from '@hapi/boom';
+import { boomify } from '@hapi/boom';
 import { WSRequest } from '@decipad/backendtypes';
 import { monitor as monitorConfig } from '@decipad/config';
-import meta from '@decipad/meta';
-
-type TraceOptions = Partial<{
-  tracesSampleRate: number;
-}>;
+import { captureException, initTrace, TraceOptions } from './captureException';
 
 const {
   sentry: { dsn: sentryDSN },
 } = monitorConfig();
 
-const sentryInitOptions = {
-  dsn: sentryDSN,
-  tracesSampleRate: 0.01,
-  environment: process.env.SENTRY_ENVIRONMENT,
-  release: meta().version,
-};
-
-let sentryInitialized = false;
-
 const lastHandlerOptions = {
   rethrowAfterCapture: !!sentryDSN,
   callbackWaitsForEmptyEventLoop: false,
   captureTimeoutWarning: true,
-};
-
-export const initTrace = (options: TraceOptions = {}) => {
-  if (sentryDSN && !sentryInitialized) {
-    SentryAWSLambda.init({ ...sentryInitOptions, ...options });
-    sentryInitialized = true;
-  }
-};
-
-export const captureException = async (err: Error): Promise<Boom> => {
-  initTrace();
-  const error = boomify(err as Error);
-  if (error.isServer) {
-    SentryAWSLambda.captureException(error);
-  }
-  await SentryAWSLambda.flush();
-  return error;
 };
 
 function handleErrors(handle: Handler): Handler {
