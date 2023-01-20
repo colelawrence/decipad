@@ -42,6 +42,13 @@ export async function create(args: ICreateInviteArguments) {
 
   const inviteAcceptLink = `${urlBase}/api/invites/${newInvite.id}/accept`;
 
+  const isLocal = urlBase === 'http://localhost:3000';
+
+  if (isLocal) {
+    // eslint-disable-next-line no-console
+    console.info('Invite link:', inviteAcceptLink);
+  }
+
   await queues.publish({
     name: 'sendemail',
     payload: {

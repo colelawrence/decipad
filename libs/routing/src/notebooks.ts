@@ -8,4 +8,10 @@ const notebook = route(
   {}
 );
 
-export default route('/n', {}, { notebook });
+const acceptInvite = route(
+  `/:notebook/accept-invite/:invite`,
+  { notebook: descriptiveIdParser, invite: descriptiveIdParser },
+  {}
+);
+
+export default route('/n', {}, { notebook, acceptInvite });

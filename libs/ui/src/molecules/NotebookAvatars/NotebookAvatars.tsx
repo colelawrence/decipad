@@ -1,6 +1,7 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { ComponentProps, FC, useState } from 'react';
+import { noop } from 'lodash';
+import { ComponentProps, FC, useCallback, useState } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
 import { NotebookInvitationPopUp } from '../../organisms';
 import { cssVar, p12Regular, p13Medium, setCssVar } from '../../primitives';
@@ -32,6 +33,7 @@ const avatarsWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   marginLeft: '6px',
+  zIndex: 2,
 });
 
 const popupWrapperStyles = css({
@@ -77,18 +79,33 @@ export const NotebookAvatars = ({
 }: NotebookAvatarsProps): ReturnType<FC> => {
   const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
 
-  const handleClickOutside = () => {
-    setShowInvitePopup(false);
-  };
-  useWindowListener('click', handleClickOutside);
+  const toggleInvitePopup = useCallback(() => {
+    setShowInvitePopup((show) => !show);
+  }, [setShowInvitePopup]);
+
+  const handleClickOutside = useCallback(
+    (ev: MouseEvent) => {
+      const target = ev.target as HTMLElement;
+      const isAvatarClick = target.closest('.notebook-avatars');
+      const isPopupClick = target.closest('.notebook-invitation-popup');
+
+      if (!isAvatarClick && !isPopupClick) {
+        setShowInvitePopup(false);
+      }
+    },
+    [setShowInvitePopup]
+  );
+
+  useWindowListener('click', showInvitePopup ? handleClickOutside : noop);
 
   return (
-    <div css={avatarsWrapperStyles} onClick={(e) => e.stopPropagation()}>
+    <div css={avatarsWrapperStyles} className="notebook-avatars">
       {allowInvitation && (
         <div
           key="invite"
           css={plusAvatarStyles}
-          onClick={() => setShowInvitePopup((show) => !show)}
+          onClick={toggleInvitePopup}
+          data-testid="avatar-invite"
         >
           <Avatar name={showInvitePopup ? '×' : '+'} greyedOut={true} />
         </div>
@@ -125,7 +142,7 @@ export const NotebookAvatars = ({
         );
       })}
       {showInvitePopup && (
-        <div css={popupWrapperStyles}>
+        <div className="notebook-invitation-popup" css={popupWrapperStyles}>
           <NotebookInvitationPopUp {...sharingProps} />
         </div>
       )}
