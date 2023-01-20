@@ -101,7 +101,7 @@ export const commitPotentialFormula = (
   leaf: RichText & PotentialFormulaDecoration,
   mode: 'magic' | 'inline',
   onCommit: (ref: ShadowCalcReference) => void,
-  id = nanoid()
+  id?: string
 ) => {
   const insertionPath = getAboveNodeSafe(editor as MyEditor, {
     at: path,
@@ -118,13 +118,13 @@ export const commitPotentialFormula = (
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,
-    text: getExprRef(id),
+    text: getExprRef(codeLineBelow.id),
   };
 
   const inlineNumberInstead: InlineNumberElement = {
     type: ELEMENT_INLINE_NUMBER,
     id: nanoid(),
-    blockId: id,
+    blockId: codeLineBelow.id,
     children: [{ text: '' }],
   };
 

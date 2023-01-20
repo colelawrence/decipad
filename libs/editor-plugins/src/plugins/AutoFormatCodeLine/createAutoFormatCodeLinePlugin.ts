@@ -26,7 +26,6 @@ import {
   toDOMNode,
   insertText,
 } from '@udecode/plate';
-import { nanoid } from 'nanoid';
 import { Computer, getExprRef } from '@decipad/computer';
 import { ShadowCalcReference } from '@decipad/react-contexts';
 import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
@@ -90,7 +89,6 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
             if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
               const autoVarName = computer.getAvailableIdentifier('Name', 1);
               const newCodeLine = createStructuredCodeLine({
-                id: node.id,
                 varName: autoVarName,
               });
 
@@ -167,7 +165,7 @@ const commitPotentialFormula = (
   computer: Computer,
   expressionRange: BaseRange,
   onCommit: (ref: ShadowCalcReference) => void,
-  id = nanoid()
+  id?: string
 ) => {
   const insertionPath = getAboveNodeSafe(editor as MyEditor, {
     at: expressionRange,
@@ -183,7 +181,7 @@ const commitPotentialFormula = (
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,
-    text: getExprRef(id),
+    text: getExprRef(codeLineBelow.id),
   };
 
   const viewInstead = magicNumberInstead;

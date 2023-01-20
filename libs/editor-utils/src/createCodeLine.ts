@@ -17,17 +17,17 @@ export interface CreateCodeLineOptions {
 }
 
 export const createCodeLine = ({
-  id = nanoid(),
+  id,
   varName = '',
   code = '',
 }: CreateCodeLineOptions): CodeLineElement => ({
-  id,
+  id: id ?? nanoid(),
   type: ELEMENT_CODE_LINE,
   children: [{ text: varName ? `${varName} = ${code}` : code }],
 });
 
 export const createStructuredCodeLine = ({
-  id = nanoid(),
+  id,
   varName = '',
   code = '',
 }: CreateCodeLineOptions): CodeLineElement | CodeLineV2Element => {
@@ -36,7 +36,7 @@ export const createStructuredCodeLine = ({
   }
 
   return {
-    id,
+    id: id ?? nanoid(),
     type: ELEMENT_CODE_LINE_V2,
     children: [
       {
