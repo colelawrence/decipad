@@ -37,6 +37,10 @@ const runCode = (sources) => {
     {
       input: JSON.stringify(Object.fromEntries(sources.entries())),
       timeout: DOCS_TEST_TIMEOUT_MS,
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+      }
     }
   );
 
