@@ -18,7 +18,7 @@ import assert from 'assert';
 import {
   getNotebookInitialState,
   getNotebooks,
-} from 'libs/services/src/notebooks';
+} from '@decipad/services/notebooks';
 import { nanoid } from 'nanoid';
 import {
   isAuthenticatedAndAuthorized,

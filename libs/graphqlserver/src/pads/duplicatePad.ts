@@ -5,7 +5,7 @@ import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
   importDoc,
-} from 'libs/services/src/notebooks';
+} from '@decipad/services/notebooks';
 import { isAuthenticatedAndAuthorized } from '../authorization';
 
 export const duplicatePad = async (

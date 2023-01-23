@@ -1,0 +1,9 @@
+{
+  "depcheck": {
+    "ignoreMatches": [
+      "@architect/*",
+      "@decipad/*",
+      "@nrwl/*"
+    ]
+  }
+}

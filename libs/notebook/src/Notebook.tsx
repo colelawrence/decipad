@@ -12,7 +12,7 @@ import {
   StarterChecklistStateChange,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { insertLiveConnection } from 'libs/editor-components/src/InteractiveParagraph/insertLiveConnection';
+import { insertLiveConnection } from '@decipad/editor-components';
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';

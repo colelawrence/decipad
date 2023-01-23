@@ -1,4 +1,4 @@
-import { Caption as UICaption, Tooltip } from '@decipad/ui';
+import { Caption as UICaption, Tooltip, UserIconKey } from '@decipad/ui';
 import {
   ELEMENT_CAPTION,
   ELEMENT_VARIABLE_DEF,
@@ -16,7 +16,6 @@ import {
   useElementMutatorCallback,
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
-import { UserIconKey } from 'libs/ui/src/utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useContext, useRef } from 'react';
 import { useFocused } from 'slate-react';
