@@ -21,6 +21,18 @@ import {
 import { InlineMenu } from '../../organisms';
 
 const dataItems = () => [
+  ...(isFlagEnabled('STRUCTURED_INPUT')
+    ? [
+        {
+          command: 'structured_in',
+          title: 'Define a Value',
+          description: 'A structured way of entering data into decipad.',
+          icon: <Calculations />,
+          enabled: true,
+          extraSearchTerms: ['number', 'decinumber', 'johnisverycool'],
+        },
+      ]
+    : []),
   ...(isFlagEnabled('CODE_LINE_NAME_SEPARATED')
     ? [
         {

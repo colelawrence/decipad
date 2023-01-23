@@ -1,11 +1,14 @@
-import { ELEMENT_CODE_LINE_V2 } from '@decipad/editor-types';
+import {
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_STRUCTURED_IN,
+} from '@decipad/editor-types';
 import {
   ColumnGroupName,
   ColumnWidths,
   initialGroups,
 } from './BlockLengthSynchronizationProvider';
 
-const blockTypes = new Set([ELEMENT_CODE_LINE_V2]);
+const blockTypes = new Set([ELEMENT_CODE_LINE_V2, ELEMENT_STRUCTURED_IN]);
 
 export type MeasuredLengths = Map<string, Partial<ColumnWidths>>;
 

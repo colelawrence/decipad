@@ -134,6 +134,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const event = useContext(ClientEventsContext);
 
+    const isCentered = props.blockKind === 'codeLine';
+
     const onDelete = useCallback(() => {
       event({
         type: 'action',
@@ -266,6 +268,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         onPlus={onPlus}
         onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}
         showLine={showLine}
+        isCentered={isCentered}
         hasPreviousSibling={hasPreviousSibling}
       >
         <BlockSelectable element={element}>

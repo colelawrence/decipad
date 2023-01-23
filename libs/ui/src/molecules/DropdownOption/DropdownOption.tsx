@@ -31,8 +31,8 @@ const inputOptionStyles = css(p13Medium, {
 
 export interface DropdownAddOptionProps {
   readonly value: string;
-  readonly error?: boolean;
   readonly setValue: (a: string) => void;
+  readonly error?: boolean;
 }
 
 export const DropdownOption = ({
@@ -48,6 +48,7 @@ export const DropdownOption = ({
         onChange={(e) => setValue(e.target.value)}
         placeholder="Type here"
         css={inputOptionStyles}
+        onClick={(e) => e.stopPropagation()}
       />
       {error && (
         <Tooltip

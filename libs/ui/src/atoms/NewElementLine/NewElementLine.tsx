@@ -44,15 +44,16 @@ const addElementLine = css({
   backgroundColor: cssVar('droplineGreyColor'),
 });
 
-const buttonStyles = css(p13Medium, {
-  cursor: 'pointer',
-  display: 'flex',
-  gap: '6px',
-  padding: `7px`,
-  borderRadius: '6px',
-  backgroundColor: cssVar('highlightColor'),
-  border: `1px solid ${cssVar('strongHighlightColor')}`,
-});
+const buttonStyles = (hasSibling: boolean) =>
+  css(p13Medium, {
+    cursor: 'pointer',
+    display: 'flex',
+    gap: '6px',
+    padding: hasSibling ? `2px` : '7px',
+    borderRadius: '6px',
+    backgroundColor: cssVar('highlightColor'),
+    border: `1px solid ${cssVar('strongHighlightColor')}`,
+  });
 
 const iconWrapperStyles = css({
   height: '16px',
@@ -148,7 +149,7 @@ export const NewElementLine = ({
                   }px`,
                 }
               }
-              css={buttonStyles}
+              css={buttonStyles(!!hasPreviousSibling)}
               onClick={() => {
                 setClicked(true);
                 if (onAdd !== undefined) onAdd();

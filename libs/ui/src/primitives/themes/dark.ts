@@ -142,6 +142,7 @@ export const theme: CssVariables = {
 
   currentTextColor: cssVar('normalTextColor'),
 
+  structuredCalculationSimpleColor: brand800.hex,
   structuredCalculationVariableColor: yellow400.hex,
 
   variableHighlightColor: teal800.hex,
