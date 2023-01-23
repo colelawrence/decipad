@@ -1,6 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { docs } from '@decipad/routing';
+import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
@@ -132,12 +132,12 @@ export const NotebookTopbar = ({
 
   const navigate = useNavigate();
   const onBack = useCallback(() => {
-    if (global.history.length) {
-      navigate(-1);
+    if (workspace) {
+      navigate(workspaces({}).workspace({ workspaceId: workspace.id }).$);
     } else {
       navigate('/');
     }
-  }, [navigate]);
+  }, [navigate, workspace]);
 
   return (
     <div css={wrapperStyles}>
