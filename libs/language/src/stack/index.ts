@@ -40,6 +40,8 @@ export class Stack<T> {
   private namespaceJoiner: StackNamespaceJoiner<T>;
   private namespaceSplitter: StackNamespaceSplitter<T>;
 
+  private idMap = new Map<string, readonly [string, string]>();
+
   constructor(
     initialGlobalScope: AnyMapping<T> | undefined,
     namespaceJoiner: StackNamespaceJoiner<T>,
@@ -131,15 +133,24 @@ export class Stack<T> {
   setNamespaced(
     [ns, name]: readonly [namespace: string, name: string],
     value: T,
-    varGroup: VarGroup
+    varGroup: VarGroup,
+    id: string | undefined = undefined
   ) {
     let asSplitNs;
     if (ns === '' && (asSplitNs = this.namespaceSplitter(value))) {
       this.createNamespace(name);
       for (const [colName, value] of asSplitNs) {
-        this.setNamespaced([name, colName], value, varGroup);
+        this.setNamespaced([name, colName], value, varGroup, id);
       }
       return;
+    }
+
+    if (id) {
+      if (this.functionScope || this.temporaryScopes.length) {
+        throw new Error('panic: cannot set id in a non-global scope');
+      }
+
+      this.idMap.set(id, [ns, name]);
     }
 
     const map = this.getAssignmentScope(varGroup);
@@ -184,14 +195,19 @@ export class Stack<T> {
   getNamespaced(
     [ns, name]: readonly [namespace: string, name: string],
     varGroup: VarGroup
-  ) {
+  ): T | null {
+    const idMap = ns === '' && this.idMap.get(name);
+    if (idMap) {
+      return this.getNamespaced(idMap, varGroup);
+    }
+
     for (const scope of this.getVisibleScopes(varGroup)) {
       if (ns === '' && scope.has(name)) {
         return this.namespaceJoiner(getDefined(scope.get(name)), name);
       }
 
       if (scope.get(ns)?.has(name)) {
-        return getDefined(scope.get(ns)).get(name);
+        return getDefined(scope.get(ns)?.get(name));
       }
     }
 

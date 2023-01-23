@@ -169,3 +169,53 @@ describe('scope modifiers', () => {
     expect(getHas('Function', 'function')).toEqual(null);
   });
 });
+
+describe('can set with an ID', () => {
+  it('can set with ID', () => {
+    stack.setNamespaced(['', 'A'], 'AVal', 'global', 'AId');
+    stack.setNamespaced(['Table', 'B'], 'BVal', 'global', 'BId');
+
+    expect(stack.get('A')).toEqual('AVal');
+    expect(stack.get('Table')).toMatchInlineSnapshot(
+      `"[[\\"B\\",\\"BVal\\"]]"`
+    );
+    expect(stack.getNamespaced(['Table', 'B'], 'lexical')).toEqual('BVal');
+    expect(stack.get('AId')).toEqual('AVal');
+    expect(stack.get('BId')).toEqual('BVal');
+
+    stack.deleteNamespaced(['Table', 'B'], 'global');
+    expect(stack.get('BId')).toEqual(null);
+  });
+
+  it('can set with ID in the context of a table', () => {
+    stack.setNamespaced(
+      ['', 'Table'],
+      JSON.stringify([['A', 'AVal']]),
+      'global',
+      'TableId'
+    );
+    stack.setNamespaced(['Table', 'B'], 'ColumnVal', 'global', 'ColumnId');
+
+    expect(
+      stack.getNamespaced(['Table', 'A'], 'lexical')
+    ).toMatchInlineSnapshot(`"AVal"`);
+    expect(
+      stack.getNamespaced(['Table', 'B'], 'lexical')
+    ).toMatchInlineSnapshot(`"ColumnVal"`);
+    expect(stack.get('Table')).toMatchInlineSnapshot(
+      `"[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"ColumnVal\\"]]"`
+    );
+    expect(stack.get('TableId')).toMatchInlineSnapshot(`"AVal"`);
+  });
+
+  it('can delete things with IDs', () => {
+    stack.setNamespaced(['', 'A'], 'AVal', 'global', 'AId');
+    stack.setNamespaced(['Table', 'B'], 'BVal', 'global', 'BId');
+
+    stack.deleteNamespaced(['Table', 'B'], 'global');
+    expect(stack.get('BId')).toEqual(null);
+
+    stack.deleteNamespaced(['', 'A'], 'global');
+    expect(stack.get('AId')).toEqual(null);
+  });
+});
