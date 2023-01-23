@@ -265,6 +265,9 @@ There is also documentation available for larger areas of the codebase that span
 
 - [Code structure](docs/CODE_STRUCTURE.md)
 - [Frontend](docs/FRONTEND.md)
+- [Backend](docs/BACKEND.md)
+- [Auth](docs/AUTH.md)
+- [Sync](docs/SYNC.md)
 
 # Feature flags
 
