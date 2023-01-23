@@ -472,7 +472,7 @@
     run-series "~1.1.9"
     symlink-or-copy "~1.3.1"
 
-"@architect/inventory@3.4.0":
+"@architect/inventory@3.4.0", "@architect/inventory@~3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.0.tgz#3a5280906cbbc4bfe727a885a25cfeb4cc7c2582"
   integrity sha512-xmJ6AsbicMGWDH0t865ixmw4QpWTV6hCau/yUaHD2q4twg6FONGAGdPZvPZDNfVw/BmoC00L9ke0kNF2u7W/iA==
@@ -500,17 +500,6 @@
     "@architect/asap" "~5.1.0"
     "@architect/parser" "~6.0.2"
     "@architect/utils" "~3.1.2"
-    lambda-runtimes "~1.1.3"
-
-"@architect/inventory@~3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.0.tgz#3a5280906cbbc4bfe727a885a25cfeb4cc7c2582"
-  integrity sha512-xmJ6AsbicMGWDH0t865ixmw4QpWTV6hCau/yUaHD2q4twg6FONGAGdPZvPZDNfVw/BmoC00L9ke0kNF2u7W/iA==
-  dependencies:
-    "@architect/asap" "~5.1.1"
-    "@architect/parser" "~6.0.2"
-    "@architect/utils" "~3.1.2"
-    esm "~3.2.25"
     lambda-runtimes "~1.1.3"
 
 "@architect/logs@4.0.6":
