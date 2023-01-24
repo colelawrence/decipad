@@ -12,7 +12,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TD,
   ELEMENT_CODE_LINE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_VARIABLE_DEF,
   VariableDefinitionElement,
   CodeLineElement,
@@ -43,7 +43,7 @@ describe('editorToProgram', () => {
         id: 'line-v2',
         children: [
           {
-            type: ELEMENT_CODE_LINE_V2_VARNAME,
+            type: ELEMENT_STRUCTURED_VARNAME,
             id: 'line-v2-var',
             children: [{ text: 'SeparateVarName' }],
           },
@@ -59,7 +59,7 @@ describe('editorToProgram', () => {
         id: 'struct-in',
         children: [
           {
-            type: ELEMENT_CODE_LINE_V2_VARNAME,
+            type: ELEMENT_STRUCTURED_VARNAME,
             id: 'struct-in-name',
             children: [{ text: 'MyVar' }],
           },

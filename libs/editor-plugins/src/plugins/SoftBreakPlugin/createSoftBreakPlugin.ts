@@ -2,7 +2,7 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TABLE_COLUMN_FORMULA,
 } from '@decipad/editor-types';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
@@ -23,7 +23,7 @@ export const createSoftBreakPlugin = createOnKeyDownPluginFactory({
             ELEMENT_CODE_LINE,
             ELEMENT_CODE_LINE_V2,
             ELEMENT_CODE_LINE_V2_CODE,
-            ELEMENT_CODE_LINE_V2_VARNAME,
+            ELEMENT_STRUCTURED_VARNAME,
             ELEMENT_TABLE_COLUMN_FORMULA,
           ],
         },

@@ -3,7 +3,7 @@ import {
   DisplayElement,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_DISPLAY,
   ELEMENT_STRUCTURED_IN,
   PlateComponent,
@@ -194,7 +194,7 @@ export const VarResultContext = createContext<
 >(undefined);
 
 export const CodeLineV2Varname: PlateComponent = (props) => {
-  assertElementType(props.element, ELEMENT_CODE_LINE_V2_VARNAME);
+  assertElementType(props.element, ELEMENT_STRUCTURED_VARNAME);
 
   const varResult = useContext(VarResultContext);
 

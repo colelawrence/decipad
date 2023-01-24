@@ -4,7 +4,7 @@ import {
   createTPlateEditor,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
@@ -23,7 +23,7 @@ function codeLine(varName?: string, code?: string): CodeLineElement {
       ...(varName
         ? [
             {
-              type: ELEMENT_CODE_LINE_V2_VARNAME,
+              type: ELEMENT_STRUCTURED_VARNAME,
               children: [{ text: varName }],
             },
           ]
@@ -80,7 +80,7 @@ describe('in a code line', () => {
                   },
                 ],
                 "id": "mocked-id",
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -117,7 +117,7 @@ describe('in a code line', () => {
                     "text": "varName",
                   },
                 ],
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -140,7 +140,7 @@ describe('in a code line', () => {
                   },
                 ],
                 "id": "mocked-id",
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -180,7 +180,7 @@ describe('in a code line', () => {
                   },
                 ],
                 "id": "mocked-id",
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -214,7 +214,7 @@ describe('in a code line', () => {
                     "text": "a",
                   },
                 ],
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -248,7 +248,7 @@ describe('in a code line', () => {
                     "text": "a",
                   },
                 ],
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -281,7 +281,7 @@ describe('in a code line', () => {
                     "text": "a",
                   },
                 ],
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [
@@ -316,7 +316,7 @@ describe('in a code line', () => {
                     "text": "a",
                   },
                 ],
-                "type": "code_line_v2_varname",
+                "type": "structured_varname",
               },
               Object {
                 "children": Array [

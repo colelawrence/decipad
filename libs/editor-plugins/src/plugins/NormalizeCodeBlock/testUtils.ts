@@ -4,7 +4,7 @@ import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_CODE_LINE_V2_CODE,
   CodeLineV2Element,
 } from '@decipad/editor-types';
@@ -25,7 +25,7 @@ export function codeLineV2(varName: string, code: string) {
     type: ELEMENT_CODE_LINE_V2,
     children: [
       {
-        type: ELEMENT_CODE_LINE_V2_VARNAME,
+        type: ELEMENT_STRUCTURED_VARNAME,
         children: [{ text: varName }],
       },
       {

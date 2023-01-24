@@ -3,7 +3,7 @@ import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   MyPlatePlugin,
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
@@ -20,7 +20,7 @@ import {
 import { createSelectionContainmentPlugin } from './selectionContainmentPlugin';
 
 const createCodeLineVarnamePlugin = (_computer: Computer) => ({
-  key: ELEMENT_CODE_LINE_V2_VARNAME,
+  key: ELEMENT_STRUCTURED_VARNAME,
   isElement: true,
   component: CodeLineV2Varname,
 });
@@ -46,7 +46,7 @@ export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
     createNormalizeCodeLineCodePlugin(computer),
     createNormalizeCodeLineVarnamePlugin(),
     createSelectionContainmentPlugin(ELEMENT_CODE_LINE_V2_CODE),
-    createSelectionContainmentPlugin(ELEMENT_CODE_LINE_V2_VARNAME),
+    createSelectionContainmentPlugin(ELEMENT_STRUCTURED_VARNAME),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_CODE_LINE_V2',
       elementTypes: [ELEMENT_CODE_LINE_V2],

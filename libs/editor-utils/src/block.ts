@@ -11,7 +11,7 @@ import {
   MyElement,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   StructuredInputElement,
 } from '@decipad/editor-types';
 import {
@@ -154,7 +154,7 @@ export const insertStructuredInput = (
       type: ELEMENT_STRUCTURED_IN,
       children: [
         {
-          type: ELEMENT_CODE_LINE_V2_VARNAME,
+          type: ELEMENT_STRUCTURED_VARNAME,
           id: nanoid(),
           children: [{ text: getAvailableIdentifier('Name', 1) }],
         },

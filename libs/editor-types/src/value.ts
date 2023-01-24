@@ -38,7 +38,7 @@ import {
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_DATA_VIEW,
   ELEMENT_DRAW,
   ELEMENT_IMPORT,
@@ -131,10 +131,10 @@ export interface CodeLineElement extends BaseElement {
 }
 export interface CodeLineV2Element extends BaseElement {
   type: typeof ELEMENT_CODE_LINE_V2;
-  children: [CodeLineV2ElementVarname, CodeLineV2ElementCode];
+  children: [StructuredVarnameElement, CodeLineV2ElementCode];
 }
-export interface CodeLineV2ElementVarname extends BaseElement {
-  type: typeof ELEMENT_CODE_LINE_V2_VARNAME;
+export interface StructuredVarnameElement extends BaseElement {
+  type: typeof ELEMENT_STRUCTURED_VARNAME;
   children: [PlainText];
 }
 export interface CodeLineV2ElementCode extends BaseElement {
@@ -149,7 +149,7 @@ export interface DeprecatedCodeBlockElement extends BaseElement {
 export interface StructuredInputElement extends BaseElement {
   type: typeof ELEMENT_STRUCTURED_IN;
   unit?: string;
-  children: [CodeLineV2ElementVarname, StructuredInputElementChildren];
+  children: [StructuredVarnameElement, StructuredInputElementChildren];
 }
 
 export interface StructuredInputElementChildren extends BaseElement {
@@ -310,7 +310,7 @@ export type AnyElement =
   | BlockElement
   | InlineElement
   | CodeLineV2ElementCode
-  | CodeLineV2ElementVarname
+  | StructuredVarnameElement
   | DataViewCaptionElement
   | DataViewNameElement;
 

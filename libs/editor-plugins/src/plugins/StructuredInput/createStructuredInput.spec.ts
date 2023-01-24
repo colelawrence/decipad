@@ -1,7 +1,7 @@
 import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
 } from '@decipad/editor-types';
@@ -19,7 +19,7 @@ function getStructuredIn(name: string, value: string, unit?: string) {
     children: [
       {
         id: nanoid(),
-        type: ELEMENT_CODE_LINE_V2_VARNAME,
+        type: ELEMENT_STRUCTURED_VARNAME,
         children: [{ text: name }],
       },
       {

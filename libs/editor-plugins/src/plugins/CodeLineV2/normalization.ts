@@ -1,8 +1,8 @@
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
-  CodeLineV2ElementVarname,
+  ELEMENT_STRUCTURED_VARNAME,
+  StructuredVarnameElement,
   CodeLineV2ElementCode,
 } from '@decipad/editor-types';
 import { isElementOfType, insertNodes } from '@decipad/editor-utils';
@@ -18,7 +18,7 @@ export const createNormalizeCodeLineV2Plugin = () =>
     name: 'NORMALIZE_CODE_LINE_V2',
     elementType: ELEMENT_CODE_LINE_V2,
     acceptableSubElements: [
-      ELEMENT_CODE_LINE_V2_VARNAME,
+      ELEMENT_STRUCTURED_VARNAME,
       ELEMENT_CODE_LINE_V2_CODE,
     ],
     plugin:
@@ -34,17 +34,17 @@ export const createNormalizeCodeLineV2Plugin = () =>
             insertNodes(
               editor,
               {
-                type: ELEMENT_CODE_LINE_V2_VARNAME,
+                type: ELEMENT_STRUCTURED_VARNAME,
                 id: nanoid(),
                 children: [{ text: '' }],
-              } as CodeLineV2ElementVarname,
+              } as StructuredVarnameElement,
               { at: [...path, 0] }
             );
 
             return true;
           }
 
-          if (node.children[0].type !== ELEMENT_CODE_LINE_V2_VARNAME) {
+          if (node.children[0].type !== ELEMENT_STRUCTURED_VARNAME) {
             removeNodes(editor, { at: [...path, 0] });
 
             return true;
@@ -70,9 +70,7 @@ export const createNormalizeCodeLineV2Plugin = () =>
             return true;
           }
 
-          if (
-            !isElementOfType(node.children[0], ELEMENT_CODE_LINE_V2_VARNAME)
-          ) {
+          if (!isElementOfType(node.children[0], ELEMENT_STRUCTURED_VARNAME)) {
             removeNodes(editor, { at: [...path, 0] });
 
             return true;
@@ -111,10 +109,10 @@ export const createNormalizeCodeLineCodePlugin = (computer: Computer) =>
 export const createNormalizeCodeLineVarnamePlugin = () =>
   createNormalizerPlugin({
     name: 'NORMALIZE_CODE_LINE_V2_VARNAME',
-    elementType: ELEMENT_CODE_LINE_V2_VARNAME,
+    elementType: ELEMENT_STRUCTURED_VARNAME,
     acceptableSubElements: [],
     plugin: (editor) => (entry) => {
-      if (isElementOfType(entry[0], ELEMENT_CODE_LINE_V2_VARNAME)) {
+      if (isElementOfType(entry[0], ELEMENT_STRUCTURED_VARNAME)) {
         if (
           normalizePlainTextChildren(editor, getNodeChildren(editor, entry[1]))
         ) {

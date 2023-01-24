@@ -5,7 +5,7 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE_V2_VARNAME,
+  ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 
@@ -40,7 +40,7 @@ export const createStructuredCodeLine = ({
     type: ELEMENT_CODE_LINE_V2,
     children: [
       {
-        type: ELEMENT_CODE_LINE_V2_VARNAME,
+        type: ELEMENT_STRUCTURED_VARNAME,
         id: nanoid(),
         children: [{ text: varName }],
       },
