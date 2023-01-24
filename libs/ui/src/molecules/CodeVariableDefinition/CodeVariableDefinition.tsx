@@ -16,6 +16,7 @@ const varStyles = (type: 'simple' | 'formula') =>
         : cssVar('structuredCalculationSimpleColor'),
     display: 'flex',
     alignItems: 'center',
+    width: 'fit-content',
   });
 
 const iconStyles = css({

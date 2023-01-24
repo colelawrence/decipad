@@ -63,6 +63,8 @@ export const codeContainerStyles = css(code, {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   lineHeight,
   whiteSpace: 'pre-wrap',
+  paddingLeft: '8px',
+  borderLeft: `1px solid ${cssVar('borderColor')}`,
 });
 
 // TODO never used I think

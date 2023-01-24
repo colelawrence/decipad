@@ -217,21 +217,23 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
           data-testid="codeline-varname"
           spellCheck={false}
         >
-          <CodeVariableDefinition
-            empty={empty}
-            type={
-              structuredInputParent
-                ? varResult?.result?.type
-                : { kind: 'table-formula' }
-            }
+          <BlockLengthSynchronizationReceiver
+            syncGroupName="variableNameColumn"
+            topLevelBlockId={varResult?.id}
           >
-            <BlockLengthSynchronizationReceiver
-              syncGroupName="variableNameColumn"
-              topLevelBlockId={varResult?.id}
+            <CodeVariableDefinition
+              empty={empty}
+              type={
+                structuredInputParent
+                  ? varResult?.type === 'identified-error'
+                    ? { kind: 'number', unit: null }
+                    : varResult?.result.type
+                  : { kind: 'table-formula' }
+              }
             >
               {props.children}
-            </BlockLengthSynchronizationReceiver>
-          </CodeVariableDefinition>
+            </CodeVariableDefinition>
+          </BlockLengthSynchronizationReceiver>
         </span>
       }
       open={errorMessage != null}

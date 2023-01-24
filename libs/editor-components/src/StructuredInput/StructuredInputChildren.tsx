@@ -31,22 +31,23 @@ export const StructuredInputChildren: PlateComponent = ({
 
   return (
     <div css={structuredInputChildrenStyles}>
-      <BlockLengthSynchronizationReceiver
-        syncGroupName="resultColumn"
-        topLevelBlockId={parent ? parent[0].id : ''}
+      <span
+        {...attributes}
+        id={element.id}
+        css={{
+          display: 'block',
+          textAlign: 'end',
+          fontSize: p14Medium.fontSize,
+        }}
       >
-        <span
-          {...attributes}
-          id={element.id}
-          css={{
-            display: 'block',
-            textAlign: 'end',
-            fontSize: p14Medium.fontSize,
-          }}
+        <BlockLengthSynchronizationReceiver
+          syncGroupName="resultColumn"
+          topLevelBlockId={parent ? parent[0].id : ''}
+          alignment="end"
         >
           {children}
-        </span>
-      </BlockLengthSynchronizationReceiver>
+        </BlockLengthSynchronizationReceiver>
+      </span>
     </div>
   );
 };

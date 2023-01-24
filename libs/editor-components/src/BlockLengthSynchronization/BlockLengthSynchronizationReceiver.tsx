@@ -16,6 +16,7 @@ export const BlockLengthSynchronizationReceiver = ({
   syncGroupName,
   topLevelBlockId,
   children,
+  alignment = 'start',
 }: {
   /** Which column does this visually align with */
   syncGroupName: ColumnGroupName;
@@ -23,6 +24,7 @@ export const BlockLengthSynchronizationReceiver = ({
   topLevelBlockId: string | undefined;
   /** PlainText node from slate-react */
   children: ReactNode;
+  alignment?: 'start' | 'end';
 }) => {
   const { minWidth, setMeasuredLength } = useSelectableContext(
     NameSyncContext,
@@ -59,7 +61,13 @@ export const BlockLengthSynchronizationReceiver = ({
   }, [syncGroupName, topLevelBlockId, setMeasuredLength, children]);
 
   return (
-    <span css={{ display: 'inline-block' }} style={{ minWidth }}>
+    <span
+      css={{
+        display: 'flex',
+        ...(alignment === 'end' && { justifyContent: 'end' }),
+      }}
+      style={{ minWidth }}
+    >
       <span css={{ whiteSpace: 'nowrap' }} ref={measurableRef}>
         {children}
       </span>
