@@ -16,7 +16,9 @@ export const CodeLineFloat: React.FC<
         ev.stopPropagation();
       }}
     >
-      <div css={codeLineStyle}>{children}</div>
+      <div data-testid="code-line-float" css={codeLineStyle}>
+        {children}
+      </div>
 
       <div css={instructionsStyle}>
         <div css={{ width: '1.5rem' }}></div>

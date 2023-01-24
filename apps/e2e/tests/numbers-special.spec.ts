@@ -49,6 +49,8 @@ test.describe('Formula highlighting', () => {
 
   test('editable when TAB pressed', async () => {
     await keyPress(page, 'Tab');
+    // Wait for line to be floaty before we start editing
+    await page.waitForSelector('[data-testid="number-result:3"]');
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(500);
@@ -85,6 +87,7 @@ test.describe('Formula highlighting', () => {
       .getByTestId('magic-number')
       .click();
 
+    await page.waitForSelector('[data-testid="code-line-float"]');
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(500);
