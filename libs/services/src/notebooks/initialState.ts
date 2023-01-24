@@ -4,6 +4,15 @@ import { mergeUpdates } from 'yjs';
 import { getDefined } from '@decipad/utils';
 import { fetchSnapshotFromFile } from './fetchSnapshotFromFile';
 
+// When loading the editor initial state, if the snapshot is void, try to load the actual notebook.
+// For that, we also need to detect when the updates are null ([0, 0]).
+const isZero = (n: number) => n === 0;
+const isUpdateVoid = (update: Uint8Array): boolean =>
+  update.length === 0 || (update.length < 3 && update.every(isZero));
+const areUpdatesVoid = (updates: Uint8Array[]): boolean => {
+  return updates.length < 1 || updates.every(isUpdateVoid);
+};
+
 const fetchUpdates = async (padId: string): Promise<Uint8Array[]> => {
   const data = await tables();
   const updates: Uint8Array[] = [];
@@ -47,7 +56,7 @@ const fetchSnapshot = async (
       }
     }
   }
-  if (updates.length < 1) {
+  if (areUpdatesVoid(updates)) {
     // eslint-disable-next-line no-console
     console.warn(`Notebook with id ${padId} had no snapshot updates`);
     // notebook is public but snapshot hasn't been created (old publish version)
