@@ -75,7 +75,6 @@ export const MagicNumber: PlateComponent = ({
 function useMagicNumberId(text: RichText) {
   return useEditorSelector((editor) => {
     const path = findNodePath(editor, text);
-
     if (!path) return '';
 
     const entry = getAboveNodeSafe(editor, {

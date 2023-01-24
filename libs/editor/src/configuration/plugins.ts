@@ -56,6 +56,7 @@ import {
   createUpdateComputerPlugin,
   createUserEventPlugin,
   createWithDocSyncHistoryPlugin,
+  createDeduplicateElementIdsPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -139,6 +140,7 @@ export const plugins = ({
       createNormalizeLinkPlugin(),
       createNormalizeImagePlugin(),
       createNormalizeElementIdPlugin(),
+      createDeduplicateElementIdsPlugin(),
       createNormalizeTextPlugin(),
       createTrailingParagraphPlugin(),
       createNormalizeColumnsPlugin(),

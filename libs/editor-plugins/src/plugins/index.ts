@@ -52,3 +52,4 @@ export * from './ExitBreakPlugin';
 export * from './RenderPerformanceStats';
 export * from './RemoteCursors';
 export * from './StructuredInput';
+export * from './DeduplicateElementIds';
