@@ -161,6 +161,7 @@ export const CodeLineV2: PlateComponent = ({
       {...attributes}
       onDelete={isNameUsed ? 'name-used' : undefined}
       id={lineId}
+      isCentered={true}
     >
       <CodeLineTeleport
         codeLine={teleport}

@@ -1,29 +1,28 @@
-import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
 } from '@decipad/editor-types';
-import { nanoid } from 'nanoid';
+import { normalizeEditor } from '@udecode/plate';
 import {
   createStructuredInputPlugin,
   onStructuredInputKeyDownPlugin,
 } from './createStructuredInput';
 
+const getAvailableIdentifier = (prefix: string, start: number) =>
+  `${prefix}${start}`;
+
 function getStructuredIn(name: string, value: string, unit?: string) {
   return {
-    id: nanoid(),
     type: ELEMENT_STRUCTURED_IN,
     unit,
     children: [
       {
-        id: nanoid(),
         type: ELEMENT_STRUCTURED_VARNAME,
         children: [{ text: name }],
       },
       {
-        id: nanoid(),
         type: ELEMENT_STRUCTURED_IN_CHILD,
         children: [{ text: value }],
       },
@@ -32,9 +31,8 @@ function getStructuredIn(name: string, value: string, unit?: string) {
 }
 
 describe('Structured input basic keyboard shortcuts', () => {
-  const computer = new Computer();
   const editor = createTPlateEditor({
-    plugins: [createStructuredInputPlugin(computer.getAvailableIdentifier)],
+    plugins: [createStructuredInputPlugin(getAvailableIdentifier)],
   });
   editor.children = [
     getStructuredIn('a', '100') as never,
@@ -47,7 +45,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move selection to the value when in the name', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab' });
     onStructuredInputKeyDownPlugin(
-      computer.getAvailableIdentifier
+      getAvailableIdentifier
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -75,7 +73,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move selection back to the name', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
     onStructuredInputKeyDownPlugin(
-      computer.getAvailableIdentifier
+      getAvailableIdentifier
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -103,7 +101,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move to the name below', () => {
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
     onStructuredInputKeyDownPlugin(
-      computer.getAvailableIdentifier
+      getAvailableIdentifier
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -131,7 +129,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move to the name above', () => {
     const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
     onStructuredInputKeyDownPlugin(
-      computer.getAvailableIdentifier
+      getAvailableIdentifier
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -159,7 +157,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab' });
     for (let i = 0; i < 3; i += 1) {
       onStructuredInputKeyDownPlugin(
-        computer.getAvailableIdentifier
+        getAvailableIdentifier
         // @ts-expect-error DOM KeyboardEvent vs React event
       ).handlers?.onKeyDown?.(editor)(event);
     }
@@ -188,7 +186,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
     for (let i = 0; i < 3; i += 1) {
       onStructuredInputKeyDownPlugin(
-        computer.getAvailableIdentifier
+        getAvailableIdentifier
         // @ts-expect-error DOM KeyboardEvent vs React event
       ).handlers?.onKeyDown?.(editor)(event);
     }
@@ -212,5 +210,97 @@ describe('Structured input basic keyboard shortcuts', () => {
         },
       }
     `);
+  });
+});
+
+describe('Normalizing structured inputs', () => {
+  const editor = createTPlateEditor({
+    plugins: [createStructuredInputPlugin(getAvailableIdentifier)],
+  });
+  editor.children = [
+    getStructuredIn('a', '100') as never,
+    getStructuredIn('longname', '50') as never,
+  ];
+  editor.selection = {
+    anchor: { path: [0, 0, 0], offset: 0 },
+    focus: { path: [0, 0, 0], offset: 0 },
+  };
+
+  it('doesnt do anything if valid', () => {
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "a",
+                },
+              ],
+              "type": "structured_varname",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "100",
+                },
+              ],
+              "type": "structured_input_child",
+            },
+          ],
+          "type": "structured_input",
+          "unit": undefined,
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "longname",
+                },
+              ],
+              "type": "structured_varname",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "50",
+                },
+              ],
+              "type": "structured_input_child",
+            },
+          ],
+          "type": "structured_input",
+          "unit": undefined,
+        },
+      ]
+    `);
+  });
+
+  it('Should remove extra elements', () => {
+    editor.children[1].children.push({
+      type: ELEMENT_STRUCTURED_IN_CHILD,
+      children: [{ text: 'i am an evil extra element' }],
+    } as any);
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children).toHaveLength(2);
+  });
+
+  it('Should remove many extra elements', () => {
+    for (let i = 0; i < 20; i += 1) {
+      editor.children[1].children.push({
+        type: ELEMENT_STRUCTURED_IN_CHILD,
+        children: [{ text: 'i am an evil extra element' }],
+      } as any);
+    }
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children).toHaveLength(2);
+  });
+
+  it('adds required elements if they are not present', () => {
+    editor.children[1].children = [];
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children).toHaveLength(2);
   });
 });

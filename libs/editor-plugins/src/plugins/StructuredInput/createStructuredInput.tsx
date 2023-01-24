@@ -19,6 +19,7 @@ import {
 import { KeyboardEvent } from 'react';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
+import { createNormalizeStructuredInput } from './createNormalizeStructuredInput';
 
 type Shortcuts =
   | 'move-right'
@@ -30,7 +31,7 @@ type Shortcuts =
 // In the future this function could be used by all elements to get shortcuts.
 function getShortcut(event: KeyboardEvent): Shortcuts | undefined {
   switch (true) {
-    case event.key === 'Tab' && !event.shiftKey:
+    case (event.key === 'Tab' || event.key === 'Enter') && !event.shiftKey:
       return 'move-right';
     case event.key === 'Tab' && event.shiftKey:
       return 'move-left';
@@ -72,6 +73,7 @@ export const createStructuredInputPlugin = (
       component: StructuredInputChildren,
     },
     onStructuredInputKeyDownPlugin(getAvailableIdentifier),
+    createNormalizeStructuredInput(getAvailableIdentifier),
   ],
 });
 

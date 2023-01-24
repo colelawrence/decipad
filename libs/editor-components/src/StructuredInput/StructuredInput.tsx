@@ -43,6 +43,7 @@ export const StructuredInput: PlateComponent = ({
       element={element}
       blockKind="codeLine"
       hasPreviousSibling={prevElement?.[0].type === ELEMENT_STRUCTURED_IN}
+      isCentered={true}
     >
       <StructuredInputLines>
         <div

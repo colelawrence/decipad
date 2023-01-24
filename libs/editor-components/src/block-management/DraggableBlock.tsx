@@ -66,7 +66,12 @@ type DraggableBlockProps = {
   readonly hasPreviousSibling?: boolean; // used for code line blocks
 } & Pick<
   ComponentProps<typeof UIDraggableBlock>,
-  'blockKind' | 'disableDrag' | 'onDelete' | 'onTurnInto' | 'turnInto'
+  | 'blockKind'
+  | 'disableDrag'
+  | 'onDelete'
+  | 'onTurnInto'
+  | 'turnInto'
+  | 'isCentered'
 > &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 
@@ -112,6 +117,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       getAxis,
       onDrop,
       hasPreviousSibling,
+      isCentered,
       ...props
     },
     forwardedRef
@@ -146,8 +152,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const ref = useMergedRef(blockRef, forwardedRef);
 
     const event = useContext(ClientEventsContext);
-
-    const isCentered = props.blockKind === 'codeLine';
 
     const onDelete = useCallback(() => {
       event({
