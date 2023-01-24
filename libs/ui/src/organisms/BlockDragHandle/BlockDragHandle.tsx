@@ -1,7 +1,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { once } from 'ramda';
-import { FC, ReactNode, useCallback, useState } from 'react';
+import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,
@@ -70,6 +70,7 @@ const plusStyle = css(handleButtonStyle, {
 interface BlockDragHandleProps {
   readonly children?: ReactNode;
   readonly menuOpen?: boolean;
+  readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;
   readonly showEyeLabel?: boolean;
@@ -87,6 +88,7 @@ export const BlockDragHandle = ({
   isHidden = false,
   onShowHide = noop,
   showEyeLabel = false,
+  onMouseDown,
   showAddBlock = true,
   onChangeMenuOpen = noop,
   onPlus = noop,
@@ -135,7 +137,7 @@ export const BlockDragHandle = ({
   );
 
   return (
-    <div css={[gridStyles(), hideOnPrint]}>
+    <div css={[gridStyles(), hideOnPrint]} onMouseDown={onMouseDown}>
       {showAddBlock && (
         <Tooltip trigger={plusButton} side="bottom" hoverOnly>
           <span css={css({ whiteSpace: 'nowrap', textAlign: 'center' })}>

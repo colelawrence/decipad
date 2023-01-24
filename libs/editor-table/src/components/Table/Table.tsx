@@ -80,6 +80,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         <EditorTableContext.Provider value={contextValue}>
           <TableDndProvider editor={editor} table={element}>
             <EditorTable
+              id={element.id}
               onChangeIcon={onSaveIcon}
               onChangeColor={onSaveColor}
               onSetCollapsed={onSetCollapsed}

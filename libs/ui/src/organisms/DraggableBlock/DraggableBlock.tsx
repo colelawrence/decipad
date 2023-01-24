@@ -1,5 +1,13 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
-import { ComponentProps, FC, Fragment, ReactNode, Ref, useState } from 'react';
+import {
+  ComponentProps,
+  FC,
+  Fragment,
+  HTMLProps,
+  ReactNode,
+  Ref,
+  useState,
+} from 'react';
 import { ConnectDragSource } from 'react-dnd';
 import { css, SerializedStyles } from '@emotion/react';
 import { BlockDragHandle } from '..';
@@ -61,6 +69,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
 
   readonly draggableCss?: SerializedStyles;
 
+  readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onDelete?: (() => void) | 'name-used' | 'none';
   readonly onDuplicate?: () => void;
@@ -94,6 +103,7 @@ export const DraggableBlock = ({
 
   draggableCss,
 
+  onMouseDown,
   onDelete,
   onDuplicate,
   onAdd,
@@ -192,6 +202,7 @@ export const DraggableBlock = ({
             <BlockDragHandle
               menuOpen={menuOpen}
               isHidden={isHidden}
+              onMouseDown={onMouseDown}
               onChangeMenuOpen={setMenuOpen}
               onPlus={onPlus}
               onDelete={onDelete}

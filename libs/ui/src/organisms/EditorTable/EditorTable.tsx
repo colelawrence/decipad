@@ -1,4 +1,7 @@
-import { useEditorStylesContext } from '@decipad/react-contexts';
+import {
+  useDndPreviewSelectors,
+  useEditorStylesContext,
+} from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
@@ -45,8 +48,17 @@ const tableCaptionWrapperStyles = css({
   },
 });
 
-export const tableWrapperStyles = css({
+const tableWrapperTransformStyles = css({
+  position: 'relative',
   transform: `translateX(calc((((100vw - 580px) / 2) + ${tableControlWidth}) * -1 ))`,
+  left: tableControlWidth,
+});
+
+const tableWrapperDraggingStyles = css({
+  left: `-${tableControlWidth}`,
+});
+
+const tableWrapperDefaultStyles = css({
   width: '100vw',
   minWidth: editorLayout.slimBlockWidth,
   overflowX: 'auto',
@@ -55,7 +67,6 @@ export const tableWrapperStyles = css({
   msOverflowStyle: 'none',
   position: 'relative',
   whiteSpace: 'nowrap',
-  left: tableControlWidth,
   display: 'flex',
   '&:hover': {
     scrollbarWidth: 'inherit',
@@ -108,6 +119,11 @@ export const tableWrapperStyles = css({
   },
 });
 
+export const tableWrapperStyles = css([
+  tableWrapperTransformStyles,
+  tableWrapperDefaultStyles,
+]);
+
 export const tableScroll = css({
   paddingRight: `calc(${scrollRightOffset})`,
   [smallScreenQuery]: {
@@ -149,6 +165,7 @@ const mouseOverAddColumnButtonStyles = css({
 });
 
 interface EditorTableProps {
+  readonly id?: string;
   readonly icon: UserIconKey;
   readonly color: AvailableSwatchColor;
   readonly isCollapsed?: boolean;
@@ -173,6 +190,7 @@ interface EditorTableProps {
 }
 
 export const EditorTable: FC<EditorTableProps> = ({
+  id,
   onAddRow,
   onAddColumn,
   columns,
@@ -193,6 +211,8 @@ export const EditorTable: FC<EditorTableProps> = ({
   previewMode,
 }: EditorTableProps): ReturnType<FC> => {
   const [caption, thead, ...tbody] = Children.toArray(children);
+
+  useDndPreviewSelectors().previewText();
 
   const { color: defaultColor } = useEditorStylesContext();
 
@@ -226,6 +246,10 @@ export const EditorTable: FC<EditorTableProps> = ({
 
   const onAddColumnClick = useEventNoEffect(onAddColumn);
 
+  const draggingId = useDndPreviewSelectors().draggingId();
+
+  const isDragging = draggingId === id;
+
   return (
     <TableStyleContext.Provider value={tableStyleContextValue}>
       <div css={wrapperStyles}>
@@ -233,8 +257,17 @@ export const EditorTable: FC<EditorTableProps> = ({
           {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 
           {!isCollapsed ? (
-            <div css={tableWrapperStyles}>
-              <div css={tableOverflowStyles} contentEditable={false} />
+            <div
+              css={[
+                !isDragging
+                  ? tableWrapperTransformStyles
+                  : tableWrapperDraggingStyles,
+                tableWrapperDefaultStyles,
+              ]}
+            >
+              {!isDragging && (
+                <div css={tableOverflowStyles} contentEditable={false} />
+              )}
               <div css={tableScroll}>
                 <Table
                   isReadOnly={false}

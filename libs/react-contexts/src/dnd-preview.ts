@@ -2,6 +2,7 @@ import { createStore } from '@udecode/plate';
 
 export const dndPreviewStore = createStore('dndPreview')({
   previewText: '',
+  draggingId: '' as string,
 });
 
 export const useDndPreviewSelectors = () => dndPreviewStore.use;

@@ -1,12 +1,17 @@
 import {
   alwaysWritableElementTypes,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
   MyEditor,
   MyElement,
   MyReactEditor,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  dndPreviewActions,
+  useComputer,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import {
   findNodePath,
   focusEditor,
@@ -28,15 +33,16 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
 import copyToClipboard from 'copy-to-clipboard';
 import {
   clone,
+  insertNodes,
   requirePathBelowBlock,
   useElementMutatorCallback,
-  insertNodes,
 } from '@decipad/editor-utils';
 import { useSelected } from 'slate-react';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -128,6 +134,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       previewRef,
       nodeRef: blockRef,
     });
+
+    useEffect(() => {
+      if (!isDragging) {
+        dndPreviewActions.draggingId('');
+      }
+    }, [isDragging]);
+
     const draggingIds = dndStore.use.draggingIds();
 
     const ref = useMergedRef(blockRef, forwardedRef);
@@ -220,6 +233,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       [element.type, event, setIsHidden]
     );
 
+    const onMouseDown = useCallback(() => {
+      if (element.type === ELEMENT_TABLE) {
+        dndPreviewActions.draggingId(element.id);
+      }
+    }, [element.id, element.type]);
+
     // Only show the Blue line to add element on these conditions.
     // If its a nested element (Such as a list, don't show it in between).
     const nodePath = findNodePath(editor, element);
@@ -259,6 +278,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         previewRef={previewRef}
         dropLine={dropLine || undefined}
         isBeingDragged={isDragging || draggingIds.has(element.id)}
+        onMouseDown={onMouseDown}
         onDelete={
           typeof parentOnDelete === 'string' ? parentOnDelete : onDelete
         }
