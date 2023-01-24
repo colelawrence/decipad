@@ -47,6 +47,7 @@ export const StructuredInput: PlateComponent = ({
       <StructuredInputLines>
         <div
           {...attributes}
+          contentEditable={true}
           id={element.id}
           css={{
             display: 'flex',

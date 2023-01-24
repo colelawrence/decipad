@@ -62,8 +62,12 @@ export const CodeLineStructured = ({
         css={[codeLineStyles, highlight && highlightedLineStyles]}
         spellCheck={false}
       >
-        <code css={variableNameContainerStyles}>{variableNameChild}</code>
-        <code css={codeContainerStyles}>{codeChild}</code>
+        <code contentEditable={true} css={variableNameContainerStyles}>
+          {variableNameChild}
+        </code>
+        <code contentEditable={true} css={codeContainerStyles}>
+          {codeChild}
+        </code>
         {placeholder && isEmpty && (
           <span css={placeholderStyles} contentEditable={false}>
             {placeholder}
