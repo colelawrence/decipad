@@ -178,7 +178,7 @@ const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
       </>
     );
   }
-  return <p>Notebook Saved</p>;
+  return <p>Notebook saved</p>;
 };
 
 export const NotebookState: FC<NotebookStateProps> = ({

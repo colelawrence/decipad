@@ -55,6 +55,7 @@ type Action =
   | { action: 'contact live support'; props?: undefined }
   | { action: 'send feedback'; props?: undefined }
   | { action: 'visit docs'; props?: undefined }
+  | { action: 'visit releases'; props?: undefined }
   | { action: 'help button clicked'; props?: undefined }
   | { action: 'join discord'; props?: undefined }
   | { action: 'user code error'; props: { message: string; url: string } }

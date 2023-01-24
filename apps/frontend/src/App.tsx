@@ -97,11 +97,12 @@ export const App: FC = () => {
         <HelpMenu
           discordUrl="https://discord.gg/CUtKEd3rBn"
           docsUrl={docs({}).$}
+          releaseUrl={docs({}).page({ name: 'releases' }).$}
           onSelectSupport={show}
           onSelectFeedback={showFeedback}
         />
       )}
-      {/* Feature flagging the feature flag switcher makes it unreacheable in 
+      {/* Feature flagging the feature flag switcher makes it unreacheable in
       production, even if you press the shortcut, unless you know how */}
       {isFlagEnabled('FEATURE_FLAG_SWITCHER') &&
         createPortal(<FeatureFlagsSwitcher />, document.body)}

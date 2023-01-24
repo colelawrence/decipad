@@ -49,6 +49,7 @@ export { DatePicker } from './DatePicker/DatePicker';
 export { Date } from './Date/Date';
 export { Deci } from './Deci/Deci';
 export { Delete } from './Delete/Delete';
+export { Discord } from './Discord/Discord';
 export { Disk } from './Disk/Disk';
 export { Divider } from './Divider/Divider';
 export { Docs } from './Docs/Docs';

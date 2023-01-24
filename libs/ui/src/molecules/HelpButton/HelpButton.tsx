@@ -42,12 +42,12 @@ export const HelpButton = (): ReturnType<React.FC> => {
         trigger={
           <button
             css={styles}
-            onClick={() =>
+            onClick={() => {
               clientEvent({
                 type: 'action',
                 action: 'help button clicked',
-              })
-            }
+              });
+            }}
           >
             <span css={innerStyles}>
               <QuestionMark /> <span>Help</span>

@@ -1,18 +1,33 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext } from 'react';
-import { ExternalHrefIcon, Link, MenuItem, MenuSeparator } from '../../atoms';
+import { Link, MenuItem, MenuSeparator } from '../../atoms';
 import { HelpButton, MenuList } from '../../molecules';
-import { p12Regular, p14Medium, setCssVar } from '../../primitives';
+import {
+  p12Regular,
+  p14Medium,
+  setCssVar,
+  transparency,
+  weakOpacity,
+  offBlack,
+} from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
+import {
+  ArrowDiagonalTopRight,
+  Docs,
+  Discord,
+  Chat,
+  LightBulb,
+} from '../../icons';
 
 const menuItemWrapperStyles = css({
   display: 'flex',
   flexDirection: 'row',
   gap: '6px',
   textDecoration: 'none',
-  minWidth: '160px',
+  minWidth: '170px',
   padding: '0px',
+  alignItems: 'center',
 });
 
 const menuItemSmallTextStyles = css(
@@ -39,10 +54,10 @@ const pulse = keyframes`
   }
 `;
 
-const statusIcon = css`
+const statusIconStyles = css`
   display: flex;
   flex-direction: row;
-  margin-left: 3px;
+  margin-left: 5px;
   margin-top: 6px;
   margin-right: 3px;
   width: 5px;
@@ -52,6 +67,11 @@ const statusIcon = css`
   border-radius: 50%;
   animation: ${pulse} 1.5s ease infinite;
 `;
+const statusIcon = (
+  <div css={{ alignSelf: 'start', height: '28px' }}>
+    <div css={statusIconStyles}></div>
+  </div>
+);
 
 const linkStyles = css({
   textDecoration: 'none',
@@ -75,6 +95,7 @@ const CustomMenuItem = ({
   chat,
   external,
   onClick,
+  icon,
 }: CustomMenuItemProps) => {
   const followLink = useCallback(() => {
     if (to) {
@@ -84,10 +105,36 @@ const CustomMenuItem = ({
 
   const children = (
     <div css={menuItemWrapperStyles}>
-      {chat && <div css={statusIcon}></div>}
-      <span css={{ display: 'flex', flexDirection: 'column' }}>
-        <span css={p14Medium}>
-          {title} {external && <ExternalHrefIcon />}
+      <span css={{ width: '20px' }}>{icon}</span>
+      <span css={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <span css={[p14Medium, { display: 'flex', gap: '8px' }]}>
+          {title}
+
+          {external && (
+            <span
+              css={{
+                display: 'flex',
+                alignItems: 'center',
+                float: 'right',
+                backgroundColor: transparency(offBlack, weakOpacity).rgba,
+                borderRadius: '4px',
+                height: '20px',
+                width: '20px',
+                padding: '5px',
+                marginLeft: 'auto',
+                opacity: '0',
+                '*:hover > &': {
+                  opacity: '1',
+                },
+                svg: {
+                  width: '16px',
+                  height: '16px',
+                },
+              }}
+            >
+              <ArrowDiagonalTopRight />
+            </span>
+          )}
         </span>
         {description !== undefined && (
           <small css={menuItemSmallTextStyles}>{description}</small>
@@ -98,14 +145,12 @@ const CustomMenuItem = ({
   return (
     <div
       css={
-        chat
-          ? {
-              '*:first-child': {
-                paddingTop: '0px',
-                paddingBottom: '0px',
-              },
-            }
-          : { marginLeft: '16px' }
+        chat && {
+          '*:first-child': {
+            paddingTop: '0px',
+            paddingBottom: '0px',
+          },
+        }
       }
     >
       <MenuItem onSelect={onSelect ?? followLink}>
@@ -124,6 +169,7 @@ const CustomMenuItem = ({
 interface HelpMenuProps {
   readonly discordUrl?: string;
   readonly docsUrl?: string;
+  readonly releaseUrl?: string;
   readonly onSelectSupport?: () => void;
   readonly onSelectFeedback?: () => void;
 }
@@ -131,6 +177,7 @@ interface HelpMenuProps {
 export const HelpMenu = ({
   discordUrl,
   docsUrl,
+  releaseUrl,
   onSelectSupport,
   onSelectFeedback,
 }: HelpMenuProps) => {
@@ -151,19 +198,32 @@ export const HelpMenu = ({
         onSelect={onSelectSupport}
         title="Contact Live Support"
         description="Chat with our team"
-        chat
-        onClick={() =>
+        icon={statusIcon}
+        onClick={() => {
           clientEvent({
             type: 'action',
             action: 'contact live support',
+          });
+        }}
+      />
+      <MenuSeparator />
+      <CustomMenuItem
+        to={releaseUrl}
+        external
+        title="What's New"
+        icon={<LightBulb background />}
+        onClick={() =>
+          clientEvent({
+            type: 'action',
+            action: 'visit releases',
           })
         }
       />
-      <MenuSeparator />
       <CustomMenuItem
         to={docsUrl}
         external
         title="Docs & Examples"
+        icon={<Docs />}
         onClick={() =>
           clientEvent({
             type: 'action',
@@ -174,17 +234,19 @@ export const HelpMenu = ({
       <CustomMenuItem
         onSelect={onSelectFeedback}
         title="Share Feedback"
-        onClick={() =>
+        icon={<Chat />}
+        onClick={() => {
           clientEvent({
             type: 'action',
             action: 'send feedback',
-          })
-        }
+          });
+        }}
       />
       <CustomMenuItem
         to={discordUrl}
         external
         title="Join Discord"
+        icon={<Discord />}
         onClick={() =>
           clientEvent({
             type: 'action',
