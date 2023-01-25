@@ -5,9 +5,10 @@ import {
   MyElementEntry,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { getNode, isCollapsed, isEditor, isElement } from '@udecode/plate';
+import { isCollapsed, isElement } from '@udecode/plate';
 import { BaseEditor, Editor, Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
+import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
 
 /**
  * Prevents default slate/browser weird behavior through allowing to intercept events.
@@ -25,17 +26,6 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
           editor.selection &&
           isCollapsed(editor.selection) &&
           editor.selection.focus.path;
-
-        const leafNodeInCollapsedSelection = () => {
-          const node = cursorPath && getNode(editor, cursorPath);
-          return (
-            node &&
-            !isEditor(node) &&
-            !isElement(node) &&
-            'text' in node &&
-            node
-          );
-        };
 
         const topLevel =
           cursorPath && findClosestBlockOrColumn(editor, cursorPath);
@@ -57,10 +47,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
           switch (event.key) {
             case 'Backspace': {
               // Handle problematic delete (at start of text node)
-              if (
-                leafNodeInCollapsedSelection() &&
-                editor.selection?.focus.offset === 0
-              ) {
+              if (isCursorAtBlockEdge(editor as BaseEditor, 'start')) {
                 const wasHandled = bubbleCancelableEvent(
                   editor,
                   { type: 'delete-text-start', event },
@@ -83,12 +70,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
             case 'Delete': {
               // Handle problematic delete (at end of text node)
 
-              const leafNode = leafNodeInCollapsedSelection();
-              const cursorAtEnd =
-                leafNode &&
-                editor.selection?.focus.offset === leafNode.text.length;
-
-              if (cursorAtEnd) {
+              if (isCursorAtBlockEdge(editor as BaseEditor, 'end')) {
                 const wasHandled = bubbleCancelableEvent(
                   editor,
                   { type: 'delete-text-end', event },
