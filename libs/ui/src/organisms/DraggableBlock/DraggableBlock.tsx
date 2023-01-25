@@ -189,16 +189,12 @@ export const DraggableBlock = ({
               // Draw over following blocks instead of increasing the current block's height
               height: 0,
             },
-            isCentered
-              ? {
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '100%',
-                  marginLeft: '-32px',
-                }
-              : {
-                  marginTop: '4px',
-                },
+            isCentered && {
+              display: 'flex',
+              alignItems: 'center',
+              height: '100%',
+              marginLeft: '-32px',
+            },
             draggableCss,
           ]}
         >

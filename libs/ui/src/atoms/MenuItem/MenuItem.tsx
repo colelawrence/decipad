@@ -4,7 +4,7 @@ import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import { menu } from '../../styles';
 
 const iconWrapperStyles = css({
-  display: 'flex',
+  display: 'grid',
   alignItems: 'center',
   height: '16px',
   width: '16px',

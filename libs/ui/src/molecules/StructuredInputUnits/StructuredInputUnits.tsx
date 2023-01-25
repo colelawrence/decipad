@@ -84,23 +84,22 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
                 css={{
                   width: 18,
                   height: 18,
-                  display: 'flex',
+                  display: 'grid',
                   alignItems: 'center',
                 }}
               >
                 <Number />
               </div>
             )}
-            <div
+            <button
               css={{
                 width: 18,
                 height: 18,
-                display: 'flex',
-                alignItems: 'center',
+                display: 'grid',
               }}
             >
               <Caret variant="down" />
-            </div>
+            </button>
           </div>
         }
       >
