@@ -155,6 +155,9 @@ export const TableCell: PlateComponent = ({
     if (!cellType || cellType.kind !== 'dropdown') return [];
 
     const dropdown = editor.children.find((child) => child.id === cellType.id);
+    if (!dropdown) {
+      return [];
+    }
     assertElementType(dropdown, ELEMENT_VARIABLE_DEF);
     if (dropdown.variant !== 'dropdown') return [];
     const { options } = dropdown.children[1];
