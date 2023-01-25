@@ -41,7 +41,7 @@ const inputStyles = css(p13Medium, {
   margin: '2px 0',
 
   width: 0, // Override vendor default width so flex basis can apply
-  flex: '0 1 50%',
+  flex: '0 1 100%',
 
   background: cssVar('highlightColor'),
 });

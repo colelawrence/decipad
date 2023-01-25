@@ -12,7 +12,7 @@ import { useComputer } from '@decipad/react-contexts';
 import { StructuredInputLines, StructuredInputUnits } from '@decipad/ui';
 import { findNodePath, getPreviousNode } from '@udecode/plate';
 import { variableNameContainerStyles } from 'libs/ui/src/organisms/CodeLineStructured/styles';
-import { Children } from 'react';
+import { Children, useMemo } from 'react';
 import { DraggableBlock } from '../block-management';
 import { VarResultContext } from '../CodeLine';
 import { getSyntaxError } from '../CodeLine/getSyntaxError';
@@ -34,6 +34,16 @@ export const StructuredInput: PlateComponent = ({
   const [, lineResult] = computer.getBlockIdResult$.useWithSelector(
     (line) => [getSyntaxError(line), line] as const,
     element.id
+  );
+
+  const parseUnit = useMemo(
+    () => computer.getUnitFromText.bind(computer),
+    [computer]
+  );
+
+  const formatUnit = useMemo(
+    () => computer.formatUnit.bind(computer),
+    [computer]
   );
 
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
@@ -62,6 +72,8 @@ export const StructuredInput: PlateComponent = ({
           <StructuredInputUnits
             unit={element.unit ?? ''}
             onChangeUnit={onChangeUnit}
+            onParseUnit={parseUnit}
+            formatUnit={formatUnit}
           />
         </div>
       </StructuredInputLines>

@@ -1,4 +1,5 @@
 import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
+import { Unit } from '@decipad/language';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -148,7 +149,7 @@ export interface DeprecatedCodeBlockElement extends BaseElement {
 
 export interface StructuredInputElement extends BaseElement {
   type: typeof ELEMENT_STRUCTURED_IN;
-  unit?: string;
+  unit?: string | Unit[];
   children: [StructuredVarnameElement, StructuredInputElementChildren];
 }
 
