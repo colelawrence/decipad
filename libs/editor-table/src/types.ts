@@ -12,3 +12,7 @@ export interface DragColumnItem {
 }
 
 export type ColumnDndDirection = undefined | 'left' | 'right';
+
+export interface TotalAggregationExpressions {
+  sum: string;
+}

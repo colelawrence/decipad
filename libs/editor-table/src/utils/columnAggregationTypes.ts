@@ -1,9 +1,13 @@
 import { TableCellType } from '@decipad/editor-types';
+import { TotalAggregationExpressions } from '../types';
 
 export interface AggregationType {
   name: string;
   shortName?: string;
-  expression: (colRef: string) => string;
+  expression: (
+    colRef: string,
+    totalAggregationExpressions: TotalAggregationExpressions
+  ) => string;
 }
 
 const aggregationTypes: { [type: string]: AggregationType[] } = {
@@ -74,6 +78,12 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       name: 'Count unique values',
       shortName: 'Unique',
       expression: (colRef) => `count(unique(${colRef}))`,
+    },
+    {
+      name: '% of total',
+      shortName: 'Percent',
+      expression: (colDef, totalAggregationExpressions) =>
+        `sum(${colDef}) / (${totalAggregationExpressions.sum}) in %`,
     },
   ],
   string: [

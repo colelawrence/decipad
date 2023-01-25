@@ -1,4 +1,7 @@
-import { columnAggregationTypes } from '@decipad/editor-table';
+import {
+  columnAggregationTypes,
+  TotalAggregationExpressions,
+} from '@decipad/editor-table';
 import { SerializedType } from '@decipad/computer';
 import { TableCellType } from '@decipad/editor-types';
 import { AggregationKind } from '../types';
@@ -6,7 +9,8 @@ import { AggregationKind } from '../types';
 export const maybeAggregate = (
   expressionFilter: string,
   columnType: SerializedType,
-  aggregation: AggregationKind | undefined
+  aggregation: AggregationKind | undefined,
+  totalAggregationExpressions: TotalAggregationExpressions
 ): string | Error | undefined => {
   try {
     if (!aggregation) {
@@ -20,7 +24,7 @@ export const maybeAggregate = (
       );
     }
 
-    return aggregator.expression(expressionFilter);
+    return aggregator.expression(expressionFilter, totalAggregationExpressions);
   } catch (err) {
     return err as Error;
   }

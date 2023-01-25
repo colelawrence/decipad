@@ -19,7 +19,6 @@ const hoverCellStyles = css({
 
 const labelStyles = css(p12Medium, {
   color: cssVar('weakerTextColor'),
-  textTransform: 'capitalize',
 });
 
 const alignRightStyles = css({

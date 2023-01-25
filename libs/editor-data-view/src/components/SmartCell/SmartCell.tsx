@@ -80,10 +80,13 @@ export const SmartCell: FC<SmartProps> = ({
       maybeAggregate(
         `${expressionFilter}.${column.name}`,
         column.type,
-        aggregationType
+        aggregationType,
+        {
+          sum: `sum(${tableName}.${column.name})`,
+        }
       )
     );
-  }, [aggregationType, column, expressionFilter]);
+  }, [aggregationType, column, expressionFilter, tableName]);
 
   useEffect(() => {
     const sub = (
