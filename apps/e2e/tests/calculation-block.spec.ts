@@ -79,4 +79,19 @@ test.describe('Calculation Blocks', () => {
     expect(caretBefore).toBeDefined();
     expect(caretAfter).toBe(caretBefore! + 2);
   });
+
+  test('Shift+Enter moves caret to a new code line below', async () => {
+    const lineText = 'a = 10';
+    await keyPress(page, 'ArrowDown');
+    await createCalculationBlockBelow(page, lineText);
+
+    lineNo += 1;
+
+    const clCount = (await page.locator('code').all()).length;
+
+    await keyPress(page, 'Shift+Enter');
+    lineNo += 1;
+
+    await expect(page.locator('code')).toHaveCount(clCount + 1);
+  });
 });

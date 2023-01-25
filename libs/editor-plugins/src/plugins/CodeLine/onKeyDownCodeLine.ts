@@ -9,6 +9,10 @@ import {
 } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
+import {
+  focusAndSetSelection,
+  insertCodeLineBelow,
+} from '@decipad/editor-utils';
 import { filterStatementSeparator } from './filterStatementSeparator';
 
 const jumpToCodeLineEnd = (editor: MyEditor, nodeEntry: MyNodeEntry) => {
@@ -46,6 +50,15 @@ export const onKeyDownCodeLine =
 
     const codeLine = findCodeLineParentEntry(editor);
     if (!codeLine) return;
+    const path = codeLine[1];
+
+    if (event.shiftKey) {
+      event.preventDefault();
+      insertCodeLineBelow(editor, path, true);
+      const nextBlock = [path[0] + 1, 0];
+      focusAndSetSelection(editor, nextBlock);
+      return;
+    }
 
     const shouldSoftBreak = filterStatementSeparator(editor)(
       codeLine,
