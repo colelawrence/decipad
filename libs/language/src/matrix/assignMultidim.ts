@@ -38,7 +38,11 @@ export async function evaluateMultidimAssignment(
   dimension: ColumnLike
 ) {
   const [, matchers, assigneeExp] = node.args;
-  const [matchCount, matches] = await matchTargets(realm, matchers);
+  const [matchCount, matches] = await matchTargets(
+    realm.inferContext,
+    realm,
+    matchers
+  );
 
   const assignee = await evaluate(realm, assigneeExp);
 

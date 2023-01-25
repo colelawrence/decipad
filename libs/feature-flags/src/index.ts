@@ -34,7 +34,9 @@ const getItem =
 export const getLocalStorageOverrides = (): Flags => {
   try {
     const rawFlags = getItem(FEATURE_FLAGS_KEY);
-    if (rawFlags == null) return {};
+    if (rawFlags == null || rawFlags === false) {
+      return {};
+    }
     if (typeof rawFlags !== 'string') {
       console.error('Unknown value type for localStorage.deciFeatureFlags');
       throw new Error('Unknown value type for localStorage.deciFeatureFlags');

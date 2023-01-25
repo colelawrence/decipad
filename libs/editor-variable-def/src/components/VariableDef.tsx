@@ -22,6 +22,7 @@ import {
   useNodePath,
 } from '@decipad/editor-utils';
 import {
+  useComputer,
   useEditorStylesContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
@@ -51,6 +52,7 @@ export const VariableDef: PlateComponent = ({
   const [deleted, setDeleted] = useState(false);
 
   const editor = useTEditorRef();
+  const computer = useComputer();
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
 
@@ -196,6 +198,7 @@ export const VariableDef: PlateComponent = ({
 
   const { color: defaultColor } = useEditorStylesContext();
 
+  const inUse = computer.isInUse$.use(element.id);
   const turnIntoProps = useTurnIntoProps(element);
 
   if (deleted) {
@@ -207,7 +210,7 @@ export const VariableDef: PlateComponent = ({
     <DraggableBlock
       blockKind="interactive"
       element={element}
-      onDelete={onDelete}
+      onDelete={inUse ? 'name-used' : onDelete}
       accept={
         isHorizontal ? [ELEMENT_VARIABLE_DEF, ELEMENT_DISPLAY] : undefined
       }

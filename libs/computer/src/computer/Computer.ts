@@ -51,18 +51,14 @@ import type {
   UserParseError,
   ProgramBlock,
 } from '../types';
-import {
-  getDefinedSymbol,
-  getGoodBlocks,
-  getIdentifierString,
-  findSymbolsUsed,
-} from '../utils';
+import { getDefinedSymbol, getGoodBlocks, getIdentifierString } from '../utils';
 import { dropWhileComputing } from '../tools/dropWhileComputing';
 import { ComputationRealm } from './ComputationRealm';
 import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 import { deduplicateColumnResults } from './deduplicateColumnResults';
+import { isInUse } from '../isInUse/isInUse';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -203,20 +199,13 @@ export class Computer {
     return undefined;
   }
 
-  getIsVariableUsed$ = listenerHelper(
-    this.results,
-    (_, blockId: string, varName: string) =>
-      this.getIsVariableUsed(blockId, varName)
+  isInUse$ = listenerHelper(this.results, (_, ...blockIds: string[]) =>
+    this.isInUse(...blockIds)
   );
 
-  getIsVariableUsed(blockId: string, varName: string) {
-    const varNames = [getExprRef(blockId), varName];
-    return this.latestProgram.some((p) => {
-      const stat = p.block?.args.at(0);
-      return stat
-        ? findSymbolsUsed(stat).some((sym) => varNames.includes(sym))
-        : false;
-    });
+  /** Is this blockId used in some expression elsewhere? */
+  isInUse(...blockIds: string[]) {
+    return isInUse(this, this.latestProgram, ...blockIds);
   }
 
   getSymbolDefinedInBlock$ = listenerHelper(

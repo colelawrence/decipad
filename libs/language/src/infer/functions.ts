@@ -4,7 +4,7 @@ import { AST } from '..';
 import { callBuiltinFunctor } from '../builtins';
 import { build as t, InferError, Type } from '../type';
 import { getDefined, getIdentifierString, getOfType, zip } from '../utils';
-import { Context } from './context';
+import { Context, logRetrievedFunctionName } from './context';
 
 export function inferFunctionDefinition(
   ctx: Context,
@@ -59,6 +59,8 @@ export async function inferFunctionCall(ctx: Context, expr: AST.FunctionCall) {
   const givenArguments: Type[] = await pSeries(
     fArgs.map((arg) => () => inferExpression(ctx, arg))
   );
+
+  logRetrievedFunctionName(ctx, fName);
 
   if (fName === 'previous') {
     return givenArguments[0];

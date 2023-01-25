@@ -15,12 +15,14 @@ export function* findNames(
   for (const block of program) {
     for (const statement of block.args) {
       const symbol = getSymbolOrColumn(statement);
-      if (!symbol || seenSymbols.has(symbol) || ignoreNames.has(symbol)) {
-        continue;
-      }
-
       const type = nodeTypes.get(statement);
-      if (!type) {
+
+      if (
+        !symbol ||
+        seenSymbols.has(symbol) ||
+        ignoreNames.has(symbol) ||
+        !type
+      ) {
         continue;
       }
 

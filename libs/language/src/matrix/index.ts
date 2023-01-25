@@ -42,7 +42,7 @@ export async function evaluateMatrixRef(
 
   // variable[dimname == needle]
   const variable = evaluateVariable(realm, getIdentifierString(varName));
-  const [, matches] = await matchTargets(realm, matchers);
+  const [, matches] = await matchTargets(realm.inferContext, realm, matchers);
 
   // Let's run the matcher against every item in Column
   return ValueTransforms.applyFilterMap(variable, matches);
@@ -61,7 +61,7 @@ export async function inferMatrixAssign(
   const assignee = await inferExpression(context, assigneeExp);
 
   const matcher = getOnly(matchersExp.args);
-  const [dimName, needle] = readSimpleMatchers(matcher);
+  const [dimName, needle] = readSimpleMatchers(context, matcher);
 
   const dimension =
     needle == null
@@ -96,7 +96,7 @@ export async function evaluateMatrixAssign(
 
   const varName = getIdentifierString(varRef);
   const matcher = getOnly(matchers.args);
-  const [dimName, needle] = readSimpleMatchers(matcher);
+  const [dimName, needle] = readSimpleMatchers(realm.inferContext, matcher);
 
   const dimension =
     needle == null

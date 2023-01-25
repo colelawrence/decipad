@@ -33,7 +33,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
             return Type.either(
               isBoolColumn,
               columnTypes[0].sameAs(cond)
-            ).mapType(() => t.row(columnTypes, columnNames));
+            ).mapType(() => t.row(columnTypes, columnNames, table.indexName));
           });
 
       if (table.cellType != null) {

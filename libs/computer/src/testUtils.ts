@@ -6,9 +6,9 @@ import {
   validateResult,
 } from '@decipad/language';
 import DeciNumber from '@decipad/number';
-import { getOnly } from '@decipad/utils';
+import { getOnly, timeout } from '@decipad/utils';
 import { Result } from 'libs/language/src/result';
-import { AST, prettyPrintAST } from '.';
+import { AST, Computer, prettyPrintAST } from '.';
 import {
   IdentifiedBlock,
   IdentifiedError,
@@ -25,6 +25,35 @@ export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
     item.id = `block-${index}`;
     return item;
   });
+};
+
+export const testProgram = (
+  ...blocks: (AST.Block | string)[]
+): ProgramBlock[] => {
+  return blocks.map((item, index) => {
+    if (typeof item === 'string') {
+      const { solution: block, error } = parseBlock(item);
+      if (error) {
+        return {
+          type: 'identified-error',
+          id: `block-${index}`,
+          errorKind: 'parse-error',
+          source: item,
+          error,
+        };
+      }
+      item = block;
+    }
+    item.id = `block-${index}`;
+    return { type: 'identified-block', id: item.id, block: item };
+  });
+};
+
+export const computerWithBlocks = async (...blocks: (AST.Block | string)[]) => {
+  const computer = new Computer({ requestDebounceMs: 0 });
+  computer.pushCompute({ program: testProgram(...blocks) });
+  await timeout(0); // debounceMs
+  return computer;
 };
 
 export const program = testBlocks(

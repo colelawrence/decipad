@@ -4,7 +4,7 @@ import type { AST } from '..';
 import { Type, build as t, InferError } from '../type';
 import { getIdentifierString, walkAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
-import { Context, pushStackAndPrevious } from '../infer/context';
+import { Context, pushTableContext } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 
 export const inferTable = async (ctx: Context, table: AST.Table) => {
@@ -23,7 +23,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return ret;
   }
 
-  const tableType = pushStackAndPrevious(ctx, async () => {
+  const tableType = pushTableContext(ctx, tableName, async () => {
     ctx.stack.createNamespace(tableName, 'function');
 
     for (const tableItem of table.args.slice(1)) {
@@ -65,9 +65,16 @@ export async function inferTableColumn(
   const exp: AST.Expression =
     columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
-  const type = refersToOtherColumnsByName(exp, otherColumns)
-    ? await inferTableColumnPerCell(ctx, otherColumns, exp)
-    : coerceTableColumnTypeIndices(await inferExpression(ctx, exp), tableName);
+  const type = await pushTableContext(ctx, tableName, async () => {
+    if (refersToOtherColumnsByName(exp, otherColumns)) {
+      return inferTableColumnPerCell(ctx, otherColumns, exp);
+    } else {
+      return coerceTableColumnTypeIndices(
+        await inferExpression(ctx, exp),
+        tableName
+      );
+    }
+  });
 
   linkToAST(ctx, columnAst, type);
 
@@ -85,14 +92,12 @@ export async function inferTableColumnPerCell(
   otherColumns: Map<string, Type>,
   columnAst: AST.Expression
 ) {
-  return pushStackAndPrevious(ctx, async () => {
-    // Make other cells in this row available
-    for (const [otherColumnName, otherColumn] of otherColumns.entries()) {
-      ctx.stack.set(otherColumnName, otherColumn);
-    }
+  // Make other cells in this row available
+  for (const [otherColumnName, otherColumn] of otherColumns.entries()) {
+    ctx.stack.set(otherColumnName, otherColumn);
+  }
 
-    return inferExpression(ctx, columnAst);
-  });
+  return inferExpression(ctx, columnAst);
 }
 
 export function refersToOtherColumnsByName(

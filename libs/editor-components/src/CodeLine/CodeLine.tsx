@@ -127,12 +127,15 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     closeEditor(element.id, focusNumber);
   }, [focusNumber, closeEditor, element.id]);
 
+  const isNameUsed = computer.isInUse$.use(lineId);
+
   return (
     <DraggableBlock
       blockKind="codeLine"
       element={element}
       {...turnIntoProps}
       {...attributes}
+      onDelete={isNameUsed ? 'name-used' : undefined}
       id={lineId}
       hasPreviousSibling={siblingCodeLines?.hasPrevious}
     >

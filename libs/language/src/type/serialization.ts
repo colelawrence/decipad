@@ -32,6 +32,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
     } else if (type.rowCellTypes && type.rowCellNames) {
       return {
         kind: 'row',
+        rowIndexName: type.rowIndexName,
         rowCellTypes: type.rowCellTypes.map((t) => serializeType(t)),
         rowCellNames: type.rowCellNames,
       };
@@ -128,7 +129,8 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'row':
           return t.row(
             type.rowCellTypes.map((t) => deserializeType(t)),
-            type.rowCellNames
+            type.rowCellNames,
+            type.rowIndexName
           );
         case 'nothing':
           return t.nothing();

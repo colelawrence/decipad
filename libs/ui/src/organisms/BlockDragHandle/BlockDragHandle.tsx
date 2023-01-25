@@ -179,10 +179,10 @@ export const BlockDragHandle = ({
               Delete
             </MenuItem>
           ) : onDelete === 'name-used' ? (
-            <MenuItem icon={<Delete />} disabled onSelect={noop}>
+            <MenuItem icon={<Delete color="weak" />} disabled onSelect={noop}>
               <Tooltip
                 trigger={
-                  <div css={{ color: cssVar('weakTextColor') }}>Delete</div>
+                  <div css={{ color: cssVar('weakerTextColor') }}>Delete</div>
                 }
               >
                 Cannot delete because this name is used elsewhere

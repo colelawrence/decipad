@@ -1,4 +1,4 @@
-import { expect, Page, test } from '@playwright/test';
+import { Page, test } from '@playwright/test';
 import { createCalculationBlockBelow } from '../utils/page/Block';
 import {
   goToPlayground,
@@ -59,19 +59,5 @@ test.describe('Navigating with magic numbers', () => {
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
     await page.waitForSelector('span[title="35"] >> visible=false');
-  });
-
-  test('works even when the variable is re-declared', async () => {
-    await page.locator('[data-testid=drag-handle] >> nth=-2').click();
-    await page.locator(`:nth-match(:text("Delete"), 2)`).click();
-    await page.locator('[data-slate-editor] p').nth(1).click();
-    await keyPress(page, 'Enter');
-    await keyPress(page, '=');
-    await page.keyboard.type('Price = 42 gbp');
-    await keyPress(page, 'Enter');
-    await expect(page.locator('text=is £42')).toBeVisible();
-    const magic = await page.locator('span[title="42"]');
-    await magic.scrollIntoViewIfNeeded();
-    await magic.click();
   });
 });

@@ -69,10 +69,15 @@ export const table = ({
   });
 };
 
-export const row = (cells: Type[], cellNames: string[]) => {
+export const row = (
+  cells: Type[],
+  cellNames: string[],
+  rowIndexName: string | null = null
+) => {
   const rowT = produce(new Type(), (t) => {
     t.rowCellTypes = cells;
     t.rowCellNames = cellNames;
+    t.rowIndexName = rowIndexName;
   });
 
   const errored = rowT.rowCellTypes?.find((t) => t.errorCause != null);

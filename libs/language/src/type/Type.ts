@@ -55,6 +55,7 @@ export class Type {
   columnTypes: Type[] | null = null;
   columnNames: string[] | null = null;
 
+  rowIndexName: string | null = null;
   rowCellTypes: Type[] | null = null;
   rowCellNames: string[] | null = null;
 

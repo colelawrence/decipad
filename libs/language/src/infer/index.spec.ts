@@ -2,7 +2,13 @@ import { dequal } from 'dequal';
 
 import { ONE } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import { AST, inferBlock, parseExpressionOrThrow, Unit } from '..';
+import {
+  AST,
+  inferBlock,
+  parseBlockOrThrow,
+  parseExpressionOrThrow,
+  Unit,
+} from '..';
 import {
   objectToMap,
   objectToTableType,
@@ -528,4 +534,126 @@ it('expands directives such as `as`', async () => {
   expect(
     await inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))
   ).toMatchObject(t.number([degC]));
+});
+
+describe('name usage tracking', () => {
+  const track = async (source: string) => {
+    const ctx = makeContext();
+    ctx.usedNames = [];
+
+    const program = parseBlockOrThrow(source);
+    await inferBlock(program, ctx);
+
+    return ctx.usedNames.map(([ns, name]) => (ns ? `${ns}.${name}` : name));
+  };
+
+  it('tracks usage of names', async () => {
+    expect(
+      await track(`
+        Unused = 1
+        A = 123
+        A + 1
+      `)
+    ).toMatchInlineSnapshot(`
+      Array [
+        "A",
+      ]
+    `);
+  });
+
+  it('does not track usage if errors occurred', async () => {
+    expect(
+      await track(`
+        A = 1
+        A + "hi"
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+  });
+
+  it('tracks columns used indirectly', async () => {
+    expect(
+      await track(`
+        Table = {}
+        Table.Col1 = 1
+        lookup(Table, 1).Col1
+      `)
+    ).toMatchInlineSnapshot(`
+      Array [
+        "Table",
+        "Table.Col1",
+      ]
+    `);
+  });
+
+  it('understands tables', async () => {
+    expect(
+      await track(`
+        Table = {}
+        Table.Col1 = 1
+        Table.Col2 = Table.Col1 + 1
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+  });
+
+  it('does not mix up function args and local scopes with global scope', async () => {
+    expect(
+      await track(`
+        X = 1
+        F(X) = X + 1
+        F(1)
+      `)
+    ).toMatchInlineSnapshot(`
+      Array [
+        "F",
+      ]
+    `);
+
+    expect(
+      await track(`
+        X = 1
+        Table = {
+          X = 2
+          Xx = X + 1
+        }
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+  });
+
+  it('does not find self-references', async () => {
+    expect(
+      await track(`
+        A = A + 1
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+
+    expect(
+      await track(`
+        F(X) = F(X + 1)
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+
+    expect(
+      await track(`
+        Table = {
+          X = X + 1
+        }
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+
+    expect(
+      await track(`
+        Table = {
+          X = 1
+          Y = Table.X + 1
+        }
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+
+    expect(
+      await track(`
+        Table = {}
+        Table.X = Table.X
+      `)
+    ).toMatchInlineSnapshot(`Array []`);
+  });
 });

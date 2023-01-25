@@ -22,6 +22,7 @@ export type Table = {
 } & Common;
 export type Row = {
   readonly kind: 'row';
+  readonly rowIndexName: string | null;
   readonly rowCellTypes: SerializedType[];
   readonly rowCellNames: string[];
 } & Common;

@@ -26,6 +26,29 @@ it('can push and pop contexts', async () => {
   expect(stack.get('variable')).toEqual(null);
 });
 
+it('can check if names are global', async () => {
+  stack.set('variable', '1');
+  stack.set('globalVariable', '1');
+  stack.setNamespaced(['Table', 'Column'], '1', 'lexical');
+
+  await stack.withPush(async () => {
+    expect(stack.isNameGlobal(['', 'variable'])).toEqual(true);
+    expect(stack.isNameGlobal(['', 'globalVariable'])).toEqual(true);
+    expect(stack.isNameGlobal(['Table', 'Column'])).toEqual(true);
+    expect(stack.isNameGlobal(['', 'Table'])).toEqual(true);
+
+    stack.set('variable', '1');
+    stack.setNamespaced(['Table', 'Column'], '1', 'lexical');
+
+    expect(stack.isNameGlobal(['', 'variable'])).toEqual(false);
+    expect(stack.isNameGlobal(['Table', 'Column'])).toEqual(false);
+    expect(stack.isNameGlobal(['', 'Table'])).toEqual(false);
+  });
+
+  expect(stack.isNameGlobal(['', 'variable'])).toEqual(true);
+  expect(stack.isNameGlobal(['', 'Table'])).toEqual(true);
+});
+
 it('can delete variables', async () => {
   stack.set('someVar', '1');
   stack.delete('someVar');

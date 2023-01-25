@@ -10,6 +10,7 @@ import { useMemo, useState } from 'react';
 import {
   EditorTableContext,
   EditorTableContextValue,
+  useComputer,
   useEditorStylesContext,
 } from '@decipad/react-contexts';
 import {
@@ -27,6 +28,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   const [deleted, setDeleted] = useState(false);
 
   const editor = useTEditorRef();
+  const computer = useComputer();
 
   const {
     onDelete,
@@ -64,15 +66,21 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const { color: defaultColor } = useEditorStylesContext();
 
+  const isNameUsed = computer.isInUse$.use(element.id);
+
   return (
     (!deleted && (
       <DraggableBlock
         element={element}
         blockKind={wideTable ? 'editorWideTable' : 'editorTable'}
-        onDelete={() => {
-          setDeleted(true);
-          onDelete();
-        }}
+        onDelete={
+          isNameUsed
+            ? 'name-used'
+            : () => {
+                setDeleted(true);
+                onDelete();
+              }
+        }
         {...attributes}
         suppressContentEditableWarning
         id={blockId}

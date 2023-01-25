@@ -81,7 +81,7 @@ it('can stringify a type', () => {
       "kind": "table",
     }
   `);
-  expect(serializeType(t.row([t.number(), t.string()], ['Num', 'S'])))
+  expect(serializeType(t.row([t.number(), t.string()], ['Num', 'S'], 'Index')))
     .toMatchInlineSnapshot(`
       Object {
         "kind": "row",
@@ -98,6 +98,7 @@ it('can stringify a type', () => {
             "kind": "string",
           },
         ],
+        "rowIndexName": "Index",
       }
     `);
   expect(serializeType(t.date('month'))).toMatchInlineSnapshot(`
@@ -188,10 +189,12 @@ it('can parse a type', () => {
       kind: 'row',
       rowCellTypes: [unitlessNumber, unitlessNumber],
       rowCellNames: ['Hi', 'Hi2'],
+      rowIndexName: 'Index',
     })
   ).toMatchObject({
     rowCellNames: ['Hi', 'Hi2'],
     rowCellTypes: [{ type: 'number' }, { type: 'number' }],
+    rowIndexName: 'Index',
   });
 
   expect(

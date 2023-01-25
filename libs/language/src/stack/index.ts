@@ -86,6 +86,18 @@ export class Stack<T> {
     return !this.functionScope;
   }
 
+  isNameGlobal(
+    [ns, name]: readonly [string, string],
+    varGroup: VarGroup = 'lexical'
+  ) {
+    for (const scope of this.getVisibleScopes(varGroup)) {
+      if ((ns === '' && scope.has(name)) || scope.get(ns)?.has(name)) {
+        return scope === this.globalScope;
+      }
+    }
+    return false;
+  }
+
   get globalVariables(): ReadonlyMap<string, T> {
     const out = new Map<string, T>();
 

@@ -2,7 +2,7 @@ import pSeries from 'p-series';
 import { getOnly } from '@decipad/utils';
 import { AST, Column, Context } from '..';
 import { getCardinality } from '../dimtools/common';
-import { inferExpression } from '../infer';
+import { inferExpression, logRetrievedName } from '../infer';
 import { evaluate, Realm } from '../interpreter';
 import { compare } from '../value';
 import { build as t, Type, InferError } from '../type';
@@ -11,10 +11,12 @@ import type { NumberValue, Value } from '../value';
 import { evaluateVariable, getIndexName } from './getVariable';
 
 /** Read inside the square brackets */
-export const readSimpleMatchers = (matcher: AST.Expression) => {
+export const readSimpleMatchers = (ctx: Context, matcher: AST.Expression) => {
   if (matcher.type === 'ref') {
+    const dimensionName = getIdentifierString(matcher);
     // VariableName[DimensionName]
-    return [getIdentifierString(matcher), null] as const;
+    logRetrievedName(ctx, dimensionName);
+    return [dimensionName, null] as const;
   } else {
     // VariableName[DimensionName == "Dimension item"]
     const [dimNameRef, needleExp] = getOfType('function-call', matcher).args[1]
@@ -26,11 +28,12 @@ export const readSimpleMatchers = (matcher: AST.Expression) => {
 };
 
 export const matchTargets = async (
+  ctx: Context,
   realm: Realm,
   matchers: AST.MatrixMatchers
 ): Promise<[number, boolean[]]> => {
   const matcher = getOnly(matchers.args);
-  const [dimName, needleExp] = readSimpleMatchers(matcher);
+  const [dimName, needleExp] = readSimpleMatchers(ctx, matcher);
   const dimension = evaluateVariable(realm, dimName);
 
   if (needleExp == null) {
@@ -61,13 +64,14 @@ export const matchTargets = async (
 };
 
 export const inferMatchers = async (
-  context: Context,
+  ctx: Context,
   matchers: AST.MatrixMatchers
 ): Promise<Type> => {
   const matcher = getOnly(matchers.args);
-  const [dimName, needleExp] = readSimpleMatchers(matcher);
+  const [dimName, needleExp] = readSimpleMatchers(ctx, matcher);
 
-  const dimension = context.stack.get(dimName);
+  logRetrievedName(ctx, dimName);
+  const dimension = ctx.stack.get(dimName);
 
   if (!dimension) {
     return t.impossible(InferError.missingVariable(dimName));
@@ -84,7 +88,7 @@ export const inferMatchers = async (
     return dimension.reduced().isPrimitive();
   } else {
     // VariableName[DimensionName == "Needle"]
-    return (await inferExpression(context, needleExp))
+    return (await inferExpression(ctx, needleExp))
       .isPrimitive()
       .sameAs(dimension.reduced());
   }

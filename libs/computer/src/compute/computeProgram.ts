@@ -1,6 +1,7 @@
 import {
   AST,
   buildType as t,
+  Context,
   evaluateStatement,
   inferStatement,
   RuntimeError,
@@ -33,10 +34,9 @@ const computeStatement = async (
   }
 
   const statement = getStatement(program, blockId);
-  const valueType = await inferStatement(
+  const [valueType, usedNames] = await inferWhileRetrievingNames(
     realm.inferContext,
-    statement,
-    undefined
+    statement
   );
 
   if (!(valueType.errorCause != null && !valueType.functionness)) {
@@ -70,6 +70,7 @@ const computeStatement = async (
     get visibleVariables() {
       return getVisibleVariables(program, blockId, realm.inferContext);
     },
+    usedNames,
   };
   return [result, value];
 };
@@ -92,6 +93,7 @@ export const resultFromError = (
     type: 'computer-result',
     id: blockId,
     result: serializeResult(t.impossible(message), null),
+    usedNames: [],
   };
 };
 
@@ -134,4 +136,18 @@ export const computeProgram = async (
   }
   // same here:
   return resultsToCache.map((resultToCache) => resultToCache.result);
+};
+
+const inferWhileRetrievingNames = async (
+  ctx: Context,
+  statement: AST.Statement
+) => {
+  try {
+    ctx.usedNames = [];
+    const valueType = await inferStatement(ctx, statement);
+    const { usedNames } = ctx;
+    return [valueType, usedNames] as const;
+  } finally {
+    ctx.usedNames = undefined;
+  }
 };

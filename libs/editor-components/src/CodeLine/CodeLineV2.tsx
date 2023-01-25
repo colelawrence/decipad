@@ -148,10 +148,7 @@ export const CodeLineV2: PlateComponent = ({
     throw new Error('panic: expected only 2 children');
   }
 
-  const isNameUsed = computer.getIsVariableUsed$.use(
-    element.id,
-    getNodeString(element.children[0])
-  );
+  const isNameUsed = computer.isInUse$.use(element.id);
 
   return (
     <DraggableBlock
