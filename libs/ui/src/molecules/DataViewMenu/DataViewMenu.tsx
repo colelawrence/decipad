@@ -4,6 +4,7 @@ import { ReactElement, useState } from 'react';
 import { MenuItem } from '../../atoms';
 import { Add } from '../../icons';
 import { cssVar } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 import { MenuList } from '../MenuList/MenuList';
 
 // Data
@@ -53,7 +54,7 @@ export const DataViewMenu = ({
         <button
           aria-roledescription="Add column"
           onClick={() => handleMenuClick()}
-          css={menuButtonStyles}
+          css={[menuButtonStyles, hideOnPrint]}
         >
           <Add />
         </button>

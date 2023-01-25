@@ -1,7 +1,7 @@
-import { css } from '@emotion/react';
-import { useRef, useEffect, FC, useState } from 'react';
 import { identity, noop } from '@decipad/utils';
-import { p13Medium, p14Medium } from '../../primitives';
+import { css } from '@emotion/react';
+import { FC, useEffect, useRef, useState } from 'react';
+import { p13Medium, p16Medium } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
 const inputStyles = css({
@@ -24,7 +24,7 @@ const headerStyles = css(p13Medium, {
   padding: '6px 0',
 });
 
-const dataStyles = css(p14Medium, {
+const dataStyles = css(p16Medium, {
   padding: '8px 0',
 });
 

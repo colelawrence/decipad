@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Label } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 type StringSetter<T extends string | undefined = string> = (str: T) => void;
 
@@ -172,7 +173,7 @@ export const PlotParams = ({
   );
 
   return (
-    <div css={wrapperContainerStyles}>
+    <div css={[wrapperContainerStyles, hideOnPrint]}>
       <div css={containerStyles}>
         <SelectInput
           labelText="Table"

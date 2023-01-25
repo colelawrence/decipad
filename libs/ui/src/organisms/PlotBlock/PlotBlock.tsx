@@ -1,21 +1,23 @@
-import { FC } from 'react';
-import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
 import type { ComponentProps } from 'react';
+import { FC } from 'react';
 import { CellInput, ErrorMessage } from '../../atoms';
+import { Plot as PlotIcon } from '../../icons';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
-import { Plot as PlotIcon } from '../../icons';
 
 const plotIconSizeStyles = css({
   display: 'grid',
-  width: '28px',
-  height: '28px',
+  width: '22px',
+  height: '22px',
 });
 
 const plotTitleStyles = css({
   // TODO: title styles
   display: 'flex',
+  alignItems: 'center',
+  gap: 4,
 });
 
 const plotBlockStyles = css({
@@ -53,8 +55,7 @@ export const PlotBlock = ({
         <CellInput
           value={title}
           onChange={onTitleChange}
-          placeholder="Plot title"
-          variant="heading"
+          placeholder="Chart title"
         />
       </div>
       <>

@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode, useState } from 'react';
 import { Label } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const selectFontStyles = css(p12Medium);
 
@@ -74,7 +75,7 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
   onChangeVariableName,
 }) => {
   return (
-    <div contentEditable={false}>
+    <div css={hideOnPrint} contentEditable={false}>
       <SelectInput
         labelText={label}
         value={selectedVariableName}
