@@ -24,6 +24,7 @@ export * from './getVariableRanges';
 export * from './hasTarget';
 export * from './insertNodes';
 export * from './isDOMNode';
+export * from './isStructuredElement';
 export * from './isElementOfType';
 export * from './isPath';
 export * from './isPotentiallyWideElement';

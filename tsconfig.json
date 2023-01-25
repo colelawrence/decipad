@@ -78,6 +78,7 @@
       "@decipad/kafka-lite": ["libs/kafka-lite/src/index.ts"],
       "@decipad/language": ["libs/language/src/index.ts"],
       "@decipad/live-connect": ["libs/live-connect/src/index.ts"],
+      "@decipad/message-packer": ["libs/message-packer/src/index.ts"],
       "@decipad/meta": ["libs/meta/src/index.ts"],
       "@decipad/notebook": ["libs/notebook/src/index.ts"],
       "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
@@ -115,8 +116,7 @@
       "@decipad/y-dynamodb": ["libs/y-dynamodb/src/index.ts"],
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
-      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
-      "@decipad/message-packer": ["libs/message-packer/src/index.ts"]
+      "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"]
     }
   },
   "files": [],

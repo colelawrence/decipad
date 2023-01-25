@@ -33,6 +33,11 @@ const spacingStyles = css({
     paddingTop: 0,
   },
 
+  // Code Lines
+  '&[data-type=structured] + [data-type=structured]': {
+    paddingTop: 0,
+  },
+
   // Tables
   '&[data-type$=Table]': {
     paddingTop: '40px',

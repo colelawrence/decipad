@@ -7,6 +7,7 @@ import {
 import {
   assertElementType,
   useElementMutatorCallback,
+  isStructuredElement,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { StructuredInputLines, StructuredInputUnits } from '@decipad/ui';
@@ -51,8 +52,8 @@ export const StructuredInput: PlateComponent = ({
   return (
     <DraggableBlock
       element={element}
-      blockKind="codeLine"
-      hasPreviousSibling={prevElement?.[0].type === ELEMENT_STRUCTURED_IN}
+      blockKind="structured"
+      hasPreviousSibling={isStructuredElement(prevElement?.[0])}
       isCentered={true}
     >
       <StructuredInputLines>

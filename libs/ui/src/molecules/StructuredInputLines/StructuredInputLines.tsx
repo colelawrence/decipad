@@ -11,12 +11,10 @@ import {
 } from './styles';
 
 interface StructuredInputLinesProps {
-  hasNextSibling?: boolean;
   children?: ReactNode;
 }
 
 export const StructuredInputLines = ({
-  hasNextSibling,
   children,
 }: StructuredInputLinesProps): ReturnType<React.FC> => {
   return (
@@ -27,13 +25,9 @@ export const StructuredInputLines = ({
 
       <div css={childrenStyles}>{children}</div>
 
-      {!hasNextSibling && (
-        <>
-          <span css={fadeLineBotLeftStyles}></span>
-          <span css={borderBotStyles}></span>
-          <span css={fadeLineBotRightStyles}></span>
-        </>
-      )}
+      <span css={fadeLineBotLeftStyles}></span>
+      <span css={borderBotStyles}></span>
+      <span css={fadeLineBotRightStyles}></span>
     </div>
   );
 };

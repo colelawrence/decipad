@@ -8,6 +8,7 @@ import {
   ELEMENT_STRUCTURED_IN,
   PlateComponent,
   useTEditorRef,
+  MyElement,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -15,6 +16,7 @@ import {
   useEnsureValidVariableName,
   getAboveNodeSafe,
   useNodeText,
+  isStructuredElement,
 } from '@decipad/editor-utils';
 import {
   useComputer,
@@ -26,7 +28,7 @@ import {
   CodeVariableDefinition,
   Tooltip,
 } from '@decipad/ui';
-import { findNodePath, getNodeString } from '@udecode/plate';
+import { findNodePath, getNodeString, getPreviousNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useSelected } from 'slate-react';
 import {
@@ -42,7 +44,6 @@ import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
-import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useOnBlurNormalize } from '../hooks';
 import { useTurnIntoProps } from './useTurnIntoProps';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
@@ -57,8 +58,6 @@ export const CodeLineV2: PlateComponent = ({
   const selected = useSelected();
   const codeLineContent = useNodeText(element, { debounceTimeMs: 0 }) ?? '';
   const isEmpty = !codeLineContent.trim() && element.children.length <= 1;
-
-  const siblingCodeLines = useSiblingCodeLines(element);
 
   const editor = useTEditorRef();
 
@@ -150,15 +149,19 @@ export const CodeLineV2: PlateComponent = ({
 
   const isNameUsed = computer.isInUse$.use(element.id);
 
+  const path = findNodePath(editor, element);
+  const prevElement = getPreviousNode<MyElement>(editor, { at: path });
+
   return (
     <DraggableBlock
-      blockKind="codeLine"
+      blockKind="structured"
       element={element}
       {...turnIntoProps}
       {...attributes}
       onDelete={isNameUsed ? 'name-used' : undefined}
       id={lineId}
       isCentered={true}
+      hasPreviousSibling={isStructuredElement(prevElement?.[0])}
     >
       <CodeLineTeleport
         codeLine={teleport}
@@ -174,7 +177,6 @@ export const CodeLineV2: PlateComponent = ({
           onDragStartInlineResult={handleDragStartInlineResult}
           onDragStartCell={handleDragStartCell}
           onClickedResult={isReadOnly ? undefined : onClickedResult}
-          hasNextSibling={!teleport && siblingCodeLines?.hasNext}
           variableNameChild={
             <VarResultContext.Provider value={lineResult}>
               {childrenArray[0]}

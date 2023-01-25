@@ -25,7 +25,6 @@ interface CodeLineStructuredProps {
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onClickedResult?: (arg0: Result.Result) => void;
-  readonly hasNextSibling?: boolean;
   readonly variableNameChild: ReactNode;
   readonly codeChild: ReactNode;
 }
@@ -39,7 +38,6 @@ export const CodeLineStructured = ({
   onDragStartInlineResult,
   onDragStartCell,
   onClickedResult,
-  hasNextSibling,
   variableNameChild,
   codeChild,
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
@@ -57,7 +55,7 @@ export const CodeLineStructured = ({
   );
 
   return (
-    <StructuredInputLines hasNextSibling={hasNextSibling}>
+    <StructuredInputLines>
       <div
         css={[codeLineStyles, highlight && highlightedLineStyles]}
         spellCheck={false}

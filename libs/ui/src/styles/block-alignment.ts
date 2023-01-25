@@ -60,3 +60,5 @@ export const columns: StyleData = {
   spacingBottom: '0',
 };
 export const draw: StyleData = {};
+
+export const structured: StyleData = {};
