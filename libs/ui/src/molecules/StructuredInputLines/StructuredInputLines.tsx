@@ -18,16 +18,16 @@ export const StructuredInputLines = ({
   children,
 }: StructuredInputLinesProps): ReturnType<React.FC> => {
   return (
-    <div contentEditable={false} css={structuredInputContainerStyles}>
-      <span css={fadeLineTopLeftStyles}></span>
-      <span css={borderTopStyles}></span>
-      <span css={fadeLineTopRightStyles}></span>
+    <div css={structuredInputContainerStyles}>
+      <span css={fadeLineTopLeftStyles} contentEditable={false}></span>
+      <span css={borderTopStyles} contentEditable={false}></span>
+      <span css={fadeLineTopRightStyles} contentEditable={false}></span>
 
       <div css={childrenStyles}>{children}</div>
 
-      <span css={fadeLineBotLeftStyles}></span>
-      <span css={borderBotStyles}></span>
-      <span css={fadeLineBotRightStyles}></span>
+      <span css={fadeLineBotLeftStyles} contentEditable={false}></span>
+      <span css={borderBotStyles} contentEditable={false}></span>
+      <span css={fadeLineBotRightStyles} contentEditable={false}></span>
     </div>
   );
 };
