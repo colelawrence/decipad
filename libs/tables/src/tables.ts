@@ -19,6 +19,7 @@ import { unique } from '@decipad/utils';
 import assert from 'assert';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { timestamp } from './timestamp';
+import { debug } from './debug';
 
 interface ArcServices {
   tables: Record<TableName, string>;
@@ -112,7 +113,7 @@ function observe(
 }
 
 function randomPublish(eventProbability: number): boolean {
-  return Math.random() >= eventProbability;
+  return Math.random() <= eventProbability;
 }
 
 function putReplacer<T extends ConcreteRecord>(
@@ -122,6 +123,12 @@ function putReplacer<T extends ConcreteRecord>(
   userId?: string
 ): (doc: T, eventProbability?: boolean | number) => Promise<void> {
   return async function replacePut(args: T, eventProbability = false) {
+    debug(
+      'tables.%s.put(%j, eventProbability=%j)',
+      tableName,
+      args,
+      eventProbability
+    );
     const ret = await method.call(table, args);
 
     const publishEvent =
@@ -130,7 +137,7 @@ function putReplacer<T extends ConcreteRecord>(
         : randomPublish(eventProbability);
 
     if (publishEvent) {
-      await arc.queues.publish({
+      const event = {
         name: `${tableName}-changes`,
         payload: {
           table: tableName,
@@ -138,7 +145,11 @@ function putReplacer<T extends ConcreteRecord>(
           args,
           user_id: userId,
         },
-      });
+      };
+      debug('tables.%s: publishing event `%j`', event);
+      await arc.queues.publish(event);
+    } else {
+      debug('tables.%s: NOT publishing event', tableName);
     }
 
     return ret;

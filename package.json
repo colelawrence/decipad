@@ -313,6 +313,7 @@
     "css-vars-ponyfill": "2.4.8",
     "csstype": "3.1.1",
     "data-urls": "4.0.0",
+    "debug": "^4.3.4",
     "diff": "5.1.0",
     "esbuild": "0.17.2",
     "eslint": "8.32.0",

@@ -21,7 +21,9 @@ async function handleDocSyncCreate({ id }: DocSyncUpdateRecord) {
   const doc = new YDoc();
   const provider = new DynamodbPersistence(id, doc);
   try {
+    console.log('started compaction');
     await provider.compact();
+    console.log('finished compaction');
   } catch (err) {
     console.error(err);
   }
