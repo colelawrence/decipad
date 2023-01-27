@@ -119,7 +119,7 @@
     "@urql/exchange-graphcache": "5.0.1",
     "@xzar90/react-router-hash-link": "6.0.4",
     "analytics-node": "6.2.0",
-    "apache-arrow": "10.0.0",
+    "apache-arrow": "11.0.0",
     "apollo-server-lambda": "3.11.1",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1227.0",
