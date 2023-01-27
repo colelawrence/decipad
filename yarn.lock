@@ -9391,10 +9391,10 @@
   resolved "https://registry.yarnpkg.com/@types/analytics-node/-/analytics-node-3.1.9.tgz#1b71e485658dc5501f72a35fdcf30b857a90db9c"
   integrity sha512-C7L7/Dd/CmBST7AvgoCnf4yI9h6W5aYfCOcfUZS5GHlXDQjnXLVOUDpTdwTIZjW4lKECeil6+G+Ul6Xzwv/P0g==
 
-"@types/apache-arrow@npm:@apache-arrow/ts@10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@apache-arrow/ts/-/ts-10.0.0.tgz#2d37b74ea6a2c432dbc3239fe3f416ba8a366cf7"
-  integrity sha512-I4zr+G0DQne5Dc3mmJR52mqj+s33lUJU+08N/5WIeCDk9CixWIB0WTaNOQpsLCF4HGRAq+9m6s1NgBn/XE/9yQ==
+"@types/apache-arrow@npm:@apache-arrow/ts@11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@apache-arrow/ts/-/ts-11.0.0.tgz#00ae7045de63480395dcd417fc1812601e8dc3b4"
+  integrity sha512-BAbf76tIebFmSYCtocXdpKG5WpBpKYZtOCPvvhHrQE7VaqaaTecdkD73+NNivkwnfdIUawxDJgGKblJzy/3geg==
   dependencies:
     "@types/command-line-args" "5.2.0"
     "@types/command-line-usage" "5.0.2"

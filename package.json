@@ -106,7 +106,7 @@
     "@storybook/addon-essentials": "6.5.15",
     "@storybook/core-server": "6.5.15",
     "@storybook/react": "6.5.15",
-    "@types/apache-arrow": "npm:@apache-arrow/ts@10.0.0",
+    "@types/apache-arrow": "npm:@apache-arrow/ts@11.0.0",
     "@types/lodash": "4.14.186",
     "@types/md5": "^2.3.2",
     "@types/react-gravatar": "^2.6.10",
