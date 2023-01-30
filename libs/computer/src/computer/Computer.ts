@@ -195,6 +195,8 @@ export class Computer {
           }
         }
       }
+    } else if (parsed?.type === 'identified-error') {
+      return parsed.definesVariable;
     }
     return undefined;
   }
