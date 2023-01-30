@@ -83,6 +83,21 @@ it('turns cells into AST nodes', async () => {
   ).toMatchInlineSnapshot(`"0.3"`);
 });
 
+it('parses implicit and non implicit percentages the same', async () => {
+  expect(
+    await testParseCell(
+      { kind: 'number', unit: null, numberFormat: 'percentage' },
+      '30%'
+    )
+  ).toMatchInlineSnapshot(`"0.3"`);
+  expect(
+    await testParseCell(
+      { kind: 'number', unit: null, numberFormat: 'percentage' },
+      '30'
+    )
+  ).toMatchInlineSnapshot(`"0.3"`);
+});
+
 it.each([
   ['abc', { kind: 'number', unit: null }],
   ['3a', { kind: 'number', unit: null }],

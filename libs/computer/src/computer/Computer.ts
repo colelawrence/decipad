@@ -639,7 +639,15 @@ export class Computer {
     return proposal;
   }
 
+  /**
+   * Parses a unit from text.
+   * NOTE: Don't use with '%', percentages are NOT units. I will crash
+   */
   async getUnitFromText(text: string): Promise<Unit[] | null> {
+    if (text.trim() === '%') {
+      throw new Error('% is not a unit!');
+    }
+
     const ast = parseExpression(text).solution;
     if (!ast) {
       return null;

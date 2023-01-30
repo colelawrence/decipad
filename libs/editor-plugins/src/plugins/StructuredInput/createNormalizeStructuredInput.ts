@@ -7,7 +7,14 @@ import {
   StructuredInputElementChildren,
   StructuredVarnameElement,
 } from '@decipad/editor-types';
-import { isElement, nanoid, removeNodes, unwrapNodes } from '@udecode/plate';
+import {
+  getNodeString,
+  insertText,
+  isElement,
+  nanoid,
+  removeNodes,
+  unwrapNodes,
+} from '@udecode/plate';
 import { insertNodes } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
@@ -61,6 +68,16 @@ export const createNormalizeStructuredInput = (
             },
             { at: [...path, 0] }
           );
+          return true;
+        }
+
+        const [, value] = node.children;
+
+        // Only numbers should be allowed
+        const text = getNodeString(value).replaceAll(/[^0-9]/g, '');
+
+        if (text !== getNodeString(value)) {
+          insertText(editor, text, { at: [...path, 1] });
           return true;
         }
 

@@ -4,6 +4,7 @@ import {
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
 } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import { normalizeEditor } from '@udecode/plate';
 import {
   createStructuredInputPlugin,
@@ -302,5 +303,22 @@ describe('Normalizing structured inputs', () => {
     editor.children[1].children = [];
     normalizeEditor(editor, { force: true });
     expect(editor.children[1].children).toHaveLength(2);
+  });
+
+  it('doesnt do anything if structured input only has numbers', () => {
+    const structuredInput = editor.children[1];
+    assertElementType(structuredInput, ELEMENT_STRUCTURED_IN);
+    structuredInput.children[1].children[0].text = '123';
+
+    normalizeEditor(editor, { force: true });
+    expect(structuredInput.children[1].children[0].text).toBe('123');
+  });
+
+  it('removes non numeric characters', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text = 'iamnota1number2sds';
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children[1].children[0].text).toBe('12');
   });
 });

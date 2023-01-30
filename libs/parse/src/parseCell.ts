@@ -44,6 +44,23 @@ const parsing = async (
   if (!parseResult.solution || !isExpression(parseResult.solution)) {
     return new Error('is not a valid expression');
   }
+
+  /** This comes from the need to get a percentage number.
+   * If we have `10` as a percentage,previously we had `1000%`.
+   * However,we would prefer to have 10%
+   * Hence the division
+   */
+  if (
+    parseResult.solution.type === 'literal' &&
+    type.kind === 'number' &&
+    type.numberFormat === 'percentage' &&
+    parseResult.solution.args[0] === 'number' &&
+    parseResult.solution.args[2] !== 'percentage'
+  ) {
+    parseResult.solution.args[2] = 'percentage';
+    parseResult.solution.args[1] = parseResult.solution.args[1].div(N('100'));
+  }
+
   let result = await computer.expressionResult(parseResult.solution);
   if (result.type.kind === 'type-error') {
     return new Error(formatError(defaultLocale, result.type.errorCause));
@@ -57,6 +74,7 @@ const parsing = async (
       value: text,
     };
   }
+
   try {
     return afterParse(result);
   } catch (err) {
