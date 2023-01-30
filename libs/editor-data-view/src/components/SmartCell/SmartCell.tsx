@@ -123,6 +123,6 @@ export const SmartCell: FC<SmartProps> = ({
       alignRight={alignRight}
       global={global}
       onDragStart={onDragStart}
-    ></UISmartCell>
+    />
   );
 };

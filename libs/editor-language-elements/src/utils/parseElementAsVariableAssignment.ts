@@ -12,7 +12,9 @@ export function parseElementAsVariableAssignment(
 ): Program {
   const { solution: expression, error } =
     typeof source === 'string'
-      ? parseExpression(source, allowedNodeTypes)
+      ? source.trim() === ''
+        ? parseExpression('0')
+        : parseExpression(source, allowedNodeTypes)
       : { solution: source, error: undefined };
 
   if (error) {
