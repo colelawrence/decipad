@@ -39,9 +39,7 @@ export const createDataViewPlugin = createPluginFactory({
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_DATA_VIEW',
       elementTypes: [ELEMENT_DATA_VIEW],
-      interceptor: () => {
-        return true;
-      },
+      interceptor: () => true,
     })(),
   ],
 });

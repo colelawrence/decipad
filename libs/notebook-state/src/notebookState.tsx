@@ -41,8 +41,6 @@ const createStore = () =>
         return;
       }
 
-      console.log('initEditor', docsync);
-
       // verify that if we have a matching connected docsync instance
       const { editor: oldEditor, syncClientState } = get();
       if (oldEditor) {

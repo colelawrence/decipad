@@ -38,7 +38,9 @@ export const useAvailableColumns = (blockId: string): Column[] | undefined => {
       )
       .subscribe(setAvailableColumns);
 
-    return () => sub.unsubscribe();
+    return () => {
+      sub.unsubscribe();
+    };
   }, [blockId, computer.getAllColumns$]);
 
   return availableColumns;

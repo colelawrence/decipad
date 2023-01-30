@@ -20,7 +20,7 @@ import {
   isCellAlignRight,
 } from '@decipad/editor-table';
 import { useComputer } from '@decipad/react-contexts';
-import { useDataView, useDragColumn, useDropColumn } from '../../hooks';
+import { useDataViewActions, useDragColumn, useDropColumn } from '../../hooks';
 
 export const DataViewColumnHeader: PlateComponent = ({
   attributes,
@@ -65,7 +65,7 @@ export const DataViewColumnHeader: PlateComponent = ({
     'aggregation'
   );
 
-  const { onDeleteColumn } = useDataView({ editor, element: dataView });
+  const { onDeleteColumn } = useDataViewActions(editor, dataView);
 
   const handleColumnDelete = useCallback(() => {
     if (path) {
