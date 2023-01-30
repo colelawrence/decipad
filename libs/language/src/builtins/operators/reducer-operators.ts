@@ -8,7 +8,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 1,
     argCardinalities: [2],
     isReducer: true,
-    fn: ([nums]: number[][]) => nums.reduce((a, b) => a + b, 0),
+    fn: ([nums]: DeciNumber[][]) => nums.reduce((a, b) => a.add(b), ZERO),
     functionSignature: 'column<number:R> -> R',
   },
   sum: {
