@@ -10,6 +10,7 @@ import {
   wiggle,
 } from '../../primitives';
 import { table } from '../../styles';
+import { resultBubbleStyles } from '../../styles/results';
 import { CodeResult } from '../CodeResult/CodeResult';
 
 const resultWrapperStyles = css({
@@ -23,7 +24,7 @@ const grabbingStyles = css({
   cursor: 'grabbing',
 });
 
-const inlineResultStyles = css({
+const inlineResultStyles = css(resultBubbleStyles, {
   ':empty': { display: 'none' },
   ':hover': {
     animation: `${antiwiggle} 0.5s ease-in-out`,
@@ -40,9 +41,6 @@ const inlineResultStyles = css({
 
   padding: '2px 8px',
 
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
-  borderRadius: '8px',
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
 

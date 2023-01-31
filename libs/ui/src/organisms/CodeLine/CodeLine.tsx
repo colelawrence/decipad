@@ -16,6 +16,7 @@ import {
   wiggle,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
+import { resultBubbleStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
@@ -117,7 +118,7 @@ const placeholderStyles = css(codeStyles, {
   },
 });
 
-const inlineResultStyles = css(p14Regular, {
+const inlineResultStyles = css(p14Regular, resultBubbleStyles, {
   ':empty': { display: 'none' },
 
   overflow: 'hidden',
@@ -126,9 +127,6 @@ const inlineResultStyles = css(p14Regular, {
 
   padding: '2px 8px',
 
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
-  borderRadius: '8px',
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
   [smallScreenQuery]: {

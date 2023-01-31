@@ -10,4 +10,5 @@ export * as floating from './floating';
 export * as highlight from './highlight';
 export * as menu from './menu';
 export * as notebookList from './notebook-list';
+export * as results from './results';
 export * as table from './table';

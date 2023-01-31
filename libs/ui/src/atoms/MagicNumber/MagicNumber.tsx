@@ -1,14 +1,15 @@
-import { FC, MouseEvent, ReactNode, useCallback } from 'react';
 import { Result } from '@decipad/computer';
+import { AnyElement } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { AnyElement } from '@decipad/editor-types';
+import { FC, MouseEvent, ReactNode, useCallback } from 'react';
 import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
-import { Tooltip } from '../Tooltip/Tooltip';
+import { resultBubbleStyles } from '../../styles/results';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 type MagicNumberProps = {
   readonly tempId?: string;
@@ -26,9 +27,13 @@ const wrapperStyles = css({
   cursor: 'pointer',
 });
 
-const highlightStyles = css({
+const highlightStyles = css(resultBubbleStyles, {
+  display: 'inline-block',
   color: cssVar('magicNumberTextColor'),
-  borderBottom: `1px dashed ${cssVar('magicNumberTextColor')}`,
+  padding: 2,
+  '@media print': {
+    color: 'unset',
+  },
 });
 
 interface ExprRefLinkProps {
@@ -116,7 +121,7 @@ export const MagicNumber = ({
       >
         <IntrospectMagicNumber expression={expression} readOnly={readOnly}>
           {hasResult ? (
-            <span css={!readOnly && highlightStyles}>
+            <span css={highlightStyles}>
               <CodeResult
                 tooltip={false}
                 variant="inline"
