@@ -92,6 +92,9 @@ export const graphCacheConfig: GraphCacheConfig = {
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
+      movePad: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Pad', id: args.id });
+      },
       addSectionToWorkspace: (result, args, cache) => {
         addSectionToItsWorkspace(
           cache,

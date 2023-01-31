@@ -1,0 +1,6 @@
+mutation MoveNotebook($id: ID!, $workspaceId: ID!) {
+  movePad(id: $id, workspaceId: $workspaceId) {
+    ...EditorNotebook
+    ...WorkspaceNotebook
+  }
+}

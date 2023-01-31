@@ -39,6 +39,7 @@ import {
   useDuplicateNotebookMutation,
   useGetWorkspacesQuery,
   useImportNotebookMutation,
+  useMoveNotebookMutation,
   useRenameWorkspaceMutation,
   useSetUsernameMutation,
   useUnarchiveNotebookMutation,
@@ -112,6 +113,7 @@ const Workspace: FC = () => {
   const deleteNotebook = useUpdateNotebookArchiveMutation()[1]; // soft delete
   const finalDeleteNotebook = useDeleteNotebookMutation()[1];
   const duplicateNotebook = useDuplicateNotebookMutation()[1];
+  const moveNotebook = useMoveNotebookMutation()[1];
   const importNotebook = useImportNotebookMutation()[1];
   const createWorkspace = useCreateWorkspaceMutation()[1];
   const renameWorkspace = useRenameWorkspaceMutation()[1];
@@ -348,20 +350,10 @@ const Workspace: FC = () => {
           })
         }
         onMoveToWorkspace={(id, targetWorkspaceId) => {
-          duplicateNotebook({
-            id,
-            targetWorkspace: targetWorkspaceId,
-          })
-            .catch((err) => {
-              console.error('Failed to duplicate notebook. Error:', err);
-              toast('Failed to move notebook to workspace.', 'error');
-            })
-            .then(() => {
-              finalDeleteNotebook({ id }).catch((err) => {
-                console.error('Failed to delete notebook. Error:', err);
-                toast('Failed to move notebook to workspace.', 'error');
-              });
-            });
+          moveNotebook({ id, workspaceId: targetWorkspaceId }).catch((err) => {
+            console.error('Failed to move notebook. Error:', err);
+            toast('Failed to move notebook to workspace.', 'error');
+          });
         }}
         onChangeStatus={(id, st: TColorStatus) => {
           if (TColorKeys.includes(st)) {

@@ -107,6 +107,7 @@ export type Mutation = {
   fulfilGoal: Scalars['Boolean'];
   importPad: Pad;
   inviteUserToRole: Array<RoleInvitation>;
+  movePad: Pad;
   pretendUser?: Maybe<Scalars['Boolean']>;
   removeAttachmentFromPad?: Maybe<Scalars['Boolean']>;
   removeExternalDataSource?: Maybe<Scalars['Boolean']>;
@@ -218,6 +219,12 @@ export type MutationInviteUserToRoleArgs = {
   permission: PermissionType;
   roleId: Scalars['ID'];
   userId: Scalars['ID'];
+};
+
+
+export type MutationMovePadArgs = {
+  id: Scalars['ID'];
+  workspaceId: Scalars['ID'];
 };
 
 
@@ -833,6 +840,14 @@ export type ImportNotebookMutationVariables = Exact<{
 
 export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
+export type MoveNotebookMutationVariables = Exact<{
+  id: Scalars['ID'];
+  workspaceId: Scalars['ID'];
+}>;
+
+
+export type MoveNotebookMutation = { __typename?: 'Mutation', movePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
+
 export type RenameNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -1184,6 +1199,19 @@ ${WorkspaceNotebookFragmentDoc}`;
 
 export function useImportNotebookMutation() {
   return Urql.useMutation<ImportNotebookMutation, ImportNotebookMutationVariables>(ImportNotebookDocument);
+};
+export const MoveNotebookDocument = gql`
+    mutation MoveNotebook($id: ID!, $workspaceId: ID!) {
+  movePad(id: $id, workspaceId: $workspaceId) {
+    ...EditorNotebook
+    ...WorkspaceNotebook
+  }
+}
+    ${EditorNotebookFragmentDoc}
+${WorkspaceNotebookFragmentDoc}`;
+
+export function useMoveNotebookMutation() {
+  return Urql.useMutation<MoveNotebookMutation, MoveNotebookMutationVariables>(MoveNotebookDocument);
 };
 export const RenameNotebookDocument = gql`
     mutation RenameNotebook($id: ID!, $name: String!) {
@@ -1679,6 +1707,7 @@ export type GraphCacheOptimisticUpdaters = {
   fulfilGoal?: GraphCacheOptimisticMutationResolver<MutationFulfilGoalArgs, Scalars['Boolean']>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
   inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
+  movePad?: GraphCacheOptimisticMutationResolver<MutationMovePadArgs, WithTypename<Pad>>,
   pretendUser?: GraphCacheOptimisticMutationResolver<MutationPretendUserArgs, Maybe<Scalars['Boolean']>>,
   removeAttachmentFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveAttachmentFromPadArgs, Maybe<Scalars['Boolean']>>,
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
@@ -1728,6 +1757,7 @@ export type GraphCacheUpdaters = {
     fulfilGoal?: GraphCacheUpdateResolver<{ fulfilGoal: Scalars['Boolean'] }, MutationFulfilGoalArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
     inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
+    movePad?: GraphCacheUpdateResolver<{ movePad: WithTypename<Pad> }, MutationMovePadArgs>,
     pretendUser?: GraphCacheUpdateResolver<{ pretendUser: Maybe<Scalars['Boolean']> }, MutationPretendUserArgs>,
     removeAttachmentFromPad?: GraphCacheUpdateResolver<{ removeAttachmentFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveAttachmentFromPadArgs>,
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,

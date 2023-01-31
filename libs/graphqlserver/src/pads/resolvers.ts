@@ -31,6 +31,7 @@ import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
 import { duplicatePad } from './duplicatePad';
 import { importPad } from './importPad';
 import { setPadPublic } from './setPadPublic';
+import { movePad } from './movePad';
 
 const padResource = Resource({
   resourceTypeName: 'pads',
@@ -141,6 +142,7 @@ const resolvers = {
     setPadPublic,
     importPad,
     createOrUpdateSnapshot,
+    movePad,
   },
 
   Subscription: {
