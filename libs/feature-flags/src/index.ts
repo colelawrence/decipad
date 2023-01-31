@@ -47,16 +47,16 @@ export const getLocalStorageOverrides = (): Flags => {
   }
 };
 
-const queryStringFlags: Flag[] = [];
-
 export const getQueryStringOverrides = (): Flags => {
   const flags: Flags = {};
   const location = 'location' in globalThis ? globalThis.location : undefined;
   const search = location?.search ?? '';
   const params = new URLSearchParams(search);
 
-  for (const key of queryStringFlags) {
-    flags[key] = params.get(key) === 'true';
+  for (const key of availableFlags) {
+    if (params.has(key)) {
+      flags[key] = params.get(key) === 'true';
+    }
   }
 
   return flags;

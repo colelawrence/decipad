@@ -42,6 +42,7 @@ export const SmartRef: FC<SmartRefProps> = ({
     <span
       css={smartRefWrapperStyles(!!hasPreviousContent, !!hasNextContent)}
       contentEditable={false}
+      data-testid="smart-ref"
     >
       {symbolName && (
         <CodeVariable

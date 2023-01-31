@@ -58,7 +58,11 @@ export const CodeLineStructured = ({
         <code contentEditable={true} css={variableNameContainerStyles}>
           {variableNameChild}
         </code>
-        <code contentEditable={true} css={codeContainerStyles}>
+        <code
+          data-testid="codeline-code"
+          contentEditable={true}
+          css={codeContainerStyles}
+        >
           {codeChild}
         </code>
         <div

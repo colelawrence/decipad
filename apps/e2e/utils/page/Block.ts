@@ -107,7 +107,7 @@ export async function createCodeLineV2Below(
   );
 
   // Click the varname (we default to the code itself)
-  await page.click(
+  await page.dblclick(
     '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
   );
 
@@ -134,6 +134,10 @@ export function getCodeV2VarNames(page: Page) {
   );
 }
 
+export function getCodeV2CodeContainers(page: Page) {
+  return getCodeLineBlockLocator(page).locator('[data-testid=codeline-code]');
+}
+
 export function getResults(page: Page) {
   return getCodeLineBlockLocator(page).locator('output');
 }
@@ -145,11 +149,8 @@ export async function getCodeLineContent(page: Page, n: number) {
   return cleanText(lineContent);
 }
 
-export async function getCodeLineV2VarName(page: Page, n: number) {
-  const lineContent = (
-    await getCodeV2VarNames(page).nth(n).allTextContents()
-  ).join();
-  return cleanText(lineContent);
+export function getCodeLineV2VarName(page: Page, n: number) {
+  return getCodeV2VarNames(page).nth(n);
 }
 
 export async function getResult(page: Page, n: number) {
