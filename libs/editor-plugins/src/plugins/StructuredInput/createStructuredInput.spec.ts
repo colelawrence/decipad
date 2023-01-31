@@ -306,12 +306,11 @@ describe('Normalizing structured inputs', () => {
   });
 
   it('doesnt do anything if structured input only has numbers', () => {
-    const structuredInput = editor.children[1];
-    assertElementType(structuredInput, ELEMENT_STRUCTURED_IN);
-    structuredInput.children[1].children[0].text = '123';
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text = '123';
 
     normalizeEditor(editor, { force: true });
-    expect(structuredInput.children[1].children[0].text).toBe('123');
+    expect(editor.children[1].children[1].children[0].text).toBe('123');
   });
 
   it('removes non numeric characters', () => {
@@ -320,5 +319,203 @@ describe('Normalizing structured inputs', () => {
 
     normalizeEditor(editor, { force: true });
     expect(editor.children[1].children[1].children[0].text).toBe('12');
+  });
+
+  it('Allows for negative numbers', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text = '-10';
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children[1].children[0].text).toBe('-10');
+  });
+
+  it('Allows for decimal numbers', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text = '-10.2342321';
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children[1].children[0].text).toBe('-10.2342321');
+  });
+
+  it('Removes leading dashes', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text = '-----10';
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children[1].children[0].text).toBe('-10');
+  });
+
+  it('Removes extra dots', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text = '----10..321';
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children[1].children[0].text).toBe('-10.321');
+  });
+
+  it('Formats completely bogus number', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children[0].text =
+      '-dsanujdsayu321.sda23.....;./.,2';
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1].children[1].children[0].text).toBe('-321.232');
+  });
+});
+
+describe('Normalize structured input child', () => {
+  const editor = createTPlateEditor({
+    plugins: [createStructuredInputPlugin(getAvailableIdentifier)],
+  });
+  editor.children = [
+    getStructuredIn('a', '100') as never,
+    getStructuredIn('longname', '50') as never,
+  ];
+  editor.selection = {
+    anchor: { path: [0, 0, 0], offset: 0 },
+    focus: { path: [0, 0, 0], offset: 0 },
+  };
+  it('does nothing to valid structured inputs', () => {
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "a",
+                },
+              ],
+              "type": "structured_varname",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "100",
+                },
+              ],
+              "type": "structured_input_child",
+            },
+          ],
+          "type": "structured_input",
+          "unit": undefined,
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "longname",
+                },
+              ],
+              "type": "structured_varname",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "50",
+                },
+              ],
+              "type": "structured_input_child",
+            },
+          ],
+          "type": "structured_input",
+          "unit": undefined,
+        },
+      ]
+    `);
+  });
+
+  it('Removes extra children', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children.push({ text: 'hello' });
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[0]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "text": "a",
+              },
+            ],
+            "type": "structured_varname",
+          },
+          Object {
+            "children": Array [
+              Object {
+                "text": "100",
+              },
+            ],
+            "type": "structured_input_child",
+          },
+        ],
+        "type": "structured_input",
+        "unit": undefined,
+      }
+    `);
+  });
+
+  it('adds child element if none if present', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children = [] as any;
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "text": "longname",
+              },
+            ],
+            "type": "structured_varname",
+          },
+          Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "type": "structured_input_child",
+          },
+        ],
+        "type": "structured_input",
+        "unit": undefined,
+      }
+    `);
+  });
+
+  it('Replaces erronous child', () => {
+    assertElementType(editor.children[1], ELEMENT_STRUCTURED_IN);
+    editor.children[1].children[1].children = [
+      { type: 'not a leaf', children: [{ text: 'text' }] },
+    ] as any;
+    normalizeEditor(editor, { force: true });
+    expect(editor.children[1]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "children": Array [
+              Object {
+                "text": "longname",
+              },
+            ],
+            "type": "structured_varname",
+          },
+          Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "type": "structured_input_child",
+          },
+        ],
+        "type": "structured_input",
+        "unit": undefined,
+      }
+    `);
   });
 });

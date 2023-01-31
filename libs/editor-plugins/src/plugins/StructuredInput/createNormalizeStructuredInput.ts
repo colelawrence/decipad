@@ -74,10 +74,32 @@ export const createNormalizeStructuredInput = (
         const [, value] = node.children;
 
         // Only numbers should be allowed
-        const text = getNodeString(value).replaceAll(/[^0-9]/g, '');
-
+        const text = getNodeString(value).replaceAll(/[^0-9.-]/g, '');
         if (text !== getNodeString(value)) {
           insertText(editor, text, { at: [...path, 1] });
+          return true;
+        }
+
+        // Then check for - and . (Both characters only being allowed once)
+        const lastIndexDash = text.lastIndexOf('-');
+        if (lastIndexDash > 0) {
+          insertText(
+            editor,
+            text.substring(0, lastIndexDash) +
+              text.substring(lastIndexDash + 1),
+            { at: [...path, 1] }
+          );
+          return true;
+        }
+
+        // There can only be 1 `.` in the number
+        const lastIndexDot = text.lastIndexOf('.');
+        if (text.lastIndexOf('.') !== text.indexOf('.')) {
+          insertText(
+            editor,
+            text.substring(0, lastIndexDot) + text.substring(lastIndexDot + 1),
+            { at: [...path, 1] }
+          );
           return true;
         }
 

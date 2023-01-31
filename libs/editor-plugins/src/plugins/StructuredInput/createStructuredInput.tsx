@@ -20,6 +20,7 @@ import { KeyboardEvent } from 'react';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
 import { createNormalizeStructuredInput } from './createNormalizeStructuredInput';
+import { createNormalizeStructuredInputChild } from './createNormalizeStructuredInputChild';
 
 type Shortcuts =
   | 'move-right'
@@ -74,6 +75,7 @@ export const createStructuredInputPlugin = (
     },
     onStructuredInputKeyDownPlugin(getAvailableIdentifier),
     createNormalizeStructuredInput(getAvailableIdentifier),
+    createNormalizeStructuredInputChild(),
   ],
 });
 
