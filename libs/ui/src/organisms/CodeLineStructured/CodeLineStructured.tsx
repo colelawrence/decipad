@@ -12,16 +12,13 @@ import {
   grabbingStyles,
   highlightedLineStyles,
   inlineStyles,
-  placeholderStyles,
   variableNameContainerStyles,
 } from './styles';
 
 interface CodeLineStructuredProps {
   readonly highlight?: boolean;
-  readonly placeholder?: string;
   readonly result?: Result.Result;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
-  readonly isEmpty?: boolean;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onClickedResult?: (arg0: Result.Result) => void;
@@ -32,9 +29,7 @@ interface CodeLineStructuredProps {
 export const CodeLineStructured = ({
   highlight = false,
   result,
-  placeholder,
   syntaxError,
-  isEmpty = false,
   onDragStartInlineResult,
   onDragStartCell,
   onClickedResult,
@@ -66,31 +61,24 @@ export const CodeLineStructured = ({
         <code contentEditable={true} css={codeContainerStyles}>
           {codeChild}
         </code>
-        {placeholder && isEmpty && (
-          <span css={placeholderStyles} contentEditable={false}>
-            {placeholder}
-          </span>
-        )}
-        {!isEmpty && (
-          <div
-            css={[
-              inlineStyles,
-              (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
-                canGrabStyles,
-              grabbing && grabbingStyles,
-            ]}
-            contentEditable={false}
-            draggable
-            onDragStart={(e) => {
-              onDragStartInlineResult?.(e);
-              setGrabbing(true);
-            }}
-            onDragEnd={() => setGrabbing(false)}
-          >
-            {inline}
-          </div>
-        )}
-        {!isEmpty && expanded}
+        <div
+          css={[
+            inlineStyles,
+            (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
+              canGrabStyles,
+            grabbing && grabbingStyles,
+          ]}
+          contentEditable={false}
+          draggable
+          onDragStart={(e) => {
+            onDragStartInlineResult?.(e);
+            setGrabbing(true);
+          }}
+          onDragEnd={() => setGrabbing(false)}
+        >
+          {inline}
+        </div>
+        {expanded}
       </div>
     </StructuredInputLines>
   );

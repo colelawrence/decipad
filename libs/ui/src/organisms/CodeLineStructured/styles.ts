@@ -64,16 +64,9 @@ export const codeContainerStyles = css(code, {
   lineHeight,
   paddingLeft: '8px',
   borderLeft: `1px solid ${cssVar('borderColor')}`,
-});
-
-// TODO never used I think
-export const placeholderStyles = css(codeContainerStyles, {
-  opacity: 0.4,
-  pointerEvents: 'none',
 
   [smallScreenQuery]: {
-    position: 'absolute',
-    left: '12px',
+    borderLeft: 'none',
   },
 });
 

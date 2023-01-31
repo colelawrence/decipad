@@ -57,7 +57,6 @@ export const CodeLineV2: PlateComponent = ({
 
   const selected = useSelected();
   const codeLineContent = useNodeText(element, { debounceTimeMs: 0 }) ?? '';
-  const isEmpty = !codeLineContent.trim() && element.children.length <= 1;
 
   const editor = useTEditorRef();
 
@@ -171,9 +170,7 @@ export const CodeLineV2: PlateComponent = ({
         <CodeLineStructured
           highlight={selected}
           result={lineResult?.result}
-          placeholder="Distance = 60 km/h * Time"
           syntaxError={syntaxError}
-          isEmpty={isEmpty}
           onDragStartInlineResult={handleDragStartInlineResult}
           onDragStartCell={handleDragStartCell}
           onClickedResult={isReadOnly ? undefined : onClickedResult}

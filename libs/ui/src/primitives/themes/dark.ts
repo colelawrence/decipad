@@ -45,9 +45,9 @@ import {
   white,
   yellow200,
   yellow300,
-  yellow400,
   yellow500,
   yellow700,
+  yellow800,
 } from '../color';
 import { cssVar, CssVariables } from '../var';
 
@@ -143,7 +143,7 @@ export const theme: CssVariables = {
   currentTextColor: cssVar('normalTextColor'),
 
   structuredCalculationSimpleColor: brand800.hex,
-  structuredCalculationVariableColor: yellow400.hex,
+  structuredCalculationVariableColor: yellow800.hex,
 
   variableHighlightColor: teal800.hex,
   variableHighlightTextColor: dark100.hex,

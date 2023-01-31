@@ -58,6 +58,4 @@ export const WithPlaceholder: Story<
 WithPlaceholder.args = {
   variableNameChild: 'Distance',
   codeChild: '',
-  isEmpty: true,
-  placeholder: 'Distance = 60km/h * Time',
 };
