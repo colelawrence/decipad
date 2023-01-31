@@ -30,7 +30,10 @@ export const StructuredInputChildren: PlateComponent = ({
   const parent = getAboveNodeSafe(editor, { at: path });
 
   return (
-    <div css={structuredInputChildrenStyles}>
+    <div
+      css={structuredInputChildrenStyles}
+      data-testid="structured-input-value"
+    >
       <span
         {...attributes}
         id={element.id}

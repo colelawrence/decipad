@@ -120,6 +120,30 @@ export async function createCodeLineV2Below(
   await page.waitForSelector('[data-slate-editor] code >> nth=-1');
 }
 
+export async function createStructuredInputBelow(
+  page: Page,
+  variableName: string,
+  value: string
+) {
+  await page.click('[data-slate-editor] p >> nth=-1');
+
+  await page
+    .locator('p:has-text("Type / for new blocks = to start calculation")')
+    .click();
+
+  await page.keyboard.type('/structured');
+  await page.locator('[data-testid="menu-item-structured_in"]').click();
+  await page.dblclick(
+    '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
+  );
+  await page.keyboard.type(variableName);
+  await page.keyboard.press('ArrowRight');
+  await page.dblclick(
+    '[data-slate-editor] [data-testid="structured-input-value"] >> nth=-1'
+  );
+  await page.keyboard.type(value);
+}
+
 export function getCodeLineBlockLocator(page: Page) {
   return page.locator('//*[@data-slate-editor][//code]') as Locator;
 }
