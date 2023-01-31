@@ -5,6 +5,7 @@ import {
   createToggleBelow,
 } from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
+import { Timeouts } from '../utils/src';
 
 test.describe('Turn Into', () => {
   test.describe.configure({ mode: 'serial' });
@@ -46,6 +47,9 @@ test.describe('Turn Into', () => {
   test('Converts a Widget into a Code Line', async () => {
     await keyPress(page, 'ArrowDown');
     await createToggleBelow(page, 'Input2');
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
 
     await expect(await page.getByText('Off', { exact: true })).toBeVisible();
 
