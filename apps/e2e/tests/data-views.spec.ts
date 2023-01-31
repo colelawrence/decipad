@@ -1,5 +1,5 @@
-import { BrowserContext, Page, test, expect } from '@playwright/test';
-import { setUp, focusOnBody, keyPress } from '../utils/page/Editor';
+import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { focusOnBody, keyPress, setUp } from '../utils/page/Editor';
 import { createTable, writeInTable } from '../utils/page/Table';
 
 test.describe('Data views', () => {
@@ -54,7 +54,6 @@ test.describe('Data views', () => {
 
   test('selects columns on data view', async () => {
     const addButton = page.locator('button[aria-roledescription="Add column"]');
-    // await page.pause();
     await addButton.click();
     await page
       .locator('role=menuitem[name="Property1"] >> text=Property1')
@@ -94,13 +93,13 @@ test.describe('Data views', () => {
 
   test('set aggregations', async () => {
     await page.click(
-      'role=cell[name="Property2 Caret down"] >> role=button[name="Caret down"]'
+      'role=cell[name="Drag Handle Property2 Caret down"] >> role=button[name="Caret down"]'
     );
     await page.click('text=Aggregate');
     await page.click('text=Sum');
 
     await page.click(
-      'role=cell[name="Property3 Caret down"] >> role=button[name="Caret down"]'
+      'role=cell[name="Drag Handle Property3 Caret down"] >> role=button[name="Caret down"]'
     );
     await page.click('text=Aggregate');
     await page.click('text=Average');

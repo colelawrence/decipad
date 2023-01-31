@@ -1,19 +1,43 @@
-import { FC, forwardRef, ReactNode, useCallback, useState } from 'react';
 import type { SerializedType } from '@decipad/computer';
 import { PlateComponentAttributes } from '@decipad/editor-types';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { css } from '@emotion/react';
+import { capitalize } from 'lodash';
+import { FC, forwardRef, ReactNode, useCallback, useState } from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
   ConnectDropTarget,
 } from 'react-dnd';
-import { css } from '@emotion/react';
-import { capitalize } from 'lodash';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
-import { MenuList } from '../../molecules';
-import { Caret, Code, Trash } from '../../icons';
-import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { useMergedRef } from '../../hooks';
+import { Caret, Code, DragHandle as DragHandleIcon, Trash } from '../../icons';
+import { MenuList } from '../../molecules';
 import { cssVar } from '../../primitives';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
+
+const dragHandleStyles = css({
+  width: '8px',
+  height: 9,
+  transform: 'translateY(50%)',
+  display: 'block',
+  margin: 'auto 0',
+  cursor: 'grab',
+  pointerEvents: 'all',
+  marginTop: 0,
+  mixBlendMode: 'luminosity',
+  'svg > rect': {
+    fill: 'transparent',
+  },
+});
+
+const DragHandle = () => {
+  return (
+    <button css={dragHandleStyles} contentEditable={false}>
+      <DragHandleIcon />
+    </button>
+  );
+};
 
 export interface DataViewColumnHeaderProps {
   name: string;
@@ -65,11 +89,6 @@ const dataViewColumnHeaderSelectWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
-});
-
-const dataViewColumnHeaderNameStyles = css({
-  cursor: 'grab',
-  fontWeight: 'bold',
 });
 
 const alignRightStyles = css({
@@ -125,6 +144,8 @@ export const DataViewColumnHeader = forwardRef<
     },
   });
 
+  const readOnly = useIsEditorReadOnly();
+
   return (
     <th
       {...attributes}
@@ -145,48 +166,51 @@ export const DataViewColumnHeader = forwardRef<
         ]}
         contentEditable={false}
       >
-        <span css={dataViewColumnHeaderNameStyles}>{name}</span>
+        {!readOnly && <DragHandle />}
+        <span>{name}</span>
 
-        <MenuList
-          root
-          dropdown
-          open={menuListOpened}
-          onChangeOpen={setMenuListOpened}
-          trigger={
-            <button css={triggerStyles} onClick={onTriggerClick}>
-              <Caret color="normal" variant="down" />
-            </button>
-          }
-        >
-          <MenuItem onSelect={() => onDeleteColumn()} icon={<Trash />}>
-            Remove column
-          </MenuItem>
-          {availableAggregations.length > 0 ? (
-            <MenuList
-              itemTrigger={
-                <TriggerMenuItem icon={<Code />}>Aggregate</TriggerMenuItem>
-              }
-            >
-              <MenuItem
-                onSelect={() => onAggregationChange(undefined)}
-                selected={selectedAggregation === undefined}
+        {!readOnly && (
+          <MenuList
+            root
+            dropdown
+            open={menuListOpened}
+            onChangeOpen={setMenuListOpened}
+            trigger={
+              <button css={triggerStyles} onClick={onTriggerClick}>
+                <Caret color="normal" variant="down" />
+              </button>
+            }
+          >
+            <MenuItem onSelect={() => onDeleteColumn()} icon={<Trash />}>
+              Remove column
+            </MenuItem>
+            {availableAggregations.length > 0 ? (
+              <MenuList
+                itemTrigger={
+                  <TriggerMenuItem icon={<Code />}>Aggregate</TriggerMenuItem>
+                }
               >
-                None
-              </MenuItem>
-              {availableAggregations.map((availableAggregation, index) => {
-                return (
-                  <MenuItem
-                    onSelect={() => onAggregationChange(availableAggregation)}
-                    selected={availableAggregation === selectedAggregation}
-                    key={index}
-                  >
-                    {capitalize(availableAggregation)}
-                  </MenuItem>
-                );
-              })}
-            </MenuList>
-          ) : null}
-        </MenuList>
+                <MenuItem
+                  onSelect={() => onAggregationChange(undefined)}
+                  selected={selectedAggregation === undefined}
+                >
+                  None
+                </MenuItem>
+                {availableAggregations.map((availableAggregation, index) => {
+                  return (
+                    <MenuItem
+                      onSelect={() => onAggregationChange(availableAggregation)}
+                      selected={availableAggregation === selectedAggregation}
+                      key={index}
+                    >
+                      {capitalize(availableAggregation)}
+                    </MenuItem>
+                  );
+                })}
+              </MenuList>
+            ) : null}
+          </MenuList>
+        )}
 
         <div contentEditable={false}>{children}</div>
       </div>

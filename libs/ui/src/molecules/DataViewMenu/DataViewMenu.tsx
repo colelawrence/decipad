@@ -1,4 +1,5 @@
 import { SerializedType } from '@decipad/language';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactElement, useState } from 'react';
 import { MenuItem } from '../../atoms';
@@ -47,18 +48,20 @@ export const DataViewMenu = ({
   const handleMenuClick = () => {
     setMenuIsOpen(!menuIsOpen);
   };
+  const readOnly = useIsEditorReadOnly();
 
   return (
-    <div css={{}}>
-      {menuIsOpen ? null : (
-        <button
-          aria-roledescription="Add column"
-          onClick={() => handleMenuClick()}
-          css={[menuButtonStyles, hideOnPrint]}
-        >
-          <Add />
-        </button>
-      )}
+    <div>
+      {!readOnly &&
+        (menuIsOpen ? null : (
+          <button
+            aria-roledescription="Add column"
+            onClick={() => handleMenuClick()}
+            css={[menuButtonStyles, hideOnPrint]}
+          >
+            <Add />
+          </button>
+        ))}
       <div css={dataViewMenuWrapperStyles}>
         <MenuList
           root

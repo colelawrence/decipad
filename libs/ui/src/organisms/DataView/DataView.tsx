@@ -1,4 +1,5 @@
 import { AutocompleteName } from '@decipad/computer';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
@@ -151,6 +152,8 @@ export const DataView: FC<DataViewProps> = ({
   children,
 }): ReturnType<FC> => {
   const [caption, thead, addNewColumnComponent] = Children.toArray(children);
+  const readOnly = useIsEditorReadOnly();
+
   return (
     <TableStyleContext.Provider
       value={{
@@ -164,12 +167,14 @@ export const DataView: FC<DataViewProps> = ({
       <div css={dataViewWrapperStyles} aria-roledescription="data view">
         <div css={dataViewControlsStyles}>
           <div css={tableCaptionWrapperStyles}>{caption}</div>
-          <VariableNameSelector
-            label="Source"
-            variableNames={availableVariableNames}
-            selectedVariableName={variableName}
-            onChangeVariableName={onChangeVariableName}
-          />
+          {!readOnly && (
+            <VariableNameSelector
+              label="Source"
+              variableNames={availableVariableNames}
+              selectedVariableName={variableName}
+              onChangeVariableName={onChangeVariableName}
+            />
+          )}
         </div>
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />

@@ -1,10 +1,11 @@
-import { DragEvent, FC, useCallback } from 'react';
-import { css } from '@emotion/react';
 import type { Result } from '@decipad/computer';
-import { noop } from '@decipad/utils';
 import { AnyElement } from '@decipad/editor-types';
-import { cssVar, p12Medium, p14Medium } from '../../primitives';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { DragEvent, FC, useCallback } from 'react';
 import { CodeResult } from '../../organisms';
+import { cssVar, p12Medium, p14Medium } from '../../primitives';
 
 const smartCellStyles = css(p14Medium, {
   position: 'relative',
@@ -71,12 +72,13 @@ export function SmartCell({
 }: SmartRowProps): ReturnType<FC> {
   const onMouseOver = useCallback(() => onHover(true), [onHover]);
   const onMouseOut = useCallback(() => onHover(false), [onHover]);
+  const readOnly = useIsEditorReadOnly();
 
   return (
     <td
       css={[
         smartCellStyles,
-        onDragStart && draggableStyles,
+        !readOnly && onDragStart && draggableStyles,
         hover && hoverCellStyles,
         alignRight && alignRightStyles,
         global && globalStyles,
