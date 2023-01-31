@@ -28,13 +28,13 @@ export const loadPlayground = () =>
 const Playground = lazy(loadPlayground);
 
 export const App: FC = () => {
-  const { show, showNewMessages } = useIntercom();
+  const { show, showNewMessage } = useIntercom();
   const session = useSession();
 
   const showFeedback = useCallback(() => {
     show();
-    showNewMessages();
-  }, [show, showNewMessages]);
+    showNewMessage();
+  }, [show, showNewMessage]);
 
   return (
     <>

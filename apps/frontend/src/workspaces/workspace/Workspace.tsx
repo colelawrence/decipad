@@ -76,12 +76,12 @@ const EditUserModal = lazy(loadEditUserModal);
 loadTopbar().then(loadNotebookList).then(loadSidebar);
 
 const Workspace: FC = () => {
-  const { show, showNewMessages } = useIntercom();
+  const { show, showNewMessage } = useIntercom();
 
   const showFeedback = useCallback(() => {
     show();
-    showNewMessages();
-  }, [show, showNewMessages]);
+    showNewMessage();
+  }, [show, showNewMessage]);
 
   const { workspaceId } = useRouteParams(workspaces({}).workspace);
   const currentWorkspaceRoute = workspaces({}).workspace({
