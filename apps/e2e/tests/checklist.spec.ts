@@ -23,10 +23,8 @@ test.describe('Starter list', () => {
   test('checks off the create calculation goal', async () => {
     await page.waitForSelector('text=👋 Welcome to Decipad!');
     await focusOnBody(page);
-    // not using createCodeLineBelow() because this is most likely how the user
-    // would create a calculation line.
     await page.keyboard.type('/');
-    await page.locator('text=Calculations').click();
+    await page.locator('[data-testid=menu-item-calculation-block]').click();
 
     await page.waitForSelector('text=Create your first calculation');
     const goal = await page

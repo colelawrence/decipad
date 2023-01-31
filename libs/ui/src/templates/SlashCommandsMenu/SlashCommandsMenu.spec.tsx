@@ -104,7 +104,7 @@ describe('search', () => {
   it('affects arrow key selection', async () => {
     const handleExecute = jest.fn();
     const { getAllByRole } = render(
-      <SlashCommandsMenu search="advanced formulas" onExecute={handleExecute} />
+      <SlashCommandsMenu search="advanced formula" onExecute={handleExecute} />
     );
 
     expect(getAllByRole('menuitem')).toHaveLength(1);

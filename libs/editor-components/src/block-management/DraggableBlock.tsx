@@ -1,3 +1,4 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   alwaysWritableElementTypes,
   ELEMENT_PARAGRAPH,
@@ -8,17 +9,31 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
+  clone,
+  insertNodes,
+  requirePathBelowBlock,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import {
   dndPreviewActions,
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import {
+  DraggableBlock as UIDraggableBlock,
+  EditorBlock,
+  useMergedRef,
+} from '@decipad/ui';
+import {
+  ELEMENT_CODE_LINE,
   findNodePath,
   focusEditor,
   getEndPoint,
   getNextNode,
   getNode,
   getNodeString,
+  getPreviousNode,
   getStartPoint,
   hasNode,
   insertElements,
@@ -27,6 +42,9 @@ import {
   select,
   setSelection,
 } from '@udecode/plate';
+import copyToClipboard from 'copy-to-clipboard';
+import { noop } from 'lodash';
+import { nanoid } from 'nanoid';
 import {
   ComponentProps,
   forwardRef,
@@ -37,26 +55,10 @@ import {
   useRef,
   useState,
 } from 'react';
-import copyToClipboard from 'copy-to-clipboard';
-import {
-  clone,
-  insertNodes,
-  requirePathBelowBlock,
-  useElementMutatorCallback,
-} from '@decipad/editor-utils';
 import { useSelected } from 'slate-react';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import {
-  DraggableBlock as UIDraggableBlock,
-  EditorBlock,
-  useMergedRef,
-} from '@decipad/ui';
-import { nanoid } from 'nanoid';
-import { noop } from 'lodash';
-import { ClientEventsContext } from '@decipad/client-events';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
-import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
+import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -182,11 +184,18 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const onAdd = useCallback(() => {
       const path = findNodePath(editor, element);
       if (path === undefined) return;
+      const entry = getPreviousNode(editor, {
+        at: path,
+      });
+      const [prevNode] = entry || [];
       insertNodes(
         editor,
         {
           id: nanoid(),
-          type: ELEMENT_PARAGRAPH,
+          type:
+            prevNode && (prevNode as MyElement).type === ELEMENT_CODE_LINE
+              ? ELEMENT_CODE_LINE
+              : ELEMENT_PARAGRAPH,
           children: [{ text: '' }],
         },
         {

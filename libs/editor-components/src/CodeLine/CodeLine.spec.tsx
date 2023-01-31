@@ -1,10 +1,10 @@
-import { render, screen } from '@testing-library/react';
-import { Plate } from '@udecode/plate';
 import { CodeLine } from '@decipad/editor-components';
 import { CodeLineElement, ELEMENT_CODE_LINE } from '@decipad/editor-types';
+import { render, screen } from '@testing-library/react';
+import { Plate } from '@udecode/plate';
 import React, { createRef, PropsWithChildren } from 'react';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 describe('Placeholders', () => {
   // @ts-ignore
@@ -16,15 +16,6 @@ describe('Placeholders', () => {
     'data-slate-node': 'element' as 'element',
     ref: createRef(),
   };
-
-  it('should render', () => {
-    const { getByText } = render(
-      <TestProvider>
-        <CodeLine element={dumbElement} attributes={attributes} />
-      </TestProvider>
-    );
-    expect(getByText((text) => text.startsWith('Distance = '))).toBeVisible();
-  });
 
   it('should hide if there are content', () => {
     render(

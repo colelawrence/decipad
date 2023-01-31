@@ -9,6 +9,7 @@ import {
 import {
   assertElementType,
   insertNodes,
+  placeholderForCalculationLine,
   useNodeText,
 } from '@decipad/editor-utils';
 import {
@@ -19,16 +20,16 @@ import {
 import { CodeLine as UICodeLine } from '@decipad/ui';
 import { findNodePath } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { useCallback, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
-import { useCallback, useMemo } from 'react';
 import { DraggableBlock } from '../block-management';
+import { useOnBlurNormalize } from '../hooks';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
-import { useOnBlurNormalize } from '../hooks';
 import { useTurnIntoProps } from './useTurnIntoProps';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
@@ -128,6 +129,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   }, [focusNumber, closeEditor, element.id]);
 
   const isNameUsed = computer.isInUse$.use(lineId);
+  const [aPlaceholder] = useState(placeholderForCalculationLine());
 
   return (
     <DraggableBlock
@@ -147,7 +149,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
         <UICodeLine
           highlight={selected}
           result={lineResult}
-          placeholder="Distance = 60 km/h * Time"
+          placeholder={aPlaceholder}
           syntaxError={syntaxError}
           isEmpty={isEmpty}
           onDragStartInlineResult={handleDragStartInlineResult}

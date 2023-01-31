@@ -13,7 +13,7 @@ export async function createInputBelow(
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.click('text=InputInputA value that others can interact with');
+  await page.click('[data-testid="menu-item-input"]');
 
   await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
   await keyPress(page, 'Backspace');

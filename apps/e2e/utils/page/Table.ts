@@ -8,7 +8,7 @@ export async function createTable(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.click('text=tableslashTableA table to structure your data');
+  await page.click('[data-testid="menu-item-table"]');
   await page.waitForSelector('[data-slate-editor] table');
 }
 

@@ -3,20 +3,20 @@ import {
   DisplayElement,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_DISPLAY,
   ELEMENT_STRUCTURED_IN,
+  ELEMENT_STRUCTURED_VARNAME,
+  MyElement,
   PlateComponent,
   useTEditorRef,
-  MyElement,
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  insertNodes,
-  useEnsureValidVariableName,
   getAboveNodeSafe,
-  useNodeText,
+  insertNodes,
   isStructuredElement,
+  useEnsureValidVariableName,
+  useNodeText,
 } from '@decipad/editor-utils';
 import {
   useComputer,
@@ -30,7 +30,6 @@ import {
 } from '@decipad/ui';
 import { findNodePath, getNodeString, getPreviousNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { useSelected } from 'slate-react';
 import {
   Children,
   createContext,
@@ -38,15 +37,16 @@ import {
   useContext,
   useMemo,
 } from 'react';
+import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
+import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
+import { useOnBlurNormalize } from '../hooks';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
-import { useOnBlurNormalize } from '../hooks';
 import { useTurnIntoProps } from './useTurnIntoProps';
-import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 
 export const CodeLineV2: PlateComponent = ({
   attributes,
