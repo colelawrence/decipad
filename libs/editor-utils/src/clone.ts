@@ -29,12 +29,13 @@ export const clone = (computer: Computer): Clone => {
       return cloneDeep(el);
     }
     if (isElement(el)) {
-      return {
-        ...deduplicateVarName(deduplicateId(cloneDeep(el))),
-        children: Array.isArray(el.children)
-          ? el.children.map(cloneEl)
-          : el.children,
-      };
+      const elm = deduplicateVarName(deduplicateId(cloneDeep(el)));
+      if (Array.isArray(elm.children)) {
+        elm.children = (elm.children as typeof el.children).map(
+          cloneEl
+        ) as typeof el.children;
+      }
+      return elm;
     }
 
     return el;

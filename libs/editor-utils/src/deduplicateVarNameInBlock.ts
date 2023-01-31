@@ -5,63 +5,62 @@ import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_STRUCTURED_IN,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
+  StructuredInputElement,
   TableElement,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate';
-import produce from 'immer';
 
 function deduplicateVarNameInDef(
   computer: Computer,
-  el: VariableDefinitionElement
-): VariableDefinitionElement {
-  return produce(el, (e) => {
-    e.children[0].children[0].text = computer.getAvailableIdentifier(
-      `${getNodeString(e.children[0])}Copy`,
-      1
-    );
-  });
+  e: VariableDefinitionElement
+) {
+  e.children[0].children[0].text = computer.getAvailableIdentifier(
+    `${getNodeString(e.children[0])}Copy`,
+    1
+  );
 }
 
-function deduplicateAssignmentVarName(
-  computer: Computer,
-  el: CodeLineElement
-): CodeLineElement {
-  const code = getNodeString(el);
+function deduplicateAssignmentVarName(computer: Computer, e: CodeLineElement) {
+  const code = getNodeString(e);
   const parsed = parseStatement(code);
-  return produce(el, (e) => {
-    if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
-      const varName = parsed.solution.args[0].args[0];
-      const newVarName = computer.getAvailableIdentifier(`${varName}Copy`, 1);
-      e.children[0].text = code.replace(varName, newVarName);
-    }
-  });
+  if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
+    const varName = parsed.solution.args[0].args[0];
+    const newVarName = computer.getAvailableIdentifier(`${varName}Copy`, 1);
+    e.children[0].text = code.replace(varName, newVarName);
+  }
 }
 
 function deduplicateVarNameInCodeLineV2(
   computer: Computer,
-  el: CodeLineV2Element
-): CodeLineV2Element {
-  return produce(el, (e) => {
-    e.children[0].children[0].text = computer.getAvailableIdentifier(
-      `${getNodeString(e.children[0])}Copy`,
-      1
-    );
-  });
+  e: CodeLineV2Element
+) {
+  e.children[0].children[0].text = computer.getAvailableIdentifier(
+    `${getNodeString(e.children[0])}Copy`,
+    1
+  );
 }
 
-function deduplicateTableVarName(
+function deduplicateVarNameInStructuredIn(
   computer: Computer,
-  el: TableElement
-): TableElement {
-  const captionEl = el.children[0].children[0];
+  e: StructuredInputElement
+) {
+  e.children[0].children[0].text = computer.getAvailableIdentifier(
+    `${getNodeString(e.children[0])}Copy`,
+    1
+  );
+}
+
+function deduplicateTableVarName(computer: Computer, e: TableElement) {
+  const captionEl = e.children[0].children[0];
   const varName = getNodeString(captionEl);
-  return produce(el, (e) => {
-    e.children[0].children[0].children[0].text =
-      computer.getAvailableIdentifier(`${varName}Copy`, 1);
-  });
+  e.children[0].children[0].children[0].text = computer.getAvailableIdentifier(
+    `${varName}Copy`,
+    1
+  );
 }
 
 export const deduplicateVarNameInBlock =
@@ -69,13 +68,20 @@ export const deduplicateVarNameInBlock =
   <T extends AnyElement>(el: T): T => {
     switch (el.type) {
       case ELEMENT_VARIABLE_DEF:
-        return deduplicateVarNameInDef(computer, el) as T;
+        deduplicateVarNameInDef(computer, el);
+        break;
       case ELEMENT_CODE_LINE:
-        return deduplicateAssignmentVarName(computer, el) as T;
+        deduplicateAssignmentVarName(computer, el);
+        break;
       case ELEMENT_CODE_LINE_V2:
-        return deduplicateVarNameInCodeLineV2(computer, el) as T;
+        deduplicateVarNameInCodeLineV2(computer, el);
+        break;
+      case ELEMENT_STRUCTURED_IN:
+        deduplicateVarNameInStructuredIn(computer, el);
+        break;
       case ELEMENT_TABLE:
-        return deduplicateTableVarName(computer, el) as T;
+        deduplicateTableVarName(computer, el);
+        break;
     }
     return el;
   };
