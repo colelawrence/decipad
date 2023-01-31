@@ -105,6 +105,7 @@
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
+      "@decipad/support": ["libs/support/src/index.ts"],
       "@decipad/sync-connection-lambdas": [
         "libs/sync-connection-lambdas/src/index.ts"
       ],

@@ -123,6 +123,7 @@
     "apollo-server-lambda": "3.11.1",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1227.0",
+    "bowser": "^2.11.0",
     "buffer": "6.0.3",
     "caniuse-lite": "1.0.30001414",
     "canvas-confetti": "^1.6.0",

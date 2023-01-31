@@ -8,6 +8,7 @@ import {
   useNavigationType,
 } from 'react-router-dom';
 import { AnalyticsBrowser } from '@segment/analytics-next';
+import { isSupportedBrowser } from '@decipad/support';
 
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 
@@ -19,9 +20,18 @@ const analytics = (): AnalyticsBrowser | undefined => {
   return undefined;
 };
 
-export const initSentry = () =>
+let sentryInitialised = false;
+
+export const initSentry = () => {
+  if (sentryInitialised) {
+    return;
+  }
+  sentryInitialised = true;
   Sentry.init({
     beforeSend: (event: Sentry.Event) => {
+      if (!isSupportedBrowser()) {
+        return null;
+      }
       event.exception?.values?.forEach((error) => {
         analytics()?.track('error', {
           type: error.type,
@@ -48,3 +58,4 @@ export const initSentry = () =>
     ],
     tracesSampleRate: 0.1,
   });
+};
