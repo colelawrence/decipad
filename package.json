@@ -231,7 +231,7 @@
     "zustand": "4.3.1"
   },
   "devDependencies": {
-    "@architect/deploy": "4.2.3",
+    "@architect/deploy": "4.3.0",
     "@architect/inventory": "3.4.0",
     "@architect/sandbox": "5.4.0",
     "@babel/core": "7.20.2",

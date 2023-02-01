@@ -299,7 +299,7 @@
   resolved "https://registry.yarnpkg.com/@architect/asap/-/asap-5.1.1.tgz#e6f48cad399858730bb21904abf82b63993ae827"
   integrity sha512-62ShtlCh28+a8fBP0pvnxlqhsYbBJW24h/IIwmY0f/yDQuG4qhonbZyYEwdJDQENbi9bCU1m5HQbsiyGU1JKZw==
 
-"@architect/create@4.1.4", "@architect/create@~4.1.1", "@architect/create@~4.1.2", "@architect/create@~4.1.4":
+"@architect/create@4.1.4", "@architect/create@~4.1.2", "@architect/create@~4.1.4":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@architect/create/-/create-4.1.4.tgz#a59488404815722ea4bb6ef5e9b50aba74970eaf"
   integrity sha512-K/OWk7/4GOqVeyOF724uBBbXYD87tLCIaKZIT7GDkoHW3rzcsJ4ng7vbBlNuXvG89x1qnRJT3Zjbq/OEt66UwA==
@@ -333,22 +333,22 @@
     zip-dir "~2.0.0"
     zipit "~2.0.0"
 
-"@architect/deploy@4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.2.3.tgz#4034106b7b746c9f5bcd2651b806bc9606cdeb96"
-  integrity sha512-q6emqw6HHQy4B7MnAiOV0r4S/pYsxLPgoJkPATpUcQHYQwrs5vQ7807sn9uI6tE7EE6h9LK8tSOKEqB9V8jzLw==
+"@architect/deploy@4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.3.0.tgz#3b47372bed236b6d9b753e3184cee4fab450f499"
+  integrity sha512-U1zcMkfg+5YNofH196ofa2OWpJVUoHOw+JmotlOX5TK+8gSIWGqS4IvgdzbfLy499nDCpVeDLly4lrMbgcBEow==
   dependencies:
-    "@architect/create" "~4.1.1"
-    "@architect/hydrate" "~3.1.3"
-    "@architect/inventory" "~3.3.0"
-    "@architect/package" "~8.1.5"
+    "@architect/create" "~4.1.4"
+    "@architect/hydrate" "~3.1.10"
+    "@architect/inventory" "~3.4.0"
+    "@architect/package" "~8.4.0"
     "@architect/utils" "~3.1.2"
     chalk "4.1.2"
-    fs-extra "~10.1.0"
+    fs-extra "~11.1.0"
     get-folder-size "2.0.1"
-    glob "~8.0.3"
+    glob "~8.1.0"
     mime-types "~2.1.35"
-    minimist "~1.2.6"
+    minimist "~1.2.7"
     path-sort "~0.1.0"
     run-parallel "~1.2.0"
     run-series "~1.1.9"
@@ -420,7 +420,7 @@
     run-waterfall "^1.1.7"
     uid-safe "^2.1.5"
 
-"@architect/hydrate@3.1.10", "@architect/hydrate@~3.1.10", "@architect/hydrate@~3.1.3", "@architect/hydrate@~3.1.4":
+"@architect/hydrate@3.1.10", "@architect/hydrate@~3.1.10", "@architect/hydrate@~3.1.4":
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/@architect/hydrate/-/hydrate-3.1.10.tgz#c60c06ff7896204405eda9c09827020b2f739e87"
   integrity sha512-16ZvsBl6r+lTe8tPxmPC09H5Yfl6NNRsKIwp4QvoX9WcvvX8yRBirMmn9T8DQEmO0hDQ9qX04jmZBVDKcM7b4w==
@@ -479,14 +479,6 @@
     run-parallel "~1.2.0"
     run-waterfall "~1.1.7"
     strftime "~0.10.1"
-
-"@architect/package@~8.1.5":
-  version "8.1.5"
-  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.1.5.tgz#c9f26fc01efa51c195072352c7ee77d17c9d6077"
-  integrity sha512-hNaEculnvEBXrsTnRzZ3JSfoKbiX13uTmtxt1L7xEW/40Qre+fqOo7HkcHqwXZpRLWABgn2vnhNSdPIykc0dgQ==
-  dependencies:
-    "@architect/inventory" "~3.3.0"
-    "@architect/utils" "~3.1.2"
 
 "@architect/package@~8.4.0":
   version "8.4.0"
@@ -17229,7 +17221,7 @@ fs-constants@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
   integrity sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==
 
-fs-extra@^10.0.0, fs-extra@^10.1.0, fs-extra@~10.1.0:
+fs-extra@^10.0.0, fs-extra@^10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.1.0.tgz#02873cfbc4084dde127eaa5f9905eef2325d1abf"
   integrity sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==
