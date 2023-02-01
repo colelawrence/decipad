@@ -37,6 +37,7 @@ get /api/pads/:padid
 post /api/discord
 get /api/ws
 get /api/import/url
+get /api/clear
 
 @static
 folder public
