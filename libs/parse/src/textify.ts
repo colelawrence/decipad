@@ -9,10 +9,16 @@ const textifyBoolean = (result: Result.Result<'boolean'>) =>
 const textifyDate = (result: Result.Result<'date'>) =>
   coerceToDate(new Date(Number(result.value)), result.type.date);
 
-const textifyNumber = (result: Result.Result<'number'>) =>
-  `(${N(result.value).toFraction()}) ${
-    result.type.unit ? simpleFormatUnit(result.type.unit) : ''
-  }`;
+const textifyNumber = (result: Result.Result<'number'>) => {
+  let f = N(result.value).toFraction();
+  if (!/^-?[0-9.]+$/.test(f)) {
+    f = `(${f})`;
+  }
+  if (result.type.unit) {
+    f = `${f} ${simpleFormatUnit(result.type.unit)}`;
+  }
+  return f;
+};
 
 export const textify = (result: Result.Result): string => {
   switch (result.type.kind) {
