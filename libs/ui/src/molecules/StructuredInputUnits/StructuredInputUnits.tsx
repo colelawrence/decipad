@@ -8,8 +8,9 @@ import {
   DollarCircle,
   Number,
   Percentage,
-  Sunrise,
-  Trophy,
+  Ruler,
+  Scale,
+  Timer,
 } from '../../icons';
 import { cssVar } from '../../primitives';
 import { MenuList } from '../MenuList/MenuList';
@@ -130,7 +131,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
         </MenuList>
         <MenuList
           itemTrigger={
-            <TriggerMenuItem icon={<Number />}>Distance</TriggerMenuItem>
+            <TriggerMenuItem icon={<Ruler />}>Distance</TriggerMenuItem>
           }
           onChangeOpen={() => onColumnExpand('distance')}
           open={currentOpen === 'distance'}
@@ -144,7 +145,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
         </MenuList>
         <MenuList
           itemTrigger={
-            <TriggerMenuItem icon={<Trophy />}>Weight</TriggerMenuItem>
+            <TriggerMenuItem icon={<Scale />}>Weight</TriggerMenuItem>
           }
           onChangeOpen={() => onColumnExpand('weight')}
           open={currentOpen === 'weight'}
@@ -156,9 +157,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
           <MenuItem onSelect={() => onChangeUnit('ton')}>Ton</MenuItem>
         </MenuList>
         <MenuList
-          itemTrigger={
-            <TriggerMenuItem icon={<Sunrise />}>Time</TriggerMenuItem>
-          }
+          itemTrigger={<TriggerMenuItem icon={<Timer />}>Time</TriggerMenuItem>}
           onChangeOpen={() => onColumnExpand('time')}
           open={currentOpen === 'time'}
         >
