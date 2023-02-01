@@ -1,6 +1,7 @@
 import { BrowserContext, Page, test, expect } from '@playwright/test';
 import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import { createStructuredInputBelow } from '../utils/page/Block';
+import { Timeouts } from '../utils/src';
 
 test.describe('Structured Inputs', () => {
   test.describe.configure({ mode: 'serial' });
@@ -65,8 +66,9 @@ test.describe('Structured Inputs', () => {
     await page.keyboard.type('/result');
     await page.locator('[data-testid="menu-item-display"]').click();
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
     await page.locator('[data-testid="result-widget"]').click();
-    await page.waitForSelector('[role="menuitem"]:has-text("AnotherName")');
     await page.locator('[role="menuitem"]:has-text("AnotherName")').click();
 
     await page.waitForSelector(
