@@ -3,7 +3,6 @@ export * from './astNode';
 export * from './block';
 export * from './clone';
 export * from './codeBlock';
-export * from './countEditorChildren';
 export * from './createCodeLine';
 export * from './decorateCode';
 export * from './filterDecorate';

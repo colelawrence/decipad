@@ -67,22 +67,22 @@ export const execute = ({
       insertCodeLineBelow(editor, path, false);
       break;
     case 'input':
-      insertInputBelow(editor, path);
+      insertInputBelow(editor, path, 'number', getAvailableIdentifier);
       break;
     case 'toggle':
-      insertInputBelow(editor, path, 'boolean');
+      insertInputBelow(editor, path, 'boolean', getAvailableIdentifier);
       break;
     case 'datepicker':
-      insertInputBelow(editor, path, 'date');
+      insertInputBelow(editor, path, 'date', getAvailableIdentifier);
       break;
     case 'slider':
-      insertSliderInputBelow(editor, path);
+      insertSliderInputBelow(editor, path, getAvailableIdentifier);
       break;
     case 'display':
       insertDisplayBelow(editor, path);
       break;
     case 'dropdown':
-      insertDropdownBelow(editor, path);
+      insertDropdownBelow(editor, path, getAvailableIdentifier);
       break;
     case 'structured_in':
       insertStructuredInput(editor, path, getAvailableIdentifier);

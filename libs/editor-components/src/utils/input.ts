@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   DisplayElement,
   DropdownElement,
@@ -13,11 +14,7 @@ import {
   VariableDropdownElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
-import {
-  getElementUniqueName,
-  insertNodes,
-  requirePathBelowBlock,
-} from '@decipad/editor-utils';
+import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import type { SerializedTypeKind } from '@decipad/computer';
 import { getEndPoint, getStartPoint, setSelection } from '@udecode/plate';
 import { nanoid } from 'nanoid';
@@ -71,10 +68,11 @@ const getVariantAndHolder = (
 export const insertInputBelow = (
   editor: MyEditor,
   path: Path,
-  kind: SerializedTypeKind = 'number'
+  kind: SerializedTypeKind,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): void => {
   const [variant, placeholder] = getVariantAndHolder(kind);
-  const name = getElementUniqueName(editor, ELEMENT_VARIABLE_DEF, 'Input');
+  const name = getAvailableIdentifier('Input', 1);
 
   const input = getInitialInputElement({
     kind,
@@ -123,13 +121,13 @@ const getSliderInputElement = () => {
   };
 };
 
-export const insertSliderInputBelow = (editor: MyEditor, path: Path): void => {
+export const insertSliderInputBelow = (
+  editor: MyEditor,
+  path: Path,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
+): void => {
   const input = getSliderInputElement();
-  input.children[0].children[0].text = getElementUniqueName(
-    editor,
-    ELEMENT_VARIABLE_DEF,
-    'Slider'
-  );
+  input.children[0].children[0].text = getAvailableIdentifier('Slider', 1);
   insertNodes<VariableSliderElement>(
     editor,
     input as unknown as VariableSliderElement,
@@ -178,13 +176,13 @@ const getDropdownElement = () =>
     ],
   } as VariableDropdownElement);
 
-export const insertDropdownBelow = (editor: MyEditor, path: Path): void => {
+export const insertDropdownBelow = (
+  editor: MyEditor,
+  path: Path,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
+): void => {
   const dropdown = getDropdownElement();
-  dropdown.children[0].children[0].text = getElementUniqueName(
-    editor,
-    ELEMENT_VARIABLE_DEF,
-    'Dropdown'
-  );
+  dropdown.children[0].children[0].text = getAvailableIdentifier('Dropdown', 1);
   insertNodes(editor, dropdown, {
     at: requirePathBelowBlock(editor, path),
   });
