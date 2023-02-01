@@ -2,8 +2,9 @@ import {
   ELEMENT_SMART_REF,
   MyElement,
   PlateComponent,
+  useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import { assertElementType, useElementMutatorCallback } from '@decipad/editor-utils';
 import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
 import { SmartRef as UISmartRef } from '@decipad/ui';
 import {
@@ -13,7 +14,8 @@ import {
   isElement,
   isText,
 } from '@udecode/plate';
-import { useEffect, useState } from 'react';
+import { debounceTime, filter } from 'rxjs';
+import { useEffect } from 'react';
 import { ReactEditor, useSelected } from 'slate-react';
 
 export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
@@ -55,30 +57,42 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
     { hasNext: false, hasPrevious: false }
   );
 
+  const editor = useTEditorRef();
+  const mutateLastSeen = useElementMutatorCallback(editor, element, 'lastSeenVariableName');
+
   const computer = useComputer();
   const symbolName = computer.getSymbolDefinedInBlock$.use(element.blockId);
-  const [lastVariableName, setLastVariableName] = useState(() => symbolName);
+
   const errorMessage =
     (symbolName == null &&
-      `The variable ${
-        (lastVariableName != null && `"${lastVariableName}"`) || ''
+      `The variable ${(element.lastSeenVariableName != null && `"${element.lastSeenVariableName}"`) || ''
       } is no longer defined`) ||
     undefined;
 
   const isSelected = useSelected();
 
   useEffect(() => {
-    if (symbolName) {
-      setLastVariableName(symbolName);
-    }
-  }, [symbolName]);
+    const symbolName$ = computer
+      .getSymbolDefinedInBlock$
+      .observe(element.blockId)
+      .pipe(debounceTime(5000))
+      .pipe(filter(name => !!name));
+
+    const sub = symbolName$.subscribe((debouncedSymbolName) => {
+      if (debouncedSymbolName !== element.lastSeenVariableName) {
+        mutateLastSeen(debouncedSymbolName);
+      }
+    });
+
+    return () => sub.unsubscribe();
+  }, [computer, element.blockId]);
 
   return (
     <span {...attributes}>
       <span contentEditable={false}>{'\u2060'}</span>
       <UISmartRef
         defBlockId={element.blockId}
-        symbolName={symbolName ?? lastVariableName}
+        symbolName={symbolName ?? element.lastSeenVariableName}
         errorMessage={errorMessage}
         isSelected={isSelected}
         hasPreviousContent={siblingContent?.hasPrevious}

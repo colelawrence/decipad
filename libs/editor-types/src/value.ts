@@ -194,6 +194,7 @@ export interface InlineNumberElement extends BaseElement {
 
 export interface SmartRefElement extends BaseElement {
   type: typeof ELEMENT_SMART_REF;
+  lastSeenVariableName?: string;
   blockId: string;
   children: [PlainText];
 }
