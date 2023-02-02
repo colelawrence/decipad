@@ -71,7 +71,12 @@ export async function evaluateColumnAssign(
     table.tableRowCount
   );
 
-  realm.stack.setNamespaced([tableName, columnName], newColumn, 'function');
+  realm.stack.setNamespaced(
+    [tableName, columnName],
+    newColumn,
+    'function',
+    realm.statementId
+  );
 
   return getDefined(
     realm.stack.getNamespaced([tableName, columnName], 'function')

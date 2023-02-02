@@ -19,7 +19,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
 
   if (table.args.some((a) => a.type === 'table-spread')) {
     const ret = t.impossible(InferError.retiredFeature('table-spread'));
-    ctx.stack.set(tableName, ret, 'function');
+    ctx.stack.set(tableName, ret, 'function', ctx.statementId);
     return ret;
   }
 
@@ -82,7 +82,12 @@ export async function inferTableColumn(
     return type;
   }
 
-  ctx.stack.setNamespaced([tableName, columnName], type, 'function');
+  ctx.stack.setNamespaced(
+    [tableName, columnName],
+    type,
+    'function',
+    ctx.statementId
+  );
 
   return type;
 }

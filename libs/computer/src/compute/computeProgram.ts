@@ -15,6 +15,7 @@ import { IdentifiedResult } from '../types';
 import { getStatement } from '../utils';
 import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
+import { getExprRef } from '../exprRefs';
 
 /*
  - Skip cached stuff
@@ -34,12 +35,15 @@ const computeStatement = async (
   }
 
   const statement = getStatement(program, blockId);
+
+  realm.inferContext.statementId = getExprRef(blockId);
   const [valueType, usedNames] = await inferWhileRetrievingNames(
     realm.inferContext,
     statement
   );
 
   if (!(valueType.errorCause != null && !valueType.functionness)) {
+    realm.interpreterRealm.statementId = getExprRef(blockId);
     value = await evaluateStatement(realm.interpreterRealm, statement);
   }
 

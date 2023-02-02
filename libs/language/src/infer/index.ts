@@ -240,7 +240,7 @@ const inferStatementInternal = wrap(
             ? t.impossible(InferError.duplicatedName(varName))
             : await inferExpression(ctx, nValue);
 
-        ctx.stack.set(varName, type, 'function');
+        ctx.stack.set(varName, type, 'function', ctx.statementId);
         return type;
       }
       case 'table': {

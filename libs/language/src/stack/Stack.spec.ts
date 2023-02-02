@@ -242,3 +242,28 @@ describe('can set with an ID', () => {
     expect(stack.get('AId')).toEqual(null);
   });
 });
+
+it('has a weird namespace retriever for language tables', () => {
+  const stack = new Stack<string>(
+    undefined,
+    (nsContents) => JSON.stringify([...nsContents]),
+    (table) => {
+      try {
+        const names = JSON.parse(table);
+        if (Array.isArray(names)) return new Map(names);
+      } catch {
+        return undefined;
+      }
+      return undefined;
+    },
+    (namespacedThing) => `Hey I retrieved ${namespacedThing}`
+  );
+
+  stack.setNamespaced(['', 'A'], 'AVal', 'global', 'AId');
+  stack.setNamespaced(['Table', 'B'], 'BVal', 'global', 'BId');
+
+  expect(stack.get('A')).toEqual('AVal');
+  expect(stack.getNamespaced(['Table', 'B'], 'global')).toMatchInlineSnapshot(
+    `"Hey I retrieved BVal"`
+  );
+});

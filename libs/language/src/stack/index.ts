@@ -20,6 +20,15 @@ export type StackNamespaceSplitter<T> = (
 ) => Iterable<[string, T]> | undefined;
 
 /**
+ * MASSIVE HACK
+ * Language tables contain the types of "CELLS", not the types of the columns. So we need a callback to raise the dimension of the cells to the column-level.
+ */
+export type StackNamespaceRetrieverHackForTypesystemTables<T> = (
+  x: T,
+  container: T
+) => T;
+
+/**
  * Holds scopes, which are maps of variable names to things like Type,
  * Value or whatever!
  *
@@ -39,19 +48,24 @@ export class Stack<T> {
   private temporaryScopes: Map<string, Map<string, T>>[] = [];
   private namespaceJoiner: StackNamespaceJoiner<T>;
   private namespaceSplitter: StackNamespaceSplitter<T>;
+  private namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T>;
 
   private idMap = new Map<string, readonly [string, string]>();
 
   constructor(
     initialGlobalScope: AnyMapping<T> | undefined,
     namespaceJoiner: StackNamespaceJoiner<T>,
-    namespaceSplitter: StackNamespaceSplitter<T>
+    namespaceSplitter: StackNamespaceSplitter<T>,
+    namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T> = (
+      x
+    ) => x
   ) {
     this.globalScope = new Map([
       ['', anyMappingToMap(initialGlobalScope ?? new Map())],
     ]);
     this.namespaceJoiner = namespaceJoiner;
     this.namespaceSplitter = namespaceSplitter;
+    this.namespaceRetriever = namespaceRetriever;
   }
 
   private *getVisibleScopes(varGroup: VarGroup = 'lexical') {
@@ -138,8 +152,13 @@ export class Stack<T> {
     if (!scope.has(ns)) scope.set(ns, new Map());
   }
 
-  set(varName: string, value: T, varGroup: VarGroup = 'lexical') {
-    return this.setNamespaced(['', varName], value, varGroup);
+  set(
+    varName: string,
+    value: T,
+    varGroup: VarGroup = 'lexical',
+    id: string | undefined = undefined
+  ) {
+    return this.setNamespaced(['', varName], value, varGroup, id);
   }
 
   setNamespaced(
@@ -157,11 +176,8 @@ export class Stack<T> {
       return;
     }
 
-    if (id) {
-      if (this.functionScope || this.temporaryScopes.length) {
-        throw new Error('panic: cannot set id in a non-global scope');
-      }
-
+    if (id && this.isInGlobalScope && !this.temporaryScopes.length) {
+      // Only set the ID if we're not in a global scope
       this.idMap.set(id, [ns, name]);
     }
 
@@ -208,9 +224,9 @@ export class Stack<T> {
     [ns, name]: readonly [namespace: string, name: string],
     varGroup: VarGroup
   ): T | null {
-    const idMap = ns === '' && this.idMap.get(name);
-    if (idMap) {
-      return this.getNamespaced(idMap, varGroup);
+    const foundWithId = ns === '' && this.idMap.get(name);
+    if (foundWithId) {
+      return this.getNamespaced(foundWithId, varGroup);
     }
 
     for (const scope of this.getVisibleScopes(varGroup)) {
@@ -219,7 +235,14 @@ export class Stack<T> {
       }
 
       if (scope.get(ns)?.has(name)) {
-        return getDefined(scope.get(ns)?.get(name));
+        let value = getDefined(scope.get(ns)?.get(name));
+        if (ns !== '') {
+          value = this.namespaceRetriever(
+            value,
+            getDefined(this.get(ns, varGroup))
+          );
+        }
+        return getDefined(value);
       }
     }
 

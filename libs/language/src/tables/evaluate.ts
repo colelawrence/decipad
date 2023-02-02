@@ -98,7 +98,12 @@ export const evaluateTable = async (
       tableLength ??= value.rowCount;
 
       tableColumns.set(name, value);
-      realm.stack.setNamespaced([tableName, name], value, 'function');
+      realm.stack.setNamespaced(
+        [tableName, name],
+        value,
+        'function',
+        realm.statementId
+      );
     };
 
     for (const item of items) {

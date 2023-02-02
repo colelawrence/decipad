@@ -14,6 +14,7 @@ export class Realm {
   previousValue: Value | null = null;
   inferContext: Context;
   previousStatementValue?: Value;
+  statementId?: string;
 
   get externalData() {
     return this.inferContext.externalData;

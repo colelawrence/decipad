@@ -69,7 +69,7 @@ export async function evaluate(
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);
       const value = await evaluate(realm, node.args[1]);
-      realm.stack.set(varName, value);
+      realm.stack.set(varName, value, 'function', realm.statementId);
       return value;
     }
     case 'ref': {
