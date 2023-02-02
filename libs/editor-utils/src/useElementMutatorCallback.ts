@@ -14,8 +14,20 @@ export const useElementMutatorCallback = <E extends MyElement>(
       const mutation = {
         [propName]: newValue,
       } as unknown as Partial<E>;
-      setNodes(editor, mutation, { at });
-      sideEffects?.();
+      try {
+        setNodes(editor, mutation, { at });
+        sideEffects?.();
+      } catch (err) {
+        console.error(err);
+        // WTF: preventing https://linear.app/decipad/issue/ENG-1841/typeerror-converting-circular-structure-to-json]
+        if (
+          !(err as Error).message.includes(
+            'Converting circular structure to JSON'
+          )
+        ) {
+          throw err;
+        }
+      }
     },
     [editor, element, propName, sideEffects]
   );
