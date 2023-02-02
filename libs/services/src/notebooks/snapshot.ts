@@ -1,5 +1,7 @@
+import { toSlateDoc } from '@decipad/slate-yjs';
 import tables, { allPages } from '@decipad/tables';
-import { applyUpdate, Doc, encodeStateVector, mergeUpdates } from 'yjs';
+import md5 from 'md5';
+import { applyUpdate, Doc, mergeUpdates } from 'yjs';
 
 export const snapshot = async (
   notebookId: string
@@ -28,6 +30,6 @@ export const snapshot = async (
 
   return {
     data: Buffer.from(mergedUpdates),
-    version: Buffer.from(encodeStateVector(doc)).toString('hex'),
+    version: md5(JSON.stringify(toSlateDoc(doc.getArray()))),
   };
 };

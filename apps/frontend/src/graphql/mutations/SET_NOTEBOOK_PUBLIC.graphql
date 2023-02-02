@@ -1,6 +1,3 @@
 mutation setNotebookPublic($id: ID!, $isPublic: Boolean!) {
-  setPadPublic(id: $id, isPublic: $isPublic) {
-    id
-    isPublic
-  }
+  setPadPublic(id: $id, isPublic: $isPublic)
 }

@@ -77,7 +77,7 @@ export default gql`
     importPad(workspaceId: ID!, source: String!): Pad!
     movePad(id: ID!, workspaceId: ID!): Pad!
 
-    setPadPublic(id: ID!, isPublic: Boolean!): Pad!
+    setPadPublic(id: ID!, isPublic: Boolean!): Boolean!
 
     sharePadWithRole(
       id: ID!
@@ -112,7 +112,7 @@ export default gql`
 
     unshareNotebookWithSecret(id: ID!, secret: String!): Boolean
 
-    createOrUpdateSnapshot(notebookId: ID!, snapshotName: String!): Pad!
+    createOrUpdateSnapshot(notebookId: ID!, snapshotName: String!): Boolean!
   }
 
   extend type Subscription {

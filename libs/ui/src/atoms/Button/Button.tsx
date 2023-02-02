@@ -150,7 +150,7 @@ type ButtonProps = {
   readonly children: ReactNode;
   readonly disabled?: boolean;
   readonly size?: 'normal' | 'extraSlim' | 'extraLarge';
-
+  readonly testId?: string;
   readonly href?: string;
   readonly onClick?: () => void;
   readonly submit?: boolean;
@@ -161,7 +161,7 @@ export const Button = ({
   size = 'normal',
   submit = type === 'primary' || type === 'primaryBrand',
   disabled = false,
-
+  testId = '',
   children,
   onClick = noop,
   href,
@@ -199,6 +199,7 @@ export const Button = ({
         disabled ? disabledStyles : enabledStyles,
       ])}
       onClick={submit ? onClick : onButtonClick}
+      data-testid={testId}
     >
       {children}
     </button>

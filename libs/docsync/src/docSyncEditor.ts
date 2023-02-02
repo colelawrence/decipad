@@ -1,8 +1,9 @@
-import { CursorEditor, YjsEditor } from '@decipad/slate-yjs';
+import { CursorEditor, toSlateDoc, YjsEditor } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
-import { Doc as YDoc, encodeStateVector } from 'yjs';
+import md5 from 'md5';
+import { Doc as YDoc } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
 import {
@@ -59,11 +60,11 @@ export function docSyncEditor<E extends MyEditor>(
 
   store.once('synced', () => {
     let savedCount = 0;
-    events.on('saved', (ev: SyncSource) => {
+    events.on('saved', (source: SyncSource) => {
       savedCount += 1;
       if (savedCount > 1) {
         savedCount = 1;
-        if (ev === 'local') {
+        if (source === 'local') {
           hasLocalChanges.next(true);
           isSavedRemotely.next(false);
         }
@@ -126,8 +127,9 @@ export function docSyncEditor<E extends MyEditor>(
     isDocSyncEnabled: true,
     markVersion: (version: string) => store.markVersion(version),
     sameVersion: (version: string) => store.sameVersion(version),
-    equals: (version: string) => {
-      return Buffer.from(encodeStateVector(doc)).toString('hex') === version;
+    equals: (checksumRemote: string) => {
+      const checksumLocal = md5(JSON.stringify(toSlateDoc(doc.getArray())));
+      return checksumLocal === checksumRemote;
     },
     get destroyed() {
       return destroyed;

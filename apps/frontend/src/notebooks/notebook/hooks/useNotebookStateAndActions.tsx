@@ -7,10 +7,9 @@ import {
   useState,
 } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { DocSyncEditor } from '@decipad/docsync';
+import { DocSyncEditor, SyncSource } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
-import { isEmpty } from 'lodash';
 import { ClientEventsContext } from '@decipad/client-events';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
@@ -44,6 +43,7 @@ interface UseNotebookStateAndActionsResult {
   notebook: Notebook | undefined;
   isReadOnly: boolean;
   isPublic: boolean;
+  isPublishing?: boolean;
   icon: Icon | undefined;
   iconColor: IconColor;
   hasLocalChanges: BehaviorSubject<boolean> | undefined;
@@ -213,24 +213,25 @@ export const useNotebookStateAndActions = ({
 
   // Grabbing the snapshot here so the effect can depend on it instead of the whole notebook. The
   // notebook appears to be a mutable reference from the local cache and so we'd miss effects.
-  const snapshot = notebook?.snapshots[0];
+  const snapshot = notebook?.snapshots.filter(
+    (s) => s.snapshotName === SNAPSHOT_NAME
+  )[0];
   useEffect(() => {
     if (!docsync || !snapshot || !isPublic) {
       return;
     }
 
-    const listener = () =>
-      setHasUnpublishedChanges(
-        !(snapshot?.version && docsync.equals(snapshot?.version))
-      );
+    const onSavedChanges = (source: SyncSource) => {
+      if (source === 'remote') {
+        setHasUnpublishedChanges(
+          !(snapshot?.version && docsync.equals(snapshot?.version))
+        );
+      }
+    };
 
-    // Trigger one initial run for good measure.
-    if (!isEmpty(docsync.children)) {
-      listener();
-    }
-
-    docsync.onSaved(listener);
-    return () => docsync?.offSaved(listener);
+    docsync.onSaved(onSavedChanges);
+    onSavedChanges('remote');
+    return () => docsync?.offSaved(onSavedChanges);
   }, [docsync, isPublic, snapshot, setHasUnpublishedChanges]);
 
   const setNotebookPublic = useCallback(
@@ -243,7 +244,10 @@ export const useNotebookStateAndActions = ({
     [notebookId, remoteUpdateNotebookIsPublic]
   );
 
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const publishNotebook = useCallback(() => {
+    setIsPublishing(true);
     // TODO: this must invalidate the Pad since snapshots are a property of Pad. One way to do
     // this is if the mutation returns a Pad instead of a PadSnapshot. Another way to do it is to
     // programatically invalidate/update cache, either here or in the urql config.
@@ -265,7 +269,8 @@ export const useNotebookStateAndActions = ({
       .catch((err) => {
         console.error(err);
         toast('Error publishing notebook', 'error');
-      });
+      })
+      .finally(() => setIsPublishing(false));
   }, [createOrUpdateSnapshot, event, notebookId, setNotebookPublic, toast]);
 
   const unpublishNotebook = useCallback(() => {
@@ -297,6 +302,7 @@ export const useNotebookStateAndActions = ({
     notebook,
     isReadOnly,
     isPublic,
+    isPublishing,
     icon,
     iconColor,
     hasLocalChanges,

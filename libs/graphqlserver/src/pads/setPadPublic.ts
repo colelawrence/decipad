@@ -1,4 +1,4 @@
-import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
+import { GraphqlContext, ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import { track } from '@decipad/backend-analytics';
@@ -8,7 +8,7 @@ export const setPadPublic = async (
   _: unknown,
   { id, isPublic }: { id: ID; isPublic: boolean },
   context: GraphqlContext
-): Promise<Pad> => {
+): Promise<boolean> => {
   const resource = `/pads/${id}`;
   const user = await isAuthenticatedAndAuthorized(resource, context, 'ADMIN');
   const data = await tables();
@@ -25,5 +25,5 @@ export const setPadPublic = async (
     context
   );
 
-  return pad;
+  return true;
 };

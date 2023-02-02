@@ -8,6 +8,7 @@ type TopbarProps = {
   readonly notebook: Notebook;
   readonly hasLocalChanges: BehaviorSubject<boolean> | undefined;
   readonly hasUnpublishedChanges: boolean;
+  readonly isPublishing?: boolean;
   readonly duplicateNotebook?: () => void;
   readonly removeLocalChanges?: () => void;
   readonly inviteEditorByEmail?: (email: string) => Promise<void>;
@@ -19,6 +20,7 @@ const Topbar: FC<TopbarProps> = ({
   notebook,
   hasLocalChanges,
   hasUnpublishedChanges,
+  isPublishing,
   duplicateNotebook,
   removeLocalChanges,
   publishNotebook = noop,
@@ -36,6 +38,7 @@ const Topbar: FC<TopbarProps> = ({
       usersWithAccess={notebook.access.users}
       permission={notebook.myPermissionType}
       isPublished={notebook.isPublic || undefined}
+      isPublishing={isPublishing}
       onRevertChanges={removeLocalChanges}
       hasLocalChanges={hasLocalChanges}
       hasUnpublishedChanges={hasUnpublishedChanges}

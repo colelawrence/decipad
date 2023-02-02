@@ -71,7 +71,6 @@ export function useEditorChange<T>(
     const observable = injectObservable
       ? merge(editorChanges$, injectObservable)
       : editorChanges$;
-
     const subscription = observable
       .pipe(
         debounceTime(debounceTimeMs),

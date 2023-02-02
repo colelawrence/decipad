@@ -72,31 +72,31 @@ test('public and private pads', (ctx) => {
 
   it('the creator can set to public', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
-    pad = (
+    const result = (
       await client.mutate({
         mutation: ctx.gql`
           mutation {
-            setPadPublic(id: "${pad.id}", isPublic: true) {
-              id
-              name
-              isPublic
-              workspace {
-                name
-                isPublic
-              }
-            }
+            setPadPublic(id: "${pad.id}", isPublic: true)
           }
       `,
       })
     ).data.setPadPublic;
 
-    expect(pad).toMatchObject({
-      isPublic: true,
-      workspace: {
-        name: 'Workspace 1',
-        isPublic: false,
-      },
-    });
+    expect(result).toBeTruthy();
+
+    const resultPad = (
+      await client.query({
+        query: ctx.gql`
+        query {
+          getPadById(id: "${pad.id}") {
+            isPublic
+          }
+        }
+      `,
+      })
+    ).data.getPadById;
+
+    expect(resultPad.isPublic).toBeTruthy();
   });
 
   it('other still user cannot update', async () => {
@@ -137,29 +137,30 @@ test('public and private pads', (ctx) => {
 
   it('the creator can set to private', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
-    pad = (
+    const result = (
       await client.mutate({
         mutation: ctx.gql`
           mutation {
-            setPadPublic(id: "${pad.id}", isPublic: false) {
-              isPublic
-              workspace {
-                name
-                isPublic
-              }
-            }
+            setPadPublic(id: "${pad.id}", isPublic: false)
           }
       `,
       })
     ).data.setPadPublic;
 
-    expect(pad).toMatchObject({
-      isPublic: false,
-      workspace: {
-        name: `Workspace 1`,
-        isPublic: false,
-      },
-    });
+    const resultPad = (
+      await client.query({
+        query: ctx.gql`
+        query {
+          getPadById(id: "${pad.id}") {
+            isPublic
+          }
+        }
+      `,
+      })
+    ).data.getPadById;
+
+    expect(result).toBeTruthy();
+    expect(resultPad.isPublic).toBeFalsy();
   });
 
   it('invited user can no longer get the pad', async () => {
@@ -175,6 +176,6 @@ test('public and private pads', (ctx) => {
         }
       `,
       })
-    ).rejects.toThrow('No such notebook');
+    ).rejects.toThrow('Forbidden');
   });
 });

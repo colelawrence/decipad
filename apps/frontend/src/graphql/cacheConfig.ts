@@ -89,6 +89,9 @@ export const graphCacheConfig: GraphCacheConfig = {
       updatePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
+      setPadPublic: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Pad', id: args.id });
+      },
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
@@ -101,6 +104,9 @@ export const graphCacheConfig: GraphCacheConfig = {
           result.addSectionToWorkspace as Section,
           args.workspaceId
         );
+      },
+      createOrUpdateSnapshot: (_result, args, cache) => {
+        cache.invalidate({ __typename: 'Pad', id: args.notebookId });
       },
       updateSectionInWorkspace: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Section', id: args.sectionId });

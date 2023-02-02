@@ -127,6 +127,7 @@ interface NotebookSharingPopUpProps {
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
   hasUnpublishedChanges?: boolean;
   isPublished?: boolean;
+  isPublishing?: boolean;
   onPublish?: () => void;
   onRestore?: () => void;
   onUnpublish?: () => void;
@@ -141,8 +142,8 @@ export const NotebookPublishingPopUp = ({
   notebook,
   hasUnpublishedChanges = false,
   isPublished = false,
+  isPublishing = false,
   onPublish = noop,
-  // onRestore = noop,
   onUnpublish = noop,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
@@ -179,17 +180,21 @@ export const NotebookPublishingPopUp = ({
       {isPublished ? (
         hasUnpublishedChanges ? (
           <Dot top={-5} right={-5}>
-            <Button type="primaryBrand" {...buttonProps}>
+            <Button
+              type="primaryBrand"
+              {...buttonProps}
+              testId="publish-button"
+            >
               Publish
             </Button>
           </Dot>
         ) : (
-          <Button type="secondary" {...buttonProps}>
+          <Button type="secondary" {...buttonProps} testId="publish-button">
             Publish
           </Button>
         )
       ) : (
-        <Button type="primaryBrand" {...buttonProps}>
+        <Button type="primaryBrand" {...buttonProps} testId="publish-button">
           Publish
         </Button>
       )}
@@ -271,8 +276,13 @@ export const NotebookPublishingPopUp = ({
                       {/* <Button type="secondary" onClick={onRestore}>
                         Restore
                       </Button> */}
-                      <Button type="primaryBrand" onClick={onPublish}>
-                        Publish New Changes
+                      <Button
+                        type="primaryBrand"
+                        onClick={onPublish}
+                        disabled={isPublishing}
+                        testId="publish-changes"
+                      >
+                        {isPublishing ? 'Publishing...' : 'Publish New Changes'}
                       </Button>
                     </div>
                   </div>

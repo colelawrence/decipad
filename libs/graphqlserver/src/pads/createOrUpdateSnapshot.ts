@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { GraphqlContext, ID, PadRecord } from '@decipad/backendtypes';
+import { GraphqlContext, ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { snapshot } from '@decipad/services/notebooks';
 import Boom from '@hapi/boom';
@@ -14,7 +14,7 @@ export const createOrUpdateSnapshot = async (
   _: unknown,
   { notebookId, snapshotName }: { notebookId: ID; snapshotName: string },
   context: GraphqlContext
-): Promise<PadRecord> => {
+): Promise<boolean> => {
   const resource = `/pads/${notebookId}`;
   await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
 
@@ -62,7 +62,7 @@ export const createOrUpdateSnapshot = async (
     throw Boom.notFound();
   }
 
-  return pad;
+  return true;
 };
 
 export const getSnapshots = async ({ notebookId }: { notebookId: ID }) => {

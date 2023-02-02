@@ -97,7 +97,7 @@ export type Mutation = {
   addTagToPad?: Maybe<Scalars['Boolean']>;
   attachFileToPad?: Maybe<Attachment>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
-  createOrUpdateSnapshot: Pad;
+  createOrUpdateSnapshot: Scalars['Boolean'];
   createPad: Pad;
   createRole: Role;
   createUserViaMagicLink: User;
@@ -119,7 +119,7 @@ export type Mutation = {
   removeUserFromRole?: Maybe<Scalars['Boolean']>;
   removeWorkspace?: Maybe<Scalars['Boolean']>;
   resendRegistrationMagicLinkEmail?: Maybe<Scalars['Boolean']>;
-  setPadPublic: Pad;
+  setPadPublic: Scalars['Boolean'];
   setUsername: Scalars['Boolean'];
   shareExternalDataSourceWithEmail?: Maybe<ExternalDataSource>;
   shareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
@@ -785,7 +785,7 @@ export type CreateOrUpdateNotebookSnapshotMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrUpdateNotebookSnapshotMutation = { __typename?: 'Mutation', createOrUpdateSnapshot: { __typename?: 'Pad', id: string, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
+export type CreateOrUpdateNotebookSnapshotMutation = { __typename?: 'Mutation', createOrUpdateSnapshot: boolean };
 
 export type CreateWorkspaceMutationVariables = Exact<{
   name: Scalars['String'];
@@ -870,7 +870,7 @@ export type SetNotebookPublicMutationVariables = Exact<{
 }>;
 
 
-export type SetNotebookPublicMutation = { __typename?: 'Mutation', setPadPublic: { __typename?: 'Pad', id: string, isPublic?: boolean | null } };
+export type SetNotebookPublicMutation = { __typename?: 'Mutation', setPadPublic: boolean };
 
 export type SetUsernameMutationVariables = Exact<{
   props: UsernameInput;
@@ -1115,14 +1115,9 @@ export function useCreateSectionMutation() {
 };
 export const CreateOrUpdateNotebookSnapshotDocument = gql`
     mutation CreateOrUpdateNotebookSnapshot($notebookId: ID!, $snapshotName: String!) {
-  createOrUpdateSnapshot(notebookId: $notebookId, snapshotName: $snapshotName) {
-    id
-    snapshots {
-      ...NotebookSnapshot
-    }
-  }
+  createOrUpdateSnapshot(notebookId: $notebookId, snapshotName: $snapshotName)
 }
-    ${NotebookSnapshotFragmentDoc}`;
+    `;
 
 export function useCreateOrUpdateNotebookSnapshotMutation() {
   return Urql.useMutation<CreateOrUpdateNotebookSnapshotMutation, CreateOrUpdateNotebookSnapshotMutationVariables>(CreateOrUpdateNotebookSnapshotDocument);
@@ -1239,10 +1234,7 @@ export function useRenameWorkspaceMutation() {
 };
 export const SetNotebookPublicDocument = gql`
     mutation setNotebookPublic($id: ID!, $isPublic: Boolean!) {
-  setPadPublic(id: $id, isPublic: $isPublic) {
-    id
-    isPublic
-  }
+  setPadPublic(id: $id, isPublic: $isPublic)
 }
     `;
 
@@ -1697,7 +1689,7 @@ export type GraphCacheOptimisticUpdaters = {
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
   attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
   createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
-  createOrUpdateSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateOrUpdateSnapshotArgs, WithTypename<Pad>>,
+  createOrUpdateSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateOrUpdateSnapshotArgs, Scalars['Boolean']>,
   createPad?: GraphCacheOptimisticMutationResolver<MutationCreatePadArgs, WithTypename<Pad>>,
   createRole?: GraphCacheOptimisticMutationResolver<MutationCreateRoleArgs, WithTypename<Role>>,
   createUserViaMagicLink?: GraphCacheOptimisticMutationResolver<MutationCreateUserViaMagicLinkArgs, WithTypename<User>>,
@@ -1719,7 +1711,7 @@ export type GraphCacheOptimisticUpdaters = {
   removeUserFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveUserFromRoleArgs, Maybe<Scalars['Boolean']>>,
   removeWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   resendRegistrationMagicLinkEmail?: GraphCacheOptimisticMutationResolver<MutationResendRegistrationMagicLinkEmailArgs, Maybe<Scalars['Boolean']>>,
-  setPadPublic?: GraphCacheOptimisticMutationResolver<MutationSetPadPublicArgs, WithTypename<Pad>>,
+  setPadPublic?: GraphCacheOptimisticMutationResolver<MutationSetPadPublicArgs, Scalars['Boolean']>,
   setUsername?: GraphCacheOptimisticMutationResolver<MutationSetUsernameArgs, Scalars['Boolean']>,
   shareExternalDataSourceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithEmailArgs, Maybe<WithTypename<ExternalDataSource>>>,
   shareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
@@ -1747,7 +1739,7 @@ export type GraphCacheUpdaters = {
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
     attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
     createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
-    createOrUpdateSnapshot?: GraphCacheUpdateResolver<{ createOrUpdateSnapshot: WithTypename<Pad> }, MutationCreateOrUpdateSnapshotArgs>,
+    createOrUpdateSnapshot?: GraphCacheUpdateResolver<{ createOrUpdateSnapshot: Scalars['Boolean'] }, MutationCreateOrUpdateSnapshotArgs>,
     createPad?: GraphCacheUpdateResolver<{ createPad: WithTypename<Pad> }, MutationCreatePadArgs>,
     createRole?: GraphCacheUpdateResolver<{ createRole: WithTypename<Role> }, MutationCreateRoleArgs>,
     createUserViaMagicLink?: GraphCacheUpdateResolver<{ createUserViaMagicLink: WithTypename<User> }, MutationCreateUserViaMagicLinkArgs>,
@@ -1769,7 +1761,7 @@ export type GraphCacheUpdaters = {
     removeUserFromRole?: GraphCacheUpdateResolver<{ removeUserFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveUserFromRoleArgs>,
     removeWorkspace?: GraphCacheUpdateResolver<{ removeWorkspace: Maybe<Scalars['Boolean']> }, MutationRemoveWorkspaceArgs>,
     resendRegistrationMagicLinkEmail?: GraphCacheUpdateResolver<{ resendRegistrationMagicLinkEmail: Maybe<Scalars['Boolean']> }, MutationResendRegistrationMagicLinkEmailArgs>,
-    setPadPublic?: GraphCacheUpdateResolver<{ setPadPublic: WithTypename<Pad> }, MutationSetPadPublicArgs>,
+    setPadPublic?: GraphCacheUpdateResolver<{ setPadPublic: Scalars['Boolean'] }, MutationSetPadPublicArgs>,
     setUsername?: GraphCacheUpdateResolver<{ setUsername: Scalars['Boolean'] }, MutationSetUsernameArgs>,
     shareExternalDataSourceWithEmail?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithEmail: Maybe<WithTypename<ExternalDataSource>> }, MutationShareExternalDataSourceWithEmailArgs>,
     shareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithRoleArgs>,

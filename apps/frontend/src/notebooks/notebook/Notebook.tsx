@@ -50,6 +50,7 @@ const Notebook: FC = () => {
     hasUnpublishedChanges,
     isReadOnly,
     isPublic,
+    isPublishing,
     icon,
     iconColor,
     updateIcon,
@@ -168,6 +169,7 @@ const Notebook: FC = () => {
                 notebook={notebook}
                 hasLocalChanges={hasLocalChanges}
                 hasUnpublishedChanges={hasUnpublishedChanges}
+                isPublishing={isPublishing}
                 duplicateNotebook={duplicateNotebook}
                 removeLocalChanges={removeLocalChanges}
                 publishNotebook={publishNotebookWithMetrics}
