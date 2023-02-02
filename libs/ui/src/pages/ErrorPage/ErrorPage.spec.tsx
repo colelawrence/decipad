@@ -5,13 +5,13 @@ import { ErrorPage } from './ErrorPage';
 const props: ComponentProps<typeof ErrorPage> = { Heading: 'h1' };
 
 it('changes the back link if the user is authenticated', () => {
-  const { getByRole, rerender } = render(
+  const { getAllByRole, rerender } = render(
     <ErrorPage {...props} authenticated={false} />
   );
-  const unauthenticatedBackLink = getByRole('link').getAttribute('href');
+  const unauthenticatedBackLink = getAllByRole('link')[0].getAttribute('href');
 
   rerender(<ErrorPage {...props} authenticated />);
-  const authenticatedBackLink = getByRole('link').getAttribute('href');
+  const authenticatedBackLink = getAllByRole('link')[0].getAttribute('href');
 
   expect(authenticatedBackLink).not.toEqual(unauthenticatedBackLink);
 });
@@ -26,6 +26,7 @@ it('shows default text for an unknown error', () => {
       "Sorry, we did something wrong",
       "Decipad isn't accessible right now. We're probably fixing this right now",
       "Back to our website",
+      "Contact support",
     ]
   `);
 });
@@ -39,6 +40,7 @@ it('shows explanatory text for a 403 error', () => {
       "You don't have permissions to access this page.",
       "The geeks call this a 403 error",
       "Back to our website",
+      "Contact support",
     ]
   `);
 });
@@ -48,10 +50,11 @@ it('shows explanatory text for a 404 error', () => {
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
     Array [
-      "Not found",
+      "The requested URL was not found",
       "The link you tried may be broken, or the page may have been removed",
       "The geeks call this a 404 error",
       "Back to our website",
+      "Contact support",
     ]
   `);
 });
@@ -65,6 +68,7 @@ it('shows explanatory text for a 500 error', () => {
       "Decipad isn't accessible right now. We're probably fixing this right now",
       "The geeks call this a 500 error",
       "Back to our website",
+      "Contact support",
     ]
   `);
 });

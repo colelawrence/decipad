@@ -32,7 +32,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
       if (account?.type === 'email') {
         if (!(await signInEmail(user as UserWithSecret, account))) {
           throw Boom.forbidden(
-            'This email is not allowed to log in. We are in closed beta, so please sign up to the wait list.'
+            `It looks like your email isn't allowed yet. We are in closed beta, so hopefully your turn is coming up soon.`
           );
         }
         return true;

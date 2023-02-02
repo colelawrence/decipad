@@ -51,14 +51,14 @@ const errorCodeStyles = css(
   setCssVar('currentTextColor', cssVar('weakerTextColor')),
   { paddingTop: '8px' }
 );
-const buttonStyles = css({ paddingTop: '36px' });
+const buttonStyles = css({ paddingTop: '36px', display: 'flex', gap: '12px' });
 
 const message = (errorCode: ErrorPageProps['wellKnown']): string => {
   switch (errorCode) {
     case '403':
       return 'Forbidden';
     case '404':
-      return 'Not found';
+      return 'The requested URL was not found';
     default:
       return 'Sorry, we did something wrong';
   }
@@ -121,7 +121,7 @@ export const ErrorPage = ({
           )}
         </>
       )}
-      <div css={buttonStyles}>
+      <div css={buttonStyles} data-testid="errorPageBacklink">
         <Button
           type="primaryBrand"
           size="extraLarge"
@@ -129,6 +129,13 @@ export const ErrorPage = ({
         >
           {backCall ||
             (authenticated ? 'Back to workspace' : 'Back to our website')}
+        </Button>
+        <Button
+          type="secondary"
+          size="extraLarge"
+          href={'mailto:support@decipad.com'}
+        >
+          Contact support
         </Button>
       </div>
     </main>
