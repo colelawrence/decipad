@@ -480,43 +480,6 @@
   resolved "https://registry.yarnpkg.com/@architect/parser/-/parser-6.0.2.tgz#f75f667ab1dfc49503f0816fbcacfcecb463b394"
   integrity sha512-VYTOP9MkQG5gTCnrnhHmD7290ozNWTtU7kZ/exGvrHA8VikWTHdbhR2vBHvINoebR/VmFG+r7btYjeN87wxYDA==
 
-"@architect/sandbox@5.4.2":
-  version "5.4.2"
-  resolved "https://registry.yarnpkg.com/@architect/sandbox/-/sandbox-5.4.2.tgz#440a0f176c04d30a5a886653ecbfac6f1974f307"
-  integrity sha512-TloKLMspKj2ucXMq2cYxclgIGapnYMJqvSgkY/1LhexI7rROyw8ZvCh8cmM0xM/+AlJtIJoBKZFCoTySV92J7w==
-  dependencies:
-    "@architect/asap" "~5.1.1"
-    "@architect/create" "~4.1.4"
-    "@architect/hydrate" "~3.1.10"
-    "@architect/inventory" "~3.4.0"
-    "@architect/utils" "~3.1.2"
-    "@aws-sdk/client-apigatewaymanagementapi" "3.188.0"
-    "@aws-sdk/client-dynamodb" "3.188.0"
-    "@aws-sdk/client-s3" "3.188.0"
-    "@aws-sdk/client-sns" "3.188.0"
-    "@aws-sdk/client-sqs" "3.188.0"
-    "@aws-sdk/client-ssm" "3.188.0"
-    "@aws-sdk/lib-dynamodb" "3.188.0"
-    "@begin/hashid" "~1.0.0"
-    aws-sdk "2.1055.0"
-    chalk "4.1.2"
-    chokidar "~3.5.3"
-    depstatus "~1.1.1"
-    dynalite "~3.2.2"
-    finalhandler "~1.2.0"
-    glob "~8.1.0"
-    http-proxy "~1.18.1"
-    lambda-runtimes "~1.1.3"
-    minimist "~1.2.7"
-    router "~1.3.7"
-    run-parallel "~1.2.0"
-    run-series "~1.1.9"
-    send "~0.18.0"
-    server-destroy "~1.0.1"
-    tree-kill "~1.2.2"
-    update-notifier-cjs "~5.1.6"
-    ws "~8.12.0"
-
 "@architect/sandbox@5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@architect/sandbox/-/sandbox-5.5.0.tgz#a7e9b616c337680670a0e6a0b640f90e2d4e7d98"
