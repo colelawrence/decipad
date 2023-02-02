@@ -1,5 +1,6 @@
 import { ComponentProps, ReactNode, Suspense } from 'react';
-import { Titled } from 'react-titled';
+import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
 import { ErrorBoundary } from './ErrorBoundary';
 
 type FrameProps = {
@@ -13,18 +14,21 @@ export const Frame: React.FC<FrameProps> = ({
   title,
   suspenseFallback,
   ...props
-}) => (
-  <ErrorBoundary {...props}>
-    <Titled
-      title={(parentTitle) =>
-        title
-          ? parentTitle
-            ? `${title} — ${parentTitle}`
-            : title
-          : parentTitle
-      }
-    >
+}) => {
+  const pageTitle = title ? `${title} | Decipad` : null;
+  const location = useLocation();
+  return (
+    <ErrorBoundary {...props}>
+      {pageTitle && (
+        <Helmet title={pageTitle}>
+          <meta property="og:title" content={pageTitle} />
+          <meta
+            property="og:url"
+            content={`https://app.decipad.com${location.pathname}`}
+          />
+        </Helmet>
+      )}
       <Suspense fallback={suspenseFallback}>{children}</Suspense>
-    </Titled>
-  </ErrorBoundary>
-);
+    </ErrorBoundary>
+  );
+};

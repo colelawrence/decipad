@@ -92,10 +92,18 @@ const Notebook: FC = () => {
 
   const onNotebookTitleChange = useCallback(
     (newName: string) => {
+      const nameTrimmed = newName.trim();
       renameNotebook({
         id: notebookId,
-        name: newName,
+        name: nameTrimmed,
       });
+      window.history.replaceState(
+        {},
+        nameTrimmed,
+        notebooks({}).notebook({
+          notebook: { id: notebookId, name: nameTrimmed },
+        }).$
+      );
     },
     [notebookId, renameNotebook]
   );
