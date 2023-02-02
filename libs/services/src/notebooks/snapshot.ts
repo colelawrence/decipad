@@ -2,7 +2,6 @@ import { toSlateDoc } from '@decipad/slate-yjs';
 import tables, { allPages } from '@decipad/tables';
 import md5 from 'md5';
 import { applyUpdate, Doc, mergeUpdates } from 'yjs';
-import '../utils/bigint';
 
 export const snapshot = async (
   notebookId: string

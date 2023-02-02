@@ -8,7 +8,10 @@ import {
 import { Path } from 'slate';
 import * as Y from 'yjs';
 import { isElement, isText } from '@udecode/plate';
+import { supportBigIntToJSON } from '@decipad/utils';
 import { SharedType, SyncElement } from '../model';
+
+supportBigIntToJSON();
 
 /**
  * Converts a sync element to a slate node

@@ -6,6 +6,7 @@ import md5 from 'md5';
 import { Doc as YDoc } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
 import { MyEditor } from '@decipad/editor-types';
+import { supportBigIntToJSON } from '@decipad/utils';
 import {
   DocSyncEditor,
   OnLoadedCallback,
@@ -13,6 +14,8 @@ import {
   SyncSource,
   OnConnectedCallback,
 } from './types';
+
+supportBigIntToJSON();
 
 export function docSyncEditor<E extends MyEditor>(
   editor: E & YjsEditor & CursorEditor,
