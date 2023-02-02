@@ -24,7 +24,9 @@ test.describe('Auto complete menu', () => {
     await createCalculationBlockBelow(page, 'MyVar = 68 + 1');
     await keyPress(page, 'Enter');
     await createCalculationBlockBelow(page, 'OtherVare = 419 + 1');
-    await expect(page.getByTestId('number-result:69')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="code-line"] [data-testid="number-result:69"]')
+    ).toBeVisible();
   });
 
   test('opens menu when cursor is at the end of a word', async () => {

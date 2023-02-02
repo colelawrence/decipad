@@ -23,6 +23,7 @@ export async function withTestUser({
     auth().testUserSecret
   }?email=${encodeURIComponent(email)}`;
   await page.goto(loginUrl);
+  await page.waitForURL(/\/w\//);
 
   return { email };
 }

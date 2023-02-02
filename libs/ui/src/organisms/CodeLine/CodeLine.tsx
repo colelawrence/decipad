@@ -210,6 +210,7 @@ export const CodeLine = ({
         highlight && highlightedLineStyles,
       ]}
       spellCheck={false}
+      data-testid="code-line"
     >
       <code css={codeStyles}>{children}</code>
       {placeholder && isEmpty && (

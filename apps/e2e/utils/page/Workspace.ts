@@ -4,7 +4,6 @@ import { nanoid } from 'nanoid';
 import os from 'os';
 import path from 'path';
 import { BrowserContext, ElementHandle, Page } from 'playwright';
-import { URL } from 'url';
 import { withTestUser } from '../src/with-test-user';
 
 interface Pad {
@@ -15,20 +14,14 @@ interface Pad {
 
 type PadList = Pad[];
 
-function isOnWorkspacePage(page: Page | URL): boolean {
-  const url = page instanceof URL ? page : new URL(page.url());
-  return url.pathname.match(/^\/w\/[^/]+$/) !== null;
+function isOnWorkspacePage(page: Page): boolean {
+  const url = page.url();
+  return url.match(/\/w\//) !== null;
 }
 
 export async function navigateToWorkspacePage(page: Page) {
-  if (!isOnWorkspacePage(page as Page)) {
+  if (!isOnWorkspacePage(page)) {
     await page.goto('/');
-
-    if (!isOnWorkspacePage(page as Page)) {
-      await page.waitForNavigation({
-        url: isOnWorkspacePage,
-      });
-    }
   }
   await page.waitForSelector('.notebookList > li');
 }
