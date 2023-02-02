@@ -1,17 +1,18 @@
 import { Computer } from '@decipad/computer';
 import {
+  ElementKind,
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_CALLOUT,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
-  ElementKind,
-  InlineNumberElement,
-  MyEditor,
-  MyElement,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
+  InlineNumberElement,
+  MyEditor,
+  MyElement,
   StructuredInputElement,
 } from '@decipad/editor-types';
 import {
@@ -68,10 +69,11 @@ export const closestElementAncestorHasType = (
   return block.type === type;
 };
 
-const BLOCKS_ALLOWING_TEXT_STYLING: ReadonlyArray<ElementKind> = [
+export const RICH_TEXT_BLOCK_TYPES: ReadonlyArray<ElementKind> = [
   ELEMENT_PARAGRAPH,
   ELEMENT_LIC,
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_CALLOUT,
 ];
 
 export const allowsTextStyling = (
@@ -79,7 +81,7 @@ export const allowsTextStyling = (
   path: Path | null
 ): boolean => {
   return path
-    ? BLOCKS_ALLOWING_TEXT_STYLING.some((type) =>
+    ? RICH_TEXT_BLOCK_TYPES.some((type) =>
         closestBlockAncestorHasType(editor, path, type)
       )
     : false;
