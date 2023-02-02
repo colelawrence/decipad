@@ -254,19 +254,19 @@
   dependencies:
     xss "^1.0.8"
 
-"@architect/architect@10.9.1":
-  version "10.9.1"
-  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.9.1.tgz#b75c078b124c710d9e738ca6f935966b1af5e101"
-  integrity sha512-SVwoIWD+0bZyz9mUVyiAxMFOhF01c5t4UAW39habkV/iPUmec01AtK6S3AABDEV/KGSMI3oxPLCyq0hnwf1+iA==
+"@architect/architect@10.10.0":
+  version "10.10.0"
+  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.10.0.tgz#48db0e1848b94cbfbc007c8c37b29ebcee337c3a"
+  integrity sha512-PywBzYj2hd/UXrlxJ7qsdO/OZNwfrQMZfZ9igFSuE49sEA/IjYZ8m29iWu25cj1wm2o+xVfx6amJ8fpoyERuYQ==
   dependencies:
     "@architect/create" "4.1.4"
-    "@architect/deploy" "4.2.11"
+    "@architect/deploy" "4.3.0"
     "@architect/destroy" "3.0.9"
     "@architect/env" "3.0.8"
     "@architect/hydrate" "3.1.10"
-    "@architect/inventory" "~3.4.0"
+    "@architect/inventory" "~3.4.1"
     "@architect/logs" "4.0.6"
-    "@architect/sandbox" "5.4.2"
+    "@architect/sandbox" "5.5.0"
     "@architect/utils" "~3.1.2"
     "@aws-sdk/client-apigatewaymanagementapi" "3.188.0"
     "@aws-sdk/client-dynamodb" "3.188.0"
@@ -304,29 +304,6 @@
     chalk "4.1.2"
     lambda-runtimes "~1.1.3"
     minimist "~1.2.7"
-
-"@architect/deploy@4.2.11":
-  version "4.2.11"
-  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.2.11.tgz#b9fc01a3fbb34553d2dc1dbbd6d1e2bdb91b9c2f"
-  integrity sha512-Zvf+w9RKBG2euXLy7u3oYz6ZKpl1uEko3q12khW81DqeL+Li2oCdTmfUiqHT4NIzdnECFxBIVcEO7+KbhG8XzA==
-  dependencies:
-    "@architect/create" "~4.1.4"
-    "@architect/hydrate" "~3.1.10"
-    "@architect/inventory" "~3.4.0"
-    "@architect/package" "~8.4.0"
-    "@architect/utils" "~3.1.2"
-    chalk "4.1.2"
-    fs-extra "~11.1.0"
-    get-folder-size "2.0.1"
-    glob "~8.1.0"
-    mime-types "~2.1.35"
-    minimist "~1.2.7"
-    path-sort "~0.1.0"
-    run-parallel "~1.2.0"
-    run-series "~1.1.9"
-    run-waterfall "~1.1.7"
-    zip-dir "~2.0.0"
-    zipit "~2.0.0"
 
 "@architect/deploy@4.3.0":
   version "4.3.0"
@@ -431,7 +408,7 @@
     run-series "~1.1.9"
     symlink-or-copy "~1.3.1"
 
-"@architect/inventory@3.4.0", "@architect/inventory@~3.4.0":
+"@architect/inventory@3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.0.tgz#3a5280906cbbc4bfe727a885a25cfeb4cc7c2582"
   integrity sha512-xmJ6AsbicMGWDH0t865ixmw4QpWTV6hCau/yUaHD2q4twg6FONGAGdPZvPZDNfVw/BmoC00L9ke0kNF2u7W/iA==
@@ -457,6 +434,16 @@
   integrity sha512-wFzMG1XH/3SxwUiAbYi1VBLWs8SoFL1bwJXmM/thDTV8Wzd2/tMvHFJ7Cax4KzPyvcd8Ukt2YkQaa8OxTG2lvg==
   dependencies:
     "@architect/asap" "~5.1.0"
+    "@architect/parser" "~6.0.2"
+    "@architect/utils" "~3.1.2"
+    lambda-runtimes "~1.1.3"
+
+"@architect/inventory@~3.4.0", "@architect/inventory@~3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.1.tgz#8f23c91d80196c40333920ecd6a505bd92a65166"
+  integrity sha512-zzWZyxUAKcYJBWh+fr6NLCLqp0ZGcFTbbfqvxMLb2wb2BTMtS7+VVGQhWHXpBpecnKZT6Uh/yxLItR9mguFGCw==
+  dependencies:
+    "@architect/asap" "~5.1.1"
     "@architect/parser" "~6.0.2"
     "@architect/utils" "~3.1.2"
     lambda-runtimes "~1.1.3"

@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.7.0",
-    "@architect/architect": "10.9.1",
+    "@architect/architect": "10.10.0",
     "@architect/asap": "5.0.1",
     "@architect/destroy": "3.0.7",
     "@architect/functions": "5.2.2",
