@@ -75,6 +75,7 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
 
     return lengthComparison;
   }
+  console.log(a, b);
   throw new RuntimeError(
     `Don't know how to compare ${a} (${typeof a}) against ${b} (${typeof b})`
   );

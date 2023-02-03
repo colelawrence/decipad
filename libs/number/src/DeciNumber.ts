@@ -45,14 +45,15 @@ const binOp = <B>(
 
 export const isDeciNumberInput = (n: unknown): n is DeciNumberInput => {
   return (
-    typeof n === 'object' &&
-    n != null &&
-    (n instanceof DeciNumber ||
-      ('n' in n &&
-        (typeof n.n === 'number' ||
-          typeof n.n === 'bigint' ||
-          typeof n.n === 'string')) ||
-      ('infinite' in n && typeof n.infinite === 'boolean'))
+    typeof n === 'bigint' ||
+    (typeof n === 'object' &&
+      n != null &&
+      (n instanceof DeciNumber ||
+        ('n' in n &&
+          (typeof n.n === 'number' ||
+            typeof n.n === 'bigint' ||
+            typeof n.n === 'string')) ||
+        ('infinite' in n && typeof n.infinite === 'boolean')))
   );
 };
 
