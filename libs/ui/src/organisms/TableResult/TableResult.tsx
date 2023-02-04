@@ -68,6 +68,8 @@ export const TableResult = ({
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const [showAllRows, setShowAllRows] = useState(false);
   const { columnNames, columnTypes } = type;
+  const allowsForLookup = columnTypes && columnTypes[0]?.kind === 'string';
+
   if (value.length !== columnNames.length) {
     throw new Error(
       `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
@@ -131,7 +133,7 @@ export const TableResult = ({
           hiddenRowsCount > 0 && rowIndex === showRowLength - 1
         }
         css={{ ...tableParentStyles }}
-        draggable={!!onDragStartCell}
+        draggable={!!onDragStartCell && allowsForLookup}
         firstChildren={
           <div
             draggable

@@ -258,6 +258,7 @@ export const Table = ({
         isLiveResult && liveResultStyles,
         b === 'inner' && nestedStyles,
         isReadOnly && readOnlyTableStyles,
+        !head && { borderTop: border },
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
