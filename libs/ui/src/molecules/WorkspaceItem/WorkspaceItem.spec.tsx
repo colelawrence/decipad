@@ -25,7 +25,7 @@ it('renders an avatar with the initial of the workspace', () => {
       <WorkspaceItem {...props} name="Some Workspace" />
     </DndProvider>
   );
-  expect(screen.getByLabelText(/avatar/i)).toHaveTextContent(/^s$/i);
+  expect(screen.getByLabelText(/avatar/i)).toHaveTextContent(/^so$/i);
 });
 
 it.each([

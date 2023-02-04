@@ -68,7 +68,6 @@ const initialBackgroundStyles = ({
 const initialTextStyles = css({
   dominantBaseline: 'central',
   textAnchor: 'middle',
-  textTransform: 'uppercase',
   fontSize: '1.2em',
 });
 
@@ -146,7 +145,8 @@ export const Avatar = ({
                   : { fill: cssVar('iconColorDark') },
               ])}
             >
-              {name[0]}
+              {name[0].toUpperCase()}
+              {name[1] && name[1].toLocaleLowerCase()}
             </text>
           </svg>
         </div>
