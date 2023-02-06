@@ -1,9 +1,8 @@
 import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, MouseEvent, ReactNode, useCallback } from 'react';
+import { FC, ReactNode } from 'react';
 import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
@@ -36,37 +35,6 @@ const highlightStyles = css(resultBubbleStyles, {
   },
 });
 
-interface ExprRefLinkProps {
-  expression: string;
-}
-
-const ExprRefLink: FC<ExprRefLinkProps> = ({ expression }) => {
-  const computer = useComputer();
-  const blockId = computer.getVarBlockId$.use(expression);
-
-  const onClick = useCallback(
-    (ev: MouseEvent) => {
-      if (typeof blockId === 'string') {
-        const el = document.getElementById(blockId);
-        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        el?.focus();
-        ev.preventDefault();
-        ev.stopPropagation();
-      }
-    },
-    [blockId]
-  );
-
-  return (
-    (blockId && (
-      <a href={`#${blockId}`} onClick={onClick}>
-        Go to definition &rarr;
-      </a>
-    )) ||
-    null
-  );
-};
-
 interface ResultResultProps {
   children?: ReactNode;
   readOnly: boolean;
@@ -78,17 +46,14 @@ const IntrospectMagicNumber: FC<ResultResultProps> = ({
   readOnly,
   children,
 }) => {
-  if (expression?.startsWith('exprRef_')) {
-    return <span>{children}</span>;
-  }
-
   return (
     <Tooltip trigger={<span>{children}</span>}>
       {expression?.startsWith('exprRef_') && !readOnly ? (
-        <ExprRefLink expression={expression} />
+        <p>Click to edit</p>
       ) : readOnly ? (
         `Live Result`
       ) : (
+        // legacy magic numbers catch
         <span>
           Formula: <pre>{expression}</pre>
         </span>
@@ -107,10 +72,11 @@ export const MagicNumber = ({
   element,
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
+  const noEffectOnClick = useEventNoEffect(onClick);
 
   return (
     <span
-      onClick={useEventNoEffect(onClick)}
+      onClick={readOnly ? noop : noEffectOnClick}
       css={[wrapperStyles]}
       data-number-id={tempId}
       data-testid="magic-number"
