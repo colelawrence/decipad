@@ -264,6 +264,7 @@ const resolvers = {
       await data.invites.create(newInvite);
 
       const inviteAcceptLink = `${urlBase}/api/invites/${newInvite.id}/accept`;
+
       await arc.queues.publish({
         name: 'sendemail',
         payload: {

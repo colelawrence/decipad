@@ -4,6 +4,18 @@ import { queues } from '@architect/functions';
 import tables from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
 import timestamp from '../utils/timestamp';
+import { createVerifier } from '../authentication';
+
+export interface INotifyInviteArguments {
+  user: User;
+  invitedByUser: User;
+  isRegistered: boolean;
+  email: string;
+
+  resourceType: { humanName: string };
+  resourceName: string;
+  resourceLink: string;
+}
 
 export interface ICreateInviteArguments {
   resourceType: string;
@@ -42,13 +54,6 @@ export async function create(args: ICreateInviteArguments) {
 
   const inviteAcceptLink = `${urlBase}/api/invites/${newInvite.id}/accept`;
 
-  const isLocal = urlBase === 'http://localhost:3000';
-
-  if (isLocal) {
-    // eslint-disable-next-line no-console
-    console.info('Invite link:', inviteAcceptLink);
-  }
-
   await queues.publish({
     name: 'sendemail',
     payload: {
@@ -60,4 +65,40 @@ export async function create(args: ICreateInviteArguments) {
       resourceName: args.resourceName,
     },
   });
+}
+
+export async function notify(args: INotifyInviteArguments) {
+  const acceptLink = args.isRegistered
+    ? args.resourceLink
+    : await generateAuthLink(args);
+
+  await queues.publish({
+    name: 'sendemail',
+    payload: {
+      template: 'generic-invite',
+      from: args.invitedByUser,
+      to: args.user,
+      resource: args.resourceType,
+      resourceName: args.resourceName,
+      inviteAcceptLink: acceptLink,
+    },
+  });
+}
+
+async function generateAuthLink(args: INotifyInviteArguments) {
+  const { jwt: jwtConfig, inviteExpirationSeconds } = authConfig();
+  const { urlBase } = appConfig();
+
+  const verifier = createVerifier({
+    secret: jwtConfig.secret,
+    baseUrl: urlBase,
+  });
+
+  const { loginLink } = await verifier.createStandaloneVerificationToken({
+    email: args.email,
+    resourceLink: args.resourceLink,
+    expirationSeconds: inviteExpirationSeconds,
+  });
+
+  return loginLink;
 }

@@ -6,8 +6,9 @@ import {
   PermissionType,
   GraphqlObjectType,
 } from '@decipad/backendtypes';
-import { create as createInvite } from '@decipad/services/invites';
+import { notify as notifyInvitee } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
+import { app } from '@decipad/config';
 import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
@@ -53,46 +54,61 @@ export const shareWithEmail = <
       }
 
       const emailKeyId = `email:${args.email}`;
-      const { userkeys } = await tables();
+      const { userkeys, users } = await tables();
       const emailKey = await userkeys.get({ id: emailKeyId });
-      if (emailKey) {
-        await shareWithUser(
-          _,
-          {
-            id: args.id,
-            userId: emailKey.user_id,
-            permissionType: args.permissionType,
-            canComment: args.canComment,
-          },
-          context
-        );
 
-        return record;
+      const registeredUserId = emailKey?.user_id;
+
+      const user = registeredUserId
+        ? await users.get({ id: registeredUserId })
+        : (
+            await createUser({
+              name: args.email,
+              email: args.email,
+            })
+          ).user;
+
+      if (!user) {
+        // Invariant: if we have a registeredUserId, we should have a user
+        throw new UserInputError(`no such user ${registeredUserId}`);
       }
 
-      const newUser = (
-        await createUser({
-          name: args.email,
-          email: args.email,
-        })
-      ).user;
+      await shareWithUser(
+        _,
+        {
+          id: args.id,
+          userId: user.id,
+          permissionType: args.permissionType,
+          canComment: args.canComment,
+        },
+        context
+      );
 
-      const invite: Parameters<typeof createInvite>[0] = {
-        resourceType: resourceType.resourceTypeName,
-        resourceId: args.id,
-        resourceName: resourceType.humanName,
-        user: newUser,
+      await notifyInvitee({
+        user,
         email: args.email,
         invitedByUser: actingUser,
-        permission: args.permissionType,
-        canComment: !!args.canComment,
-      };
-      if (resourceType.parentResourceUriFromRecord) {
-        invite.parentResourceUri =
-          resourceType.parentResourceUriFromRecord(record);
-      }
-      await createInvite(invite);
+        isRegistered: registeredUserId != null,
+        resourceType,
+        resourceLink: getResourceUrl(resourceType.resourceTypeName, args.id),
+        resourceName:
+          'name' in record ? record.name : `<Random ${resourceType.humanName}>`,
+      });
 
       return record;
     };
 };
+
+function getResourceUrl(resourceTypeName: string, resourceId: string) {
+  if (resourceTypeName === 'pads') {
+    return `${app().urlBase}/n/${resourceId}`;
+  }
+
+  if (resourceTypeName === 'externaldatasources') {
+    return `${app().urlBase}/d/${resourceId}`;
+  }
+
+  throw new Error(
+    `getResourceUrl got unknown resource type ${resourceTypeName}`
+  );
+}

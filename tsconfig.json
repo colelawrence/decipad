@@ -59,6 +59,7 @@
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
       "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
       "@decipad/emails": ["libs/emails/src/index.ts"],
+      "@decipad/email-templates": ["emails/src/index.tsx"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
       "@decipad/externaldata": ["libs/externaldata/src/index.ts"],
       "@decipad/feature-flags": ["libs/feature-flags/src/index.ts"],

@@ -37,6 +37,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
         }
         return true;
       }
+
       return false;
     },
 

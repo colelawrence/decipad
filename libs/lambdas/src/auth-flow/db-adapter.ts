@@ -1,8 +1,8 @@
-import { createHash } from 'crypto';
 import { Account, NextAuthOptions, User } from 'next-auth';
 import { UserInput } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { create as createUser } from '@decipad/services/users';
+import { createVerifier } from '@decipad/services/authentication';
 import { isAllowedToLogIn } from './is-allowed';
 
 // Next-Auth does not expose some types
@@ -27,15 +27,8 @@ type EmailConfig = {
 type Adapter = NonNullable<NextAuthOptions['adapter']>;
 type AdapterUser = User & { id: string; emailVerified: boolean };
 
-interface VerificationRequest {
-  identifier: string;
-  token: string;
-}
-
-export const adapter = ({ secret }: AdapterOptions): Adapter => {
-  function hashToken(token: string): string {
-    return createHash('sha256').update(`${token}${secret}`).digest('hex');
-  }
+export const adapter = (adapterOpts: AdapterOptions): Adapter => {
+  const verifier = createVerifier(adapterOpts);
 
   return {
     async createUser(profile: Omit<User, 'id'>): Promise<AdapterUser> {
@@ -157,39 +150,7 @@ export const adapter = ({ secret }: AdapterOptions): Adapter => {
     },
 
     /* e-mail / passwordless verification request  */
-
-    async createVerificationToken(
-      verification: VerificationRequest & { expires: Date }
-    ) {
-      const { identifier, expires, token } = verification;
-      const data = await tables();
-      const hashedToken = hashToken(token);
-
-      const newVerificationRequest = {
-        id: hashToken(`${identifier}:${hashedToken}`),
-        identifier,
-        token: hashedToken,
-        expires: Math.round(expires.getTime() / 1000),
-      };
-
-      await data.verificationrequests.put(newVerificationRequest);
-      return verification;
-    },
-
-    async useVerificationToken(verification: VerificationRequest) {
-      const { identifier, token } = verification;
-      const data = await tables();
-      const hashedToken = hashToken(token);
-      const id = hashToken(`${identifier}:${hashedToken}`);
-      const verificationRequest = await data.verificationrequests.get({ id });
-      if (verificationRequest) {
-        const expirationDate = new Date(verificationRequest.expires * 1000);
-        return {
-          ...verificationRequest,
-          expires: expirationDate,
-        };
-      }
-      return null;
-    },
+    createVerificationToken: verifier.createVerificationToken,
+    useVerificationToken: verifier.useVerificationToken,
   } as unknown as Adapter;
 };

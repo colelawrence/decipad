@@ -549,29 +549,13 @@ test('pads', (ctx) => {
     expect(updatedPad).toMatchObject({ id: pad.id });
   });
 
-  it('unregistered user can accept invite', async () => {
+  it('newly registered user appears in userkeys table', async () => {
     const data = await arc.tables();
 
     const key = await data.userkeys.get({ id: `email:test100@decipad.com` });
     expect(key).toBeDefined();
 
     targetUserId = key.user_id;
-    const invites = (
-      await data.invites.query({
-        IndexName: 'byUser',
-        KeyConditionExpression: 'user_id = :user_id',
-        ExpressionAttributeValues: {
-          ':user_id': targetUserId,
-        },
-      })
-    ).Items;
-
-    expect(invites).toHaveLength(1);
-    const invite = invites[0];
-    const inviteAcceptLink = `/api/invites/${invite.id}/accept`;
-
-    const call = ctx.http.withAuth((await ctx.auth(targetUserId)).token);
-    await call(inviteAcceptLink);
   });
 
   it('read only user cannot remove pad', async () => {

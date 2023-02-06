@@ -29,6 +29,7 @@ export async function isAuthorized(
 ): Promise<PermissionType | null> {
   const user = loadUser(context);
   const secret = loadSecret(context);
+
   return isAuthorizedBase({
     resource,
     user,
