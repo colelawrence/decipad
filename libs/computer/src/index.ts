@@ -65,4 +65,4 @@ export * from './computer';
 export * from './reporting';
 
 export { getExprRef } from './exprRefs';
-export type { IdentifiedBlock } from './types';
+export type { IdentifiedBlock, BlocksInUseInformation } from './types';

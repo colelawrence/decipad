@@ -4,28 +4,28 @@ import {
   formatNumber,
   formatUnit,
 } from '@decipad/format';
-import Queue from 'queue';
-import DeciNumber from '@decipad/number';
 import {
   AST,
   AutocompleteName,
+  deserializeType,
   ErrSpec,
   evaluateStatement,
   ExternalDataMap,
   inferExpression,
+  linearizeType,
+  parseExpression,
   parseExpressionOrThrow,
   Result,
+  SerializedType,
   SerializedTypes,
   serializeType,
   Unit,
-  SerializedType,
-  parseExpression,
-  deserializeType,
-  linearizeType,
 } from '@decipad/language';
+import DeciNumber from '@decipad/number';
 import { anyMappingToMap, getDefined, identity, zip } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
+import Queue from 'queue';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
@@ -36,29 +36,33 @@ import {
   switchMap,
   throttleTime,
 } from 'rxjs/operators';
-import { astToParseable } from './astToParseable';
 import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
+import {
+  blocksInUse,
+  isInUse,
+  programDependencies,
+} from '../dependencies/dependencies';
 import { getExprRef, makeNamesFromIds } from '../exprRefs';
 import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
+import { dropWhileComputing } from '../tools/dropWhileComputing';
 import type {
   ComputeRequest,
   ComputeRequestWithExternalData,
   IdentifiedError,
   IdentifiedResult,
   NotebookResults,
-  UserParseError,
   ProgramBlock,
+  UserParseError,
 } from '../types';
 import { getDefinedSymbol, getGoodBlocks, getIdentifierString } from '../utils';
-import { dropWhileComputing } from '../tools/dropWhileComputing';
+import { astToParseable } from './astToParseable';
 import { ComputationRealm } from './ComputationRealm';
+import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
-import { deduplicateColumnResults } from './deduplicateColumnResults';
-import { isInUse } from '../isInUse/isInUse';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 
@@ -208,6 +212,24 @@ export class Computer {
   /** Is this blockId used in some expression elsewhere? */
   isInUse(...blockIds: string[]) {
     return isInUse(this, this.latestProgram, ...blockIds);
+  }
+
+  /** Information about block usage */
+  blocksInUse$ = listenerHelper(this.results, (_, ...blockIds: string[]) =>
+    this.blocksInUse(...blockIds)
+  );
+
+  blocksInUse(...blockIds: string[]) {
+    return blocksInUse(this, this.latestProgram, ...blockIds);
+  }
+
+  programDependencies$ = listenerHelper(
+    this.results,
+    (_, ...blockIds: string[]) => this.programDependencies(...blockIds)
+  );
+
+  programDependencies(...blockIds: string[]) {
+    return programDependencies(this, this.latestProgram, ...blockIds);
   }
 
   getSymbolDefinedInBlock$ = listenerHelper(

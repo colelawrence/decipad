@@ -1,5 +1,5 @@
+import type { AST, Parser, Result } from '@decipad/language';
 import type { AnyMapping } from '@decipad/utils';
-import type { AST, Result, Parser } from '@decipad/language';
 import type { VisibleVariables } from './computer/getVisibleVariables';
 
 export interface IdentifiedBlock {
@@ -56,6 +56,11 @@ export interface UserParseError {
 }
 export interface ComputeRequest {
   program: Program;
+}
+export interface BlocksInUseInformation {
+  varName: string;
+  usedInBlockId: string[];
+  inBlockId?: string;
 }
 
 export type ComputeRequestWithExternalData = ComputeRequest & {
