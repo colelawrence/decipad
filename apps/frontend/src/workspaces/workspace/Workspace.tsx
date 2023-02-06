@@ -429,7 +429,10 @@ const Workspace: FC = () => {
                 onCreate={(workspaceName) => {
                   createWorkspace({ name: workspaceName })
                     .then((res) => {
-                      if (res.data) {
+                      if (res.error) {
+                        console.error('Failed to create workspace', res.error);
+                        toast('Failed to create workspace.', 'error');
+                      } else if (res.data) {
                         navigate(
                           workspaces({}).workspace({
                             workspaceId: res.data.createWorkspace.id,
@@ -437,7 +440,7 @@ const Workspace: FC = () => {
                         );
                       } else {
                         console.error(
-                          'Failed to create workspace. Received empty response.',
+                          'Failed to create workspace, empty response',
                           res
                         );
                         toast('Failed to create workspace.', 'error');
@@ -464,8 +467,13 @@ const Workspace: FC = () => {
                 closeHref={currentWorkspaceRoute.$}
                 onRename={(newName) =>
                   renameWorkspace({ id: currentWorkspace.id, name: newName })
-                    .then(() => {
-                      navigate(currentWorkspaceRoute.$);
+                    .then((res) => {
+                      if (res.error) {
+                        console.error(res.error);
+                        toast('Failed to rename workspace.', 'error');
+                      } else {
+                        navigate(currentWorkspaceRoute.$);
+                      }
                     })
                     .catch((err) => {
                       console.error('Failed to rename workspace. Error:', err);
@@ -475,8 +483,14 @@ const Workspace: FC = () => {
                 onDelete={() => {
                   navigate(workspaces({}).$);
                   return deleteWorkspace({ id: currentWorkspace.id })
-                    .then(() => {
-                      toast('Workspace deleted.', 'success');
+                    .then((res) => {
+                      if (res.error) {
+                        console.error(res.error);
+                        toast('Failed to delete workspace', 'error');
+                      } else {
+                        navigate('/');
+                        toast('Workspace deleted.', 'success');
+                      }
                     })
                     .catch((err) => {
                       console.error('Failed to delete workspace. Error:', err);
