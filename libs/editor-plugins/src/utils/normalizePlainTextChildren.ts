@@ -1,5 +1,11 @@
 import { MyEditor, MyNodeEntry } from '@decipad/editor-types';
-import { isElement, isText, unwrapNodes } from '@udecode/plate';
+import {
+  getNodeString,
+  unwrapNodes,
+  isElement,
+  isText,
+  removeNodes,
+} from '@udecode/plate';
 import { normalizeExcessProperties } from './normalize';
 
 export const normalizePlainTextChildren = (
@@ -10,6 +16,13 @@ export const normalizePlainTextChildren = (
     const [childNode, childPath] = childEntry;
 
     if (isElement(childNode)) {
+      const str = getNodeString(childNode);
+      if (str === '') {
+        // unwrapNodes does nothing if the element is empty
+        removeNodes(editor, { at: childPath });
+        return true;
+      }
+
       unwrapNodes(editor, { at: childPath });
       return true;
     }
