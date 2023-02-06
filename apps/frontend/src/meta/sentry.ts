@@ -33,6 +33,9 @@ export const initSentry = () => {
         return null;
       }
       event.exception?.values?.forEach((error) => {
+        if (!error.mechanism?.handled) {
+          return;
+        }
         analytics()?.track('error', {
           type: error.type,
           name: error.value,
