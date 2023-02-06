@@ -66,7 +66,7 @@ test.describe('Calculation Blocks v2', () => {
     await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name1/);
 
     // Blur the variable name to make it realize the name is bad
-    await keyPress(page, 'ArrowDown');
+    await keyPress(page, 'Tab');
 
     await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name2/);
   });
@@ -80,7 +80,7 @@ test.describe('Calculation Blocks v2', () => {
     await expect(getCodeLineV2VarName(page, lineNo)).not.toHaveText(/Name2/);
 
     // Blur it so it auto-fills some name into it
-    await keyPress(page, 'ArrowDown');
+    await keyPress(page, 'Tab');
 
     await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name2/);
   });

@@ -4,19 +4,27 @@ import {
   StructuredInputChildren,
 } from '@decipad/editor-components';
 import {
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
+  MyEditor,
   MyElement,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { insertStructuredInput } from '@decipad/editor-utils';
+import {
+  insertStructuredCodeLineBelow,
+  insertStructuredInput,
+} from '@decipad/editor-utils';
 import {
   getEndPoint,
+  getFirstNode,
+  getLastNode,
   getNode,
   getNodeString,
   getStartPoint,
 } from '@udecode/plate';
 import { KeyboardEvent } from 'react';
+import { Path } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
 import { createNormalizeStructuredInput } from './createNormalizeStructuredInput';
@@ -60,6 +68,19 @@ function getAlignedOffset(
     : nextText.length - (text.length - offset);
 }
 
+/**
+ * Selects the whole text on a given path.
+ *
+ * If you have a text note `1234`, the anchor will stay before 1 and the focus
+ * after 4, as to select the whole text.
+ */
+function setSelectionFullText(editor: MyEditor, path: Path) {
+  setSelection(editor, {
+    anchor: getStartPoint(editor, path),
+    focus: getEndPoint(editor, path),
+  });
+}
+
 export const createStructuredInputPlugin = (
   getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): MyPlatePlugin => ({
@@ -79,6 +100,8 @@ export const createStructuredInputPlugin = (
   ],
 });
 
+const ALLOWED_ELEMENTS = new Set([ELEMENT_STRUCTURED_IN, ELEMENT_CODE_LINE_V2]);
+
 export function onStructuredInputKeyDownPlugin(
   getAvailableIdentifier: Computer['getAvailableIdentifier']
 ) {
@@ -89,75 +112,87 @@ export function onStructuredInputKeyDownPlugin(
       (event): boolean => {
         const { selection } = editor;
         if (!selection) return false;
-        const anchor = { ...selection.anchor };
+        const anchorPath = [...selection.anchor.path];
+        const anchorOffset = selection.anchor.offset;
 
-        const node = getNode<MyElement>(editor, [anchor.path[0]]);
-        if (!node || node.type !== ELEMENT_STRUCTURED_IN) return false;
+        const node = getNode<MyElement>(editor, [anchorPath[0]]);
+        if (!node || !ALLOWED_ELEMENTS.has(node.type)) return false;
+
         const shortcut = getShortcut(event);
-        const nodeText = getNodeString(node.children[anchor.path[1]]);
+        switch (shortcut) {
+          case 'move-left':
+          case 'move-right':
+            event.preventDefault();
+            event.stopPropagation();
+            if (
+              (anchorPath[1] === 0 && shortcut === 'move-right') ||
+              (anchorPath[1] === 1 && shortcut === 'move-left')
+            ) {
+              anchorPath[1] = shortcut === 'move-right' ? 1 : 0;
+              setSelectionFullText(editor, anchorPath);
+              return true;
+            }
 
-        if (shortcut === 'move-right' || shortcut === 'move-left') {
-          event.preventDefault();
-          event.stopPropagation();
-
-          // Selection is on the var name, so we have a next node.
-          if (
-            (anchor.path[1] === 0 && shortcut === 'move-right') ||
-            (anchor.path[1] === 1 && shortcut === 'move-left')
-          ) {
-            anchor.path[1] = shortcut === 'move-right' ? 1 : 0;
-            setSelection(editor, {
-              anchor: getStartPoint(editor, anchor.path),
-              focus: getEndPoint(editor, anchor.path),
-            });
-
+            // If we are moving right and at the end, we move down to the next element
+            // And vise versa for the left
+            anchorPath[0] += shortcut === 'move-right' ? 1 : -1;
+            const [, path] =
+              shortcut === 'move-right'
+                ? getFirstNode(editor, [anchorPath[0]])
+                : getLastNode(editor, [anchorPath[0]]);
+            setSelectionFullText(editor, path);
             return true;
-          }
+          case 'move-up':
+          case 'move-down':
+            anchorPath[0] += shortcut === 'move-up' ? -1 : 1;
+            const isNextSame = ALLOWED_ELEMENTS.has(
+              getNode<MyElement>(editor, [anchorPath[0]])?.type || ''
+            );
 
-          const c = shortcut === 'move-right' ? 1 : -1;
-          // Else, we are on the value, and must check if we can move downwards
-          const nextNode = getNode<MyElement>(editor, [anchor.path[0] + c]);
-          if (nextNode && nextNode.type === ELEMENT_STRUCTURED_IN) {
-            anchor.path[0] += c;
-            anchor.path[1] = shortcut === 'move-right' ? 0 : 1;
-            setSelection(editor, {
-              anchor: getStartPoint(editor, anchor.path),
-              focus: getEndPoint(editor, anchor.path),
-            });
-          }
-        } else if (shortcut === 'move-up' || shortcut === 'move-down') {
-          event.preventDefault();
-          event.stopPropagation();
-          const change = shortcut === 'move-up' ? -1 : 1;
-          const nextNode = getNode<MyElement>(editor, [
-            anchor.path[0] + change,
-          ]);
-          if (nextNode && nextNode.type === ELEMENT_STRUCTURED_IN) {
-            const nextText = getNodeString(nextNode.children[anchor.path[1]]);
+            if (!isNextSame) return false;
+            event.preventDefault();
+            event.stopPropagation();
+
+            const currentNodeText = getNodeString(node.children[anchorPath[1]]);
+            const [nextNode] = getFirstNode(editor, anchorPath);
+            const nextNodeText = getNodeString(nextNode);
+
             const newRange = {
               offset: getAlignedOffset(
-                anchor.offset,
-                nodeText,
-                nextText,
-                anchor.path[1] === 0 ? 'left' : 'right'
+                anchorOffset,
+                currentNodeText,
+                nextNodeText,
+                anchorPath[1] === 0 || node.type !== ELEMENT_STRUCTURED_IN
+                  ? 'left'
+                  : 'right'
               ),
-              path: [anchor.path[0] + change, anchor.path[1], 0],
+              path: anchorPath,
             };
             setSelection(editor, {
               anchor: newRange,
               focus: newRange,
             });
             return true;
-          }
-        } else if (shortcut === 'new-element') {
-          event.preventDefault();
-          event.stopPropagation();
-          insertStructuredInput(
-            editor,
-            [anchor.path[0]],
-            getAvailableIdentifier
-          );
+          case 'new-element':
+            event.preventDefault();
+            event.stopPropagation();
+            if (node.type === ELEMENT_STRUCTURED_IN) {
+              insertStructuredInput(
+                editor,
+                [anchorPath[0]],
+                getAvailableIdentifier
+              );
+              return true;
+            }
+            insertStructuredCodeLineBelow(
+              editor,
+              [anchorPath[0]],
+              false,
+              getAvailableIdentifier
+            );
+            return true;
         }
+
         return false;
       },
   })();

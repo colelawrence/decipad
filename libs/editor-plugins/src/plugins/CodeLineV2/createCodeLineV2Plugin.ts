@@ -1,5 +1,8 @@
 import { Computer } from '@decipad/computer';
-import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
+import {
+  createEventInterceptorPluginFactory,
+  onStructuredInputKeyDownPlugin,
+} from '@decipad/editor-plugins';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -47,11 +50,15 @@ export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
     createNormalizeCodeLineVarnamePlugin(),
     createSelectionContainmentPlugin(ELEMENT_CODE_LINE_V2_CODE),
     createSelectionContainmentPlugin(ELEMENT_STRUCTURED_VARNAME),
+    onStructuredInputKeyDownPlugin(
+      computer.getAvailableIdentifier.bind(computer)
+    ),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_CODE_LINE_V2',
       elementTypes: [ELEMENT_CODE_LINE_V2],
-      interceptor: () => {
-        return true;
+      interceptor: (_editor, _entry, e) => {
+        // Keyboard shortcut for creating a new element.
+        return e.event.key !== 'Enter';
       },
     })(),
   ],
