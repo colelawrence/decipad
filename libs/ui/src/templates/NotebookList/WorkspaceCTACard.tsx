@@ -99,7 +99,7 @@ const WorkspaceCTACard: FC<WorkspaceCTACardProps> = ({
             Start with new notebook
           </Button>
           <Button type="secondary" href={docs({}).page({ name: 'gallery' }).$}>
-            Explore our gallery
+            Explore our templates
           </Button>
         </div>
       </div>

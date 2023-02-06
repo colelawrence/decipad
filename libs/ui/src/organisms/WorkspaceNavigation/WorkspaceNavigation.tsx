@@ -315,7 +315,7 @@ export const WorkspaceNavigation = ({
           icon={<Docs />}
         >
           <span css={itemTextStyles}>
-            Documentation <ExternalHrefIcon />
+            Docs & Examples <ExternalHrefIcon />
           </span>
         </NavigationItem>
         <NavigationItem
