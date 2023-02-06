@@ -14,10 +14,12 @@ import {
   nanoid,
   removeNodes,
   unwrapNodes,
+  getNodeChildren,
 } from '@udecode/plate';
 import { insertNodes } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
 import { createNormalizerPluginFactory } from '../../pluginFactories';
+import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
 export const createNormalizeStructuredInput = (
   getAvailableIdentifier: Computer['getAvailableIdentifier']
@@ -57,6 +59,11 @@ export const createNormalizeStructuredInput = (
           return true;
         }
 
+        if (node.children[0].type !== ELEMENT_STRUCTURED_VARNAME) {
+          removeNodes(editor, { at: [...path, 0] });
+          return true;
+        }
+
         if (node.children.length < 2) {
           insertNodes<StructuredInputElementChildren>(
             editor,
@@ -66,12 +73,37 @@ export const createNormalizeStructuredInput = (
               children: [{ text: getAvailableIdentifier('Name', 1) }],
               options: [],
             },
-            { at: [...path, 0] }
+            { at: [...path, 1] }
           );
           return true;
         }
 
+        if (node.children[1].type !== ELEMENT_STRUCTURED_IN_CHILD) {
+          removeNodes(editor, { at: [...path, 1] });
+          return true;
+        }
+
         const [, value] = node.children;
+
+        // Remove children that are not text in the varname
+        if (
+          normalizePlainTextChildren(
+            editor,
+            getNodeChildren(editor, [...path, 0])
+          )
+        ) {
+          return true;
+        }
+
+        // Remove children that are not text in the value
+        if (
+          normalizePlainTextChildren(
+            editor,
+            getNodeChildren(editor, [...path, 1])
+          )
+        ) {
+          return true;
+        }
 
         // Only numbers should be allowed
         const text = getNodeString(value).replaceAll(/[^0-9.-]/g, '');

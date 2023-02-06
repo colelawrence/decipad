@@ -1,5 +1,6 @@
 import {
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
   MyEditor,
@@ -37,7 +38,10 @@ export const onDropSmartCell =
 
       const filteredFragment: MyText[] = [];
 
-      if (block.type === ELEMENT_CODE_LINE) {
+      if (
+        block.type === ELEMENT_CODE_LINE ||
+        block.type === ELEMENT_CODE_LINE_V2_CODE
+      ) {
         filteredFragment.push({
           text,
         });

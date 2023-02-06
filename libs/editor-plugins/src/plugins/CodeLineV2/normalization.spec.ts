@@ -6,6 +6,7 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_PARAGRAPH,
+  ELEMENT_SMART_REF,
 } from '@decipad/editor-types';
 import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
 import {
@@ -55,6 +56,59 @@ beforeEach(() => {
 
 describe('in a code line', () => {
   describe('when there is multiple children', () => {
+    it('should merge all text in the varname', () => {
+      editor.children = [
+        {
+          type: ELEMENT_CODE_LINE_V2,
+          children: [
+            {
+              type: ELEMENT_STRUCTURED_VARNAME,
+              children: [
+                { text: 'var' },
+                {
+                  type: ELEMENT_SMART_REF,
+                  children: [{ text: 'var' }],
+                },
+                { text: 'name' },
+              ],
+            },
+            {
+              type: ELEMENT_CODE_LINE_V2_CODE,
+              children: [{ text: 'code' }],
+            },
+          ],
+        },
+      ];
+
+      normalizeEditor(editor, { force: true });
+
+      expect(editor.children).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "children": Array [
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "varvarname",
+                  },
+                ],
+                "type": "structured_varname",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "code",
+                  },
+                ],
+                "type": "code_line_v2_code",
+              },
+            ],
+            "type": "code_line_v2",
+          },
+        ]
+      `);
+    });
+
     it('should merge all text', () => {
       editor.children = [
         {
