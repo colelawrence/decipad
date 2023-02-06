@@ -29,6 +29,7 @@ const notebookStyles = css({
 });
 
 const headerStyles = css({
+  zIndex: 1,
   [smallScreenQuery]: {
     margin: '0 -4px',
   },
