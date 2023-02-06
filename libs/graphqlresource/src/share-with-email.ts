@@ -10,6 +10,7 @@ import { notify as notifyInvitee } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
 import { app } from '@decipad/config';
 import tables from '@decipad/tables';
+import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
 import { ShareWithUserFunction } from './share-with-user';
@@ -93,6 +94,16 @@ export const shareWithEmail = <
         resourceLink: getResourceUrl(resourceType.resourceTypeName, args.id),
         resourceName:
           'name' in record ? record.name : `<Random ${resourceType.humanName}>`,
+      });
+
+      await track({
+        event: 'share with email',
+        properties: {
+          userId: actingUser.id,
+          resourceType: resourceType.humanName,
+          email: args.email,
+          permissionType: args.permissionType,
+        },
       });
 
       return record;
