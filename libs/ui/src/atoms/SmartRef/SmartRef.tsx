@@ -25,7 +25,6 @@ const smartRefWrapperStyles = (hasPrevious: boolean, hasNext: boolean) =>
           marginRight: '1px',
         }
       : {}),
-    display: 'inline-flex',
     cursor: 'pointer',
     color: cssVar('variableHighlightTextColor'),
   });

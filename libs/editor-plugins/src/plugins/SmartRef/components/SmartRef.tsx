@@ -4,7 +4,10 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, useElementMutatorCallback } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useElementMutatorCallback,
+} from '@decipad/editor-utils';
 import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
 import { SmartRef as UISmartRef } from '@decipad/ui';
 import {
@@ -58,25 +61,31 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const editor = useTEditorRef();
-  const mutateLastSeen = useElementMutatorCallback(editor, element, 'lastSeenVariableName');
+  const mutateLastSeen = useElementMutatorCallback(
+    editor,
+    element,
+    'lastSeenVariableName'
+  );
 
   const computer = useComputer();
   const symbolName = computer.getSymbolDefinedInBlock$.use(element.blockId);
 
   const errorMessage =
     (symbolName == null &&
-      `The variable ${(element.lastSeenVariableName != null && `"${element.lastSeenVariableName}"`) || ''
+      `The variable ${
+        (element.lastSeenVariableName != null &&
+          `"${element.lastSeenVariableName}"`) ||
+        ''
       } is no longer defined`) ||
     undefined;
 
   const isSelected = useSelected();
 
   useEffect(() => {
-    const symbolName$ = computer
-      .getSymbolDefinedInBlock$
+    const symbolName$ = computer.getSymbolDefinedInBlock$
       .observe(element.blockId)
       .pipe(debounceTime(5000))
-      .pipe(filter(name => !!name));
+      .pipe(filter((name) => !!name));
 
     const sub = symbolName$.subscribe((debouncedSymbolName) => {
       if (debouncedSymbolName !== element.lastSeenVariableName) {
@@ -89,7 +98,6 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
 
   return (
     <span {...attributes}>
-      <span contentEditable={false}>{'\u2060'}</span>
       <UISmartRef
         defBlockId={element.blockId}
         symbolName={symbolName ?? element.lastSeenVariableName}
@@ -99,7 +107,6 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
         hasNextContent={siblingContent?.hasNext}
       />
       {children}
-      <span contentEditable={false}>{'\u2060'}</span>
     </span>
   );
 };
