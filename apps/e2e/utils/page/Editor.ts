@@ -36,6 +36,11 @@ interface SetupProps {
   context: BrowserContext;
 }
 
+function isOnNotebook(page: Page | URL): boolean {
+  const url = page instanceof URL ? page : new URL(page.url());
+  return url.pathname.match(/\/n\//) !== null;
+}
+
 export async function setUp(
   { page, context }: SetupProps,
   options: SetupOptions = {}
@@ -46,7 +51,7 @@ export async function setUp(
   await navigateToWorkspacePage(page);
   if (createAndNavigateToNewPad) {
     await Promise.all([
-      page.waitForNavigation({ url: '/n/*' }),
+      page.waitForNavigation({ url: isOnNotebook }),
       clickNewPadButton(page),
     ]);
     await waitForEditorToLoad(page, options);
