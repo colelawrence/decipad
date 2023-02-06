@@ -138,4 +138,22 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await addRow(page);
     expect(await getFromTable(page, 1, 3)).toEqual('1');
   });
+
+  test('doesnt add multiple formula blocks for same column', async () => {
+    await addColumn(page);
+    await page.click('[data-testid="table-button-showformulas-hideformulas"]');
+    await writeInTable(page, '=', 1, 5);
+    await writeInTable(page, '=', 1, 5);
+    await page.click('[data-testid="table-button-showformulas-hideformulas"]');
+    expect(await getFromTable(page, 1, 3)).toEqual('1');
+    await writeInTable(page, '=', 1, 5);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
+    await page.keyboard.type('5 + 4');
+    const codeBlock = await page.waitForSelector('section:has-text("=")');
+    const codeBlockText = await codeBlock.innerText();
+    expect(codeBlockText).toBe(`Property3 =  1 + 1
+Property5 =  2 / Property4
+Property6 =  5 + 4`);
+  });
 });

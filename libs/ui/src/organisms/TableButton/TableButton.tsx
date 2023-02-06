@@ -43,6 +43,9 @@ export const TableButton: FC<TableButtonProps> = ({
   return (
     <div
       css={[showMoreButtonWrapperStyles, hideOnPrint]}
+      data-testid={`table-button-${captions
+        .map((a) => a.replace(/\W/g, '').toLocaleLowerCase())
+        .join('-')}`}
       contentEditable={false}
     >
       <TextAndIconButton

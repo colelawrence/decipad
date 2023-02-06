@@ -1,3 +1,16 @@
+import { Computer } from '@decipad/computer';
+import {
+  ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TH,
+  MyEditor,
+  TableCaptionElement,
+  TableCellType,
+  TableColumnFormulaElement,
+  TableElement,
+  TableHeaderElement,
+} from '@decipad/editor-types';
+import { assertElementType, insertNodes } from '@decipad/editor-utils';
+import { formatResultPreview } from '@decipad/format';
 import { getDefined } from '@decipad/utils';
 import {
   ELEMENT_TD,
@@ -8,22 +21,10 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
-import {
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TH,
-  MyEditor,
-  TableCaptionElement,
-  TableCellType,
-  TableElement,
-  TableHeaderElement,
-} from '@decipad/editor-types';
-import { Path } from 'slate';
 import { nanoid } from 'nanoid';
-import { assertElementType, insertNodes } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
-import { formatResultPreview } from '@decipad/format';
-import { findTableFormulaPath } from './findTableFormulaPath';
+import { Path } from 'slate';
 import { focusCursorOnPath } from '../plugins/createCursorFocusPlugin';
+import { findTableFormulaPath } from './findTableFormulaPath';
 
 export const changeColumnType = (
   editor: MyEditor,
@@ -94,22 +95,42 @@ export const changeColumnType = (
         getNode<TableCaptionElement>(editor, tableCaptionPath)
       );
       const newFormulaPath = [...tableCaptionPath, caption.children.length];
-
+      const maybePreviousPath = [
+        ...tableCaptionPath,
+        caption.children.length - 1,
+      ];
       const headerId = getDefined(
         getNode<TableHeaderElement>(editor, columnHeaderPath)
       ).id;
-      insertNodes(
+      const maybePreviousNode = getNode<TableColumnFormulaElement>(
         editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_TABLE_COLUMN_FORMULA,
-          children: [{ text: ' ' }],
-          columnId: headerId,
-        },
-        {
-          at: newFormulaPath,
-        }
+        maybePreviousPath
       );
+      if (
+        maybePreviousNode?.type === 'table-column-formula' &&
+        maybePreviousNode?.columnId === headerId
+      ) {
+        setNodes(
+          editor,
+          { type: 'table-column-formula' },
+          {
+            at: maybePreviousPath,
+          }
+        );
+      } else {
+        insertNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_TABLE_COLUMN_FORMULA,
+            children: [{ text: ' ' }],
+            columnId: headerId,
+          },
+          {
+            at: newFormulaPath,
+          }
+        );
+      }
     }
   });
 };

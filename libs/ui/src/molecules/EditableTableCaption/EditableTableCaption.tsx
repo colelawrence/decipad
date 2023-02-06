@@ -144,10 +144,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         </div>
       </div>
 
-      {formulaEditor &&
-        !isCollapsed &&
-        tableFormulaEditors.length > 0 &&
-        !hideFormulas && <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>}
+      {formulaEditor && !isCollapsed && tableFormulaEditors.length > 0 && (
+        <div css={hideFormulas ? { display: 'none' } : { display: 'block' }}>
+          <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
+        </div>
+      )}
     </div>
   );
 };
