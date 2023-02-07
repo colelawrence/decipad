@@ -3,18 +3,20 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import {
   ELEMENT_DISPLAY,
+  ELEMENT_SMART_REF,
   ELEMENT_VARIABLE_DEF,
-  MyElement,
   PlateComponent,
   SmartRefElement,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useFocused, useSelected } from 'slate-react';
 import {
+  ELEMENT_CODE_LINE,
   findNode,
   findNodePath,
   getNodeString,
@@ -28,9 +30,9 @@ import {
   useResult,
 } from '@decipad/react-contexts';
 import { DisplayWidget, VariableEditor } from 'libs/ui/src/organisms';
-import { parseStatement } from '@decipad/computer';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
+  assertElementType,
   hasLayoutAncestor,
   safeDelete,
   useElementMutatorCallback,
@@ -99,71 +101,69 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   // Results from computer are NOT calculated until the menu is actually open.
   // Saving a lot of CPU when the editor is re-rendering when the user is busy
   // doing other work.
-  const codeLines = computer.results$
-    .useWithSelector(({ blockResults }) =>
-      Object.keys(blockResults).map((blockId) => {
+  const namesDefined = computer.getNamesDefined$
+    .useWithSelector((names) =>
+      Object.values(names).map((name): DropdownWidgetOptions | undefined => {
         if (!openMenu && loaded) return undefined;
-        const kind = blockResults[blockId].result?.type.kind;
+        const { kind } = name.type;
         if (
-          kind === 'string' ||
-          kind === 'number' ||
-          kind === 'boolean' ||
-          kind === 'type-error'
+          !(
+            kind === 'string' ||
+            kind === 'number' ||
+            kind === 'boolean' ||
+            kind === 'type-error'
+          ) ||
+          name.kind !== 'variable'
         ) {
-          const entry = findNode<MyElement>(editor, {
-            at: [],
-            match: (n) => n.id === blockId,
-          });
-
-          if (!entry) return undefined;
-          const [node] = entry;
-
-          // Variable Defs are always assignments, so we can just give the Id,
-          // and display the name of the var def.
-          if (node.type === ELEMENT_VARIABLE_DEF) {
-            return {
-              type: 'var',
-              id: node.id,
-              text: node.children[0].children[0].text,
-            };
-          }
-
-          // Smart refs are used instead of variable names,
-          // and in order to display these properly, we need to get the
-          // smart ref name and create a string from this.
-          let text = '';
-          for (const c of node.children) {
-            if ((c as MyElement)?.type === 'smart-ref') {
-              const varName = computer.getSymbolDefinedInBlock(
-                (c as SmartRefElement).blockId
-              );
-              text += varName;
-            }
-            text += getNodeString(c);
-          }
-
-          if (text.length === 0) return undefined;
-
-          const computerParsed = parseStatement(text);
-          if (computerParsed.error) return undefined;
-
-          if (computerParsed.solution.type === 'assign') {
-            return {
-              type: 'var',
-              id: node.id,
-              text: computerParsed.solution.args[0].args[0],
-            };
-          }
-          return {
-            type: 'calc',
-            id: node.id,
-            text,
-          };
+          return undefined;
         }
-        return undefined;
+        return {
+          type: 'var',
+          text: name.name,
+          id: name.blockId || '',
+        };
       })
     )
     .filter((n): n is DropdownWidgetOptions => n !== undefined);
+
+  // Decilang codelines do not need to have a name defining them.
+  // But we still want to add them.
+  const resultsWithNoName = editor.children
+    .filter((n) => n.type === ELEMENT_CODE_LINE)
+    .filter((n) => !computer.getSymbolDefinedInBlock(n.id))
+    .filter((n) => {
+      assertElementType(n, ELEMENT_CODE_LINE);
+      const codelineResult = computer.getBlockIdResult$.get(n.id);
+      const kind = codelineResult?.result?.type.kind;
+      return (
+        (kind === 'string' || kind === 'number' || kind === 'boolean') &&
+        codelineResult?.type !== 'identified-error'
+      );
+    })
+    .map((codeline): DropdownWidgetOptions | undefined => {
+      assertElementType(codeline, ELEMENT_CODE_LINE);
+      let text = '';
+      for (const c of codeline.children) {
+        if ((c as SmartRefElement)?.type === 'smart-ref') {
+          assertElementType(c, ELEMENT_SMART_REF);
+          const varName = computer.getSymbolDefinedInBlock(c.blockId);
+          if (!varName) return undefined;
+          text += varName;
+        }
+        text += getNodeString(c);
+      }
+      return {
+        type: 'calc',
+        text,
+        id: codeline.id,
+      };
+    })
+    .filter((n): n is DropdownWidgetOptions => n !== undefined);
+
+  const allResults = useMemo(
+    () => [...namesDefined, ...resultsWithNoName],
+    [namesDefined, resultsWithNoName]
+  );
 
   const path = useNodePath(element);
   const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
@@ -218,7 +218,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   // need to store a bit more information about it.
   const changeResult = useCallback(
     (blockId: string) => {
-      const newRes = codeLines.find((i) => i.id === blockId);
+      const newRes = allResults.find((i) => i.id === blockId);
       changeVarName(newRes?.text || '');
       changeBlockId(blockId);
       setOpenMenu(false);
@@ -233,17 +233,17 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         },
       });
     },
-    [changeBlockId, changeVarName, codeLines, readOnly, userEvents]
+    [changeBlockId, changeVarName, allResults, readOnly, userEvents]
   );
 
   // When the component is mounted, and the result has not yet been loaded,
   // we set the result name and value, this only happens once.
   useEffect(() => {
-    if (codeLines.length > 0 && !loaded) {
+    if (allResults.length > 0 && !loaded) {
       changeResult(element.blockId);
       setLoaded(true);
     }
-  }, [changeResult, element.blockId, codeLines.length, loaded]);
+  }, [changeResult, element.blockId, allResults.length, loaded]);
 
   if (deleted) return <></>;
 
@@ -266,7 +266,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           element={element}
         >
           <DisplayWidget
-            dropdownContent={codeLines}
+            dropdownContent={allResults}
             openMenu={openMenu && focused && selected}
             onChangeOpen={setOpenMenu}
             selectedId={element.blockId}

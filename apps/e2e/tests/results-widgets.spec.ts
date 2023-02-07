@@ -74,6 +74,6 @@ test.describe('Results widgets', () => {
     // only one different variable available
     await expect(
       page.locator('button >> span + div >> visible=true')
-    ).toHaveCount(3);
+    ).toHaveCount(2);
   });
 });
