@@ -132,10 +132,12 @@ test.describe('Calculation Blocks v2', () => {
     // Drag into a paragraph -> creates a magic number
     await (
       await getResults(page).nth(dragLineNo)
-    ).dragTo(page.locator('[data-slate-editor] p >> nth=-1'));
+    ).dragTo(page.locator('[data-testid="paragraph-wrapper"] >> nth=-1'));
 
     await expect(
-      page.locator('p [data-testid="number-result:555"]')
+      page.locator(
+        '[data-testid="paragraph-wrapper"] [data-testid="number-result:555"]'
+      )
     ).toBeVisible();
   });
 });

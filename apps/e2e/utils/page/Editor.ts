@@ -88,7 +88,9 @@ export async function getPadName(page: Page) {
 }
 
 export async function focusOnBody(page: Page) {
-  const firstP = await page.waitForSelector('[data-slate-editor] p >> nth=0');
+  const firstP = await page.waitForSelector(
+    '[data-testid="paragraph-wrapper"] >> nth=0'
+  );
   await firstP.click();
 }
 

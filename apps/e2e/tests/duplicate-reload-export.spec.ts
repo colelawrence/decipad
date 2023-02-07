@@ -69,7 +69,9 @@ test.describe('Duplicating a notebook', () => {
     await expect(
       page.locator('text=this is the third paragraph')
     ).toBeVisible();
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(4);
+    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
+      4
+    );
     await navigateToWorkspacePage(page);
   });
 
@@ -105,7 +107,9 @@ test.describe('Duplicating a notebook', () => {
         })
         .getByText('Copy of My notebook titlepad title here')
     ).toBeVisible();
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(4);
+    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
+      4
+    );
     await navigateToWorkspacePage(page);
   });
 

@@ -44,14 +44,14 @@ test.describe('Simple does publish work test', () => {
   test('can write some stuff', async () => {
     await focusOnBody(page);
     await page.keyboard.type(someText);
-    await expect(page.locator('[data-slate-editor] p >> nth=0')).toHaveText(
-      someText
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=0')
+    ).toHaveText(someText);
     await keyPress(page, 'Enter');
     await page.keyboard.type(moreText);
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      moreText
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText(moreText);
     await keyPress(page, 'Enter');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -69,7 +69,7 @@ test.describe('Simple does publish work test', () => {
   test('it can copy paste the url from the shared notebook', async ({
     baseURL,
   }) => {
-    const locatorOfUrl = '[data-slate-editor] p >> nth=2';
+    const locatorOfUrl = '[data-testid="paragraph-wrapper"] >> nth=2';
     const fourthParagraph = await page.waitForSelector(locatorOfUrl);
     await ControlPlus(page, 'v');
     await focusOnBody(page);
@@ -91,10 +91,10 @@ test.describe('Simple does publish work test', () => {
     await incognitoPage.goto(sharedPageLocation!);
     await waitForEditorToLoad(incognitoPage);
     await expect(
-      incognitoPage.locator('[data-slate-editor] p >> nth=0')
+      incognitoPage.locator('[data-testid="paragraph-wrapper"] >> nth=0')
     ).toHaveText(someText);
     await expect(
-      incognitoPage.locator('[data-slate-editor] p >> nth=1')
+      incognitoPage.locator('[data-testid="paragraph-wrapper"] >> nth=1')
     ).toHaveText(moreText);
     await incognitoPage.waitForSelector('text=Try Decipad');
   });
@@ -107,10 +107,10 @@ test.describe('Simple does publish work test', () => {
 
     await waitForEditorToLoad(randomPage);
     await expect(
-      randomPage.locator('[data-slate-editor] p >> nth=0')
+      randomPage.locator('[data-testid="paragraph-wrapper"] >> nth=0')
     ).toHaveText(someText);
     await expect(
-      randomPage.locator('[data-slate-editor] p >> nth=1')
+      randomPage.locator('[data-testid="paragraph-wrapper"] >> nth=1')
     ).toHaveText(moreText);
     await randomPage.waitForSelector('text=Duplicate');
   });
@@ -119,9 +119,9 @@ test.describe('Simple does publish work test', () => {
     await focusOnBody(page);
     await keyPress(page, 'Enter');
     await page.keyboard.type(justOneMore);
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      justOneMore
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText(justOneMore);
     await keyPress(page, 'Enter');
   });
 
@@ -137,12 +137,12 @@ test.describe('Simple does publish work test', () => {
   test('[incognito] see the republished state', async () => {
     await incognitoPage.goto(sharedPageLocation!);
     await waitForEditorToLoad(incognitoPage);
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      justOneMore
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText(justOneMore);
   });
 
-  test('it shouldnt ask people to republish if no changes exist', async () => {
+  test("it shouldn't ask people to republish if no changes exist", async () => {
     await expect(await page.locator('text=Publish New Changes')).toHaveCount(0);
   });
 });

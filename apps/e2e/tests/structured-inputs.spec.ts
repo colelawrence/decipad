@@ -62,7 +62,7 @@ test.describe('Structured Inputs', () => {
   });
 
   test('Expect the results to show up on the editor (using a result widget)', async () => {
-    await page.locator('[data-slate-editor] p >> nth=-1').click();
+    await page.locator('[data-testid="paragraph-wrapper"] >> nth=-1').click();
     await page.keyboard.type('/result');
     await page.locator('[data-testid="menu-item-display"]').click();
 

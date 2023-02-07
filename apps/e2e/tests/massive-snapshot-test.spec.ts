@@ -93,7 +93,10 @@ test.describe('Loading and snapshot of big notebook', () => {
       'text="Everything, everywhere, all at once"'
     );
 
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(28);
+    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
+      21
+    );
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(7);
   });
 
   test('navigates to published notebook link incognito', async () => {

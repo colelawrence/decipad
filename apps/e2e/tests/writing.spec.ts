@@ -31,7 +31,7 @@ test.describe('Writing in the editor', () => {
     await focusOnBody(page);
     await page.keyboard.type('this is the content for the first paragraph');
     const firstParagraph = await page.waitForSelector(
-      '[data-slate-editor] p >> nth=0'
+      '[data-testid="paragraph-wrapper"] >> nth=0'
     );
     expect(await firstParagraph.textContent()).toBe(
       'this is the content for the first paragraph'
@@ -93,24 +93,28 @@ test.describe('Writing in the editor', () => {
 
   test('allows to create a new paragraph', async () => {
     await keyPress(page, 'Enter');
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(3);
+    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
+      3
+    );
   });
   test('allows to type in the second paragraph', async () => {
     await page.keyboard.type('this is the content for the second paragraph');
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      'this is the content for the second paragraph'
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText('this is the content for the second paragraph');
   });
 
   test('allows to create even another new paragraph', async () => {
     await keyPress(page, 'Enter');
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(4);
+    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
+      4
+    );
   });
   test('allows to type in the third paragraph', async () => {
     await page.keyboard.type('this is the content for the third paragraph');
-    await expect(page.locator('[data-slate-editor] p >> nth=2')).toHaveText(
-      'this is the content for the third paragraph'
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=2')
+    ).toHaveText('this is the content for the third paragraph');
   });
 
   test('allows to go back to the previous paragraph and remove some text', async () => {
@@ -122,16 +126,16 @@ test.describe('Writing in the editor', () => {
     for (let i = 0; i < ' paragraph'.length; i += 1) {
       await keyPress(page, 'Backspace');
     }
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      'this is the content for the second'
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText('this is the content for the second');
   });
 
   test('allows appending some text to an existing paragraph', async () => {
     await page.keyboard.type(' para-graph');
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      'this is the content for the second para-graph'
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText('this is the content for the second para-graph');
   });
 
   test('can split a paragraph in two', async () => {
@@ -139,13 +143,15 @@ test.describe('Writing in the editor', () => {
       await keyPress(page, 'ArrowLeft');
     }
     await keyPress(page, 'Enter');
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(5);
+    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
+      5
+    );
 
-    await expect(page.locator('[data-slate-editor] p >> nth=1')).toHaveText(
-      'this is the content for the '
-    );
-    await expect(page.locator('[data-slate-editor] p >> nth=2')).toHaveText(
-      'second para-graph'
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+    ).toHaveText('this is the content for the ');
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=2')
+    ).toHaveText('second para-graph');
   });
 });

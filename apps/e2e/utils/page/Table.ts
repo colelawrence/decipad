@@ -2,7 +2,7 @@
 import { Page } from 'playwright';
 
 export async function createTable(page: Page) {
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/table');
 

@@ -7,7 +7,7 @@ export async function createInputBelow(
   identifier: string,
   value: number | string
 ) {
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/input');
 
@@ -34,7 +34,7 @@ export async function createInputBelow(
 }
 
 export async function createToggleBelow(page: Page, identifier: string) {
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/toggle');
 
@@ -49,7 +49,7 @@ export async function createToggleBelow(page: Page, identifier: string) {
 }
 
 export async function createDateBelow(page: Page, identifier: string) {
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/date');
 
@@ -69,13 +69,13 @@ export async function createCalculationBlockBelow(
 ) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.waitForSelector(
-    'p:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
   );
   await page.click(
-    'p:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
   );
 
   await keyPress(page, '=');
@@ -92,13 +92,13 @@ export async function createCodeLineV2Below(
   variableName: string,
   decilang: string
 ) {
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.waitForSelector(
-    'p:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
   );
   await page.click(
-    'p:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
   );
 
   await keyPress(page, '=');
@@ -126,10 +126,12 @@ export async function createStructuredInputBelow(
   variableName: string,
   value: string
 ) {
-  await page.click('[data-slate-editor] p >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page
-    .locator('p:has-text("Type / for new blocks = to start calculation")')
+    .locator(
+      '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
+    )
     .click();
 
   await page.keyboard.type('/structured');
