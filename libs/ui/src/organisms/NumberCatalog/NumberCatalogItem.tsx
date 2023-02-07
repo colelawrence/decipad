@@ -22,6 +22,7 @@ interface NumberProps {
   blockId: string;
   color: string;
   onDragStart: SmartRefDragCallback;
+  onDragEnd?: (e: React.DragEvent) => void;
 }
 
 export const NumberCatalogItem = ({
@@ -29,6 +30,7 @@ export const NumberCatalogItem = ({
   blockId,
   color,
   onDragStart,
+  onDragEnd,
 }: NumberProps) => {
   const computer = useComputer();
   const undebouncedResult = computer.getBlockIdResult$.use(blockId);
@@ -56,6 +58,7 @@ export const NumberCatalogItem = ({
           computer,
           result: result.result,
         })}
+        onDragEnd={onDragEnd}
         css={numberCatalogListItemStyles(darkTheme)}
       >
         <span

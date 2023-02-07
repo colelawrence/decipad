@@ -1,33 +1,35 @@
 import { useTEditorRef } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { useComputer, EditorChangeContext } from '@decipad/react-contexts';
+import { EditorChangeContext, useComputer } from '@decipad/react-contexts';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
 import {
+  ComponentProps,
+  useContext,
   useEffect,
   useMemo,
-  ComponentProps,
   useState,
-  useContext,
 } from 'react';
 import { dequal } from 'dequal';
 import {
-  debounceTime,
-  map,
-  concat,
-  of,
   combineLatestWith,
-  filter,
+  concat,
+  debounceTime,
   distinctUntilChanged,
+  filter,
+  map,
+  of,
 } from 'rxjs';
 import { selectCatalogNames } from './selectCatalogNames';
 import { catalogItems } from './catalogItems';
 import { toVar } from './toVar';
+import { useOnDragEnd } from '../utils/useDnd';
 
 const debounceEditorChangesMs = 1_000;
 
 export function NumberCatalog() {
   const editor = useTEditorRef();
   const onDragStart = useMemo(() => onDragStartSmartRef(editor), [editor]);
+  const onDragEnd = useOnDragEnd();
 
   const computer = useComputer();
 
@@ -59,5 +61,11 @@ export function NumberCatalog() {
     return () => sub.unsubscribe();
   }, [computer, editor, editorChanges]);
 
-  return <UINumberCatalog items={items} onDragStart={onDragStart} />;
+  return (
+    <UINumberCatalog
+      items={items}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    />
+  );
 }

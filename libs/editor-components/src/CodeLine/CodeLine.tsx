@@ -31,6 +31,7 @@ import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useTurnIntoProps } from './useTurnIntoProps';
+import { useOnDragEnd } from '../utils/useDnd';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CODE_LINE);
@@ -109,6 +110,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     [computer, editor, element, isReadOnly, lineResult]
   );
 
+  const onDragEnd = useOnDragEnd();
+
   const {
     closeEditor,
     focusNumber,
@@ -154,6 +157,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
           isEmpty={isEmpty}
           onDragStartInlineResult={handleDragStartInlineResult}
           onDragStartCell={handleDragStartCell}
+          onDragEnd={onDragEnd}
           onClickedResult={isReadOnly ? undefined : onClickedResult}
           hasNextSibling={!teleport && siblingCodeLines?.hasNext}
           hasPreviousSibling={!teleport && siblingCodeLines?.hasPrevious}

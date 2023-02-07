@@ -29,6 +29,7 @@ type NumberCatalogItemType = {
 
 interface NumberCatalogProps {
   onDragStart: SmartRefDragCallback;
+  onDragEnd: (e: React.DragEvent) => void;
   items: NumberCatalogItemType[];
   alignment?: 'right' | 'left';
   startCollapsed?: boolean;
@@ -36,6 +37,7 @@ interface NumberCatalogProps {
 
 export const NumberCatalog = ({
   onDragStart,
+  onDragEnd,
   items = [],
   alignment = 'left',
   startCollapsed = true,
@@ -66,6 +68,7 @@ export const NumberCatalog = ({
             color={color}
             blockId={item.blockId}
             onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
           />
         );
     }

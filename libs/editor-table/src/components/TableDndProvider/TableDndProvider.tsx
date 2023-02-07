@@ -81,8 +81,10 @@ export const TableDndProvider = ({
 
   const onCellDragEnd = useCallback(() => {
     dndStore.set.isDragging(false);
+    // eslint-disable-next-line no-param-reassign
+    editor.isDragging = false;
     setColumnDropLine(null);
-  }, [setColumnDropLine]);
+  }, [editor]);
 
   const tableDndContextValue = {
     onCellHover,

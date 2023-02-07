@@ -36,7 +36,5 @@ export const onDragStartSmartCell =
 
     editor.setFragmentData(e.dataTransfer, 'drag');
 
-    // This is needed to make it draggable.
-    e.dataTransfer.setData('text', '');
     e.dataTransfer.dropEffect = 'copy';
   };

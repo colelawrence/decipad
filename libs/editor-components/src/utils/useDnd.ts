@@ -16,7 +16,7 @@ import {
   moveNodes,
   withoutNormalizing,
 } from '@udecode/plate';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
 import { Path, PathRef } from 'slate';
 import {
@@ -25,7 +25,11 @@ import {
 } from '@udecode/plate-selection';
 import { ReactEditor } from 'slate-react';
 import { getAnalytics } from '@decipad/client-events';
-import { useDragNode, UseDropNodeOptions } from '@udecode/plate-ui-dnd';
+import {
+  dndStore as plateDndStore,
+  useDragNode,
+  UseDropNodeOptions,
+} from '@udecode/plate-ui-dnd';
 
 export declare type DropDirection =
   | 'top'
@@ -415,4 +419,8 @@ export const getDirection = ({
   }
 
   return undefined;
+};
+
+export const useOnDragEnd = () => {
+  return useCallback(() => plateDndStore.set.isDragging(false), []);
 };

@@ -36,7 +36,5 @@ export const onDragStartTableCellResult =
       e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
     }
 
-    // This is needed to make it draggable.
-    e.dataTransfer.setData('text', '');
     e.dataTransfer.dropEffect = 'copy';
   };

@@ -60,6 +60,7 @@ const smartColumnCellStyles = css(p12Regular, {
 interface SmartColumnCellProps {
   readonly aggregationTypeMenu: ReactNode | ReactNode[];
   readonly onDragStart: (e: DragEvent) => void;
+  readonly onDragEnd?: (e: DragEvent) => void;
   readonly result?: Result.Result;
   readonly element?: AnyElement;
   readonly previewRef?: RefObject<HTMLDivElement>;
@@ -68,6 +69,7 @@ interface SmartColumnCellProps {
 export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   aggregationTypeMenu,
   onDragStart,
+  onDragEnd,
   result,
   element,
 }) => {
@@ -98,7 +100,10 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
           setGrabbing(true);
           onDragStart(ev);
         }}
-        onDragEnd={() => setGrabbing(false)}
+        onDragEnd={(ev) => {
+          setGrabbing(false);
+          onDragEnd?.(ev);
+        }}
       >
         {result && (
           <CodeResult variant="inline" {...result} element={element} />

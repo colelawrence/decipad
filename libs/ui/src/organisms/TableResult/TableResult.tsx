@@ -60,6 +60,7 @@ export const TableResult = ({
   type,
   value,
   onDragStartCell,
+  onDragEnd,
   tooltip = true,
   isLiveResult = false,
   firstTableRowControls,
@@ -154,6 +155,7 @@ export const TableResult = ({
                 }
               )(e);
             }}
+            onDragEnd={onDragEnd}
             className={onDragStartCell && 'drag-handle'}
             css={{
               display: 'none',

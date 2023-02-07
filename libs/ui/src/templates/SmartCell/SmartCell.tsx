@@ -52,6 +52,7 @@ export interface SmartRowProps {
   colSpan?: number;
   onHover?: (hover: boolean) => void;
   onDragStart?: (e: DragEvent) => void;
+  onDragEnd?: (e: DragEvent) => void;
   hover?: boolean;
   alignRight?: boolean;
   global?: boolean;
@@ -62,6 +63,7 @@ export function SmartCell({
   result,
   aggregationType,
   onDragStart,
+  onDragEnd,
   rowSpan = 1,
   colSpan = 1,
   onHover = noop,
@@ -87,6 +89,7 @@ export function SmartCell({
       colSpan={colSpan}
       draggable
       onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >

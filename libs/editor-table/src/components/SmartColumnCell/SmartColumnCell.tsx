@@ -15,6 +15,7 @@ import { Path } from 'slate';
 import { TableColumn, useColumnAggregationTypes } from '../../hooks';
 import { AggregationType } from '../../utils';
 import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
+import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 
 interface SmartColumnCellProps {
   tableName: string;
@@ -103,11 +104,14 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
     [computer, editor, expression, result]
   );
 
+  const onDragEnd = useOnDragEnd();
+
   const showMenu = availableAggregationTypes?.length > 0;
 
   return (
     <UISmartColumnCell
       onDragStart={onDragExpressionStart}
+      onDragEnd={onDragEnd}
       result={result || undefined}
       aggregationTypeMenu={
         showMenu && (

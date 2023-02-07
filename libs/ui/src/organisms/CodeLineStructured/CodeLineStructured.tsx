@@ -7,8 +7,8 @@ import { CodeResultProps } from '../../types';
 import { useResultInfo } from '../CodeLine/CodeLine';
 import {
   canGrabStyles,
-  codeLineStyles,
   codeContainerStyles,
+  codeLineStyles,
   grabbingStyles,
   highlightedLineStyles,
   inlineStyles,
@@ -21,6 +21,7 @@ interface CodeLineStructuredProps {
   readonly syntaxError?: ComponentProps<typeof CodeError>;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
+  readonly onDragEnd?: (e: React.DragEvent) => void;
   readonly onClickedResult?: (arg0: Result.Result) => void;
   readonly variableNameChild: ReactNode;
   readonly codeChild: ReactNode;
@@ -32,6 +33,7 @@ export const CodeLineStructured = ({
   syntaxError,
   onDragStartInlineResult,
   onDragStartCell,
+  onDragEnd,
   onClickedResult,
   variableNameChild,
   codeChild,
@@ -78,7 +80,10 @@ export const CodeLineStructured = ({
             onDragStartInlineResult?.(e);
             setGrabbing(true);
           }}
-          onDragEnd={() => setGrabbing(false)}
+          onDragEnd={(e) => {
+            onDragEnd?.(e);
+            setGrabbing(false);
+          }}
         >
           {inline}
         </div>

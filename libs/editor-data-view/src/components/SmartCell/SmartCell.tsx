@@ -16,6 +16,7 @@ import { useTEditorRef } from '@decipad/editor-types';
 import { maybeAggregate } from '../../utils/maybeAggregate';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { AggregationKind, PreviousColumns } from '../../types';
+import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 
 const DEBOUNCE_RESULT_MS = 500;
 
@@ -110,6 +111,8 @@ export const SmartCell: FC<SmartProps> = ({
     [computer, editor, expression, result]
   );
 
+  const onDragEnd = useOnDragEnd();
+
   return result == null || aggregationType == null ? (
     <td css={emptyCellStyles} />
   ) : (
@@ -123,6 +126,7 @@ export const SmartCell: FC<SmartProps> = ({
       alignRight={alignRight}
       global={global}
       onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
     />
   );
 };

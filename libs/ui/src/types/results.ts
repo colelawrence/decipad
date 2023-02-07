@@ -16,6 +16,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
     data: DragCellData,
     options: { previewRef?: RefObject<Element>; result: Result.Result }
   ) => (e: DragEvent<HTMLDivElement>) => void;
+  readonly onDragEnd?: (e: DragEvent<HTMLDivElement>) => void;
   readonly tooltip?: boolean;
   readonly isLiveResult?: boolean;
   readonly firstTableRowControls?: ReactNode;

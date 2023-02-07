@@ -168,6 +168,7 @@ interface CodeLineProps {
   readonly isEmpty?: boolean;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
+  readonly onDragEnd?: (e: React.DragEvent) => void;
   readonly onClickedResult?: (arg0: Result.Result) => void;
   readonly hasNextSibling?: boolean;
   readonly hasPreviousSibling?: boolean;
@@ -184,6 +185,7 @@ export const CodeLine = ({
   isEmpty = false,
   onDragStartInlineResult,
   onDragStartCell,
+  onDragEnd,
   onClickedResult,
   hasNextSibling,
   hasPreviousSibling,
@@ -232,7 +234,10 @@ export const CodeLine = ({
             onDragStartInlineResult?.(e);
             setGrabbing(true);
           }}
-          onDragEnd={() => setGrabbing(false)}
+          onDragEnd={(e) => {
+            onDragEnd?.(e);
+            setGrabbing(false);
+          }}
         >
           {inline}
         </div>
@@ -246,11 +251,17 @@ export function useResultInfo({
   result,
   syntaxError,
   onDragStartCell,
+  onDragEnd,
   onClickedResult,
   element,
 }: Pick<
   CodeLineProps,
-  'result' | 'syntaxError' | 'onDragStartCell' | 'onClickedResult' | 'element'
+  | 'result'
+  | 'syntaxError'
+  | 'onDragStartCell'
+  | 'onDragEnd'
+  | 'onClickedResult'
+  | 'element'
 >): { inline?: ReactNode; expanded?: ReactNode; errored?: boolean } {
   const onOutputClick = useEventNoEffect(
     useCallback(() => {
@@ -295,6 +306,7 @@ export function useResultInfo({
             {...result}
             variant="block"
             onDragStartCell={onDragStartCell}
+            onDragEnd={onDragEnd}
             element={element}
           />
         </output>
