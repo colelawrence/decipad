@@ -1,6 +1,6 @@
 import { ELEMENT_PARAGRAPH, PlateComponent } from '@decipad/editor-types';
 import { noop, thro } from '@decipad/utils';
-import { fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   createPlateEditor,
@@ -18,7 +18,7 @@ import { DraggableBlock } from './DraggableBlock';
 
 const DraggableParagraph: PlateComponent = ({ element, children }) => (
   <DraggableBlock blockKind="paragraph" element={element!}>
-    <p>{children}</p>
+    <div data-testid="draggable">{children}</div>
   </DraggableBlock>
 );
 
@@ -48,10 +48,10 @@ beforeEach(() => {
 });
 
 it('renders the main block', async () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
+  const { getByTestId } = render(<Plate {...plateProps} editor={editor} />, {
     wrapper,
   });
-  expect(getByText('text').closest('p')).toBeVisible();
+  expect(getByTestId('draggable')).toBeVisible();
 });
 
 it('renders a drag handle', async () => {
@@ -125,7 +125,7 @@ afterEach(() => {
   // @ts-expect-error
   document.caretPositionFromPoint = originalCaretPositionFromPoint;
 });
-it('can move the block', () => {
+it('can move the block', async () => {
   plateProps.initialValue = [
     { type: ELEMENT_PARAGRAPH, id: '0', children: [{ text: 'first' }] },
     { type: ELEMENT_PARAGRAPH, id: '1', children: [{ text: 'second' }] },
@@ -151,18 +151,21 @@ it('can move the block', () => {
       getClientRect: () => null,
     };
   };
-
-  fireEvent.dragStart(firstDragHandle);
-  fireEvent.dragEnter(getByText('second'), { clientX: 100, clientY: 100 });
-  fireEvent.dragOver(getByText('second'), { clientX: 100, clientY: 100 });
-
+  await act(async () => {
+    fireEvent.dragStart(firstDragHandle);
+    fireEvent.dragEnter(getByText('second'), { clientX: 100, clientY: 100 });
+    fireEvent.dragOver(getByText('second'), { clientX: 100, clientY: 100 });
+  });
   expect(editor.children).toEqual([
     expect.objectContaining({ children: [{ text: 'first' }] }),
     expect.objectContaining({ children: [{ text: 'second' }] }),
   ]);
-  fireEvent.drop(getByText('second'), {
-    clientX: 100,
-    clientY: 100,
+
+  await act(async () => {
+    fireEvent.drop(getByText('second'), {
+      clientX: 100,
+      clientY: 100,
+    });
   });
   expect(editor.children).toEqual([
     expect.objectContaining({ children: [{ text: 'second' }] }),

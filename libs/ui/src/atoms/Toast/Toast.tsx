@@ -168,7 +168,7 @@ export const Toast: React.FC<React.PropsWithChildren<ToastProps>> = ({
       css={[getAppearanceType(appearance), collapsed && collapsedBaseStyles]}
     >
       <span css={iconStyles}>{getIconType(appearance)}</span>
-      <p>{children}</p>
+      <div>{children}</div>
     </div>
   );
 };

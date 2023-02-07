@@ -49,11 +49,14 @@ export const Paragraph = ({
   const isBlockActive = useIsBlockActive();
 
   return (
-    <p css={[styles, isBlockActive && activeStyles]}>
+    <div
+      css={[styles, isBlockActive && activeStyles]}
+      data-testid="paragraph-wrapper"
+    >
       <label data-testid="paragraph-placeholder" contentEditable={false}>
         {placeholder}
       </label>
       <span data-testid="paragraph-content">{children}</span>
-    </p>
+    </div>
   );
 };

@@ -51,17 +51,21 @@ it('shows a placeholder when notebook empty and not selected', async () => {
       wrapper,
     }
   );
-  const paragraphElement = renderedObject.container.querySelector('p');
+  const paragraphElement =
+    renderedObject.getAllByTestId('paragraph-wrapper')[0];
   await waitFor(() => expect(paragraphElement).toHaveTextContent('Type'));
 });
 
 // eslint-disable-next-line jest/no-disabled-tests
 it.skip('shows a placeholder when empty and selected', async () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getByText, getAllByTestId } = render(
+    <Plate {...plateProps} editor={editor} />,
+    {
+      wrapper,
+    }
+  );
   const textElement = getByText('text');
-  const paragraphElement = textElement.closest('p');
+  const paragraphElement = getAllByTestId('paragraph-wrapper')[0];
 
   await act(async () => {
     deleteText(editor, {
@@ -79,11 +83,14 @@ it.skip('shows a placeholder when empty and selected', async () => {
 });
 
 it('does not show a placeholder when not empty', async () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getByText, getAllByTestId } = render(
+    <Plate {...plateProps} editor={editor} />,
+    {
+      wrapper,
+    }
+  );
   const textElement = getByText('text');
-  const paragraphElement = textElement.closest('p');
+  const paragraphElement = getAllByTestId('paragraph-wrapper')[0];
 
   await act(async () => {
     insertText(editor, 'text2', {
@@ -101,7 +108,7 @@ it('does not show a placeholder when not empty', async () => {
 });
 
 it('does not show a placeholder when not selected', async () => {
-  const { getByText } = render(
+  const { getByText, getAllByTestId } = render(
     <Plate
       {...plateProps}
       editor={editor}
@@ -116,7 +123,7 @@ it('does not show a placeholder when not selected', async () => {
     }
   );
   const textElement = getByText('text');
-  const paragraphElement = textElement.closest('p');
+  const paragraphElement = getAllByTestId('paragraph-wrapper')[0];
   const otherTextElement = getByText('other');
 
   await act(async () => {
@@ -135,7 +142,7 @@ it('does not show a placeholder when not selected', async () => {
 });
 
 it('does not show a placeholder when selecting more than the paragraph', async () => {
-  const { getByText } = render(
+  const { getByText, getAllByTestId } = render(
     <Plate
       {...plateProps}
       editor={editor}
@@ -150,7 +157,7 @@ it('does not show a placeholder when selecting more than the paragraph', async (
     }
   );
   const textElement = getByText('text');
-  const paragraphElement = textElement.closest('p');
+  const paragraphElement = getAllByTestId('paragraph-wrapper')[0];
   const otherTextElement = getByText('other');
 
   await act(async () => {
@@ -178,11 +185,14 @@ it('does not show a placeholder when in readOnly mode', async () => {
   plateProps.readOnly = true;
   editor = createPlateEditor({ plugins: plateProps.plugins });
   const { editor: _editor, ...restProps } = plateProps;
-  const { getByText } = render(<Plate {...restProps} editor={editor} />, {
-    wrapper,
-  });
+  const { getByText, getByTestId } = render(
+    <Plate {...restProps} editor={editor} />,
+    {
+      wrapper,
+    }
+  );
   const textElement = getByText('text');
-  const paragraphElement = textElement.closest('p');
+  const paragraphElement = getByTestId('paragraph-wrapper');
 
   await act(async () => {
     select(editor, {
