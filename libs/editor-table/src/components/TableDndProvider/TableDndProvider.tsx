@@ -10,6 +10,7 @@ import {
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
+import { dndStore } from '@udecode/plate-ui-dnd';
 import {
   CellDndProps,
   ColumnDropLine,
@@ -78,10 +79,10 @@ export const TableDndProvider = ({
     [editor, onMoveColumn, table]
   );
 
-  const onCellDragEnd = useCallback(
-    () => setColumnDropLine(null),
-    [setColumnDropLine]
-  );
+  const onCellDragEnd = useCallback(() => {
+    dndStore.set.isDragging(false);
+    setColumnDropLine(null);
+  }, [setColumnDropLine]);
 
   const tableDndContextValue = {
     onCellHover,
