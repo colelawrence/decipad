@@ -75,6 +75,7 @@ export {
   n as astNode,
   safeNumberForPrecision,
   walkAst,
+  mutateAst,
   isStatement,
 } from './utils';
 export { linearizeType } from './dimtools/common';

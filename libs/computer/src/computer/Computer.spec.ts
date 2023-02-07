@@ -223,6 +223,24 @@ describe('expr refs', () => {
       ]
     `);
   });
+
+  it('supports exprRefs for table columns', async () => {
+    expect(
+      await computeOnTestComputer({
+        program: getIdentifiedBlocks(
+          'Table = {}',
+          'Table.A = [1]',
+          'C = exprRef_block_1'
+        ),
+      })
+    ).toMatchInlineSnapshot(`
+      Array [
+        "block-0 -> [[1]]",
+        "block-1 -> [1]",
+        "block-2 -> [1]",
+      ]
+    `);
+  });
 });
 
 it('creates new, unused identifiers', async () => {

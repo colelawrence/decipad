@@ -1,8 +1,9 @@
 import {
   astNode,
-  walkAst,
+  mutateAst,
   isIdentifier,
   isExpression,
+  AST,
 } from '@decipad/language';
 import { memoizePrimitive } from '@decipad/utils';
 import produce from 'immer';
@@ -21,7 +22,11 @@ export const replaceExprRefsWithPrettyRefs = (
 
   // MyVar = 1 + exprRef_4567  --->  MyVar = 1 + TheVariableName
   // exprRef_1234 = 1  --->  Value_1 = 1
-  const [renamed, generatedNames] = replaceAllBlockIdReferences(autoAssigned);
+  // exprRef_Table_Column_ID  --->  Table.Column
+  const [renamed, generatedNames] = replaceAllBlockIdReferences(
+    autoAssigned,
+    mapExprRefsToColumnAccess(program)
+  );
 
   return [renamed, generatedNames];
 };
@@ -52,24 +57,58 @@ function plainExpressionsToAssignments(program: Program) {
   );
 }
 
-function replaceAllBlockIdReferences(program: Program): [Program, Set<string>] {
+/**
+ * Helper function to map exprRef_tableColumnId to Table.Column
+ */
+function mapExprRefsToColumnAccess(
+  program: Program
+): Map<string, AST.PropertyAccess> {
+  return new Map(
+    program.flatMap((block) => {
+      const columnAssign = block.block?.args[0];
+      if (columnAssign?.type === 'table-column-assign') {
+        const [table, column] = columnAssign.args;
+        const asPropertyAccess: AST.PropertyAccess = {
+          type: 'property-access',
+          args: [{ type: 'ref', args: [table.args[0]] }, column.args[0]],
+        };
+        return [[getExprRef(block.id), asPropertyAccess]];
+      }
+
+      return [];
+    })
+  );
+}
+
+function replaceAllBlockIdReferences(
+  program: Program,
+  tableColumnsBySmartRef: Map<string, AST.PropertyAccess>
+): [Program, Set<string>] {
   const genVarName = makeVarNameLookup(program);
 
   const generatedNames = new Set<string>();
   const newProgram = program.map(
     produce((block) => {
       if (block.type === 'identified-block') {
-        walkAst(block.block, (thing) => {
+        mutateAst(block.block, (thing) => {
           if (isIdentifier(thing)) {
             const varName = getIdentifierString(thing);
             if (isExprRef(varName)) {
-              const { newName, wasGenerated } = genVarName(varName);
-              thing.args[0] = newName;
-              if (wasGenerated) {
-                generatedNames.add(thing.args[0]);
+              /** Is this a ref to a Table.Column? */
+              const asTableDotColumn = tableColumnsBySmartRef.get(varName);
+              if (asTableDotColumn) {
+                return asTableDotColumn;
+              } else {
+                const { newName, wasGenerated } = genVarName(varName);
+                thing.args[0] = newName;
+                if (wasGenerated) {
+                  generatedNames.add(thing.args[0]);
+                }
               }
             }
           }
+
+          return thing;
         });
       }
     })

@@ -124,3 +124,19 @@ it('regression: exprRefs with names, do not go in the generatedNames set', () =>
 
   expect(generatedNames.has('one')).toBe(false);
 });
+
+it('supports references to table-column-assign', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks('Table1.Column1 = 2', 'exprRef_block_0')
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(assign
+      (def Value_1)
+      (prop (ref Table1).Column1))",
+    ]
+  `);
+});

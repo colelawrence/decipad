@@ -5,6 +5,7 @@ import type { AST, Unit } from '.';
 export { date } from './date';
 
 type WalkFn = (node: AST.Node, path: number[]) => void;
+type MutateFn = (node: AST.Node, path: number[]) => AST.Node;
 
 export const DEFAULT_PRECISION = 10;
 export const MAX_PRECISION = 15;
@@ -18,6 +19,27 @@ export const walkAst = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
       walkAst(arg, fn, [...path, index]);
     }
   }
+};
+
+export const mutateAst = (
+  node: AST.Node,
+  fn: MutateFn,
+  path: number[] = []
+): AST.Node => {
+  const newNode = fn(node, path);
+  if (newNode !== node) {
+    return newNode;
+  }
+
+  for (let index = 0; index < node.args.length; index++) {
+    const arg = node.args[index];
+    if (isNode(arg)) {
+      const newNode = mutateAst(arg, fn, [...path, index]);
+      node.args[index] = newNode;
+    }
+  }
+
+  return node;
 };
 
 export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
