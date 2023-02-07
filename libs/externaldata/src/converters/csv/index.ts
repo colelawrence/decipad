@@ -10,7 +10,7 @@ export function csv(source: string): Promise<Table> {
   return new Promise((resolve, reject) => {
     let columnNames: string[];
     const data: AcceptableCellType[][] = [];
-    const parser = parseCSV({ cast });
+    const parser = parseCSV({ cast, relax_quotes: true });
     let isDone = false;
     let hadFirstRow = false;
     parser.on('readable', () => {

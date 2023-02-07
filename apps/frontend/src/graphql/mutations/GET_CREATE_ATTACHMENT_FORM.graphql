@@ -1,0 +1,18 @@
+mutation GetCreateAttachmentForm(
+  $notebookId: ID!
+  $fileName: String!
+  $fileType: String!
+) {
+  getCreateAttachmentForm(
+    padId: $notebookId
+    fileName: $fileName
+    fileType: $fileType
+  ) {
+    url
+    handle
+    fields {
+      key
+      value
+    }
+  }
+}

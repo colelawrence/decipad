@@ -11,6 +11,7 @@ import { DocSyncEditor, SyncSource } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
+import { getDefined } from '@decipad/utils';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
   GetNotebookByIdQuery,
@@ -18,6 +19,8 @@ import {
   useGetNotebookByIdQuery,
   useSetNotebookPublicMutation,
   useUpdateNotebookIconMutation,
+  useAttachFileToNotebookMutation,
+  useGetCreateAttachmentFormMutation,
   useSharePadWithEmailMutation,
 } from '../../../graphql';
 import { useDuplicateNotebook } from './useDuplicateNotebook';
@@ -60,6 +63,9 @@ interface UseNotebookStateAndActionsResult {
   publishNotebook: () => void;
   unpublishNotebook: () => void;
   inviteEditorByEmail: (email: string) => Promise<void>;
+
+  getAttachmentForm: (file: File) => Promise<[URL, FormData, string]>;
+  onAttached: (handle: string) => Promise<{ url: URL }>;
 }
 
 const SNAPSHOT_NAME = 'Published 1';
@@ -104,6 +110,41 @@ export const useNotebookStateAndActions = ({
 
   const [, createOrUpdateSnapshot] =
     useCreateOrUpdateNotebookSnapshotMutation();
+
+  // ------- attachments -------
+  const [, getCreateAttachmentForm] = useGetCreateAttachmentFormMutation();
+  const getAttachmentForm = useCallback(
+    async (file: File): Promise<[URL, FormData, string]> => {
+      const result = await getCreateAttachmentForm({
+        notebookId,
+        fileName: file.name,
+        fileType: file.type,
+      });
+
+      const form = getDefined(result.data?.getCreateAttachmentForm);
+      const url = new URL(form.url);
+      const formData = new FormData();
+      for (const { key, value } of form.fields) {
+        formData.set(key, value);
+      }
+      return [url, formData, form.handle];
+    },
+    [getCreateAttachmentForm, notebookId]
+  );
+  const [, attachFileToNotebook] = useAttachFileToNotebookMutation();
+  const onAttached = useCallback(
+    async (handle: string) => {
+      const resp = await attachFileToNotebook({ handle });
+      if (resp.error) {
+        throw new Error(resp.error.message);
+      }
+      const url = new URL(getDefined(resp.data?.attachFileToPad?.url));
+      return {
+        url,
+      };
+    },
+    [attachFileToNotebook]
+  );
 
   // ------- analytics -------
   const event = useContext(ClientEventsContext);
@@ -320,5 +361,8 @@ export const useNotebookStateAndActions = ({
     publishNotebook,
     unpublishNotebook,
     inviteEditorByEmail,
+
+    getAttachmentForm,
+    onAttached,
   };
 };

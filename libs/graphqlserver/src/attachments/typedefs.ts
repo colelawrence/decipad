@@ -23,15 +23,12 @@ export default gql`
     pad: Pad
   }
 
-  extend type Query {
+  extend type Mutation {
     getCreateAttachmentForm(
       padId: ID!
       fileName: String!
       fileType: String!
     ): CreateAttachmentForm!
-  }
-
-  extend type Mutation {
     attachFileToPad(handle: ID!): Attachment
     removeAttachmentFromPad(attachmentId: ID!): Boolean
   }

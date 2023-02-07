@@ -1,0 +1,5 @@
+mutation AttachFileToNotebook($handle: ID!) {
+  attachFileToPad(handle: $handle) {
+    url
+  }
+}

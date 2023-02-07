@@ -32,7 +32,7 @@ function attachmentUrl(padId: string, attachmentId: string): string {
 }
 
 export default {
-  Query: {
+  Mutation: {
     async getCreateAttachmentForm(
       _: unknown,
       { padId, fileName: userFileName, fileType }: ICreateAttachmentFormParams,
@@ -68,9 +68,6 @@ export default {
         })),
       };
     },
-  },
-
-  Mutation: {
     async attachFileToPad(
       _: unknown,
       { handle }: { handle: string },

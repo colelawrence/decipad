@@ -43,6 +43,7 @@ export { TableButton } from './TableButton/TableButton';
 export { TableColumnHeader } from './TableColumnHeader/TableColumnHeader';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';
 export { TableResult } from './TableResult/TableResult';
+export { UploadProgressModal } from './UploadProgressModal/UploadProgressModal';
 export { VariableEditor } from './VariableEditor/VariableEditor';
 export { VariableEditorMenu } from './VariableEditorMenu/VariableEditorMenu';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';

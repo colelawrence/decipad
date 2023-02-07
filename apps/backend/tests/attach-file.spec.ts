@@ -37,6 +37,7 @@ test('attach files', (ctx) => {
 
   beforeAll(async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
+    expect(workspace).toBeDefined();
     pad = (
       await client.mutate({
         mutation: ctx.gql`
@@ -68,9 +69,9 @@ test('attach files', (ctx) => {
       const client = ctx.graphql.withoutAuth();
 
       await expect(
-        client.query({
-          query: ctx.gql`
-            query {
+        client.mutate({
+          mutation: ctx.gql`
+            mutation {
               getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
                 url
                 fields {
@@ -89,9 +90,9 @@ test('attach files', (ctx) => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     await expect(
-      client.query({
-        query: ctx.gql`
-          query {
+      client.mutate({
+        mutation: ctx.gql`
+          mutation {
             getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
               url
               fields {
@@ -111,9 +112,9 @@ test('attach files', (ctx) => {
         const client = ctx.graphql.withAuth(await ctx.auth());
 
         const formData = (
-          await client.query({
-            query: ctx.gql`
-              query {
+          await client.mutate({
+            mutation: ctx.gql`
+              mutation {
                 getCreateAttachmentForm(padId: "${pad.id}", fileName: "filename", fileType: "text/csv") {
                   url
                   handle

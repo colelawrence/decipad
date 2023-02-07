@@ -60,6 +60,8 @@ const Notebook: FC = () => {
     publishNotebook,
     unpublishNotebook,
     inviteEditorByEmail,
+    getAttachmentForm,
+    onAttached,
   } = useNotebookStateAndActions({
     notebookId,
     editor,
@@ -149,6 +151,8 @@ const Notebook: FC = () => {
                 onDocsync={setDocsync}
                 checklistState={checklistState}
                 onChecklistStateChange={handleChecklistStateChange}
+                getAttachmentForm={getAttachmentForm}
+                onAttached={onAttached}
               />
             </Frame>
           }

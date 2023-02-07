@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react"
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../toast"
+    },
+    {
+      "path": "../ui"
+    },
+    {
+      "path": "../editor-components"
+    },
+    {
+      "path": "../notebook-state"
+    },
+    {
+      "path": "../react-utils"
+    }
+  ]
+}

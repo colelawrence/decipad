@@ -25,11 +25,11 @@ const recursiveRowCount = (r: Result.Result): number => {
   if (r.type.kind === 'table') {
     const { type, value } = r as Result.Result<'table'>;
 
-    const tableLength = Math.max(...value.map((v) => v.length));
+    const tableLength = Math.max(...value.map((v) => v?.length ?? 0));
     return (
       Math.max(
         ...zip(type.columnTypes, value).map(([ct, cv]) =>
-          recursiveRowCount({ type: ct, value: cv[0] })
+          cv == null ? 0 : recursiveRowCount({ type: ct, value: cv[0] })
         )
       ) * tableLength
     );

@@ -3,6 +3,7 @@ import { CreateAttachmentFormResult } from '@decipad/backendtypes';
 import S3 from 'aws-sdk/clients/s3';
 import { nanoid } from 'nanoid';
 import { s3 as s3Config, app as appConfig } from '@decipad/config';
+import { URL } from 'url';
 
 const { buckets, ...config } = s3Config();
 const options = {
@@ -15,6 +16,14 @@ const options = {
 
 const Bucket = buckets.attachments;
 const s3 = new S3(options);
+
+const fixURL = (urlString: string): string => {
+  const url = new URL(urlString);
+  if (url.hostname.endsWith('amazonaws.com') && url.protocol === 'http:') {
+    url.protocol = 'https';
+  }
+  return url.toString();
+};
 
 const {
   limits: {
@@ -42,12 +51,13 @@ export async function getCreateAttachmentForm(
           Expires: maxAttachmentUploadTokenExpirationSeconds,
           Conditions: [['content-length-range', 0, maxAttachmentSize]],
         },
-        (err, data) => {
+        (err, { url, ...data }) => {
           if (err) {
             reject(err);
           } else {
             resolve({
               ...data,
+              url: fixURL(url),
               fileName: key,
               fileType,
             });
@@ -90,11 +100,13 @@ export async function getURL(fileName: string): Promise<string> {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
-  return s3.getSignedUrlPromise('getObject', {
-    Bucket,
-    Key: fileName,
-    Expires: maxAttachmentDownloadTokenExpirationSeconds,
-  });
+  return s3
+    .getSignedUrlPromise('getObject', {
+      Bucket,
+      Key: fileName,
+      Expires: maxAttachmentDownloadTokenExpirationSeconds,
+    })
+    .then(fixURL);
 }
 
 export async function remove(fileName: string) {

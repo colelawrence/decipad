@@ -105,6 +105,7 @@ export type Mutation = {
   doNothing?: Maybe<Scalars['Boolean']>;
   duplicatePad: Pad;
   fulfilGoal: Scalars['Boolean'];
+  getCreateAttachmentForm: CreateAttachmentForm;
   importPad: Pad;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
@@ -206,6 +207,13 @@ export type MutationDuplicatePadArgs = {
 
 export type MutationFulfilGoalArgs = {
   props: GoalFulfilmentInput;
+};
+
+
+export type MutationGetCreateAttachmentFormArgs = {
+  fileName: Scalars['String'];
+  fileType: Scalars['String'];
+  padId: Scalars['ID'];
 };
 
 
@@ -508,7 +516,6 @@ export enum PermissionType {
 
 export type Query = {
   __typename?: 'Query';
-  getCreateAttachmentForm: CreateAttachmentForm;
   getExternalDataSource: ExternalDataSource;
   getExternalDataSources: PagedResult;
   getPadById?: Maybe<Pad>;
@@ -522,13 +529,6 @@ export type Query = {
   tags: Array<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   workspaces: Array<Workspace>;
-};
-
-
-export type QueryGetCreateAttachmentFormArgs = {
-  fileName: Scalars['String'];
-  fileType: Scalars['String'];
-  padId: Scalars['ID'];
 };
 
 
@@ -761,6 +761,13 @@ export type WorkspacesChanges = {
   updated: Array<Workspace>;
 };
 
+export type AttachFileToNotebookMutationVariables = Exact<{
+  handle: Scalars['ID'];
+}>;
+
+
+export type AttachFileToNotebookMutation = { __typename?: 'Mutation', attachFileToPad?: { __typename?: 'Attachment', url: string } | null };
+
 export type CreateNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
   name: Scalars['String'];
@@ -831,6 +838,15 @@ export type FulfilGoalMutationVariables = Exact<{
 
 
 export type FulfilGoalMutation = { __typename?: 'Mutation', fulfilGoal: boolean };
+
+export type GetCreateAttachmentFormMutationVariables = Exact<{
+  notebookId: Scalars['ID'];
+  fileName: Scalars['String'];
+  fileType: Scalars['String'];
+}>;
+
+
+export type GetCreateAttachmentFormMutation = { __typename?: 'Mutation', getCreateAttachmentForm: { __typename?: 'CreateAttachmentForm', url: string, handle: string, fields: Array<{ __typename?: 'KeyValue', key: string, value: string }> } };
 
 export type ImportNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
@@ -1083,6 +1099,17 @@ export const DashboardWorkspaceFragmentDoc = gql`
 }
     ${WorkspaceNotebookFragmentDoc}
 ${WorkspaceSectionFragmentDoc}`;
+export const AttachFileToNotebookDocument = gql`
+    mutation AttachFileToNotebook($handle: ID!) {
+  attachFileToPad(handle: $handle) {
+    url
+  }
+}
+    `;
+
+export function useAttachFileToNotebookMutation() {
+  return Urql.useMutation<AttachFileToNotebookMutation, AttachFileToNotebookMutationVariables>(AttachFileToNotebookDocument);
+};
 export const CreateNotebookDocument = gql`
     mutation CreateNotebook($workspaceId: ID!, $name: String!, $sectionId: ID) {
   createPad(workspaceId: $workspaceId, pad: {name: $name}, sectionId: $sectionId) {
@@ -1181,6 +1208,26 @@ export const FulfilGoalDocument = gql`
 
 export function useFulfilGoalMutation() {
   return Urql.useMutation<FulfilGoalMutation, FulfilGoalMutationVariables>(FulfilGoalDocument);
+};
+export const GetCreateAttachmentFormDocument = gql`
+    mutation GetCreateAttachmentForm($notebookId: ID!, $fileName: String!, $fileType: String!) {
+  getCreateAttachmentForm(
+    padId: $notebookId
+    fileName: $fileName
+    fileType: $fileType
+  ) {
+    url
+    handle
+    fields {
+      key
+      value
+    }
+  }
+}
+    `;
+
+export function useGetCreateAttachmentFormMutation() {
+  return Urql.useMutation<GetCreateAttachmentFormMutation, GetCreateAttachmentFormMutationVariables>(GetCreateAttachmentFormDocument);
 };
 export const ImportNotebookDocument = gql`
     mutation ImportNotebook($workspaceId: ID!, $source: String!) {
@@ -1469,7 +1516,6 @@ export type GraphCacheKeysConfig = {
 
 export type GraphCacheResolvers = {
   Query?: {
-    getCreateAttachmentForm?: GraphCacheResolver<WithTypename<Query>, QueryGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm> | string>,
     getExternalDataSource?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourceArgs, WithTypename<ExternalDataSource> | string>,
     getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, WithTypename<PagedResult> | string>,
     getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
@@ -1697,6 +1743,7 @@ export type GraphCacheOptimisticUpdaters = {
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
   duplicatePad?: GraphCacheOptimisticMutationResolver<MutationDuplicatePadArgs, WithTypename<Pad>>,
   fulfilGoal?: GraphCacheOptimisticMutationResolver<MutationFulfilGoalArgs, Scalars['Boolean']>,
+  getCreateAttachmentForm?: GraphCacheOptimisticMutationResolver<MutationGetCreateAttachmentFormArgs, WithTypename<CreateAttachmentForm>>,
   importPad?: GraphCacheOptimisticMutationResolver<MutationImportPadArgs, WithTypename<Pad>>,
   inviteUserToRole?: GraphCacheOptimisticMutationResolver<MutationInviteUserToRoleArgs, Array<WithTypename<RoleInvitation>>>,
   movePad?: GraphCacheOptimisticMutationResolver<MutationMovePadArgs, WithTypename<Pad>>,
@@ -1747,6 +1794,7 @@ export type GraphCacheUpdaters = {
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     duplicatePad?: GraphCacheUpdateResolver<{ duplicatePad: WithTypename<Pad> }, MutationDuplicatePadArgs>,
     fulfilGoal?: GraphCacheUpdateResolver<{ fulfilGoal: Scalars['Boolean'] }, MutationFulfilGoalArgs>,
+    getCreateAttachmentForm?: GraphCacheUpdateResolver<{ getCreateAttachmentForm: WithTypename<CreateAttachmentForm> }, MutationGetCreateAttachmentFormArgs>,
     importPad?: GraphCacheUpdateResolver<{ importPad: WithTypename<Pad> }, MutationImportPadArgs>,
     inviteUserToRole?: GraphCacheUpdateResolver<{ inviteUserToRole: Array<WithTypename<RoleInvitation>> }, MutationInviteUserToRoleArgs>,
     movePad?: GraphCacheUpdateResolver<{ movePad: WithTypename<Pad> }, MutationMovePadArgs>,

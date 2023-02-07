@@ -13,6 +13,7 @@ import {
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { insertLiveConnection } from '@decipad/editor-components';
+import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -38,12 +39,19 @@ export interface NotebookProps {
   initialState?: string;
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
+  getAttachmentForm: (file: File) => Promise<[URL, FormData, string]>;
+  onAttached: (handle: string) => Promise<{ url: URL }>;
 }
 
 type NotebookStarterChecklistProps = {
   checklistState: StarterChecklistInitialState;
   onChecklistStateChange: (props: StarterChecklistStateChange) => void;
 };
+
+type InsideNodebookStateProps = Omit<
+  NotebookProps,
+  'getAttachmentForm' | 'onAttached'
+>;
 
 const InsideNotebookState = ({
   notebookId,
@@ -56,7 +64,7 @@ const InsideNotebookState = ({
   initialState,
   onEditor,
   onDocsync,
-}: NotebookProps) => {
+}: InsideNodebookStateProps) => {
   // User warning
   const toast = useToast();
   const { data: session } = useSession();
@@ -198,7 +206,13 @@ const InsideNotebookState = ({
 export const Notebook: FC<NotebookStarterChecklistProps & NotebookProps> = (
   props
 ) => {
-  const { checklistState, onChecklistStateChange, ...rest } = props;
+  const {
+    checklistState,
+    onChecklistStateChange,
+    getAttachmentForm,
+    onAttached,
+    ...rest
+  } = props;
   return (
     <NotebookStateProvider>
       <EditorUserInteractionsProvider>
@@ -206,6 +220,10 @@ export const Notebook: FC<NotebookStarterChecklistProps & NotebookProps> = (
           checklistState={checklistState}
           onChecklistStateChange={onChecklistStateChange}
         >
+          <EditorAttachmentsHandler
+            getAttachmentForm={getAttachmentForm}
+            onAttached={onAttached}
+          />
           <InsideNotebookState {...rest} />
         </NotebookWithChecklist>
       </EditorUserInteractionsProvider>

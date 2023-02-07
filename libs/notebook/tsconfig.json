@@ -14,6 +14,7 @@
     { "path": "../toast" },
     { "path": "../docsync" },
     { "path": "../toast" },
-    { "path": "../notebook-state" }
+    { "path": "../notebook-state" },
+    { "path": "../editor-attachments" }
   ]
 }

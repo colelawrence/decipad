@@ -20,7 +20,14 @@ export const importFromCsv = async (
   const source = await resp.text();
   return new Promise((resolve, reject) => {
     const data: string[][] = [];
-    const parser = parseCSV({ cast: true, trim: true, delimiter: [',', ';'] });
+    const parser = parseCSV({
+      cast: true,
+      trim: true,
+      delimiter: [',', ';'],
+      relax_quotes: true,
+      relax_column_count: true,
+      skip_empty_lines: true,
+    });
     let isDone = false;
     parser.on('readable', () => {
       let row;
