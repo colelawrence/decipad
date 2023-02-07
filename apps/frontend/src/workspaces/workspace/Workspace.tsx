@@ -52,6 +52,7 @@ import {
 } from '../../graphql';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
+import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 
 const loadTopbar = () =>
   import(/* webpackChunkName: "workspace-topbar" */ './Topbar');
@@ -109,23 +110,72 @@ const Workspace: FC = () => {
   const [description, setDescription] = useState(user?.self?.description || '');
   const [result] = useGetWorkspacesQuery();
 
-  const createNotebook = useCreateNotebookMutation()[1];
-  const deleteNotebook = useUpdateNotebookArchiveMutation()[1]; // soft delete
-  const finalDeleteNotebook = useDeleteNotebookMutation()[1];
-  const duplicateNotebook = useDuplicateNotebookMutation()[1];
-  const moveNotebook = useMoveNotebookMutation()[1];
-  const importNotebook = useImportNotebookMutation()[1];
-  const createWorkspace = useCreateWorkspaceMutation()[1];
-  const renameWorkspace = useRenameWorkspaceMutation()[1];
-  const deleteWorkspace = useDeleteWorkspaceMutation()[1];
-  const changeNotebookStatus = useUpdateNotebookStatusMutation()[1];
-  const updateUser = useUpdateUserMutation()[1];
-  const setUsernameMutation = useSetUsernameMutation()[1];
-  const unarchiveNotebook = useUnarchiveNotebookMutation()[1];
-  const createSection = useCreateSectionMutation()[1];
-  const deleteSection = useDeleteSectionMutation()[1];
-  const editSection = useUpdateSectionMutation()[1];
-  const movePadToSection = useUpdateSectionAddNotebookMutation()[1];
+  const createNotebook = useMutationResultHandler(
+    useCreateNotebookMutation()[1],
+    'Failed to create notebook'
+  );
+  const deleteNotebook = useMutationResultHandler(
+    useUpdateNotebookArchiveMutation()[1],
+    'Failed to remove notebook'
+  ); // soft delete
+  const finalDeleteNotebook = useMutationResultHandler(
+    useDeleteNotebookMutation()[1],
+    'Failed to remove notebook'
+  );
+  const duplicateNotebook = useMutationResultHandler(
+    useDuplicateNotebookMutation()[1],
+    'Failed to duplicate notebook'
+  );
+  const moveNotebook = useMutationResultHandler(
+    useMoveNotebookMutation()[1],
+    'Failed to move notebook to workspace.'
+  );
+  const importNotebook = useMutationResultHandler(
+    useImportNotebookMutation()[1],
+    'Failed to import notebook.'
+  );
+  const createWorkspace = useMutationResultHandler(
+    useCreateWorkspaceMutation()[1],
+    'Failed to create workspace'
+  );
+  const renameWorkspace = useMutationResultHandler(
+    useRenameWorkspaceMutation()[1],
+    'Failed to rename workspace'
+  );
+  const deleteWorkspace = useMutationResultHandler(
+    useDeleteWorkspaceMutation()[1],
+    'Failed to remove workspace'
+  );
+  const changeNotebookStatus = useMutationResultHandler(
+    useUpdateNotebookStatusMutation()[1]
+  );
+  const updateUser = useMutationResultHandler(
+    useUpdateUserMutation()[1],
+    'Failed to save user'
+  );
+  const setUsernameMutation = useMutationResultHandler(
+    useSetUsernameMutation()[1],
+    'Could not change your username'
+  );
+  const unarchiveNotebook = useMutationResultHandler(
+    useUnarchiveNotebookMutation()[1]
+  );
+  const createSection = useMutationResultHandler(
+    useCreateSectionMutation()[1],
+    'Failed to create section'
+  );
+  const deleteSection = useMutationResultHandler(
+    useDeleteSectionMutation()[1],
+    'Failed to remove section'
+  );
+  const editSection = useMutationResultHandler(
+    useUpdateSectionMutation()[1],
+    'Failed to save section'
+  );
+  const movePadToSection = useMutationResultHandler(
+    useUpdateSectionAddNotebookMutation()[1],
+    'Failed to move notebook to section'
+  );
 
   const signoutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -198,30 +248,19 @@ const Workspace: FC = () => {
   }
 
   const handleCreateNotebook = async () => {
-    try {
-      const args = {
-        workspaceId,
-        sectionId,
-        name: 'My notebook title',
-      };
+    const args = {
+      workspaceId,
+      sectionId,
+      name: 'My notebook title',
+    };
 
-      const { data: createdNotebookData, error } = await createNotebook(args);
-      if (error) {
-        console.error('Failed to create notebook. Error:', error);
-        toast('Failed to create notebook.', 'error');
-      } else if (!createdNotebookData) {
-        console.error('Failed to create notebook. Received empty response.');
-        toast('Failed to create notebook.', 'error');
-      } else {
-        navigate(
-          notebooks({}).notebook({
-            notebook: createdNotebookData.createPad,
-          }).$
-        );
-      }
-    } catch (err) {
-      console.error('Failed to create notebook. Error:', err);
-      toast('Failed to create notebook.', 'error');
+    const createdNotebookData = await createNotebook(args);
+    if (createdNotebookData != null) {
+      navigate(
+        notebooks({}).notebook({
+          notebook: createdNotebookData.createPad,
+        }).$
+      );
     }
   };
 
@@ -268,13 +307,8 @@ const Workspace: FC = () => {
             sectionId: sId,
           })
             .then((res) => {
-              if (res.data) {
-                if (res.data.removeSectionFromWorkspace) {
-                  toast('Section removed', 'success');
-                }
-              } else {
-                console.error('Failed to remove section.', res);
-                toast('Failed to remove section.', 'error');
+              if (res) {
+                toast('Section removed', 'success');
               }
             })
             .catch((err) => {
@@ -349,11 +383,8 @@ const Workspace: FC = () => {
             toast('Failed to duplicate notebook.', 'error');
           })
         }
-        onMoveToWorkspace={(id, targetWorkspaceId) => {
-          moveNotebook({ id, workspaceId: targetWorkspaceId }).catch((err) => {
-            console.error('Failed to move notebook. Error:', err);
-            toast('Failed to move notebook to workspace.', 'error');
-          });
+        onMoveToWorkspace={async (id, targetWorkspaceId) => {
+          await moveNotebook({ id, workspaceId: targetWorkspaceId });
         }}
         onChangeStatus={(id, st: TColorStatus) => {
           if (TColorKeys.includes(st)) {
@@ -426,30 +457,15 @@ const Workspace: FC = () => {
               <CreateWorkspaceModal
                 Heading="h2"
                 closeHref={currentWorkspaceRoute.$}
-                onCreate={(workspaceName) => {
-                  createWorkspace({ name: workspaceName })
-                    .then((res) => {
-                      if (res.error) {
-                        console.error('Failed to create workspace', res.error);
-                        toast('Failed to create workspace.', 'error');
-                      } else if (res.data) {
-                        navigate(
-                          workspaces({}).workspace({
-                            workspaceId: res.data.createWorkspace.id,
-                          }).$
-                        );
-                      } else {
-                        console.error(
-                          'Failed to create workspace, empty response',
-                          res
-                        );
-                        toast('Failed to create workspace.', 'error');
-                      }
-                    })
-                    .catch((err) => {
-                      console.error('Failed to create workspace. Error:', err);
-                      toast('Failed to create workspace.', 'error');
-                    });
+                onCreate={async (workspaceName) => {
+                  const data = await createWorkspace({ name: workspaceName });
+                  if (data) {
+                    navigate(
+                      workspaces({}).workspace({
+                        workspaceId: data.createWorkspace.id,
+                      }).$
+                    );
+                  }
                 }}
               />
             }
@@ -465,37 +481,24 @@ const Workspace: FC = () => {
                   workspaceData?.workspaces?.length > 1
                 }
                 closeHref={currentWorkspaceRoute.$}
-                onRename={(newName) =>
-                  renameWorkspace({ id: currentWorkspace.id, name: newName })
-                    .then((res) => {
-                      if (res.error) {
-                        console.error(res.error);
-                        toast('Failed to rename workspace.', 'error');
-                      } else {
-                        navigate(currentWorkspaceRoute.$);
-                      }
-                    })
-                    .catch((err) => {
-                      console.error('Failed to rename workspace. Error:', err);
-                      toast('Failed to rename workspace.', 'error');
-                    })
-                }
-                onDelete={() => {
+                onRename={async (newName) => {
+                  const success = await renameWorkspace({
+                    id: currentWorkspace.id,
+                    name: newName,
+                  });
+                  if (success) {
+                    navigate(currentWorkspaceRoute.$);
+                  }
+                }}
+                onDelete={async () => {
                   navigate(workspaces({}).$);
-                  return deleteWorkspace({ id: currentWorkspace.id })
-                    .then((res) => {
-                      if (res.error) {
-                        console.error(res.error);
-                        toast('Failed to delete workspace', 'error');
-                      } else {
-                        navigate('/');
-                        toast('Workspace deleted.', 'success');
-                      }
-                    })
-                    .catch((err) => {
-                      console.error('Failed to delete workspace. Error:', err);
-                      toast('Failed to delete workspace.', 'error');
-                    });
+                  const success = await deleteWorkspace({
+                    id: currentWorkspace.id,
+                  });
+                  if (success) {
+                    toast('Workspace deleted.', 'success');
+                    navigate('/');
+                  }
                 }}
               />
             }
@@ -521,56 +524,31 @@ const Workspace: FC = () => {
               toast('Could not change your name', 'error');
             });
           }}
-          onChangeUsername={(newUsername) => {
-            setUsernameMutation({
+          onChangeUsername={async (newUsername) => {
+            const data = await setUsernameMutation({
               props: {
                 username: newUsername,
               },
-            })
-              .then((res) => {
-                const dta = res.data;
-                const err = res.error;
-
-                if (dta) {
-                  const { setUsername: usenameChangeSuccessful } = dta;
-                  if (usenameChangeSuccessful) {
-                    toast(`You are now ${newUsername}`, 'success');
-                    setUsername(newUsername);
-                  } else {
-                    toast(`Username ${newUsername} is already taken`, 'error');
-                  }
-                } else if (err) {
-                  console.error('Failed change username. Error:', err);
-                  // this are created by us, not generic error messages.
-                  toast(err.graphQLErrors.toString(), 'error');
-                }
-              })
-              .catch((err) => {
-                console.error('Failed change username. Error:', err);
-                toast('Could not change your username', 'error');
-              });
+            });
+            if (data) {
+              const { setUsername: usenameChangeSuccessful } = data;
+              if (usenameChangeSuccessful) {
+                toast(`You are now ${newUsername}`, 'success');
+                setUsername(newUsername);
+              } else {
+                toast(`Username ${newUsername} is already taken`, 'error');
+              }
+            }
           }}
-          onChangeDescription={(newDescription) => {
-            updateUser({
+          onChangeDescription={async (newDescription) => {
+            const data = await updateUser({
               props: {
                 description: newDescription,
               },
-            })
-              .then((r) => {
-                if (r.error) {
-                  console.error(
-                    'Failed to update user description. Error:',
-                    r.error
-                  );
-                  toast('Could not change your description', 'error');
-                } else {
-                  setDescription(newDescription);
-                }
-              })
-              .catch((err) => {
-                console.error('Failed to update user description. Error:', err);
-                toast('Could not change your description', 'error');
-              });
+            });
+            if (data) {
+              setDescription(newDescription);
+            }
           }}
         />
       </div>
