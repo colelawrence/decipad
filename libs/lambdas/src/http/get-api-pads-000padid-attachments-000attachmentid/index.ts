@@ -7,23 +7,29 @@ import Boom from '@hapi/boom';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import handle from '../handle';
 
-exports.handler = handle(async (event: APIGatewayProxyEvent) => {
-  const [{ user }] = await expectAuthenticated(event);
-  if (!event.pathParameters) {
+export const handler = handle(async (event: APIGatewayProxyEvent) => {
+  const padId = event.pathParameters?.padid;
+  if (!padId) {
     throw Boom.notAcceptable('missing parameters');
   }
-  const padId = event.pathParameters.padid;
   const resource = `/pads/${padId}`;
-  await expectAuthorized({ resource, user, permissionType: 'READ' });
+  const data = await tables();
+  const notebook = await data.pads.get({ id: padId });
+  if (!notebook) {
+    throw Boom.notFound('No such notebook');
+  }
+  if (!notebook.isPublic) {
+    const [{ user }] = await expectAuthenticated(event);
+    await expectAuthorized({ resource, user, permissionType: 'READ' });
+  }
 
-  const attachmentId = event.pathParameters.attachmentid;
+  const attachmentId = event.pathParameters?.attachmentid;
   if (!attachmentId) {
     return {
       statusCode: 400,
       body: 'Missing parameters',
     };
   }
-  const data = await tables();
   const attachment = await data.fileattachments.get({ id: attachmentId });
   if (!attachment) {
     throw Boom.notFound('No such attachment');
