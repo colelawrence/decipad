@@ -15,17 +15,23 @@ export const Table: InteractiveLanguageElement = {
       element: MyElement
     ): Promise<Program> => {
       assertElementType(element, ELEMENT_TABLE);
-      const { id, expression, columnAssigns } =
-        await getTableAstNodeFromTableElement(editor, computer, element);
+      const {
+        id,
+        name: tableName,
+        expression,
+        columnAssigns,
+      } = await getTableAstNodeFromTableElement(editor, computer, element);
 
-      const tableItself = statementToIdentifiedBlock(id, expression);
+      const tableItself = statementToIdentifiedBlock(id, expression, tableName);
 
       const columnAssignments = columnAssigns.flatMap((columnAssign) => [
         ...(columnAssign.column
           ? [
               statementToIdentifiedBlock(
                 columnAssign.blockId,
-                columnAssign.column
+                columnAssign.column,
+                tableName,
+                columnAssign.columnName
               ),
             ]
           : []),

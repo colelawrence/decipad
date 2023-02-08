@@ -243,18 +243,48 @@ describe('expr refs', () => {
   });
 });
 
-it('creates new, unused identifiers', async () => {
+it('Creates new, unused identifiers', async () => {
   expect(computer.getAvailableIdentifier('Name', 1)).toMatchInlineSnapshot(
     `"Name1"`
   );
 
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('AlreadyUsed1 = 1'),
+    program: getIdentifiedBlocks(
+      'AlreadyUsed1 = 1',
+      'Table1 = {}',
+      'Table1.ExistingColumn1 = 1'
+    ),
   });
 
   expect(
     computer.getAvailableIdentifier('AlreadyUsed', 1)
   ).toMatchInlineSnapshot(`"AlreadyUsed2"`);
+
+  expect(computer.getAvailableIdentifier('Table', 1)).toMatchInlineSnapshot(
+    `"Table2"`
+  );
+
+  expect(
+    computer.getAvailableIdentifier('ExistingColumn', 1)
+  ).toMatchInlineSnapshot(`"ExistingColumn2"`);
+});
+
+it('checks identifiers are in use', async () => {
+  await computeOnTestComputer({
+    program: getIdentifiedBlocks(
+      'AlreadyUsed1 = 1',
+      'Table1 = {}',
+      'Table1.ExistingColumn1 = 1'
+    ),
+  });
+
+  expect(computer.variableExists('AlreadyUsed1')).toBe(true);
+  expect(computer.variableExists('Table1')).toBe(true);
+  expect(computer.variableExists('ExistingColumn1')).toBe(true);
+
+  expect(computer.variableExists('AlreadyUsed1', 'block-0')).toBe(false);
+  expect(computer.variableExists('Table1', 'block-1')).toBe(false);
+  expect(computer.variableExists('ExistingColumn1', 'block-2')).toBe(false);
 });
 
 describe('uses previous value', () => {

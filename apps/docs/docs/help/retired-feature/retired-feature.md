@@ -9,6 +9,12 @@ On Decipad, we are always improving and experimenting with new features.
 Our goal is to give you superpowers when it comes to numbers, and to make them fun and intuitive.
 This sometimes means, retiring old features to make space for new and better ones.
 
+## Table & Variable Names
+
+Tables and variable names / columns no longer can share the same name.
+
+To fix an old notebook where you share the same name on tables and variables, update any of the names, so they are different. Make sure you also update the calculations where you use these variable names accordingly.
+
 ## Expanding Tables
 
 Expanding tables would let you take an original language table and reuse its columns on a new one.

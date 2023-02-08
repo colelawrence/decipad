@@ -8,6 +8,7 @@ import { toColumnAssign } from './toColumnAssign';
 
 export interface ColumnAssign {
   blockId: string;
+  columnName: string;
   column?: AST.TableColumnAssign;
   errors: IdentifiedError[];
 }

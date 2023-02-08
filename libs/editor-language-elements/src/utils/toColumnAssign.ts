@@ -18,5 +18,6 @@ export const toColumnAssign = (
         column.expression
       ),
     errors: column.errors,
+    columnName: column.columnName,
   };
 };

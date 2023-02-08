@@ -626,7 +626,7 @@ export default {
             {
               children: [
                 {
-                  text: 'COGS',
+                  text: 'COGSTable',
                 },
               ],
               type: 'table-var-name',
@@ -635,7 +635,7 @@ export default {
             {
               children: [
                 {
-                  text: 'ceil(grow(UnitCost ,UnitCostGrowth ,COGS.Year ))',
+                  text: 'ceil(grow(UnitCost ,UnitCostGrowth ,COGSTable.Year ))',
                 },
               ],
               type: 'table-column-formula',
@@ -1057,7 +1057,7 @@ export default {
             {
               children: [
                 {
-                  text: 'COGS .COGS',
+                  text: 'COGSTable .COGS',
                 },
               ],
               type: 'table-column-formula',
