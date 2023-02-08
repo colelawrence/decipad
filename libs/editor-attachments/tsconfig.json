@@ -17,6 +17,9 @@
       "path": "../editor-components"
     },
     {
+      "path": "../editor-utils"
+    },
+    {
       "path": "../notebook-state"
     },
     {

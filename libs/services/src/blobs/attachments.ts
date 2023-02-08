@@ -2,7 +2,7 @@ import { CreateAttachmentFormResult } from '@decipad/backendtypes';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import S3 from 'aws-sdk/clients/s3';
 import { nanoid } from 'nanoid';
-import { s3 as s3Config, app as appConfig } from '@decipad/config';
+import { s3 as s3Config, app as getAppConfig } from '@decipad/config';
 import { URL } from 'url';
 
 const { buckets, ...config } = s3Config();
@@ -31,7 +31,18 @@ const {
     maxAttachmentUploadTokenExpirationSeconds,
     maxAttachmentDownloadTokenExpirationSeconds,
   },
-} = appConfig();
+} = getAppConfig();
+
+export const attachmentFilePath = (
+  padId: string,
+  fileName: string,
+  attachmentId: string
+): string => `pads/${padId}/${fileName}/${attachmentId}`;
+
+export const attachmentUrl = (padId: string, attachmentId: string): string => {
+  const appConfig = getAppConfig();
+  return `${appConfig.urlBase}${appConfig.apiPathBase}/pads/${padId}/attachments/${attachmentId}`;
+};
 
 export async function getCreateAttachmentForm(
   padId: string,
@@ -39,7 +50,7 @@ export async function getCreateAttachmentForm(
   fileType: string
 ): Promise<CreateAttachmentFormResult> {
   return new Promise((resolve, reject) => {
-    const key = `pads/${padId}/${fileName}/${nanoid()}`;
+    const key = attachmentFilePath(padId, fileName, nanoid());
     try {
       s3.createPresignedPost(
         {

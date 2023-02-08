@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { produce } from 'immer';
-import axios from 'axios';
+import axios, { AxiosProgressEvent } from 'axios';
 import { dndStore } from '@udecode/plate-ui-dnd';
 import { useToast } from '@decipad/toast';
 import { UploadProgressModal } from '@decipad/ui';
@@ -17,6 +17,8 @@ import {
 } from '@udecode/plate';
 import { css } from '@emotion/react';
 import { useDelayedTrue } from '@decipad/react-utils';
+import { insertImageBelow } from '@decipad/editor-utils';
+import { Path } from 'slate';
 import { validateItemAndGetFile } from './validateItemAndGetFile';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { DropZoneDetector } from './DropZoneDetector';
@@ -43,9 +45,75 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
     defaultEditorAttachmentsContextValue
   );
 
+  const onUploadProgress = useCallback(
+    (file: File) => (progressEvent: AxiosProgressEvent) => {
+      setAttachments(
+        produce(attachments, (att) => {
+          const desc = att.uploading.find((f) => f.file === file);
+          if (desc) {
+            desc.progress =
+              (progressEvent.loaded / (progressEvent.total ?? file.size)) * 100;
+          }
+        })
+      );
+    },
+    [attachments]
+  );
+
+  const attachGeneric = useCallback(
+    async (file: File): Promise<{ url: string }> => {
+      const [target, form, handle] = await getAttachmentForm(file);
+      form.append('file', file);
+      await axios.post(target.toString(), form, {
+        onUploadProgress: onUploadProgress(file),
+      });
+      return {
+        url: (await onAttached(handle)).url.toString(),
+      };
+    },
+    [getAttachmentForm, onAttached, onUploadProgress]
+  );
+
+  const attachImage = useCallback(
+    async (file: File): Promise<{ url: string }> => {
+      const targetURL = `/api/pads/${editor?.id}/images`;
+      const response = await axios.post(targetURL, file, {
+        onUploadProgress: onUploadProgress(file),
+      });
+      const url = response.data;
+      return { url };
+    },
+    [editor?.id, onUploadProgress]
+  );
+
+  const insertAttachment = useCallback(
+    (file: File, url: string) => {
+      if (!editor) {
+        return;
+      }
+      withoutNormalizing(editor, () => {
+        let insertAt: Path;
+        if (!editor.selection || !isCollapsed(editor.selection)) {
+          const point = getStartPoint(editor, [editor.children.length - 1]);
+          focusEditor(editor, point);
+          insertAt = point.path;
+        } else {
+          insertAt = editor.selection.anchor.path;
+        }
+
+        if (file.type.startsWith('image/')) {
+          insertImageBelow(editor, insertAt, url, file.name);
+        } else {
+          insertLiveConnection({ computer, editor, url });
+        }
+      });
+    },
+    [computer, editor]
+  );
+
   const onAttach = useCallback(
     async (file: File) => {
-      if (!editor) {
+      if (!editor?.id) {
         return;
       }
       setAttachments(
@@ -57,24 +125,9 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         })
       );
       try {
-        const [target, form, handle] = await getAttachmentForm(file);
-        form.append('file', file);
-        await axios.post(target.toString(), form, {
-          onUploadProgress: (progressEvent) => {
-            setAttachments(
-              produce(attachments, (att) => {
-                const desc = att.uploading.find((f) => f.file === file);
-                if (desc) {
-                  desc.progress =
-                    (progressEvent.loaded /
-                      (progressEvent.total ?? file.size)) *
-                    100;
-                }
-              })
-            );
-          },
-        });
-        const { url } = await onAttached(handle);
+        const { url } = await (file.type.startsWith('image/')
+          ? attachImage(file)
+          : attachGeneric(file));
 
         setAttachments(
           produce(attachments, (att) => {
@@ -84,15 +137,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
             }
           })
         );
-
-        withoutNormalizing(editor, () => {
-          if (!editor.selection || !isCollapsed(editor.selection)) {
-            const point = getStartPoint(editor, [editor.children.length - 1]);
-            focusEditor(editor, point);
-          }
-
-          insertLiveConnection({ computer, editor, url: url.toString() });
-        });
+        insertAttachment(file, url);
       } catch (err) {
         console.error(err);
         toast('Error uploading file', 'error');
@@ -106,7 +151,14 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         );
       }
     },
-    [attachments, computer, editor, getAttachmentForm, onAttached, toast]
+    [
+      attachGeneric,
+      attachImage,
+      attachments,
+      editor?.id,
+      insertAttachment,
+      toast,
+    ]
   );
 
   const [{ isOver }, connectDropTarget] = useDrop({

@@ -9,11 +9,11 @@ import { nanoid } from 'nanoid';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { strictEqual as expectEqual } from 'assert';
 import {
+  attachmentUrl,
   getCreateAttachmentForm as getForm,
   getSize,
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/tables';
-import { app as appConfig } from '@decipad/config';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
 import timestamp from '../utils/timestamp';
@@ -24,11 +24,6 @@ export interface ICreateAttachmentFormParams {
   padId: string;
   fileName: string;
   fileType: string;
-}
-
-function attachmentUrl(padId: string, attachmentId: string): string {
-  const config = appConfig();
-  return `${config.urlBase}${config.apiPathBase}/pads/${padId}/attachments/${attachmentId}`;
 }
 
 export default {

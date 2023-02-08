@@ -24,6 +24,9 @@ import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 const recursiveRowCount = (r: Result.Result): number => {
   if (r.type.kind === 'table') {
     const { type, value } = r as Result.Result<'table'>;
+    if (value == null) {
+      return 0;
+    }
 
     const tableLength = Math.max(...value.map((v) => v?.length ?? 0));
     return (

@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 import globby from 'globby';
 import esbuild from 'esbuild';
+import { join, dirname } from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const envVarNames = [
   'NEXTAUTH_URL',
@@ -73,7 +80,7 @@ async function esBuildOptions(env) {
     target: 'node16',
     platform: 'node',
     format: 'cjs',
-    external: ['aws-sdk', '@vue/compiler-sfc'],
+    external: ['aws-sdk', 'sharp', '@vue/compiler-sfc'],
     legalComments: 'none',
     sourcemap: true,
     outdir: 'apps/backend/src',
@@ -88,12 +95,18 @@ const env = getEnv();
 printEnv(env);
 console.log('');
 
-(async () => {
+const installLambdaDependencies = async () => {
+  await promisify(exec)(
+    join(__dirname, '..', 'apps', 'backend', 'scripts', 'build.mjs')
+  );
+};
+
+const buildLambdas = async () => {
   const { watch, ...buildOptions } = await esBuildOptions(env);
 
   if (watch) {
     console.log('Now watching for changes...');
-    const ctx = await esbuild.context({...buildOptions,});
+    const ctx = await esbuild.context({ ...buildOptions });
     await ctx.watch();
   } else {
     // console.log('esbuild options: ', buildOptions);
@@ -101,4 +114,9 @@ console.log('');
     const result = await esbuild.build(buildOptions);
     console.log('Built successfully', result);
   }
+};
+
+(async () => {
+  await installLambdaDependencies();
+  await buildLambdas();
 })();

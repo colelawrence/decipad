@@ -1,0 +1,10 @@
+{
+  "name": "decipad-backend-post-api-pads-000padid-images-lambda",
+  "version": "0.0.1",
+  "description": "Decipad backend post-api-pads-000padid-images lambda",
+  "author": "N1N",
+  "license": "Proprietary",
+  "dependencies": {
+    "sharp": "^0.31.3"
+  }
+}

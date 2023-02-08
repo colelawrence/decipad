@@ -106,6 +106,7 @@
       "@decipad/services/pubsub": ["libs/services/src/pubsub"],
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
+      "@decipad/services/images": ["libs/services/src/images"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
       "@decipad/support": ["libs/support/src/index.ts"],
       "@decipad/sync-connection-lambdas": [

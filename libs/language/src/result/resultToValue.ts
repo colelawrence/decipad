@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { Result, Value, Table, Column, SerializedTypes } from '..';
-import { Range, Row, Scalar } from '../value';
+import { fromJS, Range, Row, Scalar } from '../value';
 import {
   ResultBoolean,
   ResultColumn,
@@ -40,6 +40,9 @@ export const resultToValue = (result: Result.Result): Value => {
 
     case 'column': {
       const columnValue = value as ResultColumn;
+      if (columnValue == null) {
+        return Column.fromValues([fromJS(0)]);
+      }
       const columnType = type as SerializedTypes.Column;
       return Column.fromValues(
         columnValue.map((cell) =>

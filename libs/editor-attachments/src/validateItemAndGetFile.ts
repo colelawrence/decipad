@@ -1,16 +1,19 @@
-const acceptableFileTypes = ['text/csv', 'application/json'];
+const acceptableFileTypes = ['text/csv', 'application/json', 'image/'];
+const validFileType = (type: string) =>
+  acceptableFileTypes.some((prefix) => type.startsWith(prefix));
+
 const maxFileSizeBytes = 1_000_000;
 
 export const validateItemAndGetFile = (item: DataTransferItem): File | true => {
   const file = item.getAsFile();
   if (!file) {
-    if (!acceptableFileTypes.includes(item.type)) {
+    if (!validFileType(item.type)) {
       throw new Error(`Cannot import file of type ${item.type}`);
     }
     return true;
   }
 
-  if (!acceptableFileTypes.includes(file.type)) {
+  if (!validFileType(file.type)) {
     console.warn(
       'Expected one of types',
       acceptableFileTypes,
