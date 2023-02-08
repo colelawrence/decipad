@@ -1,3 +1,4 @@
+import { BlocksInUseInformation } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { once } from 'ramda';
@@ -12,7 +13,7 @@ import {
   Plus,
   Show,
 } from '../../icons';
-import { MenuList } from '../../molecules';
+import { DeleteWithDepsMenuItem, MenuList } from '../../molecules';
 import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
@@ -70,13 +71,14 @@ const plusStyle = css(handleButtonStyle, {
 interface BlockDragHandleProps {
   readonly children?: ReactNode;
   readonly menuOpen?: boolean;
+  readonly dependenciesForBlock?: BlocksInUseInformation[];
   readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;
   readonly showEyeLabel?: boolean;
   readonly showAddBlock?: boolean;
   readonly onPlus?: () => void;
-  readonly onDelete?: (() => void) | 'none' | 'name-used';
+  readonly onDelete?: (() => void) | 'none';
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onCopyHref?: () => void;
@@ -95,6 +97,7 @@ export const BlockDragHandle = ({
   onDelete = noop,
   onDuplicate = noop,
   onCopyHref,
+  dependenciesForBlock,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -106,6 +109,9 @@ export const BlockDragHandle = ({
   const onClick = useCallback(() => {
     onDelete !== 'none' && onChangeMenuOpen(!menuOpen);
   }, [menuOpen, onChangeMenuOpen, onDelete]);
+
+  const isThisBlockUsedInCalculations =
+    Array.isArray(dependenciesForBlock) && dependenciesForBlock.length !== 0;
 
   const showHidden = showEyeLabel && !isHovered;
   const menuButton = (
@@ -156,37 +162,27 @@ export const BlockDragHandle = ({
           side="left"
         >
           {showHideButton}
-
           <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
             Duplicate
           </MenuItem>
-
           {onCopyHref && (
             <MenuItem icon={<Link />} onSelect={onCopyHref}>
               Copy reference
             </MenuItem>
           )}
-
           {children}
-
           <MenuItem disabled>
             <hr css={{ color: cssVar('highlightColor') }} />
           </MenuItem>
-
           {/* onDelete can be disabled by the parent component */}
-          {typeof onDelete === 'function' ? (
+          {isThisBlockUsedInCalculations ? (
+            <DeleteWithDepsMenuItem
+              blockInfo={dependenciesForBlock[0]}
+              onSelect={typeof onDelete === 'function' ? onDelete : noop}
+            />
+          ) : typeof onDelete === 'function' ? ( // dependency graph
             <MenuItem icon={<Delete />} onSelect={onDelete}>
               Delete
-            </MenuItem>
-          ) : onDelete === 'name-used' ? (
-            <MenuItem icon={<Delete color="weak" />} disabled onSelect={noop}>
-              <Tooltip
-                trigger={
-                  <div css={{ color: cssVar('weakerTextColor') }}>Delete</div>
-                }
-              >
-                Cannot delete because this name is used elsewhere
-              </Tooltip>
             </MenuItem>
           ) : null}
         </MenuList>

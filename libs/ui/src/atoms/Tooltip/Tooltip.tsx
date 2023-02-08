@@ -19,7 +19,7 @@ const contentWrapperStyles = css({
 
   maxWidth: '300px',
   padding: '12px 16px',
-  wordBreak: 'break-all',
+  wordBreak: 'break-word',
   zIndex: '1000',
 });
 

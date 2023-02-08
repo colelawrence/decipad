@@ -11,6 +11,7 @@ export { CodeVariableDefinition } from './CodeVariableDefinition/CodeVariableDef
 export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
 export { DataViewMenu } from './DataViewMenu/DataViewMenu';
 export { DataViewRow } from './DataViewRow/DataViewRow';
+export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';
 export { DividerBlock } from './DividerBlock/DividerBlock';
 export { DropdownOption } from './DropdownOption/DropdownOption';
 export { EditableLiveDataCaption } from './EditableLiveDataCaption/EditableLiveDataCaption';
@@ -45,9 +46,9 @@ export { RemoteAvatar } from './RemoteAvatar/RemoteAvatar';
 export { SearchBar } from './SearchBar/SearchBar';
 export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
 export { SignUpContent } from './SignUpContent/SignUpContent';
-export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';
 export { StructuredInputLines } from './StructuredInputLines/StructuredInputLines';
 export { StructuredInputUnits } from './StructuredInputUnits/StructuredInputUnits';
+export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';
 export { TableCellControls } from './TableCellControls/TableCellControls';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';

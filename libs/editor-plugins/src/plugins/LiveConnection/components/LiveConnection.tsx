@@ -157,12 +157,8 @@ const LiveConnectionInner: FC<LiveConnectionInnerProps> = ({
 
 const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
-  const computer = useComputer();
-
   const [deleted, setDeleted] = useState(false);
   const onceDeleted = useCallback(() => setDeleted(true), []);
-
-  const inUse = computer.isInUse$.use(element.id);
 
   return (
     <DraggableBlock
@@ -170,7 +166,7 @@ const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
       element={element}
       {...attributes}
       onceDeleted={onceDeleted}
-      onDelete={inUse ? 'name-used' : undefined}
+      dependencyId={element.id}
     >
       <BlockErrorBoundary element={element}>
         {children}

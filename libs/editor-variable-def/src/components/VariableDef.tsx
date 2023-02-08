@@ -13,16 +13,15 @@ import {
   VariableSliderElement,
 } from '@decipad/editor-types';
 import {
-  hasLayoutAncestor,
   assertElementType,
+  hasLayoutAncestor,
+  mutateText,
   safeDelete,
   useElementMutatorCallback,
-  wrapIntoColumns,
-  mutateText,
   useNodePath,
+  wrapIntoColumns,
 } from '@decipad/editor-utils';
 import {
-  useComputer,
   useEditorStylesContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
@@ -30,8 +29,8 @@ import { VariableEditor } from '@decipad/ui';
 import {
   findNode,
   findNodePath,
-  moveNodes,
   getNodeString,
+  moveNodes,
   PlateEditor,
   serializeHtml,
 } from '@udecode/plate';
@@ -52,7 +51,6 @@ export const VariableDef: PlateComponent = ({
   const [deleted, setDeleted] = useState(false);
 
   const editor = useTEditorRef();
-  const computer = useComputer();
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
 
@@ -198,7 +196,6 @@ export const VariableDef: PlateComponent = ({
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const inUse = computer.isInUse$.use(element.id);
   const turnIntoProps = useTurnIntoProps(element);
 
   if (deleted) {
@@ -210,7 +207,6 @@ export const VariableDef: PlateComponent = ({
     <DraggableBlock
       blockKind="interactive"
       element={element}
-      onDelete={inUse ? 'name-used' : onDelete}
       accept={
         isHorizontal ? [ELEMENT_VARIABLE_DEF, ELEMENT_DISPLAY] : undefined
       }
@@ -219,6 +215,7 @@ export const VariableDef: PlateComponent = ({
       contentEditable={true}
       suppressContentEditableWarning
       id={element.id}
+      dependencyId={element.id}
       {...turnIntoProps}
       {...attributes}
     >

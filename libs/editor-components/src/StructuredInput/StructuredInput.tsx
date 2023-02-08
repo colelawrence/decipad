@@ -6,8 +6,8 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
   isStructuredElement,
+  useElementMutatorCallback,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { StructuredInputLines, StructuredInputUnits } from '@decipad/ui';
@@ -54,6 +54,7 @@ export const StructuredInput: PlateComponent = ({
       element={element}
       blockKind="structured"
       hasPreviousSibling={isStructuredElement(prevElement?.[0])}
+      dependencyId={element.id}
       isCentered={true}
     >
       <StructuredInputLines>

@@ -79,6 +79,7 @@ export const MagicNumber = ({
       onClick={readOnly ? noop : noEffectOnClick}
       css={[wrapperStyles]}
       data-number-id={tempId}
+      id={tempId}
       data-testid="magic-number"
     >
       <span

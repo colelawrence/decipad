@@ -1,4 +1,6 @@
+import { BlocksInUseInformation } from '@decipad/computer';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
+import { css, SerializedStyles } from '@emotion/react';
 import {
   ComponentProps,
   FC,
@@ -9,19 +11,18 @@ import {
   useState,
 } from 'react';
 import { ConnectDragSource } from 'react-dnd';
-import { css, SerializedStyles } from '@emotion/react';
 import { BlockDragHandle } from '..';
 import { DropLine, EditorBlock, MenuItem, TriggerMenuItem } from '../../atoms';
+import { NewElementLine } from '../../atoms/NewElementLine/NewElementLine';
+import { CircularArrow } from '../../icons';
+import { MenuList } from '../../molecules';
 import {
   mouseMovingOverTransitionDelay,
   Opacity,
   shortAnimationDuration,
 } from '../../primitives';
 import { blockAlignment, editorLayout } from '../../styles';
-import { NewElementLine } from '../../atoms/NewElementLine/NewElementLine';
 import { slimBlockWidth } from '../../styles/editor-layout';
-import { MenuList } from '../../molecules';
-import { CircularArrow } from '../../icons';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -66,12 +67,13 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly dragSource?: ConnectDragSource;
   readonly blockRef?: Ref<HTMLDivElement>;
   readonly previewRef?: Ref<HTMLDivElement>;
+  readonly dependenciesForBlock?: BlocksInUseInformation[];
 
   readonly draggableCss?: SerializedStyles;
 
   readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onShowHide?: (action: 'show' | 'hide') => void;
-  readonly onDelete?: (() => void) | 'name-used' | 'none';
+  readonly onDelete?: (() => void) | 'none';
   readonly onDuplicate?: () => void;
   readonly onAdd?: () => void;
   readonly onPlus?: () => void;
@@ -111,6 +113,8 @@ export const DraggableBlock = ({
   showLine = true,
   onShowHide,
   onCopyHref,
+
+  dependenciesForBlock,
 
   onTurnInto,
   turnInto,
@@ -202,6 +206,7 @@ export const DraggableBlock = ({
             <BlockDragHandle
               menuOpen={menuOpen}
               isHidden={isHidden}
+              dependenciesForBlock={dependenciesForBlock}
               onMouseDown={onMouseDown}
               onChangeMenuOpen={setMenuOpen}
               onPlus={onPlus}

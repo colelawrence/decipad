@@ -1,7 +1,6 @@
-import { EditorColumns } from '@decipad/ui';
-import { ELEMENT_COLUMNS, PlateComponent } from '@decipad/editor-types';
 import { DraggableBlock } from '@decipad/editor-components';
-import { useComputer } from '@decipad/react-contexts';
+import { ELEMENT_COLUMNS, PlateComponent } from '@decipad/editor-types';
+import { EditorColumns } from '@decipad/ui';
 
 export const Columns: PlateComponent = ({ attributes, children, element }) => {
   if (!element || element.type !== ELEMENT_COLUMNS) {
@@ -11,16 +10,14 @@ export const Columns: PlateComponent = ({ attributes, children, element }) => {
     throw new Error('Columns is not a leaf');
   }
 
-  const computer = useComputer();
-  const childrenIds = element.children.map((child) => child.id);
-  const inUse = computer.isInUse$.use(...childrenIds);
+  const dependencyId = element.children.map((child) => child.id);
 
   return (
     <DraggableBlock
       blockKind="columns"
       element={element}
       disableDrag
-      onDelete={inUse ? 'name-used' : undefined}
+      dependencyId={dependencyId}
       {...attributes}
     >
       <EditorColumns>{children}</EditorColumns>

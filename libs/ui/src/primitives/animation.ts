@@ -61,3 +61,12 @@ export const antiwiggle = keyframes`20% {
     transform:  rotate(0deg);
   }
 `;
+
+export const animationTwoColours = (
+  cssProp: string,
+  one: string,
+  two: string
+) =>
+  keyframes`0% { ${cssProp}: ${one}; }
+  50% { ${cssProp}: ${two}; }
+  100% { ${cssProp}: ${one}; }`;

@@ -146,8 +146,6 @@ export const CodeLineV2: PlateComponent = ({
     throw new Error('panic: expected only 2 children');
   }
 
-  const isNameUsed = computer.isInUse$.use(element.id);
-
   const path = findNodePath(editor, element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
 
@@ -157,7 +155,7 @@ export const CodeLineV2: PlateComponent = ({
       element={element}
       {...turnIntoProps}
       {...attributes}
-      onDelete={isNameUsed ? 'name-used' : undefined}
+      dependencyId={lineId}
       id={lineId}
       isCentered={true}
       hasPreviousSibling={isStructuredElement(prevElement?.[0])}

@@ -63,6 +63,7 @@ import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
 type DraggableBlockProps = {
   readonly element: MyElement;
   readonly children: ReactNode;
+  readonly dependencyId?: string | string[]; // block id
   readonly [key: string]: unknown; // For organisms.DraggableBlock
   readonly onceDeleted?: () => void;
   readonly hasPreviousSibling?: boolean; // used for code line blocks
@@ -77,7 +78,7 @@ type DraggableBlockProps = {
 > &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 
-type OnDelete = (() => void) | 'name-used' | 'none' | undefined;
+type OnDelete = (() => void) | 'none' | undefined;
 
 const defaultOnDelete = (
   editor: MyReactEditor,
@@ -120,6 +121,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       onDrop,
       hasPreviousSibling,
       isCentered,
+      dependencyId,
       ...props
     },
     forwardedRef
@@ -129,6 +131,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const readOnly = useIsEditorReadOnly();
     const computer = useComputer();
 
+    const dependencyArray = Array.isArray(dependencyId)
+      ? dependencyId
+      : typeof dependencyId === 'string'
+      ? [dependencyId]
+      : [];
+
+    const dependenciesForBlock = computer.blocksInUse$.use(...dependencyArray);
     const selected = useSelected();
     const setIsHidden = useElementMutatorCallback(editor, element, 'isHidden');
 
@@ -292,9 +301,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         dropLine={dropLine || undefined}
         isBeingDragged={isDragging || draggingIds.has(element.id)}
         onMouseDown={onMouseDown}
-        onDelete={
-          typeof parentOnDelete === 'string' ? parentOnDelete : onDelete
-        }
+        onDelete={onDelete}
+        dependenciesForBlock={dependenciesForBlock}
         onDuplicate={onDuplicate}
         onShowHide={onShowHide}
         onAdd={onAdd}

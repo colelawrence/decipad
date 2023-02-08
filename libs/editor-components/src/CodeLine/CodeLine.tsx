@@ -131,7 +131,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
     closeEditor(element.id, focusNumber);
   }, [focusNumber, closeEditor, element.id]);
 
-  const isNameUsed = computer.isInUse$.use(lineId);
   const [aPlaceholder] = useState(placeholderForCalculationLine());
 
   return (
@@ -140,7 +139,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       element={element}
       {...turnIntoProps}
       {...attributes}
-      onDelete={isNameUsed ? 'name-used' : undefined}
+      dependencyId={lineId}
       id={lineId}
       hasPreviousSibling={siblingCodeLines?.hasPrevious}
     >
