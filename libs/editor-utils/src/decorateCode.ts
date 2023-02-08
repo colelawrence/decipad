@@ -8,16 +8,16 @@ import {
   MyDecorate,
   MyElementEntry,
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   DECORATE_CODE_VARIABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TABLE,
-  TableElement,
   MyNodeEntry,
   MyEditor,
   MyDecorateEntry,
   DECORATE_AUTO_COMPLETE_MENU,
   ELEMENT_SMART_REF,
+  CodeLineV2Element,
 } from '@decipad/editor-types';
 import { BasePoint, Path, Range } from 'slate';
 import { parseStatement } from '@decipad/computer';
@@ -150,17 +150,7 @@ export const decorateCode = (
           return [];
         }
 
-        let nodeId = node.id as string;
-        if (node.type === ELEMENT_TABLE_COLUMN_FORMULA) {
-          const table = getAboveNode<TableElement>(editor, {
-            at: path,
-            match: (n) => isElementOfType(n, ELEMENT_TABLE),
-          });
-          if (table) {
-            nodeId = table[0].id;
-          }
-        }
-
+        const nodeId = getRootNodeId(editor, entry);
         const sourceString = getCodeLineSource(node);
 
         // Slate seems to have an issue with decorators on empty lines so we're skipping them.
@@ -209,6 +199,25 @@ export const decorateCode = (
     }),
     ([node]) => node.type === elementType
   );
+
+/** Get the node representing "this" element. To be fed into the Computer and avoid recursive references. */
+export function getRootNodeId(editor: MyEditor, [node, path]: MyElementEntry) {
+  if (node.type === ELEMENT_TABLE_COLUMN_FORMULA) {
+    return node.columnId;
+  }
+
+  if (node.type === ELEMENT_CODE_LINE_V2_CODE) {
+    const codeLine = getAboveNode<CodeLineV2Element>(editor, {
+      at: path,
+      match: (n) => isElementOfType(n, ELEMENT_CODE_LINE_V2),
+    });
+    if (codeLine) {
+      return codeLine[0].id;
+    }
+  }
+
+  return node.id;
+}
 
 function getVariableUnderCursor(
   cursor: BasePoint,

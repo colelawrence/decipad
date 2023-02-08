@@ -239,7 +239,7 @@ describe('getTableAstNodeFromTableElement', () => {
           "errors": Array [],
         },
         Object {
-          "blockId": "formula",
+          "blockId": "th2",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (+ 1 1)),
           "errors": Array [],
         },

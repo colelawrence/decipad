@@ -56,7 +56,7 @@ const tableFormulaColumnToColumn = ({
   if (isElementOfType(formula, ELEMENT_TABLE_COLUMN_FORMULA)) {
     return formulaSourceToColumnAssign(
       columnName,
-      formula.id,
+      th.id,
       getCodeLineSource(formula)
     );
   }

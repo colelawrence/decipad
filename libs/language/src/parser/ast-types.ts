@@ -166,6 +166,7 @@ export interface TableColumn {
   end?: Pos;
 }
 
+/** @deprecated */
 export interface TableSpread {
   type: 'table-spread';
   args: [spreadTableRef: Ref];

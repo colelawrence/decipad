@@ -23,3 +23,26 @@ it('finds variables that are in the context', async () => {
       }
     `);
 });
+
+it('finds variables visible in a table column assign', async () => {
+  const program = testBlocks('Table = {}', 'Table.Col = 2', 'Table.Col2 = 2');
+  const inferContext = await inferProgram(program);
+
+  expect(getVisibleVariables(program, 'block-1', inferContext))
+    .toMatchInlineSnapshot(`
+      Object {
+        "global": Set {
+          "exprRef_block_0",
+          "Table",
+          "Table.Col",
+          "Table.Col2",
+          "exprRef_block_1",
+          "exprRef_block_2",
+        },
+        "local": Set {
+          "Col",
+          "Col2",
+        },
+      }
+    `);
+});
