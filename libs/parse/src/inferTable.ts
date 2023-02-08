@@ -1,6 +1,5 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
-import { ZERO } from '@decipad/number';
-import { getDefined, varNamify } from '@decipad/utils';
+import { varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
 import { parseDate } from './parseDate';
@@ -39,16 +38,9 @@ function toValue(
     return col.map((elem) => {
       switch (type?.kind) {
         case 'number':
-          try {
-            return fastNumber(elem as number);
-          } catch (err) {
-            if (typeof elem === 'string' && !elem.trim().length) {
-              return ZERO;
-            }
-            throw err;
-          }
+          return fastNumber(elem as number | string);
         case 'date':
-          return BigInt(getDefined(parseDate(elem as string)).date.getTime());
+          return BigInt(parseDate(elem as string)?.date.getTime() ?? 0);
         case 'string':
           return (elem as string) ?? '';
         default:
