@@ -35,10 +35,9 @@ it('emits a rename event when typing a new workspace name and submitting', async
     <EditWorkspaceModal {...props} onRename={handleRename} />
   );
 
-  await act(async () => {
-    await userEvent.type(getByPlaceholderText(/renamed/i), 'new');
-    await userEvent.click(getByText(/rename/i, { selector: 'button' }));
-  });
+  await userEvent.type(getByPlaceholderText(/renamed/i), 'new');
+  await userEvent.click(getByText(/rename/i, { selector: 'button' }));
+
   await waitFor(() =>
     expect(handleRename).toHaveBeenCalledWith(expect.stringMatching(/new$/))
   );
@@ -75,9 +74,8 @@ describe('with allowDelete', () => {
 
     await userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
     await userEvent.click(getByText(/delete/i, { selector: 'button' }));
-    await act(async () => {
-      await waitFor(() => expect(handleDelete).toHaveBeenCalled());
-    });
+
+    await waitFor(() => expect(handleDelete).toHaveBeenCalled());
   });
 
   it('disables all buttons while deleting', async () => {
@@ -96,10 +94,9 @@ describe('with allowDelete', () => {
       />
     );
 
-    await act(async () => {
-      await userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
-      await userEvent.click(getByText(/delete/i, { selector: 'button' }));
-    });
+    await userEvent.type(getByPlaceholderText(/workspace name/i), 'The Name');
+    await userEvent.click(getByText(/delete/i, { selector: 'button' }));
+
     expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
     expect(getByText(/delete/i, { selector: 'button' })).toBeDisabled();
     await act(async () => {

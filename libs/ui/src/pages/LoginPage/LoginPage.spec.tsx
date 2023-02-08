@@ -31,12 +31,7 @@ describe('Login page', () => {
   });
 
   it('disables the button while submitting', async () => {
-    let resolveSubmit!: () => void;
-    const handleSubmit = jest.fn().mockReturnValue(
-      new Promise<void>((resolve) => {
-        resolveSubmit = resolve;
-      })
-    );
+    const handleSubmit = jest.fn().mockReturnValue(new Promise<void>(() => {}));
     const { findByText, getByRole, getByText } = render(
       <LoginPage onSubmit={handleSubmit} />
     );
@@ -49,6 +44,5 @@ describe('Login page', () => {
     await userEvent.click(await findByText(/submit/i));
 
     expect(await findByText(/wait/i)).toBeDisabled();
-    act(resolveSubmit);
   });
 });
