@@ -35,11 +35,14 @@ export function useEnsureValidVariableName(
     computer,
     useCallback(() => {
       const path = findNodePath(editor, element);
-      const varName = getNodeString(element);
+      const currentVarName = getNodeString(element);
 
-      const varExists = computer.variableExists(varName, blockId);
+      const varExists = computer.variableExists(currentVarName, blockId);
 
-      const message = getVariableValidationErrorMessage({ varName, varExists });
+      const message = getVariableValidationErrorMessage({
+        varName: currentVarName,
+        varExists,
+      });
       const shouldRename = message != null;
 
       validationMessage$.next(message);
@@ -47,8 +50,10 @@ export function useEnsureValidVariableName(
       // Get next available and valid name
       if (shouldRename && path) {
         const tentativeNewName =
-          stripOffInvalidIdentifierCharacters(varName).replace(/\d+$/, '') ||
-          defaultVarName;
+          stripOffInvalidIdentifierCharacters(currentVarName).replace(
+            /\d+$/,
+            ''
+          ) || defaultVarName;
         const newName = computer.getAvailableIdentifier(tentativeNewName, 2);
 
         insertText(editor, newName, { at: path });

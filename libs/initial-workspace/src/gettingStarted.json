@@ -345,7 +345,17 @@
             {
               "children": [
                 {
-                  "text": "Income - sum(Budget_Month.Amount)"
+                  "text": "Budget_Month "
+                }
+              ],
+              "type": "table-column-formula",
+              "columnId": "yIhzJrsNxiD4EFO2tE-5M",
+              "id": "FRfU5UPMqAkRTN6uRKSNh"
+            },
+            {
+              "children": [
+                {
+                  "text": "Income - sum(Budget_Month.Amount )"
                 }
               ],
               "type": "table-column-formula",
@@ -370,6 +380,18 @@
                 "seriesType": "date"
               },
               "id": "grFr-2tCO42skMlU2pryc"
+            },
+            {
+              "children": [
+                {
+                  "text": "Budget"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "id": "yIhzJrsNxiD4EFO2tE-5M"
             },
             {
               "children": [
@@ -406,6 +428,15 @@
                 }
               ],
               "type": "td",
+              "id": "4LLYzeTAuvApAz5_nZ3uw"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
               "id": "HluKP5bZpJbhShL9le9A4"
             }
           ],
@@ -430,6 +461,15 @@
                 }
               ],
               "type": "td",
+              "id": "TD4VDgoyGyoF1zwHpjVmc"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
               "id": "Plu8UrJixjdnG_P-P9dop"
             }
           ],
@@ -446,6 +486,15 @@
               ],
               "type": "td",
               "id": "UWxgv92W3TXlINy5lcTY1"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "FZ53gdiY8By921cqCX_FU"
             },
             {
               "children": [

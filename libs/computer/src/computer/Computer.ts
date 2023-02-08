@@ -286,10 +286,6 @@ export class Computer {
         return true;
       }
 
-      if (p.definesTableColumn && p.definesTableColumn[1] === name) {
-        return true;
-      }
-
       if (p.type === 'identified-block' && p.block.args.length > 0) {
         return getDefinedSymbol(p.block.args[0], false) === name;
       } else {
@@ -647,19 +643,15 @@ export class Computer {
       ...this.computationRealm.inferContext.stack.globalVariables.keys(),
       ...this.computationRealm.inferContext.externalData.keys(),
       ...this.latestProgram.map((block) => block.definesVariable),
-      ...this.latestProgram.flatMap((block) => block.definesTableColumn),
     ]);
-
-    const exists = (name: string) => existingVars.has(name);
-
     let num = start;
     const firstProposal = prefix;
-    if (attemptNumberless && !exists(firstProposal)) {
+    if (attemptNumberless && !existingVars.has(firstProposal)) {
       return firstProposal;
     }
     const nextProposal = () => `${prefix}${num}`;
     let proposal = nextProposal();
-    while (exists(proposal)) {
+    while (existingVars.has(proposal)) {
       num += 1;
       proposal = nextProposal();
     }

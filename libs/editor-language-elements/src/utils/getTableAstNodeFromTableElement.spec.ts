@@ -151,19 +151,16 @@ describe('getTableAstNodeFromTableElement', () => {
         Object {
           "blockId": "th1",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas)))),
-          "columnName": "column1",
           "errors": Array [],
         },
         Object {
           "blockId": "th2",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3")),
-          "columnName": "column2",
           "errors": Array [],
         },
         Object {
           "blockId": "th3",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1))),
-          "columnName": "column3",
           "errors": Array [],
         },
       ]
@@ -239,13 +236,11 @@ describe('getTableAstNodeFromTableElement', () => {
         Object {
           "blockId": "th1",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column "Hello")),
-          "columnName": "column1",
           "errors": Array [],
         },
         Object {
           "blockId": "th2",
           "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (+ 1 1)),
-          "columnName": "column2",
           "errors": Array [],
         },
       ]
