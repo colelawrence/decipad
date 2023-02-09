@@ -17,7 +17,8 @@ import { getDefined, identity } from '@decipad/utils';
 import assert from 'assert';
 import {
   getNotebookInitialState,
-  getNotebooks,
+  getNotebooksSharedWith,
+  getWorkspaceNotebooks,
 } from '@decipad/services/notebooks';
 import { nanoid } from 'nanoid';
 import {
@@ -97,9 +98,20 @@ const resolvers = {
       { page, workspaceId }: { page: PageInput; workspaceId: ID },
       context: GraphqlContext
     ) {
-      return getNotebooks({
+      return getWorkspaceNotebooks({
         user: loadUser(context),
         workspaceId,
+        page,
+      });
+    },
+
+    async padsSharedWithMe(
+      _: unknown,
+      { page }: { page: PageInput },
+      context: GraphqlContext
+    ) {
+      return getNotebooksSharedWith({
+        user: requireUser(context),
         page,
       });
     },

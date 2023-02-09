@@ -2,12 +2,6 @@ import { PadRecord, PagedResult, PageInput, User } from '@decipad/backendtypes';
 import tables, { paginate } from '@decipad/tables';
 import { byDesc } from '@decipad/utils';
 
-interface GetNotebooksProps {
-  user?: User;
-  workspaceId: string;
-  page: PageInput;
-}
-
 const outputPad = (pad: PadRecord): PadRecord => {
   return {
     ...pad,
@@ -15,20 +9,39 @@ const outputPad = (pad: PadRecord): PadRecord => {
   };
 };
 
-export const getNotebooks = async ({
+const getNotebooksById = async (
+  notebookIds: string[]
+): Promise<PadRecord[]> => {
+  const data = await tables();
+  let items: PadRecord[] = [];
+  for (let i = 0; i < notebookIds.length; i += 99) {
+    const notebookIdsSlice = notebookIds.slice(i, i + 99);
+    // eslint-disable-next-line no-await-in-loop
+    const sliceItems = await data.pads.batchGet(notebookIdsSlice);
+    items = items.concat(sliceItems);
+  }
+  const sortedItems = items.sort(byDesc('createdAt'));
+  return sortedItems.map(outputPad);
+};
+
+interface GetWorkspaceNotebooksProps {
+  user?: User;
+  workspaceId: string;
+  page: PageInput;
+}
+
+export const getWorkspaceNotebooks = async ({
   user,
   workspaceId,
   page,
-}: GetNotebooksProps): Promise<PagedResult<PadRecord>> => {
+}: GetWorkspaceNotebooksProps): Promise<PagedResult<PadRecord>> => {
   const data = await tables();
-
-  const filterExpression = 'parent_resource_uri = :parent_resource_uri';
 
   const query = {
     IndexName: 'byUserId',
     KeyConditionExpression:
       'user_id = :user_id and resource_type = :resource_type',
-    FilterExpression: filterExpression,
+    FilterExpression: 'parent_resource_uri = :parent_resource_uri',
     ExpressionAttributeValues: {
       ':user_id': user?.id || 'null',
       ':resource_type': 'pads',
@@ -43,16 +56,43 @@ export const getNotebooks = async ({
     (perm) => perm.resource_id
   );
   const { items: notebookIds } = paged;
-  let items: PadRecord[] = [];
-  for (let i = 0; i < notebookIds.length; i += 99) {
-    const notebookIdsSlice = notebookIds.slice(i, i + 99);
-    // eslint-disable-next-line no-await-in-loop
-    const sliceItems = await data.pads.batchGet(notebookIdsSlice);
-    items = items.concat(sliceItems);
-  }
-  const sortedItems = items.sort(byDesc('createdAt'));
   return {
     ...paged,
-    items: sortedItems.map(outputPad),
+    items: await getNotebooksById(notebookIds),
+  };
+};
+
+interface GetNotebooksSharedWithProps {
+  user: User;
+  page: PageInput;
+}
+
+export const getNotebooksSharedWith = async ({
+  user,
+  page,
+}: GetNotebooksSharedWithProps): Promise<PagedResult<PadRecord>> => {
+  const data = await tables();
+
+  const query = {
+    IndexName: 'byUserId',
+    KeyConditionExpression:
+      'user_id = :user_id and resource_type = :resource_type',
+    FilterExpression: 'given_by_user_id <> :user_id',
+    ExpressionAttributeValues: {
+      ':user_id': user.id,
+      ':resource_type': 'pads',
+    },
+  };
+
+  const paged = await paginate(
+    data.permissions,
+    query,
+    page,
+    (perm) => perm.resource_id
+  );
+  const { items: notebookIds } = paged;
+  return {
+    ...paged,
+    items: await getNotebooksById(notebookIds),
   };
 };

@@ -409,7 +409,31 @@ test('pads', (ctx) => {
     });
   });
 
-  it('target can access pad', async () => {
+  it('target can access pad 1', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
+
+    const { padsSharedWithMe } = (
+      await client.query({
+        query: ctx.gql`
+          query {
+            padsSharedWithMe(page: { maxItems: 10 }) {
+              items { id name }
+              count
+              hasNextPage
+            }
+          }
+        `,
+      })
+    ).data;
+
+    expect(padsSharedWithMe).toMatchObject({
+      items: [{ name: 'Pad 1 renamed' }],
+      count: 1,
+      hasNextPage: false,
+    });
+  });
+
+  it('target can access pad 2', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
 
     const { pads } = (

@@ -214,12 +214,11 @@ export default {
       { page }: { page: PageInput },
       context: GraphqlContext
     ): Promise<PagedResult<PadRecord>> {
-      const nbs = await pads.getNotebooks({
+      return pads.getWorkspaceNotebooks({
         user: loadUser(context),
         workspaceId: workspace.id,
         page,
       });
-      return nbs;
     },
   },
 };

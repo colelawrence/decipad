@@ -67,6 +67,7 @@ export default gql`
   extend type Query {
     getPadById(id: ID!, snapshotName: String): Pad
     pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
+    padsSharedWithMe(page: PageInput!): PagedPadResult!
   }
 
   extend type Mutation {
