@@ -232,7 +232,7 @@
     "unist-util-visit": "2.0.3",
     "urql": "3.0.3",
     "use-debounce": "^9.0.2",
-    "use-query-params": "^2.1.2",
+    "use-query-params": "^2.2.0",
     "use-sync-external-store": "1.2.0",
     "utility-types": "3.10.0",
     "vega": "5.22.1",
