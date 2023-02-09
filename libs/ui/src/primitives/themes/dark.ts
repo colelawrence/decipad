@@ -4,7 +4,6 @@ import {
   blue300,
   blue500,
   blue700,
-  brand200,
   brand500,
   brand600,
   brand700,
@@ -148,7 +147,7 @@ export const theme: CssVariables = {
   variableHighlightColor: teal800.hex,
   variableHighlightTextColor: dark100.hex,
 
-  magicNumberTextColor: brand200.hex,
+  magicNumberTextColor: dark100.hex,
 
   tableSelectionBackgroundColor: blue700.hex,
   tableFocusColor: blue500.hex,

@@ -8,7 +8,6 @@ import {
   brand400,
   brand500,
   brand600,
-  gleb700,
   grey100,
   grey200,
   grey300,
@@ -139,7 +138,7 @@ export const theme: CssVariables = {
   structuredCalculationVariableColor: yellow400.hex,
   structuredCalculationSimpleColor: brand400.hex,
 
-  magicNumberTextColor: gleb700.hex,
+  magicNumberTextColor: teal600.hex,
 
   tableSelectionBackgroundColor: blue100.hex,
   tableFocusColor: blue300.hex,
