@@ -8,7 +8,7 @@ import { fetchSnapshotFromFile } from './fetchSnapshotFromFile';
 // For that, we also need to detect when the updates are null ([0, 0]).
 const isZero = (n: number) => n === 0;
 const isUpdateVoid = (update: Uint8Array): boolean =>
-  update.length === 0 || (update.length < 3 && update.every(isZero));
+  update.length === 0 || update.every(isZero);
 const areUpdatesVoid = (updates: Uint8Array[]): boolean => {
   return updates.length < 1 || updates.every(isUpdateVoid);
 };
