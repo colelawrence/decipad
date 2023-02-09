@@ -6,7 +6,7 @@ import {
   VersionedDataTables,
   VersionedTableRecord,
 } from '@decipad/backendtypes';
-import { getDefined } from '@decipad/utils';
+import { getDefined } from '../../utils/src';
 
 export type WithLockUserFunction<T> = (
   record: T | undefined

@@ -24,9 +24,6 @@
       "path": "../utils"
     },
     {
-      "path": "../dynamodb-lock"
-    },
-    {
       "path": "../initial-workspace"
     },
     {

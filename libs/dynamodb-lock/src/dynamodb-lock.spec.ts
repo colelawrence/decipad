@@ -1,5 +1,5 @@
-import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { getDefined } from '@decipad/utils';
+import { testWithSandbox as test } from '../../backend-test-sandbox/src';
+import { getDefined } from '../../utils/src';
 import { concurrentWrites } from './utils/concurrent-writes';
 
 /* eslint-disable jest/no-standalone-expect */

@@ -6,7 +6,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { Endpoint } from 'aws-sdk';
 import { tables } from '@architect/functions';
 import { DocSyncRecord } from '@decipad/backendtypes';
-import { timeout, getDefined } from '@decipad/utils';
+import { timeout, getDefined } from '../../../utils/src';
 import { withLock } from '..';
 
 /* Client */

@@ -33,6 +33,9 @@ const countDecimals = (
 };
 
 export const fastNumber = (n: number | string): DeciNumber => {
+  if (typeof n === 'string' && n.length < 1) {
+    return ZERO;
+  }
   const [decimalCount, fullNumber] = countDecimals(n);
   try {
     if (typeof fullNumber === 'string' && fullNumber.length < 1) {
