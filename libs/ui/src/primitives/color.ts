@@ -24,7 +24,7 @@ function componentToHex(c: number): string {
 }
 
 export function hexToOpaqueColor(hex: string): OpaqueColor | null {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = /#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i.exec(hex);
   if (!result) return null;
   const [red, green, blue] = [
     parseInt(result[1], 16),

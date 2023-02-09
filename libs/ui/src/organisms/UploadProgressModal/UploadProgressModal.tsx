@@ -14,7 +14,7 @@ export const UploadProgressModal: FC<UploadProgressModalProps> = ({
 }) => {
   return (
     <Modal>
-      <p>Uploading files...</p>
+      <p>Uploading</p>
       {files.map((file, index) => (
         <div key={index}>
           <Progress label={file.name} progress={file.progress} />
