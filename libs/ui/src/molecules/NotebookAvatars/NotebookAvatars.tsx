@@ -1,17 +1,20 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
-import { ComponentProps, FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
+import { PermissionType } from '../../types';
 import { NotebookInvitationPopUp } from '../../organisms';
 import { cssVar, p12Regular, p13Medium, setCssVar } from '../../primitives';
-import { PermissionType } from '../../types';
 
-interface NotebookAvatar {
+export interface NotebookAvatar {
   user: {
     id: string;
     name: string;
     email?: string | null;
+    image?: string | null;
+    username?: string | null;
+    onboarded?: boolean | null;
   };
   permission: PermissionType;
   onClick?: () => void;
@@ -63,12 +66,14 @@ const tooltipRoleStyles = css({
   ...setCssVar('currentTextColor', cssVar('highlightColor')),
 });
 
-export type NotebookAvatarsProps = ComponentProps<
-  typeof NotebookInvitationPopUp
-> & {
+export type NotebookAvatarsProps = {
   isWriter?: boolean;
   usersWithAccess?: NotebookAvatar[] | null;
   allowInvitation?: boolean;
+
+  notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
+  onInvite?: (email: string) => Promise<void>;
+  onRemove?: (userId: string) => Promise<void>;
 };
 
 export const NotebookAvatars = ({
@@ -89,7 +94,12 @@ export const NotebookAvatars = ({
       const isAvatarClick = target.closest('.notebook-avatars');
       const isPopupClick = target.closest('.notebook-invitation-popup');
 
-      if (!isAvatarClick && !isPopupClick) {
+      const isHtmlClick = target.tagName === 'HTML';
+      const isPopoverClick = target.closest(
+        '[data-radix-popper-content-wrapper]'
+      );
+
+      if (!isAvatarClick && !isPopupClick && !isPopoverClick && !isHtmlClick) {
         setShowInvitePopup(false);
       }
     },
@@ -97,6 +107,10 @@ export const NotebookAvatars = ({
   );
 
   useWindowListener('click', showInvitePopup ? handleClickOutside : noop);
+
+  const nonAdminUsers = usersWithAccess?.filter(
+    (user) => user.permission !== 'ADMIN'
+  );
 
   return (
     <div css={avatarsWrapperStyles} className="notebook-avatars">
@@ -112,6 +126,11 @@ export const NotebookAvatars = ({
       )}
       {usersWithAccess?.map((avatar, index) => {
         const email = avatar.user.email || avatar.user.name;
+        const isActiveUser = avatar.user.onboarded;
+        const isOwner = avatar.permission === 'ADMIN';
+
+        if (!isActiveUser && !isOwner) return null;
+
         return isWriter ? (
           <Tooltip
             key={index}
@@ -143,7 +162,10 @@ export const NotebookAvatars = ({
       })}
       {showInvitePopup && (
         <div className="notebook-invitation-popup" css={popupWrapperStyles}>
-          <NotebookInvitationPopUp {...sharingProps} />
+          <NotebookInvitationPopUp
+            usersWithAccess={nonAdminUsers}
+            {...sharingProps}
+          />
         </div>
       )}
     </div>

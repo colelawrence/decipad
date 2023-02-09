@@ -1,0 +1,15 @@
+mutation unsharePadWithUser($padId: ID!, $userId: ID!) {
+  unsharePadWithUser(id: $padId, userId: $userId) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          ...Collaborator
+        }
+      }
+    }
+  }
+}

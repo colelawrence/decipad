@@ -5,6 +5,7 @@ import {
   GraphqlObjectType,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
+import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from './';
 
@@ -13,11 +14,11 @@ export type UnshareWithUserArgs = {
   userId: ID;
 };
 
-export type UnshareWithUserFunction = (
-  _: any,
+export type UnshareWithUserFunction<RecordT extends ConcreteRecord> = (
+  _: unknown,
   args: UnshareWithUserArgs,
   context: GraphqlContext
-) => Promise<void>;
+) => Promise<RecordT>;
 
 export function unshareWithUser<
   RecordT extends ConcreteRecord,
@@ -26,17 +27,25 @@ export function unshareWithUser<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): UnshareWithUserFunction {
-  return async function (
-    _: any,
+): UnshareWithUserFunction<RecordT> {
+  return async function unshareAndReturnUpdatedResource(
+    _: unknown,
     args: UnshareWithUserArgs,
     context: GraphqlContext
   ) {
     const resource = `/${resourceType.resourceTypeName}/${args.id}`;
     await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
-    const data = await tables();
-    await data.permissions.delete({
+    const { permissions } = await tables();
+    await permissions.delete({
       id: `/users/${args.userId}/roles/null${resource}`,
     });
+
+    const data = await resourceType.dataTable();
+    const updatedRecord = await data.get({ id: args.id });
+    if (!updatedRecord) {
+      throw new UserInputError(`no such ${resourceType.humanName}`);
+    }
+
+    return updatedRecord;
   };
 }

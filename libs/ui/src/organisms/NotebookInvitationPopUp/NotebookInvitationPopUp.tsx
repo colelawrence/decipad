@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { InputField, Button } from '../../atoms';
-import { Loading } from '../../icons';
+import { Check, Loading } from '../../icons';
 import {
   black,
   cssVar,
@@ -11,6 +11,8 @@ import {
   smallScreenQuery,
   transparency,
 } from '../../primitives';
+import { NotebookAvatar } from '../../molecules/NotebookAvatars/NotebookAvatars';
+import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
 
 const popUpStyles = css({
   width: '310px',
@@ -55,9 +57,35 @@ const descriptionStyles = css(p13Regular, {
   ...setCssVar('currentTextColor', cssVar('weakerTextColor')),
 });
 
+const invitationButtonContentStyles = css({
+  height: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+const invitationFormStyles = css({
+  gap: '8px',
+  display: 'flex',
+  flexDirection: 'column',
+  '>input': {
+    paddingTop: '7px',
+    paddingBottom: '7px',
+    fontSize: '13px',
+    lineHeight: '100%',
+  },
+});
+
+const CheckMark = () => <Check width="16px" style={{ marginRight: '6px' }} />;
+const LoadingDots = () => (
+  <Loading width="24px" style={{ marginRight: '6px' }} />
+);
+
 interface NotebookSharingPopUpProps {
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
+  usersWithAccess?: NotebookAvatar[] | null;
   onInvite?: (email: string) => Promise<void>;
+  onRemove?: (userId: string) => Promise<void>;
 }
 
 /**
@@ -66,10 +94,35 @@ interface NotebookSharingPopUpProps {
  * @returns The notebook sharing pop up.
  */
 export const NotebookInvitationPopUp = ({
+  usersWithAccess,
   onInvite = () => Promise.resolve(),
+  onRemove = () => Promise.resolve(),
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleAddCollaborator = useCallback(() => {
+    if (loading) return;
+    if (email) {
+      setIsLoading(true);
+      setEmail('');
+      onInvite(email).finally(() => {
+        setIsLoading(false);
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 2000);
+      });
+    }
+  }, [email, loading, onInvite, setIsLoading, setSuccess]);
+
+  const handleRemoveCollaborator = useCallback(
+    (userId: string) => {
+      if (loading) return;
+      setIsLoading(true);
+      onRemove(userId).finally(() => setIsLoading(false));
+    },
+    [loading, onRemove, setIsLoading]
+  );
 
   return (
     <div css={[popUpStyles]}>
@@ -83,24 +136,27 @@ export const NotebookInvitationPopUp = ({
           </p>
         </div>
 
-        <div css={horizontalGroupStyles} style={{ maxHeight: '32px' }}>
+        <div css={invitationFormStyles}>
           <InputField
+            placeholder="Enter email address"
             value={email}
             onChange={setEmail}
-            placeholder="Add email to collaborate"
+            onEnter={handleAddCollaborator}
           />
-          <Button
-            size="extraSlim"
-            onClick={() => {
-              if (email) {
-                setIsLoading(true);
-                onInvite(email).finally(() => setIsLoading(false));
-              }
-            }}
-          >
-            {loading && <Loading />} Invite
+
+          <Button size="extraSlim" onClick={handleAddCollaborator}>
+            <div css={invitationButtonContentStyles}>
+              {success && <CheckMark />}
+              {loading && <LoadingDots />}
+              Send invitation
+            </div>
           </Button>
         </div>
+
+        <CollabMembersRights
+          usersWithAccess={usersWithAccess}
+          onRemoveCollaborator={handleRemoveCollaborator}
+        />
       </div>
     </div>
   );

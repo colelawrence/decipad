@@ -6,6 +6,15 @@ fragment NotebookSnapshot on PadSnapshot {
   version
 }
 
+fragment Collaborator on User {
+  id
+  image
+  name
+  email
+  username
+  onboarded
+}
+
 fragment EditorNotebook on Pad {
   id
   name
@@ -15,9 +24,7 @@ fragment EditorNotebook on Pad {
   access {
     users {
       user {
-        id
-        name
-        email
+        ...Collaborator
       }
       permission
     }

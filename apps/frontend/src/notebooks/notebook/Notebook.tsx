@@ -60,6 +60,7 @@ const Notebook: FC = () => {
     publishNotebook,
     unpublishNotebook,
     inviteEditorByEmail,
+    removeEditorById,
     getAttachmentForm,
     onAttached,
   } = useNotebookStateAndActions({
@@ -187,6 +188,7 @@ const Notebook: FC = () => {
                 publishNotebook={publishNotebookWithMetrics}
                 unpublishNotebook={unpublishNotebook}
                 inviteEditorByEmail={inviteEditorByEmail}
+                removeEditorById={removeEditorById}
               />
             </Frame>
           }

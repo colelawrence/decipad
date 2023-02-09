@@ -9,6 +9,7 @@ export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';
 export { CodeVariable } from './CodeVariable/CodeVariable';
 export { CodeVariableDefinition } from './CodeVariableDefinition/CodeVariableDefinition';
 export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
+export { CollabAccessDropdown } from './CollabAccessDropdown/CollabAccessDropdown';
 export { DataViewMenu } from './DataViewMenu/DataViewMenu';
 export { DataViewRow } from './DataViewRow/DataViewRow';
 export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';

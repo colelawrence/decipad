@@ -78,7 +78,7 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
     _: unknown,
     args: UnshareWithUserArgs,
     context: GraphqlContext
-  ) => Promise<void>;
+  ) => Promise<DataT>;
   shareWithRole: (
     _: unknown,
     args: ShareWithRoleArgs,

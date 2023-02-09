@@ -72,7 +72,7 @@ export default gql`
       permissionType: PermissionType!
     ): Boolean
 
-    unshareExternalDataSourceWithUser(id: ID!, userId: ID!): Boolean
+    unshareExternalDataSourceWithUser(id: ID!, userId: ID!): ExternalDataSource!
 
     shareExternalDataSourceWithEmail(
       id: ID!

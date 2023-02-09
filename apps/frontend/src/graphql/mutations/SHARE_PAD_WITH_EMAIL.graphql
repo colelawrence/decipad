@@ -17,11 +17,7 @@ mutation sharePadWithEmail(
         permission
         canComment
         user {
-          id
-          image
-          name
-          email
-          username
+          ...Collaborator
         }
       }
     }

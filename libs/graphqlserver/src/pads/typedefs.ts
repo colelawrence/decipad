@@ -96,7 +96,7 @@ export default gql`
       canComment: Boolean!
     ): Boolean
 
-    unsharePadWithUser(id: ID!, userId: ID!): Boolean
+    unsharePadWithUser(id: ID!, userId: ID!): Pad
 
     sharePadWithEmail(
       id: ID!

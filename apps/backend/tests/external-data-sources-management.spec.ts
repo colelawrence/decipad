@@ -261,7 +261,7 @@ test('external data sources', (ctx) => {
           unshareExternalDataSourceWithUser(
             id: "${externalDataSource!.id}"
             userId: "test user id 2"
-          )
+          ) { id }
         }
       `,
     });

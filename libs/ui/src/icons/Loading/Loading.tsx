@@ -1,5 +1,5 @@
 import { keyframes } from '@emotion/react';
-import { FC } from 'react';
+import { FC, SVGProps } from 'react';
 import { cssVar } from '../../primitives';
 
 // DO NOT change from CSS animations to SVG <animate> tags.
@@ -18,7 +18,9 @@ const dotKeyframes = keyframes`
 
 // If you update this file, also update the manual copy of this icon in frontend/index.html
 
-export const Loading = (): ReturnType<FC> => (
+export const Loading = (
+  props: Partial<SVGProps<SVGSVGElement>> = {}
+): ReturnType<FC> => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -27,6 +29,7 @@ export const Loading = (): ReturnType<FC> => (
     fill="none"
     y="0px"
     viewBox="0 0 16 16"
+    {...props}
   >
     <title>Loading</title>
     <circle

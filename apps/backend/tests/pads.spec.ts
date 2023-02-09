@@ -466,7 +466,7 @@ test('pads', (ctx) => {
           unsharePadWithUser (
             id: "${pad.id}"
             userId: "test user id 2"
-          )
+          ) { id }
         }
       `,
     });
@@ -545,7 +545,7 @@ test('pads', (ctx) => {
           unsharePadWithUser (
             id: "${pad.id}"
             userId: "test user id 2"
-          )
+          ) { id }
         }
       `,
     });
