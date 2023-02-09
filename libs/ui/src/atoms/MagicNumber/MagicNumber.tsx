@@ -35,6 +35,14 @@ const highlightStyles = css(resultBubbleStyles, {
   },
 });
 
+const formulaHeaderStyles = css({
+  textAlign: 'center',
+});
+
+const expressionStyles = css({
+  textAlign: 'center',
+});
+
 interface ResultResultProps {
   children?: ReactNode;
   readOnly: boolean;
@@ -55,7 +63,8 @@ const IntrospectMagicNumber: FC<ResultResultProps> = ({
       ) : (
         // legacy magic numbers catch
         <span>
-          Formula: <pre>{expression}</pre>
+          <h2 css={formulaHeaderStyles}>Formula:</h2>
+          <code css={expressionStyles}>{expression}</code>
         </span>
       )}
     </Tooltip>
