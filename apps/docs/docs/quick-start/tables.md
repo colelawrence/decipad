@@ -7,6 +7,11 @@ toc_min_heading_level: 2
 
 Tables help you organize your numbers.
 
+## Learn Decipad tables in 3 minutes
+<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+  <iframe src="https://www.loom.com/embed/cb7d3e18401d4f289ea7e7c9eeaf08d9" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+</div>
+
 ## Create a new Table
 
 To **add a new table** to your notebook:
