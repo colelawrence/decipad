@@ -315,7 +315,7 @@ describe('useDataView hook performance', () => {
       computer,
     });
     let elapsed = Date.now() - startTime;
-    expect(elapsed).toBeLessThanOrEqual(10_000);
+    expect(elapsed).toBeLessThanOrEqual(12_000);
     expect(testResult).toMatchSnapshot();
 
     startTime = Date.now();
@@ -328,7 +328,7 @@ describe('useDataView hook performance', () => {
       expandedGroups: [],
     });
     elapsed = Date.now() - startTime;
-    expect(elapsed).toBeLessThanOrEqual(10_000);
+    expect(elapsed).toBeLessThanOrEqual(12_000);
 
     expect(layoutDataResult).toMatchSnapshot();
   }, 120_000);

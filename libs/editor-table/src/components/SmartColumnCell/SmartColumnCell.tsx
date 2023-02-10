@@ -67,10 +67,10 @@ export const SmartColumnCell: FC<SmartColumnCellProps> = ({
   }, [selectedAggregationType]);
 
   const expression = useMemo(() => {
-    if (column.name) {
+    if (column.name && tableName) {
       const columnRef = `${tableName}.${column.name}`;
       return selectedAggregationType?.expression(columnRef, {
-        sum: `sum(${tableName}.${column.name})`,
+        sum: `sum(${columnRef})`,
       });
     }
     return undefined;
