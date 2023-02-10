@@ -66,6 +66,7 @@ import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
+export type { TokenPos } from './getUsedIdentifiers';
 
 export interface ColumnDesc {
   tableName: string;
@@ -205,6 +206,18 @@ export class Computer {
     }
     return undefined;
   }
+
+  getSymbolOrColumnName$ = listenerHelper(
+    this.results,
+    (_, blockId: string) => {
+      const programBlock = this.latestProgram.find((p) => p.id === blockId);
+      return (
+        programBlock?.definesTableColumn?.join('.') ||
+        programBlock?.definesVariable ||
+        this.getSymbolDefinedInBlock(blockId)
+      );
+    }
+  );
 
   isInUse$ = listenerHelper(this.results, (_, ...blockIds: string[]) =>
     this.isInUse(...blockIds)

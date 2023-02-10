@@ -83,6 +83,7 @@ export function* findNames(
           kind: 'column',
           type: serializeType(type),
           name,
+          blockId: block.id,
           isLocal,
         };
       }
