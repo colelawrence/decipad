@@ -7,6 +7,7 @@ import { Add } from '../../icons';
 import { cssVar } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { MenuList } from '../MenuList/MenuList';
+import { getTypeIcon } from '../../utils/table';
 
 // Data
 
@@ -39,6 +40,16 @@ const menuButtonStyles = css({
   },
 });
 
+const iconTypeStyles = css({
+  display: 'inline-block',
+  marginRight: '10px',
+  verticalAlign: 'middle',
+  svg: {
+    width: '16px',
+    height: '16px',
+  },
+});
+
 export const DataViewMenu = ({
   availableColumns,
   onInsertColumn,
@@ -55,6 +66,7 @@ export const DataViewMenu = ({
       {!readOnly &&
         (menuIsOpen ? null : (
           <button
+            data-testid="add-data-view-column-button"
             aria-roledescription="Add column"
             onClick={() => handleMenuClick()}
             css={[menuButtonStyles, hideOnPrint]}
@@ -72,8 +84,11 @@ export const DataViewMenu = ({
         >
           {availableColumns &&
             availableColumns.map((availableColumn, index) => {
+              const Icon = getTypeIcon(availableColumn.type);
+
               return (
                 <MenuItem
+                  testid={`data-view-menu-item-${availableColumn.name}`}
                   key={index}
                   onSelect={() =>
                     onInsertColumn(
@@ -82,6 +97,12 @@ export const DataViewMenu = ({
                     )
                   }
                 >
+                  {availableColumn.type.kind !== 'anything' && (
+                    <div css={iconTypeStyles}>
+                      {' '}
+                      <Icon />
+                    </div>
+                  )}
                   {availableColumn.name}
                 </MenuItem>
               );

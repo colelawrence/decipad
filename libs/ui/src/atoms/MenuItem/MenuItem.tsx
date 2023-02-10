@@ -25,6 +25,7 @@ export interface MenuItemProps {
   readonly onSelect?: () => void;
   readonly selected?: boolean;
   readonly itemAlignment?: 'left' | 'right' | 'center';
+  readonly testid?: string;
 }
 
 export const MenuItem: FC<MenuItemProps> = ({
@@ -36,6 +37,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   selected,
   disabled,
   itemAlignment,
+  testid = '',
 }) => {
   const onSelectItem = useCallback(
     (event: Event) => {
@@ -54,6 +56,7 @@ export const MenuItem: FC<MenuItemProps> = ({
       onPointerMove={onPointerMove}
       onFocus={onFocus}
       disabled={disabled}
+      data-testid={testid}
     >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span

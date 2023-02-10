@@ -53,21 +53,15 @@ test.describe('Data views', () => {
   });
 
   test('selects columns on data view', async () => {
-    const addButton = page.locator('button[aria-roledescription="Add column"]');
+    const addButton = page.getByTestId('add-data-view-column-button');
     await addButton.click();
-    await page
-      .locator('role=menuitem[name="Property1"] >> text=Property1')
-      .click();
+    await page.getByTestId('data-view-menu-item-Property1').click();
 
     await addButton.click();
-    await page
-      .locator('role=menuitem[name="Property2"] >> text=Property2')
-      .click();
+    await page.getByTestId('data-view-menu-item-Property2').click();
 
     await addButton.click();
-    await page
-      .locator('role=menuitem[name="Property3"] >> text=Property3')
-      .click();
+    await page.getByTestId('data-view-menu-item-Property3').click();
   });
 
   test('data view configuration', async () => {
