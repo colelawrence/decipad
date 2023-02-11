@@ -2,30 +2,15 @@ import {
   CodeLineElement,
   DECORATE_AUTO_COMPLETE_MENU,
   DECORATE_CODE_VARIABLE,
-  ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_CODE_LINE,
   ELEMENT_H1,
   MyEditor,
   MyValue,
-  ELEMENT_STRUCTURED_VARNAME,
-  ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_VARIABLE_NAME,
-  ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TR,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  MyElementEntry,
 } from '@decipad/editor-types';
-import { getDefined, getOnly } from '@decipad/utils';
-import {
-  createPlateEditor,
-  ELEMENT_TABLE,
-  findNode,
-  getSelectionText,
-} from '@udecode/plate';
+import { getOnly } from '@decipad/utils';
+import { createPlateEditor, getSelectionText } from '@udecode/plate';
 import { BaseEditor, NodeEntry, Path } from 'slate';
-import { decorateCode, getRootNodeId } from './decorateCode';
+import { decorateCode } from './decorateCode';
 import { insertNodes } from './insertNodes';
 
 let editor: MyEditor = createPlateEditor({});
@@ -147,115 +132,4 @@ describe('inserts autocomplete where appropriate', () => {
 
     expect(ranges).toMatchInlineSnapshot(`null`);
   });
-});
-
-it('finds the element containing the code. this is used to prevent a smartref referring to itself', () => {
-  editor.children = [
-    {
-      type: ELEMENT_H1,
-      id: 'h1',
-      children: [{ text: '' }],
-    },
-    {
-      type: ELEMENT_CODE_LINE,
-      id: 'codeline',
-      children: [{ text: 'var' }],
-    },
-    {
-      type: ELEMENT_CODE_LINE_V2,
-      id: 'codeline2',
-      children: [
-        {
-          type: ELEMENT_STRUCTURED_VARNAME,
-          id: 'codeline2varname',
-          children: [{ text: 'var' }],
-        },
-        {
-          type: ELEMENT_CODE_LINE_V2_CODE,
-          id: 'codeline2code',
-          children: [{ text: 'var' }],
-        },
-      ],
-    },
-    {
-      type: ELEMENT_TABLE,
-      id: 'table',
-      children: [
-        {
-          type: ELEMENT_TABLE_CAPTION,
-          id: 'tablecaption',
-          children: [
-            {
-              type: ELEMENT_TABLE_VARIABLE_NAME,
-              id: 'tablevarname',
-              children: [{ text: 'var' }],
-            },
-            {
-              type: ELEMENT_TABLE_COLUMN_FORMULA,
-              id: 'tablecolumnformula',
-              columnId: 'columnid',
-              children: [{ text: 'var' }],
-            },
-          ],
-        },
-        {
-          type: ELEMENT_TR,
-          id: 'tr',
-          children: [
-            {
-              type: ELEMENT_TH,
-              id: 'columnid',
-              children: [{ text: 'tablecolumnname' }],
-              cellType: { kind: 'table-formula' },
-            },
-          ],
-        },
-        {
-          type: ELEMENT_TR,
-          id: 'tr',
-          children: [
-            {
-              type: ELEMENT_TD,
-              id: 'td',
-              children: [
-                {
-                  text: 'td',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
-  const basicCodeLine = getDefined(
-    findNode(editor, {
-      at: [],
-      match: { id: 'codeline' },
-    })
-  ) as MyElementEntry;
-  expect(getRootNodeId(editor, basicCodeLine)).toMatchInlineSnapshot(
-    `"codeline"`
-  );
-
-  const codeLineV2 = getDefined(
-    findNode(editor, {
-      at: [],
-      match: { id: 'codeline2code' },
-    })
-  ) as MyElementEntry;
-  expect(getRootNodeId(editor, codeLineV2)).toMatchInlineSnapshot(
-    `"codeline2"`
-  );
-
-  const tableColumnFormula = getDefined(
-    findNode(editor, {
-      at: [],
-      match: { id: 'tablecolumnformula' },
-    })
-  ) as MyElementEntry;
-  expect(getRootNodeId(editor, tableColumnFormula)).toMatchInlineSnapshot(
-    `"columnid"`
-  );
 });

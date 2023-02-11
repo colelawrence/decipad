@@ -144,10 +144,6 @@ export class Stack<T> {
     return undefined;
   }
 
-  getNsNameFromId(id: string) {
-    return this.idMap.get(id);
-  }
-
   createNamespace(ns: string, varGroup: VarGroup = 'lexical') {
     const scope = this.getAssignmentScope(varGroup);
     if (scope.get('')?.get(ns)) {

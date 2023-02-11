@@ -7,9 +7,11 @@ import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
-import { ComponentProps, useCallback, useState } from 'react';
+import { insertText } from '@udecode/plate';
+import type { ComponentProps } from 'react';
+import { useCallback, useState } from 'react';
+import { BaseEditor, Transforms } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
-import { commitAutocompleteItem } from './commitAutocompleteItem';
 
 const compareNames = (a: AutocompleteName, b: AutocompleteName) => {
   const aScore = a.isLocal ? 1 : 0;
@@ -34,7 +36,7 @@ const selectNames = (
   );
 };
 
-export type MenuItem = Parameters<
+type MenuItem = Parameters<
   NonNullable<ComponentProps<typeof UIAutoCompleteMenu>['onExecuteItem']>
 >[0];
 
@@ -68,9 +70,15 @@ export const AutoCompleteMenu: PlateComponent<{
 
   const onExecuteItem = useCallback(
     (item: MenuItem) => {
-      if (!showAutoComplete || !variableInfo) return;
+      if (showAutoComplete) {
+        Transforms.select(editor as BaseEditor, variableInfo);
+        Transforms.delete(editor as BaseEditor);
+      }
+      insertText(editor, item.identifier);
 
-      commitAutocompleteItem(editor, variableInfo, item);
+      if (item.kind !== 'function') {
+        insertText(editor, ' ');
+      }
     },
     [editor, showAutoComplete, variableInfo]
   );
@@ -80,7 +88,7 @@ export const AutoCompleteMenu: PlateComponent<{
       <span {...attributes}>
         <AutoCompleteWrapper
           search={word}
-          blockId={variableInfo?.blockId ?? ''}
+          blockId={variableInfo.blockId}
           onExecuteItem={onExecuteItem}
         />
         {children}

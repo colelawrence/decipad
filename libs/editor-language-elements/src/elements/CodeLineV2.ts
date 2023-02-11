@@ -14,6 +14,7 @@ const disallowedNodeTypes: AST.Node['type'][] = [
   'column',
   'range',
   'sequence',
+  'date',
   'match',
   'tiered',
 ];

@@ -38,9 +38,5 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
     return trigger;
   }
 
-  return (
-    <Tooltip trigger={trigger} stopClickPropagation>
-      {formatted.asStringPrecise}
-    </Tooltip>
-  );
+  return <Tooltip trigger={trigger}>{formatted.asStringPrecise}</Tooltip>;
 };
