@@ -68,20 +68,21 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const computer = useComputer();
-  const symbolName = computer.getSymbolOrColumnName$.use(element.blockId);
+  const symbolName = computer.getSymbolDefinedInBlock$.use(element.blockId);
 
   const errorMessage =
     (symbolName == null &&
-      `The variable ${(element.lastSeenVariableName != null &&
-        `"${element.lastSeenVariableName}"`) ||
-      ''
+      `The variable ${
+        (element.lastSeenVariableName != null &&
+          `"${element.lastSeenVariableName}"`) ||
+        ''
       } is no longer defined`) ||
     undefined;
 
   const isSelected = useSelected();
 
   useEffect(() => {
-    const symbolName$ = computer.getSymbolOrColumnName$
+    const symbolName$ = computer.getSymbolDefinedInBlock$
       .observe(element.blockId)
       .pipe(debounceTime(5000))
       .pipe(filter((name) => !!name));

@@ -50,7 +50,6 @@ export {
   hasBracketError,
   identifiedErrorToMessage,
   isTypeError,
-  getDefinedSymbol,
 } from './utils';
 
 export { unnestTableRows } from './tools';

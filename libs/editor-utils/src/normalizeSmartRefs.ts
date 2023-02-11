@@ -26,8 +26,7 @@ export const normalizeSmartRefs = (
 ) => {
   const names = computer
     .getNamesDefined()
-    .filter((n) => !!n.blockId)
-    .filter((n) => n.kind === 'variable' || n.kind === 'column')
+    .filter((n) => n.kind === 'variable')
     .map((n) => [n.name, n.blockId]);
   const namesToIds: { [name: string]: string } = Object.fromEntries(names);
   const idsToNames: { [blockId: string]: string } = Object.fromEntries(
@@ -83,10 +82,23 @@ const handleTextNode = (
   namesToIds: { [name: string]: string }
 ) => {
   const fullStr = getNodeString(node);
+  const allTokens = tokenize(fullStr).filter((t) => t?.type !== 'ws');
+  const tokenPositions = Object.fromEntries(
+    allTokens.map((t, i) => [t.offset, i])
+  );
   const identifs = getUsedIdentifiers(fullStr);
 
   for (const token of identifs) {
-    if (!token.isDeclaration && !token.isBeforeDot) {
+    const tPos = tokenPositions[token.start];
+    // don't turn token in the LHS of a declaration into smart ref
+    if (allTokens[tPos + 1]?.type === 'equalSign') {
+      continue;
+    }
+    // don't turn column name in table.column into a smart ref
+    if (allTokens[tPos - 1]?.type === 'dot') {
+      continue;
+    }
+    if (!token.isDeclaration) {
       const blockId = namesToIds[token.text];
       if (blockId) {
         const start = { path, offset: token.start };

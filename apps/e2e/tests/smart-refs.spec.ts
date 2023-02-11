@@ -5,8 +5,6 @@ import {
   keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
-import { createTable } from '../utils/page/Table';
-import { cleanText } from '../utils/src';
 
 test.describe('SmartRefs simple case', () => {
   test.describe.configure({ mode: 'serial' });
@@ -38,34 +36,6 @@ test.describe('SmartRefs simple case', () => {
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       1
     );
-  });
-});
-
-test.describe('SmartRefs in low code tables', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('replaces low code table column name with smart ref', async () => {
-    await page.keyboard.press('Enter');
-    await createTable(page);
-    await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'x = Table1.Property1');
-    await page.keyboard.press('Enter');
-    const text = await page
-      .locator('span[data-slate-node="element"]')
-      .textContent();
-    expect(cleanText(text)).toBe('Table1.Property1');
   });
 });
 

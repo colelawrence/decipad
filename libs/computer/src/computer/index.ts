@@ -8,7 +8,6 @@ export type {
 } from '../types';
 
 export { Computer, getUsedIdentifiers } from './Computer';
-export type { TokenPos } from './getUsedIdentifiers';
 
 export { defaultComputerResults } from './defaultComputerResults';
 

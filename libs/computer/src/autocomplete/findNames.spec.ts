@@ -50,7 +50,6 @@ it('finds names', async () => {
         },
       },
       Object {
-        "blockId": "block-2",
         "isLocal": true,
         "kind": "column",
         "name": "Column2",
