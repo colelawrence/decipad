@@ -11,7 +11,7 @@ import {
   snapshot,
   withTestUser,
 } from '../utils/src';
-import notebookSource from '../__fixtures__/001-notebook';
+import notebookSource from '../__fixtures__/001-notebook.json';
 
 test.describe('Loading and snapshot of big notebook', () => {
   test.describe.configure({ mode: 'serial' });
