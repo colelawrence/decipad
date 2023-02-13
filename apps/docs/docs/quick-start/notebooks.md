@@ -43,7 +43,7 @@ Delete a notebook forever. You can only delete notebooks that have been archived
 
 Download a copy of the contents of your notebook as a `json` file.
 
-- To **export a notebook**, go to your workspace, hover the notebook you want to export, click the `•••` button on the right and click `Export`.
+- To **export a notebook**, go to your workspace, hover the notebook you want to export, click the `•••` button on the right and click `Download`.
 
 - To **import a notebook**, drag the `.json` file from your computer to any Decipad workspace.
 

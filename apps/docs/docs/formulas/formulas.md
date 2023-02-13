@@ -25,7 +25,7 @@ Custom formula allow you to create your dialects inside Decipad.
 
 They can be defined as follows:
 
-`name (first argument, ..., last argument) = expression`
+**Syntax:** `CustomFormulaName (first argument, ..., last argument) = you custom expression`
 
 To illustrate, we will create a formula to determine if a given number is even.
 

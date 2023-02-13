@@ -6,11 +6,28 @@ sidebar_position: 180
 
 Built-in functions that operate on tables:
 
-## lookup
+## lookup()
 
 [Here is documentation on the lookup function](/docs/formulas/lookups).
 
-## sortby
+## filter()
+
+You can select the elements from a table based on a condition:
+
+```deci live
+Flights = {
+  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
+  PassengerCount = [100, 200, 150, 125, 210, 240, 80]
+}
+
+filter(Flights, Flights.PassengerCount <= 140)
+==> {
+  FlightNumber = [ 'EZJ123', 'TP098', 'TP210' ],
+  PassengerCount = [ 100, 125, 80 ]
+}
+```
+
+## sortby()
 
 This formula sorts a table by the values of a column:
 
@@ -27,7 +44,7 @@ sortby(Flights, Flights.DepartureTime)
 }
 ```
 
-## reverse
+## reverse()
 
 This formula reverses a table:
 
@@ -41,22 +58,5 @@ reverse(Flights)
 ==> {
   Company = [ 'TAP', 'EZJ', 'BA', 'TAP', 'BA', 'TAP', 'EZJ' ],
   FlightNumber = [ 'TP210', 'EZJ432', 'BA765', 'TP098', 'BA789', 'TP456', 'EZJ123' ]
-}
-```
-
-## filter
-
-You can select the elements from a table based on a condition:
-
-```deci live
-Flights = {
-  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
-  PassengerCount = [100, 200, 150, 125, 210, 240, 80]
-}
-
-filter(Flights, Flights.PassengerCount <= 140)
-==> {
-  FlightNumber = [ 'EZJ123', 'TP098', 'TP210' ],
-  PassengerCount = [ 100, 125, 80 ]
 }
 ```

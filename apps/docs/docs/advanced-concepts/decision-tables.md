@@ -10,7 +10,7 @@ Sometimes you might want to test a group of conditions and return a value when a
 
 **Let's explore some practical examples!**
 
-Here you can see how you can determine a salary bonus based on performace. The current `Bonus` is `0.02` because the value for `Performance` matches (in other words, is) `Exceeds`. If the value for `Performace` was "Meets" the `Bonus` would be `0`.
+Here you can see how you can determine a salary bonus based on performace. The current `Bonus` is `0.02` because the value for `Performance` matches (in other words, is) `Exceeds`. If the value for `Performance` was "Meets" the `Bonus` would be `0`.
 
 ```deci live
 Performance = "Exceeds"

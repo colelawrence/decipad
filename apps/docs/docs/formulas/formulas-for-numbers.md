@@ -4,54 +4,26 @@ sidebar_position: 10
 
 # Formulas for Numbers
 
-Our built-in formulas that operate on numbers:
+Decipad has a collection pre-built formulas that help you work with numbers. <br /> You can use these formulas with [tables](/docs/quick-start/tables) and [Decipad code blocks](/docs/quick-start/calculations).
 
-## abs
+## Rounding numbers
 
-This formula gives you the absolute value of a number. If the given number is positive or zero, it gives you that number. If it's negative, it gives you the number multiplied by `-1`.
+### Round a number - round()
 
-```deci live
-abs(-10 days)
-==> 10 days
-```
+The `round()` formula gives you a rounded version of a number. Optionally, you can specify the number of decimal places.
 
-## ln
+**Syntax:** `round( Number, Optional Decimal Precision)`
 
-`ln (number)` gives you [the natural logarithmic of a number](https://en.wikipedia.org/wiki/Natural_logarithm):
+![round formula](./img/ROUND.png)
 
-```deci live
-ln(12 steps)
-==> 2.4849 steps
-```
 
-## sqrt
+### Round a number up - roundup() / ceil()
 
-This formula gives you the square root of a number:
+Rounds the number to the nearest largest integer or number with the given decimal places.
 
-```deci live
-sqrt(9 meters^2)
-==> 3 meters
-```
+**Syntax:** `roundup( Number, Optional Decimal Precision )`
 
-## round
-
-This formula gives you a rounded version of a number, with the specified number of decimals:
-
-```deci live
-round(5.76543, 2)
-==> 5.77
-```
-
-You can also leave out the number of decimals, and it will round to the units:
-
-```deci live
-round(5.76543)
-==> 6
-```
-
-## roundup / ceil
-
-Rounds the number to the nearest largest integer or number with the given decimal places:
+**Alternative Syntax:** `ceil( Number, Optional Decimal Precision )`
 
 ```deci live
 roundup(2.3)
@@ -63,9 +35,13 @@ roundup(5.2345, 2)
 ==> 5.24
 ```
 
-## rounddown / floor
+### Round a number down - rounddown() / floor()
 
-Rounds the number to the nearest smallest integer or number with the given decimal places:
+Rounds the number to the nearest smallest integer or number with the given decimal places.
+
+**Syntax:** `roundown( Number, Optional Decimal Precision )`
+
+**Alternative Syntax:** `floor( Number, Optional Decimal Precision )`
 
 ```deci live
 rounddown(2.9)
@@ -77,91 +53,38 @@ rounddown(5.789, 2)
 ==> 5.78
 ```
 
-## max
+## Square root - sqrt() 
 
-This formula gives you the maximum value of a list or table column:
+The `sqrt()` formula gives you the square root of your number.
 
-```deci live
-max([1, 3, 2])
-==> 3
-```
+**Syntax:** `sqrt( Number )`
 
-## min
+Take a look at this example, `3 feet` is the square root of `9 square feet`.
 
-This formula gives you the minimum value of a list or table column:
+![sqroot formula](./img/SQROOT.png)
 
-```deci live
-min([3, 1, 2])
-==> 1
-```
 
-## sum / total
+## Get an absolute number - abs()
 
-This formula gives you the sum of all numbers in a list or a table column:
+The `abs()` formula gives you the absolute value of a number. <br/> It is useful when you need to remove the negative sign from a number.
+If your number is positive or zero, it stays the same. If it's negative, it removes the negative sign.
 
-```deci live
-my_table = {
-  column_A = [1, 2, 3]
-  column_B = [4, 5, 6]
-}
+**Syntax:** `abs( Number )`
 
-total(my_table.column_B)
-==> 15
-```
+Take a look at this example, `20$` is the absolute value of `-$20`.
 
-## average / mean / avg
+![abs formula](./img/ABS.png)
 
-This formula gives you the mean of a list of numbers:
+Take a look at this practical example, where you check how much money you would need to get a positive balance back.
 
-```deci live
-average([1, 2, 3, 4])
-==> 2.5
-```
+![abs formula](./img/ABS2.png)
 
-## averageif / meanif / avgif
 
-This formula gives you the mean of a list of numbers that respect a certain condition:
+## Trignometric formulas
 
-```deci live
-Table = {
-  A = [1, 2, 3]
-  B = [4, 5, 6]
-}
+[Trigonometric formulas](https://en.wikipedia.org/wiki/List_of_trigonometric_identities) relate an angle of a righ-angled triangle with the ratios of two side lengths. Decipad supports adians and degrees. These can be used to triangulate distances for example.
 
-averageif(Table.A, Table.B < 6)
-==> 1.5
-```
-
-## grow
-
-This formula compounds an initial value by a specific rate over any sequence or list of values.
-
-```deci live
-Years = [date(2022), date(2023), date(2024), date(2025)]
-
-grow(500, 10%, Years)
-==> [ 500, 550, 605, 665.5 ]
-```
-
-## stepgrowth
-
-This formula gives you the increments (or decrements) between values in a sequence or list.
-
-```deci live
-BooksRead = {
-  Year = [date(2018), date(2019), date(2020), date(2021)]
-  Total = [15, 12, 25, 20]
-}
-
-stepgrowth(BooksRead.Total)
-==> [ 15, -3, 13, -5 ]
-```
-
-## Trignometric
-
-You must remember our friend Pythagoras; close. Trigonometric formulas relate an angle of a righ-angled triangle with the ratios of two side lengths. By default, they use radians, but you can also play with degrees.
-
-### sin / asin
+### sin() / asin()
 
 ```deci live
 sin(90degrees)
@@ -173,7 +96,7 @@ asin(1) in degrees
 ==> 90.0000 °
 ```
 
-### cos / acos
+### cos() / acos()
 
 ```deci live
 cos(2*pi)
@@ -185,7 +108,7 @@ acos(1)
 ==> 0 rad
 ```
 
-### tan / atan
+### tan() / atan()
 
 ```deci live
 tan(45degrees)
@@ -197,11 +120,24 @@ round(atan(1) in degrees)
 ==> 45 °
 ```
 
-### Factorial
+## Calculate a factorial - factorial()
 
-You can compute factorials with the `factorial()` formula. For example `5!`.
+Compute factorials with the `factorial()` formula. Factorials are commonly used with probabilities.
 
 ```deci live
 factorial(5)
 ==> 120
+```
+
+## Natural logarithm - ln()
+
+The `ln()` formula gives you [the natural logarithmic of a number](https://en.wikipedia.org/wiki/Natural_logarithm).
+
+**Syntax:** `ln( Number )`
+
+![abs formula](./img/ABS.png)
+
+```deci live
+ln(12)
+==> 2.4849
 ```

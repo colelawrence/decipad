@@ -1239,6 +1239,7 @@ export const Card = ({
   title,
   description,
   img,
+  img2,
   notebook,
   icon,
   author,
@@ -1273,6 +1274,15 @@ export const Card = ({
           height: '100%',
         }}
       >
+        {img2 && (
+          <img
+            alt="Author Avatar"
+            style={{
+              width: '100%',
+            }}
+            src={img2}
+          ></img>
+        )}
         {/*
         <div
           style={{
@@ -1335,31 +1345,37 @@ export const Card = ({
             >
               {title}
             </h2>
-            <span
-              style={{
-                display: 'flex',
-                marginTop: '5px',
-              }}
-            >
-              <img
-                alt="Author Avatar"
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  marginRight: '5px',
-                  borderRadius: '50%',
-                }}
-                src={avatar}
-              ></img>
+            {author && (
               <span
                 style={{
-                  color: '#777E89',
-                  fontSize: '13px',
+                  display: 'flex',
+                  marginTop: '5px',
                 }}
               >
-                by {author}
+                {avatar && (
+                  <img
+                    alt="Author Avatar"
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      marginRight: '5px',
+                      borderRadius: '50%',
+                    }}
+                    src={avatar}
+                  ></img>
+                )}
+                {author && (
+                  <span
+                    style={{
+                      color: '#777E89',
+                      fontSize: '13px',
+                    }}
+                  >
+                    by {author}
+                  </span>
+                )}
               </span>
-            </span>
+            )}
             <span
               style={{
                 marginTop: '16px',
@@ -1376,29 +1392,31 @@ export const Card = ({
               display: 'flex',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                marginTop: '15px',
-                width: '24px',
-                height: '24px',
-                background: `var(${cardColor})`,
-                borderRadius: '4px',
-                textAlign: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontSize: '12px',
-              }}
-            >
+            {icon && (
               <div
                 style={{
-                  width: '16px',
-                  height: '16px',
+                  display: 'flex',
+                  marginTop: '15px',
+                  width: '24px',
+                  height: '24px',
+                  background: `var(${cardColor})`,
+                  borderRadius: '4px',
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  fontSize: '12px',
                 }}
               >
-                {icon}
+                <div
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                  }}
+                >
+                  {icon}
+                </div>
               </div>
-            </div>
+            )}
             {newNotebook && newNotebookBadge}
 
             {template && templateBadge}

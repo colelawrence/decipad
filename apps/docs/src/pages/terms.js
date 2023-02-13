@@ -110,7 +110,7 @@ export default function Terms() {
             </div>
             <p>
               N1N, Inc. and its affiliates (“Decipad,” “we,” “us,” “our”)
-              provides its services (described below) to you through its website
+              provides its services (described below) to you through its website{' '}
               <u>
                 <a
                   href="https://www.decipad.com/"
@@ -154,7 +154,7 @@ export default function Terms() {
               In addition, when using certain services, you will be subject to
               any additional terms applicable to such services that may be
               posted on the Service from time to time, including, without
-              limitation, the Privacy Policy located at
+              limitation, the Privacy Policy located at{' '}
               <u>
                 <a
                   href="https://app.decipad.com/docs/privacy"

@@ -109,10 +109,15 @@ const config = {
             label: 'Getting started',
           },
           {
+            to: 'videos',
+            position: 'left',
+            label: 'Videos',
+          },
+          {
             type: 'doc',
             docId: 'gallery',
             position: 'left',
-            label: 'Gallery',
+            label: 'Templates',
           },
           {
             to: 'help',

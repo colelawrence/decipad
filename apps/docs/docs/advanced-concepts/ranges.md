@@ -58,7 +58,3 @@ You can have ranges of dates, like this:
 range(date(2022-01) through date(2022-06))
 ==> range(month 2022-01 to month 2022-06)
 ```
-
-## Functions on ranges
-
-[Here is a list of all the functions that work on ranges](/docs/formulas/formulas-for-ranges).
