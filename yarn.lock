@@ -25533,10 +25533,10 @@ qs@6.10.3:
   dependencies:
     side-channel "^1.0.4"
 
-qs@^6.10.0, qs@^6.10.3, qs@^6.4.0:
-  version "6.10.5"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.5.tgz#974715920a80ff6a262264acd2c7e6c2a53282b4"
-  integrity sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==
+qs@^6.10.0, qs@^6.11.0, qs@^6.4.0:
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
+  integrity sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==
   dependencies:
     side-channel "^1.0.4"
 
@@ -29319,13 +29319,13 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typesafe-routes@9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/typesafe-routes/-/typesafe-routes-9.0.1.tgz#74264f44161998a28b7143926968242fd77c2bb9"
-  integrity sha512-CnfSI1QVaJnj/l/Tc0jkQI38YOasOSogNRmLOspFBjTwsLBzko8ukdMnlRL3MbZCBx6a5HxrK5TXlcS3AicF6Q==
+typesafe-routes@10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/typesafe-routes/-/typesafe-routes-10.0.2.tgz#0c126175abe62bf0daa388b389af015d652b2600"
+  integrity sha512-g6Xjguk2z3EjXjsVEvJ4L1NGfigAuCN/Y8cdQasbcQz/h4mCm5S7cFi2YOxmX6Gg2oyPCbP6M61gYgqYy6zRZQ==
   dependencies:
     "@types/qs" "^6.9.7"
-    qs "^6.10.3"
+    qs "^6.11.0"
 
 typescript@4.9.4:
   version "4.9.4"
