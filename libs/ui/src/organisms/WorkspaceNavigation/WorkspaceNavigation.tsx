@@ -13,7 +13,7 @@ import {
   NavigationItem,
   Tooltip,
 } from '../../atoms';
-import { Archive, Chat, Docs, Home, Plus, Sparkles } from '../../icons';
+import { Archive, Chat, Docs, Home, People, Plus, Sparkles } from '../../icons';
 import { NavigationList } from '../../molecules';
 import {
   cssVar,
@@ -36,6 +36,7 @@ const workspaceNavContainerStyles = (flagEnabled: boolean) =>
     gridTemplateRows: `auto ${
       flagEnabled ? 'auto auto' : ''
     } auto 1fr auto auto auto`,
+    gap: '2px',
   });
 
 const itemTextStyles = css({ padding: '8px 0' });
@@ -88,6 +89,9 @@ export const WorkspaceNavigation = ({
   const navigate = useNavigate();
   const { '*': maybeWorkspaceFolder } = useParams();
   const isArchivePage = maybeWorkspaceFolder === 'archived';
+  const isSharedPage = maybeWorkspaceFolder === 'shared';
+
+  const isHomePage = !isArchivePage && !isSharedPage;
 
   const sectionsEnabled = !isArchivePage && isFlagEnabled('COLOR_SIDEBAR');
 
@@ -106,13 +110,15 @@ export const WorkspaceNavigation = ({
   const location = useLocation();
   const clientEvent = useContext(ClientEventsContext);
 
+  const isSharedSectionEnabled = isFlagEnabled('SHARE_PAD_WITH_EMAIL');
+
   return (
     <nav css={workspaceNavContainerStyles(sectionsEnabled)}>
       <NavigationList key={'workspace-nav-0'}>
         <NavigationItem
           key={'folder-0'}
           href={activeWorkspaceRoute.$}
-          isActive={!isArchivePage}
+          isActive={isHomePage}
           icon={<Home />}
         >
           <span css={itemTextStyles}>My Notebooks</span>
@@ -281,6 +287,19 @@ export const WorkspaceNavigation = ({
             </div>,
           ]
         : null}
+
+      {isSharedSectionEnabled && (
+        <NavigationList key={'workspace-nav-S'}>
+          <NavigationItem
+            key={'folder-0'}
+            href={activeWorkspaceRoute.shared({}).$}
+            isActive={isSharedPage}
+            icon={<People />}
+          >
+            <span css={itemTextStyles}>Shared with me</span>
+          </NavigationItem>
+        </NavigationList>
+      )}
 
       <NavigationList key={'workspace-nav-01'}>
         <NavigationItem

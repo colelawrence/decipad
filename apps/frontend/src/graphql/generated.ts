@@ -523,6 +523,7 @@ export type Query = {
   me?: Maybe<User>;
   pads: PagedPadResult;
   padsByTag: PagedPadResult;
+  padsSharedWithMe: PagedPadResult;
   sections: Array<Section>;
   self?: Maybe<User>;
   selfFulfilledGoals: Array<Scalars['String']>;
@@ -563,6 +564,11 @@ export type QueryPadsByTagArgs = {
   page: PageInput;
   tag: Scalars['String'];
   workspaceId: Scalars['ID'];
+};
+
+
+export type QueryPadsSharedWithMeArgs = {
+  page: PageInput;
 };
 
 
@@ -1020,7 +1026,7 @@ export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string,
 export type GetWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }> }> };
+export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }> }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
 
 export const CollaboratorFragmentDoc = gql`
     fragment Collaborator on User {
@@ -1508,8 +1514,14 @@ export const GetWorkspacesDocument = gql`
   workspaces {
     ...DashboardWorkspace
   }
+  padsSharedWithMe(page: {maxItems: 10000}) {
+    items {
+      ...WorkspaceNotebook
+    }
+  }
 }
-    ${DashboardWorkspaceFragmentDoc}`;
+    ${DashboardWorkspaceFragmentDoc}
+${WorkspaceNotebookFragmentDoc}`;
 
 export function useGetWorkspacesQuery(options?: Omit<Urql.UseQueryArgs<GetWorkspacesQueryVariables>, 'query'>) {
   return Urql.useQuery<GetWorkspacesQuery, GetWorkspacesQueryVariables>({ query: GetWorkspacesDocument, ...options });
@@ -1559,6 +1571,7 @@ export type GraphCacheResolvers = {
     me?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
     padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
+    padsSharedWithMe?: GraphCacheResolver<WithTypename<Query>, QueryPadsSharedWithMeArgs, WithTypename<PagedPadResult> | string>,
     sections?: GraphCacheResolver<WithTypename<Query>, QuerySectionsArgs, Array<WithTypename<Section> | string>>,
     self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     selfFulfilledGoals?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<Scalars['String'] | string>>,

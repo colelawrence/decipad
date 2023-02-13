@@ -39,4 +39,10 @@ query GetWorkspaces {
   workspaces {
     ...DashboardWorkspace
   }
+
+  padsSharedWithMe(page: { maxItems: 10000 }) {
+    items {
+      ...WorkspaceNotebook
+    }
+  }
 }

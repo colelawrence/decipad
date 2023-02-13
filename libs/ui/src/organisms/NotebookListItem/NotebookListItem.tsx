@@ -33,7 +33,7 @@ import {
 import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 
 type PageInfo = {
-  type: 'archived' | 'section' | 'workspace';
+  type: 'archived' | 'shared' | 'section' | 'workspace';
   sections: Section[];
 };
 

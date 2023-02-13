@@ -16,6 +16,7 @@ import {
   FC,
   lazy,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -98,6 +99,8 @@ const Workspace: FC = () => {
     )) || { params: { sectionId: null } };
   const sectionId = params?.sectionId;
   const isArchivePage = maybeWorkspaceFolder === 'archived';
+  const isSharedPage = maybeWorkspaceFolder === 'shared';
+
   const { data: session } = useSession();
   const { data: user } = useUserQuery()[0];
 
@@ -108,7 +111,9 @@ const Workspace: FC = () => {
   const [name, setName] = useState(user?.self?.name || '');
   const [username, setUsername] = useState(user?.self?.username || '');
   const [description, setDescription] = useState(user?.self?.description || '');
-  const [result] = useGetWorkspacesQuery();
+  const [result, refetch] = useGetWorkspacesQuery({
+    requestPolicy: 'network-only',
+  });
 
   const createNotebook = useMutationResultHandler(
     useCreateNotebookMutation()[1],
@@ -203,15 +208,26 @@ const Workspace: FC = () => {
 
   const pageInfo: ComponentProps<typeof NotebookListItem>['page'] =
     useMemo(() => {
+      const sections = currentWorkspace?.sections || [];
+
+      if (isArchivePage) return { type: 'archived', sections };
+      if (isSharedPage) return { type: 'shared', sections };
+
       return {
-        type: isArchivePage ? 'archived' : sectionId ? 'section' : 'workspace',
-        sections: currentWorkspace?.sections || [],
+        type: sectionId ? 'section' : 'workspace',
+        sections,
       };
-    }, [isArchivePage, sectionId, currentWorkspace]);
+    }, [isArchivePage, isSharedPage, sectionId, currentWorkspace]);
 
   const filterNotebooks = useMemo(() => {
     return filterPads({ page: pageInfo.type });
   }, [pageInfo]);
+
+  useEffect(() => {
+    if (!isSharedPage) return;
+
+    refetch();
+  }, [refetch, isSharedPage]);
 
   const allSectionNotebooks = useMemo(
     () =>
@@ -233,14 +249,31 @@ const Workspace: FC = () => {
     [currentWorkspace?.pads?.items, filterNotebooks]
   );
 
+  const sharedNotebooks = useMemo(
+    () =>
+      sortBy(
+        workspaceData?.padsSharedWithMe?.items,
+        (item) => -Date.parse(item.createdAt)
+      ).map(makeIcons),
+    [workspaceData?.padsSharedWithMe?.items]
+  );
+
   const showNotebooks = useMemo(
     () =>
-      sectionId
+      isSharedPage
+        ? sharedNotebooks
+        : sectionId
         ? allSectionNotebooks && allSectionNotebooks.length > 0
           ? allSectionNotebooks
           : []
         : allNotebooks,
-    [allNotebooks, allSectionNotebooks, sectionId]
+    [
+      allNotebooks,
+      allSectionNotebooks,
+      sharedNotebooks,
+      isSharedPage,
+      sectionId,
+    ]
   );
 
   if (!currentWorkspace || !session) {
@@ -451,6 +484,7 @@ const Workspace: FC = () => {
             path={currentWorkspaceRoute.archived.template}
             element={<></>}
           />
+          <Route path={currentWorkspaceRoute.shared.template} element={<></>} />
           <Route
             path={currentWorkspaceRoute.createNew.template}
             element={

@@ -16,7 +16,7 @@ export const makeIcons = (notebook: any) => {
 };
 
 export const filterPads =
-  ({ page }: { page: 'archived' | 'workspace' | 'section' }) =>
+  ({ page }: { page: 'archived' | 'shared' | 'workspace' | 'section' }) =>
   (notebook: any) => {
     const archived = page === 'archived';
 
