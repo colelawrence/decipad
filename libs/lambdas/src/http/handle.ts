@@ -2,10 +2,13 @@ import { boomify } from '@hapi/boom';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
+  APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
 import { trace } from '@decipad/backend-trace';
 
-type Handler = (req: APIGatewayProxyEvent) => Promise<any>;
+type Handler = (
+  req: APIGatewayProxyEvent
+) => Promise<APIGatewayProxyStructuredResultV2 | string | undefined | void>;
 
 export default (handler: Handler) => {
   return trace(
@@ -20,17 +23,15 @@ export default (handler: Handler) => {
         const headers = {
           'content-type': 'application/json; charset=utf-8',
         };
-        if (body === null || body === undefined) {
+        if (body == null) {
           statusCode = 404;
-        }
-
-        if (body && typeof body !== 'string') {
+        } else if (typeof body !== 'string') {
           body = JSON.stringify(body);
         }
 
         return {
           statusCode,
-          body,
+          body: body ?? '',
           headers,
         };
       } catch (_err) {
@@ -52,8 +53,14 @@ export default (handler: Handler) => {
   );
 };
 
-function isFullReturnObject(result: any) {
-  return result && (!!result.statusCode || !!result.body);
+function isFullReturnObject(
+  result: unknown
+): result is APIGatewayProxyStructuredResultV2 {
+  return (
+    result != null &&
+    typeof result === 'object' &&
+    ('statusCode' in result || 'body' in result)
+  );
 }
 
 function okStatusCodeFor(req: APIGatewayProxyEvent) {

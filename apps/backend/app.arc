@@ -34,6 +34,7 @@ get /api/externaldatasources/:id/data
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
 any /api/pads/:padid/export
+get /api/pads/:padid/backups/export
 get /api/pads/:padid
 post /api/discord
 get /api/ws
@@ -390,5 +391,5 @@ custom-domain
 
 @aws
 region eu-west-2
-timeout 30
+timeout 60
 runtime nodejs16.x

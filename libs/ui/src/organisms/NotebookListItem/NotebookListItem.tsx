@@ -123,6 +123,7 @@ type NotebookListItemProps = {
   readonly section?: Section;
   readonly actionsOpen?: boolean;
   readonly onExport?: () => void;
+  readonly onExportBackups?: () => void;
   readonly toggleActionsOpen?: () => void;
   readonly onDuplicate?: () => void;
   readonly onDelete?: () => void;
@@ -157,6 +158,7 @@ export const NotebookListItem = ({
   onMoveToSection = noop,
   onDelete = noop,
   onExport = noop,
+  onExportBackups = noop,
   onUnarchive = noop,
   onChangeStatus = noop,
   icon = 'Rocket',
@@ -317,6 +319,15 @@ export const NotebookListItem = ({
                 }}
               >
                 Download
+              </MenuItem>
+              <MenuItem
+                icon={<icons.Download />}
+                onSelect={() => {
+                  onExportBackups();
+                  toggleActionsOpen();
+                }}
+              >
+                Download Backups
               </MenuItem>
               {page?.type === 'archived' ? (
                 <MenuItem

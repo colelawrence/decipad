@@ -6,6 +6,6 @@ export const handler = handle(async (event) => {
 
   return {
     statusCode: 200,
-    body: response ? JSON.stringify(response) : null,
+    body: response ? JSON.stringify(response) : undefined,
   };
 });

@@ -1,4 +1,4 @@
-import { exportNotebook } from './exportNotebook';
+import { exportNotebook, exportNotebookBackups } from './exportNotebook';
 import { parseIconColorFromIdentifier } from './parseIconColorFromIdentifier';
 
 export const makeIcons = (notebook: any) => {
@@ -11,6 +11,7 @@ export const makeIcons = (notebook: any) => {
     iconColor,
     status,
     onExport: exportNotebook(notebook.id),
+    onExportBackups: exportNotebookBackups(notebook.id),
     creationDate: new Date(notebook.createdAt),
   };
 };

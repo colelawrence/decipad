@@ -1,0 +1,22 @@
+{
+  "name": "docsync-maintenance",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/docsync-maintenance/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/docsync-maintenance/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/docsync-maintenance"
+      }
+    }
+  },
+  "tags": []
+}

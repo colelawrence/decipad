@@ -7,10 +7,10 @@ import {
   UserInput,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
+import { timestamp } from '@decipad/services/utils';
 import Boom from '@hapi/boom';
 import { AuthenticationError } from 'apollo-server-lambda';
 import { loadUser, requireUser } from '../authorization';
-import timestamp from '../utils/timestamp';
 import { forbiddenUsernamePrefixes } from './forbiddenUsernamePrefixes';
 
 const minimumUsernameCharCount = 1;

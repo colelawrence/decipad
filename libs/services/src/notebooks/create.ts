@@ -6,8 +6,8 @@ import {
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
+import { timestamp } from '@decipad/services/utils';
 import { create as createResourcePermission } from '../permissions';
-import timestamp from '../utils/timestamp';
 
 export async function create(
   workspaceId: ID,

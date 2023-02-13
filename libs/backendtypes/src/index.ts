@@ -596,6 +596,7 @@ export interface DocSyncSnapshotRecord extends TableRecordBase {
   data_file_path?: string;
   updatedAt: number;
   version: string;
+  isBackup?: boolean;
 }
 
 export type AllowListRecord = TableRecordBase;

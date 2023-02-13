@@ -45,6 +45,7 @@
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
       "@decipad/docsync": ["libs/docsync/src/index.ts"],
+      "@decipad/docsync-maintenance": ["libs/docsync-maintenance/src/index.ts"],
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
@@ -106,6 +107,7 @@
       "@decipad/services/pubsub": ["libs/services/src/pubsub"],
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
+      "@decipad/services/utils": ["libs/services/src/utils"],
       "@decipad/services/images": ["libs/services/src/images"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
       "@decipad/support": ["libs/support/src/index.ts"],

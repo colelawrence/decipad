@@ -1,11 +1,10 @@
 import { nanoid } from 'nanoid';
 import { GraphqlContext, ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { snapshot } from '@decipad/services/notebooks';
+import { snapshot, storeSnapshotDataAsFile } from '@decipad/services/notebooks';
+import { timestamp } from '@decipad/services/utils';
 import Boom from '@hapi/boom';
-import timestamp from '../utils/timestamp';
 import { isAuthenticatedAndAuthorized } from '../authorization';
-import { storeFileData } from './fileDataStore';
 import { snapshotFilePath } from './snapshotFilePath';
 
 const MAX_DATA_SIZE_BYTES = 100_000;
@@ -48,7 +47,7 @@ export const createOrUpdateSnapshot = async (
 
   if (snapshotData.data.length > MAX_DATA_SIZE_BYTES) {
     const path = snapshotFilePath(notebookId, snapshotName);
-    await storeFileData(path, snapshotData.data);
+    await storeSnapshotDataAsFile(path, snapshotData.data);
     existingSnapshot.data_file_path = path;
   } else {
     existingSnapshot.data = snapshotData.data.toString('base64');

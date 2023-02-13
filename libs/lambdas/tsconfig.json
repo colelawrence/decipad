@@ -20,6 +20,8 @@
     { "path": "../discord-customerservice-lambda" },
     { "path": "../y-dynamodb" },
     { "path": "../backend-trace" },
-    { "path": "../backend-analytics" }
+    { "path": "../backend-analytics" },
+    { "path": "../docsync-maintenance" },
+    { "path": "../slate-yjs" }
   ]
 }

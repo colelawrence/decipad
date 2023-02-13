@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
 import { User } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import timestamp from '../utils/timestamp';
+import { timestamp } from '@decipad/services/utils';
 
 export default {
   Mutation: {

@@ -1,7 +1,7 @@
 import S3 from 'aws-sdk/clients/s3';
 import { s3 as s3Config } from '@decipad/config';
 
-export const storeFileData = async (
+export const storeSnapshotDataAsFile = async (
   path: string,
   data: Buffer
 ): Promise<void> => {

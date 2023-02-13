@@ -52,6 +52,7 @@ type NotebookListProps = {
       | 'iconColor'
       | 'creationDate'
       | 'status'
+      | 'onExportBackups'
     > & {
       readonly id: string;
     }
@@ -196,6 +197,7 @@ export const NotebookList = ({
                       onUnarchive={() => onUnarchive(id)}
                       page={page}
                       onExport={notebook.onExport}
+                      onExportBackups={notebook.onExportBackups}
                       onChangeStatus={(st: TColorStatus) => {
                         onChangeStatus(id, st);
                       }}

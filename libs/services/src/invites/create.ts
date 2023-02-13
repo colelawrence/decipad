@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import { queues } from '@architect/functions';
 import tables from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
-import timestamp from '../utils/timestamp';
+import { timestamp } from '@decipad/services/utils';
 import { createVerifier } from '../authentication';
 
 export interface INotifyInviteArguments {

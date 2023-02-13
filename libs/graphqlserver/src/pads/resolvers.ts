@@ -14,6 +14,7 @@ import Resource from '@decipad/graphqlresource';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { getDefined, identity } from '@decipad/utils';
+import { timestamp } from '@decipad/services/utils';
 import assert from 'assert';
 import {
   getNotebookInitialState,
@@ -27,7 +28,6 @@ import {
   requireUser,
 } from '../authorization';
 import { accessTokenFor } from '../utils/accessTokenFor';
-import timestamp from '../utils/timestamp';
 import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
 import { duplicatePad } from './duplicatePad';
 import { importPad } from './importPad';

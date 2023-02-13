@@ -1,32 +1,15 @@
 import assert from 'assert';
-import { Doc as YDoc } from 'yjs';
 import { TableRecordChanges, DocSyncUpdateRecord } from '@decipad/backendtypes';
-import { DynamodbPersistence } from '@decipad/y-dynamodb';
+import { notebookMaintenance } from '@decipad/docsync-maintenance';
 import handle from '../handle';
 
-export const handler = handle(docSyncChangesHandler);
-
-async function docSyncChangesHandler(
+const handleDocSyncUpdatePut = async (
   event: TableRecordChanges<DocSyncUpdateRecord>
-) {
+) => {
   assert.strictEqual(event.table, 'docsyncupdates');
-
   if (event.action === 'put') {
-    await handleDocSyncCreate(event.args);
+    await notebookMaintenance(event.args.id);
   }
-}
+};
 
-async function handleDocSyncCreate({ id }: DocSyncUpdateRecord) {
-  // let's try and compact docsync entries
-  const doc = new YDoc();
-  const provider = new DynamodbPersistence(id, doc);
-  try {
-    console.log('started compaction');
-    await provider.compact();
-    console.log('finished compaction');
-  } catch (err) {
-    console.error(err);
-  }
-
-  return { statusCode: 200 };
-}
+export const handler = handle(handleDocSyncUpdatePut);

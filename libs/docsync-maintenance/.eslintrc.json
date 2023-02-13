@@ -1,0 +1,8 @@
+{
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "rules": {
+    "no-use-before-define": 0,
+    "no-underscore-dangle": 0
+  }
+}

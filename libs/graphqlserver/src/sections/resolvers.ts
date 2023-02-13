@@ -8,11 +8,11 @@ import {
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { byAsc } from '@decipad/utils';
+import { timestamp } from '@decipad/services/utils';
 import Boom from '@hapi/boom';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
 import { isAuthenticatedAndAuthorized, requireUser } from '../authorization';
-import timestamp from '../utils/timestamp';
 
 const resolvers = {
   Mutation: {

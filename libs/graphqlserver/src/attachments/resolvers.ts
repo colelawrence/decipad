@@ -14,9 +14,9 @@ import {
   getSize,
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/tables';
+import { timestamp } from '@decipad/services/utils';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
-import timestamp from '../utils/timestamp';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 

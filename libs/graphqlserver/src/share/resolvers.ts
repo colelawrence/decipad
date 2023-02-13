@@ -18,7 +18,7 @@ import tables, { paginate } from '@decipad/tables';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { create as createUser } from '@decipad/services/users';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
-import timestamp from '../utils/timestamp';
+import { timestamp } from '@decipad/services/utils';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 
 const { urlBase } = appConfig();

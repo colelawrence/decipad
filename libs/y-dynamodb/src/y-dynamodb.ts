@@ -83,7 +83,6 @@ export class DynamodbPersistence extends Observable<string> {
         ':docsync_id': this.name,
         ':name': getDefined(this.version),
       },
-      ConsistentRead: true,
     })) {
       if (snapshot && snapshot.data) {
         updates.push(Buffer.from(snapshot.data, 'base64'));

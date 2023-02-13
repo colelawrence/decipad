@@ -12,8 +12,8 @@ import {
 } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
+import { timestamp } from '@decipad/services/utils';
 import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
-import timestamp from '../utils/timestamp';
 
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
