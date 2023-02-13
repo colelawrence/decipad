@@ -230,7 +230,7 @@ export const AutoCompleteMenu = ({
             ) : null
           )}
         </div>
-        <div css={footerStyles}>
+        <div css={footerStyles} data-testid="autocomplete-tooltip">
           Press <span css={hotKeyStyle}>{isResult ? 'Enter' : 'Esc'}</span> to
           {isResult ? ' select' : ' dismiss'}
         </div>

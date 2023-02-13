@@ -45,7 +45,7 @@ export const Dashboard = ({
   notebookList,
 }: DashboardProps): ReturnType<FC> => {
   return (
-    <div css={styles}>
+    <div css={styles} data-testid="dashboard">
       <main css={{ gridArea: 'notebook-list', overflowY: 'auto' }}>
         {notebookList}
       </main>

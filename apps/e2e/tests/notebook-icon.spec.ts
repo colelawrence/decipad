@@ -9,9 +9,10 @@ test.describe('Icons on the editor title', () => {
   });
 
   test('renders the initial color and icon', async ({ page }) => {
-    const button = page.locator('button[aria-haspopup="dialog"]');
-    await expect(button.locator('title')).toHaveText('Rocket');
-    const initialColor = await button.evaluate((el) => {
+    const notebookIconButton = page.getByTestId('notebook-icon');
+
+    await expect(notebookIconButton.locator('title')).toHaveText('Rocket');
+    const initialColor = await notebookIconButton.evaluate((el) => {
       return getComputedStyle(el).backgroundColor;
     });
 
@@ -20,7 +21,7 @@ test.describe('Icons on the editor title', () => {
 
   test('changes the icon', async ({ page }) => {
     await page.locator('button[aria-haspopup="dialog"]').click();
-    await page.locator('button[aria-label="Moon"]').click();
+    await page.locator('[data-testid="icon-picker-Moon"]').click();
 
     await expect(
       page.locator('button[aria-haspopup="dialog"] title')
@@ -29,7 +30,7 @@ test.describe('Icons on the editor title', () => {
 
   test('changes the color of the icon', async ({ page }) => {
     await page.locator('button[aria-haspopup="dialog"]').click();
-    await page.locator('button[aria-label="Sulu"]').click();
+    await page.locator('[data-testid="icon-color-picker-Sulu"]').click();
 
     await snapshot(page as Page, 'Notebook: Icon selection');
   });

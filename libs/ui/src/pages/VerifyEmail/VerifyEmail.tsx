@@ -39,7 +39,10 @@ const wrapperStyles = css({
 export const VerifyEmail = ({ email }: { email: string }): ReturnType<FC> => {
   return (
     <div css={outerWrapperStyles}>
-      <div css={[wrapperStyles, outerBorderStyles]}>
+      <div
+        data-testid="login-instructions"
+        css={[wrapperStyles, outerBorderStyles]}
+      >
         <AuthContent
           title="Check your inbox!"
           description={`Open the link sent to ${email}`}

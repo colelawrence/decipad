@@ -96,6 +96,7 @@ export const IconPopover = ({
               <button
                 key={key}
                 aria-label={key}
+                data-testid={`icon-color-picker-${key}`}
                 onClick={() => {
                   onChangeColor(key);
                 }}
@@ -112,7 +113,11 @@ export const IconPopover = ({
           {userIconKeys.map((choice) => {
             const Icon = icons[choice];
             return (
-              <Popover.Close key={choice} aria-label={choice}>
+              <Popover.Close
+                key={choice}
+                aria-label={choice}
+                data-testid={`icon-picker-${choice}`}
+              >
                 <NotebookIconButton
                   color={baseSwatches[color]}
                   onClick={() => {

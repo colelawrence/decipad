@@ -59,6 +59,7 @@ export const EditorIcon = ({
 
   const iconElement = (
     <button
+      data-testid="notebook-icon"
       css={[
         iconWrapperStyles,
         {

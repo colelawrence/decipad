@@ -31,7 +31,9 @@ test.describe('Auto complete menu', () => {
 
   test('opens menu when cursor is at the end of a word', async () => {
     await createCalculationBlockBelow(page, 'MyV');
-    await expect(page.locator('text=Press Esc to dismiss')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="autocomplete-tooltip"]')
+    ).toBeVisible();
     // Wait for result to appear. Avoids flaky snapshots.
     await page.waitForSelector(
       ".test-auto-complete-menu button:has-text('MyVar'):first-child:last-child"
