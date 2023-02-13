@@ -42,7 +42,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   useSelectedCells();
 
-  const { name, columns, headers, formulas, rowCount } = useTable(element);
+  const { name, columns, headers, rowCount } = useTable(element);
 
   const blockId = element.id;
 
@@ -50,13 +50,9 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     return {
       blockId,
       cellTypes: columns.map((col) => col.cellType),
-      columnBlockIds: columns.map((col) =>
-        col.cellType?.kind === 'table-formula'
-          ? formulas.find((f) => f.columnId === col.blockId)?.id ?? ''
-          : col.blockId
-      ),
+      columnBlockIds: columns.map((col) => col.blockId),
     };
-  }, [blockId, columns, formulas]);
+  }, [blockId, columns]);
 
   const tablePath = useNodePath(element);
 

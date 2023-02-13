@@ -1,6 +1,5 @@
 import {
   CellValueType,
-  TableColumnFormulaElement,
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
@@ -18,7 +17,6 @@ export interface TableInfo {
   name: string;
   columns: TableColumn[];
   headers: TableHeaderElement[];
-  formulas: TableColumnFormulaElement[];
   rowCount: number;
 }
 
@@ -35,9 +33,6 @@ export const useTable = (element: TableElement): TableInfo => {
           name: getNodeString(th),
           cellType: columnTypes[index] ?? { kind: 'nothing' },
         })) ?? [],
-      formulas: element.children[0].children.slice(
-        1
-      ) as TableColumnFormulaElement[],
       rowCount: element.children.length - 2,
     };
   });

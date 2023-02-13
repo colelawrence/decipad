@@ -59,7 +59,7 @@ const ColumnPreview = ({
     return cells;
   }, [colIndex, tableNode.children]);
 
-  const { columns, formulas } = useTable(tableNode);
+  const { columns } = useTable(tableNode);
 
   const blockId = tableNode.id;
 
@@ -67,14 +67,10 @@ const ColumnPreview = ({
     return {
       blockId,
       cellTypes: columns.map((col) => col.cellType),
-      columnBlockIds: columns.map((col) =>
-        col.cellType.kind === 'table-formula'
-          ? formulas.find((f) => f.columnId === col.blockId)?.id ?? ''
-          : col.blockId
-      ),
+      columnBlockIds: columns.map((col) => col.blockId),
       isCollapsed: false,
     };
-  }, [blockId, columns, formulas]);
+  }, [blockId, columns]);
 
   return (
     <div style={{ ...style, opacity: previewOpacity, zIndex: 1 }}>

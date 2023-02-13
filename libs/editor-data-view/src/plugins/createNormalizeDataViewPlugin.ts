@@ -3,23 +3,28 @@ import {
   ELEMENT_DATA_VIEW,
   MyEditor,
   MyNodeEntry,
-} from '@decipad/editor-types';
-import { assertElementType, insertNodes } from '@decipad/editor-utils';
-import { isText, removeNodes, setNodes, wrapNodes } from '@udecode/plate';
-import { nanoid } from 'nanoid';
-import { NodeEntry } from 'slate';
-import {
+  TableColumnFormulaElement,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_DATA_VIEW_TR,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
-} from '../../../editor-types/src/element-kinds';
-import {
+  ELEMENT_TABLE_COLUMN_FORMULA,
   DataViewCaptionElement,
   DataViewElement,
   DataViewHeaderRowElement,
   DataViewNameElement,
-} from '../../../editor-types/src/data-view';
+} from '@decipad/editor-types';
+import { assertElementType, insertNodes } from '@decipad/editor-utils';
+import {
+  findNode,
+  getChildren,
+  isText,
+  removeNodes,
+  setNodes,
+  wrapNodes,
+} from '@udecode/plate';
+import { nanoid } from 'nanoid';
+import { NodeEntry } from 'slate';
 
 const normalizeDataViewElement = (
   editor: MyEditor,
@@ -118,7 +123,23 @@ const normalizeDataViewHeaders = (
     setNodes<DataViewHeaderRowElement>(editor, { children: [] }, { at: path });
     return true;
   }
-  return true;
+
+  // Migrate old IDs, which referred to the formula ID, to the column ID
+  for (const [child, childPath] of getChildren([
+    node.children[1],
+    [...path, 1],
+  ])) {
+    const byId =
+      findNode<TableColumnFormulaElement>(editor, {
+        match: { id: child.name },
+      }) ?? [];
+    if (byId[0]?.type === ELEMENT_TABLE_COLUMN_FORMULA) {
+      setNodes(editor, { name: byId[0].columnId }, { at: childPath });
+      return true;
+    }
+  }
+
+  return false;
 };
 
 const normalizeDataViewPlugin =

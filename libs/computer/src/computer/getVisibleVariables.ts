@@ -20,13 +20,12 @@ export const getVisibleVariables = (
     };
   }
 
-  const blocksUntil = program.slice(0, index + 1);
   const localSymbol = getDefinedSymbol(program[index].args[0]);
 
   const globalVars = new Set<string>();
   const localVars = new Set<string>();
 
-  for (const block of blocksUntil) {
+  for (const block of program) {
     const {
       id: blockId,
       args: [stat],

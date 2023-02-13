@@ -53,6 +53,7 @@ import type {
   IdentifiedError,
   IdentifiedResult,
   NotebookResults,
+  Program,
   ProgramBlock,
   UserParseError,
 } from '../types';
@@ -253,20 +254,16 @@ export class Computer {
   /**
    * Get names for the autocomplete, and information about them
    */
-  getNamesDefined(blockId?: string): AutocompleteName[] {
+  getNamesDefined(inBlockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.latestProgram);
-    const inSymbol = blockId && this.getSymbolDefinedInBlock(blockId);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
-    if (inSymbol) {
-      toIgnore.add(inSymbol);
-    }
     return Array.from(
-      findNames(this.computationRealm, program, toIgnore, inSymbol)
+      findNames(this.computationRealm, program, toIgnore, inBlockId)
     );
   }
 
-  getNamesDefined$ = listenerHelper(this.results, (_, blockId?: string) =>
-    this.getNamesDefined(blockId)
+  getNamesDefined$ = listenerHelper(this.results, (_, inBlockId?: string) =>
+    this.getNamesDefined(inBlockId)
   );
 
   getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
@@ -678,6 +675,10 @@ export class Computer {
       inferExpression(this.computationRealm.inferContext, ast)
     );
     return expr.unit;
+  }
+
+  getLatestProgram(): Readonly<Program> {
+    return this.latestProgram;
   }
 
   /** @deprecated */

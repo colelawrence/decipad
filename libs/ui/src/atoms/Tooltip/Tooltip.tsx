@@ -8,7 +8,7 @@ import {
 } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { noop } from 'lodash';
-import { FC } from 'react';
+import { FC, MouseEventHandler, useCallback } from 'react';
 import { cssVar, p12Medium } from '../../primitives';
 import { useIsDragging } from './useIsDragging';
 
@@ -61,7 +61,8 @@ interface TooltipProps {
   readonly variant?: 'normal' | 'small';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
   readonly hoverOnly?: boolean;
-  readonly onClick?: () => void;
+  readonly onClick?: MouseEventHandler<HTMLDivElement>;
+  readonly stopClickPropagation?: boolean;
 
   readonly open?: boolean;
   readonly onChangeOpen?: (open: boolean) => void;
@@ -77,6 +78,7 @@ export const Tooltip = ({
   hoverOnly = false,
   variant,
   onClick,
+  stopClickPropagation = false,
   side,
   align,
   wrapperStyles = css(),
@@ -87,6 +89,16 @@ export const Tooltip = ({
     prop: open,
     onChange: onChangeOpen,
   });
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (stopClickPropagation) {
+        e.stopPropagation();
+      }
+      onClick?.(e);
+    },
+    [onClick, stopClickPropagation]
+  );
 
   return (
     <Root
@@ -125,7 +137,7 @@ export const Tooltip = ({
             onClick && clickableStyles,
             wrapperStyles,
           ]}
-          onClick={onClick}
+          onClick={handleClick}
         >
           <Arrow css={arrowStyles} width={18} height={9} offset={6} />
           <div css={contentStyles}>{children}</div>
