@@ -146,7 +146,11 @@ describe('Table', () => {
           editor.children[0] as MyElement
         )
       ).map((elements) => {
-        return [elements.id, elements.block && prettyPrintAST(elements.block)];
+        return [
+          elements.id,
+          elements.block && prettyPrintAST(elements.block),
+          elements.definesTableColumn,
+        ];
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -154,21 +158,34 @@ describe('Table', () => {
           "root",
           "(block
         (table varname))",
+          undefined,
         ],
         Array [
           "th1",
           "(block
         (table-column-assign (tablepartialdef varname) (coldef Col1) (column \\"1.1\\" \\"1.2\\" \\"1.3\\")))",
+          Array [
+            "varname",
+            "Col1",
+          ],
         ],
         Array [
           "th2",
           "(block
         (table-column-assign (tablepartialdef varname) (coldef Col2) (+ (ref Col1) 1)))",
+          Array [
+            "varname",
+            "Col2",
+          ],
         ],
         Array [
           "th3",
           "(block
         (table-column-assign (tablepartialdef varname) (coldef Col3) (column 3.1 3.2 3.3)))",
+          Array [
+            "varname",
+            "Col3",
+          ],
         ],
       ]
     `);

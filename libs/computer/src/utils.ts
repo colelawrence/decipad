@@ -1,5 +1,6 @@
 import { AST, SyntaxError, BracketError, walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
+import { TableColumnAssign } from 'libs/language/src/parser/ast-types';
 import { IdentifiedError, IdentifiedResult, ProgramBlock } from './types';
 
 export const getStatement = (
@@ -51,6 +52,12 @@ export const getDefinedSymbol = (
     default:
       return null;
   }
+};
+
+export const getColumnNameFromTableColumnAssign = (
+  colAss: TableColumnAssign
+) => {
+  return getIdentifierString(colAss.args[1]);
 };
 
 export const getGoodBlocks = (parsed: ProgramBlock[]) =>
