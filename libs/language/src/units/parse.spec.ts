@@ -10,43 +10,43 @@ describe('parses units', () => {
   it('parses multiplier prefixes in unknown quantities', () => {
     expect(parseUnit('yoctobananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000_000_000_000_000_000_000_000),
+        multiplier: N(1, 1_000_000_000_000_000_000_000_000n),
         known: false,
       })
     );
     expect(parseUnit('zeptobananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000_000_000_000_000_000_000),
+        multiplier: N(1, 1_000_000_000_000_000_000_000n),
         known: false,
       })
     );
     expect(parseUnit('attobananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000_000_000_000_000_000),
+        multiplier: N(1, 1_000_000_000_000_000_000n),
         known: false,
       })
     );
     expect(parseUnit('femtobananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000_000_000_000_000),
+        multiplier: N(1, 1_000_000_000_000_000n),
         known: false,
       })
     );
     expect(parseUnit('picobananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000_000_000_000),
+        multiplier: N(1, 1_000_000_000_000n),
         known: false,
       })
     );
     expect(parseUnit('microbananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000_000),
+        multiplier: N(1, 1_000_000n),
         known: false,
       })
     );
     expect(parseUnit('millibananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1, 1_000),
+        multiplier: N(1, 1_000n),
         known: false,
       })
     );
@@ -78,29 +78,29 @@ describe('parses units', () => {
       u('bananas', { multiplier: N(1000), known: false })
     );
     expect(parseUnit('megabananas')).toMatchObject(
-      u('bananas', { multiplier: N(1_000_000), known: false })
+      u('bananas', { multiplier: N(1_000_000n), known: false })
     );
     expect(parseUnit('gigabananas')).toMatchObject(
-      u('bananas', { multiplier: N(1_000_000_000), known: false })
+      u('bananas', { multiplier: N(1_000_000_000n), known: false })
     );
     expect(parseUnit('terabananas')).toMatchObject(
-      u('bananas', { multiplier: N(1_000_000_000_000), known: false })
+      u('bananas', { multiplier: N(1_000_000_000_000n), known: false })
     );
     expect(parseUnit('petabananas')).toMatchObject(
-      u('bananas', { multiplier: N(1_000_000_000_000_000), known: false })
+      u('bananas', { multiplier: N(1_000_000_000_000_000n), known: false })
     );
     expect(parseUnit('exabananas')).toMatchObject(
-      u('bananas', { multiplier: N(1_000_000_000_000_000_000), known: false })
+      u('bananas', { multiplier: N(1_000_000_000_000_000_000n), known: false })
     );
     expect(parseUnit('zettabananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1_000_000_000_000_000_000_000),
+        multiplier: N(1_000_000_000_000_000_000_000n),
         known: false,
       })
     );
     expect(parseUnit('yottabananas')).toMatchObject(
       u('bananas', {
-        multiplier: N(1_000_000_000_000_000_000_000_000),
+        multiplier: N(1_000_000_000_000_000_000_000_000n),
         known: false,
       })
     );
@@ -114,28 +114,28 @@ describe('parses units', () => {
 
   it('parses abbreviated multiplier prefixes in known units', () => {
     expect(parseUnit('yWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000_000_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000_000_000_000_000_000_000n) })
     );
     expect(parseUnit('zWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000_000_000_000_000_000n) })
     );
     expect(parseUnit('aWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000_000_000_000_000n) })
     );
     expect(parseUnit('fWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000_000_000_000n) })
     );
     expect(parseUnit('pWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000_000_000n) })
     );
     expect(parseUnit('nWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000_000n) })
     );
     expect(parseUnit('μWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000_000) })
+      u('Watts', { multiplier: N(1, 1_000_000n) })
     );
     expect(parseUnit('mWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1, 1_000) })
+      u('Watts', { multiplier: N(1, 1_000n) })
     );
     expect(parseUnit('cWatts')).toMatchObject(
       u('Watts', { multiplier: N(1, 100) })
@@ -154,25 +154,25 @@ describe('parses units', () => {
       u('Watts', { multiplier: N(1000) })
     );
     expect(parseUnit('MWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000) })
+      u('Watts', { multiplier: N(1_000_000n) })
     );
     expect(parseUnit('GWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000_000) })
+      u('Watts', { multiplier: N(1_000_000_000n) })
     );
     expect(parseUnit('TWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000_000_000) })
+      u('Watts', { multiplier: N(1_000_000_000_000n) })
     );
     expect(parseUnit('PWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1_000_000_000_000_000n) })
     );
     expect(parseUnit('EWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1_000_000_000_000_000_000n) })
     );
     expect(parseUnit('ZWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1_000_000_000_000_000_000_000n) })
     );
     expect(parseUnit('YWatts')).toMatchObject(
-      u('Watts', { multiplier: N(1_000_000_000_000_000_000_000_000) })
+      u('Watts', { multiplier: N(1_000_000_000_000_000_000_000_000n) })
     );
     expect(parseUnit('cm3')).toMatchObject(
       u('m', { multiplier: N(1, 100), exp: N(3) })

@@ -29,34 +29,7 @@ const numberToSubOrSuperscript: Record<string, string[]> = {
   '/': ['/', 'ᐟ'], // slash
 };
 
-export type AvailablePrefixes =
-  | 1e30
-  | 1e27
-  | 1e24
-  | 1e21
-  | 1_000_000_000_000_000_000
-  | 1_000_000_000_000_000
-  | 1_000_000_000_000
-  | 1_000_000_000
-  | 1_000_000
-  | 1_000
-  | 100
-  | 10
-  | 1
-  | 0.1
-  | 0.01
-  | 0.001
-  | 0.000001
-  | 1e-9
-  | 1e-12
-  | 1e-15
-  | 1e-18
-  | 1e-21
-  | 1e-24
-  | 1e-27
-  | 1e-30;
-
-const multipliersToPrefixes: Record<AvailablePrefixes, string[]> = {
+const multipliersToPrefixes = {
   1e-30: ['q', 'quecto'],
   1e-27: ['r', 'ronto'],
   1e-24: ['y', 'yocto'],
@@ -82,7 +55,9 @@ const multipliersToPrefixes: Record<AvailablePrefixes, string[]> = {
   1e24: ['Y', 'yotta'],
   1e27: ['R', 'ronna'],
   1e30: ['Q', 'quetta'],
-};
+} as const;
+
+type AvailablePrefixes = keyof typeof multipliersToPrefixes;
 
 function scriptFromNumber(n: string): string {
   return numberToSubOrSuperscript[n]?.[1] || n;
