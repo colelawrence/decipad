@@ -50,13 +50,13 @@ import {
   createSelectionShortcutPlugin,
   createSmartRefPlugin,
   createSoftBreakPlugin,
-  createStructuredInputPlugin,
   createSyntaxErrorHighlightPlugin,
   createTrailingParagraphPlugin,
   createUpdateComputerPlugin,
   createUserEventPlugin,
   createWithDocSyncHistoryPlugin,
   createDeduplicateElementIdsPlugin,
+  createMigrateStructuredInputs,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -116,9 +116,6 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
-      createStructuredInputPlugin(
-        computer.getAvailableIdentifier.bind(computer)
-      ),
 
       createNotebookTitlePlugin({
         readOnly,
@@ -235,6 +232,9 @@ export const plugins = ({
 
       // event interception
       createEventInterceptionSuperHandlerPlugin(),
+
+      // Migrations
+      createMigrateStructuredInputs(),
     ],
     {
       components: components(computer),

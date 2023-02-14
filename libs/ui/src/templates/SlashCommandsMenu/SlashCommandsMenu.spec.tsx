@@ -8,7 +8,6 @@ beforeEach(() => {
   // TODO: This is a feature flag that is disabled by default
   // and affects this test
   enable('CODE_LINE_NAME_SEPARATED');
-  enable('STRUCTURED_INPUT');
 });
 
 it('renders menuitems triggering different commands', async () => {

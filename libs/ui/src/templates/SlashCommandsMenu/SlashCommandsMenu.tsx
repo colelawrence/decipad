@@ -19,20 +19,10 @@ import {
   Slider,
   TableSlash,
   Toggle,
-  Value,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
 const dataItems = () => [
-  {
-    command: 'structured_in',
-    title: 'Define a value',
-    description: 'Input structured data into Decipad',
-    icon: <Value />,
-    enabled: isFlagEnabled('STRUCTURED_INPUT'),
-    extraSearchTerms: ['number', 'input', 'assumption'],
-  },
-
   {
     command: 'structured-code-line',
     title: 'Formula',

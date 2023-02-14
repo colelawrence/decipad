@@ -1,34 +1,21 @@
 import { Computer } from '@decipad/computer';
 import {
-  StructuredInput,
-  StructuredInputChildren,
-} from '@decipad/editor-components';
-import {
   ELEMENT_CODE_LINE_V2,
-  ELEMENT_STRUCTURED_IN,
-  ELEMENT_STRUCTURED_IN_CHILD,
   MyEditor,
   MyElement,
-  MyPlatePlugin,
 } from '@decipad/editor-types';
-import {
-  insertStructuredCodeLineBelow,
-  insertStructuredInput,
-} from '@decipad/editor-utils';
+import { insertStructuredCodeLineBelow } from '@decipad/editor-utils';
 import {
   getEndPoint,
   getFirstNode,
   getLastNode,
   getNode,
-  getNodeString,
   getStartPoint,
 } from '@udecode/plate';
 import { KeyboardEvent } from 'react';
 import { Path } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
-import { createNormalizeStructuredInput } from './createNormalizeStructuredInput';
-import { createNormalizeStructuredInputChild } from './createNormalizeStructuredInputChild';
 
 type Shortcuts =
   | 'move-right'
@@ -54,20 +41,6 @@ function getShortcut(event: KeyboardEvent): Shortcuts | undefined {
   return undefined;
 }
 
-function getAlignedOffset(
-  offset: number,
-  text: string,
-  nextText: string,
-  aligned: 'left' | 'right'
-): number {
-  if (aligned === 'left') {
-    return offset > nextText.length ? nextText.length : offset;
-  }
-  return text.length - offset > nextText.length
-    ? 0
-    : nextText.length - (text.length - offset);
-}
-
 /**
  * Selects the whole text on a given path.
  *
@@ -81,32 +54,13 @@ function setSelectionFullText(editor: MyEditor, path: Path) {
   });
 }
 
-export const createStructuredInputPlugin = (
-  getAvailableIdentifier: Computer['getAvailableIdentifier']
-): MyPlatePlugin => ({
-  key: ELEMENT_STRUCTURED_IN,
-  isElement: true,
-  isVoid: false,
-  component: StructuredInput,
-  plugins: [
-    {
-      key: ELEMENT_STRUCTURED_IN_CHILD,
-      isElement: true,
-      component: StructuredInputChildren,
-    },
-    onStructuredInputKeyDownPlugin(getAvailableIdentifier),
-    createNormalizeStructuredInput(getAvailableIdentifier),
-    createNormalizeStructuredInputChild(),
-  ],
-});
+const ALLOWED_ELEMENTS = new Set([ELEMENT_CODE_LINE_V2]);
 
-const ALLOWED_ELEMENTS = new Set([ELEMENT_STRUCTURED_IN, ELEMENT_CODE_LINE_V2]);
-
-export function onStructuredInputKeyDownPlugin(
+export function createStructuredKeyboard(
   getAvailableIdentifier: Computer['getAvailableIdentifier']
 ) {
   return createOnKeyDownPluginFactory({
-    name: 'STRUCTURED_INPUT_KEYBOARD',
+    name: 'STRUCTURED_KEYBOARD_SHORTCUTS',
     plugin:
       (editor) =>
       (event): boolean => {
@@ -153,19 +107,8 @@ export function onStructuredInputKeyDownPlugin(
             event.preventDefault();
             event.stopPropagation();
 
-            const currentNodeText = getNodeString(node.children[anchorPath[1]]);
-            const [nextNode] = getFirstNode(editor, anchorPath);
-            const nextNodeText = getNodeString(nextNode);
-
             const newRange = {
-              offset: getAlignedOffset(
-                anchorOffset,
-                currentNodeText,
-                nextNodeText,
-                anchorPath[1] === 0 || node.type !== ELEMENT_STRUCTURED_IN
-                  ? 'left'
-                  : 'right'
-              ),
+              offset: anchorOffset,
               path: anchorPath,
             };
             setSelection(editor, {
@@ -176,14 +119,6 @@ export function onStructuredInputKeyDownPlugin(
           case 'new-element':
             event.preventDefault();
             event.stopPropagation();
-            if (node.type === ELEMENT_STRUCTURED_IN) {
-              insertStructuredInput(
-                editor,
-                [anchorPath[0]],
-                getAvailableIdentifier
-              );
-              return true;
-            }
             insertStructuredCodeLineBelow(
               editor,
               [anchorPath[0]],

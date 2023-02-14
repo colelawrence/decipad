@@ -17,7 +17,6 @@ export const availableFlags = [
   'ONBOARDING_ACCOUNT_SETUP',
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
-  'STRUCTURED_INPUT',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

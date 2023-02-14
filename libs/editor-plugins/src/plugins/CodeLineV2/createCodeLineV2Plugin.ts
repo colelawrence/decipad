@@ -1,7 +1,7 @@
 import { Computer } from '@decipad/computer';
 import {
   createEventInterceptorPluginFactory,
-  onStructuredInputKeyDownPlugin,
+  createStructuredKeyboard,
 } from '@decipad/editor-plugins';
 import {
   ELEMENT_CODE_LINE_V2,
@@ -50,9 +50,7 @@ export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
     createNormalizeCodeLineVarnamePlugin(),
     createSelectionContainmentPlugin(ELEMENT_CODE_LINE_V2_CODE),
     createSelectionContainmentPlugin(ELEMENT_STRUCTURED_VARNAME),
-    onStructuredInputKeyDownPlugin(
-      computer.getAvailableIdentifier.bind(computer)
-    ),
+    createStructuredKeyboard(computer.getAvailableIdentifier.bind(computer)),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_CODE_LINE_V2',
       elementTypes: [ELEMENT_CODE_LINE_V2],
