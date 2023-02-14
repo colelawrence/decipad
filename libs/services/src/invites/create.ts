@@ -72,6 +72,11 @@ export async function notify(args: INotifyInviteArguments) {
     ? args.resourceLink
     : await generateAuthLink(args);
 
+  if (process.env.ARC_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.info('invitation link:\n\n', acceptLink, '\n\n');
+  }
+
   await queues.publish({
     name: 'sendemail',
     payload: {

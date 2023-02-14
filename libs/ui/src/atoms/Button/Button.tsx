@@ -152,6 +152,8 @@ type ButtonProps = {
   readonly size?: 'normal' | 'extraSlim' | 'extraLarge';
   readonly testId?: string;
   readonly href?: string;
+  readonly tabIndex?: number;
+  readonly autoFocus?: boolean;
   readonly onClick?: () => void;
   readonly submit?: boolean;
 };
@@ -161,7 +163,9 @@ export const Button = ({
   size = 'normal',
   submit = type === 'primary' || type === 'primaryBrand',
   disabled = false,
+  autoFocus,
   testId = '',
+  tabIndex,
   children,
   onClick = noop,
   href,
@@ -190,6 +194,7 @@ export const Button = ({
     </Anchor>
   ) : (
     <button
+      autoFocus={autoFocus}
       disabled={disabled}
       type={submit ? 'submit' : 'button'}
       css={css([
@@ -198,6 +203,7 @@ export const Button = ({
         sizeStyles[size],
         disabled ? disabledStyles : enabledStyles,
       ])}
+      tabIndex={tabIndex}
       onClick={submit ? onClick : onButtonClick}
       data-testid={testId}
     >

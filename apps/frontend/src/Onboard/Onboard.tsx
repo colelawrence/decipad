@@ -23,6 +23,7 @@ import {
   useUserQuery,
 } from '../graphql';
 import { useRequiresOnboarding } from './useRequiresOnboarding';
+import { PreOnboardingPath } from './RequireOnboard';
 
 export const Onboard = () => {
   const navigate = useNavigate();
@@ -34,9 +35,17 @@ export const Onboard = () => {
   const updateUser = useUpdateUserMutation()[1];
   const updateUsername = useSetUsernameMutation()[1];
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Keep retrieved values as local state so they can be edited and submitted
   // only when navigating to the next step.
-  const [name, setName] = useState(userResult.data?.self?.name ?? '');
+  const [name, setName] = useState(() => {
+    const userEmail = session.data?.user.email;
+    const fullName = userResult.data?.self?.name;
+    const hasValidName = fullName && fullName !== userEmail;
+
+    return hasValidName ? fullName : '';
+  });
   const [username, setUsername] = useState(session.data?.user.username ?? '');
   const [description, setDescription] = useState(
     userResult.data?.self?.description ?? ''
@@ -52,8 +61,10 @@ export const Onboard = () => {
   }, [navigate, step]);
 
   const requiresOnboarding = useRequiresOnboarding();
+  const redirectPath = PreOnboardingPath.value;
+
   if (!requiresOnboarding) {
-    return <Navigate replace to="/" />;
+    return <Navigate replace to={redirectPath} />;
   }
 
   return (
@@ -83,43 +94,50 @@ export const Onboard = () => {
               username={username}
               onChangeName={setName}
               onChangeUsername={setUsername}
+              isSubmitting={isSubmitting}
               next={() => {
+                setIsSubmitting(true);
+
                 Promise.allSettled([
                   updateUser({ props: { name } }),
                   updateUsername({ props: { username } }),
-                ]).then(([userUpdate, usernameUpdate]) => {
-                  if (
-                    userUpdate.status === 'rejected' ||
-                    (userUpdate.status === 'fulfilled' &&
-                      userUpdate.value.error)
-                  ) {
-                    const error =
-                      userUpdate.status === 'rejected'
-                        ? userUpdate.reason
-                        : userUpdate.value.error;
-                    console.error('Failed to update name. Error:', error);
-                    toast('Could not change your name', 'error');
-                  } else if (
-                    usernameUpdate.status === 'rejected' ||
-                    (usernameUpdate.status === 'fulfilled' &&
-                      usernameUpdate.value.error)
-                  ) {
-                    const error =
-                      usernameUpdate.status === 'rejected'
-                        ? usernameUpdate.reason
-                        : usernameUpdate.value.error;
-                    console.error('Failed to update username. Error:', error);
-                    toast(
+                ])
+                  .then(([userUpdate, usernameUpdate]) => {
+                    if (
+                      userUpdate.status === 'rejected' ||
+                      (userUpdate.status === 'fulfilled' &&
+                        userUpdate.value.error)
+                    ) {
+                      const error =
+                        userUpdate.status === 'rejected'
+                          ? userUpdate.reason
+                          : userUpdate.value.error;
+                      console.error('Failed to update name. Error:', error);
+                      toast('Could not change your name', 'error');
+                    } else if (
                       usernameUpdate.status === 'rejected' ||
-                        isEmpty(error.graphQLErrors)
-                        ? 'Could not change your username'
-                        : error.graphQLErrors.toString(), // this are created by us, not generic error messages.
-                      'error'
-                    );
-                  } else {
-                    next();
-                  }
-                });
+                      (usernameUpdate.status === 'fulfilled' &&
+                        usernameUpdate.value.error)
+                    ) {
+                      const error =
+                        usernameUpdate.status === 'rejected'
+                          ? usernameUpdate.reason
+                          : usernameUpdate.value.error;
+                      console.error('Failed to update username. Error:', error);
+                      toast(
+                        usernameUpdate.status === 'rejected' ||
+                          isEmpty(error.graphQLErrors)
+                          ? 'Could not change your username'
+                          : error.graphQLErrors.toString(), // this are created by us, not generic error messages.
+                        'error'
+                      );
+                    } else {
+                      next();
+                    }
+                  })
+                  .finally(() => {
+                    setIsSubmitting(false);
+                  });
               }}
               previous={previous}
             />
@@ -135,25 +153,38 @@ export const Onboard = () => {
               name={name}
               username={username}
               description={description}
+              isSubmitting={isSubmitting}
               onChangeDescription={setDescription}
               finish={() => {
+                setIsSubmitting(true);
+
                 Promise.allSettled([
                   updateUser({ props: { description, onboarded: true } }),
-                ]).then(([result]) => {
-                  if (
-                    result.status === 'rejected' ||
-                    (result.status === 'fulfilled' && result.value.error)
-                  ) {
-                    const error =
-                      result.status === 'rejected'
-                        ? result.reason
-                        : result.value.error;
-                    console.error('Failed to onboard the user. Error:', error);
-                    toast('Could not get you fully onboarded for now', 'error');
-                  } else {
-                    navigate('/');
-                  }
-                });
+                ])
+                  .then(([result]) => {
+                    if (
+                      result.status === 'rejected' ||
+                      (result.status === 'fulfilled' && result.value.error)
+                    ) {
+                      const error =
+                        result.status === 'rejected'
+                          ? result.reason
+                          : result.value.error;
+                      console.error(
+                        'Failed to onboard the user. Error:',
+                        error
+                      );
+                      toast(
+                        'Could not get you fully onboarded for now',
+                        'error'
+                      );
+                    } else {
+                      navigate(redirectPath);
+                    }
+                  })
+                  .finally(() => {
+                    setIsSubmitting(false);
+                  });
               }}
               previous={previous}
             />

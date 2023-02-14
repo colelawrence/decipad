@@ -32,6 +32,7 @@ export type InputFieldProps = {
   readonly placeholder?: string;
 
   readonly value: string;
+  readonly tabIndex?: number;
   readonly onChange?: (newValue: string) => void;
   readonly onEnter?: () => void;
 };
@@ -45,6 +46,7 @@ export const InputField = ({
   placeholder,
 
   value,
+  tabIndex,
   onChange = noop,
   onEnter = noop,
 }: InputFieldProps): ReturnType<FC> => {
@@ -65,6 +67,7 @@ export const InputField = ({
       required={required}
       placeholder={placeholder}
       value={value}
+      tabIndex={tabIndex}
       onChange={(event) => onChange(event.currentTarget.value)}
       onKeyDown={(event) => {
         if (event.key === 'Enter') {

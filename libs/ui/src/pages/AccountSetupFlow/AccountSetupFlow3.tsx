@@ -5,6 +5,7 @@ import md5 from 'md5';
 import Gravatar from 'react-gravatar';
 import { isEmpty } from 'lodash';
 import { useThemeFromStore } from '@decipad/react-contexts';
+import { FormEvent, useCallback } from 'react';
 import { Button, TextareaField } from '../../atoms';
 import {
   h1,
@@ -21,7 +22,7 @@ import {
 import { AccountSetup } from '../../templates';
 import modelDark from './model3_dark.png';
 import model3Light from './model3_light.png';
-import { Date, Sheet } from '../../icons';
+import { Date, Sheet, Loading } from '../../icons';
 import { backgroundStyles } from './styles';
 
 const leftStyles = css({
@@ -213,21 +214,36 @@ interface AccountSetupFlow2Props {
   name?: string;
   username?: string;
   description?: string;
+  isSubmitting?: boolean;
   onChangeDescription?: (newDescription: string) => void;
   finish?: () => void;
   previous?: () => void;
 }
+
+const LoadingDots = () => (
+  <Loading width="16px" style={{ marginRight: '6px' }} />
+);
 
 export const AccountSetupFlow3 = ({
   email = 'decipad@decipad.com',
   name = 'Your Name',
   username = '@username',
   description = '',
+  isSubmitting = false,
   onChangeDescription = noop,
   finish = noop,
   previous = noop,
 }: AccountSetupFlow2Props) => {
   const [isDarkMode] = useThemeFromStore();
+  const handleSubmit = useCallback(
+    (ev: FormEvent) => {
+      if (isSubmitting) return;
+
+      ev.preventDefault();
+      finish();
+    },
+    [finish, isSubmitting]
+  );
 
   const placeholder = 'Share something about yourself';
   const avatar = (
@@ -240,7 +256,7 @@ export const AccountSetupFlow3 = ({
     </div>
   );
   return (
-    <div css={backgroundStyles}>
+    <form css={backgroundStyles} onSubmit={handleSubmit}>
       <AccountSetup
         left={
           <div css={leftStyles}>
@@ -264,9 +280,15 @@ export const AccountSetupFlow3 = ({
               <label css={inputStyles}>
                 <span>Tell us about yourself in a few sentences</span>
                 <TextareaField
+                  autoFocus
                   onChange={onChangeDescription}
                   value={description}
                   placeholder={placeholder}
+                  onKeyDown={(ev) => {
+                    if (ev.key === 'Enter') {
+                      handleSubmit(ev);
+                    }
+                  }}
                 />
               </label>
               <p css={termsAndPrivacyStyles}>
@@ -276,6 +298,7 @@ export const AccountSetupFlow3 = ({
                   href={docs({}).page({ name: 'terms' }).$}
                   target="_blank"
                   rel="noreferrer"
+                  tabIndex={-1}
                 >
                   Terms of Service
                 </a>{' '}
@@ -285,13 +308,15 @@ export const AccountSetupFlow3 = ({
                   href={docs({}).page({ name: 'privacy' }).$}
                   target="_blank"
                   rel="noreferrer"
+                  tabIndex={-1}
                 >
                   Privacy policy
                 </a>
               </p>
             </div>
             <div css={bottomStyles}>
-              <Button type="primaryBrand" onClick={finish}>
+              <Button submit type="primaryBrand">
+                {isSubmitting && <LoadingDots />}
                 Create Profile
               </Button>
               <Button type="secondary" onClick={previous}>
@@ -333,6 +358,6 @@ export const AccountSetupFlow3 = ({
           </div>
         }
       />
-    </div>
+    </form>
   );
 };

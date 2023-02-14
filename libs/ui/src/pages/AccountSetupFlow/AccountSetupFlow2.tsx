@@ -1,12 +1,14 @@
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { FormEvent, useCallback } from 'react';
 import { Button, InputField } from '../../atoms';
 import { h1, p12Medium, p16Regular, cssVar, setCssVar } from '../../primitives';
 import { AccountSetup } from '../../templates';
 import modelDark from './model2_dark.png';
 import modelLight from './model2_light.png';
 import { backgroundStyles } from './styles';
+import { Loading } from '../../icons';
 
 const leftStyles = css({
   display: 'flex',
@@ -57,23 +59,39 @@ const rightDarkBackgroundImage = css({
 interface AccountSetupFlow2Props {
   name?: string;
   username?: string;
+  isSubmitting?: boolean;
   onChangeName?: (newName: string) => void;
   onChangeUsername?: (newUsername: string) => void;
   next?: () => void;
   previous?: () => void;
 }
 
+const LoadingDots = () => (
+  <Loading width="16px" style={{ marginRight: '6px' }} />
+);
+
 export const AccountSetupFlow2 = ({
   name = '',
   username = '',
+  isSubmitting = false,
   onChangeName = noop,
   onChangeUsername = noop,
   next = noop,
   previous = noop,
 }: AccountSetupFlow2Props) => {
   const [isDarkMode] = useThemeFromStore();
+  const handleSubmit = useCallback(
+    (ev: FormEvent) => {
+      if (isSubmitting) return;
+
+      ev.preventDefault();
+      next();
+    },
+    [next, isSubmitting]
+  );
+
   return (
-    <div css={backgroundStyles}>
+    <form css={backgroundStyles} onSubmit={handleSubmit}>
       <AccountSetup
         left={
           <div css={leftStyles}>
@@ -90,6 +108,7 @@ export const AccountSetupFlow2 = ({
               <label css={inputStyles}>
                 <span>To start, what's your name?</span>
                 <InputField
+                  autoFocus
                   onChange={onChangeName}
                   value={name}
                   placeholder="Enter your full name"
@@ -98,6 +117,7 @@ export const AccountSetupFlow2 = ({
               <label css={inputStyles}>
                 <span>Reserve your username</span>
                 <InputField
+                  tabIndex={0}
                   onChange={onChangeUsername}
                   value={username}
                   placeholder="@username"
@@ -105,10 +125,11 @@ export const AccountSetupFlow2 = ({
               </label>
             </div>
             <div css={bottomStyles}>
-              <Button type="primaryBrand" onClick={next}>
+              <Button submit type="primaryBrand">
+                {isSubmitting ? <LoadingDots /> : null}
                 Continue
               </Button>
-              <Button type="secondary" onClick={previous}>
+              <Button type="secondary" onClick={previous} tabIndex={3}>
                 Back
               </Button>
               <span css={stepStyles}>01 of 02</span>
@@ -121,6 +142,6 @@ export const AccountSetupFlow2 = ({
           ></div>
         }
       />
-    </div>
+    </form>
   );
 };

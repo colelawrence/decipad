@@ -15,6 +15,7 @@ import {
 } from '../../primitives';
 import { AccountSetup } from '../../templates';
 import { backgroundStyles } from './styles';
+import { useEnterListener } from './useEnterListener';
 
 const groupStyles = css({
   display: 'flex',
@@ -77,6 +78,8 @@ interface AccountSetupFlow1Props {
 }
 
 export const AccountSetupFlow1 = ({ next = noop }: AccountSetupFlow1Props) => {
+  useEnterListener(next);
+
   return (
     <div css={backgroundStyles}>
       <AccountSetup

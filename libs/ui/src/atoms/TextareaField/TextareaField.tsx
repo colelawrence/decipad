@@ -24,6 +24,10 @@ export type TextareaFieldProps = {
   readonly placeholder?: string;
   readonly required?: boolean;
   readonly value: string;
+  readonly onKeyUp?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  readonly onKeyDown?: (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => void;
   readonly onChange?: (newValue: string) => void;
 };
 
@@ -34,6 +38,8 @@ export const TextareaField = ({
   required = false,
   value,
   onChange = noop,
+  onKeyUp = noop,
+  onKeyDown = noop,
 }: TextareaFieldProps): ReturnType<FC> => {
   return (
     <textarea
@@ -41,6 +47,8 @@ export const TextareaField = ({
       autoFocus={autoFocus}
       onChange={(event) => onChange(event.currentTarget.value)}
       placeholder={placeholder}
+      onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
       required={required}
       rows={height}
       value={value}
