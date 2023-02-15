@@ -6,6 +6,11 @@
 
 > All the things Deci.
 
+[![Run Tests](https://github.com/decipad/decipad/actions/workflows/test.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/test.yml)
+[![Run E2E Tests](https://github.com/decipad/decipad/actions/workflows/test-e2e.yaml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/test-e2e.yaml)
+[![Lint & Typecheck](https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/lint-and-typecheck.yml)
+[![Deploy dev](https://github.com/decipad/decipad/actions/workflows/deploy-dev.yml/badge.svg)](https://github.com/decipad/decipad/actions/workflows/deploy-dev.yml)
+
 # TOC
 
 - [Setup](#set-up)
