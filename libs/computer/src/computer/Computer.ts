@@ -468,7 +468,7 @@ export class Computer {
 
     return this.results.pipe(
       concatMap(async () => this.expressionResult(exp)),
-      distinctUntilChanged(dequal)
+      distinctUntilChanged((cur, next) => dequal(cur, next))
     );
   }
 

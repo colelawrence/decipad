@@ -68,7 +68,7 @@ export const useColumnInferredType = (
     []
   );
 
-  useEditorChange(settleType, inferColumnType, { selectsPromise: true });
+  useEditorChange(settleType, inferColumnType);
 
   return { type };
 };

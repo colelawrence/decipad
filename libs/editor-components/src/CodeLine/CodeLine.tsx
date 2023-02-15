@@ -90,11 +90,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
 
   const handleDragStartCell = useMemo(
     () =>
-      isReadOnly
-        ? undefined
-        : onDragStartTableCellResult(editor, {
-            computer,
-          }),
+      isReadOnly ? undefined : onDragStartTableCellResult(editor, { computer }),
     [computer, editor, isReadOnly]
   );
 

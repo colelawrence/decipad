@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { Result } from '@decipad/computer';
+import { ColumnDesc } from '@decipad/computer';
 import {
   ELEMENT_DROPDOWN,
   PlateComponent,
@@ -33,14 +33,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const [columns, setColumns] = useState<
-    Array<{
-      blockId: string;
-      columnName: string;
-      tableName: string;
-      result: Result.Result<'column'>;
-    }>
-  >([]);
+  const [columns, setColumns] = useState<ColumnDesc[]>([]);
 
   const selected = getNodeString(element);
   const computer = useComputer();
@@ -48,22 +41,22 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const editorChanges = useContext(EditorChangeContext);
 
   useEffect(() => {
+    if (!dropdownOpen || !element.smartSelection) {
+      setColumns([]);
+      return;
+    }
+
     const editorChanges$ = concat(of(undefined), editorChanges);
+    const allColumn$ = concat(of([]), computer.getAllColumns$.observe());
+
     const sub = editorChanges$
       .pipe(
-        combineLatestWith(
-          concat(
-            of(undefined),
-            computer.getAllColumns$.observeWithSelector((cols) => {
-              if (!dropdownOpen || !element.smartSelection) return [];
-              return cols;
-            })
-          )
-        ),
-        map(([, c]) => Array.isArray(c) && c),
-        distinctUntilChanged(dequal)
+        combineLatestWith(allColumn$),
+        map(([, c]) => c),
+        distinctUntilChanged((cur, next) => dequal(cur, next))
       )
       .subscribe(setColumns);
+
     return () => {
       sub.unsubscribe();
     };

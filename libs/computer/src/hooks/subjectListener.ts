@@ -39,7 +39,7 @@ export function listenerHelper<
   const observe = (...a: MoreArgs) =>
     subject.pipe(
       map((item) => select(item, ...a)),
-      distinctUntilChanged(dequal)
+      distinctUntilChanged((cur, next) => dequal(cur, next))
     );
 
   const observeWithSelector = <T>(
@@ -48,7 +48,7 @@ export function listenerHelper<
   ): Observable<T> =>
     subject.pipe(
       map((item) => pick(select(item, ...a))),
-      distinctUntilChanged(dequal)
+      distinctUntilChanged((cur, next) => dequal(cur, next))
     );
 
   const use = (...a: MoreArgs) => useWithSelector(identity, ...a);

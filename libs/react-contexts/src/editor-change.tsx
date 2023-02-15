@@ -22,7 +22,7 @@ import {
 } from 'rxjs';
 import { dequal } from 'dequal';
 import { PlateEditor, usePlateEditorRef } from '@udecode/plate';
-import { getDefined, identity } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 import type { MyValue } from '../../editor-types/src';
 
@@ -43,17 +43,12 @@ export const EditorChangeContextProvider: FC<{
 export interface UseEditorChangeOptions {
   debounceTimeMs?: number;
   injectObservable?: Observable<undefined>;
-  selectsPromise?: boolean;
 }
 
 export function useEditorChange<T>(
   callback: (val: T) => void,
   selector: (editor: PlateEditor<MyValue>) => T | Promise<T>,
-  {
-    debounceTimeMs = 100,
-    injectObservable,
-    selectsPromise = false,
-  }: UseEditorChangeOptions = {}
+  { debounceTimeMs = 100, injectObservable }: UseEditorChangeOptions = {}
 ): void {
   const editor = getDefined(usePlateEditorRef<MyValue>());
   const editorChanges = useContext(EditorChangeContext);
@@ -75,12 +70,9 @@ export function useEditorChange<T>(
       .pipe(
         debounceTime(debounceTimeMs),
         map(() => selectorRef.current(editor)),
+        concatMap((v) => from(Promise.resolve(v))),
         filter((v) => v != null),
-        selectsPromise
-          ? concatMap((v) => from(v as unknown as Promise<T>))
-          : map(identity),
-        filter((v) => v != null),
-        distinctUntilChanged(dequal)
+        distinctUntilChanged((cur, next) => dequal(cur, next))
       )
       .subscribe((value) => {
         callbackRef.current(value);
@@ -89,7 +81,7 @@ export function useEditorChange<T>(
     return () => {
       subscription.unsubscribe();
     };
-  }, [editor, debounceTimeMs, injectObservable, editorChanges, selectsPromise]);
+  }, [editor, debounceTimeMs, injectObservable, editorChanges]);
 }
 
 export function useEditorSelector<T>(

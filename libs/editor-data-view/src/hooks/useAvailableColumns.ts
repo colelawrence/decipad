@@ -34,7 +34,7 @@ export const useAvailableColumns = (blockId: string): Column[] | undefined => {
           }));
         }),
         debounceTime(DEBOUNCE_RESULT_MS),
-        distinctUntilChanged(dequal)
+        distinctUntilChanged((cur, next) => dequal(cur, next))
       )
       .subscribe(setAvailableColumns);
 

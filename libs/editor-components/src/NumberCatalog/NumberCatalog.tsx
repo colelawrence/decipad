@@ -54,7 +54,7 @@ export function NumberCatalog() {
         map(([, e]) => Array.isArray(e) && e.map(toVar)),
         filter(Boolean),
         map(catalog),
-        distinctUntilChanged(dequal)
+        distinctUntilChanged((cur, next) => dequal(cur, next))
       )
       .subscribe(setItems);
 

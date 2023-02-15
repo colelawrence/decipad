@@ -38,7 +38,7 @@ export const startNotebook = async (
     .pipe(
       map((result) => result.blockResults[blockId]),
       debounceTime(250),
-      distinctUntilChanged(dequal)
+      distinctUntilChanged((cur, next) => dequal(cur, next))
     )
     .subscribe((result: IdentifiedResult | IdentifiedError | undefined) => {
       if (result) {

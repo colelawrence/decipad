@@ -53,7 +53,7 @@ export const BlockLengthSynchronizationProvider = ({
         debounceTime(100),
         mergeWith(of(undefined)),
         map(() => getContiguousGroups(editor.children)),
-        distinctUntilChanged(dequal),
+        distinctUntilChanged((cur, next) => dequal(cur, next)),
         // Take in signals of new lengths
         combineLatestWith(updatedLength$),
         map(([groups]) =>
