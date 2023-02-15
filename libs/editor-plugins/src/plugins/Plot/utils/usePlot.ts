@@ -96,7 +96,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       element,
       'sourceVarName'
     ),
-    setMarkType,
+    setMarkType: setMarkType as StringSetter,
     setXColumnName: useElementMutatorCallback(editor, element, 'xColumnName'),
     setYColumnName: useElementMutatorCallback(editor, element, 'yColumnName'),
     setSizeColumnName: useElementMutatorCallback(

@@ -1,4 +1,5 @@
-import { ColIndex, CellValueType, TableCellType } from '@decipad/editor-types';
+import { ColIndex, TableCellType } from '@decipad/editor-types';
+import { SerializedType } from '@decipad/computer';
 
 export interface InferTableOptions {
   useFirstRowAsHeader?: boolean;
@@ -17,7 +18,7 @@ export interface Sheet {
 }
 
 export interface CoercibleType {
-  type: CellValueType;
+  type: SerializedType;
   coerced?: string;
 }
 

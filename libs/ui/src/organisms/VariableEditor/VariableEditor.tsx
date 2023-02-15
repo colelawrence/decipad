@@ -1,4 +1,5 @@
-import { AnyElement, CellValueType } from '@decipad/editor-types';
+import { AnyElement } from '@decipad/editor-types';
+import { SerializedType } from '@decipad/computer';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
@@ -132,8 +133,8 @@ interface VariableEditorProps
   children?: ReactNode;
   color?: AvailableSwatchColor;
   readOnly?: boolean;
-  type?: CellValueType;
-  onChangeType?: (type: CellValueType | 'smart-selection' | undefined) => void;
+  type?: SerializedType;
+  onChangeType?: (type: SerializedType | 'smart-selection' | undefined) => void;
   value?: string;
   onChangeValue?: (
     value: string | undefined // only booleans for now

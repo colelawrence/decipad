@@ -88,7 +88,7 @@ export const DataViewColumnHeader: PlateComponent = ({
       attributes={attributes}
       selectedAggregation={element.aggregation}
       availableAggregations={availableAggregations}
-      onAggregationChange={onAggregationChange}
+      onAggregationChange={onAggregationChange as (agg?: string) => void}
       onDeleteColumn={handleColumnDelete}
       connectDragSource={connectDragSource}
       connectDragPreview={connectDragPreview}

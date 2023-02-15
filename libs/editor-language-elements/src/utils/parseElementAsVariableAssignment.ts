@@ -8,13 +8,13 @@ export function parseElementAsVariableAssignment(
   blockId: string,
   varName: string,
   source: string | AST.Expression,
-  allowedNodeTypes?: AST.Node['type'][]
+  disallowedNodeTypes?: AST.Node['type'][]
 ): Program {
   const { solution: expression, error } =
     typeof source === 'string'
       ? source.trim() === ''
         ? parseExpression('0')
-        : parseExpression(source, allowedNodeTypes)
+        : parseExpression(source, disallowedNodeTypes)
       : { solution: source, error: undefined };
 
   if (error) {

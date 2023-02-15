@@ -42,14 +42,14 @@ export const mutateAst = (
   return node;
 };
 
-export function n<K extends AST.Node['type'], N extends AST.TypeToNode[K]>(
-  type: K,
-  ...args: N['args']
-): N {
-  const node: N = {
+export function n<
+  NodeType extends AST.Node['type'],
+  Node extends Extract<AST.Node, { type: NodeType }>
+>(type: NodeType, ...args: Node['args']): Node {
+  const node = {
     type,
     args,
-  } as unknown as N;
+  } as unknown as Node;
 
   return node;
 }
@@ -229,7 +229,7 @@ export function prop(thing: string | AST.Expression, propName: string) {
 
 export function getOfType<
   K extends AST.Node['type'],
-  N extends AST.TypeToNode[K]
+  N extends Extract<AST.Node, { type: K }>
 >(desiredType: K, node: AST.Node): N {
   if (getDefined(node).type !== desiredType) {
     throw new Error(`getOfType: expected ${desiredType}, found ${node.type}`);

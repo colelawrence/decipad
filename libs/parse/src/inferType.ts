@@ -1,5 +1,4 @@
 import type { Computer, SerializedType } from '@decipad/computer';
-import { CellValueType } from '@decipad/editor-types';
 import { containsNumber } from '@decipad/utils';
 import { CoercibleType } from './types';
 import { inferBoolean } from './inferBoolean';
@@ -25,7 +24,7 @@ const inferParseError = (
 });
 
 interface InferTypeOptions {
-  type?: CellValueType;
+  type?: SerializedType;
   doNotTryExpressionNumbersParse?: boolean;
 }
 
@@ -65,8 +64,6 @@ export const inferType = async (
   const { type } = options;
 
   switch (type?.kind) {
-    case 'table-formula':
-      return { type };
     case 'boolean':
       return inferBoolean(text) ?? inferParseError(text, type.kind);
     case 'date':

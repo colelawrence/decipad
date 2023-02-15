@@ -4,7 +4,6 @@ import {
   useTextTypeInference,
 } from '@decipad/editor-components';
 import {
-  CellValueType,
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
@@ -21,6 +20,7 @@ import {
   useNodePath,
   wrapIntoColumns,
 } from '@decipad/editor-utils';
+import { SerializedType } from '@decipad/computer';
 import {
   useEditorStylesContext,
   useIsEditorReadOnly,
@@ -99,7 +99,7 @@ export const VariableDef: PlateComponent = ({
     'coerceToType'
   );
   const onChangeType = useCallback(
-    (type: CellValueType | 'smart-selection' | undefined) => {
+    (type: SerializedType | 'smart-selection' | undefined): void => {
       // Analytics
       userEvents({
         type: 'action',
@@ -124,6 +124,7 @@ export const VariableDef: PlateComponent = ({
         );
         onChangeTypeMutator({
           kind: 'number',
+          unit: null,
         });
       } else {
         // When dropdown widget changes to text ot input, it is no longer a smart selection

@@ -54,8 +54,8 @@ export interface TableActions {
   onAddRow: () => void;
   onRemoveRow: (rowIndex: string) => void;
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
-  onSaveIcon: (icon: unknown) => void;
-  onSaveColor: (color: unknown) => void;
+  onSaveIcon: (icon?: string) => void;
+  onSaveColor: (color?: string) => void;
 }
 
 export const addColumn = (

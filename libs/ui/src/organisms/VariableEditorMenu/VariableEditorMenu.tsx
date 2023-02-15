@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode, useCallback } from 'react';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { tokenRules } from '@decipad/language';
+import { SerializedType, tokenRules } from '@decipad/language';
 import { CellValueType } from '@decipad/editor-types';
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
 import { InputMenuItem, MenuList } from '../../molecules';
@@ -19,7 +19,7 @@ type VariableEditorMenuProps = {
   readonly onDelete?: () => void;
   readonly type?: CellValueType;
   readonly onChangeType?: (
-    type: CellValueType | 'smart-selection' | undefined
+    type: SerializedType | 'smart-selection' | undefined
   ) => void;
   readonly trigger: ReactNode;
   readonly smartSelection?: boolean;

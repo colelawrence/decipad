@@ -5,8 +5,6 @@ import { tokenizer, BracketCounter } from '../grammar/tokenizer';
 import { parse as languageParse } from './parser';
 import { SyntaxError } from './SyntaxError';
 
-export { nodeTypes } from './ast-types';
-
 export { AST, Parser, n, SyntaxError };
 
 export function parseBlock(source: string, id?: string): Parser.ParsedBlock {
@@ -48,7 +46,7 @@ export function parseStatement(source: string): Parser.ParsedStatement {
 
 export function parseExpression(
   source: string,
-  allowedNodeTypes?: AST.Node['type'][]
+  disallowedNodeTypes?: AST.Node['type'][]
 ): Parser.ParsedExpression {
   const parsed = parseStatement(source);
 
@@ -60,10 +58,10 @@ export function parseExpression(
     };
   }
 
-  if (allowedNodeTypes) {
+  if (disallowedNodeTypes) {
     try {
       walkAst(parsed.solution, (node) => {
-        if (!allowedNodeTypes.includes(node.type)) {
+        if (disallowedNodeTypes.includes(node.type)) {
           throw new Error('Invalid node type');
         }
       });

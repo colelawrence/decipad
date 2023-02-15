@@ -167,7 +167,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   const onExecute = useCallback(
     (item: string, type?: SelectItemTypes) => {
       if (type === 'column') {
-        elementChangeColumn(element.selectedColumn === item ? null : item);
+        elementChangeColumn(element.selectedColumn === item ? undefined : item);
       } else {
         if (selected === item) {
           changeOptions('Select');
