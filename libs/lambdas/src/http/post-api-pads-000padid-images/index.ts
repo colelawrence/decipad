@@ -18,9 +18,13 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   const resource = `/pads/${padId}`;
   await expectAuthorized({ resource, user, permissionType: 'WRITE' });
 
+  if (!event.body) {
+    throw Boom.badRequest('no image uploaded');
+  }
+
   const attachment = await createImageAttachment(user.id, padId, {
     headers: event.headers,
-    body: getDefined(event.body),
+    body: event.body,
   });
 
   return {
