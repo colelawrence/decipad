@@ -1,11 +1,12 @@
 import {
   ELEMENT_COLUMNS,
+  ELEMENT_LIC,
   InterceptableEvent,
   MyEditor,
   MyElementEntry,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { isCollapsed, isElement } from '@udecode/plate';
+import { getNodeParent, isCollapsed, isElement } from '@udecode/plate';
 import { BaseEditor, Editor, Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
@@ -29,6 +30,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
 
         const topLevel =
           cursorPath && findClosestBlockOrColumn(editor, cursorPath);
+        const parentNode = getNodeParent(editor, cursorPath || []);
 
         if (topLevel) {
           const prevBlock = Editor.previous(editor as BaseEditor, {
@@ -42,8 +44,12 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
           // Slider (Max and min), and dropdown.
           // Preventing backspace and other events in them causes
           // strange behavior.
-          if (document.activeElement?.tagName === 'INPUT') return;
-
+          // Also preventing backspace for lists can also lead to a weird behavior
+          if (
+            document.activeElement?.tagName === 'INPUT' ||
+            parentNode.type === ELEMENT_LIC
+          )
+            return;
           switch (event.key) {
             case 'Backspace': {
               // Handle problematic delete (at start of text node)
@@ -53,6 +59,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
                   { type: 'delete-text-start', event },
                   cursorPath
                 );
+
                 if (!wasHandled && prevBlock != null) {
                   // Didn't handle it locally!
                   // What does the block *before* me think about this?

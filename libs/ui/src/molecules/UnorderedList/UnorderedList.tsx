@@ -1,6 +1,5 @@
 import { FC, ReactNode, Children, createContext, useContext } from 'react';
 import { css } from '@emotion/react';
-import { listItemCounter } from '../../utils';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
 import { Bullet } from '../../icons';
 
@@ -14,13 +13,11 @@ const styles = css({
   rowGap: '6px',
   columnGap: '8px',
 
-  counterReset: listItemCounter,
   wordBreak: 'break-word',
 });
 
 const itemStyles = css({
   display: 'contents',
-  counterIncrement: listItemCounter,
 });
 
 const bulletStyles = css({
@@ -45,7 +42,7 @@ export const UnorderedList = ({
   const depth = useContext(Depth) + 1;
 
   return (
-    <ol css={styles}>
+    <ul css={styles}>
       <Depth.Provider value={depth}>
         {Children.map(children, (child) => (
           <li css={itemStyles}>
@@ -60,6 +57,6 @@ export const UnorderedList = ({
           </li>
         ))}
       </Depth.Provider>
-    </ol>
+    </ul>
   );
 };
