@@ -34,6 +34,7 @@ export type { SliceRange, SlicesMap } from './value';
 export {
   AST,
   parse,
+  decilang,
   parseBlock,
   parseStatement,
   parseExpression,

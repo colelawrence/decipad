@@ -1,8 +1,8 @@
+import { AST } from '../parser';
 import { build as t, InferError } from '../type';
-import { Directive } from './types';
+import { DirectiveImpl } from './types';
 
-export const select: Directive = {
-  argCount: 2,
+export const select: DirectiveImpl<AST.SelectDirective> = {
   async getType() {
     return t.impossible(InferError.retiredFeature('select'));
   },

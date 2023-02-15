@@ -5,6 +5,8 @@ import { tokenizer, BracketCounter } from '../grammar/tokenizer';
 import { parse as languageParse } from './parser';
 import { SyntaxError } from './SyntaxError';
 
+export { decilang } from './decilang-tag';
+
 export { AST, Parser, n, SyntaxError };
 
 export function parseBlock(source: string, id?: string): Parser.ParsedBlock {

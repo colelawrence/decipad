@@ -213,8 +213,7 @@ export async function evaluate(
       return UnknownValue;
     }
     case 'directive': {
-      const [name, ...args] = node.args;
-      return expandDirectiveToValue(node, realm, name, args);
+      return expandDirectiveToValue(realm, node);
     }
     case 'match': {
       return evaluateMatch(realm, node);

@@ -1,7 +1,7 @@
 import DeciNumber, { N } from '@decipad/number';
 import produce from 'immer';
 import { getDefined } from '@decipad/utils';
-import { RuntimeError } from '../interpreter';
+import { evaluate, RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
 import { NumberValue, fromJS, Value } from '../value';
 import { AST } from '../parser';
@@ -14,8 +14,9 @@ import {
 } from '../type';
 import { matchUnitArrays } from '../type/units';
 import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
-import type { GetTypeCtx, GetValueCtx, Directive } from './types';
+import type { DirectiveImpl } from './types';
 import { getIdentifierString, getInstanceof, U } from '../utils';
+import { inferExpression } from '../infer';
 
 function isUserUnit(exp: AST.Expression, targetUnit: Unit[]) {
   if (exp.type !== 'ref') {
@@ -42,12 +43,11 @@ function multiplyUnitMultipliersIfNeedsEnforcing(
   );
 }
 
-export async function getType(
-  _: AST.Expression,
-  { infer }: GetTypeCtx,
-  [expr, unitExpr]: [AST.Expression, AST.Expression]
-): Promise<Type> {
-  const expressionType = await infer(expr);
+export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
+  ctx,
+  { args: [, expr, unitExpr] }
+): Promise<Type> => {
+  const expressionType = await inferExpression(ctx, expr);
   if (expressionType.errorCause) {
     return expressionType;
   }
@@ -58,7 +58,9 @@ export async function getType(
     });
   }
 
-  const unitExpressionType = (await infer(unitExpr)).isScalar('number');
+  const unitExpressionType = (await inferExpression(ctx, unitExpr)).isScalar(
+    'number'
+  );
   if (unitExpressionType.errorCause) {
     return unitExpressionType;
   }
@@ -94,7 +96,7 @@ export async function getType(
     }
   );
   return ret;
-}
+};
 
 function inlineUnitAliases(units: Unit[] | null): Unit[] | null {
   if (!units) {
@@ -117,13 +119,13 @@ function inlineUnitAliases(units: Unit[] | null): Unit[] | null {
   }, []);
 }
 
-export async function getValue(
-  root: AST.Expression,
-  { evaluate, getNodeType }: GetValueCtx,
-  [expression, unitsExpression]: [AST.Expression, AST.Expression]
-): Promise<Value> {
-  const expressionType = await getNodeType(expression);
-  const expressionValue = await evaluate(expression);
+export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
+  realm,
+  root
+): Promise<Value> => {
+  const [, expression, unitsExpression] = root.args;
+  const expressionType = realm.getTypeAt(expression);
+  const expressionValue = await evaluate(realm, expression);
   const sourceUnits = inlineUnitAliases(expressionType.reducedToLowest().unit);
 
   if (representsPercentage(unitsExpression)) {
@@ -140,19 +142,19 @@ export async function getValue(
     );
   }
 
-  const targetUnitsEvalResult = await evaluate(unitsExpression);
+  const targetUnitsEvalResult = await evaluate(realm, unitsExpression);
   const targetUnitsData = getInstanceof(
     targetUnitsEvalResult.getData(),
     DeciNumber,
     `units needs to be a number`
   );
 
-  const returnExpressionType = await getNodeType(root);
+  const returnExpressionType = realm.getTypeAt(root);
   const returnTypeDivider = multiplyUnitMultipliersIfNeedsEnforcing(
     inlineUnitAliases(returnExpressionType.unit)
   );
 
-  const targetUnitsExpressionType = await getNodeType(unitsExpression);
+  const targetUnitsExpressionType = realm.getTypeAt(unitsExpression);
   const targetUnits = inlineUnitAliases(targetUnitsExpressionType.unit);
 
   const targetUnitsMultiplier = multiplyUnitMultipliers(targetUnits);
@@ -184,10 +186,9 @@ export async function getValue(
           `Don't know how to convert value to ${value.getData().toString()}`
         );
   });
-}
+};
 
-export const as: Directive = {
-  argCount: 2,
+export const as: DirectiveImpl<AST.AsDirective> = {
   getType,
   getValue,
 };

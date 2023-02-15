@@ -1,9 +1,9 @@
 import {
-  astNode,
   mutateAst,
   isIdentifier,
   isExpression,
   AST,
+  decilang,
 } from '@decipad/language';
 import { memoizePrimitive } from '@decipad/utils';
 import produce from 'immer';
@@ -40,11 +40,9 @@ function plainExpressionsToAssignments(program: Program) {
 
         if (isExpression(stats[0])) {
           // 1 + 1 --> Value_1 = 1 + 1
-          stats[0] = astNode(
-            'assign',
-            astNode('def', getExprRef(block.id)),
+          stats[0] = decilang<AST.Assign>`${{ name: getExprRef(block.id) }} = ${
             stats[0]
-          );
+          }`;
         } else if (
           stats[0].type === 'assign' &&
           !getIdentifierString(stats[0].args[0]).trim()
@@ -68,10 +66,9 @@ function mapExprRefsToColumnAccess(
       const columnAssign = block.block?.args[0];
       if (columnAssign?.type === 'table-column-assign') {
         const [table, column] = columnAssign.args;
-        const asPropertyAccess: AST.PropertyAccess = {
-          type: 'property-access',
-          args: [{ type: 'ref', args: [table.args[0]] }, column.args[0]],
-        };
+        const asPropertyAccess = decilang<AST.PropertyAccess>`${{
+          name: table.args[0],
+        }}.${{ name: column.args[0] }}`;
         return [[getExprRef(block.id), asPropertyAccess]];
       }
 

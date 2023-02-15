@@ -1,27 +1,28 @@
-import { AST, getColumnLike } from '..';
+import { AST, getColumnLike, inferExpression } from '..';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
-import { getIdentifierString, getOfType } from '../utils';
-import { Directive } from './types';
+import { evaluate } from '../interpreter';
+import { getIdentifierString } from '../utils';
+import { DirectiveImpl } from './types';
 
-const cleanAST = (...args: AST.Node[]) =>
-  [
-    args[0] as AST.Expression,
-    getIdentifierString(getOfType('generic-identifier', args[1])),
-  ] as const;
+export const over: DirectiveImpl<AST.OverDirective> = {
+  async getType(ctx, overExp) {
+    const [, matrix, indexName] = overExp.args;
 
-export const over: Directive = {
-  argCount: 2,
-  async getType(_, { infer }, args) {
-    const [matrix, indexName] = cleanAST(...args);
-
-    return dimSwapTypes(indexName, await infer(matrix));
+    return dimSwapTypes(
+      getIdentifierString(indexName),
+      await inferExpression(ctx, matrix)
+    );
   },
-  async getValue(_, { evaluate, getNodeType }, args) {
-    const [matrix, indexName] = cleanAST(...args);
+  async getValue(realm, overExp) {
+    const [, matrix, indexName] = overExp.args;
 
-    const value = await evaluate(matrix);
-    const type = await getNodeType(matrix);
+    const value = await evaluate(realm, matrix);
+    const type = realm.getTypeAt(matrix);
 
-    return dimSwapValues(indexName, type, getColumnLike(value));
+    return dimSwapValues(
+      getIdentifierString(indexName),
+      type,
+      getColumnLike(value)
+    );
   },
 };

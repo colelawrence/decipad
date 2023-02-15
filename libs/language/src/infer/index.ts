@@ -212,8 +212,7 @@ export const inferExpression = wrap(
         return inferFunctionCall(ctx, expr);
       }
       case 'directive': {
-        const [name, ...args] = expr.args;
-        return expandDirectiveToType(expr, ctx, name, args);
+        return expandDirectiveToType(ctx, expr);
       }
       case 'match':
         return inferMatch(ctx, expr);

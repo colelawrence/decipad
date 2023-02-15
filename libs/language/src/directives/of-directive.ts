@@ -1,23 +1,16 @@
 import produce from 'immer';
-import { AST } from '..';
+import { AST, Context, inferExpression } from '..';
 import { automapTypes } from '../dimtools';
+import { evaluate, Realm } from '../interpreter';
 import { InferError, Type, build as t } from '../type';
-import { getIdentifierString, getOfType } from '../utils';
-import { Directive, GetTypeCtx, GetValueCtx } from './types';
+import { getIdentifierString } from '../utils';
+import { DirectiveImpl } from './types';
 
-const cleanAST = (...args: AST.Node[]) =>
-  [
-    args[0] as AST.Expression,
-    getIdentifierString(getOfType('generic-identifier', args[1])),
-  ] as const;
-
-export const getType: Directive['getType'] = async (
-  _: AST.Expression,
-  { infer }: GetTypeCtx,
-  args
+export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
+  ctx: Context,
+  { args: [, expr, quality] }
 ): Promise<Type> => {
-  const [expr, quality] = cleanAST(...args);
-  const expressionType = await infer(expr);
+  const expressionType = await inferExpression(ctx, expr);
   if (expressionType.errorCause) {
     return expressionType;
   }
@@ -30,7 +23,7 @@ export const getType: Directive['getType'] = async (
       return produce(type, (t) => {
         if (t.unit) {
           t.unit[0] = produce(t.unit[0], (u) => {
-            u.quality = quality;
+            u.quality = getIdentifierString(quality);
           });
         }
       });
@@ -38,16 +31,12 @@ export const getType: Directive['getType'] = async (
   });
 };
 
-export const getValue: Directive['getValue'] = (
-  _root: AST.Expression,
-  { evaluate }: GetValueCtx,
-  [expression]: [AST.Expression, AST.Identifier]
-) => {
-  return evaluate(expression);
-};
+export const getValue: DirectiveImpl<AST.OfDirective>['getValue'] = (
+  realm: Realm,
+  { args: [, expr] }
+) => evaluate(realm, expr);
 
-export const of: Directive = {
-  argCount: 2,
+export const of: DirectiveImpl<AST.OfDirective> = {
   getType,
   getValue,
 };

@@ -35,6 +35,7 @@ export {
   getBuiltinsForAutocomplete,
   deserializeType,
   Table,
+  decilang,
   Column,
   areUnitsConvertible,
   convertBetweenUnits,

@@ -137,6 +137,35 @@ export interface Date {
 
 // Directives
 
+export interface AsDirective {
+  type: 'directive';
+  args: ['as', Expression, Expression];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface OfDirective {
+  type: 'directive';
+  args: ['of', Expression, GenericIdentifier];
+  start?: Pos;
+  end?: Pos;
+}
+
+export interface OverDirective {
+  type: 'directive';
+  args: ['over', Expression, GenericIdentifier];
+  start?: Pos;
+  end?: Pos;
+}
+
+/** @deprecated */
+export interface SelectDirective {
+  type: 'directive';
+  args: ['select', Expression, Expression];
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Directive {
   type: 'directive';
   args: [string, ...Node[]];
@@ -339,6 +368,10 @@ export type Expression =
   | Sequence
   | Date
   | Directive
+  | AsDirective
+  | OfDirective
+  | OverDirective
+  | SelectDirective
   | MatrixRef
   | Match
   | Tiered;

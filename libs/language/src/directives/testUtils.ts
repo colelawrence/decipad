@@ -1,11 +1,10 @@
 import type { AST } from '..';
 import { buildType } from '..';
-import { isExpression } from '../utils';
+import { isExpression, isNode } from '../utils';
 import { Realm } from '../interpreter';
-import { inferExpression, makeContext } from '../infer';
+import { Context, inferExpression, makeContext } from '../infer';
 
-import { Directive } from './types';
-import * as expand from './expand';
+import { DirectiveImpl } from './types';
 import { Type } from '../type';
 
 export const directiveFor = (args: AST.Node[]): AST.Directive => {
@@ -16,7 +15,7 @@ export const directiveFor = (args: AST.Node[]): AST.Directive => {
 };
 
 export const testGetValue = async (
-  getValue: Directive['getValue'],
+  getValue: DirectiveImpl['getValue'],
   ...args: AST.Node[]
 ) => {
   const ctx = makeContext();
@@ -32,12 +31,17 @@ export const testGetValue = async (
     }
   }
 
-  return expand.getValue(root, realm, getValue, args);
+  return getValue(realm, root);
 };
 
 export const testGetType = (
-  getType: Directive['getType'],
-  ...args: AST.Node[]
+  getType: DirectiveImpl['getType'],
+  ...args: [Context | AST.Node, ...AST.Node[]]
 ): Promise<Type> => {
-  return expand.getType(directiveFor(args), makeContext(), getType, args);
+  // Allow passing a context along with the args, it's useful for testing
+  const [firstArg, ...restArgs] = args;
+  const ctx = isNode(firstArg) ? makeContext() : firstArg;
+  const argsWithoutCtx = isNode(firstArg) ? [firstArg, ...restArgs] : restArgs;
+
+  return getType(ctx, directiveFor(argsWithoutCtx));
 };
