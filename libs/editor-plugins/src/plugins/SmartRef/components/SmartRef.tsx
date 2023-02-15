@@ -72,9 +72,10 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
 
   const errorMessage =
     (symbolName == null &&
-      `The variable ${(element.lastSeenVariableName != null &&
-        `"${element.lastSeenVariableName}"`) ||
-      ''
+      `The variable ${
+        (element.lastSeenVariableName != null &&
+          `"${element.lastSeenVariableName}"`) ||
+        ''
       } is no longer defined`) ||
     undefined;
 
@@ -93,7 +94,7 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
     });
 
     return () => sub.unsubscribe();
-  }, [computer, element.blockId]);
+  }, [computer, element.blockId, element.lastSeenVariableName, mutateLastSeen]);
 
   return (
     <span {...attributes}>

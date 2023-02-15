@@ -1,14 +1,17 @@
+import { AST, Computer, Program, SerializedType } from '@decipad/computer';
 import {
+  CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
-import { AST, Computer } from '@decipad/computer';
-import { getCodeLineSource } from '@decipad/editor-utils';
+import { assertElementType, getCodeLineSource } from '@decipad/editor-utils';
+import { N } from '@decipad/number';
+import { parseCell } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
-import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
+import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
 const disallowNodeTypes: AST.Node['type'][] = [
   'range',
@@ -17,26 +20,100 @@ const disallowNodeTypes: AST.Node['type'][] = [
   'tiered',
 ];
 
-export const getUnparsedBlockFromCodeLineV2 = async (
-  _editor: MyEditor,
-  _computer: Computer,
-  block: MyElement
-) => {
-  if (block.type === ELEMENT_CODE_LINE_V2) {
-    const [vname, sourcetext] = block.children;
-    return parseElementAsVariableAssignment(
-      block.id,
-      getNodeString(vname),
-      getCodeLineSource(sourcetext),
-      disallowNodeTypes
-    );
+const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
+  async (_editor, computer, e: CodeLineV2Element): Promise<Program> => {
+    const [vname, sourcetext] = e.children;
+    const source = getNodeString(sourcetext);
+
+    if (source?.trim()) {
+      // First try parsing it as a plain number
+      const typeHint: SerializedType =
+        e.unit === '%'
+          ? {
+              kind: 'number',
+              unit: null,
+              numberFormat: 'percentage',
+            }
+          : {
+              kind: 'number',
+              unit:
+                typeof e.unit === 'string'
+                  ? await computer.getUnitFromText(e.unit ?? '')
+                  : e.unit ?? null,
+            };
+
+      const parsedInput = await parseCell(computer, typeHint, source);
+
+      if (!(parsedInput instanceof Error || parsedInput == null)) {
+        return parseElementAsVariableAssignment(
+          e.id,
+          getNodeString(vname),
+          getCodeLineSource(sourcetext),
+          disallowNodeTypes
+        );
+      }
+    }
+
+    return [];
   }
-  return [];
-};
+);
+
+export const parseStructuredCodeLine = weakMapMemoizeInteractiveElementOutput(
+  async (
+    editor: MyEditor,
+    computer: Computer,
+    block: MyElement
+  ): Promise<{
+    interpretedAs: 'code' | 'literal' | 'empty';
+    programChunk: Program;
+  }> => {
+    assertElementType(block, ELEMENT_CODE_LINE_V2);
+
+    const [vname, sourcetext] = block.children;
+
+    if (getCodeLineSource(block.children[1])?.trim()) {
+      const asNumber = await tryParseAsNumber(
+        editor,
+        computer,
+        block as CodeLineV2Element
+      );
+
+      if (asNumber.length) {
+        return {
+          interpretedAs: 'literal',
+          programChunk: asNumber,
+        };
+      }
+
+      return {
+        interpretedAs: 'code',
+        programChunk: parseElementAsVariableAssignment(
+          block.id,
+          getNodeString(vname),
+          getCodeLineSource(sourcetext),
+          disallowNodeTypes
+        ),
+      };
+    }
+    // empty line
+    return {
+      interpretedAs: 'empty',
+      programChunk: parseElementAsVariableAssignment(
+        block.id,
+        getNodeString(vname),
+        { type: 'literal', args: ['number', N(0)] }
+      ),
+    };
+  }
+);
 
 export const CodeLineV2: InteractiveLanguageElement = {
   type: ELEMENT_CODE_LINE_V2,
-  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    getUnparsedBlockFromCodeLineV2
-  ),
+  getParsedBlockFromElement: async (editor, computer, e) => {
+    assertElementType(e, ELEMENT_CODE_LINE_V2);
+
+    const { programChunk } = await parseStructuredCodeLine(editor, computer, e);
+
+    return programChunk;
+  },
 };

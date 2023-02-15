@@ -132,6 +132,7 @@ export interface CodeLineElement extends BaseElement {
 }
 export interface CodeLineV2Element extends BaseElement {
   type: typeof ELEMENT_CODE_LINE_V2;
+  unit?: '%' | Unit[];
   children: [StructuredVarnameElement, CodeLineV2ElementCode];
 }
 export interface StructuredVarnameElement extends BaseElement {
