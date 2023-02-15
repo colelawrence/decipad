@@ -82,6 +82,7 @@ connections
   room String
   user_id String
   encrypt true
+  expires_at TTL
 
 collabs
   id *String

@@ -427,6 +427,7 @@ export interface ConnectionRecord extends TableRecordBase {
   gqlstate?: string;
   versionName?: string;
   protocol?: number;
+  expiresAt?: number;
 }
 
 export interface ExternalDataSourceRecord extends TableRecordBase {

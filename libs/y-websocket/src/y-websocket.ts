@@ -47,8 +47,8 @@ interface AwarenessUpdate {
   removed: ClientId[];
 }
 
-const reconnectTimeoutBase = 1200;
-const maxReconnectTimeout = 5000;
+const reconnectTimeoutBase = 2_000;
+const maxReconnectTimeout = 20_000;
 // @todo - this should depend on awareness.outdatedTime
 const messageReconnectTimeout = 30000;
 const debounceBroadcast = 1000;
@@ -111,9 +111,7 @@ const setupWS = async (provider: TWebSocketProvider) => {
   const scheduleReconnect = () => {
     if (provider.shouldConnect) {
       const timeout = Math.min(
-        Math.random() *
-          provider.wsUnsuccessfulReconnects *
-          reconnectTimeoutBase,
+        2 ** provider.wsUnsuccessfulReconnects * reconnectTimeoutBase,
         maxReconnectTimeout
       );
       setTimeout(setupWS, timeout, provider);
