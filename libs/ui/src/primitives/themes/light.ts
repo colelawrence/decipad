@@ -135,7 +135,7 @@ export const theme: CssVariables = {
   variableHighlightColor: grey200.hex,
   variableHighlightTextColor: teal600.hex,
 
-  structuredCalculationVariableColor: yellow400.hex,
+  structuredCalculationVariableColor: teal200.hex,
   structuredCalculationSimpleColor: brand400.hex,
 
   magicNumberTextColor: teal600.hex,

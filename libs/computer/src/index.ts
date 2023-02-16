@@ -42,6 +42,7 @@ export {
   getUnitByName,
   currencyUnits,
   isStatement,
+  isValue,
 } from '@decipad/language';
 
 export {

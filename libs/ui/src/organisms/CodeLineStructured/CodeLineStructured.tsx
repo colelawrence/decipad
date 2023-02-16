@@ -3,6 +3,7 @@ import { useDelayedValue } from '@decipad/react-utils';
 import React, { ComponentProps, ReactNode, useState } from 'react';
 import { CodeError } from '../../atoms';
 import { StructuredInputLines } from '../../molecules';
+import { grey400 } from '../../primitives';
 import { CodeResultProps } from '../../types';
 import { useResultInfo } from '../CodeLine/CodeLine';
 import {
@@ -45,11 +46,28 @@ export const CodeLineStructured = ({
     syntaxError,
     onDragStartCell,
     onClickedResult,
+    variant: 'inline',
   });
   const { inline, expanded } = useDelayedValue(
     freshResult,
     freshResult.errored === true
   );
+
+  /* Now, I know what you're thinking. A DIV inline?.
+   * Slate, seems to allow inline elements (span, var), to be clicked (And therefore the selection changes).
+   * but it doesn't do this for block elements like DIVs.
+   * Hence why we have this, instead of a span.
+   */
+  const getEquals = () => {
+    return (
+      <div
+        contentEditable={false}
+        css={{ color: grey400.rgb, display: 'inline' }}
+      >
+        ={' '}
+      </div>
+    );
+  };
 
   return (
     <StructuredInputLines>
@@ -65,6 +83,7 @@ export const CodeLineStructured = ({
           contentEditable={true}
           css={codeContainerStyles}
         >
+          {getEquals()}
           {codeChild}
         </code>
         <div

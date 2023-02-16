@@ -55,15 +55,13 @@ export const variableNameContainerStyles = css({
   gridArea: 'varname',
   display: 'flex',
   alignItems: 'center',
-  padding: '4px 14px 4px 0',
+  padding: '4px 6px 4px 0',
 });
 
 export const codeContainerStyles = css(code, {
   gridArea: 'code',
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   lineHeight,
-  paddingLeft: '8px',
-  borderLeft: `1px solid ${cssVar('borderColor')}`,
 
   [smallScreenQuery]: {
     borderLeft: 'none',

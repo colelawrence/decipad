@@ -5,6 +5,7 @@ import { CellValueType } from '@decipad/editor-types';
 import { getTypeIcon } from '../../utils';
 import { codeBlock } from '../../styles';
 import { cssVar } from '../../primitives';
+import { Formula } from '../../icons';
 
 const varStyles = (type: 'simple' | 'formula') =>
   css(codeBlock.structuredVariableStyles, {
@@ -38,13 +39,24 @@ const emptyStyles = css({
   br: { display: 'none' },
 });
 
+const formulaIconStyles = css({
+  position: 'absolute',
+  left: '-18px',
+  width: '16px',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+});
+
 interface NonInteractiveCodeVariableProps {
   readonly children: ReactNode;
   readonly empty: boolean;
   readonly type?: SerializedType | CellValueType;
+  readonly isValue?: boolean;
 }
 
 export const CodeVariableDefinition = ({
+  isValue = true,
   empty,
   children,
   type,
@@ -53,11 +65,13 @@ export const CodeVariableDefinition = ({
 
   return (
     <span
-      css={[
-        varStyles(type?.kind === 'table-formula' ? 'formula' : 'simple'),
-        empty && emptyStyles,
-      ]}
+      css={[varStyles(isValue ? 'simple' : 'formula'), empty && emptyStyles]}
     >
+      {!isValue && (
+        <span css={formulaIconStyles}>
+          <Formula />
+        </span>
+      )}
       <span css={Icon && iconStyles} contentEditable={false}>
         {Icon && <Icon />}
       </span>

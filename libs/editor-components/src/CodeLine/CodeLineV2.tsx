@@ -1,10 +1,15 @@
-import { IdentifiedError, IdentifiedResult, Result } from '@decipad/computer';
+import {
+  IdentifiedError,
+  IdentifiedResult,
+  isValue as isCodeValue,
+  parseExpressionOrThrow,
+  Result,
+} from '@decipad/computer';
 import {
   DisplayElement,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DISPLAY,
-  ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_VARNAME,
   MyElement,
   PlateComponent,
@@ -12,7 +17,6 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  getAboveNodeSafe,
   insertNodes,
   isStructuredElement,
   useEnsureValidVariableName,
@@ -29,14 +33,19 @@ import {
   Tooltip,
 } from '@decipad/ui';
 import { findNodePath, getNodeString, getPreviousNode } from '@udecode/plate';
+import { dequal } from 'dequal';
 import { nanoid } from 'nanoid';
 import {
   Children,
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
+import { debounceTime, Subject, distinctUntilChanged } from 'rxjs';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
@@ -54,6 +63,26 @@ export const CodeLineV2: PlateComponent = ({
   element,
 }) => {
   assertElementType(element, ELEMENT_CODE_LINE_V2);
+
+  const sourceCode = getNodeString(element.children[1]);
+
+  const subValue = useRef(new Subject<boolean>());
+  const [isValue, setIsValue] = useState(isCodeValue(sourceCode));
+
+  useEffect(() => {
+    try {
+      parseExpressionOrThrow(sourceCode);
+      subValue.current.next(isCodeValue(sourceCode));
+    } catch (e) {
+      // do nothing
+    }
+  }, [sourceCode]);
+
+  useEffect(() => {
+    subValue.current
+      .pipe(debounceTime(0), distinctUntilChanged(dequal))
+      .subscribe(setIsValue);
+  }, []);
 
   const selected = useSelected();
   const codeLineContent = useNodeText(element, { debounceTimeMs: 0 }) ?? '';
@@ -173,9 +202,11 @@ export const CodeLineV2: PlateComponent = ({
           onDragStartCell={handleDragStartCell}
           onClickedResult={isReadOnly ? undefined : onClickedResult}
           variableNameChild={
-            <VarResultContext.Provider value={lineResult}>
-              {childrenArray[0]}
-            </VarResultContext.Provider>
+            <IsValueContext.Provider value={isValue}>
+              <VarResultContext.Provider value={lineResult}>
+                {childrenArray[0]}
+              </VarResultContext.Provider>
+            </IsValueContext.Provider>
           }
           codeChild={childrenArray[1]}
         />
@@ -188,20 +219,15 @@ export const VarResultContext = createContext<
   IdentifiedResult | IdentifiedError | undefined
 >(undefined);
 
+export const IsValueContext = createContext<boolean>(true);
+
 export const CodeLineV2Varname: PlateComponent = (props) => {
   assertElementType(props.element, ELEMENT_STRUCTURED_VARNAME);
 
   const varResult = useContext(VarResultContext);
+  const isValue = useContext(IsValueContext);
 
   const errorMessage = useEnsureValidVariableName(props.element, varResult?.id);
-
-  const editor = useTEditorRef();
-  const path = findNodePath(editor, props.element);
-  const structuredInputParent = getAboveNodeSafe(editor, {
-    at: path,
-    match: (e) => e.type === ELEMENT_STRUCTURED_IN,
-  });
-
   const empty = getNodeString(props.element).trim() === '';
 
   return (
@@ -219,12 +245,11 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
             <CodeVariableDefinition
               empty={empty}
               type={
-                structuredInputParent
-                  ? varResult?.type === 'identified-error'
-                    ? { kind: 'number', unit: null }
-                    : varResult?.result.type
-                  : { kind: 'table-formula' }
+                varResult?.type === 'identified-error'
+                  ? { kind: 'number', unit: null }
+                  : varResult?.result.type
               }
+              isValue={isValue}
             >
               {props.children}
             </CodeVariableDefinition>

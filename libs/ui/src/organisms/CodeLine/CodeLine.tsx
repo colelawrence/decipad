@@ -118,21 +118,28 @@ const placeholderStyles = css(codeStyles, {
   },
 });
 
-const inlineResultStyles = css(p14Regular, resultBubbleStyles, {
-  ':empty': { display: 'none' },
+const inlineResultStyles = (bubble: boolean) =>
+  css(p14Regular, bubble && resultBubbleStyles, {
+    ':empty': { display: 'none' },
 
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
 
-  padding: '2px 8px',
+    padding: '2px 8px',
 
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
-  [smallScreenQuery]: {
-    width: '100%',
-  },
-});
+    ...(!bubble && {
+      paddingTop: '4px',
+      display: 'flex',
+      alignItems: 'center',
+    }),
+
+    [smallScreenQuery]: {
+      width: '100%',
+    },
+  });
 
 const expandedResultStyles = css(p14Medium, {
   gridArea: 'expanded-res',
@@ -159,7 +166,7 @@ const grabbingStyles = css({
 });
 
 interface CodeLineProps {
-  readonly variant?: 'table' | 'standalone';
+  readonly variant?: 'table' | 'standalone' | 'inline';
   readonly children: ReactNode;
   readonly highlight?: boolean;
   readonly placeholder?: string;
@@ -248,6 +255,7 @@ export const CodeLine = ({
 };
 
 export function useResultInfo({
+  variant,
   result,
   syntaxError,
   onDragStartCell,
@@ -256,6 +264,7 @@ export function useResultInfo({
   element,
 }: Pick<
   CodeLineProps,
+  | 'variant'
   | 'result'
   | 'syntaxError'
   | 'onDragStartCell'
@@ -276,7 +285,7 @@ export function useResultInfo({
     if (syntaxError.isEmptyExpressionError) {
       return {
         inline: (
-          <output css={inlineResultStyles}>
+          <output css={inlineResultStyles(variant !== 'inline')}>
             <CodeError {...syntaxError} message="There is an empty variable" />
           </output>
         ),
@@ -285,7 +294,7 @@ export function useResultInfo({
     }
     return {
       inline: (
-        <output css={inlineResultStyles}>
+        <output css={inlineResultStyles(variant !== 'inline')}>
           <CodeError {...syntaxError} />
         </output>
       ),
@@ -317,7 +326,10 @@ export function useResultInfo({
   // Any other result
   return {
     inline: (
-      <output css={inlineResultStyles} onClick={onOutputClick}>
+      <output
+        css={inlineResultStyles(variant !== 'inline')}
+        onClick={onOutputClick}
+      >
         <CodeResult {...result} variant="inline" element={element} />
       </output>
     ),
