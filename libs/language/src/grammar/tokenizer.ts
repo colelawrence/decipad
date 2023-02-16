@@ -87,8 +87,21 @@ export const tokenRules = {
       match: regexHack('date *\\('),
       push: 'date',
     },
-
+    numberWithScientificNotation: {
+      // This regular expression matches a numeric string in the following format:
+      // • [0-9]+ matches one or more digits from 0 to 9.
+      // • (?:[ _]*[0-9]+)* matches zero or more occurrences of an optional space or underscore followed by one or more digits from 0 to 9.
+      // • (?:\.[0-9]+)? matches an optional decimal point followed by one or more digits from 0 to 9.
+      // • (?:e|E) matches the character "e" or "E".
+      // • \-?[0-9]+ matches an optional minus sign followed by one or more digits from 0 to 9.
+      match: regexHack('[0-9]+(?:[ _]*[0-9]+)*(?:\\.[0-9]+)?(?:e|E)-?[0-9]+'),
+      value: (splitUp: string) => splitUp.replace(/[_ ]+/g, ''),
+    },
     number: {
+      // This regular expression matches a numeric string in the following format:
+      // • [0-9]+ matches one or more digits from 0 to 9.
+      // • (?:[ _]*[0-9]+)* matches zero or more occurrences of an optional space or underscore followed by one or more digits from 0 to 9.
+      // • (?:\.[0-9]+)? matches an optional decimal point followed by one or more digits from 0 to 9.
       match: regexHack('[0-9]+(?:[ _]*[0-9]+)*(?:\\.[0-9]+)?'),
       value: (splitUp: string) => splitUp.replace(/[_ ]+/g, ''),
     },

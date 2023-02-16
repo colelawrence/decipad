@@ -32,4 +32,19 @@ runTests({
     sourceMap: false,
     ast: [l(100_000)],
   },
+  'lowercase scientific notation': {
+    source: '1.4e-2',
+    sourceMap: false,
+    ast: [l(0.014)],
+  },
+  'uppercase scientific notation': {
+    source: '1E2',
+    sourceMap: false,
+    ast: [l(100)],
+  },
+  'negative scientific notation': {
+    source: '-1E2',
+    sourceMap: false,
+    ast: [l(-100)],
+  },
 });

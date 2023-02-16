@@ -23,6 +23,23 @@ function makeNumber(parentNode, n, numberFormat = undefined) {
 ##############
 
 number       -> negPosNumber                            {% id %}
+
+number -> %numberWithScientificNotation                 {%
+                                                        (d) => {
+                                                          const [significand, exponent] = d[0].text.split(/e|E/);
+                                                          const n = N(significand).mul(N(10).pow(N(exponent)));
+                                                          return makeNumber(d, n);
+                                                        }
+                                                        %}
+
+number -> "-" %numberWithScientificNotation             {%
+                                                        (d) => {
+                                                          const [significand, exponent] = d[1].text.split(/e|E/);
+                                                          const n = N(significand).mul(N(10).pow(N(exponent))).neg();
+                                                          return makeNumber(d, n);
+                                                        }
+                                                        %}
+
 number       -> currency negPosNumber                   {%
                                                         (d) => {
                                                           const [currency, num] = d
@@ -105,7 +122,7 @@ permyriad -> "-" decimal "‱"                          {%
                                                         }
                                                         %}
 
-permyriad -> decimal "‱"                              {%
+permyriad -> decimal "‱"                                {%
                                                         (d) => {
                                                           return makeNumber(d, N((d[0].n)).div(N(10000)))
                                                         }
@@ -122,13 +139,9 @@ unsignedNumber -> %number                               {%
 
 int -> %number                                          {%
                                                         ([number], _l, reject) => {
-                                                          if (/[.eE]/.test(number.value)) {
-                                                            return reject
-                                                          } else {
-                                                            return addLoc({
-                                                              n: BigInt(number.value)
-                                                            }, number)
-                                                          }
+                                                          return addLoc({
+                                                            n: BigInt(number.value)
+                                                          }, number)
                                                         }
                                                         %}
 
@@ -141,12 +154,8 @@ int -> "-" int                                          {%
 
 decimal -> %number                                      {%
                                                         ([number], _l, reject) => {
-                                                          if (/[eE]/.test(number.value)) {
-                                                            return reject
-                                                          } else {
-                                                            return addLoc({
-                                                              n: N(number.value)
-                                                            }, number)
-                                                          }
+                                                          return addLoc({
+                                                            n: N(number.value)
+                                                          }, number)
                                                         }
                                                         %}

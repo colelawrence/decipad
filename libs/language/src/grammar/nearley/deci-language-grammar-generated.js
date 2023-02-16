@@ -603,6 +603,35 @@ let ParserRules = [
   { name: 'number', symbols: ['negPosNumber'], postprocess: id },
   {
     name: 'number',
+    symbols: [
+      tokenizer.has('numberWithScientificNotation')
+        ? { type: 'numberWithScientificNotation' }
+        : numberWithScientificNotation,
+    ],
+    postprocess: (d) => {
+      const [significand, exponent] = d[0].text.split(/e|E/);
+      const n = N(significand).mul(N(10).pow(N(exponent)));
+      return makeNumber(d, n);
+    },
+  },
+  {
+    name: 'number',
+    symbols: [
+      { literal: '-' },
+      tokenizer.has('numberWithScientificNotation')
+        ? { type: 'numberWithScientificNotation' }
+        : numberWithScientificNotation,
+    ],
+    postprocess: (d) => {
+      const [significand, exponent] = d[1].text.split(/e|E/);
+      const n = N(significand)
+        .mul(N(10).pow(N(exponent)))
+        .neg();
+      return makeNumber(d, n);
+    },
+  },
+  {
+    name: 'number',
     symbols: ['currency', 'negPosNumber'],
     postprocess: (d) => {
       const [currency, num] = d;
@@ -733,16 +762,12 @@ let ParserRules = [
     name: 'int',
     symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number], _l, reject) => {
-      if (/[.eE]/.test(number.value)) {
-        return reject;
-      } else {
-        return addLoc(
-          {
-            n: BigInt(number.value),
-          },
-          number
-        );
-      }
+      return addLoc(
+        {
+          n: BigInt(number.value),
+        },
+        number
+      );
     },
   },
   {
@@ -757,16 +782,12 @@ let ParserRules = [
     name: 'decimal',
     symbols: [tokenizer.has('number') ? { type: 'number' } : number],
     postprocess: ([number], _l, reject) => {
-      if (/[eE]/.test(number.value)) {
-        return reject;
-      } else {
-        return addLoc(
-          {
-            n: N(number.value),
-          },
-          number
-        );
-      }
+      return addLoc(
+        {
+          n: N(number.value),
+        },
+        number
+      );
     },
   },
   {
