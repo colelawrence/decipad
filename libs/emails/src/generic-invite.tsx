@@ -10,11 +10,11 @@ const genericInvite: EmailGenerator<{
   resourceName: string;
   inviteAcceptLink: string;
 }> = ({ from, to, resource, resourceName, inviteAcceptLink }) => ({
-  subject: `Decipad: ${from.name} invites you to a ${resource.type}`,
+  subject: `Decipad: ${from.name} invites you to a ${resource.humanName}`,
 
   body: render(
     <GenericInvite
-      resourceType="notebook"
+      resourceType={resource.humanName}
       resourceName={resourceName}
       resourceUrl={inviteAcceptLink}
       inviterName={from.name}

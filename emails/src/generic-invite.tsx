@@ -31,21 +31,30 @@ export default function GenericInvite({
   resourceUrl,
 }: GenericInviteProps) {
   const preview = `Join ${inviterName} on ${serviceName}`;
-  const logoUrl = `https://uploads-ssl.webflow.com/61dda5267f2552f1a1c52b1f/622257a785a56d257a078fa0_Logomark.svg`;
 
   return (
     <Html>
       <Head />
       <Preview>{preview}</Preview>
       <Section style={main}>
+        <style>
+          {`
+            @media (prefers-color-scheme: dark) {
+              .button {
+                color: #161f2c;
+                background-color: #c1fa6b;
+              }
+            }
+          `}
+        </style>
         <Container style={container}>
           <Section style={{ marginTop: '32px' }}>
             <Img
-              src={logoUrl}
-              height="42"
-              width="42"
-              alt="Vercel"
+              src="https://user-images.githubusercontent.com/12210180/209393578-9c5e655d-bb5b-4098-9ddd-99dbead69e6e.png"
+              alt="Decipad"
               style={logo}
+              height={42}
+              width={42}
             />
           </Section>
           <Text style={h1}>
@@ -55,11 +64,17 @@ export default function GenericInvite({
           <Text style={text}>
             Your friend,{' '}
             <Inviter inviterEmail={inviterEmail} inviterName={inviterEmail} />{' '}
-            has invited you to the <strong>{resourceName}</strong> team on{' '}
+            has invited you to the <strong>{resourceName}</strong> on{' '}
             <strong>{serviceName}</strong>.
           </Text>
           <Section style={{ textAlign: 'center' }}>
-            <Button pX={20} pY={12} style={btn} href={resourceUrl}>
+            <Button
+              pX={20}
+              pY={12}
+              style={btn}
+              href={resourceUrl}
+              className="button"
+            >
               View the {resourceType}
             </Button>
           </Section>
@@ -125,9 +140,8 @@ const container = {
 };
 
 const logo: React.CSSProperties = {
+  display: 'block',
   margin: '0 auto',
-  objectPosition: 'left',
-  objectFit: 'cover',
 };
 
 const h1 = {
