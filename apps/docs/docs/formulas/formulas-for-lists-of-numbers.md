@@ -1,5 +1,5 @@
 ---
-sidebar_position: 11
+sidebar_position: 15
 ---
 
 # Formulas for Lists of Numbers

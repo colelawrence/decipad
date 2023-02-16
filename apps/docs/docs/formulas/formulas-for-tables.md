@@ -1,62 +1,91 @@
 ---
-sidebar_position: 180
+sidebar_position: 11
 ---
 
 # Formulas for Tables
 
-Built-in functions that operate on tables:
+Built-in functions that operate on tables.
 
-## lookup()
 
-[Here is documentation on the lookup function](/docs/formulas/lookups).
+## Table lookups - lookup()
 
-## filter()
+The `lookup()` formula lets you access rows and values from a table to inspect or reuse.
 
-You can select the elements from a table based on a condition:
+**Syntax:** `lookup( Table, Table Column Condition )`
 
-```deci live
-Flights = {
-  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
-  PassengerCount = [100, 200, 150, 125, 210, 240, 80]
-}
+* **Table** specifies your target table.
+* **Table Column Condition** defines a searching condition to match.
 
-filter(Flights, Flights.PassengerCount <= 140)
-==> {
-  FlightNumber = [ 'EZJ123', 'TP098', 'TP210' ],
-  PassengerCount = [ 100, 125, 80 ]
-}
-```
 
-## sortby()
+Let's explore an example where we select the **Rent Amount** from the `Expenses` table.
 
-This formula sorts a table by the values of a column:
+![lookup](./img/lookup0.png)
 
-```deci live
-Flights = {
-  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765"]
-  DepartureTime = [date(2022-03-11 15:20), date(2022-03-11 16:20), date(2022-03-10 10:05), date(2022-03-13 12:20), date(2022-03-11 15:20)]
-}
 
-sortby(Flights, Flights.DepartureTime)
-==> {
-  FlightNumber = [ 'BA789', 'EZJ123', 'BA765', 'TP456', 'TP098' ],
-  DepartureTime = [ minute 2022-03-10 10:05, minute 2022-03-11 15:20, minute 2022-03-11 15:20, minute 2022-03-11 16:20, minute 2022-03-13 12:20 ]
-}
-```
 
-## reverse()
+### 1. Select a table row
 
-This formula reverses a table:
+**To select a table row**, use the formula `lookup()` on a calculation block, where you specify the table name on the first parameter and the condition to search on the second one.
 
-```deci live
-Flights = {
-  Company = ["EZJ", "TAP", "BA", "TAP", "BA", "EZJ", "TAP"]
-  FlightNumber = ["EZJ123", "TP456", "BA789", "TP098", "BA765", "EZJ432", "TP210"]
-}
 
-reverse(Flights)
-==> {
-  Company = [ 'TAP', 'EZJ', 'BA', 'TAP', 'BA', 'TAP', 'EZJ' ],
-  FlightNumber = [ 'TP210', 'EZJ432', 'BA765', 'TP098', 'BA789', 'TP456', 'EZJ123' ]
-}
-```
+![lookup](./img/lookup0.png)
+![lookup](./img/lookup2.png)
+
+* On the first parameter specify the table name. In this example, the table `Expenses`.
+* On the second parameter specify a condition to match the table column. In this example, the row where `Expenses.Item` is equal to `"Rent"`.
+
+
+### 2. Select a value from a row
+
+**To select a value from a row**, add a dot `.` at the end of the formula `lookup()` with the name of the column you want to select.
+
+![lookup](./img/lookup3.png)
+
+On this example we specify `.Amount` to select `$1,500`.
+
+## Filter a table - filter()
+
+
+The `filter()` formula lets you filter the values from a table.
+
+**Syntax:** `filter( Table, Table Column Condition )`
+
+* **Table** specifies your target table.
+* **Table Column Condition** defines a searching condition to match.
+
+
+![lookup](./img/filter1.png)
+![lookup](./img/filter0.png)
+
+In this example, two rows are returned, since both match `Expense.Amount` less or equal to `$500`.
+
+
+## Reorder table rows 
+
+### Sort Table rows by column - sortby()
+
+The `sortby()` formula lets you reorder table rows based on any column.
+
+**Syntax:** `sorby( Table, Table Column )`
+
+* **Table** specifies your target table.
+* **Table Column** defines the column.
+
+![lookup](./img/filter1.png)
+![lookup](./img/sortby0.png)
+
+Notice how on this example, the returned table has its row ordered by `Expenses.Item`.
+
+
+### Reverse table rows order - reverse()
+
+The `reverse()` formula reverts the order of your table rows.
+
+**Syntax:** `reverse( Table)`
+
+* **Table** specifies the table to revert.
+
+![lookup](./img/filter1.png)
+![lookup](./img/reverse0.png)
+
+Notice how on this example, the returned table has its row order reversed, compared to the original table.

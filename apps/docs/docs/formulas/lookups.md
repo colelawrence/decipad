@@ -1,39 +1,9 @@
 ---
-sidebar_position: 330
+sidebar_position: 13
+draft: true
 ---
 
-# Formulas for Table Lookups
-
-## Accessing rows
-
-If you have a table index, you can extract a given row by using the `lookup` function like this:
-
-```deci live
-Flights = {
-  Number = ["TP123", "BA456", "EJ789"]
-  PassengerCount = [100, 150, 200]
-}
-
-lookup(Flights, "TP123")
-==> {
-  Number = 'TP123',
-  PassengerCount = 100
-}
-```
-
-## Accessing values
-
-If you have a table index, you can extract a value by using the `lookup` function and specifying the column name in which said value is located:
-
-```deci live
-Flights = {
-  Number = ["TP123", "BA456", "EJ789"]
-  PassengerCount = [100, 150, 200]
-}
-
-lookup(Flights, "BA456").PassengerCount
-==> 150
-```
+https://app.decipad.com/n/Cashflow-positive-for-the-month-%3A4tOWuPdwbNCGThNP9VwqE
 
 ## Cashflow positive for the month
 

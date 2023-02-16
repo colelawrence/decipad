@@ -1,14 +1,17 @@
 ---
-sidebar_position: 179
+sidebar_position: 331
 ---
 
 # Formulas for Correctness
 
-The following formulas help you ensure your notebook is always in a correct state, by double-checking your calculations programmatically.
+Ensure your notebook is always in a correct state, by double-checking your calculations programmatically.
 
-## assert
+## Check a condition - assert()
 
 Creates an error in the notebook if the condition is not true
+
+**Syntax:** `assert( Condition )`
+
 
 ```deci live
 ledger = 5000 $

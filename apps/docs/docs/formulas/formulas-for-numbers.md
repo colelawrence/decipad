@@ -135,8 +135,6 @@ The `ln()` formula gives you [the natural logarithmic of a number](https://en.wi
 
 **Syntax:** `ln( Number )`
 
-![abs formula](./img/ABS.png)
-
 ```deci live
 ln(12)
 ==> 2.4849
