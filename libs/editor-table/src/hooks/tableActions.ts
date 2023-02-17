@@ -163,7 +163,7 @@ export const addRowFromCell = (
 
 export const useTableActions = (
   editor: MyEditor,
-  element: TableElement
+  element: TableElement | null | undefined
 ): TableActions => {
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {

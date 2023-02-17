@@ -11,7 +11,6 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
-import { getDefined } from '@decipad/utils';
 import {
   ELEMENT_TD,
   getNode,
@@ -36,8 +35,8 @@ export const changeColumnType = (
   withoutNormalizing(editor, () => {
     if (cellType.kind === 'table-formula') {
       focusCursorOnPath(editor, () => {
-        const table = getDefined(getNode<TableElement>(editor, path));
-        return findTableFormulaPath(table, path, columnIndex);
+        const table = getNode<TableElement>(editor, path);
+        return table && findTableFormulaPath(table, path, columnIndex);
       });
     }
 
@@ -91,17 +90,22 @@ export const changeColumnType = (
       }
 
       const tableCaptionPath = [...path, 0];
-      const caption = getDefined(
-        getNode<TableCaptionElement>(editor, tableCaptionPath)
-      );
+      const caption = getNode<TableCaptionElement>(editor, tableCaptionPath);
+      if (!caption) {
+        return;
+      }
       const newFormulaPath = [...tableCaptionPath, caption.children.length];
       const maybePreviousPath = [
         ...tableCaptionPath,
         caption.children.length - 1,
       ];
-      const headerId = getDefined(
-        getNode<TableHeaderElement>(editor, columnHeaderPath)
-      ).id;
+      const headerId = getNode<TableHeaderElement>(
+        editor,
+        columnHeaderPath
+      )?.id;
+      if (headerId == null) {
+        return;
+      }
       const maybePreviousNode = getNode<TableColumnFormulaElement>(
         editor,
         maybePreviousPath

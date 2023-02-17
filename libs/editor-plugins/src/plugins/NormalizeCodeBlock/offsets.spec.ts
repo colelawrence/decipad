@@ -25,8 +25,8 @@ describe('offsets', () => {
       },
     ];
     expect(getCodeBlockOffsets(editor as MyEditor, [0])).toMatchObject({
-      anchor: null,
-      focus: null,
+      anchor: undefined,
+      focus: undefined,
     });
   });
 

@@ -21,7 +21,6 @@ import {
 import { getNode, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
-import { getDefined } from '@decipad/utils';
 import { concat, of } from 'rxjs';
 import { dequal } from 'dequal';
 import { selectColumn } from '../../utils/selectColumn';
@@ -41,10 +40,10 @@ export const TableHeaderCell: PlateComponent = ({
   assertElementType(element, ELEMENT_TH);
   const computer = useComputer();
   const editor = useTEditorRef();
-  const path = getDefined(useNodePath(element));
-  const nThChild = path[path.length - 1];
-  const tablePath = Path.parent(Path.parent(path));
-  const table = getDefined(getNode<TableElement>(editor, tablePath));
+  const path = useNodePath(element);
+  const nThChild = path?.[path.length - 1];
+  const tablePath = path && Path.parent(Path.parent(path));
+  const table = tablePath && getNode<TableElement>(editor, tablePath);
   const { onChangeColumnType, onRemoveColumn } = useTableActions(editor, table);
   const focused = useSelected();
   const readOnly = useIsEditorReadOnly();
@@ -129,9 +128,11 @@ export const TableHeaderCell: PlateComponent = ({
       empty={getNodeString(element).length === 0}
       focused={focused}
       isFirst={nThChild === 0}
-      onChangeColumnType={(newType) => onChangeColumnType(nThChild, newType)}
+      onChangeColumnType={(newType) =>
+        nThChild != null && onChangeColumnType(nThChild, newType)
+      }
       onRemoveColumn={() => onRemoveColumn(element.id)}
-      onSelectColumn={() => selectColumn(editor, path)}
+      onSelectColumn={() => path && selectColumn(editor, path)}
       parseUnit={parseUnit}
       type={
         element.cellType?.kind === 'anything' ? inferredType : element.cellType

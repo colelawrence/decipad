@@ -1,4 +1,3 @@
-import { getDefined } from '@decipad/utils';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 import os from 'os';
@@ -113,5 +112,8 @@ export async function exportPad(page: Page, index = 0): Promise<string> {
 
 export async function followPad(page: Page, index: number) {
   const pads = await getPadList(page);
-  await page.goto(getDefined(pads[index]?.href));
+  const href = pads[index]?.href;
+  if (href) {
+    await page.goto(href);
+  }
 }

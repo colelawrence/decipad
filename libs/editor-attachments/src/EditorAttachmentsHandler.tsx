@@ -28,8 +28,10 @@ const uploadProgressWrapperStyles = css({
 });
 
 type EditorAttachmentsHandlerProps = PropsWithChildren<{
-  getAttachmentForm: (file: File) => Promise<[URL, FormData, string]>;
-  onAttached: (handle: string) => Promise<{ url: URL }>;
+  getAttachmentForm: (
+    file: File
+  ) => Promise<undefined | [URL, FormData, string]>;
+  onAttached: (handle: string) => Promise<undefined | { url: URL }>;
 }>;
 
 export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
@@ -61,14 +63,22 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
   );
 
   const attachGeneric = useCallback(
-    async (file: File): Promise<{ url: string }> => {
-      const [target, form, handle] = await getAttachmentForm(file);
+    async (file: File): Promise<undefined | { url: string }> => {
+      const attForm = await getAttachmentForm(file);
+      if (!attForm) {
+        return;
+      }
+      const [target, form, handle] = attForm;
       form.append('file', file);
       await axios.post(target.toString(), form, {
         onUploadProgress: onUploadProgress(file),
       });
+      const onAttachedResponse = await onAttached(handle);
+      if (!onAttachedResponse) {
+        return;
+      }
       return {
-        url: (await onAttached(handle)).url.toString(),
+        url: onAttachedResponse.url.toString(),
       };
     },
     [getAttachmentForm, onAttached, onUploadProgress]
@@ -125,9 +135,13 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         })
       );
       try {
-        const { url } = await (file.type.startsWith('image/')
+        const attachResult = await (file.type.startsWith('image/')
           ? attachImage(file)
           : attachGeneric(file));
+        if (attachResult == null) {
+          return;
+        }
+        const { url } = attachResult;
 
         setAttachments(
           produce(attachments, (att) => {

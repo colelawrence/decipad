@@ -3,22 +3,24 @@ import {
   CodeLineElement,
   MyEditor,
 } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
 import { getChildren, getNode, getNodeString, select } from '@udecode/plate';
 import { Path, Point, Selection } from 'slate';
 import { cloneSelection } from './utils';
 
 interface Offsets {
-  anchor: number | null;
-  focus: number | null;
+  anchor: number | undefined;
+  focus: number | undefined;
 }
 
-function getOffsetFromPath(editor: MyEditor, path: Path): number {
+function getOffsetFromPath(editor: MyEditor, path: Path): number | undefined {
   const [codeBlockIndex] = path;
   let offset = 0;
-  const codeBlock = getDefined(
-    getNode<DeprecatedCodeBlockElement>(editor, [codeBlockIndex])
-  );
+  const codeBlock = getNode<DeprecatedCodeBlockElement>(editor, [
+    codeBlockIndex,
+  ]);
+  if (!codeBlock) {
+    return;
+  }
   for (const codeLineEntry of getChildren<DeprecatedCodeBlockElement>([
     codeBlock,
     [codeBlockIndex],
@@ -46,11 +48,15 @@ function getOffsetFromPoint(
   editor: MyEditor,
   codeBlockPath: Path,
   point: Point
-): number | null {
+): number | undefined {
   if (Path.isDescendant(point.path, codeBlockPath)) {
-    return getOffsetFromPath(editor, point.path) + point.offset;
+    const offset = getOffsetFromPath(editor, point.path);
+    if (offset == null) {
+      return undefined;
+    }
+    return offset + point.offset;
   }
-  return null;
+  return undefined;
 }
 
 export function getCodeBlockOffsets(
@@ -59,7 +65,7 @@ export function getCodeBlockOffsets(
 ): Offsets {
   const sel = editor.selection;
   if (!sel) {
-    return { anchor: null, focus: null };
+    return { anchor: undefined, focus: undefined };
   }
   return {
     anchor: getOffsetFromPoint(editor, codeBlockPath, sel.anchor),
@@ -72,9 +78,10 @@ function getPointFromOffset(
   codeBlockPath: Path,
   offset: number
 ): Point | null {
-  const codeBlock = getDefined(
-    getNode<DeprecatedCodeBlockElement>(editor, codeBlockPath)
-  );
+  const codeBlock = getNode<DeprecatedCodeBlockElement>(editor, codeBlockPath);
+  if (!codeBlock) {
+    return null;
+  }
   let currentOffset = 0;
   for (const entry of getChildren<DeprecatedCodeBlockElement>([
     codeBlock,

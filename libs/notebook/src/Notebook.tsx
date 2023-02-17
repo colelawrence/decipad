@@ -39,8 +39,10 @@ export interface NotebookProps {
   initialState?: string;
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
-  getAttachmentForm: (file: File) => Promise<[URL, FormData, string]>;
-  onAttached: (handle: string) => Promise<{ url: URL }>;
+  getAttachmentForm: (
+    file: File
+  ) => Promise<undefined | [URL, FormData, string]>;
+  onAttached: (handle: string) => Promise<undefined | { url: URL }>;
 }
 
 type NotebookStarterChecklistProps = {

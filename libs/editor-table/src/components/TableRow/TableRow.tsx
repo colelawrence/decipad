@@ -9,10 +9,9 @@ import {
   ELEMENT_TR,
   PlateComponent,
   TableElement,
-  useTPlateEditorRef,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
-import { getDefined } from '@decipad/utils';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useDndNode } from '@udecode/plate-ui-dnd';
 import { useTableActions } from '../../hooks';
@@ -24,15 +23,17 @@ const DRAG_ITEM_ROW = 'row';
 
 export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TR);
-  const editor = getDefined(useTPlateEditorRef());
-  const path = getDefined(useNodePath(element));
+  const editor = useTEditorRef();
+  const path = useNodePath(element);
 
   const { isCollapsed } = useContext(TableStyleContext);
 
   const isVisible =
-    !isCollapsed || path[path.length - 1] <= MAX_UNCOLLAPSED_TABLE_ROWS + 1;
-  const tablePath = Path.parent(path);
-  const [table] = getNodeEntry<TableElement>(editor, tablePath);
+    path &&
+    (!isCollapsed || path[path.length - 1] <= MAX_UNCOLLAPSED_TABLE_ROWS + 1);
+  const tablePath = path && Path.parent(path);
+  const tableEntry = tablePath && getNodeEntry<TableElement>(editor, tablePath);
+  const table = tableEntry?.[0];
   const { onRemoveRow } = useTableActions(editor, table);
 
   const { id } = element;
@@ -69,7 +70,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
     return () => currentRef.disconnect();
   }, [dropLine, setDropLine, rowObserver]);
 
-  const firstRow = path[path.length - 1] === 1;
+  const firstRow = path?.[path.length - 1] === 1;
   if (firstRow) {
     return (
       <TableHeaderRow attributes={attributes} readOnly={false}>
@@ -82,7 +83,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
       attributes={attributes}
       readOnly={false}
       onRemove={() => onRemoveRow(element.id)}
-      onSelect={() => selectRow(editor, path)}
+      onSelect={() => path && selectRow(editor, path)}
       dragRef={dragRef}
       previewRef={previewRef}
       ref={trRef}

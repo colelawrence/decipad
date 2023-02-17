@@ -41,7 +41,7 @@ export const VariableDef: InteractiveLanguageElement = {
             args: [],
           };
         } else {
-          expression = getDefined(coerced);
+          expression = coerced || '';
         }
         if (element.variant === 'dropdown') {
           const dropdownVariable = parseElementAsVariableAssignment(

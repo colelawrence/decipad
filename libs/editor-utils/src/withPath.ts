@@ -6,11 +6,13 @@ type WithPathFunction = (path: Path) => void;
 
 export const withPath = (
   editor: MyEditor,
-  element: MyElement,
+  element: MyElement | null | undefined,
   fn: WithPathFunction
 ): void => {
-  const path = findNodePath(editor, element);
-  if (path) {
-    fn(path);
+  if (element) {
+    const path = findNodePath(editor, element);
+    if (path) {
+      fn(path);
+    }
   }
 };

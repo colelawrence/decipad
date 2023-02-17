@@ -14,7 +14,6 @@ import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { Path } from 'slate';
 import { getNodeEntry, isFirstChild } from '@udecode/plate';
 import { useCallback, useMemo, useRef } from 'react';
-import { getDefined } from '@decipad/utils';
 import {
   columnAggregationTypes,
   isCellAlignRight,
@@ -34,10 +33,12 @@ export const DataViewColumnHeader: PlateComponent = ({
     element.id,
     'DataViewColumn'
   );
-  const path = getDefined(useNodePath(element));
-  const dataView = useMemo(() => {
-    const dataViewPath = Path.parent(Path.parent(path));
-    return getNodeEntry<DataViewElement>(editor, dataViewPath)[0];
+  const path = useNodePath(element);
+  const dataView: DataViewElement | undefined = useMemo(() => {
+    const dataViewPath = path && Path.parent(Path.parent(path));
+    return (
+      dataViewPath && getNodeEntry<DataViewElement>(editor, dataViewPath)?.[0]
+    );
   }, [editor, path]);
   const columnHeaderRef = useRef<HTMLTableCellElement>(null);
 
@@ -50,7 +51,7 @@ export const DataViewColumnHeader: PlateComponent = ({
   );
 
   const availableAggregations = useMemo(() => {
-    if (isFirstChild(path)) {
+    if (!path || isFirstChild(path)) {
       // first column: do not present aggregation choices
       return [];
     }

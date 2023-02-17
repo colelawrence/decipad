@@ -30,7 +30,10 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
 
         const topLevel =
           cursorPath && findClosestBlockOrColumn(editor, cursorPath);
-        const parentNode = getNodeParent(editor, cursorPath || []);
+        if (!cursorPath) {
+          return;
+        }
+        const parentNode = getNodeParent(editor, cursorPath);
 
         if (topLevel) {
           const prevBlock = Editor.previous(editor as BaseEditor, {

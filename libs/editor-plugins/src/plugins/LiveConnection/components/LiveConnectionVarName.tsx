@@ -11,7 +11,6 @@ import {
 } from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
 import { EditableLiveDataCaption, Tooltip } from '@decipad/ui';
-import { getDefined } from '@decipad/utils';
 import { getNodeString, getParentNode } from '@udecode/plate';
 import pluralize from 'pluralize';
 import { useMemo } from 'react';
@@ -31,13 +30,14 @@ export const LiveConnectionVarName: PlateComponent = ({
 
   const { sourceName, url, returnRange } = useMemo(() => {
     const source = parent?.[0].source ?? '';
-    const parentUrl = getDefined(parent?.[0].url);
+    const parentUrl = parent?.[0].url;
 
-    const sourceParams: SourceUrlParseResponse = (source &&
-      parentUrl &&
-      parseSourceUrl(source, parentUrl)) || { userUrl: parentUrl };
+    const sourceParams: SourceUrlParseResponse | undefined =
+      (source && parentUrl != null && parseSourceUrl(source, parentUrl)) ||
+      (parentUrl != null && { userUrl: parentUrl }) ||
+      undefined;
 
-    const { isRange, range, subsheetName, userUrl } = sourceParams;
+    const { isRange, range, subsheetName, userUrl } = sourceParams || {};
     const formattedRange = range?.join(':') || '';
     const rangeExplanation =
       subsheetName && subsheetName !== '0'

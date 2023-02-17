@@ -19,7 +19,7 @@ interface CollectedProps {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useDropColumn = (
   editor: MyEditor,
-  table: DataViewElement,
+  table: DataViewElement | undefined,
   column: MyElement,
   columnHeaderRef: MutableRefObject<HTMLTableCellElement | null>,
   columnType: ColumnType = 'TableColumn'
@@ -29,7 +29,7 @@ export const useDropColumn = (
     'left' | 'right' | undefined
   >(undefined);
 
-  const swapCtx = {
+  const swapCtx = table && {
     editor,
     table,
     column,
@@ -58,12 +58,9 @@ export const useDropColumn = (
         );
       },
       drop: (columnItem, monitor) => {
-        const columns = findSwappableColumns(
-          swapCtx,
-          columnItem,
-          monitor,
-          hoverDirection
-        );
+        const columns =
+          swapCtx &&
+          findSwappableColumns(swapCtx, columnItem, monitor, hoverDirection);
         if (columns) {
           onMoveColumn(...columns);
         }

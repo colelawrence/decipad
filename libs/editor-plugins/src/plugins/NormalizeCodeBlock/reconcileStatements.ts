@@ -5,7 +5,6 @@ import {
   MyEditor,
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
-import { getDefined } from '@decipad/utils';
 import { getNode, insertText, mergeNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -39,7 +38,10 @@ function reconcileByMergingWithNext(
   codeLinePath: Path,
   expectedStatement: string
 ): boolean {
-  const line = getDefined(getNode<CodeLineElement>(editor, codeLinePath));
+  const line = getNode<CodeLineElement>(editor, codeLinePath);
+  if (!line) {
+    return false;
+  }
   const lineText = getCodeLineText(line);
   if (lineText.length < expectedStatement.length) {
     return reconcileCodeLineByMergingWithNext(editor, line, codeLinePath);

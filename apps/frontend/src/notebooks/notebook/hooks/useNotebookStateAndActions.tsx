@@ -11,7 +11,6 @@ import { DocSyncEditor, SyncSource } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
-import { getDefined } from '@decipad/utils';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
   GetNotebookByIdQuery,
@@ -67,8 +66,10 @@ interface UseNotebookStateAndActionsResult {
   unpublishNotebook: () => void;
   inviteEditorByEmail: (email: string) => Promise<void>;
   removeEditorById: (id: string) => Promise<void>;
-  getAttachmentForm: (file: File) => Promise<[URL, FormData, string]>;
-  onAttached: (handle: string) => Promise<{ url: URL }>;
+  getAttachmentForm: (
+    file: File
+  ) => Promise<undefined | [URL, FormData, string]>;
+  onAttached: (handle: string) => Promise<undefined | { url: URL }>;
 }
 
 const SNAPSHOT_NAME = 'Published 1';
@@ -118,14 +119,17 @@ export const useNotebookStateAndActions = ({
   // ------- attachments -------
   const [, getCreateAttachmentForm] = useGetCreateAttachmentFormMutation();
   const getAttachmentForm = useCallback(
-    async (file: File): Promise<[URL, FormData, string]> => {
+    async (file: File): Promise<undefined | [URL, FormData, string]> => {
       const result = await getCreateAttachmentForm({
         notebookId,
         fileName: file.name,
         fileType: file.type,
       });
 
-      const form = getDefined(result.data?.getCreateAttachmentForm);
+      const form = result.data?.getCreateAttachmentForm;
+      if (!form) {
+        return;
+      }
       const url = new URL(form.url);
       const formData = new FormData();
       for (const { key, value } of form.fields) {
@@ -142,7 +146,11 @@ export const useNotebookStateAndActions = ({
       if (resp.error) {
         throw new Error(resp.error.message);
       }
-      const url = new URL(getDefined(resp.data?.attachFileToPad?.url));
+      const urlString = resp.data?.attachFileToPad?.url;
+      if (!urlString) {
+        return;
+      }
+      const url = new URL(urlString);
       return {
         url,
       };

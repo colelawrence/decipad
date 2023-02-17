@@ -2,7 +2,6 @@ import { MyEditor, TableElement } from '@decipad/editor-types';
 import { AST, Computer, IdentifiedError } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { astNode } from '@decipad/editor-utils';
-import { getDefined } from '@decipad/utils';
 import { headerToColumn } from './headerToColumn';
 import { toColumnAssign } from './toColumnAssign';
 
@@ -43,7 +42,7 @@ export const getTableAstNodeFromTableElement = async (
   );
 
   return {
-    id: getDefined(table.id),
+    id: table.id,
     name: tableName,
     expression: astNode('table', astNode('tabledef', tableName)),
     columnAssigns,

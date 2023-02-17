@@ -7,13 +7,16 @@ export const useElementMutatorCallback = <
   PropName extends keyof E
 >(
   editor: MyReactEditor,
-  element: E,
+  element: E | null | undefined,
   propName: PropName,
   sideEffects?: () => void
 ): ((newValue: E[PropName]) => void) => {
   return useCallback(
     (newValue: E[PropName]) => {
-      const at = findNodePath(editor, element);
+      const at = element && findNodePath(editor, element);
+      if (!at) {
+        return;
+      }
       const mutation = {
         [propName]: newValue,
       };

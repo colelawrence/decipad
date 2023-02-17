@@ -42,7 +42,7 @@ export interface TableActions {
 
 export const useDataViewActions = (
   editor: MyEditor,
-  element: DataViewElement
+  element: DataViewElement | undefined
 ): TableActions => {
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {
@@ -58,8 +58,9 @@ export const useDataViewActions = (
 
   const setDataColumns = useCallback(
     (columns: Column[]) => {
-      const headerRow: DataViewHeaderRowElement | null = element.children[1];
-      const headerRowPath = findNodePath(editor, headerRow);
+      const headerRow: DataViewHeaderRowElement | undefined =
+        element?.children[1];
+      const headerRowPath = headerRow && findNodePath(editor, headerRow);
       if (!headerRowPath) {
         return;
       }
@@ -107,7 +108,7 @@ export const useDataViewActions = (
         }
       });
     },
-    [editor, element.children]
+    [editor, element?.children]
   );
 
   const setVarName = useElementMutatorCallback(editor, element, 'varName');
@@ -115,8 +116,8 @@ export const useDataViewActions = (
   const clearColumns = useCallback(() => {
     getDefined(editor.withoutCapturingUndo)(() => {
       withoutNormalizing(editor, () => {
-        const headerRow: DataViewHeaderRowElement | null = element.children[1];
-        const headerRowPath = findNodePath(editor, headerRow);
+        const headerRow = element?.children[1];
+        const headerRowPath = headerRow && findNodePath(editor, headerRow);
         if (!headerRowPath) {
           return;
         }
@@ -133,7 +134,7 @@ export const useDataViewActions = (
         }
       });
     });
-  }, [editor, element.children]);
+  }, [editor, element?.children]);
 
   const onVariableNameChange = useCallback(
     (varName: string) => {
@@ -150,8 +151,8 @@ export const useDataViewActions = (
       if (fromColIndex === toColIndex) {
         return;
       }
-      const headerRow = element.children[1];
-      const headerRowPath = findNodePath(editor, headerRow);
+      const headerRow = element?.children[1];
+      const headerRowPath = headerRow && findNodePath(editor, headerRow);
       if (headerRowPath) {
         const fromPath = [...headerRowPath, fromColIndex];
         const toPath = [...headerRowPath, toColIndex];
@@ -163,13 +164,13 @@ export const useDataViewActions = (
         }
       }
     },
-    [columnChanges$, editor, element.children]
+    [columnChanges$, editor, element?.children]
   );
 
   const onInsertColumn = useCallback(
     (columnName: string, serializedType: SerializedType) => {
-      const headerRow = element.children[1];
-      const headerRowPath = findNodePath(editor, headerRow);
+      const headerRow = element?.children[1];
+      const headerRowPath = headerRow && findNodePath(editor, headerRow);
 
       if (headerRowPath) {
         const maybeRemoveFirstText = () => {
@@ -202,7 +203,7 @@ export const useDataViewActions = (
         });
       }
     },
-    [editor, element.children]
+    [editor, element?.children]
   );
 
   const onDeleteColumn = useCallback(
