@@ -30,6 +30,7 @@ const selectNames = (
         n.kind === 'variable' ? ('variable' as const) : ('function' as const),
       identifier: n.kind === 'function' ? `${n.name}(` : n.name,
       type: n.type.kind,
+      blockId: n.blockId,
     })
   );
 };

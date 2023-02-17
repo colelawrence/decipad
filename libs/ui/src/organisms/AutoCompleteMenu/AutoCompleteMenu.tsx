@@ -86,6 +86,7 @@ const mainStyles = css({
 export type Identifier = {
   kind: 'variable' | 'function';
   identifier: string;
+  blockId?: string;
   type: string;
   editing?: boolean;
   focused?: boolean;
@@ -98,6 +99,21 @@ export interface AutoCompleteMenuProps {
   readonly top?: boolean;
   readonly result?: string | null;
 }
+
+type ItemBlockId = {
+  identifier: string;
+  blockId?: string;
+};
+
+const matchBlockIdOrIdentifier = (
+  a: ItemBlockId,
+  b: ItemBlockId | undefined
+) => {
+  if (a.blockId && b?.blockId) {
+    return a.blockId === b.blockId;
+  }
+  return a.identifier === b?.identifier;
+};
 
 export const AutoCompleteMenu = ({
   search = '',
@@ -115,6 +131,7 @@ export const AutoCompleteMenu = ({
           .filter((i) => i.kind === 'variable' || i.kind === 'function')
           .map((i) => ({
             identifier: i.identifier,
+            blockId: i.blockId,
             kind: 'variable' as const,
             type: i.type,
             focused:
@@ -142,21 +159,21 @@ export const AutoCompleteMenu = ({
   const [matchingIdentifiers, setMathingIdentifiers] = useState(
     groupsWithItemsFiltered
       .flatMap(({ matchingItems }) => matchingItems)
-      .map(({ identifier }) => identifier)
+      .map(({ identifier, blockId }) => ({ identifier, blockId }))
   );
 
   useEffect(() => {
     setMathingIdentifiers((old) => {
       const newMatching = groupsWithItemsFiltered
         .flatMap(({ matchingItems }) => matchingItems)
-        .map(({ identifier }) => identifier);
+        .map(({ identifier, blockId }) => ({ identifier, blockId }));
       if (dequal(old, newMatching)) return old;
       return newMatching;
     });
   }, [search, groupsWithItemsFiltered]);
 
   // AutoCompleteMenuItems do not use real browser focus, see their docs
-  const [focusedItem, setFocusedItem] = useState<string>();
+  const [focusedItem, setFocusedItem] = useState<ItemBlockId>();
 
   const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
 
@@ -166,7 +183,11 @@ export const AutoCompleteMenu = ({
         case event.key === 'ArrowDown' && !event.shiftKey:
           const newFocusedItem =
             matchingIdentifiers[
-              (focusedItem ? matchingIdentifiers.indexOf(focusedItem) : -1) + 1
+              (focusedItem
+                ? matchingIdentifiers.findIndex((elem) =>
+                    matchBlockIdOrIdentifier(elem, focusedItem)
+                  )
+                : -1) + 1
             ] ?? matchingIdentifiers[0];
           setFocusedItem(newFocusedItem);
           event.stopPropagation();
@@ -176,7 +197,9 @@ export const AutoCompleteMenu = ({
           setFocusedItem(
             matchingIdentifiers[
               (focusedItem
-                ? matchingIdentifiers.indexOf(focusedItem)
+                ? matchingIdentifiers.findIndex((elem) =>
+                    matchBlockIdOrIdentifier(elem, focusedItem)
+                  )
                 : matchingIdentifiers.length) - 1
             ] ?? matchingIdentifiers.slice(-1)[0]
           );
@@ -221,8 +244,11 @@ export const AutoCompleteMenu = ({
                 {matchingItems.map(({ ...item }) => (
                   <AutoCompleteMenuItem
                     {...item}
-                    key={item.identifier}
-                    focused={focusedItem === item.identifier || item.focused}
+                    key={item.blockId ?? item.identifier}
+                    focused={
+                      matchBlockIdOrIdentifier(item, focusedItem) ||
+                      item.focused
+                    }
                     onExecute={() => onExecuteItem?.(item)}
                   />
                 ))}
