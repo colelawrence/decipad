@@ -31,8 +31,8 @@ Let's explore an example where we select the **Rent Amount** from the `Expenses`
 ![lookup](./img/lookup0.png)
 ![lookup](./img/lookup2.png)
 
-* On the first parameter specify the table name. In this example, the table `Expenses`.
-* On the second parameter specify a condition to match the table column. In this example, the row where `Expenses.Item` is equal to `"Rent"`.
+* In the first parameter specify the table name. In this example, the table `Expenses`.
+* In the second parameter specify a condition to match the table column. In this example, the row where `Expenses.Item` is equal to `"Rent"`.
 
 
 ### 2. Select a value from a row
@@ -62,7 +62,7 @@ In this example, two rows are returned, since both match `Expense.Amount` less o
 
 ## Reorder table rows 
 
-### Sort Table rows by column - sortby()
+### Sort table rows by column - sortby()
 
 The `sortby()` formula lets you reorder table rows based on any column.
 
@@ -74,7 +74,7 @@ The `sortby()` formula lets you reorder table rows based on any column.
 ![lookup](./img/filter1.png)
 ![lookup](./img/sortby0.png)
 
-Notice how on this example, the returned table has its row ordered by `Expenses.Item`.
+Notice how in this example, the returned table has its rows ordered by `Expenses.Item`.
 
 
 ### Reverse table rows order - reverse()
@@ -88,4 +88,4 @@ The `reverse()` formula reverts the order of your table rows.
 ![lookup](./img/filter1.png)
 ![lookup](./img/reverse0.png)
 
-Notice how on this example, the returned table has its row order reversed, compared to the original table.
+Notice how in this example, the returned table has its rows order reversed, compared to the original table.
