@@ -3,6 +3,7 @@ import {
   CodeLineElement,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
   MyEditor,
@@ -54,7 +55,10 @@ export const onDropSmartCellResult =
           filteredFragment.push({
             text,
           });
-        } else if (block.type === ELEMENT_PARAGRAPH) {
+        } else if (
+          block.type === ELEMENT_PARAGRAPH ||
+          block.type === ELEMENT_LIC
+        ) {
           filteredFragment.push({
             text,
             [MARK_MAGICNUMBER]: true,

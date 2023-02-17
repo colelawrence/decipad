@@ -5,6 +5,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_SMART_REF,
   ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_LIC,
   MARK_MAGICNUMBER,
   MyElement,
   RichText,
@@ -73,6 +74,7 @@ export function insertSmartRef(
       return [{ text: textBefore }, smartRef, { text: textAfter }];
     }
 
+    case ELEMENT_LIC:
     case ELEMENT_PARAGRAPH: {
       const magicNum: RichText = {
         text: getExprRef(blockId),
