@@ -25,13 +25,15 @@ export const useDuplicateNotebook = ({
 
   const { data, error } = result;
 
-  if (error || !data) {
-    throw new Error('Could not fetch workspaces');
+  if (error) {
+    toast('Could not fetch workspaces', 'error');
   }
 
   const mutate = useCallback(async () => {
-    if (!editor) {
-      console.error('Failed to duplicate notebook. Missing editor.');
+    if (!editor || !data) {
+      console.error(
+        'Failed to duplicate notebook. Missing editor or workspaces.'
+      );
       toast('Failed to duplicate notebook', 'error');
       return;
     }
@@ -64,7 +66,7 @@ export const useDuplicateNotebook = ({
       console.error('Failed to duplicate notebook. Error:', err);
       toast('Failed to duplicate notebook.', 'error');
     }
-  }, [data.workspaces, duplicateNotebook, editor, id, navigate, toast]);
+  }, [data, duplicateNotebook, editor, id, navigate, toast]);
 
   return [mutate];
 };
