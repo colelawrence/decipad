@@ -60,7 +60,7 @@ const fetchSnapshot = async (
     // eslint-disable-next-line no-console
     console.warn(`Notebook with id ${padId} had no snapshot updates`);
     // notebook is public but snapshot hasn't been created (old publish version)
-    return fetchUpdates(padId);
+    return fetchUpdates(`/pads/${padId}`);
   }
   return updates;
 };
