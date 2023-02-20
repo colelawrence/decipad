@@ -121,7 +121,7 @@ export const inferExpression = wrap(
         });
       }
       case 'sequence': {
-        return inferSequence(ctx, expr);
+        return inferSequence(ctx, expr, inferExpression);
       }
       case 'date': {
         const [, specificity] = getDateFromAstForm(expr.args);

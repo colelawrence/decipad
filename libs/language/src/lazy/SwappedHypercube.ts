@@ -1,6 +1,6 @@
 import { ColumnLike } from '../value';
 import { chooseFirst, undoChooseFirst } from '../dimtools/common';
-import { implementColumnLike } from './implementColumnLike';
+import { implementColumnLike } from './HypercubeAtIndex';
 import { Dimension, MinimalHypercube } from './types';
 
 /**

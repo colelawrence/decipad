@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { identity } from '../utils';
-import { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from './known-units';
 
 export const units: UnitOfMeasure[] = [
   {

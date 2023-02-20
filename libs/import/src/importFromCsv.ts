@@ -3,7 +3,7 @@ import { Computer, Result } from '@decipad/computer';
 import { inferTable } from '@decipad/parse';
 import { pivot } from './utils/pivot';
 import { Sheet, SpreadsheetValue } from './types';
-import { ImportOptions } from './import';
+import type { ImportOptions } from './import';
 import { trimSheet } from './utils/trimSheet';
 
 const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {

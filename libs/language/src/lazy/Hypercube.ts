@@ -3,7 +3,7 @@ import { Type } from '..';
 import { typeToDimensionIds } from '../dimtools/common';
 import { isColumnLike, Value } from '../value';
 import { zip } from '../utils';
-import { implementColumnLike } from './implementColumnLike';
+import { implementColumnLike } from './HypercubeAtIndex';
 import type {
   Dimension,
   DimensionId,

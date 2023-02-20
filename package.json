@@ -10,7 +10,7 @@
     "libs/ui"
   ],
   "engines": {
-    "node": "=16"
+    "node": ">=16"
   },
   "scripts": {
     "start": "yarn serve:all",
@@ -30,7 +30,8 @@
     "build:backend:watch": "WATCH=true yarn build:backend",
     "build:graphql": "graphql-codegen --config codegen.yml",
     "build:docs": "nx build docs",
-    "lint": "nx workspace-lint && nx run-many --target=lint --all",
+    "lint": "nx workspace-lint && nx run-many --target=depcheck --all",
+    "depcheck": "nx run-many --target=depcheck --all",
     "typecheck": "tsc -b libs/*/tsconfig.json apps/*/tsconfig.json",
     "typecheck:watch": "yarn typecheck -w",
     "test": "yarn build:backend && TZ=America/Los_Angeles nx run-many --target=test --all --skip-nx-cache",
@@ -59,7 +60,7 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "postinstall": "patch-package && yarn clean",
+    "postinstall": "patch-package && yarn run clean",
     "clean": "rm -rf dist apps/backend/public libs/*/*.tsbuildinfo apps/*/*.tsbuildinfo libs/*/*/.cache apps/*/*/.cache",
     "clean:deps": "rm -rf node_modules apps/backend/node_modules",
     "clean:all": "yarn clean && yarn clean:deps"
@@ -356,6 +357,7 @@
     "jest-config": "29.4.0",
     "jest-fetch-mock": "3.0.3",
     "lint-staged": "13.1.0",
+    "madge": "^6.0.0",
     "mkdirp": "1.0.4",
     "next": "13.1.1",
     "node-watch": "0.7.3",

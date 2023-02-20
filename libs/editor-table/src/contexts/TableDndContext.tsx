@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { DropTargetMonitor } from 'react-dnd';
-import { ColumnDndDirection, DragColumnItem } from '@decipad/editor-table';
-import { MyElement, TableHeaderElement } from '@decipad/editor-types';
+import type { MyElement, TableHeaderElement } from '@decipad/editor-types';
+import type { ColumnDndDirection, DragColumnItem } from '..';
 
 export const DRAG_ITEM_COLUMN = 'column';
 

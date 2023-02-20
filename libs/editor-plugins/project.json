@@ -17,6 +17,13 @@
         "command": "yarn tsc -b libs/editor-plugins"
       }
     },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/editor-plugins"
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/editor-plugins"],

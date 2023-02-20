@@ -1,3 +1,4 @@
+import { formatAnyUnit } from './formatNumber';
 import { formatTime, fromTimeUnitToTimeBase } from './formatTime';
 import { parseMilliseconds, parseMonths } from './parseMs';
 import { F, makeFractionUnitTuple } from './testUtils';
@@ -126,12 +127,14 @@ describe('formatTime', () => {
   describe('formatTime', () => {
     it('1 banana is not formatted as time', () => {
       const [value, unit] = makeFractionUnitTuple(F(1), 'banana');
-      expect(() => formatTime('en-US', unit, value)).toThrow();
+      expect(() =>
+        formatTime('en-US', unit, value, {}, formatAnyUnit)
+      ).toThrow();
     });
 
     it('1 second = 1s', () => {
       const [value, unit] = makeFractionUnitTuple(F(1), 'second');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1 second',
         isPrecise: true,
@@ -145,7 +148,7 @@ describe('formatTime', () => {
 
     it('1/1000 second = 1 ms', () => {
       const [value, unit] = makeFractionUnitTuple(F(1, 1000), 'second');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0.001 seconds',
         isPrecise: true,
@@ -159,7 +162,7 @@ describe('formatTime', () => {
 
     it('0 millisecond = 0 milliseconds', () => {
       const [value, unit] = makeFractionUnitTuple(F(0), 'millisecond');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0 milliseconds',
         isPrecise: true,
@@ -173,7 +176,7 @@ describe('formatTime', () => {
 
     it('0 second = 0 seconds', () => {
       const [value, unit] = makeFractionUnitTuple(F(0), 'second');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0 seconds',
         isPrecise: true,
@@ -187,7 +190,7 @@ describe('formatTime', () => {
 
     it('1 millisecond = 1ms', () => {
       const [value, unit] = makeFractionUnitTuple(F(1), 'millisecond');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1 millisecond',
         isPrecise: true,
@@ -201,7 +204,7 @@ describe('formatTime', () => {
 
     it('60 second = 1m', () => {
       const [value, unit] = makeFractionUnitTuple(F(60), 'second');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '60 seconds',
         isPrecise: true,
@@ -215,7 +218,7 @@ describe('formatTime', () => {
 
     it('90 second = 1m 30s', () => {
       const [value, unit] = makeFractionUnitTuple(F(90), 'second');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '90 seconds',
         isPrecise: true,
@@ -232,7 +235,7 @@ describe('formatTime', () => {
 
     it('1.5 hour = 1h 30m', () => {
       const [value, unit] = makeFractionUnitTuple(F(3, 2), 'hour');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1.5 hours',
         isPrecise: true,
@@ -249,7 +252,7 @@ describe('formatTime', () => {
 
     it('1.9 days = 1d 21h 36m', () => {
       const [value, unit] = makeFractionUnitTuple(F(19, 10), 'days');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1.9 days',
         isPrecise: true,
@@ -269,7 +272,7 @@ describe('formatTime', () => {
 
     it('14 days = 14 days', () => {
       const [value, unit] = makeFractionUnitTuple(F(14), 'days');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '14 days',
         isPrecise: true,
@@ -283,7 +286,7 @@ describe('formatTime', () => {
 
     it('2 weeks = 2 weeks', () => {
       const [value, unit] = makeFractionUnitTuple(F(2), 'weeks');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '2 weeks',
         isPrecise: true,
@@ -297,7 +300,7 @@ describe('formatTime', () => {
 
     it('1.5 month = 1.5 mon', () => {
       const [value, unit] = makeFractionUnitTuple(F(3, 2), 'months');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1.5 months',
         isPrecise: true,
@@ -313,7 +316,13 @@ describe('formatTime', () => {
 
     it('2 seconds in colon = 0:02', () => {
       const [value, unit] = makeFractionUnitTuple(F(2), 'seconds');
-      const res = formatTime('en-US', unit, value, { colonNotation: true });
+      const res = formatTime(
+        'en-US',
+        unit,
+        value,
+        { colonNotation: true },
+        formatAnyUnit
+      );
       expect(res).toEqual({
         asStringPrecise: '2 seconds',
         isPrecise: true,
@@ -328,7 +337,7 @@ describe('formatTime', () => {
 
     it('1/1000000 seconds in subtime = 1µs', () => {
       const [value, unit] = makeFractionUnitTuple(F(1, 1000000), 'seconds');
-      const res = formatTime('en-US', unit, value);
+      const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0.000001 seconds',
         isPrecise: true,
@@ -342,7 +351,13 @@ describe('formatTime', () => {
 
     it('12 months = 12 months', () => {
       const [value, unit] = makeFractionUnitTuple(F(12), 'months');
-      const res = formatTime('en-US', unit, value, { colonNotation: true });
+      const res = formatTime(
+        'en-US',
+        unit,
+        value,
+        { colonNotation: true },
+        formatAnyUnit
+      );
       expect(res).toEqual({
         asStringPrecise: '12 months',
         isPrecise: true,

@@ -12,5 +12,6 @@ export {
   setUnit,
   simplifyUnits,
 } from './units';
-export { type ErrSpec, InferError, getErrSpec } from './InferError';
+export { type ErrSpec, InferError } from './InferError';
+export { getErrSpec } from './getErrorSpec';
 export * as build from './build';

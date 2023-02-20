@@ -1,7 +1,7 @@
 import { Dimension, lowLevelGet } from '.';
 import { getLabelIndex } from '../dimtools';
 import { ColumnLike } from '../value';
-import { implementColumnLike } from './implementColumnLike';
+import { implementColumnLike } from './HypercubeAtIndex';
 import { MinimalHypercube } from './types';
 
 export const ConcatenatedColumn = implementColumnLike(

@@ -1,6 +1,6 @@
-import { LogicVar } from './LogicVar';
-import { Domain } from './Domain';
-import { LogicNumber } from './types';
+import type { LogicVar } from './LogicVar';
+import type { Domain } from './Domain';
+import type { LogicNumber } from './types';
 
 export const isBinding = (v: unknown): v is Binding => v instanceof Binding;
 

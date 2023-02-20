@@ -29,7 +29,6 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
-import { loadNotebooks } from '../../App';
 import {
   useCreateNotebookMutation,
   useCreateSectionMutation,
@@ -74,6 +73,9 @@ const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
 const loadEditUserModal = () =>
   import(/* webpackChunkName: "edit-user-modal" */ './EditUserModal');
 const EditUserModal = lazy(loadEditUserModal);
+
+export const loadNotebooks = () =>
+  import(/* webpackChunkName: "notebooks" */ '../../notebooks/Notebooks');
 
 // prefetch
 loadTopbar().then(loadNotebookList).then(loadSidebar);

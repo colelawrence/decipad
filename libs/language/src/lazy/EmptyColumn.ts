@@ -1,6 +1,6 @@
 import { Dimension } from '.';
 import { Value } from '../value';
-import { implementColumnLike } from './implementColumnLike';
+import { implementColumnLike } from './HypercubeAtIndex';
 import { MinimalHypercube } from './types';
 
 /**

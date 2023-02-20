@@ -9,12 +9,19 @@
       "options": {
         "lintFilePatterns": ["libs/y-dynamodb/**/*.ts"],
         "maxWarnings": 0
-      },
-      "typecheck": {
-        "executor": "@nrwl/workspace:run-commands",
-        "options": {
-          "command": "yarn tsc -b libs/y-dynamodb"
-        }
+      }
+    },
+    "typecheck": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/y-dynamodb"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/y-dynamodb"
       }
     }
   },

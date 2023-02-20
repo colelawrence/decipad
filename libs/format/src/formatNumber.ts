@@ -417,7 +417,13 @@ export function formatNumber(
     } else if (isUserDefined(units)) {
       deciNumber = formatUserDefinedUnit(locale, units, fraction);
     } else if (isTimeUnit(units)) {
-      deciNumber = formatTime(locale, units, fraction, { verbose: true });
+      deciNumber = formatTime(
+        locale,
+        units,
+        fraction,
+        { verbose: true },
+        formatAnyUnit
+      );
     } else {
       const scaledToUnit = convertToMultiplierUnit(fraction, units);
       deciNumber = formatAnyUnit(locale, units, scaledToUnit);

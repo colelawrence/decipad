@@ -1,6 +1,6 @@
 import { astNode } from '@decipad/editor-utils';
-import { ColumnAssign } from './getTableAstNodeFromTableElement';
-import { ColumnParseReturn } from './headerToColumn';
+import type { ColumnAssign } from './getTableAstNodeFromTableElement';
+import type { ColumnParseReturn } from './headerToColumn';
 
 export const toColumnAssign = (
   tableBlockId: string,

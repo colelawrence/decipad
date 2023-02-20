@@ -1,7 +1,7 @@
 import { MyEditor } from '@decipad/editor-types';
 import { insertText, getEditorString } from '@udecode/plate';
 import { BaseEditor, Range, Transforms, BasePoint, Editor } from 'slate';
-import { MenuItem } from './AutoCompleteMenu';
+import type { MenuItem } from './AutoCompleteMenu';
 
 export const commitAutocompleteItem = (
   editor: MyEditor,

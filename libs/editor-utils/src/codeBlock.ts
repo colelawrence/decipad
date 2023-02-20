@@ -1,13 +1,10 @@
 import { MyEditor } from '@decipad/editor-types';
 import { deleteText, getEditorString } from '@udecode/plate';
 import { Path } from 'slate';
-import {
-  insertNodes,
-  requireBlockParentPath,
-  requirePathBelowBlock,
-} from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
 import { createStructuredCodeLine, createCodeLine } from './createCodeLine';
+import { insertNodes } from './insertNodes';
+import { requireBlockParentPath, requirePathBelowBlock } from './path';
 
 export const insertCodeLineBelow = (
   editor: MyEditor,

@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import { getDefined } from '@decipad/utils';
-import { win, fail, nil } from './Logic';
+import { win, fail, nil } from './logicUtils';
 import { isLvar, LogicVar } from './LogicVar';
-import { Package } from './Package';
+import type { Package } from './Package';
 import { Stream } from './Stream';
 import { ConstraintFn, makeConstraint } from './Constraint';
 import { Val } from './Binding';

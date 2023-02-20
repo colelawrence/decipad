@@ -2,11 +2,11 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_STRUCTURED_IN,
 } from '@decipad/editor-types';
-import {
+import type {
   ColumnGroupName,
   ColumnWidths,
-  initialGroups,
 } from './BlockLengthSynchronizationProvider';
+import { initialGroups } from './initialGroups';
 
 const blockTypes = new Set([ELEMENT_CODE_LINE_V2, ELEMENT_STRUCTURED_IN]);
 

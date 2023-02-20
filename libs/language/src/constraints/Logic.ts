@@ -1,15 +1,15 @@
 import DeciNumber from '@decipad/number';
 import { inf, minusInf } from './consts';
 import { Domain, getDomain, intersection, makeDomain } from './Domain';
-import { EMPTY_PACKAGE, Package } from './Package';
+import { Package } from './Package';
 import { ConstraintFn, runConstraints } from './Constraint';
-import { EMPTY_STREAM, makeStream } from './Stream';
 import { isLvar, LogicVar } from './LogicVar';
 import { makeBinding, Val } from './Binding';
 import { Frame } from './Frame';
 import { Goal, makeGoal } from './Goal';
 import { isLogicNumber } from './utils';
 import { equals } from './Infinity';
+import { win, fail } from './logicUtils';
 
 export const dom = (x: LogicVar, min: DeciNumber, max: DeciNumber) => {
   return (p: Package) => {
@@ -151,8 +151,6 @@ export const mulC: ConstraintFn = (
   };
 };
 
-export const nil = EMPTY_PACKAGE; // a goal needs a package; therefore it initially receives 'nil' (the first package)
-
 export const unify = (
   a: LogicVar | Val | undefined,
   b: LogicVar | Val | undefined,
@@ -195,7 +193,3 @@ export const eq = (a: LogicVar | Val, b: LogicVar | Val) => {
     return fail();
   };
 };
-
-export const win = (pack: Package) => makeStream(pack || nil);
-
-export const fail = () => EMPTY_STREAM;

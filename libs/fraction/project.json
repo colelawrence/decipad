@@ -23,6 +23,13 @@
       "options": {
         "jestConfig": "libs/fraction/jest.config.js"
       }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/fraction"
+      }
     }
   },
   "tags": []

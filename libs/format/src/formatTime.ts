@@ -7,7 +7,7 @@ import {
   Unit,
 } from '@decipad/language';
 import pluralize from 'pluralize';
-import { IntermediateDeciNumber, formatAnyUnit } from './formatNumber';
+import type { IntermediateDeciNumber } from './formatNumber';
 import { Options, prettifyTimeMs as getPrettyPartsOfTime } from './parseMs';
 
 const ms = [parseUnit('millisecond')] as Unit[];
@@ -32,7 +32,12 @@ export function formatTime(
   locale: string,
   units: Unit[],
   n: DeciNumber,
-  args: Partial<Options> = {}
+  args: Partial<Options>,
+  formatAnyUnit: (
+    loc: string,
+    un: Unit[],
+    nu: DeciNumber
+  ) => IntermediateDeciNumber
 ): IntermediateDeciNumber {
   const [inMsTF, simplify] = fromTimeUnitToTimeBase(units, n);
   const value = inMsTF.valueOf();

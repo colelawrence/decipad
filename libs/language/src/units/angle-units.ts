@@ -1,6 +1,6 @@
 import DeciNumber, { N } from '@decipad/number';
 import { identity, invert } from '../utils';
-import { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from './known-units';
 
 const PI = N(3141592653589793, 10 ** 15);
 

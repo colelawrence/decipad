@@ -18,7 +18,7 @@ jobs:
       - name: Install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
-        run: yarn install
+        run: yarn install --ignore-engines
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16

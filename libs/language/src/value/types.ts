@@ -1,7 +1,7 @@
 import { DeepReadonly } from 'utility-types';
 import { Interpreter } from '..';
 import { Dimension } from '../lazy';
-import {
+import type {
   UnknownValue,
   NumberValue,
   StringValue,

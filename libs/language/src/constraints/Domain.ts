@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import DeciNumber, { ZERO } from '@decipad/number';
-import { Val } from './Binding';
+import type { Val } from './Binding';
 import { inf, minusInf } from './consts';
 import {
   greaterThanOrEqualTo,

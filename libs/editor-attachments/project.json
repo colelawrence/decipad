@@ -16,6 +16,13 @@
       "options": {
         "command": "yarn tsc -b libs/editor-attachments"
       }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/editor-attachments"
+      }
     }
   },
   "tags": []

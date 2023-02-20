@@ -1,6 +1,9 @@
-import { ColumnLike } from '../value';
-import { implementColumnLike } from './implementColumnLike';
+import { getDefined } from '@decipad/utils';
+import { Class } from 'utility-types';
+import { ColumnLike, Value } from '../value';
 import { MinimalHypercube } from './types';
+import { OneResult } from '../interpreter/interpreter-types';
+import { materialize } from './materialize';
 
 /**
  * Used to lazily lookup into a hypercube
@@ -36,3 +39,38 @@ export const HypercubeAtIndex = implementColumnLike(
     }
   }
 );
+
+/**
+ * Extend hypercube-like class `Cls` such that it implements the `ColumnLike` interface
+ */
+export function implementColumnLike<T extends Class<MinimalHypercube>>(Cls: T) {
+  return class ColumnLikeMixin extends Cls implements ColumnLike {
+    get values() {
+      const values: Value[] = [];
+      for (let index = 0; index < this.rowCount; index++) {
+        values.push(this.atIndex(index));
+      }
+      return values;
+    }
+
+    get rowCount() {
+      const firstDim = getDefined(
+        this.dimensions[0],
+        'panic: getting row count from non-dimensional value'
+      );
+      return firstDim.dimensionLength;
+    }
+
+    atIndex(i: number): Value {
+      if (this.dimensions.length === 1) {
+        return this.lowLevelGet(i);
+      } else {
+        return new HypercubeAtIndex(this, i);
+      }
+    }
+
+    getData(): OneResult {
+      return materialize(this);
+    }
+  };
+}

@@ -2,16 +2,9 @@ import { css } from '@emotion/react';
 import { noop } from 'lodash';
 import { FC } from 'react';
 import { normalOpacity, transparency } from '../../primitives';
-import { statusColors, TColorStatus } from '../../utils';
+import { statusColors } from '../../utils';
 import { ColorStatusCircle } from './ColorStatusCircle';
-
-export type ColorStatusProps = {
-  readonly name: TColorStatus;
-  readonly selected?: boolean;
-  readonly variantStyles?: boolean;
-  readonly onChangeStatus?: (status: TColorStatus) => void;
-  readonly toggleActionsOpen?: () => void;
-};
+import { ColorStatusProps } from './ColorStatusProps';
 
 export const ColorStatus = ({
   name = 'draft',

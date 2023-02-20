@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Dot } from '..';
 import { statusColors } from '../../utils';
-import { ColorStatusProps } from './ColorStatus';
+import { ColorStatusProps } from './ColorStatusProps';
 
-export const ColorStatusCircle = ({
+export const ColorStatusCircle: FC<ColorStatusProps> = ({
   name = 'draft',
-}: ColorStatusProps): ReturnType<FC> => {
+}: ColorStatusProps) => {
   return <Dot color={statusColors[name]} variant />;
 };

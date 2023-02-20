@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
 const N_10 = N(10);

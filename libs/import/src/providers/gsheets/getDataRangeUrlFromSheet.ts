@@ -2,7 +2,7 @@ import { thirdParty } from '@decipad/client-config';
 import { stringify as encodeQuery } from 'querystring';
 import { SheetMeta } from '../../types';
 import { sheetColumnName } from '../../utils/sheetColumnName';
-import { Island } from '../../utils/sheetIslands';
+import type { Island } from '../../utils/sheetIslands';
 
 const islandToRange = (sheetName: string, island: Island): string => {
   return `${sheetName}!${sheetColumnName(island.firstCol + 1)}${

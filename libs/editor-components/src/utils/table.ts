@@ -11,7 +11,7 @@ import {
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { GetAvailableIdentifier } from './slashCommands';
+import type { GetAvailableIdentifier } from './slashCommands';
 
 const initialTableElement = () => {
   return {

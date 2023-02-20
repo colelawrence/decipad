@@ -1,4 +1,4 @@
-import * as SerializedTypes from './SerializedTypes';
+import type * as SerializedTypes from './SerializedTypes';
 import { Type } from '.';
 
 export type { SerializedTypes };

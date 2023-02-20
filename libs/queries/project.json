@@ -10,6 +10,13 @@
         "lintFilePatterns": ["libs/queries/**/*.{ts,tsx,js,jsx}"],
         "maxWarnings": 0
       }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/queries"
+      }
     }
   },
   "tags": []

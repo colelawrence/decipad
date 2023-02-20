@@ -48,7 +48,7 @@ import {
   yellow700,
   yellow800,
 } from '../color';
-import { cssVar, CssVariables } from '../var';
+import { CssVariables } from '../CssVariables';
 
 export const theme: CssVariables = {
   theme: 'dark',
@@ -139,7 +139,7 @@ export const theme: CssVariables = {
 
   mutationAnimationColor: yellow700.hex,
 
-  currentTextColor: cssVar('normalTextColor'),
+  currentTextColor: dark200.hex,
 
   structuredCalculationSimpleColor: brand800.hex,
   structuredCalculationVariableColor: yellow800.hex,

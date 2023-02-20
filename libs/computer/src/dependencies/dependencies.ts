@@ -1,5 +1,5 @@
 import { AST } from '..';
-import { Computer } from '../computer/Computer';
+import type { Computer } from '../computer/Computer';
 import { getExprRef } from '../exprRefs';
 import { BlocksInUseInformation, Program } from '../types';
 

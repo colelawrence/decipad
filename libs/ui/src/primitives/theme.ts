@@ -1,5 +1,6 @@
+import { CssVariables } from './CssVariables';
 import { theme } from './themes/dark';
-import { CssVariableKey, CssVariables, setCssVar } from './var';
+import { CssVariableKey, setCssVar } from './var';
 
 export const darkTheme: Record<
   CssVariableKey<keyof CssVariables>,

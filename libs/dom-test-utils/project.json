@@ -16,6 +16,13 @@
       "options": {
         "command": "yarn tsc -b libs/dom-test-utils"
       }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/dom-test-utils"
+      }
     }
   },
   "tags": []

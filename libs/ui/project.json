@@ -24,6 +24,13 @@
         "command": "yarn tsc -b libs/ui"
       }
     },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/ui"
+      }
+    },
     "storybook": {
       "executor": "@nrwl/storybook:storybook",
       "options": {

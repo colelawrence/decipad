@@ -2,7 +2,7 @@ import DeciNumber, { N, ZERO } from '@decipad/number';
 import { lenientZip } from '@decipad/utils';
 import { produce } from 'immer';
 import type { Type } from '..';
-import pluralize from '../pluralize';
+import pluralize from '../langPluralize';
 import {
   areUnitsCompatible,
   expandUnits,

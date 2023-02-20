@@ -1,7 +1,6 @@
 import { immerable } from 'immer';
 import type { Time, Unit } from '..';
-import type { SerializedType } from './SerializedType';
-import { Type } from './Type';
+import type { Type } from './Type';
 
 export type ErrSpec =
   | {
@@ -308,19 +307,5 @@ export class InferError extends Error {
       return `/docs/basic-concepts/retired-features#${this.spec.featureName}`;
     }
     return `/docs/basic-concepts/language-errors#${this.spec.errType}`;
-  }
-}
-
-export function getErrSpec(
-  type: Type | SerializedType | null | undefined
-): ErrSpec | undefined {
-  if (type == null) {
-    return undefined;
-  } else if (type instanceof Type) {
-    return type.errorCause?.spec;
-  } else if (type.kind === 'type-error') {
-    return type.errorCause;
-  } else {
-    return undefined;
   }
 }

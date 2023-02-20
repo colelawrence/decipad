@@ -2,7 +2,7 @@ import { Result } from '@decipad/computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
-import { ImportOptions } from './import';
+import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
 import { sameType } from './utils/sameType';
 

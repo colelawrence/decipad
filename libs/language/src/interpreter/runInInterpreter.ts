@@ -2,7 +2,9 @@ import { getDefined } from '@decipad/utils';
 import type { AST } from '..';
 import { block } from '../utils';
 import { inferProgram } from '../infer';
-import { evaluate, Realm, Interpreter } from './index';
+import { Realm } from './Realm';
+import type * as Interpreter from './interpreter-types';
+import { evaluate } from './evaluate';
 import { evaluateTargets } from './selective';
 // TODO replace these with the ones in src/run, or move them there
 

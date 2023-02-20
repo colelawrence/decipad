@@ -10,7 +10,7 @@ import {
   unitIsSymbol,
 } from '@decipad/language';
 import produce from 'immer';
-import { DeciNumberPart } from './formatNumber';
+import type { DeciNumberPart } from './formatNumber';
 
 const numberToSubOrSuperscript: Record<string, string[]> = {
   '0': ['₀', '⁰'], // subscript not used for now

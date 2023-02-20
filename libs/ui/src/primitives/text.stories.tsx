@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { Meta } from '@storybook/react';
-import * as textExports from './text';
 import {
   banner,
   code,
@@ -26,7 +25,6 @@ import {
   p8Medium,
 } from './text';
 // eslint-disable-next-line import/no-self-import
-import * as storyExports from './text.stories';
 
 export default {
   title: 'Primitives / Text',
@@ -109,13 +107,3 @@ export const P32Medium: React.FC<React.PropsWithChildren<unknown>> = ({
 export const Code: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => <p css={css(code)}>{children}</p>;
-
-// make sure all types of text are covered by stories
-if (
-  Object.keys(storyExports).filter((name) => name !== 'default').length !==
-  Object.keys(textExports).filter((name) => name !== 'GlobalTextStyles').length
-)
-  console.error(
-    'Not all text styles covered by stories! Text style exports:',
-    Object.keys(textExports)
-  );

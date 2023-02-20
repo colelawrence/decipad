@@ -42,7 +42,7 @@ export {
   SyntaxError,
 } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export * from './pluralize';
+export * from './langPluralize';
 export { previousRefSymbols } from './previous-ref';
 export { serializeResult, validateResult } from './result';
 export * as Result from './result';

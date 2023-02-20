@@ -4,7 +4,8 @@ import {
   serializeType,
 } from '@decipad/language';
 import produce from 'immer';
-import { formatType, formatTypeToBasicString } from './formatType';
+import { formatType } from './formatType';
+import { formatTypeToBasicString } from './formatTypeBasic';
 import { u, U } from './testUtils';
 
 const locale = 'en-US';

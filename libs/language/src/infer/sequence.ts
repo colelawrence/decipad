@@ -13,7 +13,6 @@ import {
   dateNodeToTimeUnit,
   sortTimeUnits,
 } from '../date';
-import { inferExpression } from './index';
 import { Context } from './context';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
@@ -125,7 +124,8 @@ export const getDateSequenceIncrement = (
 
 export const inferSequence = async (
   ctx: Context,
-  expr: AST.Sequence
+  expr: AST.Sequence,
+  inferExpression: (ctx: Context, expr: AST.Expression) => Promise<Type>
 ): Promise<Type> => {
   const [startN, endN, byN] = expr.args;
   const startType = await inferExpression(ctx, startN);

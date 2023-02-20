@@ -17,6 +17,13 @@
         "command": "yarn tsc -b libs/feature-flags"
       }
     },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/feature-flags"
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/feature-flags"],

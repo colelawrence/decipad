@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from './known-units';
 import { identity, invert } from '../utils';
 
 export const oneInch = N(254, 10_000);

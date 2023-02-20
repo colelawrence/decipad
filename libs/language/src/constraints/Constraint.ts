@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
-import { Val } from './Binding';
+import type { Val } from './Binding';
 import type { List } from './List';
-import { LogicVar } from './LogicVar';
+import type { LogicVar } from './LogicVar';
 import type { Package } from './Package';
 
 export type ConstraintFn = (

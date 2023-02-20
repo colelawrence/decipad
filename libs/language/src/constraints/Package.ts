@@ -1,4 +1,4 @@
-import { Domain } from './Domain';
+import type { Domain } from './Domain';
 import { EMPTY_LIST, List } from './List';
 import { Binding, isBinding, makeBinding, Val } from './Binding';
 import { isLvar, LogicVar } from './LogicVar';

@@ -1,5 +1,5 @@
 import { ErrSpec, serializeType } from '@decipad/language';
-import { formatTypeToBasicString } from './formatType';
+import { formatTypeToBasicString } from './formatTypeBasic';
 import { formatUnit } from './formatUnit';
 
 // istanbul ignore next

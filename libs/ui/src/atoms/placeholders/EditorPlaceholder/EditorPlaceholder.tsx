@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { ParagraphPlaceholder } from '../index';
-import { Divider, Placeholder } from '../../index';
 import { slimBlockWidth } from '../../../styles/editor-layout';
+import { Divider } from '../../Divider/Divider';
+import { Placeholder } from '../../Placeholder/Placeholder';
+import { ParagraphPlaceholder } from '../ParagraphPlaceholder/ParagraphPlaceholder';
 
 const wrapperStyles = css({
   paddingTop: '24px',

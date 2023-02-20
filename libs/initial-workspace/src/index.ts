@@ -1,4 +1,4 @@
-import { Document } from '@decipad/editor-types';
+import type { Document } from '@decipad/editor-types';
 import gettingStarted from './gettingStarted.json';
 import tutorialNotebook from './tutorialNotebook.json';
 

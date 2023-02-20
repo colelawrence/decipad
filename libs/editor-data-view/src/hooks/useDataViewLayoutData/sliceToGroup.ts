@@ -1,7 +1,7 @@
 import { Result, SerializedType } from '@decipad/computer';
 import { BehaviorSubject } from 'rxjs';
 import { DataGroup, PreviousColumns, VirtualColumn } from '../../types';
-import { GenerateGroups, GenerateSubSmartRow } from './generateGroups';
+import type { GenerateGroups, GenerateSubSmartRow } from './generateGroups';
 
 interface SliceToGroupProps {
   isExpanded: boolean;

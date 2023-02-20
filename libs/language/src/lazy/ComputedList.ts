@@ -1,6 +1,6 @@
 import { getOnly } from '@decipad/utils';
 import type { Value } from '../value';
-import { implementColumnLike } from './implementColumnLike';
+import { implementColumnLike } from './HypercubeAtIndex';
 import type { Dimension, MinimalHypercube } from './types';
 
 type FromIndexFn = (index: number) => Value;

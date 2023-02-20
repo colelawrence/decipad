@@ -1,4 +1,4 @@
-import { singular, addIrregularRule } from '../pluralize';
+import { singular, addIrregularRule } from '../langPluralize';
 
 export function normalizeUnitName(unit: string): string {
   return singular(unit.toLocaleLowerCase());

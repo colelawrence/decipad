@@ -1,4 +1,4 @@
-import { UnitOfMeasure } from './known-units';
+import type { UnitOfMeasure } from './known-units';
 import { identity } from '../utils';
 
 export const units: UnitOfMeasure[] = [
