@@ -29,7 +29,8 @@ const wrapperStyles = css({
 const highlightStyles = css(resultBubbleStyles, {
   display: 'inline-block',
   color: cssVar('magicNumberTextColor'),
-  padding: 2,
+  padding: '1px 6px 0px 6px',
+  lineHeight: '1.3',
   '@media print': {
     color: 'unset',
   },

@@ -6,7 +6,7 @@ export const resultBubbleStyles: CSSObject = {
   borderRadius: 8,
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('borderColor')}`,
-  filter: `drop-shadow(0px 2px 0px ${cssVar('borderColor')})`,
+  filter: `drop-shadow(0px 1px 0px ${cssVar('borderColor')})`,
   '@media print': {
     backgroundColor: 'unset',
     border: 'unset',
