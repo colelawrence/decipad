@@ -67,46 +67,37 @@ export type DeciNumberRep = {
 export type IntermediateDeciNumber = Omit<DeciNumberRep, 'asString'>;
 
 function beautifyExponents(partsOf: DeciNumberPart[]): DeciNumberPart[] {
-  let ret: DeciNumberPart[] = [];
-  let unclean = false;
+  const unclean = partsOf.reduce((acc, e) => {
+    return acc || (e.type === 'exponentInteger' && e.value === '0');
+  }, false);
 
-  partsOf.map((e) => {
-    if (
-      e.type === 'exponentInteger' ||
-      e.type === 'exponentMinusSign' ||
-      e.type === 'exponentSeparator'
-    ) {
-      if (!(e.type === 'exponentInteger' && e.value === '0')) {
-        if (e.type === 'exponentSeparator') {
-          ret.push({
+  const ret = partsOf
+    .filter((e) => {
+      if (!unclean) return true;
+      return !(e.type === 'exponentInteger' || e.type === 'exponentSeparator');
+    })
+    .map((e): DeciNumberPart => {
+      switch (e.type) {
+        case 'exponentSeparator': {
+          return {
             type: 'exponentSeparator',
             originalValue: e.value,
             value: '×10',
-          });
-        } else {
-          ret.push({
+          };
+        }
+        case 'exponentInteger':
+        case 'exponentMinusSign': {
+          return {
             type: e.type,
             originalValue: e.value,
             value: prettyENumbers(e.value),
-          });
+          };
         }
-      } else {
-        // ignore 1E0 which is just 1.
-        unclean = true;
+        default: {
+          return e;
+        }
       }
-    } else {
-      ret.push(e);
-    }
-  });
-
-  ret = ret.filter((_, pos) => {
-    if (unclean) {
-      // remove first exponentSeparator, for style
-      const firstExpAt = ret.findIndex((e) => e.type === 'exponentSeparator');
-      return firstExpAt !== pos;
-    }
-    return true;
-  });
+    });
 
   return ret;
 }
