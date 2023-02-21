@@ -1,10 +1,13 @@
 import { NotebookTopbar } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import { FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { Notebook } from './hooks/useNotebookStateAndActions';
 
-type TopbarProps = {
+type TopbarProps = Pick<
+  ComponentProps<typeof NotebookTopbar>,
+  'userWorkspaces'
+> & {
   readonly notebook: Notebook;
   readonly hasLocalChanges: BehaviorSubject<boolean> | undefined;
   readonly hasUnpublishedChanges: boolean;
@@ -18,6 +21,7 @@ type TopbarProps = {
 };
 
 const Topbar: FC<TopbarProps> = ({
+  userWorkspaces,
   notebook,
   hasLocalChanges,
   hasUnpublishedChanges,
@@ -36,6 +40,7 @@ const Topbar: FC<TopbarProps> = ({
   return (
     <NotebookTopbar
       notebook={notebook}
+      userWorkspaces={userWorkspaces}
       workspace={notebook.workspace}
       usersWithAccess={notebook.access.users}
       permission={notebook.myPermissionType}

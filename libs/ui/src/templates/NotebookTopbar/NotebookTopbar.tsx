@@ -5,7 +5,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useCallback, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
 import { Deci, LeftArrow, Cards } from '../../icons';
@@ -92,6 +92,7 @@ export type NotebookTopbarProps = Pick<
 > &
   ComponentProps<typeof NotebookPublishingPopUp> & {
     permission?: PermissionType | null;
+    userWorkspaces?: Array<{ id: string; name: string }>;
     workspace?: { id: string; name: string } | null;
     onDuplicateNotebook?: () => void;
     onRevertChanges?: () => void;
@@ -101,6 +102,7 @@ export type NotebookTopbarProps = Pick<
   };
 
 export const NotebookTopbar = ({
+  userWorkspaces,
   workspace,
   notebook,
   onDuplicateNotebook = noop,
@@ -132,13 +134,29 @@ export const NotebookTopbar = ({
   }, [clientEvent]);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
   const onBack = useCallback(() => {
-    if (workspace) {
+    if (workspace && userWorkspaces && userWorkspaces.length > 0) {
+      // If location.key is default that means it is the first location
+      // of the app (so react router doesn't know where to go back to).
+      if (location.key === 'default') {
+        navigate(
+          workspaces({})
+            .workspace({
+              workspaceId: userWorkspaces[0].id,
+            })
+            .shared({}).$
+        );
+      } else {
+        navigate(-1);
+      }
+
       navigate(workspaces({}).workspace({ workspaceId: workspace.id }).$);
     } else {
       navigate('/');
     }
-  }, [navigate, workspace]);
+  }, [navigate, workspace, location.key, userWorkspaces]);
 
   return (
     <div css={wrapperStyles}>

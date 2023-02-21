@@ -13,7 +13,10 @@ import {
   TopbarPlaceholder,
 } from '@decipad/ui';
 import { FC, lazy, useCallback, useMemo, useState } from 'react';
-import { useRenameNotebookMutation } from '../../graphql';
+import {
+  useGetWorkspacesIDsQuery,
+  useRenameNotebookMutation,
+} from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useChecklist } from './hooks/useChecklist';
@@ -68,6 +71,8 @@ const Notebook: FC = () => {
     editor,
     docsync,
   });
+
+  const [userWorkspaces] = useGetWorkspacesIDsQuery();
 
   const [, renameNotebook] = useRenameNotebookMutation();
 
@@ -179,6 +184,7 @@ const Notebook: FC = () => {
               suspenseFallback={<TopbarPlaceholder />}
             >
               <Topbar
+                userWorkspaces={userWorkspaces.data?.workspaces}
                 notebook={notebook}
                 hasLocalChanges={hasLocalChanges}
                 hasUnpublishedChanges={hasUnpublishedChanges}
