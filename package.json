@@ -278,7 +278,7 @@
     "@nrwl/storybook": "15.4.2",
     "@nrwl/web": "15.4.2",
     "@nrwl/workspace": "15.4.2",
-    "@percy/cli": "1.18.0",
+    "@percy/cli": "1.20.0",
     "@percy/playwright": "1.0.4",
     "@sentry/webpack-plugin": "^1.20.0",
     "@storybook/addon-a11y": "6.5.12",
