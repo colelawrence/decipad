@@ -70,7 +70,7 @@ export const TableCellControls = forwardRef<
         verticalAlign: 'middle',
       }}
     >
-      {!readOnly ? (
+      {!readOnly && (
         <div css={gridStyles()}>
           <MenuList
             root
@@ -79,7 +79,7 @@ export const TableCellControls = forwardRef<
             trigger={menuButton}
             dropdown
           >
-            {onRemove ? (
+            {onRemove && (
               <MenuItem
                 icon={<Trash />}
                 onSelect={() => onRemove()}
@@ -87,7 +87,7 @@ export const TableCellControls = forwardRef<
               >
                 Delete row
               </MenuItem>
-            ) : null}
+            )}
           </MenuList>
 
           <Tooltip trigger={menuButton} side="left">
@@ -101,13 +101,29 @@ export const TableCellControls = forwardRef<
                 }
               )}
             >
-              <strong css={css(p12Medium)}>Drag</strong> to move
+              <strong
+                css={css([
+                  p12Medium,
+                  setCssVar('currentTextColor', cssVar('backgroundColor')),
+                ])}
+              >
+                Drag
+              </strong>{' '}
+              to move
               <br />
-              <strong css={css(p12Medium)}>Click</strong> for options
+              <strong
+                css={css([
+                  p12Medium,
+                  setCssVar('currentTextColor', cssVar('backgroundColor')),
+                ])}
+              >
+                Click
+              </strong>{' '}
+              for options
             </span>
           </Tooltip>
         </div>
-      ) : null}
+      )}
     </th>
   );
 });
