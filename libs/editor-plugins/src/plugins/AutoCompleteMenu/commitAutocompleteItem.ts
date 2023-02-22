@@ -1,6 +1,12 @@
 import { MyEditor } from '@decipad/editor-types';
-import { insertText, getEditorString } from '@udecode/plate';
-import { BaseEditor, Range, Transforms, BasePoint, Editor } from 'slate';
+import {
+  deleteText,
+  getEditorString,
+  getStartPoint,
+  insertText,
+  select,
+} from '@udecode/plate';
+import { BasePoint, Range } from 'slate';
 import type { MenuItem } from './AutoCompleteMenu';
 
 export const commitAutocompleteItem = (
@@ -10,8 +16,8 @@ export const commitAutocompleteItem = (
 ) => {
   const characterBefore = getCharacterBeforeCursor(editor, Range.start(at));
 
-  Transforms.select(editor as BaseEditor, at);
-  Transforms.delete(editor as BaseEditor);
+  select(editor, at);
+  deleteText(editor);
 
   if (needsSpaceAfter(characterBefore)) {
     insertText(editor, ' ');
@@ -29,6 +35,6 @@ const needsSpaceAfter = (character: string) =>
 
 const getCharacterBeforeCursor = (editor: MyEditor, cursor: BasePoint) =>
   getEditorString(editor, {
-    anchor: Editor.start(editor as BaseEditor, cursor.path),
+    anchor: getStartPoint(editor, cursor.path),
     focus: { path: cursor.path, offset: cursor.offset },
   }).slice(-1);

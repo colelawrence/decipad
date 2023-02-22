@@ -1,6 +1,5 @@
 import { createTPlateEditor } from '@decipad/editor-types';
-import { createLinkPlugin } from '@udecode/plate';
-import { BaseEditor, Transforms } from 'slate';
+import { createLinkPlugin, select } from '@udecode/plate';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
 
 const lastChar = 'text'.length;
@@ -49,8 +48,6 @@ it.each([
     },
   ];
 
-  Transforms.select(editor as BaseEditor, location);
-  expect(
-    isCursorAtBlockEdge(editor as BaseEditor, edge as 'start' | 'end')
-  ).toBe(expected);
+  select(editor, location);
+  expect(isCursorAtBlockEdge(editor, edge as 'start' | 'end')).toBe(expected);
 });

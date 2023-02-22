@@ -1,0 +1,2 @@
+"use strict";exports.id=8150,exports.ids=[8150],exports.modules={51604:(t,e,i)=>{i.r(e),i.d(e,{loadLegacyVideoPlugins:()=>r});var n=i(73930);function r(t){return(0,n.mG)(this,void 0,void 0,(function(){var e;return(0,n.Jh)(this,(function(n){switch(n.label){case 0:return[4,i.e(1156).then(i.t.bind(i,11156,23))];case 1:return e=n.sent(),t._plugins=e,[2]}}))}))}}};
+//# sourceMappingURL=legacyVideos.24fed420.chunk.js.map

@@ -23,6 +23,7 @@ import {
   moveNodes,
   PlateEditor,
   serializeHtml,
+  withoutNormalizing,
 } from '@udecode/plate';
 import {
   useComputer,
@@ -39,7 +40,7 @@ import {
   useNodePath,
   wrapIntoColumns,
 } from '@decipad/editor-utils';
-import { Editor, Path } from 'slate';
+import { Path } from 'slate';
 import copy from 'copy-to-clipboard';
 import { ClientEventsContext } from '@decipad/client-events';
 import { defaultMoveNode } from '../utils/useDnd';
@@ -188,7 +189,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         return defaultMoveNode(editor, item, element.id, direction);
       }
 
-      Editor.withoutNormalizing(editor as Editor, () => {
+      withoutNormalizing(editor, () => {
         const dragPath = findNode(editor, {
           at: [],
           match: { id: item.id },

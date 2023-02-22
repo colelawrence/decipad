@@ -218,7 +218,7 @@
     "search-query-parser": "^1.6.0",
     "sharp": "^0.31.3",
     "simple-cookie": "1.0.13",
-    "slate": "0.88.1",
+    "slate": "0.90.0",
     "slate-history": "0.86.0",
     "slate-hyperscript": "0.77.0",
     "slate-react": "0.89.0",

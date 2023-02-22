@@ -1,30 +1,31 @@
-import { BaseEditor, BaseRange, Point, Transforms } from 'slate';
+import { BaseRange, Point } from 'slate';
 import {
   BlockElement,
   CodeLineElement,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
+  MARK_MAGICNUMBER,
+  MyEditor,
   ParagraphElement,
   RichText,
-  MyEditor,
-  MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import {
-  pluginStore,
-  getAboveNodeSafe,
-  isElementOfType,
-  insertNodes,
   createStructuredCodeLine,
+  getAboveNodeSafe,
+  insertNodes,
+  isElementOfType,
+  pluginStore,
 } from '@decipad/editor-utils';
 import {
   getBlockAbove,
+  getEndPoint,
   getNodeString,
+  insertText,
   isCollapsed,
   isElement,
+  select,
   setNodes,
-  getEndPoint,
   toDOMNode,
-  insertText,
 } from '@udecode/plate';
 import { Computer, getExprRef } from '@decipad/computer';
 import { ShadowCalcReference } from '@decipad/react-contexts';
@@ -94,7 +95,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
 
               insertNodes(editor, newCodeLine, { at: paragraphPath });
               const codeTextPath = [...paragraphPath, 1];
-              Transforms.select(editor as BaseEditor, codeTextPath);
+              select(editor, codeTextPath);
               return;
             }
 

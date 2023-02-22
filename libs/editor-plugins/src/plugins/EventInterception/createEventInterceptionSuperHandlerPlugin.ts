@@ -6,8 +6,15 @@ import {
   MyElementEntry,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { getNodeParent, isCollapsed, isElement } from '@udecode/plate';
-import { BaseEditor, Editor, Location } from 'slate';
+import {
+  getLevels,
+  getNextNode,
+  getNodeParent,
+  getPreviousNode,
+  isCollapsed,
+  isElement,
+} from '@udecode/plate';
+import { Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
 
@@ -36,10 +43,10 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
         const parentNode = getNodeParent(editor, cursorPath);
 
         if (topLevel) {
-          const prevBlock = Editor.previous(editor as BaseEditor, {
+          const prevBlock = getPreviousNode(editor, {
             at: topLevel[1],
           });
-          const nextBlock = Editor.next(editor as BaseEditor, {
+          const nextBlock = getNextNode(editor, {
             at: topLevel[1],
           });
 
@@ -56,7 +63,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
           switch (event.key) {
             case 'Backspace': {
               // Handle problematic delete (at start of text node)
-              if (isCursorAtBlockEdge(editor as BaseEditor, 'start')) {
+              if (isCursorAtBlockEdge(editor, 'start')) {
                 const wasHandled = bubbleCancelableEvent(
                   editor,
                   { type: 'delete-text-start', event },
@@ -80,7 +87,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
             case 'Delete': {
               // Handle problematic delete (at end of text node)
 
-              if (isCursorAtBlockEdge(editor as BaseEditor, 'end')) {
+              if (isCursorAtBlockEdge(editor, 'end')) {
                 const wasHandled = bubbleCancelableEvent(
                   editor,
                   { type: 'delete-text-end', event },
@@ -124,7 +131,7 @@ function bubbleCancelableEvent(
   bubbleAt?: Location
 ): boolean {
   const elementsBubblePath = [
-    ...Editor.levels(editor as BaseEditor, {
+    ...getLevels(editor, {
       match: isElement,
       reverse: true,
       at: bubbleAt,

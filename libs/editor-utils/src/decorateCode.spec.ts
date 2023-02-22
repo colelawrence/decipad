@@ -2,20 +2,20 @@ import {
   CodeLineElement,
   DECORATE_AUTO_COMPLETE_MENU,
   DECORATE_CODE_VARIABLE,
+  ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_CODE_LINE,
   ELEMENT_H1,
-  MyEditor,
-  MyValue,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TABLE_CAPTION,
-  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TR,
+  ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
+  ELEMENT_TR,
+  MyEditor,
   MyElementEntry,
+  MyValue,
 } from '@decipad/editor-types';
 import { getDefined, getOnly } from '@decipad/utils';
 import {
@@ -24,7 +24,7 @@ import {
   findNode,
   getSelectionText,
 } from '@udecode/plate';
-import { BaseEditor, NodeEntry, Path } from 'slate';
+import { NodeEntry, Path } from 'slate';
 import { decorateCode, getRootNodeId } from './decorateCode';
 import { insertNodes } from './insertNodes';
 
@@ -34,7 +34,7 @@ beforeEach(() => {
   editor = createPlateEditor();
 });
 
-const testDecorate = (text: string, override: Partial<BaseEditor> = {}) => {
+const testDecorate = (text: string, override: Partial<MyEditor> = {}) => {
   codeLine = {
     type: ELEMENT_CODE_LINE,
     id: 'codeline',

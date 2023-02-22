@@ -33,12 +33,13 @@ import {
   moveNodes,
   PlateEditor,
   serializeHtml,
+  withoutNormalizing,
 } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
 import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { ComponentProps, useCallback, useContext, useState } from 'react';
-import { Editor, Path } from 'slate';
+import { Path } from 'slate';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
 
@@ -170,7 +171,7 @@ export const VariableDef: PlateComponent = ({
         return defaultMoveNode(editor, item, element.id, direction);
       }
 
-      Editor.withoutNormalizing(editor as Editor, () => {
+      withoutNormalizing(editor, () => {
         const dragPath = findNode(editor, {
           at: [],
           match: { id: item.id },

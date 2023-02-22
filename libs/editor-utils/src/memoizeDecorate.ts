@@ -1,5 +1,6 @@
 import { MyDecorate, MyNodeEntry } from '@decipad/editor-types';
-import { BaseEditor, Editor, Range } from 'slate';
+import { Range } from 'slate';
+import { getRange } from '@udecode/plate';
 
 interface CacheEntry {
   /** The same object might deserve a second annotate call */
@@ -36,10 +37,8 @@ export const memoizeDecorateWithSelection = (
     (entry) => {
       const selectionIntersectsPath =
         editor.selection != null &&
-        Range.intersection(
-          Editor.range(editor as BaseEditor, entry[1]),
-          editor.selection
-        ) != null;
+        Range.intersection(getRange(editor, entry[1]), editor.selection) !=
+          null;
 
       const selectionKey = selectionIntersectsPath ? editor.selection : null;
       const dedupeKey = JSON.stringify({ selectionKey, entry });

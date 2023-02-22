@@ -9,6 +9,7 @@ import {
   createPathRef,
   createStore,
   findNode,
+  findNodePath,
   focusEditor,
   getNode,
   getNodeEntries,
@@ -23,7 +24,6 @@ import {
   blockSelectionActions,
   blockSelectionSelectors,
 } from '@udecode/plate-selection';
-import { ReactEditor } from 'slate-react';
 import { getAnalytics } from '@decipad/client-events';
 import {
   dndStore as plateDndStore,
@@ -105,8 +105,7 @@ export const useDnd = ({
         selectedIds,
         // The `item` object is set only once when the component renders so we need `getPath` to be
         // a function to account for path changes.
-        getPath: () =>
-          ReactEditor.findPath(editor as ReactEditor, elementRef.current),
+        getPath: () => findNodePath(editor, elementRef.current),
       };
     },
   });

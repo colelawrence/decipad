@@ -1,15 +1,19 @@
 import {
+  getAboveNode,
+  getEdgePoints,
   getNode,
+  isBlock,
+  isCollapsed,
   isEditor,
   isElement,
-  isCollapsed,
   TNode,
 } from '@udecode/plate';
-import { BaseEditor, Editor, Node, Path, Point } from 'slate';
+import { Path, Point } from 'slate';
+import { MyEditor } from '@decipad/editor-types';
 
 /** Is the cursor at the end|start of the parent element? */
 export const isCursorAtBlockEdge = (
-  editor: BaseEditor,
+  editor: MyEditor,
   edge: 'end' | 'start'
 ): boolean => {
   const cursorPath =
@@ -22,25 +26,22 @@ export const isCursorAtBlockEdge = (
     return false;
   }
 
-  const nonLeafElement = Editor.above(editor, {
+  const nonLeafElement = getAboveNode(editor, {
     at: cursorPath,
-    match: (n: Node) => Editor.isBlock(editor, n),
+    match: (n) => isBlock(editor, n),
   });
   if (!nonLeafElement?.[0]?.children) {
     return false;
   }
 
-  const [start, end] = Editor.edges(editor, nonLeafElement[1]);
+  const [start, end] = getEdgePoints(editor, nonLeafElement[1]);
 
   return (
     Point.compare(editor.selection.focus, edge === 'end' ? end : start) === 0
   );
 };
 
-const leafNodeInCollapsedSelection = (
-  editor: BaseEditor,
-  cursorPath?: Path
-) => {
+const leafNodeInCollapsedSelection = (editor: MyEditor, cursorPath?: Path) => {
   if (!cursorPath) {
     return false;
   }
