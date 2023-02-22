@@ -115,14 +115,23 @@ export const NotebookAvatars = ({
   return (
     <div css={avatarsWrapperStyles} className="notebook-avatars">
       {allowInvitation && (
-        <div
-          key="invite"
-          css={plusAvatarStyles}
-          onClick={toggleInvitePopup}
-          data-testid="avatar-invite"
+        <Tooltip
+          trigger={
+            <div
+              key="invite"
+              css={plusAvatarStyles}
+              onClick={toggleInvitePopup}
+              data-testid="avatar-invite"
+            >
+              <Avatar name={showInvitePopup ? '×' : '+'} greyedOut={true} />
+            </div>
+          }
+          open={showInvitePopup ? false : undefined}
         >
-          <Avatar name={showInvitePopup ? '×' : '+'} greyedOut={true} />
-        </div>
+          <div css={{ textAlign: 'center' }}>
+            <p css={tooltipNameStyles}>Click to invite others</p>
+          </div>
+        </Tooltip>
       )}
       {usersWithAccess?.map((avatar, index) => {
         const email = avatar.user.email || avatar.user.name;

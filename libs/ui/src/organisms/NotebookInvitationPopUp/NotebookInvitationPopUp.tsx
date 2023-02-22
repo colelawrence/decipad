@@ -25,7 +25,7 @@ const popUpStyles = css({
   border: '1px solid',
   borderColor: cssVar('strongHighlightColor'),
   borderRadius: '8px',
-  boxShadow: `0px 2px 16px -4px ${transparency(black, 0.06)}`,
+  boxShadow: `0px 2px 16px -4px ${transparency(black, 0.06).rgba}`,
 });
 
 /**
