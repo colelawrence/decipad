@@ -22,8 +22,10 @@ export const createOrUpdateSnapshot = async (
     await data.docsyncsnapshots.query({
       IndexName: 'byDocsyncId',
       KeyConditionExpression: 'docsync_id = :docsync_id',
+      FilterExpression: 'snapshotName = :name ',
       ExpressionAttributeValues: {
         ':docsync_id': notebookId,
+        ':name': snapshotName,
       },
     })
   ).Items;
@@ -70,8 +72,10 @@ export const getSnapshots = async ({ notebookId }: { notebookId: ID }) => {
     await data.docsyncsnapshots.query({
       IndexName: 'byDocsyncId',
       KeyConditionExpression: 'docsync_id = :docsync_id',
+      FilterExpression: 'isBackup <> :backup ',
       ExpressionAttributeValues: {
         ':docsync_id': notebookId,
+        ':backup': true,
       },
     })
   ).Items;

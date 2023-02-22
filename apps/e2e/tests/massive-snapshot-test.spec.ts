@@ -72,7 +72,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('navigates to published notebook link', async () => {
+  test('navigates to published notebook link', async () => {
     await page.waitForSelector('role=button[name="Link Copy"]');
 
     publishedNotebookPage = await randomUser.newPage();
@@ -87,7 +87,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('a random user can duplicate', async () => {
+  test('a random user can duplicate', async () => {
     await publishedNotebookPage.click('text=Duplicate notebook');
 
     await waitForEditorToLoad(publishedNotebookPage);
@@ -103,7 +103,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
   // TODO: ENG-1891 fix this test
   // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('navigates to published notebook link incognito', async () => {
+  test('navigates to published notebook link incognito', async () => {
     publishedNotebookPage = (await incognito.newPage()) as Page;
 
     await navigateToNotebook(publishedNotebookPage, notebookId);
