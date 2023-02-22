@@ -5423,10 +5423,10 @@
     chalk "4.1.0"
     tslib "^2.3.0"
 
-"@nrwl/nx-cloud@15.0.2":
-  version "15.0.2"
-  resolved "https://registry.yarnpkg.com/@nrwl/nx-cloud/-/nx-cloud-15.0.2.tgz#1d1e9c52743f7d7a40c8217c211ebd22402f6dde"
-  integrity sha512-DaTASuXmGyQHMxJuK6y3f7fs+Q0qQCfYDIDVGK9muNwN/QItLeWdRNltLQxbrBeS112kQTu2FPsr0DmRD60+0A==
+"@nrwl/nx-cloud@15.1.0":
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/@nrwl/nx-cloud/-/nx-cloud-15.1.0.tgz#455404f6006a2fb2247ecb4b4c0e30665704eecd"
+  integrity sha512-QcMlPZ+DBzTWcoWSziyrENYhBLfE5MSns3M5qJB8EClg9/vomepA+NLOLWB+/O0sfdeBGFKlvFyrjf+CnVaB2A==
   dependencies:
     axios "^0.21.2"
     chalk "4.1.0"
