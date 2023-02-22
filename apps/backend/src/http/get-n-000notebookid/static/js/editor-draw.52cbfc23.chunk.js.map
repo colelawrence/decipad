@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/editor-draw.52cbfc23.chunk.js","mappings":"+GAEA,Q,SAAmB","sources":["../../editor-plugins/src/plugins/Draw/Draw.ts"],"sourcesContent":["import { Draw } from '@decipad/editor-components';\n\nexport default Draw;\n"],"names":[],"sourceRoot":""}
