@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { GlobalStyles, LoadingLogo } from '@decipad/ui';
 import reportWebVitals from './reportWebVitals';
 import suppressWarnings from './suppressWarnings';
-import { serviceWorker } from './serviceWorker';
 
 suppressWarnings();
 
@@ -37,5 +36,3 @@ if (container) {
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-serviceWorker();

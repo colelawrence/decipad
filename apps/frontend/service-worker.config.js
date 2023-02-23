@@ -2,6 +2,7 @@ const { GenerateSW } = require('workbox-webpack-plugin');
 
 module.exports = () =>
   new GenerateSW({
+    inlineWorkboxRuntime: true,
     clientsClaim: true,
     skipWaiting: true,
     chunks: [
@@ -20,5 +21,5 @@ module.exports = () =>
     ],
     dontCacheBustURLsMatching: /\/static\/js\/[^.]+\.[^.]+\.chunk\.(js|css)$/,
     cleanupOutdatedCaches: true,
-    maximumFileSizeToCacheInBytes: 4_000_000,
+    maximumFileSizeToCacheInBytes: 20_000_000,
   });

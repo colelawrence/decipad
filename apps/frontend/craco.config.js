@@ -63,21 +63,6 @@ module.exports = {
         })
       );
 
-      // add service worker plugin
-      if (process.env.NODE_ENV === 'production') {
-        config.plugins.push(serviceWorkerConfig());
-
-        if (process.env.SENTRY_DSN) {
-          config.plugins.push(
-            new SentryPlugin({
-              release: process.env.GIT_COMMIT_HASH,
-              dsn: process.env.SENTRY_DSN,
-              include: '../../dist/apps/frontend',
-            })
-          );
-        }
-      }
-
       // Configure babel-loader to handle workspace projects as well.
       const babelRule = config.module.rules[1].oneOf.find((r) => {
         if (r.loader && r.loader.includes('babel')) {
@@ -136,6 +121,22 @@ module.exports = {
           'styled-components'
         ),
       };
+
+      if (process.env === 'production') {
+        if (process.env.SENTRY_DSN) {
+          config.plugins.push(
+            new SentryPlugin({
+              release: process.env.GIT_COMMIT_HASH,
+              dsn: process.env.SENTRY_DSN,
+              include: '../../dist/apps/frontend',
+            })
+          );
+        }
+        // }
+
+        // add service worker plugin
+        config.plugins.push(serviceWorkerConfig());
+      }
 
       return config;
     },

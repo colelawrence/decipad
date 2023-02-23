@@ -1,7 +1,7 @@
 import domLoaded from 'dom-loaded';
 
-export const serviceWorker = async () => {
-  if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+if ('serviceWorker' in navigator) {
+  (async () => {
     await domLoaded;
     // eslint-disable-next-line no-console
     console.log('registering service worker...');
@@ -10,5 +10,5 @@ export const serviceWorker = async () => {
     } catch (err) {
       console.error('error registering service worker:', err);
     }
-  }
-};
+  })();
+}
