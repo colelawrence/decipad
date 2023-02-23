@@ -8723,6 +8723,11 @@
     lodash "^4.17.21"
     regenerator-runtime "^0.13.7"
 
+"@storybook/global@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@storybook/global/-/global-5.0.0.tgz#b793d34b94f572c1d7d9e0f44fac4e0dbc9572ed"
+  integrity sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==
+
 "@storybook/manager-webpack4@6.5.12":
   version "6.5.12"
   resolved "https://registry.yarnpkg.com/@storybook/manager-webpack4/-/manager-webpack4-6.5.12.tgz#7e0ae21455e1c070d291942c18373ceaa58c0e05"
@@ -28505,18 +28510,18 @@ store2@^2.12.0:
   resolved "https://registry.yarnpkg.com/store2/-/store2-2.13.2.tgz#01ad8802ca5b445b9c316b55e72645c13a3cd7e3"
   integrity sha512-CMtO2Uneg3SAz/d6fZ/6qbqqQHi2ynq6/KzMD/26gTkiEShCcpqFfTHgOxsE0egAq6SX3FmN4CeSqn8BzXQkJg==
 
-storybook-dark-mode@2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/storybook-dark-mode/-/storybook-dark-mode-2.0.4.tgz#dfac18675742f6022c352217f7b8a4627ac2ec57"
-  integrity sha512-+cJXUOMj49RbXCqCqggIMWf7GGlhvJoOgjK1E2WZUy1OMwlvgeS13Td9jccl3KmuGBx0Eke+Q2ONecNIohUpEQ==
+storybook-dark-mode@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/storybook-dark-mode/-/storybook-dark-mode-2.1.1.tgz#73dcc0a757153cc2fbac1b6be2451950dda63352"
+  integrity sha512-Ops6u/htODxIUXnAYASttqcbd2PRN723o0uIKpoYQn1+so2g6gYalpAhuysxnRhCG8yHsm6NJuX5drzzI+uFvQ==
   dependencies:
     "@storybook/addons" "^6.5.14"
     "@storybook/api" "^6.5.14"
     "@storybook/components" "^6.5.14"
     "@storybook/core-events" "^6.5.14"
+    "@storybook/global" "^5.0.0"
     "@storybook/theming" "^6.5.14"
     fast-deep-equal "^3.1.3"
-    global "^4.4.0"
     memoizerific "^1.11.3"
 
 stream-browserify@3.0.0:
