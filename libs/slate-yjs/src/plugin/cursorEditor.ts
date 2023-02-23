@@ -4,6 +4,7 @@ import { Awareness } from 'y-protocols/awareness';
 import { debounce } from 'lodash';
 import { Session } from 'next-auth';
 import { YjsEditor } from './yjsEditor';
+import { jsonify } from '../utils/jsonify';
 
 const AWARENESS: WeakMap<TEditor, Awareness> = new WeakMap();
 
@@ -32,7 +33,7 @@ export const CursorEditor = {
       const localState = awareness.getLocalState();
       const { user } = session ?? {};
       const newState = {
-        ...localState,
+        ...jsonify(localState),
         anchor,
         focus,
         user: user && {
