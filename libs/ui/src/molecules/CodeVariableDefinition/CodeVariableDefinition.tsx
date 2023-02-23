@@ -5,7 +5,7 @@ import { CellValueType } from '@decipad/editor-types';
 import { getTypeIcon } from '../../utils';
 import { codeBlock } from '../../styles';
 import { cssVar } from '../../primitives';
-import { Formula } from '../../icons';
+import { Formula, Number } from '../../icons';
 
 const varStyles = (type: 'simple' | 'formula') =>
   css(codeBlock.structuredVariableStyles, {
@@ -61,7 +61,7 @@ export const CodeVariableDefinition = ({
   children,
   type,
 }: NonInteractiveCodeVariableProps) => {
-  const Icon = useMemo(() => type && getTypeIcon(type), [type]);
+  const Icon = useMemo(() => (type ? getTypeIcon(type) : Number), [type]);
 
   return (
     <span

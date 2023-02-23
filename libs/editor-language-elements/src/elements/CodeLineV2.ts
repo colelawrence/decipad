@@ -1,4 +1,4 @@
-import { AST, Computer, Program, SerializedType } from '@decipad/computer';
+import { AST, Computer, Program } from '@decipad/computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -27,28 +27,17 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
 
     if (source?.trim()) {
       // First try parsing it as a plain number
-      const typeHint: SerializedType =
-        e.unit === '%'
-          ? {
-              kind: 'number',
-              unit: null,
-              numberFormat: 'percentage',
-            }
-          : {
-              kind: 'number',
-              unit:
-                typeof e.unit === 'string'
-                  ? await computer.getUnitFromText(e.unit ?? '')
-                  : e.unit ?? null,
-            };
-
-      const parsedInput = await parseCell(computer, typeHint, source);
+      const parsedInput = await parseCell(
+        computer,
+        { kind: 'number', unit: null },
+        source
+      );
 
       if (!(parsedInput instanceof Error || parsedInput == null)) {
         return parseElementAsVariableAssignment(
           e.id,
           getNodeString(vname),
-          getCodeLineSource(sourcetext),
+          parsedInput,
           disallowNodeTypes
         );
       }
@@ -72,11 +61,7 @@ export const parseStructuredCodeLine = weakMapMemoizeInteractiveElementOutput(
     const [vname, sourcetext] = block.children;
 
     if (getCodeLineSource(block.children[1])?.trim()) {
-      const asNumber = await tryParseAsNumber(
-        editor,
-        computer,
-        block as CodeLineV2Element
-      );
+      const asNumber = await tryParseAsNumber(editor, computer, block);
 
       if (asNumber.length) {
         return {

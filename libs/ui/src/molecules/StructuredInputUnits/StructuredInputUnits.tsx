@@ -1,7 +1,5 @@
-import { currencyUnits } from '@decipad/language';
+import { AST, currencyUnits, UnitOfMeasure } from '@decipad/language';
 import { FC, useCallback, useState } from 'react';
-import { StructuredInputElement } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   Caret,
@@ -12,28 +10,93 @@ import {
   Scale,
   Timer,
 } from '../../icons';
-import { cssVar } from '../../primitives';
 import { MenuList } from '../MenuList/MenuList';
-import { UnitMenuItem } from '../UnitMenuItem/UnitMenuItem';
+import { ASTUnitMenuItem } from '../ASTUnitMenuItem/ASTUnitMenuItem';
+import { p13Medium } from '../../primitives';
 
 export interface StructuredInputUnitsProps {
-  readonly unit: StructuredInputElement['unit'];
-  readonly onChangeUnit: (newType: StructuredInputElement['unit']) => void;
-  readonly onParseUnit: Computer['getUnitFromText'];
-  readonly formatUnit: Computer['formatUnit'];
+  readonly unit: AST.Expression | '%' | undefined;
+  readonly onChangeUnit: (unit?: AST.Expression | '%' | undefined) => void;
 }
 
-type ExpandableColumns = 'distance' | 'currency' | 'weight' | 'time' | null;
+const ExpandableColumnsArr = [
+  ['Distance', Ruler],
+  ['Weight', Scale],
+  ['Time', Timer],
+  ['Currency', DollarCircle],
+] as const;
+type ExpandableColumns = typeof ExpandableColumnsArr[number][0] | null;
 
 const presentableCurrencyUnits = currencyUnits.filter((f) => {
   return !!f.pretty && f.pretty.length <= 3;
 });
 
+const unitCategories: Record<
+  string,
+  Exclude<ExpandableColumns, null> | 'Percentage'
+> = {
+  '%': 'Percentage',
+  mm: 'Distance',
+  cm: 'Distance',
+  m: 'Distance',
+  km: 'Distance',
+  inch: 'Distance',
+  foot: 'Distance',
+  yard: 'Distance',
+  mile: 'Distance',
+
+  microsecond: 'Time',
+  second: 'Time',
+  minutes: 'Time',
+  hour: 'Time',
+  day: 'Time',
+  week: 'Time',
+  month: 'Time',
+  year: 'Time',
+
+  microgram: 'Weight',
+  gram: 'Weight',
+  kilogram: 'Weight',
+  ounce: 'Weight',
+  pound: 'Weight',
+  stone: 'Weight',
+  ton: 'Weight',
+
+  ...presentableCurrencyUnits.reduce(
+    (p, n) => ({
+      ...p,
+      [n.pretty || n.name]: 'Currency',
+    }),
+    {}
+  ),
+};
+
+// We construct an object that we can render on the menu,
+// from a map above so we can always have O(1) read.
+const availableUnits = ExpandableColumnsArr.map(([c, icon]) => ({
+  category: c,
+  icon,
+  units: Object.entries(unitCategories)
+    .filter(([_, v]) => v === c)
+    .map(([unit]) => unit),
+}));
+
+const u = (unit: string | UnitOfMeasure): AST.Expression | '%' | undefined => {
+  if (unit === '') {
+    return undefined;
+  }
+  if (unit === '%') {
+    return '%';
+  }
+  if (typeof unit === 'string') {
+    return { type: 'ref', args: [unit] };
+  }
+  return { type: 'ref', args: [unit.pretty || unit.name] };
+};
+
 export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
   unit,
   onChangeUnit,
-  onParseUnit,
-  formatUnit,
 }) => {
   // No sub menu can be open at the same time
   const [open, setOpen] = useState(false);
@@ -46,14 +109,18 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
     [currentOpen]
   );
 
+  const stringUnit = unit
+    ? unit === '%'
+      ? 'Percentage'
+      : unitCategories[unit.args[0]?.toString() || '']
+    : '';
+
   return (
     <div
       css={{
-        minWidth: '64px',
-        padding: '6px',
         display: 'flex',
         alignItems: 'center',
-        borderRight: `1px solid ${cssVar('borderColor')}`,
+        cursor: 'pointer',
       }}
       contentEditable={false}
     >
@@ -66,49 +133,30 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
           <div
             css={{
               width: '100%',
-              height: '100%',
               borderRadius: '16px',
               display: 'flex',
-              padding: '4px',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            {unit && unit.length > 0 ? (
-              typeof unit === 'string' ? (
-                unit
-              ) : (
-                formatUnit(unit)
-              )
-            ) : (
-              <div
-                css={{
-                  width: 18,
-                  height: 18,
-                  display: 'grid',
-                  alignItems: 'center',
-                }}
-              >
-                <Number />
-              </div>
-            )}
+            <span css={p13Medium}>{stringUnit}</span>
             <button
               css={{
                 width: 18,
-                height: 18,
                 display: 'grid',
               }}
+              data-testid="unit-picker-button"
             >
               <Caret variant="down" />
             </button>
           </div>
         }
       >
-        <MenuItem icon={<Number />} onSelect={() => onChangeUnit('')}>
-          Number
+        <MenuItem icon={<Number />} onSelect={() => onChangeUnit(undefined)}>
+          <span>Number</span>
         </MenuItem>
         <MenuItem icon={<Percentage />} onSelect={() => onChangeUnit('%')}>
-          Percentage
+          <span data-testid="unit-picker-percentage">Percentage</span>
         </MenuItem>
         <MenuList
           itemTrigger={
@@ -116,66 +164,50 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
               <div css={{ minWidth: '132px' }}>Currency</div>
             </TriggerMenuItem>
           }
-          onChangeOpen={() => onColumnExpand('currency')}
-          open={currentOpen === 'currency'}
+          onChangeOpen={() => onColumnExpand('Currency')}
+          open={currentOpen === 'Currency'}
         >
-          {presentableCurrencyUnits.map((u, i) => (
+          {presentableCurrencyUnits.map((currency) => (
             <MenuItem
-              key={i}
-              icon={<span>{u.pretty ?? u.name}</span>}
-              onSelect={() => onChangeUnit(u.pretty ?? u.name)}
+              key={currency.baseQuantity}
+              icon={<span>{currency.pretty ?? currency.name}</span>}
+              onSelect={() => onChangeUnit(u(currency))}
             >
-              {u.baseQuantity}
+              {currency.baseQuantity}
             </MenuItem>
           ))}
         </MenuList>
-        <MenuList
-          itemTrigger={
-            <TriggerMenuItem icon={<Ruler />}>Distance</TriggerMenuItem>
-          }
-          onChangeOpen={() => onColumnExpand('distance')}
-          open={currentOpen === 'distance'}
-        >
-          <MenuItem onSelect={() => onChangeUnit('km')}>Kilometers</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('m')}>Meters</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('cm')}>Centimeters</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('miles')}>Miles</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('yards')}>Yards</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('inches')}>Inches</MenuItem>
-        </MenuList>
-        <MenuList
-          itemTrigger={
-            <TriggerMenuItem icon={<Scale />}>Weight</TriggerMenuItem>
-          }
-          onChangeOpen={() => onColumnExpand('weight')}
-          open={currentOpen === 'weight'}
-        >
-          <MenuItem onSelect={() => onChangeUnit('g')}>Grams</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('kg')}>Kilograms</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('ounces')}>Ounces</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('pounds')}>Pounds</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('ton')}>Ton</MenuItem>
-        </MenuList>
-        <MenuList
-          itemTrigger={<TriggerMenuItem icon={<Timer />}>Time</TriggerMenuItem>}
-          onChangeOpen={() => onColumnExpand('time')}
-          open={currentOpen === 'time'}
-        >
-          <MenuItem onSelect={() => onChangeUnit('seconds')}>Seconds</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('minutes')}>Minutes</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('hours')}>Hours</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('days')}>Days</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('weeks')}>Weeks</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('months')}>Months</MenuItem>
-          <MenuItem onSelect={() => onChangeUnit('years')}>Years</MenuItem>
-        </MenuList>
-        <UnitMenuItem
-          placeholder="create custom"
-          onSelect={(u) => {
-            onChangeUnit(u ?? undefined);
-          }}
-          parseUnit={onParseUnit}
-        />
+        {/* We show currencies seperately because they have nice icons */}
+        {availableUnits
+          .filter((a) => a.category !== 'Currency')
+          .map((unitCategory) => (
+            <MenuList
+              key={unitCategory.category}
+              itemTrigger={
+                <TriggerMenuItem icon={<unitCategory.icon />}>
+                  <div
+                    css={{ minWidth: '132px' }}
+                    data-testid={`unit-picker-${unitCategory.category}`}
+                  >
+                    {unitCategory.category}
+                  </div>
+                </TriggerMenuItem>
+              }
+              onChangeOpen={() => onColumnExpand(unitCategory.category)}
+              open={currentOpen === unitCategory.category}
+            >
+              {unitCategory.units.map((myUnit) => (
+                <MenuItem key={myUnit} onSelect={() => onChangeUnit(u(myUnit))}>
+                  <span
+                    data-testid={`unit-picker-${unitCategory.category}-${myUnit}`}
+                  >
+                    {myUnit}
+                  </span>
+                </MenuItem>
+              ))}
+            </MenuList>
+          ))}
+        <ASTUnitMenuItem placeholder="create custom" onSelect={onChangeUnit} />
       </MenuList>
     </div>
   );

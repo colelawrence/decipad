@@ -62,6 +62,8 @@ export const codeContainerStyles = css(code, {
   gridArea: 'code',
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   lineHeight,
+  display: 'flex',
+  gap: '16px',
 
   [smallScreenQuery]: {
     borderLeft: 'none',

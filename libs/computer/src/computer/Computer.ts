@@ -463,6 +463,16 @@ export class Computer {
     }
   );
 
+  getSetOfNamesDefined$ = listenerHelper(this.results, (): Set<string> => {
+    const names = new Set<string>();
+    for (const block of this.latestProgram) {
+      if (block.definesVariable) {
+        names.add(block.definesVariable);
+      }
+    }
+    return names;
+  });
+
   expressionResultFromText$(decilang: string) {
     const exp = parseExpressionOrThrow(decilang);
 

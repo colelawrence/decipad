@@ -113,7 +113,7 @@ test.describe('Calculation Blocks v2', () => {
   });
 
   test('lets you drag results into code lines and paragraphs', async () => {
-    await createCodeLineV2Below(page, 'DragMe', '555');
+    await createCodeLineV2Below(page, 'DragMe', '555 + 5');
     lineNo += 1;
     const dragLineNo = lineNo;
 
@@ -126,8 +126,7 @@ test.describe('Calculation Blocks v2', () => {
     ).dragTo(getCodeV2CodeContainers(page).nth(dropLineNo));
 
     // Drag origin and drop target have 555! yay
-    await expect(getResults(page).nth(dragLineNo)).toHaveText(/555/);
-    await expect(getResults(page).nth(dropLineNo)).toHaveText(/555/);
+    await expect(getResults(page).nth(dragLineNo)).toHaveText(/560/);
 
     // Drag into a paragraph -> creates a magic number
     await (
@@ -136,8 +135,28 @@ test.describe('Calculation Blocks v2', () => {
 
     await expect(
       page.locator(
-        '[data-testid="paragraph-wrapper"] [data-testid="number-result:555"]'
+        '[data-testid="paragraph-wrapper"] [data-testid="number-result:560"]'
       )
     ).toBeVisible();
+  });
+
+  test('applies unit from unit picker', async () => {
+    await createCodeLineV2Below(page, 'Units', '100');
+    lineNo += 1;
+
+    await page.locator('[data-testid="unit-picker-button"] >> nth=-1').click();
+    await page.locator('[data-testid="unit-picker-percentage"]').click();
+
+    await expect(getCodeV2CodeContainers(page).nth(lineNo)).toHaveText(/100%/);
+  });
+
+  test('changing unit changes the text of the codeline', async () => {
+    await page.locator('[data-testid="unit-picker-button"] >> nth=-1').click();
+    await page.locator('[data-testid="unit-picker-Weight"]').click();
+    await page.locator('[data-testid="unit-picker-Weight-kilogram"]').click();
+
+    await expect(getCodeV2CodeContainers(page).nth(lineNo)).toHaveText(
+      /kilogram/
+    );
   });
 });

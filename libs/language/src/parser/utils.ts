@@ -1,8 +1,8 @@
-import DeciNumber from '@decipad/number';
+import DeciNumber, { N } from '@decipad/number';
 import { AST } from '..';
 import { getIdentifierString, isNode, isStatement } from '../utils';
 
-const prettyPrint = (node: AST.Node, indent: number): string => {
+export const prettyPrintAST = (node: AST.Node, indent = 0): string => {
   const perLine = isStatement(node) || ['block', 'table'].includes(node.type);
 
   let printedArgs: string[];
@@ -10,19 +10,23 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
 
   switch (node.type) {
     case 'literal': {
-      const [, value] = node.args;
-      return value instanceof DeciNumber
-        ? value.toString()
-        : JSON.stringify(value);
+      const [, value, numberFormat] = node.args;
+
+      if (value instanceof DeciNumber) {
+        return numberFormat === 'percentage'
+          ? `${value.mul(N(100)).toString()}%`
+          : value.toString();
+      }
+      return JSON.stringify(value);
     }
     case 'property-access': {
       const [ref, prop] = node.args;
-      return `(prop ${prettyPrint(ref, indent + 1)}.${prop})`;
+      return `(prop ${prettyPrintAST(ref, indent + 1)}.${prop})`;
     }
     case 'function-call': {
       [fname] = node.args[0].args;
       printedArgs = node.args[1].args.map((arg) =>
-        prettyPrint(arg, indent + 1)
+        prettyPrintAST(arg, indent + 1)
       );
       break;
     }
@@ -32,7 +36,7 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
       printedArgs = Array.from(colItems, (item) => {
         if (item.type === 'table-column') {
           const [colName, val] = item.args;
-          return `${colName.args[0]} ${prettyPrint(val, indent + 1)}`;
+          return `${colName.args[0]} ${prettyPrintAST(val, indent + 1)}`;
         } else {
           return `...${getIdentifierString(item.args[0])}`;
         }
@@ -42,7 +46,7 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
     case 'column': {
       fname = 'column';
       printedArgs = Array.from(node.args[0].args, (item) => {
-        return prettyPrint(item, indent + 1);
+        return prettyPrintAST(item, indent + 1);
       });
       break;
     }
@@ -51,7 +55,7 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
       printedArgs = (node.args as (AST.Node | unknown)[]).flatMap(
         function printArg(a): string | string[] {
           if (isNode(a)) {
-            return prettyPrint(a, indent + 1);
+            return prettyPrintAST(a, indent + 1);
           } else if (Array.isArray(a)) {
             return a.flatMap(printArg);
           } else {
@@ -72,5 +76,3 @@ const prettyPrint = (node: AST.Node, indent: number): string => {
     return `(${fname})`;
   }
 };
-
-export const prettyPrintAST = (ast: AST.Node) => prettyPrint(ast, 0);

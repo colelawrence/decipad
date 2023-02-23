@@ -54,6 +54,7 @@ export { TableCellControls } from './TableCellControls/TableCellControls';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';
 export { UnitMenuItem } from './UnitMenuItem/UnitMenuItem';
+export { ASTUnitMenuItem } from './ASTUnitMenuItem/ASTUnitMenuItem';
 export { UnorderedList } from './UnorderedList/UnorderedList';
 export { VariableNameSelector } from './VariableNameSelector/VariableNameSelector';
 export { WidgetDisplay } from './WidgetDisplay/WidgetDisplay';

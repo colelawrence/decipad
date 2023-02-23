@@ -33,7 +33,7 @@ const regexHack = (text: string, flags = 'u') => {
 const identifierRegExp = regexHack(
   '[\\p{L}\\p{Sc}\\p{Emoji_Presentation}_μ°][\\p{L}\\p{Nd}\\p{Sc}\\p{Emoji_Presentation}_μ°]*'
 );
-const currencies = ['r$', 'R$', '$', '£', '€'];
+export const prefixCurrencies = ['r$', 'R$', '$', '£', '€'];
 export const identifierRegExpGlobal = regexHack(
   identifierRegExp.source,
   `${identifierRegExp.flags}g`
@@ -105,7 +105,7 @@ export const tokenRules = {
       match: regexHack('[0-9]+(?:[ _]*[0-9]+)*(?:\\.[0-9]+)?'),
       value: (splitUp: string) => splitUp.replace(/[_ ]+/g, ''),
     },
-    currency: currencies,
+    currency: prefixCurrencies,
     identifier: {
       match: identifierRegExp,
       type: keywords,

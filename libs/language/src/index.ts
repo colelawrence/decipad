@@ -80,7 +80,7 @@ export {
 } from './utils';
 export { linearizeType } from './dimtools/common';
 export type { Unit };
-export * from './isValue';
+export * from './simpleValues';
 
 export type ExternalDataMap = Map<string, Result>;
 

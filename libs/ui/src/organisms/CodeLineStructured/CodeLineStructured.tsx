@@ -26,6 +26,7 @@ interface CodeLineStructuredProps {
   readonly onClickedResult?: (arg0: Result.Result) => void;
   readonly variableNameChild: ReactNode;
   readonly codeChild: ReactNode;
+  readonly unitPicker: ReactNode;
 }
 
 export const CodeLineStructured = ({
@@ -38,6 +39,7 @@ export const CodeLineStructured = ({
   onClickedResult,
   variableNameChild,
   codeChild,
+  unitPicker,
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
@@ -85,6 +87,7 @@ export const CodeLineStructured = ({
         >
           {getEquals()}
           {codeChild}
+          {unitPicker}
         </code>
         <div
           css={[

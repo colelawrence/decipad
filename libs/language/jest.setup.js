@@ -5,6 +5,8 @@ import parseDataUrl from 'data-urls';
 /* eslint-enable import/no-extraneous-dependencies */
 import { DateValue } from './src/value/Value';
 import { stringifyDate } from './src/date';
+import { isNode } from './src/utils';
+import { prettyPrintAST } from './src';
 
 // import { ReadableStream } from "web-streams-polyfill/ponyfill";
 
@@ -37,6 +39,11 @@ expect.addSnapshotSerializer({
       date.getData(),
       date.specificity
     )})`,
+});
+
+expect.addSnapshotSerializer({
+  test: (v) => v && typeof v === 'object' && isNode(v),
+  print: (node, _print, indent) => prettyPrintAST(node, indent),
 });
 
 expect.addSnapshotSerializer({

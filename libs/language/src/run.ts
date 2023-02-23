@@ -5,11 +5,15 @@ import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
 import { OneResult, Result, validateResult } from './result';
 
-export const parseBlockOrThrow = (source: string): AST.Block => {
+export const parseBlockOrThrow = (source: string, id?: string): AST.Block => {
   const parsed = parseBlock(source);
 
   if (parsed.error) {
     throw new TypeError(parsed.error.message);
+  }
+
+  if (id != null) {
+    parsed.solution.id = id;
   }
 
   return parsed.solution;

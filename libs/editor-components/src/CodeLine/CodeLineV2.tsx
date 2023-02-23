@@ -1,9 +1,8 @@
-import {
+import type {
   IdentifiedError,
   IdentifiedResult,
-  isValue as isCodeValue,
-  parseExpressionOrThrow,
   Result,
+  SimpleValue,
 } from '@decipad/computer';
 import {
   DisplayElement,
@@ -17,6 +16,7 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
+  getCodeLineSource,
   insertNodes,
   isStructuredElement,
   useEnsureValidVariableName,
@@ -30,22 +30,18 @@ import {
 import {
   CodeLineStructured,
   CodeVariableDefinition,
+  StructuredInputUnits,
   Tooltip,
 } from '@decipad/ui';
 import { findNodePath, getNodeString, getPreviousNode } from '@udecode/plate';
-import { dequal } from 'dequal';
 import { nanoid } from 'nanoid';
 import {
   Children,
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useRef,
-  useState,
 } from 'react';
-import { debounceTime, Subject, distinctUntilChanged } from 'rxjs';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
@@ -56,6 +52,9 @@ import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useTurnIntoProps } from './useTurnIntoProps';
+import { useSimpleValueInfo } from './useSimpleValueInfo';
+
+export type Variant = 'error' | 'calculation' | 'value';
 
 export const CodeLineV2: PlateComponent = ({
   attributes,
@@ -64,25 +63,14 @@ export const CodeLineV2: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_CODE_LINE_V2);
 
-  const sourceCode = getNodeString(element.children[1]);
+  const computer = useComputer();
+  const sourceCode = getCodeLineSource(element.children[1]);
 
-  const subValue = useRef(new Subject<boolean>());
-  const [isValue, setIsValue] = useState(isCodeValue(sourceCode));
-
-  useEffect(() => {
-    try {
-      parseExpressionOrThrow(sourceCode);
-      subValue.current.next(isCodeValue(sourceCode));
-    } catch (e) {
-      // do nothing
-    }
-  }, [sourceCode]);
-
-  useEffect(() => {
-    subValue.current
-      .pipe(debounceTime(0), distinctUntilChanged(dequal))
-      .subscribe(setIsValue);
-  }, []);
+  const { simpleValue, onChangeUnit } = useSimpleValueInfo(
+    computer,
+    element,
+    sourceCode
+  );
 
   const selected = useSelected();
   const codeLineContent = useNodeText(element, { debounceTimeMs: 0 }) ?? '';
@@ -94,7 +82,6 @@ export const CodeLineV2: PlateComponent = ({
   // transform variable references into smart refs on blur
   useOnBlurNormalize(editor, element);
 
-  const computer = useComputer();
   const { id: lineId } = element;
   const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
     (line) => [getSyntaxError(line), line] as const,
@@ -202,13 +189,21 @@ export const CodeLineV2: PlateComponent = ({
           onDragStartCell={handleDragStartCell}
           onClickedResult={isReadOnly ? undefined : onClickedResult}
           variableNameChild={
-            <IsValueContext.Provider value={isValue}>
+            <SimpleValueContext.Provider value={simpleValue}>
               <VarResultContext.Provider value={lineResult}>
                 {childrenArray[0]}
               </VarResultContext.Provider>
-            </IsValueContext.Provider>
+            </SimpleValueContext.Provider>
           }
           codeChild={childrenArray[1]}
+          unitPicker={
+            simpleValue != null && (
+              <StructuredInputUnits
+                unit={simpleValue.unit}
+                onChangeUnit={onChangeUnit}
+              />
+            )
+          }
         />
       </CodeLineTeleport>
     </DraggableBlock>
@@ -219,13 +214,15 @@ export const VarResultContext = createContext<
   IdentifiedResult | IdentifiedError | undefined
 >(undefined);
 
-export const IsValueContext = createContext<boolean>(true);
+export const SimpleValueContext = createContext<SimpleValue | undefined>(
+  undefined
+);
 
 export const CodeLineV2Varname: PlateComponent = (props) => {
   assertElementType(props.element, ELEMENT_STRUCTURED_VARNAME);
 
   const varResult = useContext(VarResultContext);
-  const isValue = useContext(IsValueContext);
+  const simpleValue = useContext(SimpleValueContext);
 
   const errorMessage = useEnsureValidVariableName(props.element, varResult?.id);
   const empty = getNodeString(props.element).trim() === '';
@@ -249,7 +246,7 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
                   ? { kind: 'number', unit: null }
                   : varResult?.result.type
               }
-              isValue={isValue}
+              isValue={simpleValue != null}
             >
               {props.children}
             </CodeVariableDefinition>

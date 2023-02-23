@@ -11,6 +11,8 @@ export type {
   Token,
   UnitOfMeasure,
   ColumnLike,
+  SimpleValue,
+  SimpleValueAST,
 } from '@decipad/language';
 
 export {
@@ -42,7 +44,10 @@ export {
   getUnitByName,
   currencyUnits,
   isStatement,
-  isValue,
+  parseSimpleValue,
+  parseSimpleValueUnit,
+  simpleValueUnitToString,
+  simpleValueToString,
 } from '@decipad/language';
 
 export {

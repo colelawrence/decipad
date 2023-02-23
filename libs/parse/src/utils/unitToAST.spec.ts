@@ -34,6 +34,25 @@ it('turns a unit into an AST', () => {
       unitToAST([
         {
           unit: 'meter',
+          exp: N(1),
+          multiplier: N(1),
+          known: true,
+        },
+        {
+          unit: 'second',
+          exp: N(-1),
+          multiplier: N(1),
+          known: true,
+        },
+      ]) as AST.Expression
+    )
+  ).toMatchInlineSnapshot(`"(* (ref meter) (^ (ref second) -1))"`);
+
+  expect(
+    prettyPrintAST(
+      unitToAST([
+        {
+          unit: 'meter',
           exp: N(2),
           multiplier: N(1),
           known: true,
