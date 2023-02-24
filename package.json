@@ -349,7 +349,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-testing-library": "5.10.0",
     "fake-indexeddb": "4.0.0",
-    "fast-check": "3.6.0",
+    "fast-check": "3.7.0",
     "geometry-polyfill": "1.0.7",
     "husky": "8.0.1",
     "jest": "27.5.1",
