@@ -6,13 +6,15 @@ import {
   runCodeForVariables,
   objectToTableType,
   evaluateForVariables,
+  runAndMeasure,
 } from './testUtils';
 import { runCode } from './run';
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
   it('Can MVP the use of funds document', async () => {
-    const result = await runCode(`
+    const [result, time] = await runAndMeasure(() =>
+      runCode(`
       InitialInvestment = 300000
       IncomeTax = 20%
 
@@ -32,7 +34,8 @@ describe('use of funds document', () => {
         Tech = CostToBusiness(Months, StandardSalary, date(2021-03), false),
         FrontEnd = CostToBusiness(Months, StandardSalary, date(2021-03), true)
       }
-    `);
+    `)
+    );
 
     expect(result.type).toMatchObject(
       objectToTableType('SalaryStaff', {
@@ -118,6 +121,7 @@ describe('use of funds document', () => {
         ],
       ]
     `);
+    expect(time).toBeLessThanOrEqual(1000);
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
@@ -216,8 +220,8 @@ describe('more models', () => {
       },
     ];
 
-    expect(
-      await runCodeForVariables(
+    const [result, time] = await runAndMeasure(() =>
+      runCodeForVariables(
         `
           DiscountRate = 0.25
 
@@ -241,7 +245,9 @@ describe('more models', () => {
           'YearlyCashFlows',
         ]
       )
-    ).toMatchObject({
+    );
+
+    expect(result).toMatchObject({
       variables: {
         InitialCashFlow: N(1, 100),
         Years: years,
@@ -262,6 +268,8 @@ describe('more models', () => {
         },
       },
     });
+
+    expect(time).toBeLessThanOrEqual(200);
   });
 
   test('retirement model', async () => {
@@ -269,8 +277,8 @@ describe('more models', () => {
       cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
 
-    expect(
-      await runCode(
+    const [result, time] = await runAndMeasure(() =>
+      runCode(
         `
           InitialInvestment = 5000eur
           YearlyReinforcement = 100eur
@@ -282,7 +290,9 @@ describe('more models', () => {
           }
         `
       )
-    ).toMatchObject({
+    );
+
+    expect(result).toMatchObject({
       value: [years, [N(5200), N(5404), N(140302, 25)]],
       type: {
         columnNames: ['Years', 'Value'],
@@ -295,11 +305,13 @@ describe('more models', () => {
         ],
       },
     });
+
+    expect(time).toBeLessThanOrEqual(200);
   });
 
   test('burn spare cash in the supermarket', async () => {
-    expect(
-      await runCode(
+    const [result, time] = await runAndMeasure(() =>
+      runCode(
         `
           cash = 6.15 GBP
           basket = {
@@ -310,17 +322,21 @@ describe('more models', () => {
           total(buyWithCash.price)
         `
       )
-    ).toMatchObject({
+    );
+
+    expect(result).toMatchObject({
       value: N(123, 20),
     });
+
+    expect(time).toBeLessThanOrEqual(200);
   });
 });
 
 describe('Use cases', () => {
   // https://www.notion.so/decipad/Funding-Needs-037c7eaec6304b029acc74efd734df57
   test('funding needs', async () => {
-    expect(
-      await runCodeForVariables(
+    const [result, time] = await runAndMeasure(() =>
+      runCodeForVariables(
         `
         MonthlyExpenses = 130000 eur
         InitialMonthlyRevenue = 2500 eur
@@ -363,7 +379,9 @@ ${'' /* Get capital needed */}
           'TimeToIPO',
         ]
       )
-    ).toMatchObject({
+    );
+
+    expect(result).toMatchObject({
       variables: {
         MonthlyRevenueGrowthRate: N(1, 20),
         TimeToProfitability: expect.toRoundEqual(81),
@@ -395,6 +413,8 @@ ${'' /* Get capital needed */}
         TimeToIPO: { type: 'number', unit: null },
       },
     });
+
+    expect(time).toBeLessThanOrEqual(200);
   });
 
   // https://www.notion.so/decipad/Crypto-Portfolio-Tracker-fe8bbefbd2e1441886576fd3c22c47f2
@@ -445,8 +465,8 @@ ${'' /* Get capital needed */}
   });
 
   test('Cars', async () => {
-    expect(
-      await runCode(
+    const [result, time] = await runAndMeasure(() =>
+      runCode(
         `
           Cars = {
             Type = ["Electric", "Hybrid"],
@@ -461,7 +481,9 @@ ${'' /* Get capital needed */}
           Cars.Cost + Countries.Tax
         `
       )
-    ).toMatchObject({
+    );
+
+    expect(result).toMatchObject({
       value: [
         [N(101), N(102)],
         [N(201), N(202)],
@@ -476,6 +498,8 @@ ${'' /* Get capital needed */}
         },
       },
     });
+
+    expect(time).toBeLessThanOrEqual(200);
   });
 
   // https://www.notion.so/decipad/New-Business-Line-556720d7ca974cd9a88456b44302cc1a
@@ -557,8 +581,8 @@ ${'' /* Get capital needed */}
   });
 
   test('rockets', async () => {
-    expect(
-      await evaluateForVariables(
+    const [result, time] = await runAndMeasure(() =>
+      evaluateForVariables(
         `
           M = 0.05398 kg
 
@@ -603,7 +627,9 @@ ${'' /* Get capital needed */}
           'v',
         ]
       )
-    ).toMatchObject({
+    );
+
+    expect(result).toMatchObject({
       M: {
         // M = 0.05398 kg
         type: { type: 'number', unit: U('g', { multiplier: N(1000) }) },
@@ -738,5 +764,6 @@ ${'' /* Get capital needed */}
         value: N(6328251127759379000n, 53640764699238693n), // 117,974662799844137
       },
     });
+    expect(time).toBeLessThanOrEqual(2000);
   });
 });

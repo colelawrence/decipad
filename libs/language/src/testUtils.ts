@@ -1,5 +1,6 @@
 import DeciNumber, { N } from '@decipad/number';
-import { AnyMapping, zip } from '@decipad/utils';
+import { AnyMapping, getDefined, zip } from '@decipad/utils';
+import pTime from 'p-time';
 import type { AST } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
 import { Realm, run } from './interpreter';
@@ -240,4 +241,11 @@ export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
   serialize: (item: Type) => {
     return snapshotType(item);
   },
+};
+
+export const runAndMeasure = async <T>(
+  fn: () => Promise<T>
+): Promise<[T, number]> => {
+  const p = pTime(fn)();
+  return [await p, getDefined(p.time)];
 };

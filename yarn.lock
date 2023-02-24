@@ -24322,6 +24322,13 @@ p-series@2.1.0:
     "@sindresorhus/is" "^0.15.0"
     p-reduce "^2.1.0"
 
+p-time@2:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/p-time/-/p-time-2.1.0.tgz#b9cbdac8fcd3baa4153999a15c80337036a2e9cf"
+  integrity sha512-qmQMkimWJHh4yeQz1tUcxMkNpPtrWDkwmfG/XfT0TR7iBiZpacyGZmaDf9o6SAwW8r9+DyeqfbYFJDO0J/E+1A==
+  dependencies:
+    mimic-fn "^2.1.0"
+
 p-timeout@^3.1.0, p-timeout@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-3.2.0.tgz#c7e17abc971d2a7962ef83626b35d635acf23dfe"
