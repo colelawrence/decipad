@@ -32,13 +32,13 @@ const IdentifyUserAnalytics: React.FC<{ children: ReactNode }> = ({
   }, [analytics, session, userId, userEmail]);
 
   useEffect(() => {
-    if (session?.user.id) {
+    if (session?.user?.id) {
       Sentry.setUser({
         id: session.user.id,
         email: session.user.email,
       });
     }
-  }, [session?.user.email, session?.user.id]);
+  }, [session?.user?.email, session?.user?.id]);
 
   return <>{children}</>;
 };

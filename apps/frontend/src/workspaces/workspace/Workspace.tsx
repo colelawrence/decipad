@@ -318,7 +318,7 @@ const Workspace: FC = () => {
         showFeedback={showFeedback}
         Heading="h1"
         name={user?.self?.name || 'Me'}
-        email={session.user.email || 'me@example.com'}
+        email={session.user?.email || 'me@example.com'}
         onLogout={signoutCallback}
         activeWorkspace={{
           ...currentWorkspace,

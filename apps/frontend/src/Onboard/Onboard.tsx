@@ -40,13 +40,13 @@ export const Onboard = () => {
   // Keep retrieved values as local state so they can be edited and submitted
   // only when navigating to the next step.
   const [name, setName] = useState(() => {
-    const userEmail = session.data?.user.email;
+    const userEmail = session.data?.user?.email;
     const fullName = userResult.data?.self?.name;
     const hasValidName = fullName && fullName !== userEmail;
 
     return hasValidName ? fullName : '';
   });
-  const [username, setUsername] = useState(session.data?.user.username ?? '');
+  const [username, setUsername] = useState(session.data?.user?.username ?? '');
   const [description, setDescription] = useState(
     userResult.data?.self?.description ?? ''
   );
@@ -149,7 +149,7 @@ export const Onboard = () => {
         element={
           <LazyRoute>
             <AccountSetupFlow3
-              email={session.data?.user.email}
+              email={session.data?.user?.email}
               name={name}
               username={username}
               description={description}

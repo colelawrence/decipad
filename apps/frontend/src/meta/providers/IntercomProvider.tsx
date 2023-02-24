@@ -11,8 +11,8 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
       appId={process.env.REACT_APP_INTERCOM_APP_ID!}
       autoBoot
       autoBootProps={{
-        email: session.data?.user.email,
-        name: session.data?.user.name,
+        email: session.data?.user?.email,
+        name: session.data?.user?.name,
       }}
       shouldInitialize={session.status === 'authenticated'}
     >

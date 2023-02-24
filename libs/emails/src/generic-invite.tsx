@@ -17,9 +17,9 @@ const genericInvite: EmailGenerator<{
       resourceType={resource.humanName}
       resourceName={resourceName}
       resourceUrl={inviteAcceptLink}
-      inviterName={from.name}
+      inviterName={from.name || 'Unknown'}
       inviterEmail={from.email}
-      inviteeName={to.name}
+      inviteeName={to.name || 'Unknown'}
       inviteeEmail={to.email}
     />
   ),
