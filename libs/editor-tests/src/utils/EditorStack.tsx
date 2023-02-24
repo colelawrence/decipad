@@ -7,7 +7,6 @@ import {
   EditorUserInteractionsProvider,
 } from '@decipad/react-contexts';
 import { Computer } from '@decipad/computer';
-import { NotebookStateProvider } from '@decipad/notebook-state';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BehaviorSubject } from 'rxjs';
@@ -33,21 +32,19 @@ export const EditorStack: FC<EditorStackProps> = ({
       }}
     >
       <DndProvider backend={HTML5Backend}>
-        <NotebookStateProvider>
-          <EditorUserInteractionsProvider>
-            <ComputerContextProvider computer={computer}>
-              <TeleportEditor editor={editor}>
-                <Editor
-                  notebookId={notebookId}
-                  editor={editor}
-                  loaded
-                  readOnly={false}
-                  isSavedRemotely={remoteSaved}
-                ></Editor>
-              </TeleportEditor>
-            </ComputerContextProvider>
-          </EditorUserInteractionsProvider>
-        </NotebookStateProvider>
+        <EditorUserInteractionsProvider>
+          <ComputerContextProvider computer={computer}>
+            <TeleportEditor editor={editor}>
+              <Editor
+                notebookId={notebookId}
+                editor={editor}
+                loaded
+                readOnly={false}
+                isSavedRemotely={remoteSaved}
+              ></Editor>
+            </TeleportEditor>
+          </ComputerContextProvider>
+        </EditorUserInteractionsProvider>
       </DndProvider>
     </SessionProvider>
   );

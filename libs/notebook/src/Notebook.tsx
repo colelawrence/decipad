@@ -1,10 +1,7 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useEditorPlugins } from '@decipad/editor';
 import { MyEditor } from '@decipad/editor-types';
-import {
-  NotebookStateProvider,
-  useNotebookState,
-} from '@decipad/notebook-state';
+import { useNotebookState } from '@decipad/notebook-state';
 import {
   ComputerContextProvider,
   StarterChecklistContextProvider,
@@ -216,20 +213,18 @@ export const Notebook: FC<NotebookStarterChecklistProps & NotebookProps> = (
     ...rest
   } = props;
   return (
-    <NotebookStateProvider>
-      <EditorUserInteractionsProvider>
-        <NotebookWithChecklist
-          checklistState={checklistState}
-          onChecklistStateChange={onChecklistStateChange}
-        >
-          <EditorAttachmentsHandler
-            getAttachmentForm={getAttachmentForm}
-            onAttached={onAttached}
-          />
-          <InsideNotebookState {...rest} />
-        </NotebookWithChecklist>
-      </EditorUserInteractionsProvider>
-    </NotebookStateProvider>
+    <EditorUserInteractionsProvider>
+      <NotebookWithChecklist
+        checklistState={checklistState}
+        onChecklistStateChange={onChecklistStateChange}
+      >
+        <EditorAttachmentsHandler
+          getAttachmentForm={getAttachmentForm}
+          onAttached={onAttached}
+        />
+        <InsideNotebookState {...rest} />
+      </NotebookWithChecklist>
+    </EditorUserInteractionsProvider>
   );
 };
 
