@@ -215,7 +215,6 @@ export const plugins = ({
       createWithDocSyncHistoryPlugin(),
 
       createUserEventPlugin(events),
-      createTrailingParagraphPlugin(),
 
       // shortcuts
       createSelectionShortcutPlugin(),
