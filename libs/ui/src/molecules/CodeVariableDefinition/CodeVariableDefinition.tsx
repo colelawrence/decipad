@@ -44,7 +44,7 @@ const formulaIconStyles = css({
   left: '-18px',
   width: '16px',
   height: '100%',
-  display: 'flex',
+  display: 'grid',
   alignItems: 'center',
 });
 
