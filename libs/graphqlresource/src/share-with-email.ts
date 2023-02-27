@@ -54,7 +54,8 @@ export const shareWithEmail = <
         throw new UserInputError(`no such ${resourceType.humanName}`);
       }
 
-      const emailKeyId = `email:${args.email}`;
+      const email = args.email.toLowerCase();
+      const emailKeyId = `email:${email}`;
       const { userkeys, users } = await tables();
       const emailKey = await userkeys.get({ id: emailKeyId });
 
@@ -64,8 +65,8 @@ export const shareWithEmail = <
         ? await users.get({ id: registeredUserId })
         : (
             await createUser({
-              name: args.email,
-              email: args.email,
+              email,
+              name: email,
             })
           ).user;
 
@@ -87,7 +88,7 @@ export const shareWithEmail = <
 
       await notifyInvitee({
         user,
-        email: args.email,
+        email,
         invitedByUser: actingUser,
         isRegistered: registeredUserId != null,
         resourceType,
@@ -99,9 +100,9 @@ export const shareWithEmail = <
       await track({
         event: 'share with email',
         properties: {
+          email,
           userId: actingUser.id,
           resourceType: resourceType.humanName,
-          email: args.email,
           permissionType: args.permissionType,
         },
       });

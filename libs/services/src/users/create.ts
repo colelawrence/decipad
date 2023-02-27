@@ -80,13 +80,14 @@ async function createInitialWorkspace(
 
 export async function create(user: UserInput): Promise<UserCreationResult> {
   const data = await tables();
+  const email = user.email?.toLowerCase();
 
   const newUser = {
+    email,
     id: nanoid(),
     name: user.name,
     last_login: timestamp(),
     image: user.image,
-    email: user.email,
     secret: nanoid(),
   };
 
@@ -101,9 +102,9 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
     await data.userkeys.create(newUserKey);
   }
 
-  if (user.email) {
+  if (email) {
     const newEmailUserKey = {
-      id: `email:${user.email}`,
+      id: `email:${email}`,
       user_id: newUser.id,
     };
 
@@ -121,7 +122,7 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
   await track({
     event: 'user created',
     userId: newUser.id,
-    properties: { email: user.email, firstName },
+    properties: { email, firstName },
   });
 
   return {
