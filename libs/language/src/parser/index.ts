@@ -1,4 +1,4 @@
-import { isExpression, n, walkAst } from '../utils';
+import { isExpression, n } from '../utils';
 import * as AST from './ast-types';
 import * as Parser from './parser-types';
 import { tokenizer, BracketCounter } from '../grammar/tokenizer';
@@ -46,10 +46,7 @@ export function parseStatement(source: string): Parser.ParsedStatement {
   };
 }
 
-export function parseExpression(
-  source: string,
-  disallowedNodeTypes?: AST.Node['type'][]
-): Parser.ParsedExpression {
+export function parseExpression(source: string): Parser.ParsedExpression {
   const parsed = parseStatement(source);
 
   if (parsed.error) return parsed;
@@ -58,23 +55,6 @@ export function parseExpression(
     return {
       error: { message: 'Expected expression', isEmptyExpressionError: true },
     };
-  }
-
-  if (disallowedNodeTypes) {
-    try {
-      walkAst(parsed.solution, (node) => {
-        if (disallowedNodeTypes.includes(node.type)) {
-          throw new Error('Invalid node type');
-        }
-      });
-    } catch {
-      return {
-        error: {
-          message: 'Invalid expression in this context',
-          isDisallowedNodeType: true,
-        },
-      };
-    }
   }
 
   return {

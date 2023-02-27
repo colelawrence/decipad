@@ -201,9 +201,11 @@ export const CodeLineV2: PlateComponent = ({
               <StructuredInputUnits
                 unit={simpleValue.unit}
                 onChangeUnit={onChangeUnit}
+                readOnly={isReadOnly}
               />
             )
           }
+          readOnly={isReadOnly}
         />
       </CodeLineTeleport>
     </DraggableBlock>

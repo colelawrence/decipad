@@ -7,14 +7,13 @@ import { statementToIdentifiedBlock } from './statementToIdentifiedBlock';
 export function parseElementAsVariableAssignment(
   blockId: string,
   varName: string,
-  source: string | AST.Expression,
-  disallowedNodeTypes?: AST.Node['type'][]
+  source: string | AST.Expression
 ): Program {
   const { solution: expression, error } =
     typeof source === 'string'
       ? source.trim() === ''
         ? parseExpression('0')
-        : parseExpression(source, disallowedNodeTypes)
+        : parseExpression(source)
       : { solution: source, error: undefined };
 
   if (error) {

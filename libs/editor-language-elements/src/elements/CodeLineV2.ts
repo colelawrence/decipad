@@ -1,4 +1,4 @@
-import { AST, Computer, Program } from '@decipad/computer';
+import { Computer, Program } from '@decipad/computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -12,13 +12,6 @@ import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
-
-const disallowNodeTypes: AST.Node['type'][] = [
-  'range',
-  'sequence',
-  'match',
-  'tiered',
-];
 
 const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
   async (_editor, computer, e: CodeLineV2Element): Promise<Program> => {
@@ -37,8 +30,7 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
         return parseElementAsVariableAssignment(
           e.id,
           getNodeString(vname),
-          parsedInput,
-          disallowNodeTypes
+          parsedInput
         );
       }
     }
@@ -75,8 +67,7 @@ export const parseStructuredCodeLine = weakMapMemoizeInteractiveElementOutput(
         programChunk: parseElementAsVariableAssignment(
           block.id,
           getNodeString(vname),
-          getCodeLineSource(sourcetext),
-          disallowNodeTypes
+          getCodeLineSource(sourcetext)
         ),
       };
     }

@@ -1,4 +1,5 @@
 import { AST, currencyUnits, UnitOfMeasure } from '@decipad/language';
+import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
@@ -17,6 +18,7 @@ import { p13Medium } from '../../primitives';
 export interface StructuredInputUnitsProps {
   readonly unit: AST.Expression | '%' | undefined;
   readonly onChangeUnit: (unit?: AST.Expression | '%' | undefined) => void;
+  readonly readOnly?: boolean;
 }
 
 const ExpandableColumnsArr = [
@@ -70,6 +72,13 @@ const unitCategories: Record<
     {}
   ),
 };
+const categoryAndCaretStyles = css({
+  width: '100%',
+  borderRadius: '16px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
 
 // We construct an object that we can render on the menu,
 // from a map above so we can always have O(1) read.
@@ -97,6 +106,7 @@ const u = (unit: string | UnitOfMeasure): AST.Expression | '%' | undefined => {
 export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
   unit,
   onChangeUnit,
+  readOnly = false,
 }) => {
   // No sub menu can be open at the same time
   const [open, setOpen] = useState(false);
@@ -120,95 +130,99 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
       css={{
         display: 'flex',
         alignItems: 'center',
-        cursor: 'pointer',
+        cursor: readOnly ? 'default' : 'pointer',
       }}
       contentEditable={false}
     >
-      <MenuList
-        root
-        dropdown
-        open={open}
-        onChangeOpen={setOpen}
-        trigger={
-          <div
-            css={{
-              width: '100%',
-              borderRadius: '16px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <span css={p13Medium}>{stringUnit}</span>
-            <button
-              css={{
-                width: 18,
-                display: 'grid',
-              }}
-              data-testid="unit-picker-button"
-            >
-              <Caret variant="down" />
-            </button>
-          </div>
-        }
-      >
-        <MenuItem icon={<Number />} onSelect={() => onChangeUnit(undefined)}>
-          <span>Number</span>
-        </MenuItem>
-        <MenuItem icon={<Percentage />} onSelect={() => onChangeUnit('%')}>
-          <span data-testid="unit-picker-percentage">Percentage</span>
-        </MenuItem>
+      {readOnly ? (
+        <div css={categoryAndCaretStyles}>
+          <span css={p13Medium}>{stringUnit}</span>
+        </div>
+      ) : (
         <MenuList
-          itemTrigger={
-            <TriggerMenuItem icon={<DollarCircle />}>
-              <div css={{ minWidth: '132px' }}>Currency</div>
-            </TriggerMenuItem>
+          root
+          dropdown
+          open={open}
+          onChangeOpen={setOpen}
+          trigger={
+            <div css={categoryAndCaretStyles}>
+              <span css={p13Medium}>{stringUnit}</span>
+              <button
+                css={{
+                  width: 18,
+                  display: 'grid',
+                }}
+                data-testid="unit-picker-button"
+              >
+                <Caret variant="down" />
+              </button>
+            </div>
           }
-          onChangeOpen={() => onColumnExpand('Currency')}
-          open={currentOpen === 'Currency'}
         >
-          {presentableCurrencyUnits.map((currency) => (
-            <MenuItem
-              key={currency.baseQuantity}
-              icon={<span>{currency.pretty ?? currency.name}</span>}
-              onSelect={() => onChangeUnit(u(currency))}
-            >
-              {currency.baseQuantity}
-            </MenuItem>
-          ))}
+          <MenuItem icon={<Number />} onSelect={() => onChangeUnit(undefined)}>
+            <span>Number</span>
+          </MenuItem>
+          <MenuItem icon={<Percentage />} onSelect={() => onChangeUnit('%')}>
+            <span data-testid="unit-picker-percentage">Percentage</span>
+          </MenuItem>
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem icon={<DollarCircle />}>
+                <div css={{ minWidth: '132px' }}>Currency</div>
+              </TriggerMenuItem>
+            }
+            onChangeOpen={() => onColumnExpand('Currency')}
+            open={currentOpen === 'Currency'}
+          >
+            {presentableCurrencyUnits.map((currency) => (
+              <MenuItem
+                key={currency.baseQuantity}
+                icon={<span>{currency.pretty ?? currency.name}</span>}
+                onSelect={() => onChangeUnit(u(currency))}
+              >
+                {currency.baseQuantity}
+              </MenuItem>
+            ))}
+          </MenuList>
+          {/* We show currencies seperately because they have nice icons */}
+          {availableUnits
+            .filter((a) => a.category !== 'Currency')
+            .map((unitCategory) => (
+              <MenuList
+                key={unitCategory.category}
+                itemTrigger={
+                  <TriggerMenuItem icon={<unitCategory.icon />}>
+                    <div
+                      css={{ minWidth: '132px' }}
+                      data-testid={`unit-picker-${unitCategory.category}`}
+                    >
+                      {unitCategory.category}
+                    </div>
+                  </TriggerMenuItem>
+                }
+                onChangeOpen={() => onColumnExpand(unitCategory.category)}
+                open={currentOpen === unitCategory.category}
+              >
+                {unitCategory.units.map((myUnit) => (
+                  <MenuItem
+                    key={myUnit}
+                    onSelect={() => onChangeUnit(u(myUnit))}
+                  >
+                    <span
+                      data-testid={`unit-picker-${unitCategory.category}-${myUnit}`}
+                    >
+                      {myUnit}
+                    </span>
+                  </MenuItem>
+                ))}
+              </MenuList>
+            ))}
+          <ASTUnitMenuItem
+            placeholder="create custom"
+            onSelect={onChangeUnit}
+          />
         </MenuList>
-        {/* We show currencies seperately because they have nice icons */}
-        {availableUnits
-          .filter((a) => a.category !== 'Currency')
-          .map((unitCategory) => (
-            <MenuList
-              key={unitCategory.category}
-              itemTrigger={
-                <TriggerMenuItem icon={<unitCategory.icon />}>
-                  <div
-                    css={{ minWidth: '132px' }}
-                    data-testid={`unit-picker-${unitCategory.category}`}
-                  >
-                    {unitCategory.category}
-                  </div>
-                </TriggerMenuItem>
-              }
-              onChangeOpen={() => onColumnExpand(unitCategory.category)}
-              open={currentOpen === unitCategory.category}
-            >
-              {unitCategory.units.map((myUnit) => (
-                <MenuItem key={myUnit} onSelect={() => onChangeUnit(u(myUnit))}>
-                  <span
-                    data-testid={`unit-picker-${unitCategory.category}-${myUnit}`}
-                  >
-                    {myUnit}
-                  </span>
-                </MenuItem>
-              ))}
-            </MenuList>
-          ))}
-        <ASTUnitMenuItem placeholder="create custom" onSelect={onChangeUnit} />
-      </MenuList>
+      )}
     </div>
   );
 };

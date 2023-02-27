@@ -27,6 +27,7 @@ interface CodeLineStructuredProps {
   readonly variableNameChild: ReactNode;
   readonly codeChild: ReactNode;
   readonly unitPicker: ReactNode;
+  readonly readOnly?: boolean;
 }
 
 export const CodeLineStructured = ({
@@ -40,6 +41,7 @@ export const CodeLineStructured = ({
   variableNameChild,
   codeChild,
   unitPicker,
+  readOnly = false,
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
 
@@ -77,12 +79,12 @@ export const CodeLineStructured = ({
         css={[codeLineStyles, highlight && highlightedLineStyles]}
         spellCheck={false}
       >
-        <code contentEditable={true} css={variableNameContainerStyles}>
+        <code contentEditable={!readOnly} css={variableNameContainerStyles}>
           {variableNameChild}
         </code>
         <code
           data-testid="codeline-code"
-          contentEditable={true}
+          contentEditable={!readOnly}
           css={codeContainerStyles}
         >
           {getEquals()}
