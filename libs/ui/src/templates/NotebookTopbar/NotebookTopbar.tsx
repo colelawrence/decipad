@@ -96,8 +96,9 @@ export type NotebookTopbarProps = Pick<
     workspace?: { id: string; name: string } | null;
     onDuplicateNotebook?: () => void;
     onRevertChanges?: () => void;
-    onInvite?: (email: string) => Promise<void>;
     onRemove?: (userId: string) => Promise<void>;
+    onInvite?: (email: string, permission: PermissionType) => Promise<void>;
+    onChange?: (userId: string, permission: PermissionType) => Promise<void>;
     hasLocalChanges?: BehaviorSubject<boolean>;
   };
 

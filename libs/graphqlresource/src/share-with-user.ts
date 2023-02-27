@@ -17,11 +17,11 @@ export type ShareWithUserArgs = {
   canComment?: boolean;
 };
 
-export type ShareWithUserFunction = (
+export type ShareWithUserFunction<RecordT extends ConcreteRecord> = (
   _: unknown,
   args: ShareWithUserArgs,
   context: GraphqlContext
-) => Promise<void>;
+) => Promise<RecordT>;
 
 export function shareWithUser<
   RecordT extends ConcreteRecord,
@@ -30,7 +30,7 @@ export function shareWithUser<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): ShareWithUserFunction {
+): ShareWithUserFunction<RecordT> {
   return async (
     _: unknown,
     args: ShareWithUserArgs,
@@ -59,5 +59,7 @@ export function shareWithUser<
     }
 
     await createResourcePermission(permission);
+
+    return record;
   };
 }

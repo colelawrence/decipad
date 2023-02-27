@@ -36,9 +36,9 @@ export const shareWithEmail = <
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): ((
-  shareWithUser: ShareWithUserFunction
+  shareWithUser: ShareWithUserFunction<RecordT>
 ) => ShareWithEmailFunction<RecordT>) => {
-  return (shareWithUser: ShareWithUserFunction) =>
+  return (shareWithUser: ShareWithUserFunction<RecordT>) =>
     async (
       _: unknown,
       args: ShareWithEmailArgs,

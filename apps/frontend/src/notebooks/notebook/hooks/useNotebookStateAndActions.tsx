@@ -11,6 +11,7 @@ import { DocSyncEditor, SyncSource } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
+import { PermissionType as PermissionTypeStr } from 'libs/ui/src/types';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
   GetNotebookByIdQuery,
@@ -27,6 +28,7 @@ import EditorIcon from '../EditorIcon';
 import {
   PermissionType,
   useUnsharePadWithUserMutation,
+  useUpdatePadPermissionMutation,
 } from '../../../graphql/generated';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
@@ -64,7 +66,14 @@ interface UseNotebookStateAndActionsResult {
   setNotebookPublic: (isPublic: boolean) => void;
   publishNotebook: () => void;
   unpublishNotebook: () => void;
-  inviteEditorByEmail: (email: string) => Promise<void>;
+  inviteEditorByEmail: (
+    email: string,
+    permission: PermissionTypeStr
+  ) => Promise<void>;
+  changeEditorAccess: (
+    editorId: string,
+    permission: PermissionTypeStr
+  ) => Promise<void>;
   removeEditorById: (id: string) => Promise<void>;
   getAttachmentForm: (
     file: File
@@ -111,6 +120,7 @@ export const useNotebookStateAndActions = ({
   const [, remoteUpdateNotebookIcon] = useUpdateNotebookIconMutation();
   const [, remoteUpdateNotebookIsPublic] = useSetNotebookPublicMutation();
   const [, shareNotebookWithEmail] = useSharePadWithEmailMutation();
+  const [, updatePadPermission] = useUpdatePadPermissionMutation();
   const [, unsharePadWithUser] = useUnsharePadWithUserMutation();
 
   const [, createOrUpdateSnapshot] =
@@ -337,17 +347,31 @@ export const useNotebookStateAndActions = ({
   }, [event, notebookId, setNotebookPublic]);
 
   const inviteEditorByEmail = useCallback(
-    (email: string): Promise<void> => {
+    (email: string, permission: PermissionTypeStr): Promise<void> => {
       // TODO: return a correct type instead of void
       // @ts-ignore
       return shareNotebookWithEmail({
         padId: notebookId,
         email,
         canComment: true,
-        permissionType: PermissionType.Write,
+        permissionType: permission as unknown as PermissionType,
       });
     },
     [notebookId, shareNotebookWithEmail]
+  );
+
+  const changeEditorAccess = useCallback(
+    (userId: string, permission: PermissionTypeStr): Promise<void> => {
+      // TODO: return a correct type instead of void
+      // @ts-ignore
+      return updatePadPermission({
+        padId: notebookId,
+        userId,
+        canComment: true,
+        permissionType: permission as unknown as PermissionType,
+      });
+    },
+    [notebookId, updatePadPermission]
   );
 
   const removeEditorById = useCallback(
@@ -384,6 +408,7 @@ export const useNotebookStateAndActions = ({
 
     publishNotebook,
     unpublishNotebook,
+    changeEditorAccess,
     inviteEditorByEmail,
     removeEditorById,
     getAttachmentForm,

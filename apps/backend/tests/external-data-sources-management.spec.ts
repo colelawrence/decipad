@@ -231,7 +231,7 @@ test('external data sources', (ctx) => {
             id: "${externalDataSource!.id}"
             userId: "test user id 2"
             permissionType: READ
-          )
+          ) { id }
         }
       `,
     });

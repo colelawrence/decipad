@@ -13,6 +13,8 @@ import {
 } from '../../primitives';
 import { NotebookAvatar } from '../../molecules/NotebookAvatars/NotebookAvatars';
 import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
+import { CollabAccessDropdown } from '../../molecules/CollabAccessDropdown/CollabAccessDropdown';
+import { PermissionType } from '../../types';
 
 const popUpStyles = css({
   width: '310px',
@@ -64,15 +66,30 @@ const invitationButtonContentStyles = css({
   justifyContent: 'center',
 });
 
+const inputContainerStyles = css({
+  position: 'relative',
+});
+
+const inputAccessPickerStyles = css({
+  position: 'absolute',
+  right: '2px',
+  bottom: 0,
+  top: 0,
+  marginTop: 'auto',
+  marginBottom: 'auto',
+  height: 'fit-content',
+});
+
 const invitationFormStyles = css({
   gap: '8px',
   display: 'flex',
   flexDirection: 'column',
-  '>input': {
+  input: {
     paddingTop: '7px',
     paddingBottom: '7px',
     fontSize: '13px',
     lineHeight: '100%',
+    width: '100%',
   },
 });
 
@@ -84,8 +101,9 @@ const LoadingDots = () => (
 interface NotebookSharingPopUpProps {
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
   usersWithAccess?: NotebookAvatar[] | null;
-  onInvite?: (email: string) => Promise<void>;
   onRemove?: (userId: string) => Promise<void>;
+  onInvite?: (email: string, permission: PermissionType) => Promise<void>;
+  onChange?: (userId: string, permission: PermissionType) => Promise<void>;
 }
 
 /**
@@ -97,23 +115,26 @@ export const NotebookInvitationPopUp = ({
   usersWithAccess,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
+  onChange = () => Promise.resolve(),
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  // TODO: fix input floating label
+  const [permission, setPermission] = useState<PermissionType>('WRITE');
 
   const handleAddCollaborator = useCallback(() => {
     if (loading) return;
     if (email) {
       setIsLoading(true);
       setEmail('');
-      onInvite(email).finally(() => {
+      onInvite(email, permission).finally(() => {
         setIsLoading(false);
         setSuccess(true);
         setTimeout(() => setSuccess(false), 2000);
       });
     }
-  }, [email, loading, onInvite, setIsLoading, setSuccess]);
+  }, [email, loading, permission, onInvite, setIsLoading, setSuccess]);
 
   const handleRemoveCollaborator = useCallback(
     (userId: string) => {
@@ -122,6 +143,15 @@ export const NotebookInvitationPopUp = ({
       onRemove(userId).finally(() => setIsLoading(false));
     },
     [loading, onRemove, setIsLoading]
+  );
+
+  const handleChangePermission = useCallback(
+    (userId: string, perm: PermissionType) => {
+      if (loading) return;
+      setIsLoading(true);
+      onChange(userId, perm).finally(() => setIsLoading(false));
+    },
+    [loading, onChange, setIsLoading]
   );
 
   return (
@@ -137,14 +167,28 @@ export const NotebookInvitationPopUp = ({
         </div>
 
         <div css={invitationFormStyles}>
-          <InputField
-            placeholder="Enter email address"
-            value={email}
-            onChange={setEmail}
-            onEnter={handleAddCollaborator}
-          />
+          <div css={inputContainerStyles}>
+            <InputField
+              placeholder="Enter email address"
+              value={email}
+              onChange={setEmail}
+              onEnter={handleAddCollaborator}
+            />
 
-          <Button size="extraSlim" onClick={handleAddCollaborator}>
+            <span css={inputAccessPickerStyles}>
+              <CollabAccessDropdown
+                isInvitationPicker
+                currentPermission={permission}
+                onChange={setPermission}
+              />
+            </span>
+          </div>
+
+          <Button
+            size="extraSlim"
+            onClick={handleAddCollaborator}
+            testId="send-invitation"
+          >
             <div css={invitationButtonContentStyles}>
               {success && <CheckMark />}
               {loading && <LoadingDots />}
@@ -156,6 +200,7 @@ export const NotebookInvitationPopUp = ({
         <CollabMembersRights
           usersWithAccess={usersWithAccess}
           onRemoveCollaborator={handleRemoveCollaborator}
+          onChangePermission={handleChangePermission}
         />
       </div>
     </div>

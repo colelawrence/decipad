@@ -403,7 +403,7 @@ test('pads', (ctx) => {
             id: "${pad.id}"
             userId: "test user id 2"
             permissionType: READ
-            canComment: true)
+            canComment: true) { id }
         }
       `,
     });

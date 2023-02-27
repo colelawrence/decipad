@@ -1,0 +1,39 @@
+mutation updatePadPermission(
+  $padId: ID!
+  $userId: ID!
+  $permissionType: PermissionType!
+  $canComment: Boolean!
+) {
+  unsharePadWithUser(id: $padId, userId: $userId) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          ...Collaborator
+        }
+      }
+    }
+  }
+
+  sharePadWithUser(
+    id: $padId
+    userId: $userId
+    permissionType: $permissionType
+    canComment: $canComment
+  ) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          ...Collaborator
+        }
+      }
+    }
+  }
+}

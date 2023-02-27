@@ -12,6 +12,10 @@ const shadow1 = transparency(grey500, 0.02).rgba;
 const shadow2 = transparency(grey500, 0.08).rgba;
 
 const styles = css({
+  display: 'flex',
+  flexDirection: 'column',
+
+  gap: '2px',
   padding: '6px',
   backgroundColor: cssVar('backgroundColor'),
   boxShadow: `0px 1px 2px ${shadow1}, 0px 2px 12px ${shadow2}`,

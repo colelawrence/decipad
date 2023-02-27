@@ -2078,8 +2078,8 @@
               }
             ],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "OBJECT",
+              "name": "ExternalDataSource",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2378,8 +2378,8 @@
               }
             ],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "OBJECT",
+              "name": "Pad",
               "ofType": null
             },
             "isDeprecated": false,

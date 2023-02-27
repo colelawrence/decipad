@@ -5,10 +5,12 @@ import { Avatar } from '../../atoms';
 import { p12Medium, p14Medium } from '../../primitives';
 import { CollabAccessDropdown } from '..';
 import { NotebookAvatar } from '../NotebookAvatars/NotebookAvatars';
+import { PermissionType } from '../../types';
 
 type CollabMembersRightsProps = {
   usersWithAccess?: NotebookAvatar[] | null;
   onRemoveCollaborator?: (userId: string) => void;
+  onChangePermission?: (userId: string, permission: PermissionType) => void;
 };
 
 const collaboratorStyles = css({
@@ -38,10 +40,15 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
 export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   usersWithAccess,
   onRemoveCollaborator = noop,
+  onChangePermission = noop,
 }) => {
   if (!usersWithAccess?.length) {
     return null;
   }
+
+  const sortedUsersWithAccess = usersWithAccess.sort((a, b) => {
+    return a.user.name.localeCompare(b.user.name);
+  });
 
   return (
     <>
@@ -50,7 +57,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
       </div>
 
       <div css={groupStyles}>
-        {usersWithAccess.map(({ user, permission }) => (
+        {sortedUsersWithAccess.map(({ user, permission }) => (
           <div css={collaboratorStyles} key={user.id}>
             <div css={avatarStyles}>
               <Avatar name={user.name} email={user.email || ''} />
@@ -70,6 +77,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
               currentPermission={permission}
               isActivatedAccount={!!user.onboarded}
               onRemove={() => onRemoveCollaborator(user.id)}
+              onChange={(newPerm) => onChangePermission(user.id, newPerm)}
             />
           </div>
         ))}

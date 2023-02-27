@@ -94,7 +94,7 @@ export default gql`
       userId: ID!
       permissionType: PermissionType!
       canComment: Boolean!
-    ): Boolean
+    ): Pad
 
     unsharePadWithUser(id: ID!, userId: ID!): Pad
 

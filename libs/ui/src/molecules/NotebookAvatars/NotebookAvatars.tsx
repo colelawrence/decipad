@@ -72,7 +72,8 @@ export type NotebookAvatarsProps = {
   allowInvitation?: boolean;
 
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
-  onInvite?: (email: string) => Promise<void>;
+  onInvite?: (email: string, permission: PermissionType) => Promise<void>;
+  onChange?: (userId: string, permission: PermissionType) => Promise<void>;
   onRemove?: (userId: string) => Promise<void>;
 };
 

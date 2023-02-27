@@ -64,6 +64,7 @@ const Notebook: FC = () => {
     unpublishNotebook,
     inviteEditorByEmail,
     removeEditorById,
+    changeEditorAccess,
     getAttachmentForm,
     onAttached,
   } = useNotebookStateAndActions({
@@ -195,6 +196,7 @@ const Notebook: FC = () => {
                 unpublishNotebook={unpublishNotebook}
                 inviteEditorByEmail={inviteEditorByEmail}
                 removeEditorById={removeEditorById}
+                changeEditorAccess={changeEditorAccess}
               />
             </Frame>
           }

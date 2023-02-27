@@ -35,6 +35,15 @@ const blueBackgroundStyles = css({
   },
 });
 
+const transparentBackgroundStyles = css({
+  border: 'none',
+  backgroundColor: 'transparent',
+
+  ':hover, :focus': {
+    backgroundColor: 'transparent',
+  },
+});
+
 const iconStyles = css({
   width: '12px',
 });
@@ -42,7 +51,7 @@ const iconStyles = css({
 type IconButtonProps = {
   readonly children: ReactNode;
   readonly text: TextChildren;
-  readonly color?: 'blue';
+  readonly color?: 'default' | 'blue' | 'transparent';
   readonly iconPosition?: 'left' | 'right';
 } & (
   | {
@@ -70,7 +79,11 @@ export const TextAndIconButton = ({
     <div css={wrapperStyles}>
       {onClick ? (
         <button
-          css={[styles, color === 'blue' && blueBackgroundStyles]}
+          css={[
+            styles,
+            color === 'blue' && blueBackgroundStyles,
+            color === 'transparent' && transparentBackgroundStyles,
+          ]}
           onClick={onButtonClick}
         >
           {iconPosition === 'left' ? (

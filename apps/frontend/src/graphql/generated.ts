@@ -124,11 +124,11 @@ export type Mutation = {
   setUsername: Scalars['Boolean'];
   shareExternalDataSourceWithEmail?: Maybe<ExternalDataSource>;
   shareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
-  shareExternalDataSourceWithUser?: Maybe<Scalars['Boolean']>;
+  shareExternalDataSourceWithUser?: Maybe<ExternalDataSource>;
   sharePadWithEmail: Pad;
   sharePadWithRole?: Maybe<Scalars['Boolean']>;
   sharePadWithSecret: Scalars['String'];
-  sharePadWithUser?: Maybe<Scalars['Boolean']>;
+  sharePadWithUser?: Maybe<Pad>;
   unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
   unshareExternalDataSourceWithUser: ExternalDataSource;
   unshareNotebookWithSecret?: Maybe<Scalars['Boolean']>;
@@ -966,6 +966,16 @@ export type UpdateNotebookStatusMutationVariables = Exact<{
 
 export type UpdateNotebookStatusMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
 
+export type UpdatePadPermissionMutationVariables = Exact<{
+  padId: Scalars['ID'];
+  userId: Scalars['ID'];
+  permissionType: PermissionType;
+  canComment: Scalars['Boolean'];
+}>;
+
+
+export type UpdatePadPermissionMutation = { __typename?: 'Mutation', unsharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null } } | null, sharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null } } | null };
+
 export type UpdateSectionMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
   sectionId: Scalars['ID'];
@@ -1435,6 +1445,45 @@ export const UpdateNotebookStatusDocument = gql`
 export function useUpdateNotebookStatusMutation() {
   return Urql.useMutation<UpdateNotebookStatusMutation, UpdateNotebookStatusMutationVariables>(UpdateNotebookStatusDocument);
 };
+export const UpdatePadPermissionDocument = gql`
+    mutation updatePadPermission($padId: ID!, $userId: ID!, $permissionType: PermissionType!, $canComment: Boolean!) {
+  unsharePadWithUser(id: $padId, userId: $userId) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          ...Collaborator
+        }
+      }
+    }
+  }
+  sharePadWithUser(
+    id: $padId
+    userId: $userId
+    permissionType: $permissionType
+    canComment: $canComment
+  ) {
+    id
+    name
+    access {
+      users {
+        permission
+        canComment
+        user {
+          ...Collaborator
+        }
+      }
+    }
+  }
+}
+    ${CollaboratorFragmentDoc}`;
+
+export function useUpdatePadPermissionMutation() {
+  return Urql.useMutation<UpdatePadPermissionMutation, UpdatePadPermissionMutationVariables>(UpdatePadPermissionDocument);
+};
 export const UpdateSectionDocument = gql`
     mutation UpdateSection($workspaceId: ID!, $sectionId: ID!, $name: String!, $color: String!) {
   updateSectionInWorkspace(
@@ -1811,11 +1860,11 @@ export type GraphCacheOptimisticUpdaters = {
   setUsername?: GraphCacheOptimisticMutationResolver<MutationSetUsernameArgs, Scalars['Boolean']>,
   shareExternalDataSourceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithEmailArgs, Maybe<WithTypename<ExternalDataSource>>>,
   shareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
-  shareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithUserArgs, Maybe<Scalars['Boolean']>>,
+  shareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationShareExternalDataSourceWithUserArgs, Maybe<WithTypename<ExternalDataSource>>>,
   sharePadWithEmail?: GraphCacheOptimisticMutationResolver<MutationSharePadWithEmailArgs, WithTypename<Pad>>,
   sharePadWithRole?: GraphCacheOptimisticMutationResolver<MutationSharePadWithRoleArgs, Maybe<Scalars['Boolean']>>,
   sharePadWithSecret?: GraphCacheOptimisticMutationResolver<MutationSharePadWithSecretArgs, Scalars['String']>,
-  sharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationSharePadWithUserArgs, Maybe<Scalars['Boolean']>>,
+  sharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationSharePadWithUserArgs, Maybe<WithTypename<Pad>>>,
   unshareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
   unshareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithUserArgs, WithTypename<ExternalDataSource>>,
   unshareNotebookWithSecret?: GraphCacheOptimisticMutationResolver<MutationUnshareNotebookWithSecretArgs, Maybe<Scalars['Boolean']>>,
@@ -1862,11 +1911,11 @@ export type GraphCacheUpdaters = {
     setUsername?: GraphCacheUpdateResolver<{ setUsername: Scalars['Boolean'] }, MutationSetUsernameArgs>,
     shareExternalDataSourceWithEmail?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithEmail: Maybe<WithTypename<ExternalDataSource>> }, MutationShareExternalDataSourceWithEmailArgs>,
     shareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithRoleArgs>,
-    shareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithUser: Maybe<Scalars['Boolean']> }, MutationShareExternalDataSourceWithUserArgs>,
+    shareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ shareExternalDataSourceWithUser: Maybe<WithTypename<ExternalDataSource>> }, MutationShareExternalDataSourceWithUserArgs>,
     sharePadWithEmail?: GraphCacheUpdateResolver<{ sharePadWithEmail: WithTypename<Pad> }, MutationSharePadWithEmailArgs>,
     sharePadWithRole?: GraphCacheUpdateResolver<{ sharePadWithRole: Maybe<Scalars['Boolean']> }, MutationSharePadWithRoleArgs>,
     sharePadWithSecret?: GraphCacheUpdateResolver<{ sharePadWithSecret: Scalars['String'] }, MutationSharePadWithSecretArgs>,
-    sharePadWithUser?: GraphCacheUpdateResolver<{ sharePadWithUser: Maybe<Scalars['Boolean']> }, MutationSharePadWithUserArgs>,
+    sharePadWithUser?: GraphCacheUpdateResolver<{ sharePadWithUser: Maybe<WithTypename<Pad>> }, MutationSharePadWithUserArgs>,
     unshareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithRoleArgs>,
     unshareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithUser: WithTypename<ExternalDataSource> }, MutationUnshareExternalDataSourceWithUserArgs>,
     unshareNotebookWithSecret?: GraphCacheUpdateResolver<{ unshareNotebookWithSecret: Maybe<Scalars['Boolean']> }, MutationUnshareNotebookWithSecretArgs>,

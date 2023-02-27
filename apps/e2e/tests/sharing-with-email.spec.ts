@@ -43,7 +43,7 @@ test.describe('Sharing pad with email', () => {
     await page
       .locator('.notebook-invitation-popup input')
       .fill('invited-lama@ranch.org');
-    await page.locator('.notebook-invitation-popup button').click();
+    await page.getByTestId('send-invitation').click();
 
     const avatarsCountAfterInvitation = await page
       .locator('.notebook-avatars > div')
