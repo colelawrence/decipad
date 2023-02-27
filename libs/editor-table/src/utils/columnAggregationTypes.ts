@@ -80,6 +80,11 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `count(unique(${colRef}))`,
     },
     {
+      name: 'Count values',
+      shortName: 'Count',
+      expression: (colRef) => `count(${colRef})`,
+    },
+    {
       name: '% of total',
       shortName: 'Percent',
       expression: (colDef, totalAggregationExpressions) =>
@@ -91,6 +96,11 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       name: 'Count unique values',
       shortName: 'Unique',
       expression: (colRef) => `count(unique(${colRef}))`,
+    },
+    {
+      name: 'Count values',
+      shortName: 'Count',
+      expression: (colRef) => `count(${colRef})`,
     },
   ],
 };
