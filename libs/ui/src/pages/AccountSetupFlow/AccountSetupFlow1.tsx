@@ -1,21 +1,14 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import md5 from 'md5';
-import Gravatar from 'react-gravatar';
 import { Button } from '../../atoms';
 import { Deci } from '../../icons';
-import {
-  brand500,
-  cssVar,
-  h1,
-  p10Medium,
-  p14Medium,
-  p16Regular,
-  setCssVar,
-} from '../../primitives';
+import { h1, p14Medium, p16Regular } from '../../primitives';
 import { AccountSetup } from '../../templates';
 import { backgroundStyles } from './styles';
 import { useEnterListener } from './useEnterListener';
+import calculationImgLight from './onboarding1-light.svg';
+import calculationImgDark from './onboarding1-dark.svg';
+import { useThemeFromStore } from '@decipad/react-contexts';
 
 const groupStyles = css({
   display: 'flex',
@@ -30,48 +23,16 @@ const inlineLogoStyles = css({
 
   width: '16px',
   height: '16px',
-
+  marginBottom: '24px',
   verticalAlign: 'sub',
 });
 
-const avatarStackStyles = css({
+const imageContainer = css({
   display: 'flex',
-
-  marginBottom: '24px',
+  alignItems: 'flex-end',
+  justifyContent: 'center',
+  height: '100%',
 });
-
-const avatarStyles = css({
-  border: `1.5px solid ${brand500.rgb}`,
-  borderRadius: '50%',
-
-  '& + &': {
-    marginLeft: '-6px',
-  },
-
-  height: '28px',
-  width: '28px',
-
-  backgroundColor: cssVar('backgroundColor'),
-});
-
-const overflowAvatarStyles = css(
-  avatarStyles,
-  p10Medium,
-  setCssVar('currentTextColor', 'strongTextColor'),
-  {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    boxShadow: `-2px 0px 0px 0px ${cssVar('backgroundColor')}`,
-
-    borderColor: cssVar('strongHighlightColor'),
-
-    marginLeft: '-6px',
-  }
-);
-
-const team = ['giulia@n1n.co', 'nuno@n1n.co', 'kelly@n1n.co', 'simao@n1n.co'];
 
 interface AccountSetupFlow1Props {
   next?: () => void;
@@ -79,6 +40,8 @@ interface AccountSetupFlow1Props {
 
 export const AccountSetupFlow1 = ({ next = noop }: AccountSetupFlow1Props) => {
   useEnterListener(next);
+
+  const [isDarkMode] = useThemeFromStore();
 
   return (
     <div css={backgroundStyles}>
@@ -104,24 +67,20 @@ export const AccountSetupFlow1 = ({ next = noop }: AccountSetupFlow1Props) => {
                   <Deci />
                 </span>
               </p>
-              <div css={avatarStackStyles}>
-                {team.map((email, i) => (
-                  <Gravatar
-                    key={i}
-                    css={avatarStyles}
-                    md5={md5(email, { encoding: 'binary' })}
-                    default={'blank'}
-                  />
-                ))}
-                <div css={overflowAvatarStyles}>+12</div>
-              </div>
               <Button type="primaryBrand" onClick={next}>
                 Get started
               </Button>
             </div>
           </div>
         }
-        right={<span />}
+        right={
+          <div css={imageContainer}>
+            <img
+              src={isDarkMode ? calculationImgDark : calculationImgLight}
+              alt="Notebook illustration"
+            />
+          </div>
+        }
       />
     </div>
   );

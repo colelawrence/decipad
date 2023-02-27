@@ -96,12 +96,10 @@ export const AccountSetupFlow2 = ({
         left={
           <div css={leftStyles}>
             <div css={groupStyles}>
-              <h2 css={h1}>Create a new Profile</h2>
+              <h2 css={h1}>Create a profile</h2>
               <p css={p16Regular}>
-                This is the info people will see on your public and shared
-                notebooks. At Decipad we focus on modelling, publishing, and
-                also networking. So please tell us about yourself in a few
-                sentences
+                At Decipad, you can build models and reports and collaborate
+                with your team, colleagues and friends.
               </p>
             </div>
             <div css={groupStyles}>

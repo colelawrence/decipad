@@ -13,7 +13,6 @@ import {
   p16Regular,
   cssVar,
   setCssVar,
-  blue400,
   p10Regular,
   purple300,
   p14Medium,
@@ -45,16 +44,12 @@ const linkStyles = css({
   textDecoration: 'underline',
 });
 
-const blueLinkStyles = css({
-  color: blue400.rgb,
-});
-
 const avatarStyles = css({
   position: 'relative',
 
   boxShadow: `0px 2px 16px -4px rgba(0, 0, 0, 0.06)`,
   border: `1px solid ${cssVar('backgroundColor')}`,
-  borderRadius: '8px',
+  borderRadius: '100px',
 
   '& + &': {
     marginLeft: '-6px',
@@ -142,6 +137,7 @@ const backCardStyles = css({
   flexDirection: 'column',
 
   background: cssVar('highlightColor'),
+  boxShadow: '0px 3px 24px -10px black',
 });
 
 const nameStyles = css(
@@ -176,6 +172,7 @@ const frontCardStyles = css({
   gap: '6px',
 
   background: cssVar('highlightColor'),
+  boxShadow: '0px 3px 24px -10px black',
 });
 
 const descriptionStyles = css(
@@ -263,16 +260,8 @@ export const AccountSetupFlow3 = ({
             <div css={groupStyles}>
               <h2 css={h1}>Create a new Profile</h2>
               <p css={p16Regular}>
-                Add your account image. If you use{' '}
-                <a
-                  css={blueLinkStyles}
-                  href="https://pt.gravatar.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  gravatar.com
-                </a>
-                , we'll take your image from there, or you can upload it here
+                Your profile will be visible when you publish or share a
+                notebook.
               </p>
               {avatar}
             </div>
