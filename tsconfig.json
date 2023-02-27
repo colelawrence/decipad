@@ -52,6 +52,7 @@
       "@decipad/editor-attachments": ["libs/editor-attachments/src/index.ts"],
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
       "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
+      "@decipad/editor-draw": ["libs/editor-draw/src/index.ts"],
       "@decipad/editor-language-elements": [
         "libs/editor-language-elements/src/index.ts"
       ],

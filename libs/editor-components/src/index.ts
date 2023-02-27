@@ -9,7 +9,6 @@ export * from './Display';
 export * from './hooks';
 export * from './Import/Import';
 export * from './InteractiveParagraph';
-export * from './Media/Draw';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';
 export * from './NumberCatalog';

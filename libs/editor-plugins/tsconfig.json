@@ -41,6 +41,9 @@
       "path": "../editor-components"
     },
     {
+      "path": "../editor-draw"
+    },
+    {
       "path": "../editor-language-elements"
     },
     {

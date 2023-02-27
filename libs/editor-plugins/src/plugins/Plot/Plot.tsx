@@ -5,7 +5,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { PlotBlock } from '@decipad/ui';
+import { PlotBlock } from '@decipad/ui/src/organisms/PlotBlock/PlotBlock';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   assertElementType,
