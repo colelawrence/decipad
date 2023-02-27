@@ -31,6 +31,7 @@ const selectNames = (
       identifier: n.kind === 'function' ? `${n.name}(` : n.name,
       type: n.type.kind,
       blockId: n.blockId,
+      explanation: n.explanation,
     })
   );
 };

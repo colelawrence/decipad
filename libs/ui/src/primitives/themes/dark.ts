@@ -96,6 +96,7 @@ export const theme: CssVariables = {
   iconColorLight: offWhite.hex,
 
   tooltipBackground: dark300.hex,
+  tooltipCodeBackground: offBlack.hex,
 
   // slash icons
   weakerSlashIconColor: blue100.hex,

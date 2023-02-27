@@ -88,6 +88,7 @@ export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';
   type: SerializedType;
   name: string;
+  explanation?: string;
   blockId?: string;
   isLocal?: boolean;
 }
@@ -105,6 +106,7 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
         type: serializeType(t.functionPlaceholder(name, undefined)),
         name,
         blockId: undefined,
+        explanation: operator.explanation,
       };
     });
   }

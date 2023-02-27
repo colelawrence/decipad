@@ -215,6 +215,12 @@ export const code: TypographyStyles = {
   fontFeatureSettings: 'unset',
 };
 
+export const smallCode: TypographyStyles = {
+  ...code,
+  fontSize: `${10 / usualRemPxs}rem`,
+  lineHeight: 1,
+};
+
 // global
 
 export const GlobalTextStyles = (): ReturnType<React.FC> => (

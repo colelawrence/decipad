@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AutoCompleteMenu } from './AutoCompleteMenu';
 
@@ -14,12 +14,12 @@ it('renders menuitems triggering different commands', async () => {
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await userEvent.click(getByText(/One/i));
+  await act(() => userEvent.click(getByText(/One/i)));
   expect(handleExecute).toHaveBeenLastCalledWith(
     expect.objectContaining({ kind: 'variable', identifier: 'OneVar' })
   );
 
-  await userEvent.click(getByText(/Another/));
+  await act(() => userEvent.click(getByText(/Another/)));
   expect(handleExecute).toHaveBeenLastCalledWith(
     expect.objectContaining({ kind: 'variable', identifier: 'AnotherVar' })
   );
@@ -31,22 +31,23 @@ it('focuses menuitems using the arrow keys', async () => {
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await userEvent.keyboard('{arrowdown}{enter}');
+  await act(() => userEvent.keyboard('{arrowdown}{enter}'));
   expect(handleExecute).toHaveBeenCalledTimes(1);
 
-  await userEvent.keyboard('{arrowup}{enter}');
+  await act(() => userEvent.keyboard('{arrowup}{enter}'));
   expect(handleExecute).toHaveBeenCalledTimes(2);
 
   const [[firstCommand], [secondCommand]] = handleExecute.mock.calls;
   expect(secondCommand).not.toEqual(firstCommand);
 });
+
 it('does not focus menuitems when holding shift', async () => {
   const handleExecute = jest.fn();
   render(
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await userEvent.keyboard('{Shift>}{arrowdown}{enter}');
+  await act(() => userEvent.keyboard('{Shift>}{arrowdown}{enter}'));
   expect(handleExecute).not.toHaveBeenCalled();
 });
 
@@ -83,7 +84,7 @@ describe('search', () => {
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(2);
+    expect(getAllByRole('menuitem')).toHaveLength(3);
     expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
       `"NumberOtherVar"`
     );
@@ -91,13 +92,13 @@ describe('search', () => {
     rerender(
       <AutoCompleteMenu
         identifiers={identifiers}
-        search="O"
+        search="OOther"
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(3);
+    expect(getAllByRole('menuitem')).toHaveLength(2);
     expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
-      `"NumberOneVar"`
+      `"NumberOtherVar"`
     );
   });
 
@@ -113,12 +114,12 @@ describe('search', () => {
 
     expect(getAllByRole('menuitem')).toHaveLength(1);
 
-    await userEvent.keyboard('{arrowdown}{enter}');
+    await act(() => userEvent.keyboard('{arrowdown}{enter}'));
     expect(handleExecute).toHaveBeenCalledTimes(1);
     const [[firstCommand]] = handleExecute.mock.calls;
     handleExecute.mockClear();
 
-    await userEvent.keyboard('{arrowdown}{enter}');
+    await act(() => userEvent.keyboard('{arrowdown}{enter}'));
     expect(handleExecute).toHaveBeenCalledTimes(1);
     const [[secondCommand]] = handleExecute.mock.calls;
 

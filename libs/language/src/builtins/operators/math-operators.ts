@@ -163,6 +163,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     fn: ([n]) => Math.abs(n as number),
     functionSignature: 'number:R -> R',
+    explanation:
+      "Gives you the absolute value of a number. It is useful when you need to remove the negative sign from a number. If your number is positive or zero, it stays the same. If it's negative, it removes the negative sign.",
   },
   round: {
     argCount: [1, 2],
@@ -171,6 +173,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.round(decimalPlaces)
     ),
+    explanation:
+      'Gives you a rounded version of a number. Optionally, you can specify the number of decimal places as the second argument.',
   },
   roundup: {
     argCount: [1, 2],
@@ -179,6 +183,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.ceil(decimalPlaces)
     ),
+    explanation:
+      'Rounds the number to the nearest largest integer or number with the given decimal places.',
   },
   ceil: {
     aliasFor: 'roundup',
@@ -190,6 +196,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.floor(decimalPlaces)
     ),
+    explanation:
+      'Rounds a number to the nearest smaller integer or number with the given decimal places',
   },
   floor: {
     aliasFor: 'rounddown',
@@ -200,6 +208,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: max,
+    explanation:
+      'Gives you the maximum value of a list or column\n\nExample: `max(Table.Column)`',
   },
   min: {
     argCount: 1,
@@ -207,6 +217,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: min,
+    explanation:
+      'Gives you the minimum value of a list or column\n\nExample: `min(Table.Column)`',
   },
   average: {
     argCount: 1,
@@ -214,6 +226,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     fnValues: average,
     functionSignature: 'column<R> -> R',
+    explanation:
+      'Gives you the arithmetical average of all elements on a list or column of numbers\n\nExample: `average(Table.Column)`',
   },
   avg: { aliasFor: 'average' },
   mean: { aliasFor: 'average' },
@@ -256,6 +270,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     fnValues: median,
     functionSignature: 'column<R> -> R',
+    explanation:
+      'Gives you the median value of all elements on a list or column of numbers\n\nExample: `median(Table.Column)`',
   },
   sqrt: {
     argCount: 1,
@@ -280,12 +296,14 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       return result;
     },
     functor: ([n]) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
+    explanation: 'Gives you the square root of your number',
   },
   ln: {
     argCount: 1,
     noAutoconvert: true,
     fn: ([n]) => Math.log(n),
     functionSignature: 'number:R -> R',
+    explanation: 'Gives you the natural logarithmic of a number.',
   },
   factorial: {
     argCount: 1,
@@ -413,7 +431,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   for: {
     aliasFor: '*',
-    operatorKind: 'prefix',
+    operatorKind: 'infix',
   },
   '/': {
     argCount: 2,

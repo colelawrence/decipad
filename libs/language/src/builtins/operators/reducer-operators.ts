@@ -10,9 +10,11 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     isReducer: true,
     fn: ([nums]: DeciNumber[][]) => nums.reduce((a, b) => a.add(b), ZERO),
     functionSignature: 'column<number:R> -> R',
+    explanation: 'Adds all the elements of a list or column`',
   },
   sum: {
     aliasFor: 'total',
+    explanation: 'Adds all the elements of a list or column`',
   },
   sumif: {
     argCount: 2,
@@ -31,5 +33,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
       );
     },
     functionSignature: 'column<number:R>, column<boolean> -> R',
+    explanation:
+      'Adds all the elements of a list or column that pass a certain condition.\n\nExample: `sumif(Table.Column, Table.Column > 10)`',
   },
 };

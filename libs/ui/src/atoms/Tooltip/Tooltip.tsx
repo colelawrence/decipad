@@ -9,18 +9,33 @@ import {
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { noop } from 'lodash';
 import { FC, MouseEventHandler, useCallback } from 'react';
-import { cssVar, p12Medium } from '../../primitives';
+import {
+  cssVar,
+  offBlack,
+  p12Medium,
+  transparency,
+  weakOpacity,
+} from '../../primitives';
 import { useIsDragging } from './useIsDragging';
 
 const contentWrapperStyles = css({
-  background: cssVar('tooltipBackground'),
-
   borderRadius: '6px',
 
   maxWidth: '300px',
   padding: '12px 16px',
   wordBreak: 'break-word',
   zIndex: '1000',
+});
+
+const darkContentWrapperStyles = css(contentWrapperStyles, {
+  background: cssVar('tooltipBackground'),
+});
+
+const lightWrapperStyles = css(contentWrapperStyles, {
+  background: cssVar('backgroundColor'),
+  border: '1px solid',
+  borderColor: cssVar('borderHighlightColor'),
+  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, weakOpacity).rgba}`,
 });
 
 const smallVariantStyles = (
@@ -37,14 +52,29 @@ const smallVariantStyles = (
   ]);
 
 const contentStyles = css(p12Medium, {
-  color: cssVar('backgroundColor'),
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
   gap: '4px',
 });
 
-const arrowStyles = css({
+const lightContentStyles = css(contentStyles, {
+  color: cssVar('normalTextColor'),
+});
+
+const darkContentStyles = css(contentStyles, {
+  color: cssVar('backgroundColor'),
+});
+
+const lightArrowStyles = css({
+  polygon: {
+    fill: cssVar('backgroundColor'),
+    stroke: cssVar('borderHighlightColor'),
+  },
+
+  borderColor: 'black',
+});
+const darkArrowStyles = css({
   fill: cssVar('tooltipBackground'),
 });
 
@@ -60,6 +90,8 @@ interface TooltipProps {
 
   readonly variant?: 'normal' | 'small';
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
+  readonly theme?: 'dark' | 'light';
+
   readonly hoverOnly?: boolean;
   readonly onClick?: MouseEventHandler<HTMLDivElement>;
   readonly stopClickPropagation?: boolean;
@@ -80,6 +112,7 @@ export const Tooltip = ({
   onClick,
   stopClickPropagation = false,
   side,
+  theme = 'dark',
   align,
   wrapperStyles = css(),
 }: TooltipProps): ReturnType<FC> => {
@@ -132,15 +165,22 @@ export const Tooltip = ({
           side={side}
           align={align}
           css={[
-            contentWrapperStyles,
+            theme === 'light' ? lightWrapperStyles : darkContentWrapperStyles,
             variant === 'small' && smallVariantStyles(side),
             onClick && clickableStyles,
             wrapperStyles,
           ]}
           onClick={handleClick}
         >
-          <Arrow css={arrowStyles} width={18} height={9} offset={6} />
-          <div css={contentStyles}>{children}</div>
+          <Arrow
+            css={theme === 'dark' ? darkArrowStyles : lightArrowStyles}
+            width={18}
+            height={9}
+            offset={6}
+          />
+          <div css={theme === 'dark' ? darkContentStyles : lightContentStyles}>
+            {children}
+          </div>
         </Content>
       </Portal>
     </Root>

@@ -11,5 +11,7 @@ export const contractOperators: Record<string, BuiltinSpec> = {
       return true;
     },
     functionSignature: 'boolean -> boolean',
+    explanation:
+      'Creates an error in the notebook if the condition is not true',
   },
 };

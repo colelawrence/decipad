@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import Fuse from 'fuse.js';
 import { AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
 import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
@@ -90,6 +91,7 @@ export type Identifier = {
   type: string;
   editing?: boolean;
   focused?: boolean;
+  explanation?: string;
 };
 
 export interface AutoCompleteMenuProps {
@@ -100,10 +102,22 @@ export interface AutoCompleteMenuProps {
   readonly result?: string | null;
 }
 
+interface SearchGroup {
+  group: AutoCompleteGroup;
+  index: Fuse<Identifier>;
+}
+
+interface SearchResultGroup {
+  group: AutoCompleteGroup;
+  items: AutoCompleteGroup['items'];
+}
+
 type ItemBlockId = {
   identifier: string;
   blockId?: string;
 };
+
+const groupItems = (g: AutoCompleteGroup) => g.items;
 
 const matchBlockIdOrIdentifier = (
   a: ItemBlockId,
@@ -131,6 +145,7 @@ export const AutoCompleteMenu = ({
           .filter((i) => i.kind === 'variable' || i.kind === 'function')
           .map((i) => ({
             identifier: i.identifier,
+            explanation: i.explanation,
             blockId: i.blockId,
             kind: 'variable' as const,
             type: i.type,
@@ -141,31 +156,46 @@ export const AutoCompleteMenu = ({
     ],
     [identifiers, isResult, result]
   );
+
+  const searchGroups = useMemo(
+    () =>
+      !!search &&
+      groups.map(
+        (group): SearchGroup => ({
+          group,
+          index: new Fuse(group.items, {
+            keys: ['identifier', 'explanation'],
+            isCaseSensitive: false,
+            shouldSort: true,
+          }),
+        })
+      ),
+    [groups, search]
+  );
+
   const groupsWithItemsFiltered = useMemo(
     () =>
-      groups.map(({ items, title, ...group }) => {
-        const matchingItems = items.filter(({ identifier }) =>
-          [identifier].some((term) => {
-            return term.toLowerCase().includes(search.toLowerCase());
+      (searchGroups &&
+        searchGroups?.map(
+          (searchGroup): SearchResultGroup => ({
+            group: searchGroup.group,
+            items: searchGroup.index.search(search).map(({ item }) => item),
           })
-        );
-        return groups.length === 1
-          ? { ...group, matchingItems }
-          : { ...group, title, matchingItems };
-      }),
-    [search, groups]
+        )) ||
+      groups,
+    [groups, search, searchGroups]
   );
 
   const [matchingIdentifiers, setMathingIdentifiers] = useState(
     groupsWithItemsFiltered
-      .flatMap(({ matchingItems }) => matchingItems)
+      .flatMap(groupItems)
       .map(({ identifier, blockId }) => ({ identifier, blockId }))
   );
 
   useEffect(() => {
     setMathingIdentifiers((old) => {
       const newMatching = groupsWithItemsFiltered
-        .flatMap(({ matchingItems }) => matchingItems)
+        .flatMap(groupItems)
         .map(({ identifier, blockId }) => ({ identifier, blockId }));
       if (dequal(old, newMatching)) return old;
       return newMatching;
@@ -175,7 +205,7 @@ export const AutoCompleteMenu = ({
   // AutoCompleteMenuItems do not use real browser focus, see their docs
   const [focusedItem, setFocusedItem] = useState<ItemBlockId>();
 
-  const allItems = groupsWithItemsFiltered.flatMap((g) => g.matchingItems);
+  const allItems = groupsWithItemsFiltered.flatMap(groupItems);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -218,10 +248,20 @@ export const AutoCompleteMenu = ({
     }
   }, [isResult, matchingIdentifiers]);
 
+  const [hovering, setHovering] = useState(false);
+  const onMouseEnter = useCallback(() => {
+    setHovering(true);
+  }, []);
+  const onMouseLeave = useCallback(() => {
+    setHovering(false);
+  }, []);
+
   return allItems.length ? (
     <span
       css={{ position: 'relative', zIndex: 3 }}
       className="test-auto-complete-menu"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div
         contentEditable={false}
@@ -238,13 +278,14 @@ export const AutoCompleteMenu = ({
             },
           ]}
         >
-          {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) =>
-            matchingItems.length ? (
+          {groupsWithItemsFiltered.map(({ items, ...group }, i) =>
+            items.length ? (
               <AutoCompleteMenuGroup key={i} {...group}>
-                {matchingItems.map(({ ...item }) => (
+                {items.map(({ ...item }) => (
                   <AutoCompleteMenuItem
                     {...item}
                     key={item.blockId ?? item.identifier}
+                    hoveringSome={hovering}
                     focused={
                       matchBlockIdOrIdentifier(item, focusedItem) ||
                       item.focused

@@ -74,6 +74,7 @@ export interface CssVariables {
   readonly iconColorDark: Property.Color;
   readonly iconColorLight: Property.Color;
   readonly tooltipBackground: Property.Color;
+  readonly tooltipCodeBackground: Property.Color;
 
   //
   // Buttons

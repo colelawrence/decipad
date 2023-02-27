@@ -91,6 +91,8 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         table.columnNames
       );
     },
+    explanation:
+      'Lets you access rows and values from a table to inspect or reuse.',
   },
 
   concatenate: {
@@ -128,6 +130,8 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       const table = getInstanceof(_table, Table);
       return table.mapColumns((col) => ValueTransforms.applyMap(col, sortMap));
     },
+    explanation:
+      'Lets you reorder table rows based on any column\nSyntax: `sorby( Table, Table.Column )`',
   },
 
   filter: {
@@ -147,6 +151,8 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         ValueTransforms.applyFilterMap(col, filterMap)
       );
     },
+    explanation:
+      'Lets you filter the values from a table.\nSyntax: `filter( Table, Table Column Condition )`',
   },
   grab: {
     aliasFor: 'filter',
