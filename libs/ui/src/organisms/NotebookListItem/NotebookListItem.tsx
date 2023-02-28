@@ -188,6 +188,12 @@ export const NotebookListItem = ({
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
 
+  const canArchive = page?.type !== 'shared';
+  const canMoveToWorkspace =
+    page?.type !== 'shared' &&
+    otherWorkspaces != null &&
+    otherWorkspaces.length > 0;
+
   return (
     <>
       {isDragging ? <CustomDragLayer /> : null}
@@ -292,7 +298,7 @@ export const NotebookListItem = ({
               >
                 <div css={{ minWidth: '132px' }}>Duplicate</div>
               </MenuItem>
-              {otherWorkspaces?.length !== 0 ? (
+              {canMoveToWorkspace ? (
                 <MenuList
                   itemTrigger={
                     <TriggerMenuItem icon={<icons.Switch />}>
@@ -340,21 +346,23 @@ export const NotebookListItem = ({
                   Put back
                 </MenuItem>
               ) : null}
-              <MenuItem
-                icon={
-                  page?.type === 'archived' ? (
-                    <icons.Trash />
-                  ) : (
-                    <icons.Archive />
-                  )
-                }
-                onSelect={() => {
-                  onDelete();
-                  toggleActionsOpen();
-                }}
-              >
-                {page?.type === 'archived' ? 'Delete' : 'Archive'}
-              </MenuItem>
+              {canArchive && (
+                <MenuItem
+                  icon={
+                    page?.type === 'archived' ? (
+                      <icons.Trash />
+                    ) : (
+                      <icons.Archive />
+                    )
+                  }
+                  onSelect={() => {
+                    onDelete();
+                    toggleActionsOpen();
+                  }}
+                >
+                  {page?.type === 'archived' ? 'Delete' : 'Archive'}
+                </MenuItem>
+              )}
 
               {creationDate && (
                 <li css={creationDateStyles}>
