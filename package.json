@@ -243,6 +243,7 @@
     "vega-themes": "^2.12.0",
     "wait-for-expect": "^3.0.2",
     "web-vitals": "3.1.0",
+    "workbox-routing": "^6.5.4",
     "workbox-webpack-plugin": "6.5.4",
     "y-protocols": "1.0.5",
     "yjs": "13.5.41",
