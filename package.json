@@ -199,7 +199,7 @@
     "react-dnd-preview": "8.0.0",
     "react-dnd-touch-backend": "16.0.1",
     "react-dom": "18.2.0",
-    "react-email": "1.2.0",
+    "react-email": "1.7.14",
     "react-error-boundary": "3.1.4",
     "react-gravatar": "^2.6.3",
     "react-helmet": "^6.1.0",
