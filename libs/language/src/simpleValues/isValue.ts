@@ -42,13 +42,10 @@ function isArgListValue(
   definedVariables = new Set<string>(),
   depth = 0
 ): boolean {
-  if (isPlainNumber(exp)) {
-    return exp.args[1] === root;
-  }
   if (exp.type === 'ref') {
     return !definedVariables.has(exp.args[0]);
   }
-  if (exp.type === 'function-call') {
+  if (exp.type === 'function-call' && exp.args.length === 2) {
     const fname = getIdentifierString(exp.args[0]);
 
     if (simplisticFunctions.includes(fname)) {
@@ -60,6 +57,20 @@ function isArgListValue(
           isPlainNumber(rightArg) &&
           leftArg.type === 'ref' &&
           !definedVariables.has(leftArg.args[0])
+        );
+      }
+
+      if (isPlainNumber(leftArg) && leftArg.args[1] === root) {
+        return (
+          fname === 'implicit*' &&
+          isArgListValue(rightArg, root, definedVariables, depth + 1)
+        );
+      }
+
+      if (isPlainNumber(rightArg) && rightArg.args[1] === root) {
+        return (
+          fname === 'implicit*' &&
+          isArgListValue(leftArg, root, definedVariables, depth + 1)
         );
       }
 

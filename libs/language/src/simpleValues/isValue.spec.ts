@@ -22,14 +22,25 @@ it('returns true on complex units', () => {
 
 it('returns true on prefix units', () => {
   expect(isValue('$10')).toBeTruthy();
+  expect(isValue('$10/hour')).toBeTruthy();
 });
 
 it('returns false on invalid statement', () => {
   expect(isValue('not a value 2 * asdm ./x.cz.23089')).toBeFalsy();
 });
 
-it('returns false on a basic calculations', () => {
+it('returns false on basic calculations', () => {
   expect(isValue('1 + 1')).toBeFalsy();
+  expect(isValue('1 * 1')).toBeFalsy();
+  expect(isValue('1 / 1')).toBeFalsy();
+
+  expect(isValue('1 + unit')).toBeFalsy();
+  expect(isValue('1 * unit')).toBeFalsy();
+  expect(isValue('1 / unit')).toBeFalsy();
+
+  expect(isValue('unit + 1')).toBeFalsy();
+  expect(isValue('unit * 1')).toBeFalsy();
+  expect(isValue('unit / 1')).toBeFalsy();
 });
 
 it("returns false when number isn't the root", () => {

@@ -22,6 +22,12 @@ it('parses a simple value and its unit', () => {
       "unit": (/ (ref km) (** (ref s) -1)),
     }
   `);
+  expect(parseSimpleValue('$10/hour')).toMatchInlineSnapshot(`
+    Object {
+      "ast": DeciNumber(10),
+      "unit": (/ (ref $) (ref hour)),
+    }
+  `);
   expect(parseSimpleValue('10.33 seconds')).toMatchInlineSnapshot(`
     Object {
       "ast": DeciNumber(10.33),

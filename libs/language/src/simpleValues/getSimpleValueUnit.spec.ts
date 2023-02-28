@@ -15,6 +15,10 @@ it('gets the unit part of the AST', () => {
   ).toMatchInlineSnapshot(`"%"`);
 
   expect(
+    getSimpleValueUnit(decilang<SimpleValueAST>`$10/hour`)
+  ).toMatchInlineSnapshot(`(/ (ref $) (ref hour))`);
+
+  expect(
     snapshot(getSimpleValueUnit(decilang<SimpleValueAST>`10 meters`))
   ).toMatchInlineSnapshot(`"(ref meters)"`);
 
