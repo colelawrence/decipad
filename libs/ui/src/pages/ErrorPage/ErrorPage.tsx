@@ -6,9 +6,7 @@ import {
   banner,
   cssVar,
   largestDesktop,
-  p16Regular,
   p18Regular,
-  setCssVar,
   smallestMobile,
 } from '../../primitives';
 import { viewportClampCalc } from '../../utils';
@@ -46,17 +44,12 @@ const styles = css({
 
 const headingStyles = css(banner);
 const subHeadingStyles = css(p18Regular, { paddingTop: '20px' });
-const errorCodeStyles = css(
-  p16Regular,
-  setCssVar('currentTextColor', cssVar('weakerTextColor')),
-  { paddingTop: '8px' }
-);
 const buttonStyles = css({ paddingTop: '36px', display: 'flex', gap: '12px' });
 
 const message = (errorCode: ErrorPageProps['wellKnown']): string => {
   switch (errorCode) {
     case '403':
-      return 'Forbidden';
+      return "You don't have permissions to access this page";
     case '404':
       return 'The requested URL was not found';
     default:
@@ -95,10 +88,7 @@ export const ErrorPage = ({
           <Heading css={headingStyles}>{message(wellKnown)}</Heading>
           {wellKnown === '403' ? (
             <>
-              <p css={subHeadingStyles}>
-                You don't have permissions to access this page.
-              </p>
-              <p css={errorCodeStyles}>The geeks call this a 403 error</p>
+              <p css={subHeadingStyles}>Contact the owner for access</p>
             </>
           ) : wellKnown === '404' ? (
             <>
@@ -106,7 +96,6 @@ export const ErrorPage = ({
                 The link you tried may be broken, or the page may have been
                 removed
               </p>
-              <p css={errorCodeStyles}>The geeks call this a 404 error</p>
             </>
           ) : (
             <>
@@ -114,9 +103,6 @@ export const ErrorPage = ({
                 Decipad isn't accessible right now. We're probably fixing this
                 right now
               </p>
-              {wellKnown === '500' && (
-                <p css={errorCodeStyles}>The geeks call this a 500 error</p>
-              )}
             </>
           )}
         </>

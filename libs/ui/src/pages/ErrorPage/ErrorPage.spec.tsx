@@ -36,9 +36,8 @@ it('shows explanatory text for a 403 error', () => {
   expect(getAllByText(/.+/).map(({ textContent }) => textContent))
     .toMatchInlineSnapshot(`
     Array [
-      "Forbidden",
-      "You don't have permissions to access this page.",
-      "The geeks call this a 403 error",
+      "You don't have permissions to access this page",
+      "Contact the owner for access",
       "Back to our website",
       "Contact support",
     ]
@@ -52,7 +51,6 @@ it('shows explanatory text for a 404 error', () => {
     Array [
       "The requested URL was not found",
       "The link you tried may be broken, or the page may have been removed",
-      "The geeks call this a 404 error",
       "Back to our website",
       "Contact support",
     ]
@@ -66,7 +64,6 @@ it('shows explanatory text for a 500 error', () => {
     Array [
       "Sorry, we did something wrong",
       "Decipad isn't accessible right now. We're probably fixing this right now",
-      "The geeks call this a 500 error",
       "Back to our website",
       "Contact support",
     ]
