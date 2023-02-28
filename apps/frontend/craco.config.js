@@ -122,7 +122,7 @@ module.exports = {
         ),
       };
 
-      if (process.env === 'production') {
+      if (process.env.NODE_ENV === 'production') {
         if (process.env.SENTRY_DSN) {
           config.plugins.push(
             new SentryPlugin({

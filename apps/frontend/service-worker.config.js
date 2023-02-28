@@ -1,7 +1,7 @@
 const { GenerateSW } = require('workbox-webpack-plugin');
 
-module.exports = () =>
-  new GenerateSW({
+module.exports = () => {
+  const options = {
     inlineWorkboxRuntime: true,
     clientsClaim: true,
     skipWaiting: true,
@@ -22,4 +22,8 @@ module.exports = () =>
     dontCacheBustURLsMatching: /\/static\/js\/[^.]+\.[^.]+\.chunk\.(js|css)$/,
     cleanupOutdatedCaches: true,
     maximumFileSizeToCacheInBytes: 20_000_000,
-  });
+  };
+  // eslint-disable-next-line no-console
+  console.log('SW options', options);
+  return new GenerateSW(options);
+};

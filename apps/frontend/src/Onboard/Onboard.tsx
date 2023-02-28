@@ -46,8 +46,10 @@ export const Onboard = () => {
 
     return hasValidName ? fullName : '';
   });
-  
-  const [username, setUsername] = useState(session.data?.user.username ?? '@');
+
+  const [username, setUsername] = useState(
+    session?.data?.user?.username ?? '@'
+  );
 
   const [description, setDescription] = useState(
     userResult.data?.self?.description ?? ''
