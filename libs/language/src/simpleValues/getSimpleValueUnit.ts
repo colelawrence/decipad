@@ -25,12 +25,6 @@ export function getSimpleValueUnit(
           ...funcArgs.map((arg) => recursiveBit(arg as SimpleValueAST))
         ) as SimpleValueAST;
       } else {
-        if (fname !== 'implicit*') {
-          throw new Error(
-            'unit part should always be a multiplication with the base number'
-          );
-        }
-
         return indexOfNonUnitPart === 0 ? funcArgs[1] : funcArgs[0];
       }
     } else {
