@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_STRUCTURED_VARNAME,
@@ -6,8 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
 
-const getAvailableIdentifier = (prefix: string, start: number) =>
-  `${prefix}${start}`;
+const computer = new Computer();
 
 function getStructuredCalc(name: string, value: string, unit?: string) {
   return {
@@ -28,7 +28,7 @@ function getStructuredCalc(name: string, value: string, unit?: string) {
 
 describe('Structured input basic keyboard shortcuts', () => {
   const editor = createTPlateEditor({
-    plugins: [createStructuredKeyboard(getAvailableIdentifier)],
+    plugins: [createStructuredKeyboard(computer)],
   });
   editor.children = [
     getStructuredCalc('a', '100') as never,
@@ -41,7 +41,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move selection to the value when in the name', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab' });
     createStructuredKeyboard(
-      getAvailableIdentifier
+      computer
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -69,7 +69,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move selection back to the name', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
     createStructuredKeyboard(
-      getAvailableIdentifier
+      computer
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -97,7 +97,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move to the name below', () => {
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
     createStructuredKeyboard(
-      getAvailableIdentifier
+      computer
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -125,7 +125,7 @@ describe('Structured input basic keyboard shortcuts', () => {
   it('Should move to the name above', () => {
     const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
     createStructuredKeyboard(
-      getAvailableIdentifier
+      computer
       // @ts-expect-error DOM KeyboardEvent vs React event
     ).handlers?.onKeyDown?.(editor)(event);
     expect(editor.selection).toMatchInlineSnapshot(`
@@ -153,7 +153,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab' });
     for (let i = 0; i < 3; i += 1) {
       createStructuredKeyboard(
-        getAvailableIdentifier
+        computer
         // @ts-expect-error DOM KeyboardEvent vs React event
       ).handlers?.onKeyDown?.(editor)(event);
     }
@@ -182,7 +182,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true });
     for (let i = 0; i < 3; i += 1) {
       createStructuredKeyboard(
-        getAvailableIdentifier
+        computer
         // @ts-expect-error DOM KeyboardEvent vs React event
       ).handlers?.onKeyDown?.(editor)(event);
     }

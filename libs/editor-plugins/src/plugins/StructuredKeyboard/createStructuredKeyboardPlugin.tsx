@@ -16,6 +16,7 @@ import { KeyboardEvent } from 'react';
 import { Path } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
+import { filterStatementSeparator } from '../CodeLine/filterStatementSeparator';
 
 type Shortcuts =
   | 'move-right'
@@ -25,18 +26,27 @@ type Shortcuts =
   | 'new-element';
 
 // In the future this function could be used by all elements to get shortcuts.
-function getShortcut(event: KeyboardEvent): Shortcuts | undefined {
+function getShortcut(
+  editor: MyEditor,
+  computer: Computer,
+  event: KeyboardEvent
+): Shortcuts | undefined {
   switch (true) {
-    case (event.key === 'Tab' || event.key === 'Enter') && !event.shiftKey:
+    case event.key === 'Enter' && event.shiftKey:
+      return 'new-element';
+    case event.key === 'Enter':
+      // True when cursor in (), {}, if, etc
+      const shouldSoftBreak = filterStatementSeparator(editor, computer);
+      if (shouldSoftBreak) {
+        return undefined;
+      }
       return 'move-right';
-    case event.key === 'Tab' && event.shiftKey:
-      return 'move-left';
+    case event.key === 'Tab':
+      return event.shiftKey ? 'move-left' : 'move-right';
     case event.key === 'ArrowUp':
       return 'move-up';
     case event.key === 'ArrowDown':
       return 'move-down';
-    case event.key === 'Enter' && event.shiftKey:
-      return 'new-element';
   }
   return undefined;
 }
@@ -56,9 +66,7 @@ function setSelectionFullText(editor: MyEditor, path: Path) {
 
 const ALLOWED_ELEMENTS = new Set([ELEMENT_CODE_LINE_V2]);
 
-export function createStructuredKeyboard(
-  getAvailableIdentifier: Computer['getAvailableIdentifier']
-) {
+export function createStructuredKeyboard(computer: Computer) {
   return createOnKeyDownPluginFactory({
     name: 'STRUCTURED_KEYBOARD_SHORTCUTS',
     plugin:
@@ -72,7 +80,7 @@ export function createStructuredKeyboard(
         const node = getNode<MyElement>(editor, [anchorPath[0]]);
         if (!node || !ALLOWED_ELEMENTS.has(node.type)) return false;
 
-        const shortcut = getShortcut(event);
+        const shortcut = getShortcut(editor, computer, event);
         switch (shortcut) {
           case 'move-left':
           case 'move-right':
@@ -123,7 +131,7 @@ export function createStructuredKeyboard(
               editor,
               [anchorPath[0]],
               false,
-              getAvailableIdentifier
+              computer.getAvailableIdentifier.bind(computer)
             );
             return true;
         }

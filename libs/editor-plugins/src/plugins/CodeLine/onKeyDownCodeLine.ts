@@ -60,10 +60,7 @@ export const onKeyDownCodeLine =
       return;
     }
 
-    const shouldSoftBreak = filterStatementSeparator(editor)(
-      codeLine,
-      computer
-    );
+    const shouldSoftBreak = filterStatementSeparator(editor, computer);
 
     if (shouldSoftBreak) {
       event.preventDefault();

@@ -22,6 +22,11 @@ import {
 } from './normalization';
 import { createSelectionContainmentPlugin } from './selectionContainmentPlugin';
 
+const createCodeLineRootPlugin = (_computer: Computer) => ({
+  key: ELEMENT_CODE_LINE_V2,
+  isElement: true,
+  component: CodeLineV2,
+});
 const createCodeLineVarnamePlugin = (_computer: Computer) => ({
   key: ELEMENT_STRUCTURED_VARNAME,
   isElement: true,
@@ -33,24 +38,19 @@ const createCodeLineCodeTextPlugin = (_computer: Computer) => ({
   component: CodeLineV2Code,
   decorate: decorateCode(ELEMENT_CODE_LINE_V2_CODE),
 });
-const createCodeLineRootPlugin = (_computer: Computer) => ({
-  key: ELEMENT_CODE_LINE_V2,
-  isElement: true,
-  component: CodeLineV2,
-});
 
 export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
   key: 'CODE_LINE_V2_ROOT',
   plugins: [
-    createCodeLineCodeTextPlugin(computer),
-    createCodeLineVarnamePlugin(computer),
     createCodeLineRootPlugin(computer),
+    createCodeLineVarnamePlugin(computer),
+    createCodeLineCodeTextPlugin(computer),
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),
     createNormalizeCodeLineVarnamePlugin(),
     createSelectionContainmentPlugin(ELEMENT_CODE_LINE_V2_CODE),
     createSelectionContainmentPlugin(ELEMENT_STRUCTURED_VARNAME),
-    createStructuredKeyboard(computer.getAvailableIdentifier.bind(computer)),
+    createStructuredKeyboard(computer),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_CODE_LINE_V2',
       elementTypes: [ELEMENT_CODE_LINE_V2],
