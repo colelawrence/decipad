@@ -21,13 +21,8 @@ const config = {
   },
 
   testTimeout: 15000,
-  maxWorkers: 2,
+  maxWorkers: 1,
   bail: true,
 };
-
-if (process.env.JEST_MAX_WORKERS) {
-  config.maxWorkers =
-    Number(process.env.JEST_MAX_WORKERS) || process.env.JEST_MAX_WORKERS;
-}
 
 module.exports = config;
