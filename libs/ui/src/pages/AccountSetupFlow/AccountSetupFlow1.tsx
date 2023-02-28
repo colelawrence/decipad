@@ -1,5 +1,6 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { Button } from '../../atoms';
 import { Deci } from '../../icons';
 import { h1, p14Medium, p16Regular } from '../../primitives';
@@ -8,7 +9,6 @@ import { backgroundStyles } from './styles';
 import { useEnterListener } from './useEnterListener';
 import calculationImgLight from './onboarding1-light.svg';
 import calculationImgDark from './onboarding1-dark.svg';
-import { useThemeFromStore } from '@decipad/react-contexts';
 
 const groupStyles = css({
   display: 'flex',
