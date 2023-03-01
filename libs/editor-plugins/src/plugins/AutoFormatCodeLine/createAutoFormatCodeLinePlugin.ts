@@ -91,6 +91,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
               const autoVarName = computer.getAvailableIdentifier('Name', 1);
               const newCodeLine = createStructuredCodeLine({
                 varName: autoVarName,
+                code: '100$',
               });
 
               insertNodes(editor, newCodeLine, { at: paragraphPath });
@@ -178,6 +179,7 @@ const commitPotentialFormula = (
   const codeLineBelow = createStructuredCodeLine({
     id,
     varName: computer.getAvailableIdentifier('Name', 1),
+    code: '100$',
   });
 
   const magicNumberInstead = {

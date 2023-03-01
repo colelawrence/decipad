@@ -19,7 +19,7 @@ import {
 import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
 import { ComponentProps } from 'react';
-import { Location, Path } from 'slate';
+import { BaseEditor, Location, Path, Transforms } from 'slate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -44,6 +44,7 @@ export interface ExecuteProps {
   deleteFragment?: Location;
   command: SlashCommand;
   getAvailableIdentifier: GetAvailableIdentifier;
+  select?: boolean;
 }
 
 export const execute = ({
@@ -52,15 +53,24 @@ export const execute = ({
   path,
   getAvailableIdentifier,
   deleteFragment,
+  select = true,
 }: ExecuteProps): void => {
   switch (command) {
-    case 'structured-code-line':
-      insertStructuredCodeLineBelow(
+    case 'structured-input':
+      insertStructuredCodeLineBelow({
         editor,
         path,
-        false,
-        getAvailableIdentifier
-      );
+        code: '100$',
+        getAvailableIdentifier,
+      });
+      break;
+    case 'structured-code-line':
+      insertStructuredCodeLineBelow({
+        editor,
+        path,
+        code: '14 * 3',
+        getAvailableIdentifier,
+      });
       break;
     case 'calculation-block':
       insertCodeLineBelow(editor, path, false);
@@ -118,11 +128,20 @@ export const execute = ({
       break;
   }
 
+  let newElementPath: Path;
   if (deleteFragment) {
-    const nextBlock = [path[0] + 1, 0];
-    focusAndSetSelection(editor, nextBlock);
+    newElementPath = [path[0] + 1];
     deleteText(editor, { at: deleteFragment });
   } else {
-    deleteText(editor, { at: requireBlockParentPath(editor, path) });
+    newElementPath = requireBlockParentPath(editor, path);
+    deleteText(editor, { at: newElementPath });
+  }
+
+  if (select) {
+    if (command === 'structured-input' || command === 'structured-code-line') {
+      Transforms.select(editor as BaseEditor, [...newElementPath, 1]);
+    } else {
+      focusAndSetSelection(editor, newElementPath);
+    }
   }
 };

@@ -11,6 +11,7 @@ import {
   Divider,
   Dropdown,
   FormulaSlash,
+  Value,
   Heading1,
   Heading2,
   Input,
@@ -23,6 +24,14 @@ import {
 import { InlineMenu } from '../../organisms';
 
 const dataItems = () => [
+  {
+    command: 'structured-input',
+    title: 'Number Input',
+    description: 'Create a number',
+    icon: <Value />,
+    enabled: isFlagEnabled('CODE_LINE_NAME_SEPARATED'),
+    extraSearchTerms: ['john', 'number', 'input'],
+  },
   {
     command: 'structured-code-line',
     title: 'Formula',
@@ -48,37 +57,42 @@ const dataItems = () => [
     enabled: true,
     extraSearchTerms: [],
   },
-  {
-    command: 'data-view',
-    title: 'Data view',
-    description: 'Pivot table for data analysis, filtering, and grouping',
-    icon: <DataView />,
-    enabled: true,
-    extraSearchTerms: [
-      'group',
-      'sort',
-      'analyze',
-      'pivot',
-      'data',
-      'view',
-      'filter',
-      'analytic',
-    ],
-  },
-  {
-    command: 'plot',
-    title: 'Chart',
-    description: 'Visualize data with charts, plot data using charts',
-    icon: <Chart />,
-    enabled: true,
-    extraSearchTerms: ['chart', 'visualisation', 'plot'],
-  },
 ];
 
 const groups = () => [
   {
-    title: 'Numbers',
+    title: 'Insert Data',
     items: dataItems(),
+  },
+  {
+    title: 'Visualizations',
+    items: [
+      {
+        command: 'data-view',
+        title: 'Data view',
+        description: 'Pivot table for data analysis, filtering, and grouping',
+        icon: <DataView />,
+        enabled: true,
+        extraSearchTerms: [
+          'group',
+          'sort',
+          'analyze',
+          'pivot',
+          'data',
+          'view',
+          'filter',
+          'analytic',
+        ],
+      },
+      {
+        command: 'plot',
+        title: 'Chart',
+        description: 'Visualize data with charts, plot data using charts',
+        icon: <Chart />,
+        enabled: true,
+        extraSearchTerms: ['chart', 'visualisation', 'plot'],
+      },
+    ],
   },
   {
     title: 'Widgets',

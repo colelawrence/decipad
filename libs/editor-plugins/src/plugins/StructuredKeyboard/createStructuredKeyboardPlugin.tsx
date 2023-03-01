@@ -139,12 +139,13 @@ export function createStructuredKeyboard(computer: Computer) {
           case 'new-element':
             event.preventDefault();
             event.stopPropagation();
-            insertStructuredCodeLineBelow(
+            insertStructuredCodeLineBelow({
               editor,
-              [anchorPath[0]],
-              false,
-              computer.getAvailableIdentifier.bind(computer)
-            );
+              path: [anchorPath[0]],
+              code: '$100',
+              getAvailableIdentifier:
+                computer.getAvailableIdentifier.bind(computer),
+            });
             return true;
 
           case 'select-all':

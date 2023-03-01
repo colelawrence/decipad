@@ -41,6 +41,7 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
       path: [0, 0],
       command,
       getAvailableIdentifier,
+      select: false,
     });
     expect(editor.children).toEqual([
       expect.objectContaining({ type: expectedType }),

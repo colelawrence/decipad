@@ -60,11 +60,12 @@ export const autoformatBlocks = (computer: Computer): MyAutoformatRule[] => [
     query: doesSelectionAllowTextStyling,
     triggerAtBlockStart: false,
     format: (editor): void =>
-      insertStructuredCodeLineBelowOrReplace(
+      insertStructuredCodeLineBelowOrReplace({
         editor,
-        requireCollapsedSelection(editor).path,
-        true,
-        computer.getAvailableIdentifier.bind(computer)
-      ),
+        path: requireCollapsedSelection(editor).path,
+        select: true,
+        code: '14 * 3',
+        getAvailableIdentifier: computer.getAvailableIdentifier.bind(computer),
+      }),
   },
 ];
