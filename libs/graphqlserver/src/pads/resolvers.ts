@@ -26,6 +26,7 @@ import {
   isAuthenticatedAndAuthorized,
   loadUser,
   requireUser,
+  isAuthorized,
 } from '../authorization';
 import { accessTokenFor } from '../utils/accessTokenFor';
 import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
@@ -196,14 +197,30 @@ const resolvers = {
       return permissionType;
     },
 
-    async workspace(pad: PadRecord): Promise<WorkspaceRecord | undefined> {
+    async workspace(
+      pad: PadRecord,
+      _: unknown,
+      context: GraphqlContext
+    ): Promise<WorkspaceRecord | undefined> {
+      const workspaceResource = `/workspaces/${pad.workspace_id}`;
+      if (!(await isAuthorized(workspaceResource, context, 'READ'))) {
+        return undefined;
+      }
       const data = await tables();
       return data.workspaces.get({ id: pad.workspace_id });
     },
 
-    async section(pad: PadRecord): Promise<SectionRecord | undefined> {
+    async section(
+      pad: PadRecord,
+      _: unknown,
+      context: GraphqlContext
+    ): Promise<SectionRecord | undefined> {
       if (!pad.section_id) {
         return;
+      }
+      const workspaceResource = `/workspaces/${pad.workspace_id}`;
+      if (!(await isAuthorized(workspaceResource, context, 'READ'))) {
+        return undefined;
       }
       const data = await tables();
       return data.sections.get({ id: pad.section_id });
