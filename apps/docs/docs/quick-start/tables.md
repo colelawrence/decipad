@@ -8,6 +8,7 @@ toc_min_heading_level: 2
 Tables help you organize your numbers.
 
 ## Learn Decipad tables in 3 minutes
+
 <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
   <iframe src="https://www.loom.com/embed/cb7d3e18401d4f289ea7e7c9eeaf08d9" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
 </div>
@@ -34,7 +35,7 @@ Update your table name, so it is easy to identify.
 
 ## Update a Column Name
 
-New columns are always assigned default names (Property1, Property2, ... ) <br />
+New columns are always assigned default names (Column1, Column2, ... ) <br />
 Update your column names to make them easier to identify on your calculations.
 
 - To **update a column name**, replace the old name by clicking it and picking a new one.
@@ -64,7 +65,6 @@ Move your table columns and rows to rearrange your table.
 
 - To **move a row**, hover over any row, click and hold the **`⸬`** button that appears on the left, and drag them to a new position inside the same table.
 - To **move a column**, click and hold the **`⸬`** button on the left of any column name and drag them to a new position inside the same table.
-
 
 <br></br>
 

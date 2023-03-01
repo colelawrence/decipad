@@ -67,7 +67,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
   test('can add a new column', async () => {
     await focusOnTable(page);
     await addColumn(page);
-    await page.waitForSelector('text="Property4"');
+    await page.waitForSelector('text="Column4"');
   });
 
   test('can write spaces in a table cell', async () => {
@@ -89,7 +89,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
 
-    await codeBlock.waitForSelector('role=code >> text=FormulaProperty3');
+    await codeBlock.waitForSelector('role=code >> text=FormulaColumn3');
   });
 
   test('formula produced desired output', async () => {
@@ -98,7 +98,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
     const codeBlock = await page.waitForSelector('section:has-text("=")');
     const codeBlockText = await codeBlock.innerText();
     // splitting on new line removes the text from auto-complete menu
-    expect(codeBlockText.split('\n')[0]).toBe('Property3 =  1 + 1');
+    expect(codeBlockText.split('\n')[0]).toBe('Column3 =  1 + 1');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
@@ -125,13 +125,13 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await page.click('[role="menuitem"]:has-text("Change type")');
     await page.click('[role="menuitem"]:has-text("Formula")');
     const codeBlock = await page.waitForSelector(
-      'section:has-text("Property5 =")'
+      'section:has-text("Column5 =")'
     );
     const codeBlockText = await codeBlock.innerText();
 
-    expect(codeBlockText).toContain('Property5 =');
+    expect(codeBlockText).toContain('Column5 =');
 
-    await page.keyboard.type('2 / Property4');
+    await page.keyboard.type('2 / Column4');
   });
 
   test('get any value from the table, to make sure it has not crashed', async () => {
@@ -152,8 +152,8 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await page.keyboard.type('5 + 4');
     const codeBlock = await page.waitForSelector('section:has-text("=")');
     const codeBlockText = await codeBlock.innerText();
-    expect(codeBlockText).toBe(`Property3 =  1 + 1
-Property5 =  2 / Property4
-Property6 =  5 + 4`);
+    expect(codeBlockText).toBe(`Column3 =  1 + 1
+Column5 =  2 / Column4
+Column6 =  5 + 4`);
   });
 });

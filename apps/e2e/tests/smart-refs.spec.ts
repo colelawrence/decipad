@@ -60,12 +60,12 @@ test.describe('SmartRefs in low code tables', () => {
     await page.keyboard.press('Enter');
     await createTable(page);
     await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'x = Table1.Property1');
+    await createCalculationBlockBelow(page, 'x = Table1.Column1');
     await page.keyboard.press('Enter');
     const text = await page
       .locator('span[data-slate-node="element"]')
       .textContent();
-    expect(cleanText(text)).toBe('Table1.Property1');
+    expect(cleanText(text)).toBe('Table1.Column1');
   });
 });
 

@@ -55,13 +55,13 @@ test.describe('Data views', () => {
   test('selects columns on data view', async () => {
     const addButton = page.getByTestId('add-data-view-column-button');
     await addButton.click();
-    await page.getByTestId('data-view-menu-item-Property1').click();
+    await page.getByTestId('data-view-menu-item-Column1').click();
 
     await addButton.click();
-    await page.getByTestId('data-view-menu-item-Property2').click();
+    await page.getByTestId('data-view-menu-item-Column2').click();
 
     await addButton.click();
-    await page.getByTestId('data-view-menu-item-Property3').click();
+    await page.getByTestId('data-view-menu-item-Column3').click();
   });
 
   test('data view configuration', async () => {
@@ -75,7 +75,9 @@ test.describe('Data views', () => {
   });
 
   test('expand data view group', async () => {
-    await page.click('role=cell[name="a Folder"] >> span:has-text("Folder")');
+    await page
+      .locator('role=cell[name="a Folder"] >> span:has-text("Folder")')
+      .click();
     // wait for results debounce
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000);
@@ -86,17 +88,21 @@ test.describe('Data views', () => {
   });
 
   test('set aggregations', async () => {
-    await page.click(
-      'role=cell[name="Drag Handle Property2 Caret down"] >> role=button[name="Caret down"]'
-    );
-    await page.click('text=Aggregate');
-    await page.click('text=Sum');
+    await page
+      .locator(
+        'role=cell[name="Drag Handle Column2 Caret down"] >> role=button[name="Caret down"]'
+      )
+      .click();
+    await page.locator('text=Aggregate').click();
+    await page.locator('text=Sum').click();
 
-    await page.click(
-      'role=cell[name="Drag Handle Property3 Caret down"] >> role=button[name="Caret down"]'
-    );
-    await page.click('text=Aggregate');
-    await page.click('text=Average');
+    await page
+      .locator(
+        'role=cell[name="Drag Handle Column3 Caret down"] >> role=button[name="Caret down"]'
+      )
+      .click();
+    await page.locator('text=Aggregate').click();
+    await page.locator('text=Average').click();
     // wait for results debounce
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000);
