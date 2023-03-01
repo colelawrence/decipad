@@ -20,7 +20,6 @@ import {
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
-import { createSelectionContainmentPlugin } from './selectionContainmentPlugin';
 
 const createCodeLineRootPlugin = (_computer: Computer) => ({
   key: ELEMENT_CODE_LINE_V2,
@@ -48,8 +47,6 @@ export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),
     createNormalizeCodeLineVarnamePlugin(),
-    createSelectionContainmentPlugin(ELEMENT_CODE_LINE_V2_CODE),
-    createSelectionContainmentPlugin(ELEMENT_STRUCTURED_VARNAME),
     createStructuredKeyboard(computer),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_CODE_LINE_V2',

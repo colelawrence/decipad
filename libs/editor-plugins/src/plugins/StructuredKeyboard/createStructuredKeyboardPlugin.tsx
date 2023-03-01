@@ -1,19 +1,25 @@
 import { Computer } from '@decipad/computer';
 import {
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_STRUCTURED_VARNAME,
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
-import { insertStructuredCodeLineBelow } from '@decipad/editor-utils';
+import {
+  insertStructuredCodeLineBelow,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import {
   getEndPoint,
   getFirstNode,
   getLastNode,
   getNode,
+  getNodeString,
   getStartPoint,
 } from '@udecode/plate';
 import { KeyboardEvent } from 'react';
-import { Path } from 'slate';
+import { BaseEditor, Editor, Path, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
 import { filterStatementSeparator } from '../CodeLine/filterStatementSeparator';
@@ -23,7 +29,8 @@ type Shortcuts =
   | 'move-left'
   | 'move-up'
   | 'move-down'
-  | 'new-element';
+  | 'new-element'
+  | 'select-all';
 
 // In the future this function could be used by all elements to get shortcuts.
 function getShortcut(
@@ -47,6 +54,8 @@ function getShortcut(
       return 'move-up';
     case event.key === 'ArrowDown':
       return 'move-down';
+    case event.key === 'a' && (event.ctrlKey || event.metaKey):
+      return 'select-all';
   }
   return undefined;
 }
@@ -107,16 +116,19 @@ export function createStructuredKeyboard(computer: Computer) {
           case 'move-up':
           case 'move-down':
             anchorPath[0] += shortcut === 'move-up' ? -1 : 1;
-            const isNextSame = ALLOWED_ELEMENTS.has(
-              getNode<MyElement>(editor, [anchorPath[0]])?.type || ''
-            );
+            const nextNode = getNode<MyElement>(editor, [anchorPath[0]]);
+            const isNextSame = ALLOWED_ELEMENTS.has(nextNode?.type || '');
 
-            if (!isNextSame) return false;
+            if (!isNextSame || !nextNode) return false;
             event.preventDefault();
             event.stopPropagation();
 
+            // If the destination line is shorter, our offset could be out of range. Trim it
+            const maxOffset = getNodeString(nextNode).length;
+            const offset = Math.min(anchorOffset, maxOffset);
+
             const newRange = {
-              offset: anchorOffset,
+              offset,
               path: anchorPath,
             };
             setSelection(editor, {
@@ -133,6 +145,23 @@ export function createStructuredKeyboard(computer: Computer) {
               false,
               computer.getAvailableIdentifier.bind(computer)
             );
+            return true;
+
+          case 'select-all':
+            event.preventDefault();
+            event.stopPropagation();
+
+            const above = Editor.above(editor as BaseEditor, {
+              at: selection,
+              match: (n) =>
+                isElementOfType(n, ELEMENT_CODE_LINE_V2_CODE) ||
+                isElementOfType(n, ELEMENT_STRUCTURED_VARNAME),
+            });
+
+            if (above) {
+              Transforms.select(editor as BaseEditor, above[1]);
+            }
+
             return true;
         }
 
