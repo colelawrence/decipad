@@ -24,7 +24,6 @@ export interface BuiltinSpec {
   noAutoconvert?: boolean;
   autoConvertArgs?: boolean;
   absoluteNumberInput?: boolean;
-  explanation?: string;
   hidden?: boolean;
   // Variant that operates on Value specifically
 
@@ -42,4 +41,5 @@ export interface BuiltinSpec {
     context?: Context
   ) => Type;
   operatorKind?: 'infix' | 'prefix';
+  explanation?: string;
 }

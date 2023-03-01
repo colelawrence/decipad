@@ -10,8 +10,10 @@ import { tableGroupingOperators } from './table-grouping-operators';
 import { miscOperators } from './misc-operators';
 import { contractOperators } from './contract-operators';
 import { trignometricOperators } from './trignometric-operators';
+import { compoundOperators } from './compound-operators';
+import { enrichOperators } from './enrichOperators';
 
-export const operators: { [fname: string]: BuiltinSpec } = {
+export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
   ...mathOperators,
   ...comparisonOperators,
   ...equalityOperators,
@@ -23,4 +25,5 @@ export const operators: { [fname: string]: BuiltinSpec } = {
   ...miscOperators,
   ...contractOperators,
   ...trignometricOperators,
-};
+  ...compoundOperators,
+});

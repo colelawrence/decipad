@@ -131,7 +131,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       return table.mapColumns((col) => ValueTransforms.applyMap(col, sortMap));
     },
     explanation:
-      'Lets you reorder table rows based on any column\nSyntax: `sorby( Table, Table.Column )`',
+      'Lets you reorder table rows based on any column\nSyntax: `sortby( Table, Table.Column )`',
   },
 
   filter: {

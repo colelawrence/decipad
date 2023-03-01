@@ -55,6 +55,7 @@ const identifierStyles = css(p14Medium);
 const explanationWrapperStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  maxWidth: '100%',
 });
 
 const explanationIdentifierStyles = css(identifierStyles, {
@@ -70,6 +71,7 @@ const explanationTextStyles = css({
     padding: '0.25rem',
     backgroundColor: cssVar('tooltipCodeBackground'),
     color: cssVar('strongTextColor'),
+    overflow: 'scroll',
   }),
 });
 
