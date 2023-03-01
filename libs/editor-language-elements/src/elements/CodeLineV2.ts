@@ -2,10 +2,15 @@ import { Computer, Program } from '@decipad/computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_SMART_REF,
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
-import { assertElementType, getCodeLineSource } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  getCodeLineSource,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import { N } from '@decipad/number';
 import { parseCell } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate';
@@ -53,7 +58,12 @@ export const parseStructuredCodeLine = weakMapMemoizeInteractiveElementOutput(
     const [vname, sourcetext] = block.children;
 
     if (getCodeLineSource(block.children[1])?.trim()) {
-      const asNumber = await tryParseAsNumber(editor, computer, block);
+      const hasAnySmartRefs = block.children[1].children.some((elm) =>
+        isElementOfType(elm, ELEMENT_SMART_REF)
+      );
+      const asNumber = hasAnySmartRefs
+        ? []
+        : await tryParseAsNumber(editor, computer, block);
 
       if (asNumber.length) {
         return {

@@ -6,6 +6,8 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   createTPlateEditor,
   ELEMENT_H1,
+  CodeLineV2ElementCode,
+  ELEMENT_SMART_REF,
 } from '@decipad/editor-types';
 import { getOnly } from '@decipad/utils';
 import { parseStructuredCodeLine } from './CodeLineV2';
@@ -15,7 +17,9 @@ expect.addSnapshotSerializer({
   print: (val) => prettyPrintAST(val as AST.Node),
 });
 
-const createTestCodeLine = (code: string) => {
+const createTestCodeLine = (
+  code: string | CodeLineV2ElementCode['children']
+) => {
   const codeLine: CodeLineV2Element = {
     type: ELEMENT_CODE_LINE_V2,
     id: 'codelineid',
@@ -28,7 +32,7 @@ const createTestCodeLine = (code: string) => {
       {
         type: ELEMENT_CODE_LINE_V2_CODE,
         id: 'test',
-        children: [{ text: code }],
+        children: typeof code === 'string' ? [{ text: code }] : code,
       },
     ],
   };
@@ -100,6 +104,36 @@ it('can parse nothing', async () => {
       (assign
         (def TestName)
         0)),
+      "definesVariable": "TestName",
+      "id": "codelineid",
+      "type": "identified-block",
+    }
+  `);
+});
+
+it('regression: deals with smart refs', async () => {
+  const { editor, computer, codeLine } = createTestCodeLine([
+    { text: '1' },
+    { text: ' ' },
+    {
+      type: ELEMENT_SMART_REF,
+      id: '_',
+      blockId: '1234',
+      children: [{ text: '' }],
+    },
+  ]);
+  const { interpretedAs, programChunk } = await parseStructuredCodeLine(
+    editor,
+    computer,
+    codeLine
+  );
+  expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
+  expect(getOnly(programChunk)).toMatchInlineSnapshot(`
+    Object {
+      "block": (block
+      (assign
+        (def TestName)
+        (implicit* 1 (ref exprRef_1234)))),
       "definesVariable": "TestName",
       "id": "codelineid",
       "type": "identified-block",
