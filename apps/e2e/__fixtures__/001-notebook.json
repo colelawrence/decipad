@@ -2414,6 +2414,106 @@
     {
       "children": [
         {
+          "children": [
+            {
+              "text": "StructuredDollars"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "sBAV3JVhlxq_MEi1q3o5g"
+        },
+        {
+          "children": [
+            {
+              "text": "$100"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "fNaePjrw7PQJ8zkIH8DNA"
+        }
+      ],
+      "id": "f4VcCII6Fel8k27YFpYQb",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "OneMoreStructuredDollarForTheRoad"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "PSxbJfY68tp5SlMVIASTq"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "OKt9UDf1_SoBWq8hkUT4o",
+              "type": "smart-ref",
+              "blockId": "f4VcCII6Fel8k27YFpYQb",
+              "lastSeenVariableName": "StructuredDollars"
+            },
+            {
+              "text": " + 1"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "R8BOm-lXRSIJEyS4Se5eR"
+        }
+      ],
+      "id": "C8iPNdpyi139rWNfVH8VN",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigRef"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "_mtBkatkg9mixRq_Vfh5m"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "6tP89bOyAh3MkXntFV633",
+              "type": "smart-ref",
+              "blockId": "C8iPNdpyi139rWNfVH8VN",
+              "lastSeenVariableName": "OneMoreStructuredDollarForTheRoad"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "qdK9tMqbC1lt7u2OOT6px"
+        }
+      ],
+      "id": "9IuJV-_Psd8pfqDnd95PT",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
           "text": "Heading #1"
         }
       ],
