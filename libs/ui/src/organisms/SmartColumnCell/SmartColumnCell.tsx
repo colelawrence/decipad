@@ -36,6 +36,7 @@ const inlineResultStyles = css(resultBubbleStyles, {
   },
 
   overflow: 'hidden',
+
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
 

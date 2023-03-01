@@ -17,44 +17,26 @@ export const highlightedLineStyles = {
 
 export const codeLineStyles = css({
   ':hover': highlightedLineStyles,
-
-  display: 'grid',
-  // `minmax(0, X)` prevents a grid blowout when code line is made out of huge consecutive text.
-  gridTemplate: `
-    "varname                   code            inline-res    " 1fr
-    "mobile-varname            mobile-varname  mobile-varname" auto
-    "mobile-code               mobile-code     mobile-code   " auto
-    "expanded-res              expanded-res    expanded-res  " auto
-    /minmax(max-content, auto) minmax(0, 66%)  1fr
-  `,
-
-  [smallScreenQuery]: {
-    // Layout per-line on mobile
-    gridTemplate: `
-      "varname         " auto
-      "code            " auto
-      "inline-res      " auto
-      "expanded-res    " auto
-      /1fr
-    `,
-  },
+  display: 'flex',
 });
 
 export const inlineStyles = css({
   gridArea: 'inline-res',
-  maxWidth: '100%',
-  display: 'flex',
+  maxWidth: 'min(30vw, 174px)',
+  display: 'inline-flex',
   justifySelf: 'end',
   alignSelf: 'flex-start',
   padding: '5px 0',
+
+  float: 'right',
+  whiteSpace: 'normal',
 
   userSelect: 'all',
 });
 
 export const variableNameContainerStyles = css({
   gridArea: 'varname',
-  display: 'flex',
-  alignItems: 'center',
+  display: 'inline-flex',
   padding: '4px 6px 4px 0',
 });
 
@@ -62,11 +44,21 @@ export const codeContainerStyles = css(code, {
   gridArea: 'code',
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   lineHeight,
-  display: 'flex',
+  display: 'block',
+  flexGrow: 1,
   gap: '16px',
+  overflowWrap: 'anywhere',
 
   [smallScreenQuery]: {
     borderLeft: 'none',
+  },
+
+  // Why is this here? Well, when the text is empty, slate seems to add a <br> element.
+  // I'm not sure why the reason, but at this point I am scared to ask.
+  // So we just don't display it. This isn't an issue if you use display: flex, but
+  // in this case this is an inline element.
+  br: {
+    display: 'none',
   },
 });
 

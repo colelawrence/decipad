@@ -66,7 +66,12 @@ export const CodeLineStructured = ({
     return (
       <div
         contentEditable={false}
-        css={{ color: grey400.rgb, display: 'inline' }}
+        css={{
+          color: grey400.rgb,
+          display: 'inline',
+          lineHeight: '24px',
+          paddingLeft: '4px',
+        }}
       >
         ={' '}
       </div>
@@ -81,38 +86,38 @@ export const CodeLineStructured = ({
       >
         <code contentEditable={!readOnly} css={variableNameContainerStyles}>
           {variableNameChild}
+          {getEquals()}
         </code>
         <code
           data-testid="codeline-code"
           contentEditable={!readOnly}
           css={codeContainerStyles}
         >
-          {getEquals()}
+          <div
+            css={[
+              inlineStyles,
+              (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
+                canGrabStyles,
+              grabbing && grabbingStyles,
+            ]}
+            contentEditable={false}
+            draggable
+            onDragStart={(e) => {
+              onDragStartInlineResult?.(e);
+              setGrabbing(true);
+            }}
+            onDragEnd={(e) => {
+              onDragEnd?.(e);
+              setGrabbing(false);
+            }}
+          >
+            {inline}
+          </div>
           {codeChild}
           {unitPicker}
         </code>
-        <div
-          css={[
-            inlineStyles,
-            (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
-              canGrabStyles,
-            grabbing && grabbingStyles,
-          ]}
-          contentEditable={false}
-          draggable
-          onDragStart={(e) => {
-            onDragStartInlineResult?.(e);
-            setGrabbing(true);
-          }}
-          onDragEnd={(e) => {
-            onDragEnd?.(e);
-            setGrabbing(false);
-          }}
-        >
-          {inline}
-        </div>
-        {expanded}
       </div>
+      <div>{expanded}</div>
     </StructuredInputLines>
   );
 };

@@ -75,9 +75,9 @@ const unitCategories: Record<
 const categoryAndCaretStyles = css({
   width: '100%',
   borderRadius: '16px',
-  display: 'flex',
+  display: 'inline-flex',
   justifyContent: 'space-between',
-  alignItems: 'center',
+  paddingLeft: '8px',
 });
 
 // We construct an object that we can render on the menu,
@@ -122,22 +122,21 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
   const stringUnit = unit
     ? unit === '%'
       ? 'Percentage'
-      : unitCategories[unit.args[0]?.toString() || '']
-    : '';
+      : unitCategories[unit.args[0]?.toString() || 'Advanced Unit']
+    : 'Number';
 
   return (
-    <div
+    <span
       css={{
-        display: 'flex',
-        alignItems: 'center',
+        display: 'inline-flex',
         cursor: readOnly ? 'default' : 'pointer',
       }}
       contentEditable={false}
     >
       {readOnly ? (
-        <div css={categoryAndCaretStyles}>
+        <span css={categoryAndCaretStyles}>
           <span css={p13Medium}>{stringUnit}</span>
-        </div>
+        </span>
       ) : (
         <MenuList
           root
@@ -145,9 +144,14 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
           open={open}
           onChangeOpen={setOpen}
           trigger={
-            <div css={categoryAndCaretStyles}>
-              <span css={p13Medium}>{stringUnit}</span>
-              <button
+            <span css={categoryAndCaretStyles}>
+              <span css={p13Medium}>
+                {/* Without text the icon has no line height, and so floats
+                upwards, hence the non-breaking space */}
+                {'\uFEFF'}
+                {stringUnit}
+              </span>
+              <span
                 css={{
                   width: 18,
                   display: 'grid',
@@ -155,8 +159,8 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
                 data-testid="unit-picker-button"
               >
                 <Caret variant="down" />
-              </button>
-            </div>
+              </span>
+            </span>
           }
         >
           <MenuItem icon={<Number />} onSelect={() => onChangeUnit(undefined)}>
@@ -223,6 +227,6 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
           />
         </MenuList>
       )}
-    </div>
+    </span>
   );
 };

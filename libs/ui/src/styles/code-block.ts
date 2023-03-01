@@ -15,6 +15,7 @@ export const varStyles = css(variableStyles, {
   padding: '4px 6px',
   borderRadius: '6px',
   fontSize: '13px',
+  maxWidth: 'min(30vw, 174px)',
 });
 
 export const structuredVariableStyles: CSSObject = {

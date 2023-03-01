@@ -122,10 +122,7 @@ const inlineResultStyles = (bubble: boolean) =>
   css(p14Regular, bubble && resultBubbleStyles, {
     ':empty': { display: 'none' },
 
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-
     padding: '2px 8px',
 
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),

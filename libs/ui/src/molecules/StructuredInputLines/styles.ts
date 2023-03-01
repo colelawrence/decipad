@@ -8,7 +8,7 @@ export const structuredInputContainerStyles = css({
     "fadeline-top-left top-border     fadeline-top-right" 0
     ".                 children       .                 " auto
     "fadeline-bot-left bot-border     fadeline-bot-right" 0
-    /0                 1fr            0
+    /0                 minmax(0, 1fr)            0
   `,
 });
 
