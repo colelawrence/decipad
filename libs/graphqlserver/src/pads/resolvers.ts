@@ -13,7 +13,7 @@ import {
 import Resource from '@decipad/graphqlresource';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
-import { getDefined, identity } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import { timestamp } from '@decipad/services/utils';
 import assert from 'assert';
 import {
@@ -39,7 +39,10 @@ const padResource = Resource({
   resourceTypeName: 'pads',
   humanName: 'notebook',
   dataTable: async () => (await tables()).pads,
-  toGraphql: identity,
+  toGraphql: (d) => ({
+    ...d,
+    createdAt: d.createdAt != null ? d.createdAt * 1000 : undefined,
+  }),
   isPublic: (d: PadRecord) => Boolean(d.isPublic),
 
   newRecordFrom: ({
@@ -153,9 +156,13 @@ const resolvers = {
 
     duplicatePad,
     setPadPublic,
-    importPad,
     createOrUpdateSnapshot,
     movePad,
+    importPad: async (
+      parent: unknown,
+      args: { workspaceId: ID; source: string },
+      context: GraphqlContext
+    ) => padResource.toGraphql(await importPad(parent, args, context)),
   },
 
   Subscription: {

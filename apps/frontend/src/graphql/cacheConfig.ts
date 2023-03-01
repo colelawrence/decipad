@@ -17,7 +17,7 @@ const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
     (data) => {
       data?.workspaces
         .find(({ id }) => notebook.workspace?.id === id)
-        ?.pads.items.push(notebook as Pad);
+        ?.pads.items.unshift(notebook as Pad);
       return data;
     }
   );

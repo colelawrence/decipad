@@ -6,6 +6,7 @@ import {
   ID,
   PermissionType,
 } from '@decipad/backendtypes';
+import { identity } from 'ramda';
 import { access, Access } from './access';
 import { create } from './create';
 import { getById } from './get-by-id';
@@ -114,6 +115,7 @@ export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
     _: unknown,
     context: GraphqlContext
   ) => Promise<PermissionType | undefined>;
+  toGraphql: (d: DataT) => GraphqlT;
 }
 
 export default function createGraphqlResource<
@@ -139,5 +141,6 @@ export default function createGraphqlResource<
     access: access(resourceType),
     myPermissionType: myPermissionType(resourceType),
     unshareWithSecret: unshareWithSecret(resourceType),
+    toGraphql: resourceType.toGraphql ?? identity,
   };
 }
