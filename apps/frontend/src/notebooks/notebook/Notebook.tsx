@@ -17,7 +17,7 @@ import {
   useGetWorkspacesIDsQuery,
   useRenameNotebookMutation,
 } from '../../graphql';
-import { ErrorPage, Frame } from '../../meta';
+import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
@@ -104,7 +104,11 @@ const Notebook: FC = () => {
     if (/no such/i.test(error?.message))
       return <ErrorPage Heading="h1" wellKnown="404" />;
     if (/forbidden/i.test(error?.message)) {
-      return <ErrorPage Heading="h1" wellKnown="403" />;
+      return (
+        <RequireSession>
+          <ErrorPage Heading="h1" wellKnown="403" />
+        </RequireSession>
+      );
     }
     throw error;
   }
