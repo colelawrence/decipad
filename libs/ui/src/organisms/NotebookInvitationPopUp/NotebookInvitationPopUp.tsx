@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { InputField, Button } from '../../atoms';
 import { Check, Loading } from '../../icons';
 import {
@@ -117,24 +118,36 @@ export const NotebookInvitationPopUp = ({
   onRemove = () => Promise.resolve(),
   onChange = () => Promise.resolve(),
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
+  const { data: session } = useSession();
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   // TODO: fix input floating label
   const [permission, setPermission] = useState<PermissionType>('WRITE');
 
+  const isInvalidEmail = !email.includes('@') || email === session?.user?.email;
+
   const handleAddCollaborator = useCallback(() => {
     if (loading) return;
-    if (email) {
-      setIsLoading(true);
-      setEmail('');
-      onInvite(email, permission).finally(() => {
-        setIsLoading(false);
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 2000);
-      });
-    }
-  }, [email, loading, permission, onInvite, setIsLoading, setSuccess]);
+    if (!email) return;
+    if (isInvalidEmail) return;
+
+    setIsLoading(true);
+    setEmail('');
+    onInvite(email, permission).finally(() => {
+      setIsLoading(false);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+    });
+  }, [
+    email,
+    loading,
+    permission,
+    onInvite,
+    isInvalidEmail,
+    setIsLoading,
+    setSuccess,
+  ]);
 
   const handleRemoveCollaborator = useCallback(
     (userId: string) => {
