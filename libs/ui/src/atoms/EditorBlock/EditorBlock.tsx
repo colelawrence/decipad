@@ -1,3 +1,4 @@
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { forwardRef, ReactNode } from 'react';
 import { p16Regular } from '../../primitives';
@@ -52,9 +53,14 @@ const spacingStyles = css({
   },
 });
 
+const isHiddenStyles = css({
+  display: 'none',
+});
+
 interface EditorBlockProps {
   readonly blockKind: keyof typeof blockAlignment;
   readonly children: ReactNode;
+  readonly isHidden?: boolean;
   // This component is one of the main points of contact when integrating between editor and UI. As
   // such, we'll allow it to receive an arbitrary amount of props in order to facilitate said
   // integration.
@@ -65,10 +71,12 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
 >(({ blockKind, children, ...props }, ref) => {
+  const readOnly = useIsEditorReadOnly();
   return (
     <div
       {...props}
       css={[
+        readOnly && props.isHidden && isHiddenStyles,
         {
           position: 'relative',
         },

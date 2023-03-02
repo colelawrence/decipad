@@ -272,13 +272,14 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         editor.children[1].children[0].text === ''
       );
 
-    if (deleted || (readOnly && element.isHidden)) {
+    if (deleted) {
       return null;
     }
     if (readOnly) {
       return (
         <EditorBlock
           {...props}
+          isHidden={element.isHidden}
           ref={ref}
           contentEditable={
             !readOnly || alwaysWritableElementTypes.includes(element.type)

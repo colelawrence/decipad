@@ -154,7 +154,12 @@ export const DraggableBlock = ({
   );
 
   return (
-    <EditorBlock blockKind={blockKind} ref={blockRef} {...props}>
+    <EditorBlock
+      isHidden={isHidden}
+      blockKind={blockKind}
+      ref={blockRef}
+      {...props}
+    >
       <div
         css={{
           display: 'grid',
