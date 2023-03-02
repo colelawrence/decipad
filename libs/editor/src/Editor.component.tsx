@@ -4,19 +4,13 @@ import {
   BlockLengthSynchronizationProvider,
 } from '@decipad/editor-components';
 import { MyEditor, MyValue } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   EditorBlockParentRefProvider,
   EditorChangeContextProvider,
   EditorReadOnlyContext,
-  useChecklist,
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
-import {
-  EditorPlaceholder,
-  LoadingFilter,
-  StarterChecklist,
-} from '@decipad/ui';
+import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { Plate } from '@udecode/plate';
 import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
@@ -81,7 +75,6 @@ export const Editor = (props: EditorProps) => {
 
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
   const { onRefChange } = useAutoAnimate();
-  const { checklist, hideChecklist } = useChecklist();
 
   // When in read-mode, disallow any kind of drag & drop.
   useWindowListener(
@@ -122,14 +115,6 @@ export const Editor = (props: EditorProps) => {
                       history: true,
                     }}
                   >
-                    {!checklist.hidden &&
-                      !readOnly &&
-                      isFlagEnabled('ONBOARDING_CHECKLIST') && (
-                        <StarterChecklist
-                          checklist={checklist}
-                          onHideChecklist={hideChecklist}
-                        />
-                      )}
                     <InsidePlate {...props} containerRef={containerRef} />
                     <NotebookState isSavedRemotely={isSavedRemotely} />
                   </Plate>

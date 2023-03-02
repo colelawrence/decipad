@@ -8,7 +8,6 @@ export * from './editor-teleport.hooks';
 export * from './editor-change';
 export * from './editor-table';
 export * from './editor-block-parent-ref';
-export * from './starter-checklist';
 export * from './editor-user-interactions';
 export * from './editor-styles';
 export * from './theme';

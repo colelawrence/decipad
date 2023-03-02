@@ -33,7 +33,6 @@ export { RowResult } from './RowResult/RowResult';
 export { Select } from './Select/Select';
 export { SmartColumnCell } from './SmartColumnCell/SmartColumnCell';
 export { SmartRow } from './SmartRow/SmartRow';
-export { StarterChecklist } from './StarterChecklist/StarterChecklist';
 export { Table } from './Table/Table';
 export { TableButton } from './TableButton/TableButton';
 export { TableColumnHeader } from './TableColumnHeader/TableColumnHeader';

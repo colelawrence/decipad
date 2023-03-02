@@ -7,26 +7,13 @@ import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
-  showChecklist?: boolean;
   featureFlags?: Record<Flag, boolean>;
 }
 
-export async function waitForEditorToLoad(
-  page: Page,
-  options: SetupOptions = { showChecklist: false }
-) {
+export async function waitForEditorToLoad(page: Page) {
   await page.waitForSelector('[data-slate-editor] h1', {
     timeout: 30_000,
   });
-
-  if (!options.showChecklist) {
-    const checklist = page.locator('text=Hide this forever');
-    if ((await checklist.count()) > 0) {
-      await page.waitForSelector('text="Hide this forever"');
-      const starterChecklist = page.locator('text="Hide this forever"');
-      await starterChecklist.click();
-    }
-  }
 
   await page.locator('[data-slate-editor] h1').click();
 }
@@ -54,7 +41,7 @@ export async function setUp(
       page.waitForNavigation({ url: isOnNotebook }),
       clickNewPadButton(page),
     ]);
-    await waitForEditorToLoad(page, options);
+    await waitForEditorToLoad(page);
   }
   if (featureFlags) {
     const url = new URL(page.url());
@@ -62,7 +49,7 @@ export async function setUp(
       url.searchParams.set(flagName, value.toString());
     }
     page.goto(url.toString());
-    await waitForEditorToLoad(page, options);
+    await waitForEditorToLoad(page);
   }
   if (createAndNavigateToNewPad) {
     await page.waitForSelector('[data-slate-editor] h1');

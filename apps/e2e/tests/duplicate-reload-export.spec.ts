@@ -20,10 +20,8 @@ test.describe('Duplicating a notebook', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = page.context();
-    await setUp({ page, context }, { showChecklist: false });
-    await waitForEditorToLoad(page, {
-      showChecklist: true,
-    });
+    await setUp({ page, context });
+    await waitForEditorToLoad(page);
   });
 
   test.afterAll(async () => {

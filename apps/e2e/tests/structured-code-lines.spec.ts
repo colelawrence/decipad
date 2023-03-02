@@ -24,7 +24,6 @@ test.describe('Calculation Blocks v2', () => {
     await setUp(
       { page, context },
       {
-        showChecklist: false,
         featureFlags: { CODE_LINE_NAME_SEPARATED: true },
       }
     );

@@ -2,17 +2,12 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useEditorPlugins } from '@decipad/editor';
 import { MyEditor } from '@decipad/editor-types';
 import { useNotebookState } from '@decipad/notebook-state';
-import {
-  ComputerContextProvider,
-  StarterChecklistContextProvider,
-  StarterChecklistInitialState,
-  StarterChecklistStateChange,
-} from '@decipad/react-contexts';
+import { ComputerContextProvider } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { insertLiveConnection } from '@decipad/editor-components';
 import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   EditorUserInteractionsProvider,
@@ -41,11 +36,6 @@ export interface NotebookProps {
   ) => Promise<undefined | [URL, FormData, string]>;
   onAttached: (handle: string) => Promise<undefined | { url: URL }>;
 }
-
-type NotebookStarterChecklistProps = {
-  checklistState: StarterChecklistInitialState;
-  onChecklistStateChange: (props: StarterChecklistStateChange) => void;
-};
 
 type InsideNodebookStateProps = Omit<
   NotebookProps,
@@ -202,47 +192,17 @@ const InsideNotebookState = ({
   return null;
 };
 
-export const Notebook: FC<NotebookStarterChecklistProps & NotebookProps> = (
-  props
-) => {
-  const {
-    checklistState,
-    onChecklistStateChange,
-    getAttachmentForm,
-    onAttached,
-    ...rest
-  } = props;
+export const Notebook: FC<NotebookProps> = (props) => {
+  const { getAttachmentForm, onAttached, ...rest } = props;
   return (
     <EditorUserInteractionsProvider>
-      <NotebookWithChecklist
-        checklistState={checklistState}
-        onChecklistStateChange={onChecklistStateChange}
-      >
+      <>
         <EditorAttachmentsHandler
           getAttachmentForm={getAttachmentForm}
           onAttached={onAttached}
         />
         <InsideNotebookState {...rest} />
-      </NotebookWithChecklist>
+      </>
     </EditorUserInteractionsProvider>
-  );
-};
-
-const NotebookWithChecklist: FC<
-  NotebookStarterChecklistProps & { children: ReactNode }
-> = ({ checklistState, onChecklistStateChange, children }) => {
-  const { loadedFromLocal, loadedFromRemote, timedOutLoadingFromRemote } =
-    useNotebookState();
-
-  return (
-    <StarterChecklistContextProvider
-      loaded={
-        loadedFromLocal && (loadedFromRemote || timedOutLoadingFromRemote)
-      }
-      initialState={checklistState}
-      onStateChange={onChecklistStateChange}
-    >
-      {children}
-    </StarterChecklistContextProvider>
   );
 };

@@ -8,7 +8,6 @@ export const availableFlags = [
   'COPY_HREF',
   'PERSISTENT_EXAMPLE',
   'EXPR_REFS',
-  'ONBOARDING_CHECKLIST',
   'COLOR_SIDEBAR',
   'DASHBOARD_STATUS',
   'DASHBOARD_SEARCH',

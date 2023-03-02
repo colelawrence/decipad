@@ -28,7 +28,7 @@ test.describe('Simple does publish work test', () => {
     incognitoPage = await incognito.newPage();
 
     await setUp({ page, context });
-    await waitForEditorToLoad(page, { showChecklist: false });
+    await waitForEditorToLoad(page);
   });
 
   test.afterAll(async () => {

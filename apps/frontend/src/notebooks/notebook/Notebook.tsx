@@ -19,7 +19,6 @@ import {
 } from '../../graphql';
 import { ErrorPage, Frame } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
-import { useChecklist } from './hooks/useChecklist';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
 const loadTopbar = () =>
@@ -52,7 +51,6 @@ const Notebook: FC = () => {
     hasLocalChanges,
     hasUnpublishedChanges,
     isReadOnly,
-    isPublic,
     isPublishing,
     icon,
     iconColor,
@@ -76,26 +74,6 @@ const Notebook: FC = () => {
   const [userWorkspaces] = useGetWorkspacesIDsQuery();
 
   const [, renameNotebook] = useRenameNotebookMutation();
-
-  const { checklistState, handleChecklistStateChange } = useChecklist({
-    isPublic,
-  });
-
-  const duplicateNotebook = useCallback(() => {
-    handleChecklistStateChange({
-      type: 'newGoal',
-      goalName: 'Duplicate this notebook',
-    });
-    duplicate();
-  }, [handleChecklistStateChange, duplicate]);
-
-  const publishNotebookWithMetrics = useCallback(() => {
-    handleChecklistStateChange({
-      type: 'newGoal',
-      goalName: 'Share this notebook',
-    });
-    publishNotebook();
-  }, [handleChecklistStateChange, publishNotebook]);
 
   useAnimateMutations();
 
@@ -156,8 +134,6 @@ const Notebook: FC = () => {
                 initialState={initialState}
                 onEditor={setEditor}
                 onDocsync={setDocsync}
-                checklistState={checklistState}
-                onChecklistStateChange={handleChecklistStateChange}
                 getAttachmentForm={getAttachmentForm}
                 onAttached={onAttached}
               />
@@ -190,9 +166,9 @@ const Notebook: FC = () => {
                 hasLocalChanges={hasLocalChanges}
                 hasUnpublishedChanges={hasUnpublishedChanges}
                 isPublishing={isPublishing}
-                duplicateNotebook={duplicateNotebook}
+                duplicateNotebook={duplicate}
                 removeLocalChanges={removeLocalChanges}
-                publishNotebook={publishNotebookWithMetrics}
+                publishNotebook={publishNotebook}
                 unpublishNotebook={unpublishNotebook}
                 inviteEditorByEmail={inviteEditorByEmail}
                 removeEditorById={removeEditorById}
