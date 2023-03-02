@@ -97,13 +97,20 @@ describe('Notebook Topbar', () => {
     expect(getByText(/dup/i)).toBeVisible();
   });
 
-  it('renders the publish button only when write or admin', () => {
+  it('renders the publish button only for admin', () => {
     const { getByText, queryByText, rerender } = render(
+      <WithProviders>
+        <NotebookTopbar {...props} permission="READ" />
+      </WithProviders>
+    );
+    expect(queryByText(/publish/i, {})).toBeNull();
+
+    rerender(
       <WithProviders>
         <NotebookTopbar {...props} permission="WRITE" />
       </WithProviders>
     );
-    expect(queryByText(/publish/i)).toBeVisible();
+    expect(queryByText(/publish/i)).toBeNull();
 
     rerender(
       <WithProviders>

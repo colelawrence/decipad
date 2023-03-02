@@ -114,6 +114,7 @@ export const NotebookTopbar = ({
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
   const { status: sessionStatus } = useSession();
+  const isAdmin = permission === 'ADMIN';
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
   const allowInvitation =
     permission === 'ADMIN' && isFlagEnabled('SHARE_PAD_WITH_EMAIL');
@@ -230,7 +231,7 @@ export const NotebookTopbar = ({
         />
 
         {sessionStatus === 'authenticated' ? (
-          isWriter ? (
+          isAdmin ? (
             <NotebookPublishingPopUp notebook={notebook} {...sharingProps} />
           ) : (
             <Button onClick={onDuplicateNotebook}>Duplicate notebook</Button>
