@@ -9,8 +9,8 @@ import {
   create as createResourcePermission,
   getSecretPermissions,
 } from '@decipad/services/permissions';
-import { UserInputError } from 'apollo-server-lambda';
 import { nanoid } from 'nanoid';
+import { UserInputError } from 'apollo-server-lambda';
 import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 

@@ -1,11 +1,11 @@
 import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { UserInputError } from 'apollo-server-lambda';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
   importDoc,
 } from '@decipad/services/notebooks';
+import { UserInputError } from 'apollo-server-lambda';
 import { isAuthenticatedAndAuthorized } from '../authorization';
 
 export const duplicatePad = async (

@@ -1,7 +1,7 @@
 import { GraphqlContext, ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { UserInputError } from 'apollo-server-lambda';
 import { track } from '@decipad/backend-analytics';
+import { UserInputError } from 'apollo-server-lambda';
 import { isAuthenticatedAndAuthorized } from '../authorization';
 
 export const setPadPublic = async (

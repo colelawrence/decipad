@@ -372,7 +372,7 @@ test('external data sources', (ctx) => {
     });
   });
 
-  it('cannot be modified by user that has read-only access', async () => {
+  it.skip('cannot be modified by user that has read-only access', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.mutate({

@@ -16,7 +16,6 @@ const onError = (rc: GraphQLRequestContext) => {
     if (rc.errors) {
       for (const error of rc.errors) {
         // eslint-disable-next-line no-console
-        console.error(error);
         if (error.path || error.name !== 'GraphQLError') {
           scope.addBreadcrumb({
             category: 'query-path',
@@ -40,6 +39,8 @@ const onError = (rc: GraphQLRequestContext) => {
           if (!boom.isServer) {
             continue;
           }
+          // eslint-disable-next-line no-console
+          console.error('server error detected by graphql monitor', error);
         }
 
         const contextWithUser = rc as unknown as GraphqlContext;

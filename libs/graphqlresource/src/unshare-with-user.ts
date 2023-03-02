@@ -7,7 +7,7 @@ import {
 import tables from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from './';
+import { Resource } from '.';
 
 export type UnshareWithUserArgs = {
   id: ID;

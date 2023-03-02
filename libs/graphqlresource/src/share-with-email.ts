@@ -1,4 +1,3 @@
-import { UserInputError } from 'apollo-server-lambda';
 import {
   ID,
   GraphqlContext,
@@ -11,6 +10,7 @@ import { create as createUser } from '@decipad/services/users';
 import { app } from '@decipad/config';
 import tables from '@decipad/tables';
 import { track } from '@decipad/backend-analytics';
+import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
 import { ShareWithUserFunction } from './share-with-user';

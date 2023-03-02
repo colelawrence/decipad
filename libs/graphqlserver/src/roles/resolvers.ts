@@ -1,6 +1,5 @@
 import arc from '@architect/functions';
 import { nanoid } from 'nanoid';
-import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import {
   ID,
   GraphqlContext,
@@ -13,6 +12,7 @@ import {
 import tables, { allPages } from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
 import { timestamp } from '@decipad/services/utils';
+import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
 
 const { urlBase } = appConfig();
@@ -110,7 +110,7 @@ async function removeUserFromRole(
   ).Items;
 
   if (permissions.length < 1) {
-    throw new UserInputError('user not in role');
+    throw new ForbiddenError('user not in role');
   }
 
   await checkIfCanRemoveUserFromRole({ role, userId }, context);
@@ -155,7 +155,7 @@ export default {
       }
 
       if (role.system) {
-        throw new UserInputError('cannot remove a system role');
+        throw new ForbiddenError('cannot remove a system role');
       }
 
       const roleResource = `/roles/${role.id}`;
@@ -197,7 +197,7 @@ export default {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
-        throw new UserInputError('no such role');
+        throw new ForbiddenError('no such role');
       }
 
       const workspaceResource = `/workspaces/${role.workspace_id}`;

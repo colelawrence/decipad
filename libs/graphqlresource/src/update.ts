@@ -1,4 +1,3 @@
-import { UserInputError } from 'apollo-server-lambda';
 import {
   ID,
   GraphqlContext,
@@ -7,6 +6,7 @@ import {
 } from '@decipad/backendtypes';
 import { notifyAllWithAccessTo } from '@decipad/services/pubsub';
 import { track } from '@decipad/backend-analytics';
+import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from '.';
 

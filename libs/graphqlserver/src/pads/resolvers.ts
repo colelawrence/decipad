@@ -9,6 +9,7 @@ import {
   SectionRecord,
   User,
   WorkspaceRecord,
+  PagedResult,
 } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
 import { subscribe } from '@decipad/services/pubsub';
@@ -24,9 +25,9 @@ import {
 import { nanoid } from 'nanoid';
 import {
   isAuthenticatedAndAuthorized,
+  isAuthorized,
   loadUser,
   requireUser,
-  isAuthorized,
 } from '../authorization';
 import { accessTokenFor } from '../utils/accessTokenFor';
 import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
@@ -101,12 +102,20 @@ const resolvers = {
       _: unknown,
       { page, workspaceId }: { page: PageInput; workspaceId: ID },
       context: GraphqlContext
-    ) {
-      return getWorkspaceNotebooks({
-        user: loadUser(context),
-        workspaceId,
-        page,
-      });
+    ): Promise<PagedResult<PadRecord>> {
+      const resource = `/workspaces/${workspaceId}`;
+      if (await isAuthorized(resource, context, 'READ')) {
+        return getWorkspaceNotebooks({
+          user: loadUser(context),
+          workspaceId,
+          page,
+        });
+      }
+      return {
+        items: [],
+        count: 0,
+        hasNextPage: false,
+      };
     },
 
     async padsSharedWithMe(
@@ -283,7 +292,13 @@ const resolvers = {
   },
 
   Section: {
-    async pads(section: Section): Promise<PadRecord[]> {
+    async pads(
+      section: Section,
+      _: unknown,
+      context: GraphqlContext
+    ): Promise<PadRecord[]> {
+      const resource = `/workspaces/${section.workspace_id}`;
+      await isAuthenticatedAndAuthorized(resource, context, 'READ');
       const data = await tables();
 
       const query = {

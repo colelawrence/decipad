@@ -52,6 +52,10 @@ export default function createHandler(): Handler {
             reply.headers[key] = value;
           }
         }
+        if (err) {
+          // eslint-disable-next-line no-console
+          console.error('replying with error', err);
+        }
         _callback(err, reply);
       };
 

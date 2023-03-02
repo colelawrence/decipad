@@ -6,7 +6,6 @@ import {
   FileAttachmentRecord,
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
-import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { strictEqual as expectEqual } from 'assert';
 import {
   attachmentUrl,
@@ -15,6 +14,7 @@ import {
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/tables';
 import { timestamp } from '@decipad/services/utils';
+import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
 

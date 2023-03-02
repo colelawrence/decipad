@@ -1,4 +1,3 @@
-import { UserInputError } from 'apollo-server-lambda';
 import {
   ID,
   GraphqlContext,
@@ -7,6 +6,7 @@ import {
   PermissionType,
 } from '@decipad/backendtypes';
 import { create as createResourcePermission } from '@decipad/services/permissions';
+import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
 

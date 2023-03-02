@@ -48,6 +48,12 @@ export default ({ apiPort }: { apiPort: number }): CallGraphql => ({
     return new ApolloClient({
       link: createHttpLink({ uri }),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        query: {
+          fetchPolicy: 'no-cache',
+          errorPolicy: 'all',
+        },
+      },
     });
   },
 });

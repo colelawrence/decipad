@@ -97,6 +97,7 @@ export function testWithSandbox(
       try {
         return firstArg !== undefined ? await fn(firstArg) : await fn();
       } catch (err) {
+        console.error(err);
         showEnv();
         throw err;
       }

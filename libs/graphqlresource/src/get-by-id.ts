@@ -1,10 +1,10 @@
-import { UserInputError } from 'apollo-server-lambda';
 import {
   ID,
   GraphqlContext,
   ConcreteRecord,
   GraphqlObjectType,
 } from '@decipad/backendtypes';
+import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from '.';
 
