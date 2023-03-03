@@ -15,7 +15,6 @@ export { DropdownMenu } from './DropdownMenu/DropdownMenu';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { ErrorBlock } from './ErrorBlock/ErrorBlock';
-export { EvalCodeArea } from './EvalCodeArea/EvalCodeArea';
 export { FloatingMedia } from './FloatingMedia/FloatingMedia';
 export { FormulasDrawer } from './FormulasDrawer/FormulasDrawer';
 export { HelpMenu } from './HelpMenu/HelpMenu';

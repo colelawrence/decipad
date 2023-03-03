@@ -2,7 +2,6 @@ import type { SerializedType } from '@decipad/computer';
 import {
   BaseElement,
   BlockElement,
-  ELEMENT_EVAL,
   ELEMENT_FETCH,
   DEPRECATED_ELEMENT_INPUT,
   ELEMENT_PLOT,
@@ -101,12 +100,6 @@ export interface DeprecatedInputElement extends BaseElement {
   variableName: string;
   icon: string;
   color: string;
-}
-
-export interface EvalElement extends BaseElement {
-  type: typeof ELEMENT_EVAL;
-  result: string;
-  children: [PlainText];
 }
 
 export interface CaptionElement extends BaseElement {
@@ -215,7 +208,6 @@ export type InteractiveElement =
   | ImportElement
   | LiveConnectionElement
   | PlotElement
-  | EvalElement
   | DisplayElement
   | DeprecatedInputElement
   | VariableDefinitionElement;

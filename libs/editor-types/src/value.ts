@@ -8,7 +8,6 @@ import {
   ELEMENT_CALLOUT,
   ELEMENT_CODE_LINE,
   ELEMENT_COLUMNS,
-  ELEMENT_EVAL,
   ELEMENT_FETCH,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -25,7 +24,6 @@ import {
   ELEMENT_PLOT,
   ELEMENT_TABLE,
   ELEMENT_UL,
-  EvalElement,
   InteractiveElement,
   MarkKind,
 } from '.';
@@ -286,7 +284,6 @@ export type MyValue = [
     | CodeLineV2Element
     | StructuredInputElement
     | DividerElement
-    | EvalElement
     | ImageElement
     | MediaEmbedElement
     | DrawElement
@@ -337,7 +334,6 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_FETCH,
   ELEMENT_PLOT,
   ELEMENT_COLUMNS,
-  ELEMENT_EVAL,
   ELEMENT_VARIABLE_DEF,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_IMPORT,

@@ -42,7 +42,6 @@ export const ELEMENT_DISPLAY = 'display';
 
 // Interactive
 export const DEPRECATED_ELEMENT_INPUT = 'input';
-export const ELEMENT_EVAL = 'eval';
 
 // Inlines
 export const ELEMENT_INLINE_NUMBER = 'inline-number';

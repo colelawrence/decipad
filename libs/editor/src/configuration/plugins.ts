@@ -19,7 +19,6 @@ import {
   createDragOverCursorPlugin,
   createDrawPlugin,
   createEditorApplyErrorReporterPlugin,
-  createEvalPlugin,
   createEventInterceptionSuperHandlerPlugin,
   createExitBreakPlugin,
   createImagePlugin,
@@ -191,7 +190,6 @@ export const plugins = ({
       createSmartRefPlugin(),
 
       // language
-      ...createEvalPlugin(computer),
       createCodeLinePlugin(computer),
       createCodeLineV2Plugin(computer),
       createUpdateComputerPlugin(computer),

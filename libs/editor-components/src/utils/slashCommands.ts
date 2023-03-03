@@ -1,7 +1,6 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
-  ELEMENT_EVAL,
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -119,9 +118,6 @@ export const execute = ({
       break;
     case 'blockquote':
       insertBlockOfTypeBelow(editor, path, ELEMENT_BLOCKQUOTE);
-      break;
-    case 'eval':
-      insertBlockOfTypeBelow(editor, path, ELEMENT_EVAL);
       break;
     case 'sketch':
       insertDrawBelow(editor, path);
