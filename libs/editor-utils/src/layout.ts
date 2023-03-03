@@ -1,9 +1,4 @@
-import {
-  getAboveNode,
-  isElement,
-  withoutNormalizing,
-  wrapNodes,
-} from '@udecode/plate';
+import { isElement, withoutNormalizing, wrapNodes } from '@udecode/plate';
 import { Path } from 'slate';
 import {
   ColumnsElement,
@@ -13,9 +8,10 @@ import {
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { insertNodes } from './insertNodes';
+import { getAboveNodeSafe } from './getAboveNodeSafe';
 
 export const hasLayoutAncestor = (editor: MyEditor, path: Path): boolean => {
-  return !!getAboveNode(editor, {
+  return !!getAboveNodeSafe(editor, {
     at: path,
     match: (node) => isElement(node) && node.type === ELEMENT_COLUMNS,
   });

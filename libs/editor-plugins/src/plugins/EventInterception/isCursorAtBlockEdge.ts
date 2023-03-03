@@ -1,5 +1,4 @@
 import {
-  getAboveNode,
   getEdgePoints,
   getNode,
   isBlock,
@@ -9,7 +8,8 @@ import {
   TNode,
 } from '@udecode/plate';
 import { Path, Point } from 'slate';
-import { MyEditor } from '@decipad/editor-types';
+import { MyEditor, MyElement } from '@decipad/editor-types';
+import { getAboveNodeSafe } from '@decipad/editor-utils';
 
 /** Is the cursor at the end|start of the parent element? */
 export const isCursorAtBlockEdge = (
@@ -26,7 +26,7 @@ export const isCursorAtBlockEdge = (
     return false;
   }
 
-  const nonLeafElement = getAboveNode(editor, {
+  const nonLeafElement = getAboveNodeSafe<MyElement>(editor, {
     at: cursorPath,
     match: (n) => isBlock(editor, n),
   });

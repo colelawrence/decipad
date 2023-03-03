@@ -1,6 +1,5 @@
 import { createOnCursorChangePluginFactory } from '@decipad/editor-plugins';
 import {
-  getAboveNode,
   getNodeEntry,
   hasNode,
   isCollapsed,
@@ -17,7 +16,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import { insertNodes } from '@decipad/editor-utils';
+import { getAboveNodeSafe, insertNodes } from '@decipad/editor-utils';
 import { getTableColumnCount } from '../utils/getTableColumnCount';
 import { isTableColumnEmpty } from '../utils/isTableColumnEmpty';
 
@@ -66,7 +65,7 @@ const onCursorChange = (editor: MyEditor) => {
     if (!isCollapsed(selection)) {
       return;
     }
-    const cell = getAboveNode<TableCellElement>(editor, {
+    const cell = getAboveNodeSafe<TableCellElement>(editor, {
       match: isInsideTableCell,
     });
     if (!cell) {

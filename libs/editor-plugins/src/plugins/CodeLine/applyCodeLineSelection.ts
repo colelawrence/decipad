@@ -1,6 +1,6 @@
 import { ELEMENT_CODE_LINE, MyEditor } from '@decipad/editor-types';
+import { getAboveNodeSafe } from '@decipad/editor-utils';
 import {
-  getAboveNode,
   getNodeChildren,
   getPointAfter,
   insertText,
@@ -18,7 +18,7 @@ export const applyCodeLineSelection = (editor: MyEditor, op: TOperation) => {
   let entry: TNodeEntry | undefined;
 
   try {
-    entry = getAboveNode(editor, {
+    entry = getAboveNodeSafe(editor, {
       at: op.properties as any,
       match: (n) => isElement(n) && n.type === ELEMENT_CODE_LINE,
     });

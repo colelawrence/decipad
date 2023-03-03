@@ -5,16 +5,15 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   MyEditor,
-  TableHeaderElement,
+  TableElement,
 } from '@decipad/editor-types';
 import {
-  getAboveNode,
   getParentNode,
   moveSelection,
   select,
   isElement,
 } from '@udecode/plate';
-import { isElementOfType } from '@decipad/editor-utils';
+import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { Range } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
@@ -49,7 +48,7 @@ export const createNavigationPlugin = createOnKeyDownPluginFactory({
       isElementOfType(node, ELEMENT_TABLE_VARIABLE_NAME)
     ) {
       // get the table element
-      const table = getAboveNode(editor, {
+      const table = getAboveNodeSafe<TableElement>(editor, {
         at: cursor,
         match: (n) => isElement(n) && n.type === ELEMENT_TABLE,
       });
@@ -84,8 +83,7 @@ export const createNavigationPlugin = createOnKeyDownPluginFactory({
             path[1] += direction;
             select(editor, path);
           } else if (
-            (table[0].children[1] as TableHeaderElement).children.length - 1 >
-              path[2] &&
+            table[0].children[1].children.length - 1 > path[2] &&
             direction === 1
           ) {
             // if the user is not on the bottom right cell

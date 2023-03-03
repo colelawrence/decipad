@@ -1,9 +1,4 @@
-import {
-  TRange,
-  getAboveNode,
-  getNodeString,
-  getPointAfter,
-} from '@udecode/plate';
+import { TRange, getNodeString, getPointAfter } from '@udecode/plate';
 import {
   MyDecorate,
   MyElementEntry,
@@ -29,6 +24,7 @@ import { isElementOfType } from './isElementOfType';
 import { filterDecorate } from './filterDecorate';
 import { getCodeLineSource } from './getCodeLineSource';
 import { memoizeDecorateWithSelection } from './memoizeDecorate';
+import { getAboveNodeSafe } from './getAboveNodeSafe';
 
 const isNotExpreRef = (range: RangeWithVariableInfo) =>
   !isExprRef(range.variableName);
@@ -207,7 +203,7 @@ export function getRootNodeId(editor: MyEditor, [node, path]: MyElementEntry) {
   }
 
   if (node.type === ELEMENT_CODE_LINE_V2_CODE) {
-    const codeLine = getAboveNode<CodeLineV2Element>(editor, {
+    const codeLine = getAboveNodeSafe<CodeLineV2Element>(editor, {
       at: path,
       match: (n) => isElementOfType(n, ELEMENT_CODE_LINE_V2),
     });

@@ -1,14 +1,10 @@
 import { ELEMENT_TABLE, MyEditor, TableElement } from '@decipad/editor-types';
 import { Path } from 'slate';
-import {
-  getAboveNode,
-  getEndPoint,
-  getStartPoint,
-  select,
-} from '@udecode/plate';
+import { getEndPoint, getStartPoint, select } from '@udecode/plate';
+import { getAboveNodeSafe } from '@decipad/editor-utils';
 
 export const selectColumn = (editor: MyEditor, cellPath: Path) => {
-  const tableEntry = getAboveNode<TableElement>(editor, {
+  const tableEntry = getAboveNodeSafe<TableElement>(editor, {
     at: cellPath,
     match: { type: ELEMENT_TABLE },
   });

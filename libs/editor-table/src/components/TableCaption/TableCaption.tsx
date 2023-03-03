@@ -7,13 +7,13 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
+  getAboveNodeSafe,
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditableTableCaption, Tooltip } from '@decipad/ui';
 import {
   findNodePath,
-  getAboveNode,
   getNodeChild,
   getNodeString,
   isElement,
@@ -34,7 +34,7 @@ export const TableCaption: PlateComponent = ({
   const columnCount = useTableColumnCount(element);
   const editor = useTEditorRef();
   const path = findNodePath(editor, element);
-  const parent = getAboveNode<TableElement>(editor, {
+  const parent = getAboveNodeSafe<TableElement>(editor, {
     at: path,
     match: (node) => {
       return isElement(node) && node.type === ELEMENT_TABLE;

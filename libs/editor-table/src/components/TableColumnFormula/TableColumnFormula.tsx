@@ -6,10 +6,14 @@ import {
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, isElementOfType } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  getAboveNodeSafe,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { CodeLine, CodeVariable } from '@decipad/ui';
-import { ELEMENT_TABLE, findNodePath, getAboveNode } from '@udecode/plate';
+import { ELEMENT_TABLE, findNodePath } from '@udecode/plate';
 import { Node } from 'slate';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 
@@ -23,7 +27,7 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
 
   const editor = useTEditorRef();
   const path = findNodePath(editor, element)!;
-  const tableEntry = getAboveNode<TableElement>(editor, {
+  const tableEntry = getAboveNodeSafe<TableElement>(editor, {
     at: path,
     match: (n) => isElementOfType(n, ELEMENT_TABLE),
   })!;

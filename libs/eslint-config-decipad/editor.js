@@ -36,6 +36,12 @@ module.exports = {
             message:
               'Node insertion should be done through @decipad/editor-utils',
           },
+          {
+            name: '@udecode/plate',
+            importNames: ['getAboveNode'],
+            message:
+              'Should use the safe version getAboveNodeSafe in @decipad/editor-utils',
+          },
         ],
       },
     ],
