@@ -1,5 +1,6 @@
 import { MyEditor, MyPlatePlugin } from '@decipad/editor-types';
 import { CursorEditor } from '@decipad/slate-yjs';
+import { jsonify } from 'libs/slate-yjs/src/utils/jsonify';
 import { debounce } from 'lodash';
 import { cursorStore } from '../../stores/cursorStore';
 import { cursorColor } from './cursorColor';
@@ -29,7 +30,7 @@ const schedule = (_editor: MyEditor) => {
                 focus,
               },
               data: {
-                ...awareness,
+                ...jsonify(awareness),
                 style: {
                   _backgroundColor: color,
                   backgroundColor: color.rgb,

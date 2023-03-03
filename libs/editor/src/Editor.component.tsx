@@ -11,6 +11,7 @@ import {
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
+import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate';
 import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
@@ -46,10 +47,20 @@ const InsidePlate = ({
   return (
     <>
       <Tooltip />
-      <CursorOverlay containerRef={containerRef} />
-      <RemoteAvatarOverlay containerRef={containerRef} />
-      {readOnly ? null : <NumberCatalog />}
-      <DndPreview />
+      <ErrorBoundary fallback={<></>}>
+        <CursorOverlay containerRef={containerRef} />
+      </ErrorBoundary>
+      <ErrorBoundary fallback={<></>}>
+        <RemoteAvatarOverlay containerRef={containerRef} />
+      </ErrorBoundary>
+      {readOnly ? null : (
+        <ErrorBoundary fallback={<></>}>
+          <NumberCatalog />
+        </ErrorBoundary>
+      )}
+      <ErrorBoundary fallback={<></>}>
+        <DndPreview />
+      </ErrorBoundary>
       {children}
     </>
   );
