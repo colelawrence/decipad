@@ -3,7 +3,6 @@ import {
   STATEMENT_SEP_TOKEN_TYPE,
   tokenize,
 } from '@decipad/computer';
-import { getDefined } from '@decipad/utils';
 import {
   getBlockAbove,
   getChildren,
@@ -15,6 +14,8 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
   MyEditor,
+  CodeLineV2Element,
+  CodeLineElement,
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 
@@ -27,17 +28,17 @@ export const filterStatementSeparator = (
   let cursorStart = anchor < focus ? anchor : focus;
   const cursorEnd = anchor > focus ? anchor : focus;
 
-  if (cursorStart == null || cursorEnd == null) {
-    return false;
-  }
-
-  const codeLineEntry = getDefined(
-    getBlockAbove(editor, {
+  const codeLineEntry = getBlockAbove<CodeLineElement | CodeLineV2Element>(
+    editor,
+    {
       match: (n) =>
         isElement(n) &&
         (n.type === ELEMENT_CODE_LINE || n.type === ELEMENT_CODE_LINE_V2_CODE),
-    })
+    }
   );
+  if (codeLineEntry == null || cursorStart == null || cursorEnd == null) {
+    return false;
+  }
 
   // if there are smart refs in this code line we need to get text from all code line children, and adjust the cursortStart
   const children = getChildren(codeLineEntry);
