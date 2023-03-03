@@ -1,5 +1,7 @@
 import { createHash } from 'crypto';
 import tables from '@decipad/tables';
+import { VerificationRequestRecord } from '@decipad/backendtypes';
+import { track } from '@decipad/backend-analytics';
 import { randomString } from '../utils/randomString';
 
 interface AdapterOptions {
@@ -19,17 +21,21 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
 
   return {
     async createVerificationToken(
-      verification: VerificationRequest & { expires: Date }
+      verification: VerificationRequest & {
+        expires: Date;
+        resourceLink?: string;
+      }
     ) {
-      const { identifier, expires, token } = verification;
+      const { identifier, expires, token, resourceLink } = verification;
       const data = await tables();
       const hashedToken = hashToken(token);
 
-      const newVerificationRequest = {
+      const newVerificationRequest: VerificationRequestRecord = {
         id: hashToken(`${identifier}:${hashedToken}`),
         identifier,
         token: hashedToken,
         expires: Math.round(expires.getTime() / 1000),
+        resourceLink,
       };
 
       await data.verificationrequests.put(newVerificationRequest);
@@ -53,6 +59,7 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
         token: hashedToken,
         identifier: email,
         expires: new Date(Date.now() + 1000 * expirationSeconds),
+        resourceLink,
       });
 
       const loginLink = `${baseUrl}/api/auth/callback/email?callbackUrl=${encodeURIComponent(
@@ -75,6 +82,17 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
 
       if (verificationRequest) {
         const expirationDate = new Date(verificationRequest.expires * 1000);
+        if (expirationDate.getTime() <= Date.now()) {
+          if (verificationRequest.resourceLink) {
+            await track({
+              event: 'accepted invitation',
+              properties: {
+                identifier: verificationRequest.identifier,
+                resourceLink: verificationRequest.resourceLink,
+              },
+            });
+          }
+        }
         return {
           ...verificationRequest,
           expires: expirationDate,

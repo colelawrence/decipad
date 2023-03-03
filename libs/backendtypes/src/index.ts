@@ -403,6 +403,7 @@ export interface VerificationRequestRecord extends TableRecordBase {
   identifier: string;
   token: string;
   expires: number;
+  resourceLink?: string;
 }
 
 interface SubscriptionRecord extends TableRecordBase {

@@ -6,7 +6,8 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
-import { expectAuthenticatedAndAuthorized } from './authorization';
+import { track } from '@decipad/backend-analytics';
+import { expectAuthenticatedAndAuthorized, loadUser } from './authorization';
 import { Resource } from '.';
 
 export type UnshareWithUserArgs = {
@@ -45,6 +46,20 @@ export function unshareWithUser<
     if (!updatedRecord) {
       throw new UserInputError(`no such ${resourceType.humanName}`);
     }
+
+    const user = loadUser(context);
+
+    await track(
+      {
+        userId: user?.id,
+        event: `unshared with user`,
+        properties: {
+          resourceType: resourceType.humanName,
+          resourceId: args.id,
+        },
+      },
+      context
+    );
 
     return updatedRecord;
   };

@@ -103,7 +103,9 @@ export const shareWithEmail = <
           email,
           userId: actingUser.id,
           resourceType: resourceType.humanName,
+          resourceId: args.id,
           permissionType: args.permissionType,
+          isRegistered: registeredUserId != null,
         },
       });
 
