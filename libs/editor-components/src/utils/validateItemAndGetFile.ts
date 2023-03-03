@@ -5,6 +5,8 @@ const validFileType = (type: string) =>
 const maxFileSizeBytes = 1_000_000;
 
 export const validateItemAndGetFile = (item: DataTransferItem): File | true => {
+  if (item.kind !== 'file') throw new Error(`Item kind is not a file`);
+
   const file = item.getAsFile();
   if (!file) {
     if (!validFileType(item.type)) {

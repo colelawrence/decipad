@@ -4,3 +4,6 @@ export * from './slashCommands';
 export * from './table';
 export * from './draw';
 export * from './useTurnIntoProps';
+export * from './useDnd';
+export * from './canDropFile';
+export * from './validateItemAndGetFile';

@@ -1,4 +1,3 @@
-import { useDelayedTrue } from '@decipad/react-utils';
 import {
   black,
   cssVar,
@@ -9,10 +8,8 @@ import {
   transparency,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-
-const dropZoneBorderDetectorThickness = '10px';
 
 interface DropZoneProps {
   connectDropTarget: ConnectDropTarget;
@@ -23,26 +20,12 @@ export const DropZoneDetector: FC<DropZoneProps> = ({
   connectDropTarget,
   isOver,
 }) => {
-  const isNotOver = useDelayedTrue(!isOver);
-  const [initializing, setInitializing] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setInitializing(false);
-    }, 2_000);
-
-    return () => clearTimeout(timeout);
-  }, [isNotOver]);
-
   return (
     <div
-      css={[
-        dropZoneWrapperStyles,
-        !initializing && !isNotOver && isOverDropZoneStyles,
-      ]}
+      css={[dropZoneWrapperStyles, isOver && isOverDropZoneStyles]}
       ref={connectDropTarget}
     >
-      {!initializing && !isNotOver && (
+      {isOver && (
         <div css={warningForDNDStyles}>
           <h1 css={css(p16Medium, { color: cssVar('backgroundColor') })}>
             Upload images or data
@@ -52,16 +35,13 @@ export const DropZoneDetector: FC<DropZoneProps> = ({
           </span>
         </div>
       )}
-      <div css={dropZoneTopBorderDetectorTop} ref={connectDropTarget}></div>
-      <div css={dropZoneTopBorderDetectorBottom} ref={connectDropTarget}></div>
-      <div css={dropZoneTopBorderDetectorLeft} ref={connectDropTarget}></div>
-      <div css={dropZoneTopBorderDetectorRight} ref={connectDropTarget}></div>
+      <div css={dropZoneBorderDetector} ref={connectDropTarget}></div>
     </div>
   );
 };
 
 const dropZoneWrapperStyles = css({
-  position: 'absolute',
+  position: 'fixed',
   top: 0,
   left: 0,
   height: '100vh',
@@ -94,28 +74,7 @@ const isOverDropZoneStyles = css({
 const dropZoneBorderDetector = css({
   position: 'absolute',
   zIndex: 3,
-});
-
-const dropZoneTopBorderDetectorTop = css(dropZoneBorderDetector, {
   top: 0,
-  width: '100%',
-  height: dropZoneBorderDetectorThickness,
-});
-
-const dropZoneTopBorderDetectorBottom = css(dropZoneBorderDetector, {
-  bottom: 0,
-  width: '100%',
-  height: dropZoneBorderDetectorThickness,
-});
-
-const dropZoneTopBorderDetectorLeft = css(dropZoneBorderDetector, {
   left: 0,
-  height: '100vh',
-  width: dropZoneBorderDetectorThickness,
-});
-
-const dropZoneTopBorderDetectorRight = css(dropZoneBorderDetector, {
-  right: 0,
-  height: '100vh',
-  width: dropZoneBorderDetectorThickness,
+  width: '100%',
 });

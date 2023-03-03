@@ -71,6 +71,7 @@ const DEFAULT_AXIS: Axis = { horizontal: false, vertical: true };
 
 export const dndStore = createStore('dnd')({
   draggingIds: new Set<string>(),
+  canDrop: false,
 });
 
 export const useDnd = ({

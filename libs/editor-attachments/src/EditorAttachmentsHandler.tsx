@@ -1,12 +1,16 @@
-import { FC, PropsWithChildren, useCallback, useState } from 'react';
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { produce } from 'immer';
 import axios, { AxiosProgressEvent } from 'axios';
-import { dndStore } from '@udecode/plate-ui-dnd';
 import { useToast } from '@decipad/toast';
 import { UploadProgressModal } from '@decipad/ui';
-import { insertLiveConnection } from '@decipad/editor-components';
+import {
+  canDropFile,
+  dndStore,
+  insertLiveConnection,
+  validateItemAndGetFile,
+} from '@decipad/editor-components';
 import { useComputer } from '@decipad/react-contexts';
 import { useNotebookState } from '@decipad/notebook-state';
 import {
@@ -19,7 +23,7 @@ import { css } from '@emotion/react';
 import { useDelayedTrue } from '@decipad/react-utils';
 import { insertImageBelow } from '@decipad/editor-utils';
 import { Path } from 'slate';
-import { validateItemAndGetFile } from './validateItemAndGetFile';
+import { dndStore as plateDndStore } from '@udecode/plate-ui-dnd';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { DropZoneDetector } from './DropZoneDetector';
 
@@ -46,6 +50,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
   const [attachments, setAttachments] = useState(
     defaultEditorAttachmentsContextValue
   );
+  const canDropState = dndStore.use.canDrop();
 
   const onUploadProgress = useCallback(
     (file: File) => (progressEvent: AxiosProgressEvent) => {
@@ -175,10 +180,10 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
     ]
   );
 
-  const [{ isOver }, connectDropTarget] = useDrop({
+  const [{ canDrop, isOver }, connectDropTarget] = useDrop({
     accept: [NativeTypes.FILE],
     drop: (data: DataTransfer) => {
-      dndStore.set.isDragging(false);
+      plateDndStore.set.isDragging(false);
       const items = data?.items || [];
       Array.from(items).forEach(async (item) => {
         // Async fire and forget
@@ -192,25 +197,20 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         }
       });
     },
-    canDrop: (data: DataTransfer) => {
-      const items = data?.items || [];
-      return Array.from(items).some((item) => {
-        try {
-          if (validateItemAndGetFile(item)) {
-            return true;
-          }
-        } catch {
-          // do nothing
-        }
-        return false;
-      });
-    },
+    canDrop: canDropFile,
     collect: (monitor: DropTargetMonitor) => {
       return {
+        canDrop: monitor.canDrop(),
         isOver: monitor.isOver(),
       };
     },
   });
+
+  useEffect(() => {
+    if (!isOver) {
+      dndStore.set.canDrop(false);
+    }
+  }, [canDrop, isOver]);
 
   const showUploading = useDelayedTrue(attachments.uploading.length > 0);
 
@@ -220,7 +220,10 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
 
   return (
     <>
-      <DropZoneDetector connectDropTarget={connectDropTarget} isOver={isOver} />
+      <DropZoneDetector
+        connectDropTarget={connectDropTarget}
+        isOver={canDropState}
+      />
       {children}
       {showUploading ? (
         <div css={uploadProgressWrapperStyles}>

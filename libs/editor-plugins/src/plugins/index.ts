@@ -1,3 +1,4 @@
+export * from './Attachment';
 export * from './AutoCompleteMenu';
 export * from './AutoFormatCodeLine/createAutoFormatCodeLinePlugin';
 export * from './AutoPairs/createAutoPairsPlugin';

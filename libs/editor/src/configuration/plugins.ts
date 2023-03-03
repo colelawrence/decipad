@@ -3,6 +3,7 @@ import type { Computer } from '@decipad/computer';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { noopPromise } from '@decipad/editor-utils';
 import {
+  createAttachmentPlugin,
   createAutoCompleteMenuPlugin,
   createAutoFormatCodeLinePlugin,
   createAutoPairsPlugin,
@@ -11,6 +12,7 @@ import {
   createCodeLinePlugin,
   createCodeLineV2Plugin,
   createCodeVariableHighlightPlugin,
+  createDeduplicateElementIdsPlugin,
   createDisplayPlugin,
   createDividerPlugin,
   createDndSmartRefPlugin,
@@ -27,6 +29,7 @@ import {
   createLiveConnectionPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
+  createMigrateStructuredInputs,
   createNavigationPlugin,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
@@ -55,8 +58,6 @@ import {
   createUpdateComputerPlugin,
   createUserEventPlugin,
   createWithDocSyncHistoryPlugin,
-  createDeduplicateElementIdsPlugin,
-  createMigrateStructuredInputs,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -155,6 +156,7 @@ export const plugins = ({
           scrollerProps: { strengthMultiplier: 30 },
         },
       }),
+      createAttachmentPlugin(),
       createDragOverCursorPlugin(),
       createBlockSelectionPlugin(),
 
