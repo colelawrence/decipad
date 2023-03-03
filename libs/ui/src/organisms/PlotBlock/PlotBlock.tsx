@@ -60,7 +60,7 @@ export const PlotBlock = ({
       </div>
       <>
         {!readOnly && <PlotParams {...plotParams} />}
-        {errorMessage && <ErrorMessage message={errorMessage} />}
+        {errorMessage && <ErrorMessage error={errorMessage} />}
         {result && (
           <output css={plotStyles}>
             <PlotResult {...result} />

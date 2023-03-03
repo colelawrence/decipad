@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import { ErrorMessage } from './ErrorMessage';
 
 const args = {
-  message: 'This operation requires compatible units',
+  error: 'This operation requires compatible units',
 };
 
 export default {

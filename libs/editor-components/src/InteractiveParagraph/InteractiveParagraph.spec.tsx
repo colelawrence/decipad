@@ -13,6 +13,7 @@ import {
 } from '@udecode/plate';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { SessionProvider } from 'next-auth/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, timeout } from '@decipad/utils';
@@ -41,7 +42,16 @@ beforeEach(() => {
   editor = createPlateEditor({ plugins });
 
   wrapper = ({ children }) => (
-    <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+    <SessionProvider
+      session={{
+        expires: new Date(Date.now() + 1000000).toISOString(),
+        user: {
+          id: 'userid',
+        },
+      }}
+    >
+      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+    </SessionProvider>
   );
 });
 

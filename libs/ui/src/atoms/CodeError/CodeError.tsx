@@ -35,7 +35,7 @@ const urlStyles = css({
 
 interface CodeErrorProps {
   message: string;
-  url: string;
+  url?: string;
   detailMessage?: string;
   bracketError?: BracketError;
   defaultDocsMessage?: string;
@@ -56,7 +56,7 @@ const bracketErrorMessage = (err: BracketError) => {
 export const CodeError = ({
   message,
   detailMessage,
-  url,
+  url = '/docs',
   bracketError,
   defaultDocsMessage = 'Check our docs',
 }: CodeErrorProps): ReturnType<FC> => {

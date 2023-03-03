@@ -37,6 +37,7 @@ export type ImportElementSource =
 export interface ImportElement extends BaseElement {
   type: typeof ELEMENT_IMPORT;
   source?: ImportElementSource;
+  createdByUserId: string;
   url: string;
   children: [EmptyText];
 }

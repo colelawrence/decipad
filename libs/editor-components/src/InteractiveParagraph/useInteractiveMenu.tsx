@@ -20,6 +20,7 @@ import {
   isText,
   removeNodes,
 } from '@udecode/plate';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useObservable } from 'rxjs-hooks';
 import { useSelected } from 'slate-react';
@@ -43,6 +44,7 @@ export const useInteractiveMenu = (
   const interactionsSource = useEditorUserInteractionsContext();
   const [lastInterestingUserInteraction, setLastInterestingUserInteraction] =
     useState<UserInteraction | undefined>();
+  const session = useSession();
 
   useEffect(() => {
     if (
@@ -99,7 +101,12 @@ export const useInteractiveMenu = (
         case 'import-all':
         case 'import-islands': {
           if (
-            isInteractionOfType(lastInterestingUserInteraction, 'pasted-link')
+            isInteractionOfType(
+              lastInterestingUserInteraction,
+              'pasted-link'
+            ) &&
+            session.status === 'authenticated' &&
+            session.data.user?.id
           ) {
             await insertImport({
               computer,
@@ -107,6 +114,7 @@ export const useInteractiveMenu = (
               source: lastInterestingUserInteraction.source,
               url: lastInterestingUserInteraction.url,
               identifyIslands: command === 'import-islands',
+              createdByUserId: session.data.user.id,
             });
             setLastInterestingUserInteraction(undefined);
           }
@@ -139,6 +147,7 @@ export const useInteractiveMenu = (
       computer,
       editor,
       lastInterestingUserInteraction,
+      session,
       toast,
     ]
   );

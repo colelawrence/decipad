@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid';
 export interface InsertImportProps {
   computer: Computer;
   editor: MyEditor;
+  createdByUserId: string;
   source?: ImportElementSource;
   url?: string;
   identifyIslands?: boolean;
@@ -21,6 +22,7 @@ export interface InsertImportProps {
 export const insertImport = async ({
   computer,
   editor,
+  createdByUserId,
   source,
   url,
   identifyIslands,
@@ -39,6 +41,7 @@ export const insertImport = async ({
         const fetchEl: ImportElement = {
           id: nanoid(),
           type: ELEMENT_IMPORT,
+          createdByUserId,
           url: imp.meta?.sourceUrl?.toString() ?? url,
           source,
           children: [{ text: '' }],

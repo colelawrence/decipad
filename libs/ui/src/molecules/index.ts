@@ -25,7 +25,6 @@ export { FloatingLink } from './FloatingLink/FloatingLink';
 export { FormulaTableData } from './FormulaTableData/FormulaTableData';
 export { HelpButton } from './HelpButton/HelpButton';
 export { IconPopover } from './IconPopover/IconPopover';
-export { Import } from './Import/Import';
 export { ImportTableRowControls } from './ImportTableRowControls/ImportTableRowControls';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { InlineMenuGroup } from './InlineMenuGroup/InlineMenuGroup';

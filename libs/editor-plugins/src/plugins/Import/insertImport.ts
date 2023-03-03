@@ -10,13 +10,15 @@ import { nanoid } from 'nanoid';
 export const insertImport = (
   editor: PlateEditor,
   source: ImportElementSource,
-  url: string
+  url: string,
+  createdByUserId: string
 ) => {
   const { selection } = editor;
   if (isCollapsed(selection) && selection?.anchor) {
     const fetchEl: ImportElement = {
       id: nanoid(),
       type: ELEMENT_IMPORT,
+      createdByUserId,
       url,
       source,
       children: [{ text: '' }],

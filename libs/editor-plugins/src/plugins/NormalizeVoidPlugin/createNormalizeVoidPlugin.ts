@@ -42,7 +42,7 @@ const VOID_TYPE_PROPERTIES = {
     'thetaColumnName',
   ],
   [DEPRECATED_ELEMENT_INPUT]: ['value', 'variableName'],
-  [ELEMENT_IMPORT]: ['url', 'source'],
+  [ELEMENT_IMPORT]: ['url', 'source', 'createdByUserId'],
 };
 
 const emptyString = () => '';

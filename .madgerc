@@ -12,7 +12,8 @@
   },
   "excludeRegExp": [
     "debug.ts",
-    "meta/authentication/next-auth.d.ts"
+    "meta/authentication/next-auth.d.ts",
+    "\\.d\\.ts$"
   ],
   "tsConfig": "./tsconfig.json"
 }
