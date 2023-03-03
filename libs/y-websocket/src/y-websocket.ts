@@ -20,6 +20,7 @@ import {
   TWebSocketProvider,
 } from './types';
 import { printReceivedMessage } from './printReceivedMessage';
+import { isValidMessage } from './isValidMessage';
 
 export type { TWebSocketProvider };
 
@@ -172,7 +173,9 @@ const setupWS = async (provider: TWebSocketProvider) => {
         }
         provider.wsLastMessageReceived = time.getUnixTime();
         printReceivedMessage(event.data);
-        receive(decodeMessage(event.data));
+        if (isValidMessage(event.data)) {
+          receive(decodeMessage(event.data));
+        }
       };
 
       websocket.onclose = (ev) => {
