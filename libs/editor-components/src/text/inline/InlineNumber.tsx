@@ -1,22 +1,22 @@
 import { css } from '@emotion/react';
 import {
   ElementAttributes,
-  InlineNumberElement,
+  ELEMENT_INLINE_NUMBER,
   PlateComponent,
 } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
 import { brand700, CodeResult, cssVar } from '@decipad/ui';
 import { useComputer, useShadowCodeLine } from '@decipad/react-contexts';
 import { useMergedRef } from '@decipad/ui/src/hooks/useMergedRef';
 import { useSelected } from 'slate-react';
 import { useCallback } from 'react';
+import { assertElementType } from '@decipad/editor-utils';
 
 export const InlineNumber: PlateComponent = ({
   attributes,
   children,
-  ...rest
+  element,
 }) => {
-  const element = getDefined(rest?.element as InlineNumberElement);
+  assertElementType(element, ELEMENT_INLINE_NUMBER);
   const blockId = element.id;
 
   const elementRef = (attributes as ElementAttributes).ref;

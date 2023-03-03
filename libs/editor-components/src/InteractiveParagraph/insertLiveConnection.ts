@@ -52,11 +52,14 @@ const justInsertLiveData = async ({
       throw new Error(error);
     }
   }
-  const selection = getDefined(editor.selection);
+  const { selection } = editor;
+  if (selection == null || url == null) {
+    return;
+  }
   const liveConnEl: LiveConnectionElement = {
     id: nanoid(),
     type: ELEMENT_LIVE_CONNECTION,
-    url: getDefined(url),
+    url,
     source,
     isFirstRowHeaderRow: false,
     columnTypeCoercions: [],
@@ -77,7 +80,7 @@ const insertLiveConnectionToGsheets = async ({
   computer,
   editor,
   source,
-  url: _url,
+  url,
   identifyIslands,
 }: InsertLiveConnectionProps): Promise<void> => {
   const selection = getDefined(editor.selection);
@@ -89,7 +92,9 @@ const insertLiveConnectionToGsheets = async ({
     return blockPath;
   };
 
-  const url = getDefined(_url, 'undefined url');
+  if (!url) {
+    return;
+  }
 
   const imports = await tryImport(computer, new URL(url), source, {
     identifyIslands,

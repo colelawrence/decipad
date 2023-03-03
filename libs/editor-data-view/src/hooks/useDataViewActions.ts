@@ -27,7 +27,6 @@ import { SerializedType } from '@decipad/computer';
 import { nanoid } from 'nanoid';
 import { Observable, Subject } from 'rxjs';
 import { Path } from 'slate';
-import { getDefined } from '@decipad/utils';
 import { Column } from '../types';
 
 export interface TableActions {
@@ -114,7 +113,10 @@ export const useDataViewActions = (
   const setVarName = useElementMutatorCallback(editor, element, 'varName');
 
   const clearColumns = useCallback(() => {
-    getDefined(editor.withoutCapturingUndo)(() => {
+    if (!editor.withoutCapturingUndo) {
+      return;
+    }
+    editor.withoutCapturingUndo(() => {
       withoutNormalizing(editor, () => {
         const headerRow = element?.children[1];
         const headerRowPath = headerRow && findNodePath(editor, headerRow);
