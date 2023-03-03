@@ -81,7 +81,7 @@ export async function getCreateAttachmentForm(
   });
 }
 
-export async function getSize(fileName: string): Promise<number> {
+export const getSize = async (fileName: string): Promise<number> => {
   return new Promise((resolve, reject) => {
     try {
       s3.headObject(
@@ -105,9 +105,9 @@ export async function getSize(fileName: string): Promise<number> {
       reject(err);
     }
   });
-}
+};
 
-export async function getURL(fileName: string): Promise<string> {
+export const getURL = async (fileName: string): Promise<string> => {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
@@ -118,9 +118,9 @@ export async function getURL(fileName: string): Promise<string> {
       Expires: maxAttachmentDownloadTokenExpirationSeconds,
     })
     .then(fixURL);
-}
+};
 
-export async function remove(fileName: string) {
+export const remove = async (fileName: string) => {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
@@ -129,4 +129,14 @@ export async function remove(fileName: string) {
     Bucket,
     Key: fileName,
   });
-}
+};
+
+export const duplicate = async (from: string, to: string) => {
+  return s3
+    .copyObject({
+      Bucket,
+      CopySource: `${Bucket}/${from}`,
+      Key: to,
+    })
+    .promise();
+};

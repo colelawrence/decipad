@@ -3,6 +3,7 @@ import { Document, MyValue } from '@decipad/editor-types';
 import Boom from '@hapi/boom';
 import { Element as SlateElement } from 'slate';
 import { create as createContent } from '../pad-content';
+import { applyReplaceList } from './applyReplaceList';
 import { create as createPad } from './create';
 
 export interface ImportDocProps {
@@ -10,6 +11,7 @@ export interface ImportDocProps {
   source: string | MyValue;
   user: User;
   pad?: PadRecord;
+  replaceList?: Record<string, string>;
 }
 
 export async function importDoc({
@@ -17,6 +19,7 @@ export async function importDoc({
   source,
   user,
   pad,
+  replaceList,
 }: ImportDocProps): Promise<PadRecord> {
   let doc: MyValue | undefined;
   if (typeof source === 'string') {
@@ -39,6 +42,10 @@ export async function importDoc({
 
   if (!doc) {
     throw Boom.notAcceptable('no document to import');
+  }
+
+  if (replaceList) {
+    doc = applyReplaceList(doc, replaceList);
   }
 
   if (!pad) {

@@ -34,6 +34,9 @@ export const handler = handle(async (event: APIGatewayProxyEvent) => {
   if (!attachment) {
     throw Boom.notFound('No such attachment');
   }
+  if (attachment.resource_uri !== resource) {
+    throw Boom.forbidden('Forbidden');
+  }
   const url = await getURL(attachment.filename);
   return {
     statusCode: 302,

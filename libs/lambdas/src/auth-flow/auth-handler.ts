@@ -53,7 +53,6 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
     },
 
     async session({ session, token }) {
-      console.log('session', { session, token });
       if (token.accessToken) {
         const data = await tables();
         const users = (

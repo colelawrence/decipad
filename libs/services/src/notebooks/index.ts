@@ -7,3 +7,4 @@ export * from './initialState';
 export * from './fetchSnapshotFromFile';
 export * from './storeSnapshotDataAsFile';
 export * from './snapshotFilePath';
+export * from './duplicateNotebookAttachments';

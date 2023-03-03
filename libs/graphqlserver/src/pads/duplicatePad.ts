@@ -3,6 +3,7 @@ import tables from '@decipad/tables';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
+  duplicateNotebookAttachments,
   importDoc,
 } from '@decipad/services/notebooks';
 import { UserInputError } from 'apollo-server-lambda';
@@ -47,12 +48,19 @@ export const duplicatePad = async (
   );
 
   const clonedPad = await createPad2(workspaceId, previousPad, user);
+
+  const replaceList = await duplicateNotebookAttachments(
+    previousPad.id,
+    clonedPad.id
+  );
+
   if (document) {
     return importDoc({
       workspaceId,
       source: document,
       user,
       pad: clonedPad,
+      replaceList,
     });
   }
   await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
