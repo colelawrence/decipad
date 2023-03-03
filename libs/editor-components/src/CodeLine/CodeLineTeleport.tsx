@@ -1,11 +1,11 @@
-import { createPortal } from 'react-dom';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import { noop } from 'lodash';
-import { useWindowListener } from '@decipad/react-utils';
 import { ShadowCalcPortal } from '@decipad/react-contexts';
-import { CodeLinePlaceholder, CodeLineFloat } from '@decipad/ui';
+import { useWindowListener } from '@decipad/react-utils';
+import { CodeLineFloat, CodeLinePlaceholder } from '@decipad/ui';
+import { noop } from 'lodash';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-const DISMISS_KEYS = ['Escape', 'Enter'];
+export const DISMISS_KEYS = ['Escape', 'Enter'];
 
 /**
  * Moves code line to an active number for editing
@@ -13,7 +13,7 @@ const DISMISS_KEYS = ['Escape', 'Enter'];
 export const CodeLineTeleport: React.FC<
   PropsWithChildren<{
     codeLine?: ShadowCalcPortal;
-    onDismiss?(): void;
+    onDismiss?(key?: string): void;
     onTeleport?(): void;
     onBringBack?(): void;
   }>
@@ -45,7 +45,7 @@ export const CodeLineTeleport: React.FC<
       if (isVisible && DISMISS_KEYS.includes(event.key)) {
         event.stopPropagation();
         event.preventDefault();
-        onDismiss();
+        onDismiss(event.key);
       }
     },
     true

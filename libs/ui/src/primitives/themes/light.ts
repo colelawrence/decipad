@@ -49,6 +49,8 @@ export const theme: CssVariables = {
 
   cellDateSelected: brand300.hex,
 
+  formulaUnitBackground: white.hex,
+
   errorColor: red500.hex,
 
   borderColor: grey200.hex,

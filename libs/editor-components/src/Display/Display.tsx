@@ -1,11 +1,5 @@
-import {
-  ComponentProps,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_DISPLAY,
   ELEMENT_SMART_REF,
@@ -14,7 +8,19 @@ import {
   SmartRefElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useFocused, useSelected } from 'slate-react';
+import {
+  assertElementType,
+  hasLayoutAncestor,
+  safeDelete,
+  useElementMutatorCallback,
+  useNodePath,
+  wrapIntoColumns,
+} from '@decipad/editor-utils';
+import {
+  useComputer,
+  useIsEditorReadOnly,
+  useResult,
+} from '@decipad/react-contexts';
 import {
   ELEMENT_CODE_LINE,
   findNode,
@@ -25,24 +31,18 @@ import {
   serializeHtml,
   withoutNormalizing,
 } from '@udecode/plate';
-import {
-  useComputer,
-  useIsEditorReadOnly,
-  useResult,
-} from '@decipad/react-contexts';
-import { DisplayWidget, VariableEditor } from 'libs/ui/src/organisms';
-import { DraggableBlock } from '@decipad/editor-components';
-import {
-  assertElementType,
-  hasLayoutAncestor,
-  safeDelete,
-  useElementMutatorCallback,
-  useNodePath,
-  wrapIntoColumns,
-} from '@decipad/editor-utils';
-import { Path } from 'slate';
 import copy from 'copy-to-clipboard';
-import { ClientEventsContext } from '@decipad/client-events';
+import { DisplayWidget, VariableEditor } from 'libs/ui/src/organisms';
+import {
+  ComponentProps,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { Path } from 'slate';
+import { useFocused, useSelected } from 'slate-react';
 import { defaultMoveNode } from '../utils/useDnd';
 
 interface DropdownWidgetOptions {
@@ -273,7 +273,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
             selectedId={element.blockId}
             setSelectedId={changeResult}
             lineResult={res}
-            result={element.varName || 'Name'}
+            result={element.varName || 'Unnamed'}
             readOnly={readOnly}
           >
             {children}

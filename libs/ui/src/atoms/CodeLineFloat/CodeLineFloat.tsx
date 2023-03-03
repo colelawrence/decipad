@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { cssVar, mediumShadow } from '../../primitives';
 
 export const CodeLineFloat: React.FC<
@@ -9,43 +9,67 @@ export const CodeLineFloat: React.FC<
 
   useEffect(() => setCssAnim(css({})), []);
 
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+  const [translateX, setTranslateX] = useState(0);
+
+  useEffect(() => {
+    const updatePosition = () => {
+      if (popoverRef.current == null) return;
+      const popoverRect = popoverRef.current.getBoundingClientRect();
+      const popoverMiddle = popoverRect.left + popoverRect.width / 2;
+      const screenWidth = window.innerWidth;
+      const middleScreen = screenWidth / 2;
+
+      const newTranslateX = middleScreen - popoverMiddle;
+      setTranslateX(newTranslateX);
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, []);
+
   return (
     <div
-      css={[wrapperStyle(offsetTop), cssAnim]}
+      css={[wrapperStyle(offsetTop, translateX), cssAnim]}
       onClick={(ev) => {
         ev.stopPropagation();
       }}
+      ref={popoverRef}
     >
       <div data-testid="code-line-float" css={codeLineStyle}>
         {children}
-      </div>
-
-      <div css={instructionsStyle}>
-        <div css={{ width: '1.5rem' }}></div>
-        <div>Close with ESC or ENTER</div>
       </div>
     </div>
   );
 };
 
-const wrapperStyle = (offsetTop: number) =>
-  css({
-    position: 'absolute',
-    left: 0,
-    top: `${offsetTop}px`,
-    width: '100%',
-    zIndex: 10,
-    marginTop: '2px',
+const wrapperStyle = (offsetTop: number, translateX: number) =>
+  css([
+    {
+      transform: `translateX(${translateX}px)`,
+    },
+    {
+      position: 'absolute',
+      top: offsetTop,
+      zIndex: 10,
+      marginTop: '2px',
+      padding: '8px 8px 0px 8px',
 
-    cursor: 'initial',
+      cursor: 'initial',
 
-    transition: 'opacity 60ms ease-in, transform 60ms ease-in',
+      transition: 'opacity 60ms ease-in, transform 60ms ease-in',
 
-    borderRadius: '12px',
-    backgroundColor: cssVar('backgroundColor'),
+      borderRadius: '12px',
+      border: `1px solid ${cssVar('borderHighlightColor')}`,
+      backgroundColor: cssVar('highlightColor'),
 
-    boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
-  });
+      boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
+    },
+  ]);
 
 const appearStyle = css({
   opacity: 0,
@@ -54,16 +78,4 @@ const appearStyle = css({
 
 const codeLineStyle = css({
   pointerEvents: 'all',
-});
-
-const instructionsStyle = css({
-  height: '36px',
-  fontSize: '12px',
-  fontWeight: 500,
-
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-
-  padding: '0 12px',
 });

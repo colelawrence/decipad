@@ -1,19 +1,26 @@
+import { ClientEventsContext } from '@decipad/client-events';
+import { Computer, getExprRef } from '@decipad/computer';
 import {
   ELEMENT_INLINE_NUMBER,
   ELEMENT_PARAGRAPH,
+  InlineNumberElement,
+  MARK_MAGICNUMBER,
+  MyEditor,
   PlateComponent,
   RichText,
   useTEditorRef,
-  InlineNumberElement,
-  MyEditor,
-  MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import {
-  getAboveNodeSafe,
-  isElementOfType,
-  insertNodes,
   createStructuredCodeLine,
+  getAboveNodeSafe,
+  insertNodes,
+  isElementOfType,
 } from '@decipad/editor-utils';
+import {
+  ShadowCalcReference,
+  useComputer,
+  useEditorTeleportContext,
+} from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import {
@@ -23,16 +30,8 @@ import {
   toDOMNode,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useContext } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { BaseRange, Path, Point } from 'slate';
-import { Computer, getExprRef } from '@decipad/computer';
-import { ClientEventsContext } from '@decipad/client-events';
-import {
-  useEditorTeleportContext,
-  ShadowCalcReference,
-  useComputer,
-} from '@decipad/react-contexts';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import type { PotentialFormulaDecoration } from '../decorate/interface';
 import { useIsPotentialFormulaSelected } from './useIsPotentialFormulaSelected';
 
@@ -53,7 +52,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
       return;
     }
 
-    const afterCommit = isFlagEnabled('SHADOW_CODE_LINES') ? openEditor : noop;
+    const afterCommit = openEditor;
 
     // FIXME: Opt out to use inline numbers in ENG-1401
     commitPotentialFormula(editor, computer, path, leaf, 'magic', afterCommit);
@@ -112,7 +111,7 @@ export const commitPotentialFormula = (
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier('Name', 1),
+    varName: computer.getAvailableIdentifier('Unnamed', 1),
     code: getNodeString(leaf as RichText),
   });
 

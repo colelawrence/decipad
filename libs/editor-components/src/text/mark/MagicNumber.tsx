@@ -1,4 +1,15 @@
-import { MyElement, PlateComponent, RichText } from '@decipad/editor-types';
+import { getExprRef } from '@decipad/computer';
+import {
+  MyElement,
+  PlateComponent,
+  RichText,
+  useTEditorRef,
+} from '@decipad/editor-types';
+import {
+  getAboveNodeSafe,
+  insertStructuredCodeLineBelow,
+  magicNumberId,
+} from '@decipad/editor-utils';
 import {
   useComputer,
   useEditorSelector,
@@ -6,14 +17,22 @@ import {
   useResult,
   useShadowCodeLine,
 } from '@decipad/react-contexts';
-import { MagicNumber as UIMagicNumber } from '@decipad/ui';
-import { css } from '@emotion/react';
-import { Element } from 'slate';
-import { findNodePath, getNodeString } from '@udecode/plate';
-import { useCallback } from 'react';
-import { getAboveNodeSafe, magicNumberId } from '@decipad/editor-utils';
+import { useWindowListener } from '@decipad/react-utils';
+import {
+  Button,
+  CodeLineFloat,
+  MagicNumber as UIMagicNumber,
+  ParagraphFormulaEditor,
+  VoidBlock,
+} from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import { css } from '@emotion/react';
+import { findNodePath, getNodeString, insertText } from '@udecode/plate';
+import { dequal } from 'dequal';
+import { useCallback, useEffect, useState } from 'react';
+import { Element } from 'slate';
+import { ReactEditor } from 'slate-react';
+import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
 
 export const MagicNumber: PlateComponent = ({
   attributes,
@@ -27,8 +46,27 @@ export const MagicNumber: PlateComponent = ({
   const exp = getNodeString(text);
 
   const blockId = useMagicNumberId(text);
-  const result = useResult(blockId)?.result;
   const shadow = useShadowCodeLine(blockId);
+
+  const [result, setResult] = useState(
+    computer.getBlockIdResult$.get(blockId)?.result
+  );
+  const contextResult = useResult(blockId)?.result;
+
+  useEffect(() => {
+    if (
+      contextResult &&
+      contextResult.type.kind !== 'type-error' &&
+      !dequal(result, contextResult)
+    ) {
+      setResult(contextResult);
+    }
+  }, [contextResult, result]);
+
+  const editor = useTEditorRef();
+
+  const [inlineExpEditorVisible, setInlineExpEditorVisible] = useState(false);
+  const [magicNumberInput, setMagicNumberInput] = useState(exp);
 
   const loadingState =
     result?.type?.kind === 'type-error' ||
@@ -36,19 +74,53 @@ export const MagicNumber: PlateComponent = ({
 
   const { editSource } = shadow;
 
+  const sourceId = computer.getVarBlockId$.use(exp);
+
+  useWindowListener(
+    'keydown',
+    (event) => {
+      if (inlineExpEditorVisible && DISMISS_KEYS.includes(event.key)) {
+        event.stopPropagation();
+        event.preventDefault();
+        setInlineExpEditorVisible(false);
+      }
+    },
+    true
+  );
+
+  const onCreateInput = useCallback(() => {
+    if (!_text) return;
+    const path = ReactEditor.findPath(editor as ReactEditor, _text);
+    if (!path) return;
+
+    const newBlockId = insertStructuredCodeLineBelow({
+      editor,
+      path,
+      select: true,
+      getAvailableIdentifier: computer.getAvailableIdentifier.bind(computer),
+      code: magicNumberInput,
+    });
+
+    insertText(editor, getExprRef(newBlockId), {
+      at: path,
+    });
+
+    setInlineExpEditorVisible(false);
+  }, [magicNumberInput, _text, editor, computer]);
+
   const onClick = useCallback(() => {
-    const defBlockId = computer.getVarBlockId$.get(exp);
+    if (typeof sourceId !== 'string') {
+      setInlineExpEditorVisible(true);
+      return;
+    }
 
-    if (typeof defBlockId !== 'string') return;
-
-    if (isFlagEnabled('SHADOW_CODE_LINES')) {
-      editSource(defBlockId, text);
-    } else {
-      const el = document.getElementById(defBlockId);
+    const isCodeline = editSource(sourceId, text);
+    if (!isCodeline) {
+      const el = document.getElementById(sourceId);
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el?.focus();
     }
-  }, [computer, exp, text, editSource]);
+  }, [text, editSource, sourceId]);
 
   return (
     <span {...attributes}>
@@ -61,9 +133,67 @@ export const MagicNumber: PlateComponent = ({
           onClick={onClick}
           readOnly={readOnly}
           element={element}
+          isReference={sourceId !== undefined}
         />
         {shadow.portal}
       </span>
+      {inlineExpEditorVisible && (
+        <span
+          css={{
+            position: 'absolute',
+          }}
+        >
+          <VoidBlock dontPreventDefault>
+            <CodeLineFloat offsetTop={25}>
+              <ParagraphFormulaEditor
+                formula={
+                  <input
+                    css={{
+                      width: '100%',
+                      backgroundColor: 'inherit',
+                    }}
+                    value={magicNumberInput}
+                    autoFocus
+                    onChange={(ev) => {
+                      const newValue = ev.target.value;
+                      setMagicNumberInput(newValue);
+                      if (newValue.length <= 0) return;
+
+                      if (_text) {
+                        const getPath = ReactEditor.findPath(
+                          editor as ReactEditor,
+                          _text
+                        );
+                        if (getPath) {
+                          insertText(editor, newValue, { at: getPath });
+                        }
+                      } else {
+                        console.error('could not write');
+                      }
+                    }}
+                    onBlur={(evt) => {
+                      const domNodeRole =
+                        evt.relatedTarget?.getAttribute('data-testid') || '';
+                      if (!domNodeRole.includes('unnamed-label'))
+                        setInlineExpEditorVisible(false);
+                    }}
+                  />
+                }
+                varName={
+                  <Button
+                    type="primary"
+                    size="extraSlim"
+                    onClick={onCreateInput}
+                    testId="unnamed-label"
+                  >
+                    Turn into input
+                  </Button>
+                }
+              />
+            </CodeLineFloat>
+          </VoidBlock>
+        </span>
+      )}
       <span contentEditable={false} css={css({ display: 'none' })}>
         {children}
       </span>

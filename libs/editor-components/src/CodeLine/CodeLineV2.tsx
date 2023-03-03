@@ -30,6 +30,7 @@ import {
 import {
   CodeLineStructured,
   CodeVariableDefinition,
+  ParagraphFormulaEditor,
   StructuredInputUnits,
   Tooltip,
 } from '@decipad/ui';
@@ -51,8 +52,8 @@ import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
 import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
-import { useTurnIntoProps } from './useTurnIntoProps';
 import { useSimpleValueInfo } from './useSimpleValueInfo';
+import { useTurnIntoProps } from './useTurnIntoProps';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
@@ -165,6 +166,24 @@ export const CodeLineV2: PlateComponent = ({
   const path = findNodePath(editor, element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
 
+  const isPortalVisible = teleport != null && portal != null;
+
+  const unitPicker = simpleValue != null && (
+    <StructuredInputUnits
+      unit={simpleValue.unit}
+      onChangeUnit={onChangeUnit}
+      readOnly={isReadOnly}
+    />
+  );
+
+  const varNameElem = (
+    <SimpleValueContext.Provider value={simpleValue}>
+      <VarResultContext.Provider value={lineResult}>
+        {childrenArray[0]}
+      </VarResultContext.Provider>
+    </SimpleValueContext.Provider>
+  );
+
   return (
     <DraggableBlock
       blockKind="structured"
@@ -181,32 +200,27 @@ export const CodeLineV2: PlateComponent = ({
         onDismiss={onTeleportDismiss}
         onBringBack={focusCodeLine}
       >
-        <CodeLineStructured
-          highlight={selected}
-          result={lineResult?.result}
-          syntaxError={syntaxError}
-          onDragStartInlineResult={handleDragStartInlineResult}
-          onDragStartCell={handleDragStartCell}
-          onClickedResult={isReadOnly ? undefined : onClickedResult}
-          variableNameChild={
-            <SimpleValueContext.Provider value={simpleValue}>
-              <VarResultContext.Provider value={lineResult}>
-                {childrenArray[0]}
-              </VarResultContext.Provider>
-            </SimpleValueContext.Provider>
-          }
-          codeChild={childrenArray[1]}
-          unitPicker={
-            simpleValue != null && (
-              <StructuredInputUnits
-                unit={simpleValue.unit}
-                onChangeUnit={onChangeUnit}
-                readOnly={isReadOnly}
-              />
-            )
-          }
-          readOnly={isReadOnly}
-        />
+        {isPortalVisible ? (
+          <ParagraphFormulaEditor
+            type={simpleValue ? 'input' : 'formula'}
+            varName={varNameElem}
+            formula={childrenArray[1]}
+            units={unitPicker}
+          />
+        ) : (
+          <CodeLineStructured
+            highlight={selected}
+            result={lineResult?.result}
+            syntaxError={syntaxError}
+            onDragStartInlineResult={handleDragStartInlineResult}
+            onDragStartCell={handleDragStartCell}
+            onClickedResult={isReadOnly ? undefined : onClickedResult}
+            variableNameChild={varNameElem}
+            codeChild={childrenArray[1]}
+            unitPicker={unitPicker}
+            readOnly={isReadOnly}
+          />
+        )}
       </CodeLineTeleport>
     </DraggableBlock>
   );

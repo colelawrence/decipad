@@ -11,9 +11,10 @@ import {
   Scale,
   Timer,
 } from '../../icons';
-import { MenuList } from '../MenuList/MenuList';
-import { ASTUnitMenuItem } from '../ASTUnitMenuItem/ASTUnitMenuItem';
 import { p13Medium } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
+import { ASTUnitMenuItem } from '../ASTUnitMenuItem/ASTUnitMenuItem';
+import { MenuList } from '../MenuList/MenuList';
 
 export interface StructuredInputUnitsProps {
   readonly unit: AST.Expression | '%' | undefined;
@@ -72,13 +73,16 @@ const unitCategories: Record<
     {}
   ),
 };
-const categoryAndCaretStyles = css({
-  width: '100%',
-  borderRadius: '16px',
-  display: 'inline-flex',
-  justifyContent: 'space-between',
-  paddingLeft: '8px',
-});
+const categoryAndCaretStyles = css([
+  hideOnPrint,
+  {
+    width: '100%',
+    borderRadius: '16px',
+    display: 'inline-flex',
+    justifyContent: 'space-between',
+    paddingLeft: '8px',
+  },
+]);
 
 // We construct an object that we can render on the menu,
 // from a map above so we can always have O(1) read.
@@ -149,7 +153,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
                 {/* Without text the icon has no line height, and so floats
                 upwards, hence the non-breaking space */}
                 {'\uFEFF'}
-                {stringUnit}
+                {stringUnit || 'Units'}
               </span>
               <span
                 css={{

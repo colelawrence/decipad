@@ -1,12 +1,12 @@
+import { Computer, identifierRegExpGlobal } from '@decipad/computer';
 import { MyElement, PlainText, useTEditorRef } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
-import { findNodePath, getNodeString, insertText } from '@udecode/plate';
-import { useSelected } from 'slate-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { useBehaviorSubject } from '@decipad/react-utils';
 import { timeout } from '@decipad/utils';
-import { Computer, identifierRegExpGlobal } from '@decipad/computer';
+import { findNodePath, getNodeString, insertText } from '@udecode/plate';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { useSelected } from 'slate-react';
 
 /**
  * Makes sure a variable name is not empty or duplicate
@@ -22,7 +22,7 @@ import { Computer, identifierRegExpGlobal } from '@decipad/computer';
 export function useEnsureValidVariableName(
   element: MyElement & { children: [PlainText] },
   blockId?: string,
-  defaultVarName = 'Name'
+  defaultVarName = 'Unnamed'
 ): string | undefined {
   const editor = useTEditorRef();
   const computer = useComputer();

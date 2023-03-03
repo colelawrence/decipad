@@ -1,8 +1,9 @@
+import { Computer } from '@decipad/computer';
 import { ELEMENT_CODE_LINE_V2, MyEditor } from '@decipad/editor-types';
 import { deleteText, getEditorString } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import { BaseEditor, Path, Transforms } from 'slate';
-import { Computer } from '@decipad/computer';
-import { createStructuredCodeLine, createCodeLine } from './createCodeLine';
+import { createCodeLine, createStructuredCodeLine } from './createCodeLine';
 import { insertNodes } from './insertNodes';
 import { requireBlockParentPath, requirePathBelowBlock } from './path';
 
@@ -23,6 +24,7 @@ export const insertStructuredCodeLineBelow = ({
   editor,
   path,
   code = '',
+  varName,
   select = false,
   getAvailableIdentifier,
 }: {
@@ -31,9 +33,12 @@ export const insertStructuredCodeLineBelow = ({
   select?: boolean;
   getAvailableIdentifier: Computer['getAvailableIdentifier'];
   code?: string;
-}) => {
+  varName?: string;
+}): string => {
+  const newId = nanoid();
   const elm = createStructuredCodeLine({
-    varName: getAvailableIdentifier('Name', 1),
+    id: newId,
+    varName: getAvailableIdentifier(varName ?? 'Unnamed', 1),
     code,
   });
 
@@ -47,6 +52,7 @@ export const insertStructuredCodeLineBelow = ({
       Transforms.select(editor as BaseEditor, [...pathBelow, 0]);
     }
   }
+  return newId;
 };
 
 export const insertStructuredCodeLineBelowOrReplace = ({

@@ -47,7 +47,7 @@ it('turns a decoration into a magic number and a code line', () => {
     Object {
       "children": Array [
         Object {
-          "text": "Name1 = 1 + 1",
+          "text": "Unnamed1 = 1 + 1",
         },
       ],
       "id": "id-of-thingy",

@@ -1,7 +1,6 @@
 export const availableFlags = [
   'INPUT_COPY',
   'INLINE_BUBBLES',
-  'SHADOW_CODE_LINES',
   'CODE_LINE_NAME_SEPARATED',
   'UNSAFE_JS_EVAL',
   'SKETCH',

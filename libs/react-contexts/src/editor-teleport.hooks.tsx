@@ -1,5 +1,5 @@
 import { TNode, useEditorRef } from '@udecode/plate';
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useEditorTeleportContext } from './editor-teleport';
 
 export const useShadowCodeLine = (elementId: string) => {
@@ -13,10 +13,13 @@ export const useShadowCodeLine = (elementId: string) => {
 
   const editSource = useCallback(
     (calcId: string, numberNode: TNode) => {
-      if (isEditing) return;
+      if (isEditing) return false;
 
-      const codeLine = editor.children.find((ch) => ch.id === calcId);
-      if (!codeLine) return;
+      const codeLine = editor.children.find((ch) => {
+        return ch.id === calcId && ch.type.includes('code_line');
+      });
+
+      if (!codeLine) return false;
 
       openEditor({
         numberNode,
@@ -24,6 +27,8 @@ export const useShadowCodeLine = (elementId: string) => {
         numberId: elementId,
         codeLineId: calcId,
       });
+
+      return true;
     },
     [editor, isEditing, openEditor, elementId]
   );

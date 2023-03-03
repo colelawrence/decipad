@@ -164,6 +164,7 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         },
         'html, body, #root': {
           width: '100%',
+          minWidth: '320px',
           minHeight: '100%',
           margin: '0 !important',
           padding: '0 !important',

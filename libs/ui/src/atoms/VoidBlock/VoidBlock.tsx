@@ -2,8 +2,10 @@ import { useEventNoEffect } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { FC, PropsWithChildren } from 'react';
 
-export const VoidBlock: FC<PropsWithChildren> = ({ children }) => {
-  const discardEvents = useEventNoEffect(noop);
+export const VoidBlock: FC<
+  PropsWithChildren<{ dontPreventDefault?: boolean }>
+> = ({ children, dontPreventDefault = false }) => {
+  const discardEvents = useEventNoEffect(noop, dontPreventDefault);
   return (
     <div
       contentEditable={false}

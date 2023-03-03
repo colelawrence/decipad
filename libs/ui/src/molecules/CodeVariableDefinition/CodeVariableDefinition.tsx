@@ -1,11 +1,12 @@
 import { SerializedType } from '@decipad/computer';
+import { CellValueType } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
-import { CellValueType } from '@decipad/editor-types';
-import { getTypeIcon } from '../../utils';
-import { codeBlock } from '../../styles';
-import { cssVar } from '../../primitives';
 import { Formula, Number } from '../../icons';
+import { cssVar } from '../../primitives';
+import { codeBlock } from '../../styles';
+import { hideOnPrint } from '../../styles/editor-layout';
+import { getTypeIcon } from '../../utils';
 
 const varStyles = (type: 'simple' | 'formula') =>
   css(codeBlock.structuredVariableStyles, {
@@ -20,6 +21,9 @@ const varStyles = (type: 'simple' | 'formula') =>
     overflowWrap: 'anywhere',
     maxWidth: '174px',
     whiteSpace: 'normal',
+    '@media print': {
+      background: 'unset',
+    },
   });
 
 const iconStyles = css({
@@ -41,14 +45,17 @@ const emptyStyles = css({
   br: { display: 'none' },
 });
 
-const formulaIconStyles = css({
-  position: 'absolute',
-  left: '-18px',
-  width: '16px',
-  height: '100%',
-  display: 'grid',
-  alignItems: 'center',
-});
+const formulaIconStyles = css([
+  hideOnPrint,
+  {
+    position: 'absolute',
+    left: '-18px',
+    width: '16px',
+    height: '100%',
+    display: 'grid',
+    alignItems: 'center',
+  },
+]);
 
 interface NonInteractiveCodeVariableProps {
   readonly children: ReactNode;
@@ -70,11 +77,11 @@ export const CodeVariableDefinition = ({
       css={[varStyles(isValue ? 'simple' : 'formula'), empty && emptyStyles]}
     >
       {!isValue && (
-        <span css={formulaIconStyles}>
+        <span css={[formulaIconStyles]}>
           <Formula />
         </span>
       )}
-      <span css={Icon && iconStyles} contentEditable={false}>
+      <span css={Icon && [hideOnPrint, iconStyles]} contentEditable={false}>
         {Icon && <Icon />}
       </span>
       <span>{children}</span>

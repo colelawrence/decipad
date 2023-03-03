@@ -76,12 +76,12 @@ test.describe('Calculation Blocks v2', () => {
     await getCodeLineV2VarName(page, lineNo).dblclick();
     await keyPress(page, 'Backspace');
 
-    await expect(getCodeLineV2VarName(page, lineNo)).not.toHaveText(/Name2/);
+    await expect(getCodeLineV2VarName(page, lineNo)).not.toHaveText(/Unnamed/);
 
     // Blur it so it auto-fills some name into it
     await keyPress(page, 'Tab');
 
-    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name2/);
+    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Unnamed/);
   });
 
   test('supports smartrefs', async () => {

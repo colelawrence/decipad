@@ -1,4 +1,5 @@
 import {
+  black,
   blue100,
   blue200,
   blue300,
@@ -57,6 +58,8 @@ export const theme: CssVariables = {
   toastWarning: yellow700.hex,
 
   cellDateSelected: brand500.hex,
+
+  formulaUnitBackground: black.hex,
 
   errorColor: red500.hex,
 

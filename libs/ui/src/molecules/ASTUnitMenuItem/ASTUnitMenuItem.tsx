@@ -69,6 +69,7 @@ export const ASTUnitMenuItem = ({
     >
       <div css={menuItemStyles}>
         <input
+          data-testid="advanced_unit_input"
           css={inputStyles}
           onClick={(e) => {
             // Prevent propagation to the MenuItem which will try to select itself
@@ -92,7 +93,11 @@ export const ASTUnitMenuItem = ({
           placeholder={placeholder}
         />
         {unit != null && (
-          <button css={buttonStyles} onClick={() => onSelect(unit)}>
+          <button
+            data-testid="advanced_unit_button"
+            css={buttonStyles}
+            onClick={() => onSelect(unit)}
+          >
             Add new
           </button>
         )}

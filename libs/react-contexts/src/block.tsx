@@ -7,3 +7,4 @@ export const BlockIsActiveProvider: FC<{ children?: ReactNode }> = ({
   <BlockActiveContext.Provider value>{children}</BlockActiveContext.Provider>
 );
 export const useIsBlockActive = (): boolean => useContext(BlockActiveContext);
+

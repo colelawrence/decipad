@@ -1,3 +1,4 @@
+import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
 import { MyEditor } from '@decipad/editor-types';
 import { focusAndSetSelection } from '@decipad/editor-utils';
 import {
@@ -6,16 +7,16 @@ import {
   ShadowCalcReference,
 } from '@decipad/react-contexts';
 import { findNodePath } from '@udecode/plate';
-import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
 import {
   PropsWithChildren,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
-  useContext,
 } from 'react';
 import { Subject } from 'rxjs';
+import { DISMISS_KEYS } from '../CodeLine/CodeLineTeleport';
 import { ensureSelectionHack } from './ensureSelectionHack';
 import { useFocusControl } from './useFocusControl';
 
@@ -52,16 +53,21 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
   }, [editor, editing?.codeLineNode]);
 
   const closeEditor = useCallback(
-    (codeLineId?: string, onClose?: () => void) =>
+    (codeLineId?: string, onClose?: () => void, key?: string) =>
       setEditing((old) => {
         const anyCodeLine = codeLineId == null;
         const matchingCodeLine = old?.codeLineId === codeLineId;
+
+        if (typeof key === 'string' && DISMISS_KEYS.includes(key)) {
+          onClose?.();
+          return;
+        }
 
         const shouldClose = anyCodeLine || matchingCodeLine;
 
         if (shouldClose) {
           onClose?.();
-          return undefined;
+          return;
         }
 
         clientEvent({
@@ -74,7 +80,22 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
     [setEditing, clientEvent]
   );
 
-  const onBlur = useCallback(() => closeEditor(), [closeEditor]);
+  const onBlur = useCallback(
+    (evt: { relatedTarget: any }) => {
+      // if you click something inside the popover
+      // you get a related target, so you probably want
+      // to edit a unit, or change a label in a bubble.
+      const domNodeRole = evt.relatedTarget?.getAttribute('role') || '';
+      const domNodeTestId =
+        evt.relatedTarget?.getAttribute('data-testid') || '';
+      if (
+        !domNodeRole.includes('menu') &&
+        !domNodeTestId.includes('advanced_unit')
+      )
+        closeEditor();
+    },
+    [closeEditor]
+  );
   const { useWatchTeleported } = useFocusControl(editing, closeEditor);
 
   const openEditor = useCallback(

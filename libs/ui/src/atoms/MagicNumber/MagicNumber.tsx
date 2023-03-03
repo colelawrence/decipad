@@ -19,6 +19,8 @@ type MagicNumberProps = {
   readonly setPointyStyles?: boolean;
   readonly expression?: string;
   readonly element?: AnyElement;
+  /** Is this magic number pointing to an expression reference? */
+  readonly isReference?: boolean;
 };
 
 const wrapperStyles = css({
@@ -26,48 +28,48 @@ const wrapperStyles = css({
   cursor: 'pointer',
 });
 
-const highlightStyles = css(resultBubbleStyles, {
-  display: 'inline-block',
-  color: cssVar('magicNumberTextColor'),
-  padding: '1px 6px 0px 6px',
-  lineHeight: '1.3',
-  '@media print': {
-    color: 'unset',
-  },
-});
-
-const formulaHeaderStyles = css({
-  textAlign: 'center',
-});
-
-const expressionStyles = css({
-  textAlign: 'center',
-});
+const highlightStyles = (isReference: boolean, readOnly: boolean) =>
+  css([
+    resultBubbleStyles,
+    {
+      display: 'inline-block',
+      color: cssVar('magicNumberTextColor'),
+      padding: '1px 6px 0px 6px',
+      lineHeight: '1.3',
+      '@media print': {
+        color: 'unset',
+      },
+    },
+    !isReference && {
+      color: cssVar('normalTextColor'),
+    },
+    !isReference &&
+      readOnly && {
+        padding: 0,
+        border: 'unset',
+        filter: 'unset',
+        cursor: 'text',
+      },
+  ]);
 
 interface ResultResultProps {
   children?: ReactNode;
   readOnly: boolean;
+  isReference: boolean;
   expression?: string;
 }
 
 const IntrospectMagicNumber: FC<ResultResultProps> = ({
-  expression,
+  isReference,
   readOnly,
   children,
 }) => {
+  if (!isReference && readOnly) {
+    return <span>{children}</span>;
+  }
   return (
     <Tooltip trigger={<span>{children}</span>}>
-      {expression?.startsWith('exprRef_') && !readOnly ? (
-        <p>Click to edit</p>
-      ) : readOnly ? (
-        `Live Result`
-      ) : (
-        // legacy magic numbers catch
-        <span>
-          <h2 css={formulaHeaderStyles}>Formula:</h2>
-          <code css={expressionStyles}>{expression}</code>
-        </span>
-      )}
+      {readOnly ? 'Live result' : <p>Click to edit</p>}
     </Tooltip>
   );
 };
@@ -77,6 +79,7 @@ export const MagicNumber = ({
   result,
   loadingState = false,
   readOnly = false,
+  isReference = true,
   onClick = noop,
   expression,
   element,
@@ -96,9 +99,13 @@ export const MagicNumber = ({
         title={result ? result.value?.toString() : 'Loading'}
         contentEditable={false}
       >
-        <IntrospectMagicNumber expression={expression} readOnly={readOnly}>
+        <IntrospectMagicNumber
+          isReference={isReference}
+          expression={expression}
+          readOnly={readOnly}
+        >
           {hasResult ? (
-            <span css={highlightStyles}>
+            <span css={highlightStyles(isReference, readOnly)}>
               <CodeResult
                 tooltip={false}
                 variant="inline"

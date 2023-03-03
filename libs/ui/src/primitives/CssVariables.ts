@@ -151,4 +151,6 @@ export interface CssVariables {
   // Change text color
   //
   readonly currentTextColor: Property.Color;
+
+  readonly formulaUnitBackground: Property.Color;
 }

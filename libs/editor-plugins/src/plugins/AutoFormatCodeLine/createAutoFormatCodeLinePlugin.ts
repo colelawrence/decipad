@@ -1,4 +1,6 @@
-import { BaseRange, Point } from 'slate';
+import { getAnalytics } from '@decipad/client-events';
+import { Computer, getExprRef } from '@decipad/computer';
+import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
 import {
   BlockElement,
   CodeLineElement,
@@ -16,6 +18,8 @@ import {
   isElementOfType,
   pluginStore,
 } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { ShadowCalcReference } from '@decipad/react-contexts';
 import {
   getBlockAbove,
   getEndPoint,
@@ -27,13 +31,9 @@ import {
   setNodes,
   toDOMNode,
 } from '@udecode/plate';
-import { Computer, getExprRef } from '@decipad/computer';
-import { ShadowCalcReference } from '@decipad/react-contexts';
-import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { getAnalytics } from '@decipad/client-events';
-import { getTextBeforeCursor } from './utils';
+import { BaseRange, Point } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
+import { getTextBeforeCursor } from './utils';
 
 type LastFormattedBlock = null | {
   readonly id: string;
@@ -88,7 +88,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
             }
 
             if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
-              const autoVarName = computer.getAvailableIdentifier('Name', 1);
+              const autoVarName = computer.getAvailableIdentifier('Unnamed', 1);
               const newCodeLine = createStructuredCodeLine({
                 varName: autoVarName,
                 code: '100$',
@@ -178,7 +178,7 @@ const commitPotentialFormula = (
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier('Name', 1),
+    varName: computer.getAvailableIdentifier('Unnamed', 1),
     code: '100$',
   });
 

@@ -1,6 +1,6 @@
+import { MyElement } from '@decipad/editor-types';
 import { TNode } from '@udecode/plate';
 import { createContext, useContext } from 'react';
-import { MyElement } from '@decipad/editor-types';
 
 export type ShadowCalcReference = {
   numberId: string;
@@ -22,7 +22,7 @@ export type EditorTeleportContextValue = Readonly<{
   openEditor(params: ShadowCalcReference): void;
   focusNumber(): void;
   focusCodeLine(): void;
-  closeEditor(codeLineId?: string, onClose?: () => void): void;
+  closeEditor(codeLineId?: string, onClose?: () => void, key?: string): void;
   useWatchTeleported(elementId: string, element: MyElement): void;
 }>;
 
