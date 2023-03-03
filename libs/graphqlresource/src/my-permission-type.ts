@@ -2,11 +2,11 @@ import {
   GraphqlContext,
   ConcreteRecord,
   GraphqlObjectType,
-  PermissionRecord,
   PermissionType,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { Resource } from '.';
+import { maximumPermissionType } from './maximumPermissionType';
 
 export type MyPermissionTypeFunction<RecordT extends ConcreteRecord> = (
   parent: RecordT,
@@ -62,20 +62,4 @@ export function myPermissionType<
     }
     return undefined;
   };
-}
-
-function isOfType(type: PermissionType) {
-  return (p: PermissionRecord): boolean => p.type === type;
-}
-
-function maximumPermissionType(
-  permissions: PermissionRecord[]
-): PermissionType | undefined {
-  return permissions.some(isOfType('ADMIN'))
-    ? 'ADMIN'
-    : permissions.some(isOfType('WRITE'))
-    ? 'WRITE'
-    : permissions.some(isOfType('READ'))
-    ? 'READ'
-    : undefined;
 }

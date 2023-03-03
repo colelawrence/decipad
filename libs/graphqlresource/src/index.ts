@@ -24,6 +24,8 @@ import {
 import { unshareWithUser, UnshareWithUserArgs } from './unshare-with-user';
 import { update } from './update';
 
+export { maximumPermissionType } from './maximumPermissionType';
+
 export interface Resource<
   DataTableType extends ConcreteRecord,
   GraphqlType extends GraphqlObjectType,

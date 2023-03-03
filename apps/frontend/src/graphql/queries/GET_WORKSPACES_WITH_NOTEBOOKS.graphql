@@ -10,6 +10,7 @@ fragment WorkspaceNotebook on Pad {
     id
     name
   }
+  myPermissionType
 }
 
 fragment WorkspaceSection on Section {

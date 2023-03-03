@@ -19,12 +19,14 @@ import tables from '@decipad/tables';
 import { byDesc } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
+import { maximumPermissionType } from '@decipad/graphqlresource';
 import {
   isAuthenticatedAndAuthorized,
   isAuthorized,
   loadUser,
   requireUser,
 } from '../authorization';
+import by from '../../../graphqlresource/src/utils/by';
 
 export default {
   Query: {
@@ -207,6 +209,86 @@ export default {
       }
 
       return roles.sort(byDesc('name'));
+    },
+
+    access: async (workspace: Workspace) => {
+      const resource = `/workspaces/${workspace.id}`;
+      const data = await tables();
+      const permissions = (
+        await data.permissions.query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          ExpressionAttributeValues: {
+            ':resource_uri': resource,
+          },
+        })
+      ).Items;
+
+      const roleAccesses = permissions
+        .filter((p) => p.role_id !== 'null' && p.user_id === 'null')
+        .map((p) => ({
+          role_id: p.role_id,
+          permission: p.type,
+          canComment: p.can_comment,
+          createdAt: p.createdAt,
+        }))
+        .sort(by('permission'));
+
+      const userAccesses = permissions
+        .filter((p) => p.user_id !== 'null' && p.role_id === 'null')
+        .map((p) => ({
+          user_id: p.user_id,
+          permission: p.type,
+          canComment: p.can_comment,
+          createdAt: p.createdAt,
+        }))
+        .sort(by('permission'));
+
+      return {
+        roles: roleAccesses,
+        users: userAccesses,
+      };
+    },
+
+    myPermissionType: async (
+      parent: WorkspaceRecord,
+      _: unknown,
+      context: GraphqlContext
+    ) => {
+      const resource = `/workspaces/${parent.id}`;
+      const data = await tables();
+      const { user } = context;
+      const secret =
+        context.event.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
+      const FilterExpression = [
+        user ? 'user_id = :user_id' : '',
+        secret ? 'secret = :secret' : '',
+      ]
+        .filter(Boolean)
+        .join(' OR ');
+      const ExpressionAttributeValues: Record<string, string> = {
+        ':resource_uri': resource,
+      };
+      if (user) {
+        ExpressionAttributeValues[':user_id'] = user.id;
+      }
+      if (secret) {
+        ExpressionAttributeValues[':secret'] = secret;
+      }
+
+      if (user || secret) {
+        const permissions = (
+          await data.permissions.query({
+            IndexName: 'byResource',
+            KeyConditionExpression: 'resource_uri = :resource_uri',
+            FilterExpression,
+            ExpressionAttributeValues,
+          })
+        ).Items;
+
+        return maximumPermissionType(permissions);
+      }
+      return undefined;
     },
 
     async pads(

@@ -5,6 +5,11 @@ export default gql`
     name: String!
   }
 
+  type WorkspaceAccess {
+    roles: [RoleAccess!]
+    users: [UserAccess!]
+  }
+
   type Workspace {
     id: ID!
     name: String!
@@ -13,6 +18,8 @@ export default gql`
     sections: [Section!]!
     createdAt: DateTime
     isPublic: Boolean
+    myPermissionType: PermissionType
+    access: WorkspaceAccess
   }
 
   type WorkspacesChanges {

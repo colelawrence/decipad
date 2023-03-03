@@ -1,6 +1,7 @@
 fragment WorkspaceSwitcherWorkspace on Workspace {
   id
   name
+  myPermissionType
 }
 
 query GetWorkspacesIDs {
