@@ -145,7 +145,7 @@ function applyRemoteYjsEvents(
     }
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.error('Error applying remote events', { error: err, events });
+    console.error('Error applying remote events', err, events);
   }
 }
 

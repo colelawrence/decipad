@@ -6,10 +6,11 @@ import {
 } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
 import {
-  deleteText,
+  hasNode,
   insertText,
   isElement,
   isText,
+  removeNodes,
   unwrapNodes,
 } from '@udecode/plate';
 
@@ -26,18 +27,28 @@ const normalize =
     }
 
     if (node.children.length > 1) {
-      deleteText(editor, { at: [...path, 1] });
-      return true;
+      const p = [...path, 1];
+      if (hasNode(editor, p)) {
+        removeNodes(editor, { at: p });
+        return true;
+      }
     }
 
     if (!isText(node.children[0])) {
-      deleteText(editor, { at: [...path, 0] });
-      return true;
+      const p = [...path, 0];
+      if (hasNode(editor, p)) {
+        removeNodes(editor, { at: p });
+        return true;
+      }
     }
 
     if (node.children.length < 1) {
-      insertText(editor, '', { at: path });
-      return true;
+      try {
+        insertText(editor, '', { at: path });
+        return true;
+      } catch (err) {
+        // do nothing
+      }
     }
 
     return false;

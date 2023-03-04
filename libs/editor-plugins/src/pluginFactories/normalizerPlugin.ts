@@ -9,6 +9,7 @@ import {
   MyPlatePlugin,
   MyWithOverride,
 } from '@decipad/editor-types';
+import { captureException } from '@sentry/browser';
 
 type NormalizerPlugin = (editor: MyEditor) => (entry: MyNodeEntry) => boolean;
 
@@ -104,21 +105,26 @@ const withNormalizerOverride = ({
 
     // eslint-disable-next-line no-param-reassign
     myEditor.normalizeNode = (entry) => {
-      const [node] = entry;
+      try {
+        const [node] = entry;
 
-      if (!acceptedTypes || isElement(node)) {
-        if (acceptedTypes) {
-          if (acceptedTypes.indexOf((node as MyElement).type) < 0) {
-            // no match, break early
-            return normalizeNode(entry);
+        if (!acceptedTypes || isElement(node)) {
+          if (acceptedTypes) {
+            if (acceptedTypes.indexOf((node as MyElement).type) < 0) {
+              // no match, break early
+              return normalizeNode(entry);
+            }
+            if (removeUnacceptableElementProperties(entry)) {
+              return;
+            }
           }
-          if (removeUnacceptableElementProperties(entry)) {
+          if (newNormalize && newNormalize(entry)) {
             return;
           }
         }
-        if (newNormalize && newNormalize(entry)) {
-          return;
-        }
+      } catch (err) {
+        console.error(`Error normalizing ${elementType}`, err);
+        captureException(err);
       }
       return normalizeNode(entry);
     };
