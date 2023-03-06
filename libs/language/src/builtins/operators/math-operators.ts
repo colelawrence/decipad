@@ -74,6 +74,9 @@ const roundWrap = (
     const decimalPrecision = decimalPrecisionValue
       ? getInstanceof(decimalPrecisionValue, DeciNumber)
       : ZERO;
+    if (decimalPrecision.compare(N(100)) > 0) {
+      throw new RuntimeError('round: decimal precision must be < 100');
+    }
     // in order for the round function to round at the correct precision, we need to first divide by
     // the unit multiplier, do the rouding, and *then* multiply by it at the end.
     return round(n.div(multiplier), decimalPrecision.valueOf()).mul(multiplier);
