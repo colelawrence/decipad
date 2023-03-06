@@ -2,9 +2,12 @@ import { createDocSyncEditor } from '@decipad/docsync';
 import { create } from 'zustand';
 import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
-import { Computer } from '@decipad/computer';
+import { Computer, setErrorReporter } from '@decipad/computer';
 import { createTPlateEditor } from '@decipad/editor-types';
 import { NotebookState } from './state';
+
+// set the computer's error reporter
+setErrorReporter(captureException);
 
 const LOAD_TIMEOUT_MS = 5000;
 
