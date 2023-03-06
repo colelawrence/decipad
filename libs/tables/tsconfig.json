@@ -7,5 +7,6 @@
   "references": [
     { "path": "../backendtypes" },
     { "path": "../dynamodb-lock" },
+    { "path": "../retry" }
   ]
 }

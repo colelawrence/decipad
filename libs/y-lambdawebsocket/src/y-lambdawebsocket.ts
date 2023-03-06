@@ -11,6 +11,7 @@ import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
 import { Subscription } from 'rxjs';
+import { awsRetry, retry } from '@decipad/retry';
 import { MessageSender, sender } from './send';
 
 interface Options {
@@ -182,7 +183,7 @@ export const trySend = async (
   payload: string
 ): Promise<void> => {
   try {
-    await ws.send({ id: connId, payload });
+    await retry(() => ws.send({ id: connId, payload }), awsRetry);
   } catch (err) {
     if (err instanceof Error && isSeriousError(err)) {
       throw err;

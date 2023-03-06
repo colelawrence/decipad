@@ -16,6 +16,7 @@ import {
 } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
 import { unique } from '@decipad/utils';
+import { awsRetry, retry } from '@decipad/retry';
 import assert from 'assert';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { timestamp } from './timestamp';
@@ -129,7 +130,9 @@ function putReplacer<T extends ConcreteRecord>(
       args,
       eventProbability
     );
-    const ret = await method.call(table, args);
+    const ret = await retry(() => method.call(table, args), awsRetry, {
+      maxTimeout: 5000,
+    });
 
     const publishEvent =
       typeof eventProbability === 'boolean'
@@ -147,7 +150,9 @@ function putReplacer<T extends ConcreteRecord>(
         },
       };
       debug('tables.%s: publishing event `%j`', event);
-      await arc.queues.publish(event);
+      await retry(() => arc.queues.publish(event), awsRetry, {
+        maxTimeout: 5000,
+      });
     } else {
       debug('tables.%s: NOT publishing event', tableName);
     }
@@ -170,16 +175,21 @@ function deleteReplacer<T extends ConcreteRecord>(
     await method.call(table, args);
 
     if (!noEvents) {
-      await arc.queues.publish({
-        name: `${tableName}-changes`,
-        payload: {
-          table: tableName,
-          action: 'delete',
-          args,
-          recordBeforeDelete,
-          user_id: userId,
-        },
-      });
+      await retry(
+        () =>
+          arc.queues.publish({
+            name: `${tableName}-changes`,
+            payload: {
+              table: tableName,
+              action: 'delete',
+              args,
+              recordBeforeDelete,
+              user_id: userId,
+            },
+          }),
+        awsRetry,
+        { maxTimeout: 5000 }
+      );
     }
   };
 }

@@ -22,6 +22,7 @@
     { "path": "../backend-trace" },
     { "path": "../backend-analytics" },
     { "path": "../docsync-maintenance" },
-    { "path": "../slate-yjs" }
+    { "path": "../slate-yjs" },
+    { "path": "../retry" }
   ]
 }

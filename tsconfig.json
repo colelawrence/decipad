@@ -91,6 +91,7 @@
       "@decipad/queries": ["libs/queries/src/index.ts"],
       "@decipad/react-contexts": ["libs/react-contexts/src/index.ts"],
       "@decipad/react-utils": ["libs/react-utils/src/index.ts"],
+      "@decipad/retry": ["libs/retry/src/index.ts"],
       "@decipad/routing": ["libs/routing/src/index.ts"],
       "@decipad/services": ["libs/services/src/index.ts"],
       "@decipad/services/authentication": ["libs/services/src/authentication"],
