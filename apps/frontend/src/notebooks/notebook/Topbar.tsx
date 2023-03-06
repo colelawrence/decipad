@@ -3,6 +3,7 @@ import { noop } from '@decipad/utils';
 import { ComponentProps, FC } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { PermissionType } from 'libs/ui/src/types';
+import { useSession } from 'next-auth/react';
 import { Notebook } from './hooks/useNotebookStateAndActions';
 
 type TopbarProps = Pick<
@@ -42,6 +43,8 @@ const Topbar: FC<TopbarProps> = ({
   changeEditorAccess = () => Promise.resolve(),
   removeEditorById = () => Promise.resolve(),
 }) => {
+  const { data: session } = useSession();
+
   if (!notebook) {
     return null;
   }
@@ -51,10 +54,24 @@ const Topbar: FC<TopbarProps> = ({
       notebook={notebook}
       userWorkspaces={userWorkspaces}
       workspace={notebook.workspace}
+      // TODO: ENG-1953 backend should provide this data
+      workspaceAccess={
+        userWorkspaces?.some(
+          (userWorkspace) => userWorkspace.id === notebook.workspace?.id
+        )
+          ? 'ADMIN'
+          : undefined
+      }
       usersWithAccess={notebook.access.users}
       permission={notebook.myPermissionType}
       isPublished={notebook.isPublic || undefined}
       isPublishing={isPublishing}
+      // TODO: ENG-1953 backend should provide this data
+      isSharedNotebook={notebook?.access?.users?.some(
+        (permission) =>
+          session?.user?.id === permission.user.id &&
+          permission.permission !== 'ADMIN'
+      )}
       onRevertChanges={removeLocalChanges}
       hasLocalChanges={hasLocalChanges}
       hasUnpublishedChanges={hasUnpublishedChanges}

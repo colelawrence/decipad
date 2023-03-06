@@ -5,7 +5,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useCallback, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
 import { Deci, LeftArrow, Cards } from '../../icons';
@@ -94,6 +94,8 @@ export type NotebookTopbarProps = Pick<
     permission?: PermissionType | null;
     userWorkspaces?: Array<{ id: string; name: string }>;
     workspace?: { id: string; name: string } | null;
+    workspaceAccess?: PermissionType | null;
+    isSharedNotebook?: boolean;
     onDuplicateNotebook?: () => void;
     onRevertChanges?: () => void;
     onRemove?: (userId: string) => Promise<void>;
@@ -110,6 +112,8 @@ export const NotebookTopbar = ({
   onRevertChanges = noop,
   usersWithAccess,
   permission,
+  isSharedNotebook,
+  workspaceAccess,
   hasLocalChanges: hasLocalChanges$,
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
@@ -136,35 +140,42 @@ export const NotebookTopbar = ({
   }, [clientEvent]);
 
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const workspaceName = isSharedNotebook
+    ? 'Shared with me'
+    : isWriter && workspace
+    ? workspace?.name
+    : undefined;
 
   const onBack = useCallback(() => {
     if (workspace && userWorkspaces && userWorkspaces.length > 0) {
-      // If location.key is default that means it is the first location
-      // of the app (so react router doesn't know where to go back to).
-      if (location.key === 'default') {
-        navigate(
-          workspaces({})
-            .workspace({
-              workspaceId: userWorkspaces[0].id,
-            })
-            .shared({}).$
-        );
-      } else {
-        navigate(-1);
-      }
+      const sharedWithMeRoute = workspaces({})
+        .workspace({
+          workspaceId: userWorkspaces[0].id,
+        })
+        .shared({}).$;
 
-      navigate(workspaces({}).workspace({ workspaceId: workspace.id }).$);
+      const documentWorkspaceRoute = workspaces({}).workspace({
+        workspaceId: workspace.id,
+      }).$;
+
+      if (workspaceAccess) {
+        navigate(documentWorkspaceRoute);
+      } else if (isSharedNotebook) {
+        navigate(sharedWithMeRoute);
+      } else {
+        navigate('/');
+      }
     } else {
       navigate('/');
     }
-  }, [navigate, workspace, location.key, userWorkspaces]);
+  }, [navigate, workspace, userWorkspaces, workspaceAccess, isSharedNotebook]);
 
   return (
     <div css={wrapperStyles}>
       {/* Left side */}
       <div css={leftSideStyles}>
-        {isWriter && workspace ? (
+        {workspaceAccess || isSharedNotebook ? (
           <div css={{ width: '32px', display: 'grid' }}>
             <IconButton onClick={onBack}>
               <LeftArrow />
@@ -181,7 +192,7 @@ export const NotebookTopbar = ({
           notebookName={
             isWriter ? notebook.name : 'Decipad — interactive notebook'
           }
-          workspaceName={isWriter ? workspace?.name : undefined}
+          workspaceName={workspaceName}
           href={!isWriter ? 'https://decipad.com' : undefined}
         />
         <BetaBadge />
