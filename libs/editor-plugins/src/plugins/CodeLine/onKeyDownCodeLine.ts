@@ -5,7 +5,6 @@ import {
   MyEditor,
   ELEMENT_CODE_LINE,
   MyNodeEntry,
-  ELEMENT_CODE_LINE_V2_CODE,
 } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
@@ -32,10 +31,7 @@ const findCodeLineParentEntry = (editor: MyEditor) => {
   if (!entry) return;
 
   const [node] = entry;
-  if (
-    node.type !== ELEMENT_CODE_LINE &&
-    node.type !== ELEMENT_CODE_LINE_V2_CODE
-  ) {
+  if (node.type !== ELEMENT_CODE_LINE) {
     return;
   }
 

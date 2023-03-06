@@ -30,7 +30,8 @@ type Shortcuts =
   | 'move-up'
   | 'move-down'
   | 'new-element'
-  | 'select-all';
+  | 'select-all'
+  | 'soft-break';
 
 // In the future this function could be used by all elements to get shortcuts.
 function getShortcut(
@@ -45,7 +46,7 @@ function getShortcut(
       // True when cursor in (), {}, if, etc
       const shouldSoftBreak = filterStatementSeparator(editor, computer);
       if (shouldSoftBreak) {
-        return undefined;
+        return 'soft-break';
       }
       return 'move-right';
     case event.key === 'Tab':
@@ -93,12 +94,12 @@ export function createStructuredKeyboard(computer: Computer) {
         switch (shortcut) {
           case 'move-left':
           case 'move-right':
-            event.preventDefault();
-            event.stopPropagation();
             if (
               (anchorPath[1] === 0 && shortcut === 'move-right') ||
               (anchorPath[1] === 1 && shortcut === 'move-left')
             ) {
+              event.preventDefault();
+              event.stopPropagation();
               anchorPath[1] = shortcut === 'move-right' ? 1 : 0;
               setSelectionFullText(editor, anchorPath);
               return true;
@@ -106,11 +107,18 @@ export function createStructuredKeyboard(computer: Computer) {
 
             // If we are moving right and at the end, we move down to the next element
             // And vise versa for the left
-            anchorPath[0] += shortcut === 'move-right' ? 1 : -1;
+            const moveTo = [
+              anchorPath[0] + (shortcut === 'move-right' ? 1 : -1),
+            ];
+            if (!Editor.hasPath(editor as BaseEditor, moveTo)) {
+              return false;
+            }
+            event.preventDefault();
+            event.stopPropagation();
             const [, path] =
               shortcut === 'move-right'
-                ? getFirstNode(editor, [anchorPath[0]])
-                : getLastNode(editor, [anchorPath[0]]);
+                ? getFirstNode(editor, moveTo)
+                : getLastNode(editor, moveTo);
             setSelectionFullText(editor, path);
             return true;
           case 'move-up':
@@ -119,21 +127,20 @@ export function createStructuredKeyboard(computer: Computer) {
             const nextNode = getNode<MyElement>(editor, [anchorPath[0]]);
             const isNextSame = ALLOWED_ELEMENTS.has(nextNode?.type || '');
 
-            if (!isNextSame || !nextNode) return false;
+            if (!isNextSame || !nextNode) return true;
             event.preventDefault();
             event.stopPropagation();
 
             // If the destination line is shorter, our offset could be out of range. Trim it
-            const maxOffset = getNodeString(nextNode).length;
-            const offset = Math.min(anchorOffset, maxOffset);
+            const maxOffset = getNodeString(nextNode.children[0]).length;
 
-            const newRange = {
-              offset,
+            const newSelectionPoint = {
+              offset: Math.min(anchorOffset, maxOffset),
               path: anchorPath,
             };
             setSelection(editor, {
-              anchor: newRange,
-              focus: newRange,
+              anchor: newSelectionPoint,
+              focus: newSelectionPoint,
             });
             return true;
           case 'new-element':
@@ -143,6 +150,7 @@ export function createStructuredKeyboard(computer: Computer) {
               editor,
               path: [anchorPath[0]],
               code: '$100',
+              select: true,
               getAvailableIdentifier:
                 computer.getAvailableIdentifier.bind(computer),
             });
@@ -162,6 +170,14 @@ export function createStructuredKeyboard(computer: Computer) {
             if (above) {
               Transforms.select(editor as BaseEditor, above[1]);
             }
+
+            return true;
+
+          case 'soft-break':
+            event.preventDefault();
+            event.stopPropagation();
+
+            editor.insertText('\n');
 
             return true;
         }

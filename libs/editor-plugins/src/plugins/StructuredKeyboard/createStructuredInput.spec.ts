@@ -4,7 +4,9 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
+  MyEditor,
 } from '@decipad/editor-types';
+import { enable, reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
 
 const computer = new Computer();
@@ -27,17 +29,24 @@ function getStructuredCalc(name: string, value: string, unit?: string) {
 }
 
 describe('Structured input basic keyboard shortcuts', () => {
-  const editor = createTPlateEditor({
-    plugins: [createStructuredKeyboard(computer)],
+  let editor: MyEditor;
+  beforeEach(() => {
+    enable('CODE_LINE_NAME_SEPARATED');
+    editor = createTPlateEditor({
+      plugins: [createStructuredKeyboard(computer)],
+    });
+    editor.children = [
+      getStructuredCalc('a', '100') as never,
+      getStructuredCalc('longname', '50') as never,
+    ];
+    editor.selection = {
+      anchor: { path: [0, 0, 0], offset: 1 },
+      focus: { path: [0, 0, 0], offset: 1 },
+    };
   });
-  editor.children = [
-    getStructuredCalc('a', '100') as never,
-    getStructuredCalc('longname', '50') as never,
-  ];
-  editor.selection = {
-    anchor: { path: [0, 0, 0], offset: 1 },
-    focus: { path: [0, 0, 0], offset: 1 },
-  };
+  afterEach(() => {
+    reset();
+  });
   it('Should move selection to the value when in the name', () => {
     const event = new KeyboardEvent('keydown', { key: 'Tab' });
     createStructuredKeyboard(
@@ -75,7 +84,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     expect(editor.selection).toMatchInlineSnapshot(`
       Object {
         "anchor": Object {
-          "offset": 0,
+          "offset": 1,
           "path": Array [
             0,
             0,
@@ -103,7 +112,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     expect(editor.selection).toMatchInlineSnapshot(`
       Object {
         "anchor": Object {
-          "offset": 0,
+          "offset": 1,
           "path": Array [
             1,
             0,
@@ -111,7 +120,7 @@ describe('Structured input basic keyboard shortcuts', () => {
           ],
         },
         "focus": Object {
-          "offset": 0,
+          "offset": 1,
           "path": Array [
             1,
             0,
@@ -131,7 +140,7 @@ describe('Structured input basic keyboard shortcuts', () => {
     expect(editor.selection).toMatchInlineSnapshot(`
       Object {
         "anchor": Object {
-          "offset": 0,
+          "offset": 1,
           "path": Array [
             0,
             0,
@@ -139,7 +148,7 @@ describe('Structured input basic keyboard shortcuts', () => {
           ],
         },
         "focus": Object {
-          "offset": 0,
+          "offset": 1,
           "path": Array [
             0,
             0,
@@ -189,7 +198,70 @@ describe('Structured input basic keyboard shortcuts', () => {
     expect(editor.selection).toMatchInlineSnapshot(`
       Object {
         "anchor": Object {
+          "offset": 1,
+          "path": Array [
+            0,
+            0,
+            0,
+          ],
+        },
+        "focus": Object {
+          "offset": 1,
+          "path": Array [
+            0,
+            0,
+            0,
+          ],
+        },
+      }
+    `);
+  });
+
+  it('regression: Creates a new structured codeline and moves to its value part', () => {
+    const event = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      shiftKey: true,
+    });
+    createStructuredKeyboard(
+      computer
+      // @ts-expect-error DOM KeyboardEvent vs React event
+    ).handlers?.onKeyDown?.(editor)(event);
+    expect(editor.selection).toMatchInlineSnapshot(`
+      Object {
+        "anchor": Object {
           "offset": 0,
+          "path": Array [
+            1,
+            1,
+            0,
+          ],
+        },
+        "focus": Object {
+          "offset": 4,
+          "path": Array [
+            1,
+            1,
+            0,
+          ],
+        },
+      }
+    `);
+  });
+
+  it('regression: Moves to the end of the name, and checks if its too large', () => {
+    editor.selection = {
+      anchor: { path: [1, 0, 0], offset: 'longname'.length },
+      focus: { path: [1, 0, 0], offset: 'longname'.length },
+    };
+    const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+    createStructuredKeyboard(
+      computer
+      // @ts-expect-error DOM KeyboardEvent vs React event
+    ).handlers?.onKeyDown?.(editor)(event);
+    expect(editor.selection).toMatchInlineSnapshot(`
+      Object {
+        "anchor": Object {
+          "offset": 1,
           "path": Array [
             0,
             0,
