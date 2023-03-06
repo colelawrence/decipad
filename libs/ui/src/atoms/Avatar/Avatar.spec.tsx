@@ -12,6 +12,17 @@ it("shows the user's first initial", () => {
   expect(container).toHaveTextContent('J');
 });
 
+it('works even if typescript convention violated', () => {
+  const brokenName = undefined as unknown as string;
+  const { container } = render(<Avatar name={brokenName} />);
+  expect(container).toHaveTextContent('?');
+});
+
+it('works with an empty string', () => {
+  const { container } = render(<Avatar name="" />);
+  expect(container).toHaveTextContent('?');
+});
+
 describe('roundedSquare', () => {
   it('changes the border radius', () => {
     const { rerender } = render(<Avatar name="John Doe" />);

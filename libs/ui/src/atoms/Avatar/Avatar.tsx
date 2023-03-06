@@ -83,6 +83,16 @@ interface AvatarProps {
   readonly onClick?: () => void;
 }
 
+const DEFAULT_LETTER = '?';
+
+const getAvatarColor = (name = '?') => {
+  const hashString = name
+    .split('')
+    .map((c: string) => c.charCodeAt(0))
+    .reduce((a: number, b: number) => a + b, 0);
+  return baseColors[hashString % baseColors.length];
+};
+
 export const Avatar = ({
   name,
   email = 'thisemaildoesnthaveagravatar@n1n.co',
@@ -94,16 +104,14 @@ export const Avatar = ({
   onClick,
   title,
 }: AvatarProps): ReturnType<FC> => {
-  const hashString = name
-    .split('')
-    .map((c: string) => c.charCodeAt(0))
-    .reduce((a: number, b: number) => a + b, 0);
-  const avatarColor =
-    backgroundColor ?? baseColors[hashString % baseColors.length];
+  const firstLetter = name?.[0]?.toUpperCase() || DEFAULT_LETTER;
+  const secondLetter = name?.[1]?.toLocaleLowerCase() || '';
+  const avatarColor = backgroundColor ?? getAvatarColor(name);
+
   return (
     <div
       role="img"
-      aria-label={title ?? `Avatar of user ${name[0]}`}
+      aria-label={title ?? `Avatar of user ${name}`}
       css={containerStyles(variant)}
       onClick={onClick}
     >
@@ -145,8 +153,8 @@ export const Avatar = ({
                   : { fill: cssVar('iconColorDark') },
               ])}
             >
-              {name[0].toUpperCase()}
-              {name[1] && name[1].toLocaleLowerCase()}
+              {firstLetter}
+              {secondLetter}
             </text>
           </svg>
         </div>
