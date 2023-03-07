@@ -72,10 +72,10 @@ export async function createCalculationBlockBelow(
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.waitForSelector(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
   );
   await page.click(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
   );
 
   await keyPress(page, '=');
@@ -95,10 +95,10 @@ export async function createCodeLineV2Below(
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.waitForSelector(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
   );
   await page.click(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks = to start calculation")'
+    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
   );
 
   await keyPress(page, '=');

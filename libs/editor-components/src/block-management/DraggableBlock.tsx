@@ -1,18 +1,24 @@
 import { ClientEventsContext } from '@decipad/client-events';
+import { Computer, parseSimpleValue } from '@decipad/computer';
 import {
   alwaysWritableElementTypes,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
   MyEditor,
   MyElement,
   MyReactEditor,
   useTEditorRef,
+  MyElementOrText,
 } from '@decipad/editor-types';
 import {
   clone,
   insertNodes,
   requirePathBelowBlock,
   useElementMutatorCallback,
+  createStructuredCodeLine,
+  getCodeLineSource,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -26,7 +32,6 @@ import {
   useMergedRef,
 } from '@decipad/ui';
 import {
-  ELEMENT_CODE_LINE,
   findNodePath,
   focusEditor,
   getEndPoint,
@@ -79,6 +84,11 @@ type DraggableBlockProps = {
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 
 type OnDelete = (() => void) | 'none' | undefined;
+
+const placeHolders = {
+  input: '100$',
+  formula: '14 * 3',
+};
 
 const defaultOnDelete = (
   editor: MyReactEditor,
@@ -197,22 +207,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         at: path,
       });
       const [prevNode] = entry || [];
-      insertNodes(
-        editor,
-        {
-          id: nanoid(),
-          type:
-            prevNode && (prevNode as MyElement).type === ELEMENT_CODE_LINE
-              ? ELEMENT_CODE_LINE
-              : ELEMENT_PARAGRAPH,
-          children: [{ text: '' }],
-        },
-        {
-          at: path,
-        }
-      );
+      insertNodes(editor, insertSameNodeType(prevNode as MyElement, computer), {
+        at: path,
+      });
       select(editor, path);
-    }, [editor, element]);
+    }, [editor, element, computer]);
 
     const onPlus = useCallback(() => {
       openSlashMenu(editor, element);
@@ -320,6 +319,40 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     );
   }
 );
+
+const insertSameNodeType = (
+  prevNode: MyElement | undefined,
+  computer: Computer
+): MyElementOrText => {
+  const id = nanoid();
+  const { input, formula } = placeHolders;
+
+  switch (prevNode?.type) {
+    case ELEMENT_CODE_LINE_V2: {
+      const prevNodeText = getCodeLineSource(prevNode.children[1]);
+      const isSimpleValue = !!parseSimpleValue(prevNodeText);
+      const autoVarName = computer.getAvailableIdentifier('Unnamed', 1);
+
+      return createStructuredCodeLine({
+        id,
+        varName: autoVarName,
+        code: isSimpleValue ? input : formula,
+      });
+    }
+    case ELEMENT_CODE_LINE:
+      return {
+        id,
+        type: ELEMENT_CODE_LINE,
+        children: [{ text: '' }],
+      };
+    default:
+      return {
+        id,
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: '' }],
+      };
+  }
+};
 
 const openSlashMenu = (editor: MyEditor, element: MyElement) => {
   const selectedBlock = editor.selection?.anchor.path[0];

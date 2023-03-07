@@ -18,6 +18,6 @@ const equalsKey = <span css={hotKeyStyle}>=</span>;
 
 export const ParagraphPlaceholder: React.FC = () => (
   <>
-    Type {slashKey} for new blocks {equalsKey} to start calculation
+    Type {slashKey} for new blocks or {equalsKey} for an input
   </>
 );
