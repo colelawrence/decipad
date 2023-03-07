@@ -3,6 +3,7 @@ import { useWindowListener } from '@decipad/react-utils';
 import { FC, useCallback, useRef, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { Remark } from 'react-remark';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { Calendar, Formula, Number, Table, Text } from '../../icons';
 import {
   setCssVar,
@@ -135,7 +136,11 @@ export const AutoCompleteMenuItem = ({
       <Tooltip
         side="right"
         theme="light"
-        open={(hovering || (focused && !hoveringSome)) && explanation != null}
+        open={
+          (hovering || (focused && !hoveringSome)) &&
+          explanation != null &&
+          isFlagEnabled('FORMULAS_TOOLTIP')
+        }
         trigger={
           <div css={wrapperStyles(focused)}>
             <button
