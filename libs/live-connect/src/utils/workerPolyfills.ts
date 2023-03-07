@@ -7,6 +7,7 @@ global.document = {
   getElementsByTagName() {
     return [];
   },
+  addEventListener() {},
 };
 global.window = {
   navigator: {
