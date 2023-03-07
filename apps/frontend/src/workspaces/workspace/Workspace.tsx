@@ -201,7 +201,7 @@ const Workspace: FC = () => {
     setCtaDismissed(true);
   }, []);
 
-  const { data: workspaceData } = result;
+  const { data: workspaceData, fetching } = result;
 
   const currentWorkspace = useMemo(
     () => workspaceData?.workspaces.find((w) => w.id === workspaceId),
@@ -277,6 +277,16 @@ const Workspace: FC = () => {
       sectionId,
     ]
   );
+
+  if (fetching) {
+    return (
+      <Dashboard
+        sidebar={<DashboardSidebarPlaceholder />}
+        topbar={<TopbarPlaceholder />}
+        notebookList={<NotebookListPlaceholder />}
+      />
+    );
+  }
 
   if (!currentWorkspace || !session) {
     return <ErrorPage Heading="h1" wellKnown="404" />;

@@ -148,26 +148,29 @@ export const NotebookTopbar = ({
     : undefined;
 
   const onBack = useCallback(() => {
-    if (workspace && userWorkspaces && userWorkspaces.length > 0) {
-      const sharedWithMeRoute = workspaces({})
-        .workspace({
-          workspaceId: userWorkspaces[0].id,
-        })
-        .shared({}).$;
+    const redirectToWorkspace =
+      workspace && workspaceAccess
+        ? workspaces({}).workspace({
+            workspaceId: workspace.id,
+          }).$
+        : null;
 
-      const documentWorkspaceRoute = workspaces({}).workspace({
-        workspaceId: workspace.id,
-      }).$;
+    const hasWorkspaces = userWorkspaces && userWorkspaces.length > 0;
+    const redirectToShared =
+      isSharedNotebook && hasWorkspaces
+        ? workspaces({})
+            .workspace({
+              workspaceId: userWorkspaces[0].id,
+            })
+            .shared({}).$
+        : null;
 
-      if (workspaceAccess) {
-        navigate(documentWorkspaceRoute);
-      } else if (isSharedNotebook) {
-        navigate(sharedWithMeRoute);
-      } else {
-        navigate('/');
-      }
+    if (redirectToWorkspace) {
+      navigate(redirectToWorkspace);
+    } else if (redirectToShared) {
+      navigate(redirectToShared);
     } else {
-      navigate('/');
+      navigate('/w');
     }
   }, [navigate, workspace, userWorkspaces, workspaceAccess, isSharedNotebook]);
 
