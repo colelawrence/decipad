@@ -17,7 +17,7 @@ export const retry = <TReturn, TError>(
   options: RetryOptions = {}
 ): Promise<TReturn> => {
   const controller = new AbortController();
-  const pRetryOptions: Options = {
+  const pRetryOptions: Options & { signal: AbortSignal } = {
     ...options,
     signal: controller.signal,
     randomize: true,
