@@ -38,6 +38,7 @@ export const variableNameContainerStyles = css({
   gridArea: 'varname',
   display: 'inline-flex',
   padding: '4px 6px 4px 0',
+  flexShrink: '0',
 });
 
 export const codeContainerStyles = css(code, {
