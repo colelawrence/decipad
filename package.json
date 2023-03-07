@@ -357,7 +357,7 @@
     "husky": "8.0.1",
     "jest": "27.5.1",
     "jest-canvas-mock": "2.4.0",
-    "jest-config": "29.4.0",
+    "jest-config": "29.5.0",
     "jest-fetch-mock": "3.0.3",
     "lint-staged": "13.1.0",
     "madge": "^6.0.0",
