@@ -180,6 +180,22 @@ npx playwright test <<test-name-pattern>>  [--debug]
 
 Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
 
+## If your deployment failed
+
+You will see a message like this:
+
+```json
+{ "message": "Not Found" }
+```
+
+1. Just run the following command to delete the stack:
+
+   ```bash
+   scripts/aws-delete-stack.sh DecipadBackendStagingXXXX
+   ```
+
+2. Then re-run the deployment github action.
+
 ## Private deploys and fast client updates
 
 You can deploy your own private instance by following these instructions:

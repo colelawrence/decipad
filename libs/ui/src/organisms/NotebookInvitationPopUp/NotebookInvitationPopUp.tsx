@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useIntercom } from 'react-use-intercom';
 import { InputField, Button } from '../../atoms';
-import { Check, Loading } from '../../icons';
+import { Check, Loading, Sparkles } from '../../icons';
 import {
   black,
   cssVar,
@@ -94,10 +95,51 @@ const invitationFormStyles = css({
   },
 });
 
+const disclaimerStyles = css(p14Medium, {
+  display: 'flex',
+  alignItems: 'flex-start',
+  padding: '8px',
+  gap: '8px',
+
+  backgroundColor: cssVar('strongHighlightColor'),
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
+  borderRadius: '8px',
+});
+
 const CheckMark = () => <Check width="16px" style={{ marginRight: '6px' }} />;
 const LoadingDots = () => (
   <Loading width="24px" style={{ marginRight: '6px' }} />
 );
+
+const Disclaimer = () => {
+  const { show, showNewMessage } = useIntercom();
+
+  const showFeedback = useCallback(
+    (ev: React.MouseEvent) => {
+      ev.preventDefault();
+      show();
+      showNewMessage();
+    },
+    [show, showNewMessage]
+  );
+
+  return (
+    <p css={disclaimerStyles}>
+      <div css={{ height: '18px', width: '18px', flexShrink: 0 }}>
+        <Sparkles />
+      </div>
+      <span>
+        This is an early release. We're still perfecting it, and eager for your
+        {` `}
+        <span onClick={showFeedback} css={{ textDecoration: 'underline' }}>
+          thoughts
+        </span>
+        .
+      </span>
+    </p>
+  );
+};
 
 interface NotebookSharingPopUpProps {
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
@@ -122,6 +164,7 @@ export const NotebookInvitationPopUp = ({
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [disclaimer, setDisclaimer] = useState(false);
   // TODO: fix input floating label
   const [permission, setPermission] = useState<PermissionType>('WRITE');
 
@@ -137,6 +180,7 @@ export const NotebookInvitationPopUp = ({
     onInvite(email, permission).finally(() => {
       setIsLoading(false);
       setSuccess(true);
+      setDisclaimer(true);
       setTimeout(() => setSuccess(false), 2000);
     });
   }, [
@@ -215,6 +259,8 @@ export const NotebookInvitationPopUp = ({
           onRemoveCollaborator={handleRemoveCollaborator}
           onChangePermission={handleChangePermission}
         />
+
+        {disclaimer && <Disclaimer />}
       </div>
     </div>
   );
