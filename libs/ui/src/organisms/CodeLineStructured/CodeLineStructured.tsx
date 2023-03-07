@@ -71,9 +71,10 @@ export const CodeLineStructured = ({
           display: 'inline',
           lineHeight: '24px',
           paddingLeft: '4px',
+          userSelect: 'none',
         }}
       >
-        ={' '}
+        =
       </div>
     );
   };

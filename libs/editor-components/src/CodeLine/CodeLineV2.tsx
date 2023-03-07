@@ -34,6 +34,7 @@ import {
   StructuredInputUnits,
   Tooltip,
 } from '@decipad/ui';
+import { css } from '@emotion/react';
 import { findNodePath, getNodeString, getPreviousNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
@@ -276,6 +277,8 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   );
 };
 
+const avoidUnclickableZeroWidth = css({ paddingRight: '20px' });
+
 export const CodeLineV2Code: PlateComponent = ({
   element,
   attributes,
@@ -288,5 +291,11 @@ export const CodeLineV2Code: PlateComponent = ({
   // transform variable references into smart refs on blur
   useOnBlurNormalize(editor, element);
 
-  return <span {...attributes}>{children}</span>;
+  const isEmpty = getCodeLineSource(element) === '';
+
+  return (
+    <span {...attributes} css={isEmpty && avoidUnclickableZeroWidth}>
+      {children}
+    </span>
+  );
 };

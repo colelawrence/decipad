@@ -31,7 +31,7 @@ export const inlineStyles = css({
   float: 'right',
   whiteSpace: 'normal',
 
-  userSelect: 'all',
+  userSelect: 'none',
 });
 
 export const variableNameContainerStyles = css({

@@ -134,6 +134,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
       css={{
         display: 'inline-flex',
         cursor: readOnly ? 'default' : 'pointer',
+        userSelect: 'none',
       }}
       contentEditable={false}
     >
