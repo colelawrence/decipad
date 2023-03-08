@@ -3,6 +3,7 @@ import {
   antiwiggle,
   code,
   cssVar,
+  mobileQuery,
   setCssVar,
   smallScreenQuery,
   wiggle,
@@ -18,6 +19,9 @@ export const highlightedLineStyles = {
 export const codeLineStyles = css({
   ':hover': highlightedLineStyles,
   display: 'flex',
+  [mobileQuery]: {
+    flexDirection: 'column',
+  },
 });
 
 export const inlineStyles = css({
