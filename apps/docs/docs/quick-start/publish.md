@@ -2,9 +2,9 @@
 sidebar_position: 7
 ---
 
-# Publish your Work
+# Publish your Notebooks
 
-Share your Notebook, so anyone can follow your calculations.
+Publish your Notebook, so anyone with the link can follow your calculations.
 
 ## Make a Notebook Public
 
@@ -16,7 +16,7 @@ Make a notebook public with a link.
 
 ## Publish New Changes
 
-Share adjustments to notebooks you already published.
+Make updates to notebooks you already published.
 
 - To **publish new changes**, click the `Publish` button on the top right of your notebook, and then press `Publish New Changes`.
 
