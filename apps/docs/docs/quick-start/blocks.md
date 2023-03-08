@@ -52,4 +52,4 @@ Hide blocks from readers when you [publish your notebook](/docs/quick-start/publ
 
 # Continue Exploring:
 
-- [Create your first calculation](/docs/quick-start/calculations)
+- [Create your first formula](/docs/quick-start/formulas)

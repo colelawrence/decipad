@@ -4,7 +4,7 @@ sidebar_position: 10
 
 # Formulas for Numbers
 
-Decipad has a collection pre-built formulas that help you work with numbers. <br /> You can use these formulas with [tables](/docs/quick-start/tables) and [Decipad code blocks](/docs/quick-start/calculations).
+Decipad has a collection pre-built formulas that help you work with numbers. <br /> You can use these formulas with [tables](/docs/quick-start/tables), formulas and [Decipad Advanced Formula blocks](/docs/advanced-concepts/advanced-formulas).
 
 ## Rounding numbers
 
