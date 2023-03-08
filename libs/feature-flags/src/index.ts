@@ -59,7 +59,10 @@ export const getQueryStringOverrides = (): Flags => {
   return flags;
 };
 
-let overrides: Flags = {};
+let overrides: Flags = {
+  ONBOARDING_ACCOUNT_SETUP: true,
+  SHARE_PAD_WITH_EMAIL: true,
+};
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 
