@@ -1,0 +1,57 @@
+---
+title: 'Collaboration'
+tags: [New, Fixed and Improved]
+hide_table_of_contents: true
+---
+
+import {Stars, Hammer, FancyTitle} from '@site/src/components/FancyTitle';
+import {ReleasePost} from '@site/src/components/ReleasePost';
+
+<ReleasePost>
+
+![COLLABORATION](./img/image_collab.png)
+
+## Collaborate in Real-time on Models and Reports
+
+**Decipad now allows you to invite teammates** to collaborate on your notebooks by simply entering their email. No prior account is required.
+
+- **To invite someone as a collaborator or reader,** click the `+` button near your avatar on the top bar of your notebooks, select a role, and add their emails.
+- **To find notebooks shared with you**, go to your workspace and select **Shared with me** on the left**.** Alternatively**,** you can also click the link we send to your email.
+
+<br/>
+
+## Create Formulas Everyone Understands
+
+![FORMULAS](./img/image_str-inp.png)
+
+**We’ve introduced a new block to clearly define inputs and formulas**, making it easier for you and your team to understand the context when exploring calculations.
+
+- **To add this new block to your notebook,** simply type `=`.
+Alternatively, type `/` or click the `+` button to open the block menu and search for **Number Input** or **Formula.**
+- **The original Decipad calculation blocks are still there,** so existing notebooks won’t be affected. You can find these original blocks on the menu under their new name: **Advanced Formulas.**
+
+<br/>
+
+## Better Inspection for Inline Numbers
+
+We have enhanced the inspector for inline numbers, allowing you to explore the formulas behind the numbers, make quick edits, and update their name.
+
+[Learn more about Inline Numbers →](/docs/basic-concepts/data-views)
+
+<br/>
+
+
+### <FancyTitle icon={Hammer}>Fixes and Improvements</FancyTitle>
+
+- Added several formulas for finance. `compound()`, `futurevalue()`, `netpresentvalue()` and `paymentamounts()`, to help you explore compounding and interest use cases.
+- You can now export backups for your notebooks from the workspace menu.
+- Notebooks imported to a workspace are now added to the top of the list instead of the bottom.
+- Table placeholders have been updated to say `Columns` instead of `Properties`.
+- The Decipad Language now supports the latest metric prefixes introduced in 2022.
+- Improved scientific notation for small and big numbers, with better-looking exponents.
+- The inline + button has been improved to avoid misc licks and add the correct blocks in the right context.
+- Any calculation using a column won’t break when you update their name.
+- Fixed an issue that prevented users from dragging inline numbers to bulleted lists.
+- Table tooltip styles fixed in dark mode.
+
+</ReleasePost>
