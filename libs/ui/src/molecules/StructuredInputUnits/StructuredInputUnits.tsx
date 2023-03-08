@@ -39,10 +39,10 @@ const unitCategories: Record<
   Exclude<ExpandableColumns, null> | 'Percentage'
 > = {
   '%': 'Percentage',
-  mm: 'Distance',
-  cm: 'Distance',
-  m: 'Distance',
-  km: 'Distance',
+  millimeter: 'Distance',
+  centimeter: 'Distance',
+  meter: 'Distance',
+  kilometer: 'Distance',
   inch: 'Distance',
   foot: 'Distance',
   yard: 'Distance',
