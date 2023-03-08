@@ -118,7 +118,7 @@ export const AccountSetupFlow2 = ({
                   tabIndex={0}
                   onChange={onChangeUsername}
                   value={username}
-                  placeholder="@username"
+                  placeholder="username"
                 />
               </label>
             </div>

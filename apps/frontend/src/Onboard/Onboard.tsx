@@ -47,9 +47,7 @@ export const Onboard = () => {
     return hasValidName ? fullName : '';
   });
 
-  const [username, setUsername] = useState(
-    session?.data?.user?.username ?? '@'
-  );
+  const [username, setUsername] = useState(session?.data?.user?.username ?? '');
 
   const [description, setDescription] = useState(
     userResult.data?.self?.description ?? ''
@@ -63,11 +61,6 @@ export const Onboard = () => {
   const previous = useCallback(() => {
     navigate(onboard({}).step({ step: Number(step) - 1 }).$);
   }, [navigate, step]);
-
-  const handleUsernameChange = (newUsername: string) => {
-    if (username === '@' && newUsername === '') return setUsername('@');
-    setUsername(newUsername);
-  };
 
   const requiresOnboarding = useRequiresOnboarding();
   const redirectPath = PreOnboardingPath.value;
@@ -102,7 +95,7 @@ export const Onboard = () => {
               name={name}
               username={username}
               onChangeName={setName}
-              onChangeUsername={handleUsernameChange}
+              onChangeUsername={setUsername}
               isSubmitting={isSubmitting}
               next={() => {
                 setIsSubmitting(true);
