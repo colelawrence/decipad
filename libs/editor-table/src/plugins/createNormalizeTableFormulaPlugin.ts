@@ -1,28 +1,18 @@
 import { Computer } from '@decipad/computer';
 import { createNormalizerPlugin } from '@decipad/editor-plugins';
 import {
-  ELEMENT_SMART_REF,
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
   MyEditor,
   MyNodeEntry,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  insertNodes,
-  normalizeSmartRefs,
-} from '@decipad/editor-utils';
-import {
-  hasNode,
-  deleteText,
-  getNodeChildren,
-  isElement,
-} from '@udecode/plate';
+import { assertElementType, insertNodes } from '@decipad/editor-utils';
+import { hasNode, deleteText } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
 export const normalizeTableFormula =
-  (computer: Computer) =>
+  (_computer: Computer) =>
   (editor: MyEditor) =>
   (entry: MyNodeEntry): boolean => {
     const [element, path] = entry;
@@ -72,19 +62,6 @@ export const normalizeTableFormula =
             at: formulaPath,
           });
           return true;
-        }
-      }
-      for (const lineChild of getNodeChildren(editor, formulaPath)) {
-        const [lineChildNode, lineChildPath] = lineChild;
-        if (
-          !isElement(lineChildNode) ||
-          lineChildNode.type === ELEMENT_SMART_REF
-        ) {
-          if (
-            normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)
-          ) {
-            return true;
-          }
         }
       }
     }

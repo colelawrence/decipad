@@ -25,7 +25,6 @@ import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
-import { useOnBlurNormalize } from '../hooks';
 import { useOnDragEnd } from '../utils/useDnd';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
@@ -34,6 +33,7 @@ import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useTurnIntoProps } from './useTurnIntoProps';
+import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CODE_LINE);
@@ -45,13 +45,12 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const siblingCodeLines = useSiblingCodeLines(element);
 
   const editor = useTEditorRef();
+  const computer = useComputer();
 
   useCodeLineClickReference(editor, selected, codeLineContent);
 
-  // transform variable references into smart refs on blur
-  useOnBlurNormalize(editor, element);
+  useAutoConvertToSmartRef(element);
 
-  const computer = useComputer();
   const { id: lineId } = element;
   const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
     (line) => [getSyntaxError(line), line?.result] as const,

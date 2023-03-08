@@ -6,7 +6,7 @@ import {
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import { assertElementType, normalizeSmartRefs } from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
 import {
   deleteText,
   getNodeChildren,
@@ -21,7 +21,7 @@ import { createNormalizerPlugin } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 export const normalizeCodeChildren = (
-  computer: Computer,
+  _computer: Computer,
   editor: MyEditor,
   [_node, path]: MyNodeEntry
 ) => {
@@ -103,11 +103,6 @@ export const normalizeCodeChildren = (
     // Children must be text or SmartRef
     if (isElement(lineChildNode) && lineChildNode.type !== ELEMENT_SMART_REF) {
       unwrapNodes(editor, { at: lineChildPath });
-      return true;
-    }
-
-    // add or extend smart refs
-    if (normalizeSmartRefs(lineChildNode, lineChildPath, editor, computer)) {
       return true;
     }
 

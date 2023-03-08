@@ -54,3 +54,4 @@ export * from './RenderPerformanceStats';
 export * from './RemoteCursors';
 export * from './StructuredKeyboard';
 export * from './DeduplicateElementIds';
+export * from './ConvertSmartRefs';

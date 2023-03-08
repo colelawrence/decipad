@@ -47,7 +47,6 @@ import {
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
-import { useOnBlurNormalize } from '../hooks';
 import { CodeLineTeleport } from './CodeLineTeleport';
 import { getSyntaxError } from './getSyntaxError';
 import { onDragStartInlineResult } from './onDragStartInlineResult';
@@ -55,6 +54,7 @@ import { onDragStartTableCellResult } from './onDragStartTableCellResult';
 import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSimpleValueInfo } from './useSimpleValueInfo';
 import { useTurnIntoProps } from './useTurnIntoProps';
+import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
@@ -66,7 +66,10 @@ export const CodeLineV2: PlateComponent = ({
   assertElementType(element, ELEMENT_CODE_LINE_V2);
 
   const computer = useComputer();
+  const editor = useTEditorRef();
   const sourceCode = getCodeLineSource(element.children[1]);
+
+  useAutoConvertToSmartRef(element);
 
   const { simpleValue, onChangeUnit } = useSimpleValueInfo(
     computer,
@@ -76,13 +79,7 @@ export const CodeLineV2: PlateComponent = ({
 
   const selected = useSelected();
   const codeLineContent = useNodeText(element, { debounceTimeMs: 0 }) ?? '';
-
-  const editor = useTEditorRef();
-
   useCodeLineClickReference(editor, selected, codeLineContent);
-
-  // transform variable references into smart refs on blur
-  useOnBlurNormalize(editor, element);
 
   const { id: lineId } = element;
   const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
@@ -286,10 +283,8 @@ export const CodeLineV2Code: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_CODE_LINE_V2_CODE);
 
-  const editor = useTEditorRef();
-
   // transform variable references into smart refs on blur
-  useOnBlurNormalize(editor, element);
+  useAutoConvertToSmartRef(element);
 
   const isEmpty = getCodeLineSource(element) === '';
 

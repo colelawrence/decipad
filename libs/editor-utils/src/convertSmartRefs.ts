@@ -7,6 +7,7 @@ import {
 } from '@decipad/editor-types';
 import {
   getNextNode,
+  getNodeChildren,
   getNodeString,
   insertText,
   isElement,
@@ -16,9 +17,34 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Location, Path, Point, Range } from 'slate';
+import { captureException } from '@sentry/react';
 import { insertNodes } from './insertNodes';
 
-export const normalizeSmartRefs = (
+export const convertCodeSmartRefs = (
+  editor: MyEditor,
+  path: Path,
+  computer: Computer
+) => {
+  try {
+    const keepGoing = true;
+    outer: while (keepGoing) {
+      const children = Array.from(getNodeChildren(editor, path));
+      for (const lineChild of children) {
+        const [lineChildNode, lineChildPath] = lineChild;
+        // add or extend smart refs
+        if (handleNode(lineChildNode, lineChildPath, editor, computer)) {
+          continue outer;
+        }
+      }
+      return;
+    }
+  } catch (err) {
+    console.error('Error caught trying to convert to smart ref', err);
+    captureException(err);
+  }
+};
+
+export const handleNode = (
   node: MyNode,
   path: Path,
   editor: MyEditor,
