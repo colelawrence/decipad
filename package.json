@@ -30,7 +30,7 @@
     "build:backend:watch": "WATCH=true yarn build:backend",
     "build:graphql": "graphql-codegen --config codegen.yml",
     "build:docs": "nx build docs",
-    "lint": "nx workspace-lint && nx run-many --target=depcheck --all",
+    "lint": "nx workspace-lint && nx run-many --target=lint --all",
     "depcheck": "nx run-many --target=depcheck --all",
     "typecheck": "tsc -b libs/*/tsconfig.json apps/*/tsconfig.json",
     "typecheck:watch": "yarn typecheck -w",
