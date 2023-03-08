@@ -132,7 +132,10 @@ export function createStructuredKeyboard(computer: Computer) {
             event.stopPropagation();
 
             // If the destination line is shorter, our offset could be out of range. Trim it
-            const maxOffset = getNodeString(nextNode.children[0]).length;
+            // anchorPath[1] will tell us if we are on the name of the code.
+            const maxOffset = getNodeString(
+              nextNode.children[anchorPath[1]]
+            ).length;
 
             const newSelectionPoint = {
               offset: Math.min(anchorOffset, maxOffset),
