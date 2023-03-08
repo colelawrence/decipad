@@ -31,7 +31,7 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
-import { Path } from 'slate';
+import { BaseEditor, Path, Transforms } from 'slate';
 import { useComputer } from '@decipad/react-contexts';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
@@ -229,10 +229,21 @@ export const useTableActions = (
     });
   }, [editor, element]);
 
-  const onSetCollapsed = useElementMutatorCallback(
+  // here is the crash i think
+  const mutateIsCollapsed = useElementMutatorCallback(
     editor,
     element,
     'isCollapsed'
+  );
+  const onSetCollapsed = useCallback(
+    (newValue: boolean | undefined) => {
+      if (newValue === true) {
+        // Prevent a crash caused by the cursor being in a table cell
+        Transforms.deselect(editor as BaseEditor);
+      }
+      mutateIsCollapsed(newValue);
+    },
+    [mutateIsCollapsed, editor]
   );
 
   const onSetHideFormulas = useElementMutatorCallback(
