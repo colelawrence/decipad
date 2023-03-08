@@ -169,6 +169,7 @@ export const VariableEditor = ({
         { variant: menuProps.variant },
         menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
       )}
+      data-testid="widget-editor"
     >
       <div css={widgetWrapperStyles}>
         <div

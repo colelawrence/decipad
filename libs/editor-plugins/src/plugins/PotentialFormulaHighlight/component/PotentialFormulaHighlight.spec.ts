@@ -43,17 +43,37 @@ it('turns a decoration into a magic number and a code line', () => {
   expect(editor.children.length).toBeLessThan(3);
 
   // It has code line in the end
-  expect(editor.children[1]).toMatchInlineSnapshot(`
+  expect(editor.children[1]).toMatchInlineSnapshot(
+    {
+      children: [{ id: expect.any(String) }, { id: expect.any(String) }],
+    },
+    `
     Object {
       "children": Array [
         Object {
-          "text": "Unnamed1 = 1 + 1",
+          "children": Array [
+            Object {
+              "text": "Unnamed1",
+            },
+          ],
+          "id": Any<String>,
+          "type": "structured_varname",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "text": "1 + 1",
+            },
+          ],
+          "id": Any<String>,
+          "type": "code_line_v2_code",
         },
       ],
       "id": "id-of-thingy",
-      "type": "code_line",
+      "type": "code_line_v2",
     }
-  `);
+  `
+  );
 
   // It has an inline element instead of an expression
   expect(editor.children[0]).toMatchInlineSnapshot(

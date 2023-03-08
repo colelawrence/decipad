@@ -15,7 +15,11 @@ export async function createInputBelow(
 
   await page.click('[data-testid="menu-item-input"]');
 
-  await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
+  await page
+    .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
+    .last()
+    .dblclick();
+
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
@@ -42,7 +46,11 @@ export async function createToggleBelow(page: Page, identifier: string) {
 
   await page.locator('role=menuitem', { hasText: 'toggle' }).click();
 
-  await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
+  await page
+    .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
+    .last()
+    .dblclick();
+
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
@@ -57,7 +65,11 @@ export async function createDateBelow(page: Page, identifier: string) {
 
   await page.locator('role=menuitem', { hasText: 'date' }).click();
 
-  await (await page.waitForSelector('text=/Input[0-9]+/ >> nth=-1')).dblclick();
+  await page
+    .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
+    .last()
+    .dblclick();
+
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(identifier);
@@ -78,13 +90,15 @@ export async function createCalculationBlockBelow(
     '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
   );
 
-  await keyPress(page, '=');
+  await page.keyboard.insertText('/advanced');
 
-  await page.waitForSelector('[data-slate-editor] code');
+  await page.locator('role=menuitem', { hasText: 'Advanced' }).click();
+
+  await page.waitForSelector('[data-testid="code-line"]');
 
   await page.keyboard.type(decilang);
 
-  await page.waitForSelector('[data-slate-editor] code >> nth=-1');
+  await page.waitForSelector('[data-testid="code-line"] >> nth=-1');
 }
 
 export async function createCodeLineV2Below(

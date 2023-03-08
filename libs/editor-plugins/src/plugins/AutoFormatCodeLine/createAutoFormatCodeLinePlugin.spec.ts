@@ -3,11 +3,15 @@ import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_PARAGRAPH,
+  ELEMENT_STRUCTURED_VARNAME,
   MyEditor,
   MyElement,
   MyPlatePlugin,
 } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import React from 'react';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
@@ -30,8 +34,20 @@ const makeParagraph = (text = ''): MyElement[] =>
     },
   ] as MyElement[];
 
-const makeCodeLine = (text: string): MyElement[] =>
-  [{ type: ELEMENT_CODE_LINE, children: [{ text }] }] as MyElement[];
+const makeCodeLine = (): MyElement =>
+  isFlagEnabled('CODE_LINE_NAME_SEPARATED')
+    ? ({
+        type: ELEMENT_CODE_LINE_V2,
+        children: [
+          {
+            type: ELEMENT_STRUCTURED_VARNAME,
+          },
+          {
+            type: ELEMENT_CODE_LINE_V2_CODE,
+          },
+        ],
+      } as MyElement)
+    : ({ type: ELEMENT_CODE_LINE } as MyElement);
 
 const renderEditorParagraph = (text: string) => {
   editor.children = makeParagraph(text) as never;
@@ -42,9 +58,9 @@ const renderEditorParagraph = (text: string) => {
   };
 };
 
-const renderEditorCodeLine = (code = '') => {
-  editor.children = makeCodeLine(code) as never;
-  const end = { path: [0, 1], offset: code.length };
+const renderEditorCodeLine = () => {
+  editor.children = makeCodeLine() as never;
+  const end = { path: [0, 1], offset: 0 };
   editor.selection = {
     anchor: end,
     focus: end,
@@ -85,13 +101,19 @@ describe('Auto format code line plugin', () => {
   it('formats a paragraph to a code line when = is pressed at the start', () => {
     renderEditorParagraph('');
     pressKey('=');
-    expect(editor.children).toMatchObject(makeCodeLine(''));
+    expect(editor.children).toMatchObject([
+      makeCodeLine(),
+      { type: ELEMENT_PARAGRAPH },
+    ]);
   });
 
   it('formats a paragraph to a code line when = is pressed while holding shift on some keyboard layouts', () => {
     renderEditorParagraph('');
     pressKey('=', { shiftKey: true });
-    expect(editor.children).toMatchObject(makeCodeLine(''));
+    expect(editor.children).toMatchObject([
+      makeCodeLine(),
+      { type: ELEMENT_PARAGRAPH },
+    ]);
   });
 
   it('does not format a paragraph to a code line when holding modifier keys', () => {
@@ -108,7 +130,7 @@ describe('Auto format code line plugin', () => {
   });
 
   it.skip('when removing a codeline it inserts a paragraph', () => {
-    renderEditorCodeLine('');
+    renderEditorCodeLine();
     pressKey('Backspace');
     expect(editor.children).toMatchObject(makeParagraph(''));
   });

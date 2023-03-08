@@ -1,5 +1,8 @@
 import { Page, test } from '@playwright/test';
-import { createCalculationBlockBelow } from '../utils/page/Block';
+import {
+  createCalculationBlockBelow,
+  createCodeLineV2Below,
+} from '../utils/page/Block';
 import {
   goToPlayground,
   keyPress,
@@ -53,7 +56,9 @@ test.describe('Navigating with magic numbers', () => {
     await keyPress(page, 'Enter');
     await keyPress(page, 'Enter');
     await keyPress(page, '=');
-    await page.keyboard.type('Price = Fees + 30 gbp');
+
+    await createCodeLineV2Below(page, 'Price', 'Fees + 30 gbp');
+
     await page.waitForSelector('text=is £35');
     const magic = await page.locator('span[title="35"]');
     await magic.scrollIntoViewIfNeeded();

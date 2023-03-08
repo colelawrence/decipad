@@ -1,7 +1,7 @@
 import { Computer } from '@decipad/computer';
 import {
   createTAutoformatPlugin,
-  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
@@ -9,7 +9,8 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { createPlateEditor, select } from '@udecode/plate';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { createPlateEditor, ELEMENT_CODE_LINE, select } from '@udecode/plate';
 import { autoformatBlocks } from './autoformatBlocks';
 
 let editor: MyEditor;
@@ -73,12 +74,17 @@ describe('inserting a code block', () => {
     editor.insertText('`');
     editor.insertText('`');
     editor.insertText('`');
+
     expect(editor.children).toMatchObject([
       {
         type: ELEMENT_PARAGRAPH,
         children: [{ text: 'text' }],
       },
-      { type: ELEMENT_CODE_LINE },
+      {
+        type: isFlagEnabled('CODE_LINE_NAME_SEPARATED')
+          ? ELEMENT_CODE_LINE_V2
+          : ELEMENT_CODE_LINE,
+      },
     ]);
   });
 });

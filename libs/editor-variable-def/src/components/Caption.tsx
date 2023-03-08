@@ -6,15 +6,11 @@ import {
   useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import {
-  getNodeString,
-  findNodePath,
-  getAboveNode,
-  isElement,
-} from '@udecode/plate';
+import { getNodeString, findNodePath, isElement } from '@udecode/plate';
 import {
   useElementMutatorCallback,
   useEnsureValidVariableName,
+  getAboveNodeSafe,
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useContext, useRef } from 'react';
@@ -40,7 +36,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
 
   // ensure variable name is unique
   const path = findNodePath(editor, element);
-  const parent = getAboveNode<VariableDefinitionElement>(editor, {
+  const parent = getAboveNodeSafe<VariableDefinitionElement>(editor, {
     at: path,
     match: (node) => {
       return isElement(node) && node.type === ELEMENT_VARIABLE_DEF;
@@ -70,6 +66,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
       {...attributes}
       contentEditable={isEditable}
       suppressContentEditableWarning
+      data-testid="widget-caption"
     >
       <UICaption
         color={color}

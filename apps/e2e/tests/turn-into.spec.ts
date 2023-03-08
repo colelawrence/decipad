@@ -44,7 +44,7 @@ test.describe('Turn Into', () => {
     await expect(await page.getByRole('checkbox')).toBeVisible();
   });
 
-  test('Converts a Widget into a Code Line', async () => {
+  test('Converts a Widget into a structured input', async () => {
     await keyPress(page, 'ArrowDown');
     await createToggleBelow(page, 'Input2');
 
@@ -58,7 +58,12 @@ test.describe('Turn Into', () => {
     await page.locator('role=menuitem', { hasText: 'calculation' }).click();
 
     await expect(await page.getByText('Off', { exact: true })).toBeHidden();
-    await expect(await page.getByText('Input2 = false')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="codeline-varname"] >> nth=-1')
+    ).toContainText('Input2');
+    await expect(
+      page.locator('[data-testid="codeline-code"] >> nth=-1')
+    ).toContainText('false');
   });
 
   test('Converts a Date Widget into a Code Line with proper syntax', async () => {
@@ -69,6 +74,11 @@ test.describe('Turn Into', () => {
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
     await page.locator('role=menuitem', { hasText: 'calculation' }).click();
 
-    await expect(await page.getByText(`Input3 = date(`)).toBeVisible();
+    await expect(
+      page.locator('[data-testid="codeline-varname"] >> nth=-1')
+    ).toContainText('Input3');
+    await expect(
+      page.locator('[data-testid="codeline-code"] >> nth=-1')
+    ).toContainText('date(');
   });
 });

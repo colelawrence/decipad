@@ -5,6 +5,7 @@ import {
   keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
+import { createCodeLineV2Below } from '../utils/page/Block';
 
 test.describe('Editor markdown marks', () => {
   test.beforeEach(async ({ page }) => {
@@ -35,7 +36,9 @@ test.describe('Editor markdown marks', () => {
   test('inserts a magic number', async ({ page }) => {
     await focusOnBody(page);
     await keyPress(page, 'Enter');
-    await page.keyboard.type('= Foo = 4');
+
+    await createCodeLineV2Below(page, 'Foo', '4');
+
     await keyPress(page, 'Enter');
     await page.keyboard.type('The sentence meaning of life is %Foo%');
     await expect(
