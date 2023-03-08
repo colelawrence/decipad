@@ -95,7 +95,7 @@ const invitationFormStyles = css({
   },
 });
 
-const disclaimerStyles = css(p14Medium, {
+const disclaimerStyles = css(p13Regular, {
   display: 'flex',
   alignItems: 'flex-start',
   padding: '8px',
@@ -130,12 +130,11 @@ const Disclaimer = () => {
         <Sparkles />
       </div>
       <span>
-        This is an early release. We're still perfecting it, and eager for your
-        {` `}
-        <span onClick={showFeedback} css={{ textDecoration: 'underline' }}>
-          thoughts
-        </span>
-        .
+        We're testing collaboration!{' '}
+        <button onClick={showFeedback} css={{ textDecoration: 'underline' }}>
+          Let us know
+        </button>
+        , if something doesn't work as expected.
       </span>
     </p>
   );
