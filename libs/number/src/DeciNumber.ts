@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
-import Fraction, { isFractionLike, F, pow } from '@decipad/fraction';
+import Fraction, { F, isFractionLike, pow } from '@decipad/fraction';
 import {
+  DeciNumberInput,
+  DeciNumberInputWithNumerator,
   FiniteNumber,
   InfiniteNumber,
-  UndefinedNumber,
   UndefinableOrInfiniteOrFractionLike,
-  DeciNumberInputWithNumerator,
-  DeciNumberInput,
+  UndefinedNumber,
 } from './types';
 
 export type { DeciNumberInputWithNumerator };
@@ -235,6 +235,13 @@ export class DeciNumber {
     return pow(this as unknown as Fraction, n);
   }
 
+  private excelLikeRound(n?: number) {
+    const nr = n || 0;
+    const powPart = F(10).pow(F(nr));
+    const roundResult = this.mul(powPart as unknown as DeciNumber);
+    return Fraction.prototype.round.call(roundResult, 0).div(powPart);
+  }
+
   pow(n: DeciNumber): DeciNumber {
     return binOp(this, n, DeciNumber.prototype.fractionPow);
   }
@@ -260,7 +267,7 @@ export class DeciNumber {
   }
 
   round(n?: number): DeciNumber {
-    return binOp(this, n, Fraction.prototype.round);
+    return binOp(this, n, DeciNumber.prototype.excelLikeRound);
   }
 
   inverse(): DeciNumber {

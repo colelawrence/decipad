@@ -1,13 +1,13 @@
-import { getDefined } from '@decipad/utils';
 import { N } from '@decipad/number';
-import { fromJS } from '../../value';
-import { InferError, build as t } from '../../type';
-import { col, c, n, l, U } from '../../utils';
-import { mathOperators, mathOperators as operators } from './math-operators';
-import { makeContext, inferExpression } from '../../infer';
+import { getDefined } from '@decipad/utils';
+import { inferExpression, makeContext } from '../../infer';
 import { AST } from '../../parser';
+import { build as t, InferError } from '../../type';
+import { c, col, l, n, U } from '../../utils';
+import { fromJS } from '../../value';
+import { mathOperators, mathOperators as operators } from './math-operators';
 
-describe('math operators', () => {
+describe('round', () => {
   it('rounds a number', () => {
     expect(operators.round.functor?.([t.number(U('bananas'))])).toEqual(
       t.number(U('bananas'))
@@ -26,6 +26,30 @@ describe('math operators', () => {
     );
   });
 
+  it('rounds a number with decimal units', () => {
+    expect(
+      operators.round.fn?.([N(112799, 1000), N(1)], [t.number()]).valueOf()
+    ).toBe(112.8);
+  });
+
+  it('rounds a number with decimal units (0)', () => {
+    expect(
+      operators.round.fn?.([N(112799, 1000), N(0)], [t.number()]).valueOf()
+    ).toBe(113);
+  });
+
+  it('rounds a number with decimal units (-2)', () => {
+    expect(
+      operators.round.fn?.([N(112799, 1000), N(-2)], [t.number()]).valueOf()
+    ).toBe(100);
+  });
+
+  it('rounds a number with decimal units (-5)', () => {
+    expect(
+      operators.round.fn?.([N(112799, 1000), N(-5)], [t.number()]).valueOf()
+    ).toBe(0);
+  });
+
   it('rounds down a number with decimal units', () => {
     expect(
       operators.rounddown.fn?.([N(112799, 1000), N(1)], [t.number()]).valueOf()
@@ -37,7 +61,9 @@ describe('math operators', () => {
       operators.rounddown.fn?.([N(1127, 10)], [t.number()]).valueOf()
     ).toBe(112);
   });
+});
 
+describe('math operators', () => {
   it('max of a list of numbers', () => {
     expect(operators.max.fnValues?.([fromJS([2, 4, 3])])).toEqual(fromJS(4));
   });
