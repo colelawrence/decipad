@@ -63,6 +63,7 @@ let overrides: Flags = {
   ONBOARDING_ACCOUNT_SETUP: true,
   SHARE_PAD_WITH_EMAIL: true,
   CODE_LINE_NAME_SEPARATED: true,
+  EXPR_REFS: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
