@@ -378,7 +378,7 @@
     "remark-frontmatter": "4.0.1",
     "remark-gfm": "3.0.1",
     "remark-mdx": "2.3.0",
-    "rimraf": "4.3.0",
+    "rimraf": "4.4.0",
     "s3rver": "3.7.1",
     "serve-handler": "^6.1.5",
     "tsconfig-paths-webpack-plugin": "4.0.0",
