@@ -17,8 +17,18 @@ const schedule = (_editor: MyEditor) => {
     editor.awareness.on(
       'update',
       debounce(() => {
+        const clientIds: Record<string, boolean> = {};
+
         const newCursorData = Array.from(editor.awareness.getStates())
-          .filter(([clientId]) => clientId !== editor.sharedType.doc?.clientID)
+          .filter(([clientId]) => {
+            if (clientIds[clientId]) {
+              return false;
+            }
+
+            clientIds[clientId] = true;
+
+            return clientId !== editor.sharedType.doc?.clientID;
+          })
           .map(([clientID, awareness]) => {
             const { anchor, focus } = awareness;
             const color = cursorColor(clientID);

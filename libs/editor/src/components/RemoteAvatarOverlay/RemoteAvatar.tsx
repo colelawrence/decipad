@@ -4,10 +4,10 @@ import { OpaqueColor, RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
 import { Session } from 'next-auth';
 import { FC, RefObject } from 'react';
 import { Range } from 'slate';
-import { getNodeEntries, toDOMNode, isElement } from '@udecode/plate';
+import { getNodeEntries, isElement, toDOMNode } from '@udecode/plate';
 import {
-  isTopLevelBlock,
   isPotentiallyWideElement,
+  isTopLevelBlock,
 } from '@decipad/editor-utils';
 
 const MIN_VERTICAL_DISPLACEMENT = 50;
