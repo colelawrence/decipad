@@ -41,9 +41,15 @@ export const TableCaption: PlateComponent = ({
     },
   });
 
+  const tableBlockId = parent?.[0].id;
+  const firstThId = parent?.[0].children?.[1]?.children?.[0].id;
+
   // ensure name is unique
   const varNameElement = element.children[0];
-  const tooltip = useEnsureValidVariableName(varNameElement, parent?.[0].id);
+  const tooltip = useEnsureValidVariableName(varNameElement, [
+    tableBlockId,
+    firstThId,
+  ]);
 
   const onAddDataViewButtonPress = useCallback(() => {
     if (!parent) {

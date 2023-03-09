@@ -51,7 +51,7 @@ export const LiveConnectionVarName: PlateComponent = ({
   }, [parent]);
 
   // ensure var name is unique
-  const tooltip = useEnsureValidVariableName(element, parent?.[0].id);
+  const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
   const caption = (
     <div {...attributes}>

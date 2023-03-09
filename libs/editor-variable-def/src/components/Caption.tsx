@@ -42,7 +42,7 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
       return isElement(node) && node.type === ELEMENT_VARIABLE_DEF;
     },
   });
-  const tooltip = useEnsureValidVariableName(element, parent?.[0].id);
+  const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
   // Analytics
   const nodeText = getNodeString(element);

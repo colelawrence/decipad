@@ -238,7 +238,9 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
   const varResult = useContext(VarResultContext);
   const simpleValue = useContext(SimpleValueContext);
 
-  const errorMessage = useEnsureValidVariableName(props.element, varResult?.id);
+  const errorMessage = useEnsureValidVariableName(props.element, [
+    varResult?.id,
+  ]);
   const empty = getNodeString(props.element).trim() === '';
 
   return (

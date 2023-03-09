@@ -288,10 +288,10 @@ export class Computer {
   );
 
   /** Does `name` exist? Ignores a block ID if you pass the second argument */
-  variableExists(name: string, inBlockId?: string) {
+  variableExists(name: string, inBlockIds?: string[]) {
     return this.latestProgram.some((p) => {
       // Skip own block
-      if (p.id === inBlockId) {
+      if (inBlockIds?.includes(p.id)) {
         return false;
       }
 

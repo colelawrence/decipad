@@ -21,7 +21,7 @@ import { useSelected } from 'slate-react';
  */
 export function useEnsureValidVariableName(
   element: MyElement & { children: [PlainText] },
-  blockId?: string,
+  blockIds: Array<string | undefined> = [],
   defaultVarName = 'Unnamed'
 ): string | undefined {
   const editor = useTEditorRef();
@@ -37,7 +37,10 @@ export function useEnsureValidVariableName(
       const path = findNodePath(editor, element);
       const currentVarName = getNodeString(element);
 
-      const varExists = computer.variableExists(currentVarName, blockId);
+      const varExists = computer.variableExists(
+        currentVarName,
+        blockIds.filter(Boolean) as string[]
+      );
 
       const message = getVariableValidationErrorMessage({
         varName: currentVarName,
@@ -58,7 +61,14 @@ export function useEnsureValidVariableName(
 
         insertText(editor, newName, { at: path });
       }
-    }, [editor, element, blockId, validationMessage$, defaultVarName, computer])
+    }, [
+      editor,
+      element,
+      blockIds,
+      computer,
+      validationMessage$,
+      defaultVarName,
+    ])
   );
 
   return useBehaviorSubject(validationMessage$, hideMessageLater);
