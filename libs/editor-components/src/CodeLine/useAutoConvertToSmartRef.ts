@@ -7,7 +7,7 @@ import { useSelected } from 'slate-react';
 
 // transform variable references into smart refs on blur
 // useOnBlurNormalize(editor, element);
-export const useAutoConvertToSmartRef = (element: MyElement) => {
+export const useAutoConvertToSmartRef = (element?: MyElement) => {
   const editor = useTEditorRef();
   const computer = useComputer();
   const selected = useSelected();
@@ -15,7 +15,7 @@ export const useAutoConvertToSmartRef = (element: MyElement) => {
   const wasSelected = useWasSelected();
 
   useEffect(() => {
-    if ((selected || wasSelected) && isCollapsed(editor.selection)) {
+    if (element && (selected || wasSelected) && isCollapsed(editor.selection)) {
       const path = findNodePath(editor, element);
       if (path) {
         convertCodeSmartRefs(editor, path, computer);
