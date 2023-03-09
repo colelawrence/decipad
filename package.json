@@ -383,7 +383,7 @@
     "serve-handler": "^6.1.5",
     "tsconfig-paths-webpack-plugin": "4.0.0",
     "typescript": "4.9.4",
-    "webpack": "5.75.0",
+    "webpack": "5.76.0",
     "ws": "8.12.0"
   },
   "resolutions": {
