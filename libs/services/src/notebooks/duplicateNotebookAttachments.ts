@@ -6,8 +6,7 @@ import {
   duplicate as duplicateFile,
   attachmentFilePath,
 } from '../blobs/attachments';
-
-type ReplaceList = Record<string, string>;
+import { ReplaceList } from './types';
 
 const isAttachmentAbsolute = (attachment: FileAttachmentRecord): boolean =>
   attachment.filename.startsWith('http://') ||

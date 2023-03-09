@@ -7,14 +7,14 @@ import { GenericTable } from '../../icons';
 import { emptywRapperStyles } from '../../templates/NotebookList/NotebookList';
 import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
 
-const acceptableFileTypes = ['application/json'];
-const maxFileSizeBytes = 1_000_000;
+const acceptableFileTypes = ['application/json', 'application/zip'];
+const maxFileSizeBytes = 10_000_000;
 
-const validateItemAndGetFile = (item: DataTransferItem) => {
+const validateItemAndGetFile = (item: DataTransferItem): File | undefined => {
   const file = item.getAsFile();
   if (!file) {
     console.warn('Expected item to be a file but received item', item);
-    throw new Error('Received an item that is not a file');
+    return;
   }
 
   if (!acceptableFileTypes.includes(file.type)) {
@@ -26,7 +26,7 @@ const validateItemAndGetFile = (item: DataTransferItem) => {
       'with type',
       file.type
     );
-    throw new Error(`Cannot import file of type ${file.type}`);
+    return;
   }
 
   if (file.size > maxFileSizeBytes) {
@@ -38,9 +38,7 @@ const validateItemAndGetFile = (item: DataTransferItem) => {
       'with size',
       file.size
     );
-    throw new Error(
-      `File too big (${file.size} bytes). Will only accept files smaller than ${maxFileSizeBytes} bytes.`
-    );
+    return;
   }
 
   return file;
@@ -66,25 +64,18 @@ export const DragAndDropImportNotebook = ({
     drop: (data: DataTransfer) => {
       const items = data?.items || [];
       Array.from(items).forEach(async (item) => {
-        // Async fire and forget
-        try {
-          const file = validateItemAndGetFile(item);
-          onImport(await file.text());
-        } catch (err) {
-          console.warn('Did not import invalid item', item);
+        const file = validateItemAndGetFile(item);
+        if (file) {
+          const contents = Buffer.from(await file.arrayBuffer());
+          onImport(contents.toString('base64'));
         }
       });
     },
     canDrop: (data: DataTransfer) => {
       const items = data?.items || [];
-      return Array.from(items).some((item) => {
-        try {
-          validateItemAndGetFile(item);
-          return true;
-        } catch {
-          return false;
-        }
-      });
+      return Array.from(items).some(
+        (item) => validateItemAndGetFile(item) != null
+      );
     },
     collect: (monitor: DropTargetMonitor) => {
       return {

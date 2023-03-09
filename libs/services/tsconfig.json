@@ -37,6 +37,9 @@
     },
     {
       "path": "../backend-analytics"
+    },
+    {
+      "path": "../backend-trace"
     }
   ]
 }

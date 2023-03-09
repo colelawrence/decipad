@@ -1,5 +1,5 @@
 import { GraphqlContext, ID, PadRecord } from '@decipad/backendtypes';
-import { importDoc } from '@decipad/services/notebooks';
+import { importNotebook } from '@decipad/services/notebooks';
 import { isAuthenticatedAndAuthorized } from '../authorization';
 
 export const importPad = async (
@@ -14,5 +14,9 @@ export const importPad = async (
     'WRITE'
   );
 
-  return importDoc({ workspaceId, source, user });
+  return importNotebook({
+    workspaceId,
+    source,
+    user,
+  });
 };

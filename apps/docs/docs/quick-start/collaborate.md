@@ -3,7 +3,7 @@ sidebar_position: 7
 sidebar_class_name: new
 ---
 
-# Share your Notebooks 
+# Share your Notebooks
 
 ![Invites](./img/image_collab.png)
 
@@ -11,12 +11,12 @@ sidebar_class_name: new
 
 1. Click the + button on the top bar of your notebook.
 2. Select a role for the person you want to invite.
-2. Add their email address.
+3. Add their email address.
 
 Notebook access roles:
 
-* `Collaborator`: can make changes to your notebook.
-* `Reader`: has access to read your notebook and duplicate it to make a copy.
+- `Collaborator`: can make changes to your notebook.
+- `Reader`: has access to read your notebook and duplicate it to make a copy.
 
 ## Change Access Permissions
 
@@ -25,16 +25,14 @@ Notebook access roles:
 1. Click the `+` button near your avatar on the top bar of your notebook.
 2. Use the role dropdown to update the permissions.
 
-
 ## Remove Access to Your Notebook
 
 **To remove access to your notebook**, follow these steps:
 
 1. Click the `+` button near your avatar on the top bar of your notebook.
-2. Press the role dropdown and choose `Remove`. 
+2. Press the role dropdown and choose `Remove`.
 
 **Note**: If your notebook has been published, users with the link will still be able to access your notebook as a reader. [Learn more about publishing Notebooks →](/docs/quick-start/publish)
-
 
 ## Find Notebooks You Have Access To
 

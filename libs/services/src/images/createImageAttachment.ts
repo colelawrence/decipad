@@ -3,7 +3,7 @@ import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import { attachmentFilePath } from '../blobs/attachments';
 import { resize } from './resize';
-import { save } from './save';
+import { save } from '../blobs/save';
 import { Upload } from './types';
 
 export const createImageAttachment = async (

@@ -38,7 +38,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,
-      JSON.stringify(notebookSource),
+      Buffer.from(JSON.stringify(notebookSource), 'utf-8').toString('base64'),
       page
     );
   });

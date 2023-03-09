@@ -6,9 +6,14 @@ import { expectAuthorized } from '@decipad/services/authorization';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import tables, { allPages } from '@decipad/tables';
-import { fetchSnapshotFromFile } from '@decipad/services/notebooks';
+import {
+  exportNotebookWithAttachments,
+  fetchSnapshotFromFile,
+} from '@decipad/services/notebooks';
 import { Buffer } from 'buffer';
 import { toSlateDoc } from '@decipad/slate-yjs';
+import { Document } from '@decipad/editor-types';
+import { format } from 'date-fns';
 import handle from '../handle';
 
 async function checkAccess(
@@ -23,12 +28,12 @@ async function checkAccess(
   await expectAuthorized({ resource, user, permissionType: 'READ' });
 }
 
-const serialize = (_: string, value: unknown): unknown =>
-  typeof value === 'bigint' ? value.toString() : value;
+const DATE_FORMAT = 'yyyy-MM-dd_HHmm';
 
 interface Snapshot {
   name: string;
-  data: Buffer;
+  doc: Document;
+  date?: Date;
 }
 
 const snapshotFromDbSnapshot = async (
@@ -46,10 +51,9 @@ const snapshotFromDbSnapshot = async (
 
   return {
     name: snapshot.snapshotName,
-    data: Buffer.from(
-      JSON.stringify({ children: toSlateDoc(doc.getArray()) }, serialize, '\t'),
-      'utf-8'
-    ),
+    doc: { children: toSlateDoc(doc.getArray()) },
+    date:
+      (snapshot.createdAt && new Date(snapshot.createdAt * 1000)) || undefined,
   };
 };
 
@@ -67,7 +71,14 @@ const exportPadBackups = async (notebookId: string): Promise<string> => {
     if (!s) {
       continue;
     }
-    zip.addFile(`${s.name}.json`, s.data);
+    const { title, content } = await exportNotebookWithAttachments({
+      notebookId,
+      doc: s.doc,
+    });
+    zip.addFile(
+      `${s.date && `${format(s.date, DATE_FORMAT)}_`}${title}.zip`,
+      content
+    );
   }
   return zip.toBuffer().toString('base64');
 };
@@ -78,13 +89,13 @@ export const handler = handle(async (event) => {
   const [{ user }] = await expectAuthenticated(event);
   await checkAccess(user, padId);
 
-  const response = await exportPadBackups(padId);
+  const zip = await exportPadBackups(padId);
   return {
     statusCode: 200,
     headers: {
       'content-type': 'application/zip',
     },
-    body: response,
+    body: zip,
     isBase64Encoded: true,
   };
 });

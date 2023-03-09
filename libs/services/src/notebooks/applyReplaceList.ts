@@ -1,8 +1,9 @@
-import { MyValue } from '@decipad/editor-types';
+import type { MyValue } from '@decipad/editor-types';
+import type { ReplaceList } from './types';
 
 export const applyReplaceList = (
   doc: MyValue,
-  replaceList: Record<string, string>
+  replaceList: ReplaceList
 ): MyValue => {
   let docAsString = JSON.stringify(doc);
 

@@ -4,13 +4,14 @@ sidebar_position: 4
 
 # Create an Advanced Formula
 
-Use `Advanced Formulas` to explore the advanced features of the Decipad Language. <br/> 
-These blocks also allow you create all calculations that normal [formula blocks]((/docs/getting-started/formulas)) support.
+Use `Advanced Formulas` to explore the advanced features of the Decipad Language. <br/>
+These blocks also allow you create all calculations that normal [formula blocks](<(/docs/getting-started/formulas)>) support.
 
 Advanced Formulas enable you to:
-* [Define custom formulas to reause](/docs/formulas/formulas).
-* [Create `Language Tables`](/docs/advances-concepts/language-tables).
-* [Define conditions with `match()` and `tiers()`](/docs/advances-concepts/decision-tables).
+
+- [Define custom formulas to reause](/docs/formulas/formulas).
+- [Create `Language Tables`](/docs/advances-concepts/language-tables).
+- [Define conditions with `match()` and `tiers()`](/docs/advances-concepts/decision-tables).
 
 ## Add an Advanced Formula Block
 
@@ -32,7 +33,7 @@ Variables are labels for your numbers. They make your calculations easy to follo
 To **create a new variable on an Advanced Formula**, follow these steps:
 
 1. Add an Advanced Formula block from the menu.
-2. Write the variable name for your number. 
+2. Write the variable name for your number.
 3. Add an `=` sign next to your name and write your number.
 
 Take a look at this example:

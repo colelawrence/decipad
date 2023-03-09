@@ -12,11 +12,12 @@ import { create as createResourcePermission } from '../permissions';
 export async function create(
   workspaceId: ID,
   pad: PadInput,
-  user: TableRecordIdentifier
+  user: TableRecordIdentifier,
+  padId?: string
 ): Promise<PadRecord> {
   const newPad = {
     ...pad,
-    id: nanoid(),
+    id: padId ?? nanoid(),
     workspace_id: workspaceId,
     createdAt: timestamp(),
   };

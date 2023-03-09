@@ -6,21 +6,23 @@ import { create as createContent } from '../pad-content';
 import { applyReplaceList } from './applyReplaceList';
 import { create as createPad } from './create';
 
-export interface ImportDocProps {
+export interface ImportNotebookContentProps {
   workspaceId: string;
-  source: string | MyValue;
+  source: string | Document;
   user: User;
   pad?: PadRecord;
+  padId?: string;
   replaceList?: Record<string, string>;
 }
 
-export async function importDoc({
+export const importNotebookContent = async ({
   workspaceId,
   source,
   user,
   pad,
+  padId,
   replaceList,
-}: ImportDocProps): Promise<PadRecord> {
+}: ImportNotebookContentProps): Promise<PadRecord> => {
   let doc: MyValue | undefined;
   if (typeof source === 'string') {
     try {
@@ -37,7 +39,7 @@ export async function importDoc({
       );
     }
   } else {
-    doc = source;
+    doc = source.children;
   }
 
   if (!doc) {
@@ -49,9 +51,14 @@ export async function importDoc({
   }
 
   if (!pad) {
-    pad = await createPad(workspaceId, { name: 'Imported notebook' }, user);
+    pad = await createPad(
+      workspaceId,
+      { name: 'Imported notebook' },
+      user,
+      padId
+    );
   }
 
   await createContent(pad.id, doc);
   return pad;
-}
+};

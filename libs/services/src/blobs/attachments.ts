@@ -44,6 +44,24 @@ export const attachmentUrl = (padId: string, attachmentId: string): string => {
   return `${appConfig.urlBase}${appConfig.apiPathBase}/pads/${padId}/attachments/${attachmentId}`;
 };
 
+export const getAttachmentContent = async (
+  fileName: string
+): Promise<Buffer> => {
+  const result = await s3
+    .getObject({
+      Bucket,
+      Key: fileName,
+    })
+    .promise();
+
+  const content = result.Body;
+  if (!Buffer.isBuffer(content)) {
+    throw new Error('Expected buffer as response from s3.getObject');
+  }
+
+  return content;
+};
+
 export async function getCreateAttachmentForm(
   padId: string,
   fileName: string,

@@ -4,6 +4,7 @@ import {
   MyDescendant,
   MyNode,
   PlainText,
+  MyValue,
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 import * as Y from 'yjs';
@@ -47,8 +48,8 @@ export function toSlateNode(element: SyncElement): MyNode {
  * Converts a SharedType to a Slate doc
  * @param doc
  */
-export function toSlateDoc(doc: SharedType): MyNode[] {
-  return doc.map(toSlateNode);
+export function toSlateDoc(doc: SharedType): MyValue {
+  return doc.map(toSlateNode) as MyValue;
 }
 
 /**

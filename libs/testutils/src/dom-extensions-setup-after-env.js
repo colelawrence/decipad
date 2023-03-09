@@ -31,6 +31,10 @@ window.File = class File extends window.File {
     this.text = () =>
       Buffer.concat(parts.map((part) => Buffer.from(part))).toString();
   }
+
+  arrayBuffer() {
+    return Buffer.from(this.text());
+  }
 };
 
 // storage event

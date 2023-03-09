@@ -1,3 +1,4 @@
+import Zip from 'adm-zip';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 import os from 'os';
@@ -107,7 +108,13 @@ export async function exportPad(page: Page, index = 0): Promise<string> {
     waitForDownload(page),
     exportButton.click(),
   ]);
-  return fileContent.toString('utf8');
+  const zip = new Zip(fileContent);
+  const jsonEntry = zip.getEntry('notebook.json');
+  if (!jsonEntry) {
+    throw new Error('expected a notebook.json entry on the export');
+  }
+  const json = jsonEntry.getData();
+  return json.toString('utf8');
 }
 
 export async function followPad(page: Page, index: number) {

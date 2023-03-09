@@ -4,7 +4,7 @@ import {
   APIGatewayProxyResultV2,
   APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
-import { trace } from '@decipad/backend-trace';
+import { captureException, trace } from '@decipad/backend-trace';
 
 type Handler = (
   req: APIGatewayProxyEvent
@@ -41,6 +41,7 @@ export default (handler: Handler) => {
           console.error((_err as Error).message);
           console.error((_err as Error).stack);
           console.log(_err);
+          await captureException(err);
           throw err; // throw error for wrapper to log and handle
         }
         return {

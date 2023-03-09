@@ -31,7 +31,9 @@ test.describe('Use case: building a candle business', () => {
   test('loads and computes the "starting a candle business notebook"', async () => {
     const notebookId = await importNotebook(
       workspaceId,
-      JSON.stringify(startingACandleBusiness),
+      Buffer.from(JSON.stringify(startingACandleBusiness), 'utf-8').toString(
+        'base64'
+      ),
       page
     );
 

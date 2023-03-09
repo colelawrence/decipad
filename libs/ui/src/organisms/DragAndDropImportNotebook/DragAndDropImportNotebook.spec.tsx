@@ -68,12 +68,12 @@ const fileDragEventProps = (files: File[]) => {
     },
   };
 };
-const validFile = new File(['42'], 'notebook.json', {
+const validFile = new File(['43'], 'notebook.json', {
   type: 'application/json',
 });
 const textFile = new File(['42'], 'notebook.txt', { type: 'text/plain' });
 const tooLargeFile = new File(
-  [JSON.stringify('x'.repeat(2_000_000))],
+  [JSON.stringify('x'.repeat(20_000_001))],
   'notebook.json',
   { type: 'application/json' }
 );
@@ -181,6 +181,8 @@ it('emits an import event when dropping for only the acceptable file', async () 
 
   await waitFor(() => {
     expect(handleImport).toHaveBeenCalledTimes(1);
-    expect(handleImport).toHaveBeenCalledWith('42');
+    expect(handleImport).toHaveBeenCalledWith(
+      Buffer.from('43').toString('base64')
+    );
   });
 });

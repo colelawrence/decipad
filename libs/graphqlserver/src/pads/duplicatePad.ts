@@ -3,8 +3,8 @@ import tables from '@decipad/tables';
 import {
   create as createPad2,
   duplicate as duplicateSharedDoc,
+  importNotebookContent,
   duplicateNotebookAttachments,
-  importDoc,
 } from '@decipad/services/notebooks';
 import { UserInputError } from 'apollo-server-lambda';
 import { isAuthenticatedAndAuthorized } from '../authorization';
@@ -55,7 +55,7 @@ export const duplicatePad = async (
   );
 
   if (document) {
-    return importDoc({
+    return importNotebookContent({
       workspaceId,
       source: document,
       user,

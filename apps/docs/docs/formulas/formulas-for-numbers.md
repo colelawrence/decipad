@@ -16,7 +16,6 @@ The `round()` formula gives you a rounded version of a number. Optionally, you
 
 ![round formula](./img/ROUND.png)
 
-
 ### Round a number up - roundup() / ceil()
 
 Rounds the number to the nearest largest integer or number with the given decimal places.
@@ -53,7 +52,7 @@ rounddown(5.789, 2)
 ==> 5.78
 ```
 
-## Square root - sqrt() 
+## Square root - sqrt()
 
 The `sqrt()` formula gives you the square root of your number.
 
@@ -62,7 +61,6 @@ The `sqrt()` formula gives you the square root of your number.
 Take a look at this example, `3 feet` is the square root of `9 square feet`.
 
 ![sqroot formula](./img/SQROOT.png)
-
 
 ## Get an absolute number - abs()
 
@@ -78,7 +76,6 @@ Take a look at this example, `20$` is the absolute value of `-$20`.
 Take a look at this practical example, where you check how much money you would need to get a positive balance back.
 
 ![abs formula](./img/ABS2.png)
-
 
 ## Trignometric formulas
 
