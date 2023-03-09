@@ -11,11 +11,10 @@ interface SetupOptions {
 }
 
 export async function waitForEditorToLoad(page: Page) {
-  await page.waitForSelector('[data-slate-editor] h1', {
-    timeout: 30_000,
+  await page.waitForSelector('[data-testid="notebook-title"]', {
+    timeout: 50_000,
   });
-
-  await page.locator('[data-slate-editor] h1').click();
+  await page.locator('[data-testid="notebook-title"]').click();
 }
 
 interface SetupProps {

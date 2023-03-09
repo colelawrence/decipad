@@ -19,6 +19,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
   return (
     <EditorBlock
       blockKind="title"
+      data-testid="notebook-title"
       {...attributes}
       contentEditable={readOnly ? false : undefined}
     >
