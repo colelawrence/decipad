@@ -641,6 +641,9 @@ describe('imprecise conversions', () => {
     expect(loose(1, U('month'), U('second'))).toMatchInlineSnapshot(
       `DeciNumber(2592000)`
     );
+    expect(
+      loose(30, U('month', { exp: N(-1n) }), U('day', { exp: N(-1n) }))
+    ).toMatchInlineSnapshot(`DeciNumber(1)`);
   });
 
   it('converts days to months', () => {
@@ -650,5 +653,8 @@ describe('imprecise conversions', () => {
     expect(loose(15, U('day'), U('month'))).toMatchInlineSnapshot(
       `DeciNumber(0.5)`
     );
+    expect(
+      loose(1, U('day', { exp: N(-1n) }), U('month', { exp: N(-1n) }))
+    ).toMatchInlineSnapshot(`DeciNumber(30)`);
   });
 });

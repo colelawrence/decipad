@@ -1,5 +1,6 @@
 import DeciNumber from '@decipad/number';
 import produce from 'immer';
+import { getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
 import { Unit } from '../type/unit-type';
@@ -118,18 +119,19 @@ export function fromExpandedBaseQuantity(
 }
 
 export function convertBetweenUnits(
-  n: DeciNumber,
+  _n: DeciNumber,
   from: Unit[],
   to: Unit[],
   { tolerateImprecision }: ImprecisionOpts = {}
 ): DeciNumber {
+  let n = _n;
   if (!areUnitsConvertible(from, to, { tolerateImprecision })) {
     throw InferError.cannotConvertBetweenUnits(from, to);
   }
 
   if (tolerateImprecision && !areUnitsConvertible(from, to)) {
     // It's not convertible precisely, let's go imprecise
-    return impreciselyConvertBetweenUnits(n, from, to);
+    n = impreciselyConvertBetweenUnits(n, from, to);
   }
 
   const [expandedUnits, expandedN] = toExpandedBaseQuantity(n, from);
@@ -148,10 +150,13 @@ export function convertBetweenUnits(
 }
 
 function impreciselyConvertBetweenUnits(
-  n: DeciNumber,
-  from: Unit[],
-  to: Unit[]
-) {
+  _n: DeciNumber,
+  _from: Unit[],
+  _to: Unit[]
+): DeciNumber {
+  let n = _n;
+  const from = getDefined(normalizeUnits(_from), 'could not normalize units');
+  const to = getDefined(normalizeUnits(_to), 'could not normalize units');
   for (const fromU of from) {
     for (const toU of to) {
       const basicCompat = areQuantityUnitsCompatible(fromU, toU);
@@ -162,19 +167,17 @@ function impreciselyConvertBetweenUnits(
       const fromBase = getUnitByName(fromU.unit);
       const toBase = getUnitByName(toU.unit);
 
-      const conv =
+      const conversion =
         fromBase?.baseQuantity &&
         toBase?.baseQuantity &&
         getImpreciseConversionFactor(
           fromBase.baseQuantity,
           toBase.baseQuantity
-        );
-      if (!conv) {
+        )?.pow(toU.exp);
+      if (!conversion) {
         continue;
       }
-
-      // Convert fromU to something compatible with toU
-      n = toBase.fromBaseQuantity(fromBase.toBaseQuantity(n).mul(conv));
+      n = n.mul(conversion);
     }
   }
 
