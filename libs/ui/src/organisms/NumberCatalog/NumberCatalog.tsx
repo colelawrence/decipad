@@ -40,7 +40,7 @@ export const NumberCatalog = ({
   onDragEnd,
   items = [],
   alignment = 'left',
-  startCollapsed = true,
+  startCollapsed = false,
 }: NumberCatalogProps) => {
   const [collapsed, setCollapsed] = useState(startCollapsed);
   const { color } = useEditorStylesContext();
