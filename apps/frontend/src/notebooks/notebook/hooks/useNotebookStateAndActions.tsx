@@ -276,9 +276,9 @@ export const useNotebookStateAndActions = ({
 
   // Grabbing the snapshot here so the effect can depend on it instead of the whole notebook. The
   // notebook appears to be a mutable reference from the local cache and so we'd miss effects.
-  const snapshot = notebook?.snapshots.filter(
+  const snapshot = notebook?.snapshots.find(
     (s) => s.snapshotName === SNAPSHOT_NAME
-  )[0];
+  );
   useEffect(() => {
     if (!docsync || !snapshot || !isPublic) {
       return;
@@ -313,7 +313,7 @@ export const useNotebookStateAndActions = ({
     setIsPublishing(true);
     // TODO: this must invalidate the Pad since snapshots are a property of Pad. One way to do
     // this is if the mutation returns a Pad instead of a PadSnapshot. Another way to do it is to
-    // programatically invalidate/update cache, either here or in the urql config.
+    // programmatically invalidate/update cache, either here or in the urql config.
     createOrUpdateSnapshot({ notebookId, snapshotName: SNAPSHOT_NAME })
       .then((ret) => {
         if (ret.error) {

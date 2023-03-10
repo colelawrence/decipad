@@ -124,7 +124,15 @@ const padLinkTextStyles = css(
 );
 
 interface NotebookSharingPopUpProps {
-  notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
+  notebook: {
+    id: string;
+    name: string;
+    snapshots?: {
+      createdAt?: string;
+      updatedAt?: string;
+      snapshotName?: string;
+    }[];
+  };
   hasUnpublishedChanges?: boolean;
   isPublished?: boolean;
   isPublishing?: boolean;
@@ -132,6 +140,8 @@ interface NotebookSharingPopUpProps {
   onRestore?: () => void;
   onUnpublish?: () => void;
 }
+
+const SNAPSHOT_NAME = 'Published 1';
 
 /**
  * A component that handles the rendering of the notebook sharing pop up and the toggle logic.
@@ -172,6 +182,10 @@ export const NotebookPublishingPopUp = ({
     [onPublish, onUnpublish]
   );
 
+  const currentSnapshot = notebook.snapshots?.find(
+    (ss) => ss.snapshotName === SNAPSHOT_NAME
+  );
+
   return (
     <div
       css={wrapperStyles}
@@ -210,6 +224,7 @@ export const NotebookPublishingPopUp = ({
                     ariaRoleDescription="enable publishing"
                     active={isPublished}
                     onChange={onPublishToggle}
+                    disabled={isPublishing}
                   />
                 </div>
                 <p css={descriptionStyles}>
@@ -260,22 +275,25 @@ export const NotebookPublishingPopUp = ({
                   </div>
                 </div>
               )}
-
               {isPublished &&
                 hasUnpublishedChanges &&
                 !isEmpty(notebook.snapshots) && (
                   <div css={groupStyles}>
-                    <p css={descriptionStyles}>
-                      Previous version from{' '}
-                      {format(
-                        new Date(notebook.snapshots?.[0].createdAt ?? ''),
-                        'LLL do, HH:mm'
-                      )}
-                    </p>
+                    {(currentSnapshot?.createdAt ||
+                      currentSnapshot?.updatedAt) && (
+                      <p css={descriptionStyles} data-testid="version-date">
+                        Previous version from{' '}
+                        {format(
+                          new Date(
+                            currentSnapshot.updatedAt ??
+                              currentSnapshot.createdAt ??
+                              ''
+                          ),
+                          'LLL do, HH:mm'
+                        )}
+                      </p>
+                    )}
                     <div css={horizontalGroupStyles}>
-                      {/* <Button type="secondary" onClick={onRestore}>
-                        Restore
-                      </Button> */}
                       <Button
                         type="primaryBrand"
                         onClick={onPublish}

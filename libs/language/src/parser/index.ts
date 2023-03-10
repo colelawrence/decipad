@@ -10,7 +10,7 @@ export { decilang } from './decilang-tag';
 export { AST, Parser, n, SyntaxError };
 
 export function parseBlock(source: string, id?: string): Parser.ParsedBlock {
-  if (source.trim() === '') {
+  if (source?.trim() === '') {
     return { solution: n('block', n('noop')) };
   } else {
     const bracketError = validateBrackets(source);

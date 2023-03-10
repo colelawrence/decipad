@@ -1,6 +1,7 @@
 import { toSlateDoc } from '@decipad/slate-yjs';
 import tables, { allPages } from '@decipad/tables';
 import md5 from 'md5';
+import { canonicalize } from 'json-canonicalize';
 import { applyUpdate, Doc, mergeUpdates } from 'yjs';
 
 export const snapshot = async (
@@ -27,9 +28,10 @@ export const snapshot = async (
   if (mergedUpdates.length) {
     applyUpdate(doc, mergedUpdates);
   }
+  const canonicalizedObj = canonicalize(toSlateDoc(doc.getArray()));
 
   return {
     data: Buffer.from(mergedUpdates),
-    version: md5(JSON.stringify(toSlateDoc(doc.getArray()))),
+    version: md5(canonicalizedObj),
   };
 };

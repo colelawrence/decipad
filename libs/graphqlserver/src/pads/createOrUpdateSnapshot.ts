@@ -68,7 +68,7 @@ export const createOrUpdateSnapshot = async (
 
 export const getSnapshots = async ({ notebookId }: { notebookId: ID }) => {
   const data = await tables();
-  return (
+  const snapshots = (
     await data.docsyncsnapshots.query({
       IndexName: 'byDocsyncId',
       KeyConditionExpression: 'docsync_id = :docsync_id',
@@ -79,4 +79,10 @@ export const getSnapshots = async ({ notebookId }: { notebookId: ID }) => {
       },
     })
   ).Items;
+
+  // we need to convert dates into ms again
+  return snapshots.map((ss) => ({
+    ...ss,
+    updatedAt: ss.updatedAt * 1000,
+  }));
 };

@@ -97,6 +97,7 @@ export interface ToggleProps {
   active?: boolean;
   onChange?: (newActive: boolean) => void;
   ariaRoleDescription?: string;
+  disabled?: boolean;
 }
 
 export const Toggle = ({
@@ -104,6 +105,7 @@ export const Toggle = ({
   onChange = noop,
   ariaRoleDescription,
   parentType = 'input',
+  disabled = false,
 }: ToggleProps): ReturnType<FC> => {
   const skinny = parentType !== 'input';
   return (
@@ -118,6 +120,7 @@ export const Toggle = ({
       onClick={() => {
         onChange(!active);
       }}
+      disabled={disabled}
     >
       <span
         role="checkbox"

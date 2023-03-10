@@ -2,6 +2,7 @@ import { CursorEditor, toSlateDoc, YjsEditor } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
+import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
 import { Doc as YDoc } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
@@ -131,7 +132,9 @@ export function docSyncEditor<E extends MyEditor>(
     markVersion: (version: string) => store.markVersion(version),
     sameVersion: (version: string) => store.sameVersion(version),
     equals: (checksumRemote: string) => {
-      const checksumLocal = md5(JSON.stringify(toSlateDoc(doc.getArray())));
+      const canonicalizedObj = canonicalize(toSlateDoc(doc.getArray()));
+      const checksumLocal = md5(canonicalizedObj);
+
       return checksumLocal === checksumRemote;
     },
     get destroyed() {

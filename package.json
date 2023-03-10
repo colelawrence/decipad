@@ -167,6 +167,7 @@
     "is-hotkey": "0.2.0",
     "isomorphic-fetch": "3.0.0",
     "jq.node": "2.4.0",
+    "json-canonicalize": "^1.0.4",
     "jsurl": "^0.1.5",
     "just-permutations": "2.2.0",
     "lib0": "0.2.52",

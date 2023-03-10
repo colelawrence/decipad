@@ -43,7 +43,13 @@ describe('NotebookPublishingPopUp organism', () => {
       notebook: {
         id: 'nbid',
         name: 'My first notebook',
-        snapshots: [{ createdAt: '2022-12-17T03:24:00' }],
+        snapshots: [
+          {
+            createdAt: '2022-12-17T03:24:00',
+            updatedAt: '2022-12-17T03:34:00',
+            snapshotName: 'Published 1',
+          },
+        ],
       },
       hasUnpublishedChanges: true,
       isPublished: true,
@@ -66,6 +72,104 @@ describe('NotebookPublishingPopUp organism', () => {
     expect(publishButton?.getAttribute('disabled')).toBeNull();
     expect(getByRole('checkbox').getAttribute('aria-checked')).toBe('true');
     expect(queryByTestId('publish-changes')).not.toBeNull();
+  });
+
+  it('should render the notebook popup with changes to publish and the published toggle on but with created date', async () => {
+    const props: ComponentProps<typeof NotebookPublishingPopUp> = {
+      notebook: {
+        id: 'nbid',
+        name: 'My first notebook',
+        snapshots: [
+          {
+            createdAt: '2022-12-17T03:24:00',
+            snapshotName: 'Published 1',
+          },
+        ],
+      },
+      hasUnpublishedChanges: true,
+      isPublished: true,
+      isPublishing: false,
+      onPublish: () => noop,
+      onRestore: () => noop,
+      onUnpublish: () => noop,
+    };
+
+    const { queryByTestId } = render(
+      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+    );
+
+    const publishButton = queryByTestId('publish-button');
+
+    await act(async () => {
+      publishButton?.click();
+    });
+
+    expect(queryByTestId('version-date')).not.toBeNull();
+  });
+
+  it('should render the notebook popup with changes to publish and the published toggle on with updated date', async () => {
+    const props: ComponentProps<typeof NotebookPublishingPopUp> = {
+      notebook: {
+        id: 'nbid',
+        name: 'My first notebook',
+        snapshots: [
+          {
+            updatedAt: '2022-12-17T03:24:00',
+            snapshotName: 'Published 1',
+          },
+        ],
+      },
+      hasUnpublishedChanges: true,
+      isPublished: true,
+      isPublishing: false,
+      onPublish: () => noop,
+      onRestore: () => noop,
+      onUnpublish: () => noop,
+    };
+
+    const { queryByTestId } = render(
+      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+    );
+
+    const publishButton = queryByTestId('publish-button');
+
+    await act(async () => {
+      publishButton?.click();
+    });
+
+    expect(queryByTestId('version-date')).not.toBeNull();
+  });
+
+  it('should render the notebook popup with changes to publish and the published toggle but without any date', async () => {
+    const props: ComponentProps<typeof NotebookPublishingPopUp> = {
+      notebook: {
+        id: 'nbid',
+        name: 'My first notebook',
+        snapshots: [
+          {
+            snapshotName: 'Published 1',
+          },
+        ],
+      },
+      hasUnpublishedChanges: true,
+      isPublished: true,
+      isPublishing: false,
+      onPublish: () => noop,
+      onRestore: () => noop,
+      onUnpublish: () => noop,
+    };
+
+    const { queryByTestId } = render(
+      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+    );
+
+    const publishButton = queryByTestId('publish-button');
+
+    await act(async () => {
+      publishButton?.click();
+    });
+
+    expect(queryByTestId('version-date')).toBeNull();
   });
 
   it('should render the notebook popup with changes to publish and the published toggle off', async () => {
