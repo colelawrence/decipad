@@ -10,25 +10,27 @@ import { ComputationRealm } from '../computer/ComputationRealm';
 it('creates a result from an error', () => {
   expect(resultFromError(new RuntimeError('Message!'), 'blockid').result.type)
     .toMatchInlineSnapshot(`
-      Object {
-        "errorCause": Object {
-          "errType": "free-form",
-          "message": "Message!",
-        },
-        "kind": "type-error",
-      }
-    `);
+    Object {
+      "errorCause": Object {
+        "errType": "free-form",
+        "message": "Message!",
+      },
+      "errorLocation": undefined,
+      "kind": "type-error",
+    }
+  `);
 
   expect(resultFromError(new Error('panic: Message!'), 'blockid').result.type)
     .toMatchInlineSnapshot(`
-      Object {
-        "errorCause": Object {
-          "errType": "free-form",
-          "message": "Internal Error: Message!. Please contact support",
-        },
-        "kind": "type-error",
-      }
-    `);
+    Object {
+      "errorCause": Object {
+        "errType": "free-form",
+        "message": "Internal Error: Message!. Please contact support",
+      },
+      "errorLocation": undefined,
+      "kind": "type-error",
+    }
+  `);
 });
 
 const testCompute = async (program: AST.Block[]) =>

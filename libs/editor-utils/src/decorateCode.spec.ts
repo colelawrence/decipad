@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import {
   CodeLineElement,
   DECORATE_AUTO_COMPLETE_MENU,
@@ -29,6 +30,7 @@ import { decorateCode, getRootNodeId } from './decorateCode';
 import { insertNodes } from './insertNodes';
 
 let editor: MyEditor = createPlateEditor({});
+const computer = new Computer();
 let codeLine: CodeLineElement;
 beforeEach(() => {
   editor = createPlateEditor();
@@ -48,7 +50,7 @@ const testDecorate = (text: string, override: Partial<MyEditor> = {}) => {
   Object.assign(editor, override);
 
   const e: NodeEntry<CodeLineElement> = [codeLine, [1]];
-  return decorateCode('code_line')(editor, null as never)(e);
+  return decorateCode(computer, ELEMENT_CODE_LINE)(editor, null as never)(e);
 };
 
 const mkCursor = (path: Path, offset = 0) => ({

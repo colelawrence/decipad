@@ -155,6 +155,10 @@ export class Computer {
 
   results$ = listenerHelper(this.results, identity);
 
+  getBlockIdResult(blockId: string) {
+    return this.results.value.blockResults[blockId ?? ''];
+  }
+
   getBlockIdResult$ = listenerHelper(
     this.results,
     (

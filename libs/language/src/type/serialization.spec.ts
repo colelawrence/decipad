@@ -122,6 +122,7 @@ it('can stringify a type', () => {
         "A",
         "B",
       ]),
+      "errorLocation": undefined,
       "kind": "type-error",
     }
   `);

@@ -53,13 +53,13 @@ const bracketErrorMessage = (err: BracketError) => {
   }
 };
 
-export const CodeError = ({
+export const CodeError: FC<CodeErrorProps> = ({
   message,
   detailMessage,
   url = '/docs',
   bracketError,
   defaultDocsMessage = 'Check our docs',
-}: CodeErrorProps): ReturnType<FC> => {
+}) => {
   const clientEvent = useContext(ClientEventsContext);
   return (
     <Tooltip

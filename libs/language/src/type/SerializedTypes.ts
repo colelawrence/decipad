@@ -4,6 +4,7 @@ import type { AST } from '../parser';
 import type { Unit } from '.';
 import type { ErrSpec } from './InferError';
 import type { SerializedType } from './SerializedType';
+import type { Pos } from '../parser/ast-types';
 
 type Common = { symbol?: string; node?: AST.Statement | AST.Expression };
 
@@ -64,4 +65,8 @@ export type Function = {
 export type TypeError = {
   readonly kind: 'type-error';
   readonly errorCause: ErrSpec;
+  readonly errorLocation?: {
+    start?: Pos;
+    end?: Pos;
+  };
 } & Common;

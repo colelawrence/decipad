@@ -15,7 +15,7 @@ import {
   CodeLineV2Element,
 } from '@decipad/editor-types';
 import { BasePoint, Path, Range } from 'slate';
-import { parseStatement } from '@decipad/computer';
+import { Computer, parseStatement } from '@decipad/computer';
 import { isExprRef } from 'libs/computer/src/exprRefs';
 import { getVariableRanges } from './getVariableRanges';
 import type { RangeWithVariableInfo } from './getVariableRanges';
@@ -25,6 +25,7 @@ import { filterDecorate } from './filterDecorate';
 import { getCodeLineSource } from './getCodeLineSource';
 import { memoizeDecorateWithSelection } from './memoizeDecorate';
 import { getAboveNodeSafe } from './getAboveNodeSafe';
+import { getTypeErrorRanges } from './getTypeErrorRanges';
 
 const isNotExpreRef = (range: RangeWithVariableInfo) =>
   !isExprRef(range.variableName);
@@ -76,6 +77,7 @@ export interface AutocompleteDecorationProps {
 }
 
 export const decorateCode = (
+  computer: Computer,
   elementType:
     | typeof ELEMENT_CODE_LINE
     | typeof ELEMENT_TABLE_COLUMN_FORMULA
@@ -88,8 +90,23 @@ export const decorateCode = (
         source: string
       ): TRange[] => {
         const { error } = parseStatement(source);
-        const ranges = getSyntaxErrorRanges(path, error);
-        return ranges;
+        return getSyntaxErrorRanges(path, error);
+      };
+
+      const typeErrorDecorations = ([
+        element,
+        path,
+      ]: MyElementEntry): TRange[] => {
+        const { id } = element;
+        const result = computer.getBlockIdResult(id);
+        if (!result || !result.result) {
+          return [];
+        }
+        const { type } = result.result;
+        if (type.kind !== 'type-error') {
+          return [];
+        }
+        return getTypeErrorRanges(path, type);
       };
 
       const variableDecorations = (
@@ -184,6 +201,7 @@ export const decorateCode = (
           ...syntaxErrorDecorations(entry, sourceString).map((range) =>
             simpleRangeToSubNodeRange(range, subNodes)
           ),
+          ...typeErrorDecorations(entry),
           ...variableDecorations(variableRanges),
           ...autoCompleteMenuDecoration(entry, variableRanges),
         ];

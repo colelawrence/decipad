@@ -80,7 +80,16 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         ast: type.node,
       };
     } else if (type.errorCause) {
-      return { kind: 'type-error', errorCause: type.errorCause.spec };
+      return {
+        kind: 'type-error',
+        errorCause: type.errorCause.spec,
+        errorLocation: type.node
+          ? {
+              start: type.node.start,
+              end: type.node.end,
+            }
+          : undefined,
+      };
     }
 
     return null;

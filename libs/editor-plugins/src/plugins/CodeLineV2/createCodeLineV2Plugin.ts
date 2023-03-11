@@ -31,11 +31,11 @@ const createCodeLineVarnamePlugin = (_computer: Computer) => ({
   isElement: true,
   component: CodeLineV2Varname,
 });
-const createCodeLineCodeTextPlugin = (_computer: Computer) => ({
+const createCodeLineCodeTextPlugin = (computer: Computer) => ({
   key: ELEMENT_CODE_LINE_V2_CODE,
   isElement: true,
   component: CodeLineV2Code,
-  decorate: decorateCode(ELEMENT_CODE_LINE_V2_CODE),
+  decorate: decorateCode(computer, ELEMENT_CODE_LINE_V2_CODE),
 });
 
 export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
