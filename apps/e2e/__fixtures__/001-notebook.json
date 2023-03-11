@@ -1084,7 +1084,8 @@
               "type": "th",
               "cellType": {
                 "kind": "table-formula"
-              }
+              },
+              "aggregation": "Sum"
             }
           ],
           "type": "tr",
@@ -1759,8 +1760,23 @@
                 "kind": "number",
                 "unit": null
               },
-              "name": "MJ5IrxKydDa7mtZtasGOv",
+              "name": "0m2gN-9JtZM2d72NsLSdw",
               "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "476f8O33fMqHEOyySginH",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "number",
+                "unit": null
+              },
+              "name": "0m2gN-9JtZM2d72NsLSdw",
+              "aggregation": "% of total"
             }
           ],
           "id": "9XkyL7oAAqvwxWPMOegwF",
@@ -2440,6 +2456,102 @@
         {
           "children": [
             {
+              "text": "StructuredDollarsCopy1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "2FRQyuYeQp_cuOnwESVaa"
+        },
+        {
+          "children": [
+            {
+              "text": "100%"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "k4B50-53dypIQTrbRcdyr"
+        }
+      ],
+      "id": "IU6OU-fL-UyFv2ssCAETg",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1Copy1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "YPr_gCPZEcvgDy5n09iAC"
+        },
+        {
+          "children": [
+            {
+              "text": "100 kilometer"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "A0cyYbH9A1X0mF2f6fChd"
+        }
+      ],
+      "id": "Acu2wNUIP6Pc0tnef-nfJ",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1Copy1Copy1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "huEwK-Ebu-V8h_HHe0Bwp"
+        },
+        {
+          "children": [
+            {
+              "text": "100 second"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "W3OisS4hkkRkWx6QhZJPR"
+        }
+      ],
+      "id": "48evqvdELRraV1ZHnBOHr",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1Copy1Copy1Copy1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "AW2qKyQlxn1sMg0QYkkRW"
+        },
+        {
+          "children": [
+            {
+              "text": "100 $ per hour"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "RyUJ-DqEUW4JAUPLjqwSn"
+        }
+      ],
+      "id": "WtFMC9UY7oDI-mTTzIAd7",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
               "text": "OneMoreStructuredDollarForTheRoad"
             }
           ],
@@ -2514,6 +2626,302 @@
     {
       "children": [
         {
+          "children": [
+            {
+              "text": "BigRefCopy1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "s5W_I884Lr7tcL6Y7pqBf"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "jNsuTq7vha7TyxV5QckIJ",
+              "type": "smart-ref",
+              "blockId": "f4VcCII6Fel8k27YFpYQb",
+              "lastSeenVariableName": "StructuredDollars"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "iBT4kPJ41G_9SsHaw6xfG",
+              "type": "smart-ref",
+              "blockId": "C8iPNdpyi139rWNfVH8VN",
+              "lastSeenVariableName": "OneMoreStructuredDollarForTheRoad"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "Qll5JZwNEnOSVogA7sqlW"
+        }
+      ],
+      "id": "dzjhdu7HmEB3g8DLTuyAD",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigRefCopy1Copy1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "fDwZzTFcmbgDfW9XTJ7bm"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "i8aitWkzHPtYrPQl0r_fB",
+              "type": "smart-ref",
+              "blockId": "f4VcCII6Fel8k27YFpYQb",
+              "lastSeenVariableName": "StructuredDollars"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "WHpFA-n-wd_BEHceQKjFs",
+              "type": "smart-ref",
+              "blockId": "C8iPNdpyi139rWNfVH8VN",
+              "lastSeenVariableName": "OneMoreStructuredDollarForTheRoad"
+            },
+            {
+              "text": "+ "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "dRobOtf1uQ7hlmd9dpkun",
+              "type": "smart-ref",
+              "blockId": "48evqvdELRraV1ZHnBOHr",
+              "lastSeenVariableName": "StructuredDollarsCopy1Copy1Copy1"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "2yFlB1ucmHRMF4obBctdS"
+        }
+      ],
+      "id": "IPGVYbnibCXA4mJwuQY7p",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigBunber"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "tpFtM7v77D87Og6oN2vge"
+        },
+        {
+          "children": [
+            {
+              "text": "3e200"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "dDeBB76xyrvNlbVSHBP7v"
+        }
+      ],
+      "id": "sTyUI7bAdmn0_OyxJz_Oj",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": " "
+        },
+        {
+          "text": "exprRef_uqKFbC_Q62uYo03FMSdpiexprRef_sTyUI7bAdmn0_OyxJz_Oj",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "gHyhFOtcIO7nJAqy5Dbfw"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LoanRate"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "_5lycc3HgVvOy7PawWMlI"
+        },
+        {
+          "children": [
+            {
+              "text": "(pmt( "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "yn8jz8_uaKB9E67yUqGCo",
+              "type": "smart-ref",
+              "blockId": "H8pUJwl_QaM0ZDfIfewVx",
+              "lastSeenVariableName": "LoanInterest"
+            },
+            {
+              "text": " , 5, "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "JRY8V6U1sE2ckpe6uvagG",
+              "type": "smart-ref",
+              "blockId": "aifEokkFbAtqQqZERoezP",
+              "lastSeenVariableName": "FundsLoan"
+            },
+            {
+              "text": " )/12) per month"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "zRR2Rz-6YQwPKUBNXg91g"
+        }
+      ],
+      "id": "uqKFbC_Q62uYo03FMSdpi",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LoanRepay"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "0E5ghfwIFxXmr2F8-G72Q"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "oJyZa6PLvNwzIhFZg0x6z",
+              "type": "smart-ref",
+              "blockId": "uqKFbC_Q62uYo03FMSdpi",
+              "lastSeenVariableName": "LoanRate"
+            },
+            {
+              "text": " * 5 years"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "yk5wVFDCmULaMXJkeX3Fr"
+        }
+      ],
+      "id": "BKgxEQ7kipryEmc7VrM2f",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LoanInterest"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "KszDL0YvhALVF6G1117r4"
+        },
+        {
+          "children": [
+            {
+              "text": "100$"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "m-m2w-mmSK110jmY69vqx"
+        }
+      ],
+      "id": "H8pUJwl_QaM0ZDfIfewVx",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "FundsLoan"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "YUjIchUVZMBhHYSSEMOvy"
+        },
+        {
+          "children": [
+            {
+              "text": "100$"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "Q8yqQoaIQ90C6u3G-tcgJ"
+        }
+      ],
+      "id": "aifEokkFbAtqQqZERoezP",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
           "text": "Heading #1"
         }
       ],
@@ -2528,6 +2936,15 @@
       ],
       "type": "h3",
       "id": "zcUD-uah_mjYqbFPw7nmZ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "Tx2aQGCG0XH_6OV7vmywt",
+      "type": "p"
     },
     {
       "children": [
@@ -3381,16 +3798,6 @@
     {
       "children": [
         {
-          "text": ""
-        }
-      ],
-      "type": "img",
-      "url": "https://memegenerator.net/img/instances/80423445.jpg",
-      "id": "yGFskX6GEZnf6Es3ofE69"
-    },
-    {
-      "children": [
-        {
           "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
         },
         {
@@ -3574,6 +3981,37 @@
       ],
       "type": "p",
       "id": "CIR97RckWwwPEgrBl5UnJ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "TqaItIMV3VqzaEQ5tA4zz",
+      "type": "img",
+      "url": "https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png",
+      "width": 580
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "mH7v8S7iz432n5UWt030e",
+      "type": "img",
+      "url": "https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png",
+      "width": 341
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "DKgyJQYcBvxq5MsCQ0dL7"
     }
   ]
 }
