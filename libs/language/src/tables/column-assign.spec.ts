@@ -139,7 +139,9 @@ describe('Column assignment evaluation', () => {
   });
 
   it('can add errors', async () => {
-    const assigned = await testColumnAssign(parseExpressionOrThrow('1m + 1s'));
+    const assigned = await testColumnAssign(
+      parseExpressionOrThrow('1meter + 1s')
+    );
     expect(assigned).toMatchInlineSnapshot(`
       Object {
         "getData": [Function],

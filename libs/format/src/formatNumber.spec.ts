@@ -393,46 +393,61 @@ describe('formatNumber', () => {
     });
 
     describe('known units', () => {
-      it('1/1000 km = 0 km [0.001 km]', () => {
-        const [value, unit] = makeFractionUnitTuple(F(1, 1000), 'km');
+      it('1/1000 km = 0 kmeter [0.001 kmeter]', () => {
+        const [value, unit] = makeFractionUnitTuple(F(1, 1000), 'kmeter');
         const { asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('≈0 km');
+        expect(asString).toEqual('≈0 kilometers');
 
-        expect(formatNumber(locale, unit, value)).toEqual({
-          isPrecise: false,
-          asString: '≈0 km',
-          asStringPrecise: '0.001',
-          value: 0.001,
-          partsOf: [
-            { type: 'roughly', value: '≈' },
-            { type: 'integer', value: '0' },
-            {
-              partsOf: [
-                { type: 'unit-prefix', value: 'k' },
-                { base: 'length', type: 'unit', value: 'm' },
-              ],
-              type: 'unit',
-              value: 'km',
-            },
-          ],
-        });
+        expect(formatNumber(locale, unit, value)).toMatchInlineSnapshot(`
+          Object {
+            "asString": "≈0 kilometers",
+            "asStringPrecise": "0.001",
+            "isPrecise": false,
+            "partsOf": Array [
+              Object {
+                "type": "roughly",
+                "value": "≈",
+              },
+              Object {
+                "type": "integer",
+                "value": "0",
+              },
+              Object {
+                "partsOf": Array [
+                  Object {
+                    "type": "unit-prefix",
+                    "value": "kilo",
+                  },
+                  Object {
+                    "base": "length",
+                    "type": "unit",
+                    "value": "meters",
+                  },
+                ],
+                "type": "unit",
+                "value": "kilometers",
+              },
+            ],
+            "value": 0.001,
+          }
+        `);
       });
 
       it('23/2 km = 11.5 km', () => {
-        const [value, unit] = makeFractionUnitTuple(F(23, 2), 'km');
+        const [value, unit] = makeFractionUnitTuple(F(23, 2), 'kmeter');
         const { partsOf, asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('11.5 km');
+        expect(asString).toEqual('11.5 kilometers');
         expect(partsOf).toEqual([
           { type: 'integer', value: '11' },
           { type: 'decimal', value: '.' },
           { type: 'fraction', value: '5' },
           {
             partsOf: [
-              { type: 'unit-prefix', value: 'k' },
-              { base: 'length', type: 'unit', value: 'm' },
+              { type: 'unit-prefix', value: 'kilo' },
+              { base: 'length', type: 'unit', value: 'meters' },
             ],
             type: 'unit',
-            value: 'km',
+            value: 'kilometers',
           },
         ]);
       });
@@ -454,9 +469,9 @@ describe('formatNumber', () => {
       });
 
       it('90,000 m = 90 thousand m', () => {
-        const [value, unit] = makeFractionUnitTuple(F(90000), 'm');
+        const [value, unit] = makeFractionUnitTuple(F(90000), 'meters');
         const { asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('90 thousand m');
+        expect(asString).toEqual('90 thousand meters');
       });
 
       it('15,000 km = 15 thousand kilometers', () => {
@@ -640,60 +655,60 @@ describe('formatNumber', () => {
       });
 
       it('1/90000 meters = 0 m', () => {
-        const [nr, unit] = makeFractionUnitTuple(F(1, 90000), 'm');
+        const [nr, unit] = makeFractionUnitTuple(F(1, 90000), 'meters');
         const { asString } = formatNumber(locale, unit, nr);
-        expect(asString).toEqual('≈0 m');
+        expect(asString).toEqual('≈0 meters');
       });
 
       it('1/100 meters = 0.01 m', () => {
-        const [value, unit] = makeFractionUnitTuple(F(1, 100), 'm');
+        const [value, unit] = makeFractionUnitTuple(F(1, 100), 'meters');
         const { asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('0.01 m');
+        expect(asString).toEqual('0.01 meters');
       });
 
       it('1/100 km = 0.01 km', () => {
-        const [value, unit] = makeFractionUnitTuple(F(1, 100), 'km');
+        const [value, unit] = makeFractionUnitTuple(F(1, 100), 'kmeter');
         const { asString } = formatNumber(locale, unit, value);
-        expect(asString).toEqual('0.01 km');
+        expect(asString).toEqual('0.01 kilometers');
       });
 
       it('69 m^420 = 69 m⁴²⁰', () => {
         const { partsOf, asString } = formatNumber(
           locale,
-          U('m', { exp: F(420) }),
+          U('meter', { exp: F(420) }),
           F(69)
         );
         expect(partsOf).toEqual([
           { type: 'integer', value: '69' },
           {
             partsOf: [
-              { base: 'length', type: 'unit', value: 'm' },
+              { base: 'length', type: 'unit', value: 'meters' },
               { value: '⁴²⁰', type: 'unit-exponent', originalValue: '420' },
             ],
             type: 'unit',
-            value: 'm⁴²⁰',
+            value: 'meters⁴²⁰',
           },
         ]);
-        expect(asString).toEqual('69 m⁴²⁰');
+        expect(asString).toEqual('69 meters⁴²⁰');
       });
       it('69 m^-420 = 69 m⁻⁴²⁰', () => {
         const { partsOf, asString } = formatNumber(
           locale,
-          U('m', { exp: F(-420) }),
+          U('meter', { exp: F(-420) }),
           F(69)
         );
         expect(partsOf).toEqual([
           { type: 'integer', value: '69' },
           {
             partsOf: [
-              { base: 'length', type: 'unit', value: 'm' },
+              { base: 'length', type: 'unit', value: 'meters' },
               { value: '⁻⁴²⁰', type: 'unit-exponent', originalValue: '-420' },
             ],
             type: 'unit',
-            value: 'm⁻⁴²⁰',
+            value: 'meters⁻⁴²⁰',
           },
         ]);
-        expect(asString).toEqual('69 m⁻⁴²⁰');
+        expect(asString).toEqual('69 meters⁻⁴²⁰');
       });
       it('1,000,000,000 meters = 1 trillion meters', () => {
         const [nr, unit] = makeFractionUnitTuple(F(1000000000000), 'meters');
@@ -1296,7 +1311,7 @@ describe('formatNumber', () => {
         );
       });
 
-      it('100,000,000,000,000,000,000,000,000,000,000,000 meters per second = 100×10³³ m per second', () => {
+      it('100,000,000,000,000,000,000,000,000,000,000,000 meters per second = 100×10³³ meters per second', () => {
         const { asString, partsOf } = formatNumber(
           locale,
           metersPerSecond,
@@ -1313,7 +1328,7 @@ describe('formatNumber', () => {
                 Object {
                   "base": "length",
                   "type": "unit",
-                  "value": "m",
+                  "value": "meters",
                 },
                 Object {
                   "type": "unit-literal",
@@ -1334,12 +1349,12 @@ describe('formatNumber', () => {
                 },
               ],
               "type": "unit",
-              "value": "m per second",
+              "value": "meters per second",
             },
           ]
         `);
         expect(asString).toEqual(
-          '100000000000000000000000000000000000 m per second'
+          '100000000000000000000000000000000000 meters per second'
         );
       });
 
@@ -1405,7 +1420,7 @@ describe('formatNumber', () => {
           metersPerSecond,
           F(1, 100000000000000000000000000000000000n)
         );
-        expect(asString).toEqual('≈0.00 m per second');
+        expect(asString).toEqual('≈0.00 meters per second');
       });
 
       it('1/100,000,000,000,000,000,000,000,000,000,000,000 usd/day = $0 per day', () => {

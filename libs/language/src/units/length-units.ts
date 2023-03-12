@@ -56,7 +56,6 @@ const pica: Converter = (x) =>
 export const units: UnitOfMeasure[] = [
   {
     name: 'meter',
-    symbols: ['m'],
     aliases: ['metre'],
     baseQuantity: 'length',
     toBaseQuantity: identity,

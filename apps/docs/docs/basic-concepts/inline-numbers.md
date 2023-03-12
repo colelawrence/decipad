@@ -10,20 +10,19 @@ Inline Numbers let you embed calculation results in your text to help you explai
 
 ## Create Inline Numbers with the = shortcut
 
-**Embed any number or calculation when writing a sentence.**  <br/> Press the `=` key, and a formula bar will pop up. Type your calculation and see the result embedded in your text.
+**Embed any number or calculation when writing a sentence.** <br /> Press the `=` key, and a formula bar will pop up. Type your calculation and see the result embedded in your text.
 
 ## Drag & Drop Inline Numbers from your Number's Catalog
 
-**Embed any value from the number's catalog on the left side of your notebook** <br/> Just click and hold the **`⸬`** button that shows when you hover a number and drop it on your text.
+**Embed any value from the number's catalog on the left side of your notebook** <br /> Just click and hold the **`⸬`** button that shows when you hover a number and drop it on your text.
 
 ## Drag & Drop Inline Numbers from Data Views
 
-**Drag any aggregation from a Data View to embed on your text** <br/> Just click and hold any result and drop it to any paragraph.
-
+**Drag any aggregation from a Data View to embed on your text** <br /> Just click and hold any result and drop it to any paragraph.
 
 ## Drag & Drop Inline Numbers from Column Results
 
-**Drag any calculation result to embed on your text** <br/> Just click and hold the result on the right of your calculation and drop it on any paragraph.
+**Drag any calculation result to embed on your text** <br /> Just click and hold the result on the right of your calculation and drop it on any paragraph.
 
 ## Edit Inline Numbers
 

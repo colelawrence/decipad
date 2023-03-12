@@ -44,7 +44,7 @@ Speed = Distance / Duration
 Decipad understands some basic units. To convert between them you can use the `in` directive like this:
 
 ```deci live
-3 km in miles
+3 kmeters in miles
 ==> 1.8(641135767120019088523025530899546647578143) miles
 ```
 
@@ -81,13 +81,13 @@ Or, with more known units:
 Decipad can contract and expand units automatically. For instance, pressure is force divided by area. So Decipad understands this and tries to do the right thing when you mix these units in conversions:
 
 ```deci live
-30 newtons/m^2 in bars
+30 newtons/m2 in bars
 ==> 0.0003 bars
 ```
 
 ```deci live
-30 bars in newton/m^2
-==> 3000000 N·m⁻²
+30 bars in newton/m2
+==> 3000000 N/m²
 ```
 
 Or in operations:
@@ -109,7 +109,7 @@ cat([1 meters, 2], [3 centimeters, 4])
 In Decipad the following
 
 ```deci live
-Bolt = 44.72 km/hour in meter/sec
+Bolt = 44.72 kmeter/hour in meter/sec
 ==> 12.4(2) meters per sec
 ```
 
@@ -213,11 +213,11 @@ With qualities, you are able to express data relations in a more realistic way. 
 Here's another example:
 
 ```deci live
-constructionIndex = 1.6 m^2 of usefularea / m^2 of land
-terrain = 600 m^2 of land
+constructionIndex = 1.6 meters^2 of usefularea / meters^2 of land
+terrain = 600 meters^2 of land
 
 buildingArea = constructionIndex * terrain
-==> 960 m² of usefularea
+==> 960 meters² of usefularea
 ```
 
 ### Supported units

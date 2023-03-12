@@ -50,7 +50,10 @@ export const kmPerSecond: Unit[] = [
   u('second', { exp: N(-1) }),
 ];
 
-export const metersPerSecond: Unit[] = [u('m'), u('second', { exp: N(-1) })];
+export const metersPerSecond: Unit[] = [
+  u('meter'),
+  u('second', { exp: N(-1) }),
+];
 
 export function makeFractionUnitTuple(
   fraction: DeciNumber,

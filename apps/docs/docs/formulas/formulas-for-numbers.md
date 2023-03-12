@@ -64,7 +64,7 @@ Take a look at this example, `3 feet` is the square root of `9 square feet`.
 
 ## Get an absolute number - abs()
 
-The `abs()` formula gives you the absolute value of a number. <br/> It is useful when you need to remove the negative sign from a number.
+The `abs()` formula gives you the absolute value of a number. <br /> It is useful when you need to remove the negative sign from a number.
 If your number is positive or zero, it stays the same. If it's negative, it removes the negative sign.
 
 **Syntax:** `abs( Number )`

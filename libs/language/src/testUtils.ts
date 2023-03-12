@@ -51,7 +51,7 @@ export const runCodeForVariables = async (
   const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
-      `runCodeForVariables found an error\n${erroredType.toString()}`
+      `runCodeForVariables found an error\n${erroredType.errorCause?.message}`
     );
   }
 
@@ -115,7 +115,11 @@ export const evaluateForVariables = async (
   const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
-      `runCodeForVariables found an error\n${erroredType.toString()}`
+      `runCodeForVariables found an error\n${JSON.stringify(
+        erroredType,
+        null,
+        '\t'
+      )}`
     );
   }
 

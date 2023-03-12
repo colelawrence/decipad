@@ -4,13 +4,11 @@ sidebar_position: 550
 
 # Clearing Cache and Cookies
 
-
 If Decipad isn't loading properly, you can try to clear your browser cache and cookies. Be mindful that you will lose your local changes if they were only stored locally and not uploaded to our server, this is common when your internet connection isn't stable.
-
 
 ### Chrome
 
-Visit [https://app.decipad.com/api/clear](https://app.decipad.com/api/clear) and press *Click here to continue*.
+Visit [https://app.decipad.com/api/clear](https://app.decipad.com/api/clear) and press _Click here to continue_.
 
 Alternativly, you can clear them manually by doing:
 
@@ -27,7 +25,7 @@ Alternativly, you can clear them manually by doing:
 
 ### Firefox
 
-Visit [https://app.decipad.com/api/clear](https://app.decipad.com/api/clear) and press *Click here to continue*.
+Visit [https://app.decipad.com/api/clear](https://app.decipad.com/api/clear) and press _Click here to continue_.
 
 Alternativly, you can clear them manually by doing:
 

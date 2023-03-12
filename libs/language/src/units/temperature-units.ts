@@ -5,8 +5,7 @@ import type { UnitOfMeasure } from './known-units';
 export const units: UnitOfMeasure[] = [
   {
     name: 'kelvin',
-    symbols: ['k'],
-    pretty: 'K',
+    pretty: 'kelvin',
     baseQuantity: 'temperature',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,

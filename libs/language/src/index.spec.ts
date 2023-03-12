@@ -100,7 +100,7 @@ describe('basic code', () => {
 
   it('supports functions', async () => {
     const results = await runCode(`
-      functionname(a b) = a + b
+      functionname(a c) = a + c
 
       functionname(1, 2)
     `);
@@ -185,7 +185,7 @@ describe('basic code', () => {
 
   it('Can run a function with a column as only the first argument', async () => {
     const results = await runCode(`
-      multiply(A B) = A * B
+      multiply(A C) = A * C
       multiply([ 1, 2, 3 ], 2)
     `);
 
@@ -197,7 +197,7 @@ describe('basic code', () => {
 
   it('Can run a function with two columns as arguments', async () => {
     const results = await runCode(`
-      multiply(A B) = A * B
+      multiply(A C) = A * C
       multiply([ 1, 2, 3 ], [ 1, 2, 0 ])
     `);
 
@@ -1414,7 +1414,7 @@ describe('number units work together', () => {
   });
 
   it('handles non-scalar unit conversions', async () => {
-    expect(await runCode(`1K + 2°C + 3°F`)).toMatchObject({
+    expect(await runCode(`1Kelvin + 2°C + 3°F`)).toMatchObject({
       // 1 + (2 + 273.15) + ((3 - 32) * 5 / 9 + 273.15)
       // = 1 + 275.15 + 257.03(8) =  533.18(8)
       value: N(50007, 100),
@@ -1430,7 +1430,9 @@ describe('number units work together', () => {
   });
 
   it('converts between complex units', async () => {
-    expect(await runCode(`100 joules/km to calories/foot`)).toMatchObject({
+    expect(
+      await runCode(`100 joules/kilometer to calories/foot`)
+    ).toMatchObject({
       value: N(381, 52300),
       type: t.number(U([u('calories'), u('feet', { exp: N(-1) })])),
     });
@@ -1446,10 +1448,13 @@ describe('number units work together', () => {
   });
 
   it('converts between exponentiated and non-exponentiated but expandable to same', async () => {
-    expect(await runCode('1 cm^3 in cm3')).toMatchObject({
-      value: N(1, 1000000),
-      type: t.number(U('m', { exp: N(3), multiplier: N(1, 100) })),
-    });
+    expect(await runCode('100 centimeter^3 in cubicmetre'))
+      .toMatchInlineSnapshot(`
+      Object {
+        "type": cubicmetre,
+        "value": DeciNumber(0.0001),
+      }
+    `);
   });
 
   it('autoconverts complex units', async () => {
@@ -1464,9 +1469,9 @@ describe('number units work together', () => {
   });
 
   it('expands expandable units (1)', async () => {
-    expect(await runCode(`1 squaremeter + 2 m^2`)).toMatchObject({
+    expect(await runCode(`1 squaremeter + 2 meter^2`)).toMatchObject({
       value: N(3),
-      type: t.number(U('m', { exp: N(2) })),
+      type: t.number(U('meters', { exp: N(2) })),
     });
   });
 
@@ -1527,11 +1532,11 @@ describe('number units work together', () => {
   });
 
   it('should convert 1cm into mm', async () => {
-    const run = await runCode(`1 cm in mm`);
+    const run = await runCode(`1 cmeter in mmeter`);
 
     expect(run).toMatchObject({
       value: N(1, 100),
-      type: t.number(U([u('m', { multiplier: N(0.001) })])),
+      type: t.number(U([u('meter', { multiplier: N(0.001) })])),
     });
   });
 
@@ -1545,7 +1550,7 @@ describe('number units work together', () => {
   });
 
   it('should convert 1 cm into millimetre', async () => {
-    const run = await runCode(`1 cm in millimetre`);
+    const run = await runCode(`1 cmeter in millimetre`);
 
     expect(run).toMatchObject({
       value: N(1, 100),
@@ -1554,20 +1559,20 @@ describe('number units work together', () => {
   });
 
   it('should convert 1mm into nm', async () => {
-    const run = await runCode(`1 mm in nm`);
+    const run = await runCode(`1 mmeter in nmeter`);
 
     expect(run).toMatchObject({
       value: N(1, 1000),
-      type: t.number(U([u('m', { multiplier: N(1, 1_000_000_000) })])),
+      type: t.number(U([u('meter', { multiplier: N(1, 1_000_000_000) })])),
     });
   });
 
   it('should convert 1mm into μm', async () => {
-    const run = await runCode(`1 mm in μm`);
+    const run = await runCode(`1 mmeter in μmeter`);
 
     expect(run).toMatchObject({
       value: N(1, 1000),
-      type: t.number(U([u('m', { multiplier: N(0.000001) })])),
+      type: t.number(U([u('meter', { multiplier: N(0.000001) })])),
     });
   });
 
@@ -1590,7 +1595,7 @@ describe('number units work together', () => {
   });
 
   it('converts to contracted unit (2)', async () => {
-    expect(await runCode(`10 kg*m/sec^2 in newtons`)).toMatchObject({
+    expect(await runCode(`10 kg*meter/sec^2 in newtons`)).toMatchObject({
       value: N(10),
       type: t.number(U('newtons')),
     });
@@ -1696,9 +1701,9 @@ describe('number units work together', () => {
       type: t.number(U([u('inches', { exp: N(-2) }), u('newtons')])),
     });
 
-    expect(await runCode(`30 bar + 100000 N/m^2`)).toMatchObject({
+    expect(await runCode(`30 bar + 100000 N/meter^2`)).toMatchObject({
       value: N(3100000),
-      type: t.number(U([u('N'), u('m', { exp: N(-2) })])),
+      type: t.number(U([u('N'), u('meters', { exp: N(-2) })])),
     });
   });
 
@@ -1974,9 +1979,9 @@ describe('unit qualities', () => {
   });
 
   it('applies to numbers with single unit with exponent', async () => {
-    expect(await runCode('600 m^2 of land')).toMatchObject({
+    expect(await runCode('600 meter^2 of land')).toMatchObject({
       value: N(600),
-      type: t.number(U('m', { exp: N(2), quality: 'land' })),
+      type: t.number(U('meters', { exp: N(2), quality: 'land' })),
     });
   });
 

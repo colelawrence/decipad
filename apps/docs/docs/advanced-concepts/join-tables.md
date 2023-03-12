@@ -16,17 +16,15 @@ Here is an example of two tables you can join.
 
 ![Join Tables Correct](./img/JoinTablesCorrect.png)
 
-
 Here is an example of tables you can't join, since the column names and data types in both tables are different.
 
 ![Join Tables Wrong](./img/JoinTablesWrong.png)
 
 Notice how the first column of `Table1` is a number column called `Column1` and the first column of `Table2` is a currency column called `Column3`. All columns should be the same in order to join `Table1` and `Table2`.
 
-
 ### 2. Add a Decipad Code Block
 
-To use formulas, you will need a `Decipad Code Block`. 
+To use formulas, you will need a `Decipad Code Block`.
 
 Add a **Decipad Code Block** from the block menu by typing `/calc` on an empty line or by pressing `+` and selecting `Calculations` from the menu.
 

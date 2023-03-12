@@ -33,13 +33,15 @@ describe('simplify units', () => {
   it('simplifies exponentiated known unit', () => {
     // km^-1.meters^3
     expect(
-      simplifyUnits(U([u('m', { exp: N(-1) }), u('m', { exp: N(3) })]))
-    ).toMatchObject(U('m', { exp: N(2) }));
+      simplifyUnits(U([u('meter', { exp: N(-1) }), u('meter', { exp: N(3) })]))
+    ).toMatchObject(U('meters', { exp: N(2) }));
   });
 
   it('simplifies with fractional exponents', () => {
     expect(
-      simplifyUnits(U([u('m', { exp: N(-1, 2) }), u('m', { exp: N(3, 2) })]))
-    ).toMatchObject(U('m', { exp: N(1) }));
+      simplifyUnits(
+        U([u('meter', { exp: N(-1, 2) }), u('meter', { exp: N(3, 2) })])
+      )
+    ).toMatchObject(U('meters', { exp: N(1) }));
   });
 });

@@ -134,7 +134,7 @@ describe('use of funds document', () => {
 
           Salaries = {
             Title = ["Exec", "Product", "Tech"]
-            Salary = [120000, 80000, 80000]
+            Salary = [0.12 millions, 80 thousands, 80k]
             Department = ["G&A", "R&D", "R&D"]
             StartDate = [date(2021-02), date(2021-01), date(2021-03)]
             Bonus = [false, true, false]
@@ -280,7 +280,7 @@ describe('more models', () => {
     const [result, time] = await runAndMeasure(() =>
       runCode(
         `
-          InitialInvestment = 5000eur
+          InitialInvestment = 5 thousand eur
           YearlyReinforcement = 100eur
           ExpectedYearlyGrowth = 2%
 
@@ -365,7 +365,7 @@ ${'' /* Get capital needed */}
 
         CapitalNeeded = CumulativeMonthlyRevenue - CumulativeMonthlyExpenses
 
-        IPOTargetMonthlyRevenue = 10000000 eur
+        IPOTargetMonthlyRevenue = 10 million eur
 
         TimeToIPO = ln(IPOTargetMonthlyRevenue / InitialMonthlyRevenue) / ln(1 + MonthlyRevenueGrowthRate)
       `,
@@ -584,38 +584,38 @@ ${'' /* Get capital needed */}
     const [result, time] = await runAndMeasure(() =>
       evaluateForVariables(
         `
-          M = 0.05398 kg
+          Mass = 0.05398 kg
 
           g = 9.8 meters / (second ^ 2)
 
           D = 0.976 inches
-          A = pi * (D/2) ^2 in m^2
-          rho = 1.2 kg / (m^3)
+          A = pi * (D/2) ^2 in meter^2
+          rho = 1.2 kg / (meter^3)
 
           Cd = 0.75
-          k = 0.5 * rho * Cd * A
+          kk = 0.5 * rho * Cd * A
 
           I = 9 N s
           T = 6 N
           t = I / T
 
-          gF = (M * g) in N
+          gF = (Mass * g) in N
 
-          q = sqrt((T - gF) / k)
+          q = sqrt((T - gF) / kk)
 
-          x = 2 * k * q / M
+          x = 2 * kk * q / Mass
           temp1 = -x * t
           temp2 = e ** temp1
-          v = q * (1 - temp2) / (1 + temp2) in m / s
+          v = q * (1 - temp2) / (1 + temp2) in meters / s
         `,
         [
-          'M',
+          'Mass',
           'g',
           'D',
           'A',
           'rho',
           'Cd',
-          'k',
+          'kk',
           'I',
           'T',
           't',
@@ -630,7 +630,7 @@ ${'' /* Get capital needed */}
     );
 
     expect(result).toMatchObject({
-      M: {
+      Mass: {
         // M = 0.05398 kg
         type: { type: 'number', unit: U('g', { multiplier: N(1000) }) },
         value: N(2699n, 50000n), // 0,05398 ✓
@@ -650,14 +650,17 @@ ${'' /* Get capital needed */}
       },
       A: {
         // A = pi * (D/2) ^2 in m^2
-        type: { type: 'number', unit: U('m', { exp: N(2) }) },
+        type: { type: 'number', unit: U('meter', { exp: N(2) }) },
         value: N(188545852972178898996137n, 390625000000000000000000000n),
       },
       rho: {
         // rho = 1.2 kg / (m^3)
         type: {
           type: 'number',
-          unit: U([u('g', { multiplier: N(1000) }), u('m', { exp: N(-3) })]),
+          unit: U([
+            u('g', { multiplier: N(1000) }),
+            u('meters', { exp: N(-3) }),
+          ]),
         },
         value: N(6, 5), // 1,2 ✓
       },
@@ -666,11 +669,14 @@ ${'' /* Get capital needed */}
         type: { type: 'number' },
         value: N(75, 100), // 0,75 ✓
       },
-      k: {
+      kk: {
         // k = 0.5 * rho * Cd * A
         type: {
           type: 'number',
-          unit: U([u('g', { multiplier: N(1000) }), u('m', { exp: N(-1) })]),
+          unit: U([
+            u('g', { multiplier: N(1000) }),
+            u('meters', { exp: N(-1) }),
+          ]),
         },
         value: N(1696912676749610090965233n, 7812500000000000000000000000n),
       },
@@ -704,7 +710,7 @@ ${'' /* Get capital needed */}
           unit: U([
             u('N', { exp: N(1, 2) }),
             u('g', { multiplier: N(1000), exp: N(-1, 2) }),
-            u('m', { exp: N(1, 2) }),
+            u('meters', { exp: N(1, 2) }),
           ]),
         },
         value: N(132843142604550n, 837029326097n), // 158,707871354863318 ✓
@@ -723,7 +729,7 @@ ${'' /* Get capital needed */}
             // x = { multiplier: N(1000), exp: N(1) + N(-1, 2) - N(1)}
             // x = { multiplier: N(1000), exp: N(-1, 2)}
             u('g', { multiplier: N(1000), exp: N(-1, 2) }),
-            u('m', { exp: N(-1, 2) }),
+            u('meters', { exp: N(-1, 2) }),
           ]),
         },
         value: N(
@@ -738,7 +744,7 @@ ${'' /* Get capital needed */}
           unit: U([
             u('N', { exp: N(1, 2) }),
             u('g', { multiplier: N(1000), exp: N(-1, 2) }),
-            u('m', { exp: N(-1, 2) }),
+            u('meters', { exp: N(-1, 2) }),
             u('s'),
           ]),
         },
@@ -759,7 +765,7 @@ ${'' /* Get capital needed */}
         // v = q * (1 - temp2) / (1 + temp2) in m / s
         type: {
           type: 'number',
-          unit: U([u('m', { exp: N(1) }), u('s', { exp: N(-1) })]),
+          unit: U([u('meters', { exp: N(1) }), u('s', { exp: N(-1) })]),
         },
         value: N(6328251127759379000n, 53640764699238693n), // 117,974662799844137
       },

@@ -59,18 +59,18 @@ export const computerWithBlocks = async (...blocks: (AST.Block | string)[]) => {
 export const program = testBlocks(
   'A = 1',
   'Unused = 123',
-  'B = 2',
+  'B1 = 2',
   'A + 1',
-  'A + B'
+  'A + B1'
 );
 
-export const deeperProgram = testBlocks(...program, 'C = B', 'D = C');
+export const deeperProgram = testBlocks(...program, 'C = B1', 'D = C');
 
 export const implicitDepProgram = testBlocks(
   'A = 1',
   'Unused = 123',
   '1',
-  '_ + B',
+  '_ + B1',
   'C = _',
   'D = _',
   'E = C',

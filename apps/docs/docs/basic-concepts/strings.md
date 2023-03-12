@@ -24,8 +24,8 @@ The variable `A` is declared with the string "Hello world!". From now on, each t
 Sometimes you will have separated variables with the phase you want to display and you may want to join them. Join two strings with the `+` operator like this:
 
 ```deci live
-A = "Hello "
-B = "World!"
-A + B
+H = "Hello "
+W = "World!"
+H + W
 ==> 'Hello World!'
 ```

@@ -64,11 +64,11 @@ Quote = {
 
 InMeters = {
   Name = Quote.Name,
-  Price = ceil(Quote.Price in £/m^2)
+  Price = ceil(Quote.Price in £/meter^2)
 }
 ==> {
   Name = [ 'Bhakta Construction', 'Precido Builders', 'MBD Firm' ],
-  Price = [ 8073 £·m⁻², 9688 £·m⁻², 4683 £·m⁻² ]
+  Price = [ 8073 £·meter⁻², 9688 £·meter⁻², 4683 £·meter⁻² ]
 }
 ```
 

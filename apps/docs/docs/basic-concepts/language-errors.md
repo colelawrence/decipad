@@ -31,14 +31,14 @@ FlourDensity = 0.8 g/ml
 ## Column contains inconsistent type
 
 :::caution `column-contains-inconsistent-type`
-Column cannot contain both ft and cm
+Column cannot contain both ft and centimeters
 :::
 
 We don't support having multiple types in the same column.
 
 ```deci live
-[1 ft, 2 cm]
-==> Column cannot contain both ft and cm
+[1 ft, 2 centimeter]
+==> Column cannot contain both ft and centimeters
 ```
 
 You can organise them in different columns:
@@ -112,7 +112,7 @@ The exponent must be a simple expression
 The power component in an exponentiation can only be a simple expression (a number or expression composed of built-in functions).
 
 ```deci live
-(30 m)**([1,2,3])
+(30 meters)**([1,2,3])
 ==> Complex expressions not supported in exponents
 ```
 
@@ -341,7 +341,7 @@ So we require you to use descriptive names for your variables, to make your note
 Cash = 100 $
 Coffee = 5 $
 Cash = Cash - Coffee
-==> This name is already being used. You cannot have duplicated names
+==> The "Cash" name is already taken. It has been either defined elsewhere or is a language constant.
 ```
 
 You can fix it by providing descriptive variable names:

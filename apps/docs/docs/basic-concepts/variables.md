@@ -37,7 +37,7 @@ Existing variables can't be redefined after declaration:
 ```deci live
 Beans = 1 bean
 Beans = Beans + 1
-==> This name is already being used. You cannot have duplicated names
+==> The "Beans" name is already taken. It has been either defined elsewhere or is a language constant.
 ```
 
 A simple solution is declaring a new variable:

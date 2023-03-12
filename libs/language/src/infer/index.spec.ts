@@ -173,7 +173,7 @@ describe('columns', () => {
     expect(
       await inferExpression(
         nilCtx,
-        col(c('*', l(1), r('cm')), c('*', l(1), r('ft')))
+        col(c('*', l(1), r('centimeter')), c('*', l(1), r('ft')))
       )
     ).toMatchObject({
       errorCause: { spec: { errType: 'column-contains-inconsistent-type' } },
@@ -511,7 +511,7 @@ describe('inferProgram', () => {
         'block',
         assign('A', l(1)),
         assign('Error', errorNode),
-        assign('B', l(2))
+        assign('C', l(2))
       ),
     ];
 
@@ -524,7 +524,7 @@ describe('inferProgram', () => {
           errorCause: expect.anything(),
           node: errorNode,
         }),
-        B: t.number(),
+        C: t.number(),
       })
     );
   });

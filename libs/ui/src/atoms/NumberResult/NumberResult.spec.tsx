@@ -110,7 +110,7 @@ describe('NumberResult', () => {
 
     it('can operate crazy numbers (2)', async () => {
       const { container } = render(
-        <NumberResult {...await runCode('69 m^100 in ft^100')} />
+        <NumberResult {...await runCode('69 meter^100 in ft^100')} />
       );
       expect(container.textContent).toMatchInlineSnapshot(
         `"≈273749178131136126854001791227874085602067535229707755.77 ft¹⁰⁰"`
@@ -153,14 +153,16 @@ describe('NumberResult', () => {
 
     it('my liters', async () => {
       const { container } = render(
-        <NumberResult {...await runCode('0.001 liters / km')} />
+        <NumberResult {...await runCode('0.001 liters / kmeter')} />
       );
-      expect(container.textContent).toMatchInlineSnapshot(`"≈0 liters / km"`);
+      expect(container.textContent).toMatchInlineSnapshot(
+        `"≈0 liters per kilometer"`
+      );
     });
 
     it('$1K', async () => {
       const { container } = render(<NumberResult {...await runCode('$1K')} />);
-      expect(container.textContent).toMatchInlineSnapshot(`"$1 K"`);
+      expect(container.textContent).toMatchInlineSnapshot(`"$1,000"`);
     });
 
     it('0.4 M£', async () => {

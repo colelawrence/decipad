@@ -12,7 +12,6 @@ Creates an error in the notebook if the condition is not true
 
 **Syntax:** `assert( Condition )`
 
-
 ```deci live
 ledger = 5000 $
 moneyInBank = 4999$

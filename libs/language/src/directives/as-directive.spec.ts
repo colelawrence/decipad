@@ -134,7 +134,7 @@ describe('getValue', () => {
   });
 
   it('works on a unitful column', async () => {
-    const quantity = col(ne(1, 'km'), ne(2, 'km'), ne(3, 'km'));
+    const quantity = col(ne(1, 'kmeter'), ne(2, 'kmeter'), ne(3, 'kmeter'));
 
     expect((await testGetValue(getValue, quantity, ne(1, 'miles'))).getData())
       .toMatchInlineSnapshot(`

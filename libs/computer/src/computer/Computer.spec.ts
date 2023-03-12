@@ -19,8 +19,8 @@ import { Computer } from './Computer';
 
 const testProgram = getIdentifiedBlocks(
   'A = 0',
-  'B = A + 1',
-  'C = B + 10',
+  'B1 = A + 1',
+  'C = B1 + 10',
   'D = C + 100'
 );
 let computer: Computer;
@@ -61,7 +61,7 @@ describe('caching', () => {
 
     // Change C
     const changedC = produce(testProgram, (program) => {
-      program[2] = getIdentifiedBlock('C = B + 10.1', 2);
+      program[2] = getIdentifiedBlock('C = B1 + 10.1', 2);
     });
     expect(await computeOnTestComputer({ program: changedC }))
       .toMatchInlineSnapshot(`
@@ -126,7 +126,7 @@ describe('caching', () => {
     // Use a missing variable B
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + B'),
+        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + C'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -139,7 +139,7 @@ describe('caching', () => {
     // Define it out of order
     expect(
       await computeOnTestComputer({
-        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + B', 'B = 1'),
+        program: getIdentifiedBlocks('A = 1', '', 'A + 1 + C', 'C = 1'),
       })
     ).toMatchInlineSnapshot(`
       Array [
@@ -381,21 +381,21 @@ describe('tooling data', () => {
 
 it('can extract units from text', async () => {
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('Foo = 30cm', 'Bar = 30'),
+    program: getIdentifiedBlocks('Foo = 30cmeter', 'Bar = 30'),
   });
 
   // Internal units
   let units = await computer.getUnitFromText('W');
   expect(units?.[0].unit).toBe('W');
-  units = await computer.getUnitFromText('km/h');
+  units = await computer.getUnitFromText('kmeter/h');
   expect(units?.[0].unit).toBe('h');
-  expect(units?.[1].unit).toBe('m');
+  expect(units?.[1].unit).toBe('meters');
 
   // Custom units
   units = await computer.getUnitFromText('Bananas');
   expect(units?.[0].unit).toBe('Bananas');
   units = await computer.getUnitFromText('Foo');
-  expect(units?.[0].unit).toBe('m');
+  expect(units?.[0].unit).toBe('meters');
 
   // Non units
   units = await computer.getUnitFromText('Bar');

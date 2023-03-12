@@ -18,8 +18,8 @@ describe('stringify', () => {
     ).toMatchInlineSnapshot(`"<10>%"`);
 
     expect(
-      formatResult(locale, N(10), t.number([parseUnit('m')]), highlight)
-    ).toMatchInlineSnapshot(`"<10> m"`);
+      formatResult(locale, N(10), t.number([parseUnit('meters')]), highlight)
+    ).toMatchInlineSnapshot(`"<10> meters"`);
 
     expect(
       formatResult(locale, [N(1), N(10)], t.range(t.number()), highlight)

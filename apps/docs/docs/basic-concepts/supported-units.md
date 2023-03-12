@@ -19,20 +19,20 @@ Please bear that in mind when using our units. Approximations are marked with a 
 The standard [metric unit prefixes](https://en.wikipedia.org/wiki/Metric_prefix) are available in Decipad.
 
 ```deci live
-1 metre in cm
-==> 100 cm
+1 metre in cmeter
+==> 100 centimeters
 ```
 
 ## Length units
 
-The default unit is Metre (`meter`, `m`).
+The default unit is Metre (`meter`).
 
 The following are also supported:
 
 - Mile (`mile`, `mi`) = `1609.344 m` = `1,760 yards`
 - Yard (`yard`, `yd`) = `3 ft`
 - Foot (`foot`, `ft`) = `12 inches`
-- Inch (`inch`, `in`) = `0.0254 m`
+- Inch (`inch`, `in`) = `0.0254 meters`
 
 ```deci live
 1 mile in inches
@@ -102,11 +102,11 @@ The following are also supported:
 
 ## Fun
 
-- Rope (`rope`) = `6.096 m`
+- Rope (`rope`) = `6.096 meters`
 - Hand (`hand`) = `4 inches`
-- Smoot (`smoot`) = `1,702 m`
-- Marathon (`marathon`) = `42195 m`
-- League (`league`, `lea`) = `4828 m`
+- Smoot (`smoot`) = `1,702 meters`
+- Marathon (`marathon`) = `42195 meters`
+- League (`league`, `lea`) = `4828 meters`
 
 It takes over 26 horse races to make a marathon.
 
@@ -127,8 +127,8 @@ The following are also supported:
 - Knot (`knot`) = `1 nmi/hour` = `1.852 kilometer/hour`
 
 ```deci live
-3.6 kph in m/s
-==> 1 m/s
+3.6 kph in meters/s
+==> 1 meters/s
 ```
 
 ## Area units
@@ -146,7 +146,7 @@ The following are also supported:
 - Square Inch (`squareinch`, `sqin`) = `0.00064516 m2`
 
 ```deci live
-(1 mi * 1mi in m^2) == (1 sqmi in m2)
+(1 mi * 1mi in meter^2) == (1 sqmi in m2)
 ==> true
 ```
 
@@ -215,7 +215,7 @@ Cooking:
 
 The default unit is Atmosphere (`atmosphere`, `atm`).
 
-Pascal can be expressed as `kg⋅m−1⋅s−2` and we support expanding (or contracting) any pressure unit to SI units.
+Pascal can be expressed as `kg⋅meter−1⋅s−2` and we support expanding (or contracting) any pressure unit to SI units.
 
 The following are also supported:
 
@@ -270,7 +270,7 @@ The following are also supported:
 - Month (`month`, `m`) = `1/12 year`
 - Week (`day`, `day`) = `7 days`
 - Day (`day`, `day`) = `24 h`
-- Hour (`hour`, `h`) = `60 m`
+- Hour (`hour`, `h`) = `60 minutes`
 - Minutes (`minute`, `m`) = `60 s`
 
 ## Frequency units

@@ -3,8 +3,8 @@
 ## [ENG-242](https://linear.app/decipad/issue/ENG-242)
 
 ```deci live
-[1 cm, 1m]
-==> Column cannot contain both cm and m
+[1 cmeter, 1meter]
+==> Column cannot contain both centimeters and meters
 ```
 
 ## [ENG-275](https://linear.app/decipad/issue/ENG-275)
@@ -28,15 +28,15 @@ grow(Offer, Step, Duration)
 ## [ENG-277](https://linear.app/decipad/issue/ENG-277)
 
 ```deci live
-300000 N/m^2 + 1 bar
+300000 N/meter^2 + 1 bar
 ==> 4 bars
 ```
 
 ## [ENG-140](https://linear.app/decipad/issue/ENG-140)
 
 ```deci live
-(900*m**2)**(1/2)
-==> 30 m
+(900*meter**2)**(1/2)
+==> 30 meters
 ```
 
 ## [ENG-263](https://linear.app/decipad/issue/ENG-263)
@@ -57,8 +57,8 @@ miles * hour^-1
 ## [ENG-242](https://linear.app/decipad/issue/ENG-242)
 
 ```deci live
-[1cm, 2m, 3cm]
-==> Column cannot contain both cm and m
+[1cmeter, 2meter, 3cmeter]
+==> Column cannot contain both centimeters and meters
 ```
 
 ## [ENG-216](https://linear.app/decipad/issue/ENG-216)
@@ -159,47 +159,47 @@ nuno = 100 kg
 ## [ENG-307](https://linear.app/decipad/issue/ENG-307)
 
 ```deci live
-1 cm^3 in cm3
+1 centimeter^3 in cm3
 ==> 1 cm³
 ```
 
 ```deci live
-(cm * cm * cm) in cm3
-==> 1 cm³
+(meter * meter * meter) in m3
+==> 1 m³
 ```
 
 ```deci live
-(cm * cm * cm) in cm^3
-==> 1 cm³
+(cmeter * cmeter * cmeter) in cmeters^3
+==> 1 centimeters³
 ```
 
 ```deci live
-(1 km * 1 km) in km2
+(1 kmeter * 1 kmeter) in km2
 ==> 1 km²
 ```
 
 ```deci live
-(1 km * 1 km) in km^2
-==> 1 km²
+(1 kmeter * 1 kmeter) in kmeter^2
+==> 1 kilometers²
 ```
 
 ```deci live
-(1 km * 1 km)
-==> 1 km²
+(1 kmeter * 1 kmeter)
+==> 1 kilometers²
 ```
 
 ```deci live
-(1 km * 1 km) in m^2
-==> 1000000 m²
+(1 kmeter * 1 kmeter) in meter^2
+==> 1000000 meters²
 ```
 
 ```deci live
-(1 km * 1 km) in cm^2
+(1 kmeter * 1 kmeter) in cm2
 ==> 10000000000 cm²
 ```
 
 ```deci live
-(1 km * 1 km) in cm2
+(1 kmeter * 1 kmeter) in cm2
 ==> 10000000000 cm²
 ```
 
@@ -237,28 +237,28 @@ round(1/2 pint in ml)
 ## [ENG-332](https://linear.app/decipad/issue/ENG-332)
 
 ```deci live
-10 minutes/km in km/hour
-==> 6 km per hour
+10 minutes/kmeter in kmeter/hour
+==> 6 kilometers per hour
 ```
 
 ```deci live
-10 s/km in km/s
-==> 0.1 km/s
+10 s/kmeter in kmeter/s
+==> 0.1 kilometers/s
 ```
 
 ```deci live
-10 s/m in m/s
-==> 0.1 m/s
+10 s/meter in meters/s
+==> 0.1 meters/s
 ```
 
 ```deci live
-10 s/km^2 in km^2/s
-==> 0.1 km²/s
+10 s/kmeter^2 in kmeter^2/s
+==> 0.1 kilometers²/s
 ```
 
 ```deci live
-10 banana/s/m in banana/m/s
-==> 10 bananas·m⁻¹·s⁻¹
+10 banana/s/meter in banana/meter/s
+==> 10 bananas·meter⁻¹·s⁻¹
 ```
 
 ## [ENG-281](https://linear.app/decipad/issue/ENG-281)

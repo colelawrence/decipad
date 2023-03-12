@@ -24,7 +24,7 @@ Alternatively, to add a table with the keyboard, open up the block menu by typin
 
 To **delete a table**, hover over the table, click the **`⸬`** button that appears on the left, and then click `Delete`.
 
-<br></br>
+<br />
 
 ## Update a Table Name
 
@@ -66,7 +66,7 @@ Move your table columns and rows to rearrange your table.
 - To **move a row**, hover over any row, click and hold the **`⸬`** button that appears on the left, and drag them to a new position inside the same table.
 - To **move a column**, click and hold the **`⸬`** button on the left of any column name and drag them to a new position inside the same table.
 
-<br></br>
+<br />
 
 ---
 

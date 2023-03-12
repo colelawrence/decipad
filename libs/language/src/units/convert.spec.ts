@@ -41,9 +41,9 @@ describe('convert', () => {
     expect(convertBetweenUnits(N(1), U('meters'), U('meter'))).toMatchObject(
       N(1)
     );
-    expect(convertBetweenUnits(N(1), U('meters'), U('m'))).toMatchObject(N(1));
-    expect(convertBetweenUnits(N(1), U('m'), U('meters'))).toMatchObject(N(1));
-    expect(convertBetweenUnits(N(1), U('m'), U('metres'))).toMatchObject(N(1));
+    expect(convertBetweenUnits(N(1), U('meters'), U('metres'))).toMatchObject(
+      N(1)
+    );
     expect(convertBetweenUnits(N(567), U('seconds'), U('sec'))).toMatchObject(
       N(567)
     );
@@ -76,9 +76,9 @@ describe('convert', () => {
     expect(convertBetweenUnits(N(2), U('meter'), U('angstroms'))).toMatchObject(
       N(2e10)
     );
-    expect(convertBetweenUnits(N(2e10), U('angstroms'), U('m'))).toMatchObject(
-      N(2)
-    );
+    expect(
+      convertBetweenUnits(N(2e10), U('angstroms'), U('meter'))
+    ).toMatchObject(N(2));
     expect(
       convertBetweenUnits(N(1_609_344, 1_000), U('meters'), U('miles'))
     ).toMatchObject(N(1));
@@ -88,7 +88,9 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(N(20), U('smoot'), U('angstroms'))
     ).toMatchObject(N(340_400_000_000));
-    expect(convertBetweenUnits(N(1), U('nmi'), U('m'))).toMatchObject(N(1_852));
+    expect(convertBetweenUnits(N(1), U('nmi'), U('meter'))).toMatchObject(
+      N(1_852)
+    );
     expect(convertBetweenUnits(N(20), U('furlong'), U('yard'))).toMatchObject(
       N(4_400)
     );
@@ -96,7 +98,7 @@ describe('convert', () => {
       convertBetweenUnits(N(4_400), U('yard'), U('furlong'))
     ).toMatchObject(N(20));
     expect(
-      convertBetweenUnits(N(100_000_000), U('angstroms'), U('m'))
+      convertBetweenUnits(N(100_000_000), U('angstroms'), U('meter'))
     ).toMatchObject(N(1, 100));
     expect(convertBetweenUnits(N(1), U('angstroms'), U('fm'))).toMatchObject(
       N(100000)
@@ -117,13 +119,13 @@ describe('convert', () => {
     expect(convertBetweenUnits(N(1), U('marathon'), U('meters'))).toMatchObject(
       N(42195)
     );
-    expect(convertBetweenUnits(N(1), U('parsec'), U('m'))).toMatchObject(
+    expect(convertBetweenUnits(N(1), U('parsec'), U('meter'))).toMatchObject(
       // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
       N(30_856_775_814_913_673)
     );
-    expect(convertBetweenUnits(N(1), U('lightsecond'), U('m'))).toMatchObject(
-      N(299792458)
-    );
+    expect(
+      convertBetweenUnits(N(1), U('lightsecond'), U('meter'))
+    ).toMatchObject(N(299792458));
     expect(convertBetweenUnits(N(1), U('lightminute'), U('ls'))).toMatchObject(
       N(60)
     );
@@ -146,14 +148,14 @@ describe('convert', () => {
       N(1)
     );
     expect(convertBetweenUnits(N(1), U('hand'), U('in'))).toMatchObject(N(4));
-    expect(convertBetweenUnits(N(1), U('league'), U('m'))).toMatchObject(
+    expect(convertBetweenUnits(N(1), U('league'), U('meter'))).toMatchObject(
       N(4_828)
     );
     expect(convertBetweenUnits(N(1), U('pica'), U('points'))).toMatchObject(
       N(12)
     );
     expect(
-      convertBetweenUnits(N(94_607_304_725_808), U('m'), U('ly'))
+      convertBetweenUnits(N(94_607_304_725_808), U('meter'), U('ly'))
     ).toMatchObject(N(1, 1e2));
   });
 
@@ -162,7 +164,7 @@ describe('convert', () => {
   //   1 Å in nmeter ==> 0.1 nmeter
   //
   it('converts the big numbers', () => {
-    expect(convertBetweenUnits(N(10e11), U('bohr'), U('m'))).toMatchObject(
+    expect(convertBetweenUnits(N(10e11), U('bohr'), U('meter'))).toMatchObject(
       //
       // work-around (fraction.js): this is because fractions
       // fails to detect earlier fraction and internally finds this
@@ -187,14 +189,14 @@ describe('convert', () => {
       N(1)
     );
     expect(convertBetweenUnits(N(1), U('hand'), U('in'))).toMatchObject(N(4));
-    expect(convertBetweenUnits(N(1), U('league'), U('m'))).toMatchObject(
+    expect(convertBetweenUnits(N(1), U('league'), U('meter'))).toMatchObject(
       N(4_828)
     );
     expect(convertBetweenUnits(N(1), U('pica'), U('points'))).toMatchObject(
       N(12)
     );
     expect(
-      convertBetweenUnits(N(94_607_304_725_808), U('m'), U('ly'))
+      convertBetweenUnits(N(94_607_304_725_808), U('meter'), U('ly'))
     ).toMatchObject(N(1, 1e2));
   });
 
@@ -496,7 +498,7 @@ describe('convert', () => {
     expect(
       convertBetweenUnits(
         N(100),
-        U([u('joules'), u('m', { exp: N(-1) })]),
+        U([u('joules'), u('meter', { exp: N(-1) })]),
         U([u('calories'), u('foot', { exp: N(-1) })])
       )
     ).toMatchObject(N(3810, 523));

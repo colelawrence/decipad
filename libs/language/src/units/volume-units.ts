@@ -26,6 +26,7 @@ const cubicinch: Converter = (x) => x.mul(oneInch).mul(oneInch).mul(oneInch);
 const cubicfoot: Converter = (x) => x.mul(oneFoot).mul(oneFoot).mul(oneFoot);
 const cubicyard: Converter = (x) => x.mul(oneYard).mul(oneYard).mul(oneYard);
 const cubicmile: Converter = (x) => x.mul(oneMile).mul(oneMile).mul(oneMile);
+const cubiccentimeter: Converter = (x) => x.div(N(1e6));
 
 export const units: UnitOfMeasure[] = [
   {
@@ -36,6 +37,15 @@ export const units: UnitOfMeasure[] = [
     pretty: 'm³',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+  },
+  {
+    name: 'cubiccentimeter',
+    baseQuantity: 'volume',
+    symbols: ['cm3', 'cm³'],
+    aliases: ['cubiccentimetre'],
+    pretty: 'cm³',
+    toBaseQuantity: cubiccentimeter,
+    fromBaseQuantity: invert(cubiccentimeter),
   },
   {
     // https://en.wikipedia.org/wiki/Conversion_of_units

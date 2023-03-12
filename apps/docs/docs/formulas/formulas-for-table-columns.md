@@ -8,7 +8,7 @@ You may want to reduce the number of columns to a given value.
 
 ### Get a Table column
 
-To select a table column, just type the table name on a calculation, folowed by a `.` and the column name. 
+To select a table column, just type the table name on a calculation, folowed by a `.` and the column name.
 
 ![lookup](./img/lookup1.png)
 

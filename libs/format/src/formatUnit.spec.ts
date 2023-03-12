@@ -5,7 +5,7 @@ import { U, u } from './testUtils';
 
 const meter = u('meters');
 const second = u('seconds');
-const cm = u('m', { multiplier: N(1, 100) });
+const cm = u('meter', { multiplier: N(1, 100) });
 const kw = u('W', { multiplier: N(1000) });
 
 const locale = 'en-US';
@@ -13,8 +13,8 @@ const locale = 'en-US';
 describe('base unit tests', () => {
   it('runs a single test', () => {
     expect(
-      formatUnit(locale, U([u('m'), u('kg'), inverseExponent(u('s'))]))
-    ).toEqual('m·kg·s⁻¹');
+      formatUnit(locale, U([u('meter'), u('kg'), inverseExponent(u('s'))]))
+    ).toEqual('meters·kg·s⁻¹');
   });
 
   it('crazy multipliers', () => {
@@ -27,7 +27,7 @@ describe('base unit tests', () => {
     expect(formatUnit(locale, U('s'))).toEqual('s');
     expect(formatUnit(locale, U(second))).toEqual('seconds');
     // cm = 0.01m
-    expect(formatUnit(locale, U([cm]))).toEqual('cm');
+    expect(formatUnit(locale, U([cm]))).toEqual('centimeters');
     expect(
       formatUnit(locale, U([u('meter', { multiplier: N(1, 100) })]))
     ).toEqual('centimeters');
@@ -37,9 +37,9 @@ describe('base unit tests', () => {
     expect(formatUnit(locale, U([meter, inverseExponent(second)]))).toEqual(
       'meters per second'
     );
-    expect(formatUnit(locale, U([u('m'), inverseExponent(u('s'))]))).toEqual(
-      'm/s'
-    );
+    expect(
+      formatUnit(locale, U([u('meters'), inverseExponent(u('s'))]))
+    ).toEqual('meters/s');
     expect(formatUnit(locale, U([u('meter'), u('banana')]))).toEqual(
       'meters·banana'
     );
@@ -47,16 +47,16 @@ describe('base unit tests', () => {
     expect(formatUnit(locale, U([u('w'), u('h')]))).toEqual('W·h');
     expect(formatUnit(locale, U([kw, u('h')]))).toEqual('kW·h');
     // cm3 = 0.01m3
-    const cm3 = U([u('m', { multiplier: N(1, 100), exp: N(3) })]);
-    expect(formatUnit(locale, cm3)).toEqual('cm³');
+    const cm3 = U([u('meter', { multiplier: N(1, 100), exp: N(3) })]);
+    expect(formatUnit(locale, cm3)).toEqual('centimeters³');
     expect(formatUnit(locale, U([u('cubicmeter')]))).toEqual('m³');
     expect(formatUnit(locale, U([u('lightyear')]))).toEqual('light year');
     expect(formatUnit(locale, U([u('ly')]))).toEqual('light year');
     expect(formatUnit(locale, U([u('$')]))).toEqual('$');
     expect(
-      formatUnit(locale, U([u('m'), u('kg'), inverseExponent(u('s'))]))
-    ).toEqual('m·kg·s⁻¹');
-    expect(formatUnit(locale, U([cm, cm, cm]))).toEqual('μm³');
+      formatUnit(locale, U([u('meters'), u('kg'), inverseExponent(u('s'))]))
+    ).toEqual('meters·kg·s⁻¹');
+    expect(formatUnit(locale, U([cm, cm, cm]))).toEqual('micrometers³');
     expect(formatUnit(locale, U([u('f', { multiplier: N(1, 100) })]))).toEqual(
       'cF'
     );

@@ -8,6 +8,7 @@ const oneAcre = N(40_468_564_224);
 type Converter = UnitOfMeasure['toBaseQuantity'];
 
 const squarekilometre: Converter = (x) => x.mul(N(1_000_000));
+const squarecentimeter: Converter = (x) => x.div(N(1_000_0));
 const squaremile: Converter = (x) => x.mul(oneMile).mul(oneMile);
 const squareyard: Converter = (x) => x.mul(oneYard).mul(oneYard);
 const squarefoot: Converter = (x) => x.mul(oneFoot).mul(oneFoot);
@@ -26,6 +27,14 @@ export const units: UnitOfMeasure[] = [
     baseQuantity: 'area',
     toBaseQuantity: identity,
     fromBaseQuantity: identity,
+  },
+  {
+    name: 'squarecentimeter',
+    symbols: ['cm2', 'cm²'],
+    pretty: 'cm²',
+    baseQuantity: 'area',
+    toBaseQuantity: squarecentimeter,
+    fromBaseQuantity: invert(squarecentimeter),
   },
   {
     // https://en.wikipedia.org/wiki/Conversion_of_units
