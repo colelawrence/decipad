@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { FC } from 'react';
 import { Placeholder } from '../../atoms';
 import { notebookList } from '../../styles';
+import { cssVar } from '../../primitives';
 
 const verticalPadding = 3;
 
@@ -13,46 +13,72 @@ const styles = css(gridStyles, {
 
 const iconStyles = css({
   margin: `${-verticalPadding}px 0`,
-  height: '38px',
+  height: '32px',
+  width: '32px',
 
   display: 'grid',
 });
 const titleStyles = css({
-  height: '12px',
-  maxWidth: `${(100 * 124) / 506}%`,
+  alignSelf: 'center',
+  overflowX: 'clip',
+  textOverflow: 'ellipsis',
 
   display: 'grid',
+  minWidth: '128px',
+  minHeight: '20px',
 });
-const descriptionStyles = css({
-  height: '12px',
-  maxWidth: `${(100 * 440) / 506}%`,
-
-  display: 'grid',
-});
+const descriptionStyles = css({});
 const middleAndRightStyles = css({
-  height: '12px',
-  maxWidth: '64px',
+  gap: '8px',
+  marginLeft: '36px',
 
-  display: 'grid',
+  alignSelf: 'center',
+  display: 'flex',
 });
 
-export const NotebookListItemPlaceholder = (): ReturnType<FC> => {
+const tagStyle = css({
+  display: 'flex',
+  height: '20px',
+  width: '60px',
+  borderRadius: '4px',
+  border: '1px solid',
+  borderColor: cssVar('highlightColor'),
+});
+
+const seedRandom = (seed = 1) => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
+
+export const NotebookListItemPlaceholder: React.FC<{ pos?: number }> = ({
+  pos,
+}) => {
+  const randomWidth = Math.floor(seedRandom(pos ?? 1) * 142 + 32);
+  const tagsCount = Math.floor(seedRandom((pos ?? 1) + 10) * 2 + 1);
+
   return (
     <div role="presentation" css={styles}>
       <div css={[iconStyles, { gridArea: 'icon' }]}>
         <Placeholder />
       </div>
-      <div css={[titleStyles, { gridArea: 'title' }]}>
+      <span
+        css={[
+          titleStyles,
+          { gridArea: 'title / title / title / tags' },
+          { width: `${randomWidth}px` },
+        ]}
+      >
         <Placeholder />
-      </div>
+      </span>
       <div css={[descriptionStyles, { gridArea: 'description' }]}>
         <Placeholder />
       </div>
-      <div css={[middleAndRightStyles, { gridArea: 'updated' }]}>
-        <Placeholder />
-      </div>
       <div css={[middleAndRightStyles, { gridArea: 'tags' }]}>
-        <Placeholder />
+        {Array(tagsCount)
+          .fill(null)
+          .map((_, i) => (
+            <span css={tagStyle} key={i} />
+          ))}
       </div>
     </div>
   );

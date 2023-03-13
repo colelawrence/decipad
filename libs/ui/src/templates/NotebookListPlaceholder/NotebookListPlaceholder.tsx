@@ -44,7 +44,7 @@ export const NotebookListPlaceholder = (): ReturnType<FC> => {
         {Array(numberOfItemPlaceholders)
           .fill(null)
           .map((_, i) => (
-            <NotebookListItemPlaceholder key={i} />
+            <NotebookListItemPlaceholder key={i} pos={i} />
           ))}
       </div>
     </div>

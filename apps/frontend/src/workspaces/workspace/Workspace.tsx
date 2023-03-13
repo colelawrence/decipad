@@ -8,6 +8,7 @@ import {
   TColorKeys,
   TColorStatus,
   TopbarPlaceholder,
+  DashboardPlaceholder,
 } from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
@@ -279,13 +280,7 @@ const Workspace: FC = () => {
   );
 
   if (fetching) {
-    return (
-      <Dashboard
-        sidebar={<DashboardSidebarPlaceholder />}
-        topbar={<TopbarPlaceholder />}
-        notebookList={<NotebookListPlaceholder />}
-      />
-    );
+    return <DashboardPlaceholder />;
   }
 
   if (!currentWorkspace || !session) {

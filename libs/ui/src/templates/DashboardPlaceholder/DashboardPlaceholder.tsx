@@ -1,5 +1,6 @@
 import {
   Dashboard,
+  DashboardSidebarPlaceholder,
   DashboardTopbar,
   NotebookListPlaceholder,
 } from '@decipad/ui';
@@ -7,7 +8,7 @@ import {
 export const DashboardPlaceholder: React.FC = () => (
   <Dashboard
     topbar={<DashboardTopbar />}
-    sidebar={<></>}
+    sidebar={<DashboardSidebarPlaceholder />}
     notebookList={<NotebookListPlaceholder />}
   />
 );
