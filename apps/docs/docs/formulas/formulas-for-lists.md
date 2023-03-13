@@ -102,14 +102,3 @@ You can generate a new list that contains all the elements in the source list in
 reverse([1 duck, 2 ducks, 3 ducks])
 ==> [ 3 ducks, 2 ducks, 1 ducks ]
 ```
-
-## transpose()
-
-Transpose a list:
-
-**Syntax:** `transpose( List )`
-
-```deci live
-transpose([[5$],[10$],[15$]])
-==> [ [ 5 $, 10 $, 15 $ ] ]
-```

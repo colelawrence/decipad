@@ -10,9 +10,13 @@ import {
   useState,
 } from 'react';
 import Fuse from 'fuse.js';
-import { AutoCompleteMenuItem } from '../../atoms';
+import { docs } from '@decipad/routing';
+import { Link, AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
-import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
+import { cssVar, mediumShadow, p10Medium, setCssVar } from '../../primitives';
+
+import { AutoCompleteMenuFormulaTooltip } from '../../atoms/AutoCompleteMenuFormulaTooltip/AutoCompleteMenuIFormulaTooltip';
+import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 
 type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
@@ -25,28 +29,44 @@ const hotKeyStyle = css({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-
+  lineHeight: '1.5',
   boxSizing: 'border-box',
   borderRadius: '6px',
-  padding: '0 6px',
+  padding: '0 4px',
   border: `1px ${cssVar('strongerHighlightColor')} solid`,
   backgroundColor: cssVar('backgroundColor'),
   color: cssVar('weakTextColor'),
 });
 
+const exploreDocsLinkIconStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  float: 'right',
+  borderRadius: '4px',
+  height: '15px',
+  width: '20px',
+  padding: '12px 0px 5px 3px',
+  marginLeft: 'auto',
+  svg: {
+    width: '10px',
+    height: '10px',
+  },
+});
+
 const footerStyles = css(
-  p13Medium,
+  p10Medium,
   {
-    padding: '6px 0px 8px 16px',
+    padding: '2px 0px 4px 6px',
     width: '100%',
     bottom: '0px',
-    height: '32px',
+    height: '26px',
     lineHeight: '24px',
     background: cssVar('highlightColor'),
     boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
     margin: '0px 0px',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: '4px',
   },
   setCssVar('currentTextColor', cssVar('weakTextColor'))
@@ -71,17 +91,16 @@ const styles = (top: boolean) =>
 
     backgroundColor: cssVar('backgroundColor'),
     border: `1px solid ${cssVar('borderColor')}`,
-    borderRadius: '12px',
+    borderRadius: '10px',
     boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
     position: 'absolute',
-    width: '280px',
     boxSizing: 'border-box',
     zIndex: 2,
   });
 
 const mainStyles = css({
-  padding: '6px',
-  width: '100%',
+  padding: '3px',
+  width: '200px',
 });
 
 export type Identifier = {
@@ -92,6 +111,9 @@ export type Identifier = {
   editing?: boolean;
   focused?: boolean;
   explanation?: string;
+  syntax?: string;
+  example?: string;
+  formulaGroup?: string;
 };
 
 export interface AutoCompleteMenuProps {
@@ -129,6 +151,10 @@ const matchBlockIdOrIdentifier = (
   return a.identifier === b?.identifier;
 };
 
+/**
+ * Currently disabling react exaustive deps because this logic needs to be refactored,
+ * into smaller hooks.
+ */
 export const AutoCompleteMenu = ({
   search = '',
   identifiers,
@@ -146,6 +172,9 @@ export const AutoCompleteMenu = ({
           .map((i) => ({
             identifier: i.identifier,
             explanation: i.explanation,
+            syntax: i.syntax,
+            example: i.example,
+            formulaGroup: i.formulaGroup,
             blockId: i.blockId,
             kind: 'variable' as const,
             type: i.type,
@@ -164,7 +193,13 @@ export const AutoCompleteMenu = ({
         (group): SearchGroup => ({
           group,
           index: new Fuse(group.items, {
-            keys: ['identifier', 'explanation'],
+            keys: [
+              'identifier',
+              'explanation',
+              'syntax',
+              'example',
+              'formulaGroup',
+            ],
             isCaseSensitive: false,
             shouldSort: true,
           }),
@@ -204,14 +239,23 @@ export const AutoCompleteMenu = ({
 
   // AutoCompleteMenuItems do not use real browser focus, see their docs
   const [focusedItem, setFocusedItem] = useState<ItemBlockId>();
+  const [hovoredItem, setHoveredItem] = useState<Identifier>();
+
+  const onMouseLeave = useCallback(() => {
+    setHoveredItem(
+      groupsWithItemsFiltered
+        .flatMap(groupItems)
+        .find((item) => item.identifier === focusedItem?.identifier)
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const allItems = groupsWithItemsFiltered.flatMap(groupItems);
-
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       switch (true) {
         case event.key === 'ArrowDown' && !event.shiftKey:
-          const newFocusedItem =
+          const newFocusedItemUp =
             matchingIdentifiers[
               (focusedItem
                 ? matchingIdentifiers.findIndex((elem) =>
@@ -219,48 +263,75 @@ export const AutoCompleteMenu = ({
                   )
                 : -1) + 1
             ] ?? matchingIdentifiers[0];
-          setFocusedItem(newFocusedItem);
+          setFocusedItem(newFocusedItemUp);
+          setHoveredItem(
+            groupsWithItemsFiltered
+              .flatMap(groupItems)
+              .find((item) => item.identifier === newFocusedItemUp?.identifier)
+          );
           event.stopPropagation();
           event.preventDefault();
           break;
         case event.key === 'ArrowUp' && !event.shiftKey:
-          setFocusedItem(
+          const newFocusedItemDown =
             matchingIdentifiers[
               (focusedItem
                 ? matchingIdentifiers.findIndex((elem) =>
                     matchBlockIdOrIdentifier(elem, focusedItem)
                   )
                 : matchingIdentifiers.length) - 1
-            ] ?? matchingIdentifiers.slice(-1)[0]
+            ] ?? matchingIdentifiers.slice(-1)[0];
+          setFocusedItem(newFocusedItemDown);
+          setHoveredItem(
+            groupsWithItemsFiltered
+              .flatMap(groupItems)
+              .find(
+                (item) => item.identifier === newFocusedItemDown?.identifier
+              )
           );
           event.stopPropagation();
           event.preventDefault();
           break;
+        default:
+          if (hovoredItem?.explanation) {
+            setHoveredItem(
+              groupsWithItemsFiltered
+                .flatMap(groupItems)
+                .find((item) => item.identifier === focusedItem?.identifier)
+            );
+          }
+          break;
       }
     },
-    [focusedItem, matchingIdentifiers]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [focusedItem, matchingIdentifiers, groupsWithItemsFiltered]
   );
   useWindowListener('keydown', onKeyDown, true);
 
   useEffect(() => {
     if (matchingIdentifiers.length > 0 && !isResult) {
       setFocusedItem(matchingIdentifiers[0]);
+      if (hovoredItem?.explanation) {
+        setHoveredItem(
+          groupsWithItemsFiltered
+            .flatMap(groupItems)
+            .find(
+              (item) => item.identifier === matchingIdentifiers[0]?.identifier
+            )
+        );
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isResult, matchingIdentifiers]);
 
-  const [hovering, setHovering] = useState(false);
-  const onMouseEnter = useCallback(() => {
-    setHovering(true);
-  }, []);
-  const onMouseLeave = useCallback(() => {
-    setHovering(false);
-  }, []);
+  if (allItems.length === 0) {
+    return null;
+  }
 
-  return allItems.length ? (
+  return (
     <span
       css={{ position: 'relative', zIndex: 3 }}
       className="test-auto-complete-menu"
-      onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <div
@@ -270,38 +341,68 @@ export const AutoCompleteMenu = ({
         css={[styles(top), isResult && resultStyles]}
       >
         <div
-          css={[
-            mainStyles,
-            allItems.length > 5 && {
-              height: '200px',
-              overflowY: 'scroll',
-            },
-          ]}
+          style={{
+            display: 'flex',
+            maxHeight: '166px',
+          }}
         >
-          {groupsWithItemsFiltered.map(({ items, ...group }, i) =>
-            items.length ? (
-              <AutoCompleteMenuGroup key={i} {...group}>
-                {items.map(({ ...item }) => (
-                  <AutoCompleteMenuItem
-                    {...item}
-                    key={item.blockId ?? item.identifier}
-                    hoveringSome={hovering}
-                    focused={
-                      matchBlockIdOrIdentifier(item, focusedItem) ||
-                      item.focused
-                    }
-                    onExecute={() => onExecuteItem?.(item)}
-                  />
-                ))}
-              </AutoCompleteMenuGroup>
-            ) : null
+          <div
+            css={[
+              mainStyles,
+              allItems.length > 5 && {
+                maxHeight: '166px',
+                overflowY: 'scroll',
+              },
+            ]}
+          >
+            {groupsWithItemsFiltered.map(
+              ({ items, ...group }, i) =>
+                items.length && (
+                  <AutoCompleteMenuGroup key={i} {...group}>
+                    {items.map(({ ...item }) => (
+                      <AutoCompleteMenuItem
+                        {...item}
+                        key={item.blockId ?? item.identifier}
+                        focused={
+                          matchBlockIdOrIdentifier(item, focusedItem) ||
+                          item.focused
+                        }
+                        onExecute={() => {
+                          onExecuteItem?.(item);
+                        }}
+                        onHover={() => setHoveredItem(item)}
+                      />
+                    ))}
+                  </AutoCompleteMenuGroup>
+                )
+            )}
+          </div>
+          {hovoredItem?.explanation && (
+            <AutoCompleteMenuFormulaTooltip
+              explanation={hovoredItem?.explanation}
+              syntax={hovoredItem?.syntax}
+              example={hovoredItem?.example}
+              formulaGroup={hovoredItem?.formulaGroup}
+            />
           )}
         </div>
         <div css={footerStyles} data-testid="autocomplete-tooltip">
-          Press <span css={hotKeyStyle}>{isResult ? 'Enter' : 'Esc'}</span> to
-          {isResult ? ' select' : ' dismiss'}
+          <span>
+            <span css={hotKeyStyle}>{isResult ? 'Enter' : 'Esc'}</span> to
+            {isResult ? ' select' : ' dismiss'}
+          </span>
+          {hovoredItem?.explanation !== undefined && (
+            <Link href={docs({}).page({ name: 'formulas' }).$}>
+              <span style={{ cursor: 'pointer' }}>
+                Explore Docs{' '}
+                <span css={exploreDocsLinkIconStyles}>
+                  <ArrowDiagonalTopRight />
+                </span>
+              </span>
+            </Link>
+          )}
         </div>
       </div>
     </span>
-  ) : null;
+  );
 };

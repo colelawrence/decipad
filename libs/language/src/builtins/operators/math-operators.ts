@@ -166,8 +166,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     noAutoconvert: true,
     fn: ([n]) => Math.abs(n as number),
     functionSignature: 'number:R -> R',
-    explanation:
-      "Gives you the absolute value of a number. It is useful when you need to remove the negative sign from a number. If your number is positive or zero, it stays the same. If it's negative, it removes the negative sign.",
+    explanation: 'Absolute value of a number.',
+    formulaGroup: 'Numbers',
+    syntax: 'abs(Number)',
+    example: 'abs(-$300)',
   },
   round: {
     argCount: [1, 2],
@@ -176,8 +178,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.round(decimalPlaces)
     ),
-    explanation:
-      'Gives you a rounded version of a number. Optionally, you can specify the number of decimal places as the second argument.',
+    explanation: 'Rounds a number.',
+    formulaGroup: 'Numbers',
+    syntax: 'round(Number, [Precision])',
+    example: 'round(3.145) \nround(3.145, 2)',
   },
   roundup: {
     argCount: [1, 2],
@@ -186,8 +190,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.ceil(decimalPlaces)
     ),
-    explanation:
-      'Rounds the number to the nearest largest integer or number with the given decimal places.',
+    explanation: 'Rounds a number up.',
+    formulaGroup: 'Numbers',
+    syntax: 'roundup(Number, [Precision])',
+    example: 'roundup(3.145) \nroundup(3.145, 2)',
   },
   ceil: {
     aliasFor: 'roundup',
@@ -199,8 +205,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
       n.floor(decimalPlaces)
     ),
-    explanation:
-      'Rounds a number to the nearest smaller integer or number with the given decimal places',
+    explanation: 'Rounds a number down.',
+    formulaGroup: 'Numbers',
+    syntax: 'roundown(Number, [Precision])',
+    example: 'roundown(3.145) \nroundown(3.145, 2)',
   },
   floor: {
     aliasFor: 'rounddown',
@@ -211,8 +219,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: max,
-    explanation:
-      'Gives you the maximum value of a list or column\n\nExample: `max(Table.Column)`',
+    explanation: 'Maximum value of a column.',
+    syntax: 'max(Table.Column)',
+    formulaGroup: 'Columns',
+    example: 'max(Prices.Discount)',
   },
   min: {
     argCount: 1,
@@ -220,8 +230,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     functor: firstArgumentReducedFunctor,
     fnValues: min,
-    explanation:
-      'Gives you the minimum value of a list or column\n\nExample: `min(Table.Column)`',
+    explanation: 'Minimum value of a column.',
+    syntax: 'min(Table.Column)',
+    example: 'min(Prices.Discount)',
+    formulaGroup: 'Columns',
   },
   average: {
     argCount: 1,
@@ -229,11 +241,25 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     fnValues: average,
     functionSignature: 'column<R> -> R',
-    explanation:
-      'Gives you the arithmetical average of all elements on a list or column of numbers\n\nExample: `average(Table.Column)`',
+    explanation: 'Average of a column.',
+    syntax: 'average(Table.Column)',
+    example: 'average(Prices.Discount)',
+    formulaGroup: 'Columns',
   },
-  avg: { aliasFor: 'average' },
-  mean: { aliasFor: 'average' },
+  avg: {
+    aliasFor: 'average',
+    explanation: 'Average of a column.',
+    syntax: 'avg(Table.Column)',
+    example: 'avg(Prices.Discount)',
+    formulaGroup: 'Columns',
+  },
+  mean: {
+    aliasFor: 'average',
+    explanation: 'Average of a column.',
+    syntax: 'mean(Table.Column)',
+    example: 'mean(Prices.Discount)',
+    formulaGroup: 'Columns',
+  },
   averageif: {
     argCount: 2,
     noAutoconvert: true,
@@ -264,6 +290,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         booleans.reduced().isScalar('boolean'),
         numbers.reduced().isScalar('number')
       ),
+    explanation: 'Averages all the elements of a column that match condition.',
+    formulaGroup: 'Columns',
+    syntax: 'avgif(Column)',
+    example: 'avgif(Sales.Prices >= $100)',
   },
   avgif: { aliasFor: 'averageif' },
   meanif: { aliasFor: 'averageif' },
@@ -273,8 +303,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     fnValues: median,
     functionSignature: 'column<R> -> R',
-    explanation:
-      'Gives you the median value of all elements on a list or column of numbers\n\nExample: `median(Table.Column)`',
+    explanation: 'Median of a column.',
+    syntax: 'median(Table.Column)',
+    formulaGroup: 'Columns',
+    example: 'median(Prices.Discount)',
   },
   sqrt: {
     argCount: 1,
@@ -299,14 +331,20 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       return result;
     },
     functor: ([n]) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
-    explanation: 'Gives you the square root of your number',
+    explanation: 'Square root of your number.',
+    formulaGroup: 'Numbers',
+    syntax: 'sqrt(Number)',
+    example: 'sqrt(9ft)',
   },
   ln: {
     argCount: 1,
     noAutoconvert: true,
     fn: ([n]) => Math.log(n),
     functionSignature: 'number:R -> R',
-    explanation: 'Gives you the natural logarithmic of a number.',
+    explanation: 'Natural logarithmic of a number.',
+    formulaGroup: 'Numbers',
+    syntax: 'ln(Number)',
+    example: 'ln(1)',
   },
   factorial: {
     argCount: 1,
@@ -350,6 +388,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       };
     })(),
     functor: ([n]) => n,
+    explanation: 'Factorial of a number.',
+    syntax: 'factorial(Number)',
+    example: 'factorial(5)',
+    formulaGroup: 'Numbers',
   },
   '+': overloadBuiltin(
     '+',
@@ -456,10 +498,18 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: ([a, b]) => a.mod(b),
     functor: binopFunctor,
     operatorKind: 'infix',
+    explanation: 'Remainder when dividing.',
+    formulaGroup: 'Numbers',
+    syntax: 'Number mod Number',
+    example: '5 mod 2',
   },
   modulo: {
     aliasFor: 'mod',
     operatorKind: 'infix',
+    explanation: 'Remainder when dividing.',
+    formulaGroup: 'Numbers',
+    syntax: 'Number modulo Number',
+    example: '5 modulo 2',
   },
   '**': {
     argCount: 2,
@@ -473,6 +523,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     aliasFor: '**',
   },
   smooth: {
+    hidden: true,
     argCount: 2,
     fn: () => 69,
     functor: () => t.number(),

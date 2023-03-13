@@ -1,18 +1,9 @@
 import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
-import { FC, useCallback, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { noop } from '@decipad/utils';
-import { Remark } from 'react-remark';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { Calendar, Formula, Number, Table, Text } from '../../icons';
-import {
-  setCssVar,
-  cssVar,
-  p14Medium,
-  teal600,
-  smallCode,
-} from '../../primitives';
-import { Tooltip } from '../Tooltip/Tooltip';
+import { setCssVar, cssVar, p12Medium, teal600 } from '../../primitives';
 
 const wrapperStyles = (focused: boolean) =>
   css({
@@ -20,9 +11,9 @@ const wrapperStyles = (focused: boolean) =>
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '6px',
+    padding: '4px',
     ':hover': {
-      backgroundColor: cssVar('highlightColor'),
+      backgroundColor: cssVar('tintedBackgroundColor'),
       borderRadius: '6px',
     },
     ...(focused && {
@@ -51,29 +42,11 @@ const textStyles = css({
   textAlign: 'start',
 });
 
-const identifierStyles = css(p14Medium);
-
-const explanationWrapperStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  maxWidth: '100%',
-});
-
-const explanationIdentifierStyles = css(identifierStyles, {
-  color: cssVar('weakerTextColor'),
-});
-
-const explanationTextStyles = css({
-  padding: '0.5rem 0.25rem 0.25rem',
-  code: css(smallCode, {
-    marginTop: '0.25rem',
-    display: 'block',
-    borderRadius: '3px',
-    padding: '0.25rem',
-    backgroundColor: cssVar('tooltipCodeBackground'),
-    color: cssVar('strongTextColor'),
-    overflow: 'scroll',
-  }),
+const identifierStyles = css(p12Medium, {
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  position: 'relative',
+  overflow: 'hidden',
 });
 
 interface AutoCompleteMenuItemProps {
@@ -89,22 +62,24 @@ interface AutoCompleteMenuItemProps {
   readonly focused?: boolean;
   readonly hoveringSome?: boolean;
   readonly onExecute?: () => void;
+
+  readonly onHover?: () => void;
 }
 
 export const AutoCompleteMenuItem = ({
   identifier,
   type,
-  explanation,
   focused = false,
-  hoveringSome = false,
   onExecute = noop,
+  onHover = noop,
 }: AutoCompleteMenuItemProps): ReturnType<FC> => {
   const itemRef = useRef<HTMLButtonElement>(null);
 
-  const [hovering, setHovering] = useState(false);
+  const [, setHovering] = useState(false);
   const onMouseEnter = useCallback(() => {
     setHovering(true);
-  }, []);
+    onHover();
+  }, [onHover]);
   const onMouseLeave = useCallback(() => {
     setHovering(false);
   }, []);
@@ -123,59 +98,45 @@ export const AutoCompleteMenuItem = ({
   );
   useWindowListener('keydown', onKeyDown, true);
 
-  if (focused) {
-    itemRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'nearest',
-    });
-  }
+  useEffect(() => {
+    if (focused) {
+      itemRef.current?.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+      });
+    }
+  }, [focused]);
 
   return (
-    <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <Tooltip
-        side="right"
-        theme="light"
-        open={
-          (hovering || (focused && !hoveringSome)) &&
-          explanation != null &&
-          isFlagEnabled('FORMULAS_TOOLTIP')
-        }
-        trigger={
-          <div css={wrapperStyles(focused)}>
-            <button
-              role="menuitem"
-              css={styles}
-              onMouseDown={(event) => {
-                onExecute();
-                event.stopPropagation();
-                event.preventDefault();
-              }}
-              ref={itemRef}
-            >
-              <span css={iconStyles}>
-                {{
-                  number: <Number />,
-                  string: <Text />,
-                  date: <Calendar />,
-                  table: <Table />,
-                  function: <Formula />,
-                }[type] || <Number />}
-              </span>
-              <div css={textStyles}>
-                <strong css={identifierStyles}>{identifier}</strong>
-              </div>
-            </button>
-          </div>
-        }
+    <div
+      css={wrapperStyles(focused)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      spellCheck={false}
+    >
+      <button
+        role="menuitem"
+        css={styles}
+        onMouseDown={(event) => {
+          onExecute();
+          event.stopPropagation();
+          event.preventDefault();
+        }}
+        ref={itemRef}
       >
-        <div css={explanationWrapperStyles}>
-          <h2 css={explanationIdentifierStyles}>{identifier}</h2>
-          <div css={explanationTextStyles}>
-            <Remark>{explanation || ''}</Remark>
-          </div>
+        <span css={iconStyles}>
+          {{
+            number: <Number />,
+            string: <Text />,
+            date: <Calendar />,
+            table: <Table />,
+            function: <Formula />,
+          }[type] || <Number />}
+        </span>
+        <div css={textStyles}>
+          <strong css={identifierStyles}>{identifier}</strong>
         </div>
-      </Tooltip>
+      </button>
     </div>
   );
 };

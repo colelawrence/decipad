@@ -14,8 +14,10 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
       const periods = getInstanceof(_periods, DeciNumber);
       return rate.add(ONE).pow(periods).sub(ONE);
     },
-    explanation:
-      'Calculates the compounded rate for aninitial rate after a set of periods.\n\nExample: `compoundrate(5%, 36 months)`',
+    explanation: 'Compound rate of a given period based on a constant rate.',
+    example: 'compoundrate(5%, 36 months)',
+    syntax: 'compoundrate(Rate, Nº of Periods)',
+    formulaGroup: 'Finance',
   },
   futurevalue: {
     argCount: 3,
@@ -37,10 +39,18 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
       return compounded.add(ONE).mul(presentValue);
     },
     explanation:
-      'The future value (FV) is one of the key metrics in financial planning that defines the value of a current asset in the future. In other words, FV measures how much a given amount of money will be worth at a specific time in the future.\nExample: `fv(5%, 36 months, 50 kusd)`',
+      'Future value from periodic payments given an initial amount and fixed rate.',
+    example: 'futurevalue(5%, 36 months, $50k)',
+    formulaGroup: 'Finance',
+    syntax: 'futurevalue(Rate, Nº of Periods, Initial Amount)',
   },
   fv: {
     aliasFor: 'futurevalue',
+    explanation:
+      'Future value from periodic payments given an initial amount and fixed rate.',
+    example: 'fv(5%, 36 months, $50k)',
+    formulaGroup: 'Finance',
+    syntax: 'fv(Rate, Nº of Periods, Initial Amount)',
   },
   netpresentvalue: {
     argCount: 2,
@@ -65,10 +75,18 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
       );
     },
     explanation:
-      'netpresentvalue will calculate the the Net Present Value (NPV) for a series of cash flows and a given discount rate.\nExample: `npv(5%, Table.Column)`',
+      'Net present value of investment given cash flows and a discount rate.',
+    example: 'netpresentvalue(5%, Table.Column)',
+    formulaGroup: 'Finance',
+    syntax: 'netpresentvalue(Discount Rate, Future Cashflows Column)',
   },
   npv: {
     aliasFor: 'netpresentvalue',
+    explanation:
+      'Net present value of investment given cash flows and a discount rate.',
+    example: 'npv(5%, Table.Column)',
+    formulaGroup: 'Finance',
+    syntax: 'npv(Discount Rate, Future Cashflows Column)',
   },
   paymentamounts: {
     argCount: 3,
@@ -91,10 +109,16 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
         .mul(ONE.add(rate).pow(numberOfPeriods))
         .div(ONE.add(rate).pow(numberOfPeriods).sub(ONE));
     },
-    explanation:
-      'calculates the payment amount for a loan based on the loan amount, interest rate, and number of payments.\nSyntax: `pmt(rate, nrOfPayments, loanAmount)`',
+    explanation: 'Loan payment amount.',
+    syntax: 'paymentamounts(Rate, Nº Payments, Loan)',
+    example: 'paymentamounts(3%, 36 months, $10k)',
+    formulaGroup: 'Finance',
   },
   pmt: {
     aliasFor: 'paymentamounts',
+    explanation: 'Loan payment amount.',
+    syntax: 'pmt(Rate, Nº Payments, Loan)',
+    example: 'pmt(3%, 36 months, $10k)',
+    formulaGroup: 'Finance',
   },
 };

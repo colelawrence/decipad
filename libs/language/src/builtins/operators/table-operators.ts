@@ -91,8 +91,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         table.columnNames
       );
     },
-    explanation:
-      'Lets you access rows and values from a table to inspect or reuse.',
+    explanation: 'Lookup first row that matches a condition.',
+    formulaGroup: 'Tables',
+    syntax: 'lookup(Table, Column Condition)',
+    example: 'lookup(Prices, Prices.Discount == 10%)',
   },
 
   concatenate: {
@@ -117,6 +119,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         getDefined(columnNames)
       );
     },
+    explanation: 'Joins two tables or columns into one.',
+    syntax: 'concatenate(Table1.Col1, Table2.Col2)',
+    example: 'concatenate(Day1.Sales, Day2.Sales)',
+    formulaGroup: 'Tables or Columns',
   },
 
   sortby: {
@@ -130,8 +136,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       const table = getInstanceof(_table, Table);
       return table.mapColumns((col) => ValueTransforms.applyMap(col, sortMap));
     },
-    explanation:
-      'Lets you reorder table rows based on any column\nSyntax: `sortby( Table, Table.Column )`',
+    explanation: 'Reorder table rows based on a column.',
+    syntax: 'sortby(Table, Table.Column)',
+    formulaGroup: 'Tables',
+    example: 'sortby(Prices, Prices.Discount)',
   },
 
   filter: {
@@ -151,8 +159,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         ValueTransforms.applyFilterMap(col, filterMap)
       );
     },
-    explanation:
-      'Lets you filter the values from a table.\nSyntax: `filter( Table, Table Column Condition )`',
+    explanation: 'Filter table rows based on column values.',
+    syntax: 'filter(Table, Column Condition)',
+    formulaGroup: 'Tables',
+    example: 'filter(Prices, Prices.Discount > 20%)',
   },
   grab: {
     aliasFor: 'filter',

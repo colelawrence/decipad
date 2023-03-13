@@ -27,5 +27,6 @@ export const booleanOperators: Record<string, BuiltinSpec> = {
   },
   or: {
     aliasFor: '||',
+    hidden: true,
   },
 };

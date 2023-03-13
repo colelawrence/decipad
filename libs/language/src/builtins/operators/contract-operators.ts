@@ -12,6 +12,9 @@ export const contractOperators: Record<string, BuiltinSpec> = {
     },
     functionSignature: 'boolean -> boolean',
     explanation:
-      'Creates an error in the notebook if the condition is not true',
+      'Creates an error in the notebook if the condition is not true.',
+    formulaGroup: 'Correctness',
+    syntax: 'assert(Condition)',
+    example: 'assert(Balance < $0)',
   },
 };

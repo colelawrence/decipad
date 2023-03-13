@@ -32,6 +32,9 @@ const selectNames = (
       type: n.type.kind,
       blockId: n.blockId,
       explanation: n.explanation,
+      syntax: n.syntax,
+      example: n.example,
+      formulaGroup: n.formulaGroup,
     })
   );
 };

@@ -24,8 +24,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCardinalities: [2],
     fnValues: ([col]: Value[]) => fromJS(getColumnLike(col).rowCount),
     functionSignature: 'column<A> -> number',
-    explanation:
-      'Counts the number of entries on a list or column\n\nExample: `len(Table.Column)`',
+    explanation: 'Size of a column.',
+    syntax: 'len(Table.Column)',
+    example: 'len(Sales.Entries)',
+    formulaGroup: 'Columns',
   },
   cat: {
     argCount: 2,
@@ -41,8 +43,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
             : (a.columnSize || 1) + (b.columnSize || 1);
         return t.column(a.reduced(), resultColumnSize);
       }),
-    explanation:
-      'Joins two lists or columns into one.\n\nExample:`cat(List1, Table.Column)`',
+    explanation: 'Joins two tables or columns into one.',
+    syntax: 'cat(Table1.Col1, Table2.Col2)',
+    example: 'cat(Day1.Sales, Day2.Sales)',
+    formulaGroup: 'Tables or Columns',
   },
   first: {
     argCount: 1,
@@ -50,8 +54,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     fnValues: ([arg]: Value[]) => getColumnLike(arg).atIndex(0),
     functionSignature: 'column<A> -> A',
-    explanation:
-      'Grabs the first element of a list or column.\n\nExample: `first(Table.Column)```',
+    explanation: 'First element of a column.',
+    example: 'first(Table.Column)',
+    syntax: 'first(Flights.Seats)',
+    formulaGroup: 'Columns',
   },
   last: {
     argCount: 1,
@@ -62,11 +68,17 @@ export const listOperators: Record<string, BuiltinSpec> = {
       return col.atIndex(col.rowCount - 1);
     },
     functionSignature: 'column<A> -> A',
-    explanation:
-      'Grabs the last element of a list or column.\n\nExample: `last(Table.Column)`',
+    explanation: 'Last element of a column.',
+    example: 'last(Table.Column)',
+    syntax: 'last(Flights.Seats)',
+    formulaGroup: 'Columns',
   },
   count: {
     aliasFor: 'len',
+    explanation: 'Size of a column.',
+    syntax: 'count(Table.Column)',
+    example: 'count(Sales.Entries)',
+    formulaGroup: 'Columns',
   },
   countif: {
     argCount: 1,
@@ -79,8 +91,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
       );
     },
     functionSignature: 'column<boolean> -> number',
-    explanation:
-      'Counts the number of entries on a list or column that respect a certain condition.\n\nExample: `countif(Flights.PassengerCount > 100)`',
+    explanation: 'Number of entries on a column that match a condition.',
+    example: 'countif(Table.Column > 100)',
+    syntax: 'countif(Flights.Passengers > 100)',
+    formulaGroup: 'Columns',
   },
   stepgrowth: {
     argCount: 1,
@@ -91,8 +105,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
         return item - previous;
       }),
     functionSignature: 'column<number>:A -> A',
-    explanation:
-      'This formula gives you the increments (or decrements) between values in a list os column.\n\nExample: `stepgrowth(Table.Column)`',
+    explanation: 'Increments between values in a column.',
+    syntax: 'stepgrowth(Table.Column)',
+    example: 'stepgrowth(SalaryYears.Amount)',
+    formulaGroup: 'Columns',
   },
   grow: {
     argCount: 3,
@@ -108,8 +124,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
         growthRate.isScalar('number'),
         period.isColumn()
       ).mapType(() => t.column(initial, getDefined(period.columnSize))),
-    explanation:
-      'Compounds an initial value by a specific rate over a list or column.\n\nExample: `grow(30, 5%, Table.Column)`',
+    explanation: 'Compounds a value by a specific rate.',
+    syntax: 'grow(Initial, Rate, Table.Column)',
+    example: 'grow($10k, 5%, Investment.Years)',
+    formulaGroup: 'Columns',
   },
   transpose: {
     argCount: 1,
@@ -124,6 +142,11 @@ export const listOperators: Record<string, BuiltinSpec> = {
           return t.column(t.column(cell, horizontal), vertical);
         }
       ),
+    explanation: 'Matrix',
+    syntax: 'transpose(Matrix)',
+    example: 'transpose(Years)',
+    formulaGroup: 'Algebra',
+    hidden: true,
   },
 
   sort: {
@@ -131,7 +154,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCardinalities: [2],
     fnValues: ([column]) => ValueTransforms.sort(getColumnLike(column)),
     functionSignature: 'column<A>:R -> R',
-    explanation: 'Sorts a list or column.\n\nExample: `sort(Table.Column)`',
+    explanation: 'Sorts a column.',
+    syntax: 'sort(Table.Column)',
+    example: 'sort(Flight.Prices)',
+    formulaGroup: 'Columns',
   },
 
   unique: {
@@ -139,8 +165,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCardinalities: [2],
     fnValues: ([column]) => ValueTransforms.unique(getColumnLike(column)),
     functionSignature: 'column<A> -> column<A>',
-    explanation:
-      'Gives you the unique values of a list or column.\n\nExample: `unique(Table.Column)`',
+    explanation: 'Extracts the unique values of a column.',
+    syntax: 'unique(Table.Column)',
+    example: 'unique(Sales.ClientsID)',
+    formulaGroup: 'Columns',
   },
 
   reverse: {
@@ -154,8 +182,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
         return ValueTransforms.reverse(getColumnLike(column));
       }
     },
-    explanation:
-      'Reverses the order of a list or table.\n\nSyntax: `reverse(Table)` or `reverse(Table.Column)`',
+    explanation: 'Reverses the order of a column or table.',
+    syntax: 'reverse(Table)\nreverse(Table.Column)',
+    example: 'reverse(Purchases)\nreverse(Purchases.Dates)',
+    formulaGroup: 'Tables or Columns',
   },
 
   // Table stuff
@@ -193,5 +223,6 @@ export const listOperators: Record<string, BuiltinSpec> = {
           columnTypes: getDefined(table.columnTypes),
         })
       ),
+    hidden: true,
   },
 };

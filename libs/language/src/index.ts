@@ -85,6 +85,9 @@ export * from './simpleValues';
 export type ExternalDataMap = Map<string, Result>;
 
 export interface AutocompleteName {
+  syntax?: string;
+  example?: string;
+  formulaGroup?: string;
   kind: 'function' | 'variable' | 'column';
   type: SerializedType;
   name: string;
@@ -98,7 +101,7 @@ let cachedBuiltins: AutocompleteName[] | null = null;
 export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
   if (!cachedBuiltins) {
     cachedBuiltins = Object.entries(operators).flatMap(([name, operator]) => {
-      if (operator.operatorKind) {
+      if (operator.operatorKind || operator.hidden) {
         return [];
       }
       return {
@@ -107,6 +110,9 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
         name,
         blockId: undefined,
         explanation: operator.explanation,
+        example: operator.example,
+        syntax: operator.syntax,
+        formulaGroup: operator.formulaGroup,
       };
     });
   }

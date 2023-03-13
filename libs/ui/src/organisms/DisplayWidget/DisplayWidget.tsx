@@ -58,7 +58,6 @@ interface DropdownWidgetOptions {
   type: 'var' | 'calc';
   id: string;
   text: string;
-  explanation?: string;
 }
 
 interface DisplayWidgetDropdownProps {
@@ -127,7 +126,6 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           identifiers={dropdownContent.map<Identifier>((item) => ({
             kind: 'variable',
             identifier: item.text,
-            explanation: item.explanation,
             type: item.id,
           }))}
           onExecuteItem={(i) => {

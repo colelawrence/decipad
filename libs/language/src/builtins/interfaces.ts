@@ -42,4 +42,7 @@ export interface BuiltinSpec {
   ) => Type;
   operatorKind?: 'infix' | 'prefix';
   explanation?: string;
+  syntax?: string;
+  example?: string;
+  formulaGroup?: string;
 }

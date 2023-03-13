@@ -30,7 +30,7 @@ test.describe('Navigating with magic numbers', () => {
     await page.keyboard.type('Price is %Price');
     await keyPress(page, '%');
     await keyPress(page, 'Enter');
-    await createCalculationBlockBelow(page, 'Fees = 5 gbp');
+    await createCalculationBlockBelow(page, 'Fees = 5£');
 
     await page.waitForSelector('text=Should you buy a house?');
   });
@@ -57,7 +57,7 @@ test.describe('Navigating with magic numbers', () => {
     await keyPress(page, 'Enter');
     await keyPress(page, '=');
 
-    await createCodeLineV2Below(page, 'Price', 'Fees + 30 gbp');
+    await createCodeLineV2Below(page, 'Price', 'Fees + 30£');
 
     await page.waitForSelector('text=is £35');
     const magic = await page.locator('span[title="35"]');
