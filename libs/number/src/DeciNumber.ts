@@ -258,15 +258,15 @@ export class DeciNumber {
     return binOp(this, n, Fraction.prototype.mod);
   }
 
-  ceil(n?: number): DeciNumber {
+  ceil(n?: DeciNumber | number): DeciNumber {
     return binOp(this, n, Fraction.prototype.ceil);
   }
 
-  floor(n?: number): DeciNumber {
+  floor(n?: DeciNumber | number): DeciNumber {
     return binOp(this, n, Fraction.prototype.floor);
   }
 
-  round(n?: number): DeciNumber {
+  round(n?: DeciNumber | number): DeciNumber {
     return binOp(this, n, DeciNumber.prototype.excelLikeRound);
   }
 

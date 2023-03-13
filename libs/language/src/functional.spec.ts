@@ -121,7 +121,7 @@ describe('use of funds document', () => {
         ],
       ]
     `);
-    expect(time).toBeLessThanOrEqual(1000);
+    expect(time).toBeLessThanOrEqual(1000 * (process.env.CI ? 2 : 1));
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
@@ -269,7 +269,7 @@ describe('more models', () => {
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200);
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
   });
 
   test('retirement model', async () => {
@@ -306,7 +306,7 @@ describe('more models', () => {
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200);
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
   });
 
   test('burn spare cash in the supermarket', async () => {
@@ -328,7 +328,7 @@ describe('more models', () => {
       value: N(123, 20),
     });
 
-    expect(time).toBeLessThanOrEqual(200);
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
   });
 });
 
@@ -414,7 +414,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200);
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
   });
 
   // https://www.notion.so/decipad/Crypto-Portfolio-Tracker-fe8bbefbd2e1441886576fd3c22c47f2
@@ -499,7 +499,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200);
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
   });
 
   // https://www.notion.so/decipad/New-Business-Line-556720d7ca974cd9a88456b44302cc1a
@@ -770,6 +770,77 @@ ${'' /* Get capital needed */}
         value: N(6328251127759379000n, 53640764699238693n), // 117,974662799844137
       },
     });
-    expect(time).toBeLessThanOrEqual(2000);
+    expect(time).toBeLessThanOrEqual(2000 * (process.env.CI ? 2 : 1));
+  });
+
+  test('rounds dates', async () => {
+    expect(
+      await runCodeForVariables(
+        `
+          Date = date(2023-05-14 11:53:32)
+          Second = round(Date, second)
+          Minute = round(Date, minute)
+          Hour = round(Date, hour)
+          Day = round(Date, day)
+          Month = round(Date, month)
+          Quarter = round(Date, quarter)
+          Year = round(Date, year)
+          Year2 = Year + 2 years
+          QuarterMatches = round(Date, quarter) == date(2023Q2)
+          `,
+        [
+          'Second',
+          'Minute',
+          'Hour',
+          'Day',
+          'Quarter',
+          'Month',
+          'Year',
+          'Year2',
+          'QuarterMatches',
+        ]
+      )
+    ).toMatchObject({
+      types: {
+        Date: {
+          date: 'second',
+        },
+        Day: {
+          date: 'day',
+        },
+        Hour: {
+          date: 'hour',
+        },
+        Minute: {
+          date: 'minute',
+        },
+        Month: {
+          date: 'month',
+        },
+        Quarter: {
+          date: 'quarter',
+        },
+        Second: {
+          date: 'second',
+        },
+        Year: {
+          date: 'year',
+        },
+        Year2: {
+          date: 'year',
+        },
+      },
+      variables: {
+        Day: 1684022400000n,
+        Hour: 1684062000000n,
+        Minute: 1684065180000n,
+        Month: 1682899200000n,
+        Quarter: 1680307200000n,
+        Second: 1684065212000n,
+        Year: 1672531200000n,
+        Year2: 1735689600000n,
+        QuarterMatches: true,
+      },
+    });
   });
 });

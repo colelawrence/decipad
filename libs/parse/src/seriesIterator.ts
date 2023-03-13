@@ -6,6 +6,7 @@ import { parseDate } from './parseDate';
 const dateGranularityToDateFnsDuration: Record<Time.Specificity, Duration> = {
   year: { years: 1 },
   month: { months: 1 },
+  quarter: { months: 3 },
   day: { days: 1 },
   hour: { hours: 1 },
   minute: { minutes: 1 },

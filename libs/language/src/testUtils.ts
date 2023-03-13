@@ -51,7 +51,11 @@ export const runCodeForVariables = async (
   const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
-      `runCodeForVariables found an error\n${erroredType.errorCause?.message}`
+      `runCodeForVariables found an error\n${JSON.stringify(
+        erroredType,
+        null,
+        '\t'
+      )}`
     );
   }
 

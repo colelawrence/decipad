@@ -44,7 +44,7 @@ grow(Offer, Step, Duration)
 ```deci live
 Time = [date(2022-01) .. date(2025-01) by quarter]
 StartingDate = first(Time)
-==> month 2022-01
+==> quarter 2022-01-01 00:00
 ```
 
 ## [ENG-251](https://linear.app/decipad/issue/ENG-251)

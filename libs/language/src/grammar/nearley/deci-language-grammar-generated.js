@@ -840,6 +840,25 @@ let ParserRules = [
       nextDateInner: d[1],
     }),
   },
+  {
+    name: 'dateInner',
+    symbols: ['dateYear', 'dateInnerQuarter'],
+    postprocess: (d) => ({
+      type: 'date',
+      args: ['year', d[0].year],
+      nextDateInner: d[1],
+    }),
+  },
+  { name: 'dateInnerQuarter$subexpression$1', symbols: [{ literal: 'q' }] },
+  { name: 'dateInnerQuarter$subexpression$1', symbols: [{ literal: 'Q' }] },
+  {
+    name: 'dateInnerQuarter',
+    symbols: ['dateInnerQuarter$subexpression$1', 'dateQuarter'],
+    postprocess: (d) => ({
+      type: 'date',
+      args: ['quarter', d[1].quarter],
+    }),
+  },
   { name: 'dateInnerMonth$ebnf$1', symbols: ['dateInnerDay'], postprocess: id },
   {
     name: 'dateInnerMonth$ebnf$1',
@@ -966,6 +985,11 @@ let ParserRules = [
     name: 'dateYear',
     symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
     postprocess: makeDateFragmentReader('year', 4, 0, 9999),
+  },
+  {
+    name: 'dateQuarter',
+    symbols: [tokenizer.has('digits') ? { type: 'digits' } : digits],
+    postprocess: makeDateFragmentReader('quarter', 1, 1, 4),
   },
   {
     name: 'dateMonth',

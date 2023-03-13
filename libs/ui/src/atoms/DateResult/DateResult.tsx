@@ -1,11 +1,6 @@
+import { formatUTCDate } from '@decipad/utils';
 import { FC } from 'react';
-import { DateTime } from 'luxon';
 import { CodeResultProps } from '../../types';
-
-export const formatUTCDate = (date: Date, form: string, tz = false): string => {
-  const dateTime = DateTime.fromMillis(date.valueOf()).toUTC();
-  return dateTime.toFormat(form) + (tz ? ' UTC' : '');
-};
 
 export const DateResult = ({
   type,
@@ -17,6 +12,10 @@ export const DateResult = ({
   switch (type.date) {
     case 'year': {
       format = 'yyyy';
+      break;
+    }
+    case 'quarter': {
+      format = "yyyy'Q'q";
       break;
     }
     case 'month': {

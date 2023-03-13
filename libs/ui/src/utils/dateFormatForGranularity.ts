@@ -3,6 +3,7 @@ import { CellValueType } from '@decipad/editor-types';
 
 const dateFormatsForType: Record<SerializedTypes.Date['date'], string> = {
   year: 'yyyy',
+  quarter: "yyyy'Q'q",
   month: 'yyyy-MM',
   day: 'yyyy-MM-dd',
   hour: 'yyyy-MM-dd HH',

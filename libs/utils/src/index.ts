@@ -20,3 +20,5 @@ export * from './unzip';
 export * from './varnamify';
 export * from './zip';
 export * from './bigint';
+export * from './trimLines';
+export * from './formatUTCDate';

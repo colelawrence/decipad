@@ -60,6 +60,27 @@ dateInner -> dateYear dateInnerMonth:?                  {%
                                                         })
                                                         %}
 
+dateInner -> dateYear dateInnerQuarter                 {%
+                                                        (d) => ({
+                                                          type: 'date',
+                                                          args: [
+                                                            'year',
+                                                            d[0].year,
+                                                          ],
+                                                          nextDateInner: d[1],
+                                                        })
+                                                        %}
+
+dateInnerQuarter -> ("q" | "Q") dateQuarter            {%
+                                                        (d) => ({
+                                                          type: 'date',
+                                                          args: [
+                                                            'quarter',
+                                                            d[1].quarter,
+                                                          ],
+                                                        })
+                                                        %}
+
 dateInnerMonth -> dateSeparator dateMonth dateInnerDay:? {%
                                                         (d) => ({
                                                           type: 'date',
@@ -127,6 +148,7 @@ dateInnerMillisecond -> "." dateMillisecond             {%
                                                         %}
 
 dateYear -> %digits                                     {% makeDateFragmentReader('year', 4, 0, 9999) %}
+dateQuarter -> %digits                                  {% makeDateFragmentReader('quarter', 1, 1, 4) %}
 dateMonth -> %digits                                    {% makeDateFragmentReader('month', 2, 1, 12) %}
 dateMonth -> literalMonth                               {% id %}
 dateDay -> %digits                                      {% makeDateFragmentReader('day', 2, 1, 31) %}

@@ -12,6 +12,7 @@ import { contractOperators } from './contract-operators';
 import { trignometricOperators } from './trignometric-operators';
 import { compoundOperators } from './compound-operators';
 import { enrichOperators } from './enrichOperators';
+import { roundOperators } from './round-operators';
 
 export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
   ...mathOperators,
@@ -26,4 +27,5 @@ export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
   ...contractOperators,
   ...trignometricOperators,
   ...compoundOperators,
+  ...roundOperators,
 });

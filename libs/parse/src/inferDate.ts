@@ -13,6 +13,8 @@ export const coerceToDate = (
   switch (specificity) {
     case 'year':
       return `date(${formatDate(d, 'yyyy')})`;
+    case 'quarter':
+      return `date(${formatDate(d, "yyyy'Q'q")})`;
     case 'month':
       return `date(${formatDate(d, 'yyyy-MM')})`;
     case 'day':

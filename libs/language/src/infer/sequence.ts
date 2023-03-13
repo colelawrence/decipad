@@ -6,7 +6,6 @@ import { InferError, build as t, Type } from '../type';
 import {
   dateToArray,
   getJSDateUnitAndMultiplier,
-  cmpSpecificities,
   getSpecificity,
   getTimeUnit,
   getDateFromAstForm,
@@ -50,6 +49,7 @@ type SimplerUnit = 'month' | 'day' | 'millisecond';
 
 const toSimpleTimeUnit: Record<string, [SimplerUnit, number]> = {
   year: ['month', 12],
+  quarter: ['month', 3],
   hour: ['millisecond', 60 * 60 * 1000],
   minute: ['millisecond', 60 * 1000],
   second: ['millisecond', 1000],
@@ -151,10 +151,6 @@ export const inferSequence = async (
       specificity = getSpecificity(increment);
     } catch {
       return t.impossible('Invalid increment clause in date sequence');
-    }
-
-    if (cmpSpecificities(specificity, boundsSpecificity) < 0) {
-      return t.impossible(`An increment clause of ${increment} is too broad`);
     }
 
     const countOrError = getDateSequenceError(

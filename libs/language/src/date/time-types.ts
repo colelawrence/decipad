@@ -32,6 +32,7 @@ export type JSDateUnit =
  */
 export type Specificity =
   | 'year'
+  | 'quarter'
   | 'month'
   | 'day'
   | 'hour'

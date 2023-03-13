@@ -3,7 +3,7 @@ import produce from 'immer';
 import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
 import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
-import { getInstanceof, multiplyMultipliers } from '../../utils';
+import { getInstanceof } from '../../utils';
 import { InferError, Type, build as t } from '../../type';
 import {
   fromJS,
@@ -58,29 +58,6 @@ const exponentiationFunctor = (
   } else {
     return binopFunctor([a, removeUnit(b)]);
   }
-};
-
-const roundFunctor: BuiltinSpec['functor'] = ([
-  n,
-  decimalPrecision = t.number(),
-]) => Type.combine(decimalPrecision.isScalar('number'), n.isScalar('number'));
-
-const roundWrap = (
-  round: (f: DeciNumber, decimalPrecisionValue: number) => DeciNumber
-): BuiltinSpec['fn'] => {
-  return ([nValue, decimalPrecisionValue], [type] = []) => {
-    const n = getInstanceof(nValue, DeciNumber);
-    const multiplier = multiplyMultipliers(type.unit);
-    const decimalPrecision = decimalPrecisionValue
-      ? getInstanceof(decimalPrecisionValue, DeciNumber)
-      : ZERO;
-    if (decimalPrecision.compare(N(100)) > 0) {
-      throw new RuntimeError('round: decimal precision must be < 100');
-    }
-    // in order for the round function to round at the correct precision, we need to first divide by
-    // the unit multiplier, do the rouding, and *then* multiply by it at the end.
-    return round(n.div(multiplier), decimalPrecision.valueOf()).mul(multiplier);
-  };
 };
 
 const firstArgumentReducedFunctor = ([t]: Type[]) => t.reduced();
@@ -170,48 +147,6 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     formulaGroup: 'Numbers',
     syntax: 'abs(Number)',
     example: 'abs(-$300)',
-  },
-  round: {
-    argCount: [1, 2],
-    noAutoconvert: true,
-    functor: roundFunctor,
-    fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
-      n.round(decimalPlaces)
-    ),
-    explanation: 'Rounds a number.',
-    formulaGroup: 'Numbers',
-    syntax: 'round(Number, [Precision])',
-    example: 'round(3.145) \nround(3.145, 2)',
-  },
-  roundup: {
-    argCount: [1, 2],
-    noAutoconvert: true,
-    functor: roundFunctor,
-    fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
-      n.ceil(decimalPlaces)
-    ),
-    explanation: 'Rounds a number up.',
-    formulaGroup: 'Numbers',
-    syntax: 'roundup(Number, [Precision])',
-    example: 'roundup(3.145) \nroundup(3.145, 2)',
-  },
-  ceil: {
-    aliasFor: 'roundup',
-  },
-  rounddown: {
-    argCount: [1, 2],
-    noAutoconvert: true,
-    functor: roundFunctor,
-    fn: roundWrap((n: DeciNumber, decimalPlaces: number) =>
-      n.floor(decimalPlaces)
-    ),
-    explanation: 'Rounds a number down.',
-    formulaGroup: 'Numbers',
-    syntax: 'roundown(Number, [Precision])',
-    example: 'roundown(3.145) \nroundown(3.145, 2)',
-  },
-  floor: {
-    aliasFor: 'rounddown',
   },
   max: {
     argCount: 1,

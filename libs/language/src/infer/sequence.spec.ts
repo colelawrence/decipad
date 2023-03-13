@@ -49,20 +49,6 @@ describe('sequences of dates', () => {
     ).toMatchObject({
       cellType: t.date('year'),
     });
-
-    expect(
-      (
-        await inferSequence(
-          nilCtx,
-          seq(
-            date('2020-01', 'month'),
-            date('2020-01', 'month'),
-            n('ref', 'year')
-          ),
-          inferExpression
-        )
-      ).errorCause
-    ).toMatchInlineSnapshot(`[Error: Inference Error: free-form]`);
   });
 
   it('ensures start and end have the same specificity', async () => {

@@ -21,6 +21,46 @@ runTests({
     ],
   },
 
+  quarter1: {
+    source: 'date(1978Q2)',
+    ast: [
+      {
+        type: 'date',
+        args: ['year', 1978n, 'quarter', 2n],
+        start: {
+          char: 0,
+          line: 1,
+          column: 1,
+        },
+        end: {
+          char: 11,
+          line: 1,
+          column: 12,
+        },
+      },
+    ],
+  },
+
+  quarter2: {
+    source: 'date(1978q2)',
+    ast: [
+      {
+        type: 'date',
+        args: ['year', 1978n, 'quarter', 2n],
+        start: {
+          char: 0,
+          line: 1,
+          column: 1,
+        },
+        end: {
+          char: 11,
+          line: 1,
+          column: 12,
+        },
+      },
+    ],
+  },
+
   'month date': {
     source: 'date(1978-01)',
     ast: [

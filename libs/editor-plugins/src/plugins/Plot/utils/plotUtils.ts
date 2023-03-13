@@ -218,6 +218,8 @@ function displayTimeUnitType(type: SerializedType): TimeUnit {
     case 'year': {
       return 'utcyear';
     }
+    case 'quarter':
+      return 'utcquarter';
     case 'month': {
       return 'utcyearmonth';
     }

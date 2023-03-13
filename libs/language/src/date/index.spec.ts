@@ -15,7 +15,7 @@ const d = parseUTCDate;
 
 it('can turn any kind of time unit into date specificities', () => {
   expect(getSpecificity('second')).toEqual('second');
-  expect(getSpecificity('quarter')).toEqual('month');
+  expect(getSpecificity('quarter')).toEqual('quarter');
   expect(getSpecificity('decade')).toEqual('year');
   expect(getSpecificity('week')).toEqual('day');
 
@@ -23,16 +23,13 @@ it('can turn any kind of time unit into date specificities', () => {
 });
 
 it('can sort specificities', () => {
-  expect(sortSpecificities(['second', 'month', 'hour', 'day'])).toEqual([
-    'month',
-    'day',
-    'hour',
-    'second',
-  ]);
+  expect(
+    sortSpecificities(['second', 'month', 'hour', 'day', 'quarter'])
+  ).toEqual(['quarter', 'month', 'day', 'hour', 'second']);
 
   expect(
     sortSpecificities(['second', 'month', 'quarter', 'day', 'week', 'second'])
-  ).toEqual(['month', 'day', 'second']);
+  ).toEqual(['quarter', 'month', 'day', 'second']);
 });
 
 it('can sort time units', () => {

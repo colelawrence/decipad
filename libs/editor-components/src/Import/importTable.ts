@@ -41,6 +41,9 @@ const valueToString = (result: Result.Result): string => {
       case 'year':
         fmt = 'yyyy';
         break;
+      case 'quarter':
+        fmt = "yyyy'Q'q";
+        break;
       case 'month':
         fmt = 'yyyy/MM';
         break;

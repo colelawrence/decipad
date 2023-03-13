@@ -33,6 +33,17 @@ export const toLuxonUTC = (date: bigint | number | DateValue | DateTime) => {
   return DateTime.fromMillis(date).toUTC();
 };
 
+const allSpecificities = [
+  'year',
+  'quarter',
+  'month',
+  'day',
+  'hour',
+  'minute',
+  'second',
+  'millisecond',
+];
+
 const specificities: Time.Specificity[] = [
   'year',
   'month',
@@ -101,6 +112,21 @@ const timeUnitToIndex: Record<Time.Unit, number> = {
   millisecond: 11,
 };
 
+const timeUnitToJSTimeIndex: Record<Time.Unit, number> = {
+  millennium: 0,
+  century: 0,
+  decade: 0,
+  year: 0,
+  quarter: 1,
+  month: 1,
+  week: 2,
+  day: 2,
+  hour: 3,
+  minute: 4,
+  second: 5,
+  millisecond: 6,
+};
+
 export const timeUnitFromUnit = (unit: Unit | string): Time.Unit => {
   const u = singular((unit as Unit).unit ?? unit);
   if (!timeUnits.has(u)) {
@@ -118,11 +144,9 @@ export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
     if (unit === 'century') return 'year';
     if (unit === 'decade') return 'year';
 
-    if (unit === 'quarter') return 'month';
-
     if (unit === 'week') return 'day';
 
-    if (specificities.includes(unit as Time.Specificity)) {
+    if (allSpecificities.includes(unit as Time.Specificity)) {
       return unit as Time.Specificity;
     }
   }
@@ -130,7 +154,7 @@ export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
   throw new Error(`panic: Expected Time.JSDateUnit, got ${unit}`);
 };
 
-export const getTimeUnit = (thing: string) => {
+export const getTimeUnit = (thing: string): Time.Unit => {
   if (thing in timeUnitToJSDateUnit) {
     return thing as Time.Unit;
   } else {
@@ -138,9 +162,12 @@ export const getTimeUnit = (thing: string) => {
   }
 };
 
+export const isTimeSpecificity = (thing: string): thing is Time.Specificity =>
+  allSpecificities.includes(thing);
+
 export const cmpSpecificities = (left: string, right: string): number => {
-  const leftIdx = specificities.indexOf(getSpecificity(left));
-  const rightIdx = specificities.indexOf(getSpecificity(right));
+  const leftIdx = allSpecificities.indexOf(getSpecificity(left));
+  const rightIdx = allSpecificities.indexOf(getSpecificity(right));
 
   return Math.sign(leftIdx - rightIdx);
 };
@@ -180,10 +207,19 @@ export const cleanDate = (
 ): bigint => {
   const necessarySegments = dateToArray(date).slice(
     0,
-    jsUnitToIndex[specificity] + 1
+    timeUnitToJSTimeIndex[specificity] + 1
   );
 
-  return arrayToDate(necessarySegments);
+  if (specificity === 'quarter') {
+    // we must treat quarters specially because
+    // they must end on the beginning of the first month
+    // otherwise, comparisons with roundings will fail.
+    const dateTime = DateTime.fromMillis(Number(date)).toUTC();
+    const startOfQuarter = dateTime.startOf('quarter');
+    return BigInt(startOfQuarter.toMillis());
+  }
+  const result = arrayToDate(necessarySegments);
+  return result;
 };
 
 export const dateToArray = (date: Date | number | bigint) => {
@@ -287,7 +323,6 @@ export function stringifyDate(
   specificity: Time.Specificity
 ): string {
   const segments = dateToArray(date);
-
   let out = String(segments[0]);
   if (specificity === 'year') return out;
 
@@ -319,6 +354,16 @@ export const dateNodeToTimeUnit = (nodeArgs: AST.Date['args']): Time.Unit => {
 export const getDateFromAstForm = (
   segments: AST.Date['args']
 ): [bigint, Time.Specificity] => {
+  if (segments[2] === 'quarter') {
+    const quarter = (Number(segments[3]) - 1) * 4 + 1;
+    const [dateNum] = getDateFromAstForm([
+      'year',
+      segments[1],
+      'month',
+      BigInt(quarter),
+    ]);
+    return [dateNum, 'quarter'];
+  }
   const dateNum = arrayToDate([
     segments[1],
     segments[3],

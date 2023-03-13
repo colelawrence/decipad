@@ -18,6 +18,8 @@ it("rounds down the day if it's over the end of a month", () => {
   // Same thing but with DST -- we use Date.UTC but just in case
   expect(addTime(d('2020-05-31'), 'month', 1n)).toEqual(d('2020-06-30'));
 
+  expect(addTime(d('2020-05-31'), 'quarter', 1n)).toEqual(d('2020-08-31'));
+
   // How about an entire year?
   expect(addTime(d('2020-02-29'), 'year', 1n)).toEqual(d('2021-02-28'));
 });

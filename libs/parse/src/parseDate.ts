@@ -71,6 +71,7 @@ export const dateFormats: Record<Time.Specificity, DateFormat[]> = {
     'MMM-yyyy',
     'MMMM-yyyy',
   ],
+  quarter: ["yyyy'q'q", "yyyy'Q'q", "yyyy'q'qq", "yyyy'Q'qq"],
   day: dayFormats,
   hour: combineFormats(dayFormats, ['HH']),
   minute: combineFormats(dayFormats, minuteFormats),

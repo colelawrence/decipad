@@ -1,4 +1,4 @@
-import { Computer, Program } from '@decipad/computer';
+import { AST, Computer, Program } from '@decipad/computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -24,13 +24,17 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
     const source = getNodeString(sourcetext);
 
     if (source?.trim()) {
-      // First try parsing it as a plain number
-      const parsedInput = await parseCell(
-        computer,
-        { kind: 'number', unit: null },
-        source
-      );
-
+      let parsedInput: AST.Expression | Error | null = null;
+      try {
+        // First try parsing it as a plain number
+        parsedInput = await parseCell(
+          computer,
+          { kind: 'number', unit: null },
+          source
+        );
+      } catch (err) {
+        // do nothing
+      }
       if (!(parsedInput instanceof Error || parsedInput == null)) {
         return parseElementAsVariableAssignment(
           e.id,

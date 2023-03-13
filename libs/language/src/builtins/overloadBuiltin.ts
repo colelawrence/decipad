@@ -36,7 +36,7 @@ export type OverloadedBuiltinSpec =
 
 export const overloadBuiltin = (
   fName: string,
-  argCount: number,
+  argCount: number | number[],
   overloads: OverloadedBuiltinSpec[],
   operatorKind?: 'prefix' | 'infix'
 ): BuiltinSpec => {
