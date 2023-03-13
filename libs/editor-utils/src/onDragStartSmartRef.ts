@@ -34,7 +34,7 @@ export const onDragStartSmartRef =
     const id = element?.id ?? blockId!;
 
     if (element) {
-      if (editor.previewRef?.current) {
+      if (editor.previewRef?.current && result.type.kind === 'number') {
         const formatted = computer.formatNumber(
           result.type as SerializedTypes.Number,
           result.value as DeciNumber

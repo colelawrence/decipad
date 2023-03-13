@@ -36,7 +36,9 @@ describe('onDragStartSmartRef', () => {
       })),
     };
     result = {
-      type: 'number',
+      type: {
+        kind: 'number',
+      },
       value: new DeciNumber('2'),
     };
   });

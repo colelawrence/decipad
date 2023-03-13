@@ -6,6 +6,7 @@ interface DataViewDataProps {
   tableName: string;
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
+  roundings: Array<string | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
 }

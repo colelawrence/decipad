@@ -5,7 +5,13 @@ import { layoutPowerData } from './useDataViewLayoutData';
 
 describe('layoutPowerData', () => {
   it('lays out an empty table', async () => {
-    expect(await layoutPowerData([], [], [])).toEqual([]);
+    expect(
+      await layoutPowerData({
+        columns: [],
+        aggregationTypes: [],
+        expandedGroups: [],
+      })
+    ).toEqual([]);
   });
 
   it('lays out empty a one-column one-cell table', async () => {
@@ -18,7 +24,13 @@ describe('layoutPowerData', () => {
       },
     ];
 
-    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+    expect(
+      await layoutPowerData({
+        columns,
+        aggregationTypes: [],
+        expandedGroups: [],
+      })
+    ).toMatchObject([
       {
         children: [],
         collapsible: false,
@@ -43,7 +55,13 @@ describe('layoutPowerData', () => {
       },
     ];
 
-    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+    expect(
+      await layoutPowerData({
+        columns,
+        aggregationTypes: [],
+        expandedGroups: [],
+      })
+    ).toMatchObject([
       {
         children: [],
         collapsible: false,
@@ -89,7 +107,13 @@ describe('layoutPowerData', () => {
         type: { kind: 'number', unit: null },
       },
     ];
-    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+    expect(
+      await layoutPowerData({
+        columns,
+        aggregationTypes: [],
+        expandedGroups: [],
+      })
+    ).toMatchObject([
       {
         children: [],
         collapsible: false,
@@ -131,7 +155,13 @@ describe('layoutPowerData', () => {
       },
     ];
 
-    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+    expect(
+      await layoutPowerData({
+        columns,
+        aggregationTypes: [],
+        expandedGroups: [],
+      })
+    ).toMatchObject([
       {
         children: [
           {
@@ -220,7 +250,13 @@ describe('layoutPowerData', () => {
       },
     ];
 
-    expect(await layoutPowerData(columns, [], [])).toMatchObject([
+    expect(
+      await layoutPowerData({
+        columns,
+        aggregationTypes: [],
+        expandedGroups: [],
+      })
+    ).toMatchObject([
       {
         children: [],
         collapsible: true,

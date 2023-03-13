@@ -1,48 +1,40 @@
 import { Result } from '@decipad/computer';
 import { useEffect, useMemo, useState } from 'react';
-import { AggregationKind, Column, DataGroup, VirtualColumn } from '../../types';
-import { generateGroups } from './generateGroups';
-import { generateTotalGroup } from './generateTotalGroup';
+import { AggregationKind, Column, DataGroup } from '../../types';
+import { layoutPowerData } from './layoutPowerData';
+import { useReplacingColumns } from './useReplacingColumns';
 
-export const layoutPowerData = async (
-  columns: VirtualColumn[],
-  aggregationTypes: (AggregationKind | undefined)[],
-  expandedGroups: string[] | undefined
-): Promise<DataGroup[]> => {
-  const rootGroups = await generateGroups({
-    columns,
-    aggregationTypes,
-    expandedGroups,
-    columnIndex: 0,
-    previousColumns: [],
+interface UseDataViewLayoutDataProps {
+  tableName: string;
+  columns: Column[];
+  aggregationTypes: Array<AggregationKind | undefined>;
+  roundings: Array<string | undefined>;
+  expandedGroups: string[] | undefined;
+}
+
+export const useDataViewLayoutData = ({
+  tableName,
+  columns: _columns,
+  aggregationTypes,
+  roundings,
+  expandedGroups,
+}: UseDataViewLayoutDataProps): DataGroup[] => {
+  const columns = useReplacingColumns({
+    tableName,
+    columns: _columns,
+    roundings,
   });
 
-  const totalGroup = generateTotalGroup({
-    columns,
-    aggregationTypes,
-  });
-
-  return Promise.all([
-    ...rootGroups,
-    ...(totalGroup != null ? [totalGroup] : []),
-  ]);
-};
-
-export const useDataViewLayoutData = (
-  columns: Column[],
-  aggregationTypes: (AggregationKind | undefined)[],
-  expandedGroups: string[] | undefined
-): DataGroup[] => {
   const dataGroups = useMemo(
     () =>
-      layoutPowerData(
-        columns.map((column) => ({
+      layoutPowerData({
+        columns: columns.map((column) => ({
           ...column,
           value: Result.Column.fromValues(column.value as Result.Comparable[]),
         })),
         aggregationTypes,
-        expandedGroups
-      ),
+        expandedGroups,
+      }),
     [aggregationTypes, columns, expandedGroups]
   );
 

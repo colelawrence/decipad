@@ -45,6 +45,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     onVariableNameChange,
     sortedColumns,
     selectedAggregationTypes,
+    selectedRoundings,
     onInsertColumn,
     availableColumns,
   } = useDataView({
@@ -82,6 +83,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
               tableName={tableName}
               columns={sortedColumns}
               aggregationTypes={selectedAggregationTypes}
+              roundings={selectedRoundings}
               expandedGroups={element.expandedGroups}
               onChangeExpandedGroups={saveExpandedGroups}
             />

@@ -11,6 +11,7 @@ interface DataViewDataGroupElementProps {
   Header: FC<HeaderProps>;
   SmartCell: FC<SmartProps>;
   aggregationType: AggregationKind | undefined;
+  roundings: Array<string | undefined>;
   isFullWidthRow: boolean;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
@@ -24,6 +25,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   Header,
   SmartCell,
   aggregationType,
+  roundings,
   isFullWidthRow,
   expandedGroups,
   onChangeExpandedGroups,
@@ -83,6 +85,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       rowSpan={element.rowspan}
       colSpan={element.colspan}
       column={element.column}
+      roundings={roundings}
       aggregationType={aggregationType}
       onHover={onHover}
       hover={parentHover || selfHover}

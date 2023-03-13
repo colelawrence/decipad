@@ -33,6 +33,7 @@ interface UseDataViewReturnType {
   availableColumns: Column[] | undefined;
   sortedColumns: Column[] | undefined;
   selectedAggregationTypes: Array<AggregationKind | undefined>;
+  selectedRoundings: Array<string | undefined>;
 }
 
 const greaterOrEqualToZero = (n: number): boolean => n >= 0;
@@ -108,6 +109,13 @@ export const useDataView = ({
     )
   );
 
+  const selectedRoundings = useEditorSelector(
+    useCallback(
+      () => element.children[1]?.children?.map((th) => th.rounding),
+      [element.children]
+    )
+  );
+
   useEffect(() => {
     if (availableColumns) {
       setDataColumns(availableColumns);
@@ -124,5 +132,6 @@ export const useDataView = ({
     sortedColumns,
     availableColumns,
     selectedAggregationTypes,
+    selectedRoundings,
   };
 };

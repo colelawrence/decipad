@@ -33,6 +33,7 @@ interface SmartProps {
   };
   columnIndex?: number;
   aggregationType: AggregationKind | undefined;
+  roundings: Array<string | undefined>;
   rowSpan?: number;
   colSpan?: number;
   onHover: (hover: boolean) => void;
@@ -46,6 +47,7 @@ export const SmartCell: FC<SmartProps> = ({
   column,
   tableName,
   aggregationType,
+  roundings,
   rowSpan,
   colSpan,
   onHover,
@@ -61,18 +63,25 @@ export const SmartCell: FC<SmartProps> = ({
   const expressionFilter = useMemo(() => {
     return (
       (column &&
-        previousColumns.reduce((previous, current) => {
+        previousColumns.reduce((previous, current, index) => {
+          const rounding = roundings[index];
+          const filterSubject = previous
+            ? `${previous}.${current.name}`
+            : `${tableName}.${current.name}`;
+          const roundedFilterSubject = rounding
+            ? `round(${filterSubject}, ${rounding})`
+            : filterSubject;
           const escapedValue = textify({
             type: current.type,
             value: current.value as Result.Result['value'],
           });
-          return previous === ``
-            ? `filter(${tableName}, ${tableName}.${current.name} == ${escapedValue})`
-            : `filter(${previous}, ${previous}.${current.name} == ${escapedValue})`;
+          return previous === ''
+            ? `filter(${tableName}, ${roundedFilterSubject} == ${escapedValue})`
+            : `filter(${previous}, ${roundedFilterSubject} == ${escapedValue})`;
         }, '')) ||
       tableName
     );
-  }, [column, previousColumns, tableName]);
+  }, [column, previousColumns, roundings, tableName]);
 
   const expression = useMemo(() => {
     return (

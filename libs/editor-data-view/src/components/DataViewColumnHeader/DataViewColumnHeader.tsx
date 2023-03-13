@@ -20,6 +20,7 @@ import {
 } from '@decipad/editor-table';
 import { useComputer } from '@decipad/react-contexts';
 import { useDataViewActions, useDragColumn, useDropColumn } from '../../hooks';
+import { availableRoundings } from './availableRoundings';
 
 export const DataViewColumnHeader: PlateComponent = ({
   attributes,
@@ -78,6 +79,17 @@ export const DataViewColumnHeader: PlateComponent = ({
   const columnName =
     computer.getColumnNameDefinedInBlock$.use(element.name) || element.name;
 
+  // roundings
+  const roundings = useMemo(
+    () => (element ? availableRoundings(element.cellType) : []),
+    [element]
+  );
+  const onRoundingChange = useElementMutatorCallback(
+    editor,
+    element,
+    'rounding'
+  );
+
   if (!columnName) {
     return null;
   }
@@ -90,6 +102,9 @@ export const DataViewColumnHeader: PlateComponent = ({
       selectedAggregation={element.aggregation}
       availableAggregations={availableAggregations}
       onAggregationChange={onAggregationChange as (agg?: string) => void}
+      availableRoundings={roundings}
+      onRoundingChange={onRoundingChange}
+      selectedRounding={element.rounding}
       onDeleteColumn={handleColumnDelete}
       connectDragSource={connectDragSource}
       connectDragPreview={connectDragPreview}

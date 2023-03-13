@@ -198,8 +198,10 @@ const runWithDataView = async ({
 };
 
 interface WithLayoutDataHookProps {
+  tableName: string;
   columns: Column[];
   aggregationTypes: (AggregationKind | undefined)[];
+  roundings: (string | undefined)[];
   expandedGroups: string[] | undefined;
   onLayoutDataResultChange: (
     result: ReturnType<typeof useDataViewLayoutData>
@@ -207,16 +209,20 @@ interface WithLayoutDataHookProps {
 }
 
 const WithLayoutDataHook: FC<WithLayoutDataHookProps> = ({
+  tableName,
   columns,
   aggregationTypes,
+  roundings,
   expandedGroups,
   onLayoutDataResultChange,
 }) => {
-  const results = useDataViewLayoutData(
+  const results = useDataViewLayoutData({
+    tableName,
     columns,
     aggregationTypes,
-    expandedGroups
-  );
+    roundings,
+    expandedGroups,
+  });
   useEffect(() => {
     onLayoutDataResultChange(results);
   }, [onLayoutDataResultChange, results]);
@@ -228,6 +234,7 @@ const runWithLayoutData = async ({
   waitForCallbackCount,
   computer,
   editor,
+  tableName,
   columns,
   aggregationTypes,
   expandedGroups,
@@ -235,6 +242,7 @@ const runWithLayoutData = async ({
   waitForCallbackCount: number;
   computer: Computer;
   editor: TestEditor;
+  tableName: string;
   columns: Column[];
   aggregationTypes: (AggregationKind | undefined)[];
   expandedGroups: string[] | undefined;
@@ -244,8 +252,10 @@ const runWithLayoutData = async ({
     render(
       <WithProviders computer={computer} editor={editor}>
         <WithLayoutDataHook
+          tableName={tableName}
           columns={columns}
           aggregationTypes={aggregationTypes}
+          roundings={[]}
           expandedGroups={expandedGroups}
           onLayoutDataResultChange={(r) => {
             count -= 1;
@@ -300,6 +310,7 @@ describe('useDataView hook performance', () => {
       waitForCallbackCount: 2,
       computer,
       editor,
+      tableName: 'table',
       columns: getDefined(testResult.sortedColumns),
       aggregationTypes: getDefined(testResult.selectedAggregationTypes),
       expandedGroups: [],
@@ -325,6 +336,7 @@ describe('useDataView hook performance', () => {
       waitForCallbackCount: 2,
       computer,
       editor,
+      tableName: 'table',
       columns: getDefined(testResult.sortedColumns),
       aggregationTypes: getDefined(testResult.selectedAggregationTypes),
       expandedGroups: [],

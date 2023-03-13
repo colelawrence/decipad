@@ -93,6 +93,7 @@ export const useDataViewActions = (
                   {
                     cellType: matchingDataColumn.type,
                     aggregation: undefined,
+                    rounding: undefined,
                   },
                   { at: columnPath }
                 );

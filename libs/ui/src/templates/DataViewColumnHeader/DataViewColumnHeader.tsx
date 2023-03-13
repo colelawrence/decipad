@@ -1,20 +1,17 @@
-import type { SerializedType } from '@decipad/computer';
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { capitalize } from 'lodash';
-import { FC, forwardRef, ReactNode, useCallback, useState } from 'react';
+import { FC, forwardRef, ReactNode } from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
   ConnectDropTarget,
 } from 'react-dnd';
-import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { useMergedRef } from '../../hooks';
-import { Caret, Code, DragHandle as DragHandleIcon, Trash } from '../../icons';
-import { MenuList } from '../../molecules';
+import { DragHandle as DragHandleIcon } from '../../icons';
+import { DataViewColumnMenu } from '../../molecules';
+import { DataViewColumnMenuProps } from '../../molecules/DataViewColumnMenu/DataViewColumnMenu';
 import { cssVar } from '../../primitives';
-import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const dragHandleStyles = css({
   width: '8px',
@@ -39,15 +36,10 @@ const DragHandle = () => {
   );
 };
 
-export interface DataViewColumnHeaderProps {
+export interface DataViewColumnHeaderProps extends DataViewColumnMenuProps {
   name: string;
-  type: SerializedType;
   attributes?: PlateComponentAttributes;
   children?: ReactNode;
-  selectedAggregation?: string;
-  availableAggregations: Array<string>;
-  onAggregationChange: (aggregation: string | undefined) => void;
-  onDeleteColumn: () => void;
   connectDragSource?: ConnectDragSource;
   connectDragPreview?: ConnectDragPreview;
   connectDropTarget?: ConnectDropTarget;
@@ -73,11 +65,6 @@ const dataViewColumnHeaderStyles = css({
   borderBottomColor: cssVar('evenStrongerHighlightColor'),
 });
 
-const triggerStyles = css({
-  display: 'grid',
-  alignItems: 'center',
-  width: '16px',
-});
 const borderLeftStyles = css({
   '&::before': {
     background: 'blue',
@@ -108,26 +95,16 @@ export const DataViewColumnHeader = forwardRef<
     name,
     attributes,
     children,
-    availableAggregations,
-    selectedAggregation,
-    onAggregationChange,
-    onDeleteColumn,
     connectDragSource,
     connectDropTarget,
     hoverDirection,
     isOverCurrent,
     alignRight = false,
     global = false,
+    ...rest
   }: DataViewColumnHeaderProps,
   ref
 ): ReturnType<FC> {
-  const [menuListOpened, setMenuListOpened] = useState(false);
-
-  const onTriggerClick = useEventNoEffect(
-    useCallback(() => {
-      setMenuListOpened(!menuListOpened);
-    }, [menuListOpened])
-  );
   const refs = useMergedRef(ref, connectDragSource, connectDropTarget);
 
   const getBorderRightTranslation = () => {
@@ -169,48 +146,7 @@ export const DataViewColumnHeader = forwardRef<
         {!readOnly && <DragHandle />}
         <span>{name}</span>
 
-        {!readOnly && (
-          <MenuList
-            root
-            dropdown
-            open={menuListOpened}
-            onChangeOpen={setMenuListOpened}
-            trigger={
-              <button css={triggerStyles} onClick={onTriggerClick}>
-                <Caret color="normal" variant="down" />
-              </button>
-            }
-          >
-            <MenuItem onSelect={() => onDeleteColumn()} icon={<Trash />}>
-              Remove column
-            </MenuItem>
-            {availableAggregations.length > 0 ? (
-              <MenuList
-                itemTrigger={
-                  <TriggerMenuItem icon={<Code />}>Aggregate</TriggerMenuItem>
-                }
-              >
-                <MenuItem
-                  onSelect={() => onAggregationChange(undefined)}
-                  selected={selectedAggregation === undefined}
-                >
-                  None
-                </MenuItem>
-                {availableAggregations.map((availableAggregation, index) => {
-                  return (
-                    <MenuItem
-                      onSelect={() => onAggregationChange(availableAggregation)}
-                      selected={availableAggregation === selectedAggregation}
-                      key={index}
-                    >
-                      {capitalize(availableAggregation)}
-                    </MenuItem>
-                  );
-                })}
-              </MenuList>
-            ) : null}
-          </MenuList>
-        )}
+        {!readOnly && <DataViewColumnMenu {...rest} />}
 
         <div contentEditable={false}>{children}</div>
       </div>

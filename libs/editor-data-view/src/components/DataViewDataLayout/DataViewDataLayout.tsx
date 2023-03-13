@@ -38,6 +38,7 @@ export interface SmartProps {
     value: Result.ColumnLike<Result.Comparable>;
     name: string;
   };
+  roundings: Array<string | undefined>;
   columnIndex?: number;
   aggregationType: AggregationKind | undefined;
   rowSpan?: number;
@@ -53,6 +54,7 @@ export interface DataViewLayoutProps {
   tableName: string;
   columns: Column[];
   aggregationTypes: Array<AggregationKind | undefined>;
+  roundings: Array<string | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
 }
@@ -61,14 +63,17 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   tableName,
   columns,
   aggregationTypes,
+  roundings,
   expandedGroups = [],
   onChangeExpandedGroups,
 }: DataViewLayoutProps) => {
-  const groups = useDataViewLayoutData(
+  const groups = useDataViewLayoutData({
+    tableName,
     columns,
     aggregationTypes,
-    expandedGroups
-  );
+    roundings,
+    expandedGroups,
+  });
 
   const table = useMemo(
     () =>
@@ -111,6 +116,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
                 index={index}
                 tableName={tableName}
                 element={element}
+                roundings={roundings}
                 aggregationType={aggregationTypes[element.columnIndex]}
                 Header={DataViewHeader}
                 SmartCell={SmartCell}
