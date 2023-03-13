@@ -63,25 +63,26 @@ function deduplicateTableVarName(computer: Computer, e: TableElement) {
   );
 }
 
-export const deduplicateVarNameInBlock =
-  (computer: Computer) =>
-  <T extends AnyElement>(el: T): T => {
-    switch (el.type) {
-      case ELEMENT_VARIABLE_DEF:
-        deduplicateVarNameInDef(computer, el);
-        break;
-      case ELEMENT_CODE_LINE:
-        deduplicateAssignmentVarName(computer, el);
-        break;
-      case ELEMENT_CODE_LINE_V2:
-        deduplicateVarNameInCodeLineV2(computer, el);
-        break;
-      case ELEMENT_STRUCTURED_IN:
-        deduplicateVarNameInStructuredIn(computer, el);
-        break;
-      case ELEMENT_TABLE:
-        deduplicateTableVarName(computer, el);
-        break;
-    }
-    return el;
-  };
+export const deduplicateVarNameInBlock = <T extends AnyElement>(
+  computer: Computer,
+  el: T
+): T => {
+  switch (el.type) {
+    case ELEMENT_VARIABLE_DEF:
+      deduplicateVarNameInDef(computer, el);
+      break;
+    case ELEMENT_CODE_LINE:
+      deduplicateAssignmentVarName(computer, el);
+      break;
+    case ELEMENT_CODE_LINE_V2:
+      deduplicateVarNameInCodeLineV2(computer, el);
+      break;
+    case ELEMENT_STRUCTURED_IN:
+      deduplicateVarNameInStructuredIn(computer, el);
+      break;
+    case ELEMENT_TABLE:
+      deduplicateTableVarName(computer, el);
+      break;
+  }
+  return el;
+};

@@ -17,7 +17,7 @@ beforeEach(() => {
 
 it('clones and uses a new nanoid', () => {
   expect(
-    clone(computer)({
+    clone(computer, {
       type: ELEMENT_PARAGRAPH,
       id: 'old-id',
       children: [{ text: 'hello' }],
@@ -37,7 +37,7 @@ it('clones and uses a new nanoid', () => {
 
 it('clones while using a different varname', () => {
   expect(
-    clone(computer)({
+    clone(computer, {
       type: ELEMENT_CODE_LINE,
       id: 'old-id',
       children: [{ text: 'hello = "world"' }],
@@ -57,7 +57,7 @@ it('clones while using a different varname', () => {
 
 it('clones while using a different varname (2)', () => {
   expect(
-    clone(computer)({
+    clone(computer, {
       type: ELEMENT_CODE_LINE_V2,
       id: 'old-id',
       children: [

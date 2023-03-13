@@ -1,45 +1,42 @@
-import { nanoid } from 'nanoid';
-import { AnyElement, Text } from '@decipad/editor-types';
-import { AnyObject, isText } from '@udecode/plate';
-import { Computer } from '@decipad/computer';
 import { cloneDeep } from 'lodash';
+import { isElement } from '@udecode/plate';
+import { nanoid } from 'nanoid';
+import { MyElement, MyNode } from '@decipad/editor-types';
+import { Computer } from '@decipad/computer';
+import { identity } from 'ramda';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
-import { isElement } from './isElement';
 
-type WithId = { id: string };
-
-const hasId = (n: AnyObject): n is WithId => {
-  return n != null && 'id' in n && typeof n.id === 'string';
-};
-
-const deduplicateId = <T extends AnyElement>(el: T): T => {
-  if (hasId(el)) {
-    // eslint-disable-next-line no-param-reassign
-    el.id = nanoid();
+const traverseElements = <T extends MyElement>(
+  el: T,
+  t: (e: MyElement) => void
+) => {
+  t(el);
+  for (const child of el.children) {
+    if (isElement(child)) {
+      traverseElements(child, t);
+    }
   }
-  return el;
 };
 
-type Clone = <T extends AnyElement | Text>(el: T) => T;
-
-export const clone = (computer: Computer): Clone => {
-  const deduplicateVarName = deduplicateVarNameInBlock(computer);
-  const cloneEl = <T extends AnyElement | Text>(el: T): T => {
-    if (isText(el)) {
-      return cloneDeep(el);
+const cloneAndReplaceElementIds = <T extends MyElement>(
+  el: T,
+  transform: (e: T) => T = identity
+): T => {
+  let text = JSON.stringify(el);
+  traverseElements(el, (e) => {
+    if (e.id) {
+      text = text.replaceAll(e.id, nanoid());
     }
-    if (isElement(el)) {
-      const elm = deduplicateVarName(deduplicateId(cloneDeep(el)));
-      if (Array.isArray(elm.children)) {
-        elm.children = (elm.children as typeof el.children).map(
-          cloneEl
-        ) as typeof el.children;
-      }
-      return elm;
-    }
+  });
+  return transform(JSON.parse(text));
+};
 
-    return el;
-  };
+const cloneElement = <T extends MyElement>(computer: Computer, el: T): T =>
+  cloneAndReplaceElementIds(el, (e) => deduplicateVarNameInBlock(computer, e));
 
-  return cloneEl;
+export const clone = <T extends MyNode>(computer: Computer, node: T): T => {
+  if (isElement(node)) {
+    return cloneElement(computer, node) as T;
+  }
+  return cloneDeep(node);
 };
