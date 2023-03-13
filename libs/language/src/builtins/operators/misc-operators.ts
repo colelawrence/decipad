@@ -1,6 +1,6 @@
 import DeciNumber from '@decipad/number';
 import { getInstanceof } from '../../utils';
-import { DateValue, Range, fromJS, compare } from '../../value';
+import { DateValue, Range, fromJS, compare, NumberValue } from '../../value';
 import { Type, build as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
@@ -59,4 +59,19 @@ export const miscOperators: Record<string, BuiltinSpec> = {
         Type.combine(range.isRange(), date.isDate(), t.boolean()),
     },
   ]),
+  stripunit: {
+    argCount: 1,
+    fnValues: ([expression]) => expression,
+    functor: ([expression]) =>
+      expression.isScalar('number').mapType(() => t.number()),
+    explanation:
+      'Removes the unit from an expression and returns just the number. \n\nExample: `value(5 minutes)`',
+  },
+  getunit: {
+    argCount: 1,
+    fnValues: () => new NumberValue(1),
+    functor: ([expression]) => expression,
+    explanation:
+      'Removes the value from an expression and returns just the unit. \n\nExample: `unit(5 minutes)`',
+  },
 };
