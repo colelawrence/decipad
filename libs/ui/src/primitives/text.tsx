@@ -1,4 +1,4 @@
-import { CSSObject, Global } from '@emotion/react';
+import { css, CSSObject, Global } from '@emotion/react';
 import { abcDiatype, abcDiatypeMono } from '../fonts';
 import { cssVar, setCssVar } from './var';
 
@@ -220,6 +220,13 @@ export const smallCode: TypographyStyles = {
   fontSize: `${10 / usualRemPxs}rem`,
   lineHeight: 1,
 };
+
+export const ellipsis = css({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  minWidth: 0,
+});
 
 // global
 

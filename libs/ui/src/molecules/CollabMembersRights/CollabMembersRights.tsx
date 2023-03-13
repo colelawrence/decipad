@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { noop } from 'lodash';
 import { Avatar } from '../../atoms';
-import { p12Medium, p14Medium } from '../../primitives';
+import { ellipsis, p12Medium, p14Medium } from '../../primitives';
 import { CollabAccessDropdown } from '..';
 import { NotebookAvatar } from '../NotebookAvatars/NotebookAvatars';
 import { PermissionType } from '../../types';
@@ -23,6 +23,11 @@ const collaboratorStyles = css({
 const avatarStyles = css({
   width: '28px',
   height: '28px',
+});
+
+const userDetailsStyles = css({
+  flex: 1,
+  minWidth: 0,
 });
 
 const groupStyles = css({
@@ -63,13 +68,25 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
               <Avatar name={user.name} email={user.email || ''} />
             </div>
             {user.email === user.name ? (
-              <div css={{ flex: 1 }}>
-                <div css={css(p12Medium)}>{user.email}</div>
+              <div css={userDetailsStyles}>
+                <div
+                  css={css(p12Medium, ellipsis)}
+                  title={user.email ?? undefined}
+                >
+                  {user.email}
+                </div>
               </div>
             ) : (
-              <div css={{ flex: 1 }}>
-                <div css={css(p14Medium)}>{user.name}</div>
-                <div css={css(p12Medium)}>{user.email}</div>
+              <div css={userDetailsStyles}>
+                <div css={css(p14Medium, ellipsis)} title={user.name}>
+                  {user.name}
+                </div>
+                <div
+                  css={css(p12Medium, ellipsis)}
+                  title={user.email ?? undefined}
+                >
+                  {user.email}
+                </div>
               </div>
             )}
 
