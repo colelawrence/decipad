@@ -7,6 +7,7 @@ export * from './Callout';
 export * from './CodeLine';
 export * from './CodeLineV2';
 export * from './CodeVariableHighlight';
+export * from './DataMapping';
 export * from './ConvertSmartRefs';
 export * from './DeduplicateElementIds';
 export * from './Display';

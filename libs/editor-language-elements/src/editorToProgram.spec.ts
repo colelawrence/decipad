@@ -22,6 +22,9 @@ import {
   StructuredInputElement,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
+  DataMappingElement,
+  ELEMENT_DATA_MAPPING,
+  ELEMENT_DATA_MAPPING_ROW,
 } from '@decipad/editor-types';
 import { Computer, prettyPrintAST, Program } from '@decipad/computer';
 import { createPlateEditor } from '@udecode/plate';
@@ -120,10 +123,48 @@ describe('editorToProgram', () => {
           },
         ],
       } as TableElement,
+      {
+        type: ELEMENT_DATA_MAPPING,
+        id: 'data-mapping',
+        sourceType: 'notebook-var',
+        source: 'struct-in',
+        children: [
+          {
+            type: ELEMENT_STRUCTURED_VARNAME,
+            id: 'data-mapping-name',
+            children: [{ text: 'DataMapping1' }],
+          },
+        ],
+      } as DataMappingElement,
+      {
+        type: ELEMENT_DATA_MAPPING,
+        id: 'data-mapping-table',
+        sourceType: 'notebook-table',
+        source: 'table',
+        children: [
+          {
+            type: ELEMENT_STRUCTURED_VARNAME,
+            id: 'data-mapping-name',
+            children: [{ text: 'DataMapping1' }],
+          },
+          {
+            type: ELEMENT_DATA_MAPPING_ROW,
+            sourceColumn: 'th',
+            id: 'data-mapping-table-col-1',
+            children: [
+              {
+                type: ELEMENT_STRUCTURED_VARNAME,
+                id: 'data-mapping-table-col-1-name',
+                children: [{ text: 'Column1' }],
+              },
+            ],
+          },
+        ],
+      } as DataMappingElement,
     ];
     const { program } = await editorToProgram(editor, new Computer());
 
-    expect(program.length).toBe(9);
+    expect(program.length).toBe(12);
 
     const [
       block,
@@ -135,6 +176,9 @@ describe('editorToProgram', () => {
       magicNum,
       table,
       tableCol,
+      dataMapping,
+      dataMapTable,
+      dataMapColumn,
     ] = prettyPrintAll(program);
 
     expect(block).toMatchInlineSnapshot(`"(+ 1 1)"`);
@@ -175,6 +219,18 @@ describe('editorToProgram', () => {
 
     expect(tableCol).toMatchInlineSnapshot(
       `"(table-column-assign (tablepartialdef TableName) (coldef ColName) (column \\"CellData\\"))"`
+    );
+
+    expect(dataMapping).toMatchInlineSnapshot(`
+      "(assign
+        (def DataMapping1)
+        (ref exprRef_struct_in))"
+    `);
+
+    expect(dataMapTable).toMatchInlineSnapshot(`"(table DataMapping1)"`);
+
+    expect(dataMapColumn).toMatchInlineSnapshot(
+      `"(table-column-assign (tablepartialdef DataMapping1) (coldef Column1) (ref exprRef_th))"`
     );
   });
 });

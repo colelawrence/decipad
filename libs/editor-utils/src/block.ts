@@ -1,11 +1,15 @@
+import { Computer } from '@decipad/computer';
 import {
+  DataMappingElement,
   ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
+  ELEMENT_DATA_MAPPING,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
+  ELEMENT_STRUCTURED_VARNAME,
   InlineNumberElement,
   MyEditor,
   MyElement,
@@ -134,6 +138,29 @@ export const insertBlockOfTypeBelow = (
     editor,
     { id: nanoid(), type, children: [{ text: '' }] },
     { at: requirePathBelowBlock(editor, path) }
+  );
+};
+
+export const insertDataMapping = (
+  editor: MyEditor,
+  path: Path,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
+) => {
+  const insertPath = requirePathBelowBlock(editor, path);
+  insertNodes<TElement>(
+    editor,
+    {
+      id: nanoid(),
+      type: ELEMENT_DATA_MAPPING,
+      children: [
+        {
+          type: ELEMENT_STRUCTURED_VARNAME,
+          id: nanoid(),
+          children: [{ text: getAvailableIdentifier('DataMapping', 1) }],
+        },
+      ],
+    } as DataMappingElement,
+    { at: insertPath }
   );
 };
 

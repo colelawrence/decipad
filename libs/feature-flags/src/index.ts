@@ -15,6 +15,7 @@ export const availableFlags = [
   'FORMULAS_TOOLTIP',
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
+  'DATA_MAPPINGS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

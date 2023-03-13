@@ -7,6 +7,7 @@ export { CodeLineStructured } from './CodeLineStructured/CodeLineStructured';
 export { CodeResult } from './CodeResult/CodeResult';
 export { ColumnResult } from './ColumnResult/ColumnResult';
 export { DashboardDialogCTA } from './DashboardDialogCTA/DashboardDialogCTA';
+export { DataMapping } from './DataMapping/DataMapping';
 export { DataView } from './DataView/DataView';
 export { DisplayWidget } from './DisplayWidget/DisplayWidget';
 export { DragAndDropImportNotebook } from './DragAndDropImportNotebook/DragAndDropImportNotebook';

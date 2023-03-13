@@ -12,7 +12,6 @@ import {
   createCodeLinePlugin,
   createCodeLineV2Plugin,
   createCodeVariableHighlightPlugin,
-  createDeduplicateElementIdsPlugin,
   createDisplayPlugin,
   createDividerPlugin,
   createDndSmartRefPlugin,
@@ -28,7 +27,6 @@ import {
   createLiveConnectionPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
-  createMigrateStructuredInputs,
   createNavigationPlugin,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
@@ -58,6 +56,9 @@ import {
   createUpdateComputerPlugin,
   createUserEventPlugin,
   createWithDocSyncHistoryPlugin,
+  createDeduplicateElementIdsPlugin,
+  createDataMappingPlugin,
+  createMigrateStructuredInputs,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -117,6 +118,8 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
+
+      createDataMappingPlugin(),
 
       createNotebookTitlePlugin({
         readOnly,

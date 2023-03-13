@@ -56,6 +56,14 @@ const dataItems = () => [
     enabled: true,
     extraSearchTerms: [],
   },
+  {
+    command: 'data-mapping',
+    title: 'Data Mapping',
+    description: 'Turns a source of data into a transformed version',
+    icon: <TableSlash />,
+    enabled: isFlagEnabled('DATA_MAPPINGS'),
+    extraSearchTerms: [],
+  },
 ];
 
 const groups = () => [

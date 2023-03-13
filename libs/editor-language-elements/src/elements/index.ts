@@ -1,5 +1,6 @@
 export * from './CodeLine';
 export * from './CodeLineV2';
+export * from './DataMapping';
 export * from './TextElements';
 export * from './Table';
 export * from './Column';

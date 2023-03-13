@@ -14,6 +14,7 @@ import {
   insertCodeLineBelow,
   insertDividerBelow,
   requireBlockParentPath,
+  insertDataMapping,
 } from '@decipad/editor-utils';
 import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
@@ -97,6 +98,9 @@ export const execute = ({
       break;
     case 'data-view':
       insertDataViewBelow(editor, path);
+      break;
+    case 'data-mapping':
+      insertDataMapping(editor, path, getAvailableIdentifier);
       break;
     case 'plot':
       insertPlotBelow(editor, path);
