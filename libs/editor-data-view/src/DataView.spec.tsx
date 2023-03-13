@@ -33,6 +33,8 @@ import { Column, AggregationKind } from './types';
 type TestValue = [H1Element, DataViewElement];
 type TestEditor = PlateEditor<TestValue>;
 
+const maxRunBigTableTimeoutMs = 12_000 * (process.env.CI ? 2 : 1);
+
 const createEditor = (): TestEditor => {
   const editor = createPlateEditor<TestValue>({
     plugins: [createDataViewPlugin()],
@@ -315,7 +317,7 @@ describe('useDataView hook performance', () => {
       computer,
     });
     let elapsed = Date.now() - startTime;
-    expect(elapsed).toBeLessThanOrEqual(12_000);
+    expect(elapsed).toBeLessThanOrEqual(maxRunBigTableTimeoutMs);
     expect(testResult).toMatchSnapshot();
 
     startTime = Date.now();
@@ -328,7 +330,7 @@ describe('useDataView hook performance', () => {
       expandedGroups: [],
     });
     elapsed = Date.now() - startTime;
-    expect(elapsed).toBeLessThanOrEqual(12_000);
+    expect(elapsed).toBeLessThanOrEqual(maxRunBigTableTimeoutMs);
 
     expect(layoutDataResult).toMatchSnapshot();
   }, 120_000);

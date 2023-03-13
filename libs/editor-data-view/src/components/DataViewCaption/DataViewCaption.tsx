@@ -5,12 +5,11 @@ import {
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditableTableCaption } from '@decipad/ui';
 import {
   findNodePath,
-  getAboveNode,
   getNodeChild,
   getNodeString,
   isElement,
@@ -28,7 +27,7 @@ export const DataViewCaption: PlateComponent = ({
   assertElementType(element, ELEMENT_DATA_VIEW_CAPTION);
   const editor = useTEditorRef();
   const path = findNodePath(editor, element);
-  const parent = getAboveNode<TableElement>(editor, {
+  const parent = getAboveNodeSafe<TableElement>(editor, {
     at: path,
     match: (node) => {
       return isElement(node) && node.type === ELEMENT_TABLE;
