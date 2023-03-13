@@ -212,7 +212,7 @@
     "react-router-dom": "6.9.0",
     "react-simple-code-editor": "0.13.1",
     "react-toast-notifications": "2.5.1",
-    "react-use-intercom": "^5.0.0",
+    "react-use-intercom": "^3.0.0",
     "react-vega": "7.6.0",
     "remark-parse": "9.0.0",
     "run-parallel-limit": "1.1.0",
