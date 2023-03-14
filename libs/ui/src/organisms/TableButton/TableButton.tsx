@@ -41,7 +41,7 @@ export const TableButton: FC<TableButtonProps> = ({
     : captions[0];
 
   return (
-    <div
+    <div // please don't change this to a button, as bad things will happen, like breaking the layout *only* on headless chrome, (which runs on E2E tests). That would not be fun!!!!
       css={[showMoreButtonWrapperStyles, hideOnPrint]}
       data-testid={`table-button-${captions
         .map((a) => a.replace(/\W/g, '').toLocaleLowerCase())

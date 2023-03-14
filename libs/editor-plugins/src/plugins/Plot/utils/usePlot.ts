@@ -2,7 +2,8 @@ import { PlotElement, useTEditorRef } from '@decipad/editor-types';
 import { Computer, AutocompleteName, getExprRef } from '@decipad/computer';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import { useMemo } from 'react';
+import { colorSchemes } from '@decipad/ui';
+import { useEffect, useMemo } from 'react';
 import type { PlotData, PlotSpec } from './plotUtils';
 import {
   enhanceSpecFromWideData,
@@ -86,39 +87,83 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     return undefined;
   }, [element.markType]);
 
-  const plotParams: PlotParams = {
-    sourceVarNameOptions: names.map((name) => name.name),
-    sourceExprRefOptions: names.map((name) => name.exprRef),
-    columnNameOptions:
-      (source?.type.kind === 'table' && source.type.columnNames) || [],
-    setSourceVarName: useElementMutatorCallback(
-      editor,
+  const setSourceVarName = useElementMutatorCallback(
+    editor,
+    element,
+    'sourceVarName'
+  );
+  const setXColumnName = useElementMutatorCallback(
+    editor,
+    element,
+    'xColumnName'
+  );
+  const setYColumnName = useElementMutatorCallback(
+    editor,
+    element,
+    'yColumnName'
+  );
+  const setSizeColumnName = useElementMutatorCallback(
+    editor,
+    element,
+    'sizeColumnName'
+  );
+  const setColorColumnName = useElementMutatorCallback(
+    editor,
+    element,
+    'colorColumnName'
+  );
+  const setThetaColumnName = useElementMutatorCallback(
+    editor,
+    element,
+    'thetaColumnName'
+  );
+  const setColorScheme = useElementMutatorCallback(
+    editor,
+    element,
+    'colorScheme'
+  );
+
+  const plotParams: PlotParams = useMemo(
+    () => ({
+      sourceVarNameOptions: names.map((name) => name.name),
+      sourceExprRefOptions: names.map((name) => name.exprRef),
+      columnNameOptions:
+        (source?.type.kind === 'table' && source.type.columnNames) || [],
+      setSourceVarName,
+      setMarkType: setMarkType as StringSetter,
+      setXColumnName,
+      setYColumnName,
+      setSizeColumnName,
+      setColorColumnName,
+      setThetaColumnName,
+      setColorScheme,
+      ...element,
+      setShape: setMarkType,
+      shape,
+    }),
+    [
       element,
-      'sourceVarName'
-    ),
-    setMarkType: setMarkType as StringSetter,
-    setXColumnName: useElementMutatorCallback(editor, element, 'xColumnName'),
-    setYColumnName: useElementMutatorCallback(editor, element, 'yColumnName'),
-    setSizeColumnName: useElementMutatorCallback(
-      editor,
-      element,
-      'sizeColumnName'
-    ),
-    setColorColumnName: useElementMutatorCallback(
-      editor,
-      element,
-      'colorColumnName'
-    ),
-    setThetaColumnName: useElementMutatorCallback(
-      editor,
-      element,
-      'thetaColumnName'
-    ),
-    setColorScheme: useElementMutatorCallback(editor, element, 'colorScheme'),
-    ...element,
-    setShape: setMarkType,
-    shape,
-  };
+      names,
+      setColorColumnName,
+      setColorScheme,
+      setMarkType,
+      setSizeColumnName,
+      setSourceVarName,
+      setThetaColumnName,
+      setXColumnName,
+      setYColumnName,
+      shape,
+      source,
+    ]
+  );
+
+  // Notebooks with charts that do not have a current color scheme need to be updated or they won't render.
+  useEffect(() => {
+    const colorScheme = plotParams.colorScheme as string;
+    if (colorScheme && !Object.keys(colorSchemes).includes(colorScheme)) {
+      plotParams.setColorScheme(Object.keys(colorSchemes)[0]);
+    }
+  }, [plotParams]);
 
   return { spec, data, plotParams };
 };

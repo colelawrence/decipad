@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { createContext, FC, ReactElement, ReactNode, useContext } from 'react';
 import { isElement } from 'react-is';
@@ -11,7 +11,7 @@ export const Depth = createContext(0);
 const shadow1 = transparency(grey500, 0.02).rgba;
 const shadow2 = transparency(grey500, 0.08).rgba;
 
-const styles = css({
+const defaultStyles = css({
   display: 'flex',
   flexDirection: 'column',
 
@@ -68,6 +68,8 @@ type MenuListProps = (
   readonly side?: 'top' | 'right' | 'bottom' | 'left';
   readonly sideOffset?: number;
   readonly container?: HTMLElement;
+  readonly styles?: SerializedStyles;
+  readonly dataTestid?: string;
 };
 
 function getSubElementType(isRoot: boolean | undefined) {
@@ -127,6 +129,8 @@ export const MenuList = ({
   side = 'bottom',
   sideOffset = 0,
   container,
+  styles = css({}),
+  dataTestid,
 }: MenuListProps): ReturnType<FC> => {
   const depth = useContext(Depth) + 1;
 
@@ -171,12 +175,13 @@ export const MenuList = ({
             ]}
           >
             <DropdownMenuContentElement
-              css={styles}
+              css={css([defaultStyles, styles])}
               align={align}
               onFocusOutside={(e) => e.preventDefault()}
               onClick={(e) => e.preventDefault()}
               side={side}
               sideOffset={sideOffset}
+              data-testid={dataTestid}
             >
               {children}
             </DropdownMenuContentElement>

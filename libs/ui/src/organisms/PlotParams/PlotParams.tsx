@@ -1,24 +1,52 @@
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
-import { Label } from '../../atoms';
-import { cssVar, p12Medium } from '../../primitives';
+import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
+import { MenuItem, TriggerMenuItem } from '../../atoms';
+import {
+  Brush,
+  List,
+  Plot,
+  Settings,
+  Table,
+  AreaChart,
+  BarChart,
+  LineChart,
+  PieChart,
+  ScatterPlot,
+} from '../../icons';
+import { MenuList } from '../../molecules';
+import {
+  colorSchemes,
+  monochromeColorSchemes,
+  multicolorColorSchemes,
+  cssVar,
+  grey400,
+  p13Medium,
+} from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 type StringSetter<T extends string | undefined = string> = (str: T) => void;
 
-const markTypes = ['line', 'bar', 'arc', 'area', 'point'] as const;
+export const markTypes = ['line', 'bar', 'arc', 'area', 'point'] as const;
 
-type MarkType = typeof markTypes[number];
+export type MarkType = typeof markTypes[number];
 
-const markTypeNames: Record<MarkType, string> = {
+export const markTypeNames: Record<MarkType, string> = {
   bar: 'Bar',
   line: 'Line',
-  point: 'Point',
+  point: 'Scatter',
   area: 'Area',
   arc: 'Pie',
 };
 
-const shapes = ['point', 'circle', 'square', 'tick'];
+export const markTypeIcons: Record<MarkType, ReactNode> = {
+  bar: <BarChart />,
+  line: <LineChart />,
+  point: <ScatterPlot />,
+  arc: <PieChart />,
+  area: <AreaChart />,
+};
+
+export const shapes = ['point', 'circle', 'square', 'tick'];
 
 export interface PlotParamsProps {
   readonly sourceVarName: string;
@@ -44,81 +72,53 @@ export interface PlotParamsProps {
   readonly setShape: StringSetter;
 }
 
-interface SelectInputProps {
-  readonly labelText: string;
-  readonly children: ReactNode;
-  readonly value: string;
-  readonly setValue: StringSetter;
-}
-
-const selectFontStyles = css(p12Medium);
-
-const selectStyles = css({
-  backgroundColor: cssVar('highlightColor'),
-  width: '100%',
-  maxWidth: '140px',
-});
-
-const SelectInput = ({
-  labelText,
-  children,
-  value,
-  setValue,
-}: SelectInputProps): ReturnType<FC> => {
-  return (
-    <Label
-      renderContent={(id) => (
-        <select
-          css={[selectFontStyles, selectStyles]}
-          id={id}
-          onChange={(ev) => {
-            setValue(ev.target.value);
-          }}
-          value={value}
-        >
-          {children}
-        </select>
-      )}
-    >
-      <span css={selectFontStyles}>{labelText}:</span>
-    </Label>
-  );
-};
-
 const wrapperContainerStyles = css({
   marginBottom: '20px',
 });
 
-const containerStyles = css({
+const buttonStyles = css({
+  borderRadius: '6px',
+  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('tintedBackgroundColor'),
+
+  ':hover, :focus': {
+    backgroundColor: cssVar('strongHighlightColor'),
+  },
   display: 'flex',
-  flexWrap: 'wrap',
-  gap: '4px',
-  marginBottom: '4px',
+  flexDirection: 'row',
+  alignItems: 'center',
+  padding: '4px',
 });
 
-const colorSchemes = [
-  'deciblues',
-  'accent',
-  'category20',
-  'dark2',
-  'paired',
-  'pastel1',
-  'pastel2',
-  'set2',
-  'set3',
-];
+const iconStyles = css({
+  width: '12px',
+});
 
-const ColorSchemeOptions = () => {
-  return (
-    <>
-      <option key="__none" value=""></option>;
-      {colorSchemes.map((scheme) => (
-        <option key={scheme} value={scheme}>
-          {scheme}
-        </option>
-      ))}
-    </>
-  );
+const buttonTextStyles = css(p13Medium, {
+  whiteSpace: 'nowrap',
+  padding: '0 4px',
+});
+
+type SubMenuKey =
+  | 'source-table'
+  | 'chart-type'
+  | 'shape'
+  | 'colors'
+  | 'color-scheme'
+  | 'slice-size'
+  | 'label'
+  | 'value'
+  | 'point-size'
+  | 'color-scheme_monochrome'
+  | 'color-scheme_multicolor';
+
+type ColorSchemeUniqueName = keyof typeof colorSchemes;
+
+const getColorSchemePrettyName = (uniqueName: ColorSchemeUniqueName) => {
+  const cs = colorSchemes[uniqueName];
+  // When this function is called we cheat and coerce a string to `ColorSchemeUniqueName` so we
+  // have to check whether cs exists even though the type system thinks it definitely should!
+  return cs ? `${cs.category} ${cs.name}` : '';
 };
 
 export const PlotParams = ({
@@ -144,126 +144,389 @@ export const PlotParams = ({
   shape,
   setShape,
 }: PlotParamsProps): ReturnType<FC> => {
-  const emptyColumnOption = <option key="__none" value=""></option>;
-  const sourceVarNameOptionsOptions = [emptyColumnOption].concat(
-    sourceVarNameOptions.map((sourceVarNameOption, index) => (
-      <option
-        key={sourceVarNameOption}
-        value={sourceExprRefOptions?.[index] ?? sourceVarNameOption}
-      >
-        {sourceVarNameOption}
-      </option>
-    ))
+  const [open, setOpen] = useState<SubMenuKey | null>(null);
+
+  const onChangeOpen = useCallback(
+    (key: SubMenuKey) => (isOpen: boolean) => {
+      // Have to check menu is definitely opening or this will be reset to the key when
+      // the main menu closes and reopen the submenu!
+      if (isOpen) {
+        setOpen(key);
+      }
+    },
+    [setOpen]
   );
 
-  const columnOptions = [emptyColumnOption].concat(
-    columnNameOptions.map((columnNameOption) => (
-      <option key={columnNameOption} value={columnNameOption}>
-        {columnNameOption}
-      </option>
-    ))
+  const [tempColorScheme, setTempColorScheme] = useState<string | undefined>(
+    undefined
   );
+  const [cachedColorScheme, setCachedColorScheme] = useState<
+    string | undefined
+  >(colorScheme);
 
-  const markTypeOptions = [emptyColumnOption].concat(
-    markTypes.map((mark) => (
-      <option key={mark} value={mark}>
-        {markTypeNames[mark]}
-      </option>
-    ))
-  );
+  useEffect(() => {
+    if (tempColorScheme) {
+      setColorScheme(tempColorScheme);
+    } else if (cachedColorScheme) {
+      setColorScheme(cachedColorScheme);
+    }
+  }, [tempColorScheme, cachedColorScheme, setColorScheme]);
+
+  const tableExpressionRefIndex = sourceExprRefOptions?.indexOf(sourceVarName);
+  const tableVarName =
+    tableExpressionRefIndex === undefined
+      ? undefined
+      : sourceVarNameOptions[tableExpressionRefIndex];
+
+  useEffect(() => {
+    // We can't set sensible defaults without these two, so we just return
+    if (!tableVarName) return;
+    if (columnNameOptions.length < 2) return;
+
+    // Not used for everything, but doesn't hurt to set it anyway
+    if (!colorScheme) {
+      setColorScheme('multicolor_yellow');
+    }
+
+    // When a new chart is created, pick some sensible defaults once we kow what type of chart it's meant to be
+    switch (markType) {
+      case 'arc': {
+        if (!colorColumnName) {
+          setColorColumnName(columnNameOptions[0]);
+        }
+        if (!thetaColumnName) {
+          setThetaColumnName(columnNameOptions[1]);
+        }
+        break;
+      }
+      case 'bar':
+      case 'area':
+      case 'point':
+      case 'line': {
+        if (!xColumnName) {
+          setXColumnName(columnNameOptions[0]);
+        }
+        if (!yColumnName) {
+          setYColumnName(columnNameOptions[1]);
+        }
+        break;
+      }
+    }
+  }, [
+    tableVarName,
+    markType,
+    colorColumnName,
+    colorScheme,
+    columnNameOptions,
+    setColorColumnName,
+    setColorScheme,
+    setThetaColumnName,
+    setXColumnName,
+    setYColumnName,
+    thetaColumnName,
+    xColumnName,
+    yColumnName,
+  ]);
 
   return (
     <div css={[wrapperContainerStyles, hideOnPrint]}>
-      <div css={containerStyles}>
-        <SelectInput
-          labelText="Table"
-          setValue={setSourceVarName}
-          value={sourceVarName}
-        >
-          {sourceVarNameOptionsOptions}
-        </SelectInput>
-        {sourceVarName && (
-          <>
-            <SelectInput
-              labelText="Chart"
-              setValue={setMarkType}
-              value={shapes.includes(markType) ? 'point' : markType}
+      <MenuList
+        root
+        dropdown
+        onChangeOpen={(isOpen) => {
+          if (!isOpen) {
+            setOpen(null);
+          }
+        }}
+        // Width hard coded to deal with "Monochrome Yellow", the longest color name :(
+        styles={css({ width: '290px' })}
+        dataTestid="chart-settings-menu"
+        trigger={
+          <button css={buttonStyles} data-testid="chart-settings-button">
+            <span css={iconStyles}>{<Settings />}</span>
+            <span css={buttonTextStyles}>Settings</span>
+          </button>
+        }
+      >
+        <MenuList
+          key="source-table"
+          open={open === 'source-table'}
+          onChangeOpen={onChangeOpen('source-table')}
+          itemTrigger={
+            <TriggerMenuItem
+              icon={<Table />}
+              selectedPreview={tableVarName?.toString()}
             >
-              {markTypeOptions}
-            </SelectInput>
-            {shapes.includes(markType) && (
-              <SelectInput labelText="Shape" setValue={setShape} value={shape}>
-                {shapes.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </SelectInput>
-            )}
+              Source table
+            </TriggerMenuItem>
+          }
+        >
+          {sourceVarNameOptions.map((svn, index) => {
+            return (
+              <MenuItem
+                key={svn}
+                selected={sourceExprRefOptions?.[index] === sourceVarName}
+                onSelect={() => {
+                  setSourceVarName(sourceExprRefOptions?.[index] ?? svn);
+                }}
+              >
+                <div css={{ minWidth: '160px' }}>{svn}</div>
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+        <MenuList
+          key="chart-type"
+          open={open === 'chart-type'}
+          onChangeOpen={onChangeOpen('chart-type')}
+          itemTrigger={
+            <TriggerMenuItem
+              icon={<Plot />}
+              selectedPreview={markTypeNames[markType]}
+            >
+              Chart type
+            </TriggerMenuItem>
+          }
+        >
+          {markTypes.map((mark) => {
+            const type = shapes.includes(mark) ? 'point' : mark;
+
+            return (
+              <MenuItem
+                key={type}
+                selected={markType === mark}
+                onSelect={() => setMarkType(type)}
+                icon={markTypeIcons[mark]}
+                data-testid={`chart__settings__chart-type__${mark}`}
+              >
+                <div css={{ minWidth: '160px' }}>{markTypeNames[mark]}</div>
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+        {shapes.includes(markType) && (
+          <MenuList
+            key="shape"
+            open={open === 'shape'}
+            onChangeOpen={onChangeOpen('shape')}
+            itemTrigger={
+              <TriggerMenuItem selectedPreview={shape}>Shape</TriggerMenuItem>
+            }
+          >
+            {shapes.map((s) => {
+              return (
+                <MenuItem
+                  key={s}
+                  selected={shape === s}
+                  onSelect={() => {
+                    setShape(s);
+                  }}
+                >
+                  <div css={{ minWidth: '160px' }}>{s}</div>
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+        )}
+        {(markType === 'bar' || markType === 'arc') && (
+          <MenuList
+            key="colors"
+            open={open === 'colors'}
+            onChangeOpen={onChangeOpen('colors')}
+            itemTrigger={
+              <TriggerMenuItem
+                icon={<List />}
+                selectedPreview={colorColumnName}
+              >
+                Colors
+              </TriggerMenuItem>
+            }
+          >
+            {columnNameOptions.map((columnNameOption) => {
+              return (
+                <MenuItem
+                  key={columnNameOption}
+                  selected={colorColumnName === columnNameOption}
+                  onSelect={() => setColorColumnName(columnNameOption)}
+                >
+                  <div css={{ minWidth: '160px' }}>{columnNameOption}</div>
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+        )}
+
+        {markType === 'arc' && (
+          <MenuList
+            key="slice-size"
+            open={open === 'slice-size'}
+            onChangeOpen={onChangeOpen('slice-size')}
+            itemTrigger={
+              <TriggerMenuItem
+                icon={<List />}
+                selectedPreview={thetaColumnName}
+              >
+                Slice size
+              </TriggerMenuItem>
+            }
+          >
+            {columnNameOptions.map((columnNameOption) => (
+              <MenuItem
+                key={columnNameOption}
+                selected={thetaColumnName === columnNameOption}
+                onSelect={() => setThetaColumnName(columnNameOption)}
+              >
+                <div css={{ minWidth: '160px' }}>{columnNameOption}</div>
+              </MenuItem>
+            ))}
+          </MenuList>
+        )}
+
+        {(markType === 'bar' || markType === 'arc') && colorColumnName && (
+          <MenuList
+            key="color-scheme"
+            open={open?.startsWith('color-scheme')}
+            onChangeOpen={onChangeOpen('color-scheme')}
+            itemTrigger={
+              <TriggerMenuItem
+                icon={<Brush />}
+                selectedPreview={getColorSchemePrettyName(
+                  colorScheme as keyof typeof colorSchemes
+                )}
+              >
+                Color scheme
+              </TriggerMenuItem>
+            }
+          >
+            <MenuList
+              key="monochrome-color-scheme"
+              open={open === 'color-scheme_monochrome'}
+              onChangeOpen={onChangeOpen('color-scheme_monochrome')}
+              itemTrigger={
+                <TriggerMenuItem icon={<Brush />}>Monochrome</TriggerMenuItem>
+              }
+            >
+              {monochromeColorSchemes.map(([uniqueName, cs]) => (
+                <MenuItem
+                  key={uniqueName}
+                  selected={uniqueName === colorScheme}
+                  onSelect={() => {
+                    setColorScheme(uniqueName);
+                    setCachedColorScheme(uniqueName);
+                  }}
+                  onMouseEnter={() => {
+                    setTempColorScheme(uniqueName);
+                  }}
+                  onMouseLeave={() => {
+                    setTempColorScheme(undefined);
+                  }}
+                >
+                  <div css={{ minWidth: '160px' }}>{cs.name}</div>
+                </MenuItem>
+              ))}
+            </MenuList>
+            <MenuList
+              key="multicolor-color-scheme"
+              open={open === 'color-scheme_multicolor'}
+              onChangeOpen={onChangeOpen('color-scheme_multicolor')}
+              itemTrigger={
+                <TriggerMenuItem icon={<Brush />}>Multicolor</TriggerMenuItem>
+              }
+            >
+              {multicolorColorSchemes.map(([uniqueName, cs]) => (
+                <MenuItem
+                  key={uniqueName}
+                  selected={uniqueName === colorScheme}
+                  onSelect={() => {
+                    setColorScheme(uniqueName);
+                    setCachedColorScheme(uniqueName);
+                  }}
+                  onMouseEnter={() => {
+                    setTempColorScheme(uniqueName);
+                  }}
+                  onMouseLeave={() => {
+                    setTempColorScheme(undefined);
+                  }}
+                >
+                  <div css={{ minWidth: '160px' }}>{cs.name}</div>
+                </MenuItem>
+              ))}
+            </MenuList>
+          </MenuList>
+        )}
+        {markType !== 'arc' && (
+          <>
+            <MenuList
+              key="label"
+              open={open === 'label'}
+              onChangeOpen={onChangeOpen('label')}
+              itemTrigger={
+                <TriggerMenuItem icon={<List />} selectedPreview={xColumnName}>
+                  Label
+                </TriggerMenuItem>
+              }
+            >
+              {columnNameOptions.map((columnNameOption) => (
+                <MenuItem
+                  key={columnNameOption}
+                  onSelect={() => setXColumnName(columnNameOption)}
+                  data-testid={`chart__settings__label__${columnNameOption}`}
+                >
+                  <div css={{ minWidth: '160px' }}>{columnNameOption}</div>
+                </MenuItem>
+              ))}
+            </MenuList>
+            <MenuList
+              key="value"
+              open={open === 'value'}
+              onChangeOpen={onChangeOpen('value')}
+              itemTrigger={
+                <TriggerMenuItem icon={<List />} selectedPreview={yColumnName}>
+                  Value
+                </TriggerMenuItem>
+              }
+            >
+              {columnNameOptions.map((columnNameOption) => (
+                <MenuItem
+                  key={columnNameOption}
+                  onSelect={() => setYColumnName(columnNameOption)}
+                  data-testid={`chart__settings__value__${columnNameOption}`}
+                >
+                  <div css={{ minWidth: '160px' }}>{columnNameOption}</div>
+                </MenuItem>
+              ))}
+            </MenuList>
           </>
         )}
-      </div>
-
-      {sourceVarName && (
-        <div css={containerStyles}>
-          {markType !== 'arc' && (
-            <>
-              <SelectInput
-                labelText="Label"
-                setValue={setXColumnName}
-                value={xColumnName}
+        {(shapes.includes(markType) || markType === 'area') && (
+          <MenuList
+            key="point-size"
+            open={open === 'point-size'}
+            onChangeOpen={onChangeOpen('point-size')}
+            itemTrigger={
+              <TriggerMenuItem icon={<List />} selectedPreview={sizeColumnName}>
+                Point size
+              </TriggerMenuItem>
+            }
+          >
+            <MenuItem key="" onSelect={() => setSizeColumnName('')}>
+              <div
+                css={{ minWidth: '160px', height: '19px', color: grey400.rgb }}
               >
-                {columnOptions}
-              </SelectInput>
-              <SelectInput
-                labelText="Value"
-                setValue={setYColumnName}
-                value={yColumnName}
+                None
+              </div>
+            </MenuItem>
+            {columnNameOptions.map((columnNameOption) => (
+              <MenuItem
+                key={columnNameOption}
+                onSelect={() => setSizeColumnName(columnNameOption)}
               >
-                {columnOptions}
-              </SelectInput>
-              {(shapes.includes(markType) || markType === 'area') && (
-                <SelectInput
-                  labelText="Sizes"
-                  setValue={setSizeColumnName}
-                  value={sizeColumnName}
-                >
-                  {columnOptions}
-                </SelectInput>
-              )}
-            </>
-          )}
-
-          {markType === 'arc' && (
-            <SelectInput
-              labelText="Slice size"
-              setValue={setThetaColumnName}
-              value={thetaColumnName}
-            >
-              {columnOptions}
-            </SelectInput>
-          )}
-
-          {(markType === 'bar' || markType === 'arc') && (
-            <SelectInput
-              labelText="Colors"
-              setValue={setColorColumnName}
-              value={colorColumnName}
-            >
-              {columnOptions}
-            </SelectInput>
-          )}
-          {(markType === 'bar' || markType === 'arc') && colorColumnName && (
-            <SelectInput
-              labelText="Color Scheme"
-              setValue={setColorScheme}
-              value={colorScheme || ''}
-            >
-              <ColorSchemeOptions />
-            </SelectInput>
-          )}
-        </div>
-      )}
+                <div css={{ minWidth: '160px' }}>{columnNameOption}</div>
+              </MenuItem>
+            ))}
+          </MenuList>
+        )}
+      </MenuList>
     </div>
   );
 };

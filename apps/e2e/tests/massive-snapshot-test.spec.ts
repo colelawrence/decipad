@@ -113,6 +113,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
     // Magic numbers are delayed
     await page.waitForSelector('text="This is a string"');
+    await page.waitForSelector('text="ם עוד. על בקר"');
 
     await snapshot(
       publishedNotebookPage,

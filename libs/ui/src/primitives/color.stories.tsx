@@ -70,6 +70,7 @@ const colorNames: Record<ColorId, string> = {
   orange800: 'Orange 800',
   orange900: 'Orange 900',
 
+  purple50: 'Purple 50',
   purple100: 'Purple 100',
   purple200: 'Purple 200',
   purple300: 'Purple 300',

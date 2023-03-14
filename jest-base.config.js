@@ -5,7 +5,11 @@ process.env.TZ = process.env.TZ || 'America/Los_Angeles';
 const { presets, plugins } = require('./babel-web.config');
 
 module.exports = {
-  collectCoverageFrom: ['<rootDir>/src/**', '!<rootDir>/src/**/*.stories.tsx'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**',
+    '!<rootDir>/src/**/*.stories.tsx',
+    '!<rootDir>/src/**/storybook-utils/**',
+  ],
   coveragePathIgnorePatterns: ['^((?!<rootDir>).)*$'],
 
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'mjs'],

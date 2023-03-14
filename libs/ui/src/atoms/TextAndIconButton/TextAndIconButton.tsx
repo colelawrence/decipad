@@ -53,16 +53,9 @@ type IconButtonProps = {
   readonly text: TextChildren;
   readonly color?: 'default' | 'blue' | 'transparent';
   readonly iconPosition?: 'left' | 'right';
-} & (
-  | {
-      readonly href: string;
-      readonly onClick?: undefined;
-    }
-  | {
-      readonly onClick: () => void;
-      readonly href?: undefined;
-    }
-);
+  readonly href?: string;
+  readonly onClick?: () => void;
+};
 
 export const TextAndIconButton = ({
   children,

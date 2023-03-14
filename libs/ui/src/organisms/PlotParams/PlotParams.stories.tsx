@@ -8,7 +8,7 @@ const setter = (prop: string) => (value: string) => {
   props[prop] = value;
 };
 
-const params: ComponentProps<typeof PlotParams> = {
+export const params: ComponentProps<typeof PlotParams> = {
   sourceVarName: 'source var name',
   sourceVarNameOptions: [
     'source var name option 1',

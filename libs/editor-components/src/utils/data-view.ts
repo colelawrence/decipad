@@ -50,13 +50,12 @@ export const insertDataViewBelow = (
   blockId?: string,
   varName?: string
 ): void => {
-  const dataView = clone(
-    getInitialDataViewElement(blockId, varName)
-  ) as unknown as DataViewElement;
+  const dataView = clone(getInitialDataViewElement(blockId, varName));
+
   const newPath = requirePathBelowBlock(editor, path);
-  insertNodes(editor, dataView, {
-    at: newPath,
-  });
+
+  insertNodes(editor, dataView, { at: newPath });
+
   setTimeout(() => {
     const findPath = [...newPath, 0];
     const node = findNode(editor, {

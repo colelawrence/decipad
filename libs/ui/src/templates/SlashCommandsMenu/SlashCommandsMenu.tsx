@@ -1,10 +1,11 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { ComponentProps, FC, useMemo } from 'react';
 import {
+  AreaChartSlash,
+  BarChartSlash,
   Blockquote,
   Calculations,
   Callout,
-  Chart,
   DataView,
   DatePicker,
   Divider,
@@ -19,6 +20,9 @@ import {
   Slider,
   TableSlash,
   Toggle,
+  PieChartSlash,
+  ScatterPlotSlash,
+  LineChartSlash,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
 
@@ -92,12 +96,44 @@ const groups = () => [
         ],
       },
       {
-        command: 'plot',
-        title: 'Chart',
-        description: 'Visualize data with charts, plot data using charts',
-        icon: <Chart />,
+        command: 'pie-chart',
+        title: 'Pie Chart',
+        description: 'Visualize data on a pie chart',
+        icon: <PieChartSlash />,
         enabled: true,
         extraSearchTerms: ['chart', 'visualisation', 'plot'],
+      },
+      {
+        command: 'line-chart',
+        title: 'Line Chart',
+        description: 'Visualise data on a line chart',
+        icon: <LineChartSlash />,
+        enabled: true,
+        extraSearchTerms: ['chart', 'visualisation', 'plot', 'line plot'],
+      },
+      {
+        command: 'bar-chart',
+        title: 'Bar Chart',
+        description: 'Visualise dta on a bar chart',
+        icon: <BarChartSlash />,
+        enabled: true,
+        extraSearchTerms: ['chart', 'visualisation', 'plot', 'bar plot'],
+      },
+      {
+        command: 'area-chart',
+        title: 'Area Chart',
+        description: 'Visualize data on an areea chart',
+        icon: <AreaChartSlash />,
+        enabled: true,
+        extraSearchTerms: ['chart', 'visualisation', 'plot', 'area plot'],
+      },
+      {
+        command: 'scatter-plot',
+        title: 'Scatter Plot',
+        description: 'Visualise data on a scatter plot',
+        icon: <ScatterPlotSlash />,
+        enabled: true,
+        extraSearchTerms: ['point plot', 'chart', 'visualisation', 'plot'],
       },
     ],
   },

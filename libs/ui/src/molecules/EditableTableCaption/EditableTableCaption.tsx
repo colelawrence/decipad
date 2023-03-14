@@ -1,8 +1,15 @@
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
+import { MenuItem, TextAndIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { FormulasDrawer, TableButton } from '../../organisms';
+import {
+  markTypeIcons,
+  markTypeNames,
+  markTypes,
+  shapes,
+} from '../../organisms/PlotParams/PlotParams';
 import {
   cssVar,
   display,
@@ -13,6 +20,7 @@ import {
 import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
+import { MenuList } from '../MenuList/MenuList';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -58,6 +66,7 @@ const placeholderStyles = css(p16Medium, {
 const editableTableCaptionStyles = css(p16Medium);
 type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: () => void;
+  onAddChartViewButtonPress?: (type: typeof markTypes[number]) => void;
   isForWideTable?: boolean;
   empty?: boolean;
   readOnly?: boolean;
@@ -71,6 +80,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   isForWideTable = false,
   readOnly = false,
   onAddDataViewButtonPress,
+  onAddChartViewButtonPress,
   children,
   showToggleCollapsedButton = false,
 }) => {
@@ -140,6 +150,42 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               onClick={onAddDataViewButtonPress}
               captions={['Create view']}
             />
+          )}
+          {hideAddDataViewButton ||
+          readOnly ||
+          !onAddChartViewButtonPress ? null : (
+            <MenuList
+              root
+              dropdown
+              trigger={
+                <button css={css({ padding: '5px' })}>
+                  <TextAndIconButton text="Create chart" iconPosition="left">
+                    <icons.Plot />
+                  </TextAndIconButton>
+                </button>
+              }
+            >
+              {markTypes.map((mark) => {
+                const type = shapes.includes(mark) ? 'point' : mark;
+
+                return (
+                  <MenuItem
+                    key={type}
+                    onSelect={() => {
+                      onAddChartViewButtonPress(mark);
+                    }}
+                    icon={markTypeIcons[mark]}
+                  >
+                    <div
+                      css={{ minWidth: '160px' }}
+                      data-test-id={`create-chart__${mark}`}
+                    >
+                      {markTypeNames[mark]}
+                    </div>
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
           )}
         </div>
       </div>

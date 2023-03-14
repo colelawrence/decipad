@@ -1,3 +1,5 @@
+import { getExprRef } from '@decipad/computer';
+import { insertPlotBelow } from '@decipad/editor-components';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -19,6 +21,7 @@ import {
   isElement,
 } from '@udecode/plate';
 import { insertDataViewBelow } from 'libs/editor-components/src/utils/data-view';
+import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import { useCallback } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableColumnCount } from '../../hooks';
@@ -69,6 +72,27 @@ export const TableCaption: PlateComponent = ({
     );
   }, [editor, element, parent, path]);
 
+  const onAddChartViewButtonPress = useCallback(
+    (markType: MarkType) => {
+      if (!parent) {
+        return;
+      }
+
+      const [tableElement, parentPath] = parent;
+
+      return (
+        path &&
+        insertPlotBelow(
+          editor,
+          parentPath,
+          markType,
+          getExprRef(tableElement.id)
+        )
+      );
+    },
+    [editor, element, parent, path]
+  );
+
   const caption = (
     <div {...attributes}>
       <EditableTableCaption
@@ -78,6 +102,7 @@ export const TableCaption: PlateComponent = ({
         }
         empty={getNodeString(element.children[0]).length === 0}
         onAddDataViewButtonPress={onAddDataViewButtonPress}
+        onAddChartViewButtonPress={onAddChartViewButtonPress}
         showToggleCollapsedButton={!!parent}
       >
         {children}

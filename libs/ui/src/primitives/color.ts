@@ -114,6 +114,7 @@ export const brand900 = color(39, 50, 21);
 //
 // purple
 //
+export const purple50 = color(241, 240, 255);
 export const purple100 = color(227, 225, 254);
 export const purple200 = color(199, 195, 253);
 export const purple300 = color(171, 165, 252);

@@ -99,11 +99,23 @@ export const execute = ({
     case 'data-view':
       insertDataViewBelow(editor, path);
       break;
+    case 'pie-chart':
+      insertPlotBelow(editor, path, 'arc');
+      break;
+    case 'line-chart':
+      insertPlotBelow(editor, path, 'line');
+      break;
+    case 'bar-chart':
+      insertPlotBelow(editor, path, 'bar');
+      break;
+    case 'area-chart':
+      insertPlotBelow(editor, path, 'area');
+      break;
+    case 'scatter-plot':
+      insertPlotBelow(editor, path, 'point');
+      break;
     case 'data-mapping':
       insertDataMapping(editor, path, getAvailableIdentifier);
-      break;
-    case 'plot':
-      insertPlotBelow(editor, path);
       break;
     case 'import':
       insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);

@@ -1,9 +1,10 @@
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
+import { MarkType } from '../PlotParams/PlotParams';
 import { PlotBlock } from './PlotBlock';
 
 let props: Record<string, string>;
-afterEach(() => {
+beforeEach(() => {
   props = {};
 });
 
@@ -37,14 +38,25 @@ const setter = (prop: string) => (value: string) => {
   props[prop] = value;
 };
 
-const plotParams: ComponentProps<typeof PlotBlock>['plotParams'] = {
-  sourceVarName: 'source var name',
+const plotParams: (
+  markType: MarkType,
+  sourceVarName?: string
+) => ComponentProps<typeof PlotBlock>['plotParams'] = (
+  markType,
+  sourceVarName
+) => ({
+  sourceVarName:
+    sourceVarName === undefined ? 'source var name' : sourceVarName,
+  sourceExprRefOptions: [
+    'exprRef_sTyUI7bAdmn0_OyxJz_Oj',
+    'exprRef_sTyUI7bAdmn0_OyxJz_Og',
+  ],
   sourceVarNameOptions: [
     'source var name option 1',
     'source var name option 2',
   ],
   columnNameOptions: ['column name option 1', 'column name option 2'],
-  markType: 'line',
+  markType,
   xColumnName: 'x column name',
   yColumnName: 'y column name',
   sizeColumnName: 'size column name',
@@ -61,33 +73,117 @@ const plotParams: ComponentProps<typeof PlotBlock>['plotParams'] = {
   setColorScheme: setter('colorScheme'),
   shape: '',
   setShape: setter('shape'),
-};
+});
 
-const plotProps: ComponentProps<typeof PlotBlock> = {
+const plotParamsNoSources: (
+  markType: MarkType
+) => ComponentProps<typeof PlotBlock>['plotParams'] = (markType) => ({
+  sourceVarName: '',
+  sourceExprRefOptions: [],
+  sourceVarNameOptions: [],
+  columnNameOptions: ['column name option 1', 'column name option 2'],
+  markType,
+  xColumnName: 'x column name',
+  yColumnName: 'y column name',
+  sizeColumnName: 'size column name',
+  colorColumnName: 'color column name',
+  thetaColumnName: 'color column name',
+  colorScheme: 'color scheme',
+  setSourceVarName: setter('sourceVarName'),
+  setMarkType: setter('markType'),
+  setXColumnName: setter('xColumnName'),
+  setYColumnName: setter('yColumnName'),
+  setSizeColumnName: setter('sizeColumnName'),
+  setColorColumnName: setter('colorColumnName'),
+  setThetaColumnName: setter('thetaColumnName'),
+  setColorScheme: setter('colorScheme'),
+  shape: '',
+  setShape: setter('shape'),
+});
+
+const plotProps: (
+  markType: MarkType,
+  sourceVarName?: string
+) => ComponentProps<typeof PlotBlock> = (markType, sourceVarName) => ({
   title: 'Title',
   readOnly: false,
   result,
-  plotParams,
-};
+  plotParams: plotParams(markType, sourceVarName),
+});
 
-it('displays the plot params unless readonly', () => {
-  const { getByLabelText, queryByLabelText, rerender } = render(
-    <PlotBlock {...plotProps} readOnly={false} />
+it('displays the "Select a table" component if no table selected', async () => {
+  const { queryByLabelText } = render(
+    <PlotBlock {...plotProps('arc', '')} readOnly={false} />
   );
-  expect(getByLabelText(/table/i)).toBeVisible();
 
-  rerender(<PlotBlock {...plotProps} readOnly />);
-  expect(queryByLabelText(/table/i)).not.toBeInTheDocument();
+  expect(queryByLabelText(/select a table/i)).toBeInTheDocument();
+});
+
+it('displays a warning if no tables exist', async () => {
+  const plotPropsNoSources: ComponentProps<typeof PlotBlock> = {
+    title: 'Title',
+    readOnly: false,
+    result,
+    plotParams: plotParamsNoSources('arc'),
+  };
+
+  const { queryByText } = render(
+    <PlotBlock {...plotPropsNoSources} readOnly={false} />
+  );
+
+  const text =
+    "You can't create a chart because this document does not include any tables";
+  expect(queryByText(text)).toBeInTheDocument();
+});
+
+it('displays the plot settings for a line plot unless readonly', async () => {
+  const { queryAllByText, rerender } = render(
+    <PlotBlock {...plotProps('line')} readOnly={false} />
+  );
+  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+
+  rerender(<PlotBlock {...plotProps('line')} readOnly />);
+  expect(await queryAllByText('Settings')).toHaveLength(0);
+});
+
+it('displays the plot settings for a pie chart unless readonly', async () => {
+  const { queryAllByText, rerender } = render(
+    <PlotBlock {...plotProps('arc')} readOnly={false} />
+  );
+  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+
+  rerender(<PlotBlock {...plotProps('arc')} readOnly />);
+  expect(await queryAllByText('Settings')).toHaveLength(0);
+});
+
+it('displays the plot settings for an area chart unless readonly', async () => {
+  const { queryAllByText, rerender } = render(
+    <PlotBlock {...plotProps('area')} readOnly={false} />
+  );
+  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+
+  rerender(<PlotBlock {...plotProps('area')} readOnly />);
+  expect(await queryAllByText('Settings')).toHaveLength(0);
+});
+
+it('displays the plot settings for a scatter plot unless readonly', async () => {
+  const { queryAllByText, rerender } = render(
+    <PlotBlock {...plotProps('point')} readOnly={false} />
+  );
+  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+
+  rerender(<PlotBlock {...plotProps('point')} readOnly />);
+  expect(await queryAllByText('Settings')).toHaveLength(0);
 });
 
 it('shows a given error message', () => {
   const { getByText } = render(
-    <PlotBlock {...plotProps} errorMessage="Oopsie whoopsie." />
+    <PlotBlock {...plotProps('line')} errorMessage="Oopsie whoopsie." />
   );
   expect(getByText('Oopsie whoopsie.')).toBeVisible();
 });
 
 it('renders a plot with the given result', async () => {
-  const { findAllByText } = render(<PlotBlock {...plotProps} />);
+  const { findAllByText } = render(<PlotBlock {...plotProps('line')} />);
   expect(await findAllByText(firstDataLabel)).not.toHaveLength(0);
 });

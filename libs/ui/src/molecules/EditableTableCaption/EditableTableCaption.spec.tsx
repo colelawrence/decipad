@@ -3,7 +3,10 @@ import { EditableTableCaption } from './EditableTableCaption';
 
 it('renders the text', () => {
   render(
-    <EditableTableCaption onAddDataViewButtonPress={() => null}>
+    <EditableTableCaption
+      onAddDataViewButtonPress={() => null}
+      onAddChartViewButtonPress={() => null}
+    >
       TableName
     </EditableTableCaption>
   );

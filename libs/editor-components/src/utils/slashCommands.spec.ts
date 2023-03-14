@@ -19,7 +19,7 @@ const expectedTypes = {
   heading2: ELEMENT_H3,
   import: ELEMENT_FETCH,
   'calculation-block': ELEMENT_CODE_LINE,
-  plot: ELEMENT_PLOT,
+  'pie-chart': ELEMENT_PLOT,
   input: ELEMENT_VARIABLE_DEF,
 };
 

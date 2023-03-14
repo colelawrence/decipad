@@ -19,6 +19,12 @@ const children = [
     <MenuItem icon={circleIcon}>Item 2.1</MenuItem>
     <MenuItem icon={circleIcon}>Item 2.2</MenuItem>
   </MenuList>,
+  <MenuList
+    itemTrigger={<TriggerMenuItem icon={circleIcon}>Item 3</TriggerMenuItem>}
+  >
+    <MenuItem icon={circleIcon}>Item 3.1</MenuItem>
+    <MenuItem icon={circleIcon}>Item 3.2</MenuItem>
+  </MenuList>,
 ];
 
 export const Normal: Story<typeof args> = (props) => {
