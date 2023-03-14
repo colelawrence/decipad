@@ -37,12 +37,12 @@ export const importFromCsv = async (
         }
       }
     });
-    parser.once('end', async () => {
+    parser.once('end', () => {
       isDone = true;
       try {
         const sheet = trimSheet(toColumnOriented(data));
         resolve(
-          await inferTable(computer, sheet, {
+          inferTable(computer, sheet, {
             ...options,
             doNotTryExpressionNumbersParse: true,
           })

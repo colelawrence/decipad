@@ -505,7 +505,7 @@ export class Computer {
 
   async expressionResult(expression: AST.Expression): Promise<Result.Result> {
     return this.enqueueComputation(async () => {
-      const type = await inferExpression(
+      const type = inferExpression(
         this.computationRealm.inferContext,
         expression
       );
@@ -539,14 +539,12 @@ export class Computer {
     });
   }
 
-  async expressionType(expression: AST.Expression): Promise<SerializedType> {
-    return this.enqueueComputation(async () => {
-      const type = await inferExpression(
-        this.computationRealm.inferContext,
-        expression
-      );
-      return serializeType(type);
-    });
+  expressionType(expression: AST.Expression): SerializedType {
+    const type = inferExpression(
+      this.computationRealm.inferContext,
+      expression
+    );
+    return serializeType(type);
   }
 
   /** Take stock of new program (came from editorToProgram) and update caching */
@@ -689,7 +687,7 @@ export class Computer {
    * Parses a unit from text.
    * NOTE: Don't use with '%', percentages are NOT units. I will crash
    */
-  async getUnitFromText(text: string): Promise<Unit[] | null> {
+  getUnitFromText(text: string): Unit[] | null {
     if (text.trim() === '%') {
       throw new Error('% is not a unit!');
     }
@@ -698,9 +696,7 @@ export class Computer {
     if (!ast) {
       return null;
     }
-    const expr = await this.enqueueComputation(() =>
-      inferExpression(this.computationRealm.inferContext, ast)
-    );
+    const expr = inferExpression(this.computationRealm.inferContext, ast);
     return expr.unit;
   }
 

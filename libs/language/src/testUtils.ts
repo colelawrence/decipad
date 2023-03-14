@@ -25,7 +25,7 @@ export const runAST = async (
 ) => {
   const ctx = makeContext({ externalData });
 
-  const inferResult = await inferBlock(block, ctx);
+  const inferResult = inferBlock(block, ctx);
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
@@ -44,7 +44,7 @@ export const runCodeForVariables = async (
 ) => {
   const program = [parseBlockOrThrow(source)];
 
-  const inferResult = await inferProgram(program);
+  const inferResult = inferProgram(program);
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
@@ -112,7 +112,7 @@ export const evaluateForVariables = async (
 ) => {
   const program = [parseBlockOrThrow(source)];
 
-  const inferResult = await inferProgram(program);
+  const inferResult = inferProgram(program);
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 

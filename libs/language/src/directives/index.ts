@@ -7,7 +7,7 @@ import { directives } from './directives';
 export const expandDirectiveToType = (
   ctx: Context,
   root: AST.Directive
-): Promise<Type> => directives[root.args[0]].getType(ctx, root);
+): Type => directives[root.args[0]].getType(ctx, root);
 
 export const expandDirectiveToValue = (
   realm: Realm,

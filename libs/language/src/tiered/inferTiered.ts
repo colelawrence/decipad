@@ -13,23 +13,23 @@ const isPredicate = (exp: AST.Expression): boolean => {
   return false;
 };
 
-const inferTieredDef = async (
+const inferTieredDef = (
   initialType: Type,
   ctx: Context,
   def: AST.TieredDef
-): Promise<Type> => {
-  return ctx.stack.withPush(async () => {
+): Type => {
+  return ctx.stack.withPushSync(() => {
     ctx.stack.set('tier', initialType);
     ctx.stack.set('slice', initialType);
 
     const [condition, result] = def.args;
     let conditionType: Type | undefined;
     if (!isPredicate(condition)) {
-      conditionType = (await inferExpression(ctx, condition))
+      conditionType = inferExpression(ctx, condition)
         .isScalar('number')
         .sameAs(initialType);
     }
-    const resultType = await inferExpression(ctx, result);
+    const resultType = inferExpression(ctx, result);
     if (conditionType?.errorCause) {
       return conditionType;
     }
@@ -37,19 +37,14 @@ const inferTieredDef = async (
   });
 };
 
-export const inferTiered = async (
-  ctx: Context,
-  node: AST.Tiered
-): Promise<Type> => {
+export const inferTiered = (ctx: Context, node: AST.Tiered): Type => {
   const [initial, ...tieredDefs] = node.args;
-  const argType = (await inferExpression(ctx, initial)).isScalar('number');
+  const argType = inferExpression(ctx, initial).isScalar('number');
 
   if (!tieredDefs.length) {
     return t.impossible('tiered definitions are empty');
   }
-  return (
-    await Promise.all(
-      tieredDefs.map((def) => inferTieredDef(argType, ctx, def))
-    )
-  ).reduce((type, other) => type.sameAs(other));
+  return tieredDefs
+    .map((def) => inferTieredDef(argType, ctx, def))
+    .reduce((type, other) => type.sameAs(other));
 };

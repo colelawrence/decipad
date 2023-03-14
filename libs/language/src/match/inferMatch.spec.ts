@@ -5,26 +5,24 @@ import { buildType as t } from '../type';
 import { inferMatch } from './inferMatch';
 
 describe('inferMatch', () => {
-  it('infers to nothing if empty', async () => {
-    expect(await inferMatch(makeContext(), match())).toEqual(t.nothing());
+  it('infers to nothing if empty', () => {
+    expect(inferMatch(makeContext(), match())).toEqual(t.nothing());
   });
 
-  it('errors if match def is not boolean', async () => {
+  it('errors if match def is not boolean', () => {
     expect(
-      (
-        await inferMatch(
-          makeContext(),
-          match(
-            matchDef(n('literal', 'number', N(1)), n('literal', 'number', N(1)))
-          )
+      inferMatch(
+        makeContext(),
+        match(
+          matchDef(n('literal', 'number', N(1)), n('literal', 'number', N(1)))
         )
       ).errorCause
     ).toBeDefined();
   });
 
-  it('infers to the value type', async () => {
+  it('infers to the value type', () => {
     expect(
-      await inferMatch(
+      inferMatch(
         makeContext(),
         match(
           matchDef(n('literal', 'boolean', true), n('literal', 'number', N(1)))
@@ -33,21 +31,13 @@ describe('inferMatch', () => {
     ).toEqual(t.number());
   });
 
-  it('errors if values are incongruous', async () => {
+  it('errors if values are incongruous', () => {
     expect(
-      (
-        await inferMatch(
-          makeContext(),
-          match(
-            matchDef(
-              n('literal', 'boolean', true),
-              n('literal', 'number', N(1))
-            ),
-            matchDef(
-              n('literal', 'boolean', true),
-              n('literal', 'string', 'hey')
-            )
-          )
+      inferMatch(
+        makeContext(),
+        match(
+          matchDef(n('literal', 'boolean', true), n('literal', 'number', N(1))),
+          matchDef(n('literal', 'boolean', true), n('literal', 'string', 'hey'))
         )
       ).errorCause
     ).toBeDefined();

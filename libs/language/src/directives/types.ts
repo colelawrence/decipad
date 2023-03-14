@@ -7,6 +7,6 @@ import type { Value } from '../value';
  * But aren't because they need to see the AST to determine their result.
  */
 export interface DirectiveImpl<D extends AST.Directive = AST.Directive> {
-  getType(ctx: Context, root: D): Promise<Type>;
+  getType(ctx: Context, root: D): Type;
   getValue(ctx: Realm, root: D): Promise<Value>;
 }

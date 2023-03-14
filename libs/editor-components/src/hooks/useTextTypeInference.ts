@@ -30,14 +30,12 @@ export const useTextTypeInference = (
 
   const inferAndSetType = useCallback(
     (text: string | undefined) => {
-      (async () => {
-        if (text != null) {
-          const { type: newType } = await inferType(computer, text);
-          if (!dequal(newType, inferredType)) {
-            setInferredType(newType);
-          }
+      if (text != null) {
+        const { type: newType } = inferType(computer, text);
+        if (!dequal(newType, inferredType)) {
+          setInferredType(newType);
         }
-      })();
+      }
     },
     [computer, inferredType]
   );

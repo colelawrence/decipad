@@ -32,7 +32,7 @@ export const VariableDef: InteractiveLanguageElement = {
         element.variant === 'toggle' ||
         element.variant === 'dropdown'
       ) {
-        const { type, coerced } = await inferType(computer, expression, {
+        const { type, coerced } = inferType(computer, expression, {
           type: element.coerceToType,
         });
         if (type.kind === 'anything' || type.kind === 'nothing') {
@@ -50,32 +50,30 @@ export const VariableDef: InteractiveLanguageElement = {
             expression
           );
           // TODO: Refactor this part into function.
-          const dropdownOptions = (
-            await Promise.all(
-              element.children[1].options.map(async (option) => {
-                let dropdownExpression: string | AST.Expression;
-                const dropdownType = await inferType(computer, option.value, {
-                  type: element.coerceToType,
-                });
-                if (
-                  dropdownType.type.kind === 'anything' ||
-                  dropdownType.type.kind === 'nothing'
-                ) {
-                  dropdownExpression = {
-                    type: 'noop',
-                    args: [],
-                  };
-                } else {
-                  dropdownExpression = getDefined(dropdownType.coerced);
-                }
-                return parseElementAsVariableAssignment(
-                  option.id,
-                  getExprRef(option.id),
-                  dropdownExpression
-                );
-              })
-            )
-          ).flat();
+          const dropdownOptions = element.children[1].options.flatMap(
+            (option) => {
+              let dropdownExpression: string | AST.Expression;
+              const dropdownType = inferType(computer, option.value, {
+                type: element.coerceToType,
+              });
+              if (
+                dropdownType.type.kind === 'anything' ||
+                dropdownType.type.kind === 'nothing'
+              ) {
+                dropdownExpression = {
+                  type: 'noop',
+                  args: [],
+                };
+              } else {
+                dropdownExpression = getDefined(dropdownType.coerced);
+              }
+              return parseElementAsVariableAssignment(
+                option.id,
+                getExprRef(option.id),
+                dropdownExpression
+              );
+            }
+          );
           return [...dropdownVariable, ...dropdownOptions];
         }
       }

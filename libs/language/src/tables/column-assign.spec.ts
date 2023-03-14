@@ -18,15 +18,15 @@ beforeEach(() => {
 });
 
 describe('Column assignment inference', () => {
-  it('can create a new column with column data', async () => {
-    const table = await inferColumnAssign(
+  it('can create a new column with column data', () => {
+    const table = inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', col(123))
     );
     expect(table).toMatchInlineSnapshot(`column<number, indexed by Table>`);
   });
-  it('can create a new column with scalar number', async () => {
-    const expandedNum = await inferColumnAssign(
+  it('can create a new column with scalar number', () => {
+    const expandedNum = inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', l(1))
     );
@@ -34,8 +34,8 @@ describe('Column assignment inference', () => {
       `column<number, indexed by Table>`
     );
   });
-  it('can create a new column with a formula', async () => {
-    const expandedFormula = await inferColumnAssign(
+  it('can create a new column with a formula', () => {
+    const expandedFormula = inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', r('Col1'), l(1)))
     );
@@ -43,8 +43,8 @@ describe('Column assignment inference', () => {
       `column<number, indexed by Table>`
     );
   });
-  it('can create a new column with a formula using previous', async () => {
-    const usingPrevious = await inferColumnAssign(
+  it('can create a new column with a formula using previous', () => {
+    const usingPrevious = inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', c('previous', l(1)), l(1)))
     );
@@ -53,9 +53,9 @@ describe('Column assignment inference', () => {
     );
   });
 
-  it('only works in global scope', async () => {
-    ctx.stack.withPushCall(async () => {
-      const error = await inferColumnAssign(
+  it('only works in global scope', () => {
+    ctx.stack.withPushCallSync(() => {
+      const error = inferColumnAssign(
         ctx,
         tableColAssign('Table', 'Col2', col(1, 2))
       );
@@ -66,8 +66,8 @@ describe('Column assignment inference', () => {
     });
   });
 
-  it('propagates multiple errors', async () => {
-    const duplicatedColumn = await inferColumnAssign(
+  it('propagates multiple errors', () => {
+    const duplicatedColumn = inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col1', col('1', '2'))
     );
@@ -80,7 +80,7 @@ describe('Column assignment inference', () => {
     });
 
     ctx.stack.set('Num', t.number());
-    const assigningToNonTable = await inferStatement(
+    const assigningToNonTable = inferStatement(
       ctx,
       tableColAssign('Num', 'Col', col(1, 2))
     );
@@ -102,13 +102,13 @@ describe('Column assignment evaluation', () => {
     realm = new Realm(ctx);
     realm.stack.createNamespace('Table');
     realm.stack.setNamespaced(['Table', 'Col1'], jsCol([1, 2]), 'function');
-    await inferStatement(ctx, columnFormula);
-    await inferStatement(ctx, columnFormulaWithPrevious);
+    inferStatement(ctx, columnFormula);
+    inferStatement(ctx, columnFormulaWithPrevious);
   });
 
-  const testColumnAssign = async (column: AST.Expression) => {
+  const testColumnAssign = (column: AST.Expression) => {
     const colAssign = tableColAssign('Table', 'Col2', column);
-    await inferColumnAssign(realm.inferContext, colAssign);
+    inferColumnAssign(realm.inferContext, colAssign);
     return evaluateColumnAssign(realm, colAssign);
   };
   const getColNames = () =>

@@ -26,7 +26,7 @@ export const reset = () => {
 
 async function execDeci(ast: AST.Block) {
   try {
-    const type = await inferBlock(ast, inferContext);
+    const type = inferBlock(ast, inferContext);
 
     if (type.errorCause != null) {
       return `Error: ${formatError(DEFAULT_LOCALE, type.errorCause.spec)}`;

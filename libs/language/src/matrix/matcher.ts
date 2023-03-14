@@ -63,10 +63,10 @@ export const matchTargets = async (
   }
 };
 
-export const inferMatchers = async (
+export const inferMatchers = (
   ctx: Context,
   matchers: AST.MatrixMatchers
-): Promise<Type> => {
+): Type => {
   const matcher = getOnly(matchers.args);
   const [dimName, needleExp] = readSimpleMatchers(ctx, matcher);
 
@@ -88,7 +88,7 @@ export const inferMatchers = async (
     return dimension.reduced().isPrimitive();
   } else {
     // VariableName[DimensionName == "Needle"]
-    return (await inferExpression(ctx, needleExp))
+    return inferExpression(ctx, needleExp)
       .isPrimitive()
       .sameAs(dimension.reduced());
   }

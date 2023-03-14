@@ -3,7 +3,7 @@ import { buildType as t, InferError } from '../type';
 import { DirectiveImpl } from './types';
 
 export const select: DirectiveImpl<AST.SelectDirective> = {
-  async getType() {
+  getType() {
     return t.impossible(InferError.retiredFeature('select'));
   },
   async getValue() {

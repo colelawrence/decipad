@@ -18,11 +18,11 @@ interface InferColumnOptions {
 const INFER_MAX_ROWS = 100;
 
 export const inferColumn = memoize(
-  async (
+  (
     computer: Computer,
     column: SpreadsheetColumn,
     options: InferColumnOptions = {}
-  ): Promise<CellValueType> => {
+  ): CellValueType => {
     let lastType: CellValueType | undefined = options.userType;
 
     if (lastType && lastType?.kind !== 'anything') {
@@ -90,8 +90,7 @@ export const inferColumn = memoize(
           }
           break;
         case 'string': {
-          // eslint-disable-next-line no-await-in-loop
-          const inferredType = await inferType(computer, value, options);
+          const inferredType = inferType(computer, value, options);
           coalesce(inferredType.type);
           break;
         }

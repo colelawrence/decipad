@@ -61,14 +61,14 @@ describe('math operators', () => {
     expect(operators.ln.fn?.([Math.E])).toBe(1);
   });
 
-  const exponentTestHelper = async (expArg: AST.Expression) => {
+  const exponentTestHelper = (expArg: AST.Expression) => {
     const ctx = makeContext();
-    await inferExpression(ctx, expArg);
+    inferExpression(ctx, expArg);
     return { ctx, expArg };
   };
 
-  it('exponentiates number with unit (1)', async () => {
-    const { ctx, expArg } = await exponentTestHelper(l(2));
+  it('exponentiates number with unit (1)', () => {
+    const { ctx, expArg } = exponentTestHelper(l(2));
     expect(
       operators['**'].functor?.(
         [
@@ -90,8 +90,8 @@ describe('math operators', () => {
     );
   });
 
-  it('exponentiates number with unit (2)', async () => {
-    const { ctx, expArg } = await exponentTestHelper(l('hey'));
+  it('exponentiates number with unit (2)', () => {
+    const { ctx, expArg } = exponentTestHelper(l('hey'));
     expect(
       operators['**'].functor?.(
         [
@@ -113,8 +113,8 @@ describe('math operators', () => {
     );
   });
 
-  it('exponentiates number with unit (3)', async () => {
-    const { ctx, expArg } = await exponentTestHelper(
+  it('exponentiates number with unit (3)', () => {
+    const { ctx, expArg } = exponentTestHelper(
       n('function-call', n('funcref', '+'), n('argument-list', l(2), l(2)))
     );
     expect(
@@ -145,8 +145,8 @@ describe('math operators', () => {
     );
   });
 
-  it('exponentiation allows simple expressions as exponents of unit-ed values', async () => {
-    const { ctx, expArg } = await exponentTestHelper(c('/', l(1), l(2)));
+  it('exponentiation allows simple expressions as exponents of unit-ed values', () => {
+    const { ctx, expArg } = exponentTestHelper(c('/', l(1), l(2)));
     expect(
       operators['**'].functor?.(
         [
@@ -175,10 +175,8 @@ describe('math operators', () => {
     );
   });
 
-  it('exponentiation does not allow >0 dimensioned functions as exponents of unit-ed values', async () => {
-    const { ctx, expArg } = await exponentTestHelper(
-      c('*', col(1, 2, 3), l(2))
-    );
+  it('exponentiation does not allow >0 dimensioned functions as exponents of unit-ed values', () => {
+    const { ctx, expArg } = exponentTestHelper(c('*', col(1, 2, 3), l(2)));
     expect(
       operators['**'].functor?.(
         [

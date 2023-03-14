@@ -54,7 +54,7 @@ export const runAST = async (
     throwOnError,
   }: RunAstOptions = {}
 ): Promise<RunAstResult> => {
-  const type = await inferBlock(block, ctx);
+  const type = inferBlock(block, ctx);
 
   const erroredType = type.errorCause != null ? type : null;
   if (erroredType && throwOnError) {

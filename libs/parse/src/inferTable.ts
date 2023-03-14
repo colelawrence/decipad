@@ -50,23 +50,21 @@ function toValue(
   });
 }
 
-export const inferTable = async (
+export const inferTable = (
   computer: Computer,
   data: Sheet,
   options: InferTableOptions
-): Promise<Result.Result<'table'>> => {
+): Result.Result<'table'> => {
   const { columnNames, columnValues } = withColumnNames(data, options);
-  const columnTypes = await Promise.all(
-    columnValues.map(
-      async (col, colIndex): Promise<SerializedType> =>
-        (options.columnTypeCoercions?.[colIndex] as SerializedType) ??
-        inferColumn(computer, col, {
-          doNotTryExpressionNumbersParse:
-            options.doNotTryExpressionNumbersParse,
-          userType: options.columnTypeCoercions?.[colIndex],
-        })
-    )
+  const columnTypes = columnValues.map(
+    (col, colIndex): SerializedType =>
+      (options.columnTypeCoercions?.[colIndex] as SerializedType) ??
+      inferColumn(computer, col, {
+        doNotTryExpressionNumbersParse: options.doNotTryExpressionNumbersParse,
+        userType: options.columnTypeCoercions?.[colIndex],
+      })
   );
+
   return {
     type: {
       kind: 'table',

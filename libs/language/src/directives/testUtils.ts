@@ -27,7 +27,7 @@ export const testGetValue = async (
   for (const passedArg of args) {
     if (isExpression(passedArg)) {
       // eslint-disable-next-line no-await-in-loop
-      await inferExpression(ctx, passedArg);
+      inferExpression(ctx, passedArg);
     }
   }
 
@@ -37,7 +37,7 @@ export const testGetValue = async (
 export const testGetType = (
   getType: DirectiveImpl['getType'],
   ...args: [Context | AST.Node, ...AST.Node[]]
-): Promise<Type> => {
+): Type => {
   // Allow passing a context along with the args, it's useful for testing
   const [firstArg, ...restArgs] = args;
   const ctx = isNode(firstArg) ? makeContext() : firstArg;

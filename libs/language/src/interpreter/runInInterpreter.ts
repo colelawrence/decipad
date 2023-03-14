@@ -13,7 +13,7 @@ export const run = async (
   desiredTargets: Array<string | number | [number, number]>,
   realm?: Realm
 ): Promise<Interpreter.OneResult[]> => {
-  realm = realm ?? new Realm(await inferProgram(program));
+  realm = realm ?? new Realm(inferProgram(program));
 
   return (await evaluateTargets(program, desiredTargets, realm)).map((v) => {
     return v.getData();
@@ -21,14 +21,14 @@ export const run = async (
 };
 
 export const runOne = async (statement: AST.Statement, realm?: Realm) => {
-  realm = realm ?? new Realm(await inferProgram([block(statement)]));
+  realm = realm ?? new Realm(inferProgram([block(statement)]));
 
   const value = await evaluate(realm, statement);
   return value.getData();
 };
 
 export const runBlock = async (block: AST.Block, realm?: Realm) => {
-  realm = realm ?? new Realm(await inferProgram([block]));
+  realm = realm ?? new Realm(inferProgram([block]));
 
   let last;
   for (const stmt of block.args) {

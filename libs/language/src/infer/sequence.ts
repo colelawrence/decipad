@@ -122,14 +122,14 @@ export const getDateSequenceIncrement = (
   return getDefined(sortTimeUnits([startUnit, endUnit]).pop());
 };
 
-export const inferSequence = async (
+export const inferSequence = (
   ctx: Context,
   expr: AST.Sequence,
-  inferExpression: (ctx: Context, expr: AST.Expression) => Promise<Type>
-): Promise<Type> => {
+  inferExpression: (ctx: Context, expr: AST.Expression) => Type
+): Type => {
   const [startN, endN, byN] = expr.args;
-  const startType = await inferExpression(ctx, startN);
-  const endType = await inferExpression(ctx, endN);
+  const startType = inferExpression(ctx, startN);
+  const endType = inferExpression(ctx, endN);
   const boundTypes = startType.sameAs(endType);
 
   if (boundTypes.errorCause != null) {

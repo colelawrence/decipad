@@ -43,11 +43,11 @@ function multiplyUnitMultipliersIfNeedsEnforcing(
   );
 }
 
-export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
+export const getType: DirectiveImpl<AST.AsDirective>['getType'] = (
   ctx,
   { args: [, expr, unitExpr] }
-): Promise<Type> => {
-  const expressionType = await inferExpression(ctx, expr);
+): Type => {
+  const expressionType = inferExpression(ctx, expr);
   if (expressionType.errorCause) {
     return expressionType;
   }
@@ -58,9 +58,7 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
     });
   }
 
-  const unitExpressionType = (await inferExpression(ctx, unitExpr)).isScalar(
-    'number'
-  );
+  const unitExpressionType = inferExpression(ctx, unitExpr).isScalar('number');
   if (unitExpressionType.errorCause) {
     return unitExpressionType;
   }

@@ -30,7 +30,7 @@ const parsing = async (
   text: string,
   afterParse: (result: Result.Result) => ParseCellResult
 ): Promise<ParseCellResult> => {
-  const inferred = await inferType(computer, text, { type });
+  const inferred = inferType(computer, text, { type });
   if (inferred.type.kind === 'type-error') {
     return new Error(formatError(defaultLocale, inferred.type.errorCause));
   }

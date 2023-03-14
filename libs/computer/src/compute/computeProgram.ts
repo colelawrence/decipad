@@ -37,7 +37,7 @@ const computeStatement = async (
   const statement = getStatement(program, blockId);
 
   realm.inferContext.statementId = getExprRef(blockId);
-  const [valueType, usedNames] = await inferWhileRetrievingNames(
+  const [valueType, usedNames] = inferWhileRetrievingNames(
     realm.inferContext,
     statement
   );
@@ -142,13 +142,10 @@ export const computeProgram = async (
   return resultsToCache.map((resultToCache) => resultToCache.result);
 };
 
-const inferWhileRetrievingNames = async (
-  ctx: Context,
-  statement: AST.Statement
-) => {
+const inferWhileRetrievingNames = (ctx: Context, statement: AST.Statement) => {
   try {
     ctx.usedNames = [];
-    const valueType = await inferStatement(ctx, statement);
+    const valueType = inferStatement(ctx, statement);
     const { usedNames } = ctx;
     return [valueType, usedNames] as const;
   } finally {

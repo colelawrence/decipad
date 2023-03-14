@@ -14,16 +14,13 @@ import { evaluateVariable, inferVariable } from './getVariable';
 import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
 import { ColumnLike, ValueTransforms } from '../value';
 
-export async function inferMatrixRef(
-  context: Context,
-  ref: AST.MatrixRef
-): Promise<Type> {
+export function inferMatrixRef(context: Context, ref: AST.MatrixRef): Type {
   const {
     args: [varExp, matchersExp],
   } = ref;
 
   const variable = inferVariable(context, getIdentifierString(varExp));
-  const matchers = await inferMatchers(context, matchersExp);
+  const matchers = inferMatchers(context, matchersExp);
 
   return Type.combine(variable, matchers).mapType(() =>
     produce(variable, (returned) => {
@@ -48,17 +45,17 @@ export async function evaluateMatrixRef(
   return ValueTransforms.applyFilterMap(variable, matches);
 }
 
-export async function inferMatrixAssign(
+export function inferMatrixAssign(
   context: Context,
   assign: AST.MatrixAssign
-): Promise<Type> {
+): Type {
   const {
     args: [varExp, matchersExp, assigneeExp],
   } = assign;
 
   const varName = getIdentifierString(varExp);
-  const matchers = await inferMatchers(context, matchersExp);
-  const assignee = await inferExpression(context, assigneeExp);
+  const matchers = inferMatchers(context, matchersExp);
+  const assignee = inferExpression(context, assigneeExp);
 
   const matcher = getOnly(matchersExp.args);
   const [dimName, needle] = readSimpleMatchers(context, matcher);

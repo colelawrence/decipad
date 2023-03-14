@@ -9,7 +9,7 @@ import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
 import { shouldEvaluate } from './shouldEvaluate';
 
-export const inferColumnAssign = async (
+export const inferColumnAssign = (
   ctx: Context,
   assign: AST.TableColumnAssign
 ) => {
@@ -33,7 +33,7 @@ export const inferColumnAssign = async (
 
   const newColumnAtParentIndex = getDefined(table.columnNames).length;
 
-  const newColumn = await inferTableColumn(ctx, {
+  const newColumn = inferTableColumn(ctx, {
     columnAst: assign,
     tableName,
     columnName,

@@ -12,6 +12,4 @@ export default {
   decorators: [inMenu],
 } as Meta<Args>;
 
-export const Normal: Story = () => (
-  <UnitMenuItem parseUnit={() => Promise.resolve([])} />
-);
+export const Normal: Story = () => <UnitMenuItem parseUnit={() => []} />;

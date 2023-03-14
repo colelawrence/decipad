@@ -16,10 +16,9 @@ it('renders the children', () => {
 
 it('renders a button when parse is successful', async () => {
   // Parse always fails.
-  const { rerender } = render(
-    <UnitMenuItem parseUnit={() => Promise.resolve(null)} />,
-    { wrapper }
-  );
+  const { rerender } = render(<UnitMenuItem parseUnit={() => null} />, {
+    wrapper,
+  });
 
   expect(screen.queryByRole('button')).toBeNull();
 
@@ -27,7 +26,7 @@ it('renders a button when parse is successful', async () => {
   await expect(screen.findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
-  rerender(<UnitMenuItem parseUnit={() => Promise.resolve([])} />);
+  rerender(<UnitMenuItem parseUnit={() => []} />);
 
   expect(await screen.findByRole('button')).toBeInTheDocument();
 });
@@ -35,13 +34,9 @@ it('renders a button when parse is successful', async () => {
 describe('onSelect prop', () => {
   it('gets called when parse is successful and button is pressed', async () => {
     const onSelect = jest.fn();
-    render(
-      <UnitMenuItem
-        onSelect={onSelect}
-        parseUnit={() => Promise.resolve([])}
-      />,
-      { wrapper }
-    );
+    render(<UnitMenuItem onSelect={onSelect} parseUnit={() => []} />, {
+      wrapper,
+    });
 
     await user.type(screen.getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
@@ -52,13 +47,9 @@ describe('onSelect prop', () => {
 
   it('gets called when parse is successful and Enter is pressed', async () => {
     const onSelect = jest.fn();
-    render(
-      <UnitMenuItem
-        onSelect={onSelect}
-        parseUnit={() => Promise.resolve([])}
-      />,
-      { wrapper }
-    );
+    render(<UnitMenuItem onSelect={onSelect} parseUnit={() => []} />, {
+      wrapper,
+    });
 
     await user.type(screen.getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();
@@ -70,13 +61,9 @@ describe('onSelect prop', () => {
 
   it('does not gets called when parse is unsuccessful', async () => {
     const onSelect = jest.fn();
-    render(
-      <UnitMenuItem
-        onSelect={onSelect}
-        parseUnit={() => Promise.resolve(null)}
-      />,
-      { wrapper }
-    );
+    render(<UnitMenuItem onSelect={onSelect} parseUnit={() => null} />, {
+      wrapper,
+    });
 
     await user.type(screen.getByRole('textbox'), 'm/s');
     expect(onSelect).not.toHaveBeenCalled();

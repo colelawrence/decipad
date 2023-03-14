@@ -7,7 +7,7 @@ import { fromJS } from '../value';
 
 let testRealm: Realm;
 let testContext: Context;
-beforeEach(async () => {
+beforeEach(() => {
   testContext = makeContext({
     initialGlobalScope: {
       City: t.column(t.string(), 2, 'City'),
@@ -21,9 +21,9 @@ beforeEach(async () => {
   testRealm.stack.set('CoffeePrice', fromJS([70, 90]));
 });
 
-it('infers sets', async () => {
+it('infers sets', () => {
   expect(
-    await inferCategories(testContext, categories('Name', col(1, 2)))
+    inferCategories(testContext, categories('Name', col(1, 2)))
   ).toMatchObject({
     cellType: {
       type: 'number',
@@ -33,18 +33,18 @@ it('infers sets', async () => {
   expect(testContext.stack.get('Name')).toBeDefined();
 });
 
-it('does not infer inside functions', async () => {
-  await testContext.stack.withPushCall(async () => {
+it('does not infer inside functions', () => {
+  testContext.stack.withPushCallSync(() => {
     expect(
-      (await inferCategories(testContext, categories('Name', col(1, 2))))
-        .errorCause?.spec?.errType
+      inferCategories(testContext, categories('Name', col(1, 2))).errorCause
+        ?.spec?.errType
     ).toMatchInlineSnapshot(`"forbidden-inside-function"`);
   });
 });
 
-it('does not accept already-existing variable names', async () => {
+it('does not accept already-existing variable names', () => {
   expect(
-    await inferCategories(testContext, categories('City', col(1, 2)))
+    inferCategories(testContext, categories('City', col(1, 2)))
   ).toMatchObject({
     errorCause: { spec: { errType: 'duplicated-name' } },
   });

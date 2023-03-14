@@ -297,4 +297,29 @@ export class Stack<T> {
       this.functionScope = preCallFunctionScope;
     }
   }
+
+  withPushSync<T>(wrapper: () => T): T {
+    this.temporaryScopes.push(new Map());
+
+    try {
+      return wrapper();
+    } finally {
+      getDefined(this.temporaryScopes.pop());
+    }
+  }
+
+  withPushCallSync<T>(wrapper: () => T): T {
+    const preCallTemporaryScope = this.temporaryScopes;
+    const preCallFunctionScope = this.functionScope;
+
+    this.temporaryScopes = [];
+    this.functionScope = new Map();
+
+    try {
+      return wrapper();
+    } finally {
+      this.temporaryScopes = preCallTemporaryScope;
+      this.functionScope = preCallFunctionScope;
+    }
+  }
 }

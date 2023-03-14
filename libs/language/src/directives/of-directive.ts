@@ -6,11 +6,11 @@ import { InferError, Type, buildType as t } from '../type';
 import { getIdentifierString } from '../utils';
 import { DirectiveImpl } from './types';
 
-export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
+export const getType: DirectiveImpl<AST.OfDirective>['getType'] = (
   ctx: Context,
   { args: [, expr, quality] }
-): Promise<Type> => {
-  const expressionType = await inferExpression(ctx, expr);
+): Type => {
+  const expressionType = inferExpression(ctx, expr);
   if (expressionType.errorCause) {
     return expressionType;
   }

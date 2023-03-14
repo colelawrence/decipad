@@ -59,12 +59,12 @@ afterEach(() => {
 });
 
 it('infers literals', async () => {
-  expect(await inferExpression(nilCtx, l(1.1))).toEqual(t.number());
-  expect(await inferExpression(nilCtx, l(1))).toEqual(t.number());
+  expect(inferExpression(nilCtx, l(1.1))).toEqual(t.number());
+  expect(inferExpression(nilCtx, l(1))).toEqual(t.number());
 
-  expect(await inferExpression(nilCtx, l('one'))).toEqual(t.string());
+  expect(inferExpression(nilCtx, l('one'))).toEqual(t.string());
 
-  expect(await inferExpression(nilCtx, l(true))).toEqual(t.boolean());
+  expect(inferExpression(nilCtx, l(true))).toEqual(t.boolean());
 });
 
 describe('variables', () => {
@@ -76,73 +76,68 @@ describe('variables', () => {
     );
 
     expect(
-      (await inferProgram([reassigning])).stack.get('Reassigned')?.errorCause
+      inferProgram([reassigning]).stack.get('Reassigned')?.errorCause
     ).not.toBeNull();
   });
 });
 
 describe('ranges', () => {
   it('infers ranges', async () => {
-    expect(await inferExpression(nilCtx, range(1, 2))).toEqual(
-      t.range(t.number())
-    );
+    expect(inferExpression(nilCtx, range(1, 2))).toEqual(t.range(t.number()));
 
     expect(
-      (await inferExpression(nilCtx, range(false, true))).errorCause
+      inferExpression(nilCtx, range(false, true)).errorCause
     ).toBeDefined();
     expect(
-      (await inferExpression(nilCtx, range(range(1, 2), range(3, 4))))
-        .errorCause
+      inferExpression(nilCtx, range(range(1, 2), range(3, 4))).errorCause
     ).toBeDefined();
     expect(
-      (await inferExpression(nilCtx, range('string', 'string2'))).errorCause
+      inferExpression(nilCtx, range('string', 'string2')).errorCause
     ).toBeDefined();
   });
 
   it('infers ranges of dates', async () => {
     const r = range(date('2030-01', 'month'), date('2031-11', 'month'));
-    expect(await inferExpression(nilCtx, r)).toEqual(t.range(t.date('month')));
+    expect(inferExpression(nilCtx, r)).toEqual(t.range(t.date('month')));
 
     expect(
-      await inferExpression(nilCtx, c('contains', r, date('2020-01', 'month')))
+      inferExpression(nilCtx, c('contains', r, date('2020-01', 'month')))
     ).toEqual(t.boolean());
   });
 
   it('infers range functions', async () => {
+    expect(inferExpression(nilCtx, c('contains', range(1, 10), l(1)))).toEqual(
+      t.boolean()
+    );
     expect(
-      await inferExpression(nilCtx, c('contains', range(1, 10), l(1)))
-    ).toEqual(t.boolean());
-    expect(
-      (await inferExpression(nilCtx, c('contains', l(1), l(1)))).errorCause
+      inferExpression(nilCtx, c('contains', l(1), l(1))).errorCause
     ).not.toBeNull();
   });
 });
 
 describe('dates', () => {
   it('infers dates', async () => {
-    expect(await inferExpression(nilCtx, date('2020-01', 'month'))).toEqual(
+    expect(inferExpression(nilCtx, date('2020-01', 'month'))).toEqual(
       t.date('month')
     );
 
-    expect(await inferExpression(nilCtx, date('2020-01-15', 'day'))).toEqual(
+    expect(inferExpression(nilCtx, date('2020-01-15', 'day'))).toEqual(
       t.date('day')
     );
   });
 
   it('infers date fns', async () => {
     expect(
-      await inferExpression(
+      inferExpression(
         nilCtx,
         c('==', date('2020-01', 'month'), date('2020-01', 'month'))
       )
     ).toEqual(t.boolean());
 
     expect(
-      (
-        await inferExpression(
-          nilCtx,
-          c('==', date('2020-01-01', 'day'), date('2020-01', 'month'))
-        )
+      inferExpression(
+        nilCtx,
+        c('==', date('2020-01-01', 'day'), date('2020-01', 'month'))
       ).errorCause
     ).not.toBeNull();
   });
@@ -150,28 +145,28 @@ describe('dates', () => {
 
 describe('columns', () => {
   it('infers columns', async () => {
-    expect(await inferExpression(nilCtx, col(1, 2, 3))).toEqual(
+    expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(
       t.column(t.number(), 3)
     );
 
-    expect(await inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(
+    expect(inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(
       t.column(t.number(), 1)
     );
 
     const mixedCol = col(l(1), l('hi'));
-    expect(await inferExpression(nilCtx, mixedCol)).toMatchObject({
+    expect(inferExpression(nilCtx, mixedCol)).toMatchObject({
       errorCause: InferError.expectedButGot(t.number(), t.string()),
     });
 
     const emptyCol = col();
-    expect(await inferExpression(nilCtx, emptyCol)).toMatchObject({
+    expect(inferExpression(nilCtx, emptyCol)).toMatchObject({
       errorCause: InferError.unexpectedEmptyColumn(),
     });
   });
 
   it('does not mangle units', async () => {
     expect(
-      await inferExpression(
+      inferExpression(
         nilCtx,
         col(c('*', l(1), r('centimeter')), c('*', l(1), r('ft')))
       )
@@ -181,17 +176,17 @@ describe('columns', () => {
   });
 
   it('column-ness is infectious', async () => {
-    expect(await inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
+    expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
       t.column(t.number(), 3)
     );
-    expect(await inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(
+    expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(
       t.column(t.number(), 3)
     );
   });
 
   it('infers columns of dates', async () => {
     expect(
-      await inferExpression(
+      inferExpression(
         nilCtx,
         col(date('2020-01', 'month'), date('2020-02', 'month'))
       )
@@ -199,7 +194,7 @@ describe('columns', () => {
   });
 
   it('can be reduced with the total function', async () => {
-    expect(await inferExpression(nilCtx, c('total', col(1, 2, 3)))).toEqual(
+    expect(inferExpression(nilCtx, c('total', col(1, 2, 3)))).toEqual(
       t.number()
     );
   });
@@ -213,7 +208,7 @@ describe('error source tracking', () => {
     const program = block(badStatement, badStatement2);
 
     const ctx = makeContext();
-    await inferBlock(program, ctx);
+    inferBlock(program, ctx);
 
     // Both errors came from the same place
     expect(ctx.nodeTypes.get(badStatement)?.node).toEqual(badExp);
@@ -232,7 +227,7 @@ describe('tables', () => {
     });
 
     expect(
-      await inferStatement(
+      inferStatement(
         tableContext,
         tableDef('Table', {
           Col1: col(1, 2, 3),
@@ -255,7 +250,7 @@ describe('tables', () => {
       )
     );
 
-    expect((await inferProgram([block])).stack.get('Col')).toEqual(
+    expect(inferProgram([block]).stack.get('Col')).toEqual(
       t.column(t.number(), 'unknown', 'Table', 0)
     );
   });
@@ -273,7 +268,7 @@ describe('tables', () => {
       Col3: c('previous', l('hi')),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(expectedType);
+    expect(inferStatement(makeContext(), table)).toEqual(expectedType);
   });
 
   it('unifies column sizes', async () => {
@@ -282,7 +277,7 @@ describe('tables', () => {
       Col2: col(1, 2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(
+    expect(inferStatement(makeContext(), table)).toEqual(
       t.table({
         indexName: 'Table',
         columnTypes: [t.number(), t.number()],
@@ -297,7 +292,7 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(
+    expect(inferStatement(makeContext(), table)).toEqual(
       t.table({
         indexName: 'Table',
         columnTypes: [t.string(), t.number()],
@@ -312,7 +307,7 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(
+    expect(inferStatement(makeContext(), table)).toEqual(
       t.table({
         indexName: 'Table',
         columnTypes: [t.string(), t.number()],
@@ -324,30 +319,26 @@ describe('tables', () => {
   it('Errors cause the column to not be present', async () => {
     expect(
       getDefined(
-        (
-          await inferStatement(
-            makeContext(),
-            tableDef('Table', {
-              Col1: prop(r('MissingVar'), 'nosuchprop'),
-            })
-          )
+        inferStatement(
+          makeContext(),
+          tableDef('Table', {
+            Col1: prop(r('MissingVar'), 'nosuchprop'),
+          })
         ).columnTypes
       )[0]
     ).toBe(undefined);
 
     expect(
       getDefined(
-        (
-          await inferBlock(
-            block(
-              tableDef('Table', {}),
-              tableColAssign(
-                'Table',
-                'NoColumnHere',
-                parseExpressionOrThrow('1 meter + 1 second')
-              ),
-              r('Table')
-            )
+        inferBlock(
+          block(
+            tableDef('Table', {}),
+            tableColAssign(
+              'Table',
+              'NoColumnHere',
+              parseExpressionOrThrow('1 meter + 1 second')
+            ),
+            r('Table')
           )
         ).columnTypes
       )[0]
@@ -356,7 +347,7 @@ describe('tables', () => {
 
   it('tracks the index through columns', async () => {
     expect(
-      await inferStatement(
+      inferStatement(
         makeContext(),
         tableDef('Table', {
           Col1: col(1, 2, 3),
@@ -383,7 +374,7 @@ describe('tables', () => {
       })
     );
 
-    expect((await inferProgram([block])).stack.get('Table')).toMatchObject({
+    expect(inferProgram([block]).stack.get('Table')).toMatchObject({
       columnNames: ['MaybeNegative', 'Positive'],
       columnTypes: [{ type: 'number' }, { type: 'number' }],
     });
@@ -400,33 +391,32 @@ describe('Property access', () => {
   });
 
   it('Accesses columns in tables', async () => {
-    expect(
-      await inferExpression(scopeWithTable, prop('Table', 'Col'))
-    ).toMatchObject({
-      cellType: { type: 'number' },
-    });
+    expect(inferExpression(scopeWithTable, prop('Table', 'Col'))).toMatchObject(
+      {
+        cellType: { type: 'number' },
+      }
+    );
 
-    expect(
-      await inferExpression(scopeWithTable, prop('Row', 'Name'))
-    ).toMatchObject({ type: 'string' });
+    expect(inferExpression(scopeWithTable, prop('Row', 'Name'))).toMatchObject({
+      type: 'string',
+    });
   });
 
   it('Property access errors', async () => {
     expect(
-      (await inferExpression(scopeWithTable, prop('Table', 'A'))).errorCause
-        ?.spec
+      inferExpression(scopeWithTable, prop('Table', 'A')).errorCause?.spec
     ).toMatchInlineSnapshot(
       `ErrSpec:free-form("message" => "A column named A does not exist in Table")`
     );
 
     expect(
-      (await inferExpression(scopeWithTable, prop('NotATable', 'Col')))
-        .errorCause?.spec.errType
+      inferExpression(scopeWithTable, prop('NotATable', 'Col')).errorCause?.spec
+        .errType
     ).toEqual('expected-but-got');
 
     expect(
-      (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
-        .errorCause?.spec
+      inferExpression(scopeWithTable, prop('MissingVar', 'Col')).errorCause
+        ?.spec
     ).toMatchInlineSnapshot(`
       ErrSpec:expected-but-got("expectedButGot" => Array [
         "table or row",
@@ -441,9 +431,7 @@ describe('refs', () => {
     const scopeWithVariable = makeContext();
     scopeWithVariable.stack.set('N', t.number());
 
-    expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(
-      t.number()
-    );
+    expect(inferExpression(scopeWithVariable, r('N'))).toEqual(t.number());
   });
 
   it('References to automatically generated varnames which are missing, are errors', async () => {
@@ -452,53 +440,43 @@ describe('refs', () => {
     });
 
     expect(
-      await inferExpression(scopeWithVariable, r('AutoGenerated'))
+      inferExpression(scopeWithVariable, r('AutoGenerated'))
     ).toMatchInlineSnapshot(`InferError unknown-reference`);
   });
 });
 
 it('infers binops', async () => {
-  expect(await inferExpression(nilCtx, c('+', l(1), l(1)))).toEqual(t.number());
+  expect(inferExpression(nilCtx, c('+', l(1), l(1)))).toEqual(t.number());
 
   // These assertions will be different WRT integer/float casts eventually
-  expect(await inferExpression(nilCtx, c('+', l(0.1), l(0.2)))).toEqual(
-    t.number()
-  );
-  expect(await inferExpression(nilCtx, c('+', l(1.1), l(1)))).toEqual(
-    t.number()
-  );
-  expect(await inferExpression(nilCtx, c('+', l(1), l(1.1)))).toEqual(
-    t.number()
-  );
+  expect(inferExpression(nilCtx, c('+', l(0.1), l(0.2)))).toEqual(t.number());
+  expect(inferExpression(nilCtx, c('+', l(1.1), l(1)))).toEqual(t.number());
+  expect(inferExpression(nilCtx, c('+', l(1), l(1.1)))).toEqual(t.number());
 
-  expect(await inferExpression(nilCtx, c('>', l(1), l(0.5)))).toEqual(
-    t.boolean()
-  );
-  expect(await inferExpression(nilCtx, c('==', l(1), l(0.5)))).toEqual(
-    t.boolean()
-  );
+  expect(inferExpression(nilCtx, c('>', l(1), l(0.5)))).toEqual(t.boolean());
+  expect(inferExpression(nilCtx, c('==', l(1), l(0.5)))).toEqual(t.boolean());
 
   const errorCtx = makeContext();
   const badExpr = c('==', l(1), l(true));
 
-  expect((await inferExpression(errorCtx, badExpr)).errorCause).toEqual(
+  expect(inferExpression(errorCtx, badExpr).errorCause).toEqual(
     InferError.expectedButGot(t.number(), t.boolean())
   );
 });
 
 it('infers conditions', async () => {
-  expect(await inferExpression(nilCtx, c('if', l(true), l(1), l(1)))).toEqual(
+  expect(inferExpression(nilCtx, c('if', l(true), l(1), l(1)))).toEqual(
     t.number()
   );
 
   expect(
-    await inferExpression(nilCtx, c('if', l(true), l('str'), l('other str')))
+    inferExpression(nilCtx, c('if', l(true), l('str'), l('other str')))
   ).toEqual(t.string());
 
   const errorCtx = makeContext();
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
-  expect((await inferExpression(errorCtx, badConditional)).errorCause).toEqual(
+  expect(inferExpression(errorCtx, badConditional).errorCause).toEqual(
     InferError.expectedButGot(t.string(), t.number())
   );
 });
@@ -515,7 +493,7 @@ describe('inferProgram', () => {
       ),
     ];
 
-    const ctx = await inferProgram(program);
+    const ctx = inferProgram(program);
 
     expect(ctx.stack.globalVariables).toEqual(
       objectToMap({
@@ -531,9 +509,9 @@ describe('inferProgram', () => {
 });
 
 it('expands directives such as `as`', async () => {
-  expect(
-    await inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))
-  ).toMatchObject(t.number([degC]));
+  expect(inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))).toMatchObject(
+    t.number([degC])
+  );
 });
 
 describe('name usage tracking', () => {
@@ -542,7 +520,7 @@ describe('name usage tracking', () => {
     ctx.usedNames = [];
 
     const program = parseBlockOrThrow(source);
-    await inferBlock(program, ctx);
+    inferBlock(program, ctx);
 
     return ctx.usedNames.map(([ns, name]) => (ns ? `${ns}.${name}` : name));
   };

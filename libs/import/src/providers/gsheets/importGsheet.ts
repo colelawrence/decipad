@@ -46,7 +46,7 @@ const handleGsheetsResponse = async (
   return inferTable(computer, trimmedBody, {
     ...options,
     doNotTryExpressionNumbersParse: true,
-  }) as Promise<Result.Result>;
+  }) as Result.Result;
 };
 
 const loadSheet =

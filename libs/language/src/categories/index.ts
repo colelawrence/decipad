@@ -6,10 +6,10 @@ import { ColumnLike, getColumnLike } from '../value';
 import { buildType as t, InferError, Type } from '../type';
 import { getIdentifierString } from '../utils';
 
-export const inferCategories = async (
+export const inferCategories = (
   ctx: Context,
   category: AST.Categories
-): Promise<Type> => {
+): Type => {
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('category'));
   }
@@ -17,7 +17,7 @@ export const inferCategories = async (
   const [nameExp, contentsExp] = category.args;
 
   const name = getIdentifierString(nameExp);
-  const contents = await inferExpression(ctx, contentsExp);
+  const contents = inferExpression(ctx, contentsExp);
 
   const theSet = contents
     .isColumn()

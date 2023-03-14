@@ -73,16 +73,16 @@ const getTableColumnAsAGoddamnColumn: StackNamespaceRetrieverHackForTypesystemTa
 };
 
 /** Push the stack and set Context.previous for the duration of `fn` */
-export const pushTableContext = async <T>(
+export const pushTableContext = <T>(
   ctx: Context,
   tableName: string | null,
-  fn: () => Promise<T>
-): Promise<T> => {
+  fn: () => T
+): T => {
   const previousPrevious = ctx.previous;
   const previousTable = ctx.inTableBraces;
   ctx.inTableBraces = tableName;
   try {
-    return await ctx.stack.withPush(fn);
+    return ctx.stack.withPushSync(fn);
   } finally {
     ctx.previous = previousPrevious;
     ctx.inTableBraces = previousTable;

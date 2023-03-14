@@ -7,7 +7,7 @@ import { inferExpression, linkToAST } from '../infer';
 import { Context, pushTableContext } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 
-export const inferTable = async (ctx: Context, table: AST.Table) => {
+export const inferTable = (ctx: Context, table: AST.Table) => {
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
@@ -23,13 +23,13 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return ret;
   }
 
-  const tableType = pushTableContext(ctx, tableName, async () => {
+  const tableType = pushTableContext(ctx, tableName, () => {
     ctx.stack.createNamespace(tableName, 'function');
 
     for (const tableItem of table.args.slice(1)) {
       if (tableItem.type === 'table-column') {
         // eslint-disable-next-line no-await-in-loop
-        await inferTableColumn(ctx, {
+        inferTableColumn(ctx, {
           tableName,
           columnAst: tableItem,
           columnName: getIdentifierString(tableItem.args[0]),
@@ -45,7 +45,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
   return tableType;
 };
 
-export async function inferTableColumn(
+export function inferTableColumn(
   ctx: Context,
   {
     columnAst,
@@ -56,7 +56,7 @@ export async function inferTableColumn(
     tableName: string;
     columnName: string;
   }
-): Promise<Type> {
+): Type {
   ctx.stack.createNamespace(tableName, 'function');
   const otherColumns = getDefined(
     ctx.stack.getNamespace(tableName, 'function')
@@ -65,14 +65,11 @@ export async function inferTableColumn(
   const exp: AST.Expression =
     columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
-  const type = await pushTableContext(ctx, tableName, async () => {
+  const type = pushTableContext(ctx, tableName, () => {
     if (refersToOtherColumnsByName(exp, otherColumns)) {
       return inferTableColumnPerCell(ctx, otherColumns, exp);
     } else {
-      return coerceTableColumnTypeIndices(
-        await inferExpression(ctx, exp),
-        tableName
-      );
+      return coerceTableColumnTypeIndices(inferExpression(ctx, exp), tableName);
     }
   });
 
@@ -92,7 +89,7 @@ export async function inferTableColumn(
   return type;
 }
 
-export async function inferTableColumnPerCell(
+export function inferTableColumnPerCell(
   ctx: Context,
   otherColumns: Map<string, Type>,
   columnAst: AST.Expression
