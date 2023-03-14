@@ -1,7 +1,7 @@
 import { N } from '@decipad/number';
 import { once } from 'ramda';
 import { fromJS, Value } from '../value';
-import { Type, build as t } from '../type';
+import { Type, buildType as t } from '../type';
 import { u } from '../utils';
 
 export interface Constant {

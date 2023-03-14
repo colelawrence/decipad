@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { build as t } from '../../type';
+import { buildType as t } from '../../type';
 import { U } from '../../utils';
 import { fromJS } from '../../value';
 import { roundOperators as operators } from './round-operators';

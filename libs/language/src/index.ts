@@ -1,7 +1,7 @@
 /* istanbul ignore file: just config and re-export */
 import { operators } from './builtins';
 import type { Result } from './result';
-import { build as t, SerializedType, serializeType, Unit } from './type';
+import { buildType as t, SerializedType, serializeType, Unit } from './type';
 
 export { parseUTCDate, stringifyDate, Time, getDateFromAstForm } from './date';
 export {
@@ -48,7 +48,7 @@ export { serializeResult, validateResult } from './result';
 export * as Result from './result';
 export * from './run';
 export {
-  build as buildType,
+  buildType,
   convertToMultiplierUnit,
   deserializeType,
   InferError,

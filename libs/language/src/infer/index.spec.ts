@@ -14,7 +14,7 @@ import {
   objectToTableType,
   typeSnapshotSerializer,
 } from '../testUtils';
-import { build as t, InferError } from '../type';
+import { buildType as t, InferError } from '../type';
 import {
   as,
   assign,

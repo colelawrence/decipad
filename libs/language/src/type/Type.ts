@@ -1,6 +1,6 @@
 import { immerable, produce } from 'immer';
 import type { AST, Time } from '..';
-import * as t from './build';
+import * as t from './buildType';
 import {
   divideUnit,
   getRangeOf,

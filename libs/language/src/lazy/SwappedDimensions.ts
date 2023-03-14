@@ -1,7 +1,7 @@
 import { ColumnLike } from '../value';
 import { chooseFirst, undoChooseFirst } from '../dimtools/common';
-import { implementColumnLike } from './HypercubeAtIndex';
-import { Dimension, MinimalHypercube } from './types';
+import { implementColumnLike } from './LazyAtIndex';
+import { Dimension, MinimalTensor } from './types';
 
 /**
  * Swaps a dimension like so (pseudocode):
@@ -12,7 +12,7 @@ import { Dimension, MinimalHypercube } from './types';
  *   [4, 5, 6]
  * ]
  *
- * > swappedHC = new SwappedHypercube(unswappedHC, 1)
+ * > swappedHC = new SwappedDimensions(unswappedHC, 1)
  * > swappedHC
  * [
  *   [1, 4],
@@ -20,8 +20,8 @@ import { Dimension, MinimalHypercube } from './types';
  *   [3, 6],
  * ]
  */
-export const SwappedHypercube = implementColumnLike(
-  class SwappedHypercube implements MinimalHypercube {
+export const SwappedDimensions = implementColumnLike(
+  class SwappedDimensions implements MinimalTensor {
     unswappedHC: ColumnLike;
 
     dimensions: Dimension[];

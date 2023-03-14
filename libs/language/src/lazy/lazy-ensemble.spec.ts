@@ -10,10 +10,10 @@ import {
   isColumnLike,
   Value,
 } from '../value';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { ColumnSlice } from './ColumnSlice';
-import { HypercubeAtIndex } from './HypercubeAtIndex';
-import { SwappedHypercube } from './SwappedHypercube';
+import { LazyAtIndex } from './LazyAtIndex';
+import { SwappedDimensions } from './SwappedDimensions';
 import { jsCol } from './testUtils';
 import { OperationFunction } from './types';
 
@@ -27,14 +27,14 @@ const toAdd = jsCol([0, 1, 2]);
 describe.each(
   Object.entries({
     Column: jsCol([1, 2, 3]),
-    HypercubeAtIndex: new HypercubeAtIndex(
+    LazyAtIndex: new LazyAtIndex(
       jsCol([
         [0n, 0n, 0n],
         [1n, 2n, 3n],
       ]),
       1
     ),
-    'SwappedHypercube (doing nothing because 1D)': new SwappedHypercube(
+    'SwappedDimensions (doing nothing because 1D)': new SwappedDimensions(
       jsCol([1, 2, 3]),
       0
     ),
@@ -119,7 +119,7 @@ describe.each(
       [1n, 2n, 3n],
       [4n, 5n, 6n],
     ]),
-    HypercubeAtIndex: new HypercubeAtIndex(
+    LazyAtIndex: new LazyAtIndex(
       jsCol([
         [
           [0n, 0n, 0n],
@@ -132,7 +132,7 @@ describe.each(
       ]),
       1
     ),
-    SwappedHypercube: new SwappedHypercube(
+    SwappedDimensions: new SwappedDimensions(
       jsCol([
         [1n, 4n],
         [2n, 5n],

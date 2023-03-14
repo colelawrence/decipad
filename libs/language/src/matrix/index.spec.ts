@@ -7,7 +7,7 @@ import {
 import { Context, makeContext } from '..';
 import { Realm } from '../interpreter';
 import { fromJS } from '../value';
-import { build as t, InferError } from '../type';
+import { buildType as t, InferError } from '../type';
 import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
 
 let testRealm: Realm;

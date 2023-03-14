@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { makeContext } from '../infer';
-import { build as T } from '../type';
+import { buildType as T } from '../type';
 import { c, n, r, tiered, tieredDef, U } from '../utils';
 import { inferTiered } from './inferTiered';
 

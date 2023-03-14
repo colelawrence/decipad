@@ -1,4 +1,4 @@
-import { build as t } from './index';
+import { buildType as t } from './index';
 import { InferError } from './InferError';
 
 it('can stringify errors', () => {

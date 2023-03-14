@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import { Context, inferExpression } from '../infer';
 import { AST } from '../parser';
-import { Type, build as t } from '../type';
+import { Type, buildType as t } from '../type';
 import { getIdentifierString } from '../utils';
 
 export const predicateSymbols = new Set(['rest', 'max', 'min']);

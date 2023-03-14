@@ -1,5 +1,5 @@
 import { ONE } from '@decipad/number';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { DateValue as IDate, NumberValue } from '../value';
 import { parseUTCDate, Time } from '../date';
 import { overloadBuiltin } from './overloadBuiltin';

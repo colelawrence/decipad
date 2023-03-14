@@ -1,5 +1,5 @@
 import { inferBlock } from '..';
-import { build as t, getErrSpec, InferError } from '../type';
+import { buildType as t, getErrSpec, InferError } from '../type';
 import { assign, block, c, funcDef, l, r, U } from '../utils';
 import { makeContext } from './context';
 import { inferFunction } from './functions';

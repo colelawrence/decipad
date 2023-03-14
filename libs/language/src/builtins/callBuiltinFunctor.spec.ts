@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { makeContext } from '..';
-import { Type, build as t, Unit } from '../type';
+import { Type, buildType as t, Unit } from '../type';
 import { U } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';

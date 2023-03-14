@@ -2,7 +2,7 @@ import { dequal } from 'dequal';
 import { PrimitiveTypeName, Type } from '.';
 import type { Time } from '..';
 import { zip } from '../utils';
-import * as t from './build';
+import * as t from './buildType';
 import { InferError } from './InferError';
 import { propagatePercentage } from './percentages';
 import { Unit } from './unit-type';

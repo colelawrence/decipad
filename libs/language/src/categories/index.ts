@@ -3,7 +3,7 @@ import { AST, Context } from '..';
 import { inferExpression } from '../infer';
 import { evaluate, Realm } from '../interpreter';
 import { ColumnLike, getColumnLike } from '../value';
-import { build as t, InferError, Type } from '../type';
+import { buildType as t, InferError, Type } from '../type';
 import { getIdentifierString } from '../utils';
 
 export const inferCategories = async (

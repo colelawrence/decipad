@@ -1,7 +1,7 @@
 import { makeContext } from '@decipad/language';
 import { N } from '@decipad/number';
 import { Column, Table, DateValue, fromJS } from '../../value';
-import { build as t, Type } from '../../type';
+import { buildType as t, Type } from '../../type';
 import { tableOperators as operators } from './table-operators';
 import { U } from '../../utils';
 import { Realm, RuntimeError } from '../../interpreter';

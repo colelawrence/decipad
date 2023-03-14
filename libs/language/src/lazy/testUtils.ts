@@ -1,5 +1,5 @@
 import { fromJS, FromJSArg, getColumnLike } from '../value';
-import { HypercubeArg } from './Hypercube';
+import { HypercubeArg } from './LazyOperation';
 import { DimensionId } from './types';
 
 export const jsCol = (items: FromJSArg) => getColumnLike(fromJS(items));

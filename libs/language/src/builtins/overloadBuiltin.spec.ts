@@ -1,5 +1,5 @@
 import { DateValue, fromJS } from '../value';
-import { InferError, build as t } from '../type';
+import { InferError, buildType as t } from '../type';
 import { getDefined } from '../utils';
 import {
   getOverloadedTypeFromType,

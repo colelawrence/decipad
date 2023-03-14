@@ -2,7 +2,7 @@
 import { getDefined } from '@decipad/utils';
 import { Context, inferExpression } from '../infer';
 import { AST } from '../parser';
-import { Type, build as T } from '../type';
+import { Type, buildType as T } from '../type';
 
 const inferMatchDef = async (
   ctx: Context,

@@ -1,6 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { fromJS } from '../../value';
-import { build as t } from '../../type';
+import { buildType as t } from '../../type';
 import { parseFunctor } from '../parseFunctor';
 import { reducerOperators as operators } from './reducer-operators';
 

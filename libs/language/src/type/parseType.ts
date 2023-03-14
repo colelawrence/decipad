@@ -2,7 +2,7 @@ import produce from 'immer';
 import moo from 'moo';
 import { getDefined, thro } from '@decipad/utils';
 
-import { build as t, Type } from '.';
+import { buildType as t, Type } from '.';
 import type { FunctionSignature } from './narrowing';
 
 const tokens = moo.compile({

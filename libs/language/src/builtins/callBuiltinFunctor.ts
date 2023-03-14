@@ -1,6 +1,6 @@
 import { getOnly } from '@decipad/utils';
 import type { AST, Context } from '..';
-import { Type, build as t, InferError } from '../type';
+import { Type, buildType as t, InferError } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
 import { getOperatorByName } from './operators';
 import type { BuiltinSpec, Functor } from './interfaces';

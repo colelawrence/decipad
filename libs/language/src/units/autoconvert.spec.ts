@@ -1,7 +1,7 @@
 import { N } from '@decipad/number';
 import { fromJS } from '../value';
 import { U, u } from '../utils';
-import { number } from '../type/build';
+import { number } from '../type/buildType';
 import { autoconvertArguments, autoconvertResult } from './autoconvert';
 
 describe('autoconvert arguments', () => {

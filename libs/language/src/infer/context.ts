@@ -1,7 +1,7 @@
 import { AnyMapping, anyMappingToMap, zip } from '@decipad/utils';
 
 import { AST, ExternalDataMap } from '..';
-import { Type, SerializedType, build as t } from '../type';
+import { Type, SerializedType, buildType as t } from '../type';
 import {
   Stack,
   StackNamespaceJoiner,

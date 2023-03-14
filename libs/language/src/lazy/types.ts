@@ -5,7 +5,7 @@ export interface Dimension {
   dimensionLength: number;
 }
 
-export type MinimalHypercube = Pick<
+export type MinimalTensor = Pick<
   ColumnLike,
   'lowLevelGet' | 'dimensions' | 'indexToLabelIndex'
 >;

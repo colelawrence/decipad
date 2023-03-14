@@ -8,7 +8,7 @@ import { fromJS, FromJSArg, Table } from './value';
 import { OneResult, Result } from './result';
 import { parseBlockOrThrow } from './run';
 import {
-  build as t,
+  buildType as t,
   convertToMultiplierUnit,
   getErrSpec,
   normalizeUnits,

@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { c, col, l, U, u, ne, r, n } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';

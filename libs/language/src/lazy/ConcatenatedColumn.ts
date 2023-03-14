@@ -1,11 +1,11 @@
 import { Dimension, lowLevelGet } from '.';
 import { getLabelIndex } from '../dimtools';
 import { ColumnLike } from '../value';
-import { implementColumnLike } from './HypercubeAtIndex';
-import { MinimalHypercube } from './types';
+import { implementColumnLike } from './LazyAtIndex';
+import { MinimalTensor } from './types';
 
 export const ConcatenatedColumn = implementColumnLike(
-  class ConcatenatedColumn implements MinimalHypercube {
+  class ConcatenatedColumn implements MinimalTensor {
     dimensions: Dimension[];
     column1: ColumnLike;
     column2: ColumnLike;

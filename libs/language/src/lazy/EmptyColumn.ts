@@ -1,7 +1,7 @@
 import { Dimension } from '.';
 import { Value } from '../value';
-import { implementColumnLike } from './HypercubeAtIndex';
-import { MinimalHypercube } from './types';
+import { implementColumnLike } from './LazyAtIndex';
+import { MinimalTensor } from './types';
 
 /**
  * Sometimes we may access `.values[0]` of a column to figure out its dimensionality.
@@ -11,7 +11,7 @@ import { MinimalHypercube } from './types';
  * Column.fromValues() returns this when given dimension information and zero values
  */
 export const EmptyColumn = implementColumnLike(
-  class EmptyColumn implements MinimalHypercube {
+  class EmptyColumn implements MinimalTensor {
     dimensions: Dimension[];
 
     constructor(dimensions: Dimension[]) {

@@ -2,7 +2,7 @@ import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { AST, Time, DateValue } from '..';
 import { getIdentifierString, getOfType } from '../utils';
-import { InferError, build as t, Type } from '../type';
+import { InferError, buildType as t, Type } from '../type';
 import {
   dateToArray,
   getJSDateUnitAndMultiplier,

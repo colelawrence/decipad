@@ -4,7 +4,7 @@ import { N } from '@decipad/number';
 import { l, u, U } from '../utils';
 import { InferError } from './InferError';
 import { inverseExponent, setExponent } from './units';
-import { Type, build as t } from './index';
+import { Type, buildType as t } from './index';
 import type { Unit } from './unit-type';
 
 const meter = u('meters');

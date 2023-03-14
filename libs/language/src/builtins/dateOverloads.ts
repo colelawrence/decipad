@@ -9,7 +9,7 @@ import {
   timeUnitFromUnits,
 } from '../date';
 import { getDefined, getInstanceof } from '../utils';
-import { Type, build as t, InferError } from '../type';
+import { Type, buildType as t, InferError } from '../type';
 import { OverloadedBuiltinSpec } from './overloadBuiltin';
 
 export const addDateAndTimeQuantity = (

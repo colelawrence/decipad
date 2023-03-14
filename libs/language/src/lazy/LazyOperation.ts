@@ -3,11 +3,11 @@ import { Type } from '..';
 import { typeToDimensionIds } from '../dimtools/common';
 import { isColumnLike, Value } from '../value';
 import { zip } from '../utils';
-import { implementColumnLike } from './HypercubeAtIndex';
+import { implementColumnLike } from './LazyAtIndex';
 import type {
   Dimension,
   DimensionId,
-  MinimalHypercube,
+  MinimalTensor,
   OperationFunction,
 } from './types';
 
@@ -23,8 +23,8 @@ export type HypercubeArgLoose = [
  *
  * Instead, getData() is used to materialize the data.
  */
-export const Hypercube = implementColumnLike(
-  class Hypercube implements MinimalHypercube {
+export const LazyOperation = implementColumnLike(
+  class LazyOperation implements MinimalTensor {
     readonly op: OperationFunction;
     readonly args: HypercubeArg[];
 
@@ -79,7 +79,7 @@ export const createLazyOperation = (
   argValues: Value[],
   argTypes: Type[]
 ) => {
-  const lazyOperation = new Hypercube(op, ...zip(argValues, argTypes));
+  const lazyOperation = new LazyOperation(op, ...zip(argValues, argTypes));
   if (lazyOperation.dimensions.length) {
     return lazyOperation;
   } else {

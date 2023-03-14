@@ -2,7 +2,7 @@ import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { inferExpression, makeContext } from '../../infer';
 import { AST } from '../../parser';
-import { build as t, InferError } from '../../type';
+import { buildType as t, InferError } from '../../type';
 import { c, col, l, n, U } from '../../utils';
 import { fromJS } from '../../value';
 import { mathOperators, mathOperators as operators } from './math-operators';

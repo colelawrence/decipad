@@ -1,7 +1,7 @@
 import DeciNumber from '@decipad/number';
 import { getInstanceof } from '../../utils';
 import { DateValue, Range, fromJS, compare, NumberValue } from '../../value';
-import { Type, build as t } from '../../type';
+import { Type, buildType as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
 

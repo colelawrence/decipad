@@ -1,7 +1,7 @@
 import { N } from '@decipad/number';
 import { makeContext } from '../infer';
 import { match, matchDef, n } from '../utils';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { inferMatch } from './inferMatch';
 
 describe('inferMatch', () => {

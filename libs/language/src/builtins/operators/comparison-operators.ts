@@ -1,5 +1,5 @@
 import { BuiltinSpec } from '../interfaces';
-import { Type, build as t, InferError } from '../../type';
+import { Type, buildType as t, InferError } from '../../type';
 import { compare } from '../../value';
 
 const cmpFunctor = ([left, right]: Type[]): Type => {

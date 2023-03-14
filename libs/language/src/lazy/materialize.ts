@@ -1,11 +1,11 @@
 import { OneResult } from '../interpreter/interpreter-types';
-import type { Dimension, MinimalHypercube } from './types';
+import type { Dimension, MinimalTensor } from './types';
 
 /**
  * Come up with all possible .lowLevelGet arg combinations and call
  * it while building a nested array
  * */
-export function materialize(hc: MinimalHypercube): OneResult {
+export function materialize(hc: MinimalTensor): OneResult {
   if (hc.dimensions.some((dim) => dim.dimensionLength === 0)) {
     return [];
   }

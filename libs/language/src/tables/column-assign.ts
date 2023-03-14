@@ -1,7 +1,7 @@
 import { zip } from '@decipad/utils';
 import { AST } from '..';
 import { Context } from '../infer';
-import { build as t, InferError } from '../type';
+import { buildType as t, InferError } from '../type';
 import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { Realm } from '../interpreter';
 import { Table, UnknownValue, Value } from '../value';

@@ -1,5 +1,5 @@
 import { AST } from '../parser';
-import { build as t, InferError } from '../type';
+import { buildType as t, InferError } from '../type';
 import { DirectiveImpl } from './types';
 
 export const select: DirectiveImpl<AST.SelectDirective> = {

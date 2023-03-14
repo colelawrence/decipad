@@ -10,8 +10,8 @@ import {
   getColumnLike,
   ValueTransforms,
 } from '../../value';
-import { SwappedHypercube, ConcatenatedColumn } from '../../lazy';
-import { Type, build as t } from '../../type';
+import { SwappedDimensions, ConcatenatedColumn } from '../../lazy';
+import { Type, buildType as t } from '../../type';
 import { getInstanceof } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
 import { approximateSubsetSumIndices } from '../table';
@@ -132,7 +132,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   transpose: {
     argCount: 1,
     argCardinalities: [3],
-    fnValues: ([matrix]) => new SwappedHypercube(getColumnLike(matrix), 1),
+    fnValues: ([matrix]) => new SwappedDimensions(getColumnLike(matrix), 1),
     functor: ([matrix]) =>
       Type.combine(matrix.isColumn().reduced().isColumn().reduced()).mapType(
         (cell) => {

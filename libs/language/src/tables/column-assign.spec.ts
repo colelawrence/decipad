@@ -1,5 +1,5 @@
 import { inferStatement, makeContext } from '../infer';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { c, col, l, r, tableColAssign } from '../utils';
 import { typeSnapshotSerializer } from '../testUtils';
 import { evaluateColumnAssign, inferColumnAssign } from './column-assign';

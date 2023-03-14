@@ -1,6 +1,6 @@
 import { IndexNames } from './common';
 import { getReductionPlan } from './getReductionPlan';
-import { build, Type } from '../type';
+import { buildType, Type } from '../type';
 
 const testReduction = (
   cardinalities: number[],
@@ -10,9 +10,13 @@ const testReduction = (
   // getReductionPlan wants something that's instanceof Column
   const mockCardinality = (cardinality: number, index: string | null): Type => {
     if (cardinality === 1) {
-      return build.string();
+      return buildType.string();
     } else {
-      return build.column(mockCardinality(cardinality - 1, null), 123, index);
+      return buildType.column(
+        mockCardinality(cardinality - 1, null),
+        123,
+        index
+      );
     }
   };
 
@@ -73,10 +77,10 @@ describe('multi-index arguments', () => {
   const testMultiIndexReduction = (...mockArgs: MockArg[]) => {
     const mockType = (indices: IndexNames): Type => {
       if (!indices.length) {
-        return build.number();
+        return buildType.number();
       } else {
         const [index, ...nextIndices] = indices;
-        return build.column(mockType(nextIndices), 123, index);
+        return buildType.column(mockType(nextIndices), 123, index);
       }
     };
 

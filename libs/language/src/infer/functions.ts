@@ -2,7 +2,7 @@ import pSeries from 'p-series';
 import { inferExpression, inferStatement } from '.';
 import { AST } from '..';
 import { callBuiltinFunctor } from '../builtins';
-import { build as t, InferError, Type } from '../type';
+import { buildType as t, InferError, Type } from '../type';
 import { getDefined, getIdentifierString, getOfType, zip } from '../utils';
 import { Context, logRetrievedFunctionName } from './context';
 

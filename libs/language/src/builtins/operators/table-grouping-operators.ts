@@ -1,5 +1,5 @@
 import { BuiltinSpec } from '../interfaces';
-import { build as t, InferError } from '../../type';
+import { buildType as t, InferError } from '../../type';
 
 export const tableGroupingOperators: { [fname: string]: BuiltinSpec } = {
   splitby: {

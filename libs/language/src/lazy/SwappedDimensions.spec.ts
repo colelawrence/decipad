@@ -1,5 +1,5 @@
 import { materialize } from './materialize';
-import { SwappedHypercube } from './SwappedHypercube';
+import { SwappedDimensions } from './SwappedDimensions';
 import { jsCol } from './testUtils';
 
 const multiDimX = jsCol([1n, 2n, 3n]);
@@ -14,7 +14,7 @@ const threeAnonDims = jsCol([
 ]);
 
 it('can swap dimensions of a hypercube', () => {
-  expect(materialize(new SwappedHypercube(twoAnonDims, 1)))
+  expect(materialize(new SwappedDimensions(twoAnonDims, 1)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -26,7 +26,7 @@ it('can swap dimensions of a hypercube', () => {
 });
 
 it('or left alone', () => {
-  expect(materialize(new SwappedHypercube(twoAnonDims, 0)))
+  expect(materialize(new SwappedDimensions(twoAnonDims, 0)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -40,7 +40,7 @@ it('or left alone', () => {
 });
 
 it('can swap nothing if the dimension is 1D', () => {
-  expect(materialize(new SwappedHypercube(multiDimX, 0)))
+  expect(materialize(new SwappedDimensions(multiDimX, 0)))
     .toMatchInlineSnapshot(`
     Array [
       DeciNumber(1),
@@ -51,7 +51,7 @@ it('can swap nothing if the dimension is 1D', () => {
 });
 
 it('can work with 3d', () => {
-  expect(materialize(new SwappedHypercube(threeAnonDims, 0)))
+  expect(materialize(new SwappedDimensions(threeAnonDims, 0)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -69,7 +69,7 @@ it('can work with 3d', () => {
     ]
   `);
 
-  expect(materialize(new SwappedHypercube(threeAnonDims, 1)))
+  expect(materialize(new SwappedDimensions(threeAnonDims, 1)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -89,7 +89,7 @@ it('can work with 3d', () => {
     ]
   `);
 
-  expect(materialize(new SwappedHypercube(threeAnonDims, 2)))
+  expect(materialize(new SwappedDimensions(threeAnonDims, 2)))
     .toMatchInlineSnapshot(`
     Array [
       Array [

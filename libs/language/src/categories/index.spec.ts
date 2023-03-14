@@ -1,5 +1,5 @@
 import { col, categories } from '../utils';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { inferCategories } from '.';
 import { Realm } from '../interpreter';
 import { Context, makeContext } from '..';

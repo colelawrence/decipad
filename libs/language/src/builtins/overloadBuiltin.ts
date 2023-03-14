@@ -1,5 +1,5 @@
 import { BuiltinSpec } from './interfaces';
-import { InferError, Type, build as t } from '../type';
+import { InferError, Type, buildType as t } from '../type';
 import {
   Value,
   DateValue,

@@ -1,6 +1,6 @@
 import DeciNumber, { N } from '@decipad/number';
 import * as Values from '../value';
-import { Type, build as t } from '../type';
+import { Type, buildType as t } from '../type';
 import {
   automapTypes,
   automapTypesForReducer,

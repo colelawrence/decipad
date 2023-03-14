@@ -6,7 +6,7 @@ import { automapTypes, automapValues } from '../dimtools';
 import { NumberValue, fromJS, Value } from '../value';
 import { AST } from '../parser';
 import {
-  build as t,
+  buildType as t,
   convertToMultiplierUnit,
   InferError,
   Type,

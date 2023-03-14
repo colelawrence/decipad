@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 
 import type { AST } from '..';
-import { Type, build as t, InferError } from '../type';
+import { Type, buildType as t, InferError } from '../type';
 import { getIdentifierString, walkAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { Context, pushTableContext } from '../infer/context';

@@ -1,7 +1,7 @@
 import { AST } from '..';
 import { inferStatement, makeContext } from '../infer';
 import { table, col, n, c, l, r } from '../utils';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { objectToMap } from '../testUtils';
 import { inferTable, inferTableColumnPerCell } from './inference';
 

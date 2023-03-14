@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { runAST } from '..';
-import { build as T } from '../type';
+import { buildType as T } from '../type';
 import { n, block, tiered, tieredDef, r, c } from '../utils';
 
 describe('evaluateTiered', () => {

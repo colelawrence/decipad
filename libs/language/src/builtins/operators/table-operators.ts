@@ -12,7 +12,7 @@ import {
 } from '../../value';
 import { OneResult } from '../../interpreter/interpreter-types';
 import { ConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
-import { build as t, Type } from '../../type';
+import { buildType as t, Type } from '../../type';
 import { getInstanceof, zip } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
 

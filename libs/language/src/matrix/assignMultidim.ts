@@ -3,7 +3,7 @@ import { getDefined } from '@decipad/utils';
 import { AST, Column, Type } from '..';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { ColumnLike, isColumnLike } from '../value';
-import { build as t, InferError } from '../type';
+import { buildType as t, InferError } from '../type';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
 

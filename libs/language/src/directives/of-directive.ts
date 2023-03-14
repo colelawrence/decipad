@@ -2,7 +2,7 @@ import produce from 'immer';
 import { AST, Context, inferExpression } from '..';
 import { automapTypes } from '../dimtools';
 import { evaluate, Realm } from '../interpreter';
-import { InferError, Type, build as t } from '../type';
+import { InferError, Type, buildType as t } from '../type';
 import { getIdentifierString } from '../utils';
 import { DirectiveImpl } from './types';
 

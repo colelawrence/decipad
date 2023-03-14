@@ -1,6 +1,6 @@
 import { createLazyOperation } from '.';
 import { fromJS, getColumnLike } from '../value';
-import { build } from '../type';
+import { buildType } from '../type';
 import { EmptyColumn } from './EmptyColumn';
 
 it('forbids access into it', () => {
@@ -20,7 +20,7 @@ it('can be materialized by a lazy operation', () => {
     createLazyOperation(
       () => new EmptyColumn([]),
       [fromJS([1, 2, 3])],
-      [build.column(build.number(), 3)]
+      [buildType.column(buildType.number(), 3)]
     )
   );
   expect(lazyOp.getData()).toEqual([[], [], []]);
@@ -29,7 +29,7 @@ it('can be materialized by a lazy operation', () => {
     createLazyOperation(
       () => new EmptyColumn([{ dimensionLength: 2 }]),
       [fromJS([1, 2, 3])],
-      [build.column(build.number(), 3)]
+      [buildType.column(buildType.number(), 3)]
     )
   );
   expect(lazyOpWithInnerDims.getData()).toEqual([[], [], []]);
@@ -40,7 +40,7 @@ it('can be the arg of a lazy operation', () => {
     createLazyOperation(
       () => fromJS(1),
       [new EmptyColumn([])],
-      [build.column(build.number(), 'unknown')]
+      [buildType.column(buildType.number(), 'unknown')]
     )
   );
   expect(lazyOp.getData()).toEqual([]);
@@ -50,8 +50,8 @@ it('can be the arg of a lazy operation', () => {
       () => fromJS(1),
       [fromJS([1, 2]), fromJS([])],
       [
-        build.column(build.number(), 'unknown', 'X'),
-        build.column(build.number(), 'unknown', 'Y'),
+        buildType.column(buildType.number(), 'unknown', 'X'),
+        buildType.column(buildType.number(), 'unknown', 'Y'),
       ]
     )
   );

@@ -1,5 +1,5 @@
 import { inferExpression } from '.';
-import { build as t } from '../type';
+import { buildType as t } from '../type';
 import { l, n, seq, date } from '../utils';
 
 import { makeContext } from './context';

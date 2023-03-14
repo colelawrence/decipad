@@ -9,8 +9,8 @@ import {
   runCodeForVariables,
   typeSnapshotSerializer,
 } from './testUtils';
-import { build as t, InferError, serializeType } from './type';
-import { number } from './type/build';
+import { buildType as t, InferError, serializeType } from './type';
+import { number } from './type/buildType';
 import { block, c, n, U, u } from './utils';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);

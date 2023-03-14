@@ -1,5 +1,5 @@
 import DeciNumber, { N } from '@decipad/number';
-import { Hypercube, uniqDimensions } from './Hypercube';
+import { LazyOperation, uniqDimensions } from './LazyOperation';
 import { NumberValue, fromJS, Value } from '../value';
 import { getInstanceof } from '../utils';
 
@@ -13,18 +13,18 @@ const op =
       )
     );
 
-const multiDimX = new Hypercube(
+const multiDimX = new LazyOperation(
   op((a) => a),
   hcArg([1n, 2n, 3n], 'X')
 );
 
-const multiDimXTwice = new Hypercube(
+const multiDimXTwice = new LazyOperation(
   op((a, b) => a.div(b)),
   hcArg([1n, 2n, 3n], 'X'),
   hcArg([2n, 4n, 6n], 'X')
 );
 
-const multidimDivision = new Hypercube(
+const multidimDivision = new LazyOperation(
   op((a, b) => a.div(b)),
   hcArg([100n, 200n, 300n], 'X'),
   hcArg([1n, 2n, 3n], 'Y')
@@ -32,13 +32,13 @@ const multidimDivision = new Hypercube(
 
 describe('nesting', () => {
   it('can lowLevelGet into nested hypercubes', () => {
-    const nested2 = new Hypercube(
+    const nested2 = new LazyOperation(
       op((a) => a.add(N(100))),
       [multiDimX, ['X']]
     );
     expect(nested2.lowLevelGet(0).getData()).toEqual(N(101));
 
-    const nested3 = new Hypercube(
+    const nested3 = new LazyOperation(
       op((a, b) => a.mul(N(100)).add(b)),
       [multiDimX, ['X']],
       [multiDimX, ['X']]
@@ -70,7 +70,7 @@ it('uniqDimensions can find out what dimensions are involved and give them to ya
 });
 
 it('can operate with one column', () => {
-  const operateWithOneD = new Hypercube(
+  const operateWithOneD = new LazyOperation(
     op((a, b) => a.add(b)),
     hcArg([1n, 2n, 3n], 'X'),
     hcArg(100n, 0)
@@ -84,7 +84,7 @@ it('can operate with one column', () => {
     ]
   `);
 
-  const operateWithOneDReversed = new Hypercube(
+  const operateWithOneDReversed = new LazyOperation(
     op((a, b) => a.add(b)),
     hcArg(100n, 0),
     hcArg([1n, 2n, 3n], 'X')

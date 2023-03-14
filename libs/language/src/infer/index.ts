@@ -1,7 +1,7 @@
 import pSeries from 'p-series';
 
 import { AST } from '..';
-import { InferError, Type, build as t, deserializeType } from '../type';
+import { InferError, Type, buildType as t, deserializeType } from '../type';
 import { matchUnitArraysForColumn } from '../type/units';
 import { getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';

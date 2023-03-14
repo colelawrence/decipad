@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { u, U } from './utils';
-import { build as t } from './type';
+import { buildType as t } from './type';
 import { cleanDate } from './date';
 import {
   runCodeForVariables,

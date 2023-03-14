@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { once } from 'ramda';
-import { Type, build as t } from '../../type';
+import { Type, buildType as t } from '../../type';
 import { BuiltinSpec } from '../interfaces';
 
 const radian = once(() =>

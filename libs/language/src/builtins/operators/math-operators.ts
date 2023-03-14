@@ -4,7 +4,7 @@ import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
 import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { getInstanceof } from '../../utils';
-import { InferError, Type, build as t } from '../../type';
+import { InferError, Type, buildType as t } from '../../type';
 import {
   fromJS,
   Scalar,

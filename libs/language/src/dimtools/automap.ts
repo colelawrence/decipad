@@ -1,6 +1,6 @@
 import * as Value from '../value';
 import { createLazyOperation } from '../lazy';
-import { build as t, Type } from '../type';
+import { buildType as t, Type } from '../type';
 import {
   arrayOfOnes,
   deLinearizeType,

@@ -1,11 +1,11 @@
 import { Dimension, lowLevelGet } from '.';
 import { getLabelIndex } from '../dimtools';
 import { ColumnLike } from '../value';
-import { implementColumnLike } from './HypercubeAtIndex';
-import { MinimalHypercube } from './types';
+import { implementColumnLike } from './LazyAtIndex';
+import { MinimalTensor } from './types';
 
 export const ColumnSlice = implementColumnLike(
-  class _ColumnSlice implements MinimalHypercube {
+  class _ColumnSlice implements MinimalTensor {
     begin: number;
     end: number;
     sourceColumn: ColumnLike;
