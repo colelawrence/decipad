@@ -26,7 +26,6 @@ export async function createInputBelow(
 
   await page.click('div [data-testid="input-widget-name"]');
   await keyPress(page, 'ArrowDown');
-  await keyPress(page, 'ArrowDown');
   // erase 100$, then focus goes to title, we come back down
   await keyPress(page, 'End');
   await keyPress(page, 'Backspace');

@@ -2,7 +2,15 @@ import type { SerializedTypes } from '@decipad/computer';
 import { CellValueType } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { format, parse } from 'date-fns';
-import { FC, MouseEvent, ReactNode, useCallback, useMemo } from 'react';
+import {
+  FC,
+  MouseEvent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { dateFormatForGranularity } from '../../utils/dateFormatForGranularity';
@@ -77,8 +85,24 @@ export const DateEditor: FC<DateEditorProps> = ({
     [open]
   );
 
+  const datePickerWrapperRef = useRef<HTMLSpanElement>(null);
+
+  // DatePicker siblings should have contentEditable=false
+  useEffect(() => {
+    const element = datePickerWrapperRef.current?.getElementsByClassName(
+      'react-datepicker__aria-live'
+    )[0];
+    if (!element) return;
+
+    element.setAttribute('contenteditable', 'false');
+  }, []);
+
   return (
-    <span onClick={onClick} className="mydateeditorwrapper">
+    <span
+      onClick={onClick}
+      className="mydateeditorwrapper"
+      ref={datePickerWrapperRef}
+    >
       <DatePicker
         open={open && type?.kind === 'date'}
         dateFormat={dateFormat || 'yyyy-MM-dd'}
