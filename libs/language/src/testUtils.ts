@@ -244,6 +244,15 @@ export const snapshotType = (type: Type | SerializedType): string => {
   }
 };
 
+export const fromDate = (s: string): bigint => {
+  try {
+    return BigInt(new Date(s).getTime());
+  } catch (err) {
+    console.error(err);
+    throw new Error(`Error caught converting "${s}" to date`);
+  }
+};
+
 export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
   test: (item) => item instanceof Type || isSerializedType(item),
   serialize: (item: Type) => {

@@ -7,6 +7,7 @@ import {
   objectToTableType,
   evaluateForVariables,
   runAndMeasure,
+  fromDate,
 } from './testUtils';
 import { runCode } from './run';
 
@@ -786,7 +787,8 @@ ${'' /* Get capital needed */}
           Quarter = round(Date, quarter)
           Year = round(Date, year)
           Year2 = Year + 2 years
-          QuarterMatches = round(Date, quarter) == date(2023Q2)
+          Quarter2 = date(2023Q2)
+          QuarterMatches = round(Date, quarter) == Quarter2
           `,
         [
           'Second',
@@ -797,6 +799,7 @@ ${'' /* Get capital needed */}
           'Month',
           'Year',
           'Year2',
+          'Quarter2',
           'QuarterMatches',
         ]
       )
@@ -820,6 +823,9 @@ ${'' /* Get capital needed */}
         Quarter: {
           date: 'quarter',
         },
+        Quarter2: {
+          date: 'quarter',
+        },
         Second: {
           date: 'second',
         },
@@ -831,14 +837,15 @@ ${'' /* Get capital needed */}
         },
       },
       variables: {
-        Day: 1684022400000n,
-        Hour: 1684062000000n,
-        Minute: 1684065180000n,
-        Month: 1682899200000n,
-        Quarter: 1680307200000n,
-        Second: 1684065212000n,
-        Year: 1672531200000n,
-        Year2: 1735689600000n,
+        Second: fromDate('2023-05-14T11:53:32.000Z'),
+        Minute: fromDate('2023-05-14T11:53:00.000Z'),
+        Hour: fromDate('2023-05-14T11:00:00.000Z'),
+        Day: fromDate('2023-05-14T00:00:00.000Z'),
+        Month: fromDate('2023-05-01T00:00:00.000Z'),
+        Quarter: fromDate('2023-04-01T00:00:00.000Z'),
+        Quarter2: fromDate('2023-04-01T00:00:00.000Z'),
+        Year: fromDate('2023-01-01T00:00:00.000Z'),
+        Year2: fromDate('2025-01-01T00:00:00.000Z'),
         QuarterMatches: true,
       },
     });

@@ -355,7 +355,7 @@ export const getDateFromAstForm = (
   segments: AST.Date['args']
 ): [bigint, Time.Specificity] => {
   if (segments[2] === 'quarter') {
-    const quarter = (Number(segments[3]) - 1) * 4 + 1;
+    const quarter = (Number(segments[3]) - 1) * 3 + 1;
     const [dateNum] = getDateFromAstForm([
       'year',
       segments[1],
