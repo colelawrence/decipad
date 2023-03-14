@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { once } from 'ramda';
 import { forwardRef, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
-import { DragHandle, Trash } from '../../icons/index';
+import { Add, DragHandle, Trash } from '../../icons/index';
 import {
   cssVar,
   mouseMovingOverTransitionDelay,
@@ -18,6 +18,8 @@ import { MenuList } from '../MenuList/MenuList';
 export interface TableCellControlsProps {
   readonly onSelect?: () => void;
   readonly onRemove?: () => void;
+  readonly onAddRowAbove?: () => void;
+  readonly onAddRowBelow?: () => void;
   readonly readOnly?: boolean;
 }
 
@@ -41,7 +43,7 @@ const gridStyles = once(() =>
 export const TableCellControls = forwardRef<
   HTMLTableHeaderCellElement,
   TableCellControlsProps
->(({ readOnly, onSelect, onRemove }, ref) => {
+>(({ readOnly, onSelect, onRemove, onAddRowAbove, onAddRowBelow }, ref) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   const handleMenuClick = () => {
@@ -79,15 +81,17 @@ export const TableCellControls = forwardRef<
             trigger={menuButton}
             dropdown
           >
+            <MenuItem icon={<Add />} onSelect={onAddRowAbove}>
+              Add Above
+            </MenuItem>
             {onRemove && (
-              <MenuItem
-                icon={<Trash />}
-                onSelect={() => onRemove()}
-                selected={false}
-              >
+              <MenuItem icon={<Trash />} onSelect={onRemove} selected={false}>
                 Delete row
               </MenuItem>
             )}
+            <MenuItem icon={<Add />} onSelect={onAddRowBelow}>
+              Add below
+            </MenuItem>
           </MenuList>
 
           <Tooltip trigger={menuButton} side="left">

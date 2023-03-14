@@ -20,7 +20,6 @@ import {
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
-  findNodePath,
   getNodeChildren,
   getNodeEntry,
   hasNode,
@@ -51,6 +50,7 @@ export interface TableActions {
   ) => void;
   onAddColumn: () => void;
   onRemoveColumn: (columnId: string) => void;
+  onAddRowHere: (rowNumber: number, below?: boolean) => void;
   onAddRow: () => void;
   onRemoveRow: (rowIndex: string) => void;
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
@@ -121,6 +121,7 @@ export const addRow = (
   const headerRowEntry = getNodeEntry(editor, headerRowPath);
   const headerRow = headerRowEntry[0] as TableHeaderRowElement;
   const columnCount = headerRow.children.length;
+
   const emptyCells: TableCellElement[] = Array.from(
     { length: columnCount },
     (): TableCellElement => ({
@@ -129,35 +130,17 @@ export const addRow = (
       children: [{ text: '' }],
     })
   );
+
   const newRow: TableRowElement = {
     id: nanoid(),
     type: ELEMENT_TR,
     children: emptyCells,
   };
+
   // @ts-ignore
   insertNodes<TableRowElement>(editor, newRow, {
     at: [...tablePath, elementCount],
     ...options,
-  });
-};
-
-export const addRowFromCell = (
-  editor: MyEditor,
-  {
-    cellElement,
-    offset = 0,
-  }: { cellElement: TableCellElement; offset?: number }
-) => {
-  const cellPath = findNodePath(editor, cellElement);
-  if (!cellPath) return;
-
-  const rowPath = cellPath.slice(0, cellPath.length - 1);
-  const rowIndex = rowPath[rowPath.length - 1];
-  const tablePath = rowPath.slice(0, rowPath.length - 1);
-
-  addRow(editor, tablePath, {
-    at: [...tablePath, rowIndex + offset],
-    select: true,
   });
 };
 
@@ -285,6 +268,24 @@ export const useTableActions = (
     [editor, element]
   );
 
+  /**
+   * Action for adding row above or below the current row.
+   * @param above, if you want to add below send true, otherwise
+   * it will default to adding above.
+   */
+  const onAddRowHere = useCallback(
+    (rowNumber: number, below?: boolean) => {
+      withPath(editor, element, (path) => {
+        withoutNormalizing(editor, () => {
+          addRow(editor, path, {
+            at: [...path, below ? rowNumber + 1 : rowNumber],
+          });
+        });
+      });
+    },
+    [editor, element]
+  );
+
   const onAddRow = useCallback(() => {
     withPath(editor, element, (path) => {
       withoutNormalizing(editor, () => {
@@ -341,6 +342,7 @@ export const useTableActions = (
     onChangeColumnAggregation,
     onAddColumn,
     onRemoveColumn,
+    onAddRowHere,
     onAddRow,
     onRemoveRow,
     onMoveColumn,

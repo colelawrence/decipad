@@ -56,6 +56,8 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       isBeingDragged = false,
       isVisible = true,
       tableCellControls,
+      onAddRowAbove = noop,
+      onAddRowBelow = noop,
     },
     ref
   ): ReturnType<FC> => {
@@ -79,6 +81,8 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
               readOnly={readOnly}
               onSelect={onSelect}
               onRemove={onRemove}
+              onAddRowAbove={onAddRowAbove}
+              onAddRowBelow={onAddRowBelow}
             />
           ))}
         {children}

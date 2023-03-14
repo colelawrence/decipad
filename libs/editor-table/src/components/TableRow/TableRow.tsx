@@ -34,7 +34,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
   const tablePath = path && Path.parent(path);
   const tableEntry = tablePath && getNodeEntry<TableElement>(editor, tablePath);
   const table = tableEntry?.[0];
-  const { onRemoveRow } = useTableActions(editor, table);
+  const { onRemoveRow, onAddRowHere } = useTableActions(editor, table);
 
   const { id } = element;
   const trRef = useRef<HTMLTableRowElement>(null);
@@ -84,6 +84,8 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
       readOnly={false}
       onRemove={() => onRemoveRow(element.id)}
       onSelect={() => path && selectRow(editor, path)}
+      onAddRowAbove={() => path && onAddRowHere(path[1])}
+      onAddRowBelow={() => path && onAddRowHere(path[1], true)}
       dragRef={dragRef}
       previewRef={previewRef}
       ref={trRef}

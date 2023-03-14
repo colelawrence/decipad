@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getExprRef } from '@decipad/computer';
 import {
-  ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TH,
-  ELEMENT_TR,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
-  TableCellElement,
-  TableRowElement,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -19,28 +15,18 @@ import {
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
-import {
-  CodeResult,
-  ColumnDropLine,
-  FormulaTableData,
-  RowDropLine,
-  TableData,
-} from '@decipad/ui';
-import { NewElementLine } from '@decipad/ui/src/atoms/NewElementLine/NewElementLine';
+import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
 import {
   findNodePath,
   getNodeString,
   insertText,
   isCollapsed,
-  useElement,
 } from '@udecode/plate';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
-import { useTableRowStore, useTableStore } from '../../contexts/tableStore';
+import { useTableStore } from '../../contexts/tableStore';
 import {
-  addRowFromCell,
   useCellType,
-  useColumnDropDirection,
   useDropColumn,
   useIsCellSelected,
   useIsColumnSelected,
@@ -57,21 +43,7 @@ export const TableCell: PlateComponent = ({
   const focused = useSelected();
   const collapsed = isCollapsed(useSelection());
   const selectedCells = useTableStore().get.selectedCells();
-  const dropLine = useTableRowStore().get.dropLine();
   const [, dropTarget] = useDropColumn(editor, element!);
-  const direction = useColumnDropDirection(editor, element!);
-  const hoveredRowId = useTableStore().get.hoveredRowId();
-  const setHoveredRowId = useTableStore().set.hoveredRowId();
-  const hoveredRowBottomId = useTableStore().get.hoveredRowBottomId();
-  const setHoveredRowBottomId = useTableStore().set.hoveredRowBottomId();
-  const table = useElement(ELEMENT_TABLE);
-  const row = useElement<TableRowElement>(ELEMENT_TR);
-  const isRowHovered = hoveredRowId === row.id;
-  const isLastRow = table.children[table.children.length - 1] === row;
-  const isLastRowHovered = hoveredRowBottomId === row.id && isLastRow;
-  const isLastColumnPerRow =
-    row.children[row.children.length - 1].id === element?.id;
-  const rowWidth = useTableRowStore().get.rowWidth() || 0;
 
   if (
     !isElementOfType(element, ELEMENT_TH) &&
@@ -168,59 +140,6 @@ export const TableCell: PlateComponent = ({
     }));
   }, [cellType, editor.children, nodeText]);
 
-  const DropLine = (
-    <>
-      {!dropLine && (
-        <NewElementLine
-          onMouseEnter={() => setHoveredRowId(row.id)}
-          onMouseLeave={() => setHoveredRowId(null)}
-          onClick={() => setHoveredRowId(null)}
-          onAdd={() =>
-            addRowFromCell(editor, {
-              cellElement: element as TableCellElement,
-            })
-          }
-          show={isRowHovered}
-          isTable
-          tableAdditionalProps={{
-            isLastColumn: isLastColumnPerRow,
-            rowWidth,
-          }}
-        />
-      )}
-
-      {!dropLine && isLastRow && (
-        <NewElementLine
-          onMouseEnter={() => {
-            setHoveredRowBottomId(row.id);
-          }}
-          onMouseLeave={() => {
-            setHoveredRowBottomId(null);
-          }}
-          onClick={() => setHoveredRowBottomId(null)}
-          onAdd={() =>
-            addRowFromCell(editor, {
-              offset: 1,
-              cellElement: element as TableCellElement,
-            })
-          }
-          show={isLastRowHovered}
-          isTable
-          tableAdditionalProps={{
-            isLastColumn: isLastColumnPerRow,
-            rowWidth,
-          }}
-          reverse
-        />
-      )}
-
-      {dropLine === 'top' && <RowDropLine dropLine={dropLine} />}
-      {direction === 'left' && <ColumnDropLine dropDirection={direction} />}
-      {direction === 'right' && <ColumnDropLine dropDirection={direction} />}
-      {dropLine === 'bottom' && <RowDropLine dropLine={dropLine} />}
-    </>
-  );
-
   if (formulaResult != null) {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
@@ -233,7 +152,6 @@ export const TableCell: PlateComponent = ({
         resultType={formulaResult.type.kind}
         {...attributes}
         selected={selected}
-        firstChildren={DropLine}
       >
         {children}
       </FormulaTableData>
@@ -257,7 +175,6 @@ export const TableCell: PlateComponent = ({
       onChangeValue={onChangeValue}
       alignRight={forceAlignRight || isCellAlignRight(cellType)}
       parseError={showParseError ? parseErrorMessage : undefined}
-      firstChildren={DropLine}
       dropdownOptions={{
         dropdownOptions,
         dropdownResult,
