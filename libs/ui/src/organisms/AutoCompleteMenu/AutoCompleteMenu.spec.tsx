@@ -84,7 +84,7 @@ describe('search', () => {
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(3);
+    expect(getAllByRole('menuitem')).toHaveLength(2);
     expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
       `"NumberOtherVar"`
     );

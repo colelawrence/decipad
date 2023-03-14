@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react';
 import Fuse from 'fuse.js';
+import { once } from 'ramda';
 import { docs } from '@decipad/routing';
 import { Link, AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
@@ -141,6 +142,16 @@ type ItemBlockId = {
 
 const groupItems = (g: AutoCompleteGroup) => g.items;
 
+const searchOptions = once(
+  (): Fuse.IFuseOptions<AutoCompleteGroup['items'][0]> => ({
+    keys: ['identifier', { name: 'explanation', weight: 0.5 }],
+    isCaseSensitive: false,
+    shouldSort: true,
+    threshold: 0.3,
+    fieldNormWeight: 2,
+  })
+);
+
 const matchBlockIdOrIdentifier = (
   a: ItemBlockId,
   b: ItemBlockId | undefined
@@ -192,17 +203,7 @@ export const AutoCompleteMenu = ({
       groups.map(
         (group): SearchGroup => ({
           group,
-          index: new Fuse(group.items, {
-            keys: [
-              'identifier',
-              'explanation',
-              'syntax',
-              'example',
-              'formulaGroup',
-            ],
-            isCaseSensitive: false,
-            shouldSort: true,
-          }),
+          index: new Fuse(group.items, searchOptions()),
         })
       ),
     [groups, search]
