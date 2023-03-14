@@ -202,7 +202,8 @@ const Workspace: FC = () => {
     setCtaDismissed(true);
   }, []);
 
-  const { data: workspaceData, fetching } = result;
+  const { data: workspaceData, fetching: isFetching } = result;
+  const fetching = isFetching || !workspaceData;
 
   const currentWorkspace = useMemo(
     () => workspaceData?.workspaces.find((w) => w.id === workspaceId),
