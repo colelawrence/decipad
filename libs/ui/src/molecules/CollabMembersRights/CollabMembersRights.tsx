@@ -1,11 +1,20 @@
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { noop } from 'lodash';
+import { useIntercom } from 'react-use-intercom';
 import { Avatar } from '../../atoms';
-import { ellipsis, p12Medium, p14Medium } from '../../primitives';
+import {
+  cssVar,
+  ellipsis,
+  p12Medium,
+  p13Regular,
+  p14Medium,
+  setCssVar,
+} from '../../primitives';
 import { CollabAccessDropdown } from '..';
 import { NotebookAvatar } from '../NotebookAvatars/NotebookAvatars';
 import { PermissionType } from '../../types';
+import { Sparkles } from '../../icons';
 
 type CollabMembersRightsProps = {
   usersWithAccess?: NotebookAvatar[] | null;
@@ -41,6 +50,46 @@ const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
 const titleAndToggleStyles = css(horizontalGroupStyles, {
   justifyContent: 'space-between',
 });
+
+const disclaimerStyles = css(p13Regular, {
+  display: 'flex',
+  alignItems: 'flex-start',
+  padding: '8px',
+  gap: '8px',
+
+  backgroundColor: cssVar('strongHighlightColor'),
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
+  borderRadius: '8px',
+});
+
+const Disclaimer = () => {
+  const { show, showNewMessage } = useIntercom();
+
+  const showFeedback = useCallback(
+    (ev: React.MouseEvent) => {
+      ev.preventDefault();
+      show();
+      showNewMessage();
+    },
+    [show, showNewMessage]
+  );
+
+  return (
+    <p css={disclaimerStyles}>
+      <div css={{ height: '18px', width: '18px', flexShrink: 0 }}>
+        <Sparkles />
+      </div>
+      <span>
+        We're testing collaboration!{' '}
+        <button onClick={showFeedback} css={{ textDecoration: 'underline' }}>
+          Let us know
+        </button>
+        , if something doesn't work as expected.
+      </span>
+    </p>
+  );
+};
 
 export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   usersWithAccess,
@@ -99,6 +148,8 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
           </div>
         ))}
       </div>
+
+      <Disclaimer />
     </>
   );
 };
