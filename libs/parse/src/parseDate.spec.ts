@@ -13,6 +13,11 @@ describe('dates', () => {
     ['2020/10/13', { kind: 'date', date: 'day' }, '2020-10-13T00:00'],
     ['2020/10/13 10:30', { kind: 'date', date: 'minute' }, '2020-10-13T10:30'],
     ['2020-10-13 1:30', { kind: 'date', date: 'minute' }, '2020-10-13T01:30'],
+    [
+      '2023-02-01T00:00:00+02:00',
+      { kind: 'date', date: 'second' },
+      '2023-01-31T22:00:00.000Z',
+    ],
   ])('%s is a good %s', (format, type, result) => {
     const d = parseDate(format, type.date as DateGranularity);
     expect(d).toBeDefined();

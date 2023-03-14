@@ -1,5 +1,6 @@
 import { Time } from '@decipad/computer';
 import { parse } from 'date-fns';
+import { once } from 'ramda';
 import { DateFormat } from './types';
 
 const granularityRank = new Map(
@@ -33,65 +34,89 @@ const isValidDate = (d: Date | undefined): d is Date => {
   return d != null && !Number.isNaN(d.valueOf());
 };
 
-const combineFormats = (a: string[], b: string[]): string[] => {
+const combineFormats = (
+  a: string[],
+  b: string[],
+  separators: string | string[] = [' ']
+): string[] => {
   const formats: string[] = [];
+  const sep = Array.isArray(separators) ? separators : [separators];
   for (const aElem of a) {
     for (const bElem of b) {
-      formats.push(`${aElem} ${bElem}`);
+      for (const s of sep) {
+        formats.push(`${aElem}${s}${bElem}`);
+      }
     }
   }
   return formats;
 };
 
+const timeZoneFormats = ['', 'X', 'XX', 'XXX', 'XXXX', 'XXXXX'];
+
+const combineWithAndWithoutTimezone = (formats: string[]) =>
+  combineFormats(formats, timeZoneFormats, '');
+
 // Format strings reference:
 // https://date-fns.org/v2.25.0/docs/format
-const dayFormats = [
-  'dd-MM-yyyy',
-  'yyyy-MM-dd',
-  'dd/MM/yyyy',
-  'yyyy/MM/dd',
-  'P',
-  'PP',
-  'PPP',
-];
-const minuteFormats = ['HH:mm', 'HHmm', 'h:m aaa', 'hh:mm aaa', 'hhmm aaa'];
-const secondFormats = ['s', 'ss'];
-const fractionSecondsFormats = ['S', 'SS', 'SSS', 'SSSS'];
-export const dateFormats: Record<Time.Specificity, DateFormat[]> = {
-  year: ['yy', 'yyyy'],
-  month: [
-    'yyyy-MM',
-    'MM-yyyy',
-    'yyyy/MM',
-    'MM/yyyy',
-    'MMM yyyy',
-    'MMMM yyyy',
-    'MMM/yyyy',
-    'MMMM/yyyy',
-    'MMM-yyyy',
-    'MMMM-yyyy',
-  ],
-  quarter: ["yyyy'q'q", "yyyy'Q'q", "yyyy'q'qq", "yyyy'Q'qq"],
-  day: dayFormats,
-  hour: combineFormats(dayFormats, ['HH']),
-  minute: combineFormats(dayFormats, minuteFormats),
-  second: combineFormats(
-    combineFormats(dayFormats, minuteFormats),
-    secondFormats
-  ),
-  millisecond: combineFormats(
-    combineFormats(combineFormats(dayFormats, minuteFormats), secondFormats),
-    fractionSecondsFormats
-  ),
-};
+export const dateFormats = once((): Record<Time.Specificity, DateFormat[]> => {
+  const dayFormats = [
+    'dd-MM-yyyy',
+    'yyyy-MM-dd',
+    'dd/MM/yyyy',
+    'yyyy/MM/dd',
+    'P',
+    'PP',
+    'PPP',
+  ];
+  const minuteFormats = ['HH:mm', 'HHmm', 'h:m aaa', 'hh:mm aaa', 'hhmm aaa'];
+  const secondFormats = ['s', 'ss'];
+  const fractionSecondsFormats = ['S', 'SS', 'SSS', 'SSSS'];
+  return {
+    year: ['yy', 'yyyy'],
+    quarter: ["yyyy'q'q", "yyyy'Q'q", "yyyy'q'qq", "yyyy'Q'qq"],
+    month: [
+      'yyyy-MM',
+      'MM-yyyy',
+      'yyyy/MM',
+      'MM/yyyy',
+      'MMM yyyy',
+      'MMMM yyyy',
+      'MMM/yyyy',
+      'MMMM/yyyy',
+      'MMM-yyyy',
+      'MMMM-yyyy',
+    ],
+    day: dayFormats,
+    hour: combineWithAndWithoutTimezone(
+      combineFormats(dayFormats, ['HH'], [' ', "'T'"])
+    ),
+    minute: combineWithAndWithoutTimezone(
+      combineFormats(dayFormats, minuteFormats, [' ', "'T'"])
+    ),
+    second: combineWithAndWithoutTimezone(
+      combineFormats(
+        combineFormats(dayFormats, minuteFormats, [' ', "'T'"]),
+        secondFormats,
+        [' ', ':']
+      )
+    ),
+    millisecond: combineWithAndWithoutTimezone(
+      combineFormats(
+        combineFormats(
+          combineFormats(dayFormats, minuteFormats),
+          secondFormats
+        ),
+        fractionSecondsFormats
+      )
+    ),
+  };
+});
 
 const dateFormatsForSpecificity = (
   specificity: Time.Specificity
-): Record<Time.Specificity, string[]> => {
-  return Object.fromEntries(
-    Object.entries(dateFormats).filter(([s]) => specificity === s)
-  ) as Record<Time.Specificity, DateFormat[]>;
-};
+): Partial<Record<Time.Specificity, string[]>> => ({
+  [specificity]: dateFormats()[specificity],
+});
 
 interface ParseDateResult {
   format: string;
@@ -111,9 +136,9 @@ export const parseDate = (
         }
       : specificity
       ? dateFormatsForSpecificity(specificity)
-      : dateFormats;
+      : dateFormats();
   for (const spec of Object.keys(formats) as Array<Time.Specificity>) {
-    const formatStrings = formats[spec];
+    const formatStrings = formats[spec] ?? [];
     for (const format of formatStrings) {
       const date = parse(value, format, new Date());
       if (isValidDate(date)) {
