@@ -6,10 +6,16 @@ import {
   ELEMENT_PARAGRAPH,
   MyEditor,
 } from '@decipad/editor-types';
-import * as plate from '@udecode/plate-core';
+// eslint-disable-next-line no-restricted-imports
+import * as plate from '@udecode/plate';
 import { DragEvent } from 'react';
 import { onDragStartTableCellResult } from '@decipad/editor-components';
 import { onDropTableCellResult } from './onDropTableCellResult';
+
+jest.mock('@udecode/plate', () => ({
+  __esModule: true,
+  ...jest.requireActual('@udecode/plate'),
+}));
 
 const testStorage = new Map();
 

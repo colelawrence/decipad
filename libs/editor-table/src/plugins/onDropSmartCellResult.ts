@@ -17,7 +17,7 @@ import {
 } from '@decipad/editor-utils';
 import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { dndStore } from '@udecode/plate-ui-dnd';
+import { dndStore } from '@udecode/plate-dnd';
 import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
 type DragCellData = string;

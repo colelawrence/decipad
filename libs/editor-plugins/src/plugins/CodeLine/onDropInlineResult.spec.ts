@@ -8,11 +8,17 @@ import {
   MARK_MAGICNUMBER,
   MyEditor,
 } from '@decipad/editor-types';
-import * as plate from '@udecode/plate-core';
 import { DragEvent } from 'react';
 import { onDragStartInlineResult } from '@decipad/editor-components';
 import { disable, reset } from '@decipad/feature-flags';
+// eslint-disable-next-line no-restricted-imports
+import * as plate from '@udecode/plate';
 import { onDropInlineResult } from './onDropInlineResult';
+
+jest.mock('@udecode/plate', () => ({
+  __esModule: true,
+  ...jest.requireActual('@udecode/plate'),
+}));
 
 const testStorage = new Map();
 
@@ -61,6 +67,7 @@ describe('onDropInlineResult', () => {
     } as unknown as DragEvent;
 
     jest.spyOn(plate, 'isEditorFocused').mockReturnValue(true);
+    jest.spyOn(plate, 'focusEditor').mockImplementation(jest.fn());
   });
 
   afterEach(() => {

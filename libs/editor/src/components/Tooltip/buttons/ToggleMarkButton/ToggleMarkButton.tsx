@@ -1,8 +1,4 @@
-import {
-  getPreventDefaultHandler,
-  isMarkActive,
-  toggleMark,
-} from '@udecode/plate';
+import { isMarkActive, toggleMark } from '@udecode/plate';
 import { FC, useState } from 'react';
 import { MyMark, useTEditorRef } from '@decipad/editor-types';
 import { FloatingButton } from '@decipad/ui';
@@ -42,7 +38,9 @@ export const ToggleMarkButton = ({
         onMouseDown={(e) => {
           if (editor) {
             setActive(!active);
-            getPreventDefaultHandler(toggleMark, editor, { key: type })(e);
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMark(editor, { key: type });
           }
         }}
       >

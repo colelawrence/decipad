@@ -1,6 +1,6 @@
 import { ElementAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { DropLineDirection } from '@udecode/plate-ui-dnd';
+import { DropLineDirection } from '@udecode/plate-dnd';
 import { FC, forwardRef, ReactNode, RefCallback, RefObject } from 'react';
 import { noop } from 'rxjs';
 import { useMergedRef } from '../../hooks';

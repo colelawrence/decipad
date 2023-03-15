@@ -83,7 +83,7 @@ import {
 } from '@udecode/plate';
 import { createJuicePlugin } from '@udecode/plate-juice';
 import { Subject } from 'rxjs';
-import { createDndPlugin } from '@udecode/plate-ui-dnd';
+import { createDndPlugin } from '@udecode/plate-dnd';
 import { autoformatRules } from './autoformat';
 import { components } from './components';
 import { exitBreakOptions } from './exitBreakOptions';

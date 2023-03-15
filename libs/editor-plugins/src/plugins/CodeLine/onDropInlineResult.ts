@@ -25,7 +25,7 @@ import {
 } from '@decipad/editor-utils';
 import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
 import { getExprRef } from '@decipad/computer';
-import { dndStore } from '@udecode/plate-ui-dnd';
+import { dndStore } from '@udecode/plate-dnd';
 
 export const onDropInlineResult =
   (editor: MyEditor) => (event: React.DragEvent) => {

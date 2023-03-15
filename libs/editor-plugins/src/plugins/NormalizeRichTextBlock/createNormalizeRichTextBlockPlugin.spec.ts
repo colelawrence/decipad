@@ -28,7 +28,6 @@ describe('when wrapLink when it has a link at start of a block', () => {
 
     upsertLink(editor as any, {
       url: 'https://google.com',
-      isUrl: () => true,
     });
 
     normalizeEditor(editor, { force: true });

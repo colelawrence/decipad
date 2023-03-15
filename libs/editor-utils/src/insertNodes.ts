@@ -1,6 +1,9 @@
-import { insertNodes as plateInsertNodes } from '@udecode/plate-core';
+import {
+  insertNodes as plateInsertNodes,
+  isElement,
+  TElement,
+} from '@udecode/plate';
 import { getAnalytics } from '@decipad/client-events';
-import { isElement, TElement } from '@udecode/plate';
 
 const elementsFrom = (n: unknown | unknown[]): TElement[] => {
   const ret = Array.isArray(n) ? n : [n];

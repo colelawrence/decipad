@@ -21,7 +21,7 @@ import {
 } from '@udecode/plate';
 import React from 'react';
 import { BasePoint, Path } from 'slate';
-import { dndStore } from '@udecode/plate-ui-dnd';
+import { dndStore } from '@udecode/plate-dnd';
 import { insertSmartRef } from './insertSmartRef';
 
 export const onDropSmartRef =

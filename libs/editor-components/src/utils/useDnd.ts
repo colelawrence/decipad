@@ -29,7 +29,7 @@ import {
   dndStore as plateDndStore,
   useDragNode,
   UseDropNodeOptions,
-} from '@udecode/plate-ui-dnd';
+} from '@udecode/plate-dnd';
 
 export declare type DropDirection =
   | 'top'

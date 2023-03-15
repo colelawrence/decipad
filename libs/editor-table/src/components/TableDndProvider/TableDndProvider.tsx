@@ -10,7 +10,7 @@ import {
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { dndStore } from '@udecode/plate-ui-dnd';
+import { dndStore } from '@udecode/plate-dnd';
 import {
   CellDndProps,
   ColumnDropLine,

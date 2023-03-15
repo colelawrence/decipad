@@ -13,7 +13,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import React, { useContext, useEffect, useRef } from 'react';
-import { useDndNode } from '@udecode/plate-ui-dnd';
+import { useDndNode } from '@udecode/plate-dnd';
 import { useTableActions } from '../../hooks';
 import { selectRow } from '../../utils/selectRow';
 import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';

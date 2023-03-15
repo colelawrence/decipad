@@ -23,7 +23,7 @@ import { css } from '@emotion/react';
 import { useDelayedTrue } from '@decipad/react-utils';
 import { insertImageBelow } from '@decipad/editor-utils';
 import { Path } from 'slate';
-import { dndStore as plateDndStore } from '@udecode/plate-ui-dnd';
+import { dndStore as plateDndStore } from '@udecode/plate-dnd';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { DropZoneDetector } from './DropZoneDetector';
 

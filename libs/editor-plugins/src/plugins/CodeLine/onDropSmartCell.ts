@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import { getBlockAbove } from '@udecode/plate';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
-import { dndStore } from '@udecode/plate-ui-dnd';
+import { dndStore } from '@udecode/plate-dnd';
 
 export const DRAG_SMART_CELL = 'smart-cell';
 
