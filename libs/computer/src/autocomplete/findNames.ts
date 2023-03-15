@@ -62,7 +62,9 @@ export function* findNames(
               kind: 'column',
               type: serializeType(colType),
               name,
+              inTable: tableName,
               isLocal,
+              // No blockId because the table (which has the blockid) has n columns
             };
           }
         }
@@ -83,8 +85,9 @@ export function* findNames(
           kind: 'column',
           type: serializeType(type),
           name,
-          blockId: block.id,
+          inTable: tableName,
           isLocal,
+          blockId: block.id,
         };
       }
 

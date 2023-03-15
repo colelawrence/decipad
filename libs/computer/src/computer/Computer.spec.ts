@@ -348,7 +348,7 @@ describe('tooling data', () => {
       program: getIdentifiedBlocks('A = 1', 'f(x) = 1', 'C = 3'),
     });
 
-    const names = await computer.getNamesDefined();
+    const names = computer.getNamesDefined();
     expect(names).toMatchObject([
       {
         kind: 'variable',

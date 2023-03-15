@@ -42,6 +42,7 @@ it('finds names', async () => {
         },
       },
       Object {
+        "inTable": "Table1",
         "isLocal": true,
         "kind": "column",
         "name": "Hello",
@@ -51,6 +52,7 @@ it('finds names', async () => {
       },
       Object {
         "blockId": "block-2",
+        "inTable": "Table1",
         "isLocal": true,
         "kind": "column",
         "name": "Column2",
@@ -73,6 +75,67 @@ it('finds names', async () => {
           "ast": null,
           "kind": "function",
           "name": "f",
+        },
+      },
+    ]
+  `);
+});
+
+it('places local vars first', async () => {
+  const computer = await computerWithBlocks(
+    `Table1 = {}`,
+    `Table1.Column1 = [1]`,
+    `SomeVar = 1`,
+    `Table1.Column2 = [1]`
+  );
+
+  const idOfColumnThatImIn = 'block-1';
+
+  await timeout(400);
+
+  expect([
+    ...findNames(
+      computer.computationRealm,
+      computer.getLatestProgram().flatMap((block) => block.block ?? []),
+      new Set(),
+      idOfColumnThatImIn
+    ),
+  ]).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "blockId": "block-0",
+        "kind": "variable",
+        "name": "Table1",
+        "type": Object {
+          "columnNames": Array [],
+          "columnTypes": Array [],
+          "indexName": "Table1",
+          "kind": "table",
+        },
+      },
+      Object {
+        "blockId": "block-2",
+        "kind": "variable",
+        "name": "SomeVar",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+      },
+      Object {
+        "blockId": "block-3",
+        "inTable": "Table1",
+        "isLocal": true,
+        "kind": "column",
+        "name": "Column2",
+        "type": Object {
+          "cellType": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "columnSize": "unknown",
+          "indexedBy": "Table1",
+          "kind": "column",
         },
       },
     ]

@@ -2,9 +2,11 @@ import { MyEditor } from '@decipad/editor-types';
 import {
   deleteText,
   getEditorString,
+  getPointBefore,
   getStartPoint,
   insertText,
   select,
+  setSelection,
 } from '@udecode/plate';
 import { BasePoint, Range } from 'slate';
 import type { MenuItem } from './AutoCompleteMenu';
@@ -14,19 +16,38 @@ export const commitAutocompleteItem = (
   at: Range,
   item: MenuItem
 ) => {
-  const characterBefore = getCharacterBeforeCursor(editor, Range.start(at));
+  const pointBefore = Range.start(at);
+  const characterBefore = getCharacterBeforeCursor(editor, pointBefore);
 
   select(editor, at);
   deleteText(editor);
 
+  let toInsert = '';
+
   if (needsSpaceAfter(characterBefore)) {
-    insertText(editor, ' ');
+    toInsert += ' ';
   }
 
-  insertText(editor, item.identifier);
+  toInsert += item.identifier;
 
+  let moveCursorBack;
   if (item.kind !== 'function') {
-    insertText(editor, ' ');
+    toInsert += ' ';
+    moveCursorBack = false;
+  } else {
+    toInsert += '()';
+    moveCursorBack = true;
+  }
+
+  insertText(editor, toInsert);
+
+  // Move cursor to before the closing parenthesis
+  if (editor.selection?.focus && moveCursorBack) {
+    const pointToMoveTo = getPointBefore(editor, editor.selection.focus, {
+      distance: 1,
+      unit: 'character',
+    });
+    setSelection(editor, { anchor: pointToMoveTo, focus: pointToMoveTo });
   }
 };
 

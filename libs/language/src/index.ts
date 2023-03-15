@@ -91,6 +91,7 @@ export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';
   type: SerializedType;
   name: string;
+  inTable?: string;
   explanation?: string;
   blockId?: string;
   isLocal?: boolean;

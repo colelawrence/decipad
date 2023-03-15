@@ -7,28 +7,22 @@ import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
+import sortBy from 'lodash/sortBy';
 import { ComponentProps, useCallback, useState } from 'react';
 import { useFocused, useSelected } from 'slate-react';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
 
-const compareNames = (a: AutocompleteName, b: AutocompleteName) => {
-  const aScore = a.isLocal ? 1 : 0;
-  const bScore = b.isLocal ? 1 : 0;
-
-  return aScore - bScore;
-};
-
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
-  names.sort(compareNames);
+  sortBy(names, (name) => (name.isLocal ? 0 : 1));
 
 const selectNames = (
   names: AutocompleteName[]
 ): ComponentProps<typeof UIAutoCompleteMenu>['identifiers'] => {
-  return [...localNamesFirst(names), ...getBuiltinsForAutocomplete()].map(
+  return [...localNamesFirst(names), ...getBuiltinsForAutocomplete()].flatMap(
     (n) => ({
-      kind:
-        n.kind === 'variable' ? ('variable' as const) : ('function' as const),
-      identifier: n.kind === 'function' ? `${n.name}(` : n.name,
+      kind: n.kind,
+      identifier: n.name,
+      inTable: n.inTable,
       type: n.type.kind,
       blockId: n.blockId,
       explanation: n.explanation,
@@ -109,6 +103,9 @@ const AutoCompleteWrapper = ({
     selectNames,
     blockId
   );
+  const isInTable = useComputer().getAllColumns$.useWithSelector(
+    (cols) => cols.find((t) => t.blockId === blockId)?.tableName
+  );
 
   if (!identifiers.length) {
     return null;
@@ -116,6 +113,7 @@ const AutoCompleteWrapper = ({
 
   return (
     <UIAutoCompleteMenu
+      isInTable={isInTable}
       search={search}
       identifiers={identifiers}
       onExecuteItem={onExecuteItem}

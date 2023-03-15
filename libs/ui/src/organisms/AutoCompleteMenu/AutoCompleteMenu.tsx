@@ -1,7 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { dequal } from 'dequal';
 import {
   ComponentProps,
   FC,
@@ -17,11 +16,12 @@ import { docs } from '@decipad/routing';
 import { Link, AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
 import { cssVar, mediumShadow, p10Medium, setCssVar } from '../../primitives';
+import { groupIdentifiers } from './groupIdentifiers';
 
 import { AutoCompleteMenuFormulaTooltip } from '../../atoms/AutoCompleteMenuFormulaTooltip/AutoCompleteMenuIFormulaTooltip';
 import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 
-type AutoCompleteGroup = Omit<
+export type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
   'children'
 > & {
@@ -107,10 +107,11 @@ const mainStyles = css({
 });
 
 export type Identifier = {
-  kind: 'variable' | 'function';
+  kind: 'variable' | 'function' | 'column';
   identifier: string;
   blockId?: string;
   type: string;
+  inTable?: string;
   editing?: boolean;
   focused?: boolean;
   explanation?: string;
@@ -120,6 +121,7 @@ export type Identifier = {
 };
 
 export interface AutoCompleteMenuProps {
+  readonly isInTable?: string;
   readonly identifiers: Identifier[];
   readonly search?: string;
   readonly onExecuteItem?: (identifier: Identifier) => void;
@@ -140,6 +142,7 @@ interface SearchResultGroup {
 type ItemBlockId = {
   identifier: string;
   blockId?: string;
+  explanation?: string;
 };
 
 const groupItems = (g: AutoCompleteGroup) => g.items;
@@ -158,7 +161,15 @@ const matchBlockIdOrIdentifier = (
   b: ItemBlockId | undefined
 ) => {
   if (a.blockId && b?.blockId) {
-    return a.blockId === b.blockId;
+    return (
+      a.blockId === b.blockId &&
+      (!a?.identifier || !b?.identifier
+        ? true
+        : a.identifier === b.identifier) &&
+      (!a?.explanation || !b?.explanation
+        ? true
+        : a.explanation === b.explanation)
+    );
   }
   return a.identifier === b?.identifier;
 };
@@ -168,6 +179,7 @@ const matchBlockIdOrIdentifier = (
  * into smaller hooks.
  */
 export const AutoCompleteMenu = ({
+  isInTable = '',
   search = '',
   identifiers,
   onExecuteItem,
@@ -176,28 +188,9 @@ export const AutoCompleteMenu = ({
 }: AutoCompleteMenuProps): ReturnType<FC> => {
   const clientEvent = useContext(ClientEventsContext);
   const isResult = result !== '';
-  const groups: ReadonlyArray<AutoCompleteGroup> = useMemo(
-    () => [
-      {
-        title: 'Variables',
-        items: identifiers
-          .filter((i) => i.kind === 'variable' || i.kind === 'function')
-          .map((i) => ({
-            identifier: i.identifier,
-            explanation: i.explanation,
-            syntax: i.syntax,
-            example: i.example,
-            formulaGroup: i.formulaGroup,
-            blockId: i.blockId,
-            kind: 'variable' as const,
-            type: i.type,
-            focused:
-              isResult && i.kind === 'variable' && i.identifier === result,
-          })),
-      },
-    ],
-    [identifiers, isResult, result]
-  );
+  const groups = useMemo(() => {
+    return groupIdentifiers(identifiers, isResult, result, isInTable);
+  }, [identifiers, isResult, result, isInTable]);
 
   const searchGroups = useMemo(
     () =>
@@ -220,25 +213,17 @@ export const AutoCompleteMenu = ({
             items: searchGroup.index.search(search).map(({ item }) => item),
           })
         )) ||
-      groups,
+      groups.map(({ items, ...group }) => ({ group, items })),
     [groups, search, searchGroups]
   );
 
-  const [matchingIdentifiers, setMathingIdentifiers] = useState(
-    groupsWithItemsFiltered
-      .flatMap(groupItems)
-      .map(({ identifier, blockId }) => ({ identifier, blockId }))
-  );
-
-  useEffect(() => {
-    setMathingIdentifiers((old) => {
-      const newMatching = groupsWithItemsFiltered
+  const matchingIdentifiers = useMemo(
+    () =>
+      groupsWithItemsFiltered
         .flatMap(groupItems)
-        .map(({ identifier, blockId }) => ({ identifier, blockId }));
-      if (dequal(old, newMatching)) return old;
-      return newMatching;
-    });
-  }, [search, groupsWithItemsFiltered]);
+        .map(({ identifier, blockId }) => ({ identifier, blockId })),
+    [groupsWithItemsFiltered]
+  );
 
   // AutoCompleteMenuItems do not use real browser focus, see their docs
   const [focusedItem, setFocusedItem] = useState<ItemBlockId>();
@@ -358,26 +343,27 @@ export const AutoCompleteMenu = ({
               },
             ]}
           >
-            {groupsWithItemsFiltered.map(
-              ({ items, ...group }, i) =>
-                items.length && (
-                  <AutoCompleteMenuGroup key={i} {...group}>
-                    {items.map(({ ...item }) => (
-                      <AutoCompleteMenuItem
-                        {...item}
-                        key={item.blockId ?? item.identifier}
-                        focused={
-                          matchBlockIdOrIdentifier(item, focusedItem) ||
-                          item.focused
-                        }
-                        onExecute={() => {
-                          onExecuteItem?.(item);
-                        }}
-                        onHover={() => setHoveredItem(item)}
-                      />
-                    ))}
-                  </AutoCompleteMenuGroup>
-                )
+            {groupsWithItemsFiltered.map(({ items, group }, i) =>
+              items.length ? (
+                <AutoCompleteMenuGroup
+                  key={i}
+                  {...group}
+                  isOnlyGroup={groupsWithItemsFiltered.length === 1}
+                >
+                  {items.map(({ ...item }) => (
+                    <AutoCompleteMenuItem
+                      {...item}
+                      key={item.blockId ?? item.identifier}
+                      focused={
+                        matchBlockIdOrIdentifier(item, focusedItem) ||
+                        item.focused
+                      }
+                      onExecute={() => onExecuteItem?.(item)}
+                      onHover={() => setHoveredItem(item)}
+                    />
+                  ))}
+                </AutoCompleteMenuGroup>
+              ) : null
             )}
           </div>
           {hovoredItem?.explanation && (
