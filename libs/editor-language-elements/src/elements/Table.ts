@@ -19,9 +19,8 @@ export const Table: InteractiveLanguageElement = {
       const { id, expression, columnAssigns } =
         await getTableAstNodeFromTableElement(editor, computer, element);
 
-      const tableItself = statementToIdentifiedBlock(id, expression);
-      const tableName =
-        getDefinedSymbol(tableItself.block.args[0]) || undefined;
+      const tableName = getDefinedSymbol(expression) || undefined;
+      const tableItself = statementToIdentifiedBlock(id, expression, tableName);
 
       const columnAssignments = columnAssigns.flatMap((columnAssign) => [
         ...(columnAssign.column

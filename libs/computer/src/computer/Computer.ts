@@ -662,21 +662,26 @@ export class Computer {
   getAvailableIdentifier(
     prefix: string,
     start: number,
-    attemptNumberless = false
+    attemptNumberless = false,
+    forbiddenNames: string[] = []
   ): string {
     const existingVars = new Set([
       ...this.computationRealm.inferContext.stack.globalVariables.keys(),
       ...this.computationRealm.inferContext.externalData.keys(),
       ...this.latestProgram.map((block) => block.definesVariable),
     ]);
+
+    const exists = (name: string) =>
+      existingVars.has(name) || forbiddenNames.includes(name);
+
     let num = start;
     const firstProposal = prefix;
-    if (attemptNumberless && !existingVars.has(firstProposal)) {
+    if (attemptNumberless && !exists(firstProposal)) {
       return firstProposal;
     }
     const nextProposal = () => `${prefix}${num}`;
     let proposal = nextProposal();
-    while (existingVars.has(proposal)) {
+    while (exists(proposal)) {
       num += 1;
       proposal = nextProposal();
     }

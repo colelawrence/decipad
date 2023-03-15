@@ -12,11 +12,12 @@ import {
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { TableColumnHeader } from '@decipad/ui';
+import { TableColumnHeader, Tooltip } from '@decipad/ui';
 import {
   assertElementType,
   useElementMutatorCallback,
   useNodePath,
+  useEnsureValidColumnName,
 } from '@decipad/editor-utils';
 import { getNode, getNodeString } from '@udecode/plate';
 import { Path } from 'slate';
@@ -121,7 +122,9 @@ export const TableHeaderCell: PlateComponent = ({
 
   const { type: inferredType } = useColumnInferredType(element);
 
-  return (
+  const invalidNameError = useEnsureValidColumnName(element, 'Column');
+
+  const header = (
     <TableColumnHeader
       attributes={attributes}
       readOnly={readOnly}
@@ -146,5 +149,11 @@ export const TableHeaderCell: PlateComponent = ({
     >
       {children}
     </TableColumnHeader>
+  );
+
+  return (
+    <Tooltip open={invalidNameError != null} trigger={header}>
+      {invalidNameError}
+    </Tooltip>
   );
 };
