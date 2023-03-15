@@ -25,7 +25,7 @@ export const InlineMenuGroup = ({
   children,
 }: InlineMenuGroupProps): ReturnType<FC> => {
   return (
-    <div role="group">
+    <div role="group" css={{ minWidth: '270px' }}>
       {title && <div css={titleStyles}>{title}</div>}
       <div css={itemsStyles}>
         {Children.map(children, (child) => {

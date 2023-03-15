@@ -66,7 +66,7 @@ it('renders the menu when typing in the selected paragraph starting with a /', a
       path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    insertText(editor, 'a');
+    insertText(editor, 's');
     await timeout(500);
   });
 
@@ -99,7 +99,7 @@ it('does not render the menu when the paragraph is not selected', async () => {
 
   await act(async () => {
     focusEditor(editor);
-    insertText(editor, 'a', {
+    insertText(editor, 'h', {
       at: {
         path: findDomNodePath(editor, getByText('/'))!,
         offset: '/'.length,
@@ -170,7 +170,7 @@ describe('the menu', () => {
         path: findDomNodePath(editor, getByText('/'))!,
         offset: '/'.length,
       });
-      insertText(editor, 'a');
+      insertText(editor, 'h');
       await timeout(500);
     });
 
@@ -194,10 +194,10 @@ describe('the menu', () => {
         path: findDomNodePath(editor, getByText('/'))!,
         offset: '/'.length,
       });
-      insertText(editor, 'a');
+      insertText(editor, 'h');
       await timeout(500);
     });
-    await findByText('/a');
+    await findByText('/h');
 
     const menuElement = findParentWithStyle(
       getByText(/sub-head/i),
@@ -228,14 +228,14 @@ describe('the escape key', () => {
         path: findDomNodePath(editor, getByText('/'))!,
         offset: '/'.length,
       });
-      insertText(editor, 'a');
+      insertText(editor, 'h');
       await timeout(500);
     });
 
     await act(() => userEvent.keyboard('{Escape}'));
     expect(queryByText(/sub-head/i)).not.toBeInTheDocument();
 
-    insertText(editor, 'd');
+    insertText(editor, 'e');
     expect(await findByText(/sub-head/i)).toBeVisible();
   });
 
@@ -250,7 +250,7 @@ describe('the escape key', () => {
         path: findDomNodePath(editor, getByText('/'))!,
         offset: '/'.length,
       });
-      insertText(editor, 'a');
+      insertText(editor, 'h');
       await timeout(500);
     });
 
@@ -270,7 +270,7 @@ it('executes a command on click', async () => {
       path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    insertText(editor, 'a');
+    insertText(editor, 'h');
     await timeout(500);
   });
 
@@ -294,7 +294,7 @@ it('uses the text after the slash to search for commands', async () => {
       path: findDomNodePath(editor, getByText('/'))!,
       offset: '/'.length,
     });
-    insertText(editor, 'secondary');
+    insertText(editor, 'sub');
     await timeout(500);
   });
 

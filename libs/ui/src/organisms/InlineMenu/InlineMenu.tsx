@@ -14,7 +14,7 @@ import {
 
 const styles = css({
   maxWidth: '80vw',
-  maxHeight: '40vh',
+  maxHeight: '33vh',
   overflowX: 'hidden',
   overflowY: 'scroll',
   display: 'grid',
@@ -60,16 +60,9 @@ export const InlineMenu: FC<InlineMenuProps> = ({
   search = '',
 }) => {
   const groupsWithItemsFiltered = groups.map(({ items, ...group }) => {
-    const groupMatchesSearch = group.title
-      ?.toLowerCase()
-      .includes(search.toLowerCase());
-    const matchingItems = groupMatchesSearch
-      ? items
-      : items.filter(({ command, title, description, extraSearchTerms }) =>
-          [command, title, description, ...extraSearchTerms].some((term) =>
-            term.toLowerCase().includes(search.toLowerCase())
-          )
-        );
+    const matchingItems = items.filter(({ title }) =>
+      title.toLowerCase().match(`\\b${search.toLowerCase()}\\w*`)
+    );
     return { ...group, matchingItems };
   });
   const matchingCommands = groupsWithItemsFiltered

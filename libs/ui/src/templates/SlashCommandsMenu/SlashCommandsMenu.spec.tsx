@@ -77,27 +77,17 @@ it('focuses menuitems using tab and shift+tab', async () => {
 });
 
 describe('search', () => {
-  it('filters out non-matching groups and items', () => {
-    const { getByText, getAllByRole } = render(
-      <SlashCommandsMenu search="secondary" />
-    );
+  it("doesn't search by description", () => {
+    const { queryAllByRole } = render(<SlashCommandsMenu search="secondary" />);
 
-    expect(getAllByRole('group')).toHaveLength(1);
-    expect(getAllByRole('menuitem')).toHaveLength(1);
-
-    expect(getByText(/secondary.+heading/i)).toBeInTheDocument();
+    expect(queryAllByRole('menuitem')).toHaveLength(0);
   });
 
-  it('shows all group items if the group matches', () => {
-    const { getByText, getAllByRole } = render(
-      <SlashCommandsMenu search="text" />
-    );
+  it("doesn't search by group", () => {
+    const { queryAllByRole } = render(<SlashCommandsMenu search="text" />);
 
-    expect(getAllByRole('group')).toHaveLength(1);
-    expect(getAllByRole('menuitem')).toHaveLength(3);
-
-    expect(getByText(/main.+heading/i)).toBeInTheDocument();
-    expect(getByText(/secondary.+heading/i)).toBeInTheDocument();
+    expect(queryAllByRole('group')).toHaveLength(0);
+    expect(queryAllByRole('menuitem')).toHaveLength(0);
   });
 
   it('affects arrow key selection', async () => {

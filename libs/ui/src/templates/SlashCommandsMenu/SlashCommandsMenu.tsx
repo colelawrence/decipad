@@ -33,12 +33,12 @@ const dataItems = () => [
     description: 'Create a number',
     icon: <Value />,
     enabled: isFlagEnabled('CODE_LINE_NAME_SEPARATED'),
-    extraSearchTerms: ['john', 'number', 'input'],
+    extraSearchTerms: ['number', 'input'],
   },
   {
     command: 'structured-code-line',
     title: 'Formula',
-    description: 'Establish relationships between numbers using basic formulas',
+    description: 'Create a calculation',
     icon: <FormulaSlash />,
     enabled: isFlagEnabled('CODE_LINE_NAME_SEPARATED'),
     extraSearchTerms: ['formula', 'calculation'],
@@ -46,7 +46,7 @@ const dataItems = () => [
   {
     command: 'calculation-block',
     title: 'Advanced formula',
-    description: "Derive insights using Decipad's full language capabilities",
+    description: 'Combine formulas',
     icon: <Calculations />,
     enabled: true,
     extraSearchTerms: ['decipad', 'calculation', 'language', 'formula'],
@@ -54,8 +54,7 @@ const dataItems = () => [
   {
     command: 'table',
     title: 'Table',
-    description:
-      'Organize data in a table. Input data into models using table format',
+    description: 'Create a table to input data',
     icon: <TableSlash />,
     enabled: true,
     extraSearchTerms: [],
@@ -63,7 +62,7 @@ const dataItems = () => [
   {
     command: 'data-mapping',
     title: 'Data Mapping',
-    description: 'Turns a source of data into a transformed version',
+    description: 'Map data into variables',
     icon: <TableSlash />,
     enabled: isFlagEnabled('DATA_MAPPINGS'),
     extraSearchTerms: [],
@@ -81,7 +80,7 @@ const groups = () => [
       {
         command: 'data-view',
         title: 'Data view',
-        description: 'Pivot table for data analysis, filtering, and grouping',
+        description: 'Pivot table data',
         icon: <DataView />,
         enabled: true,
         extraSearchTerms: [
@@ -122,7 +121,7 @@ const groups = () => [
       {
         command: 'area-chart',
         title: 'Area Chart',
-        description: 'Visualize data on an areea chart',
+        description: 'Visualize data on an area chart',
         icon: <AreaChartSlash />,
         enabled: true,
         extraSearchTerms: ['chart', 'visualisation', 'plot', 'area plot'],
@@ -143,23 +142,23 @@ const groups = () => [
       {
         command: 'input',
         title: 'Input',
-        description: 'Enter a value that others can interact with',
+        description: 'Define values others can update',
         icon: <Input />,
         enabled: true,
-        extraSearchTerms: ['input', 'number', 'units', 'string'],
+        extraSearchTerms: ['input'],
       },
       {
         command: 'toggle',
         title: 'Toggle',
-        description: 'Choose between yes/no options using a switch',
+        description: 'Define a switcher for booleans',
         icon: <Toggle />,
         enabled: true,
-        extraSearchTerms: ['switch', 'toggle', 'boolean', 'yes', 'no'],
+        extraSearchTerms: ['switch', 'toggle', 'boolean'],
       },
       {
         command: 'datepicker',
         title: 'Date',
-        description: 'Pick a date from a calendar',
+        description: 'Define a data picker',
         icon: <DatePicker />,
         enabled: true,
         extraSearchTerms: ['input', 'date', 'calendar', 'pick'],
@@ -167,15 +166,15 @@ const groups = () => [
       {
         command: 'slider',
         title: 'Slider',
-        description: 'Slide to adjust a number and share it with others',
+        description: 'Define a slider others can update',
         icon: <Slider />,
         enabled: true,
-        extraSearchTerms: ['input', 'number', 'slider', 'adjust'],
+        extraSearchTerms: ['input', 'slider'],
       },
       {
         command: 'display',
         title: 'Result',
-        description: 'Highlight important results in a story',
+        description: 'Highlight a result',
         icon: <Result />,
         enabled: true,
         extraSearchTerms: ['display', 'result', 'show'],
@@ -183,7 +182,7 @@ const groups = () => [
       {
         command: 'dropdown',
         title: 'Dropdown',
-        description: 'Choose from a list of specified options',
+        description: 'Define pre-selected options',
         icon: <Dropdown />,
         enabled: true,
         extraSearchTerms: ['dropdown', 'list', 'select', 'options'],
@@ -199,7 +198,7 @@ const groups = () => [
         description: 'Main text heading',
         icon: <Heading1 />,
         enabled: true,
-        extraSearchTerms: ['h1'],
+        extraSearchTerms: ['h1', '#'],
       },
       {
         command: 'heading2',
@@ -207,7 +206,7 @@ const groups = () => [
         description: 'Secondary text heading',
         icon: <Heading2 />,
         enabled: true,
-        extraSearchTerms: ['h2'],
+        extraSearchTerms: ['h2', '##'],
       },
       {
         command: 'callout',
@@ -215,7 +214,7 @@ const groups = () => [
         description: 'Grabs the readers attention',
         icon: <Callout />,
         enabled: true,
-        extraSearchTerms: ['highlight', 'pop', 'hero'],
+        extraSearchTerms: ['highlight', 'hero'],
       },
       {
         command: 'blockquote',
