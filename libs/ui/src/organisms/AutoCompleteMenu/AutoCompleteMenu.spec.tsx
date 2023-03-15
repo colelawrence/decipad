@@ -65,14 +65,14 @@ describe('search', () => {
 
   it('updates pre-selected first option', async () => {
     const handleExecute = jest.fn();
-    const { rerender, getAllByRole } = render(
+    const { queryAllByRole, rerender, getAllByRole } = render(
       <AutoCompleteMenu
         identifiers={identifiers}
         search="O"
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(3);
+    expect(getAllByRole('menuitem')).toHaveLength(2);
     expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
       `"NumberOneVar"`
     );
@@ -84,7 +84,7 @@ describe('search', () => {
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(2);
+    expect(getAllByRole('menuitem')).toHaveLength(1);
     expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
       `"NumberOtherVar"`
     );
@@ -96,10 +96,7 @@ describe('search', () => {
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(2);
-    expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
-      `"NumberOtherVar"`
-    );
+    expect(queryAllByRole('menuitem')).toHaveLength(0);
   });
 
   it('affects arrow key selection', async () => {

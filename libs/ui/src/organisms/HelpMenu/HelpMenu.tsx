@@ -228,6 +228,9 @@ export const HelpMenu = ({
           clientEvent({
             type: 'action',
             action: 'visit docs',
+            props: {
+              source: 'Help Button',
+            },
           })
         }
       />

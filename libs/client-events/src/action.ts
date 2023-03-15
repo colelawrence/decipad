@@ -54,7 +54,7 @@ type Action =
   // Customer Support
   | { action: 'contact live support'; props?: undefined }
   | { action: 'send feedback'; props?: undefined }
-  | { action: 'visit docs'; props?: undefined }
+  | { action: 'visit docs'; props?: { source: string } }
   | { action: 'visit releases'; props?: undefined }
   | { action: 'help button clicked'; props?: undefined }
   | { action: 'join discord'; props?: undefined }

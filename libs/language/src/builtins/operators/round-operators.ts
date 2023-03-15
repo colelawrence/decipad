@@ -100,6 +100,10 @@ export const roundOperators: Record<string, BuiltinSpec> = {
   },
   precision: {
     aliasFor: 'round',
+    explanation: 'Rounds a number.',
+    formulaGroup: 'Numbers',
+    syntax: 'precision(Number, [Precision])',
+    example: 'precision(3.145) \nprecision(3.145, 2)',
   },
   roundup: {
     argCount: [1, 2],
@@ -115,6 +119,10 @@ export const roundOperators: Record<string, BuiltinSpec> = {
   },
   ceil: {
     aliasFor: 'roundup',
+    explanation: 'Rounds a number up.',
+    formulaGroup: 'Numbers',
+    syntax: 'ceil(Number, [Precision])',
+    example: 'ceil(3.145) \nceil(3.145, 2)',
   },
   rounddown: {
     argCount: [1, 2],
@@ -130,5 +138,9 @@ export const roundOperators: Record<string, BuiltinSpec> = {
   },
   floor: {
     aliasFor: 'rounddown',
+    explanation: 'Rounds a number down.',
+    formulaGroup: 'Numbers',
+    syntax: 'floor(Number, [Precision])',
+    example: 'floor(3.145) \nfloor(3.145, 2)',
   },
 };

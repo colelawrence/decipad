@@ -1,3 +1,4 @@
+import { ClientEventsContext } from '@decipad/client-events';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { dequal } from 'dequal';
@@ -8,6 +9,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useContext,
 } from 'react';
 import Fuse from 'fuse.js';
 import { once } from 'ramda';
@@ -144,11 +146,10 @@ const groupItems = (g: AutoCompleteGroup) => g.items;
 
 const searchOptions = once(
   (): Fuse.IFuseOptions<AutoCompleteGroup['items'][0]> => ({
-    keys: ['identifier', { name: 'explanation', weight: 0.5 }],
+    keys: ['identifier'],
     isCaseSensitive: false,
     shouldSort: true,
-    threshold: 0.3,
-    fieldNormWeight: 2,
+    threshold: 0.0,
   })
 );
 
@@ -173,6 +174,7 @@ export const AutoCompleteMenu = ({
   top = true,
   result = '',
 }: AutoCompleteMenuProps): ReturnType<FC> => {
+  const clientEvent = useContext(ClientEventsContext);
   const isResult = result !== '';
   const groups: ReadonlyArray<AutoCompleteGroup> = useMemo(
     () => [
@@ -393,7 +395,18 @@ export const AutoCompleteMenu = ({
             {isResult ? ' select' : ' dismiss'}
           </span>
           {hovoredItem?.explanation !== undefined && (
-            <Link href={docs({}).page({ name: 'formulas' }).$}>
+            <Link
+              href={docs({}).page({ name: 'formulas' }).$}
+              onClick={() =>
+                clientEvent({
+                  type: 'action',
+                  action: 'visit docs',
+                  props: {
+                    source: 'Autocomplete Menu',
+                  },
+                })
+              }
+            >
               <span style={{ cursor: 'pointer' }}>
                 Explore Docs{' '}
                 <span css={exploreDocsLinkIconStyles}>
