@@ -10,8 +10,8 @@ These blocks also allow you create all calculations that normal [formula blocks]
 Advanced Formulas enable you to:
 
 - [Define custom formulas to reause](/docs/formulas/formulas).
-- [Create `Language Tables`](/docs/advances-concepts/language-tables).
-- [Define conditions with `match()` and `tiers()`](/docs/advances-concepts/decision-tables).
+- [Create `Language Tables`](/docs/advanced-concepts/language-tables).
+- [Define conditions with `match()` and `tiers()`](/docs/advanced-concepts/decision-tables).
 
 ## Add an Advanced Formula Block
 
