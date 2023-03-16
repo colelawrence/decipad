@@ -14,7 +14,7 @@ const defaultProps: ComponentProps<typeof EditorTable> = {
       cellType: getNumberType(),
     },
   ],
-  icon: 'Table',
+  icon: 'TableSmall',
   color: 'Catskill',
 };
 

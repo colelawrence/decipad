@@ -145,6 +145,7 @@ export { Sun } from './Sun/Sun';
 export { Sunrise } from './Sunrise/Sunrise';
 export { Switch } from './Switch/Switch';
 export { Table } from './Table/Table';
+export { TableSmall } from './TableSmall/TableSmall';
 export { TableSlash } from './TableSlash/TableSlash';
 export { Text } from './Text/Text';
 export { Timer } from './Timer/Timer';

@@ -8,7 +8,7 @@ export const userIconKeys = [
   'ShoppingCart',
   'Coffee',
   'World',
-  'Table',
+  'TableSmall',
   'AnnotationWarning',
   'Frame',
   'Paperclip',

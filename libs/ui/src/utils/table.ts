@@ -111,7 +111,7 @@ interface TableStyleContextValue {
   readonly hideAddDataViewButton?: boolean;
 }
 export const TableStyleContext = createContext<TableStyleContextValue>({
-  icon: 'Table',
+  icon: 'TableSmall',
   color: undefined,
   hideAddDataViewButton: false,
   isCollapsed: false,
