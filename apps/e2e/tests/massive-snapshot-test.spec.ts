@@ -4,6 +4,7 @@ import {
   navigateToNotebook,
   setUp,
   waitForEditorToLoad,
+  waitForNotebookToLoad,
 } from '../utils/page/Editor';
 import {
   createWorkspace,
@@ -81,7 +82,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
     await navigateToNotebook(publishedNotebookPage, notebookId);
 
-    await waitForEditorToLoad(publishedNotebookPage);
+    await waitForNotebookToLoad(publishedNotebookPage);
     // make sure screenshot is captured
     expect(publishedNotebookPage).toBeDefined();
   });
@@ -90,7 +91,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   test('a random user can duplicate', async () => {
     await publishedNotebookPage.click('text=Duplicate notebook');
 
-    await waitForEditorToLoad(publishedNotebookPage);
+    await waitForNotebookToLoad(publishedNotebookPage);
     await publishedNotebookPage.waitForSelector(
       'text="Everything, everywhere, all at once"'
     );
@@ -107,7 +108,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     publishedNotebookPage = (await incognito.newPage()) as Page;
 
     await navigateToNotebook(publishedNotebookPage, notebookId);
-    await waitForEditorToLoad(publishedNotebookPage);
+    await waitForNotebookToLoad(publishedNotebookPage);
     // make sure screenshot is captured
     expect(publishedNotebookPage).toBeDefined();
 

@@ -14,7 +14,15 @@ export async function waitForEditorToLoad(page: Page) {
   await page.waitForSelector('[data-testid="notebook-title"]', {
     timeout: 50_000,
   });
-  await page.locator('[data-testid="notebook-title"]').click();
+  await page.locator('[data-testid="notebook-title"]').click({
+    timeout: 50_000,
+  });
+}
+
+export async function waitForNotebookToLoad(page: Page) {
+  await page.waitForSelector('[data-testid="notebook-title"]', {
+    timeout: 50_000,
+  });
 }
 
 interface SetupProps {
