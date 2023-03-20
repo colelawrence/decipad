@@ -1,5 +1,6 @@
 import invariant from 'tiny-invariant';
 import { TOperation } from '@udecode/plate';
+import { captureException } from '@sentry/browser';
 import { SharedType } from '../model';
 import node from './node';
 import text from './text';
@@ -45,7 +46,15 @@ export default function applySlateOps(
 
   if (ops.length > 0) {
     sharedType.doc.transact(() => {
-      ops.forEach((op) => applySlateOp(sharedType, op));
+      ops.forEach((op) => {
+        try {
+          applySlateOp(sharedType, op);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error applying slate op', op, err);
+          captureException(err);
+        }
+      });
     }, origin);
   }
 

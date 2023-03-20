@@ -5,6 +5,7 @@ import {
   keyPress,
   setUp,
   waitForEditorToLoad,
+  waitForNotebookToLoad,
 } from '../utils/page/Editor';
 import { Timeouts, withTestUser } from '../utils/src';
 
@@ -89,7 +90,7 @@ test.describe('Simple does publish work test', () => {
 
   test('[incognito] navigates to published notebook link', async () => {
     await incognitoPage.goto(sharedPageLocation!);
-    await waitForEditorToLoad(incognitoPage);
+    await waitForNotebookToLoad(incognitoPage);
     await expect(
       incognitoPage.locator('[data-testid="paragraph-wrapper"] >> nth=0')
     ).toHaveText(someText);
@@ -105,7 +106,7 @@ test.describe('Simple does publish work test', () => {
 
     await randomPage.goto(sharedPageLocation!);
 
-    await waitForEditorToLoad(randomPage);
+    await waitForNotebookToLoad(randomPage);
     await expect(
       randomPage.locator('[data-testid="paragraph-wrapper"] >> nth=0')
     ).toHaveText(someText);
@@ -136,7 +137,7 @@ test.describe('Simple does publish work test', () => {
 
   test('[incognito] see the republished state', async () => {
     await incognitoPage.goto(sharedPageLocation!);
-    await waitForEditorToLoad(incognitoPage);
+    await waitForNotebookToLoad(incognitoPage);
     await expect(
       page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
     ).toHaveText(justOneMore);

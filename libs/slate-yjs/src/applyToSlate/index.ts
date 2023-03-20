@@ -7,6 +7,7 @@ import {
 } from '@udecode/plate';
 import * as Y from 'yjs';
 import { YjsEditor } from '@decipad/slate-yjs';
+import { captureException } from '@sentry/browser';
 import translateArrayEvent from './arrayEvent';
 import translateMapEvent from './mapEvent';
 import translateTextEvent from './textEvent';
@@ -44,9 +45,15 @@ export function applyYjsEvents(
 ): void {
   const { selection } = editor;
   withoutNormalizing(editor, () => {
-    events.forEach((event) =>
-      translateYjsEvent(editor, event).forEach(editor.apply)
-    );
+    events.forEach((event) => {
+      try {
+        translateYjsEvent(editor, event).forEach(editor.apply);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Error applying yjs event', event, err);
+        captureException(err);
+      }
+    });
     if (selection) {
       const { anchor, focus } = selection;
       for (const point of [anchor, focus]) {
