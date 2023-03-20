@@ -36,5 +36,6 @@ module.exports = {
     '<rootDir>/libs/import',
     '<rootDir>/libs/number',
     '<rootDir>/libs/message-packer',
+    '<rootDir>/libs/live-connect',
   ],
 };

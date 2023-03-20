@@ -8,6 +8,7 @@ import {
 import { ImportResult } from '@decipad/import';
 import { useCache } from '@decipad/editor-utils';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
+import { deserializeImportResult } from './utils/deserializeImportResult';
 
 export interface LiveConnectionResult {
   error?: Error;
@@ -51,6 +52,7 @@ export const useLiveConnection = (
     blockId,
     deleted,
     value: liveConnectionResult,
+    deserialize: deserializeImportResult,
   });
 
   useEffect(() => {

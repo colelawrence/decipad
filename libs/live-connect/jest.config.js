@@ -15,6 +15,5 @@ module.exports = {
         '<rootDir>/src/lib',
       ],
     },
-    require.resolve('./jest-browser.config.js'),
   ],
 };
