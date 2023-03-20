@@ -2,8 +2,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import pRetry from 'p-retry';
 import type { Options } from 'p-retry';
+import { timeout } from '@decipad/utils';
 
-type RetryFn<TError> = (error: TError) => boolean;
+type RetryFn<TError> = (error: TError) => [boolean, number | undefined];
 
 interface RetryOptions {
   retries?: number;
@@ -21,9 +22,14 @@ export const retry = <TReturn, TError>(
     ...options,
     signal: controller.signal,
     randomize: true,
-    onFailedAttempt(error) {
-      if (shouldRetry != null && !shouldRetry(error as TError)) {
-        controller.abort(error);
+    async onFailedAttempt(error) {
+      if (shouldRetry != null) {
+        const [retryable, waitFor] = shouldRetry(error as TError);
+        if (!retryable) {
+          controller.abort(error);
+        } else if (waitFor) {
+          await timeout(waitFor);
+        }
       } else {
         console.warn('An error occurred, going to retry. Details below:');
         console.warn(error);

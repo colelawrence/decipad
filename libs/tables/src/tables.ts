@@ -60,8 +60,8 @@ const versionedTables: (keyof VersionedDataTables)[] = ['docsync'];
 
 let tablesPromise: Promise<DataTables>;
 
-export default async function tables(userId?: string): Promise<DataTables> {
-  if (tablesPromise && !userId) {
+export const tables = (): Promise<DataTables> => {
+  if (tablesPromise) {
     return tablesPromise;
   }
 
@@ -78,7 +78,7 @@ export default async function tables(userId?: string): Promise<DataTables> {
           );
         }
         for (const observedTable of observedTables) {
-          observe(tables, observedTable, userId);
+          observe(tables, observedTable);
         }
         for (const versionedTable of versionedTables) {
           withWithVersion(tables, tables._doc, versionedTable);
@@ -88,18 +88,12 @@ export default async function tables(userId?: string): Promise<DataTables> {
       .catch(reject);
   });
 
-  if (!userId) {
-    tablesPromise = p;
-  }
+  tablesPromise = p;
 
   return p;
-}
+};
 
-function observe(
-  dataTables: DataTables,
-  tableName: keyof DataTables,
-  userId?: string
-) {
+function observe(dataTables: DataTables, tableName: keyof DataTables) {
   const table = dataTables[tableName] as ConcreteDataTable;
   if (!table) {
     throw new Error(`No table named ${tableName}`);
@@ -109,8 +103,8 @@ function observe(
   }
   table.__deci_observed__ = true;
 
-  table.put = putReplacer(table, tableName, table.put, userId);
-  table.delete = deleteReplacer(table, tableName, table.delete, userId);
+  table.put = putReplacer(table, tableName, table.put);
+  table.delete = deleteReplacer(table, tableName, table.delete);
 }
 
 function randomPublish(eventProbability: number): boolean {
@@ -120,8 +114,7 @@ function randomPublish(eventProbability: number): boolean {
 function putReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
-  method: (doc: T) => Promise<void>,
-  userId?: string
+  method: (doc: T) => Promise<void>
 ): (doc: T, eventProbability?: boolean | number) => Promise<void> {
   return async function replacePut(args: T, eventProbability = false) {
     debug(
@@ -146,7 +139,6 @@ function putReplacer<T extends ConcreteRecord>(
           table: tableName,
           action: 'put',
           args,
-          user_id: userId,
         },
       };
       debug('tables.%s: publishing event `%j`', event);
@@ -164,8 +156,7 @@ function putReplacer<T extends ConcreteRecord>(
 function deleteReplacer<T extends ConcreteRecord>(
   table: DataTable<T>,
   tableName: keyof DataTables,
-  method: (id: TableRecordIdentifier) => Promise<void>,
-  userId?: string
+  method: (id: TableRecordIdentifier) => Promise<void>
 ): (id: TableRecordIdentifier, noEvents: boolean) => Promise<void> {
   return async function replaceDelete(
     args: TableRecordIdentifier,
@@ -184,7 +175,6 @@ function deleteReplacer<T extends ConcreteRecord>(
               action: 'delete',
               args,
               recordBeforeDelete,
-              user_id: userId,
             },
           }),
         awsRetry,

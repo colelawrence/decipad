@@ -27,15 +27,14 @@ async function verifyAuth(command: Command): Promise<string> {
 }
 
 async function parseAndReplyToCommand(command: Command): Promise<string> {
-  const userId = await verifyAuth(command);
+  await verifyAuth(command);
   const commandData = getDefined(command.data, 'no command data');
-  const options = { user_id: userId };
   switch (commandData.name) {
     case 'allowlist': {
-      return commands.allowlist(commandData.options, options);
+      return commands.allowlist(commandData.options);
     }
     case 'superadmins': {
-      return commands.superadmins(commandData.options, options);
+      return commands.superadmins(commandData.options);
     }
     default: {
       throw Boom.notImplemented(

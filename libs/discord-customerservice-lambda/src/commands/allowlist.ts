@@ -7,19 +7,14 @@ import {
   AllowListApplicationCommandDataOption,
 } from '../command';
 
-interface AllowListOptions {
-  user_id: string;
-}
-
 async function add(
-  options: AllowlistAddApplicationCommandDataOption['options'],
-  config: AllowListOptions
+  options: AllowlistAddApplicationCommandDataOption['options']
 ): Promise<string> {
   const option = getDefined(
     options.find((o) => o.name === 'email'),
     'no option named email'
   );
-  const data = await tables(config.user_id);
+  const data = await tables();
   const email = (option.value ?? '').toLowerCase();
   await data.allowlist.put({ id: email });
 
@@ -27,14 +22,13 @@ async function add(
 }
 
 async function remove(
-  options: AllowlistRemoveApplicationCommandDataOption['options'],
-  config: AllowListOptions
+  options: AllowlistRemoveApplicationCommandDataOption['options']
 ): Promise<string> {
   const option = getDefined(
     options.find((o) => o.name === 'email'),
     'no option named email'
   );
-  const data = await tables(config.user_id);
+  const data = await tables();
   const email = (option.value ?? '').toLowerCase();
   const exists = await data.allowlist.get({ id: email });
   if (!exists) {
@@ -66,8 +60,7 @@ ${entries.map((entry) => `${entry}\n`)}
 }
 
 export default function allowlist(
-  options: AllowListApplicationCommandDataOption[],
-  config: AllowListOptions
+  options: AllowListApplicationCommandDataOption[]
 ): Promise<string> {
   if (options.length !== 1) {
     throw Boom.notAcceptable('allowlist command should only have one option');
@@ -75,10 +68,10 @@ export default function allowlist(
   const option = options[0];
   switch (option.name) {
     case 'add': {
-      return add(option.options, config);
+      return add(option.options);
     }
     case 'remove': {
-      return remove(option.options, config);
+      return remove(option.options);
     }
     case 'list': {
       return list();
