@@ -7,6 +7,7 @@ import {
 } from '@decipad/backendtypes';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { UserInputError } from 'apollo-server-lambda';
+import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
 
@@ -46,19 +47,41 @@ export function shareWithUser<
       throw new UserInputError(`no such ${resourceType.humanName}`);
     }
 
-    const permission: Parameters<typeof createResourcePermission>[0] = {
-      userId: args.userId,
-      givenByUserId: actorUser.id,
-      resourceUri: resource,
-      type: args.permissionType,
-      canComment: !!args.canComment,
-    };
-    if (resourceType.parentResourceUriFromRecord) {
-      permission.parentResourceUri =
-        resourceType.parentResourceUriFromRecord(record);
-    }
+    const { permissions } = await tables();
+    const existingPermissions = (
+      await permissions.query({
+        IndexName: 'byResourceAndUser',
+        KeyConditionExpression:
+          'resource_uri = :resource_uri and user_id = :user_id',
+        ExpressionAttributeValues: {
+          ':resource_uri': resource,
+          ':user_id': args.userId,
+        },
+      })
+    ).Items;
+    if (existingPermissions.length > 0) {
+      const [permission] = existingPermissions;
+      if (permission.type !== args.permissionType) {
+        await permissions.put({
+          ...permission,
+          type: args.permissionType,
+        });
+      }
+    } else {
+      const permission: Parameters<typeof createResourcePermission>[0] = {
+        userId: args.userId,
+        givenByUserId: actorUser.id,
+        resourceUri: resource,
+        type: args.permissionType,
+        canComment: !!args.canComment,
+      };
+      if (resourceType.parentResourceUriFromRecord) {
+        permission.parentResourceUri =
+          resourceType.parentResourceUriFromRecord(record);
+      }
 
-    await createResourcePermission(permission);
+      await createResourcePermission(permission);
+    }
 
     return record;
   };

@@ -37,6 +37,13 @@ export default gql`
     createWorkspace(workspace: WorkspaceInput!): Workspace!
     updateWorkspace(id: ID!, workspace: WorkspaceInput!): Workspace!
     removeWorkspace(id: ID!): Boolean
+    shareWorkspaceWithEmail(
+      id: ID!
+      email: String!
+      permissionType: PermissionType!
+      canComment: Boolean!
+    ): Workspace!
+    unshareWorkspaceWithUser(id: ID!, userId: ID!): Workspace
   }
 
   extend type Subscription {

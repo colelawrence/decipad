@@ -27,6 +27,7 @@ import {
   requireUser,
 } from '../authorization';
 import by from '../../../graphqlresource/src/utils/by';
+import { workspaceResource } from './workspaceResource';
 
 export default {
   Query: {
@@ -83,6 +84,8 @@ export default {
   },
 
   Mutation: {
+    shareWorkspaceWithEmail: workspaceResource.shareWithEmail,
+    unshareWorkspaceWithUser: workspaceResource.unshareWithUser,
     async createWorkspace(
       _: unknown,
       { workspace }: { workspace: WorkspaceInput },
@@ -177,8 +180,8 @@ export default {
       const data = await tables();
       let roles;
 
-      const workspaceResource = `/workspaces/${workspace.id}`;
-      if (await isAuthorized(workspaceResource, context, 'ADMIN')) {
+      const workspaceResourceName = `/workspaces/${workspace.id}`;
+      if (await isAuthorized(workspaceResourceName, context, 'ADMIN')) {
         roles = (
           await data.workspaceroles.query({
             IndexName: 'byWorkspaceId',
@@ -193,7 +196,7 @@ export default {
         const roleResources = await queryAccessibleResources({
           userId: user.id,
           resourceType: 'roles',
-          parentResourceUri: workspaceResource,
+          parentResourceUri: workspaceResourceName,
         });
 
         for (const roleResource of roleResources) {

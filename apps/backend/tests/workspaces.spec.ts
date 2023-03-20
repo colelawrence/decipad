@@ -424,6 +424,130 @@ test('workspaces', (ctx) => {
     expect(workspaces).toMatchObject([]);
   });
 
+  it('admin user can share the workspace with another users email', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
+    await client.mutate({
+      mutation: ctx.gql`
+          mutation {
+            shareWorkspaceWithEmail(
+              id: "${workspace.id}"
+              email: "test2@decipad.com"
+              permissionType: READ
+              canComment: true) {
+              id
+            }
+          }
+        `,
+    });
+  });
+
+  it('invitee can get workspace', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
+
+    const workspace2 = (
+      await client.query({
+        query: ctx.gql`
+          query {
+            getWorkspaceById(id: "${workspace.id}") {
+              id
+              name
+            }
+          }
+        `,
+      })
+    ).data.getWorkspaceById;
+
+    expect(workspace2).toMatchObject({
+      id: workspace.id,
+      name: 'Workspace 1 renamed',
+    });
+  });
+
+  it('admin user can again share the workspace with the same user email and same permission', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
+    await client.mutate({
+      mutation: ctx.gql`
+          mutation {
+            shareWorkspaceWithEmail(
+              id: "${workspace.id}"
+              email: "test2@decipad.com"
+              permissionType: READ
+              canComment: true) {
+              id
+            }
+          }
+        `,
+    });
+  });
+
+  it('invitee can still get workspace', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
+
+    const workspace2 = (
+      await client.query({
+        query: ctx.gql`
+          query {
+            getWorkspaceById(id: "${workspace.id}") {
+              id
+              name
+              myPermissionType
+            }
+          }
+        `,
+      })
+    ).data.getWorkspaceById;
+
+    expect(workspace2).toMatchObject({
+      id: workspace.id,
+      name: 'Workspace 1 renamed',
+      myPermissionType: 'READ',
+    });
+  });
+
+  it('admin user can again share the workspace with the same user email but write permission', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth());
+
+    await client.mutate({
+      mutation: ctx.gql`
+          mutation {
+            shareWorkspaceWithEmail(
+              id: "${workspace.id}"
+              email: "test2@decipad.com"
+              permissionType: WRITE
+              canComment: true) {
+              id
+            }
+          }
+        `,
+    });
+  });
+
+  it('invitee can now write to that workspace', async () => {
+    const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
+
+    const workspace2 = (
+      await client.query({
+        query: ctx.gql`
+          query {
+            getWorkspaceById(id: "${workspace.id}") {
+              id
+              name
+              myPermissionType
+            }
+          }
+        `,
+      })
+    ).data.getWorkspaceById;
+
+    expect(workspace2).toMatchObject({
+      id: workspace.id,
+      name: 'Workspace 1 renamed',
+      myPermissionType: 'WRITE',
+    });
+  });
+
   it('admin can remove role', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 

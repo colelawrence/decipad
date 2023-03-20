@@ -49,6 +49,7 @@ export async function createSandboxEnv(
     JEST_WORKER_ID: process.env.JEST_WORKER_ID,
     // Architect uses env name testing instead of the conventional test
     NODE_ENV: 'testing' as 'test',
+    DEBUG: process.env.DEBUG,
   };
 
   // configure Architect's ports

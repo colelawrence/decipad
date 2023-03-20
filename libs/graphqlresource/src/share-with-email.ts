@@ -113,16 +113,20 @@ export const shareWithEmail = <
     };
 };
 
-function getResourceUrl(resourceTypeName: string, resourceId: string) {
-  if (resourceTypeName === 'pads') {
-    return `${app().urlBase}/n/${resourceId}`;
+const resourceTypeNameRootPathComponent: Record<string, string> = {
+  workspaces: 'w',
+  pads: 'n',
+  externaldatasources: 'd',
+};
+
+const getResourceUrl = (resourceTypeName: string, resourceId: string) => {
+  const rootPathComponent = resourceTypeNameRootPathComponent[resourceTypeName];
+
+  if (!rootPathComponent) {
+    throw new Error(
+      `getResourceUrl got unknown resource type ${resourceTypeName}`
+    );
   }
 
-  if (resourceTypeName === 'externaldatasources') {
-    return `${app().urlBase}/d/${resourceId}`;
-  }
-
-  throw new Error(
-    `getResourceUrl got unknown resource type ${resourceTypeName}`
-  );
-}
+  return `${app().urlBase}/${rootPathComponent}/${resourceId}`;
+};
