@@ -128,7 +128,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             {caption}
           </div>
         </div>
-        <div css={css({ display: 'inline-flex' })}>
+        <div css={css({ display: 'inline-flex' })} contentEditable={false}>
           {showToggleCollapsedButton && setCollapsed ? (
             <TableButton
               setState={setCollapsed}

@@ -34,6 +34,14 @@ export const changeColumnType = (
 ) => {
   withoutNormalizing(editor, () => {
     if (cellType.kind === 'table-formula') {
+      setNodes<TableElement>(
+        editor,
+        {
+          hideFormulas: false,
+        },
+        { at: path }
+      );
+
       focusCursorOnPath(editor, () => {
         const table = getNode<TableElement>(editor, path);
         return table && findTableFormulaPath(table, path, columnIndex);
