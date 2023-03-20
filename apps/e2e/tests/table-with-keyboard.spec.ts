@@ -86,8 +86,8 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
   test('can change column type to a formula', async () => {
     await openColumnMenu(page, 2);
-    await page.click('[role="menuitem"]:has-text("Change type")');
-    await page.click('[role="menuitem"]:has-text("Formula")');
+    await page.locator('[role="menuitem"]:has-text("Change type")').click();
+    await page.locator('[role="menuitem"]:has-text("Formula")').click();
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
 
@@ -98,9 +98,10 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await focusOnTableColumnFormula(page);
     await page.keyboard.type('1 + 1');
 
-    const codeBlock = await page.waitForSelector('section:has-text("=")');
-
     await waitForExpect(async () => {
+      const codeBlock = await page.waitForSelector(
+        'section:has-text("Column3 =")'
+      );
       const codeBlockText = await codeBlock.innerText();
       // splitting on new line removes the text from auto-complete menu
       expect(codeBlockText.split('\n')[0]).toBe('Column3 =  1 + 1');
@@ -133,9 +134,9 @@ test.describe('Adding tables with keyboard (and more)', () => {
     const codeBlock = await page.waitForSelector(
       'section:has-text("Column5 =")'
     );
-    const codeBlockText = await codeBlock.innerText();
-
-    expect(codeBlockText).toContain('Column5 =');
+    await waitForExpect(async () =>
+      expect(await codeBlock.innerText()).toContain('Column5 =')
+    );
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await focusOnTableColumnFormula(page, 'Column5 =');

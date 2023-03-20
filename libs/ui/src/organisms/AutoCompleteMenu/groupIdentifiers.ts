@@ -35,7 +35,7 @@ export function groupIdentifiers(
   });
 
   const toTableGroup = (idents: Identifier[], tableName: string) => ({
-    title: tableName,
+    title: `${tableName} Table`,
     tableName,
     items: idents.flatMap((ident) => {
       const { identifier } = ident;
@@ -72,7 +72,7 @@ export function groupIdentifiers(
       ...Object.entries(tableGroups).map(([tbl, idents]) =>
         toTableGroup(idents, tbl)
       ),
-      toGroup(functions, 'Functions'),
+      toGroup(functions, 'Formulas'),
     ],
     (g) => {
       if (isInTable === g.tableName) {

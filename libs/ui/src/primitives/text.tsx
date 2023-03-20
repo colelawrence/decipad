@@ -127,6 +127,12 @@ export const p13Medium: TypographyStyles = {
   ...p13Regular,
   fontWeight: 500,
 };
+
+export const p12Bold: TypographyStyles = {
+  ...p12Regular,
+  fontWeight: 700,
+};
+
 export const p13Bold: TypographyStyles = {
   ...p13Regular,
   fontWeight: 700,

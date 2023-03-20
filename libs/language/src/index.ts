@@ -85,15 +85,16 @@ export * from './simpleValues';
 export type ExternalDataMap = Map<string, Result>;
 
 export interface AutocompleteName {
+  kind: 'function' | 'variable' | 'column';
   syntax?: string;
   example?: string;
   formulaGroup?: string;
-  kind: 'function' | 'variable' | 'column';
   type: SerializedType;
   name: string;
   inTable?: string;
   explanation?: string;
   blockId?: string;
+  columnId?: string;
   isLocal?: boolean;
 }
 

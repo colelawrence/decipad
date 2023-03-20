@@ -42,6 +42,8 @@ it('finds names', async () => {
         },
       },
       Object {
+        "blockId": undefined,
+        "columnId": undefined,
         "inTable": "Table1",
         "isLocal": true,
         "kind": "column",
@@ -51,7 +53,8 @@ it('finds names', async () => {
         },
       },
       Object {
-        "blockId": "block-2",
+        "blockId": "block-1",
+        "columnId": "block-2",
         "inTable": "Table1",
         "isLocal": true,
         "kind": "column",
@@ -123,7 +126,8 @@ it('places local vars first', async () => {
         },
       },
       Object {
-        "blockId": "block-3",
+        "blockId": "block-0",
+        "columnId": "block-3",
         "inTable": "Table1",
         "isLocal": true,
         "kind": "column",

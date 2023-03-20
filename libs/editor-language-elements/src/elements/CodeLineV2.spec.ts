@@ -119,6 +119,7 @@ it('regression: deals with smart refs', async () => {
       type: ELEMENT_SMART_REF,
       id: '_',
       blockId: '1234',
+      columnId: null,
       children: [{ text: '' }],
     },
   ]);
@@ -134,6 +135,37 @@ it('regression: deals with smart refs', async () => {
       (assign
         (def TestName)
         (implicit* 1 (ref exprRef_1234)))),
+      "definesVariable": "TestName",
+      "id": "codelineid",
+      "type": "identified-block",
+    }
+  `);
+});
+
+it('deals with table+column smart refs', async () => {
+  const { editor, computer, codeLine } = createTestCodeLine([
+    { text: '1' },
+    { text: ' ' },
+    {
+      type: ELEMENT_SMART_REF,
+      id: '_',
+      blockId: 'tableId',
+      columnId: 'columnId',
+      children: [{ text: '' }],
+    },
+  ]);
+  const { interpretedAs, programChunk } = await parseStructuredCodeLine(
+    editor,
+    computer,
+    codeLine
+  );
+  expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
+  expect(getOnly(programChunk)).toMatchInlineSnapshot(`
+    Object {
+      "block": (block
+      (assign
+        (def TestName)
+        (implicit* 1 (prop (ref exprRef_tableId).exprRef_columnId)))),
       "definesVariable": "TestName",
       "id": "codelineid",
       "type": "identified-block",

@@ -3,7 +3,7 @@ import { useWindowListener } from '@decipad/react-utils';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { Calendar, Formula, Number, Table, Text } from '../../icons';
-import { setCssVar, cssVar, p12Medium, teal600 } from '../../primitives';
+import { setCssVar, cssVar, grey400, p12Medium } from '../../primitives';
 
 const wrapperStyles = (focused: boolean) =>
   css({
@@ -30,7 +30,7 @@ const styles = css({
   columnGap: '4px',
 });
 
-const iconStyles = css(setCssVar('currentTextColor', teal600.rgb), {
+const iconStyles = css(setCssVar('currentTextColor', grey400.rgb), {
   width: '16px',
   height: '16px',
   display: 'grid',
@@ -43,6 +43,7 @@ const textStyles = css({
 });
 
 const identifierStyles = css(p12Medium, {
+  color: cssVar('weakTextColor'),
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   position: 'relative',
@@ -129,8 +130,10 @@ export const AutoCompleteMenuItem = ({
             number: <Number />,
             string: <Text />,
             date: <Calendar />,
-            table: <Table />,
-            function: <Formula />,
+            table: (
+              <Table strokeColor={cssVar('weakerTextColor')} noBackground />
+            ),
+            function: <Formula strokeColor={cssVar('weakerTextColor')} />,
           }[type] || <Number />}
         </span>
         <div css={textStyles}>

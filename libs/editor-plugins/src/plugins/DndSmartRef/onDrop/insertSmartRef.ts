@@ -52,6 +52,7 @@ const surroundWithPlusSigns = (
 export function insertSmartRef(
   blockType: MyElement['type'],
   blockId: string,
+  columnId: string | null,
   precedingText = '',
   followingText = ''
 ): (MyElement | Text)[] | undefined {
@@ -68,6 +69,7 @@ export function insertSmartRef(
         id: nanoid(),
         type: ELEMENT_SMART_REF,
         blockId,
+        columnId,
         children: [{ text: '' }],
       };
 

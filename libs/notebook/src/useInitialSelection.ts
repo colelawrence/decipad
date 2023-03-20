@@ -39,9 +39,14 @@ const getSelection = (editor: MyEditor): BaseSelection => {
   } as BaseSelection;
 };
 
-export const useInitialSelection = (loaded: boolean, editor?: MyEditor) => {
+export const useInitialSelection = (
+  notebookId: string,
+  loaded: boolean,
+  editor?: MyEditor
+) => {
   const selection = useEditorSelector((ed) => ed.selection);
-  const { initialFocusDone, setInitialFocusDone } = useNotebookState();
+  const { initialFocusDone, setInitialFocusDone } =
+    useNotebookState(notebookId);
   const readOnly = useIsEditorReadOnly();
 
   useEffect(() => {

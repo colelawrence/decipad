@@ -646,6 +646,28 @@ it('can get a defined symbol, in block', async () => {
   expect(computer.getSymbolDefinedInBlock('block-1')).toEqual(undefined);
 });
 
+it('can get table/column data by block id', async () => {
+  await computeOnTestComputer({
+    program: getIdentifiedBlocks('Table = {}', 'Table.Xs = [10, 20, 30]'),
+  });
+
+  expect(computer.getBlockIdAndColumnId$.get('block-0')).toMatchInlineSnapshot(`
+    Array [
+      "block-0",
+      null,
+    ]
+  `);
+  expect(computer.getBlockIdAndColumnId$.get('block-1')).toMatchInlineSnapshot(`
+    Array [
+      "block-0",
+      "block-1",
+    ]
+  `);
+  expect(
+    computer.getSymbolOrTableDotColumn$.get('block-0', 'block-1')
+  ).toMatchInlineSnapshot(`"Table.Xs"`);
+});
+
 it('can stream imperative errors', async () => {
   let error: UserParseError | undefined;
 

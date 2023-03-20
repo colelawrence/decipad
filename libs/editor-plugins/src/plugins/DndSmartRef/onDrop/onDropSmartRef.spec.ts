@@ -32,7 +32,11 @@ it('can get the text before or after a selection', () => {
 
   codeLine.children = [
     testText('hey '),
-    { ...testElm('2', ELEMENT_SMART_REF, [testText('')]), blockId: 'blockid' },
+    {
+      ...testElm('2', ELEMENT_SMART_REF, [testText('')]),
+      blockId: 'blockid',
+      columnId: '',
+    },
     testText(''),
   ];
   expect(findTextBeforeAndAfterPoint(codeLine, [], { path: [0], offset: 0 }))

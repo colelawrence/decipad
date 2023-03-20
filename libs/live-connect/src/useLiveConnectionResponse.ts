@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
+import { deserializeImportResult } from './utils/deserializeImportResult';
 
 export interface LiveConnectionResponseResult {
   error?: Error;
@@ -67,7 +68,7 @@ export const useLiveConnectionResponse = ({
                       )
                     );
                   } else {
-                    setResult(res);
+                    setResult(deserializeImportResult(res));
                   }
                 }
               }

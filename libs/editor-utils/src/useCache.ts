@@ -1,3 +1,4 @@
+import { identity } from 'ramda';
 import { useEffect, useMemo, useState } from 'react';
 
 interface UseCacheProps<V> {
@@ -5,17 +6,19 @@ interface UseCacheProps<V> {
   value: V | undefined;
   deleted: boolean;
   cacheKey?: string;
+  deserialize: (v: V) => V;
 }
 
-const fetchValue = (key: string) => {
+const fetchValue = <V>(key: string): V | undefined => {
   try {
     const serializedValue = localStorage.getItem(key);
     if (serializedValue) {
-      return JSON.parse(serializedValue);
+      return JSON.parse(serializedValue) as V;
     }
   } catch (err) {
     console.error('Error fetching value:', err);
   }
+  return undefined;
 };
 
 const saveValue = <V>(key: string, value: V): void => {
@@ -32,6 +35,7 @@ export const useCache = <V>({
   value,
   deleted,
   cacheKey = 'cache',
+  deserialize = identity,
 }: UseCacheProps<V>): V | undefined => {
   const [cachedValue, setCachedValue] = useState(() => value);
 
@@ -48,9 +52,12 @@ export const useCache = <V>({
   useEffect(() => {
     // fetch the value
     if (!cachedValue) {
-      setCachedValue(fetchValue(fullCacheKey));
+      const fetchedValue = fetchValue<V>(fullCacheKey);
+      if (fetchedValue != null) {
+        setCachedValue(deserialize(fetchedValue));
+      }
     }
-  }, [cachedValue, fullCacheKey]);
+  }, [cachedValue, deserialize, fullCacheKey]);
 
   useEffect(() => {
     if (value) {

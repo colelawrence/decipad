@@ -292,6 +292,7 @@ export const EditorTable: FC<EditorTableProps> = ({
               {!previewMode && (
                 <div
                   css={tableAddColumnButtonWrapperStyles}
+                  contentEditable={false}
                   onMouseEnter={onMouseEnter}
                   onMouseLeave={onMouseLeave}
                 >

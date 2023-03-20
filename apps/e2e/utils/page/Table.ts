@@ -56,8 +56,8 @@ export async function writeInTable(
 
 export function openRowMenu(page: Page, line: number) {
   return page
-    .locator(`${tableRowLocator(line)} > th > div > button:nth-child(2)`)
-    .click();
+    .locator(`${tableRowLocator(line)} > th > div > button`)
+    .click({ force: true });
 }
 
 export function focusOnTable(page: Page) {

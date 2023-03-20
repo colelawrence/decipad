@@ -67,7 +67,7 @@ const InsideNotebookState = ({
     timedOutLoadingFromRemote,
     hasLocalChanges,
     destroy,
-  } = useNotebookState();
+  } = useNotebookState(notebookId);
 
   const interactions = useEditorUserInteractionsContext();
 
@@ -184,7 +184,11 @@ const InsideNotebookState = ({
           editor={editor}
           readOnly={readOnly}
         >
-          <InitialSelection loaded={loaded} editor={editor} />
+          <InitialSelection
+            notebookId={notebookId}
+            loaded={loaded}
+            editor={editor}
+          />
         </Editor>
       </ComputerContextProvider>
     );
@@ -198,6 +202,7 @@ export const Notebook: FC<NotebookProps> = (props) => {
     <EditorUserInteractionsProvider>
       <>
         <EditorAttachmentsHandler
+          notebookId={rest.notebookId}
           getAttachmentForm={getAttachmentForm}
           onAttached={onAttached}
         />

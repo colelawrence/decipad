@@ -171,15 +171,23 @@ export const useTableActions = (
   );
 
   const computer = useComputer();
+
+  const onSetHideFormulas = useElementMutatorCallback(
+    editor,
+    element,
+    'hideFormulas'
+  );
+
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType: TableCellType) => {
       withPath(editor, element, (path) => {
         withoutNormalizing(editor, () => {
+          onSetHideFormulas(false);
           changeColumnType(editor, path, cellType, columnIndex, computer);
         });
       });
     },
-    [editor, element, computer]
+    [editor, element, computer, onSetHideFormulas]
   );
 
   const onChangeColumnAggregation = useCallback(
@@ -227,12 +235,6 @@ export const useTableActions = (
       mutateIsCollapsed(newValue);
     },
     [mutateIsCollapsed, editor]
-  );
-
-  const onSetHideFormulas = useElementMutatorCallback(
-    editor,
-    element,
-    'hideFormulas'
   );
 
   const onSaveIcon = useElementMutatorCallback(editor, element, 'icon');

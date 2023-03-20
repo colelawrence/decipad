@@ -26,7 +26,12 @@ export const getCodeLineSource = (
 
         const bspc = needsWhitespaceBefore ? ' ' : '';
         const aspc = needsWhitespaceAfter ? ' ' : '';
-        return bspc + getExprRef(c.blockId) + aspc;
+        return (
+          bspc +
+          getExprRef(c.blockId) +
+          (c.columnId ? `.${getExprRef(c.columnId)}` : '') +
+          aspc
+        );
       }
       return getNodeString(c);
     })
