@@ -25,7 +25,7 @@ export function getTypeErrorRanges(
     {
       [DECORATE_TYPE_ERROR]: true,
       anchor: { path, offset: error.errorLocation.start.char },
-      focus: { path, offset: error.errorLocation.end.char + 1 },
+      focus: { path, offset: error.errorLocation.end.char },
       error: formatError('en-US', error.errorCause),
     },
   ];
