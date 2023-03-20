@@ -70,13 +70,13 @@ interface EditorBlockProps {
 export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
->(({ blockKind, children, ...props }, ref) => {
+>(({ blockKind, children, isHidden, ...props }, ref) => {
   const readOnly = useIsEditorReadOnly();
   return (
     <div
       {...props}
       css={[
-        readOnly && props.isHidden && isHiddenStyles,
+        readOnly && isHidden && isHiddenStyles,
         {
           position: 'relative',
         },

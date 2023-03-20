@@ -53,7 +53,8 @@ export const onDropSmartRef =
       }
 
       const result = computer.getBlockIdResult$.get(blockId);
-      if (!result) {
+      const smartId = computer.getBlockIdAndColumnId$.get(blockId);
+      if (!result || !smartId) {
         return;
       }
 
@@ -65,12 +66,7 @@ export const onDropSmartRef =
         return;
       }
 
-      const nodes = insertSmartRef(
-        blockAbove.type,
-        blockId,
-        textBefore,
-        textAfter
-      );
+      const nodes = insertSmartRef(blockAbove.type, ...smartId, textAfter);
 
       if (nodes != null) {
         insertNodes(editor, nodes);

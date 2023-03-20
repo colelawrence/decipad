@@ -4,8 +4,10 @@ import {
   MyEditor,
   MyNode,
   SmartRefElement,
+  TableElement,
 } from '@decipad/editor-types';
 import {
+  ELEMENT_TABLE,
   getNextNode,
   getNodeChildren,
   getNodeString,
@@ -16,9 +18,10 @@ import {
   withoutNormalizing,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { Location, Path, Point, Range } from 'slate';
+import { BaseEditor, Editor, Location, Path, Point, Range } from 'slate';
 import { captureException } from '@sentry/react';
 import { insertNodes } from './insertNodes';
+import { isElementOfType } from './isElementOfType';
 
 export const convertCodeSmartRefs = (
   editor: MyEditor,
@@ -44,6 +47,8 @@ export const convertCodeSmartRefs = (
   }
 };
 
+type VarAndCol = [string, string | null];
+
 export const handleNode = (
   node: MyNode,
   path: Path,
@@ -52,17 +57,34 @@ export const handleNode = (
 ) => {
   const names = computer
     .getNamesDefined()
-    .filter((n) => !!n.blockId)
-    .filter((n) => n.kind === 'variable' || n.kind === 'column')
-    .map((n) => [n.name, n.blockId]);
-  const namesToIds: { [name: string]: string } = Object.fromEntries(names);
-  const idsToNames: { [blockId: string]: string } = Object.fromEntries(
-    names.map((n) => [n[1], n[0]])
-  );
+    .flatMap((n): [VarAndCol, VarAndCol][] => {
+      if (n.kind === 'variable' && n.blockId) {
+        return [
+          [
+            [n.name, null],
+            [n.blockId, null],
+          ],
+        ];
+      }
+      if (n.kind === 'column' && n.blockId && n.columnId) {
+        return [
+          [n.name.split('.') as [string, string], [n.blockId, n.columnId]],
+        ];
+      }
+      return [];
+    });
+  const namesToIds = names;
+  const idsToNames = names.map((n) => [n[1], n[0]] as [VarAndCol, VarAndCol]);
+
+  const inTableId =
+    Editor.above<TableElement>(editor as BaseEditor, {
+      at: path,
+      match: (n) => isElementOfType(n, ELEMENT_TABLE),
+    })?.[0].id ?? null;
 
   // text
   if (!isElement(node)) {
-    return handleTextNode(node, path, editor, namesToIds);
+    return handleTextNode(node, path, editor, inTableId, namesToIds);
   }
   // smart ref
   if (node.type === ELEMENT_SMART_REF) {
@@ -76,10 +98,14 @@ const handleSmartRefNode = (
   node: SmartRefElement,
   path: Path,
   editor: MyEditor,
-  idsToNames: { [blockId: string]: string }
+  idsToNames: [VarAndCol, VarAndCol][]
 ) => {
-  const curName = idsToNames[node.blockId];
-  if (!curName) {
+  const curName = find(idsToNames, node.blockId, node.columnId);
+  if (
+    !curName ||
+    node.columnId ===
+      undefined /* legacy, handled in migrateTableColumnSmartRefs */
+  ) {
     return false;
   }
 
@@ -92,7 +118,7 @@ const handleSmartRefNode = (
     // turn smart ref into text if it's in the LHS of a declaration
     if (nextTokens[0]?.type === 'equalSign') {
       withoutNormalizing(editor, () => {
-        insertText(editor, curName, {
+        insertText(editor, curName.filter((n) => n != null).join('.'), {
           at: { path: nextPath, offset: 0 },
         });
         removeNodes(editor, { at: path });
@@ -106,30 +132,48 @@ const handleTextNode = (
   node: MyNode,
   path: Path,
   editor: MyEditor,
-  namesToIds: { [name: string]: string }
+  inTableId: string | null,
+  namesToIds: [VarAndCol, VarAndCol][]
 ) => {
   const fullStr = getNodeString(node);
   const identifs = getUsedIdentifiers(fullStr);
 
   for (const token of identifs) {
-    if (!token.isDeclaration && !token.isBeforeDot) {
-      const blockId = namesToIds[token.text];
-      if (blockId) {
-        const start = { path, offset: token.start };
-        const end = { path, offset: token.end };
-        const textRange = { anchor: start, focus: end };
-        const inside =
-          editor.selection && !!Range.intersection(editor.selection, textRange);
+    let blockIdAndColumn;
+    if (!token.isDeclaration && token.tableColumn) {
+      blockIdAndColumn = find(
+        namesToIds,
+        token.tableColumn[0],
+        token.tableColumn[1]
+      );
+    } else if (!token.isDeclaration && !token.isBeforeDot) {
+      blockIdAndColumn =
+        find(namesToIds, token.text, null) ??
+        namesToIds.flatMap(([[, columnName], [tableId, columnId]]) =>
+          inTableId != null &&
+          tableId === inTableId &&
+          columnName === token.text
+            ? [[columnId, null] as VarAndCol]
+            : []
+        )?.[0];
+    }
 
-        // dont replace if selection is inside or right next to the var name
-        if (inside) {
-          return false;
-        }
-        replaceTextWithSmartRef(editor, textRange, blockId);
-        return true;
+    if (blockIdAndColumn) {
+      const start = { path, offset: token.start };
+      const end = { path, offset: token.end };
+      const textRange = { anchor: start, focus: end };
+      const inside =
+        editor.selection && !!Range.intersection(editor.selection, textRange);
+
+      // dont replace if selection is inside or right next to the var name
+      if (inside) {
+        return false;
       }
+      replaceTextWithSmartRef(editor, textRange, ...blockIdAndColumn);
+      return true;
     }
   }
+
   return false;
 };
 
@@ -146,15 +190,30 @@ export const smartRefToText = (
   setSelection(editor, { anchor: textPoint, focus: textPoint });
 };
 
+const find = (
+  items: [VarAndCol, VarAndCol][],
+  block: string,
+  column: string | null
+) => {
+  for (const item of items) {
+    if (item[0][0] === block && item[0][1] === column) {
+      return item[1];
+    }
+  }
+  return null;
+};
+
 const replaceTextWithSmartRef = (
   editor: MyEditor,
   textRange: Range,
-  blockId: string
+  blockId: string,
+  columnId: string | null
 ) => {
   const smartRef: SmartRefElement = {
     id: nanoid(),
     type: ELEMENT_SMART_REF,
     blockId,
+    columnId,
     children: [{ text: '' }],
   };
   insertNodes(editor, [{ text: '' }, smartRef, { text: '' }], {

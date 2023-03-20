@@ -88,23 +88,6 @@ it('allows messy names', () => {
   `);
 });
 
-it('creates names for the computer to use (3)', () => {
-  const [result] = replaceExprRefsWithPrettyRefs([stat2, stat2]);
-  const stringified = result.map(prettyPrintProgramBlock);
-
-  expect(stringified[0]).toMatchInlineSnapshot(`
-    "(assign
-      (def Value_1)
-      (ref Value_2))"
-  `);
-
-  expect(stringified[1]).toMatchInlineSnapshot(`
-    "(assign
-      (def Value_1)
-      (ref Value_2))"
-  `);
-});
-
 it('tolerates empty var names', () => {
   const emptyVarBlock = b('1', n('assign', n('def', ''), n('noop')));
   const [result] = replaceExprRefsWithPrettyRefs([emptyVarBlock]);
@@ -127,16 +110,234 @@ it('regression: exprRefs with names, do not go in the generatedNames set', () =>
 
 it('supports references to table-column-assign', () => {
   const [result] = replaceExprRefsWithPrettyRefs(
-    getIdentifiedBlocks('Table1.Column1 = 2', 'exprRef_block_0')
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Table1.Column1 = 2',
+      'exprRef_block_0.exprRef_block_1',
+      'Table1.Column1',
+      'Table1.exprRef_block_1'
+    )
   );
   const stringified = result.map(prettyPrintProgramBlock);
 
   expect(stringified).toMatchInlineSnapshot(`
     Array [
+      "(table Table1)",
       "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
       "(assign
       (def Value_1)
       (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_2)
+      (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_3)
+      (prop (ref Table1).Column1))",
+    ]
+  `);
+});
+
+it('supports references to table-column-assign (ID based)', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks('Table1 = {}', 'Table1.Column1 = 2', 'exprRef_block_1')
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(assign
+      (def Value_1)
+      (prop (ref Table1).Column1))",
+    ]
+  `);
+});
+
+it('supports references to table-column-assign (ID based) in a table column assign', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Table1.Column1 = 2',
+      'Table1.Column3 = exprRef_block_1'
+    )
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column3) (ref Column1))",
+    ]
+  `);
+});
+
+it('naming conflicts', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Table1.Column1 = 2',
+      'Table2 = {}',
+      'Table2.Column1 = 2',
+      'exprRef_block_1',
+      'exprRef_block_3'
+    )
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(table Table2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column1) 2)",
+      "(assign
+      (def Value_1)
+      (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_2)
+      (prop (ref Table2).Column1))",
+    ]
+  `);
+});
+
+it('naming conflicts (2)', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Column1 = 2',
+      'Table1.Column1 = 2',
+      'Table1.Column2 = Column1',
+      'Table2 = {}',
+      'Table2.Column1 = 2',
+      'Table2.Column2 = Column1',
+      'Table2.Column3 = Table2.Column1',
+      'exprRef_block_2',
+      'exprRef_block_5'
+    )
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(assign
+      (def Column1)
+      2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column2) (ref Column1))",
+      "(table Table2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column2) (ref Column1))",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column3) (prop (ref Table2).Column1))",
+      "(assign
+      (def Value_1)
+      (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_2)
+      (prop (ref Table2).Column1))",
+    ]
+  `);
+});
+
+it('naming conflicts (in columns)', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Table1.Year = 1',
+      'Table2 = {}',
+      'Table2.Year = 2',
+      'Table2.Column2 = Table2.Year'
+    )
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Year) 1)",
+      "(table Table2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Year) 2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column2) (prop (ref Table2).Year))",
+    ]
+  `);
+});
+
+it('naming conflicts (using IDs to refer)', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Column1 = 2',
+      'Table1.Column1 = 2',
+      'Table1.Column2 = exprRef_block_2',
+      'Table2 = {}',
+      'Table2.Column1 = 2',
+      'Table2.Column2 = Column1',
+      'Table2.Column3 = Table1.exprRef_block_2',
+      'exprRef_block_2',
+      'exprRef_block_5'
+    )
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(assign
+      (def Column1)
+      2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column2) (ref Column1))",
+      "(table Table2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column2) (ref Column1))",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column3) (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_1)
+      (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_2)
+      (prop (ref Table2).Column1))",
+    ]
+  `);
+});
+
+it('naming conflicts (using IDs to refer) (2)', () => {
+  const [result] = replaceExprRefsWithPrettyRefs(
+    getIdentifiedBlocks(
+      'Table1 = {}',
+      'Column1 = 2',
+      'Table1.Column1 = 2',
+      'Table1.Column2 = exprRef_block_2',
+      'Table2 = {}',
+      'Table2.Column1 = 2',
+      'Table2.Column2 = Column1',
+      'Table2.Column3 = Table1.exprRef_block_2',
+      'exprRef_block_2',
+      'exprRef_block_5'
+    )
+  );
+  const stringified = result.map(prettyPrintProgramBlock);
+
+  expect(stringified).toMatchInlineSnapshot(`
+    Array [
+      "(table Table1)",
+      "(assign
+      (def Column1)
+      2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table1) (coldef Column2) (ref Column1))",
+      "(table Table2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column1) 2)",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column2) (ref Column1))",
+      "(table-column-assign (tablepartialdef Table2) (coldef Column3) (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_1)
+      (prop (ref Table1).Column1))",
+      "(assign
+      (def Value_2)
+      (prop (ref Table2).Column1))",
     ]
   `);
 });

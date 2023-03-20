@@ -16,6 +16,7 @@ import {
   NotebookResults,
   ProgramBlock,
 } from './types';
+import { getDefinedSymbol, getIdentifierString } from './utils';
 
 export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {
@@ -103,9 +104,8 @@ export function getIdentifiedBlock(
   source: string,
   i = 0
 ): IdentifiedBlock | IdentifiedError {
-  const { solution: block, error } = parseBlock(source);
-
   const id = `block-${i}`;
+  const { solution: block, error } = parseBlock(source);
 
   if (error) {
     return {
@@ -119,7 +119,18 @@ export function getIdentifiedBlock(
 
   block.id = id;
 
-  return { type: 'identified-block', id, block };
+  const ret: IdentifiedBlock = { type: 'identified-block', id, block };
+
+  if (block.args[0]?.type === 'table-column-assign') {
+    ret.definesTableColumn = [
+      getIdentifierString(block.args[0].args[0]),
+      getIdentifierString(block.args[0].args[1]),
+    ];
+  } else {
+    ret.definesVariable = getDefinedSymbol(block.args[0]) ?? undefined;
+  }
+
+  return ret;
 }
 
 export const simplifyInBlockResults = (results: IdentifiedResult[]) => {

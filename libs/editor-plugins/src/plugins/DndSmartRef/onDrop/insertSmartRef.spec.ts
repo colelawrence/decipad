@@ -9,7 +9,7 @@ import { insertSmartRef } from './insertSmartRef';
 jest.mock('nanoid', () => ({ nanoid: () => 'randomId' }));
 
 it('can insert a smart ref', () => {
-  const ref = insertSmartRef(ELEMENT_CODE_LINE, 'block-id');
+  const ref = insertSmartRef(ELEMENT_CODE_LINE, 'block-id', null);
 
   expect(ref).toMatchInlineSnapshot(`
     Array [
@@ -23,6 +23,7 @@ it('can insert a smart ref', () => {
             "text": "",
           },
         ],
+        "columnId": null,
         "id": "randomId",
         "type": "smart-ref",
       },
@@ -34,7 +35,7 @@ it('can insert a smart ref', () => {
 });
 
 it('can insert a smart ref into table formula', () => {
-  const ref = insertSmartRef(ELEMENT_TABLE_COLUMN_FORMULA, 'block-id');
+  const ref = insertSmartRef(ELEMENT_TABLE_COLUMN_FORMULA, 'block-id', null);
 
   expect(ref).toMatchInlineSnapshot(`
     Array [
@@ -48,6 +49,7 @@ it('can insert a smart ref into table formula', () => {
             "text": "",
           },
         ],
+        "columnId": null,
         "id": "randomId",
         "type": "smart-ref",
       },
@@ -59,7 +61,7 @@ it('can insert a smart ref into table formula', () => {
 });
 
 it('can insert a magic number into a paragraph', () => {
-  const newNodes = insertSmartRef(ELEMENT_PARAGRAPH, 'block-id');
+  const newNodes = insertSmartRef(ELEMENT_PARAGRAPH, 'block-id', null);
 
   expect(newNodes).toMatchInlineSnapshot(`
     Array [
@@ -72,7 +74,7 @@ it('can insert a magic number into a paragraph', () => {
 });
 
 it('adds + if it will parse to something good', () => {
-  const newNodes = insertSmartRef(ELEMENT_CODE_LINE, 'block-id', '1');
+  const newNodes = insertSmartRef(ELEMENT_CODE_LINE, 'block-id', null, '1');
 
   expect(newNodes).toMatchInlineSnapshot(`
     Array [
@@ -86,6 +88,7 @@ it('adds + if it will parse to something good', () => {
             "text": "",
           },
         ],
+        "columnId": null,
         "id": "randomId",
         "type": "smart-ref",
       },
@@ -100,6 +103,7 @@ it('eliminates spurious spaces', () => {
   const [before, , after] = insertSmartRef(
     ELEMENT_CODE_LINE,
     'block-id',
+    null,
     'hello ',
     ' world'
   ) as Text[];

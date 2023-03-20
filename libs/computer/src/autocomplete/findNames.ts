@@ -1,4 +1,5 @@
 import { AST, AutocompleteName, serializeType } from '@decipad/language';
+import { getDefined } from '@decipad/utils';
 import { getDefinedSymbol } from '../utils';
 import { ComputationRealm } from '../computer/ComputationRealm';
 import { getExprRef } from '../exprRefs';
@@ -15,6 +16,17 @@ export function* findNames(
 
   const [ownTableName, ownVariableName] =
     realm.inferContext.stack.getNsNameFromId(getExprRef(inBlockId ?? '')) ?? [];
+
+  const tableIdsByName = new Map<string, string>(
+    program.flatMap((b) => {
+      if (b.args[0]?.type === 'table') {
+        const [tName] = b.args[0].args;
+        return [[tName.args[0], b.id]];
+      } else {
+        return [];
+      }
+    })
+  );
 
   for (const block of program) {
     for (const statement of block.args) {
@@ -64,7 +76,8 @@ export function* findNames(
               name,
               inTable: tableName,
               isLocal,
-              // No blockId because the table (which has the blockid) has n columns
+              blockId: undefined, // don't want to get into smart refs with text code tables
+              columnId: undefined, // unknown because in text form not all columns have ids
             };
           }
         }
@@ -75,7 +88,10 @@ export function* findNames(
         const columnName = statement.args[1].args[0];
         const isLocal = ownTableName === tableName;
 
-        if (ownTableName === tableName && ownVariableName === columnName) {
+        if (
+          (ownTableName === tableName && ownVariableName === columnName) ||
+          !tableIdsByName.has(tableName)
+        ) {
           continue;
         }
 
@@ -85,9 +101,10 @@ export function* findNames(
           kind: 'column',
           type: serializeType(type),
           name,
+          blockId: getDefined(tableIdsByName.get(tableName)),
+          columnId: block.id,
           inTable: tableName,
           isLocal,
-          blockId: block.id,
         };
       }
 

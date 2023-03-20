@@ -211,15 +211,47 @@ export class Computer {
     return undefined;
   }
 
-  getSymbolOrColumnName$ = listenerHelper(
+  getSymbolOrTableDotColumn$ = listenerHelper(
     this.results,
-    (_, blockId: string) => {
+    (_, blockId: string, columnId: string | null) => {
+      // Find "Table.Column"
+      if (columnId) {
+        const column = this.latestProgram.find((p) => p.id === columnId);
+        if (column?.definesTableColumn) {
+          return column.definesTableColumn.join('.');
+        }
+      }
+
+      // Find just "Column" (or "Table.Column" when referred outside)
+      const column = this.latestProgram.find((p) => p.id === blockId);
+      if (column?.definesTableColumn) {
+        return columnId
+          ? column.definesTableColumn.join('.')
+          : column.definesTableColumn[1];
+      }
+
       const programBlock = this.latestProgram.find((p) => p.id === blockId);
       return (
-        programBlock?.definesTableColumn?.join('.') ||
-        programBlock?.definesVariable ||
-        this.getSymbolDefinedInBlock(blockId)
+        programBlock?.definesVariable || this.getSymbolDefinedInBlock(blockId)
       );
+    }
+  );
+
+  /** Used for smart refs, which use [string, string | null] to identify a variable or column. May return undefined if definesVariable is unknown for the block in question */
+  getBlockIdAndColumnId$ = listenerHelper(
+    this.results,
+    (_, blockId: string): [string, string | null] | undefined => {
+      const programBlock = this.latestProgram.find((p) => p.id === blockId);
+
+      if (programBlock?.definesTableColumn) {
+        const [tableName] = programBlock.definesTableColumn;
+        const tableId = this.getVarBlockId(tableName);
+        if (!tableId) return undefined;
+
+        return [tableId, blockId];
+      }
+
+      return [blockId, null];
     }
   );
 

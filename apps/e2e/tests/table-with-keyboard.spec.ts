@@ -159,7 +159,10 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await page.waitForTimeout(Timeouts.typing);
     await page.keyboard.type('5 + 4');
     const codeBlock = await page.waitForSelector('section:has-text("=")');
-    const codeBlockText = await codeBlock.innerText();
+    const codeBlockText = (await codeBlock.innerText()).replace(
+      /\n(\n|\s)+/g,
+      '\n'
+    );
     expect(codeBlockText).toBe(`Column3 =  1 + 1
 Column5 =  2 / Column4
 Column6 =  5 + 4`);

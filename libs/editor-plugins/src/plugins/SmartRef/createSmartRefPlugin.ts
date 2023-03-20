@@ -1,6 +1,7 @@
 import { createTPluginFactory, ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { SmartRef } from './components/SmartRef';
 import { createSmartRefKeysPlugin } from './plugins/createSmartRefKeysPlugin';
+import { migrateTableColumnSmartRefs } from './plugins/migrateTableColumnSmartRefs';
 
 export const createSmartRefPlugin = createTPluginFactory({
   key: ELEMENT_SMART_REF,
@@ -9,5 +10,5 @@ export const createSmartRefPlugin = createTPluginFactory({
   isVoid: true,
   isElement: true,
   component: SmartRef,
-  plugins: [createSmartRefKeysPlugin()],
+  plugins: [createSmartRefKeysPlugin(), migrateTableColumnSmartRefs()],
 });

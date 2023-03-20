@@ -68,7 +68,10 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const computer = useComputer();
-  const symbolName = computer.getSymbolOrColumnName$.use(element.blockId);
+  const symbolName = computer.getSymbolOrTableDotColumn$.use(
+    element.blockId,
+    element.columnId
+  );
 
   const errorMessage =
     (symbolName == null &&
@@ -82,8 +85,8 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   const isSelected = useSelected();
 
   useEffect(() => {
-    const symbolName$ = computer.getSymbolOrColumnName$
-      .observe(element.blockId)
+    const symbolName$ = computer.getSymbolOrTableDotColumn$
+      .observe(element.blockId, element.columnId)
       .pipe(debounceTime(5000))
       .pipe(filter((name) => !!name));
 
@@ -94,7 +97,13 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
     });
 
     return () => sub.unsubscribe();
-  }, [computer, element.blockId, element.lastSeenVariableName, mutateLastSeen]);
+  }, [
+    computer,
+    element.blockId,
+    element.columnId,
+    element.lastSeenVariableName,
+    mutateLastSeen,
+  ]);
 
   return (
     <span {...attributes}>
