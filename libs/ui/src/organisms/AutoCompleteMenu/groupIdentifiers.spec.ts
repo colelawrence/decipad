@@ -71,7 +71,7 @@ it('groups identifiers', () => {
           },
         ],
         "tableName": "Table1",
-        "title": "Table1",
+        "title": "Table1 Table",
       },
     ]
   `);
@@ -154,7 +154,7 @@ it('Places my table columns first', () => {
           },
         ],
         "tableName": "Table1",
-        "title": "Table1",
+        "title": "Table1 Table",
       },
       Object {
         "items": Array [

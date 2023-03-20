@@ -1,22 +1,37 @@
 import { FC } from 'react';
 import { css } from '@emotion/react';
-import { cssVar, smallCode, p12Medium, p12Regular } from '../../primitives';
+import { cssVar, p13Bold, p12Regular, p12Medium } from '../../primitives';
+import { Formula } from '../../icons';
 
-const explanationTextStyles = css({
-  lineHeight: '16px',
-  padding: '4px',
-  fontSize: '8pt',
-  color: cssVar('weakTextColor'),
-  code: css(smallCode, {
+const explanationTextStyles = css(p12Medium, {
+  padding: '4px 2px',
+  color: cssVar('weakerTextColor'),
+  code: css({
     display: 'block',
+    height: '100%',
     borderRadius: '3px',
-    padding: '0.25rem',
+    padding: '1px 2px',
     backgroundColor: cssVar('tooltipCodeBackground'),
     color: cssVar('weakTextColor'),
   }),
 });
 
-const titleTextStyles = css(p12Medium);
+const iconStyles = css({
+  width: '16px',
+  height: '16px',
+  display: 'grid',
+  borderRadius: '6px',
+  marginLeft: '3px',
+});
+
+const titleTextStyles = css(p13Bold, {
+  color: cssVar('weakTextColor'),
+});
+
+const sectionStyles = css({
+  marginTop: '5px',
+  paddingLeft: '1px',
+});
 
 const maxSpace = css({
   maxHeight: '200px',
@@ -24,14 +39,14 @@ const maxSpace = css({
 });
 
 const FormulaTooltipBoxStyles = css(p12Regular, {
-  width: '220px',
+  width: '235px',
   backgroundColor: cssVar('notebookStateDisabledLight'),
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   margin: '3px 3px 3px 0px',
   borderRadius: '8px',
-  padding: '4px 0px 0px 2px',
+  padding: '2px 2px 0px 3px',
   color: cssVar('normalTextColor'),
 });
 
@@ -59,24 +74,34 @@ export const AutoCompleteMenuFormulaTooltip = ({
     <div css={FormulaTooltipContentStyles}>
       <div css={FormulaTooltipBoxStyles}>
         {formulaGroup && (
-          <span>
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <span css={iconStyles}>
+              <Formula strokeColor={cssVar('weakTextColor')} />
+            </span>
             <span css={[explanationTextStyles, titleTextStyles, maxSpace]}>
-              {formulaGroup}
+              Formula for {formulaGroup}
             </span>
           </span>
         )}
-        {explanation && (
-          <span css={[explanationTextStyles, maxSpace]}>{explanation}</span>
-        )}
-        {syntax && (
-          <span css={[explanationTextStyles, maxSpace]}>
-            <code>{syntax}</code>
-          </span>
-        )}
+        <span css={sectionStyles}>
+          {explanation && (
+            <span css={[explanationTextStyles, maxSpace]}>{explanation}</span>
+          )}
+          {syntax && (
+            <p css={[explanationTextStyles]}>
+              <code>{syntax}</code>
+            </p>
+          )}
+        </span>
         {example && (
-          <span>
+          <span css={sectionStyles}>
             <span css={[explanationTextStyles, maxSpace]}>Example</span>
-            <p css={[explanationTextStyles, maxSpace]}>
+            <p css={[explanationTextStyles]}>
               <code>{example} </code>
             </p>
           </span>

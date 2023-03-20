@@ -15,7 +15,7 @@ import { once } from 'ramda';
 import { docs } from '@decipad/routing';
 import { Link, AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
-import { cssVar, mediumShadow, p10Medium, setCssVar } from '../../primitives';
+import { cssVar, mediumShadow, p12Medium, setCssVar } from '../../primitives';
 import { groupIdentifiers } from './groupIdentifiers';
 
 import { AutoCompleteMenuFormulaTooltip } from '../../atoms/AutoCompleteMenuFormulaTooltip/AutoCompleteMenuIFormulaTooltip';
@@ -57,7 +57,7 @@ const exploreDocsLinkIconStyles = css({
 });
 
 const footerStyles = css(
-  p10Medium,
+  p12Medium,
   {
     padding: '2px 0px 4px 6px',
     width: '100%',
@@ -71,6 +71,7 @@ const footerStyles = css(
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: '4px',
+    zIndex: '4',
   },
   setCssVar('currentTextColor', cssVar('weakTextColor'))
 );
@@ -102,8 +103,10 @@ const styles = (top: boolean) =>
   });
 
 const mainStyles = css({
-  padding: '3px',
+  padding: '3px 3px 8px 3px',
   width: '200px',
+  maxHeight: '166px',
+  overflowY: 'auto',
 });
 
 export type Identifier = {

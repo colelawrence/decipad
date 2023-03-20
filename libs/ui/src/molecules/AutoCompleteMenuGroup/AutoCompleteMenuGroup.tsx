@@ -2,16 +2,21 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { AutoCompleteMenuItem } from '../../atoms';
-import { cssVar, p13Medium } from '../../primitives';
+import { cssVar, p13Bold } from '../../primitives';
 
 const styles = css({
   display: 'grid',
   gap: '4px',
+  maxWidth: '200px',
 });
 
-const titleStyles = css(p13Medium, {
-  padding: '8px 8px 0px',
-  color: cssVar('weakerTextColor'),
+const titleStyles = css(p13Bold, {
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  padding: '6px 5px 2px 5px',
+  color: cssVar('weakTextColor'),
+  maxWidth: '200px',
+  overflowX: 'auto',
 });
 
 const itemsStyles = css({
