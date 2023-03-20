@@ -1,115 +1,27 @@
-import { createDocSyncEditor } from '@decipad/docsync';
-import { create } from 'zustand';
+import { StoreApi, useStore } from 'zustand';
 import { captureException } from '@sentry/browser';
-import { take } from 'rxjs';
-import { Computer, setErrorReporter } from '@decipad/computer';
-import { createTPlateEditor } from '@decipad/editor-types';
+import { setErrorReporter } from '@decipad/computer';
 import { NotebookState } from './state';
+import { createNotebookStore } from './oneNotebookState';
 
 // set the computer's error reporter
 setErrorReporter(captureException);
 
-const LOAD_TIMEOUT_MS = 5000;
+const notebooks = new Map<string, StoreApi<NotebookState>>();
 
-const initialState = (): Omit<
-  NotebookState,
-  'initComputer' | 'initEditor' | 'destroy' | 'setInitialFocusDone'
-> => ({
-  syncClientState: 'idle',
-  editor: undefined,
-  computer: undefined,
-  loadedFromLocal: false,
-  loadedFromRemote: false,
-  timedOutLoadingFromRemote: false,
-  hasLocalChanges: false,
-  initialFocusDone: false,
-});
+const getNotebookStore = (notebookId: string): StoreApi<NotebookState> => {
+  let store = notebooks.get(notebookId);
+  if (!store) {
+    const onDestroy = () => {
+      // eslint-disable-next-line no-console
+      console.log(`notebook ${notebookId} destroyed`);
+      notebooks.delete(notebookId);
+    };
+    store = createNotebookStore(onDestroy);
+    notebooks.set(notebookId, store);
+  }
+  return store;
+};
 
-const useStore = create<NotebookState>((set, get) => ({
-  ...initialState(),
-  initComputer: () => {
-    set({ computer: new Computer() });
-  },
-  initEditor: (notebookId, { plugins, docsync }, getSession) => {
-    if (docsync.initialState == null) {
-      // do not accept initializations without initial state
-      return;
-    }
-
-    // verify that if we have a matching connected docsync instance
-    const { editor: oldEditor, syncClientState } = get();
-    if (oldEditor) {
-      if (
-        syncClientState === 'created' &&
-        oldEditor.id === notebookId &&
-        oldEditor.isReadOnly === docsync.readOnly &&
-        !oldEditor.destroyed
-      ) {
-        // the one we have is just fine
-        return;
-      }
-      try {
-        oldEditor.disconnect();
-        oldEditor.destroy();
-      } catch (err) {
-        console.error('error destroying old docsync instance', err);
-      }
-    }
-
-    const editor = createTPlateEditor({
-      id: notebookId,
-      plugins,
-      disableCorePlugins: { history: true },
-    });
-
-    const loadTimeout = setTimeout(() => {
-      set({ timedOutLoadingFromRemote: true });
-    }, LOAD_TIMEOUT_MS);
-    const docSyncEditor = createDocSyncEditor(
-      notebookId,
-      {
-        ...docsync,
-        editor,
-        onError: captureException,
-      },
-      getSession
-    );
-
-    docSyncEditor.onLoaded((source) => {
-      if (source === 'local') {
-        set({ loadedFromLocal: true });
-      } else if (source === 'remote') {
-        clearTimeout(loadTimeout);
-        set({ loadedFromRemote: true });
-      }
-    });
-    docSyncEditor
-      .hasLocalChanges()
-      .pipe(take(1))
-      .subscribe(() => {
-        set({ hasLocalChanges: true });
-      });
-    set({
-      editor: docSyncEditor,
-      notebookHref: window.location.pathname,
-      syncClientState: 'created',
-      loadedFromLocal: false,
-      loadedFromRemote: false,
-      timedOutLoadingFromRemote: false,
-      hasLocalChanges: false,
-    });
-  },
-  setInitialFocusDone: () => {
-    set({ initialFocusDone: true });
-  },
-  destroy: () => {
-    const { syncClientState, editor } = get();
-    if (syncClientState === 'created') {
-      editor?.disconnect();
-      editor?.destroy();
-      set(initialState());
-    }
-  },
-}));
-
-export const useNotebookState = useStore;
+export const useNotebookState = (notebookId: string) =>
+  useStore(getNotebookStore(notebookId));

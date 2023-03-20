@@ -32,6 +32,7 @@ const uploadProgressWrapperStyles = css({
 });
 
 type EditorAttachmentsHandlerProps = PropsWithChildren<{
+  notebookId: string;
   getAttachmentForm: (
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;
@@ -39,13 +40,14 @@ type EditorAttachmentsHandlerProps = PropsWithChildren<{
 }>;
 
 export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
+  notebookId,
   getAttachmentForm,
   onAttached,
   children,
 }) => {
   const toast = useToast();
   const computer = useComputer();
-  const { editor } = useNotebookState();
+  const { editor } = useNotebookState(notebookId);
 
   const [attachments, setAttachments] = useState(
     defaultEditorAttachmentsContextValue
