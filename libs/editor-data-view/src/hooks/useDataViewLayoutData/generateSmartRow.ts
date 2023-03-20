@@ -13,6 +13,7 @@ export interface GenerateSmartRowProps {
   previousColumns: PreviousColumns;
   parentHighlight$?: BehaviorSubject<boolean>;
   global?: boolean;
+  rotate: boolean;
 }
 
 export const generateSmartRow = ({
@@ -22,6 +23,7 @@ export const generateSmartRow = ({
   previousColumns,
   parentHighlight$,
   global = false,
+  rotate,
 }: GenerateSmartRowProps): DataGroup => {
   const [firstColumn, ...rest] = columns;
 
@@ -37,6 +39,7 @@ export const generateSmartRow = ({
               previousColumns,
               parentHighlight$,
               global,
+              rotate,
             }),
           ]
         : [],

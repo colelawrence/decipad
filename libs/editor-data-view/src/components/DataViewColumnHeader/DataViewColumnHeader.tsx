@@ -22,10 +22,11 @@ import { useComputer } from '@decipad/react-contexts';
 import { useDataViewActions, useDragColumn, useDropColumn } from '../../hooks';
 import { availableRoundings } from './availableRoundings';
 
-export const DataViewColumnHeader: PlateComponent = ({
+export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   attributes,
   children,
   element,
+  overridePath,
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW_TH);
   const editor = useTEditorRef();
@@ -35,12 +36,13 @@ export const DataViewColumnHeader: PlateComponent = ({
     'DataViewColumn'
   );
   const path = useNodePath(element);
+  const actualPath = overridePath ?? path;
   const dataView: DataViewElement | undefined = useMemo(() => {
-    const dataViewPath = path && Path.parent(Path.parent(path));
+    const dataViewPath = actualPath && Path.parent(Path.parent(actualPath));
     return (
       dataViewPath && getNodeEntry<DataViewElement>(editor, dataViewPath)?.[0]
     );
-  }, [editor, path]);
+  }, [editor, actualPath]);
   const columnHeaderRef = useRef<HTMLTableCellElement>(null);
 
   const [{ isOverCurrent }, connectDropTarget, hoverDirection] = useDropColumn(
@@ -52,14 +54,14 @@ export const DataViewColumnHeader: PlateComponent = ({
   );
 
   const availableAggregations = useMemo(() => {
-    if (!path || isFirstChild(path)) {
+    if (!actualPath || isFirstChild(actualPath)) {
       // first column: do not present aggregation choices
       return [];
     }
     return columnAggregationTypes(element.cellType as TableCellType).map(
       (agg) => agg.name
     );
-  }, [element.cellType, path]);
+  }, [element.cellType, actualPath]);
 
   const onAggregationChange = useElementMutatorCallback(
     editor,
@@ -70,10 +72,10 @@ export const DataViewColumnHeader: PlateComponent = ({
   const { onDeleteColumn } = useDataViewActions(editor, dataView);
 
   const handleColumnDelete = useCallback(() => {
-    if (path) {
-      onDeleteColumn(path);
+    if (actualPath) {
+      onDeleteColumn(actualPath);
     }
-  }, [onDeleteColumn, path]);
+  }, [onDeleteColumn, actualPath]);
 
   const computer = useComputer();
   const columnName =
@@ -113,6 +115,7 @@ export const DataViewColumnHeader: PlateComponent = ({
       isOverCurrent={isOverCurrent}
       alignRight={isCellAlignRight(element.cellType)}
       ref={columnHeaderRef}
+      rotate={dataView?.rotate ?? false}
     >
       {children}
     </UIDataViewColumnHeader>

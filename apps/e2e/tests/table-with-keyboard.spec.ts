@@ -134,9 +134,9 @@ test.describe('Adding tables with keyboard (and more)', () => {
     const codeBlock = await page.waitForSelector(
       'section:has-text("Column5 =")'
     );
-    await waitForExpect(async () =>
-      expect(await codeBlock.innerText()).toContain('Column5 =')
-    );
+    await waitForExpect(async () => {
+      await expect(await codeBlock.innerText()).toContain('Column5 =');
+    });
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await focusOnTableColumnFormula(page, 'Column5 =');

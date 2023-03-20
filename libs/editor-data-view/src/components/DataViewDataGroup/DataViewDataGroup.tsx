@@ -1,9 +1,9 @@
 import { isCellAlignRight } from 'libs/editor-table/src/components';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { Subscription } from 'rxjs';
-import { AggregationKind, DataGroup } from '../../types';
-import { Element as GroupElement } from '../../utils/treeToTable';
-import { HeaderProps, SmartProps } from '../DataViewDataLayout';
+import type { Subscription } from 'rxjs';
+import type { AggregationKind, DataGroup } from '../../types';
+import type { Element as GroupElement } from '../../utils/types';
+import type { HeaderProps, SmartProps } from '../DataViewDataLayout';
 
 interface DataViewDataGroupElementProps {
   tableName: string;
@@ -17,6 +17,8 @@ interface DataViewDataGroupElementProps {
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   groupLength: number;
   index: number;
+  rotate: boolean;
+  isFirstLevel: boolean;
 }
 
 export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
@@ -31,6 +33,8 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   onChangeExpandedGroups,
   groupLength,
   index,
+  rotate,
+  isFirstLevel,
 }) => {
   const [parentHover, setParentHover] = useState(false);
   const [selfHover, setSelfHover] = useState(false);
@@ -78,6 +82,8 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       groupLength={groupLength}
       index={index}
       global={element.global}
+      rotate={rotate}
+      isFirstLevelHeader={isFirstLevel}
     />
   ) : (
     <SmartCell
@@ -92,6 +98,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       alignRight={isCellAlignRight(element.column?.type)}
       previousColumns={element.previousColumns}
       global={element.global}
+      rotate={rotate}
     />
   );
 };

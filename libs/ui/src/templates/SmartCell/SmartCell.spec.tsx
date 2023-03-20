@@ -6,7 +6,7 @@ it('renders', () => {
     <table>
       <tbody>
         <tr>
-          <SmartCell aggregationType="aggtype" />
+          <SmartCell rotate={false} aggregationType="aggtype" />
         </tr>
       </tbody>
     </table>

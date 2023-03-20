@@ -6,12 +6,18 @@ interface LayoutPowerDataProps {
   columns: VirtualColumn[];
   aggregationTypes: Array<AggregationKind | undefined>;
   expandedGroups: string[] | undefined;
+  includeTotal?: boolean;
+  preventExpansion: boolean;
+  rotate: boolean;
 }
 
 export const layoutPowerData = async ({
   columns,
   aggregationTypes,
   expandedGroups,
+  includeTotal = true,
+  preventExpansion = false,
+  rotate,
 }: LayoutPowerDataProps): Promise<DataGroup[]> => {
   const rootGroups = await generateGroups({
     columns,
@@ -19,15 +25,16 @@ export const layoutPowerData = async ({
     expandedGroups,
     columnIndex: 0,
     previousColumns: [],
+    preventExpansion,
+    rotate,
   });
 
-  const totalGroup = generateTotalGroup({
-    columns,
-    aggregationTypes,
-  });
+  const totalGroup =
+    includeTotal &&
+    generateTotalGroup({
+      columns,
+      aggregationTypes,
+    });
 
-  return Promise.all([
-    ...rootGroups,
-    ...(totalGroup != null ? [totalGroup] : []),
-  ]);
+  return Promise.all([...rootGroups, ...(totalGroup ? [totalGroup] : [])]);
 };

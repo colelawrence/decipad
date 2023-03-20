@@ -1,8 +1,11 @@
 import { AutocompleteName } from '@decipad/computer';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
+import { Invisible } from '../../atoms';
+import { CircularArrow } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
 import { cssVar, p14Regular, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -20,6 +23,7 @@ const dataViewWrapperStyles = css({
 const dataViewControlsStyles = css({
   display: 'flex',
   flexFlow: 'row wrap',
+  gap: '4px',
 });
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
@@ -128,6 +132,18 @@ const dataViewTableOverflowStyles = css({
   minWidth: `calc((100vw - 700px) / 2)`,
 });
 
+const iconWrapperStyles = css({
+  display: 'inline-flex',
+  //
+  // strange safari bug makes errors not show
+  // if this is replaced with simply height and width
+  //
+  '> svg': {
+    height: '16px',
+    width: '16px',
+  },
+});
+
 interface DataViewProps {
   readonly availableVariableNames: AutocompleteName[];
   readonly variableName: string;
@@ -136,6 +152,8 @@ interface DataViewProps {
   readonly onChangeVariableName?: (varName: string) => void;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
+  readonly rotate: boolean;
+  readonly onRotated: (rotated: boolean) => void;
   children: ReactNode;
   data: ReactNode;
 }
@@ -150,6 +168,8 @@ export const DataView: FC<DataViewProps> = ({
   onChangeColor = noop,
   data,
   children,
+  rotate,
+  onRotated,
 }): ReturnType<FC> => {
   const [caption, thead, addNewColumnComponent] = Children.toArray(children);
   const readOnly = useIsEditorReadOnly();
@@ -164,7 +184,11 @@ export const DataView: FC<DataViewProps> = ({
         hideAddDataViewButton: true,
       }}
     >
-      <div css={dataViewWrapperStyles} aria-roledescription="data view">
+      <div
+        contentEditable={false}
+        css={dataViewWrapperStyles}
+        aria-roledescription="data view"
+      >
         <div css={dataViewControlsStyles}>
           <div css={tableCaptionWrapperStyles}>{caption}</div>
           {!readOnly && (
@@ -175,12 +199,19 @@ export const DataView: FC<DataViewProps> = ({
               onChangeVariableName={onChangeVariableName}
             />
           )}
+          {isFlagEnabled('ROTATED_DATA_VIEW') && (
+            <button onClick={() => onRotated(!rotate)} title="Rotate data view">
+              <span css={iconWrapperStyles}>
+                <CircularArrow />
+              </span>
+            </button>
+          )}
         </div>
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
           <div css={tableScroll}>
             <table css={dataViewTableStyles} contentEditable={false}>
-              <thead>{thead}</thead>
+              <thead>{rotate ? <Invisible>{thead}</Invisible> : thead}</thead>
               <tbody aria-roledescription="data view data">{data}</tbody>
             </table>
             {variableName && addNewColumnComponent}

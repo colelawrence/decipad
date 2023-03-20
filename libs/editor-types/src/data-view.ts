@@ -37,6 +37,7 @@ export interface DataViewElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW;
   children: [DataViewCaptionElement, DataViewHeaderRowElement];
   expandedGroups?: string[];
+  rotate?: boolean;
   varName?: string;
   color?: string;
   icon?: string;

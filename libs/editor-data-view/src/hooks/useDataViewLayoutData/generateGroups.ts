@@ -18,6 +18,8 @@ export interface GenerateGroupsProps {
   previousColumns: PreviousColumns;
   parentGroupId?: string;
   parentHighlight$?: BehaviorSubject<boolean>;
+  preventExpansion: boolean;
+  rotate: boolean;
 }
 
 export type GenerateSubSmartRowProps = Omit<
@@ -41,6 +43,8 @@ export const generateGroups = async ({
   previousColumns,
   parentHighlight$,
   parentGroupId,
+  preventExpansion,
+  rotate,
 }: GenerateGroupsProps & {
   aggregationTypes: (AggregationKind | undefined)[];
   expandedGroups?: string[];
@@ -101,6 +105,8 @@ export const generateGroups = async ({
       previousColumns: slicePreviousColumns,
       generateGroups: subGenerateGroups,
       generateSmartRow: subGenerateSmartRow,
+      preventExpansion,
+      rotate,
     });
   });
 

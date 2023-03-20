@@ -10,6 +10,9 @@ interface UseDataViewLayoutDataProps {
   aggregationTypes: Array<AggregationKind | undefined>;
   roundings: Array<string | undefined>;
   expandedGroups: string[] | undefined;
+  includeTotal?: boolean;
+  preventExpansion: boolean;
+  rotate: boolean;
 }
 
 export const useDataViewLayoutData = ({
@@ -18,6 +21,9 @@ export const useDataViewLayoutData = ({
   aggregationTypes,
   roundings,
   expandedGroups,
+  includeTotal = true,
+  preventExpansion = false,
+  rotate,
 }: UseDataViewLayoutDataProps): DataGroup[] => {
   const columns = useReplacingColumns({
     tableName,
@@ -34,8 +40,18 @@ export const useDataViewLayoutData = ({
         })),
         aggregationTypes,
         expandedGroups,
+        includeTotal,
+        preventExpansion,
+        rotate,
       }),
-    [aggregationTypes, columns, expandedGroups]
+    [
+      aggregationTypes,
+      columns,
+      expandedGroups,
+      includeTotal,
+      preventExpansion,
+      rotate,
+    ]
   );
 
   const [resolvedDataGroups, setResolvedDataGroups] = useState<DataGroup[]>([]);

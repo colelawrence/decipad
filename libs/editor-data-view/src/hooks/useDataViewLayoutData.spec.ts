@@ -10,6 +10,8 @@ describe('layoutPowerData', () => {
         columns: [],
         aggregationTypes: [],
         expandedGroups: [],
+        preventExpansion: false,
+        rotate: false,
       })
     ).toEqual([]);
   });
@@ -29,6 +31,8 @@ describe('layoutPowerData', () => {
         columns,
         aggregationTypes: [],
         expandedGroups: [],
+        preventExpansion: false,
+        rotate: false,
       })
     ).toMatchObject([
       {
@@ -60,6 +64,8 @@ describe('layoutPowerData', () => {
         columns,
         aggregationTypes: [],
         expandedGroups: [],
+        preventExpansion: false,
+        rotate: false,
       })
     ).toMatchObject([
       {
@@ -112,6 +118,8 @@ describe('layoutPowerData', () => {
         columns,
         aggregationTypes: [],
         expandedGroups: [],
+        preventExpansion: false,
+        rotate: false,
       })
     ).toMatchObject([
       {
@@ -160,6 +168,8 @@ describe('layoutPowerData', () => {
         columns,
         aggregationTypes: [],
         expandedGroups: [],
+        preventExpansion: false,
+        rotate: false,
       })
     ).toMatchObject([
       {
@@ -255,6 +265,8 @@ describe('layoutPowerData', () => {
         columns,
         aggregationTypes: [],
         expandedGroups: [],
+        preventExpansion: false,
+        rotate: false,
       })
     ).toMatchObject([
       {

@@ -5,7 +5,7 @@ import { dequal } from 'dequal';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Column } from '../types';
 
-const DEBOUNCE_RESULT_MS = 500;
+const DEBOUNCE_RESULT_MS = 100;
 
 const getColumnType = (type: SerializedType): SerializedType => {
   if (type.kind === 'column') {

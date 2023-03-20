@@ -47,6 +47,7 @@ export interface DataViewColumnHeaderProps extends DataViewColumnMenuProps {
   isOverCurrent?: boolean;
   alignRight?: boolean;
   global?: boolean;
+  rotate: boolean;
 }
 
 export type Ref = HTMLTableCellElement;
@@ -65,7 +66,7 @@ const dataViewColumnHeaderStyles = css({
   borderBottomColor: cssVar('evenStrongerHighlightColor'),
 });
 
-const borderLeftStyles = css({
+const dataViewColumnHeaderBorderLeftStyles = css({
   '&::before': {
     background: 'blue',
     translate: '-8px',
@@ -78,14 +79,18 @@ const dataViewColumnHeaderSelectWrapperStyles = css({
   gap: '8px',
 });
 
-const alignRightStyles = css({
+const dataViewColumnHeaderAlignRightStyles = css({
   justifyContent: 'flex-end',
 });
 
-const globalStyles = {
+const dataViewColumnHeaderGlobalStyles = {
   color: cssVar('weakTextColor'),
   backgroundColor: cssVar('highlightColor'),
 };
+
+const dataViewColumnHeaderRotateStyles = css({
+  borderColor: cssVar('strongerHighlightColor'),
+});
 
 export const DataViewColumnHeader = forwardRef<
   HTMLTableCellElement,
@@ -101,6 +106,7 @@ export const DataViewColumnHeader = forwardRef<
     isOverCurrent,
     alignRight = false,
     global = false,
+    rotate,
     ...rest
   }: DataViewColumnHeaderProps,
   ref
@@ -128,9 +134,12 @@ export const DataViewColumnHeader = forwardRef<
       {...attributes}
       css={[
         dataViewColumnHeaderStyles,
-        isOverCurrent && hoverDirection === 'left' && borderLeftStyles,
+        isOverCurrent &&
+          hoverDirection === 'left' &&
+          dataViewColumnHeaderBorderLeftStyles,
         isOverCurrent && hoverDirection === 'right' && borderRightStyles,
-        global && globalStyles,
+        global && dataViewColumnHeaderGlobalStyles,
+        rotate && dataViewColumnHeaderRotateStyles,
       ]}
       contentEditable={false}
       ref={refs}
@@ -139,7 +148,7 @@ export const DataViewColumnHeader = forwardRef<
         // eslint-disable-next-line no-sparse-arrays
         css={[
           dataViewColumnHeaderSelectWrapperStyles,
-          alignRight ? alignRightStyles : null,
+          alignRight ? dataViewColumnHeaderAlignRightStyles : null,
         ]}
         contentEditable={false}
       >

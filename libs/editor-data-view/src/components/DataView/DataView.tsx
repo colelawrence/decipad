@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_DATA_VIEW,
@@ -8,6 +8,7 @@ import {
 import {
   assertElementType,
   useElementMutatorCallback,
+  useNodePath,
 } from '@decipad/editor-utils';
 import {
   AvailableSwatchColor,
@@ -20,6 +21,7 @@ import { useEditorStylesContext } from '@decipad/react-contexts';
 import { DataViewData } from '../DataViewData';
 import { useDataView } from '../../hooks';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
+import { DataViewColumnHeader } from '../DataViewColumnHeader';
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -37,6 +39,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     element,
     'expandedGroups'
   );
+  const saveRotated = useElementMutatorCallback(editor, element, 'rotate');
 
   const {
     variableNames,
@@ -62,6 +65,27 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     onDelete();
   }, [onDelete]);
 
+  const path = useNodePath(element);
+
+  const rotate = element.rotate ?? false;
+  const headers = useMemo((): ReactNode[] => {
+    // optimization: these headers are only used on rotated data views
+    if (!rotate || !path) {
+      return [];
+    }
+    return element.children[1].children.map((header, index) => (
+      <DataViewColumnHeader
+        element={header}
+        attributes={{
+          'data-slate-node': 'element',
+          'data-slate-void': true,
+          ref: undefined,
+        }}
+        overridePath={[...path, 1, index]}
+      />
+    ));
+  }, [element.children, rotate, path]);
+
   return !deleted ? (
     <DraggableBlock
       element={element}
@@ -77,6 +101,8 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         onChangeColor={saveColor}
         icon={(element.icon ?? 'Table') as UserIconKey}
         color={(element.color ?? defaultColor) as AvailableSwatchColor}
+        onRotated={saveRotated}
+        rotate={rotate}
         data={
           (sortedColumns && tableName && (
             <DataViewData
@@ -86,6 +112,8 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
               roundings={selectedRoundings}
               expandedGroups={element.expandedGroups}
               onChangeExpandedGroups={saveExpandedGroups}
+              rotate={rotate}
+              headers={headers}
             />
           )) ||
           null

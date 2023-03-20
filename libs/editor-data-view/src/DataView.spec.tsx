@@ -203,6 +203,7 @@ interface WithLayoutDataHookProps {
   aggregationTypes: (AggregationKind | undefined)[];
   roundings: (string | undefined)[];
   expandedGroups: string[] | undefined;
+  preventExpansion: boolean;
   onLayoutDataResultChange: (
     result: ReturnType<typeof useDataViewLayoutData>
   ) => void;
@@ -214,6 +215,7 @@ const WithLayoutDataHook: FC<WithLayoutDataHookProps> = ({
   aggregationTypes,
   roundings,
   expandedGroups,
+  preventExpansion,
   onLayoutDataResultChange,
 }) => {
   const results = useDataViewLayoutData({
@@ -222,6 +224,8 @@ const WithLayoutDataHook: FC<WithLayoutDataHookProps> = ({
     aggregationTypes,
     roundings,
     expandedGroups,
+    preventExpansion,
+    rotate: false,
   });
   useEffect(() => {
     onLayoutDataResultChange(results);
@@ -256,6 +260,7 @@ const runWithLayoutData = async ({
           columns={columns}
           aggregationTypes={aggregationTypes}
           roundings={[]}
+          preventExpansion={false}
           expandedGroups={expandedGroups}
           onLayoutDataResultChange={(r) => {
             count -= 1;

@@ -26,6 +26,7 @@ export const generateTotalGroup = ({
         aggregationTypes: aggregationTypes.slice(1),
         previousColumns: [],
         global: true,
+        rotate: false,
       }),
     ],
     collapsible: false,

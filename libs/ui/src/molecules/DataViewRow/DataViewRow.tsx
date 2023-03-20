@@ -9,6 +9,7 @@ interface TableRowProps {
   readonly isFullWidth: boolean;
   readonly isBeforeFullWidthRow: boolean;
   readonly global: boolean;
+  readonly rotate: boolean;
 }
 
 const dataViewRowStyles = css({
@@ -28,11 +29,12 @@ export const DataViewRow = ({
   attributes,
   children,
   global = false,
+  rotate,
 }: TableRowProps): ReturnType<FC> => {
   return (
     <tr
       {...attributes}
-      css={[dataViewRowStyles, global && dataViewRowGlobalStyles]}
+      css={[dataViewRowStyles, !rotate && global && dataViewRowGlobalStyles]}
     >
       {children}
     </tr>

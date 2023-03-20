@@ -43,6 +43,7 @@ export { IconButton } from './IconButton/IconButton';
 export { InlineCode } from './InlineCode/InlineCode';
 export { InlineMenuItem } from './InlineMenuItem/InlineMenuItem';
 export { InputField } from './InputField/InputField';
+export { Invisible } from './Invisible/Invisible';
 export { Italic } from './Italic/Italic';
 export { KeyboardKey } from './KeyboardKey/KeyboardKey';
 export { Label } from './Label/Label';

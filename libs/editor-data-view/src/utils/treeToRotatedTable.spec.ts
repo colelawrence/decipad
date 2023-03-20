@@ -1,7 +1,7 @@
 import { stripChildren } from './testUtils';
-import { treeToTable } from './treeToTable';
+import { treeToRotatedTable } from './treeToRotatedTable';
 
-describe('treeToTable', () => {
+describe('treeToRotatedTable', () => {
   it('transforms complete', () => {
     const schema = {
       key: 'root',
@@ -35,87 +35,67 @@ describe('treeToTable', () => {
       ],
     };
 
-    expect(treeToTable(schema).map(stripChildren)).toMatchInlineSnapshot(`
+    expect(treeToRotatedTable(schema).map(stripChildren))
+      .toMatchInlineSnapshot(`
       Array [
         Array [
           Object {
-            "colspan": 3,
-            "depth": 1,
+            "colspan": 1,
             "key": "name",
-            "rowspan": 1,
-          },
-        ],
-        Array [
-          Object {
-            "colspan": 1,
-            "depth": 3,
-            "key": "personal",
-            "rowspan": 5,
-          },
-          Object {
-            "colspan": 2,
-            "depth": 1,
-            "key": "birthsday",
-            "rowspan": 1,
-          },
-        ],
-        Array [
-          Object {
-            "colspan": 2,
-            "depth": 1,
-            "key": "gender",
-            "rowspan": 1,
-          },
-        ],
-        Array [
-          Object {
-            "colspan": 1,
-            "depth": 2,
-            "key": "contact",
             "rowspan": 3,
           },
           Object {
-            "colspan": 1,
-            "depth": 1,
-            "key": "address",
+            "colspan": 5,
+            "key": "personal",
             "rowspan": 1,
           },
-        ],
-        Array [
-          Object {
-            "colspan": 1,
-            "depth": 1,
-            "key": "zipcode",
-            "rowspan": 1,
-          },
-        ],
-        Array [
-          Object {
-            "colspan": 1,
-            "depth": 1,
-            "key": "mobile",
-            "rowspan": 1,
-          },
-        ],
-        Array [
           Object {
             "colspan": 2,
-            "depth": 2,
             "key": "education",
+            "rowspan": 1,
+          },
+        ],
+        Array [
+          Object {
+            "colspan": 1,
+            "key": "birthsday",
             "rowspan": 2,
           },
           Object {
             "colspan": 1,
-            "depth": 1,
-            "key": "degree",
+            "key": "gender",
+            "rowspan": 2,
+          },
+          Object {
+            "colspan": 3,
+            "key": "contact",
             "rowspan": 1,
+          },
+          Object {
+            "colspan": 1,
+            "key": "degree",
+            "rowspan": 2,
+          },
+          Object {
+            "colspan": 1,
+            "key": "CA",
+            "rowspan": 2,
           },
         ],
         Array [
           Object {
             "colspan": 1,
-            "depth": 1,
-            "key": "CA",
+            "key": "address",
+            "rowspan": 1,
+          },
+          Object {
+            "colspan": 1,
+            "key": "zipcode",
+            "rowspan": 1,
+          },
+          Object {
+            "colspan": 1,
+            "key": "mobile",
             "rowspan": 1,
           },
         ],

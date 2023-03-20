@@ -15,6 +15,8 @@ interface SliceToGroupProps {
   previousColumns: PreviousColumns;
   generateGroups: GenerateGroups;
   generateSmartRow: GenerateSubSmartRow;
+  preventExpansion: boolean;
+  rotate: boolean;
 }
 
 export const sliceToGroup = async ({
@@ -29,6 +31,8 @@ export const sliceToGroup = async ({
   previousColumns,
   generateGroups,
   generateSmartRow,
+  preventExpansion,
+  rotate,
 }: SliceToGroupProps): Promise<DataGroup> => {
   const selfHighlight$ = new BehaviorSubject<boolean>(false);
 
@@ -38,6 +42,8 @@ export const sliceToGroup = async ({
     previousColumns,
     parentHighlight$: selfHighlight$,
     parentGroupId: groupId,
+    preventExpansion,
+    rotate,
   });
 
   const expandable = newGroups.length > 1;
@@ -50,6 +56,7 @@ export const sliceToGroup = async ({
         columnIndex: columnIndex + 1,
         previousColumns,
         parentHighlight$,
+        rotate,
       })) ||
     null;
 

@@ -1,19 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { assertDefined } from '@decipad/utils';
+import { treeToRotatedTable } from './treeToRotatedTable';
+import type { Element } from './types';
 
 /* eslint-disable no-param-reassign */
-type BaseNode = {
-  rowspan?: number;
-  colspan?: number;
-  depth?: number;
-};
-
-export type Element<TElement> = BaseNode &
-  TElement & {
-    children: Array<Element<TElement>>;
-    tempChildren?: Array<Element<TElement>>;
-  };
 
 function hasChildren<TElement>(n: Element<TElement>): boolean {
   return n.children.length > 0;
@@ -95,8 +86,14 @@ function traversalToTable<TElement>(
   return res;
 }
 
-export function treeToTable<TElement>(
-  root: Element<TElement>
-): Array<Element<TElement>>[] {
-  return traversalToTable(traversalColSpan(traversalRowSpan(root)));
+interface TreeToTableOptions {
+  rotate?: boolean;
 }
+
+export const treeToTable = <TElement>(
+  root: Element<TElement>,
+  { rotate: doRotate }: TreeToTableOptions = {}
+): Array<Element<TElement>>[] =>
+  doRotate
+    ? treeToRotatedTable(root)
+    : traversalToTable(traversalColSpan(traversalRowSpan(root)));

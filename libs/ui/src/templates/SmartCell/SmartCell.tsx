@@ -14,25 +14,25 @@ const smartCellStyles = css(p14Medium, {
   fontWeight: '700',
 });
 
-const hoverCellStyles = css({
+const smartCellHoverCellStyles = css({
   backgroundColor: cssVar('highlightColor'),
 });
 
-const labelStyles = css(p12Medium, {
+const smartCellLabelStyles = css(p12Medium, {
   color: cssVar('weakerTextColor'),
 });
 
-const alignRightStyles = css({
+const smartCellAlignRightStyles = css({
   textAlign: 'right',
 });
 
-const globalStyles = css({
+const smartCellGlobalStyles = css({
   color: cssVar('weakTextColor'),
   backgroundColor: cssVar('highlightColor'),
   fontWeight: 'bold',
 });
 
-const draggableStyles = css({
+const smartCellDraggableStyles = css({
   cursor: 'grab',
 
   ':active': {
@@ -56,6 +56,7 @@ export interface SmartRowProps {
   hover?: boolean;
   alignRight?: boolean;
   global?: boolean;
+  rotate: boolean;
   element?: AnyElement;
 }
 
@@ -70,6 +71,7 @@ export function SmartCell({
   hover = false,
   alignRight = false,
   global = false,
+  rotate,
   element,
 }: SmartRowProps): ReturnType<FC> {
   const onMouseOver = useCallback(() => onHover(true), [onHover]);
@@ -80,10 +82,10 @@ export function SmartCell({
     <td
       css={[
         smartCellStyles,
-        !readOnly && onDragStart && draggableStyles,
-        hover && hoverCellStyles,
-        alignRight && alignRightStyles,
-        global && globalStyles,
+        !readOnly && onDragStart && smartCellDraggableStyles,
+        hover && smartCellHoverCellStyles,
+        alignRight && smartCellAlignRightStyles,
+        !rotate && global && smartCellGlobalStyles,
       ]}
       rowSpan={rowSpan}
       colSpan={colSpan}
@@ -93,7 +95,7 @@ export function SmartCell({
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <span css={labelStyles}>
+      <span css={smartCellLabelStyles}>
         {(aggregationType && `${aggregationType}: `) || null}
       </span>
       {result ? (

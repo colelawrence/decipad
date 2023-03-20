@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 import { Result, SerializedType } from '@decipad/computer';
 import { DataViewRow } from '@decipad/ui';
 import {
@@ -10,7 +10,7 @@ import {
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';
-import { DataViewHeader } from '..';
+import { DataViewTableHeader } from '..';
 import { SmartCell } from '../SmartCell';
 
 export interface HeaderProps {
@@ -29,6 +29,8 @@ export interface HeaderProps {
   groupLength: number;
   index: number;
   global?: boolean;
+  rotate: boolean;
+  isFirstLevelHeader: boolean;
 }
 
 export interface SmartProps {
@@ -48,6 +50,7 @@ export interface SmartProps {
   previousColumns: PreviousColumns;
   alignRight?: boolean;
   global?: boolean;
+  rotate: boolean;
 }
 
 export interface DataViewLayoutProps {
@@ -57,6 +60,8 @@ export interface DataViewLayoutProps {
   roundings: Array<string | undefined>;
   expandedGroups: string[] | undefined;
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
+  rotate: boolean;
+  headers: ReactNode[];
 }
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
@@ -66,6 +71,8 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   roundings,
   expandedGroups = [],
   onChangeExpandedGroups,
+  rotate,
+  headers,
 }: DataViewLayoutProps) => {
   const groups = useDataViewLayoutData({
     tableName,
@@ -73,16 +80,24 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     aggregationTypes,
     roundings,
     expandedGroups,
+    includeTotal: true,
+    preventExpansion: rotate,
+    rotate,
   });
 
   const table = useMemo(
     () =>
-      treeToTable({
-        elementType: 'group',
-        children: groups,
-        columnIndex: -1,
-      }),
-    [groups]
+      treeToTable(
+        {
+          elementType: 'group',
+          children: groups,
+          columnIndex: -1,
+        },
+        {
+          rotate,
+        }
+      ),
+    [groups, rotate]
   );
 
   const cols = useMemo(
@@ -109,7 +124,9 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
               table[index + 1] && table[index + 1].length === maxCols
             }
             global={row.some((r) => r.global)}
+            rotate={rotate}
           >
+            {rotate && headers[index]}
             {row.map((element, elementIndex) => (
               <DataViewDataGroupElement
                 key={`${table.indexOf(row)}-${index}-${elementIndex}}`}
@@ -118,12 +135,14 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
                 element={element}
                 roundings={roundings}
                 aggregationType={aggregationTypes[element.columnIndex]}
-                Header={DataViewHeader}
+                Header={DataViewTableHeader}
                 SmartCell={SmartCell}
                 isFullWidthRow={row.length === maxCols}
                 expandedGroups={expandedGroups}
                 onChangeExpandedGroups={onChangeExpandedGroups}
                 groupLength={row.length}
+                rotate={rotate}
+                isFirstLevel={index === 0}
               />
             ))}
           </DataViewRow>

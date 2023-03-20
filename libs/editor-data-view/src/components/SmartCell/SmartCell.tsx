@@ -18,7 +18,7 @@ import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { AggregationKind, PreviousColumns } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 
-const DEBOUNCE_RESULT_MS = 500;
+const DEBOUNCE_RESULT_MS = 100;
 
 const emptyCellStyles = css({
   borderBottom: 0,
@@ -41,6 +41,7 @@ interface SmartProps {
   previousColumns: PreviousColumns;
   alignRight?: boolean;
   global?: boolean;
+  rotate: boolean;
 }
 
 export const SmartCell: FC<SmartProps> = ({
@@ -55,6 +56,7 @@ export const SmartCell: FC<SmartProps> = ({
   alignRight,
   previousColumns,
   global = false,
+  rotate,
 }: SmartProps) => {
   const computer = useComputer();
   const editor = useTEditorRef();
@@ -134,6 +136,7 @@ export const SmartCell: FC<SmartProps> = ({
       hover={hover}
       alignRight={alignRight}
       global={global}
+      rotate={rotate}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     />

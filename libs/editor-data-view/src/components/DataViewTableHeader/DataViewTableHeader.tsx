@@ -29,10 +29,12 @@ interface DataViewTableHeaderProps {
   onChangeExpandedGroups: (collapsedGroups: string[]) => void;
   groupId: string;
   global?: boolean;
+  rotate: boolean;
+  isFirstLevelHeader: boolean;
   element?: AnyElement;
 }
 
-export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
+export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   type,
   value,
   rowSpan = 1,
@@ -46,6 +48,8 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
   collapsible,
   global,
   element,
+  rotate,
+  isFirstLevelHeader,
 }) => {
   const editor = useTEditorRef();
   const handleCollapseGroupButtonPress = useEventNoEffect(
@@ -92,6 +96,8 @@ export const DataViewHeader: FC<DataViewTableHeaderProps> = ({
       onHover={onHover}
       alignRight={alignRight}
       global={global}
+      rotate={rotate}
+      isFirstLevelHeader={isFirstLevelHeader}
     >
       {collapsible ? (
         <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>

@@ -11,19 +11,25 @@ interface DataViewTableHeaderProps {
   onHover?: (hover: boolean) => void;
   alignRight?: boolean;
   global?: boolean;
+  rotate: boolean;
+  isFirstLevelHeader: boolean;
 }
 
 const dataViewTableHeaderStyles = css({
   textAlign: 'left',
 });
 
-const alignRightStyles = css({
+const dataViewTableHeaderAlignRightStyles = css({
   textAlign: 'right',
 });
 
-const globalStyles = css({
+const dataViewTableHeaderGlobalStyles = css({
   color: cssVar('weakTextColor'),
   backgroundColor: cssVar('highlightColor'),
+});
+
+const dataViewTableHeaderRotatedStyles = css({
+  borderRight: `1px solid ${cssVar('borderColor')}`,
 });
 
 export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
@@ -33,6 +39,8 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   onHover = noop,
   alignRight = false,
   global = false,
+  rotate,
+  isFirstLevelHeader,
 }) => {
   const onMouseOver = useCallback(
     (ev: MouseEvent) => {
@@ -58,8 +66,9 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
       onMouseOut={onMouseOut}
       css={[
         dataViewTableHeaderStyles,
-        alignRight && alignRightStyles,
-        global && globalStyles,
+        alignRight && dataViewTableHeaderAlignRightStyles,
+        !rotate && global && dataViewTableHeaderGlobalStyles,
+        rotate && isFirstLevelHeader && dataViewTableHeaderRotatedStyles,
       ]}
     >
       {children}

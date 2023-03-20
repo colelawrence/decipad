@@ -15,6 +15,7 @@ export const availableFlags = [
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
   'DATA_MAPPINGS',
+  'ROTATED_DATA_VIEW',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
