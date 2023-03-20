@@ -41,7 +41,7 @@ export async function getFromTable(
 }
 
 export function clickCell(page: Page, line: number, col = 0) {
-  return page.locator(tableCellLocator(line, col)).click();
+  return page.locator(tableCellLocator(line, col)).click({ force: true });
 }
 
 export async function writeInTable(
@@ -78,9 +78,22 @@ export async function addColumn(page: Page) {
 }
 
 export function openColumnMenu(page: Page, col: number) {
-  return page.click(
-    `${tableRowLocator(0)} > th:nth-child(${
-      col + 2
-    }) button:has-text("Caret down")`
-  );
+  return page
+    .locator(
+      `${tableRowLocator(0)} > th:nth-child(${
+        col + 2
+      }) button:has-text("Caret down")`
+    )
+    .click();
+}
+
+export async function focusOnTableColumnFormula(
+  page: Page,
+  filterText?: string
+) {
+  if (!filterText) {
+    await page.getByRole('code').click();
+  } else {
+    await page.getByRole('code').filter({ hasText: filterText }).click();
+  }
 }

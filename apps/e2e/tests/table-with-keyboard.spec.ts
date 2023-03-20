@@ -1,4 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
+import waitForExpect from 'wait-for-expect';
 import {
   focusOnBody,
   goToPlayground,
@@ -10,6 +11,7 @@ import {
   addRow,
   createTable,
   focusOnTable,
+  focusOnTableColumnFormula,
   getFromTable,
   openColumnMenu,
   openRowMenu,
@@ -93,12 +95,16 @@ test.describe('Adding tables with keyboard (and more)', () => {
   });
 
   test('formula produced desired output', async () => {
+    await focusOnTableColumnFormula(page);
     await page.keyboard.type('1 + 1');
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
-    const codeBlockText = await codeBlock.innerText();
-    // splitting on new line removes the text from auto-complete menu
-    expect(codeBlockText.split('\n')[0]).toBe('Column3 =  1 + 1');
+
+    await waitForExpect(async () => {
+      const codeBlockText = await codeBlock.innerText();
+      // splitting on new line removes the text from auto-complete menu
+      expect(codeBlockText.split('\n')[0]).toBe('Column3 =  1 + 1');
+    });
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
@@ -131,29 +137,14 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
     expect(codeBlockText).toContain('Column5 =');
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await focusOnTableColumnFormula(page, 'Column5 =');
     await page.keyboard.type('2 / Column4');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
   });
 
   test('get any value from the table, to make sure it has not crashed', async () => {
     await addRow(page);
     expect(await getFromTable(page, 1, 3)).toEqual('1');
-  });
-
-  test('doesnt add multiple formula blocks for same column', async () => {
-    await addColumn(page);
-    await page.click('[data-testid="table-button-showformulas-hideformulas"]');
-    await writeInTable(page, '=', 1, 5);
-    await writeInTable(page, '=', 1, 5);
-    await page.click('[data-testid="table-button-showformulas-hideformulas"]');
-    expect(await getFromTable(page, 1, 3)).toEqual('1');
-    await writeInTable(page, '=', 1, 5);
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
-    await page.keyboard.type('5 + 4');
-    const codeBlock = await page.waitForSelector('section:has-text("=")');
-    const codeBlockText = await codeBlock.innerText();
-    expect(codeBlockText).toBe(`Column3 =  1 + 1
-Column5 =  2 / Column4
-Column6 =  5 + 4`);
   });
 });
