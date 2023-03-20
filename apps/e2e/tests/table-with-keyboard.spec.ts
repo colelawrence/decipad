@@ -1,4 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
+import waitForExpect from 'wait-for-expect';
 import {
   focusOnBody,
   goToPlayground,
@@ -84,8 +85,8 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
   test('can change column type to a formula', async () => {
     await openColumnMenu(page, 2);
-    await page.click('[role="menuitem"]:has-text("Change type")');
-    await page.click('[role="menuitem"]:has-text("Formula")');
+    await page.locator('[role="menuitem"]:has-text("Change type")').click();
+    await page.locator('[role="menuitem"]:has-text("Formula")').click();
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
 
@@ -93,12 +94,19 @@ test.describe('Adding tables with keyboard (and more)', () => {
   });
 
   test('formula produced desired output', async () => {
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(500);
     await page.keyboard.type('1 + 1');
 
-    const codeBlock = await page.waitForSelector('section:has-text("=")');
-    const codeBlockText = await codeBlock.innerText();
+    const codeBlock = await page.waitForSelector(
+      'section:has-text("Column3 =")'
+    );
+    await waitForExpect(async () =>
+      expect((await codeBlock.innerText()).split('\n')[0]).toBe(
+        'Column3 =  1 + 1'
+      )
+    );
     // splitting on new line removes the text from auto-complete menu
-    expect(codeBlockText.split('\n')[0]).toBe('Column3 =  1 + 1');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
@@ -127,9 +135,9 @@ test.describe('Adding tables with keyboard (and more)', () => {
     const codeBlock = await page.waitForSelector(
       'section:has-text("Column5 =")'
     );
-    const codeBlockText = await codeBlock.innerText();
-
-    expect(codeBlockText).toContain('Column5 =');
+    await waitForExpect(async () =>
+      expect(await codeBlock.innerText()).toContain('Column5 =')
+    );
 
     await page.keyboard.type('2 / Column4');
   });

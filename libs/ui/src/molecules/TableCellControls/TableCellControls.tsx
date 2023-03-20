@@ -72,7 +72,7 @@ export const TableCellControls = forwardRef<
         verticalAlign: 'middle',
       }}
     >
-      {!readOnly && (
+      {!readOnly && menuIsOpen && (
         <div css={gridStyles()}>
           <MenuList
             root
@@ -128,6 +128,7 @@ export const TableCellControls = forwardRef<
           </Tooltip>
         </div>
       )}
+      {!readOnly && !menuIsOpen && <div css={gridStyles()}>{menuButton}</div>}
     </th>
   );
 });

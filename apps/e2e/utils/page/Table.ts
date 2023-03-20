@@ -41,7 +41,7 @@ export async function getFromTable(
 }
 
 export function clickCell(page: Page, line: number, col = 0) {
-  return page.locator(tableCellLocator(line, col)).click();
+  return page.locator(tableCellLocator(line, col)).click({ force: true });
 }
 
 export async function writeInTable(
@@ -56,8 +56,8 @@ export async function writeInTable(
 
 export function openRowMenu(page: Page, line: number) {
   return page
-    .locator(`${tableRowLocator(line)} > th > div > button:nth-child(2)`)
-    .click();
+    .locator(`${tableRowLocator(line)} > th > div > button`)
+    .click({ force: true });
 }
 
 export function focusOnTable(page: Page) {
