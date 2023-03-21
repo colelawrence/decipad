@@ -1,5 +1,4 @@
 import { AWSError } from 'aws-sdk';
-import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { awsRetry, retry } from '.';
 
 const createAWSError = (message: string, retryable: boolean): AWSError => {
@@ -9,8 +8,7 @@ const createAWSError = (message: string, retryable: boolean): AWSError => {
 };
 
 /* eslint-disable jest/no-standalone-expect */
-test('retry', (ctx) => {
-  const { test: it } = ctx;
+describe('retry', () => {
   it('does not retry on AWS unretryable errors', async () => {
     let shouldRetryCalledCount = 0;
     await expect(() =>
