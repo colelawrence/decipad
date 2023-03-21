@@ -23,6 +23,13 @@ const result: ComponentProps<typeof PlotBlock>['result'] = {
       color: { field: 'aa', type: 'nominal' },
     },
     mark: { type: 'circle', tooltip: true },
+    config: {
+      encoding: {
+        color: {
+          scheme: 'monochrome_purple_light',
+        },
+      },
+    },
   },
   data: {
     table: [

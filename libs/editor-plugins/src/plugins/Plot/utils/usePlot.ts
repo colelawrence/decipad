@@ -1,7 +1,8 @@
 import { PlotElement, useTEditorRef } from '@decipad/editor-types';
+import _ from 'lodash';
 import { Computer, AutocompleteName, getExprRef } from '@decipad/computer';
 import { useElementMutatorCallback } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
 import { useEffect, useMemo } from 'react';
 import type { PlotData, PlotSpec } from './plotUtils';
@@ -57,6 +58,7 @@ const shapes = ['point', 'circle', 'square', 'tick'] as const;
 export type Shape = typeof shapes[number];
 
 export const usePlot = (element: PlotElement): UsePlotReturn => {
+  const [isDarkMode] = useThemeFromStore();
   const editor = useTEditorRef();
   const computer = useComputer();
 
@@ -164,6 +166,21 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       plotParams.setColorScheme(Object.keys(colorSchemes)[0]);
     }
   }, [plotParams]);
+
+  if (spec) {
+    // config.encoding.color.scheme
+    _.update(
+      spec,
+      'config.encoding.color.scheme',
+      (theme: string) => `${theme}_${isDarkMode ? 'dark' : 'light'}`
+    );
+    // encoding.color.scale.scheme
+    _.update(
+      spec,
+      'encoding.color.scale.scheme',
+      (theme: string) => `${theme}_${isDarkMode ? 'dark' : 'light'}`
+    );
+  }
 
   return { spec, data, plotParams };
 };

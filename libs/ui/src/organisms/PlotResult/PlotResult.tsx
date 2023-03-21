@@ -15,8 +15,14 @@ const styles = css({
 
 const GOLDEN_RATIO = 1.618;
 
+type SpecConfig = VegaProps['spec']['config'];
+
+type Spec = VegaProps['spec'] & {
+  config: SpecConfig & { encoding: { color: { scheme: string | undefined } } };
+};
+
 interface PlotResultProps {
-  spec: NonNullable<VegaProps['spec']>;
+  spec: NonNullable<Spec>;
   data: NonNullable<VegaProps['data']>;
   onError?: VegaProps['onError'];
 }
@@ -28,6 +34,7 @@ export const PlotResult = ({
 }: PlotResultProps): ReturnType<FC> => {
   // For some reason, react-vega seems to add 10px to the width.
   const width = slimBlockWidth - 10;
+
   return (
     <VegaLite
       css={styles}

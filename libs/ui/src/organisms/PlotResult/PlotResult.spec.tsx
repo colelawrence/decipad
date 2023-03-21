@@ -9,6 +9,13 @@ const props: ComponentProps<typeof PlotResult> = {
   },
   spec: {
     data: { name: 'table' },
+    config: {
+      encoding: {
+        color: {
+          scheme: 'monochrome_purple_light',
+        },
+      },
+    },
     encoding: {
       x: { field: 'aa', type: 'nominal' },
       y: {
@@ -61,6 +68,13 @@ describe('given invalid input', () => {
         spec={{
           data: [{ name: 'one' }],
           mark: { type: 'circle' },
+          config: {
+            encoding: {
+              color: {
+                scheme: 'monochrome_purple_light',
+              },
+            },
+          },
         }}
         data={{ two: [] }}
         onError={handleError}

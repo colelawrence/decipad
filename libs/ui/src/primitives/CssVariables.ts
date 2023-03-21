@@ -153,4 +153,172 @@ export interface CssVariables {
   readonly currentTextColor: Property.Color;
 
   readonly formulaUnitBackground: Property.Color;
+
+  readonly chartThemeMulticolorPurple1: Property.Color;
+  readonly chartThemeMulticolorPurple2: Property.Color;
+  readonly chartThemeMulticolorPurple3: Property.Color;
+  readonly chartThemeMulticolorPurple4: Property.Color;
+  readonly chartThemeMulticolorPurple5: Property.Color;
+  readonly chartThemeMulticolorPurple6: Property.Color;
+  readonly chartThemeMulticolorPurple7: Property.Color;
+  readonly chartThemeMulticolorPurple8: Property.Color;
+  readonly chartThemeMulticolorPurple9: Property.Color;
+  readonly chartThemeMulticolorPurple10: Property.Color;
+  readonly chartThemeMulticolorPurple11: Property.Color;
+
+  readonly chartThemeMulticolorRed1: Property.Color;
+  readonly chartThemeMulticolorRed2: Property.Color;
+  readonly chartThemeMulticolorRed3: Property.Color;
+  readonly chartThemeMulticolorRed4: Property.Color;
+  readonly chartThemeMulticolorRed5: Property.Color;
+  readonly chartThemeMulticolorRed6: Property.Color;
+  readonly chartThemeMulticolorRed7: Property.Color;
+  readonly chartThemeMulticolorRed8: Property.Color;
+  readonly chartThemeMulticolorRed9: Property.Color;
+  readonly chartThemeMulticolorRed10: Property.Color;
+  readonly chartThemeMulticolorRed11: Property.Color;
+
+  readonly chartThemeMulticolorGrey1: Property.Color;
+  readonly chartThemeMulticolorGrey2: Property.Color;
+  readonly chartThemeMulticolorGrey3: Property.Color;
+  readonly chartThemeMulticolorGrey4: Property.Color;
+  readonly chartThemeMulticolorGrey5: Property.Color;
+  readonly chartThemeMulticolorGrey6: Property.Color;
+  readonly chartThemeMulticolorGrey7: Property.Color;
+  readonly chartThemeMulticolorGrey8: Property.Color;
+  readonly chartThemeMulticolorGrey9: Property.Color;
+  readonly chartThemeMulticolorGrey10: Property.Color;
+  readonly chartThemeMulticolorGrey11: Property.Color;
+
+  readonly chartThemeMulticolorYellow1: Property.Color;
+  readonly chartThemeMulticolorYellow2: Property.Color;
+  readonly chartThemeMulticolorYellow3: Property.Color;
+  readonly chartThemeMulticolorYellow4: Property.Color;
+  readonly chartThemeMulticolorYellow5: Property.Color;
+  readonly chartThemeMulticolorYellow6: Property.Color;
+  readonly chartThemeMulticolorYellow7: Property.Color;
+  readonly chartThemeMulticolorYellow8: Property.Color;
+  readonly chartThemeMulticolorYellow9: Property.Color;
+  readonly chartThemeMulticolorYellow10: Property.Color;
+  readonly chartThemeMulticolorYellow11: Property.Color;
+
+  readonly chartThemeMulticolorBlue1: Property.Color;
+  readonly chartThemeMulticolorBlue2: Property.Color;
+  readonly chartThemeMulticolorBlue3: Property.Color;
+  readonly chartThemeMulticolorBlue4: Property.Color;
+  readonly chartThemeMulticolorBlue5: Property.Color;
+  readonly chartThemeMulticolorBlue6: Property.Color;
+  readonly chartThemeMulticolorBlue7: Property.Color;
+  readonly chartThemeMulticolorBlue8: Property.Color;
+  readonly chartThemeMulticolorBlue9: Property.Color;
+  readonly chartThemeMulticolorBlue10: Property.Color;
+  readonly chartThemeMulticolorBlue11: Property.Color;
+
+  readonly chartThemeMulticolorGreen1: Property.Color;
+  readonly chartThemeMulticolorGreen2: Property.Color;
+  readonly chartThemeMulticolorGreen3: Property.Color;
+  readonly chartThemeMulticolorGreen4: Property.Color;
+  readonly chartThemeMulticolorGreen5: Property.Color;
+  readonly chartThemeMulticolorGreen6: Property.Color;
+  readonly chartThemeMulticolorGreen7: Property.Color;
+  readonly chartThemeMulticolorGreen8: Property.Color;
+  readonly chartThemeMulticolorGreen9: Property.Color;
+  readonly chartThemeMulticolorGreen10: Property.Color;
+  readonly chartThemeMulticolorGreen11: Property.Color;
+
+  readonly chartThemeMulticolorOrange1: Property.Color;
+  readonly chartThemeMulticolorOrange2: Property.Color;
+  readonly chartThemeMulticolorOrange3: Property.Color;
+  readonly chartThemeMulticolorOrange4: Property.Color;
+  readonly chartThemeMulticolorOrange5: Property.Color;
+  readonly chartThemeMulticolorOrange6: Property.Color;
+  readonly chartThemeMulticolorOrange7: Property.Color;
+  readonly chartThemeMulticolorOrange8: Property.Color;
+  readonly chartThemeMulticolorOrange9: Property.Color;
+  readonly chartThemeMulticolorOrange10: Property.Color;
+  readonly chartThemeMulticolorOrange11: Property.Color;
+
+  readonly chartThemeMonochromePurple1: Property.Color;
+  readonly chartThemeMonochromePurple2: Property.Color;
+  readonly chartThemeMonochromePurple3: Property.Color;
+  readonly chartThemeMonochromePurple4: Property.Color;
+  readonly chartThemeMonochromePurple5: Property.Color;
+  readonly chartThemeMonochromePurple6: Property.Color;
+  readonly chartThemeMonochromePurple7: Property.Color;
+  readonly chartThemeMonochromePurple8: Property.Color;
+  readonly chartThemeMonochromePurple9: Property.Color;
+  readonly chartThemeMonochromePurple10: Property.Color;
+  readonly chartThemeMonochromePurple11: Property.Color;
+
+  readonly chartThemeMonochromeRed1: Property.Color;
+  readonly chartThemeMonochromeRed2: Property.Color;
+  readonly chartThemeMonochromeRed3: Property.Color;
+  readonly chartThemeMonochromeRed4: Property.Color;
+  readonly chartThemeMonochromeRed5: Property.Color;
+  readonly chartThemeMonochromeRed6: Property.Color;
+  readonly chartThemeMonochromeRed7: Property.Color;
+  readonly chartThemeMonochromeRed8: Property.Color;
+  readonly chartThemeMonochromeRed9: Property.Color;
+  readonly chartThemeMonochromeRed10: Property.Color;
+  readonly chartThemeMonochromeRed11: Property.Color;
+
+  readonly chartThemeMonochromeGrey1: Property.Color;
+  readonly chartThemeMonochromeGrey2: Property.Color;
+  readonly chartThemeMonochromeGrey3: Property.Color;
+  readonly chartThemeMonochromeGrey4: Property.Color;
+  readonly chartThemeMonochromeGrey5: Property.Color;
+  readonly chartThemeMonochromeGrey6: Property.Color;
+  readonly chartThemeMonochromeGrey7: Property.Color;
+  readonly chartThemeMonochromeGrey8: Property.Color;
+  readonly chartThemeMonochromeGrey9: Property.Color;
+  readonly chartThemeMonochromeGrey10: Property.Color;
+  readonly chartThemeMonochromeGrey11: Property.Color;
+
+  readonly chartThemeMonochromeYellow1: Property.Color;
+  readonly chartThemeMonochromeYellow2: Property.Color;
+  readonly chartThemeMonochromeYellow3: Property.Color;
+  readonly chartThemeMonochromeYellow4: Property.Color;
+  readonly chartThemeMonochromeYellow5: Property.Color;
+  readonly chartThemeMonochromeYellow6: Property.Color;
+  readonly chartThemeMonochromeYellow7: Property.Color;
+  readonly chartThemeMonochromeYellow8: Property.Color;
+  readonly chartThemeMonochromeYellow9: Property.Color;
+  readonly chartThemeMonochromeYellow10: Property.Color;
+  readonly chartThemeMonochromeYellow11: Property.Color;
+
+  readonly chartThemeMonochromeBlue1: Property.Color;
+  readonly chartThemeMonochromeBlue2: Property.Color;
+  readonly chartThemeMonochromeBlue3: Property.Color;
+  readonly chartThemeMonochromeBlue4: Property.Color;
+  readonly chartThemeMonochromeBlue5: Property.Color;
+  readonly chartThemeMonochromeBlue6: Property.Color;
+  readonly chartThemeMonochromeBlue7: Property.Color;
+  readonly chartThemeMonochromeBlue8: Property.Color;
+  readonly chartThemeMonochromeBlue9: Property.Color;
+  readonly chartThemeMonochromeBlue10: Property.Color;
+  readonly chartThemeMonochromeBlue11: Property.Color;
+
+  readonly chartThemeMonochromeGreen1: Property.Color;
+  readonly chartThemeMonochromeGreen2: Property.Color;
+  readonly chartThemeMonochromeGreen3: Property.Color;
+  readonly chartThemeMonochromeGreen4: Property.Color;
+  readonly chartThemeMonochromeGreen5: Property.Color;
+  readonly chartThemeMonochromeGreen6: Property.Color;
+  readonly chartThemeMonochromeGreen7: Property.Color;
+  readonly chartThemeMonochromeGreen8: Property.Color;
+  readonly chartThemeMonochromeGreen9: Property.Color;
+  readonly chartThemeMonochromeGreen10: Property.Color;
+  readonly chartThemeMonochromeGreen11: Property.Color;
+
+  readonly chartThemeMonochromeOrange1: Property.Color;
+  readonly chartThemeMonochromeOrange2: Property.Color;
+  readonly chartThemeMonochromeOrange3: Property.Color;
+  readonly chartThemeMonochromeOrange4: Property.Color;
+  readonly chartThemeMonochromeOrange5: Property.Color;
+  readonly chartThemeMonochromeOrange6: Property.Color;
+  readonly chartThemeMonochromeOrange7: Property.Color;
+  readonly chartThemeMonochromeOrange8: Property.Color;
+  readonly chartThemeMonochromeOrange9: Property.Color;
+  readonly chartThemeMonochromeOrange10: Property.Color;
+  readonly chartThemeMonochromeOrange11: Property.Color;
 }

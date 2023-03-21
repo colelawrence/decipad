@@ -15,6 +15,13 @@ const plotResult: ComponentProps<typeof PlotBlock>['result'] = {
   spec: {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     data: { name: 'table' },
+    config: {
+      encoding: {
+        color: {
+          scheme: 'monochrome_purple_light',
+        },
+      },
+    },
     encoding: {
       x: { field: 'aa', type: 'nominal' },
       y: { field: 'bb', type: 'quantitative' },
