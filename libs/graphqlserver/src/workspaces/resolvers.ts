@@ -20,14 +20,12 @@ import { byDesc } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
 import { maximumPermissionType } from '@decipad/graphqlresource';
-import {
-  isAuthenticatedAndAuthorized,
-  isAuthorized,
-  loadUser,
-  requireUser,
-} from '../authorization';
+import { resource } from '@decipad/backend-resources';
+import { isAuthorized, loadUser, requireUser } from '../authorization';
 import by from '../../../graphqlresource/src/utils/by';
 import { workspaceResource } from './workspaceResource';
+
+const workspaces = resource('workspace');
 
 export default {
   Query: {
@@ -36,8 +34,11 @@ export default {
       { id }: { id: ID },
       context: GraphqlContext
     ): Promise<WorkspaceRecord | undefined> {
-      const resource = `/workspaces/${id}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'READ');
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: id,
+        minimumPermissionType: 'READ',
+      });
 
       const data = await tables();
       return data.workspaces.get({ id });
@@ -66,7 +67,7 @@ export default {
         })
       ).Items;
 
-      const workspaces = [];
+      const workspaceRecords = [];
 
       for (const permission of permissions) {
         // TODO should we use Promise.all?
@@ -75,11 +76,11 @@ export default {
           id: permission.resource_id,
         });
         if (workspace) {
-          workspaces.push(workspace);
+          workspaceRecords.push(workspace);
         }
       }
 
-      return workspaces.sort(byDesc('name'));
+      return workspaceRecords.sort(byDesc('name'));
     },
   },
 
@@ -100,8 +101,11 @@ export default {
       { id, workspace }: { id: ID; workspace: WorkspaceInput },
       context: GraphqlContext
     ) {
-      const resource = `/workspaces/${id}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const { resources } = await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: id,
+        minimumPermissionType: 'WRITE',
+      });
 
       const data = await tables();
       const previousWorkspace = await data.workspaces.get({ id });
@@ -113,7 +117,7 @@ export default {
       await data.workspaces.put(newWorkspace);
 
       await notifyAllWithAccessTo<WorkspaceRecord>(
-        resource,
+        resources,
         'workspacesChanged',
         {
           updated: [
@@ -133,7 +137,11 @@ export default {
       { id }: { id: ID },
       context: GraphqlContext
     ) {
-      await isAuthenticatedAndAuthorized(`/workspaces/${id}`, context, 'ADMIN');
+      const { resources } = await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: id,
+        minimumPermissionType: 'ADMIN',
+      });
 
       const data = await tables();
       const roles = (
@@ -154,7 +162,7 @@ export default {
       }
       /* eslint-enable no-await-in-loop */
 
-      await removeAllPermissionsFor(`/workspaces/${id}`);
+      await removeAllPermissionsFor(resources[0]);
     },
   },
 
@@ -215,14 +223,14 @@ export default {
     },
 
     access: async (workspace: Workspace) => {
-      const resource = `/workspaces/${workspace.id}`;
+      const workspaceResourceName = `/workspaces/${workspace.id}`;
       const data = await tables();
       const permissions = (
         await data.permissions.query({
           IndexName: 'byResource',
           KeyConditionExpression: 'resource_uri = :resource_uri',
           ExpressionAttributeValues: {
-            ':resource_uri': resource,
+            ':resource_uri': workspaceResourceName,
           },
         })
       ).Items;
@@ -258,7 +266,7 @@ export default {
       _: unknown,
       context: GraphqlContext
     ) => {
-      const resource = `/workspaces/${parent.id}`;
+      const workspaceResourceName = `/workspaces/${parent.id}`;
       const data = await tables();
       const { user } = context;
       const secret =
@@ -270,7 +278,7 @@ export default {
         .filter(Boolean)
         .join(' OR ');
       const ExpressionAttributeValues: Record<string, string> = {
-        ':resource_uri': resource,
+        ':resource_uri': workspaceResourceName,
       };
       if (user) {
         ExpressionAttributeValues[':user_id'] = user.id;

@@ -2,7 +2,6 @@ import { Doc as YDoc, applyUpdate } from 'yjs';
 import Zip from 'adm-zip';
 import { DocSyncSnapshotRecord, User } from '@decipad/backendtypes';
 import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import tables, { allPages } from '@decipad/tables';
@@ -14,18 +13,21 @@ import { Buffer } from 'buffer';
 import { toSlateDoc } from '@decipad/slate-yjs';
 import { Document } from '@decipad/editor-types';
 import { format } from 'date-fns';
+import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
-async function checkAccess(
-  user: User | undefined,
-  padId: string
-): Promise<void> {
+const notebooks = resource('notebook');
+
+async function checkAccess(user: User | undefined, padId: string) {
   if (!user) {
     throw Boom.forbidden('Needs authentication');
   }
 
-  const resource = `/pads/${padId}`;
-  await expectAuthorized({ resource, user, permissionType: 'READ' });
+  await notebooks.expectAuthorized({
+    user,
+    recordId: padId,
+    minimumPermissionType: 'READ',
+  });
 }
 
 const DATE_FORMAT = 'yyyy-MM-dd_HHmm';

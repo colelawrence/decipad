@@ -14,11 +14,14 @@ import {
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/tables';
 import { timestamp } from '@decipad/services/utils';
+import { resource } from '@decipad/backend-resources';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
-import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
+import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
+
+const notebooks = resource('notebook');
 
 export interface ICreateAttachmentFormParams {
   padId: string;
@@ -33,12 +36,14 @@ export default {
       { padId, fileName: userFileName, fileType }: ICreateAttachmentFormParams,
       context: GraphqlContext
     ) {
-      const padResource = `/pads/${padId}`;
-      const user = await isAuthenticatedAndAuthorized(
-        padResource,
+      const { user, resources } = await notebooks.expectAuthorizedForGraphql({
         context,
-        'WRITE'
-      );
+        minimumPermissionType: 'WRITE',
+        recordId: padId,
+      });
+      if (!user) {
+        throw new ForbiddenError('Not authenticated');
+      }
 
       const form = await getForm(padId, userFileName, fileType);
 
@@ -46,7 +51,7 @@ export default {
       const newFileAttachment = {
         id: nanoid(),
         user_id: user.id,
-        resource_uri: padResource,
+        resource_uri: resources[0],
         user_filename: userFileName,
         filename: form.fileName,
         filetype: form.fileType,
@@ -80,8 +85,11 @@ export default {
         throw new ForbiddenError('File was not uploaded by the same user');
       }
 
-      const resource = attachment.resource_uri;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      await notebooks.expectAuthorizedForGraphql({
+        context,
+        resourceIds: [attachment.resource_uri],
+        minimumPermissionType: 'WRITE',
+      });
 
       const parsedResource = parseResourceUri(attachment.resource_uri);
       expectEqual(parsedResource.type, 'pads');
@@ -115,11 +123,12 @@ export default {
         throw new UserInputError('No such attachment was found');
       }
 
-      await isAuthenticatedAndAuthorized(
-        attachment.resource_uri,
+      await notebooks.expectAuthorizedForGraphql({
         context,
-        'WRITE'
-      );
+        resourceIds: [attachment.resource_uri],
+        minimumPermissionType: 'WRITE',
+      });
+
       await data.fileattachments.delete({ id: attachmentId });
     },
   },

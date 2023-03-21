@@ -14,6 +14,7 @@ import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
 import { ShareWithUserFunction } from './share-with-user';
+import { getResources } from './utils/getResources';
 
 export type ShareWithEmailArgs = {
   id: ID;
@@ -44,8 +45,8 @@ export const shareWithEmail = <
       args: ShareWithEmailArgs,
       context: GraphqlContext
     ): Promise<RecordT> => {
-      const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-      await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+      const resources = await getResources(resourceType, args.id);
+      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
       const actingUser = requireUser(context);
 
       const data = await resourceType.dataTable();

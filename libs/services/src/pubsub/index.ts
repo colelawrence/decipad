@@ -64,7 +64,7 @@ async function notifyMany<T extends TableRecord>(
   });
 }
 
-async function notifyAllWithAccessTo<T extends TableRecord>(
+async function notifyAllWithAccessToResource<T extends TableRecord>(
   resource: URI,
   type: string,
   _changes: Changes<T>
@@ -76,9 +76,9 @@ async function notifyAllWithAccessTo<T extends TableRecord>(
   do {
     const q: DynamoDbQuery = {
       IndexName: 'byResource',
-      KeyConditionExpression: 'resource_uri = :resource_uri',
+      KeyConditionExpression: 'resource_uri = :resource',
       ExpressionAttributeValues: {
-        ':resource_uri': resource,
+        ':resource': resource,
       },
     };
 
@@ -95,6 +95,18 @@ async function notifyAllWithAccessTo<T extends TableRecord>(
 
     await notifyMany(userIds, type, changes);
   } while (lastKey);
+}
+
+async function notifyAllWithAccessTo<T extends TableRecord>(
+  resources: URI[],
+  type: string,
+  _changes: Changes<T>
+) {
+  return Promise.all(
+    resources.map((resource) =>
+      notifyAllWithAccessToResource(resource, type, _changes)
+    )
+  );
 }
 
 function fakeAsyncIterable<T extends TableRecord>(): AsyncIterable<Changes<T>> {

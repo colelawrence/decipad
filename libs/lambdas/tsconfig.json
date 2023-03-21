@@ -23,6 +23,7 @@
     { "path": "../backend-analytics" },
     { "path": "../docsync-maintenance" },
     { "path": "../slate-yjs" },
-    { "path": "../retry" }
+    { "path": "../retry" },
+    { "path": "../backend-resources" }
   ]
 }

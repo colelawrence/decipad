@@ -11,6 +11,7 @@
     { "path": "../graphqlresource" },
     { "path": "../config" },
     { "path": "../backend-trace" },
-    { "path": "../y-dynamodb" }
+    { "path": "../y-dynamodb" },
+    { "path": "../backend-resources" }
   ]
 }

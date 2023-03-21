@@ -20,6 +20,7 @@ import {
   getNotebooksSharedWith,
   getWorkspaceNotebooks,
 } from '@decipad/services/notebooks';
+import { resource } from '@decipad/backend-resources';
 import {
   isAuthenticatedAndAuthorized,
   isAuthorized,
@@ -33,6 +34,8 @@ import { importPad } from './importPad';
 import { setPadPublic } from './setPadPublic';
 import { movePad } from './movePad';
 import { padResource } from './padResource';
+
+const workspaces = resource('workspace');
 
 const resolvers = {
   Query: {
@@ -51,8 +54,8 @@ const resolvers = {
       { page, workspaceId }: { page: PageInput; workspaceId: ID },
       context: GraphqlContext
     ): Promise<PagedResult<PadRecord>> {
-      const resource = `/workspaces/${workspaceId}`;
-      if (await isAuthorized(resource, context, 'READ')) {
+      const workspaceResource = `/workspaces/${workspaceId}`;
+      if (await isAuthorized(workspaceResource, context, 'READ')) {
         return getWorkspaceNotebooks({
           user: loadUser(context),
           workspaceId,
@@ -84,8 +87,8 @@ const resolvers = {
       opts: { workspaceId: ID; pad: PadInput; sectionId: ID },
       context: GraphqlContext
     ) {
-      const resource = `/workspaces/${opts.workspaceId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const workspaceResource = `/workspaces/${opts.workspaceId}`;
+      await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
       const notebook = opts.pad;
 
@@ -245,8 +248,11 @@ const resolvers = {
       _: unknown,
       context: GraphqlContext
     ): Promise<PadRecord[]> {
-      const resource = `/workspaces/${section.workspace_id}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'READ');
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: section.workspace_id,
+        minimumPermissionType: 'READ',
+      });
       const data = await tables();
 
       const query = {

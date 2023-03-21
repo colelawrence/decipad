@@ -7,6 +7,7 @@ import {
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type GetByIdFunction<GraphqlT extends GraphqlObjectType> = (
   _: unknown,
@@ -30,11 +31,8 @@ export function getById<
       throw new UserInputError(`No such ${resource.humanName}`);
     }
     if (!resource.isPublic || !resource.isPublic(record)) {
-      await expectAuthenticatedAndAuthorized(
-        `/${resource.resourceTypeName}/${id}`,
-        context,
-        'READ'
-      );
+      const resources = await getResources(resource, id);
+      await expectAuthenticatedAndAuthorized(resources, context, 'READ');
     }
 
     return resource.toGraphql(record);

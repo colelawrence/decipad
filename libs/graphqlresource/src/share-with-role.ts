@@ -9,6 +9,7 @@ import { create as createResourcePermission } from '@decipad/services/permission
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type ShareWithRoleArgs = {
   id: ID;
@@ -36,9 +37,8 @@ export function shareWithRole<
     args: ShareWithRoleArgs,
     context: GraphqlContext
   ) => {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const actingUser = requireUser(context);
 
     const data = await resourceType.dataTable();
@@ -50,7 +50,8 @@ export function shareWithRole<
     const permission: Parameters<typeof createResourcePermission>[0] = {
       roleId: args.roleId,
       givenByUserId: actingUser.id,
-      resourceUri: resource,
+      resourceUri: resources[0],
+      parentResourceUri: resources[1],
       type: args.permissionType,
       canComment: !!args.canComment,
     };

@@ -8,6 +8,7 @@ import { removeAllPermissionsFor } from '@decipad/services/permissions';
 import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type RemoveFunction = (
   _: unknown,
@@ -28,12 +29,12 @@ export function remove<
     args: { id: ID },
     context: GraphqlContext
   ) {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const data = await resourceType.dataTable();
     await Promise.all([
       data.delete({ id: args.id }),
-      removeAllPermissionsFor(resource),
+      removeAllPermissionsFor(resources[0]),
     ]);
 
     await track(

@@ -10,6 +10,7 @@ import { UserInputError } from 'apollo-server-lambda';
 import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type ShareWithUserArgs = {
   id: ID;
@@ -37,8 +38,8 @@ export function shareWithUser<
     args: ShareWithUserArgs,
     context: GraphqlContext
   ) => {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const actorUser = requireUser(context);
 
     const data = await resourceType.dataTable();
@@ -54,7 +55,7 @@ export function shareWithUser<
         KeyConditionExpression:
           'resource_uri = :resource_uri and user_id = :user_id',
         ExpressionAttributeValues: {
-          ':resource_uri': resource,
+          ':resource_uri': resources[0],
           ':user_id': args.userId,
         },
       })
@@ -71,7 +72,8 @@ export function shareWithUser<
       const permission: Parameters<typeof createResourcePermission>[0] = {
         userId: args.userId,
         givenByUserId: actorUser.id,
-        resourceUri: resource,
+        resourceUri: resources[0],
+        parentResourceUri: resources[1],
         type: args.permissionType,
         canComment: !!args.canComment,
       };

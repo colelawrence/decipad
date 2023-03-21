@@ -8,10 +8,12 @@ import {
 } from '@decipad/backendtypes';
 import assert from 'assert';
 import tables, { allPages, paginate } from '@decipad/tables';
-
 import { subscribe } from '@decipad/services/pubsub';
-import { requireUser, isAuthenticatedAndAuthorized } from '../authorization';
+import { resource } from '@decipad/backend-resources';
+import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
+
+const notebooks = resource('notebook');
 
 const resolvers = {
   Query: {
@@ -71,9 +73,9 @@ const resolvers = {
         query,
         page,
         async (userTaggedResource: UserTaggedResourceRecord) => {
-          const resource = parseResourceUri(userTaggedResource.resource_uri);
-          assert.strictEqual(resource.type, 'pads');
-          return data.pads.get({ id: resource.id });
+          const resourceUri = parseResourceUri(userTaggedResource.resource_uri);
+          assert.strictEqual(resourceUri.type, 'pads');
+          return data.pads.get({ id: resourceUri.id });
         }
       );
     },
@@ -85,14 +87,17 @@ const resolvers = {
       { padId, tag }: { padId: ID; tag: string },
       context: GraphqlContext
     ) {
-      const resource = `/pads/${padId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const { resources } = await notebooks.expectAuthorizedForGraphql({
+        context,
+        recordId: padId,
+        minimumPermissionType: 'WRITE',
+      });
 
       const data = await tables();
       const newTag = {
-        id: `${resource}/tags/${encodeURIComponent(tag)}`,
+        id: `${resources[0]}/tags/${encodeURIComponent(tag)}`,
         tag,
-        resource_uri: resource,
+        resource_uri: resources[0],
       };
       await data.tags.put(newTag);
     },
@@ -102,11 +107,14 @@ const resolvers = {
       { padId, tag }: { padId: ID; tag: string },
       context: GraphqlContext
     ) {
-      const resource = `/pads/${padId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const { resources } = await notebooks.expectAuthorizedForGraphql({
+        context,
+        recordId: padId,
+        minimumPermissionType: 'WRITE',
+      });
 
       const data = await tables();
-      const tagId = `${resource}/tags/${encodeURIComponent(tag)}`;
+      const tagId = `${resources[0]}/tags/${encodeURIComponent(tag)}`;
       await data.tags.delete({ id: tagId });
     },
   },
@@ -134,14 +142,14 @@ const resolvers = {
 
   Pad: {
     async tags(pad: Pad): Promise<string[]> {
-      const resource = `/pads/${pad.id}`;
+      const notebookResource = `/pads/${pad.id}`;
       const data = await tables();
 
       const query = {
         IndexName: 'byResource',
         KeyConditionExpression: 'resource_uri = :resource_uri',
         ExpressionAttributeValues: {
-          ':resource_uri': resource,
+          ':resource_uri': notebookResource,
         },
       };
       const tags = [];

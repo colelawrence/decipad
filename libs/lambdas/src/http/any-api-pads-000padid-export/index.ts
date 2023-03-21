@@ -1,9 +1,11 @@
 import Boom from '@hapi/boom';
 import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
 import { getDefined } from '@decipad/utils';
 import { exportNotebookWithAttachments } from '@decipad/services/notebooks';
+import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
+
+const notebooks = resource('notebook');
 
 export const handler = handle(async (event) => {
   const notebookId = getDefined(getDefined(event.pathParameters).padid);
@@ -13,8 +15,11 @@ export const handler = handle(async (event) => {
     throw Boom.forbidden('Needs authentication');
   }
 
-  const resource = `/pads/${notebookId}`;
-  await expectAuthorized({ resource, user, permissionType: 'READ' });
+  await notebooks.expectAuthorized({
+    recordId: notebookId,
+    user,
+    minimumPermissionType: 'READ',
+  });
 
   const response = await exportNotebookWithAttachments({
     notebookId,

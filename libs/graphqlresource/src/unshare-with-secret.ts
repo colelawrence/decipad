@@ -7,6 +7,7 @@ import {
 import tables from '@decipad/tables';
 import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized } from './authorization';
+import { getResources } from './utils/getResources';
 
 export type UnshareWithSecretArgs = {
   id: ID;
@@ -32,21 +33,30 @@ export function unshareWithSecret<
     args: UnshareWithSecretArgs,
     context: GraphqlContext
   ) {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const data = await tables();
-    const permissions = await data.permissions.query({
-      IndexName: 'byResourceAndSecret',
-      KeyConditionExpression:
-        'resource_uri = :resource_uri AND secret = :secret',
-      ExpressionAttributeValues: {
-        ':resource_uri': resource,
-        ':secret': args.secret,
-      },
-    });
+    const permissions = (
+      await Promise.all(
+        resources.map(
+          async (resource) =>
+            (
+              await data.permissions.query({
+                IndexName: 'byResourceAndSecret',
+                KeyConditionExpression:
+                  'resource_uri = :resource AND secret = :secret',
+                ExpressionAttributeValues: {
+                  ':resource': resource,
+                  ':secret': args.secret,
+                },
+              })
+            ).Items
+        )
+      )
+    ).flat(1);
 
     await Promise.all(
-      permissions.Items.map(async (permission) => {
+      permissions.map(async (permission) => {
         await data.permissions.delete({ id: permission.id });
       })
     );

@@ -6,7 +6,8 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from './';
+import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type UnshareWithRoleArgs = {
   id: ID;
@@ -32,11 +33,11 @@ export function unshareWithRole<
     args: UnshareWithRoleArgs,
     context: GraphqlContext
   ) {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const data = await tables();
     await data.permissions.delete({
-      id: `/users/null/roles/${args.roleId}${resource}`,
+      id: `/users/null/roles/${args.roleId}${resources[0]}`,
     });
   };
 }

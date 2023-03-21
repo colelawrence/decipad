@@ -23,7 +23,7 @@ export const handler = handle(
       throw Boom.badRequest('missing parameters');
     }
     const resource = `/externaldatasources/${id}`;
-    await expectAuthorized({ resource, user, permissionType: 'READ' });
+    await expectAuthorized({ resource, user, minimumPermissionType: 'READ' });
 
     const data = await tables();
     const externalDataSource = await data.externaldatasources.get({ id });

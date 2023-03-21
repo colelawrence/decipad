@@ -36,14 +36,14 @@ export const TOKEN_COOKIE_NAMES = [
   '__Secure-next-auth.session-token',
 ];
 
-function validAuthResult(authResult: AuthResult): boolean {
+export function isValidAuthResult(authResult: AuthResult): boolean {
   return !!authResult.secret || !!authResult.user;
 }
 
 export async function authenticate(event: Request): Promise<AuthResult[]> {
   const tokens = getSessionTokens(event);
   return (await Promise.all(tokens.map(authenticateOneToken))).filter(
-    validAuthResult
+    isValidAuthResult
   );
 }
 
@@ -105,6 +105,20 @@ function validAuthenticatedAuthResult(
   authResult: AuthenticatedAuthResult
 ): boolean {
   return !!authResult.user || !!authResult.token;
+}
+
+function userAuthenticatedAuthResult(
+  authResult: AuthenticatedAuthResult
+): boolean {
+  return !!authResult.user;
+}
+
+export async function getAuthenticatedUser(
+  event: Request
+): Promise<User | undefined> {
+  return (await authenticate(event))
+    .map(authenticatedAuthResultFromAuthResult)
+    .filter(userAuthenticatedAuthResult)[0]?.user;
 }
 
 export async function expectAuthenticated(

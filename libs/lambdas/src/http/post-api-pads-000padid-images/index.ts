@@ -1,13 +1,15 @@
 /* eslint-disable import/no-import-module-exports */
 import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
 import { attachmentUrl } from '@decipad/services/blobs/attachments';
 import { createImageAttachment } from '@decipad/services/images';
 import { getDefined } from '@decipad/utils';
 
 import Boom from '@hapi/boom';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
+import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
+
+const notebooks = resource('notebook');
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   const [{ user }] = await expectAuthenticated(event);
@@ -15,8 +17,11 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
     throw Boom.notAcceptable('missing parameters');
   }
   const padId = getDefined(event.pathParameters.padid);
-  const resource = `/pads/${padId}`;
-  await expectAuthorized({ resource, user, permissionType: 'WRITE' });
+  await notebooks.expectAuthorized({
+    user,
+    recordId: padId,
+    minimumPermissionType: 'READ',
+  });
 
   if (!event.body) {
     throw Boom.badRequest('no image uploaded');

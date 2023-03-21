@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "references": [
+    { "path": "../backendtypes" },
+    { "path": "../services" },
+    { "path": "../utils" },
+    { "path": "../tables" }
+  ]
+}

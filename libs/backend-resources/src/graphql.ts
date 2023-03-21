@@ -1,7 +1,7 @@
 import { PermissionType, User } from '@decipad/backendtypes';
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
-import { ForbiddenError } from 'apollo-server-lambda';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { ForbiddenError } from 'apollo-server-lambda';
 
 type Context = {
   user?: User;
@@ -22,28 +22,43 @@ export function loadSecret(context: Context): string | undefined {
   return context.event.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
 }
 
-export async function isAuthorized(
+export async function isAuthorizedGraphql(
   resources: string[],
   context: Context,
-  permissionType: PermissionType = 'READ'
+  minimumPermissionType: PermissionType = 'READ'
 ): Promise<PermissionType | null> {
   const user = loadUser(context);
   const secret = loadSecret(context);
-
   return isAuthorizedBase({
     resources,
     user,
     secret,
-    minimumPermissionType: permissionType,
+    minimumPermissionType,
   });
 }
 
-export async function expectAuthenticatedAndAuthorized(
-  resources: string[],
-  context: Context,
-  permissionType: PermissionType
-): Promise<void> {
-  if (!(await isAuthorized(resources, context, permissionType))) {
+export interface IsAuthenticatedAndAuthorizedGraphqlParams {
+  resources: string[];
+  context: Context;
+  minimumPermissionType: PermissionType;
+}
+
+export async function isAuthenticatedAndAuthorizedGraphql({
+  resources,
+  context,
+  minimumPermissionType,
+}: IsAuthenticatedAndAuthorizedGraphqlParams): Promise<{
+  user: User;
+  permissionType: PermissionType;
+}> {
+  const user = requireUser(context);
+  const permissionType = await isAuthorizedGraphql(
+    resources,
+    context,
+    minimumPermissionType
+  );
+  if (!permissionType) {
     throw new ForbiddenError('Forbidden');
   }
+  return { user, permissionType };
 }

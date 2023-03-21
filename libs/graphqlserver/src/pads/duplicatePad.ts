@@ -6,8 +6,11 @@ import {
   importNotebookContent,
   duplicateNotebookAttachments,
 } from '@decipad/services/notebooks';
-import { UserInputError } from 'apollo-server-lambda';
-import { isAuthenticatedAndAuthorized } from '../authorization';
+import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
+import { resource } from '@decipad/backend-resources';
+
+const notebooks = resource('notebook');
+const workspaces = resource('workspace');
 
 export const duplicatePad = async (
   _: unknown,
@@ -18,7 +21,6 @@ export const duplicatePad = async (
   }: { id: ID; targetWorkspace?: string; document?: string },
   context: GraphqlContext
 ): Promise<Pad> => {
-  const resource = `/pads/${id}`;
   const data = await tables();
   const previousPad = await data.pads.get({ id });
 
@@ -26,26 +28,30 @@ export const duplicatePad = async (
     throw new UserInputError('No such pad');
   }
 
+  await notebooks.expectAuthorizedForGraphql({
+    context,
+    recordId: id,
+    minimumPermissionType: 'READ',
+  });
+
   const newName =
     targetWorkspace === previousPad.workspace_id
       ? `Copy of ${previousPad.name}`
       : previousPad.name;
-
-  if (!previousPad.isPublic) {
-    await isAuthenticatedAndAuthorized(resource, context, 'READ');
-  }
 
   previousPad.name = newName;
   previousPad.isPublic = false;
 
   const workspaceId = targetWorkspace || previousPad.workspace_id;
 
-  const workspaceResource = `/workspaces/${workspaceId}`;
-  const user = await isAuthenticatedAndAuthorized(
-    workspaceResource,
+  const { user } = await workspaces.expectAuthorizedForGraphql({
     context,
-    'WRITE'
-  );
+    recordId: workspaceId,
+    minimumPermissionType: 'WRITE',
+  });
+  if (!user) {
+    throw new ForbiddenError('not authenticated');
+  }
 
   const clonedPad = await createPad2(workspaceId, previousPad, user);
 

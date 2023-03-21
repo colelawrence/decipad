@@ -9,6 +9,7 @@ import { track } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type UpdateArgs<T> = T & {
   id: ID;
@@ -40,8 +41,8 @@ export function update<
     input: UpdateArgs<UpdateInputT>,
     context: GraphqlContext
   ) {
-    const resource = `/${resourceType.resourceTypeName}/${input.id}`;
-    await expectAuthenticatedAndAuthorized(resource, context, 'WRITE');
+    const resources = await getResources(resourceType, input.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'WRITE');
     const data = await resourceType.dataTable();
     const oldRecord = await data.get({ id: input.id });
     if (!oldRecord) {
@@ -54,7 +55,7 @@ export function update<
 
     if (resourceType.pubSubChangeTopic) {
       console.log('notifying', resourceType.pubSubChangeTopic);
-      await notifyAllWithAccessTo(resource, resourceType.pubSubChangeTopic, {
+      await notifyAllWithAccessTo(resources, resourceType.pubSubChangeTopic, {
         updated: [graphqlReturn],
       });
     }

@@ -13,10 +13,12 @@ import tables, { allPages } from '@decipad/tables';
 import { auth as authConfig, app as appConfig } from '@decipad/config';
 import { timestamp } from '@decipad/services/utils';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
+import { resource } from '@decipad/backend-resources';
 import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
 
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
+const workspaces = resource('workspace');
 
 async function checkIfCanRemoveUserFromRole(
   {
@@ -129,8 +131,11 @@ export default {
       { role }: { role: RoleInput },
       context: GraphqlContext
     ): Promise<RoleRecord> {
-      const workspaceResource = `/workspaces/${role.workspaceId}`;
-      await isAuthenticatedAndAuthorized(workspaceResource, context, 'ADMIN');
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: role.workspaceId,
+        minimumPermissionType: 'ADMIN',
+      });
 
       const newRole = {
         id: nanoid(),

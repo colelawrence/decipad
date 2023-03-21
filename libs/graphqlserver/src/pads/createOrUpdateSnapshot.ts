@@ -4,18 +4,23 @@ import tables from '@decipad/tables';
 import { snapshot, storeSnapshotDataAsFile } from '@decipad/services/notebooks';
 import { timestamp } from '@decipad/services/utils';
 import Boom from '@hapi/boom';
-import { isAuthenticatedAndAuthorized } from '../authorization';
+import { resource } from '@decipad/backend-resources';
 import { snapshotFilePath } from './snapshotFilePath';
 
 const MAX_DATA_SIZE_BYTES = 100_000;
+
+const notebooks = resource('notebook');
 
 export const createOrUpdateSnapshot = async (
   _: unknown,
   { notebookId, snapshotName }: { notebookId: ID; snapshotName: string },
   context: GraphqlContext
 ): Promise<boolean> => {
-  const resource = `/pads/${notebookId}`;
-  await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+  await notebooks.expectAuthorizedForGraphql({
+    context,
+    recordId: notebookId,
+    minimumPermissionType: 'WRITE',
+  });
 
   const data = await tables();
   let [existingSnapshot] = (

@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
 import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
+import { getResources } from './utils/getResources';
 
 export type ShareWithSecretArgs = {
   id: ID;
@@ -39,9 +40,8 @@ export function shareWithSecret<
     args: ShareWithSecretArgs,
     context: GraphqlContext
   ) {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const actorUser = requireUser(context);
 
     const data = await resourceType.dataTable();
@@ -51,7 +51,7 @@ export function shareWithSecret<
     }
 
     const existingPermissions = await getSecretPermissions({
-      resourceUri: resource,
+      resourceUri: resources[0],
       permissionType: args.permissionType,
     });
 
@@ -62,12 +62,13 @@ export function shareWithSecret<
 
     const secret = nanoid();
     console.log(
-      `about to create secret for resource resource ${resource}: ${secret}`
+      `about to create secret for resource resource ${resources[0]}: ${secret}`
     );
     const permission: Parameters<typeof createResourcePermission>[0] = {
       secret,
       givenByUserId: actorUser.id,
-      resourceUri: resource,
+      resourceUri: resources[0],
+      parentResourceUri: resources[1],
       type: args.permissionType,
       canComment: !!args.canComment,
     };

@@ -9,6 +9,7 @@ import { UserInputError } from 'apollo-server-lambda';
 import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized, loadUser } from './authorization';
 import { Resource } from '.';
+import { getResources } from './utils/getResources';
 
 export type UnshareWithUserArgs = {
   id: ID;
@@ -34,11 +35,11 @@ export function unshareWithUser<
     args: UnshareWithUserArgs,
     context: GraphqlContext
   ) {
-    const resource = `/${resourceType.resourceTypeName}/${args.id}`;
-    await expectAuthenticatedAndAuthorized(resource, context, 'ADMIN');
+    const resources = await getResources(resourceType, args.id);
+    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
     const { permissions } = await tables();
     await permissions.delete({
-      id: `/users/${args.userId}/roles/null${resource}`,
+      id: `/users/${args.userId}/roles/null${resources[0]}`,
     });
 
     const data = await resourceType.dataTable();

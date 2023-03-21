@@ -1,11 +1,9 @@
 import {
   ExternalDataSourceRecord,
   ExternalKeyRecord,
-  User,
 } from '@decipad/backendtypes';
 import { encodeTable, provider as getProvider } from '@decipad/externaldata';
 import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
@@ -13,19 +11,10 @@ import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
 } from 'aws-lambda';
+import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 
-async function checkAccess(
-  user: User | undefined,
-  externalDataSource: ExternalDataSourceRecord
-): Promise<void> {
-  if (!user) {
-    throw Boom.forbidden('Needs authentication');
-  }
-
-  const resource = `/pads/${externalDataSource.padId}`;
-  await expectAuthorized({ resource, user, permissionType: 'READ' });
-}
+const notebooks = resource('notebook');
 
 async function fetchExternalDataSource(
   id: string
@@ -37,14 +26,14 @@ async function fetchExternalDataSource(
 async function getAccessKey(
   externalDataSource: ExternalDataSourceRecord
 ): Promise<ExternalKeyRecord | null> {
-  const resource = `/pads/${externalDataSource.padId}`;
+  const notebookResource = `/pads/${externalDataSource.padId}`;
   const data = await tables();
   const keys = (
     await data.externaldatasourcekeys.query({
       IndexName: 'byResource',
       KeyConditionExpression: 'resource_uri = :resource_uri',
       ExpressionAttributeValues: {
-        ':resource_uri': resource,
+        ':resource_uri': notebookResource,
       },
     })
   ).Items;
@@ -90,7 +79,11 @@ export const handler = handle(
     }
 
     const [{ user }] = await expectAuthenticated(event);
-    await checkAccess(user, externalDataSource);
+    await notebooks.expectAuthorized({
+      user,
+      recordId: externalDataSource.padId,
+      minimumPermissionType: 'READ',
+    });
 
     const key = await getAccessKey(externalDataSource);
     if (!key) {

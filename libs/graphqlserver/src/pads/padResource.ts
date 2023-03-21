@@ -3,7 +3,9 @@ import Resource from '@decipad/graphqlresource';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/services/utils';
 import { nanoid } from 'nanoid';
-import { isAuthenticatedAndAuthorized } from '../authorization';
+import { resource } from '@decipad/backend-resources';
+
+const workspaces = resource('workspace');
 
 export const padResource = Resource({
   resourceTypeName: 'pads',
@@ -43,8 +45,11 @@ export const padResource = Resource({
     { workspaceId }: { workspaceId: ID },
     context: GraphqlContext
   ) => {
-    const workspaceResource = `/workspaces/${workspaceId}`;
-    await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
+    await workspaces.expectAuthorizedForGraphql({
+      context,
+      recordId: workspaceId,
+      minimumPermissionType: 'WRITE',
+    });
   },
 
   parentResourceUriFromCreateInput: ({ workspaceId }: { workspaceId: ID }) =>
@@ -53,4 +58,5 @@ export const padResource = Resource({
   parentResourceUriFromRecord: ({ workspace_id }: { workspace_id: ID }) =>
     /* eslint-disable camelcase */
     `/workspaces/${workspace_id}`,
+  delegateAccessToParentResource: true,
 });

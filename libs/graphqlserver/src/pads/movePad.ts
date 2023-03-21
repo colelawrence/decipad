@@ -1,7 +1,10 @@
 import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
-import { isAuthenticatedAndAuthorized } from '../authorization';
+import { resource } from '@decipad/backend-resources';
+
+const notebooks = resource('notebook');
+const workspaces = resource('workspace');
 
 export const movePad = async (
   _: unknown,
@@ -15,11 +18,18 @@ export const movePad = async (
     throw new UserInputError('No such pad');
   }
 
-  const padResource = `/pads/${id}`;
-  await isAuthenticatedAndAuthorized(padResource, context, 'ADMIN');
-  const workspaceResource = `/workspaces/${workspaceId}`;
-  await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
+  const { resources } = await notebooks.expectAuthorizedForGraphql({
+    context,
+    recordId: id,
+    minimumPermissionType: 'ADMIN',
+  });
 
+  const { resources: workspaceResources } =
+    await workspaces.expectAuthorizedForGraphql({
+      context,
+      recordId: workspaceId,
+      minimumPermissionType: 'WRITE',
+    });
   pad.workspace_id = workspaceId;
   await data.pads.put(pad);
 
@@ -27,7 +37,7 @@ export const movePad = async (
     IndexName: 'byResource',
     KeyConditionExpression: 'resource_uri = :resource',
     ExpressionAttributeValues: {
-      ':resource': padResource,
+      ':resource': resources[0],
     },
   };
 
@@ -37,8 +47,8 @@ export const movePad = async (
     if (!permission) {
       continue;
     }
-    if (permission.parent_resource_uri !== workspaceResource) {
-      permission.parent_resource_uri = workspaceResource;
+    if (permission.parent_resource_uri !== workspaceResources[0]) {
+      [permission.parent_resource_uri] = workspaceResources;
       await data.permissions.put(permission);
     }
   }

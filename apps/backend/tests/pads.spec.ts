@@ -236,7 +236,7 @@ test('pads', (ctx) => {
     expect(pad2.createdAt).toBeDefined();
   });
 
-  it('invited user cannot get the pad', async () => {
+  it('invited user can get the pad', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
     await expect(
       client.query({
@@ -249,7 +249,7 @@ test('pads', (ctx) => {
         }
       `,
       })
-    ).rejects.toThrow('Forbidden');
+    ).resolves.not.toThrow();
   });
 
   it('the creator can share a notebook with secret', async () => {

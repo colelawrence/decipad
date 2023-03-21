@@ -37,7 +37,7 @@ function secretFromAny(authResults: AuthResult[]): string | undefined {
 
 interface ConnectParams {
   connId: string;
-  resource: string;
+  resources: string[];
   versionName: string;
   auth: AuthResult[];
   protocol: number;
@@ -45,7 +45,7 @@ interface ConnectParams {
 
 export async function onConnect({
   connId,
-  resource,
+  resources,
   versionName,
   auth,
   protocol,
@@ -54,7 +54,7 @@ export async function onConnect({
   if (
     !auth.length &&
     (await isAuthorized({
-      resource,
+      resources,
       user: undefined,
       secret: undefined,
       minimumPermissionType: 'READ',
@@ -63,7 +63,11 @@ export async function onConnect({
     permissionTypes = ['READ'];
   } else {
     permissionTypes = (
-      await Promise.all(auth.map(authorizedForResource(resource)))
+      await Promise.all(
+        resources
+          .map((resource) => auth.map(authorizedForResource(resource)))
+          .flat(1)
+      )
     ).filter(Boolean) as PermissionType[];
   }
   if (permissionTypes.length < 1) {
@@ -74,7 +78,7 @@ export async function onConnect({
   const conn = {
     id: connId,
     user_id: userFromAny(auth)?.id,
-    room: resource,
+    room: resources[0],
     authorizationType: maximumPermissionIn(permissionTypes),
     secret: secretFromAny(auth),
     versionName,
@@ -87,7 +91,7 @@ export async function onConnect({
     name: 'sync-after-connect',
     payload: {
       connectionId: connId,
-      resource,
+      resource: resources[0],
     },
   });
 }

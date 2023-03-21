@@ -4,10 +4,12 @@ import { User } from '@decipad/backendtypes';
 import { APIGatewayProxyResultV2 as HttpResponse } from 'aws-lambda';
 import Boom from '@hapi/boom';
 import { app } from '@decipad/config';
-import { expectAuthorized } from '@decipad/services/authorization';
 import { create as createNotebook } from '@decipad/services/notebooks';
 import { ensurePrivateWorkspaceForUser } from '@decipad/services/workspaces';
+import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
+
+const notebooks = resource('notebook');
 
 async function checkAccess(
   user: User | undefined,
@@ -17,8 +19,11 @@ async function checkAccess(
     throw Boom.forbidden('Needs authentication');
   }
 
-  const resource = `/pads/${padId}`;
-  await expectAuthorized({ resource, user, permissionType: 'WRITE' });
+  await notebooks.expectAuthorized({
+    recordId: padId,
+    user,
+    minimumPermissionType: 'WRITE',
+  });
 }
 
 export const handler = handle(async (event): Promise<HttpResponse> => {

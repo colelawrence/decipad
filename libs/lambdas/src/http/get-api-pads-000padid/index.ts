@@ -1,10 +1,12 @@
 /* eslint-disable import/no-import-module-exports */
 import { expectAuthenticated } from '@decipad/services/authentication';
-import { expectAuthorized } from '@decipad/services/authorization';
 import tables from '@decipad/tables';
+import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import handle from '../handle';
+
+const notebooks = resource('notebook');
 
 exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   const [{ user }] = await expectAuthenticated(event);
@@ -15,8 +17,11 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
   if (!padId) {
     throw Boom.notAcceptable('missing parameter padid');
   }
-  const resource = `/pads/${padId}`;
-  await expectAuthorized({ resource, user, permissionType: 'READ' });
+  await notebooks.expectAuthorized({
+    user,
+    recordId: padId,
+    minimumPermissionType: 'READ',
+  });
 
   const data = await tables();
   const notebook = await data.pads.get({ id: padId });

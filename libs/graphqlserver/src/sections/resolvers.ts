@@ -12,7 +12,10 @@ import { timestamp } from '@decipad/services/utils';
 import Boom from '@hapi/boom';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
+import { resource } from '@decipad/backend-resources';
 import { isAuthenticatedAndAuthorized, requireUser } from '../authorization';
+
+const notebooks = resource('notebook');
 
 const resolvers = {
   Mutation: {
@@ -21,8 +24,8 @@ const resolvers = {
       { workspaceId, section }: { workspaceId: ID; section: SectionInput },
       context: GraphqlContext
     ): Promise<SectionRecord> {
-      const resource = `/workspaces/${workspaceId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const workspaceResource = `/workspaces/${workspaceId}`;
+      await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
       const data = await tables();
       const newSection = {
@@ -40,8 +43,11 @@ const resolvers = {
       { sectionId, notebookId }: { sectionId: ID; notebookId: ID },
       context: GraphqlContext
     ) {
-      const resource = `/pads/${notebookId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      await notebooks.expectAuthorizedForGraphql({
+        context,
+        recordId: notebookId,
+        minimumPermissionType: 'WRITE',
+      });
 
       const data = await tables();
 
@@ -79,8 +85,8 @@ const resolvers = {
       { workspaceId, sectionId }: { workspaceId: ID; sectionId: ID },
       context: GraphqlContext
     ) {
-      const resource = `/workspaces/${workspaceId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const workspaceResource = `/workspaces/${workspaceId}`;
+      await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
       const data = await tables();
       await data.sections.delete({ id: sectionId });
@@ -96,8 +102,8 @@ const resolvers = {
       }: { workspaceId: ID; sectionId: ID; section: SectionInput },
       context: GraphqlContext
     ) {
-      const resource = `/workspaces/${workspaceId}`;
-      await isAuthenticatedAndAuthorized(resource, context, 'WRITE');
+      const workspaceResource = `/workspaces/${workspaceId}`;
+      await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
       const data = await tables();
       const oldSection = await data.sections.get({ id: sectionId });
