@@ -3,10 +3,16 @@ import {
   ExternalDataSourceCreateInput,
   ExternalDataSourceUpdateInput,
   ExternalDataSourceRecord,
+  GraphqlContext,
+  PageInput,
+  PagedResult,
 } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import tables, { paginate } from '@decipad/tables';
 import Resource from '@decipad/graphqlresource';
 import { app } from '@decipad/config';
+import { identity } from 'ramda';
+import { UserInputError } from 'apollo-server-lambda';
+import { isAuthenticatedAndAuthorized } from '../authorization';
 
 function baseUrlFor(externalDataSource: ExternalDataSourceRecord): string {
   const { urlBase, apiPathBase } = app();
@@ -25,22 +31,21 @@ const externalDataResource = Resource({
   resourceTypeName: 'externaldatasources',
   humanName: 'external data source',
   dataTable: async () => (await tables()).externaldatasources,
-  toGraphql: (d: ExternalDataSourceRecord) => ({
-    ...d,
-    dataUrl: dataUrlFor(d),
-    authUrl: authUrlFor(d),
-  }),
+  toGraphql: identity,
   newRecordFrom: ({
     dataSource,
   }: {
     dataSource: ExternalDataSourceCreateInput;
-  }) => ({
-    id: nanoid(),
-    name: dataSource.name,
-    padId: dataSource.padId,
-    provider: dataSource.provider,
-    externalId: dataSource.externalId,
-  }),
+  }) => {
+    const eds = {
+      id: nanoid(),
+      name: dataSource.name,
+      padId: dataSource.padId,
+      provider: dataSource.provider,
+      externalId: dataSource.externalId,
+    };
+    return eds;
+  },
   updateRecordFrom: (
     record: ExternalDataSourceRecord,
     { dataSource }: { dataSource: ExternalDataSourceUpdateInput }
@@ -50,11 +55,39 @@ const externalDataResource = Resource({
       ...dataSource,
     };
   },
+  skipPermissions: true,
 });
 
 const resolvers = {
   Query: {
     getExternalDataSource: externalDataResource.getById,
+    getExternalDataSources: async (
+      _: unknown,
+      { notebookId, page }: { notebookId: string; page: PageInput },
+      context: GraphqlContext
+    ): Promise<PagedResult<ExternalDataSourceRecord>> => {
+      const data = await tables();
+      const notebook = await data.pads.get({ id: notebookId });
+      if (!notebook) {
+        throw new UserInputError(`No such notebook`);
+      }
+      if (!notebook.isPublic) {
+        const notebookResource = `/pads/${notebookId}`;
+        await isAuthenticatedAndAuthorized(notebookResource, context, 'READ');
+      }
+      return paginate(
+        data.externaldatasources,
+        {
+          IndexName: 'byPadId',
+          KeyConditionExpression: 'padId = :padId',
+          ExpressionAttributeValues: {
+            ':padId': notebookId,
+          },
+        },
+        page,
+        { gqlType: 'ExternalDataSource' }
+      );
+    },
   },
 
   Mutation: {
@@ -70,6 +103,20 @@ const resolvers = {
 
   ExternalDataSource: {
     access: externalDataResource.access,
+    keys: async (externalDataSource: ExternalDataSourceRecord) => {
+      const data = await tables();
+      return (
+        await data.externaldatasourcekeys.query({
+          IndexName: 'byResource',
+          KeyConditionExpression: 'resource_uri = :resource_uri',
+          ExpressionAttributeValues: {
+            ':resource_uri': `/pads/${externalDataSource.padId}`,
+          },
+        })
+      ).Items;
+    },
+    dataUrl: (d: ExternalDataSourceRecord) => dataUrlFor(d),
+    authUrl: (d: ExternalDataSourceRecord) => authUrlFor(d),
   },
 };
 

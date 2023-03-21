@@ -41,9 +41,12 @@ describe('import performance', () => {
         typeof address === 'string'
           ? new URL(file, address)
           : new URL(file, `http://${address.address}:${address.port}/`);
-      const result = await tryImport(computer, url, undefined, {
-        useFirstRowAsHeader: true,
-      });
+      const result = await tryImport(
+        { computer, url },
+        {
+          useFirstRowAsHeader: true,
+        }
+      );
       expect(result).toHaveLength(1);
       expect(result[0].result).toMatchSnapshot('big1.csv-import-result');
     },

@@ -3,6 +3,7 @@ export * from './computer';
 export * from './dnd-preview';
 export * from './editor-readonly';
 export * from './results';
+export * from './editor-external-data-sources';
 export * from './editor-teleport';
 export * from './editor-teleport.hooks';
 export * from './editor-change';

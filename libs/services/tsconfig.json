@@ -9,6 +9,9 @@
       "path": "../backendtypes"
     },
     {
+      "path": "../backend-utils"
+    },
+    {
       "path": "../tables"
     },
     {

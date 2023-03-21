@@ -1,3 +1,6 @@
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useSession } from 'next-auth/react';
 import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useEditorPlugins } from '@decipad/editor';
 import { MyEditor } from '@decipad/editor-types';
@@ -6,14 +9,13 @@ import { ComputerContextProvider } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { insertLiveConnection } from '@decipad/editor-components';
 import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
-import { useSession } from 'next-auth/react';
-import { FC, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import {
   EditorUserInteractionsProvider,
   useEditorUserInteractionsContext,
 } from '../../react-contexts/src/editor-user-interactions';
 import { InitialSelection } from './InitialSelection';
+import { ExternalDataSourcesProvider } from './ExternalDataSourcesProvider';
 
 export interface NotebookConnectionParams {
   url: string;
@@ -35,6 +37,9 @@ export interface NotebookProps {
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;
   onAttached: (handle: string) => Promise<undefined | { url: URL }>;
+  useExternalDataSources: (
+    notebookId: string
+  ) => ExternalDataSourcesContextValue;
 }
 
 type InsideNodebookStateProps = Omit<
@@ -53,6 +58,7 @@ const InsideNotebookState = ({
   initialState,
   onEditor,
   onDocsync,
+  useExternalDataSources,
 }: InsideNodebookStateProps) => {
   // User warning
   const toast = useToast();
@@ -176,21 +182,26 @@ const InsideNotebookState = ({
 
   if (editor) {
     return (
-      <ComputerContextProvider computer={computer}>
-        <Editor
-          notebookId={notebookId}
-          loaded={loaded}
-          isSavedRemotely={editor.isSavedRemotely()}
-          editor={editor}
-          readOnly={readOnly}
-        >
-          <InitialSelection
+      <ExternalDataSourcesProvider
+        notebookId={notebookId}
+        useExternalDataSources={useExternalDataSources}
+      >
+        <ComputerContextProvider computer={computer}>
+          <Editor
             notebookId={notebookId}
             loaded={loaded}
+            isSavedRemotely={editor.isSavedRemotely()}
             editor={editor}
-          />
-        </Editor>
-      </ComputerContextProvider>
+            readOnly={readOnly}
+          >
+            <InitialSelection
+              notebookId={notebookId}
+              loaded={loaded}
+              editor={editor}
+            />
+          </Editor>
+        </ComputerContextProvider>
+      </ExternalDataSourcesProvider>
     );
   }
   return null;

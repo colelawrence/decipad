@@ -6,8 +6,8 @@ import {
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
+import { timestamp } from '@decipad/backend-utils';
 import handle from '../handle';
-import timestamp from '../../common/timestamp';
 
 export const handler = handle(allowListChangesHandler);
 

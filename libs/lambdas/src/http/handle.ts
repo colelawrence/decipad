@@ -4,11 +4,8 @@ import {
   APIGatewayProxyResultV2,
   APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
+import { Handler } from '@decipad/backendtypes';
 import { captureException, trace } from '@decipad/backend-trace';
-
-type Handler = (
-  req: APIGatewayProxyEvent
-) => Promise<APIGatewayProxyStructuredResultV2 | string | undefined | void>;
 
 export default (handler: Handler) => {
   return trace(

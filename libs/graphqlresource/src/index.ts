@@ -49,6 +49,7 @@ export interface Resource<
   parentResourceUriFromCreateInput?: (args: CreateInputType) => string;
   parentResourceUriFromRecord?: (args: DataTableType) => string;
   pubSubChangeTopic?: string;
+  skipPermissions?: boolean;
   delegateAccessToParentResource?: boolean;
 }
 

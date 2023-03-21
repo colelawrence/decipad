@@ -7,7 +7,7 @@ import { encode } from 'next-auth/jwt';
 import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
 import assert from 'assert';
-import timestamp from '../../common/timestamp';
+import { timestamp } from '@decipad/backend-utils';
 import handle from '../handle';
 
 const isSecureCookie =

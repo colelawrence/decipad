@@ -45,8 +45,10 @@ export const shareWithEmail = <
       args: ShareWithEmailArgs,
       context: GraphqlContext
     ): Promise<RecordT> => {
-      const resources = await getResources(resourceType, args.id);
-      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+      if (!resourceType.skipPermissions) {
+        const resources = await getResources(resourceType, args.id);
+        await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+      }
       const actingUser = requireUser(context);
 
       const data = await resourceType.dataTable();

@@ -13,6 +13,8 @@
     { "path": "../docsync" },
     { "path": "../editor-language-elements" },
     { "path": "../fetch" },
-    { "path": "../editor-utils" }
+    { "path": "../editor-utils" },
+    { "path": "../toast" },
+    { "path": "../interfaces" }
   ]
 }

@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import { HttpError } from '../utils/HttpError';
 
 interface ErrorResponseBody {
   error: {
@@ -17,7 +16,8 @@ interface RequestResponse {
 
 export async function request(
   url: URL,
-  json = false
+  json = false,
+  { proxy }: { proxy?: URL } = {}
 ): Promise<RequestResponse> {
   const fetchOptions = {
     method: 'GET',
@@ -25,7 +25,10 @@ export async function request(
       Referer: global.location.toString(),
     },
   };
-  const response = await fetch(url.toString(), fetchOptions);
+  const fetchUrl = proxy
+    ? `${proxy.toString()}?url=${encodeURIComponent(url.toString())}`
+    : url.toString();
+  const response = await fetch(fetchUrl, fetchOptions);
 
   if (!response.ok) {
     await handleResponseError(response);
@@ -40,14 +43,16 @@ export async function request(
 
 async function handleResponseError(response: Response) {
   const responseBodyString = await response.text();
+  // eslint-disable-next-line no-console
+  console.error('Error response', responseBodyString);
   let responseBodyJson: ErrorResponseBody | undefined;
   try {
     responseBodyJson = JSON.parse(responseBodyString as string);
   } catch (err) {
     // do nothing
   }
-  const error = responseBodyJson?.error
-    ? HttpError.fromResponse(responseBodyJson?.error)
-    : new Error(responseBodyString);
-  throw error;
+  const message =
+    (response.status === 403 ? 'Forbidden: ' : '') +
+    (responseBodyJson?.error?.message ?? responseBodyString);
+  throw new Error(message);
 }

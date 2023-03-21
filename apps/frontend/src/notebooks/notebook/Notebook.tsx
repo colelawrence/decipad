@@ -19,6 +19,7 @@ import {
 } from '../../graphql';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
+import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
 const loadTopbar = () =>
@@ -140,6 +141,7 @@ const Notebook: FC = () => {
                 onDocsync={setDocsync}
                 getAttachmentForm={getAttachmentForm}
                 onAttached={onAttached}
+                useExternalDataSources={useExternalDataSources}
               />
             </Frame>
           }

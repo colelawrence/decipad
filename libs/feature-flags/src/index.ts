@@ -16,6 +16,7 @@ export const availableFlags = [
   'FEATURE_FLAG_SWITCHER',
   'DATA_MAPPINGS',
   'ROTATED_DATA_VIEW',
+  'INTEGRATIONS_AUTH',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

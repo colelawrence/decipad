@@ -15,7 +15,7 @@ export type UnshareWithRoleArgs = {
 };
 
 export type UnshareWithRoleFunction = (
-  _: any,
+  _: unknown,
   args: UnshareWithRoleArgs,
   context: GraphqlContext
 ) => Promise<void>;
@@ -28,13 +28,15 @@ export function unshareWithRole<
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): UnshareWithRoleFunction {
-  return async function (
-    _: any,
+  return async (
+    _: unknown,
     args: UnshareWithRoleArgs,
     context: GraphqlContext
-  ) {
+  ) => {
     const resources = await getResources(resourceType, args.id);
-    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    if (!resourceType.skipPermissions) {
+      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    }
     const data = await tables();
     await data.permissions.delete({
       id: `/users/null/roles/${args.roleId}${resources[0]}`,

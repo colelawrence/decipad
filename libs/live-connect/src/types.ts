@@ -3,7 +3,6 @@ import {
   ImportElementSource,
   LiveConnectionElement,
   TableCellType,
-  ColIndex,
 } from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
 
@@ -19,14 +18,7 @@ export type Unsubscribe = () => void;
 
 export interface LiveConnectionWorker {
   subscribe: (
-    props: {
-      url: string;
-      source?: ImportElementSource;
-      options: RequestInit | undefined;
-      useFirstRowAsHeader?: boolean;
-      columnTypeCoercions: Record<ColIndex, TableCellType>;
-      maxCellCount?: number;
-    },
+    props: Omit<SubscribeParams, 'pollIntervalSeconds'>,
     listener: SubscriptionListener
   ) => Promise<Unsubscribe>;
   terminate: () => void;
@@ -35,6 +27,7 @@ export interface LiveConnectionWorker {
 
 export interface SubscribeParams {
   url: string;
+  proxy?: string;
   source?: ImportElementSource;
   options?: RequestInit;
   pollIntervalSeconds?: number;

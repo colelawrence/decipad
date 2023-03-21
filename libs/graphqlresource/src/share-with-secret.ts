@@ -41,7 +41,9 @@ export function shareWithSecret<
     context: GraphqlContext
   ) {
     const resources = await getResources(resourceType, args.id);
-    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    if (!resourceType.skipPermissions) {
+      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    }
     const actorUser = requireUser(context);
 
     const data = await resourceType.dataTable();

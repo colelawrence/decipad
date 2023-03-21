@@ -30,9 +30,12 @@ export const insertImport = async ({
   const { selection } = editor;
 
   if (isCollapsed(selection) && selection?.anchor && url) {
-    const imports = await tryImport(computer, new URL(url), source, {
-      identifyIslands,
-    });
+    const imports = await tryImport(
+      { computer, url: new URL(url), provider: source },
+      {
+        identifyIslands,
+      }
+    );
     const insertPath = requirePathBelowBlock(editor, selection.anchor.path);
     const selBefore = selection;
 

@@ -1,0 +1,5 @@
+mutation CreateExternalDataSource($dataSource: ExternalDataSourceCreateInput!) {
+  createExternalDataSource(dataSource: $dataSource) {
+    ...ExternalDataSourceFragment
+  }
+}

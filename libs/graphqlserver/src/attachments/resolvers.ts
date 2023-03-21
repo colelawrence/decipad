@@ -13,7 +13,7 @@ import {
   getSize,
 } from '@decipad/services/blobs/attachments';
 import tables, { allPages } from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import { resource } from '@decipad/backend-resources';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { requireUser } from '../authorization';

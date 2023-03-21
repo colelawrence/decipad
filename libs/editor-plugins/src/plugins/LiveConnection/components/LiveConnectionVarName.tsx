@@ -33,7 +33,10 @@ export const LiveConnectionVarName: PlateComponent = ({
     const parentUrl = parent?.[0].url;
 
     const sourceParams: SourceUrlParseResponse | undefined =
-      (source && parentUrl != null && parseSourceUrl(source, parentUrl)) ||
+      (source &&
+        parentUrl != null &&
+        !parent?.[0].externalDataSourceId &&
+        parseSourceUrl(source, parentUrl)) ||
       (parentUrl != null && { userUrl: parentUrl }) ||
       undefined;
 

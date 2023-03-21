@@ -216,6 +216,7 @@ function enhance(
   };
 
   table.batchGet = async function batchGet(ids: string[]) {
+    debug(tableName + ':batchGet', ids);
     const uniqueIds = unique(ids);
     if (uniqueIds.length < 1) {
       return [];

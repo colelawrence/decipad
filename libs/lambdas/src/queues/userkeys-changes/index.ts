@@ -4,7 +4,7 @@ import { app as appConfig, auth as authConfig } from '@decipad/config';
 import tables from '@decipad/tables';
 import assert from 'assert';
 import { nanoid } from 'nanoid';
-import timestamp from '../../common/timestamp';
+import { timestamp } from '@decipad/backend-utils';
 import handle from '../handle';
 
 export const handler = handle(userKeyChangesHandler);

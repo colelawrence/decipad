@@ -310,6 +310,30 @@
             "deprecationReason": null
           },
           {
+            "name": "keys",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ExternalKey",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "name",
             "description": null,
             "args": [],
@@ -608,13 +632,31 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "googlesheets",
+            "name": "arrow",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "testdatasource",
+            "name": "csv",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "decipad",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "gsheets",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -3883,6 +3925,22 @@
             "name": "getExternalDataSources",
             "description": null,
             "args": [
+              {
+                "name": "notebookId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
               {
                 "name": "page",
                 "description": null,

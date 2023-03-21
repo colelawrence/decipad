@@ -8,12 +8,13 @@ export const parseSourceUrl = (
 ): SourceUrlParseResponse => {
   switch (source) {
     case 'gsheets': {
-      return gsheets.parseSourceUrl(url);
+      if (gsheets.parseSourceUrl) {
+        return gsheets.parseSourceUrl(url);
+      }
     }
-    default:
-      return {
-        isRange: false,
-        userUrl: url,
-      };
   }
+  return {
+    isRange: false,
+    userUrl: url,
+  };
 };

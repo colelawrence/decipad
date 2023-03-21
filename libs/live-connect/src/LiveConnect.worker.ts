@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import './utils/workerPolyfills';
 import { ImportResult, tryImport } from '@decipad/import';
-import { Computer } from '@decipad/computer';
+import { Computer, setErrorReporter } from '@decipad/computer';
 import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';
@@ -13,6 +13,10 @@ import type {
   Subscription,
   SubscriptionId,
 } from './types';
+
+setErrorReporter((err) => {
+  console.error('Error caught on computer', err);
+});
 
 const rpc = new RPC({
   target: {
@@ -32,6 +36,26 @@ const rpc = new RPC({
   serviceId: 'live-connect',
 });
 
+const reply = async (
+  subscriptionId: string,
+  error?: Error,
+  newResponse?: ImportResult
+) => {
+  // eslint-disable-next-line no-console
+  console.debug('Live connect worker replying', { error, newResponse });
+  if (error) {
+    await rpc.call('notify', {
+      subscriptionId,
+      error: error?.message,
+    });
+  } else {
+    await rpc.call('notify', {
+      subscriptionId,
+      newResponse,
+    });
+  }
+};
+
 interface UnsubscribeParams {
   subscriptionId: SubscriptionId;
 }
@@ -46,9 +70,12 @@ const tryImportHere = async (
   if (sub) {
     try {
       const results = await tryImport(
-        computer,
-        new URL(sub.params.url),
-        sub.params.source,
+        {
+          computer,
+          url: new URL(sub.params.url),
+          proxy: sub.params.proxy ? new URL(sub.params.proxy) : undefined,
+          provider: sub.params.source,
+        },
         {
           useFirstRowAsHeader: sub.params.useFirstRowAsHeader,
           columnTypeCoercions: sub.params.columnTypeCoercions,
@@ -86,7 +113,7 @@ const notify = (subscriptionId: string) => {
     if (!dequal(lastResult, result)) {
       lastResult = result;
       const newResponse = createRPCResponse(result);
-      await rpc.call('notify', { subscriptionId, newResponse });
+      await reply(subscriptionId, undefined, newResponse);
     }
   };
 };
@@ -109,7 +136,8 @@ const hasCircularDependency = (subscriptionRequest: Subscription): boolean => {
   for (const subscription of subscriptions.values()) {
     if (
       subscription.params.source === subscriptionRequest.params.source &&
-      subscription.params.url === subscriptionRequest.params.url
+      subscription.params.url === subscriptionRequest.params.url &&
+      subscription.params.proxy === subscriptionRequest.params.proxy
     ) {
       return true;
     }
@@ -142,25 +170,18 @@ const observe =
       if (throwOnError) {
         throw err;
       }
-      rpc.call('notify', {
-        subscriptionId: parentSubscriptionId,
-        error: (err as Error).message,
-      });
+      await reply(parentSubscriptionId, err as Error);
     }
     return undefined;
   };
 
 const onError =
-  (subscriptionId: string, params: SubscribeParams) =>
-  (err: Error): void => {
+  (subscriptionId: string, params: SubscribeParams) => async (err: Error) => {
     console.error(
       `Worker: error caught on worker ${params.url}: ${(err as Error).message}`,
       err
     );
-    rpc.call('notify', {
-      subscriptionId,
-      error: err.message,
-    });
+    await reply(subscriptionId, err);
   };
 
 const deferringError =

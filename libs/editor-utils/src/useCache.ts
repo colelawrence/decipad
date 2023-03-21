@@ -1,5 +1,5 @@
 import { identity } from 'ramda';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface UseCacheProps<V> {
   blockId: string;
@@ -30,14 +30,16 @@ const saveValue = <V>(key: string, value: V): void => {
   }
 };
 
+export type ClearCacheFn = () => void;
+
 export const useCache = <V>({
   blockId,
   value,
   deleted,
   cacheKey = 'cache',
   deserialize = identity,
-}: UseCacheProps<V>): V | undefined => {
-  const [cachedValue, setCachedValue] = useState(() => value);
+}: UseCacheProps<V>): [V | undefined, ClearCacheFn] => {
+  const [cachedValue, setCachedValue] = useState<V | undefined>(() => value);
 
   const fullCacheKey = useMemo(
     () => `${blockId}:${cacheKey}`,
@@ -74,5 +76,9 @@ export const useCache = <V>({
     }
   });
 
-  return cachedValue;
+  const clearCache = useCallback(() => {
+    setCachedValue(undefined);
+  }, []);
+
+  return [cachedValue, clearCache];
 };

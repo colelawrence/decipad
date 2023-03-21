@@ -41,6 +41,7 @@ const diffAndProcessNew = async (
       {
         params: {
           url: conn.url,
+          proxy: conn.proxy,
           source: conn.source,
           useFirstRowAsHeader: conn.isFirstRowHeaderRow,
           columnTypeCoercions: conn.columnTypeCoercions,

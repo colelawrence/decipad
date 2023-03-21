@@ -8,7 +8,7 @@ import {
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { byAsc } from '@decipad/utils';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import Boom from '@hapi/boom';
 import assert from 'assert';
 import { nanoid } from 'nanoid';

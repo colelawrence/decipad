@@ -14,6 +14,9 @@ const getNotebooksById = async (
 ): Promise<PadRecord[]> => {
   const data = await tables();
   let items: PadRecord[] = [];
+  if (!Array.isArray(notebookIds)) {
+    throw new Error('expected an array of strings');
+  }
   for (let i = 0; i < notebookIds.length; i += 99) {
     const notebookIdsSlice = notebookIds.slice(i, i + 99);
     // eslint-disable-next-line no-await-in-loop
@@ -49,12 +52,10 @@ export const getWorkspaceNotebooks = async ({
     },
   };
 
-  const paged = await paginate(
-    data.permissions,
-    query,
-    page,
-    (perm) => perm.resource_id
-  );
+  const paged = await paginate(data.permissions, query, page, {
+    map: (perm) => perm.resource_id,
+    gqlType: 'Permission',
+  });
   const { items: notebookIds } = paged;
   return {
     ...paged,
@@ -84,12 +85,9 @@ export const getNotebooksSharedWith = async ({
     },
   };
 
-  const paged = await paginate(
-    data.permissions,
-    query,
-    page,
-    (perm) => perm.resource_id
-  );
+  const paged = await paginate(data.permissions, query, page, {
+    map: (perm) => perm.resource_id,
+  });
   const { items: notebookIds } = paged;
   return {
     ...paged,

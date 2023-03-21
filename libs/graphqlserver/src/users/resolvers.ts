@@ -7,7 +7,7 @@ import {
   UserInput,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import Boom from '@hapi/boom';
 import { AuthenticationError } from 'apollo-server-lambda';
 import { loadUser, requireUser } from '../authorization';

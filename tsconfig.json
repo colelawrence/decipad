@@ -37,6 +37,7 @@
         "libs/backend-test-sandbox/src/index.ts"
       ],
       "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"],
+      "@decipad/backend-utils": ["libs/backend-utils/src/index.ts"],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/client-config": ["libs/client-config/src/index.ts"],
       "@decipad/client-events": ["libs/client-events/src/index.ts"],
@@ -65,6 +66,9 @@
       "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/email-templates": ["emails/src/index.tsx"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
+      "@decipad/external-data-lambdas": [
+        "libs/external-data-lambdas/src/index.ts"
+      ],
       "@decipad/externaldata": ["libs/externaldata/src/index.ts"],
       "@decipad/feature-flags": ["libs/feature-flags/src/index.ts"],
       "@decipad/fetch": ["libs/fetch/src/index.ts"],

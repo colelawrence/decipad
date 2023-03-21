@@ -43,9 +43,12 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
       ) {
         setFetching(true);
         try {
-          const p = tryImport(computer, new URL(element.url), element.source, {
-            maxCellCount: MAX_IMPORT_CELL_COUNT,
-          });
+          const p = tryImport(
+            { computer, url: new URL(element.url), provider: element.source },
+            {
+              maxCellCount: MAX_IMPORT_CELL_COUNT,
+            }
+          );
           setPromise(p);
           const imported = await p;
           if (imported.length > 0) {

@@ -30,7 +30,10 @@ export function getById<
     if (record == null) {
       throw new UserInputError(`No such ${resource.humanName}`);
     }
-    if (!resource.isPublic || !resource.isPublic(record)) {
+    if (
+      !resource.skipPermissions &&
+      (!resource.isPublic || !resource.isPublic(record))
+    ) {
       const resources = await getResources(resource, id);
       await expectAuthenticatedAndAuthorized(resources, context, 'READ');
     }

@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { LiveConnectionWorker } from './types';
 
-export const useLiveConnectionWorker = (): LiveConnectionWorker | undefined => {
+export const useLiveConnectionWorker = (
+  workerGen: number
+): LiveConnectionWorker | undefined => {
+  const workerGenRef = useRef(workerGen);
   const workerRef = useRef<LiveConnectionWorker>();
   const [worker, setWorker] = useState<LiveConnectionWorker | undefined>();
 
   useEffect(() => {
+    if (workerGen !== workerGenRef.current) {
+      workerGenRef.current = workerGen;
+    }
     let cancelled = false;
     if (!workerRef.current) {
       (async () => {
@@ -26,7 +32,7 @@ export const useLiveConnectionWorker = (): LiveConnectionWorker | undefined => {
         w.terminate();
       }
     };
-  }, []);
+  }, [workerGen]);
 
   return worker;
 };

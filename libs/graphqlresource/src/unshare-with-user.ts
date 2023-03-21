@@ -36,7 +36,9 @@ export function unshareWithUser<
     context: GraphqlContext
   ) {
     const resources = await getResources(resourceType, args.id);
-    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    if (!resourceType.skipPermissions) {
+      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    }
     const { permissions } = await tables();
     await permissions.delete({
       id: `/users/${args.userId}/roles/null${resources[0]}`,

@@ -8,6 +8,12 @@ import { importFromUnknown } from './importFromUnknown';
 import { decipad, gsheets } from './providers';
 import { ImportResult } from './types';
 
+export interface ImportParams {
+  computer: Computer;
+  url: URL;
+  proxy?: URL;
+  provider?: ImportElementSource;
+}
 export interface ImportOptions {
   identifyIslands?: boolean;
   useFirstRowAsHeader?: boolean;
@@ -17,32 +23,32 @@ export interface ImportOptions {
 }
 
 const internalTryImport = (
-  computer: Computer,
-  url: URL,
-  provider?: ImportElementSource,
+  params: ImportParams,
   options: ImportOptions = {}
 ): Promise<ImportResult[]> => {
-  if (provider) {
-    switch (provider) {
+  if (params.provider) {
+    switch (params.provider) {
       case 'gsheets':
-        return gsheets.import(computer, url, options);
+        return gsheets.import(params, options);
       case 'decipad':
         return decipad.import();
     }
   }
-  return importFromUnknown(computer, url, options);
+  return importFromUnknown(
+    params.computer,
+    params.proxy ?? params.url,
+    options
+  );
 };
 
 export const tryImport = async (
-  computer: Computer,
-  url: URL,
-  provider?: ImportElementSource,
+  params: ImportParams,
   options: ImportOptions = {}
 ): Promise<ImportResult[]> => {
   const { identifyIslands, ...restOptions } = options;
-  let result = await internalTryImport(computer, url, provider, options);
+  let result = await internalTryImport(params, options);
   if (result.length === 1 && identifyIslands) {
-    result = await internalTryImport(computer, url, provider, restOptions);
+    result = await internalTryImport(params, restOptions);
   }
   return result;
 };

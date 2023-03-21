@@ -7,7 +7,7 @@ import {
 } from '@decipad/services/notebooks';
 import { nanoid } from 'nanoid';
 import { DocSyncSnapshotRecord } from '@decipad/backendtypes';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 
 const MAX_DATA_SIZE_BYTES = 100_000;
 

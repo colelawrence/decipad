@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import { GraphqlContext, ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { snapshot, storeSnapshotDataAsFile } from '@decipad/services/notebooks';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import Boom from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';
 import { snapshotFilePath } from './snapshotFilePath';

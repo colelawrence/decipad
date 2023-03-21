@@ -130,7 +130,7 @@ const loadAndPushTable = async (
     typeof address === 'string'
       ? new URL(fileName, address)
       : new URL(fileName, `http://${address.address}:${address.port}/`);
-  const table = await tryImport(computer, url);
+  const table = await tryImport({ computer, url });
   expect(table).toHaveLength(1);
   await act(() => {
     computer.pushExternalDataUpdate('data-source', table[0].result);

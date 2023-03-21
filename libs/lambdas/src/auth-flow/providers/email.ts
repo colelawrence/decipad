@@ -4,7 +4,7 @@ import { auth } from '@decipad/config';
 import tables from '@decipad/tables';
 import { differenceInHours } from 'date-fns';
 import Email from 'next-auth/providers/email';
-import timestamp from '../../common/timestamp';
+import { timestamp } from '@decipad/backend-utils';
 
 type EmailVerificationRequest = {
   identifier: string;

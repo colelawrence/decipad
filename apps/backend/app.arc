@@ -198,6 +198,7 @@ fileattachments
 
 externaldatasources
   id *String
+  padId: String
 
 externaldatasourcekeys
   id *String
@@ -355,6 +356,10 @@ usertaggedresources
 fileattachments
   resource_uri *String
   name byResource
+
+externaldatasources
+  padId *String
+  name byPadId
 
 externaldatasourcekeys
   resource_uri *String

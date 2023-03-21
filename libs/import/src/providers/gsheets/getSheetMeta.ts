@@ -2,13 +2,15 @@ import { stringify as encodeQuery } from 'querystring';
 import { thirdParty } from '@decipad/client-config';
 import { request } from '../../http/request';
 import { SheetMeta } from '../../types';
+import { ImportParams } from '../../import';
 
 export interface SpreadsheetMetaResponse {
   body: SheetMeta;
 }
 
 export const getSheetMeta = async (
-  spreadsheetId: string
+  spreadsheetId: string,
+  params: ImportParams
 ): Promise<SheetMeta> => {
   const { googleSheets } = thirdParty();
   const qs = encodeQuery({
@@ -21,7 +23,8 @@ export const getSheetMeta = async (
 
   const spreadsheet = (await request(
     metadataUrl,
-    true
+    true,
+    params
   )) as unknown as SpreadsheetMetaResponse;
 
   return spreadsheet.body;

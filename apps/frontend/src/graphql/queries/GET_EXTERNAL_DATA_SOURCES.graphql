@@ -1,0 +1,23 @@
+fragment ExternalDataSourceFragment on ExternalDataSource {
+  id
+  name
+  padId
+  provider
+  externalId
+  dataUrl
+  authUrl
+  keys {
+    lastError
+    createdAt
+    expiresAt
+    lastUsedAt
+  }
+}
+
+query GetExternalDataSources($notebookId: ID!) {
+  getExternalDataSources(notebookId: $notebookId, page: { maxItems: 10000 }) {
+    items {
+      ...ExternalDataSourceFragment
+    }
+  }
+}

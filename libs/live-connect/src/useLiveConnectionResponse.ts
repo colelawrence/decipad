@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import { ImportResult } from '@decipad/import';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
@@ -14,10 +14,12 @@ import { deserializeImportResult } from './utils/deserializeImportResult';
 export interface LiveConnectionResponseResult {
   error?: Error;
   result?: ImportResult;
+  retry: () => void;
 }
 
 export interface LiveConnectionProps {
   url: string;
+  proxy?: string;
   options?: RequestInit;
   source?: ImportElementSource;
   useFirstRowAsHeader?: boolean;
@@ -28,6 +30,7 @@ export interface LiveConnectionProps {
 
 export const useLiveConnectionResponse = ({
   url,
+  proxy,
   source,
   options,
   useFirstRowAsHeader,
@@ -35,7 +38,8 @@ export const useLiveConnectionResponse = ({
   timeoutMs = 5000,
   maxCellCount,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
-  const worker = useLiveConnectionWorker();
+  const [workerGen, setWorkerGen] = useState(0);
+  const worker = useLiveConnectionWorker(workerGen);
   const [error, setError] = useState<Error | undefined>();
   const [result, setResult] = useState<ImportResult | undefined>();
 
@@ -48,6 +52,7 @@ export const useLiveConnectionResponse = ({
           unsubscribe = await worker.subscribe(
             {
               url,
+              proxy,
               options,
               source,
               useFirstRowAsHeader,
@@ -94,6 +99,7 @@ export const useLiveConnectionResponse = ({
     columnTypeCoercions,
     maxCellCount,
     options,
+    proxy,
     source,
     url,
     useFirstRowAsHeader,
@@ -119,5 +125,11 @@ export const useLiveConnectionResponse = ({
     return () => clearTimeout(timeout);
   }, [error, result, timeoutMs]);
 
-  return { error, result };
+  const retry = useCallback(() => {
+    setError(undefined);
+    setResult(undefined);
+    setWorkerGen((gen) => gen + 1);
+  }, []);
+
+  return { error, result, retry };
 };

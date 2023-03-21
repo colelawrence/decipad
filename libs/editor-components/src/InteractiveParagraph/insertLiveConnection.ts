@@ -33,7 +33,7 @@ export interface InsertLiveConnectionProps {
   identifyIslands?: boolean;
 }
 
-const justInsertLiveData = async ({
+const justInsertLiveConnection = async ({
   editor,
   source,
   url,
@@ -76,7 +76,7 @@ const justInsertLiveData = async ({
   });
 };
 
-const insertLiveConnectionToGsheets = async ({
+const identifyIslandsAndThenInsertLiveConnection = async ({
   computer,
   editor,
   source,
@@ -96,9 +96,16 @@ const insertLiveConnectionToGsheets = async ({
     return;
   }
 
-  const imports = await tryImport(computer, new URL(url), source, {
-    identifyIslands,
-  });
+  const imports = await tryImport(
+    {
+      computer,
+      url: new URL(url),
+      provider: source,
+    },
+    {
+      identifyIslands,
+    }
+  );
 
   return Promise.all(
     imports.map(async (imp) => {
@@ -139,12 +146,12 @@ const insertLiveConnectionToGsheets = async ({
 export const insertLiveConnection = async (
   props: InsertLiveConnectionProps
 ): Promise<void> => {
-  const { editor, source, url } = props;
+  const { editor, url, identifyIslands } = props;
   const { selection } = editor;
   if (isCollapsed(selection) && selection?.anchor && url) {
-    if (source !== 'gsheets') {
-      return justInsertLiveData(props);
+    if (identifyIslands) {
+      return identifyIslandsAndThenInsertLiveConnection(props);
     }
-    return insertLiveConnectionToGsheets(props);
+    return justInsertLiveConnection(props);
   }
 };

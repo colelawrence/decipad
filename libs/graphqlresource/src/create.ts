@@ -39,19 +39,21 @@ export function create<
 
     await data.create(newRecord);
 
-    const permission: Parameters<typeof createPermission>[0] = {
-      userId: user.id,
-      givenByUserId: user.id,
-      resourceType: resourceType.resourceTypeName,
-      resourceId: newRecord.id,
-      type: 'ADMIN',
-      canComment: true,
-    };
-    if (resourceType.parentResourceUriFromCreateInput) {
-      permission.parentResourceUri =
-        resourceType.parentResourceUriFromCreateInput(input);
+    if (!resourceType.skipPermissions) {
+      const permission: Parameters<typeof createPermission>[0] = {
+        userId: user.id,
+        givenByUserId: user.id,
+        resourceType: resourceType.resourceTypeName,
+        resourceId: newRecord.id,
+        type: 'ADMIN',
+        canComment: true,
+      };
+      if (resourceType.parentResourceUriFromCreateInput) {
+        permission.parentResourceUri =
+          resourceType.parentResourceUriFromCreateInput(input);
+      }
+      await createPermission(permission);
     }
-    await createPermission(permission);
 
     await track(
       { userId: user.id, event: `${resourceType.humanName} created` },

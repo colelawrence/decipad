@@ -29,6 +29,9 @@
     },
     {
       "path": "../../libs/support"
+    },
+    {
+      "path": "../../libs/react-contexts"
     }
   ]
 }

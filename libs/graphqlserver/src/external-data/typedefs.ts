@@ -2,8 +2,11 @@ import { gql } from 'apollo-server-lambda';
 
 export default gql`
   enum ExternalProvider {
-    testdatasource
-    googlesheets
+    decipad
+    gsheets
+    csv
+    json
+    arrow
   }
 
   type ExternalKey {
@@ -36,14 +39,15 @@ export default gql`
     padId: ID!
     provider: ExternalProvider!
     externalId: String!
-    dataUrl: String!
-    authUrl: String!
+    dataUrl: String
+    authUrl: String
     access: ExternalDataSourceAccess!
+    keys: [ExternalKey!]!
   }
 
   extend type Query {
     getExternalDataSource(id: ID!): ExternalDataSource!
-    getExternalDataSources(page: PageInput!): PagedResult!
+    getExternalDataSources(notebookId: ID!, page: PageInput!): PagedResult!
   }
 
   extend type Mutation {

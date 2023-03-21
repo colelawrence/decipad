@@ -1,13 +1,14 @@
-import { Computer, Result } from '@decipad/computer';
+import { captureException, Computer, Result } from '@decipad/computer';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
 import { ImportResult, Sheet } from '../../types';
-import { ImportOptions } from '../../import';
+import { ImportOptions, ImportParams } from '../../import';
 import { getSheetMeta } from './getSheetMeta';
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
 import { getDataUrlFromSheetMeta } from './getDataUrlFromSheetUrl';
 import { trimSheet } from '../../utils/trimSheet';
 import { findAllIslands } from '../../utils/sheetIslands';
+import { request } from '../../http/request';
 
 const sumLength = <T>(acc: number, col: T[]): number => {
   return acc + col.length;
@@ -28,13 +29,38 @@ const errorResult = (err: string): ImportResult => {
   };
 };
 
+const getSheet = (response: unknown): Sheet => {
+  try {
+    if (
+      typeof response !== 'object' ||
+      response == null ||
+      !('body' in response)
+    ) {
+      throw new TypeError('response does not have a body');
+    }
+    const { body } = response;
+    if (typeof body !== 'object' || body == null || !('values' in body)) {
+      throw new TypeError('body is not an object');
+    }
+    if (!Array.isArray(body.values)) {
+      throw new TypeError('body.values is not an array');
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error caught while parsing gsheet return value', response);
+    captureException(err as Error);
+    throw err;
+  }
+  return response.body as Sheet;
+};
+
 const handleGsheetsResponse = async (
   computer: Computer,
-  resp: Response,
+  resp: unknown,
   options: ImportOptions
 ): Promise<Result.Result> => {
   const { identifyIslands = false, maxCellCount } = options;
-  const body = (await resp.json()) as unknown as Sheet;
+  const body = getSheet(resp);
   if (maxCellCount) {
     const cellCount = body.values.reduce(sumLength, 0);
     if (cellCount > maxCellCount) {
@@ -50,18 +76,21 @@ const handleGsheetsResponse = async (
 };
 
 const loadSheet =
-  (computer: Computer, options: ImportOptions) => async (url: URL) => {
-    return handleGsheetsResponse(computer, await fetch(url), options);
+  (params: ImportParams, options: ImportOptions) => async (url: URL) => {
+    return handleGsheetsResponse(
+      params.computer,
+      await request(url, true, params),
+      options
+    );
   };
 
 const loadAllSubsheets = async (
-  computer: Computer,
-  importURL: URL,
+  params: ImportParams,
   options: ImportOptions
 ): Promise<ImportResult[]> => {
-  const { sheetId } = getSheetRequestDataFromUrl(importURL);
-  const meta = await getSheetMeta(sheetId);
-  const loader = loadSheet(computer, options);
+  const { sheetId } = getSheetRequestDataFromUrl(params.url);
+  const meta = await getSheetMeta(sheetId, params);
+  const loader = loadSheet(params, options);
   const results: ImportResult[] = [];
   for (const subsheet of meta.sheets) {
     const url = getDataUrlFromSheetMeta(
@@ -92,57 +121,50 @@ const loadAllSubsheets = async (
 };
 
 const importGsheetIslands = async (
-  computer: Computer,
-  importURL: URL,
+  params: ImportParams,
   options: ImportOptions
 ): Promise<ImportResult[]> => {
-  return (await loadAllSubsheets(computer, importURL, options)).flatMap(
-    (result) => findAllIslands(getDefined(result.meta?.gid).toString(), result)
+  return (await loadAllSubsheets(params, options)).flatMap((result) =>
+    findAllIslands(getDefined(result.meta?.gid).toString(), result)
   );
 };
 
 const importOneGsheet = async (
-  computer: Computer,
-  importURL: URL,
+  params: ImportParams,
   options: ImportOptions
 ) => {
-  const { sheetId, gid } = getSheetRequestDataFromUrl(importURL);
-  const meta = await getSheetMeta(sheetId);
+  const { sheetId, gid } = getSheetRequestDataFromUrl(params.url);
+  const meta = await getSheetMeta(sheetId, params);
   const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
-  let resp: Response | undefined;
   try {
-    resp = await fetch(url);
+    const resp = await request(url, true, params);
+    const result = (await handleGsheetsResponse(
+      params.computer,
+      resp,
+      options
+    )) as Result.Result;
+
+    const importResult = {
+      meta: {
+        title: meta.properties.title,
+        importedAt: new Date(),
+      },
+      result,
+    };
+    return [importResult];
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error importing one Gsheet', err);
+    captureException(err as Error);
     return [errorResult((err as Error).message)];
   }
-  if (!resp.ok) {
-    return [errorResult(resp.statusText || (await resp.text()))];
-  }
-  const result = (await handleGsheetsResponse(
-    computer,
-    resp,
-    options
-  )) as Result.Result;
-
-  const importResult = {
-    meta: {
-      title: meta.properties.title,
-      importedAt: new Date(),
-    },
-    result,
-  };
-
-  return [importResult];
 };
 
 export const importGsheet = async (
-  computer: Computer,
-  importURL: URL,
+  params: ImportParams,
   options: ImportOptions
-): Promise<ImportResult[]> => {
-  return (options.identifyIslands ? importGsheetIslands : importOneGsheet)(
-    computer,
-    importURL,
+): Promise<ImportResult[]> =>
+  (options.identifyIslands ? importGsheetIslands : importOneGsheet)(
+    params,
     options
   );
-};

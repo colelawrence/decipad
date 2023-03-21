@@ -72,10 +72,14 @@ const resolvers = {
         data.usertaggedresources,
         query,
         page,
-        async (userTaggedResource: UserTaggedResourceRecord) => {
-          const resourceUri = parseResourceUri(userTaggedResource.resource_uri);
-          assert.strictEqual(resourceUri.type, 'pads');
-          return data.pads.get({ id: resourceUri.id });
+        {
+          map: async (userTaggedResource: UserTaggedResourceRecord) => {
+            const parsedResource = parseResourceUri(
+              userTaggedResource.resource_uri
+            );
+            assert.strictEqual(parsedResource.type, 'pads');
+            return data.pads.get({ id: parsedResource.id });
+          },
         }
       );
     },

@@ -42,7 +42,9 @@ export function update<
     context: GraphqlContext
   ) {
     const resources = await getResources(resourceType, input.id);
-    await expectAuthenticatedAndAuthorized(resources, context, 'WRITE');
+    if (!resourceType.skipPermissions) {
+      await expectAuthenticatedAndAuthorized(resources, context, 'WRITE');
+    }
     const data = await resourceType.dataTable();
     const oldRecord = await data.get({ id: input.id });
     if (!oldRecord) {

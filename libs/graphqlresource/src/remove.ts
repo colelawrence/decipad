@@ -30,7 +30,9 @@ export function remove<
     context: GraphqlContext
   ) {
     const resources = await getResources(resourceType, args.id);
-    await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    if (!resourceType.skipPermissions) {
+      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    }
     const data = await resourceType.dataTable();
     await Promise.all([
       data.delete({ id: args.id }),

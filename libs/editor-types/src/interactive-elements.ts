@@ -52,7 +52,9 @@ export type ColIndex = number;
 export interface LiveConnectionElement extends BaseElement {
   type: typeof ELEMENT_LIVE_CONNECTION;
   url: string;
+  proxy?: string;
   source?: ImportElementSource;
+  externalDataSourceId?: string;
   isFirstRowHeaderRow: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   children: [LiveConnectionVarNameElement];

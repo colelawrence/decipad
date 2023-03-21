@@ -18,7 +18,6 @@ export * from './Draw';
 export * from './EditorApplyErrorReporter';
 export * from './EventInterception';
 export * from './ExitBreakPlugin';
-export * from './ExternalData';
 export * from './Import';
 export * from './LayoutColumns';
 export * from './Link';

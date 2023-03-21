@@ -1,7 +1,7 @@
 import { WorkspaceInput, WorkspaceRecord } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
 import tables from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import { nanoid } from 'nanoid';
 
 export const workspaceResource = Resource({

@@ -6,7 +6,7 @@ import {
   maximumPermissionIn,
 } from '@decipad/services/authorization';
 import tables from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import Boom from '@hapi/boom';
 
 const CONNECTION_EXPIRATION_TIME_SECONDS = 60 * 60 * 24;

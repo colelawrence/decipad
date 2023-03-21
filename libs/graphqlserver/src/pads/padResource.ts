@@ -1,7 +1,7 @@
 import { GraphqlContext, ID, PadInput, PadRecord } from '@decipad/backendtypes';
 import Resource from '@decipad/graphqlresource';
 import tables from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import { nanoid } from 'nanoid';
 import { resource } from '@decipad/backend-resources';
 

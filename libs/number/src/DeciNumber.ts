@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import Fraction, { F, isFractionLike, pow } from '@decipad/fraction';
+import Fraction, { F, isFractionLike, pow } from '../../fraction/src';
 import {
   DeciNumberInput,
   DeciNumberInputWithNumerator,

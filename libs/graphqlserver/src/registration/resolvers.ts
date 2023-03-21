@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import { User } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import { UserInputError } from 'apollo-server-lambda';
 
 export default {

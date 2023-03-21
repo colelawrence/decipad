@@ -10,6 +10,7 @@
     { "path": "../emails" },
     { "path": "../meta" },
     { "path": "../backendtypes" },
+    { "path": "../backend-utils" },
     { "path": "../services" },
     { "path": "../tables" },
     { "path": "../graphqlserver" },
@@ -24,6 +25,7 @@
     { "path": "../docsync-maintenance" },
     { "path": "../slate-yjs" },
     { "path": "../retry" },
+    { "path": "../external-data-lambdas" },
     { "path": "../backend-resources" }
   ]
 }

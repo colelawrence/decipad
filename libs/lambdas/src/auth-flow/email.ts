@@ -6,8 +6,8 @@ import {
   maybeEnrich as maybeEnrichUser,
 } from '@decipad/services/users';
 import { track } from '@decipad/backend-analytics';
+import { timestamp } from '@decipad/backend-utils';
 import { isAllowedToLogIn } from './is-allowed';
-import timestamp from '../common/timestamp';
 
 export async function signInEmail(
   user: UserWithSecret & { provider?: string; providerId?: string },

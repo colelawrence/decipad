@@ -1,7 +1,5 @@
-import { Table } from 'apache-arrow';
-import { ExternalKeyRecord } from '@decipad/backendtypes';
-import { googlesheets } from './googlesheets';
-import { testdatasource } from './test';
+import type { ExternalDataSourceProvider } from '@decipad/backendtypes';
+import { gsheets } from './gsheets';
 
 export interface ProviderOptions {
   useThirdPartyUrl?: string;
@@ -16,15 +14,10 @@ export interface Provider {
   scope: string;
   authorizationParams: Record<string, string>;
   headers: Record<string, string>;
-  fetch: (
-    id: string,
-    key: ExternalKeyRecord,
-    provider: Provider,
-    options: ProviderOptions
-  ) => Promise<Table>;
 }
 
-export const providers: Record<string, () => Provider> = {
-  testdatasource,
-  googlesheets,
+export const providers: Partial<
+  Record<ExternalDataSourceProvider, () => Provider>
+> = {
+  gsheets,
 };

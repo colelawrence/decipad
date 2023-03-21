@@ -6,7 +6,7 @@ import {
 } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import tables from '@decipad/tables';
-import { timestamp } from '@decipad/services/utils';
+import { timestamp } from '@decipad/backend-utils';
 import { create as createResourcePermission } from '../permissions';
 
 export async function create(

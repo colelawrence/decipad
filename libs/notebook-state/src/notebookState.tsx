@@ -5,7 +5,10 @@ import { NotebookState } from './state';
 import { createNotebookStore } from './oneNotebookState';
 
 // set the computer's error reporter
-setErrorReporter(captureException);
+setErrorReporter((err) => {
+  console.error('Error caught on computer:', err);
+  captureException(err);
+});
 
 const notebooks = new Map<string, StoreApi<NotebookState>>();
 
