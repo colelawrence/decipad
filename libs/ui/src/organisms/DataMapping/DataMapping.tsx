@@ -1,14 +1,19 @@
 import { css } from '@emotion/react';
 import { DataMappingElement } from '@decipad/editor-types';
 import { FC, ReactNode, useState } from 'react';
+import { Result } from '@decipad/computer';
+import { useDelayedValue } from '@decipad/react-utils';
 import { MenuList, StructuredInputUnits } from '../../molecules';
 import { cssVar, grey100, p12Medium, p13Bold } from '../../primitives';
 import { Button, MenuItem } from '../../atoms';
 import { FolderOpen, Number, Table } from '../../icons';
+import { useResultInfo } from '../CodeLine/CodeLine';
+import { TableButton } from '../TableButton/TableButton';
 
 interface DataMappingProps {
   readonly sourceName: string;
   readonly sourceType: DataMappingElement['sourceType'];
+  readonly result: Result.Result | undefined;
   readonly unit?: DataMappingElement['unit'];
   readonly results: Array<{
     id: string;
@@ -29,6 +34,7 @@ interface DataMappingProps {
 export const DataMapping: FC<DataMappingProps> = ({
   sourceName,
   sourceType,
+  result,
   unit,
   onChangeUnit,
   results,
@@ -39,55 +45,75 @@ export const DataMapping: FC<DataMappingProps> = ({
   onAddMapping,
 }) => {
   const [open, setOpen] = useState(false);
+  const [isResultHidden, setIsResultHidden] = useState(false);
+
   const isTable = sourceType && sourceType !== 'notebook-var';
 
+  const freshResult = useResultInfo({
+    result,
+    variant: 'table',
+  });
+
+  const { inline, expanded } = useDelayedValue(
+    freshResult,
+    freshResult.errored === true
+  );
+
   return (
-    <div css={parentStyles}>
-      {nameChild}
-      <div css={contentStyles}>
-        <div css={topRowStyles} contentEditable={false}>
-          <MenuList
-            root
-            dropdown
-            open={open}
-            onChangeOpen={setOpen}
-            trigger={<div css={[p12Medium, triggerStyles]}>{sourceName}</div>}
-          >
-            {results.map((res) => (
-              <MenuItem
-                icon={res.type === 'notebook-var' ? <Number /> : <Table />}
-                key={res.id}
-                onSelect={() => {
-                  onSelectSource(res.id, res.type);
-                }}
-              >
-                {res.name}
-              </MenuItem>
-            ))}
-          </MenuList>
-          {isTable && (
-            <>
-              <div css={{ width: 16, height: 16 }}>
-                <FolderOpen />
+    <div css={{ display: 'flex', flexDirection: 'column' }}>
+      <div css={parentStyles}>
+        {nameChild}
+        <div css={contentStyles}>
+          <div css={topRowStyles} contentEditable={false}>
+            <MenuList
+              root
+              dropdown
+              open={open}
+              onChangeOpen={setOpen}
+              trigger={<div css={[p12Medium, triggerStyles]}>{sourceName}</div>}
+            >
+              {results.map((res) => (
+                <MenuItem
+                  icon={res.type === 'notebook-var' ? <Number /> : <Table />}
+                  key={res.id}
+                  onSelect={() => {
+                    onSelectSource(res.id, res.type);
+                  }}
+                >
+                  {res.name}
+                </MenuItem>
+              ))}
+            </MenuList>
+            {isTable && (
+              <>
+                <div css={{ width: 16, height: 16 }}>
+                  <FolderOpen />
+                </div>
+                <span css={p13Bold}>{columnLength} Columns</span>
+              </>
+            )}
+            {!isTable && (
+              <div css={typeStyles} contentEditable={false}>
+                <StructuredInputUnits unit={unit} onChangeUnit={onChangeUnit} />
               </div>
-              <span css={p13Bold}>{columnLength} Columns</span>
-            </>
-          )}
-          {!isTable && (
-            <div css={typeStyles} contentEditable={false}>
-              <StructuredInputUnits unit={unit} onChangeUnit={onChangeUnit} />
+            )}
+            <TableButton
+              captions={['Hide Preview']}
+              onClick={() => setIsResultHidden(!isResultHidden)}
+            />
+            {!isResultHidden && <div>{inline}</div>}
+          </div>
+          {rowChildren}
+          {isTable && (
+            <div contentEditable={false} css={{ marginTop: '4px' }}>
+              <Button type="secondary" onClick={onAddMapping}>
+                + Add Mapping
+              </Button>
             </div>
           )}
         </div>
-        {rowChildren}
-        {isTable && (
-          <div contentEditable={false} css={{ marginTop: '4px' }}>
-            <Button type="secondary" onClick={onAddMapping}>
-              + Add Mapping
-            </Button>
-          </div>
-        )}
       </div>
+      {!isResultHidden && <div>{expanded}</div>}
     </div>
   );
 };
@@ -100,7 +126,7 @@ const triggerStyles = css({
   borderRadius: '4px',
   minWidth: '80px',
   width: 'min-content',
-  height: '100%',
+  marginLeft: '4px',
   backgroundColor: grey100.rgb,
 });
 

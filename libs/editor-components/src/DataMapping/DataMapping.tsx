@@ -42,6 +42,8 @@ export const DataMapping: PlateComponent = ({
   );
   const changeUnit = useElementMutatorCallback(editor, element, 'unit');
 
+  const definedResult = computer.getBlockIdResult$.use(element.id);
+
   const results = computer.results$.useWithSelector(({ blockResults }) =>
     Object.values(blockResults)
       .map((blockResult) => {
@@ -174,7 +176,9 @@ export const DataMapping: PlateComponent = ({
   const sourceName =
     element.sourceType === 'notebook-var'
       ? bareResults.find((res) => res.id === element.source)?.name
-      : tables.find((res) => res.name === element.source)?.name;
+      : element.sourceType === 'live-connection'
+      ? tables.find((res) => res.name === element.source)?.name
+      : tables.find((res) => res.id === element.source)?.name;
 
   // HACK: To display the right colour on the varname, we give it a dummy simple value.
   const dummySimpleValue = useMemo(() => parseSimpleValue('0'), []);
@@ -185,6 +189,7 @@ export const DataMapping: PlateComponent = ({
         <UIDataMapping
           sourceName={sourceName ?? '-----'}
           sourceType={element.sourceType}
+          result={definedResult?.result}
           unit={element.unit}
           onChangeUnit={changeUnit}
           results={allResults}

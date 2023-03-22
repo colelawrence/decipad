@@ -251,7 +251,7 @@ export const TableResult = ({
                 <TableHeader
                   type={toTableHeaderType(columnTypes[index])}
                   key={index}
-                  isEditable={!isLiveResult}
+                  isEditable={false}
                   showIcon={isLiveResult}
                 >
                   {columnName}
