@@ -12,6 +12,7 @@ import {
   TReactEditor,
 } from '@udecode/plate';
 import { RefObject } from 'react';
+import { UndoManager } from 'yjs';
 import { EventInterceptor } from './event-interception';
 import { MyValue } from './value';
 
@@ -26,10 +27,6 @@ export type MyNodeEntry = ENodeEntry<MyValue>;
  * Editor
  */
 
-export type UndoManager = {
-  canUndo?: () => boolean;
-  canRedo?: () => boolean;
-};
 export type UndoEditor = {
   undoManager?: UndoManager;
   withoutCapturingUndo?: (cb: () => void) => void;

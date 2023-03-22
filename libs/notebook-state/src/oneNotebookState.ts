@@ -5,6 +5,7 @@ import { take } from 'rxjs';
 import { Computer } from '@decipad/computer';
 import { createTPlateEditor } from '@decipad/editor-types';
 import { NotebookState } from './state';
+import { isNewNotebook } from './isNewNotebook';
 
 const LOAD_TIMEOUT_MS = 5000;
 
@@ -20,6 +21,7 @@ const initialState = (): Omit<
   timedOutLoadingFromRemote: false,
   hasLocalChanges: false,
   initialFocusDone: false,
+  isNewNotebook: true,
 });
 
 export const createNotebookStore = (onDestroy: () => void) =>
@@ -63,6 +65,9 @@ export const createNotebookStore = (onDestroy: () => void) =>
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
       }, LOAD_TIMEOUT_MS);
+
+      const newNotebook = isNewNotebook(docsync.initialState);
+
       const docSyncEditor = createDocSyncEditor(
         notebookId,
         {
@@ -87,6 +92,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
         .subscribe(() => {
           set({ hasLocalChanges: true });
         });
+
       set({
         editor: docSyncEditor,
         notebookHref: window.location.pathname,
@@ -95,6 +101,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
         loadedFromRemote: false,
         timedOutLoadingFromRemote: false,
         hasLocalChanges: false,
+        isNewNotebook: newNotebook,
       });
     },
     setInitialFocusDone: () => {

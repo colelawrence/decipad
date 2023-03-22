@@ -31,6 +31,7 @@ export interface EditorProps {
   readOnly: boolean;
   editor: MyEditor;
   children?: ReactNode;
+  isNewNotebook?: boolean;
 }
 
 const InsidePlate = ({
@@ -70,7 +71,7 @@ const InsidePlate = ({
  * TODO: remove Plate.id after plate patch
  */
 export const Editor = (props: EditorProps) => {
-  const { loaded, isSavedRemotely, editor, readOnly } = props;
+  const { loaded, isSavedRemotely, editor, readOnly, isNewNotebook } = props;
 
   // Cursor remote presence
   // useCursors(editor);
@@ -127,7 +128,10 @@ export const Editor = (props: EditorProps) => {
                     }}
                   >
                     <InsidePlate {...props} containerRef={containerRef} />
-                    <NotebookState isSavedRemotely={isSavedRemotely} />
+                    <NotebookState
+                      isSavedRemotely={isSavedRemotely}
+                      isNewNotebook={!!isNewNotebook}
+                    />
                   </Plate>
                 </TeleportEditor>
               </BlockLengthSynchronizationProvider>

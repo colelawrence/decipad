@@ -1,6 +1,7 @@
 import type { Document } from '@decipad/editor-types';
-import gettingStarted from './gettingStarted.json';
+import welcomeNotebook from './welcomeNotebook.json';
 import tutorialNotebook from './tutorialNotebook.json';
+import businessNotebook from './businessNotebook.json';
 
 export interface Notebook {
   title: string;
@@ -33,8 +34,14 @@ export const initialWorkspace: InitialWorkspace = {
       status: 'draft',
     },
     {
-      title: 'Meet Decipad! Learn the basics',
-      content: gettingStarted as Document,
+      title: 'Starting a Business - Example Notebook',
+      content: businessNotebook as Document,
+      icon: 'Wallet-Perfume',
+      status: 'draft',
+    },
+    {
+      title: 'Welcome to Decipad!',
+      content: welcomeNotebook as Document,
       icon: 'Message-Sun',
       status: 'draft',
     },

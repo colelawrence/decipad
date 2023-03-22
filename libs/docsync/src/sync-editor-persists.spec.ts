@@ -2,6 +2,7 @@ import waitForExpect from 'wait-for-expect';
 import { getDefined } from '@decipad/utils';
 import { TElement } from '@udecode/plate';
 import { createTPlateEditor } from '@decipad/editor-types';
+import { disable } from '@decipad/feature-flags';
 import { createDocSyncEditor, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
@@ -27,6 +28,10 @@ describe('pad editor persistence', () => {
     });
     editor.onLoaded(onLoaded);
     editor.onSaved(onSaved);
+  });
+
+  beforeEach(() => {
+    disable('POPULATED_NEW_NOTEBOOK');
   });
 
   afterEach(() => {

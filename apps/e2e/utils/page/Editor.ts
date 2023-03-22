@@ -2,7 +2,7 @@ import { Flag } from '@decipad/feature-flags';
 import { BrowserContext, Page } from 'playwright';
 import { Timeouts, withTestUser } from '../src';
 import { signOut } from './Home';
-import { navigateToPlayground } from './Playground';
+import { navigateToPlayground, isOnPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
 interface SetupOptions {
@@ -17,6 +17,14 @@ export async function waitForEditorToLoad(page: Page) {
   await page.locator('[data-testid="notebook-title"]').click({
     timeout: 50_000,
   });
+  if (!isOnPlayground(page)) {
+    if (await page.isVisible('text=/clear all/i')) {
+      await page.click('text=/clear all/i');
+      await page.locator('[data-testid="notebook-title"]').click({
+        timeout: 50_000,
+      });
+    }
+  }
 }
 
 export async function waitForNotebookToLoad(page: Page) {

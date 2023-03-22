@@ -6,12 +6,14 @@ const args: ComponentProps<typeof NotebookState> = {
   undo: () => {},
   redo: () => {},
   revertChanges: () => {},
+  clearNotebook: () => {},
   canUndo: true,
   canRedo: true,
   readOnly: true,
   saved: true,
   isOffline: false,
   authed: true,
+  isNewNotebook: true,
 };
 
 export default {

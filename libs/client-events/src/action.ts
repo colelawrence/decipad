@@ -22,6 +22,7 @@ type Action =
         id: string;
       };
     }
+  | { action: 'clear all'; props?: undefined }
   // Visitor
   | { action: 'try decipad'; props?: undefined }
   // Editor actions

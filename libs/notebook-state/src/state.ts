@@ -27,4 +27,5 @@ export interface NotebookState {
   notebookHref?: string;
   setInitialFocusDone: () => void;
   initialFocusDone: boolean;
+  isNewNotebook: boolean;
 }

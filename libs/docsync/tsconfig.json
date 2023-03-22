@@ -31,6 +31,12 @@
     },
     {
       "path": "../editor-types"
+    },
+    {
+      "path": "../editor-utils"
+    },
+    {
+      "path": "../feature-flags"
     }
   ]
 }

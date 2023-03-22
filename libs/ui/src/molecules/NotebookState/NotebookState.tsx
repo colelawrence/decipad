@@ -1,8 +1,17 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useState, useCallback } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow, CurvedArrow } from '../../icons';
-import { cssVar, grey500, mediumShadow, p13Bold } from '../../primitives';
+import {
+  cssVar,
+  grey500,
+  red100,
+  red200,
+  red500,
+  mediumShadow,
+  p13Bold,
+} from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const wrapperStyles = css({
@@ -131,12 +140,14 @@ export interface NotebookStateProps {
   undo: () => void;
   redo: () => void;
   revertChanges: () => void;
+  clearNotebook: () => void;
   canUndo: boolean;
   canRedo: boolean;
   readOnly: boolean;
   saved: boolean;
   isOffline: boolean;
   authed: boolean;
+  isNewNotebook: boolean;
 }
 
 const getText = (readOnly: boolean, saved: boolean, isOffline: boolean) => {
@@ -185,18 +196,27 @@ export const NotebookState: FC<NotebookStateProps> = ({
   undo,
   redo,
   revertChanges,
+  clearNotebook,
   canUndo,
   canRedo,
   readOnly,
   saved,
   isOffline,
   authed,
+  isNewNotebook,
 }) => {
   const state = isOffline
     ? 'offline'
     : readOnly || !saved
     ? 'unsaved'
     : 'saved';
+
+  const onMouseLeave = useCallback(() => {
+    setShowClearAllDirection(false);
+  }, []);
+
+  const [showClearAllDirection, setShowClearAllDirection] = useState(true);
+
   return (
     <div
       css={[
@@ -208,32 +228,79 @@ export const NotebookState: FC<NotebookStateProps> = ({
         !canUndo && readOnly && { display: 'none' },
       ]}
     >
-      <div css={[buttonStyles, canUndo && activeButtonStyles]}>
-        <button
-          css={[
-            { width: 24, height: 24 },
-            inactiveStyles,
-            canUndo && activeStyles,
-          ]}
-          onClick={undo}
-          title={canUndo ? 'Undo ⌘ + Z' : ''}
-        >
-          <CurvedArrow direction="left" active={canUndo} />
-        </button>
-      </div>
-      <div css={[buttonStyles, canRedo && activeButtonStyles]}>
-        <button
-          css={[
-            { width: 24, height: 24 },
-            inactiveStyles,
-            canRedo && activeStyles,
-          ]}
-          onClick={redo}
-          title={canRedo ? 'Redo ⌘ + SHIFT + Z' : ''}
-        >
-          <CurvedArrow direction="right" active={canRedo} />
-        </button>
-      </div>
+      {!readOnly &&
+        isNewNotebook &&
+        !canUndo &&
+        isFlagEnabled('POPULATED_NEW_NOTEBOOK') && (
+          <span id="ClearAllButton" onMouseLeave={onMouseLeave}>
+            {/*
+            We want to temporarily control the tooltip, but after the user
+            hovered it, we want to hand the control back to Radix.
+          */}
+            <Tooltip
+              {...(showClearAllDirection && { open: true })}
+              trigger={
+                <button
+                  onClick={clearNotebook}
+                  css={[
+                    revertChangesStyles,
+                    activeStyles,
+                    activeRevertChangesStyles,
+                    {
+                      backgroundColor: red100.rgb,
+                      color: red500.rgb,
+                      ':hover': {
+                        backgroundColor: red200.rgb,
+                      },
+                    },
+                  ]}
+                >
+                  Clear All
+                </button>
+              }
+              align="center"
+            >
+              <>
+                <p>Clear All Content</p>
+                <p>
+                  <span css={{ color: grey500.rgb }}>
+                    Click to start from an empty notebook.
+                  </span>
+                </p>
+              </>
+            </Tooltip>
+          </span>
+        )}
+      {(canRedo || canUndo) && (
+        <>
+          <div css={[buttonStyles, canUndo && activeButtonStyles]}>
+            <button
+              css={[
+                { width: 24, height: 24 },
+                inactiveStyles,
+                canUndo && activeStyles,
+              ]}
+              onClick={undo}
+              title={canUndo ? 'Undo ⌘ + Z' : ''}
+            >
+              <CurvedArrow direction="left" active={canUndo} />
+            </button>
+          </div>
+          <div css={[buttonStyles, canRedo && activeButtonStyles]}>
+            <button
+              css={[
+                { width: 24, height: 24 },
+                inactiveStyles,
+                canRedo && activeStyles,
+              ]}
+              onClick={redo}
+              title={canRedo ? 'Redo ⌘ + SHIFT + Z' : ''}
+            >
+              <CurvedArrow direction="right" active={canRedo} />
+            </button>
+          </div>
+        </>
+      )}
       {readOnly && (
         <button
           css={[

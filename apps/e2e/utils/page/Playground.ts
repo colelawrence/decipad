@@ -1,7 +1,7 @@
 import { Page } from 'playwright';
 import { URL } from 'url';
 
-function isOnPlayground(page: Page | URL): boolean {
+export function isOnPlayground(page: Page | URL): boolean {
   const url = page instanceof URL ? page : new URL(page.url());
   return url.pathname.match(/playground/) !== null;
 }

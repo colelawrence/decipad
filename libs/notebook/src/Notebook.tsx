@@ -73,6 +73,7 @@ const InsideNotebookState = ({
     timedOutLoadingFromRemote,
     hasLocalChanges,
     destroy,
+    isNewNotebook,
   } = useNotebookState(notebookId);
 
   const interactions = useEditorUserInteractionsContext();
@@ -193,6 +194,7 @@ const InsideNotebookState = ({
             isSavedRemotely={editor.isSavedRemotely()}
             editor={editor}
             readOnly={readOnly}
+            isNewNotebook={isNewNotebook}
           >
             <InitialSelection
               notebookId={notebookId}

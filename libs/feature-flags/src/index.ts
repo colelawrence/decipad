@@ -15,6 +15,7 @@ export const availableFlags = [
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
   'DATA_MAPPINGS',
+  'POPULATED_NEW_NOTEBOOK',
   'ROTATED_DATA_VIEW',
   'INTEGRATIONS_AUTH',
 ] as const;
@@ -66,6 +67,7 @@ let overrides: Flags = {
   SHARE_PAD_WITH_EMAIL: true,
   CODE_LINE_NAME_SEPARATED: true,
   EXPR_REFS: true,
+  POPULATED_NEW_NOTEBOOK: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

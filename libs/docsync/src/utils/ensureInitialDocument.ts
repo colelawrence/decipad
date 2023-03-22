@@ -1,37 +1,35 @@
-import { nanoid } from 'nanoid';
-import { H1Element, MyEditor, ParagraphElement } from '@decipad/editor-types';
-import {
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH,
-  insertNodes,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { MyEditor } from '@decipad/editor-types';
+import { insertNodes, withoutNormalizing } from '@udecode/plate';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { createDefaultNotebook } from '@decipad/editor-utils';
+import InitialNotebook from '../initial-notebook';
 
 export function ensureInitialDocument(editor: MyEditor): void {
-  const { children } = editor;
+  const { children, withoutCapturingUndo } = editor;
+
+  function createInitNotebook() {
+    if (isFlagEnabled('POPULATED_NEW_NOTEBOOK')) {
+      createPopulatedNotebook(editor);
+    } else {
+      createDefaultNotebook(editor);
+    }
+  }
+
   if (children.length > 1) {
     return;
   }
+
   if (children.length === 0) {
-    withoutNormalizing(editor, () => {
-      insertNodes<H1Element>(
-        editor,
-        {
-          type: ELEMENT_H1,
-          children: [{ text: 'My notebook title' }],
-          id: nanoid(),
-        },
-        { at: [0] }
-      );
-      insertNodes<ParagraphElement>(
-        editor,
-        {
-          type: ELEMENT_PARAGRAPH,
-          children: [{ text: '' }],
-          id: nanoid(),
-        },
-        { at: [1] }
-      );
-    });
+    if (withoutCapturingUndo) {
+      withoutCapturingUndo(createInitNotebook);
+      return;
+    }
+    createInitNotebook();
   }
+}
+
+function createPopulatedNotebook(editor: MyEditor) {
+  withoutNormalizing(editor, () => {
+    insertNodes(editor, InitialNotebook as any, { at: [0] });
+  });
 }

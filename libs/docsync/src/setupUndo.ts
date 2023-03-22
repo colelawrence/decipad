@@ -4,26 +4,39 @@ import { DocSyncEditor } from '.';
 
 export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
   let captureTransaction = true;
+
   const undoManager = new UndoManager(editor.sharedType, {
     trackedOrigins: new Set([slateYjsSymbol]),
-    captureTransaction: () => captureTransaction,
+
+    /**
+     * Previously, the code for changing the `captureTransaction` was in `withoutCapturingUndo`,
+     * However this seemed to create a race condition of sorts, and therefore we have the logic here.
+     * We simply change it to true everytime it is false.
+     */
+    captureTransaction: () => {
+      if (captureTransaction) {
+        return true;
+      }
+
+      captureTransaction = true;
+      return false;
+    },
     captureTimeout: 200,
   });
+
   editor.undo = () => {
     undoManager.undo();
   };
+
   editor.redo = () => {
     undoManager.redo();
   };
+
   editor.withoutCapturingUndo = (cb: () => void) => {
-    const beforeCapturing = captureTransaction;
     captureTransaction = false;
-    try {
-      cb();
-    } finally {
-      captureTransaction = beforeCapturing;
-    }
+    cb();
   };
+
   editor.undoManager = undoManager;
 
   return editor;

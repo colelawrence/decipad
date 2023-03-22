@@ -31,7 +31,11 @@ test.describe('Dashboard snapshot', () => {
   test('should display the initial notebooks', async () => {
     const pads = await (await getPadList(page)).sort(byName);
     expect(pads).toMatchObject(
-      ['Meet Decipad! Learn the basics', 'Weekend Trip - Example Notebook']
+      [
+        'Welcome to Decipad!',
+        'Starting a Business - Example Notebook',
+        'Weekend Trip - Example Notebook',
+      ]
         .map((notebook) => ({
           name: notebook,
         }))
@@ -76,7 +80,7 @@ test.describe('Dashboard operations', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
     const pads = await getPadList(page);
-    expect(pads).toHaveLength(2);
+    expect(pads).toHaveLength(3);
   });
 
   test('can duplicate pad', async () => {
@@ -86,7 +90,7 @@ test.describe('Dashboard operations', () => {
 
     let pads = await getPadList(page);
 
-    expect(pads).toHaveLength(3);
+    expect(pads).toHaveLength(4);
 
     pads = await getPadList(page);
     const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));
