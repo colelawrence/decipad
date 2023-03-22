@@ -52,6 +52,8 @@ type Action =
         elementType?: AnyElement['type'];
       };
     }
+  // Onboarding
+  | { action: 'onboarding screen'; props?: { screen: string } }
   // Customer Support
   | { action: 'contact live support'; props?: undefined }
   | { action: 'send feedback'; props?: undefined }

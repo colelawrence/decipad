@@ -1,4 +1,5 @@
 import { onboard } from '@decipad/routing';
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   AccountSetupFlow1,
   AccountSetupFlow2,
@@ -6,7 +7,7 @@ import {
   ErrorPage,
 } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useContext } from 'react';
 import {
   Navigate,
   Route,
@@ -55,9 +56,17 @@ export const Onboard = () => {
 
   // Browser navigation between steps.
   const step = useParams()['*'];
+  const clientEvent = useContext(ClientEventsContext);
   const next = useCallback(() => {
     navigate(onboard({}).step({ step: Number(step) + 1 }).$);
-  }, [navigate, step]);
+    clientEvent({
+      type: 'action',
+      action: 'onboarding screen',
+      props: {
+        screen: `Screen ${Number(step)} finished`,
+      },
+    });
+  }, [navigate, step, clientEvent]);
   const previous = useCallback(() => {
     navigate(onboard({}).step({ step: Number(step) - 1 }).$);
   }, [navigate, step]);
