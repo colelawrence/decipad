@@ -31,7 +31,7 @@ const exampleBlock: IdentifiedBlock = {
   type: 'identified-block',
   id: 'my-first-block',
   // To parse an expression with a variable name separately, use
-  // decilang`{{ name: 'MyVariable' }} = ${parseExpressionOrThrow('round(1.23)')}`
+  // decilang`${{ name: 'MyVariable' }} = ${parseExpressionOrThrow('round(1.23)')}`
   // Because this enables you to use arbitrary variable names
   block: parseBlockOrThrow('MyVariable = round(1.23)'),
   // This is optional but highly recommended
