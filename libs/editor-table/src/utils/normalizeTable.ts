@@ -35,7 +35,6 @@ import {
 import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { Computer } from '@decipad/computer';
 import { createTableCaption } from './createTableCaption';
 import { convertLegacyType } from './convertLegacyType';
 
@@ -101,8 +100,7 @@ const normalizeTableStructure = (
 
 const normalizeTableCaption = (
   editor: MyEditor,
-  entry: TNodeEntry<TableElement>,
-  computer: Computer
+  entry: TNodeEntry<TableElement>
 ): boolean => {
   const [caption] = getChildren(entry);
   for (const [captionChildIndex, captionChild] of enumerate(
@@ -145,16 +143,13 @@ const normalizeTableCaption = (
 
   const [varName] = getChildren(caption);
   const [varNameText] = getChildren(varName);
-  return normalizeIdentifierElement(editor, varNameText, () =>
-    computer.getAvailableIdentifier('Table', 1)
-  );
+  return normalizeIdentifierElement(editor, varNameText);
 };
 
 const normalizeTableHeaderCell = (
   editor: MyEditor,
   path: Path,
-  th: TableHeaderElement,
-  computer: Computer
+  th: TableHeaderElement
 ): boolean => {
   if (isText(th)) {
     wrapNodes<TableHeaderElement>(
@@ -225,15 +220,12 @@ const normalizeTableHeaderCell = (
   }
 
   const [text] = getChildren([th, path]);
-  return normalizeIdentifierElement(editor, text, () =>
-    computer.getAvailableIdentifier('Column', path[2] + 1)
-  );
+  return normalizeIdentifierElement(editor, text);
 };
 
 const normalizeTableHeaderRow = (
   editor: MyEditor,
-  [node, path]: TNodeEntry<TableElement>,
-  computer: Computer
+  [node, path]: TNodeEntry<TableElement>
 ): boolean => {
   const headerRow = node.children[1];
   const headerRowPath = [...path, 1];
@@ -252,7 +244,7 @@ const normalizeTableHeaderRow = (
   for (const th of headerRow.children) {
     thIndex += 1;
     const thPath = [...headerRowPath, thIndex];
-    if (normalizeTableHeaderCell(editor, thPath, th, computer)) {
+    if (normalizeTableHeaderCell(editor, thPath, th)) {
       return true;
     }
   }
@@ -412,13 +404,12 @@ const normalizeTableRowCount = (
 
 export const normalizeTable = (
   editor: MyEditor,
-  computer: Computer,
   entry: TNodeEntry<TableElement>
 ): boolean => {
   return (
     normalizeTableStructure(editor, entry) ||
-    normalizeTableCaption(editor, entry, computer) ||
-    normalizeTableHeaderRow(editor, entry, computer) ||
+    normalizeTableCaption(editor, entry) ||
+    normalizeTableHeaderRow(editor, entry) ||
     normalizeTableDataRows(editor, entry) ||
     normalizeTableRowColumnCount(editor, entry) ||
     normalizeTableRowCount(editor, entry)

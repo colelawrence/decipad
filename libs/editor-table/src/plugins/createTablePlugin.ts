@@ -79,7 +79,7 @@ export const createTablePlugin = (
     createCellFormulaShortcutPlugin(),
     createNormalizeTableFormulaPlugin(computer),
     createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
-    createNormalizeTablesPlugin(computer),
+    createNormalizeTablesPlugin(),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,

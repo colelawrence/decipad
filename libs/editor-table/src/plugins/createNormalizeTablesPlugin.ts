@@ -8,7 +8,6 @@ import {
 } from '@decipad/editor-types';
 import { deleteText, isElement, TNodeEntry } from '@udecode/plate';
 import { insertNodes } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
 import { normalizeTable } from '../utils/normalizeTable';
 
@@ -22,28 +21,28 @@ const normalizeTableInput = (
   insertNodes(editor, table, { at: path });
 };
 
-export const createNormalizeTablesPlugin = (computer: Computer) =>
-  createNormalizerPluginFactory({
-    name: 'NORMALIZE_TABLES_PLUGIN',
-    plugin:
-      (editor: MyEditor) =>
-      (entry: MyNodeEntry): boolean => {
-        const [node, path] = entry;
-        if (
-          !isElement(node) ||
-          (node.type !== DEPRECATED_ELEMENT_TABLE_INPUT &&
-            node.type !== ELEMENT_TABLE)
-        ) {
-          return false;
-        }
-        if (node.type === DEPRECATED_ELEMENT_TABLE_INPUT) {
-          normalizeTableInput(editor, [node, path]);
-          return true;
-        }
-        if (node.type === ELEMENT_TABLE) {
-          return normalizeTable(editor, computer, [node, path]);
-        }
+export const normalizeTables =
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): boolean => {
+    const [node, path] = entry;
+    if (
+      !isElement(node) ||
+      (node.type !== DEPRECATED_ELEMENT_TABLE_INPUT &&
+        node.type !== ELEMENT_TABLE)
+    ) {
+      return false;
+    }
+    if (node.type === DEPRECATED_ELEMENT_TABLE_INPUT) {
+      normalizeTableInput(editor, [node, path]);
+      return true;
+    }
+    if (node.type === ELEMENT_TABLE) {
+      return normalizeTable(editor, [node, path]);
+    }
+    return false;
+  };
 
-        return false;
-      },
-  })();
+export const createNormalizeTablesPlugin = createNormalizerPluginFactory({
+  name: 'NORMALIZE_TABLES_PLUGIN',
+  plugin: normalizeTables,
+});
