@@ -189,8 +189,3 @@ it('shows a given error message', () => {
   );
   expect(getByText('Oopsie whoopsie.')).toBeVisible();
 });
-
-it('renders a plot with the given result', async () => {
-  const { findAllByText } = render(<PlotBlock {...plotProps('line')} />);
-  expect(await findAllByText(firstDataLabel)).not.toHaveLength(0);
-});

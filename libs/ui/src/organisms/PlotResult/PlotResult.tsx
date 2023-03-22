@@ -38,7 +38,7 @@ export const PlotResult = ({
   return (
     <VegaLite
       css={styles}
-      renderer="svg"
+      renderer="canvas"
       spec={spec}
       data={data}
       width={width}

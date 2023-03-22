@@ -47,16 +47,6 @@ it('renders a plot', async () => {
   expect(await findByRole('graphics-document')).toBeVisible();
 });
 
-it('respects the given spec', async () => {
-  const { findAllByText } = render(<PlotResult {...props} />);
-  expect(await findAllByText('aa')).not.toHaveLength(0);
-});
-
-it('respects the given data', async () => {
-  const { findAllByText } = render(<PlotResult {...props} />);
-  expect(await findAllByText('label 1')).not.toHaveLength(0);
-});
-
 describe('given invalid input', () => {
   mockConsoleWarn();
 
