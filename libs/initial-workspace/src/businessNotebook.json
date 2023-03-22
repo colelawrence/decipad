@@ -223,8 +223,9 @@
 									],
 									"id": "t0fg3oLUrKoGhrFXxpoeu",
 									"type": "smart-ref",
-									"blockId": "c6FNo_imJSEDtWBsgNrXZ",
-									"lastSeenVariableName": "Revenue.Year"
+									"blockId": "ddTJXSKZzWh56A8NMCZmM",
+									"lastSeenVariableName": "Revenue.Year",
+									"columnId": "c6FNo_imJSEDtWBsgNrXZ"
 								},
 								{
 									"text": " ))"
@@ -683,7 +684,7 @@
 						{
 							"children": [
 								{
-									"text": "COGS"
+									"text": "COGSTable"
 								}
 							],
 							"type": "table-var-name",
@@ -730,8 +731,9 @@
 									],
 									"id": "2N7Ul8xrcSAyJAz4_AfbZ",
 									"type": "smart-ref",
-									"blockId": "1T4rQFbMj0oHnACsSYQ5y",
-									"lastSeenVariableName": "COGS.Year"
+									"blockId": "HFm_s7Zp8559ZZsUzDnbH",
+									"lastSeenVariableName": "COGSTable.Year",
+									"columnId": "1T4rQFbMj0oHnACsSYQ5y"
 								},
 								{
 									"text": " ))"
@@ -744,7 +746,22 @@
 						{
 							"children": [
 								{
-									"text": "Units*"
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "lqG8HYW2Z9L8R5qNRbTzU",
+									"type": "smart-ref",
+									"blockId": "pbzxLSQGi_Wb44SEUAdyN",
+									"columnId": null,
+									"lastSeenVariableName": "Units"
+								},
+								{
+									"text": "*"
 								},
 								{
 									"children": [
@@ -778,8 +795,9 @@
 									],
 									"id": "k56W9FIUcOFUb7AxKJpMo",
 									"type": "smart-ref",
-									"blockId": "fW42GOC3mjcWDoFB386CE",
-									"lastSeenVariableName": "Revenue.Units"
+									"blockId": "ddTJXSKZzWh56A8NMCZmM",
+									"lastSeenVariableName": "Revenue.Units",
+									"columnId": "fW42GOC3mjcWDoFB386CE"
 								},
 								{
 									"text": ""
@@ -1185,8 +1203,9 @@
 									],
 									"id": "cPRDK33yvfz7Mm3AKsh8z",
 									"type": "smart-ref",
-									"blockId": "pF2XmhRPbG81DiO13qilh",
-									"lastSeenVariableName": "Revenue.NetRevenue"
+									"blockId": "ddTJXSKZzWh56A8NMCZmM",
+									"lastSeenVariableName": "Revenue.NetRevenue",
+									"columnId": "pF2XmhRPbG81DiO13qilh"
 								},
 								{
 									"text": ""
@@ -1209,8 +1228,9 @@
 									],
 									"id": "yPoJTme2_ms8l2qQ3mLLZ",
 									"type": "smart-ref",
-									"blockId": "8rRgO31BB_biu8RpsnF__",
-									"lastSeenVariableName": "COGS.COGS"
+									"blockId": "HFm_s7Zp8559ZZsUzDnbH",
+									"lastSeenVariableName": "COGSTable.COGS",
+									"columnId": "8rRgO31BB_biu8RpsnF__"
 								},
 								{
 									"text": ""
@@ -1223,7 +1243,7 @@
 						{
 							"children": [
 								{
-									"text": "NetRevenue  - "
+									"text": ""
 								},
 								{
 									"children": [
@@ -1231,9 +1251,25 @@
 											"text": ""
 										}
 									],
-									"id": "EwknZgq-J0vDVbIjxdRup",
+									"id": "DFqhaJSXL0_TdAPOO45NN",
 									"type": "smart-ref",
-									"blockId": "HFm_s7Zp8559ZZsUzDnbH",
+									"blockId": "1NNlKhP2trAHQ23YmqOVV",
+									"columnId": null,
+									"lastSeenVariableName": "NetRevenue"
+								},
+								{
+									"text": "  - "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BR9dtDcub_jTyVfXJp8Hg",
+									"type": "smart-ref",
+									"blockId": "6sMXx81_zzoy-RYoNmAr8",
+									"columnId": null,
 									"lastSeenVariableName": "COGS"
 								},
 								{
@@ -1786,8 +1822,9 @@
 									],
 									"id": "V6vbzjuGpoIB-VwemnVrV",
 									"type": "smart-ref",
-									"blockId": "L_O223kPwJDA92Okl-Vcp",
-									"lastSeenVariableName": "OPEX.Year"
+									"blockId": "NOnNrYjbMXL7-mNf0_HYD",
+									"lastSeenVariableName": "OPEX.Year",
+									"columnId": "L_O223kPwJDA92Okl-Vcp"
 								},
 								{
 									"text": "))"
@@ -1810,8 +1847,9 @@
 									],
 									"id": "z0nQgPD0qMOAD9KIzhVOp",
 									"type": "smart-ref",
-									"blockId": "pF2XmhRPbG81DiO13qilh",
-									"lastSeenVariableName": "Revenue.NetRevenue"
+									"blockId": "ddTJXSKZzWh56A8NMCZmM",
+									"lastSeenVariableName": "Revenue.NetRevenue",
+									"columnId": "pF2XmhRPbG81DiO13qilh"
 								},
 								{
 									"text": " * "
@@ -1848,8 +1886,9 @@
 									],
 									"id": "uPrftKgSgjnU3dHn67bMh",
 									"type": "smart-ref",
-									"blockId": "fW42GOC3mjcWDoFB386CE",
-									"lastSeenVariableName": "Revenue.Units"
+									"blockId": "ddTJXSKZzWh56A8NMCZmM",
+									"lastSeenVariableName": "Revenue.Units",
+									"columnId": "fW42GOC3mjcWDoFB386CE"
 								},
 								{
 									"text": ""
@@ -2416,8 +2455,9 @@
 									],
 									"id": "wfWGbB_9jKfIuS0DUHKhd",
 									"type": "smart-ref",
-									"blockId": "pQ0XmWlMNhJAezj3ulFU6",
-									"lastSeenVariableName": "GrossMargin.GrossProfit"
+									"blockId": "hOM1pr8pzdFI19V4lubQD",
+									"lastSeenVariableName": "GrossMargin.GrossProfit",
+									"columnId": "pQ0XmWlMNhJAezj3ulFU6"
 								},
 								{
 									"text": " "
@@ -2440,8 +2480,9 @@
 									],
 									"id": "RKS0TQMapvCzdKqzdLjf9",
 									"type": "smart-ref",
-									"blockId": "LeraciU6Vy1axysEbM7Zy",
-									"lastSeenVariableName": "OPEX.Total"
+									"blockId": "NOnNrYjbMXL7-mNf0_HYD",
+									"lastSeenVariableName": "OPEX.Total",
+									"columnId": "LeraciU6Vy1axysEbM7Zy"
 								},
 								{
 									"text": ""
@@ -2488,8 +2529,9 @@
 									],
 									"id": "fEuCwKB6ec0gIhbCC5JRq",
 									"type": "smart-ref",
-									"blockId": "1NNlKhP2trAHQ23YmqOVV",
-									"lastSeenVariableName": "GrossMargin.NetRevenue"
+									"blockId": "hOM1pr8pzdFI19V4lubQD",
+									"lastSeenVariableName": "GrossMargin.NetRevenue",
+									"columnId": "1NNlKhP2trAHQ23YmqOVV"
 								},
 								{
 									"text": ""
@@ -2990,8 +3032,9 @@
 									],
 									"id": "HXEMFUOmkUULqP3aUBDM4",
 									"type": "smart-ref",
-									"blockId": "oQQlONGTZmYYR0HdpOB9J",
-									"lastSeenVariableName": "EBIT.OperatingIncome"
+									"blockId": "-farwyIZskJw6c8lgrotZ",
+									"lastSeenVariableName": "EBIT.OperatingIncome",
+									"columnId": "oQQlONGTZmYYR0HdpOB9J"
 								},
 								{
 									"text": ""
