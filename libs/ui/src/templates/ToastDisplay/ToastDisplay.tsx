@@ -1,5 +1,5 @@
-import { ToastContext } from '@decipad/toast';
-import { ComponentType } from 'react';
+import { ToastContext, ToastType } from '@decipad/toast';
+import { ComponentType, useCallback, ReactNode } from 'react';
 import * as ReactToastNotifications from 'react-toast-notifications';
 import { Toast } from '../../atoms';
 import { toastTransitionDelay } from '../../primitives';
@@ -8,15 +8,15 @@ const ToastProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   const { addToast } = ReactToastNotifications.useToasts();
-  return (
-    <ToastContext.Provider
-      value={(message, type, options = {}) => {
-        addToast(message, { appearance: type, ...options });
-      }}
-    >
-      {children}
-    </ToastContext.Provider>
+
+  const add = useCallback(
+    (message: ReactNode | string, type: ToastType, options = {}) => {
+      addToast(message, { appearance: type, ...options });
+    },
+    [addToast]
   );
+
+  return <ToastContext.Provider value={add}>{children}</ToastContext.Provider>;
 };
 
 export const ToastDisplay: React.FC<React.PropsWithChildren<unknown>> = ({
