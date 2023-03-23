@@ -191,6 +191,13 @@ export const Onboard = () => {
                       );
                     } else {
                       navigate(redirectPath);
+                      clientEvent({
+                        type: 'action',
+                        action: 'onboarding screen',
+                        props: {
+                          screen: `Screen 3 finished`,
+                        },
+                      });
                     }
                   })
                   .finally(() => {
