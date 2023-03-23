@@ -116,6 +116,8 @@ test.describe('Loading and snapshot of big notebook', () => {
     await page.waitForSelector('text="This is a string"');
     await page.waitForSelector('text="ם עוד. על בקר"');
 
+    // wait for charts to load before snapshot
+    await page.isVisible('[data-testid="chart-styles"]');
     await snapshot(
       publishedNotebookPage,
       'Notebook: Published mode (incognito)',

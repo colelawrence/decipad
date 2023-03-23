@@ -90,7 +90,11 @@ export const PlotBlock = ({
   onTitleChange = noop,
 }: PlotBlockProps): ReturnType<FC> => {
   return (
-    <section css={plotBlockStyles} contentEditable={false}>
+    <section
+      data-test-id="chart-styles"
+      css={plotBlockStyles}
+      contentEditable={false}
+    >
       <div css={plotTitleStyles}>
         <div css={plotIconSizeStyles}>
           <PlotIcon />
