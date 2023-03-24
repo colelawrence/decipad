@@ -18,6 +18,7 @@ export const availableFlags = [
   'POPULATED_NEW_NOTEBOOK',
   'ROTATED_DATA_VIEW',
   'INTEGRATIONS_AUTH',
+  'AC_MENU_INSERT_SMART_REF',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

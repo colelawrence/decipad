@@ -113,6 +113,7 @@ export type Identifier = {
   kind: 'variable' | 'function' | 'column';
   identifier: string;
   blockId?: string;
+  columnId?: string;
   type: string;
   inTable?: string;
   editing?: boolean;

@@ -1,10 +1,17 @@
-import { MyEditor } from '@decipad/editor-types';
+import {
+  ELEMENT_SMART_REF,
+  MyEditor,
+  SmartRefElement,
+} from '@decipad/editor-types';
+import { insertNodes } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   deleteText,
   getEditorString,
   getPointBefore,
   getStartPoint,
   insertText,
+  nanoid,
   select,
   setSelection,
 } from '@udecode/plate';
@@ -39,7 +46,18 @@ export const commitAutocompleteItem = (
     moveCursorBack = true;
   }
 
-  insertText(editor, toInsert);
+  if (!isFlagEnabled('AC_MENU_INSERT_SMART_REF') || !item.blockId) {
+    insertText(editor, toInsert);
+  } else {
+    const smartRef: SmartRefElement = {
+      id: nanoid(),
+      type: ELEMENT_SMART_REF,
+      blockId: item.blockId,
+      columnId: item.columnId || null,
+      children: [{ text: '' }],
+    };
+    insertNodes(editor, smartRef);
+  }
 
   // Move cursor to before the closing parenthesis
   if (editor.selection?.focus && moveCursorBack) {

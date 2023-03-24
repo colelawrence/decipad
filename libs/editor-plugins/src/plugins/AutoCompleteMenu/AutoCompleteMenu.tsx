@@ -25,6 +25,7 @@ const selectNames = (
       inTable: n.inTable,
       type: n.type.kind,
       blockId: n.blockId,
+      columnId: n.columnId,
       explanation: n.explanation,
       syntax: n.syntax,
       example: n.example,
