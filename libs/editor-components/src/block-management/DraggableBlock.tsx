@@ -36,7 +36,6 @@ import {
   focusEditor,
   getEndPoint,
   getNextNode,
-  getNode,
   getNodeString,
   getPreviousNode,
   getStartPoint,
@@ -355,31 +354,27 @@ const insertSameNodeType = (
 };
 
 const openSlashMenu = (editor: MyEditor, element: MyElement) => {
-  const selectedBlock = editor.selection?.anchor.path[0];
-  const selectedNode = selectedBlock ? getNode(editor, [selectedBlock]) : null;
-  const selectedLine = selectedNode ? getNodeString(selectedNode) : null;
-  const slashAlreadyCreated = selectedLine === '/' && selectedBlock;
+  const currentLine = getNodeString(element);
+  const currentPath = findNodePath(editor, element);
+  const nextNode = getNextNode(editor, { at: currentPath });
+  const [nextElement, nextPath] = nextNode || [];
 
-  if (slashAlreadyCreated) {
-    select(editor, getEndPoint(editor, [selectedBlock]));
+  if (currentLine === '/') return;
+  if (!currentPath) return;
+
+  const slashAlreadyCreated =
+    currentLine !== '' && nextElement && getNodeString(nextElement) === '/';
+
+  if (slashAlreadyCreated && nextPath) {
+    select(editor, getEndPoint(editor, nextPath));
     focusEditor(editor);
     return;
   }
 
-  const path = findNodePath(editor, element);
-  const currentLine = getNodeString(element);
   const isParagraph = element.type === ELEMENT_PARAGRAPH;
-
-  if (!path) return;
-  if (currentLine === '/') return;
-
   const createNewParagraph = currentLine || !isParagraph;
 
-  if (createNewParagraph) {
-    const nextNode = getNextNode(editor, { at: path });
-    const [, nextPath] = nextNode || [];
-    if (!nextPath) return;
-
+  if (createNewParagraph && nextPath) {
     insertNodes(
       editor,
       {
@@ -394,8 +389,8 @@ const openSlashMenu = (editor: MyEditor, element: MyElement) => {
     select(editor, getEndPoint(editor, nextPath));
     focusEditor(editor);
   } else {
-    insertText(editor, '/', { at: path });
-    select(editor, getEndPoint(editor, path));
+    insertText(editor, '/', { at: currentPath });
+    select(editor, getEndPoint(editor, currentPath));
     focusEditor(editor);
   }
 };
