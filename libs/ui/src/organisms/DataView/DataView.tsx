@@ -184,11 +184,7 @@ export const DataView: FC<DataViewProps> = ({
         hideAddDataViewButton: true,
       }}
     >
-      <div
-        contentEditable={false}
-        css={dataViewWrapperStyles}
-        aria-roledescription="data view"
-      >
+      <div css={dataViewWrapperStyles} aria-roledescription="data view">
         <div css={dataViewControlsStyles}>
           <div css={tableCaptionWrapperStyles}>{caption}</div>
           {!readOnly && (

@@ -124,6 +124,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             aria-roledescription="table name"
             css={[editableTableCaptionStyles, placeholderStyles]}
             spellCheck={false}
+            contentEditable={!useIsEditorReadOnly()}
           >
             {caption}
           </div>
