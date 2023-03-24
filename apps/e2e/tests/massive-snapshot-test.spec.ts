@@ -69,12 +69,13 @@ test.describe('Loading and snapshot of big notebook', () => {
   test('click publish button and extract text', async () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
+    await page.waitForSelector('[data-test-id="copy-published-link"]');
     await snapshot(page as Page, 'Notebook: Publish Popover');
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
   test('navigates to published notebook link', async () => {
-    await page.waitForSelector('role=button[name="Link Copy"]');
+    await page.waitForSelector('[data-test-id="copy-published-link"]');
 
     publishedNotebookPage = await randomUser.newPage();
 

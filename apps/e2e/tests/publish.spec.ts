@@ -62,9 +62,7 @@ test.describe('Simple does publish work test', () => {
   test('it can share', async () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
-    await page
-      .locator('[aria-roledescription="copy url to clipboard"]')
-      .click();
+    await page.locator('[data-test-id="copy-published-link"]').click();
   });
 
   test('it can copy paste the url from the shared notebook', async ({

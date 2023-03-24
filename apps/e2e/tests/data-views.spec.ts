@@ -75,9 +75,7 @@ test.describe('Data views', () => {
   });
 
   test('expand data view group', async () => {
-    await page
-      .locator('role=cell[name="a Folder"] >> span:has-text("Folder")')
-      .click();
+    await page.locator('[data-test-id="data-view-row-expander"]').click();
     // wait for results debounce
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000);
@@ -89,17 +87,13 @@ test.describe('Data views', () => {
 
   test('set aggregations', async () => {
     await page
-      .locator(
-        'role=cell[name="Drag Handle Column2 Caret down"] >> role=button[name="Caret down"]'
-      )
+      .locator('[data-test-id="data-view-options-menu-Column2"]')
       .click();
     await page.locator('text=Aggregate').click();
     await page.locator('text=Sum').click();
 
     await page
-      .locator(
-        'role=cell[name="Drag Handle Column3 Caret down"] >> role=button[name="Caret down"]'
-      )
+      .locator('[data-test-id="data-view-options-menu-Column3"]')
       .click();
     await page.locator('text=Aggregate').click();
     await page.locator('text=Average').click();

@@ -21,6 +21,7 @@ export interface DataViewColumnMenuProps {
   onAggregationChange: (aggregation: string | undefined) => void;
   onRoundingChange: (aggregation: string | undefined) => void;
   onDeleteColumn: () => void;
+  columnName?: string;
 }
 
 export type Ref = HTMLTableCellElement;
@@ -41,6 +42,7 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
   selectedRounding,
   onRoundingChange,
   onDeleteColumn,
+  columnName,
 }) => {
   const [rootMenuListOpened, setRootMenuListOpened] = useState(false);
 
@@ -65,7 +67,11 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
       open={rootMenuListOpened}
       onChangeOpen={setRootMenuListOpened}
       trigger={
-        <button css={triggerStyles} onClick={onTriggerClick}>
+        <button
+          css={triggerStyles}
+          onClick={onTriggerClick}
+          data-test-id={`data-view-options-menu-${columnName}`}
+        >
           <Caret color="normal" variant="down" />
         </button>
       }

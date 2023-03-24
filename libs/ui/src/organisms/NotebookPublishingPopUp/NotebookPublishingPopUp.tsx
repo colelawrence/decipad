@@ -259,6 +259,7 @@ export const NotebookPublishingPopUp = ({
                             <button
                               css={copyButtonStyles}
                               aria-roledescription="copy url to clipboard"
+                              data-test-id="copy-published-link"
                             >
                               <span css={copyButtonIconStyles}>
                                 <Link />

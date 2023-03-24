@@ -110,7 +110,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
                 element={element}
               />
             )}
-            <span css={iconStyles}>
+            <span css={iconStyles} data-test-id="data-view-row-expander">
               {groupIsExpanded ? <FolderOpen /> : <Folder />}
             </span>
           </>

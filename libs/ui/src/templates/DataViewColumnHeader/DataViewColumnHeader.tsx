@@ -155,7 +155,7 @@ export const DataViewColumnHeader = forwardRef<
         {!readOnly && <DragHandle />}
         <span>{name}</span>
 
-        {!readOnly && <DataViewColumnMenu {...rest} />}
+        {!readOnly && <DataViewColumnMenu columnName={name} {...rest} />}
 
         <div contentEditable={false}>{children}</div>
       </div>
