@@ -1,12 +1,9 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import pluralize from 'pluralize';
 import { FC, ReactNode, useCallback } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-import { TextAndIconButton } from '../../atoms';
 import { useAutoAnimate } from '../../hooks';
-import { Eye } from '../../icons';
-import { cssVar } from '../../primitives';
+import { cssVar, p12Medium } from '../../primitives';
 import { table } from '../../styles';
 import { tableRowCounter } from '../../utils';
 
@@ -158,15 +155,15 @@ const showMoreWrapperStyles = css({
   justifyContent: 'center',
 });
 
-const showMoreButtonWrapperStyles = css({
+const showMoreButtonWrapperStyles = css(p12Medium, {
   display: 'flex',
   flexDirection: 'row',
+  lineHeight: '2rem',
 });
 
 const ShowAllRows: FC<ShowAllRowsProps> = ({
   columnCount,
   hiddenRowCount,
-  handleSetShowALlRowsButtonPress,
   isReadOnly,
   isLiveResult,
 }) => (
@@ -182,15 +179,7 @@ const ShowAllRows: FC<ShowAllRowsProps> = ({
         <div css={thinVeilAtTheEndStyles}></div>
         <div css={showMoreWrapperStyles}>
           <div css={showMoreButtonWrapperStyles}>
-            <TextAndIconButton
-              text={`View ${hiddenRowCount} more ${pluralize(
-                'result',
-                hiddenRowCount
-              )}`}
-              onClick={handleSetShowALlRowsButtonPress}
-            >
-              <Eye />
-            </TextAndIconButton>
+            Hiding {hiddenRowCount} rows
           </div>
         </div>
       </div>

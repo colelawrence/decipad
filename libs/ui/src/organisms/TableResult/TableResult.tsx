@@ -1,7 +1,7 @@
+import { useState, useMemo, FC, useRef } from 'react';
 import { Result, SerializedTypes } from '@decipad/computer';
 import { zip } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useMemo, useRef, useState } from 'react';
 import { CodeResult, Table } from '..';
 import { TableData, TableHeader } from '../../atoms';
 import { DragHandle } from '../../icons/index';
@@ -20,6 +20,8 @@ import {
   tableWrapperStyles,
 } from '../EditorTable/EditorTable';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
+
+const MAX_COLS = 10;
 
 const recursiveRowCount = (r: Result.Result): number => {
   if (r.type.kind === 'table') {
@@ -46,6 +48,22 @@ const recursiveRowCount = (r: Result.Result): number => {
   return 1;
 };
 
+const trimMaxCols = <T extends Result.Result>(result: T): T => {
+  if (result.type.kind !== 'table') {
+    return result;
+  }
+  return {
+    type: {
+      ...result.type,
+      columnNames: result.type.columnNames.slice(0, MAX_COLS),
+      columnTypes: result.type.columnTypes.slice(0, MAX_COLS),
+    },
+    value: Array.isArray(result.value)
+      ? result.value.slice(0, MAX_COLS)
+      : result.value,
+  } as T;
+};
+
 const liveTableWrapperStyles = css({
   left: '20px',
 });
@@ -60,8 +78,8 @@ const liveTableEmptyCellStyles = css({
 
 export const TableResult = ({
   parentType,
-  type,
-  value,
+  type: _type,
+  value: _value,
   onDragStartCell,
   onDragEnd,
   tooltip = true,
@@ -71,7 +89,19 @@ export const TableResult = ({
   element,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
   const [showAllRows, setShowAllRows] = useState(false);
+  const result = useMemo(
+    () => ({ type: _type, value: _value }),
+    [_type, _value]
+  );
+  const trimmedResult = useMemo(
+    () => isLiveResult && trimMaxCols(result),
+    [isLiveResult, result]
+  );
+
+  const { type, value } = trimmedResult || result;
+
   const { columnNames, columnTypes } = type;
+
   const allowsForLookup = columnTypes && columnTypes[0]?.kind === 'string';
 
   if (value.length !== columnNames.length) {
@@ -79,6 +109,12 @@ export const TableResult = ({
       `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
     );
   }
+
+  const warnAboutTrimmedColumns =
+    trimmedResult &&
+    Array.isArray(value) &&
+    Array.isArray(trimmedResult.value) &&
+    trimmedResult.value.length !== value.length;
 
   const handleSetShowALlRowsButtonPress = () => {
     setShowAllRows(true);
@@ -288,6 +324,7 @@ export const TableResult = ({
           </>
         }
       ></Table>
+      {warnAboutTrimmedColumns && <span>(Columns were trimmed)</span>}
     </div>
   );
 };
