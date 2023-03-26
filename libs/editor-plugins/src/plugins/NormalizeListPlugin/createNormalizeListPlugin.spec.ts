@@ -244,7 +244,42 @@ describe('a list item', () => {
         children: [
           {
             type: ELEMENT_LI,
-            children: [{ type: ELEMENT_LIC, children: [{ text: 'text' }] }],
+            children: [
+              {
+                type: ELEMENT_LIC,
+                children: [{ text: 'text' }],
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+  });
+  it('should wrap many texts', () => {
+    editor.children = [
+      {
+        type: ELEMENT_UL,
+        children: [
+          {
+            type: ELEMENT_LI,
+            children: [{ text: 'text', bold: true }, { text: 'text' }],
+          },
+        ],
+      },
+    ];
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toMatchObject([
+      {
+        type: ELEMENT_UL,
+        children: [
+          {
+            type: ELEMENT_LI,
+            children: [
+              {
+                type: ELEMENT_LIC,
+                children: [{ text: 'text', bold: true }, { text: 'text' }],
+              },
+            ],
           },
         ],
       },

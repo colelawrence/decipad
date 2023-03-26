@@ -12,11 +12,14 @@ import {
 import { insertNodes } from '@decipad/editor-utils';
 import {
   ChildOf,
-  deleteText,
   getNodeChildren,
   isElement,
   isText,
+  removeNodes,
+  TElement,
+  TNodeEntry,
   unwrapNodes,
+  wrapNodeChildren,
   wrapNodes,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
@@ -34,18 +37,15 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
       return true;
     }
 
-    for (const childEntry of getNodeChildren<ChildOf<ListElement>>(
-      editor,
-      path
-    )) {
-      const [childNode, childPath] = childEntry;
+    for (const liEntry of getNodeChildren<ChildOf<ListElement>>(editor, path)) {
+      const [liNode, liPath] = liEntry;
 
-      if (isElement(childNode) && childNode.type !== ELEMENT_LI) {
-        unwrapNodes(editor, { at: childPath });
+      if (isElement(liNode) && liNode.type !== ELEMENT_LI) {
+        unwrapNodes(editor, { at: liPath });
         return true;
       }
 
-      if (isText(childNode)) {
+      if (isText(liNode)) {
         wrapNodes(
           editor,
           {
@@ -53,7 +53,7 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
             type: ELEMENT_LI,
             children: [],
           } as unknown as ListItemElement,
-          { at: childPath }
+          { at: liPath }
         );
         return true;
       }
@@ -65,12 +65,15 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
       return true;
     }
 
-    const [licChild, listChild, ...furtherChildren] = getNodeChildren<
+    const [licEntry, _listChildEntry, ..._furtherChildren] = getNodeChildren<
       ChildOf<ListItemElement>
     >(editor, path);
+    const listChildEntry =
+      _listChildEntry as unknown as TNodeEntry<ListElement>;
+    const furtherChildren = _furtherChildren as TNodeEntry<TElement>[];
 
     // LIC child
-    if (!licChild) {
+    if (!licEntry) {
       insertNodes(
         editor,
         {
@@ -83,7 +86,7 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
       return true;
     }
 
-    const [licChildNode, licChildPath] = licChild;
+    const [licChildNode, licChildPath] = licEntry;
 
     if (isElement(licChildNode) && licChildNode.type !== ELEMENT_LIC) {
       unwrapNodes(editor, { at: licChildPath });
@@ -91,21 +94,23 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
     }
 
     if (isText(licChildNode)) {
-      wrapNodes(
+      wrapNodeChildren(
         editor,
         {
           id: nanoid(),
           type: ELEMENT_LIC,
           children: [],
         },
-        { at: licChildPath }
+        {
+          at: path,
+        }
       );
       return true;
     }
 
     // Optional list child
-    if (listChild) {
-      const [listChildNode, listChildPath] = listChild;
+    if (listChildEntry) {
+      const [listChildNode, listChildPath] = listChildEntry;
       if (
         !(
           isElement(listChildNode) &&
@@ -113,7 +118,7 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
             (listChildNode.type as string) === ELEMENT_OL)
         )
       ) {
-        deleteText(editor, { at: listChildPath });
+        removeNodes(editor, { at: listChildPath });
         return true;
       }
 
@@ -121,7 +126,7 @@ const normalizeList = (editor: MyEditor) => (entry: MyNodeEntry) => {
         // Further children not allowed
         const furtherChildEntry = furtherChildren[0];
         const [, furtherChildPath] = furtherChildEntry;
-        deleteText(editor, { at: furtherChildPath });
+        removeNodes(editor, { at: furtherChildPath });
         return true;
       }
     }
