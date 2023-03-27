@@ -1,5 +1,3 @@
-import produce from 'immer';
-
 import { getOnly } from '@decipad/utils';
 
 import { AST, Context, Type } from '..';
@@ -15,18 +13,12 @@ import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
 import { ColumnLike, ValueTransforms } from '../value';
 
 export function inferMatrixRef(context: Context, ref: AST.MatrixRef): Type {
-  const {
-    args: [varExp, matchersExp],
-  } = ref;
+  const [varExp, matchersExp] = ref.args;
 
   const variable = inferVariable(context, getIdentifierString(varExp));
   const matchers = inferMatchers(context, matchersExp);
 
-  return Type.combine(variable, matchers).mapType(() =>
-    produce(variable, (returned) => {
-      returned.columnSize = 'unknown';
-    })
-  );
+  return Type.combine(matchers, variable);
 }
 
 export async function evaluateMatrixRef(
@@ -75,9 +67,7 @@ export function inferMatrixAssign(
     );
   } else {
     newMatrix = Type.combine(dimension, matchers, assignee)
-      .mapType(() =>
-        inferMultidimAssignment(dimension, assignee, 'unknown', dimension)
-      )
+      .mapType(() => inferMultidimAssignment(dimension, assignee, dimension))
       .mapType((newMatrix) => dimension.sameAs(newMatrix));
   }
 

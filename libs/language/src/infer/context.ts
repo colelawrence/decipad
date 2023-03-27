@@ -69,7 +69,7 @@ const tableToTypes: StackNamespaceSplitter<Type> = (tableMapping) => {
 const getTableColumnAsAGoddamnColumn: StackNamespaceRetrieverHackForTypesystemTables<
   Type
 > = (column, table) => {
-  return t.column(column, undefined, table.indexName);
+  return t.column(column, table.indexName);
 };
 
 /** Push the stack and set Context.previous for the duration of `fn` */

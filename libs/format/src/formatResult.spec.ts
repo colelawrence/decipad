@@ -30,7 +30,7 @@ describe('stringify', () => {
     ).toMatchInlineSnapshot(`"month <2020-01>"`);
 
     expect(
-      formatResult(locale, [N(1n), N(2n)], t.column(t.number(), 2), highlight)
+      formatResult(locale, [N(1n), N(2n)], t.column(t.number()), highlight)
     ).toMatchInlineSnapshot(`"[ <1>, <2> ]"`);
 
     expect(

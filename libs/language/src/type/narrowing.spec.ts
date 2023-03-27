@@ -33,13 +33,10 @@ it('can narrow percentages', () => {
 
 it('can narrow `anything`', () => {
   expect(
-    narrowTypes(parseType('column<number, 2>'), parseType('anything'))
+    narrowTypes(parseType('column<number>'), parseType('anything'))
   ).toMatchInlineSnapshot(`column<number>`);
   expect(
-    narrowTypes(
-      parseType('column<number, 2>'),
-      parseType('column<anything, 2>')
-    )
+    narrowTypes(parseType('column<number>'), parseType('column<anything>'))
   ).toMatchInlineSnapshot(`column<number>`);
 });
 
@@ -84,17 +81,6 @@ it('can narrow dates', () => {
   expect(
     narrowTypes(t.date('day'), t.date('hour')).errorCause
   ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
-});
-
-it('can narrow columns', () => {
-  expect(
-    narrowTypes(parseType('column<number>'), parseType('column<number, 2>'))
-      .cellType
-  ).toMatchInlineSnapshot(`number`);
-  expect(
-    narrowTypes(parseType('column<number, 2>'), parseType('column<number>'))
-      .cellType
-  ).toMatchInlineSnapshot(`number`);
 });
 
 it('explains where the error came from', () => {
@@ -145,14 +131,14 @@ describe('narrow func call', () => {
 
     expect(
       narrowFunctionCall({
-        args: [parseType('column<boolean, 2>')],
+        args: [parseType('column<boolean>')],
         ...parseFunctionSignature('column<A> -> A'),
       })
     ).toMatchInlineSnapshot(`boolean`);
 
     expect(
       narrowFunctionCall({
-        args: [parseType('column<number, 2>')],
+        args: [parseType('column<number>')],
         ...parseFunctionSignature('column<A>:B -> B'),
       })
     ).toMatchInlineSnapshot(`column<number>`);

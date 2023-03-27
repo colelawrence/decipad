@@ -316,7 +316,7 @@ it('can pass on injected data', async () => {
 
   const externalData: AnyMapping<Result.Result> = {
     'external-reference-id': {
-      type: serializeType(t.column(t.string(), 2)),
+      type: serializeType(t.column(t.string())),
       value: ['Hello', 'World'],
     },
   };
@@ -604,7 +604,6 @@ it('can list tables and columns', async () => {
               "date": "day",
               "kind": "date",
             },
-            "columnSize": "unknown",
             "indexedBy": "table",
             "kind": "column",
           },

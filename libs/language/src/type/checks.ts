@@ -65,7 +65,7 @@ export const sharePercentage = checker((me: Type, other: Type) => {
 });
 
 export const isColumn = checker((me: Type) => {
-  if (me.columnSize != null) {
+  if (me.cellType != null) {
     return me;
   } else {
     return me.expected('column');
@@ -132,12 +132,9 @@ export const withAtParentIndex = checker((me: Type) => {
 });
 
 export const sameColumnessAs = checker((me: Type, other: Type) => {
-  if (me.columnSize != null && other.columnSize != null) {
-    return me
-      .reduced()
-      .sameAs(other.reduced())
-      .mapType(() => me);
-  } else if (me.columnSize == null && other.columnSize == null) {
+  if (me.cellType != null && other.cellType != null) {
+    return me.cellType.sameAs(other.cellType).mapType(() => me);
+  } else if (me.cellType == null && other.cellType == null) {
     return me;
   } else {
     return me.expected(other);

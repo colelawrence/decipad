@@ -91,7 +91,6 @@ describe('deserialize import result', () => {
           type: {
             kind: 'column',
             indexedBy: '',
-            columnSize: 'unknown',
             cellType: {
               kind: 'number',
               unit: [
@@ -163,7 +162,6 @@ describe('deserialize import result', () => {
                 },
               ],
             },
-            "columnSize": "unknown",
             "indexedBy": "",
             "kind": "column",
           },

@@ -13,7 +13,6 @@ export type Column = {
   readonly kind: 'column';
   readonly indexedBy: string | null;
   readonly cellType: SerializedType;
-  readonly columnSize: number | 'unknown';
 } & Common;
 export type Table = {
   readonly kind: 'table';

@@ -127,10 +127,9 @@ export const automapTypesForReducer = (
 
   if (getCardinality(argType) === 2) {
     return mapFn([argType]);
-  } else if (argType.columnSize != null) {
+  } else if (argType.cellType != null) {
     return t.column(
-      automapTypesForReducer(argType.reduced(), mapFn),
-      argType.columnSize,
+      automapTypesForReducer(argType.cellType, mapFn),
       argType.indexedBy
     );
   } else {

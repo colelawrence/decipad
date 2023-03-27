@@ -145,12 +145,10 @@ describe('dates', () => {
 
 describe('columns', () => {
   it('infers columns', async () => {
-    expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(
-      t.column(t.number(), 3)
-    );
+    expect(inferExpression(nilCtx, col(1, 2, 3))).toEqual(t.column(t.number()));
 
     expect(inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(
-      t.column(t.number(), 1)
+      t.column(t.number())
     );
 
     const mixedCol = col(l(1), l('hi'));
@@ -177,10 +175,10 @@ describe('columns', () => {
 
   it('column-ness is infectious', async () => {
     expect(inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
-      t.column(t.number(), 3)
+      t.column(t.number())
     );
     expect(inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(
-      t.column(t.number(), 3)
+      t.column(t.number())
     );
   });
 
@@ -190,7 +188,7 @@ describe('columns', () => {
         nilCtx,
         col(date('2020-01', 'month'), date('2020-02', 'month'))
       )
-    ).toEqual(t.column(t.date('month'), 2));
+    ).toEqual(t.column(t.date('month')));
   });
 
   it('can be reduced with the total function', async () => {
@@ -251,7 +249,7 @@ describe('tables', () => {
     );
 
     expect(inferProgram([block]).stack.get('Col')).toEqual(
-      t.column(t.number(), 'unknown', 'Table', 0)
+      t.column(t.number(), 'Table', 0)
     );
   });
 

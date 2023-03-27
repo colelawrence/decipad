@@ -38,11 +38,11 @@ describe.each(
       jsCol([1, 2, 3]),
       0
     ),
-    createLazyOperation: testLazyOp(addOne, [toAdd], [t.column(t.number(), 3)]),
+    createLazyOperation: testLazyOp(addOne, [toAdd], [t.column(t.number())]),
     'createLazyOperation with named dims': testLazyOp(
       addOne,
       [toAdd],
-      [t.column(t.number(), 3, 'X')]
+      [t.column(t.number(), 'X')]
     ),
     ConcatenatedColumn: new ConcatenatedColumn(jsCol([1]), jsCol([2, 3])),
     ColumnSlice: new ColumnSlice(jsCol([0, 1, 2, 3, 4]), 1, 4),
@@ -143,22 +143,22 @@ describe.each(
     createLazyOperation: testLazyOp(
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number(), 3), 2)]
+      [t.column(t.column(t.number()))]
     ),
     'createLazyOperation with named dims': testLazyOp(
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number(), 3, 'X'), 2, 'Y')]
+      [t.column(t.column(t.number(), 'X'), 'Y')]
     ),
     'createLazyOperation with named dims (one unnamed)': testLazyOp(
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number(), 3, 'X'), 2)]
+      [t.column(t.column(t.number(), 'X'))]
     ),
     'createLazyOperation with named dims (other unnamed)': testLazyOp(
       addOne,
       [toAdd2D],
-      [t.column(t.column(t.number(), 3), 2, 'X')]
+      [t.column(t.column(t.number()), 'X')]
     ),
   })
 )('Two dimensional tests: %s', (_name, lazyThing: ColumnLike) => {

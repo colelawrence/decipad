@@ -12,11 +12,7 @@ const testReduction = (
     if (cardinality === 1) {
       return buildType.string();
     } else {
-      return buildType.column(
-        mockCardinality(cardinality - 1, null),
-        123,
-        index
-      );
+      return buildType.column(mockCardinality(cardinality - 1, null), index);
     }
   };
 
@@ -80,7 +76,7 @@ describe('multi-index arguments', () => {
         return buildType.number();
       } else {
         const [index, ...nextIndices] = indices;
-        return buildType.column(mockType(nextIndices), 123, index);
+        return buildType.column(mockType(nextIndices), index);
       }
     };
 

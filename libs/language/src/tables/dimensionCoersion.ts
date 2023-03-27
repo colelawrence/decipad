@@ -25,7 +25,7 @@ import {
 
 /** Make {type} columnar and place {indexName} on top if {type} more than 1D */
 export const coerceTableColumnTypeIndices = (type: Type, indexName: string) => {
-  if (type.columnSize == null) {
+  if (type.cellType == null) {
     // Because we're so very nice, allow `Column = 1` as syntax sugar.
     return type;
   } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {

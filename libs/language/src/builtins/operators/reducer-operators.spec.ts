@@ -8,9 +8,9 @@ const sumif = parseFunctor(getDefined(operators.sumif.functionSignature));
 
 describe('reducer operators', () => {
   it('sumif: sums the elements against boolean elements in a second list', () => {
-    expect(
-      sumif([t.column(t.number(), 3), t.column(t.boolean(), 3)])
-    ).toMatchObject(t.number());
+    expect(sumif([t.column(t.number()), t.column(t.boolean())])).toMatchObject(
+      t.number()
+    );
 
     expect(
       operators.sumif.fnValues?.([

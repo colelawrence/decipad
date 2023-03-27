@@ -74,7 +74,6 @@ function validate(
           const implicitColumn: SerializedType = {
             kind: 'column',
             cellType,
-            columnSize: 'unknown',
             indexedBy: null,
           };
           validate(implicitColumn, value);

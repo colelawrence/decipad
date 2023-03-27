@@ -103,8 +103,6 @@ export function narrowTypes(
         }
 
         return produce(t1, (type) => {
-          type.columnSize =
-            s1.columnSize === 'unknown' ? s2.columnSize : s1.columnSize;
           type.cellType = narrowedCell;
         });
       }

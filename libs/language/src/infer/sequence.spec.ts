@@ -10,11 +10,11 @@ const nilCtx = makeContext();
 it('infers sequences of numbers', () => {
   expect(
     inferSequence(nilCtx, seq(l(1), l(10), l(1)), inferExpression)
-  ).toEqual(t.column(t.number(), 10));
+  ).toEqual(t.column(t.number()));
 
   expect(
     inferSequence(nilCtx, seq(l(10), l(1), l(-1)), inferExpression)
-  ).toEqual(t.column(t.number(), 10));
+  ).toEqual(t.column(t.number()));
 });
 
 it('catches multiple errors', () => {

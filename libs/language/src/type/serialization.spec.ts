@@ -45,18 +45,16 @@ it('can stringify a type', () => {
       },
     }
   `);
-  expect(serializeType(t.column(t.number(), 2, 'Index')))
-    .toMatchInlineSnapshot(`
-    Object {
-      "cellType": Object {
-        "kind": "number",
-        "unit": null,
-      },
-      "columnSize": "unknown",
-      "indexedBy": "Index",
-      "kind": "column",
-    }
-  `);
+  expect(serializeType(t.column(t.number(), 'Index'))).toMatchInlineSnapshot(`
+      Object {
+        "cellType": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "indexedBy": "Index",
+        "kind": "column",
+      }
+    `);
 
   expect(
     serializeType(
@@ -177,7 +175,6 @@ it('can parse a type', () => {
       kind: 'column',
       indexedBy: null,
       cellType: unitlessNumber,
-      columnSize: 123,
     })
   ).toMatchObject({
     cellType: {

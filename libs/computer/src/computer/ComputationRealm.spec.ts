@@ -69,7 +69,7 @@ describe('getIndexLabels', () => {
   it('getIndexLabels for Sets', () => {
     realm.inferContext.stack.set(
       'DimName',
-      buildType.column(buildType.string(), 3, 'DimName')
+      buildType.column(buildType.string(), 'DimName')
     );
     realm.interpreterRealm.stack.set(
       'DimName',

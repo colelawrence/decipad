@@ -10,9 +10,9 @@ let testContext: Context;
 beforeEach(() => {
   testContext = makeContext({
     initialGlobalScope: {
-      City: t.column(t.string(), 2, 'City'),
-      OtherDimension: t.column(t.string(), 2, 'OtherDimension'),
-      CoffeePrice: t.column(t.number(), 2, 'City'),
+      City: t.column(t.string(), 'City'),
+      OtherDimension: t.column(t.string(), 'OtherDimension'),
+      CoffeePrice: t.column(t.number(), 'City'),
     },
   });
 

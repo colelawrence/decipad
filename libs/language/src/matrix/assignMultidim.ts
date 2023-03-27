@@ -1,5 +1,3 @@
-import { getDefined } from '@decipad/utils';
-
 import { AST, Column, Type } from '..';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { ColumnLike, isColumnLike } from '../value';
@@ -10,26 +8,15 @@ import { matchTargets } from './matcher';
 export function inferMultidimAssignment(
   dimension: Type,
   assignee: Type,
-  // eslint-disable-next-line default-param-last
-  outColumnSize = dimension.columnSize,
   previousMatrix?: Type
 ) {
-  let returnedCellType = assignee;
-  if (assignee.cellType != null) {
-    returnedCellType = assignee.reduced();
-  } else {
-    returnedCellType = assignee;
-  }
+  let returnedCellType = assignee.cellType ?? assignee;
 
   if (previousMatrix) {
     returnedCellType = returnedCellType.sameAs(previousMatrix.reduced());
   }
 
-  return t.column(
-    returnedCellType,
-    getDefined(outColumnSize),
-    getIndexName(dimension)
-  );
+  return t.column(returnedCellType, getIndexName(dimension));
 }
 
 export async function evaluateMultidimAssignment(

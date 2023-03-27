@@ -13,7 +13,7 @@ let ctx = makeContext();
 beforeEach(() => {
   ctx = makeContext();
   ctx.stack.setNamespaced(['Table', 'Col1'], t.number(), 'function');
-  ctx.stack.set('ColumnOfUnknownLength', t.column(t.number(), 'unknown'));
+  ctx.stack.set('ColumnOfUnknownLength', t.column(t.number()));
   ctx.stack.createNamespace('Empty');
 });
 

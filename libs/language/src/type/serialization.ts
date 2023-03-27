@@ -15,12 +15,11 @@ export function serializeType(type: Type | SerializedType): SerializedType {
     return type;
   }
   const serializedType = ((): SerializedType | null => {
-    if (type.cellType && type.columnSize) {
+    if (type.cellType) {
       return {
         kind: 'column',
         indexedBy: type.indexedBy,
         cellType: serializeType(type.cellType),
-        columnSize: type.columnSize,
       };
     } else if (type.columnTypes && type.columnNames) {
       return {
@@ -124,11 +123,7 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'range':
           return t.range(deserializeType(type.rangeOf));
         case 'column':
-          return t.column(
-            deserializeType(type.cellType),
-            type.columnSize,
-            type.indexedBy
-          );
+          return t.column(deserializeType(type.cellType), type.indexedBy);
         case 'table':
           const { columnTypes, columnNames } = type;
           return t.table({

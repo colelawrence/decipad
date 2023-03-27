@@ -32,7 +32,7 @@ describe('automapTypes', () => {
   });
 
   it('columns can be mapped with single type mapFns', () => {
-    const type = t.column(str, 10);
+    const type = t.column(str);
 
     const calledOnTypes: Type[][] = [];
     const result = automapTypes([type, type], ([t1, t2]) => {
@@ -45,7 +45,7 @@ describe('automapTypes', () => {
   });
 
   it('can bump dimensions recursively', () => {
-    const type = t.column(t.column(t.column(str, 10), 11), 12);
+    const type = t.column(t.column(t.column(str)));
 
     const calledOnTypes: Type[][] = [];
     const result = automapTypes([type, str], ([t1, t2]) => {
@@ -58,7 +58,7 @@ describe('automapTypes', () => {
   });
 
   it('compares columns and scalars on equal footing', () => {
-    const type = t.column(str, 10);
+    const type = t.column(str);
 
     const calledOnTypes: Type[][] = [];
     const result = automapTypes([type, str], ([t1, t2]) => {
@@ -84,20 +84,20 @@ describe('automapTypes', () => {
   it.skip('can automap types', () => {
     const total = ([a]: Type[]) => a.reduced();
 
-    expect(automapTypes([t.column(num, 5)], total, [2])).toEqual(num);
+    expect(automapTypes([t.column(num)], total, [2])).toEqual(num);
 
-    expect(automapTypes([t.column(t.column(num, 5), 1)], total, [2])).toEqual(
-      t.column(num, 1)
+    expect(automapTypes([t.column(t.column(num))], total, [2])).toEqual(
+      t.column(num)
     );
 
     expect(
       automapTypes(
-        [t.column(num, 4), t.column(num, 5)],
+        [t.column(num), t.column(num)],
         ([scalar, col]: Type[]) =>
           Type.combine(scalar.isScalar('number'), col.isColumn(), str),
         [1, 2]
       )
-    ).toEqual(t.column(str, 4));
+    ).toEqual(t.column(str));
 
     expect(automapTypes([num], total, [2])).toEqual(
       t.impossible('A column is required')
@@ -110,25 +110,19 @@ describe('automapTypes', () => {
     const card = [1, 1, 1];
 
     expect(
-      automapTypes(
-        [t.column(bool, 3), t.column(str, 3), t.column(num, 3)],
-        cond,
-        card
-      ).errorCause
+      automapTypes([t.column(bool), t.column(str), t.column(num)], cond, card)
+        .errorCause
     ).toBeDefined();
   });
 
   it('takes indexedBy of operands into account', () => {
     expect(
-      automapTypes(
-        [t.column(num, 5, 'Idx1'), t.column(num, 5, 'Idx1')],
-        () => str
-      )
+      automapTypes([t.column(num, 'Idx1'), t.column(num, 'Idx1')], () => str)
     ).toMatchObject({
       indexedBy: 'Idx1',
     });
 
-    const twoIndices = t.column(t.column(str, 1, 'Idx2d'), 5, 'Idx1');
+    const twoIndices = t.column(t.column(str, 'Idx2d'), 'Idx1');
     expect(automapTypes([twoIndices], () => str)).toMatchObject({
       indexedBy: 'Idx1',
       cellType: {
@@ -136,7 +130,7 @@ describe('automapTypes', () => {
       },
     });
 
-    const indicesTwo = t.column(t.column(str, 1, 'Idx2d'), 5, 'Idx1');
+    const indicesTwo = t.column(t.column(str, 'Idx2d'), 'Idx1');
     expect(automapTypes([indicesTwo], () => str)).toMatchObject({
       indexedBy: 'Idx1',
       cellType: {
@@ -149,8 +143,8 @@ describe('automapTypes', () => {
     expect(
       automapTypes(
         [
-          t.column(t.column(num, 3, 'Index2'), 2, 'Index1'),
-          t.column(t.column(num, 2, 'Index1'), 3, 'Index2'),
+          t.column(t.column(num, 'Index2'), 'Index1'),
+          t.column(t.column(num, 'Index1'), 'Index2'),
         ],
         ([a, b]) => Type.combine(a.sameAs(b).isScalar('number'), str)
       )
@@ -166,7 +160,7 @@ describe('automapTypes', () => {
   it('Can heighten dimensions when it sees two index names', () => {
     expect(
       automapTypes(
-        [t.column(num, 2, 'Index1'), t.column(num, 3, 'Index2')],
+        [t.column(num, 'Index1'), t.column(num, 'Index2')],
         () => str
       )
     ).toMatchObject({
@@ -179,9 +173,9 @@ describe('automapTypes', () => {
     expect(
       automapTypes(
         [
-          t.column(num, 2, 'Index1'),
-          t.column(num, 3, 'Index2'),
-          t.column(num, 1, 'Index3'),
+          t.column(num, 'Index1'),
+          t.column(num, 'Index2'),
+          t.column(num, 'Index3'),
         ],
         () => str
       )
@@ -204,7 +198,7 @@ describe('automapTypes', () => {
     expect(callee).toHaveBeenCalledWith([table]);
     callee.mockClear();
 
-    const col = t.column(table, 123);
+    const col = t.column(table);
     expect(automapTypes([col], callee)).toEqual(col);
     expect(callee).toHaveBeenCalledWith([table]);
     callee.mockClear();
@@ -225,7 +219,7 @@ describe('automapValues', () => {
 
     const calledOnValues: Values.Value[] = [];
     const result = automapValues(
-      [t.column(t.column(t.column(t.number(), 2), 3), 1), t.number()],
+      [t.column(t.column(t.column(t.number()))), t.number()],
       [multiDim, scalar],
       ([v1, v2]) => {
         calledOnValues.push(Values.Column.fromValues([v1, v2]));
@@ -309,12 +303,9 @@ describe('automapValues', () => {
     it('does not map a column, if mapFn already takes that cardinality (2D)', () => {
       const values = Values.fromJS([1, 2, 4]);
 
-      const result = automapValues(
-        [t.column(t.number(), 3)],
-        [values],
-        sumOne,
-        [2]
-      );
+      const result = automapValues([t.column(t.number())], [values], sumOne, [
+        2,
+      ]);
 
       expect(result.getData()).toEqual(N(7));
     });
@@ -327,7 +318,7 @@ describe('automapValues', () => {
       ]);
 
       const result = automapValues(
-        [t.column(t.column(t.number(), 3), 2)],
+        [t.column(t.column(t.number()))],
         [deepValues],
         sumOne,
         [2]
@@ -342,7 +333,7 @@ describe('automapValues', () => {
 
       const calls: unknown[] = [];
       const result = automapValues(
-        [t.column(t.number(), 2), t.column(t.number(), 3)],
+        [t.column(t.number()), t.column(t.number())],
         args,
         ([a1, a2]: Values.Value[]) => {
           const v1 = a1.getData() as DeciNumber;
@@ -375,10 +366,7 @@ describe('automapValues', () => {
       ];
 
       const result = automapValues(
-        [
-          t.column(t.column(t.number(), 2, 'X'), 2),
-          t.column(t.number(), 2, 'X'),
-        ],
+        [t.column(t.column(t.number(), 'X')), t.column(t.number(), 'X')],
         args,
         combine
       );
@@ -393,7 +381,7 @@ describe('automapValues', () => {
       it('supports raising a dimension', () => {
         expect(
           automapValues(
-            [t.column(t.string(), 2, 'Dimone'), t.column(t.number(), 3)],
+            [t.column(t.string(), 'Dimone'), t.column(t.number())],
             [Values.fromJS(['A', 'B']), Values.fromJS([1, 2, 3])],
             combine,
             [1, 1]
@@ -418,9 +406,9 @@ describe('automapValues', () => {
         expect(
           automapValues(
             [
-              t.column(t.string(), 2, 'IndexOne'),
+              t.column(t.string(), 'IndexOne'),
               t.string(),
-              t.column(t.number(), 3, 'IndexTwo'),
+              t.column(t.number(), 'IndexTwo'),
             ],
             [
               Values.fromJS(['A', 'B']),
@@ -450,9 +438,9 @@ describe('automapValues', () => {
         expect(
           automapValues(
             [
-              t.column(t.string(), 1, 'DimZero'),
-              t.column(t.number(), 2, 'DimOne'),
-              t.column(t.string(), 3, 'DimTwo'),
+              t.column(t.string(), 'DimZero'),
+              t.column(t.number(), 'DimOne'),
+              t.column(t.string(), 'DimTwo'),
             ],
             [
               Values.fromJS(['A']),
@@ -484,9 +472,9 @@ describe('automapValues', () => {
         expect(
           automapValues(
             [
-              t.column(t.string(), 2, 'Index1'),
-              t.column(t.string(), 2, 'DiffIndex'),
-              t.column(t.number(), 2, 'Index1'),
+              t.column(t.string(), 'Index1'),
+              t.column(t.string(), 'DiffIndex'),
+              t.column(t.number(), 'Index1'),
             ],
             [
               Values.fromJS(['A', 'B']),
@@ -515,8 +503,8 @@ describe('automapValues', () => {
       expect(
         automapValues(
           [
-            t.column(t.column(str, 3, 'Letters'), 2, 'Numbers'),
-            t.column(t.column(str, 2, 'Numbers'), 3, 'Letters'),
+            t.column(t.column(str, 'Letters'), 'Numbers'),
+            t.column(t.column(str, 'Numbers'), 'Letters'),
           ],
           [
             Values.fromJS([
@@ -569,7 +557,7 @@ describe('automapValues', () => {
     callee.mockClear();
 
     const colVal = Values.Column.fromValues([tableVal]);
-    const col = t.column(table, 1);
+    const col = t.column(table);
     expect(automapValues([col], [colVal], callee).getData()).toEqual(
       Values.Column.fromValues([otherTable]).getData()
     );
@@ -592,7 +580,7 @@ describe('automapValues', () => {
     const mapFn = jest.fn(() => Values.fromJS(1n));
 
     const reducedType = t.number();
-    const type = t.column(reducedType, 1);
+    const type = t.column(reducedType);
     const reducedValue = Values.fromJS(1n);
     const value = Values.Column.fromValues([reducedValue]);
 
@@ -611,7 +599,7 @@ describe('automap for reducers', () => {
 
   describe('automapTypesForReducer', () => {
     it('automapTypesForReducer can call a reducer', () => {
-      const oneDeeType = t.column(t.number(), 1, 'X');
+      const oneDeeType = t.column(t.number(), 'X');
 
       expect(automapTypesForReducer(oneDeeType, sumFunctor)).toMatchObject({
         type: 'number',
@@ -619,7 +607,7 @@ describe('automap for reducers', () => {
     });
 
     it('automapTypesForReducer can reduce', () => {
-      const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+      const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
 
       expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
         indexedBy: 'Y',
@@ -630,7 +618,7 @@ describe('automap for reducers', () => {
     });
 
     it('automapTypesForReducer can reduce the other way', () => {
-      const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+      const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
 
       expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
         cellType: {
@@ -651,7 +639,7 @@ describe('automap for reducers', () => {
 
   describe('automapValuesForReducer', () => {
     it('automapValuesForReducer can call a reducer', () => {
-      const oneDeeType = t.column(t.number(), 1, 'X');
+      const oneDeeType = t.column(t.number(), 'X');
       const oneDeeValue = Values.fromJS([1, 2]);
 
       expect(
@@ -664,7 +652,7 @@ describe('automap for reducers', () => {
     });
 
     it('automapValuesForReducer can reduce', () => {
-      const twoDeeType = t.column(t.column(t.number(), 1, 'X'), 2, 'Y');
+      const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
       const twoDeeValue = Values.fromJS([[1n], [2n]]);
 
       expect(
@@ -682,7 +670,7 @@ describe('automap for reducers', () => {
     });
 
     it('automapValuesForReducer can reduce the other way', () => {
-      const twoDeeType = t.column(t.column(t.number(), 2, 'X'), 1, 'Y');
+      const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
       const twoDeeValue = Values.fromJS([[1n, 2n]]);
 
       expect(
@@ -701,7 +689,7 @@ describe('automap for reducers', () => {
     it('can pass the correct types to the function', () => {
       const mapFn = jest.fn(() => Values.fromJS(1));
 
-      const oneDeeType = t.column(t.number(), 2, 'X');
+      const oneDeeType = t.column(t.number(), 'X');
       const oneDeeValue = Values.fromJS([1n, 2n]);
 
       automapValuesForReducer(oneDeeType, oneDeeValue as Values.Column, mapFn);
@@ -712,8 +700,8 @@ describe('automap for reducers', () => {
     it('can pass the correct types to the function (with higher-dimensional args)', () => {
       const mapFn = jest.fn(() => Values.fromJS(1));
 
-      const oneDeeType = t.column(t.number(), 2, 'X');
-      const twoDeeType = t.column(oneDeeType, 1, 'Y');
+      const oneDeeType = t.column(t.number(), 'X');
+      const twoDeeType = t.column(oneDeeType, 'Y');
       const oneDeeValue = Values.fromJS([1n, 2n]);
       const twoDeeValue = Values.Column.fromValues([oneDeeValue]);
 

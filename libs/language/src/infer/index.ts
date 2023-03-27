@@ -153,11 +153,7 @@ export const inferExpression = wrap(
             );
           }
         }
-        return t.column(
-          firstCellType,
-          columnItems.args.length,
-          optionalIndex?.args[0]
-        );
+        return t.column(firstCellType, optionalIndex?.args[0]);
       }
       case 'property-access': {
         const [thing, propName] = expr.args;
@@ -193,7 +189,7 @@ export const inferExpression = wrap(
             table.columnNames,
             table.columnTypes
           );
-          return t.column(column, 'unknown', table.indexName, columnIndex);
+          return t.column(column, table.indexName, columnIndex);
         } else {
           const { rowCellNames, rowCellTypes } = table;
           const [type] = getFromTableOrRow(

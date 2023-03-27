@@ -184,6 +184,6 @@ export const inferSequence = (
           : t.column(boundTypes, countOrError);
       }
     }
-    return t.column(boundTypes, 'unknown');
+    return t.column(boundTypes);
   }
 };

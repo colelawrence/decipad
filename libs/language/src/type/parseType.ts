@@ -54,20 +54,6 @@ interface TokenStream {
 }
 
 function parseTypeInner({ token, next, error, ensure }: TokenStream) {
-  const parseLiteralNumber = (): number | 'unknown' => {
-    const { type, text } = next() ?? thro(error());
-
-    if (type === 'number') {
-      return Number(text);
-    }
-
-    if (text === 'unknown') {
-      return 'unknown';
-    }
-
-    throw error();
-  };
-
   const maybeSymbol = (type: Type): Type => {
     const tok = token();
     if (!tok) {
@@ -95,13 +81,7 @@ function parseTypeInner({ token, next, error, ensure }: TokenStream) {
     if (text === 'column') {
       ensure('lt');
       const cellType = parseWord();
-      let columnSize: number | 'unknown' = 'unknown';
-
-      if (token()?.type === 'comma') {
-        next();
-        columnSize = parseLiteralNumber();
-      }
-      const col = t.column(cellType, columnSize);
+      const col = t.column(cellType);
       ensure('gt');
       return maybeSymbol(col);
     }

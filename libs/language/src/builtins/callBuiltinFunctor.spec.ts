@@ -50,17 +50,17 @@ describe('callBuiltin', () => {
 
     expect(
       callBuiltinFunctor(nilCtx, 'contains', [
-        t.column(t.range(t.number([meter])), 3),
+        t.column(t.range(t.number([meter]))),
         t.number([meter]),
       ])
-    ).toEqual(t.column(t.boolean(), 3));
+    ).toEqual(t.column(t.boolean()));
 
     expect(
       callBuiltinFunctor(nilCtx, 'contains', [
         t.range(t.number([meter])),
-        t.column(t.number([meter]), 3),
+        t.column(t.number([meter])),
       ])
-    ).toEqual(t.column(t.boolean(), 3));
+    ).toEqual(t.column(t.boolean()));
 
     expect(
       callBuiltinFunctor(nilCtx, 'contains', [
@@ -84,21 +84,21 @@ describe('callBuiltin', () => {
   it('cat', () => {
     expect(
       callBuiltinFunctor(nilCtx, 'cat', [
-        t.column(t.number([meter]), 2),
-        t.column(t.number([meter]), 3),
+        t.column(t.number([meter])),
+        t.column(t.number([meter])),
       ])
-    ).toEqual(t.column(t.number([meter]), 5));
+    ).toEqual(t.column(t.number([meter])));
   });
 
   it('first', () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'first', [t.column(t.number([meter]), 3)])
+      callBuiltinFunctor(nilCtx, 'first', [t.column(t.number([meter]))])
     ).toEqual(t.number([meter]));
   });
 
   it('last', () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'last', [t.column(t.number([meter]), 3)])
+      callBuiltinFunctor(nilCtx, 'last', [t.column(t.number([meter]))])
     ).toEqual(t.number([meter]));
   });
 
@@ -235,9 +235,9 @@ for (const [testName, testFn] of Object.entries(typeDimTests)) {
       return t[type]();
     }
   };
-  const build1D = (args: TestBuilderArgs) => t.column(buildScalar(args), 42);
-  const build2D = (args: TestBuilderArgs) => t.column(build1D(args), 42);
-  const build3D = (args: TestBuilderArgs) => t.column(build2D(args), 42);
+  const build1D = (args: TestBuilderArgs) => t.column(buildScalar(args));
+  const build2D = (args: TestBuilderArgs) => t.column(build1D(args));
+  const build3D = (args: TestBuilderArgs) => t.column(build2D(args));
 
   /* eslint-disable jest/expect-expect */
   it(`${testName} - Scalar`, () => {

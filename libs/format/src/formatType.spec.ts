@@ -57,10 +57,10 @@ it('type can be stringified', () => {
     'row [ Col1 = meters, Col2 = <string> ]'
   );
 
-  const col = serializeType(t.column(t.string(), 4));
+  const col = serializeType(t.column(t.string()));
   expect(formatType(locale, col)).toEqual('<string>[]');
 
-  const nestedCol = serializeType(t.column(t.column(t.string(), 4), 6));
+  const nestedCol = serializeType(t.column(t.column(t.string())));
   expect(formatType(locale, nestedCol)).toEqual('<string>[][]');
 });
 
@@ -122,7 +122,7 @@ it('can be stringified in basic form', () => {
   );
   expect(formatTypeToBasicString(locale, row)).toEqual('row');
 
-  const col = serializeType(t.column(t.string(), 4));
+  const col = serializeType(t.column(t.string()));
   expect(formatTypeToBasicString(locale, col)).toEqual('column');
 
   expect(() =>

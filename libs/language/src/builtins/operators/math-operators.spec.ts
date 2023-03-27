@@ -25,8 +25,8 @@ describe('math operators', () => {
   it('averageif: averages the elements against boolean elements in a second list', () => {
     expect(
       operators.averageif.functor!([
-        t.column(t.number(), 3),
-        t.column(t.boolean(), 3),
+        t.column(t.number()),
+        t.column(t.boolean()),
       ])
     ).toMatchObject(t.number());
 
@@ -188,7 +188,7 @@ describe('math operators', () => {
               known: false,
             },
           ]),
-          t.column(t.number(), 3),
+          t.column(t.number()),
         ],
         [l(30), expArg],
         ctx

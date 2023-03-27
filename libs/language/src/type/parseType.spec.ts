@@ -19,24 +19,24 @@ it('creates primitives', () => {
 });
 
 it('creates columns', () => {
-  expect(parseType('column<number, 2>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"}`
+  expect(parseType('column<number>')).toMatchInlineSnapshot(
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null}}`
   );
-  expect(parseType('column<column<number, 2>, 7>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"},"columnSize":"unknown"}`
+  expect(parseType('column<column<number>>')).toMatchInlineSnapshot(
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null}}}`
   );
   expect(parseType('column<number>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"}`
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null}}`
   );
-  expect(parseType('column<number, unknown>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null},"columnSize":"unknown"}`
+  expect(parseType('column<number>')).toMatchInlineSnapshot(
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"number","unit":null}}`
   );
 });
 
 it('constructs anything', () => {
   expect(parseType('anything')).toMatchInlineSnapshot(`{"kind":"anything"}`);
-  expect(parseType('column<anything, 2>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"columnSize":"unknown"}`
+  expect(parseType('column<anything>')).toMatchInlineSnapshot(
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"}}`
   );
 });
 
@@ -44,11 +44,11 @@ it('understands symbols', () => {
   expect(parseType('number:A')).toMatchInlineSnapshot(
     `{"kind":"number","unit":null,"symbol":"A"}`
   );
-  expect(parseType('column<anything:A, 3>')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything","symbol":"A"},"columnSize":"unknown"}`
+  expect(parseType('column<anything:A>')).toMatchInlineSnapshot(
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything","symbol":"A"}}`
   );
-  expect(parseType('column<anything, 2>:A')).toMatchInlineSnapshot(
-    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"columnSize":"unknown","symbol":"A"}`
+  expect(parseType('column<anything>:A')).toMatchInlineSnapshot(
+    `{"kind":"column","indexedBy":null,"cellType":{"kind":"anything"},"symbol":"A"}`
   );
   expect(parseType('A')).toMatchInlineSnapshot(
     `{"kind":"anything","symbol":"A"}`
@@ -80,5 +80,5 @@ it('errors', () => {
 
   expect(() => parseType('>')).toThrow(/unexpected/);
 
-  expect(() => parseType('column<number, A>')).toThrow(/unexpected/);
+  expect(() => parseType('column<number, A>')).toThrow(/expected/);
 });

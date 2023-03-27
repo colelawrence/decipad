@@ -43,7 +43,7 @@ export const inferColumnAssign = (
     return newColumn;
   }
 
-  return t.column(newColumn, 'unknown', tableName, newColumnAtParentIndex);
+  return t.column(newColumn, tableName, newColumnAtParentIndex);
 };
 
 export async function evaluateColumnAssign(

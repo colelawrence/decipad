@@ -168,7 +168,7 @@ describe('basic code', () => {
     `);
 
     expect(results).toMatchObject({
-      type: { columnSize: 'unknown' },
+      type: { cellType: { type: 'number' } },
       value: [N(2), N(4), N(6)],
     });
 
@@ -178,7 +178,7 @@ describe('basic code', () => {
     `);
 
     expect(results2).toMatchObject({
-      type: { columnSize: 'unknown' },
+      type: { cellType: { type: 'number' } },
       value: [N(2), N(1), N(1, 2)],
     });
   });
@@ -256,12 +256,7 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (X.Col / 10)
       `)
     ).toMatchObject({
-      type: t.column(
-        t.column(t.number(), 'unknown', 'Y', 0),
-        'unknown',
-        'X',
-        0
-      ),
+      type: t.column(t.column(t.number(), 'Y', 0), 'X', 0),
       value: [
         [N(1011, 10), N(2011, 10)],
         [N(511, 5), N(1011, 5)],
@@ -277,12 +272,7 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (Y.Col / 1000)
       `)
     ).toMatchObject({
-      type: t.column(
-        t.column(t.number(), 'unknown', 'Y', 0),
-        'unknown',
-        'X',
-        0
-      ),
+      type: t.column(t.column(t.number(), 'Y', 0), 'X', 0),
       value: [
         [N(1011, 10), N(1006, 5)],
         [N(1021, 10), N(1011, 5)],
@@ -423,7 +413,7 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 'unknown', 'Table', 0),
+      type: t.column(t.number(), 'Table', 0),
       value: [N(1), N(2), N(3)],
     });
   });
@@ -439,7 +429,7 @@ describe('Tables', () => {
         Table.Col2
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 'unknown', 'Table', 1),
+      type: t.column(t.number(), 'Table', 1),
       value: [N(1), N(1), N(1)],
     });
   });
@@ -1116,14 +1106,14 @@ describe('Injected external data', () => {
       await runAST(block(n('externalref', 'random-id')), {
         externalData: {
           'random-id': {
-            type: serializeType(t.column(t.string(), 2)),
+            type: serializeType(t.column(t.string())),
             value: ['Hello', 'World'],
           },
         },
       })
     ).toMatchObject({
       value: ['Hello', 'World'],
-      type: t.column(t.string(), 2),
+      type: t.column(t.string()),
     });
   });
 });
@@ -1301,7 +1291,7 @@ describe('number units work together', () => {
         1704067200000n,
         1735689600000n,
       ],
-      type: t.column(t.date('year'), 6),
+      type: t.column(t.date('year')),
     });
   });
 
@@ -1761,7 +1751,7 @@ describe('unit conversion', () => {
       `)
     ).toMatchObject({
       value: [N(1), N(2), N(3)],
-      type: t.column(t.number(U('watts')), 3),
+      type: t.column(t.number(U('watts'))),
     });
   });
 
@@ -1786,7 +1776,7 @@ describe('unit conversion', () => {
         N(2461375, 2950464),
         N(12306875, 5900928),
       ],
-      type: t.column(t.number(U('hours')), 'unknown', 'Animals'),
+      type: t.column(t.number(U('hours')), 'Animals'),
     });
   });
 
@@ -1939,7 +1929,7 @@ describe('type coercion', () => {
   it('can type coerce column cells to the same unit', async () => {
     expect(await runCode(`[1 centigram, 2]`)).toMatchObject({
       value: [N(1, 100), N(2, 100)],
-      type: t.column(t.number(U('grams', { multiplier: N(1, 100) })), 2),
+      type: t.column(t.number(U('grams', { multiplier: N(1, 100) }))),
     });
   });
 
@@ -1988,7 +1978,7 @@ describe('unit qualities', () => {
   it('applies to multi-dimensional values', async () => {
     expect(await runCode('[1, 2, 3] grams of sugar')).toMatchObject({
       value: [N(1), N(2), N(3)],
-      type: t.column(t.number(U('grams', { quality: 'sugar' })), 3),
+      type: t.column(t.number(U('grams', { quality: 'sugar' }))),
     });
   });
 

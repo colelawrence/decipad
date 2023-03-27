@@ -15,9 +15,9 @@ let testContext: Context;
 beforeEach(async () => {
   testContext = makeContext({
     initialGlobalScope: {
-      City: t.column(t.string(), 2, 'City'),
-      OtherDimension: t.column(t.string(), 2, 'OtherDimension'),
-      CoffeePrice: t.column(t.number(), 2, 'City'),
+      City: t.column(t.string(), 'City'),
+      OtherDimension: t.column(t.string(), 'OtherDimension'),
+      CoffeePrice: t.column(t.number(), 'City'),
     },
   });
 
@@ -97,7 +97,6 @@ describe('matrix op inference', () => {
         matrixRef('CoffeePrice', [c('==', r('City'), l('Lisbon'))])
       )
     ).toMatchObject({
-      columnSize: 'unknown',
       cellType: { type: 'number' },
     });
   });

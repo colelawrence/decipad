@@ -1,4 +1,3 @@
-import { getDefined } from '@decipad/utils';
 import { AST, Context } from '..';
 import { inferExpression } from '../infer';
 import { evaluate, Realm } from '../interpreter';
@@ -27,7 +26,7 @@ export const inferCategories = (
       if (ctx.stack.has(name)) {
         return t.impossible(InferError.duplicatedName(name));
       }
-      return t.column(setCell, getDefined(contents.columnSize), name);
+      return t.column(setCell, name);
     });
 
   ctx.stack.set(name, theSet, 'function', ctx.statementId);

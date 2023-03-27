@@ -59,6 +59,6 @@ describe('utils', () => {
       getOverloadedTypeFromType(t.table({ columnTypes: [], columnNames: [] }))
     ).toEqual(null);
     expect(getOverloadedTypeFromType(t.row([t.string()], ['A']))).toEqual(null);
-    expect(getOverloadedTypeFromType(t.column(t.number(), 123))).toEqual(null);
+    expect(getOverloadedTypeFromType(t.column(t.number()))).toEqual(null);
   });
 });

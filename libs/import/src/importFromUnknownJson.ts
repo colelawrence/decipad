@@ -45,7 +45,6 @@ const importFromArray = (
       kind: 'column',
       indexedBy: null,
       cellType: results[0].type,
-      columnSize: 'unknown',
     },
     value: results.map((r) => r.value) as Result.Result<'column'>['value'],
   };

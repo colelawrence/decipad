@@ -67,7 +67,6 @@ export const formatResult = (
             {
               kind: 'column',
               cellType: t,
-              columnSize: 'unknown',
               indexedBy: null,
             },
             color

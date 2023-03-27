@@ -27,12 +27,12 @@ describe('sameAs', () => {
     sameAsItself(t.string());
     sameAsItself(t.number([meter]));
     sameAsItself(t.number([second, meter]));
-    sameAsItself(t.column(t.number(), 6));
-    sameAsItself(t.column(t.row([t.number(), t.string()], ['A', 'B']), 6));
+    sameAsItself(t.column(t.number()));
+    sameAsItself(t.column(t.row([t.number(), t.string()], ['A', 'B'])));
     sameAsItself(
       t.table({
         columnNames: ['A', 'B'],
-        columnTypes: [t.number([meter]), t.column(t.boolean(), 10)],
+        columnTypes: [t.number([meter]), t.column(t.boolean())],
       })
     );
   });
@@ -40,9 +40,7 @@ describe('sameAs', () => {
   it('checks scalar types and lack thereof', () => {
     expect(t.number().sameAs(t.string()).errorCause).not.toBeNull();
 
-    expect(
-      t.number().sameAs(t.column(t.string(), 1)).errorCause
-    ).not.toBeNull();
+    expect(t.number().sameAs(t.column(t.string())).errorCause).not.toBeNull();
   });
 
   const n = (...units: Unit[]) => t.number(units);
@@ -65,7 +63,7 @@ describe('sameAs', () => {
   it('checks tables are the same', () => {
     const table = t.table({
       columnNames: ['A', 'B'],
-      columnTypes: [t.number([meter]), t.column(t.boolean(), 10)],
+      columnTypes: [t.number([meter]), t.column(t.boolean())],
       indexName: 'Table1',
     });
 
@@ -102,9 +100,9 @@ describe('Type.combine', () => {
 
 describe('new columns and tables', () => {
   it('Can reduce one dimension off the top', () => {
-    expect(t.column(t.string(), 3).reduced()).toEqual(t.string());
-    expect(t.column(t.column(t.string(), 3), 1).reduced()).toEqual(
-      t.column(t.string(), 3)
+    expect(t.column(t.string()).reduced()).toEqual(t.string());
+    expect(t.column(t.column(t.string())).reduced()).toEqual(
+      t.column(t.string())
     );
 
     expect(t.string().reduced().errorCause).not.toBeNull();

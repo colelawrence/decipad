@@ -30,7 +30,6 @@ export const resultToValue = (result: Result.Result): Value => {
             kind: 'column',
             indexedBy: tableType.columnNames[0],
             cellType: columnType,
-            columnSize: 'unknown',
           },
           value: tableValue[index],
         });

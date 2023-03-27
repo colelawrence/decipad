@@ -116,7 +116,7 @@ describe('table operators', () => {
       columnNames: ['indexcolumn', 'booooleans'],
       columnTypes: [t.number(U('bananas')), t.boolean()],
     });
-    const column = t.column(table.columnTypes?.[1] as Type, 3, 'TheTable');
+    const column = t.column(table.columnTypes?.[1] as Type, 'TheTable');
 
     expect(
       operators.lookup.functorNoAutomap!([column, t.number()])
@@ -163,7 +163,7 @@ describe('table operators', () => {
       ['Index', 'Value']
     );
 
-    const conditionColumnType = t.column(t.boolean(), 3);
+    const conditionColumnType = t.column(t.boolean());
     const conditionColumnValue = fromJS([false, true, true]);
 
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
@@ -184,7 +184,7 @@ describe('table operators', () => {
       columnNames: ['indexcolumn'],
       columnTypes: [t.number(U('bananas'))],
     });
-    const column = t.column(t.number(U('bananas')), 3, undefined, 1);
+    const column = t.column(t.number(U('bananas')), undefined, 1);
     expect(operators.sortby.functor!([table, column])).toMatchObject(table);
 
     const tableValue = Table.fromNamedColumns(
@@ -214,7 +214,7 @@ describe('table operators', () => {
       columnNames: ['indexcolumn', 'booooleans'],
       columnTypes: [t.number(U('bananas')), t.boolean()],
     });
-    const column = t.column(t.boolean(), 3, undefined, 1);
+    const column = t.column(t.boolean(), undefined, 1);
     expect(operators.filter.functorNoAutomap?.([table, column])).toMatchObject(
       t.table({
         columnNames: ['indexcolumn', 'booooleans'],

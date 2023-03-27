@@ -48,7 +48,6 @@ export class Type {
 
   // Column
   cellType: Type | null = null;
-  columnSize: number | 'unknown' | null = null;
   atParentIndex: number | null = null;
 
   // Table

@@ -19,7 +19,6 @@ const lines = [
       type: {
         kind: 'column',
         cellType: { kind: 'string' },
-        columnSize: 'unknown',
         indexedBy: null,
       } as SerializedType,
     },

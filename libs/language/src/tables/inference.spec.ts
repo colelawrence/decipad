@@ -6,11 +6,11 @@ import { objectToMap } from '../testUtils';
 import { inferTable, inferTableColumnPerCell } from './inference';
 
 const nilCtx = makeContext({
-  initialGlobalScope: new Map([['SomeCol', t.column(t.number(), 2)]]),
+  initialGlobalScope: new Map([['SomeCol', t.column(t.number())]]),
 });
 nilCtx.stack.setNamespaced(
   ['SomeExistingTable', 'Col'],
-  t.column(t.number(), 1234, 'SomeExistingTable'),
+  t.column(t.number(), 'SomeExistingTable'),
   'global'
 );
 
@@ -54,7 +54,7 @@ describe('table with formulae', () => {
 
   it('can run a formula', () => {
     expect(testComputed(l('a string'))).toEqual(t.string());
-    expect(testComputed(col('one', 'two'))).toEqual(t.column(t.string(), 2));
+    expect(testComputed(col('one', 'two'))).toEqual(t.column(t.string()));
   });
 
   it('can run a formula with previous', () => {

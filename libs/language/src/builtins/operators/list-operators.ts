@@ -15,6 +15,11 @@ import { Type, buildType as t } from '../../type';
 import { getInstanceof } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
 import { approximateSubsetSumIndices } from '../table';
+import {
+  chooseFirst,
+  deLinearizeType,
+  linearizeType,
+} from '../../dimtools/common';
 
 export const listOperators: Record<string, BuiltinSpec> = {
   len: {
@@ -35,14 +40,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     // TODO: make this a varargs function
     fnValues: ([a, b]: Value[]) =>
       new ConcatenatedColumn(getColumnLike(a), getColumnLike(b)),
-    functor: ([a, b]) =>
-      Type.combine(a.reduced().sameAs(b.reduced())).mapType(() => {
-        const resultColumnSize =
-          a.columnSize === 'unknown' || b.columnSize === 'unknown'
-            ? 'unknown'
-            : (a.columnSize || 1) + (b.columnSize || 1);
-        return t.column(a.reduced(), resultColumnSize);
-      }),
+    functionSignature: 'column<A>, column<A> -> column<A>',
     explanation: 'Joins two tables or columns into one.',
     syntax: 'cat(Table1.Col1, Table2.Col2)',
     example: 'cat(Day1.Sales, Day2.Sales)',
@@ -123,7 +121,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
         initial.isScalar('number'),
         growthRate.isScalar('number'),
         period.isColumn()
-      ).mapType(() => t.column(initial, getDefined(period.columnSize))),
+      ).mapType(() => t.column(initial, period.indexedBy)),
     explanation: 'Compounds a value by a specific rate.',
     syntax: 'grow(Initial, Rate, Table.Column)',
     example: 'grow($10k, 5%, Investment.Years)',
@@ -135,11 +133,11 @@ export const listOperators: Record<string, BuiltinSpec> = {
     fnValues: ([matrix]) => new SwappedDimensions(getColumnLike(matrix), 1),
     functor: ([matrix]) =>
       Type.combine(matrix.isColumn().reduced().isColumn().reduced()).mapType(
-        (cell) => {
-          const horizontal = getDefined(matrix.columnSize);
-          const vertical = getDefined(matrix.reduced().columnSize);
+        () => {
+          const linear = linearizeType(matrix);
+          const secondDimensionFirst = chooseFirst(1, linear);
 
-          return t.column(t.column(cell, horizontal), vertical);
+          return deLinearizeType(secondDimensionFirst);
         }
       ),
     explanation: 'Matrix',
