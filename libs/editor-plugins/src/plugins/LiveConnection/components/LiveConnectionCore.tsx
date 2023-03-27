@@ -23,7 +23,7 @@ import { Result } from '@decipad/computer';
 import { ExternalDataSource } from '@decipad/interfaces';
 import { LiveConnectionError } from './LiveConnectionError';
 
-const MAX_CELL_COUNT = 3000;
+const MAX_CELL_COUNT = 50_000;
 
 export interface LiveConnectionCoreProps {
   element: LiveConnectionElement;
