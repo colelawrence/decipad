@@ -304,11 +304,9 @@ export default {
 
     async pads(
       workspace: Workspace,
-      { page }: { page: PageInput },
-      context: GraphqlContext
+      { page }: { page: PageInput }
     ): Promise<PagedResult<PadRecord>> {
       return pads.getWorkspaceNotebooks({
-        user: loadUser(context),
         workspaceId: workspace.id,
         page,
       });

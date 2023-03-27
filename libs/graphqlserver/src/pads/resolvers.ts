@@ -24,7 +24,6 @@ import { resource } from '@decipad/backend-resources';
 import {
   isAuthenticatedAndAuthorized,
   isAuthorized,
-  loadUser,
   requireUser,
 } from '../authorization';
 import { accessTokenFor } from '../utils/accessTokenFor';
@@ -57,7 +56,6 @@ const resolvers = {
       const workspaceResource = `/workspaces/${workspaceId}`;
       if (await isAuthorized(workspaceResource, context, 'READ')) {
         return getWorkspaceNotebooks({
-          user: loadUser(context),
           workspaceId,
           page,
         });
@@ -96,13 +94,11 @@ const resolvers = {
         notebook.section_id = opts.sectionId;
       }
 
-      const newPad = await padResource.create(
+      return padResource.create(
         _,
         { workspaceId: opts.workspaceId, pad: notebook },
         context
       );
-
-      return newPad;
     },
     updatePad: padResource.update,
     removePad: padResource.remove,

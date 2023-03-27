@@ -25,9 +25,7 @@ export async function paginate<T1 extends ConcreteRecord, T2>(
   if (cursor) {
     query.ExclusiveStartKey = cursor;
   }
-
   const result = await table.query(query);
-
   const items = result.Items;
   let retItems: T2[];
   if (options.map) {

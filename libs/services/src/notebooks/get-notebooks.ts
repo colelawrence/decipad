@@ -34,33 +34,22 @@ interface GetWorkspaceNotebooksProps {
 }
 
 export const getWorkspaceNotebooks = async ({
-  user,
   workspaceId,
   page,
 }: GetWorkspaceNotebooksProps): Promise<PagedResult<PadRecord>> => {
   const data = await tables();
 
   const query = {
-    IndexName: 'byUserId',
-    KeyConditionExpression:
-      'user_id = :user_id and resource_type = :resource_type',
-    FilterExpression: 'parent_resource_uri = :parent_resource_uri',
+    IndexName: 'byWorkspace',
+    KeyConditionExpression: 'workspace_id = :workspace_id',
     ExpressionAttributeValues: {
-      ':user_id': user?.id || 'null',
-      ':resource_type': 'pads',
-      ':parent_resource_uri': `/workspaces/${workspaceId}`,
+      ':workspace_id': workspaceId,
     },
   };
 
-  const paged = await paginate(data.permissions, query, page, {
-    map: (perm) => perm.resource_id,
-    gqlType: 'Permission',
+  return paginate(data.pads, query, page, {
+    gqlType: 'Pad',
   });
-  const { items: notebookIds } = paged;
-  return {
-    ...paged,
-    items: await getNotebooksById(notebookIds),
-  };
 };
 
 interface GetNotebooksSharedWithProps {

@@ -261,7 +261,6 @@ invites
 
 pads
   workspace_id *String
-  sequence **Number
   name byWorkspace
 
 sections
