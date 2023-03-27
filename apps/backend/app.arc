@@ -268,10 +268,6 @@ pads
   workspace_id *String
   name byWorkspaceOnly
 
-pads
-  workspace_id *String
-  name byWorkspace
-
 sections
   workspace_id *String
   name byWorkspace
