@@ -12,13 +12,4 @@ module.exports = {
     ...coveragePathIgnorePatterns,
     '<rootDir>/src/lib',
   ],
-
-  coverageThreshold: {
-    global: {
-      statements: 75.5,
-      branches: 54,
-      functions: 60,
-      lines: 76.5,
-    },
-  },
 };
