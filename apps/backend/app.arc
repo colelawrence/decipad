@@ -261,6 +261,15 @@ invites
 
 pads
   workspace_id *String
+  sequence **Number
+  name byWorkspace
+
+pads
+  workspace_id *String
+  name byWorkspaceOnly
+
+pads
+  workspace_id *String
   name byWorkspace
 
 sections

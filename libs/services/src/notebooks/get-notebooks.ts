@@ -40,7 +40,7 @@ export const getWorkspaceNotebooks = async ({
   const data = await tables();
 
   const query = {
-    IndexName: 'byWorkspace',
+    IndexName: 'byWorkspaceOnly',
     KeyConditionExpression: 'workspace_id = :workspace_id',
     ExpressionAttributeValues: {
       ':workspace_id': workspaceId,
