@@ -163,6 +163,7 @@ export const createNormalizeDataViewPlugin = () =>
       'color',
       'icon',
       'rotate',
+      'alternateRotation',
     ],
     acceptableSubElements: [ELEMENT_TABLE_CAPTION, ELEMENT_DATA_VIEW_TR],
     plugin: normalizeDataViewPlugin,

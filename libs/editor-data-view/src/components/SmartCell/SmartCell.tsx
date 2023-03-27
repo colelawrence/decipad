@@ -8,41 +8,23 @@ import {
 } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
 import { useComputer } from '@decipad/react-contexts';
-import { Result, SerializedType } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { debounceTime, EMPTY } from 'rxjs';
 import { css } from '@emotion/react';
 import { textify } from '@decipad/parse';
 import { useTEditorRef } from '@decipad/editor-types';
 import { maybeAggregate } from '../../utils/maybeAggregate';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
-import { AggregationKind, PreviousColumns } from '../../types';
+import { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 
 const DEBOUNCE_RESULT_MS = 100;
 
 const emptyCellStyles = css({
   borderBottom: 0,
+  padding: 0,
+  margin: 0,
 });
-
-interface SmartProps {
-  tableName: string;
-  column: {
-    type: SerializedType;
-    value: Result.ColumnLike<Result.Comparable>;
-    name: string;
-  };
-  columnIndex?: number;
-  aggregationType: AggregationKind | undefined;
-  roundings: Array<string | undefined>;
-  rowSpan?: number;
-  colSpan?: number;
-  onHover: (hover: boolean) => void;
-  hover: boolean;
-  previousColumns: PreviousColumns;
-  alignRight?: boolean;
-  global?: boolean;
-  rotate: boolean;
-}
 
 export const SmartCell: FC<SmartProps> = ({
   column,
@@ -125,7 +107,7 @@ export const SmartCell: FC<SmartProps> = ({
   const onDragEnd = useOnDragEnd();
 
   return result == null || aggregationType == null ? (
-    <td css={emptyCellStyles} />
+    <td data-empty css={emptyCellStyles} />
   ) : (
     <UISmartCell
       aggregationType={aggregationType}

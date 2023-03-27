@@ -1,57 +1,11 @@
 import { FC, ReactNode, useMemo } from 'react';
-import { Result, SerializedType } from '@decipad/computer';
 import { DataViewRow } from '@decipad/ui';
-import {
-  AggregationKind,
-  Column,
-  PreviousColumns,
-  ValueCell,
-} from '../../types';
+import { AggregationKind, Column } from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
 import { DataViewDataGroupElement } from '../DataViewDataGroup';
 import { DataViewTableHeader } from '..';
 import { SmartCell } from '../SmartCell';
-
-export interface HeaderProps {
-  type?: SerializedType;
-  value?: ValueCell;
-  rowSpan?: number;
-  colSpan?: number;
-  collapsible?: boolean;
-  onHover: (hover: boolean) => void;
-  hover: boolean;
-  alignRight?: boolean;
-  isFullWidthRow: boolean;
-  groupId: string;
-  expandedGroups: string[] | undefined;
-  onChangeExpandedGroups: (expandedGroups: string[]) => void;
-  groupLength: number;
-  index: number;
-  global?: boolean;
-  rotate: boolean;
-  isFirstLevelHeader: boolean;
-}
-
-export interface SmartProps {
-  tableName: string;
-  column: {
-    type: SerializedType;
-    value: Result.ColumnLike<Result.Comparable>;
-    name: string;
-  };
-  roundings: Array<string | undefined>;
-  columnIndex?: number;
-  aggregationType: AggregationKind | undefined;
-  rowSpan?: number;
-  colSpan?: number;
-  onHover: (hover: boolean) => void;
-  hover: boolean;
-  previousColumns: PreviousColumns;
-  alignRight?: boolean;
-  global?: boolean;
-  rotate: boolean;
-}
 
 export interface DataViewLayoutProps {
   tableName: string;

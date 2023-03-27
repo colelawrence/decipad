@@ -4,33 +4,19 @@ import {
   DataViewTableHeader as DataViewTableHeaderUI,
   useEventNoEffect,
 } from '@decipad/ui';
-import { Result, SerializedType } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { css } from '@emotion/react';
 import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import { deselect } from '@udecode/plate';
-import { ValueCell } from '../../types';
+import { HeaderProps } from '../../types';
 
 const iconStyles = css({
   height: '24px',
   width: '24px',
 });
 
-interface DataViewTableHeaderProps {
-  type?: SerializedType;
-  value?: ValueCell;
-  rowSpan?: number;
-  colSpan?: number;
-  collapsible?: boolean;
-  onHover: (hover: boolean) => void;
-  hover: boolean;
-  alignRight?: boolean;
-  expandedGroups: string[] | undefined;
-  onChangeExpandedGroups: (collapsedGroups: string[]) => void;
-  groupId: string;
-  global?: boolean;
-  rotate: boolean;
-  isFirstLevelHeader: boolean;
+interface DataViewTableHeaderProps extends HeaderProps {
   element?: AnyElement;
 }
 
@@ -40,7 +26,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   rowSpan = 1,
   colSpan = 1,
   onHover,
-  hover,
+  hover = false,
   alignRight,
   expandedGroups = [],
   onChangeExpandedGroups,

@@ -1,9 +1,13 @@
 import { isCellAlignRight } from 'libs/editor-table/src/components';
 import { FC, useCallback, useEffect, useState } from 'react';
 import type { Subscription } from 'rxjs';
-import type { AggregationKind, DataGroup } from '../../types';
+import type {
+  AggregationKind,
+  DataGroup,
+  HeaderProps,
+  SmartProps,
+} from '../../types';
 import type { Element as GroupElement } from '../../utils/types';
-import type { HeaderProps, SmartProps } from '../DataViewDataLayout';
 
 interface DataViewDataGroupElementProps {
   tableName: string;
@@ -19,6 +23,7 @@ interface DataViewDataGroupElementProps {
   index: number;
   rotate: boolean;
   isFirstLevel: boolean;
+  alignRight?: boolean;
 }
 
 export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
@@ -35,6 +40,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
   index,
   rotate,
   isFirstLevel,
+  alignRight,
 }) => {
   const [parentHover, setParentHover] = useState(false);
   const [selfHover, setSelfHover] = useState(false);
@@ -74,7 +80,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       collapsible={element.collapsible}
       onHover={onHover}
       hover={parentHover || selfHover}
-      alignRight={isCellAlignRight(element.type)}
+      alignRight={alignRight ?? isCellAlignRight(element.type)}
       isFullWidthRow={isFullWidthRow}
       expandedGroups={expandedGroups}
       onChangeExpandedGroups={onChangeExpandedGroups}
@@ -95,7 +101,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       aggregationType={aggregationType}
       onHover={onHover}
       hover={parentHover || selfHover}
-      alignRight={isCellAlignRight(element.column?.type)}
+      alignRight={alignRight ?? isCellAlignRight(element.column?.type)}
       previousColumns={element.previousColumns}
       global={element.global}
       rotate={rotate}

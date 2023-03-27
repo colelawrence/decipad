@@ -3,9 +3,9 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode } from 'react';
+import { Children, FC, ReactNode, useCallback } from 'react';
 import { Invisible } from '../../atoms';
-import { CircularArrow } from '../../icons';
+import { Bolt, CircularArrow } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
 import { cssVar, p14Regular, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -14,6 +14,7 @@ import {
   TableStyleContext,
   UserIconKey,
 } from '../../utils';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const dataViewWrapperStyles = css({
   display: 'flex',
@@ -49,6 +50,16 @@ const dataViewTableStyles = css(p14Regular, {
   tableLayout: 'auto',
   'th, td': {
     padding: '8px',
+  },
+});
+
+const dataViewAlternateRotationTableStyles = css({
+  'th, td': {
+    paddingTop: '2px',
+    paddingBottom: '2px',
+  },
+  'td[data-empty]': {
+    padding: 0,
   },
 });
 
@@ -144,6 +155,11 @@ const iconWrapperStyles = css({
   },
 });
 
+const selectedIconWrapperStyles = css({
+  border: `solid 1px ${cssVar('strongerHighlightColor')}`,
+  borderRadius: '8px',
+});
+
 interface DataViewProps {
   readonly availableVariableNames: AutocompleteName[];
   readonly variableName: string;
@@ -154,6 +170,8 @@ interface DataViewProps {
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
   readonly rotate: boolean;
   readonly onRotated: (rotated: boolean) => void;
+  readonly alternateRotation: boolean;
+  readonly onChangeAlternateRotation: (alternateRotation: boolean) => void;
   children: ReactNode;
   data: ReactNode;
 }
@@ -170,9 +188,22 @@ export const DataView: FC<DataViewProps> = ({
   children,
   rotate,
   onRotated,
+  alternateRotation,
+  onChangeAlternateRotation,
 }): ReturnType<FC> => {
   const [caption, thead, addNewColumnComponent] = Children.toArray(children);
   const readOnly = useIsEditorReadOnly();
+
+  const onRotatedChange = useEventNoEffect(
+    useCallback(() => onRotated(!rotate), [onRotated, rotate])
+  );
+
+  const onAlternateRotationChange = useEventNoEffect(
+    useCallback(
+      () => onChangeAlternateRotation(!alternateRotation),
+      [alternateRotation, onChangeAlternateRotation]
+    )
+  );
 
   return (
     <TableStyleContext.Provider
@@ -196,9 +227,24 @@ export const DataView: FC<DataViewProps> = ({
             />
           )}
           {isFlagEnabled('ROTATED_DATA_VIEW') && (
-            <button onClick={() => onRotated(!rotate)} title="Rotate data view">
+            <button
+              css={rotate && selectedIconWrapperStyles}
+              onClick={onRotatedChange}
+              title="Rotate data view"
+            >
               <span css={iconWrapperStyles}>
                 <CircularArrow />
+              </span>
+            </button>
+          )}
+          {isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
+            <button
+              onClick={onAlternateRotationChange}
+              title="Zig-zag"
+              css={alternateRotation && selectedIconWrapperStyles}
+            >
+              <span css={iconWrapperStyles}>
+                <Bolt />
               </span>
             </button>
           )}
@@ -206,8 +252,20 @@ export const DataView: FC<DataViewProps> = ({
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
           <div css={tableScroll}>
-            <table css={dataViewTableStyles} contentEditable={false}>
-              <thead>{rotate ? <Invisible>{thead}</Invisible> : thead}</thead>
+            <table
+              css={[
+                dataViewTableStyles,
+                alternateRotation && dataViewAlternateRotationTableStyles,
+              ]}
+              contentEditable={false}
+            >
+              <thead>
+                {rotate && !alternateRotation ? (
+                  <Invisible>{thead}</Invisible>
+                ) : (
+                  thead
+                )}
+              </thead>
               <tbody aria-roledescription="data view data">{data}</tbody>
             </table>
             {variableName && addNewColumnComponent}

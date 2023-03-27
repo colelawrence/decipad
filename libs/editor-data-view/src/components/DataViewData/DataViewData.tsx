@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { DataViewDataLayout } from '..';
+import { DataViewDataAlternatedRotationLayout, DataViewDataLayout } from '..';
 import { AggregationKind, Column } from '../../types';
 
 interface DataViewDataProps {
@@ -11,8 +11,16 @@ interface DataViewDataProps {
   onChangeExpandedGroups: (expandedGroups: string[]) => void;
   rotate: boolean;
   headers: ReactNode[];
+  alternateRotation?: boolean;
 }
 
-export const DataViewData: FC<DataViewDataProps> = (props) => {
-  return <DataViewDataLayout {...props} />;
+export const DataViewData: FC<DataViewDataProps> = ({
+  alternateRotation,
+  ...props
+}) => {
+  return alternateRotation ? (
+    <DataViewDataAlternatedRotationLayout {...props} />
+  ) : (
+    <DataViewDataLayout {...props} />
+  );
 };

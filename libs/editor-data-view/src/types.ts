@@ -5,6 +5,47 @@ import { Subject } from 'rxjs';
 // Row layout
 
 export type ValueCell = Result.Comparable;
+
+export interface SmartProps {
+  tableName: string;
+  column: {
+    type: SerializedType;
+    value: Result.ColumnLike<Result.Comparable>;
+    name: string;
+  };
+  roundings: Array<string | undefined>;
+  columnIndex?: number;
+  aggregationType: AggregationKind | undefined;
+  rowSpan?: number;
+  colSpan?: number;
+  onHover: (hover: boolean) => void;
+  hover: boolean;
+  previousColumns: PreviousColumns;
+  alignRight?: boolean;
+  global?: boolean;
+  rotate: boolean;
+}
+
+export interface HeaderProps {
+  type?: SerializedType;
+  value?: ValueCell;
+  rowSpan?: number;
+  colSpan?: number;
+  collapsible?: boolean;
+  onHover?: (hover: boolean) => void;
+  hover?: boolean;
+  alignRight?: boolean;
+  isFullWidthRow?: boolean;
+  groupId: string;
+  expandedGroups: string[] | undefined;
+  onChangeExpandedGroups: (expandedGroups: string[]) => void;
+  groupLength: number;
+  index: number;
+  global?: boolean;
+  rotate: boolean;
+  isFirstLevelHeader: boolean;
+}
+
 export interface SmartRowColumn {
   name: string;
   type: SerializedType;

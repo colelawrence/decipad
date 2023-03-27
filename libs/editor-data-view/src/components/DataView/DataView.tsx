@@ -40,6 +40,11 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     'expandedGroups'
   );
   const saveRotated = useElementMutatorCallback(editor, element, 'rotate');
+  const saveAlternateRotation = useElementMutatorCallback(
+    editor,
+    element,
+    'alternateRotation'
+  );
 
   const {
     variableNames,
@@ -103,6 +108,8 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         color={(element.color ?? defaultColor) as AvailableSwatchColor}
         onRotated={saveRotated}
         rotate={rotate}
+        alternateRotation={element.alternateRotation ?? false}
+        onChangeAlternateRotation={saveAlternateRotation}
         data={
           (sortedColumns && tableName && (
             <DataViewData
@@ -114,6 +121,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
               onChangeExpandedGroups={saveExpandedGroups}
               rotate={rotate}
               headers={headers}
+              alternateRotation={element.alternateRotation ?? false}
             />
           )) ||
           null
