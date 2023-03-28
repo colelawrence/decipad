@@ -200,6 +200,7 @@ export const TableData = forwardRef(
 
         <CellEditor
           focused={focused}
+          isEditable={isEditable}
           type={type}
           value={value}
           unit={unit}
@@ -208,13 +209,17 @@ export const TableData = forwardRef(
           element={element}
           {...dropdownOptions}
         >
-          <SyntaxErrorHighlight
-            variant="custom"
-            error={parseError}
-            hideError={!parseError}
-          >
-            {children}
-          </SyntaxErrorHighlight>
+          {parseError ? (
+            <SyntaxErrorHighlight
+              variant="custom"
+              error={parseError}
+              hideError={!parseError}
+            >
+              {children}
+            </SyntaxErrorHighlight>
+          ) : (
+            <>{children}</>
+          )}
         </CellEditor>
       </Component>
     );

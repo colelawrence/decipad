@@ -2,7 +2,7 @@ import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { Close } from '../../icons';
@@ -71,66 +71,69 @@ export const IconPopover = ({
 }: IconPopoverProps): ReturnType<FC> => {
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = swatchesThemed(darkTheme);
+  const [open, setOpen] = useState(false);
   return (
-    <Popover.Root>
+    <Popover.Root onOpenChange={setOpen}>
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>
-      <Popover.Content css={contentWrapper}>
-        <div css={contentHeaderWrapper}>
-          <h2 css={contentHeaderText}>Pick a style</h2>
-          <Popover.Close css={closeIconWrapper}>
-            <Close />
-          </Popover.Close>
-        </div>
-        <div css={{ padding: '12px 0' }}>
-          <Divider />
-        </div>
-        <div
-          css={{
-            display: 'flex',
-            gap: '8px',
-            justifyContent: 'space-between',
-          }}
-        >
-          {swatchNames.map((key) => {
-            return (
-              <button
-                key={key}
-                aria-label={key}
-                data-testid={`icon-color-picker-${key}`}
-                onClick={() => {
-                  onChangeColor(key);
-                }}
-              >
-                <ColorPicker
-                  color={baseSwatches[key]}
-                  selected={key === color}
-                />
-              </button>
-            );
-          })}
-        </div>
-        <div css={iconsWrapper}>
-          {userIconKeys.map((choice) => {
-            const Icon = icons[choice];
-            return (
-              <Popover.Close
-                key={choice}
-                aria-label={choice}
-                data-testid={`icon-picker-${choice}`}
-              >
-                <NotebookIconButton
-                  color={baseSwatches[color]}
+      {open && (
+        <Popover.Content css={contentWrapper}>
+          <div css={contentHeaderWrapper}>
+            <h2 css={contentHeaderText}>Pick a style</h2>
+            <Popover.Close css={closeIconWrapper}>
+              <Close />
+            </Popover.Close>
+          </div>
+          <div css={{ padding: '12px 0' }}>
+            <Divider />
+          </div>
+          <div
+            css={{
+              display: 'flex',
+              gap: '8px',
+              justifyContent: 'space-between',
+            }}
+          >
+            {swatchNames.map((key) => {
+              return (
+                <button
+                  key={key}
+                  aria-label={key}
+                  data-testid={`icon-color-picker-${key}`}
                   onClick={() => {
-                    onChangeIcon(choice);
+                    onChangeColor(key);
                   }}
                 >
-                  <Icon />
-                </NotebookIconButton>
-              </Popover.Close>
-            );
-          })}
-        </div>
-      </Popover.Content>
+                  <ColorPicker
+                    color={baseSwatches[key]}
+                    selected={key === color}
+                  />
+                </button>
+              );
+            })}
+          </div>
+          <div css={iconsWrapper}>
+            {userIconKeys.map((choice) => {
+              const Icon = icons[choice];
+              return (
+                <Popover.Close
+                  key={choice}
+                  aria-label={choice}
+                  data-testid={`icon-picker-${choice}`}
+                >
+                  <NotebookIconButton
+                    color={baseSwatches[color]}
+                    onClick={() => {
+                      onChangeIcon(choice);
+                    }}
+                  >
+                    <Icon />
+                  </NotebookIconButton>
+                </Popover.Close>
+              );
+            })}
+          </div>
+        </Popover.Content>
+      )}
     </Popover.Root>
   );
 };

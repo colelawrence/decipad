@@ -24,6 +24,8 @@ const unitStyles = css({
 
 export interface DateEditorProps {
   open: boolean;
+  focused?: boolean;
+  isEditable?: boolean;
   children?: ReactNode;
   type?: CellValueType;
   value?: string;
@@ -48,6 +50,8 @@ const showTimeInputForGranularity: Partial<
 
 export const DateEditor: FC<DateEditorProps> = ({
   open,
+  focused = false,
+  isEditable = false,
   children,
   value = '',
   unit,
@@ -97,31 +101,37 @@ export const DateEditor: FC<DateEditorProps> = ({
     element.setAttribute('contenteditable', 'false');
   }, []);
 
+  const customInput = (
+    <span data-unit={unit ?? ''} css={unit && unitStyles}>
+      {children}
+    </span>
+  );
+
   return (
     <span
       onClick={onClick}
       className="mydateeditorwrapper"
       ref={datePickerWrapperRef}
     >
-      <DatePicker
-        open={open && type?.kind === 'date'}
-        dateFormat={dateFormat || 'yyyy-MM-dd'}
-        selected={dateValue}
-        onChange={onChangeValue}
-        customInput={
-          <span data-unit={unit ?? ''} css={unit && unitStyles}>
-            {children}
-          </span>
-        }
-        showTimeSelect={
-          type?.kind === 'date' && showTimeInputForGranularity[type.date]
-        }
-        showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
-        showYearPicker={type?.kind === 'date' && type.date === 'year'}
-        portalId="date-picker-portal"
-        todayButton="Today"
-        timeClassName={() => 'deci-datepicker-selectable'}
-      ></DatePicker>
+      {isEditable && focused ? (
+        <DatePicker
+          open={open && type?.kind === 'date'}
+          dateFormat={dateFormat || 'yyyy-MM-dd'}
+          selected={dateValue}
+          onChange={onChangeValue}
+          customInput={customInput}
+          showTimeSelect={
+            type?.kind === 'date' && showTimeInputForGranularity[type.date]
+          }
+          showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
+          showYearPicker={type?.kind === 'date' && type.date === 'year'}
+          portalId="date-picker-portal"
+          todayButton="Today"
+          timeClassName={() => 'deci-datepicker-selectable'}
+        ></DatePicker>
+      ) : (
+        customInput
+      )}
     </span>
   );
 };

@@ -34,6 +34,7 @@ const editorComponents: Record<string, FC<SpecificEditorProps>> = {
 
 interface CellEditorProps {
   focused?: boolean;
+  isEditable?: boolean;
   children: ReactNode;
   type?: CellValueType;
   unit?: string;
@@ -49,6 +50,7 @@ interface CellEditorProps {
 
 export const CellEditor: FC<CellEditorProps> = ({
   focused = false,
+  isEditable = false,
   value,
   type,
   unit,
@@ -139,6 +141,8 @@ export const CellEditor: FC<CellEditorProps> = ({
     <div ref={wrapperRef} onClick={onClick} className="mycelleditorwrapper">
       <EditorComponent
         open={opened}
+        focused={focused}
+        isEditable={isEditable}
         type={type}
         value={value}
         unit={unit}

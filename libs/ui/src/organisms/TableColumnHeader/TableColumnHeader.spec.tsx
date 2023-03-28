@@ -38,7 +38,7 @@ it('renders the trigger for the dropdown menu', () => {
 
 describe('readOnly prop', () => {
   it('does not render the column menu', () => {
-    const { queryAllByRole, rerender } = render(
+    const { rerender, queryAllByTestId } = render(
       <table>
         <thead>
           <tr>
@@ -47,12 +47,8 @@ describe('readOnly prop', () => {
         </thead>
       </table>
     );
-    const getPopupButton = () =>
-      queryAllByRole(
-        (content, element) =>
-          content === 'button' && element?.getAttribute('aria-haspopup')
-      );
 
+    const getPopupButton = () => queryAllByTestId('table-column-menu-button');
     expect(getPopupButton()).toHaveLength(1);
     expect(getPopupButton()[0]).toBeVisible();
 

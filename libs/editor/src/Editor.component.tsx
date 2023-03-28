@@ -17,6 +17,7 @@ import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
+import { useDebouncedCallback } from 'use-debounce';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { NotebookState } from './components/NotebookState/NotebookState';
@@ -78,12 +79,13 @@ export const Editor = (props: EditorProps) => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [changeSubject] = useState(() => new Subject<undefined>());
-  const onChange = useCallback(() => {
-    // Make sure all components have been updated with the new change.
-    setTimeout(() => {
+  const onChange = useDebouncedCallback(
+    useCallback(() => {
+      // Make sure all components have been updated with the new change.
       changeSubject.next(undefined);
-    });
-  }, [changeSubject]);
+    }, [changeSubject]),
+    0
+  );
 
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
   const { onRefChange } = useAutoAnimate();

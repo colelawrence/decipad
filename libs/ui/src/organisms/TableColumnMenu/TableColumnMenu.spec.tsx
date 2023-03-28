@@ -46,7 +46,7 @@ it('renders the menu only when open', async () => {
 
 it('shows the sub menu', async () => {
   const handleChangeOpen = jest.fn();
-  const { findByText, getByText } = render(
+  const { findByText, getByText, rerender } = render(
     <TableColumnMenu
       {...props}
       trigger={<button>trigger</button>}
@@ -56,6 +56,16 @@ it('shows the sub menu', async () => {
   expect(getByText('trigger')).toBeInTheDocument();
 
   await userEvent.click(getByText('trigger'));
+  expect(handleChangeOpen.mock.calls).toHaveLength(1);
+  expect(handleChangeOpen.mock.calls[0][0]).toBe(true);
+  rerender(
+    <TableColumnMenu
+      {...props}
+      trigger={<button>trigger</button>}
+      onChangeOpen={handleChangeOpen}
+      open
+    />
+  );
   await userEvent.click(await findByText(/change type/i), {
     pointerEventsCheck: 0,
   });

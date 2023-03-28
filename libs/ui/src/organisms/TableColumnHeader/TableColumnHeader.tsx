@@ -70,7 +70,10 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
         !readOnly && (
           <TableColumnMenu
             trigger={
-              <button css={rightSlotStyles}>
+              <button
+                data-testid="table-column-menu-button"
+                css={rightSlotStyles}
+              >
                 <Caret variant="down" />
               </button>
             }

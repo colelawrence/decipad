@@ -9,7 +9,7 @@ import { N, ONE } from '@decipad/number';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, ReactNode, useState } from 'react';
+import { ComponentProps, ReactNode, useState, useCallback } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   AddToWorkspace,
@@ -107,219 +107,232 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
     }
   };
 
+  const onTriggerClick = useCallback(
+    () => onChangeOpen?.(true),
+    [onChangeOpen]
+  );
+
   return (
     <div contentEditable={false} css={tableColumnMenuStyles}>
-      <MenuList
-        root
-        dropdown
-        open={open}
-        onChangeOpen={onChangeOpen}
-        trigger={trigger}
-      >
+      {open ? (
         <MenuList
-          itemTrigger={
-            <TriggerMenuItem icon={<Shapes />}>
-              <div css={{ minWidth: '132px' }}>Change type</div>
-            </TriggerMenuItem>
-          }
+          root
+          dropdown
+          open={open}
+          onChangeOpen={onChangeOpen}
+          trigger={trigger}
         >
-          {type.kind === 'number' &&
-            type.unit != null &&
-            !isCurrencyUnit(type.unit) && (
-              <MenuItem key="all" icon={<All />} selected>
-                {computer.formatUnit(type.unit, N(1))}
-              </MenuItem>
-            )}
-          <MenuItem
-            key="number"
-            icon={<Number />}
-            onSelect={() => onChangeColumnType(getNumberType())}
-            selected={type.kind === 'number' && type.unit == null}
-          >
-            Number
-          </MenuItem>
           <MenuList
-            key="currency"
             itemTrigger={
-              <TriggerMenuItem icon={<DollarCircle />}>
-                <div css={{ minWidth: '132px' }}>Currency</div>
+              <TriggerMenuItem icon={<Shapes />}>
+                <div css={{ minWidth: '132px' }}>Change type</div>
               </TriggerMenuItem>
             }
-            open={currentOpen === 'currency'}
-            onChangeOpen={() => onColumnExpand('currency')}
           >
-            {presentableCurrencyUnits.map((unit, index) => (
-              <MenuItem
-                key={index}
-                icon={<span>{unit.pretty ?? unit.name}</span>}
-                onSelect={() =>
-                  onChangeColumnType(
-                    getNumberType([
-                      {
-                        exp: ONE,
-                        multiplier: ONE,
-                        known: true,
-                        unit: unit.name,
-                        baseSuperQuantity: unit.superBaseQuantity,
-                        baseQuantity: unit.name as Unit['baseQuantity'],
-                      },
-                    ])
-                  )
-                }
-                selected={type.kind === 'number' && sameUnits(type.unit, unit)}
-                itemAlignment="center"
-              >
-                <span css={{ marginLeft: '2px' }}>{unit.baseQuantity}</span>
-              </MenuItem>
-            ))}
-          </MenuList>
-
-          {!isForImportedColumn && !isFirst && (
+            {type.kind === 'number' &&
+              type.unit != null &&
+              !isCurrencyUnit(type.unit) && (
+                <MenuItem key="all" icon={<All />} selected>
+                  {computer.formatUnit(type.unit, N(1))}
+                </MenuItem>
+              )}
             <MenuItem
-              key="table-formula"
-              icon={<Formula />}
-              onSelect={() => onChangeColumnType(getFormulaType())}
-              selected={type.kind === 'table-formula'}
+              key="number"
+              icon={<Number />}
+              onSelect={() => onChangeColumnType(getNumberType())}
+              selected={type.kind === 'number' && type.unit == null}
             >
-              Formula
+              Number
             </MenuItem>
-          )}
-          <MenuItem
-            key="boolean"
-            icon={<CheckboxSelected />}
-            onSelect={() => onChangeColumnType(getBooleanType())}
-            selected={type.kind === 'boolean'}
-          >
-            Checkbox
-          </MenuItem>
-          <MenuItem
-            key="string"
-            icon={<Text />}
-            onSelect={() => onChangeColumnType(getStringType())}
-            selected={type.kind === 'string'}
-          >
-            Text
-          </MenuItem>
-
-          {!isFirst && dropdownNames.length > 0 && (
             <MenuList
-              key="dropdown-tables"
+              key="currency"
               itemTrigger={
-                <TriggerMenuItem
-                  icon={<AddToWorkspace />}
-                  selected={type.kind === 'date'}
-                >
-                  <div css={{ minWidth: '116px' }}>Categories</div>
+                <TriggerMenuItem icon={<DollarCircle />}>
+                  <div css={{ minWidth: '132px' }}>Currency</div>
                 </TriggerMenuItem>
               }
-              open={currentOpen === 'dropdowns'}
-              onChangeOpen={() => onColumnExpand('dropdowns')}
+              open={currentOpen === 'currency'}
+              onChangeOpen={() => onColumnExpand('currency')}
             >
-              {dropdownNames.map((d, index) => (
+              {presentableCurrencyUnits.map((unit, index) => (
                 <MenuItem
                   key={index}
-                  icon={<AddToWorkspace />}
+                  icon={<span>{unit.pretty ?? unit.name}</span>}
                   onSelect={() =>
-                    onChangeColumnType({
-                      kind: 'dropdown',
-                      id: d.id,
-                      type: d.type,
-                    })
+                    onChangeColumnType(
+                      getNumberType([
+                        {
+                          exp: ONE,
+                          multiplier: ONE,
+                          known: true,
+                          unit: unit.name,
+                          baseSuperQuantity: unit.superBaseQuantity,
+                          baseQuantity: unit.name as Unit['baseQuantity'],
+                        },
+                      ])
+                    )
                   }
-                  selected={false}
+                  selected={
+                    type.kind === 'number' && sameUnits(type.unit, unit)
+                  }
+                  itemAlignment="center"
                 >
-                  {d.value}
+                  <span css={{ marginLeft: '2px' }}>{unit.baseQuantity}</span>
                 </MenuItem>
               ))}
             </MenuList>
-          )}
-          <MenuList
-            key="dates"
-            itemTrigger={
-              <TriggerMenuItem
-                icon={<Calendar />}
-                selected={type.kind === 'date'}
+
+            {!isForImportedColumn && !isFirst && (
+              <MenuItem
+                key="table-formula"
+                icon={<Formula />}
+                onSelect={() => onChangeColumnType(getFormulaType())}
+                selected={type.kind === 'table-formula'}
               >
-                <div css={{ minWidth: '116px' }}>Date</div>
-              </TriggerMenuItem>
-            }
-            open={currentOpen === 'date'}
-            onChangeOpen={() => onColumnExpand('date')}
-          >
+                Formula
+              </MenuItem>
+            )}
             <MenuItem
-              key="year"
-              icon={<Calendar />}
-              onSelect={() => onChangeColumnType(getDateType('year'))}
-              selected={type.kind === 'date' && type.date === 'year'}
+              key="boolean"
+              icon={<CheckboxSelected />}
+              onSelect={() => onChangeColumnType(getBooleanType())}
+              selected={type.kind === 'boolean'}
             >
-              Year
+              Checkbox
             </MenuItem>
             <MenuItem
-              key="month"
-              icon={<Calendar />}
-              onSelect={() => onChangeColumnType(getDateType('month'))}
-              selected={type.kind === 'date' && type.date === 'month'}
+              key="string"
+              icon={<Text />}
+              onSelect={() => onChangeColumnType(getStringType())}
+              selected={type.kind === 'string'}
             >
-              Month
+              Text
             </MenuItem>
-            <MenuItem
-              key="day"
-              icon={<Calendar />}
-              onSelect={() => onChangeColumnType(getDateType('day'))}
-              selected={type.kind === 'date' && type.date === 'day'}
-            >
-              Day
-            </MenuItem>
-            <MenuItem
-              key="minute"
-              icon={<Calendar />}
-              onSelect={() => onChangeColumnType(getDateType('minute'))}
-              selected={type.kind === 'date' && type.date === 'minute'}
-            >
-              Time
-            </MenuItem>
-          </MenuList>
-          {!isForImportedColumn && (
+
+            {!isFirst && dropdownNames.length > 0 && (
+              <MenuList
+                key="dropdown-tables"
+                itemTrigger={
+                  <TriggerMenuItem
+                    icon={<AddToWorkspace />}
+                    selected={type.kind === 'date'}
+                  >
+                    <div css={{ minWidth: '116px' }}>Categories</div>
+                  </TriggerMenuItem>
+                }
+                open={currentOpen === 'dropdowns'}
+                onChangeOpen={() => onColumnExpand('dropdowns')}
+              >
+                {dropdownNames.map((d, index) => (
+                  <MenuItem
+                    key={index}
+                    icon={<AddToWorkspace />}
+                    onSelect={() =>
+                      onChangeColumnType({
+                        kind: 'dropdown',
+                        id: d.id,
+                        type: d.type,
+                      })
+                    }
+                    selected={false}
+                  >
+                    {d.value}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            )}
             <MenuList
-              key="series"
+              key="dates"
               itemTrigger={
                 <TriggerMenuItem
-                  icon={<Leaf />}
-                  selected={type.kind === 'series'}
+                  icon={<Calendar />}
+                  selected={type.kind === 'date'}
                 >
-                  <div css={{ minWidth: '116px' }}>Series</div>
+                  <div css={{ minWidth: '116px' }}>Date</div>
                 </TriggerMenuItem>
               }
-              open={currentOpen === 'series'}
-              onChangeOpen={() => onColumnExpand('series')}
+              open={currentOpen === 'date'}
+              onChangeOpen={() => onColumnExpand('date')}
             >
               <MenuItem
+                key="year"
                 icon={<Calendar />}
-                onSelect={() => onChangeColumnType(getSeriesType('date'))}
-                selected={type.kind === 'series' && type.seriesType === 'date'}
+                onSelect={() => onChangeColumnType(getDateType('year'))}
+                selected={type.kind === 'date' && type.date === 'year'}
               >
-                Date
+                Year
+              </MenuItem>
+              <MenuItem
+                key="month"
+                icon={<Calendar />}
+                onSelect={() => onChangeColumnType(getDateType('month'))}
+                selected={type.kind === 'date' && type.date === 'month'}
+              >
+                Month
+              </MenuItem>
+              <MenuItem
+                key="day"
+                icon={<Calendar />}
+                onSelect={() => onChangeColumnType(getDateType('day'))}
+                selected={type.kind === 'date' && type.date === 'day'}
+              >
+                Day
+              </MenuItem>
+              <MenuItem
+                key="minute"
+                icon={<Calendar />}
+                onSelect={() => onChangeColumnType(getDateType('minute'))}
+                selected={type.kind === 'date' && type.date === 'minute'}
+              >
+                Time
               </MenuItem>
             </MenuList>
-          )}
-          <UnitMenuItem
-            placeholder="create custom"
-            onSelect={(unit) => {
-              onChangeColumnType({ kind: 'number', unit });
-            }}
-            parseUnit={parseUnit}
-          />
+            {!isForImportedColumn && (
+              <MenuList
+                key="series"
+                itemTrigger={
+                  <TriggerMenuItem
+                    icon={<Leaf />}
+                    selected={type.kind === 'series'}
+                  >
+                    <div css={{ minWidth: '116px' }}>Series</div>
+                  </TriggerMenuItem>
+                }
+                open={currentOpen === 'series'}
+                onChangeOpen={() => onColumnExpand('series')}
+              >
+                <MenuItem
+                  icon={<Calendar />}
+                  onSelect={() => onChangeColumnType(getSeriesType('date'))}
+                  selected={
+                    type.kind === 'series' && type.seriesType === 'date'
+                  }
+                >
+                  Date
+                </MenuItem>
+              </MenuList>
+            )}
+            <UnitMenuItem
+              placeholder="create custom"
+              onSelect={(unit) => {
+                onChangeColumnType({ kind: 'number', unit });
+              }}
+              parseUnit={parseUnit}
+            />
+          </MenuList>
+          {length > 1 ? (
+            <MenuItem
+              key="delete column"
+              icon={<Trash />}
+              onSelect={() => onRemoveColumn()}
+            >
+              Delete column
+            </MenuItem>
+          ) : null}
         </MenuList>
-        {length > 1 ? (
-          <MenuItem
-            key="delete column"
-            icon={<Trash />}
-            onSelect={() => onRemoveColumn()}
-          >
-            Delete column
-          </MenuItem>
-        ) : null}
-      </MenuList>
+      ) : (
+        <div onClick={onTriggerClick}>{trigger}</div>
+      )}
     </div>
   );
 };

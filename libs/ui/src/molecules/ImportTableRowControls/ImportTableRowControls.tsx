@@ -68,25 +68,28 @@ export const ImportTableRowControls: FC<ImportTableRowControlsProps> = ({
         menuIsOpen ? menuOpenedStyles : menuClosedStyles,
       ]}
     >
-      {isFirstRow && (
-        <div css={gridStyles()}>
-          <MenuList
-            root
-            open={menuIsOpen}
-            onChangeOpen={setMenuIsOpen}
-            trigger={menuButton}
-            dropdown
-          >
-            <MenuItem
-              icon={<Crown />}
-              onSelect={() => toggleFirstRowIsHeader(true)}
-              selected={false}
+      {isFirstRow &&
+        (menuIsOpen ? (
+          <div css={gridStyles()}>
+            <MenuList
+              root
+              open={menuIsOpen}
+              onChangeOpen={setMenuIsOpen}
+              trigger={menuButton}
+              dropdown
             >
-              Make this the header row
-            </MenuItem>
-          </MenuList>
-        </div>
-      )}
+              <MenuItem
+                icon={<Crown />}
+                onSelect={() => toggleFirstRowIsHeader(true)}
+                selected={false}
+              >
+                Make this the header row
+              </MenuItem>
+            </MenuList>
+          </div>
+        ) : (
+          menuButton
+        ))}
     </th>
   );
 };
