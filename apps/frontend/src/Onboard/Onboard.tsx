@@ -16,13 +16,13 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useToast } from '@decipad/toast';
-import { isEmpty } from 'lodash';
-import { LazyRoute } from '../meta';
 import {
   useUpdateUserMutation,
   useSetUsernameMutation,
   useUserQuery,
-} from '../graphql';
+} from '@decipad/graphql-client';
+import { isEmpty } from 'lodash';
+import { LazyRoute } from '../meta';
 import { useRequiresOnboarding } from './useRequiresOnboarding';
 import { PreOnboardingPath } from './RequireOnboard';
 

@@ -75,6 +75,7 @@
       "@decipad/fnqueue": ["libs/fnqueue/src/index.ts"],
       "@decipad/format": ["libs/format/src/index.ts"],
       "@decipad/fraction": ["libs/fraction/src/index.ts"],
+      "@decipad/graphql-client": ["libs/graphql-client/src/index.ts"],
       "@decipad/graphqlresource": ["libs/graphqlresource/src/index.ts"],
       "@decipad/graphqlserver": ["libs/graphqlserver/src/index.ts"],
       "@decipad/graphqlserver/resolvers": [

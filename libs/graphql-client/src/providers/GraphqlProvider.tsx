@@ -10,7 +10,7 @@ import {
   Provider as UrqlProvider,
   ClientOptions,
 } from 'urql';
-import { graphCacheConfig } from '../../graphql/cacheConfig';
+import { graphCacheConfig } from '../cacheConfig';
 
 const defaultClientOpts = {
   url: new URL(`/graphql`, window.location.origin).toString(),

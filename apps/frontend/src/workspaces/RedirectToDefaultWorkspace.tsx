@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { LoadingLogo } from '@decipad/ui';
-import { useGetWorkspacesIDsQuery } from '../graphql';
+import { useGetWorkspacesIDsQuery } from '@decipad/graphql-client';
 
 const RedirectToDefaultWorkspace: FC = () => {
   const [results] = useGetWorkspacesIDsQuery();

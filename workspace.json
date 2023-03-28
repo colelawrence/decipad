@@ -35,6 +35,7 @@
     "format": "libs/format",
     "fraction": "libs/fraction",
     "frontend": "apps/frontend",
+    "graphql-client": "libs/graphql-client",
     "graphqlresource": "libs/graphqlresource",
     "graphqlserver": "libs/graphqlserver",
     "import": "libs/import",

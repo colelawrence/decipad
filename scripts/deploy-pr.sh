@@ -34,7 +34,7 @@ echo "Building the backend..."
 yarn build:backend
 
 echo "Clearing sourcemaps..."
-find apps/backend/public/ | grep '\.map$' | xargs rm
+(find apps/backend/public/ | grep '\.map$' | xargs -r rm) || true
 
 echo "Deploying \"$DEPLOY_NAME\"..."
 mkdir -p tmp/deploy

@@ -12,7 +12,6 @@ import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
 import { PermissionType as PermissionTypeStr } from 'libs/ui/src/types';
-import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import {
   GetNotebookByIdQuery,
   useCreateOrUpdateNotebookSnapshotMutation,
@@ -22,14 +21,13 @@ import {
   useAttachFileToNotebookMutation,
   useGetCreateAttachmentFormMutation,
   useSharePadWithEmailMutation,
-} from '../../../graphql';
-import { useDuplicateNotebook } from './useDuplicateNotebook';
-import EditorIcon from '../EditorIcon';
-import {
-  PermissionType,
   useUnsharePadWithUserMutation,
   useUpdatePadPermissionMutation,
-} from '../../../graphql/generated';
+  PermissionType,
+} from '@decipad/graphql-client';
+import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
+import { useDuplicateNotebook } from './useDuplicateNotebook';
+import EditorIcon from '../EditorIcon';
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];

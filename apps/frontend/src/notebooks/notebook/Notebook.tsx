@@ -16,7 +16,7 @@ import { FC, lazy, useCallback, useMemo, useState } from 'react';
 import {
   useGetWorkspacesIDsQuery,
   useRenameNotebookMutation,
-} from '../../graphql';
+} from '@decipad/graphql-client';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';

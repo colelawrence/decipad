@@ -10,7 +10,7 @@ import {
   ExternalDataSourceCreateInput,
   useCreateExternalDataSourceMutation,
   useGetExternalDataSourcesQuery,
-} from '../../../graphql';
+} from '@decipad/graphql-client';
 
 export const useExternalDataSources = (
   notebookId: string

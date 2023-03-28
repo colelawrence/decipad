@@ -28,7 +28,7 @@ echo "Building backend..."
 yarn build:backend
 
 echo "Clearing sourcemaps..."
-find apps/backend/public/ | grep '\.map$' | xargs rm
+(find apps/backend/public/ | grep '\.map$' | xargs -r rm) || true
 
 ## Trying prevent #295 (https://github.com/decipad/decipad/pull/295)
 mkdir -p apps/backend/src/shared;

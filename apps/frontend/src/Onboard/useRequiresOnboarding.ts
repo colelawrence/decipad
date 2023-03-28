@@ -1,6 +1,6 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useSession } from 'next-auth/react';
-import { useUserQuery } from '../graphql';
+import { useUserQuery } from '@decipad/graphql-client';
 
 export const useRequiresOnboarding = () => {
   const session = useSession();

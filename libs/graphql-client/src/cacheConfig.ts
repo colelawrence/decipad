@@ -40,7 +40,7 @@ const addSectionToItsWorkspace = (
 };
 
 export const graphCacheConfig: GraphCacheConfig = {
-  schema: schema as any,
+  schema: schema as GraphCacheConfig['schema'],
   keys: {
     PagedPadResult() {
       return null;

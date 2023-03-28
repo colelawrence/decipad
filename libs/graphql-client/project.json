@@ -1,27 +1,27 @@
 {
-  "name": "backend-resources",
+  "name": "graphql-client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/backend-resources/src",
+  "sourceRoot": "libs/graphql-client/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/backend-resources/src/**/*.ts"],
+        "lintFilePatterns": ["libs/graphql-client/**/*.ts"],
         "maxWarnings": 0
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "yarn tsc -b libs/backend-resources"
+        "command": "yarn tsc -b libs/graphql-client"
       }
     },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "../../node_modules/.bin/madge --circular src",
-        "cwd": "libs/backend-resources"
+        "cwd": "libs/graphql-client"
       }
     }
   },

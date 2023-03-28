@@ -1,4 +1,5 @@
 import { GlobalStyles, ToastDisplay } from '@decipad/ui';
+import { GraphqlProvider } from '@decipad/graphql-client';
 import { SessionProvider } from 'next-auth/react';
 import { FC, ReactNode } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -8,7 +9,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { AnalyticsProvider } from './AnalyticsProvider';
-import { GraphqlProvider } from './GraphqlProvider';
 import { IntercomProvider } from './IntercomProvider';
 import { UpdatesHandler } from './UpdatesHandler';
 

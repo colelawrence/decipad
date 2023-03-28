@@ -50,7 +50,7 @@ import {
   useUpdateSectionMutation,
   useUpdateUserMutation,
   useUserQuery,
-} from '../../graphql';
+} from '@decipad/graphql-client';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';

@@ -1,8 +1,8 @@
 overwrite: true
 schema: 'http://localhost:3000/graphql'
-documents: 'apps/frontend/src/graphql/**/*.graphql'
+documents: 'libs/graphql-client/src/**/*.graphql'
 generates:
-  apps/frontend/src/graphql/generated.ts:
+  libs/graphql-client/src/generated.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
@@ -10,6 +10,6 @@ generates:
       - 'typescript-urql-graphcache'
     config:
       withHooks: true
-  apps/frontend/src/graphql/schema.generated.json:
+  libs/graphql-client/src/schema.generated.json:
     plugins:
       - 'introspection'

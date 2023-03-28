@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   useDuplicateNotebookMutation,
   useGetWorkspacesIDsQuery,
-} from '../../../graphql';
+} from '@decipad/graphql-client';
 
 type UseDuplicateNotebookArgs = {
   readonly editor?: MyEditor;

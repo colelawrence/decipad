@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import { Navigate } from 'react-router-dom';
 import { LoadingLogo } from '@decipad/ui';
-import { useGetNotebookByIdQuery } from '../../graphql';
+import { useGetNotebookByIdQuery } from '@decipad/graphql-client';
 
 const getInviteAcceptUrl = (inviteId: string) =>
   `${window.location.origin}/api/invites/${inviteId}/accept`;
