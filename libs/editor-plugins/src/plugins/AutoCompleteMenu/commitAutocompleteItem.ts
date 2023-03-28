@@ -49,14 +49,20 @@ export const commitAutocompleteItem = (
   if (!isFlagEnabled('AC_MENU_INSERT_SMART_REF') || !item.blockId) {
     insertText(editor, toInsert);
   } else {
+    // item may know how we should smartly refer to it
+    const [blockId, columnId] = item.smartRef ?? [
+      item.blockId,
+      item.columnId ?? null,
+    ];
+
     const smartRef: SmartRefElement = {
       id: nanoid(),
       type: ELEMENT_SMART_REF,
-      blockId: item.blockId,
-      columnId: item.columnId || null,
+      blockId,
+      columnId,
       children: [{ text: '' }],
     };
-    insertNodes(editor, smartRef);
+    insertNodes(editor, [smartRef, { text: ' ' }]);
   }
 
   // Move cursor to before the closing parenthesis

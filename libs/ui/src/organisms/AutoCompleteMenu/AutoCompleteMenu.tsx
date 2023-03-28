@@ -114,6 +114,8 @@ export type Identifier = {
   identifier: string;
   blockId?: string;
   columnId?: string;
+  /** If 2 items, {blockId}.{columnId}. If one item, either {columnId} or {blockId} which to a smart ref is the same */
+  smartRef?: [string, string | null];
   type: string;
   inTable?: string;
   editing?: boolean;
