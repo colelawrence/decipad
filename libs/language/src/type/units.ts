@@ -30,6 +30,8 @@ export const timeUnits = new Set([
   'months',
   'day',
   'days',
+  'week',
+  'weeks',
   'hour',
   'hours',
   'minute',

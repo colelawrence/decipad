@@ -1097,6 +1097,12 @@ describe('Dates', () => {
       },
       value: 1577874600000n,
     });
+    expect(await runCode(`date(2020-01-01) - 1 week`)).toMatchObject({
+      type: {
+        date: 'day',
+      },
+      value: BigInt(new Date('2019-12-25').getTime()),
+    });
   });
 });
 
