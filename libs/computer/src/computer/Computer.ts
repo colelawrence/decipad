@@ -101,6 +101,9 @@ export class Computer {
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
+  private readonly extraProgramBlocks = new BehaviorSubject<
+    Map<string, ProgramBlock[]>
+  >(new Map());
   public results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
 
   constructor({ requestDebounceMs = 100 }: Partial<ComputerOpts> = {}) {
@@ -112,6 +115,24 @@ export class Computer {
     this.computeRequests.next(req);
   }
 
+  public pushExtraProgramBlocks(id: string, blocks: ProgramBlock[]): void {
+    const newValue = new Map(this.extraProgramBlocks.value);
+
+    if (!dequal(blocks, this.extraProgramBlocks.value.get(id))) {
+      newValue.set(id, blocks);
+      this.extraProgramBlocks.next(newValue);
+    }
+  }
+
+  public pushExtraProgramBlocksDelete(id: string): void {
+    const newValue = new Map(this.extraProgramBlocks.value);
+    const deleted = newValue.delete(id);
+
+    if (deleted) {
+      this.extraProgramBlocks.next(newValue);
+    }
+  }
+
   /**
    * Wire our computeRequests stream to the "results" stream.
    * Timing is handled here too (debouncing, throttling)
@@ -120,13 +141,20 @@ export class Computer {
   private wireRequestsToResults() {
     this.computeRequests
       .pipe(
-        combineLatestWith(this.externalData),
+        combineLatestWith(this.externalData, this.extraProgramBlocks),
         // Debounce to give React an easier time
         throttleTime(this.requestDebounceMs, undefined, {
           leading: false,
           trailing: true,
         }),
-        map(([computeReq, externalData]) => ({ ...computeReq, externalData })),
+        map(([{ program, ...computeReq }, externalData, extraBlocks]) => ({
+          ...computeReq,
+          program: [
+            ...program,
+            ...Array.from(extraBlocks.values(), (blocks) => blocks).flat(),
+          ],
+          externalData,
+        })),
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!

@@ -2,6 +2,7 @@ import { N } from '@decipad/number';
 import {
   astNode,
   buildType as t,
+  parseBlockOrThrow,
   Result,
   serializeType,
 } from '@decipad/language';
@@ -13,6 +14,7 @@ import {
   getIdentifiedBlock,
   getIdentifiedBlocks,
   simplifyComputeResponse,
+  testProgram as makeTestProgram,
 } from '../testUtils';
 import { ComputeRequestWithExternalData, UserParseError } from '../types';
 import { Computer } from './Computer';
@@ -340,6 +342,40 @@ it('can pass on injected data', async () => {
       "block-0 -> [\\"Hello\\", \\"World\\"]",
     ]
   `);
+});
+
+it('can accept program bits', async () => {
+  computer.pushCompute({
+    program: makeTestProgram('Var1'),
+  });
+  await timeout(0); // give time to compute
+
+  expect(
+    computer.getBlockIdResult('block-0')?.result?.value
+    // undefined
+  ).toMatchInlineSnapshot(`DeciNumber(1)`);
+
+  computer.pushExtraProgramBlocks('new-stuff', [
+    {
+      type: 'identified-block',
+      id: 'new-stuff-id',
+      block: parseBlockOrThrow('Var1 = 42', 'new-stuff-id'),
+    },
+  ]);
+  await timeout(0); // give time to compute
+
+  expect(
+    computer.getBlockIdResult('block-0')?.result?.value
+    // Var1 is defined now
+  ).toMatchInlineSnapshot(`DeciNumber(42)`);
+
+  computer.pushExtraProgramBlocksDelete('new-stuff');
+  await timeout(0); // give time to compute
+
+  expect(
+    computer.getBlockIdResult('block-0')?.result?.value
+    // undefined again
+  ).toMatchInlineSnapshot(`DeciNumber(1)`);
 });
 
 describe('tooling data', () => {

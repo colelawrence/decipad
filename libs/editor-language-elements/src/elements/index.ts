@@ -6,4 +6,3 @@ export * from './Table';
 export * from './Column';
 export * from './StructuredInputs';
 export * from './VariableDef';
-export * from './LiveConnection';

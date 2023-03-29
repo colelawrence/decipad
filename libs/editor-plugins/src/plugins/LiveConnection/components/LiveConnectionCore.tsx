@@ -57,6 +57,7 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
 
   const { error, result, retry, authenticate } = useLiveConnection(computer, {
     blockId: element.id,
+    variableName: getNodeString(element.children[0]),
     url: element.url,
     proxy: element.proxy,
     source: element.source,

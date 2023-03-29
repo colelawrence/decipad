@@ -1,5 +1,5 @@
 import { useCallback, useEffect, Context } from 'react';
-import { Computer } from '@decipad/computer';
+import { astNode, Computer, ProgramBlock } from '@decipad/computer';
 import {
   ColIndex,
   ImportElementSource,
@@ -24,6 +24,7 @@ export interface LiveConnectionResult {
 
 export interface LiveConnectionProps {
   blockId: string;
+  variableName: string;
   url: string;
   proxy?: string;
   options?: RequestInit;
@@ -40,6 +41,7 @@ export const useLiveConnection = (
   computer: Computer,
   {
     blockId,
+    variableName,
     url,
     proxy,
     options,
@@ -80,14 +82,38 @@ export const useLiveConnection = (
       typeof computerResult.value !== 'symbol'
     ) {
       computer.pushExternalDataUpdate(blockId, computerResult);
+
+      const programBlocks: ProgramBlock[] = [
+        // Table = {computerResult pushed above}
+        // TODO one per column so they all have IDs
+        {
+          type: 'identified-block',
+          id: blockId,
+          block: {
+            id: blockId,
+            type: 'block',
+            args: [
+              astNode(
+                'assign',
+                astNode('def', variableName),
+                astNode('externalref', blockId)
+              ),
+            ],
+          },
+          definesVariable: variableName,
+        },
+      ];
+      computer.pushExtraProgramBlocks(blockId, programBlocks);
     } else {
       computer.pushExternalDataDelete(blockId);
+      computer.pushExtraProgramBlocksDelete(blockId);
     }
-  }, [blockId, computer, result]);
+  }, [blockId, computer, variableName, result]);
 
   useEffect(() => {
     return () => {
       computer.pushExternalDataDelete(blockId);
+      computer.pushExtraProgramBlocksDelete(blockId);
     };
   }, [computer, blockId]);
 

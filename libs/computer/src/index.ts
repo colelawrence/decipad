@@ -20,6 +20,7 @@ export {
   identifierRegExpGlobal,
   InferError,
   isExpression,
+  astNode,
   parseBlockOrThrow,
   parseStatementOrThrow,
   parseExpressionOrThrow,
