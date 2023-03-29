@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { p16Bold } from '../../primitives';
 
-const styles = css(p16Bold, { fontStyle: 'inherit' });
+const styles = css(p16Bold, { fontStyle: 'inherit', fontSize: 'inherit' });
 
 interface BoldProps {
   readonly children: ReactNode;
