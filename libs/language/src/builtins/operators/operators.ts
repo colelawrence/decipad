@@ -13,6 +13,7 @@ import { trignometricOperators } from './trignometric-operators';
 import { compoundOperators } from './compound-operators';
 import { enrichOperators } from './enrichOperators';
 import { roundOperators } from './round-operators';
+import { dateOperators } from './date-operators';
 
 export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
   ...mathOperators,
@@ -28,4 +29,5 @@ export const operators: { [fname: string]: BuiltinSpec } = enrichOperators({
   ...trignometricOperators,
   ...compoundOperators,
   ...roundOperators,
+  ...dateOperators,
 });

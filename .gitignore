@@ -285,3 +285,6 @@ test-results
 
 # Obsidian Vaults
 .obsidian
+
+# SQLite test DBs
+*.sqlite
