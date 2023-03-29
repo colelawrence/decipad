@@ -10,9 +10,8 @@ import {
 import tables, { paginate } from '@decipad/tables';
 import Resource from '@decipad/graphqlresource';
 import { app } from '@decipad/config';
+import { resource } from '@decipad/backend-resources';
 import { identity } from 'ramda';
-import { UserInputError } from 'apollo-server-lambda';
-import { isAuthenticatedAndAuthorized } from '../authorization';
 
 function baseUrlFor(externalDataSource: ExternalDataSourceRecord): string {
   const { urlBase, apiPathBase } = app();
@@ -26,6 +25,8 @@ function dataUrlFor(externalDataSource: ExternalDataSourceRecord): string {
 function authUrlFor(externalDataSource: ExternalDataSourceRecord): string {
   return `${baseUrlFor(externalDataSource)}/auth`;
 }
+
+const notebooks = resource('notebook');
 
 const externalDataResource = Resource({
   resourceTypeName: 'externaldatasources',
@@ -66,15 +67,12 @@ const resolvers = {
       { notebookId, page }: { notebookId: string; page: PageInput },
       context: GraphqlContext
     ): Promise<PagedResult<ExternalDataSourceRecord>> => {
+      await notebooks.expectAuthorizedForGraphql({
+        context,
+        recordId: notebookId,
+        minimumPermissionType: 'READ',
+      });
       const data = await tables();
-      const notebook = await data.pads.get({ id: notebookId });
-      if (!notebook) {
-        throw new UserInputError(`No such notebook`);
-      }
-      if (!notebook.isPublic) {
-        const notebookResource = `/pads/${notebookId}`;
-        await isAuthenticatedAndAuthorized(notebookResource, context, 'READ');
-      }
       return paginate(
         data.externaldatasources,
         {
