@@ -6,6 +6,7 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
   children,
 }) => {
   const session = useSession();
+
   return (
     <Provider
       appId={process.env.REACT_APP_INTERCOM_APP_ID!}
@@ -13,6 +14,7 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
       autoBootProps={{
         email: session.data?.user?.email,
         name: session.data?.user?.name,
+        userHash: session.data?.user?.intercomUserHash,
       }}
       shouldInitialize={session.status === 'authenticated'}
     >

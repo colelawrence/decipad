@@ -91,6 +91,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.REACT_APP_ANALYTICS_WRITE_KEY);
     case 'SENTRY_DSN':
       return valueOrDefault(name, process.env.SENTRY_DSN);
+    case 'INTERCOM_SECRET_ID':
+      return valueOrDefault(name, process.env.INTERCOM_SECRET_ID);
   }
 }
 

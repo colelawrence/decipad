@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto';
 import { identify, track } from '@decipad/backend-analytics';
 import { UserWithSecret } from '@decipad/backendtypes';
 import { app, auth as authConfig } from '@decipad/config';
@@ -68,8 +69,12 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
           return session;
         }
         const [user] = users;
+        const hmac = createHmac('sha256', process.env.INTERCOM_SECRET_ID || '');
+        hmac.update(user.email!);
+
         extend(
           session.user,
+          { intercomUserHash: hmac.digest('hex') },
           pick(user, 'id', 'email', 'name', 'image', 'description')
         );
 

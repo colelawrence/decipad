@@ -81,6 +81,7 @@ jobs:
           NODE_OPTIONS: '--enable-source-maps'
           REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
           REACT_APP_INTERCOM_APP_ID: '${{secrets.DEV_INTERCOM_APP_ID}}'
+          INTERCOM_SECRET_ID: '${{secrets.DEV_INTERCOM_SECRET_ID}}'
           GIT_COMMIT_HASH: '${{github.sha}}'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"

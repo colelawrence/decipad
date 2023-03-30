@@ -37,6 +37,7 @@ const envVarNames = [
   'DISCORD_APP_ID',
   'NODE_OPTIONS',
   'ARC_STATIC_SPA',
+  'INTERCOM_SECRET_ID',
 ];
 
 function getEnvVar(name) {

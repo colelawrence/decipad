@@ -49,6 +49,8 @@ const defaultEnvValues = {
 
   // Tests-related
   DECI_TEST_USER_SECRET: '8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
+
+  INTERCOM_SECRET_ID: '',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;
