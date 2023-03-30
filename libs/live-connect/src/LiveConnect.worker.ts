@@ -80,6 +80,7 @@ const tryImportHere = async (
           useFirstRowAsHeader: sub.params.useFirstRowAsHeader,
           columnTypeCoercions: sub.params.columnTypeCoercions,
           maxCellCount: sub.params.maxCellCount,
+          jsonPath: sub.params.jsonPath,
         }
       );
       for (const result of results) {

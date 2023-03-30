@@ -72,11 +72,11 @@ interface UnitMenuItemProps {
   readonly placeholder?: string;
 }
 
-export const UnitMenuItem = ({
+export const UnitMenuItem: FC<UnitMenuItemProps> = ({
   onSelect = noop,
   parseUnit = () => null,
   placeholder = 'Create a custom unit',
-}: UnitMenuItemProps): ReturnType<FC> => {
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     if (state.text.length > 0) {

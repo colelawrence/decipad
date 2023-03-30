@@ -4,3 +4,4 @@ export * from './delay-value';
 export * from './selectable-context';
 export * from './useActiveElement';
 export * from './use-behavior-subject';
+export * from './justStopEventPropagation';

@@ -80,7 +80,7 @@ const partition = (
   sheetName: string,
   imported: ImportResult
 ): ImportResult[] => {
-  if (imported.result.type.kind !== 'table') {
+  if (imported.result?.type.kind !== 'table') {
     return [];
   }
   const sheet = imported.result as Result.Result<'table'>;

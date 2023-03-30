@@ -20,6 +20,7 @@ export interface ImportOptions {
   columnTypeCoercions?: Record<ColIndex, TableCellType>;
   doNotTryExpressionNumbersParse?: boolean;
   maxCellCount?: number;
+  jsonPath?: string;
 }
 
 const internalTryImport = (

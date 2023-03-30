@@ -382,24 +382,36 @@ export class Computer {
       results,
       result: Result.Result<'column'>
     ): DimensionExplanation[] | undefined => {
-      // We now have a column or matrix
+      try {
+        // We now have a column or matrix
 
-      const getDeepLengths = (value: Result.OneResult): number[] =>
-        Array.isArray(value) ? [value.length, ...getDeepLengths(value[0])] : [];
+        const getDeepLengths = (value: Result.OneResult): number[] =>
+          Array.isArray(value)
+            ? [value.length, ...getDeepLengths(value[0])]
+            : [];
 
-      const dimensions = linearizeType(deserializeType(result.type));
+        const deserialisedType = deserializeType(result.type);
+        // console.log('deserialisedType', deserialisedType);
+        const dimensions = linearizeType(deserialisedType);
+        // console.log('dimensions', dimensions);
 
-      dimensions.pop(); // remove tip
+        dimensions.pop(); // remove tip
 
-      const deepLengths = getDeepLengths(result.value);
+        const deepLengths = getDeepLengths(result.value);
 
-      return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
-        return {
-          indexedBy: type.indexedBy ?? undefined,
-          labels: results.indexLabels.get(type.indexedBy ?? ''),
-          dimensionLength,
-        };
-      });
+        // console.log('zip', dimensions, deepLengths);
+
+        return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
+          return {
+            indexedBy: type.indexedBy ?? undefined,
+            labels: results.indexLabels.get(type.indexedBy ?? ''),
+            dimensionLength,
+          };
+        });
+      } catch (err) {
+        // TODO: fix this
+        return undefined;
+      }
     }
   );
 

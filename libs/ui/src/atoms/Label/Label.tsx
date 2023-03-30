@@ -32,7 +32,7 @@ const bubbleStyles = css(codeBlock.variableStyles, {
 
 const baseLabelStyles = css({
   whiteSpace: 'nowrap',
-  lineHeight: 'calc(1.5em + 1px)',
+  lineHeight: 'calc(2em + 1px)',
 });
 
 interface LabelProps {

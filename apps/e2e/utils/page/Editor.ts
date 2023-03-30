@@ -89,11 +89,11 @@ export async function getPadName(page: Page) {
   return (await name!.textContent())!.trim();
 }
 
-export async function focusOnBody(page: Page) {
-  const firstP = await page.waitForSelector(
-    '[data-testid="paragraph-wrapper"] >> nth=0'
+export async function focusOnBody(page: Page, paragraphNumber = 0) {
+  const p = await page.waitForSelector(
+    `[data-testid="paragraph-wrapper"] >> nth=${paragraphNumber}`
   );
-  await firstP.click();
+  await p.click();
 }
 
 export async function keyPress(page: Page, k: string) {
@@ -104,13 +104,14 @@ export async function keyPress(page: Page, k: string) {
   await page.waitForTimeout(Timeouts.typing);
 }
 
-export async function ControlPlus(page: Page, key: string) {
+export async function controlPlus(page: Page, key: string) {
   const platform = await page.evaluate(() => navigator.platform);
   const isMac = platform.indexOf('Mac') === 0 || platform === 'iPhone';
   const modifier = isMac ? 'Meta' : 'Control';
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
-  await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
+  const pasteKeyCombo = `${modifier}+${key.toLocaleUpperCase()}`;
+  await page.keyboard.press(pasteKeyCombo);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
 }

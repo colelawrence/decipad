@@ -14,10 +14,9 @@ const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
 
 export const importFromCsv = async (
   computer: Computer,
-  resp: Response,
+  source: string,
   options: ImportOptions
 ): Promise<Result.Result<'table'>> => {
-  const source = await resp.text();
   return new Promise((resolve, reject) => {
     const data: string[][] = [];
     const parser = parseCSV({

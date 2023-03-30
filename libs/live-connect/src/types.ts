@@ -34,6 +34,7 @@ export interface SubscribeParams {
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<number, TableCellType>;
   maxCellCount?: number;
+  jsonPath?: string;
 }
 
 export interface Subscription {

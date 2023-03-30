@@ -117,7 +117,7 @@ export function useEditorSelector<T>(
   return useSyncExternalStoreWithSelector(
     subscribe,
     getSnapshot,
-    undefined,
+    getSnapshot,
     selector
   );
 }

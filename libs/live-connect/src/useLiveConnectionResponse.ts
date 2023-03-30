@@ -26,6 +26,7 @@ export interface LiveConnectionProps {
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   timeoutMs?: number;
   maxCellCount?: number;
+  jsonPath?: string;
 }
 
 export const useLiveConnectionResponse = ({
@@ -37,6 +38,7 @@ export const useLiveConnectionResponse = ({
   columnTypeCoercions,
   timeoutMs = 5000,
   maxCellCount,
+  jsonPath,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const [workerGen, setWorkerGen] = useState(0);
   const worker = useLiveConnectionWorker(workerGen);
@@ -58,6 +60,7 @@ export const useLiveConnectionResponse = ({
               useFirstRowAsHeader,
               columnTypeCoercions,
               maxCellCount,
+              jsonPath,
             },
             (err, res) => {
               if (!canceled) {
@@ -66,7 +69,7 @@ export const useLiveConnectionResponse = ({
                 }
                 setError(err);
                 if (res) {
-                  if (res.result.type.kind === 'type-error') {
+                  if (res.result?.type.kind === 'type-error') {
                     setError(
                       new Error(
                         formatError('en-US', res.result.type.errorCause)
@@ -97,6 +100,7 @@ export const useLiveConnectionResponse = ({
     };
   }, [
     columnTypeCoercions,
+    jsonPath,
     maxCellCount,
     options,
     proxy,

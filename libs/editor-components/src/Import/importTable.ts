@@ -175,7 +175,7 @@ export const importTable = ({
   computer,
 }: ImportTableProps): void => {
   const tableResult = result.result;
-  if (tableResult.type.kind === 'table') {
+  if (tableResult?.type.kind === 'table') {
     const t = tableElement(
       computer,
       tableResult as Result.Result<'table'>,

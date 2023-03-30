@@ -77,5 +77,29 @@ export const ColumnResult = ({
         </>
       }
     />
-  ) : null;
+  ) : (
+    <Table
+      isReadOnly={true}
+      columnCount={value.length}
+      body={
+        <>
+          {value.map((oneValue, index) => {
+            return (
+              <TableRow readOnly key={index}>
+                <TableData as="td" showPlaceholder={false} element={element}>
+                  <span css={rowLabelStyles}>
+                    <CodeResult
+                      type={type.cellType}
+                      value={oneValue}
+                      element={element}
+                    />
+                  </span>
+                </TableData>
+              </TableRow>
+            );
+          })}
+        </>
+      }
+    />
+  );
 };

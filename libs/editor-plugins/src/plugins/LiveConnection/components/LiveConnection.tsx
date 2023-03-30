@@ -3,6 +3,7 @@ import { ELEMENT_LIVE_CONNECTION, PlateComponent } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useCallback, useState } from 'react';
 import { LiveConnectionCore } from './LiveConnectionCore';
+import { LiveConnectionResultContextProvider } from '../contexts/LiveConnectionResultContext';
 
 const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION);
@@ -17,8 +18,10 @@ const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
       onceDeleted={onceDeleted}
       dependencyId={element.id}
     >
-      {children}
-      <LiveConnectionCore element={element} deleted={deleted} />
+      <LiveConnectionResultContextProvider>
+        {children}
+        <LiveConnectionCore element={element} deleted={deleted} />
+      </LiveConnectionResultContextProvider>
     </DraggableBlock>
   );
 };

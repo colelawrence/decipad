@@ -2,6 +2,7 @@ import { ImportResult } from '@decipad/import';
 import { SerializedTypes, Unit, Result } from '@decipad/computer';
 import { fromNumber } from '@decipad/number';
 import { OneResult } from 'libs/language/src/result';
+import { getDefined } from '@decipad/utils';
 
 const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
   unit?.map(
@@ -14,7 +15,12 @@ const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
       } as Unit)
   ) ?? null;
 
-const deserializeResult = (result: Result.Result): Result.Result => {
+const deserializeResult = <T extends Result.Result>(
+  result: T | undefined
+): T | undefined => {
+  if (result == null) {
+    return undefined;
+  }
   const { type, value } = result;
   let replaceValue: typeof value | undefined;
   let replaceType: typeof type | undefined;
@@ -49,11 +55,11 @@ const deserializeResult = (result: Result.Result): Result.Result => {
           value: v,
         })
       );
-      replaceValue = replacements.map((r) => r.value) as OneResult;
+      replaceValue = replacements.map((r) => r?.value) as OneResult | undefined;
       if (replacements.length) {
         replaceType = {
           ...type,
-          cellType: replacements[0].type,
+          cellType: getDefined(replacements[0]?.type),
         };
       }
       break;
@@ -70,13 +76,13 @@ const deserializeResult = (result: Result.Result): Result.Result => {
       replaceType = {
         ...type,
         columnTypes: replacementColumns.map((col) =>
-          col.type.kind === 'column' ? col.type.cellType : undefined
+          col?.type.kind === 'column' ? col.type.cellType : undefined
         ) as SerializedTypes.Table['columnTypes'],
       };
-      replaceValue = replacementColumns.map((col) => col.value) as OneResult;
+      replaceValue = replacementColumns.map((col) => col?.value) as OneResult;
   }
-  if (replaceType != null || replaceValue != null) {
-    return { type: replaceType ?? type, value: replaceValue ?? value };
+  if ((replaceType ?? type) != null || (replaceValue ?? value) != null) {
+    return { type: replaceType ?? type, value: replaceValue ?? value } as T;
   }
   return result;
 };

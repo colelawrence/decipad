@@ -23,6 +23,7 @@ export { Image } from './Image/Image';
 export { InlineColumnResult } from './InlineColumnResult/InlineColumnResult';
 export { InlineMenu } from './InlineMenu/InlineMenu';
 export { InlineRowResult } from './InlineRowResult/InlineRowResult';
+export { LiveConnectionParams } from './LiveConnectionParams/LiveConnectionParams';
 export { MediaEmbed } from './MediaEmbed/MediaEmbed';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookInvitationPopUp } from './NotebookInvitationPopUp/NotebookInvitationPopUp';

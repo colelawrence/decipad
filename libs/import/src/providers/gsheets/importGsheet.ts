@@ -1,7 +1,11 @@
 import { captureException, Computer, Result } from '@decipad/computer';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
-import { ImportResult, Sheet } from '../../types';
+import {
+  ImportResult,
+  ImportResultWithMandatoryResult,
+  Sheet,
+} from '../../types';
 import { ImportOptions, ImportParams } from '../../import';
 import { getSheetMeta } from './getSheetMeta';
 import { getSheetRequestDataFromUrl } from './getSheetRequestDataFromUrl';
@@ -14,7 +18,7 @@ const sumLength = <T>(acc: number, col: T[]): number => {
   return acc + col.length;
 };
 
-const errorResult = (err: string): ImportResult => {
+const errorResult = (err: string): ImportResultWithMandatoryResult => {
   return {
     result: {
       type: {

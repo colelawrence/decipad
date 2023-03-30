@@ -6,14 +6,29 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
+  useElementMutatorCallback,
   useEnsureValidVariableName,
-  useNodePath,
 } from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
-import { EditableLiveDataCaption, Tooltip } from '@decipad/ui';
-import { getNodeString, getParentNode } from '@udecode/plate';
+import { useEditorChange } from '@decipad/react-contexts';
+import {
+  EditableLiveDataCaption,
+  LiveConnectionParams,
+  Tooltip,
+} from '@decipad/ui';
+import { findNodePath, getNodeString, getParentNode } from '@udecode/plate';
 import pluralize from 'pluralize';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { NodeEntry } from 'slate';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { css } from '@emotion/react';
+import { useLiveConnectionPossibleJsonPaths } from '../hooks/useLiveConnectionPossibleJsonPaths';
+
+const captionWrapperStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '4px',
+});
 
 export const LiveConnectionVarName: PlateComponent = ({
   element,
@@ -21,11 +36,22 @@ export const LiveConnectionVarName: PlateComponent = ({
   children,
 }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION_VARIABLE_NAME);
-  const path = useNodePath(element);
   const editor = useTEditorRef();
-  const parent = useMemo(
-    () => path && getParentNode<LiveConnectionElement>(editor, path),
-    [editor, path]
+  const [parent, setParent] = useState<
+    NodeEntry<LiveConnectionElement> | undefined
+  >();
+  useEditorChange(
+    setParent,
+    useCallback(
+      (ed) => {
+        const path = findNodePath(ed, element);
+        if (path) {
+          return getParentNode<LiveConnectionElement>(editor, path);
+        }
+        return undefined;
+      },
+      [editor, element]
+    )
   );
 
   const { sourceName, url, returnRange } = useMemo(() => {
@@ -56,8 +82,17 @@ export const LiveConnectionVarName: PlateComponent = ({
   // ensure var name is unique
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
+  const possibleJsonPaths = useLiveConnectionPossibleJsonPaths();
+  const setJsonPath = useElementMutatorCallback(
+    editor,
+    parent?.[0],
+    'jsonPath'
+  );
+  const setUrl = useElementMutatorCallback(editor, parent?.[0], 'url');
+  const setSource = useElementMutatorCallback(editor, parent?.[0], 'source');
+
   const caption = (
-    <div {...attributes}>
+    <div {...attributes} css={captionWrapperStyles}>
       <EditableLiveDataCaption
         source={sourceName}
         url={url}
@@ -66,6 +101,19 @@ export const LiveConnectionVarName: PlateComponent = ({
       >
         {children}
       </EditableLiveDataCaption>
+      {isFlagEnabled('LIVE_CONN_OPTIONS') && (
+        <div contentEditable={false}>
+          <LiveConnectionParams
+            jsonPath={parent?.[0].jsonPath ?? ''}
+            possibleJsonPaths={possibleJsonPaths}
+            setJsonPath={setJsonPath}
+            url={parent?.[0].url ?? ''}
+            setUrl={setUrl}
+            source={parent?.[0].source}
+            setSource={setSource}
+          />
+        </div>
+      )}
     </div>
   );
 

@@ -57,6 +57,7 @@ export interface LiveConnectionElement extends BaseElement {
   externalDataSourceId?: string;
   isFirstRowHeaderRow: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
+  jsonPath?: string;
   children: [LiveConnectionVarNameElement];
 }
 

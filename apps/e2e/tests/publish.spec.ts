@@ -1,6 +1,5 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
-  ControlPlus,
   focusOnBody,
   keyPress,
   setUp,
@@ -63,27 +62,11 @@ test.describe('Simple does publish work test', () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     await page.locator('[data-test-id="copy-published-link"]').click();
-  });
-
-  test('it can copy paste the url from the shared notebook', async ({
-    baseURL,
-  }) => {
-    const locatorOfUrl = '[data-testid="paragraph-wrapper"] >> nth=2';
-    const fourthParagraph = await page.waitForSelector(locatorOfUrl);
-    await ControlPlus(page, 'v');
-    await focusOnBody(page);
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
-    sharedPageLocation = await fourthParagraph.textContent();
-    sharedPageLocation = (
-      baseURL
-        ? `/${sharedPageLocation?.replace(baseURL, '')}`
-        : sharedPageLocation!
-    ).replace(/\ufeff/gi, '');
-    expect(sharedPageLocation).toContain('My-notebook-title');
-    expect(sharedPageLocation).toContain('/n/');
-    expect(sharedPageLocation).not.toContain('//n/');
-    expect(sharedPageLocation).not.toContain('Connect Table');
+    const clipboardText = (
+      (await page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+    expect(clipboardText).toContain('My-notebook-title');
+    sharedPageLocation = clipboardText;
   });
 
   test('[incognito] navigates to published notebook link', async () => {

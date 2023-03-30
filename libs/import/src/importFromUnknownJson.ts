@@ -5,6 +5,7 @@ import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
 import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
 import { sameType } from './utils/sameType';
+import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
 
 const importTableFromArray = (
   arr: Array<unknown>,
@@ -106,10 +107,11 @@ interface ToStringable {
 }
 
 export const importFromUnknownJson = (
-  json: unknown,
-  options: ImportOptions,
+  _json: unknown,
+  { jsonPath, ...options }: ImportOptions,
   cohersion?: TableCellType
 ): Result.Result => {
+  const json = jsonPath ? selectUsingJsonPath(_json, jsonPath) : _json;
   if (Array.isArray(json)) {
     return importFromArray(json, options);
   }

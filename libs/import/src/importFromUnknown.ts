@@ -17,19 +17,27 @@ const importFromUnknownResponse = async (
     );
   }
   const contentType = resp.headers.get('content-type');
-  let result: Result.Result | undefined;
+  let rawResult: ImportResult['rawResult'] | undefined;
+  let result: Result.Result;
   if (contentType?.startsWith('application/json')) {
-    result = importFromUnknownJson(await resp.json(), options);
+    rawResult = await resp.json();
+    result = importFromUnknownJson(rawResult, options);
   } else if (contentType?.startsWith('text/csv')) {
-    result = (await importFromCsv(computer, resp, options)) as Result.Result;
+    rawResult = await resp.text();
+    result = (await importFromCsv(
+      computer,
+      rawResult,
+      options
+    )) as Result.Result;
   } else if (contentType?.startsWith('application/vnd.apache.arrow')) {
     result = await importFromArrow(resp);
   } else {
+    rawResult = await resp.text();
     result = {
       type: {
         kind: 'string',
       },
-      value: await resp.text(),
+      value: rawResult,
     };
   }
 
@@ -39,6 +47,7 @@ const importFromUnknownResponse = async (
         sourceUrl: url,
       },
       result,
+      rawResult,
     },
   ];
 };

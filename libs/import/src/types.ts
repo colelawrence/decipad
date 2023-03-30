@@ -39,10 +39,18 @@ export interface ImportResultMeta {
   sourceMeta?: SheetMeta;
 }
 
+type JSON = Record<string, unknown>;
+
 export interface ImportResult {
   meta?: ImportResultMeta;
-  result: Result.Result;
+  result?: Result.Result;
+  rawResult?: string | JSON;
+  loading?: boolean;
 }
+
+export type ImportResultWithMandatoryResult = ImportResult & {
+  result: Result.Result;
+};
 
 export interface SourceUrlParseResponse {
   subsheetName?: string;

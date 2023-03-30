@@ -22,6 +22,7 @@ import { varNamify } from '@decipad/utils';
 import { Result } from '@decipad/computer';
 import { ExternalDataSource } from '@decipad/interfaces';
 import { LiveConnectionError } from './LiveConnectionError';
+import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 
 const MAX_CELL_COUNT = 50_000;
 
@@ -32,6 +33,7 @@ export interface LiveConnectionCoreProps {
 
 export interface StoreResult {
   result?: Result.Result;
+  rawResult?: Record<string, unknown> | string;
   error?: Error;
 }
 
@@ -63,6 +65,7 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
     source: element.source,
     useFirstRowAsHeader: element.isFirstRowHeaderRow,
     columnTypeCoercions: element.columnTypeCoercions,
+    jsonPath: element.jsonPath,
     maxCellCount: MAX_CELL_COUNT,
     deleted,
     beforeAuthenticate,
@@ -121,10 +124,14 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
   useEffect(() => {
     const persistedResult = store.get(element);
     if (result && persistedResult?.result !== result.result) {
-      store.set(element, { result: result.result, error: undefined });
+      store.set(element, result);
       setVersion((v) => v + 1);
     } else if (error && persistedResult?.error !== error) {
-      store.set(element, { result: undefined, error });
+      store.set(element, {
+        result: undefined,
+        error,
+        rawResult: result?.rawResult,
+      });
       setVersion((v) => v + 1);
     }
   }, [element, error, result, store]);
@@ -132,7 +139,18 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
   const {
     result: persistedResult = result?.result,
     error: persistedError = error,
+    rawResult: persistedRawResult,
   } = store.get(element) ?? {};
+
+  const resultInContext = useLiveConnectionResult();
+  useEffect(() => {
+    if (resultInContext) {
+      resultInContext.next({
+        result: persistedResult,
+        rawResult: persistedRawResult,
+      });
+    }
+  }, [persistedRawResult, persistedResult, result, resultInContext]);
 
   const clearCacheAndRetry = useCallback(() => {
     store.set(element, { result: undefined, error: undefined });
@@ -159,11 +177,12 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
           onAuthenticate={authenticate}
         />
       ) : null}
-      {!persistedError && !persistedResult && (
-        <div>
-          <Spinner />
-        </div>
-      )}
+      {result?.loading ||
+        (!persistedError && !persistedResult && (
+          <div>
+            <Spinner />
+          </div>
+        ))}
     </div>
   );
 };

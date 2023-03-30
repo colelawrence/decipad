@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
-import { Label } from '../../atoms';
+import { ChangeEvent, useCallback } from 'react';
+import { justStopPropagation } from '@decipad/react-utils';
+import { Label, VoidBlock } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
 
 const selectFontStyles = css(p12Medium);
@@ -21,26 +23,31 @@ export function LabeledSelect<T extends string>({
   value,
   onChange,
 }: LabeledSelectProps<T>) {
+  const onInternalChange = useCallback(
+    (ev: ChangeEvent<HTMLSelectElement>) => onChange(ev.target.value as T),
+    [onChange]
+  );
   return (
-    <Label
-      renderContent={(id) => (
-        <select
-          css={[selectFontStyles, selectStyles]}
-          id={id}
-          onChange={(ev) => {
-            onChange(ev.target.value as T);
-          }}
-          value={value}
-        >
-          {options.map((text, index) => (
-            <option key={index} value={text}>
-              {text}
-            </option>
-          ))}
-        </select>
-      )}
-    >
-      {label && <span css={selectFontStyles}>{label}:</span>}
-    </Label>
+    <VoidBlock>
+      <Label
+        renderContent={(id) => (
+          <select
+            css={[selectFontStyles, selectStyles]}
+            id={id}
+            onChange={onInternalChange}
+            value={value}
+            onClick={justStopPropagation}
+          >
+            {options.map((text, index) => (
+              <option key={index} value={text} onClick={justStopPropagation}>
+                {text}
+              </option>
+            ))}
+          </select>
+        )}
+      >
+        {label && <span css={selectFontStyles}>{label}:</span>}
+      </Label>
+    </VoidBlock>
   );
 }

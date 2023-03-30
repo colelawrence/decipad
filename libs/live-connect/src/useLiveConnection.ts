@@ -11,6 +11,7 @@ import {
   ExternalDataSource,
   ExternalDataSourcesContextValue,
 } from '@decipad/interfaces';
+import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
 import { deserializeImportResult } from './utils/deserializeImportResult';
@@ -33,6 +34,7 @@ export interface LiveConnectionProps {
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   maxCellCount: number;
   deleted: boolean;
+  jsonPath?: string;
   externalDataSourceContext: Context<ExternalDataSourcesContextValue>;
   beforeAuthenticate: (source: ExternalDataSource) => Promise<void>;
 }
@@ -50,10 +52,13 @@ export const useLiveConnection = (
     columnTypeCoercions,
     maxCellCount,
     deleted,
+    jsonPath: _jsonPath,
     beforeAuthenticate,
     externalDataSourceContext,
   }: LiveConnectionProps
 ): LiveConnectionResult => {
+  const [jsonPath] = useDebounce(_jsonPath, 2000);
+
   const {
     error,
     result: liveConnectionResult,
@@ -63,6 +68,7 @@ export const useLiveConnection = (
     proxy,
     options,
     source,
+    jsonPath,
     useFirstRowAsHeader,
     columnTypeCoercions,
     maxCellCount,

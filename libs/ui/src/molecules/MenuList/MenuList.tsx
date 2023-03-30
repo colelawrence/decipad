@@ -112,7 +112,7 @@ const DropdownMenuPortalElement = ({
   return <>{children}</>;
 };
 
-export const MenuList = ({
+export const MenuList: FC<MenuListProps> = ({
   children,
 
   root,
@@ -131,7 +131,7 @@ export const MenuList = ({
   container,
   styles = css({}),
   dataTestid,
-}: MenuListProps): ReturnType<FC> => {
+}) => {
   const depth = useContext(Depth) + 1;
 
   if (root && depth > 1) {

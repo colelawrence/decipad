@@ -133,7 +133,9 @@ const loadAndPushTable = async (
   const table = await tryImport({ computer, url });
   expect(table).toHaveLength(1);
   await act(() => {
-    computer.pushExternalDataUpdate('data-source', table[0].result);
+    if (table[0].result) {
+      computer.pushExternalDataUpdate('data-source', table[0].result);
+    }
 
     computer.pushCompute({
       program: [
