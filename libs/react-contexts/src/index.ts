@@ -11,4 +11,5 @@ export * from './editor-table';
 export * from './editor-block-parent-ref';
 export * from './editor-user-interactions';
 export * from './editor-styles';
+export * from './editor-paste-interaction-menu-provider';
 export * from './theme';

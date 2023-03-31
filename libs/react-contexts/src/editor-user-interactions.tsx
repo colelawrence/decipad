@@ -15,6 +15,7 @@ export interface PastedLinkUserInteraction {
   type: 'pasted-link';
   url: string;
   source: ImportElementSource | undefined;
+  blockId: string;
 }
 export interface ConsumedUserInteraction {
   type: 'consumed';

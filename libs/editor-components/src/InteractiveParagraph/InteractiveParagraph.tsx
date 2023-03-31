@@ -29,7 +29,7 @@ export const InteractiveParagraph =
       useSlashMenu(paragraphElement);
 
     // interactions
-    const { showInteractionMenu, onInteractionMenuExecute, source } =
+    const { showInteractionMenu, onInteractionMenuExecute, source, blockId } =
       useInteractiveMenu(paragraphElement);
 
     if (showSlashCommands) {
@@ -74,7 +74,7 @@ export const InteractiveParagraph =
       <Paragraph {...props}>
         <>
           {children}
-          {showInteractionMenu && (
+          {showInteractionMenu && blockId === paragraphElement.id && (
             <div
               ref={menuRef}
               contentEditable={false}

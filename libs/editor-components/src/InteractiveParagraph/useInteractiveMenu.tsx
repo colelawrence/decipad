@@ -4,11 +4,9 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
-  isInteractionOfType,
+  EditorPasteInteractionMenuContextValue,
   useComputer,
-  useEditorUserInteractions,
-  useEditorUserInteractionsContext,
-  UserInteraction,
+  useEditorPasteInteractionMenuContext,
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
@@ -21,9 +19,7 @@ import {
   removeNodes,
 } from '@udecode/plate';
 import { useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
-import { useObservable } from 'rxjs-hooks';
-import { useSelected } from 'slate-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { insertImport } from './insertImport';
 import { insertLiveConnection } from './insertLiveConnection';
 
@@ -31,58 +27,47 @@ interface UseInteractiveMenuResult {
   showInteractionMenu: boolean;
   source?: ImportElementSource;
   onInteractionMenuExecute: (action: string) => void;
+  blockId: string;
 }
 
 export const useInteractiveMenu = (
   element: MyElement
 ): UseInteractiveMenuResult => {
   const editor = useTEditorRef();
-  const [showInteractionMenu, setShowInteractionMenu] = useState(false);
-  const interactions = useEditorUserInteractions('pasted-link');
-  const interaction = useObservable(() => interactions);
-  const selected = useSelected();
-  const interactionsSource = useEditorUserInteractionsContext();
-  const [lastInterestingUserInteraction, setLastInterestingUserInteraction] =
-    useState<UserInteraction | undefined>();
+  const pasteContext = useEditorPasteInteractionMenuContext(element.id);
   const session = useSession();
+  const [show, setShow] = useState(false);
+  const lastConsumedPasteContext =
+    useRef<EditorPasteInteractionMenuContextValue>();
+
+  console.log('pasteContext', pasteContext);
 
   useEffect(() => {
     if (
-      isInteractionOfType(interaction, 'pasted-link') &&
-      selected &&
-      !showInteractionMenu
+      lastConsumedPasteContext.current !== pasteContext &&
+      pasteContext.showInteractionMenu &&
+      !show
     ) {
-      // set interaction as consumed
-      setLastInterestingUserInteraction(interaction);
-      setShowInteractionMenu(true);
-      interactionsSource.next({ type: 'consumed' });
+      lastConsumedPasteContext.current = pasteContext;
+      setShow(true);
     }
-    if (showInteractionMenu && !selected) {
-      setShowInteractionMenu(false);
-    }
-  }, [interaction, interactionsSource, selected, showInteractionMenu]);
+  }, [show, pasteContext]);
 
   const cleanupAfterCommand = useCallback(
-    (inter: UserInteraction | undefined) => {
-      if (inter && inter.type === 'pasted-link') {
-        const path = findNodePath(editor, element);
-        if (path) {
-          const entry = findNode(editor, {
-            at: path,
-            match: (node) =>
-              isText(node) && getNodeString(node).includes(inter.url),
-          });
-          if (entry) {
-            const [node, nodePath] = entry;
-            const textAfterUrlRemoval = getNodeString(node).replace(
-              inter.url,
-              ''
-            );
-            if (textAfterUrlRemoval) {
-              insertText(editor, textAfterUrlRemoval, { at: nodePath });
-            } else {
-              removeNodes(editor, { at: nodePath });
-            }
+    (text: string) => {
+      const path = findNodePath(editor, element);
+      if (path) {
+        const entry = findNode(editor, {
+          at: path,
+          match: (node) => isText(node) && getNodeString(node).includes(text),
+        });
+        if (entry) {
+          const [node, nodePath] = entry;
+          const textAfterUrlRemoval = getNodeString(node).replace(text, '');
+          if (textAfterUrlRemoval) {
+            insertText(editor, textAfterUrlRemoval, { at: nodePath });
+          } else {
+            removeNodes(editor, { at: nodePath });
           }
         }
       }
@@ -96,84 +81,72 @@ export const useInteractiveMenu = (
 
   const onInteractionMenuExecute = useCallback(
     async (command: string) => {
-      setShowInteractionMenu(false);
+      setShow(false);
       switch (command) {
         case 'import-all':
         case 'import-islands': {
-          if (
-            isInteractionOfType(
-              lastInterestingUserInteraction,
-              'pasted-link'
-            ) &&
-            session.status === 'authenticated' &&
-            session.data.user?.id
-          ) {
+          if (session.status === 'authenticated' && session.data.user?.id) {
             await insertImport({
               computer,
               editor,
-              source: lastInterestingUserInteraction.source,
-              url: lastInterestingUserInteraction.url,
+              source: pasteContext.source,
+              url: pasteContext.url,
               identifyIslands: command === 'import-islands',
               createdByUserId: session.data.user.id,
             });
-            setLastInterestingUserInteraction(undefined);
           }
           break;
         }
         case 'connect-all':
         case 'connect-islands': {
-          if (
-            isInteractionOfType(lastInterestingUserInteraction, 'pasted-link')
-          ) {
-            try {
-              await insertLiveConnection({
-                computer,
-                editor,
-                source: lastInterestingUserInteraction.source,
-                url: lastInterestingUserInteraction.url,
-                identifyIslands: command === 'connect-islands',
-              });
-            } catch (err) {
-              toast((err as Error).message, 'error');
-            }
-            setLastInterestingUserInteraction(undefined);
+          try {
+            await insertLiveConnection({
+              computer,
+              editor,
+              source: pasteContext.source,
+              url: pasteContext.url,
+              identifyIslands: command === 'connect-islands',
+            });
+          } catch (err) {
+            toast((err as Error).message, 'error');
           }
         }
       }
-      cleanupAfterCommand(lastInterestingUserInteraction);
+      if (pasteContext.url) {
+        cleanupAfterCommand(pasteContext.url);
+      }
     },
     [
       cleanupAfterCommand,
       computer,
       editor,
-      lastInterestingUserInteraction,
-      session,
+      pasteContext,
+      session.data?.user?.id,
+      session.status,
       toast,
     ]
   );
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (showInteractionMenu && !event.shiftKey) {
+      if (pasteContext.showInteractionMenu && !event.shiftKey) {
         switch (event.key) {
           case 'Escape':
-            setShowInteractionMenu(false);
+            setShow(false);
             event.stopPropagation();
             event.preventDefault();
             break;
         }
       }
     },
-    [showInteractionMenu]
+    [pasteContext]
   );
   useWindowListener('keydown', onKeyDown, true);
 
   return {
-    showInteractionMenu,
+    blockId: element.id,
+    showInteractionMenu: show,
     onInteractionMenuExecute,
-    source:
-      lastInterestingUserInteraction?.type === 'pasted-link'
-        ? lastInterestingUserInteraction.source
-        : undefined,
+    source: pasteContext.source,
   };
 };

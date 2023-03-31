@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { TeleportEditor } from '@decipad/editor-components';
 import {
   ComputerContextProvider,
+  EditorPasteInteractionMenuProvider,
   EditorUserInteractionsProvider,
 } from '@decipad/react-contexts';
 import { Computer } from '@decipad/computer';
@@ -33,17 +34,19 @@ export const EditorStack: FC<EditorStackProps> = ({
     >
       <DndProvider backend={HTML5Backend}>
         <EditorUserInteractionsProvider>
-          <ComputerContextProvider computer={computer}>
-            <TeleportEditor editor={editor}>
-              <Editor
-                notebookId={notebookId}
-                editor={editor}
-                loaded
-                readOnly={false}
-                isSavedRemotely={remoteSaved}
-              ></Editor>
-            </TeleportEditor>
-          </ComputerContextProvider>
+          <EditorPasteInteractionMenuProvider>
+            <ComputerContextProvider computer={computer}>
+              <TeleportEditor editor={editor}>
+                <Editor
+                  notebookId={notebookId}
+                  editor={editor}
+                  loaded
+                  readOnly={false}
+                  isSavedRemotely={remoteSaved}
+                ></Editor>
+              </TeleportEditor>
+            </ComputerContextProvider>
+          </EditorPasteInteractionMenuProvider>
         </EditorUserInteractionsProvider>
       </DndProvider>
     </SessionProvider>

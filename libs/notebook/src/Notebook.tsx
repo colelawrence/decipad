@@ -5,7 +5,10 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useEditorPlugins } from '@decipad/editor';
 import { MyEditor } from '@decipad/editor-types';
 import { useNotebookState } from '@decipad/notebook-state';
-import { ComputerContextProvider } from '@decipad/react-contexts';
+import {
+  ComputerContextProvider,
+  EditorPasteInteractionMenuProvider,
+} from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { insertLiveConnection } from '@decipad/editor-components';
 import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
@@ -213,14 +216,14 @@ export const Notebook: FC<NotebookProps> = (props) => {
   const { getAttachmentForm, onAttached, ...rest } = props;
   return (
     <EditorUserInteractionsProvider>
-      <>
+      <EditorPasteInteractionMenuProvider>
         <EditorAttachmentsHandler
           notebookId={rest.notebookId}
           getAttachmentForm={getAttachmentForm}
           onAttached={onAttached}
         />
         <InsideNotebookState {...rest} />
-      </>
+      </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>
   );
 };
