@@ -13,6 +13,7 @@ const labelContainerStyles = css({
   display: 'flex',
   flexWrap: 'nowrap',
   gap: '4px',
+  height: '1.75rem',
 });
 
 const hoveredBubbleStyles = css({

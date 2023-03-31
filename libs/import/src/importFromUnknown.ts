@@ -5,6 +5,22 @@ import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
 import { ImportResult } from './types';
 
+const unnestOneColumnOneCellIfNecessary = (
+  result: Result.Result
+): Result.Result => {
+  if (
+    result.type.kind === 'column' &&
+    Array.isArray(result.value) &&
+    result.value.length === 1
+  ) {
+    return {
+      type: result.type.cellType,
+      value: result.value[0],
+    };
+  }
+  return result;
+};
+
 const importFromUnknownResponse = async (
   computer: Computer,
   resp: Response,
@@ -46,7 +62,7 @@ const importFromUnknownResponse = async (
       meta: {
         sourceUrl: url,
       },
-      result,
+      result: unnestOneColumnOneCellIfNecessary(result),
       rawResult,
     },
   ];
@@ -66,13 +82,14 @@ const importFromUnknownUrl = async (
   }
 };
 
-export const importFromUnknown = (
+export const importFromUnknown = async (
   computer: Computer,
   source: URL | Response,
   options: ImportOptions
 ): Promise<ImportResult[]> => {
   if (source instanceof URL) {
-    return importFromUnknownUrl(computer, source, options);
+    const res = await importFromUnknownUrl(computer, source, options);
+    return res;
   }
   return importFromUnknownResponse(computer, source as Response, options);
 };

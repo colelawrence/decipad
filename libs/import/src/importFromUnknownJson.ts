@@ -6,6 +6,7 @@ import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
+import { rowsToColumns } from './utils/rowsToColumns';
 
 const importTableFromArray = (
   arr: Array<unknown>,
@@ -55,12 +56,12 @@ const importTableFromObject = (
   obj: Record<string, unknown>,
   options: ImportOptions
 ): Result.Result => {
-  const entries = Object.entries(obj);
-  if (entries.length < 0) {
+  const values = Object.values(obj);
+  if (values.length < 0) {
     return errorResult('Don`t know how to import an empty object');
   }
-  const results = entries
-    .map(([, value], index) => [index, value])
+  const results = values
+    .map((value, index) => [index, value])
     .map(([index, value]) =>
       importFromUnknownJson(
         value,
@@ -68,7 +69,6 @@ const importTableFromObject = (
         options.columnTypeCoercions?.[index as ColIndex]
       )
     );
-
   const value = results.map((res) => {
     if (res.value == null) {
       return Result.UnknownValue.getData();
@@ -106,7 +106,7 @@ interface ToStringable {
   toString: () => string;
 }
 
-export const importFromUnknownJson = (
+const internalImportFromUnknownJson = (
   _json: unknown,
   { jsonPath, ...options }: ImportOptions,
   cohersion?: TableCellType
@@ -116,6 +116,7 @@ export const importFromUnknownJson = (
     return importFromArray(json, options);
   }
   const tof = typeof json;
+
   if (cohersion?.kind === 'string') {
     return {
       type: {
@@ -186,7 +187,8 @@ export const importFromUnknownJson = (
     };
   }
   if (tof === 'object' && json != null) {
-    return importTableFromObject(json as Record<string, unknown>, options);
+    const res = importTableFromObject(json as Record<string, unknown>, options);
+    return res;
   }
   return {
     type: {
@@ -195,3 +197,10 @@ export const importFromUnknownJson = (
     value: Result.UnknownValue.getData(),
   };
 };
+
+export const importFromUnknownJson = (
+  json: unknown,
+  options: ImportOptions,
+  cohersion?: TableCellType
+): Result.Result =>
+  rowsToColumns(internalImportFromUnknownJson(json, options, cohersion));

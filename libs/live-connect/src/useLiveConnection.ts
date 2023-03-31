@@ -6,7 +6,7 @@ import {
   TableCellType,
 } from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
-import { useCache } from '@decipad/editor-utils';
+import { useCache, deserializeResult } from '@decipad/editor-utils';
 import {
   ExternalDataSource,
   ExternalDataSourcesContextValue,
@@ -14,7 +14,6 @@ import {
 import { useDebounce } from 'use-debounce';
 import { useLiveConnectionResponse } from './useLiveConnectionResponse';
 import { useLiveConnectionAuth } from './useLiveConnectionAuth';
-import { deserializeImportResult } from './utils/deserializeImportResult';
 
 export interface LiveConnectionResult {
   error?: Error;
@@ -74,11 +73,18 @@ export const useLiveConnection = (
     maxCellCount,
   });
 
-  const [result, clearCache] = useCache({
+  const [result, clearCache] = useCache<ImportResult | undefined>({
     blockId,
     deleted,
     value: liveConnectionResult,
-    deserialize: deserializeImportResult,
+    deserialize: useCallback(
+      (importRes) =>
+        importRes && {
+          ...importRes,
+          result: deserializeResult(importRes.result),
+        },
+      []
+    ),
   });
 
   useEffect(() => {

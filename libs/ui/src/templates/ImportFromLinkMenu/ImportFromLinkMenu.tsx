@@ -1,5 +1,4 @@
 import { ImportElementSource } from '@decipad/editor-types';
-import pluralize from 'pluralize';
 import { ComponentProps, FC } from 'react';
 import {
   ConnectRanges,
@@ -20,8 +19,9 @@ const sourceToName: Record<ImportElementSource, string> = {
 const groups = (
   source?: ImportElementSource
 ): ComponentProps<typeof InlineMenu>['groups'] => {
-  const sourceName = source ? sourceToName[source] : 'unknown source';
-  const ppSource = pluralize.singular(sourceName).toLocaleLowerCase();
+  const sourceName = source
+    ? sourceToName[source] ?? 'unknown source'
+    : 'unknown source';
   return [
     {
       items: [
@@ -35,8 +35,8 @@ const groups = (
         },
         {
           command: 'connect-all',
-          title: `Connect to ${ppSource}`,
-          description: `Connect to live data from this ${ppSource}`,
+          title: `Connect to ${sourceName}`,
+          description: `Connect to live data from this ${sourceName}`,
           icon: <ConnectTable />,
           enabled: true,
           extraSearchTerms: ['connect', 'live'],
@@ -51,8 +51,8 @@ const groups = (
         },
         {
           command: 'import-all',
-          title: `Import from ${ppSource}`,
-          description: `Import all data in this ${ppSource}`,
+          title: `Import from ${sourceName}`,
+          description: `Import all data in this ${sourceName}`,
           icon: <ImportTable />,
           enabled: true,
           extraSearchTerms: ['import', 'google', 'sheets'],

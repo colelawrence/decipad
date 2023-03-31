@@ -1,4 +1,3 @@
-import { ImportResult } from '@decipad/import';
 import { SerializedTypes, Unit, Result } from '@decipad/computer';
 import { fromNumber } from '@decipad/number';
 import { OneResult } from 'libs/language/src/result';
@@ -15,7 +14,7 @@ const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
       } as Unit)
   ) ?? null;
 
-const deserializeResult = <T extends Result.Result>(
+export const deserializeResult = <T extends Result.Result>(
   result: T | undefined
 ): T | undefined => {
   if (result == null) {
@@ -55,8 +54,10 @@ const deserializeResult = <T extends Result.Result>(
           value: v,
         })
       );
-      replaceValue = replacements.map((r) => r?.value) as OneResult | undefined;
-      if (replacements.length) {
+      replaceValue = replacements?.map((r) => r?.value) as
+        | OneResult
+        | undefined;
+      if (replacements?.length) {
         replaceType = {
           ...type,
           cellType: getDefined(replacements[0]?.type),
@@ -85,13 +86,4 @@ const deserializeResult = <T extends Result.Result>(
     return { type: replaceType ?? type, value: replaceValue ?? value } as T;
   }
   return result;
-};
-
-export const deserializeImportResult = (
-  importResult: ImportResult
-): ImportResult => {
-  return {
-    ...importResult,
-    result: deserializeResult(importResult.result),
-  };
 };

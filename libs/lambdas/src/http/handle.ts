@@ -6,6 +6,8 @@ import {
 } from 'aws-lambda';
 import { Handler } from '@decipad/backendtypes';
 import { captureException, trace } from '@decipad/backend-trace';
+import chalk from 'chalk';
+import { inspect } from 'util';
 
 export default (handler: Handler) => {
   return trace(
@@ -41,6 +43,13 @@ export default (handler: Handler) => {
           await captureException(err);
           throw err; // throw error for wrapper to log and handle
         }
+        console.error(
+          chalk.yellow(
+            `User error caught while processing request:\n${inspect(
+              req
+            )}\nErr:\n${inspect(err)}`
+          )
+        );
         return {
           statusCode: err.output.statusCode,
           headers: getErrorHeaders(err.output.headers),

@@ -6,6 +6,7 @@ export * from './codeBlock';
 export * from './createCodeLine';
 export * from './createDefaultNotebook';
 export * from './decorateCode';
+export * from './deserializeResult';
 export * from './filterDecorate';
 export * from './findDomNodePath';
 export * from './focusAndSetSelection';

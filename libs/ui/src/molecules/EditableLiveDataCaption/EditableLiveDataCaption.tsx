@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
-import { Children, FC, PropsWithChildren } from 'react';
+import { Children, FC, PropsWithChildren, ReactNode } from 'react';
 import { useSelected } from 'slate-react';
 import { Tag } from '../../atoms';
-import * as icons from '../../icons';
 import {
   cssVar,
   normalOpacity,
@@ -12,6 +11,7 @@ import {
   transparency,
 } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { Zap } from '../../icons';
 
 const editableLiveCaptionStyles = css({
   maxWidth: `${slimBlockWidth}px`,
@@ -63,6 +63,7 @@ type EditableTableCaptionProps = PropsWithChildren<{
   source?: string;
   range?: string;
   url?: string;
+  icon?: ReactNode;
 }>;
 
 export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
@@ -71,6 +72,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
   url,
   range,
   children,
+  icon,
 }) => {
   const [caption] = Children.toArray(children);
   const selected = useSelected();
@@ -79,7 +81,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
     <div css={editableLiveCaptionStyles}>
       <div css={tableTitleWrapper}>
         <div css={[iconWrapperStyles, iconSvgStyles]} contentEditable={false}>
-          <icons.Zap />
+          {icon ?? <Zap />}
         </div>
         <div
           aria-placeholder={empty ? 'LiveConnection' : ''}

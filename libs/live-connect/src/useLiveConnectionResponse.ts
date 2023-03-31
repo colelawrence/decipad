@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import {
   ColIndex,
   ImportElementSource,
@@ -5,11 +6,10 @@ import {
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import { ImportResult } from '@decipad/import';
-import { useCallback, useEffect, useState } from 'react';
+import { deserializeResult } from '@decipad/editor-utils';
 import { Unsubscribe } from './types';
 import { useLiveConnectionWorker } from './useLiveConnectionWorker';
 import { isFatalError } from './utils/isFatalError';
-import { deserializeImportResult } from './utils/deserializeImportResult';
 
 export interface LiveConnectionResponseResult {
   error?: Error;
@@ -76,7 +76,10 @@ export const useLiveConnectionResponse = ({
                       )
                     );
                   } else {
-                    setResult(deserializeImportResult(res));
+                    setResult({
+                      ...res,
+                      result: deserializeResult(res.result),
+                    });
                   }
                 }
               }

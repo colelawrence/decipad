@@ -32,7 +32,7 @@ const internalTryImport = (
       case 'gsheets':
         return gsheets.import(params, options);
       case 'decipad':
-        return decipad.import();
+        return decipad.import(params.url);
     }
   }
   return importFromUnknown(
