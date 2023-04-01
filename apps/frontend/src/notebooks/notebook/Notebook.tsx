@@ -3,6 +3,7 @@ import { MyEditor } from '@decipad/editor-types';
 import {
   EditorStylesContext,
   EditorStylesContextValue,
+  DeciEditorContextProvider,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
@@ -115,76 +116,78 @@ const Notebook: FC = () => {
   }
 
   return (
-    <EditorStylesContext.Provider value={styles}>
-      <Frame
-        Heading="h1"
-        title={notebook?.name ?? ''}
-        suspenseFallback={<LoadingLogo />}
-      >
-        <NotebookPage
-          notebook={
-            <Frame
-              Heading="h1"
-              title={null}
-              suspenseFallback={<EditorPlaceholder />}
-            >
-              <Editor
-                notebookMetaLoaded={notebook != null}
-                notebookTitle={notebook?.name ?? ''}
-                onNotebookTitleChange={onNotebookTitleChange}
-                notebookId={notebookId}
-                readOnly={isReadOnly}
-                secret={secret}
-                connectionParams={connectionParams}
-                initialState={initialState}
-                onEditor={setEditor}
-                onDocsync={setDocsync}
-                getAttachmentForm={getAttachmentForm}
-                onAttached={onAttached}
-                useExternalDataSources={useExternalDataSources}
-              />
-            </Frame>
-          }
-          notebookIcon={
-            <Frame
-              Heading="h1"
-              title={null}
-              suspenseFallback={<NotebookIconPlaceholder />}
-            >
-              <EditorIcon
-                color={iconColor}
-                icon={icon ?? 'Rocket'}
-                onChangeIcon={updateIcon}
-                onChangeColor={updateIconColor}
-                readOnly={isReadOnly}
-              />
-            </Frame>
-          }
-          topbar={
-            <Frame
-              Heading="h1"
-              title={null}
-              suspenseFallback={<TopbarPlaceholder />}
-            >
-              <Topbar
-                userWorkspaces={userWorkspaces.data?.workspaces}
-                notebook={notebook}
-                hasLocalChanges={hasLocalChanges}
-                hasUnpublishedChanges={hasUnpublishedChanges}
-                isPublishing={isPublishing}
-                duplicateNotebook={duplicate}
-                removeLocalChanges={removeLocalChanges}
-                publishNotebook={publishNotebook}
-                unpublishNotebook={unpublishNotebook}
-                inviteEditorByEmail={inviteEditorByEmail}
-                removeEditorById={removeEditorById}
-                changeEditorAccess={changeEditorAccess}
-              />
-            </Frame>
-          }
-        />
-      </Frame>
-    </EditorStylesContext.Provider>
+    <DeciEditorContextProvider value={docsync}>
+      <EditorStylesContext.Provider value={styles}>
+        <Frame
+          Heading="h1"
+          title={notebook?.name ?? ''}
+          suspenseFallback={<LoadingLogo />}
+        >
+          <NotebookPage
+            notebook={
+              <Frame
+                Heading="h1"
+                title={null}
+                suspenseFallback={<EditorPlaceholder />}
+              >
+                <Editor
+                  notebookMetaLoaded={notebook != null}
+                  notebookTitle={notebook?.name ?? ''}
+                  onNotebookTitleChange={onNotebookTitleChange}
+                  notebookId={notebookId}
+                  readOnly={isReadOnly}
+                  secret={secret}
+                  connectionParams={connectionParams}
+                  initialState={initialState}
+                  onEditor={setEditor}
+                  onDocsync={setDocsync}
+                  getAttachmentForm={getAttachmentForm}
+                  onAttached={onAttached}
+                  useExternalDataSources={useExternalDataSources}
+                />
+              </Frame>
+            }
+            notebookIcon={
+              <Frame
+                Heading="h1"
+                title={null}
+                suspenseFallback={<NotebookIconPlaceholder />}
+              >
+                <EditorIcon
+                  color={iconColor}
+                  icon={icon ?? 'Rocket'}
+                  onChangeIcon={updateIcon}
+                  onChangeColor={updateIconColor}
+                  readOnly={isReadOnly}
+                />
+              </Frame>
+            }
+            topbar={
+              <Frame
+                Heading="h1"
+                title={null}
+                suspenseFallback={<TopbarPlaceholder />}
+              >
+                <Topbar
+                  userWorkspaces={userWorkspaces.data?.workspaces}
+                  notebook={notebook}
+                  hasLocalChanges={hasLocalChanges}
+                  hasUnpublishedChanges={hasUnpublishedChanges}
+                  isPublishing={isPublishing}
+                  duplicateNotebook={duplicate}
+                  removeLocalChanges={removeLocalChanges}
+                  publishNotebook={publishNotebook}
+                  unpublishNotebook={unpublishNotebook}
+                  inviteEditorByEmail={inviteEditorByEmail}
+                  removeEditorById={removeEditorById}
+                  changeEditorAccess={changeEditorAccess}
+                />
+              </Frame>
+            }
+          />
+        </Frame>
+      </EditorStylesContext.Provider>
+    </DeciEditorContextProvider>
   );
 };
 

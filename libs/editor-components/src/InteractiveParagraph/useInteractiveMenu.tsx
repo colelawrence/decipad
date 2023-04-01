@@ -40,8 +40,6 @@ export const useInteractiveMenu = (
   const lastConsumedPasteContext =
     useRef<EditorPasteInteractionMenuContextValue>();
 
-  console.log('pasteContext', pasteContext);
-
   useEffect(() => {
     if (
       lastConsumedPasteContext.current !== pasteContext &&
