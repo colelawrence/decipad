@@ -79,12 +79,15 @@ const withRemoveUnacceptableElementProperties = (
   };
 };
 
-const withNormalizerOverride = ({
-  plugin,
-  elementType,
-  acceptableElementProperties,
-  acceptableSubElements,
-}: NormalizerOverrideProps): MyWithOverride => {
+const withNormalizerOverride = (
+  pluginName: string,
+  {
+    plugin,
+    elementType,
+    acceptableElementProperties,
+    acceptableSubElements,
+  }: NormalizerOverrideProps
+): MyWithOverride => {
   return (editor) => {
     const myEditor = getMyEditor(editor);
 
@@ -123,7 +126,15 @@ const withNormalizerOverride = ({
           }
         }
       } catch (err) {
-        console.error(`Error normalizing ${elementType}`, err);
+        console.error(
+          `Error caught on normalizer ${pluginName} while normalizing a ${elementType}`,
+          err
+        );
+        (
+          err as Error
+        ).message = `Error caught on normalizer ${pluginName} while normalizing a ${elementType}: ${
+          (err as Error).message
+        }`;
         captureException(err);
       }
       return normalizeNode(entry);
@@ -137,7 +148,7 @@ export const createNormalizerPlugin = ({
   ...props
 }: NormalizerPluginProps): MyPlatePlugin => ({
   key: name,
-  withOverrides: withNormalizerOverride(props),
+  withOverrides: withNormalizerOverride(name, props),
 });
 
 export const createNormalizerPluginFactory = ({
@@ -146,6 +157,6 @@ export const createNormalizerPluginFactory = ({
 }: NormalizerPluginProps) => {
   return createTPluginFactory({
     key: name,
-    withOverrides: withNormalizerOverride(props),
+    withOverrides: withNormalizerOverride(name, props),
   });
 };
