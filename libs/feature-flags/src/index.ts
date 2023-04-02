@@ -17,7 +17,6 @@ export const availableFlags = [
   'ROTATED_DATA_VIEW',
   'ALTERNATE_ROTATION_DATA_VIEW',
   'INTEGRATIONS_AUTH',
-  'AC_MENU_INSERT_SMART_REF',
   'LIVE_CONN_OPTIONS',
 ] as const;
 

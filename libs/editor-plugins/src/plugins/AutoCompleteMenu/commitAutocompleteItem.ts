@@ -4,7 +4,6 @@ import {
   SmartRefElement,
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   deleteText,
   getEditorString,
@@ -46,7 +45,7 @@ export const commitAutocompleteItem = (
     moveCursorBack = true;
   }
 
-  if (!isFlagEnabled('AC_MENU_INSERT_SMART_REF') || !item.blockId) {
+  if (!item.blockId) {
     insertText(editor, toInsert);
   } else {
     // item may know how we should smartly refer to it
