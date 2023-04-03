@@ -24,6 +24,7 @@ import {
   DropdownMenu,
   VariableEditor,
 } from '@decipad/ui';
+import { noop } from '@decipad/utils';
 import {
   findNode,
   findNodePath,
@@ -225,7 +226,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         >
           <DropdownMenu
             open={openMenu}
-            setOpen={setOpenMenu}
+            setOpen={!readOnly ? setOpenMenu : noop}
             onExecute={onExecute}
             groups={allResults}
             isReadOnly={readOnly}
