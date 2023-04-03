@@ -21,7 +21,7 @@ export interface TableInfo {
 }
 
 export const useTable = (element: TableElement): TableInfo => {
-  const { types: columnTypes } = useColumnsInferredTypes(element);
+  const columnTypes = useColumnsInferredTypes(element);
 
   return useEditorSelector(() => {
     return {

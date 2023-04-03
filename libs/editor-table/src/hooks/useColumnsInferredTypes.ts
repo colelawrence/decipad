@@ -10,9 +10,7 @@ import {
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
 
-interface UseColumnInferredTypeResult {
-  types: CellValueType[];
-}
+export type UseColumnInferredTypeResult = CellValueType[];
 
 const collectColumnData = (
   editor: MyEditor,
@@ -56,29 +54,19 @@ export const useColumnsInferredTypes = (
   );
 
   const inferColumnsTypes = useCallback(
-    (editor: MyEditor): Promise<CellValueType[]> => {
+    (editor: MyEditor): CellValueType[] => {
       const columnsData = collectColumnsData(editor, element);
       const headerCells = element.children[1].children;
-      return Promise.all(
-        columnsData.map((columnData, columnIndex) =>
-          inferColumn(computer, columnData, {
-            userType: headerCells[columnIndex]?.cellType,
-          })
-        )
+      return columnsData.map((columnData, columnIndex) =>
+        inferColumn(computer, columnData, {
+          userType: headerCells[columnIndex]?.cellType,
+        })
       );
     },
     [computer, element]
   );
 
-  const settleColumnTypes = useCallback(
-    async (columnTypes: Promise<CellValueType[]>) => {
-      const settledColumnTypes = await columnTypes;
-      setTypes(settledColumnTypes);
-    },
-    []
-  );
+  useEditorChange(setTypes, inferColumnsTypes);
 
-  useEditorChange(settleColumnTypes, inferColumnsTypes);
-
-  return { types };
+  return types;
 };

@@ -16,8 +16,6 @@ import {
   debounceTime,
   of,
   merge,
-  concatMap,
-  from,
   filter,
 } from 'rxjs';
 import { dequal } from 'dequal';
@@ -47,7 +45,7 @@ export interface UseEditorChangeOptions {
 
 export function useEditorChange<T>(
   callback: (val: T) => void,
-  selector: (editor: PlateEditor<MyValue>) => T | Promise<T>,
+  selector: (editor: PlateEditor<MyValue>) => T,
   { debounceTimeMs = 100, injectObservable }: UseEditorChangeOptions = {}
 ): void {
   const editor = getDefined(usePlateEditorRef<MyValue>());
@@ -70,7 +68,6 @@ export function useEditorChange<T>(
       .pipe(
         debounceTime(debounceTimeMs),
         map(() => selectorRef.current(editor)),
-        concatMap((v) => from(Promise.resolve(v))),
         filter((v) => v != null),
         distinctUntilChanged((cur, next) => dequal(cur, next))
       )

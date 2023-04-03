@@ -46,7 +46,7 @@ export const useColumnInferredType = (
     () => element?.cellType
   );
   const inferColumnType = useCallback(
-    async (editor: MyEditor): Promise<CellValueType | undefined> => {
+    (editor: MyEditor): CellValueType | undefined => {
       if (element && element.cellType?.kind !== 'anything') {
         return element.cellType;
       }
@@ -60,15 +60,7 @@ export const useColumnInferredType = (
     [computer, element]
   );
 
-  const settleType = useCallback(
-    async (tableCell: Promise<CellValueType | undefined>) => {
-      const cellType = await tableCell;
-      setType(cellType);
-    },
-    []
-  );
-
-  useEditorChange(settleType, inferColumnType);
+  useEditorChange(setType, inferColumnType);
 
   return { type };
 };
