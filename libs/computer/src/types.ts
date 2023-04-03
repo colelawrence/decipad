@@ -50,10 +50,6 @@ export interface IdentifiedResult {
 export type ProgramBlock = IdentifiedBlock | IdentifiedError;
 export type Program = ProgramBlock[];
 
-export interface UserParseError {
-  elementId: string;
-  error: Parser.ParserError | string;
-}
 export interface ComputeRequest {
   program: Program;
 }

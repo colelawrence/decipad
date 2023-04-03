@@ -91,8 +91,9 @@ export const TableCell: PlateComponent = ({
       ? computer.formatUnit(cellType.unit)
       : undefined;
 
-  const parseError = computer.getImperativeParseError$.useWithSelector(
-    (elm) => elm?.error,
+  // Cell parse error (present for all cells, but only displayed in the series cell)
+  const parseError = computer.getBlockIdResult$.useWithSelector(
+    (elm) => (hasText && cellType?.kind === 'series' ? elm?.error : undefined),
     element.id
   );
   const parseErrorMessage =

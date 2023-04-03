@@ -111,7 +111,6 @@ const normalizeFormulaColumns = (
 };
 
 const normalizeSeriesColumn = (
-  computer: Computer,
   editor: MyEditor,
   tableEntry: TNodeEntry<TableElement>,
   [th]: NodeEntry<TableHeaderElement>,
@@ -135,14 +134,10 @@ const normalizeSeriesColumn = (
     th.cellType.seriesType,
     firstCellContent
   );
-  const cellId = firstCell[0].id;
+
   if (error) {
-    computer.imperativelySetParseError(cellId, { elementId: cellId, error });
+    // Error is in computer.
     return false;
-  }
-  // no parse error
-  if (computer.hasImperativelySetParseError(cellId)) {
-    computer.imperativelyUnsetParseError(cellId);
   }
 
   // now we need to ensure all the remaining cells have the expected from the next in the series
@@ -150,7 +145,7 @@ const normalizeSeriesColumn = (
     type,
     getDefined(granularity),
     firstCellContent
-  );
+  )[Symbol.iterator]();
   for (const row of restRows) {
     const cell = getChildren(row)[columnIndex];
     if (cell) {
@@ -171,14 +166,13 @@ const normalizeSeriesColumn = (
 };
 
 const normalizeSeriesColumns = (
-  computer: Computer,
   editor: MyEditor,
   tableEntry: TNodeEntry<TableElement>
 ) => {
   const [, _ths] = getChildren(tableEntry); // second element of a table is a header table row
   const ths = _ths as NodeEntry<TableHeaderRowElement>;
   for (const [index, th] of enumerate(getChildren(ths))) {
-    if (normalizeSeriesColumn(computer, editor, tableEntry, th, index)) {
+    if (normalizeSeriesColumn(editor, tableEntry, th, index)) {
       return true;
     }
   }
@@ -186,7 +180,6 @@ const normalizeSeriesColumns = (
 };
 
 export const normalizeTableFormulaAndSeries =
-  (computer: Computer) =>
   (editor: MyEditor) =>
   (entry: MyNodeEntry): boolean => {
     const [node, path] = entry;
@@ -196,16 +189,16 @@ export const normalizeTableFormulaAndSeries =
     if (node.type === ELEMENT_TABLE) {
       return (
         normalizeFormulaColumns(editor, [node, path]) ||
-        normalizeSeriesColumns(computer, editor, [node, path])
+        normalizeSeriesColumns(editor, [node, path])
       );
     }
     return false;
   };
 
 export const createNormalizeTableFormulaAndSeriesCellsPlugin = (
-  computer: Computer
+  _computer: Computer
 ) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_TABLE_FORMULA_AND_SERIES_CELLS_PLUGIN',
-    plugin: normalizeTableFormulaAndSeries(computer),
+    plugin: normalizeTableFormulaAndSeries,
   });

@@ -16,7 +16,7 @@ import {
   simplifyComputeResponse,
   testProgram as makeTestProgram,
 } from '../testUtils';
-import { ComputeRequestWithExternalData, UserParseError } from '../types';
+import { ComputeRequestWithExternalData } from '../types';
 import { Computer } from './Computer';
 
 const testProgram = getIdentifiedBlocks(
@@ -701,29 +701,6 @@ it('can get table/column data by block id', async () => {
   expect(
     computer.getSymbolOrTableDotColumn$.get('block-0', 'block-1')
   ).toMatchInlineSnapshot(`"Table.Xs"`);
-});
-
-it('can stream imperative errors', async () => {
-  let error: UserParseError | undefined;
-
-  computer.getImperativeParseError$.observe('1').subscribe((item) => {
-    error = item;
-  });
-
-  computer.imperativelySetParseError('1', { elementId: '1', error: 'err' });
-
-  await timeout(0);
-
-  expect(error).toMatchInlineSnapshot(`
-    Object {
-      "elementId": "1",
-      "error": "err",
-    }
-  `);
-
-  computer.imperativelyUnsetParseError('1');
-  await timeout(0);
-  expect(error).toEqual(undefined);
 });
 
 it('formats stuff', () => {

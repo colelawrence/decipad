@@ -17,7 +17,7 @@ const dateGranularityToDateFnsDuration: Record<Time.Specificity, Duration> = {
 export const dateIterator = (
   granularity: Time.Specificity,
   initialValue: string
-): Iterator<string> => {
+): Iterable<string> => {
   const parseResult = parseDate(initialValue, granularity);
   if (!parseResult) {
     throw new Error(`Could not parse date ${initialValue}`);
@@ -26,10 +26,12 @@ export const dateIterator = (
   let v: Date = parseResult.date;
   const g = dateGranularityToDateFnsDuration[granularity];
   return {
-    next() {
-      v = addDate(v, g);
+    [Symbol.iterator]: () => {
       return {
-        value: formatDate(v, format),
+        next() {
+          v = addDate(v, g);
+          return { value: formatDate(v, format) };
+        },
       };
     },
   };
@@ -39,7 +41,7 @@ export const seriesIterator = (
   type: SeriesType,
   granularity: Time.Specificity,
   initialValue: string
-): Iterator<string> => {
+): Iterable<string> => {
   if (granularity == null) {
     throw new Error('Date series requires granularity');
   }

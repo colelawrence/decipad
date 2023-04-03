@@ -18,6 +18,7 @@ import {
 import { getNodeString } from '@udecode/plate';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
+import { simpleError } from './common';
 
 interface HeaderToColumnProps {
   computer: Computer;
@@ -32,16 +33,8 @@ export interface ColumnParseReturn {
   errors: IdentifiedError[];
   expression?: AST.Expression;
   columnName: string;
-  elementId?: string;
+  elementId: string;
 }
-
-const simpleError = (id: string, message: string): IdentifiedError => ({
-  type: 'identified-error',
-  errorKind: 'parse-error',
-  id,
-  error: { message },
-  source: '',
-});
 
 const tableFormulaColumnToColumn = ({
   table,
@@ -61,6 +54,7 @@ const tableFormulaColumnToColumn = ({
     );
   }
   return {
+    elementId: th.id,
     columnName,
     errors: [simpleError(th.id, 'Could not find a formula for this column')],
   };
@@ -75,30 +69,27 @@ const seriesColumnToColumn = async ({
   if (th.cellType.kind !== 'series') {
     throw new Error('Expected series');
   }
-  const firstDataRow = dataRows[0];
-  if (!firstDataRow) {
-    throw new Error('Expected first data row');
-  }
-  const content = getNodeString(firstDataRow.children[columnIndex]);
-  const expression = await seriesColumn(
+  const content = getNodeString(dataRows[0].children[columnIndex]);
+  const [expression, errors] = await seriesColumn(
     computer,
     th.cellType.seriesType,
     content,
-    dataRows.length
+    dataRows.length,
+    dataRows.map((dataRow) => dataRow.children[columnIndex].id)
   );
   return {
     elementId: th.id,
     expression,
     columnName: getNodeString(th),
-    errors: [],
+    errors,
   };
 };
 
-const dropdownColumnToColumn = async ({
+const dropdownColumnToColumn = ({
   th,
   columnIndex,
   dataRows,
-}: HeaderToColumnProps): Promise<ColumnParseReturn> => {
+}: HeaderToColumnProps): ColumnParseReturn => {
   const errors: IdentifiedError[] = [];
   const cellTexts: string[] = [];
   const cellIds: string[] = [];
@@ -152,7 +143,7 @@ const dataColumnToColumn = async ({
 
   const columnType =
     !th.cellType || th.cellType.kind === 'anything'
-      ? await inferColumn(computer, cellTexts, { userType: th.cellType })
+      ? inferColumn(computer, cellTexts, { userType: th.cellType })
       : th.cellType;
 
   const items = await Promise.all(

@@ -24,7 +24,6 @@ import {
 import DeciNumber from '@decipad/number';
 import { anyMappingToMap, getDefined, identity, zip } from '@decipad/utils';
 import { dequal } from 'dequal';
-import produce from 'immer';
 import Queue from 'queue';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
@@ -55,7 +54,6 @@ import type {
   NotebookResults,
   Program,
   ProgramBlock,
-  UserParseError,
 } from '../types';
 import { getDefinedSymbol, getGoodBlocks, getIdentifierString } from '../utils';
 import { astToParseable } from './astToParseable';
@@ -85,8 +83,6 @@ interface ComputerOpts {
   requestDebounceMs: number;
 }
 
-type ParseErrorMap = Map<string, UserParseError>;
-
 export class Computer {
   private locale = 'en-US';
   private latestProgram: ProgramBlock[] = [];
@@ -97,9 +93,6 @@ export class Computer {
     Map<string, [id: string, injectedResult: Result.Result][]>
   >(new Map());
   private automaticallyGeneratedNames = new Set<string>();
-
-  /** @deprecated Imperative parse errors */
-  private imperativeParseErrors = new BehaviorSubject<ParseErrorMap>(new Map());
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -777,39 +770,6 @@ export class Computer {
   getLatestProgram(): Readonly<Program> {
     return this.latestProgram;
   }
-
-  /** @deprecated */
-  private updateImperativeParseError(
-    updater: (map: ParseErrorMap) => void
-  ): void {
-    const nextValue = produce(this.imperativeParseErrors.getValue(), updater);
-    this.imperativeParseErrors.next(nextValue);
-  }
-
-  /** @deprecated */
-  imperativelySetParseError(id: string, error: UserParseError): void {
-    this.updateImperativeParseError((map) => {
-      map.set(id, error);
-    });
-  }
-
-  /** @deprecated */
-  imperativelyUnsetParseError(id: string): void {
-    this.updateImperativeParseError((map) => {
-      map.delete(id);
-    });
-  }
-
-  /** @deprecated */
-  hasImperativelySetParseError(id: string): boolean {
-    return this.imperativeParseErrors.getValue().has(id);
-  }
-
-  /** @deprecated */
-  getImperativeParseError$ = listenerHelper(
-    this.imperativeParseErrors,
-    (errors, blockId: string) => errors.get(blockId)
-  );
 
   // locale
 
