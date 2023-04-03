@@ -38,7 +38,6 @@ export default gql`
     name: String!
     padId: ID!
     provider: ExternalProvider!
-    externalId: String!
     dataUrl: String
     authUrl: String
     access: ExternalDataSourceAccess!

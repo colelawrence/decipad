@@ -11,7 +11,6 @@ export interface ExternalDataSource {
   id: string;
   padId: string;
   provider: ImportElementSource;
-  externalId: string;
   dataUrl: string;
   authUrl: string;
   keys: ExternalDataSourceKey[];

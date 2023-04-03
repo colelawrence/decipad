@@ -2,7 +2,8 @@ import { ConcreteRecord } from '@decipad/backendtypes';
 import { expectAuthorized } from '@decipad/services/authorization';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import { isAuthenticatedAndAuthorizedGraphql } from './graphql';
+import { ForbiddenError } from 'apollo-server-lambda';
+import { isAuthorizedGraphql } from './graphql';
 import * as resources from './resources';
 import { BackendResource, BackendResourceDef } from './types';
 
@@ -90,12 +91,17 @@ export const resource = <TData extends ConcreteRecord>(
         const rec = await load(recordId);
         resourceIds.push(await def.parentResourceUriFromRecord(rec));
       }
+      const { user, permissionType } = await isAuthorizedGraphql(
+        resourceIds,
+        context,
+        minimumPermissionType
+      );
+      if (!permissionType) {
+        throw new ForbiddenError('Forbidden');
+      }
       return {
-        ...(await isAuthenticatedAndAuthorizedGraphql({
-          resources: resourceIds,
-          context,
-          minimumPermissionType,
-        })),
+        user,
+        permissionType,
         resources: resourceIds,
       };
     },

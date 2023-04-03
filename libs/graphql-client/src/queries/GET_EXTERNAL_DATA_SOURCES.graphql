@@ -3,7 +3,6 @@ fragment ExternalDataSourceFragment on ExternalDataSource {
   name
   padId
   provider
-  externalId
   dataUrl
   authUrl
   keys {

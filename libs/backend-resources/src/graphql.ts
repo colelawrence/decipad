@@ -26,15 +26,22 @@ export async function isAuthorizedGraphql(
   resources: string[],
   context: Context,
   minimumPermissionType: PermissionType = 'READ'
-): Promise<PermissionType | null> {
+): Promise<{
+  user?: User;
+  permissionType?: PermissionType;
+}> {
   const user = loadUser(context);
   const secret = loadSecret(context);
-  return isAuthorizedBase({
-    resources,
+  return {
+    permissionType:
+      (await isAuthorizedBase({
+        resources,
+        user,
+        secret,
+        minimumPermissionType,
+      })) ?? undefined,
     user,
-    secret,
-    minimumPermissionType,
-  });
+  };
 }
 
 export interface IsAuthenticatedAndAuthorizedGraphqlParams {
@@ -52,7 +59,7 @@ export async function isAuthenticatedAndAuthorizedGraphql({
   permissionType: PermissionType;
 }> {
   const user = requireUser(context);
-  const permissionType = await isAuthorizedGraphql(
+  const { permissionType } = await isAuthorizedGraphql(
     resources,
     context,
     minimumPermissionType

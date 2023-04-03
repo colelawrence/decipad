@@ -60,7 +60,6 @@ test('external data sources', (ctx) => {
               id
               name
               provider
-              externalId
               dataUrl
             }
           }
@@ -72,7 +71,6 @@ test('external data sources', (ctx) => {
       id: expect.stringMatching(/.+/),
       name: 'test data source 1',
       provider: 'gsheets',
-      externalId: 'external id',
     });
 
     externalDataSource = newDataSource;
@@ -89,7 +87,6 @@ test('external data sources', (ctx) => {
               id
               name
               provider
-              externalId
               dataUrl
             }
           }
@@ -114,7 +111,6 @@ test('external data sources', (ctx) => {
               id
               name
               provider
-              externalId
               dataUrl
             }
           }
@@ -148,7 +144,6 @@ test('external data sources', (ctx) => {
               id
               name
               provider
-              externalId
               dataUrl
             }
           }
@@ -174,7 +169,6 @@ test('external data sources', (ctx) => {
               id
               name
               provider
-              externalId
               dataUrl
             }
           }
