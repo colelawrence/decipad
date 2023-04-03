@@ -1,6 +1,6 @@
 import { Locator, Page } from 'playwright';
 import { cleanText, Timeouts } from '../src';
-import { keyPress } from './Editor';
+import { keyPress, ControlPlus } from './Editor';
 
 export async function createInputBelow(
   page: Page,
@@ -129,7 +129,7 @@ export async function createCodeLineV2Below(
 
   await page.keyboard.press('ArrowRight');
 
-  await page.keyboard.press('Control+a');
+  await ControlPlus(page, 'a');
 
   await page.keyboard.type(decilang);
 

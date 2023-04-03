@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
-import { createTable, writeInTable } from '../utils/page/Table';
+import { createTable, writeInTable, getFromTable } from '../utils/page/Table';
 
 test.describe('Charts', () => {
   test.describe.configure({ mode: 'serial' });
@@ -32,13 +32,19 @@ test.describe('Charts', () => {
   test('fills table', async () => {
     // first column
     await writeInTable(page, 'Imports', 1, 0);
+    expect(await getFromTable(page, 1, 0)).toBe('Imports');
     await writeInTable(page, 'Hydro, wind and solar', 2, 0);
+    expect(await getFromTable(page, 2, 0)).toBe('Hydro, wind and solar');
     await writeInTable(page, 'Bioenergy', 3, 0);
+    expect(await getFromTable(page, 3, 0)).toBe('Bioenergy');
 
     // second column
     await writeInTable(page, '0.68%', 1, 1);
+    expect(await getFromTable(page, 1, 1)).toBe('0.68%');
     await writeInTable(page, '3.02%', 2, 1);
+    expect(await getFromTable(page, 2, 1)).toBe('3.02%');
     await writeInTable(page, '9.32%', 3, 1);
+    expect(await getFromTable(page, 3, 1)).toBe('9.32%');
   });
 
   test('creates a pie chart', async () => {
@@ -55,6 +61,18 @@ test.describe('Charts', () => {
       .screenshot();
 
     expect(dataViewContent).toMatchSnapshot('initial-pie-chart.png');
+  });
+
+  test('updates chart name', async () => {
+    await page.getByPlaceholder('Chart title').dblclick();
+    await page.keyboard.type('NewChartName');
+    await page.isVisible("text='NewChartName'");
+  });
+
+  test('puts old chart name back', async () => {
+    await page.getByPlaceholder('Chart title').dblclick();
+    await page.keyboard.type('Chart');
+    await page.isVisible("text='Chart'");
   });
 
   test('test pie chart menu', async () => {

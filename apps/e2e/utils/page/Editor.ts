@@ -104,16 +104,10 @@ export async function keyPress(page: Page, k: string) {
   await page.waitForTimeout(Timeouts.typing);
 }
 
-export async function controlPlus(page: Page, key: string) {
-  const platform = await page.evaluate(() => navigator.platform);
-  const isMac = platform.indexOf('Mac') === 0 || platform === 'iPhone';
+export async function ControlPlus(page: Page, key: string) {
+  const isMac = process.platform === 'darwin';
   const modifier = isMac ? 'Meta' : 'Control';
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.typing);
-  const pasteKeyCombo = `${modifier}+${key.toLocaleUpperCase()}`;
-  await page.keyboard.press(pasteKeyCombo);
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.typing);
+  await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
 }
 
 export async function navigateToNotebook(page: Page, notebookId: string) {

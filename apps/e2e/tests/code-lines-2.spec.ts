@@ -33,7 +33,7 @@ test.describe.skip('Calculation Blocks v2', () => {
     await page.close();
   });
 
-  const detectedType = 'Number';
+  const detectedType = 'FormulaNumber';
 
   test('Calculates 1 + 1', async () => {
     const lineText = '1 + 1';
@@ -48,7 +48,7 @@ test.describe.skip('Calculation Blocks v2', () => {
     ]);
 
     const line = await getCodeLineContent(page, lineNo);
-    expect(line).toBe(`${detectedType}MyVariable = ${lineText}`);
+    expect(line).toBe(`${detectedType}MyVariable=`);
 
     expect(await getCodeLineV2VarName(page, lineNo)).toMatch(/MyVariable/);
   });
