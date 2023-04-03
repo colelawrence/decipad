@@ -25,7 +25,7 @@ import path from 'path';
 import handler from 'serve-handler';
 import getPort from 'get-port';
 import { tryImport } from '@decipad/import';
-import { getDefined } from '@decipad/utils';
+import { getDefined, timeout } from '@decipad/utils';
 import { createDataViewPlugin } from './plugins';
 import { useDataView, useDataViewLayoutData } from './hooks';
 import { Column, AggregationKind } from './types';
@@ -132,9 +132,11 @@ const loadAndPushTable = async (
       : new URL(fileName, `http://${address.address}:${address.port}/`);
   const table = await tryImport({ computer, url });
   expect(table).toHaveLength(1);
-  await act(() => {
+  await act(async () => {
     if (table[0].result) {
-      computer.pushExternalDataUpdate('data-source', table[0].result);
+      computer.pushExternalDataUpdate('data-source', [
+        ['data-source', table[0].result],
+      ]);
     }
 
     computer.pushCompute({
@@ -155,6 +157,8 @@ const loadAndPushTable = async (
         },
       ],
     });
+
+    await timeout(0);
   });
 
   await server.close();

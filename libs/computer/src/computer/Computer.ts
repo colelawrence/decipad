@@ -93,7 +93,9 @@ export class Computer {
   private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
   public readonly requestDebounceMs: number;
-  private externalData = new BehaviorSubject<ExternalDataMap>(new Map());
+  private externalData = new BehaviorSubject<
+    Map<string, [id: string, injectedResult: Result.Result][]>
+  >(new Map());
   private automaticallyGeneratedNames = new Set<string>();
 
   /** @deprecated Imperative parse errors */
@@ -149,11 +151,8 @@ export class Computer {
         }),
         map(([{ program, ...computeReq }, externalData, extraBlocks]) => ({
           ...computeReq,
-          program: [
-            ...program,
-            ...Array.from(extraBlocks.values(), (blocks) => blocks).flat(),
-          ],
-          externalData,
+          program: [...program, ...[...extraBlocks.values()].flat()],
+          externalData: [...externalData.values()].flat(),
         })),
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
@@ -690,9 +689,12 @@ export class Computer {
     }, true);
   }
 
-  public pushExternalDataUpdate(key: string, value: Result.Result): void {
+  public pushExternalDataUpdate(
+    key: string,
+    values: [string, Result.Result][]
+  ): void {
     const newValue = new Map(this.externalData.getValue());
-    newValue.set(key, value);
+    newValue.set(key, values);
     this.externalData.next(newValue);
   }
 
