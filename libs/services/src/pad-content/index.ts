@@ -1,7 +1,8 @@
-import { SharedType, toSharedType } from '@decipad/slate-yjs';
+import { SharedType } from '@decipad/slate-yjs';
 import { MyElement } from '@decipad/editor-types';
 import { Doc as YDoc } from 'yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
+import { toSharedTypeSingular } from 'libs/slate-yjs/src/utils';
 
 function createPadContent(path: string, content: MyElement[]): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -11,11 +12,20 @@ function createPadContent(path: string, content: MyElement[]): Promise<void> {
       doc.on('update', (update: Uint8Array, origin: unknown) => {
         provider.storeUpdate(update, origin);
       });
-      doc.transact(() => {
-        const children = doc.getArray() as SharedType;
-        toSharedType(children, content);
+
+      /** The reason we iterate, instead of simply uploading the content array,
+       * is because DynamoDB has a size limit on a singular record. So if the notebook
+       * is too large, then it would reject the update.
+       * Hence why now we iterate over each block in the notebook instead.
+       */
+      const sharedType = doc.getArray() as SharedType;
+      content.forEach((block, i) => {
+        doc.transact(() => {
+          toSharedTypeSingular(sharedType, block, i);
+        });
       });
-      provider.once('saved', () => {
+
+      provider.once('flushed', () => {
         resolve();
       });
     } catch (err) {

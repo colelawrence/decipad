@@ -93,6 +93,18 @@ export function toSharedType(sharedType: SharedType, doc: MyElement[]): void {
 }
 
 /**
+ * Same as toShareType but takes in a singular element instead,
+ * to avoid DynamoDBs size limit.
+ */
+export function toSharedTypeSingular(
+  sharedType: SharedType,
+  doc: MyElement,
+  pos: number
+): void {
+  sharedType.insert(pos, [toSyncElement(doc)]);
+}
+
+/**
  * Converts a SharedType path the a slate path
  *
  * @param path

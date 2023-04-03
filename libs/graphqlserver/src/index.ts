@@ -17,7 +17,7 @@ type Context = LambdaContext & AdditionalContext;
 export default function createHandler(): Handler {
   const server = createServer();
   const handler = server.createHandler({
-    expressGetMiddlewareOptions: { bodyParserConfig: { limit: '1mb' } },
+    expressGetMiddlewareOptions: { bodyParserConfig: { limit: '6mb' } },
   });
 
   /* eslint-disable no-param-reassign */

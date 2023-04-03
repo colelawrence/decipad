@@ -25,6 +25,7 @@ export class DynamodbPersistence extends Observable<string> {
 
   private _mux = fnQueue();
   private _readOnly: boolean;
+  private _pendingSaves = 0;
 
   constructor(name: string, doc: YDoc, version?: string, readOnly = false) {
     super();
@@ -139,18 +140,28 @@ export class DynamodbPersistence extends Observable<string> {
     ) {
       return;
     }
+    this._pendingSaves += 1;
     await this._mux.push(async () => {
-      await this.whenSynced;
-      const data = await tables();
-      await data.docsyncupdates.put(
-        {
-          id: this.name,
-          seq: `${Date.now()}:${Math.floor(Math.random() * 10000)}:${nanoid()}`,
-          data: Buffer.from(update).toString('base64'),
-        },
-        skipNotif ? 0 : 0.2
-      );
-      this.emit('saved', [this]);
+      try {
+        await this.whenSynced;
+        const data = await tables();
+        await data.docsyncupdates.put(
+          {
+            id: this.name,
+            seq: `${Date.now()}:${Math.floor(
+              Math.random() * 10000
+            )}:${nanoid()}`,
+            data: Buffer.from(update).toString('base64'),
+          },
+          skipNotif ? 0 : 0.2
+        );
+        this.emit('saved', [this]);
+      } finally {
+        this._pendingSaves -= 1;
+        if (this._pendingSaves === 0) {
+          this.emit('flushed', [this]);
+        }
+      }
     });
   }
 
