@@ -1,5 +1,5 @@
 import DeciNumber from '@decipad/number';
-import { lenientZip, zip } from '@decipad/utils';
+import { zip } from '@decipad/utils';
 import { Type } from '..';
 import { getSpecificity } from '../date';
 import { Interpreter } from '../interpreter';
@@ -30,12 +30,11 @@ function validate(
     case 'number': {
       return getTrue(value instanceof DeciNumber, 'panic: expected fraction');
     }
-    case 'boolean':
+    case 'boolean': {
+      return getTrue(typeof value === 'boolean', 'panic: expected boolean');
+    }
     case 'string': {
-      return getTrue(
-        typeof value === type.kind,
-        `panic: expected ${type.kind}`
-      );
+      return getTrue(typeof value === 'string', 'panic: expected string');
     }
     case 'date': {
       return (
@@ -66,7 +65,7 @@ function validate(
       return array.every((cell) => validate(type.cellType, cell));
     }
     case 'table': {
-      return lenientZip(
+      return zip(
         type.columnTypes,
         getArray(value as Interpreter.ResultTable)
       ).every(([cellType, value]) => {
