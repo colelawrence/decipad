@@ -235,6 +235,44 @@ it('supports a table column named the same as the table (4 - defined after)', as
   `);
 });
 
+it('supports a table column named the same as the table (5 - defined after)', async () => {
+  expect(
+    await run(
+      mkTable(
+        'TableName',
+        'TableName',
+        'lookup(TableName, TableName.Column1 == 1).Column1 + 41'
+      )
+    )
+  ).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "type": table<Column1 = number, TableName = number>,
+        "value": Array [
+          Array [
+            DeciNumber(1),
+          ],
+          Array [
+            DeciNumber(42),
+          ],
+        ],
+      },
+      Object {
+        "type": column<number, indexed by TableName>,
+        "value": Array [
+          DeciNumber(1),
+        ],
+      },
+      Object {
+        "type": column<number, indexed by TableName>,
+        "value": Array [
+          DeciNumber(42),
+        ],
+      },
+    ]
+  `);
+});
+
 it('Legacy reference to a table column ID (now we use blockId + columnId for this)', async () => {
   const idOfColumn = `id_TableName_headers_${'Column2'}`;
   expect(

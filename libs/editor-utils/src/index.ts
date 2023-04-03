@@ -24,6 +24,7 @@ export * from './hasTarget';
 export * from './insertNodes';
 export * from './isDOMNode';
 export * from './isElementOfType';
+export * from './isEntryOfType';
 export * from './isPath';
 export * from './isPotentiallyWideElement';
 export * from './isStructuredElement';

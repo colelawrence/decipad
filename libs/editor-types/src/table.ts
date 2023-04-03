@@ -98,6 +98,8 @@ export interface TableHeaderRowElement extends BaseElement {
 
 export interface TableElement extends BaseElement {
   type: typeof ELEMENT_TABLE;
+  // track the format of the table, IE what does a smartref mean
+  version?: number;
   children: [TableCaptionElement, TableHeaderRowElement, ...TableRowElement[]];
   color?: string;
   icon?: string;
