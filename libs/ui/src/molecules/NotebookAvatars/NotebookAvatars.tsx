@@ -1,7 +1,8 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState, useContext } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
 import { Avatar, Tooltip } from '../../atoms';
 import { PermissionType } from '../../types';
 import { NotebookInvitationPopUp } from '../../organisms';
@@ -84,6 +85,7 @@ export const NotebookAvatars = ({
   ...sharingProps
 }: NotebookAvatarsProps): ReturnType<FC> => {
   const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
+  const clientEvent = useContext(ClientEventsContext);
 
   const toggleInvitePopup = useCallback(() => {
     setShowInvitePopup((show) => !show);
@@ -121,7 +123,13 @@ export const NotebookAvatars = ({
             <div
               key="invite"
               css={plusAvatarStyles}
-              onClick={toggleInvitePopup}
+              onClick={() => {
+                toggleInvitePopup();
+                clientEvent({
+                  type: 'action',
+                  action: 'click invite button',
+                });
+              }}
               data-testid="avatar-invite"
             >
               <Avatar name={showInvitePopup ? '×' : '+'} greyedOut={true} />

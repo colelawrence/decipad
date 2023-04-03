@@ -54,6 +54,8 @@ type Action =
     }
   // Onboarding
   | { action: 'onboarding screen'; props?: { screen: string } }
+  // Inviting
+  | { action: 'click invite button'; props?: undefined }
   // Customer Support
   | { action: 'contact live support'; props?: undefined }
   | { action: 'send feedback'; props?: undefined }
