@@ -1,6 +1,7 @@
 import { MyEditor, TableElement } from '@decipad/editor-types';
 import { insertTableBelow } from '@decipad/editor-components';
 import { createTEditor, getNodeEntry, TNodeEntry } from '@udecode/plate';
+import { Computer } from '@decipad/computer';
 import { normalizeTable } from './normalizeTable';
 
 const getAvailableIdentifier = (prefix: string, start: number) =>
@@ -8,6 +9,7 @@ const getAvailableIdentifier = (prefix: string, start: number) =>
 
 describe('normalizeTable', () => {
   let editor!: MyEditor;
+  const computer = new Computer();
 
   beforeEach(() => {
     editor = createTEditor() as MyEditor;
@@ -28,7 +30,7 @@ describe('normalizeTable', () => {
       offset: 0,
     });
 
-    const normalizedTable = normalizeTable(editor, tableEntry);
+    const normalizedTable = normalizeTable(editor, computer, tableEntry);
 
     expect(normalizedTable).toBe(true);
   });

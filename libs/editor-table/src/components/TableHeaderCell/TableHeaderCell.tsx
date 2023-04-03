@@ -12,10 +12,11 @@ import {
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { TableColumnHeader } from '@decipad/ui';
+import { TableColumnHeader, Tooltip } from '@decipad/ui';
 import {
   assertElementType,
   useElementMutatorCallback,
+  useEnsureValidVariableName,
   useNodePath,
 } from '@decipad/editor-utils';
 import { getNode, getNodeString } from '@udecode/plate';
@@ -121,30 +122,46 @@ export const TableHeaderCell: PlateComponent = ({
 
   const { type: inferredType } = useColumnInferredType(element);
 
+  const columnResult = computer.getBlockIdResult$.use(element.id);
+  const errorMessage = useEnsureValidVariableName(
+    element,
+    [columnResult?.id],
+    'Column'
+  );
+
   return (
-    <TableColumnHeader
-      attributes={attributes}
-      readOnly={readOnly}
-      empty={getNodeString(element).length === 0}
-      focused={focused}
-      isFirst={nThChild === 0}
-      onChangeColumnType={(newType) =>
-        nThChild != null && onChangeColumnType(nThChild, newType)
+    <Tooltip
+      trigger={
+        <TableColumnHeader
+          attributes={attributes}
+          readOnly={readOnly}
+          empty={getNodeString(element).length === 0}
+          focused={focused}
+          isFirst={nThChild === 0}
+          onChangeColumnType={(newType) =>
+            nThChild != null && onChangeColumnType(nThChild, newType)
+          }
+          onRemoveColumn={() => onRemoveColumn(element.id)}
+          onSelectColumn={() => path && selectColumn(editor, path)}
+          parseUnit={parseUnit}
+          type={
+            element.cellType?.kind === 'anything'
+              ? inferredType
+              : element.cellType
+          }
+          draggable={true}
+          dragSource={dragSource}
+          dropTarget={dropTarget}
+          draggingOver={!isDragging && isOver}
+          dropDirection={dropDirection}
+          dropdownNames={cols}
+        >
+          {children}
+        </TableColumnHeader>
       }
-      onRemoveColumn={() => onRemoveColumn(element.id)}
-      onSelectColumn={() => path && selectColumn(editor, path)}
-      parseUnit={parseUnit}
-      type={
-        element.cellType?.kind === 'anything' ? inferredType : element.cellType
-      }
-      draggable={true}
-      dragSource={dragSource}
-      dropTarget={dropTarget}
-      draggingOver={!isDragging && isOver}
-      dropDirection={dropDirection}
-      dropdownNames={cols}
+      open={errorMessage != null}
     >
-      {children}
-    </TableColumnHeader>
+      {errorMessage}
+    </Tooltip>
   );
 };
