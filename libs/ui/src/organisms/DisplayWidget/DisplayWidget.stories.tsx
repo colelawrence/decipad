@@ -6,22 +6,8 @@ import { withCode } from '../../storybook-utils';
 import { DisplayWidget } from './DisplayWidget';
 
 const args: ComponentProps<typeof DisplayWidget> = {
-  dropdownContent: [
-    {
-      type: 'var',
-      id: '1',
-      text: 'Variable #1',
-    },
-    {
-      type: 'var',
-      id: '2',
-      text: 'Variable #2',
-    },
-  ],
   openMenu: true,
   onChangeOpen: noop,
-  selectedId: '1',
-  setSelectedId: noop,
   result: 'Result',
   readOnly: false,
   children: [],

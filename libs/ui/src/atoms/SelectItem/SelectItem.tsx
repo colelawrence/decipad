@@ -2,8 +2,7 @@ import { FC, ReactNode, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import { useWindowListener } from '@decipad/react-utils';
-import { Result } from '@decipad/computer';
-import { cssVar, p14Medium } from '../../primitives';
+import { cssVar, p14Medium, setCssVar, teal600 } from '../../primitives';
 import { Edit, Trash } from '../../icons';
 import { DropdownOption } from '../../molecules';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
@@ -47,35 +46,47 @@ const iconStyles = css({
   height: 24,
 });
 
+const itemIconStyles = css(setCssVar('currentTextColor', teal600.rgb), {
+  width: '16px',
+  height: '16px',
+  display: 'grid',
+  borderRadius: '6px',
+});
+
 export type SelectItemTypes = 'column';
+
 export interface SelectItems {
+  index?: number;
   item: string;
+  group?: string;
   blockId?: string;
   type?: SelectItemTypes;
-  focused?: boolean;
-  itemValue?: Result.Result;
   icon?: ReactNode;
 }
 
 export type EditItemsOptions = {
-  readonly onRemoveOption?: (a: string) => void;
-  readonly onEditOption?: (a: string, b: string) => boolean;
-  readonly onExecute: (a: string, t?: SelectItemTypes) => void;
+  readonly onRemoveOption?: (a: SelectItems) => void;
+  readonly onEditOption?: (a: SelectItems, newText: string) => boolean;
+  readonly onExecute: (a: SelectItems) => void;
 };
 
 type SelectItemProps = EditItemsOptions & {
   readonly item: SelectItems;
   readonly isEditAllowed?: boolean;
+  readonly focusedItem?: number;
 };
 
 /*
- * SelectItem is a component used in SelectMenu to display a "Select" menu of options
+ * SelectItem is a component used in the DropdownMenu to display a menu of options
  * This is used through parts of the application that need a dropdown in order to be
- * consist in design everywhere
+ * consist in design everywhere.
+ *
+ * You can extend the `SelectItems` interface to add extra functionality here.
  */
 export const SelectItem: FC<SelectItemProps> = ({
   item,
   onExecute,
+  focusedItem = -1,
   isEditAllowed = false,
   onRemoveOption = noop,
   onEditOption = noop,
@@ -89,25 +100,19 @@ export const SelectItem: FC<SelectItemProps> = ({
       if ((event.key === 'Enter' || event.key === 'Escape') && editing) {
         event.preventDefault();
         event.stopPropagation();
-        const changed = onEditOption(item.item, newValue);
+        const changed = onEditOption(item, newValue);
         if (changed) {
           setEditing(false);
         } else {
           setEditingError(true);
         }
+      } else if (event.key === 'Enter' && item.index === focusedItem) {
+        onExecute(item);
       }
     },
-    [onEditOption, editing, item, newValue]
+    [onEditOption, editing, item, newValue, focusedItem, onExecute]
   );
   useWindowListener('keydown', keydown, true);
-
-  const onExecuteItem = useCallback(() => {
-    if (item.type === 'column') {
-      onExecute(item.blockId || item.item, 'column');
-    } else {
-      onExecute(item.item);
-    }
-  }, [onExecute, item.item, item.type, item.blockId]);
 
   const onEdit = useEventNoEffect(
     useCallback(() => {
@@ -117,8 +122,8 @@ export const SelectItem: FC<SelectItemProps> = ({
 
   const onRemove = useEventNoEffect(
     useCallback(() => {
-      onRemoveOption(item.item);
-    }, [item.item, onRemoveOption])
+      onRemoveOption(item);
+    }, [item, onRemoveOption])
   );
 
   if (editing) {
@@ -135,16 +140,23 @@ export const SelectItem: FC<SelectItemProps> = ({
     <div
       css={[
         wrapper,
-        item.focused && {
+        focusedItem === item.index && {
           backgroundColor: cssVar('highlightColor'),
           borderRadius: '6px',
         },
       ]}
-      onClick={onExecuteItem}
+      onClick={() => onExecute(item)}
       aria-roledescription="dropdownOption"
     >
-      <div css={{ display: 'flex', gap: '4px', maxWidth: '100%' }}>
-        {item.icon && <div css={{ width: 16, height: 16 }}>{item.icon}</div>}
+      <div
+        css={{
+          display: 'flex',
+          gap: '4px',
+          maxWidth: '100%',
+          alignItems: 'center',
+        }}
+      >
+        {item.icon && <div css={itemIconStyles}>{item.icon}</div>}
         <span css={textStyles}>{item.item}</span>
       </div>
       {isEditAllowed && (

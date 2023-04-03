@@ -7,14 +7,14 @@ const props: Omit<DropdownMenuProps, 'children'> = {
   open: true,
   setOpen: noop,
   isReadOnly: false,
-  items: [
+  groups: [
     {
       item: 'Hello',
-      focused: true,
+      index: 0,
     },
     {
       item: 'World',
-      focused: false,
+      index: 1,
     },
   ],
 };

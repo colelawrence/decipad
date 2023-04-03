@@ -39,15 +39,17 @@ test.describe('Results widgets', () => {
     await page.locator('[data-testid="result-widget"]').click();
 
     await expect(
-      page.locator('button >> span + div:has-text("Hello")')
+      page.locator('[aria-roledescription="dropdownOption"]:has-text("Hello")')
     ).toBeVisible();
     await expect(
-      page.locator('button >> span + div:has-text("World")')
+      page.locator('[aria-roledescription="dropdownOption"]:has-text("World")')
     ).toBeVisible();
   });
 
   test('shows the result of a calculation', async () => {
-    await page.locator('button >> span + div:has-text("hello")').click();
+    await page
+      .locator('[aria-roledescription="dropdownOption"]:has-text("Hello")')
+      .click();
 
     await expect(
       page.locator('[data-testid="result-widget"]:has-text("6")')
@@ -73,7 +75,7 @@ test.describe('Results widgets', () => {
     await page.locator('[data-testid="result-widget"]').click();
     // only one different variable available
     await expect(
-      page.locator('button >> span + div >> visible=true')
+      page.locator('[aria-roledescription="dropdownOption"]')
     ).toHaveCount(2);
   });
 });

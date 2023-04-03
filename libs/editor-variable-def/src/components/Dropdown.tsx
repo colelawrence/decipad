@@ -16,12 +16,7 @@ import {
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import {
-  DropdownMenu,
-  SelectItems,
-  SelectItemTypes,
-  WidgetDisplay,
-} from '@decipad/ui';
+import { DropdownMenu, SelectItems, WidgetDisplay } from '@decipad/ui';
 import { getNodeString, insertText, nanoid } from '@udecode/plate';
 import { dequal } from 'dequal';
 import { Table } from 'libs/ui/src/icons';
@@ -67,7 +62,7 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
     element.smartSelection,
   ]);
 
-  const dropdownIds: SelectItems[] = useMemo(
+  const dropdownIds: Array<SelectItems> = useMemo(
     () =>
       element.options.map((n) => ({
         item: n.value,
@@ -119,11 +114,11 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   );
 
   const removeOption = useCallback(
-    (removeOptionn: string) => {
+    (option: SelectItems) => {
       elementChangeOptions(
-        element.options.filter((n) => n.value !== removeOptionn)
+        element.options.filter((n) => n.value !== option.item)
       );
-      if (removeOptionn === selected) {
+      if (option.item === selected) {
         insertText(editor, 'Select', {
           at: path,
         });
@@ -134,22 +129,22 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
 
   // Return true when the option was changes, false when it wasn't
   const onEditOption = useCallback(
-    (old: string, newV: string): boolean => {
-      if (old === newV) return true;
-      const exists = element.options.some((v) => v.value === newV);
+    (option: SelectItems, newText: string): boolean => {
+      if (option.item === newText) return true;
+      const exists = element.options.some((v) => v.value === newText);
 
       // If there already exists an option, we don't want duplicates.
       if (exists) return false;
 
       const newOps = element.options.map((e) => {
-        if (e.value === old) {
-          return { id: e.id, value: newV };
+        if (e.value === option.item) {
+          return { id: e.id, value: newText };
         }
         return e;
       });
 
-      if (old === selected) {
-        changeOptions(newV);
+      if (option.item === selected) {
+        changeOptions(option.item);
       }
       elementChangeOptions(newOps);
       return true;
@@ -158,14 +153,16 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   );
 
   const onExecute = useCallback(
-    (item: string, type?: SelectItemTypes) => {
-      if (type === 'column') {
-        elementChangeColumn(element.selectedColumn === item ? undefined : item);
+    (option: SelectItems) => {
+      if (option.type === 'column') {
+        elementChangeColumn(
+          element.selectedColumn === option.item ? undefined : option.item
+        );
       } else {
-        if (selected === item) {
+        if (selected === option.item) {
           changeOptions('Select');
         } else {
-          changeOptions(item);
+          changeOptions(option.item);
         }
         userEvents({
           type: 'action',
@@ -195,27 +192,23 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         : `${c.tableName}.${c.columnName}` === element.selectedColumn
     );
     return [
-      {
-        title: 'Table category',
-        items: columns.map((c) => ({
-          item: `${c.tableName}.${c.columnName}`,
-          blockId: c.blockId,
-          type: 'column',
-          focused: element.selectedColumn === c.columnName,
-          icon: <Table />,
-        })),
-      },
+      ...columns.map((c) => ({
+        group: 'Table category',
+        item: `${c.tableName}.${c.columnName}`,
+        blockId: c.blockId,
+        type: 'column',
+        focused: element.selectedColumn === c.columnName,
+        icon: <Table />,
+      })),
       ...(colValues
         ? [
-            {
-              title: 'Values',
-              items: colValues.result.value.map((v) => ({
-                item: formatResultPreview({
-                  value: v,
-                  type: colValues.result.type.cellType,
-                }),
-              })),
-            },
+            ...colValues.result.value.map((v) => ({
+              group: 'Values',
+              item: formatResultPreview({
+                value: v,
+                type: colValues.result.type.cellType,
+              }),
+            })),
           ]
         : []),
     ];
@@ -232,18 +225,18 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         open={dropdownOpen}
         setOpen={setDropdownOpen}
         isReadOnly={readOnly}
-        items={!element.smartSelection ? dropdownIds : []}
-        otherItems={element.smartSelection ? otherItems : []}
+        groups={[...dropdownIds, ...otherItems]}
         addOption={addOption}
         onRemoveOption={removeOption}
         onEditOption={onEditOption}
         onExecute={onExecute}
+        isEditingAllowed
       >
         <WidgetDisplay
-          allowOpen={true}
           openMenu={dropdownOpen}
           setOpenMenu={setDropdownOpen}
           readOnly={readOnly}
+          allowOpen
         >
           {children}
         </WidgetDisplay>

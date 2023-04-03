@@ -2,13 +2,14 @@ import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { nanoid } from 'nanoid';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
 import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
 import { DropdownMenuGroup } from '../DropdownMenuGroup/DropdownMenuGroup';
+
+export type { SelectItems } from '../../atoms';
 
 const styles = css({
   display: 'flex',
@@ -69,22 +70,26 @@ export type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
   readonly setOpen: (a: boolean) => void;
   readonly isReadOnly: boolean;
-  readonly items: Array<SelectItems>;
-  readonly otherItems?: Array<{ title?: string; items: Array<SelectItems> }>;
+  /** The title will define a category for the items */
+  readonly groups: Array<SelectItems>;
+  readonly isEditingAllowed?: boolean;
   readonly addOption?: (a: string) => void;
   readonly children: JSX.Element;
 };
 
+/**
+ * A general purpose dropdown component, mostly used by the result and dropdown widget.
+ */
 export const DropdownMenu: FC<DropdownMenuProps> = ({
   open,
   setOpen,
   isReadOnly,
-  items,
-  otherItems = [],
+  groups,
   addOption = noop,
   onExecute,
   onEditOption,
   onRemoveOption,
+  isEditingAllowed = false,
   children,
 }) => {
   const ref = useRef<HTMLInputElement>(null);
@@ -92,9 +97,35 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [addingNew, setAddingNew] = useState(false);
   const [error, setError] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+  const [focusedItem, setFocusedItem] = useState(0);
 
-  const showInput = items.length === 0 || addingNew;
+  const showInput = isEditingAllowed && (addingNew || groups.length === 0);
+
+  /**
+   * Splits the given content into various groups.
+   */
+  const splitGroups = useMemo(
+    () =>
+      groups.reduce((prev, next) => {
+        if (!next.group) {
+          if (!prev['']) {
+            /* eslint no-param-reassign: "error" */
+            prev[''] = [];
+          }
+          prev[''].push(next);
+          return prev;
+        }
+
+        if (next.group! in prev) {
+          prev[next.group].push(next);
+          return prev;
+        }
+        /* eslint no-param-reassign: "error" */
+        prev[next.group] = [next];
+        return prev;
+      }, {} as Record<string, Array<SelectItems>>),
+    [groups]
+  );
 
   // Handles keyboard selection of items (up and down), as well as
   // Enter press when user is adding new option
@@ -102,18 +133,8 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     (event: KeyboardEvent) => {
       if (!open) return;
       switch (true) {
-        case event.key === 'ArrowDown' && !event.shiftKey:
-          setFocusedIndex(
-            focusedIndex === items.length - 1 ? 0 : focusedIndex + 1
-          );
-          break;
-        case event.key === 'ArrowUp' && !event.shiftKey:
-          setFocusedIndex(
-            focusedIndex === 0 ? items.length - 1 : focusedIndex - 1
-          );
-          break;
         case event.key === 'Enter' && inputValue.length > 0 && showInput:
-          if (items.some((i) => i.item === inputValue)) {
+          if (groups.some((i) => i.item === inputValue)) {
             setError(true);
           } else {
             addOption(inputValue);
@@ -123,27 +144,21 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             event.stopPropagation();
           }
           break;
-        case event.key === 'Enter' && !showInput: {
-          const item = items[focusedIndex];
-          if (item) {
-            onExecute(item.item);
-          }
-          break;
-        }
         case event.key === 'Escape':
           setOpen(false);
+          break;
+        case event.key === 'ArrowDown':
+          setFocusedItem((focusedItem + 1) % groups.length);
+          break;
+        case event.key === 'ArrowUp':
+          if (focusedItem === 0) {
+            setFocusedItem(groups.length - 1);
+            break;
+          }
+          setFocusedItem(focusedItem - 1);
       }
     },
-    [
-      open,
-      addOption,
-      inputValue,
-      items,
-      focusedIndex,
-      showInput,
-      setOpen,
-      onExecute,
-    ]
+    [open, addOption, inputValue, groups, showInput, setOpen, focusedItem]
   );
 
   useWindowListener('keydown', onKeyDown);
@@ -154,39 +169,24 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     }
   }, [showInput, open]);
 
-  useEffect(() => {
-    if (error && !items.some((i) => i.item === inputValue)) {
-      setError(false);
-    }
-  }, [error, inputValue, items]);
-
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger css={{ width: '100%' }}>{children}</Popover.Trigger>
       <Popover.Content>
         <div css={styles}>
           <div css={mainStyles}>
-            {otherItems.length > 0 &&
-              otherItems.map((group) => (
-                <DropdownMenuGroup
-                  key={nanoid()}
-                  items={group.items}
-                  onExecute={onExecute}
-                  title={group.title}
-                  onEditOption={onEditOption}
-                  onRemoveOption={onRemoveOption}
-                />
-              ))}
-            {items.length > 0 && (
+            {Object.entries(splitGroups).map(([key, items]) => (
               <DropdownMenuGroup
-                key={nanoid()}
+                key={key}
+                title={key.length === 0 ? undefined : key}
                 items={items}
                 onExecute={onExecute}
                 onEditOption={onEditOption}
                 onRemoveOption={onRemoveOption}
-                isEditingAllowed={!isReadOnly}
+                isEditingAllowed={!isReadOnly && isEditingAllowed}
+                focusedItem={focusedItem}
               />
-            )}
+            ))}
             {!isReadOnly && showInput && (
               <DropdownOption
                 value={inputValue}
@@ -196,7 +196,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
             )}
           </div>
 
-          {!isReadOnly && (
+          {!isReadOnly && isEditingAllowed && (
             <div
               css={footerStyles}
               onClick={() => {

@@ -4,10 +4,6 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { ArrowOutlined, Caret } from '../../icons';
 import { cssVar, p14Regular, p32Medium } from '../../primitives';
-import {
-  AutoCompleteMenu,
-  Identifier,
-} from '../AutoCompleteMenu/AutoCompleteMenu';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -54,18 +50,9 @@ const iconStyles = css({
   },
 });
 
-interface DropdownWidgetOptions {
-  type: 'var' | 'calc';
-  id: string;
-  text: string;
-}
-
 interface DisplayWidgetDropdownProps {
-  readonly dropdownContent: Array<DropdownWidgetOptions>;
   readonly openMenu: boolean;
   readonly onChangeOpen: (arg0: boolean) => void;
-  readonly selectedId: string;
-  readonly setSelectedId: (arg0: string) => void;
   readonly lineResult?: IdentifiedResult | IdentifiedError;
   readonly result: string | null;
   readonly readOnly: boolean;
@@ -73,10 +60,8 @@ interface DisplayWidgetDropdownProps {
 }
 
 export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
-  dropdownContent,
   openMenu,
   onChangeOpen,
-  setSelectedId,
   lineResult,
   result,
   readOnly,
@@ -119,20 +104,6 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           </div>
         )}
       </div>
-      {openMenu && !readOnly && (
-        <AutoCompleteMenu
-          top={false}
-          result={result}
-          identifiers={dropdownContent.map<Identifier>((item) => ({
-            kind: 'variable',
-            identifier: item.text,
-            type: item.id,
-          }))}
-          onExecuteItem={(i) => {
-            setSelectedId(i.type);
-          }}
-        />
-      )}
     </>
   );
 };

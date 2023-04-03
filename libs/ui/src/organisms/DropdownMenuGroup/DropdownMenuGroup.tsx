@@ -6,6 +6,7 @@ type DropdownMenuGroupProps = EditItemsOptions & {
   readonly items: Array<SelectItems>;
   readonly title?: string;
   readonly isEditingAllowed?: boolean;
+  readonly focusedItem?: number;
 };
 
 export const DropdownMenuGroup: FC<DropdownMenuGroupProps> = ({

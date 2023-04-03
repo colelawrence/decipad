@@ -35,14 +35,14 @@ export const DropdownEditor: FC<DropdownEditorProps> = ({
         open={open}
         isReadOnly={true}
         setOpen={setOpen}
-        items={
+        groups={
           dropdownOptions?.map((v) => ({
             item: v.value,
             focused: v.focused,
           })) || []
         }
         onExecute={(i) => {
-          const id = dropdownOptions?.find((v) => v.value === i);
+          const id = dropdownOptions?.find((v) => v.value === i.item);
           if (!id) return;
           onChangeValue(getExprRef(id.id));
           setOpen(false);
