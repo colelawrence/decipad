@@ -51,7 +51,7 @@ export * from './setSlateFragment';
 export * from './turnInto';
 export * from './useCache';
 export * from './useElementAbove';
-export * from './useElementMutatorCallback';
+export * from './usePathMutatorCallback';
 export * from './useEnsureValidVariableName';
 export * from './useIsOffline';
 export * from './useNodePath';

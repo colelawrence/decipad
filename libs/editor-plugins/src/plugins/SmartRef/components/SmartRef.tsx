@@ -6,7 +6,8 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  useNodePath,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
 import { SmartRef as UISmartRef } from '@decipad/ui';
@@ -61,9 +62,10 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const editor = useTEditorRef();
-  const mutateLastSeen = useElementMutatorCallback(
+  const path = useNodePath(element);
+  const mutateLastSeen = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'lastSeenVariableName'
   );
 

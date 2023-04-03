@@ -5,7 +5,8 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  useNodePath,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import { Callout as UICallout } from '@decipad/ui';
@@ -18,8 +19,9 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
 
   const editor = useTEditorRef();
 
-  const saveIcon = useElementMutatorCallback(editor, element, 'icon');
-  const saveColor = useElementMutatorCallback(editor, element, 'color');
+  const path = useNodePath(element);
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon');
+  const saveColor = usePathMutatorCallback(editor, path, 'color');
   const { color: defaultColor } = useEditorStylesContext();
 
   const turnIntoProps = useTurnIntoProps(element);

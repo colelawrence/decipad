@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
 import {
@@ -32,17 +32,18 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   const [deleted, setDeleted] = useState(false);
   const editor = useTEditorRef();
 
-  const saveIcon = useElementMutatorCallback(editor, element, 'icon');
-  const saveColor = useElementMutatorCallback(editor, element, 'color');
-  const saveExpandedGroups = useElementMutatorCallback(
+  const path = useNodePath(element);
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon');
+  const saveColor = usePathMutatorCallback(editor, path, 'color');
+  const saveExpandedGroups = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'expandedGroups'
   );
-  const saveRotated = useElementMutatorCallback(editor, element, 'rotate');
-  const saveAlternateRotation = useElementMutatorCallback(
+  const saveRotated = usePathMutatorCallback(editor, path, 'rotate');
+  const saveAlternateRotation = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'alternateRotation'
   );
 
@@ -69,8 +70,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     setDeleted(true);
     onDelete();
   }, [onDelete]);
-
-  const path = useNodePath(element);
 
   const rotate = element.rotate ?? false;
   const headers = useMemo((): ReactNode[] => {

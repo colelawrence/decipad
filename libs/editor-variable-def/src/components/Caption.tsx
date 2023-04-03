@@ -6,11 +6,12 @@ import {
   useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { getNodeString, findNodePath, isElement } from '@udecode/plate';
+import { getNodeString, isElement } from '@udecode/plate';
 import {
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useEnsureValidVariableName,
   getAboveNodeSafe,
+  useNodePath,
 } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useContext, useRef } from 'react';
@@ -27,15 +28,15 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const focused = useFocused();
   const userEvents = useContext(ClientEventsContext);
 
-  const setIcon = useElementMutatorCallback(editor, element, 'icon');
-  const setColor = useElementMutatorCallback(editor, element, 'color');
+  const path = useNodePath(element);
+  const setIcon = usePathMutatorCallback(editor, path, 'icon');
+  const setColor = usePathMutatorCallback(editor, path, 'color');
 
   // Captions are not editable in read mode.
   const isEditable = !useIsEditorReadOnly();
   const { color } = useVariableEditorContext();
 
   // ensure variable name is unique
-  const path = findNodePath(editor, element);
   const parent = getAboveNodeSafe<VariableDefinitionElement>(editor, {
     at: path,
     match: (node) => {

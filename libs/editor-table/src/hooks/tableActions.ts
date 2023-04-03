@@ -14,7 +14,8 @@ import {
 } from '@decipad/editor-types';
 import {
   insertNodes,
-  useElementMutatorCallback,
+  useNodePath,
+  usePathMutatorCallback,
   withPath,
 } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
@@ -172,60 +173,59 @@ export const useTableActions = (
 
   const computer = useComputer();
 
-  const onSetHideFormulas = useElementMutatorCallback(
+  const path = useNodePath(element ?? undefined);
+  const onSetHideFormulas = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'hideFormulas'
   );
 
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType: TableCellType) => {
-      withPath(editor, element, (path) => {
-        withoutNormalizing(editor, () => {
-          onSetHideFormulas(false);
+      withoutNormalizing(editor, () => {
+        onSetHideFormulas(false);
+        if (path) {
           changeColumnType(editor, path, cellType, columnIndex, computer);
-        });
+        }
       });
     },
-    [editor, element, computer, onSetHideFormulas]
+    [editor, onSetHideFormulas, path, computer]
   );
 
   const onChangeColumnAggregation = useCallback(
     (columnIndex: number, aggregation: string | undefined) => {
-      withPath(editor, element, (path) => {
-        const columnHeaderPath = [...path, 1, columnIndex];
-        if (hasNode(editor, columnHeaderPath)) {
-          withoutNormalizing(editor, () => {
-            setNodes<TableHeaderElement>(
-              editor,
-              { aggregation },
-              {
-                at: columnHeaderPath,
-              }
-            );
-          });
-        }
-      });
+      if (!path) {
+        return;
+      }
+      const columnHeaderPath = [...path, 1, columnIndex];
+      if (hasNode(editor, columnHeaderPath)) {
+        withoutNormalizing(editor, () => {
+          setNodes<TableHeaderElement>(
+            editor,
+            { aggregation },
+            {
+              at: columnHeaderPath,
+            }
+          );
+        });
+      }
     },
-    [editor, element]
+    [editor, path]
   );
 
   const onAddColumn = useCallback(() => {
-    withPath(editor, element, (path) => {
-      withoutNormalizing(editor, () => {
-        addColumn(editor, {
-          tablePath: path,
-        });
+    if (!path) {
+      return;
+    }
+    withoutNormalizing(editor, () => {
+      addColumn(editor, {
+        tablePath: path,
       });
     });
-  }, [editor, element]);
+  }, [editor, path]);
 
   // here is the crash i think
-  const mutateIsCollapsed = useElementMutatorCallback(
-    editor,
-    element,
-    'isCollapsed'
-  );
+  const mutateIsCollapsed = usePathMutatorCallback(editor, path, 'isCollapsed');
   const onSetCollapsed = useCallback(
     (newValue: boolean | undefined) => {
       if (newValue === true) {
@@ -237,37 +237,38 @@ export const useTableActions = (
     [mutateIsCollapsed, editor]
   );
 
-  const onSaveIcon = useElementMutatorCallback(editor, element, 'icon');
-  const onSaveColor = useElementMutatorCallback(editor, element, 'color');
+  const onSaveIcon = usePathMutatorCallback(editor, path, 'icon');
+  const onSaveColor = usePathMutatorCallback(editor, path, 'color');
 
   const onRemoveColumn = useCallback(
     (columnHeaderId: string) => {
-      withPath(editor, element, (path) => {
-        const headerRowPath = [...path, 1];
+      if (!path) {
+        return;
+      }
+      const headerRowPath = [...path, 1];
 
-        const columns = Array.from(getNodeChildren(editor, headerRowPath));
-        const columnIndex = columns.findIndex(
-          ([column]) => (column as unknown as Element).id === columnHeaderId
-        );
+      const columns = Array.from(getNodeChildren(editor, headerRowPath));
+      const columnIndex = columns.findIndex(
+        ([column]) => (column as unknown as Element).id === columnHeaderId
+      );
 
-        if (columnIndex >= 0) {
-          withoutNormalizing(editor, () => {
-            const children = Array.from(getNodeChildren(editor, path));
-            children.forEach(([, childPath], childIndex) => {
-              if (childIndex === 0) {
-                // caption
-                return;
-              }
-              const cellToDeletePath = [...childPath, columnIndex];
-              removeNodes(editor, {
-                at: cellToDeletePath,
-              });
+      if (columnIndex >= 0) {
+        withoutNormalizing(editor, () => {
+          const children = Array.from(getNodeChildren(editor, path));
+          children.forEach(([, childPath], childIndex) => {
+            if (childIndex === 0) {
+              // caption
+              return;
+            }
+            const cellToDeletePath = [...childPath, columnIndex];
+            removeNodes(editor, {
+              at: cellToDeletePath,
             });
           });
-        }
-      });
+        });
+      }
     },
-    [editor, element]
+    [editor, path]
   );
 
   /**
@@ -277,64 +278,68 @@ export const useTableActions = (
    */
   const onAddRowHere = useCallback(
     (rowNumber: number, below?: boolean) => {
-      withPath(editor, element, (path) => {
-        withoutNormalizing(editor, () => {
-          addRow(editor, path, {
-            at: [...path, below ? rowNumber + 1 : rowNumber],
-          });
+      if (!path) {
+        return;
+      }
+      withoutNormalizing(editor, () => {
+        addRow(editor, path, {
+          at: [...path, below ? rowNumber + 1 : rowNumber],
         });
       });
     },
-    [editor, element]
+    [editor, path]
   );
 
   const onAddRow = useCallback(() => {
-    withPath(editor, element, (path) => {
-      withoutNormalizing(editor, () => {
-        addRow(editor, path);
-      });
+    if (!path) {
+      return;
+    }
+    withoutNormalizing(editor, () => {
+      addRow(editor, path);
     });
-  }, [editor, element]);
+  }, [editor, path]);
 
   const onRemoveRow = useCallback(
     (id: string) => {
-      withPath(editor, element, (path) => {
-        const [table] = getNodeEntry(editor, path);
-        const rows = (table as TableElement).children;
-        const rowIndex = rows.findIndex((row) => row.id === id);
-        const rowPath = [...path, rowIndex];
-        if (hasNode(editor, rowPath)) {
-          withoutNormalizing(editor, () => {
-            removeNodes(editor, { at: rowPath });
-          });
-        }
-      });
+      if (!path) {
+        return;
+      }
+      const [table] = getNodeEntry(editor, path);
+      const rows = (table as TableElement).children;
+      const rowIndex = rows.findIndex((row) => row.id === id);
+      const rowPath = [...path, rowIndex];
+      if (hasNode(editor, rowPath)) {
+        withoutNormalizing(editor, () => {
+          removeNodes(editor, { at: rowPath });
+        });
+      }
     },
-    [editor, element]
+    [editor, path]
   );
 
   const onMoveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
-      withPath(editor, element, (path) => {
-        withoutNormalizing(editor, () => {
-          let childIndex = -1;
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          for (const _row of getNodeChildren(editor, path)) {
-            childIndex += 1;
-            if (childIndex < 1) {
-              // skip caption element
-              continue;
-            }
-            const sourcePath = [...path, childIndex, fromIndex];
-            const targetPath = [...path, childIndex, toIndex];
-            if (hasNode(editor, sourcePath) && hasNode(editor, targetPath)) {
-              moveNodes(editor, { at: sourcePath, to: targetPath });
-            }
+      if (!path) {
+        return;
+      }
+      withoutNormalizing(editor, () => {
+        let childIndex = -1;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for (const _row of getNodeChildren(editor, path)) {
+          childIndex += 1;
+          if (childIndex < 1) {
+            // skip caption element
+            continue;
           }
-        });
+          const sourcePath = [...path, childIndex, fromIndex];
+          const targetPath = [...path, childIndex, toIndex];
+          if (hasNode(editor, sourcePath) && hasNode(editor, targetPath)) {
+            moveNodes(editor, { at: sourcePath, to: targetPath });
+          }
+        }
       });
     },
-    [editor, element]
+    [editor, path]
   );
 
   return {

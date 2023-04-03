@@ -9,7 +9,7 @@ import {
 import {
   assertElementType,
   pluginStore,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
 import { useLiveConnection } from '@decipad/live-connect';
@@ -90,9 +90,9 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
     [editor, element.columnTypeCoercions, path]
   );
 
-  const setIsFirstRowHeader = useElementMutatorCallback(
+  const setIsFirstRowHeader = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'isFirstRowHeaderRow'
   );
 

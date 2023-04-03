@@ -6,13 +6,14 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  useNodePath,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { parseSimpleValue } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { cssVar, MenuItem, MenuList, StructuredInputUnits } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { findNodePath, getParentNode, removeNodes } from '@udecode/plate';
+import { getParentNode, removeNodes } from '@udecode/plate';
 import { Caret, Number, Trash } from 'libs/ui/src/icons';
 import { useCallback, useMemo, useState } from 'react';
 import { SimpleValueContext, VarResultContext } from '../CodeLine';
@@ -28,13 +29,13 @@ export const DataMappingRow: PlateComponent = ({
 
   const computer = useComputer();
   const editor = useTEditorRef();
-  const onChangeUnit = useElementMutatorCallback(editor, element, 'unit');
+  const path = useNodePath(element);
+  const onChangeUnit = usePathMutatorCallback(editor, path, 'unit');
 
-  const path = findNodePath(editor, element);
   const parent = getParentNode<DataMappingElement>(editor, path!)![0];
-  const changeSourceColumn = useElementMutatorCallback(
+  const changeSourceColumn = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'sourceColumn'
   );
 
@@ -44,7 +45,9 @@ export const DataMappingRow: PlateComponent = ({
   );
 
   const onDelete = useCallback(() => {
-    removeNodes(editor, { at: path });
+    if (path) {
+      removeNodes(editor, { at: path });
+    }
   }, [editor, path]);
 
   const columns = computer.getAllColumns$.use(parent.source);

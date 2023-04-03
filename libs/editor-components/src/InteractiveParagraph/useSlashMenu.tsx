@@ -95,7 +95,7 @@ export const useSlashMenu = (
   return {
     showSlashCommands,
     menuRef,
-    elementPath,
+    elementPath: elementPath ?? undefined,
     deleteFragment,
     search,
   };

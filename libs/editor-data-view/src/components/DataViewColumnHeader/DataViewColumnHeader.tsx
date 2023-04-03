@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
@@ -63,9 +63,9 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     );
   }, [element.cellType, actualPath]);
 
-  const onAggregationChange = useElementMutatorCallback(
+  const onAggregationChange = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'aggregation'
   );
 
@@ -86,11 +86,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     () => (element ? availableRoundings(element.cellType) : []),
     [element]
   );
-  const onRoundingChange = useElementMutatorCallback(
-    editor,
-    element,
-    'rounding'
-  );
+  const onRoundingChange = usePathMutatorCallback(editor, path, 'rounding');
 
   if (!columnName) {
     return null;

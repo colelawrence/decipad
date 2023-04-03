@@ -9,7 +9,7 @@ import {
 import {
   hasLayoutAncestor,
   safeDelete,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useNodePath,
   wrapIntoColumns,
 } from '@decipad/editor-utils';
@@ -25,12 +25,7 @@ import {
   VariableEditor,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import {
-  findNode,
-  findNodePath,
-  moveNodes,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { findNode, moveNodes, withoutNormalizing } from '@udecode/plate';
 import { Number } from 'libs/ui/src/icons';
 import {
   ComponentProps,
@@ -59,18 +54,20 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const readOnly = useIsEditorReadOnly();
 
   const editor = useTEditorRef();
-  const changeBlockId = useElementMutatorCallback(editor, element, 'blockId');
-  const changeVarName = useElementMutatorCallback(editor, element, 'varName');
+  const path = useNodePath(element);
+  const changeBlockId = usePathMutatorCallback(editor, path, 'blockId');
+  const changeVarName = usePathMutatorCallback(editor, path, 'varName');
 
   const res = useResult(element.blockId);
   const computer = useComputer();
 
+  const [deleted, setDeleted] = useState(false);
   const onDelete = useCallback(() => {
-    const path = findNodePath(editor, element);
     if (path) {
+      setDeleted(true);
       safeDelete(editor, path);
     }
-  }, [editor, element]);
+  }, [editor, path]);
 
   // Results from computer are NOT calculated until the menu is actually open.
   // Saving a lot of CPU when the editor is re-rendering when the user is busy
@@ -120,8 +117,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     [namesDefined, unnamedResults]
   );
 
-  const path = useNodePath(element);
-  const isHorizontal = path && hasLayoutAncestor(editor, path);
+  const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
 
   const getAxis = useCallback<
     NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>

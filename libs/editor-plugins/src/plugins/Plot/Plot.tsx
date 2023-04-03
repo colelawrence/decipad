@@ -9,7 +9,8 @@ import { PlotBlock } from '@decipad/ui/src/organisms/PlotBlock/PlotBlock';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  useNodePath,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { usePlot } from './utils/usePlot';
 import { initializeVega } from './initializeVega';
@@ -24,7 +25,8 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
   const { spec, data, plotParams } = usePlot(element);
-  const onTitleChange = useElementMutatorCallback(editor, element, 'title');
+  const path = useNodePath(element);
+  const onTitleChange = usePathMutatorCallback(editor, path, 'title');
 
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers

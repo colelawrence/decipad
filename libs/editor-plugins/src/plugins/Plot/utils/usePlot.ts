@@ -1,7 +1,7 @@
 import { PlotElement, useTEditorRef } from '@decipad/editor-types';
 import _ from 'lodash';
 import { Computer, AutocompleteName, getExprRef } from '@decipad/computer';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
 import { useEffect, useMemo } from 'react';
@@ -61,6 +61,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
   const [isDarkMode] = useThemeFromStore();
   const editor = useTEditorRef();
   const computer = useComputer();
+  const path = useNodePath(element);
 
   const names = computer.getNamesDefined$.useWithSelector((n) =>
     n.filter(isTable).map((table) => autocompleteNameToExprRef(computer, table))
@@ -80,7 +81,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
 
   spec = spec && data && enhanceSpecFromWideData(spec, data);
 
-  const setMarkType = useElementMutatorCallback(editor, element, 'markType');
+  const setMarkType = usePathMutatorCallback(editor, path, 'markType');
 
   const shape = useMemo(() => {
     if (shapes.includes(element.markType as Shape)) {
@@ -89,41 +90,29 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     return undefined;
   }, [element.markType]);
 
-  const setSourceVarName = useElementMutatorCallback(
+  const setSourceVarName = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'sourceVarName'
   );
-  const setXColumnName = useElementMutatorCallback(
+  const setXColumnName = usePathMutatorCallback(editor, path, 'xColumnName');
+  const setYColumnName = usePathMutatorCallback(editor, path, 'yColumnName');
+  const setSizeColumnName = usePathMutatorCallback(
     editor,
-    element,
-    'xColumnName'
-  );
-  const setYColumnName = useElementMutatorCallback(
-    editor,
-    element,
-    'yColumnName'
-  );
-  const setSizeColumnName = useElementMutatorCallback(
-    editor,
-    element,
+    path,
     'sizeColumnName'
   );
-  const setColorColumnName = useElementMutatorCallback(
+  const setColorColumnName = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'colorColumnName'
   );
-  const setThetaColumnName = useElementMutatorCallback(
+  const setThetaColumnName = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'thetaColumnName'
   );
-  const setColorScheme = useElementMutatorCallback(
-    editor,
-    element,
-    'colorScheme'
-  );
+  const setColorScheme = usePathMutatorCallback(editor, path, 'colorScheme');
 
   const plotParams: PlotParams = useMemo(
     () => ({

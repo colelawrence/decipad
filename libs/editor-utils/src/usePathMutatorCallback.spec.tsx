@@ -1,25 +1,26 @@
-import { LinkElement, MyElement, useTEditorRef } from '@decipad/editor-types';
+import {
+  MyElement,
+  PlateComponent,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useState } from 'react';
-import { Editable, RenderElementProps, Slate } from 'slate-react';
+import { ComponentProps, useState } from 'react';
+import { Editable, Slate } from 'slate-react';
 
-import { createTEditor, withTReact } from '@udecode/plate';
-import { useElementMutatorCallback } from './useElementMutatorCallback';
+import { createTEditor, findNodePath, withTReact } from '@udecode/plate';
+import { usePathMutatorCallback } from './usePathMutatorCallback';
 
-describe('useElementMutatorCallback', () => {
-  const Link: React.FC<RenderElementProps & { sideEffects: () => void }> = ({
-    element,
-    attributes,
-    children,
-    sideEffects,
-  }) => {
+describe('usePathMutatorCallback', () => {
+  const Link: React.FC<
+    ComponentProps<PlateComponent> & { sideEffects: () => void }
+  > = ({ element, attributes, children, sideEffects }) => {
     const [text, setText] = useState('');
     const editor = useTEditorRef();
-    const mutateElement = useElementMutatorCallback(
+    const mutateElement = usePathMutatorCallback(
       editor,
-      element as LinkElement,
+      findNodePath(editor, element as MyElement),
       'url',
       sideEffects
     );
@@ -55,7 +56,10 @@ describe('useElementMutatorCallback', () => {
       >
         <Editable
           renderElement={(props) => (
-            <Link {...props} sideEffects={sideEffects} />
+            <Link
+              {...(props as ComponentProps<PlateComponent>)}
+              sideEffects={sideEffects}
+            />
           )}
         />
       </Slate>

@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useNodePath,
 } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
@@ -79,15 +79,11 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
   // For the dropdown options to be permenant in the editor state,
   // I save to a field in the dropdown child, this array can be
   // modifiedwith this functions
-  const elementChangeOptions = useElementMutatorCallback(
-    editor,
-    element,
-    'options'
-  );
+  const elementChangeOptions = usePathMutatorCallback(editor, path, 'options');
 
-  const elementChangeColumn = useElementMutatorCallback(
+  const elementChangeColumn = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'selectedColumn'
   );
 

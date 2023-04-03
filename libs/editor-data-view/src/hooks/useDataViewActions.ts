@@ -7,9 +7,10 @@ import {
   DataViewHeaderRowElement,
 } from '@decipad/editor-types';
 import {
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   withPath,
   insertNodes,
+  useNodePath,
 } from '@decipad/editor-utils';
 import { useCallback, useMemo } from 'react';
 import {
@@ -111,7 +112,8 @@ export const useDataViewActions = (
     [editor, element?.children]
   );
 
-  const setVarName = useElementMutatorCallback(editor, element, 'varName');
+  const path = useNodePath(element);
+  const setVarName = usePathMutatorCallback(editor, path, 'varName');
 
   const clearColumns = useCallback(() => {
     if (!editor.withoutCapturingUndo) {
@@ -191,7 +193,7 @@ export const useDataViewActions = (
           if (maybeRemoveFirstText()) {
             childLength -= 1;
           }
-          const path = [...headerRowPath, childLength];
+          const newColumnPath = [...headerRowPath, childLength];
           insertNodes(
             editor,
             {
@@ -201,7 +203,7 @@ export const useDataViewActions = (
               name: columnName,
               children: [{ text: '' }],
             },
-            { at: path }
+            { at: newColumnPath }
           );
         });
       }

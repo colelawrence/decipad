@@ -9,7 +9,8 @@ import {
 import {
   assertElementType,
   insertNodes,
-  useElementMutatorCallback,
+  useNodePath,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { IdentifiedResult, parseSimpleValue } from '@decipad/computer';
@@ -18,7 +19,7 @@ import {
   StructuredInputLines,
 } from '@decipad/ui';
 import { Children, ComponentProps, useCallback, useMemo } from 'react';
-import { findNodePath, nanoid, removeNodes } from '@udecode/plate';
+import { nanoid, removeNodes } from '@udecode/plate';
 import { DraggableBlock } from '../block-management';
 import { getSyntaxError } from '../CodeLine/getSyntaxError';
 import { SimpleValueContext, VarResultContext } from '../CodeLine';
@@ -33,14 +34,11 @@ export const DataMapping: PlateComponent = ({
   const childrenArray = Children.toArray(children);
   const editor = useTEditorRef();
   const computer = useComputer();
+  const path = useNodePath(element);
 
-  const changeSource = useElementMutatorCallback(editor, element, 'source');
-  const changeSourceType = useElementMutatorCallback(
-    editor,
-    element,
-    'sourceType'
-  );
-  const changeUnit = useElementMutatorCallback(editor, element, 'unit');
+  const changeSource = usePathMutatorCallback(editor, path, 'source');
+  const changeSourceType = usePathMutatorCallback(editor, path, 'sourceType');
+  const changeUnit = usePathMutatorCallback(editor, path, 'unit');
 
   const definedResult = computer.getBlockIdResult$.use(element.id);
 
@@ -96,7 +94,6 @@ export const DataMapping: PlateComponent = ({
   );
 
   const addMapping = useCallback(() => {
-    const path = findNodePath(editor, element);
     if (!path) return;
 
     insertNodes(
@@ -117,7 +114,7 @@ export const DataMapping: PlateComponent = ({
         at: [...path, element.children.length],
       }
     );
-  }, [editor, element]);
+  }, [editor, element.children.length, path]);
 
   const onSelectSource = useCallback(
     (
@@ -127,7 +124,6 @@ export const DataMapping: PlateComponent = ({
       changeSource(sourceId);
       changeSourceType(sourceType);
 
-      const path = findNodePath(editor, element);
       if (!path) return;
 
       if (element.children.length > 1) {
@@ -168,7 +164,14 @@ export const DataMapping: PlateComponent = ({
         counter += 1;
       }
     },
-    [editor, computer.getAllColumns$, element, changeSource, changeSourceType]
+    [
+      changeSource,
+      changeSourceType,
+      path,
+      element.children.length,
+      computer.getAllColumns$,
+      editor,
+    ]
   );
 
   const isTable = element.sourceType && element.sourceType !== 'notebook-var';

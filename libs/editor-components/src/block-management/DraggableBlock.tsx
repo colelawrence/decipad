@@ -16,9 +16,10 @@ import {
   clone,
   insertNodes,
   requirePathBelowBlock,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   createStructuredCodeLine,
   getCodeLineSource,
+  useNodePath,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -148,7 +149,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const dependenciesForBlock = computer.blocksInUse$.use(...dependencyArray);
     const selected = useSelected();
-    const setIsHidden = useElementMutatorCallback(editor, element, 'isHidden');
+    const path = useNodePath(element);
+    const setIsHidden = usePathMutatorCallback(editor, path, 'isHidden');
 
     const blockRef = useRef<HTMLDivElement>(null);
     const previewRef = useRef<HTMLDivElement>(null);
@@ -185,7 +187,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     }, [editor, element, parentOnDelete, event, onceDeleted]);
 
     const onDuplicate = useCallback(() => {
-      const path = findNodePath(editor, element);
       if (path) {
         const newEl = clone(computer, element);
         insertElements(editor, newEl, {
@@ -197,11 +198,10 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           props: { blockType: newEl.type },
         });
       }
-    }, [computer, editor, element, event]);
+    }, [computer, editor, element, event, path]);
 
     const onAdd = useCallback(() => {
-      const path = findNodePath(editor, element);
-      if (path === undefined) return;
+      if (path == null) return;
       const entry = getPreviousNode(editor, {
         at: path,
       });
@@ -210,7 +210,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         at: path,
       });
       select(editor, path);
-    }, [editor, element, computer]);
+    }, [path, editor, computer]);
 
     const onPlus = useCallback(() => {
       openSlashMenu(editor, element);

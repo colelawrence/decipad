@@ -21,7 +21,7 @@ const Fallback: FC<FallbackProps> = ({
   const editor = useTEditorRef();
 
   const delPath = useNodePath(element);
-  if (delPath === undefined) return <ErrorBlock type="complete-error" />;
+  if (delPath == null) return <ErrorBlock type="complete-error" />;
 
   return (
     <ErrorBlock

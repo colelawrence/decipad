@@ -6,7 +6,7 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
@@ -83,13 +83,9 @@ export const LiveConnectionVarName: PlateComponent = ({
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
   const possibleJsonPaths = useLiveConnectionPossibleJsonPaths();
-  const setJsonPath = useElementMutatorCallback(
-    editor,
-    parent?.[0],
-    'jsonPath'
-  );
-  const setUrl = useElementMutatorCallback(editor, parent?.[0], 'url');
-  const setSource = useElementMutatorCallback(editor, parent?.[0], 'source');
+  const setJsonPath = usePathMutatorCallback(editor, parent?.[1], 'jsonPath');
+  const setUrl = usePathMutatorCallback(editor, parent?.[1], 'url');
+  const setSource = usePathMutatorCallback(editor, parent?.[1], 'source');
 
   const caption = (
     <div {...attributes} css={captionWrapperStyles}>

@@ -16,7 +16,7 @@ import {
   hasLayoutAncestor,
   mutateText,
   safeDelete,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useNodePath,
   wrapIntoColumns,
 } from '@decipad/editor-utils';
@@ -28,7 +28,6 @@ import {
 import { VariableEditor } from '@decipad/ui';
 import {
   findNode,
-  findNodePath,
   getNodeString,
   moveNodes,
   PlateEditor,
@@ -54,14 +53,14 @@ export const VariableDef: PlateComponent = ({
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
+  const path = useNodePath(element);
 
   const onDelete = useCallback(() => {
-    const path = findNodePath(editor, element);
     if (path) {
       setDeleted(true);
       safeDelete(editor, path);
     }
-  }, [editor, element]);
+  }, [editor, path]);
 
   const onCopy = useCallback(() => {
     copy(serializeHtml(editor as PlateEditor, { nodes: [element] }), {
@@ -69,34 +68,30 @@ export const VariableDef: PlateComponent = ({
     });
   }, [editor, element]);
 
+  const sliderElementPath = useNodePath(
+    (element as VariableSliderElement).children[2]
+  );
   // Slider
-  const onChangeMax = useElementMutatorCallback(
+  const onChangeMax = usePathMutatorCallback(editor, sliderElementPath, 'max');
+  const onChangeMin = usePathMutatorCallback(editor, sliderElementPath, 'min');
+  const onChangeStep = usePathMutatorCallback(
     editor,
-    (element as VariableSliderElement).children[2],
-    'max'
-  );
-  const onChangeMin = useElementMutatorCallback(
-    editor,
-    (element as VariableSliderElement).children[2],
-    'min'
-  );
-  const onChangeStep = useElementMutatorCallback(
-    editor,
-    (element as VariableSliderElement).children[2],
+    sliderElementPath,
     'step'
   );
 
-  const onChangeSmartSelection = useElementMutatorCallback(
+  const dropDownElementPath = useNodePath(element.children[1]);
+  const onChangeSmartSelection = usePathMutatorCallback(
     editor,
-    (element as VariableDropdownElement).children[1],
+    dropDownElementPath,
     'smartSelection'
   );
 
   const inferredType = useTextTypeInference(element);
 
-  const onChangeTypeMutator = useElementMutatorCallback(
+  const onChangeTypeMutator = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'coerceToType'
   );
   const onChangeType = useCallback(
@@ -140,15 +135,13 @@ export const VariableDef: PlateComponent = ({
 
   const onChangeValue = useCallback(
     (value: string | undefined) => {
-      const path = findNodePath(editor, element.children[1]);
       if (path) {
         mutateText(editor, path)(value?.toString() ?? '');
       }
     },
-    [editor, element]
+    [editor, path]
   );
 
-  const path = useNodePath(element);
   const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
 
   const getAxis = useCallback<

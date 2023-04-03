@@ -15,7 +15,7 @@ import {
 import { TableColumnHeader, Tooltip } from '@decipad/ui';
 import {
   assertElementType,
-  useElementMutatorCallback,
+  usePathMutatorCallback,
   useEnsureValidVariableName,
   useNodePath,
 } from '@decipad/editor-utils';
@@ -62,11 +62,7 @@ export const TableHeaderCell: PlateComponent = ({
 
   const [cols, setCols] = useState<ColumnMenuDropdown[]>([]);
 
-  const mutateDropdownType = useElementMutatorCallback(
-    editor,
-    element,
-    'cellType'
-  );
+  const mutateDropdownType = usePathMutatorCallback(editor, path, 'cellType');
 
   useEffect(() => {
     const editorChanges$ = concat(of(undefined), editorChanges);

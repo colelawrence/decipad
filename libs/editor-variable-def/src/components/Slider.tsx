@@ -5,7 +5,7 @@ import {
   PlateComponent,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
-import { useElementMutatorCallback } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
 import { ReactEditor } from 'slate-react';
 import { setSelection } from '@udecode/plate';
 import { ClientEventsContext } from '@decipad/client-events';
@@ -30,9 +30,10 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
     });
   }, [editor, element]);
 
-  const onValueChange = useElementMutatorCallback(
+  const path = useNodePath(element);
+  const onValueChange = usePathMutatorCallback(
     editor,
-    element,
+    path,
     'value',
     selectElement
   );
