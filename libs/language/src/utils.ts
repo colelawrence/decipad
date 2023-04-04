@@ -224,7 +224,7 @@ export function funcDef(
 
 export function prop(thing: string | AST.Expression, propName: string) {
   const asExp = typeof thing === 'string' ? n('ref', thing) : thing;
-  return n('property-access', asExp, propName);
+  return n('property-access', asExp, n('colref', propName));
 }
 
 export function getOfType<
@@ -292,21 +292,23 @@ const assignmentTypesSet = new Set([
 export const isAssignment = (value: unknown): value is AST.GenericAssignment =>
   isNode(value) && assignmentTypesSet.has(value.type);
 
-const identifierTypesSet = new Set([
-  'ref',
-  'catdef',
-  'def',
-  'tabledef',
-  'tablepartialdef',
-  'funcdef',
-  'generic-identifier',
-  'funcref',
-  'coldef',
-  'externalref',
-]);
+/** complete list of identifiers. It's a record so that TS will assert that all identifiers are covered. */
+const identifierTypes: Record<AST.Identifier['type'], true> = {
+  ref: true,
+  catdef: true,
+  def: true,
+  tabledef: true,
+  tablepartialdef: true,
+  funcdef: true,
+  'generic-identifier': true,
+  funcref: true,
+  coldef: true,
+  colref: true,
+  externalref: true,
+};
 
 export const isIdentifier = (value: unknown): value is AST.Identifier =>
-  isNode(value) && identifierTypesSet.has(value.type);
+  isNode(value) && identifierTypes[(value as AST.Identifier).type] === true;
 
 export function assertIdentifier(
   value: unknown

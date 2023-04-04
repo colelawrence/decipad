@@ -219,7 +219,10 @@ primary       -> (ref | functionCall | parenthesizedExpression | select) _ "." _
                                                             type: 'property-access',
                                                             args: [
                                                               d[0][0],
-                                                              d[4].value
+                                                              addLoc({
+                                                                type: 'colref',
+                                                                args: [d[4].value]
+                                                              }, d[4]),
                                                             ]
                                                           }, d)
                                                         %}

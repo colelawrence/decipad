@@ -14,7 +14,12 @@ runTests({
             start: 1,
             end: 3,
           },
-          'def',
+          {
+            type: 'colref',
+            args: ['def'],
+            start: 5,
+            end: 7,
+          },
         ],
         start: {
           char: 1,
@@ -96,7 +101,12 @@ runTests({
                             start: 4,
                             end: 4,
                           },
-                          'c',
+                          {
+                            type: 'colref',
+                            args: ['c'],
+                            start: 6,
+                            end: 6,
+                          },
                         ],
                         start: {
                           char: 4,

@@ -7,6 +7,7 @@ const typesWithArgs = new Set<AST.Node['type']>([
   'assign',
   'table-column-assign',
   'categories',
+  'property-access',
   'matrix-ref',
   'matrix-assign',
   'argument-names',
@@ -64,8 +65,6 @@ export function sourceMapDecorator(
       node.args = (node.args as AST.Node[]).map((node: unknown) =>
         decorateNode(node as ParserNode)
       ) as ParserNode[];
-    } else if (node.type === 'property-access') {
-      node.args[0] = decorateNode(node.args[0] as ParserNode);
     } else if (node.type === 'directive') {
       const [type, ...rest] = node.args as ParserNode[];
       node.args = [type, ...rest.map(decorateNode)] as AST.Node[];

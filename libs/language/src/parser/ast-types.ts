@@ -78,6 +78,13 @@ export interface ColDef {
   end?: Pos;
 }
 
+export interface ColRef {
+  type: 'colref';
+  args: [colName: string];
+  start?: Pos;
+  end?: Pos;
+}
+
 export type Identifier =
   | Ref
   | FuncRef
@@ -88,7 +95,8 @@ export type Identifier =
   | TablePartialDef
   | CatDef
   | FuncDef
-  | ColDef;
+  | ColDef
+  | ColRef;
 
 // Literal number, char, string etc
 
@@ -240,7 +248,7 @@ export interface Tiered {
 
 export interface PropertyAccess {
   type: 'property-access';
-  args: [Expression, string];
+  args: [Expression, ColRef];
   start?: Pos;
   end?: Pos;
 }

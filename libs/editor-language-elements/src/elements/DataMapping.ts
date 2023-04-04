@@ -82,7 +82,7 @@ export const DataMapping: InteractiveLanguageElement = {
           sourceColumn = astNode(
             'property-access',
             astNode('ref', getExprRef(element.source)),
-            col.sourceColumn
+            astNode('colref', col.sourceColumn)
           );
         }
         if (!sourceColumn) return undefined;

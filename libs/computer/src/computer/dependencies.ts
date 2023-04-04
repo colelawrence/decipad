@@ -67,20 +67,29 @@ export const dependencies = (
         return findRefs(node.args[0]);
       }
       case 'property-access': {
-        const [table, column] = node.args;
+        const [table, columnRef] = node.args;
+        const column = getIdentifierString(columnRef);
         if (table.type === 'ref') {
           return unique([...findRefs(table), `${table.args[0]}::${column}`]);
         }
 
+        return unique([
+          ...findRefs(table),
+          // colref handled below
+          ...findRefs(columnRef),
+        ]);
+      }
+      case 'colref': {
+        const colName = getIdentifierString(node);
+
         // TODO no idea what table this is, let's just do all of them
         // In the future we can improve this by making sure
         // That all column names are globally unique!
-        const allPossiblePropertyAccesses = [...namespaces].flatMap(
-          ([table, columns]) => {
-            return columns.has(column) ? [`${table}::${column}`] : [];
-          }
+        return unique(
+          [...namespaces].flatMap(([table, columns]) =>
+            columns.has(colName) ? [`${table}::${colName}`] : []
+          )
         );
-        return unique([...allPossiblePropertyAccesses, ...findRefs(table)]);
       }
       case 'directive': {
         const [, ...args] = node.args;

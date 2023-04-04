@@ -1,5 +1,5 @@
 import { AST, runAST } from '..';
-import { n, c, l, block, assign, col, r, tableDef } from '../utils';
+import { n, c, l, block, assign, col, r, tableDef, prop } from '../utils';
 
 import { usesRecursion } from './evaluate';
 
@@ -19,7 +19,7 @@ describe('evaluateTableColumn', () => {
         numbers: col(1, 2, 3, 4),
         theTestColumn: exp,
       }),
-      n('property-access', r('Table'), 'theTestColumn')
+      prop('Table', 'theTestColumn')
     );
 
     return (await runAST(testBlock)).value as unknown[];

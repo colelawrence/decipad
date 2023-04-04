@@ -77,15 +77,6 @@ function replaceAllBlockIdReferences(program: Program): [Program, Set<string>] {
                 generatedNames.add(thing.args[0]);
               }
             }
-          } else if (thing.type === 'property-access') {
-            const [, column] = thing.args;
-            if (isExprRef(column)) {
-              const { newName, wasGenerated } = genVarName(column);
-              thing.args[1] = newName;
-              if (wasGenerated) {
-                generatedNames.add(thing.args[1]);
-              }
-            }
           }
 
           return thing;

@@ -21,7 +21,9 @@ export const prettyPrintAST = (node: AST.Node, indent = 0): string => {
     }
     case 'property-access': {
       const [ref, prop] = node.args;
-      return `(prop ${prettyPrintAST(ref, indent + 1)}.${prop})`;
+      return `(prop ${prettyPrintAST(ref, indent + 1)}.${getIdentifierString(
+        prop
+      )})`;
     }
     case 'function-call': {
       [fname] = node.args[0].args;

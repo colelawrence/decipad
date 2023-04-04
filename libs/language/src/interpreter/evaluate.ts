@@ -189,8 +189,9 @@ export async function evaluate(
       return evaluateTable(realm, node);
     }
     case 'property-access': {
-      const tableOrRow = await evaluate(realm, node.args[0]);
-      return getProperty(tableOrRow, node.args[1]);
+      const [base, prop] = node.args;
+      const tableOrRow = await evaluate(realm, base);
+      return getProperty(tableOrRow, getIdentifierString(prop));
     }
     case 'table-column-assign': {
       return evaluateColumnAssign(realm, node);

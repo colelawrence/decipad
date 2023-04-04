@@ -241,11 +241,7 @@ describe('tables', () => {
     const block = n(
       'block',
       tableDef('Table', { Col1: col(1, 2, 3) }),
-      n(
-        'assign',
-        n('def', 'Col'),
-        n('property-access', n('ref', 'Table'), 'Col1')
-      )
+      n('assign', n('def', 'Col'), prop('Table', 'Col1'))
     );
 
     expect(inferProgram([block]).stack.get('Col')).toEqual(

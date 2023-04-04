@@ -1809,7 +1809,16 @@ let ParserRules = [
       addArrayLoc(
         {
           type: 'property-access',
-          args: [d[0][0], d[4].value],
+          args: [
+            d[0][0],
+            addLoc(
+              {
+                type: 'colref',
+                args: [d[4].value],
+              },
+              d[4]
+            ),
+          ],
         },
         d
       ),

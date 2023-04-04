@@ -156,7 +156,8 @@ export const inferExpression = wrap(
         return t.column(firstCellType, optionalIndex?.args[0]);
       }
       case 'property-access': {
-        const [thing, propName] = expr.args;
+        const [thing, prop] = expr.args;
+        const propName = getIdentifierString(prop);
         const table = inferExpression(ctx, thing).isTableOrRow();
         const tableName =
           thing.type === 'ref' ? thing.args[0] : table.indexName;

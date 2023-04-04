@@ -37,16 +37,6 @@ const interpolate = (
   idsToInterpolations: Map<string, AST.Node | { name: string }>
 ): AST.Statement => {
   return mutateAst(parsed, (node) => {
-    if (
-      node.type === 'property-access' &&
-      idsToInterpolations.has(node.args[1])
-    ) {
-      // Special-case property access's column because the name is a string.
-      node.args[1] = (
-        idsToInterpolations.get(node.args[1]) as { name: string }
-      ).name;
-    }
-
     const toReplace =
       isIdentifier(node) && idsToInterpolations.get(node.args[0]);
 
