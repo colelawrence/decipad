@@ -14,6 +14,13 @@ const sourceToName: Record<ImportElementSource, string> = {
   gsheets: 'Google Sheets',
   json: 'a JSON API',
   arrow: 'an Arrow file',
+  sqlite: 'a SQLIte database',
+  postgresql: 'a PostgreSQL database',
+  mysql: 'a MySQL database',
+  oracledb: 'an OracleDB database',
+  cockroachdb: 'a CockroachDB database',
+  redshift: 'a Redshift database',
+  mariadb: 'a MariaDB database',
 };
 
 const groups = (

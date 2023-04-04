@@ -6,6 +6,7 @@ import {
   GraphqlContext,
   PageInput,
   PagedResult,
+  ExternalDataSourceProvider,
 } from '@decipad/backendtypes';
 import tables, { paginate } from '@decipad/tables';
 import Resource from '@decipad/graphqlresource';
@@ -13,9 +14,21 @@ import { app } from '@decipad/config';
 import { resource } from '@decipad/backend-resources';
 import { identity } from 'ramda';
 
+const isDatabaseSource = new Set<ExternalDataSourceProvider>([
+  'sqlite',
+  'postgresql',
+  'mysql',
+  'oracledb',
+  'cockroachdb',
+  'redshift',
+  'mariadb',
+]);
+
 function baseUrlFor(externalDataSource: ExternalDataSourceRecord): string {
   const { urlBase, apiPathBase } = app();
-  return `${urlBase}${apiPathBase}/externaldatasources/${externalDataSource.id}`;
+  return `${urlBase}${apiPathBase}/externaldatasources/${
+    isDatabaseSource.has(externalDataSource.provider) ? 'db/' : ''
+  }${externalDataSource.id}`;
 }
 
 function dataUrlFor(externalDataSource: ExternalDataSourceRecord): string {

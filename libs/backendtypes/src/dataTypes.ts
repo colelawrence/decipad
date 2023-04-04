@@ -204,7 +204,15 @@ export type ExternalDataSourceProvider =
   | 'gsheets'
   | 'csv'
   | 'json'
-  | 'arrow';
+  | 'arrow'
+  | 'sqlite'
+  | 'postgresql'
+  | 'mysql'
+  | 'mssql'
+  | 'oracledb'
+  | 'cockroachdb'
+  | 'redshift'
+  | 'mariadb';
 
 /* Pagination */
 

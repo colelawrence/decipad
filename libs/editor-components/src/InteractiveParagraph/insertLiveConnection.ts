@@ -19,6 +19,9 @@ import { getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
+import { ExternalProvider } from '@decipad/graphql-client';
+import { needsToCreateExternalData } from '../utils/needsToCreateExternalData';
+import { insertExternalData } from '../utils/insertExternalData';
 
 const nextBlock = (path: Path): Path => {
   const [block, ...rest] = path;
@@ -151,6 +154,18 @@ export const insertLiveConnection = async (
   if (isCollapsed(selection) && selection?.anchor && url) {
     if (identifyIslands) {
       return identifyIslandsAndThenInsertLiveConnection(props);
+    }
+    if (needsToCreateExternalData(props)) {
+      const externalData = await insertExternalData({
+        name: `data-source/${props.editor.id}/${props.source}/${props.url}`,
+        padId: props.editor.id,
+        externalId: props.url ?? '',
+        provider: getDefined(props.source) as ExternalProvider,
+      });
+      return justInsertLiveConnection({
+        ...props,
+        url: getDefined(externalData.dataUrl),
+      });
     }
     return justInsertLiveConnection(props);
   }

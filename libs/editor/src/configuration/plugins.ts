@@ -25,6 +25,7 @@ import {
   createLayoutColumnsPlugin,
   createLinkPlugin,
   createLiveConnectionPlugin,
+  createLiveQueryPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
   createNavigationPlugin,
@@ -184,6 +185,7 @@ export const plugins = ({
       createAutoFormatCodeLinePlugin(computer)(),
       createImportPlugin(interactions),
       createLiveConnectionPlugin(),
+      createLiveQueryPlugin(),
 
       // code editing
       createCodeVariableHighlightPlugin(),

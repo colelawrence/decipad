@@ -190,12 +190,7 @@ const internalImportFromUnknownJson = (
     const res = importTableFromObject(json as Record<string, unknown>, options);
     return res;
   }
-  return {
-    type: {
-      kind: 'anything',
-    },
-    value: Result.UnknownValue.getData(),
-  };
+  throw new Error(`Don't know what to do with ${JSON.stringify(_json)}`);
 };
 
 export const importFromUnknownJson = (

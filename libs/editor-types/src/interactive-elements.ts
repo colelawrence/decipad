@@ -16,6 +16,9 @@ import {
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+  ELEMENT_LIVE_QUERY,
+  ELEMENT_LIVE_QUERY_QUERY,
+  ELEMENT_LIVE_QUERY_VARIABLE_NAME,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
@@ -32,7 +35,15 @@ export type ImportElementSource =
   | 'gsheets'
   | 'csv'
   | 'json'
-  | 'arrow';
+  | 'arrow'
+  | 'sqlite'
+  | 'postgresql'
+  | 'mysql'
+  | 'oracledb'
+  | 'cockroachdb'
+  | 'redshift'
+  | 'mariadb';
+
 export interface ImportElement extends BaseElement {
   type: typeof ELEMENT_IMPORT;
   source?: ImportElementSource;
@@ -41,12 +52,12 @@ export interface ImportElement extends BaseElement {
   children: [EmptyText];
 }
 
+// Live Connection
+
 export interface LiveConnectionVarNameElement extends BaseElement {
   type: typeof ELEMENT_LIVE_CONNECTION_VARIABLE_NAME;
   children: [PlainText];
 }
-
-// live connection
 
 export type ColIndex = number;
 export interface LiveConnectionElement extends BaseElement {
@@ -59,6 +70,25 @@ export interface LiveConnectionElement extends BaseElement {
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   jsonPath?: string;
   children: [LiveConnectionVarNameElement];
+}
+
+// Live Query
+
+export interface LiveQueryVarNameElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_QUERY_VARIABLE_NAME;
+  children: [PlainText];
+}
+
+export interface LiveQueryQueryElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_QUERY_QUERY;
+  children: [PlainText];
+}
+
+export interface LiveQueryElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_QUERY;
+  connectionBlockId?: string;
+  columnTypeCoercions: Record<ColIndex, TableCellType>;
+  children: [LiveQueryVarNameElement, LiveQueryQueryElement];
 }
 
 // legacy FetchElement
@@ -213,6 +243,7 @@ export type InteractiveElement =
   | PlotElement
   | DisplayElement
   | DeprecatedInputElement
-  | VariableDefinitionElement;
+  | VariableDefinitionElement
+  | LiveQueryElement;
 
 export type VariableElement = VariableDefinitionElement | VariableSliderElement;

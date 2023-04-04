@@ -32,6 +32,7 @@ export { InlineMenuGroup } from './InlineMenuGroup/InlineMenuGroup';
 export { InputMenuItem } from './InputMenuItem/InputMenuItem';
 export { LabeledSelect } from './LabeledSelect/LabeledSelect';
 export { LiveConnectionPath } from './LiveConnectionPath/LiveConnectionPath';
+export { LiveQueryQuery } from './LiveQueryQuery/LiveQueryQuery';
 export { MenuList } from './MenuList/MenuList';
 export { Modal } from './Modal/Modal';
 export { ModalForm } from './ModalForm/ModalForm';

@@ -30,6 +30,7 @@ import {
 } from './input';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
+import { insertLiveQueryBelow } from './live-query';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof SlashCommandsMenu>['onExecute'],
@@ -98,6 +99,9 @@ export const execute = ({
       break;
     case 'data-view':
       insertDataViewBelow(editor, path);
+      break;
+    case 'live-query':
+      insertLiveQueryBelow(editor, path, getAvailableIdentifier);
       break;
     case 'pie-chart':
       insertPlotBelow(editor, path, 'arc');

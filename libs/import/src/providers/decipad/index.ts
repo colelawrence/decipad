@@ -2,7 +2,7 @@ import { ImportResult, Provider } from '../../types';
 
 export const decipad: Provider = {
   name: 'decipad',
-  matchUrl: (url: URL): boolean =>
+  matchUrl: (url) =>
     (url.hostname === 'localhost' || url.hostname.endsWith('.decipad.com')) &&
     url.pathname.startsWith('/n/'),
   import: async (): Promise<ImportResult[]> => {

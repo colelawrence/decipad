@@ -4,7 +4,7 @@ import { parseGsheetsSourceUrl } from './parseGsheetsSourceUrl';
 
 export const gsheets: Provider = {
   name: 'gsheets',
-  matchUrl: (url: URL): boolean => url.hostname === 'docs.google.com',
+  matchUrl: (url) => url.hostname === 'docs.google.com',
   import: importGsheet,
   parseSourceUrl: parseGsheetsSourceUrl,
 };

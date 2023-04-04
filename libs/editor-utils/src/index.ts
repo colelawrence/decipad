@@ -22,6 +22,7 @@ export * from './getUrlComponents';
 export * from './getVariableRanges';
 export * from './hasTarget';
 export * from './insertNodes';
+export * from './isDatabaseConnection';
 export * from './isDOMNode';
 export * from './isElementOfType';
 export * from './isEntryOfType';

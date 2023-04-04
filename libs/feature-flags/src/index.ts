@@ -18,6 +18,7 @@ export const availableFlags = [
   'ALTERNATE_ROTATION_DATA_VIEW',
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
+  'LIVE_QUERY',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

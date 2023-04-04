@@ -56,6 +56,13 @@ const sourceTypes: ImportElementSource[] = [
   'csv',
   'json',
   'arrow',
+  'sqlite',
+  'postgresql',
+  'mysql',
+  'oracledb',
+  'cockroachdb',
+  'redshift',
+  'mariadb',
 ];
 
 export const LiveConnectionParams: FC<LiveConnectionParamsProps> = ({
@@ -107,6 +114,7 @@ export const LiveConnectionParams: FC<LiveConnectionParamsProps> = ({
           >
             {sourceTypes.map((sourceType) => (
               <MenuItem
+                key={sourceType}
                 selected={sourceType === source}
                 onSelect={() => setSource(sourceType)}
               >

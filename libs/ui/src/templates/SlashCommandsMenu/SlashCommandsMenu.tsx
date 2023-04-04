@@ -67,6 +67,14 @@ const dataItems = () => [
     enabled: isFlagEnabled('DATA_MAPPINGS'),
     extraSearchTerms: [],
   },
+  {
+    command: 'live-query',
+    title: 'Live Query',
+    description: 'Query a database',
+    icon: <TableSlash />,
+    enabled: isFlagEnabled('LIVE_QUERY'),
+    extraSearchTerms: ['sql', 'db', 'database'],
+  },
 ];
 
 const groups = () => [

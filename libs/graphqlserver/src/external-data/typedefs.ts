@@ -7,6 +7,13 @@ export default gql`
     csv
     json
     arrow
+    sqlite
+    postgresql
+    mysql
+    oracledb
+    cockroachdb
+    redshift
+    mariadb
   }
 
   type ExternalKey {

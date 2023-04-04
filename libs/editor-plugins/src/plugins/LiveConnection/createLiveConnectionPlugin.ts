@@ -5,8 +5,11 @@ import {
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   LiveConnectionVarNameElement,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
-import { insertNodes, removeNodes } from '@udecode/plate';
+import {
+  assertElementType,
+  normalizeIdentifierElement,
+} from '@decipad/editor-utils';
+import { insertNodes, removeNodes, getChildren } from '@udecode/plate';
 import { createNormalizerPlugin } from '../../pluginFactories';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveConnectionVarName } from './components/LiveConnectionVarName';
@@ -35,8 +38,7 @@ export const createLiveConnectionPlugin = createTPluginFactory({
         (editor) =>
         ([element, path]) => {
           assertElementType(element, ELEMENT_LIVE_CONNECTION);
-          const [liveConnVarName, ...rest] = element.children;
-          if (!liveConnVarName) {
+          if (element.children.length < 1) {
             insertNodes<LiveConnectionVarNameElement>(
               editor,
               {
@@ -48,11 +50,19 @@ export const createLiveConnectionPlugin = createTPluginFactory({
             );
             return true;
           }
-          if (rest.length > 0) {
-            removeNodes(editor, { at: [...path, 2] });
+          if (element.children.length > 1) {
+            removeNodes(editor, { at: [...path, 1] });
+            return true;
           }
           return false;
         },
+    }),
+    createNormalizerPlugin({
+      name: 'NORMALIZE_LIVE_CONN_VAR_NAME',
+      elementType: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+      plugin: (editor) => (entry) => {
+        return normalizeIdentifierElement(editor, getChildren(entry)[0]);
+      },
     }),
   ],
 });

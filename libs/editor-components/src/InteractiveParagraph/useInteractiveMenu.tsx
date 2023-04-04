@@ -20,6 +20,7 @@ import {
 } from '@udecode/plate';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelected } from 'slate-react';
 import { insertImport } from './insertImport';
 import { insertLiveConnection } from './insertLiveConnection';
 
@@ -39,17 +40,22 @@ export const useInteractiveMenu = (
   const [show, setShow] = useState(false);
   const lastConsumedPasteContext =
     useRef<EditorPasteInteractionMenuContextValue>();
+  const selected = useSelected();
 
   useEffect(() => {
     if (
       lastConsumedPasteContext.current !== pasteContext &&
       pasteContext.showInteractionMenu &&
+      selected &&
       !show
     ) {
       lastConsumedPasteContext.current = pasteContext;
       setShow(true);
     }
-  }, [show, pasteContext]);
+    if (!selected && show) {
+      setShow(false);
+    }
+  }, [show, pasteContext, selected]);
 
   const cleanupAfterCommand = useCallback(
     (text: string) => {

@@ -31,6 +31,7 @@ get /api/userkeyvalidations/:userkeyvalidationid/validate
 get /api/externaldatasources/:id/auth
 get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
+any /api/externaldatasources/db/:id/data
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
 any /api/pads/:padid/export

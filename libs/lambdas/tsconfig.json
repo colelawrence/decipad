@@ -26,6 +26,7 @@
     { "path": "../slate-yjs" },
     { "path": "../retry" },
     { "path": "../external-data-lambdas" },
-    { "path": "../backend-resources" }
+    { "path": "../backend-resources" },
+    { "path": "../backend-external-db" }
   ]
 }

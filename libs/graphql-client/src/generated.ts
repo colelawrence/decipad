@@ -77,10 +77,17 @@ export type ExternalKey = {
 
 export enum ExternalProvider {
   Arrow = 'arrow',
+  Cockroachdb = 'cockroachdb',
   Csv = 'csv',
   Decipad = 'decipad',
   Gsheets = 'gsheets',
-  Json = 'json'
+  Json = 'json',
+  Mariadb = 'mariadb',
+  Mysql = 'mysql',
+  Oracledb = 'oracledb',
+  Postgresql = 'postgresql',
+  Redshift = 'redshift',
+  Sqlite = 'sqlite'
 }
 
 export type GoalFulfilmentInput = {

@@ -38,6 +38,7 @@
       ],
       "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"],
       "@decipad/backend-utils": ["libs/backend-utils/src/index.ts"],
+      "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/client-config": ["libs/client-config/src/index.ts"],
       "@decipad/client-events": ["libs/client-events/src/index.ts"],

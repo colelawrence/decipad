@@ -22,6 +22,7 @@ export * from './Import';
 export * from './LayoutColumns';
 export * from './Link';
 export * from './LiveConnection';
+export * from './LiveQuery';
 export * from './Marks';
 export * from './Media';
 export * from './Migrations';

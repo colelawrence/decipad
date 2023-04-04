@@ -1,18 +1,23 @@
 import { Result } from '@decipad/computer';
-import { AnyElement, TableCellType } from '@decipad/editor-types';
+import {
+  LiveConnectionElement,
+  LiveQueryElement,
+  TableCellType,
+} from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { ImportTableRowControls } from '../../molecules';
-import { CodeResult } from '../../organisms';
+import { CodeResult, DatabaseConnection } from '../../organisms';
 import { code } from '../../primitives';
+import { isDatabaseConnection } from '../../utils/isDatabaseConnection';
 
 interface LiveConnectionResultProps {
   result: Result.Result;
   isFirstRowHeaderRow?: boolean;
   setIsFirstRowHeader?: (is: boolean) => void;
   onChangeColumnType?: (columnIndex: number, type: TableCellType) => void;
-  element: AnyElement;
+  element: LiveConnectionElement | LiveQueryElement;
 }
 
 export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
@@ -22,7 +27,9 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
   onChangeColumnType = noop,
   element,
 }) => {
-  return (
+  return isDatabaseConnection(element) ? (
+    <DatabaseConnection result={result} />
+  ) : (
     result && (
       <div css={css(code)}>
         <CodeResult

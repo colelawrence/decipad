@@ -1,3 +1,6 @@
+import { useCallback, useMemo, useState } from 'react';
+import { NodeEntry } from 'slate';
+import { css } from '@emotion/react';
 import {
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   LiveConnectionElement,
@@ -6,28 +9,34 @@ import {
 } from '@decipad/editor-types';
 import {
   assertElementType,
+  isDatabaseConnection,
   usePathMutatorCallback,
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useComputer, useEditorChange } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveConnectionParams,
+  TableButton,
   Tooltip,
 } from '@decipad/ui';
 import { findNodePath, getNodeString, getParentNode } from '@udecode/plate';
 import pluralize from 'pluralize';
-import { useCallback, useMemo, useState } from 'react';
-import { NodeEntry } from 'slate';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { css } from '@emotion/react';
+import { insertLiveQueryBelow } from '@decipad/editor-components';
 import { useLiveConnectionPossibleJsonPaths } from '../hooks/useLiveConnectionPossibleJsonPaths';
 
 const captionWrapperStyles = css({
   display: 'flex',
   flexDirection: 'row',
-  gap: '4px',
+  gap: '8px',
+});
+
+const tableButtonWrapperStyles = css({
+  marginBottom: '8px',
+  marginTop: '-5px',
+  marginLeft: '-5px',
 });
 
 export const LiveConnectionVarName: PlateComponent = ({
@@ -87,6 +96,19 @@ export const LiveConnectionVarName: PlateComponent = ({
   const setUrl = usePathMutatorCallback(editor, parent?.[1], 'url');
   const setSource = usePathMutatorCallback(editor, parent?.[1], 'source');
 
+  const computer = useComputer();
+
+  const onCreateQueryPress = useCallback(() => {
+    if (parent) {
+      insertLiveQueryBelow(
+        editor,
+        parent[1],
+        computer.getAvailableIdentifier.bind(computer),
+        parent[0].id
+      );
+    }
+  }, [computer, editor, parent]);
+
   const caption = (
     <div {...attributes} css={captionWrapperStyles}>
       <EditableLiveDataCaption
@@ -110,6 +132,16 @@ export const LiveConnectionVarName: PlateComponent = ({
           />
         </div>
       )}
+      {isFlagEnabled('LIVE_QUERY') &&
+        parent &&
+        isDatabaseConnection(parent[0]) && (
+          <div css={tableButtonWrapperStyles}>
+            <TableButton
+              onClick={onCreateQueryPress}
+              captions={['Create query']}
+            />
+          </div>
+        )}
     </div>
   );
 

@@ -48,6 +48,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   ELEMENT_DATA_MAPPING_ROW,
   ELEMENT_DATA_MAPPING,
+  ELEMENT_LIVE_QUERY,
 } from './element-kinds';
 import {
   CaptionElement,
@@ -55,6 +56,8 @@ import {
   DropdownElement,
   ExpressionElement,
   LiveConnectionVarNameElement,
+  LiveQueryQueryElement,
+  LiveQueryVarNameElement,
   SliderElement,
   VariableDefinitionElement,
 } from './interactive-elements';
@@ -264,6 +267,8 @@ export type BlockElement =
   // Special elements
   | InteractiveElement
   | LiveConnectionVarNameElement
+  | LiveQueryVarNameElement
+  | LiveQueryQueryElement
   // Table elements
   | DeprecatedTableInputElement
   | TableElement
@@ -362,4 +367,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_IMPORT,
   ELEMENT_DRAW,
   ELEMENT_DATA_MAPPING,
+  ELEMENT_LIVE_QUERY,
 ];

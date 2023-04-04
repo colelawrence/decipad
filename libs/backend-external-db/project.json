@@ -1,0 +1,29 @@
+{
+  "name": "backend-external-db",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend-external-db/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/backend-external-db/src/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/backend-external-db"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/backend-external-db"
+      }
+    }
+  },
+  "tags": []
+}
