@@ -101,6 +101,10 @@ export function createStructuredKeyboard(computer: Computer) {
               event.preventDefault();
               event.stopPropagation();
               anchorPath[1] = shortcut === 'move-right' ? 1 : 0;
+
+              // We remove the last part of the path so that we can
+              // select the WHOLE of the code element (including smart refs);
+              anchorPath.pop();
               setSelectionFullText(editor, anchorPath);
               return true;
             }
@@ -119,6 +123,7 @@ export function createStructuredKeyboard(computer: Computer) {
               shortcut === 'move-right'
                 ? getFirstNode(editor, moveTo)
                 : getLastNode(editor, moveTo);
+            path.pop();
             setSelectionFullText(editor, path);
             return true;
           case 'move-up':

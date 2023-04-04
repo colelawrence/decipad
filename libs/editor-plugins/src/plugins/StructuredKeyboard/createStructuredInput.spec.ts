@@ -5,22 +5,31 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   MyEditor,
+  SmartRefElement,
+  CodeLineV2Element,
 } from '@decipad/editor-types';
 import { enable, reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
 
-const computer = new Computer();
-
-function getStructuredCalc(name: string, value: string, unit?: string) {
+let counter = 0;
+function getStructuredCalc(
+  name: string,
+  value: string,
+  unit?: string
+): CodeLineV2Element {
+  counter += 1;
   return {
     type: ELEMENT_CODE_LINE_V2,
     unit,
+    id: `id-${counter}`,
     children: [
       {
+        id: `id-${counter}`,
         type: ELEMENT_STRUCTURED_VARNAME,
         children: [{ text: name }],
       },
       {
+        id: `id-${counter}`,
         type: ELEMENT_CODE_LINE_V2_CODE,
         children: [{ text: value }],
       },
@@ -28,8 +37,20 @@ function getStructuredCalc(name: string, value: string, unit?: string) {
   };
 }
 
+function getSmartRef(blockId: string): SmartRefElement {
+  counter += 1;
+  return {
+    id: `id-${counter}`,
+    type: 'smart-ref',
+    blockId,
+    columnId: null,
+    children: [{ text: '' }],
+  };
+}
+
 describe('Structured input basic keyboard shortcuts', () => {
   let editor: MyEditor;
+  const computer = new Computer();
   beforeEach(() => {
     enable('CODE_LINE_NAME_SEPARATED');
     editor = createTPlateEditor({
@@ -273,6 +294,64 @@ describe('Structured input basic keyboard shortcuts', () => {
           "path": Array [
             0,
             0,
+            0,
+          ],
+        },
+      }
+    `);
+  });
+});
+
+describe('Works with smart refs', () => {
+  let editor: MyEditor;
+  const computer = new Computer();
+  beforeEach(() => {
+    enable('CODE_LINE_NAME_SEPARATED');
+    editor = createTPlateEditor({
+      plugins: [createStructuredKeyboard(computer)],
+    });
+    editor.children = [
+      getStructuredCalc('a', '100') as never,
+      getStructuredCalc('longname', '50') as never,
+    ];
+    editor.selection = {
+      anchor: { path: [0, 0, 0], offset: 1 },
+      focus: { path: [0, 0, 0], offset: 1 },
+    };
+  });
+  afterEach(() => {
+    reset();
+  });
+
+  it('allows smart ref selection', () => {
+    const structuredIn = getStructuredCalc('SmartyRefy', '1 +');
+    structuredIn.children[1].children.push(getSmartRef(structuredIn.id));
+    editor.children.push(structuredIn);
+
+    const event = new KeyboardEvent('keydown', { key: 'Tab' });
+    for (let i = 0; i < 5; i += 1) {
+      createStructuredKeyboard(
+        computer
+        // @ts-expect-error DOM KeyboardEvent vs React event
+      ).handlers?.onKeyDown?.(editor)(event);
+    }
+
+    expect(editor.selection).toMatchInlineSnapshot(`
+      Object {
+        "anchor": Object {
+          "offset": 0,
+          "path": Array [
+            2,
+            1,
+            0,
+          ],
+        },
+        "focus": Object {
+          "offset": 0,
+          "path": Array [
+            2,
+            1,
+            1,
             0,
           ],
         },
