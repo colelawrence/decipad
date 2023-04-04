@@ -1,4 +1,5 @@
 import { N } from '@decipad/number';
+import ptime from 'p-time';
 import { u, U } from './utils';
 import { buildType as t } from './type';
 import { cleanDate } from './date';
@@ -8,8 +9,11 @@ import {
   evaluateForVariables,
   runAndMeasure,
   fromDate,
+  typeSnapshotSerializer,
 } from './testUtils';
 import { runCode } from './run';
+
+expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
@@ -848,6 +852,42 @@ ${'' /* Get capital needed */}
         Year2: fromDate('2025-01-01T00:00:00.000Z'),
         QuarterMatches: true,
       },
+    });
+  });
+
+  describe('SaaS growth', () => {
+    it('does not hang up converting monthly to yearly rates', async () => {
+      const p = ptime(async () =>
+        runCode(`
+        ExpectedMonthlyGrowthRate(MRR) = 6% + (14% / MRR) in %
+        ExpectedYearlyGrowth(YRR) = ((1 + ExpectedMonthlyGrowthRate(YRR / 12)) ** 12 - 1) * YRR
+        T = {
+          Year = [date(2015), date(2016), date(2017), date(2018)]
+          Revenue = ExpectedYearlyGrowth(previous(1.2)) + previous(1.2)
+        }
+        `)
+      )();
+
+      expect(await p).toMatchInlineSnapshot(`
+        Object {
+          "type": table<Year = date<year>, Revenue = number>,
+          "value": Array [
+            Array [
+              1420070400000n,
+              1451606400000n,
+              1483228800000n,
+              1514764800000n,
+            ],
+            Array [
+              DeciNumber(58938.968549213337831),
+              DeciNumber(118635.059927825485312),
+              DeciNumber(238755.321533784046940),
+              DeciNumber(480460.886718440223735),
+            ],
+          ],
+        }
+      `);
+      expect(p.time).toBeLessThan(10_000);
     });
   });
 });

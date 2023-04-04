@@ -62,3 +62,69 @@ index 0000000..020409d
 +  toContinued(): number[];
 +  clone(): Fraction;
 +}
+diff --git a/node_modules/fraction.js/bigfraction.js b/node_modules/fraction.js/bigfraction.js
+index 2e504d7..31b2320 100644
+--- a/node_modules/fraction.js/bigfraction.js
++++ b/node_modules/fraction.js/bigfraction.js
+@@ -353,21 +353,51 @@
+     return 0;
+   }
+ 
++  // Fabio: Tried several versions of Stein's algorithm, but this one is the fastest for BigInt
++  // https://www.geeksforgeeks.org/steins-algorithm-for-finding-gcd/
+   function gcd(a, b) {
+-
+-    if (!a)
++    /* GCD(0, b) == b; GCD(a, 0) == a,
++       GCD(0, 0) == 0 */
++    if (a == 0n)
+       return b;
+-    if (!b)
++    if (b == 0n)
+       return a;
+ 
+-    while (1) {
+-      a%= b;
+-      if (!a)
+-        return b;
+-      b%= a;
+-      if (!b)
+-        return a;
++    /*Finding K, where K is the
++      greatest power of 2
++      that divides both a and b. */
++    let k;
++    for (k = 0n; ((a | b) & 1n) == 0n; ++k) {
++      a >>= 1n;
++      b >>= 1n;
++    }
++
++    /* Dividing a by 2 until a becomes odd */
++    while ((a & 1n) == 0n) {
++      a >>= 1n;
+     }
++
++    /* From here on, 'a' is always odd. */
++    do {
++      /* If b is even, remove all factor of 2 in b */
++      while ((b & 1n) == 0n) {
++        b >>= 1n;
++      }
++
++      /* Now a and b are both odd.
++         Swap if necessary so a <= b,
++         then set b = b - a (which is even).*/
++      if (a > b) {
++        let t = a;
++        a = b;
++        b = t;
++      }
++
++      b -= a;
++    } while (b != 0n);
++
++    /* restore common factors of 2 */
++    return a << k;
+   }
+ 
+   /**
