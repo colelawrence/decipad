@@ -7,6 +7,10 @@ const cssVariablePrefix = '--deci-';
 export type CssVariableKey<V extends keyof CssVariables> =
   `${typeof cssVariablePrefix}${V}`;
 
+export function cssVarHex<V extends keyof CssVariables>(name: V) {
+  return defaults[name];
+}
+
 export function cssVar<V extends keyof CssVariables>(
   name: V
 ): Exclude<CssVariables[V], undefined> {

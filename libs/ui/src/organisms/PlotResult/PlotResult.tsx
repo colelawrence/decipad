@@ -34,7 +34,6 @@ export const PlotResult = ({
 }: PlotResultProps): ReturnType<FC> => {
   // For some reason, react-vega seems to add 10px to the width.
   const width = slimBlockWidth - 10;
-
   return (
     <VegaLite
       css={styles}

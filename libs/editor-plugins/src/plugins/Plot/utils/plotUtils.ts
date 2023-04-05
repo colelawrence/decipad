@@ -1,12 +1,13 @@
-import { PlotElement } from '@decipad/editor-types';
 import {
   Computer,
   convertToMultiplierUnit,
   Result,
   SerializedType,
 } from '@decipad/computer';
-import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
+import { PlotElement } from '@decipad/editor-types';
 import DeciNumber from '@decipad/number';
+import { cssVarHex } from '@decipad/ui';
+import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
 
 export type DisplayProps = {
   sourceVarName: string;
@@ -53,6 +54,7 @@ interface PlotConfig {
   };
   axis?: Axis;
   mark?: {
+    interpolate: Interpolate;
     stroke?: string;
     fill?: string;
     strokeWidth?: number;
@@ -116,6 +118,7 @@ type TimeUnit =
 type Axis =
   | undefined
   | {
+      offset?: number;
       grid?: boolean;
       gridDash?: number[];
       gridColor?: string;
@@ -180,7 +183,7 @@ const markTypeToFill = (
     case 'bar':
     case 'area':
     case 'point':
-      return 'rgba(69, 195, 235)';
+      return cssVarHex('chartThemeMonochromeBlue5');
     case 'circle':
     case 'square':
       return 'white';
@@ -315,12 +318,13 @@ export function specFromType(
   if (encoding.y && encoding.y.axis) {
     encoding.y.axis.labelAngle = 0;
     encoding.y.axis.labelBaseline = 'line-bottom';
-    // encoding.y.axis.offset = -30;
     encoding.y.axis.labelAlign = 'left';
+    encoding.y.axis.labelColor = cssVarHex('weakerTextColor');
   }
   if (encoding.x && encoding.x.axis) {
-    encoding.x.axis.labelColor = '#777E89';
-    encoding.x.axis.labelFontSize = 14;
+    encoding.x.axis.labelColor = cssVarHex('weakerTextColor');
+    encoding.x.axis.labelAngle = 0;
+    encoding.x.axis.offset = 5;
     encoding.x.axis.labelFontWeight = 700;
   }
   if (displayProps.markType !== 'bar' && displayProps.markType !== 'arc') {
@@ -328,7 +332,7 @@ export function specFromType(
   }
 
   const markProps =
-    displayProps.markType === 'bar' ? { width: { band: 0.75 } } : {};
+    displayProps.markType === 'bar' ? { width: { band: 0.8 } } : {};
 
   return {
     mark: { type: displayProps.markType, tooltip: true, ...markProps },
@@ -341,26 +345,24 @@ export function specFromType(
         },
       },
       symbol: {
-        stroke: 'rgba(69, 195, 235)',
+        stroke: cssVarHex('chartThemeMonochromeBlue5'),
         fill: '0xfff',
       },
       mark: {
+        interpolate: 'cardinal',
         stroke:
           displayProps.markType !== 'arc' && !encoding.color
-            ? 'rgba(69, 195, 235)'
+            ? cssVarHex('chartThemeMonochromeBlue5')
             : undefined,
         fill: markTypeToFill(displayProps.markType),
-        strokeWidth: 6,
+        strokeWidth: 3,
       },
       axis: {
-        gridColor: '#AAB1BD',
-        gridDash: [5, 5],
-        labelColor: '#D6D6D6',
-        domainColor: '#AAB1BD',
+        gridColor: cssVarHex('highlightColor'),
+        labelColor: cssVarHex('weakTextColor'),
         domainOpacity: 0,
         labelAngle: -45,
         labelBound: true,
-        labelFontSize: 12,
         tickSize: 0,
       },
       autosize: 'fit',

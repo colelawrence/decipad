@@ -17,7 +17,11 @@ import {
   placeholderOpacity,
   setCssVar,
 } from '../../primitives';
-import { slimBlockWidth, wideBlockWidth } from '../../styles/editor-layout';
+import {
+  hideOnPrint,
+  slimBlockWidth,
+  wideBlockWidth,
+} from '../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
 import { MenuList } from '../MenuList/MenuList';
@@ -159,7 +163,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               root
               dropdown
               trigger={
-                <button css={css({ padding: '5px' })}>
+                <button css={css([{ padding: '5px' }, hideOnPrint])}>
                   <TextAndIconButton text="Create chart" iconPosition="left">
                     <icons.Plot />
                   </TextAndIconButton>

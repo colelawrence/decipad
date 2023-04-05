@@ -2,24 +2,25 @@ import { css } from '@emotion/react';
 import { FC, ReactNode, useCallback, useEffect, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
-  Brush,
-  List,
-  Plot,
-  Settings,
-  Table,
   AreaChart,
   BarChart,
+  Brush,
+  Generic,
   LineChart,
+  List,
   PieChart,
+  Plot,
   ScatterPlot,
+  Settings,
+  Table,
 } from '../../icons';
 import { MenuList } from '../../molecules';
 import {
   colorSchemes,
-  monochromeColorSchemes,
-  multicolorColorSchemes,
   cssVar,
   grey400,
+  monochromeColorSchemes,
+  multicolorColorSchemes,
   p13Medium,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
@@ -310,7 +311,9 @@ export const PlotParams = ({
             open={open === 'shape'}
             onChangeOpen={onChangeOpen('shape')}
             itemTrigger={
-              <TriggerMenuItem selectedPreview={shape}>Shape</TriggerMenuItem>
+              <TriggerMenuItem icon={<Generic />} selectedPreview={shape}>
+                Shape
+              </TriggerMenuItem>
             }
           >
             {shapes.map((s) => {

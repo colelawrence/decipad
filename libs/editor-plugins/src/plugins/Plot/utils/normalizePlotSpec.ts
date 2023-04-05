@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { cssVarHex } from '@decipad/ui';
 import { PlotSpec } from './plotUtils';
 
 export const normalizePlotSpec = (
@@ -34,10 +35,10 @@ export const normalizePlotSpec = (
   if (spec.mark.type === 'line' || spec.mark.type === 'area') {
     if (!spec.mark.point) {
       spec.mark.point = {
-        filled: false,
-        fill: 'white',
-        size: 140,
-        strokeWidth: 5,
+        fill: cssVarHex('chartThemeMonochromeBlue5'),
+        filled: true,
+        size: 20,
+        strokeWidth: 3,
       };
     }
   }
@@ -66,7 +67,7 @@ export const normalizePlotSpec = (
   }
   if (!spec.config.axis) {
     spec.config.axis = {
-      titleColor: '#999',
+      titleColor: cssVarHex('chartThemeMonochromeGrey7'),
     };
   }
   if (!spec.config.style) {
