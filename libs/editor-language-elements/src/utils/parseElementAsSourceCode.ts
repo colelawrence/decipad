@@ -27,5 +27,6 @@ export function parseElementAsSourceCode(
       },
     ];
   }
+
   return [statementToIdentifiedBlock(blockId, solution)];
 }

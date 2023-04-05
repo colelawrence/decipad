@@ -22,8 +22,7 @@ export const Table: InteractiveLanguageElement = {
 
       const tableItself = statementToIdentifiedBlock(
         table.id,
-        decilang`${{ name: tableName }} = {}`,
-        tableName
+        decilang`${{ name: tableName }} = {}`
       );
 
       const columnAssigns: Program = [];
@@ -46,12 +45,7 @@ export const Table: InteractiveLanguageElement = {
           }}.${{ name: columnName }} = ${expression}`;
 
           columnAssigns.push(
-            statementToIdentifiedBlock(
-              elementId,
-              columnAssign,
-              tableName,
-              columnName
-            ),
+            statementToIdentifiedBlock(elementId, columnAssign),
             ...errors
           );
         } else {

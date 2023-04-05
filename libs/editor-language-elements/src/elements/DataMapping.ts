@@ -61,7 +61,7 @@ export const DataMapping: InteractiveLanguageElement = {
       const astMaybeUnit = addUnitToAst(varContent, element.unit);
       const newVar = decilang`${{ name: datasetName }} = ${astMaybeUnit}`;
 
-      const block = statementToIdentifiedBlock(element.id, newVar, datasetName);
+      const block = statementToIdentifiedBlock(element.id, newVar);
       return [block];
     }
 
@@ -108,19 +108,10 @@ export const DataMapping: InteractiveLanguageElement = {
       .filter((n): n is ColumnDefWithId => n !== undefined);
 
     const tableAst = astNode('table', astNode('tabledef', datasetName));
-    const identifiedTable = statementToIdentifiedBlock(
-      element.id,
-      tableAst,
-      datasetName
-    );
+    const identifiedTable = statementToIdentifiedBlock(element.id, tableAst);
 
     const identifiedColumns = columnReassign.map((c) =>
-      statementToIdentifiedBlock(
-        c.id,
-        c.tableColumnAssign,
-        datasetName,
-        c.tableColumnName
-      )
+      statementToIdentifiedBlock(c.id, c.tableColumnAssign)
     );
 
     return [identifiedTable, ...identifiedColumns];

@@ -36,5 +36,5 @@ export function parseElementAsVariableAssignment(
       }
     : expression;
 
-  return [statementToIdentifiedBlock(blockId, statement, varName)];
+  return [statementToIdentifiedBlock(blockId, statement)];
 }
