@@ -28,12 +28,10 @@ import Queue from 'queue';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
-  concatMap,
   distinctUntilChanged,
   map,
   shareReplay,
   switchMap,
-  throttleTime,
 } from 'rxjs/operators';
 import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
@@ -80,7 +78,7 @@ export interface DimensionExplanation {
 }
 
 interface ComputerOpts {
-  requestDebounceMs: number;
+  initialProgram?: Program;
 }
 
 export class Computer {
@@ -88,7 +86,6 @@ export class Computer {
   private latestProgram: ProgramBlock[] = [];
   private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
-  public readonly requestDebounceMs: number;
   private externalData = new BehaviorSubject<
     Map<string, [id: string, injectedResult: Result.Result][]>
   >(new Map());
@@ -101,9 +98,11 @@ export class Computer {
   >(new Map());
   public results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
 
-  constructor({ requestDebounceMs = 100 }: Partial<ComputerOpts> = {}) {
-    this.requestDebounceMs = requestDebounceMs;
+  constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
+    if (initialProgram) {
+      this.pushCompute({ program: initialProgram });
+    }
   }
 
   public pushCompute(req: ComputeRequest): void {
@@ -130,7 +129,6 @@ export class Computer {
 
   /**
    * Wire our computeRequests stream to the "results" stream.
-   * Timing is handled here too (debouncing, throttling)
    * And the externalData stream (containing imports) is integrated here.
    */
   private wireRequestsToResults() {
@@ -138,10 +136,6 @@ export class Computer {
       .pipe(
         combineLatestWith(this.externalData, this.extraProgramBlocks),
         // Debounce to give React an easier time
-        throttleTime(this.requestDebounceMs, undefined, {
-          leading: false,
-          trailing: true,
-        }),
         map(([{ program, ...computeReq }, externalData, extraBlocks]) => ({
           ...computeReq,
           program: [...program, ...[...extraBlocks.values()].flat()],
@@ -545,7 +539,7 @@ export class Computer {
     const exp = parseExpressionOrThrow(decilang);
 
     return this.results.pipe(
-      concatMap(async () => this.expressionResult(exp)),
+      switchMap(async () => this.expressionResult(exp)),
       distinctUntilChanged((cur, next) => dequal(cur, next))
     );
   }

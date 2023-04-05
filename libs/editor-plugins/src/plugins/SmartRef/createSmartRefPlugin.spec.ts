@@ -61,9 +61,7 @@ beforeEach(() => {
     createCodeLine({ id: 'varId', code: 'var = 1' }),
   ] as unknown as MyValue;
 
-  computer = new Computer({
-    requestDebounceMs: 0,
-  });
+  computer = new Computer();
 });
 
 it('can turn text into smartrefs', async () => {

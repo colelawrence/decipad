@@ -68,9 +68,8 @@ it('unnests table rows', () => {
 describe('can provide information for rendering matrices', () => {
   let computer: Computer;
   beforeEach(async () => {
-    computer = new Computer({ requestDebounceMs: 0 });
-    computer.pushCompute({
-      program: getIdentifiedBlocks(
+    computer = new Computer({
+      initialProgram: getIdentifiedBlocks(
         `Table = { Xs = [10, 20, 30] }`,
         `Matrix = [100, 200] * Table.Xs`
       ),

@@ -13,7 +13,7 @@ it('finds names', async () => {
 
   const idOfColumnThatImIn = 'block-3';
 
-  await timeout(400);
+  await timeout(0);
 
   expect([
     ...findNames(
@@ -93,7 +93,7 @@ it('places local vars first', async () => {
 
   const idOfColumnThatImIn = 'block-1';
 
-  await timeout(400);
+  await timeout(0);
 
   expect([
     ...findNames(

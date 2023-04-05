@@ -131,8 +131,8 @@ function useSlateOnBlur(computer: Computer, onBlur: () => void) {
     previouslySelected.current = selected;
 
     if (selected === false) {
-      // Invoke later to make sure to have Computer's latest state
-      setTimeout(onBlur, computer.requestDebounceMs);
+      // DEBOUNCE_UPDATE_COMPUTER_MS
+      setTimeout(onBlur, 500);
     }
   }, [selected, onBlur, computer]);
 }

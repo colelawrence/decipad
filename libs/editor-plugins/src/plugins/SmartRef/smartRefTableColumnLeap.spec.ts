@@ -323,7 +323,7 @@ const run = async (...elements: MyValue[number][]) => {
 
   Editor.normalize(editor as BaseEditor, { force: true });
 
-  const computer = new Computer({ requestDebounceMs: 0 });
+  const computer = new Computer();
   const program = await editorToProgram(editor, computer);
 
   computer.pushCompute(program);

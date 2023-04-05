@@ -98,6 +98,9 @@ export async function createCalculationBlockBelow(
   await page.keyboard.type(decilang);
 
   await page.waitForSelector('[data-testid="code-line"] >> nth=-1');
+
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.computerDelay);
 }
 
 export async function createCodeLineV2Below(

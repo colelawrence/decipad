@@ -4,9 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { pushTableResultToComputer } from './useLiveConnection';
 
 it('can push a new table into the computer', async () => {
-  const computer = new Computer({ requestDebounceMs: 0 });
   // We need a first request for the computer to function
-  computer.pushCompute({ program: [] });
+  const computer = new Computer({ initialProgram: [] });
 
   const { type, value } = await runCode(
     'Table1 = { Column1 = [1], Column2 = [2] }\nTable1'

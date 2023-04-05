@@ -27,7 +27,7 @@ const testProgram = getIdentifiedBlocks(
 );
 let computer: Computer;
 beforeEach(() => {
-  computer = new Computer({ requestDebounceMs: 0 });
+  computer = new Computer();
 });
 
 const computeOnTestComputer = async (req: ComputeRequestWithExternalData) => {
@@ -461,8 +461,6 @@ it('regression: can describe tables correctly', async () => {
     ),
   });
 
-  await timeout(100);
-
   expect(res).toMatchInlineSnapshot(`
     Array [
       "block-0 -> [[\\"A\\", \\"B\\"], [\\"c\\", \\"d\\"]]",
@@ -480,8 +478,6 @@ it('regression: can describe partially good tables', async () => {
       `Table.Two = ["c", "d"]`
     ),
   });
-
-  await timeout(100);
 
   expect(res).toMatchInlineSnapshot(`
     Array [
@@ -561,10 +557,9 @@ describe('getVarBlockId$', () => {
 describe('can retrieve columns indexed by a table', () => {
   let computer: Computer;
   beforeEach(async () => {
-    computer = new Computer({ requestDebounceMs: 0 });
-    computer.pushCompute({
-      program: getIdentifiedBlocks(
-        `Table = {  }`,
+    computer = new Computer({
+      initialProgram: getIdentifiedBlocks(
+        `Table = { }`,
         'Table.Xs = [10, 20, 30]',
         `Table.Xs * 2`
       ),
@@ -584,10 +579,8 @@ describe('can retrieve columns indexed by a table', () => {
 });
 
 it('can list tables and columns', async () => {
-  const computer = new Computer({ requestDebounceMs: 0 });
-
-  computer.pushCompute({
-    program: getIdentifiedBlocks(
+  const computer = new Computer({
+    initialProgram: getIdentifiedBlocks(
       `table = { A = [1], B = ["a"] }`,
       `table.C = [date(2020-01-01)]`,
       `anotherVar = "Not a table"`

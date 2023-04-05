@@ -51,8 +51,7 @@ export const testProgram = (
 };
 
 export const computerWithBlocks = async (...blocks: (AST.Block | string)[]) => {
-  const computer = new Computer({ requestDebounceMs: 0 });
-  computer.pushCompute({ program: testProgram(...blocks) });
+  const computer = new Computer({ initialProgram: testProgram(...blocks) });
   await timeout(0); // debounceMs
   return computer;
 };

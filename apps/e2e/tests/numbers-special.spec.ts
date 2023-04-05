@@ -5,6 +5,7 @@ import {
   keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
+import { Timeouts } from '../utils/src';
 
 const findMagicNumber = (page: Page) =>
   page.waitForSelector(`[data-testid=magic-number]`);
@@ -53,7 +54,7 @@ test.describe('Formula highlighting', () => {
     await page.waitForSelector('[data-testid="number-result:3"]');
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(Timeouts.computerDelay);
     const potentialFormula = await getMagicNumberContent(page);
     expect(potentialFormula).toEqual('4');
   });
@@ -90,7 +91,7 @@ test.describe('Formula highlighting', () => {
     await page.waitForSelector('[data-testid="code-line-float"]');
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(Timeouts.computerDelay);
     const potentialFormula = await getMagicNumberContent(page);
     expect(potentialFormula).toEqual('5');
 
