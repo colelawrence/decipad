@@ -185,7 +185,50 @@ export default {
             {
               children: [
                 {
-                  text: 'floor(grow(SalesFirstYear ,SalesGrowth ,Revenue.Year ))',
+                  text: 'floor(grow(',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '5HnZhjG200MsYS-3GxbS2',
+                  type: 'smart-ref',
+                  blockId: 'pPgI13tV_TQbSVKBDXpBx',
+                  lastSeenVariableName: 'SalesFirstYear',
+                },
+                {
+                  text: ', ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'YNKsWRHx2KZbzGX-3j_M-',
+                  type: 'smart-ref',
+                  blockId: '_uLNoxVuRGQR7MLjjqQ4N',
+                  lastSeenVariableName: 'SalesGrowth',
+                },
+                {
+                  text: ', ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'LX1KWPrLUBemHJvfFX_Dr',
+                  type: 'smart-ref',
+                  blockId: 'ddTJXSKZzWh56A8NMCZmM',
+                  columnId: 'c6FNo_imJSEDtWBsgNrXZ',
+                  lastSeenVariableName: 'Revenue.Year',
+                },
+                {
+                  text: '))',
                 },
               ],
               type: 'table-column-formula',
@@ -195,7 +238,21 @@ export default {
             {
               children: [
                 {
-                  text: 'PriceUnit',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'yyQdW-I9nyd_RiOY_-FSn',
+                  type: 'smart-ref',
+                  blockId: 'ExNqIQEPGtXBMUDiZsoOs',
+                  lastSeenVariableName: 'PriceUnit',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -205,7 +262,37 @@ export default {
             {
               children: [
                 {
-                  text: 'Units*Price',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'JtOuGYRAW5ooWnT4DdkbJ',
+                  type: 'smart-ref',
+                  blockId: 'fW42GOC3mjcWDoFB386CE',
+                  columnId: null,
+                  lastSeenVariableName: 'Units',
+                },
+                {
+                  text: ' * ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'LLXNulDuf9RwzQWD3K_BD',
+                  type: 'smart-ref',
+                  blockId: 'zPdgOerCCYj6K-E14CYp5',
+                  columnId: null,
+                  lastSeenVariableName: 'Price',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -544,6 +631,7 @@ export default {
       ],
       type: 'table',
       id: 'ddTJXSKZzWh56A8NMCZmM',
+      hideFormulas: false,
     },
     {
       children: [
@@ -626,7 +714,7 @@ export default {
             {
               children: [
                 {
-                  text: 'COGS',
+                  text: 'COGSTable',
                 },
               ],
               type: 'table-var-name',
@@ -635,7 +723,50 @@ export default {
             {
               children: [
                 {
-                  text: 'ceil(grow(UnitCost ,UnitCostGrowth ,COGS.Year ))',
+                  text: 'ceil(grow(',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'Jk-zRmM0HxQX9UKbco1vc',
+                  type: 'smart-ref',
+                  blockId: 'XMYcbjHl8KfIrFWThRBkW',
+                  lastSeenVariableName: 'UnitCost',
+                },
+                {
+                  text: ' ,',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'GMp_6F7OfQ_x08Zl32k4w',
+                  type: 'smart-ref',
+                  blockId: 'OcOgbmVNoCfO01wmhFkKO',
+                  lastSeenVariableName: 'UnitCostGrowth',
+                },
+                {
+                  text: ' ,',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'uBsyCeawmyepF-fXocmzZ',
+                  type: 'smart-ref',
+                  blockId: 'HFm_s7Zp8559ZZsUzDnbH',
+                  lastSeenVariableName: 'COGSTable.Year',
+                  columnId: '1T4rQFbMj0oHnACsSYQ5y',
+                },
+                {
+                  text: '))',
                 },
               ],
               type: 'table-column-formula',
@@ -645,7 +776,36 @@ export default {
             {
               children: [
                 {
-                  text: 'Units*UnitCost ',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'SENpyzceA3aOfUv4P-jxz',
+                  type: 'smart-ref',
+                  blockId: 'pbzxLSQGi_Wb44SEUAdyN',
+                  columnId: null,
+                  lastSeenVariableName: 'Units',
+                },
+                {
+                  text: ' * ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'EfpSa4NeNkpqMg61j8ZED',
+                  type: 'smart-ref',
+                  blockId: 'XMYcbjHl8KfIrFWThRBkW',
+                  lastSeenVariableName: 'UnitCost',
+                },
+                {
+                  text: ' ',
                 },
               ],
               type: 'table-column-formula',
@@ -655,7 +815,22 @@ export default {
             {
               children: [
                 {
-                  text: 'Revenue.Units',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'ZSPywiWChSbbRGQ8BS6wp',
+                  type: 'smart-ref',
+                  blockId: 'ddTJXSKZzWh56A8NMCZmM',
+                  lastSeenVariableName: 'Revenue.Units',
+                  columnId: 'fW42GOC3mjcWDoFB386CE',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -1012,6 +1187,8 @@ export default {
       ],
       type: 'table',
       id: 'HFm_s7Zp8559ZZsUzDnbH',
+      hideFormulas: false,
+      isCollapsed: false,
     },
     {
       children: [
@@ -1025,7 +1202,7 @@ export default {
     {
       children: [
         {
-          text: 'Looking only at the direct costs involved in the production, how much will I make in revenue throughout the years?',
+          text: 'Looking only at the direct costs involved in the production, how much will I make throughout the years?',
         },
       ],
       type: 'p',
@@ -1047,7 +1224,22 @@ export default {
             {
               children: [
                 {
-                  text: 'Revenue .NetRevenue',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'rpgDaw3XB7_oNyPN-zs65',
+                  type: 'smart-ref',
+                  blockId: 'ddTJXSKZzWh56A8NMCZmM',
+                  columnId: 'pF2XmhRPbG81DiO13qilh',
+                  lastSeenVariableName: 'Revenue.NetRevenue',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -1057,7 +1249,22 @@ export default {
             {
               children: [
                 {
-                  text: 'COGS .COGS',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '0W_KDyRcvAqdhent5bdD-',
+                  type: 'smart-ref',
+                  blockId: 'HFm_s7Zp8559ZZsUzDnbH',
+                  lastSeenVariableName: 'COGSTable.COGS',
+                  columnId: '8rRgO31BB_biu8RpsnF__',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -1067,7 +1274,37 @@ export default {
             {
               children: [
                 {
-                  text: 'NetRevenue  - COGS ',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '5Dx_AI06vmDqthrSPuvW_',
+                  type: 'smart-ref',
+                  blockId: '1NNlKhP2trAHQ23YmqOVV',
+                  columnId: null,
+                  lastSeenVariableName: 'NetRevenue',
+                },
+                {
+                  text: ' - ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'IAwKHM2Dp0gqkPCRYd6hI',
+                  type: 'smart-ref',
+                  blockId: '6sMXx81_zzoy-RYoNmAr8',
+                  columnId: null,
+                  lastSeenVariableName: 'COGS',
+                },
+                {
+                  text: ' ',
                 },
               ],
               type: 'table-column-formula',
@@ -1406,6 +1643,7 @@ export default {
       ],
       type: 'table',
       id: 'hOM1pr8pzdFI19V4lubQD',
+      hideFormulas: false,
     },
     {
       children: [
@@ -1577,7 +1815,50 @@ export default {
             {
               children: [
                 {
-                  text: 'ceil(grow(Labor1Year,LaborCostGrowth,OPEX.Year))',
+                  text: 'ceil(grow(',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'jLY4ErvXeYcX17_UMZapw',
+                  type: 'smart-ref',
+                  blockId: 'bT8SgkwS53AAiuQcGTcoV',
+                  lastSeenVariableName: 'Labor1Year',
+                },
+                {
+                  text: ', ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '-6RiyMQruEXMhd6802UfC',
+                  type: 'smart-ref',
+                  blockId: 'mKGe5gOM7Dd4ci9_JDh-e',
+                  lastSeenVariableName: 'LaborCostGrowth',
+                },
+                {
+                  text: ', ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '2vuHS-5yVyGBwGbw3CAcw',
+                  type: 'smart-ref',
+                  blockId: 'NOnNrYjbMXL7-mNf0_HYD',
+                  columnId: 'L_O223kPwJDA92Okl-Vcp',
+                  lastSeenVariableName: 'OPEX.Year',
+                },
+                {
+                  text: '))',
                 },
               ],
               type: 'table-column-formula',
@@ -1587,7 +1868,36 @@ export default {
             {
               children: [
                 {
-                  text: 'Revenue.NetRevenue * MarketingBudget ',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'HkZvLQs2LDBE3BQtW9zDw',
+                  type: 'smart-ref',
+                  blockId: 'ddTJXSKZzWh56A8NMCZmM',
+                  columnId: 'pF2XmhRPbG81DiO13qilh',
+                  lastSeenVariableName: 'Revenue.NetRevenue',
+                },
+                {
+                  text: ' * ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '-VH5ZpOZXYFSTvnescueo',
+                  type: 'smart-ref',
+                  blockId: '7ufNmdV4GIv-Sjp6RLv7z',
+                  lastSeenVariableName: 'MarketingBudget',
+                },
+                {
+                  text: ' ',
                 },
               ],
               type: 'table-column-formula',
@@ -1597,7 +1907,22 @@ export default {
             {
               children: [
                 {
-                  text: 'Revenue.Units',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'KrluOFL7d4L4VIcggUUWe',
+                  type: 'smart-ref',
+                  blockId: 'ddTJXSKZzWh56A8NMCZmM',
+                  columnId: 'fW42GOC3mjcWDoFB386CE',
+                  lastSeenVariableName: 'Revenue.Units',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -1607,7 +1932,37 @@ export default {
             {
               children: [
                 {
-                  text: 'Units *LaborItem',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'rGTMFK5raW7c7urJXT5gu',
+                  type: 'smart-ref',
+                  blockId: 'elQTf_RF9VP1T4EFcIm06',
+                  columnId: null,
+                  lastSeenVariableName: 'Units',
+                },
+                {
+                  text: ' * ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'PMr3YZvo0Nu4iSMlnZn-h',
+                  type: 'smart-ref',
+                  blockId: 'zdBYsmo2JBLNlrGO_yOPc',
+                  columnId: null,
+                  lastSeenVariableName: 'LaborItem',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -1617,7 +1972,37 @@ export default {
             {
               children: [
                 {
-                  text: 'Labor + Marketing',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'DvA14-A5GiMVdfFFdClS5',
+                  type: 'smart-ref',
+                  blockId: 'AjU4So0sYyU8U8gSx_O6T',
+                  columnId: null,
+                  lastSeenVariableName: 'Labor',
+                },
+                {
+                  text: ' + ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '05UChzfD2HH5E18fl8yZQ',
+                  type: 'smart-ref',
+                  blockId: 'yIdiIwZrtrXz9Z-6FhpBa',
+                  columnId: null,
+                  lastSeenVariableName: 'Marketing',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -2124,6 +2509,7 @@ export default {
       ],
       type: 'table',
       id: 'NOnNrYjbMXL7-mNf0_HYD',
+      hideFormulas: false,
     },
     {
       children: [
@@ -2150,7 +2536,22 @@ export default {
             {
               children: [
                 {
-                  text: 'GrossMargin.GrossProfit ',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'WKhFZL_S2tMnpVM3yOfsS',
+                  type: 'smart-ref',
+                  blockId: 'hOM1pr8pzdFI19V4lubQD',
+                  columnId: 'pQ0XmWlMNhJAezj3ulFU6',
+                  lastSeenVariableName: 'GrossMargin.GrossProfit',
+                },
+                {
+                  text: ' ',
                 },
               ],
               type: 'table-column-formula',
@@ -2160,7 +2561,22 @@ export default {
             {
               children: [
                 {
-                  text: 'OPEX.Total',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'wz7d6j2aDavFrxe7l1do4',
+                  type: 'smart-ref',
+                  blockId: 'NOnNrYjbMXL7-mNf0_HYD',
+                  columnId: 'LeraciU6Vy1axysEbM7Zy',
+                  lastSeenVariableName: 'OPEX.Total',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -2170,7 +2586,36 @@ export default {
             {
               children: [
                 {
-                  text: 'GrossProfit - OPEX ',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'zXEtXLFmmp_AG2FGdCDAB',
+                  type: 'smart-ref',
+                  blockId: '85eSX9Ze_QsLmnEoRi4Z9',
+                  columnId: null,
+                  lastSeenVariableName: 'GrossProfit',
+                },
+                {
+                  text: ' - ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'ZKDLiJjDFO_tjQauOaUdb',
+                  type: 'smart-ref',
+                  blockId: 'NOnNrYjbMXL7-mNf0_HYD',
+                  lastSeenVariableName: 'OPEX',
+                },
+                {
+                  text: ' ',
                 },
               ],
               type: 'table-column-formula',
@@ -2180,7 +2625,22 @@ export default {
             {
               children: [
                 {
-                  text: 'GrossMargin.NetRevenue',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'poWuvRcTOeATiAtEBU5jy',
+                  type: 'smart-ref',
+                  blockId: 'hOM1pr8pzdFI19V4lubQD',
+                  columnId: '1NNlKhP2trAHQ23YmqOVV',
+                  lastSeenVariableName: 'GrossMargin.NetRevenue',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -2603,6 +3063,7 @@ export default {
       ],
       type: 'table',
       id: '-farwyIZskJw6c8lgrotZ',
+      hideFormulas: false,
     },
     {
       children: [
@@ -2667,7 +3128,22 @@ export default {
             {
               children: [
                 {
-                  text: 'EBIT.OperatingIncome',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '9bpKIevGi9GNwGOckOvCr',
+                  type: 'smart-ref',
+                  blockId: '-farwyIZskJw6c8lgrotZ',
+                  columnId: 'oQQlONGTZmYYR0HdpOB9J',
+                  lastSeenVariableName: 'EBIT.OperatingIncome',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -2677,7 +3153,49 @@ export default {
             {
               children: [
                 {
-                  text: 'if EBIT > 0 then EBIT * TaxRate  else 0',
+                  text: 'if ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'yw0uRjgPB1u0cM54UX8FP',
+                  type: 'smart-ref',
+                  blockId: '-farwyIZskJw6c8lgrotZ',
+                  lastSeenVariableName: 'EBIT',
+                },
+                {
+                  text: ' > 0 then ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: '7T92JbyM_l1QHKl7TfuCj',
+                  type: 'smart-ref',
+                  blockId: '-farwyIZskJw6c8lgrotZ',
+                  lastSeenVariableName: 'EBIT',
+                },
+                {
+                  text: ' * ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'GkD74wpsd9rLoDDnF9OtJ',
+                  type: 'smart-ref',
+                  blockId: 'CRC1rx6_RQiGR858xdg_2',
+                  lastSeenVariableName: 'TaxRate',
+                },
+                {
+                  text: '  else 0',
                 },
               ],
               type: 'table-column-formula',
@@ -2950,6 +3468,7 @@ export default {
       ],
       type: 'table',
       id: 'Kqjhk4bqXwF7Y4lKcLZIH',
+      hideFormulas: false,
     },
     {
       children: [
@@ -2985,7 +3504,22 @@ export default {
             {
               children: [
                 {
-                  text: 'EBIT.OperatingIncome ',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'UTnv0G-ifhT69-G5ecatS',
+                  type: 'smart-ref',
+                  blockId: '-farwyIZskJw6c8lgrotZ',
+                  columnId: 'oQQlONGTZmYYR0HdpOB9J',
+                  lastSeenVariableName: 'EBIT.OperatingIncome',
+                },
+                {
+                  text: ' ',
                 },
               ],
               type: 'table-column-formula',
@@ -2995,7 +3529,22 @@ export default {
             {
               children: [
                 {
-                  text: 'Tax.Taxes',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'VZzkN04VxHX98MGWsDZ1r',
+                  type: 'smart-ref',
+                  blockId: 'Kqjhk4bqXwF7Y4lKcLZIH',
+                  columnId: 'Gy10UJ_AblyC41ZniHrST',
+                  lastSeenVariableName: 'Tax.Taxes',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -3005,7 +3554,37 @@ export default {
             {
               children: [
                 {
-                  text: 'OperatingIncome - Taxes',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'uiA4zVihtWOM49lEItawM',
+                  type: 'smart-ref',
+                  blockId: 'oqFDAfdh8Tg4fmy1_8kbu',
+                  columnId: null,
+                  lastSeenVariableName: 'OperatingIncome',
+                },
+                {
+                  text: ' - ',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'hGm8z9s-B4D4cA-GOzaVj',
+                  type: 'smart-ref',
+                  blockId: 'oNqXPFl_emZTsl3UyDOCh',
+                  columnId: null,
+                  lastSeenVariableName: 'Taxes',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -3015,7 +3594,22 @@ export default {
             {
               children: [
                 {
-                  text: 'EBIT.NetRevenue',
+                  text: '',
+                },
+                {
+                  children: [
+                    {
+                      text: '',
+                    },
+                  ],
+                  id: 'BUBVsD8GDFKRTyiiNN9ab',
+                  type: 'smart-ref',
+                  blockId: '-farwyIZskJw6c8lgrotZ',
+                  columnId: 'nijg0ftBc2YaIL0KaNeDo',
+                  lastSeenVariableName: 'EBIT.NetRevenue',
+                },
+                {
+                  text: '',
                 },
               ],
               type: 'table-column-formula',
@@ -3438,6 +4032,7 @@ export default {
       ],
       type: 'table',
       id: 'dx3xX7M8CauTJALImf5vt',
+      hideFormulas: false,
     },
     {
       children: [

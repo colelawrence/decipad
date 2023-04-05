@@ -32,13 +32,13 @@
     "noErrorTruncation": true,
     "paths": {
       "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
+      "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
       "@decipad/backend-resources": ["libs/backend-resources/src/index.ts"],
       "@decipad/backend-test-sandbox": [
         "libs/backend-test-sandbox/src/index.ts"
       ],
       "@decipad/backend-trace": ["libs/backend-trace/src/index.ts"],
       "@decipad/backend-utils": ["libs/backend-utils/src/index.ts"],
-      "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/client-config": ["libs/client-config/src/index.ts"],
       "@decipad/client-events": ["libs/client-events/src/index.ts"],
@@ -64,8 +64,8 @@
       "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],
       "@decipad/editor-variable-def": ["libs/editor-variable-def/src/index.ts"],
-      "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/email-templates": ["emails/src/index.tsx"],
+      "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
       "@decipad/external-data-lambdas": [
         "libs/external-data-lambdas/src/index.ts"
@@ -109,15 +109,15 @@
       "@decipad/services/blobs/pads": ["libs/services/src/blobs/pads"],
       "@decipad/services/email": ["libs/services/src/email"],
       "@decipad/services/externaldata": ["libs/services/src/externaldata"],
+      "@decipad/services/images": ["libs/services/src/images"],
       "@decipad/services/invites": ["libs/services/src/invites"],
       "@decipad/services/monitor": ["libs/services/src/monitor"],
       "@decipad/services/notebooks": ["libs/services/src/notebooks"],
       "@decipad/services/permissions": ["libs/services/src/permissions"],
       "@decipad/services/pubsub": ["libs/services/src/pubsub"],
       "@decipad/services/users": ["libs/services/src/users"],
-      "@decipad/services/workspaces": ["libs/services/src/workspaces"],
       "@decipad/services/utils": ["libs/services/src/utils"],
-      "@decipad/services/images": ["libs/services/src/images"],
+      "@decipad/services/workspaces": ["libs/services/src/workspaces"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
       "@decipad/support": ["libs/support/src/index.ts"],
       "@decipad/sync-connection-lambdas": [

@@ -58,7 +58,7 @@ test.describe('Use case: building a candle business', () => {
 
     expect(await fetchTable(page, '[id="HFm_s7Zp8559ZZsUzDnbH"]')).toBe(
       `.---------------------------------------------.
-|                    COGS                     |
+|                  COGSTable                  |
 |---------------------------------------------|
 | Year |  UnitCost   |    Units    |   COGS   |
 |------|-------------|-------------|----------|
