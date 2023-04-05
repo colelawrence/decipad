@@ -19,7 +19,6 @@ import { codeBlock } from '../../styles';
 import { resultBubbleStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
-import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const { lineHeight } = codeBlock;
 
@@ -269,14 +268,12 @@ export function useResultInfo({
   | 'onClickedResult'
   | 'element'
 >): { inline?: ReactNode; expanded?: ReactNode; errored?: boolean } {
-  const onOutputClick = useEventNoEffect(
-    useCallback(() => {
-      if (onClickedResult && result) {
-        onClickedResult(result);
-      }
-    }, [onClickedResult, result])
-  );
-
+  const onOutputClick = useCallback(() => {
+    if (onClickedResult && result) {
+      onClickedResult(result);
+    }
+  }, [onClickedResult, result]);
+  //
   // Return early when syntax errors
   if (syntaxError) {
     if (syntaxError.isEmptyExpressionError) {
