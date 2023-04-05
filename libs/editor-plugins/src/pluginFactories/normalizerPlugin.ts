@@ -122,6 +122,8 @@ const withNormalizerOverride = (
             }
           }
           if (newNormalize && newNormalize(entry)) {
+            // eslint-disable-next-line no-console
+            console.debug(`Normalizer ${pluginName} did something`);
             return;
           }
         }
