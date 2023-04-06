@@ -24,7 +24,7 @@ Dates:
 
 ```deci live
 [date(2020), date(2021), date(2022)]
-==> [ year 2020, year 2021, year 2022 ]
+==> [ 2020, 2021, 2022 ]
 ```
 
 Text strings:
@@ -93,7 +93,7 @@ You can also operate on lists with dates:
 
 ```deci live
 [date(2021-01), date(2021-02), date(2021-03)] + 1 year + 1 month
-==> [ month 2022-02, month 2022-03, month 2022-04 ]
+==> [ 2022-02, 2022-03, 2022-04 ]
 ```
 
 Or strings:

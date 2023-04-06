@@ -125,6 +125,7 @@ export interface PlotElement extends BaseElement {
   colorColumnName: string;
   thetaColumnName: string;
   children: [EmptyText];
+  y2ColumnName: string;
 }
 export interface DeprecatedInputElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_INPUT;

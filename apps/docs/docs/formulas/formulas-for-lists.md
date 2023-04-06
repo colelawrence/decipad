@@ -78,7 +78,7 @@ You can generate a new list that contains all the elements in the source list so
 
 ```deci live
 sort([date(2021-03), date(2020-12), date(2023-01)])
-==> [ month 2020-12, month 2021-03, month 2023-01 ]
+==> [ 2020-12, 2021-03, 2023-01 ]
 ```
 
 ## unique()

@@ -11,7 +11,7 @@
 
 ```deci live
 AddDifferentDateUnits = [ date(2020-01) ] + [ 1 year ]
-==> [ month 2021-01 ]
+==> [ 2021-01 ]
 ```
 
 ## [ENG-246](https://linear.app/decipad/issue/ENG-246)
@@ -44,7 +44,7 @@ grow(Offer, Step, Duration)
 ```deci live
 Time = [date(2022-01) .. date(2025-01) by quarter]
 StartingDate = first(Time)
-==> quarter 2022-01-01 00:00
+==> 2022-01-01 00:00
 ```
 
 ## [ENG-251](https://linear.app/decipad/issue/ENG-251)
@@ -275,12 +275,12 @@ round(1/2 pint in ml)
 
 ```deci live
 [date(2003) .. date(2000) by month]
-==> [ month 2003-12, month 2003-11, month 2003-10, month 2003-09, month 2003-08, month 2003-07, month 2003-06, month 2003-05, month 2003-04, month 2003-03, month 2003-02, month 2003-01, month 2002-12, month 2002-11, month 2002-10, month 2002-09, month 2002-08, month 2002-07, month 2002-06, month 2002-05, month 2002-04, month 2002-03, month 2002-02, month 2002-01, month 2001-12, month 2001-11, month 2001-10, month 2001-09, month 2001-08, month 2001-07, month 2001-06, month 2001-05, month 2001-04, month 2001-03, month 2001-02, month 2001-01, month 2000-12, month 2000-11, month 2000-10, month 2000-09, month 2000-08, month 2000-07, month 2000-06, month 2000-05, month 2000-04, month 2000-03, month 2000-02, month 2000-01 ]
+==> [ 2003-12, 2003-11, 2003-10, 2003-09, 2003-08, 2003-07, 2003-06, 2003-05, 2003-04, 2003-03, 2003-02, 2003-01, 2002-12, 2002-11, 2002-10, 2002-09, 2002-08, 2002-07, 2002-06, 2002-05, 2002-04, 2002-03, 2002-02, 2002-01, 2001-12, 2001-11, 2001-10, 2001-09, 2001-08, 2001-07, 2001-06, 2001-05, 2001-04, 2001-03, 2001-02, 2001-01, 2000-12, 2000-11, 2000-10, 2000-09, 2000-08, 2000-07, 2000-06, 2000-05, 2000-04, 2000-03, 2000-02, 2000-01 ]
 ```
 
 ```deci live
 [date(2003) .. date(2000)]
-==> [ year 2003, year 2002, year 2001, year 2000 ]
+==> [ 2003, 2002, 2001, 2000 ]
 ```
 
 ```deci live

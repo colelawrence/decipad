@@ -124,7 +124,7 @@ We can also declare a time value that also has one degree of freedom that is a s
 
 ```deci live
 Year = [date(2020) .. date(2025) by year]
-==> [ year 2020, year 2021, year 2022, year 2023, year 2024, year 2025 ]
+==> [ 2020, 2021, 2022, 2023, 2024, 2025 ]
 ```
 
 Which we now can use to calculate an interest rate and the price of fuel per year:
@@ -140,7 +140,7 @@ Fuel = {
   Price = round(BaseFuelPrice * InterestRateFromYear, 2)
 }
 ==> {
-  Year = [ year 2020, year 2021, year 2022, year 2023, year 2024, year 2025 ],
+  Year = [ 2020, 2021, 2022, 2023, 2024, 2025 ],
   InterestRateFromYear = [ 1, 1.08, 1.1664, 1.2597, 1.3604, 1.4693 ],
   Price = [ 4 $ per gallon, 4.32 $ per gallon, 4.67 $ per gallon, 5.04 $ per gallon, 5.44 $ per gallon, 5.88 $ per gallon ]
 }

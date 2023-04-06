@@ -6,8 +6,21 @@ import {
 } from '@decipad/computer';
 import { PlotElement } from '@decipad/editor-types';
 import DeciNumber from '@decipad/number';
+import { formatResult } from '@decipad/format';
 import { cssVarHex } from '@decipad/ui';
 import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
+import {
+  EncodingKey,
+  DisplayType,
+  TimeUnit,
+  EncodingSpec,
+  PlotSpec,
+  AllowedPlotValue,
+  PlotData,
+  Row,
+  FieldType,
+  comparableChartTypes,
+} from './plotUtils.interface';
 
 export type DisplayProps = {
   sourceVarName: string;
@@ -17,144 +30,9 @@ export type DisplayProps = {
   sizeColumnName: string;
   colorColumnName: string;
   thetaColumnName: string;
+  y2ColumnName: string;
   colorScheme?: string;
 };
-
-interface LegendConfig {
-  direction: 'horizontal' | 'vertical';
-  orient:
-    | 'left'
-    | 'right'
-    | 'top'
-    | 'bottom'
-    | 'top-left'
-    | 'top-right'
-    | 'bottom-left'
-    | 'bottom-right'
-    | 'none';
-}
-
-interface PlotConfig {
-  legend?: LegendConfig;
-  autosize?: 'fit' | 'pad' | 'none';
-  encoding?: {
-    color?: {
-      scheme?: string;
-      legend?: unknown;
-    };
-  };
-  style?: {
-    cell?: {
-      stroke?: string;
-    };
-  };
-  symbol?: {
-    stroke?: string;
-    fill?: string;
-  };
-  axis?: Axis;
-  mark?: {
-    interpolate: Interpolate;
-    stroke?: string;
-    fill?: string;
-    strokeWidth?: number;
-  };
-}
-
-type DisplayType = 'quantitative' | 'temporal' | 'ordinal' | 'nominal';
-
-type Interpolate =
-  | 'linear'
-  | 'linear-closed'
-  | 'step'
-  | 'basis'
-  | 'basis-open'
-  | 'basis-closed'
-  | 'cardinal'
-  | 'cardinal-closed'
-  | 'bundle';
-
-type Point =
-  | boolean
-  | {
-      filled?: boolean;
-      fill?: string;
-      size?: number;
-      strokeWidth?: number;
-    };
-
-export interface PlotSpec {
-  mark: {
-    type: PlotElement['markType'];
-    tooltip: boolean;
-    cornerRadiusEnd?: number;
-    interpolate?: Interpolate;
-    theta?: number;
-    innerRadius?: number;
-    point?: Point;
-  };
-  data: { name: 'table' };
-  encoding: Record<EncodingKey, EncodingSpec>;
-  config?: PlotConfig;
-}
-
-export type AllowedPlotValue = string | boolean | number | Date;
-
-export type Row = Record<string, AllowedPlotValue>;
-
-export type PlotData = {
-  table: Row[];
-};
-
-type TimeUnit =
-  | 'utcyear'
-  | 'utcquarter'
-  | 'utcyearmonth'
-  | 'utcyearmonthdate'
-  | 'utcyearmonthdatehours'
-  | 'utcyearmonthdatehoursminutes'
-  | 'utcyearmonthdatehoursminutesseconds';
-
-type Axis =
-  | undefined
-  | {
-      offset?: number;
-      grid?: boolean;
-      gridDash?: number[];
-      gridColor?: string;
-      labelAngle?: number;
-      labelBaseline?: string;
-      labelAlign?: string;
-      labelColor?: string;
-      labelFontSize?: number;
-      labelFontWeight?: number;
-      labelBound?: boolean;
-      titleColor?: string;
-      domainColor?: string;
-      domainOpacity?: number;
-      label?: number;
-      tickSize?: number;
-    };
-
-type EncodingSpec =
-  | undefined
-  | {
-      field: string;
-      type: DisplayType;
-      sort?: null;
-      timeUnit?: TimeUnit;
-      title?: string;
-      scale?: {
-        scheme?: string;
-        range?: Array<string>;
-        domain?: [number, number];
-        domainMin?: number;
-        domainMax?: number;
-      };
-      axis?: Axis;
-      legend?: null | undefined;
-    };
-type EncodingKey = 'x' | 'y' | 'size' | 'color' | 'theta';
 
 const displayPropsToEncoding: Record<string, EncodingKey> = {
   xColumnName: 'x',
@@ -170,6 +48,11 @@ const hasGrid: Record<EncodingKey, boolean> = {
   size: false,
   color: false,
   theta: false,
+  y2: false,
+  xOffset: false,
+  column: false,
+  aggregate: false,
+  datum: false,
 };
 
 const relevantDataDisplayProps: Array<keyof DisplayProps> = Object.keys(
@@ -210,6 +93,7 @@ function relevantColumnNames(displayProps: DisplayProps): string[] {
     displayProps.sizeColumnName,
     displayProps.colorColumnName,
     displayProps.thetaColumnName,
+    displayProps.y2ColumnName,
   ].filter(Boolean);
 }
 
@@ -310,6 +194,38 @@ export function specFromType(
     {} as Record<EncodingKey, EncodingSpec>
   );
 
+  // if we want to compare multiple columns in the same chart
+  if (
+    displayProps.y2ColumnName &&
+    comparableChartTypes.includes(displayProps.markType)
+  ) {
+    encoding.color = {
+      datum: { repeat: 'layer' },
+    };
+
+    encoding.y = {
+      aggregate: 'sum',
+      field: { repeat: 'layer' },
+      type: 'quantitative',
+      title: '',
+    };
+
+    encoding.xOffset = {
+      datum: { repeat: 'layer' },
+      type: 'nominal',
+    };
+
+    encoding.x = {
+      field: encoding.x?.field,
+      type: 'nominal',
+      title: '',
+      axis: {
+        labelAngle: 0,
+        labelLimit: 100,
+      },
+    };
+  }
+
   if (encoding.color && !encoding.color.scale) {
     encoding.color.scale = {
       scheme: displayProps.colorScheme,
@@ -327,7 +243,10 @@ export function specFromType(
     encoding.x.axis.offset = 5;
     encoding.x.axis.labelFontWeight = 700;
   }
-  if (displayProps.markType !== 'bar' && displayProps.markType !== 'arc') {
+  if (
+    !comparableChartTypes.includes(displayProps.markType) &&
+    displayProps.markType !== 'arc'
+  ) {
     encoding.color = undefined;
   }
 
@@ -336,7 +255,6 @@ export function specFromType(
 
   return {
     mark: { type: displayProps.markType, tooltip: true, ...markProps },
-    data: { name: 'table' },
     encoding,
     config: {
       encoding: {
@@ -383,7 +301,7 @@ function toPlotColumn(
     );
   }
   if (type.kind === 'date') {
-    return (column as Array<bigint>).map((d) => new Date(Number(d)));
+    return (column as Array<bigint>).map((d) => formatResult('en-US', d, type));
   }
   return column as Array<AllowedPlotValue>;
 }
@@ -428,6 +346,7 @@ export function resultToPlotResultData(
   }
   const tableValue = value as ResultTable;
   const columnNames = relevantColumnNames(displayProps);
+
   const columnsTypesAndResults: Array<[SerializedType, Result.OneResult[]]> =
     columnNames.map((columnName): [SerializedType, Result.OneResult[]] => {
       const index = type.columnNames.indexOf(columnName);
@@ -438,22 +357,28 @@ export function resultToPlotResultData(
     const [columnType, values] = columnsTypesAndResults[index];
     returnValue[columnName] = toPlotColumn(columnType, values);
   });
+
   return { table: makeWide(returnValue) };
 }
 
-function findWideDataDomain(key: string, data: Row[]): [number, number] | void {
+function findWideDataDomain(
+  key: FieldType | undefined,
+  data: Row[]
+): [number, number] | void {
   let min = Infinity;
   let max = -Infinity;
 
-  for (const row of data) {
-    const value = row[key];
-    if (value) {
-      if (typeof value === 'number') {
-        if (value < min) {
-          min = value;
-        }
-        if (value > max) {
-          max = value;
+  if (typeof key === 'string') {
+    for (const row of data) {
+      const value = row[key];
+      if (value) {
+        if (typeof value === 'number') {
+          if (value < min) {
+            min = value;
+          }
+          if (value > max) {
+            max = value;
+          }
         }
       }
     }

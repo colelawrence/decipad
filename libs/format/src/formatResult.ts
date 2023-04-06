@@ -30,7 +30,7 @@ export const formatResult = (
   }
 
   if (type.kind === 'date') {
-    return `${type.date} ${color(stringifyDate(result as bigint, type.date))}`;
+    return color(stringifyDate(result as bigint, type.date));
   }
 
   if (type.kind === 'number') {

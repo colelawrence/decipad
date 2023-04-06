@@ -40,6 +40,7 @@ const VOID_TYPE_PROPERTIES = {
     'sizeColumnName',
     'colorColumnName',
     'thetaColumnName',
+    'y2ColumnName',
   ],
   [DEPRECATED_ELEMENT_INPUT]: ['value', 'variableName'],
   [ELEMENT_IMPORT]: ['url', 'source', 'createdByUserId'],
@@ -70,6 +71,7 @@ const MISSING_ATTRIBUTE_GENERATOR = {
     sizeColumnName: emptyString,
     colorColumnName: emptyString,
     thetaColumnName: emptyString,
+    y2ColumnName: emptyString,
   },
   [DEPRECATED_ELEMENT_INPUT]: {
     value: emptyString,

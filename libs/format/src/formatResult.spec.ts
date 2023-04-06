@@ -27,7 +27,7 @@ describe('stringify', () => {
 
     expect(
       formatResult(locale, parseUTCDate('2020-01'), t.date('month'), highlight)
-    ).toMatchInlineSnapshot(`"month <2020-01>"`);
+    ).toMatchInlineSnapshot(`"<2020-01>"`);
 
     expect(
       formatResult(locale, [N(1n), N(2n)], t.column(t.number()), highlight)

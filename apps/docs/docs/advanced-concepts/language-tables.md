@@ -41,7 +41,7 @@ MyTable = {
   ArrivalDate = [date(2022-02-20) through date(2022-02-24) by day]
 }
 ==> {
-  ArrivalDate = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24 ]
+  ArrivalDate = [ 2022-02-20, 2022-02-21, 2022-02-22, 2022-02-23, 2022-02-24 ]
 }
 ```
 
@@ -55,8 +55,8 @@ MyTable = {
   DepartureDate = ArrivalDate + 7 days
 }
 ==> {
-  ArrivalDate = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24 ],
-  DepartureDate = [ day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03 ]
+  ArrivalDate = [ 2022-02-20, 2022-02-21, 2022-02-22, 2022-02-23, 2022-02-24 ],
+  DepartureDate = [ 2022-02-27, 2022-02-28, 2022-03-01, 2022-03-02, 2022-03-03 ]
 }
 ```
 
@@ -86,7 +86,7 @@ Or analyze changes to your profits:
     PercentOfProfit = round(Profit / total(Table.Profit) in 1/100)
   }
 ==> {
-  Months = [ month 2020-01, month 2020-02, month 2020-03, month 2020-04 ],
+  Months = [ 2020-01, 2020-02, 2020-03, 2020-04 ],
   Profit = [ 500 £, 300 £, 125 £, 230 £ ],
   RelativeChangeInProfit = [ 500 £, -200 £, -175 £, 105 £ ],
   PercentOfProfit = [ 43, 26, 11, 20 ]
@@ -104,7 +104,7 @@ Harvest = {
   Count = previous(0) + oranges
 }
 ==> {
-  Date = [ day 2022-02-20, day 2022-02-21, day 2022-02-22, day 2022-02-23, day 2022-02-24, day 2022-02-25, day 2022-02-26, day 2022-02-27, day 2022-02-28, day 2022-03-01, day 2022-03-02, day 2022-03-03, day 2022-03-04, day 2022-03-05 ],
+  Date = [ 2022-02-20, 2022-02-21, 2022-02-22, 2022-02-23, 2022-02-24, 2022-02-25, 2022-02-26, 2022-02-27, 2022-02-28, 2022-03-01, 2022-03-02, 2022-03-03, 2022-03-04, 2022-03-05 ],
   Oranges = [ 10 oranges, 15 oranges, 20 oranges, 9 oranges, 4 oranges, 54 oranges, 23 oranges, 45 oranges, 53 oranges, 63 oranges, 54 oranges, 12 oranges, 0 oranges, 1 oranges ],
   Count = [ 1 oranges, 2 oranges, 3 oranges, 4 oranges, 5 oranges, 6 oranges, 7 oranges, 8 oranges, 9 oranges, 10 oranges, 11 oranges, 12 oranges, 13 oranges, 14 oranges ]
 }

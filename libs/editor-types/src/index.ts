@@ -1,13 +1,13 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
 import { SerializedType } from '@decipad/computer';
+import * as markKinds from './mark-kinds';
+import * as elementKindsModule from './element-kinds';
 
 export * from './event-interception';
 export * from './decorator-kinds';
 
 export * from './mark-kinds';
-import * as markKinds from './mark-kinds';
-import * as elementKindsModule from './element-kinds';
 export { markKinds };
 
 import type { TableCellType } from './table';

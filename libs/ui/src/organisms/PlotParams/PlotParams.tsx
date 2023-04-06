@@ -39,6 +39,16 @@ export const markTypeNames: Record<MarkType, string> = {
   arc: 'Pie',
 };
 
+const comparableChartTypes = [
+  'bar',
+  'line',
+  'point',
+  'area',
+  'circle',
+  'square',
+  'tick',
+];
+
 export const markTypeIcons: Record<MarkType, ReactNode> = {
   bar: <BarChart />,
   line: <LineChart />,
@@ -57,9 +67,9 @@ export interface PlotParamsProps {
   readonly markType: MarkType;
   readonly setMarkType: StringSetter;
   readonly columnNameOptions: ReadonlyArray<string>;
-  readonly xColumnName: string;
+  readonly xColumnName?: string;
   readonly setXColumnName: StringSetter;
-  readonly yColumnName: string;
+  readonly yColumnName?: string;
   readonly setYColumnName: StringSetter;
   readonly sizeColumnName: string;
   readonly setSizeColumnName: StringSetter;
@@ -71,6 +81,8 @@ export interface PlotParamsProps {
   readonly setColorScheme: StringSetter;
   readonly shape: string;
   readonly setShape: StringSetter;
+  readonly y2ColumnName: string;
+  readonly setY2ColumnName: StringSetter;
 }
 
 const wrapperContainerStyles = css({
@@ -111,7 +123,8 @@ type SubMenuKey =
   | 'value'
   | 'point-size'
   | 'color-scheme_monochrome'
-  | 'color-scheme_multicolor';
+  | 'color-scheme_multicolor'
+  | 'value2';
 
 type ColorSchemeUniqueName = keyof typeof colorSchemes;
 
@@ -144,6 +157,8 @@ export const PlotParams = ({
   setColorScheme,
   shape,
   setShape,
+  y2ColumnName,
+  setY2ColumnName,
 }: PlotParamsProps): ReturnType<FC> => {
   const [open, setOpen] = useState<SubMenuKey | null>(null);
 
@@ -171,7 +186,7 @@ export const PlotParams = ({
     } else if (cachedColorScheme) {
       setColorScheme(cachedColorScheme);
     }
-  }, [tempColorScheme, cachedColorScheme, setColorScheme]);
+  }, [tempColorScheme, cachedColorScheme, setColorScheme, columnNameOptions]);
 
   const tableExpressionRefIndex = sourceExprRefOptions?.indexOf(sourceVarName);
   const tableVarName =
@@ -210,6 +225,10 @@ export const PlotParams = ({
         if (!yColumnName) {
           setYColumnName(columnNameOptions[1]);
         }
+
+        if (!y2ColumnName && columnNameOptions.length > 2) {
+          setY2ColumnName(columnNameOptions[2]);
+        }
         break;
       }
     }
@@ -227,6 +246,8 @@ export const PlotParams = ({
     thetaColumnName,
     xColumnName,
     yColumnName,
+    setY2ColumnName,
+    y2ColumnName,
   ]);
 
   return (
@@ -268,6 +289,9 @@ export const PlotParams = ({
                 key={svn}
                 selected={sourceExprRefOptions?.[index] === sourceVarName}
                 onSelect={() => {
+                  setXColumnName('');
+                  setYColumnName('');
+                  setY2ColumnName('');
                   setSourceVarName(sourceExprRefOptions?.[index] ?? svn);
                 }}
               >
@@ -385,78 +409,79 @@ export const PlotParams = ({
           </MenuList>
         )}
 
-        {(markType === 'bar' || markType === 'arc') && colorColumnName && (
-          <MenuList
-            key="color-scheme"
-            open={open?.startsWith('color-scheme')}
-            onChangeOpen={onChangeOpen('color-scheme')}
-            itemTrigger={
-              <TriggerMenuItem
-                icon={<Brush />}
-                selectedPreview={getColorSchemePrettyName(
-                  colorScheme as keyof typeof colorSchemes
-                )}
+        {(comparableChartTypes.includes(markType) || markType === 'arc') &&
+          colorColumnName && (
+            <MenuList
+              key="color-scheme"
+              open={open?.startsWith('color-scheme')}
+              onChangeOpen={onChangeOpen('color-scheme')}
+              itemTrigger={
+                <TriggerMenuItem
+                  icon={<Brush />}
+                  selectedPreview={getColorSchemePrettyName(
+                    colorScheme as keyof typeof colorSchemes
+                  )}
+                >
+                  Color scheme
+                </TriggerMenuItem>
+              }
+            >
+              <MenuList
+                key="monochrome-color-scheme"
+                open={open === 'color-scheme_monochrome'}
+                onChangeOpen={onChangeOpen('color-scheme_monochrome')}
+                itemTrigger={
+                  <TriggerMenuItem icon={<Brush />}>Monochrome</TriggerMenuItem>
+                }
               >
-                Color scheme
-              </TriggerMenuItem>
-            }
-          >
-            <MenuList
-              key="monochrome-color-scheme"
-              open={open === 'color-scheme_monochrome'}
-              onChangeOpen={onChangeOpen('color-scheme_monochrome')}
-              itemTrigger={
-                <TriggerMenuItem icon={<Brush />}>Monochrome</TriggerMenuItem>
-              }
-            >
-              {monochromeColorSchemes.map(([uniqueName, cs]) => (
-                <MenuItem
-                  key={uniqueName}
-                  selected={uniqueName === colorScheme}
-                  onSelect={() => {
-                    setColorScheme(uniqueName);
-                    setCachedColorScheme(uniqueName);
-                  }}
-                  onMouseEnter={() => {
-                    setTempColorScheme(uniqueName);
-                  }}
-                  onMouseLeave={() => {
-                    setTempColorScheme(undefined);
-                  }}
-                >
-                  <div css={{ minWidth: '160px' }}>{cs.name}</div>
-                </MenuItem>
-              ))}
+                {monochromeColorSchemes.map(([uniqueName, cs]) => (
+                  <MenuItem
+                    key={uniqueName}
+                    selected={uniqueName === colorScheme}
+                    onSelect={() => {
+                      setColorScheme(uniqueName);
+                      setCachedColorScheme(uniqueName);
+                    }}
+                    onMouseEnter={() => {
+                      setTempColorScheme(uniqueName);
+                    }}
+                    onMouseLeave={() => {
+                      setTempColorScheme(undefined);
+                    }}
+                  >
+                    <div css={{ minWidth: '160px' }}>{cs.name}</div>
+                  </MenuItem>
+                ))}
+              </MenuList>
+              <MenuList
+                key="multicolor-color-scheme"
+                open={open === 'color-scheme_multicolor'}
+                onChangeOpen={onChangeOpen('color-scheme_multicolor')}
+                itemTrigger={
+                  <TriggerMenuItem icon={<Brush />}>Multicolor</TriggerMenuItem>
+                }
+              >
+                {multicolorColorSchemes.map(([uniqueName, cs]) => (
+                  <MenuItem
+                    key={uniqueName}
+                    selected={uniqueName === colorScheme}
+                    onSelect={() => {
+                      setColorScheme(uniqueName);
+                      setCachedColorScheme(uniqueName);
+                    }}
+                    onMouseEnter={() => {
+                      setTempColorScheme(uniqueName);
+                    }}
+                    onMouseLeave={() => {
+                      setTempColorScheme(undefined);
+                    }}
+                  >
+                    <div css={{ minWidth: '160px' }}>{cs.name}</div>
+                  </MenuItem>
+                ))}
+              </MenuList>
             </MenuList>
-            <MenuList
-              key="multicolor-color-scheme"
-              open={open === 'color-scheme_multicolor'}
-              onChangeOpen={onChangeOpen('color-scheme_multicolor')}
-              itemTrigger={
-                <TriggerMenuItem icon={<Brush />}>Multicolor</TriggerMenuItem>
-              }
-            >
-              {multicolorColorSchemes.map(([uniqueName, cs]) => (
-                <MenuItem
-                  key={uniqueName}
-                  selected={uniqueName === colorScheme}
-                  onSelect={() => {
-                    setColorScheme(uniqueName);
-                    setCachedColorScheme(uniqueName);
-                  }}
-                  onMouseEnter={() => {
-                    setTempColorScheme(uniqueName);
-                  }}
-                  onMouseLeave={() => {
-                    setTempColorScheme(undefined);
-                  }}
-                >
-                  <div css={{ minWidth: '160px' }}>{cs.name}</div>
-                </MenuItem>
-              ))}
-            </MenuList>
-          </MenuList>
-        )}
+          )}
         {markType !== 'arc' && (
           <>
             <MenuList
@@ -499,6 +524,33 @@ export const PlotParams = ({
                 </MenuItem>
               ))}
             </MenuList>
+            {comparableChartTypes.includes(markType) && (
+              <MenuList
+                key="value2"
+                open={open === 'value2'}
+                onChangeOpen={onChangeOpen('value2')}
+                itemTrigger={
+                  <TriggerMenuItem
+                    icon={<List />}
+                    selectedPreview={y2ColumnName}
+                  >
+                    Value 2
+                  </TriggerMenuItem>
+                }
+              >
+                {columnNameOptions.map((columnNameOption) => (
+                  <MenuItem
+                    key={columnNameOption}
+                    onSelect={() => {
+                      setY2ColumnName(columnNameOption);
+                    }}
+                    data-testid={`chart__settings__group_by__${columnNameOption}`}
+                  >
+                    <div css={{ minWidth: '160px' }}>{columnNameOption}</div>
+                  </MenuItem>
+                ))}
+              </MenuList>
+            )}
           </>
         )}
         {(shapes.includes(markType) || markType === 'area') && (

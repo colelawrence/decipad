@@ -22,6 +22,10 @@ describe('normalizePlotSpec', () => {
             field: 'field3',
             type: 'quantitative',
           },
+          y2: {
+            field: 'field31',
+            type: 'quantitative',
+          },
           size: {
             field: 'field4',
             type: 'quantitative',
@@ -30,9 +34,10 @@ describe('normalizePlotSpec', () => {
             field: 'field5',
             type: 'nominal',
           },
-        },
-        data: {
-          name: 'table',
+          column: {},
+          xOffset: {},
+          aggregate: {},
+          datum: {},
         },
       })
     ).toMatchObject({
@@ -44,14 +49,19 @@ describe('normalizePlotSpec', () => {
         },
         x: undefined,
         y: undefined,
+        y2: {
+          field: 'field31',
+          type: 'quantitative',
+        },
         size: undefined,
         color: {
           field: 'field5',
           type: 'nominal',
         },
-      },
-      data: {
-        name: 'table',
+        column: {},
+        xOffset: {},
+        aggregate: {},
+        datum: {},
       },
     });
   });
@@ -73,6 +83,10 @@ describe('normalizePlotSpec', () => {
             field: 'field3',
             type: 'quantitative',
           },
+          y2: {
+            field: 'field31',
+            type: 'quantitative',
+          },
           size: {
             field: 'field4',
             type: 'quantitative',
@@ -81,9 +95,10 @@ describe('normalizePlotSpec', () => {
             field: 'field5',
             type: 'nominal',
           },
-        },
-        data: {
-          name: 'table',
+          column: {},
+          xOffset: {},
+          aggregate: {},
+          datum: {},
         },
       })
     ).toMatchObject({
@@ -103,9 +118,10 @@ describe('normalizePlotSpec', () => {
           field: 'field5',
           type: 'nominal',
         },
-      },
-      data: {
-        name: 'table',
+        column: {},
+        xOffset: {},
+        aggregate: {},
+        datum: {},
       },
     });
   });

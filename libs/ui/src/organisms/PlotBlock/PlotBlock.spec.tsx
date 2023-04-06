@@ -39,6 +39,7 @@ const result: ComponentProps<typeof PlotBlock>['result'] = {
       { aa: 'label 4', bb: 17 },
     ],
   },
+  repeatedColumns: [],
 };
 
 const setter = (prop: string) => (value: string) => {
@@ -66,6 +67,7 @@ const plotParams: (
   markType,
   xColumnName: 'x column name',
   yColumnName: 'y column name',
+  y2ColumnName: 'y2 column name',
   sizeColumnName: 'size column name',
   colorColumnName: 'color column name',
   thetaColumnName: 'color column name',
@@ -74,6 +76,7 @@ const plotParams: (
   setMarkType: setter('markType'),
   setXColumnName: setter('xColumnName'),
   setYColumnName: setter('yColumnName'),
+  setY2ColumnName: setter('y2ColumnName'),
   setSizeColumnName: setter('sizeColumnName'),
   setColorColumnName: setter('colorColumnName'),
   setThetaColumnName: setter('thetaColumnName'),
@@ -92,6 +95,7 @@ const plotParamsNoSources: (
   markType,
   xColumnName: 'x column name',
   yColumnName: 'y column name',
+  y2ColumnName: 'y2 column name',
   sizeColumnName: 'size column name',
   colorColumnName: 'color column name',
   thetaColumnName: 'color column name',
@@ -100,6 +104,7 @@ const plotParamsNoSources: (
   setMarkType: setter('markType'),
   setXColumnName: setter('xColumnName'),
   setYColumnName: setter('yColumnName'),
+  setY2ColumnName: setter('y2ColumnName'),
   setSizeColumnName: setter('sizeColumnName'),
   setColorColumnName: setter('colorColumnName'),
   setThetaColumnName: setter('thetaColumnName'),

@@ -56,5 +56,5 @@ You can have ranges of dates, like this:
 
 ```deci live
 range(date(2022-01) through date(2022-06))
-==> range(month 2022-01 to month 2022-06)
+==> range(2022-01 to 2022-06)
 ```

@@ -22,7 +22,7 @@ Cashflow = {
   Profit = Income - Expenses
 }
 ==> {
-  Month = [ month 2023-01, month 2023-02, month 2023-03, month 2023-04, month 2023-05 ],
+  Month = [ 2023-01, 2023-02, 2023-03, 2023-04, 2023-05 ],
   Expenses = [ 500 £, 500 £, 600 £, 700 £, 700 £ ],
   Income = [ 0 £, 400 £, 800 £, 2000 £, 3000 £ ],
   Profit = [ -500 £, -100 £, 200 £, 1300 £, 2300 £ ]
@@ -40,7 +40,7 @@ Cashflow = {
 }
 
 lookup(Cashflow, Cashflow.Profit >= 0).Month
-==> month 2023-03
+==> 2023-03
 ```
 
 ## Break even
@@ -57,7 +57,7 @@ Cashflow = {
   BankBalance = previous(InitialInvestment) + Profit
 }
 ==> {
-  Month = [ month 2023-01, month 2023-02, month 2023-03, month 2023-04, month 2023-05 ],
+  Month = [ 2023-01, 2023-02, 2023-03, 2023-04, 2023-05 ],
   Expenses = [ 500 £, 500 £, 600 £, 700 £, 700 £ ],
   Income = [ 0 £, 400 £, 800 £, 2000 £, 3000 £ ],
   Profit = [ -500 £, -100 £, 200 £, 1300 £, 2300 £ ],
@@ -78,7 +78,7 @@ Cashflow = {
 }
 
 lookup(Cashflow, Cashflow.BankBalance >= 0).Month
-==> month 2023-04
+==> 2023-04
 ```
 
 If you want to calculate how much of a interest free loan or extra investment you need:

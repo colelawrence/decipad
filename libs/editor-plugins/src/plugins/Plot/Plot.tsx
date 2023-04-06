@@ -24,7 +24,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
-  const { spec, data, plotParams } = usePlot(element);
+  const { spec, data, plotParams, repeatedColumns } = usePlot(element);
   const path = useNodePath(element);
   const onTitleChange = usePathMutatorCallback(editor, path, 'title');
 
@@ -50,6 +50,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
           ({
             spec,
             data,
+            repeatedColumns,
           } as PlotBlockProps['result'])
         }
         title={element.title || DEFAULT_TITLE}

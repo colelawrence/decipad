@@ -19,6 +19,7 @@ const getPlotElement = (
   thetaColumnName: '',
   sizeColumnName: '',
   colorColumnName: '',
+  y2ColumnName: '',
   children: [{ text: '' }],
 });
 

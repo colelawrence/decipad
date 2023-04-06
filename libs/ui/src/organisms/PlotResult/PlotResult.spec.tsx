@@ -32,6 +32,7 @@ const props: ComponentProps<typeof PlotResult> = {
     },
     mark: { type: 'circle', tooltip: true },
   },
+  repeatedColumns: [],
   data: {
     table: [
       { aa: 'label 1', bb: 2 },
@@ -57,7 +58,6 @@ describe('given invalid input', () => {
         {...props}
         spec={{
           data: [{ name: 'one' }],
-          mark: { type: 'circle' },
           config: {
             encoding: {
               color: {
@@ -66,6 +66,7 @@ describe('given invalid input', () => {
             },
           },
         }}
+        repeatedColumns={[]}
         data={{ two: [] }}
         onError={handleError}
       />

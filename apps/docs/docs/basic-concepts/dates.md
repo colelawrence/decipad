@@ -12,21 +12,21 @@ A time value has a granularity, which can be a year, a month, a day, or a specif
 
 ```deci live
 date(2022-06-30)
-==> day 2022-06-30
+==> 2022-06-30
 ```
 
 You can specify a time value to the hour:
 
 ```deci live
 date(2022-06-30 16)
-==> hour 2022-06-30 16:00
+==> 2022-06-30 16:00
 ```
 
 Or to the minute:
 
 ```deci live
 date(2022-06-30 16:45)
-==> minute 2022-06-30 16:45
+==> 2022-06-30 16:45
 ```
 
 A time value can have any of the following granularities:
@@ -55,7 +55,7 @@ You can add a time duration to a date:
 ```deci live
 Start = date(2021-01-01)
 End = Start + 1 year + 6 months + 5 days
-==> day 2022-07-06
+==> 2022-07-06
 ```
 
 Or subtract two dates to get a time duration:

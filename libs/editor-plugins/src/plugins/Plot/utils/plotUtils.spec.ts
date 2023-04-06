@@ -12,6 +12,7 @@ const defaultDisplayProps: DisplayProps = {
   sourceVarName: '',
   xColumnName: '',
   yColumnName: '',
+  y2ColumnName: '',
   sizeColumnName: '',
   colorColumnName: '',
   thetaColumnName: '',
@@ -87,9 +88,6 @@ describe('specFromType', () => {
           },
         },
       },
-      data: {
-        name: 'table',
-      },
       encoding: {},
       mark: {
         tooltip: true,
@@ -100,9 +98,6 @@ describe('specFromType', () => {
 
   it('returns a default spec with default display props', () => {
     expect(specFromType(computer, tableType, displayProps())).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {},
       mark: {
         tooltip: true,
@@ -115,9 +110,6 @@ describe('specFromType', () => {
     expect(
       specFromType(computer, tableType, displayProps({ markType: 'area' }))
     ).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {},
       mark: {
         tooltip: true,
@@ -130,9 +122,6 @@ describe('specFromType', () => {
     expect(
       specFromType(computer, tableType, displayProps({ xColumnName: 'index' }))
     ).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {
         x: {
           field: 'index',
@@ -151,9 +140,6 @@ describe('specFromType', () => {
     expect(
       specFromType(computer, tableType, displayProps({ yColumnName: 'index' }))
     ).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {
         y: {
           field: 'index',
@@ -174,9 +160,6 @@ describe('specFromType', () => {
         displayProps({ sizeColumnName: 'index' })
       )
     ).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {
         size: {
           field: 'index',
@@ -197,9 +180,6 @@ describe('specFromType', () => {
         displayProps({ colorColumnName: 'index' })
       )
     ).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {
         color: {
           field: 'index',
@@ -220,9 +200,6 @@ describe('specFromType', () => {
         displayProps({ thetaColumnName: 'index' })
       )
     ).toMatchObject({
-      data: {
-        name: 'table',
-      },
       encoding: {
         theta: {
           field: 'index',
@@ -254,9 +231,6 @@ describe('specFromType', () => {
           displayProps({ xColumnName: `date-${unit}` })
         )
       ).toMatchObject({
-        data: {
-          name: 'table',
-        },
         encoding: {
           x: {
             field: `date-${unit}`,
@@ -284,6 +258,7 @@ describe('resultToPlotResultData', () => {
         displayProps({
           xColumnName: 'index',
           yColumnName: 'date-year',
+          y2ColumnName: 'date-year2',
           thetaColumnName: 'date-month',
           colorColumnName: 'date-day',
           sizeColumnName: 'simple-number',
@@ -293,23 +268,23 @@ describe('resultToPlotResultData', () => {
       Object {
         "table": Array [
           Object {
-            "date-day": 1970-01-01T00:00:00.100Z,
-            "date-month": 1970-01-01T00:00:00.100Z,
-            "date-year": 1970-01-01T00:00:00.100Z,
+            "date-day": "1970-01-01",
+            "date-month": "1970-01",
+            "date-year": "1970",
             "index": "label 1",
             "simple-number": 1,
           },
           Object {
-            "date-day": 1970-01-01T00:00:00.200Z,
-            "date-month": 1970-01-01T00:00:00.200Z,
-            "date-year": 1970-01-01T00:00:00.200Z,
+            "date-day": "1970-01-01",
+            "date-month": "1970-01",
+            "date-year": "1970",
             "index": "label 2",
             "simple-number": 2,
           },
           Object {
-            "date-day": 1970-01-01T00:00:00.300Z,
-            "date-month": 1970-01-01T00:00:00.300Z,
-            "date-year": 1970-01-01T00:00:00.300Z,
+            "date-day": "1970-01-01",
+            "date-month": "1970-01",
+            "date-year": "1970",
             "index": "label 3",
             "simple-number": 3,
           },

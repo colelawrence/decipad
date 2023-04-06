@@ -5,7 +5,7 @@ import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
 import { useEffect, useMemo } from 'react';
-import type { PlotData, PlotSpec } from './plotUtils';
+import type { PlotData, PlotSpec } from './plotUtils.interface';
 import {
   enhanceSpecFromWideData,
   resultToPlotResultData,
@@ -28,12 +28,14 @@ export type PlotParams = Omit<PlotElement, 'children' | 'id' | 'type'> & {
   setColorColumnName: StringSetter;
   setThetaColumnName: StringSetter;
   setColorScheme: StringSetter;
+  setY2ColumnName: StringSetter;
 };
 
 type UsePlotReturn = {
   spec?: PlotSpec;
   data?: PlotData;
   plotParams: PlotParams;
+  repeatedColumns: string[];
 };
 
 type AutocompleteNameWithExpRef = AutocompleteName & {
@@ -112,7 +114,12 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     path,
     'thetaColumnName'
   );
+  const setY2ColumnName = usePathMutatorCallback(editor, path, 'y2ColumnName');
   const setColorScheme = usePathMutatorCallback(editor, path, 'colorScheme');
+
+  const repeatedColumns = useMemo(() => {
+    return _.uniq([element.y2ColumnName, element.yColumnName]).filter(Boolean);
+  }, [element]);
 
   const plotParams: PlotParams = useMemo(
     () => ({
@@ -128,6 +135,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       setColorColumnName,
       setThetaColumnName,
       setColorScheme,
+      setY2ColumnName,
       ...element,
       setShape: setMarkType,
       shape,
@@ -143,6 +151,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       setThetaColumnName,
       setXColumnName,
       setYColumnName,
+      setY2ColumnName,
       shape,
       source,
     ]
@@ -171,5 +180,5 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     );
   }
 
-  return { spec, data, plotParams };
+  return { spec, data, plotParams, repeatedColumns };
 };

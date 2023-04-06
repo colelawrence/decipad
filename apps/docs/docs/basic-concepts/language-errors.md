@@ -183,7 +183,7 @@ You can fix it by providing fixing the typo:
 ```deci live
 Date = date(2025)
 Date + 1 year
-==> year 2026
+==> 2026
 ```
 
 ## Mismatched Specificity
@@ -203,14 +203,14 @@ But adding a year works:
 
 ```deci live
 date(2022) + 1 year
-==> year 2023
+==> 2023
 ```
 
 If you want to add a day you need to define the granularity of your date at that level:
 
 ```deci live
 date(2022-06-30) + 1 day
-==> day 2022-07-01
+==> 2022-07-01
 ```
 
 You can fix it by providing fixing the typo:
@@ -218,7 +218,7 @@ You can fix it by providing fixing the typo:
 ```deci live
 Date = date(2025)
 Date + 1 year
-==> year 2026
+==> 2026
 ```
 
 ## Formula Cannot Call Itself

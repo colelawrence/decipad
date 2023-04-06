@@ -12,7 +12,7 @@ Gets you the maximum date from a list of dates:
 
 ```deci live
 max([date(2050-Jan-01), date(2025-Jun-01)])
-==> day 2050-01-01
+==> 2050-01-01
 ```
 
 ## min()
@@ -21,7 +21,7 @@ You can get the maximum date from a list of dates:
 
 ```deci live
 min([date(2050-Jan-01), date(2025-Jun-01)])
-==> day 2025-06-01
+==> 2025-06-01
 ```
 
 ## contains()

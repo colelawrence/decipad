@@ -1,10 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { Computer, SerializedType } from '@decipad/computer';
-import { encodingFor, PlotSpec } from './plotUtils';
+import { encodingFor } from './plotUtils';
+import { PlotSpec } from './plotUtils.interface';
 
 type KindSet = Set<SerializedType['kind']>;
 
-type ExclusionList = Array<string | undefined>;
+type ExclusionList = Array<string | { repeat: string } | undefined>;
 
 const quantitativeKinds: KindSet = new Set(['number', 'date']);
 
@@ -48,7 +49,6 @@ export const defaultPlotSpec = (
   if (type?.kind !== 'table' || !spec) {
     return spec;
   }
-
   // pie charts
   if (spec.mark.type === 'arc') {
     const exclude: ExclusionList = [];

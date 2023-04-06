@@ -67,6 +67,7 @@ const PlotWithProviders = ({
     markType: 'bar',
     xColumnName: '',
     yColumnName: '',
+    y2ColumnName: '',
     sizeColumnName: '',
     colorColumnName: '',
     thetaColumnName: '',
