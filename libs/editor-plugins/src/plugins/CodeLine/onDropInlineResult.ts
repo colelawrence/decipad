@@ -26,6 +26,7 @@ import {
 import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
 import { getExprRef } from '@decipad/computer';
 import { dndStore } from '@udecode/plate-dnd';
+import { cursorStore } from '../../stores/cursorStore';
 
 export const onDropInlineResult =
   (editor: MyEditor) => (event: React.DragEvent) => {
@@ -33,6 +34,7 @@ export const onDropInlineResult =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      cursorStore.set.reset();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

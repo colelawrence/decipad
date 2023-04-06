@@ -1,6 +1,7 @@
 import { ELEMENT_CODE_LINE, MyPlatePlugin } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
+import { eventEditorActions } from '@udecode/plate';
 import { deserializeCodeLineHtml } from './deserializeCodeLineHtml';
 import { serializeCodeLineHtml } from './serializeCodeLineHtml';
 import { onDropCodeLine } from './onDropCodeLine';
@@ -19,5 +20,8 @@ export const createCodeLinePlugin = (computer: Computer): MyPlatePlugin => ({
   handlers: {
     onDrop: onDropCodeLine,
     onKeyDown: onKeyDownCodeLine(computer),
+    onFocus: () => () => {
+      eventEditorActions.blur('');
+    },
   },
 });

@@ -17,6 +17,7 @@ import {
 } from '@decipad/editor-utils';
 import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { cursorStore } from '@decipad/editor-plugins';
 import { dndStore } from '@udecode/plate-dnd';
 import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
@@ -28,6 +29,7 @@ export const onDropSmartCellResult =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      cursorStore.set.reset();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

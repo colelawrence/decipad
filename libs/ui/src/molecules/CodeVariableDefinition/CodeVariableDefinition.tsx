@@ -1,7 +1,24 @@
 import { SerializedType } from '@decipad/computer';
-import { CellValueType } from '@decipad/editor-types';
+import { CellValueType, MyEditor } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import { ReactNode, useMemo } from 'react';
+import {
+  HTMLAttributes,
+  MouseEvent,
+  MouseEventHandler,
+  ReactNode,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  eventEditorSelectors,
+  findEventRange,
+  findNodePath,
+  focusEditor,
+  getStartPoint,
+  someNode,
+  TElement,
+} from '@udecode/plate';
+import { Location } from 'slate';
 import { Formula, Number } from '../../icons';
 import { cssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
@@ -32,8 +49,6 @@ const iconStyles = css({
   height: '16px',
   width: '16px',
   marginRight: '4px',
-  pointerEvents: 'none',
-  userSelect: 'none',
 });
 
 const emptyStyles = css({
@@ -60,21 +75,127 @@ const formulaIconStyles = css([
 interface NonInteractiveCodeVariableProps {
   readonly children: ReactNode;
   readonly empty: boolean;
+  readonly contentEditable: boolean;
   readonly type?: SerializedType | CellValueType;
+  readonly readOnly?: boolean;
   readonly isValue?: boolean;
+  readonly onClick?: MouseEventHandler<HTMLSpanElement>;
+  readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
+  readonly onDragEnd?: (e: React.DragEvent) => void;
 }
+
+export const shouldResetContentEditable = (
+  editor: MyEditor,
+  id: string,
+  contentEditable: boolean
+) => {
+  if (!editor.selection) return false;
+  if (eventEditorSelectors.blur()) return false;
+
+  const hasNode = someNode(editor, {
+    match: {
+      id,
+    },
+  });
+
+  if (!contentEditable) {
+    if (hasNode) {
+      return true;
+    }
+  } else if (!hasNode) {
+    return false;
+  }
+
+  return null;
+};
+
+export const focusMouseEventLocation = (
+  editor: MyEditor,
+  element: TElement,
+  event: MouseEvent<HTMLSpanElement>
+) => {
+  let target: Location | undefined = findEventRange(editor, event);
+  if (!target) {
+    const at = findNodePath(editor, element);
+    if (!at) return;
+
+    target = getStartPoint(editor, at);
+    if (!target) return;
+  }
+
+  focusEditor(editor, target);
+};
+
+export const getCodeVariableDefinitionRootProps = ({
+  contentEditable,
+  onDragEnd,
+  onDragStartInlineResult,
+  onClick,
+  setGrabbing,
+}: {
+  contentEditable: boolean;
+  setGrabbing: (grabbing: boolean) => void;
+  onClick?: MouseEventHandler<HTMLSpanElement>;
+  onDragStartInlineResult?: (e: React.DragEvent<HTMLSpanElement>) => void;
+  onDragEnd?: (e: React.DragEvent<HTMLSpanElement>) => void;
+}): HTMLAttributes<HTMLSpanElement> => {
+  if (contentEditable) {
+    return {};
+  }
+
+  return {
+    draggable: true,
+    onDragStart: (e: React.DragEvent<HTMLSpanElement>) => {
+      onDragStartInlineResult?.(e);
+      setGrabbing(true);
+    },
+    onDragEnd: (e: React.DragEvent<HTMLSpanElement>) => {
+      onDragEnd?.(e);
+      setGrabbing(false);
+    },
+    onClick,
+  };
+};
 
 export const CodeVariableDefinition = ({
   isValue = true,
   empty,
   children,
   type,
+  readOnly,
+  contentEditable,
+  onClick,
+  onDragStartInlineResult,
+  onDragEnd,
 }: NonInteractiveCodeVariableProps) => {
+  const [grabbing, setGrabbing] = useState(false);
   const Icon = useMemo(() => (type ? getTypeIcon(type) : Number), [type]);
+
+  const rootProps: HTMLAttributes<HTMLSpanElement> = useMemo(
+    () =>
+      getCodeVariableDefinitionRootProps({
+        contentEditable,
+        onDragEnd,
+        onDragStartInlineResult,
+        onClick,
+        setGrabbing,
+      }),
+    [onClick, contentEditable, onDragEnd, onDragStartInlineResult]
+  );
 
   return (
     <span
-      css={[varStyles(isValue ? 'simple' : 'formula'), empty && emptyStyles]}
+      css={[
+        varStyles(isValue ? 'simple' : 'formula'),
+        empty && emptyStyles,
+        !contentEditable &&
+          onDragStartInlineResult && {
+            cursor: 'grab',
+          },
+        !contentEditable && grabbing && { cursor: 'grabbing' },
+      ]}
+      contentEditable={!readOnly && contentEditable}
+      {...rootProps}
     >
       {!isValue && (
         <span css={[formulaIconStyles]}>

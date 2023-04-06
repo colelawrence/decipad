@@ -5,6 +5,7 @@ import type {
   SimpleValue,
 } from '@decipad/computer';
 import {
+  CodeLineV2Element,
   DisplayElement,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -13,6 +14,7 @@ import {
   MyElement,
   PlateComponent,
   useTEditorRef,
+  useTPlateEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -34,17 +36,30 @@ import {
   StructuredInputUnits,
   Tooltip,
 } from '@decipad/ui';
-import { css } from '@emotion/react';
-import { findNodePath, getNodeString, getPreviousNode } from '@udecode/plate';
+import {
+  findNodePath,
+  getNodeString,
+  getPreviousNode,
+  useElement,
+  useEventEditorSelectors,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
   Children,
   createContext,
+  MouseEvent,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useState,
 } from 'react';
 import { useSelected } from 'slate-react';
+import { css } from '@emotion/react';
+import {
+  focusMouseEventLocation,
+  shouldResetContentEditable,
+} from '@decipad/ui/src/molecules/CodeVariableDefinition/CodeVariableDefinition';
 import { DraggableBlock } from '../block-management';
 import { BlockLengthSynchronizationReceiver } from '../BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 import { CodeLineTeleport } from './CodeLineTeleport';
@@ -55,6 +70,7 @@ import { useCodeLineClickReference } from './useCodeLineClickReference';
 import { useSimpleValueInfo } from './useSimpleValueInfo';
 import { useTurnIntoProps } from './useTurnIntoProps';
 import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
+import { CodeVariableDefinitionEffects } from './CodeVariableDefinitionEffects';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
@@ -132,7 +148,7 @@ export const CodeLineV2: PlateComponent = ({
         : onDragStartInlineResult(editor, {
             element,
             computer,
-            result: lineResult as any,
+            result: lineResult?.result as any,
           }),
     [computer, editor, element, isReadOnly, lineResult]
   );
@@ -235,13 +251,59 @@ export const SimpleValueContext = createContext<SimpleValue | undefined>(
 export const CodeLineV2Varname: PlateComponent = (props) => {
   assertElementType(props.element, ELEMENT_STRUCTURED_VARNAME);
 
+  const [contentEditable, setContentEditable] = useState(false);
+  const element = useElement<CodeLineV2Element>(ELEMENT_CODE_LINE_V2);
+  const editor = useTPlateEditorRef();
+  const computer = useComputer();
   const varResult = useContext(VarResultContext);
   const simpleValue = useContext(SimpleValueContext);
+  const isReadOnly = useIsEditorReadOnly();
+
+  const { id: lineId } = element;
+  const lineResult = computer.getBlockIdResult$.use(lineId);
 
   const errorMessage = useEnsureValidVariableName(props.element, [
     varResult?.id,
   ]);
   const empty = getNodeString(props.element).trim() === '';
+
+  const blurred = useEventEditorSelectors.blur();
+  useEffect(() => {
+    if (blurred) {
+      setContentEditable(false);
+    }
+  }, [blurred]);
+
+  const handleDragStartInlineResult = useMemo(
+    () =>
+      isReadOnly
+        ? undefined
+        : onDragStartInlineResult(editor, {
+            element,
+            computer,
+            result: lineResult?.result as any,
+          }),
+    [computer, editor, element, isReadOnly, lineResult]
+  );
+
+  const onEditorChange = useCallback(() => {
+    const shouldReset = shouldResetContentEditable(
+      editor,
+      props.element.id as string,
+      contentEditable
+    );
+    if (shouldReset !== null) {
+      setContentEditable(shouldReset);
+    }
+  }, [contentEditable, editor, props.element.id, setContentEditable]);
+
+  const handleCodeVariableDefinitionClick = useCallback(
+    (event: MouseEvent<HTMLSpanElement>) => {
+      setContentEditable(true);
+      focusMouseEventLocation(editor, element, event);
+    },
+    [editor, element]
+  );
 
   return (
     <Tooltip
@@ -263,7 +325,12 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
                   : varResult?.result.type
               }
               isValue={simpleValue != null}
+              contentEditable={contentEditable}
+              readOnly={isReadOnly}
+              onClick={handleCodeVariableDefinitionClick}
+              onDragStartInlineResult={handleDragStartInlineResult}
             >
+              <CodeVariableDefinitionEffects onEditorChange={onEditorChange} />
               {props.children}
             </CodeVariableDefinition>
           </BlockLengthSynchronizationReceiver>

@@ -23,6 +23,7 @@ import React from 'react';
 import { BasePoint, Path } from 'slate';
 import { dndStore } from '@udecode/plate-dnd';
 import { insertSmartRef } from './insertSmartRef';
+import { cursorStore } from '../../../stores/cursorStore';
 
 export const onDropSmartRef =
   (computer: Computer) => (editor: MyEditor) => (event: React.DragEvent) => {
@@ -30,6 +31,7 @@ export const onDropSmartRef =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      cursorStore.set.reset();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

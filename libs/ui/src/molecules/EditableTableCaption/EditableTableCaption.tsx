@@ -78,6 +78,12 @@ type EditableTableCaptionProps = PropsWithChildren<{
   showToggleCollapsedButton?: boolean;
 }>;
 
+export const shouldShowFormulaDrawer = (
+  formulaEditor: any,
+  isCollapsed: boolean,
+  tableFormulaEditors: any[]
+): boolean => !!formulaEditor && !isCollapsed && tableFormulaEditors.length > 0;
+
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
   formulaEditor = true,
@@ -195,7 +201,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         </div>
       </div>
 
-      {formulaEditor && !isCollapsed && tableFormulaEditors.length > 0 && (
+      {shouldShowFormulaDrawer(
+        formulaEditor,
+        !!isCollapsed,
+        tableFormulaEditors
+      ) && (
         <div css={hideFormulas ? { display: 'none' } : { display: 'block' }}>
           <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
         </div>

@@ -11,6 +11,7 @@ import React from 'react';
 import { getBlockAbove } from '@udecode/plate';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import { dndStore } from '@udecode/plate-dnd';
+import { cursorStore } from '../../stores/cursorStore';
 
 export const DRAG_SMART_CELL = 'smart-cell';
 
@@ -20,6 +21,7 @@ export const onDropSmartCell =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      cursorStore.set.reset();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

@@ -16,6 +16,7 @@ import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
 import { CodeResult } from '@decipad/ui';
 import { nanoid } from 'nanoid';
 import { dndStore } from '@udecode/plate-dnd';
+import { cursorStore } from '../../stores/cursorStore';
 
 type DragCellData = Parameters<
   NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']>
@@ -27,6 +28,7 @@ export const onDropTableCellResult =
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;
 
+      cursorStore.set.reset();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();

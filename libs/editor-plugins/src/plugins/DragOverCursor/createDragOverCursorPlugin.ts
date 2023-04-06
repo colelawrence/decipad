@@ -25,14 +25,17 @@ export const createDragOverCursorPlugin = (): MyPlatePlugin => ({
         },
       });
     },
+    onDragExit: () => () => {
+      cursorStore.set.reset();
+    },
     onDragLeave: () => () => {
-      cursorStore.set.cursors({});
+      cursorStore.set.reset();
     },
     onDragEnd: () => () => {
-      cursorStore.set.cursors({});
+      cursorStore.set.reset();
     },
     onDrop: () => () => {
-      cursorStore.set.cursors({});
+      cursorStore.set.reset();
     },
   },
 });
