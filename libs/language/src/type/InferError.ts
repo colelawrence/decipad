@@ -2,7 +2,9 @@ import { immerable } from 'immer';
 import type { Time, Unit } from '..';
 import type { Type } from './Type';
 
-export type ErrSpec =
+export type ErrSpec = {
+  context?: string;
+} & (
   | {
       errType: 'free-form';
       message: string;
@@ -105,7 +107,8 @@ export type ErrSpec =
   | {
       errType: 'retired-feature';
       featureName: string;
-    };
+    }
+);
 
 // exhaustive switch
 export class InferError extends Error {

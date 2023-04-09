@@ -64,14 +64,14 @@ You cannot add incompatible types.
 
 ```deci live
 5 apples + 5 oranges
-==> This operation requires compatible units
+==> Error in operation "+" (number, number): This operation requires compatible units
 ```
 
 You can also get this error if you try to perform an operation in incompatible units
 
 ```deci live
 1 month + 1 day
-==> This operation requires compatible units
+==> Error in operation "+" (number, number): This operation requires compatible units
 ```
 
 This is because different months have different amounts of days.
@@ -92,7 +92,7 @@ You are calling a function, or using an operator, with a wrong argument. For ins
 
 ```deci live
 false or 1234
-==> This operation requires a boolean and a number was entered
+==> Error in operation "or" (boolean, number): This operation requires a boolean and a number was entered
 ```
 
 ## Expected primitive
@@ -113,7 +113,7 @@ The power component in an exponentiation can only be a simple expression (a numb
 
 ```deci live
 (30 meters)**([1,2,3])
-==> Complex expressions not supported in exponents
+==> Error in operation "**" (number, column): Complex expressions not supported in exponents
 ```
 
 ## Sequence step must not be zero
@@ -175,7 +175,7 @@ You probably made an error while typing, and Decipad cannot calculate that opera
 ```deci live
 Date = date(2025)
 "Date" + 1 year
-==> The function + cannot be called with (string, years)
+==> Error in operation "+" (string, number): The function + cannot be called with (string, years)
 ```
 
 You can fix it by providing fixing the typo:
@@ -196,7 +196,7 @@ You are trying to do an operation on a date with a different granularity.
 
 ```deci live
 date(2022) + 1 day
-==> Expected time specific up to the year, but got day
+==> Error in operation "+" (date, number): Expected time specific up to the year, but got day
 ```
 
 But adding a year works:
@@ -232,7 +232,7 @@ You are trying to call a formula inside the definition for the formula.
 ```deci live
 MyFormula(Arg) = MyFormula(Arg) + 1
 MyFormula(0)
-==> MyFormula() cannot be used in its own definition
+==> Error in operation "+" (type-error, number): MyFormula() cannot be used in its own definition
 ```
 
 This is not supported.
@@ -252,7 +252,7 @@ MyTable = {
   Items = [3, 1, 2]
 }
 sortby(MyTable, [1, 2, 3])
-==> Expected table and associated column
+==> Error in operation "sortby" (table, column): Expected table and associated column
 ```
 
 Make sure this association exists by using a table, and then its column.
@@ -363,7 +363,7 @@ You attempted to call a formula that isn't available. It might be just a typo, o
 
 ```deci live
 MyFormula(1)
-==> The formula MyFormula() does not exist
+==> Error in operation "MyFormula" (number): The formula MyFormula() does not exist
 ```
 
 You can fix it by creating the formula:

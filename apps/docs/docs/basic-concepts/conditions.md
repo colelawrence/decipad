@@ -23,7 +23,7 @@ For instance, the following is invalid:
 ```deci live
 TheSunIsDown = true
 if TheSunIsDown then "dinner" else 337
-==> This operation requires a string and a number was entered
+==> Error in operation "if" (boolean, string, number): This operation requires a string and a number was entered
 ```
 
 You can assign the result of an `if ... then ... else` to a variable:

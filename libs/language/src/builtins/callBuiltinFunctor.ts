@@ -1,12 +1,18 @@
 import { getOnly } from '@decipad/utils';
+import produce from 'immer';
 import type { AST, Context } from '..';
 import { Type, buildType as t, InferError } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';
 import { getOperatorByName } from './operators';
-import type { BuiltinSpec, Functor } from './interfaces';
+import { serializeType } from '../type/serialization';
+import { BuiltinSpec, Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';
 
-export const callBuiltinFunctor = (
+type CallBuiltinFunctorParams =
+  | [Context, string, Type[]]
+  | [Context, string, Type[], AST.Expression[]];
+
+const internalCallBuiltinFunctor = (
   context: Context,
   opName: string,
   givenArguments: Type[],
@@ -56,6 +62,46 @@ export const callBuiltinFunctor = (
       op.argCardinalities
     );
   }
+};
+
+const formatTypes = (types: Type[]): string =>
+  types.map((t) => serializeType(t).kind).join(', ');
+
+const enrichErrorType = (
+  [, opName, argumentTypes]: CallBuiltinFunctorParams,
+  type: Type
+): Type => {
+  if (!type.errorCause) {
+    return type;
+  }
+  const { spec } = type.errorCause;
+  if (!spec) {
+    return type;
+  }
+  if (!type.errorCause.spec.context) {
+    return produce(type, (type) => {
+      type.errorCause = produce(type.errorCause, (errorCause: InferError) => {
+        errorCause.spec = produce(errorCause.spec, (spec) => {
+          spec.context = `in operation "${opName}" (${formatTypes(
+            argumentTypes
+          )})`;
+        });
+      });
+    });
+  }
+  return type;
+};
+
+export const callBuiltinFunctor = (
+  ...params: CallBuiltinFunctorParams
+): Type => {
+  const returnType = internalCallBuiltinFunctor(
+    ...(params as [Context, string, Type[], AST.Expression[] | undefined])
+  );
+  if (typeHasError(returnType)) {
+    return enrichErrorType(params, returnType);
+  }
+  return returnType;
 };
 
 function typeHasError(t: Type) {

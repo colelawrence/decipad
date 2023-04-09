@@ -482,7 +482,7 @@ it('regression: can describe partially good tables', async () => {
   expect(res).toMatchInlineSnapshot(`
     Array [
       "block-0 -> [[\\"c\\", \\"d\\"]]",
-      "block-1 -> The function + cannot be called with (number, string)",
+      "block-1 -> Error in operation \\"+\\" (number, string): The function + cannot be called with (number, string)",
       "block-2 -> [\\"c\\", \\"d\\"]",
     ]
   `);

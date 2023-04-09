@@ -75,7 +75,7 @@ TableToSplitBy = {
 }
 
 splitby(TableToSplitBy, TableToSplitBy.Column)
-==> You're using a feature that's been retired
+==> Error in operation "splitby" (table, column): You're using a feature that's been retired
 ```
 
 This feature has been retired to improve our internal support of tables.

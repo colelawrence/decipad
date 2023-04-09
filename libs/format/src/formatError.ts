@@ -3,7 +3,7 @@ import { formatTypeToBasicString } from './formatTypeBasic';
 import { formatUnit } from './formatUnit';
 
 // istanbul ignore next
-export const formatError = (locale: string, spec: ErrSpec): string => {
+const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
   switch (spec.errType) {
     case 'free-form': {
       return spec.message;
@@ -113,4 +113,12 @@ export const formatError = (locale: string, spec: ErrSpec): string => {
       return "You're using a feature that's been retired";
     }
   }
+};
+
+export const formatError = (locale: string, spec: ErrSpec): string => {
+  let error = formatErrorWithoutContext(locale, spec);
+  if (spec.context) {
+    error = `Error ${spec.context}: ${error}`;
+  }
+  return error;
 };
