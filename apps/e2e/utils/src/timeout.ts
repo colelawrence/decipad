@@ -7,5 +7,6 @@ export function timeout(ms: number) {
 export const Timeouts = {
   typing: 100,
   syncDelay: 3000,
+  chartsDelay: 5000,
   computerDelay: 1000,
 };
