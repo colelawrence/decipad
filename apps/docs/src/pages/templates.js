@@ -27,7 +27,11 @@ import {
   IconVirus,
   IconRocket,
   IconSparkles,
+  IconWallet,
   GridContainer,
+  IconShoppingCart,
+  IconMessage,
+  IconHappy,
   Card,
 } from '@site/src/components/GalleryCards';
 
@@ -161,7 +165,7 @@ export default function Templates() {
                 icon={IconLeaf}
                 title="Offer letter template"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                notebook="https://app.decipad.com/n/You-re-hired-Offer-Letter%3Am5plUls5fkWflsneZcJNQ"
+                notebook="https://app.decipad.com/n/An-offer-letter-for-startup-employees-template-%3ArpkOOZpHjUQHfm2cDDOKR"
                 description="Offer letters at startups most often include stock base compensation. Use this template to explain how these work and next steps."
                 template
                 avatar={avatarKelly}
@@ -204,14 +208,84 @@ export default function Templates() {
             <GridContainer>
               <Card
                 author="Kelly McEttrick"
-                cardColor="--card-yellow"
-                icon={IconLeaf}
+                cardColor="--card-orange"
+                icon={IconShoppingCart}
                 title="Sales Pipeline Report"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/-Template-Sales-Report-Monthly-Pipeline-Update%3ABxUws8V5ImNdj3feqCevN"
-                description="Build a report to showcase the current and future state of your sales funnel using data views."
+                description="Bring context to your sales funnel. Use this template to easily track your pipeline, analyze top performers and share insights with your team."
                 template
                 avatar={avatarKelly}
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-purple"
+                icon={IconHappy}
+                title="SDR Compensation Letter"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/SDR-compensation-for-growing-companies%3AgEo9yC8lhBXeko-5dSxIV"
+                description="An interactive commission plan that allows sales to easily explore different scenarios and better understand how their performance impacts their pay."
+                template
+                avatar={avatarKelly}
+                newNotebook
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-yellow"
+                icon={IconMessage}
+                title="Building a Commission Plan"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Tips-for-building-a-commission-plan-from-experts%3AyoiYxMLOyZk_GP3QkTl1y"
+                description="Best practices and tips for building a commission plan from experts."
+                avatar={avatarKelly}
+                newNotebook
+              />
+              <Card
+                author="Peyton Swift"
+                cardColor="--card-yellow"
+                icon={IconPercentage}
+                title="Tiered Rate Commission Plan"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Sales-commission-letter-tiered-rates-%3AyN_j70uUyLKBVXn-7cmqJ"
+                description="Share interactive commission plans with your sales team so they can better understand how their variable compensation will work."
+                avatar={avatarPeyton}
+                template
+                newNotebook
+              />
+              <Card
+                author="Peyton Swift"
+                cardColor="--card-yellow"
+                icon={IconPercentage}
+                title="Tiered Rate Commission Plan - Seasonality"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Sales-commission-letter-advanced-tiered-rates-%3A72ZufuX-ShOY0yXg57p60"
+                description="Design a sales commission plan that encourages steady performance throughout the year and offers rewards for sales teams who achieve higher sales during peak seasons."
+                template
+                avatar={avatarPeyton}
+                newNotebook
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-orange"
+                icon={IconShoppingCart}
+                title="Commission Pipeline Tracking"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/-Template-Commission-Pipeline-Tracking%3AaIaxBwyCvG6h3Arh4ea9H"
+                description="A template to monitor your sales pipeline and easily forecast how you are pacing to a sales goal, quota and commission payout."
+                template
+                avatar={avatarKelly}
+                newNotebook
+              />
+              <Card
+                author="Simão Dias"
+                cardColor="--card-green"
+                icon={IconRocket}
+                title="Pricing Calculator"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/-Template-Pricing-Calculator%3A8Z1R0ZJhsmj8-8nidd7sF"
+                description="Pricing configuration can be complicated at times, use this template to explore pricing options."
+                template
+                avatar={avatarSimao}
                 newNotebook
               />
             </GridContainer>
@@ -246,12 +320,35 @@ export default function Templates() {
                 avatar={avatarKelly}
               ></Card>
               <Card
+                author="Peyton Swift"
+                cardColor="--card-green"
+                icon={IconWallet}
+                title="Yearly Marketing Budget"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Yearly-Marketing-Budget%3A-DS_cAn252f5GtDHFKI9D"
+                description="Use this  template to efficiently plan and track your marketing expenses, enabling you to make informed decisions and easily communicate your investment."
+                template
+                avatar={avatarPeyton}
+              ></Card>
+              <Card
+                author="Peyton Swift"
+                cardColor="--card-green"
+                icon={IconRocket}
+                title="UX Design Proposal Template"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/UX-Design-Client-Proposal%3AEDoj00ZVGr4-MNIbCCB6L"
+                description="Use this template to outline your project goals, establish a clear scope of work, and present your design process and pricing structure to potential clients.
+                "
+                template
+                avatar={avatarPeyton}
+              ></Card>
+              <Card
                 author="Simão Dias"
                 cardColor="--card-purple"
                 icon={IconSparkles}
                 title="Start a business"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                notebook="https://app.decipad.com/n/-Starting-a-Candle-Business%3AJTYAmhcwfINZobogKoEbU"
+                notebook="https://app.decipad.com/n/-Starting-a-Candle-Business%3Ax7lAd-B_27F0gCxxhlHDr"
                 description="Example on how to break down and forecast financials of a businees before starting."
                 avatar={avatarSimao}
               />
