@@ -178,7 +178,10 @@ npx playwright test <<test-name-pattern>>  [--debug]
 
 > To run the E2E tests individually you will need the local sandbox server running (which you can start with `yarn serve:all` on a different terminal).
 
-Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
+Interesting options:
+ - `--headless` (don't show a window)
+ - `--watch` (don't close after running)
+ - `--grep <part-of-filename>` (run only matching test files)
 
 ## If your deployment failed
 

@@ -46,3 +46,27 @@ it('detects circular dependencies', () => {
     },
   ]);
 });
+
+it('sorts code with tables', () => {
+  const program = getIdentifiedBlocks('T = { A = 1, B = 2 }', 'T.C = A + B');
+  const sorted = topologicalSort(program);
+  expect(sorted).toHaveLength(program.length);
+  expect(sorted.map((r) => r.id)).toEqual(['block-0', 'block-1']);
+});
+
+it('sorts code with weirdly ordered table definitions', () => {
+  const program = getIdentifiedBlocks(
+    'T.C = A + D',
+    'T = { A = 1, B = 2 }',
+    'T.D = A + B + CC',
+    'CC = 100'
+  );
+  const sorted = topologicalSort(program);
+  expect(sorted).toHaveLength(program.length);
+  expect(sorted.map((r) => r.id)).toEqual([
+    'block-1',
+    'block-3',
+    'block-2',
+    'block-0',
+  ]);
+});

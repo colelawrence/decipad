@@ -22168,11 +22168,6 @@ junk@^3.1.0:
   resolved "https://registry.yarnpkg.com/junk/-/junk-3.1.0.tgz#31499098d902b7e98c5d9b9c80f43457a88abfa1"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
 
-just-permutations@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/just-permutations/-/just-permutations-2.2.0.tgz#8529d3d89a00c29e8020ad8f787c9f89aebc5985"
-  integrity sha512-FRZsAujTt1Q0Xvh9yjSkfNjnXNHMwTwiwJC4pMjCCvifxgnYnoMmVaLAoY4giXcOHGG/EYkL4p+qKlkCEBdpiw==
-
 jwa@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jwa/-/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"

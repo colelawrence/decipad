@@ -1,8 +1,11 @@
 import { getDefined } from '@decipad/utils';
-import { isAssignment } from '@decipad/language';
 import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
-import { getIdentifierString } from '../utils';
-import { dependencies, TableNamespaces, findAllTables } from './dependencies';
+import {
+  dependencies,
+  TableNamespaces,
+  findAllTables,
+  getDefinedEntity,
+} from './dependencies';
 
 interface Node {
   entity: string | null;
@@ -22,22 +25,9 @@ const goodBlock = (block: ProgramBlock): block is IdentifiedBlock => {
   return block.type !== 'identified-error';
 };
 
-const blockEntity = ({ block }: IdentifiedBlock): string | null => {
-  if (block.args.length < 1) {
-    return null;
-  }
-  const statement = block.args[0];
-  if (!statement || !isAssignment(statement)) {
-    return null;
-  }
-  // we have a statement
-  const arg0 = statement.args[0];
-  return getIdentifierString(arg0);
-};
-
 const blockToNode = (block: IdentifiedBlock): Node => {
   return {
-    entity: blockEntity(block),
+    entity: getDefinedEntity(block.block.args[0]) ?? null,
     temporaryMark: false,
     permanentMark: false,
     value: block,

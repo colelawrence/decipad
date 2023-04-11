@@ -172,7 +172,6 @@
     "json-canonicalize": "^1.0.4",
     "jsonpath": "^1.1.1",
     "jsurl": "^0.1.5",
-    "just-permutations": "2.2.0",
     "knex": "^2.4.2",
     "lib0": "0.2.52",
     "lodash": "4.17.21",
