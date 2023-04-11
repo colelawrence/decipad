@@ -30,6 +30,7 @@ export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookInvitationPopUp } from './NotebookInvitationPopUp/NotebookInvitationPopUp';
 export { NotebookPublishingPopUp } from './NotebookPublishingPopUp/NotebookPublishingPopUp';
 export { NumberCatalog } from './NumberCatalog/NumberCatalog';
+export { PaginationControl } from './PaginationControl/PaginationControl';
 export { RangeResult } from './RangeResult/RangeResult';
 export { RowResult } from './RowResult/RowResult';
 export { Select } from './Select/Select';

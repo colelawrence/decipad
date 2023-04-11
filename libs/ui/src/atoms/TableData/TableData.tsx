@@ -109,13 +109,16 @@ const draggableStyles = css({
   },
 });
 
+const nonContentEditableStyles = css({
+  whiteSpace: 'nowrap',
+});
+
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   alignRight?: boolean;
   isEditable?: boolean;
   isUserContent?: boolean;
   isLiveResult?: boolean;
-  contentEditable?: boolean;
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
   grabbing?: boolean;
@@ -131,7 +134,6 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   dropTarget?: ConnectDropTarget;
   parseError?: string;
   firstChildren?: ReactNode;
-  lastBeforeMoreRowsHidden?: boolean;
   dropdownOptions?: Pick<
     ComponentProps<typeof CellEditor>,
     'dropdownOptions' | 'dropdownResult'
@@ -156,7 +158,6 @@ export const TableData = forwardRef(
       dropTarget,
       rowSpan,
       disabled = false,
-      lastBeforeMoreRowsHidden = false,
       type,
       unit,
       value,
@@ -193,6 +194,7 @@ export const TableData = forwardRef(
           alignRight && alignRightStyles,
           isLiveResult && liveResultStyles,
           draggable && draggableStyles,
+          !isEditable && nonContentEditableStyles,
         ]}
         {...props}
       >

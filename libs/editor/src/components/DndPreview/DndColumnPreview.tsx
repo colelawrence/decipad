@@ -76,7 +76,6 @@ const ColumnPreview = ({
     <div style={{ ...style, opacity: previewOpacity, zIndex: 1 }}>
       <EditorTableContext.Provider value={contextValue}>
         <EditorTable
-          columns={columns}
           previewMode
           icon={(tableNode.icon ?? 'Table') as UserIconKey}
           color={tableNode.color as AvailableSwatchColor}

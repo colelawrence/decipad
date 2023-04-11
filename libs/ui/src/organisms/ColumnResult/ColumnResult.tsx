@@ -29,7 +29,6 @@ export const ColumnResult = ({
   return labels ? (
     <Table
       isReadOnly={true}
-      columnCount={labels[0].dimensionLength}
       body={
         <>
           {Array.from(unnestTableRows(labels, { type, value })).map(
@@ -80,7 +79,6 @@ export const ColumnResult = ({
   ) : (
     <Table
       isReadOnly={true}
-      columnCount={value.length}
       body={
         <>
           {value.map((oneValue, index) => {

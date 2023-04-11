@@ -1,19 +1,8 @@
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
-import { getNumberType, getStringType } from '../../utils';
 import { EditorTable } from './EditorTable';
 
 const defaultProps: ComponentProps<typeof EditorTable> = {
-  columns: [
-    {
-      name: 'FirstName',
-      cellType: getStringType(),
-    },
-    {
-      name: 'Numbers',
-      cellType: getNumberType(),
-    },
-  ],
   icon: 'TableSmall',
   color: 'Catskill',
 };

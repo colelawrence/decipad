@@ -3,8 +3,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode, useCallback } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useAutoAnimate } from '../../hooks';
-import { cssVar, p12Medium } from '../../primitives';
-import { table } from '../../styles';
+import { cssVar } from '../../primitives';
 import { tableRowCounter } from '../../utils';
 
 export const regularBorder = `1px solid ${cssVar('borderTable')}`;
@@ -108,84 +107,28 @@ const liveResultStyles = css({
   '> thead > tr > th': {
     borderTop: liveResultBorder,
   },
-  '> thead > tr > th:last-of-type, > tbody > tr > td:last-of-type, > tfoot > tr > td:last-of-type':
-    {
-      borderRight: liveResultBorder,
-    },
-  '> tbody > tr:last-of-type > td': {
-    borderBottom: liveResultBorder,
+  '> thead > tr > th:last-of-type, > tbody > tr > td:last-of-type': {
+    borderRight: liveResultBorder,
+  },
+  '> tbody > tr:last-of-type > td, > tfoot > tr > td:last-of-type': {
+    border: 0,
   },
 });
 
-interface ShowAllRowsProps {
-  readonly columnCount: number;
-  readonly hiddenRowCount: number;
-  readonly isReadOnly: boolean;
-  readonly isLiveResult: boolean;
-  readonly handleSetShowALlRowsButtonPress: () => void;
-}
-
-const showAllRowsTdStyles = (border: string) =>
-  css({
-    borderBottom: border,
-  });
-
-const showAllRowsWrapperStyle = css({
-  position: 'relative',
+const footerStyles = css({
+  '> tbody > tr:last-of-type > td:first-of-type': {
+    borderBottomLeftRadius: 0,
+  },
+  '> tbody > tr:last-of-type > td:last-of-type': {
+    borderBottomRightRadius: 0,
+  },
+  '> tfoot > tr:last-of-type > td:first-of-type': {
+    borderBottomLeftRadius: borderRadius,
+  },
+  '> tfoot > tr:last-of-type > td:last-of-type': {
+    borderBottomRightRadius: borderRadius,
+  },
 });
-
-const thinVeilAtTheEndStyles = css({
-  position: 'absolute',
-  height: `calc(${table.tdMinHeight} * 1.5)`,
-  left: 0,
-  right: 0,
-  bottom: '57px',
-  background: `linear-gradient(180deg, transparent, ${cssVar(
-    'backgroundColor'
-  )})`,
-  border: '1px solid ref',
-});
-
-const showMoreWrapperStyles = css({
-  width: '100%',
-  position: 'relative',
-  paddingBottom: '20px',
-  marginTop: '10px',
-  display: 'flex',
-  justifyContent: 'center',
-});
-
-const showMoreButtonWrapperStyles = css(p12Medium, {
-  display: 'flex',
-  flexDirection: 'row',
-  lineHeight: '2rem',
-});
-
-const ShowAllRows: FC<ShowAllRowsProps> = ({
-  columnCount,
-  hiddenRowCount,
-  isReadOnly,
-  isLiveResult,
-}) => (
-  <tr>
-    {!isReadOnly && <td contentEditable={false} style={{ border: 0 }}></td>}
-    <td
-      colSpan={isReadOnly ? columnCount : columnCount + 1}
-      contentEditable={false}
-      css={showAllRowsTdStyles(isLiveResult ? liveResultBorder : regularBorder)}
-      style={{ borderRight: 0 }}
-    >
-      <div css={showAllRowsWrapperStyle}>
-        <div css={thinVeilAtTheEndStyles}></div>
-        <div css={showMoreWrapperStyles}>
-          <div css={showMoreButtonWrapperStyles}>
-            Hiding {hiddenRowCount} rows
-          </div>
-        </div>
-      </div>
-    </td>
-  </tr>
-);
 
 type Border = 'all' | 'inner';
 export type TableWidth = 'SLIM' | 'WIDE';
@@ -193,16 +136,14 @@ export type TableWidth = 'SLIM' | 'WIDE';
 interface TableProps {
   readonly head?: ReactNode;
   readonly body: ReactNode;
+  readonly footer?: ReactNode;
   readonly addTable?: ReactNode;
   readonly smartRow?: ReactNode;
   readonly previewMode?: boolean;
-  readonly columnCount?: number;
   readonly border?: Border;
   readonly dropRef?: ConnectDropTarget;
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
-  readonly hiddenRowCount?: number;
-  readonly handleSetShowALlRowsButtonPress?: () => void;
   readonly setCollapsed?: (collapsed: boolean) => void;
   readonly isCollapsed?: boolean;
   readonly isReadOnly?: boolean;
@@ -213,16 +154,14 @@ interface TableProps {
 export const Table = ({
   head,
   body,
+  footer,
   smartRow,
   addTable,
   previewMode = true,
   border: b = 'all',
-  columnCount = 1,
   dropRef,
   tableWidth,
   isSelectingCell,
-  hiddenRowCount = 0,
-  handleSetShowALlRowsButtonPress = noop,
   isReadOnly = false,
   isLiveResult = false,
   onMouseOver = noop,
@@ -248,24 +187,13 @@ export const Table = ({
         b === 'inner' && nestedStyles,
         isReadOnly && readOnlyTableStyles,
         !head && { borderTop: border },
+        footer && footerStyles,
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {head && <thead>{head}</thead>}
-      <tbody ref={animateBody}>
-        {body}
-
-        {hiddenRowCount > 0 && (
-          <ShowAllRows
-            columnCount={columnCount}
-            hiddenRowCount={hiddenRowCount}
-            handleSetShowALlRowsButtonPress={handleSetShowALlRowsButtonPress}
-            isReadOnly={isReadOnly}
-            isLiveResult={isLiveResult}
-          />
-        )}
-      </tbody>
+      <tbody ref={animateBody}>{body}</tbody>
 
       <tfoot>
         {previewMode && (
@@ -274,6 +202,7 @@ export const Table = ({
             {smartRow}
           </tr>
         )}
+        {footer}
       </tfoot>
     </table>
   );

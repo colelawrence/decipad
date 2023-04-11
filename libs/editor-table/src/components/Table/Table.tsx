@@ -12,10 +12,7 @@ import {
 } from '@decipad/react-contexts';
 import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
 import { useMemo, useState } from 'react';
-import {
-  MAX_UNCOLLAPSED_TABLE_ROWS,
-  WIDE_MIN_COL_COUNT,
-} from '../../constants';
+import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableStore } from '../../contexts/tableStore';
 import { useTable, useTableActions } from '../../hooks';
 import { SmartRow } from '../SmartRow';
@@ -42,7 +39,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   useSelectedCells();
 
-  const { name, columns, headers, rowCount } = useTable(element);
+  const { name, columns, headers } = useTable(element);
 
   const blockId = element.id;
 
@@ -88,14 +85,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
               isCollapsed={element.isCollapsed}
               onAddRow={onAddRow}
               onAddColumn={onAddColumn}
-              columns={columns}
               tableWidth={wideTable ? 'WIDE' : 'SLIM'}
               isSelectingCell={!!selectedCells}
-              hiddenRowCount={
-                element.isCollapsed
-                  ? Math.max(0, rowCount - MAX_UNCOLLAPSED_TABLE_ROWS)
-                  : 0
-              }
               smartRow={
                 <SmartRow
                   onAggregationTypeNameChange={onChangeColumnAggregation}

@@ -34,6 +34,25 @@ const typeStyles: Record<
   NonNullable<ButtonProps['type']>,
   { enabled: CSSObject; disabled: CSSObject }
 > = {
+  minimal: {
+    enabled: {
+      border: 0,
+      borderRadius: 0,
+      boxShadow: '',
+      backgroundColor: cssVar('backgroundColor'),
+      ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+      ':hover, :focus': {
+        backgroundColor: cssVar('tintedBackgroundColor'),
+      },
+    },
+    disabled: {
+      border: 0,
+      borderRadius: 0,
+      boxShadow: '',
+      backgroundColor: cssVar('backgroundColor'),
+      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+    },
+  },
   primary: {
     enabled: {
       backgroundColor: cssVar('buttonPrimaryBackground'),
@@ -132,6 +151,9 @@ const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
   extraLarge: {
     padding: '12px 24px',
   },
+  extraExtraSlim: {
+    padding: '4px 10px 4px 8px',
+  },
 };
 
 const enabledStyles = css({ cursor: 'pointer' });
@@ -139,6 +161,7 @@ const disabledStyles = css({ cursor: 'unset' });
 
 type ButtonProps = {
   readonly type?:
+    | 'minimal'
     | 'primary'
     | 'primaryBrand'
     | 'secondary'
@@ -149,7 +172,7 @@ type ButtonProps = {
     | 'darkWarningText';
   readonly children: ReactNode;
   readonly disabled?: boolean;
-  readonly size?: 'normal' | 'extraSlim' | 'extraLarge';
+  readonly size?: 'normal' | 'extraSlim' | 'extraLarge' | 'extraExtraSlim';
   readonly testId?: string;
   readonly href?: string;
   readonly tabIndex?: number;

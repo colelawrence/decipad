@@ -17,7 +17,6 @@ export const RowResult = ({
   return (
     <Table
       isReadOnly={true}
-      columnCount={1}
       border={isTabularType(parentType) ? 'inner' : 'all'}
       head={
         <TableHeaderRow readOnly>

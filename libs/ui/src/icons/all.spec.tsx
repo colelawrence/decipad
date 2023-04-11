@@ -132,6 +132,7 @@ import { Health } from './Health/Health';
 import { Sketch } from './Sketch/Sketch';
 import { Code } from './Code/Code';
 import { ConnectRanges } from './ConnectRanges/ConnectRanges';
+import { LeftArrowShort } from './LeftArrowShort/LeftArrowShort';
 
 it('renders a moon icon', () => {
   render(<Moon />);
@@ -391,6 +392,11 @@ it('renders a medal icon', () => {
 
 it('renders a left arrow icon', () => {
   render(<LeftArrow />);
+  expect(screen.getByTitle(/left arrow/i)).toBeInTheDocument();
+});
+
+it('renders a short left arrow icon', () => {
+  render(<LeftArrowShort />);
   expect(screen.getByTitle(/left arrow/i)).toBeInTheDocument();
 });
 

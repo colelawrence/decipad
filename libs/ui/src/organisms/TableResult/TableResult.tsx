@@ -1,18 +1,10 @@
-import { useState, useMemo, FC, useRef } from 'react';
-import { Result, SerializedTypes } from '@decipad/computer';
-import { zip } from '@decipad/utils';
+import { useState, useMemo, FC } from 'react';
 import { css } from '@emotion/react';
-import { CodeResult, Table } from '..';
-import { TableData, TableHeader } from '../../atoms';
-import { DragHandle } from '../../icons/index';
+import pluralize from 'pluralize';
+import { PaginationControl, Table } from '..';
+import { TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
-import { cssVar } from '../../primitives';
-import { table } from '../../styles';
-import {
-  defaultMaxRows,
-  tableControlWidth,
-  tableParentStyles,
-} from '../../styles/table';
+import { tableControlWidth } from '../../styles/table';
 import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
 import {
@@ -20,49 +12,10 @@ import {
   tableWrapperStyles,
 } from '../EditorTable/EditorTable';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
+import { TableResultCell } from './TableResultCell';
+import { cssVar, p13Regular } from '../../primitives';
 
-const MAX_COLS = 10;
-
-const recursiveRowCount = (r: Result.Result): number => {
-  if (r.type.kind === 'table') {
-    const { type, value } = r as Result.Result<'table'>;
-    if (value == null) {
-      return 0;
-    }
-
-    const tableLength = Math.max(...value.map((v) => v?.length ?? 0));
-    return (
-      Math.max(
-        ...zip(type.columnTypes, value).map(([ct, cv]) =>
-          cv == null ? 0 : recursiveRowCount({ type: ct, value: cv[0] })
-        )
-      ) * tableLength
-    );
-  }
-  if (r.type.kind === 'column') {
-    const { type, value } = r as Result.Result<'column'>;
-    return (
-      recursiveRowCount({ type: type.cellType, value: value[0] }) * value.length
-    );
-  }
-  return 1;
-};
-
-const trimMaxCols = <T extends Result.Result>(result: T): T => {
-  if (result.type.kind !== 'table') {
-    return result;
-  }
-  return {
-    type: {
-      ...result.type,
-      columnNames: result.type.columnNames.slice(0, MAX_COLS),
-      columnTypes: result.type.columnTypes.slice(0, MAX_COLS),
-    },
-    value: Array.isArray(result.value)
-      ? result.value.slice(0, MAX_COLS)
-      : result.value,
-  } as T;
-};
+const MAX_ROWS_PER_PAGE = 10;
 
 const liveTableWrapperStyles = css({
   left: '20px',
@@ -74,6 +27,19 @@ const liveTableOverflowStyles = css({
 
 const liveTableEmptyCellStyles = css({
   border: 0,
+});
+
+const paginationControlWrapperTdStyles = css({
+  border: 0,
+  padding: '6px 8px 6px 12px',
+});
+
+const pageDescriptionStyles = css(p13Regular, {
+  color: cssVar('normalTextColor'),
+});
+
+const footerRowStyles = css({
+  backgroundColor: cssVar('tableFooterBackgroundColor'),
 });
 
 export const TableResult = ({
@@ -88,17 +54,12 @@ export const TableResult = ({
   onChangeColumnType,
   element,
 }: CodeResultProps<'table'>): ReturnType<FC> => {
-  const [showAllRows, setShowAllRows] = useState(false);
   const result = useMemo(
     () => ({ type: _type, value: _value }),
     [_type, _value]
   );
-  const trimmedResult = useMemo(
-    () => isLiveResult && trimMaxCols(result),
-    [isLiveResult, result]
-  );
 
-  const { type, value } = trimmedResult || result;
+  const { type, value } = result;
 
   const { columnNames, columnTypes } = type;
 
@@ -110,141 +71,27 @@ export const TableResult = ({
     );
   }
 
-  const warnAboutTrimmedColumns =
-    trimmedResult &&
-    Array.isArray(value) &&
-    Array.isArray(trimmedResult.value) &&
-    trimmedResult.value.length !== value.length;
-
-  const handleSetShowALlRowsButtonPress = () => {
-    setShowAllRows(true);
-  };
-
   const tableLength = value.at(0)?.length;
-
-  const tableRecursiveLength = useMemo(
-    () => recursiveRowCount({ type, value }),
-    [type, value]
-  );
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
-  const hiddenRowsCount = useMemo(() => {
-    if (isNested || showAllRows || !tableLength) {
-      return 0;
-    }
-    if (tableRecursiveLength <= defaultMaxRows) {
-      return 0;
-    }
-    if (tableRecursiveLength === tableLength) {
-      return tableLength - defaultMaxRows;
-    }
-    const recursiveShowLength = tableRecursiveLength - defaultMaxRows;
-    const proportionOfTableToHide = recursiveShowLength / tableRecursiveLength;
-    return Math.floor(tableLength * proportionOfTableToHide);
-  }, [isNested, tableLength, showAllRows, tableRecursiveLength]);
+  // pagination
+  const [page, setPage] = useState(1);
+  const totalRowCount = useMemo(() => value[0]?.length, [value]);
+  const rowOffset = useMemo(() => (page - 1) * MAX_ROWS_PER_PAGE, [page]);
+  const presentRowCount = Math.min(
+    totalRowCount - rowOffset,
+    MAX_ROWS_PER_PAGE
+  );
+  const valuesForPage = useMemo(
+    () =>
+      value.map((col) => col.slice(rowOffset, rowOffset + MAX_ROWS_PER_PAGE)),
+    [rowOffset, value]
+  );
 
   if (tableLength == null) {
     return null;
   }
-
-  const showRowLength = tableLength - hiddenRowsCount;
-
-  const Cell = ({
-    cellValue,
-    colIndex,
-    rowIndex,
-  }: {
-    cellValue: any;
-    colIndex: number;
-    rowIndex: number;
-  }) => {
-    const previewRef = useRef<Element>(null);
-
-    return (
-      <TableData
-        ref={previewRef}
-        key={colIndex}
-        as="td"
-        isEditable={false}
-        isLiveResult={isLiveResult}
-        showPlaceholder={false}
-        lastBeforeMoreRowsHidden={
-          hiddenRowsCount > 0 && rowIndex === showRowLength - 1
-        }
-        css={{ ...tableParentStyles }}
-        draggable={!!onDragStartCell && allowsForLookup}
-        firstChildren={
-          <div
-            draggable
-            onDragStart={(e) => {
-              onDragStartCell?.(
-                {
-                  tableName: (type as SerializedTypes.Table)
-                    .indexName as string,
-                  columnName: columnNames[colIndex],
-                  cellValue: value[0][rowIndex] as string,
-                },
-                {
-                  previewRef,
-                  result: {
-                    type: columnTypes[colIndex],
-                    value: cellValue,
-                  },
-                }
-              )(e);
-            }}
-            onDragEnd={onDragEnd}
-            className={onDragStartCell && 'drag-handle'}
-            css={{
-              display: 'none',
-              position: 'absolute',
-              top: 8,
-              right: 4,
-              zIndex: 2,
-              height: 18,
-              width: 18,
-              borderRadius: 6,
-              ':hover': {
-                background: cssVar('highlightColor'),
-              },
-            }}
-          >
-            <button
-              css={{
-                width: '8px',
-                height: 9,
-                transform: 'translateY(50%)',
-                display: 'block',
-                margin: 'auto',
-                cursor: 'grab',
-              }}
-            >
-              <DragHandle />
-            </button>
-          </div>
-        }
-        element={element}
-      >
-        <div
-          css={[
-            css(table.getCellWrapperStyles(columnTypes[colIndex])),
-            colIndex === 0 && table.cellLeftPaddingStyles,
-          ]}
-        >
-          <CodeResult
-            parentType={type}
-            type={columnTypes[colIndex]}
-            value={cellValue}
-            variant="block"
-            tooltip={tooltip}
-            isLiveResult={isLiveResult}
-            element={element}
-          />
-        </div>
-      </TableData>
-    );
-  };
 
   return (
     <div
@@ -262,12 +109,9 @@ export const TableResult = ({
       />
 
       <Table
-        columnCount={columnNames.length}
         border={isNested ? 'inner' : 'all'}
-        hiddenRowCount={hiddenRowsCount}
         isReadOnly={!isLiveResult}
         isLiveResult={isLiveResult}
-        handleSetShowALlRowsButtonPress={handleSetShowALlRowsButtonPress}
         head={
           <TableHeaderRow readOnly={!isLiveResult}>
             {columnNames?.map((columnName, index) =>
@@ -298,7 +142,7 @@ export const TableResult = ({
         }
         body={
           <>
-            {Array.from({ length: showRowLength }, (_, rowIndex) => (
+            {Array.from({ length: presentRowCount }, (_, rowIndex) => (
               <TableRow
                 key={rowIndex}
                 readOnly={!isLiveResult || rowIndex > 0}
@@ -311,20 +155,57 @@ export const TableResult = ({
                 {isLiveResult && rowIndex > 0 && (
                   <th css={liveTableEmptyCellStyles}></th>
                 )}
-                {value.map((column, colIndex) => (
-                  <Cell
+                {valuesForPage.map((column, colIndex) => (
+                  <TableResultCell
                     key={colIndex}
                     cellValue={column[rowIndex]}
-                    rowIndex={rowIndex}
                     colIndex={colIndex}
+                    isLiveResult={isLiveResult}
+                    allowsForLookup={allowsForLookup}
+                    onDragStartCell={onDragStartCell}
+                    onDragEnd={onDragEnd}
+                    tableType={type}
+                    columnName={columnNames[colIndex]}
+                    columnType={columnTypes[colIndex]}
+                    value={value[0][rowIndex] as string}
+                    element={element}
+                    tooltip={tooltip}
                   />
                 ))}
               </TableRow>
             ))}
           </>
         }
+        footer={
+          totalRowCount > MAX_ROWS_PER_PAGE && (
+            <TableRow
+              key="pagination"
+              readOnly={true}
+              tableCellControls={false}
+            >
+              <th></th>
+              <td
+                css={[paginationControlWrapperTdStyles, footerRowStyles]}
+                colSpan={columnNames.length}
+              >
+                <PaginationControl
+                  page={page}
+                  onPageChange={setPage}
+                  startAt={1}
+                  maxPages={Math.ceil(totalRowCount / MAX_ROWS_PER_PAGE)}
+                >
+                  <span css={pageDescriptionStyles}>
+                    {totalRowCount} {pluralize('row', totalRowCount)}
+                    {`, previewing rows ${rowOffset + 1} to ${
+                      rowOffset + presentRowCount
+                    }`}
+                  </span>
+                </PaginationControl>
+              </td>
+            </TableRow>
+          )
+        }
       ></Table>
-      {warnAboutTrimmedColumns && <span>(Columns were trimmed)</span>}
     </div>
   );
 };

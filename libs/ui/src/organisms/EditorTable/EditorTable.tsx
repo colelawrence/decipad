@@ -12,7 +12,6 @@ import { AddTableRowButton } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { tableControlWidth } from '../../styles/table';
-import { Column } from '../../types';
 import {
   AvailableSwatchColor,
   TableStyleContext,
@@ -173,7 +172,6 @@ interface EditorTableProps {
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
   readonly onChangeColor?: (newColor: AvailableSwatchColor) => void;
 
-  readonly columns: Column[];
   readonly children?: ReactNode;
   readonly dropRef?: ConnectDropTarget;
   readonly onAddRow?: () => void;
@@ -182,7 +180,6 @@ interface EditorTableProps {
   readonly tableWidth?: TableWidth;
   readonly isSelectingCell?: boolean;
   readonly showAllRows?: boolean;
-  readonly hiddenRowCount?: number;
   readonly onSetCollapsed?: (collapsed: boolean) => void;
   readonly onSetHideFormulas?: (isHidden: boolean) => void;
 
@@ -193,7 +190,6 @@ export const EditorTable: FC<EditorTableProps> = ({
   id,
   onAddRow,
   onAddColumn,
-  columns,
   children,
   dropRef,
   icon,
@@ -206,7 +202,6 @@ export const EditorTable: FC<EditorTableProps> = ({
   onChangeColor = noop,
   onSetCollapsed = noop,
   onSetHideFormulas = noop,
-  hiddenRowCount = 0,
   smartRow,
   previewMode,
 }: EditorTableProps): ReturnType<FC> => {
@@ -271,11 +266,9 @@ export const EditorTable: FC<EditorTableProps> = ({
               <div css={tableScroll}>
                 <Table
                   isReadOnly={false}
-                  columnCount={columns.length}
                   dropRef={dropRef}
                   tableWidth={tableWidth}
                   isSelectingCell={isSelectingCell}
-                  hiddenRowCount={hiddenRowCount}
                   head={thead}
                   body={tbody}
                   previewMode={previewMode}

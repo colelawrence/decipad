@@ -8,7 +8,7 @@ import { ComponentProps, FC, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link } from '../../atoms';
-import { Deci, LeftArrow, Cards } from '../../icons';
+import { Deci, Cards, LeftArrowShort } from '../../icons';
 import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
 import { NotebookPublishingPopUp } from '../../organisms';
 import { cssVar, p13Bold, smallScreenQuery } from '../../primitives';
@@ -181,7 +181,7 @@ export const NotebookTopbar = ({
         {workspaceAccess || isSharedNotebook ? (
           <div css={{ width: '32px', display: 'grid' }}>
             <IconButton onClick={onBack}>
-              <LeftArrow />
+              <LeftArrowShort />
             </IconButton>
           </div>
         ) : (
