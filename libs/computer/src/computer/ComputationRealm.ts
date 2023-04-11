@@ -52,6 +52,7 @@ export class ComputationRealm {
       this.interpreterRealm.stack.delete(sym, 'global');
       this.inferContext.stack.delete(sym, 'global');
       this.interpreterRealm.functions.delete(sym);
+      this.interpreterRealm.clearCacheForSymbols([sym]);
       this.inferContext.functionDefinitions.delete(sym);
     }
   }

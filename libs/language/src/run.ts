@@ -5,8 +5,12 @@ import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
 import { OneResult, Result, validateResult } from './result';
 
-export const parseBlockOrThrow = (source: string, id?: string): AST.Block => {
-  const parsed = parseBlock(source);
+export const parseBlockOrThrow = (
+  source: string,
+  id?: string,
+  addCacheKeys = false
+): AST.Block => {
+  const parsed = parseBlock(source, id, addCacheKeys);
 
   if (parsed.error) {
     throw new TypeError(parsed.error.message);
@@ -26,8 +30,11 @@ export const parseStatementOrThrow = (source: string): AST.Statement => {
   return item;
 };
 
-export const parseExpressionOrThrow = (source: string): AST.Expression => {
-  const block = parseBlockOrThrow(source);
+export const parseExpressionOrThrow = (
+  source: string,
+  addCacheKeys = false
+): AST.Expression => {
+  const block = parseBlockOrThrow(source, undefined, addCacheKeys);
   const item = block.args[0];
   if (!isExpression(item)) {
     throw new TypeError('Expected expression');

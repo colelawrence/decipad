@@ -75,7 +75,7 @@ const evaluateTier = async (
     realm.inferContext.nodeTypes.get(tierValueExp)
   );
   const tierSizeValue = NumberValue.fromValue(tierSize);
-  const tierValue = await realm.stack.withPush(async () => {
+  const tierValue = await realm.withPush(async () => {
     realm.stack.set('tier', tierSizeValue);
     realm.stack.set('slice', tierSizeValue);
     return evaluate(realm, tierValueExp);

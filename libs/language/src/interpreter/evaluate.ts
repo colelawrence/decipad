@@ -31,12 +31,13 @@ import { evaluateMatch } from '../match/evaluateMatch';
 import { evaluateTiered } from '../tiered/evaluateTiered';
 import { RuntimeError } from '.';
 import { resultToValue } from '../result';
+import { getDependencies } from '../dependencies/getDependencies';
 
 // Gets a single value from an expanded AST.
 
 // exhaustive switch
 // eslint-disable-next-line consistent-return
-export async function evaluate(
+async function internalEvaluate(
   realm: Realm,
   node: AST.Statement
 ): Promise<Value> {
@@ -115,7 +116,7 @@ export async function evaluate(
       } else if (realm.functions.has(funcName)) {
         const customFunc = getDefined(realm.functions.get(funcName));
 
-        return realm.stack.withPushCall(async () => {
+        return realm.withPushCall(async () => {
           for (let i = 0; i < args.length; i++) {
             const argName = getIdentifierString(customFunc.args[1].args[i]);
 
@@ -223,6 +224,25 @@ export async function evaluate(
       return evaluateTiered(realm, node);
     }
   }
+}
+
+export async function evaluate(
+  realm: Realm,
+  node: AST.Statement
+): Promise<Value> {
+  const cachedValue = node.cacheKey
+    ? realm.expressionCache.getCacheResult(node.cacheKey)
+    : undefined;
+  if (cachedValue != null) {
+    return cachedValue;
+  }
+
+  const value = await internalEvaluate(realm, node);
+  if (node.cacheKey) {
+    const dependencies = getDependencies(node);
+    realm.expressionCache.putCacheResult(node.cacheKey, dependencies, value);
+  }
+  return value;
 }
 
 export async function evaluateStatement(

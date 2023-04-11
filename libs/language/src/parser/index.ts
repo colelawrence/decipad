@@ -4,12 +4,17 @@ import * as Parser from './parser-types';
 import { tokenizer, BracketCounter } from '../grammar/tokenizer';
 import { parse as languageParse } from './parser';
 import { SyntaxError } from './SyntaxError';
+import { annotateWithCacheKeys } from './annotateWithCacheKeys';
 
 export { decilang } from './decilang-tag';
 
 export { AST, Parser, n, SyntaxError };
 
-export function parseBlock(source: string, id?: string): Parser.ParsedBlock {
+export function parseBlock(
+  source: string,
+  id?: string,
+  addCacheKeys = false
+): Parser.ParsedBlock {
   if (source?.trim() === '') {
     return { solution: n('block', n('noop')) };
   } else {
@@ -27,7 +32,9 @@ export function parseBlock(source: string, id?: string): Parser.ParsedBlock {
         solution.id = id;
       }
 
-      return { solution };
+      return {
+        solution: addCacheKeys ? annotateWithCacheKeys(solution) : solution,
+      };
     } catch (err) {
       return {
         error: fromParseError(err as Error),

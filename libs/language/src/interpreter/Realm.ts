@@ -3,6 +3,7 @@ import { isColumnLike, ColumnLike, Table, Value } from '../value';
 import type { AST, ExternalDataMap, Context } from '..';
 import { Stack, StackNamespaceJoiner, StackNamespaceSplitter } from '../stack';
 import { getDefined } from '../utils';
+import { ExpressionCache } from '../expression-cache';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
@@ -15,6 +16,7 @@ export class Realm {
   inferContext: Context;
   previousStatementValue?: Value;
   statementId?: string;
+  expressionCache = new ExpressionCache<Value>();
 
   get externalData() {
     return this.inferContext.externalData;
@@ -32,6 +34,30 @@ export class Realm {
       this.maybeGetTypeAt(node),
       `Could not find type for ${node.type}`
     );
+  }
+
+  async withPush<T>(wrapper: () => Promise<T>): Promise<T> {
+    const parentExpressionCache = this.expressionCache;
+    this.expressionCache = new ExpressionCache(parentExpressionCache);
+    try {
+      return this.stack.withPush(wrapper);
+    } finally {
+      this.expressionCache = parentExpressionCache;
+    }
+  }
+
+  async withPushCall<T>(wrapper: () => Promise<T>): Promise<T> {
+    const parentExpressionCache = this.expressionCache;
+    this.expressionCache = new ExpressionCache(parentExpressionCache);
+    try {
+      return this.stack.withPushCall(wrapper);
+    } finally {
+      this.expressionCache = parentExpressionCache;
+    }
+  }
+
+  clearCacheForSymbols(symbols: string[]): void {
+    this.expressionCache.clearCacheResultsForSymbols(symbols);
   }
 
   constructor(context: Context) {

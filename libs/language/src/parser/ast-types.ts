@@ -1,88 +1,72 @@
 import DeciNumber from '@decipad/number';
 import { Time } from '..';
 
+interface BasicNode {
+  cacheKey?: string;
+  start?: Pos;
+  end?: Pos;
+}
+
 export interface Pos {
   line: number;
   column: number;
   char: number;
 }
 
-export interface Noop {
+export interface Noop extends BasicNode {
   type: 'noop';
   args: [];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Def {
+export interface Def extends BasicNode {
   type: 'def';
   args: [varName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface TableDef {
+export interface TableDef extends BasicNode {
   type: 'tabledef';
   args: [varName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
 /** The table part of a table column definition */
-export interface TablePartialDef {
+export interface TablePartialDef extends BasicNode {
   type: 'tablepartialdef';
   args: [tableName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface CatDef {
+export interface CatDef extends BasicNode {
   type: 'catdef';
   args: [varName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Ref {
+export interface Ref extends BasicNode {
   type: 'ref';
   args: [varName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface ExternalRef {
+export interface ExternalRef extends BasicNode {
   type: 'externalref';
   args: [randomId: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface FuncRef {
+export interface FuncRef extends BasicNode {
   type: 'funcref';
   args: [functionName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface FuncDef {
+export interface FuncDef extends BasicNode {
   type: 'funcdef';
   args: [functionName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface ColDef {
+export interface ColDef extends BasicNode {
   type: 'coldef';
   args: [colName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface ColRef {
+export interface ColRef extends BasicNode {
   type: 'colref';
   args: [colName: string];
-  start?: Pos;
-  end?: Pos;
 }
 
 export type Identifier =
@@ -106,29 +90,23 @@ type LitArgs =
   | ['boolean', boolean]
   | ['string', string];
 
-export interface Literal {
+export interface Literal extends BasicNode {
   type: 'literal';
   args: LitArgs;
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Range {
+export interface Range extends BasicNode {
   type: 'range';
   args: [start: Expression, end: Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
 type SequenceArgs =
   | [start: Expression, end: Expression, by: Expression]
   | [start: Expression, end: Expression];
 
-export interface Sequence {
+export interface Sequence extends BasicNode {
   type: 'sequence';
   args: SequenceArgs;
-  start?: Pos;
-  end?: Pos;
 }
 
 export interface TZInfo {
@@ -136,225 +114,167 @@ export interface TZInfo {
   minutes: number;
 }
 
-export interface Date {
+export interface Date extends BasicNode {
   type: 'date';
   args: (Time.Unit | bigint | TZInfo)[];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Directives
 
-export interface AsDirective {
+export interface AsDirective extends BasicNode {
   type: 'directive';
   args: ['as', Expression, Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface OfDirective {
+export interface OfDirective extends BasicNode {
   type: 'directive';
   args: ['of', Expression, GenericIdentifier];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface OverDirective {
+export interface OverDirective extends BasicNode {
   type: 'directive';
   args: ['over', Expression, GenericIdentifier];
-  start?: Pos;
-  end?: Pos;
 }
 
 /** @deprecated */
-export interface SelectDirective {
+export interface SelectDirective extends BasicNode {
   type: 'directive';
   args: ['select', Expression, Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Directive {
+export interface Directive extends BasicNode {
   type: 'directive';
   args: [string, ...Node[]];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Columns, tables
-export interface ColumnItems {
+export interface ColumnItems extends BasicNode {
   type: 'column-items';
   args: Expression[];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Column {
+export interface Column extends BasicNode {
   type: 'column';
   args: [items: ColumnItems, indexName?: GenericIdentifier];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface TableColumn {
+export interface TableColumn extends BasicNode {
   type: 'table-column';
   args: [name: ColDef, column: Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
 /** @deprecated */
-export interface TableSpread {
+export interface TableSpread extends BasicNode {
   type: 'table-spread';
   args: [spreadTableRef: Ref];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Table {
+export interface Table extends BasicNode {
   type: 'table';
   args: [TableDef, ...(TableColumn | TableSpread)[]];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface MatchDef {
+export interface MatchDef extends BasicNode {
   type: 'matchdef';
   args: [Expression, Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Match {
+export interface Match extends BasicNode {
   type: 'match';
   args: MatchDef[];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface TieredDef {
+export interface TieredDef extends BasicNode {
   type: 'tiered-def';
   args: [Expression, Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface Tiered {
+export interface Tiered extends BasicNode {
   type: 'tiered';
   args: [Expression, ...TieredDef[]];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface PropertyAccess {
+export interface PropertyAccess extends BasicNode {
   type: 'property-access';
   args: [Expression, ColRef];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface TableColumnAssign {
+export interface TableColumnAssign extends BasicNode {
   type: 'table-column-assign';
   args: [tableName: TablePartialDef, columnName: ColDef, value: Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Matrix stuff
 
-export interface MatrixAssign {
+export interface MatrixAssign extends BasicNode {
   type: 'matrix-assign';
   args: [def: Def, where: MatrixMatchers, assignee: Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface MatrixRef {
+export interface MatrixRef extends BasicNode {
   type: 'matrix-ref';
   args: [ref: Ref, where: MatrixMatchers];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface MatrixMatchers {
+export interface MatrixMatchers extends BasicNode {
   type: 'matrix-matchers';
   args: Expression[];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Sets
 
-export interface Categories {
+export interface Categories extends BasicNode {
   type: 'categories';
   args: [setName: CatDef, setContents: Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Generic stuff
 
-export interface GenericIdentifier {
+export interface GenericIdentifier extends BasicNode {
   type: 'generic-identifier';
   args: [name: string];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface GenericList {
+export interface GenericList extends BasicNode {
   type: 'generic-list';
   args: Node[];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Function calls and operators
 
-export interface ArgList {
+export interface ArgList extends BasicNode {
   type: 'argument-list';
   args: Expression[];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface FunctionCall {
+export interface FunctionCall extends BasicNode {
   type: 'function-call';
   args: [FuncRef, ArgList];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Definitions
 
-export interface Assign {
+export interface Assign extends BasicNode {
   type: 'assign';
   args: [def: Def, assignee: Expression];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface FunctionArgumentNames {
+export interface FunctionArgumentNames extends BasicNode {
   type: 'argument-names';
   args: Def[];
-  start?: Pos;
-  end?: Pos;
 }
 
-export interface FunctionDefinition {
+export interface FunctionDefinition extends BasicNode {
   type: 'function-definition';
   args: [name: FuncDef, arguments: FunctionArgumentNames, body: Block];
-  start?: Pos;
-  end?: Pos;
 }
 
 // Groupings
 
-export interface Block {
+export interface Block extends BasicNode {
   type: 'block';
   id: string;
   args: Statement[];
-  start?: Pos;
-  end?: Pos;
 }
 
 export type GenericAssignment =

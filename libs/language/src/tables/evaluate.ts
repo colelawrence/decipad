@@ -63,7 +63,7 @@ export const evaluateTableColumnIteratively = async (
   column: AST.Expression,
   rowCount: number
 ): Promise<ColumnLike> =>
-  realm.stack.withPush(async () => {
+  realm.withPush(async () => {
     const cells = await mapWithPrevious(realm, async function* mapper() {
       for (let index = 0; index < rowCount; index++) {
         // Make other cells available
@@ -93,7 +93,7 @@ export const evaluateTable = async (
   realm.stack.createNamespace(tableName, 'function');
 
   let tableLength: number | undefined;
-  return realm.stack.withPush(async () => {
+  return realm.withPush(async () => {
     const addColumn = (name: string, value: ColumnLike) => {
       tableLength ??= value.rowCount;
 

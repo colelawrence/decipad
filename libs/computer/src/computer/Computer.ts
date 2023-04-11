@@ -536,7 +536,7 @@ export class Computer {
   });
 
   expressionResultFromText$(decilang: string) {
-    const exp = parseExpressionOrThrow(decilang);
+    const exp = parseExpressionOrThrow(decilang, true);
 
     return this.results.pipe(
       switchMap(async () => this.expressionResult(exp)),
