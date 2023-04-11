@@ -66,6 +66,7 @@ export type Interpolate =
   | 'basis-open'
   | 'basis-closed'
   | 'cardinal'
+  | 'natural'
   | 'cardinal-closed'
   | 'bundle'
   | 'cardinal';
@@ -110,6 +111,7 @@ export type Axis =
       labelFontSize?: number;
       labelFontWeight?: number;
       labelBound?: boolean;
+      tickColor?: string;
       titleColor?: string;
       domainColor?: string;
       domainOpacity?: number;

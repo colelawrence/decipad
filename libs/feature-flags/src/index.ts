@@ -1,5 +1,6 @@
 export const availableFlags = [
   'INPUT_COPY',
+  'DOWNLOAD_CHART',
   'INLINE_BUBBLES',
   'CODE_LINE_NAME_SEPARATED',
   'SKETCH',

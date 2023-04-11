@@ -1,18 +1,18 @@
+import { AutocompleteName, Computer, getExprRef } from '@decipad/computer';
 import { PlotElement, useTEditorRef } from '@decipad/editor-types';
-import _ from 'lodash';
-import { Computer, AutocompleteName, getExprRef } from '@decipad/computer';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
+import _ from 'lodash';
 import { useEffect, useMemo } from 'react';
-import type { PlotData, PlotSpec } from './plotUtils.interface';
+import { defaultPlotSpec } from './defaultPlotSpec';
+import { normalizePlotSpec } from './normalizePlotSpec';
 import {
   enhanceSpecFromWideData,
   resultToPlotResultData,
   specFromType,
 } from './plotUtils';
-import { defaultPlotSpec } from './defaultPlotSpec';
-import { normalizePlotSpec } from './normalizePlotSpec';
+import type { PlotData, PlotSpec } from './plotUtils.interface';
 
 type StringSetter = (value: string) => void;
 
@@ -118,7 +118,9 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
   const setColorScheme = usePathMutatorCallback(editor, path, 'colorScheme');
 
   const repeatedColumns = useMemo(() => {
-    return _.uniq([element.y2ColumnName, element.yColumnName]).filter(Boolean);
+    return _.uniq([element.y2ColumnName, element.yColumnName])
+      .filter((word) => word !== 'None')
+      .filter(Boolean);
   }, [element]);
 
   const plotParams: PlotParams = useMemo(

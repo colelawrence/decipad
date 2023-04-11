@@ -72,19 +72,6 @@ export const normalizePlotSpec = (
       titleColor: cssVarHex('chartThemeMonochromeGrey7'),
     };
   }
-  if (!spec.config.style) {
-    spec.config.style = {
-      cell: {
-        stroke: 'transparent',
-      },
-    };
-  }
-  if (!spec.config.legend) {
-    spec.config.legend = {
-      direction: 'horizontal',
-      orient: 'top',
-    };
-  }
 
   if (spec.encoding.color) {
     if (!spec.encoding.color.scale?.scheme) {

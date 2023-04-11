@@ -59,6 +59,15 @@ export const markTypeIcons: Record<MarkType, ReactNode> = {
 
 export const shapes = ['point', 'circle', 'square', 'tick'];
 
+function sortArrayWithNoneFirst(arr: string[]) {
+  arr.sort();
+  const noneIndex = arr.indexOf('None');
+  if (noneIndex !== -1) {
+    arr.splice(noneIndex, 1);
+    arr.unshift('None');
+  }
+  return arr;
+}
 export interface PlotParamsProps {
   readonly sourceVarName: string;
   readonly sourceVarNameOptions: ReadonlyArray<string>;
@@ -532,13 +541,19 @@ export const PlotParams = ({
                 itemTrigger={
                   <TriggerMenuItem
                     icon={<List />}
-                    selectedPreview={y2ColumnName}
+                    selectedPreview={
+                      y2ColumnName === yColumnName ? 'None' : y2ColumnName
+                    }
                   >
                     Value 2
                   </TriggerMenuItem>
                 }
               >
-                {columnNameOptions.map((columnNameOption) => (
+                {sortArrayWithNoneFirst(
+                  columnNameOptions.map((columnNameOption) =>
+                    columnNameOption === yColumnName ? 'None' : columnNameOption
+                  )
+                ).map((columnNameOption) => (
                   <MenuItem
                     key={columnNameOption}
                     onSelect={() => {

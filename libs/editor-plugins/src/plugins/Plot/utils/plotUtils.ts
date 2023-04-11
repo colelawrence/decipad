@@ -5,21 +5,21 @@ import {
   SerializedType,
 } from '@decipad/computer';
 import { PlotElement } from '@decipad/editor-types';
-import DeciNumber from '@decipad/number';
 import { formatResult } from '@decipad/format';
+import DeciNumber from '@decipad/number';
 import { cssVarHex } from '@decipad/ui';
 import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
 import {
-  EncodingKey,
-  DisplayType,
-  TimeUnit,
-  EncodingSpec,
-  PlotSpec,
   AllowedPlotValue,
-  PlotData,
-  Row,
-  FieldType,
   comparableChartTypes,
+  DisplayType,
+  EncodingKey,
+  EncodingSpec,
+  FieldType,
+  PlotData,
+  PlotSpec,
+  Row,
+  TimeUnit,
 } from './plotUtils.interface';
 
 export type DisplayProps = {
@@ -40,19 +40,6 @@ const displayPropsToEncoding: Record<string, EncodingKey> = {
   sizeColumnName: 'size',
   colorColumnName: 'color',
   thetaColumnName: 'theta',
-};
-
-const hasGrid: Record<EncodingKey, boolean> = {
-  x: false,
-  y: true,
-  size: false,
-  color: false,
-  theta: false,
-  y2: false,
-  xOffset: false,
-  column: false,
-  aggregate: false,
-  datum: false,
 };
 
 const relevantDataDisplayProps: Array<keyof DisplayProps> = Object.keys(
@@ -130,7 +117,6 @@ export function encodingFor(
   _computer: Computer,
   columnName: string,
   columnType: SerializedType,
-  grid: boolean,
   markType: PlotElement['markType']
 ): EncodingSpec {
   const type = encodingTypeForColumnType(columnType);
@@ -140,9 +126,6 @@ export function encodingFor(
     title: '',
     timeUnit:
       columnType.kind === 'date' ? displayTimeUnitType(columnType) : undefined,
-    axis: {
-      grid,
-    },
     legend: markType !== 'arc' ? null : undefined,
   };
 
@@ -184,7 +167,6 @@ export function specFromType(
           computer,
           columnName,
           columnType,
-          hasGrid[channelKey],
           displayProps.markType
         );
       }
@@ -208,6 +190,7 @@ export function specFromType(
       field: { repeat: 'layer' },
       type: 'quantitative',
       title: '',
+      axis: {},
     };
 
     encoding.xOffset = {
@@ -233,15 +216,18 @@ export function specFromType(
   }
   if (encoding.y && encoding.y.axis) {
     encoding.y.axis.labelAngle = 0;
-    encoding.y.axis.labelBaseline = 'line-bottom';
-    encoding.y.axis.labelAlign = 'left';
+    encoding.y.axis.tickColor = cssVarHex('strongHighlightColor');
     encoding.y.axis.labelColor = cssVarHex('weakerTextColor');
+    encoding.y.axis.labelFontWeight = 700;
+    encoding.y.axis.gridColor = cssVarHex('highlightColor');
   }
   if (encoding.x && encoding.x.axis) {
+    encoding.x.axis.domainColor = cssVarHex('strongHighlightColor');
+    encoding.x.axis.tickColor = cssVarHex('strongHighlightColor');
     encoding.x.axis.labelColor = cssVarHex('weakerTextColor');
     encoding.x.axis.labelAngle = 0;
-    encoding.x.axis.offset = 5;
     encoding.x.axis.labelFontWeight = 700;
+    encoding.x.axis.grid = false;
   }
   if (
     !comparableChartTypes.includes(displayProps.markType) &&
@@ -254,7 +240,12 @@ export function specFromType(
     displayProps.markType === 'bar' ? { width: { band: 0.8 } } : {};
 
   return {
-    mark: { type: displayProps.markType, tooltip: true, ...markProps },
+    mark: {
+      interpolate: 'natural',
+      type: displayProps.markType,
+      tooltip: true,
+      ...markProps,
+    },
     encoding,
     config: {
       encoding: {
@@ -262,26 +253,13 @@ export function specFromType(
           scheme: displayProps.colorScheme || 'deciblues',
         },
       },
-      symbol: {
-        stroke: cssVarHex('chartThemeMonochromeBlue5'),
-        fill: '0xfff',
-      },
       mark: {
-        interpolate: 'cardinal',
         stroke:
           displayProps.markType !== 'arc' && !encoding.color
             ? cssVarHex('chartThemeMonochromeBlue5')
             : undefined,
         fill: markTypeToFill(displayProps.markType),
         strokeWidth: 3,
-      },
-      axis: {
-        gridColor: cssVarHex('highlightColor'),
-        labelColor: cssVarHex('weakTextColor'),
-        domainOpacity: 0,
-        labelAngle: -45,
-        labelBound: true,
-        tickSize: 0,
       },
       autosize: 'fit',
     },
