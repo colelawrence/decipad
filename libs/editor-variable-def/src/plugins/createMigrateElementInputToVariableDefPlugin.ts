@@ -11,13 +11,14 @@ import { inputElementToVariableDef } from '../utils/inputElementToVariableDef';
 
 const normalize =
   (editor: MyEditor) =>
-  ([node, path]: MyNodeEntry): boolean => {
+  ([node, path]: MyNodeEntry): false | (() => void) => {
     const replacement = inputElementToVariableDef(
       node as DeprecatedInputElement
     );
-    deleteText(editor, { at: path });
-    insertNodes(editor, replacement, { at: path });
-    return true;
+    return () => {
+      deleteText(editor, { at: path });
+      insertNodes(editor, replacement, { at: path });
+    };
   };
 
 export const createMigrateElementInputToVariableDefPlugin =

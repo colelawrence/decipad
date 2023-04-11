@@ -13,7 +13,10 @@ import {
   MyNodeEntry,
   SliderElement,
 } from '@decipad/editor-types';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '@decipad/editor-plugins';
 import { removeNodes, setNodes } from '@udecode/plate';
 import { insertNodes, isElementOfType } from '@decipad/editor-utils';
 
@@ -27,50 +30,52 @@ const allowableVariant = new Set([
 
 const normalize =
   (editor: MyEditor) =>
-  ([node, path]: MyNodeEntry): boolean => {
+  ([node, path]: MyNodeEntry): NormalizerReturnValue => {
     if (!isElementOfType(node, ELEMENT_VARIABLE_DEF)) {
       return false;
     }
     if (!('variant' in node) || !allowableVariant.has(node.variant)) {
-      setNodes(editor, { variant: 'expression' } as Partial<MyNode>, {
-        at: path,
-      });
-      return true;
+      return () =>
+        setNodes(editor, { variant: 'expression' } as Partial<MyNode>, {
+          at: path,
+        });
     }
 
     if (node.children.length < 1) {
-      insertNodes(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_CAPTION,
-          children: [{ text: '' }],
-        } as CaptionElement,
-        { at: [...path, 0] }
-      );
-      return true;
+      return () =>
+        insertNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_CAPTION,
+            children: [{ text: '' }],
+          } as CaptionElement,
+          { at: [...path, 0] }
+        );
     }
 
     if (node.children[0].type !== ELEMENT_CAPTION) {
-      removeNodes(editor, {
-        at: [...path, 0],
-      });
-      return true;
+      return () =>
+        removeNodes(editor, {
+          at: [...path, 0],
+        });
     }
 
     if (node.children.length < 2) {
       if (node.variant === 'dropdown') {
-        insertNodes<DropdownElement>(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_DROPDOWN,
-            children: [{ text: '' }],
-            options: [],
-          },
-          { at: [...path, 1] }
-        );
-      } else {
+        return () =>
+          insertNodes<DropdownElement>(
+            editor,
+            {
+              id: nanoid(),
+              type: ELEMENT_DROPDOWN,
+              children: [{ text: '' }],
+              options: [],
+            },
+            { at: [...path, 1] }
+          );
+      }
+      return () =>
         insertNodes<ExpressionElement>(
           editor,
           {
@@ -80,9 +85,6 @@ const normalize =
           },
           { at: [...path, 1] }
         );
-      }
-
-      return true;
     }
 
     if (
@@ -91,10 +93,10 @@ const normalize =
       (node.children[1].type !== ELEMENT_DROPDOWN &&
         node.variant === 'dropdown')
     ) {
-      removeNodes(editor, {
-        at: [...path, 1],
-      });
-      return true;
+      return () =>
+        removeNodes(editor, {
+          at: [...path, 1],
+        });
     }
 
     // Dropdown options used to just be an array of strings.
@@ -104,8 +106,7 @@ const normalize =
       let changed = false;
 
       if (!('options' in node.children[1]) || !node.children[1].options) {
-        setNodes(editor, { options: [] }, { at: [...path, 1] });
-        return true;
+        return () => setNodes(editor, { options: [] }, { at: [...path, 1] });
       }
 
       for (const op of node.children[1].options) {
@@ -120,36 +121,36 @@ const normalize =
         newOptions.push(op);
       }
       if (changed) {
-        setNodes(editor, { options: newOptions } as Partial<MyNode>, {
-          at: [...path, 1],
-        });
-        return true;
+        return () =>
+          setNodes(editor, { options: newOptions } as Partial<MyNode>, {
+            at: [...path, 1],
+          });
       }
     }
 
     if (node.variant === 'slider') {
       if (node.children.length < 3) {
-        insertNodes<SliderElement>(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_SLIDER,
-            max: '10',
-            min: '0',
-            step: '0.1',
-            value: '0',
-            children: [{ text: '' }],
-          },
-          { at: [...path, 2] }
-        );
-        return true;
+        return () =>
+          insertNodes<SliderElement>(
+            editor,
+            {
+              id: nanoid(),
+              type: ELEMENT_SLIDER,
+              max: '10',
+              min: '0',
+              step: '0.1',
+              value: '0',
+              children: [{ text: '' }],
+            },
+            { at: [...path, 2] }
+          );
       }
 
       if (node.children[2].type !== ELEMENT_SLIDER) {
-        removeNodes(editor, {
-          at: [...path, 2],
-        });
-        return true;
+        return () =>
+          removeNodes(editor, {
+            at: [...path, 2],
+          });
       }
     }
 

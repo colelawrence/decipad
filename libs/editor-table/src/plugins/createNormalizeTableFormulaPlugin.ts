@@ -1,5 +1,8 @@
 import { Computer } from '@decipad/computer';
-import { createNormalizerPlugin } from '@decipad/editor-plugins';
+import {
+  NormalizerReturnValue,
+  createNormalizerPlugin,
+} from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -14,7 +17,7 @@ import { nanoid } from 'nanoid';
 export const normalizeTableFormula =
   (_computer: Computer) =>
   (editor: MyEditor) =>
-  (entry: MyNodeEntry): boolean => {
+  (entry: MyNodeEntry): NormalizerReturnValue => {
     const [element, path] = entry;
     assertElementType(element, ELEMENT_TABLE);
 
@@ -39,17 +42,17 @@ export const normalizeTableFormula =
       );
       if (captionChildIndex < 0) {
         const insertPath = [...path, 0, caption.children.length];
-        insertNodes(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_TABLE_COLUMN_FORMULA,
-            columnId: header.id,
-            children: [{ text: '' }],
-          },
-          { at: insertPath }
-        );
-        return true;
+        return () =>
+          insertNodes(
+            editor,
+            {
+              id: nanoid(),
+              type: ELEMENT_TABLE_COLUMN_FORMULA,
+              columnId: header.id,
+              children: [{ text: '' }],
+            },
+            { at: insertPath }
+          );
       }
     }
 
@@ -58,10 +61,10 @@ export const normalizeTableFormula =
       const formulaPath = [...path, 0, caption.children.indexOf(formula)];
       if (!columnIdToHeader.has(formula.columnId)) {
         if (hasNode(editor, formulaPath)) {
-          deleteText(editor, {
-            at: formulaPath,
-          });
-          return true;
+          return () =>
+            deleteText(editor, {
+              at: formulaPath,
+            });
         }
       }
     }

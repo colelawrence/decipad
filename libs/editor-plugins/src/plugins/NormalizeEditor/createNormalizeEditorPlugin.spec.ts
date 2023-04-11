@@ -40,11 +40,13 @@ describe('the title normalization', () => {
     normalizeEditor(editor, { force: true });
     expect(editor.children).toMatchObject([h1Element()]);
   });
+
   it('forces the first H1 to exist', () => {
     editor.children = [];
     normalizeEditor(editor, { force: true });
     expect(editor.children).toMatchObject([h1Element()]);
   });
+
   it('forbids H1s in the second to last elements and converts them to paragraphs', () => {
     editor.children = [h1Element(), h1Element()];
     normalizeEditor(editor, { force: true });
@@ -56,6 +58,7 @@ describe('the title normalization', () => {
       },
     ] as MyElement[]);
   });
+
   it('applies to moved but unchanged blocks', () => {
     editor.children = [{ type: ELEMENT_H1, children: [{ text: 'text' }] }];
     select(editor, { path: [0, 0], offset: 0 });

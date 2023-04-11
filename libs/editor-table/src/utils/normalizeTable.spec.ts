@@ -32,6 +32,6 @@ describe('normalizeTable', () => {
 
     const normalizedTable = normalizeTable(editor, computer, tableEntry);
 
-    expect(normalizedTable).toBe(true);
+    expect(normalizedTable).not.toBe(false);
   });
 });

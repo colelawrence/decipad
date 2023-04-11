@@ -1,4 +1,7 @@
-import { createNormalizerPlugin } from '@decipad/editor-plugins';
+import {
+  NormalizerReturnValue,
+  createNormalizerPlugin,
+} from '@decipad/editor-plugins';
 import {
   ELEMENT_DATA_VIEW,
   MyEditor,
@@ -29,86 +32,93 @@ import { NodeEntry } from 'slate';
 const normalizeDataViewElement = (
   editor: MyEditor,
   entry: NodeEntry<DataViewElement>
-): boolean => {
+): NormalizerReturnValue => {
   const [node, path] = entry;
 
   if (!node.children) {
-    setNodes(editor, { children: [{ text: '' }] }, { at: path });
-    return true;
+    return () => setNodes(editor, { children: [{ text: '' }] }, { at: path });
   }
 
   if (node.children.length < 1) {
-    insertNodes<DataViewCaptionElement>(
-      editor,
-      [
-        {
-          id: nanoid(),
-          type: ELEMENT_DATA_VIEW_CAPTION,
-          children: [
-            {
-              id: nanoid(),
-              type: ELEMENT_DATA_VIEW_NAME,
-              children: [{ text: '' }],
-            },
-          ],
-        },
-      ],
-      { at: [...path, 0] }
-    );
-    return true;
+    return () =>
+      insertNodes<DataViewCaptionElement>(
+        editor,
+        [
+          {
+            id: nanoid(),
+            type: ELEMENT_DATA_VIEW_CAPTION,
+            children: [
+              {
+                id: nanoid(),
+                type: ELEMENT_DATA_VIEW_NAME,
+                children: [{ text: '' }],
+              },
+            ],
+          },
+        ],
+        { at: [...path, 0] }
+      );
   }
   if (node.children.length < 2) {
-    insertNodes<DataViewHeaderRowElement>(
-      editor,
-      [
-        {
-          id: nanoid(),
-          type: ELEMENT_DATA_VIEW_TR,
-          children: [],
-        },
-      ],
-      { at: [...path, 1] }
-    );
-    return true;
+    return () =>
+      insertNodes<DataViewHeaderRowElement>(
+        editor,
+        [
+          {
+            id: nanoid(),
+            type: ELEMENT_DATA_VIEW_TR,
+            children: [],
+          },
+        ],
+        { at: [...path, 1] }
+      );
   }
 
   if (node.children[0].type !== ELEMENT_DATA_VIEW_CAPTION) {
-    setNodes(editor, { type: ELEMENT_DATA_VIEW_CAPTION }, { at: [...path, 0] });
-    return true;
+    return () =>
+      setNodes(
+        editor,
+        { type: ELEMENT_DATA_VIEW_CAPTION },
+        { at: [...path, 0] }
+      );
   }
 
   if (node.children[0].children.length < 1) {
-    insertNodes<DataViewNameElement>(
-      editor,
-      {
-        id: nanoid(),
-        type: ELEMENT_DATA_VIEW_NAME,
-        children: [{ text: '' }],
-      },
-      { at: [...path, 0, 0] }
-    );
-    return true;
-  }
-  if (node.children[0].children[0]?.type !== ELEMENT_DATA_VIEW_NAME) {
-    if (isText(node.children[0].children[0])) {
-      wrapNodes(
+    return () =>
+      insertNodes<DataViewNameElement>(
         editor,
-        { id: nanoid(), type: ELEMENT_DATA_VIEW_NAME, children: [] },
+        {
+          id: nanoid(),
+          type: ELEMENT_DATA_VIEW_NAME,
+          children: [{ text: '' }],
+        },
         { at: [...path, 0, 0] }
       );
-    } else {
+  }
+  if (node.children[0].children[0]?.type !== ELEMENT_DATA_VIEW_NAME) {
+    const dataViewName = node.children[0].children[0];
+    if (isText(dataViewName)) {
+      return () =>
+        wrapNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_DATA_VIEW_NAME,
+            children: [dataViewName],
+          },
+          { at: [...path, 0, 0] }
+        );
+    }
+    return () =>
       setNodes(
         editor,
         { type: ELEMENT_DATA_VIEW_NAME },
         { at: [...path, 0, 0] }
       );
-    }
-    return true;
   }
 
   if (node.children[1].type !== ELEMENT_DATA_VIEW_TR) {
-    removeNodes(editor, { at: [...path, 1] });
-    return true;
+    return () => removeNodes(editor, { at: [...path, 1] });
   }
 
   return false;
@@ -117,11 +127,15 @@ const normalizeDataViewElement = (
 const normalizeDataViewHeaders = (
   editor: MyEditor,
   entry: NodeEntry<DataViewElement>
-): boolean => {
+): NormalizerReturnValue => {
   const [node, path] = entry;
   if (!node.children[1].children) {
-    setNodes<DataViewHeaderRowElement>(editor, { children: [] }, { at: path });
-    return true;
+    return () =>
+      setNodes<DataViewHeaderRowElement>(
+        editor,
+        { children: [] },
+        { at: path }
+      );
   }
 
   // Migrate old IDs, which referred to the formula ID, to the column ID
@@ -129,13 +143,13 @@ const normalizeDataViewHeaders = (
     node.children[1],
     [...path, 1],
   ])) {
-    const byId =
-      findNode<TableColumnFormulaElement>(editor, {
-        match: { id: child.name },
-      }) ?? [];
-    if (byId[0]?.type === ELEMENT_TABLE_COLUMN_FORMULA) {
-      setNodes(editor, { name: byId[0].columnId }, { at: childPath });
-      return true;
+    const byId = findNode<TableColumnFormulaElement>(editor, {
+      match: { id: child.name },
+    });
+    const formulaEl = byId?.[0];
+    if (formulaEl?.type === ELEMENT_TABLE_COLUMN_FORMULA) {
+      return () =>
+        setNodes(editor, { name: formulaEl.columnId }, { at: childPath });
     }
   }
 
@@ -144,7 +158,7 @@ const normalizeDataViewHeaders = (
 
 const normalizeDataViewPlugin =
   (editor: MyEditor) =>
-  (entry: MyNodeEntry): boolean => {
+  (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node] = entry;
     assertElementType(node, ELEMENT_DATA_VIEW);
     return (

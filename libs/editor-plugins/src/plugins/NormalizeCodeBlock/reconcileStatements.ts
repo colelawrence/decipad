@@ -10,12 +10,13 @@ import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { getCodeBlockOffsets, reinstateCursorOffsets } from './offsets';
 import { getCodeLineText, incrementLastElementOfPath } from './utils';
+import { NormalizerReturnValue } from '../../pluginFactories';
 
 function reconcileCodeLineByMergingWithNext(
   editor: MyEditor,
   line: CodeLineElement,
   codeLinePath: Path
-): boolean {
+): NormalizerReturnValue {
   const nextCodeLinePath = incrementLastElementOfPath(codeLinePath);
   const next = getNode<CodeLineElement>(editor, nextCodeLinePath);
   if (next) {
@@ -25,10 +26,10 @@ function reconcileCodeLineByMergingWithNext(
       at: [...codeLinePath],
     });
 
-    mergeNodes(editor, {
-      at: nextCodeLinePath,
-    });
-    return true;
+    return () =>
+      mergeNodes(editor, {
+        at: nextCodeLinePath,
+      });
   }
   return false;
 }
@@ -37,7 +38,7 @@ function reconcileByMergingWithNext(
   editor: MyEditor,
   codeLinePath: Path,
   expectedStatement: string
-): boolean {
+): NormalizerReturnValue {
   const line = getNode<CodeLineElement>(editor, codeLinePath);
   if (!line) {
     return false;
@@ -54,7 +55,7 @@ function reconcileBySplitting(
   _expectedStatement: string,
   childText: string,
   codeLinePath: Path
-): boolean {
+): NormalizerReturnValue {
   const expectedStatement = _expectedStatement;
   // insert one new code line after current one with the rest of the statement
   let nextLineText = childText.slice(expectedStatement.length);
@@ -70,13 +71,14 @@ function reconcileBySplitting(
       },
     ],
   };
-  insertNodes(editor, newNode as CodeLineElement, {
-    at: incrementLastElementOfPath(codeLinePath),
-  });
-  insertText(editor, expectedStatement, {
-    at: [...codeLinePath, 0],
-  });
-  return true;
+  return () => {
+    insertNodes(editor, newNode as CodeLineElement, {
+      at: incrementLastElementOfPath(codeLinePath),
+    });
+    insertText(editor, expectedStatement, {
+      at: [...codeLinePath, 0],
+    });
+  };
 }
 
 function reconcileLine(
@@ -84,14 +86,13 @@ function reconcileLine(
   line: CodeLineElement,
   expectedStatement: string,
   codeLinePath: Path
-): boolean {
+): NormalizerReturnValue {
   const text = getCodeLineText(line);
   if (text.length > expectedStatement.length) {
     return reconcileBySplitting(editor, expectedStatement, text, codeLinePath);
   }
   return reconcileByMergingWithNext(editor, codeLinePath, expectedStatement);
 }
-
 function needsReconciliation(
   line: CodeLineElement,
   expectedStatement: string
@@ -104,7 +105,7 @@ export function reconcileStatements(
   editor: MyEditor,
   statements: string[],
   codeBlockPath: Path
-): boolean {
+): NormalizerReturnValue {
   let childIndex = -1;
   let statementIndex = -1;
   const codeBlock = getNode<DeprecatedCodeBlockElement>(editor, codeBlockPath);
@@ -117,13 +118,15 @@ export function reconcileStatements(
     statementIndex += 1;
     const expectedText = statements[statementIndex] || '';
     if (needsReconciliation(line, expectedText)) {
-      const changed = reconcileLine(editor, line, expectedText, [
+      const normalize = reconcileLine(editor, line, expectedText, [
         ...codeBlockPath,
         childIndex,
       ]);
-      if (changed) {
-        reinstateCursorOffsets(editor, codeBlockPath, offsets);
-        return true;
+      if (normalize) {
+        return () => {
+          normalize();
+          reinstateCursorOffsets(editor, codeBlockPath, offsets);
+        };
       }
     }
   }

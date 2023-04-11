@@ -13,7 +13,10 @@ import { removeNodes, getChildren, insertNodes, nanoid } from '@udecode/plate';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveQueryVarName } from './components/LiveQueryVarName';
 import { LiveQueryQuery } from './components/LiveQueryQuery';
-import { createNormalizerPlugin } from '../../pluginFactories';
+import {
+  createNormalizerPlugin,
+  NormalizerReturnValue,
+} from '../../pluginFactories';
 import { createSoftBreakLiveQueryPluginFactory } from './createSoftBreakLiveQueryPluginFactory';
 import { LiveQueryVarNameElement } from '../../../../editor-types/src/interactive-elements';
 
@@ -42,45 +45,42 @@ export const createLiveQueryPlugin = createTPluginFactory({
       elementType: ELEMENT_LIVE_QUERY,
       plugin:
         (editor) =>
-        ([el, path]) => {
+        ([el, path]): NormalizerReturnValue => {
           assertElementType(el, ELEMENT_LIVE_QUERY);
 
           if (el.children.length < 1) {
-            insertNodes<LiveQueryVarNameElement>(
-              editor,
-              {
-                id: nanoid(),
-                type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-                children: [{ text: 'LiveQuery' }],
-              },
-              { at: [...path, 0] }
-            );
-            return true;
+            return () =>
+              insertNodes<LiveQueryVarNameElement>(
+                editor,
+                {
+                  id: nanoid(),
+                  type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+                  children: [{ text: 'LiveQuery' }],
+                },
+                { at: [...path, 0] }
+              );
           }
           if (el.children[0].type !== ELEMENT_LIVE_QUERY_VARIABLE_NAME) {
-            removeNodes(editor, { at: [...path, 0] });
-            return true;
+            return () => removeNodes(editor, { at: [...path, 0] });
           }
           if (el.children.length < 2) {
-            insertNodes<LiveQueryQueryElement>(
-              editor,
-              {
-                id: nanoid(),
-                type: ELEMENT_LIVE_QUERY_QUERY,
-                children: [{ text: '' }],
-              },
-              { at: [...path, 1] }
-            );
-            return true;
+            return () =>
+              insertNodes<LiveQueryQueryElement>(
+                editor,
+                {
+                  id: nanoid(),
+                  type: ELEMENT_LIVE_QUERY_QUERY,
+                  children: [{ text: '' }],
+                },
+                { at: [...path, 1] }
+              );
           }
           if (el.children[1].type !== ELEMENT_LIVE_QUERY_QUERY) {
-            removeNodes(editor, { at: [...path, 1] });
-            return true;
+            return () => removeNodes(editor, { at: [...path, 1] });
           }
 
           if (el.children.length > 2) {
-            removeNodes(editor, { at: [...path, 2] });
-            return true;
+            return () => removeNodes(editor, { at: [...path, 2] });
           }
           return false;
         },

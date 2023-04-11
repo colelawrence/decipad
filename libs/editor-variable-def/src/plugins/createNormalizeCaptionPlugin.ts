@@ -1,5 +1,8 @@
 import { ELEMENT_CAPTION, MyEditor, MyNodeEntry } from '@decipad/editor-types';
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '@decipad/editor-plugins';
 import { normalizeIdentifierElement } from '@decipad/editor-utils';
 import {
   deleteText,
@@ -12,30 +15,26 @@ import {
 
 const normalize =
   (editor: MyEditor) =>
-  (entry: MyNodeEntry): boolean => {
+  (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
     if (isElement(node) && node.type !== ELEMENT_CAPTION) {
       return false;
     }
 
     if (!isElement(node)) {
-      unwrapNodes(editor, { at: path });
-      return true;
+      return () => unwrapNodes(editor, { at: path });
     }
 
     if (node.children.length > 1) {
-      deleteText(editor, { at: [...path, 1] });
-      return true;
+      return () => deleteText(editor, { at: [...path, 1] });
     }
 
     if (!isText(node.children[0])) {
-      deleteText(editor, { at: [...path, 0] });
-      return true;
+      return () => deleteText(editor, { at: [...path, 0] });
     }
 
     if (node.children.length < 1) {
-      insertText(editor, '', { at: path });
-      return true;
+      return () => insertText(editor, '', { at: path });
     }
 
     const [text] = getChildren(entry);

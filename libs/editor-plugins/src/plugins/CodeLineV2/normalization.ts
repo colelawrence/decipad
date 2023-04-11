@@ -10,7 +10,10 @@ import { Computer } from '@decipad/computer';
 import { nanoid } from 'nanoid';
 import { getNodeChildren, removeNodes, setNodes } from '@udecode/plate';
 import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeLinePlugin';
-import { createNormalizerPlugin } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPlugin,
+} from '../../pluginFactories';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
 export const createNormalizeCodeLineV2Plugin = () =>
@@ -23,69 +26,57 @@ export const createNormalizeCodeLineV2Plugin = () =>
     ],
     plugin:
       (editor) =>
-      ([node, path]) => {
+      ([node, path]): NormalizerReturnValue => {
         if (isElementOfType(node, ELEMENT_CODE_LINE_V2)) {
           if (!node.children) {
-            setNodes(editor, { children: [{ text: '' }] }, { at: path });
-            return true;
+            return () =>
+              setNodes(editor, { children: [{ text: '' }] }, { at: path });
           }
 
           if (node.children.length < 1) {
-            insertNodes(
-              editor,
-              {
-                type: ELEMENT_STRUCTURED_VARNAME,
-                id: nanoid(),
-                children: [{ text: '' }],
-              } as StructuredVarnameElement,
-              { at: [...path, 0] }
-            );
-
-            return true;
+            return () =>
+              insertNodes(
+                editor,
+                {
+                  type: ELEMENT_STRUCTURED_VARNAME,
+                  id: nanoid(),
+                  children: [{ text: '' }],
+                } as StructuredVarnameElement,
+                { at: [...path, 0] }
+              );
           }
 
           if (node.children[0].type !== ELEMENT_STRUCTURED_VARNAME) {
-            removeNodes(editor, { at: [...path, 0] });
-
-            return true;
+            return () => removeNodes(editor, { at: [...path, 0] });
           }
 
           if (node.children.length < 2) {
-            insertNodes(
-              editor,
-              {
-                type: ELEMENT_CODE_LINE_V2_CODE,
-                id: nanoid(),
-                children: [{ text: '' }],
-              } as CodeLineV2ElementCode,
-              { at: [...path, 1] }
-            );
-
-            return true;
+            return () =>
+              insertNodes(
+                editor,
+                {
+                  type: ELEMENT_CODE_LINE_V2_CODE,
+                  id: nanoid(),
+                  children: [{ text: '' }],
+                } as CodeLineV2ElementCode,
+                { at: [...path, 1] }
+              );
           }
 
           if (node.children[1].type !== ELEMENT_CODE_LINE_V2_CODE) {
-            removeNodes(editor, { at: [...path, 1] });
-
-            return true;
+            return () => removeNodes(editor, { at: [...path, 1] });
           }
 
           if (!isElementOfType(node.children[0], ELEMENT_STRUCTURED_VARNAME)) {
-            removeNodes(editor, { at: [...path, 0] });
-
-            return true;
+            return () => removeNodes(editor, { at: [...path, 0] });
           }
 
           if (!isElementOfType(node.children[1], ELEMENT_CODE_LINE_V2_CODE)) {
-            removeNodes(editor, { at: [...path, 1] });
-
-            return true;
+            return () => removeNodes(editor, { at: [...path, 1] });
           }
 
           if (node.children.length > 2) {
-            removeNodes(editor, { at: [...path, 2] });
-
-            return true;
+            return () => removeNodes(editor, { at: [...path, 2] });
           }
         }
 
@@ -98,12 +89,14 @@ export const createNormalizeCodeLineCodePlugin = (computer: Computer) =>
     name: 'NORMALIZE_CODE_LINE_V2_CODE',
     elementType: ELEMENT_CODE_LINE_V2_CODE,
     acceptableSubElements: [],
-    plugin: (editor) => (entry) => {
-      if (isElementOfType(entry[0], ELEMENT_CODE_LINE_V2_CODE)) {
-        return normalizeCodeChildren(computer, editor, entry);
-      }
-      return false;
-    },
+    plugin:
+      (editor) =>
+      (entry): NormalizerReturnValue => {
+        if (isElementOfType(entry[0], ELEMENT_CODE_LINE_V2_CODE)) {
+          return normalizeCodeChildren(computer, editor, entry);
+        }
+        return false;
+      },
   });
 
 export const createNormalizeCodeLineVarnamePlugin = () =>
@@ -111,15 +104,16 @@ export const createNormalizeCodeLineVarnamePlugin = () =>
     name: 'NORMALIZE_CODE_LINE_V2_VARNAME',
     elementType: ELEMENT_STRUCTURED_VARNAME,
     acceptableSubElements: [],
-    plugin: (editor) => (entry) => {
-      if (isElementOfType(entry[0], ELEMENT_STRUCTURED_VARNAME)) {
-        if (
-          normalizePlainTextChildren(editor, getNodeChildren(editor, entry[1]))
-        ) {
-          return true;
+    plugin:
+      (editor) =>
+      (entry): NormalizerReturnValue => {
+        if (isElementOfType(entry[0], ELEMENT_STRUCTURED_VARNAME)) {
+          return normalizePlainTextChildren(
+            editor,
+            getNodeChildren(editor, entry[1])
+          );
         }
-      }
 
-      return false;
-    },
+        return false;
+      },
   });

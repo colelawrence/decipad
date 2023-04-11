@@ -7,15 +7,14 @@ export const normalizeIdentifierElement = (
   editor: MyEditor,
   [node, path]: TNodeEntry,
   getUniqueName?: () => string
-): boolean => {
+): false | (() => void) => {
   const text = getNodeString(node);
   const { selection } = editor;
 
   const replacement =
     text.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
   if (replacement !== text) {
-    insertText(editor, replacement, { at: path });
-    return true;
+    return () => insertText(editor, replacement, { at: path });
   }
 
   /** If the user is NOT on the given path, then we can
@@ -29,8 +28,8 @@ export const normalizeIdentifierElement = (
     text.length === 0 &&
     !Path.equals(selection?.anchor.path || [-1], path)
   ) {
-    insertText(editor, getUniqueName(), { at: path });
-    return true;
+    return () => insertText(editor, getUniqueName(), { at: path });
   }
+
   return false;
 };

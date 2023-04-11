@@ -10,7 +10,10 @@ import {
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
 import { insertNodes, removeNodes, getChildren } from '@udecode/plate';
-import { createNormalizerPlugin } from '../../pluginFactories';
+import {
+  createNormalizerPlugin,
+  NormalizerReturnValue,
+} from '../../pluginFactories';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveConnectionVarName } from './components/LiveConnectionVarName';
 
@@ -36,23 +39,22 @@ export const createLiveConnectionPlugin = createTPluginFactory({
       elementType: ELEMENT_LIVE_CONNECTION,
       plugin:
         (editor) =>
-        ([element, path]) => {
+        ([element, path]): NormalizerReturnValue => {
           assertElementType(element, ELEMENT_LIVE_CONNECTION);
           if (element.children.length < 1) {
-            insertNodes<LiveConnectionVarNameElement>(
-              editor,
-              {
-                id: nanoid(),
-                type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-                children: [{ text: '' }],
-              },
-              { at: [...path, 1] }
-            );
-            return true;
+            return () =>
+              insertNodes<LiveConnectionVarNameElement>(
+                editor,
+                {
+                  id: nanoid(),
+                  type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+                  children: [{ text: '' }],
+                },
+                { at: [...path, 1] }
+              );
           }
           if (element.children.length > 1) {
-            removeNodes(editor, { at: [...path, 1] });
-            return true;
+            return () => removeNodes(editor, { at: [...path, 1] });
           }
           return false;
         },

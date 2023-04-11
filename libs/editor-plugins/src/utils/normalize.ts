@@ -11,6 +11,7 @@ import {
   TNodeProps,
   unsetNodes,
 } from '@udecode/plate';
+import { NormalizerReturnValue } from '../pluginFactories';
 
 const baseProps = {
   element: ['type', 'children', 'id', 'isHidden'],
@@ -51,7 +52,7 @@ export const normalizeExcessProperties = (
   editor: TEditor,
   entry: TNodeEntry,
   allowedPropKeys: string[] = []
-): boolean => {
+): NormalizerReturnValue => {
   assertElementOrText(entry);
   const [node, path] = entry;
   const propKeys = Object.keys(getNodeProps(node));
@@ -60,8 +61,10 @@ export const normalizeExcessProperties = (
   const excessPropKeys = propKeys.filter(
     (key) => !basePropKeys.includes(key) && !allowedPropKeys.includes(key)
   );
-  unsetNodes<TElement>(editor, excessPropKeys, { at: path });
-  return !!excessPropKeys.length;
+  if (excessPropKeys.length) {
+    return () => unsetNodes<TElement>(editor, excessPropKeys, { at: path });
+  }
+  return false;
 };
 
 /**
@@ -75,7 +78,7 @@ export const normalizeMissingProperties = (
   entry: TNodeEntry,
   mandatoryPropKeys: string[] = [],
   missingPropGenerator: Record<string, () => unknown> = {}
-): boolean => {
+): NormalizerReturnValue => {
   assertElementOrText(entry);
   const [node, path] = entry;
   const presentPropKeys = Object.keys(getNodeProps(node));
@@ -101,10 +104,11 @@ export const normalizeMissingProperties = (
       key,
       'and we do not know how to initialize it. Deleting element.'
     );
-    deleteText(editor, { at: path });
-    return true;
+    return () => deleteText(editor, { at: path });
   }
 
-  setNodes(editor, newProps, { at: path });
-  return !!Object.keys(newProps).length;
+  if (Object.keys(newProps).length) {
+    return () => setNodes(editor, newProps, { at: path });
+  }
+  return false;
 };

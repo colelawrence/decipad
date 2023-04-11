@@ -11,9 +11,15 @@ import {
 } from '@decipad/editor-types';
 import { captureException } from '@sentry/browser';
 
-type NormalizerPlugin = (editor: MyEditor) => (entry: MyNodeEntry) => boolean;
+export type NormalizerNormaliser = () => void;
 
-interface NormalizerPluginProps {
+export type NormalizerReturnValue = false | NormalizerNormaliser;
+
+export type NormalizerPlugin = (
+  editor: MyEditor
+) => (entry: MyNodeEntry) => NormalizerReturnValue;
+
+export interface NormalizerPluginProps {
   name: string;
   elementType?: MyElement['type'] | Array<MyElement['type']>;
   acceptableElementProperties?: string[];
@@ -121,10 +127,16 @@ const withNormalizerOverride = (
               return;
             }
           }
-          if (newNormalize && newNormalize(entry)) {
-            // eslint-disable-next-line no-console
-            console.debug(`Normalizer ${pluginName} did something`);
-            return;
+          if (newNormalize) {
+            const normalize = newNormalize(entry);
+            if (normalize) {
+              // eslint-disable-next-line no-console
+              console.debug(`Normalizer ${pluginName} >>>>>>>>>>>>>>>>>>`);
+              normalize();
+              // eslint-disable-next-line no-console
+              console.debug(`Normalizer ${pluginName} <<<<<<<<<<<<<<<<<<`);
+              return;
+            }
           }
         }
       } catch (err) {

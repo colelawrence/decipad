@@ -7,7 +7,10 @@ import {
   setSelection,
   TNodeEntry,
 } from '@udecode/plate';
-import { createNormalizerPlugin } from '@decipad/editor-plugins';
+import {
+  createNormalizerPlugin,
+  NormalizerReturnValue,
+} from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TD,
@@ -52,7 +55,7 @@ const getBlankCell = (isHeader: boolean) => {
 const normalizeFormulaColumns = (
   editor: MyEditor,
   [table, tablePath]: TNodeEntry<TableElement>
-) => {
+): NormalizerReturnValue => {
   const [, headerRow] = table.children;
   if (!tableIsSquare(table)) return false;
 
@@ -69,7 +72,7 @@ const normalizeFormulaColumns = (
 
   // Prevent formula columns from being the first column
   if (formulaColIndices[0] === 0) {
-    let didTransform = false;
+    const normalizers: Array<() => void> = [];
     for (const [rowIndex, row] of enumerate(table.children)) {
       if (row.type !== ELEMENT_TR) {
         continue;
@@ -80,12 +83,18 @@ const normalizeFormulaColumns = (
       if (hasNode(editor, newCellPath)) {
         const newCell = getBlankCell(row.children[0].type === ELEMENT_TH);
 
-        insertNodes(editor, [newCell], { at: newCellPath });
-        didTransform = true;
+        normalizers.push(() =>
+          insertNodes(editor, [newCell], { at: newCellPath })
+        );
       }
     }
-
-    if (didTransform) return true;
+    if (normalizers.length) {
+      return () => {
+        for (const n of normalizers) {
+          n();
+        }
+      };
+    }
   }
 
   // Empty formula cells. They must have no text (results come from off-document)
@@ -98,11 +107,10 @@ const normalizeFormulaColumns = (
     for (const cellIndex of formulaColIndices) {
       const cell = row.children[cellIndex];
 
-      if (cell.type === ELEMENT_TD && getNodeString(cell) !== '') {
+      if (cell.type === ELEMENT_TD && getNodeString(cell).length > 0) {
         const tdPath = [...tablePath, rowIndex, cellIndex];
 
-        insertText(editor, '', { at: tdPath });
-        return true;
+        return () => insertText(editor, '', { at: tdPath });
       }
     }
   }
@@ -115,7 +123,7 @@ const normalizeSeriesColumn = (
   tableEntry: TNodeEntry<TableElement>,
   [th]: NodeEntry<TableHeaderElement>,
   columnIndex: number
-): boolean => {
+): NormalizerReturnValue => {
   if (th.cellType.kind !== 'series') {
     return false;
   }
@@ -153,12 +161,13 @@ const normalizeSeriesColumn = (
       const existingText = getNodeString(cellEl).trim();
       const expectedText = series.next().value;
       if (existingText !== expectedText) {
-        const selectionBefore = editor.selection;
-        insertText(editor, expectedText, { at: cellPath });
-        if (selectionBefore && !dequal(selectionBefore, editor.selection)) {
-          setSelection(editor, selectionBefore);
-        }
-        return true;
+        return () => {
+          const selectionBefore = editor.selection;
+          insertText(editor, expectedText, { at: cellPath });
+          if (selectionBefore && !dequal(selectionBefore, editor.selection)) {
+            setSelection(editor, selectionBefore);
+          }
+        };
       }
     }
   }
@@ -168,12 +177,13 @@ const normalizeSeriesColumn = (
 const normalizeSeriesColumns = (
   editor: MyEditor,
   tableEntry: TNodeEntry<TableElement>
-) => {
+): NormalizerReturnValue => {
   const [, _ths] = getChildren(tableEntry); // second element of a table is a header table row
   const ths = _ths as NodeEntry<TableHeaderRowElement>;
   for (const [index, th] of enumerate(getChildren(ths))) {
-    if (normalizeSeriesColumn(editor, tableEntry, th, index)) {
-      return true;
+    const normalize = normalizeSeriesColumn(editor, tableEntry, th, index);
+    if (normalize) {
+      return normalize;
     }
   }
   return false;
@@ -181,7 +191,7 @@ const normalizeSeriesColumns = (
 
 export const normalizeTableFormulaAndSeries =
   (editor: MyEditor) =>
-  (entry: MyNodeEntry): boolean => {
+  (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
     if (!isElement(node) || node.type !== ELEMENT_TABLE) {
       return false;

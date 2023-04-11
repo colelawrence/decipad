@@ -7,7 +7,7 @@ const logsColor = `
 export const createOperationsBlackboxPlugin = createOverrideApplyPluginFactory({
   name: 'OPERATIONS_BLACKBOX_PLUGIN',
   plugin: (editor, apply) => {
-    if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV === 'test' && !process.env.DEBUG) {
       return apply;
     }
     // eslint-disable-next-line no-console

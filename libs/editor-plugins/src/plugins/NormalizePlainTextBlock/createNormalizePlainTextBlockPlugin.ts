@@ -7,26 +7,40 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
 const PLAIN_TEXT_BLOCK_TYPES = [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3];
 
-const normalizePlainTextBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
-  const [node, path] = entry;
+const normalizePlainTextBlock =
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): NormalizerReturnValue => {
+    const [node, path] = entry;
 
-  if (isElement(node) && PLAIN_TEXT_BLOCK_TYPES.includes(node.type)) {
-    if (normalizeExcessProperties(editor, entry)) {
-      return true;
-    }
+    if (isElement(node) && PLAIN_TEXT_BLOCK_TYPES.includes(node.type)) {
+      {
+        const normalize = normalizeExcessProperties(editor, entry);
+        if (normalize) {
+          return normalize;
+        }
+      }
 
-    if (normalizePlainTextChildren(editor, getNodeChildren(editor, path))) {
-      return true;
+      {
+        const normalize = normalizePlainTextChildren(
+          editor,
+          getNodeChildren(editor, path)
+        );
+        if (normalize) {
+          return normalize;
+        }
+      }
     }
-  }
-  return false;
-};
+    return false;
+  };
 
 export const createNormalizePlainTextBlockPlugin =
   createNormalizerPluginFactory({

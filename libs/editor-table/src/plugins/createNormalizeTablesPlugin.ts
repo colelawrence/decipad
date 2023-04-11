@@ -1,4 +1,7 @@
-import { createNormalizerPluginFactory } from '@decipad/editor-plugins';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -18,8 +21,10 @@ const normalizeTableInput = (
 ) => {
   const [element, path] = entry;
   const table = tableFromLegacyTableInputElement(element);
-  deleteText(editor, { at: path });
-  insertNodes(editor, table, { at: path });
+  return () => {
+    deleteText(editor, { at: path });
+    insertNodes(editor, table, { at: path });
+  };
 };
 
 export const createNormalizeTablesPlugin = (computer: Computer) =>
@@ -27,7 +32,7 @@ export const createNormalizeTablesPlugin = (computer: Computer) =>
     name: 'NORMALIZE_TABLES_PLUGIN',
     plugin:
       (editor: MyEditor) =>
-      (entry: MyNodeEntry): boolean => {
+      (entry: MyNodeEntry): NormalizerReturnValue => {
         const [node, path] = entry;
         if (
           !isElement(node) ||
@@ -37,8 +42,7 @@ export const createNormalizeTablesPlugin = (computer: Computer) =>
           return false;
         }
         if (node.type === DEPRECATED_ELEMENT_TABLE_INPUT) {
-          normalizeTableInput(editor, [node, path]);
-          return true;
+          return normalizeTableInput(editor, [node, path]);
         }
         if (node.type === ELEMENT_TABLE) {
           return normalizeTable(editor, computer, [node, path]);

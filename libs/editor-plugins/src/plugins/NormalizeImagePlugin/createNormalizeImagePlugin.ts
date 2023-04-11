@@ -13,21 +13,24 @@ const normalizeImage = (editor: MyEditor) => (entry: MyNodeEntry) => {
   const [node, path] = entry;
 
   if (isElement(node) && node.type === ELEMENT_IMAGE) {
-    if (normalizeExcessProperties(editor, entry, ['url', 'width', 'caption'])) {
-      return true;
+    const normalize = normalizeExcessProperties(editor, entry, [
+      'url',
+      'width',
+      'caption',
+    ]);
+    if (normalize) {
+      return normalize;
     }
 
     if (!('url' in node) || getNodeString(node) === '') {
-      unwrapNodes(editor, { at: path });
-      return true;
+      return () => unwrapNodes(editor, { at: path });
     }
 
     for (const childEntry of getNodeChildren(editor, path)) {
       const [childNode, childPath] = childEntry;
 
       if (isElement(childNode)) {
-        unwrapNodes(editor, { at: childPath });
-        return true;
+        return () => unwrapNodes(editor, { at: childPath });
       }
     }
   }

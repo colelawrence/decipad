@@ -36,6 +36,7 @@
     "jsurl",
     "lambdawebsocket",
     "NEXTAUTH",
+    "Normaliser",
     "nrwl",
     "prefetch",
     "retryable",

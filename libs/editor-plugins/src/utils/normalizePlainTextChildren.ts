@@ -7,11 +7,12 @@ import {
   removeNodes,
 } from '@udecode/plate';
 import { normalizeExcessProperties } from './normalize';
+import { NormalizerReturnValue } from '../pluginFactories';
 
 export const normalizePlainTextChildren = (
   editor: MyEditor,
   children: Iterable<MyNodeEntry>
-) => {
+): NormalizerReturnValue => {
   for (const childEntry of children) {
     const [childNode, childPath] = childEntry;
 
@@ -19,17 +20,16 @@ export const normalizePlainTextChildren = (
       const str = getNodeString(childNode);
       if (str === '') {
         // unwrapNodes does nothing if the element is empty
-        removeNodes(editor, { at: childPath });
-        return true;
+        return () => removeNodes(editor, { at: childPath });
       }
 
-      unwrapNodes(editor, { at: childPath });
-      return true;
+      return () => unwrapNodes(editor, { at: childPath });
     }
 
     if (isText(childNode)) {
-      if (normalizeExcessProperties(editor, childEntry)) {
-        return true;
+      const normalize = normalizeExcessProperties(editor, childEntry);
+      if (normalize) {
+        return normalize;
       }
     }
   }

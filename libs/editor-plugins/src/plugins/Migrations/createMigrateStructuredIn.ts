@@ -14,14 +14,17 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { isElement, removeNodes, setNodes } from '@udecode/plate';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../pluginFactories';
 
 export const createMigrateStructuredInputs = createNormalizerPluginFactory({
   name: 'MIGRATE_STRUCTURED_IN_TO_CODELINE_V2',
   elementType: ELEMENT_STRUCTURED_IN,
   plugin:
     (editor: MyEditor) =>
-    (entry: MyNodeEntry): boolean => {
+    (entry: MyNodeEntry): NormalizerReturnValue => {
       const [node, path] = entry;
       if (isElement(node) && node.type === ELEMENT_STRUCTURED_IN) {
         if (
@@ -29,27 +32,28 @@ export const createMigrateStructuredInputs = createNormalizerPluginFactory({
           node.children[0].type !== ELEMENT_STRUCTURED_VARNAME ||
           node.children[1].type !== ELEMENT_STRUCTURED_IN_CHILD
         ) {
-          removeNodes(editor, {
-            at: path,
-          });
-          return true;
+          return () =>
+            removeNodes(editor, {
+              at: path,
+            });
         }
 
-        setNodes(
-          editor,
-          { type: ELEMENT_CODE_LINE_V2 },
-          {
-            at: path,
-          }
-        );
-        setNodes(
-          editor,
-          { type: ELEMENT_CODE_LINE_V2_CODE },
-          {
-            at: [...path, 1],
-          }
-        );
-        return true;
+        return () => {
+          setNodes(
+            editor,
+            { type: ELEMENT_CODE_LINE_V2 },
+            {
+              at: path,
+            }
+          );
+          setNodes(
+            editor,
+            { type: ELEMENT_CODE_LINE_V2_CODE },
+            {
+              at: [...path, 1],
+            }
+          );
+        };
       }
       return false;
     },

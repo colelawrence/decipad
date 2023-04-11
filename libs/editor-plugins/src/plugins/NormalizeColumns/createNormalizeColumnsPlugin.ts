@@ -14,36 +14,39 @@ import {
   removeNodes,
   unwrapNodes,
 } from '@udecode/plate';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../pluginFactories';
 
-const normalizeColumns = (editor: MyEditor) => (entry: MyNodeEntry) => {
-  const [node, path] = entry;
-  if (isElement(node) && node.type === ELEMENT_COLUMNS) {
-    for (const childEntry of getNodeChildren(editor, path)) {
-      const [childNode, childPath] = childEntry;
+const normalizeColumns =
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): NormalizerReturnValue => {
+    const [node, path] = entry;
+    if (isElement(node) && node.type === ELEMENT_COLUMNS) {
+      for (const childEntry of getNodeChildren(editor, path)) {
+        const [childNode, childPath] = childEntry;
 
-      if (
-        isText(childNode) ||
-        (isElement(childNode) &&
-          childNode.type !== ELEMENT_VARIABLE_DEF &&
-          childNode.type !== ELEMENT_DISPLAY)
-      ) {
-        liftNodes(editor, { at: childPath });
-        return true;
+        if (
+          isText(childNode) ||
+          (isElement(childNode) &&
+            childNode.type !== ELEMENT_VARIABLE_DEF &&
+            childNode.type !== ELEMENT_DISPLAY)
+        ) {
+          return () => liftNodes(editor, { at: childPath });
+        }
+      }
+
+      if (node.children.length === 0) {
+        return () => removeNodes(editor, { at: path });
+      }
+      if (node.children.length === 1) {
+        return () => unwrapNodes(editor, { at: path });
       }
     }
 
-    if (node.children.length === 0) {
-      removeNodes(editor, { at: path });
-    }
-    if (node.children.length === 1) {
-      unwrapNodes(editor, { at: path });
-    }
-    return true;
-  }
-
-  return false;
-};
+    return false;
+  };
 
 export const createNormalizeColumnsPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_COLUMNS_PLUGIN',

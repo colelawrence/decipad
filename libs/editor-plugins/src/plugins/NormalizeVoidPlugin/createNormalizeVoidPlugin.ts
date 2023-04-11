@@ -12,7 +12,10 @@ import {
 } from '@decipad/editor-types';
 import { deleteText, getNodeChildren, isElement, isText } from '@udecode/plate';
 import { Path } from 'slate';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../pluginFactories';
 import {
   normalizeExcessProperties,
   normalizeMissingProperties,
@@ -83,15 +86,17 @@ const removeExcessProperties = (
   editor: MyEditor,
   entry: MyNodeEntry,
   node: MyElement
-): boolean => {
-  return normalizeExcessProperties(
+): NormalizerReturnValue =>
+  normalizeExcessProperties(
     editor,
     entry,
     VOID_TYPE_PROPERTIES[node.type as keyof typeof VOID_TYPE_PROPERTIES]
   );
-};
 
-const removeBadChildren = (editor: MyEditor, path: Path): boolean => {
+const removeBadChildren = (
+  editor: MyEditor,
+  path: Path
+): NormalizerReturnValue => {
   for (const childEntry of getNodeChildren(editor, path)) {
     const [childNode, childPath] = childEntry;
 
@@ -99,8 +104,7 @@ const removeBadChildren = (editor: MyEditor, path: Path): boolean => {
       isElement(childNode) ||
       (isText(childNode) && (childNode as MyText).text !== '')
     ) {
-      deleteText(editor, { at: childPath });
-      return true;
+      return () => deleteText(editor, { at: childPath });
     }
   }
   return false;
@@ -110,8 +114,8 @@ const addMissingProperties = (
   editor: MyEditor,
   entry: MyNodeEntry,
   node: MyElement
-): boolean => {
-  return normalizeMissingProperties(
+) =>
+  normalizeMissingProperties(
     editor,
     entry,
     VOID_TYPE_PROPERTIES[node.type as keyof typeof VOID_TYPE_PROPERTIES],
@@ -119,24 +123,21 @@ const addMissingProperties = (
       node.type as keyof typeof MISSING_ATTRIBUTE_GENERATOR
     ]
   );
-};
 
 const normalizeVoid =
   (editor: MyEditor) =>
-  (entry: MyNodeEntry): boolean => {
+  (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
 
     if (
       isElement(node) &&
       Object.keys(VOID_TYPE_PROPERTIES).includes(node.type)
     ) {
-      if (
+      return (
         removeExcessProperties(editor, entry, node as MyElement) ||
         removeBadChildren(editor, path) ||
         addMissingProperties(editor, entry, node as MyElement)
-      ) {
-        return true;
-      }
+      );
     }
 
     return false;

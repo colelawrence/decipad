@@ -6,34 +6,38 @@ import {
   isElement,
   unwrapNodes,
 } from '@udecode/plate';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
-const normalizeLink = (editor: MyEditor) => (entry: MyNodeEntry) => {
-  const [node, path] = entry;
+const normalizeLink =
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): NormalizerReturnValue => {
+    const [node, path] = entry;
 
-  if (isElement(node) && node.type === ELEMENT_LINK) {
-    if (normalizeExcessProperties(editor, entry, ['url'])) {
-      return true;
-    }
+    if (isElement(node) && node.type === ELEMENT_LINK) {
+      const normalize = normalizeExcessProperties(editor, entry, ['url']);
+      if (normalize) {
+        return normalize;
+      }
 
-    if (!('url' in node) || getNodeString(node) === '') {
-      unwrapNodes(editor, { at: path });
-      return true;
-    }
+      if (!('url' in node) || getNodeString(node) === '') {
+        return () => unwrapNodes(editor, { at: path });
+      }
 
-    for (const childEntry of getNodeChildren(editor, path)) {
-      const [childNode, childPath] = childEntry;
+      for (const childEntry of getNodeChildren(editor, path)) {
+        const [childNode, childPath] = childEntry;
 
-      if (isElement(childNode)) {
-        unwrapNodes(editor, { at: childPath });
-        return true;
+        if (isElement(childNode)) {
+          return () => unwrapNodes(editor, { at: childPath });
+        }
       }
     }
-  }
 
-  return false;
-};
+    return false;
+  };
 
 export const createNormalizeLinkPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_LINK_PLUGIN',

@@ -36,55 +36,53 @@ import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { Computer } from '@decipad/computer';
+import { NormalizerReturnValue } from '@decipad/editor-plugins';
 import { createTableCaption } from './createTableCaption';
 import { convertLegacyType } from './convertLegacyType';
 
 const normalizeTableStructure = (
   editor: MyEditor,
   [node, path]: TNodeEntry<TableElement>
-): boolean => {
+): NormalizerReturnValue => {
   const [caption, header, ...body] = node.children;
 
   // caption
   if (!caption) {
-    insertNodes<TableCaptionElement>(
-      editor,
-      createTableCaption({ id: node.id }),
-      { at: [...path, 0] }
-    );
-    return true;
+    return () =>
+      insertNodes<TableCaptionElement>(
+        editor,
+        createTableCaption({ id: node.id }),
+        { at: [...path, 0] }
+      );
   }
   if (caption.type !== ELEMENT_TABLE_CAPTION) {
-    deleteText(editor, { at: [...path, 0] });
-    return true;
+    return () => deleteText(editor, { at: [...path, 0] });
   }
-
   // header
   if (!header) {
-    insertNodes(
-      editor,
-      {
-        id: nanoid(),
-        type: ELEMENT_TR,
-        children: [
-          {
-            id: nanoid(),
-            type: ELEMENT_TH,
-            cellType: {
-              kind: 'string',
+    return () =>
+      insertNodes(
+        editor,
+        {
+          id: nanoid(),
+          type: ELEMENT_TR,
+          children: [
+            {
+              id: nanoid(),
+              type: ELEMENT_TH,
+              cellType: {
+                kind: 'string',
+              },
+              children: [{ text: '' }],
             },
-            children: [{ text: '' }],
-          },
-        ],
-      } as unknown as TableRowElement,
-      { at: [...path, 1] }
-    );
-    return true;
+          ],
+        } as unknown as TableRowElement,
+        { at: [...path, 1] }
+      );
   }
 
   if (header.type !== ELEMENT_TR) {
-    deleteText(editor, { at: [...path, 1] });
-    return true;
+    return () => deleteText(editor, { at: [...path, 1] });
   }
 
   // body
@@ -92,7 +90,8 @@ const normalizeTableStructure = (
   for (const row of body) {
     rowIndex += 1;
     if (row.type !== ELEMENT_TR) {
-      deleteText(editor, { at: [...path, 2 + rowIndex] });
+      // eslint-disable-next-line no-loop-func
+      return () => deleteText(editor, { at: [...path, 2 + rowIndex] });
     }
   }
 
@@ -103,7 +102,7 @@ const normalizeTableCaption = (
   editor: MyEditor,
   entry: TNodeEntry<TableElement>,
   computer: Computer
-): boolean => {
+): NormalizerReturnValue => {
   const [caption] = getChildren(entry);
   for (const [captionChildIndex, captionChild] of enumerate(
     getChildren(caption)
@@ -114,32 +113,31 @@ const normalizeTableCaption = (
       isElement(captionChildNode) &&
       !isElementOfType(captionChildNode, ELEMENT_TABLE_VARIABLE_NAME)
     ) {
-      insertNodes(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_TABLE_VARIABLE_NAME,
-          children: [{ text: '' }],
-        },
-        { at: [...caption[1], 0] }
-      );
-      return true;
+      return () =>
+        insertNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_TABLE_VARIABLE_NAME,
+            children: [{ text: '' }],
+          },
+          { at: [...caption[1], 0] }
+        );
     }
-
     if (isText(captionChildNode)) {
-      wrapNodes<TableVariableNameElement | TableColumnFormulaElement>(
-        editor,
-        {
-          id: nanoid(),
-          type:
-            captionChildIndex === 0
-              ? ELEMENT_TABLE_VARIABLE_NAME
-              : ELEMENT_TABLE_COLUMN_FORMULA,
-          children: [captionChildNode],
-        } as TableVariableNameElement,
-        { at: captionChildPath }
-      );
-      return true;
+      return () =>
+        wrapNodes<TableVariableNameElement | TableColumnFormulaElement>(
+          editor,
+          {
+            id: nanoid(),
+            type:
+              captionChildIndex === 0
+                ? ELEMENT_TABLE_VARIABLE_NAME
+                : ELEMENT_TABLE_COLUMN_FORMULA,
+            children: [captionChildNode],
+          } as TableVariableNameElement,
+          { at: captionChildPath }
+        );
     }
   }
 
@@ -155,60 +153,49 @@ const normalizeTableHeaderCell = (
   path: Path,
   th: TableHeaderElement,
   computer: Computer
-): boolean => {
+): NormalizerReturnValue => {
   if (isText(th)) {
-    wrapNodes<TableHeaderElement>(
-      editor,
-      {
-        id: th.id,
-        type: ELEMENT_TH,
-        cellType: {
-          kind: 'string',
+    return () =>
+      wrapNodes<TableHeaderElement>(
+        editor,
+        {
+          id: th.id,
+          type: ELEMENT_TH,
+          cellType: {
+            kind: 'string',
+          },
+          children: [th],
         },
-        children: [th],
-      },
-      {
-        at: path,
-      }
-    );
-    return true;
+        {
+          at: path,
+        }
+      );
   }
 
   if (isElement(th) && th.type !== ELEMENT_TH) {
     const replaceWith: Partial<TableHeaderElement> = {
       type: ELEMENT_TH,
     };
-    setNodes(editor, replaceWith, {
-      at: path,
-    });
-    return true;
+    return () =>
+      setNodes(editor, replaceWith, {
+        at: path,
+      });
   }
 
   if (!th.cellType) {
     const insert: Partial<TableHeaderElement> = {
       cellType: { kind: 'string' },
     };
-    setNodes(editor, insert, {
-      at: path,
-    });
-    return true;
-  }
-
-  if (typeof th.cellType === 'string') {
-    const insert: Partial<TableHeaderElement> = {
-      cellType: { kind: th.cellType },
-    };
-    setNodes(editor, insert, {
-      at: path,
-    });
-    return true;
+    return () =>
+      setNodes(editor, insert, {
+        at: path,
+      });
   }
 
   if (th.cellType.kind === 'number') {
     const newCellType = convertLegacyType(th.cellType);
     if (newCellType) {
-      setNodes(editor, { cellType: newCellType }, { at: path });
-      return true;
+      return () => setNodes(editor, { cellType: newCellType }, { at: path });
     }
   }
 
@@ -219,8 +206,8 @@ const normalizeTableHeaderCell = (
       break;
     }
     if (!isText(el)) {
-      unwrapNodes(editor, { at: [...path, childIndex] });
-      return true;
+      // eslint-disable-next-line no-loop-func
+      return () => unwrapNodes(editor, { at: [...path, childIndex] });
     }
   }
 
@@ -234,26 +221,26 @@ const normalizeTableHeaderRow = (
   editor: MyEditor,
   [node, path]: TNodeEntry<TableElement>,
   computer: Computer
-): boolean => {
+): NormalizerReturnValue => {
   const headerRow = node.children[1];
   const headerRowPath = [...path, 1];
   if (headerRow.type !== ELEMENT_TR) {
-    setNodes(
-      editor,
-      { type: ELEMENT_TR },
-      {
-        at: headerRowPath,
-      }
-    );
-    return true;
+    return () =>
+      setNodes(
+        editor,
+        { type: ELEMENT_TR },
+        {
+          at: headerRowPath,
+        }
+      );
   }
-
   let thIndex = -1;
   for (const th of headerRow.children) {
     thIndex += 1;
     const thPath = [...headerRowPath, thIndex];
-    if (normalizeTableHeaderCell(editor, thPath, th, computer)) {
-      return true;
+    const normalize = normalizeTableHeaderCell(editor, thPath, th, computer);
+    if (normalize) {
+      return normalize;
     }
   }
 
@@ -263,39 +250,39 @@ const normalizeTableHeaderRow = (
 const normalizeTableDataCell = (
   editor: MyEditor,
   [node, path]: TNodeEntry<TableCellElement>
-): boolean => {
+): NormalizerReturnValue => {
   if (isText(node)) {
-    wrapNodes(
-      editor,
-      {
-        id: node.id,
-        type: ELEMENT_TD,
-        children: [node],
-      },
-      {
-        at: path,
-      }
-    );
-    return true;
+    return () =>
+      wrapNodes(
+        editor,
+        {
+          id: node.id,
+          type: ELEMENT_TD,
+          children: [node],
+        },
+        {
+          at: path,
+        }
+      );
   }
 
   if (node.type !== ELEMENT_TD) {
-    setNodes(
-      editor,
-      { type: ELEMENT_TD },
-      {
-        at: path,
-      }
-    );
-    return true;
+    return () =>
+      setNodes(
+        editor,
+        { type: ELEMENT_TD },
+        {
+          at: path,
+        }
+      );
   }
 
   let childIndex = -1;
   for (const el of node.children || []) {
     childIndex += 1;
     if (!isText(el)) {
-      unwrapNodes(editor, { at: [...path, childIndex] });
-      return true;
+      // eslint-disable-next-line no-loop-func
+      return () => unwrapNodes(editor, { at: [...path, childIndex] });
     }
   }
 
@@ -305,13 +292,14 @@ const normalizeTableDataCell = (
 const normalizeTableDataRow = (
   editor: MyEditor,
   [, path]: TNodeEntry<TableRowElement>
-): boolean => {
+): NormalizerReturnValue => {
   for (const [cell, cellPath] of getNodeChildren<ChildOf<TableRowElement>>(
     editor,
     path
   )) {
-    if (normalizeTableDataCell(editor, [cell, cellPath])) {
-      return true;
+    const normalize = normalizeTableDataCell(editor, [cell, cellPath]);
+    if (normalize) {
+      return normalize;
     }
   }
   return false;
@@ -320,22 +308,23 @@ const normalizeTableDataRow = (
 const normalizeTableDataRows = (
   editor: MyEditor,
   [, path]: TNodeEntry<TableElement>
-): boolean => {
+): NormalizerReturnValue => {
   for (const [row, rowPath] of Array.from(
     getNodeChildren<ChildOf<TableElement, 2>>(editor, path)
   ).slice(2)) {
     if (row.type !== ELEMENT_TR) {
-      setNodes(
-        editor,
-        { type: ELEMENT_TR },
-        {
-          at: rowPath,
-        }
-      );
-      return true;
+      return () =>
+        setNodes(
+          editor,
+          { type: ELEMENT_TR },
+          {
+            at: rowPath,
+          }
+        );
     }
-    if (normalizeTableDataRow(editor, [row, rowPath])) {
-      return true;
+    const normalize = normalizeTableDataRow(editor, [row, rowPath]);
+    if (normalize) {
+      return normalize;
     }
   }
   return false;
@@ -344,7 +333,7 @@ const normalizeTableDataRows = (
 const normalizeTableRowColumnCount = (
   editor: MyEditor,
   [, path]: TNodeEntry<TableElement>
-): boolean => {
+): NormalizerReturnValue => {
   let rowIndex = -1;
   let columnCount = -1;
   for (const [row, rowPath] of Array.from(getNodeChildren(editor, path)).slice(
@@ -360,21 +349,20 @@ const normalizeTableRowColumnCount = (
     } else if (columnCount >= 0) {
       if (rowChildCount > columnCount) {
         const deleteAt = [...rowPath, columnCount];
-        deleteText(editor, { at: deleteAt });
-        return true;
+        return () => deleteText(editor, { at: deleteAt });
       }
       if (rowChildCount < columnCount) {
         const insertAt = [...rowPath, rowChildCount];
-        insertNodes(
-          editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_TD,
-            children: [{ text: '' }],
-          },
-          { at: insertAt }
-        );
-        return true;
+        return () =>
+          insertNodes(
+            editor,
+            {
+              id: nanoid(),
+              type: ELEMENT_TD,
+              children: [{ text: '' }],
+            },
+            { at: insertAt }
+          );
       }
     }
   }
@@ -384,27 +372,27 @@ const normalizeTableRowColumnCount = (
 const normalizeTableRowCount = (
   editor: MyEditor,
   [, path]: TNodeEntry<TableElement>
-): boolean => {
+): NormalizerReturnValue => {
   // at least two rows of data
   for (const rowIndex of [2]) {
     const firstDataRowPath = [...path, rowIndex];
     if (!hasNode(editor, firstDataRowPath)) {
-      insertNodes(
-        editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_TR,
-          children: [
-            {
-              id: nanoid(),
-              type: ELEMENT_TD,
-              children: [{ text: '' }],
-            },
-          ],
-        },
-        { at: firstDataRowPath }
-      );
-      return true;
+      return () =>
+        insertNodes(
+          editor,
+          {
+            id: nanoid(),
+            type: ELEMENT_TR,
+            children: [
+              {
+                id: nanoid(),
+                type: ELEMENT_TD,
+                children: [{ text: '' }],
+              },
+            ],
+          },
+          { at: firstDataRowPath }
+        );
     }
   }
   return false;
@@ -414,7 +402,7 @@ export const normalizeTable = (
   editor: MyEditor,
   computer: Computer,
   entry: TNodeEntry<TableElement>
-): boolean => {
+): NormalizerReturnValue => {
   return (
     normalizeTableStructure(editor, entry) ||
     normalizeTableCaption(editor, entry, computer) ||

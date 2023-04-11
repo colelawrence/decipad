@@ -15,64 +15,68 @@ import {
   unwrapNodes,
   wrapNodes,
 } from '@udecode/plate';
-import { createNormalizerPluginFactory } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../pluginFactories';
 import { codeBlockToCode } from './codeBlockToCode';
 import { reconcileStatements } from './reconcileStatements';
 import { splitCodeIntoStatements } from './splitCodeIntoStatements';
 
-const normalizeCodeBlock = (editor: MyEditor) => (entry: MyNodeEntry) => {
-  const [node, path] = entry;
+const normalizeCodeBlock =
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): NormalizerReturnValue => {
+    const [node, path] = entry;
 
-  // Code block legacy component
-  if (isElement(node) && node.type === DEPRECATED_ELEMENT_CODE_BLOCK) {
-    for (const blockChild of getNodeChildren<
-      ChildOf<DeprecatedCodeBlockElement>
-    >(editor, path)) {
-      const [blockChildNode, blockChildPath] = blockChild;
+    // Code block legacy component
+    if (isElement(node) && node.type === DEPRECATED_ELEMENT_CODE_BLOCK) {
+      for (const blockChild of getNodeChildren<
+        ChildOf<DeprecatedCodeBlockElement>
+      >(editor, path)) {
+        const [blockChildNode, blockChildPath] = blockChild;
 
-      // Element children must be code lines, else unwrap their text
-      if (
-        isElement(blockChildNode) &&
-        blockChildNode.type !== ELEMENT_CODE_LINE
-      ) {
-        unwrapNodes(editor, { at: blockChildPath });
-        return true;
+        // Element children must be code lines, else unwrap their text
+        if (
+          isElement(blockChildNode) &&
+          blockChildNode.type !== ELEMENT_CODE_LINE
+        ) {
+          return () => unwrapNodes(editor, { at: blockChildPath });
+        }
+
+        // Text must be wrapped in a code line
+        if (isText(blockChildNode)) {
+          return () =>
+            wrapNodes(
+              editor,
+              {
+                type: ELEMENT_CODE_LINE,
+                children: [],
+              } as unknown as CodeLineElement,
+              {
+                at: blockChildPath,
+              }
+            );
+        }
       }
 
-      // Text must be wrapped in a code line
-      if (isText(blockChildNode)) {
-        wrapNodes(
-          editor,
-          {
-            type: ELEMENT_CODE_LINE,
-            children: [],
-          } as unknown as CodeLineElement,
-          {
-            at: blockChildPath,
-          }
-        );
-        return true;
+      // At this point the normalization has ensured a matching structure
+      const codeBlockNode = node as DeprecatedCodeBlockElement;
+
+      // Split and merge lines to match statements
+      const blockCode = codeBlockToCode(codeBlockNode);
+      const statements = splitCodeIntoStatements(blockCode);
+      if (statements.length) {
+        const normalize = reconcileStatements(editor, statements, path);
+        if (normalize) {
+          return normalize;
+        }
       }
+
+      // We don't use code blocks anymore so we unwrap their code lines.
+      return () => unwrapNodes(editor, { at: path });
     }
-
-    // At this point the normalization has ensured a matching structure
-    const codeBlockNode = node as DeprecatedCodeBlockElement;
-
-    // Split and merge lines to match statements
-    const blockCode = codeBlockToCode(codeBlockNode);
-    const statements = splitCodeIntoStatements(blockCode);
-    if (statements.length) {
-      if (reconcileStatements(editor, statements, path)) {
-        return true;
-      }
-    }
-
-    // We don't use code blocks anymore so we unwrap their code lines.
-    unwrapNodes(editor, { at: path });
-    return true;
-  }
-  return false;
-};
+    return false;
+  };
 
 export const createNormalizeCodeBlockPlugin = createNormalizerPluginFactory({
   name: 'NORMALIZE_CODE_BLOCK_PLUGIN',

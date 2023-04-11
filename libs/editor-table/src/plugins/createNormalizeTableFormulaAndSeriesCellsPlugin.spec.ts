@@ -137,7 +137,7 @@ it('ensures that a formula column is not the first column', () => {
           type: ELEMENT_TR,
           children: [
             { type: ELEMENT_TD },
-            { id: 'formula-td', type: ELEMENT_TD },
+            { id: 'formula-td', type: ELEMENT_TD, children: [{ text: '' }] },
           ],
         },
       ],

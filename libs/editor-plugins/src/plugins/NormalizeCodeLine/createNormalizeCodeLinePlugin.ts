@@ -17,14 +17,17 @@ import {
   unwrapNodes,
   withoutNormalizing,
 } from '@udecode/plate';
-import { createNormalizerPlugin } from '../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPlugin,
+} from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
 export const normalizeCodeChildren = (
   _computer: Computer,
   editor: MyEditor,
   [_node, path]: MyNodeEntry
-) => {
+): NormalizerReturnValue => {
   const children = Array.from(getNodeChildren(editor, path));
   for (const lineChild of children) {
     const [lineChildNode, lineChildPath] = lineChild;
@@ -45,73 +48,72 @@ export const normalizeCodeChildren = (
             isDefined(charAfter) &&
             !['\n', '}'].includes(charAfter)
           ) {
-            insertText(editor, '\n  ', {
-              at: {
-                offset: charIndex + 1,
-                path: lineChildPath,
-              },
-            });
-            return false;
+            return () =>
+              insertText(editor, '\n  ', {
+                at: {
+                  offset: charIndex + 1,
+                  path: lineChildPath,
+                },
+              });
           }
         }
 
         if (char === '}') {
           // there is no char before
           if (!charIndex) {
-            insertText(editor, '\n', {
-              at: {
-                offset: charIndex,
-                path: lineChildPath,
-              },
-            });
-            return false;
+            return () =>
+              insertText(editor, '\n', {
+                at: {
+                  offset: charIndex,
+                  path: lineChildPath,
+                },
+              });
           }
 
           const charBefore = text[charIndex - 1];
 
           if (isDefined(charBefore) && !['\n', '{'].includes(charBefore)) {
-            insertText(editor, '\n', {
-              at: {
-                offset: charIndex,
-                path: lineChildPath,
-              },
-            });
-            return false;
+            return () =>
+              insertText(editor, '\n', {
+                at: {
+                  offset: charIndex,
+                  path: lineChildPath,
+                },
+              });
           }
         }
 
         if (char === '\t') {
-          withoutNormalizing(editor, () => {
-            deleteText(editor, {
-              at: {
-                offset: charIndex,
-                path: lineChildPath,
-              },
+          return () =>
+            withoutNormalizing(editor, () => {
+              deleteText(editor, {
+                at: {
+                  offset: charIndex,
+                  path: lineChildPath,
+                },
+              });
+              insertText(editor, '  ', {
+                at: {
+                  offset: charIndex,
+                  path: lineChildPath,
+                },
+              });
             });
-            insertText(editor, '  ', {
-              at: {
-                offset: charIndex,
-                path: lineChildPath,
-              },
-            });
-          });
-          return true;
         }
       }
     }
 
     // Children must be text or SmartRef
     if (isElement(lineChildNode) && lineChildNode.type !== ELEMENT_SMART_REF) {
-      unwrapNodes(editor, { at: lineChildPath });
-      return true;
+      return () => unwrapNodes(editor, { at: lineChildPath });
     }
 
     // Text must be plain
-    if (
-      !isElement(lineChildNode) &&
-      normalizeExcessProperties(editor, lineChild)
-    ) {
-      return true;
+    if (!isElement(lineChildNode)) {
+      const normalize = normalizeExcessProperties(editor, lineChild);
+      if (normalize) {
+        return normalize;
+      }
     }
   }
 
@@ -119,14 +121,12 @@ export const normalizeCodeChildren = (
 };
 
 const normalizeCodeLine =
-  (computer: Computer) => (editor: MyEditor) => (entry: MyNodeEntry) => {
+  (computer: Computer) =>
+  (editor: MyEditor) =>
+  (entry: MyNodeEntry): NormalizerReturnValue => {
     assertElementType(entry[0], ELEMENT_CODE_LINE);
 
-    if (normalizeCodeChildren(computer, editor, entry)) {
-      return true;
-    }
-
-    return false;
+    return normalizeCodeChildren(computer, editor, entry);
   };
 
 export const createNormalizeCodeLinePlugin = (computer: Computer) =>

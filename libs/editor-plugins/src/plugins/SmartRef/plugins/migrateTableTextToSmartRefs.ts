@@ -25,14 +25,17 @@ import {
   TNodeEntry,
 } from '@udecode/plate';
 import { BaseEditor, Range, Transforms } from 'slate';
-import { createNormalizerPluginFactory } from '../../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../../pluginFactories';
 
 export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory({
   name: 'MIGRATE_TABLE_TEXT_TO_SMART_REFS',
   elementType: ELEMENT_TABLE,
   plugin:
     (editor) =>
-    ([tableNode, tablePath]) => {
+    ([tableNode, tablePath]): NormalizerReturnValue => {
       assertElementType(tableNode, ELEMENT_TABLE);
 
       if ((tableNode.version ?? 0) < 2) {
@@ -67,13 +70,15 @@ export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory({
             (f) => f[0].columnId === header[0].id
           );
           if (formulaForThisColumn) {
-            const didReplace = replaceSomeToSmartRefs(
+            const willReplace = replaceSomeToSmartRefs(
               editor,
               formulaForThisColumn,
               availableSmartRefs
             );
 
-            if (didReplace) return true;
+            if (willReplace) {
+              return willReplace;
+            }
           }
 
           // {col} and {table.col} are available from now on
@@ -84,14 +89,13 @@ export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory({
           ]);
         }
 
-        Transforms.setNodes<TableElement>(
-          editor as BaseEditor,
-          { version: 2 },
-          { at: tablePath }
-        );
-        return true;
+        return () =>
+          Transforms.setNodes<TableElement>(
+            editor as BaseEditor,
+            { version: 2 },
+            { at: tablePath }
+          );
       }
-
       return false;
     },
 });
@@ -100,7 +104,7 @@ function replaceSomeToSmartRefs(
   editor: MyEditor,
   entry: TNodeEntry<TableColumnFormulaElement>,
   seen: Map<string, [string, string | null]>
-) {
+): NormalizerReturnValue {
   for (const [range, key] of locateTextRefs(entry)) {
     const [blockId, columnId] = seen.get(key) ?? [null, null];
     if (blockId == null) {
@@ -115,9 +119,8 @@ function replaceSomeToSmartRefs(
       children: [{ text: '' }],
     };
 
-    Transforms.insertNodes(editor as BaseEditor, ref, { at: range });
-
-    return true;
+    return () =>
+      Transforms.insertNodes(editor as BaseEditor, ref, { at: range });
   }
 
   return false;

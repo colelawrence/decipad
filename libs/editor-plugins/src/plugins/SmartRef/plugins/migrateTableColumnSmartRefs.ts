@@ -9,14 +9,17 @@ import {
 import { assertElementType, isElementOfType } from '@decipad/editor-utils';
 import { findNode } from '@udecode/plate';
 import { BaseEditor, Editor, Transforms } from 'slate';
-import { createNormalizerPluginFactory } from '../../../pluginFactories';
+import {
+  NormalizerReturnValue,
+  createNormalizerPluginFactory,
+} from '../../../pluginFactories';
 
 export const migrateTableColumnSmartRefs = createNormalizerPluginFactory({
   name: 'MIGRATE_TABLE_COLUMN_SMART_REFS',
   elementType: ELEMENT_SMART_REF,
   plugin:
     (editor) =>
-    ([node, path]) => {
+    ([node, path]): NormalizerReturnValue => {
       assertElementType(node, ELEMENT_SMART_REF);
 
       if (node.columnId === undefined) {
@@ -30,13 +33,12 @@ export const migrateTableColumnSmartRefs = createNormalizerPluginFactory({
 
         if (shouldUpdate) {
           const [blockId, columnId] = blockAndColId;
-          Transforms.setNodes<SmartRefElement>(
-            editor as BaseEditor,
-            { blockId, columnId },
-            { at: path }
-          );
-
-          return true;
+          return () =>
+            Transforms.setNodes<SmartRefElement>(
+              editor as BaseEditor,
+              { blockId, columnId },
+              { at: path }
+            );
         }
       }
 
