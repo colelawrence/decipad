@@ -538,6 +538,17 @@ export default function Templates() {
                 description="It's important to understand how much of your monthly payment is going to the principal (ie. to repay your owed money) and how much is going to fees and interest."
                 avatar={avatarSimao}
               />
+              <Card
+                author="Peyton Swift"
+                cardColor="--card-green"
+                icon={IconRocket}
+                title="Saving for a big purchase"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Saving-for-a-big-purchase%3ACHaAlJTk9l8BLiE38HmDx"
+                description="Input your expenses and income to find how long it will take you to save for a big purchase."
+                avatar={avatarPeyton}
+                template
+              />
             </GridContainer>
 
             <br></br>
