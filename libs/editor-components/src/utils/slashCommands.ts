@@ -20,6 +20,7 @@ import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
 import { ComponentProps } from 'react';
 import { BaseEditor, Location, Path, Transforms } from 'slate';
+import { useConnectionStore } from '../Connections';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {
@@ -56,6 +57,8 @@ export const execute = ({
   deleteFragment,
   select = true,
 }: ExecuteProps): void => {
+  const { changeOpen } = useConnectionStore.getState();
+
   switch (command) {
     case 'structured-input':
       insertStructuredCodeLineBelow({
@@ -99,6 +102,9 @@ export const execute = ({
       break;
     case 'data-view':
       insertDataViewBelow(editor, path);
+      break;
+    case 'open-integration':
+      changeOpen(true);
       break;
     case 'live-query':
       insertLiveQueryBelow(editor, path, getAvailableIdentifier);

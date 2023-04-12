@@ -1,0 +1,10 @@
+export { default as GoogleSheet } from './google_sheet.png';
+export { default as MariaDb } from './maria_db.png';
+export { default as MongoDb } from './mongo_db.png';
+export { default as MsSql } from './ms_sql.png';
+export { default as MySql } from './my_sql.png';
+export { default as Oracle } from './oracle.png';
+export { default as OtherSql } from './other_sql.png';
+export { default as PostgreSql } from './postgresql.png';
+export { default as Redshift } from './redshift.png';
+export { default as WebApi } from './web_api.png';

@@ -2,6 +2,7 @@ import {
   TeleportEditor,
   NumberCatalog,
   BlockLengthSynchronizationProvider,
+  AddConnection,
 } from '@decipad/editor-components';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import {
@@ -130,6 +131,7 @@ export const Editor = (props: EditorProps) => {
                     }}
                   >
                     <InsidePlate {...props} containerRef={containerRef} />
+                    <AddConnection />
                     <NotebookState
                       isSavedRemotely={isSavedRemotely}
                       isNewNotebook={!!isNewNotebook}

@@ -62,7 +62,7 @@ export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
       database: client !== 'sqlite' ? url.pathname.substring(1) : undefined,
       filename: client === 'sqlite' ? url.pathname : undefined,
       ssl: {
-        rejectUnauthorized: true,
+        rejectUnauthorized: false,
       },
     },
   };

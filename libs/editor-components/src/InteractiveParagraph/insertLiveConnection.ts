@@ -36,11 +36,14 @@ export interface InsertLiveConnectionProps {
   identifyIslands?: boolean;
 }
 
+/**
+ * returns the ID of the live connection block or undefined if error.
+ */
 const justInsertLiveConnection = async ({
   editor,
   source,
   url,
-}: InsertLiveConnectionProps) => {
+}: InsertLiveConnectionProps): Promise<string | undefined> => {
   if (source === 'decipad' && url) {
     const { docId } = getURLComponents(url);
     const { hasAccess, exists, isPublic } = await getNotebook(docId);
@@ -77,6 +80,7 @@ const justInsertLiveConnection = async ({
   insertNodes(editor, liveConnEl, {
     at: requirePathBelowBlock(editor, selection.anchor.path),
   });
+  return liveConnEl.id;
 };
 
 const identifyIslandsAndThenInsertLiveConnection = async ({
@@ -146,14 +150,18 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
   ).then(noop);
 };
 
+/**
+ * Returns the ID of the live connection or undefined.
+ */
 export const insertLiveConnection = async (
   props: InsertLiveConnectionProps
-): Promise<void> => {
+): Promise<string | undefined> => {
   const { editor, url, identifyIslands } = props;
   const { selection } = editor;
   if (isCollapsed(selection) && selection?.anchor && url) {
     if (identifyIslands) {
-      return identifyIslandsAndThenInsertLiveConnection(props);
+      await identifyIslandsAndThenInsertLiveConnection(props);
+      return;
     }
     if (needsToCreateExternalData(props)) {
       const externalData = await insertExternalData({
@@ -169,4 +177,5 @@ export const insertLiveConnection = async (
     }
     return justInsertLiveConnection(props);
   }
+  return undefined;
 };

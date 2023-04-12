@@ -12,5 +12,6 @@ export * from './primitives';
 export * from './templates';
 export * from './utils';
 export * from './utils/useEventNoEffect';
+export * from './images';
 
 export const icons = allIcons;

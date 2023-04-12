@@ -11,6 +11,8 @@ export const mouseMovingOverTransitionDelay = '20ms';
 
 export const toastTransitionDelay = 7500;
 
+export const showTransition = 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)';
+
 export const easing = 'cubic-bezier(0.42, 0, 0.58, 1)';
 
 export const wiggle = keyframes`

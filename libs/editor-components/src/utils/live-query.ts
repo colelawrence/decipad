@@ -37,12 +37,16 @@ export const insertLiveQueryBelow = (
   editor: TEditor,
   path: Path,
   getAvailableIdentifier: Computer['getAvailableIdentifier'],
-  connectionBlockId?: string
+  connectionBlockId?: string,
+  query?: string
 ): void => {
   const varName = getAvailableIdentifier('LiveQuery', 1);
   const liveQuery = clone(
     getInitialLiveQueryElement(connectionBlockId, varName)
   );
+  if (query) {
+    liveQuery.children[1].children[0].text = query;
+  }
 
   const newPath = requirePathBelowBlock(editor, path);
 

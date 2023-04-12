@@ -82,6 +82,24 @@ const groups = () => [
     title: 'Insert Data',
     items: dataItems(),
   },
+  ...(isFlagEnabled('INTEGRATIONS_MODEL_DIALOG')
+    ? [
+        {
+          title: 'Integrations',
+          items: [
+            {
+              command: 'open-integration',
+              title: 'Add External Data',
+              description:
+                'Take your existing data and bring it over to Deci seamlessly',
+              icon: <DataView />,
+              enabled: true,
+              extraSearchTerms: [],
+            },
+          ],
+        },
+      ]
+    : []),
   {
     title: 'Visualizations',
     items: [

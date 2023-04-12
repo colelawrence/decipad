@@ -48,3 +48,5 @@ export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceOptions } from './WorkspaceOptions/WorkspaceOptions';
 export { WorkspaceSelector } from './WorkspaceSelector/WorkspaceSelector';
+
+export * from './DataIntegration';

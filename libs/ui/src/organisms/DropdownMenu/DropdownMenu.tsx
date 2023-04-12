@@ -69,7 +69,7 @@ const hotKeyStyle = css({
 export type DropdownMenuProps = EditItemsOptions & {
   readonly open: boolean;
   readonly setOpen: (a: boolean) => void;
-  readonly isReadOnly: boolean;
+  readonly isReadOnly?: boolean;
   /** The title will define a category for the items */
   readonly groups: Array<SelectItems>;
   readonly isEditingAllowed?: boolean;
@@ -83,7 +83,7 @@ export type DropdownMenuProps = EditItemsOptions & {
 export const DropdownMenu: FC<DropdownMenuProps> = ({
   open,
   setOpen,
-  isReadOnly,
+  isReadOnly = false,
   groups,
   addOption = noop,
   onExecute,

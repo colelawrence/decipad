@@ -20,6 +20,9 @@ export const availableFlags = [
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
   'LIVE_QUERY',
+
+  // The pop up modal that allows users to create connections and queries.
+  'INTEGRATIONS_MODEL_DIALOG',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

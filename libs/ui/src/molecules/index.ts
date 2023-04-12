@@ -14,6 +14,7 @@ export { DataViewColumnMenu } from './DataViewColumnMenu/DataViewColumnMenu';
 export { DataViewMenu } from './DataViewMenu/DataViewMenu';
 export { DataViewRow } from './DataViewRow/DataViewRow';
 export { DeleteWithDepsMenuItem } from './DeleteWithDepsMenuItem/DeleteWithDepsMenuItem';
+export { Dialog } from './Dialog/Dialog';
 export { DividerBlock } from './DividerBlock/DividerBlock';
 export { DropdownOption } from './DropdownOption/DropdownOption';
 export { EditableLiveDataCaption } from './EditableLiveDataCaption/EditableLiveDataCaption';

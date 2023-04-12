@@ -85,7 +85,7 @@ const importFromUnknownUrl = async (
 export const importFromUnknown = async (
   computer: Computer,
   source: URL | Response,
-  options: ImportOptions
+  options: ImportOptions = {}
 ): Promise<ImportResult[]> => {
   if (source instanceof URL) {
     const res = await importFromUnknownUrl(computer, source, options);
