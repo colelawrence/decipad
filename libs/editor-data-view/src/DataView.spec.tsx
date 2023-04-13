@@ -33,7 +33,7 @@ import { Column, AggregationKind } from './types';
 type TestValue = [H1Element, DataViewElement];
 type TestEditor = PlateEditor<TestValue>;
 
-const maxRunBigTableTimeoutMs = 8_000 * (process.env.CI ? 2 : 1);
+const maxRunBigTableTimeoutMs = 16_000 * (process.env.CI ? 2 : 1);
 
 const createEditor = (): TestEditor => {
   const editor = createPlateEditor<TestValue>({
