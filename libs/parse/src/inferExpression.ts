@@ -6,7 +6,7 @@ export const inferExpression = (
   text: string
 ): CoercibleType | undefined => {
   try {
-    const parsed = parseExpressionOrThrow(text);
+    const parsed = parseExpressionOrThrow(text, false, true);
     const type = computer.expressionType(parsed);
     if (parsed.type !== 'noop') {
       return { type, coerced: text };

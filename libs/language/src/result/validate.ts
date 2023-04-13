@@ -97,9 +97,10 @@ function validate(
 
 const reportError = (
   type: SerializedType,
-  value: Interpreter.OneResult | null | undefined
+  value: Interpreter.OneResult | null | undefined,
+  error?: Error
 ) => {
-  console.error('Failed to validate a Result:');
+  console.error('Failed to validate a Result:', error?.message);
   console.error({ type, value });
 };
 
@@ -114,7 +115,7 @@ export function validateResult(
   try {
     return validate(type, value);
   } catch (e) {
-    reportError(type, value);
+    reportError(type, value, e as Error);
     throw e;
   }
 }

@@ -16,6 +16,7 @@ import { getStatement } from '../utils';
 import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 import { getExprRef } from '../exprRefs';
+import { identifiedResultForTable } from './identifiedResultForTable';
 
 /*
  - Skip cached stuff
@@ -61,13 +62,7 @@ const computeStatement = async (
     id: blockId,
     get result() {
       if (statement.type === 'table') {
-        const type = getDefined(
-          realm.inferContext.stack.get(getDefined(variableName))
-        );
-        const value = realm.interpreterRealm.stack.get(
-          getDefined(variableName)
-        );
-        return serializeResult(type, value?.getData());
+        return identifiedResultForTable(realm, variableName, statement);
       }
       return serializeResult(valueType, value?.getData());
     },

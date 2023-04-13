@@ -4,6 +4,9 @@ const suppressMessagesBeginnings = [
   'Warning: validateDOMNesting',
   'Warning: Function components cannot be given refs',
   'Warning: A component is `contentEditable` and contains `children` managed by React',
+  'Warning: React does not recognize the',
+  'Warning: Unknown event handler property',
+  'Warning: Using UNSAFE_componentWillMount in strict mode is not recommended',
 ];
 
 const suppress = (s: string): boolean => {

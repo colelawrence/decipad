@@ -13,7 +13,8 @@ export { AST, Parser, n, SyntaxError };
 export function parseBlock(
   source: string,
   id?: string,
-  addCacheKeys = false
+  addCacheKeys = false,
+  suppressErrorLog = false
 ): Parser.ParsedBlock {
   if (source?.trim() === '') {
     return { solution: n('block', n('noop')) };
@@ -26,7 +27,10 @@ export function parseBlock(
     }
 
     try {
-      const solution = languageParse(source.trimEnd()) as AST.Block;
+      const solution = languageParse(
+        source.trimEnd(),
+        suppressErrorLog
+      ) as AST.Block;
 
       if (id) {
         solution.id = id;

@@ -90,7 +90,7 @@ export class Parser extends NearleyParser {
   }
 }
 
-function tryParse(source: string): ParserNode {
+function tryParse(source: string, suppressErrorLog = false): ParserNode {
   const parser = new Parser(grammar);
   parser.feed(source);
   parser.finish();
@@ -103,9 +103,11 @@ function tryParse(source: string): ParserNode {
     const printedSolutions = solutions.map((s) =>
       prettyPrintAST(s as AST.Node)
     );
-    console.error(
-      [`Source: ${source}`, ...printedSolutions].join('\n\n---\n\n')
-    );
+    if (!suppressErrorLog) {
+      console.error(
+        [`Source: ${source}`, ...printedSolutions].join('\n\n---\n\n')
+      );
+    }
 
     // If this ever happens, it's a problem with the grammar
     throw new SyntaxError({ message: 'panic: multiple solutions' });
@@ -119,17 +121,19 @@ function tryParse(source: string): ParserNode {
   return getDefined(solutions[0]);
 }
 
-export function parse(source: string): ParserNode {
+export function parse(source: string, suppressErrorLog = false): ParserNode {
   try {
-    return tryParse(source);
+    return tryParse(source, suppressErrorLog);
   } catch (err) {
     if (!(err instanceof SyntaxError)) {
       let syntaxError: ISyntaxError | undefined;
       try {
         syntaxError = JSON.parse((err as Error).message);
       } catch (err2) {
-        console.warn('Error trying to parse', (err as Error).message);
-        console.warn(err2);
+        if (!suppressErrorLog) {
+          console.warn('Error trying to parse', (err as Error).message);
+          console.warn(err2);
+        }
       }
       if (syntaxError) {
         throw SyntaxError.fromNearleySyntaxError({

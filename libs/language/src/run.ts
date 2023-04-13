@@ -8,9 +8,10 @@ import { OneResult, Result, validateResult } from './result';
 export const parseBlockOrThrow = (
   source: string,
   id?: string,
-  addCacheKeys = false
+  addCacheKeys = false,
+  suppressErrorLog = false
 ): AST.Block => {
-  const parsed = parseBlock(source, id, addCacheKeys);
+  const parsed = parseBlock(source, id, addCacheKeys, suppressErrorLog);
 
   if (parsed.error) {
     throw new TypeError(parsed.error.message);
@@ -32,9 +33,15 @@ export const parseStatementOrThrow = (source: string): AST.Statement => {
 
 export const parseExpressionOrThrow = (
   source: string,
-  addCacheKeys = false
+  addCacheKeys = false,
+  suppressErrorLog = false
 ): AST.Expression => {
-  const block = parseBlockOrThrow(source, undefined, addCacheKeys);
+  const block = parseBlockOrThrow(
+    source,
+    undefined,
+    addCacheKeys,
+    suppressErrorLog
+  );
   const item = block.args[0];
   if (!isExpression(item)) {
     throw new TypeError('Expected expression');

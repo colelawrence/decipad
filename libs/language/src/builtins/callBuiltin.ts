@@ -43,6 +43,7 @@ function callBuiltinAfterAutoconvert(
         if (err instanceof RuntimeError) {
           throw err;
         }
+        console.error('Error calling fromJS with ', argData, typesLowerDims);
         console.error(err);
         throw new TypeError(
           `Error calling builtin ${funcName}: ${(err as Error).message}`
@@ -121,7 +122,11 @@ export function callBuiltin(
       ? autoconvertResult(resultBeforeConvertingBack, returnType)
       : resultBeforeConvertingBack;
   } catch (err) {
-    if (process.env.NODE_ENV !== 'test' && typeof jest === 'undefined') {
+    if (
+      process.env.NODE_ENV !== 'test' &&
+      typeof jest === 'undefined' &&
+      !(err instanceof RuntimeError)
+    ) {
       console.error(`Error at stage ${stages[stage]}`, err);
     }
     throw new RuntimeError((err as Error)?.message || 'Unknown error');
