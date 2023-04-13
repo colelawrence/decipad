@@ -4,11 +4,11 @@ import { AST, Column, Context } from '..';
 import { getCardinality } from '../dimtools/common';
 import { inferExpression, logRetrievedName } from '../infer';
 import { evaluate, Realm } from '../interpreter';
-import { compare } from '../value';
 import { buildType as t, Type, InferError } from '../type';
 import { getIdentifierString, getOfType } from '../utils';
 import type { NumberValue, Value } from '../value';
 import { evaluateVariable, getIndexName } from './getVariable';
+import { compare } from '../compare';
 
 /** Read inside the square brackets */
 export const readSimpleMatchers = (ctx: Context, matcher: AST.Expression) => {

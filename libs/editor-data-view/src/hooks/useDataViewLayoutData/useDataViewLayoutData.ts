@@ -1,5 +1,5 @@
-import { Result } from '@decipad/computer';
 import { useEffect, useMemo, useState } from 'react';
+import { Column as ColumnImpl } from '@decipad/column';
 import { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
 import { useReplacingColumns } from './useReplacingColumns';
@@ -36,7 +36,7 @@ export const useDataViewLayoutData = ({
       layoutPowerData({
         columns: columns.map((column) => ({
           ...column,
-          value: Result.Column.fromValues(column.value as Result.Comparable[]),
+          value: ColumnImpl.fromValues(column.value),
         })),
         aggregationTypes,
         expandedGroups,

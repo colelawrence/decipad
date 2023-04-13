@@ -3,7 +3,7 @@ import { ConcatenatedColumn, createLazyOperation } from '.';
 import { OneResult } from '../interpreter/interpreter-types';
 import {
   Column,
-  ColumnLike,
+  ColumnLikeValue,
   NumberValue,
   fromJS,
   getColumnLike,
@@ -47,7 +47,7 @@ describe.each(
     ConcatenatedColumn: new ConcatenatedColumn(jsCol([1]), jsCol([2, 3])),
     ColumnSlice: new ColumnSlice(jsCol([0, 1, 2, 3, 4]), 1, 4),
   })
-)('One dimensional tests: %s', (_name, lazyThing: ColumnLike) => {
+)('One dimensional tests: %s', (_name, lazyThing: ColumnLikeValue) => {
   it('can getData()', () => {
     expect(lazyThing.getData()).toMatchInlineSnapshot(`
       Array [
@@ -62,8 +62,8 @@ describe.each(
     expect(lazyThing.lowLevelGet(0).getData().valueOf()).toEqual(1);
     expect(lazyThing.lowLevelGet(2).getData().valueOf()).toEqual(3);
 
-    expect(lazyThing.atIndex(0).getData().valueOf()).toEqual(1);
-    expect(lazyThing.atIndex(2).getData().valueOf()).toEqual(3);
+    expect(lazyThing.atIndex(0)?.getData().valueOf()).toEqual(1);
+    expect(lazyThing.atIndex(2)?.getData().valueOf()).toEqual(3);
   });
 
   it('bound checks', () => {
@@ -98,7 +98,10 @@ describe.each(
   });
 });
 
-const nums = (values: OneResult | Value): unknown => {
+const nums = (values: OneResult | Value | undefined): unknown => {
+  if (values == null) {
+    return [];
+  }
   if (Array.isArray(values)) {
     return values.map(nums);
   } else if (values instanceof NumberValue || isColumnLike(values as Column)) {
@@ -161,7 +164,7 @@ describe.each(
       [t.column(t.column(t.number()), 'X')]
     ),
   })
-)('Two dimensional tests: %s', (_name, lazyThing: ColumnLike) => {
+)('Two dimensional tests: %s', (_name, lazyThing: ColumnLikeValue) => {
   it('can getData()', () => {
     expect(lazyThing.getData()).toMatchInlineSnapshot(`
       Array [
@@ -185,8 +188,8 @@ describe.each(
     expect(nums(lazyThing.lowLevelGet(1, 0))).toEqual(4);
     expect(nums(lazyThing.lowLevelGet(1, 2))).toEqual(6);
 
-    expect(nums(lazyThing.atIndex(0))).toEqual([1, 2, 3]);
-    expect(nums(lazyThing.atIndex(1))).toEqual([4, 5, 6]);
+    expect(nums(lazyThing?.atIndex(0))).toEqual([1, 2, 3]);
+    expect(nums(lazyThing?.atIndex(1))).toEqual([4, 5, 6]);
 
     expect(nums(getColumnLike(lazyThing.atIndex(0)).atIndex(1))).toEqual(2);
     expect(nums(getColumnLike(lazyThing.atIndex(1)).atIndex(1))).toEqual(5);

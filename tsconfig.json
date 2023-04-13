@@ -42,6 +42,7 @@
       "@decipad/backendtypes": ["libs/backendtypes/src/index.ts"],
       "@decipad/client-config": ["libs/client-config/src/index.ts"],
       "@decipad/client-events": ["libs/client-events/src/index.ts"],
+      "@decipad/column": ["libs/column/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
       "@decipad/config": ["libs/config/src/index.ts"],
       "@decipad/discord-customerservice-lambda": [
@@ -127,6 +128,7 @@
       "@decipad/testutils": ["libs/testutils/src/index.ts"],
       "@decipad/toast": ["libs/toast/src/index.ts"],
       "@decipad/ui": ["libs/ui/src/index.ts"],
+      "@decipad/universal-compare": ["libs/universal-compare/src/index.ts"],
       "@decipad/utils": ["libs/utils/src/index.ts"],
       "@decipad/y-dynamodb": ["libs/y-dynamodb/src/index.ts"],
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],

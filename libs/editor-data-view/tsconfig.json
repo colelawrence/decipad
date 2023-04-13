@@ -33,6 +33,12 @@
     },
     {
       "path": "../import"
+    },
+    {
+      "path": "../column"
+    },
+    {
+      "path": "../universal-compare"
     }
   ]
 }

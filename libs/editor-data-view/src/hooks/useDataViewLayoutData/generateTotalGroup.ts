@@ -1,4 +1,3 @@
-import { Result } from '@decipad/computer';
 import { AggregationKind, DataGroupElement, VirtualColumn } from '../../types';
 import { generateSmartRow } from './generateSmartRow';
 
@@ -18,7 +17,7 @@ export const generateTotalGroup = ({
     elementType: 'group',
     id: 'total',
     type: { kind: 'string' },
-    value: 'Total' as Result.Comparable,
+    value: 'Total',
     children: [
       generateSmartRow({
         columns: columns.slice(1),

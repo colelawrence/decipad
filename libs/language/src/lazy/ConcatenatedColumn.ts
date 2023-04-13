@@ -1,17 +1,17 @@
 import { Dimension, lowLevelGet } from '.';
 import { getLabelIndex } from '../dimtools';
-import { ColumnLike } from '../value';
+import { ColumnLikeValue } from '../value';
 import { implementColumnLike } from './LazyAtIndex';
 import { MinimalTensor } from './types';
 
 export const ConcatenatedColumn = implementColumnLike(
   class ConcatenatedColumn implements MinimalTensor {
-    dimensions: Dimension[];
-    column1: ColumnLike;
-    column2: ColumnLike;
+    readonly dimensions: Dimension[];
+    readonly column1: ColumnLikeValue;
+    readonly column2: ColumnLikeValue;
 
     /** Construct a column that concatenates the values of 2 columns. */
-    constructor(column1: ColumnLike, column2: ColumnLike) {
+    constructor(column1: ColumnLikeValue, column2: ColumnLikeValue) {
       const [firstDim, ...restDims] = column1.dimensions;
 
       const concatenatedDim = {

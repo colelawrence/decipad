@@ -1,4 +1,4 @@
-import { DeepReadonly } from 'utility-types';
+import { ColumnLike } from '@decipad/column';
 import { Interpreter } from '..';
 import { Dimension } from '../lazy';
 import type {
@@ -16,12 +16,10 @@ export interface Value {
   getData(): Interpreter.OneResult;
 }
 
-export interface ColumnLike extends Value {
-  values: DeepReadonly<Value[]>;
-  atIndex(i: number): DeepReadonly<Value>;
-  rowCount: number;
+export interface ColumnLikeValue extends Value, ColumnLike<Value> {
   getData(): Interpreter.OneResult;
   lowLevelGet(...keys: number[]): Value;
+
   /** Useful when filtering or sorting.
    * By default the identity function is used and no index changes are assumed to exist */
   indexToLabelIndex?: (index: number) => number;
@@ -29,15 +27,15 @@ export interface ColumnLike extends Value {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isColumnLike = (thing: any): thing is ColumnLike => {
-  const col = thing as ColumnLike;
+export const isColumnLike = (thing: any): thing is ColumnLikeValue => {
+  const col = thing as ColumnLikeValue;
   return typeof col === 'object' && typeof col?.lowLevelGet === 'function';
 };
 
 export const getColumnLike = (
-  thing: Value,
+  thing: Value | undefined,
   message = 'panic: expected column-like value'
-): ColumnLike => {
+): ColumnLikeValue => {
   if (!isColumnLike(thing)) {
     throw new Error(message);
   }

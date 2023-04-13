@@ -39,9 +39,8 @@ export interface Result<T extends SerializedTypeKind = SerializedTypeKind> {
 }
 
 export * from './resultToValue';
-export * as ResultTransforms from './ResultTransforms';
 export { Column } from './Column';
-export type { ColumnLike, Comparable } from './Column';
+export type { ColumnLikeResult, Comparable } from './Column';
 
 export function serializeResult<T extends SerializedTypeKind>(
   type: Type,

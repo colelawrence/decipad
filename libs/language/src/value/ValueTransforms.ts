@@ -1,52 +1,55 @@
-import { Value } from './types';
+import type { SlicesMap } from '@decipad/column';
+import { compare } from '../compare';
+import { ColumnLikeValue, Value } from './types';
 import { ColumnSlice } from '../lazy/ColumnSlice';
-import {
-  compare,
-  ColumnLike,
-  FilteredColumn,
-  MappedColumn,
-  SlicesMap,
-} from '.';
+import { FilteredColumn, MappedColumn } from './Value';
 
-export function sortMap(col: ColumnLike): number[] {
+export function sortMap(col: ColumnLikeValue): number[] {
   const unsortedIndexes = Array.from({ length: col.rowCount }, (_, i) => i);
   return unsortedIndexes.sort((aIndex, bIndex) => {
     return compare(col.atIndex(aIndex), col.atIndex(bIndex));
   });
 }
 
-export function sort(col: ColumnLike): ColumnLike {
-  return MappedColumn.fromColumnAndMap(col, sortMap(col));
+export function sort(col: ColumnLikeValue): ColumnLikeValue {
+  return MappedColumn.fromColumnValueAndMap(col, sortMap(col));
 }
 
-export function unique(col: ColumnLike): ColumnLike {
+export function unique(col: ColumnLikeValue): ColumnLikeValue {
   const sorted = sort(col);
   const slices = contiguousSlices(sorted).map(([index]) => index);
   return applyMap(sorted, slices);
 }
 
-function reverseMap(col: ColumnLike) {
+function reverseMap(col: ColumnLikeValue) {
   const length = col.rowCount;
   return Array.from({ length }, (_, i) => length - i - 1);
 }
 
-export function reverse(col: ColumnLike): ColumnLike {
-  return MappedColumn.fromColumnAndMap(col, reverseMap(col));
+export function reverse(col: ColumnLikeValue): ColumnLikeValue {
+  return MappedColumn.fromColumnValueAndMap(col, reverseMap(col));
 }
 
-export function slice(col: ColumnLike, begin: number, end: number): ColumnLike {
+export function slice(
+  col: ColumnLikeValue,
+  begin: number,
+  end: number
+): ColumnLikeValue {
   return ColumnSlice.fromColumnAndRange(col, begin, end);
 }
 
-export function applyMap(col: ColumnLike, map: number[]): ColumnLike {
-  return MappedColumn.fromColumnAndMap(col, map);
+export function applyMap(col: ColumnLikeValue, map: number[]): ColumnLikeValue {
+  return MappedColumn.fromColumnValueAndMap(col, map);
 }
 
-export function applyFilterMap(col: ColumnLike, map: boolean[]): ColumnLike {
-  return FilteredColumn.fromColumnAndMap(col, map);
+export function applyFilterMap(
+  col: ColumnLikeValue,
+  map: boolean[]
+): ColumnLikeValue {
+  return FilteredColumn.fromColumnValueAndMap(col, map);
 }
 
-export function contiguousSlices(column: ColumnLike): SlicesMap {
+export function contiguousSlices(column: ColumnLikeValue): SlicesMap {
   const slices: SlicesMap = [];
   let lastValue: undefined | Value;
   let nextSliceBeginsAt = 0;

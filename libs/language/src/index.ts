@@ -20,8 +20,8 @@ export {
   makeContext,
 } from './infer';
 export type { Context } from './infer';
-export type { ColumnLike, Value } from './value';
-export { isColumnLike, CompareValues, getColumnLike } from './value';
+export type { ColumnLikeValue, Value } from './value';
+export { isColumnLike, getColumnLike } from './value';
 export {
   evaluateStatement,
   Realm,
@@ -30,7 +30,6 @@ export {
 } from './interpreter';
 export type { Interpreter } from './interpreter';
 export { Column, DateValue, fromJS, Range, Row, Scalar, Table } from './value';
-export type { SliceRange, SlicesMap } from './value';
 export {
   AST,
   parse,

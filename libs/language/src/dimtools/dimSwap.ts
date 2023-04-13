@@ -1,6 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { SwappedDimensions } from '../lazy';
-import { ColumnLike, getColumnLike } from '../value';
+import { ColumnLikeValue, getColumnLike } from '../value';
 import { buildType as t, InferError, Type } from '../type';
 import { chooseFirst, deLinearizeType, linearizeType } from './common';
 
@@ -21,7 +21,7 @@ export const dimSwapTypes = (dominantIndexName: string, type: Type) => {
 export const dimSwapValues = (
   dominantIndexName: string,
   type: Type,
-  value: ColumnLike
+  value: ColumnLikeValue
 ) => {
   const linear = linearizeType(type).slice(0, -1);
 

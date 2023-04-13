@@ -1,16 +1,17 @@
+import { ColumnLike } from '@decipad/column';
 import { Result, SerializedType } from '@decipad/computer';
-import { ColumnLike } from 'libs/language/src/result';
+import { Comparable } from '@decipad/universal-compare';
 import { Subject } from 'rxjs';
 
 // Row layout
 
-export type ValueCell = Result.Comparable;
+export type ValueCell = Comparable;
 
 export interface SmartProps {
   tableName: string;
   column: {
     type: SerializedType;
-    value: Result.ColumnLike<Result.Comparable>;
+    value: ColumnLike<Comparable>;
     name: string;
   };
   roundings: Array<string | undefined>;
@@ -49,7 +50,7 @@ export interface HeaderProps {
 export interface SmartRowColumn {
   name: string;
   type: SerializedType;
-  value: Result.ColumnLike<Result.Comparable>;
+  value: ColumnLike<Comparable>;
 }
 
 interface BaseElement {
@@ -68,7 +69,7 @@ export interface SmartRowElement extends BaseElement {
   columnIndex: number;
   previousColumns: {
     type: SerializedType;
-    value: Result.Comparable;
+    value: Comparable | undefined;
     name: string;
   }[];
   global?: boolean;
@@ -102,7 +103,7 @@ export interface VirtualColumn {
   name: string;
   blockId?: string;
   type: SerializedType;
-  value: ColumnLike<Result.Comparable>;
+  value: ColumnLike<Comparable>;
 }
 
 // Aggregations
@@ -116,6 +117,6 @@ export type Aggregator = (params: {
 
 export type PreviousColumns = Array<{
   type: SerializedType;
-  value: Result.Comparable;
+  value: Comparable | undefined;
   name: string;
 }>;

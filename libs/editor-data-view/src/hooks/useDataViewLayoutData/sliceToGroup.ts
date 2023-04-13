@@ -1,11 +1,12 @@
-import { Result, SerializedType } from '@decipad/computer';
+import { SerializedType } from '@decipad/computer';
 import { BehaviorSubject } from 'rxjs';
+import { Comparable } from '@decipad/universal-compare';
 import { DataGroup, PreviousColumns, VirtualColumn } from '../../types';
 import type { GenerateGroups, GenerateSubSmartRow } from './generateGroups';
 
 interface SliceToGroupProps {
   isExpanded: boolean;
-  value: Result.Comparable;
+  value: Comparable | undefined;
   type: SerializedType;
   hideSmartRow: boolean;
   columns: VirtualColumn[];

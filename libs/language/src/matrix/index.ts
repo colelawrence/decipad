@@ -10,7 +10,7 @@ import {
 } from './assignMultidim';
 import { evaluateVariable, inferVariable } from './getVariable';
 import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
-import { ColumnLike, ValueTransforms } from '../value';
+import { ColumnLikeValue, applyFilterMap } from '../value';
 
 export function inferMatrixRef(context: Context, ref: AST.MatrixRef): Type {
   const [varExp, matchersExp] = ref.args;
@@ -24,7 +24,7 @@ export function inferMatrixRef(context: Context, ref: AST.MatrixRef): Type {
 export async function evaluateMatrixRef(
   realm: Realm,
   ref: AST.MatrixRef
-): Promise<ColumnLike> {
+): Promise<ColumnLikeValue> {
   const {
     args: [varName, matchers],
   } = ref;
@@ -34,7 +34,7 @@ export async function evaluateMatrixRef(
   const [, matches] = await matchTargets(realm.inferContext, realm, matchers);
 
   // Let's run the matcher against every item in Column
-  return ValueTransforms.applyFilterMap(variable, matches);
+  return applyFilterMap(variable, matches);
 }
 
 export function inferMatrixAssign(
@@ -78,7 +78,7 @@ export function inferMatrixAssign(
 export async function evaluateMatrixAssign(
   realm: Realm,
   assign: AST.MatrixAssign
-): Promise<ColumnLike> {
+): Promise<ColumnLikeValue> {
   const [varRef, matchers] = assign.args;
 
   const varName = getIdentifierString(varRef);

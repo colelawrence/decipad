@@ -1,27 +1,21 @@
 /* eslint-disable no-underscore-dangle */
 import { getDefined } from '@decipad/utils';
-import { Comparable } from '../value';
+import { ColumnLike } from '@decipad/column';
+import { DeepReadonly } from 'utility-types';
+import { Comparable } from '../compare';
 
 export type { Comparable };
 
-export interface ColumnLike<T = Comparable> {
-  values: T[];
-  atIndex(i: number): T;
-  rowCount: number;
-  getData(): T[];
-}
+export type ColumnLikeResult<T = Comparable> = ColumnLike<T>;
 
 export class Column<T = Comparable> implements ColumnLike<T> {
-  readonly _values: T[];
+  readonly _values: DeepReadonly<T[]>;
 
   constructor(values: T[]) {
-    this._values = values;
+    this._values = values as DeepReadonly<T[]>;
   }
   atIndex(i: number): T {
-    return getDefined(this.values[i], `index ${i} out of bounds`);
-  }
-  getData(): T[] {
-    return this.values;
+    return getDefined(this.values[i] as T, `index ${i} out of bounds`);
   }
 
   get values() {
@@ -34,7 +28,7 @@ export class Column<T = Comparable> implements ColumnLike<T> {
   /**
    * Create a column from the values inside. Empty columns return a special value.
    */
-  public static fromValues<T extends Comparable>(values: T[]): ColumnLike<T> {
+  public static fromValues<T extends Comparable>(values: T[]): Column<T> {
     return new Column(values);
   }
 }

@@ -5,14 +5,7 @@ import { getDefined, zip } from '@decipad/utils';
 import { RuntimeError, Realm } from '../../interpreter';
 import { getInstanceof } from '../../utils';
 import { InferError, Type, buildType as t } from '../../type';
-import {
-  fromJS,
-  Scalar,
-  Value,
-  isColumnLike,
-  NumberValue,
-  compare,
-} from '../../value';
+import { fromJS, Scalar, Value, isColumnLike, NumberValue } from '../../value';
 import { AST } from '../../parser';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
@@ -20,6 +13,7 @@ import { BuiltinSpec } from '../interfaces';
 import { Context } from '../../infer';
 
 import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-evaluate';
+import { compare } from '../../compare';
 
 const binopFunctor = ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));

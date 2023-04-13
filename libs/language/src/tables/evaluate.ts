@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
-import { Column, ColumnLike, Row, Table, Value } from '../value';
+import { Column, ColumnLikeValue, Row, Table, Value } from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
   walkAst,
@@ -31,11 +31,11 @@ export const usesRecursion = (expr: AST.Expression) => {
 
 export const evaluateTableColumn = async (
   realm: Realm,
-  tableColumns: Map<string, ColumnLike>,
+  tableColumns: Map<string, ColumnLikeValue>,
   column: AST.Expression,
   indexName: string,
   rowCount?: number
-): Promise<ColumnLike> => {
+): Promise<ColumnLikeValue> => {
   if (
     refersToOtherColumnsByName(column, tableColumns) ||
     usesRecursion(column)
@@ -59,10 +59,10 @@ export const evaluateTableColumn = async (
 
 export const evaluateTableColumnIteratively = async (
   realm: Realm,
-  otherColumns: Map<string, ColumnLike>,
+  otherColumns: Map<string, ColumnLikeValue>,
   column: AST.Expression,
   rowCount: number
-): Promise<ColumnLike> =>
+): Promise<ColumnLikeValue> =>
   realm.withPush(async () => {
     const cells = await mapWithPrevious(realm, async function* mapper() {
       for (let index = 0; index < rowCount; index++) {
@@ -82,7 +82,7 @@ export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
 ): Promise<Table> => {
-  const tableColumns = new Map<string, ColumnLike>();
+  const tableColumns = new Map<string, ColumnLikeValue>();
   const {
     args: [tName, ...items],
   } = table;
@@ -94,7 +94,7 @@ export const evaluateTable = async (
 
   let tableLength: number | undefined;
   return realm.withPush(async () => {
-    const addColumn = (name: string, value: ColumnLike) => {
+    const addColumn = (name: string, value: ColumnLikeValue) => {
       tableLength ??= value.rowCount;
 
       tableColumns.set(name, value);

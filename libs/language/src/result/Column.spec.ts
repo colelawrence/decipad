@@ -1,6 +1,7 @@
 import { N } from '@decipad/number';
+import { sort, unique, slice } from '@decipad/column';
 import { Column } from './Column';
-import { sort, unique, slice } from './ResultTransforms';
+import { compare } from '../compare';
 
 const toN = (n: number) => N(n);
 
@@ -8,7 +9,7 @@ describe('column value', () => {
   it('can be constructed from values', () => {
     const column = Column.fromValues([1, 2, 3].map(toN));
     expect(column.rowCount).toBe(3);
-    expect(column.getData()).toMatchInlineSnapshot(`
+    expect(column.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
         DeciNumber(2),
@@ -19,15 +20,15 @@ describe('column value', () => {
 
   it('can be sorted', () => {
     const originalColumn = Column.fromValues([3, 1, 2].map(toN));
-    const sortedColumn = sort(originalColumn);
-    expect(originalColumn.getData()).toMatchInlineSnapshot(`
+    const sortedColumn = sort(originalColumn, compare);
+    expect(originalColumn.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(3),
         DeciNumber(1),
         DeciNumber(2),
       ]
     `);
-    expect(sortedColumn.getData()).toMatchInlineSnapshot(`
+    expect(sortedColumn.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
         DeciNumber(2),
@@ -40,8 +41,8 @@ describe('column value', () => {
     const originalColumn = Column.fromValues(
       [3, 1, 2, 3, 3, 5, 1, 2, 3, 0].map(toN)
     ) as Column;
-    const uniqueValuesColumn = unique(originalColumn);
-    expect(originalColumn.getData()).toMatchInlineSnapshot(`
+    const uniqueValuesColumn = unique(originalColumn, compare);
+    expect(originalColumn.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(3),
         DeciNumber(1),
@@ -56,7 +57,7 @@ describe('column value', () => {
       ]
     `);
 
-    expect(uniqueValuesColumn.getData()).toMatchInlineSnapshot(`
+    expect(uniqueValuesColumn.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(0),
         DeciNumber(1),
@@ -73,7 +74,7 @@ describe('column value', () => {
     );
     const slice1 = slice(originalColumn, 3, 7);
     const slice2 = slice(originalColumn, 7, 9);
-    expect(originalColumn.getData()).toMatchInlineSnapshot(`
+    expect(originalColumn.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
         DeciNumber(2),
@@ -86,7 +87,7 @@ describe('column value', () => {
         DeciNumber(9),
       ]
     `);
-    expect(slice1.getData()).toMatchInlineSnapshot(`
+    expect(slice1.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(4),
         DeciNumber(5),
@@ -94,7 +95,7 @@ describe('column value', () => {
         DeciNumber(7),
       ]
     `);
-    expect(slice2.getData()).toMatchInlineSnapshot(`
+    expect(slice2.values).toMatchInlineSnapshot(`
       Array [
         DeciNumber(8),
         DeciNumber(9),

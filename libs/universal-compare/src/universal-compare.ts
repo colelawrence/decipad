@@ -5,25 +5,16 @@ import DeciNumber, {
   DeciNumberInput,
 } from '@decipad/number';
 import { zip } from '@decipad/utils';
-import { DeepReadonly } from 'utility-types';
-import {
-  RuntimeError,
-  Value,
-  NumberValue,
-  StringValue,
-  BooleanValue,
-  DateValue,
-  isColumnLike,
-} from '.';
+import { isColumnLike } from '@decipad/column';
 
 export type CompareResult = -1 | 0 | 1;
 
 export type Comparable =
-  | DeepReadonly<Value>
   | string
   | boolean
   | number
   | bigint
+  | symbol
   | DeciNumber
   | DeciNumberInput
   | ReadonlyArray<Comparable>;
@@ -45,26 +36,19 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   if (typeof a === 'bigint' && typeof b === 'bigint') {
     return a - b;
   }
-  if (a instanceof NumberValue && b instanceof NumberValue) {
-    return a.value.compare(b.value);
-  }
-  if (a instanceof StringValue && b instanceof StringValue) {
-    return a.value === b.value ? 0 : a.value < b.value ? -1 : 1;
-  }
-  if (a instanceof BooleanValue && b instanceof BooleanValue) {
-    return ((a.value && 1) || 0) - ((b.value && 1) || 0);
-  }
-  if (a instanceof DateValue && b instanceof DateValue) {
-    return a.moment < b.moment ? -1 : a.moment === b.moment ? 0 : 1;
-  }
+
   if (isColumnLike(a) && isColumnLike(b)) {
-    return compareToNumber(a.values, b.values);
+    return compareToNumber(
+      a.values as ReadonlyArray<Comparable>,
+      b.values as ReadonlyArray<Comparable>
+    );
   }
   if (Array.isArray(a) && Array.isArray(b)) {
     const lengthComparison = a.length - b.length;
 
     if (lengthComparison === 0) {
       for (const [aItem, bItem] of zip(a, b)) {
+        // eslint-disable-next-line no-use-before-define
         const thisItem = compare(aItem, bItem);
 
         if (thisItem !== 0) {
@@ -75,9 +59,14 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
 
     return lengthComparison;
   }
-  console.log(a, b);
-  throw new RuntimeError(
-    `Don't know how to compare ${a} (${typeof a}) against ${b} (${typeof b})`
+  if (typeof a === 'symbol' && typeof b === 'symbol') {
+    return compareToNumber(a.toString(), b.toString());
+  }
+
+  // eslint-disable-next-line no-console
+  console.error(a, b);
+  throw new Error(
+    `Don't know how to compare ${a.toString()} (${typeof a}) against ${b.toString()} (${typeof b})`
   );
 }
 
@@ -88,6 +77,12 @@ const sign = (diff: number | bigint): CompareResult => {
   return diff > 0n ? 1 : diff < 0n ? -1 : 0;
 };
 
-export function compare(a: Comparable, b: Comparable): CompareResult {
+export function compare(
+  a: Comparable | undefined,
+  b: Comparable | undefined
+): CompareResult {
+  if (a == null || b == null) {
+    return 0;
+  }
   return sign(compareToNumber(a, b));
 }

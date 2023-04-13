@@ -4,7 +4,7 @@ import { RuntimeError, Time } from '..';
 import { addTime, getSpecificity } from '../date';
 
 import { Column, DateValue, Scalar } from './Value';
-import { Value, ColumnLike } from './types';
+import { Value, ColumnLikeValue } from './types';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
@@ -12,7 +12,7 @@ export function columnFromSequence(
   startV: Value,
   endV: Value,
   byV?: Value
-): ColumnLike {
+): ColumnLikeValue {
   const [start, end] = [startV, endV].map((val) => val.getData() as DeciNumber);
 
   const by = byV
@@ -45,7 +45,7 @@ export function columnFromDateSequence(
   startD: DateValue,
   endD: DateValue,
   by: Time.Unit
-): ColumnLike {
+): ColumnLikeValue {
   let start = startD.getData();
   let end = endD.getData();
   if (end >= start) {

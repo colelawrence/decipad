@@ -3,7 +3,10 @@
   "compilerOptions": {
     "lib": ["esnext", "dom", "WebWorker"]
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "../language/src/expression-cache/ExpressionCache.spec.ts"
+  ],
   "references": [
     {
       "path": "../language"

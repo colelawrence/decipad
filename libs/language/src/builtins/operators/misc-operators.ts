@@ -1,9 +1,10 @@
 import DeciNumber from '@decipad/number';
 import { getInstanceof } from '../../utils';
-import { DateValue, Range, fromJS, compare, NumberValue } from '../../value';
+import { DateValue, Range, fromJS, NumberValue } from '../../value';
 import { Type, buildType as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
+import { compare } from '../../compare';
 
 export const miscOperators: Record<string, BuiltinSpec> = {
   if: {

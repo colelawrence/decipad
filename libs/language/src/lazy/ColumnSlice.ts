@@ -1,17 +1,17 @@
 import { Dimension, lowLevelGet } from '.';
 import { getLabelIndex } from '../dimtools';
-import { ColumnLike } from '../value';
+import { ColumnLikeValue } from '../value';
 import { implementColumnLike } from './LazyAtIndex';
 import { MinimalTensor } from './types';
 
 export const ColumnSlice = implementColumnLike(
   class _ColumnSlice implements MinimalTensor {
-    begin: number;
-    end: number;
-    sourceColumn: ColumnLike;
-    dimensions: Dimension[];
+    readonly begin: number;
+    readonly end: number;
+    readonly sourceColumn: ColumnLikeValue;
+    readonly dimensions: Dimension[];
 
-    constructor(sourceColumn: ColumnLike, begin: number, end: number) {
+    constructor(sourceColumn: ColumnLikeValue, begin: number, end: number) {
       this.sourceColumn = sourceColumn;
       this.begin = begin;
       this.end = end;
@@ -21,7 +21,11 @@ export const ColumnSlice = implementColumnLike(
       ];
     }
 
-    static fromColumnAndRange(column: ColumnLike, begin: number, end: number) {
+    static fromColumnAndRange(
+      column: ColumnLikeValue,
+      begin: number,
+      end: number
+    ) {
       return new ColumnSlice(column, begin, end);
     }
 

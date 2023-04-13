@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { generateHash } from '@decipad/editor-utils';
-import { Result } from '@decipad/computer';
+import { applyMap, contiguousSlices, slice, sortMap } from '@decipad/column';
+import { compare } from '@decipad/universal-compare';
 import {
   AggregationKind,
   DataGroup,
@@ -9,8 +10,6 @@ import {
 } from '../../types';
 import { generateSmartRow, GenerateSmartRowProps } from './generateSmartRow';
 import { sliceToGroup } from './sliceToGroup';
-
-const { ResultTransforms } = Result;
 
 export interface GenerateGroupsProps {
   columns: VirtualColumn[];
@@ -54,16 +53,13 @@ export const generateGroups = async ({
   }
   const [firstColumn, ...restOfColumns] = columns;
 
-  const sortMap = ResultTransforms.sortMap(firstColumn.value);
-  const sortedFirstColumn = ResultTransforms.applyMap(
-    firstColumn.value,
-    sortMap
-  );
+  const map = sortMap(firstColumn.value, compare);
+  const sortedFirstColumn = applyMap(firstColumn.value, map);
   const sortedRestOfColumns: VirtualColumn[] = restOfColumns.map((column) => ({
     ...column,
-    value: ResultTransforms.applyMap(column.value, sortMap),
+    value: applyMap(column.value, map),
   }));
-  const slices = ResultTransforms.contiguousSlices(sortedFirstColumn);
+  const slices = contiguousSlices(sortedFirstColumn, compare);
 
   const subGenerateGroups: GenerateGroups = (props) =>
     generateGroups({ ...props, aggregationTypes, expandedGroups });
@@ -82,7 +78,7 @@ export const generateGroups = async ({
 
     const groupColumns: VirtualColumn[] = sortedRestOfColumns.map((column) => ({
       ...column,
-      value: ResultTransforms.slice(column.value, start, end + 1),
+      value: slice(column.value, start, end + 1),
     }));
 
     const hideSmartRow =

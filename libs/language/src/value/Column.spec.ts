@@ -1,4 +1,4 @@
-import { Column, fromJS, ValueTransforms } from '.';
+import { Column, fromJS, slice, sort, unique } from '.';
 
 describe('column value', () => {
   it('can be constructed from values', () => {
@@ -34,7 +34,7 @@ describe('column value', () => {
 
   it('can be sorted', () => {
     const originalColumn = Column.fromValues([3, 1, 2].map(fromJS));
-    const sortedColumn = ValueTransforms.sort(originalColumn);
+    const sortedColumn = sort(originalColumn);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
         DeciNumber(3),
@@ -53,7 +53,7 @@ describe('column value', () => {
 
   it('can derive a column with unique values', () => {
     const originalColumn = fromJS([3, 1, 2, 3, 3, 5, 1, 2, 3, 0]) as Column;
-    const uniqueValuesColumn = ValueTransforms.unique(originalColumn);
+    const uniqueValuesColumn = unique(originalColumn);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
         DeciNumber(3),
@@ -82,8 +82,8 @@ describe('column value', () => {
 
   it('a column can be sliced', () => {
     const originalColumn = fromJS([1, 2, 3, 4, 5, 6, 7, 8, 9]) as Column;
-    const slice1 = ValueTransforms.slice(originalColumn, 3, 7);
-    const slice2 = ValueTransforms.slice(originalColumn, 7, 9);
+    const slice1 = slice(originalColumn, 3, 7);
+    const slice2 = slice(originalColumn, 7, 9);
     expect(originalColumn.getData()).toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),

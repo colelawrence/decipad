@@ -1,7 +1,7 @@
 import { AST, Context } from '..';
 import { inferExpression } from '../infer';
 import { evaluate, Realm } from '../interpreter';
-import { ColumnLike, getColumnLike } from '../value';
+import { ColumnLikeValue, getColumnLike } from '../value';
 import { buildType as t, InferError, Type } from '../type';
 import { getIdentifierString } from '../utils';
 
@@ -36,7 +36,7 @@ export const inferCategories = (
 export const evaluateCategories = async (
   realm: Realm,
   category: AST.Categories
-): Promise<ColumnLike> => {
+): Promise<ColumnLikeValue> => {
   const [nameExp, contentsExp] = category.args;
 
   const name = getIdentifierString(nameExp);

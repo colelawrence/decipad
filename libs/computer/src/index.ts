@@ -10,7 +10,6 @@ export type {
   Time,
   Token,
   UnitOfMeasure,
-  ColumnLike,
   SimpleValue,
   SimpleValueAST,
 } from '@decipad/language';
@@ -34,7 +33,6 @@ export {
   normalizeUnits,
   serializeResult,
   tokenize,
-  CompareValues,
   getBuiltinsForAutocomplete,
   deserializeType,
   Table,
@@ -62,12 +60,7 @@ export {
 
 export { unnestTableRows } from './tools';
 
-export type {
-  AutocompleteName,
-  ErrSpec,
-  SliceRange,
-  SlicesMap,
-} from '@decipad/language';
+export type { AutocompleteName, ErrSpec } from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

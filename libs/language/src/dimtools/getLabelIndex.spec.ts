@@ -1,4 +1,4 @@
-import { ColumnLike } from '../value';
+import { ColumnLikeValue } from '../value';
 import { jsCol } from '../lazy/testUtils';
 import { getLabelIndex } from './getLabelIndex';
 
@@ -17,7 +17,7 @@ it('gets .indexToLabelIndex from the ColumnLike interface, if it exists', () => 
   const column = {
     indexToLabelIndex: (i) => i + 1,
     rowCount: 3,
-  } as ColumnLike;
+  } as ColumnLikeValue;
   expect(getLabelIndex(column, 0)).toEqual(1);
   expect(getLabelIndex(column, 1)).toEqual(2);
 });

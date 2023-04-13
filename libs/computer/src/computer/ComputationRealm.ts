@@ -1,6 +1,6 @@
 import {
   AST,
-  ColumnLike,
+  ColumnLikeValue,
   ExternalDataMap,
   isColumnLike,
   makeContext as makeInferContext,
@@ -65,7 +65,11 @@ export class ComputationRealm {
   getIndexLabels(): Map<string, string[]> {
     const labels = new Map();
 
-    const addLabels = (name: string, column?: ColumnLike, cellType?: Type) => {
+    const addLabels = (
+      name: string,
+      column?: ColumnLikeValue,
+      cellType?: Type
+    ) => {
       if (!column || !cellType) {
         return;
       }

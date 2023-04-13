@@ -3,7 +3,7 @@ import { linearizeType } from '../dimtools/common';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 import {
   Column,
-  ColumnLike,
+  ColumnLikeValue,
   isColumnLike,
   Value,
   RuntimeError,
@@ -38,10 +38,10 @@ export const coerceTableColumnTypeIndices = (type: Type, indexName: string) => {
 
 export const coerceTableColumnIndices = (
   type: Type,
-  value: ColumnLike | Value,
+  value: ColumnLikeValue | Value,
   indexName: string,
   tableLength?: number
-): ColumnLike => {
+): ColumnLikeValue => {
   if (!isColumnLike(value)) {
     return Column.fromValues(repeat(value, tableLength ?? 1));
   } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
@@ -54,7 +54,7 @@ export const coerceTableColumnIndices = (
 const repeat = <T>(value: T, length: number) =>
   Array.from({ length }, () => value);
 
-const validateLength = (value: ColumnLike, wanted: number | undefined) => {
+const validateLength = (value: ColumnLikeValue, wanted: number | undefined) => {
   if (wanted != null && wanted !== value.rowCount) {
     // UI tables will never place us in this situation
     throw new RuntimeError('Inconsistent table column sizes');

@@ -1,11 +1,11 @@
-import type { ColumnLike } from '../value';
+import type { ColumnLikeValue } from '../value';
 
 /**
  * Turns an output index (IE an index in a Interpreter.Result array) into an index of a label
  *
  * ColumnLike values which transform the order or arity of indices supply an .indexToLabelIndex method
  */
-export function getLabelIndex(column: ColumnLike, index: number): number {
+export function getLabelIndex(column: ColumnLikeValue, index: number): number {
   getPositive(index);
 
   if (column.indexToLabelIndex) {

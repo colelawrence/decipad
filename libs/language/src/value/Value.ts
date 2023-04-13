@@ -1,6 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import DeciNumber, { N } from '@decipad/number';
 import { unzip, getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
+import {
+  MappedColumn as MappedColumnBase,
+  FilteredColumn as FilteredColumnBase,
+} from '@decipad/column';
 import { DeepReadonly } from 'utility-types';
 import { Interpreter, Time } from '..';
 import { addTime, cleanDate } from '../date';
@@ -11,10 +15,10 @@ import { Unknown } from './Unknown';
 import { getLabelIndex } from '../dimtools/getLabelIndex';
 import {
   Value,
-  ColumnLike,
   NonColumn,
   isColumnLike,
   getColumnLike,
+  ColumnLikeValue,
 } from './types';
 
 export const UnknownValue: Value = {
@@ -157,10 +161,7 @@ export class Range implements Value {
   }
 }
 
-export type SliceRange = [start: number, end: number];
-export type SlicesMap = SliceRange[];
-
-export class Column implements ColumnLike {
+export class Column implements ColumnLikeValue {
   readonly _values: DeepReadonly<Value[]>;
 
   constructor(values: DeepReadonly<Column['values']>) {
@@ -187,7 +188,7 @@ export class Column implements ColumnLike {
   static fromValues(
     values: DeepReadonly<Value[]>,
     innerDimensions?: Dimension[]
-  ): ColumnLike {
+  ): ColumnLikeValue {
     if (values.length === 0) {
       if (innerDimensions) {
         // We can create a column with no values
@@ -215,30 +216,40 @@ export class Column implements ColumnLike {
   }
 }
 
-export class MappedColumn extends Column implements ColumnLike {
-  private map: number[];
-  sourceColumn: ColumnLike;
+export class MappedColumn
+  extends MappedColumnBase<Value>
+  implements ColumnLikeValue
+{
+  private sourceColumn: ColumnLikeValue;
 
-  constructor(col: ColumnLike, map: number[]) {
-    super(col.values);
-    this.sourceColumn = col;
-    this.map = map;
+  constructor(source: ColumnLikeValue, map: number[]) {
+    super(source, map);
+    this.sourceColumn = source;
   }
 
-  get values(): Value[] {
-    return this.map.map((index) => this._values[index]);
+  getData(): Interpreter.OneResult[] {
+    return this.values.map((value) => value.getData());
   }
 
-  static fromColumnAndMap(column: ColumnLike, map: number[]): MappedColumn {
-    return new MappedColumn(column, map);
+  lowLevelGet(...keys: number[]) {
+    return lowLevelGet(this.atIndex(keys[0]), keys.slice(1));
   }
 
-  get rowCount() {
-    return this.map.length;
+  get dimensions() {
+    const contents = this.values[0];
+
+    if (isColumnLike(contents)) {
+      return [{ dimensionLength: this.rowCount }, ...contents.dimensions];
+    } else {
+      return [{ dimensionLength: this.rowCount }];
+    }
   }
 
-  atIndex(index: number) {
-    return this._values[this.map[index]];
+  static fromColumnValueAndMap(
+    column: ColumnLikeValue,
+    map: number[]
+  ): MappedColumn {
+    return new MappedColumn(Column.fromValues(column.values), map);
   }
 
   indexToLabelIndex(mappedIndex: number) {
@@ -246,69 +257,53 @@ export class MappedColumn extends Column implements ColumnLike {
   }
 }
 
-export class FilteredColumn extends Column implements ColumnLike {
-  private map: boolean[];
-  private sourceColumn: ColumnLike;
+export class FilteredColumn
+  extends FilteredColumnBase<Value>
+  implements ColumnLikeValue
+{
+  private sourceColumn2: ColumnLikeValue;
 
-  constructor(col: ColumnLike, map: boolean[]) {
-    super(col.values);
-    this.sourceColumn = col;
-    this.map = map;
+  constructor(column: ColumnLikeValue, map: boolean[]) {
+    super(column, map);
+    this.sourceColumn2 = column;
   }
 
-  get values(): Value[] {
-    const { map } = this;
-    let cursor = -1;
-    return Array.from({ length: this.map.filter(Boolean).length }, () => {
-      cursor += 1;
-      while (!map[cursor]) {
-        cursor += 1;
-      }
-      return this._values[cursor];
-    });
+  getData(): Interpreter.OneResult[] {
+    return this.values.map((value) => value.getData());
   }
 
-  static fromColumnAndMap(column: ColumnLike, map: boolean[]): FilteredColumn {
+  lowLevelGet(...keys: number[]) {
+    return lowLevelGet(this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  get dimensions() {
+    const contents = this.values[0];
+
+    if (isColumnLike(contents)) {
+      return [{ dimensionLength: this.rowCount }, ...contents.dimensions];
+    } else {
+      return [{ dimensionLength: this.rowCount }];
+    }
+  }
+
+  static fromColumnValueAndMap(
+    column: ColumnLikeValue,
+    map: boolean[]
+  ): FilteredColumn {
     return new FilteredColumn(column, map);
-  }
-
-  get rowCount() {
-    let count = 0;
-    for (const bool of this.map) {
-      count += Number(bool);
-    }
-    return count;
-  }
-
-  private getSourceIndex(outwardIndex: number) {
-    let trueCount = -1;
-    for (let sourceIndex = 0; sourceIndex < this.map.length; sourceIndex++) {
-      if (this.map[sourceIndex] === true) {
-        trueCount++;
-        if (trueCount === outwardIndex) {
-          return sourceIndex;
-        }
-      }
-    }
-
-    throw new Error(`panic: index not found: ${outwardIndex}`);
-  }
-
-  atIndex(wantedIndex: number) {
-    return this._values[this.getSourceIndex(wantedIndex)];
   }
 
   indexToLabelIndex(filteredIndex: number) {
     const sourceIndex = this.getSourceIndex(filteredIndex);
-    return getLabelIndex(this.sourceColumn, sourceIndex);
+    return getLabelIndex(this.sourceColumn2, sourceIndex);
   }
 }
 
 export class Table implements Value {
-  columns: ColumnLike[];
+  columns: ColumnLikeValue[];
   columnNames: string[];
 
-  constructor(columns: ColumnLike[], columnNames: string[]) {
+  constructor(columns: ColumnLikeValue[], columnNames: string[]) {
     this.columns = columns;
     this.columnNames = columnNames;
   }
@@ -324,7 +319,7 @@ export class Table implements Value {
     return this.columns.at(0)?.rowCount;
   }
 
-  static fromMapping(mapping: AnyMapping<ColumnLike>) {
+  static fromMapping(mapping: AnyMapping<ColumnLikeValue>) {
     const [columnNames, columns] = unzip(anyMappingToMap(mapping).entries());
     return new Table(columns, columnNames);
   }
@@ -341,11 +336,13 @@ export class Table implements Value {
     return this.columns.map((column) => column.getData());
   }
 
-  mapColumns(mapFn: (col: ColumnLike, index: number) => ColumnLike): Table {
+  mapColumns(
+    mapFn: (col: ColumnLikeValue, index: number) => ColumnLikeValue
+  ): Table {
     return Table.fromNamedColumns(this.columns.map(mapFn), this.columnNames);
   }
 
-  filterColumns(fn: (colName: string, col: ColumnLike) => boolean): Table {
+  filterColumns(fn: (colName: string, col: ColumnLikeValue) => boolean): Table {
     const [names, columns] = filterUnzipped(this.columnNames, this.columns, fn);
 
     return Table.fromNamedColumns(columns, names);

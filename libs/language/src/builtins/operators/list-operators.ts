@@ -8,7 +8,9 @@ import {
   Table,
   fromJS,
   getColumnLike,
-  ValueTransforms,
+  sort,
+  unique,
+  reverse,
 } from '../../value';
 import { SwappedDimensions, ConcatenatedColumn } from '../../lazy';
 import { Type, buildType as t } from '../../type';
@@ -50,7 +52,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     isReducer: true,
-    fnValues: ([arg]: Value[]) => getColumnLike(arg).atIndex(0),
+    fnValues: ([arg]: Value[]) =>
+      getDefined(getColumnLike(arg).atIndex(0), 'could not find first element'),
     functionSignature: 'column<A> -> A',
     explanation: 'First element of a column.',
     example: 'first(Table.Column)',
@@ -63,7 +66,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     fnValues: ([arg]: Value[]) => {
       const col = getColumnLike(arg);
-      return col.atIndex(col.rowCount - 1);
+      return getDefined(
+        col.atIndex(col.rowCount - 1),
+        'could not find last element'
+      );
     },
     functionSignature: 'column<A> -> A',
     explanation: 'Last element of a column.',
@@ -150,7 +156,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   sort: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: ([column]) => ValueTransforms.sort(getColumnLike(column)),
+    fnValues: ([column]) => sort(getColumnLike(column)),
     functionSignature: 'column<A>:R -> R',
     explanation: 'Sorts a column.',
     syntax: 'sort(Table.Column)',
@@ -161,7 +167,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   unique: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: ([column]) => ValueTransforms.unique(getColumnLike(column)),
+    fnValues: ([column]) => unique(getColumnLike(column)),
     functionSignature: 'column<A> -> column<A>',
     explanation: 'Extracts the unique values of a column.',
     syntax: 'unique(Table.Column)',
@@ -175,9 +181,9 @@ export const listOperators: Record<string, BuiltinSpec> = {
       Type.either(column.isColumn(), column.isTable()),
     fnValuesNoAutomap: ([column]) => {
       if (column instanceof Table) {
-        return column.mapColumns((column) => ValueTransforms.reverse(column));
+        return column.mapColumns((column) => reverse(column));
       } else {
-        return ValueTransforms.reverse(getColumnLike(column));
+        return reverse(getColumnLike(column));
       }
     },
     explanation: 'Reverses the order of a column or table.',

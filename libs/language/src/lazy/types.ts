@@ -1,4 +1,4 @@
-import { ColumnLike, Value } from '../value';
+import { ColumnLikeValue, Value } from '../value';
 
 export type DimensionId = string | number;
 export interface Dimension {
@@ -6,7 +6,7 @@ export interface Dimension {
 }
 
 export type MinimalTensor = Pick<
-  ColumnLike,
+  ColumnLikeValue,
   'lowLevelGet' | 'dimensions' | 'indexToLabelIndex'
 >;
 

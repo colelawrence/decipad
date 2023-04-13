@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
-import { compare } from './compare-values';
-import { fromJS } from '.';
+import { fromJS } from '..';
+import { compare } from './compare';
 
 it('can compare columns', () => {
   expect(compare(fromJS([1, 2]), fromJS([1, 2]))).toEqual(0);

@@ -2,19 +2,22 @@ import { getDefined } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
 import {
-  compare,
   getColumnLike,
   isColumnLike,
   Row,
   Table,
-  ValueTransforms,
   RuntimeError,
+  sortMap,
+  applyMap,
+  applyFilterMap,
+  Value,
 } from '../../value';
 import { OneResult } from '../../interpreter/interpreter-types';
 import { ConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
 import { buildType as t, Type } from '../../type';
 import { getInstanceof, zip } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
+import { compare } from '../../compare';
 
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
@@ -42,8 +45,12 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         return whenTable(table);
       }
     },
-    // eslint-disable-next-line default-param-last
-    fnValuesNoAutomap: ([tableOrColumn, needle], [tableType] = [], realm) => {
+    fnValuesNoAutomap: (
+      [tableOrColumn, needle],
+      // eslint-disable-next-line default-param-last
+      [tableType] = [],
+      realm
+    ): Value => {
       const getNeedleIndexAtTable = (table: Table) => {
         const needleVal = needle.getData();
         const firstColumn = table.columns[0];
@@ -70,7 +77,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
           );
         }
 
-        return tableOrColumn.atIndex(index);
+        return getDefined(
+          tableOrColumn.atIndex(index),
+          `could not find element at position ${index}`
+        );
       }
 
       const table = getInstanceof(tableOrColumn, Table);
@@ -87,7 +97,12 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       }
 
       return Row.fromNamedCells(
-        table.columns.map((column) => column.atIndex(rowIndex)),
+        table.columns.map((column) =>
+          getDefined(
+            column.atIndex(rowIndex),
+            `could not find element at row ${rowIndex}`
+          )
+        ),
         table.columnNames
       );
     },
@@ -132,9 +147,9 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       Type.combine(column.isColumn().withAtParentIndex(), table.isTable()),
     fnValues: ([_table, _column]) => {
       const column = getColumnLike(_column);
-      const sortMap = ValueTransforms.sortMap(column);
+      const map = sortMap(column);
       const table = getInstanceof(_table, Table);
-      return table.mapColumns((col) => ValueTransforms.applyMap(col, sortMap));
+      return table.mapColumns((col) => applyMap(col, map));
     },
     explanation: 'Reorder table rows based on a column.',
     syntax: 'sortby(Table, Table.Column)',
@@ -155,9 +170,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
     fnValuesNoAutomap: ([_table, _column]) => {
       const filterMap = getColumnLike(_column).getData() as boolean[];
       const table = getInstanceof(_table, Table);
-      return table.mapColumns((col) =>
-        ValueTransforms.applyFilterMap(col, filterMap)
-      );
+      return table.mapColumns((col) => applyFilterMap(col, filterMap));
     },
     explanation: 'Filter table rows based on column values.',
     syntax: 'filter(Table, Column Condition)',

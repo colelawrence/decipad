@@ -1,6 +1,6 @@
 import { BuiltinSpec } from '../interfaces';
 import { Type, buildType as t, InferError } from '../../type';
-import { compare } from '../../value';
+import { compare } from '../../compare';
 
 const cmpFunctor = ([left, right]: Type[]): Type => {
   if (left.type === 'boolean') {

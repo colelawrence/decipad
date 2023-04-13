@@ -1,5 +1,5 @@
 import { zip } from '@decipad/utils';
-import { isColumnLike, ColumnLike, Table, Value } from '../value';
+import { isColumnLike, ColumnLikeValue, Table, Value } from '../value';
 import type { AST, ExternalDataMap, Context } from '..';
 import { Stack, StackNamespaceJoiner, StackNamespaceSplitter } from '../stack';
 import { getDefined } from '../utils';
@@ -69,7 +69,7 @@ const tableItemsToTable: StackNamespaceJoiner<Value> = (tableItems) => {
   for (const v of tableItems.values()) {
     if (!isColumnLike(v)) throw new Error('expected column-like');
   }
-  return Table.fromMapping(tableItems as Map<string, ColumnLike>);
+  return Table.fromMapping(tableItems as Map<string, ColumnLikeValue>);
 };
 
 const tableToTableItems: StackNamespaceSplitter<Value> = (table) => {

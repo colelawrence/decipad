@@ -1,4 +1,4 @@
-import { ColumnLike } from '../value';
+import { ColumnLikeValue } from '../value';
 import { chooseFirst, undoChooseFirst } from '../dimtools/common';
 import { implementColumnLike } from './LazyAtIndex';
 import { Dimension, MinimalTensor } from './types';
@@ -22,12 +22,12 @@ import { Dimension, MinimalTensor } from './types';
  */
 export const SwappedDimensions = implementColumnLike(
   class SwappedDimensions implements MinimalTensor {
-    unswappedHC: ColumnLike;
+    unswappedHC: ColumnLikeValue;
 
     dimensions: Dimension[];
     dominantDimensionIndex: number;
 
-    constructor(unswappedHC: ColumnLike, dominantDimensionIndex: number) {
+    constructor(unswappedHC: ColumnLikeValue, dominantDimensionIndex: number) {
       this.unswappedHC = unswappedHC;
 
       this.dominantDimensionIndex = dominantDimensionIndex;

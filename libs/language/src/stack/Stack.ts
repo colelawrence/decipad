@@ -158,11 +158,13 @@ export class Stack<T> {
 
   set(
     varName: string,
-    value: T,
+    value: T | undefined,
     varGroup: VarGroup = 'lexical',
     id: string | undefined = undefined
   ) {
-    return this.setNamespaced(['', varName], value, varGroup, id);
+    if (value != null) {
+      return this.setNamespaced(['', varName], value, varGroup, id);
+    }
   }
 
   setNamespaced(

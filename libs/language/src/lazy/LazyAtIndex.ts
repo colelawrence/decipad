@@ -1,6 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { Class } from 'utility-types';
-import { ColumnLike, Value } from '../value';
+import { ColumnLikeValue, Value } from '../value';
 import { MinimalTensor } from './types';
 import { OneResult } from '../interpreter/interpreter-types';
 import { materialize } from './materialize';
@@ -18,9 +18,9 @@ import { materialize } from './materialize';
 export const LazyAtIndex = implementColumnLike(
   class LazyAtIndex implements MinimalTensor {
     index: number;
-    innerHC: ColumnLike;
+    innerHC: ColumnLikeValue;
 
-    constructor(innerHC: ColumnLike, index: number) {
+    constructor(innerHC: ColumnLikeValue, index: number) {
       this.innerHC = innerHC;
       this.index = index;
 
@@ -44,7 +44,7 @@ export const LazyAtIndex = implementColumnLike(
  * Extend hypercube-like class `Cls` such that it implements the `ColumnLike` interface
  */
 export function implementColumnLike<T extends Class<MinimalTensor>>(Cls: T) {
-  return class ColumnLikeMixin extends Cls implements ColumnLike {
+  return class ColumnLikeMixin extends Cls implements ColumnLikeValue {
     get values() {
       const values: Value[] = [];
       for (let index = 0; index < this.rowCount; index++) {
