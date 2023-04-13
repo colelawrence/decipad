@@ -4,7 +4,8 @@ import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
 import { parseDate } from './parseDate';
 import { Sheet, SpreadsheetColumn, InferTableOptions } from './types';
-import { fastNumber } from './fastNumber';
+import { parseBoolean } from './inferBoolean';
+import { fasterNumber } from './fasterNumber';
 
 interface WithColumnNamesResult {
   columnNames: string[];
@@ -29,26 +30,36 @@ const withColumnNames = (
   };
 };
 
-function toValue(
+const columnToValue = (
+  type: SerializedType,
+  value: SpreadsheetColumn
+): Result.OneResult[] => {
+  return value.map((elem) => {
+    switch (type?.kind) {
+      case 'number':
+        return fasterNumber(elem as string | number);
+      case 'date':
+        return BigInt(
+          parseDate(elem as string, type.date)?.date.getTime() ?? 0
+        );
+      case 'string':
+        return (elem as string) ?? '';
+      case 'boolean':
+        return parseBoolean(elem as string);
+      default:
+        return elem.toString();
+    }
+  });
+};
+
+const tableToValue = (
   columnTypes: SerializedType[],
   columnValues: SpreadsheetColumn[]
-): Result.OneResult[][] {
-  return columnValues.map((col, colIndex) => {
-    const type = columnTypes[colIndex];
-    return col.map((elem) => {
-      switch (type?.kind) {
-        case 'number':
-          return fastNumber(elem as number | string);
-        case 'date':
-          return BigInt(parseDate(elem as string)?.date.getTime() ?? 0);
-        case 'string':
-          return (elem as string) ?? '';
-        default:
-          return elem.toString();
-      }
-    });
-  });
-}
+): Result.OneResult[][] => {
+  return columnValues.map((col, colIndex) =>
+    columnToValue(columnTypes[colIndex], col)
+  );
+};
 
 export const inferTable = (
   computer: Computer,
@@ -64,6 +75,7 @@ export const inferTable = (
         userType: options.columnTypeCoercions?.[colIndex],
       })
   );
+  const value = tableToValue(columnTypes, columnValues);
 
   return {
     type: {
@@ -72,6 +84,6 @@ export const inferTable = (
       columnNames,
       indexName: columnNames[0],
     },
-    value: toValue(columnTypes, columnValues),
+    value,
   };
 };

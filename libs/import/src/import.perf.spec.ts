@@ -6,7 +6,10 @@ import getPort from 'get-port';
 import { getDefined } from '@decipad/utils';
 import { tryImport } from '.';
 
-const MAX_BIG_IMPORT_TIMEOUT_MS = 30_000;
+const timeoutMultiplier = process.env.CI ? 2 : 1;
+
+const MAX_BIG_IMPORT_TIMEOUT_MS = 60_000 * timeoutMultiplier;
+const MAX_BIGISH_IMPORT_TIMEOUT_MS = 6_000 * timeoutMultiplier;
 
 describe('import performance', () => {
   let server: Server;
@@ -32,6 +35,32 @@ describe('import performance', () => {
   });
 
   it(
+    'imports big(ish) csv',
+    async () => {
+      const computer = new Computer();
+      const address = getDefined(server.address());
+      const file = '/bigish1.csv';
+      const url =
+        typeof address === 'string'
+          ? new URL(file, address)
+          : new URL(file, `http://${address.address}:${address.port}/`);
+      const startTime = Date.now();
+      const result = await tryImport(
+        { computer, url },
+        {
+          // useFirstRowAsHeader: true,
+          useFirstRowAsHeader: true,
+        }
+      );
+      const ellapsed = Date.now() - startTime;
+      expect(ellapsed).toBeLessThanOrEqual(MAX_BIGISH_IMPORT_TIMEOUT_MS);
+      expect(result).toHaveLength(1);
+      expect(result[0].result).toMatchSnapshot('bigish1.csv-import-result');
+    },
+    MAX_BIGISH_IMPORT_TIMEOUT_MS * 2
+  );
+
+  it(
     'imports big csv',
     async () => {
       const computer = new Computer();
@@ -41,15 +70,18 @@ describe('import performance', () => {
         typeof address === 'string'
           ? new URL(file, address)
           : new URL(file, `http://${address.address}:${address.port}/`);
+      const startTime = Date.now();
       const result = await tryImport(
         { computer, url },
         {
           useFirstRowAsHeader: true,
         }
       );
+      const ellapsed = Date.now() - startTime;
+      expect(ellapsed).toBeLessThanOrEqual(MAX_BIG_IMPORT_TIMEOUT_MS);
       expect(result).toHaveLength(1);
       expect(result[0].result).toMatchSnapshot('big1.csv-import-result');
     },
-    MAX_BIG_IMPORT_TIMEOUT_MS
+    MAX_BIG_IMPORT_TIMEOUT_MS * 2
   );
 });

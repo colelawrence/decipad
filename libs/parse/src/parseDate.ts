@@ -60,6 +60,7 @@ const combineWithAndWithoutTimezone = (formats: string[]) =>
 // https://date-fns.org/v2.25.0/docs/format
 export const dateFormats = once((): Record<Time.Specificity, DateFormat[]> => {
   const dayFormats = [
+    'MM/dd/yyyy',
     'dd-MM-yyyy',
     'yyyy-MM-dd',
     'dd/MM/yyyy',
@@ -137,10 +138,11 @@ export const parseDate = (
       : specificity
       ? dateFormatsForSpecificity(specificity)
       : dateFormats();
+  const now = new Date();
   for (const spec of Object.keys(formats) as Array<Time.Specificity>) {
     const formatStrings = formats[spec] ?? [];
     for (const format of formatStrings) {
-      const date = parse(value, format, new Date());
+      const date = parse(value, format, now);
       if (isValidDate(date)) {
         return {
           format,

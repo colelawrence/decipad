@@ -15,7 +15,7 @@ interface InferColumnOptions {
   doNotTryExpressionNumbersParse?: boolean;
 }
 
-const INFER_MAX_ROWS = 100;
+const INFER_MAX_ROWS = 20;
 
 export const inferColumn = memoize(
   (
@@ -92,6 +92,9 @@ export const inferColumn = memoize(
         case 'string': {
           const inferredType = inferType(computer, value, options);
           coalesce(inferredType.type);
+          if (inferredType.type.kind === 'string') {
+            continue;
+          }
           break;
         }
         case 'undefined':

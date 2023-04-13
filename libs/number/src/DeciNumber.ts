@@ -100,65 +100,63 @@ export class DeciNumber {
     if (f == null) {
       return;
     }
-    if (
-      typeof f === 'string' ||
-      typeof f === 'bigint' ||
-      typeof f === 'number'
-    ) {
-      if (typeof f === 'number') {
-        if (Number.isNaN(f)) {
-          return;
-        }
-        if (!Number.isFinite(f)) {
-          this.s = BigInt(Math.sign(f));
-          this.infinite = true;
-          return;
-        }
+    const tof = typeof f;
+    if (tof === 'number') {
+      if (Number.isNaN(f)) {
+        return;
       }
-      const n = F(f);
+      if (!Number.isFinite(f)) {
+        this.s = BigInt(Math.sign(f as number));
+        this.infinite = true;
+        return;
+      }
+    }
+    if (tof === 'number' || tof === 'string' || tof === 'bigint') {
+      const n = F(f as number | string | bigint);
       this.n = n.n;
       this.d = n.d;
       this.s = n.s;
       return;
     }
-    if (f.d == null && f.n == null && !f.infinite) {
+    const ff = f as UndefinableOrInfiniteOrFractionLike;
+    if (ff.d == null && ff.n == null && !ff.infinite) {
       return;
     }
-    if (typeof f.n === 'number' && !Number.isFinite(f.n)) {
-      if (Number.isNaN(f.n)) {
+    if (typeof ff.n === 'number' && !Number.isFinite(ff.n)) {
+      if (Number.isNaN(ff.n)) {
         return;
       }
-      if (Number.isFinite(f.d)) {
+      if (Number.isFinite(ff.d)) {
         this.infinite = true;
-        this.s = f.s != null ? BigInt(f.s) : 1n;
+        this.s = ff.s != null ? BigInt(ff.s) : 1n;
       }
       return;
     }
-    if (typeof f.d === 'number' && !Number.isFinite(f.d)) {
+    if (typeof ff.d === 'number' && !Number.isFinite(ff.d)) {
       this.n = 0n;
       this.d = 1n;
-      this.s = BigInt(Math.sign(Number(f.n)) * Math.sign(Number(f.d)));
+      this.s = BigInt(Math.sign(Number(ff.n)) * Math.sign(Number(ff.d)));
       return;
     }
 
-    if (!f.d) {
-      if (f.n) {
+    if (!ff.d) {
+      if (ff.n) {
         this.infinite = true;
-        this.s = BigInt(Math.sign(Number(f.n)) * Math.sign(Number(f.d)));
+        this.s = BigInt(Math.sign(Number(ff.n)) * Math.sign(Number(ff.d)));
         return;
-      } else if (!f.infinite) {
+      } else if (!ff.infinite) {
         return;
       }
     }
 
-    if (isFractionLike(f)) {
-      const fraction = F(f);
+    if (isFractionLike(ff)) {
+      const fraction = F(ff);
       this.n = fraction.n;
       this.d = fraction.d;
       this.s = fraction.s;
     } else {
-      this.s = BigInt(Number(f.s ?? 1));
-      this.infinite = !!f.infinite;
+      this.s = BigInt(Number(ff.s ?? 1));
+      this.infinite = !!ff.infinite;
     }
   }
 

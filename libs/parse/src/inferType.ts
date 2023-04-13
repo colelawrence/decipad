@@ -73,7 +73,7 @@ export const inferType = (
         inferNumber(computer, text, options) ?? inferParseError(text, type.kind)
       );
     case 'string':
-      return inferText(text) ?? inferParseError(text, type.kind);
+      return inferText(text);
     case 'anything':
     case 'nothing':
     case undefined: {

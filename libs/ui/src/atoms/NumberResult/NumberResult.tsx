@@ -1,6 +1,7 @@
 import { useComputer } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { N } from '@decipad/number';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -20,7 +21,7 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
 }) => {
   const computer = useComputer();
 
-  const formatted = computer.formatNumber(type, value);
+  const formatted = computer.formatNumber(type, N(value));
 
   const fullResult = <span css={numberResultStyles}>{formatted.asString}</span>;
 
