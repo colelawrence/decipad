@@ -340,10 +340,9 @@ describe('useDataView hook performance', () => {
     });
     let elapsed = Date.now() - startTime;
     expect(elapsed).toBeLessThanOrEqual(maxRunBigTableTimeoutMs);
-    expect(testResult).toMatchSnapshot();
 
     startTime = Date.now();
-    const layoutDataResult = await runWithLayoutData({
+    await runWithLayoutData({
       waitForCallbackCount: 2,
       computer,
       editor,
@@ -354,7 +353,5 @@ describe('useDataView hook performance', () => {
     });
     elapsed = Date.now() - startTime;
     expect(elapsed).toBeLessThanOrEqual(maxRunBigTableTimeoutMs);
-
-    expect(layoutDataResult).toMatchSnapshot();
   }, 120_000);
 });

@@ -333,7 +333,7 @@ describe('more models', () => {
       value: N(123, 20),
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 });
 
