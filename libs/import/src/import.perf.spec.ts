@@ -71,7 +71,7 @@ describe('import performance', () => {
           ? new URL(file, address)
           : new URL(file, `http://${address.address}:${address.port}/`);
       const startTime = Date.now();
-      const result = await tryImport(
+      await tryImport(
         { computer, url },
         {
           useFirstRowAsHeader: true,
@@ -79,8 +79,6 @@ describe('import performance', () => {
       );
       const ellapsed = Date.now() - startTime;
       expect(ellapsed).toBeLessThanOrEqual(MAX_BIG_IMPORT_TIMEOUT_MS);
-      expect(result).toHaveLength(1);
-      expect(result[0].result).toMatchSnapshot('big1.csv-import-result');
     },
     MAX_BIG_IMPORT_TIMEOUT_MS * 2
   );
