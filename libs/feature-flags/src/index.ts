@@ -10,6 +10,7 @@ export const availableFlags = [
   'COLOR_SIDEBAR',
   'DASHBOARD_STATUS',
   'DASHBOARD_SEARCH',
+  'WORKSPACE_MEMBERS',
   'ONBOARDING_ACCOUNT_SETUP',
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
@@ -73,6 +74,7 @@ let overrides: Flags = {
   CODE_LINE_NAME_SEPARATED: true,
   EXPR_REFS: true,
   POPULATED_NEW_NOTEBOOK: true,
+  WORKSPACE_MEMBERS: false,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

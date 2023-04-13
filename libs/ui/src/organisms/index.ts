@@ -44,6 +44,8 @@ export { TableResult } from './TableResult/TableResult';
 export { UploadProgressModal } from './UploadProgressModal/UploadProgressModal';
 export { VariableEditor } from './VariableEditor/VariableEditor';
 export { VariableEditorMenu } from './VariableEditorMenu/VariableEditorMenu';
+export { WorkspaceMembers } from './WorkspaceMembers/WorkspaceMembers';
+export type { WorkspaceMembersProps } from './WorkspaceMembers/WorkspaceMembers';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceOptions } from './WorkspaceOptions/WorkspaceOptions';

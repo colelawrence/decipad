@@ -1,0 +1,17 @@
+mutation ChangeWorkspaceAccessLevel(
+  $workspaceId: ID!
+  $userId: ID!
+  $email: String!
+  $permissionType: PermissionType!
+  $canComment: Boolean!
+) {
+  shareWorkspaceWithEmail(
+    id: $workspaceId
+    email: $email
+    permissionType: $permissionType
+    canComment: $canComment
+  ) {
+    id
+    ...WorkspaceMembers
+  }
+}

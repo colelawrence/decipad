@@ -1,6 +1,8 @@
+/* eslint decipad/css-prop-named-variable: 2 */
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
-import { ComponentProps, useState } from 'react';
+import { css } from '@emotion/react';
+import { ComponentProps, useCallback, useState } from 'react';
 import { Button, InputField } from '../../atoms';
 import { ClosableModal } from '../../organisms';
 
@@ -17,34 +19,57 @@ export const CreateWorkspaceModal = ({
   const [name, setName] = useState('');
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
 
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsSubmitting(true);
+      try {
+        await onCreate(name);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [name, onCreate, setIsSubmitting]
+  );
+
   return (
     <ClosableModal
       {...props}
       title="Create New Workspace"
       closeAction={closeHref}
     >
-      <form
-        css={{ display: 'grid', rowGap: '12px' }}
-        onSubmit={async (event) => {
-          event.preventDefault();
-          setIsSubmitting(true);
-          try {
-            await onCreate(name);
-          } finally {
-            setIsSubmitting(false);
-          }
-        }}
-      >
+      <form css={formWrapperStyle} onSubmit={handleSubmit}>
         <InputField
+          small
           required
-          placeholder="My Workspace"
+          placeholder="Team workspace"
+          label="Name of Workspace"
           value={name}
           onChange={setName}
         />
-        <Button type="secondary" submit disabled={!name || isSubmitting}>
-          Create Workspace
-        </Button>
+        <div css={createWorkspaceButtonStyle}>
+          <Button
+            submit
+            type="primary"
+            testId="btn-create-modal"
+            disabled={!name || isSubmitting}
+          >
+            Create Workspace
+          </Button>
+          <Button type="secondary">Cancel</Button>
+        </div>
       </form>
     </ClosableModal>
   );
 };
+
+const formWrapperStyle = css({
+  display: 'grid',
+  rowGap: '26px',
+});
+
+const createWorkspaceButtonStyle = css({
+  display: 'flex',
+  gap: '8px',
+  button: { flexGrow: 0 },
+});

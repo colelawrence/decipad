@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { Divider } from '../../atoms';
 import { Close } from '../../icons';
 import { p15Medium } from '../../primitives';
 import { Anchor } from '../../utils';
@@ -12,6 +11,7 @@ const styles = css({
 const titleRowStyles = css({
   display: 'flex',
   flexWrap: 'wrap-reverse',
+  marginBottom: '12px',
 });
 const closeStyles = css({
   width: '16px',
@@ -45,7 +45,6 @@ export const ClosableModalHeader = ({
           </button>
         )}
       </div>
-      <Divider />
     </div>
   );
 };

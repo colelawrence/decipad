@@ -10,18 +10,18 @@ const props: ComponentProps<typeof CreateWorkspaceModal> = {
 };
 
 it('cannot create a workspace in its initial state', () => {
-  const { getByRole } = render(<CreateWorkspaceModal {...props} />);
-  expect(getByRole('button')).toBeDisabled();
+  const { getByTestId } = render(<CreateWorkspaceModal {...props} />);
+  expect(getByTestId('btn-create-modal')).toBeDisabled();
 });
 
 it('emits a create event when typings a workspace name and submitting', async () => {
   const handleCreate = jest.fn();
-  const { getByRole, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText } = render(
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
 
   await userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
-  await userEvent.click(getByRole('button'));
+  await userEvent.click(getByTestId('btn-create-modal'));
   await act(() => timeout(500));
   await waitFor(() =>
     expect(handleCreate).toHaveBeenCalledWith('My Workspace')
@@ -35,19 +35,19 @@ it('disables workspace creation while already submitting', async () => {
       resolveCreation = resolve;
     })
   );
-  const { getByRole, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText } = render(
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
 
   await act(async () => {
     await userEvent.type(getByPlaceholderText(/workspace/i), 'My Workspace');
-    await userEvent.click(getByRole('button'));
+    await userEvent.click(getByTestId('btn-create-modal'));
   });
-  expect(getByRole('button')).toBeDisabled();
+  expect(getByTestId('btn-create-modal')).toBeDisabled();
   await act(async () => {
     resolveCreation();
   });
   await waitFor(() => {
-    expect(getByRole('button')).not.toBeDisabled();
+    expect(getByTestId('btn-create-modal')).not.toBeDisabled();
   });
 });

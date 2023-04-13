@@ -1,7 +1,8 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
-import { cssVar, p14Regular, setCssVar } from '../../primitives';
+import { FC, useState } from 'react';
+import { nanoid } from 'nanoid';
+import { cssVar, p14Regular, setCssVar, p13Medium } from '../../primitives';
 
 const inputStyles = css({
   padding: '12px',
@@ -13,6 +14,19 @@ const inputStyles = css({
   '&::placeholder': {
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   },
+});
+
+const inputStylesSmall = css(inputStyles, {
+  height: '32px',
+  padding: '10px 12px',
+  backgroundColor: cssVar('backgroundColor'),
+
+  ...p13Medium,
+});
+
+const labelStyles = css(p13Medium, {
+  color: cssVar('weakTextColor'),
+  marginBottom: '8px',
 });
 
 type FieldType =
@@ -28,7 +42,9 @@ export type InputFieldProps = {
   readonly required?: boolean;
   readonly autoFocus?: boolean;
   readonly disabled?: boolean;
+  readonly small?: boolean;
 
+  readonly label?: string;
   readonly placeholder?: string;
 
   readonly value: string;
@@ -42,7 +58,9 @@ export const InputField = ({
   required = false,
   autoFocus = false,
   disabled = false,
+  small,
 
+  label,
   placeholder,
 
   value,
@@ -50,12 +68,20 @@ export const InputField = ({
   onChange = noop,
   onEnter = noop,
 }: InputFieldProps): ReturnType<FC> => {
-  return (
+  const id = `input-${useState(nanoid)[0]}`;
+  const labelEl = label ? (
+    <label htmlFor={id} css={labelStyles}>
+      {label}
+    </label>
+  ) : null;
+
+  const inputEl = (
     <input
+      id={id}
       autoFocus={autoFocus}
       disabled={disabled}
       css={[
-        inputStyles,
+        small ? inputStylesSmall : inputStyles,
         type !== 'search'
           ? {
               border: `1px solid ${cssVar('borderColor')}`,
@@ -75,5 +101,12 @@ export const InputField = ({
         }
       }}
     />
+  );
+
+  return (
+    <div css={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+      {labelEl}
+      {inputEl}
+    </div>
   );
 };

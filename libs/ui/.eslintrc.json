@@ -1,5 +1,6 @@
 {
   "extends": ["../../libs/eslint-config-decipad/react"],
+  "plugins": ["decipad"],
   "ignorePatterns": [
     "!**/*",
     ".babelrc.js",
@@ -10,7 +11,9 @@
     "import/no-extraneous-dependencies": [
       // TODO re-enable when properly using Yarn workspaces
       "off"
-    ]
+    ],
+    // "custom-emotion/css-prop-named-variable": "error",
+    "decipad/css-prop-named-variable": "off"
   },
   "overrides": [
     {

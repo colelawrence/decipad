@@ -1,0 +1,7 @@
+{
+  "name": "eslint-plugin-decipad",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/eslint-plugin-decipad",
+  "projectType": "library",
+  "tags": []
+}

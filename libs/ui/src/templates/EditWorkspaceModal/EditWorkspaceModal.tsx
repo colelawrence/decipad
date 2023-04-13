@@ -1,9 +1,11 @@
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, useState } from 'react';
+import React, { ComponentProps, useCallback, useState } from 'react';
 import { Button, InputField } from '../../atoms';
-import { ClosableModal } from '../../organisms';
+import { People } from '../../icons';
+import { ClosableModal, WorkspaceMembers } from '../../organisms';
 import { cssVar, p13Medium, p13Regular, setCssVar } from '../../primitives';
 
 type EditWorkspaceModalProps = {
@@ -14,6 +16,8 @@ type EditWorkspaceModalProps = {
   readonly closeHref: string;
   readonly onRename?: (newName: string) => void | Promise<void>;
   readonly onDelete?: () => void | Promise<void>;
+
+  readonly workspaceMembers?: ComponentProps<typeof WorkspaceMembers>;
 } & Pick<ComponentProps<typeof ClosableModal>, 'Heading'>;
 
 export const EditWorkspaceModal = ({
@@ -25,6 +29,8 @@ export const EditWorkspaceModal = ({
   onRename = noop,
   onDelete = noop,
 
+  workspaceMembers,
+
   ...props
 }: EditWorkspaceModalProps): ReturnType<React.FC> => {
   const [newName, setNewName] = useState(name);
@@ -32,25 +38,66 @@ export const EditWorkspaceModal = ({
     useState('');
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
 
+  const membersEnabled = isFlagEnabled('WORKSPACE_MEMBERS');
+
+  const [showMembers, setShowMembers] = useState(false);
+
+  const openMembersList = useCallback(
+    () => setShowMembers(true),
+    [setShowMembers]
+  );
+
+  const closeMembersList = useCallback(
+    () => setShowMembers(false),
+    [setShowMembers]
+  );
+
+  const renameWorkspace = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsSubmitting(true);
+      try {
+        await onRename(newName);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [setIsSubmitting, onRename, newName]
+  );
+
+  const deleteWorkspace = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      setIsSubmitting(true);
+      try {
+        await onDelete();
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [setIsSubmitting, onDelete]
+  );
+
+  if (showMembers && workspaceMembers) {
+    return (
+      <ClosableModal
+        {...props}
+        title="Workspace members"
+        closeAction={closeMembersList}
+      >
+        <WorkspaceMembers {...workspaceMembers} />
+      </ClosableModal>
+    );
+  }
+
   return (
     <ClosableModal
       {...props}
       title="Workspace settings"
       closeAction={closeHref}
     >
-      <div css={{ display: 'grid', rowGap: '24px' }}>
-        <form
-          css={{ display: 'grid', rowGap: '12px' }}
-          onSubmit={async (event) => {
-            event.preventDefault();
-            setIsSubmitting(true);
-            try {
-              await onRename(newName);
-            } finally {
-              setIsSubmitting(false);
-            }
-          }}
-        >
+      <div css={modalStyles}>
+        <form css={formStyles} onSubmit={renameWorkspace}>
           <h3 css={headingStyles}>Rename Workspace</h3>
           <InputField
             required
@@ -66,19 +113,19 @@ export const EditWorkspaceModal = ({
             Rename
           </Button>
         </form>
+        {membersEnabled && (
+          <div css={membersStyle}>
+            <h3 css={headingStyles}>Workspace members</h3>
+            <Button type="secondary" onClick={openMembersList}>
+              <span css={buttonIconStyle}>
+                <People />
+              </span>
+              Manage members
+            </Button>
+          </div>
+        )}
         {allowDelete && (
-          <form
-            css={{ display: 'grid', rowGap: '12px' }}
-            onSubmit={async (event) => {
-              event.preventDefault();
-              setIsSubmitting(true);
-              try {
-                await onDelete();
-              } finally {
-                setIsSubmitting(false);
-              }
-            }}
-          >
+          <form css={formStyles} onSubmit={deleteWorkspace}>
             <h3 css={headingStyles}>Delete Workspace</h3>
             <p css={css(p13Regular)}>
               Are you sure you want to delete your workspace? This will also
@@ -109,3 +156,24 @@ const headingStyles = css(
   p13Medium,
   setCssVar('currentTextColor', cssVar('weakTextColor'))
 );
+
+const modalStyles = css({
+  display: 'grid',
+  rowGap: '24px',
+});
+
+const membersStyle = css({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  gap: '8px',
+});
+
+const buttonIconStyle = css({
+  height: '18px',
+  width: '18px',
+  marginRight: '4px',
+});
+
+const formStyles = css({ display: 'grid', rowGap: '12px' });

@@ -23,6 +23,20 @@ fragment WorkspaceSection on Section {
   createdAt
 }
 
+fragment WorkspaceMembers on Workspace {
+  access {
+    users {
+      permission
+      user {
+        id
+        name
+        email
+        image
+      }
+    }
+  }
+}
+
 fragment DashboardWorkspace on Workspace {
   id
   name
@@ -34,6 +48,7 @@ fragment DashboardWorkspace on Workspace {
   sections {
     ...WorkspaceSection
   }
+  ...WorkspaceMembers
 }
 
 query GetWorkspaces {

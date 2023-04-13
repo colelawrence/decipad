@@ -1,0 +1,6 @@
+mutation UnshareWorkspaceWithUser($workspaceId: ID!, $userId: ID!) {
+  unshareWorkspaceWithUser(id: $workspaceId, userId: $userId) {
+    id
+    ...WorkspaceMembers
+  }
+}

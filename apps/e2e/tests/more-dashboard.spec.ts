@@ -25,8 +25,8 @@ test.describe('Workspace flows', () => {
   test('Create a workspace', async ({ page }) => {
     await expect(page.locator('[role=img]')).toHaveCount(2);
     await page.locator('[data-test-id="create-workspace-button"]').click();
-    await page.getByPlaceholder('My Workspace').click();
-    await page.getByPlaceholder('My Workspace').fill('Wtf');
+    await page.getByPlaceholder('Team workspace').click();
+    await page.getByPlaceholder('Team workspace').fill('Wtf');
     await page.getByRole('button', { name: 'Create Workspace' }).click();
     await expect(page.getByText('Wtf')).toBeVisible();
   });

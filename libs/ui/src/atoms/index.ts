@@ -13,6 +13,7 @@ export { CodeError } from './CodeError/CodeError';
 export { CodeLineFloat } from './CodeLineFloat/CodeLineFloat';
 export { CodeLinePlaceholder } from './CodeLinePlaceholder/CodeLinePlaceholder';
 export { CodeSyntax } from './CodeSyntax/CodeSyntax';
+export { CollabMember } from './CollabMember/CollabMember';
 export { ColorPicker } from './ColorPicker/ColorPicker';
 export { ColorStatus } from './ColorStatus/ColorStatus';
 export { ColorStatusCircle } from './ColorStatus/ColorStatusCircle';

@@ -9,6 +9,7 @@ import {
   TColorStatus,
   TopbarPlaceholder,
   DashboardPlaceholder,
+  WorkspaceMembersProps,
 } from '@decipad/ui';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
@@ -31,6 +32,7 @@ import {
 } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import {
+  useChangeWorkspaceAccessLevelMutation,
   useCreateNotebookMutation,
   useCreateSectionMutation,
   useCreateWorkspaceMutation,
@@ -43,7 +45,9 @@ import {
   useMoveNotebookMutation,
   useRenameWorkspaceMutation,
   useSetUsernameMutation,
+  useShareWorkspaceWithEmailMutation,
   useUnarchiveNotebookMutation,
+  useUnshareWorkspaceWithUserMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
   useUpdateSectionAddNotebookMutation,
@@ -262,6 +266,10 @@ const Workspace: FC = () => {
     [workspaceData?.padsSharedWithMe?.items]
   );
 
+  const [, shareWorkspace] = useShareWorkspaceWithEmailMutation();
+  const [, unshareWorkspace] = useUnshareWorkspaceWithUserMutation();
+  const [, changeWorkspaceAccess] = useChangeWorkspaceAccessLevelMutation();
+
   const showNotebooks = useMemo(
     () =>
       isSharedPage
@@ -280,11 +288,69 @@ const Workspace: FC = () => {
     ]
   );
 
+  const workspaceMembers: WorkspaceMembersProps | null = useMemo(
+    () =>
+      !currentWorkspace
+        ? null
+        : {
+            workspaceId: currentWorkspace.id,
+            workspaceMembers: currentWorkspace.access?.users || [],
+            onInvite: async (id, email, permissionType) =>
+              shareWorkspace({
+                workspaceId: id,
+                email,
+                permissionType: permissionType as any,
+                canComment: true,
+              })
+                .catch((err) => {
+                  console.error('Failed to share workspace. Error:', err);
+                  toast('Failed to share workspace.', 'error');
+                })
+                .then(() => {}),
+            onRevoke: async (id, userId) =>
+              unshareWorkspace({
+                workspaceId: id,
+                userId,
+              })
+                .catch((err) => {
+                  console.error(
+                    'Failed to revoke workspace access. Error:',
+                    err
+                  );
+                  toast('Failed to revoke workspace access.', 'error');
+                })
+                .then(() => {}),
+            onPermissionChange: async (id, userId, email, permissionType) =>
+              changeWorkspaceAccess({
+                workspaceId: id,
+                userId,
+                email,
+                permissionType: permissionType as any,
+                canComment: true,
+              })
+                .catch((err) => {
+                  console.error(
+                    'Failed to change workspace permission. Error:',
+                    err
+                  );
+                  toast('Failed to change workspace permission.', 'error');
+                })
+                .then(() => {}),
+          },
+    [
+      currentWorkspace,
+      shareWorkspace,
+      unshareWorkspace,
+      changeWorkspaceAccess,
+      toast,
+    ]
+  );
+
   if (fetching) {
     return <DashboardPlaceholder />;
   }
 
-  if (!currentWorkspace || !session) {
+  if (!currentWorkspace || !workspaceMembers || !session) {
     return <ErrorPage Heading="h1" wellKnown="404" />;
   }
 
@@ -517,6 +583,7 @@ const Workspace: FC = () => {
             element={
               <EditWorkspaceModal
                 Heading="h1"
+                workspaceMembers={workspaceMembers}
                 name={currentWorkspace.name}
                 allowDelete={
                   workspaceData?.workspaces &&

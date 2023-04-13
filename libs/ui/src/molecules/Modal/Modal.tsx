@@ -31,7 +31,7 @@ const dialogStyles = css({
   padding: '24px',
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('borderColor')}`,
-  borderRadius: '10px',
+  borderRadius: '24px',
   width: '480px',
   boxShadow: `
     0px 2px 20px ${transparency(grey700, 0.04).rgba},
