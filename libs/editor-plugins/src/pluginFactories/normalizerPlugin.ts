@@ -157,6 +157,8 @@ const withNormalizerOverride = (
       }
       return normalizeNode(entry);
     };
+
+    return editor;
   };
 };
 
