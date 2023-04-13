@@ -130,11 +130,15 @@ const withNormalizerOverride = (
           if (newNormalize) {
             const normalize = newNormalize(entry);
             if (normalize) {
-              // eslint-disable-next-line no-console
-              console.debug(`Normalizer ${pluginName} >>>>>>>>>>>>>>>>>>`);
+              if (!process.env.CI) {
+                // eslint-disable-next-line no-console
+                console.debug(`Normalizer ${pluginName} >>>>>>>>>>>>>>>>>>`);
+              }
               normalize();
-              // eslint-disable-next-line no-console
-              console.debug(`Normalizer ${pluginName} <<<<<<<<<<<<<<<<<<`);
+              if (!process.env.CI) {
+                // eslint-disable-next-line no-console
+                console.debug(`Normalizer ${pluginName} <<<<<<<<<<<<<<<<<<`);
+              }
               return;
             }
           }
@@ -153,7 +157,6 @@ const withNormalizerOverride = (
       }
       return normalizeNode(entry);
     };
-    return editor;
   };
 };
 
