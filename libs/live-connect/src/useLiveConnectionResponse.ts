@@ -24,7 +24,6 @@ export interface LiveConnectionProps {
   source?: ImportElementSource;
   useFirstRowAsHeader?: boolean;
   columnTypeCoercions: Record<ColIndex, TableCellType>;
-  timeoutMs?: number;
   maxCellCount?: number;
   jsonPath?: string;
 }
@@ -36,7 +35,6 @@ export const useLiveConnectionResponse = ({
   options,
   useFirstRowAsHeader,
   columnTypeCoercions,
-  timeoutMs = 5000,
   maxCellCount,
   jsonPath,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
@@ -122,15 +120,6 @@ export const useLiveConnectionResponse = ({
       setError(new Error(ev.message));
     });
   }, [worker?.worker]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!result && !error) {
-        setError(new Error("Could not find the result you're looking for"));
-      }
-    }, timeoutMs);
-    return () => clearTimeout(timeout);
-  }, [error, result, timeoutMs]);
 
   const retry = useCallback(() => {
     setError(undefined);
