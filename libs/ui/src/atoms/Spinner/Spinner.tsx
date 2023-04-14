@@ -3,21 +3,13 @@ import { FC } from 'react';
 import { cssVar } from '../../primitives';
 
 const spinnerWrapperStyles = css({
-  display: 'block',
-  position: 'relative',
-  height: '25px',
-  width: '100px',
+  height: '16px',
+  width: '16px',
+  lineHeight: '35px',
 });
 
 const spinnerStyles = css({
   animation: 'rotate 2s linear infinite',
-  zIndex: 2,
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  margin: '-25px 0 0 -25px',
-  width: '25px',
-  height: '25px',
 });
 
 const circleStyles = css({

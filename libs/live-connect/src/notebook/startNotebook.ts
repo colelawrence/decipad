@@ -49,6 +49,7 @@ export const startNotebook = async (
           subscription.notify({
             meta: { title: identifier },
             result: result.result,
+            loading: false,
           });
         }
       }

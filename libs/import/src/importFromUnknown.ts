@@ -64,6 +64,7 @@ const importFromUnknownResponse = async (
       },
       result: unnestOneColumnOneCellIfNecessary(result),
       rawResult,
+      loading: false,
     },
   ];
 };

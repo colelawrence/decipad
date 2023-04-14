@@ -21,7 +21,7 @@ export const LiveConnectionResultContextProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
   const resultContextValue = useMemo(
-    () => new BehaviorSubject<ImportResult>({}),
+    () => new BehaviorSubject<ImportResult>({ loading: true }),
     []
   );
 

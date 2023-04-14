@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ColIndex,
   ImportElementSource,
@@ -42,6 +42,7 @@ export const useLiveConnectionResponse = ({
   const worker = useLiveConnectionWorker(workerGen);
   const [error, setError] = useState<Error | undefined>();
   const [result, setResult] = useState<ImportResult | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | undefined;
@@ -73,11 +74,14 @@ export const useLiveConnectionResponse = ({
                         formatError('en-US', res.result.type.errorCause)
                       )
                     );
-                  } else {
+                  } else if (res.result) {
                     setResult({
                       ...res,
                       result: deserializeResult(res.result),
                     });
+                  }
+                  if (res.loading != null) {
+                    setLoading(res.loading);
                   }
                 }
               }
@@ -127,5 +131,15 @@ export const useLiveConnectionResponse = ({
     setWorkerGen((gen) => gen + 1);
   }, []);
 
-  return { error, result, retry };
+  return useMemo(
+    () => ({
+      error,
+      result: {
+        ...result,
+        loading,
+      },
+      retry,
+    }),
+    [error, loading, result, retry]
+  );
 };

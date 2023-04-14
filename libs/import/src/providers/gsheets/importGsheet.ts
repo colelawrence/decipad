@@ -30,6 +30,7 @@ const errorResult = (err: string): ImportResultWithMandatoryResult => {
       },
       value: Result.UnknownValue.getData(),
     },
+    loading: false,
   };
 };
 
@@ -116,6 +117,7 @@ const loadAllSubsheets = async (
       results.push({
         meta: subMeta,
         result: result as Result.Result,
+        loading: false,
       });
     } catch (err) {
       results.push(errorResult((err as Error).message));
@@ -136,7 +138,7 @@ const importGsheetIslands = async (
 const importOneGsheet = async (
   params: ImportParams,
   options: ImportOptions
-) => {
+): Promise<ImportResult[]> => {
   const { sheetId, gid } = getSheetRequestDataFromUrl(params.url);
   const meta = await getSheetMeta(sheetId, params);
   const url = getDataUrlFromSheetMeta(sheetId, gid, meta);
@@ -154,6 +156,7 @@ const importOneGsheet = async (
         importedAt: new Date(),
       },
       result,
+      loading: false,
     };
     return [importResult];
   } catch (err) {

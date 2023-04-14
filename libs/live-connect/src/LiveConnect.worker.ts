@@ -69,6 +69,7 @@ const tryImportHere = async (
   const sub = subscriptions.get(subscriptionId);
   if (sub) {
     try {
+      sub.notify({ loading: true });
       const results = await tryImport(
         {
           computer,

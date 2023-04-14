@@ -31,6 +31,7 @@ const sheetToResult = (
       } as Result.Result['type'],
       value: m,
     },
+    loading: false,
   };
 };
 
@@ -52,6 +53,7 @@ describe('findAllIslands', () => {
     expect(findAllIslands('Sheet1', sheet(1, 1, 'hey'))).toMatchInlineSnapshot(`
       Array [
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {
@@ -91,6 +93,7 @@ describe('findAllIslands', () => {
     expect(findAllIslands('Sheet1', sheet(4, 3, 'hey'))).toMatchInlineSnapshot(`
       Array [
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {
@@ -164,6 +167,7 @@ describe('findAllIslands', () => {
     expect(findAllIslands('Sheet1', r)).toMatchInlineSnapshot(`
       Array [
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {
@@ -216,6 +220,7 @@ describe('findAllIslands', () => {
           },
         },
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {
@@ -285,6 +290,7 @@ describe('findAllIslands', () => {
     expect(islands).toMatchInlineSnapshot(`
       Array [
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {
@@ -337,6 +343,7 @@ describe('findAllIslands', () => {
           },
         },
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {
@@ -418,6 +425,7 @@ describe('findAllIslands', () => {
           },
         },
         Object {
+          "loading": false,
           "meta": Object {
             "sheetId": "sheetid",
             "sourceMeta": Object {

@@ -182,6 +182,7 @@ const partition = (
           island
         ),
       },
+      loading: false,
     };
   });
 

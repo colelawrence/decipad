@@ -18,6 +18,7 @@ import { useComputer, useEditorChange } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveConnectionParams,
+  Spinner,
   TableButton,
   Tooltip,
 } from '@decipad/ui';
@@ -26,6 +27,7 @@ import pluralize from 'pluralize';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { insertLiveQueryBelow } from '@decipad/editor-components';
 import { useLiveConnectionPossibleJsonPaths } from '../hooks/useLiveConnectionPossibleJsonPaths';
+import { useLiveConnectionStore } from '../store/liveConnectionStore';
 
 const captionWrapperStyles = css({
   display: 'flex',
@@ -109,6 +111,8 @@ export const LiveConnectionVarName: PlateComponent = ({
     }
   }, [computer, editor, parent]);
 
+  const [{ loading }] = useLiveConnectionStore(parent?.[0]) ?? {};
+
   const caption = (
     <div {...attributes} css={captionWrapperStyles}>
       <EditableLiveDataCaption
@@ -142,6 +146,7 @@ export const LiveConnectionVarName: PlateComponent = ({
             />
           </div>
         )}
+      {loading && <Spinner />}
     </div>
   );
 

@@ -45,7 +45,7 @@ export interface ImportResult {
   meta?: ImportResultMeta;
   result?: Result.Result;
   rawResult?: string | JSON;
-  loading?: boolean;
+  loading: boolean;
 }
 
 export type ImportResultWithMandatoryResult = ImportResult & {

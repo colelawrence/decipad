@@ -19,7 +19,7 @@ import { useLiveConnectionAuth } from './useLiveConnectionAuth';
 
 export interface LiveConnectionResult {
   error?: Error;
-  result?: ImportResult;
+  result: ImportResult;
   retry: () => void;
   authenticate: () => void;
 }
@@ -113,7 +113,23 @@ export const useLiveConnection = (
     beforeAuthenticate,
   });
 
-  return { error, result, retry: clearCacheAndRetry, authenticate };
+  return {
+    error,
+    result: {
+      ...result,
+      ...liveConnectionResult,
+      result:
+        result?.result != null || liveConnectionResult?.result != null
+          ? ({
+              ...result?.result,
+              ...liveConnectionResult?.result,
+            } as Result.Result)
+          : undefined,
+      loading: liveConnectionResult?.loading || result?.loading || false,
+    },
+    retry: clearCacheAndRetry,
+    authenticate,
+  };
 };
 
 /** Inject a table into the computer so the rest of the notebook can read it */
