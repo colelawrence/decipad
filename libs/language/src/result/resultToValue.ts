@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { Result, Value, Table, Column, SerializedTypes } from '..';
-import { fromJS, Range, Row, Scalar } from '../value';
+import { DateValue, fromJS, Range, Row, Scalar } from '../value';
 import {
   ResultBoolean,
   ResultColumn,
@@ -59,7 +59,10 @@ export const resultToValue = (result: Result.Result): Value => {
       if (typeof dateValue !== 'bigint') {
         dateValue = BigInt(dateValue);
       }
-      return Scalar.fromValue(dateValue);
+      return DateValue.fromDateAndSpecificity(
+        dateValue,
+        (result.type as SerializedTypes.Date).date
+      );
     }
 
     case 'boolean':

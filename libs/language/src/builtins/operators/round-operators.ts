@@ -48,6 +48,9 @@ const roundWrap = (
   };
 };
 
+const roundNumber = (n: DeciNumber, decimalPlaces: DeciNumber) =>
+  n.round(decimalPlaces);
+
 export const roundOperators: Record<string, BuiltinSpec> = {
   round: {
     ...overloadBuiltin(
@@ -57,16 +60,12 @@ export const roundOperators: Record<string, BuiltinSpec> = {
         {
           argTypes: ['number', 'number'],
           functor: roundNumberFunctor,
-          fnValues: roundWrap((n: DeciNumber, decimalPlaces: DeciNumber) =>
-            n.round(decimalPlaces)
-          ),
+          fnValues: roundWrap(roundNumber),
         },
         {
           argTypes: ['number'],
           functor: roundNumberFunctor,
-          fnValues: roundWrap((n: DeciNumber, decimalPlaces: DeciNumber) =>
-            n.round(decimalPlaces)
-          ),
+          fnValues: roundWrap(roundNumber),
         },
         {
           argTypes: ['date', 'number'],

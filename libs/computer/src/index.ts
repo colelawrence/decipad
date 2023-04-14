@@ -47,6 +47,7 @@ export {
   parseSimpleValueUnit,
   simpleValueUnitToString,
   simpleValueToString,
+  cleanDate,
 } from '@decipad/language';
 
 export {

@@ -81,6 +81,8 @@ export { linearizeType } from './dimtools/common';
 export type { Unit };
 export * from './simpleValues';
 
+export { cleanDate } from './date';
+
 export type ExternalDataMap = Map<string, Result>;
 
 export interface AutocompleteName {

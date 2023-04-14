@@ -1,4 +1,5 @@
 import type { Computer, Result, SerializedType } from '@decipad/computer';
+import { cleanDate } from '@decipad/computer';
 import { varNamify } from '@decipad/utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
@@ -39,8 +40,9 @@ const columnToValue = (
       case 'number':
         return fasterNumber(elem as string | number);
       case 'date':
-        return BigInt(
-          parseDate(elem as string, type.date)?.date.getTime() ?? 0
+        return cleanDate(
+          BigInt(parseDate(elem as string, type.date)?.date.getTime() ?? 0),
+          type.date
         );
       case 'string':
         return (elem as string) ?? '';
@@ -75,7 +77,6 @@ export const inferTable = (
         userType: options.columnTypeCoercions?.[colIndex],
       })
   );
-  const value = tableToValue(columnTypes, columnValues);
 
   return {
     type: {
@@ -84,6 +85,6 @@ export const inferTable = (
       columnNames,
       indexName: columnNames[0],
     },
-    value,
+    value: tableToValue(columnTypes, columnValues),
   };
 };
