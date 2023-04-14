@@ -191,6 +191,55 @@ it('supports a table column named the same as the table (4 - defined after)', as
     await run(
       mkTable(
         'TableName',
+        'Column2',
+        'TableName.Column1 + 1',
+        'TableName',
+        '99999'
+      )
+    )
+  ).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "type": table<Column1 = number, Column2 = number, TableName = number>,
+        "value": Array [
+          Array [
+            DeciNumber(1),
+          ],
+          Array [
+            DeciNumber(2),
+          ],
+          Array [
+            DeciNumber(99999),
+          ],
+        ],
+      },
+      Object {
+        "type": column<number, indexed by TableName>,
+        "value": Array [
+          DeciNumber(1),
+        ],
+      },
+      Object {
+        "type": column<number, indexed by TableName>,
+        "value": Array [
+          DeciNumber(2),
+        ],
+      },
+      Object {
+        "type": column<number, indexed by TableName>,
+        "value": Array [
+          DeciNumber(99999),
+        ],
+      },
+    ]
+  `);
+});
+
+it('supports a table column named the same as the table (5 - defined after)', async () => {
+  expect(
+    await run(
+      mkTable(
+        'TableName',
         'TableName',
         'lookup(TableName, TableName.Column1 == 1).Column1 + 41'
       )
