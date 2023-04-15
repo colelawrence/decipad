@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
   useContext,
+  MouseEventHandler,
 } from 'react';
 import Fuse from 'fuse.js';
 import { once } from 'ramda';
@@ -17,7 +18,6 @@ import { Link, AutoCompleteMenuItem } from '../../atoms';
 import { AutoCompleteMenuGroup } from '../../molecules';
 import { cssVar, mediumShadow, p12Medium, setCssVar } from '../../primitives';
 import { groupIdentifiers } from './groupIdentifiers';
-
 import { AutoCompleteMenuFormulaTooltip } from '../../atoms/AutoCompleteMenuFormulaTooltip/AutoCompleteMenuIFormulaTooltip';
 import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 
@@ -193,6 +193,24 @@ export const AutoCompleteMenu = ({
   result = '',
 }: AutoCompleteMenuProps): ReturnType<FC> => {
   const clientEvent = useContext(ClientEventsContext);
+
+  const handleMouseDown: MouseEventHandler<HTMLSpanElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    []
+  );
+  const handleClientEvent = useCallback(() => {
+    clientEvent({
+      type: 'action',
+      action: 'visit docs',
+      props: {
+        source: 'Autocomplete Menu',
+      },
+    });
+  }, [clientEvent]);
+
   const isResult = result !== '';
   const groups = useMemo(() => {
     return groupIdentifiers(identifiers, isResult, result, isInTable);
@@ -335,10 +353,10 @@ export const AutoCompleteMenu = ({
         css={[styles(top), isResult && resultStyles]}
       >
         <div
-          style={{
+          css={css({
             display: 'flex',
             maxHeight: '166px',
-          }}
+          })}
         >
           <div
             css={[
@@ -387,25 +405,19 @@ export const AutoCompleteMenu = ({
             {isResult ? ' select' : ' dismiss'}
           </span>
           {hovoredItem?.explanation !== undefined && (
-            <Link
-              href={docs({}).page({ name: 'formulas' }).$}
-              onClick={() =>
-                clientEvent({
-                  type: 'action',
-                  action: 'visit docs',
-                  props: {
-                    source: 'Autocomplete Menu',
-                  },
-                })
-              }
-            >
-              <span style={{ cursor: 'pointer' }}>
-                Explore Docs{' '}
-                <span css={exploreDocsLinkIconStyles}>
-                  <ArrowDiagonalTopRight />
-                </span>
+            <>
+              <span onMouseDown={handleMouseDown}>
+                <Link
+                  href={docs({}).page({ name: 'formulas' }).$}
+                  onClick={handleClientEvent}
+                >
+                  Explore Docs
+                  <span css={exploreDocsLinkIconStyles}>
+                    <ArrowDiagonalTopRight />
+                  </span>
+                </Link>
               </span>
-            </Link>
+            </>
           )}
         </div>
       </div>
