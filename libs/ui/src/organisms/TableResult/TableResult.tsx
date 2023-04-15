@@ -183,7 +183,7 @@ export const TableResult = ({
               readOnly={true}
               tableCellControls={false}
             >
-              <th></th>
+              {isLiveResult && <th></th>}
               <td
                 css={[paginationControlWrapperTdStyles, footerRowStyles]}
                 colSpan={columnNames.length}

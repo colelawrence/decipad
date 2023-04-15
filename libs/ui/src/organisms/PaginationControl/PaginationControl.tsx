@@ -50,9 +50,15 @@ interface PaginationControlProps {
   maxPages: number;
   onPageChange: (page: number) => void;
 }
+
 export const PaginationControl: FC<
   PropsWithChildren<PaginationControlProps>
 > = ({ page, startAt, maxPages, onPageChange, children }) => {
+  const targetPage = useCallback(
+    (current: number, diff: number): number =>
+      Math.floor(((current - startAt + maxPages + diff) % maxPages) + startAt),
+    [maxPages, startAt]
+  );
   return (
     <div css={paginationControlOuterWrapperStyles}>
       <div css={paginationControlWrapperStyles}>
@@ -61,14 +67,13 @@ export const PaginationControl: FC<
             <Button
               type="minimal"
               size="extraExtraSlim"
-              disabled={page <= startAt}
               onClick={useCallback(
-                () => onPageChange(page - 1),
-                [onPageChange, page]
+                () => onPageChange(targetPage(page, -1)),
+                [onPageChange, page, targetPage]
               )}
             >
               <span css={iconWrapperStyles}>
-                <LeftArrow title={`Go to page ${page - 1}`} />
+                <LeftArrow title={`Go to page ${targetPage(page, -1)}`} />
               </span>
             </Button>
           </VoidBlock>
@@ -86,14 +91,13 @@ export const PaginationControl: FC<
             <Button
               type="minimal"
               size="extraExtraSlim"
-              disabled={page >= maxPages}
               onClick={useCallback(
-                () => onPageChange(page + 1),
-                [onPageChange, page]
+                () => onPageChange(targetPage(page, 1)),
+                [onPageChange, page, targetPage]
               )}
             >
               <span css={iconWrapperStyles}>
-                <RightArrow />
+                <RightArrow title={`Go to page ${targetPage(page, 1)}`} />
               </span>
             </Button>
           </VoidBlock>
