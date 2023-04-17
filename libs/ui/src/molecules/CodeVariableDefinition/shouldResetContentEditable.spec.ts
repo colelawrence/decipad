@@ -19,12 +19,20 @@ describe('shouldResetContentEditable', () => {
     };
   });
 
-  it('returns false if blurred', () => {
+  it('returns false if blurred and contentEditable is falsy', () => {
     eventEditorActions.blur('id');
     jest.spyOn(plate, 'someNode').mockReturnValue(true);
 
     const result = shouldResetContentEditable(editor, 'node-id', false);
     expect(result).toBe(false);
+  });
+
+  it('returns null if blurred but contentEditable is true', () => {
+    eventEditorActions.blur('id');
+    jest.spyOn(plate, 'someNode').mockReturnValue(true);
+
+    const result = shouldResetContentEditable(editor, 'node-id', true);
+    expect(result).toBe(null);
   });
 
   it('returns false if editor has no selection', () => {

@@ -90,7 +90,7 @@ export const shouldResetContentEditable = (
   contentEditable: boolean
 ) => {
   if (!editor.selection) return false;
-  if (eventEditorSelectors.blur()) return false;
+  if (eventEditorSelectors.blur() && !contentEditable) return false;
 
   const hasNode = someNode(editor, {
     match: {
