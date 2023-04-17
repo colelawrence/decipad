@@ -56,6 +56,26 @@ test('workspaces', (ctx) => {
             getWorkspaceById(id: "${workspace.id}") {
               id
               name
+              access {
+                roles {
+                  permission
+                  role {
+                    id
+                    users {
+                      id
+                      name
+                    }
+                  }
+                }
+                users {
+                  permission
+                  user {
+                    id
+                    name
+                    image
+                  }
+                }
+              }
             }
           }
         `,
@@ -63,7 +83,21 @@ test('workspaces', (ctx) => {
     ).data.getWorkspaceById;
 
     expect(workspace2).toMatchObject({
-      id: workspace.id,
+      access: {
+        roles: [
+          {
+            permission: 'ADMIN',
+            role: {
+              users: [
+                {
+                  name: 'Test User',
+                },
+              ],
+            },
+          },
+        ],
+        users: [],
+      },
       name: 'Workspace 1',
     });
   });

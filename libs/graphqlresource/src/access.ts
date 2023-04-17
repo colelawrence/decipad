@@ -65,7 +65,7 @@ export function access<
     ).Items;
 
     const roleAccesses = permissions
-      .filter((p) => p.role_id !== 'null' && p.user_id === 'null')
+      .filter((p) => p.role_id !== 'null')
       .map((p) => ({
         role_id: p.role_id,
         permission: p.type,

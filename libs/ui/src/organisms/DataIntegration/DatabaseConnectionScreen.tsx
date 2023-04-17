@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { dividerStyles, inputStyles, MessageBlock } from '.';
 import { brand500, grey500, p13Bold } from '../../primitives';
 import { DropdownMenu, SelectItems } from '../DropdownMenu/DropdownMenu';
-import { Table, Warning } from '../../icons';
+import { Table as TableIcon, Warning } from '../../icons';
 
 export type DbOptions = {
   connectionString: string;
@@ -52,8 +52,8 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             item: name,
             blockId: id,
             index: i,
-            icon: <Table />,
-          } satisfies SelectItems)
+            icon: <TableIcon />,
+          } as SelectItems)
       ),
     [existingConnections]
   );
