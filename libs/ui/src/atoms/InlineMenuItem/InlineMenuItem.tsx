@@ -111,7 +111,9 @@ export const InlineMenuItem = ({
       inline: 'nearest',
     });
   }
-
+  if (!enabled) {
+    return <></>;
+  }
   return (
     <button
       role="menuitem"
