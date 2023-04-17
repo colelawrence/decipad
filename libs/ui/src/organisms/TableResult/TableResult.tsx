@@ -1,4 +1,4 @@
-import { useState, useMemo, FC } from 'react';
+import { useMemo, FC } from 'react';
 import { css } from '@emotion/react';
 import pluralize from 'pluralize';
 import { PaginationControl, Table } from '..';
@@ -14,6 +14,7 @@ import {
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 import { TableResultCell } from './TableResultCell';
 import { cssVar, p13Regular } from '../../primitives';
+import { usePagination } from '../../utils/usePagination';
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -75,19 +76,11 @@ export const TableResult = ({
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
-  // pagination
-  const [page, setPage] = useState(1);
-  const totalRowCount = useMemo(() => value[0]?.length, [value]);
-  const rowOffset = useMemo(() => (page - 1) * MAX_ROWS_PER_PAGE, [page]);
-  const presentRowCount = Math.min(
-    totalRowCount - rowOffset,
-    MAX_ROWS_PER_PAGE
-  );
-  const valuesForPage = useMemo(
-    () =>
-      value.map((col) => col.slice(rowOffset, rowOffset + MAX_ROWS_PER_PAGE)),
-    [rowOffset, value]
-  );
+  const { page, offset, presentRowCount, valuesForPage, setPage } =
+    usePagination({
+      all: value,
+      maxRowsPerPage: MAX_ROWS_PER_PAGE,
+    });
 
   if (tableLength == null) {
     return null;
@@ -177,7 +170,7 @@ export const TableResult = ({
           </>
         }
         footer={
-          totalRowCount > MAX_ROWS_PER_PAGE && (
+          tableLength > MAX_ROWS_PER_PAGE && (
             <TableRow
               key="pagination"
               readOnly={true}
@@ -192,12 +185,12 @@ export const TableResult = ({
                   page={page}
                   onPageChange={setPage}
                   startAt={1}
-                  maxPages={Math.ceil(totalRowCount / MAX_ROWS_PER_PAGE)}
+                  maxPages={Math.ceil(tableLength / MAX_ROWS_PER_PAGE)}
                 >
                   <span css={pageDescriptionStyles}>
-                    {totalRowCount} {pluralize('row', totalRowCount)}
-                    {`, previewing rows ${rowOffset + 1} to ${
-                      rowOffset + presentRowCount
+                    {tableLength} {pluralize('row', tableLength)}
+                    {`, previewing rows ${offset + 1} to ${
+                      offset + presentRowCount
                     }`}
                   </span>
                 </PaginationControl>
