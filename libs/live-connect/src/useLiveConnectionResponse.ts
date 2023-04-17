@@ -26,6 +26,7 @@ export interface LiveConnectionProps {
   columnTypeCoercions: Record<ColIndex, TableCellType>;
   maxCellCount?: number;
   jsonPath?: string;
+  delimiter?: string;
 }
 
 export const useLiveConnectionResponse = ({
@@ -37,6 +38,7 @@ export const useLiveConnectionResponse = ({
   columnTypeCoercions,
   maxCellCount,
   jsonPath,
+  delimiter,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const [workerGen, setWorkerGen] = useState(0);
   const worker = useLiveConnectionWorker(workerGen);
@@ -60,6 +62,7 @@ export const useLiveConnectionResponse = ({
               columnTypeCoercions,
               maxCellCount,
               jsonPath,
+              delimiter,
             },
             (err, res) => {
               if (!canceled) {
@@ -105,6 +108,7 @@ export const useLiveConnectionResponse = ({
     };
   }, [
     columnTypeCoercions,
+    delimiter,
     jsonPath,
     maxCellCount,
     options,

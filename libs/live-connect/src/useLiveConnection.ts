@@ -36,6 +36,7 @@ export interface LiveConnectionProps {
   maxCellCount: number;
   deleted: boolean;
   jsonPath?: string;
+  delimiter?: string;
   externalDataSourceContext: Context<ExternalDataSourcesContextValue>;
   beforeAuthenticate: (source: ExternalDataSource) => Promise<void>;
 }
@@ -54,6 +55,7 @@ export const useLiveConnection = (
     maxCellCount,
     deleted,
     jsonPath: _jsonPath,
+    delimiter,
     beforeAuthenticate,
     externalDataSourceContext,
   }: LiveConnectionProps
@@ -70,6 +72,7 @@ export const useLiveConnection = (
     options,
     source,
     jsonPath,
+    delimiter,
     useFirstRowAsHeader,
     columnTypeCoercions,
     maxCellCount,

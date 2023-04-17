@@ -82,6 +82,7 @@ const tryImportHere = async (
           columnTypeCoercions: sub.params.columnTypeCoercions,
           maxCellCount: sub.params.maxCellCount,
           jsonPath: sub.params.jsonPath,
+          delimiter: sub.params.delimiter,
         }
       );
       for (const result of results) {

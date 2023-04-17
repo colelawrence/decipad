@@ -42,12 +42,14 @@ const labelStyles = css({
 
 export interface LiveConnectionParamsProps {
   jsonPath: string;
+  delimiter?: string | string[];
   possibleJsonPaths: JsonPath[];
   setJsonPath: (jsonPath: string) => void;
   url: string;
   setUrl: (url: string) => void;
   source?: ImportElementSource;
   setSource: (source: ImportElementSource) => void;
+  setDelimiter: (delimiter: string) => void;
 }
 
 const sourceTypes: ImportElementSource[] = [
@@ -65,6 +67,8 @@ const sourceTypes: ImportElementSource[] = [
   'mariadb',
 ];
 
+const delimiters = [',', ';'];
+
 export const LiveConnectionParams: FC<LiveConnectionParamsProps> = ({
   url,
   setUrl,
@@ -73,10 +77,12 @@ export const LiveConnectionParams: FC<LiveConnectionParamsProps> = ({
   jsonPath,
   possibleJsonPaths,
   setJsonPath,
+  delimiter,
+  setDelimiter,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [subMenuOpen, setSubmenuOpen] = useState<
-    'source' | 'jsonPath' | undefined
+    'source' | 'jsonPath' | 'delimiter' | undefined
   >();
   const onChangeOpen = useCallback((newOpen: boolean) => {
     setSubmenuOpen(undefined);
@@ -139,6 +145,29 @@ export const LiveConnectionParams: FC<LiveConnectionParamsProps> = ({
               />
             )}
           </>
+        )}
+        {(!source || source === 'csv') && (
+          <MenuItem>
+            <MenuList
+              onChangeOpen={() => setSubmenuOpen('delimiter')}
+              open={open && subMenuOpen === 'delimiter'}
+              itemTrigger={
+                <TriggerMenuItem>
+                  <span css={labelStyles}>Delimiter</span>
+                </TriggerMenuItem>
+              }
+            >
+              {delimiters.map((delimtierCandidate) => (
+                <MenuItem
+                  key={delimtierCandidate}
+                  selected={delimtierCandidate === delimiter}
+                  onSelect={() => setDelimiter(delimtierCandidate)}
+                >
+                  {delimtierCandidate}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </MenuItem>
         )}
       </MenuList>
     </div>

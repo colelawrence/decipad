@@ -35,6 +35,7 @@ export interface SubscribeParams {
   columnTypeCoercions: Record<number, TableCellType>;
   maxCellCount?: number;
   jsonPath?: string;
+  delimiter?: string;
 }
 
 export interface Subscription {

@@ -22,7 +22,7 @@ export const importFromCsv = async (
     const parser = parseCSV({
       cast: true,
       trim: true,
-      delimiter: [',', ';'],
+      delimiter: options.delimiter ?? [',', ';'],
       relax_quotes: true,
       relax_column_count: true,
       skip_empty_lines: true,

@@ -97,6 +97,7 @@ export const LiveConnectionVarName: PlateComponent = ({
   const setJsonPath = usePathMutatorCallback(editor, parent?.[1], 'jsonPath');
   const setUrl = usePathMutatorCallback(editor, parent?.[1], 'url');
   const setSource = usePathMutatorCallback(editor, parent?.[1], 'source');
+  const setDelimiter = usePathMutatorCallback(editor, parent?.[1], 'delimiter');
 
   const computer = useComputer();
 
@@ -133,6 +134,8 @@ export const LiveConnectionVarName: PlateComponent = ({
             setUrl={setUrl}
             source={parent?.[0].source}
             setSource={setSource}
+            delimiter={parent?.[0].delimiter}
+            setDelimiter={setDelimiter}
           />
         </div>
       )}

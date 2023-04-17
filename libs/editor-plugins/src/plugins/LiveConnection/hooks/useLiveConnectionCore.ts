@@ -52,6 +52,7 @@ export const useLiveConnectionCore = ({
     useFirstRowAsHeader: element.isFirstRowHeaderRow,
     columnTypeCoercions: element.columnTypeCoercions,
     jsonPath: element.jsonPath,
+    delimiter: element.delimiter,
     maxCellCount: MAX_CELL_COUNT,
     deleted,
     beforeAuthenticate,

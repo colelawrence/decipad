@@ -21,6 +21,7 @@ export interface ImportOptions {
   doNotTryExpressionNumbersParse?: boolean;
   maxCellCount?: number;
   jsonPath?: string;
+  delimiter?: string;
 }
 
 const internalTryImport = (
