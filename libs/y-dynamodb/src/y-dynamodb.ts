@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Buffer } from 'buffer';
 import {
   encodeStateAsUpdate,
@@ -8,12 +9,13 @@ import {
 import { Observable } from 'lib0/observable';
 import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
-import { DocSyncRecord, DocSyncUpdateRecord } from '@decipad/backendtypes';
+import { DocSyncRecord } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 import { nanoid } from 'nanoid';
+import { pick } from 'lodash';
 
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
-const MAX_ALLOWED_RECORD_SIZE_BYTES = 60_000;
+const MAX_ALLOWED_RECORD_SIZE_BYTES = 150_000;
 
 export class DynamodbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;
@@ -171,55 +173,51 @@ export class DynamodbPersistence extends Observable<string> {
     }
     await this.whenSynced;
     const data = await tables();
-    const updates = (
-      await data.docsyncupdates.query({
-        KeyConditionExpression: 'id = :id',
-        ExpressionAttributeValues: {
-          ':id': this.name,
-        },
-        ConsistentRead: true,
-      })
-    ).Items;
-    if (updates.length > 1) {
-      let merged: Uint8Array | undefined;
-      let toDelete: DocSyncUpdateRecord[] = [];
+    console.log('getting all updates');
+    const updates = allPages(data.docsyncupdates, {
+      KeyConditionExpression: 'id = :id',
+      ExpressionAttributeValues: {
+        ':id': this.name,
+      },
+    });
+    console.log('got all updates');
+    let merged: Uint8Array | undefined;
+    let toDelete: Array<{ id: string; seq: string }> = [];
 
-      const mergedSize = () => merged?.length ?? 0;
+    const mergedSize = () => merged?.length ?? 0;
 
-      const pushToDataBase = async () => {
-        if (toDelete.length > 1) {
-          await this.storeUpdate(getDefined(merged), 'compaction', true);
-          await Promise.all(
-            toDelete.map((update) =>
-              data.docsyncupdates.delete(
-                { id: update.id, seq: update.seq },
-                true
-              )
-            )
-          );
-        }
-        merged = undefined;
-        toDelete = [];
-      };
-
-      for (const update of updates) {
-        const { data: dataString } = update;
-        if (!dataString) {
-          continue;
-        }
-        const dataBuffer = Buffer.from(dataString, 'base64');
-        if (mergedSize() + dataString.length < MAX_ALLOWED_RECORD_SIZE_BYTES) {
-          merged = merged ? mergeUpdates([merged, dataBuffer]) : dataBuffer;
-          toDelete.push(update);
-        } else {
-          // eslint-disable-next-line no-await-in-loop
-          await pushToDataBase();
-          merged = dataBuffer;
-          toDelete.push(update);
-        }
+    const pushToDataBase = async () => {
+      console.log(
+        `compaction: will compact ${toDelete.length} records`,
+        toDelete
+      );
+      if (toDelete.length > 1) {
+        await this.storeUpdate(getDefined(merged), 'compaction', true);
+        data.docsyncupdates.batchDelete(toDelete);
       }
-      await pushToDataBase();
+      console.log(`compaction: compacted ${toDelete.length} records`);
+      merged = undefined;
+      toDelete = [];
+    };
+
+    for await (const update of updates) {
+      if (!update?.data) {
+        continue;
+      }
+      const updateId = pick(update, ['id', 'seq']);
+      const { data: dataString } = update;
+      const dataBuffer = Buffer.from(dataString, 'base64');
+      if (mergedSize() + dataString.length < MAX_ALLOWED_RECORD_SIZE_BYTES) {
+        merged = merged ? mergeUpdates([merged, dataBuffer]) : dataBuffer;
+        toDelete.push(updateId);
+      } else {
+        // eslint-disable-next-line no-await-in-loop
+        await pushToDataBase();
+        merged = dataBuffer;
+        toDelete.push(updateId);
+      }
     }
+    await pushToDataBase();
   }
 
   flush(): Promise<void> {

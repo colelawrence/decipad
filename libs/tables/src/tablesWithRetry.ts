@@ -60,6 +60,16 @@ export const tablesWithRetry = async (): Promise<DataTables> => {
             awsRetry
           );
       }
+      if ('batchDelete' in sourceTable) {
+        (table as EnhancedDataTable<TableRecordBase>).batchDelete = (...args) =>
+          retry(
+            () =>
+              (
+                sourceTable.batchDelete as EnhancedDataTable<TableRecordBase>['batchDelete']
+              )(...args),
+            awsRetry
+          );
+      }
       if ('create' in sourceTable) {
         (table as EnhancedDataTable<TableRecordBase>).create = (...args) =>
           retry(

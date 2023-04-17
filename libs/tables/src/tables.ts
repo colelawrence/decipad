@@ -21,6 +21,7 @@ import assert from 'assert';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { timestamp } from './timestamp';
 import { debug } from './debug';
+import { batchDelete } from './batchDelete';
 
 interface ArcServices {
   tables: Record<TableName, string>;
@@ -31,6 +32,7 @@ type Arc = typeof arc & {
 };
 
 const enhancedTables: (keyof EnhancedDataTables)[] = [
+  'docsyncupdates',
   'users',
   'userkeys',
   'usergoals',
@@ -230,6 +232,14 @@ function enhance(
       .batchGet(query)
       .promise()
       .then((data) => data.Responses?.[realTableName] ?? []);
+  };
+
+  table.batchDelete = async (selectors) => {
+    debug(tableName + ':batchDelete', selectors);
+    if (selectors.length < 1) {
+      return;
+    }
+    return batchDelete(db, realTableName, selectors);
   };
 
   return table;

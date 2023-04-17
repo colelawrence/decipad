@@ -1,6 +1,7 @@
 export * from './any-mapping-to-map';
 export * from './assert-defined';
 export * from './byDesc';
+export * from './chunks';
 export * from './containsNumber';
 export * from './enumerate';
 export * from './get-defined';

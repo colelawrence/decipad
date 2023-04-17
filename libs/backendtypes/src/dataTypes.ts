@@ -512,9 +512,11 @@ export interface EnhancedDataTable<T extends TableRecordBase>
   extends DataTable<T> {
   create(doc: T): Promise<void>;
   batchGet(ids: string[]): Promise<T[]>;
+  batchDelete(selectors: Array<{ id: string; seq?: string }>): Promise<void>;
 }
 
 export interface EnhancedDataTables {
+  docsyncupdates: EnhancedDataTable<DocSyncUpdateRecord>;
   users: EnhancedDataTable<UserRecord>;
   userkeys: EnhancedDataTable<UserKeyRecord>;
   permissions: EnhancedDataTable<PermissionRecord>;
@@ -541,7 +543,6 @@ export interface DataTables extends EnhancedDataTables {
   collabs: DataTable<CollabRecord>;
   connections: DataTable<ConnectionRecord>;
   docsync: VersionedDataTable<DocSyncRecord>;
-  docsyncupdates: DataTable<DocSyncUpdateRecord>;
   docsyncsnapshots: DataTable<DocSyncSnapshotRecord>;
   allowlist: DataTable<AllowListRecord>;
   superadminusers: DataTable<SuperAdminUserRecord>;

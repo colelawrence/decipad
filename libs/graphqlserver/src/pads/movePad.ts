@@ -41,7 +41,7 @@ export const movePad = async (
     },
   };
 
-  const allPermissions = await allPages(data.permissions, query);
+  const allPermissions = allPages(data.permissions, query);
 
   for await (const permission of allPermissions) {
     if (!permission) {
