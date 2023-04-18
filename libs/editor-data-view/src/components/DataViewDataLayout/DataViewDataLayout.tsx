@@ -1,5 +1,6 @@
-import { FC, ReactNode, useMemo } from 'react';
-import { DataViewRow } from '@decipad/ui';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { DataViewRow, PaginationControl, p13Medium } from '@decipad/ui';
+import { css } from '@emotion/react';
 import { AggregationKind, Column } from '../../types';
 import { treeToTable } from '../../utils/treeToTable';
 import { useDataViewLayoutData } from '../../hooks';
@@ -17,6 +18,15 @@ export interface DataViewLayoutProps {
   rotate: boolean;
   headers: ReactNode[];
 }
+
+const MAX_PAGE_SIZE = 60;
+const paginationExplanationStyles = css(p13Medium, {
+  lineHeight: '24px',
+});
+const paginationWrapperStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+});
 
 export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   tableName,
@@ -39,19 +49,31 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
     rotate,
   });
 
+  const [page, setPage] = useState(1);
+  const pageGroups = useMemo(() => {
+    const offset = (page - 1) * MAX_PAGE_SIZE;
+    return groups.slice(offset, offset + MAX_PAGE_SIZE);
+  }, [groups, page]);
+
+  useEffect(() => {
+    if (pageGroups.length === 0 && page > 1) {
+      setPage(1);
+    }
+  }, [page, pageGroups.length]);
+
   const table = useMemo(
     () =>
       treeToTable(
         {
           elementType: 'group',
-          children: groups,
+          children: pageGroups,
           columnIndex: -1,
         },
         {
           rotate,
         }
       ),
-    [groups, rotate]
+    [pageGroups, rotate]
   );
 
   const cols = useMemo(
@@ -66,6 +88,11 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   );
 
   const maxCols = Math.max(...cols);
+
+  const maxPages = useMemo(
+    () => Math.ceil(groups.length / MAX_PAGE_SIZE),
+    [groups.length]
+  );
 
   return (
     <>
@@ -102,6 +129,23 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
           </DataViewRow>
         );
       })}
+      {groups.length > MAX_PAGE_SIZE && (
+        <tr>
+          <td colSpan={maxCols}>
+            <div css={paginationWrapperStyles}>
+              <PaginationControl
+                page={page}
+                startAt={1}
+                maxPages={maxPages}
+                onPageChange={setPage}
+              />
+              <span css={paginationExplanationStyles}>
+                Page {page} of {maxPages}
+              </span>
+            </div>
+          </td>
+        </tr>
+      )}
     </>
   );
 };
