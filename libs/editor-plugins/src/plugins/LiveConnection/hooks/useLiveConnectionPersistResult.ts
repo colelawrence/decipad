@@ -23,6 +23,7 @@ export const useLiveConnectionPersistResult = ({
         set({
           ...persistedResult,
           result: result.result,
+          rawResult: result.rawResult,
           loading: false,
         });
       }
