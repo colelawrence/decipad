@@ -15,6 +15,7 @@ import { InferError } from './InferError';
 import { propagatePercentage } from './percentages';
 
 export const timeUnits = new Set([
+  'undefined',
   'millennium',
   'millenniums',
   'millennia',

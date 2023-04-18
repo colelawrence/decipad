@@ -4,6 +4,7 @@ import { add as addDate, Duration, format as formatDate } from 'date-fns';
 import { parseDate } from './parseDate';
 
 const dateGranularityToDateFnsDuration: Record<Time.Specificity, Duration> = {
+  undefined: {},
   year: { years: 1 },
   month: { months: 1 },
   quarter: { months: 3 },

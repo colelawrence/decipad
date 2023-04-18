@@ -1,6 +1,12 @@
 import { BehaviorSubject } from 'rxjs';
 import { generateHash } from '@decipad/editor-utils';
-import { applyMap, contiguousSlices, slice, sortMap } from '@decipad/column';
+import {
+  Comparable,
+  applyMap,
+  contiguousSlices,
+  slice,
+  sortMap,
+} from '@decipad/column';
 import { compare } from '@decipad/universal-compare';
 import {
   AggregationKind,
@@ -53,13 +59,13 @@ export const generateGroups = async ({
   }
   const [firstColumn, ...restOfColumns] = columns;
 
-  const map = sortMap(firstColumn.value, compare);
+  const map = sortMap<Comparable>(firstColumn.value, compare);
   const sortedFirstColumn = applyMap(firstColumn.value, map);
   const sortedRestOfColumns: VirtualColumn[] = restOfColumns.map((column) => ({
     ...column,
     value: applyMap(column.value, map),
   }));
-  const slices = contiguousSlices(sortedFirstColumn, compare);
+  const slices = contiguousSlices<Comparable>(sortedFirstColumn, compare);
 
   const subGenerateGroups: GenerateGroups = (props) =>
     generateGroups({ ...props, aggregationTypes, expandedGroups });

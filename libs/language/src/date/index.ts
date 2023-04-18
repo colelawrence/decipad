@@ -17,7 +17,9 @@ export { Time };
 /**
  * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
-export const toLuxonUTC = (date: bigint | number | DateValue | DateTime) => {
+export const toLuxonUTC = (
+  date: bigint | undefined | number | DateValue | DateTime
+) => {
   if (date instanceof DateValue) {
     date = date.getData();
   }
@@ -56,8 +58,9 @@ const specificities: Time.Specificity[] = [
 
 export const timeUnitToJSDateUnit: Record<
   Time.Unit,
-  [Time.JSDateUnit, bigint]
+  [Time.JSDateUnit, bigint] | undefined
 > = {
+  undefined,
   millennium: ['year', 1000n],
   century: ['year', 100n],
   decade: ['year', 10n],
@@ -98,6 +101,7 @@ export const jsIndexToUnit: Record<number, Time.JSDateUnit> = {
 };
 
 const timeUnitToIndex: Record<Time.Unit, number> = {
+  undefined: -1,
   millennium: 0,
   century: 1,
   decade: 2,
@@ -113,6 +117,7 @@ const timeUnitToIndex: Record<Time.Unit, number> = {
 };
 
 const timeUnitToJSTimeIndex: Record<Time.Unit, number> = {
+  undefined: -1,
   millennium: 0,
   century: 0,
   decade: 0,
@@ -139,16 +144,17 @@ export const getSpecificity = (thing?: string | Unit): Time.Specificity => {
   let unit = typeof thing === 'string' ? thing : thing && thing.unit;
   if (unit) {
     unit = singular(unit);
-
+    if (unit === 'undefined') return 'undefined';
     if (unit === 'millennium') return 'year';
     if (unit === 'century') return 'year';
     if (unit === 'decade') return 'year';
-
     if (unit === 'week') return 'day';
 
     if (allSpecificities.includes(unit as Time.Specificity)) {
       return unit as Time.Specificity;
     }
+  } else {
+    return 'undefined';
   }
 
   throw new Error(`panic: Expected Time.JSDateUnit, got ${unit}`);
@@ -202,9 +208,9 @@ const cmpJSDateUnits = (left: Time.JSDateUnit, right: Time.JSDateUnit) => {
 
 // Dates are ranges -- this function cuts up a date to its closest specificity
 export const cleanDate = (
-  date: bigint | number,
+  date: bigint | number | undefined,
   specificity: Time.Specificity
-): bigint => {
+): bigint | undefined => {
   const necessarySegments = dateToArray(date).slice(
     0,
     timeUnitToJSTimeIndex[specificity] + 1
@@ -218,11 +224,15 @@ export const cleanDate = (
     const startOfQuarter = dateTime.startOf('quarter');
     return BigInt(startOfQuarter.toMillis());
   }
-  const result = arrayToDate(necessarySegments);
-  return result;
+  return arrayToDate(necessarySegments);
 };
 
-export const dateToArray = (date: Date | number | bigint) => {
+export const dateToArray = (
+  date: Date | number | bigint | undefined
+): Array<bigint> => {
+  if (date == null) {
+    return [];
+  }
   const d = new Date(Number(date));
 
   return [
@@ -253,7 +263,7 @@ const getDateSegment = (
 
 export function arrayToDate(
   segments: (string | bigint | AST.TZInfo | undefined)[]
-): bigint {
+): bigint | undefined {
   const nameAndNumber: [string, string | bigint | AST.TZInfo | undefined][] = [
     ['year', segments[0]],
     ['month', segments[1]],
@@ -281,6 +291,8 @@ export function arrayToDate(
     ...dateArgs.slice(2).map(Number),
   ];
   const d = Date.UTC(utcArgs[0], utcArgs[1], ...utcArgs.slice(2));
+  if (Number.isNaN(d)) return undefined;
+
   return BigInt(d);
 }
 
@@ -288,7 +300,7 @@ export function arrayToDate(
 export function parseUTCDate(iso: string) {
   const segments = iso.match(/(\d+)/g)?.map((n) => BigInt(n));
 
-  return arrayToDate(getDefined(segments, `bad date ${iso}`));
+  return getDefined(arrayToDate(getDefined(segments, `bad date ${iso}`)));
 }
 
 export function getUTCDateSpecificity(iso: string): Time.Specificity {
@@ -319,9 +331,12 @@ export function date(
 const pad = (x: bigint | string) => String(x).padStart(2, '0');
 
 export function stringifyDate(
-  date: bigint,
+  date: bigint | undefined | symbol,
   specificity: Time.Specificity
 ): string {
+  if (date == null || typeof date === 'symbol') {
+    return '?';
+  }
   const segments = dateToArray(date);
   let out = String(segments[0]);
   if (specificity === 'year') return out;
@@ -342,7 +357,7 @@ export const dateNodeToSpecificity = (
 ): Time.Specificity => getSpecificity(dateNodeToTimeUnit(nodeArgs));
 
 export const dateNodeToTimeUnit = (nodeArgs: AST.Date['args']): Time.Unit => {
-  let lowestSegment: Time.Unit = 'year';
+  let lowestSegment: Time.Unit = 'undefined';
 
   for (const [segment] of pairwise<Time.Unit, unknown>(nodeArgs)) {
     lowestSegment = segment;
@@ -353,7 +368,7 @@ export const dateNodeToTimeUnit = (nodeArgs: AST.Date['args']): Time.Unit => {
 
 export const getDateFromAstForm = (
   segments: AST.Date['args']
-): [bigint, Time.Specificity] => {
+): [bigint | undefined, Time.Specificity] => {
   if (segments[2] === 'quarter') {
     const quarter = (Number(segments[3]) - 1) * 3 + 1;
     const [dateNum] = getDateFromAstForm([

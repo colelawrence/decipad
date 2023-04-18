@@ -40,11 +40,20 @@ const makeDateFragmentReader = (key, len, min, max) => ([{text}], _l, reject) =>
 }
 %}
 
+date -> %beginDate _ %endDate                           {%
+                                                        (d) => {
+                                                          return addLoc({
+                                                            type: 'date',
+                                                            args: [],
+                                                          }, d[0], d[4])
+                                                        }
+                                                        %}
+
 date -> %beginDate _ dateInner _ %endDate               {%
                                                         (d) => {
                                                           return addLoc({
                                                             type: 'date',
-                                                            args: joinDateParts(d[2]),
+                                                            args: d[2] ? joinDateParts(d[2]) : [],
                                                           }, d[0], d[4])
                                                         }
                                                         %}

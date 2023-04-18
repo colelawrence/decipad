@@ -3,11 +3,16 @@ import { simpleFormatUnit } from '@decipad/format';
 import { N } from '@decipad/number';
 import { coerceToDate } from './inferDate';
 
-const textifyBoolean = (result: Result.Result<'boolean'>) =>
+const textifyBoolean = (result: Result.Result<'boolean'>): string =>
   result.value ? 'true' : 'false';
 
-const textifyDate = (result: Result.Result<'date'>) =>
-  coerceToDate(new Date(Number(result.value)), result.type.date);
+const textifyDate = (result: Result.Result<'date'>): string => {
+  const res =
+    result.value != null
+      ? coerceToDate(new Date(Number(result.value)), result.type.date)
+      : 'date()';
+  return res;
+};
 
 const textifyNumber = (result: Result.Result<'number'>) => {
   let f = N(result.value).toFraction();

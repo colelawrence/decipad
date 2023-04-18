@@ -181,7 +181,7 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
     throw targetUnits
       ? InferError.cannotConvertToUnit(targetUnits)
       : new RuntimeError(
-          `Don't know how to convert value to ${value.getData().toString()}`
+          `Don't know how to convert value to ${value?.getData()?.toString()}`
         );
   });
 };

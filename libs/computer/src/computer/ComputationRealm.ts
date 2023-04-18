@@ -87,7 +87,9 @@ export class ComputationRealm {
       if (date) {
         labels.set(
           name,
-          (data as bigint[]).map((d) => stringifyDate(d, date))
+          (data as Array<bigint | undefined | symbol>).map((d) =>
+            stringifyDate(d, date)
+          )
         );
       }
     };

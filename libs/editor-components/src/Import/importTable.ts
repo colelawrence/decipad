@@ -59,6 +59,10 @@ const valueToString = (result: Result.Result): string => {
       case 'second':
       case 'millisecond':
         fmt = 'yyyy/MM/dd HH:mm:ss';
+        break;
+      case 'undefined':
+        fmt = '';
+        break;
     }
     const tof = typeof value;
     if (tof !== 'bigint') {

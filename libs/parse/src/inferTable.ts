@@ -39,11 +39,13 @@ const columnToValue = (
     switch (type?.kind) {
       case 'number':
         return fasterNumber(elem as string | number);
-      case 'date':
-        return cleanDate(
-          BigInt(parseDate(elem as string, type.date)?.date.getTime() ?? 0),
-          type.date
-        );
+      case 'date': {
+        const parsed = parseDate(elem as string, type.date);
+        if (!parsed) {
+          return undefined;
+        }
+        return cleanDate(BigInt(parsed.date.getTime()), type.date);
+      }
       case 'string':
         return (elem as string) ?? '';
       case 'boolean':

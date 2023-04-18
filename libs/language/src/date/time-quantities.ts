@@ -5,10 +5,13 @@ import { RuntimeError } from '../value';
 import { getDefined } from '../utils';
 
 export const addTime = (
-  date: bigint,
+  date: bigint | undefined,
   timeUnit: Time.Unit,
   quantity: bigint
-): bigint => {
+): bigint | undefined => {
+  if (date == null) {
+    return undefined;
+  }
   const [composedUnit, compositeMultiplier] = getDefined(
     timeUnitToJSDateUnit[timeUnit],
     `bad time unit ${timeUnit}`

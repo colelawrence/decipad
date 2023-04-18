@@ -15,6 +15,7 @@ export type Comparable =
   | number
   | bigint
   | symbol
+  | undefined
   | DeciNumber
   | DeciNumberInput
   | ReadonlyArray<Comparable>;
@@ -59,14 +60,14 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
 
     return lengthComparison;
   }
-  if (typeof a === 'symbol' && typeof b === 'symbol') {
-    return compareToNumber(a.toString(), b.toString());
+  if (typeof a === 'symbol' || typeof b === 'symbol') {
+    return compareToNumber(a?.toString(), b?.toString());
   }
 
   // eslint-disable-next-line no-console
   console.error(a, b);
   throw new Error(
-    `Don't know how to compare ${a.toString()} (${typeof a}) against ${b.toString()} (${typeof b})`
+    `Don't know how to compare ${a?.toString()} (${typeof a}) against ${b?.toString()} (${typeof b})`
   );
 }
 
@@ -82,6 +83,12 @@ export function compare(
   b: Comparable | undefined
 ): CompareResult {
   if (a == null || b == null) {
+    if (a != null) {
+      return -1;
+    }
+    if (b != null) {
+      return 1;
+    }
     return 0;
   }
   return sign(compareToNumber(a, b));

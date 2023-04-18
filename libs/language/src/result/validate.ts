@@ -43,8 +43,11 @@ function validate(
           `invalid date specificity ${type.date}`
         ) &&
         getTrue(
-          typeof value === 'bigint' || value instanceof DeciNumber,
-          'expected date to be represented as a bigint'
+          typeof value === 'symbol' ||
+            typeof value === 'bigint' ||
+            value === undefined ||
+            value instanceof DeciNumber,
+          'expected date to be represented as a bigint or undefined'
         )
       );
     }

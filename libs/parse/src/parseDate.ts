@@ -73,6 +73,7 @@ export const dateFormats = once((): Record<Time.Specificity, DateFormat[]> => {
   const secondFormats = ['s', 'ss'];
   const fractionSecondsFormats = ['S', 'SS', 'SSS', 'SSSS'];
   return {
+    undefined: [''],
     year: ['yy', 'yyyy'],
     quarter: ["yyyy'q'q", "yyyy'Q'q", "yyyy'q'qq", "yyyy'Q'qq"],
     month: [
@@ -130,6 +131,9 @@ export const parseDate = (
   specificity?: Time.Specificity,
   allowedFormats?: string[]
 ): ParseDateResult | undefined => {
+  if (!value) {
+    return undefined;
+  }
   const formats =
     allowedFormats && specificity
       ? {

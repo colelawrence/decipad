@@ -149,9 +149,6 @@ const dataColumnToColumn = async ({
   const items = await Promise.all(
     cellTexts.map(async (text, index) => {
       let parsed = await parseCell(computer, columnType, text);
-      if (!parsed) {
-        errors.push(simpleError(cellIds[index], `Invalid ${columnType.kind}`));
-      }
       if (parsed instanceof Error) {
         errors.push(simpleError(cellIds[index], parsed.message));
         parsed = null;
@@ -163,6 +160,7 @@ const dataColumnToColumn = async ({
     })
   );
   const expression = astColumn(...items);
+
   return {
     expression,
     errors,

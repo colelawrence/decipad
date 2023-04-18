@@ -91,7 +91,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     fnValues: ([a]: Value[]) => {
       const aData = getColumnLike(a).getData() as OneResult[];
       return fromJS(
-        aData.reduce((count, elem) => (elem.valueOf() ? count + 1 : count), 0)
+        aData.reduce((count, elem) => (elem?.valueOf() ? count + 1 : count), 0)
       );
     },
     functionSignature: 'column<boolean> -> number',

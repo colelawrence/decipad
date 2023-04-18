@@ -115,7 +115,7 @@ export function CodeResult<T extends SerializedTypeKind>(
   const ResultComponent = getResultComponent({ value, variant, type, element });
 
   // Does not present result when result is not present, except for type errors.
-  if (value == null && type.kind !== 'type-error') {
+  if (value == null && type.kind !== 'type-error' && type.kind !== 'date') {
     return null;
   }
 

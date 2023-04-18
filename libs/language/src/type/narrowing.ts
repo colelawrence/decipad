@@ -60,6 +60,13 @@ export function narrowTypes(
       case 'date': {
         const s2 = s2UnknownType as SerializedTypes.Date;
 
+        if (s1.date === 'undefined') {
+          return t2;
+        }
+        if (s2.date === 'undefined') {
+          return t1;
+        }
+
         if (s1.date !== s2.date) {
           return t2.expected(s1.date);
         }

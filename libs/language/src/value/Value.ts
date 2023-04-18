@@ -101,17 +101,17 @@ export class BooleanValue implements Value {
 
 export class DateValue implements Value {
   specificity: Time.Specificity;
-  moment: bigint;
+  moment: bigint | undefined;
 
-  constructor(moment: bigint, specificity: Time.Specificity) {
+  constructor(moment: bigint | undefined, specificity: Time.Specificity) {
     this.moment = moment;
     this.specificity = specificity;
   }
 
   static fromDateAndSpecificity(
-    date: bigint | number,
+    date: bigint | number | undefined,
     specificity: Time.Specificity
-  ) {
+  ): DateValue {
     return new DateValue(cleanDate(date, specificity), specificity);
   }
 
@@ -123,7 +123,11 @@ export class DateValue implements Value {
    * Dates such as month, day and year, have a start and end. getData() gets us the first millisecond of that range. getEnd gets us the last.
    */
   getEnd() {
-    return addTime(this.moment, this.specificity, 1n) - 1n;
+    const end = addTime(this.moment, this.specificity, 1n);
+    if (end == null) {
+      return undefined;
+    }
+    return end - 1n;
   }
 
   getEndDate() {

@@ -116,7 +116,7 @@ export interface TZInfo {
 
 export interface Date extends BasicNode {
   type: 'date';
-  args: (Time.Unit | bigint | TZInfo)[];
+  args: (Time.Unit | bigint | TZInfo | undefined)[];
 }
 
 // Directives

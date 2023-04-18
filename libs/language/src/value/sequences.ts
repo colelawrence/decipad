@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import DeciNumber, { N } from '@decipad/number';
+import { getDefined } from '@decipad/utils';
 import { RuntimeError, Time } from '..';
 import { addTime, getSpecificity } from '../date';
 
@@ -45,13 +46,19 @@ export function columnFromDateSequence(
   startD: DateValue,
   endD: DateValue,
   by: Time.Unit
-): ColumnLikeValue {
+): ColumnLikeValue | undefined {
   let start = startD.getData();
   let end = endD.getData();
+  if (start == null || end == null) {
+    return undefined;
+  }
   if (end >= start) {
     end = endD.getEnd();
   } else {
     start = startD.getEnd();
+  }
+  if (start == null || end == null) {
+    return undefined;
   }
 
   const spec = getSpecificity(by);
@@ -68,9 +75,9 @@ export function columnFromDateSequence(
 
   let iterations = 0;
   for (
-    let cur = start;
+    let cur: bigint = start;
     cmpFn(start, end, cur);
-    cur = addTime(cur, by, BigInt(step))
+    cur = getDefined(addTime(cur, by, BigInt(step)))
   ) {
     if (++iterations > MAX_ITERATIONS) {
       throw new RuntimeError(

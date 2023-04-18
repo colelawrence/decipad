@@ -44,7 +44,6 @@ export const sameScalarnessAs = checker((me: Type, other: Type) => {
     if (!matchingTypes) {
       return me.expected(other);
     }
-
     if (me.type === 'number') {
       return propagateTypeUnits(me, other);
     }
@@ -149,7 +148,7 @@ export const isRange = checker((me: Type) => {
   }
 });
 
-export const getRangeOf = checker((me: Type) => {
+export const getRangeOf = checker((me: Type): Type => {
   return me.rangeOf ?? me.expected('range');
 });
 
@@ -202,7 +201,11 @@ export const isDate = checker((me: Type, specificity?: Time.Specificity) => {
 });
 
 export const sameDatenessAs = checker((me: Type, other: Type) => {
-  if (me.date === other.date) {
+  if (
+    me.date === 'undefined' ||
+    other.date === 'undefined' ||
+    me.date === other.date
+  ) {
     return me;
   } else {
     return me.expected(other);

@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { Type, buildType } from '../../type';
 import { BuiltinSpec } from '../interfaces';
 import { isTimeSpecificity } from '../../date/index';
-import { NumberValue } from '../../value';
+import { NumberValue, RuntimeError } from '../../value';
 
 const extractFunctor: BuiltinSpec['functor'] = ([n, precision]) =>
   Type.combine(precision.isTimeQuantity(), n.isDate()).mapType((t) => {
@@ -37,6 +37,9 @@ export const dateOperators: Record<string, BuiltinSpec> = {
         throw new Error(
           `Expected unit name to be time precision and was ${unitName}`
         );
+      }
+      if (unitName === 'undefined') {
+        throw new RuntimeError('undefined date');
       }
       const luxonDate = DateTime.fromMillis(Number(d), { zone: 'UTC' });
       return NumberValue.fromValue(luxonDate.get(unitName));

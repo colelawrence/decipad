@@ -1,6 +1,5 @@
 import { SerializedTypes, Unit, Result } from '@decipad/computer';
 import { fromNumber } from '@decipad/number';
-import { OneResult } from 'libs/language/src/result';
 import { getDefined } from '@decipad/utils';
 
 const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
@@ -32,13 +31,20 @@ export const deserializeResult = <T extends Result.Result>(
       } as typeof type;
       break;
     case 'date':
-      if (typeof value !== 'symbol' && typeof value !== 'object') {
-        replaceValue = BigInt(value ?? 0);
+      if (
+        value != null &&
+        typeof value !== 'symbol' &&
+        typeof value !== 'object' &&
+        typeof value !== 'symbol'
+      ) {
+        replaceValue = BigInt(value);
+      } else {
+        replaceValue = Result.Unknown;
       }
       break;
     case 'column':
       if (type.cellType.kind === 'number') {
-        replaceValue = (value as OneResult[])?.map(fromNumber);
+        replaceValue = (value as Result.OneResult[])?.map(fromNumber);
         replaceType = {
           ...type,
           cellType: {
@@ -48,14 +54,14 @@ export const deserializeResult = <T extends Result.Result>(
         } as typeof type;
         break;
       }
-      const replacements = (value as OneResult[])?.map((v) =>
+      const replacements = (value as Result.OneResult[])?.map((v) =>
         deserializeResult({
           type: type.cellType,
           value: v,
         })
       );
       replaceValue = replacements?.map((r) => r?.value) as
-        | OneResult
+        | Result.OneResult
         | undefined;
       if (replacements?.length) {
         replaceType = {
@@ -71,7 +77,7 @@ export const deserializeResult = <T extends Result.Result>(
             kind: 'column',
             cellType: colType,
           } as SerializedTypes.Column,
-          value: (value as OneResult[][])?.[colIndex],
+          value: (value as Result.OneResult[][])?.[colIndex],
         });
       });
       replaceType = {
@@ -80,7 +86,9 @@ export const deserializeResult = <T extends Result.Result>(
           col?.type.kind === 'column' ? col.type.cellType : undefined
         ) as SerializedTypes.Table['columnTypes'],
       };
-      replaceValue = replacementColumns.map((col) => col?.value) as OneResult;
+      replaceValue = replacementColumns.map(
+        (col) => col?.value
+      ) as Result.OneResult;
   }
   if ((replaceType ?? type) != null || (replaceValue ?? value) != null) {
     return { type: replaceType ?? type, value: replaceValue ?? value } as T;

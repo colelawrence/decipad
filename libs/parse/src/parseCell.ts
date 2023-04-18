@@ -212,7 +212,7 @@ export const getNullReplacementValue = (
   cellType: CellValueType
 ): AST.Expression => {
   if (cellType.kind === 'date') {
-    return dateToAST(cellType, new Date('2020-01-01'));
+    return dateToAST(cellType, undefined);
   }
   if (cellType.kind === 'number') {
     return astNode('literal', 'number', ZERO);

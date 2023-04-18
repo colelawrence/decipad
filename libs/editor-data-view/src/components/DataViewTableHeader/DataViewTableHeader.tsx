@@ -56,7 +56,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
     }, [expandedGroups, editor, groupId, onChangeExpandedGroups])
   );
 
-  if (type == null || value == null) {
+  if (type == null) {
     return null;
   }
 
@@ -85,30 +85,21 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
       rotate={rotate}
       isFirstLevelHeader={isFirstLevelHeader}
     >
-      {collapsible ? (
-        <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>
-          <>
-            {value != null && (
-              <CodeResult
-                value={value as Result.Result['value']}
-                variant="inline"
-                type={type}
-                element={element}
-              />
-            )}
+      <div onClick={handleCollapseGroupButtonPress} css={resultWrapperStyles}>
+        <>
+          <CodeResult
+            value={value as Result.Result['value']}
+            variant="inline"
+            type={type}
+            element={element}
+          />
+          {collapsible && (
             <span css={iconStyles} data-test-id="data-view-row-expander">
               {groupIsExpanded ? <FolderOpen /> : <Folder />}
             </span>
-          </>
-        </div>
-      ) : (
-        <CodeResult
-          value={value as Result.Result['value']}
-          variant="inline"
-          type={type}
-          element={element}
-        />
-      )}
+          )}
+        </>
+      </div>
     </DataViewTableHeaderUI>
   );
 };

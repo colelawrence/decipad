@@ -59,11 +59,11 @@ describe.each(
   });
 
   it('can get its contents with lowLevelGet and atIndex', () => {
-    expect(lazyThing.lowLevelGet(0).getData().valueOf()).toEqual(1);
-    expect(lazyThing.lowLevelGet(2).getData().valueOf()).toEqual(3);
+    expect(lazyThing.lowLevelGet(0).getData()?.valueOf()).toEqual(1);
+    expect(lazyThing.lowLevelGet(2).getData()?.valueOf()).toEqual(3);
 
-    expect(lazyThing.atIndex(0)?.getData().valueOf()).toEqual(1);
-    expect(lazyThing.atIndex(2)?.getData().valueOf()).toEqual(3);
+    expect(lazyThing.atIndex(0)?.getData()?.valueOf()).toEqual(1);
+    expect(lazyThing.atIndex(2)?.getData()?.valueOf()).toEqual(3);
   });
 
   it('bound checks', () => {

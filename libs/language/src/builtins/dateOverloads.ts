@@ -16,8 +16,11 @@ export const addDateAndTimeQuantity = (
   date: DateValue,
   unit: Time.Unit,
   amount: bigint
-) => {
+): DateValue => {
   const newDate = addTime(date.getData(), unit, amount);
+  if (newDate == null) {
+    return DateValue.fromDateAndSpecificity(undefined, date.specificity);
+  }
 
   return DateValue.fromDateAndSpecificity(newDate, date.specificity);
 };

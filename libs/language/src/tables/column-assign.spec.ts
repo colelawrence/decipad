@@ -116,25 +116,25 @@ describe('Column assignment evaluation', () => {
 
   it('whole-column assignment', async () => {
     const assigned = await testColumnAssign(col(3, 4));
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"3,4"`);
+    expect(assigned.getData()?.toString()).toMatchInlineSnapshot(`"3,4"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 
   it('can assign a scalar to a column', async () => {
     const assigned = await testColumnAssign(l(1));
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"1,1"`);
+    expect(assigned.getData()?.toString()).toMatchInlineSnapshot(`"1,1"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 
   it('formula assignment', async () => {
     const assigned = await testColumnAssign(columnFormula);
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"3,4"`);
+    expect(assigned.getData()?.toString()).toMatchInlineSnapshot(`"3,4"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 
   it('formula with previous', async () => {
     const assigned = await testColumnAssign(columnFormulaWithPrevious);
-    expect(assigned.getData().toString()).toMatchInlineSnapshot(`"3,4"`);
+    expect(assigned.getData()?.toString()).toMatchInlineSnapshot(`"3,4"`);
     expect(getColNames()).toEqual(['Col1', 'Col2']);
   });
 

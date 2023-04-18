@@ -56,15 +56,27 @@ const toSimpleTimeUnit: Record<string, [SimplerUnit, number]> = {
 };
 
 export const getDateSequenceError = (
-  start: bigint,
-  end: bigint,
+  start: bigint | undefined,
+  end: bigint | undefined,
   boundsSpecificity: Time.Specificity,
   by: Time.Unit
 ): InferError | undefined => {
+  if (start == null) {
+    return new InferError('No start date');
+  }
+  if (end == null) {
+    return new InferError('No end date');
+  }
   // Get the end of the year, month or day.
-  end = DateValue.fromDateAndSpecificity(end, boundsSpecificity).getEnd();
+  end = getDefined(
+    DateValue.fromDateAndSpecificity(end, boundsSpecificity).getEnd()
+  );
 
-  let [stepUnit, steps] = getJSDateUnitAndMultiplier(by);
+  const dateUnitAndMultiplier = getJSDateUnitAndMultiplier(by);
+  if (!dateUnitAndMultiplier) {
+    return new InferError('undefined date');
+  }
+  let [stepUnit, steps] = dateUnitAndMultiplier;
   if (start > end) {
     steps = -steps;
   }

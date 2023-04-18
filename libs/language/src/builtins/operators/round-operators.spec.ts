@@ -15,7 +15,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(1.13);
     expect(
       operators.round.fnValues!(
@@ -23,7 +23,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(113);
   });
 
@@ -31,7 +31,7 @@ describe('round', () => {
     expect(
       operators.round.fnValues!([fromJS(N(1127, 10))], [t.number()])
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(113);
   });
 
@@ -42,7 +42,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(112.8);
   });
 
@@ -53,7 +53,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(113);
   });
 
@@ -64,7 +64,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(100);
   });
 
@@ -75,7 +75,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(0);
   });
 
@@ -86,7 +86,7 @@ describe('round', () => {
         [t.number()]
       )
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(112.7);
   });
 
@@ -94,7 +94,7 @@ describe('round', () => {
     expect(
       operators.rounddown.fnValues!([fromJS(N(1127, 10))], [t.number()])
         .getData()
-        .valueOf()
+        ?.valueOf()
     ).toBe(112);
   });
 });

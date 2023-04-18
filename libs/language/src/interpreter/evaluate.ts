@@ -167,7 +167,7 @@ async function internalEvaluate(
         );
 
         const step = getDateSequenceIncrement(node.args[2], startUnit, endUnit);
-        return columnFromDateSequence(start, end, step);
+        return getDefined(columnFromDateSequence(start, end, step));
       } else {
         const step = node.args[2]
           ? await evaluate(realm, node.args[2])

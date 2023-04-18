@@ -808,6 +808,24 @@ let ParserRules = [
     symbols: [
       tokenizer.has('beginDate') ? { type: 'beginDate' } : beginDate,
       '_',
+      tokenizer.has('endDate') ? { type: 'endDate' } : endDate,
+    ],
+    postprocess: (d) => {
+      return addLoc(
+        {
+          type: 'date',
+          args: [],
+        },
+        d[0],
+        d[4]
+      );
+    },
+  },
+  {
+    name: 'date',
+    symbols: [
+      tokenizer.has('beginDate') ? { type: 'beginDate' } : beginDate,
+      '_',
       'dateInner',
       '_',
       tokenizer.has('endDate') ? { type: 'endDate' } : endDate,
@@ -816,7 +834,7 @@ let ParserRules = [
       return addLoc(
         {
           type: 'date',
-          args: joinDateParts(d[2]),
+          args: d[2] ? joinDateParts(d[2]) : [],
         },
         d[0],
         d[4]

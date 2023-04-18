@@ -6,6 +6,9 @@ export const DateResult = ({
   type,
   value,
 }: CodeResultProps<'date'>): ReturnType<FC> => {
+  if (typeof value === 'symbol' || value == null) {
+    return <span>?</span>;
+  }
   const date = new Date(Number(value));
   let fullUTC = false;
   let format;

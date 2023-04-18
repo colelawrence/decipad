@@ -33,6 +33,14 @@ export const inferDate = (
   granularity?: DateGranularity,
   allowedFormats?: string[]
 ): CoercibleType | undefined => {
+  if (!text.trim()) {
+    return {
+      type: {
+        kind: 'date',
+        date: 'day',
+      },
+    };
+  }
   const parsed = parseDate(text, granularity, allowedFormats);
   if (parsed) {
     return {

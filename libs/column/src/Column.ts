@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { getDefined } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import DeciNumber, { DeciNumberInput } from '@decipad/number';
 import { ColumnLike } from './ColumnLike';
@@ -10,6 +9,7 @@ export type Comparable =
   | number
   | bigint
   | symbol
+  | undefined
   | DeciNumber
   | DeciNumberInput
   | ReadonlyArray<Comparable>;
@@ -23,7 +23,7 @@ export class Column<T extends Comparable> implements ColumnLike<T> {
     this._values = values as DeepReadonly<T[]>;
   }
   atIndex(i: number): T {
-    return getDefined(this.values[i] as T, `index ${i} out of bounds`);
+    return this.values[i] as T;
   }
 
   get values() {

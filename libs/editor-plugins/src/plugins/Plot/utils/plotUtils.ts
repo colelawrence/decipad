@@ -84,7 +84,7 @@ function relevantColumnNames(displayProps: DisplayProps): string[] {
   ].filter(Boolean);
 }
 
-function displayTimeUnitType(type: SerializedType): TimeUnit {
+function displayTimeUnitType(type: SerializedType): TimeUnit | undefined {
   if (type.kind !== 'date') {
     throw new Error('expected column to be of date type');
   }
@@ -111,6 +111,7 @@ function displayTimeUnitType(type: SerializedType): TimeUnit {
       return 'utcyearmonthdatehoursminutesseconds';
     }
   }
+  return undefined;
 }
 
 export function encodingFor(

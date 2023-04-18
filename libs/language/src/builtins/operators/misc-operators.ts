@@ -1,10 +1,15 @@
 import DeciNumber from '@decipad/number';
-import { getInstanceof } from '../../utils';
-import { DateValue, Range, fromJS, NumberValue } from '../../value';
+import { getDefined, getInstanceof } from '../../utils';
+import { DateValue, Range, fromJS, NumberValue, Value } from '../../value';
 import { Type, buildType as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
 import { compare } from '../../compare';
+
+const extractDateValues = (a: Value) => {
+  const aVal = getInstanceof(a, DateValue);
+  return [aVal.getData(), aVal.getEnd()];
+};
 
 export const miscOperators: Record<string, BuiltinSpec> = {
   if: {
@@ -40,10 +45,15 @@ export const miscOperators: Record<string, BuiltinSpec> = {
       {
         argTypes: ['date', 'date'],
         fnValues: ([a, b]) => {
-          const aVal = getInstanceof(a, DateValue);
-          const bVal = getInstanceof(b, DateValue);
+          const [[aDate, aEndDate], [bDate, bEndDate]] = [a, b].map(
+            extractDateValues
+          );
+          if (aDate == null || bDate == null) {
+            return fromJS(false);
+          }
+
           return fromJS(
-            aVal.getData() <= bVal.getData() && aVal.getEnd() >= bVal.getEnd()
+            aDate <= bDate && getDefined(aEndDate) >= getDefined(bEndDate)
           );
         },
         functor: ([a, b]) => Type.combine(a.isDate(), b.isDate(), t.boolean()),
@@ -52,14 +62,13 @@ export const miscOperators: Record<string, BuiltinSpec> = {
         argTypes: ['range', 'date'],
         fnValues: ([rangeV, dateD]) => {
           const { start, end } = getInstanceof(rangeV, Range);
-          const startDate = getInstanceof(start, DateValue);
-          const endDate = getInstanceof(end, DateValue);
-          const date = getInstanceof(dateD, DateValue);
+          const [[startDate], [endDate]] = [start, end].map(extractDateValues);
+          const [dateStart, dateEnd] = extractDateValues(dateD);
+          if (!startDate || !endDate || !dateStart || !dateEnd) {
+            return fromJS(false);
+          }
 
-          return fromJS(
-            startDate.getData() <= date.getData() &&
-              endDate.getData() >= date.getEnd()
-          );
+          return fromJS(startDate <= dateStart && endDate >= dateEnd);
         },
         functor: ([range, date]) =>
           Type.combine(range.isRange(), date.isDate(), t.boolean()),
