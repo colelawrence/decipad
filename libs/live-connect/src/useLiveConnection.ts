@@ -94,12 +94,12 @@ export const useLiveConnection = (
 
   useEffect(() => {
     const computerResult = result?.result;
-    pushTableResultToComputer(computer, blockId, variableName, computerResult);
+    pushResultToComputer(computer, blockId, variableName, computerResult);
   }, [blockId, computer, variableName, result]);
 
   useEffect(() => {
     return () => {
-      pushTableResultToComputer(computer, blockId, variableName, undefined);
+      pushResultToComputer(computer, blockId, variableName, undefined);
     };
   }, [computer, blockId, variableName]);
 
@@ -136,73 +136,102 @@ export const useLiveConnection = (
 };
 
 /** Inject a table into the computer so the rest of the notebook can read it */
-export function pushTableResultToComputer(
+export function pushResultToComputer(
   computer: Computer,
   blockId: string,
   variableName: string,
   computerResult: Result.Result | undefined
 ) {
   if (
+    computerResult?.type &&
     computerResult?.value != null &&
-    typeof computerResult.value !== 'symbol' &&
-    computerResult?.type.kind === 'table'
+    typeof computerResult.value !== 'symbol'
   ) {
-    const { type, value } = computerResult as Result.Result<'table'>;
+    if (computerResult.type.kind === 'table') {
+      const { type, value } = computerResult as Result.Result<'table'>;
 
-    const externalDatas = [] as [string, Result.Result][];
-    const programBlocks: ProgramBlock[] = [
-      // Table = {}
-      {
-        type: 'identified-block',
-        id: blockId,
-        block: {
-          id: blockId,
-          type: 'block',
-          args: [astNode('table', astNode('tabledef', variableName))],
-        },
-        definesVariable: variableName,
-      },
-    ];
-
-    for (const [index, [colName, colType]] of zip(
-      type.columnNames,
-      type.columnTypes
-    ).entries()) {
-      const dataRef = `${blockId}--${index}`;
-
-      // Table.Column = {Data}
-      programBlocks.push({
-        type: 'identified-block',
-        id: dataRef,
-        block: {
-          id: dataRef,
-          type: 'block',
-          args: [
-            astNode(
-              'table-column-assign',
-              astNode('tablepartialdef', variableName),
-              astNode('coldef', colName),
-              astNode('externalref', dataRef)
-            ),
-          ],
-        },
-        definesTableColumn: [variableName, colName],
-      });
-
-      // the {Data} for the thing above
-      externalDatas.push([
-        dataRef,
+      const externalDatas = [] as [string, Result.Result][];
+      const programBlocks: ProgramBlock[] = [
+        // Table = {}
         {
-          type: serializeType(
-            buildType.column(deserializeType(colType), variableName, index)
-          ),
-          value: value[index],
+          type: 'identified-block',
+          id: blockId,
+          block: {
+            id: blockId,
+            type: 'block',
+            args: [astNode('table', astNode('tabledef', variableName))],
+          },
+          definesVariable: variableName,
+        },
+      ];
+
+      for (const [index, [colName, colType]] of zip(
+        type.columnNames,
+        type.columnTypes
+      ).entries()) {
+        const dataRef = `${blockId}--${index}`;
+
+        // Table.Column = {Data}
+        programBlocks.push({
+          type: 'identified-block',
+          id: dataRef,
+          block: {
+            id: dataRef,
+            type: 'block',
+            args: [
+              astNode(
+                'table-column-assign',
+                astNode('tablepartialdef', variableName),
+                astNode('coldef', colName),
+                astNode('externalref', dataRef)
+              ),
+            ],
+          },
+          definesTableColumn: [variableName, colName],
+        });
+
+        // the {Data} for the thing above
+        externalDatas.push([
+          dataRef,
+          {
+            type: serializeType(
+              buildType.column(deserializeType(colType), variableName, index)
+            ),
+            value: value[index],
+          },
+        ]);
+      }
+
+      computer.pushExternalDataUpdate(blockId, externalDatas);
+      computer.pushExtraProgramBlocks(blockId, programBlocks);
+    } else {
+      computer.pushExternalDataUpdate(blockId, [
+        [
+          blockId,
+          {
+            type: serializeType(computerResult.type),
+            value: computerResult.value,
+          },
+        ],
+      ]);
+      computer.pushExtraProgramBlocks(blockId, [
+        {
+          type: 'identified-block',
+          id: blockId,
+          block: {
+            id: blockId,
+            type: 'block',
+            args: [
+              astNode(
+                'assign',
+                astNode('def', variableName),
+                astNode('externalref', blockId)
+              ),
+            ],
+          },
         },
       ]);
     }
-
-    computer.pushExternalDataUpdate(blockId, externalDatas);
-    computer.pushExtraProgramBlocks(blockId, programBlocks);
   } else {
     computer.pushExternalDataDelete(blockId);
     computer.pushExtraProgramBlocksDelete(blockId);

@@ -1,7 +1,7 @@
 import { Computer, runCode, serializeResult } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
-import { pushTableResultToComputer } from './useLiveConnection';
+import { pushResultToComputer } from './useLiveConnection';
 
 it('can push a new table into the computer', async () => {
   // We need a first request for the computer to function
@@ -11,7 +11,7 @@ it('can push a new table into the computer', async () => {
     'Table1 = { Column1 = [1], Column2 = [2] }\nTable1'
   );
 
-  pushTableResultToComputer(
+  pushResultToComputer(
     computer,
     'blockid',
     'Table1',
@@ -53,7 +53,7 @@ it('can push a new table into the computer', async () => {
   `);
 
   // Garbage collect
-  pushTableResultToComputer(computer, 'blockid', 'Table1', undefined);
+  pushResultToComputer(computer, 'blockid', 'Table1', undefined);
   await timeout(0);
 
   // Assert on the computer's internal state to make sure we've GC'd the things we need to
