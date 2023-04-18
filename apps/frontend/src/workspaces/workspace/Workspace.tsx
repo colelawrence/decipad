@@ -294,7 +294,18 @@ const Workspace: FC = () => {
         ? null
         : {
             workspaceId: currentWorkspace.id,
-            workspaceMembers: currentWorkspace.access?.users || [],
+            workspaceMembers: [
+              ...(currentWorkspace.access?.users ?? []),
+              ...(currentWorkspace.access?.roles?.flatMap((access) =>
+                access.role.users?.map((roleUser) => ({
+                  permission: access.permission,
+                  user: roleUser,
+                  canComment: true,
+                }))
+              ) ?? []),
+            ],
+            currentUserId: session?.user?.id,
+
             onInvite: async (id, email, permissionType) =>
               shareWorkspace({
                 workspaceId: id,
@@ -342,6 +353,7 @@ const Workspace: FC = () => {
       shareWorkspace,
       unshareWorkspace,
       changeWorkspaceAccess,
+      session?.user?.id,
       toast,
     ]
   );

@@ -2,7 +2,13 @@ import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { noop } from 'lodash';
 import { TextAndIconButton, MenuItem } from '../../atoms';
-import { p12Medium, p14Medium, red500 } from '../../primitives';
+import {
+  p12Medium,
+  p14Medium,
+  red500,
+  cssVar,
+  p13Medium,
+} from '../../primitives';
 import { Caret } from '../../icons/Caret/Caret';
 import { MenuList } from '..';
 import { PermissionType } from '../../types';
@@ -12,6 +18,7 @@ type CollabAccessDropdownProps = {
   isInvitationPicker?: boolean;
 
   currentPermission: PermissionType;
+  disabled?: boolean;
   onRemove?: () => void;
   onChange?: (newPermission: PermissionType) => void;
 };
@@ -19,6 +26,13 @@ type CollabAccessDropdownProps = {
 const dropDownItemStyles = css({
   marginTop: '6px',
   maxWidth: '200px',
+});
+
+const labelStyle = css(p13Medium, {
+  borderRadius: '6px',
+  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('tintedBackgroundColor'),
+  padding: '4px 8px',
 });
 
 const HumanReadablePermission: Record<PermissionType, string> = {
@@ -30,6 +44,7 @@ const HumanReadablePermission: Record<PermissionType, string> = {
 export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
   isInvitationPicker,
   currentPermission,
+  disabled,
   onRemove,
   onChange,
 }) => {
@@ -42,24 +57,24 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
     onChange?.('WRITE');
   }, [onChange]);
 
+  if (disabled) {
+    return <span css={labelStyle}>{permissionLabel}</span>;
+  }
+
+  const trigger = (
+    <div css={css(p12Medium)}>
+      <TextAndIconButton
+        text={permissionLabel}
+        onClick={noop}
+        color={isInvitationPicker ? 'transparent' : 'default'}
+      >
+        <Caret variant="down" />
+      </TextAndIconButton>
+    </div>
+  );
+
   return (
-    <MenuList
-      root
-      dropdown
-      align="end"
-      sideOffset={4}
-      trigger={
-        <div css={css(p12Medium)}>
-          <TextAndIconButton
-            text={permissionLabel}
-            onClick={noop}
-            color={isInvitationPicker ? 'transparent' : 'default'}
-          >
-            <Caret variant="down" />
-          </TextAndIconButton>
-        </div>
-      }
-    >
+    <MenuList root dropdown align="end" sideOffset={4} trigger={trigger}>
       <MenuItem
         onSelect={onAdminSelected}
         selected={currentPermission === 'ADMIN'}

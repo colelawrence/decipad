@@ -20,6 +20,7 @@ import {
 export type WorkspaceMembersProps = {
   workspaceId: string;
   workspaceMembers: NotebookAvatar[];
+  currentUserId?: string;
   onInvite: (
     workspaceId: string,
     email: string,
@@ -45,6 +46,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
   onPermissionChange,
   workspaceId,
   workspaceMembers,
+  currentUserId,
 }) => {
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
@@ -117,6 +119,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
 
             <div css={columnPermissionStyles}>
               <CollabMembershipDropdown
+                disabled={currentUserId === member.user.id}
                 currentPermission={member.permission}
                 onChange={(newPermission) => {
                   if (!member.user.email) {
@@ -138,9 +141,11 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
               {member.user.name === member.user.email && (
                 <span css={pendingInviteStyles}>invite pending</span>
               )}
-              <WorkspaceMemberOptions
-                onRevoke={() => onRevoke(workspaceId, member.user.id)}
-              />
+              {currentUserId !== member.user.id && (
+                <WorkspaceMemberOptions
+                  onRevoke={() => onRevoke(workspaceId, member.user.id)}
+                />
+              )}
             </div>
           </>
         ))}

@@ -74,7 +74,6 @@ let overrides: Flags = {
   CODE_LINE_NAME_SEPARATED: true,
   EXPR_REFS: true,
   POPULATED_NEW_NOTEBOOK: true,
-  WORKSPACE_MEMBERS: false,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
