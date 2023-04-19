@@ -1,4 +1,4 @@
-import { identify } from '@decipad/backend-analytics';
+import { identify, track } from '@decipad/backend-analytics';
 import {
   GoalFulfilmentInput,
   GraphqlContext,
@@ -55,6 +55,14 @@ export default {
       const self = await data.users.get({ id: user.id });
       if (!self) {
         throw new AuthenticationError('Not authenticated');
+      }
+
+      if (!user.onboarded && props.onboarded) {
+        await track({
+          event: 'user onboarded',
+          userId: user.id,
+          properties: { email: user.email },
+        });
       }
 
       Object.assign(self, props, { id: user.id });
