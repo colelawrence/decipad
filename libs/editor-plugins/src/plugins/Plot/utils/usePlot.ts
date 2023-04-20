@@ -118,6 +118,9 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
   const setColorScheme = usePathMutatorCallback(editor, path, 'colorScheme');
 
   const repeatedColumns = useMemo(() => {
+    if (element.markType === 'arc') {
+      return [element.thetaColumnName];
+    }
     return _.uniq([element.y2ColumnName, element.yColumnName])
       .filter((word) => word !== 'None')
       .filter(Boolean);
