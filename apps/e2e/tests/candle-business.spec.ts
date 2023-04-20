@@ -133,7 +133,7 @@ test.describe('Use case: building a candle business', () => {
 
     expect(await fetchTable(page, '[id="dx3xX7M8CauTJALImf5vt"]')).toBe(
       `.------------------------------------------------------------.
-|                         NetIncome                          |
+|                       NetIncomeTable                       |
 |------------------------------------------------------------|
 | Year | NetRevenue | OperatingIncome |  Taxes   | NetIncome |
 |------|------------|-----------------|----------|-----------|

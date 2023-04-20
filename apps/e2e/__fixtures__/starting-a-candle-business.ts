@@ -3495,7 +3495,7 @@ export default {
             {
               children: [
                 {
-                  text: 'NetIncome',
+                  text: 'NetIncomeTable',
                 },
               ],
               type: 'table-var-name',
