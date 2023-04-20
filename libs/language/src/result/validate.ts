@@ -88,6 +88,9 @@ function validate(
         getArray(value as Interpreter.ResultRow)
       ).every(([type, value]) => validate(type, value));
     }
+    case 'pending': {
+      return getTrue(value === Unknown, 'expected Unknown');
+    }
     case 'nothing': {
       return getTrue(value == null || value === Unknown, 'expected no value');
     }

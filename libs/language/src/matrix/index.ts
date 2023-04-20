@@ -11,12 +11,19 @@ import {
 import { evaluateVariable, inferVariable } from './getVariable';
 import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
 import { ColumnLikeValue, applyFilterMap } from '../value';
+import { typeIsPending } from '../type';
 
 export function inferMatrixRef(context: Context, ref: AST.MatrixRef): Type {
   const [varExp, matchersExp] = ref.args;
 
   const variable = inferVariable(context, getIdentifierString(varExp));
   const matchers = inferMatchers(context, matchersExp);
+
+  // pending is contagious
+  const pending = [variable, matchers].find(typeIsPending);
+  if (pending) {
+    return pending;
+  }
 
   return Type.combine(matchers, variable);
 }

@@ -13,6 +13,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     case 'table':
     case 'row':
     case 'function':
+    case 'pending':
     case 'nothing': {
       // Rarely seen in the wild
       return type.kind;

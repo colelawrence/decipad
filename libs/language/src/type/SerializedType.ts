@@ -17,6 +17,7 @@ export type SerializedType =
   | SerializedTypes.Range
 
   // Oddball
+  | SerializedTypes.Pending
   | SerializedTypes.Nothing // No-op
   | SerializedTypes.Anything
   | SerializedTypes.Function

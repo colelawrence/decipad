@@ -55,6 +55,7 @@ export type Range = {
 // Oddball
 export type Nothing = { readonly kind: 'nothing' } & Common; // No-op
 export type Anything = { readonly kind: 'anything' } & Common; // Top type
+export type Pending = { readonly kind: 'pending' } & Common; // Top type
 export type Function = {
   readonly kind: 'function';
   readonly name: string;

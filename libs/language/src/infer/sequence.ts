@@ -2,7 +2,7 @@ import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { AST, Time, DateValue } from '..';
 import { getIdentifierString, getOfType } from '../utils';
-import { InferError, buildType as t, Type } from '../type';
+import { InferError, buildType as t, Type, typeIsPending } from '../type';
 import {
   dateToArray,
   getJSDateUnitAndMultiplier,
@@ -142,6 +142,12 @@ export const inferSequence = (
   const [startN, endN, byN] = expr.args;
   const startType = inferExpression(ctx, startN);
   const endType = inferExpression(ctx, endN);
+
+  // pending is contagious
+  const pending = [startType, endType].find(typeIsPending);
+  if (pending) {
+    return pending;
+  }
   const boundTypes = startType.sameAs(endType);
 
   if (boundTypes.errorCause != null) {

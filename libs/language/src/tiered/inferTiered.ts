@@ -39,12 +39,19 @@ const inferTieredDef = (
 
 export const inferTiered = (ctx: Context, node: AST.Tiered): Type => {
   const [initial, ...tieredDefs] = node.args;
-  const argType = inferExpression(ctx, initial).isScalar('number');
+  const argType = inferExpression(ctx, initial);
+  if (argType.errorCause || argType.pending) {
+    return argType;
+  }
+  const argTypeNumber = argType.isScalar('number');
+  if (argTypeNumber.errorCause) {
+    return argTypeNumber;
+  }
 
   if (!tieredDefs.length) {
     return t.impossible('tiered definitions are empty');
   }
   return tieredDefs
-    .map((def) => inferTieredDef(argType, ctx, def))
+    .map((def) => inferTieredDef(argTypeNumber, ctx, def))
     .reduce((type, other) => type.sameAs(other));
 };

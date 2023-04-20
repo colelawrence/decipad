@@ -16,6 +16,7 @@ export const resultToValue = (result: Result.Result): Value => {
   const { type, value } = result;
   switch (type.kind) {
     case 'type-error':
+    case 'pending':
     case 'nothing':
     case 'function':
     case 'anything':

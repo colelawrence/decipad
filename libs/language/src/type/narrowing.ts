@@ -32,6 +32,14 @@ export function narrowTypes(
   const s1 = serializeType(t1);
   const s2UnknownType = serializeType(t2);
 
+  // pending type is contagious
+  if (s1.kind === 'pending') {
+    return t1;
+  }
+  if (s2UnknownType.kind === 'pending') {
+    return t2;
+  }
+
   if (s1.kind === 'anything') return t2;
   if (s2UnknownType.kind === 'anything') return t1;
 

@@ -1,6 +1,6 @@
 import * as Value from '../value';
 import { createLazyOperation } from '../lazy';
-import { buildType as t, Type } from '../type';
+import { buildType as t, Type, typeIsPending } from '../type';
 import {
   arrayOfOnes,
   deLinearizeType,
@@ -26,6 +26,13 @@ export const automapTypes = (
   mapFn: (types: Type[]) => Type,
   expectedCardinalities = arrayOfOnes(argTypes.length)
 ): Type => {
+  // pending is contagious
+  {
+    const pending = argTypes.find(typeIsPending);
+    if (pending) {
+      return pending;
+    }
+  }
   const invalidCardinality = findInvalidCardinality(
     argTypes,
     expectedCardinalities
@@ -39,6 +46,15 @@ export const automapTypes = (
     // Expand dimensions by returning the union of all arguments' dims
     const linearTypedArgs = argTypes.map((t) => linearizeType(t));
     const scalarArgs = linearTypedArgs.map((types) => types[types.length - 1]);
+
+    // pending is contagious
+    {
+      const pending = scalarArgs.find(typeIsPending);
+      if (pending) {
+        return pending;
+      }
+    }
+
     const allDimensions = groupTypesByDimension(
       ...linearTypedArgs.map((item) => item.slice(0, -1))
     );

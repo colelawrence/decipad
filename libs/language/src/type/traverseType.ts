@@ -8,6 +8,7 @@ export function traverseType(
   const type = fn(givenType);
 
   switch (type.kind) {
+    case 'pending':
     case 'nothing':
     case 'anything':
     case 'type-error':

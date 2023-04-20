@@ -14,6 +14,7 @@ import {
   DateResult,
   DefaultFunctionResult,
   NumberResult,
+  PendingResult,
 } from '../../atoms';
 import { InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
@@ -90,6 +91,10 @@ const getResultMatchers = (): ResultMatcher[] => [
     component: InlineCodeError,
     match: ({ type, variant }) =>
       type.kind === 'type-error' && variant === 'inline',
+  },
+  {
+    component: PendingResult,
+    match: ({ type }) => type.kind === 'pending',
   },
   {
     component: AnyResult,

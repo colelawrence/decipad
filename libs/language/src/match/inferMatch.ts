@@ -20,12 +20,15 @@ export const inferMatch = (ctx: Context, node: AST.Match): Type => {
   let resultType: Type | undefined;
   for (const matchDef of node.args) {
     const matchDefType = inferMatchDef(ctx, matchDef);
+    if (matchDefType.pending || matchDefType.errorCause) {
+      return matchDefType;
+    }
     if (resultType) {
       resultType = resultType.sameAs(matchDefType);
     } else {
       resultType = matchDefType;
     }
-    if (resultType.errorCause) {
+    if (resultType.errorCause || resultType.pending) {
       return resultType;
     }
   }

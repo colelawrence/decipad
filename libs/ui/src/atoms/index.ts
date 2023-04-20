@@ -60,6 +60,7 @@ export { Overlay } from './Overlay/Overlay';
 export { Paragraph } from './Paragraph/Paragraph';
 export { ParagraphFormulaEditor } from './ParagraphFormulaEditor/ParagraphFormulaEditor';
 export { ParagraphPlaceholder } from './ParagraphPlaceholder/ParagraphPlaceholder';
+export { PendingResult } from './PendingResult/PendingResult';
 export { Placeholder } from './Placeholder/Placeholder';
 export * from './placeholders';
 export { PlotFunction } from './PlotFunction/PlotFunction';

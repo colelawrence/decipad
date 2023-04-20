@@ -1,5 +1,11 @@
 import { AST } from '..';
-import { InferError, Type, buildType as t, deserializeType } from '../type';
+import {
+  InferError,
+  Type,
+  buildType as t,
+  deserializeType,
+  typeIsPending,
+} from '../type';
 import { matchUnitArraysForColumn } from '../type/units';
 import { getDefined, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
@@ -108,6 +114,10 @@ export const inferExpression = wrap(
         const [start, end] = expr.args.map((expr) =>
           inferExpression(ctx, getDefined(expr))
         );
+        const pending = [start, end].find(typeIsPending);
+        if (pending) {
+          return pending;
+        }
 
         return Type.combine(start, end).mapType(() => {
           const rangeOf =
@@ -136,6 +146,12 @@ export const inferExpression = wrap(
           inferExpression(ctx, a, firstCellType)
         );
 
+        // pending type is contagious
+        const pending = [firstCellType, ...restCellTypes].find(typeIsPending);
+        if (pending) {
+          return pending;
+        }
+
         const erroredCell = [firstCellType, ...restCellTypes].find(
           (cell) => cell.errorCause != null
         );
@@ -158,7 +174,13 @@ export const inferExpression = wrap(
       case 'property-access': {
         const [thing, prop] = expr.args;
         const propName = getIdentifierString(prop);
-        const table = inferExpression(ctx, thing).isTableOrRow();
+        const potentialTable = inferExpression(ctx, thing);
+        // pending is contagious
+        if (potentialTable.pending) {
+          return potentialTable;
+        }
+        const table = potentialTable.isTableOrRow();
+
         const tableName =
           thing.type === 'ref' ? thing.args[0] : table.indexName;
 

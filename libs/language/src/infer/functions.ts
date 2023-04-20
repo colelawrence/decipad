@@ -1,7 +1,7 @@
 import { inferExpression, inferStatement } from '.';
 import { AST } from '..';
 import { callBuiltinFunctor } from '../builtins';
-import { buildType as t, InferError, Type } from '../type';
+import { buildType as t, InferError, Type, typeIsPending } from '../type';
 import { getDefined, getIdentifierString, getOfType, zip } from '../utils';
 import { Context, logRetrievedFunctionName } from './context';
 
@@ -52,10 +52,16 @@ export const inferFunction = (
 /** set while calling a function to avoid infinite recursion */
 const isCurrentlyCallingFunctions = new Set<string>();
 
-export function inferFunctionCall(ctx: Context, expr: AST.FunctionCall) {
+export function inferFunctionCall(ctx: Context, expr: AST.FunctionCall): Type {
   const fName = getIdentifierString(expr.args[0]);
   const fArgs = getOfType('argument-list', expr.args[1]).args;
   const givenArguments: Type[] = fArgs.map((arg) => inferExpression(ctx, arg));
+
+  // pending is contagious
+  const pending = givenArguments.find(typeIsPending);
+  if (pending) {
+    return pending;
+  }
 
   logRetrievedFunctionName(ctx, fName);
 

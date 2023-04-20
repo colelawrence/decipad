@@ -122,6 +122,11 @@ export const nothing = () =>
     nothingType.nothingness = true;
   });
 
+export const pending = () =>
+  produce(new Type(), (pendingType) => {
+    pendingType.pending = true;
+  });
+
 export const anything = () =>
   produce(new Type(), (anyType) => {
     anyType.anythingness = true;

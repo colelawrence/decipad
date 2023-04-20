@@ -15,3 +15,4 @@ export {
 export { type ErrSpec, InferError } from './InferError';
 export { getErrSpec } from './getErrorSpec';
 export * as buildType from './buildType';
+export * from './typeIsPending';

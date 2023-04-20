@@ -63,6 +63,9 @@ export class Type {
   functionName: string | undefined;
   functionArgCount: number | undefined;
 
+  // Set to true when the type is still pending inference
+  pending = false;
+
   // Set to true when no data will be present. Used for empty blocks
   nothingness = false;
 
@@ -72,16 +75,16 @@ export class Type {
   // Associates the type to a symbol
   symbol: string | null = null;
 
-  // Return the first type that has an error, or the last one.
+  // Return the first type that has an error or is pending, or the last one.
   static combine(initialType: Type, ...types: CombineArg[]): Type {
     let lastNonErrorType = initialType;
-    if (lastNonErrorType.errorCause != null) {
+    if (lastNonErrorType.errorCause != null || lastNonErrorType.pending) {
       return lastNonErrorType;
     }
     for (const type of types) {
       const resultingType =
         typeof type === 'function' ? lastNonErrorType.mapType(type) : type;
-      if (resultingType.errorCause != null) {
+      if (resultingType.errorCause != null || resultingType.pending) {
         return resultingType;
       }
       lastNonErrorType = resultingType;

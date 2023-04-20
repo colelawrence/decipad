@@ -8,6 +8,7 @@ import {
   serializeResult,
   validateResult,
   Value,
+  Result,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
@@ -43,7 +44,9 @@ const computeStatement = async (
     statement
   );
 
-  if (!(valueType.errorCause != null && !valueType.functionness)) {
+  if (valueType.pending) {
+    value = Result.UnknownValue;
+  } else if (valueType.errorCause == null || valueType.functionness) {
     realm.interpreterRealm.statementId = getExprRef(blockId);
     value = await evaluateStatement(realm.interpreterRealm, statement);
   }

@@ -15,27 +15,33 @@ export function serializeType(type: Type | SerializedType): SerializedType {
     return type;
   }
   const serializedType = ((): SerializedType | null => {
+    if (type.pending) {
+      return { kind: 'pending' };
+    }
     if (type.cellType) {
       return {
         kind: 'column',
         indexedBy: type.indexedBy,
         cellType: serializeType(type.cellType),
       };
-    } else if (type.columnTypes && type.columnNames) {
+    }
+    if (type.columnTypes && type.columnNames) {
       return {
         kind: 'table',
         indexName: type.indexName,
         columnTypes: type.columnTypes.map((t) => serializeType(t)),
         columnNames: type.columnNames,
       };
-    } else if (type.rowCellTypes && type.rowCellNames) {
+    }
+    if (type.rowCellTypes && type.rowCellNames) {
       return {
         kind: 'row',
         rowIndexName: type.rowIndexName,
         rowCellTypes: type.rowCellTypes.map((t) => serializeType(t)),
         rowCellNames: type.rowCellNames,
       };
-    } else if (type.type === 'number') {
+    }
+    if (type.type === 'number') {
       if (type.numberFormat === 'percentage' && type.unit?.length) {
         throw new Error('Cannot serialize a percentage number with a unit');
       }
@@ -59,26 +65,34 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         kind: 'number',
         unit: type.unit?.length ? type.unit : null,
       };
-    } else if (type.type === 'boolean') {
+    }
+    if (type.type === 'boolean') {
       return { kind: 'boolean' };
-    } else if (type.type === 'string') {
+    }
+    if (type.type === 'string') {
       return { kind: 'string' };
-    } else if (type.date) {
+    }
+    if (type.date) {
       return { kind: 'date', date: type.date };
-    } else if (type.rangeOf) {
+    }
+    if (type.rangeOf) {
       return { kind: 'range', rangeOf: serializeType(type.rangeOf) };
-    } else if (type.nothingness) {
+    }
+    if (type.nothingness) {
       return { kind: 'nothing' };
-    } else if (type.anythingness) {
+    }
+    if (type.anythingness) {
       return { kind: 'anything' };
-    } else if (type.functionness) {
+    }
+    if (type.functionness) {
       return {
         kind: 'function',
         name: getDefined(type.functionName),
         argCount: type.functionArgCount,
         ast: type.node,
       };
-    } else if (type.errorCause) {
+    }
+    if (type.errorCause) {
       return {
         kind: 'type-error',
         errorCause: type.errorCause.spec,
@@ -136,6 +150,8 @@ export function deserializeType(type: Type | SerializedType): Type {
             type.rowCellNames,
             type.rowIndexName
           );
+        case 'pending':
+          return t.pending();
         case 'nothing':
           return t.nothing();
         case 'anything':

@@ -27,6 +27,8 @@ export function formatTypeInner(
       return '<boolean>';
     case 'date':
       return type.date;
+    case 'pending':
+      return 'pending';
     case 'nothing':
       return 'nothing';
     case 'anything':

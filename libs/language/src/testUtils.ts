@@ -194,6 +194,7 @@ export const snapshotType = (type: Type | SerializedType): string => {
     case 'string':
     case 'boolean':
     case 'nothing':
+    case 'pending':
     case 'function': {
       return type.kind;
     }

@@ -11,7 +11,7 @@ export const getType: DirectiveImpl<AST.OfDirective>['getType'] = (
   { args: [, expr, quality] }
 ): Type => {
   const expressionType = inferExpression(ctx, expr);
-  if (expressionType.errorCause) {
+  if (expressionType.errorCause || expressionType.pending) {
     return expressionType;
   }
   return automapTypes([expressionType], ([expressionType]: Type[]): Type => {

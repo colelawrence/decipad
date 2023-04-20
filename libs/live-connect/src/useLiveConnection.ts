@@ -94,8 +94,12 @@ export const useLiveConnection = (
 
   useEffect(() => {
     const computerResult = result?.result;
-    pushResultToComputer(computer, blockId, variableName, computerResult);
-  }, [blockId, computer, variableName, result]);
+    if (!computerResult) {
+      pushPendingResultToComputer(computer, blockId, variableName);
+    } else {
+      pushResultToComputer(computer, blockId, variableName, computerResult);
+    }
+  }, [blockId, computer, result, variableName]);
 
   useEffect(() => {
     return () => {
@@ -134,6 +138,41 @@ export const useLiveConnection = (
     authenticate,
   };
 };
+
+function pushPendingResultToComputer(
+  computer: Computer,
+  blockId: string,
+  variableName: string
+) {
+  computer.pushExternalDataUpdate(blockId, [
+    [
+      blockId,
+      {
+        type: {
+          kind: 'pending',
+        },
+        value: Result.UnknownValue.getData(),
+      },
+    ],
+  ]);
+  computer.pushExtraProgramBlocks(blockId, [
+    {
+      type: 'identified-block',
+      id: blockId,
+      block: {
+        id: blockId,
+        type: 'block',
+        args: [
+          astNode(
+            'assign',
+            astNode('def', variableName),
+            astNode('externalref', blockId)
+          ),
+        ],
+      },
+    },
+  ]);
+}
 
 /** Inject a table into the computer so the rest of the notebook can read it */
 export function pushResultToComputer(
