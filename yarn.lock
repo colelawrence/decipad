@@ -475,6 +475,29 @@
     zip-dir "~2.0.0"
     zipit "~2.0.0"
 
+"@architect/deploy@4.4.2":
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.4.2.tgz#0af0e63afb806439b959109a0920e32e3137ee20"
+  integrity sha512-6m7PlefBtktFUdRgPC2P0urFyGNLTLhRwpkl9NC4O494wFaz5YsSsBJ8SZ7K29SqKuklLeK8wLNu9CRCAWt/Rw==
+  dependencies:
+    "@architect/create" "~4.1.4"
+    "@architect/hydrate" "~3.2.0"
+    "@architect/inventory" "~3.4.3"
+    "@architect/package" "~8.4.2"
+    "@architect/utils" "~3.1.6"
+    chalk "4.1.2"
+    fs-extra "~11.1.1"
+    get-folder-size "2.0.1"
+    glob "~9.3.4"
+    mime-types "~2.1.35"
+    minimist "~1.2.8"
+    path-sort "~0.1.0"
+    run-parallel "~1.2.0"
+    run-series "~1.1.9"
+    run-waterfall "~1.1.7"
+    zip-dir "~2.0.0"
+    zipit "~2.0.0"
+
 "@architect/destroy@3.0.7":
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/@architect/destroy/-/destroy-3.0.7.tgz#a6df89c6e03eb1167ba6d72f902ee892d2431eb0"
@@ -555,6 +578,22 @@
     run-series "~1.1.9"
     symlink-or-copy "~1.3.1"
 
+"@architect/hydrate@~3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@architect/hydrate/-/hydrate-3.2.0.tgz#7929fe3be7cb932d14b92394e87a3e23d3adc080"
+  integrity sha512-JyoB15dRyny3jO+qO4GfWV3bJkhJ7j1sQZbu4/sYAzpxqJmpNJRvElwGglX2+EfwNG3sEUG9hbA63cCv6TlFXg==
+  dependencies:
+    "@architect/inventory" "~3.4.2"
+    "@architect/utils" "~3.1.5"
+    acorn-loose "~8.3.0"
+    chalk "4.1.2"
+    cpr "~3.0.1"
+    esquery "~1.5.0"
+    glob "~9.2.1"
+    minimist "~1.2.8"
+    run-series "~1.1.9"
+    symlink-or-copy "~1.3.1"
+
 "@architect/inventory@3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.0.tgz#3a5280906cbbc4bfe727a885a25cfeb4cc7c2582"
@@ -585,15 +624,15 @@
     "@architect/utils" "~3.1.2"
     lambda-runtimes "~1.1.3"
 
-"@architect/inventory@~3.4.0", "@architect/inventory@~3.4.1":
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.2.tgz#4994da000fa01b0d613eaae653f3cd692438d3d1"
-  integrity sha512-hX5zGJ6m9kROwMogPNBri/6ixucTj5UrlyyCbxgTZTReF+DAjN0GIX44pcjdIss4PTGBJAlXWNB5QJQLhDzxuQ==
+"@architect/inventory@~3.4.0", "@architect/inventory@~3.4.1", "@architect/inventory@~3.4.2", "@architect/inventory@~3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.4.3.tgz#e3298b7072fbaddf8a566cf9fc0df7532a542a1b"
+  integrity sha512-2/dZYsr29t7RceWqWS+tB/RnQ1JvQSM7mG+P/dvjU3kDIg4ULXNW7agNW49yLEi5EaxV58Umn1Yr6WJukGNCJQ==
   dependencies:
     "@architect/asap" "~5.1.1"
     "@architect/parser" "~6.0.2"
-    "@architect/utils" "~3.1.2"
-    lambda-runtimes "~1.1.3"
+    "@architect/utils" "~3.1.6"
+    lambda-runtimes "~1.1.4"
 
 "@architect/logs@4.0.6":
   version "4.0.6"
@@ -609,10 +648,10 @@
     run-waterfall "~1.1.7"
     strftime "~0.10.1"
 
-"@architect/package@~8.4.0":
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.4.0.tgz#a14242785d892ad838c68b02ce32adafa8a29118"
-  integrity sha512-YjhUhMgjKvfHm4hevoxX9elqHSmYquaOOrEdMcbOgc5O4/QaU1NJi/QYNHkrZZhQzeT61O5MHYaPG27V6nTRfQ==
+"@architect/package@~8.4.0", "@architect/package@~8.4.2":
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.4.2.tgz#5ee94daa805c103ece9fb55e9c202a1f62aa07ca"
+  integrity sha512-EmTJPsYG3SBKN3UBkS79r/BgRjMsIz1aUhu8Jjy0LXTxapmkGkw/Ogw2KQCt0cB+GTTwU7fn4eekz9x/8gc5Uw==
   dependencies:
     "@architect/inventory" "~3.4.0"
     "@architect/utils" "~3.1.2"
@@ -677,13 +716,13 @@
     run-waterfall "~1.1.7"
     sha "~3.0.0"
 
-"@architect/utils@~3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@architect/utils/-/utils-3.1.2.tgz#b87e17ce76b6e4eb50a9fc2e91ed12e45c03fb90"
-  integrity sha512-m4SE/FzTlWmy59QO0unv629LQZ1xIqcIEuMx8V/UlGrSB6aTDoZivRBGemrPfOU3FOAGMg9nsbOdi9QlHzLWYA==
+"@architect/utils@~3.1.2", "@architect/utils@~3.1.5", "@architect/utils@~3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@architect/utils/-/utils-3.1.6.tgz#e49cb363b6d8a2ae2905062bd481eb816077ebb4"
+  integrity sha512-n80n34PmZxyQZQycg/F4FVbfdQPQnx3rH4+RbOcb3feDBhw6qBy/WdBpqYSbjmO6UviDyB/MGgp2m94Hvza+FQ==
   dependencies:
     chalk "4.1.2"
-    glob "~7.2.0"
+    glob "~9.3.4"
     path-sort "~0.1.0"
     restore-cursor "3.1.0"
     run-series "~1.1.9"
@@ -17511,7 +17550,14 @@ esprima@^4.0.0, esprima@^4.0.1, esprima@~4.0.0:
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
   integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
 
-esquery@^1.0.1, esquery@^1.4.2, esquery@~1.4.0:
+esquery@^1.0.1, esquery@^1.4.2, esquery@~1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/esquery/-/esquery-1.5.0.tgz#6ce17738de8577694edd7361c57182ac8cb0db0b"
+  integrity sha512-YQLXUplAwJgCydQ78IMJywZCceoqk1oH01OERdSAJc/7U2AylwjhSCLDEtqwg811idIS/9fIU5GjG73IgjKMVg==
+  dependencies:
+    estraverse "^5.1.0"
+
+esquery@~1.4.0:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/esquery/-/esquery-1.4.2.tgz#c6d3fee05dd665808e2ad870631f221f5617b1d1"
   integrity sha512-JVSoLdTlTDkmjFmab7H/9SL9qGSyjElT3myyKp7krqjVFQCDLmj1QFaCLRFBszBKI0XVZaiiXvuPIX3ZwHe1Ng==
@@ -18498,10 +18544,10 @@ fs-extra@^9.0.0, fs-extra@^9.0.1:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
-fs-extra@~11.1.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.0.tgz#5784b102104433bb0e090f48bfc4a30742c357ed"
-  integrity sha512-0rcTq621PD5jM/e0a3EJoGC/1TC5ZBCERW82LQuwfGnCa1V8w7dpYH1yNu+SLb6E5dkeCBzKEyLGlFrnr+dUyw==
+fs-extra@~11.1.0, fs-extra@~11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.1.tgz#da69f7c39f3b002378b0954bb6ae7efdc0876e2d"
+  integrity sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==
   dependencies:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
@@ -18848,7 +18894,17 @@ glob@^8.0.3, glob@~8.1.0:
     minimatch "^5.0.1"
     once "^1.3.0"
 
-glob@^9.2.0:
+glob@^9.2.0, glob@~9.3.4:
+  version "9.3.5"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-9.3.5.tgz#ca2ed8ca452781a3009685607fdf025a899dfe21"
+  integrity sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==
+  dependencies:
+    fs.realpath "^1.0.0"
+    minimatch "^8.0.2"
+    minipass "^4.2.4"
+    path-scurry "^1.6.1"
+
+glob@~9.2.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/glob/-/glob-9.2.1.tgz#f47e34e1119e7d4f93a546e75851ba1f1e68de50"
   integrity sha512-Pxxgq3W0HyA3XUvSXcFhRSs+43Jsx0ddxcFrbjxNGkL2Ak5BAUBxLqI5G6ADDeCHLfzzXFhe0b1yYcctGmytMA==
@@ -22405,10 +22461,10 @@ kuler@^2.0.0:
   resolved "https://registry.yarnpkg.com/kuler/-/kuler-2.0.0.tgz#e2c570a3800388fb44407e851531c1d670b061b3"
   integrity sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==
 
-lambda-runtimes@~1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-1.1.3.tgz#7bea251df5d0a391a218cbdb090685f215f7b593"
-  integrity sha512-IZBXsb78ia/gRB32VUIisiG1SW2Y9mvQepMHosNiqcksLgM1c1dWZ9LDSbA/DUPUdzVTvpUj5IyBl+E0BfIr7g==
+lambda-runtimes@~1.1.3, lambda-runtimes@~1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-1.1.4.tgz#6e50d0943e6ffff3ac1aa26e13b7e2d71df152fd"
+  integrity sha512-5s94cnm8cvk2DddyUXUZS2bR3am1e+RrdndiAILcss3YFjUIMl4uxNlluvkSu2DSTJj16KR4ttdzo/9SyWocKA==
 
 language-subtag-registry@~0.3.2:
   version "0.3.21"
@@ -24029,6 +24085,13 @@ minimatch@^7.4.1:
   dependencies:
     brace-expansion "^2.0.1"
 
+minimatch@^8.0.2:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-8.0.4.tgz#847c1b25c014d4e9a7f68aaf63dedd668a626229"
+  integrity sha512-W0Wvr9HyFXZRGIDgCicunpQ299OKXs9RgZfaukz4qAW/pJhcpUfupc9c+OObPOFueNy8VSrZgEmDtk6Kh4WzDA==
+  dependencies:
+    brace-expansion "^2.0.1"
+
 minimist-options@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/minimist-options/-/minimist-options-4.1.0.tgz#c0655713c53a8a2ebd77ffa247d342c40f010619"
@@ -24038,10 +24101,10 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6, minimist@~1.2.6, minimist@~1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
-  integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
+minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6, minimist@~1.2.6, minimist@~1.2.7, minimist@~1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
+  integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
