@@ -28,6 +28,7 @@ import {
 import { VariableEditor } from '@decipad/ui';
 import {
   findNode,
+  findNodePath,
   getNodeString,
   moveNodes,
   PlateEditor,
@@ -133,13 +134,16 @@ export const VariableDef: PlateComponent = ({
     [onChangeTypeMutator, onChangeSmartSelection, element, userEvents, readOnly]
   );
 
+  const secondChild = element.children[1];
+
   const onChangeValue = useCallback(
     (value: string | undefined) => {
-      if (path) {
-        mutateText(editor, path)(value?.toString() ?? '');
+      const textPath = findNodePath(editor, secondChild);
+      if (textPath) {
+        mutateText(editor, textPath)(value?.toString() ?? '');
       }
     },
-    [editor, path]
+    [editor, secondChild]
   );
 
   const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
