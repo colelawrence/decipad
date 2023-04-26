@@ -62,9 +62,13 @@ module.exports = {
           mainFields: ['module', 'main'],
         })
       );
-
       // Configure babel-loader to handle workspace projects as well.
-      const babelRule = config.module.rules[1].oneOf.find((r) => {
+      const babelRuleOneOf = config.module.rules.find((rule) =>
+        Object.keys(rule).includes('oneOf')
+      );
+      if (!babelRuleOneOf) throw new Error('Cannot find babel rules');
+
+      const babelRule = babelRuleOneOf.oneOf.find((r) => {
         if (r.loader && r.loader.includes('babel')) {
           return r;
         }
