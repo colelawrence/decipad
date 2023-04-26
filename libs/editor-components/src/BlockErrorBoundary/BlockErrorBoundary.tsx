@@ -1,21 +1,21 @@
-import { FC, ReactNode } from 'react';
-import { ErrorBoundary } from '@sentry/react';
+import { ErrorInfo, FC, ReactNode, useCallback } from 'react';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
 import { removeNodes } from '@udecode/plate';
 import { ErrorBlock } from '@decipad/ui';
 import { useNodePath } from '@decipad/editor-utils';
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import * as Sentry from '@sentry/react';
 
 interface FallbackProps {
   error: Error;
-  componentStack: string | null;
   element: MyElement;
-  resetError: () => void;
+  resetErrorBoundary: () => void;
 }
 
 const Fallback: FC<FallbackProps> = ({
   error,
   element,
-  resetError,
+  resetErrorBoundary,
 }: FallbackProps) => {
   console.error(error);
   const editor = useTEditorRef();
@@ -30,11 +30,11 @@ const Fallback: FC<FallbackProps> = ({
         removeNodes(editor, {
           at: [delPath[0]],
         });
-        resetError();
+        resetErrorBoundary();
       }}
       onUndo={() => {
         editor.undo();
-        resetError();
+        resetErrorBoundary();
       }}
     />
   );
@@ -47,12 +47,28 @@ export function BlockErrorBoundary({
   children: ReactNode;
   element: MyElement;
 }): ReturnType<FC> {
+  const onError = useCallback(
+    (err: Error, info: ErrorInfo) => {
+      const { message } = err;
+      console.error(err);
+      // eslint-disable-next-line no-param-reassign
+      err.message = `Block crash (${element.type}): ${message}`;
+      Sentry.captureException(err, {
+        level: 'fatal',
+        extra: {
+          info,
+        },
+      });
+    },
+    [element.type]
+  );
+
   return (
-    <ErrorBoundary
-      fallback={(props) => <Fallback {...props} element={element} />}
-      showDialog={false}
+    <ReactErrorBoundary
+      onError={onError}
+      fallbackRender={(props) => <Fallback {...props} element={element} />}
     >
       {children}
-    </ErrorBoundary>
+    </ReactErrorBoundary>
   );
 }

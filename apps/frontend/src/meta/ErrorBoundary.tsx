@@ -1,4 +1,11 @@
-import { ComponentProps, FC, ReactNode, useCallback, useState } from 'react';
+import {
+  ComponentProps,
+  ErrorInfo,
+  FC,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import * as Sentry from '@sentry/react';
 import { ErrorPage } from './ErrorPage';
@@ -17,11 +24,20 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
     number | undefined
   >();
   const onError = useCallback(
-    (error: Error) => {
+    (error: Error, info: ErrorInfo) => {
       setPreviousErrorDate(Date.now());
       console.error(error);
+      // eslint-disable-next-line no-param-reassign
+      error.message = `Page crash: ${
+        error.message
+      }: (${info.componentStack.substring(0, 100)})`;
       try {
-        Sentry.captureException(error);
+        Sentry.captureException(error, {
+          level: 'fatal',
+          extra: {
+            info,
+          },
+        });
       } catch (err) {
         console.error(err);
       }
