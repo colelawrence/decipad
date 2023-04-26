@@ -16,6 +16,14 @@ const implicitMultHandler = (d, _l, reject) => {
     }
   }
 
+  // also things like `2 -1`
+  if (right.type === 'literal') {
+    if (right.args[0] === 'number' && right.args[1].s == -1) {
+      return reject;
+    }
+  }
+
+
   return addArrayLoc({
     type: 'function-call',
     args: [

@@ -1,0 +1,1153 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Negative Calculations Checks"
+        }
+      ],
+      "type": "h1",
+      "id": "7a24LBLfzHq5g2L-PKM9s"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case1"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "V98rAdIHqFdIoFbIl65iL"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5-2 == 3)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "P-GTtAnxMp8iwcBF4qnhz"
+        }
+      ],
+      "id": "ZSE5PrApgI9sN9aclQH4u",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case2"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "R5E1_H6K96JuDjDcCjvwg"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5 -2 == 3)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "e4sl0dt8DopUDdbIv0sWF"
+        }
+      ],
+      "id": "YorX0_Cb0ysukQUdtXDJi",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case3"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "0IEXjWEkd5Hhgw9f00e7Y"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-2 == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "n4NsFKJMrrQkAlaBFnYSj"
+        }
+      ],
+      "id": "xuBmDjqNhuq6fS7kTe5i0",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case4"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "F3wZc0oQIcT5VexBU6fZk"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$ -2 == $3)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "bhjXEnjNj4juDbJYZO_Ue"
+        }
+      ],
+      "id": "Q04-AJXBafEy4g07TK2kz",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case5"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "-jNiAxQkh2Wa0CSlNxn9Q"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$* (-2) == -($10))"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "oaza2P5alIGebB-ZVfDAq"
+        }
+      ],
+      "id": "23GmdfbVehmrr5Jg5lXBQ",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case6"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "y2qwh8v6JZgOEgXw_nvze"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$*(-2) == -10$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "SPxgq3RdVrxQpdHpFwjSs"
+        }
+      ],
+      "id": "apFZ4zXcZjacbS9x5EEqB",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case7"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "roXexq9bznvlLWCdrqBXP"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-(-2) == 7$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "C6QutpfNMOng-37emUzDI"
+        }
+      ],
+      "id": "0m0tKhiXeJg97oK3uMsUP",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case8"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "HkeKxUE8NEgEpkyu63gJU"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-( -2) == 7$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "WSMq-KWYfzZhO7H7UzRZX"
+        }
+      ],
+      "id": "iGK81d5Id1iTHTNYh1WVh",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case9"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "7gciIZt-t-Nb7WFzf8JeX"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-( 2/1) == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "pi5tvTqFX9FMhk9wTIOx0"
+        }
+      ],
+      "id": "n0BPCfppajihhyH7-aa04",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case10"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "USyBRwq6Z1K7jMDjw5GSj"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-2/1 == $3)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "6EfOo25rfu52Q1j2K0SWB"
+        }
+      ],
+      "id": "CargJJTmMJk_qjFbQ1dzR",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case11"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "o1IkKFlq3-hOKaKhICdw0"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$ -2/1 == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "2eZW0knUpgyJRmCmfb2gZ"
+        }
+      ],
+      "id": "ASDTAbb9JZl3AWYbMgCta",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case12"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "yrVCVvjCcapFJB7RMlcvx"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-( 5-3) == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "oK7dQlU3y_cLG4VRLbSVe"
+        }
+      ],
+      "id": "rSxU84iHkcMCcompbtftK",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case13"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "qLCeLTyz4CtlsWMdyzf2h"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-( 5- 3) == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "jOAS78bYo_wwfZLJrNHt_"
+        }
+      ],
+      "id": "fH3COKF2AdnoBsxpEt2ba",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case14"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "gjI52onoaXzzzuLoADJHa"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-( 5 - 3) == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "6OxmDHrHOmrCn2yucjAUz"
+        }
+      ],
+      "id": "oRIcUO__WSw2nQfdNDM0K",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case15"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "9ImSAVTyJhtHHeAevy-jD"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5$-( 5 -3) == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "ct5UEH8H8o9-JvPOFLbfQ"
+        }
+      ],
+      "id": "T8kqwxclVh14TH0kyqn-d",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case16"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "NAg-jriEZ1FO7S7f-grG9"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(-2 + 5 == 3)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "bx6hTKUJ2Sy1REviSWmPE"
+        }
+      ],
+      "id": "WtilSmZvl6sQfcbVsnkRG",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case17"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "CUEEMTGJyOndPqzhCX0Ys"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(-2$ + 5 == 3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "l5ByftgidaNxstvTndL1H"
+        }
+      ],
+      "id": "WDlRS3YhmNkhTAiMISaJD",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case23"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "lPpXPRFgLLpVAtzEjT1uJ"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(-3$ == -3$)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "EPYT4RK_CNDeXkbsqbnWl"
+        }
+      ],
+      "id": "emwHn3foZWPt-gnY8_ibA",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case24"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "VJOHmm5SGYEUzsoSrqJCQ"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5 -3% == 4.85)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "tqUgb7XELhOIhryPkFNRB"
+        }
+      ],
+      "id": "AHbvHFslciIjMeQmSHq2N",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case25"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "gY-T6RPCekHnviTIiIJsi"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5 - 3% == 4.85)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "kfWCqRjx4mOMdfYnsWPOH"
+        }
+      ],
+      "id": "2deBt-Ie1RNp6b0MFEWe_",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "kHSUHYPef50gZGZ95GWqa"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "TestSubtractionTables"
+                }
+              ],
+              "id": "W3cSO4-hiNWHRUlexJKrl",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "Bi67XtIeZ0tWOPITeAO2p",
+                  "type": "smart-ref",
+                  "blockId": "8v4VkZ8RGvj_CLSkWTpe5",
+                  "columnId": null,
+                  "lastSeenVariableName": "Positives"
+                },
+                {
+                  "text": " + "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "heSve4c8Ft0zQAQJvxfEp",
+                  "type": "smart-ref",
+                  "blockId": "zIDre0rha6xkEzjLaJKxa",
+                  "columnId": null,
+                  "lastSeenVariableName": "Negatives"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "id": "KAS1NXp-Dq5aqnDuTcoh_",
+              "type": "table-column-formula",
+              "columnId": "PaXUtj4Uqub57CQnpUAhv"
+            }
+          ],
+          "id": "k46VuheXrO1ObJtryeS-h",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Positives"
+                }
+              ],
+              "id": "8v4VkZ8RGvj_CLSkWTpe5",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Negatives"
+                }
+              ],
+              "id": "zIDre0rha6xkEzjLaJKxa",
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": null
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Result"
+                }
+              ],
+              "id": "PaXUtj4Uqub57CQnpUAhv",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "aggregation": "Sum"
+            }
+          ],
+          "id": "fByuL4-juEyKVEwR5Ni3W",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "q4NLsdEi1Ker8abM_zCHd",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "-2/1"
+                }
+              ],
+              "id": "yQQoNmJvRhiLcK-AAQFZx",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "z0_QuPB45Rl1C-lfzX5pX",
+              "type": "td"
+            }
+          ],
+          "id": "KpUYTKHf412DMSPVaGZ-6",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "zpfnpsUNUV9dLmbd9V2X1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "-2"
+                }
+              ],
+              "id": "vQrhJaMG-RXP8xvc02UZl",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ftKjMA05BtqaEWXlqgVsH",
+              "type": "td"
+            }
+          ],
+          "id": "T55VEa7IWLbGsVxv8b5jL",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "CGLMl8y_wkGmLlYaMhuK0",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "-(2)"
+                }
+              ],
+              "id": "H12UVqA0rAWTmSE123yyL",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "aoFx7fOEy9t0whqy84SA6",
+              "type": "td"
+            }
+          ],
+          "id": "rQ-k52FL1gUglousp6Qdw",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "ehkjTa2N8vPhlsdYkpaVg",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "(-2)"
+                }
+              ],
+              "id": "d2-H69bS5t_ZIZkt67dcN",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Bf6_uJkdoEmRkpXfXviSg",
+              "type": "td"
+            }
+          ],
+          "id": "ATcnRJ1hl_4cuKIGpqqDN",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "13EJx7I-8tJF3Z6omyoUb",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "-( 2)"
+                }
+              ],
+              "id": "3T-cQ3bN8fY_ytzEM_aDS",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "vpLX99Q3BBEHOW-iK1z1f",
+              "type": "td"
+            }
+          ],
+          "id": "H0wlOJVBT7lAfeA1GF8AD",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "mvQ3N6-UIiNe_mVhzK1_i",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "-(-(-2))"
+                }
+              ],
+              "id": "B-bk6YXfmdZgtYe5_uVaK",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "VKKPxr2xzpZXyVcEcE3bD",
+              "type": "td"
+            }
+          ],
+          "id": "5Pm0Xyq2fpgo7YrQCzA7N",
+          "type": "tr"
+        }
+      ],
+      "id": "nHxrrRvGFC82f2Ps-BGSj",
+      "type": "table",
+      "version": 2,
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "TestSubtractionTablesSkip"
+                }
+              ],
+              "id": "dJ0niXRKWAE7PBVP5CkdF",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "NpAMdNxk3NoXVTlLwnZh5",
+                  "type": "smart-ref",
+                  "blockId": "ztfwZy8ioEyjRxEl5O0hh",
+                  "columnId": null,
+                  "lastSeenVariableName": "Positives"
+                },
+                {
+                  "text": " + "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "R6VS3SapcnUo1OIgAErdy",
+                  "type": "smart-ref",
+                  "blockId": "66D_u4FrDIEw06SDajfiE",
+                  "columnId": null,
+                  "lastSeenVariableName": "Negatives"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "id": "FPT09njjL5PuBsTf0d4fJ",
+              "type": "table-column-formula",
+              "columnId": "9PfJAAKRUzpnYhzqFJhzY"
+            }
+          ],
+          "id": "scmQLDw525ZzTZqwYKwIl",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Positives"
+                }
+              ],
+              "id": "ztfwZy8ioEyjRxEl5O0hh",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Negatives"
+                }
+              ],
+              "id": "66D_u4FrDIEw06SDajfiE",
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": null
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Result"
+                }
+              ],
+              "id": "9PfJAAKRUzpnYhzqFJhzY",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "aggregation": "Sum"
+            }
+          ],
+          "id": "xnoIAVHcWvdIqHg5OwJru",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "hb6SLNCzwITzWk4ghQuoj",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "- 2/1"
+                }
+              ],
+              "id": "ScmP62Y19xj1WP3rWx4wq",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "AJamw2XyiPgLRiEjm7pzB",
+              "type": "td"
+            }
+          ],
+          "id": "kHvv5Evy8A92-aBzjSCK6",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "TMNDx_NQBgKth7AO2NU0h",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "- 2"
+                }
+              ],
+              "id": "Bk27pmf7XFPh4E_e7eesz",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "7yyHbglOzYud0_gvmYs_-",
+              "type": "td"
+            }
+          ],
+          "id": "2OKmZIsFkXMBDriozBmbP",
+          "type": "tr"
+        }
+      ],
+      "id": "r0Y-nfchxE-gIjze-j_pp",
+      "type": "table",
+      "version": 2,
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "text": "Case19 = assert(sum("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "6LW5ADE9od1It6gfHR4Y0",
+          "type": "smart-ref",
+          "blockId": "nHxrrRvGFC82f2Ps-BGSj",
+          "columnId": "PaXUtj4Uqub57CQnpUAhv",
+          "lastSeenVariableName": "TestSubtractionTables.Result"
+        },
+        {
+          "text": ") == count("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "DPOjXuDzakU2e9x_bZThr",
+          "type": "smart-ref",
+          "blockId": "nHxrrRvGFC82f2Ps-BGSj",
+          "columnId": "PaXUtj4Uqub57CQnpUAhv",
+          "lastSeenVariableName": "TestSubtractionTables.Result"
+        },
+        {
+          "text": " )*3)"
+        }
+      ],
+      "id": "mKLOQzOK-UCfMaxhR9u5L",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "u8FzTWp4BMmaZbFG8Zd2K"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "InputTest"
+            }
+          ],
+          "type": "caption",
+          "id": "2lYQY-rghuRat1PZiMKns"
+        },
+        {
+          "children": [
+            {
+              "text": "-2"
+            }
+          ],
+          "type": "exp",
+          "id": "72VqquVrwIZKH2H4aUpu0"
+        }
+      ],
+      "id": "KW7lhCzeDT-u34gwv-sNZ",
+      "type": "def",
+      "variant": "expression",
+      "coerceToType": {
+        "kind": "number",
+        "date": "day"
+      }
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case20"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "NZK_gbVga6bS_g_LoJRPr"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5+ "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "C2AXijM279CItNrKEE7y_",
+              "type": "smart-ref",
+              "blockId": "KW7lhCzeDT-u34gwv-sNZ",
+              "columnId": null,
+              "lastSeenVariableName": "InputTest"
+            },
+            {
+              "text": " ==3)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "rqdL2TUuYeA7Vt4i29DH9"
+        }
+      ],
+      "id": "R4HU6B72gXgMrq1UkTZm3",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Case21"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "aIFMhty9hSX5UqRkJ8yNo"
+        },
+        {
+          "children": [
+            {
+              "text": "assert(5* "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "9tZUmBDBHlJgScv_-U3D_",
+              "type": "smart-ref",
+              "blockId": "KW7lhCzeDT-u34gwv-sNZ",
+              "columnId": null,
+              "lastSeenVariableName": "InputTest"
+            },
+            {
+              "text": " == -10)"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "wmEiFEL8HSy3ow2hZ3ZP1"
+        }
+      ],
+      "id": "ot3jJdHiUWQrqQY20sVkT",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "6zkhscghQRLIAdir53_7y"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "sLk4y0NoUfcfD8aSLYuOX"
+    }
+  ]
+}
