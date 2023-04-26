@@ -88,7 +88,6 @@ export const PlotResult = ({
       }
     }
   };
-
   return (
     <>
       <div ref={chartRef}>

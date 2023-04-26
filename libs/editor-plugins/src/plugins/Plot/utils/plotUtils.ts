@@ -203,9 +203,20 @@ export function specFromType(
       field: encoding.x?.field,
       type: 'nominal',
       title: '',
+    };
+  }
+
+  //
+  // all charts of comparable type need this,
+  // but unlike above this is not specific
+  // to ones that have a y2 column name
+  //
+  if (comparableChartTypes.includes(displayProps.markType)) {
+    encoding.x = {
+      ...encoding.x,
       axis: {
         labelAngle: 0,
-        labelLimit: 100,
+        labelOverlap: true,
       },
     };
   }

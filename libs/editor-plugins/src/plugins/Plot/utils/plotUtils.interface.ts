@@ -104,7 +104,7 @@ export type Axis =
       gridDash?: number[];
       gridColor?: string;
       labelAngle?: number;
-      labelLimit?: number;
+      labelOverlap?: string | boolean;
       labelBaseline?: string;
       labelAlign?: string;
       labelColor?: string;
