@@ -12,7 +12,7 @@ import { ExpressionCache } from '../expression-cache';
 export class Realm {
   stack = new Stack<Value>(undefined, tableItemsToTable, tableToTableItems);
   functions = new Map<string, AST.FunctionDefinition>();
-  previousValue: Value | null = null;
+  previousRow: Map<string | symbol, Value> | null = null;
   inferContext: Context;
   previousStatementValue?: Value;
   statementId?: string;

@@ -1,32 +1,46 @@
-import { mapWithPrevious } from './previous';
+import { makeContext } from '../infer';
+import { CURRENT_COLUMN_SYMBOL, mapWithPrevious } from './previous';
 import { Realm } from './Realm';
 
-it('mapWithPrevious', async () => {
+describe('mapWithPrevious', () => {
   const rows = [1, 2, 4];
   const foundPrevious = [];
+  let rollySum;
+  const realm = new Realm(makeContext());
 
-  const realm = new Realm();
+  beforeAll(async () => {
+    rollySum = await mapWithPrevious(realm, new Map(), async function* () {
+      for (const row of rows) {
+        const previousValue =
+          realm.previousRow?.get(CURRENT_COLUMN_SYMBOL) || null;
+        foundPrevious.push(previousValue);
 
-  const rollySum = await mapWithPrevious(realm, async function* () {
-    for (const row of rows) {
-      foundPrevious.push(realm.previousValue);
-      yield realm.previousValue + row;
-    }
+        yield (previousValue || 0) + row;
+      }
+    });
   });
 
-  expect(realm.previousValue).toEqual(null);
-  expect(rollySum).toMatchInlineSnapshot(`
-    Array [
-      1,
-      3,
-      7,
-    ]
-  `);
-  expect(foundPrevious).toMatchInlineSnapshot(`
-    Array [
-      null,
-      1,
-      3,
-    ]
-  `);
+  test('realm.previousRow should be set to null at the end', () => {
+    expect(realm.previousRow).toEqual(null);
+  });
+
+  test('accumulator should work', () => {
+    expect(rollySum).toMatchInlineSnapshot(`
+          Array [
+            1,
+            3,
+            7,
+          ]
+      `);
+  });
+
+  test('list of previous values is correct', () => {
+    expect(foundPrevious).toMatchInlineSnapshot(`
+      Array [
+        null,
+        1,
+        3,
+      ]
+    `);
+  });
 });

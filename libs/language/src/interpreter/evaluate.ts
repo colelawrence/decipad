@@ -32,6 +32,7 @@ import { evaluateTiered } from '../tiered/evaluateTiered';
 import { RuntimeError } from '.';
 import { resultToValue } from '../result';
 import { getDependencies } from '../dependencies/getDependencies';
+import { CURRENT_COLUMN_SYMBOL } from './previous';
 
 // Gets a single value from an expanded AST.
 
@@ -112,7 +113,23 @@ async function internalEvaluate(
       );
 
       if (funcName === 'previous') {
-        return realm.previousValue ?? args[0];
+        if (realm.previousRow === null) {
+          return args[0];
+        }
+
+        if (funcArgs[1] && funcArgs[1].type !== 'ref') {
+          throw new Error(
+            "Second argument to 'previous' must be a column name."
+          );
+        }
+
+        const columnName = funcArgs[1]?.args[0] || CURRENT_COLUMN_SYMBOL;
+        const previousValue = realm.previousRow.get(columnName);
+        if (previousValue) {
+          return previousValue;
+        } else {
+          throw new Error('Column name does not exist.');
+        }
       } else if (realm.functions.has(funcName)) {
         const customFunc = getDefined(realm.functions.get(funcName));
 

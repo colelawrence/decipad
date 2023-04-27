@@ -64,16 +64,20 @@ export const evaluateTableColumnIteratively = async (
   rowCount: number
 ): Promise<ColumnLikeValue> =>
   realm.withPush(async () => {
-    const cells = await mapWithPrevious(realm, async function* mapper() {
-      for (let index = 0; index < rowCount; index++) {
-        // Make other cells available
-        for (const [otherColName, otherCol] of otherColumns) {
-          realm.stack.set(otherColName, otherCol.atIndex(index));
+    const cells = await mapWithPrevious(
+      realm,
+      otherColumns,
+      async function* mapper() {
+        for (let index = 0; index < rowCount; index++) {
+          // Make other cells available
+          for (const [otherColName, otherCol] of otherColumns) {
+            realm.stack.set(otherColName, otherCol.atIndex(index));
+          }
+          // eslint-disable-next-line no-await-in-loop
+          yield evaluate(realm, column);
         }
-        // eslint-disable-next-line no-await-in-loop
-        yield evaluate(realm, column);
       }
-    });
+    );
 
     return Column.fromValues(cells);
   });

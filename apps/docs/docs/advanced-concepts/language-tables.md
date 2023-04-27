@@ -110,6 +110,19 @@ Harvest = {
 }
 ```
 
+You can also access previous values from other columns by using the word `previous`, providing a value for the first cell and the name of the column you want to access. Like this:
+
+```deci live
+Table = {
+  Column1 = [1, 2, 3, 4]
+  Column2 = previous(0, Column1)
+}
+==> {
+  Column1 = [ 1, 2, 3, 4 ],
+  Column2 = [ 0, 1, 2, 3 ]
+}
+```
+
 ## Access columns
 
 You can access the table columns individually:
