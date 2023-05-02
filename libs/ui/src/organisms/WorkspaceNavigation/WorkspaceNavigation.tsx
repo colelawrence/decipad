@@ -13,7 +13,16 @@ import {
   NavigationItem,
   Tooltip,
 } from '../../atoms';
-import { Archive, Chat, Docs, Home, People, Plus, Sparkles } from '../../icons';
+import {
+  Archive,
+  Chat,
+  Docs,
+  Gear,
+  Home,
+  Plus,
+  Sparkles,
+  Users,
+} from '../../icons';
 import { NavigationList } from '../../molecules';
 import {
   cssVar,
@@ -29,15 +38,13 @@ import {
   hexBaseSwatches,
   swatchNames,
 } from '../../utils';
+import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
 
-const workspaceNavContainerStyles = (flagEnabled: boolean) =>
-  css({
-    display: 'grid',
-    gridTemplateRows: `auto ${
-      flagEnabled ? 'auto auto' : ''
-    } auto 1fr auto auto auto`,
-    gap: '2px',
-  });
+const workspaceNavContainerStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '2px',
+});
 
 const itemTextStyles = css({ padding: '8px 0' });
 const hrStyles = css({
@@ -74,6 +81,14 @@ interface WorkspaceNavigationProps {
   };
   readonly showFeedback?: () => void;
 }
+
+const NavSpacer = () => <div css={{ flex: 1 }} />;
+const NavDivider = () => (
+  <div role="presentation" css={hrStyles}>
+    <Divider />
+  </div>
+);
+
 export const WorkspaceNavigation = ({
   activeWorkspace,
   onDeleteSection,
@@ -84,7 +99,10 @@ export const WorkspaceNavigation = ({
   const activeWorkspaceRoute = workspaces({}).workspace({
     workspaceId: activeWorkspace.id,
   });
+
   const { sections } = activeWorkspace;
+
+  const showSettingsAndMembers = isFlagEnabled('NO_WORKSPACE_SWITCHER');
 
   const navigate = useNavigate();
   const { '*': maybeWorkspaceFolder } = useParams();
@@ -113,7 +131,35 @@ export const WorkspaceNavigation = ({
   const isSharedSectionEnabled = isFlagEnabled('SHARE_PAD_WITH_EMAIL');
 
   return (
-    <nav css={workspaceNavContainerStyles(sectionsEnabled)}>
+    <nav css={workspaceNavContainerStyles}>
+      {showSettingsAndMembers && (
+        <>
+          <NavigationList key={'workspace-nav-SM'}>
+            <NavigationItem
+              key={'folder-0'}
+              href={activeWorkspaceRoute.members({}).$}
+              isActive={isSharedPage}
+              icon={<Users />}
+            >
+              <span css={itemTextStyles}>Manage members</span>
+            </NavigationItem>
+          </NavigationList>
+
+          <NavigationList key={'workspace-nav-ST'}>
+            <NavigationItem
+              key={'folder-0'}
+              href={activeWorkspaceRoute.edit({}).$}
+              isActive={isSharedPage}
+              icon={<Gear />}
+            >
+              <span css={itemTextStyles}>Workspace settings</span>
+            </NavigationItem>
+          </NavigationList>
+
+          <NavDivider />
+        </>
+      )}
+
       <NavigationList key={'workspace-nav-0'}>
         <NavigationItem
           key={'folder-0'}
@@ -288,19 +334,6 @@ export const WorkspaceNavigation = ({
           ]
         : null}
 
-      {isSharedSectionEnabled && (
-        <NavigationList key={'workspace-nav-S'}>
-          <NavigationItem
-            key={'folder-0'}
-            href={activeWorkspaceRoute.shared({}).$}
-            isActive={isSharedPage}
-            icon={<People />}
-          >
-            <span css={itemTextStyles}>Shared with me</span>
-          </NavigationItem>
-        </NavigationList>
-      )}
-
       <NavigationList key={'workspace-nav-01'}>
         <NavigationItem
           key={'archive-3'}
@@ -311,6 +344,21 @@ export const WorkspaceNavigation = ({
           <span css={itemTextStyles}>Archived</span>
         </NavigationItem>
       </NavigationList>
+
+      <NavSpacer />
+
+      {isSharedSectionEnabled && (
+        <NavigationList key={'workspace-nav-S'}>
+          <NavigationItem
+            key={'folder-0'}
+            href={activeWorkspaceRoute.shared({}).$}
+            isActive={isSharedPage}
+            icon={<Users />}
+          >
+            <span css={itemTextStyles}>Shared with me</span>
+          </NavigationItem>
+        </NavigationList>
+      )}
 
       <div key="div-empty-grid-spaces" role="presentation" />
       <NavigationList key={'navigation-footer-0'}>
@@ -324,9 +372,9 @@ export const WorkspaceNavigation = ({
           </span>
         </NavigationItem>
       </NavigationList>
-      <div key="div-1" role="presentation" css={hrStyles}>
-        <Divider />
-      </div>
+
+      <NavDivider />
+
       <NavigationList key={'settings-0'}>
         <NavigationItem
           href={docs({}).$}
@@ -351,6 +399,14 @@ export const WorkspaceNavigation = ({
           <span css={itemTextStyles}>Feedback</span>
         </NavigationItem>
       </NavigationList>
+
+      {showSettingsAndMembers && (
+        <>
+          <NavDivider />
+          <WorkspaceAccount />
+        </>
+      )}
+
       {openRenameMenu && (
         <div key="div-section-modal" role="presentation">
           <CreateOrEditSectionModal

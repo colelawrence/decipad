@@ -7,6 +7,7 @@ const props: ComponentProps<typeof EditWorkspaceModal> = {
   name: 'Workspace',
   Heading: 'h1',
   closeHref: '',
+  membersHref: '',
 };
 
 it('prepopulates the rename field with the old name', () => {

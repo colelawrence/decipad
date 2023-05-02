@@ -2,6 +2,7 @@ import { route, stringParser } from 'typesafe-routes';
 
 const createNew = route('/create-new', {}, {});
 const edit = route('/edit', {}, {});
+const members = route('/members', {}, {});
 const archived = route('/archived', {}, {});
 const shared = route('/shared', {}, {});
 
@@ -13,6 +14,7 @@ const workspace = route(
   {
     createNew,
     edit,
+    members,
     archived,
     shared,
     section,

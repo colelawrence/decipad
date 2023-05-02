@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import React, { ComponentProps, useCallback, useState } from 'react';
 import { Button, InputField } from '../../atoms';
 import { People } from '../../icons';
-import { ClosableModal, WorkspaceMembers } from '../../organisms';
+import { ClosableModal } from '../../organisms';
 import { cssVar, p13Medium, p13Regular, setCssVar } from '../../primitives';
 
 type EditWorkspaceModalProps = {
@@ -14,10 +14,9 @@ type EditWorkspaceModalProps = {
   readonly allowDelete?: boolean;
 
   readonly closeHref: string;
+  readonly membersHref: string;
   readonly onRename?: (newName: string) => void | Promise<void>;
   readonly onDelete?: () => void | Promise<void>;
-
-  readonly workspaceMembers?: ComponentProps<typeof WorkspaceMembers>;
 } & Pick<ComponentProps<typeof ClosableModal>, 'Heading'>;
 
 export const EditWorkspaceModal = ({
@@ -26,10 +25,9 @@ export const EditWorkspaceModal = ({
   allowDelete,
 
   closeHref,
+  membersHref,
   onRename = noop,
   onDelete = noop,
-
-  workspaceMembers,
 
   ...props
 }: EditWorkspaceModalProps): ReturnType<React.FC> => {
@@ -39,18 +37,6 @@ export const EditWorkspaceModal = ({
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
 
   const membersEnabled = isFlagEnabled('WORKSPACE_MEMBERS');
-
-  const [showMembers, setShowMembers] = useState(false);
-
-  const openMembersList = useCallback(
-    () => setShowMembers(true),
-    [setShowMembers]
-  );
-
-  const closeMembersList = useCallback(
-    () => setShowMembers(false),
-    [setShowMembers]
-  );
 
   const renameWorkspace = useCallback(
     async (event: React.FormEvent) => {
@@ -78,18 +64,6 @@ export const EditWorkspaceModal = ({
     [setIsSubmitting, onDelete]
   );
 
-  if (showMembers && workspaceMembers) {
-    return (
-      <ClosableModal
-        {...props}
-        title="Workspace members"
-        closeAction={closeMembersList}
-      >
-        <WorkspaceMembers {...workspaceMembers} />
-      </ClosableModal>
-    );
-  }
-
   return (
     <ClosableModal
       {...props}
@@ -116,7 +90,7 @@ export const EditWorkspaceModal = ({
         {membersEnabled && (
           <div css={membersStyle}>
             <h3 css={headingStyles}>Workspace members</h3>
-            <Button type="secondary" onClick={openMembersList}>
+            <Button type="secondary" href={membersHref}>
               <span css={buttonIconStyle}>
                 <People />
               </span>

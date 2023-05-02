@@ -13,5 +13,5 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => (
-  <EditWorkspaceModal {...props} Heading="h1" closeHref="" />
+  <EditWorkspaceModal {...props} Heading="h1" closeHref="" membersHref="" />
 );

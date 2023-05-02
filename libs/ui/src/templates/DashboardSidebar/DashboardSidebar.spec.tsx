@@ -51,12 +51,12 @@ const aWorkspace = {
   ...sampleWorkspace,
   numberOfMembers: 1,
   sections: [],
+  isActive: false,
 };
 const props: ComponentProps<typeof DashboardSidebar> = {
   name: 'John Doe',
   email: 'john.doe@example.com',
   Heading: 'h1',
-  onOpenSettings: noop,
   onDeleteSection: noop,
   onCreateSection: () => new Promise(noop),
   onUpdateSection: () => new Promise(noop),

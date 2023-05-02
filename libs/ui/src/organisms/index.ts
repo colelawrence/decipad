@@ -47,8 +47,10 @@ export { VariableEditorMenu } from './VariableEditorMenu/VariableEditorMenu';
 export { WorkspaceMembers } from './WorkspaceMembers/WorkspaceMembers';
 export type { WorkspaceMembersProps } from './WorkspaceMembers/WorkspaceMembers';
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
+export { WorkspaceLogo } from './WorkspaceLogo/WorkspaceLogo';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceOptions } from './WorkspaceOptions/WorkspaceOptions';
 export { WorkspaceSelector } from './WorkspaceSelector/WorkspaceSelector';
+export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';
 
 export * from './DataIntegration';

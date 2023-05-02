@@ -1,72 +1,81 @@
 import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
-import { Edit } from '../../icons';
+import { Check } from '../../icons';
 import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
-import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
-const maxWidth = '176px';
-const iconSize = '24px';
+const maxWidth = '256px';
+const pencilSize = '24px';
+const avatarSize = '28px';
 const padding = '8px';
 
 const gridStyles = css({
-  display: 'grid',
-  gridTemplateColumns: '1fr auto',
+  display: 'flex',
+  flexDirection: 'row',
   gap: '12px',
 
-  width: '100%',
+  width: '228px',
   maxWidth,
+  marginTop: '-4px',
+  marginBottom: '-4px',
 });
 
 const styles = css({
+  flex: 1,
   padding: `${padding} 0`,
 
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  rowGap: '4px',
-  maxWidth: `calc(${maxWidth} - ${iconSize} - (${padding} * 2))`,
+
+  maxWidth: `calc(${maxWidth} - ${pencilSize} - (${padding} * 2))`,
 });
 
-const iconStyles = css({
-  alignSelf: 'center',
-  height: '24px',
-  width: '24px',
+const avatarStyles = css({
+  height: avatarSize,
+  width: avatarSize,
+});
 
-  ':hover': {
-    backgroundColor: cssVar('strongerHighlightColor'),
-    borderRadius: '6px',
-  },
+const checkmarkStyles = css({
+  alignSelf: 'center',
+  height: '14px',
+  width: '14px',
 });
 
 export interface WorkspaceItemProps {
   readonly id: string;
   readonly name: string;
+  readonly isActive?: boolean;
   readonly numberOfMembers: number;
-  readonly onClickEdit?: (id: string) => void;
+  readonly onClose?: () => void;
 }
 
 export const WorkspaceItem = ({
   id,
   name,
+  isActive,
   numberOfMembers,
-  onClickEdit = noop,
+  onClose = noop,
 }: WorkspaceItemProps): ReturnType<FC> => {
   const workspacePath = workspaces({}).workspace({ workspaceId: id });
+
   return (
     <NavigationItem
       href={workspacePath.$}
-      icon={<Avatar name={name} roundedSquare />}
+      onLinkClick={onClose}
+      icon={<Avatar name={name} />}
+      iconStyles={avatarStyles}
     >
-      <span css={gridStyles}>
+      <div css={gridStyles}>
         <span css={styles}>
           <strong
             css={css(
               p14Medium,
               setCssVar('currentTextColor', cssVar('strongTextColor')),
               {
+                textAlign: 'left',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -75,23 +84,22 @@ export const WorkspaceItem = ({
           >
             {name}
           </strong>
-          <span css={css(p12Regular)}>
+          <span
+            css={css(p12Regular, {
+              textAlign: 'left',
+              color: cssVar('weakTextColor'),
+            })}
+          >
             {numberOfMembers} member{numberOfMembers === 1 ? '' : 's'}
           </span>
         </span>
-        <button
-          css={iconStyles}
-          onClick={useEventNoEffect(
-            useCallback(() => {
-              // Doing navigation programatically instead of using an <Anchor> component because <a>
-              // inside of an <a> is semantically forbidden.
-              onClickEdit(id);
-            }, [id, onClickEdit])
-          )}
-        >
-          <Edit />
-        </button>
-      </span>
+
+        {isActive && (
+          <span css={checkmarkStyles}>
+            <Check />
+          </span>
+        )}
+      </div>
     </NavigationItem>
   );
 };

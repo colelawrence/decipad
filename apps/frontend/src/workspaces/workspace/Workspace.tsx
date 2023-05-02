@@ -72,6 +72,9 @@ const loadCreateWorkspaceModal = () =>
     /* webpackChunkName: "create-workspace-modal" */ './CreateWorkspaceModal'
   );
 const CreateWorkspaceModal = lazy(loadCreateWorkspaceModal);
+const loadEditMembersModal = () =>
+  import(/* webpackChunkName: "edit-members-modal" */ './EditMembersModal');
+const EditMembersModal = lazy(loadEditMembersModal);
 const loadEditWorkspaceModal = () =>
   import(/* webpackChunkName: "edit-workspace-modal" */ './EditWorkspaceModal');
 const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
@@ -112,8 +115,6 @@ const Workspace: FC = () => {
   const { data: user } = useUserQuery()[0];
 
   const toast = useToast();
-
-  const [userSettings, setUserSettings] = useState(false);
 
   const [name, setName] = useState(user?.self?.name || '');
   const [username, setUsername] = useState(user?.self?.username || '');
@@ -389,7 +390,9 @@ const Workspace: FC = () => {
       href: workspaces({}).workspace({
         workspaceId: workspace.id,
       }).$,
-      numberOfMembers: 1,
+      numberOfMembers:
+        (workspace.access?.users?.length || 0) +
+        (workspace.access?.roles?.length || 0),
     })) ?? [];
 
   const sidebarWrapper = (
@@ -412,9 +415,6 @@ const Workspace: FC = () => {
         onCreateWorkspace={() =>
           navigate(currentWorkspaceRoute.createNew({}).$)
         }
-        onEditWorkspace={(id) => {
-          navigate(workspaces({}).workspace({ workspaceId: id }).edit({}).$);
-        }}
         onClickWorkspace={(id) => {
           navigate(workspaces({}).workspace({ workspaceId: id }).$);
         }}
@@ -438,7 +438,6 @@ const Workspace: FC = () => {
         onPointerEnter={() =>
           loadEditWorkspaceModal().then(loadCreateWorkspaceModal)
         }
-        onOpenSettings={setUserSettings}
       />
     </Frame>
   );
@@ -595,13 +594,13 @@ const Workspace: FC = () => {
             element={
               <EditWorkspaceModal
                 Heading="h1"
-                workspaceMembers={workspaceMembers}
                 name={currentWorkspace.name}
                 allowDelete={
                   workspaceData?.workspaces &&
                   workspaceData?.workspaces?.length > 1
                 }
                 closeHref={currentWorkspaceRoute.$}
+                membersHref={currentWorkspaceRoute.members({}).$}
                 onRename={async (newName) => {
                   const success = await renameWorkspace({
                     id: currentWorkspace.id,
@@ -624,55 +623,63 @@ const Workspace: FC = () => {
               />
             }
           />
+          <Route
+            path={currentWorkspaceRoute.members.template}
+            element={
+              <EditMembersModal
+                Heading="h1"
+                name={currentWorkspace.name}
+                workspaceMembers={workspaceMembers}
+                closeHref={currentWorkspaceRoute.$}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
-      <div style={{ display: userSettings ? 'block' : 'none' }}>
-        <EditUserModal
-          name={name}
-          username={username}
-          description={description}
-          // closeHref={currentWorkspaceRoute.$}
-          onClose={() => setUserSettings(false)}
-          onChangeName={(newName) => {
-            setName(newName);
-            updateUser({
-              props: {
-                name: newName,
-              },
-            }).catch((err) => {
-              console.error('Failed to update user. Error:', err);
-              toast('Could not change your name', 'error');
-            });
-          }}
-          onChangeUsername={async (newUsername) => {
-            const data = await setUsernameMutation({
-              props: {
-                username: newUsername,
-              },
-            });
-            if (data) {
-              const { setUsername: usenameChangeSuccessful } = data;
-              if (usenameChangeSuccessful) {
-                toast(`You are now ${newUsername}`, 'success');
-                setUsername(newUsername);
-              } else {
-                toast(`Username ${newUsername} is already taken`, 'error');
-              }
+      <EditUserModal
+        name={name}
+        username={username}
+        description={description}
+        // closeHref={currentWorkspaceRoute.$}
+        onChangeName={(newName) => {
+          setName(newName);
+          updateUser({
+            props: {
+              name: newName,
+            },
+          }).catch((err) => {
+            console.error('Failed to update user. Error:', err);
+            toast('Could not change your name', 'error');
+          });
+        }}
+        onChangeUsername={async (newUsername) => {
+          const data = await setUsernameMutation({
+            props: {
+              username: newUsername,
+            },
+          });
+          if (data) {
+            const { setUsername: usenameChangeSuccessful } = data;
+            if (usenameChangeSuccessful) {
+              toast(`You are now ${newUsername}`, 'success');
+              setUsername(newUsername);
+            } else {
+              toast(`Username ${newUsername} is already taken`, 'error');
             }
-          }}
-          onChangeDescription={async (newDescription) => {
-            const data = await updateUser({
-              props: {
-                description: newDescription,
-              },
-            });
-            if (data) {
-              setDescription(newDescription);
-            }
-          }}
-        />
-      </div>
+          }
+        }}
+        onChangeDescription={async (newDescription) => {
+          const data = await updateUser({
+            props: {
+              description: newDescription,
+            },
+          });
+          if (data) {
+            setDescription(newDescription);
+          }
+        }}
+      />
     </>
   );
 };

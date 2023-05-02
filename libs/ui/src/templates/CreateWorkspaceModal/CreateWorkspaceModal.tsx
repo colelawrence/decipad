@@ -56,7 +56,9 @@ export const CreateWorkspaceModal = ({
           >
             Create Workspace
           </Button>
-          <Button type="secondary">Cancel</Button>
+          <Button type="secondary" href={closeHref}>
+            Cancel
+          </Button>
         </div>
       </form>
     </ClosableModal>

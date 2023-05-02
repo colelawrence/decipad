@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 2 */
 import { css } from '@emotion/react';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { PermissionType } from '../../types';
 import { Check, Ellipsis, Loading } from '../../icons';
 import {
@@ -112,7 +112,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
         <div css={tableHeadStyles}>Status</div>
 
         {workspaceMembers.map((member) => (
-          <>
+          <React.Fragment key={member.user.id}>
             <div css={columnAvatarStyles}>
               <CollabMember key={member.user.id} avatar={member} />
             </div>
@@ -147,7 +147,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
                 />
               )}
             </div>
-          </>
+          </React.Fragment>
         ))}
       </div>
     </div>

@@ -11,6 +11,7 @@ export const availableFlags = [
   'DASHBOARD_STATUS',
   'DASHBOARD_SEARCH',
   'WORKSPACE_MEMBERS',
+  'NO_WORKSPACE_SWITCHER',
   'ONBOARDING_ACCOUNT_SETUP',
   'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
@@ -68,12 +69,18 @@ export const getQueryStringOverrides = (): Flags => {
   return flags;
 };
 
+// Overrides will always have the highest priority
 let overrides: Flags = {
   ONBOARDING_ACCOUNT_SETUP: true,
   SHARE_PAD_WITH_EMAIL: true,
   CODE_LINE_NAME_SEPARATED: true,
   EXPR_REFS: true,
   POPULATED_NEW_NOTEBOOK: true,
+};
+
+// Unlike overrides flag switcher will have higher priority
+const flagDefaults: Flags = {
+  NO_WORKSPACE_SWITCHER: false,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
@@ -94,6 +101,7 @@ export const isFlagEnabled = (flag: Flag): boolean =>
   overrides[flag] ??
   localStorageOverrides[flag] ??
   queryStringOverrides[flag] ??
+  flagDefaults[flag] ??
   (inJest || inE2E ? testOverrides[flag] : undefined) ??
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   (!inE2E &&

@@ -65,4 +65,6 @@ export { UnorderedList } from './UnorderedList/UnorderedList';
 export { VariableNameSelector } from './VariableNameSelector/VariableNameSelector';
 export { WidgetDisplay } from './WidgetDisplay/WidgetDisplay';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
+export { WorkspaceItemCreate } from './WorkspaceItemCreate/WorkspaceItemCreate';
+export type { WorkspaceItemProps } from './WorkspaceItem/WorkspaceItem';
 export { TextInputMenuItem } from './TextInputMenuItem/TextInputMenuItem';

@@ -40,26 +40,30 @@ it('renders a heading at given level', () => {
 
 it('renders a button to create a workspace', async () => {
   const handleCreateWorkspace = jest.fn();
-  const { getByTitle } = render(
+  const { getByText } = render(
     <WithContexts>
       <WorkspaceMenu {...props} onCreateWorkspace={handleCreateWorkspace} />
     </WithContexts>
   );
 
-  await userEvent.click(getByTitle(/create/i));
+  await userEvent.click(getByText(/create/i));
   expect(handleCreateWorkspace).toHaveBeenCalled();
 });
 
 it('links to the active workspace', () => {
+  const activeWorkspace = {
+    ...props.activeWorkspace,
+    id: '42',
+    name: 'Some Workspace',
+  };
+  const allWorkspaces = [activeWorkspace];
+
   const { getByText } = render(
     <WithContexts>
       <WorkspaceMenu
-        {...props}
-        activeWorkspace={{
-          ...props.activeWorkspace,
-          id: '42',
-          name: 'Some Workspace',
-        }}
+        Heading="h1"
+        allWorkspaces={allWorkspaces}
+        activeWorkspace={activeWorkspace}
       />
     </WithContexts>
   );
@@ -96,29 +100,4 @@ it('links to the other workspaces', () => {
     'href',
     expect.stringContaining('1337')
   );
-});
-
-it('shows a separator if there are other workspaces', () => {
-  const { getByRole, queryByRole, rerender } = render(
-    <WithContexts>
-      <WorkspaceMenu {...props} allWorkspaces={[]} />
-    </WithContexts>
-  );
-  expect(queryByRole('separator')).not.toBeInTheDocument();
-
-  rerender(
-    <WithContexts>
-      <WorkspaceMenu
-        {...props}
-        allWorkspaces={[
-          {
-            id: '0',
-            numberOfMembers: 2,
-            name: 'Some Workspace',
-          },
-        ]}
-      />
-    </WithContexts>
-  );
-  expect(getByRole('separator')).toBeVisible();
 });

@@ -1,0 +1,95 @@
+import { useActiveElement } from '@decipad/react-utils';
+import { css } from '@emotion/react';
+import { ComponentProps, FC, useCallback, useState } from 'react';
+import { WorkspaceMenu } from '..';
+import { Caret } from '../../icons';
+import { cssVar, mediumShadow, p18Regular } from '../../primitives';
+
+type WorkspaceLogoProps = ComponentProps<typeof WorkspaceMenu>;
+
+export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
+  const [menuIsVisible, setMenuIsVisible] = useState(false);
+
+  const hideMenu = useCallback(
+    () => setMenuIsVisible(false),
+    [setMenuIsVisible]
+  );
+
+  const toggleMenu = useCallback(
+    () => setMenuIsVisible((prev) => !prev),
+    [setMenuIsVisible]
+  );
+
+  const { onCreateWorkspace } = props;
+  const menuRef = useActiveElement(hideMenu);
+
+  const createWorkspaceAndHideMenu = useCallback(() => {
+    hideMenu();
+    onCreateWorkspace?.();
+  }, [onCreateWorkspace, hideMenu]);
+
+  return (
+    <div ref={menuRef}>
+      {menuIsVisible && (
+        <div css={workspaceSelectorStyles}>
+          <WorkspaceMenu
+            Heading="h1"
+            allWorkspaces={props.allWorkspaces}
+            onCreateWorkspace={createWorkspaceAndHideMenu}
+            onClose={hideMenu}
+            activeWorkspace={props.activeWorkspace}
+          />
+        </div>
+      )}
+      <div css={containerStyles} onClick={toggleMenu}>
+        <span css={nameStyles}>
+          <strong>{props.activeWorkspace.name}</strong>
+        </span>
+
+        <span css={arrowDownButtonStyles}>
+          <Caret variant="down" />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const workspaceSelectorStyles = css({
+  position: 'absolute',
+  minWidth: '256px',
+  width: 'max-content',
+  maxWidth: '50vw',
+  top: '60px',
+  left: '8px',
+  zIndex: 2,
+
+  boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
+  borderRadius: '16px',
+  overflow: 'hidden',
+});
+
+const containerStyles = css({
+  position: 'relative',
+  display: 'flex',
+  padding: '8px',
+  cursor: 'pointer',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  justifyContent: 'space-between',
+});
+
+const nameStyles = css(p18Regular, {
+  maxWidth: '200px',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
+
+const arrowDownButtonStyles = css({
+  backgroundColor: cssVar('borderHighlightColor'),
+  borderRadius: '50%',
+  height: '24px',
+  width: '24px',
+  padding: '2px',
+});

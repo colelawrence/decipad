@@ -11,7 +11,6 @@ export const Normal: Story = () => (
   <DashboardSidebar
     name="John Doe"
     email="john.doe@example.com"
-    onOpenSettings={noop}
     onDeleteSection={noop}
     onUpdateSection={() => new Promise(noop)}
     onCreateSection={() => new Promise(noop)}

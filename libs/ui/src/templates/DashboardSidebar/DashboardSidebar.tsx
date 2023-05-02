@@ -1,22 +1,22 @@
-import { useThemeFromStore } from '@decipad/react-contexts';
-import { useActiveElement } from '@decipad/react-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
-import { ComponentProps, FC, useState } from 'react';
-import { ThemePicker } from '../../atoms';
+import { ComponentProps, FC } from 'react';
 import { AccountAvatar } from '../../molecules';
 
 import {
   AccountMenu,
+  WorkspaceLogo,
   WorkspaceNavigation,
   WorkspaceOptions,
-  WorkspaceSelector,
+  WorkspaceSwitcher,
 } from '../../organisms';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { dashboard } from '../../styles';
+import { useEditUserModalStore } from '../EditUserModal/EditUserModal';
 
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
   Pick<ComponentProps<typeof AccountAvatar>, 'name'> &
-  ComponentProps<typeof AccountMenu> &
+  Omit<ComponentProps<typeof AccountMenu>, 'onOpenSettings'> &
   Pick<
     ComponentProps<typeof WorkspaceNavigation>,
     'onDeleteSection' | 'onCreateSection' | 'onUpdateSection' | 'showFeedback'
@@ -29,68 +29,22 @@ export const DashboardSidebar = ({
   name,
   email,
   onLogout,
-  onOpenSettings,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
-  const [darkTheme, setDarkTheme] = useThemeFromStore();
-  const [openMenu, setOpenMenu] = useState(false);
-
-  const ref = useActiveElement(() => {
-    setOpenMenu(false);
-  });
+  const showSwitcher = !isFlagEnabled('NO_WORKSPACE_SWITCHER');
+  const openUserSettings = useEditUserModalStore((state) => state.open);
 
   return (
     <div css={dashboardMainSidebarStyles} onPointerEnter={onPointerEnter}>
-      <div css={workspaceSwitcherStyles}>
-        <div css={workspaceSwitcherFlexyStyles}>
-          <WorkspaceSelector {...props}></WorkspaceSelector>
-          <div css={themeSwitcherAndConfigStyles}>
-            <div
-              css={{
-                display: 'flex',
-                flexDirection: 'column',
-                flexWrap: 'nowrap',
-                alignItems: 'center',
-                gap: 32,
-              }}
-            >
-              <ThemePicker
-                active={darkTheme}
-                onChange={setDarkTheme}
-                ariaRoleDescription={'theme picker'}
-              ></ThemePicker>
-              <div ref={ref}>
-                <AccountAvatar
-                  menuOpen={openMenu}
-                  name={name}
-                  email={email}
-                  onClick={() => setOpenMenu(!openMenu)}
-                />
-                {openMenu && (
-                  <div
-                    css={{
-                      position: 'absolute',
-                      minWidth: '240px',
-                      width: 'max-content',
-                      maxWidth: '50vw',
-                      bottom: 20,
-                      left: '60px',
-                      zIndex: 2,
-                    }}
-                  >
-                    <AccountMenu
-                      onOpenSettings={onOpenSettings}
-                      name={name}
-                      email={email}
-                      onLogout={onLogout}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {showSwitcher && (
+        <WorkspaceSwitcher
+          name={name}
+          email={email}
+          onLogout={onLogout}
+          {...props}
+          onOpenSettings={openUserSettings}
+        />
+      )}
       <div
         css={[
           {
@@ -112,20 +66,16 @@ export const DashboardSidebar = ({
             gridTemplateColumns: 'minmax(150px, 100%)',
           }}
         >
-          <WorkspaceOptions {...props} />
+          {showSwitcher ? (
+            <WorkspaceOptions {...props} />
+          ) : (
+            <WorkspaceLogo {...props} />
+          )}
         </div>
       </div>
     </div>
   );
 };
-
-const workspaceSwitcherFlexyStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  flexWrap: 'nowrap',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-});
 
 const dashboardSidebarStyles = css({
   padding: dashboard.topPadding,
@@ -156,24 +106,5 @@ const dashboardMainSidebarStyles = css({
   [smallScreenQuery]: {
     display: 'flex',
     gap: '20px',
-  },
-});
-
-const workspaceSwitcherStyles = css({
-  gridColumn: 'workspaceselector',
-
-  display: 'grid',
-  [smallScreenQuery]: {
-    display: 'inline-flex',
-    gridColumn: 'initial',
-    width: '100%',
-  },
-});
-
-const themeSwitcherAndConfigStyles = css({
-  marginBottom: '22px',
-  [smallScreenQuery]: {
-    display: 'none',
-    marginBottom: '0px',
   },
 });

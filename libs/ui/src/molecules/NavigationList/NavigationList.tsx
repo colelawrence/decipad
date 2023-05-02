@@ -1,7 +1,7 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
-import { WorkspaceItem } from '..';
+import { WorkspaceItem, WorkspaceItemCreate } from '..';
 import { NavigationItem } from '../../atoms';
 
 const styles = css({
@@ -26,7 +26,9 @@ export const NavigationList = ({
         }
         if (
           isElement(child) &&
-          (child.type === NavigationItem || child.type === WorkspaceItem)
+          (child.type === NavigationItem ||
+            child.type === WorkspaceItem ||
+            child.type === WorkspaceItemCreate)
         ) {
           return <li>{child}</li>;
         }

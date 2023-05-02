@@ -31,6 +31,7 @@ export type NavigationItemProps = {
   readonly menuItems?: ReactNode[];
   readonly dndInfo?: DNDType;
   readonly isActive?: boolean;
+  readonly onLinkClick?: () => void;
 } & (
   | {
       readonly href?: string;
@@ -63,6 +64,7 @@ export const NavigationItem = ({
   backgroundColor = cssVar('highlightColor'),
 
   onClick,
+  onLinkClick,
 }: NavigationItemProps): ReturnType<FC> => {
   const styledIcon = icon && <span css={[iconStylez, iconStyles]}>{icon}</span>;
   const onButtonClick = useEventNoEffect(onClick);
@@ -170,6 +172,7 @@ export const NavigationItem = ({
           activeStyles={css([isActive && activeStyles(backgroundColor)])}
           href={href}
           exact={exact}
+          onClick={onLinkClick}
         >
           {leftSide}
           {maybeRightSide}

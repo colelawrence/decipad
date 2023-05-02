@@ -1,6 +1,7 @@
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { create } from 'zustand';
 import { ModalForm } from '../../molecules';
 import { ClosableModal } from '../../organisms';
 import { cssVar, p13Regular } from '../../primitives';
@@ -12,14 +13,22 @@ type EditUserModalProps = {
   readonly onChangeUsername?: (newUsername: string) => void;
   readonly description?: string;
   readonly onChangeDescription?: (newDescription: string) => void;
-  readonly onClose: () => void;
 };
+
+export const useEditUserModalStore = create<{
+  isOpened: boolean;
+  open(): void;
+  close(): void;
+}>((set) => ({
+  isOpened: false,
+  open: () => set({ isOpened: true }),
+  close: () => set({ isOpened: false }),
+}));
 
 export const EditUserModal = ({
   name,
   username,
   description,
-  onClose,
   onChangeName = noop,
   onChangeUsername = noop,
   onChangeDescription = noop,
@@ -28,12 +37,19 @@ export const EditUserModal = ({
 }: EditUserModalProps): ReturnType<React.FC> => {
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
 
+  const isOpened = useEditUserModalStore((state) => state.isOpened);
+  const closeModal = useEditUserModalStore((state) => state.close);
+
+  if (!isOpened) {
+    return null;
+  }
+
   return (
     <ClosableModal
       Heading="h2"
       {...props}
       title="Account settings"
-      closeAction={onClose}
+      closeAction={closeModal}
     >
       <div css={{ display: 'grid', rowGap: '24px' }}>
         <ModalForm
