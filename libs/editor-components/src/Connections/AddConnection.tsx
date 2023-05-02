@@ -136,54 +136,58 @@ export const AddConnection: FC = () => {
   }, [computer, editor, session.data?.user?.id, store, liveConnections]);
 
   return (
-    <Dialog open={store.open} setOpen={store.changeOpen}>
-      <WrapperIntegrationModalDialog
-        onConnect={onConnectDb}
-        isConnectShown={true}
-        isConnectDisabled={false}
-        title="Import Data"
-        showTabs={store.stage !== 'pick-source'}
-        tabStage={store.stage !== 'pick-source' ? store.stage : undefined}
-        onTabClick={store.setStage}
-        onAbort={store.abort}
-      >
-        {store.stage === 'pick-source' ? (
-          <IntegrationModalDialog
-            onSelectSource={(provider) => {
-              if (provider) {
-                store.setConnectionType(provider as ExternalProvider);
-              }
-              store.setStage('connect');
-            }}
-            dataSources={ProviderList}
-          />
-        ) : store.stage === 'connect' ? (
-          <DatabaseConnectionScreen
-            error={
-              store.states.connectionState?.type === 'error'
-                ? store.states.connectionState?.message
-                : undefined
-            }
-            existingConnections={liveConnectionIDs}
-            values={store.dbOptions}
-            setValues={store.setDbOptions}
-          />
-        ) : store.stage === 'create-query' ? (
-          <DatabaseQuery
-            connection={store.states.connectionState?.type}
-            query={store.dbOptions.query}
-            setQuery={(q) =>
-              store.setDbOptions({
-                query: q,
-              })
-            }
-            message={store.states.queryState?.message}
-            state={store.states.queryState?.type}
-          />
-        ) : (
-          <></>
-        )}
-      </WrapperIntegrationModalDialog>
-    </Dialog>
+    <>
+      {store.open && (
+        <Dialog open={store.open} setOpen={store.changeOpen}>
+          <WrapperIntegrationModalDialog
+            onConnect={onConnectDb}
+            isConnectShown={true}
+            isConnectDisabled={false}
+            title="Import Data"
+            showTabs={store.stage !== 'pick-source'}
+            tabStage={store.stage !== 'pick-source' ? store.stage : undefined}
+            onTabClick={store.setStage}
+            onAbort={store.abort}
+          >
+            {store.stage === 'pick-source' ? (
+              <IntegrationModalDialog
+                onSelectSource={(provider) => {
+                  if (provider) {
+                    store.setConnectionType(provider as ExternalProvider);
+                  }
+                  store.setStage('connect');
+                }}
+                dataSources={ProviderList}
+              />
+            ) : store.stage === 'connect' ? (
+              <DatabaseConnectionScreen
+                error={
+                  store.states.connectionState?.type === 'error'
+                    ? store.states.connectionState?.message
+                    : undefined
+                }
+                existingConnections={liveConnectionIDs}
+                values={store.dbOptions}
+                setValues={store.setDbOptions}
+              />
+            ) : store.stage === 'create-query' ? (
+              <DatabaseQuery
+                connection={store.states.connectionState?.type}
+                query={store.dbOptions.query}
+                setQuery={(q) =>
+                  store.setDbOptions({
+                    query: q,
+                  })
+                }
+                message={store.states.queryState?.message}
+                state={store.states.queryState?.type}
+              />
+            ) : (
+              <></>
+            )}
+          </WrapperIntegrationModalDialog>
+        </Dialog>
+      )}
+    </>
   );
 };
