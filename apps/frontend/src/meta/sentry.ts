@@ -27,6 +27,7 @@ export const initSentry = () => {
     return;
   }
   sentryInitialised = true;
+  Sentry.addTracingExtensions();
   Sentry.init({
     beforeSend: (event: Sentry.Event) => {
       if (!isSupportedBrowser()) {
