@@ -5,9 +5,10 @@ import { p12Medium, p24Medium } from '../../primitives';
 
 const wrapperStyles = css({
   display: 'flex',
-  gap: '6px',
+  gap: '8px',
+  minHeight: '40px',
   alignItems: 'center',
-  padding: '0px 6px 0px 8px',
+  padding: '0px 8px 0px 8px',
 });
 
 const hiddenChildrenStyles = css({

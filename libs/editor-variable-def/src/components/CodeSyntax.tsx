@@ -10,6 +10,8 @@ export const CodeSyntax: PlateComponent = ({ attributes, children, leaf }) => {
           (leaf as unknown as CodeSyntaxRange).tokenType as
             | 'number'
             | 'identifier'
+            | 'date'
+            | 'string'
         }
       >
         {children}

@@ -3,16 +3,16 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Caret } from '../../icons';
 import { CodeResult } from '../../organisms';
-import { cssVar } from '../../primitives';
+import { cssVar, p24Medium } from '../../primitives';
 
 const mainStyles = (readOnly: boolean, selected: boolean) =>
-  css({
+  css(p24Medium, {
     width: '100%',
     maxWidth: '244px',
     borderRadius: 8,
     padding: '0px 6px 0px 8px',
     fontSize: 24,
-    minHeight: 44,
+    minHeight: 40,
     height: '100%',
     display: 'flex',
     justifyContent: 'space-between',

@@ -25,6 +25,7 @@ const wrapper = css({
     'aside:last-child': {
       display: 'flex',
     },
+    cursor: 'pointer',
   },
 });
 

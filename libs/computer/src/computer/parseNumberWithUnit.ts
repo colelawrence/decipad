@@ -1,21 +1,21 @@
 import { tokenRules } from '@decipad/language';
 
 const captureNumberAndExpression = new RegExp(
-  `^(${tokenRules.main.number.match.source})(.+)?$`
+  `^([^0-9]?[ ]?)(${tokenRules.main.number.match.source})(.+)?$`
 );
 
-export function parseNumberWithUnit(source: string): [number, string] | null {
+export function parseNumberWithUnit(
+  source: string
+): [number, string, string] | null {
   const match = source.match(captureNumberAndExpression);
   if (!match) {
     return null;
   }
-
-  const [, number, rest] = match;
+  const [, prefix, number, rest] = match;
   const parsedNumber = Number(number);
-
   if (Number.isNaN(parsedNumber)) {
     return null;
   }
 
-  return [parsedNumber, rest ?? ''];
+  return [parsedNumber, rest ?? '', prefix];
 }

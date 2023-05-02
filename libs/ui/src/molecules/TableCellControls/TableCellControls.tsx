@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { once } from 'ramda';
 import { forwardRef, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
-import { Add, DragHandle, Trash } from '../../icons/index';
+import { DownArrow, DragHandle, Trash, UpArrow } from '../../icons/index';
 import {
   cssVar,
   mouseMovingOverTransitionDelay,
@@ -81,17 +81,17 @@ export const TableCellControls = forwardRef<
             trigger={menuButton}
             dropdown
           >
-            <MenuItem icon={<Add />} onSelect={onAddRowAbove}>
-              Add Above
+            <MenuItem icon={<UpArrow />} onSelect={onAddRowAbove}>
+              Insert Above
+            </MenuItem>
+            <MenuItem icon={<DownArrow />} onSelect={onAddRowBelow}>
+              Insert Below
             </MenuItem>
             {onRemove && (
               <MenuItem icon={<Trash />} onSelect={onRemove} selected={false}>
-                Delete row
+                Delete
               </MenuItem>
             )}
-            <MenuItem icon={<Add />} onSelect={onAddRowBelow}>
-              Add below
-            </MenuItem>
           </MenuList>
 
           <Tooltip trigger={menuButton} side="left">

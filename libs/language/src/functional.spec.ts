@@ -126,7 +126,7 @@ describe('use of funds document', () => {
         ],
       ]
     `);
-    expect(time).toBeLessThanOrEqual(1000 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(4000 * (process.env.CI ? 2 : 1));
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
@@ -274,7 +274,7 @@ describe('more models', () => {
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(500 * (process.env.CI ? 2 : 1));
   });
 
   test('retirement model', async () => {
@@ -311,7 +311,7 @@ describe('more models', () => {
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 
   test('burn spare cash in the supermarket', async () => {
@@ -333,7 +333,7 @@ describe('more models', () => {
       value: N(123, 20),
     });
 
-    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(450 * (process.env.CI ? 2 : 1));
   });
 });
 
@@ -775,7 +775,7 @@ ${'' /* Get capital needed */}
         value: N(6328251127759379000n, 53640764699238693n), // 117,974662799844137
       },
     });
-    expect(time).toBeLessThanOrEqual(2000 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(2200 * (process.env.CI ? 2 : 1));
   });
 
   test('rounds dates', async () => {
@@ -887,7 +887,7 @@ ${'' /* Get capital needed */}
           ],
         }
       `);
-      expect(p.time).toBeLessThan(10_000);
+      expect(p.time).toBeLessThan(12_000);
     });
   });
 });

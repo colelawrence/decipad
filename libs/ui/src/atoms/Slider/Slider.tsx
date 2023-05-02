@@ -12,13 +12,16 @@ import {
 } from '../../primitives';
 import { AvailableSwatchColor, swatchesThemed } from '../../utils';
 
-const thumbBorderWidth = 1;
-const thumbSize = 20;
-const trackHeight = 4;
+const thumbBorderWidth = 1.28;
+const thumbSize = 16;
+const trackHeight = 3;
 
 const sliderWrapperStyles = css({
-  padding: `calc(${thumbSize}px / 2 - ${trackHeight}px / 2) 7px`,
+  padding: `calc(${thumbSize}px / 2 / 2) 7px`,
   width: '100%', // Specific width is required for Firefox.
+  marginTop: '-5px',
+  height: '0px',
+  gap: '0px',
 });
 
 const sliderStyles = css({
@@ -47,16 +50,16 @@ const rangeStyles = css({
 
 const thumbStyles = css({
   all: 'unset',
-  boxShadow: `0px 2px 20px ${transparency(grey700, 0.04)},
+  boxShadow: `0px 2px 20px ${transparency(grey700, 1)},
   0px 2px 8px ${transparency(offBlack, 0.02)}`,
 
   border: `${thumbBorderWidth}px solid ${cssVar('borderColor')}`,
   borderRadius: '8px',
 
-  height: `${thumbSize}px`,
-  width: `${thumbSize}px`,
+  height: `10px`,
+  width: `25px`,
 
-  backgroundColor: cssVar('iconColorLight'),
+  backgroundColor: cssVar('thumbColor'),
 
   cursor: 'pointer',
   display: 'block',

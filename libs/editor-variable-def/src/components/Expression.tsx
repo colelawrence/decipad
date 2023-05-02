@@ -17,7 +17,7 @@ import { useDelayedTrue } from '@decipad/react-utils';
 import { ClientEventsContext } from '@decipad/client-events';
 
 const getPlaceHolder = (type: SerializedType | undefined) => {
-  if (!type) return '1 km';
+  if (!type) return '100$';
   switch (type.kind) {
     case 'string':
       return 'Type here...';
@@ -35,7 +35,7 @@ const getPlaceHolder = (type: SerializedType | undefined) => {
           return 'date';
       }
   }
-  return '1 km';
+  return '100$';
 };
 
 export const Expression: PlateComponent = ({

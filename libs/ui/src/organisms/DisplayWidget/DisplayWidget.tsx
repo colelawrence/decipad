@@ -1,9 +1,17 @@
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
-import { CodeResult } from '@decipad/ui';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import {
+  AvailableSwatchColor,
+  CodeResult,
+  IconPopover,
+  UserIconKey,
+} from '@decipad/ui';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { ArrowOutlined, Caret } from '../../icons';
-import { cssVar, p14Regular, p32Medium } from '../../primitives';
+import * as icons from '../../icons';
+import { Caret } from '../../icons';
+import { cssVar, p14Regular, p24Medium, setCssVar } from '../../primitives';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -18,12 +26,13 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     borderRadius: 8,
     padding: '0px 6px 0px 8px',
     fontSize: 24,
-    minHeight: 44,
+    minHeight: 40,
     height: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
+    marginTop: '4px',
     ...(selected && { backgroundColor: cssVar('highlightColor') }),
     ...(!readOnly && {
       border: `1px solid ${cssVar('borderColor')}`,
@@ -40,14 +49,13 @@ const textWrapperStyles = css({
   gap: '2px',
 });
 
-const iconStyles = css({
-  display: 'grid',
-  justifyContent: 'center',
+const iconWrapperStyles = css({
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   alignItems: 'center',
-  '> svg': {
-    height: 24,
-    width: 24,
-  },
+  display: 'grid',
+  height: `20px`,
+  width: '20px',
+  mixBlendMode: 'luminosity',
 });
 
 interface DisplayWidgetDropdownProps {
@@ -57,6 +65,9 @@ interface DisplayWidgetDropdownProps {
   readonly result: string | null;
   readonly readOnly: boolean;
   readonly children: ReactNode;
+  readonly icon?: UserIconKey;
+  readonly color?: AvailableSwatchColor;
+  readonly saveIcon?: (newIcon: UserIconKey) => void;
 }
 
 export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
@@ -66,16 +77,32 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   result,
   readOnly,
   children,
+  icon = 'Paperclip',
+  saveIcon = noop,
 }) => {
+  const Icon = icons[icon];
+
   return (
     <>
       <div css={wrapperStyles}>
-        <div css={iconStyles}>
-          <ArrowOutlined />
-        </div>
+        {useIsEditorReadOnly() ? (
+          <span css={iconWrapperStyles}>
+            <Icon />
+          </span>
+        ) : (
+          <IconPopover
+            color={'Malibu'}
+            trigger={
+              <button css={iconWrapperStyles}>
+                <Icon />
+              </button>
+            }
+            onChangeIcon={saveIcon}
+          />
+        )}
         <div css={textWrapperStyles}>
           <span css={[p14Regular, { color: cssVar('weakTextColor') }]}>
-            {`Result: ${result ?? 'Name'}`}
+            {result ?? 'Name'}
           </span>
         </div>
       </div>
@@ -87,7 +114,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
       >
         <span
           css={[
-            p32Medium,
+            p24Medium,
             !lineResult?.result && { color: cssVar('weakerTextColor') },
           ]}
         >

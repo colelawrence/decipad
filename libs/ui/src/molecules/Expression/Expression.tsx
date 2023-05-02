@@ -3,11 +3,10 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode, useEffect, useRef } from 'react';
 import { CodeError } from '../../atoms';
 import {
+  Opacity,
   cssVar,
   display,
-  Opacity,
   p24Medium,
-  p32Medium,
   setCssVar,
   smallScreenQuery,
 } from '../../primitives';
@@ -16,13 +15,18 @@ const baseWrapperStyles = css({
   width: '100%',
   display: 'grid',
   overflow: 'hidden',
+  alignItems: 'center',
+  minHeight: '40px',
 });
 
 const expressionInputStyles = css({
-  color: cssVar('strongTextColor'),
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   borderRadius: '8px',
   minWidth: 0,
   padding: '0 8px',
+  fontSize: '14px',
+  minHeight: '40px',
+  alignItems: 'center',
   ':hover': {
     backgroundColor: cssVar('highlightColor'),
   },
@@ -44,7 +48,7 @@ const placeholderStyles = css({
   },
   '::before': {
     ...display,
-    ...p32Medium,
+    ...p24Medium,
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
@@ -99,14 +103,18 @@ export const Expression = ({
     >
       <div
         css={[
-          type?.kind !== 'date' ? p32Medium : p24Medium,
           expressionInputStyles,
+          (type?.kind === 'date' || type?.kind === 'string') && {
+            fontWeight: 500,
+            fontSize: 24,
+            color: cssVar('strongTextColor'),
+          },
           placeholderStyles,
           focused && focusedExpressionInputStyles,
         ]}
         aria-placeholder={placeholder}
       >
-        <span css={lineStyles} ref={inputRef}>
+        <span data-test-id="widget-input" css={lineStyles} ref={inputRef}>
           {children}
         </span>
       </div>

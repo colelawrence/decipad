@@ -52,14 +52,14 @@ describe('inserts slider below', () => {
         },
         {
           type: ELEMENT_EXPRESSION,
-          children: [{ text: '' }],
+          children: [{ text: '5' }],
         },
         {
           type: ELEMENT_SLIDER,
           max: '10',
           min: '0',
           step: '1',
-          value: '0',
+          value: '5',
           children: [{ text: '' }],
         } as SliderElement,
       ],

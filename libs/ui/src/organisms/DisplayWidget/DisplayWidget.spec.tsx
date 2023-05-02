@@ -55,5 +55,5 @@ it('shows 0 as a placeholder', async () => {
   const { getByText } = render(<DisplayWidget {...props} result={null} />);
 
   expect(getByText('0')).toBeVisible();
-  expect(getByText('Result: Name')).toBeVisible();
+  expect(getByText('Name')).toBeVisible();
 });

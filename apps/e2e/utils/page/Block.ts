@@ -55,6 +55,40 @@ export async function createToggleBelow(page: Page, identifier: string) {
   await page.keyboard.type(identifier);
 }
 
+export async function createSliderBelow(
+  page: Page,
+  identifier: string,
+  value: number | string
+) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/slider');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'slider' }).click();
+
+  await page
+    .locator('[data-testid="widget-caption"] >> text=/Slider[0-9]+/')
+    .last()
+    .dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+
+  await page.click('div [data-testid="input-widget-name"]');
+  await keyPress(page, 'ArrowDown');
+  // erase 100$, then focus goes to title, we come back down
+  await keyPress(page, 'End');
+  await keyPress(page, 'Backspace');
+  await keyPress(page, 'Backspace');
+  await keyPress(page, 'Backspace');
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(value.toString());
+}
+
 export async function createDateBelow(page: Page, identifier: string) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 

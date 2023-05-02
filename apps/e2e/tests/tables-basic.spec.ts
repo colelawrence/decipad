@@ -1,6 +1,13 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
-import { createTable, writeInTable, getFromTable } from '../utils/page/Table';
+import {
+  createTable,
+  writeInTable,
+  getFromTable,
+  focusOnTable,
+  insertRowAbove,
+  insertRowBelow,
+} from '../utils/page/Table';
 
 test.describe('Basic Table', () => {
   test.describe.configure({ mode: 'serial' });
@@ -51,5 +58,19 @@ test.describe('Basic Table', () => {
     await page.getByText('Table1', { exact: true }).dblclick();
     await page.keyboard.type('NewTableName');
     await expect(page.getByText('NewTableName')).toBeVisible();
+  });
+
+  test('can insert a new row below', async () => {
+    await focusOnTable(page);
+    await insertRowBelow(page, 3);
+    await writeInTable(page, '1%', 4, 1);
+    expect(await getFromTable(page, 4, 1)).toBe('1%');
+  });
+
+  test('can insert a new row above', async () => {
+    await focusOnTable(page);
+    await insertRowAbove(page, 4);
+    // row 4 with 1% is now row 5
+    expect(await getFromTable(page, 5, 1)).toBe('1%');
   });
 });

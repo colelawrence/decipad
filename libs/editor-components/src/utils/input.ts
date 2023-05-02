@@ -1,21 +1,21 @@
+import type { SerializedTypeKind } from '@decipad/computer';
 import { Computer } from '@decipad/computer';
 import {
   DisplayElement,
   DropdownElement,
-  ElementVariants,
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
   ELEMENT_VARIABLE_DEF,
+  ElementVariants,
   MyEditor,
   VariableDefinitionElement,
   VariableDropdownElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import type { SerializedTypeKind } from '@decipad/computer';
 import { getEndPoint, getStartPoint, setSelection } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -93,6 +93,7 @@ export const insertInputBelow = (
 };
 
 const getSliderInputElement = () => {
+  const initialSliderValue = '5';
   return {
     id: nanoid(),
     type: ELEMENT_VARIABLE_DEF,
@@ -106,7 +107,7 @@ const getSliderInputElement = () => {
       {
         id: nanoid(),
         type: ELEMENT_EXPRESSION,
-        children: [{ text: '' }],
+        children: [{ text: initialSliderValue }],
       },
       {
         id: nanoid(),
@@ -114,7 +115,7 @@ const getSliderInputElement = () => {
         max: '10',
         min: '0',
         step: '1',
-        value: '0',
+        value: initialSliderValue,
         children: [{ text: '' }],
       },
     ],

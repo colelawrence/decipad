@@ -1,21 +1,20 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import {
-  cssVar,
-  p24Medium,
-  p32Medium,
-  setCssVar,
-  smallScreenQuery,
-} from '../../primitives';
+import { cssVar, p14Medium, p24Medium, setCssVar } from '../../primitives';
 
 const leafStylesByTokenType = {
-  number: css(p32Medium, {
+  number: css(p24Medium, {
+    fontSize: 24,
     ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-    [smallScreenQuery]: p24Medium,
   }),
-  identifier: css(p32Medium, {
+  date: css(p24Medium, {
+    ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  }),
+  identifier: css(p14Medium, {
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-    [smallScreenQuery]: p24Medium,
+  }),
+  string: css(p24Medium, {
+    ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   }),
   ws: undefined,
 };

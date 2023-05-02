@@ -1,12 +1,15 @@
+import { parseNumberWithUnit } from '@decipad/computer';
 import { createOverrideApplyPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_EXPRESSION,
   ELEMENT_SLIDER,
+  ExpressionElement,
   MyElement,
   SliderElement,
-  ExpressionElement,
 } from '@decipad/editor-types';
+import { mutateText } from '@decipad/editor-utils';
 import {
+  TNode,
   getNextNode,
   getNode,
   getNodeEntry,
@@ -16,11 +19,8 @@ import {
   isElement,
   isText,
   setNodes,
-  TNode,
 } from '@udecode/plate';
-import { parseNumberWithUnit } from '@decipad/computer';
 import { Path } from 'slate';
-import { mutateText } from '@decipad/editor-utils';
 
 const isExpression = (n: TNode) =>
   isElement(n) && n.type === ELEMENT_EXPRESSION;
@@ -64,7 +64,7 @@ export const createSliderExpressionSyncPlugin =
 
           const [expressionNode, expressionPath] = expressionEntry;
           const expression = getNodeString(expressionNode);
-          const [value, rest] = parseNumberWithUnit(expression) ?? [];
+          const [value, rest, prefix] = parseNumberWithUnit(expression) ?? [];
 
           if (Number(sliderNode.value) === value) {
             return;
@@ -73,7 +73,7 @@ export const createSliderExpressionSyncPlugin =
           mutateText(
             editor,
             expressionPath
-          )(`${sliderNode.value}${rest ?? expression ?? ''}`);
+          )(`${prefix}${sliderNode.value}${rest ?? expression ?? ''}`);
         }
 
         if (

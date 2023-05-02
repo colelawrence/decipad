@@ -1,15 +1,13 @@
-import { useCallback, useContext } from 'react';
-import { Slider as UISlider } from '@decipad/ui';
+import { ClientEventsContext } from '@decipad/client-events';
 import {
   ELEMENT_SLIDER,
   PlateComponent,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
-import { ReactEditor } from 'slate-react';
-import { setSelection } from '@udecode/plate';
-import { ClientEventsContext } from '@decipad/client-events';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import { Slider as UISlider } from '@decipad/ui';
+import { useCallback, useContext } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
@@ -19,24 +17,8 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
 
   const editor = useTPlateEditorRef();
 
-  const selectElement = useCallback(() => {
-    const point = {
-      path: ReactEditor.findPath(editor as ReactEditor, element),
-      offset: 0,
-    };
-    setSelection(editor, {
-      anchor: point,
-      focus: point,
-    });
-  }, [editor, element]);
-
   const path = useNodePath(element);
-  const onValueChange = usePathMutatorCallback(
-    editor,
-    path,
-    'value',
-    selectElement
-  );
+  const onValueChange = usePathMutatorCallback(editor, path, 'value');
 
   const onChange = useCallback(
     (newValue: number) => {
@@ -71,7 +53,6 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
         step={Number(element.step)}
         onChange={onChange}
         value={Number(element.value)}
-        onFocus={selectElement}
         color={color}
         onCommit={onCommit}
       />

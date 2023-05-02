@@ -1,5 +1,5 @@
-import { AnyElement } from '@decipad/editor-types';
 import { SerializedType } from '@decipad/computer';
+import { AnyElement } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';
@@ -14,13 +14,14 @@ import {
   grey700,
   offBlack,
   setCssVar,
-  smallScreenQuery,
+  smallestDesktop,
   transparency,
   white,
 } from '../../primitives';
 import { AvailableSwatchColor, getTypeIcon, swatchesThemed } from '../../utils';
 
-const leftBarSize = 6;
+const leftBarSize = 2;
+const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
 type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
 
@@ -40,7 +41,7 @@ const wrapperStyles = ({ variant }: Variant, color: string) => {
     backgroundClip: 'content-box, border-box',
 
     // Last shadow is the left side color bar.
-    boxShadow: `0px 2px 20px ${transparency(grey700, 0.04).rgba},
+    boxShadow: `0px 2px 20px ${transparency(grey700, 0.02).rgba},
      0px 2px 8px ${transparency(offBlack, 0.02).rgba},
      -${leftBarSize}px 0px ${color}`,
     marginLeft: `${leftBarSize}px`,
@@ -54,8 +55,9 @@ const wrapperStyles = ({ variant }: Variant, color: string) => {
 const widgetWrapperStyles = css({
   alignItems: 'center',
   display: 'grid',
-  gap: '8px',
-  padding: '8px 8px 16px',
+  gap: '5px',
+  padding: '6px 6px 10px',
+  minHeight: '84px',
 });
 
 const headerWrapperStyles = css({
@@ -64,6 +66,7 @@ const headerWrapperStyles = css({
   gridAutoColumns: 'auto',
   minWidth: 0,
   gap: '4px',
+  padding: '0 2px',
 });
 
 const iconWrapperStyles = ({ variant }: Variant) =>
@@ -229,9 +232,10 @@ export const VariableEditor = ({
             value={value}
             onChangeValue={onChangeValue}
             focused={selected}
+            isEditable={!readOnly}
             element={element}
           >
-            <div css={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div css={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
               {childrenArray.slice(1)}
             </div>
           </CellEditor>

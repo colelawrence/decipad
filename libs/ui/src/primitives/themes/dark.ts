@@ -120,6 +120,7 @@ export const theme: CssVariables = {
 
   iconColorDark: offBlack.hex,
   iconColorLight: offWhite.hex,
+  thumbColor: offWhite.hex,
 
   tooltipBackground: dark300.hex,
   tooltipCodeBackground: offBlack.hex,

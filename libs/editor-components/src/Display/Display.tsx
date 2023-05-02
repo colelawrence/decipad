@@ -9,8 +9,8 @@ import {
 import {
   hasLayoutAncestor,
   safeDelete,
-  usePathMutatorCallback,
   useNodePath,
+  usePathMutatorCallback,
   wrapIntoColumns,
 } from '@decipad/editor-utils';
 import {
@@ -19,9 +19,10 @@ import {
   useResult,
 } from '@decipad/react-contexts';
 import {
-  SelectItems,
   DisplayWidget,
   DropdownMenu,
+  SelectItems,
+  UserIconKey,
   VariableEditor,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
@@ -55,6 +56,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   const editor = useTEditorRef();
   const path = useNodePath(element);
+
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon');
   const changeBlockId = usePathMutatorCallback(editor, path, 'blockId');
   const changeVarName = usePathMutatorCallback(editor, path, 'varName');
 
@@ -233,6 +236,8 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
               lineResult={res}
               result={element.varName || 'Unnamed'}
               readOnly={readOnly}
+              icon={element.icon as UserIconKey}
+              saveIcon={saveIcon}
             >
               {children}
             </DisplayWidget>

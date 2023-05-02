@@ -119,6 +119,7 @@ export interface CssVariables {
   readonly borderColor: Property.Color;
   readonly borderHighlightColor: Property.Color;
   readonly borderTable: Property.Color;
+  readonly thumbColor: Property.Color;
 
   //
   // Hover UI Buttons

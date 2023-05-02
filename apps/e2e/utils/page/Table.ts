@@ -72,6 +72,16 @@ export function addRow(page: Page) {
     .click({ force: true });
 }
 
+export async function insertRowAbove(page: Page, line: number) {
+  await openRowMenu(page, line);
+  await page.locator('span', { hasText: 'Insert Above' }).click();
+}
+
+export async function insertRowBelow(page: Page, line: number) {
+  await openRowMenu(page, line);
+  await page.locator('span', { hasText: 'Insert Below' }).click();
+}
+
 export async function addColumn(page: Page) {
   // eslint-disable-next-line playwright/no-force-option
   await page.locator('button[title="Add Column"]').click({ force: true });

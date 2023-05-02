@@ -16,6 +16,10 @@ const styles = css({
   flexDirection: 'column',
   alignItems: 'flex-start',
   overflowX: 'hidden',
+  top: '48px',
+  left: 0,
+  userSelect: 'none',
+
   marginTop: '8px',
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('borderColor')}`,

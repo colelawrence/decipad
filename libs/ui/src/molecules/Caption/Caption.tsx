@@ -8,6 +8,7 @@ import {
   cssVar,
   display,
   p13Regular,
+  p14Regular,
   p16Regular,
   placeholderOpacity,
   setCssVar,
@@ -48,29 +49,33 @@ const iconWrapperStyles = css(
   }
 );
 
-const placeholderStyles = css(p16Regular, {
-  display: 'grid',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  width: '100%',
+const placeholderStyles = css(
+  p14Regular,
+  setCssVar('currentTextColor', cssVar('weakTextColor')),
+  {
+    display: 'grid',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    width: '100%',
 
-  '> span, ::before': {
-    gridArea: '1 / 1',
-  },
+    '> span, ::before': {
+      gridArea: '1 / 1',
+    },
 
-  '::before': {
-    ...display,
-    ...p16Regular,
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-    pointerEvents: 'none',
-    content: 'attr(aria-placeholder)',
-    opacity: placeholderOpacity,
+    '::before': {
+      ...display,
+      ...p16Regular,
+      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+      pointerEvents: 'none',
+      content: 'attr(aria-placeholder)',
+      opacity: placeholderOpacity,
+
+      [smallScreenQuery]: p13Regular,
+    },
 
     [smallScreenQuery]: p13Regular,
-  },
-
-  [smallScreenQuery]: p13Regular,
-});
+  }
+);
 
 export const Caption = ({
   empty = false,
