@@ -42,6 +42,7 @@ export type ImportElementSource =
   | 'oracledb'
   | 'cockroachdb'
   | 'redshift'
+  | 'mssql'
   | 'mariadb';
 
 export interface ImportElement extends BaseElement {

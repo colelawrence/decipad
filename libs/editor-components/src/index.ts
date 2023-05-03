@@ -5,7 +5,6 @@ export * from './BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 export * from './BlockSelection/BlockSelectable';
 export * from './TeleportEditor';
 export * from './CodeLine';
-export * from './Connections';
 export * from './DataMapping';
 export * from './Display';
 export * from './hooks';

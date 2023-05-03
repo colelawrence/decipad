@@ -147,6 +147,7 @@ export const theme: CssVariables = {
 
   errorBlockColor: orange700.hex,
   errorBlockWarning: orange50.hex,
+  errorBlockAnnotationWarning: yellow100.hex,
   errorBlockError: red50.hex,
 
   errorPageGradientEnd: grey200.hex,

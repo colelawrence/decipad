@@ -14,6 +14,7 @@ export default gql`
     cockroachdb
     redshift
     mariadb
+    mssql
   }
 
   type ExternalKey {

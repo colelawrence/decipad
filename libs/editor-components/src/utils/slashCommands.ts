@@ -20,7 +20,7 @@ import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
 import { ComponentProps } from 'react';
 import { BaseEditor, Location, Path, Transforms } from 'slate';
-import { useConnectionStore } from '../Connections';
+import { useConnectionStore } from '@decipad/react-contexts';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 import { inputStyles, MessageBlock } from '.';
-import { Sparkles, Warning } from '../../icons';
+import { AnnotationWarning, Sparkles, Warning } from '../../icons';
 import { cssVar, p13Medium } from '../../primitives';
 
 interface DatabaseQueryProps {
@@ -58,13 +58,13 @@ export const DatabaseQuery: FC<DatabaseQueryProps> = ({
           title={state === 'error' ? 'Query error: ' : 'Success: '}
           message={
             message ??
-            'An error has occured, check your syntax or contact support'
+            'An error has occurred, check your syntax or contact support'
           }
         />
       ) : (
         <MessageBlock
-          type="warning"
-          icon={<Warning />}
+          type="annotationWarning"
+          icon={<AnnotationWarning />}
           title="Current Data Import Limits: "
           message="We only support a certain number of rows"
         />

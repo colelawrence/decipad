@@ -21,6 +21,7 @@ const sourceToName: Record<ImportElementSource, string> = {
   cockroachdb: 'a CockroachDB database',
   redshift: 'a Redshift database',
   mariadb: 'a MariaDB database',
+  mssql: 'a SQL Server database',
 };
 
 const groups = (

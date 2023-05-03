@@ -4,8 +4,9 @@ import { noop } from '@decipad/utils';
 import { cssVar, p15Medium } from '../../primitives';
 import { Close } from '../../icons';
 import { Button } from '../../atoms';
+import { DbOptions } from './DatabaseConnectionScreen';
 
-type Stages = 'connect' | 'create-query' | 'map';
+type Stages = 'pick-source' | 'connect' | 'create-query' | 'map';
 interface WrapperIntegrationModalDialogProps {
   children: ReactNode;
   title: string;
@@ -19,7 +20,36 @@ interface WrapperIntegrationModalDialogProps {
   onConnect: () => void;
   isConnectShown?: boolean;
   isConnectDisabled?: boolean;
+  dbOptions?: DbOptions;
 }
+
+const buttonTitle = {
+  'pick-source': 'Connect',
+  connect: 'Connect',
+  'create-query': 'Execute Query',
+  'execute-query': 'Continue to Preview and Map',
+  map: 'Done',
+};
+
+const shouldDisableButton = (
+  tabStage: string,
+  dbOptions: DbOptions
+): boolean => {
+  const { query, connectionString, host } = dbOptions;
+  switch (tabStage) {
+    case 'pick-source':
+      // TODO: fix this, it should return true if the "import file" field is empty
+      return true;
+    case 'create-query':
+      return !query;
+    case 'connect':
+      return !connectionString && !host;
+    case 'map':
+      return false;
+    default:
+      return true;
+  }
+};
 
 export const WrapperIntegrationModalDialog: FC<
   WrapperIntegrationModalDialogProps
@@ -30,50 +60,53 @@ export const WrapperIntegrationModalDialog: FC<
   onConnect,
   onAbort,
   showTabs = false,
-  tabStage = undefined,
+  tabStage = 'pick-source',
   onTabClick = noop,
   children,
+  dbOptions,
 }) => {
   return (
     <div css={wrapperStyles}>
-      <div css={titleStyles}>
-        <span>{title}</span>
+      <div css={titleWrapperStyles}>
+        <div css={titleStyles}>{title}</div>
         {showTabs && (
           <div css={tabStyles}>
             <div
-              {...(tabStage === 'connect' && { 'aria-selected': true })}
+              {...([
+                'connect',
+                'pick-source',
+                'create-query',
+                'execute-query',
+              ].includes(tabStage) && { 'aria-selected': true })}
               onClick={() => onTabClick('connect')}
             >
               Connection
             </div>
-            <div
-              {...(tabStage === 'create-query' && { 'aria-selected': true })}
-              onClick={() => onTabClick('create-query')}
-            >
-              Query
-            </div>
-
-            <div
-              {...(tabStage === 'map' && { 'aria-selected': true })}
-              onClick={() => onTabClick('map')}
-            >
-              Mapping
-            </div>
+            {dbOptions?.query && (
+              <div
+                {...(tabStage === 'map' && { 'aria-selected': true })}
+                onClick={() => onTabClick('map')}
+              >
+                Mapping
+              </div>
+            )}
           </div>
         )}
         <div css={iconStyles}>
-          <div>
+          <div role="button" onClick={onAbort}>
             <Close />
           </div>
         </div>
       </div>
       {children}
       <div css={bottomBarStyles}>
-        <div>
-          <Button type="primary" onClick={onAbort}>
-            Abort
-          </Button>
-        </div>
+        {(!tabStage || ['pick-source', 'connect'].includes(tabStage)) && (
+          <div>
+            <Button type="secondary" onClick={onAbort}>
+              Abort
+            </Button>
+          </div>
+        )}
         <div>
           <Button type="text">Contact Support</Button>
         </div>
@@ -81,10 +114,15 @@ export const WrapperIntegrationModalDialog: FC<
           <div css={connectStyles}>
             <Button
               type="primaryBrand"
-              disabled={isConnectDisabled}
-              onClick={onConnect}
+              disabled={
+                isConnectDisabled ||
+                (dbOptions && shouldDisableButton(tabStage, dbOptions))
+              }
+              onClick={tabStage !== 'map' ? onConnect : onAbort}
             >
-              Connect
+              {tabStage === 'create-query' && !dbOptions?.query
+                ? buttonTitle['execute-query']
+                : buttonTitle[tabStage]}
             </Button>
           </div>
         )}
@@ -124,7 +162,7 @@ const tabStyles = css({
   },
 });
 
-const titleStyles = css(p15Medium, {
+const titleWrapperStyles = css(p15Medium, {
   color: cssVar('normalTextColor'),
   height: '30px',
 
@@ -132,14 +170,14 @@ const titleStyles = css(p15Medium, {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'end',
+});
 
-  span: {
-    lineHeight: '30px',
-    verticalAlign: 'center',
-    flexShrink: 0,
-    flexBasis: '120px',
-    borderBottom: `1px solid ${cssVar('strongerHighlightColor')}`,
-  },
+const titleStyles = css({
+  lineHeight: '30px',
+  flexShrink: 0,
+  paddingLeft: '5px',
+  paddingRight: '15px',
+  borderBottom: `1px solid ${cssVar('strongerHighlightColor')}`,
 });
 
 const iconStyles = css({

@@ -83,6 +83,7 @@ export enum ExternalProvider {
   Gsheets = 'gsheets',
   Json = 'json',
   Mariadb = 'mariadb',
+  Mssql = 'mssql',
   Mysql = 'mysql',
   Oracledb = 'oracledb',
   Postgresql = 'postgresql',

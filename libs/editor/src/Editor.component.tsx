@@ -2,8 +2,8 @@ import {
   TeleportEditor,
   NumberCatalog,
   BlockLengthSynchronizationProvider,
-  AddConnection,
 } from '@decipad/editor-components';
+import { AddConnection } from '@decipad/editor-database';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   EditorBlockParentRefProvider,

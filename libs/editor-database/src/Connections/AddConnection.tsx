@@ -7,22 +7,52 @@ import {
   IntegrationModalDialog,
   WrapperIntegrationModalDialog,
 } from '@decipad/ui';
-import { ELEMENT_LIVE_CONNECTION, useTEditorRef } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
-import { getNodeString } from '@udecode/plate';
-import { useSession } from 'next-auth/react';
-import { ExternalProvider } from '@decipad/graphql-client';
-import { useEditorElements } from '../hooks';
-import { insertLiveConnection } from '../InteractiveParagraph';
-import { insertLiveQueryBelow } from '../utils';
 import {
-  attemptConnection,
+  ELEMENT_LIVE_CONNECTION,
+  ImportElementSource,
+  LiveQueryElement,
+  useTEditorRef,
+} from '@decipad/editor-types';
+import { useComputer, useConnectionStore } from '@decipad/react-contexts';
+import { findNode, getNodeString } from '@udecode/plate';
+import { css } from '@emotion/react';
+import { useSession } from 'next-auth/react';
+import { LiveQueryCore } from 'libs/editor-plugins/src/plugins/LiveQuery/components/LiveQueryCore';
+import { useEditorElements } from '../hooks/useEditorElements';
+import {
+  insertLiveQueryBelow,
+  insertLiveConnection,
   fetchQuery,
-  ProviderList,
-  useConnectionStore,
-} from '.';
+  attemptConnection,
+} from '../utils';
+import { ProviderList } from '.';
+
+// Note: Some of these names were not set, we might need to review this mapping
+const providerTitle = {
+  default: 'Import External Data',
+  gsheets: 'GSheetDataSet',
+  mysql: 'MySQLDataSet',
+  csv: 'FileDataSet',
+  json: 'WebAPIDataSet',
+  mariadb: 'MariaDBDataSet',
+  mongodb: 'MongoDBDataSet',
+  mssql: 'MSSQLDataSet',
+  redshift: 'RedshiftDataSet',
+  postgresql: 'PostGresDataSet',
+  oracledb: 'OracleDBDataSet',
+  arrow: 'OtherSQLDataSet',
+  cockroachdb: 'OtherSQLDataSet',
+  decipad: 'DecipadDataSet',
+  sqlite: 'OtherSQLDataSet',
+};
 
 export const AddConnection: FC = () => {
+  const liveResultWrapperStyles = css({
+    width: '740px',
+    paddingLeft: '32px',
+    paddingRight: '32px',
+  });
+
   const store = useConnectionStore();
 
   const editor = useTEditorRef();
@@ -36,10 +66,16 @@ export const AddConnection: FC = () => {
     [liveConnections]
   );
 
+  const connectionTitle = useMemo(() => {
+    return store.connectionType
+      ? providerTitle[store.connectionType] || providerTitle.default
+      : providerTitle.default;
+  }, [store.connectionType]);
+
   // Handles creation of connection and queries as the user moves through
   // the dialog.
   const onConnectDb = useCallback(async () => {
-    if (!session.data?.user?.id) return;
+    if (session.status !== 'authenticated') return;
 
     if (store.stage === 'connect' && store.connectionType) {
       if (store.dbOptions.dbConnType === 'existing-conn') {
@@ -93,7 +129,7 @@ export const AddConnection: FC = () => {
       const liveConId = await insertLiveConnection({
         computer,
         editor,
-        source: store.connectionType,
+        source: store.connectionType as ImportElementSource,
         url: connectionString,
       });
 
@@ -125,6 +161,8 @@ export const AddConnection: FC = () => {
       // We don't want to create a live query if the query is wrong.
       if (queryState?.type !== 'success') return;
 
+      store.setStage('map');
+
       insertLiveQueryBelow(
         editor,
         [0],
@@ -133,7 +171,16 @@ export const AddConnection: FC = () => {
         store.dbOptions.query
       );
     }
-  }, [computer, editor, session.data?.user?.id, store, liveConnections]);
+  }, [computer, editor, session.status, store, liveConnections]);
+
+  const currentQuery = useMemo(
+    () =>
+      findNode(editor, {
+        at: [],
+        match: { id: store.dbOptions.existingConn.id },
+      }) as unknown as LiveQueryElement,
+    [store, editor]
+  );
 
   return (
     <>
@@ -143,17 +190,20 @@ export const AddConnection: FC = () => {
             onConnect={onConnectDb}
             isConnectShown={true}
             isConnectDisabled={false}
-            title="Import Data"
+            title={connectionTitle}
             showTabs={store.stage !== 'pick-source'}
-            tabStage={store.stage !== 'pick-source' ? store.stage : undefined}
+            tabStage={store.stage}
             onTabClick={store.setStage}
             onAbort={store.abort}
+            dbOptions={store.dbOptions}
           >
             {store.stage === 'pick-source' ? (
               <IntegrationModalDialog
                 onSelectSource={(provider) => {
                   if (provider) {
-                    store.setConnectionType(provider as ExternalProvider);
+                    store.setConnectionType(provider as ImportElementSource);
+                  } else {
+                    store.setConnectionType(undefined);
                   }
                   store.setStage('connect');
                 }}
@@ -169,8 +219,9 @@ export const AddConnection: FC = () => {
                 existingConnections={liveConnectionIDs}
                 values={store.dbOptions}
                 setValues={store.setDbOptions}
+                provider={store.connectionType}
               />
-            ) : store.stage === 'create-query' ? (
+            ) : ['create-query', 'execute-query'].includes(store.stage) ? (
               <DatabaseQuery
                 connection={store.states.connectionState?.type}
                 query={store.dbOptions.query}
@@ -182,6 +233,13 @@ export const AddConnection: FC = () => {
                 message={store.states.queryState?.message}
                 state={store.states.queryState?.type}
               />
+            ) : store.stage === 'map' && currentQuery ? (
+              <div css={liveResultWrapperStyles}>
+                <LiveQueryCore
+                  element={currentQuery}
+                  deleted={false}
+                ></LiveQueryCore>
+              </div>
             ) : (
               <></>
             )}

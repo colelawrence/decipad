@@ -39,7 +39,7 @@ const circleStyles = css({
 });
 
 export const Spinner: FC = () => (
-  <span css={spinnerWrapperStyles}>
+  <div css={spinnerWrapperStyles}>
     <svg css={spinnerStyles} viewBox="0 0 25 25">
       <circle
         css={circleStyles}
@@ -50,5 +50,5 @@ export const Spinner: FC = () => (
         strokeWidth="2.5"
       ></circle>
     </svg>
-  </span>
+  </div>
 );

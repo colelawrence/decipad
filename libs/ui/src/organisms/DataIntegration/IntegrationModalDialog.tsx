@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Button } from '../../atoms';
-import { Warning } from '../../icons';
+import { AnnotationWarning } from '../../icons';
 import { cssVar, p12Medium, p13Bold } from '../../primitives';
 import { MessageBlock } from './MessageBlock';
 
@@ -23,16 +23,22 @@ export const IntegrationModalDialog: FC<IntegrationModalDialogProps> = ({
   return (
     <div css={wrapperStyles}>
       <div css={dataGridStyles}>
-        {Object.values(dataSources).map((source) => (
-          <div
-            css={dataCardStyles}
-            key={source.name}
-            onClick={() => onSelectSource(source.provider)}
-          >
-            {source.icon}
-            <span>{source.name}</span>
-          </div>
-        ))}
+        {Object.values(dataSources).map((source) => {
+          // TODO remove this when these databases are actually supported
+          const isDbSupported = !!source.provider || source.name !== 'MongoDB';
+          return (
+            <div
+              css={[dataCardStyles, isDbSupported ? {} : disabledDb]}
+              key={source.name}
+              onClick={() => isDbSupported && onSelectSource(source.provider)}
+            >
+              {source.icon}
+              <span>
+                {isDbSupported ? source.name : `${source.name} (soon)`}
+              </span>
+            </div>
+          );
+        })}
       </div>
       <div css={importFileWrapperStyles}>
         <div css={importFileTopbarStyles}>
@@ -52,14 +58,19 @@ export const IntegrationModalDialog: FC<IntegrationModalDialogProps> = ({
         </div>
       </div>
       <MessageBlock
-        type="warning"
-        icon={<Warning />}
+        type="annotationWarning"
+        icon={<AnnotationWarning />}
         title="Current Data Import Limits"
         message="We support data up to a maximum size of 200.000 cells (e.g. 10.000 rows by 20 columns, or 20.000 rows by 10 columns, etc.). If you want to import a larger dataset, contact us directly."
+        overrideTextColor={true}
       />
     </div>
   );
 };
+
+const disabledDb = css({
+  opacity: 0.6,
+});
 
 const wrapperStyles = css({
   width: '100%',

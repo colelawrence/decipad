@@ -42,6 +42,9 @@
     },
     {
       "path": "../editor-data-view"
+    },
+    {
+      "path": "../editor-database"
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { FC, useMemo, useState } from 'react';
 import { css } from '@emotion/react';
+import { ImportElementSource } from '@decipad/editor-types';
 import { dividerStyles, inputStyles, MessageBlock } from '.';
 import { brand500, grey500, p13Bold } from '../../primitives';
 import { DropdownMenu, SelectItems } from '../DropdownMenu/DropdownMenu';
@@ -33,13 +34,32 @@ interface DatabaseConnectionProps {
   error?: string;
   values: DbOptions;
   setValues: (v: Partial<DbOptions>) => void;
+  provider?: ImportElementSource;
 }
+
+const placeholderList = {
+  mysql: 'mysql://',
+  oracledb: 'oracle://',
+  gsheets: 'https://',
+  json: 'https://',
+  postgresql: 'postgresql://',
+  mariadb: 'mariadb://',
+  mongodb: 'mongodb://',
+  mssql: 'mssql://',
+  redshift: 'redshift://',
+  arrow: 'https://',
+  csv: 'https://',
+  cockroachdb: 'postgresql://',
+  decipad: 'https://',
+  sqlite: 'sqlite:///',
+};
 
 export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
   existingConnections,
   error,
   values,
   setValues,
+  provider,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -58,128 +78,133 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
     [existingConnections]
   );
 
-  return (
-    <div css={wrapperStyles}>
-      <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
-        <label css={labelStyles}>URL</label>
-        <input
-          css={extraInputStyles(values.dbConnType, 'url')}
-          placeholder="mysql://"
-          value={values.connectionString}
-          onChange={(e) => setValues({ connectionString: e.target.value })}
-          onFocus={() => setValues({ dbConnType: 'url' })}
-        />
-      </div>
-
-      <hr css={[dividerStyles, { gridColumn: 'span 2' }]} />
-
-      <div css={inputFieldWrapper}>
-        <label css={labelStyles}>Host</label>
-        <input
-          css={extraInputStyles(values.dbConnType, 'credentials')}
-          placeholder="www.mydatabase.com"
-          onFocus={() => setValues({ dbConnType: 'credentials' })}
-          value={values.host}
-          onChange={(e) => setValues({ host: e.target.value })}
-        />
-      </div>
-
-      <div css={inputFieldWrapper}>
-        <label css={labelStyles}>Username</label>
-        <input
-          css={extraInputStyles(values.dbConnType, 'credentials')}
-          placeholder="admin..."
-          onFocus={() => setValues({ dbConnType: 'credentials' })}
-          value={values.username}
-          onChange={(e) => setValues({ username: e.target.value })}
-        />
-      </div>
-
-      <div css={inputFieldWrapper}>
-        <label css={labelStyles}>Password</label>
-        <input
-          type="password"
-          css={extraInputStyles(values.dbConnType, 'credentials')}
-          placeholder="password..."
-          onFocus={() => setValues({ dbConnType: 'credentials' })}
-          value={values.password}
-          onChange={(e) => setValues({ password: e.target.value })}
-        />
-      </div>
-
-      <div css={inputFieldWrapper}>
-        <label css={labelStyles}>Database</label>
-        <input
-          css={extraInputStyles(values.dbConnType, 'credentials')}
-          placeholder="my_database..."
-          onFocus={() => setValues({ dbConnType: 'credentials' })}
-          value={values.database}
-          onChange={(e) => setValues({ database: e.target.value })}
-        />
-      </div>
-
-      <div css={inputFieldWrapper}>
-        <label css={labelStyles}>Port</label>
-        <input
-          css={extraInputStyles(values.dbConnType, 'credentials')}
-          placeholder="5432..."
-          onFocus={() => setValues({ dbConnType: 'credentials' })}
-          value={values.port}
-          onChange={(e) => setValues({ port: e.target.value })}
-        />
-      </div>
-
-      {items.length > 0 && (
-        <>
-          <hr css={[dividerStyles, { gridColumn: 'span 2' }]} />
-          <div>
-            <label css={labelStyles}>
-              Or you can use an existing connection
-            </label>
-            <DropdownMenu
-              open={open}
-              setOpen={() => {
-                setOpen(!open);
-                setValues({ dbConnType: 'existing-conn' });
-              }}
-              onExecute={(item) => {
-                setValues({ dbConnType: 'existing-conn' });
-                setValues({
-                  existingConn: { id: item.blockId || '', name: item.item },
-                });
-              }}
-              groups={items}
-            >
-              <div
-                css={[
-                  extraInputStyles(values.dbConnType, 'existing-conn'),
-                  inputFieldWrapper,
-                  triggerStyles,
-                ]}
-              >
-                <span>
-                  {values.existingConn.name.length > 0
-                    ? values.existingConn.name
-                    : 'Existing Connection'}
-                </span>
-              </div>
-            </DropdownMenu>
+  switch (provider) {
+    default:
+      return (
+        <div css={wrapperStyles}>
+          <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
+            <label css={labelStyles}>URL</label>
+            <input
+              css={extraInputStyles(values.dbConnType, 'url')}
+              placeholder={
+                provider ? placeholderList[provider] || 'https://' : 'https://'
+              }
+              value={values.connectionString}
+              onChange={(e) => setValues({ connectionString: e.target.value })}
+              onFocus={() => setValues({ dbConnType: 'url' })}
+            />
           </div>
-        </>
-      )}
 
-      {error && (
-        <div css={errorBlockStyles}>
-          <MessageBlock
-            type="error"
-            icon={<Warning />}
-            title="Authorization Error: "
-            message={error}
-          />
+          <hr css={[dividerStyles, { gridColumn: 'span 2' }]} />
+
+          <div css={inputFieldWrapper}>
+            <label css={labelStyles}>Host</label>
+            <input
+              css={extraInputStyles(values.dbConnType, 'credentials')}
+              placeholder="www.mydatabase.com"
+              onFocus={() => setValues({ dbConnType: 'credentials' })}
+              value={values.host}
+              onChange={(e) => setValues({ host: e.target.value })}
+            />
+          </div>
+
+          <div css={inputFieldWrapper}>
+            <label css={labelStyles}>Username</label>
+            <input
+              css={extraInputStyles(values.dbConnType, 'credentials')}
+              placeholder="admin..."
+              onFocus={() => setValues({ dbConnType: 'credentials' })}
+              value={values.username}
+              onChange={(e) => setValues({ username: e.target.value })}
+            />
+          </div>
+
+          <div css={inputFieldWrapper}>
+            <label css={labelStyles}>Password</label>
+            <input
+              type="password"
+              css={extraInputStyles(values.dbConnType, 'credentials')}
+              placeholder="password..."
+              onFocus={() => setValues({ dbConnType: 'credentials' })}
+              value={values.password}
+              onChange={(e) => setValues({ password: e.target.value })}
+            />
+          </div>
+
+          <div css={inputFieldWrapper}>
+            <label css={labelStyles}>Database</label>
+            <input
+              css={extraInputStyles(values.dbConnType, 'credentials')}
+              placeholder="my_database..."
+              onFocus={() => setValues({ dbConnType: 'credentials' })}
+              value={values.database}
+              onChange={(e) => setValues({ database: e.target.value })}
+            />
+          </div>
+
+          <div css={inputFieldWrapper}>
+            <label css={labelStyles}>Port</label>
+            <input
+              css={extraInputStyles(values.dbConnType, 'credentials')}
+              placeholder="5432..."
+              onFocus={() => setValues({ dbConnType: 'credentials' })}
+              value={values.port}
+              onChange={(e) => setValues({ port: e.target.value })}
+            />
+          </div>
+
+          {items.length > 0 && (
+            <>
+              <hr css={[dividerStyles, { gridColumn: 'span 2' }]} />
+              <div>
+                <label css={labelStyles}>
+                  Or you can use an existing connection
+                </label>
+                <DropdownMenu
+                  open={open}
+                  setOpen={() => {
+                    setOpen(!open);
+                    setValues({ dbConnType: 'existing-conn' });
+                  }}
+                  onExecute={(item) => {
+                    setValues({ dbConnType: 'existing-conn' });
+                    setValues({
+                      existingConn: { id: item.blockId || '', name: item.item },
+                    });
+                  }}
+                  groups={items}
+                >
+                  <div
+                    css={[
+                      extraInputStyles(values.dbConnType, 'existing-conn'),
+                      inputFieldWrapper,
+                      triggerStyles,
+                    ]}
+                  >
+                    <span>
+                      {values.existingConn.name.length > 0
+                        ? values.existingConn.name
+                        : 'Existing Connection'}
+                    </span>
+                  </div>
+                </DropdownMenu>
+              </div>
+            </>
+          )}
+
+          {error && (
+            <div css={errorBlockStyles}>
+              <MessageBlock
+                type="error"
+                icon={<Warning />}
+                title="Authorization Error: "
+                message={error}
+              />
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+      );
+  }
 };
 
 const wrapperStyles = css({

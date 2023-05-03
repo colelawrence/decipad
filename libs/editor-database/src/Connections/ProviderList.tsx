@@ -43,7 +43,7 @@ export const ProviderList: Array<DataSource> = [
   {
     name: 'MSSQL',
     icon: <img alt="Ms Sql" src={MsSql} />,
-    provider: undefined,
+    provider: ExternalProvider.Mssql,
   },
   {
     name: 'Oracle',

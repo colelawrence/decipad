@@ -89,7 +89,7 @@ const groups = () => [
           items: [
             {
               command: 'open-integration',
-              title: 'Add External Data',
+              title: 'Import External Data',
               description:
                 'Take your existing data and bring it over to Deci seamlessly',
               icon: <DataView />,

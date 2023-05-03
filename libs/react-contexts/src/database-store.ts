@@ -1,10 +1,6 @@
-import { Computer } from '@decipad/computer';
-import { ExternalProvider } from '@decipad/graphql-client';
-import { tryImport } from '@decipad/import';
-import { DbOptions } from '@decipad/ui';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
-import { EasyExternalDataProps, insertExternalData } from '../utils';
+import { ImportElementSource } from '@decipad/editor-types';
 
 type Stage = 'pick-source' | 'connect' | 'create-query' | 'map';
 type States = {
@@ -12,12 +8,32 @@ type States = {
   queryState: { type: 'success' | 'error'; message: string } | undefined;
 };
 
+export type DbOptions = {
+  connectionString: string;
+
+  // Credential connection
+  host: string;
+  username: string;
+  password: string;
+  database: string;
+  port: string;
+
+  existingConn: {
+    name: string;
+    id: string;
+  };
+
+  dbConnType?: 'url' | 'credentials' | 'existing-conn';
+
+  query: string;
+};
+
 interface CreateDataStore {
   open: boolean;
   changeOpen: (v: boolean) => void;
 
-  connectionType?: ExternalProvider;
-  setConnectionType: (v: ExternalProvider) => void;
+  connectionType?: ImportElementSource;
+  setConnectionType: (v: ImportElementSource | undefined) => void;
 
   dbOptions: DbOptions;
   setDbOptions: (v: Partial<DbOptions>) => void;
@@ -37,6 +53,12 @@ interface CreateDataStore {
   /** Partially reset the store */
   abort: () => void;
 }
+
+export type EasyExternalDataProps = {
+  editorId: string;
+  url: string;
+  provider: ImportElementSource;
+};
 
 const initialDbOptions: CreateDataStore['dbOptions'] = {
   query: '',
@@ -104,73 +126,6 @@ export const useConnectionStore = create<CreateDataStore>((set, get) => ({
       states: cloneDeep(initialStates),
       dbOptions: cloneDeep(initialDbOptions),
       open: false,
+      connectionType: undefined,
     })),
 }));
-
-/**
- * Attempts to connect to backend by inserting external data,
- * and then importing it. Returns the ID of the external data,
- * or undefined if it was unsuccessful.
- */
-export async function attemptConnection(
-  props: EasyExternalDataProps,
-  computer: Computer
-): Promise<string | undefined> {
-  const newExternalData = await insertExternalData(props);
-  if (newExternalData.dataUrl == null) return undefined;
-
-  // We simply need to check if we can import or not.
-  try {
-    await tryImport({
-      computer,
-      url: new URL(newExternalData.dataUrl ?? ''),
-    });
-    return newExternalData.dataUrl;
-  } catch (error) {
-    // Do nothing
-  }
-  return undefined;
-}
-
-/**
- * Queries the backend for the external data, to check if query is valid.
- * Returns an error State @see States.
- */
-export async function fetchQuery(
-  url: string,
-  query: string
-): Promise<States['queryState']> {
-  const queryRes = await fetch(url, {
-    body: query,
-    method: 'POST',
-  });
-
-  if (!queryRes.ok) {
-    const err = await errorFromFetchResult(queryRes);
-    return {
-      type: 'error',
-      message: err ?? 'There was an error with your query',
-    };
-  }
-
-  return {
-    type: 'success',
-    message: 'Query executed successfully',
-  };
-}
-
-// Helper function to extract error message from result.
-export async function errorFromFetchResult(
-  resp: Response
-): Promise<string | undefined> {
-  const respText = await resp.text();
-  try {
-    const respJson = JSON.parse(respText);
-    if ('message' in respJson) {
-      return respJson.message;
-    }
-  } catch (err) {
-    // Do nothing
-  }
-  return undefined;
-}

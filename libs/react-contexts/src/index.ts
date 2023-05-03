@@ -14,3 +14,4 @@ export * from './editor-styles';
 export * from './editor-paste-interaction-menu-provider';
 export * from './theme';
 export * from './editor-context';
+export * from './database-store';
