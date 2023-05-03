@@ -49,8 +49,6 @@ import {
   teal100,
   teal200,
   teal300,
-  teal50,
-  teal500,
   teal600,
   teal700,
   teal800,
@@ -168,8 +166,8 @@ export const theme: CssVariables = {
 
   magicNumberTextColor: teal600.hex,
 
-  tableSelectionBackgroundColor: teal50.hex,
-  tableFocusColor: teal500.hex,
+  tableSelectionBackgroundColor: blue100.hex,
+  tableFocusColor: blue300.hex,
   tableFooterBackgroundColor: grey100.hex,
 
   liveDataBackgroundColor: yellow400.hex,
