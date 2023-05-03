@@ -1,7 +1,10 @@
 import type { Document } from '@decipad/editor-types';
+import { once } from 'ramda';
 import welcomeNotebook from './welcomeNotebook.json';
 import tutorialNotebook from './tutorialNotebook.json';
 import businessNotebook from './businessNotebook.json';
+import veryWeirdLoadingWhenEditing from './veryWeirdLoadingWhenEditing.json';
+import everything from './everything.json';
 
 export interface Notebook {
   title: string;
@@ -19,7 +22,34 @@ export interface InitialWorkspace {
   sections: Array<Section>;
 }
 
-export const initialWorkspace: InitialWorkspace = {
+const isTesting = once(() => !!process.env.JEST_WORKER_ID || !!process.env.CI);
+// eslint-disable-next-line no-underscore-dangle
+const isLocalDev = once(() => {
+  const url = process.env.DECI_APP_URL_BASE;
+  return (
+    url == null ||
+    url.startsWith('http://localhost') ||
+    url.startsWith('http://127.0.0.1')
+  );
+});
+const shouldCreateDevNotebooks = once(() => !isTesting() && isLocalDev());
+
+const devOnlyNotebooks = (): InitialWorkspace['notebooks'] => [
+  {
+    title: 'Very weird loading when editing',
+    content: veryWeirdLoadingWhenEditing as Document,
+    icon: 'Beach-Sulu',
+    status: 'draft',
+  },
+  {
+    title: 'Everything, everywhere, all at once',
+    content: everything as Document,
+    icon: 'Beach-Sulu',
+    status: 'draft',
+  },
+];
+
+export const initialWorkspace = (): InitialWorkspace => ({
   sections: [
     {
       name: 'Personal',
@@ -45,5 +75,6 @@ export const initialWorkspace: InitialWorkspace = {
       icon: 'Message-Sun',
       status: 'draft',
     },
+    ...(shouldCreateDevNotebooks() ? devOnlyNotebooks() : []),
   ],
-};
+});

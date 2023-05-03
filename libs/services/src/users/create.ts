@@ -35,9 +35,11 @@ async function createInitialWorkspace(
     user
   );
 
+  const initialWorkspaceSpec = initialWorkspace();
+
   const notebooks = [];
   /* eslint-disable no-await-in-loop */
-  for (const notebook of initialWorkspace.notebooks) {
+  for (const notebook of initialWorkspaceSpec.notebooks) {
     const pad = await createPad(
       workspace.id,
       {
@@ -60,7 +62,7 @@ async function createInitialWorkspace(
 
   const sections = [];
   /* eslint-disable no-await-in-loop */
-  for (const section of initialWorkspace.sections) {
+  for (const section of initialWorkspaceSpec.sections) {
     const newSection = {
       ...section,
       id: nanoid(),
