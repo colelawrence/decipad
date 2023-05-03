@@ -8,10 +8,14 @@ import {
   cssVar,
   darkTheme,
   GlobalTextStyles,
+  hexToOpaqueColor,
   mediumShadow,
   p12Medium,
   p13Medium,
   p14Medium,
+  strongOpacity,
+  teal600,
+  transparency,
 } from '../../primitives';
 
 const DarkThemeStyles = (): ReturnType<React.FC> => {
@@ -181,8 +185,15 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
           WebkitAppearance: 'none',
         },
         '.slate-selection-area': {
-          background: '#4f90f22d',
-          border: '1px solid #4f90f2',
+          background: cssVar('tableSelectionBackgroundColor'),
+          boxShadow: `inset 0 0 0 1px ${
+            transparency(
+              hexToOpaqueColor(cssVar('tableFocusColor')) || teal600,
+              strongOpacity
+            ).rgba
+          }`,
+          borderRadius: 8,
+          opacity: strongOpacity,
         },
         // further resets
         '*:focus-visible': {

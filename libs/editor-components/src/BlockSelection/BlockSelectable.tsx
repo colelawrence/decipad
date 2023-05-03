@@ -1,6 +1,7 @@
+import { cssVar } from '@decipad/ui';
 import { TElement } from '@udecode/plate';
-import { ReactNode } from 'react';
 import { BlockSelectable as _BlockSelectable } from '@udecode/plate-selection';
+import { ReactNode } from 'react';
 
 export const BlockSelectable = ({
   element,
@@ -12,5 +13,5 @@ export const BlockSelectable = ({
   _BlockSelectable({
     element,
     children,
-    selectedColor: 'rgb(219 234 254)',
+    selectedColor: cssVar('tableSelectionBackgroundColor'),
   });

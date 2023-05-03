@@ -1,25 +1,25 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { Computer, parseSimpleValue } from '@decipad/computer';
 import {
-  alwaysWritableElementTypes,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
   MyEditor,
   MyElement,
-  MyReactEditor,
-  useTEditorRef,
   MyElementOrText,
+  MyReactEditor,
+  alwaysWritableElementTypes,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import {
   clone,
-  insertNodes,
-  requirePathBelowBlock,
-  usePathMutatorCallback,
   createStructuredCodeLine,
   getCodeLineSource,
+  insertNodes,
+  requirePathBelowBlock,
   useNodePath,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -28,10 +28,12 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import {
-  DraggableBlock as UIDraggableBlock,
   EditorBlock,
+  DraggableBlock as UIDraggableBlock,
+  cssVar,
   useMergedRef,
 } from '@decipad/ui';
+import { css } from '@emotion/react';
 import {
   findNodePath,
   focusEditor,
@@ -52,8 +54,8 @@ import { noop } from 'lodash';
 import { nanoid } from 'nanoid';
 import {
   ComponentProps,
-  forwardRef,
   ReactNode,
+  forwardRef,
   useCallback,
   useContext,
   useEffect,
@@ -63,7 +65,7 @@ import {
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
-import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
+import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -311,9 +313,23 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         isCentered={isCentered}
         hasPreviousSibling={hasPreviousSibling}
       >
-        <BlockSelectable element={element}>
-          <BlockErrorBoundary element={element}>{children}</BlockErrorBoundary>
-        </BlockSelectable>
+        <div
+          css={css({
+            '> div': {
+              borderRadius: 8,
+              padding: '0px 2px',
+            },
+            '*::selection': {
+              background: cssVar('tableSelectionBackgroundColor'),
+            },
+          })}
+        >
+          <BlockSelectable element={element}>
+            <BlockErrorBoundary element={element}>
+              {children}
+            </BlockErrorBoundary>
+          </BlockSelectable>
+        </div>
       </UIDraggableBlock>
     );
   }
