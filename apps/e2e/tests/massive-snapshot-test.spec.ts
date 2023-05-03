@@ -11,6 +11,7 @@ import {
   importNotebook,
   snapshot,
   withTestUser,
+  Timeouts,
 } from '../utils/src';
 import notebookSource from '../__fixtures__/001-notebook.json';
 
@@ -70,6 +71,8 @@ test.describe('Loading and snapshot of big notebook', () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     await page.waitForSelector('[data-test-id="copy-published-link"]');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.chartsDelay);
     await snapshot(page as Page, 'Notebook: Publish Popover');
   });
 
@@ -119,6 +122,8 @@ test.describe('Loading and snapshot of big notebook', () => {
 
     // wait for charts to load before snapshot
     await page.isVisible('[data-testid="chart-styles"]');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.chartsDelay);
     await snapshot(
       publishedNotebookPage,
       'Notebook: Published mode (incognito)',

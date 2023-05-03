@@ -41,7 +41,9 @@ export async function getFromTable(
 }
 
 export function clickCell(page: Page, line: number, col = 0) {
-  return page.locator(tableCellLocator(line, col)).click({ force: true });
+  return page
+    .locator(tableCellLocator(line, col))
+    .click({ force: true, delay: 100 });
 }
 
 export async function writeInTable(
@@ -84,7 +86,9 @@ export async function insertRowBelow(page: Page, line: number) {
 
 export async function addColumn(page: Page) {
   // eslint-disable-next-line playwright/no-force-option
-  await page.locator('button[title="Add Column"]').click({ force: true });
+  await page
+    .locator('button[title="Add Column"]')
+    .click({ force: true, timeout: 500 });
 }
 
 export function openColumnMenu(page: Page, col: number) {
