@@ -42,6 +42,12 @@ module.exports = {
             message:
               'Should use the safe version getAboveNodeSafe in @decipad/editor-utils',
           },
+          {
+            name: '@udecode/plate',
+            importNames: ['getNodeEntry'],
+            message:
+              'Should use the safe version getNodeEntrySafe in @decipad/editor-utils',
+          },
         ],
       },
     ],

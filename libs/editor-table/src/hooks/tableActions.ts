@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import {
+  ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
@@ -9,11 +10,12 @@ import {
   TableCellType,
   TableElement,
   TableHeaderElement,
-  TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
 import {
+  getNodeEntrySafe,
   insertNodes,
+  isElementOfType,
   useNodePath,
   usePathMutatorCallback,
   withPath,
@@ -22,7 +24,6 @@ import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {
   getNodeChildren,
-  getNodeEntry,
   hasNode,
   InsertNodesOptions,
   insertText,
@@ -70,15 +71,18 @@ export const addColumn = (
   }
 ) => {
   const headerRowPath = [...tablePath, 1];
-  const headerRowEntry = getNodeEntry<TableHeaderRowElement>(
-    editor,
-    headerRowPath
-  );
-  const headerRow = headerRowEntry[0];
-  const columnCount = headerRow.children.length;
+  const headerRowEntry = getNodeEntrySafe(editor, headerRowPath);
+  const headerRow = headerRowEntry?.[0];
+  if (!isElementOfType(headerRow, ELEMENT_TR)) {
+    return;
+  }
+  const columnCount = headerRow?.children.length;
 
-  const tableEntry = getNodeEntry<TableRowElement>(editor, tablePath);
-  const table = tableEntry[0];
+  const tableEntry = getNodeEntrySafe(editor, tablePath);
+  const table = tableEntry?.[0];
+  if (!isElementOfType(table, ELEMENT_TABLE)) {
+    return;
+  }
   const [, , ...body] = table.children;
   const columnName = getColumnName(editor, tablePath, columnCount + 1);
   withoutNormalizing(editor, () => {
@@ -117,10 +121,23 @@ export const addRow = (
   options?: InsertNodesOptions<MyValue>
 ) => {
   const headerRowPath = [...tablePath, 1];
-  const [table] = getNodeEntry(editor, tablePath);
-  const elementCount = (table as TableElement).children.length;
-  const headerRowEntry = getNodeEntry(editor, headerRowPath);
-  const headerRow = headerRowEntry[0] as TableHeaderRowElement;
+  const tableEntry = getNodeEntrySafe(editor, tablePath);
+  if (!tableEntry) {
+    return;
+  }
+  const [table] = tableEntry;
+  if (!isElementOfType(table, ELEMENT_TABLE)) {
+    return;
+  }
+  const elementCount = table.children.length;
+  const headerRowEntry = getNodeEntrySafe(editor, headerRowPath);
+  if (!headerRowEntry) {
+    return;
+  }
+  const headerRow = headerRowEntry[0];
+  if (!isElementOfType(headerRow, ELEMENT_TR)) {
+    return;
+  }
   const columnCount = headerRow.children.length;
 
   const emptyCells: TableCellElement[] = Array.from(
@@ -304,7 +321,11 @@ export const useTableActions = (
       if (!path) {
         return;
       }
-      const [table] = getNodeEntry(editor, path);
+      const tableEntry = getNodeEntrySafe(editor, path);
+      if (!tableEntry) {
+        return;
+      }
+      const [table] = tableEntry;
       const rows = (table as TableElement).children;
       const rowIndex = rows.findIndex((row) => row.id === id);
       const rowPath = [...path, rowIndex];

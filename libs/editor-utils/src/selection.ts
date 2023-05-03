@@ -1,5 +1,6 @@
-import { getNodeEntry, isSelectionExpanded, TEditor } from '@udecode/plate';
+import { isSelectionExpanded, TEditor } from '@udecode/plate';
 import { Path, Point } from 'slate';
+import { getNodeEntrySafe } from './getNodeEntrySafe';
 
 /**
  * Get the point of the current selection,
@@ -23,5 +24,8 @@ export const getCollapsedSelection = (editor: TEditor): Point | null => {
 };
 
 export const getPathContainingSelection = (editor: TEditor): Path | null => {
-  return editor.selection && getNodeEntry(editor, editor.selection)?.[1];
+  return (
+    (editor.selection && getNodeEntrySafe(editor, editor.selection)?.[1]) ??
+    null
+  );
 };

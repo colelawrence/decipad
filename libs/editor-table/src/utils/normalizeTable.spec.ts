@@ -1,7 +1,10 @@
 import { MyEditor, TableElement } from '@decipad/editor-types';
 import { insertTableBelow } from '@decipad/editor-components';
-import { createTEditor, getNodeEntry, TNodeEntry } from '@udecode/plate';
+import { createTEditor } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
+import { getNodeEntrySafe } from '@decipad/editor-utils';
+import { getDefined } from '@decipad/utils';
+import { NodeEntry } from 'slate';
 import { normalizeTable } from './normalizeTable';
 
 const getAvailableIdentifier = (prefix: string, start: number) =>
@@ -25,11 +28,12 @@ describe('normalizeTable', () => {
   it('should normalize a table', async () => {
     await insertTableBelow(editor, [0], getAvailableIdentifier);
 
-    const tableEntry: TNodeEntry<TableElement> = getNodeEntry(editor, {
-      path: [1],
-      offset: 0,
-    });
-
+    const tableEntry = getDefined(
+      getNodeEntrySafe(editor, {
+        path: [1],
+        offset: 0,
+      })
+    ) as NodeEntry<TableElement>;
     const normalizedTable = normalizeTable(editor, computer, tableEntry);
 
     expect(normalizedTable).not.toBe(false);

@@ -1,15 +1,14 @@
 import {
+  ELEMENT_VARIABLE_DEF,
   MyEditor,
   MyElement,
   useTEditorRef,
-  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { Result } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import {
   setNodes,
   findNodePath,
-  getNodeEntry,
   getNodeString,
   removeNodes,
   focusEditor,
@@ -17,7 +16,12 @@ import {
 import { textify } from '@decipad/parse';
 import { Path } from 'slate';
 import { useMemo } from 'react';
-import { createStructuredCodeLine, insertNodes } from '@decipad/editor-utils';
+import {
+  createStructuredCodeLine,
+  getNodeEntrySafe,
+  insertNodes,
+  isElementOfType,
+} from '@decipad/editor-utils';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Input', value: 'expression' },
@@ -41,17 +45,22 @@ export const defaultConvertInto =
         return;
       }
 
-      const [node] = getNodeEntry<VariableDefinitionElement>(editor, at);
-      const {
-        id,
-        children: [caption],
-      } = node;
-      const varName = getNodeString(caption);
+      const entry = getNodeEntrySafe(editor, at);
+      if (entry) {
+        const [node] = entry;
+        if (isElementOfType(node, ELEMENT_VARIABLE_DEF)) {
+          const {
+            id,
+            children: [caption],
+          } = node;
+          const varName = getNodeString(caption);
 
-      removeNodes(editor, { at });
-      insertNodes(editor, createStructuredCodeLine({ id, varName, code }), {
-        at,
-      });
+          removeNodes(editor, { at });
+          insertNodes(editor, createStructuredCodeLine({ id, varName, code }), {
+            at,
+          });
+        }
+      }
     }
 
     const coercedKind =

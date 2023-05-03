@@ -1,5 +1,4 @@
 import {
-  getNodeEntry,
   getPointAfter,
   getPointBefore,
   hasNode,
@@ -8,6 +7,7 @@ import {
   removeNodes,
   setSelection,
 } from '@udecode/plate';
+import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 
@@ -20,16 +20,19 @@ export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
         if (focus) {
           const before = getPointBefore(editor, focus);
           if (before && hasNode(editor, before.path)) {
-            const [beforeNode, beforePath] = getNodeEntry(editor, before.path);
-            if (isText(beforeNode) && isMagicNumber(beforeNode)) {
-              // User is going into void element. Try to move the cursor past it
-              const beforeBefore = getPointBefore(editor, beforePath);
-              if (beforeBefore) {
-                setSelection(editor, {
-                  focus: beforeBefore,
-                  anchor: beforeBefore,
-                });
-                return true;
+            const beforeEntry = getNodeEntrySafe(editor, before.path);
+            if (beforeEntry) {
+              const [beforeNode, beforePath] = beforeEntry;
+              if (isText(beforeNode) && isMagicNumber(beforeNode)) {
+                // User is going into void element. Try to move the cursor past it
+                const beforeBefore = getPointBefore(editor, beforePath);
+                if (beforeBefore) {
+                  setSelection(editor, {
+                    focus: beforeBefore,
+                    anchor: beforeBefore,
+                  });
+                  return true;
+                }
               }
             }
           }
@@ -43,13 +46,16 @@ export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
           if (before && hasNode(editor, before.path)) {
             const beforeBefore = getPointBefore(editor, before);
             if (beforeBefore) {
-              const [beforeNode, beforePath] = getNodeEntry(
+              const beforeBeforeEntry = getNodeEntrySafe(
                 editor,
                 beforeBefore.path
               );
-              if (isText(beforeNode) && isMagicNumber(beforeNode)) {
-                removeNodes(editor, { at: beforePath });
-                return true;
+              if (beforeBeforeEntry) {
+                const [beforeNode, beforePath] = beforeBeforeEntry;
+                if (isText(beforeNode) && isMagicNumber(beforeNode)) {
+                  removeNodes(editor, { at: beforePath });
+                  return true;
+                }
               }
             }
           }
@@ -62,20 +68,23 @@ export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
       if (focus) {
         const after = getPointAfter(editor, focus);
         if (after && hasNode(editor, after.path)) {
-          const [afterNode, afterPath] = getNodeEntry(editor, after.path);
-          if (isText(afterNode) && isMagicNumber(afterNode)) {
-            removeNodes(editor, { at: afterPath });
-            return true;
-          }
-          const afterAfter = getPointAfter(editor, after);
-          if (afterAfter) {
-            const [afterAfterNode, afterAfterPath] = getNodeEntry(
-              editor,
-              afterAfter.path
-            );
-            if (isText(afterAfterNode) && isMagicNumber(afterAfterNode)) {
-              removeNodes(editor, { at: afterAfterPath });
+          const afterEntry = getNodeEntrySafe(editor, after.path);
+          if (afterEntry) {
+            const [afterNode, afterPath] = afterEntry;
+            if (isText(afterNode) && isMagicNumber(afterNode)) {
+              removeNodes(editor, { at: afterPath });
               return true;
+            }
+            const afterAfter = getPointAfter(editor, after);
+            if (afterAfter) {
+              const afterAfterEntry = getNodeEntrySafe(editor, afterAfter.path);
+              if (afterAfterEntry) {
+                const [afterAfterNode, afterAfterPath] = afterAfterEntry;
+                if (isText(afterAfterNode) && isMagicNumber(afterAfterNode)) {
+                  removeNodes(editor, { at: afterAfterPath });
+                  return true;
+                }
+              }
             }
           }
         }

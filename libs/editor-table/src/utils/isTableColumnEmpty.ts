@@ -1,11 +1,7 @@
 import { Path } from 'slate';
-import {
-  getNodeChildren,
-  getNodeEntry,
-  getNodeString,
-  hasNode,
-} from '@udecode/plate';
+import { getNodeChildren, getNodeString, hasNode } from '@udecode/plate';
 import { MyEditor } from '@decipad/editor-types';
+import { getNodeEntrySafe } from '@decipad/editor-utils';
 
 export const isTableColumnEmpty = (
   editor: MyEditor,
@@ -20,7 +16,11 @@ export const isTableColumnEmpty = (
     }
     const cellPath = [...rowPath, columnIndex];
     if (hasNode(editor, cellPath)) {
-      const [cell] = getNodeEntry(editor, cellPath);
+      const cellEntry = getNodeEntrySafe(editor, cellPath);
+      if (!cellEntry) {
+        return false;
+      }
+      const [cell] = cellEntry;
       if (getNodeString(cell).length > 0) {
         return false;
       }

@@ -1,6 +1,7 @@
-import { createTEditor, getNodeEntry, TEditor, TText } from '@udecode/plate';
+import { createTEditor, TEditor, TText } from '@udecode/plate';
 import { mockConsoleError } from '@decipad/testutils';
-
+import { getNodeEntrySafe } from '@decipad/editor-utils';
+import { getDefined } from '@decipad/utils';
 import {
   normalizeExcessProperties,
   normalizeMissingProperties,
@@ -34,7 +35,7 @@ describe('normalizeExcessProperties', () => {
     applyNormalization(
       normalizeExcessProperties(
         editor,
-        getNodeEntry(editor, { path: [0, 0], offset: 0 })
+        getDefined(getNodeEntrySafe(editor, { path: [0, 0], offset: 0 }))
       )
     );
     expect(editor).not.toHaveProperty('children.0.children.0.extraProp');
@@ -45,7 +46,7 @@ describe('normalizeExcessProperties', () => {
     applyNormalization(
       normalizeExcessProperties(
         editor,
-        getNodeEntry(editor, { path: [0], offset: 0 })
+        getDefined(getNodeEntrySafe(editor, { path: [0], offset: 0 }))
       )
     );
     expect(editor).not.toHaveProperty('children.0.extraProp');
@@ -57,7 +58,7 @@ describe('normalizeExcessProperties', () => {
       applyNormalization(
         normalizeExcessProperties(
           editor,
-          getNodeEntry(editor, { path: [0], offset: 0 })
+          getDefined(getNodeEntrySafe(editor, { path: [0], offset: 0 }))
         )
       )
     ).toBe(false);
@@ -70,7 +71,7 @@ describe('normalizeExcessProperties', () => {
       applyNormalization(
         normalizeExcessProperties(
           editor,
-          getNodeEntry(editor, { path: [0], offset: 0 })
+          getDefined(getNodeEntrySafe(editor, { path: [0], offset: 0 }))
         )
       )
     ).toBe(true);
@@ -84,7 +85,7 @@ describe('normalizeExcessProperties', () => {
         applyNormalization(
           normalizeExcessProperties(
             editor,
-            getNodeEntry(editor, { path: [0, 0], offset: 0 })
+            getDefined(getNodeEntrySafe(editor, { path: [0, 0], offset: 0 }))
           )
         )
       ).toThrow(/element.+text/i);
@@ -97,7 +98,7 @@ describe('normalizeExcessProperties', () => {
         applyNormalization(
           normalizeExcessProperties(
             editor,
-            getNodeEntry(editor, { path: [0, 0], offset: 0 })
+            getDefined(getNodeEntrySafe(editor, { path: [0, 0], offset: 0 }))
           )
         )
       ).toThrow(/element.+text/i);
@@ -109,7 +110,7 @@ describe('normalizeExcessProperties', () => {
       applyNormalization(
         normalizeExcessProperties(
           editor,
-          getNodeEntry(editor, { path: [0], offset: 0 }),
+          getDefined(getNodeEntrySafe(editor, { path: [0], offset: 0 })),
           ['extraProp']
         )
       );
@@ -124,7 +125,7 @@ describe('normalizeExcessProperties', () => {
       applyNormalization(
         normalizeMissingProperties(
           editor,
-          getNodeEntry(editor, { path: [0], offset: 0 }),
+          getDefined(getNodeEntrySafe(editor, { path: [0], offset: 0 })),
           ['mandatoryProp'],
           { mandatoryProp: () => 'val' }
         )
@@ -136,7 +137,7 @@ describe('normalizeExcessProperties', () => {
       applyNormalization(
         normalizeMissingProperties(
           editor,
-          getNodeEntry(editor, { path: [0], offset: 0 }),
+          getDefined(getNodeEntrySafe(editor, { path: [0], offset: 0 })),
           ['missingProp'],
           {}
         )

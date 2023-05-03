@@ -12,6 +12,7 @@ import {
 import type { Token } from 'moo';
 import {
   assertElementType,
+  getNodeEntrySafe,
   isElementOfType,
   isEntryOfType,
 } from '@decipad/editor-utils';
@@ -19,7 +20,6 @@ import { tokenize } from '@decipad/computer';
 import {
   ELEMENT_TR,
   getChildren,
-  getNodeEntry,
   getNodeString,
   nanoid,
   TNodeEntry,
@@ -39,8 +39,8 @@ export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory({
       assertElementType(tableNode, ELEMENT_TABLE);
 
       if ((tableNode.version ?? 0) < 2) {
-        const caption = getNodeEntry(editor, tablePath.concat(0));
-        const headerRow = getNodeEntry(editor, tablePath.concat(1));
+        const caption = getNodeEntrySafe(editor, tablePath.concat(0));
+        const headerRow = getNodeEntrySafe(editor, tablePath.concat(1));
 
         if (
           !isEntryOfType(caption, ELEMENT_TABLE_CAPTION) ||

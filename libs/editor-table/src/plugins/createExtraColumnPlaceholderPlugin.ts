@@ -1,11 +1,5 @@
 import { createOnCursorChangePluginFactory } from '@decipad/editor-plugins';
-import {
-  getNodeEntry,
-  hasNode,
-  isCollapsed,
-  isElement,
-  removeNodes,
-} from '@udecode/plate';
+import { hasNode, isCollapsed, isElement, removeNodes } from '@udecode/plate';
 import { Path, Selection } from 'slate';
 import {
   ELEMENT_TD,
@@ -16,7 +10,12 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import { getAboveNodeSafe, insertNodes } from '@decipad/editor-utils';
+import {
+  getAboveNodeSafe,
+  getNodeEntrySafe,
+  insertNodes,
+  isElementOfType,
+} from '@decipad/editor-utils';
 import { getTableColumnCount } from '../utils/getTableColumnCount';
 import { isTableColumnEmpty } from '../utils/isTableColumnEmpty';
 
@@ -46,11 +45,12 @@ const withNotAtLastColumn =
     if (!hasNode(editor, lastHeaderPath)) {
       return;
     }
-    const [headerEntry] = getNodeEntry<TableHeaderElement>(
-      editor,
-      lastHeaderPath
-    );
-    if (!headerEntry.autoCreated) {
+    const headerEntry = getNodeEntrySafe(editor, lastHeaderPath);
+    if (!headerEntry) {
+      return;
+    }
+    const [header] = headerEntry;
+    if (!isElementOfType(header, ELEMENT_TH) || !header.autoCreated) {
       return;
     }
     if (isTableColumnEmpty(editor, tablePath, tableColumnIndex)) {

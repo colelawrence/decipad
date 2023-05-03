@@ -7,12 +7,11 @@ import {
   MyElement,
   SliderElement,
 } from '@decipad/editor-types';
-import { mutateText } from '@decipad/editor-utils';
+import { mutateText, getNodeEntrySafe } from '@decipad/editor-utils';
 import {
   TNode,
   getNextNode,
   getNode,
-  getNodeEntry,
   getNodeString,
   getParentNode,
   getPreviousNode,
@@ -42,7 +41,7 @@ export const createSliderExpressionSyncPlugin =
 
         const entry = isText(getNode<MyElement>(editor, op.path))
           ? getParentNode<MyElement>(editor, op.path)
-          : getNodeEntry<MyElement>(editor, op.path);
+          : getNodeEntrySafe(editor, op.path);
         if (!entry) {
           return;
         }
