@@ -454,7 +454,7 @@ export default function Templates() {
                 icon={IconWorld}
                 title="$AAPL, interest rates and the stock market"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                notebook="https://app.decipad.com/n/Rising-interest-rates-and-AAPL-share-price%3AGwKX8lzGM5tDFJ3aV6eTJ"
+                notebook="https://app.decipad.com/n/How-much-is-Apple-worth-Breaking-down-a-DFC-model-for-AAPL-%3AhioCODsrbDsTmMHKdukPm"
                 description="You’ve probably been hearing a lot about interest rates lately. Check out this model that shows why they have been making the markets go wild."
                 avatar={avatarKelly}
               />
