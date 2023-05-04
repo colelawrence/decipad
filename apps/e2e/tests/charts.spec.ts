@@ -1,4 +1,3 @@
-/* eslint-disable playwright/no-skipped-test */
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
 import { createTable, writeInTable, getFromTable } from '../utils/page/Table';
@@ -62,7 +61,7 @@ test.describe('Charts', () => {
     await page.waitForTimeout(1000);
   });
 
-  test.skip('pie chart looks ok', async () => {
+  test('pie chart looks ok', async () => {
     const dataViewContent = await page
       .locator('[class*=plotBlockStyles]')
       .screenshot();
@@ -82,7 +81,7 @@ test.describe('Charts', () => {
     await page.isVisible("text='Chart'");
   });
 
-  test.skip('test pie chart menu', async () => {
+  test('test pie chart menu', async () => {
     await page.getByTestId('chart-settings-button').click();
     const pieChartMenu = await page
       .getByTestId('chart-settings-menu')
@@ -91,7 +90,7 @@ test.describe('Charts', () => {
     expect(pieChartMenu).toMatchSnapshot('pie-chart-menu.png');
   });
 
-  test.skip('change color scheme', async () => {
+  test('change color scheme', async () => {
     await page.getByText('Color scheme').click();
     await page.getByText('Monochrome').click();
     await page.getByText('Purple').click();
@@ -103,7 +102,7 @@ test.describe('Charts', () => {
     expect(dataViewContent).toMatchSnapshot('purple-pie-chart.png');
   });
 
-  test.skip('convert to bar chart', async () => {
+  test('convert to bar chart', async () => {
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__bar').click();
@@ -115,7 +114,7 @@ test.describe('Charts', () => {
     expect(dataViewContent).toMatchSnapshot('bar-chart.png');
   });
 
-  test.skip('bar chart menu', async () => {
+  test('bar chart menu', async () => {
     await page.getByTestId('chart-settings-button').click();
     const pieChartMenu = await page
       .getByTestId('chart-settings-menu')
@@ -124,7 +123,7 @@ test.describe('Charts', () => {
     expect(pieChartMenu).toMatchSnapshot('bar-chart-menu.png');
   });
 
-  test.skip('swap axes', async () => {
+  test('swap axes', async () => {
     await page.getByText('label').click();
     await page.getByTestId('chart__settings__label__Column2').click();
 
@@ -139,7 +138,7 @@ test.describe('Charts', () => {
     expect(dataViewContent).toMatchSnapshot('swapped-bar-chart.png');
   });
 
-  test.skip('convert to scatter chart', async () => {
+  test('convert to scatter chart', async () => {
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__point').click();
@@ -151,7 +150,7 @@ test.describe('Charts', () => {
     expect(dataViewContent).toMatchSnapshot('scatter-plot.png');
   });
 
-  test.skip('scatter plot menu', async () => {
+  test('scatter plot menu', async () => {
     await page.getByTestId('chart-settings-button').click();
     const pieChartMenu = await page
       .getByTestId('chart-settings-menu')

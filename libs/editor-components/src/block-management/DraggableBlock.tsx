@@ -317,7 +317,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           css={css({
             '> div': {
               borderRadius: 8,
-              padding: '0px 2px',
             },
             '*::selection': {
               background: cssVar('tableSelectionBackgroundColor'),

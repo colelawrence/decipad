@@ -10,7 +10,7 @@ const styles = css({
 
 const itemStyles = css({
   flexGrow: 1,
-  flexBasis: `calc((${slimBlockWidth}px - 1 - 100%) * 999)`,
+  flexBasis: `calc((${slimBlockWidth}px - 100%) * 999)`,
 });
 
 export const EditorColumns: FC<React.PropsWithChildren<unknown>> = ({
