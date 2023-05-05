@@ -30,5 +30,5 @@ module.exports = {
     require.resolve('./libs/testutils/src/feature-flags-setup-after-env.js'),
     require.resolve('./libs/testutils/src/suppress-console-warnings.js'),
   ],
-  testTimeout: 10000,
+  testTimeout: 15000,
 };

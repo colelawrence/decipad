@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import Fraction, { F, isFractionLike, pow } from '../../fraction/src';
+import Fraction, { F, isFractionLike } from '../../fraction/src';
 import {
   DeciNumberInput,
   DeciNumberInputWithNumerator,
@@ -26,7 +26,7 @@ const isSameInfinite = (a: InfiniteNumber, b: InfiniteNumber): boolean => {
   return a.s === b.s;
 };
 
-const isZero = (n: DeciNumber): boolean => isFinite(n) && n.n === 0n;
+const isZero = (n: DeciNumber | Fraction): boolean => isFinite(n) && n.n === 0n;
 
 const binOp = <B>(
   a: DeciNumber,
@@ -229,10 +229,6 @@ export class DeciNumber {
     return binOp(this, d, Fraction.prototype.div);
   }
 
-  private fractionPow(n: Fraction): Fraction {
-    return pow(this as unknown as Fraction, n);
-  }
-
   private excelLikeRound(n?: number) {
     const nr = n || 0;
     const powPart = F(10).pow(F(nr));
@@ -240,8 +236,25 @@ export class DeciNumber {
     return Fraction.prototype.round.call(roundResult, 0).div(powPart);
   }
 
+  private internalPow(b: DeciNumber) {
+    const result = Fraction.prototype.pow.call(
+      this as unknown as Fraction,
+      b as unknown as Fraction
+    );
+    if (result == null || isZero(result)) {
+      const resultNumber = this.valueOf() ** b.valueOf();
+      if (Number.isNaN(resultNumber)) {
+        throw new TypeError(
+          `**: result of raising to ${b.toString()} is not rational`
+        );
+      }
+      return N(resultNumber) as unknown as Fraction;
+    }
+    return result as unknown as Fraction;
+  }
+
   pow(n: DeciNumber): DeciNumber {
-    return binOp(this, n, DeciNumber.prototype.fractionPow);
+    return binOp(this, n, DeciNumber.prototype.internalPow);
   }
 
   gcd(n: DeciNumber): DeciNumber {
