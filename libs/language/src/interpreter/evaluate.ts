@@ -92,11 +92,7 @@ async function internalEvaluate(
       }
 
       const type = realm.getTypeAt(node);
-      const unit = getDefined(
-        type.unit,
-        `no unit for ${identifier}, which probably means that ${identifier} is not a number`
-      );
-      return Scalar.fromValue(multiplyMultipliers(unit));
+      return Scalar.fromValue(multiplyMultipliers(type.unit ?? []));
     }
     case 'externalref': {
       const data = realm.externalData.get(node.args[0]);
