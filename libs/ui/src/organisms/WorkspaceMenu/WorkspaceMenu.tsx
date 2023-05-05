@@ -26,6 +26,7 @@ const headerStyles = css({
 
 const headingStyles = css(p14Medium, {
   color: cssVar('weakerTextColor'),
+  marginLeft: '8px',
 });
 
 interface WorkspaceMenuProps {

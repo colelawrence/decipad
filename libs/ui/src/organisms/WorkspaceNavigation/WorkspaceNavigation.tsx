@@ -29,6 +29,7 @@ import {
   hexToOpaqueColor,
   OpaqueColor,
   opaqueColorToHex,
+  smallScreenQuery,
 } from '../../primitives';
 import { CreateOrEditSectionModal } from '../../templates';
 import {
@@ -82,7 +83,17 @@ interface WorkspaceNavigationProps {
   readonly showFeedback?: () => void;
 }
 
-const NavSpacer = () => <div css={{ flex: 1 }} />;
+const NavSpacer = () => (
+  <div
+    css={{
+      flex: 1,
+      [smallScreenQuery]: {
+        flex: 0,
+        minHeight: '24px',
+      },
+    }}
+  />
+);
 const NavDivider = () => (
   <div role="presentation" css={hrStyles}>
     <Divider />
@@ -346,6 +357,8 @@ export const WorkspaceNavigation = ({
       </NavigationList>
 
       <NavSpacer />
+
+      <NavDivider />
 
       {isSharedSectionEnabled && (
         <NavigationList key={'workspace-nav-S'}>

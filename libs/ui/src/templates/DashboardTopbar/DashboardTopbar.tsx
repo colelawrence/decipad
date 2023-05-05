@@ -27,6 +27,7 @@ export const DashboardTopbar = ({
       css={css({
         [smallScreenQuery]: {
           backgroundColor: cssVar('highlightColor'),
+          display: 'none',
         },
       })}
     >
@@ -87,9 +88,6 @@ const dashboardTopbarWrapperStyles = css({
   flexWrap: 'wrap-reverse',
   rowGap: '32px',
   [smallScreenQuery]: {
-    borderTop: `1px solid ${cssVar('borderColor')}`,
-    borderTopLeftRadius: '20px',
-    borderTopRightRadius: '20px',
     backgroundColor: cssVar('backgroundColor'),
   },
 });

@@ -42,7 +42,7 @@ export const WorkspaceAccount: React.FC = () => {
         alignItems: 'center',
         cursor: 'pointer',
 
-        padding: '4px 8px',
+        padding: '4px 6px',
         borderRadius: '8px',
 
         ':hover': {

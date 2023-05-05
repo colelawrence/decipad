@@ -92,4 +92,5 @@ const arrowDownButtonStyles = css({
   height: '24px',
   width: '24px',
   padding: '2px',
+  flexShrink: 0,
 });

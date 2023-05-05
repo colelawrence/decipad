@@ -26,6 +26,7 @@ export { InlineMenu } from './InlineMenu/InlineMenu';
 export { InlineRowResult } from './InlineRowResult/InlineRowResult';
 export { LiveConnectionParams } from './LiveConnectionParams/LiveConnectionParams';
 export { MediaEmbed } from './MediaEmbed/MediaEmbed';
+export { MobileSidebar } from './MobileSidebar/MobileSidebar';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
 export { NotebookInvitationPopUp } from './NotebookInvitationPopUp/NotebookInvitationPopUp';
 export { NotebookPublishingPopUp } from './NotebookPublishingPopUp/NotebookPublishingPopUp';
