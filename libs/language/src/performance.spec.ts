@@ -19,7 +19,14 @@ const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
   );
 
 const randomNumber = (max = 100_000) => BigInt(Math.floor(Math.random() * max));
-const randomDeciNumber = () => N(randomNumber(), randomNumber());
+const notZeroRandomNumber = (max = 100_000): bigint => {
+  let value: bigint | undefined;
+  do {
+    value = randomNumber(max);
+  } while (value === 0n);
+  return value;
+};
+const randomDeciNumber = () => N(randomNumber(), notZeroRandomNumber());
 
 const createProgram = (op: string): AST.Block => ({
   type: 'block',
