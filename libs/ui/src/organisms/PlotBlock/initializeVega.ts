@@ -1,7 +1,8 @@
 import { scheme } from 'vega';
+import { once } from 'ramda';
 import { colorSchemes } from '@decipad/ui';
 
-export const initializeVega = () => {
+export const initializeVega = once(() => {
   Object.entries(colorSchemes).forEach(([uniqueName, cs]) => {
     scheme(
       `${uniqueName}_dark`,
@@ -12,4 +13,4 @@ export const initializeVega = () => {
       cs.light_mode_colors.map((c) => c.hex)
     );
   });
-};
+});

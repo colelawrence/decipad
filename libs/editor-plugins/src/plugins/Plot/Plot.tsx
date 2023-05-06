@@ -13,7 +13,6 @@ import {
   usePathMutatorCallback,
 } from '@decipad/editor-utils';
 import { usePlot } from './utils/usePlot';
-import { initializeVega } from './initializeVega';
 
 const DEFAULT_TITLE = 'Plot';
 
@@ -63,5 +62,3 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
 
 // Default export so we can use React.lazy
 export default Plot;
-
-initializeVega();

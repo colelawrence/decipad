@@ -6,6 +6,7 @@ import { Plot as PlotIcon } from '../../icons';
 import { cssVar, p12Medium } from '../../primitives';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
+import { initializeVega } from './initializeVega';
 
 type StringSetter<T extends string | undefined = string> = (str: T) => void;
 
@@ -89,6 +90,7 @@ export const PlotBlock = ({
   title,
   onTitleChange = noop,
 }: PlotBlockProps): ReturnType<FC> => {
+  initializeVega();
   return (
     <section
       data-test-id="chart-styles"
