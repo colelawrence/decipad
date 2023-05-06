@@ -93,7 +93,7 @@ export const TableCell: PlateComponent = ({
 
   // Cell parse error (present for all cells, but only displayed in the series cell)
   const parseError = computer.getBlockIdResult$.useWithSelector(
-    (elm) => (hasText && cellType?.kind === 'series' ? elm?.error : undefined),
+    (elm) => (hasText ? elm?.error : undefined),
     element.id
   );
   const parseErrorMessage =
