@@ -1,10 +1,9 @@
-import { ComponentProps, ReactNode, useCallback } from 'react';
-import { noop } from '@decipad/utils';
+import { CellValueType } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { SerializedType, tokenRules } from '@decipad/language';
-import { CellValueType } from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
+import { ComponentProps, ReactNode, useCallback } from 'react';
 import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
-import { InputMenuItem, MenuList } from '../../molecules';
 import {
   Calendar,
   Number as NumberIcon,
@@ -12,6 +11,7 @@ import {
   Table,
   Text,
 } from '../../icons';
+import { InputMenuItem, MenuList } from '../../molecules';
 import { getDateType, getNumberType, getStringType } from '../../utils';
 
 type VariableEditorMenuProps = {
@@ -83,8 +83,11 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
               : undefined
           }
           key="min"
-          label="Minimum"
-          onChange={onChangeMin}
+          label="Min"
+          onChange={(changedMin: string) => {
+            typeof onChangeMin === 'function' &&
+              onChangeMin(Math.abs(+changedMin).toString());
+          }}
           pattern={tokenRules.main.number.match.source}
           value={min}
         />,
@@ -95,8 +98,11 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
               : undefined
           }
           key="max"
-          label="Maximum"
-          onChange={onChangeMax}
+          label="Max"
+          onChange={(changedMax: string) => {
+            typeof onChangeMax === 'function' &&
+              onChangeMax(Math.abs(+changedMax).toString());
+          }}
           pattern={tokenRules.main.number.match.source}
           value={max}
         />,
