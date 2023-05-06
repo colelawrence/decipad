@@ -1,3 +1,5 @@
+import { Computer } from '@decipad/computer';
+import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -8,10 +10,8 @@ import {
   MyPlatePlugin,
   MyValue,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
 import { decorateCode } from '@decipad/editor-utils';
 import { TablePlugin } from '@udecode/plate';
-import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   Table,
   TableCaption,
@@ -23,16 +23,17 @@ import {
 import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
-import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
-import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
-import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
-import { createPreventDestructiveDeleteOnTablePlugin } from './createPreventDestructiveDeleteOnTablePlugin';
+import { addColumn, addRow } from '../hooks/index';
 import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
 import { createCursorFocusPlugin } from './createCursorFocusPlugin';
+import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
+import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
+import { createNormalizeTdPlugin } from './createNormalizeTdPlugin';
+import { createPreventDestructiveDeleteOnTablePlugin } from './createPreventDestructiveDeleteOnTablePlugin';
+import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
 import { onDropSmartCellResult } from './onDropSmartCellResult';
-import { addColumn, addRow } from '../hooks/index';
-import { withTable } from './withTable';
 import { onKeyDownTable } from './onKeyDownTable';
+import { withTable } from './withTable';
 
 type Attributes =
   | {
@@ -107,6 +108,7 @@ export const createTablePlugin = (
           rowSpan: (element?.attributes as Attributes)?.rowspan,
         },
       }),
+      plugins: [createNormalizeTdPlugin()],
     },
     {
       key: ELEMENT_TH,
