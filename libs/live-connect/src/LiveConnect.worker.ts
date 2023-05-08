@@ -105,7 +105,7 @@ const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
   if (sub) {
     setTimeout(
       () => tryImportHere(computer, subscriptionId),
-      (sub.params.pollIntervalSeconds || 30) * 1000
+      (sub.params.pollIntervalSeconds || 60) * 1000
     );
   }
 };

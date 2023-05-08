@@ -4,6 +4,7 @@ import { importFromArrow } from './importFromArrow';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
 import { ImportResult } from './types';
+import { sanitizeRawResult } from './utils/sanitizeRawResult';
 
 const unnestOneColumnOneCellIfNecessary = (
   result: Result.Result
@@ -36,7 +37,9 @@ const importFromUnknownResponse = async (
   let rawResult: ImportResult['rawResult'] | undefined;
   let result: Result.Result;
   if (contentType?.startsWith('application/json')) {
-    rawResult = await resp.json();
+    rawResult = sanitizeRawResult(await resp.json()) as
+      | ImportResult['rawResult']
+      | undefined;
     result = importFromUnknownJson(rawResult, options);
   } else if (contentType?.startsWith('text/csv')) {
     rawResult = await resp.text();

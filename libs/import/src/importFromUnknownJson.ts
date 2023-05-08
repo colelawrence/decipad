@@ -7,6 +7,7 @@ import { errorResult } from './utils/errorResult';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
 import { rowsToColumns } from './utils/rowsToColumns';
+import { normalizeColumnName } from './utils/normalizeColumnName';
 
 const importTableFromArray = (
   arr: Array<unknown>,
@@ -82,7 +83,7 @@ const importTableFromObject = (
     return [res.value] as Result.Result['value'];
   }) as Result.Result<'table'>['value'];
 
-  const columnNames = Object.keys(obj);
+  const columnNames = Object.keys(obj).map(normalizeColumnName);
 
   const r: Result.Result<'table'> = {
     type: {
@@ -187,8 +188,7 @@ const internalImportFromUnknownJson = (
     };
   }
   if (tof === 'object' && json != null) {
-    const res = importTableFromObject(json as Record<string, unknown>, options);
-    return res;
+    return importTableFromObject(json as Record<string, unknown>, options);
   }
   throw new Error(`Don't know what to do with ${JSON.stringify(_json)}`);
 };
