@@ -11,19 +11,17 @@ import { MenuItem, TriggerMenuItem } from '../../atoms';
 const wrapperContainerStyles = css({
   marginBottom: '20px',
 });
-
 const buttonStyles = css({
-  borderRadius: '6px',
-  border: `1px solid ${cssVar('borderColor')}`,
-  backgroundColor: cssVar('tintedBackgroundColor'),
-
-  ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
-  },
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   padding: '4px',
+  borderRadius: '6px',
+  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('tintedBackgroundColor'),
+  ':hover, :focus': {
+    backgroundColor: cssVar('strongHighlightColor'),
+  },
 });
 
 const iconStyles = css({
@@ -50,6 +48,7 @@ export interface LiveConnectionParamsProps {
   source?: ImportElementSource;
   setSource: (source: ImportElementSource) => void;
   setDelimiter: (delimiter: string) => void;
+  isUiIntegration?: boolean;
 }
 
 const sourceTypes: ImportElementSource[] = [
@@ -97,7 +96,7 @@ export const LiveConnectionParams: FC<LiveConnectionParamsProps> = ({
         onChangeOpen={onChangeOpen}
         open={open}
         // Width hard coded to deal with "Monochrome Yellow", the longest color name :(
-        styles={css({ width: '290px' })}
+        styles={css({ width: '300px' })}
         trigger={
           <button css={buttonStyles}>
             <span css={iconStyles}>{<Settings />}</span>

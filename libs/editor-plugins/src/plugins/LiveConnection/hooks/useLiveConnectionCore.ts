@@ -1,6 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { getNodeString } from '@udecode/plate';
-import { LiveConnectionElement, TableCellType } from '@decipad/editor-types';
+import {
+  LiveConnectionElement,
+  LiveDataSetElement,
+  TableCellType,
+} from '@decipad/editor-types';
 import { useNodePath } from '@decipad/editor-utils';
 import { useLiveConnection } from '@decipad/live-connect';
 import {
@@ -17,7 +21,7 @@ import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';
 const MAX_CELL_COUNT = 50_000;
 
 interface UseLiveConnectionCoreProps {
-  element: LiveConnectionElement;
+  element: LiveConnectionElement | LiveDataSetElement;
   deleted: boolean;
 }
 

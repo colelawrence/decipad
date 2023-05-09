@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ColIndex,
   ImportElementSource,
+  LiveQueryElement,
   TableCellType,
 } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
@@ -27,6 +28,7 @@ export interface LiveConnectionProps {
   maxCellCount?: number;
   jsonPath?: string;
   delimiter?: string;
+  liveQuery?: LiveQueryElement;
 }
 
 export const useLiveConnectionResponse = ({
@@ -39,6 +41,7 @@ export const useLiveConnectionResponse = ({
   maxCellCount,
   jsonPath,
   delimiter,
+  liveQuery,
 }: LiveConnectionProps): LiveConnectionResponseResult => {
   const [workerGen, setWorkerGen] = useState(0);
   const worker = useLiveConnectionWorker(workerGen);
@@ -63,6 +66,7 @@ export const useLiveConnectionResponse = ({
               maxCellCount,
               jsonPath,
               delimiter,
+              liveQuery,
             },
             (err, res) => {
               if (!canceled) {
@@ -117,6 +121,7 @@ export const useLiveConnectionResponse = ({
     url,
     useFirstRowAsHeader,
     worker,
+    liveQuery,
   ]);
 
   useEffect(() => {

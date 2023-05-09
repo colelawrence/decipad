@@ -1,16 +1,14 @@
 import { Computer } from '@decipad/computer';
 import { insertExternalData } from '@decipad/editor-components';
 import {
-  ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-  LiveQueryElement,
   MyEditor,
   ImportElementSource,
-  LiveConnectionElement,
-  ELEMENT_LIVE_CONNECTION,
-  ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-  ParagraphElement,
+  LiveDataSetElement,
+  ELEMENT_LIVE_DATASET,
+  ELEMENT_LIVE_DATASET_VARIABLE_NAME,
+  ELEMENT_LIVE_QUERY,
 } from '@decipad/editor-types';
 import {
   insertNodes,
@@ -23,84 +21,49 @@ import { tryImport } from '@decipad/import';
 import { getDefined, noop, timeout } from '@decipad/utils';
 import {
   findNode,
-  focusEditor,
   nanoid,
-  TEditor,
   isCollapsed,
-  ELEMENT_PARAGRAPH,
   withoutNormalizing,
+  TEditor,
+  getChildren,
+  insertText,
 } from '@udecode/plate';
 import { needsToCreateExternalData } from 'libs/editor-components/src/utils/needsToCreateExternalData';
-import { clone } from 'lodash';
 import { Path } from 'slate';
 
-export interface InsertLiveConnectionProps {
+export interface InsertLiveDataSetProps {
   computer: Computer;
   editor: MyEditor;
   source?: ImportElementSource;
   url?: string;
   identifyIslands?: boolean;
+  connectionName?: string;
 }
 
-const getInitialLiveQueryElement = (
-  blockId: string | undefined,
-  varName: string | undefined
-): LiveQueryElement => ({
-  type: ELEMENT_LIVE_QUERY,
-  id: nanoid(),
-  connectionBlockId: blockId,
-  columnTypeCoercions: {},
-  children: [
-    {
-      type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-      id: nanoid(),
-      children: [{ text: varName ?? '' }],
-    },
-    {
-      type: ELEMENT_LIVE_QUERY_QUERY,
-      id: nanoid(),
-      children: [{ text: 'SELECT 1 + 1 as result' }],
-    },
-  ],
-});
-
-export const insertLiveQueryBelow = (
+export const addQueryToLiveDataSet = (
   editor: TEditor,
-  path: Path,
-  getAvailableIdentifier: Computer['getAvailableIdentifier'],
   connectionBlockId?: string,
   query?: string
 ): void => {
-  const varName = getAvailableIdentifier('LiveQuery', 1);
-  const liveQuery = clone(
-    getInitialLiveQueryElement(connectionBlockId, varName)
-  );
-  if (query) {
-    liveQuery.children[1].children[0].text = query;
+  const liveQuery = findNode(editor, {
+    at: [],
+    match: { connectionBlockId },
+  });
+
+  if (liveQuery && query) {
+    const [, path] = getChildren(liveQuery);
+
+    insertText(editor, query, { at: path[1] });
   }
-
-  const newPath = requirePathBelowBlock(editor, path);
-
-  insertNodes<LiveQueryElement>(editor, liveQuery, { at: newPath });
-
-  setTimeout(() => {
-    const findPath = [...newPath, 0];
-    const node = findNode(editor, {
-      at: findPath,
-      block: true,
-      match: (_e, p) => Path.equals(findPath, p),
-    });
-    if (node) {
-      focusEditor(editor as MyEditor, { path: findPath, offset: 0 });
-    }
-  }, 0);
 };
 
-const justInsertLiveConnection = async ({
+const justInsertLiveDataSet = async ({
   editor,
   source,
   url,
-}: InsertLiveConnectionProps): Promise<string | undefined> => {
+  connectionName,
+  computer,
+}: InsertLiveDataSetProps): Promise<string | undefined> => {
   if (source === 'decipad' && url) {
     const { docId } = getURLComponents(url);
     const { hasAccess, exists, isPublic } = await getNotebook(docId);
@@ -119,18 +82,44 @@ const justInsertLiveConnection = async ({
   if (selection == null || url == null) {
     return;
   }
-  const liveConnEl: LiveConnectionElement = {
-    id: nanoid(),
-    type: ELEMENT_LIVE_CONNECTION,
+  const blockId = nanoid();
+  const availableIdentifier = computer.getAvailableIdentifier(
+    connectionName || 'LiveConnection',
+    1
+  );
+  const liveConnEl: LiveDataSetElement = {
+    id: blockId,
+    type: ELEMENT_LIVE_DATASET,
     url,
     source,
     isFirstRowHeaderRow: false,
     columnTypeCoercions: [],
+    hideLiveryQueryResults: true,
     children: [
       {
         id: nanoid(),
-        type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-        children: [{ text: '' }],
+        type: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
+        children: [{ text: availableIdentifier }],
+      },
+      {
+        type: ELEMENT_LIVE_QUERY,
+        id: nanoid(),
+        connectionBlockId: blockId,
+        columnTypeCoercions: {},
+        children: [
+          {
+            type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+            id: nanoid(),
+            children: [{ text: '' }],
+            isHidden: true,
+          },
+          {
+            type: ELEMENT_LIVE_QUERY_QUERY,
+            id: nanoid(),
+            children: [{ text: 'SELECT 1 + 1 as result' }],
+            isHidden: true,
+          },
+        ],
       },
     ],
   };
@@ -140,14 +129,19 @@ const justInsertLiveConnection = async ({
   return liveConnEl.id;
 };
 
-const identifyIslandsAndThenInsertLiveConnection = async ({
+const identifyIslandsAndThenInsertLiveDataSet = async ({
   computer,
   editor,
   source,
   url,
   identifyIslands,
-}: InsertLiveConnectionProps): Promise<void> => {
+  connectionName,
+}: InsertLiveDataSetProps): Promise<void> => {
   const selection = getDefined(editor.selection);
+  const availableIdentifier = computer.getAvailableIdentifier(
+    connectionName || 'LiveConnection',
+    1
+  );
 
   let blockPath = [selection.anchor.path[0]];
 
@@ -178,9 +172,10 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
 
   return Promise.all(
     imports.map(async (imp) => {
-      const liveConnEl: LiveConnectionElement = {
-        id: nanoid(),
-        type: ELEMENT_LIVE_CONNECTION,
+      const blockId = nanoid();
+      const liveConnEl: LiveDataSetElement = {
+        id: blockId,
+        type: ELEMENT_LIVE_DATASET,
         url: imp.meta?.sourceUrl?.toString() ?? getDefined(url),
         source,
         isFirstRowHeaderRow: false,
@@ -188,20 +183,31 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
         children: [
           {
             id: nanoid(),
-            type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-            children: [{ text: '' }],
+            type: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
+            children: [{ text: availableIdentifier }],
+          },
+          {
+            type: ELEMENT_LIVE_QUERY,
+            id: nanoid(),
+            connectionBlockId: blockId,
+            hideLiveryQueryResults: true,
+            columnTypeCoercions: {},
+            children: [
+              {
+                type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+                id: nanoid(),
+                children: [{ text: '' }],
+              },
+              {
+                type: ELEMENT_LIVE_QUERY_QUERY,
+                id: nanoid(),
+                children: [{ text: 'SELECT 1 + 1 as result' }],
+              },
+            ],
           },
         ],
       };
-      const paragraphEl: ParagraphElement = {
-        id: nanoid(),
-        type: ELEMENT_PARAGRAPH,
-        children: [{ text: 'Add your explanation here', italic: true }],
-      };
       withoutNormalizing(editor, () => {
-        insertNodes(editor, paragraphEl, {
-          at: nextPath(),
-        });
         insertNodes(editor, liveConnEl, {
           at: nextPath(),
         });
@@ -215,14 +221,14 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
 /**
  * Returns the ID of the live connection or undefined.
  */
-export const insertLiveConnection = async (
-  props: InsertLiveConnectionProps
+export const insertLiveDataSet = async (
+  props: InsertLiveDataSetProps
 ): Promise<string | undefined> => {
   const { editor, url, identifyIslands } = props;
   const { selection } = editor;
   if (isCollapsed(selection) && selection?.anchor && url) {
     if (identifyIslands) {
-      await identifyIslandsAndThenInsertLiveConnection(props);
+      await identifyIslandsAndThenInsertLiveDataSet(props);
       return;
     }
     if (needsToCreateExternalData(props)) {
@@ -232,12 +238,12 @@ export const insertLiveConnection = async (
         externalId: props.url ?? '',
         provider: getDefined(props.source) as ExternalProvider,
       });
-      return justInsertLiveConnection({
+      return justInsertLiveDataSet({
         ...props,
         url: getDefined(externalData.dataUrl),
       });
     }
-    return justInsertLiveConnection(props);
+    return justInsertLiveDataSet(props);
   }
   return undefined;
 };

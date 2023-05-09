@@ -2,13 +2,17 @@ import { useEffect } from 'react';
 import { getNodeString, insertText } from '@udecode/plate';
 import { varNamify } from '@decipad/utils';
 import { ImportResult } from '@decipad/import';
-import { LiveConnectionElement, useTEditorRef } from '@decipad/editor-types';
+import {
+  LiveConnectionElement,
+  LiveDataSetElement,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { Path } from 'slate';
 
 interface UseSyncLiveConnectionMetadataProps {
   path?: Path;
-  element: LiveConnectionElement;
+  element: LiveConnectionElement | LiveDataSetElement;
   result?: ImportResult;
 }
 

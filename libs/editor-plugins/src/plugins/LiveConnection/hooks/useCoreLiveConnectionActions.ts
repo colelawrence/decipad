@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { setNodes } from '@udecode/plate';
 import {
   LiveConnectionElement,
+  LiveDataSetElement,
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -11,7 +12,7 @@ import { ExternalDataSource } from '@decipad/interfaces';
 
 interface UseCoreLiveConnectionActionsProps {
   path?: Path;
-  element: LiveConnectionElement;
+  element: LiveConnectionElement | LiveDataSetElement;
 }
 
 export const useCoreLiveConnectionActions = ({
@@ -23,7 +24,7 @@ export const useCoreLiveConnectionActions = ({
   const onChangeColumnType = useCallback(
     (columnIndex: number, type: TableCellType) => {
       if (path) {
-        setNodes<LiveConnectionElement>(
+        setNodes<LiveConnectionElement | LiveDataSetElement>(
           editor,
           {
             columnTypeCoercions: {

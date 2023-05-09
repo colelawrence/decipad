@@ -16,6 +16,8 @@ import {
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+  ELEMENT_LIVE_DATASET,
+  ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
   ELEMENT_LIVE_QUERY_VARIABLE_NAME,
@@ -60,6 +62,11 @@ export interface LiveConnectionVarNameElement extends BaseElement {
   children: [PlainText];
 }
 
+export interface LiveDataSetVarNameElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_DATASET_VARIABLE_NAME;
+  children: [PlainText];
+}
+
 export type ColIndex = number;
 export interface LiveConnectionElement extends BaseElement {
   type: typeof ELEMENT_LIVE_CONNECTION;
@@ -74,16 +81,37 @@ export interface LiveConnectionElement extends BaseElement {
   children: [LiveConnectionVarNameElement];
 }
 
+export interface LiveDataSetElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_DATASET;
+  url: string;
+  proxy?: string;
+  source?: ImportElementSource;
+  externalDataSourceId?: string;
+  isFirstRowHeaderRow: boolean;
+  columnTypeCoercions: Record<ColIndex, TableCellType>;
+  jsonPath?: string;
+  delimiter?: string;
+  children: [LiveDataSetVarNameElement, LiveQueryElement];
+  hideLiveryQueryResults?: boolean;
+}
+
+export interface LiveDataSetQueryElement extends BaseElement {
+  type: typeof ELEMENT_LIVE_CONNECTION_VARIABLE_NAME;
+  children: [PlainText];
+}
+
 // Live Query
 
 export interface LiveQueryVarNameElement extends BaseElement {
   type: typeof ELEMENT_LIVE_QUERY_VARIABLE_NAME;
   children: [PlainText];
+  isHidden?: boolean;
 }
 
 export interface LiveQueryQueryElement extends BaseElement {
   type: typeof ELEMENT_LIVE_QUERY_QUERY;
   children: [PlainText];
+  isHidden?: boolean;
 }
 
 export interface LiveQueryElement extends BaseElement {
@@ -243,6 +271,7 @@ export type InteractiveElement =
   | FetchElement
   | ImportElement
   | LiveConnectionElement
+  | LiveDataSetElement
   | PlotElement
   | DisplayElement
   | DeprecatedInputElement

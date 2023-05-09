@@ -20,6 +20,7 @@ interface TableButtonProps {
   readonly isInState?: boolean;
   readonly captions: string[];
   readonly isExpandButton?: boolean;
+  readonly isToggleButton?: boolean;
 }
 
 export const TableButton: FC<TableButtonProps> = ({
@@ -28,6 +29,7 @@ export const TableButton: FC<TableButtonProps> = ({
   onClick,
   captions,
   isExpandButton = false,
+  isToggleButton = false,
 }) => {
   const handleClick = useCallback(() => {
     onClick?.();
@@ -35,7 +37,7 @@ export const TableButton: FC<TableButtonProps> = ({
   }, [isInState, onClick, setState]);
 
   const textToShow = captions[1]
-    ? isInState && isExpandButton
+    ? isInState && (isExpandButton || isToggleButton)
       ? captions[0]
       : captions[1]
     : captions[0];

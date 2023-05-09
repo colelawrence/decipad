@@ -16,6 +16,7 @@ import { useLiveQuery } from '../hooks/useLiveQuery';
 export interface LiveConnectionCoreProps {
   element: LiveQueryElement;
   deleted: boolean;
+  showLiveQueryResults?: boolean;
 }
 
 export interface StoreResult {
@@ -25,7 +26,10 @@ export interface StoreResult {
 
 const createStore = () => new WeakMap<LiveQueryElement, StoreResult>();
 
-export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({ element }) => {
+export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
+  element,
+  showLiveQueryResults = false,
+}) => {
   const editor = useTEditorRef();
   const computer = useComputer();
   const path = useNodePath(element);
@@ -107,6 +111,7 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({ element }) => {
           result={persistedResult}
           onChangeColumnType={onChangeColumnType}
           element={element}
+          showLiveQueryResults={showLiveQueryResults}
         ></LiveConnectionResult>
       )}
       {persistedError ? (

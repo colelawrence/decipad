@@ -3,16 +3,23 @@ import {
   LiveConnectionElement,
   ELEMENT_LIVE_CONNECTION,
   MyValue,
+  LiveDataSetElement,
+  LiveQueryElement,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
+import { isEmpty } from 'lodash';
 import { BehaviorSubject, SubscriptionLike } from 'rxjs';
 import { ConnectionResult, Observe } from '../types';
 
-type LiveConnectionElementWithConnections = LiveConnectionElement & {
-  result?: {
-    subject: BehaviorSubject<ConnectionResult | undefined>;
-    subscription: SubscriptionLike;
-  };
+type LiveConnectionElementWithConnections =
+  | LiveConnectionElement
+  | (LiveDataSetElement & {
+      result?: Result;
+    });
+
+type Result = {
+  subject: BehaviorSubject<ConnectionResult | undefined>;
+  subscription: SubscriptionLike;
 };
 
 type BlockId = string;
@@ -45,6 +52,7 @@ const diffAndProcessNew = async (
           source: conn.source,
           useFirstRowAsHeader: conn.isFirstRowHeaderRow,
           columnTypeCoercions: conn.columnTypeCoercions,
+          liveQuery: conn.liveQuery as LiveQueryElement,
         },
         notify: (result) => {
           subject.next({ source: conn, result });
@@ -75,7 +83,9 @@ const diffAndUnsubscribeOld = (
   );
 
   for (const [, sub] of old) {
-    sub.result?.subscription.unsubscribe();
+    if (!isEmpty(sub.result)) {
+      (sub.result as Result).subscription.unsubscribe();
+    }
   }
 };
 
@@ -128,19 +138,21 @@ export const liveConnections = (observe: Observe): LiveConnections => {
     // subscribe to new connections
     for (const [key, conn] of connections) {
       if (!subscriptions.has(key)) {
-        const newSubscription = conn.result?.subject.subscribe((result) => {
-          if (result) {
-            results.set(key, result);
-          } else {
-            results.delete(key);
+        const newSubscription = (conn.result as Result)?.subject.subscribe(
+          (result) => {
+            if (result) {
+              results.set(key, result);
+            } else {
+              results.delete(key);
+            }
+            getExternalData$.next(results);
           }
-          getExternalData$.next(results);
-        });
+        );
         if (newSubscription) {
           subscriptions.set(key, newSubscription);
         }
         // retrieve and expose current value
-        const currentValue = conn.result?.subject.getValue();
+        const currentValue = (conn.result as Result)?.subject.getValue();
         if (currentValue) {
           results.set(key, currentValue);
           getExternalData$.next(results);

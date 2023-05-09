@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
-import { LiveConnectionElement } from '@decipad/editor-types';
+import {
+  LiveConnectionElement,
+  LiveDataSetElement,
+} from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 
 interface UseLiveConnectionPersistResultProps {
-  element: LiveConnectionElement;
+  element: LiveConnectionElement | LiveDataSetElement;
   result?: ImportResult;
   error?: Error;
 }

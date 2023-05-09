@@ -26,6 +26,7 @@ export type DbOptions = {
   dbConnType?: 'url' | 'credentials' | 'existing-conn';
 
   query: string;
+  showQueryResults?: boolean;
 };
 
 interface CreateDataStore {

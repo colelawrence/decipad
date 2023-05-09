@@ -8,7 +8,16 @@ interface MessageBlockProps {
   title?: string;
   message?: string;
   overrideTextColor?: boolean;
+  extraButtonText?: string;
+  extraButtonClick?: () => void;
 }
+
+const extraButtonStyles = css({
+  ...p12Regular,
+  position: 'absolute',
+  right: '20px',
+  textDecoration: 'underline',
+});
 
 export const MessageBlock: FC<MessageBlockProps> = ({
   type,
@@ -16,6 +25,8 @@ export const MessageBlock: FC<MessageBlockProps> = ({
   title = '',
   message = '',
   overrideTextColor = false,
+  extraButtonText,
+  extraButtonClick,
 }) => {
   return (
     <div css={wrapperStyles(type)}>
@@ -25,6 +36,11 @@ export const MessageBlock: FC<MessageBlockProps> = ({
         <span css={overrideTextColor ? messageStyles : p12Regular}>
           {message}
         </span>
+        {extraButtonClick && extraButtonText && (
+          <button css={extraButtonStyles} onClick={extraButtonClick}>
+            {extraButtonText}
+          </button>
+        )}
       </span>
     </div>
   );
@@ -62,6 +78,7 @@ const wrapperStyles = (type: MessageBlockProps['type']) =>
     alignItems: 'center',
     gap: '4px',
     padding: '16px 20px 16px 10px',
+    position: 'relative',
   });
 
 const iconStyles = css({

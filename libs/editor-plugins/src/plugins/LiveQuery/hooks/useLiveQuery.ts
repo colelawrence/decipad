@@ -29,6 +29,7 @@ export const useLiveQuery = ({
   const databaseResult = computer.getBlockIdResult$.use(
     element.connectionBlockId
   );
+
   const url = useMemo(
     () => databaseResult?.result && getDatabaseUrl(databaseResult.result),
     [databaseResult]

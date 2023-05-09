@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { css } from '@emotion/react';
+import { ImportElementSource } from '@decipad/editor-types';
 import { inputStyles, MessageBlock } from '.';
 import { AnnotationWarning, Sparkles, Warning } from '../../icons';
 import { cssVar, p13Medium } from '../../primitives';
@@ -12,6 +13,8 @@ interface DatabaseQueryProps {
 
   state?: 'error' | 'success';
   message?: string;
+  connectionType?: ImportElementSource;
+  onReconfigure?: () => void;
 }
 
 export const DatabaseQuery: FC<DatabaseQueryProps> = ({
@@ -22,6 +25,8 @@ export const DatabaseQuery: FC<DatabaseQueryProps> = ({
 
   state,
   message,
+  connectionType,
+  onReconfigure,
 }) => {
   const [locked, setLocked] = useState(state === 'success');
 
@@ -31,14 +36,18 @@ export const DatabaseQuery: FC<DatabaseQueryProps> = ({
         <MessageBlock
           type="success"
           icon={<Sparkles />}
-          title="Connection active"
+          title={`${connectionType?.toUpperCase()} Connection active`}
+          extraButtonText="Reconfigure"
+          extraButtonClick={onReconfigure}
         />
       )}
       {connection === 'error' && (
         <MessageBlock
           type="error"
           icon={<Sparkles />}
-          title="Connected failed"
+          title={`${connectionType?.toUpperCase()} Connection active`}
+          extraButtonText="Reconfigure"
+          extraButtonClick={onReconfigure}
         />
       )}
       <textarea

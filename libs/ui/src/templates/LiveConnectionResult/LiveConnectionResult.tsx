@@ -1,6 +1,7 @@
 import { Result } from '@decipad/computer';
-import {
+import type {
   LiveConnectionElement,
+  LiveDataSetElement,
   LiveQueryElement,
   TableCellType,
 } from '@decipad/editor-types';
@@ -17,7 +18,8 @@ interface LiveConnectionResultProps {
   isFirstRowHeaderRow?: boolean;
   setIsFirstRowHeader?: (is: boolean) => void;
   onChangeColumnType?: (columnIndex: number, type: TableCellType) => void;
-  element: LiveConnectionElement | LiveQueryElement;
+  element: LiveConnectionElement | LiveQueryElement | LiveDataSetElement;
+  showLiveQueryResults?: boolean;
 }
 
 export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
@@ -26,10 +28,11 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
   setIsFirstRowHeader = noop,
   onChangeColumnType = noop,
   element,
+  showLiveQueryResults = true,
 }) => {
   return isDatabaseConnection(element) ? (
     <DatabaseConnection result={result} />
-  ) : (
+  ) : element.type !== 'live-dataset' && showLiveQueryResults ? (
     result && (
       <div css={css(code)}>
         <CodeResult
@@ -48,5 +51,5 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
         ></CodeResult>
       </div>
     )
-  );
+  ) : null;
 };

@@ -1,4 +1,7 @@
-import { LiveConnectionElement } from '@decipad/editor-types';
+import {
+  LiveConnectionElement,
+  LiveDataSetElement,
+} from '@decipad/editor-types';
 import { Result } from '@decipad/computer';
 import { create, useStore } from 'zustand';
 import { useCallback, useMemo } from 'react';
@@ -11,7 +14,7 @@ export interface StoreResult {
 }
 
 const liveConnectionStore = create(
-  () => new WeakMap<LiveConnectionElement, StoreResult>()
+  () => new WeakMap<LiveConnectionElement | LiveDataSetElement, StoreResult>()
 );
 
 type StoreSetter = (result: StoreResult) => void;
@@ -19,7 +22,7 @@ type StoreSetter = (result: StoreResult) => void;
 type UseLiveConnectionStoreResult = [StoreResult, StoreSetter];
 
 export const useLiveConnectionStore = (
-  element?: LiveConnectionElement
+  element?: LiveConnectionElement | LiveDataSetElement
 ): UseLiveConnectionStoreResult => {
   const store = useStore(liveConnectionStore);
 

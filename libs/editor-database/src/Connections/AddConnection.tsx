@@ -10,18 +10,22 @@ import {
 import {
   ELEMENT_LIVE_CONNECTION,
   ImportElementSource,
-  LiveQueryElement,
+  LiveDataSetElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useComputer, useConnectionStore } from '@decipad/react-contexts';
+import {
+  useComputer,
+  useConnectionStore,
+  useEditorSelector,
+} from '@decipad/react-contexts';
 import { findNode, getNodeString } from '@udecode/plate';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { LiveQueryCore } from 'libs/editor-plugins/src/plugins/LiveQuery/components/LiveQueryCore';
 import { useEditorElements } from '../hooks/useEditorElements';
 import {
-  insertLiveQueryBelow,
-  insertLiveConnection,
+  addQueryToLiveDataSet,
+  insertLiveDataSet,
   fetchQuery,
   attemptConnection,
 } from '../utils';
@@ -126,11 +130,12 @@ export const AddConnection: FC = () => {
       }
 
       store.setExternalDataSource(externalDataId);
-      const liveConId = await insertLiveConnection({
+      const liveConId = await insertLiveDataSet({
         computer,
         editor,
         source: store.connectionType as ImportElementSource,
         url: connectionString,
+        connectionName: connectionTitle,
       });
 
       if (liveConId) {
@@ -153,7 +158,6 @@ export const AddConnection: FC = () => {
         store.externalDataSource,
         store.dbOptions.query
       );
-
       store.setStates({
         queryState,
       });
@@ -163,23 +167,30 @@ export const AddConnection: FC = () => {
 
       store.setStage('map');
 
-      insertLiveQueryBelow(
+      addQueryToLiveDataSet(
         editor,
-        [0],
-        computer.getAvailableIdentifier.bind(computer),
         store.dbOptions.existingConn.id,
         store.dbOptions.query
       );
     }
-  }, [computer, editor, session.status, store, liveConnections]);
+  }, [
+    session.status,
+    store,
+    editor,
+    computer,
+    connectionTitle,
+    liveConnections,
+  ]);
 
-  const currentQuery = useMemo(
-    () =>
-      findNode(editor, {
+  const currentQuery = useEditorSelector(
+    useCallback(() => {
+      const node = findNode(editor, {
         at: [],
         match: { id: store.dbOptions.existingConn.id },
-      }) as unknown as LiveQueryElement,
-    [store, editor]
+      });
+
+      return node ? (node[0] as LiveDataSetElement).children[1] : undefined;
+    }, [store, editor])
   );
 
   return (
@@ -232,12 +243,15 @@ export const AddConnection: FC = () => {
                 }
                 message={store.states.queryState?.message}
                 state={store.states.queryState?.type}
+                connectionType={store.connectionType}
+                onReconfigure={() => store.setStage('connect')}
               />
             ) : store.stage === 'map' && currentQuery ? (
               <div css={liveResultWrapperStyles}>
                 <LiveQueryCore
                   element={currentQuery}
                   deleted={false}
+                  showLiveQueryResults={true}
                 ></LiveQueryCore>
               </div>
             ) : (

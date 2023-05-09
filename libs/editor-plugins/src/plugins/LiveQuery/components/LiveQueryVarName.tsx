@@ -28,6 +28,10 @@ const captionWrapperStyles = css({
   gap: '4px',
 });
 
+const hideElement = css({
+  display: 'none',
+});
+
 export const LiveQueryVarName: PlateComponent = ({
   element,
   attributes,
@@ -54,9 +58,11 @@ export const LiveQueryVarName: PlateComponent = ({
 
   // ensure var name is unique
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
-
   const caption = (
-    <div {...attributes} css={captionWrapperStyles}>
+    <div
+      {...attributes}
+      css={element.isHidden ? hideElement : captionWrapperStyles}
+    >
       <EditableLiveDataCaption
         icon={<icons.Code />}
         empty={getNodeString(element).length === 0}

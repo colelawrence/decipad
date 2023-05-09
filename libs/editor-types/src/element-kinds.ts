@@ -70,6 +70,8 @@ export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
 // live connection
 export const ELEMENT_LIVE_CONNECTION = 'live-conn';
 export const ELEMENT_LIVE_CONNECTION_VARIABLE_NAME = 'live-var-name';
+export const ELEMENT_LIVE_DATASET = 'live-dataset';
+export const ELEMENT_LIVE_DATASET_VARIABLE_NAME = 'live-dataset-var-name';
 
 // live query
 export const ELEMENT_LIVE_QUERY = 'live-query';

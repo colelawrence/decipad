@@ -11,7 +11,7 @@ import {
   transparency,
 } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
-import { Zap } from '../../icons';
+import { Archive, Zap } from '../../icons';
 
 const editableLiveCaptionStyles = css({
   maxWidth: `${slimBlockWidth}px`,
@@ -28,6 +28,12 @@ const tableTitleWrapper = css({
   borderRadius: '6px',
   padding: '2px 8px',
   marginTop: '2.5px',
+});
+
+const iconWrapperStylesUiIntegration = css({
+  height: '16px',
+  width: '16px',
+  marginTop: '0',
 });
 
 const iconWrapperStyles = css({
@@ -64,6 +70,7 @@ type EditableTableCaptionProps = PropsWithChildren<{
   range?: string;
   url?: string;
   icon?: ReactNode;
+  isUiIntegration?: boolean;
 }>;
 
 export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
@@ -73,6 +80,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
   range,
   children,
   icon,
+  isUiIntegration = false,
 }) => {
   const [caption] = Children.toArray(children);
   const selected = useSelected();
@@ -80,8 +88,16 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
   return (
     <div css={editableLiveCaptionStyles}>
       <div css={tableTitleWrapper}>
-        <div css={[iconWrapperStyles, iconSvgStyles]} contentEditable={false}>
-          {icon ?? <Zap />}
+        <div
+          css={[
+            isUiIntegration
+              ? iconWrapperStylesUiIntegration
+              : iconWrapperStyles,
+            iconSvgStyles,
+          ]}
+          contentEditable={false}
+        >
+          {icon ?? (isUiIntegration ? <Archive /> : <Zap />)}
         </div>
         <div
           aria-placeholder={empty ? 'LiveConnection' : ''}
@@ -89,7 +105,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
         >
           {caption}
         </div>
-        {source && (
+        {!isUiIntegration && source && (
           <Tag
             explanation={
               url && (

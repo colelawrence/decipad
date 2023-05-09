@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import {
   ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_DATASET,
   LiveConnectionElement,
+  LiveDataSetElement,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
 import { LiveConnectionResult } from '@decipad/ui';
+import { assertElementMultipleType } from '@decipad/editor-utils';
 import { LiveConnectionError } from './LiveConnectionError';
 import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
 
 export interface LiveConnectionCoreProps {
-  element: LiveConnectionElement;
+  element: LiveConnectionElement | LiveDataSetElement;
   deleted: boolean;
 }
 
@@ -17,7 +19,10 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
   element,
   deleted,
 }) => {
-  assertElementType(element, ELEMENT_LIVE_CONNECTION);
+  assertElementMultipleType(element, [
+    ELEMENT_LIVE_CONNECTION,
+    ELEMENT_LIVE_DATASET,
+  ]);
 
   const {
     result,
@@ -40,6 +45,7 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
           setIsFirstRowHeader={setIsFirstRowHeader}
           onChangeColumnType={onChangeColumnType}
           element={element}
+          showLiveQueryResults={!element.hideLiveryQueryResults}
         ></LiveConnectionResult>
       )}
       {error ? (

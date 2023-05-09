@@ -60,6 +60,7 @@ import {
   createDeduplicateElementIdsPlugin,
   createDataMappingPlugin,
   createMigrateStructuredInputs,
+  createLiveDataSetPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -185,6 +186,7 @@ export const plugins = ({
       createAutoFormatCodeLinePlugin(computer)(),
       createImportPlugin(interactions),
       createLiveConnectionPlugin(),
+      createLiveDataSetPlugin(),
       createLiveQueryPlugin(),
 
       // code editing

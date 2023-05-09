@@ -1,7 +1,9 @@
 import {
   ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_DATASET,
   ImportElementSource,
   LiveConnectionElement,
+  LiveDataSetElement,
   LiveQueryElement,
 } from '@decipad/editor-types';
 
@@ -12,7 +14,7 @@ const databaseSources = new Set<ImportElementSource | undefined>([
 ]);
 
 export const isDatabaseConnection = (
-  element: LiveConnectionElement | LiveQueryElement
+  element: LiveConnectionElement | LiveQueryElement | LiveDataSetElement
 ): boolean =>
-  element.type === ELEMENT_LIVE_CONNECTION &&
-  databaseSources.has(element.source);
+  [ELEMENT_LIVE_CONNECTION, ELEMENT_LIVE_DATASET].includes(element.type) &&
+  databaseSources.has(element.source as ImportElementSource);

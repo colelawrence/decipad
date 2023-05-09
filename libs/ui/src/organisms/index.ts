@@ -53,5 +53,6 @@ export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceOptions } from './WorkspaceOptions/WorkspaceOptions';
 export { WorkspaceSelector } from './WorkspaceSelector/WorkspaceSelector';
 export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';
+export { LiveDataSetParams } from './LiveDataSetParams/LiveDataSetParams';
 
 export * from './DataIntegration';

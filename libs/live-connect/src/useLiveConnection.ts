@@ -5,6 +5,7 @@ import { buildType, deserializeType, serializeType } from '@decipad/language';
 import {
   ColIndex,
   ImportElementSource,
+  LiveQueryElement,
   TableCellType,
 } from '@decipad/editor-types';
 import { ImportResult } from '@decipad/import';
@@ -39,6 +40,7 @@ export interface LiveConnectionProps {
   delimiter?: string;
   externalDataSourceContext: Context<ExternalDataSourcesContextValue>;
   beforeAuthenticate: (source: ExternalDataSource) => Promise<void>;
+  liveQuery?: LiveQueryElement;
 }
 
 export const useLiveConnection = (
@@ -58,6 +60,7 @@ export const useLiveConnection = (
     delimiter,
     beforeAuthenticate,
     externalDataSourceContext,
+    liveQuery,
   }: LiveConnectionProps
 ): LiveConnectionResult => {
   const [jsonPath] = useDebounce(_jsonPath, 2000);
@@ -76,6 +79,7 @@ export const useLiveConnection = (
     useFirstRowAsHeader,
     columnTypeCoercions,
     maxCellCount,
+    liveQuery,
   });
 
   const [result, clearCache] = useCache<ImportResult | undefined>({
