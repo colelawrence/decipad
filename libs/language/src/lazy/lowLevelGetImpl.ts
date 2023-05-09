@@ -1,10 +1,10 @@
 import { getDefined } from '@decipad/utils';
 import { isColumnLike, Value } from '../value';
 
-export function lowLevelGet(
+export async function lowLevelGet(
   valueHere: Value | undefined,
   keys: number[]
-): Value {
+): Promise<Value> {
   getDefined(valueHere, 'panic: lowLevelGet called with undefined value');
 
   if (isColumnLike(valueHere)) {
@@ -12,6 +12,6 @@ export function lowLevelGet(
   } else if (keys.length) {
     throw new Error('panic: lowLevelGet called with too many coordinates');
   } else {
-    return getDefined(valueHere);
+    return Promise.resolve(getDefined(valueHere));
   }
 }

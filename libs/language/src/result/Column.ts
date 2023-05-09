@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { getDefined } from '@decipad/utils';
 import { ColumnLike } from '@decipad/column';
-import { DeepReadonly } from 'utility-types';
+import { from } from '@decipad/generator-utils';
 import { Comparable } from '../compare';
 
 export type { Comparable };
@@ -9,20 +8,20 @@ export type { Comparable };
 export type ColumnLikeResult<T = Comparable> = ColumnLike<T>;
 
 export class Column<T = Comparable> implements ColumnLike<T> {
-  readonly _values: DeepReadonly<T[]>;
+  readonly _values: ReadonlyArray<T>;
 
   constructor(values: T[]) {
-    this._values = values as DeepReadonly<T[]>;
+    this._values = values as ReadonlyArray<T>;
   }
-  atIndex(i: number): T {
-    return getDefined(this.values[i] as T, `index ${i} out of bounds`);
+  async atIndex(i: number) {
+    return Promise.resolve(this._values[i] as T);
   }
 
-  get values() {
-    return this._values;
+  values(start = 0, end = Infinity) {
+    return from(this._values.slice(start, end));
   }
-  get rowCount() {
-    return this._values.length;
+  async rowCount() {
+    return Promise.resolve(this._values.length);
   }
 
   /**

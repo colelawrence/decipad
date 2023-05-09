@@ -116,7 +116,7 @@ it('can turn text into smartrefs (columns edition)', async () => {
   `);
 });
 
-it('migrates old-style smart refs (just col ID) to NEW SMART REFS (blockId + colId)', async () => {
+it('migrates old-style smart refs (just col ID) to NEW SMART REFS (blockId + colId)', () => {
   editor.children.push({
     type: ELEMENT_CODE_LINE,
     id: '2',

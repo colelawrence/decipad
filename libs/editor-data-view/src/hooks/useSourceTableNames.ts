@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { AutocompleteName } from '@decipad/computer';
+import {
+  AutocompleteName,
+  isTable as isComputerTable,
+} from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 
 const namesThatLookLikeTablesOnly = (name: AutocompleteName) =>
   name.name.indexOf('.') < 0;
 
-const isTable = (name: AutocompleteName): boolean => name.type.kind === 'table';
+const isTable = (name: AutocompleteName): boolean => isComputerTable(name.type);
 
 export const useSourceTableNames = (): AutocompleteName[] => {
   const computer = useComputer();

@@ -14,14 +14,13 @@ const radian = once(() =>
   ])
 );
 
-const angleOpFunctor = ([n]: Type[]) =>
-  n
-    .isScalar('number')
-    .sameAs(radian())
-    .mapType(() => t.number());
+const angleOpFunctor = async ([n]: Type[]) =>
+  (await (await n.isScalar('number')).sameAs(radian())).mapType(() =>
+    t.number()
+  );
 
-const arcFunctor = ([n]: Type[]) =>
-  n.isScalar('number').mapType(() => radian());
+const arcFunctor = async ([n]: Type[]) =>
+  (await n.isScalar('number')).mapType(() => radian());
 
 export const trignometricOperators: Record<string, BuiltinSpec> = {
   sin: {

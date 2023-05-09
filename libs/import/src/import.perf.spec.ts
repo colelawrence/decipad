@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { Computer, materializeResult } from '@decipad/computer';
 import { createServer, Server } from 'http';
 import path from 'path';
 import handler from 'serve-handler';
@@ -55,7 +55,9 @@ describe('import performance', () => {
       const ellapsed = Date.now() - startTime;
       expect(ellapsed).toBeLessThanOrEqual(MAX_BIGISH_IMPORT_TIMEOUT_MS);
       expect(result).toHaveLength(1);
-      expect(result[0].result).toMatchSnapshot('bigish1.csv-import-result');
+      expect(
+        await materializeResult(getDefined(result[0].result))
+      ).toMatchSnapshot('bigish1.csv-import-result');
     },
     MAX_BIGISH_IMPORT_TIMEOUT_MS * 2
   );

@@ -14,7 +14,7 @@ type UseSimplePaginationResult<T> = Omit<
 >;
 
 interface UsePaginationProps<T> {
-  all: Array<T>;
+  all?: Array<T>;
   maxRowsPerPage: number;
 }
 
@@ -28,7 +28,10 @@ export const usePagination = <B, T extends Array<B>>({
     [maxRowsPerPage, page]
   );
   const valuesForPage = useMemo(
-    () => all.map((col) => col.slice(offset, offset + maxRowsPerPage)),
+    () =>
+      all != null
+        ? all.map((col) => col.slice(offset, offset + maxRowsPerPage))
+        : [],
     [all, maxRowsPerPage, offset]
   ) as Array<T>;
 
@@ -45,9 +48,12 @@ export const usePagination = <B, T extends Array<B>>({
 };
 
 export const useSimplePagination = <T>({
-  all,
+  all = [],
   maxRowsPerPage,
 }: UsePaginationProps<T>): UseSimplePaginationResult<T> => {
+  if (!Array.isArray(all)) {
+    throw new Error('all is not an array');
+  }
   const [page, setPage] = useState(1);
   const offset = useMemo(
     () => (page - 1) * maxRowsPerPage,

@@ -9,6 +9,7 @@ import {
   validateResult,
   Value,
   Result,
+  Type,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
@@ -39,7 +40,7 @@ const computeStatement = async (
   const statement = getStatement(program, blockId);
 
   realm.inferContext.statementId = getExprRef(blockId);
-  const [valueType, usedNames] = inferWhileRetrievingNames(
+  const [valueType, usedNames] = await inferWhileRetrievingNames(
     realm.inferContext,
     statement
   );
@@ -51,8 +52,9 @@ const computeStatement = async (
     value = await evaluateStatement(realm.interpreterRealm, statement);
   }
 
-  if (value) {
-    validateResult(valueType, value.getData());
+  const data = await value?.getData();
+  if (data) {
+    validateResult(valueType, data);
   }
 
   const variableName =
@@ -67,7 +69,7 @@ const computeStatement = async (
       if (statement.type === 'table') {
         return identifiedResultForTable(realm, variableName, statement);
       }
-      return serializeResult(valueType, value?.getData());
+      return serializeResult(valueType, data);
     },
     get visibleVariables() {
       return getVisibleVariables(program, blockId, realm.inferContext);
@@ -140,12 +142,15 @@ export const computeProgram = async (
   return resultsToCache.map((resultToCache) => resultToCache.result);
 };
 
-const inferWhileRetrievingNames = (ctx: Context, statement: AST.Statement) => {
+const inferWhileRetrievingNames = async (
+  ctx: Context,
+  statement: AST.Statement
+): Promise<[Type, Context['usedNames']]> => {
   try {
     ctx.usedNames = [];
-    const valueType = inferStatement(ctx, statement);
+    const valueType = await inferStatement(ctx, statement);
     const { usedNames } = ctx;
-    return [valueType, usedNames] as const;
+    return [valueType, usedNames];
   } finally {
     ctx.usedNames = undefined;
   }

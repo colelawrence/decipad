@@ -1,8 +1,11 @@
-type AsyncFunction<T> = () => Promise<T>;
+import { PromiseOrType } from '@decipad/utils';
+
+type AsyncFunction<T> = () => PromiseOrType<T>;
 type Fn<T> = (value: T) => void;
 
 type FunctionQueue = {
   push: <T>(fn: AsyncFunction<T>) => Promise<T>;
+  unshift: <T>(fn: AsyncFunction<T>) => Promise<T>;
   flush: () => Promise<unknown>;
   pendingCount: () => number;
 };
@@ -12,7 +15,7 @@ export function fnQueue(): FunctionQueue {
   let processing = 0;
   const flushes: Fn<void>[] = [];
 
-  async function processOne() {
+  function processOne() {
     const fn = fns.shift();
     if (!fn) {
       throw new Error('Expected to have a function left in the queue');
@@ -59,9 +62,27 @@ export function fnQueue(): FunctionQueue {
     return p;
   }
 
-  async function flush() {
+  function unshift<T>(fn: AsyncFunction<T>): Promise<T> {
+    let resolve: Fn<T>;
+    let reject: Fn<Error>;
+    const p = new Promise<T>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    fns.unshift(async () => {
+      try {
+        resolve(await fn());
+      } catch (err) {
+        reject(err as Error);
+      }
+    });
+    work();
+
+    return p;
+  }
+  function flush() {
     if (fns.length === 0 && processing === 0) {
-      return undefined;
+      return Promise.resolve(undefined);
     }
     return new Promise((resolve) => {
       flushes.push(resolve);
@@ -74,6 +95,7 @@ export function fnQueue(): FunctionQueue {
 
   return {
     push,
+    unshift,
     flush,
     pendingCount,
   };

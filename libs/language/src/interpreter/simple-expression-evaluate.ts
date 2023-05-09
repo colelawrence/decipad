@@ -11,10 +11,10 @@ import { InferError } from '../type';
 // zero-dimension builtin functions only) expanded AST.
 
 // eslint-disable-next-line consistent-return
-export function simpleExpressionEvaluate(
+export async function simpleExpressionEvaluate(
   realm: Realm,
   node: AST.Statement
-): NumberValue {
+): Promise<NumberValue> {
   switch (node.type) {
     case 'literal': {
       switch (node.args[0]) {
@@ -29,7 +29,9 @@ export function simpleExpressionEvaluate(
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;
-      const args = funcArgs.map((arg) => simpleExpressionEvaluate(realm, arg));
+      const args = await Promise.all(
+        funcArgs.map(async (arg) => simpleExpressionEvaluate(realm, arg))
+      );
       const argTypes = funcArgs.map((arg) =>
         getDefined(
           realm.inferContext.nodeTypes.get(arg),
@@ -37,7 +39,13 @@ export function simpleExpressionEvaluate(
         )
       );
       const returnType = getDefined(realm.inferContext.nodeTypes.get(node));
-      const res = callBuiltin(realm, funcName, args, argTypes, returnType);
+      const res = await callBuiltin(
+        realm,
+        funcName,
+        args,
+        argTypes,
+        returnType
+      );
       if (!(res instanceof NumberValue)) {
         throw InferError.complexExpressionExponent();
       }

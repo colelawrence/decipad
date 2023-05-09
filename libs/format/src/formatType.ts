@@ -41,6 +41,7 @@ export function formatTypeInner(
       return `range of ${formatType(locale, type.rangeOf)}`;
     case 'number':
       return type.unit ? formatUnit(locale, type.unit) : '<number>';
+    case 'materialized-table':
     case 'table': {
       const columnStrings = zip(type.columnNames, type.columnTypes).map(
         ([name, col]) =>
@@ -56,6 +57,7 @@ export function formatTypeInner(
 
       return `row [ ${rowCellStrings.join(', ')} ]`;
     }
+    case 'materialized-column':
     case 'column': {
       const columnStr = `${formatType(locale, type.cellType)}[]`;
 

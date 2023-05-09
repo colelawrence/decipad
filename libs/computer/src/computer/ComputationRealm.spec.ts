@@ -38,7 +38,7 @@ it('evictStatement', () => {
 });
 
 describe('getIndexLabels', () => {
-  it('getIndexLabels', () => {
+  it('getIndexLabels', async () => {
     realm.inferContext.stack.set(
       'DimName',
       buildType.table({
@@ -55,7 +55,7 @@ describe('getIndexLabels', () => {
       )
     );
 
-    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+    expect(await realm.getIndexLabels()).toMatchInlineSnapshot(`
       Map {
         "DimName" => Array [
           "One",
@@ -66,7 +66,7 @@ describe('getIndexLabels', () => {
     `);
   });
 
-  it('getIndexLabels for Sets', () => {
+  it('getIndexLabels for Sets', async () => {
     realm.inferContext.stack.set(
       'DimName',
       buildType.column(buildType.string(), 'DimName')
@@ -76,7 +76,7 @@ describe('getIndexLabels', () => {
       fromJS(['One', 'Two', 'Three'])
     );
 
-    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+    expect(await realm.getIndexLabels()).toMatchInlineSnapshot(`
       Map {
         "DimName" => Array [
           "One",
@@ -87,7 +87,7 @@ describe('getIndexLabels', () => {
     `);
   });
 
-  it('getIndexLabels with numbers', () => {
+  it('getIndexLabels with numbers', async () => {
     realm.inferContext.stack.set(
       'Diabetes',
       buildType.table({
@@ -102,7 +102,7 @@ describe('getIndexLabels', () => {
       Table.fromNamedColumns([fromJS([1, 2])], ['Nums'])
     );
 
-    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+    expect(await realm.getIndexLabels()).toMatchInlineSnapshot(`
       Map {
         "Diabetes" => Array [
           "1",
@@ -112,7 +112,7 @@ describe('getIndexLabels', () => {
     `);
   });
 
-  it('getIndexLabels with dates', () => {
+  it('getIndexLabels with dates', async () => {
     realm.inferContext.stack.set(
       'Dates',
       buildType.table({
@@ -134,7 +134,7 @@ describe('getIndexLabels', () => {
       )
     );
 
-    expect(realm.getIndexLabels()).toMatchInlineSnapshot(`
+    expect(await realm.getIndexLabels()).toMatchInlineSnapshot(`
       Map {
         "Dates" => Array [
           "2020-01",

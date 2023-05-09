@@ -1,8 +1,10 @@
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import {
+  act,
   getAllByRole as getAllDescendantsByRole,
   render,
 } from '@testing-library/react';
+import { timeout } from '@decipad/utils';
 import { runCode } from '../../test-utils';
 
 import { TableResult } from '..';
@@ -10,11 +12,14 @@ import { TableResult } from '..';
 const code = 'my_table = { H1 = [1, 2], H2 = ["A", "B"]}';
 it('renders an empty table', async () => {
   expect(
-    render(<TableResult {...await runCode('empty_table = {}')} />)
+    render(<TableResult {...await runCode<'table'>('empty_table = {}')} />)
   ).toBeDefined();
 });
 it('renders a table', async () => {
-  const { getAllByRole } = render(<TableResult {...await runCode(code)} />);
+  const { getAllByRole } = render(
+    <TableResult {...await runCode<'table'>(code)} />
+  );
+  await act(() => timeout(2000));
 
   const headers = getAllByRole('columnheader');
   const cells = getAllByRole('cell');
@@ -30,7 +35,11 @@ it('renders a table', async () => {
 });
 
 it('render side padding on cells with non-tabular content', async () => {
-  const { getByText } = render(<TableResult {...await runCode(code)} />);
+  const { getByText } = render(
+    <TableResult {...await runCode<'table'>(code)} />
+  );
+
+  await act(() => timeout(2000));
 
   const cellPaddings = ['1', '2', 'A', 'B']
     .map((text) => getByText(text))
@@ -53,8 +62,10 @@ describe('dimensions', () => {
 
   it('renders tables inside tables', async () => {
     const { container } = render(
-      <TableResult {...await runCode(dimensionalCode)} />
+      <TableResult {...await runCode<'table'>(dimensionalCode)} />
     );
+
+    await act(() => timeout(2000));
 
     const dimensions = getAllDescendantsByRole(
       container.querySelector('table')!,

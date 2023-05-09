@@ -7,6 +7,7 @@ import { CodeResult, Table, PaginationControl } from '..';
 import { CodeResultProps } from '../../types';
 import { cellLeftPaddingStyles } from '../../styles/table';
 import { useSimplePagination } from '../../utils/usePagination';
+import { useMaterializedResult } from '../../hooks';
 
 const rowLabelStyles = css(cellLeftPaddingStyles, {
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
@@ -26,13 +27,13 @@ const footerRowStyles = css({
 
 const MAX_CELLS_PER_PAGE = 10;
 
-export const SimpleColumnResult: FC<CodeResultProps<'column'>> = ({
+export const SimpleColumnResult: FC<CodeResultProps<'materialized-column'>> = ({
   type,
   value,
   element,
 }) => {
   const { page, valuesForPage, setPage } = useSimplePagination({
-    all: value,
+    all: useMaterializedResult(value),
     maxRowsPerPage: MAX_CELLS_PER_PAGE,
   });
 

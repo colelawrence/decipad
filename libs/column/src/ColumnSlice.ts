@@ -1,11 +1,10 @@
-import { DeepReadonly } from 'utility-types';
+import { firstOrUndefined, slice } from '@decipad/generator-utils';
 import { ColumnLike } from './ColumnLike';
 
 export class ColumnSlice<TValue> implements ColumnLike<TValue> {
   readonly begin: number;
   readonly end: number;
   readonly sourceColumn: ColumnLike<TValue>;
-  private memo: DeepReadonly<TValue[]> | undefined;
 
   constructor(sourceColumn: ColumnLike<TValue>, begin: number, end: number) {
     this.sourceColumn = sourceColumn;
@@ -21,19 +20,21 @@ export class ColumnSlice<TValue> implements ColumnLike<TValue> {
     return new ColumnSlice(column, begin, end);
   }
 
-  get values() {
-    if (!this.memo) {
-      const { values } = this.sourceColumn;
-      this.memo = values.slice(this.begin, this.end) as DeepReadonly<TValue[]>;
+  values(start = 0, end = Infinity) {
+    if (end < start) {
+      throw new Error('skip needs to be >= start');
     }
-    return this.memo;
+    return slice(this.sourceColumn.values(this.begin, this.end), start, end);
   }
 
   atIndex(i: number) {
-    return this.values[i] as TValue | undefined;
+    return firstOrUndefined(this.values(i, i + 1));
   }
 
-  get rowCount() {
-    return this.values.length;
+  async rowCount() {
+    const sourceRowCount = await this.sourceColumn.rowCount();
+    const start = Math.min(sourceRowCount, this.begin);
+    const end = Math.min(sourceRowCount, this.end);
+    return end - start;
   }
 }

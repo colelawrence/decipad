@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { timeout } from '@decipad/utils';
 import { runCode } from '../../test-utils';
 import { CodeResult } from './CodeResult';
 
@@ -43,6 +44,7 @@ it.each(['block', 'inline'] as const)(
     const { container } = render(
       <CodeResult {...await runCode('[1, 2, 3]')} variant={variant} />
     );
+    await timeout(1000);
     expect(container.textContent).toContain('1');
   }
 );
@@ -56,6 +58,7 @@ it.each(['block', 'inline'] as const)(
         variant={variant}
       />
     );
+    await timeout(1000);
     expect(container.textContent).toMatch(/Table|A/);
   }
 );

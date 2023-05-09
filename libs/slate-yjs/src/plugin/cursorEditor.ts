@@ -61,7 +61,7 @@ export function withCursor<T extends YjsEditor>(
 
   const { onChange, destroy } = editor;
 
-  const debouncedOnChange = debounce(async () => {
+  const debouncedOnChange = debounce(() => {
     try {
       CursorEditor.updateCursor(e, getSession());
     } catch (err) {

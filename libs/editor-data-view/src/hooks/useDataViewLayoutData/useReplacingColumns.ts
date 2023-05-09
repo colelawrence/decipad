@@ -1,5 +1,6 @@
 import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { isColumn } from '@decipad/computer';
 import { Column } from '../../types';
 
 interface UserReplacingColumnsProps {
@@ -43,10 +44,7 @@ export const useReplacingColumns = ({
         if (originalColumn) {
           replaceBy[colIndex] = {
             ...originalColumn,
-            type:
-              result.type.kind === 'column'
-                ? result.type.cellType
-                : result.type,
+            type: isColumn(result.type) ? result.type.cellType : result.type,
             value: result.value as Column['value'],
           };
           setReplacingColumns(replaceBy);

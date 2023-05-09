@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { DateValue, NumberValue } from '../value';
+import { DateValue, NumberValue, Value } from '../value';
 import {
   addTime,
   cmpSpecificities,
@@ -12,12 +12,12 @@ import { getDefined, getInstanceof } from '../utils';
 import { Type, buildType as t, InferError } from '../type';
 import { OverloadedBuiltinSpec } from './overloadBuiltin';
 
-export const addDateAndTimeQuantity = (
+export const addDateAndTimeQuantity = async (
   date: DateValue,
   unit: Time.Unit,
   amount: bigint
-): DateValue => {
-  const newDate = addTime(date.getData(), unit, amount);
+): Promise<DateValue> => {
+  const newDate = await addTime(await date.getData(), unit, amount);
   if (newDate == null) {
     return DateValue.fromDateAndSpecificity(undefined, date.specificity);
   }
@@ -25,22 +25,27 @@ export const addDateAndTimeQuantity = (
   return DateValue.fromDateAndSpecificity(newDate, date.specificity);
 };
 
-export const dateAndTimeQuantityFunctor = ([date, timeQuantity]: Type[]) =>
-  Type.combine(date.isDate(), timeQuantity.isTimeQuantity()).mapType(() => {
-    const dateSpecificity = getDefined(date.date);
+export const dateAndTimeQuantityFunctor = async ([
+  date,
+  timeQuantity,
+]: Type[]): Promise<Type> =>
+  (await Type.combine(date.isDate(), timeQuantity.isTimeQuantity())).mapType(
+    () => {
+      const dateSpecificity = getDefined(date.date);
 
-    const lowestUnit = getMostSpecific(getDefined(timeQuantity.unit));
+      const lowestUnit = getMostSpecific(getDefined(timeQuantity.unit));
 
-    if (cmpSpecificities(dateSpecificity, lowestUnit) < 0) {
-      return t.impossible(
-        InferError.mismatchedSpecificity(dateSpecificity, lowestUnit)
-      );
-    } else {
-      return date;
+      if (cmpSpecificities(dateSpecificity, lowestUnit) < 0) {
+        return t.impossible(
+          InferError.mismatchedSpecificity(dateSpecificity, lowestUnit)
+        );
+      } else {
+        return date;
+      }
     }
-  });
+  );
 
-export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
+export const subtractDatesFunctor = async ([t1, t2]: Type[]) => {
   const d1Specificity = getDefined(t1.date);
   const d2Specificity = getDefined(t2.date);
 
@@ -64,32 +69,35 @@ export const subtractDatesFunctor = ([t1, t2]: Type[]) => {
   );
 };
 
+const dateAndNumberFnValues = async (
+  [v1, v2]: Value[],
+  [, t2]: Type[] = []
+) => {
+  const amount = (await getInstanceof(v2, NumberValue).getData()).valueOf();
+  const unit = getDefined(t2?.unit);
+  return addDateAndTimeQuantity(
+    getInstanceof(v1, DateValue),
+    timeUnitFromUnits(unit),
+    BigInt(amount)
+  );
+};
+
 export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
   '+': [
     {
       argTypes: ['date', 'number'],
-      fnValues: ([v1, v2], [, t2] = []) =>
-        addDateAndTimeQuantity(
-          getInstanceof(v1, DateValue),
-
-          timeUnitFromUnits(getDefined(t2?.unit)),
-          BigInt(getInstanceof(v2, NumberValue).getData().valueOf())
-        ),
-      functor: ([t1, t2]) =>
-        Type.combine(t2.isTimeQuantity(), () =>
+      fnValues: dateAndNumberFnValues,
+      functor: async ([t1, t2]) =>
+        Type.combine(t2.isTimeQuantity(), async () =>
           dateAndTimeQuantityFunctor([t1, t2])
         ),
     },
     {
       argTypes: ['number', 'date'],
-      fnValues: ([v1, v2], [t1] = []) =>
-        addDateAndTimeQuantity(
-          getInstanceof(v2, DateValue),
-          timeUnitFromUnits(getDefined(t1?.unit)),
-          BigInt(getInstanceof(v1, NumberValue).getData().valueOf())
-        ),
-      functor: ([t1, t2]) =>
-        Type.combine(t1.isTimeQuantity(), () =>
+      fnValues: async (values, types = []) =>
+        dateAndNumberFnValues(values.reverse(), types.reverse()),
+      functor: async ([t1, t2]) =>
+        Type.combine(t1.isTimeQuantity(), async () =>
           dateAndTimeQuantityFunctor([t2, t1])
         ),
     },
@@ -97,10 +105,12 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
   '-': [
     {
       argTypes: ['date', 'number'],
-      fnValues: ([v1, v2], [, t2] = []) => {
+      fnValues: async ([v1, v2], [, t2] = []) => {
         const number = getInstanceof(v2, NumberValue);
 
-        const negatedQuantity = BigInt(number.getData().neg().valueOf());
+        const negatedQuantity = BigInt(
+          (await number.getData()).neg().valueOf()
+        );
 
         return addDateAndTimeQuantity(
           getInstanceof(v1, DateValue),
@@ -112,10 +122,10 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
     },
     {
       argTypes: ['date', 'date'],
-      fnValues: ([v1, v2]) => {
+      fnValues: async ([v1, v2]) => {
         const d1 = getInstanceof(v1, DateValue);
         const d2 = getInstanceof(v2, DateValue);
-        const difference = subtractDates(d1, d2, d1.specificity);
+        const difference = await subtractDates(d1, d2, d1.specificity);
 
         return NumberValue.fromValue(difference);
       },

@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-import { useComputer, useEditorChange } from '@decipad/react-contexts';
+import { useCallback } from 'react';
+import { useComputer, useEditorSelector } from '@decipad/react-contexts';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import {
   MyEditor,
@@ -9,8 +9,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
-
-export type UseColumnInferredTypeResult = CellValueType[];
+import { useResolved } from '@decipad/react-utils';
 
 const collectColumnData = (
   editor: MyEditor,
@@ -37,6 +36,8 @@ const collectColumnData = (
   return columnData;
 };
 
+const EMPTY: Array<never> = [];
+
 const collectColumnsData = (
   editor: MyEditor,
   element: TableElement
@@ -47,26 +48,23 @@ const collectColumnsData = (
 
 export const useColumnsInferredTypes = (
   element: TableElement
-): UseColumnInferredTypeResult => {
+): CellValueType[] => {
   const computer = useComputer();
-  const [types, setTypes] = useState<CellValueType[]>(() =>
-    element.children[1].children.map((th) => th.cellType)
-  );
 
   const inferColumnsTypes = useCallback(
-    (editor: MyEditor): CellValueType[] => {
+    (editor: MyEditor): Promise<CellValueType[]> => {
       const columnsData = collectColumnsData(editor, element);
       const headerCells = element.children[1].children;
-      return columnsData.map((columnData, columnIndex) =>
-        inferColumn(computer, columnData, {
-          userType: headerCells[columnIndex]?.cellType,
-        })
+      return Promise.all(
+        columnsData.map((columnData, columnIndex) =>
+          inferColumn(computer, columnData, {
+            userType: headerCells[columnIndex]?.cellType,
+          })
+        )
       );
     },
     [computer, element]
   );
 
-  useEditorChange(setTypes, inferColumnsTypes);
-
-  return types;
+  return useResolved(useEditorSelector(inferColumnsTypes)) ?? EMPTY;
 };

@@ -5,11 +5,14 @@ import type { ColumnLikeValue } from '../value';
  *
  * ColumnLike values which transform the order or arity of indices supply an .indexToLabelIndex method
  */
-export function getLabelIndex(column: ColumnLikeValue, index: number): number {
+export async function getLabelIndex(
+  column: ColumnLikeValue,
+  index: number
+): Promise<number> {
   getPositive(index);
 
   if (column.indexToLabelIndex) {
-    return getPositive(column.indexToLabelIndex(index));
+    return getPositive(await column.indexToLabelIndex(index));
   }
 
   return index;
@@ -17,7 +20,7 @@ export function getLabelIndex(column: ColumnLikeValue, index: number): number {
 
 const getPositive = (index: number | null) => {
   if (index == null || index < 0) {
-    throw new Error(`getLabelIndex got an invalid index ${index}`);
+    throw new Error(`index not found ${index}`);
   } else {
     return index;
   }

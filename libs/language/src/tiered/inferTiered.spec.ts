@@ -5,47 +5,32 @@ import { c, n, r, tiered, tieredDef, U } from '../utils';
 import { inferTiered } from './inferTiered';
 
 describe('inferTiered', () => {
-  it('infers to error if empty', () => {
+  it('infers to error if empty', async () => {
     expect(
-      inferTiered(makeContext(), tiered(n('literal', 'number', N(1))))
+      (await inferTiered(makeContext(), tiered(n('literal', 'number', N(1)))))
         .errorCause
     ).toBeDefined();
   });
 
-  it('errors if tiered arg is not number', () => {
+  it('errors if tiered arg is not number', async () => {
     expect(
-      inferTiered(makeContext(), tiered(n('literal', 'boolean', true)))
+      (await inferTiered(makeContext(), tiered(n('literal', 'boolean', true))))
         .errorCause
     ).toBeDefined();
   });
 
-  it('errors if tier is not a number', () => {
+  it('errors if tier is not a number', async () => {
     expect(
-      inferTiered(
-        makeContext(),
-        tiered(
+      (
+        await inferTiered(
+          makeContext(),
           tiered(
-            n('literal', 'number', N(1)),
-            tieredDef(
-              n('literal', 'boolean', true),
-              n('literal', 'number', N(1))
-            )
-          )
-        )
-      ).errorCause
-    ).toBeDefined();
-  });
-
-  it('errors if tier value is not number', () => {
-    expect(
-      inferTiered(
-        makeContext(),
-        tiered(
-          tiered(
-            n('literal', 'number', N(1)),
-            tieredDef(
+            tiered(
               n('literal', 'number', N(1)),
-              n('literal', 'boolean', true)
+              tieredDef(
+                n('literal', 'boolean', true),
+                n('literal', 'number', N(1))
+              )
             )
           )
         )
@@ -53,9 +38,28 @@ describe('inferTiered', () => {
     ).toBeDefined();
   });
 
-  it('infers to type of value', () => {
+  it('errors if tier value is not number', async () => {
     expect(
-      inferTiered(
+      (
+        await inferTiered(
+          makeContext(),
+          tiered(
+            tiered(
+              n('literal', 'number', N(1)),
+              tieredDef(
+                n('literal', 'number', N(1)),
+                n('literal', 'boolean', true)
+              )
+            )
+          )
+        )
+      ).errorCause
+    ).toBeDefined();
+  });
+
+  it('infers to type of value', async () => {
+    expect(
+      await inferTiered(
         makeContext(),
         tiered(
           n('literal', 'number', N(1)),
@@ -72,19 +76,21 @@ describe('inferTiered', () => {
     ).toMatchObject(T.number(U('USD', { known: true })));
   });
 
-  it('tier defs must be congruous', () => {
+  it('tier defs must be congruous', async () => {
     expect(
-      inferTiered(
-        makeContext(),
-        tiered(
-          n('literal', 'number', N(1)),
-          tieredDef(
+      (
+        await inferTiered(
+          makeContext(),
+          tiered(
             n('literal', 'number', N(1)),
-            c('*', n('literal', 'number', N(2)), r('USD'))
-          ),
-          tieredDef(
-            n('literal', 'number', N(1)),
-            c('*', n('literal', 'number', N(2)), r('EUR'))
+            tieredDef(
+              n('literal', 'number', N(1)),
+              c('*', n('literal', 'number', N(2)), r('USD'))
+            ),
+            tieredDef(
+              n('literal', 'number', N(1)),
+              c('*', n('literal', 'number', N(2)), r('EUR'))
+            )
           )
         )
       ).errorCause

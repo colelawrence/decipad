@@ -60,7 +60,7 @@ export const UpdatesHandler: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (!foundUpdate && 'serviceWorker' in navigator) {
-      const interval = setInterval(async () => {
+      const interval = setInterval(() => {
         if (!foundUpdate) {
           tryToUpdate();
         }

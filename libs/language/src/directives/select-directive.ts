@@ -6,7 +6,7 @@ export const select: DirectiveImpl<AST.SelectDirective> = {
   getType() {
     return t.impossible(InferError.retiredFeature('select'));
   },
-  async getValue() {
+  getValue() {
     throw new Error('unreachable');
   },
 };

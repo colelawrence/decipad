@@ -16,6 +16,12 @@
     },
     {
       "path": "../number"
+    },
+    {
+      "path": "../generator-utils"
+    },
+    {
+      "path": "../fnqueue"
     }
   ]
 }

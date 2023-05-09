@@ -1,4 +1,4 @@
-import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import { IdentifiedError, IdentifiedResult, Result } from '@decipad/computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   PlateComponent,
@@ -13,15 +13,15 @@ import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 export const TableColumnFormula: PlateComponent = ({ children, element }) => {
   assertElementType(element, ELEMENT_TABLE_COLUMN_FORMULA);
   const header = useTableColumnHeaderOfTableAbove(element, element.columnId);
-  const typeErrorResult = useComputer().getBlockIdResult$.useWithSelector(
-    selectTypeErrors,
+  const errorResult = useComputer().getBlockIdResult$.useWithSelector(
+    selectErrors,
     element.columnId
   );
 
   useAutoConvertToSmartRef(element);
 
   return (
-    <CodeLine variant="table" result={typeErrorResult} element={element}>
+    <CodeLine variant="table" result={errorResult} element={element}>
       <span contentEditable={false}>
         <CodeVariable type={{ kind: 'table-formula' }} showTooltip={false}>
           {header && Node.string(header)}
@@ -33,8 +33,32 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
   );
 };
 
-const selectTypeErrors = (blockResult?: IdentifiedResult | IdentifiedError) => {
-  if (blockResult?.result?.type.kind === 'type-error') {
+const errorMessage = (message?: string): string => {
+  if (message === 'No solutions') {
+    return 'Syntax error';
+  }
+  return message ?? 'Unknown error';
+};
+
+const selectErrors = (
+  blockResult?: IdentifiedResult | IdentifiedError
+): Result.Result | undefined => {
+  if (blockResult?.type === 'identified-error') {
+    return {
+      type: {
+        kind: 'type-error',
+        errorCause: {
+          errType: 'free-form',
+          message: errorMessage(blockResult.error?.message),
+        },
+      },
+      value: Result.Unknown,
+    };
+  }
+  if (
+    blockResult?.type === 'computer-result' &&
+    blockResult?.result?.type.kind === 'type-error'
+  ) {
     return blockResult.result;
   }
   return undefined;

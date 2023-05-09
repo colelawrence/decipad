@@ -9,33 +9,35 @@ import { isTimeSpecificity } from '../../date/index';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { DateValue, Scalar } from '../../value';
 
-const roundNumberFunctor: BuiltinSpec['functor'] = ([n, precision]) =>
+const roundNumberFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
   Type.combine((precision ?? n).isScalar('number'), n.isScalar('number'));
 
-const roundDateFunctor: BuiltinSpec['functor'] = ([n, precision]) =>
-  Type.combine(precision.isScalar('number'), n.isDate()).mapType((t) => {
-    if (!precision.unit || precision.unit.length !== 1) {
-      return t.withErrorCause(`round: invalid time unit`);
-    }
-    const unitName = singular(precision.unit[0].unit.toLocaleLowerCase());
-    if (!isTimeSpecificity(unitName)) {
-      return t.withErrorCause(`round: invalid time unit ${unitName}`);
-    }
+const roundDateFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
+  (await Type.combine(precision.isScalar('number'), n.isDate())).mapType(
+    (t) => {
+      if (!precision.unit || precision.unit.length !== 1) {
+        return t.withErrorCause(`round: invalid time unit`);
+      }
+      const unitName = singular(precision.unit[0].unit.toLocaleLowerCase());
+      if (!isTimeSpecificity(unitName)) {
+        return t.withErrorCause(`round: invalid time unit ${unitName}`);
+      }
 
-    return produce(t, (time) => {
-      time.date = unitName;
-      return time;
-    });
-  });
+      return produce(t, (time) => {
+        time.date = unitName;
+        return time;
+      });
+    }
+  );
 
 const roundWrap = (
   round: (f: DeciNumber, decimalPrecisionValue: DeciNumber) => DeciNumber
 ): NonNullable<BuiltinSpec['fnValues']> => {
-  return ([nValue, decimalPrecisionValue], [type] = []) => {
-    const n = getInstanceof(nValue.getData(), DeciNumber);
+  return async ([nValue, decimalPrecisionValue], [type] = []) => {
+    const n = getInstanceof(await nValue.getData(), DeciNumber);
     const multiplier = multiplyMultipliers(type.unit);
     const decimalPrecision = decimalPrecisionValue
-      ? getInstanceof(decimalPrecisionValue.getData(), DeciNumber)
+      ? getInstanceof(await decimalPrecisionValue.getData(), DeciNumber)
       : ZERO;
     if (decimalPrecision.compare(N(100)) > 0) {
       throw new RuntimeError('round: decimal precision must be < 100');
@@ -70,8 +72,8 @@ export const roundOperators: Record<string, BuiltinSpec> = {
         {
           argTypes: ['date', 'number'],
           functor: roundDateFunctor,
-          fnValues: ([date], types) => {
-            const d = date.getData();
+          fnValues: async ([date], types) => {
+            const d = await date.getData();
             if (typeof d !== 'bigint' && typeof d !== 'number') {
               throw new Error(
                 `Expected date to be number or bigint and was ${typeof d}`

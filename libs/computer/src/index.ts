@@ -48,6 +48,10 @@ export {
   simpleValueUnitToString,
   simpleValueToString,
   cleanDate,
+  materializeOneResult,
+  materializeResult,
+  serializeType,
+  buildType,
 } from '@decipad/language';
 
 export {
@@ -57,6 +61,9 @@ export {
   identifiedErrorToMessage,
   isTypeError,
   getDefinedSymbol,
+  isColumn,
+  isTable,
+  isTableResult,
 } from './utils';
 
 export { unnestTableRows } from './tools';
@@ -68,3 +75,5 @@ export * from './reporting';
 
 export { getExprRef } from './exprRefs';
 export type { IdentifiedBlock, BlocksInUseInformation } from './types';
+
+export * from './result';

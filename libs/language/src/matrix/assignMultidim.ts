@@ -1,4 +1,5 @@
 import { getDefined } from '@decipad/utils';
+import { map } from '@decipad/generator-utils';
 import { AST, Column, Type } from '..';
 import { evaluate, Realm, RuntimeError } from '../interpreter';
 import { ColumnLikeValue, Value, isColumnLike } from '../value';
@@ -6,7 +7,7 @@ import { buildType as t, InferError } from '../type';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
 
-export function inferMultidimAssignment(
+export async function inferMultidimAssignment(
   dimension: Type,
   assignee: Type,
   previousMatrix?: Type
@@ -14,7 +15,7 @@ export function inferMultidimAssignment(
   let returnedCellType = assignee.cellType ?? assignee;
 
   if (previousMatrix) {
-    returnedCellType = returnedCellType.sameAs(previousMatrix.reduced());
+    returnedCellType = await returnedCellType.sameAs(previousMatrix.reduced());
   }
 
   return t.column(returnedCellType, getIndexName(dimension));
@@ -24,7 +25,7 @@ export async function evaluateMultidimAssignment(
   realm: Realm,
   node: AST.MatrixAssign,
   dimension: ColumnLikeValue
-) {
+): Promise<ColumnLikeValue> {
   const [, matchers, assigneeExp] = node.args;
   const [matchCount, matches] = await matchTargets(
     realm.inferContext,
@@ -34,24 +35,25 @@ export async function evaluateMultidimAssignment(
 
   const assignee = await evaluate(realm, assigneeExp);
 
-  let getAssignee = (): Value => assignee;
+  let getAssignee = async (): Promise<Value> => Promise.resolve(assignee);
   if (isColumnLike(assignee)) {
     // There must be one item for each match
-    if (assignee.values.length !== matchCount) {
+    if ((await assignee.rowCount()) !== matchCount) {
       throw new RuntimeError(new InferError('Mismatched column sizes'));
     }
 
     let targetIndex = 0;
-    getAssignee = () => getDefined(assignee.atIndex(targetIndex++));
+    getAssignee = async () => getDefined(await assignee.atIndex(targetIndex++));
   }
 
-  return Column.fromValues(
-    dimension.values.map((valueInCol, index) => {
+  const gen = (start?: number, end?: number) =>
+    map(dimension.values(start, end), async (valueInCol, index) => {
       if (matches[index]) {
         return getAssignee();
       } else {
         return valueInCol;
       }
-    })
-  );
+    });
+
+  return Column.fromGenerator(gen);
 }

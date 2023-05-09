@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Computer, SerializedType } from '@decipad/computer';
+import { Computer, SerializedType, isColumn, isTable } from '@decipad/computer';
 import { encodingFor } from './plotUtils';
 import { PlotSpec } from './plotUtils.interface';
 
@@ -16,7 +16,7 @@ const firstColumnInKind = (
   kinds: KindSet,
   exclude: ExclusionList = []
 ): [string, SerializedType] | undefined => {
-  if (type.kind !== 'table') {
+  if (!isTable(type)) {
     return undefined;
   }
   let columnIndex = -1;
@@ -26,7 +26,7 @@ const firstColumnInKind = (
     if (exclude.indexOf(columnName) >= 0) {
       continue;
     }
-    if (columnType.kind === 'column' && kinds.has(columnType.cellType.kind)) {
+    if (isColumn(columnType) && kinds.has(columnType.cellType.kind)) {
       return [type.columnNames[columnIndex], columnType.cellType];
     }
   }
@@ -46,7 +46,7 @@ export const defaultPlotSpec = (
   type: undefined | SerializedType,
   spec: PlotSpec | undefined
 ): PlotSpec | undefined => {
-  if (type?.kind !== 'table' || !spec) {
+  if (!isTable(type) || !spec) {
     return spec;
   }
   // pie charts

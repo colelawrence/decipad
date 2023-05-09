@@ -1,42 +1,56 @@
 import { findNodePath } from '@udecode/plate';
-import { Result } from '@decipad/computer';
+import { Result, isTableResult } from '@decipad/computer';
 import {
   MyReactEditor,
   TableCellElement,
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
+import {
+  useEditorTableContext,
+  useEditorTableResultContext,
+} from '@decipad/react-contexts';
+import { useMemo } from 'react';
+import { all } from '@decipad/generator-utils';
+import { useResolved } from '@decipad/react-utils';
 
 export function useTableColumnFormulaResultForCell(
   element: TableCellElement | TableHeaderElement
 ): Result.Result | undefined {
   const editor = useTEditorRef();
-  const computer = useComputer();
-
   const [rowIndex, colIndex] = findFormulaCoordinates(editor, element);
-  const columnBlockId = useColumnBlockId(colIndex);
-
-  return computer.getBlockIdResult$.useWithSelector((result) => {
-    const column = getColumnResult(result?.result);
-
-    if (column && rowIndex != null) {
-      const type = column.type.cellType;
-      const value = column.value.at(rowIndex);
-
-      return (type && value && { type, value }) || undefined;
-    }
-    return undefined;
-  }, columnBlockId);
+  const columnResult = useTableColumnFormulaResultForColumn(colIndex);
+  const isTableColumnFormula = useIsTableColumnFormula(colIndex);
+  return useMemo(
+    () =>
+      isTableColumnFormula &&
+      rowIndex != null &&
+      columnResult?.type.kind === 'materialized-column'
+        ? {
+            type: columnResult.type.cellType,
+            value: columnResult.value[rowIndex] as Result.OneResult,
+          }
+        : undefined,
+    [columnResult, isTableColumnFormula, rowIndex]
+  );
 }
 
 export function useTableColumnFormulaResultForColumn(
   colIndex?: number
-): Result.Result<'column'> | undefined {
-  const computer = useComputer();
-  const blockId = useColumnBlockId(colIndex);
-
-  return getColumnResult(computer.getBlockIdResult$.use(blockId)?.result);
+): Result.Result<'materialized-column'> | undefined {
+  const tableResult = useEditorTableResultContext();
+  return useResolved(
+    useMemo(
+      async () =>
+        isTableResult(tableResult)
+          ? getColumnResult(
+              tableResult as Result.Result<'table' | 'materialized-table'>,
+              colIndex
+            )
+          : undefined,
+      [colIndex, tableResult]
+    )
+  );
 }
 
 const findFormulaCoordinates = (
@@ -54,17 +68,40 @@ const findFormulaCoordinates = (
   return [rowIndex, colIndex] as const;
 };
 
-const getColumnResult = (result: Result.Result | undefined) => {
-  if (result?.type.kind === 'column') {
-    return result as Result.Result<'column'>;
+const getColumnResult = async (
+  result: Result.Result<'table' | 'materialized-table'>,
+  columnIndex?: number
+): Promise<Result.Result<'materialized-column'> | undefined> => {
+  if (columnIndex != null) {
+    const value = await getColumnResultValue(result, columnIndex);
+    if (value != null) {
+      return {
+        type: {
+          kind: 'materialized-column',
+          indexedBy: result.type.indexName,
+          cellType: result.type.columnTypes[columnIndex],
+        },
+        value,
+      };
+    }
   }
   return undefined;
 };
 
-const useColumnBlockId = (colIndex?: number) => {
-  const { cellTypes, columnBlockIds } = useEditorTableContext();
+const getColumnResultValue = async (
+  result: Result.Result<'table' | 'materialized-table'>,
+  columnIndex?: number
+): Promise<Result.Result<'materialized-column'>['value'] | undefined> => {
+  const columnValue =
+    columnIndex != null ? result.value[columnIndex] : undefined;
+  if (columnValue != null) {
+    return typeof columnValue === 'function' ? all(columnValue()) : columnValue;
+  }
+  return undefined;
+};
 
-  return colIndex != null && cellTypes[colIndex]?.kind === 'table-formula'
-    ? columnBlockIds.at(colIndex)
-    : undefined;
+const useIsTableColumnFormula = (colIndex?: number): boolean => {
+  const { cellTypes } = useEditorTableContext();
+
+  return colIndex != null && cellTypes[colIndex]?.kind === 'table-formula';
 };

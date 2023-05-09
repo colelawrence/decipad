@@ -36,7 +36,7 @@ expect.addSnapshotSerializer({
   test: (v) => v instanceof DateValue,
   print: (date) =>
     `DateValue(${date.specificity} ${stringifyDate(
-      date.getData(),
+      date.moment,
       date.specificity
     )})`,
 });

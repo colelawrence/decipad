@@ -1,6 +1,10 @@
 /* istanbul ignore file */
 import { formatError, formatResult } from '@decipad/format';
-import { deserializeType, RuntimeError } from '@decipad/language';
+import {
+  deserializeType,
+  materializeOneResult,
+  RuntimeError,
+} from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 
 import { Computer, NotebookResults } from '.';
@@ -10,7 +14,9 @@ type EvaluatedDoc = string | { crash: string };
 
 const DEFAULT_LOCALE = 'en-US';
 
-function resultFromComputerResult(result: NotebookResults): string {
+async function resultFromComputerResult(
+  result: NotebookResults
+): Promise<string> {
   for (const update of Object.values(result.blockResults)) {
     if (update.error) {
       return update.error.message;
@@ -28,7 +34,7 @@ function resultFromComputerResult(result: NotebookResults): string {
 
   return formatResult(
     DEFAULT_LOCALE,
-    lastResult.value,
+    lastResult.value && (await materializeOneResult(lastResult.value)),
     deserializeType(lastResult.type)
   );
 }
@@ -65,7 +71,7 @@ const loadStdin = async () => {
   return loadedCode;
 };
 
-function timeout(ms: number, code: string): Promise<never> {
+async function timeout(ms: number, code: string): Promise<never> {
   return new Promise((_resolve, reject) => {
     setTimeout(() => reject(new Error(`timeout evaluating ${code}`)), ms);
   });

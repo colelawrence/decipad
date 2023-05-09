@@ -267,7 +267,7 @@ async function testGrowTable({
       NewCol = ${newColumn}
     }
   `;
-  const resultAllInOneTable = await runCode(codeAllInOneExpression, {}).catch(
+  const resultAllInOneTable = await runCode(codeAllInOneExpression).catch(
     String
   );
 
@@ -280,7 +280,7 @@ async function testGrowTable({
     Table.NewCol = ${newColumn}
     Table
   `;
-  const resultAddingOneColumn = await runCode(codeAddingOneColumn, {}).catch(
+  const resultAddingOneColumn = await runCode(codeAddingOneColumn).catch(
     String
   );
   expect(resultAddingOneColumn).toEqual(resultAllInOneTable);
@@ -293,7 +293,7 @@ async function testGrowTable({
     Table.NewCol = ${newColumn}
     Table
   `;
-  const resultColByCol = await runCode(codeColByCol, {}).catch(String);
+  const resultColByCol = await runCode(codeColByCol).catch(String);
   expect(resultColByCol).toEqual(resultAllInOneTable);
 
   return resultAllInOneTable;

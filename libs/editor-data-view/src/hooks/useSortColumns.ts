@@ -1,6 +1,7 @@
 import { dequal } from 'dequal';
 import { useCallback } from 'react';
 import { Column as ColumnImpl, Comparable, applyMap } from '@decipad/column';
+import { all, filter } from '@decipad/generator-utils';
 import { Column } from '../types';
 
 interface UseSortColumnsProps {
@@ -17,7 +18,7 @@ export const useSortColumns = ({
   availableColumns,
 }: UseSortColumnsProps): UseSortColumnsReturn => {
   return useCallback(
-    (columnMap) => {
+    async (columnMap) => {
       if (!columnMap || !availableColumns) {
         setSortedColumns(undefined);
         return;
@@ -26,10 +27,14 @@ export const useSortColumns = ({
       const newSortedColumns = applyMap(
         ColumnImpl.fromValues(availableColumns as Comparable[]),
         columnMap
-      ).values.filter(Boolean) as unknown as typeof availableColumns;
+      );
 
-      if (!dequal(sortedColumns, newSortedColumns)) {
-        setSortedColumns(newSortedColumns);
+      const materializedNewSortedColumns = await all(
+        filter(newSortedColumns.values(), Boolean)
+      );
+
+      if (!dequal(sortedColumns, materializedNewSortedColumns)) {
+        setSortedColumns(materializedNewSortedColumns as Column[]);
       }
     },
     [availableColumns, setSortedColumns, sortedColumns]

@@ -16,7 +16,7 @@
  * If they don't pass, then surely existing models will break
  */
 
-import { Computer } from '@decipad/computer';
+import { Computer, materializeResult } from '@decipad/computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import {
   createTPlateEditor,
@@ -331,7 +331,11 @@ const run = async (...elements: MyValue[number][]) => {
 
   const ret = computer.results$.get();
 
-  return Object.values(ret.blockResults).map((r) => r.result ?? r.error);
+  return Promise.all(
+    Object.values(ret.blockResults).map(
+      (r) => (r.result && materializeResult(r.result)) ?? r.error
+    )
+  );
 };
 
 const mkTable = (

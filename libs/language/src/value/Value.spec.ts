@@ -1,4 +1,5 @@
 import { N } from '@decipad/number';
+import { all } from '@decipad/generator-utils';
 import { parseUTCDate } from '../date';
 import { jsCol } from '../lazy/testUtils';
 import {
@@ -11,6 +12,7 @@ import {
   MappedColumn,
 } from '.';
 import { getLabelIndex } from '../dimtools';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 it('can get from JS for testing', () => {
   expect(fromJS(1)).toEqual(Scalar.fromValue(1));
@@ -23,55 +25,75 @@ it('can get from JS for testing', () => {
   );
 });
 
-it('can represent a range', () => {
+it('can represent a range', async () => {
   expect(
-    Range.fromBounds(Scalar.fromValue(0), Scalar.fromValue(10)).getData()
+    await (
+      await Range.fromBounds(Scalar.fromValue(0), Scalar.fromValue(10))
+    ).getData()
   ).toEqual([N(0), N(10)]);
 
-  const r = Range.fromBounds(fromJS(0), fromJS(10));
-  expect(() => Range.fromBounds(r, r).getData()).toThrow();
+  const r = await Range.fromBounds(fromJS(0), fromJS(10));
+  await expect(async () => Range.fromBounds(r, r)).rejects.toThrow();
 });
 
 const d = parseUTCDate;
 
-it('can represent a date', () => {
+it('can represent a date', async () => {
   const date = DateValue.fromDateAndSpecificity(d('2020-01-04'), 'month');
-  expect(date.getData()).toEqual(d('2020-01'));
+  expect(await date.getData()).toEqual(d('2020-01'));
 });
 
-it('can represent a column of dates', () => {
+it('can represent a column of dates', async () => {
   const dates = Column.fromValues([
     DateValue.fromDateAndSpecificity(d('2021-02-15'), 'month'),
     DateValue.fromDateAndSpecificity(d('2021-06-15'), 'month'),
   ]);
 
-  expect(dates.getData()).toEqual([d('2021-02'), d('2021-06')]);
+  expect(await materializeOneResult(await dates.getData())).toEqual([
+    d('2021-02'),
+    d('2021-06'),
+  ]);
 });
 
-it('Can retrieve the original index in a filtered column', () => {
+it('Can retrieve the original index in a filtered column', async () => {
   const values = jsCol([1, 2, 3]);
   const doNothingFilter = new FilteredColumn(values, [true, true, true]);
-  expect(getLabelIndex(doNothingFilter, 1)).toEqual(1);
+  expect(await getLabelIndex(doNothingFilter, 1)).toEqual(1);
 
   const firstTakenOff = new FilteredColumn(values, [false, true, true]);
-  expect(getLabelIndex(firstTakenOff, 0)).toEqual(1);
-  expect(getLabelIndex(firstTakenOff, 1)).toEqual(2);
-  expect(() => getLabelIndex(firstTakenOff, 2)).toThrow();
+  expect(await getLabelIndex(firstTakenOff, 0)).toEqual(1);
+  expect(await getLabelIndex(firstTakenOff, 1)).toEqual(2);
+  await expect(async () => getLabelIndex(firstTakenOff, 2)).rejects.toThrow();
 });
 
-it('Can retrieve the original index in a doubly filtered column', () => {
+it('Can retrieve the original index in a doubly filtered column', async () => {
   const values = jsCol([1, 2, 3]);
   const firstTakenOff = new FilteredColumn(values, [false, true, true]);
   const lastTakenOff = new FilteredColumn(firstTakenOff, [true, false]);
 
-  expect(getLabelIndex(lastTakenOff, 0)).toEqual(1);
-  expect(() => getLabelIndex(lastTakenOff, 1)).toThrow(/index not found/);
+  expect(await getLabelIndex(lastTakenOff, 0)).toEqual(1);
+  await expect(async () => getLabelIndex(lastTakenOff, 1)).rejects.toThrow(
+    /index not found/
+  );
 });
 
-it('Can retrieve the original index in a mapped column', () => {
+it('Can retrieve the original index in a mapped column', async () => {
   const values = jsCol([1, 2, 3]);
 
   const reversed = new MappedColumn(values, [2, 1, 0]);
-  expect(getLabelIndex(reversed, 0)).toEqual(2);
-  expect(getLabelIndex(reversed, 2)).toEqual(0);
+  expect(await getLabelIndex(reversed, 0)).toEqual(2);
+  expect(await getLabelIndex(reversed, 2)).toEqual(0);
+});
+
+it('can create column from generator', async () => {
+  const col = Column.fromGenerator(async function* generate() {
+    yield Scalar.fromValue(N(1));
+    yield Scalar.fromValue(N(2));
+    yield Scalar.fromValue(N(3));
+  });
+  expect(await all(col.values())).toEqual([
+    Scalar.fromValue(N(1)),
+    Scalar.fromValue(N(2)),
+    Scalar.fromValue(N(3)),
+  ]);
 });

@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+import pSeries from 'p-series';
 import { AST } from '..';
 import {
   InferError,
@@ -39,12 +41,12 @@ export const linkToAST = (ctx: Context, node: AST.Node, type: Type) => {
 
 const wrap =
   <T extends AST.Node>(
-    fn: (ctx: Context, thing: T, cohercingTo?: Type) => Type
+    fn: (ctx: Context, thing: T, cohercingTo?: Type) => Promise<Type>
   ) =>
-  (ctx: Context, thing: T, cohercingTo?: Type): Type => {
-    let type = fn(ctx, thing);
+  async (ctx: Context, thing: T, cohercingTo?: Type): Promise<Type> => {
+    let type = await fn(ctx, thing);
     if (cohercingTo) {
-      type = type.sameAs(cohercingTo);
+      type = await type.sameAs(cohercingTo);
     }
     return linkToAST(ctx, thing, type);
   };
@@ -61,7 +63,7 @@ const wrap =
 export const inferExpression = wrap(
   // exhaustive switch
   // eslint-disable-next-line consistent-return
-  (ctx: Context, expr: AST.Expression): Type => {
+  async (ctx: Context, expr: AST.Expression): Promise<Type> => {
     switch (expr.type) {
       case 'noop': {
         return t.nothing();
@@ -111,19 +113,20 @@ export const inferExpression = wrap(
         return t[litType]();
       }
       case 'range': {
-        const [start, end] = expr.args.map((expr) =>
-          inferExpression(ctx, getDefined(expr))
+        const [start, end] = await pSeries(
+          expr.args.map(
+            (expr) => async () => inferExpression(ctx, getDefined(expr))
+          )
         );
         const pending = [start, end].find(typeIsPending);
         if (pending) {
           return pending;
         }
 
-        return Type.combine(start, end).mapType(() => {
-          const rangeOf =
-            start.date != null
-              ? start.sameAs(end)
-              : start.isScalar('number').sameAs(end);
+        return (await Type.combine(start, end)).mapType(async () => {
+          const rangeOf = await (start.date != null
+            ? start.sameAs(end)
+            : (await start.isScalar('number')).sameAs(end));
 
           return t.range(rangeOf);
         });
@@ -141,9 +144,11 @@ export const inferExpression = wrap(
           return t.impossible(InferError.unexpectedEmptyColumn());
         }
         const [firstCellNode, ...restCellNodes] = columnItems.args;
-        const firstCellType = inferExpression(ctx, firstCellNode);
-        const restCellTypes = restCellNodes.map((a) =>
-          inferExpression(ctx, a, firstCellType)
+        const firstCellType = await inferExpression(ctx, firstCellNode);
+        const restCellTypes = await pSeries(
+          restCellNodes.map(
+            (a) => async () => inferExpression(ctx, a, firstCellType)
+          )
         );
 
         // pending type is contagious
@@ -160,8 +165,8 @@ export const inferExpression = wrap(
         for (const restCell of restCellTypes) {
           if (
             !matchUnitArraysForColumn(
-              firstCellType.reducedToLowest().unit,
-              restCell.reducedToLowest().unit
+              (await firstCellType.reducedToLowest()).unit,
+              (await restCell.reducedToLowest()).unit
             )
           ) {
             return t.impossible(
@@ -174,12 +179,12 @@ export const inferExpression = wrap(
       case 'property-access': {
         const [thing, prop] = expr.args;
         const propName = getIdentifierString(prop);
-        const potentialTable = inferExpression(ctx, thing);
+        const potentialTable = await inferExpression(ctx, thing);
         // pending is contagious
         if (potentialTable.pending) {
           return potentialTable;
         }
-        const table = potentialTable.isTableOrRow();
+        const table = await potentialTable.isTableOrRow();
 
         const tableName =
           thing.type === 'ref' ? thing.args[0] : table.indexName;
@@ -240,7 +245,10 @@ export const inferExpression = wrap(
 );
 
 const inferStatementInternal = wrap(
-  (/* Mutable! */ ctx: Context, statement: AST.Statement): Type => {
+  async (
+    /* Mutable! */ ctx: Context,
+    statement: AST.Statement
+  ): Promise<Type> => {
     switch (statement.type) {
       case 'assign': {
         const [nName, nValue] = statement.args;
@@ -251,7 +259,7 @@ const inferStatementInternal = wrap(
         const type =
           constant || ctx.stack.has(varName, 'function')
             ? t.impossible(InferError.duplicatedName(varName))
-            : inferExpression(ctx, nValue);
+            : await inferExpression(ctx, nValue);
 
         ctx.stack.set(varName, type, 'function', ctx.statementId);
         return type;
@@ -278,9 +286,9 @@ const inferStatementInternal = wrap(
   }
 );
 
-export const inferStatement = (
+export const inferStatement = async (
   ...args: Parameters<typeof inferStatementInternal>
-) => {
+): Promise<Type> => {
   const [ctx] = args;
   const { usedNames: previoususedNames } = ctx;
 
@@ -291,7 +299,7 @@ export const inferStatement = (
   // Do not keep track of names retrieved here if we errored out
   ctx.usedNames = [...previoususedNames];
 
-  const type = inferStatementInternal(...args);
+  const type = await inferStatementInternal(...args);
 
   if (type.errorCause) {
     ctx.usedNames = previoususedNames;
@@ -300,22 +308,25 @@ export const inferStatement = (
   return type;
 };
 
-export const inferBlock = (block: AST.Block, ctx = makeContext()): Type => {
+export const inferBlock = async (
+  block: AST.Block,
+  ctx = makeContext()
+): Promise<Type> => {
   let last;
   for (const stmt of block.args) {
     // eslint-disable-next-line no-await-in-loop
-    last = inferStatement(ctx, stmt);
+    last = await inferStatement(ctx, stmt);
   }
   return getDefined(last, 'Unexpected empty block');
 };
 
-export const inferProgram = (
+export const inferProgram = async (
   program: AST.Block[],
   ctx = makeContext()
-): Context => {
+): Promise<Context> => {
   for (const block of program) {
     // eslint-disable-next-line no-await-in-loop
-    inferBlock(block, ctx);
+    await inferBlock(block, ctx);
   }
   return ctx;
 };

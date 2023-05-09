@@ -271,7 +271,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
     sub.unsubscribe();
   }
 
-  private async _updateHandler(update: Uint8Array, origin: unknown) {
+  private _updateHandler(update: Uint8Array, origin: unknown) {
     if (origin !== this) {
       this.mux.push(async () => {
         const encoder = encoding.createEncoder();
@@ -319,7 +319,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
     }
   }
 
-  async receive(message: Uint8Array): Promise<void> {
+  receive(message: Uint8Array): void {
     this.mux.push(async () => {
       this.wsLastMessageReceived = Date.now();
       const encoder = readMessage(this, message, true);
@@ -330,7 +330,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
   }
 
   onOpen(): void {
-    this.mux.push(async () => {
+    this.mux.push(() => {
       this.emit('status', [
         {
           status: 'connected',

@@ -11,12 +11,12 @@ export interface FunctionSignature {
   returnType: Type;
 }
 
-export function narrowTypes(
+export async function narrowTypes(
   t1: Type,
   t2: Type,
   mutSymbols = new Map<string, Type>(),
   errorPath: ('column' | 'range')[] = []
-): Type {
+): Promise<Type> {
   if (t1.errorCause) return t1;
   if (t2.errorCause) return t2;
 
@@ -43,7 +43,7 @@ export function narrowTypes(
   if (s1.kind === 'anything') return t2;
   if (s2UnknownType.kind === 'anything') return t1;
 
-  const ret = (() => {
+  const ret = await (async () => {
     if (s1.kind !== s2UnknownType.kind) {
       return t2.expected(s1.kind);
     }
@@ -83,7 +83,7 @@ export function narrowTypes(
       }
 
       case 'range': {
-        const narrowedContents = narrowTypes(
+        const narrowedContents = await narrowTypes(
           getDefined(t1.rangeOf),
           getDefined(t2.rangeOf),
           mutSymbols,
@@ -99,10 +99,11 @@ export function narrowTypes(
         });
       }
 
-      case 'column': {
+      case 'column':
+      case 'materialized-column': {
         const s2 = s2UnknownType as SerializedTypes.Column;
 
-        const narrowedCell = narrowTypes(
+        const narrowedCell = await narrowTypes(
           getDefined(t1.cellType),
           getDefined(t2.cellType),
           mutSymbols,
@@ -122,6 +123,7 @@ export function narrowTypes(
         });
       }
 
+      case 'materialized-table':
       case 'table': {
         throw new Error('tables cannot be narrowed');
       }
@@ -150,15 +152,17 @@ interface NarrowFunctionCallArgs {
   returnType: Type;
 }
 
-export function narrowFunctionCall({
+export async function narrowFunctionCall({
   args,
   expectedArgs,
   returnType,
-}: NarrowFunctionCallArgs): Type {
+}: NarrowFunctionCallArgs): Promise<Type> {
   const genericSymbols = new Map<string, Type>();
 
-  const actualArgs = zip(args, expectedArgs).map(([arg, expected]) =>
-    narrowTypes(expected, arg, genericSymbols)
+  const actualArgs = await Promise.all(
+    zip(args, expectedArgs).map(async ([arg, expected]) =>
+      narrowTypes(expected, arg, genericSymbols)
+    )
   );
 
   const error = actualArgs.find((t) => t.errorCause);

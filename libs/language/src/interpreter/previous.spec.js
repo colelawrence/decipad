@@ -9,15 +9,19 @@ describe('mapWithPrevious', () => {
   const realm = new Realm(makeContext());
 
   beforeAll(async () => {
-    rollySum = await mapWithPrevious(realm, new Map(), async function* () {
-      for (const row of rows) {
-        const previousValue =
-          realm.previousRow?.get(CURRENT_COLUMN_SYMBOL) || null;
-        foundPrevious.push(previousValue);
+    rollySum = await mapWithPrevious(
+      realm,
+      new Map(),
+      async function* mapper() {
+        for (const row of rows) {
+          const previousValue =
+            realm.previousRow?.get(CURRENT_COLUMN_SYMBOL) || null;
+          foundPrevious.push(previousValue);
 
-        yield (previousValue || 0) + row;
+          yield (previousValue || 0) + row;
+        }
       }
-    });
+    );
   });
 
   test('realm.previousRow should be set to null at the end', () => {

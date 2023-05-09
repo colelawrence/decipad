@@ -5,8 +5,8 @@ import { expandUnits, contractUnits } from './expand';
 import { zip } from '../utils';
 import { automapValues } from '../dimtools';
 
-function autoconvertArgument(value: Value, type: Type): Value {
-  const typeLowestDims = type.reducedToLowest();
+async function autoconvertArgument(value: Value, type: Type): Promise<Value> {
+  const typeLowestDims = await type.reducedToLowest();
   if (typeLowestDims.unit) {
     const [, expander] = expandUnits(getDefined(typeLowestDims.unit));
     return automapValues([type], [value], ([value]) => {
@@ -16,11 +16,14 @@ function autoconvertArgument(value: Value, type: Type): Value {
       return value;
     });
   }
-  return value;
+  return Promise.resolve(value);
 }
 
-export function autoconvertResult(value: Value, type: Type): Value {
-  const typeLowestDims = type.reducedToLowest();
+export async function autoconvertResult(
+  value: Value,
+  type: Type
+): Promise<Value> {
+  const typeLowestDims = await type.reducedToLowest();
   if (typeLowestDims.unit) {
     const [, contractor] = contractUnits(getDefined(typeLowestDims.unit));
     return automapValues([type], [value], ([value]) => {
@@ -30,11 +33,16 @@ export function autoconvertResult(value: Value, type: Type): Value {
       return value;
     });
   }
-  return value;
+  return Promise.resolve(value);
 }
 
-export function autoconvertArguments(values: Value[], types: Type[]): Value[] {
-  return zip(values, types).map(([value, type]) =>
-    autoconvertArgument(value, type)
+export async function autoconvertArguments(
+  values: Value[],
+  types: Type[]
+): Promise<Value[]> {
+  return Promise.all(
+    zip(values, types).map(async ([value, type]) =>
+      autoconvertArgument(value, type)
+    )
   );
 }

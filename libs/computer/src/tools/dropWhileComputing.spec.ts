@@ -55,7 +55,7 @@ it('propagates errors and completion', async () => {
   const next = jest.fn();
 
   inputs
-    // eslint-disable-next-line prefer-promise-reject-errors
+    // eslint-disable-next-line prefer-promise-reject-errors, @typescript-eslint/promise-function-async
     .pipe(dropWhileComputing(() => Promise.reject('compute error!')))
     .subscribe({ next, error });
 

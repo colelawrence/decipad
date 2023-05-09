@@ -22,15 +22,17 @@ export const findInvalidCardinality = (
 export const linearizeType = (type: Type): Type[] =>
   type.cellType ? [type, ...linearizeType(type.cellType)] : [type];
 
-export const deLinearizeType = (types: Type[]): Type => {
+export const deLinearizeType = async (types: Type[]): Promise<Type> => {
   const [initialType, ...rest] = types;
-  return Type.combine(initialType, ...rest).mapType(() =>
-    types.length === 1
-      ? initialType
-      : produce(types[0], (type) => {
-          type.cellType = deLinearizeType(rest);
-        })
-  );
+  return (await Type.combine(initialType, ...rest)).mapType(async () => {
+    if (types.length === 1) {
+      return initialType;
+    }
+    const cellType = await deLinearizeType(rest);
+    return produce(types[0], (type) => {
+      type.cellType = cellType;
+    });
+  });
 };
 
 export const typeToDimensionIds = (type: Type): DimensionId[] => {

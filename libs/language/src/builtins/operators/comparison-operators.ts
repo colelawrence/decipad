@@ -2,7 +2,7 @@ import { BuiltinSpec } from '../interfaces';
 import { Type, buildType as t, InferError } from '../../type';
 import { compare } from '../../compare';
 
-const cmpFunctor = ([left, right]: Type[]): Type => {
+const cmpFunctor = async ([left, right]: Type[]) => {
   if (left.type === 'boolean') {
     return t.impossible(InferError.expectedButGot('number', left));
   }

@@ -1,13 +1,11 @@
 import { ImportElementSource } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
+import { PromiseOrType, getDefined } from '@decipad/utils';
 import providers from './providers';
 import { isRandomImportUrl } from './isRandomImportUrl';
 
 type IsImportUrlResult = [boolean, undefined | ImportElementSource];
 
-const isProviderImportUrl = async (
-  url: URL
-): Promise<ImportElementSource | undefined> => {
+const isProviderImportUrl = (url: URL): ImportElementSource | undefined => {
   return providers.find(({ matchUrl }) => {
     try {
       return matchUrl(url);
@@ -17,7 +15,7 @@ const isProviderImportUrl = async (
   })?.name as undefined | ImportElementSource;
 };
 
-export const isImportUrl = async (text: string): Promise<IsImportUrlResult> => {
+export const isImportUrl = (text: string): PromiseOrType<IsImportUrlResult> => {
   let url: URL | undefined;
   try {
     url = new URL(text.trim());
@@ -25,7 +23,7 @@ export const isImportUrl = async (text: string): Promise<IsImportUrlResult> => {
     // not a URL
     return [false, undefined];
   }
-  const provider = await isProviderImportUrl(getDefined(url));
+  const provider = isProviderImportUrl(getDefined(url));
   if (provider) {
     return [true, provider];
   }

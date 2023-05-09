@@ -56,7 +56,7 @@ test('sync many', (ctx) => {
     ).data.createPad;
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     for (const editor of editors) {
       editor.destroy();
     }
@@ -66,6 +66,7 @@ test('sync many', (ctx) => {
     const auth = await ctx.auth();
     fetch.mockClear();
     fetch.enableMocks();
+    // eslint-disable-next-line require-await
     fetch.mockResponse(async (req) => {
       const { pathname } = new URL(req.url);
       switch (pathname) {
@@ -109,7 +110,7 @@ test('sync many', (ctx) => {
       randomChangeCountPerReplica
     );
 
-    await waitForExpect(async () => {
+    await waitForExpect(() => {
       const expectedContents = clone(editors[0].children);
       expect(editors.length).toBe(replicaCount);
       for (const editor2 of editors.slice(1)) {

@@ -28,19 +28,19 @@ interface InferTypeOptions {
   doNotTryExpressionNumbersParse?: boolean;
 }
 
-const tryInferChain = (
+const tryInferChain = async (
   computer: Computer,
   text: string,
   options: InferTypeOptions
-): CoercibleType => {
+): Promise<CoercibleType> => {
   let inferResult = inferDate(text, 'month') ??
     inferDate(text, 'day') ??
     inferBoolean(text) ??
-    inferNumber(computer, text, options) ??
+    (await inferNumber(computer, text, options)) ??
     inferDate(text) ??
     (options.doNotTryExpressionNumbersParse
       ? undefined
-      : inferExpression(computer, text)) ?? {
+      : await inferExpression(computer, text)) ?? {
       type: { kind: 'string' },
       coerced: text,
     };
@@ -54,11 +54,11 @@ const tryInferChain = (
   return inferResult;
 };
 
-export const inferType = (
+export const inferType = async (
   computer: Computer,
   _text: string,
   options: InferTypeOptions = {}
-): CoercibleType => {
+): Promise<CoercibleType> => {
   const text = _text.trim();
 
   const { type } = options;
@@ -70,7 +70,8 @@ export const inferType = (
       return inferDate(text) ?? inferParseError(text, type.kind);
     case 'number':
       return (
-        inferNumber(computer, text, options) ?? inferParseError(text, type.kind)
+        (await inferNumber(computer, text, options)) ??
+        inferParseError(text, type.kind)
       );
     case 'string':
       return inferText(text);

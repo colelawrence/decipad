@@ -6,16 +6,17 @@ import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
 import { compare } from '../../compare';
 
-const extractDateValues = (a: Value) => {
+const extractDateValues = async (a: Value) => {
   const aVal = getInstanceof(a, DateValue);
-  return [aVal.getData(), aVal.getEnd()];
+  return [await aVal.getData(), await aVal.getEnd()];
 };
 
 export const miscOperators: Record<string, BuiltinSpec> = {
   if: {
     argCount: 3,
-    fnValues: ([cond, then, otherwise]) => (cond.getData() ? then : otherwise),
-    functor: ([cond, then, otherwise]) =>
+    fnValues: async ([cond, then, otherwise]) =>
+      (await cond.getData()) ? then : otherwise,
+    functor: async ([cond, then, otherwise]) =>
       Type.combine(cond.isScalar('boolean'), otherwise.sameAs(then)),
     explanation: 'Select a result based on a condition.',
     formulaGroup: 'Conditions',
@@ -28,25 +29,25 @@ export const miscOperators: Record<string, BuiltinSpec> = {
     ...overloadBuiltin('contains', 2, [
       {
         argTypes: ['range', 'number'],
-        fnValues: ([a, b]) => {
-          const [aStart, aEnd] = a.getData() as DeciNumber[];
-          const bNumber = b.getData() as DeciNumber;
+        fnValues: async ([a, b]) => {
+          const [aStart, aEnd] = (await a.getData()) as DeciNumber[];
+          const bNumber = getInstanceof(await b.getData(), DeciNumber);
           return fromJS(
             compare(bNumber, aStart) >= 0 && compare(bNumber, aEnd) <= 0
           );
         },
-        functor: ([a, b]): Type =>
+        functor: async ([a, b]) =>
           Type.combine(
             a.isRange(),
-            b.isScalar('number').sameAs(a.getRangeOf()),
+            (await b.isScalar('number')).sameAs(a.getRangeOf()),
             t.boolean()
           ),
       },
       {
         argTypes: ['date', 'date'],
-        fnValues: ([a, b]) => {
-          const [[aDate, aEndDate], [bDate, bEndDate]] = [a, b].map(
-            extractDateValues
+        fnValues: async ([a, b]) => {
+          const [[aDate, aEndDate], [bDate, bEndDate]] = await Promise.all(
+            [a, b].map(extractDateValues)
           );
           if (aDate == null || bDate == null) {
             return fromJS(false);
@@ -56,21 +57,24 @@ export const miscOperators: Record<string, BuiltinSpec> = {
             aDate <= bDate && getDefined(aEndDate) >= getDefined(bEndDate)
           );
         },
-        functor: ([a, b]) => Type.combine(a.isDate(), b.isDate(), t.boolean()),
+        functor: async ([a, b]) =>
+          Type.combine(a.isDate(), b.isDate(), t.boolean()),
       },
       {
         argTypes: ['range', 'date'],
-        fnValues: ([rangeV, dateD]) => {
+        fnValues: async ([rangeV, dateD]) => {
           const { start, end } = getInstanceof(rangeV, Range);
-          const [[startDate], [endDate]] = [start, end].map(extractDateValues);
-          const [dateStart, dateEnd] = extractDateValues(dateD);
+          const [[startDate], [endDate]] = await Promise.all(
+            [start, end].map(extractDateValues)
+          );
+          const [dateStart, dateEnd] = await extractDateValues(dateD);
           if (!startDate || !endDate || !dateStart || !dateEnd) {
             return fromJS(false);
           }
 
           return fromJS(startDate <= dateStart && endDate >= dateEnd);
         },
-        functor: ([range, date]) =>
+        functor: async ([range, date]) =>
           Type.combine(range.isRange(), date.isDate(), t.boolean()),
       },
     ]),
@@ -82,8 +86,9 @@ export const miscOperators: Record<string, BuiltinSpec> = {
   stripunit: {
     argCount: 1,
     fnValues: ([expression]) => expression,
-    functor: ([expression]) =>
-      expression.isScalar('number').mapType(() => t.number()),
+    noAutoconvert: true,
+    functor: async ([expression]) =>
+      (await expression.isScalar('number')).mapType(() => t.number()),
     explanation: 'Removes the unit from an expression.',
     example: 'stripunit(5 minutes)',
     syntax: 'stripunit(Number with unit)',
@@ -92,6 +97,7 @@ export const miscOperators: Record<string, BuiltinSpec> = {
   getunit: {
     argCount: 1,
     fnValues: () => new NumberValue(1),
+    noAutoconvert: true,
     functor: ([expression]) => expression,
     explanation: 'Returns the unit from an expression',
     example: 'getunit(5 minutes)',

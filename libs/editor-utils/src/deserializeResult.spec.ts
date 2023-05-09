@@ -111,7 +111,7 @@ describe('deserialize result', () => {
             ],
           },
           "indexedBy": "",
-          "kind": "column",
+          "kind": "materialized-column",
         },
         "value": Array [
           DeciNumber(1),
@@ -187,7 +187,7 @@ describe('deserialize result', () => {
             },
           ],
           "indexName": "Column1",
-          "kind": "table",
+          "kind": "materialized-table",
         },
         "value": Array [
           Array [

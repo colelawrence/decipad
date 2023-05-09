@@ -1,4 +1,9 @@
-import { Computer, runCode, serializeResult } from '@decipad/computer';
+import {
+  Computer,
+  materializeOneResult,
+  runCode,
+  serializeResult,
+} from '@decipad/computer';
 import { timeout } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
 import { pushResultToComputer } from './useLiveConnection';
@@ -20,10 +25,16 @@ it('can push a new table into the computer', async () => {
   await timeout(0);
 
   expect(
-    Array.from(Object.values(computer.results.value.blockResults), (result) => [
-      result.id,
-      result.result?.value,
-    ])
+    await Promise.all(
+      Array.from(
+        Object.values(computer.results.value.blockResults),
+        async (result) => [
+          result.id,
+          result.result?.value &&
+            (await materializeOneResult(result.result?.value)),
+        ]
+      )
+    )
   ).toMatchInlineSnapshot(`
     Array [
       Array [

@@ -6,16 +6,16 @@ import { InferError, Type, buildType as t } from '../type';
 import { getIdentifierString } from '../utils';
 import { DirectiveImpl } from './types';
 
-export const getType: DirectiveImpl<AST.OfDirective>['getType'] = (
+export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
   ctx: Context,
   { args: [, expr, quality] }
-): Type => {
-  const expressionType = inferExpression(ctx, expr);
+) => {
+  const expressionType = await inferExpression(ctx, expr);
   if (expressionType.errorCause || expressionType.pending) {
     return expressionType;
   }
-  return automapTypes([expressionType], ([expressionType]: Type[]): Type => {
-    return expressionType.isScalar('number').mapType((type): Type => {
+  return automapTypes([expressionType], async ([expressionType]: Type[]) => {
+    return (await expressionType.isScalar('number')).mapType((type): Type => {
       if (!type.unit || type.unit.length !== 1) {
         return t.impossible(InferError.needOneAndOnlyOneUnit());
       }
@@ -31,7 +31,7 @@ export const getType: DirectiveImpl<AST.OfDirective>['getType'] = (
   });
 };
 
-export const getValue: DirectiveImpl<AST.OfDirective>['getValue'] = (
+export const getValue: DirectiveImpl<AST.OfDirective>['getValue'] = async (
   realm: Realm,
   { args: [, expr] }
 ) => evaluate(realm, expr);

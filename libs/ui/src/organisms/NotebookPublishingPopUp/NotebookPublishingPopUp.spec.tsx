@@ -29,7 +29,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 
@@ -65,7 +65,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 
@@ -100,7 +100,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 
@@ -133,7 +133,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 
@@ -165,7 +165,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 
@@ -192,7 +192,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 
@@ -221,7 +221,7 @@ describe('NotebookPublishingPopUp organism', () => {
 
     const publishButton = queryByTestId('publish-button');
 
-    await act(async () => {
+    await act(() => {
       publishButton?.click();
     });
 

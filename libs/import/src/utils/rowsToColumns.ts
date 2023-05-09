@@ -2,11 +2,11 @@ import { Result } from '@decipad/computer';
 
 export const rowsToColumns = (result: Result.Result): Result.Result => {
   if (
-    result.type.kind === 'column' &&
-    result.type.cellType.kind === 'table' &&
+    result.type.kind === 'materialized-column' &&
+    result.type.cellType.kind === 'materialized-table' &&
     Array.isArray(result.value)
   ) {
-    const table: Result.Result<'table'>['value'] = [];
+    const table: Result.Result<'materialized-table'>['value'] = [];
     const ensureColumn = (colIndex: number) => {
       if (!table[colIndex]) {
         table[colIndex] = [];

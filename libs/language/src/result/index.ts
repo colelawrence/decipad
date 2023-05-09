@@ -2,9 +2,7 @@ import { Type } from '..';
 import type { Interpreter } from '../interpreter';
 import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 import { UnknownValue, Unknown } from '../value';
-import { validateResult } from './validate';
-
-export { validateResult } from './validate';
+import { validateResult } from '../validateResult';
 
 type OneResult = Interpreter.OneResult;
 export type { OneResult };
@@ -13,7 +11,7 @@ export { UnknownValue, Unknown };
 
 // Can be used as Result to represent the entire spectrum of possible result values and types or
 // Result<'number'> to represent a specific kind of result value and type.
-export interface Result<T extends SerializedTypeKind = SerializedTypeKind> {
+export type Result<T extends SerializedTypeKind = SerializedTypeKind> = {
   value: T extends 'number'
     ? Interpreter.ResultNumber
     : T extends 'boolean'
@@ -26,17 +24,25 @@ export interface Result<T extends SerializedTypeKind = SerializedTypeKind> {
     ? Interpreter.ResultRange
     : T extends 'column'
     ? Interpreter.ResultColumn
+    : T extends 'materialized-column'
+    ? Interpreter.ResultMaterializedColumn
     : T extends 'table'
     ? Interpreter.ResultTable
+    : T extends 'materialized-table'
+    ? Interpreter.ResultMaterializedTable
     : T extends 'row'
     ? Interpreter.ResultRow
     : T extends 'function'
     ? Interpreter.ResultUnknown | null
     : T extends 'type-error'
     ? Interpreter.ResultUnknown | null
+    : T extends 'pending'
+    ? Interpreter.ResultUnknown
     : never;
   type: T extends SerializedTypeKind ? Extract<SerializedType, { kind: T }> : T;
-}
+};
+
+export type AnyResult = Result<SerializedTypeKind>;
 
 export * from './resultToValue';
 export { Column } from './Column';
@@ -44,9 +50,9 @@ export type { ColumnLikeResult, Comparable } from './Column';
 
 export function serializeResult<T extends SerializedTypeKind>(
   type: Type,
-  value: Interpreter.OneResult | null | undefined
+  _value: Interpreter.OneResult | null | undefined
 ): Result<T> {
-  validateResult(type, value);
+  const value = validateResult(type, _value);
   const serializedType = serializeType(type);
   return {
     value,

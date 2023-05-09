@@ -1,9 +1,15 @@
-import { ONE } from '@decipad/number';
-import { ConcatenatedColumn, createLazyOperation } from '.';
+import { N, ONE } from '@decipad/number';
+import { all, map } from '@decipad/generator-utils';
+import { PromiseOrType } from '@decipad/utils';
+import {
+  createColumnSlice,
+  createConcatenatedColumn,
+  createLazyOperation,
+  createSwappedDimensions,
+} from '.';
 import { OneResult } from '../interpreter/interpreter-types';
 import {
   Column,
-  ColumnLikeValue,
   NumberValue,
   fromJS,
   getColumnLike,
@@ -11,30 +17,29 @@ import {
   Value,
 } from '../value';
 import { buildType as t } from '../type';
-import { ColumnSlice } from './ColumnSlice';
-import { LazyAtIndex } from './LazyAtIndex';
-import { SwappedDimensions } from './SwappedDimensions';
 import { jsCol } from './testUtils';
 import { OperationFunction } from './types';
+import { createLazyAtIndex } from './LazyAtIndex';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 const addOne: OperationFunction = ([x]) =>
   fromJS((x as NumberValue).value.add(ONE));
-const testLazyOp = (...args: Parameters<typeof createLazyOperation>) =>
-  getColumnLike(createLazyOperation(...args));
+const testLazyOp = async (...args: Parameters<typeof createLazyOperation>) =>
+  createLazyOperation(...args);
 
 const toAdd = jsCol([0, 1, 2]);
 
 describe.each(
   Object.entries({
     Column: jsCol([1, 2, 3]),
-    LazyAtIndex: new LazyAtIndex(
+    LazyAtIndex: createLazyAtIndex(
       jsCol([
         [0n, 0n, 0n],
         [1n, 2n, 3n],
       ]),
       1
     ),
-    'SwappedDimensions (doing nothing because 1D)': new SwappedDimensions(
+    'SwappedDimensions (doing nothing because 1D)': createSwappedDimensions(
       jsCol([1, 2, 3]),
       0
     ),
@@ -44,68 +49,114 @@ describe.each(
       [toAdd],
       [t.column(t.number(), 'X')]
     ),
-    ConcatenatedColumn: new ConcatenatedColumn(jsCol([1]), jsCol([2, 3])),
-    ColumnSlice: new ColumnSlice(jsCol([0, 1, 2, 3, 4]), 1, 4),
+    ConcatenatedColumn: createConcatenatedColumn(jsCol([1]), jsCol([2, 3])),
+    ColumnSlice: createColumnSlice(jsCol([0, 1, 2, 3, 4]), 1, 4),
   })
-)('One dimensional tests: %s', (_name, lazyThing: ColumnLikeValue) => {
-  it('can getData()', () => {
-    expect(lazyThing.getData()).toMatchInlineSnapshot(`
-      Array [
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
-      ]
-    `);
+)('One dimensional tests: %s', (_name, lazyThing) => {
+  it('can getData()', async () => {
+    expect(
+      await materializeOneResult((await lazyThing).getData())
+    ).toMatchObject([N(1), N(2), N(3)]);
   });
 
-  it('can get its contents with lowLevelGet and atIndex', () => {
-    expect(lazyThing.lowLevelGet(0).getData()?.valueOf()).toEqual(1);
-    expect(lazyThing.lowLevelGet(2).getData()?.valueOf()).toEqual(3);
-
-    expect(lazyThing.atIndex(0)?.getData()?.valueOf()).toEqual(1);
-    expect(lazyThing.atIndex(2)?.getData()?.valueOf()).toEqual(3);
+  it('can get its contents with lowLevelGet and atIndex 1', async () => {
+    expect(
+      (
+        await materializeOneResult(
+          (await getColumnLike(await lazyThing).lowLevelGet(0)).getData()
+        )
+      )?.valueOf()
+    ).toEqual(1);
+  });
+  it('can get its contents with lowLevelGet and atIndex 2', async () => {
+    expect(
+      (
+        await materializeOneResult(
+          (await getColumnLike(await lazyThing).lowLevelGet(2)).getData()
+        )
+      )?.valueOf()
+    ).toEqual(3);
+  });
+  it('can get its contents with lowLevelGet and atIndex 3', async () => {
+    expect(
+      (
+        await materializeOneResult(
+          (await getColumnLike(await lazyThing).atIndex(0))?.getData()
+        )
+      )?.valueOf()
+    ).toEqual(1);
+  });
+  it('can get its contents with lowLevelGet and atIndex 4', async () => {
+    expect(
+      (
+        await materializeOneResult(
+          (await getColumnLike(await lazyThing).atIndex(2))?.getData()
+        )
+      )?.valueOf()
+    ).toEqual(3);
   });
 
-  it('bound checks', () => {
-    expect(() => lazyThing.lowLevelGet(-1)).toThrow();
-    expect(() => lazyThing.lowLevelGet(4)).toThrow();
+  it('bound checks', async () => {
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(-1)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(4)
+    ).rejects.toThrow();
 
-    expect(() => lazyThing.atIndex(-1)).toThrow();
-    expect(() => lazyThing.atIndex(4)).toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).atIndex(-1)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).atIndex(4)
+    ).rejects.toThrow();
   });
 
-  it('validates keys in lowLevelGet', () => {
+  it('validasync async ates keys in lowLevelGet', async () => {
     // Too few coordinates
-    expect(() => lazyThing.lowLevelGet()).toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet()
+    ).rejects.toThrow();
 
     // Too many coordinates
-    expect(() => lazyThing.lowLevelGet(0, 0)).toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(0, 0)
+    ).rejects.toThrow();
   });
 
-  it('contains a .dimensions property', () => {
-    expect(lazyThing.dimensions).toEqual([{ dimensionLength: 3 }]);
+  it('contains a .dimensions property', async () => {
+    expect(await getColumnLike(await lazyThing).dimensions()).toEqual([
+      { dimensionLength: 3 },
+    ]);
   });
 
-  it('contains .rowCount', () => {
-    expect(lazyThing.rowCount).toEqual(3);
+  it('contains .rowCount', async () => {
+    expect(await getColumnLike(await lazyThing).rowCount()).toEqual(3);
   });
 
-  it('contains .values', () => {
-    const numericValues = lazyThing.values.map((value) =>
-      (value as NumberValue).value.valueOf()
+  it('contains .values', async () => {
+    const numericValues = await all(
+      map(getColumnLike(await lazyThing).values(), (value) =>
+        (value as NumberValue).value.valueOf()
+      )
     );
     expect(numericValues).toEqual([1, 2, 3]);
   });
 });
 
-const nums = (values: OneResult | Value | undefined): unknown => {
+type NumsArgValue = PromiseOrType<OneResult | Value | undefined>;
+
+const nums = async (
+  _values: NumsArgValue | Array<NumsArgValue>
+): Promise<unknown> => {
+  const values = await _values;
   if (values == null) {
     return [];
   }
   if (Array.isArray(values)) {
-    return values.map(nums);
+    return Promise.all(values.map(nums));
   } else if (values instanceof NumberValue || isColumnLike(values as Column)) {
-    return nums((values as Value).getData());
+    return nums(materializeOneResult(await (values as Value).getData()));
   } else {
     return values.valueOf();
   }
@@ -122,7 +173,7 @@ describe.each(
       [1n, 2n, 3n],
       [4n, 5n, 6n],
     ]),
-    LazyAtIndex: new LazyAtIndex(
+    LazyAtIndex: createLazyAtIndex(
       jsCol([
         [
           [0n, 0n, 0n],
@@ -135,7 +186,7 @@ describe.each(
       ]),
       1
     ),
-    SwappedDimensions: new SwappedDimensions(
+    SwappedDimensions: createSwappedDimensions(
       jsCol([
         [1n, 4n],
         [2n, 5n],
@@ -164,9 +215,10 @@ describe.each(
       [t.column(t.column(t.number()), 'X')]
     ),
   })
-)('Two dimensional tests: %s', (_name, lazyThing: ColumnLikeValue) => {
-  it('can getData()', () => {
-    expect(lazyThing.getData()).toMatchInlineSnapshot(`
+)('Two dimensional tests: %s', (_name, lazyThing) => {
+  it('can getData()', async () => {
+    expect(await materializeOneResult((await lazyThing).getData()))
+      .toMatchInlineSnapshot(`
       Array [
         Array [
           DeciNumber(1),
@@ -182,47 +234,93 @@ describe.each(
     `);
   });
 
-  it('can get its contents with lowLevelGet and atIndex', () => {
-    expect(nums(lazyThing.lowLevelGet(0, 0))).toEqual(1);
-    expect(nums(lazyThing.lowLevelGet(0, 2))).toEqual(3);
-    expect(nums(lazyThing.lowLevelGet(1, 0))).toEqual(4);
-    expect(nums(lazyThing.lowLevelGet(1, 2))).toEqual(6);
+  it('can get its contents with lowLevelGet and atIndex', async () => {
+    expect(
+      await nums(await getColumnLike(await lazyThing).lowLevelGet(0, 0))
+    ).toEqual(1);
+    expect(
+      await nums(await getColumnLike(await lazyThing).lowLevelGet(0, 2))
+    ).toEqual(3);
+    expect(
+      await nums(await getColumnLike(await lazyThing).lowLevelGet(1, 0))
+    ).toEqual(4);
+    expect(
+      await nums(await getColumnLike(await lazyThing).lowLevelGet(1, 2))
+    ).toEqual(6);
 
-    expect(nums(lazyThing?.atIndex(0))).toEqual([1, 2, 3]);
-    expect(nums(lazyThing?.atIndex(1))).toEqual([4, 5, 6]);
+    expect(await nums(await getColumnLike(await lazyThing).atIndex(0))).toEqual(
+      [1, 2, 3]
+    );
+    expect(await nums(await getColumnLike(await lazyThing).atIndex(1))).toEqual(
+      [4, 5, 6]
+    );
 
-    expect(nums(getColumnLike(lazyThing.atIndex(0)).atIndex(1))).toEqual(2);
-    expect(nums(getColumnLike(lazyThing.atIndex(1)).atIndex(1))).toEqual(5);
+    expect(
+      await nums(
+        await getColumnLike(
+          await getColumnLike(await lazyThing).atIndex(0)
+        ).atIndex(1)
+      )
+    ).toEqual(2);
+    expect(
+      await nums(
+        await getColumnLike(
+          await getColumnLike(await lazyThing).atIndex(1)
+        ).atIndex(1)
+      )
+    ).toEqual(5);
   });
 
-  it('bound-checks', () => {
-    expect(() => lazyThing.lowLevelGet(-1)).toThrow();
-    expect(() => lazyThing.lowLevelGet(4)).toThrow();
-    expect(() => lazyThing.lowLevelGet(0, -1)).toThrow();
-    expect(() => lazyThing.lowLevelGet(4, 0)).toThrow();
-    expect(() => lazyThing.atIndex(-1)).toThrow();
-    expect(() => lazyThing.atIndex(4)).toThrow();
+  it('bound-checks', async () => {
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(-1)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(4)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(0, -1)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(4, 0)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).atIndex(-1)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).atIndex(4)
+    ).rejects.toThrow();
   });
 
-  it('validates keys in lowLevelGet', () => {
-    expect(() => lazyThing.lowLevelGet()).toThrow();
-    expect(() => lazyThing.lowLevelGet(1)).toThrow();
-    expect(() => lazyThing.lowLevelGet(1, 2, 3)).toThrow();
+  it('validates keys in lowLevelGet', async () => {
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet()
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(1)
+    ).rejects.toThrow();
+    await expect(async () =>
+      getColumnLike(await lazyThing).lowLevelGet(1, 2, 3)
+    ).rejects.toThrow();
   });
 
-  it('contains a .dimensions property', () => {
-    expect(lazyThing.dimensions).toEqual([
+  it('contains a .dimensions property', async () => {
+    expect(await getColumnLike(await lazyThing).dimensions()).toEqual([
       { dimensionLength: 2 },
       { dimensionLength: 3 },
     ]);
   });
 
-  it('contains .rowCount', () => {
-    expect(lazyThing.rowCount).toEqual(2);
+  it('contains .rowCount', async () => {
+    expect(await getColumnLike(await lazyThing).rowCount()).toEqual(2);
   });
 
-  it('contains .values', () => {
-    const numericValues = lazyThing.values.map((v) => nums(v.getData()));
+  it('contains .values', async () => {
+    const numericValues = await all(
+      map(getColumnLike(await lazyThing).values(), async (v) =>
+        nums(await materializeOneResult(v.getData()))
+      )
+    );
     expect(numericValues).toEqual([
       [1, 2, 3],
       [4, 5, 6],

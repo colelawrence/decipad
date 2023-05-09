@@ -15,7 +15,12 @@ import {
   TableElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { Computer, Result, SerializedType } from '@decipad/computer';
+import {
+  Computer,
+  Result,
+  SerializedType,
+  isTableResult,
+} from '@decipad/computer';
 import { ImportResult } from '@decipad/import';
 import { varNamify } from '@decipad/utils';
 import { insertNodes } from '@decipad/editor-utils';
@@ -90,7 +95,9 @@ const cellType = (type: SerializedType): TableCellType => {
   }
 };
 
-const dataRows = (table: Result.Result<'table'>): TableRowElement[] => {
+const dataRows = (
+  table: Result.Result<'materialized-table'>
+): TableRowElement[] => {
   let it = -1;
   const rows: TableRowElement[] = [];
   const { columnTypes } = table.type;
@@ -129,7 +136,7 @@ const dataRows = (table: Result.Result<'table'>): TableRowElement[] => {
 
 const tableElement = (
   computer: Computer,
-  table: Result.Result<'table'>,
+  table: Result.Result<'materialized-table'>,
   meta?: ImportResult['meta']
 ): TableElement => {
   return {
@@ -179,10 +186,10 @@ export const importTable = ({
   computer,
 }: ImportTableProps): void => {
   const tableResult = result.result;
-  if (tableResult?.type.kind === 'table') {
+  if (isTableResult(tableResult)) {
     const t = tableElement(
       computer,
-      tableResult as Result.Result<'table'>,
+      tableResult as Result.Result<'materialized-table'>,
       result.meta
     );
     insertNodes(editor, t, {

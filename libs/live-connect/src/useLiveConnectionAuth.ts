@@ -7,11 +7,12 @@ import type {
   ExternalDataSource,
   ExternalDataSourcesContextValue,
 } from '@decipad/interfaces';
+import { PromiseOrType } from '@decipad/utils';
 
 interface UseLiveConnectionAuthProps {
   provider?: ImportElementSource;
   externalId: string;
-  beforeAuthenticate: (source: ExternalDataSource) => Promise<void>;
+  beforeAuthenticate: (source: ExternalDataSource) => PromiseOrType<void>;
   context: Context<ExternalDataSourcesContextValue>;
 }
 

@@ -36,7 +36,7 @@ it('submits a new value when pressing enter', async () => {
   expect(onChange).toHaveBeenCalledWith('text newtext');
 });
 
-it('takes a new value from the props', async () => {
+it('takes a new value from the props', () => {
   const { rerender } = render(<CellInput value="old" />);
 
   expect(screen.getByRole('textbox')).toHaveValue('old');

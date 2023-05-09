@@ -1,11 +1,26 @@
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
+import { timeout } from '@decipad/utils';
 import { runCode } from '../../test-utils';
 import { InlineColumnResult } from './InlineColumnResult';
 
-it('renders value', async () => {
-  const { container } = render(
-    <InlineColumnResult {...await runCode('[10, 20, 30]')} />
-  );
+describe('InlineColumnResult', () => {
+  it('renders value all values <= 3', async () => {
+    const { container } = render(
+      <InlineColumnResult {...await runCode('[10, 20, 30]')} />
+    );
 
-  expect(container.textContent).toBe('10, 20, 30');
+    await act(() => timeout(1000));
+
+    expect(container.textContent).toBe('10, 20, 30');
+  });
+
+  it('renders value ellipsis if count > 3', async () => {
+    const { container } = render(
+      <InlineColumnResult {...await runCode('[10, 20, 30, 40]')} />
+    );
+
+    await act(() => timeout(1000));
+
+    expect(container.textContent).toBe('10, 20, 30, ...');
+  });
 });

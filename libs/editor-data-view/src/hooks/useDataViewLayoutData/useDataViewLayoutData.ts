@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useResolved } from '@decipad/react-utils';
 import { Column as ColumnImpl } from '@decipad/column';
+import { OneMaterializedResult } from 'libs/language/src/interpreter/interpreter-types';
 import { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
 import { useReplacingColumns } from './useReplacingColumns';
@@ -24,43 +26,33 @@ export const useDataViewLayoutData = ({
   includeTotal = true,
   preventExpansion = false,
   rotate,
-}: UseDataViewLayoutDataProps): DataGroup[] => {
+}: UseDataViewLayoutDataProps): DataGroup[] | undefined => {
   const columns = useReplacingColumns({
     tableName,
     columns: _columns,
     roundings,
   });
 
-  const dataGroups = useMemo(
-    () =>
-      layoutPowerData({
+  return useResolved(
+    useMemo(() => {
+      return layoutPowerData({
         columns: columns.map((column) => ({
           ...column,
-          value: ColumnImpl.fromValues(column.value),
+          value: ColumnImpl.fromValues(column.value as OneMaterializedResult[]),
         })),
         aggregationTypes,
         expandedGroups,
         includeTotal,
         preventExpansion,
         rotate,
-      }),
-    [
+      });
+    }, [
       aggregationTypes,
       columns,
       expandedGroups,
       includeTotal,
       preventExpansion,
       rotate,
-    ]
+    ])
   );
-
-  const [resolvedDataGroups, setResolvedDataGroups] = useState<DataGroup[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      setResolvedDataGroups(await dataGroups);
-    })();
-  }, [dataGroups]);
-
-  return resolvedDataGroups;
 };

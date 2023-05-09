@@ -9,10 +9,11 @@ import { Realm } from '../interpreter';
 import { fromJS } from '../value';
 import { buildType as t, InferError } from '../type';
 import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 let testRealm: Realm;
 let testContext: Context;
-beforeEach(async () => {
+beforeEach(() => {
   testContext = makeContext({
     initialGlobalScope: {
       City: t.column(t.string(), 'City'),
@@ -29,12 +30,14 @@ beforeEach(async () => {
 describe('matrix op evaluation', () => {
   it('gets the values of a match', async () => {
     expect(
-      (
-        await evaluateMatrixRef(
-          testRealm,
-          matrixRef('CoffeePrice', [r('City')])
-        )
-      ).getData()
+      await materializeOneResult(
+        (
+          await evaluateMatrixRef(
+            testRealm,
+            matrixRef('CoffeePrice', [r('City')])
+          )
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(70),
@@ -43,12 +46,14 @@ describe('matrix op evaluation', () => {
     `);
 
     expect(
-      (
-        await evaluateMatrixRef(
-          testRealm,
-          matrixRef('CoffeePrice', [c('==', r('City'), l('Lisbon'))])
-        )
-      ).getData()
+      await materializeOneResult(
+        (
+          await evaluateMatrixRef(
+            testRealm,
+            matrixRef('CoffeePrice', [c('==', r('City'), l('Lisbon'))])
+          )
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(70),
@@ -58,12 +63,14 @@ describe('matrix op evaluation', () => {
 
   it('can be used to create a variable (runtime)', async () => {
     expect(
-      (
-        await evaluateMatrixAssign(
-          testRealm,
-          matrixAssign('UnknownVar', [r('City')], l(123))
-        )
-      ).getData()
+      await materializeOneResult(
+        await (
+          await evaluateMatrixAssign(
+            testRealm,
+            matrixAssign('UnknownVar', [r('City')], l(123))
+          )
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(123),
@@ -74,12 +81,18 @@ describe('matrix op evaluation', () => {
 
   it('updates the values of a match', async () => {
     expect(
-      (
-        await evaluateMatrixAssign(
-          testRealm,
-          matrixAssign('CoffeePrice', [c('==', r('City'), l('Lisbon'))], l(123))
-        )
-      ).getData()
+      await materializeOneResult(
+        await (
+          await evaluateMatrixAssign(
+            testRealm,
+            matrixAssign(
+              'CoffeePrice',
+              [c('==', r('City'), l('Lisbon'))],
+              l(123)
+            )
+          )
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(123),
@@ -90,9 +103,9 @@ describe('matrix op evaluation', () => {
 });
 
 describe('matrix op inference', () => {
-  it('infers the result of a match', () => {
+  it('infers the result of a match', async () => {
     expect(
-      inferMatrixRef(
+      await inferMatrixRef(
         testContext,
         matrixRef('CoffeePrice', [c('==', r('City'), l('Lisbon'))])
       )
@@ -101,18 +114,18 @@ describe('matrix op inference', () => {
     });
   });
 
-  it('propagates inference errors', () => {
+  it('propagates inference errors', async () => {
     expect(
-      inferMatrixRef(
+      await inferMatrixRef(
         testContext,
         matrixRef('MissingVar', [c('==', r('City'), l('Lisbon'))])
       )
     ).toMatchObject(t.impossible(InferError.missingVariable('MissingVar')));
   });
 
-  it('infers the matchers within', () => {
+  it('infers the matchers within', async () => {
     expect(
-      inferMatrixRef(
+      await inferMatrixRef(
         testContext,
         matrixRef('CoffeePrice', [c('==', r('MissingVar'), l('Lisbon'))])
       )
@@ -121,7 +134,7 @@ describe('matrix op inference', () => {
     const typeErrorAST = c('+', l('str'), l(1));
 
     expect(
-      inferMatrixRef(
+      await inferMatrixRef(
         testContext,
         matrixRef('CoffeePrice', [c('==', r('City'), typeErrorAST)])
       )
@@ -134,7 +147,7 @@ describe('matrix op inference', () => {
     });
 
     expect(
-      inferMatrixRef(
+      await inferMatrixRef(
         testContext,
         matrixRef('CoffeePrice', [c('==', r('City'), l(1))])
       )
@@ -147,9 +160,9 @@ describe('matrix op inference', () => {
     });
   });
 
-  it('ensures new matrix content matches the existing content', () => {
+  it('ensures new matrix content matches the existing content', async () => {
     expect(
-      inferMatrixAssign(
+      await inferMatrixAssign(
         testContext,
         matrixAssign(
           'CoffeePrice',
@@ -166,9 +179,9 @@ describe('matrix op inference', () => {
     });
   });
 
-  it('ensures matcher has the correct dimension', () => {
+  it('ensures matcher has the correct dimension', async () => {
     expect(
-      inferMatrixAssign(
+      await inferMatrixAssign(
         testContext,
         matrixAssign(
           'CoffeePrice',
@@ -185,7 +198,7 @@ describe('matrix op inference', () => {
     });
 
     expect(
-      inferMatrixAssign(
+      await inferMatrixAssign(
         testContext,
         matrixAssign(
           'CoffeePrice',
@@ -202,8 +215,8 @@ describe('matrix op inference', () => {
     });
   });
 
-  it('can be used to create a variable', () => {
-    const newVariable = inferMatrixAssign(
+  it('can be used to create a variable', async () => {
+    const newVariable = await inferMatrixAssign(
       testContext,
       matrixAssign('CreatedVar', [r('City')], l(1))
     );
@@ -214,9 +227,9 @@ describe('matrix op inference', () => {
     expect(testContext.stack.get('CreatedVar')).toBe(newVariable);
   });
 
-  it('ensures the dimension exists', () => {
+  it('ensures the dimension exists', async () => {
     expect(
-      inferMatrixAssign(
+      await inferMatrixAssign(
         testContext,
         matrixAssign('CreatedVar', [r('UnknownSet')], l(1))
       )
@@ -234,12 +247,14 @@ describe('matrix op inference', () => {
 describe('assigning multidimensional values', () => {
   it('can eval simple assignment', async () => {
     expect(
-      (
-        await evaluateMatrixAssign(
-          testRealm,
-          matrixAssign('CoffeePrice', [r('City')], col(1, 2))
-        )
-      ).getData()
+      await materializeOneResult(
+        await (
+          await evaluateMatrixAssign(
+            testRealm,
+            matrixAssign('CoffeePrice', [r('City')], col(1, 2))
+          )
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
@@ -250,12 +265,18 @@ describe('assigning multidimensional values', () => {
 
   it('can eval filtered assignment', async () => {
     expect(
-      (
-        await evaluateMatrixAssign(
-          testRealm,
-          matrixAssign('CoffeePrice', [c('==', r('City'), l('Faro'))], col(150))
-        )
-      ).getData()
+      await materializeOneResult(
+        await (
+          await evaluateMatrixAssign(
+            testRealm,
+            matrixAssign(
+              'CoffeePrice',
+              [c('==', r('City'), l('Faro'))],
+              col(150)
+            )
+          )
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(70),
@@ -266,7 +287,7 @@ describe('assigning multidimensional values', () => {
 
   it('can infer simple assignment', async () => {
     expect(
-      inferMatrixAssign(
+      await inferMatrixAssign(
         testContext,
         matrixAssign('CoffeePrice', [r('City')], col(1, 2))
       )
@@ -278,7 +299,7 @@ describe('assigning multidimensional values', () => {
 
   it('can infer filtered assignment', async () => {
     expect(
-      inferMatrixAssign(
+      await inferMatrixAssign(
         testContext,
         matrixAssign('CoffeePrice', [c('==', r('City'), l('Faro'))], col(123))
       )

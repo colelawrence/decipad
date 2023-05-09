@@ -1,10 +1,17 @@
-import { AutocompleteName, Computer, getExprRef } from '@decipad/computer';
+import {
+  AutocompleteName,
+  Computer,
+  SerializedType,
+  getExprRef,
+  isTable as isComputerTable,
+} from '@decipad/computer';
 import { PlotElement, useTEditorRef } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
 import _ from 'lodash';
 import { useEffect, useMemo } from 'react';
+import { useResolved } from '@decipad/react-utils';
 import { defaultPlotSpec } from './defaultPlotSpec';
 import { normalizePlotSpec } from './normalizePlotSpec';
 import {
@@ -13,6 +20,7 @@ import {
   specFromType,
 } from './plotUtils';
 import type { PlotData, PlotSpec } from './plotUtils.interface';
+import { fixColorScheme } from './fixColorScheme';
 
 type StringSetter = (value: string) => void;
 
@@ -53,13 +61,13 @@ const autocompleteNameToExprRef = (
 };
 
 const isTable = (name: AutocompleteName) =>
-  !name.name.includes('.') && name.type.kind === 'table';
+  !name.name.includes('.') && isComputerTable(name.type);
 
 const shapes = ['point', 'circle', 'square', 'tick'] as const;
 
 export type Shape = typeof shapes[number];
 
-export const usePlot = (element: PlotElement): UsePlotReturn => {
+export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
   const [isDarkMode] = useThemeFromStore();
   const editor = useTEditorRef();
   const computer = useComputer();
@@ -70,18 +78,32 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
   );
 
   const source = computer.getVarResult$.use(element.sourceVarName)?.result;
+  const sourceType: SerializedType | undefined = source?.type;
 
-  let spec = normalizePlotSpec(
-    defaultPlotSpec(
-      computer,
-      source?.type,
-      specFromType(computer, source?.type, element)
-    )
+  const data = useResolved(
+    useMemo(() => resultToPlotResultData(source, element), [element, source])
   );
 
-  const data = resultToPlotResultData(source, element);
-
-  spec = spec && data && enhanceSpecFromWideData(spec, data);
+  const spec = useMemo(
+    () =>
+      fixColorScheme(
+        (() => {
+          const normalizedSpec = normalizePlotSpec(
+            defaultPlotSpec(
+              computer,
+              source?.type,
+              specFromType(computer, source?.type, element)
+            )
+          );
+          if (normalizedSpec && data) {
+            return enhanceSpecFromWideData(normalizedSpec, data);
+          }
+          return normalizedSpec;
+        })(),
+        isDarkMode
+      ),
+    [computer, data, element, isDarkMode, source?.type]
+  );
 
   const setMarkType = usePathMutatorCallback(editor, path, 'markType');
 
@@ -130,8 +152,9 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     () => ({
       sourceVarNameOptions: names.map((name) => name.name),
       sourceExprRefOptions: names.map((name) => name.exprRef),
-      columnNameOptions:
-        (source?.type.kind === 'table' && source.type.columnNames) || [],
+      columnNameOptions: isComputerTable(sourceType)
+        ? sourceType.columnNames
+        : [],
       setSourceVarName,
       setMarkType: setMarkType as StringSetter,
       setXColumnName,
@@ -146,19 +169,19 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
       shape,
     }),
     [
-      element,
       names,
-      setColorColumnName,
-      setColorScheme,
-      setMarkType,
-      setSizeColumnName,
+      sourceType,
       setSourceVarName,
-      setThetaColumnName,
+      setMarkType,
       setXColumnName,
       setYColumnName,
+      setSizeColumnName,
+      setColorColumnName,
+      setThetaColumnName,
+      setColorScheme,
       setY2ColumnName,
+      element,
       shape,
-      source,
     ]
   );
 
@@ -170,20 +193,8 @@ export const usePlot = (element: PlotElement): UsePlotReturn => {
     }
   }, [plotParams]);
 
-  if (spec) {
-    // config.encoding.color.scheme
-    _.update(
-      spec,
-      'config.encoding.color.scheme',
-      (theme: string) => `${theme}_${isDarkMode ? 'dark' : 'light'}`
-    );
-    // encoding.color.scale.scheme
-    _.update(
-      spec,
-      'encoding.color.scale.scheme',
-      (theme: string) => `${theme}_${isDarkMode ? 'dark' : 'light'}`
-    );
-  }
-
-  return { spec, data, plotParams, repeatedColumns };
+  return useMemo(
+    () => ({ spec, data, plotParams, repeatedColumns }),
+    [data, plotParams, repeatedColumns, spec]
+  );
 };

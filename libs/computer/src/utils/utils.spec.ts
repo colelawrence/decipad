@@ -1,5 +1,5 @@
 import { parseStatementOrThrow } from '@decipad/language';
-import { findSymbolsUsed, getDefinedSymbol, setIntersection } from './utils';
+import { findSymbolsUsed, getDefinedSymbol, setIntersection } from './many';
 
 it('figures out what symbol a statement creates, if any', () => {
   expect(getDefinedSymbol(parseStatementOrThrow('A=1'))).toEqual('A');

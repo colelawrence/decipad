@@ -78,7 +78,7 @@ const tooLargeFile = new File(
   { type: 'application/json' }
 );
 
-it('renders the children', async () => {
+it('renders the children', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <DragAndDropImportNotebook>child here</DragAndDropImportNotebook>
@@ -87,7 +87,7 @@ it('renders the children', async () => {
   expect(getByText('child here')).toBeVisible();
 });
 
-it('does not show a drop effect when dragging only a text file over', async () => {
+it('does not show a drop effect when dragging only a text file over', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>
@@ -112,7 +112,7 @@ it('does not show a drop effect when dragging only a text file over', async () =
   expect(dragHoverBackgroundColor).toEqual(normalBackgroundColor);
 });
 
-it('does not show a drop effect when dragging only a non-file item over', async () => {
+it('does not show a drop effect when dragging only a non-file item over', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>
@@ -137,7 +137,7 @@ it('does not show a drop effect when dragging only a non-file item over', async 
   expect(dragHoverBackgroundColor).toEqual(normalBackgroundColor);
 });
 
-it('does not show a drop effect when dragging only a file that is too large over', async () => {
+it('does not show a drop effect when dragging only a file that is too large over', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
       <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>

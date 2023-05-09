@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
 import DeciNumber, {
   isDeciNumberInput,
@@ -6,14 +7,15 @@ import DeciNumber, {
 } from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
+import { inspect } from 'util';
 import {
   RuntimeError,
   Value,
+  Column,
   NumberValue,
   StringValue,
   BooleanValue,
   DateValue,
-  isColumnLike,
   UnknownValue,
 } from '../value';
 
@@ -25,12 +27,14 @@ export type Comparable =
   | boolean
   | number
   | bigint
+  | symbol
   | DeciNumber
   | DeciNumberInput
+  | Value
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
-function compareToNumber(a: Comparable, b: Comparable): number | bigint {
+const compareToNumber = (a: Comparable, b: Comparable): number | bigint => {
   if (a === UnknownValue) {
     return -1;
   }
@@ -70,8 +74,8 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     }
     return a.moment < b.moment ? -1 : a.moment === b.moment ? 0 : 1;
   }
-  if (isColumnLike(a) && isColumnLike(b)) {
-    return compareToNumber(a.values, b.values);
+  if (a instanceof Column && b instanceof Column) {
+    return compare(a._values, b._values);
   }
   if (Array.isArray(a) && Array.isArray(b)) {
     const lengthComparison = a.length - b.length;
@@ -80,19 +84,31 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
       for (const [aItem, bItem] of zip(a, b)) {
         const thisItem = compare(aItem, bItem);
 
+        // eslint-disable-next-line no-await-in-loop
         if (thisItem !== 0) {
           return thisItem;
         }
       }
+    }
+    if (typeof a === 'symbol' || typeof b === 'symbol') {
+      if (typeof a !== 'symbol') {
+        return -1;
+      }
+      if (typeof b !== 'symbol') {
+        return 1;
+      }
+      return 0;
     }
 
     return lengthComparison;
   }
   console.log(a, b);
   throw new RuntimeError(
-    `Don't know how to compare ${a} (${typeof a}) against ${b} (${typeof b})`
+    `Don't know how to compare ${a.toString()} (${inspect(
+      a
+    )}) against ${b.toString()} (${inspect(b)})`
   );
-}
+};
 
 const sign = (diff: number | bigint): CompareResult => {
   if (typeof diff === 'number') {
@@ -101,10 +117,10 @@ const sign = (diff: number | bigint): CompareResult => {
   return diff > 0n ? 1 : diff < 0n ? -1 : 0;
 };
 
-export function compare(
+export const compare = (
   a: Comparable | undefined,
   b: Comparable | undefined
-): CompareResult {
+): CompareResult => {
   if (a == null || b == null) {
     if (a != null) {
       return -1;
@@ -115,4 +131,4 @@ export function compare(
     return 0;
   }
   return sign(compareToNumber(a, b));
-}
+};

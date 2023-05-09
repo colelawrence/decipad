@@ -21,9 +21,14 @@ export const mapWithPrevious = async (
 
   for await (const result of iter()) {
     const previousRow = new Map<string | symbol, Value>();
-    otherColumns.forEach((value, key) => {
-      previousRow.set(key, value.values[ret.length]);
-    });
+    await Promise.all(
+      [...otherColumns.entries()].map(async ([key, value]) => {
+        const v = await value.atIndex(ret.length);
+        if (v != null) {
+          previousRow.set(key, v);
+        }
+      })
+    );
 
     ret.push(result);
     previousRow.set(CURRENT_COLUMN_SYMBOL, result);

@@ -1,3 +1,5 @@
+import { all } from '@decipad/generator-utils';
+import { first } from '@decipad/utils';
 import type { ColumnLike } from '.';
 import { ColumnSlice } from './ColumnSlice';
 import { FilteredColumn } from './FilteredColumn';
@@ -5,40 +7,44 @@ import { MappedColumn } from './MappedColumn';
 import { SlicesMap } from './SlicesMap';
 import { CompareFn } from './types';
 
-export const sortMap = <TValue>(
+export const sortMap = async <TValue>(
   col: ColumnLike<TValue>,
   compare: CompareFn<TValue>
-): number[] => {
-  const unsortedIndexes = Array.from({ length: col.rowCount }, (_, i) => i);
+): Promise<number[]> => {
+  const allValues = await all(col.values());
+  const unsortedIndexes = Array.from({ length: allValues.length }, (_, i) => i);
   return unsortedIndexes.sort((aIndex, bIndex) => {
-    return compare(col.atIndex(aIndex), col.atIndex(bIndex));
+    return compare(allValues[aIndex], allValues[bIndex]);
   });
 };
 
-export const sort = <TValue>(
+export const sort = async <TValue>(
   col: ColumnLike<TValue>,
   compare: CompareFn<TValue>
-): ColumnLike<TValue> =>
-  MappedColumn.fromColumnAndMap(col, sortMap(col, compare));
+): Promise<ColumnLike<TValue>> =>
+  MappedColumn.fromColumnAndMap(col, await sortMap(col, compare));
 
-export const contiguousSlices = <TValue>(
+export const contiguousSlices = async <TValue>(
   column: ColumnLike<TValue>,
   compare: CompareFn<TValue>
-): SlicesMap => {
+): Promise<SlicesMap> => {
   const slices: SlicesMap = [];
   let lastValue: undefined | TValue;
   let nextSliceBeginsAt = 0;
-  column.values.forEach((currentValue, index) => {
+  let index = -1;
+  for await (const currentValue of column.values()) {
+    index += 1;
     if (lastValue && compare(lastValue, currentValue as TValue) !== 0) {
       // at the beginning of a new slice
       slices.push([nextSliceBeginsAt, index - 1]);
       nextSliceBeginsAt = index;
     }
     lastValue = currentValue as TValue;
-  });
+  }
 
-  if (nextSliceBeginsAt <= column.rowCount - 1) {
-    slices.push([nextSliceBeginsAt, column.rowCount - 1]);
+  const rowCount = await column.rowCount();
+  if (nextSliceBeginsAt < rowCount) {
+    slices.push([nextSliceBeginsAt, rowCount - 1]);
   }
 
   return slices;
@@ -49,22 +55,26 @@ export const applyMap = <TValue>(
   map: number[]
 ): ColumnLike<TValue> => MappedColumn.fromColumnAndMap(col, map);
 
-export const unique = <TValue>(
+export const unique = async <TValue>(
   col: ColumnLike<TValue>,
   compare: CompareFn<TValue>
-): ColumnLike<TValue> => {
-  const sorted = sort(col, compare);
-  const slices = contiguousSlices(sorted, compare).map(([index]) => index);
+): Promise<ColumnLike<TValue>> => {
+  const sorted = await sort(col, compare);
+  const slices = (await contiguousSlices(sorted, compare)).map(first);
   return applyMap(sorted, slices);
 };
 
-const reverseMap = <TValue>(col: ColumnLike<TValue>): number[] => {
-  const length = col.rowCount;
+export const reverseMap = async <TValue>(
+  col: ColumnLike<TValue>
+): Promise<number[]> => {
+  const length = await col.rowCount();
   return Array.from({ length }, (_, i) => length - i - 1);
 };
 
-export const reverse = <TValue>(col: ColumnLike<TValue>): ColumnLike<TValue> =>
-  MappedColumn.fromColumnAndMap(col, reverseMap(col));
+export const reverse = async <TValue>(
+  col: ColumnLike<TValue>
+): Promise<ColumnLike<TValue>> =>
+  MappedColumn.fromColumnAndMap(col, await reverseMap(col));
 
 export const slice = <TValue>(
   col: ColumnLike<TValue>,

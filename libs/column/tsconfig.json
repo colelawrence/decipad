@@ -8,6 +8,12 @@
   "references": [
     {
       "path": "../number"
+    },
+    {
+      "path": "../generator-utils"
+    },
+    {
+      "path": "../utils"
     }
   ]
 }

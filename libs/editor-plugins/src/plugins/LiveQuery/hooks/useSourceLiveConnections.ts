@@ -1,4 +1,4 @@
-import { AutocompleteName, Computer, Result } from '@decipad/computer';
+import { AutocompleteName, Computer, Result, isTable } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useState } from 'react';
 
@@ -6,13 +6,13 @@ const isSourceLiveConnection = (
   computer: Computer,
   autoCompleteName: AutocompleteName
 ): boolean => {
-  if (autoCompleteName.blockId && autoCompleteName.type.kind === 'table') {
+  if (autoCompleteName.blockId && isTable(autoCompleteName.type)) {
     const { columnNames } = autoCompleteName.type;
     const indexOfTypeColumn = columnNames.indexOf('type');
     if (indexOfTypeColumn >= 0) {
       const result = computer.getBlockIdResult(autoCompleteName.blockId);
       return (
-        (result.result as Result.Result<'table'>)?.value?.[
+        (result.result as Result.Result<'materialized-table'>)?.value?.[
           indexOfTypeColumn
         ]?.[0] === 'dbconn'
       );

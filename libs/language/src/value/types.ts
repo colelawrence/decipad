@@ -13,17 +13,19 @@ import type {
 } from './index';
 
 export interface Value {
-  getData(): Interpreter.OneResult;
+  getData(): Promise<Interpreter.OneResult>;
 }
 
+export type ValueGenerator = AsyncGenerator<Value>;
+
 export interface ColumnLikeValue extends Value, ColumnLike<Value> {
-  getData(): Interpreter.OneResult;
-  lowLevelGet(...keys: number[]): Value;
+  getData(): Promise<Interpreter.OneResult>;
+  lowLevelGet(...keys: number[]): Promise<Value>;
 
   /** Useful when filtering or sorting.
    * By default the identity function is used and no index changes are assumed to exist */
-  indexToLabelIndex?: (index: number) => number;
-  dimensions: Dimension[];
+  indexToLabelIndex?: (index: number) => number | Promise<number>;
+  dimensions(): Promise<Dimension[]>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,3 +53,8 @@ export type NonColumn =
   | DateValue
   | Table
   | Row;
+
+export type ValueGeneratorFunction = (
+  start?: number,
+  end?: number
+) => AsyncGenerator<Value>;

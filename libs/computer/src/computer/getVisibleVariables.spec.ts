@@ -2,9 +2,9 @@ import { inferProgram } from '@decipad/language';
 import { getVisibleVariables } from './getVisibleVariables';
 import { testBlocks } from '../testUtils';
 
-it('finds variables that are in the context', () => {
+it('finds variables that are in the context', async () => {
   const program = testBlocks('MissingVar', 'A = 1', 'Table = { Col = Ref }');
-  const inferContext = inferProgram(program);
+  const inferContext = await inferProgram(program);
 
   expect(getVisibleVariables(program, 'block-2', inferContext))
     .toMatchInlineSnapshot(`
@@ -24,9 +24,9 @@ it('finds variables that are in the context', () => {
     `);
 });
 
-it('finds variables visible in a table column assign', () => {
+it('finds variables visible in a table column assign', async () => {
   const program = testBlocks('Table = {}', 'Table.Col = 2', 'Table.Col2 = 2');
-  const inferContext = inferProgram(program);
+  const inferContext = await inferProgram(program);
 
   expect(getVisibleVariables(program, 'block-1', inferContext))
     .toMatchInlineSnapshot(`

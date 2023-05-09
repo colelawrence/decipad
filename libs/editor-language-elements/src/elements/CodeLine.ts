@@ -5,7 +5,7 @@ import { InteractiveLanguageElement } from '../types';
 import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
-export const getUnparsedBlockFromCodeLine = async (
+export const getUnparsedBlockFromCodeLine = (
   _editor: MyEditor,
   _computer: Computer,
   block: MyElement

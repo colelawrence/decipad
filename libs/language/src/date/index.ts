@@ -17,11 +17,11 @@ export { Time };
 /**
  * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
-export const toLuxonUTC = (
+export const toLuxonUTC = async (
   date: bigint | undefined | number | DateValue | DateTime
 ) => {
   if (date instanceof DateValue) {
-    date = date.getData();
+    date = await date.getData();
   }
   if (typeof date === 'bigint') {
     date = Number(date);
@@ -391,13 +391,13 @@ export const getDateFromAstForm = (
   return [dateNum, dateNodeToSpecificity(segments)];
 };
 
-export const subtractDates = (
+export const subtractDates = async (
   d1: DateValue,
   d2: DateValue,
   specificity: Time.Specificity
-): DeciNumber => {
-  const dateTime1 = toLuxonUTC(d1.getData());
-  const dateTime2 = toLuxonUTC(d2.getData());
+): Promise<DeciNumber> => {
+  const dateTime1 = await toLuxonUTC(await d1.getData());
+  const dateTime2 = await toLuxonUTC(await d2.getData());
 
   switch (specificity) {
     case 'year': {

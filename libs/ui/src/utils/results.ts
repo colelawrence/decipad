@@ -1,8 +1,21 @@
-import { SerializedType } from '@decipad/computer';
+import {
+  SerializedType,
+  SerializedTypes,
+  isColumn,
+  isTable,
+} from '@decipad/computer';
 
-export function isTabularType(type: SerializedType | undefined): boolean {
+type TabularType =
+  | SerializedTypes.Column
+  | SerializedTypes.MaterializedColumn
+  | SerializedTypes.Table
+  | SerializedTypes.MaterializedTable
+  | SerializedTypes.Row;
+
+export function isTabularType(
+  type: SerializedType | undefined
+): type is TabularType {
   return (
-    type != null &&
-    (type.kind === 'column' || type.kind === 'row' || type.kind === 'table')
+    type != null && (isColumn(type) || type.kind === 'row' || isTable(type))
   );
 }

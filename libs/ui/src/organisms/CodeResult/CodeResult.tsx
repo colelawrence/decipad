@@ -1,4 +1,4 @@
-import { SerializedTypeKind } from '@decipad/computer';
+import { SerializedTypeKind, isColumn, isTable } from '@decipad/computer';
 import { isDeciNumberInput } from '@decipad/number';
 import {
   ColumnResult,
@@ -56,20 +56,19 @@ const getResultMatchers = (): ResultMatcher[] => [
   },
   {
     component: TableResult,
-    match: ({ type, variant }) => type.kind === 'table' && variant === 'block',
+    match: ({ type, variant }) => isTable(type) && variant === 'block',
   },
   {
     component: InlineTableResult,
-    match: ({ type, variant }) => type.kind === 'table' && variant === 'inline',
+    match: ({ type, variant }) => isTable(type) && variant === 'inline',
   },
   {
     component: ColumnResult,
-    match: ({ type, variant }) => type.kind === 'column' && variant === 'block',
+    match: ({ type, variant }) => isColumn(type) && variant === 'block',
   },
   {
     component: InlineColumnResult,
-    match: ({ type, variant }) =>
-      type.kind === 'column' && variant === 'inline',
+    match: ({ type, variant }) => isColumn(type) && variant === 'inline',
   },
   {
     component: RowResult,
@@ -104,10 +103,12 @@ const getResultMatchers = (): ResultMatcher[] => [
 
 function getResultComponent<T extends SerializedTypeKind>(
   props: CodeResultProps<T>
-): CodeResultComponentType<T> {
+): CodeResultComponentType<T> | undefined {
   return (
-    ((getResultMatchers().find(({ match }) => match(props))?.component ??
-      DefaultResult) as CodeResultComponentType<T>) || null
+    (props.type &&
+      ((getResultMatchers().find(({ match }) => match(props))?.component ??
+        DefaultResult) as CodeResultComponentType<T>)) ||
+    undefined
   );
 }
 
@@ -120,8 +121,11 @@ export function CodeResult<T extends SerializedTypeKind>(
   const ResultComponent = getResultComponent({ value, variant, type, element });
 
   // Does not present result when result is not present, except for type errors.
-  if (value == null && type.kind !== 'type-error' && type.kind !== 'date') {
-    return null;
+  if (
+    !ResultComponent ||
+    (value == null && type.kind !== 'type-error' && type.kind !== 'date')
+  ) {
+    return <></>;
   }
 
   return <ResultComponent {...props} />;

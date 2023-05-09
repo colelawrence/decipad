@@ -3,7 +3,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   MyEditor,
 } from '@decipad/editor-types';
-import { AST, Computer, getExprRef } from '@decipad/computer';
+import { AST, Computer, Program, getExprRef } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType } from '@decipad/parse';
@@ -15,7 +15,11 @@ import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariabl
 export const VariableDef: InteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor: MyEditor, computer: Computer, element: MyElement) => {
+    async (
+      _editor: MyEditor,
+      computer: Computer,
+      element: MyElement
+    ): Promise<Program> => {
       assertElementType(element, ELEMENT_VARIABLE_DEF);
 
       if (element.children.length < 2) {
@@ -32,7 +36,7 @@ export const VariableDef: InteractiveLanguageElement = {
         element.variant === 'toggle' ||
         element.variant === 'dropdown'
       ) {
-        const { type, coerced } = inferType(computer, expression, {
+        const { type, coerced } = await inferType(computer, expression, {
           type: element.coerceToType,
         });
         if (type.kind === 'anything' || type.kind === 'nothing') {
@@ -50,10 +54,10 @@ export const VariableDef: InteractiveLanguageElement = {
             expression
           );
           // TODO: Refactor this part into function.
-          const dropdownOptions = element.children[1].options.flatMap(
-            (option) => {
+          const dropdownOptions = await Promise.all(
+            element.children[1].options.map(async (option) => {
               let dropdownExpression: string | AST.Expression;
-              const dropdownType = inferType(computer, option.value, {
+              const dropdownType = await inferType(computer, option.value, {
                 type: element.coerceToType,
               });
               if (
@@ -72,9 +76,9 @@ export const VariableDef: InteractiveLanguageElement = {
                 getExprRef(option.id),
                 dropdownExpression
               );
-            }
+            })
           );
-          return [...dropdownVariable, ...dropdownOptions];
+          return [...dropdownVariable, ...dropdownOptions.flat()];
         }
       }
 

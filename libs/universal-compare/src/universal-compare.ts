@@ -5,7 +5,6 @@ import DeciNumber, {
   DeciNumberInput,
 } from '@decipad/number';
 import { zip } from '@decipad/utils';
-import { isColumnLike } from '@decipad/column';
 
 export type CompareResult = -1 | 0 | 1;
 
@@ -18,6 +17,8 @@ export type Comparable =
   | undefined
   | DeciNumber
   | DeciNumberInput
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  | Function
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
@@ -38,12 +39,6 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     return a - b;
   }
 
-  if (isColumnLike(a) && isColumnLike(b)) {
-    return compareToNumber(
-      a.values as ReadonlyArray<Comparable>,
-      b.values as ReadonlyArray<Comparable>
-    );
-  }
   if (Array.isArray(a) && Array.isArray(b)) {
     const lengthComparison = a.length - b.length;
 

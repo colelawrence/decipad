@@ -18,7 +18,7 @@ beforeEach(() => {
 });
 
 it('can push and pop contexts', async () => {
-  await stack.withPush(async () => {
+  await stack.withPushSync(() => {
     stack.set('variable', '1');
     expect(stack.get('variable')).toEqual('1');
   });
@@ -31,7 +31,7 @@ it('can check if names are global', async () => {
   stack.set('globalVariable', '1');
   stack.setNamespaced(['Table', 'Column'], '1', 'lexical');
 
-  await stack.withPush(async () => {
+  await stack.withPushSync(() => {
     expect(stack.isNameGlobal(['', 'variable'])).toEqual(true);
     expect(stack.isNameGlobal(['', 'globalVariable'])).toEqual(true);
     expect(stack.isNameGlobal(['Table', 'Column'])).toEqual(true);
@@ -49,7 +49,7 @@ it('can check if names are global', async () => {
   expect(stack.isNameGlobal(['', 'Table'])).toEqual(true);
 });
 
-it('can delete variables', async () => {
+it('can delete variables', () => {
   stack.set('someVar', '1');
   stack.delete('someVar');
 
@@ -58,7 +58,7 @@ it('can delete variables', async () => {
 
 it('checks for the presence of a variable', async () => {
   stack.set('GlobalScope', '1');
-  await stack.withPush(async () => {
+  await stack.withPushSync(() => {
     stack.set('InnerScope', '2');
 
     expect(stack.has('InnerScope')).toEqual(true);
@@ -74,7 +74,7 @@ it('can push a function call', async () => {
     stack.set('GlobalScope', 'garbage');
     stack.set('garbage', 'garbage');
 
-    await stack.withPushCall(async () => {
+    await stack.withPushCallSync(() => {
       expect(stack.get('GlobalScope')).toEqual('GlobalScope');
       expect(stack.get('garbage')).toEqual(null);
     });
@@ -144,7 +144,7 @@ describe('scope modifiers', () => {
     expect(getHas('Duplicate', 'function')).toEqual('Global');
     expect(getHas('Duplicate', 'lexical')).toEqual('Global');
 
-    await stack.withPush(async () => {
+    await stack.withPushSync(() => {
       stack.set('Duplicate', 'lexical', 'lexical');
 
       expect(getHas('Duplicate', 'global')).toEqual('Global');
@@ -159,7 +159,7 @@ describe('scope modifiers', () => {
       expect(getHas('Duplicate', 'function')).toEqual('Function');
       expect(getHas('Duplicate', 'lexical')).toEqual('Function');
 
-      await stack.withPush(async () => {
+      await stack.withPushSync(() => {
         stack.set('Duplicate', 'lexical', 'lexical');
 
         expect(getHas('Duplicate', 'global')).toEqual('Global');
@@ -175,7 +175,7 @@ describe('scope modifiers', () => {
 
   it('can set variables into other scopes', async () => {
     await stack.withPushCall(async () => {
-      await stack.withPush(async () => {
+      await stack.withPushSync(() => {
         stack.set('Global', 'Global', 'global');
         stack.set('Function', 'Function', 'function');
         stack.set('Lexical', 'Lexical', 'lexical');

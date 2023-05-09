@@ -6,175 +6,189 @@ import { parseFunctionSignature, parseType } from './parseType';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
-it('can narrow some types', () => {
+it('can narrow some types', async () => {
   expect(
-    narrowTypes(parseType('number'), parseType('number'))
+    await narrowTypes(parseType('number'), parseType('number'))
   ).toMatchInlineSnapshot(`number`);
   expect(
-    narrowTypes(parseType('boolean'), parseType('boolean'))
+    await narrowTypes(parseType('boolean'), parseType('boolean'))
   ).toMatchInlineSnapshot(`boolean`);
 
   expect(
-    narrowTypes(parseType('number'), parseType('string')).errorCause
+    (await narrowTypes(parseType('number'), parseType('string'))).errorCause
   ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
 });
 
-it('can narrow percentages', () => {
+it('can narrow percentages', async () => {
   expect(
-    narrowTypes(t.number(), t.number(null, 'percentage'))
+    await narrowTypes(t.number(), t.number(null, 'percentage'))
   ).toMatchInlineSnapshot(`number`);
   expect(
-    narrowTypes(t.number(null, 'percentage'), t.number())
+    await narrowTypes(t.number(null, 'percentage'), t.number())
   ).toMatchInlineSnapshot(`number`);
   expect(
-    narrowTypes(t.number(null, 'percentage'), t.number(null, 'percentage'))
+    await narrowTypes(
+      t.number(null, 'percentage'),
+      t.number(null, 'percentage')
+    )
   ).toMatchInlineSnapshot(`percentage`);
 });
 
-it('can narrow `anything`', () => {
+it('can narrow `anything`', async () => {
   expect(
-    narrowTypes(parseType('column<number>'), parseType('anything'))
+    await narrowTypes(parseType('column<number>'), parseType('anything'))
   ).toMatchInlineSnapshot(`column<number>`);
   expect(
-    narrowTypes(parseType('column<number>'), parseType('column<anything>'))
+    await narrowTypes(
+      parseType('column<number>'),
+      parseType('column<anything>')
+    )
   ).toMatchInlineSnapshot(`column<number>`);
 });
 
-it('can narrow units', () => {
+it('can narrow units', async () => {
   const meters = t.number([parseUnit('meters')]);
-  expect(narrowTypes(meters, t.number())).toMatchInlineSnapshot(`meters`);
+  expect(await narrowTypes(meters, t.number())).toMatchInlineSnapshot(`meters`);
 
-  expect(narrowTypes(meters, meters)).toMatchInlineSnapshot(`meters`);
+  expect(await narrowTypes(meters, meters)).toMatchInlineSnapshot(`meters`);
 
   expect(
-    narrowTypes(meters, t.number([parseUnit('seconds')])).errorCause
+    (await narrowTypes(meters, t.number([parseUnit('seconds')]))).errorCause
   ).toMatchInlineSnapshot(`[Error: Inference Error: expected-unit]`);
 });
 
 describe('percentages', () => {
-  it('can narrow percentages', () => {
+  it('can narrow percentages', async () => {
     expect(
-      narrowTypes(t.number(), t.number(null, 'percentage'))
+      await narrowTypes(t.number(), t.number(null, 'percentage'))
     ).toMatchInlineSnapshot(`number`);
 
     expect(
-      narrowTypes(t.number(), t.number(null, 'percentage'))
+      await narrowTypes(t.number(), t.number(null, 'percentage'))
     ).toMatchInlineSnapshot(`number`);
 
     expect(
-      narrowTypes(t.number(null, 'percentage'), t.number())
+      await narrowTypes(t.number(null, 'percentage'), t.number())
     ).toMatchInlineSnapshot(`number`);
   });
 
-  it('narrows with units', () => {
+  it('narrows with units', async () => {
     const meters = t.number([parseUnit('meters')]);
     expect(
-      narrowTypes(meters, t.number(null, 'percentage'))
+      await narrowTypes(meters, t.number(null, 'percentage'))
     ).toMatchInlineSnapshot(`meters`);
   });
 });
 
-it('can narrow dates', () => {
-  expect(narrowTypes(t.date('day'), t.date('day'))).toMatchInlineSnapshot(
+it('can narrow dates', async () => {
+  expect(await narrowTypes(t.date('day'), t.date('day'))).toMatchInlineSnapshot(
     `date<day>`
   );
   expect(
-    narrowTypes(t.date('day'), t.date('hour')).errorCause
+    (await narrowTypes(t.date('day'), t.date('hour'))).errorCause
   ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
 });
 
-it('explains where the error came from', () => {
+it('explains where the error came from', async () => {
   expect(
-    narrowTypes(parseType('column<range<number>>'), parseType('column<string>'))
-      .errorCause?.pathToError
+    (
+      await narrowTypes(
+        parseType('column<range<number>>'),
+        parseType('column<string>')
+      )
+    ).errorCause?.pathToError
   ).toEqual(['column']);
 
   expect(
-    narrowTypes(
-      parseType('column<range<number>>'),
-      parseType('column<range<string>>')
+    (
+      await narrowTypes(
+        parseType('column<range<number>>'),
+        parseType('column<range<string>>')
+      )
     ).errorCause?.pathToError
   ).toEqual(['column', 'range']);
 });
 
 describe('narrow func call', () => {
-  it('validates args', () => {
+  it('validates args', async () => {
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('number'), parseType('number')],
         ...parseFunctionSignature('number, number -> string'),
       })
     ).toMatchInlineSnapshot(`string`);
 
     expect(
-      narrowFunctionCall({
-        args: [parseType('string'), parseType('number')],
-        ...parseFunctionSignature('number, number -> string'),
-      }).errorCause
+      (
+        await narrowFunctionCall({
+          args: [parseType('string'), parseType('number')],
+          ...parseFunctionSignature('number, number -> string'),
+        })
+      ).errorCause
     ).toMatchInlineSnapshot(`[Error: Inference Error: expected-but-got]`);
   });
 
-  it('propagates symbols to ret', () => {
+  it('propagates symbols to ret', async () => {
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('number')],
         ...parseFunctionSignature('A -> A'),
       })
     ).toMatchInlineSnapshot(`number`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('column<number>')],
         ...parseFunctionSignature('column<A> -> column<A>'),
       })
     ).toMatchInlineSnapshot(`column<number>`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('column<boolean>')],
         ...parseFunctionSignature('column<A> -> A'),
       })
     ).toMatchInlineSnapshot(`boolean`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('column<number>')],
         ...parseFunctionSignature('column<A>:B -> B'),
       })
     ).toMatchInlineSnapshot(`column<number>`);
   });
 
-  it('propagates symbols to other args', () => {
+  it('propagates symbols to other args', async () => {
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [t.number(), t.number()],
         ...parseFunctionSignature('A, A -> boolean'),
       })
     ).toMatchInlineSnapshot(`boolean`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [t.string(), t.number()],
         ...parseFunctionSignature('A, A -> boolean'),
       })
     ).toMatchInlineSnapshot(`InferError expected-but-got`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('string'), parseType('column<string>')],
         ...parseFunctionSignature('A, column<A> -> boolean'),
       })
     ).toMatchInlineSnapshot(`boolean`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('string'), parseType('column<number>')],
         ...parseFunctionSignature('A, column<A> -> boolean'),
       })
     ).toMatchInlineSnapshot(`InferError expected-but-got`);
 
     expect(
-      narrowFunctionCall({
+      await narrowFunctionCall({
         args: [parseType('number'), parseType('column<string>')],
         ...parseFunctionSignature('A, column<A> -> boolean'),
       })
@@ -182,7 +196,7 @@ describe('narrow func call', () => {
   });
 });
 
-it('cant narrow tables, rows, functions', () => {
+it('cant narrow tables, rows, functions', async () => {
   const table = t.table({
     columnNames: ['X'],
     columnTypes: [t.boolean()],
@@ -190,7 +204,7 @@ it('cant narrow tables, rows, functions', () => {
   const row = t.row([t.boolean()], ['X']);
   const func = t.functionPlaceholder('fname', undefined);
 
-  expect(() => narrowTypes(table, table)).toThrow();
-  expect(() => narrowTypes(row, row)).toThrow();
-  expect(() => narrowTypes(func, func)).toThrow();
+  await expect(async () => narrowTypes(table, table)).rejects.toThrow();
+  await expect(async () => narrowTypes(row, row)).rejects.toThrow();
+  await expect(async () => narrowTypes(func, func)).rejects.toThrow();
 });

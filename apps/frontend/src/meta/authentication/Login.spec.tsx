@@ -16,7 +16,7 @@ beforeEach(() => {
   );
 });
 afterEach(() =>
-  act(async () =>
+  act(() =>
     resolveSignIn({
       ok: true,
       error: undefined,
@@ -47,7 +47,7 @@ it('shows a message when the signin request is processed', async () => {
   );
   await userEvent.click(await findByText(/submit/i));
 
-  await act(async () =>
+  await act(() =>
     resolveSignIn({ ok: true, error: undefined, status: 200, url: null })
   );
   expect(await findByText(/open.+link/i)).toBeVisible();

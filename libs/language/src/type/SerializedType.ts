@@ -6,7 +6,9 @@ export type { SerializedTypes };
 export type SerializedType =
   // Groups
   | SerializedTypes.Column
+  | SerializedTypes.MaterializedColumn
   | SerializedTypes.Table
+  | SerializedTypes.MaterializedTable
   | SerializedTypes.Row
 
   // Non-groups

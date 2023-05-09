@@ -100,7 +100,7 @@ describe('with allowDelete', () => {
 
     expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
     expect(getByText(/delete/i, { selector: 'button' })).toBeDisabled();
-    await act(async () => {
+    await act(() => {
       resolveDeletion();
     });
     await waitFor(() => {

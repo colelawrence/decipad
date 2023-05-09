@@ -1,25 +1,49 @@
-import { DeepReadonly } from 'utility-types';
+import { empty, generate } from '@decipad/generator-utils';
+import { getDefined } from '@decipad/utils';
 import { ColumnLike } from './ColumnLike';
 
 /* eslint-disable no-underscore-dangle */
 export class MappedColumn<TValue> implements ColumnLike<TValue> {
   readonly map: number[];
   readonly source: ColumnLike<TValue>;
-  private memo: DeepReadonly<TValue[]> | undefined;
 
   constructor(col: ColumnLike<TValue>, map: number[]) {
+    if (map.length < 1) {
+      throw new TypeError('map contains no entries');
+    }
     this.source = col;
     this.map = map;
   }
 
-  get values() {
-    if (!this.memo) {
-      const { values } = this.source;
-      this.memo = this.map.map((index) => values[index]) as DeepReadonly<
-        TValue[]
-      >;
+  values(start = 0, end = Infinity): AsyncGenerator<TValue> {
+    if (this.map.length < 1) {
+      return empty();
     }
-    return this.memo;
+    let index = start - 1;
+    const stopAt = Math.min(this.map.length, end) - 1;
+    if (index > stopAt) {
+      return empty();
+    }
+    return generate<TValue>(async (done): Promise<TValue> => {
+      index += 1;
+      if (index === stopAt) {
+        done();
+      }
+      const pos = getDefined(this.map[index], `no map at position ${index}`);
+      return this.source.atIndex(pos) as TValue;
+    });
+  }
+
+  async rowCount() {
+    return Math.min(this.map.length, await this.source.rowCount());
+  }
+
+  async atIndex(index: number) {
+    const pos = this.map[index];
+    if (pos == null) {
+      return undefined;
+    }
+    return this.source.atIndex(pos);
   }
 
   static fromColumnAndMap<TV>(
@@ -27,13 +51,5 @@ export class MappedColumn<TValue> implements ColumnLike<TValue> {
     map: number[]
   ): MappedColumn<TV> {
     return new MappedColumn(column, map);
-  }
-
-  get rowCount() {
-    return Math.min(this.map.length, this.source.rowCount);
-  }
-
-  atIndex(index: number) {
-    return this.source.atIndex(this.map[index]);
   }
 }

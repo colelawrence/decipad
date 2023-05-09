@@ -8,6 +8,7 @@ import { Type, Unit } from '../type';
 import { convertBetweenUnits } from '../units';
 import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { predicateSymbols } from './inferTiered';
+import { cleanInferred } from './cleanInferred';
 
 const maybeConvertBetweenUnits = (
   f: DeciNumber,
@@ -71,8 +72,8 @@ const evaluateTier = async (
   tierSize: DeciNumber,
   tierResultType: Type
 ): Promise<DeciNumber> => {
-  const tierValueType = getDefined(
-    realm.inferContext.nodeTypes.get(tierValueExp)
+  const tierValueType = cleanInferred(
+    getDefined(realm.inferContext.nodeTypes.get(tierValueExp))
   );
   const tierSizeValue = NumberValue.fromValue(tierSize);
   const tierValue = await realm.withPush(async () => {
@@ -81,7 +82,7 @@ const evaluateTier = async (
     return evaluate(realm, tierValueExp);
   });
   return maybeConvertBetweenUnits(
-    getInstanceof(tierValue.getData(), DeciNumber),
+    getInstanceof(await tierValue.getData(), DeciNumber),
     tierValueType.unit,
     tierResultType.unit
   );
@@ -108,7 +109,10 @@ const iterateTier = async (
   );
 
   const tierCutOff = maybeConvertBetweenUnits(
-    getInstanceof((await evaluate(realm, tierSizeExp)).getData(), DeciNumber),
+    await getInstanceof(
+      await (await evaluate(realm, tierSizeExp)).getData(),
+      DeciNumber
+    ),
     tierSizeType.unit,
     globalTierSizeType.unit
   );
@@ -135,7 +139,7 @@ export const evaluateTiered = async (
 ): Promise<Value> => {
   const [initial, ...tierDefs] = node.args;
   const initialNumber = getInstanceof(
-    (await evaluate(realm, initial)).getData(),
+    await (await evaluate(realm, initial)).getData(),
     DeciNumber
   );
   const tierSizeType = getDefined(realm.inferContext.nodeTypes.get(initial));
@@ -181,7 +185,7 @@ export const evaluateTiered = async (
     );
     const minimumValue = maybeConvertBetweenUnits(
       getInstanceof(
-        (await evaluate(realm, predicates.min)).getData(),
+        await (await evaluate(realm, predicates.min)).getData(),
         DeciNumber
       ),
       minType.unit,
@@ -196,7 +200,7 @@ export const evaluateTiered = async (
     );
     const maximumValue = maybeConvertBetweenUnits(
       getInstanceof(
-        (await evaluate(realm, predicates.max)).getData(),
+        await (await evaluate(realm, predicates.max)).getData(),
         DeciNumber
       ),
       maxType.unit,

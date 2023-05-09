@@ -7,6 +7,4 @@ export const jsCol = (items: FromJSArg) => getColumnLike(fromJS(items));
 export const hcArg = (
   col: FromJSArg,
   dimensionId: DimensionId
-): HypercubeArg => {
-  return [fromJS(col), [dimensionId]];
-};
+): HypercubeArg => [fromJS(col), [dimensionId]];

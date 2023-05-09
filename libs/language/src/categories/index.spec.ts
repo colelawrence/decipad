@@ -21,9 +21,9 @@ beforeEach(() => {
   testRealm.stack.set('CoffeePrice', fromJS([70, 90]));
 });
 
-it('infers sets', () => {
+it('infers sets', async () => {
   expect(
-    inferCategories(testContext, categories('Name', col(1, 2)))
+    await inferCategories(testContext, categories('Name', col(1, 2)))
   ).toMatchObject({
     cellType: {
       type: 'number',
@@ -33,18 +33,18 @@ it('infers sets', () => {
   expect(testContext.stack.get('Name')).toBeDefined();
 });
 
-it('does not infer inside functions', () => {
-  testContext.stack.withPushCallSync(() => {
+it('does not infer inside functions', async () => {
+  await testContext.stack.withPushCall(async () => {
     expect(
-      inferCategories(testContext, categories('Name', col(1, 2))).errorCause
-        ?.spec?.errType
+      (await inferCategories(testContext, categories('Name', col(1, 2))))
+        .errorCause?.spec?.errType
     ).toMatchInlineSnapshot(`"forbidden-inside-function"`);
   });
 });
 
-it('does not accept already-existing variable names', () => {
+it('does not accept already-existing variable names', async () => {
   expect(
-    inferCategories(testContext, categories('City', col(1, 2)))
+    await inferCategories(testContext, categories('City', col(1, 2)))
   ).toMatchObject({
     errorCause: { spec: { errType: 'duplicated-name' } },
   });

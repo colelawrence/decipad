@@ -55,21 +55,21 @@ const toSimpleTimeUnit: Record<string, [SimplerUnit, number]> = {
   second: ['millisecond', 1000],
 };
 
-export const getDateSequenceError = (
+export const getDateSequenceError = async (
   start: bigint | undefined,
-  end: bigint | undefined,
+  _end: bigint | undefined,
   boundsSpecificity: Time.Specificity,
   by: Time.Unit
-): InferError | undefined => {
+): Promise<InferError | undefined> => {
   if (start == null) {
     return new InferError('No start date');
   }
-  if (end == null) {
+  if (_end == null) {
     return new InferError('No end date');
   }
   // Get the end of the year, month or day.
-  end = getDefined(
-    DateValue.fromDateAndSpecificity(end, boundsSpecificity).getEnd()
+  const end = getDefined(
+    await DateValue.fromDateAndSpecificity(_end, boundsSpecificity).getEnd()
   );
 
   const dateUnitAndMultiplier = getJSDateUnitAndMultiplier(by);
@@ -134,21 +134,21 @@ export const getDateSequenceIncrement = (
   return getDefined(sortTimeUnits([startUnit, endUnit]).pop());
 };
 
-export const inferSequence = (
+export const inferSequence = async (
   ctx: Context,
   expr: AST.Sequence,
-  inferExpression: (ctx: Context, expr: AST.Expression) => Type
-): Type => {
+  inferExpression: (ctx: Context, expr: AST.Expression) => Promise<Type>
+): Promise<Type> => {
   const [startN, endN, byN] = expr.args;
-  const startType = inferExpression(ctx, startN);
-  const endType = inferExpression(ctx, endN);
+  const startType = await inferExpression(ctx, startN);
+  const endType = await inferExpression(ctx, endN);
 
   // pending is contagious
   const pending = [startType, endType].find(typeIsPending);
   if (pending) {
     return pending;
   }
-  const boundTypes = startType.sameAs(endType);
+  const boundTypes = await startType.sameAs(endType);
 
   if (boundTypes.errorCause != null) {
     return boundTypes;
@@ -171,7 +171,7 @@ export const inferSequence = (
       return t.impossible('Invalid increment clause in date sequence');
     }
 
-    const countOrError = getDateSequenceError(
+    const countOrError = await getDateSequenceError(
       start,
       end,
       boundsSpecificity,
@@ -182,7 +182,7 @@ export const inferSequence = (
       ? t.impossible(countOrError)
       : t.column(t.date(specificity));
   } else {
-    const type = startType.isScalar('number');
+    const type = await startType.isScalar('number');
     if (type.errorCause) {
       return type;
     }

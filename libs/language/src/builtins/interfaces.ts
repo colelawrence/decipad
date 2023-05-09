@@ -1,3 +1,4 @@
+import { PromiseOrType } from '@decipad/utils';
 import type { Value } from '../value';
 import type { Type } from '../type';
 import type { AST } from '../parser';
@@ -8,7 +9,7 @@ export type Functor = (
   types: Type[],
   values?: AST.Expression[],
   context?: Context
-) => Type;
+) => Type | Promise<Type>;
 
 export interface BuiltinSpec {
   argCount?: number | number[];
@@ -31,15 +32,19 @@ export interface BuiltinSpec {
     args: Value[],
     argTypes?: Type[],
     realm?: Realm
-  ) => Value;
-  fnValues?: (args: Value[], argTypes?: Type[], realm?: Realm) => Value;
+  ) => PromiseOrType<Value>;
+  fnValues?: (
+    args: Value[],
+    argTypes?: Type[],
+    realm?: Realm
+  ) => PromiseOrType<Value>;
   functor?: Functor;
   functionSignature?: string;
   functorNoAutomap?: (
     types: Type[],
     values?: AST.Expression[],
     context?: Context
-  ) => Type;
+  ) => PromiseOrType<Type>;
   operatorKind?: 'infix' | 'prefix';
   explanation?: string;
   syntax?: string;

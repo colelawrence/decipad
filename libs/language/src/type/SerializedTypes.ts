@@ -14,8 +14,19 @@ export type Column = {
   readonly indexedBy: string | null;
   readonly cellType: SerializedType;
 } & Common;
+export type MaterializedColumn = {
+  readonly kind: 'materialized-column';
+  readonly indexedBy: string | null;
+  readonly cellType: SerializedType;
+} & Common;
 export type Table = {
   readonly kind: 'table';
+  readonly indexName: string | null;
+  readonly columnTypes: SerializedType[];
+  readonly columnNames: string[];
+} & Common;
+export type MaterializedTable = {
+  readonly kind: 'materialized-table';
   readonly indexName: string | null;
   readonly columnTypes: SerializedType[];
   readonly columnNames: string[];

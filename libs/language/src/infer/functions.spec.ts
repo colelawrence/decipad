@@ -5,66 +5,69 @@ import { makeContext } from './context';
 import { inferFunction } from './functions';
 import { inferProgram } from '.';
 
-it('Accepts arguments types and returns a return type', () => {
-  const ctx = makeContext();
-  const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
+describe('function inference', () => {
+  it('Accepts arguments types and returns a return type', async () => {
+    const ctx = makeContext();
+    const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
 
-  expect(inferFunction(ctx, functionWithSpecificTypes, [t.boolean()])).toEqual(
-    t.boolean()
-  );
-});
-
-it('cannot infinitely recurse', () => {
-  const selfReferringProgram = [
-    block(funcDef('Fn', ['A'], c('Fn', l(true)))),
-    block(assign('Error', c('Fn', l(true)))),
-  ];
-  const context = inferProgram(selfReferringProgram);
-
-  expect(getErrSpec(context.stack.get('Error'))?.errType).toEqual(
-    'formula-cannot-call-itself'
-  );
-});
-
-it('cannot indirectly infinitely recurse', () => {
-  const selfReferringProgram = [
-    block(funcDef('Fn', ['A'], c('Fn2', l(true)))),
-    block(funcDef('Fn2', ['A'], c('Fn', l(true)))),
-    block(assign('Error', c('Fn', l(true)))),
-  ];
-  const context = inferProgram(selfReferringProgram);
-
-  expect(getErrSpec(context.stack.get('Error'))).toEqual({
-    errType: 'formula-cannot-call-itself',
-    fname: 'Fn',
+    expect(
+      await inferFunction(ctx, functionWithSpecificTypes, [t.boolean()])
+    ).toEqual(t.boolean());
   });
-});
 
-it('disallows wrong argument count', () => {
-  const unaryFn = funcDef('Fn', ['A'], r('A'));
+  it('cannot infinitely recurse', async () => {
+    const selfReferringProgram = [
+      block(funcDef('Fn', ['A'], c('Fn', l(true)))),
+      block(assign('Error', c('Fn', l(true)))),
+    ];
+    const context = await inferProgram(selfReferringProgram);
 
-  let errorCtx = makeContext();
-  expect(inferFunction(errorCtx, unaryFn, []).errorCause).toEqual(
-    InferError.expectedArgCount('Fn', 1, 0)
-  );
+    expect(getErrSpec(context.stack.get('Error'))?.errType).toEqual(
+      'formula-cannot-call-itself'
+    );
+  });
 
-  errorCtx = makeContext();
-  const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
-  expect(
-    inferFunction(errorCtx, unaryFn, [t.boolean(), t.string()]).errorCause
-  ).toEqual(badArgumentCountError2);
-});
+  it('cannot indirectly infinitely recurse', async () => {
+    const selfReferringProgram = [
+      block(funcDef('Fn', ['A'], c('Fn2', l(true)))),
+      block(funcDef('Fn2', ['A'], c('Fn', l(true)))),
+      block(assign('Error', c('Fn', l(true)))),
+    ];
+    const context = await inferProgram(selfReferringProgram);
 
-it("gets a separate stack so as to not see another function's arg", () => {
-  const funcs = block(
-    funcDef('ShouldFail', [], r('OtherFunctionsArgument')),
-    funcDef('Func', ['OtherFunctionsArgument'], c('ShouldFail')),
-    c('Func', l('string'))
-  );
+    expect(getErrSpec(context.stack.get('Error'))).toEqual({
+      errType: 'formula-cannot-call-itself',
+      fname: 'Fn',
+    });
+  });
 
-  const ctx = makeContext();
-  expect(inferBlock(funcs, ctx)).toMatchObject({
-    type: 'number',
-    unit: U('OtherFunctionsArgument', { known: false }),
+  it('disallows wrong argument count', async () => {
+    const unaryFn = funcDef('Fn', ['A'], r('A'));
+
+    let errorCtx = makeContext();
+    expect((await inferFunction(errorCtx, unaryFn, [])).errorCause).toEqual(
+      InferError.expectedArgCount('Fn', 1, 0)
+    );
+
+    errorCtx = makeContext();
+    const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
+    expect(
+      (await inferFunction(errorCtx, unaryFn, [t.boolean(), t.string()]))
+        .errorCause
+    ).toEqual(badArgumentCountError2);
+  });
+
+  it("gets a separate stack so as to not see another function's arg", async () => {
+    const funcs = block(
+      funcDef('ShouldFail', [], r('OtherFunctionsArgument')),
+      funcDef('Func', ['OtherFunctionsArgument'], c('ShouldFail')),
+      c('Func', l('string'))
+    );
+
+    const ctx = makeContext();
+    expect(await inferBlock(funcs, ctx)).toMatchObject({
+      type: 'number',
+      unit: U('OtherFunctionsArgument', { known: false }),
+    });
   });
 });

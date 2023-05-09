@@ -9,16 +9,16 @@ import { makeContext } from '../infer';
 const year = u('years');
 
 describe('getType', () => {
-  it('adds a unit to a unitless type', () => {
-    expect(testGetType(getType, l(1), ne(1, 'hours'))).toMatchObject({
+  it('adds a unit to a unitless type', async () => {
+    expect(await testGetType(getType, l(1), ne(1, 'hours'))).toMatchObject({
       type: 'number',
       unit: U('hours'),
     });
   });
 
-  it('converts to percentage', () => {
+  it('converts to percentage', async () => {
     expect(
-      testGetType(getType, l(1), n('generic-identifier', '%'))
+      await testGetType(getType, l(1), n('generic-identifier', '%'))
     ).toMatchObject({
       type: 'number',
       unit: null,
@@ -26,22 +26,22 @@ describe('getType', () => {
     });
   });
 
-  it('converts a unit to another', () => {
-    expect(testGetType(getType, ne(1, 'minute'), ne(1, 'hours'))).toMatchObject(
-      {
-        type: 'number',
-        unit: U('hours'),
-      }
-    );
+  it('converts a unit to another', async () => {
+    expect(
+      await testGetType(getType, ne(1, 'minute'), ne(1, 'hours'))
+    ).toMatchObject({
+      type: 'number',
+      unit: U('hours'),
+    });
   });
 
-  it('converts unitless column to other unitful column', () => {
-    expect(testGetType(getType, col(l(1), l(2)), ne(1, 'years'))).toMatchObject(
-      t.column(t.number([year]))
-    );
+  it('converts unitless column to other unitful column', async () => {
+    expect(
+      await testGetType(getType, col(l(1), l(2)), ne(1, 'years'))
+    ).toMatchObject(t.column(t.number([year])));
   });
 
-  it('assigns the ref name as the target unit', () => {
+  it('assigns the ref name as the target unit', async () => {
     const ctx = makeContext();
     ctx.stack.set(
       'nuno',
@@ -49,7 +49,7 @@ describe('getType', () => {
     );
     const quantity = ne(2, 'ton');
     const ref = r('nuno');
-    expect(testGetType(getType, ctx, quantity, ref)).toMatchObject(
+    expect(await testGetType(getType, ctx, quantity, ref)).toMatchObject(
       t.number(
         U(
           u('nuno', { known: false, aliasFor: U('g', { multiplier: N(1000) }) })
@@ -58,10 +58,10 @@ describe('getType', () => {
     );
   });
 
-  it('converts time imprecisely', () => {
-    expect(testGetType(getType, ne(1, 'month'), ne(1, 'days'))).toMatchObject(
-      t.number(U('days'), undefined, 'month-day-conversion')
-    );
+  it('converts time imprecisely', async () => {
+    expect(
+      await testGetType(getType, ne(1, 'month'), ne(1, 'days'))
+    ).toMatchObject(t.number(U('days'), undefined, 'month-day-conversion'));
   });
 });
 
@@ -118,7 +118,7 @@ describe('getValue', () => {
     });
 
     expect(
-      (
+      await (
         await testGetValue(getValue, quantity, n('generic-identifier', '%'))
       ).getData()
     ).toMatchInlineSnapshot(`
@@ -127,7 +127,7 @@ describe('getValue', () => {
       ]
     `);
     expect(
-      (
+      await (
         await testGetValue(getValue, l(10), n('generic-identifier', '%'))
       ).getData()
     ).toMatchInlineSnapshot(`DeciNumber(10)`);
@@ -136,8 +136,9 @@ describe('getValue', () => {
   it('works on a unitful column', async () => {
     const quantity = col(ne(1, 'kmeter'), ne(2, 'kmeter'), ne(3, 'kmeter'));
 
-    expect((await testGetValue(getValue, quantity, ne(1, 'miles'))).getData())
-      .toMatchInlineSnapshot(`
+    expect(
+      await (await testGetValue(getValue, quantity, ne(1, 'miles'))).getData()
+    ).toMatchInlineSnapshot(`
       Array [
         DeciNumber(0.6(213711922373339696174341843633182215859381)),
         DeciNumber(1.(242742384474667939234868368726636443171876)),
@@ -148,7 +149,9 @@ describe('getValue', () => {
 
   it('converts imprecisely', async () => {
     expect(
-      (await testGetValue(getValue, ne(30, 'days'), ne(1, 'months'))).getData()
+      await (
+        await testGetValue(getValue, ne(30, 'days'), ne(1, 'months'))
+      ).getData()
     ).toMatchInlineSnapshot(`DeciNumber(1)`);
   });
 });

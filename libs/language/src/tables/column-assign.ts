@@ -1,7 +1,7 @@
 import { zip } from '@decipad/utils';
 import { AST } from '..';
 import { Context } from '../infer';
-import { buildType as t, InferError } from '../type';
+import { buildType as t, InferError, Type } from '../type';
 import { getDefined, getIdentifierString, getInstanceof } from '../utils';
 import { Realm } from '../interpreter';
 import { Table, UnknownValue, Value } from '../value';
@@ -9,10 +9,10 @@ import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
 import { shouldEvaluate } from './shouldEvaluate';
 
-export const inferColumnAssign = (
+export const inferColumnAssign = async (
   ctx: Context,
   assign: AST.TableColumnAssign
-) => {
+): Promise<Type> => {
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
@@ -21,7 +21,7 @@ export const inferColumnAssign = (
   const tableName = getIdentifierString(tableNameAst);
   const columnName = getIdentifierString(colNameAst);
 
-  const table = ctx.stack.get(tableName)?.isTable();
+  const table = await ctx.stack.get(tableName)?.isTable();
 
   if (table == null || table?.errorCause) {
     return table ?? t.impossible(InferError.missingVariable(tableName));
@@ -33,7 +33,7 @@ export const inferColumnAssign = (
 
   const newColumnAtParentIndex = getDefined(table.columnNames).length;
 
-  const newColumn = inferTableColumn(ctx, {
+  const newColumn = await inferTableColumn(ctx, {
     columnAst: assign,
     tableName,
     columnName,
@@ -68,7 +68,7 @@ export async function evaluateColumnAssign(
     columns,
     expAst,
     tableName,
-    table.tableRowCount
+    await table.tableRowCount()
   );
 
   realm.stack.setNamespaced(

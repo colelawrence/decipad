@@ -9,7 +9,7 @@ const evaluateMatchDef = async (
 ): Promise<Value | undefined> => {
   const [condition, result] = def.args;
   const conditionValue = await evaluate(realm, condition);
-  if (conditionValue.getData()) {
+  if (await conditionValue.getData()) {
     return evaluate(realm, result);
   }
   return undefined;

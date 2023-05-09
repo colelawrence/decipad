@@ -52,7 +52,7 @@ it('does not focus menuitems when holding shift', async () => {
 });
 
 describe('search', () => {
-  it('filters out non-matching groups and items', async () => {
+  it('filters out non-matching groups and items', () => {
     const { getByText, getAllByRole } = render(
       <AutoCompleteMenu search="One" identifiers={identifiers} />
     );
@@ -63,7 +63,7 @@ describe('search', () => {
     expect(getByText(/OneVar/)).toBeInTheDocument();
   });
 
-  it('updates pre-selected first option', async () => {
+  it('updates pre-selected first option', () => {
     const handleExecute = jest.fn();
     const { queryAllByRole, rerender, getAllByRole } = render(
       <AutoCompleteMenu

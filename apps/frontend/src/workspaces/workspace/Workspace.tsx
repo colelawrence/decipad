@@ -307,7 +307,7 @@ const Workspace: FC = () => {
             ],
             currentUserId: session?.user?.id,
 
-            onInvite: async (id, email, permissionType) =>
+            onInvite: (id, email, permissionType) =>
               shareWorkspace({
                 workspaceId: id,
                 email,
@@ -319,7 +319,7 @@ const Workspace: FC = () => {
                   toast('Failed to share workspace.', 'error');
                 })
                 .then(() => {}),
-            onRevoke: async (id, userId) =>
+            onRevoke: (id, userId) =>
               unshareWorkspace({
                 workspaceId: id,
                 userId,
@@ -332,7 +332,7 @@ const Workspace: FC = () => {
                   toast('Failed to revoke workspace access.', 'error');
                 })
                 .then(() => {}),
-            onPermissionChange: async (id, userId, email, permissionType) =>
+            onPermissionChange: (id, userId, email, permissionType) =>
               changeWorkspaceAccess({
                 workspaceId: id,
                 userId,

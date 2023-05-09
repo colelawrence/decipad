@@ -49,7 +49,10 @@ export const formatResult = (
     return color(util.inspect(result));
   }
 
-  if (type.kind === 'column' && Array.isArray(result)) {
+  if (
+    (type.kind === 'column' || type.kind === 'materialized-column') &&
+    Array.isArray(result)
+  ) {
     return `[ ${result
       .map((item) =>
         formatResult(locale, item, getDefined(type.cellType), color)
@@ -57,7 +60,10 @@ export const formatResult = (
       .join(', ')} ]`;
   }
 
-  if (type.kind === 'table' && Array.isArray(result)) {
+  if (
+    (type.kind === 'table' || type.kind === 'materialized-table') &&
+    Array.isArray(result)
+  ) {
     const cols = zip(result, zip(type.columnTypes, type.columnNames))
       .map(
         ([col, [t, name]]) =>

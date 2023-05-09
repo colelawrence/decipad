@@ -10,12 +10,19 @@ import { convertToMultiplierUnit, Type } from '../type';
 import { autoconvertResult, autoconvertArguments } from '../units';
 import { BuiltinSpec } from './interfaces';
 
-function shouldAutoconvert(types: Type[]): boolean {
+async function shouldAutoconvert(types: Type[]): Promise<boolean> {
+  // console.log(
+  //   'shouldAutoconvert units',
+  //   types.map((t) => [t.unit, t.cellType?.unit?.map((u) => u.unit)])
+  // );
   if (types.length === 1) {
     return false;
   }
   if (types.length === 2) {
-    const [typeA, typeB] = types.map((t) => t.reducedToLowest());
+    const [typeA, typeB] = await Promise.all(
+      types.map(async (t) => t.reducedToLowest())
+    );
+    // console.log({ typeA, typeB });
     if ((typeA.unit && !typeB.unit) || (typeB.unit && !typeA.unit)) {
       return false;
     }
@@ -23,20 +30,22 @@ function shouldAutoconvert(types: Type[]): boolean {
   return true;
 }
 
-function callBuiltinAfterAutoconvert(
+async function callBuiltinAfterAutoconvert(
   realm: Realm,
   funcName: string,
   builtin: BuiltinSpec,
   args: Value[],
   argTypes: Type[]
-): Value {
+): Promise<Value> {
   if (builtin.fnValuesNoAutomap) {
     return builtin.fnValuesNoAutomap(args, argTypes, realm);
   }
 
-  const lowerDimFn = (argsLowerDims: Value[], typesLowerDims: Type[]) => {
+  const lowerDimFn = async (argsLowerDims: Value[], typesLowerDims: Type[]) => {
     if (builtin.fn != null) {
-      const argData = argsLowerDims.map((a) => a.getData());
+      const argData = await Promise.all(
+        argsLowerDims.map(async (a) => a.getData())
+      );
       try {
         return fromJS(builtin.fn(argData, typesLowerDims));
       } catch (err) {
@@ -75,13 +84,15 @@ function callBuiltinAfterAutoconvert(
 
 const stages = ['autoConvertArguments', 'builtin', 'autoConvertResult'];
 
-export function callBuiltin(
+export const callBuiltin = async (
   realm: Realm,
   funcName: string,
   argsBeforeConvert: Value[],
   argTypes: Type[],
   returnType: Type
-): Value {
+): Promise<Value> => {
+  // console.log(`builtin ${funcName}`);
+
   const op = getDefined(
     getOperatorByName(funcName),
     `panic: builtin not found: ${funcName}`
@@ -91,26 +102,28 @@ export function callBuiltin(
   try {
     const autoConvert =
       !!op.autoConvertArgs ||
-      (!op.noAutoconvert && shouldAutoconvert(argTypes));
+      (!op.noAutoconvert && (await shouldAutoconvert(argTypes)));
     let args = autoConvert
-      ? autoconvertArguments(argsBeforeConvert, argTypes)
+      ? await autoconvertArguments(argsBeforeConvert, argTypes)
       : argsBeforeConvert;
 
     if (op.absoluteNumberInput && !returnType.unit) {
-      args = args.map((value, index) => {
-        const type = argTypes[index];
-        if (type.type === 'number') {
-          const data = value.getData();
-          if (data instanceof DeciNumber) {
-            return fromJS(convertToMultiplierUnit(data, type.unit));
+      args = await Promise.all(
+        args.map(async (value, index) => {
+          const type = argTypes[index];
+          if (type.type === 'number') {
+            const data = await value.getData();
+            if (data instanceof DeciNumber) {
+              return fromJS(convertToMultiplierUnit(data, type.unit));
+            }
           }
-        }
-        return value;
-      });
+          return value;
+        })
+      );
     }
 
     stage += 1;
-    const resultBeforeConvertingBack = callBuiltinAfterAutoconvert(
+    const resultBeforeConvertingBack = await callBuiltinAfterAutoconvert(
       realm,
       funcName,
       op,
@@ -131,4 +144,4 @@ export function callBuiltin(
     }
     throw new RuntimeError((err as Error)?.message || 'Unknown error');
   }
-}
+};

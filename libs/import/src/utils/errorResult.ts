@@ -9,6 +9,6 @@ export const errorResult = (message: string): Result.Result => {
         message,
       },
     },
-    value: Result.UnknownValue.getData(),
+    value: Result.Unknown,
   };
 };

@@ -5,8 +5,8 @@ import { BuiltinSpec } from '../interfaces';
 import { isTimeSpecificity } from '../../date/index';
 import { NumberValue, RuntimeError } from '../../value';
 
-const extractFunctor: BuiltinSpec['functor'] = ([n, precision]) =>
-  Type.combine(precision.isTimeQuantity(), n.isDate()).mapType((t) => {
+const extractFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
+  (await Type.combine(precision.isTimeQuantity(), n.isDate())).mapType((t) => {
     if (!precision.unit || precision.unit.length !== 1) {
       return t.withErrorCause(`round: invalid time unit`);
     }
@@ -22,8 +22,8 @@ export const dateOperators: Record<string, BuiltinSpec> = {
   pick: {
     argCount: 2,
     functor: extractFunctor,
-    fnValues: ([date], types) => {
-      const d = date.getData();
+    fnValues: async ([date], types) => {
+      const d = await date.getData();
       if (typeof d !== 'bigint' && typeof d !== 'number') {
         throw new Error(
           `Expected date to be number or bigint and was ${typeof d}`

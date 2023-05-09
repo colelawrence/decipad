@@ -80,7 +80,7 @@ describe.skip('avatar interactions', () => {
     );
     expect(getByLabelText(/Avatar of user/i)).toBeVisible();
   });
-  it('opens and closes the account menu', async () => {
+  it('opens and closes the account menu', () => {
     const { queryByText } = render(
       <BrowserRouter>
         <DndProvider backend={HTML5Backend}>

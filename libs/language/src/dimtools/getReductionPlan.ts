@@ -36,26 +36,24 @@ const findCommonIndexBetweenArguments = <T>(
   return null;
 };
 
-const findAnyIndex = <T>(
-  argIndices: (T | null)[][],
-  highCardinality: boolean[],
-  exclude = new Set<T>()
-) => {
+const findAnyIndex = (
+  argIndices: IndexNames[],
+  highCardinality: boolean[]
+): string | undefined => {
   for (const [index, arg] of enumerate(argIndices)) {
     if (!highCardinality[index]) continue;
 
     for (const indexName of arg) {
       if (
         typeof indexName === 'string' &&
-        !(!indexName.startsWith || indexName.startsWith('\0')) &&
-        !exclude.has(indexName)
+        !(!indexName.startsWith || indexName.startsWith('\0'))
       ) {
         return indexName;
       }
     }
   }
 
-  return null;
+  return undefined;
 };
 
 /**
@@ -91,7 +89,7 @@ export const getReductionPlan = (
 
   // Expand dims when any named index is spotted
   const namedIndex = findAnyIndex(argIndices, highCardinality);
-  if (namedIndex) {
+  if (namedIndex != null) {
     return argIndices.map(
       (indexName, i) => indexName.includes(namedIndex) && highCardinality[i]
     );

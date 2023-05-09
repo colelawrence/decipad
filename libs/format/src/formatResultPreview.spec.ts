@@ -10,13 +10,13 @@ const testCode = async (source: string) => {
 it('can summarize longer lists', async () => {
   expect(
     formatResultPreview(await testCode('[1, 2, 3]'))
-  ).toMatchInlineSnapshot(`"1, 2, 3"`);
+  ).toMatchInlineSnapshot(`"column of number"`);
 
   expect(
     formatResultPreview(
       await testCode('["Hewwo", "UwU", "Is it me you\'re looking for", "UwU"]')
     )
-  ).toMatchInlineSnapshot(`"\\"Hewwo\\", \\"UwU\\", ..."`);
+  ).toMatchInlineSnapshot(`"column of string"`);
 });
 
 it('shows ranges', async () => {

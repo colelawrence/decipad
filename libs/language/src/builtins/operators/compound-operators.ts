@@ -1,13 +1,14 @@
-import DeciNumber, { ONE, ZERO, fromNumber } from '@decipad/number';
+import DeciNumber, { ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { BuiltinSpec } from '../interfaces';
 import { Type } from '../../type';
 import { getInstanceof } from '../../utils';
+import { Scalar, getColumnLike } from '../../value';
 
 export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   compoundrate: {
     argCount: 2,
-    functor: ([rate, periods]) =>
+    functor: async ([rate, periods]) =>
       Type.combine(periods.isScalar('number'), rate.isScalar('number')),
     fn: ([_rate, _periods]) => {
       const rate = getInstanceof(_rate, DeciNumber);
@@ -22,7 +23,7 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   futurevalue: {
     argCount: 3,
     noAutoconvert: true,
-    functor: ([periodicInterest, nPer, presentValue]) =>
+    functor: async ([periodicInterest, nPer, presentValue]) =>
       Type.combine(
         periodicInterest.isScalar('number'),
         nPer.isScalar('number'),
@@ -55,24 +56,26 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   netpresentvalue: {
     argCount: 2,
     argCardinalities: [1, 2],
-    functor: ([rate, values]) =>
+    functor: async ([rate, values]) =>
       Type.combine(
         rate.isScalar('number'),
         Type.either(
           values.isScalar('number'),
-          values.isColumn().reducedToLowest().isScalar('number')
+          (await (await values.isColumn()).reducedToLowest()).isScalar('number')
         )
       ),
-    fn: ([_rate, values]) => {
-      const rate = getInstanceof(_rate, DeciNumber);
+    fnValues: async ([_rate, _column]) => {
+      const rate = getInstanceof(await _rate.getData(), DeciNumber);
       const onePlusRate = ONE.add(rate);
-      return getInstanceof(values, Array).reduce<DeciNumber>(
-        (sum, _value, index) => {
-          const value = getInstanceof(_value, DeciNumber);
-          return sum.add(value.div(onePlusRate.pow(fromNumber(index + 1))));
-        },
-        ZERO
-      );
+      const column = getColumnLike(_column);
+      let sum = ZERO;
+      let index = ZERO;
+      for await (const v of column.values()) {
+        index = index.add(ONE);
+        const value = getInstanceof(await v.getData(), DeciNumber);
+        sum = sum.add(value.div(onePlusRate.pow(index)));
+      }
+      return Scalar.fromValue(sum);
     },
     explanation:
       'Net present value of investment given cash flows and a discount rate.',
@@ -92,7 +95,7 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 3,
     noAutoconvert: true,
     argCardinalities: [1, 1, 1],
-    functor: ([rate, numberOfPayments, loanAmount]) =>
+    functor: async ([rate, numberOfPayments, loanAmount]) =>
       Type.combine(
         rate.isScalar('number'),
         numberOfPayments.isScalar('number'),

@@ -1,4 +1,4 @@
-import type { ColumnDesc } from './Computer';
+import { ColumnDesc } from './types';
 
 export const deduplicateColumnResults = (
   acc: ColumnDesc[],

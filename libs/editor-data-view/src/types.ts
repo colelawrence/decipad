@@ -96,8 +96,12 @@ export interface Column {
   name: string;
   blockId?: string;
   type: SerializedType;
-  value: Result.OneResult[];
+  value: Result.Result<'materialized-column'>['value'];
 }
+
+export type ImmaterializedColumn = Omit<Column, 'value'> & {
+  value: Result.Result<'column'>['value'];
+};
 
 export interface VirtualColumn {
   name: string;

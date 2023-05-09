@@ -18,6 +18,7 @@ import {
   Unit,
 } from './type';
 import { isSerializedType } from './type/SerializedType';
+import { materializeOneResult } from './utils/materializeOneResult';
 
 export const runAST = async (
   block: AST.Block,
@@ -25,7 +26,7 @@ export const runAST = async (
 ) => {
   const ctx = makeContext({ externalData });
 
-  const inferResult = inferBlock(block, ctx);
+  const inferResult = await inferBlock(block, ctx);
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
@@ -33,7 +34,7 @@ export const runAST = async (
   const [value] = await run([block], [0], new Realm(ctx));
 
   return {
-    value,
+    value: await materializeOneResult(value),
     type: inferResult,
   };
 };
@@ -44,7 +45,7 @@ export const runCodeForVariables = async (
 ) => {
   const program = [parseBlockOrThrow(source)];
 
-  const inferResult = inferProgram(program);
+  const inferResult = await inferProgram(program);
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
@@ -112,7 +113,7 @@ export const evaluateForVariables = async (
 ) => {
   const program = [parseBlockOrThrow(source)];
 
-  const inferResult = inferProgram(program);
+  const inferResult = await inferProgram(program);
 
   const types = Object.fromEntries(inferResult.stack.globalVariables.entries());
 
@@ -146,7 +147,7 @@ export const objectToTableType = (
     columnNames: Object.keys(obj),
   });
 
-export const objectToTableValue = (obj: Record<string, FromJSArg[]>) => {
+export const objectToTableValue = async (obj: Record<string, FromJSArg[]>) => {
   const values = Object.values(obj).map((v) => fromJS(v));
 
   return Table.fromNamedColumns(values, Object.keys(obj)).getData();
@@ -210,6 +211,7 @@ export const snapshotType = (type: Type | SerializedType): string => {
       }
     }
 
+    case 'materialized-table':
     case 'table': {
       const colsPairs = zip(type.columnNames, type.columnTypes).map(
         ([name, colType]) => `${name} = ${snapshotType(colType)}`
@@ -217,6 +219,7 @@ export const snapshotType = (type: Type | SerializedType): string => {
       return `table<${colsPairs.join(', ')}>`;
     }
 
+    case 'materialized-column':
     case 'column': {
       let contents = snapshotType(type.cellType);
 

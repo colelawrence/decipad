@@ -59,13 +59,13 @@ export const generateGroups = async ({
   }
   const [firstColumn, ...restOfColumns] = columns;
 
-  const map = sortMap<Comparable>(firstColumn.value, compare);
+  const map = await sortMap<Comparable>(firstColumn.value, compare);
   const sortedFirstColumn = applyMap(firstColumn.value, map);
   const sortedRestOfColumns: VirtualColumn[] = restOfColumns.map((column) => ({
     ...column,
     value: applyMap(column.value, map),
   }));
-  const slices = contiguousSlices<Comparable>(sortedFirstColumn, compare);
+  const slices = await contiguousSlices<Comparable>(sortedFirstColumn, compare);
 
   const subGenerateGroups: GenerateGroups = (props) =>
     generateGroups({ ...props, aggregationTypes, expandedGroups });
@@ -73,44 +73,48 @@ export const generateGroups = async ({
   const subGenerateSmartRow: GenerateSubSmartRow = (props) =>
     generateSmartRow({ ...props, aggregationTypes });
 
-  const groups = slices.map(async ([start, end]) => {
-    const value = sortedFirstColumn.atIndex(start);
-    const generatedHash = await generateHash(value);
-    const groupId = parentGroupId
-      ? `${parentGroupId}/${generatedHash}`
-      : generatedHash;
+  const groups = await Promise.all(
+    slices.map(async ([start, end]) => {
+      const value = await sortedFirstColumn.atIndex(start);
+      const generatedHash = await generateHash(value);
+      const groupId = parentGroupId
+        ? `${parentGroupId}/${generatedHash}`
+        : generatedHash;
 
-    const isExpanded = expandedGroups.includes(groupId);
+      const isExpanded = expandedGroups.includes(groupId);
 
-    const groupColumns: VirtualColumn[] = sortedRestOfColumns.map((column) => ({
-      ...column,
-      value: slice(column.value, start, end + 1),
-    }));
+      const groupColumns: VirtualColumn[] = sortedRestOfColumns.map(
+        (column) => ({
+          ...column,
+          value: slice(column.value, start, end + 1),
+        })
+      );
 
-    const hideSmartRow =
-      !aggregationTypes || aggregationTypes.filter(Boolean).length === 0;
+      const hideSmartRow =
+        !aggregationTypes || aggregationTypes.filter(Boolean).length === 0;
 
-    const slicePreviousColumns = [
-      ...previousColumns,
-      { ...firstColumn, value },
-    ];
+      const slicePreviousColumns = [
+        ...previousColumns,
+        { ...firstColumn, value },
+      ];
 
-    return sliceToGroup({
-      isExpanded,
-      value,
-      type: firstColumn.type,
-      columns: groupColumns,
-      groupId,
-      columnIndex,
-      hideSmartRow,
-      parentHighlight$,
-      previousColumns: slicePreviousColumns,
-      generateGroups: subGenerateGroups,
-      generateSmartRow: subGenerateSmartRow,
-      preventExpansion,
-      rotate,
-    });
-  });
+      return sliceToGroup({
+        isExpanded,
+        value,
+        type: firstColumn.type,
+        columns: groupColumns,
+        groupId,
+        columnIndex,
+        hideSmartRow,
+        parentHighlight$,
+        previousColumns: slicePreviousColumns,
+        generateGroups: subGenerateGroups,
+        generateSmartRow: subGenerateSmartRow,
+        preventExpansion,
+        rotate,
+      });
+    })
+  );
 
   return Promise.all(groups);
 };

@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { Spinner } from '@decipad/ui';
 import { AggregationKind, Column } from '../../types';
 import { useDataViewLayoutData } from '../../hooks';
 import { NestedGroups } from './NestedGroups';
@@ -39,16 +40,20 @@ export const DataViewDataAlternatedRotationLayout: FC<
   return (
     <tr>
       <td>
-        <NestedGroups
-          tableName={tableName}
-          aggregationTypes={aggregationTypes}
-          groups={groups}
-          expandedGroups={expandedGroups}
-          onChangeExpandedGroups={onChangeExpandedGroups}
-          rotate={rotate}
-          roundings={roundings}
-          columnIndex={0}
-        />
+        {groups ? (
+          <NestedGroups
+            tableName={tableName}
+            aggregationTypes={aggregationTypes}
+            groups={groups}
+            expandedGroups={expandedGroups}
+            onChangeExpandedGroups={onChangeExpandedGroups}
+            rotate={rotate}
+            roundings={roundings}
+            columnIndex={0}
+          />
+        ) : (
+          <Spinner />
+        )}
       </td>
     </tr>
   );

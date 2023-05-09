@@ -13,6 +13,7 @@ import type {
   Subscription,
   SubscriptionId,
 } from './types';
+import { materializeImportResult } from './utils/materializeImportResult';
 
 setErrorReporter((err) => {
   console.error('Error caught on computer', err);
@@ -51,7 +52,7 @@ const reply = async (
   } else {
     await rpc.call('notify', {
       subscriptionId,
-      newResponse,
+      newResponse: newResponse && (await materializeImportResult(newResponse)),
     });
   }
 };
@@ -238,7 +239,7 @@ const subscribe = async (params: SubscribeParams) => {
 
 rpc.expose<SubscribeParams>('subscribe', subscribe);
 
-rpc.expose<UnsubscribeParams>('unsubscribe', async ({ subscriptionId }) => {
+rpc.expose<UnsubscribeParams>('unsubscribe', ({ subscriptionId }) => {
   unsubscribe(subscriptionId);
 });
 

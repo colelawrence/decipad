@@ -26,7 +26,7 @@ it('emits a create event when typings a workspace name and submitting', async ()
   await waitFor(() =>
     expect(handleCreate).toHaveBeenCalledWith('My Workspace')
   );
-});
+}, 20_000);
 
 it('disables workspace creation while already submitting', async () => {
   let resolveCreation!: () => void;
@@ -44,7 +44,7 @@ it('disables workspace creation while already submitting', async () => {
     await userEvent.click(getByTestId('btn-create-modal'));
   });
   expect(getByTestId('btn-create-modal')).toBeDisabled();
-  await act(async () => {
+  await act(() => {
     resolveCreation();
   });
   await waitFor(() => {

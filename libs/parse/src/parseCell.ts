@@ -13,14 +13,14 @@ import {
   isExpression,
 } from '@decipad/computer';
 import { formatUnit, formatError } from '@decipad/format';
-import { containsNumber } from '@decipad/utils';
+import { PromiseOrType, containsNumber } from '@decipad/utils';
 import { astNode } from './utils/astNode';
 import { dateToAST } from './utils/dateToAST';
 import { unitToAST } from './utils/unitToAST';
 import { inferType } from './inferType';
 import { memoize } from './utils/memoize';
 
-type ParseCellResult = Promise<AST.Expression | Error | null>;
+type ParseCellResult = AST.Expression | Error | null;
 
 const defaultLocale = 'en-US'; // TODO: make this dynamic
 
@@ -28,9 +28,9 @@ const parsing = async (
   computer: Computer,
   type: SerializedType,
   text: string,
-  afterParse: (result: Result.Result) => ParseCellResult
+  afterParse: (result: Result.Result) => PromiseOrType<ParseCellResult>
 ): Promise<ParseCellResult> => {
-  const inferred = inferType(computer, text, { type });
+  const inferred = await inferType(computer, text, { type });
   if (inferred.type.kind === 'type-error') {
     return new Error(formatError(defaultLocale, inferred.type.errorCause));
   }
@@ -120,7 +120,7 @@ export const parseCell = memoize(
         computer,
         cellType,
         text,
-        async (result: Result.Result) => {
+        (result: Result.Result): ParseCellResult => {
           const { type } = result;
           switch (type.kind) {
             case 'number': {

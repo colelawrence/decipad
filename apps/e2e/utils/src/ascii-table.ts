@@ -3,7 +3,7 @@
 import AsciiTable from 'ascii-table';
 import { Table } from './types';
 
-export const toAsciiTable = async (table: Table): Promise<string> => {
+export const toAsciiTable = (table: Table): string => {
   const aTable = new AsciiTable(table.name);
   aTable.setHeading(...table.columnHeaders.map((header) => header.name));
   for (const row of table.rows) {

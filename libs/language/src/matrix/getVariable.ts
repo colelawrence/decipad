@@ -7,7 +7,7 @@ import { getIdentifierString } from '../utils';
 export const getIndexName = (type: Type) =>
   type.indexedBy ?? type.indexName ?? null;
 
-export const inferVariable = (
+export const inferVariable = async (
   context: Context,
   varName: RefLike,
   expectedDim?: string | null

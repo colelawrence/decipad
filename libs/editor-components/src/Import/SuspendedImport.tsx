@@ -7,6 +7,7 @@ import { useComputer } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
 import { useSession } from 'next-auth/react';
 import { Spinner } from '@decipad/ui';
+import { isTableResult } from '@decipad/computer';
 import { importTable } from './importTable';
 
 interface SuspendedImportProps {
@@ -84,12 +85,12 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
       const computerResult = result.result;
       if (computerResult?.type.kind === 'type-error') {
         setError(formatError('en-US', computerResult.type.errorCause));
-      } else if (computerResult?.type.kind !== 'table') {
+      } else if (isTableResult(computerResult)) {
         setError('Expected result to be a table');
         return;
       }
       const path = findNodePath(editor, element);
-      if (path && computerResult && computerResult.type.kind === 'table') {
+      if (path && computerResult && isTableResult(computerResult)) {
         try {
           const insertPath = requirePathBelowBlock(editor, path);
           withoutNormalizing(editor, () => {

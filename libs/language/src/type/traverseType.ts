@@ -26,7 +26,8 @@ export function traverseType(
       });
     }
 
-    case 'column': {
+    case 'column':
+    case 'materialized-column': {
       const { cellType } = type;
       return produce(type, (t) => {
         t.cellType = traverseType(cellType, fn);
@@ -34,6 +35,7 @@ export function traverseType(
     }
 
     case 'table':
+    case 'materialized-table':
     case 'row':
     case 'function': {
       throw new Error(`cannot traverse type ${type.kind}`);

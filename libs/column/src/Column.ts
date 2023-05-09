@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { DeepReadonly } from 'utility-types';
 import DeciNumber, { DeciNumberInput } from '@decipad/number';
+import { from } from '@decipad/generator-utils';
 import { ColumnLike } from './ColumnLike';
 
 export type Comparable =
@@ -12,25 +12,27 @@ export type Comparable =
   | undefined
   | DeciNumber
   | DeciNumberInput
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  | Function
   | ReadonlyArray<Comparable>;
 
 export type ColumnLikeResult<T extends Comparable = Comparable> = ColumnLike<T>;
 
 export class Column<T extends Comparable> implements ColumnLike<T> {
-  readonly _values: DeepReadonly<T[]>;
+  readonly _values: ReadonlyArray<T>;
 
   constructor(values: T[]) {
-    this._values = values as DeepReadonly<T[]>;
+    this._values = values as ReadonlyArray<T>;
   }
-  atIndex(i: number): T {
-    return this.values[i] as T;
+  atIndex(i: number): Promise<T | undefined> {
+    return Promise.resolve(this._values[i]);
   }
 
-  get values() {
-    return this._values;
+  values(start = 0, end = Infinity) {
+    return from(this._values.slice(start, end));
   }
-  get rowCount() {
-    return this._values.length;
+  rowCount() {
+    return Promise.resolve(this._values.length);
   }
 
   /**

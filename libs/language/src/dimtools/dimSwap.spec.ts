@@ -1,4 +1,5 @@
 import { buildType as t } from '..';
+import { materializeOneResult } from '../utils/materializeOneResult';
 import { ColumnLikeValue, fromJS } from '../value';
 import { dimSwapTypes, dimSwapValues } from './dimSwap';
 
@@ -21,36 +22,44 @@ it('can make a dimension dominant', async () => {
   );
 });
 
-it('can get the value too', async () => {
-  expect((await dimSwapValues('X', twoDColumn, twoDColumnVal)).getData())
-    .toMatchInlineSnapshot(`
+it('can get the value too (1)', async () => {
+  expect(
+    await materializeOneResult(
+      (await dimSwapValues('Y', twoDColumn, twoDColumnVal)).getData()
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         DeciNumber(1),
-        DeciNumber(3),
-        DeciNumber(5),
+        DeciNumber(2),
       ],
       Array [
-        DeciNumber(2),
+        DeciNumber(3),
         DeciNumber(4),
+      ],
+      Array [
+        DeciNumber(5),
         DeciNumber(6),
       ],
     ]
   `);
+});
 
-  expect((await dimSwapValues('Y', twoDColumn, twoDColumnVal)).getData())
-    .toMatchInlineSnapshot(`
+it('can get the value too (2)', async () => {
+  expect(
+    await materializeOneResult(
+      (await dimSwapValues('X', twoDColumn, twoDColumnVal)).getData()
+    )
+  ).toMatchInlineSnapshot(`
     Array [
       Array [
         DeciNumber(1),
-        DeciNumber(2),
-      ],
-      Array [
         DeciNumber(3),
-        DeciNumber(4),
+        DeciNumber(5),
       ],
       Array [
-        DeciNumber(5),
+        DeciNumber(2),
+        DeciNumber(4),
         DeciNumber(6),
       ],
     ]

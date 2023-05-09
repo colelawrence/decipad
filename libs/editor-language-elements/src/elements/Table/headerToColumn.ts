@@ -16,6 +16,7 @@ import {
   getNullReplacementValue,
 } from '@decipad/parse';
 import { getNodeString } from '@udecode/plate';
+import { PromiseOrType } from '@decipad/utils';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
 import { simpleError } from './common';
@@ -143,7 +144,7 @@ const dataColumnToColumn = async ({
 
   const columnType =
     !th.cellType || th.cellType.kind === 'anything'
-      ? inferColumn(computer, cellTexts, { userType: th.cellType })
+      ? await inferColumn(computer, cellTexts, { userType: th.cellType })
       : th.cellType;
 
   const items = await Promise.all(
@@ -169,9 +170,9 @@ const dataColumnToColumn = async ({
   };
 };
 
-export const headerToColumn = async (
+export const headerToColumn = (
   props: HeaderToColumnProps
-): Promise<ColumnParseReturn> => {
+): PromiseOrType<ColumnParseReturn> => {
   const { th, dataRows } = props;
   const { cellType } = th;
   return cellType.kind === 'table-formula'

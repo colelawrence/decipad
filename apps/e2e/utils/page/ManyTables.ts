@@ -5,9 +5,8 @@ const tableNameSelector = (tableSelector: string): string => {
   return `${tableSelector} [aria-roledescription="table name"]`;
 };
 
-const fetchTableName = async (page: Page, tableSelector: string) => {
-  return page.textContent(tableNameSelector(tableSelector));
-};
+const fetchTableName = (page: Page, tableSelector: string) =>
+  page.textContent(tableNameSelector(tableSelector));
 
 const tableRowSelector = (tableSelector: string, row: number): string => {
   const parentType = row === 0 ? 'thead' : 'tbody';
@@ -29,7 +28,7 @@ const fetchAllStringElements = async (
   return texts.map((text) => filterCellText(text ?? ''));
 };
 
-const fetchAllSlateStringElements = async (
+const fetchAllSlateStringElements = (
   page: Page,
   selector: string
 ): Promise<string[]> =>
@@ -46,12 +45,10 @@ const fetchColumnHeaders = async (
   return headerTexts.map((text) => ({ name: text }));
 };
 
-const fetchDataRowCount = async (
+const fetchDataRowCount = (
   page: Page,
   tableSelector: string
-): Promise<number> => {
-  return page.locator(`${tableSelector} tbody  tr`).count();
-};
+): Promise<number> => page.locator(`${tableSelector} tbody  tr`).count();
 
 const fetchDataRows = async (
   page: Page,

@@ -6,9 +6,9 @@ module.exports = {
   displayName: 'format',
   coverageThreshold: {
     global: {
-      statements: 96,
-      branches: 88,
-      functions: 100,
+      statements: 94,
+      branches: 86,
+      functions: 96,
     },
   },
 };

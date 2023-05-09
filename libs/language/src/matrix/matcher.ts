@@ -1,6 +1,6 @@
-import pSeries from 'p-series';
 import { getOnly } from '@decipad/utils';
-import { AST, Column, Context } from '..';
+import { all, map } from '@decipad/generator-utils';
+import { AST, Context } from '..';
 import { getCardinality } from '../dimtools/common';
 import { inferExpression, logRetrievedName } from '../infer';
 import { evaluate, Realm } from '../interpreter';
@@ -9,6 +9,7 @@ import { getIdentifierString, getOfType } from '../utils';
 import type { NumberValue, Value } from '../value';
 import { evaluateVariable, getIndexName } from './getVariable';
 import { compare } from '../compare';
+import { generatorOfPromisesToGenerator } from '../../../generator-utils/src/generatorOfPromisesToGenerator';
 
 /** Read inside the square brackets */
 export const readSimpleMatchers = (ctx: Context, matcher: AST.Expression) => {
@@ -38,35 +39,40 @@ export const matchTargets = async (
 
   if (needleExp == null) {
     // VariableName[DimensionName]
-    const { length } = (dimension as Column).values;
+    const length = await dimension.rowCount();
     return [length, Array.from({ length }, () => true)];
   } else {
     // VariableName[DimensionName == "Dimension item"]
 
     // We know these are comparable
-    const compareScalars = (a: Value, b: Value) =>
-      compare((a as NumberValue).getData(), (b as NumberValue).getData());
+    const compareScalars = async (a: Value, b: Value) =>
+      compare(
+        await (a as NumberValue).getData(),
+        await (b as NumberValue).getData()
+      );
 
     let length = 0;
-    const matches = await pSeries(
-      dimension.values.map((dimItem) => async () => {
+    const matcher = generatorOfPromisesToGenerator(
+      map<Value, Promise<boolean>>(dimension.values(), async (dimItem) => {
         const result =
-          compareScalars(dimItem, await evaluate(realm, needleExp)) === 0;
+          (await compareScalars(dimItem, await evaluate(realm, needleExp))) ===
+          0;
         if (result) {
           length++;
         }
         return result;
       })
     );
+    const matches = await all(matcher);
 
     return [length, matches];
   }
 };
 
-export const inferMatchers = (
+export const inferMatchers = async (
   ctx: Context,
   matchers: AST.MatrixMatchers
-): Type => {
+): Promise<Type> => {
   const matcher = getOnly(matchers.args);
   const [dimName, needleExp] = readSimpleMatchers(ctx, matcher);
 
@@ -85,11 +91,11 @@ export const inferMatchers = (
 
   if (needleExp == null) {
     // VariableName[DimensionName]
-    return dimension.reduced().isPrimitive();
+    return (await dimension.reduced()).isPrimitive();
   } else {
     // VariableName[DimensionName == "Needle"]
-    return inferExpression(ctx, needleExp)
-      .isPrimitive()
-      .sameAs(dimension.reduced());
+    return (await (await inferExpression(ctx, needleExp)).isPrimitive()).sameAs(
+      dimension.reduced()
+    );
   }
 };

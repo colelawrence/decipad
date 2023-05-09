@@ -19,6 +19,8 @@ export type NormalizerPlugin = (
   editor: MyEditor
 ) => (entry: MyNodeEntry) => NormalizerReturnValue;
 
+const isTesting = !!process.env.JEST_WORKER_ID;
+
 export interface NormalizerPluginProps {
   name: string;
   elementType?: MyElement['type'] | Array<MyElement['type']>;
@@ -130,12 +132,12 @@ const withNormalizerOverride = (
           if (newNormalize) {
             const normalize = newNormalize(entry);
             if (normalize) {
-              if (!process.env.CI) {
+              if (!isTesting) {
                 // eslint-disable-next-line no-console
                 console.debug(`Normalizer ${pluginName} >>>>>>>>>>>>>>>>>>`);
               }
               normalize();
-              if (!process.env.CI) {
+              if (!isTesting) {
                 // eslint-disable-next-line no-console
                 console.debug(`Normalizer ${pluginName} <<<<<<<<<<<<<<<<<<`);
               }

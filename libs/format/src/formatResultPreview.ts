@@ -10,6 +10,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     }
 
     case 'anything':
+    case 'materialized-table':
     case 'table':
     case 'row':
     case 'function':
@@ -32,6 +33,10 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     }
 
     case 'column': {
+      return `column of ${type.cellType.kind}`;
+    }
+
+    case 'materialized-column': {
       /* eslint-disable-next-line no-use-before-define */
       return limitedColumnSizePreview(
         type.cellType,

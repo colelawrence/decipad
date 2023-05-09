@@ -10,3 +10,4 @@ export * from './useTable';
 export * from './useColumnAggregationTypes';
 export * from './useColumnInferredType';
 export * from './useColumnsInferredTypes';
+export * from './useMaterializedResult';

@@ -12,6 +12,7 @@ import {
 import { buildType as t, InferError, serializeType } from './type';
 import { number } from './type/buildType';
 import { block, c, n, U, u } from './utils';
+import { materializeOneResult } from './utils/materializeOneResult';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
@@ -332,14 +333,16 @@ describe('Tables', () => {
         `Table = { Column1 = [1.1, 2.2, 3.3], Column2 = Column1 * 2 }`
       )
     ).toMatchObject({
-      type: objectToTableType('Table', {
+      type: await objectToTableType('Table', {
         Column1: t.number(),
         Column2: t.number(),
       }),
-      value: objectToTableValue({
-        Column1: [N(11, 10), N(22, 10), N(33, 10)],
-        Column2: [N(22, 10), N(44, 10), N(66, 10)],
-      }),
+      value: await materializeOneResult(
+        objectToTableValue({
+          Column1: [N(11, 10), N(22, 10), N(33, 10)],
+          Column2: [N(22, 10), N(44, 10), N(66, 10)],
+        })
+      ),
     });
   });
 
@@ -356,10 +359,12 @@ describe('Tables', () => {
         Column1: t.number(),
         Column2: t.number(),
       }),
-      value: objectToTableValue({
-        Column1: [N(11, 10), N(22, 10), N(33, 10)],
-        Column2: [N(11, 10), N(33, 10), N(66, 10)],
-      }),
+      value: await materializeOneResult(
+        objectToTableValue({
+          Column1: [N(11, 10), N(22, 10), N(33, 10)],
+          Column2: [N(11, 10), N(33, 10), N(66, 10)],
+        })
+      ),
     });
   });
 
@@ -395,11 +400,13 @@ describe('Tables', () => {
         Column2: t.number(),
         Column3: t.boolean(),
       }),
-      value: objectToTableValue({
-        Column1: [N(1), N(2), N(3)],
-        Column2: [N(1, 2), 1n, N(3, 2)],
-        Column3: [false, false, true],
-      }),
+      value: await materializeOneResult(
+        objectToTableValue({
+          Column1: [N(1), N(2), N(3)],
+          Column2: [N(1, 2), 1n, N(3, 2)],
+          Column3: [false, false, true],
+        })
+      ),
     });
   });
 

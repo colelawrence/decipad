@@ -4,27 +4,35 @@ import { Context, inferExpression } from '../infer';
 import { AST } from '../parser';
 import { Type, buildType as T } from '../type';
 
-const inferMatchDef = (ctx: Context, def: AST.MatchDef): Type => {
+const inferMatchDef = async (
+  ctx: Context,
+  def: AST.MatchDef
+): Promise<Type> => {
   const [condition, result] = def.args;
-  const conditionType = inferExpression(ctx, condition).isScalar('boolean');
+  const conditionType = await (
+    await inferExpression(ctx, condition)
+  ).isScalar('boolean');
   if (conditionType.errorCause) {
     return conditionType;
   }
   return inferExpression(ctx, result);
 };
 
-export const inferMatch = (ctx: Context, node: AST.Match): Type => {
+export const inferMatch = async (
+  ctx: Context,
+  node: AST.Match
+): Promise<Type> => {
   if (node.args.length < 1) {
     return T.nothing();
   }
   let resultType: Type | undefined;
   for (const matchDef of node.args) {
-    const matchDefType = inferMatchDef(ctx, matchDef);
+    const matchDefType = await inferMatchDef(ctx, matchDef);
     if (matchDefType.pending || matchDefType.errorCause) {
       return matchDefType;
     }
     if (resultType) {
-      resultType = resultType.sameAs(matchDefType);
+      resultType = await resultType.sameAs(matchDefType);
     } else {
       resultType = matchDefType;
     }

@@ -1,4 +1,4 @@
-import DeciNumber, { N } from '@decipad/number';
+import DeciNumber, { N, ZERO } from '@decipad/number';
 import * as Values from '../value';
 import { Type, buildType as t } from '../type';
 import {
@@ -7,6 +7,7 @@ import {
   automapValues,
   automapValuesForReducer,
 } from './automap';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 // needed because JSON.stringify(BigInt) does not work
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
@@ -18,11 +19,22 @@ const bool = t.boolean();
 const num = t.number();
 const str = t.string();
 
+const sumOne = async ([val]: Values.Value[]): Promise<Values.Value> => {
+  let sum = ZERO;
+  for await (const v of Values.getColumnLike(val).values()) {
+    sum = sum.add((await v.getData()) as DeciNumber);
+  }
+  return Values.Scalar.fromValue(sum);
+};
+
+const sumFunctor = async ([type]: Type[]) =>
+  (await type.reduced()).isScalar('number');
+
 describe('automapTypes', () => {
-  it('shallow', () => {
+  it('shallow', async () => {
     const calledOnTypes: Type[][] = [];
 
-    const result = automapTypes([num, str], ([t1, t2]) => {
+    const result = await automapTypes([num, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -31,11 +43,11 @@ describe('automapTypes', () => {
     expect(calledOnTypes).toEqual([[num, str]]);
   });
 
-  it('columns can be mapped with single type mapFns', () => {
+  it('columns can be mapped with single type mapFns', async () => {
     const type = t.column(str);
 
     const calledOnTypes: Type[][] = [];
-    const result = automapTypes([type, type], ([t1, t2]) => {
+    const result = await automapTypes([type, type], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -44,11 +56,11 @@ describe('automapTypes', () => {
     expect(calledOnTypes).toEqual([[str, str]]);
   });
 
-  it('can bump dimensions recursively', () => {
+  it('can bump dimensions recursively', async () => {
     const type = t.column(t.column(t.column(str)));
 
     const calledOnTypes: Type[][] = [];
-    const result = automapTypes([type, str], ([t1, t2]) => {
+    const result = await automapTypes([type, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -57,11 +69,11 @@ describe('automapTypes', () => {
     expect(calledOnTypes).toEqual([[str, str]]);
   });
 
-  it('compares columns and scalars on equal footing', () => {
+  it('compares columns and scalars on equal footing', async () => {
     const type = t.column(str);
 
     const calledOnTypes: Type[][] = [];
-    const result = automapTypes([type, str], ([t1, t2]) => {
+    const result = await automapTypes([type, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -72,8 +84,8 @@ describe('automapTypes', () => {
 
   const typeId = (t: Type[]) => t[0];
 
-  it('ensures that cardinality is high enough for the expectedCardinality array', () => {
-    const error = automapTypes([t.number()], typeId, [2]);
+  it('ensures that cardinality is high enough for the expectedCardinality array', async () => {
+    const error = await automapTypes([t.number()], typeId, [2]);
     expect(error.errorCause?.spec).toMatchObject({
       errType: 'expected-but-got',
       expectedButGot: [t.column(t.anything()), t.number()],
@@ -81,19 +93,19 @@ describe('automapTypes', () => {
   });
 
   /* eslint-disable-next-line jest/no-disabled-tests */
-  it.skip('can automap types', () => {
-    const total = ([a]: Type[]) => a.reduced();
+  it.skip('can automap types', async () => {
+    const total = async ([a]: Type[]) => a.reduced();
 
-    expect(automapTypes([t.column(num)], total, [2])).toEqual(num);
+    expect(await automapTypes([t.column(num)], total, [2])).toEqual(num);
 
-    expect(automapTypes([t.column(t.column(num))], total, [2])).toEqual(
+    expect(await automapTypes([t.column(t.column(num))], total, [2])).toEqual(
       t.column(num)
     );
 
     expect(
-      automapTypes(
+      await automapTypes(
         [t.column(num), t.column(num)],
-        ([scalar, col]: Type[]) =>
+        async ([scalar, col]: Type[]) =>
           Type.combine(scalar.isScalar('number'), col.isColumn(), str),
         [1, 2]
       )
@@ -104,26 +116,34 @@ describe('automapTypes', () => {
     );
   });
 
-  it('Propagates errors from mapFn', () => {
-    const cond = ([a, b, c]: Type[]) =>
+  it('Propagates errors from mapFn', async () => {
+    const cond = async ([a, b, c]: Type[]) =>
       Type.combine(a.isScalar('boolean'), c.sameAs(b));
     const card = [1, 1, 1];
 
     expect(
-      automapTypes([t.column(bool), t.column(str), t.column(num)], cond, card)
-        .errorCause
+      (
+        await automapTypes(
+          [t.column(bool), t.column(str), t.column(num)],
+          cond,
+          card
+        )
+      ).errorCause
     ).toBeDefined();
   });
 
-  it('takes indexedBy of operands into account', () => {
+  it('takes indexedBy of operands into account', async () => {
     expect(
-      automapTypes([t.column(num, 'Idx1'), t.column(num, 'Idx1')], () => str)
+      await automapTypes(
+        [t.column(num, 'Idx1'), t.column(num, 'Idx1')],
+        () => str
+      )
     ).toMatchObject({
       indexedBy: 'Idx1',
     });
 
     const twoIndices = t.column(t.column(str, 'Idx2d'), 'Idx1');
-    expect(automapTypes([twoIndices], () => str)).toMatchObject({
+    expect(await automapTypes([twoIndices], () => str)).toMatchObject({
       indexedBy: 'Idx1',
       cellType: {
         indexedBy: 'Idx2d',
@@ -131,7 +151,7 @@ describe('automapTypes', () => {
     });
 
     const indicesTwo = t.column(t.column(str, 'Idx2d'), 'Idx1');
-    expect(automapTypes([indicesTwo], () => str)).toMatchObject({
+    expect(await automapTypes([indicesTwo], () => str)).toMatchObject({
       indexedBy: 'Idx1',
       cellType: {
         indexedBy: 'Idx2d',
@@ -139,14 +159,15 @@ describe('automapTypes', () => {
     });
   });
 
-  it('Can operate on two higher-dimensional types', () => {
+  it('Can operate on two higher-dimensional types', async () => {
     expect(
-      automapTypes(
+      await automapTypes(
         [
           t.column(t.column(num, 'Index2'), 'Index1'),
           t.column(t.column(num, 'Index1'), 'Index2'),
         ],
-        ([a, b]) => Type.combine(a.sameAs(b).isScalar('number'), str)
+        async ([a, b]) =>
+          Type.combine((await a.sameAs(b)).isScalar('number'), str)
       )
     ).toMatchObject({
       indexedBy: 'Index1',
@@ -157,9 +178,9 @@ describe('automapTypes', () => {
     });
   });
 
-  it('Can heighten dimensions when it sees two index names', () => {
+  it('Can heighten dimensions when it sees two index names', async () => {
     expect(
-      automapTypes(
+      await automapTypes(
         [t.column(num, 'Index1'), t.column(num, 'Index2')],
         () => str
       )
@@ -171,7 +192,7 @@ describe('automapTypes', () => {
     });
 
     expect(
-      automapTypes(
+      await automapTypes(
         [
           t.column(num, 'Index1'),
           t.column(num, 'Index2'),
@@ -190,23 +211,23 @@ describe('automapTypes', () => {
     });
   });
 
-  it('can take tables as arguments', () => {
+  it('can take tables as arguments', async () => {
     const table = t.table({ columnNames: [], columnTypes: [] });
     const callee = jest.fn(([x]: Type[]) => x);
 
-    expect(automapTypes([table], callee)).toEqual(table);
+    expect(await automapTypes([table], callee)).toEqual(table);
     expect(callee).toHaveBeenCalledWith([table]);
     callee.mockClear();
 
     const col = t.column(table);
-    expect(automapTypes([col], callee)).toEqual(col);
+    expect(await automapTypes([col], callee)).toEqual(col);
     expect(callee).toHaveBeenCalledWith([table]);
     callee.mockClear();
   });
 });
 
 describe('automapValues', () => {
-  it('can bump dimensions recursively', () => {
+  it('can bump dimensions recursively', async () => {
     const multiDim = Values.Column.fromValues([
       Values.Column.fromValues([
         Values.fromJS([2, 4]),
@@ -218,18 +239,20 @@ describe('automapValues', () => {
     const scalar = Values.fromJS(2);
 
     const calledOnValues: Values.Value[] = [];
-    const result = automapValues(
+    const result = await automapValues(
       [t.column(t.column(t.column(t.number()))), t.number()],
       [multiDim, scalar],
-      ([v1, v2]) => {
+      async ([v1, v2]) => {
         calledOnValues.push(Values.Column.fromValues([v1, v2]));
         return Values.fromJS(
-          (v1.getData() as DeciNumber).mul(v2.getData() as DeciNumber)
+          ((await v1.getData()) as DeciNumber).mul(
+            (await v2.getData()) as DeciNumber
+          )
         );
       }
     );
 
-    expect(result.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(result.getData())).toMatchInlineSnapshot(`
       Array [
         Array [
           Array [
@@ -247,7 +270,11 @@ describe('automapValues', () => {
         ],
       ]
     `);
-    expect(calledOnValues.map((v) => v.getData())).toMatchInlineSnapshot(`
+    expect(
+      await materializeOneResult(
+        await Promise.all(calledOnValues.map(async (v) => v.getData()))
+      )
+    ).toMatchInlineSnapshot(`
       Array [
         Array [
           DeciNumber(2),
@@ -278,66 +305,65 @@ describe('automapValues', () => {
   });
 
   describe('automapping', () => {
-    const sumOne = ([val]: Values.Value[]) =>
-      Values.fromJS((val.getData() as DeciNumber[]).reduce((a, b) => a.add(b)));
-
-    const combine = (values: Values.Value[]) =>
+    const combine = async (values: Values.Value[]) =>
       Values.fromJS(
-        values
-          .map((v) => v.getData())
+        (await Promise.all(values.map(async (v) => v.getData())))
           .map(String)
           .join('')
       );
 
-    it('does not map a column, if mapFn already takes that cardinality', () => {
-      const result = automapValues(
+    it('does not map a column, if mapFn already takes that cardinality', async () => {
+      const result = await automapValues(
         [t.number(), t.number()],
         [Values.fromJS(10), Values.fromJS(1)],
         combine,
         [1, 1]
       );
 
-      expect(result.getData()).toEqual('101');
+      expect(await materializeOneResult(result.getData())).toEqual('101');
     });
 
-    it('does not map a column, if mapFn already takes that cardinality (2D)', () => {
+    it('does not map a column, if mapFn already takes that cardinality (2D)', async () => {
       const values = Values.fromJS([1, 2, 4]);
 
-      const result = automapValues([t.column(t.number())], [values], sumOne, [
-        2,
-      ]);
+      const result = await automapValues(
+        [t.column(t.number())],
+        [values],
+        sumOne,
+        [2]
+      );
 
-      expect(result.getData()).toEqual(N(7));
+      expect(await materializeOneResult(result.getData())).toEqual(N(7));
     });
 
     /* eslint-disable-next-line jest/no-disabled-tests */
-    it.skip('supports reducing the last of many dimensions', () => {
+    it.skip('supports reducing the last of many dimensions', async () => {
       const deepValues = Values.fromJS([
         [1n, 2n, 4n],
         [8n, 16n, 32n],
       ]);
 
-      const result = automapValues(
+      const result = await automapValues(
         [t.column(t.column(t.number()))],
         [deepValues],
         sumOne,
         [2]
       );
 
-      expect(result.getData()).toEqual([7, 56]);
+      expect(await materializeOneResult(result.getData())).toEqual([7, 56]);
     });
 
     /* eslint-disable-next-line jest/no-disabled-tests */
-    it.skip('supports reducing one of multiple args', () => {
+    it.skip('supports reducing one of multiple args', async () => {
       const args = [Values.fromJS([1, 2]), Values.fromJS([1, 2, 3])];
 
       const calls: unknown[] = [];
-      const result = automapValues(
+      const result = await automapValues(
         [t.column(t.number()), t.column(t.number())],
         args,
-        ([a1, a2]: Values.Value[]) => {
-          const v1 = a1.getData() as DeciNumber;
-          const v2 = a2.getData() as DeciNumber[];
+        async ([a1, a2]: Values.Value[]) => {
+          const v1 = (await a1.getData()) as DeciNumber;
+          const v2 = (await a2.getData()) as DeciNumber[];
 
           calls.push([v1, v2]);
 
@@ -350,13 +376,13 @@ describe('automapValues', () => {
         [1, [1, 2, 3]],
         [2, [1, 2, 3]],
       ]);
-      expect(result.getData()).toEqual([
+      expect(await materializeOneResult(await result.getData())).toEqual([
         [2, 3, 4],
         [3, 4, 5],
       ]);
     });
 
-    it('can go through a 2D array while picking non-top dimensions', () => {
+    it('can go through a 2D array while picking non-top dimensions', async () => {
       const args = [
         Values.fromJS([
           ['1', '2'],
@@ -365,27 +391,31 @@ describe('automapValues', () => {
         Values.fromJS(['-a', '-b']),
       ];
 
-      const result = automapValues(
+      const result = await automapValues(
         [t.column(t.column(t.number(), 'X')), t.column(t.number(), 'X')],
         args,
         combine
       );
 
-      expect(result.getData()).toEqual([
+      expect(await materializeOneResult(await result.getData())).toEqual([
         ['1-a', '2-b'],
         ['3-a', '4-b'],
       ]);
     });
 
     describe('raising a dimension', () => {
-      it('supports raising a dimension', () => {
+      it('supports raising a dimension', async () => {
         expect(
-          automapValues(
-            [t.column(t.string(), 'Dimone'), t.column(t.number())],
-            [Values.fromJS(['A', 'B']), Values.fromJS([1, 2, 3])],
-            combine,
-            [1, 1]
-          ).getData()
+          await materializeOneResult(
+            (
+              await automapValues(
+                [t.column(t.string(), 'Dimone'), t.column(t.number())],
+                [Values.fromJS(['A', 'B']), Values.fromJS([1, 2, 3])],
+                combine,
+                [1, 1]
+              )
+            ).getData()
+          )
         ).toMatchInlineSnapshot(`
           Array [
             Array [
@@ -402,22 +432,26 @@ describe('automapValues', () => {
         `);
       });
 
-      it('supports not raising all the dimensions', () => {
+      it('supports not raising all the dimensions', async () => {
         expect(
-          automapValues(
-            [
-              t.column(t.string(), 'IndexOne'),
-              t.string(),
-              t.column(t.number(), 'IndexTwo'),
-            ],
-            [
-              Values.fromJS(['A', 'B']),
-              Values.fromJS('-'),
-              Values.fromJS([1, 2, 3]),
-            ],
-            combine,
-            [1, 1, 1]
-          ).getData()
+          await materializeOneResult(
+            (
+              await automapValues(
+                [
+                  t.column(t.string(), 'IndexOne'),
+                  t.string(),
+                  t.column(t.number(), 'IndexTwo'),
+                ],
+                [
+                  Values.fromJS(['A', 'B']),
+                  Values.fromJS('-'),
+                  Values.fromJS([1, 2, 3]),
+                ],
+                combine,
+                [1, 1, 1]
+              )
+            ).getData()
+          )
         ).toMatchInlineSnapshot(`
           Array [
             Array [
@@ -434,22 +468,26 @@ describe('automapValues', () => {
         `);
       });
 
-      it('supports raising dims deeply', () => {
+      it('supports raising dims deeply', async () => {
         expect(
-          automapValues(
-            [
-              t.column(t.string(), 'DimZero'),
-              t.column(t.number(), 'DimOne'),
-              t.column(t.string(), 'DimTwo'),
-            ],
-            [
-              Values.fromJS(['A']),
-              Values.fromJS([1, 2]),
-              Values.fromJS(['a', 'b', 'c']),
-            ],
-            combine,
-            [1, 1, 1]
-          ).getData()
+          await materializeOneResult(
+            (
+              await automapValues(
+                [
+                  t.column(t.string(), 'DimZero'),
+                  t.column(t.number(), 'DimOne'),
+                  t.column(t.string(), 'DimTwo'),
+                ],
+                [
+                  Values.fromJS(['A']),
+                  Values.fromJS([1, 2]),
+                  Values.fromJS(['a', 'b', 'c']),
+                ],
+                combine,
+                [1, 1, 1]
+              )
+            ).getData()
+          )
         ).toMatchInlineSnapshot(`
           Array [
             Array [
@@ -468,22 +506,26 @@ describe('automapValues', () => {
         `);
       });
 
-      it('can raise the same dimension together in 2 different args', () => {
+      it('can raise the same dimension together in 2 different args', async () => {
         expect(
-          automapValues(
-            [
-              t.column(t.string(), 'Index1'),
-              t.column(t.string(), 'DiffIndex'),
-              t.column(t.number(), 'Index1'),
-            ],
-            [
-              Values.fromJS(['A', 'B']),
-              Values.fromJS([',', ';']),
-              Values.fromJS([1, 2]),
-            ],
-            combine,
-            [1, 1, 1]
-          ).getData()
+          await materializeOneResult(
+            (
+              await automapValues(
+                [
+                  t.column(t.string(), 'Index1'),
+                  t.column(t.string(), 'DiffIndex'),
+                  t.column(t.number(), 'Index1'),
+                ],
+                [
+                  Values.fromJS(['A', 'B']),
+                  Values.fromJS([',', ';']),
+                  Values.fromJS([1, 2]),
+                ],
+                combine,
+                [1, 1, 1]
+              )
+            ).getData()
+          )
         ).toMatchInlineSnapshot(`
           Array [
             Array [
@@ -499,27 +541,31 @@ describe('automapValues', () => {
       });
     });
 
-    it('can operate between two higher-dimensional arguments', () => {
+    it('can operate between two higher-dimensional arguments', async () => {
       expect(
-        automapValues(
-          [
-            t.column(t.column(str, 'Letters'), 'Numbers'),
-            t.column(t.column(str, 'Numbers'), 'Letters'),
-          ],
-          [
-            Values.fromJS([
-              ['a1 ', 'b1 ', 'c1 '],
-              ['a2 ', 'b2 ', 'c2 '],
-            ]),
-            Values.fromJS([
-              ['A1', 'A2'],
-              ['B1', 'B2'],
-              ['C1', 'C2'],
-            ]),
-          ],
-          combine,
-          [1, 1]
-        ).getData()
+        await materializeOneResult(
+          (
+            await automapValues(
+              [
+                t.column(t.column(str, 'Letters'), 'Numbers'),
+                t.column(t.column(str, 'Numbers'), 'Letters'),
+              ],
+              [
+                Values.fromJS([
+                  ['a1 ', 'b1 ', 'c1 '],
+                  ['a2 ', 'b2 ', 'c2 '],
+                ]),
+                Values.fromJS([
+                  ['A1', 'A2'],
+                  ['B1', 'B2'],
+                  ['C1', 'C2'],
+                ]),
+              ],
+              combine,
+              [1, 1]
+            )
+          ).getData()
+        )
       ).toMatchInlineSnapshot(`
         Array [
           Array [
@@ -537,7 +583,7 @@ describe('automapValues', () => {
     });
   });
 
-  it('can take tables as arguments', () => {
+  it('can take tables as arguments', async () => {
     const table = t.table({
       columnNames: ['Col'],
       columnTypes: [t.number()],
@@ -552,31 +598,39 @@ describe('automapValues', () => {
     );
     const callee = jest.fn(() => otherTable);
 
-    expect(automapValues([table], [tableVal], callee)).toEqual(otherTable);
+    expect(await automapValues([table], [tableVal], callee)).toEqual(
+      otherTable
+    );
     expect(callee).toHaveBeenCalledWith([tableVal], [table]);
     callee.mockClear();
 
     const colVal = Values.Column.fromValues([tableVal]);
     const col = t.column(table);
-    expect(automapValues([col], [colVal], callee).getData()).toEqual(
-      Values.Column.fromValues([otherTable]).getData()
+    expect(
+      await materializeOneResult(
+        await (await automapValues([col], [colVal], callee)).getData()
+      )
+    ).toEqual(
+      await materializeOneResult(
+        await Values.Column.fromValues([otherTable]).getData()
+      )
     );
     expect(callee).toHaveBeenCalledWith([tableVal], [table]);
     callee.mockClear();
   });
 
-  it('can pass the correct types to the map function', () => {
+  it('can pass the correct types to the map function', async () => {
     const mapFn = jest.fn(() => Values.fromJS(1n));
 
     const type = t.number();
     const value = Values.fromJS(1n);
 
-    automapValues([type], [value], mapFn);
+    await automapValues([type], [value], mapFn);
 
     expect(mapFn).toHaveBeenCalledWith([value], [type]);
   });
 
-  it('can pass the correct types to the map function (when reducing)', () => {
+  it('can pass the correct types to the map function (when reducing)', async () => {
     const mapFn = jest.fn(() => Values.fromJS(1n));
 
     const reducedType = t.number();
@@ -584,32 +638,32 @@ describe('automapValues', () => {
     const reducedValue = Values.fromJS(1n);
     const value = Values.Column.fromValues([reducedValue]);
 
-    const hc = automapValues([type], [value], mapFn);
+    const hc = await automapValues([type], [value], mapFn);
 
-    hc.getData(); // trigger lazy execution
+    await hc.getData(); // trigger lazy execution
 
     expect(mapFn).toHaveBeenCalledWith([reducedValue], [reducedType]);
   });
 });
 
 describe('automap for reducers', () => {
-  const sum = ([value]: Values.Value[]) =>
-    Values.fromJS((value.getData() as DeciNumber[]).reduce((a, b) => a.add(b)));
-  const sumFunctor = ([type]: Type[]) => type.reduced().isScalar('number');
-
   describe('automapTypesForReducer', () => {
-    it('automapTypesForReducer can call a reducer', () => {
+    it('automapTypesForReducer can call a reducer', async () => {
       const oneDeeType = t.column(t.number(), 'X');
 
-      expect(automapTypesForReducer(oneDeeType, sumFunctor)).toMatchObject({
+      expect(
+        await automapTypesForReducer(oneDeeType, sumFunctor)
+      ).toMatchObject({
         type: 'number',
       });
     });
 
-    it('automapTypesForReducer can reduce', () => {
+    it('automapTypesForReducer can reduce', async () => {
       const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
 
-      expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
+      expect(
+        await automapTypesForReducer(twoDeeType, sumFunctor)
+      ).toMatchObject({
         indexedBy: 'Y',
         cellType: {
           type: 'number',
@@ -617,10 +671,12 @@ describe('automap for reducers', () => {
       });
     });
 
-    it('automapTypesForReducer can reduce the other way', () => {
+    it('automapTypesForReducer can reduce the other way', async () => {
       const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
 
-      expect(automapTypesForReducer(twoDeeType, sumFunctor)).toMatchObject({
+      expect(
+        await automapTypesForReducer(twoDeeType, sumFunctor)
+      ).toMatchObject({
         cellType: {
           type: 'number',
         },
@@ -628,8 +684,8 @@ describe('automap for reducers', () => {
       });
     });
 
-    it('ensures that cardinality is high enough', () => {
-      const error = automapTypesForReducer(t.number(), ([ret]) => ret);
+    it('ensures that cardinality is high enough', async () => {
+      const error = await automapTypesForReducer(t.number(), ([ret]) => ret);
       expect(error.errorCause?.spec).toMatchObject({
         errType: 'expected-but-got',
         expectedButGot: [t.column(t.anything()), t.number()],
@@ -638,29 +694,33 @@ describe('automap for reducers', () => {
   });
 
   describe('automapValuesForReducer', () => {
-    it('automapValuesForReducer can call a reducer', () => {
+    it('automapValuesForReducer can call a reducer', async () => {
       const oneDeeType = t.column(t.number(), 'X');
       const oneDeeValue = Values.fromJS([1, 2]);
 
       expect(
-        automapValuesForReducer(
-          oneDeeType,
-          oneDeeValue as Values.Column,
-          sum
-        )?.getData()
+        await materializeOneResult(
+          (
+            await automapValuesForReducer(
+              oneDeeType,
+              oneDeeValue as Values.Column,
+              sumOne
+            )
+          )?.getData()
+        )
       ).toMatchInlineSnapshot(`DeciNumber(3)`);
     });
 
-    it('automapValuesForReducer can reduce', () => {
+    it('automapValuesForReducer can reduce', async () => {
       const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
       const twoDeeValue = Values.fromJS([[1n], [2n]]);
 
       expect(
-        automapValuesForReducer(
-          twoDeeType,
-          twoDeeValue as Values.Column,
-          sum
-        )?.getData()
+        await materializeOneResult(
+          (
+            await automapValuesForReducer(twoDeeType, twoDeeValue, sumOne)
+          )?.getData()
+        )
       ).toMatchInlineSnapshot(`
         Array [
           DeciNumber(1),
@@ -669,16 +729,20 @@ describe('automap for reducers', () => {
       `);
     });
 
-    it('automapValuesForReducer can reduce the other way', () => {
+    it('automapValuesForReducer can reduce the other way', async () => {
       const twoDeeType = t.column(t.column(t.number(), 'X'), 'Y');
       const twoDeeValue = Values.fromJS([[1n, 2n]]);
 
       expect(
-        automapValuesForReducer(
-          twoDeeType,
-          twoDeeValue as Values.Column,
-          sum
-        )?.getData()
+        await materializeOneResult(
+          (
+            await automapValuesForReducer(
+              twoDeeType,
+              twoDeeValue as Values.Column,
+              sumOne
+            )
+          )?.getData()
+        )
       ).toMatchInlineSnapshot(`
         Array [
           DeciNumber(3),
@@ -686,18 +750,22 @@ describe('automap for reducers', () => {
       `);
     });
 
-    it('can pass the correct types to the function', () => {
+    it('can pass the correct types to the function', async () => {
       const mapFn = jest.fn(() => Values.fromJS(1));
 
       const oneDeeType = t.column(t.number(), 'X');
       const oneDeeValue = Values.fromJS([1n, 2n]);
 
-      automapValuesForReducer(oneDeeType, oneDeeValue as Values.Column, mapFn);
+      await automapValuesForReducer(
+        oneDeeType,
+        oneDeeValue as Values.Column,
+        mapFn
+      );
 
       expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
     });
 
-    it('can pass the correct types to the function (with higher-dimensional args)', () => {
+    it('can pass the correct types to the function (with higher-dimensional args)', async () => {
       const mapFn = jest.fn(() => Values.fromJS(1));
 
       const oneDeeType = t.column(t.number(), 'X');
@@ -705,7 +773,15 @@ describe('automap for reducers', () => {
       const oneDeeValue = Values.fromJS([1n, 2n]);
       const twoDeeValue = Values.Column.fromValues([oneDeeValue]);
 
-      automapValuesForReducer(twoDeeType, twoDeeValue as Values.Column, mapFn);
+      await materializeOneResult(
+        (
+          await automapValuesForReducer(
+            twoDeeType,
+            twoDeeValue as Values.Column,
+            mapFn
+          )
+        ).getData()
+      );
 
       expect(mapFn).toHaveBeenCalledWith([oneDeeValue], [oneDeeType]);
     });

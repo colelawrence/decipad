@@ -8,16 +8,25 @@ import { assertElementType, useNodePath } from '@decipad/editor-utils';
 import {
   EditorTableContext,
   EditorTableContextValue,
+  EditorTableResultContext,
+  useComputer,
   useEditorStylesContext,
 } from '@decipad/react-contexts';
 import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
+import { Result } from '@decipad/computer';
 import { useMemo, useState } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableStore } from '../../contexts/tableStore';
-import { useTable, useTableActions } from '../../hooks';
+import { useMaterializedResult, useTable, useTableActions } from '../../hooks';
 import { SmartRow } from '../SmartRow';
 import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
 import { useSelectedCells } from './useSelectedCells';
+import { selectTableResult } from '../../utils/selectTableResult';
+import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
+import {
+  ColumnInferredTypeContext,
+  createDefaultColumnInferredTypeContextValue,
+} from '../../contexts/ColumnInferredTypeContext';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
@@ -40,22 +49,37 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   useSelectedCells();
 
   const { name, columns, headers } = useTable(element);
-
   const blockId = element.id;
 
-  const contextValue: EditorTableContextValue = useMemo(() => {
-    return {
+  const contextValue: EditorTableContextValue = useMemo(
+    () => ({
       blockId,
       cellTypes: columns.map((col) => col.cellType),
       columnBlockIds: columns.map((col) => col.blockId),
-    };
-  }, [blockId, columns]);
+    }),
+    [blockId, columns]
+  );
+
+  const computer = useComputer();
+  const blockResult = computer.getBlockIdResult$.use(blockId)?.result;
+  const tableResult = useMemo(
+    () => selectTableResult(blockResult, columns),
+    [blockResult, columns]
+  );
+  const materializedTableResult = useMaterializedResult(
+    tableResult as Result.Result<'table' | 'materialized-table'>
+  ) as Result.Result<'materialized-table'>;
 
   const tablePath = useNodePath(element);
 
   const wideTable = columns.length >= WIDE_MIN_COL_COUNT;
 
   const { color: defaultColor } = useEditorStylesContext();
+
+  const columnInferredTypesContextValue = useMemo(
+    createDefaultColumnInferredTypeContextValue,
+    []
+  );
 
   return (
     (!deleted && (
@@ -72,35 +96,45 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         dependencyId={blockId}
       >
         <EditorTableContext.Provider value={contextValue}>
-          <TableDndProvider editor={editor} table={element}>
-            <EditorTable
-              id={element.id}
-              onChangeIcon={onSaveIcon}
-              onChangeColor={onSaveColor}
-              onSetCollapsed={onSetCollapsed}
-              hideFormulas={element.hideFormulas}
-              onSetHideFormulas={onSetHideFormulas}
-              icon={(element.icon ?? 'Table') as UserIconKey}
-              color={(element.color ?? defaultColor) as AvailableSwatchColor}
-              isCollapsed={element.isCollapsed}
-              onAddRow={onAddRow}
-              onAddColumn={onAddColumn}
-              tableWidth={wideTable ? 'WIDE' : 'SLIM'}
-              isSelectingCell={!!selectedCells}
-              smartRow={
-                <SmartRow
-                  onAggregationTypeNameChange={onChangeColumnAggregation}
-                  aggregationTypeNames={headers.map((h) => h.aggregation)}
-                  tableName={name}
-                  tablePath={tablePath}
-                  columns={columns}
-                  element={element}
-                />
-              }
+          <ColumnInferredTypeContext.Provider
+            value={columnInferredTypesContextValue}
+          >
+            <EditorTableResultContext.Provider
+              value={materializedTableResult ?? defaultTableResultValue}
             >
-              {children}
-            </EditorTable>
-          </TableDndProvider>
+              <TableDndProvider editor={editor} table={element}>
+                <EditorTable
+                  id={element.id}
+                  onChangeIcon={onSaveIcon}
+                  onChangeColor={onSaveColor}
+                  onSetCollapsed={onSetCollapsed}
+                  hideFormulas={element.hideFormulas}
+                  onSetHideFormulas={onSetHideFormulas}
+                  icon={(element.icon ?? 'Table') as UserIconKey}
+                  color={
+                    (element.color ?? defaultColor) as AvailableSwatchColor
+                  }
+                  isCollapsed={element.isCollapsed}
+                  onAddRow={onAddRow}
+                  onAddColumn={onAddColumn}
+                  tableWidth={wideTable ? 'WIDE' : 'SLIM'}
+                  isSelectingCell={!!selectedCells}
+                  smartRow={
+                    <SmartRow
+                      onAggregationTypeNameChange={onChangeColumnAggregation}
+                      aggregationTypeNames={headers.map((h) => h.aggregation)}
+                      tableName={name}
+                      tablePath={tablePath}
+                      columns={columns}
+                      element={element}
+                    />
+                  }
+                >
+                  {children}
+                </EditorTable>
+              </TableDndProvider>
+            </EditorTableResultContext.Provider>
+          </ColumnInferredTypeContext.Provider>
         </EditorTableContext.Provider>
       </DraggableBlock>
     )) ||

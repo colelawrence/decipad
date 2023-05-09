@@ -105,7 +105,7 @@ async function internalEvaluate(
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;
       const args = await pSeries(
-        funcArgs.map((arg) => () => evaluate(realm, arg))
+        funcArgs.map((arg) => async () => evaluate(realm, arg))
       );
 
       if (funcName === 'previous') {
@@ -162,7 +162,7 @@ async function internalEvaluate(
     }
     case 'range': {
       const [start, end] = await pSeries(
-        node.args.map((arg) => () => evaluate(realm, getDefined(arg)))
+        node.args.map((arg) => async () => evaluate(realm, getDefined(arg)))
       );
 
       return Range.fromBounds(start, end);
@@ -180,7 +180,7 @@ async function internalEvaluate(
         );
 
         const step = getDateSequenceIncrement(node.args[2], startUnit, endUnit);
-        return getDefined(columnFromDateSequence(start, end, step));
+        return getDefined(await columnFromDateSequence(start, end, step));
       } else {
         const step = node.args[2]
           ? await evaluate(realm, node.args[2])
@@ -194,7 +194,7 @@ async function internalEvaluate(
     }
     case 'column': {
       const values: Value[] = await pSeries(
-        node.args[0].args.map((v) => () => evaluate(realm, v))
+        node.args[0].args.map((v) => async () => evaluate(realm, v))
       );
 
       return Column.fromValues(values);

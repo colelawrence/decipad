@@ -15,6 +15,7 @@ import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 import { TableResultCell } from './TableResultCell';
 import { cssVar, p13Regular } from '../../primitives';
 import { usePagination } from '../../utils/usePagination';
+import { useMaterializedResult } from '../../hooks/useMaterializedResult';
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -43,9 +44,13 @@ const footerRowStyles = css({
   backgroundColor: cssVar('tableFooterBackgroundColor'),
 });
 
-export const TableResult = ({
+type TableResultProps =
+  | CodeResultProps<'table'>
+  | CodeResultProps<'materialized-table'>;
+
+export const TableResult: FC<TableResultProps> = ({
   parentType,
-  type: _type,
+  type,
   value: _value,
   onDragStartCell,
   onDragEnd,
@@ -54,27 +59,26 @@ export const TableResult = ({
   firstTableRowControls,
   onChangeColumnType,
   element,
-}: CodeResultProps<'table'>): ReturnType<FC> => {
-  const result = useMemo(
-    () => ({ type: _type, value: _value }),
-    [_type, _value]
-  );
+}) => {
+  const value = useMaterializedResult(_value) as
+    | undefined
+    | CodeResultProps<'materialized-table'>['value'];
 
-  const { type, value } = result;
+  const allowsForLookup =
+    type.columnTypes && type.columnTypes[0]?.kind === 'string';
 
-  const { columnNames, columnTypes } = type;
-
-  const allowsForLookup = columnTypes && columnTypes[0]?.kind === 'string';
-
-  if (value.length !== columnNames.length) {
-    throw new Error(
-      `There are ${columnNames.length} column names. Expected values for ${columnNames.length} columns, but received values for ${value.length} columns.`
-    );
-  }
-
-  const tableLength = value.at(0)?.length;
+  const tableLength = value?.at(0)?.length ?? 0;
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
+
+  if (
+    value &&
+    (!Array.isArray(value) ||
+      !(value as Array<unknown>).every((col: unknown) => Array.isArray(col)))
+  ) {
+    console.error(value);
+    throw new Error('invalid table value');
+  }
 
   const { page, offset, presentRowCount, valuesForPage, setPage } =
     usePagination({
@@ -107,11 +111,11 @@ export const TableResult = ({
         isLiveResult={isLiveResult}
         head={
           <TableHeaderRow readOnly={!isLiveResult}>
-            {columnNames?.map((columnName, index) =>
+            {type.columnNames?.map((columnName, index) =>
               isLiveResult ? (
                 <TableColumnHeader
                   key={index}
-                  type={toTableHeaderType(columnTypes[index])}
+                  type={toTableHeaderType(type.columnTypes[index])}
                   isFirst={index === 0}
                   isForImportedColumn={isLiveResult}
                   onChangeColumnType={(columnType) =>
@@ -122,7 +126,7 @@ export const TableResult = ({
                 </TableColumnHeader>
               ) : (
                 <TableHeader
-                  type={toTableHeaderType(columnTypes[index])}
+                  type={toTableHeaderType(type.columnTypes[index])}
                   key={index}
                   isEditable={false}
                   showIcon={isLiveResult}
@@ -135,38 +139,39 @@ export const TableResult = ({
         }
         body={
           <>
-            {Array.from({ length: presentRowCount }, (_, rowIndex) => (
-              <TableRow
-                key={rowIndex}
-                readOnly={!isLiveResult || rowIndex > 0}
-                tableCellControls={
-                  (isLiveResult && rowIndex === 0 && firstTableRowControls) ||
-                  (isLiveResult && <th></th>) ||
-                  false
-                }
-              >
-                {isLiveResult && rowIndex > 0 && (
-                  <th css={liveTableEmptyCellStyles}></th>
-                )}
-                {valuesForPage.map((column, colIndex) => (
-                  <TableResultCell
-                    key={colIndex}
-                    cellValue={column[rowIndex]}
-                    colIndex={colIndex}
-                    isLiveResult={isLiveResult}
-                    allowsForLookup={allowsForLookup}
-                    onDragStartCell={onDragStartCell}
-                    onDragEnd={onDragEnd}
-                    tableType={type}
-                    columnName={columnNames[colIndex]}
-                    columnType={columnTypes[colIndex]}
-                    value={value[0][rowIndex] as string}
-                    element={element}
-                    tooltip={tooltip}
-                  />
-                ))}
-              </TableRow>
-            ))}
+            {value &&
+              Array.from({ length: presentRowCount }, (_, rowIndex) => (
+                <TableRow
+                  key={rowIndex}
+                  readOnly={!isLiveResult || rowIndex > 0}
+                  tableCellControls={
+                    (isLiveResult && rowIndex === 0 && firstTableRowControls) ||
+                    (isLiveResult && <th></th>) ||
+                    false
+                  }
+                >
+                  {isLiveResult && rowIndex > 0 && (
+                    <th css={liveTableEmptyCellStyles}></th>
+                  )}
+                  {valuesForPage.map((column, colIndex) => (
+                    <TableResultCell
+                      key={colIndex}
+                      cellValue={column[rowIndex]}
+                      colIndex={colIndex}
+                      isLiveResult={isLiveResult}
+                      allowsForLookup={allowsForLookup}
+                      onDragStartCell={onDragStartCell}
+                      onDragEnd={onDragEnd}
+                      tableType={type}
+                      columnName={type.columnNames[colIndex]}
+                      columnType={type.columnTypes[colIndex]}
+                      value={value[0][rowIndex] as string}
+                      element={element}
+                      tooltip={tooltip}
+                    />
+                  ))}
+                </TableRow>
+              ))}
           </>
         }
         footer={
@@ -179,7 +184,7 @@ export const TableResult = ({
               {isLiveResult && <th></th>}
               <td
                 css={[paginationControlWrapperTdStyles, footerRowStyles]}
-                colSpan={columnNames.length}
+                colSpan={type.columnNames.length}
               >
                 <PaginationControl
                   page={page}

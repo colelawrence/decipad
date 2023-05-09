@@ -4,11 +4,11 @@ import type { Unit } from '..';
 import { RuntimeError } from '../value';
 import { getDefined } from '../utils';
 
-export const addTime = (
+export const addTime = async (
   date: bigint | undefined,
   timeUnit: Time.Unit,
   quantity: bigint
-): bigint | undefined => {
+): Promise<bigint | undefined> => {
   if (date == null) {
     return undefined;
   }
@@ -17,7 +17,7 @@ export const addTime = (
     `bad time unit ${timeUnit}`
   );
 
-  const added = toLuxonUTC(date).plus({
+  const added = (await toLuxonUTC(date)).plus({
     [composedUnit]: Number(BigInt(quantity) * compositeMultiplier),
   });
 

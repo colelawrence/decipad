@@ -6,11 +6,11 @@ import {
   VersionedDataTables,
   VersionedTableRecord,
 } from '@decipad/backendtypes';
-import { getDefined } from '../../utils/src';
+import { PromiseOrType, getDefined } from '../../utils/src';
 
 export type WithLockUserFunction<T> = (
   record: T | undefined
-) => Promise<Omit<T, '_version'>>;
+) => PromiseOrType<Omit<T, '_version'>>;
 
 type WithLock<T> = {
   (id: string, fn: WithLockUserFunction<T>): Promise<T>;

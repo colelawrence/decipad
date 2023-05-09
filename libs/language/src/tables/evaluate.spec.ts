@@ -1,5 +1,6 @@
 import { AST, runAST } from '..';
 import { n, c, l, block, assign, col, r, tableDef, prop } from '../utils';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 import { usesRecursion } from './evaluate';
 
@@ -12,7 +13,7 @@ it('can find a previous symbol', () => {
 });
 
 describe('evaluateTableColumn', () => {
-  const testEvaluate = async (exp: AST.Expression) => {
+  const testEvaluate = async (exp: AST.Expression): Promise<Array<unknown>> => {
     const testBlock = block(
       assign('numbers', col(1, 2, 3, 4)),
       tableDef('Table', {
@@ -22,7 +23,11 @@ describe('evaluateTableColumn', () => {
       prop('Table', 'theTestColumn')
     );
 
-    return (await runAST(testBlock)).value as unknown[];
+    return (await materializeOneResult(
+      (
+        await runAST(testBlock, { doNotValidateResults: false })
+      ).value
+    )) as Array<unknown>;
   };
 
   it('can emulate a quadratic function', async () => {
@@ -68,7 +73,7 @@ describe('evaluateTableColumn', () => {
   });
 
   it('ensures columns are consistently sized', async () => {
-    await expect(
+    await expect(async () =>
       runAST(
         block(
           tableDef('Table', {

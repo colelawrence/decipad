@@ -23,6 +23,13 @@
         "command": "../../node_modules/.bin/madge --circular src",
         "cwd": "libs/column"
       }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/column"],
+      "options": {
+        "jestConfig": "libs/column/jest.config.js"
+      }
     }
   },
   "tags": []

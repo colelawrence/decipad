@@ -24,28 +24,34 @@ import {
  */
 
 /** Make {type} columnar and place {indexName} on top if {type} more than 1D */
-export const coerceTableColumnTypeIndices = (type: Type, indexName: string) => {
+export const coerceTableColumnTypeIndices = async (
+  type: Type,
+  indexName: string
+): Promise<Type> => {
   if (type.cellType == null) {
     // Because we're so very nice, allow `Column = 1` as syntax sugar.
     return type;
   } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
-    return dimSwapTypes(indexName, type).reduced();
+    return (await dimSwapTypes(indexName, type)).reduced();
   } else {
     // We want our table index on top
     return type.reduced();
   }
 };
 
-export const coerceTableColumnIndices = (
+export const coerceTableColumnIndices = async (
   type: Type,
   value: ColumnLikeValue | Value,
   indexName: string,
   tableLength?: number
-): ColumnLikeValue => {
+): Promise<ColumnLikeValue> => {
   if (!isColumnLike(value)) {
     return Column.fromValues(repeat(value, tableLength ?? 1));
   } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
-    return validateLength(dimSwapValues(indexName, type, value), tableLength);
+    return validateLength(
+      await dimSwapValues(indexName, type, value),
+      tableLength
+    );
   } else {
     return validateLength(value, tableLength);
   }
@@ -54,8 +60,11 @@ export const coerceTableColumnIndices = (
 const repeat = <T>(value: T, length: number) =>
   Array.from({ length }, () => value);
 
-const validateLength = (value: ColumnLikeValue, wanted: number | undefined) => {
-  if (wanted != null && wanted !== value.rowCount) {
+const validateLength = async <T extends ColumnLikeValue>(
+  value: T,
+  wanted: number | undefined
+): Promise<T> => {
+  if (wanted != null && wanted !== (await value.rowCount())) {
     // UI tables will never place us in this situation
     throw new RuntimeError('Inconsistent table column sizes');
   }

@@ -68,25 +68,29 @@ function reducer(state: UnitsState, action: UnitsAction): UnitsState {
 
 interface UnitMenuItemProps {
   readonly onSelect?: (unit: Unit[] | null) => void;
-  readonly parseUnit?: (value: string) => Unit[] | null;
+  readonly parseUnit?: (
+    value: string
+  ) => Promise<Unit[] | null> | Unit[] | null;
   readonly placeholder?: string;
 }
 
 export const UnitMenuItem: FC<UnitMenuItemProps> = ({
   onSelect = noop,
-  parseUnit = () => null,
+  parseUnit = () => Promise.resolve(null),
   placeholder = 'Create a custom unit',
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    if (state.text.length > 0) {
-      try {
-        const unit = parseUnit(state.text);
-        dispatch({ type: 'unit', value: unit });
-      } catch {
-        dispatch({ type: 'unit', value: null });
+    (async () => {
+      if (state.text.length > 0) {
+        try {
+          const unit = await parseUnit(state.text);
+          dispatch({ type: 'unit', value: unit });
+        } catch {
+          dispatch({ type: 'unit', value: null });
+        }
       }
-    }
+    })();
   }, [state.text, parseUnit]);
 
   const inputRef = useRef<HTMLInputElement>(null);

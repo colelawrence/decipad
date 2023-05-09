@@ -10,12 +10,14 @@ import {
   Type,
   Value,
 } from '@decipad/language';
+import { all, map } from '@decipad/generator-utils';
 import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
 } from '../caching/getStatementsToEvict';
 import type { IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatement } from '../utils';
+import { getResultGenerator } from '../utils/getResultGenerator';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -62,10 +64,10 @@ export class ComputationRealm {
   }
 
   /** Retrieve labels (first column) for each table, indexed by table name. */
-  getIndexLabels(): Map<string, string[]> {
+  async getIndexLabels(): Promise<Map<string, string[]>> {
     const labels = new Map();
 
-    const addLabels = (
+    const addLabels = async (
       name: string,
       column?: ColumnLikeValue,
       cellType?: Type
@@ -74,21 +76,20 @@ export class ComputationRealm {
         return;
       }
 
-      const data = column.getData();
+      const data = getResultGenerator(await column.getData());
 
       if (cellType.type === 'string' || cellType.type === 'number') {
-        labels.set(
-          name,
-          (data as string[]).map((s) => String(s))
-        );
+        labels.set(name, await all(map(data(), String)));
       }
 
       const { date } = cellType;
       if (date) {
         labels.set(
           name,
-          (data as Array<bigint | undefined | symbol>).map((d) =>
-            stringifyDate(d, date)
+          await all(
+            map(data(), (d) =>
+              stringifyDate(d as bigint | symbol | undefined, date)
+            )
           )
         );
       }
@@ -101,9 +102,11 @@ export class ComputationRealm {
       const table = this.interpreterRealm.stack.get(name, 'global');
 
       if (table instanceof Table) {
-        addLabels(name, table.columns[0], type.columnTypes?.[0]);
+        // eslint-disable-next-line no-await-in-loop
+        await addLabels(name, table.columns[0], type.columnTypes?.[0]);
       } else if (table != null && isColumnLike(table)) {
-        addLabels(name, table, type.cellType ?? undefined);
+        // eslint-disable-next-line no-await-in-loop
+        await addLabels(name, table, type.cellType ?? undefined);
       }
     }
 

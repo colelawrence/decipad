@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useMemo } from 'react';
 import {
   ELEMENT_PLOT,
   PlateComponent,
@@ -23,9 +23,22 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
   assertElementType(element, ELEMENT_PLOT);
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
-  const { spec, data, plotParams, repeatedColumns } = usePlot(element);
+  const plot = usePlot(element);
   const path = useNodePath(element);
   const onTitleChange = usePathMutatorCallback(editor, path, 'title');
+  const result = useMemo(
+    () =>
+      (plot != null &&
+        plot.spec &&
+        plot.data &&
+        ({
+          spec: plot.spec,
+          data: plot.data,
+          repeatedColumns: plot.repeatedColumns,
+        } as PlotBlockProps['result'])) ||
+      undefined,
+    [plot]
+  );
 
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers
@@ -40,21 +53,15 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
       contentEditable={false}
       {...attributes}
     >
-      <PlotBlock
-        readOnly={readOnly}
-        plotParams={plotParams as unknown as PlotParamsProps}
-        result={
-          spec &&
-          data &&
-          ({
-            spec,
-            data,
-            repeatedColumns,
-          } as PlotBlockProps['result'])
-        }
-        title={element.title || DEFAULT_TITLE}
-        onTitleChange={onTitleChange}
-      />
+      {plot != null && result != null && (
+        <PlotBlock
+          readOnly={readOnly}
+          plotParams={plot.plotParams as unknown as PlotParamsProps}
+          result={result}
+          title={element.title || DEFAULT_TITLE}
+          onTitleChange={onTitleChange}
+        />
+      )}
       {children}
     </DraggableBlock>
   );

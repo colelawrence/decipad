@@ -9,7 +9,6 @@ import {
 import { Observable } from 'lib0/observable';
 import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
-import { DocSyncRecord } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import { pick } from 'lodash';
@@ -47,9 +46,7 @@ export class DynamodbPersistence extends Observable<string> {
     try {
       await data.docsync.withLock(
         this.name,
-        async (
-          docsync = { id: this.name, _version: 0, data: '' }
-        ): Promise<DocSyncRecord> => {
+        (docsync = { id: this.name, _version: 0, data: '' }) => {
           return {
             id: docsync.id,
             _version: docsync._version + 1,
@@ -224,7 +221,7 @@ export class DynamodbPersistence extends Observable<string> {
     return this._mux.flush().then(noop);
   }
 
-  async destroy(): Promise<void> {
+  destroy() {
     this.doc.off('destroy', this.destroy);
   }
 }

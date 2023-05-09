@@ -14,60 +14,64 @@ nilCtx.stack.setNamespaced(
   'global'
 );
 
-it('puts column types in ether', () => {
+it('puts column types in ether', async () => {
   const col1 = n('table-column', n('coldef', 'ColA'), col(1, 2));
   const col2 = n('table-column', n('coldef', 'ColA'), col(3, 4));
   const tbl = n('table', n('tabledef', 'tbl'), col1, col2);
 
   const ctx = makeContext();
-  inferStatement(ctx, tbl);
+  await inferStatement(ctx, tbl);
   expect(ctx.nodeTypes.has(col1)).toBe(true);
   expect(ctx.nodeTypes.has(col2)).toBe(true);
 });
 
-it('allows empty tables', () => {
-  expect(inferTable(nilCtx, table('TableName', {}))).toMatchObject({
+it('allows empty tables', async () => {
+  expect(await inferTable(nilCtx, table('TableName', {}))).toMatchObject({
     indexName: 'TableName',
     columnNames: [],
     columnTypes: [],
   });
 });
 
-it('forbids tables inside functions', () => {
-  nilCtx.stack.withPushCallSync(() => {
+it('forbids tables inside functions', async () => {
+  await nilCtx.stack.withPushCall(async () => {
     const tbl = table('TableName', {
       Calculated: n('ref', 'SomeCol'),
     });
-    expect(inferTable(nilCtx, tbl).errorCause?.spec).toMatchInlineSnapshot(
+    expect(
+      (await inferTable(nilCtx, tbl)).errorCause?.spec
+    ).toMatchInlineSnapshot(
       `ErrSpec:forbidden-inside-function("forbiddenThing" => "table")`
     );
   });
 });
 
 describe('table with formulae', () => {
-  const testComputed = (expression: AST.Expression) =>
+  const testComputed = async (expression: AST.Expression) =>
     inferTableColumnPerCell(
       makeContext(),
       objectToMap({ OtherColumn: t.number() }),
       expression
     );
 
-  it('can run a formula', () => {
-    expect(testComputed(l('a string'))).toEqual(t.string());
-    expect(testComputed(col('one', 'two'))).toEqual(t.column(t.string()));
+  it('can run a formula', async () => {
+    expect(await testComputed(l('a string'))).toEqual(t.string());
+    expect(await testComputed(col('one', 'two'))).toEqual(t.column(t.string()));
   });
 
-  it('can run a formula with previous', () => {
-    expect(testComputed(c('previous', l('hello')))).toEqual(t.string());
+  it('can run a formula with previous', async () => {
+    expect(await testComputed(c('previous', l('hello')))).toEqual(t.string());
   });
 
-  it('can use another column', () => {
-    expect(testComputed(c('+', r('OtherColumn'), l(1)))).toEqual(t.number());
+  it('can use another column', async () => {
+    expect(await testComputed(c('+', r('OtherColumn'), l(1)))).toEqual(
+      t.number()
+    );
   });
 
-  it('propagates errors', () => {
+  it('propagates errors', async () => {
     expect(
-      testComputed(c('+', r('seconds'), r('meters'))).errorCause
+      (await testComputed(c('+', r('seconds'), r('meters')))).errorCause
     ).not.toBeNull();
   });
 });

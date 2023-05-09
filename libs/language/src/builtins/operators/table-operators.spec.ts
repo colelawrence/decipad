@@ -5,12 +5,13 @@ import { buildType as t, Type } from '../../type';
 import { tableOperators as operators } from './table-operators';
 import { U } from '../../utils';
 import { Realm, RuntimeError } from '../../interpreter';
+import { materializeOneResult } from '../../utils/materializeOneResult';
 
 describe('table operators', () => {
-  it('concatenates tables', () => {
+  it('concatenates tables', async () => {
     expect(
-      operators.concatenate
-        .fnValues?.([
+      await (
+        await operators.concatenate.fnValues?.([
           Table.fromNamedColumns(
             [fromJS([1, 2, 3]), fromJS(['Hello', 'World', 'Sup'])],
             ['Numbers', 'Strings']
@@ -21,7 +22,7 @@ describe('table operators', () => {
             ['Numbers', 'Strings']
           ),
         ])
-        ?.getData()
+      )?.getData()
     ).toMatchInlineSnapshot(`
       Array [
         Array [
@@ -44,12 +45,14 @@ describe('table operators', () => {
       columnTypes: [t.number()],
     });
 
-    expect(operators.concatenate.functor?.([tNumber, tNumber])).toMatchObject({
+    expect(
+      await operators.concatenate.functor?.([tNumber, tNumber])
+    ).toMatchObject({
       errorCause: null,
     });
   });
 
-  it('looks things up with a string', () => {
+  it('looks things up with a string', async () => {
     const tableType = t.table({
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.number()],
@@ -61,22 +64,19 @@ describe('table operators', () => {
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup;
 
-    expect(functor?.([tableType, t.string()])).toMatchObject({
+    expect(await functor?.([tableType, t.string()])).toMatchObject({
       rowCellTypes: [{ type: 'string' }, { type: 'number' }],
       rowCellNames: ['Index', 'Value'],
     });
-    expect(fnValues?.([tableValue, fromJS('The Thing')]).getData()).toEqual([
-      'The Thing',
-      N(12345),
-    ]);
-    expect(() =>
-      fnValues?.([tableValue, fromJS('Not found')])
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"Could not find a row with the given condition"`
-    );
+    expect(
+      await (await fnValues!([tableValue, fromJS('The Thing')])).getData()
+    ).toEqual(['The Thing', N(12345)]);
+    await expect(async () =>
+      fnValues!([tableValue, fromJS('Not found')])
+    ).rejects.toThrow(`Could not find a row with the given condition`);
   });
 
-  it('looks things up with a date', () => {
+  it('looks things up with a date', async () => {
     const tableType = t.table({
       columnNames: ['Index', 'Value'],
       columnTypes: [t.string(), t.date('day')],
@@ -96,22 +96,21 @@ describe('table operators', () => {
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup;
 
-    expect(functor?.([tableType, t.string()])).toMatchObject({
+    expect(await functor?.([tableType, t.string()])).toMatchObject({
       rowCellTypes: [{ type: 'string' }, { date: 'day' }],
       rowCellNames: ['Index', 'Value'],
     });
-    expect(fnValues?.([tableValue, fromJS('The Thing')]).getData()).toEqual([
-      'The Thing',
-      BigInt(new Date('2022-03-01').getTime()),
-    ]);
-    expect(() =>
+    expect(
+      await (await fnValues!([tableValue, fromJS('The Thing')])).getData()
+    ).toEqual(['The Thing', BigInt(new Date('2022-03-01').getTime())]);
+    await expect(async () =>
       fnValues?.([tableValue, fromJS('Not found')])
-    ).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Could not find a row with the given condition"`
     );
   });
 
-  it('can lookup a column', () => {
+  it('can lookup a column', async () => {
     const table = t.table({
       columnNames: ['indexcolumn', 'booooleans'],
       columnTypes: [t.number(U('bananas')), t.boolean()],
@@ -119,7 +118,7 @@ describe('table operators', () => {
     const column = t.column(table.columnTypes?.[1] as Type, 'TheTable');
 
     expect(
-      operators.lookup.functorNoAutomap!([column, t.number()])
+      await operators.lookup.functorNoAutomap!([column, t.number()])
     ).toMatchObject({
       type: 'boolean',
     });
@@ -139,21 +138,25 @@ describe('table operators', () => {
     );
     preloadedRealm.stack.set('TheTable', tableValue);
     expect(
-      operators.lookup
-        .fnValuesNoAutomap?.([columnValue, fromJS(3)], [column], preloadedRealm)
-        .getData()
+      await (
+        await operators.lookup.fnValuesNoAutomap!(
+          [columnValue, fromJS(3)],
+          [column],
+          preloadedRealm
+        )
+      ).getData()
     ).toMatchInlineSnapshot(`true`);
 
-    expect(() =>
+    await expect(async () =>
       operators.lookup.fnValuesNoAutomap?.(
         [columnValue, fromJS(404)],
         [column],
         preloadedRealm
       )
-    ).toThrow(RuntimeError);
+    ).rejects.toThrow(RuntimeError);
   });
 
-  it('looks things up with a condition', () => {
+  it('looks things up with a condition', async () => {
     const tableType = t.table({
       columnNames: ['col1', 'col2'],
       columnTypes: [t.string(), t.number()],
@@ -169,31 +172,35 @@ describe('table operators', () => {
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
       operators.lookup;
 
-    expect(functor?.([tableType, conditionColumnType])).toMatchObject({
+    expect(await functor?.([tableType, conditionColumnType])).toMatchObject({
       rowCellNames: ['col1', 'col2'],
       rowCellTypes: [{ type: 'string' }, { type: 'number' }],
     });
-    expect(fnValues?.([tableValue, conditionColumnValue]).getData()).toEqual([
-      'b',
-      N(2),
-    ]);
+    expect(
+      await (await fnValues!([tableValue, conditionColumnValue])).getData()
+    ).toEqual(['b', N(2)]);
   });
 
-  it('sorts a table by a column', () => {
+  it('sorts a table by a column', async () => {
     const table = t.table({
       columnNames: ['indexcolumn'],
       columnTypes: [t.number(U('bananas'))],
     });
     const column = t.column(t.number(U('bananas')), undefined, 1);
-    expect(operators.sortby.functor!([table, column])).toMatchObject(table);
+    expect(await operators.sortby.functor!([table, column])).toMatchObject(
+      table
+    );
 
     const tableValue = Table.fromNamedColumns(
       [fromJS([1, 2, 3]), fromJS([6, 4, 5])],
       ['A', 'B']
     );
     const columnValue = tableValue.getColumn('B');
-    expect(operators.sortby.fnValues?.([tableValue, columnValue]).getData())
-      .toMatchInlineSnapshot(`
+    expect(
+      await materializeOneResult(
+        (await operators.sortby.fnValues!([tableValue, columnValue])).getData()
+      )
+    ).toMatchInlineSnapshot(`
       Array [
         Array [
           DeciNumber(2),
@@ -209,13 +216,15 @@ describe('table operators', () => {
     `);
   });
 
-  it('filters a table by a column', () => {
+  it('filters a table by a column', async () => {
     const table = t.table({
       columnNames: ['indexcolumn', 'booooleans'],
       columnTypes: [t.number(U('bananas')), t.boolean()],
     });
     const column = t.column(t.boolean(), undefined, 1);
-    expect(operators.filter.functorNoAutomap?.([table, column])).toMatchObject(
+    expect(
+      await operators.filter.functorNoAutomap?.([table, column])
+    ).toMatchObject(
       t.table({
         columnNames: ['indexcolumn', 'booooleans'],
         columnTypes: [t.number(U('bananas')), t.boolean()],
@@ -231,7 +240,11 @@ describe('table operators', () => {
     );
     const columnValue = tableValue.getColumn('Bools');
     expect(
-      operators.filter.fnValuesNoAutomap?.([tableValue, columnValue]).getData()
+      await materializeOneResult(
+        (
+          await operators.filter.fnValuesNoAutomap!([tableValue, columnValue])
+        ).getData()
+      )
     ).toMatchInlineSnapshot(`
       Array [
         Array [

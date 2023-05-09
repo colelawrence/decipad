@@ -12,12 +12,17 @@ type CallBuiltinFunctorParams =
   | [Context, string, Type[]]
   | [Context, string, Type[], AST.Expression[]];
 
-const internalCallBuiltinFunctor = (
+const internalCallBuiltinFunctor = async (
   context: Context,
   opName: string,
   givenArguments: Type[],
   givenValues?: AST.Expression[]
-): Type => {
+): Promise<Promise<Type> | Type> => {
+  // console.log(
+  //   `builtin functor ${opName}`,
+  //   givenArguments.map((t) => t.unit),
+  //   givenArguments.map((t) => t.cellType?.unit)
+  // );
   const error = givenArguments.find(typeHasError);
   if (error) {
     return error;
@@ -50,7 +55,7 @@ const internalCallBuiltinFunctor = (
       givenArguments,
       'panic: isReducer used in a function with multiple arguments'
     );
-    return automapTypesForReducer(onlyArg, (types: Type[]) =>
+    return automapTypesForReducer(onlyArg, async (types: Type[]) =>
       lowerDimFunctor(types, givenValues, context)
     );
   }
@@ -59,14 +64,23 @@ const internalCallBuiltinFunctor = (
     return op.functorNoAutomap(givenArguments, givenValues, context);
   }
 
-  return automapTypes(
+  const resultTypes = await automapTypes(
     givenArguments,
-    ([type, ...rest]) =>
-      Type.combine(type, ...rest).mapType(() =>
+    async ([type, ...rest]) =>
+      (
+        await Type.combine(type, ...rest)
+      ).mapType(async () =>
         getFunctor(op)([type, ...rest], givenValues, context)
       ),
     op.argCardinalities
   );
+
+  // console.log(
+  //   `builtin functor ${opName} result units:`,
+  //   resultTypes.unit,
+  //   resultTypes.cellType?.unit
+  // );
+  return resultTypes;
 };
 
 const formatTypes = (types: Type[]): string =>
@@ -97,10 +111,10 @@ const enrichErrorType = (
   return type;
 };
 
-export const callBuiltinFunctor = (
+export const callBuiltinFunctor = async (
   ...params: CallBuiltinFunctorParams
-): Type => {
-  const returnType = internalCallBuiltinFunctor(
+): Promise<Type> => {
+  const returnType = await internalCallBuiltinFunctor(
     ...(params as [Context, string, Type[], AST.Expression[] | undefined])
   );
   if (typeHasError(returnType)) {

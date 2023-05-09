@@ -46,7 +46,7 @@ export const useCoreLiveConnectionActions = ({
   );
 
   const beforeAuthenticate = useCallback(
-    async (source: ExternalDataSource) => {
+    (source: ExternalDataSource) => {
       if (path) {
         setNodes(editor, { proxy: source.dataUrl }, { at: path });
       }

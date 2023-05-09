@@ -1,4 +1,5 @@
 import { immerable, produce } from 'immer';
+import { PromiseOrType } from '@decipad/utils';
 import type { AST, Time } from '..';
 import * as t from './buildType';
 import {
@@ -25,7 +26,7 @@ import type { Unit } from './unit-type';
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
 
-type CombineArg = Type | ((t: Type) => Type);
+type CombineArg = PromiseOrType<Type> | ((t: Type) => PromiseOrType<Type>);
 
 export class Type {
   [immerable] = true;
@@ -76,14 +77,19 @@ export class Type {
   symbol: string | null = null;
 
   // Return the first type that has an error or is pending, or the last one.
-  static combine(initialType: Type, ...types: CombineArg[]): Type {
-    let lastNonErrorType = initialType;
+  static async combine(
+    initialType: Type | Promise<Type>,
+    ...types: CombineArg[]
+  ): Promise<Type> {
+    let lastNonErrorType = await initialType;
     if (lastNonErrorType.errorCause != null || lastNonErrorType.pending) {
       return lastNonErrorType;
     }
-    for (const type of types) {
+    for await (const type of types) {
       const resultingType =
-        typeof type === 'function' ? lastNonErrorType.mapType(type) : type;
+        typeof type === 'function'
+          ? await lastNonErrorType.mapType(type)
+          : type;
       if (resultingType.errorCause != null || resultingType.pending) {
         return resultingType;
       }
@@ -94,12 +100,12 @@ export class Type {
   }
 
   /** Return the first non-error type */
-  static either(...types: Type[]): Type {
-    const notErrored = types.find((t) => !t.errorCause);
+  static async either(...types: Array<PromiseOrType<Type>>): Promise<Type> {
+    const notErrored = (await Promise.all(types)).find((t) => !t.errorCause);
     return notErrored ?? types[0];
   }
 
-  mapType(fn: (t: Type) => Type) {
+  async mapType(fn: (t: Type) => PromiseOrType<Type>): Promise<Type> {
     if (this.errorCause) {
       return this;
     } else {
@@ -123,78 +129,78 @@ export class Type {
     }
   }
 
-  expected(expected: Type | string): Type {
+  async expected(expected: Type | string): Promise<Type> {
     return this.mapType(() =>
       this.withErrorCause(InferError.expectedButGot(expected, this))
     );
   }
 
   // Type assertions -- these return a new type possibly with an error
-  sameAs(other: Type): Type {
+  async sameAs(other: Type | Promise<Type>): Promise<Type> {
     return sameAs(this, other);
   }
 
-  isScalar(type: PrimitiveTypeName): Type {
+  async isScalar(type: PrimitiveTypeName): Promise<Type> {
     return isScalar(this, type);
   }
 
-  isColumn(): Type {
+  async isColumn(): Promise<Type> {
     return isColumn(this);
   }
 
-  isTable(): Type {
+  async isTable(): Promise<Type> {
     return isTable(this);
   }
 
-  isTableOrRow(): Type {
+  async isTableOrRow(): Promise<Type> {
     return isTableOrRow(this);
   }
 
-  reduced(): Type {
+  async reduced(): Promise<Type> {
     return reduced(this);
   }
 
-  reducedToLowest(): Type {
+  async reducedToLowest(): Promise<Type> {
     return reducedToLowest(this);
   }
 
-  withAtParentIndex(): Type {
+  async withAtParentIndex(): Promise<Type> {
     return withAtParentIndex(this);
   }
 
-  withMinimumColumnCount(colCount = 1): Type {
+  async withMinimumColumnCount(colCount = 1): Promise<Type> {
     return withMinimumColumnCount(this, colCount);
   }
 
-  isPrimitive(): Type {
+  async isPrimitive(): Promise<Type> {
     return isPrimitive(this);
   }
 
-  isRange(): Type {
+  async isRange(): Promise<Type> {
     return isRange(this);
   }
 
-  getRangeOf(): Type {
+  async getRangeOf(): Promise<Type> {
     return getRangeOf(this);
   }
 
-  isTimeQuantity(): Type {
+  async isTimeQuantity(): Promise<Type> {
     return isTimeQuantity(this);
   }
 
-  isDate(specificity?: Time.Specificity): Type {
+  async isDate(specificity?: Time.Specificity): Promise<Type> {
     return isDate(this, specificity);
   }
 
-  multiplyUnit(withUnits: Unit[] | null): Type {
+  async multiplyUnit(withUnits: Unit[] | null): Promise<Type> {
     return multiplyUnit(this, withUnits);
   }
 
-  divideUnit(divideBy: Unit[] | number | null): Type {
+  async divideUnit(divideBy: Unit[] | number | null): Promise<Type> {
     return divideUnit(this, divideBy);
   }
 
-  sharePercentage(other: Type) {
+  async sharePercentage(other: Type): Promise<Type> {
     return sharePercentage(this, other);
   }
 }

@@ -1,6 +1,7 @@
 import {
   Computer,
   convertToMultiplierUnit,
+  materializeResult,
   Result,
   SerializedType,
 } from '@decipad/computer';
@@ -8,7 +9,7 @@ import { PlotElement } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import DeciNumber from '@decipad/number';
 import { cssVarHex } from '@decipad/ui';
-import { ResultTable } from 'libs/language/src/interpreter/interpreter-types';
+import { ResultMaterializedTable } from 'libs/language/src/interpreter/interpreter-types';
 import {
   AllowedPlotValue,
   comparableChartTypes,
@@ -319,22 +320,23 @@ function makeWide(
   return rows.map((row) => Object.fromEntries(row));
 }
 
-export function resultToPlotResultData(
-  result: undefined | Result.Result,
+export async function resultToPlotResultData(
+  _result: undefined | Result.Result,
   displayProps: DisplayProps
-): undefined | PlotData {
-  if (!result || result.type.kind !== 'table') {
+): Promise<undefined | PlotData> {
+  if (!_result || _result.type.kind !== 'table') {
     return;
   }
-  const type = result?.type;
+  const type = _result?.type;
   if (!type || type.kind !== 'table') {
     return undefined;
   }
+  const result = await materializeResult(_result);
   const value = result?.value;
   if (!value) {
     return;
   }
-  const tableValue = value as ResultTable;
+  const tableValue = value as ResultMaterializedTable;
   const columnNames = relevantColumnNames(displayProps);
 
   const columnsTypesAndResults: Array<[SerializedType, Result.OneResult[]]> =

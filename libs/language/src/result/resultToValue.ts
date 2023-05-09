@@ -1,4 +1,5 @@
 import { N } from '@decipad/number';
+import { from, map } from '@decipad/generator-utils';
 import { Result, Value, Table, Column, SerializedTypes } from '..';
 import { DateValue, fromJS, Range, Row, Scalar, UnknownValue } from '../value';
 import {
@@ -10,9 +11,12 @@ import {
   ResultRow,
   ResultString,
   ResultTable,
+  ResultMaterializedColumn,
+  ResultMaterializedTable,
 } from '../interpreter/interpreter-types';
+import { ValueGeneratorFunction } from '../value/types';
 
-export const resultToValue = (result: Result.Result): Value => {
+export const resultToValue = async (result: Result.Result): Promise<Value> => {
   const { type, value } = result;
   switch (type.kind) {
     case 'type-error':
@@ -22,33 +26,64 @@ export const resultToValue = (result: Result.Result): Value => {
     case 'anything':
       return Result.UnknownValue;
 
-    case 'table': {
-      const tableValue = value as ResultTable;
-      const tableType = type as SerializedTypes.Table;
-      const columns = tableType.columnTypes.map((columnType, index) => {
-        return resultToValue({
-          type: {
-            kind: 'column',
-            indexedBy: tableType.columnNames[0],
-            cellType: columnType,
-          },
-          value: tableValue[index],
-        });
-      });
+    case 'materialized-table': {
+      const tableValue = value as ResultMaterializedTable;
+      const tableType = type as SerializedTypes.MaterializedTable;
+      const columns = await Promise.all(
+        tableType.columnTypes.map(async (columnType, index) => {
+          return resultToValue({
+            type: {
+              kind: 'materialized-column',
+              indexedBy: tableType.columnNames[0],
+              cellType: columnType,
+            },
+            value: tableValue[index],
+          });
+        })
+      );
       return Table.fromNamedColumns(columns, tableType.columnNames);
     }
 
-    case 'column': {
-      const columnValue = value as ResultColumn;
+    case 'table': {
+      const tableValue = value as ResultTable;
+      const tableType = type as SerializedTypes.Table;
+      const columns = await Promise.all(
+        tableType.columnTypes.map(async (columnType, index) => {
+          return resultToValue({
+            type: {
+              kind: 'column',
+              indexedBy: tableType.columnNames[0],
+              cellType: columnType,
+            },
+            value: tableValue[index],
+          });
+        })
+      );
+      return Table.fromNamedColumns(columns, tableType.columnNames);
+    }
+
+    case 'column':
+    case 'materialized-column': {
+      const columnValue = value as ResultColumn | ResultMaterializedColumn;
       if (columnValue == null) {
         return Column.fromValues([fromJS(0)]);
       }
       const columnType = type as SerializedTypes.Column;
-      return Column.fromValues(
-        columnValue.map((cell) =>
-          resultToValue({ type: columnType.cellType, value: cell })
-        )
-      );
+      let columnGen: ValueGeneratorFunction;
+      if (typeof columnValue === 'function') {
+        columnGen = (start?: number, end?: number) =>
+          map(columnValue(start, end), async (cell: Result.OneResult) =>
+            resultToValue({ type: columnType.cellType, value: cell })
+          );
+      } else if (Array.isArray(columnValue)) {
+        columnGen = () =>
+          map(from(columnValue.slice()), async (cell: Result.OneResult) =>
+            resultToValue({ type: columnType.cellType, value: cell })
+          );
+      } else {
+        throw new Error(`panic: got invalid column: ${typeof value}`);
+      }
+      return Column.fromGenerator(columnGen);
     }
 
     case 'number': {
@@ -84,8 +119,10 @@ export const resultToValue = (result: Result.Result): Value => {
       const rowValue = value as ResultRow;
       const rowType = type as SerializedTypes.Row;
       return Row.fromNamedCells(
-        rowValue.map((cell, index) =>
-          resultToValue({ type: rowType.rowCellTypes[index], value: cell })
+        await Promise.all(
+          rowValue.map(async (cell, index) =>
+            resultToValue({ type: rowType.rowCellTypes[index], value: cell })
+          )
         ),
         rowType.rowCellNames
       );

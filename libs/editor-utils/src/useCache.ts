@@ -1,3 +1,4 @@
+import { PromiseOrType } from '@decipad/utils';
 import { identity } from 'ramda';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -6,7 +7,8 @@ interface UseCacheProps<V> {
   value: V | undefined;
   deleted: boolean;
   cacheKey?: string;
-  deserialize: (v: V) => V;
+  serialize?: (v: V) => PromiseOrType<V>;
+  deserialize?: (v: V) => V;
 }
 
 const fetchValue = <V>(key: string): V | undefined => {
@@ -37,6 +39,7 @@ export const useCache = <V>({
   value,
   deleted,
   cacheKey = 'cache',
+  serialize = identity,
   deserialize = identity,
 }: UseCacheProps<V>): [V | undefined, ClearCacheFn] => {
   const [cachedValue, setCachedValue] = useState<V | undefined>(() => value);
@@ -62,13 +65,22 @@ export const useCache = <V>({
   }, [cachedValue, deserialize, fullCacheKey]);
 
   useEffect(() => {
+    let canceled = false;
     if (value) {
       setCachedValue(value);
-      requestAnimationFrame(() => {
-        saveValue(fullCacheKey, value);
+      requestAnimationFrame(async () => {
+        if (!canceled) {
+          const serialized = await serialize(value);
+          if (!canceled) {
+            saveValue(fullCacheKey, serialized);
+          }
+        }
       });
     }
-  }, [fullCacheKey, value]);
+    return () => {
+      canceled = true;
+    };
+  }, [fullCacheKey, serialize, value]);
 
   useEffect(() => {
     if (cachedValue && deleted) {

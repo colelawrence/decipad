@@ -1,27 +1,26 @@
-import DeciNumber from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import { RuntimeError } from '../../interpreter';
-import { OneResult } from '../../interpreter/interpreter-types';
+import { map } from '@decipad/generator-utils';
+import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import {
   Value,
-  Column,
   Table,
   fromJS,
   getColumnLike,
   sort,
   unique,
   reverse,
+  Column,
+  Scalar,
 } from '../../value';
-import { SwappedDimensions, ConcatenatedColumn } from '../../lazy';
+import { createConcatenatedColumn, createSwappedDimensions } from '../../lazy';
 import { Type, buildType as t } from '../../type';
-import { getInstanceof } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
-import { approximateSubsetSumIndices } from '../table';
 import {
   chooseFirst,
   deLinearizeType,
   linearizeType,
 } from '../../dimtools/common';
+import { getInstanceof } from '../../utils';
 
 export const listOperators: Record<string, BuiltinSpec> = {
   len: {
@@ -29,7 +28,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     noAutoconvert: true,
     argCardinalities: [2],
-    fnValues: ([col]: Value[]) => fromJS(getColumnLike(col).rowCount),
+    fnValues: async ([col]: Value[]) =>
+      fromJS(await getColumnLike(col).rowCount()),
     functionSignature: 'column<A> -> number',
     explanation: 'Size of a column.',
     syntax: 'len(Table.Column)',
@@ -40,8 +40,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 2,
     argCardinalities: [2, 2],
     // TODO: make this a varargs function
-    fnValues: ([a, b]: Value[]) =>
-      new ConcatenatedColumn(getColumnLike(a), getColumnLike(b)),
+    fnValues: async ([a, b]: Value[]) =>
+      createConcatenatedColumn(getColumnLike(a), getColumnLike(b)),
     functionSignature: 'column<A>, column<A> -> column<A>',
     explanation: 'Joins two tables or columns into one.',
     syntax: 'cat(Table1.Col1, Table2.Col2)',
@@ -52,8 +52,11 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     isReducer: true,
-    fnValues: ([arg]: Value[]) =>
-      getDefined(getColumnLike(arg).atIndex(0), 'could not find first element'),
+    fnValues: async ([arg]: Value[]) =>
+      getDefined(
+        await getColumnLike(arg).atIndex(0),
+        'could not find first element'
+      ),
     functionSignature: 'column<A> -> A',
     explanation: 'First element of a column.',
     example: 'first(Table.Column)',
@@ -64,10 +67,10 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     isReducer: true,
-    fnValues: ([arg]: Value[]) => {
+    fnValues: async ([arg]: Value[]) => {
       const col = getColumnLike(arg);
       return getDefined(
-        col.atIndex(col.rowCount - 1),
+        await col.atIndex((await col.rowCount()) - 1),
         'could not find last element'
       );
     },
@@ -88,11 +91,14 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     isReducer: true,
-    fnValues: ([a]: Value[]) => {
-      const aData = getColumnLike(a).getData() as OneResult[];
-      return fromJS(
-        aData.reduce((count, elem) => (elem?.valueOf() ? count + 1 : count), 0)
-      );
+    fnValues: async ([a]: Value[]) => {
+      let count = 0;
+      for await (const elem of getColumnLike(a).values()) {
+        if (await elem.getData()) {
+          count += 1;
+        }
+      }
+      return fromJS(count);
     },
     functionSignature: 'column<boolean> -> number',
     explanation: 'Number of entries on a column that match a condition.',
@@ -103,10 +109,16 @@ export const listOperators: Record<string, BuiltinSpec> = {
   stepgrowth: {
     argCount: 1,
     argCardinalities: [2],
-    fn: ([a]: number[][]) =>
-      a.map((item, index) => {
-        const previous = a[index - 1] ?? 0;
-        return item - previous;
+    noAutoconvert: true,
+    fnValues: ([a]) =>
+      Column.fromGenerator(() => {
+        let previous = ZERO;
+        return map(getColumnLike(a).values(), async (item) => {
+          const current = getInstanceof(await item.getData(), DeciNumber);
+          const next = current.sub(previous);
+          previous = current;
+          return Scalar.fromValue(next);
+        });
       }),
     functionSignature: 'column<number>:A -> A',
     explanation: 'Increments between values in a column.',
@@ -117,16 +129,28 @@ export const listOperators: Record<string, BuiltinSpec> = {
   grow: {
     argCount: 3,
     argCardinalities: [1, 1, 2],
-    fn: ([initial, growthRate, { length }]) =>
-      Array.from({ length }, (_, i) => {
-        const growth = (1 + growthRate) ** i;
-        return initial * growth;
-      }),
-    functor: ([initial, growthRate, period]) =>
-      Type.combine(
-        initial.isScalar('number'),
-        growthRate.isScalar('number'),
-        period.isColumn()
+    noAutoconvert: true,
+    fnValues: async ([_initial, _growthRate, it]) => {
+      const initial = getInstanceof(await _initial.getData(), DeciNumber);
+      const growthRate = getInstanceof(
+        await _growthRate.getData(),
+        DeciNumber
+      ).add(ONE);
+      return Column.fromGenerator(() =>
+        map(getColumnLike(it).values(), (_v, i) => {
+          const growth = growthRate.pow(N(i));
+          const grown = initial.mul(growth);
+          return Scalar.fromValue(grown);
+        })
+      );
+    },
+    functor: async ([initial, growthRate, period]) =>
+      (
+        await Type.combine(
+          initial.isScalar('number'),
+          growthRate.isScalar('number'),
+          period.isColumn()
+        )
       ).mapType(() => t.column(initial, period.indexedBy)),
     explanation: 'Compounds a value by a specific rate.',
     syntax: 'grow(Initial, Rate, Table.Column)',
@@ -136,16 +160,21 @@ export const listOperators: Record<string, BuiltinSpec> = {
   transpose: {
     argCount: 1,
     argCardinalities: [3],
-    fnValues: ([matrix]) => new SwappedDimensions(getColumnLike(matrix), 1),
-    functor: ([matrix]) =>
-      Type.combine(matrix.isColumn().reduced().isColumn().reduced()).mapType(
-        () => {
-          const linear = linearizeType(matrix);
-          const secondDimensionFirst = chooseFirst(1, linear);
+    fnValues: async ([matrix]) =>
+      createSwappedDimensions(getColumnLike(matrix), 1),
+    functor: async ([matrix]) =>
+      (
+        await Type.combine(
+          (
+            await (await (await matrix.isColumn()).reduced()).isColumn()
+          ).reduced()
+        )
+      ).mapType(async () => {
+        const linear = linearizeType(matrix);
+        const secondDimensionFirst = chooseFirst(1, linear);
 
-          return deLinearizeType(secondDimensionFirst);
-        }
-      ),
+        return deLinearizeType(secondDimensionFirst);
+      }),
     explanation: 'Matrix',
     syntax: 'transpose(Matrix)',
     example: 'transpose(Years)',
@@ -156,7 +185,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   sort: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: ([column]) => sort(getColumnLike(column)),
+    fnValues: async ([column]) => sort(getColumnLike(column)),
     functionSignature: 'column<A>:R -> R',
     explanation: 'Sorts a column.',
     syntax: 'sort(Table.Column)',
@@ -167,7 +196,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
   unique: {
     argCount: 1,
     argCardinalities: [2],
-    fnValues: ([column]) => unique(getColumnLike(column)),
+    fnValues: async ([column]) => unique(getColumnLike(column)),
     functionSignature: 'column<A> -> column<A>',
     explanation: 'Extracts the unique values of a column.',
     syntax: 'unique(Table.Column)',
@@ -177,56 +206,18 @@ export const listOperators: Record<string, BuiltinSpec> = {
 
   reverse: {
     argCount: 1,
-    functorNoAutomap: ([column]) =>
-      Type.either(column.isColumn(), column.isTable()),
-    fnValuesNoAutomap: ([column]) => {
-      if (column instanceof Table) {
-        return column.mapColumns((column) => reverse(column));
+    functorNoAutomap: async ([columnOrTable]) =>
+      Type.either(columnOrTable.isColumn(), columnOrTable.isTable()),
+    fnValuesNoAutomap: async ([columnOrTable]) => {
+      if (columnOrTable instanceof Table) {
+        return columnOrTable.mapColumns(async (column) => reverse(column));
       } else {
-        return reverse(getColumnLike(column));
+        return reverse(getColumnLike(columnOrTable));
       }
     },
     explanation: 'Reverses the order of a column or table.',
     syntax: 'reverse(Table)\nreverse(Table.Column)',
     example: 'reverse(Purchases)\nreverse(Purchases.Dates)',
     formulaGroup: 'Tables or Columns',
-  },
-
-  // Table stuff
-  approximatesubsetsum: {
-    argCount: 3,
-    fnValues: ([upperBound, _table, columnName]) => {
-      const table = getInstanceof(_table, Table);
-      const { columnNames } = table;
-      const columnIndex = columnNames.indexOf(columnName.getData() as string);
-      if (columnIndex < 0) {
-        throw new RuntimeError(`Column ${columnName} does not exist`);
-      }
-
-      const indices = approximateSubsetSumIndices(
-        upperBound.getData() as DeciNumber,
-        table.getData() as unknown[][],
-        columnIndex
-      );
-
-      return table.mapColumns((column) =>
-        Column.fromValues(
-          column.values.filter((_, i) => indices.includes(i)),
-          []
-        )
-      );
-    },
-    functor: ([upperBound, table, columnName]) =>
-      Type.combine(
-        upperBound.isScalar('number'),
-        table.isTable(),
-        columnName.isScalar('string')
-      ).mapType(() =>
-        t.table({
-          columnNames: getDefined(table.columnNames),
-          columnTypes: getDefined(table.columnTypes),
-        })
-      ),
-    hidden: true,
   },
 };

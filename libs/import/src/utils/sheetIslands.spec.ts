@@ -4,7 +4,7 @@ import { matrix } from './matrix';
 import { findAllIslands } from './sheetIslands';
 
 const sheetToResult = (
-  m: Result.Result<'table'>['value'],
+  m: Result.Result<'materialized-table'>['value'],
   columnCount: number
 ): ImportResult => {
   return {

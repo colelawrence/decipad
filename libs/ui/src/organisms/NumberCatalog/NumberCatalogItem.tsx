@@ -3,6 +3,7 @@ import { formatResultPreview } from '@decipad/format';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
+import { isTable } from '@decipad/computer';
 import { DragHandle, NestIndicator } from '../../icons';
 import {
   black,
@@ -103,7 +104,7 @@ export const NumberCatalogItem = ({
                 color: cssVar('weakTextColor'),
               })}
             >
-              {result.result.type.kind === 'table' ? (
+              {isTable(result.result.type) ? (
                 'Table'
               ) : (
                 <CodeResult {...result.result} />

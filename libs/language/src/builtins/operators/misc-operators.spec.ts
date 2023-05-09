@@ -6,9 +6,9 @@ import { typeSnapshotSerializer } from '../../testUtils';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
-it('knows whether a range contains a value', () => {
+it('knows whether a range contains a value', async () => {
   expect(
-    operators.contains.fnValues?.([
+    await operators.contains.fnValues?.([
       new Range({ start: fromJS(1), end: fromJS(2) }),
       fromJS(1),
     ])
@@ -19,7 +19,7 @@ it('knows whether a range contains a value', () => {
   `);
 
   expect(
-    operators.contains.fnValues?.([
+    await operators.contains.fnValues?.([
       new Range({ start: fromJS(1), end: fromJS(2) }),
       fromJS(3),
     ])
@@ -30,7 +30,7 @@ it('knows whether a range contains a value', () => {
   `);
 
   expect(
-    operators.contains.fnValues?.([
+    await operators.contains.fnValues?.([
       LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'month'),
       LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-31'), 'day'),
     ])
@@ -41,7 +41,7 @@ it('knows whether a range contains a value', () => {
   `);
 
   expect(
-    operators.contains.fnValues?.([
+    await operators.contains.fnValues?.([
       LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'day'),
       LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-31'), 'month'),
     ])

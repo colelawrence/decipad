@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Result } from '@decipad/computer';
+import { Result, isTable } from '@decipad/computer';
 import { getDefined } from '@decipad/utils';
 import { dequal } from 'dequal';
 import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';
@@ -55,7 +55,7 @@ const islandExtension = (
 });
 
 const islandToResult =
-  (sheet: Result.Result<'table'>) =>
+  (sheet: Result.Result<'materialized-table'>) =>
   (island: Island): Result.Result => ({
     type: {
       ...sheet.type,
@@ -80,10 +80,10 @@ const partition = (
   sheetName: string,
   imported: ImportResult
 ): ImportResult[] => {
-  if (imported.result?.type.kind !== 'table') {
+  if (!isTable(imported.result?.type)) {
     return [];
   }
-  const sheet = imported.result as Result.Result<'table'>;
+  const sheet = imported.result as Result.Result<'materialized-table'>;
   const columnCount = sheet.type.columnTypes.length;
   const rowCount = Math.max(...sheet.value.map((col) => col.length));
   const visited = matrix(columnCount, rowCount, false);

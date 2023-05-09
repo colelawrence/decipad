@@ -7,6 +7,7 @@ import {
 } from '@decipad/language';
 import DeciNumber from '@decipad/number';
 import { getOnly, timeout } from '@decipad/utils';
+import { all } from '@decipad/generator-utils';
 import { Result } from 'libs/language/src/result';
 import { AST, Computer, prettyPrintAST } from '.';
 import {
@@ -16,7 +17,11 @@ import {
   NotebookResults,
   ProgramBlock,
 } from './types';
-import { getDefinedSymbol, getIdentifierString } from './utils';
+import {
+  getDefinedSymbol,
+  getIdentifierString,
+  getResultGenerator,
+} from './utils';
 
 export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {
@@ -132,10 +137,14 @@ export function getIdentifiedBlock(
   return ret;
 }
 
-export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
-  const numberToString = (value: Result['value']): string => {
+export const simplifyInBlockResults = async (results: IdentifiedResult[]) => {
+  const numberToString = async (value: Result['value']): Promise<string> => {
     if (Array.isArray(value))
-      return `[${value.map(numberToString).join(', ')}]`;
+      return `[${(await Promise.all(value.map(numberToString))).join(', ')}]`;
+    if (typeof value === 'function') {
+      const materializedResults = await all(getResultGenerator(value)());
+      return numberToString(materializedResults);
+    }
     return value instanceof DeciNumber
       ? value.toString()
       : JSON.stringify(value);
@@ -151,24 +160,27 @@ export const simplifyInBlockResults = (results: IdentifiedResult[]) => {
     if (type.kind === 'type-error') {
       simpleUpdates.push(`${prefix}${formatError('en-us', type.errorCause)}`);
     } else {
-      simpleUpdates.push(prefix + numberToString(value));
+      // eslint-disable-next-line no-await-in-loop
+      simpleUpdates.push(prefix + (await numberToString(value)));
     }
   }
   return simpleUpdates;
 };
 
-export const simplifyComputeResponse = (res: NotebookResults | null) => {
+export const simplifyComputeResponse = async (
+  res: NotebookResults | null
+): Promise<string[]> => {
   if (res == null) return [`panic`];
 
-  const simpleUpdates = [];
-
-  for (const [, up] of Object.entries(res.blockResults)) {
-    if (up.type === 'identified-error') {
-      simpleUpdates.push(`${up.id} -> Syntax Error`);
-    } else {
-      simpleUpdates.push(...simplifyInBlockResults([up]));
-    }
-  }
-
-  return simpleUpdates;
+  return (
+    await Promise.all(
+      Object.entries(res.blockResults).map(async ([, up]) => {
+        if (up.type === 'identified-error') {
+          return `${up.id} -> Syntax Error`;
+        } else {
+          return simplifyInBlockResults([up]);
+        }
+      })
+    )
+  ).flat();
 };

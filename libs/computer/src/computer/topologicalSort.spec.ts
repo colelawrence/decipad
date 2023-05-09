@@ -1,7 +1,7 @@
 import { getIdentifiedBlocks } from '../testUtils';
 import { topologicalSort } from './topologicalSort';
 
-it('sorts two dependencies', async () => {
+it('sorts two dependencies', () => {
   const program = getIdentifiedBlocks('A = B + 1', 'B = 42');
   const sorted = topologicalSort(program);
   expect(sorted).toHaveLength(program.length);

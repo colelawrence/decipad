@@ -7,7 +7,7 @@ describe('evaluateMatch', () => {
     const m = match(
       matchDef(n('literal', 'boolean', false), n('literal', 'number', N(1)))
     );
-    await expect(() => runAST(block(m))).rejects.toThrow();
+    await expect(async () => runAST(block(m))).rejects.toThrow();
   });
 
   it('returns first match', async () => {

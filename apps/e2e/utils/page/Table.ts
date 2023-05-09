@@ -1,5 +1,6 @@
 /* eslint-disable playwright/no-force-option */
 import { Page } from 'playwright';
+import { Timeouts } from '../src';
 
 export async function createTable(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
@@ -33,6 +34,8 @@ export async function getFromTable(
   col = 0,
   formula = false
 ) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
   return page
     .locator(
       formula ? tableCellLocator(line, col) : tableCellTextLocator(line, col)
@@ -40,7 +43,9 @@ export async function getFromTable(
     .textContent();
 }
 
-export function clickCell(page: Page, line: number, col = 0) {
+export async function clickCell(page: Page, line: number, col = 0) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
   return page
     .locator(tableCellLocator(line, col))
     .click({ force: true, delay: 100 });
@@ -53,6 +58,9 @@ export async function writeInTable(
   col = 0
 ) {
   await clickCell(page, line, col);
+  await clickCell(page, line, col);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
   await page.keyboard.type(text);
 }
 

@@ -1,4 +1,4 @@
-import { Computer, Result } from '@decipad/computer';
+import { Computer, Result, isColumn } from '@decipad/computer';
 import type { ImportOptions } from './import';
 import { importFromArrow } from './importFromArrow';
 import { importFromCsv } from './importFromCsv';
@@ -10,7 +10,7 @@ const unnestOneColumnOneCellIfNecessary = (
   result: Result.Result
 ): Result.Result => {
   if (
-    result.type.kind === 'column' &&
+    isColumn(result.type) &&
     Array.isArray(result.value) &&
     result.value.length === 1
   ) {

@@ -43,26 +43,28 @@ function multiplyUnitMultipliersIfNeedsEnforcing(
   );
 }
 
-export const getType: DirectiveImpl<AST.AsDirective>['getType'] = (
+export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
   ctx,
   { args: [, expr, unitExpr] }
-): Type => {
-  const expressionType = inferExpression(ctx, expr);
+): Promise<Type> => {
+  const expressionType = await inferExpression(ctx, expr);
   if (expressionType.errorCause) {
     return expressionType;
   }
 
   if (representsPercentage(unitExpr)) {
-    return automapTypes([expressionType.isScalar('number')], (): Type => {
+    return automapTypes([await expressionType.isScalar('number')], (): Type => {
       return t.number(null, 'percentage');
     });
   }
 
-  const unitExpressionType = inferExpression(ctx, unitExpr).isScalar('number');
+  const unitExpressionType = await (
+    await inferExpression(ctx, unitExpr)
+  ).isScalar('number');
   if (unitExpressionType.errorCause) {
     return unitExpressionType;
   }
-  const { unit } = unitExpressionType.reducedToLowest();
+  const { unit } = await unitExpressionType.reducedToLowest();
   let targetUnit = unit;
   if (unitExpr.type === 'ref' && unit && isUserUnit(unitExpr, unit)) {
     targetUnit = U(getIdentifierString(unitExpr), {
@@ -124,7 +126,9 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   const [, expression, unitsExpression] = root.args;
   const expressionType = realm.getTypeAt(expression);
   const expressionValue = await evaluate(realm, expression);
-  const sourceUnits = inlineUnitAliases(expressionType.reducedToLowest().unit);
+  const sourceUnits = inlineUnitAliases(
+    (await expressionType.reducedToLowest()).unit
+  );
 
   if (representsPercentage(unitsExpression)) {
     return automapValues(
@@ -142,9 +146,9 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
 
   const targetUnitsEvalResult = await evaluate(realm, unitsExpression);
   const targetUnitsData = getInstanceof(
-    targetUnitsEvalResult.getData(),
+    await targetUnitsEvalResult.getData(),
     DeciNumber,
-    `units needs to be a number`
+    `units needs to be a number:`
   );
 
   const returnExpressionType = realm.getTypeAt(root);
@@ -162,14 +166,14 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
 
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
-  return automapValues([expressionType], [expressionValue], ([value]) => {
+  return automapValues([expressionType], [expressionValue], async ([value]) => {
     if (value instanceof NumberValue) {
       if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
-        return fromJS(value.getData().div(conversionRate));
+        return fromJS((await value.getData()).div(conversionRate));
       }
 
       const converted = convertBetweenUnits(
-        value.getData(),
+        await value.getData(),
         sourceUnits,
         targetUnits,
         { tolerateImprecision: true }

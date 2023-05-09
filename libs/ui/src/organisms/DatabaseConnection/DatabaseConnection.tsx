@@ -9,14 +9,15 @@ interface DatabaseConnectionProps {
 }
 
 const firstColumnValue = (
-  result: Result.Result<'table'>,
+  result: Result.Result<'materialized-table'>,
   columnName: string
 ): Result.OneResult | undefined => {
   const { type } = result;
-  if (type.kind === 'table') {
+  if (type.kind === 'materialized-table') {
     const valueIndex = type.columnNames.indexOf(columnName);
     if (valueIndex >= 0) {
-      const value = result.value as Result.Result<'table'>['value'];
+      const value =
+        result.value as Result.Result<'materialized-table'>['value'];
       return value[valueIndex]?.[0];
     }
   }
@@ -31,8 +32,8 @@ const iconWrapper = css({
 });
 
 export const DatabaseConnection: FC<DatabaseConnectionProps> = ({ result }) => {
-  if (result.type.kind === 'table') {
-    const tableResult = result as Result.Result<'table'>;
+  if (result.type.kind === 'materialized-table') {
+    const tableResult = result as Result.Result<'materialized-table'>;
     const ok = firstColumnValue(tableResult, 'ok');
     if (ok) {
       return (

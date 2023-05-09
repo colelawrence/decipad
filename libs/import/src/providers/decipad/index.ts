@@ -5,7 +5,7 @@ export const decipad: Provider = {
   matchUrl: (url) =>
     (url.hostname === 'localhost' || url.hostname.endsWith('.decipad.com')) &&
     url.pathname.startsWith('/n/'),
-  import: async (): Promise<ImportResult[]> => {
+  import: (): Promise<ImportResult[]> => {
     throw new Error(
       'Decipad notebooks are not meant to be imported statically. Use a live connection instead'
     );

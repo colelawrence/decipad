@@ -5,10 +5,10 @@ import { ColumnLikeValue, getColumnLike } from '../value';
 import { buildType as t, InferError, Type } from '../type';
 import { getIdentifierString } from '../utils';
 
-export const inferCategories = (
+export const inferCategories = async (
   ctx: Context,
   category: AST.Categories
-): Type => {
+): Promise<Type> => {
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('category'));
   }
@@ -16,18 +16,16 @@ export const inferCategories = (
   const [nameExp, contentsExp] = category.args;
 
   const name = getIdentifierString(nameExp);
-  const contents = inferExpression(ctx, contentsExp);
+  const contents = await inferExpression(ctx, contentsExp);
 
-  const theSet = contents
-    .isColumn()
-    .reduced()
-    .isPrimitive()
-    .mapType((setCell) => {
-      if (ctx.stack.has(name)) {
-        return t.impossible(InferError.duplicatedName(name));
-      }
-      return t.column(setCell, name);
-    });
+  const theSet = await (
+    await (await (await contents.isColumn()).reduced()).isPrimitive()
+  ).mapType(async (setCell) => {
+    if (ctx.stack.has(name)) {
+      return t.impossible(InferError.duplicatedName(name));
+    }
+    return t.column(await setCell, name);
+  });
 
   ctx.stack.set(name, theSet, 'function', ctx.statementId);
   return theSet;

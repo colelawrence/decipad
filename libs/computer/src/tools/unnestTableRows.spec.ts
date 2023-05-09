@@ -1,14 +1,15 @@
-import { buildType, Result, serializeType } from '@decipad/language';
+import { Result } from '@decipad/language';
 import { getDefined, timeout } from '@decipad/utils';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import AsciiTable from 'ascii-table';
 import { N } from '@decipad/number';
+import { all } from '@decipad/generator-utils';
 import { Computer } from '../computer/Computer';
 import { getIdentifiedBlocks } from '../testUtils';
 import { unnestTableRows } from './unnestTableRows';
 
-it('unnests table rows', () => {
+it('unnests table rows', async () => {
   const explanation = [
     {
       indexedBy: 'Table',
@@ -17,11 +18,18 @@ it('unnests table rows', () => {
     },
   ];
   const result = {
-    type: serializeType(buildType.column(buildType.number())),
+    type: {
+      kind: 'materialized-column',
+      indexedBy: 'Table',
+      cellType: {
+        kind: 'number',
+      },
+    },
     value: [N(1), N(2)],
-  } as Result.Result<'column'>;
+  } as Result.Result<'materialized-column'>;
 
-  expect([...unnestTableRows(explanation, result)]).toMatchInlineSnapshot(`
+  expect([...(await all(unnestTableRows(explanation, result)))])
+    .toMatchInlineSnapshot(`
     Array [
       Object {
         "labelInfo": Array [
@@ -81,7 +89,7 @@ describe('can provide information for rendering matrices', () => {
     expect(
       computer.explainDimensions$.get(
         computer.getBlockIdResult$.get('block-1')
-          ?.result as Result.Result<'column'>
+          ?.result as Result.Result<'materialized-column'>
       )
     ).toMatchInlineSnapshot(`
       Array [
@@ -103,10 +111,10 @@ describe('can provide information for rendering matrices', () => {
     `);
   });
 
-  it('can turn nested matrices to a tabular data format', () => {
+  it('can turn nested matrices to a tabular data format', async () => {
     const result = getDefined(
       computer.getBlockIdResult$.get('block-1')?.result
-    ) as Result.Result<'column'>;
+    ) as Result.Result<'materialized-column'>;
     const dimExplanation = getDefined(computer.explainDimensions$.get(result));
 
     const aTable = new AsciiTable('Matrix');
@@ -115,7 +123,7 @@ describe('can provide information for rendering matrices', () => {
       ...dimExplanation.map((v) => v.indexedBy ?? '(no dimension)')
     );
 
-    for (const {
+    for await (const {
       labelInfo,
       result: { value },
     } of unnestTableRows(dimExplanation, result)) {

@@ -1,110 +1,114 @@
 import { getDefined } from '@decipad/utils';
 import { dequal } from 'dequal';
 import produce from 'immer';
+import { all, findIndex, map } from '@decipad/generator-utils';
+import { sortMap } from '@decipad/column';
 import {
   getColumnLike,
   isColumnLike,
   Row,
   Table,
   RuntimeError,
-  sortMap,
   applyMap,
   applyFilterMap,
   Value,
 } from '../../value';
-import { OneResult } from '../../interpreter/interpreter-types';
-import { ConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
+import { createConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
 import { buildType as t, Type } from '../../type';
 import { getInstanceof, zip } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
-import { compare } from '../../compare';
+import { Comparable, compare } from '../../compare';
+import { valueToResultValue } from '../../value/valueToResultValue';
 
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
     argCount: 2,
-    functorNoAutomap: ([table, cond]) => {
-      const isBoolColumn = cond.isColumn().reduced().isScalar('boolean');
+    functorNoAutomap: async ([table, cond]) => {
+      const isBoolColumn = await (
+        await (await cond.isColumn()).reduced()
+      ).isScalar('boolean');
 
-      const whenTable = (table: Type) =>
-        table
-          .isTable()
-          .withMinimumColumnCount(1)
-          .mapType((table) => {
+      const whenTable = async (table: Type) =>
+        (await (await table.isTable()).withMinimumColumnCount(1)).mapType(
+          async (table) => {
             const columnTypes = getDefined(table.columnTypes);
             const columnNames = getDefined(table.columnNames);
 
-            return Type.either(
-              isBoolColumn,
-              columnTypes[0].sameAs(cond)
+            return (
+              await Type.either(isBoolColumn, columnTypes[0].sameAs(cond))
             ).mapType(() => t.row(columnTypes, columnNames, table.indexName));
-          });
+          }
+        );
 
       if (table.cellType != null) {
-        return table.isColumn().reduced();
+        return (await table.isColumn()).reduced();
       } else {
         return whenTable(table);
       }
     },
-    fnValuesNoAutomap: (
+    fnValuesNoAutomap: async (
       [tableOrColumn, needle],
       // eslint-disable-next-line default-param-last
       [tableType] = [],
       realm
-    ): Value => {
-      const getNeedleIndexAtTable = (table: Table) => {
-        const needleVal = needle.getData();
+    ): Promise<Value> => {
+      const needleVal = await needle.getData();
+      const getNeedleIndexAtTable = async (table: Table): Promise<number> => {
         const firstColumn = table.columns[0];
 
-        return firstColumn.values.findIndex(
+        return findIndex(
+          map(firstColumn.values(), valueToResultValue),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (value) => compare(value.getData() as any, needleVal as any) === 0
+          (value) => compare(value as Comparable, needleVal as Comparable) === 0
         );
       };
 
+      let rowIndex: number;
+      let table: Table;
       if (isColumnLike(tableOrColumn)) {
-        const originalTable = getInstanceof(
+        table = getInstanceof(
           getDefined(realm).stack.get(
             getDefined(tableType.indexedBy),
             'global'
           ),
           Table
         );
-
-        const index = getNeedleIndexAtTable(originalTable);
-        if (index === -1) {
-          throw new RuntimeError(
-            `Could not find a row with the given condition`
-          );
-        }
-
-        return getDefined(
-          tableOrColumn.atIndex(index),
-          `could not find element at position ${index}`
-        );
-      }
-
-      const table = getInstanceof(tableOrColumn, Table);
-
-      let rowIndex: number;
-      if (isColumnLike(needle)) {
-        rowIndex = (needle.getData() as OneResult[]).findIndex(Boolean);
+        rowIndex = await getNeedleIndexAtTable(table);
       } else {
-        rowIndex = getNeedleIndexAtTable(table);
+        table = getInstanceof(tableOrColumn, Table);
+
+        if (isColumnLike(needle)) {
+          rowIndex = await findIndex(
+            map(needle.values(), valueToResultValue),
+            Boolean
+          );
+        } else {
+          rowIndex = await getNeedleIndexAtTable(table);
+        }
       }
 
       if (rowIndex === -1) {
         throw new RuntimeError(`Could not find a row with the given condition`);
       }
 
-      return Row.fromNamedCells(
-        table.columns.map((column) =>
-          getDefined(
-            column.atIndex(rowIndex),
-            `could not find element at row ${rowIndex}`
-          )
-        ),
-        table.columnNames
-      );
+      if (isColumnLike(tableOrColumn)) {
+        return getDefined(
+          await tableOrColumn.atIndex(rowIndex),
+          `could not find element at row ${rowIndex}`
+        );
+      } else {
+        return Row.fromNamedCells(
+          await Promise.all(
+            table.columns.map(async (column) =>
+              getDefined(
+                await column.atIndex(rowIndex),
+                `could not find element at row ${rowIndex}`
+              )
+            )
+          ),
+          table.columnNames
+        );
+      }
     },
     explanation: 'Lookup first row that matches a condition.',
     formulaGroup: 'Tables',
@@ -114,8 +118,8 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
   concatenate: {
     argCount: 2,
-    functor: ([tab1, tab2]) =>
-      Type.combine(tab1.isTable(), tab2.isTable()).mapType(() => {
+    functor: async ([tab1, tab2]) =>
+      (await Type.combine(tab1.isTable(), tab2.isTable())).mapType(() => {
         if (
           !dequal(tab1.columnNames, tab2.columnNames) ||
           !dequal(tab1.columnTypes, tab2.columnTypes)
@@ -125,12 +129,16 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
           return tab1;
         }
       }),
-    fnValues: ([tab1, tab2]) => {
+    fnValues: async ([tab1, tab2]) => {
       const { columns: cols1, columnNames } = getInstanceof(tab1, Table);
       const { columns: cols2 } = getInstanceof(tab2, Table);
 
       return Table.fromNamedColumns(
-        zip(cols1, cols2).map(([c1, c2]) => new ConcatenatedColumn(c1, c2)),
+        await Promise.all(
+          zip(cols1, cols2).map(async ([c1, c2]) =>
+            createConcatenatedColumn(c1, c2)
+          )
+        ),
         getDefined(columnNames)
       );
     },
@@ -143,11 +151,14 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
   sortby: {
     argCount: 2,
     argCardinalities: [1, 2],
-    functor: ([table, column]) =>
-      Type.combine(column.isColumn().withAtParentIndex(), table.isTable()),
-    fnValues: ([_table, _column]) => {
+    functor: async ([table, column]) =>
+      Type.combine(
+        (await column.isColumn()).withAtParentIndex(),
+        table.isTable()
+      ),
+    fnValues: async ([_table, _column]) => {
       const column = getColumnLike(_column);
-      const map = sortMap(column);
+      const map = await sortMap(column, compare);
       const table = getInstanceof(_table, Table);
       return table.mapColumns((col) => applyMap(col, map));
     },
@@ -159,16 +170,18 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
   filter: {
     argCount: 2,
-    functorNoAutomap: ([table, column]) =>
+    functorNoAutomap: async ([table, column]) =>
       Type.combine(
-        column.isColumn().reduced().isScalar('boolean'),
+        (await (await column.isColumn()).reduced()).isScalar('boolean'),
         table.isTable(),
         produce((table) => {
           table.indexName = null;
         })
       ),
-    fnValuesNoAutomap: ([_table, _column]) => {
-      const filterMap = getColumnLike(_column).getData() as boolean[];
+    fnValuesNoAutomap: async ([_table, _column]) => {
+      const filterMap = (await all(
+        map(getColumnLike(_column).values(), valueToResultValue)
+      )) as boolean[];
       const table = getInstanceof(_table, Table);
       return table.mapColumns((col) => applyFilterMap(col, filterMap));
     },

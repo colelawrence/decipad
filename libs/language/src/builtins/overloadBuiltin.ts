@@ -1,3 +1,4 @@
+import { PromiseOrType } from '@decipad/utils';
 import { BuiltinSpec } from './interfaces';
 import { InferError, Type, buildType as t } from '../type';
 import {
@@ -23,13 +24,16 @@ export type OverloadTypeName =
 export type OverloadedBuiltinSpec =
   | {
       argTypes: OverloadTypeName[];
-      fnValues: (values: Value[], types?: Type[]) => Value;
-      functor: (types: Type[], values?: AST.Expression[]) => Type;
+      fnValues: (values: Value[], types?: Type[]) => PromiseOrType<Value>;
+      functor: (
+        types: Type[],
+        values?: AST.Expression[]
+      ) => Type | Promise<Type>;
       functionSignature?: undefined;
     }
   | {
       argTypes: OverloadTypeName[];
-      fnValues: (values: Value[], types?: Type[]) => Value;
+      fnValues: (values: Value[], types?: Type[]) => PromiseOrType<Value>;
       functor?: undefined;
       functionSignature: string;
     };
@@ -54,11 +58,10 @@ export const overloadBuiltin = (
     );
   }
 
-  const fnValues = (values: Value[], types?: Type[]) => {
-    return getOverload(values).fnValues(values, types);
-  };
+  const fnValues = async (values: Value[], types?: Type[]): Promise<Value> =>
+    getOverload(values).fnValues(values, types);
 
-  const functor = (types: Type[]) => {
+  const functor = async (types: Type[]): Promise<Type> => {
     const argTypeNames = types.map(getOverloadedTypeFromType);
     const overload = byArgTypes.get(argTypesKey(argTypeNames));
 

@@ -50,7 +50,7 @@ export default ({ apiPort }: { apiPort: number }): CallSimple => {
     return response;
   }
 
-  async function justFetch(
+  function justFetch(
     url: string,
     options: RequestInit = {}
   ): ReturnType<typeof global.fetch> {

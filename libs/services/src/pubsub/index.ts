@@ -97,7 +97,7 @@ async function notifyAllWithAccessToResource<T extends TableRecord>(
   } while (lastKey);
 }
 
-async function notifyAllWithAccessTo<T extends TableRecord>(
+function notifyAllWithAccessTo<T extends TableRecord>(
   resources: URI[],
   type: string,
   _changes: Changes<T>

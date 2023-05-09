@@ -5,14 +5,14 @@ type TransformerFn<T extends MyElement, RetT> = (
   editor: MyEditor,
   computer: Computer,
   arg: T
-) => Promise<RetT>;
+) => RetT;
 
 export const weakMapMemoizeInteractiveElementOutput = <
   T extends MyElement,
   RetT
 >(
-  fn: TransformerFn<T, RetT>
-): TransformerFn<T, RetT> => {
+  fn: TransformerFn<T, RetT | Promise<RetT>>
+): TransformerFn<T, Promise<RetT>> => {
   const cache = new WeakMap<T, RetT | null>();
 
   return async (editor: MyEditor, computer: Computer, arg: T) => {

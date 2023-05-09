@@ -1,9 +1,11 @@
 import { Column, fromJS, slice, sort, unique } from '.';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 describe('column value', () => {
-  it('can be constructed from values', () => {
+  it('can be constructed from values', async () => {
     const column = Column.fromValues([1, 2, 3].map(fromJS));
-    expect(column.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(await column.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
         DeciNumber(2),
@@ -12,11 +14,12 @@ describe('column value', () => {
     `);
   });
 
-  it('can be constructed from other columns', () => {
+  it('can be constructed from other columns', async () => {
     const column1 = Column.fromValues([1, 2, 3].map(fromJS));
     const column2 = Column.fromValues([4, 5, 6].map(fromJS));
     const column = Column.fromValues([column1, column2]);
-    expect(column.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(await column.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         Array [
           DeciNumber(1),
@@ -32,17 +35,19 @@ describe('column value', () => {
     `);
   });
 
-  it('can be sorted', () => {
+  it('can be sorted', async () => {
     const originalColumn = Column.fromValues([3, 1, 2].map(fromJS));
-    const sortedColumn = sort(originalColumn);
-    expect(originalColumn.getData()).toMatchInlineSnapshot(`
+    const sortedColumn = await sort(originalColumn);
+    expect(await materializeOneResult(await originalColumn.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(3),
         DeciNumber(1),
         DeciNumber(2),
       ]
     `);
-    expect(sortedColumn.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(await sortedColumn.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
         DeciNumber(2),
@@ -51,10 +56,11 @@ describe('column value', () => {
     `);
   });
 
-  it('can derive a column with unique values', () => {
+  it('can derive a column with unique values', async () => {
     const originalColumn = fromJS([3, 1, 2, 3, 3, 5, 1, 2, 3, 0]) as Column;
-    const uniqueValuesColumn = unique(originalColumn);
-    expect(originalColumn.getData()).toMatchInlineSnapshot(`
+    const uniqueValuesColumn = await unique(originalColumn);
+    expect(await materializeOneResult(await originalColumn.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(3),
         DeciNumber(1),
@@ -69,7 +75,8 @@ describe('column value', () => {
       ]
     `);
 
-    expect(uniqueValuesColumn.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(await uniqueValuesColumn.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(0),
         DeciNumber(1),
@@ -80,11 +87,12 @@ describe('column value', () => {
     `);
   });
 
-  it('a column can be sliced', () => {
+  it('a column can be sliced', async () => {
     const originalColumn = fromJS([1, 2, 3, 4, 5, 6, 7, 8, 9]) as Column;
-    const slice1 = slice(originalColumn, 3, 7);
-    const slice2 = slice(originalColumn, 7, 9);
-    expect(originalColumn.getData()).toMatchInlineSnapshot(`
+    const slice1 = await slice(originalColumn, 3, 7);
+    const slice2 = await slice(originalColumn, 7, 9);
+    expect(await materializeOneResult(await originalColumn.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(1),
         DeciNumber(2),
@@ -97,7 +105,8 @@ describe('column value', () => {
         DeciNumber(9),
       ]
     `);
-    expect(slice1.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(await slice1.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(4),
         DeciNumber(5),
@@ -105,7 +114,8 @@ describe('column value', () => {
         DeciNumber(7),
       ]
     `);
-    expect(slice2.getData()).toMatchInlineSnapshot(`
+    expect(await materializeOneResult(await slice2.getData()))
+      .toMatchInlineSnapshot(`
       Array [
         DeciNumber(8),
         DeciNumber(9),

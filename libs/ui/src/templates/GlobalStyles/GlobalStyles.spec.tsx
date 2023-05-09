@@ -18,12 +18,12 @@ afterEach(() => {
   cleanup();
 });
 
-it('renders the children', async () => {
+it('renders the children', () => {
   const { container } = render(<GlobalStyles>text</GlobalStyles>);
   expect(container).toHaveTextContent('text');
 });
 
-it('applies global styles', async () => {
+it('applies global styles', () => {
   expect(getComputedStyle(document.body).boxSizing).not.toBe('border-box');
   render(<GlobalStyles />);
   expect(getComputedStyle(document.body).boxSizing).toBe('border-box');

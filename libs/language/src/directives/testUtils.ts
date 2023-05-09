@@ -1,4 +1,4 @@
-import type { AST } from '..';
+import type { AST, Value } from '..';
 import { buildType } from '..';
 import { isExpression, isNode } from '../utils';
 import { Realm } from '../interpreter';
@@ -17,7 +17,7 @@ export const directiveFor = (args: AST.Node[]): AST.Directive => {
 export const testGetValue = async (
   getValue: DirectiveImpl['getValue'],
   ...args: AST.Node[]
-) => {
+): Promise<Value> => {
   const ctx = makeContext();
   const realm = new Realm(ctx);
   const root = directiveFor(args);
@@ -27,17 +27,17 @@ export const testGetValue = async (
   for (const passedArg of args) {
     if (isExpression(passedArg)) {
       // eslint-disable-next-line no-await-in-loop
-      inferExpression(ctx, passedArg);
+      await inferExpression(ctx, passedArg);
     }
   }
 
   return getValue(realm, root);
 };
 
-export const testGetType = (
+export const testGetType = async (
   getType: DirectiveImpl['getType'],
   ...args: [Context | AST.Node, ...AST.Node[]]
-): Type => {
+): Promise<Type> => {
   // Allow passing a context along with the args, it's useful for testing
   const [firstArg, ...restArgs] = args;
   const ctx = isNode(firstArg) ? makeContext() : firstArg;

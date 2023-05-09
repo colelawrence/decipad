@@ -1,6 +1,7 @@
-import { AST, SyntaxError, BracketError, walkAst } from '@decipad/language';
+import { walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
-import { IdentifiedError, IdentifiedResult, ProgramBlock } from './types';
+import type { AST, SyntaxError, BracketError } from '@decipad/language';
+import type { IdentifiedError, IdentifiedResult, ProgramBlock } from '../types';
 
 export const getStatement = (
   program: AST.Block[],

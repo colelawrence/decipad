@@ -1,7 +1,15 @@
 import { useCallback, useEffect, Context } from 'react';
-import { astNode, Computer, ProgramBlock, Result } from '@decipad/computer';
-import { zip } from '@decipad/utils';
-import { buildType, deserializeType, serializeType } from '@decipad/language';
+import {
+  astNode,
+  buildType,
+  deserializeType,
+  materializeResult,
+  serializeType,
+  Result,
+  isTableResult,
+} from '@decipad/computer';
+import type { Computer, ProgramBlock } from '@decipad/computer';
+import { PromiseOrType, zip } from '@decipad/utils';
 import {
   ColIndex,
   ImportElementSource,
@@ -39,7 +47,7 @@ export interface LiveConnectionProps {
   jsonPath?: string;
   delimiter?: string;
   externalDataSourceContext: Context<ExternalDataSourcesContextValue>;
-  beforeAuthenticate: (source: ExternalDataSource) => Promise<void>;
+  beforeAuthenticate: (source: ExternalDataSource) => PromiseOrType<void>;
   liveQuery?: LiveQueryElement;
 }
 
@@ -86,8 +94,17 @@ export const useLiveConnection = (
     blockId,
     deleted,
     value: liveConnectionResult,
+    serialize: useCallback(
+      async (importRes: ImportResult | undefined) =>
+        importRes && {
+          ...importRes,
+          result:
+            importRes.result && (await materializeResult(importRes.result)),
+        },
+      []
+    ),
     deserialize: useCallback(
-      (importRes) =>
+      (importRes: ImportResult | undefined) =>
         importRes && {
           ...importRes,
           result: deserializeResult(importRes.result),
@@ -155,7 +172,7 @@ function pushPendingResultToComputer(
         type: {
           kind: 'pending',
         },
-        value: Result.UnknownValue.getData(),
+        value: Result.Unknown,
       },
     ],
   ]);
@@ -190,8 +207,10 @@ export function pushResultToComputer(
     computerResult?.value != null &&
     typeof computerResult.value !== 'symbol'
   ) {
-    if (computerResult.type.kind === 'table') {
-      const { type, value } = computerResult as Result.Result<'table'>;
+    if (isTableResult(computerResult)) {
+      const { type, value } = computerResult as Result.Result<
+        'table' | 'materialized-table'
+      >;
 
       const externalDatas = [] as [string, Result.Result][];
       const programBlocks: ProgramBlock[] = [

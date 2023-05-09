@@ -1,5 +1,5 @@
 import { materialize } from './materialize';
-import { SwappedDimensions } from './SwappedDimensions';
+import { createSwappedDimensions } from './SwappedDimensions';
 import { jsCol } from './testUtils';
 
 const multiDimX = jsCol([1n, 2n, 3n]);
@@ -13,8 +13,8 @@ const threeAnonDims = jsCol([
   ],
 ]);
 
-it('can swap dimensions of a hypercube', () => {
-  expect(materialize(new SwappedDimensions(twoAnonDims, 1)))
+it('can swap dimensions of a hypercube', async () => {
+  expect(await materialize(createSwappedDimensions(twoAnonDims, 1)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -25,8 +25,8 @@ it('can swap dimensions of a hypercube', () => {
   `);
 });
 
-it('or left alone', () => {
-  expect(materialize(new SwappedDimensions(twoAnonDims, 0)))
+it('or left alone', async () => {
+  expect(await materialize(createSwappedDimensions(twoAnonDims, 0)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -39,8 +39,8 @@ it('or left alone', () => {
   `);
 });
 
-it('can swap nothing if the dimension is 1D', () => {
-  expect(materialize(new SwappedDimensions(multiDimX, 0)))
+it('can swap nothing if the dimension is 1D', async () => {
+  expect(await materialize(createSwappedDimensions(multiDimX, 0)))
     .toMatchInlineSnapshot(`
     Array [
       DeciNumber(1),
@@ -50,8 +50,8 @@ it('can swap nothing if the dimension is 1D', () => {
   `);
 });
 
-it('can work with 3d', () => {
-  expect(materialize(new SwappedDimensions(threeAnonDims, 0)))
+it('can work with 3d', async () => {
+  expect(await materialize(createSwappedDimensions(threeAnonDims, 0)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -69,7 +69,7 @@ it('can work with 3d', () => {
     ]
   `);
 
-  expect(materialize(new SwappedDimensions(threeAnonDims, 1)))
+  expect(await materialize(createSwappedDimensions(threeAnonDims, 1)))
     .toMatchInlineSnapshot(`
     Array [
       Array [
@@ -89,7 +89,7 @@ it('can work with 3d', () => {
     ]
   `);
 
-  expect(materialize(new SwappedDimensions(threeAnonDims, 2)))
+  expect(await materialize(createSwappedDimensions(threeAnonDims, 2)))
     .toMatchInlineSnapshot(`
     Array [
       Array [

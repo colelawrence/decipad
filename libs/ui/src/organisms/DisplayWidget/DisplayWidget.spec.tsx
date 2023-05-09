@@ -51,7 +51,7 @@ it('dropdown menu not present', async () => {
   expect(queryByText('Variable #1')).not.toBeInTheDocument();
 });
 
-it('shows 0 as a placeholder', async () => {
+it('shows 0 as a placeholder', () => {
   const { getByText } = render(<DisplayWidget {...props} result={null} />);
 
   expect(getByText('0')).toBeVisible();

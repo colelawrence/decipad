@@ -51,6 +51,9 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
 
   const [page, setPage] = useState(1);
   const pageGroups = useMemo(() => {
+    if (!groups) {
+      return [];
+    }
     const offset = (page - 1) * MAX_PAGE_SIZE;
     return groups.slice(offset, offset + MAX_PAGE_SIZE);
   }, [groups, page]);
@@ -90,8 +93,8 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
   const maxCols = Math.max(...cols);
 
   const maxPages = useMemo(
-    () => Math.ceil(groups.length / MAX_PAGE_SIZE),
-    [groups.length]
+    () => (groups ? Math.ceil(groups.length / MAX_PAGE_SIZE) : 0),
+    [groups]
   );
 
   return (
@@ -129,7 +132,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
           </DataViewRow>
         );
       })}
-      {groups.length > MAX_PAGE_SIZE && (
+      {groups && groups.length > MAX_PAGE_SIZE && (
         <tr>
           <td colSpan={maxCols}>
             <div css={paginationWrapperStyles}>

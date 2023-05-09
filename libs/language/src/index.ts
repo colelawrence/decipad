@@ -21,7 +21,12 @@ export {
 } from './infer';
 export type { Context } from './infer';
 export type { ColumnLikeValue, Value } from './value';
-export { isColumnLike, getColumnLike } from './value';
+export {
+  isColumnLike,
+  getColumnLike,
+  isTableValue,
+  tableValueToTableResultValue,
+} from './value';
 export {
   evaluateStatement,
   Realm,
@@ -43,8 +48,9 @@ export {
 export { prettyPrintAST } from './parser/utils';
 export * from './langPluralize';
 export { previousRefSymbols } from './previous-ref';
-export { serializeResult, validateResult } from './result';
+export { serializeResult } from './result';
 export * as Result from './result';
+export { validateResult } from './validateResult';
 export * from './run';
 export {
   buildType,
@@ -77,6 +83,8 @@ export {
   mutateAst,
   isStatement,
 } from './utils';
+export { materializeResult } from './utils/materializeResult';
+export { materializeOneResult } from './utils/materializeOneResult';
 export { linearizeType } from './dimtools/common';
 export type { Unit };
 export * from './simpleValues';

@@ -248,12 +248,14 @@ describe('specFromType', () => {
 });
 
 describe('resultToPlotResultData', () => {
-  it('undefined result gets undefined plot results', () => {
-    expect(resultToPlotResultData(undefined, displayProps())).toBeUndefined();
-  });
-  it('picks columns', () => {
+  it('undefined result gets undefined plot results', async () => {
     expect(
-      resultToPlotResultData(
+      await resultToPlotResultData(undefined, displayProps())
+    ).toBeUndefined();
+  });
+  it('picks columns', async () => {
+    expect(
+      await resultToPlotResultData(
         { value: tableData, type: tableType },
         displayProps({
           xColumnName: 'index',

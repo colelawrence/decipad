@@ -9,7 +9,7 @@ export const versionsStoreName = 'versions';
 
 export const PREFERRED_TRIM_SIZE = 500;
 
-export async function fetchUpdates(
+export function fetchUpdates(
   idbPersistence: IndexeddbPersistence
 ): Promise<void> {
   return idbPersistence._mux.push(async () => {
@@ -79,18 +79,19 @@ function getVersionsStore(
   }
 }
 
-async function maybeWithStore<T>(
+function maybeWithStore<T>(
   idbPersistence: IndexeddbPersistence,
   write: boolean,
-  fn: (store: IDBObjectStore) => Promise<T> | void
+  fn: (store: IDBObjectStore) => Promise<T | void>
 ): Promise<T | void> {
   if (idbPersistence._destroyed) {
-    return;
+    return Promise.resolve();
   }
   const store = getUpdatesStore(idbPersistence, write);
   if (store) {
     return fn(store);
   }
+  return Promise.resolve();
 }
 
 export async function storeState(
@@ -230,8 +231,9 @@ export class IndexeddbPersistence extends Observable<string> {
   }
 
   async remove(): Promise<void> {
-    await maybeWithStore(this, true, async (store) => {
+    await maybeWithStore(this, true, (store) => {
       store.clear();
+      return Promise.resolve();
     });
   }
 

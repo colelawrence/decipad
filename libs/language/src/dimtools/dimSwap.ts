@@ -1,12 +1,12 @@
 import { getDefined } from '@decipad/utils';
-import { SwappedDimensions } from '../lazy';
+import { createSwappedDimensions } from '../lazy';
 import { ColumnLikeValue, getColumnLike } from '../value';
 import { buildType as t, InferError, Type } from '../type';
 import { chooseFirst, deLinearizeType, linearizeType } from './common';
 
-export const dimSwapTypes = (dominantIndexName: string, type: Type) => {
-  return type.isColumn().mapType((matrix) => {
-    const types = linearizeType(matrix);
+export const dimSwapTypes = async (dominantIndexName: string, type: Type) => {
+  return (await type.isColumn()).mapType(async (matrix) => {
+    const types = linearizeType(await matrix);
     const scalarTip = getDefined(types.pop());
 
     const dimIndex = types.findIndex((t) => t.indexedBy === dominantIndexName);
@@ -18,14 +18,14 @@ export const dimSwapTypes = (dominantIndexName: string, type: Type) => {
   });
 };
 
-export const dimSwapValues = (
+export const dimSwapValues = async (
   dominantIndexName: string,
   type: Type,
   value: ColumnLikeValue
-) => {
+): Promise<ColumnLikeValue> => {
   const linear = linearizeType(type).slice(0, -1);
 
-  if (linear.length !== value.dimensions.length) {
+  if (linear.length !== (await value.dimensions()).length) {
     throw new Error('panic: incorrect amount of dimensions');
   }
 
@@ -34,17 +34,15 @@ export const dimSwapValues = (
   );
 
   if (indexOfDominantDimension === 0) {
-    return value;
+    return Promise.resolve(value);
   }
 
   if (indexOfDominantDimension < 0) {
     throw new Error('panic: dominant dimension not found');
   }
 
-  const swapped = new SwappedDimensions(
+  return createSwappedDimensions(
     getColumnLike(value),
     indexOfDominantDimension
   );
-
-  return swapped;
 };

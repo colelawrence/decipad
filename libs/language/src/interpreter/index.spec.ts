@@ -16,6 +16,7 @@ import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
 
 import { run, runOne } from './index';
+import { materializeOneResult } from '../utils/materializeOneResult';
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -73,7 +74,7 @@ describe('ranges', () => {
 
     expect(await runOne(r)).toEqual([d('2020-01-01'), d('2020-12-01') - 1n]);
 
-    const rContains = (...args: Parameters<typeof date>) =>
+    const rContains = async (...args: Parameters<typeof date>) =>
       runOne(c('contains', r, date(...args)));
 
     expect(await rContains('2020-01', 'month')).toEqual(true);
@@ -95,7 +96,7 @@ describe('ranges', () => {
 
 describe('sequences', () => {
   it('can be evaluated', async () => {
-    expect(await runOne(seq(l(1), l(5), l(1)))).toEqual([
+    expect(await materializeOneResult(runOne(seq(l(1), l(5), l(1))))).toEqual([
       N(1),
       N(2),
       N(3),
@@ -103,7 +104,7 @@ describe('sequences', () => {
       N(5),
     ]);
 
-    expect(await runOne(seq(l(5), l(1), l(-1)))).toEqual([
+    expect(await materializeOneResult(runOne(seq(l(5), l(1), l(-1))))).toEqual([
       N(5),
       N(4),
       N(3),
@@ -112,27 +113,33 @@ describe('sequences', () => {
     ]);
 
     expect(
-      await runOne(
-        seq(
-          date('2020-01', 'month'),
-          date('2020-02', 'month'),
-          n('ref', 'month')
+      await materializeOneResult(
+        runOne(
+          seq(
+            date('2020-01', 'month'),
+            date('2020-02', 'month'),
+            n('ref', 'month')
+          )
         )
       )
     ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
 
     expect(
-      await runOne(
-        seq(
-          date('2020-02', 'month'),
-          date('2020-01', 'month'),
-          n('ref', 'month')
+      await materializeOneResult(
+        runOne(
+          seq(
+            date('2020-02', 'month'),
+            date('2020-01', 'month'),
+            n('ref', 'month')
+          )
         )
       )
     ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
 
-    const dates = (await runOne(
-      seq(date('2020-01', 'year'), date('2020-01', 'year'), n('ref', 'month'))
+    const dates = (await materializeOneResult(
+      runOne(
+        seq(date('2020-01', 'year'), date('2020-01', 'year'), n('ref', 'month'))
+      )
     )) as bigint[];
 
     expect(dates.length).toEqual(12);
@@ -142,15 +149,27 @@ describe('sequences', () => {
 
   it('can omit the increment', async () => {
     expect(
-      await runOne(seq(date('2020-01', 'month'), date('2020-02', 'month')))
+      await materializeOneResult(
+        runOne(seq(date('2020-01', 'month'), date('2020-02', 'month')))
+      )
     ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
 
     expect(
-      await runOne(seq(date('2020-02', 'month'), date('2020-01', 'month')))
+      await materializeOneResult(
+        runOne(seq(date('2020-02', 'month'), date('2020-01', 'month')))
+      )
     ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
 
-    expect(await runOne(seq(l(1), l(3)))).toEqual([N(1), N(2), N(3)]);
-    expect(await runOne(seq(l(3), l(1)))).toEqual([N(3), N(2), N(1)]);
+    expect(await materializeOneResult(runOne(seq(l(1), l(3))))).toEqual([
+      N(1),
+      N(2),
+      N(3),
+    ]);
+    expect(await materializeOneResult(runOne(seq(l(3), l(1))))).toEqual([
+      N(3),
+      N(2),
+      N(1),
+    ]);
   });
 });
 
@@ -166,7 +185,9 @@ describe('functions', () => {
       c('Function Name', l(1), l(2))
     );
 
-    expect(await run([usingFunctions], [0])).toEqual([N(3)]);
+    expect(await materializeOneResult(run([usingFunctions], [0]))).toEqual([
+      N(3),
+    ]);
   });
 });
 
@@ -177,7 +198,7 @@ it('Can use variables', async () => {
     n('ref', 'Some Variable')
   );
 
-  expect(await run([withVariables], [0])).toEqual([N(1)]);
+  expect(await materializeOneResult(run([withVariables], [0]))).toEqual([N(1)]);
 });
 
 describe('columns', () => {
@@ -189,49 +210,41 @@ describe('columns', () => {
       c('+', n('ref', 'Array'), col(3, c('+', l(1), l(1)), 1))
     );
 
-    expect(await run([programWithArray], [0])).toEqual([[N(4), N(4), N(4)]]);
+    expect(await materializeOneResult(run([programWithArray], [0]))).toEqual([
+      [N(4), N(4), N(4)],
+    ]);
   });
 
   it('can perform calculations between columns and single numbers', async () => {
-    expect(await runOne(c('*', col(1, 2, 3), l(2)))).toEqual([
-      N(2),
-      N(4),
-      N(6),
-    ]);
+    expect(
+      await materializeOneResult(runOne(c('*', col(1, 2, 3), l(2))))
+    ).toEqual([N(2), N(4), N(6)]);
 
-    expect(await runOne(c('/', col(1, 2, 3), l(2)))).toEqual([
-      N(1, 2),
-      N(1),
-      N(3, 2),
-    ]);
+    expect(
+      await materializeOneResult(runOne(c('/', col(1, 2, 3), l(2))))
+    ).toEqual([N(1, 2), N(1), N(3, 2)]);
 
-    expect(await runOne(c('+', l(1), col(1, 2, 3)))).toEqual([
-      N(2),
-      N(3),
-      N(4),
-    ]);
+    expect(
+      await materializeOneResult(runOne(c('+', l(1), col(1, 2, 3))))
+    ).toEqual([N(2), N(3), N(4)]);
   });
 
   it('evaluates columns of ranges', async () => {
     const column = col(range(1, 2), range(3, 4), range(5, 6));
 
-    expect(await runOne(column)).toEqual([
+    expect(await materializeOneResult(runOne(column))).toEqual([
       [N(1), N(2)],
       [N(3), N(4)],
       [N(5), N(6)],
     ]);
 
-    expect(await runOne(c('contains', column, l(3)))).toEqual([
-      false,
-      true,
-      false,
-    ]);
+    expect(
+      await materializeOneResult(runOne(c('contains', column, l(3))))
+    ).toEqual([false, true, false]);
 
-    expect(await runOne(c('contains', column, col(1, 5, 5)))).toEqual([
-      true,
-      false,
-      true,
-    ]);
+    expect(
+      await materializeOneResult(runOne(c('contains', column, col(1, 5, 5))))
+    ).toEqual([true, false, true]);
   });
 });
 
@@ -239,16 +252,22 @@ describe('dates', () => {
   const d = parseUTCDate;
 
   it('can evaluate dates', async () => {
-    expect(await runOne(date('2021-10-11', 'month'))).toEqual(d('2021-10'));
+    expect(
+      await materializeOneResult(runOne(date('2021-10-11', 'month')))
+    ).toEqual(d('2021-10'));
   });
 
   it('can evaluate date functions', async () => {
     expect(
-      await runOne(c('==', date('2021-10', 'month'), date('2021-11', 'month')))
+      await materializeOneResult(
+        runOne(c('==', date('2021-10', 'month'), date('2021-11', 'month')))
+      )
     ).toEqual(false);
 
     expect(
-      await runOne(c('==', date('2021-10', 'month'), date('2021-10', 'month')))
+      await materializeOneResult(
+        runOne(c('==', date('2021-10', 'month'), date('2021-10', 'month')))
+      )
     ).toEqual(true);
   });
 });
@@ -256,12 +275,14 @@ describe('dates', () => {
 describe('Tables', () => {
   it('can evaluate tables', async () => {
     expect(
-      await runOne(
-        tableDef('Table', {
-          Col1: col(1, 2, 3),
-          Col2: l(2),
-          Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
-        })
+      await materializeOneResult(
+        runOne(
+          tableDef('Table', {
+            Col1: col(1, 2, 3),
+            Col2: l(2),
+            Col3: c('>', n('ref', 'Col1'), n('ref', 'Col2')),
+          })
+        )
       )
     ).toEqual([
       [N(1), N(2), N(3)],
@@ -270,20 +291,24 @@ describe('Tables', () => {
     ]);
 
     expect(
-      await runOne(
-        tableDef('Table', {
-          Col1: l(1),
-          Col2: l(2),
-        })
+      await materializeOneResult(
+        runOne(
+          tableDef('Table', {
+            Col1: l(1),
+            Col2: l(2),
+          })
+        )
       )
     ).toEqual([[N(1)], [N(2)]]);
 
     expect(
-      await runOne(
-        tableDef('Table', {
-          Col1: col(1, 2, 3),
-          Col2: c('*', n('ref', 'Col1'), l(2)),
-        })
+      await materializeOneResult(
+        runOne(
+          tableDef('Table', {
+            Col1: col(1, 2, 3),
+            Col2: c('*', n('ref', 'Col1'), l(2)),
+          })
+        )
       )
     ).toEqual([
       [N(1), N(2), N(3)],
@@ -293,18 +318,22 @@ describe('Tables', () => {
 
   it('Tables with scalar item get turned to tables with 1 row', async () => {
     expect(
-      await runOne(
-        tableDef('Table', {
-          Col1: l(101),
-        })
+      await materializeOneResult(
+        runOne(
+          tableDef('Table', {
+            Col1: l(101),
+          })
+        )
       )
     ).toEqual([[N(101)]]);
 
     expect(
-      await runOne(
-        tableDef('Table', {
-          Col1: c('previous', l(101)),
-        })
+      await materializeOneResult(
+        runOne(
+          tableDef('Table', {
+            Col1: c('previous', l(101)),
+          })
+        )
       )
     ).toEqual([[N(101)]]);
   });
@@ -318,16 +347,20 @@ describe('Tables', () => {
       prop('Table', 'Col')
     );
 
-    expect(await run([block], [0])).toEqual([['hi', 'there']]);
+    expect(await materializeOneResult(run([block], [0]))).toEqual([
+      ['hi', 'there'],
+    ]);
   });
 
   it('sets the "previous" reference', async () => {
     expect(
-      await runOne(
-        tableDef('Table', {
-          Col1: col(1, 2, 3),
-          Col2: c('+', c('previous', l(0)), l(1)),
-        })
+      await materializeOneResult(
+        runOne(
+          tableDef('Table', {
+            Col1: col(1, 2, 3),
+            Col2: c('+', c('previous', l(0)), l(1)),
+          })
+        )
       )
     ).toEqual([
       [N(1), N(2), N(3)],
@@ -361,12 +394,12 @@ describe('higher dimensions', () => {
   it('Can operate upon 2D columns', async () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
 
-    expect(await runOne(column)).toEqual([
+    expect(await materializeOneResult(runOne(column))).toEqual([
       [N(1), N(2), N(3)],
       [N(4), N(5), N(6)],
     ]);
 
-    expect(await runOne(c('+', column, column))).toEqual([
+    expect(await materializeOneResult(runOne(c('+', column, column)))).toEqual([
       [N(2), N(4), N(6)],
       [N(8), N(10), N(12)],
     ]);
@@ -375,16 +408,18 @@ describe('higher dimensions', () => {
   it('can mix columns with other dimensions', async () => {
     const column = col(col(l(1), l(2), l(3)), col(l(4), l(5), l(6)));
 
-    expect(await runOne(c('+', column, l(1)))).toEqual([
+    expect(await materializeOneResult(runOne(c('+', column, l(1))))).toEqual([
       [N(2), N(3), N(4)],
       [N(5), N(6), N(7)],
     ]);
-    expect(await runOne(c('+', l(1), column))).toEqual([
+    expect(await materializeOneResult(runOne(c('+', l(1), column)))).toEqual([
       [N(2), N(3), N(4)],
       [N(5), N(6), N(7)],
     ]);
 
-    expect(await runOne(c('/', column, col(l(1), l(2))))).toEqual([
+    expect(
+      await materializeOneResult(runOne(c('/', column, col(l(1), l(2)))))
+    ).toEqual([
       [N(1), N(2), N(3)],
       [N(2), N(5, 2), N(3)],
     ]);
@@ -393,8 +428,8 @@ describe('higher dimensions', () => {
 
 it('Can create columns with disparate types / dims', async () => {
   expect(
-    await runOne(
-      col(col(l(1), l(2), l(3)), col(l('s'), l(5), l(false), col(l(1))))
+    await materializeOneResult(
+      runOne(col(col(l(1), l(2), l(3)), col(l('s'), l(5), l(false), col(l(1)))))
     )
   ).toEqual([
     [N(1), N(2), N(3)],

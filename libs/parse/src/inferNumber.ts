@@ -17,18 +17,18 @@ const inferPlainNumber = (text: string): CoercibleType | undefined => {
   };
 };
 
-export const inferNumber = (
+export const inferNumber = async (
   computer: Computer,
   text: string,
   options: InferNumberOptions = {}
-): CoercibleType | undefined => {
+): Promise<CoercibleType | undefined> => {
   if (options.doNotTryExpressionNumbersParse) {
     return inferPlainNumber(text);
   }
   if (containsNumber(text)) {
     try {
       const exp = parseExpressionOrThrow(text);
-      const type = computer.expressionType(exp);
+      const type = await computer.expressionType(exp);
       if (type.kind === 'number') {
         return { type, coerced: text };
       }

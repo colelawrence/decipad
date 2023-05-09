@@ -1,4 +1,11 @@
-import { buildType as t, serializeResult, AST } from '@decipad/language';
+import {
+  buildType as t,
+  serializeResult,
+  AST,
+  Result,
+  isTableValue,
+  tableValueToTableResultValue,
+} from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { ComputationRealm } from '../computer/ComputationRealm';
 
@@ -6,7 +13,7 @@ export const identifiedResultForTable = (
   realm: ComputationRealm,
   variableName: string | undefined,
   table: AST.Table
-) => {
+): Result.Result => {
   const type = getDefined(
     realm.inferContext.stack.get(getDefined(variableName))
   );
@@ -17,8 +24,15 @@ export const identifiedResultForTable = (
       null
     );
   }
-  const data = value?.getData();
-  if (Array.isArray(data) && data.length !== type.columnNames?.length) {
+  if (value && !isTableValue(value)) {
+    throw new Error(`table does not have table value: ${value}`);
+  }
+
+  if (
+    value &&
+    Array.isArray(value.columns) &&
+    value.columns.length !== type.columnNames?.length
+  ) {
     return serializeResult(
       t.impossible(
         "column names and result column count don't match length",
@@ -27,5 +41,5 @@ export const identifiedResultForTable = (
       null
     );
   }
-  return serializeResult(type, value?.getData());
+  return serializeResult(type, value && tableValueToTableResultValue(value));
 };

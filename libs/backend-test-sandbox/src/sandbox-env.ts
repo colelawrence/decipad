@@ -10,7 +10,7 @@ import getPorts from './get-ports';
 export type Env = NodeJS.ProcessEnv & Record<string, string | undefined>;
 type ISandboxEnvReturn = [Env, Config];
 
-async function loadAWSConfig(): Promise<Record<string, string>> {
+function loadAWSConfig(): Promise<Record<string, string>> {
   return new Promise((resolve, reject) => {
     AWS.config.getCredentials((err, credentials) => {
       if (err) {

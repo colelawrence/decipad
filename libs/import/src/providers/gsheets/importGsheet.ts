@@ -28,7 +28,7 @@ const errorResult = (err: string): ImportResultWithMandatoryResult => {
           message: err,
         },
       },
-      value: Result.UnknownValue.getData(),
+      value: Result.Unknown,
     },
     loading: false,
   };
@@ -77,7 +77,7 @@ const handleGsheetsResponse = async (
   return inferTable(computer, trimmedBody, {
     ...options,
     doNotTryExpressionNumbersParse: true,
-  }) as Result.Result;
+  }) as Promise<Result.Result>;
 };
 
 const loadSheet =
@@ -167,7 +167,7 @@ const importOneGsheet = async (
   }
 };
 
-export const importGsheet = async (
+export const importGsheet = (
   params: ImportParams,
   options: ImportOptions
 ): Promise<ImportResult[]> =>

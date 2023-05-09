@@ -9,6 +9,7 @@ import {
 import { AnyMapping, timeout } from '@decipad/utils';
 import produce from 'immer';
 import { filter, firstValueFrom } from 'rxjs';
+import { all } from '@decipad/generator-utils';
 import { getExprRef } from '../exprRefs';
 import {
   getIdentifiedBlock,
@@ -18,6 +19,8 @@ import {
 } from '../testUtils';
 import { ComputeRequestWithExternalData } from '../types';
 import { Computer } from './Computer';
+import { ColumnDesc } from './types';
+import { getResultGenerator } from '../utils';
 
 const testProgram = getIdentifiedBlocks(
   'A = 0',
@@ -30,7 +33,9 @@ beforeEach(() => {
   computer = new Computer();
 });
 
-const computeOnTestComputer = async (req: ComputeRequestWithExternalData) => {
+const computeOnTestComputer = async (
+  req: ComputeRequestWithExternalData
+): Promise<string[]> => {
   const res = await computer.computeRequest(req);
   return simplifyComputeResponse(res);
 };
@@ -404,8 +409,8 @@ describe('tooling data', () => {
     ]);
   });
 
-  it('can get a statement', () => {
-    computeOnTestComputer({ program: getIdentifiedBlocks('1 + 1') });
+  it('can get a statement', async () => {
+    await computeOnTestComputer({ program: getIdentifiedBlocks('1 + 1') });
 
     expect(computer.getStatement('block-0')?.args[1]).toMatchObject({
       type: 'function-call',
@@ -578,6 +583,14 @@ describe('can retrieve columns indexed by a table', () => {
   });
 });
 
+const materializeColumnDesc = async (desc: ColumnDesc) => ({
+  ...desc,
+  result: {
+    ...desc.result,
+    value: await all(getResultGenerator(desc.result.value)()),
+  },
+});
+
 it('can list tables and columns', async () => {
   const computer = new Computer({
     initialProgram: getIdentifiedBlocks(
@@ -591,7 +604,8 @@ it('can list tables and columns', async () => {
 
   const columns = computer.getAllColumns$.get();
   const tables = computer.getAllTables$.get();
-  expect(columns).toMatchInlineSnapshot(`
+  expect(await Promise.all(columns.map(materializeColumnDesc)))
+    .toMatchInlineSnapshot(`
     Array [
       Object {
         "columnName": "A",

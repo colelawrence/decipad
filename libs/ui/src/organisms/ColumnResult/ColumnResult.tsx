@@ -8,7 +8,7 @@ export const ColumnResult = ({
   type,
   value,
   element,
-}: CodeResultProps<'column'>): ReturnType<FC> => {
+}: CodeResultProps<'materialized-column'>): ReturnType<FC> => {
   const computer = useComputer();
 
   const labels = computer.explainDimensions$.use({ type, value });

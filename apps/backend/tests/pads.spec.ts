@@ -317,7 +317,7 @@ test('pads', (ctx) => {
     );
   });
 
-  it('waits for share', async () => timeout(1000));
+  it('waits for share', () => timeout(1000));
 
   it.skip('invitee can get pad', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));
@@ -390,7 +390,7 @@ test('pads', (ctx) => {
     );
   });
 
-  it('waits for unshare', async () => timeout(1000));
+  it('waits for unshare', () => timeout(1000));
 
   it('target user still has access to pad through workspace', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth('test user id 2'));

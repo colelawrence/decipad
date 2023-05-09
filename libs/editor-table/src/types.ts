@@ -16,3 +16,9 @@ export type ColumnDndDirection = undefined | 'left' | 'right';
 export interface TotalAggregationExpressions {
   sum: string;
 }
+
+export interface DropdownOption {
+  id: string;
+  value: string;
+  focused: boolean;
+}

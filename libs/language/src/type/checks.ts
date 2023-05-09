@@ -1,4 +1,5 @@
 import { dequal } from 'dequal';
+import { PromiseOrType } from '@decipad/utils';
 import { PrimitiveTypeName, Type } from '.';
 import type { Time } from '..';
 import { zip } from '../utils';
@@ -16,9 +17,9 @@ import {
 } from './units';
 
 const checker = <Args extends unknown[]>(
-  fn: (...args: Args) => Type
+  fn: (...args: Args) => PromiseOrType<Type>
 ): typeof fn => {
-  return function typeChecker(...args: Args) {
+  return async function typeChecker(...args: Args) {
     const errored = args.find(
       (a) => a instanceof Type && a.errorCause != null
     ) as Type | undefined;
@@ -27,7 +28,7 @@ const checker = <Args extends unknown[]>(
   };
 };
 
-export const isScalar = checker((me: Type, type: PrimitiveTypeName) => {
+export const isScalar = checker(async (me: Type, type: PrimitiveTypeName) => {
   if (type === me.type) {
     return me;
   } else {
@@ -35,7 +36,7 @@ export const isScalar = checker((me: Type, type: PrimitiveTypeName) => {
   }
 });
 
-export const sameScalarnessAs = checker((me: Type, other: Type) => {
+export const sameScalarnessAs = checker(async (me: Type, other: Type) => {
   const meScalar = me.type != null;
   const theyScalar = me.type != null;
 
@@ -63,7 +64,7 @@ export const sharePercentage = checker((me: Type, other: Type) => {
   return me;
 });
 
-export const isColumn = checker((me: Type) => {
+export const isColumn = checker(async (me: Type) => {
   if (me.cellType != null) {
     return me;
   } else {
@@ -71,7 +72,7 @@ export const isColumn = checker((me: Type) => {
   }
 });
 
-export const isTable = checker((me: Type) => {
+export const isTable = checker(async (me: Type) => {
   if (me.columnNames != null && me.columnTypes != null) {
     return me;
   } else {
@@ -79,7 +80,7 @@ export const isTable = checker((me: Type) => {
   }
 });
 
-export const isTableOrRow = checker((me: Type) => {
+export const isTableOrRow = checker(async (me: Type) => {
   if (
     (me.columnNames != null && me.columnTypes != null) ||
     (me.rowCellTypes != null && me.rowCellNames != null)
@@ -90,7 +91,7 @@ export const isTableOrRow = checker((me: Type) => {
   }
 });
 
-export const reduced = checker((me: Type) => {
+export const reduced = checker(async (me: Type) => {
   if (me.cellType != null) {
     return me.cellType;
   } else {
@@ -130,9 +131,9 @@ export const withAtParentIndex = checker((me: Type) => {
   }
 });
 
-export const sameColumnessAs = checker((me: Type, other: Type) => {
+export const sameColumnessAs = checker(async (me: Type, other: Type) => {
   if (me.cellType != null && other.cellType != null) {
-    return me.cellType.sameAs(other.cellType).mapType(() => me);
+    return (await me.cellType.sameAs(other.cellType)).mapType(() => me);
   } else if (me.cellType == null && other.cellType == null) {
     return me;
   } else {
@@ -140,7 +141,7 @@ export const sameColumnessAs = checker((me: Type, other: Type) => {
   }
 });
 
-export const isRange = checker((me: Type) => {
+export const isRange = checker(async (me: Type) => {
   if (me.rangeOf != null) {
     return me;
   } else {
@@ -148,13 +149,13 @@ export const isRange = checker((me: Type) => {
   }
 });
 
-export const getRangeOf = checker((me: Type): Type => {
-  return me.rangeOf ?? me.expected('range');
-});
+export const getRangeOf = checker(
+  async (me: Type) => me.rangeOf ?? me.expected('range')
+);
 
-export const sameRangenessAs = checker((me: Type, other: Type) => {
+export const sameRangenessAs = checker(async (me: Type, other: Type) => {
   if (me.rangeOf != null && other.rangeOf != null) {
-    return me.rangeOf.sameAs(other.rangeOf).mapType(() => me);
+    return (await me.rangeOf.sameAs(other.rangeOf)).mapType(() => me);
   } else if (me.rangeOf == null && other.rangeOf == null) {
     return me;
   } else {
@@ -162,13 +163,18 @@ export const sameRangenessAs = checker((me: Type, other: Type) => {
   }
 });
 
-export const sameTablenessAs = checker((me: Type, other: Type) => {
+export const sameTablenessAs = checker(async (me: Type, other: Type) => {
   if (me.columnTypes != null && other.columnTypes != null) {
     if (
       dequal(me.columnNames, other.columnNames) &&
-      zip(me.columnTypes, other.columnTypes).every(
-        ([myT, otherT]) => myT.sameAs(otherT).errorCause == null
-      )
+      (
+        await Promise.all(
+          zip(me.columnTypes, other.columnTypes).map(
+            async ([myT, otherT]) =>
+              (await myT.sameAs(otherT)).errorCause == null
+          )
+        )
+      ).every(Boolean)
     ) {
       return me;
     } else {
@@ -181,7 +187,7 @@ export const sameTablenessAs = checker((me: Type, other: Type) => {
   }
 });
 
-export const isTimeQuantity = checker((me: Type) => {
+export const isTimeQuantity = checker(async (me: Type) => {
   if (
     me.unit == null ||
     me.unit.length === 0 ||
@@ -192,15 +198,17 @@ export const isTimeQuantity = checker((me: Type) => {
   return me;
 });
 
-export const isDate = checker((me: Type, specificity?: Time.Specificity) => {
-  if (me.date != null && (specificity == null || me.date === specificity)) {
-    return me;
-  } else {
-    return me.expected(specificity ? t.date(specificity) : 'date');
+export const isDate = checker(
+  async (me: Type, specificity?: Time.Specificity) => {
+    if (me.date != null && (specificity == null || me.date === specificity)) {
+      return me;
+    } else {
+      return me.expected(specificity ? t.date(specificity) : 'date');
+    }
   }
-});
+);
 
-export const sameDatenessAs = checker((me: Type, other: Type) => {
+export const sameDatenessAs = checker(async (me: Type, other: Type) => {
   if (
     me.date === 'undefined' ||
     other.date === 'undefined' ||
@@ -232,26 +240,30 @@ export const divideUnit = checker(
   }
 );
 
-export const sameAs = checker((me: Type, other: Type) => {
-  const ensurers = [
-    sameScalarnessAs,
-    sameColumnessAs,
-    sameDatenessAs,
-    sameRangenessAs,
-    sameTablenessAs,
-  ];
+export const sameAs = checker(
+  async (me: PromiseOrType<Type>, _other: PromiseOrType<Type>) => {
+    const ensurers = [
+      sameScalarnessAs,
+      sameColumnessAs,
+      sameDatenessAs,
+      sameRangenessAs,
+      sameTablenessAs,
+    ];
 
-  let type = me;
-  for (const cmp of ensurers) {
-    type = cmp(type, other);
-    if (type.errorCause) return type;
+    const other = await _other;
+    let type = await me;
+    for (const cmp of ensurers) {
+      // eslint-disable-next-line no-await-in-loop
+      type = await cmp(type, other);
+      if (type.errorCause) return type;
+    }
+
+    return type;
   }
+);
 
-  return type;
-});
-
-export const isPrimitive = checker((me: Type) => {
-  const anyOf = Type.either(
+export const isPrimitive = checker(async (me: Type) => {
+  const anyOf = await Type.either(
     me.isDate(),
     me.isScalar('string'),
     me.isScalar('number'),

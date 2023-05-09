@@ -3,6 +3,8 @@ import {
   Result,
   SerializedType,
   SerializedTypes,
+  isTable,
+  memoizedColumnResultGenerator,
 } from '@decipad/computer';
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
@@ -95,7 +97,7 @@ const inferData = (data: Table): SerializedType => {
 const evaluateCell = (cell: unknown): Result.OneResult => {
   const tof = typeof cell;
   if (cell == null) {
-    return Result.UnknownValue.getData();
+    return Result.Unknown;
   }
   if (tof === 'number') {
     return N(cell as number);
@@ -111,11 +113,11 @@ const evaluateCell = (cell: unknown): Result.OneResult => {
       return cell.toString();
     }
   }
-  return Result.UnknownValue.getData();
+  return Result.Unknown;
 };
 
 const evaluateData = (
-  _type: SerializedTypes.Table,
+  _type: SerializedTypes.Table | SerializedTypes.MaterializedTable,
   data: Table
 ): Result.Result<'table'>['value'] => {
   const colValues: Interpreter.ResultColumn[] = [];
@@ -125,11 +127,20 @@ const evaluateData = (
       data.getChildAt(colIndex),
       `expected column at ${colIndex}`
     );
-    const values: Interpreter.ResultColumn = [];
-    for (let rowIndex = 0; rowIndex < column.length; rowIndex += 1) {
-      values.push(evaluateCell(column.get(rowIndex)));
-    }
-    colValues.push(values);
+    colValues.push(
+      memoizedColumnResultGenerator(async function* generateColumn(
+        start = 0,
+        end = Infinity
+      ) {
+        for (
+          let rowIndex = start;
+          rowIndex < end && rowIndex < column.length;
+          rowIndex += 1
+        ) {
+          yield evaluateCell(column.get(rowIndex));
+        }
+      })
+    );
   }
 
   return colValues;
@@ -140,7 +151,7 @@ export const importFromArrow = async (
 ): Promise<Result.Result> => {
   const arrowTable = await tableFromIPC(resp);
   const type = inferData(arrowTable);
-  if (type.kind === 'table') {
+  if (isTable(type)) {
     return {
       type,
       value: evaluateData(type, arrowTable),
@@ -149,7 +160,7 @@ export const importFromArrow = async (
   if (type.kind === 'type-error') {
     return {
       type,
-      value: Result.UnknownValue.getData(),
+      value: Result.Unknown,
     };
   }
   return errorResult(`Unexpected result of type ${type.kind}`);

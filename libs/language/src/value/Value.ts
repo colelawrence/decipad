@@ -1,12 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 import DeciNumber, { N } from '@decipad/number';
-import { unzip, getDefined, AnyMapping, anyMappingToMap } from '@decipad/utils';
+import { unzip, AnyMapping, anyMappingToMap, getDefined } from '@decipad/utils';
 import {
   MappedColumn as MappedColumnBase,
   FilteredColumn as FilteredColumnBase,
 } from '@decipad/column';
-import { DeepReadonly } from 'utility-types';
-import { Interpreter, Time } from '..';
+import {
+  count,
+  first,
+  firstOrUndefined,
+  from,
+  memoizing,
+  slice,
+} from '@decipad/generator-utils';
+import { Result, Time } from '..';
 import { addTime, cleanDate } from '../date';
 import { Dimension, EmptyColumn, lowLevelGet } from '../lazy';
 import { filterUnzipped } from '../utils';
@@ -19,11 +26,15 @@ import {
   isColumnLike,
   getColumnLike,
   ColumnLikeValue,
+  ValueGeneratorFunction,
 } from './types';
+import { columnValueToResultValue } from './columnValueToResultValue';
+import { columnValueToValueGeneratorFunction } from './columnValueToValueGeneratorFunction';
+import { OneResult } from '../result';
 
 export const UnknownValue: Value = {
-  getData() {
-    return Unknown;
+  async getData() {
+    return Promise.resolve(Unknown);
   },
 };
 
@@ -60,8 +71,8 @@ export class NumberValue implements Value {
     }
   }
 
-  getData() {
-    return this.value;
+  async getData() {
+    return Promise.resolve(this.value);
   }
 
   static fromValue(value: number | bigint | DeciNumber): NumberValue {
@@ -79,8 +90,8 @@ export class StringValue implements Value {
     return new StringValue(value);
   }
 
-  getData() {
-    return this.value;
+  async getData() {
+    return Promise.resolve(this.value);
   }
 }
 
@@ -94,8 +105,8 @@ export class BooleanValue implements Value {
     return new BooleanValue(value);
   }
 
-  getData() {
-    return this.value;
+  async getData() {
+    return Promise.resolve(this.value);
   }
 }
 
@@ -115,23 +126,23 @@ export class DateValue implements Value {
     return new DateValue(cleanDate(date, specificity), specificity);
   }
 
-  getData() {
-    return this.moment;
+  async getData() {
+    return Promise.resolve(this.moment);
   }
 
   /**
    * Dates such as month, day and year, have a start and end. getData() gets us the first millisecond of that range. getEnd gets us the last.
    */
-  getEnd() {
-    const end = addTime(this.moment, this.specificity, 1n);
+  async getEnd() {
+    const end = await addTime(this.moment, this.specificity, 1n);
     if (end == null) {
       return undefined;
     }
     return end - 1n;
   }
 
-  getEndDate() {
-    const moment = this.getEnd();
+  async getEndDate() {
+    const moment = await this.getEnd();
     return new DateValue(moment, this.specificity);
   }
 }
@@ -145,11 +156,11 @@ export class Range implements Value {
     this.end = end;
   }
 
-  static fromBounds(start: Value, end: Value): Range {
+  static async fromBounds(start: Value, end: Value): Promise<Range> {
     if (start instanceof DateValue && end instanceof DateValue) {
       return new Range({
         start,
-        end: end.getEndDate(),
+        end: await end.getEndDate(),
       });
     } else if (start instanceof NumberValue && end instanceof NumberValue) {
       return new Range({ start, end });
@@ -160,37 +171,40 @@ export class Range implements Value {
     }
   }
 
-  getData() {
-    return [this.start.getData(), this.end.getData()];
+  async getData() {
+    return [await this.start.getData(), await this.end.getData()];
   }
 }
 
 export class Column implements ColumnLikeValue {
-  readonly _values: DeepReadonly<Value[]>;
+  readonly _values: ReadonlyArray<Value>;
 
-  constructor(values: DeepReadonly<Column['values']>) {
+  constructor(values: ReadonlyArray<Value>) {
     this._values = values;
   }
 
-  get dimensions() {
-    const contents = this.values[0];
+  async dimensions() {
+    const contents = this._values[0];
 
     if (isColumnLike(contents)) {
-      return [{ dimensionLength: this.rowCount }, ...contents.dimensions];
+      return [
+        { dimensionLength: await this.rowCount() },
+        ...(await contents.dimensions()),
+      ];
     } else {
-      return [{ dimensionLength: this.rowCount }];
+      return [{ dimensionLength: await this.rowCount() }];
     }
   }
 
-  lowLevelGet(...keys: number[]) {
-    return lowLevelGet(this.atIndex(keys[0]), keys.slice(1));
+  async lowLevelGet(...keys: number[]) {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
   /**
    * Create a column from the values inside. Empty columns return a special value.
    */
   static fromValues(
-    values: DeepReadonly<Value[]>,
+    values: ReadonlyArray<Value>,
     innerDimensions?: Dimension[]
   ): ColumnLikeValue {
     if (values.length === 0) {
@@ -203,20 +217,103 @@ export class Column implements ColumnLikeValue {
     return new Column(values);
   }
 
-  get values() {
-    return this._values;
+  static fromGenerator(gen: ValueGeneratorFunction): ColumnLikeValue {
+    return GeneratorColumn.fromGenerator(gen);
   }
 
-  get rowCount() {
-    return this.values.length;
+  values(start = 0, end = Infinity) {
+    return from(this._values.slice(start, end));
   }
 
-  atIndex(i: number) {
-    return getDefined(this.values[i], `index ${i} out of bounds`);
+  async rowCount() {
+    return Promise.resolve(this._values.length);
   }
 
-  getData(): Interpreter.OneResult[] {
-    return this.values.map((value) => value.getData());
+  async atIndex(i: number): Promise<Value> {
+    return Promise.resolve(
+      getDefined(this._values[i], `no value in position ${i}`)
+    );
+  }
+
+  async getData(): Promise<OneResult> {
+    return Promise.resolve(columnValueToResultValue(this));
+  }
+}
+
+type ValueGenerator = (...args: never) => AsyncGenerator<Value>;
+
+const MAX_GENERATOR_MEMO_ELEMENTS = 10_000;
+
+export class GeneratorColumn implements ColumnLikeValue {
+  private gen: ValueGenerator;
+  private memo: undefined | Array<Value>;
+  private partialMemo: undefined | boolean;
+
+  constructor(gen: ValueGenerator) {
+    this.gen = gen;
+  }
+  indexToLabelIndex?: ((index: number) => Promise<number>) | undefined;
+  async dimensions(): Promise<Dimension[]> {
+    const contents = await firstOrUndefined(this.gen());
+
+    if (isColumnLike(contents)) {
+      return [
+        { dimensionLength: await this.rowCount() },
+        ...(await contents.dimensions()),
+      ];
+    } else {
+      return [{ dimensionLength: await this.rowCount() }];
+    }
+  }
+
+  async getData(): Promise<OneResult> {
+    return columnValueToResultValue(this);
+  }
+
+  async lowLevelGet(...keys: number[]) {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1)).catch(
+      (err) => {
+        console.error('GeneratorColumn lowLevelGet error', err, this.gen);
+        throw err;
+      }
+    );
+  }
+
+  async atIndex(i: number): Promise<Value | undefined> {
+    if (this.memo && i < this.memo.length) {
+      return this.memo[i];
+    }
+    return firstOrUndefined(this.values(i, i + 1));
+  }
+  async rowCount(): Promise<number> {
+    return count(this.values());
+  }
+
+  values(start = 0, end = Infinity) {
+    if (
+      this.memo != null &&
+      (end < this.memo.length || !getDefined(this.partialMemo))
+    ) {
+      return slice(from(this.memo), start, end);
+    }
+    return slice(
+      memoizing(
+        this.gen(),
+        (all, partial) => {
+          this.memo = all;
+          this.partialMemo = partial;
+        },
+        MAX_GENERATOR_MEMO_ELEMENTS
+      ),
+      start,
+      end
+    );
+  }
+
+  static fromGenerator(
+    gen: (start?: number, end?: number) => AsyncGenerator<Value>
+  ) {
+    return new GeneratorColumn(gen);
   }
 }
 
@@ -231,21 +328,24 @@ export class MappedColumn
     this.sourceColumn = source;
   }
 
-  getData(): Interpreter.OneResult[] {
-    return this.values.map((value) => value.getData());
+  async getData(): Promise<Result.OneResult> {
+    return columnValueToResultValue(this);
   }
 
-  lowLevelGet(...keys: number[]) {
-    return lowLevelGet(this.atIndex(keys[0]), keys.slice(1));
+  async lowLevelGet(...keys: number[]) {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
-  get dimensions() {
-    const contents = this.values[0];
+  async dimensions() {
+    const contents = first(this.values());
 
     if (isColumnLike(contents)) {
-      return [{ dimensionLength: this.rowCount }, ...contents.dimensions];
+      return [
+        { dimensionLength: await this.rowCount() },
+        ...(await contents.dimensions()),
+      ];
     } else {
-      return [{ dimensionLength: this.rowCount }];
+      return [{ dimensionLength: await this.rowCount() }];
     }
   }
 
@@ -253,10 +353,13 @@ export class MappedColumn
     column: ColumnLikeValue,
     map: number[]
   ): MappedColumn {
-    return new MappedColumn(Column.fromValues(column.values), map);
+    return new MappedColumn(
+      Column.fromGenerator(columnValueToValueGeneratorFunction(column)),
+      map
+    );
   }
 
-  indexToLabelIndex(mappedIndex: number) {
+  async indexToLabelIndex(mappedIndex: number) {
     return getLabelIndex(this.sourceColumn, this.map[mappedIndex]);
   }
 }
@@ -272,21 +375,24 @@ export class FilteredColumn
     this.sourceColumn2 = column;
   }
 
-  getData(): Interpreter.OneResult[] {
-    return this.values.map((value) => value.getData());
+  async getData(): Promise<Result.OneResult> {
+    return columnValueToResultValue(this);
   }
 
-  lowLevelGet(...keys: number[]) {
-    return lowLevelGet(this.atIndex(keys[0]), keys.slice(1));
+  async lowLevelGet(...keys: number[]) {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
   }
 
-  get dimensions() {
-    const contents = this.values[0];
+  async dimensions() {
+    const contents = first(this.values());
 
     if (isColumnLike(contents)) {
-      return [{ dimensionLength: this.rowCount }, ...contents.dimensions];
+      return [
+        { dimensionLength: await this.rowCount() },
+        ...(await contents.dimensions()),
+      ];
     } else {
-      return [{ dimensionLength: this.rowCount }];
+      return [{ dimensionLength: await this.rowCount() }];
     }
   }
 
@@ -297,7 +403,7 @@ export class FilteredColumn
     return new FilteredColumn(column, map);
   }
 
-  indexToLabelIndex(filteredIndex: number) {
+  async indexToLabelIndex(filteredIndex: number) {
     const sourceIndex = this.getSourceIndex(filteredIndex);
     return getLabelIndex(this.sourceColumn2, sourceIndex);
   }
@@ -319,8 +425,8 @@ export class Table implements Value {
     );
   }
 
-  get tableRowCount(): number | undefined {
-    return this.columns.at(0)?.rowCount;
+  async tableRowCount(): Promise<number | undefined> {
+    return this.columns.at(0)?.rowCount();
   }
 
   static fromMapping(mapping: AnyMapping<ColumnLikeValue>) {
@@ -336,14 +442,20 @@ export class Table implements Value {
     return this.columns[index];
   }
 
-  getData() {
-    return this.columns.map((column) => column.getData());
+  async getData(): Promise<Result.OneResult> {
+    return Promise.all(this.columns.map(async (column) => column.getData()));
   }
 
-  mapColumns(
-    mapFn: (col: ColumnLikeValue, index: number) => ColumnLikeValue
-  ): Table {
-    return Table.fromNamedColumns(this.columns.map(mapFn), this.columnNames);
+  async mapColumns(
+    mapFn: (
+      col: ColumnLikeValue,
+      index: number
+    ) => Promise<ColumnLikeValue> | ColumnLikeValue
+  ): Promise<Table> {
+    return Table.fromNamedColumns(
+      await Promise.all(this.columns.map(mapFn)),
+      this.columnNames
+    );
   }
 
   filterColumns(fn: (colName: string, col: ColumnLikeValue) => boolean): Table {
@@ -352,6 +464,9 @@ export class Table implements Value {
     return Table.fromNamedColumns(columns, names);
   }
 }
+
+export const isTableValue = (v: Value | undefined | null): v is Table =>
+  v instanceof Table;
 
 export class Row implements Value {
   cells: Value[];
@@ -374,30 +489,48 @@ export class Row implements Value {
     return this.cells[index];
   }
 
-  getData() {
-    return this.cells.map((v) => v.getData());
+  async getData() {
+    return Promise.all(this.cells.map(async (v) => v.getData()));
   }
 }
 
-export type FromJSArg =
+type ValidFromJSArg =
   | string
   | boolean
   | number
   | bigint
   | Date
   | DeciNumber
-  | FromJSArg[];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  | Function;
+
+export type FromJSArg = symbol | undefined | FromJSArg[] | ValidFromJSArg;
+
+const invalidTypes = new Set(['symbol']);
+
+const validateFromJsArg = (thing: FromJSArg): thing is ValidFromJSArg => {
+  if (thing == null) {
+    throw new TypeError('result cannot be null or undefined');
+  }
+  if (invalidTypes.has(typeof thing)) {
+    throw new TypeError('result cannot be symbol or function');
+  }
+  return true;
+};
 
 export const fromJS = (thing: FromJSArg): Value => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
-  if (thing == null) {
-    throw new TypeError('result cannot be null');
+  if (!validateFromJsArg(thing)) {
+    throw new TypeError(`invalid result ${thing?.toString()}`);
+  }
+  if (typeof thing === 'function') {
+    return Column.fromGenerator(thing as ValueGeneratorFunction);
   }
   if (!Array.isArray(thing)) {
     return Scalar.fromValue(thing);
-  } else if (thing.length === 0) {
-    return Column.fromValues([], []);
-  } else {
-    return Column.fromValues(thing.map((t) => fromJS(t)));
   }
+  if (thing.length === 0) {
+    return Column.fromValues([], []);
+  }
+  return Column.fromValues(thing.map((t) => fromJS(t)));
 };

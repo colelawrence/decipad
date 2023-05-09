@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import produce from 'immer';
 import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
-import { getDefined, zip } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
+import { sort } from '@decipad/column';
 import { RuntimeError, Realm } from '../../interpreter';
 import { getInstanceof } from '../../utils';
 import { InferError, Type, buildType as t } from '../../type';
@@ -14,15 +15,16 @@ import { Context } from '../../infer';
 
 import { simpleExpressionEvaluate } from '../../interpreter/simple-expression-evaluate';
 import { compare } from '../../compare';
+import { coherceToFraction } from '../../utils/coherceToFraction';
 
-const binopFunctor = ([a, b]: Type[]) =>
+const binopFunctor = async ([a, b]: Type[]) =>
   Type.combine(a.isScalar('number'), b.sameAs(a));
 
 const removeUnit = produce((t: Type) => {
   if (t.type === 'number') t.unit = null;
 });
 
-const exponentiationFunctor = (
+const exponentiationFunctor = async (
   [a, b]: Type[],
   values?: AST.Expression[],
   context?: Context
@@ -34,7 +36,7 @@ const exponentiationFunctor = (
   if (a.unit && a.unit.length > 0) {
     const realm = new Realm(ctx);
     try {
-      u = simpleExpressionEvaluate(realm, bValue).getData();
+      u = await (await simpleExpressionEvaluate(realm, bValue)).getData();
     } catch (err) {
       if (err instanceof InferError) {
         return t.impossible(err);
@@ -42,7 +44,7 @@ const exponentiationFunctor = (
         throw err;
       }
     }
-    return binopFunctor([a, removeUnit(b)]).mapType(
+    return (await binopFunctor([a, removeUnit(b)])).mapType(
       produce((arg1) => {
         for (const unit of arg1.unit ?? []) {
           unit.exp = (unit.exp || N(1)).mul(u);
@@ -54,25 +56,21 @@ const exponentiationFunctor = (
   }
 };
 
-const firstArgumentReducedFunctor = ([t]: Type[]) => t.reduced();
+const firstArgumentReducedFunctor = async ([t]: Type[]) => t.reduced();
 
-const coherceToFraction = (value: unknown): DeciNumber => {
-  return getInstanceof(value, DeciNumber);
-};
-
-const max = ([value]: Value[]): Value => {
+const max = async ([value]: Value[]): Promise<Value> => {
   let max: Value | undefined;
   if (!isColumnLike(value)) {
-    return value;
+    return Promise.resolve(value);
   }
-  for (let i = 0; i < value.rowCount; i += 1) {
-    const cellValue = value.atIndex(i);
+
+  for await (const val of value.values()) {
     if (max) {
-      if (compare(cellValue, max) > 0) {
-        max = cellValue;
+      if (compare(val, max) > 0) {
+        max = val;
       }
     } else {
-      max = cellValue;
+      max = val;
     }
   }
   if (max == null) {
@@ -81,19 +79,18 @@ const max = ([value]: Value[]): Value => {
   return max;
 };
 
-const min = ([value]: Value[]): Value => {
+const min = async ([value]: Value[]): Promise<Value> => {
   let min: Value | undefined;
   if (!isColumnLike(value)) {
-    return value;
+    return Promise.resolve(value);
   }
-  for (let i = 0; i < value.rowCount; i += 1) {
-    const cellValue = value.atIndex(i);
+  for await (const val of value.values()) {
     if (min) {
-      if (compare(cellValue, min) < 0) {
-        min = cellValue;
+      if (compare(val, min) < 0) {
+        min = val;
       }
     } else {
-      min = cellValue;
+      min = val;
     }
   }
   if (min == null) {
@@ -102,30 +99,37 @@ const min = ([value]: Value[]): Value => {
   return min;
 };
 
-const average = ([value]: Value[]): Value => {
-  const fractions = (value.getData() as DeciNumber[]).map(coherceToFraction);
-  if (fractions.length === 0) {
-    throw new RuntimeError('average needs at least one element');
+const average = async ([value]: Value[]): Promise<Value> => {
+  let acc = ZERO;
+  if (!isColumnLike(value)) {
+    return Promise.resolve(value);
   }
-  return fromJS(
-    fractions.reduce((acc, n) => acc.add(n), ZERO).div(N(fractions.length))
-  );
+  let count = 0n;
+  for await (const val of value.values()) {
+    count += 1n;
+    acc = acc.add(coherceToFraction(await val.getData()));
+  }
+  return Scalar.fromValue(acc.div(N(count)));
 };
 
-const median = ([value]: Value[]): Value => {
-  const fractions = (value.getData() as DeciNumber[]).map(coherceToFraction);
-  if (fractions.length === 0) {
-    throw new RuntimeError('median needs at least one element');
+const median = async ([value]: Value[]): Promise<Value> => {
+  if (!isColumnLike(value)) {
+    return Promise.resolve(value);
   }
-  const sortedValues = fractions.sort((f1, f2) => f1.compare(f2));
-  const { length } = sortedValues;
+
+  const sortedValues = await sort(value, compare);
+  const length = await sortedValues.rowCount();
   const rightCenterPos = Math.floor(length / 2);
-  const rightCenter = sortedValues[rightCenterPos];
+  const rightCenter = await getDefined(
+    await sortedValues.atIndex(rightCenterPos)
+  ).getData();
   if (length % 2 === 1) {
     return fromJS(rightCenter);
   }
-  const leftCenter = sortedValues[rightCenterPos - 1];
-  return fromJS(leftCenter.add(rightCenter).div(TWO));
+  const leftCenter = coherceToFraction(
+    await getDefined(await sortedValues.atIndex(rightCenterPos - 1)).getData()
+  );
+  return fromJS(leftCenter.add(coherceToFraction(rightCenter)).div(TWO));
 };
 
 const secondArgIsPercentage = (types?: Type[]) =>
@@ -135,7 +139,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   abs: {
     argCount: 1,
     noAutoconvert: true,
-    fn: ([n]) => Math.abs(n as number),
+    fnValues: async ([n]) =>
+      Scalar.fromValue(coherceToFraction(await n.getData()).abs()),
     functionSignature: 'number:R -> R',
     explanation: 'Absolute value of a number.',
     formulaGroup: 'Numbers',
@@ -193,31 +198,32 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     argCount: 2,
     noAutoconvert: true,
     argCardinalities: [2, 2],
-    fnValues: ([_numbers, _bools]: Value[]) => {
-      const numbers = _numbers.getData() as DeciNumber[];
-      const bools = _bools.getData() as boolean[];
-      if (numbers.length === 0) {
-        throw new RuntimeError(
-          'average: cannot compute average on zero elements'
-        );
+    fnValues: async ([numbers, bools]: Value[]) => {
+      let acc = ZERO;
+      if (!isColumnLike(numbers)) {
+        return numbers;
       }
-
-      let count = ZERO;
-      let sum = N(0);
-
-      for (const [bool, num] of zip(bools, numbers)) {
-        if (bool) {
-          count = count.add(ONE);
-          sum = sum.add(num);
+      if (!isColumnLike(bools)) {
+        throw new Error('expected booleans to be a column');
+      }
+      const boolsIt = bools.values();
+      let count = 0n;
+      for await (const val of numbers.values()) {
+        const b = await boolsIt.next();
+        if (b.done) {
+          throw new Error('booleans and values should have the same length');
+        }
+        if (await b.value.getData()) {
+          count += 1n;
+          acc = acc.add(coherceToFraction(await val.getData()));
         }
       }
-
-      return fromJS(sum.div(count));
+      return Scalar.fromValue(acc.div(N(count)));
     },
-    functor: ([numbers, booleans]) =>
+    functor: async ([numbers, booleans]) =>
       Type.combine(
-        booleans.reduced().isScalar('boolean'),
-        numbers.reduced().isScalar('number')
+        (await booleans.reduced()).isScalar('boolean'),
+        (await numbers.reduced()).isScalar('number')
       ),
     explanation: 'Averages all the elements of a column that match condition.',
     formulaGroup: 'Columns',
@@ -242,7 +248,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fn: ([n]) => {
       let result: DeciNumber | undefined;
       try {
-        result = getInstanceof(n, DeciNumber).pow(N(1, 2));
+        result = coherceToFraction(n).pow(N(1, 2));
       } catch (err) {
         console.error(err);
       }
@@ -259,7 +265,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
       }
       return result;
     },
-    functor: ([n]) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
+    functor: async ([n]) => Type.combine(n.isScalar('number'), n.divideUnit(2)),
     explanation: 'Square root of your number.',
     formulaGroup: 'Numbers',
     syntax: 'sqrt(Number)',
@@ -280,8 +286,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     fnValues: (() => {
       const lookupTable = Array(100_000);
 
-      return ([n]) => {
-        const frac = getInstanceof(n.getData(), DeciNumber);
+      return async ([n]) => {
+        const frac = getInstanceof(await n.getData(), DeciNumber);
 
         if (frac.compare(ZERO) < 0) {
           throw new RuntimeError(
@@ -328,26 +334,30 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     [
       {
         argTypes: ['number', 'number'],
-        fnValues: ([n1, n2], types) => {
+        fnValues: async ([n1, n2], types) => {
           if (secondArgIsPercentage(types)) {
             return Scalar.fromValue(
-              (n1.getData() as DeciNumber).mul(
-                (n2.getData() as DeciNumber).add(ONE)
+              coherceToFraction(await n1.getData()).mul(
+                coherceToFraction(await n2.getData()).add(ONE)
               )
             );
           }
 
           return Scalar.fromValue(
-            (n1.getData() as DeciNumber).add(n2.getData() as DeciNumber)
+            coherceToFraction(await n1.getData()).add(
+              coherceToFraction(await n2.getData())
+            )
           );
         },
         functor: binopFunctor,
       },
       {
         argTypes: ['string', 'string'],
-        fnValues: ([n1, n2]) =>
-          Scalar.fromValue(String(n1.getData()) + String(n2.getData())),
-        functor: ([a, b]) =>
+        fnValues: async ([n1, n2]) =>
+          Scalar.fromValue(
+            String(await n1.getData()) + String(await n2.getData())
+          ),
+        functor: async ([a, b]) =>
           Type.combine(a.isScalar('string'), b.isScalar('string')),
       },
       ...dateOverloads['+'],
@@ -360,17 +370,19 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     [
       {
         argTypes: ['number', 'number'],
-        fnValues: ([a, b], types) => {
+        fnValues: async ([a, b], types) => {
           if (secondArgIsPercentage(types)) {
             return Scalar.fromValue(
-              (a.getData() as DeciNumber).mul(
-                ONE.sub(b.getData() as DeciNumber)
+              coherceToFraction(await a.getData()).mul(
+                ONE.sub((await b.getData()) as DeciNumber)
               )
             );
           }
 
           return Scalar.fromValue(
-            (a.getData() as DeciNumber).sub(b.getData() as DeciNumber)
+            coherceToFraction(await a.getData()).sub(
+              (await b.getData()) as DeciNumber
+            )
           );
         },
         functor: binopFunctor,
@@ -389,11 +401,11 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '*': {
     argCount: 2,
     fn: ([a, b]) => getInstanceof(a, DeciNumber).mul(b),
-    functor: ([a, b]) =>
+    functor: async ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
         b.isScalar('number'),
-        a.sharePercentage(b).multiplyUnit(b.unit)
+        (await a.sharePercentage(b)).multiplyUnit(b.unit)
       ),
     operatorKind: 'infix',
   },
@@ -410,11 +422,11 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   '/': {
     argCount: 2,
     fn: ([a, b]) => getInstanceof(a, DeciNumber).div(b),
-    functor: ([a, b]) =>
+    functor: async ([a, b]) =>
       Type.combine(
         a.isScalar('number'),
         b.isScalar('number'),
-        a.sharePercentage(b).divideUnit(b.unit)
+        (await a.sharePercentage(b)).divideUnit(b.unit)
       ),
     operatorKind: 'infix',
   },

@@ -1,6 +1,8 @@
 import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
 import { unnestTableRows, DimensionExplanation } from '@decipad/computer';
+import { all as allElements } from '@decipad/generator-utils';
+import { useResolved } from '@decipad/react-utils';
 import { cssVar, setCssVar } from '../../primitives';
 import { TableData } from '../../atoms';
 import { TableRow } from '../../molecules';
@@ -28,7 +30,7 @@ const footerRowStyles = css({
 
 const MAX_CELLS_PER_PAGE = 10;
 
-type LabeledColumnResultProps = CodeResultProps<'column'> & {
+type LabeledColumnResultProps = CodeResultProps<'materialized-column'> & {
   labels: DimensionExplanation[];
 };
 
@@ -38,10 +40,16 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
   element,
   labels,
 }) => {
-  const all = useMemo(
-    () => Array.from(unnestTableRows(labels, { type, value })),
-    [labels, type, value]
-  );
+  const all =
+    useResolved(
+      useMemo(
+        async () =>
+          Array.from(
+            await allElements(unnestTableRows(labels, { type, value }))
+          ),
+        [labels, type, value]
+      )
+    ) ?? [];
 
   const { page, offset, setPage } = useSimplePagination({
     all,

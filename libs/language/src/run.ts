@@ -1,9 +1,10 @@
 import { AnyMapping } from '@decipad/utils';
-import { AST, isExpression, Type } from '.';
+import { AST, isExpression, Type, validateResult } from '.';
 import { Context, inferBlock, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
-import { OneResult, Result, validateResult } from './result';
+import { OneResult, Result } from './result';
+import { materializeOneResult } from './utils/materializeOneResult';
 
 export const parseBlockOrThrow = (
   source: string,
@@ -53,6 +54,8 @@ interface RunAstOptions {
   externalData?: AnyMapping<Result>;
   ctx?: Context;
   throwOnError?: boolean;
+  doNotValidateResults?: boolean;
+  doNotMaterialiseResults?: boolean;
 }
 
 interface RunAstResult {
@@ -66,18 +69,31 @@ export const runAST = async (
     externalData,
     ctx = makeContext({ externalData }),
     throwOnError,
+    doNotValidateResults,
+    doNotMaterialiseResults,
   }: RunAstOptions = {}
 ): Promise<RunAstResult> => {
-  const type = inferBlock(block, ctx);
+  const type = await inferBlock(block, ctx);
 
   const erroredType = type.errorCause != null ? type : null;
   if (erroredType && throwOnError) {
     throw new TypeError(`Type error: ${JSON.stringify(erroredType)}`);
   }
 
-  const [value] = await run([block], [0], new Realm(ctx));
+  const results = await run(
+    [block],
+    [0],
+    new Realm(ctx),
+    doNotMaterialiseResults
+  );
+  if (doNotMaterialiseResults) {
+    return { type, value: results[0] };
+  }
+  const [value] = await Promise.all(results.map(materializeOneResult));
 
-  validateResult(type, value);
+  if (!doNotValidateResults) {
+    validateResult(type, value);
+  }
 
   return { type, value };
 };

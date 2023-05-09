@@ -62,7 +62,7 @@ export const getAttachmentContent = async (
   return content;
 };
 
-export async function getCreateAttachmentForm(
+export function getCreateAttachmentForm(
   padId: string,
   fileName: string,
   fileType: string
@@ -99,7 +99,7 @@ export async function getCreateAttachmentForm(
   });
 }
 
-export const getSize = async (fileName: string): Promise<number> => {
+export const getSize = (fileName: string): Promise<number> => {
   return new Promise((resolve, reject) => {
     try {
       s3.headObject(
@@ -125,7 +125,7 @@ export const getSize = async (fileName: string): Promise<number> => {
   });
 };
 
-export const getURL = async (fileName: string): Promise<string> => {
+export const getURL = (fileName: string): Promise<string> => {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
@@ -149,7 +149,7 @@ export const remove = async (fileName: string) => {
   });
 };
 
-export const duplicate = async (from: string, to: string) => {
+export const duplicate = (from: string, to: string) => {
   return s3
     .copyObject({
       Bucket,

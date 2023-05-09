@@ -38,6 +38,7 @@
     "format": "libs/format",
     "fraction": "libs/fraction",
     "frontend": "apps/frontend",
+    "generator-utils": "libs/generator-utils",
     "graphql-client": "libs/graphql-client",
     "graphqlresource": "libs/graphqlresource",
     "graphqlserver": "libs/graphqlserver",

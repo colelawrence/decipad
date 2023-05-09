@@ -1,6 +1,12 @@
-import type { Computer, Result, SerializedType } from '@decipad/computer';
-import { cleanDate } from '@decipad/computer';
+import {
+  Computer,
+  Result,
+  SerializedType,
+  memoizedColumnResultGenerator,
+  cleanDate,
+} from '@decipad/computer';
 import { varNamify } from '@decipad/utils';
+import { slice } from '@decipad/generator-utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
 import { inferColumn } from './inferColumn';
 import { parseDate } from './parseDate';
@@ -31,53 +37,63 @@ const withColumnNames = (
   };
 };
 
-const columnToValue = (
+const columnToValue = async function* columnToValue(
   type: SerializedType,
   value: SpreadsheetColumn
-): Result.OneResult[] => {
-  return value.map((elem) => {
+): AsyncGenerator<Result.OneResult> {
+  for (const elem of value) {
     switch (type?.kind) {
       case 'number':
-        return fasterNumber(elem as string | number);
+        yield fasterNumber(elem as string | number);
+        break;
       case 'date': {
         const parsed = parseDate(elem as string, type.date);
         if (!parsed) {
-          return undefined;
+          yield undefined;
+        } else {
+          yield cleanDate(BigInt(parsed.date.getTime()), type.date);
         }
-        return cleanDate(BigInt(parsed.date.getTime()), type.date);
+        break;
       }
       case 'string':
-        return (elem as string) ?? '';
+        yield (elem as string) ?? '';
+        break;
       case 'boolean':
-        return parseBoolean(elem as string);
+        yield parseBoolean(elem as string);
+        break;
       default:
-        return elem.toString();
+        yield elem.toString();
     }
-  });
+  }
 };
 
 const tableToValue = (
   columnTypes: SerializedType[],
   columnValues: SpreadsheetColumn[]
-): Result.OneResult[][] => {
+): Result.Result<'table'>['value'] => {
   return columnValues.map((col, colIndex) =>
-    columnToValue(columnTypes[colIndex], col)
+    memoizedColumnResultGenerator((start = 0, end = Infinity) =>
+      slice(columnToValue(columnTypes[colIndex], col), start, end)
+    )
   );
 };
 
-export const inferTable = (
+export const inferTable = async (
   computer: Computer,
   data: Sheet,
   options: InferTableOptions
-): Result.Result<'table'> => {
+): Promise<Result.Result<'table'>> => {
   const { columnNames, columnValues } = withColumnNames(data, options);
-  const columnTypes = columnValues.map(
-    (col, colIndex): SerializedType =>
-      (options.columnTypeCoercions?.[colIndex] as SerializedType) ??
-      inferColumn(computer, col, {
-        doNotTryExpressionNumbersParse: options.doNotTryExpressionNumbersParse,
-        userType: options.columnTypeCoercions?.[colIndex],
-      })
+  const columnTypes = await Promise.all(
+    columnValues.map(
+      async (col, colIndex): Promise<SerializedType> =>
+        (options.columnTypeCoercions?.[colIndex] as SerializedType) ??
+        inferColumn(computer, col, {
+          doNotTryExpressionNumbersParse:
+            options.doNotTryExpressionNumbersParse,
+          userType: options.columnTypeCoercions?.[colIndex],
+        })
+    )
   );
 
   return {

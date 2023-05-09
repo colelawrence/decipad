@@ -56,6 +56,8 @@ export * from './useElementAbove';
 export * from './usePathMutatorCallback';
 export * from './useEnsureValidVariableName';
 export * from './useIsOffline';
+export * from './useMaterializedColumnResult';
+export * from './useMaterializedColumnResultValue';
 export * from './useNodePath';
 export * from './useNodeText';
 export * from './useSelection';

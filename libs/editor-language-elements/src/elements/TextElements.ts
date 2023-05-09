@@ -24,7 +24,7 @@ export const Paragraph: InteractiveLanguageElement = {
   ],
   isStructural: true,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor, _computer, element) => {
+    (_editor, _computer, element) => {
       return element.children.flatMap((child, index) => {
         if (MARK_MAGICNUMBER in child) {
           return parseElementAsSourceCode(

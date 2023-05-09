@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { N } from '@decipad/number';
+import { PromiseOrType } from '@decipad/utils';
 import { makeContext } from '..';
 import { Type, buildType as t, Unit } from '../type';
-import { U } from '../utils';
 
 import { callBuiltinFunctor } from './callBuiltinFunctor';
+import { U } from '../utils';
 
 const meter: Unit = {
   unit: 'meter',
@@ -22,93 +24,100 @@ const second: Unit = {
 const nilCtx = makeContext();
 
 describe('callBuiltin', () => {
-  it('dateCmpFunctor', () => {
+  it('dateCmpFunctor', async () => {
     expect(
-      callBuiltinFunctor(nilCtx, '==', [t.date('month'), t.date('month')])
+      await callBuiltinFunctor(nilCtx, '==', [t.date('month'), t.date('month')])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(nilCtx, '>=', [t.date('day'), t.date('month')])
+      (await callBuiltinFunctor(nilCtx, '>=', [t.date('day'), t.date('month')]))
         .errorCause
     ).not.toBeNull();
   });
 
-  it('contains', () => {
+  it('contains', async () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [
+      await callBuiltinFunctor(nilCtx, 'contains', [
         t.range(t.number([meter])),
         t.number(),
       ])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [
+      await callBuiltinFunctor(nilCtx, 'contains', [
         t.range(t.number([meter])),
         t.number([meter]),
       ])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [
+      await callBuiltinFunctor(nilCtx, 'contains', [
         t.column(t.range(t.number([meter]))),
         t.number([meter]),
       ])
     ).toEqual(t.column(t.boolean()));
 
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [
+      await callBuiltinFunctor(nilCtx, 'contains', [
         t.range(t.number([meter])),
         t.column(t.number([meter])),
       ])
     ).toEqual(t.column(t.boolean()));
 
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [
-        t.range(t.number([meter])),
-        t.number([second]),
-      ]).errorCause
+      (
+        await callBuiltinFunctor(nilCtx, 'contains', [
+          t.range(t.number([meter])),
+          t.number([second]),
+        ])
+      ).errorCause
     ).not.toBeNull();
 
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [t.date('month'), t.date('day')])
+      await callBuiltinFunctor(nilCtx, 'contains', [
+        t.date('month'),
+        t.date('day'),
+      ])
     ).toEqual(t.boolean());
 
     expect(
-      callBuiltinFunctor(nilCtx, 'contains', [
-        t.number([meter]),
-        t.range(t.number([meter])),
-      ]).errorCause
+      (
+        await callBuiltinFunctor(nilCtx, 'contains', [
+          t.number([meter]),
+          t.range(t.number([meter])),
+        ])
+      ).errorCause
     ).not.toBeNull();
   });
 
-  it('cat', () => {
+  it('cat', async () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'cat', [
+      await callBuiltinFunctor(nilCtx, 'cat', [
         t.column(t.number([meter])),
         t.column(t.number([meter])),
       ])
     ).toEqual(t.column(t.number([meter])));
   });
 
-  it('first', () => {
+  it('first', async () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'first', [t.column(t.number([meter]))])
+      await callBuiltinFunctor(nilCtx, 'first', [t.column(t.number([meter]))])
     ).toEqual(t.number([meter]));
   });
 
-  it('last', () => {
+  it('last', async () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'last', [t.column(t.number([meter]))])
+      await callBuiltinFunctor(nilCtx, 'last', [t.column(t.number([meter]))])
     ).toEqual(t.number([meter]));
   });
 
-  it('errors', () => {
+  it('errors', async () => {
     expect(
-      callBuiltinFunctor(nilCtx, 'unknownFn', [t.number()]).errorCause
+      (await callBuiltinFunctor(nilCtx, 'unknownFn', [t.number()])).errorCause
     ).not.toBeNull();
 
     expect(
-      callBuiltinFunctor(nilCtx, 'if', [t.number()]).errorCause
+      (await callBuiltinFunctor(nilCtx, 'if', [t.number()])).errorCause
     ).not.toBeNull();
   });
 });
@@ -117,110 +126,116 @@ interface TestBuilderArgs {
   type: 'string' | 'boolean' | 'number' | 'month' | 'year';
   unit?: Unit[] | null;
 }
-type Builder = (a: TestBuilderArgs) => Type;
+type Builder = (a: TestBuilderArgs) => PromiseOrType<Type>;
 // build, build2, build3, and buildOut will switch dimensionality to test propagation
 type Test = (
   build: Builder,
   build2: Builder,
   build3: Builder,
   buildOut: Builder
-) => void;
+) => PromiseOrType<void>;
 
 const typeDimTests: Record<string, Test> = {
-  binopFunctor: (build, build2, _, buildOut) => {
-    const n = build({ type: 'number' });
-    const n2 = build2({ type: 'number' });
-    const out = buildOut({ type: 'number' });
+  binopFunctor: async (build, build2, _, buildOut) => {
+    const n = await build({ type: 'number' });
+    const n2 = await build2({ type: 'number' });
+    const out = await buildOut({ type: 'number' });
 
-    expect(callBuiltinFunctor(nilCtx, '+', [n, n2])).toEqual(out);
+    expect(await callBuiltinFunctor(nilCtx, '+', [n, n2])).toEqual(out);
   },
-  cmpFunctor: (build, build2, _, buildOut) => {
-    const n = build({ type: 'number' });
-    const n2 = build2({ type: 'number' });
-    const out = buildOut({ type: 'boolean' });
+  cmpFunctor: async (build, build2, _, buildOut) => {
+    const n = await build({ type: 'number' });
+    const n2 = await build2({ type: 'number' });
+    const out = await buildOut({ type: 'boolean' });
 
-    expect(callBuiltinFunctor(nilCtx, '>', [n, n2])).toEqual(out);
+    expect(await callBuiltinFunctor(nilCtx, '>', [n, n2])).toEqual(out);
 
     expect(
-      callBuiltinFunctor(nilCtx, '>', [
-        build({ type: 'number', unit: [meter] }),
-        build2({ type: 'number', unit: [meter] }),
+      await callBuiltinFunctor(nilCtx, '>', [
+        await build({ type: 'number', unit: [meter] }),
+        await build2({ type: 'number', unit: [meter] }),
       ])
     ).toEqual(out);
 
     expect(
-      callBuiltinFunctor(nilCtx, '>', [
-        build({ type: 'number', unit: [meter] }),
-        build2({ type: 'number', unit: null }),
+      await callBuiltinFunctor(nilCtx, '>', [
+        await build({ type: 'number', unit: [meter] }),
+        await build2({ type: 'number', unit: null }),
       ])
     ).toEqual(out);
 
     expect(
-      callBuiltinFunctor(nilCtx, '>', [
-        build({ type: 'number', unit: [meter] }),
-        build2({ type: 'number', unit: [second] }),
-      ]).errorCause?.spec
+      (
+        await callBuiltinFunctor(nilCtx, '>', [
+          await build({ type: 'number', unit: [meter] }),
+          await build2({ type: 'number', unit: [second] }),
+        ])
+      ).errorCause?.spec
     ).toHaveProperty('expectedUnit', [[meter], [second]]);
   },
-  if: (build, build2, build3, buildOut) => {
+  if: async (build, build2, build3, buildOut) => {
     expect(
-      callBuiltinFunctor(nilCtx, 'if', [
-        build({ type: 'boolean' }),
-        build2({ type: 'number' }),
-        build3({ type: 'number' }),
+      await callBuiltinFunctor(nilCtx, 'if', [
+        await build({ type: 'boolean' }),
+        await build2({ type: 'number' }),
+        await build3({ type: 'number' }),
       ])
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      callBuiltinFunctor(nilCtx, 'if', [
-        build({ type: 'boolean' }),
-        build2({ type: 'string' }),
-        build3({ type: 'number' }),
-      ]).errorCause
+      (
+        await callBuiltinFunctor(nilCtx, 'if', [
+          await build({ type: 'boolean' }),
+          await build2({ type: 'string' }),
+          await build3({ type: 'number' }),
+        ])
+      ).errorCause
     ).not.toBeNull();
   },
-  '+': (build, build2, _, buildOut) => {
+  '+': async (build, build2, _, buildOut) => {
     expect(
-      callBuiltinFunctor(nilCtx, '+', [
-        build({ type: 'number' }),
-        build2({ type: 'number' }),
+      await callBuiltinFunctor(nilCtx, '+', [
+        await build({ type: 'number' }),
+        await build2({ type: 'number' }),
       ])
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      callBuiltinFunctor(nilCtx, '+', [
-        build({ type: 'month' }),
-        build2({ type: 'number', unit: U('month') }),
+      await callBuiltinFunctor(nilCtx, '+', [
+        await build({ type: 'month' }),
+        await build2({ type: 'number', unit: U('month') }),
       ])
     ).toEqual(buildOut({ type: 'month' }));
 
     expect(
-      callBuiltinFunctor(nilCtx, '+', [
-        build2({ type: 'number', unit: U('month') }),
-        build({ type: 'month' }),
+      await callBuiltinFunctor(nilCtx, '+', [
+        await build2({ type: 'number', unit: U('month') }),
+        await build({ type: 'month' }),
       ])
     ).toEqual(buildOut({ type: 'month' }));
   },
-  '-': (build, build2, _, buildOut) => {
+  '-': async (build, build2, _, buildOut) => {
     expect(
-      callBuiltinFunctor(nilCtx, '-', [
-        build({ type: 'number' }),
-        build2({ type: 'number' }),
+      await callBuiltinFunctor(nilCtx, '-', [
+        await build({ type: 'number' }),
+        await build2({ type: 'number' }),
       ])
     ).toEqual(buildOut({ type: 'number' }));
 
     expect(
-      callBuiltinFunctor(nilCtx, '-', [
-        build({ type: 'month' }),
-        build2({ type: 'number', unit: U('month') }),
+      await callBuiltinFunctor(nilCtx, '-', [
+        await build({ type: 'month' }),
+        await build2({ type: 'number', unit: U('month') }),
       ])
     ).toEqual(buildOut({ type: 'month' }));
 
     expect(
-      callBuiltinFunctor(nilCtx, '-', [
-        build2({ type: 'number', unit: U('month') }),
-        build({ type: 'month' }),
-      ]).errorCause
+      (
+        await callBuiltinFunctor(nilCtx, '-', [
+          await build2({ type: 'number', unit: U('month') }),
+          await build({ type: 'month' }),
+        ])
+      ).errorCause
     ).not.toBeNull();
   },
 };
@@ -239,33 +254,36 @@ for (const [testName, testFn] of Object.entries(typeDimTests)) {
   const build2D = (args: TestBuilderArgs) => t.column(build1D(args));
   const build3D = (args: TestBuilderArgs) => t.column(build2D(args));
 
-  /* eslint-disable jest/expect-expect */
-  it(`${testName} - Scalar`, () => {
-    testFn(buildScalar, buildScalar, buildScalar, buildScalar);
-  });
+  // eslint-disable-next-line jest/valid-title
+  describe(testName, () => {
+    /* eslint-disable jest/expect-expect */
+    it(`${testName} - Scalar`, async () => {
+      await testFn(buildScalar, buildScalar, buildScalar, buildScalar);
+    });
 
-  it(`${testName} - 1D`, () => {
-    testFn(build1D, build1D, build1D, build1D);
-  });
+    it(`${testName} - 1D`, async () => {
+      await testFn(build1D, build1D, build1D, build1D);
+    });
 
-  it(`${testName} - Scalar mixed with 1D`, () => {
-    testFn(buildScalar, build1D, build1D, build1D);
-  });
+    it(`${testName} - Scalar mixed with 1D`, async () => {
+      await testFn(buildScalar, build1D, build1D, build1D);
+    });
 
-  it(`${testName} - 2D`, () => {
-    testFn(build2D, build2D, build2D, build2D);
-  });
+    it(`${testName} - 2D`, async () => {
+      await testFn(build2D, build2D, build2D, build2D);
+    });
 
-  it(`${testName} - Scalar mixed with 2D`, () => {
-    testFn(buildScalar, build2D, build2D, build2D);
-  });
+    it(`${testName} - Scalar mixed with 2D`, async () => {
+      await testFn(buildScalar, build2D, build2D, build2D);
+    });
 
-  it(`${testName} - Scalar mixed with 3D`, () => {
-    testFn(buildScalar, build3D, build3D, build3D);
-  });
+    it(`${testName} - Scalar mixed with 3D`, async () => {
+      await testFn(buildScalar, build3D, build3D, build3D);
+    });
 
-  it(`${testName} - 1D mixed with 3D`, () => {
-    testFn(build1D, build3D, build3D, build3D);
+    it(`${testName} - 1D mixed with 3D`, async () => {
+      await testFn(build1D, build3D, build3D, build3D);
+    });
+    /* eslint-enable jest/expect-expect */
   });
-  /* eslint-enable jest/expect-expect */
 }

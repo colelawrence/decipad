@@ -4,7 +4,7 @@ import { typeSnapshotSerializer } from '../../testUtils';
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 describe('extract operators', () => {
-  it('extract day', async () => {
+  it('pick from date', async () => {
     expect(await runCode('pick(date(2020-03-15), day)')).toMatchInlineSnapshot(`
       Object {
         "type": number,

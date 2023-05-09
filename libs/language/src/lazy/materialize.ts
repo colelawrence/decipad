@@ -1,27 +1,49 @@
-import { OneResult } from '../interpreter/interpreter-types';
+import { empty, from } from '@decipad/generator-utils';
+import { PromiseOrType } from '@decipad/utils';
 import type { Dimension, MinimalTensor } from './types';
+import { OneResult } from '../result';
+import { materializeOneResult } from '../utils/materializeOneResult';
+
+const recurse = async (
+  dims: Dimension[],
+  currentDepth: number,
+  _currentCoordinates: number[],
+  hc: MinimalTensor
+): Promise<OneResult> => {
+  const currentCoordinates = [..._currentCoordinates];
+  if (dims.length > 0) {
+    const [firstDim, ...restDims] = dims;
+    return materializeOneResult(() =>
+      from(
+        Promise.all(
+          Array.from({ length: firstDim.dimensionLength }, async (_, i) => {
+            currentCoordinates[currentDepth] = i;
+            return recurse(restDims, currentDepth + 1, currentCoordinates, hc);
+          })
+        )
+      )
+    );
+  } else {
+    return materializeOneResult(
+      (await hc.lowLevelGet(...currentCoordinates)).getData()
+    );
+  }
+};
 
 /**
  * Come up with all possible .lowLevelGet arg combinations and call
  * it while building a nested array
  * */
-export function materialize(hc: MinimalTensor): OneResult {
-  if (hc.dimensions.some((dim) => dim.dimensionLength === 0)) {
-    return [];
+export const materialize = async (
+  _hc: PromiseOrType<MinimalTensor>
+): Promise<OneResult> => {
+  const hc = await _hc;
+  const dimensions = await hc.dimensions();
+  if (dimensions.some((dim) => dim.dimensionLength === 0)) {
+    return () => empty();
   }
 
   /** args for lowLevelGet(). We'll be mutating this as we go */
-  const currentCoordinates = hc.dimensions.map(() => 0);
-
-  return (function recurse(dims: Dimension[], currentDepth: number): OneResult {
-    if (dims.length > 0) {
-      const [firstDim, ...restDims] = dims;
-      return Array.from({ length: firstDim.dimensionLength }, (_, i) => {
-        currentCoordinates[currentDepth] = i;
-        return recurse(restDims, currentDepth + 1);
-      });
-    } else {
-      return hc.lowLevelGet(...currentCoordinates).getData();
-    }
-  })(hc.dimensions, 0);
-}
+  const currentCoordinates = dimensions.map(() => 0);
+  return recurse(dimensions, 0, currentCoordinates, hc);
+};

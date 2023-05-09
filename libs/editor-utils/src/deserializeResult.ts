@@ -1,4 +1,10 @@
-import { SerializedTypes, Unit, Result } from '@decipad/computer';
+import {
+  SerializedTypes,
+  Unit,
+  Result,
+  Interpreter,
+  isColumn,
+} from '@decipad/computer';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 
@@ -37,16 +43,18 @@ export const deserializeResult = <T extends Result.Result>(
         typeof value !== 'object' &&
         typeof value !== 'symbol'
       ) {
-        replaceValue = BigInt(value);
+        replaceValue = BigInt(value as string | number | bigint | boolean);
       } else {
         replaceValue = Result.Unknown;
       }
       break;
     case 'column':
+    case 'materialized-column':
       if (type.cellType.kind === 'number') {
         replaceValue = (value as Result.OneResult[])?.map(fromNumber);
         replaceType = {
           ...type,
+          kind: 'materialized-column',
           cellType: {
             ...type.cellType,
             unit: fixUnit(type.cellType.unit),
@@ -71,19 +79,21 @@ export const deserializeResult = <T extends Result.Result>(
       }
       break;
     case 'table':
+    case 'materialized-table':
       const replacementColumns = type.columnTypes.map((colType, colIndex) => {
         return deserializeResult({
           type: {
-            kind: 'column',
+            kind: 'materialized-column',
             cellType: colType,
-          } as SerializedTypes.Column,
-          value: (value as Result.OneResult[][])?.[colIndex],
+          } as SerializedTypes.MaterializedColumn,
+          value: (value as Interpreter.ResultMaterializedColumn)?.[colIndex],
         });
       });
       replaceType = {
         ...type,
+        kind: 'materialized-table',
         columnTypes: replacementColumns.map((col) =>
-          col?.type.kind === 'column' ? col.type.cellType : undefined
+          isColumn(col?.type) ? col?.type.cellType : undefined
         ) as SerializedTypes.Table['columnTypes'],
       };
       replaceValue = replacementColumns.map(

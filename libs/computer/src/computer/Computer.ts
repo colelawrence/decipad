@@ -24,7 +24,7 @@ import {
 import DeciNumber from '@decipad/number';
 import { anyMappingToMap, getDefined, identity, zip } from '@decipad/utils';
 import { dequal } from 'dequal';
-import Queue from 'queue';
+import { fnQueue } from '@decipad/fnqueue';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
@@ -53,30 +53,29 @@ import type {
   Program,
   ProgramBlock,
 } from '../types';
-import { getDefinedSymbol, getGoodBlocks, getIdentifierString } from '../utils';
+import {
+  getDefinedSymbol,
+  getGoodBlocks,
+  getIdentifierString,
+  isTableResult,
+} from '../utils';
 import { astToParseable } from './astToParseable';
 import { ComputationRealm } from './ComputationRealm';
-import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
+import {
+  ColumnDesc,
+  DimensionExplanation,
+  ResultStream,
+  TableDesc,
+} from './types';
+import { deduplicateColumnResults } from './deduplicateColumnResults';
+import { isTable } from '../utils/isTable';
+import { isColumn } from '../utils/isColumn';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
-
-export interface ColumnDesc {
-  tableName: string;
-  columnName: string;
-  result: Result.Result<'column'>;
-  blockId?: string;
-}
-
-export interface DimensionExplanation {
-  indexedBy: string | undefined;
-  labels: readonly string[] | undefined;
-  dimensionLength: number;
-}
-
 interface ComputerOpts {
   initialProgram?: Program;
 }
@@ -96,7 +95,7 @@ export class Computer {
   private readonly extraProgramBlocks = new BehaviorSubject<
     Map<string, ProgramBlock[]>
   >(new Map());
-  public results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
+  public results: ResultStream = new BehaviorSubject(defaultComputerResults);
 
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
@@ -144,7 +143,7 @@ export class Computer {
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
-        dropWhileComputing((req) => this.computeRequest(req)),
+        dropWhileComputing(async (req) => this.computeRequest(req)),
         switchMap((item) => (item == null ? [] : [item])),
         shareReplay(1)
       )
@@ -186,10 +185,16 @@ export class Computer {
     this.getVarBlockId(varName)
   );
 
-  getVarResult$ = listenerHelper(this.results, (results, varName: string) => {
-    const blockId = this.getVarBlockId(varName);
-    return blockId ? results.blockResults[blockId] : undefined;
-  });
+  getVarResult$ = listenerHelper(
+    this.results,
+    (
+      results,
+      varName: string
+    ): IdentifiedError | IdentifiedResult | undefined => {
+      const blockId = this.getVarBlockId(varName);
+      return blockId ? results.blockResults[blockId] : undefined;
+    }
+  );
 
   getAllColumnsIndexedBy$ = listenerHelper(
     this.results,
@@ -197,7 +202,7 @@ export class Computer {
       return Object.values(results.blockResults).flatMap((br) => {
         if (
           br.type === 'computer-result' &&
-          br.result.type.kind === 'column' &&
+          isColumn(br.result.type) &&
           br.result.type.indexedBy === tableName
         ) {
           return [br];
@@ -366,7 +371,7 @@ export class Computer {
     this.results,
     (
       results,
-      result: Result.Result<'column'>
+      result: Result.Result<'materialized-column'>
     ): DimensionExplanation[] | undefined => {
       try {
         // We now have a column or matrix
@@ -401,11 +406,11 @@ export class Computer {
     }
   );
 
-  getAllTables$ = listenerHelper(this.results, (results) => {
+  getAllTables$ = listenerHelper(this.results, (results): TableDesc[] => {
     return Object.entries(results.blockResults).flatMap(([id, b]) => {
       if (!b.result) return [];
 
-      if (b.result.type.kind === 'table') {
+      if (isTableResult(b.result)) {
         return { id, tableName: b.result.type.indexName || '' };
       }
       return [];
@@ -414,17 +419,25 @@ export class Computer {
 
   public getAllColumns$ = listenerHelper(
     this.results,
-    (results, filterForBlockId?: string): ColumnDesc[] => {
-      return Object.values(results.blockResults)
-        .flatMap((b) => {
-          if (b.result?.type.kind === 'table') {
+    (results: NotebookResults, filterForBlockId?: string): ColumnDesc[] =>
+      this.getAllColumns(results, filterForBlockId)
+  );
+
+  getAllColumns(
+    results: NotebookResults,
+    filterForBlockId?: string
+  ): ColumnDesc[] {
+    return Object.values(results.blockResults)
+      .flatMap((b) => {
+        if (b.type === 'computer-result') {
+          if (isTableResult(b.result)) {
             if (filterForBlockId && b.id !== filterForBlockId) {
               return [];
             }
             // external data results in a single table
             if (this.latestExternalData.has(b.id)) {
               const extData = getDefined(this.latestExternalData.get(b.id));
-              if (extData.type.kind !== 'table') {
+              if (!isTable(extData.type)) {
                 return [];
               }
               return b.result.type.columnNames.map(
@@ -479,7 +492,7 @@ export class Computer {
                 }
               );
             }
-          } else if (b.result?.type.kind === 'column') {
+          } else if (isColumn(b.result?.type)) {
             const statement = this.latestProgram.find((p) => p.id === b.id)
               ?.block?.args[0];
             if (statement?.type !== 'table-column-assign') {
@@ -503,18 +516,18 @@ export class Computer {
               },
             ];
           }
+        }
 
-          return [];
-        })
-        .reduce(deduplicateColumnResults, []);
-    }
-  );
+        return [];
+      })
+      .reduce(deduplicateColumnResults, []);
+  }
 
   public getColumnNameDefinedInBlock$ = listenerHelper(
     this.results,
     (results, blockId: string): string | undefined => {
       const block = results.blockResults[blockId];
-      if (block?.result?.type.kind === 'column') {
+      if (isColumn(block?.result?.type)) {
         const statement = this.latestProgram.find((p) => p.id === block.id)
           ?.block?.args[0];
         if (statement?.type === 'table-column-assign') {
@@ -544,26 +557,29 @@ export class Computer {
     );
   }
 
-  private computationQueue = new Queue({
-    concurrency: 1,
-    autostart: true,
-  });
-  private enqueueComputation<T>(
+  private computationQueue = fnQueue();
+  private async enqueueComputation<T>(
     fn: () => Promise<T>,
     priority = false
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       if (priority) {
-        this.computationQueue.unshift(() => fn().then(resolve, reject));
+        this.computationQueue
+          .unshift(fn)
+          .then(resolve, reject)
+          .catch(captureException);
       } else {
-        this.computationQueue.push(() => fn().then(resolve, reject));
+        this.computationQueue
+          .push(fn)
+          .then(resolve, reject)
+          .catch(captureException);
       }
     });
   }
 
   async expressionResult(expression: AST.Expression): Promise<Result.Result> {
-    return this.enqueueComputation(async () => {
-      const type = inferExpression(
+    return this.enqueueComputation(async (): Promise<Result.Result> => {
+      const type = await inferExpression(
         this.computationRealm.inferContext,
         expression
       );
@@ -579,7 +595,7 @@ export class Computer {
         );
 
         return {
-          value: value.getData(),
+          value: await value.getData(),
           type: serializeType(type),
         };
       } catch (err) {
@@ -597,8 +613,8 @@ export class Computer {
     });
   }
 
-  expressionType(expression: AST.Expression): SerializedType {
-    const type = inferExpression(
+  async expressionType(expression: AST.Expression): Promise<SerializedType> {
+    const type = await inferExpression(
       this.computationRealm.inferContext,
       expression
     );
@@ -665,7 +681,7 @@ export class Computer {
           blockResults: Object.fromEntries(
             updates.map((result) => [result.id, result])
           ),
-          indexLabels: this.computationRealm.getIndexLabels(),
+          indexLabels: await this.computationRealm.getIndexLabels(),
         };
       } catch (error) {
         console.error(error);
@@ -699,10 +715,7 @@ export class Computer {
     this.latestExternalData = new Map();
     this.computationRealm = new ComputationRealm();
     this.results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
-    this.computationQueue = new Queue({
-      concurrency: 1,
-      autostart: true,
-    });
+    this.computationQueue = fnQueue();
     this.wireRequestsToResults();
   }
 
@@ -748,7 +761,7 @@ export class Computer {
    * Parses a unit from text.
    * NOTE: Don't use with '%', percentages are NOT units. I will crash
    */
-  getUnitFromText(text: string): Unit[] | null {
+  async getUnitFromText(text: string): Promise<Unit[] | null> {
     if (text.trim() === '%') {
       throw new Error('% is not a unit!');
     }
@@ -757,7 +770,7 @@ export class Computer {
     if (!ast) {
       return null;
     }
-    const expr = inferExpression(this.computationRealm.inferContext, ast);
+    const expr = await inferExpression(this.computationRealm.inferContext, ast);
     return expr.unit;
   }
 

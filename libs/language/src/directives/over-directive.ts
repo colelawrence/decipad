@@ -5,12 +5,12 @@ import { getIdentifierString } from '../utils';
 import { DirectiveImpl } from './types';
 
 export const over: DirectiveImpl<AST.OverDirective> = {
-  getType(ctx, overExp) {
+  async getType(ctx, overExp) {
     const [, matrix, indexName] = overExp.args;
 
     return dimSwapTypes(
       getIdentifierString(indexName),
-      inferExpression(ctx, matrix)
+      await inferExpression(ctx, matrix)
     );
   },
   async getValue(realm, overExp) {

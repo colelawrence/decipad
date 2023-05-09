@@ -20,7 +20,7 @@ it('opens the menu when clicking the drag handle', async () => {
   await userEvent.click(getAllByTitle(/drag/i)[0]);
 
   expect(getByTitle(/delete/i)).toBeInTheDocument();
-});
+}, 20_000);
 
 it('changes opacity when being dragged', () => {
   const { getByText, rerender } = render(

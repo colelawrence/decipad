@@ -1,8 +1,6 @@
 import { Page } from 'playwright';
 
-export const getDataViewAsText = async (
+export const getDataViewAsText = (
   page: Page,
   locator: string
-): Promise<string> => {
-  return page.locator(locator).innerHTML();
-};
+): Promise<string> => page.locator(locator).innerHTML();

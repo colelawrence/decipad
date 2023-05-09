@@ -8,7 +8,7 @@ export type {
 } from '../types';
 
 export { Computer, getUsedIdentifiers } from './Computer';
-export type { ColumnDesc, DimensionExplanation } from './Computer';
+export type { ColumnDesc, DimensionExplanation } from './types';
 export type { TokenPos } from './getUsedIdentifiers';
 
 export { defaultComputerResults } from './defaultComputerResults';

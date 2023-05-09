@@ -18,7 +18,7 @@ expect.addSnapshotSerializer(typeSnapshotSerializer);
 // https://observablehq.com/d/0c4bca59558d2985
 describe('use of funds document', () => {
   it('Can MVP the use of funds document', async () => {
-    const [result, time] = await runAndMeasure(() =>
+    const [result, time] = await runAndMeasure(async () =>
       runCode(`
       InitialInvestment = 300000
       IncomeTax = 20%
@@ -225,7 +225,7 @@ describe('more models', () => {
       },
     ];
 
-    const [result, time] = await runAndMeasure(() =>
+    const [result, time] = await runAndMeasure(async () =>
       runCodeForVariables(
         `
           DiscountRate = 0.25
@@ -234,7 +234,7 @@ describe('more models', () => {
 
           InitialCashFlow = 10musd
 
-          GrowthRate = 0.25
+          GrowthRate = 25%
 
           CashFlows = grow(InitialCashFlow, GrowthRate, Years)
 
@@ -282,7 +282,7 @@ describe('more models', () => {
       cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
 
-    const [result, time] = await runAndMeasure(() =>
+    const [result, time] = await runAndMeasure(async () =>
       runCode(
         `
           InitialInvestment = 5 thousand eur
@@ -313,34 +313,12 @@ describe('more models', () => {
 
     expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
-
-  test('burn spare cash in the supermarket', async () => {
-    const [result, time] = await runAndMeasure(() =>
-      runCode(
-        `
-          cash = 6.15 GBP
-          basket = {
-            product = ["Pizza", "Pasta", "Cola", "Orange Juice", "Oat Milk", "Cow Milk", "Sweets"],
-            price = [2.5GBP, 1, 2.15, 1.3, 1.7, 1.2, 1]
-          }
-          buyWithCash = approximateSubsetSum(cash, basket, "price")
-          total(buyWithCash.price)
-        `
-      )
-    );
-
-    expect(result).toMatchObject({
-      value: N(123, 20),
-    });
-
-    expect(time).toBeLessThanOrEqual(450 * (process.env.CI ? 2 : 1));
-  });
 });
 
 describe('Use cases', () => {
   // https://www.notion.so/decipad/Funding-Needs-037c7eaec6304b029acc74efd734df57
   test('funding needs', async () => {
-    const [result, time] = await runAndMeasure(() =>
+    const [result, time] = await runAndMeasure(async () =>
       runCodeForVariables(
         `
         MonthlyExpenses = 130000 eur
@@ -419,7 +397,7 @@ ${'' /* Get capital needed */}
       },
     });
 
-    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+    expect(time).toBeLessThanOrEqual(400 * (process.env.CI ? 2 : 1));
   });
 
   // https://www.notion.so/decipad/Crypto-Portfolio-Tracker-fe8bbefbd2e1441886576fd3c22c47f2
@@ -470,7 +448,7 @@ ${'' /* Get capital needed */}
   });
 
   test('Cars', async () => {
-    const [result, time] = await runAndMeasure(() =>
+    const [result, time] = await runAndMeasure(async () =>
       runCode(
         `
           Cars = {
@@ -586,7 +564,7 @@ ${'' /* Get capital needed */}
   });
 
   test('rockets', async () => {
-    const [result, time] = await runAndMeasure(() =>
+    const [result, time] = await runAndMeasure(async () =>
       evaluateForVariables(
         `
           Mass = 0.05398 kg

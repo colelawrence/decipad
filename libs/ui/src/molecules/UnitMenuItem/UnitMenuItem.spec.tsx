@@ -16,9 +16,12 @@ it('renders the children', () => {
 
 it('renders a button when parse is successful', async () => {
   // Parse always fails.
-  const { rerender } = render(<UnitMenuItem parseUnit={() => null} />, {
-    wrapper,
-  });
+  const { rerender } = render(
+    <UnitMenuItem parseUnit={() => Promise.resolve(null)} />,
+    {
+      wrapper,
+    }
+  );
 
   expect(screen.queryByRole('button')).toBeNull();
 

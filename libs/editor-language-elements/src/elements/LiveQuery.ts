@@ -9,7 +9,7 @@ import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeI
 export const LiveQuery: InteractiveLanguageElement = {
   type: ELEMENT_LIVE_QUERY,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor: MyEditor, _computer: Computer, element: MyElement) => {
+    (_editor: MyEditor, _computer: Computer, element: MyElement) => {
       assertElementType(element, ELEMENT_LIVE_QUERY);
       const name = getNodeString(element.children[0]);
       const { id } = element;

@@ -15,9 +15,9 @@ interface TableResultCellProps {
   colIndex: number;
   isLiveResult?: boolean;
   allowsForLookup?: boolean;
-  onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
-  onDragEnd?: CodeResultProps<'table'>['onDragEnd'];
-  tableType: SerializedTypes.Table;
+  onDragStartCell?: CodeResultProps<'materialized-table'>['onDragStartCell'];
+  onDragEnd?: CodeResultProps<'materialized-table'>['onDragEnd'];
+  tableType: SerializedTypes.MaterializedTable | SerializedTypes.Table;
   columnName: string;
   columnType: SerializedType;
   value: string;

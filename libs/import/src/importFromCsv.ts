@@ -12,7 +12,7 @@ const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
   };
 };
 
-export const importFromCsv = async (
+export const importFromCsv = (
   computer: Computer,
   source: string,
   options: ImportOptions
@@ -36,12 +36,12 @@ export const importFromCsv = async (
         }
       }
     });
-    parser.once('end', () => {
+    parser.once('end', async () => {
       isDone = true;
       try {
         const sheet = trimSheet(toColumnOriented(data));
         resolve(
-          inferTable(computer, sheet, {
+          await inferTable(computer, sheet, {
             ...options,
             doNotTryExpressionNumbersParse: true,
           })

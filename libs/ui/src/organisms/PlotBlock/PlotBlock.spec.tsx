@@ -123,7 +123,7 @@ const plotProps: (
   plotParams: plotParams(markType, sourceVarName),
 });
 
-it('displays the "Select a table" component if no table selected', async () => {
+it('displays the "Select a table" component if no table selected', () => {
   const { queryByLabelText } = render(
     <PlotBlock {...plotProps('arc', '')} readOnly={false} />
   );
@@ -131,7 +131,7 @@ it('displays the "Select a table" component if no table selected', async () => {
   expect(queryByLabelText(/select a table/i)).toBeInTheDocument();
 });
 
-it('displays a warning if no tables exist', async () => {
+it('displays a warning if no tables exist', () => {
   const plotPropsNoSources: ComponentProps<typeof PlotBlock> = {
     title: 'Title',
     readOnly: false,

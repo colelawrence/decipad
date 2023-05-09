@@ -1,34 +1,26 @@
-import { DeepReadonly } from 'utility-types';
+import { filter, slice } from '@decipad/generator-utils';
 import { ColumnLike } from './ColumnLike';
 
 export class FilteredColumn<TValue> implements ColumnLike<TValue> {
   readonly map: boolean[];
   readonly sourceColumn: ColumnLike<TValue>;
-  private memo: DeepReadonly<TValue[]> | undefined;
 
   constructor(col: ColumnLike<TValue>, map: boolean[]) {
     this.sourceColumn = col;
     this.map = map;
   }
-  get values() {
-    if (this.memo != null) {
-      return this.memo;
-    }
-    this.memo = this.calculateValues();
-    return this.memo;
-  }
 
-  private calculateValues(): DeepReadonly<TValue[]> {
+  values(start = 0, end = Infinity) {
     const { map } = this;
     let cursor = -1;
-    const sourceValues = this.sourceColumn.values;
-    return Array.from({ length: this.map.filter(Boolean).length }, () => {
-      cursor += 1;
-      while (!map[cursor]) {
+    return slice(
+      filter(this.sourceColumn.values(), () => {
         cursor += 1;
-      }
-      return sourceValues[cursor];
-    }) as DeepReadonly<TValue[]>;
+        return map[cursor];
+      }),
+      start,
+      end
+    );
   }
 
   static fromColumnAndMap<TV>(
@@ -38,12 +30,14 @@ export class FilteredColumn<TValue> implements ColumnLike<TValue> {
     return new FilteredColumn(column, map);
   }
 
-  get rowCount() {
+  rowCount() {
     let count = 0;
     for (const bool of this.map) {
-      count += Number(bool);
+      if (bool) {
+        count += 1;
+      }
     }
-    return count;
+    return Promise.resolve(count);
   }
 
   public getSourceIndex(outwardIndex: number) {
@@ -57,12 +51,10 @@ export class FilteredColumn<TValue> implements ColumnLike<TValue> {
       }
     }
 
-    throw new Error(`panic: index not found: ${outwardIndex}`);
+    return -1;
   }
 
   atIndex(wantedIndex: number) {
-    return this.sourceColumn.values[this.getSourceIndex(wantedIndex)] as
-      | TValue
-      | undefined;
+    return this.sourceColumn.atIndex(this.getSourceIndex(wantedIndex));
   }
 }

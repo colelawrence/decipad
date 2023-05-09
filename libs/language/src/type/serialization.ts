@@ -137,7 +137,9 @@ export function deserializeType(type: Type | SerializedType): Type {
         case 'range':
           return t.range(deserializeType(type.rangeOf));
         case 'column':
+        case 'materialized-column':
           return t.column(deserializeType(type.cellType), type.indexedBy);
+        case 'materialized-table':
         case 'table':
           const { columnTypes, columnNames } = type;
           return t.table({

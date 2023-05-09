@@ -22,6 +22,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'require-await': 'off',
     'import/prefer-default-export': 'off',
     'import/extensions': [
       'error',

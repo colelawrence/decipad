@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Result, isColumn } from '@decipad/computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
@@ -33,7 +33,7 @@ const importFromArray = (
       type: {
         kind: 'anything',
       },
-      value: Result.UnknownValue.getData(),
+      value: Result.Unknown,
     };
   }
   if (arr.some((elem) => Array.isArray(elem))) {
@@ -49,7 +49,9 @@ const importFromArray = (
       indexedBy: null,
       cellType: results[0].type,
     },
-    value: results.map((r) => r.value) as Result.Result<'column'>['value'],
+    value: results.map(
+      (r) => r.value
+    ) as Result.Result<'materialized-column'>['value'],
   };
 };
 
@@ -74,23 +76,23 @@ const importTableFromObject = (
     if (res.value == null) {
       return Result.UnknownValue.getData();
     }
-    if (res.type.kind === 'column') {
+    if (isColumn(res.type)) {
       return res.value as Result.Result['value'];
     }
     if (res.type.kind === 'type-error') {
       return res.value as Result.Result['value'];
     }
     return [res.value] as Result.Result['value'];
-  }) as Result.Result<'table'>['value'];
+  }) as Result.Result<'materialized-table'>['value'];
 
   const columnNames = Object.keys(obj).map(normalizeColumnName);
 
-  const r: Result.Result<'table'> = {
+  const r: Result.Result<'materialized-table'> = {
     type: {
-      kind: 'table',
+      kind: 'materialized-table',
       columnNames,
       columnTypes: results.map((res) => {
-        if (res.type.kind === 'column') {
+        if (isColumn(res.type)) {
           return res.type.cellType;
         }
         return res.type;
@@ -184,7 +186,7 @@ const internalImportFromUnknownJson = (
       type: {
         kind: 'anything',
       },
-      value: Result.UnknownValue.getData(),
+      value: Result.Unknown,
     };
   }
   if (tof === 'object' && json != null) {

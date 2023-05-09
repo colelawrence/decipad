@@ -19,11 +19,11 @@ const debounceGetValueMs = 500;
 
 export type OnErrorCallback = (error: Error) => void;
 
-export const startNotebook = async (
+export const startNotebook = (
   subscription: Subscription,
   observeExternal: Observe,
   onError: OnErrorCallback
-): Promise<Computer> => {
+): Computer => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
   const editor = createTPlateEditor();
   editor.normalizeNode = noop;

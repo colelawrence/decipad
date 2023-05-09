@@ -1,12 +1,13 @@
 import {
   deserializeType,
-  Result,
   serializeType,
   linearizeType,
 } from '@decipad/language';
-import { OneResult } from 'libs/language/src/result';
-import { enumerate, getDefined, last } from '@decipad/utils';
-import { DimensionExplanation } from '../computer/Computer';
+import type { Result } from '@decipad/language';
+import { getDefined, last } from '@decipad/utils';
+import { map } from '@decipad/generator-utils';
+import type { DimensionExplanation } from '..';
+import { getResultGenerator } from '../utils';
 
 export type LabelInfo = {
   indexName?: string;
@@ -27,19 +28,19 @@ export type ResultAndLabelInfo = {
  *
  * Get a `DimensionExplanation` from `computer.explainDimensions$` so you can observe changes to dimension labels and lengths.
  */
-export function* unnestTableRows(
+export async function* unnestTableRows(
   r: DimensionExplanation[],
-  result: Result.Result<'column'>
-): Iterable<ResultAndLabelInfo> {
+  result: Result.Result<'materialized-column'>
+): AsyncIterable<ResultAndLabelInfo> {
   const scalarType = serializeType(
     getDefined(last(linearizeType(deserializeType(result.type))))
   );
 
-  function* recurseDimensions(
+  async function* recurseDimensions(
     dims: DimensionExplanation[],
-    deepValue: OneResult,
+    deepValue: Result.OneResult,
     labelInfo: LabelInfo[] = []
-  ): Iterable<ResultAndLabelInfo> {
+  ): AsyncIterable<ResultAndLabelInfo> {
     if (Array.isArray(deepValue) !== dims.length > 0) {
       throw new Error('panic: DimensionExplanation does not match reality');
     }
@@ -54,9 +55,10 @@ export function* unnestTableRows(
 
     const [dimHere, ...restDims] = dims;
 
-    for (const [indexAtThisDimension, itemAtThisDimension] of enumerate(
-      deepValue as OneResult[]
-    )) {
+    const gen = getResultGenerator(deepValue);
+    let indexAtThisDimension = -1;
+    for await (const itemAtThisDimension of gen()) {
+      indexAtThisDimension += 1;
       const labelInfoHere: LabelInfo = {
         indexName: dimHere.indexedBy,
         label: dimHere.labels?.[indexAtThisDimension],
@@ -70,10 +72,11 @@ export function* unnestTableRows(
     }
   }
 
-  const recursedDimensions = [...recurseDimensions(r, result.value)];
+  const recursedDimensions = recurseDimensions(r, result.value);
 
-  const resultAndLabelInfoWithIndexesOfRemainingLengthsAreZero =
-    recursedDimensions.map((resultAndLabelInfo) => {
+  const resultAndLabelInfoWithIndexesOfRemainingLengthsAreZero = map(
+    recursedDimensions,
+    (resultAndLabelInfo) => {
       const mappedLabelInfo = resultAndLabelInfo.labelInfo.map(
         (labelInfo, labelInfoIndex) => {
           const restLabelInfo = resultAndLabelInfo.labelInfo.slice(
@@ -100,7 +103,8 @@ export function* unnestTableRows(
         result: resultAndLabelInfo.result,
         labelInfo: mappedLabelInfo,
       };
-    });
+    }
+  );
 
   yield* resultAndLabelInfoWithIndexesOfRemainingLengthsAreZero;
 }

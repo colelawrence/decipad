@@ -6,18 +6,23 @@ import { addTime, getSpecificity } from '../date';
 
 import { Column, DateValue, Scalar } from './Value';
 import { Value, ColumnLikeValue } from './types';
+import { getInstanceof } from '../utils';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
-export function columnFromSequence(
+export async function columnFromSequence(
   startV: Value,
   endV: Value,
   byV?: Value
-): ColumnLikeValue {
-  const [start, end] = [startV, endV].map((val) => val.getData() as DeciNumber);
+): Promise<ColumnLikeValue> {
+  const [start, end] = await Promise.all(
+    [startV, endV].map(async (val) =>
+      getInstanceof(await val.getData(), DeciNumber)
+    )
+  );
 
   const by = byV
-    ? (byV.getData() as DeciNumber)
+    ? ((await byV.getData()) as DeciNumber)
     : start.compare(end) < 0
     ? N(1)
     : N(-1);
@@ -42,20 +47,20 @@ export function columnFromSequence(
   return Column.fromValues(array);
 }
 
-export function columnFromDateSequence(
+export async function columnFromDateSequence(
   startD: DateValue,
   endD: DateValue,
   by: Time.Unit
-): ColumnLikeValue | undefined {
-  let start = startD.getData();
-  let end = endD.getData();
+): Promise<ColumnLikeValue | undefined> {
+  let start = await startD.getData();
+  let end = await endD.getData();
   if (start == null || end == null) {
     return undefined;
   }
   if (end >= start) {
-    end = endD.getEnd();
+    end = await endD.getEnd();
   } else {
-    start = startD.getEnd();
+    start = await startD.getEnd();
   }
   if (start == null || end == null) {
     return undefined;
@@ -77,7 +82,8 @@ export function columnFromDateSequence(
   for (
     let cur: bigint = start;
     cmpFn(start, end, cur);
-    cur = getDefined(addTime(cur, by, BigInt(step)))
+    // eslint-disable-next-line no-await-in-loop
+    cur = getDefined(await addTime(cur, by, BigInt(step)))
   ) {
     if (++iterations > MAX_ITERATIONS) {
       throw new RuntimeError(

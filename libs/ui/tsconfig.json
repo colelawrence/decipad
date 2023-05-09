@@ -51,6 +51,9 @@
     },
     {
       "path": "../number"
+    },
+    {
+      "path": "../generator-utils"
     }
   ]
 }

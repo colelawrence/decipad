@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+import { getDefined } from '@decipad/utils';
 import { ColumnLikeValue } from '../value';
 import { chooseFirst, undoChooseFirst } from '../dimtools/common';
 import { implementColumnLike } from './LazyAtIndex';
@@ -20,27 +22,42 @@ import { Dimension, MinimalTensor } from './types';
  *   [3, 6],
  * ]
  */
-export const SwappedDimensions = implementColumnLike(
+const SwappedDimensions = implementColumnLike(
   class SwappedDimensions implements MinimalTensor {
     unswappedHC: ColumnLikeValue;
 
-    dimensions: Dimension[];
+    _dimensions: Dimension[] | undefined;
     dominantDimensionIndex: number;
 
     constructor(unswappedHC: ColumnLikeValue, dominantDimensionIndex: number) {
       this.unswappedHC = unswappedHC;
 
       this.dominantDimensionIndex = dominantDimensionIndex;
-      this.dimensions = chooseFirst(
-        this.dominantDimensionIndex,
-        unswappedHC.dimensions
-      );
     }
 
-    lowLevelGet(...indices: number[]) {
+    async dimensions() {
+      return Promise.resolve(getDefined(this._dimensions));
+    }
+
+    setDimensions(dimensions: Dimension[]) {
+      this._dimensions = dimensions;
+    }
+
+    async lowLevelGet(...indices: number[]) {
       return this.unswappedHC.lowLevelGet(
         ...undoChooseFirst(this.dominantDimensionIndex, indices)
       );
     }
   }
 );
+
+export const createSwappedDimensions = async (
+  unswappedHC: ColumnLikeValue,
+  dominantDimensionIndex: number
+): Promise<MinimalTensor & ColumnLikeValue> => {
+  const swapped = new SwappedDimensions(unswappedHC, dominantDimensionIndex);
+  swapped.setDimensions(
+    chooseFirst(dominantDimensionIndex, await unswappedHC.dimensions())
+  );
+  return swapped;
+};

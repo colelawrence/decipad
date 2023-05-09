@@ -1,5 +1,6 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import type { PromiseOrType } from '@decipad/utils';
 
 /* Basic */
 
@@ -633,7 +634,7 @@ export type VersionedDataTable<T extends VersionedTableRecord> =
   DataTable<T> & {
     withLock: (
       id: string,
-      fn: (record: T | undefined) => Promise<T>
+      fn: (record: T | undefined) => PromiseOrType<T>
     ) => Promise<T>;
   };
 
