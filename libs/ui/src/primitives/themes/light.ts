@@ -49,7 +49,6 @@ import {
   teal100,
   teal200,
   teal300,
-  teal50,
   teal500,
   teal600,
   teal700,
@@ -164,12 +163,14 @@ export const theme: CssVariables = {
   variableHighlightColor: grey200.hex,
   variableHighlightTextColor: teal600.hex,
 
+  selectionColor: grey300.hex,
+
   structuredCalculationVariableColor: teal200.hex,
   structuredCalculationSimpleColor: brand400.hex,
 
   magicNumberTextColor: teal600.hex,
 
-  tableSelectionBackgroundColor: teal50.hex,
+  tableSelectionBackgroundColor: teal100.hex,
   tableFocusColor: teal500.hex,
   tableFooterBackgroundColor: grey100.hex,
 

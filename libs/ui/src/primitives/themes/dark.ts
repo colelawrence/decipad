@@ -176,6 +176,8 @@ export const theme: CssVariables = {
   variableHighlightColor: teal800.hex,
   variableHighlightTextColor: dark100.hex,
 
+  selectionColor: blue700.hex,
+
   magicNumberTextColor: dark100.hex,
 
   tableSelectionBackgroundColor: blue700.hex,

@@ -30,7 +30,6 @@ import {
 import {
   EditorBlock,
   DraggableBlock as UIDraggableBlock,
-  cssVar,
   useMergedRef,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
@@ -317,9 +316,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
           css={css({
             '> div': {
               borderRadius: 8,
-            },
-            '*::selection': {
-              background: cssVar('tableSelectionBackgroundColor'),
             },
           })}
         >

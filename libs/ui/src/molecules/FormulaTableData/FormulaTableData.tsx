@@ -9,7 +9,7 @@ const tdLineStyles = css(p14Medium, {
 });
 
 const selectedStyles = css({
-  backgroundColor: cssVar('tableSelectionBackgroundColor'),
+  backgroundColor: cssVar('selectionColor'),
 });
 
 const noEditingStyles = css({ display: 'none' });

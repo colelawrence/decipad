@@ -8,14 +8,11 @@ import {
   cssVar,
   darkTheme,
   GlobalTextStyles,
-  hexToOpaqueColor,
   mediumShadow,
   p12Medium,
   p13Medium,
   p14Medium,
   strongOpacity,
-  teal600,
-  transparency,
 } from '../../primitives';
 
 const DarkThemeStyles = (): ReturnType<React.FC> => {
@@ -184,17 +181,16 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         'button, [type="button"], [type="reset"], [type="submit"]': {
           WebkitAppearance: 'none',
         },
+        '::selection': {
+          backgroundColor: cssVar('selectionColor'),
+        },
+
         '.slate-selection-area': {
-          background: cssVar('tableSelectionBackgroundColor'),
-          boxShadow: `inset 0 0 0 1px ${
-            transparency(
-              hexToOpaqueColor(cssVar('tableFocusColor')) || teal600,
-              strongOpacity
-            ).rgba
-          }`,
+          background: cssVar('selectionColor'),
           borderRadius: 8,
           opacity: strongOpacity,
         },
+
         // further resets
         '*:focus-visible': {
           outline: 'none',

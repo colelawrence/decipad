@@ -13,5 +13,5 @@ export const BlockSelectable = ({
   _BlockSelectable({
     element,
     children,
-    selectedColor: cssVar('tableSelectionBackgroundColor'),
+    selectedColor: cssVar('selectionColor'),
   });
