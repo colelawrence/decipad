@@ -1,30 +1,15 @@
+import { useCallback, useMemo } from 'react';
 import { useTEditorRef } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { EditorChangeContext, useComputer } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { NumberCatalog as UINumberCatalog } from '@decipad/ui';
-import {
-  ComponentProps,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { dequal } from 'dequal';
-import {
-  combineLatestWith,
-  concat,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  of,
-} from 'rxjs';
+import { AutocompleteName } from '@decipad/computer';
 import { selectCatalogNames } from './selectCatalogNames';
 import { catalogItems } from './catalogItems';
 import { toVar } from './toVar';
 import { useOnDragEnd } from '../utils/useDnd';
 
-const debounceEditorChangesMs = 1_000;
+const catalogDebounceTimeMs = 1_000;
 
 export function NumberCatalog() {
   const editor = useTEditorRef();
@@ -33,33 +18,16 @@ export function NumberCatalog() {
 
   const computer = useComputer();
 
-  const [items, setItems] = useState<
-    ComponentProps<typeof UINumberCatalog>['items']
-  >([]);
-
-  const editorChanges = useContext(EditorChangeContext);
-
-  useEffect(() => {
-    const catalog = catalogItems(editor);
-    const editorChanges$ = concat(of(undefined), editorChanges);
-    const sub = editorChanges$
-      .pipe(
-        combineLatestWith(
-          concat(
-            of(undefined),
-            computer.getNamesDefined$.observeWithSelector(selectCatalogNames)
-          )
-        ),
-        debounceTime(debounceEditorChangesMs),
-        map(([, e]) => Array.isArray(e) && e.map(toVar)),
-        filter(Boolean),
-        map(catalog),
-        distinctUntilChanged((cur, next) => dequal(cur, next))
-      )
-      .subscribe(setItems);
-
-    return () => sub.unsubscribe();
-  }, [computer, editor, editorChanges]);
+  const catalog = useMemo(() => catalogItems(editor), [editor]);
+  const items = computer.getNamesDefined$.useWithSelectorDebounced(
+    catalogDebounceTimeMs,
+    useCallback(
+      (_items: AutocompleteName[]) => {
+        return catalog(selectCatalogNames(_items).map(toVar));
+      },
+      [catalog]
+    )
+  );
 
   return (
     <UINumberCatalog

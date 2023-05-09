@@ -1,7 +1,7 @@
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 import { dequal } from 'dequal';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { identity } from '@decipad/utils';
 
 /**
@@ -16,6 +16,11 @@ export interface ListenerHelper<Args extends unknown[], Ret> {
   observeWithSelector<T>(selector: (item: Ret) => T, ...a: Args): Observable<T>;
   use(...a: Args): Ret;
   useWithSelector<T>(selector: (item: Ret) => T, ...a: Args): T;
+  useWithSelectorDebounced<T>(
+    debounceTimeMs: number,
+    selector: (item: Ret) => T,
+    ...a: Args
+  ): T;
   get(...a: Args): Ret;
 }
 
@@ -31,6 +36,14 @@ export function listenerHelper<
     const sub = subject.subscribe(callback);
     return () => sub.unsubscribe();
   };
+
+  const rootSubscribeDebounced =
+    (debounceTimeMs: number) => (callback: () => void) => {
+      const sub = subject
+        .pipe(debounceTime(debounceTimeMs))
+        .subscribe(callback);
+      return () => sub.unsubscribe();
+    };
 
   const rootGet = () => subject.getValue();
 
@@ -62,5 +75,25 @@ export function listenerHelper<
       dequal
     );
 
-  return { get, observe, observeWithSelector, use, useWithSelector };
+  const useWithSelectorDebounced = <T>(
+    debounceTimeMs: number,
+    pick: (item: Ret) => T,
+    ...a: MoreArgs
+  ): T =>
+    useSyncExternalStoreWithSelector(
+      rootSubscribeDebounced(debounceTimeMs),
+      rootGet,
+      undefined,
+      (item) => pick(select(item, ...a)),
+      dequal
+    );
+
+  return {
+    get,
+    observe,
+    observeWithSelector,
+    use,
+    useWithSelector,
+    useWithSelectorDebounced,
+  };
 }
