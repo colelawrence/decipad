@@ -1,5 +1,11 @@
-import { onboard } from '@decipad/routing';
 import { ClientEventsContext } from '@decipad/client-events';
+import {
+  useSetUsernameMutation,
+  useUpdateUserMutation,
+  useUserQuery,
+} from '@decipad/graphql-client';
+import { onboard } from '@decipad/routing';
+import { useToast } from '@decipad/toast';
 import {
   AccountSetupFlow1,
   AccountSetupFlow2,
@@ -7,7 +13,7 @@ import {
   ErrorPage,
 } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { useCallback, useState, useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import {
   Navigate,
   Route,
@@ -15,16 +21,9 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { useToast } from '@decipad/toast';
-import {
-  useUpdateUserMutation,
-  useSetUsernameMutation,
-  useUserQuery,
-} from '@decipad/graphql-client';
-import { isEmpty } from 'lodash';
 import { LazyRoute } from '../meta';
-import { useRequiresOnboarding } from './useRequiresOnboarding';
 import { PreOnboardingPath } from './RequireOnboard';
+import { useRequiresOnboarding } from './useRequiresOnboarding';
 
 export const Onboard = () => {
   const navigate = useNavigate();
@@ -126,20 +125,11 @@ export const Onboard = () => {
                       console.error('Failed to update name. Error:', error);
                       toast('Could not change your name', 'error');
                     } else if (
-                      usernameUpdate.status === 'rejected' ||
-                      (usernameUpdate.status === 'fulfilled' &&
-                        usernameUpdate.value.error)
+                      usernameUpdate.status === 'fulfilled' &&
+                      !usernameUpdate.value?.data?.setUsername
                     ) {
-                      const error =
-                        usernameUpdate.status === 'rejected'
-                          ? usernameUpdate.reason
-                          : usernameUpdate.value.error;
-                      console.error('Failed to update username. Error:', error);
                       toast(
-                        usernameUpdate.status === 'rejected' ||
-                          isEmpty(error.graphQLErrors)
-                          ? 'Could not change your username'
-                          : error.graphQLErrors.toString(), // this are created by us, not generic error messages.
+                        'That username is already taken, please change it',
                         'error'
                       );
                     } else {

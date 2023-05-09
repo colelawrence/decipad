@@ -60,7 +60,6 @@ export const withTable: MyWithOverride = (editor, plugin) => {
                 { length: node.children[0].children.length },
                 createEmptyTableHeaderCell
               );
-
               node.children.unshift({
                 type: ELEMENT_TR,
                 children: cells,
@@ -73,6 +72,21 @@ export const withTable: MyWithOverride = (editor, plugin) => {
               })
             );
           }
+
+          // clear up cell content
+          const trWithCells = node.children.slice(2);
+          trWithCells.map((tr) => {
+            const cells = tr.children;
+            cells.map((td) => {
+              const cellCores = td.children;
+              cellCores.map((core) => {
+                if (core.text && typeof core.text === 'string') {
+                  core.text = core.text.trim();
+                }
+              });
+            });
+            return cells;
+          });
         }
 
         return node;
