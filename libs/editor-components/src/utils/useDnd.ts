@@ -40,14 +40,14 @@ export declare type DropDirection =
 
 type ChangeDropDirection = (direction: DropDirection) => void;
 
-interface DragItemNode {
+export interface DragItemNode {
   id: string;
   selectedIds: Set<string>;
   type: ElementKind;
   [key: string]: unknown;
 }
 
-interface Axis {
+export interface Axis {
   horizontal?: boolean;
   vertical?: boolean;
 }

@@ -9,7 +9,7 @@ import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
 import { cssVar, setCssVar, transparency } from '../../primitives';
 import { blockAlignment } from '../../styles';
-import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
+import { AvailableSwatchColor, UserIconKey, swatchesThemed } from '../../utils';
 
 const { callout } = blockAlignment;
 
@@ -58,6 +58,7 @@ export const Callout = ({
   const [darkTheme] = useThemeFromStore();
   return (
     <p
+      aria-label="column-content"
       css={[
         styles,
         {

@@ -1,45 +1,41 @@
 import { ClientEventsContext } from '@decipad/client-events';
+import { SerializedType } from '@decipad/computer';
 import {
   DraggableBlock,
+  useDragAndDropGetAxis,
+  useDragAndDropOnDrop,
   useTextTypeInference,
 } from '@decipad/editor-components';
 import {
   ELEMENT_DISPLAY,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
-  useTEditorRef,
   VariableDropdownElement,
   VariableSliderElement,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
-  hasLayoutAncestor,
+  isDragAndDropHorizontal,
   mutateText,
   safeDelete,
-  usePathMutatorCallback,
   useNodePath,
-  wrapIntoColumns,
+  usePathMutatorCallback,
 } from '@decipad/editor-utils';
-import { SerializedType } from '@decipad/computer';
 import {
   useEditorStylesContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
 import {
-  findNode,
+  PlateEditor,
   findNodePath,
   getNodeString,
-  moveNodes,
-  PlateEditor,
   serializeHtml,
-  withoutNormalizing,
 } from '@udecode/plate';
 import copy from 'copy-to-clipboard';
-import { defaultMoveNode } from 'libs/editor-components/src/utils/useDnd';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
-import { ComponentProps, useCallback, useContext, useState } from 'react';
-import { Path } from 'slate';
+import { useCallback, useContext, useState } from 'react';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
 
@@ -146,52 +142,9 @@ export const VariableDef: PlateComponent = ({
     [editor, secondChild]
   );
 
-  const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
-
-  const getAxis = useCallback<
-    NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>
-  >(
-    (_, monitor) => ({
-      horizontal:
-        monitor.getItemType() === ELEMENT_VARIABLE_DEF ||
-        monitor.getItemType() === ELEMENT_DISPLAY,
-      vertical: !isHorizontal,
-    }),
-    [isHorizontal]
-  );
-
-  const onDrop = useCallback<
-    NonNullable<ComponentProps<typeof DraggableBlock>['onDrop']>
-  >(
-    (item, _, direction) => {
-      if (!path || (direction !== 'left' && direction !== 'right')) {
-        return defaultMoveNode(editor, item, element.id, direction);
-      }
-
-      withoutNormalizing(editor, () => {
-        const dragPath = findNode(editor, {
-          at: [],
-          match: { id: item.id },
-        })?.[1];
-        let dropPath: Path = [];
-
-        if (isHorizontal) {
-          if (direction === 'left') {
-            dropPath = path;
-          }
-          if (direction === 'right') {
-            dropPath = Path.next(path);
-          }
-        } else {
-          dropPath = [...path, direction === 'left' ? 0 : 1];
-          wrapIntoColumns(editor, path);
-        }
-
-        moveNodes(editor, { at: dragPath, to: dropPath });
-      });
-    },
-    [editor, element.id, isHorizontal, path]
-  );
+  const isHorizontal = isDragAndDropHorizontal(deleted, editor, path);
+  const getAxis = useDragAndDropGetAxis({ isHorizontal });
+  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
 
   const { color: defaultColor } = useEditorStylesContext();
 

@@ -31,7 +31,10 @@ export const Blockquote = ({
 }: BlockquoteProps): ReturnType<React.FC> => {
   const isBlockActive = useIsBlockActive();
   return (
-    <blockquote css={[styles, isBlockActive && activeStyles]}>
+    <blockquote
+      aria-label="column-content"
+      css={[styles, isBlockActive && activeStyles]}
+    >
       {children}
     </blockquote>
   );

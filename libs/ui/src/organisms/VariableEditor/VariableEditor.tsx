@@ -18,6 +18,7 @@ import {
   transparency,
   white,
 } from '../../primitives';
+import { columns } from '../../styles';
 import { AvailableSwatchColor, getTypeIcon, swatchesThemed } from '../../utils';
 
 const leftBarSize = 2;
@@ -45,10 +46,7 @@ const wrapperStyles = ({ variant }: Variant, color: string) => {
      0px 2px 8px ${transparency(offBlack, 0.02).rgba},
      -${leftBarSize}px 0px ${color}`,
     marginLeft: `${leftBarSize}px`,
-
-    maxWidth: `262px`,
-    minWidth: '175px',
-    width: '100%',
+    ...columns.styles,
   });
 };
 
@@ -168,6 +166,7 @@ export const VariableEditor = ({
   const selected = useSelected();
   return (
     <div
+      aria-label="column-content"
       css={wrapperStyles(
         { variant: menuProps.variant },
         menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb

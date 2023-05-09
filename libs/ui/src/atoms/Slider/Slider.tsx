@@ -97,7 +97,7 @@ export const Slider = ({
         value={[Number(value)]}
         onValueChange={(values) => values.map(onChange)}
         onFocus={onFocus}
-        min={min}
+        min={Math.min(Number(min), Number(value))}
         max={Math.max(Number(max), Number(value))}
         step={step}
         onValueCommit={onCommit}

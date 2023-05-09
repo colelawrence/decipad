@@ -1,8 +1,7 @@
 /* eslint-disable no-param-reassign */
 import {
+  COLUMN_KINDS,
   ELEMENT_COLUMNS,
-  ELEMENT_DISPLAY,
-  ELEMENT_VARIABLE_DEF,
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
@@ -29,9 +28,7 @@ const normalizeColumns =
 
         if (
           isText(childNode) ||
-          (isElement(childNode) &&
-            childNode.type !== ELEMENT_VARIABLE_DEF &&
-            childNode.type !== ELEMENT_DISPLAY)
+          (isElement(childNode) && !COLUMN_KINDS.includes(childNode.type))
         ) {
           return () => liftNodes(editor, { at: childPath });
         }

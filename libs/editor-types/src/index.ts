@@ -1,33 +1,31 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
 import { SerializedType } from '@decipad/computer';
-import * as markKinds from './mark-kinds';
 import * as elementKindsModule from './element-kinds';
+import * as markKinds from './mark-kinds';
 
-export * from './event-interception';
+export * from './column-kinds';
+export * from './components';
+export * from './data-view';
 export * from './decorator-kinds';
-
+export * from './element-kinds';
+export * from './event-interception';
+export * from './interactive-elements';
 export * from './mark-kinds';
+export * from './nodes';
+export * from './plate';
+export * from './table';
+export * from './utils';
+export * from './value';
 export { markKinds };
 
 import type { TableCellType } from './table';
 
 export type MarkKind = typeof markKinds[keyof typeof markKinds];
 
-export * from './decorator-kinds';
-export * from './element-kinds';
 export const elementKinds = Object.values(elementKindsModule);
 export type ElementKind =
   typeof elementKindsModule[keyof typeof elementKindsModule];
-
-export * from './interactive-elements';
-export * from './value';
-export * from './table';
-export * from './components';
-export * from './data-view';
-export * from './utils';
-export * from './nodes';
-export * from './plate';
 
 export const alwaysWritableElementTypes = [
   elementKindsModule.ELEMENT_TABLE,

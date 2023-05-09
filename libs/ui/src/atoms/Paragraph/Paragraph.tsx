@@ -50,6 +50,7 @@ export const Paragraph = ({
 
   return (
     <div
+      aria-label="column-content"
       css={[styles, isBlockActive && activeStyles]}
       data-testid="paragraph-wrapper"
     >

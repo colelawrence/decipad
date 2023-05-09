@@ -1,10 +1,12 @@
 import {
+  COLUMN_KINDS,
   ELEMENT_CALLOUT,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
   assertElementType,
+  isDragAndDropHorizontal,
   useNodePath,
   usePathMutatorCallback,
 } from '@decipad/editor-utils';
@@ -12,6 +14,7 @@ import { useEditorStylesContext } from '@decipad/react-contexts';
 import { Callout as UICallout } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
 import { DraggableBlock } from '../block-management';
+import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 
 export const Callout: PlateComponent = ({ attributes, children, element }) => {
@@ -26,10 +29,17 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
 
   const turnIntoProps = useTurnIntoProps(element);
 
+  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
+  const getAxis = useDragAndDropGetAxis({ isHorizontal });
+  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
+
   return (
     <DraggableBlock
       blockKind="callout"
       element={element}
+      accept={isHorizontal ? COLUMN_KINDS : undefined}
+      getAxis={getAxis}
+      onDrop={onDrop}
       {...turnIntoProps}
       {...attributes}
     >

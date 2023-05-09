@@ -1,14 +1,25 @@
-import { MyEditor, MyElement, PlateComponent } from '@decipad/editor-types';
-import { getRangeSafe } from '@decipad/editor-utils';
+import {
+  COLUMN_KINDS,
+  MyEditor,
+  MyElement,
+  PlateComponent,
+  useTEditorRef,
+} from '@decipad/editor-types';
+import {
+  getRangeSafe,
+  isDragAndDropHorizontal,
+  useNodePath,
+} from '@decipad/editor-utils';
 import {
   useEditorChangeState,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { Paragraph as UIParagraph, ParagraphPlaceholder } from '@decipad/ui';
+import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
 import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { DraggableBlock } from '../block-management';
+import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 
 const isSelected = (editor: MyEditor, element: MyElement) => {
@@ -52,11 +63,19 @@ export const Paragraph: PlateComponent = ({
     readOnly || !showPlaceHolder ? undefined : <ParagraphPlaceholder />;
 
   const turnIntoProps = useTurnIntoProps(element);
+  const editor = useTEditorRef();
+  const path = useNodePath(element);
+  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
+  const getAxis = useDragAndDropGetAxis({ isHorizontal });
+  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
 
   return (
     <DraggableBlock
       blockKind="paragraph"
       element={element}
+      accept={isHorizontal ? COLUMN_KINDS : undefined}
+      getAxis={getAxis}
+      onDrop={onDrop}
       {...turnIntoProps}
       {...attributes}
     >

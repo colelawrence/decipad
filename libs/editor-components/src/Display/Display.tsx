@@ -1,17 +1,21 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { DraggableBlock, useUnnamedResults } from '@decipad/editor-components';
 import {
+  DraggableBlock,
+  useDragAndDropGetAxis,
+  useDragAndDropOnDrop,
+  useUnnamedResults,
+} from '@decipad/editor-components';
+import {
+  COLUMN_KINDS,
   ELEMENT_DISPLAY,
-  ELEMENT_VARIABLE_DEF,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
-  hasLayoutAncestor,
+  isDragAndDropHorizontal,
   safeDelete,
   useNodePath,
   usePathMutatorCallback,
-  wrapIntoColumns,
 } from '@decipad/editor-utils';
 import {
   useComputer,
@@ -26,18 +30,8 @@ import {
   VariableEditor,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import { findNode, moveNodes, withoutNormalizing } from '@udecode/plate';
 import { Number } from 'libs/ui/src/icons';
-import {
-  ComponentProps,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { Path } from 'slate';
-import { defaultMoveNode } from '../utils/useDnd';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 export const Display: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_DISPLAY) {
@@ -120,52 +114,9 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     [namesDefined, unnamedResults]
   );
 
-  const isHorizontal = !deleted && path && hasLayoutAncestor(editor, path);
-
-  const getAxis = useCallback<
-    NonNullable<ComponentProps<typeof DraggableBlock>['getAxis']>
-  >(
-    (_, monitor) => ({
-      horizontal:
-        monitor.getItemType() === ELEMENT_VARIABLE_DEF ||
-        monitor.getItemType() === ELEMENT_DISPLAY,
-      vertical: !isHorizontal,
-    }),
-    [isHorizontal]
-  );
-
-  const onDrop = useCallback<
-    NonNullable<ComponentProps<typeof DraggableBlock>['onDrop']>
-  >(
-    (item, _, direction) => {
-      if (!path || (direction !== 'left' && direction !== 'right')) {
-        return defaultMoveNode(editor, item, element.id, direction);
-      }
-
-      withoutNormalizing(editor, () => {
-        const dragPath = findNode(editor, {
-          at: [],
-          match: { id: item.id },
-        })?.[1];
-        let dropPath: Path = [];
-
-        if (isHorizontal) {
-          if (direction === 'left') {
-            dropPath = path;
-          }
-          if (direction === 'right') {
-            dropPath = Path.next(path);
-          }
-        } else {
-          dropPath = [...path, direction === 'left' ? 0 : 1];
-          wrapIntoColumns(editor, path);
-        }
-
-        moveNodes(editor, { at: dragPath, to: dropPath });
-      });
-    },
-    [editor, element.id, isHorizontal, path]
-  );
+  const isHorizontal = isDragAndDropHorizontal(deleted, editor, path);
+  const getAxis = useDragAndDropGetAxis({ isHorizontal });
+  const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
 
   // Performance improvement: Because results are only calculated when
   // menu is open, we no longer have access to them all the time. So we
@@ -211,9 +162,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
       <DraggableBlock
         blockKind="interactive"
         element={element}
-        accept={
-          isHorizontal ? [ELEMENT_VARIABLE_DEF, ELEMENT_DISPLAY] : undefined
-        }
+        accept={isHorizontal ? COLUMN_KINDS : undefined}
         getAxis={getAxis}
         onDrop={onDrop}
       >
