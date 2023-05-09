@@ -126,7 +126,8 @@ export const Onboard = () => {
                       toast('Could not change your name', 'error');
                     } else if (
                       usernameUpdate.status === 'fulfilled' &&
-                      !usernameUpdate.value?.data?.setUsername
+                      username.trim() !== '' &&
+                      usernameUpdate.value?.data?.setUsername !== true
                     ) {
                       toast(
                         'That username is already taken, please change it',
