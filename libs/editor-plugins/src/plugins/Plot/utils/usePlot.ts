@@ -73,7 +73,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
   const computer = useComputer();
   const path = useNodePath(element);
 
-  const names = computer.getNamesDefined$.useWithSelector((n) =>
+  const names = computer.getNamesDefined$.useWithSelectorDebounced(500, (n) =>
     n.filter(isTable).map((table) => autocompleteNameToExprRef(computer, table))
   );
 

@@ -80,11 +80,14 @@ export const defaultConvertInto =
     focusEditor(editor);
   };
 
+const turnIntoResultDebounceMs = 500;
+
 export const useTurnIntoProps = (element: MyElement) => {
   const editor = useTEditorRef();
   const computer = useComputer();
 
-  const result = computer.getBlockIdResult$.useWithSelector(
+  const result = computer.getBlockIdResult$.useWithSelectorDebounced(
+    turnIntoResultDebounceMs,
     (r) => r?.result,
     element.id
   );

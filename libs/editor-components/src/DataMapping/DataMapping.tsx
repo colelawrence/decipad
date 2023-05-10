@@ -24,6 +24,8 @@ import { DraggableBlock } from '../block-management';
 import { getSyntaxError } from '../CodeLine/getSyntaxError';
 import { SimpleValueContext, VarResultContext } from '../CodeLine';
 
+const dataMappingResultsDebounceMs = 500;
+
 export const DataMapping: PlateComponent = ({
   attributes,
   children,
@@ -42,24 +44,26 @@ export const DataMapping: PlateComponent = ({
 
   const definedResult = computer.getBlockIdResult$.use(element.id);
 
-  const results = computer.results$.useWithSelector(({ blockResults }) =>
-    Object.values(blockResults)
-      .map((blockResult) => {
-        const kind = blockResult.result?.type.kind;
-        if (blockResult.type === 'identified-error') return undefined;
-        if (
-          !(
-            kind === 'string' ||
-            kind === 'number' ||
-            kind === 'boolean' ||
-            kind === 'type-error'
-          )
-        ) {
-          return undefined;
-        }
-        return blockResult;
-      })
-      .filter((n): n is IdentifiedResult => n !== undefined)
+  const results = computer.results$.useWithSelectorDebounced(
+    dataMappingResultsDebounceMs,
+    ({ blockResults }) =>
+      Object.values(blockResults)
+        .map((blockResult) => {
+          const kind = blockResult.result?.type.kind;
+          if (blockResult.type === 'identified-error') return undefined;
+          if (
+            !(
+              kind === 'string' ||
+              kind === 'number' ||
+              kind === 'boolean' ||
+              kind === 'type-error'
+            )
+          ) {
+            return undefined;
+          }
+          return blockResult;
+        })
+        .filter((n): n is IdentifiedResult => n !== undefined)
   );
   const bareResults: ComponentProps<typeof UIDataMapping>['results'] =
     results.map((res) => ({
@@ -88,7 +92,8 @@ export const DataMapping: PlateComponent = ({
 
   const tableColumns = computer.getAllColumns$.use(element.source);
 
-  const [, lineResult] = computer.getBlockIdResult$.useWithSelector(
+  const [, lineResult] = computer.getBlockIdResult$.useWithSelectorDebounced(
+    dataMappingResultsDebounceMs,
     (line) => [getSyntaxError(line), line] as const,
     element.id
   );

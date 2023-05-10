@@ -16,6 +16,8 @@ interface CodeVariableTooltipProps {
   onGoToDefinition?: () => void;
 }
 
+const tooltipDebounceMs = 500;
+
 export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   variableMissing = false,
   children,
@@ -23,7 +25,8 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   provideDefinitionLink,
   onGoToDefinition = noop,
 }): ReturnType<FC> => {
-  const hasValue = useComputer().getBlockIdResult$.useWithSelector(
+  const hasValue = useComputer().getBlockIdResult$.useWithSelectorDebounced(
+    tooltipDebounceMs,
     (result) => result?.result?.value != null,
     defBlockId
   );

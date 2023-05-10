@@ -10,10 +10,13 @@ import { Node } from 'slate';
 import { useAutoConvertToSmartRef } from '@decipad/editor-components';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 
+const errorDebounceMs = 500;
+
 export const TableColumnFormula: PlateComponent = ({ children, element }) => {
   assertElementType(element, ELEMENT_TABLE_COLUMN_FORMULA);
   const header = useTableColumnHeaderOfTableAbove(element, element.columnId);
-  const errorResult = useComputer().getBlockIdResult$.useWithSelector(
+  const errorResult = useComputer().getBlockIdResult$.useWithSelectorDebounced(
+    errorDebounceMs,
     selectErrors,
     element.columnId
   );

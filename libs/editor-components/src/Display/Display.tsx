@@ -33,6 +33,8 @@ import { noop } from '@decipad/utils';
 import { Number } from 'libs/ui/src/icons';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
+const displayDebounceNamesDefinedMs = 500;
+
 export const Display: PlateComponent = ({ attributes, element, children }) => {
   if (element?.type !== ELEMENT_DISPLAY) {
     throw new Error(`Expression is meant to render expression elements`);
@@ -70,7 +72,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   // Saving a lot of CPU when the editor is re-rendering when the user is busy
   // doing other work.
   const namesDefined = computer.getNamesDefined$
-    .useWithSelector((names) =>
+    .useWithSelectorDebounced(displayDebounceNamesDefinedMs, (names) =>
       Object.values(names).map((name, i): SelectItems | undefined => {
         if (!openMenu && loaded) return undefined;
         const { kind } = name.type;

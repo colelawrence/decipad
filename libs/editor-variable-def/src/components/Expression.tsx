@@ -38,6 +38,8 @@ const getPlaceHolder = (type: SerializedType | undefined) => {
   return '100$';
 };
 
+const errorDebounceMs = 500;
+
 export const Expression: PlateComponent = ({
   attributes,
   element,
@@ -57,10 +59,12 @@ export const Expression: PlateComponent = ({
   const isReadOnly = useIsEditorReadOnly();
 
   const computer = useComputer();
-  const [result, parseError] = computer.getBlockIdResult$.useWithSelector(
-    (r) => [r?.result, r?.error?.message],
-    parent?.id || ''
-  );
+  const [result, parseError] =
+    computer.getBlockIdResult$.useWithSelectorDebounced(
+      errorDebounceMs,
+      (r) => [r?.result, r?.error?.message],
+      parent?.id || ''
+    );
   const showParseError = useDelayedTrue(Boolean(parseError));
 
   const error =

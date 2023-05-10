@@ -19,6 +19,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { SimpleValueContext, VarResultContext } from '../CodeLine';
 import { getSyntaxError } from '../CodeLine/getSyntaxError';
 
+const dataMappingResultsDebounceMs = 500;
+
 export const DataMappingRow: PlateComponent = ({
   attributes,
   children,
@@ -39,7 +41,8 @@ export const DataMappingRow: PlateComponent = ({
     'sourceColumn'
   );
 
-  const [, lineResult] = computer.getBlockIdResult$.useWithSelector(
+  const [, lineResult] = computer.getBlockIdResult$.useWithSelectorDebounced(
+    dataMappingResultsDebounceMs,
     (line) => [getSyntaxError(line), line] as const,
     element.id
   );

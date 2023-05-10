@@ -35,6 +35,8 @@ import { useSiblingCodeLines } from './useSiblingCodeLines';
 import { useTurnIntoProps } from './useTurnIntoProps';
 import { useAutoConvertToSmartRef } from './useAutoConvertToSmartRef';
 
+const codeLineDebounceResultMs = 500;
+
 export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_CODE_LINE);
 
@@ -52,10 +54,12 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   useAutoConvertToSmartRef(element);
 
   const { id: lineId } = element;
-  const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
-    (line) => [getSyntaxError(line), line?.result] as const,
-    lineId
-  );
+  const [syntaxError, lineResult] =
+    computer.getBlockIdResult$.useWithSelectorDebounced(
+      codeLineDebounceResultMs,
+      (line) => [getSyntaxError(line), line?.result] as const,
+      lineId
+    );
 
   useEffect(() => {
     // refresh decorations when text or result type changes

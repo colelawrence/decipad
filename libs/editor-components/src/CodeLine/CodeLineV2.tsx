@@ -74,6 +74,8 @@ import { CodeVariableDefinitionEffects } from './CodeVariableDefinitionEffects';
 
 export type Variant = 'error' | 'calculation' | 'value';
 
+const codeLineDebounceResultMs = 500;
+
 export const CodeLineV2: PlateComponent = ({
   attributes,
   children,
@@ -98,10 +100,12 @@ export const CodeLineV2: PlateComponent = ({
   useCodeLineClickReference(editor, selected, codeLineContent);
 
   const { id: lineId } = element;
-  const [syntaxError, lineResult] = computer.getBlockIdResult$.useWithSelector(
-    (line) => [getSyntaxError(line), line] as const,
-    lineId
-  );
+  const [syntaxError, lineResult] =
+    computer.getBlockIdResult$.useWithSelectorDebounced(
+      codeLineDebounceResultMs,
+      (line) => [getSyntaxError(line), line] as const,
+      lineId
+    );
 
   const onClickedResult = useCallback(
     (result: Result.Result) => {

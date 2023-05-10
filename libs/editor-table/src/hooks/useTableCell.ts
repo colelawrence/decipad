@@ -51,6 +51,8 @@ interface UseTableCellResult {
   forceAlignRight: boolean;
 }
 
+const debounceParseErrorMs = 500;
+
 export const useTableCell = (
   element: TableHeaderElement | TableCellElement
 ): UseTableCellResult => {
@@ -103,7 +105,8 @@ export const useTableCell = (
       : undefined;
 
   // Cell parse error (present for all cells, but only displayed in the series cell)
-  const parseError = computer.getBlockIdResult$.useWithSelector(
+  const parseError = computer.getBlockIdResult$.useWithSelectorDebounced(
+    debounceParseErrorMs,
     (elm) => (hasText ? elm?.error : undefined),
     element.id
   );

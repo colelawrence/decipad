@@ -15,6 +15,8 @@ import { commitAutocompleteItem } from './commitAutocompleteItem';
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
   sortBy(names, (name) => (name.isLocal ? 0 : 1));
 
+const autoCompleteDebounceMs = 500;
+
 const selectNames = (
   names: AutocompleteName[]
 ): ComponentProps<typeof UIAutoCompleteMenu>['identifiers'] => {
@@ -100,11 +102,13 @@ const AutoCompleteWrapper = ({
   ComponentProps<typeof UIAutoCompleteMenu>,
   'identifiers'
 >) => {
-  const identifiers = useComputer().getNamesDefined$.useWithSelector(
+  const identifiers = useComputer().getNamesDefined$.useWithSelectorDebounced(
+    autoCompleteDebounceMs,
     selectNames,
     blockId
   );
-  const isInTable = useComputer().getAllColumns$.useWithSelector(
+  const isInTable = useComputer().getAllColumns$.useWithSelectorDebounced(
+    autoCompleteDebounceMs,
     (cols) => cols.find((t) => t.blockId === blockId)?.tableName
   );
 
