@@ -2,9 +2,9 @@ import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
   create as createPad2,
-  duplicate as duplicateSharedDoc,
   importNotebookContent,
   duplicateNotebookAttachments,
+  snapshot,
 } from '@decipad/services/notebooks';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
@@ -17,7 +17,7 @@ export const duplicatePad = async (
   {
     id,
     targetWorkspace,
-    document,
+    document: _document,
   }: { id: ID; targetWorkspace?: string; document?: string },
   context: GraphqlContext
 ): Promise<Pad> => {
@@ -60,15 +60,16 @@ export const duplicatePad = async (
     clonedPad.id
   );
 
-  if (document) {
-    return importNotebookContent({
-      workspaceId,
-      source: document,
-      user,
-      pad: clonedPad,
-      replaceList,
-    });
-  }
-  await duplicateSharedDoc(id, clonedPad.id, previousPad.name);
-  return clonedPad;
+  const doc = (await snapshot(id)).value;
+  // set new title
+  doc.children[0].children = [{ text: newName }];
+  const document = _document != null ? _document : JSON.stringify(doc);
+
+  return importNotebookContent({
+    workspaceId,
+    source: document,
+    user,
+    pad: clonedPad,
+    replaceList,
+  });
 };

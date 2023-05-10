@@ -1,12 +1,13 @@
 import { toSlateDoc } from '@decipad/slate-yjs';
 import tables, { allPages } from '@decipad/tables';
+import { Document } from '@decipad/editor-types';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import { applyUpdate, Doc, mergeUpdates } from 'yjs';
 
 export const snapshot = async (
   notebookId: string
-): Promise<{ data: Buffer; version: string }> => {
+): Promise<{ data: Buffer; version: string; value: Document }> => {
   const data = await tables();
 
   const updates: Buffer[] = [];
@@ -28,9 +29,11 @@ export const snapshot = async (
   if (mergedUpdates.length) {
     applyUpdate(doc, mergedUpdates);
   }
-  const canonicalizedObj = canonicalize(toSlateDoc(doc.getArray()));
+  const value = toSlateDoc(doc.getArray());
+  const canonicalizedObj = canonicalize(value);
 
   return {
+    value: { children: value },
     data: Buffer.from(mergedUpdates),
     version: md5(canonicalizedObj),
   };

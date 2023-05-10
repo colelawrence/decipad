@@ -20,7 +20,6 @@ const isAttachmentLocal = (attachment: FileAttachmentRecord): boolean => {
 };
 
 const duplicateAttachment = async (
-  sourceNotebookId: string,
   targetNotebookId: string,
   attachment: FileAttachmentRecord
 ): Promise<FileAttachmentRecord> => {
@@ -32,11 +31,7 @@ const duplicateAttachment = async (
     resource_uri: `/pads/${targetNotebookId}`,
   };
   if (isAttachmentLocal(attachment)) {
-    const oldFileName = attachmentFilePath(
-      sourceNotebookId,
-      attachment.user_filename,
-      attachment.id
-    );
+    const oldFileName = attachment.filename;
     const newFileName = attachmentFilePath(
       targetNotebookId,
       attachment.user_filename,
@@ -74,7 +69,6 @@ export const duplicateNotebookAttachments = async (
     try {
       // eslint-disable-next-line no-await-in-loop
       const newAttachment = await duplicateAttachment(
-        sourceNotebookId,
         targetNotebookId,
         attachment
       );
@@ -83,7 +77,7 @@ export const duplicateNotebookAttachments = async (
       ] = `/attachments/${newAttachment.id}`;
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.error('Error duplicating attachment', attachment);
+      console.error('Error duplicating attachment', attachment, err);
     }
   }
 

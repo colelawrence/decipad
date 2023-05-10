@@ -6,7 +6,7 @@ import { runAST } from '.';
 const TEST_COLUMN_LENGTH = 10_000;
 const OPS = ['+', '-', '/', '*', 'mod', '^'] as const;
 
-const CI_SUCKINESS_FACTOR = 5;
+const CI_SUCKINESS_FACTOR = 7;
 const MIN_ROWS_PER_SEC = 3_500 / (process.env.CI ? CI_SUCKINESS_FACTOR : 1);
 const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
   Object.fromEntries(
