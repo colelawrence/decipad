@@ -8,9 +8,6 @@ export class MappedColumn<TValue> implements ColumnLike<TValue> {
   readonly source: ColumnLike<TValue>;
 
   constructor(col: ColumnLike<TValue>, map: number[]) {
-    if (map.length < 1) {
-      throw new TypeError('map contains no entries');
-    }
     this.source = col;
     this.map = map;
   }

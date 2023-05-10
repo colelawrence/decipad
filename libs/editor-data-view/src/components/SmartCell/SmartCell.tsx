@@ -13,11 +13,13 @@ import { debounceTime, EMPTY } from 'rxjs';
 import { css } from '@emotion/react';
 import { textify } from '@decipad/parse';
 import { useTEditorRef } from '@decipad/editor-types';
+import { useDebounce } from 'use-debounce';
 import { maybeAggregate } from '../../utils/maybeAggregate';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
 
+const DEBOUNCE_EXPRESSION_MS = 500;
 const DEBOUNCE_RESULT_MS = 100;
 
 const emptyCellStyles = css({
@@ -67,20 +69,23 @@ export const SmartCell: FC<SmartProps> = ({
     );
   }, [column, previousColumns, roundings, tableName]);
 
-  const expression = useMemo(() => {
-    return (
-      column &&
-      expressionFilter &&
-      maybeAggregate(
-        `${expressionFilter}.${column.name}`,
-        column.type,
-        aggregationType,
-        {
-          sum: `sum(${tableName}.${column.name})`,
-        }
-      )
-    );
-  }, [aggregationType, column, expressionFilter, tableName]);
+  const [expression] = useDebounce(
+    useMemo(() => {
+      return (
+        column &&
+        expressionFilter &&
+        maybeAggregate(
+          `${expressionFilter}.${column.name}`,
+          column.type,
+          aggregationType,
+          {
+            sum: `sum(${tableName}.${column.name})`,
+          }
+        )
+      );
+    }, [aggregationType, column, expressionFilter, tableName]),
+    DEBOUNCE_EXPRESSION_MS
+  );
 
   useEffect(() => {
     const sub = (

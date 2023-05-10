@@ -1,16 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+
+const debounceTimeMs = 200;
 
 export const useIsDragging = () => {
   const [isDragging, setIsDragging] = useState(false);
 
-  useEffect(() => {
-    const onDragStart = () => {
+  const onDragStart = useDebouncedCallback(
+    useCallback(() => {
       setIsDragging(true);
-    };
-    const onDragEnd = () => {
-      setIsDragging(false);
-    };
+    }, []),
+    debounceTimeMs
+  );
 
+  const onDragEnd = useDebouncedCallback(
+    useCallback(() => {
+      setIsDragging(false);
+    }, []),
+    debounceTimeMs
+  );
+
+  useEffect(() => {
     document.addEventListener('dragstart', onDragStart);
     document.addEventListener('dragend', onDragEnd);
 
@@ -18,7 +28,7 @@ export const useIsDragging = () => {
       document.removeEventListener('dragstart', onDragStart);
       document.removeEventListener('dragend', onDragEnd);
     };
-  }, [setIsDragging]);
+  }, [onDragEnd, onDragStart]);
 
   return isDragging;
 };

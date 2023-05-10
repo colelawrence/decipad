@@ -25,6 +25,8 @@ interface UseSmartRefResult {
   isSelected: boolean;
 }
 
+const smartRefDebounceTimeMs = 500;
+
 export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
   const siblingContent = useEditorChangeState(
     (editor) => {
@@ -59,7 +61,8 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
         hasNext,
       };
     },
-    { hasNext: false, hasPrevious: false }
+    { hasNext: false, hasPrevious: false },
+    { debounceTimeMs: smartRefDebounceTimeMs }
   );
 
   const editor = useTEditorRef();
