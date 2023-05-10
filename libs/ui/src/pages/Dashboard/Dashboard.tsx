@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, smallestDesktop } from '../../primitives';
+import { cssVar, smallestDesktop, smallScreenQuery } from '../../primitives';
 
 const crossBarsQuery = `@media (min-width: ${smallestDesktop.portrait.width}px)`;
 const styles = css({
@@ -22,6 +22,12 @@ const styles = css({
       "sidebar notebook-list" 1fr
       /347px   1fr
     `,
+  },
+
+  [smallScreenQuery]: {
+    header: {
+      display: 'none',
+    },
   },
 
   '> *': {

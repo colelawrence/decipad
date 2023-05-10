@@ -221,6 +221,12 @@ export const code: TypographyStyles = {
   fontFeatureSettings: 'unset',
 };
 
+export const inputLabel = css({
+  ...p13Medium,
+  color: cssVar('weakTextColor'),
+  marginBottom: '8px',
+});
+
 export const smallCode: TypographyStyles = {
   ...code,
   fontSize: `${10 / usualRemPxs}rem`,

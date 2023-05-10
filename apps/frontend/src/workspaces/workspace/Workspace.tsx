@@ -641,17 +641,21 @@ const Workspace: FC = () => {
         name={name}
         username={username}
         description={description}
-        // closeHref={currentWorkspaceRoute.$}
-        onChangeName={(newName) => {
+        onChangeName={async (newName) => {
           setName(newName);
-          updateUser({
-            props: {
-              name: newName,
-            },
-          }).catch((err) => {
+
+          try {
+            await updateUser({
+              props: {
+                name: newName,
+              },
+            });
+
+            toast(`Your name changed to ${newName}`, 'success');
+          } catch (err) {
             console.error('Failed to update user. Error:', err);
             toast('Could not change your name', 'error');
-          });
+          }
         }}
         onChangeUsername={async (newUsername) => {
           const data = await setUsernameMutation({

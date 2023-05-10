@@ -1,1 +1,1 @@
-export const ALLOW_DARK_THEME_LOCAL_STORAGE_KEY = 'deciAllowDarkTheme';
+export const THEME_PREFERENCE_LOCAL_STORAGE_KEY = 'deciThemePreference';

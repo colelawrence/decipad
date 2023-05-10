@@ -16,6 +16,8 @@ import { AvailableColorStatus, ColorStatusNames } from '../../utils';
 import { FilterBubbles } from '../FilterBubbles/FilterBubbles';
 import { MenuList } from '../MenuList/MenuList';
 
+const ROUTES_WHITELIST = ['', 'edit', 'members'];
+
 export const SearchBar = (): ReturnType<FC> => {
   const [search, setSearch] = useQueryParam(
     'search',
@@ -33,8 +35,10 @@ export const SearchBar = (): ReturnType<FC> => {
   const [visibilityOpen, setVisibilityOpen] = useState(false);
 
   const { '*': maybeWorkspaceFolder } = useParams();
-  const displaySearchBox =
-    isFlagEnabled('DASHBOARD_SEARCH') && maybeWorkspaceFolder === '';
+  const isRouteAllowed =
+    maybeWorkspaceFolder != null &&
+    ROUTES_WHITELIST.includes(maybeWorkspaceFolder);
+  const displaySearchBox = isFlagEnabled('DASHBOARD_SEARCH') && isRouteAllowed;
   const noNulls = useMemo(
     () => status.filter((x) => x !== null) as string[],
     [status]

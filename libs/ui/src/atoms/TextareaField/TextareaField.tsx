@@ -1,7 +1,15 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { nanoid } from 'nanoid';
 import { cssVar, p14Regular, setCssVar } from '../../primitives';
+import { inputLabel } from '../../primitives/text';
+
+const containerStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+});
 
 const inputStyles = css({
   padding: '12px',
@@ -24,6 +32,8 @@ export type TextareaFieldProps = {
   readonly placeholder?: string;
   readonly required?: boolean;
   readonly value: string;
+  readonly label?: string;
+  readonly name?: string;
   readonly onKeyUp?: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   readonly onKeyDown?: (
     event: React.KeyboardEvent<HTMLTextAreaElement>
@@ -37,11 +47,20 @@ export const TextareaField = ({
   placeholder,
   required = false,
   value,
+  label,
+  name,
   onChange = noop,
   onKeyUp = noop,
   onKeyDown = noop,
 }: TextareaFieldProps): ReturnType<FC> => {
-  return (
+  const id = `input-${useState(nanoid)[0]}`;
+  const labelEl = label ? (
+    <label htmlFor={id} css={inputLabel}>
+      {label}
+    </label>
+  ) : null;
+
+  const inputEl = (
     <textarea
       css={inputStyles}
       autoFocus={autoFocus}
@@ -52,6 +71,14 @@ export const TextareaField = ({
       required={required}
       rows={height}
       value={value}
+      name={name}
     />
+  );
+
+  return (
+    <div css={containerStyles}>
+      {labelEl}
+      {inputEl}
+    </div>
   );
 };

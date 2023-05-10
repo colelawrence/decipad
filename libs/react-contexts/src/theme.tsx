@@ -1,7 +1,9 @@
-import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '@decipad/utils';
 import { noop } from 'lodash';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { create } from 'zustand';
+import { THEME_PREFERENCE_LOCAL_STORAGE_KEY } from '@decipad/utils';
+
+export type ThemePreference = 'system' | 'light' | 'dark';
 
 const getItem =
   'localStorage' in global
@@ -12,13 +14,23 @@ const setItem =
     ? global.localStorage.setItem.bind(global.localStorage)
     : noop;
 
+const isSystemThemeDark = (): boolean => {
+  if (!('matchMedia' in global)) {
+    return false;
+  }
+
+  return matchMedia('(prefers-color-scheme: dark)').matches;
+};
+
 const defaultTheme = (): boolean => {
-  const isInDarkTheme = getItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY);
-  return isInDarkTheme
-    ? isInDarkTheme === 'true'
-    : 'matchMedia' in global
-    ? matchMedia('(prefers-color-scheme: dark)').matches
-    : false;
+  const themePreference = getItem(
+    THEME_PREFERENCE_LOCAL_STORAGE_KEY
+  ) as ThemePreference;
+
+  if (!themePreference || themePreference === 'system')
+    return isSystemThemeDark();
+
+  return themePreference === 'dark';
 };
 
 interface ThemeStore {
@@ -31,16 +43,42 @@ export const themeStore = create<ThemeStore>((set) => ({
   setTheme: (isDarkTheme: boolean) => set({ theme: isDarkTheme }),
 }));
 
-export const useThemeFromStore = (): [boolean, (newValue: boolean) => void] => {
-  const store = themeStore((st) => st);
+export const useThemeFromStore = (): [
+  boolean,
+  ThemePreference,
+  (newValue: ThemePreference) => void
+] => {
+  const { theme, setTheme } = themeStore((st) => st);
+  const preference = useMemo(
+    () =>
+      (getItem(THEME_PREFERENCE_LOCAL_STORAGE_KEY) as ThemePreference) ||
+      'system',
+    []
+  );
+
+  useEffect(() => {
+    const matchMedia = window.matchMedia('(prefers-color-scheme: dark)');
+    const resetTheme = () => setTheme(defaultTheme());
+
+    if (!matchMedia || !('addEventListener' in matchMedia)) return;
+
+    matchMedia.addEventListener('change', resetTheme);
+    return () => matchMedia.removeEventListener('change', resetTheme);
+  }, [setTheme]);
+
   return [
-    store.theme,
+    theme,
+    preference,
     useCallback(
-      (isDarkTheme) => {
-        store.setTheme(isDarkTheme);
-        setItem(ALLOW_DARK_THEME_LOCAL_STORAGE_KEY, String(isDarkTheme));
+      (newPreference) => {
+        if (newPreference === 'system') {
+          setTheme(isSystemThemeDark());
+        } else {
+          setTheme(newPreference === 'dark');
+        }
+        setItem(THEME_PREFERENCE_LOCAL_STORAGE_KEY, newPreference);
       },
-      [store]
+      [setTheme]
     ),
   ];
 };

@@ -1,5 +1,5 @@
 import { ArgTypes, DecoratorFn, Parameters } from '@storybook/react';
-import { ALLOW_DARK_THEME_LOCAL_STORAGE_KEY } from '@decipad/utils';
+import { THEME_PREFERENCE_LOCAL_STORAGE_KEY } from '@decipad/utils';
 import { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
 import { GlobalStyles } from '../src';
@@ -24,10 +24,7 @@ const SetAllowDarkMode: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => {
   const allowDarkMode = useDarkMode();
   useEffect(() => {
-    localStorage.setItem(
-      ALLOW_DARK_THEME_LOCAL_STORAGE_KEY,
-      String(allowDarkMode)
-    );
+    localStorage.setItem(THEME_PREFERENCE_LOCAL_STORAGE_KEY, 'dark');
   }, [allowDarkMode]);
   return <>{children}</>;
 };

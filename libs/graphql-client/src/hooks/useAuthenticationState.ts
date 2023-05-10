@@ -8,6 +8,8 @@ export const useAuthenticationState = () => {
 
   const userName = user?.self?.name || 'Me';
   const userEmail = session?.user?.email || 'me@example.com';
+  const userUsername = user?.self?.username || '';
+  const userBio = user?.self?.description || '';
   const userId = 'me'; // TODO: fix user id
 
   const signOutCallback = useCallback(() => {
@@ -24,10 +26,12 @@ export const useAuthenticationState = () => {
       currentUser: {
         id: userId,
         name: userName,
+        username: userUsername,
         email: userEmail,
+        bio: userBio,
       },
       signOutCallback,
     }),
-    [userId, userName, userEmail, signOutCallback]
+    [userId, userName, userUsername, userEmail, userBio, signOutCallback]
   );
 };

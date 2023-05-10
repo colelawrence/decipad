@@ -27,7 +27,7 @@ export const WorkspaceSwitcher: React.FC<DashboardSidebarProps> = ({
   onLogout,
   ...props
 }) => {
-  const [darkTheme, setDarkTheme] = useThemeFromStore();
+  const [darkTheme, , setThemePreference] = useThemeFromStore();
   const [openMenu, setOpenMenu] = useState(false);
   const openUserSettings = useEditUserModalStore((state) => state.open);
 
@@ -44,6 +44,13 @@ export const WorkspaceSwitcher: React.FC<DashboardSidebarProps> = ({
     setOpenMenu(false);
     openUserSettings();
   }, [openUserSettings]);
+
+  const setDarkTheme = useCallback(
+    (isDarkTheme: boolean) => {
+      setThemePreference(isDarkTheme ? 'dark' : 'light');
+    },
+    [setThemePreference]
+  );
 
   return (
     <div css={workspaceSwitcherStyles}>

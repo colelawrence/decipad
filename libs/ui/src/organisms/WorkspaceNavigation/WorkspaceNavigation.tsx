@@ -11,7 +11,6 @@ import {
   ExternalHrefIcon,
   MenuItem,
   NavigationItem,
-  Tooltip,
 } from '../../atoms';
 import {
   Archive,
@@ -279,68 +278,59 @@ export const WorkspaceNavigation = ({
               })}
             </NavigationList>,
             <div role="presentation" key="sections-part-0">
-              <Tooltip
-                side="right"
-                variant="small"
-                trigger={
-                  <span ref={ref}>
-                    <NavigationList key={'sections-new'}>
-                      <NavigationItem
-                        key={'section-new'}
-                        wrapperStyles={css({
-                          'div[aria-label="lefty"]': { paddingLeft: 16 },
-                          'button div': {
-                            color: cssVar('weakerTextColor'),
-                          },
-                          'button div span svg path': {
-                            stroke: cssVar('weakerTextColor'),
-                          },
-                        })}
-                        iconStyles={css({ width: 12, height: 12 })}
-                        onClick={() => setOpenMenu(!openMenu)}
-                        icon={<Plus />}
-                      >
-                        <span css={itemTextStyles}>New Section</span>
-                      </NavigationItem>
-                    </NavigationList>
+              <span ref={ref}>
+                <NavigationList key={'sections-new'}>
+                  <NavigationItem
+                    key={'section-new'}
+                    wrapperStyles={css({
+                      'div[aria-label="lefty"]': { paddingLeft: 16 },
+                      'button div': {
+                        color: cssVar('weakerTextColor'),
+                      },
+                      'button div span svg path': {
+                        stroke: cssVar('weakerTextColor'),
+                      },
+                    })}
+                    iconStyles={css({ width: 12, height: 12 })}
+                    onClick={() => setOpenMenu(!openMenu)}
+                    icon={<Plus />}
+                  >
+                    <span css={itemTextStyles}>New Section</span>
+                  </NavigationItem>
+                </NavigationList>
 
-                    {openMenu && (
-                      <CreateOrEditSectionModal
-                        onClose={() => setOpenMenu(!openMenu)}
-                        onSubmit={(sectionName: string, color: OpaqueColor) => {
-                          onCreateSection({
-                            workspaceId: activeWorkspace.id,
-                            name: sectionName,
-                            color: opaqueColorToHex(color),
-                          })
-                            .then((res) => {
-                              if (res.data) {
-                                if (res.data.addSectionToWorkspace?.id) {
-                                  navigate(
-                                    activeWorkspaceRoute.section({
-                                      sectionId:
-                                        res.data.addSectionToWorkspace.id,
-                                    }).$
-                                  );
-                                }
-                              } else {
-                                console.error('Failed to create section.', res);
-                              }
-                            })
-                            .catch((err) => {
-                              console.error(
-                                'Failed to create section. Error:',
-                                err
+                {openMenu && (
+                  <CreateOrEditSectionModal
+                    onClose={() => setOpenMenu(!openMenu)}
+                    onSubmit={(sectionName: string, color: OpaqueColor) => {
+                      onCreateSection({
+                        workspaceId: activeWorkspace.id,
+                        name: sectionName,
+                        color: opaqueColorToHex(color),
+                      })
+                        .then((res) => {
+                          if (res.data) {
+                            if (res.data.addSectionToWorkspace?.id) {
+                              navigate(
+                                activeWorkspaceRoute.section({
+                                  sectionId: res.data.addSectionToWorkspace.id,
+                                }).$
                               );
-                            });
-                        }}
-                      />
-                    )}
-                  </span>
-                }
-              >
-                Create a new section
-              </Tooltip>
+                            }
+                          } else {
+                            console.error('Failed to create section.', res);
+                          }
+                        })
+                        .catch((err) => {
+                          console.error(
+                            'Failed to create section. Error:',
+                            err
+                          );
+                        });
+                    }}
+                  />
+                )}
+              </span>
             </div>,
           ]
         : null}

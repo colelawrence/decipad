@@ -3,6 +3,13 @@ import { css } from '@emotion/react';
 import { FC, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { cssVar, p14Regular, setCssVar, p13Medium } from '../../primitives';
+import { inputLabel } from '../../primitives/text';
+
+const containerStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+});
 
 const inputStyles = css({
   padding: '12px',
@@ -24,11 +31,6 @@ const inputStylesSmall = css(inputStyles, {
   ...p13Medium,
 });
 
-const labelStyles = css(p13Medium, {
-  color: cssVar('weakTextColor'),
-  marginBottom: '8px',
-});
-
 type FieldType =
   | 'text'
   | 'search'
@@ -46,6 +48,7 @@ export type InputFieldProps = {
 
   readonly label?: string;
   readonly placeholder?: string;
+  readonly name?: string;
 
   readonly value: string;
   readonly tabIndex?: number;
@@ -62,6 +65,7 @@ export const InputField = ({
 
   label,
   placeholder,
+  name,
 
   value,
   tabIndex,
@@ -70,7 +74,7 @@ export const InputField = ({
 }: InputFieldProps): ReturnType<FC> => {
   const id = `input-${useState(nanoid)[0]}`;
   const labelEl = label ? (
-    <label htmlFor={id} css={labelStyles}>
+    <label htmlFor={id} css={inputLabel}>
       {label}
     </label>
   ) : null;
@@ -92,6 +96,7 @@ export const InputField = ({
       type={type}
       required={required}
       placeholder={placeholder}
+      name={name}
       value={value}
       tabIndex={tabIndex}
       onChange={(event) => onChange(event.currentTarget.value)}
@@ -104,7 +109,7 @@ export const InputField = ({
   );
 
   return (
-    <div css={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div css={containerStyles}>
       {labelEl}
       {inputEl}
     </div>

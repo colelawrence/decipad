@@ -6,6 +6,7 @@ import { CollabMember } from '../../atoms';
 import { AccountMenu } from '../AccountMenu/AccountMenu';
 import { useEditUserModalStore } from '../../templates/EditUserModal/EditUserModal';
 import { cssVar } from '../../primitives';
+import { Settings } from '../../icons';
 
 export const WorkspaceAccount: React.FC = () => {
   const authState = useAuthenticationState();
@@ -35,42 +36,54 @@ export const WorkspaceAccount: React.FC = () => {
   }, [signOutCallback]);
 
   return (
-    <div
-      css={{
-        display: 'flex',
-        gap: '8px',
-        alignItems: 'center',
-        cursor: 'pointer',
+    <div css={buttonsContainerStyles}>
+      <div css={accountButtonStyles} ref={ref} onClick={setMenuOpen}>
+        <CollabMember
+          avatar={{
+            user: authState.currentUser,
+            permission: 'READ',
+          }}
+        />
+        {openMenu && (
+          <div css={menuContainerStyles}>
+            <AccountMenu
+              onLogout={logoutAndCloseMenu}
+              onOpenSettings={openSettingsAndCloseMenu}
+              name={authState.currentUser.name}
+              email={authState.currentUser.email}
+            />
+          </div>
+        )}
+      </div>
 
-        padding: '4px 6px',
-        borderRadius: '8px',
-
-        ':hover': {
-          backgroundColor: cssVar('highlightColor'),
-        },
-      }}
-      ref={ref}
-      onClick={setMenuOpen}
-    >
-      <CollabMember
-        avatar={{
-          user: authState.currentUser,
-          permission: 'READ',
-        }}
-      />
-      {openMenu && (
-        <div css={menuContainerStyles}>
-          <AccountMenu
-            onLogout={logoutAndCloseMenu}
-            onOpenSettings={openSettingsAndCloseMenu}
-            name={authState.currentUser.name}
-            email={authState.currentUser.email}
-          />
-        </div>
-      )}
+      <div css={settingsButtonStyles} onClick={openSettingsAndCloseMenu}>
+        <Settings />
+      </div>
     </div>
   );
 };
+
+const buttonsContainerStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: '8px',
+});
+
+const accountButtonStyles = css({
+  flex: 1,
+  display: 'flex',
+  gap: '8px',
+  alignItems: 'center',
+  cursor: 'pointer',
+
+  padding: '4px 6px',
+  borderRadius: '8px',
+
+  ':hover': {
+    backgroundColor: cssVar('highlightColor'),
+  },
+});
 
 const menuContainerStyles = css({
   position: 'absolute',
@@ -81,4 +94,19 @@ const menuContainerStyles = css({
   left: '128px',
   zIndex: 2,
   cursor: 'default',
+});
+
+const settingsButtonStyles = css({
+  height: '28px',
+  width: '28px',
+  borderRadius: '8px',
+  padding: '6px',
+  backgroundColor: cssVar('highlightColor'),
+
+  cursor: 'pointer',
+  opacity: 0.5,
+  ':hover': {
+    opacity: 1,
+    backgroundColor: cssVar('strongHighlightColor'),
+  },
 });

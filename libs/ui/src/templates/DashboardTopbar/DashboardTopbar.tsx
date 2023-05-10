@@ -8,6 +8,8 @@ import { SearchBar } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { dashboard, notebookList } from '../../styles';
 
+const ROUTES_WHITELIST = ['', 'edit', 'members'];
+
 type DashboardTopbarProps = {
   readonly onCreateNotebook?: () => void;
 
@@ -20,8 +22,12 @@ export const DashboardTopbar = ({
   onPointerEnter,
 }: DashboardTopbarProps): ReturnType<React.FC> => {
   const { '*': maybeWorkspaceFolder } = useParams();
+  const isRouteAllowed =
+    maybeWorkspaceFolder != null &&
+    ROUTES_WHITELIST.includes(maybeWorkspaceFolder);
   const displaySearchBoxBorder =
-    isFlagEnabled('DASHBOARD_SEARCH') && maybeWorkspaceFolder === '';
+    isFlagEnabled('DASHBOARD_SEARCH') && isRouteAllowed;
+
   return (
     <div
       css={css({

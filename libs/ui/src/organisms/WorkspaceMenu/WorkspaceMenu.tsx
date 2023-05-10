@@ -9,6 +9,8 @@ import { card } from '../../styles';
 import { WorkspaceItemCreate } from '../../molecules/WorkspaceItemCreate/WorkspaceItemCreate';
 
 const styles = css(card.styles, {
+  maxHeight: '50vh',
+  overflowY: 'auto',
   padding: '16px',
 
   display: 'grid',

@@ -1,13 +1,13 @@
-import { noop } from '@decipad/utils';
 import { Meta, Story } from '@storybook/react';
 import { EditUserModal } from './EditUserModal';
 
+const emptyPromise = Promise.resolve;
 const args = {
   name: 'Aspen Vaccaro',
   username: '@aspen',
-  onChangeName: noop,
-  onChangeUsername: noop,
-  onClose: noop,
+  onChangeName: emptyPromise,
+  onChangeUsername: emptyPromise,
+  onClose: emptyPromise,
 };
 
 export default {
