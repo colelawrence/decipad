@@ -1,6 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
-import { ComponentProps, useCallback, useContext } from 'react';
+import { ComponentProps, useCallback, useContext, useState } from 'react';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
 import { HelpButton, MenuList } from '../../molecules';
 import {
@@ -182,10 +182,22 @@ export const HelpMenu = ({
   onSelectFeedback,
 }: HelpMenuProps) => {
   const clientEvent = useContext(ClientEventsContext);
+  const [open, setOpen] = useState(false);
+
   return (
     <MenuList
       root
       dropdown
+      open={open}
+      onChangeOpen={() => {
+        if (!open) {
+          clientEvent({
+            type: 'action',
+            action: 'help button clicked',
+          });
+        }
+        setOpen(!open);
+      }}
       trigger={
         <div css={[helpMenuStyles, hideOnPrint]}>
           <HelpButton />
