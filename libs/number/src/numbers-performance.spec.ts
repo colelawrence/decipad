@@ -21,24 +21,39 @@ const randomDeciNumber = () => N(randomNumber(), randomNumber());
 
 describe('numbers performance', () => {
   it.each(OPS)('performs', async (operator: OpName) => {
-    const columns = [0, 1].map(() =>
-      Array.from({ length: TEST_COLUMN_LENGTH }).map(randomDeciNumber)
-    );
+    const run = () => {
+      const columns = [0, 1].map(() =>
+        Array.from({ length: TEST_COLUMN_LENGTH }).map(randomDeciNumber)
+      );
 
-    const method = DeciNumber.prototype[operator];
-    const op = (n1: DeciNumber, n2: DeciNumber) => method.call(n1, n2);
-    const startTime = Date.now();
-    for (let i = 0; i < TEST_COLUMN_LENGTH; i += 1) {
-      const [a, b] = columns.map((c) => c[i]);
-      op(a, b);
+      const method = DeciNumber.prototype[operator];
+      const op = (n1: DeciNumber, n2: DeciNumber) => method.call(n1, n2);
+      const startTime = Date.now();
+      for (let i = 0; i < TEST_COLUMN_LENGTH; i += 1) {
+        const [a, b] = columns.map((c) => c[i]);
+        op(a, b);
+      }
+      const timeSpan = Date.now() - startTime;
+
+      // validate the time
+      const rowPerSec = (TEST_COLUMN_LENGTH / timeSpan) * 1000;
+      console.log(`rows per second for ${operator} is ${rowPerSec}`);
+      const minRowsPerSec =
+        OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES[operator] ?? MIN_ROWS_PER_SEC;
+      expect(rowPerSec).toBeGreaterThanOrEqual(minRowsPerSec);
+    };
+    let done = false;
+    while (!done) {
+      try {
+        run();
+        done = true;
+      } catch (err) {
+        if (
+          !(err as Error).message.toLowerCase().includes('division by zero')
+        ) {
+          throw err;
+        }
+      }
     }
-    const timeSpan = Date.now() - startTime;
-
-    // validate the time
-    const rowPerSec = (TEST_COLUMN_LENGTH / timeSpan) * 1000;
-    console.log(`rows per second for ${operator} is ${rowPerSec}`);
-    const minRowsPerSec =
-      OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES[operator] ?? MIN_ROWS_PER_SEC;
-    expect(rowPerSec).toBeGreaterThanOrEqual(minRowsPerSec);
   });
 });
