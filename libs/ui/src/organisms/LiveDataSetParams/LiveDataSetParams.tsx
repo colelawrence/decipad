@@ -4,8 +4,6 @@ import { Settings } from '../../icons';
 import { cssVar, p13Medium } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
-//   marginBottom: '20px',
-// });
 const buttonStyles = css({
   display: 'flex',
   flexDirection: 'row',

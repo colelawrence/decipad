@@ -94,7 +94,7 @@ const justInsertLiveDataSet = async ({
     source,
     isFirstRowHeaderRow: false,
     columnTypeCoercions: [],
-    hideLiveryQueryResults: true,
+    hideLiveQueryResults: true,
     children: [
       {
         id: nanoid(),
@@ -190,7 +190,7 @@ const identifyIslandsAndThenInsertLiveDataSet = async ({
             type: ELEMENT_LIVE_QUERY,
             id: nanoid(),
             connectionBlockId: blockId,
-            hideLiveryQueryResults: true,
+            hideLiveQueryResults: true,
             columnTypeCoercions: {},
             children: [
               {

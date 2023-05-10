@@ -45,7 +45,7 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
           setIsFirstRowHeader={setIsFirstRowHeader}
           onChangeColumnType={onChangeColumnType}
           element={element}
-          showLiveQueryResults={!element.hideLiveryQueryResults}
+          showLiveQueryResults={!element.hideLiveQueryResults}
         ></LiveConnectionResult>
       )}
       {error ? (

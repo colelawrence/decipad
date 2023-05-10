@@ -99,58 +99,54 @@ export const LiveDataSetVarName: PlateComponent = ({
   // ensure var name is unique
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);
 
-  const onShowDataPress = () => {
+  const onShowDataPress = useCallback(() => {
     if (parent) {
       const [elem, path] = parent;
       setNodes(
         editor,
-        { hideLiveryQueryResults: !elem.hideLiveryQueryResults },
+        { hideLiveQueryResults: !elem.hideLiveQueryResults },
         { at: path }
       );
     }
-  };
+  }, [parent, editor]);
 
-  const onOptionsPress = () => {
+  const onOptionsPress = useCallback(() => {
     store.changeOpen(true);
-  };
+  }, [store]);
 
   const [{ loading }] = useLiveConnectionStore(parent?.[0]) ?? {};
 
   const caption = (
-    <>
-      <div {...attributes} css={captionWrapperStyles}>
-        <EditableLiveDataCaption
-          source={sourceName}
-          url={url}
-          empty={getNodeString(element).length === 0}
-          range={returnRange}
-          isUiIntegration={true}
-        >
-          {children}
-        </EditableLiveDataCaption>
-        <LiveDataSetCaption source={sourceName} />
-        {isFlagEnabled('LIVE_QUERY') &&
-          parent &&
-          isDatabaseConnection(parent[0]) && (
-            <>
-              <div css={tableButtonWrapperStyles}>
-                <TableButton
-                  isInState={!parent?.[0].hideLiveryQueryResults}
-                  isToggleButton={true}
-                  onClick={onShowDataPress}
-                  captions={['Hide Data', 'Show Data']}
-                />
-              </div>
-            </>
-          )}
-        {isFlagEnabled('LIVE_CONN_OPTIONS') && (
-          <div contentEditable={false}>
-            <LiveDataSetParams onClick={onOptionsPress} />
+    <div {...attributes} css={captionWrapperStyles}>
+      <EditableLiveDataCaption
+        source={sourceName}
+        url={url}
+        empty={getNodeString(element).length === 0}
+        range={returnRange}
+        isUiIntegration
+      >
+        {children}
+      </EditableLiveDataCaption>
+      <LiveDataSetCaption source={sourceName} />
+      {isFlagEnabled('LIVE_QUERY') &&
+        parent &&
+        isDatabaseConnection(parent[0]) && (
+          <div css={tableButtonWrapperStyles}>
+            <TableButton
+              isInState={!parent?.[0].hideLiveQueryResults}
+              isToggleButton
+              onClick={onShowDataPress}
+              captions={['Hide Data', 'Show Data']}
+            />
           </div>
         )}
-        {loading && <Spinner />}
-      </div>
-    </>
+      {isFlagEnabled('LIVE_CONN_OPTIONS') && (
+        <div contentEditable={false}>
+          <LiveDataSetParams onClick={onOptionsPress} />
+        </div>
+      )}
+      {loading && <Spinner />}
+    </div>
   );
 
   return tooltip ? (

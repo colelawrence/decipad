@@ -30,10 +30,12 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
   element,
   showLiveQueryResults = true,
 }) => {
-  return isDatabaseConnection(element) ? (
-    <DatabaseConnection result={result} />
-  ) : element.type !== 'live-dataset' && showLiveQueryResults ? (
-    result && (
+  if (isDatabaseConnection(element)) {
+    return <DatabaseConnection result={result} />;
+  }
+
+  if (element.type !== 'live-dataset' && showLiveQueryResults && result) {
+    return (
       <div css={css(code)}>
         <CodeResult
           type={result.type}
@@ -50,6 +52,8 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
           element={element}
         ></CodeResult>
       </div>
-    )
-  ) : null;
+    );
+  }
+
+  return null;
 };

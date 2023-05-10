@@ -92,7 +92,7 @@ export interface LiveDataSetElement extends BaseElement {
   jsonPath?: string;
   delimiter?: string;
   children: [LiveDataSetVarNameElement, LiveQueryElement];
-  hideLiveryQueryResults?: boolean;
+  hideLiveQueryResults?: boolean;
 }
 
 export interface LiveDataSetQueryElement extends BaseElement {

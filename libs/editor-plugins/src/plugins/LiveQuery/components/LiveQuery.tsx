@@ -47,7 +47,7 @@ const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
       <LiveQueryCore
         element={element}
         deleted={deleted}
-        showLiveQueryResults={!parent?.hideLiveryQueryResults}
+        showLiveQueryResults={!parent?.hideLiveQueryResults}
       />
     </DraggableBlock>
   );
