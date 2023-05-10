@@ -20,9 +20,10 @@ import {
   Result,
   SerializedType,
   isTableResult,
+  materializeResult,
 } from '@decipad/computer';
 import { ImportResult } from '@decipad/import';
-import { varNamify } from '@decipad/utils';
+import { getDefined, varNamify } from '@decipad/utils';
 import { insertNodes } from '@decipad/editor-utils';
 
 interface ImportTableProps {
@@ -179,17 +180,19 @@ const tableElement = (
   };
 };
 
-export const importTable = ({
+export const importTable = async ({
   editor,
   insertPath,
   result,
   computer,
-}: ImportTableProps): void => {
+}: ImportTableProps): Promise<void> => {
   const tableResult = result.result;
   if (isTableResult(tableResult)) {
     const t = tableElement(
       computer,
-      tableResult as Result.Result<'materialized-table'>,
+      getDefined(
+        await materializeResult(tableResult)
+      ) as Result.Result<'materialized-table'>,
       result.meta
     );
     insertNodes(editor, t, {

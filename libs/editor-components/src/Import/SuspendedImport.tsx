@@ -85,7 +85,8 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
       const computerResult = result.result;
       if (computerResult?.type.kind === 'type-error') {
         setError(formatError('en-US', computerResult.type.errorCause));
-      } else if (isTableResult(computerResult)) {
+      } else if (!isTableResult(computerResult)) {
+        console.error(computerResult);
         setError('Expected result to be a table');
         return;
       }
@@ -99,7 +100,7 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
               computer,
               insertPath,
               result,
-            });
+            }).catch((err) => setError(err.message));
             removeNodes(editor, { at: path });
           });
         } catch (err) {
