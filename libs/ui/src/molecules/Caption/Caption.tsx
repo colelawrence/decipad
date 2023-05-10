@@ -9,7 +9,6 @@ import {
   display,
   p13Regular,
   p14Regular,
-  p16Regular,
   placeholderOpacity,
   setCssVar,
   smallScreenQuery,
@@ -64,7 +63,7 @@ const placeholderStyles = css(
 
     '::before': {
       ...display,
-      ...p16Regular,
+      ...p14Regular,
       ...setCssVar('currentTextColor', cssVar('weakTextColor')),
       pointerEvents: 'none',
       content: 'attr(aria-placeholder)',
