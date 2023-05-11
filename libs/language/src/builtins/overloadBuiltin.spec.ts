@@ -24,12 +24,20 @@ const stringPlus: OverloadedBuiltinSpec = {
 const plus = overloadBuiltin('+', 2, [numberPlus, stringPlus]);
 
 it('chooses the correct overload for a value', async () => {
-  expect(await plus.fnValues!([fromJS(1), fromJS(2)])).toEqual(fromJS(3));
-  expect(await plus.fnValues!([fromJS('hello '), fromJS('world')])).toEqual(
-    fromJS('hello world')
-  );
+  expect(
+    await plus.fnValues!([fromJS(1), fromJS(2)], [t.number(), t.number()])
+  ).toEqual(fromJS(3));
+  expect(
+    await plus.fnValues!(
+      [fromJS('hello '), fromJS('world')],
+      [t.string(), t.string()]
+    )
+  ).toEqual(fromJS('hello world'));
   await expect(async () =>
-    plus.fnValues!([fromJS('notnumberpls'), fromJS(1)])
+    plus.fnValues!(
+      [fromJS('notnumberpls'), fromJS(1)],
+      [t.string(), t.number()]
+    )
   ).rejects.toThrow();
 });
 

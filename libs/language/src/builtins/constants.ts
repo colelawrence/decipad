@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { once } from 'ramda';
-import { fromJS, Value } from '../value';
+import { fromJS, UnknownValue, Value } from '../value';
 import { Type, buildType as t } from '../type';
 import { u } from '../utils';
 
@@ -33,6 +33,10 @@ const builtinConstants = once((): Record<string, Constant> => {
     value: fromJS(N(1000)),
   };
   return {
+    unknown: {
+      type: t.nothing(),
+      value: UnknownValue,
+    },
     e: {
       type: t.number(),
       value: fromJS(N(2718281828459045, 10 ** 15)),

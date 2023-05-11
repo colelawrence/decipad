@@ -4,4 +4,5 @@ export * from './types';
 export * from './Value';
 export * from './sequences';
 export * from './ValueTransforms';
+export * from './isUnknownValue';
 export * from './tableValueToResultValue';

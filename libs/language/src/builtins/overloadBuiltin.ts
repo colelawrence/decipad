@@ -1,4 +1,5 @@
-import { PromiseOrType } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
+import type { PromiseOrType } from '@decipad/utils';
 import { BuiltinSpec } from './interfaces';
 import { InferError, Type, buildType as t } from '../type';
 import {
@@ -8,8 +9,9 @@ import {
   StringValue,
   BooleanValue,
   NumberValue,
+  isUnknownValue,
+  UnknownValue,
 } from '../value';
-import { getDefined } from '../utils';
 import { AST } from '..';
 import { parseFunctor } from './parseFunctor';
 
@@ -48,18 +50,26 @@ export const overloadBuiltin = (
     overloads.map((o) => [argTypesKey(o.argTypes), o])
   );
 
-  function getOverload(values: Value[]): OverloadedBuiltinSpec {
-    const argTypeNames = values.map(getOverloadedTypeFromValue);
-    return getDefined(
-      byArgTypes.get(argTypesKey(argTypeNames)),
-      `panic: did not find version of function ${fName} for arg types ${argTypeNames.join(
-        ', '
-      )}`
-    );
-  }
+  const getArgTypeKey = (types: Type[]): string =>
+    argTypesKey(types.map(getOverloadedTypeFromType));
 
-  const fnValues = async (values: Value[], types?: Type[]): Promise<Value> =>
-    getOverload(values).fnValues(values, types);
+  const getOverload = (types: Type[]): OverloadedBuiltinSpec | undefined =>
+    byArgTypes.get(getArgTypeKey(types));
+
+  const fnValues = async (values: Value[], types?: Type[]): Promise<Value> => {
+    if (values.find(isUnknownValue)) {
+      return UnknownValue;
+    }
+    const overload = getOverload(getDefined(types));
+    if (!overload) {
+      throw new Error(
+        `panic: could not find overload for ${fName}(${getArgTypeKey(
+          getDefined(types)
+        )})`
+      );
+    }
+    return overload.fnValues(values, types);
+  };
 
   const functor = async (types: Type[]): Promise<Type> => {
     const argTypeNames = types.map(getOverloadedTypeFromType);

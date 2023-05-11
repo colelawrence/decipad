@@ -51,6 +51,12 @@ export const timeQuantity = (timeUnit: Unit | string) =>
     ];
   });
 
+export const symbol = (symbol: string) =>
+  produce(new Type(), (t) => {
+    t.anythingness = true;
+    t.symbol = symbol;
+  });
+
 interface BuildTableArgs {
   indexName?: string | null;
   columnTypes: Type[];

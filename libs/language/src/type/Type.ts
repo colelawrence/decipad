@@ -7,6 +7,7 @@ import {
   getRangeOf,
   isColumn,
   isDate,
+  isNothing,
   isPrimitive,
   isRange,
   isScalar,
@@ -139,6 +140,10 @@ export class Type {
   // Type assertions -- these return a new type possibly with an error
   async sameAs(other: Type | Promise<Type>): Promise<Type> {
     return sameAs(this, other);
+  }
+
+  async isNothing(): Promise<Type> {
+    return isNothing(this);
   }
 
   async isScalar(type: PrimitiveTypeName): Promise<Type> {

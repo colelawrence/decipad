@@ -64,6 +64,14 @@ export const sharePercentage = checker((me: Type, other: Type) => {
   return me;
 });
 
+export const isNothing = checker(async (me: Type) => {
+  if (me.nothingness === true) {
+    return me;
+  } else {
+    return me.expected('nothing');
+  }
+});
+
 export const isColumn = checker(async (me: Type) => {
   if (me.cellType != null) {
     return me;

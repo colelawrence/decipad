@@ -7,7 +7,6 @@ import DeciNumber, {
 } from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
-import { inspect } from 'util';
 import {
   RuntimeError,
   Value,
@@ -17,6 +16,7 @@ import {
   BooleanValue,
   DateValue,
   UnknownValue,
+  Unknown,
 } from '../value';
 
 export type CompareResult = -1 | 0 | 1;
@@ -34,12 +34,28 @@ export type Comparable =
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
-const compareToNumber = (a: Comparable, b: Comparable): number | bigint => {
-  if (a === UnknownValue) {
-    return -1;
+function compareToNumber(a: Comparable, b: Comparable): number | bigint {
+  if (
+    a === UnknownValue ||
+    a === Unknown ||
+    b === UnknownValue ||
+    b === Unknown
+  ) {
+    if (a === b) {
+      return 0;
+    }
+    if (a === UnknownValue || a === Unknown) {
+      return -1;
+    }
+    if (b === UnknownValue || b === Unknown) {
+      return 1;
+    }
   }
-  if (b === UnknownValue) {
-    return 1;
+  if (typeof a === 'symbol' && typeof b === 'symbol') {
+    if (a === b) {
+      return 0;
+    }
+    return compare(a.toString(), b.toString());
   }
   if (isDeciNumberInput(a) && isDeciNumberInput(b)) {
     return N(a).compare(N(b));
@@ -104,11 +120,9 @@ const compareToNumber = (a: Comparable, b: Comparable): number | bigint => {
   }
   console.log(a, b);
   throw new RuntimeError(
-    `Don't know how to compare ${a.toString()} (${inspect(
-      a
-    )}) against ${b.toString()} (${inspect(b)})`
+    `Don't know how to compare ${a.toString()} (${typeof a}) against ${b.toString()} (${typeof b})`
   );
-};
+}
 
 const sign = (diff: number | bigint): CompareResult => {
   if (typeof diff === 'number') {

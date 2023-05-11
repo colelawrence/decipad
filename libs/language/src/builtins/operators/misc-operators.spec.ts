@@ -3,15 +3,16 @@ import { runCode } from '../../run';
 import { fromJS, DateValue as LanguageDate, Range } from '../../value';
 import { miscOperators as operators } from './misc-operators';
 import { typeSnapshotSerializer } from '../../testUtils';
+import { buildType as t } from '../../type';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 it('knows whether a range contains a value', async () => {
   expect(
-    await operators.contains.fnValues?.([
-      new Range({ start: fromJS(1), end: fromJS(2) }),
-      fromJS(1),
-    ])
+    await operators.contains.fnValues?.(
+      [new Range({ start: fromJS(1), end: fromJS(2) }), fromJS(1)],
+      [t.range(t.number()), t.number()]
+    )
   ).toMatchInlineSnapshot(`
     BooleanValue {
       "value": true,
@@ -19,10 +20,10 @@ it('knows whether a range contains a value', async () => {
   `);
 
   expect(
-    await operators.contains.fnValues?.([
-      new Range({ start: fromJS(1), end: fromJS(2) }),
-      fromJS(3),
-    ])
+    await operators.contains.fnValues?.(
+      [new Range({ start: fromJS(1), end: fromJS(2) }), fromJS(3)],
+      [t.range(t.number()), t.number()]
+    )
   ).toMatchInlineSnapshot(`
     BooleanValue {
       "value": false,
@@ -30,10 +31,16 @@ it('knows whether a range contains a value', async () => {
   `);
 
   expect(
-    await operators.contains.fnValues?.([
-      LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'month'),
-      LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-31'), 'day'),
-    ])
+    await operators.contains.fnValues?.(
+      [
+        LanguageDate.fromDateAndSpecificity(
+          parseUTCDate('2021-01-01'),
+          'month'
+        ),
+        LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-31'), 'day'),
+      ],
+      [t.date('month'), t.date('day')]
+    )
   ).toMatchInlineSnapshot(`
     BooleanValue {
       "value": true,
@@ -41,10 +48,16 @@ it('knows whether a range contains a value', async () => {
   `);
 
   expect(
-    await operators.contains.fnValues?.([
-      LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'day'),
-      LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-31'), 'month'),
-    ])
+    await operators.contains.fnValues?.(
+      [
+        LanguageDate.fromDateAndSpecificity(parseUTCDate('2021-01-01'), 'day'),
+        LanguageDate.fromDateAndSpecificity(
+          parseUTCDate('2021-01-31'),
+          'month'
+        ),
+      ],
+      [t.date('day'), t.date('month')]
+    )
   ).toMatchInlineSnapshot(`
     BooleanValue {
       "value": false,

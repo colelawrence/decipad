@@ -172,10 +172,19 @@ describe('date overloads', () => {
     ) =>
       materializeOneResult(
         (
-          await minus.fnValues?.([
-            IDate.fromDateAndSpecificity(parseUTCDate(date1), date1Specificity),
-            IDate.fromDateAndSpecificity(parseUTCDate(date2), date2Specificity),
-          ])
+          await minus.fnValues?.(
+            [
+              IDate.fromDateAndSpecificity(
+                parseUTCDate(date1),
+                date1Specificity
+              ),
+              IDate.fromDateAndSpecificity(
+                parseUTCDate(date2),
+                date2Specificity
+              ),
+            ],
+            [t.date(date1Specificity), t.date(date2Specificity)]
+          )
         )?.getData()
       );
 
