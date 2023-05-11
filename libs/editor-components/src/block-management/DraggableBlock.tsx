@@ -13,7 +13,6 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
-  clone,
   createStructuredCodeLine,
   getCodeLineSource,
   insertNodes,
@@ -65,6 +64,7 @@ import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
+import utils from './utils';
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -189,7 +189,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     const onDuplicate = useCallback(() => {
       if (path) {
-        const newEl = clone(computer, element);
+        const newEl = utils.cloneProxy(computer, element);
         insertElements(editor, newEl, {
           at: requirePathBelowBlock(editor, path),
         });
