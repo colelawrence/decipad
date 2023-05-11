@@ -72,9 +72,7 @@ const evaluateTier = async (
   tierSize: DeciNumber,
   tierResultType: Type
 ): Promise<DeciNumber> => {
-  const tierValueType = cleanInferred(
-    getDefined(realm.inferContext.nodeTypes.get(tierValueExp))
-  );
+  const tierValueType = cleanInferred(getDefined(tierValueExp.inferredType));
   const tierSizeValue = NumberValue.fromValue(tierSize);
   const tierValue = await realm.withPush(async () => {
     realm.stack.set('tier', tierSizeValue);
@@ -104,9 +102,7 @@ const iterateTier = async (
   previousCutoff: DeciNumber
 ): Promise<IterateTierResult> => {
   const [tierSizeExp, tierValueExp] = tier;
-  const tierSizeType = getDefined(
-    realm.inferContext.nodeTypes.get(tierSizeExp)
-  );
+  const tierSizeType = getDefined(tierSizeExp.inferredType);
 
   const tierCutOff = maybeConvertBetweenUnits(
     await getInstanceof(
@@ -142,8 +138,8 @@ export const evaluateTiered = async (
     await (await evaluate(realm, initial)).getData(),
     DeciNumber
   );
-  const tierSizeType = getDefined(realm.inferContext.nodeTypes.get(initial));
-  const resultType = getDefined(realm.inferContext.nodeTypes.get(node));
+  const tierSizeType = getDefined(initial.inferredType);
+  const resultType = getDefined(node.inferredType);
 
   const { predicates, tiers } = collectDefs(tierDefs);
 
@@ -180,9 +176,7 @@ export const evaluateTiered = async (
   }
 
   if (predicates.min) {
-    const minType = getDefined(
-      realm.inferContext.nodeTypes.get(predicates.min)
-    );
+    const minType = getDefined(predicates.min.inferredType);
     const minimumValue = maybeConvertBetweenUnits(
       getInstanceof(
         await (await evaluate(realm, predicates.min)).getData(),
@@ -195,9 +189,7 @@ export const evaluateTiered = async (
   }
 
   if (predicates.max) {
-    const maxType = getDefined(
-      realm.inferContext.nodeTypes.get(predicates.max)
-    );
+    const maxType = getDefined(predicates.max.inferredType);
     const maximumValue = maybeConvertBetweenUnits(
       getInstanceof(
         await (await evaluate(realm, predicates.max)).getData(),

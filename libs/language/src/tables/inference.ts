@@ -76,7 +76,7 @@ export async function inferTableColumn(
     }
   });
 
-  linkToAST(ctx, columnAst, type);
+  linkToAST(columnAst, type);
 
   if (type.errorCause) {
     return type;

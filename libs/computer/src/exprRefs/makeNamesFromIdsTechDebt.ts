@@ -1,5 +1,4 @@
 import { mutateAst, AST, decilang } from '@decipad/language';
-import produce from 'immer';
 import { Program, ProgramBlock } from '../types';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { getExprRef, isExprRef } from '.';
@@ -36,19 +35,20 @@ export function removeLegacyTableColumnReferences(program: Program) {
   );
 
   let inTableColumnAssign: string | undefined;
-  return program.map(
-    produce((block: ProgramBlock) => {
-      if (block.type === 'identified-block') {
-        if (block.block.args[0].type === 'table-column-assign') {
-          const tableRef = tableRefsToIds.get(
-            block.block.args[0].args[0].args[0]
-          );
-          inTableColumnAssign = tableRef && getExprRef(tableRef);
-        } else {
-          inTableColumnAssign = undefined;
-        }
+  return program.map((block: ProgramBlock): ProgramBlock => {
+    if (block.type === 'identified-block') {
+      if (block.block.args[0].type === 'table-column-assign') {
+        const tableRef = tableRefsToIds.get(
+          block.block.args[0].args[0].args[0]
+        );
+        inTableColumnAssign = tableRef && getExprRef(tableRef);
+      } else {
+        inTableColumnAssign = undefined;
+      }
 
-        mutateAst(block.block, (node) => {
+      return {
+        ...block,
+        block: mutateAst(block.block, (node) => {
           if (node.type === 'ref' && isExprRef(node.args[0])) {
             const columnId = node.args[0];
             const tableColumn = idsToTableColumns.get(columnId);
@@ -59,10 +59,11 @@ export function removeLegacyTableColumnReferences(program: Program) {
             }
           }
           return node;
-        });
-      }
-    })
-  );
+        }) as AST.Block,
+      };
+    }
+    return block;
+  });
 }
 
 function getDefinedColumn(arg0: AST.Statement) {

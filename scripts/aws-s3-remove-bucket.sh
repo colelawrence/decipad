@@ -2,8 +2,11 @@
 
 set -euo pipefail
 
-bucket="s3://$1"
-echo "removing $bucket"
+for bucketName in "${@:-}"
+do
+  bucket="s3://$bucketName"
+  echo "removing $bucket"
 
-aws s3 rm --recursive $bucket
-aws s3 rb $bucket
+  aws s3 rm --recursive $bucket
+  aws s3 rb $bucket
+done

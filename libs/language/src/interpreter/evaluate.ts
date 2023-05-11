@@ -152,11 +152,11 @@ async function internalEvaluate(
       } else {
         const argTypes = funcArgs.map((arg) =>
           getDefined(
-            realm.inferContext.nodeTypes.get(arg),
+            arg.inferredType,
             () => `Could not get type for node ${prettyPrintAST(arg)}`
           )
         );
-        const returnType = getDefined(realm.inferContext.nodeTypes.get(node));
+        const returnType = getDefined(node.inferredType);
         return callBuiltin(realm, funcName, args, argTypes, returnType);
       }
     }

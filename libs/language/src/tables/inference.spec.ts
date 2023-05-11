@@ -21,8 +21,8 @@ it('puts column types in ether', async () => {
 
   const ctx = makeContext();
   await inferStatement(ctx, tbl);
-  expect(ctx.nodeTypes.has(col1)).toBe(true);
-  expect(ctx.nodeTypes.has(col2)).toBe(true);
+  expect(col1.inferredType).toBeDefined();
+  expect(col2.inferredType).toBeDefined();
 });
 
 it('allows empty tables', async () => {

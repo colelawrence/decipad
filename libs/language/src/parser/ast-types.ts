@@ -1,10 +1,11 @@
 import DeciNumber from '@decipad/number';
-import { Time } from '..';
+import { Time, Type } from '..';
 
 interface BasicNode {
   cacheKey?: string;
   start?: Pos;
   end?: Pos;
+  inferredType?: Type;
 }
 
 export interface Pos {

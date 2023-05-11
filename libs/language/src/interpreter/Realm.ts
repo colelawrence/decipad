@@ -26,7 +26,7 @@ export class Realm {
   }
 
   maybeGetTypeAt(node: AST.Node) {
-    return this.inferContext.nodeTypes.get(node);
+    return node.inferredType;
   }
 
   getTypeAt(node: AST.Node) {

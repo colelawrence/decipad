@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import pSeries from 'p-series';
+import { Writable } from 'utility-types';
 import { AST } from '..';
 import {
   InferError,
@@ -29,8 +30,8 @@ import { inferTiered } from '../tiered/inferTiered';
 export { makeContext, logRetrievedName };
 export type { Context };
 
-export const linkToAST = (ctx: Context, node: AST.Node, type: Type) => {
-  ctx.nodeTypes.set(node, type);
+export const linkToAST = (node: Writable<AST.Node>, type: Type) => {
+  node.inferredType = type;
 
   if (type.errorCause != null && type.node == null) {
     return type.inNode(node);
@@ -41,14 +42,14 @@ export const linkToAST = (ctx: Context, node: AST.Node, type: Type) => {
 
 const wrap =
   <T extends AST.Node>(
-    fn: (ctx: Context, thing: T, cohercingTo?: Type) => Promise<Type>
+    fn: (ctx: Context, node: T, cohercingTo?: Type) => Promise<Type>
   ) =>
-  async (ctx: Context, thing: T, cohercingTo?: Type): Promise<Type> => {
-    let type = await fn(ctx, thing);
+  async (ctx: Context, node: T, cohercingTo?: Type): Promise<Type> => {
+    let type = await fn(ctx, node);
     if (cohercingTo) {
       type = await type.sameAs(cohercingTo);
     }
-    return linkToAST(ctx, thing, type);
+    return linkToAST(node, type);
   };
 
 /**
@@ -63,7 +64,7 @@ const wrap =
 export const inferExpression = wrap(
   // exhaustive switch
   // eslint-disable-next-line consistent-return
-  async (ctx: Context, expr: AST.Expression): Promise<Type> => {
+  async (ctx: Context, expr: Writable<AST.Expression>): Promise<Type> => {
     switch (expr.type) {
       case 'noop': {
         return t.nothing();
@@ -312,7 +313,7 @@ export const inferBlock = async (
   block: AST.Block,
   ctx = makeContext()
 ): Promise<Type> => {
-  let last;
+  let last: Type | undefined;
   for (const stmt of block.args) {
     // eslint-disable-next-line no-await-in-loop
     last = await inferStatement(ctx, stmt);

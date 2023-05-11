@@ -1,4 +1,4 @@
-import { immerable, produce } from 'immer';
+import { immerable } from 'immer';
 import { PromiseOrType } from '@decipad/utils';
 import type { AST, Time } from '..';
 import * as t from './buildType';
@@ -114,9 +114,10 @@ export class Type {
   }
 
   inNode(node: AST.Node) {
-    return produce(this, (newType) => {
-      newType.node = node;
-    });
+    const t = new Type();
+    Object.assign(t, this);
+    t.node = node;
+    return t;
   }
 
   withErrorCause(error: InferError | string): Type {

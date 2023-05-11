@@ -21,7 +21,7 @@ export const testGetValue = async (
   const ctx = makeContext();
   const realm = new Realm(ctx);
   const root = directiveFor(args);
-  realm.inferContext.nodeTypes.set(root, buildType.number());
+  root.inferredType = buildType.number();
 
   // Preload passed arguments into ctx.nodeTypes
   for (const passedArg of args) {

@@ -45,7 +45,6 @@ const degC: Unit = {
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 afterEach(() => {
-  nilCtx.nodeTypes = new Map();
   const newContext = makeContext();
   if (!dequal(nilCtx, newContext)) {
     newContext.previous = nilCtx.previous;
@@ -215,8 +214,8 @@ describe('error source tracking', () => {
     await inferBlock(program, ctx);
 
     // Both errors came from the same place
-    expect(ctx.nodeTypes.get(badStatement)?.node).toEqual(badExp);
-    expect(ctx.nodeTypes.get(badStatement2)?.node).toEqual(badExp);
+    expect(badStatement.inferredType?.node).toEqual(badExp);
+    expect(badStatement2.inferredType?.node).toEqual(badExp);
   });
 });
 

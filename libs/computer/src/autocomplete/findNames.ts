@@ -12,7 +12,6 @@ export function* findNames(
   inBlockId?: string
 ): Iterable<AutocompleteName> {
   const seenSymbols = new Set<string>();
-  const { nodeTypes } = realm.inferContext;
 
   const [ownTableName, ownVariableName] =
     realm.inferContext.stack.getNsNameFromId(getExprRef(inBlockId ?? '')) ?? [];
@@ -31,7 +30,7 @@ export function* findNames(
   for (const block of program) {
     for (const statement of block.args) {
       const symbol = getSymbolOrColumn(statement);
-      const type = nodeTypes.get(statement);
+      const type = statement.inferredType;
 
       if (
         !symbol ||
@@ -63,7 +62,7 @@ export function* findNames(
         };
 
         for (const col of colItems) {
-          const colType = nodeTypes.get(col);
+          const colType = col.inferredType;
 
           if (colType) {
             const tableName = statement.args[0].args[0];

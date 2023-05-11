@@ -33,12 +33,9 @@ export async function simpleExpressionEvaluate(
         funcArgs.map(async (arg) => simpleExpressionEvaluate(realm, arg))
       );
       const argTypes = funcArgs.map((arg) =>
-        getDefined(
-          realm.inferContext.nodeTypes.get(arg),
-          'exponent type should be defined'
-        )
+        getDefined(arg.inferredType, 'exponent type should be defined')
       );
-      const returnType = getDefined(realm.inferContext.nodeTypes.get(node));
+      const returnType = getDefined(node.inferredType);
       const res = await callBuiltin(
         realm,
         funcName,

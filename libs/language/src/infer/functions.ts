@@ -1,4 +1,3 @@
-import { PromiseOrType } from '@decipad/utils';
 import pSeries from 'p-series';
 import { inferExpression, inferStatement } from '.';
 import { AST } from '..';
@@ -81,6 +80,7 @@ const continueInferFunctionCall = async (
   }
 };
 
+// IMPORTANT: keep this function below synchronous, otherwise the guard is not guaranteed.
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 const guardFunctionCallInfer = (
   ctx: Context,
@@ -101,9 +101,10 @@ const guardFunctionCallInfer = (
   });
 };
 
-export const inferFunctionCall = (
+export const inferFunctionCall = async (
   ctx: Context,
   expr: AST.FunctionCall
-): PromiseOrType<Type> => {
-  return guardFunctionCallInfer(ctx, expr);
+): Promise<Type> => {
+  const ret = await guardFunctionCallInfer(ctx, expr);
+  return ret;
 };

@@ -135,12 +135,23 @@ export const anything = () =>
 export const impossible = (
   errorCause: string | InferError,
   inNode: AST.Node | null = null
-): Type =>
-  produce(new Type(), (impossibleType) => {
+): Type => {
+  if (inNode) {
+    // IMPORTANT: avoid freezing the AST node
+    const t = new Type();
     if (typeof errorCause === 'string') {
       errorCause = new InferError(errorCause);
     }
+    t.errorCause = errorCause;
+    t.node = inNode;
+    return t;
+  } else {
+    return produce(new Type(), (impossibleType) => {
+      if (typeof errorCause === 'string') {
+        errorCause = new InferError(errorCause);
+      }
 
-    impossibleType.errorCause = errorCause;
-    impossibleType.node = inNode;
-  });
+      impossibleType.errorCause = errorCause;
+    });
+  }
+};

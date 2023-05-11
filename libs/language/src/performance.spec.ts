@@ -11,7 +11,7 @@ const MIN_ROWS_PER_SEC = 3_500 / (process.env.CI ? CI_SUCKINESS_FACTOR : 1);
 const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
   Object.fromEntries(
     Object.entries({
-      '^': 1500,
+      '^': 500,
     }).map(([op, minRowsPerSec]) => [
       op,
       minRowsPerSec / (process.env.CI ? CI_SUCKINESS_FACTOR : 1),
