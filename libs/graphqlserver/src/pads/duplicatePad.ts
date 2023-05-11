@@ -41,6 +41,7 @@ export const duplicatePad = async (
 
   previousPad.name = newName;
   previousPad.isPublic = false;
+  previousPad.archived = false;
 
   const workspaceId = targetWorkspace || previousPad.workspace_id;
 
