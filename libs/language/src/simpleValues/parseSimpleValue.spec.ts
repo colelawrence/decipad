@@ -49,3 +49,7 @@ it('disallows corner case numbers', () => {
   expect(parseSimpleValue(num(N(1, 0)))).toEqual(undefined);
   expect(parseSimpleValue(num(N(1, 3)))).toEqual(undefined);
 });
+
+it('works with edge cases', () => {
+  expect(parseSimpleValue('-($5)')).toMatchInlineSnapshot(`undefined`);
+});
