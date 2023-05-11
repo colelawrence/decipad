@@ -77,7 +77,7 @@ const dataItems = () => [
   },
 ];
 
-const groups = () => [
+export const groups = () => [
   {
     title: 'Insert Data',
     items: dataItems(),

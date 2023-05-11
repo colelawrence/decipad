@@ -16,14 +16,14 @@ import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
 
 const wrapperStyles = css({
+  position: 'fixed',
   display: 'flex',
   justifyContent: 'space-between',
   rowGap: '8px',
-
-  padding: '16px 0',
-
-  borderBottom: '1px solid',
-  borderColor: cssVar('highlightColor'),
+  width: '100%',
+  padding: '1rem 2rem',
+  backgroundColor: cssVar('backgroundColor'),
+  borderBottom: `solid 1px ${cssVar('strongHighlightColor')}`,
 });
 
 const leftSideStyles = css({

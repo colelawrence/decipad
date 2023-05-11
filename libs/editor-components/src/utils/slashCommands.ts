@@ -47,6 +47,7 @@ export interface ExecuteProps {
   command: SlashCommand;
   getAvailableIdentifier: GetAvailableIdentifier;
   select?: boolean;
+  sidebar?: boolean;
 }
 
 export const execute = ({
@@ -56,6 +57,7 @@ export const execute = ({
   getAvailableIdentifier,
   deleteFragment,
   select = true,
+  sidebar = false,
 }: ExecuteProps): void => {
   const { changeOpen } = useConnectionStore.getState();
 
@@ -151,6 +153,12 @@ export const execute = ({
   }
 
   let newElementPath: Path;
+
+  // if the action is executed from the dynamic sidebar, we don't want to delete the current active block
+  if (sidebar) {
+    return focusAndSetSelection(editor, [path[0] + 1]);
+  }
+
   if (deleteFragment) {
     newElementPath = [path[0] + 1];
     deleteText(editor, { at: deleteFragment });

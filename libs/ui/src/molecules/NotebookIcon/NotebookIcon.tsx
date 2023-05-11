@@ -32,6 +32,7 @@ const notebookIconStyles = css({
   height: '32px',
   width: '32px',
   cursor: 'move',
+  maxWidth: '580px',
 
   display: 'grid',
   placeItems: 'center',

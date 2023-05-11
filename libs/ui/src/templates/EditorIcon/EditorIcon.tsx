@@ -5,6 +5,7 @@ import * as icons from '../../icons';
 import { IconPopover } from '../../molecules';
 import {
   black,
+  mobileQuery,
   p14Regular,
   setCssVar,
   shortAnimationDuration,
@@ -13,13 +14,19 @@ import { editorLayout } from '../../styles';
 import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
 
 const blockStyles = css({
+  width: '100%',
+  maxWidth: '580px',
+  margin: '0 auto',
   display: 'grid',
   gridTemplateRows: '32px',
   gridTemplateColumns: `min(100%, ${editorLayout.slimBlockWidth}px)`,
   justifyContent: 'center',
   alignItems: 'center',
-
   borderRadius: '6px',
+
+  [mobileQuery]: {
+    padding: '0 24px',
+  },
 });
 
 const iconWrapperStyles = css({

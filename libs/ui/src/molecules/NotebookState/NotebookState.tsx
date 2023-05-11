@@ -1,16 +1,17 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
-import { FC, useState, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow, CurvedArrow } from '../../icons';
 import {
   cssVar,
   grey500,
+  mediumShadow,
+  p13Bold,
   red100,
   red200,
   red500,
-  mediumShadow,
-  p13Bold,
+  smallDesktopLandscapeQuery,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
@@ -216,6 +217,18 @@ export const NotebookState: FC<NotebookStateProps> = ({
   }, []);
 
   const [showClearAllDirection, setShowClearAllDirection] = useState(true);
+  const isDynamicSidebarEnabled = isFlagEnabled('DYNAMIC_SIDEBAR');
+
+  let position: string;
+
+  if (!authed || !isDynamicSidebarEnabled) {
+    position = '80px';
+    if (readOnly) {
+      position = '16px';
+    }
+  } else {
+    position = '480px';
+  }
 
   return (
     <div
@@ -223,7 +236,11 @@ export const NotebookState: FC<NotebookStateProps> = ({
         wrapperStyles,
         hideOnPrint,
         {
-          right: !authed ? '14px' : '80px',
+          right: position,
+
+          [smallDesktopLandscapeQuery]: {
+            right: !authed || !isDynamicSidebarEnabled ? '16px' : '80px',
+          },
         },
         !canUndo && readOnly && { display: 'none' },
       ]}

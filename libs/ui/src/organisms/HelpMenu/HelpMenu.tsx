@@ -1,24 +1,27 @@
-import { ClientEventsContext } from '@decipad/client-events';
-import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext, useState } from 'react';
+import { ClientEventsContext } from '@decipad/client-events';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { css, keyframes } from '@emotion/react';
+import { useLocation } from 'react-router-dom';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
+import {
+  ArrowDiagonalTopRight,
+  Chat,
+  Discord,
+  Docs,
+  LightBulb,
+} from '../../icons';
 import { HelpButton, MenuList } from '../../molecules';
 import {
+  offBlack,
   p12Regular,
   p14Medium,
   setCssVar,
+  smallDesktopLandscapeQuery,
   transparency,
   weakOpacity,
-  offBlack,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import {
-  ArrowDiagonalTopRight,
-  Docs,
-  Discord,
-  Chat,
-  LightBulb,
-} from '../../icons';
 
 const menuItemWrapperStyles = css({
   display: 'flex',
@@ -38,8 +41,11 @@ const menuItemSmallTextStyles = css(
 const helpMenuStyles = css({
   position: 'fixed',
   bottom: '16px',
-  right: '16px',
   zIndex: 2,
+
+  [smallDesktopLandscapeQuery]: {
+    right: '16px',
+  },
 });
 
 const pulse = keyframes`
@@ -181,8 +187,10 @@ export const HelpMenu = ({
   onSelectSupport,
   onSelectFeedback,
 }: HelpMenuProps) => {
+  const location = useLocation();
   const clientEvent = useContext(ClientEventsContext);
   const [open, setOpen] = useState(false);
+  const isDynamicSidebarEnabled = isFlagEnabled('DYNAMIC_SIDEBAR');
 
   return (
     <MenuList
@@ -199,7 +207,15 @@ export const HelpMenu = ({
         setOpen(!open);
       }}
       trigger={
-        <div css={[helpMenuStyles, hideOnPrint]}>
+        <div
+          css={[
+            helpMenuStyles,
+            hideOnPrint,
+            !location.pathname.includes('/n/') || !isDynamicSidebarEnabled
+              ? { right: '16px' }
+              : { right: '416px' },
+          ]}
+        >
           <HelpButton />
         </div>
       }

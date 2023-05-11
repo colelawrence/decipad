@@ -11,7 +11,7 @@ import {
   black,
   normalOpacity,
   p14Bold,
-  smallestDesktop,
+  smallDesktopLandscapeQuery,
   strongOpacity,
   transparency,
   white,
@@ -155,7 +155,7 @@ const floatyStyles = css({
   top: '80px',
   display: 'block',
   alignItems: 'center',
-  [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
+  [smallDesktopLandscapeQuery]: {
     display: 'none',
   },
   zIndex: 2,
