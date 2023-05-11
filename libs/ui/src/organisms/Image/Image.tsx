@@ -4,14 +4,13 @@ import {
   Box,
   Caption,
   ElementPopover,
-  Image as PlateImage,
   Media,
-  mediaFloatingOptions,
+  Image as PlateImage,
   Resizable,
+  mediaFloatingOptions,
 } from '@udecode/plate';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { useFocused, useSelected } from 'slate-react';
-import { imageLoad } from '../../images';
 import { cssVar } from '../../primitives';
 import { Div, FigCaption } from '../../utils/resizing';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
@@ -41,7 +40,6 @@ export const imgStyles = css({
 
 const imagePlaceholderStyles = css({
   background: `
-  url(${imageLoad}) no-repeat center,
   radial-gradient(
     ellipse at center,
     ${cssVar('tintedBackgroundColor')} 0%,
@@ -56,10 +54,7 @@ const imagePlaceholderStyles = css({
 });
 
 const resizableImagePlaceholderStyles = css({
-  background: `
-  url(${imageLoad}) no-repeat center ${cssVar(
-    'tableSelectionBackgroundColor'
-  )}`,
+  background: `no-repeat center ${cssVar('tableSelectionBackgroundColor')}`,
 });
 
 type ImageComponent = PlateComponent<{
@@ -71,12 +66,18 @@ type ImageComponent = PlateComponent<{
   >;
   pluginKey?: string;
   readOnly?: boolean;
+  accept?: any;
+  getAxis?: any;
+  onDrop?: any;
 }>;
 
 export const Image: ImageComponent = ({
   draggableBlock: Draggable,
   readOnly,
   pluginKey,
+  accept,
+  getAxis,
+  onDrop,
   ...props
 }) => {
   const { children, element } = props;
@@ -95,8 +96,15 @@ export const Image: ImageComponent = ({
           blockKind="media"
           element={element as ImageElement}
           draggableCss={draggableStyles}
+          accept={accept}
+          getAxis={getAxis}
+          onDrop={onDrop}
         >
-          <figure css={figureStyles} contentEditable={false}>
+          <figure
+            aria-label="column-content"
+            css={figureStyles}
+            contentEditable={false}
+          >
             <Resizable
               css={[
                 resizableStyles,
