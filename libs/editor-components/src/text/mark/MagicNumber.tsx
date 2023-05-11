@@ -203,22 +203,17 @@ export const MagicNumber: PlateComponent = ({
 
 /** Get the ID of the magic number, comprised of paragraph and index */
 function useMagicNumberId(text: RichText) {
-  return useEditorSelector(
-    useCallback(
-      (editor) => {
-        const path = findNodePath(editor, text);
-        if (!path) return '';
+  return useEditorSelector((editor) => {
+    const path = findNodePath(editor, text);
+    if (!path) return '';
 
-        const entry = getAboveNodeSafe(editor, {
-          at: path,
-          match: (node) => Element.isElement(node),
-        });
+    const entry = getAboveNodeSafe(editor, {
+      at: path,
+      match: (node) => Element.isElement(node),
+    });
 
-        if (!entry) return '';
+    if (!entry) return '';
 
-        return magicNumberId(entry[0] as MyElement, path[path.length - 1]);
-      },
-      [text]
-    )
-  );
+    return magicNumberId(entry[0] as MyElement, path[path.length - 1]);
+  });
 }

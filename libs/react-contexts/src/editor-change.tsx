@@ -88,11 +88,17 @@ export function useEditorSelector<T>(
 
   const editorChanges = useContext(EditorChangeContext);
 
+  const selectorRef = useRef(selector);
+
+  useEffect(() => {
+    selectorRef.current = selector;
+  }, [selector]);
+
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
       const sub = editorChanges
         .pipe(
-          map(() => selector(editor)),
+          map(() => selectorRef.current(editor)),
           distinctUntilChanged(dequal),
           map(() => undefined) // We only want to minimize onStoreChange() calls
         )
@@ -100,7 +106,7 @@ export function useEditorSelector<T>(
 
       return () => sub.unsubscribe();
     },
-    [editorChanges, selector, editor]
+    [editorChanges, editor]
   );
 
   const getSnapshot = useCallback(() => editor, [editor]);

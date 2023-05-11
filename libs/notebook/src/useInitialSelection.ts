@@ -12,7 +12,7 @@ import {
   toDOMNode,
   isVoid,
 } from '@udecode/plate';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BaseSelection, Path, Selection } from 'slate';
 import { MyEditor } from '@decipad/editor-types';
 import { getPersistedSelection } from '@decipad/editor-plugins';
@@ -44,7 +44,7 @@ export const useInitialSelection = (
   loaded: boolean,
   editor?: MyEditor
 ) => {
-  const selection = useEditorSelector(useCallback((ed) => ed.selection, []));
+  const selection = useEditorSelector((ed) => ed.selection);
   const { initialFocusDone, setInitialFocusDone } =
     useNotebookState(notebookId);
   const readOnly = useIsEditorReadOnly();
