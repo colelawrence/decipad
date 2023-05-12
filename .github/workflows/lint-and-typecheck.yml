@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     concurrency:
       group: lint-typecheck-${{ github.head_ref }}
       cancel-in-progress: true
