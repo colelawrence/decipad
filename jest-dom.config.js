@@ -30,4 +30,9 @@ module.exports = {
     require.resolve('jest-fetch-mock'),
     require.resolve('./libs/testutils/src/dom-extensions-setup-after-env'),
   ],
+  reporters: [
+    process.env.CI
+      ? ['jest-silent-reporter', { showWarnings: false, useDots: true }]
+      : 'default',
+  ],
 };
