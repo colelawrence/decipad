@@ -1,10 +1,10 @@
 import { Computer } from '@decipad/computer';
 import {
+  CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
   MyEditor,
-  MyElement,
 } from '@decipad/editor-types';
 import {
   insertStructuredCodeLineBelow,
@@ -23,6 +23,7 @@ import { BaseEditor, Editor, Path, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { setSelection } from '../NormalizeCodeBlock/utils';
 import { filterStatementSeparator } from '../CodeLine/filterStatementSeparator';
+import utils from './structured_utils';
 
 type Shortcuts =
   | 'move-right'
@@ -87,7 +88,7 @@ export function createStructuredKeyboard(computer: Computer) {
         const anchorPath = [...selection.anchor.path];
         const anchorOffset = selection.anchor.offset;
 
-        const node = getNode<MyElement>(editor, [anchorPath[0]]);
+        const node = getNode<CodeLineV2Element>(editor, [anchorPath[0]]);
         if (!node || !ALLOWED_ELEMENTS.has(node.type)) return false;
 
         const shortcut = getShortcut(editor, computer, event);
@@ -129,22 +130,41 @@ export function createStructuredKeyboard(computer: Computer) {
           case 'move-up':
           case 'move-down':
             anchorPath[0] += shortcut === 'move-up' ? -1 : 1;
-            const nextNode = getNode<MyElement>(editor, [anchorPath[0]]);
+            const nextNode = getNode<CodeLineV2Element>(editor, [
+              anchorPath[0],
+            ]);
             const isNextSame = ALLOWED_ELEMENTS.has(nextNode?.type || '');
 
             if (!isNextSame || !nextNode) return true;
             event.preventDefault();
             event.stopPropagation();
 
-            // If the destination line is shorter, our offset could be out of range. Trim it
-            // anchorPath[1] will tell us if we are on the name of the code.
-            const maxOffset = getNodeString(
-              nextNode.children[anchorPath[1]]
-            ).length;
+            if (anchorPath[1] === 0) {
+              const nextNameLength = getNodeString(nextNode.children[0]).length;
+              const newSelectionPoint = {
+                offset: Math.min(nextNameLength, anchorOffset),
+                path: anchorPath,
+              };
+              setSelection(editor, {
+                anchor: newSelectionPoint,
+                focus: newSelectionPoint,
+              });
+              return true;
+            }
+
+            const selectionLength = utils.getSelectionLength(
+              node,
+              anchorPath[2],
+              anchorOffset
+            );
+            const [newPath, newOffset] = utils.getTargetSelection(
+              nextNode,
+              selectionLength
+            );
 
             const newSelectionPoint = {
-              offset: Math.min(anchorOffset, maxOffset),
-              path: anchorPath,
+              offset: newOffset,
+              path: [anchorPath[0], anchorPath[1], newPath],
             };
             setSelection(editor, {
               anchor: newSelectionPoint,

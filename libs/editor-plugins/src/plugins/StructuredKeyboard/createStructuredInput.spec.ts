@@ -1,52 +1,8 @@
 import { Computer } from '@decipad/computer';
-import {
-  createTPlateEditor,
-  ELEMENT_STRUCTURED_VARNAME,
-  ELEMENT_CODE_LINE_V2,
-  ELEMENT_CODE_LINE_V2_CODE,
-  MyEditor,
-  SmartRefElement,
-  CodeLineV2Element,
-} from '@decipad/editor-types';
+import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import { enable, reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
-
-let counter = 0;
-function getStructuredCalc(
-  name: string,
-  value: string,
-  unit?: string
-): CodeLineV2Element {
-  counter += 1;
-  return {
-    type: ELEMENT_CODE_LINE_V2,
-    unit,
-    id: `id-${counter}`,
-    children: [
-      {
-        id: `id-${counter}`,
-        type: ELEMENT_STRUCTURED_VARNAME,
-        children: [{ text: name }],
-      },
-      {
-        id: `id-${counter}`,
-        type: ELEMENT_CODE_LINE_V2_CODE,
-        children: [{ text: value }],
-      },
-    ],
-  };
-}
-
-function getSmartRef(blockId: string): SmartRefElement {
-  counter += 1;
-  return {
-    id: `id-${counter}`,
-    type: 'smart-ref',
-    blockId,
-    columnId: null,
-    children: [{ text: '' }],
-  };
-}
+import { getSmartRef, getStructuredCalc } from './test_utils';
 
 describe('Structured input basic keyboard shortcuts', () => {
   let editor: MyEditor;
