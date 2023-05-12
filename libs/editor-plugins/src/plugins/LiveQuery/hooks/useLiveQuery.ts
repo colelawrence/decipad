@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getNodeString } from '@udecode/plate';
 import { Result } from '@decipad/computer';
 import { LiveQueryElement } from '@decipad/editor-types';
@@ -30,10 +30,18 @@ export const useLiveQuery = ({
     element.connectionBlockId
   );
 
-  const url = useMemo(
-    () => databaseResult?.result && getDatabaseUrl(databaseResult.result),
-    [databaseResult]
-  );
+  const [url, setUrl] = useState<string | undefined>(undefined);
+
+  // getDatabaseUrl must be async because the result is async
+  useEffect(() => {
+    if (databaseResult?.result && !url) {
+      getDatabaseUrl(databaseResult.result).then((dbUrl) => {
+        if (dbUrl) {
+          setUrl(dbUrl);
+        }
+      });
+    }
+  }, [databaseResult?.result, url]);
 
   const [generation, setGeneration] = useState(0n);
   const [fetchError, setFetchError] = useState<Error | undefined>();

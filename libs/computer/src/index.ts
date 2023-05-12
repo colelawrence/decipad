@@ -64,6 +64,7 @@ export {
   isColumn,
   isTable,
   isTableResult,
+  getResultGenerator,
 } from './utils';
 
 export { unnestTableRows } from './tools';
