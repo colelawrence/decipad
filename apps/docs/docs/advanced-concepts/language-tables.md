@@ -219,6 +219,23 @@ Flights.PassengerCount - 100
 ==> [ 0, 50, 100 ]
 ```
 
+## Defining a first value in a column
+
+If you want to set an initial value in a column you can use the `first` keyword. This only works in table formulas.
+
+```deci live
+Initial = 7
+
+Table = {
+  Id = [1 .. 10]
+  Total = if first then Initial else previous(0) + Initial
+}
+==> {
+  Id = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+  Total = [ 7, 14, 21, 28, 35, 42, 49, 56, 63, 70 ]
+}
+```
+
 ## Functions on tables
 
 [Here is a list of all the functions that work on tables](/docs/formulas/formulas-for-tables).
