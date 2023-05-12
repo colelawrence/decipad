@@ -9,16 +9,16 @@ import {
   ComponentProps,
   ElementType,
   FC,
-  forwardRef,
   HTMLAttributes,
   ReactNode,
+  forwardRef,
 } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
 import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
 import {
-  cssVar,
   Opacity,
+  cssVar,
   p12Medium,
   p14Medium,
   purple100,
@@ -33,6 +33,8 @@ const lineNumberWidth = '22px';
 const tdBaseStyles = css(p14Medium, {
   position: 'relative',
   alignItems: 'center',
+
+  caretColor: cssVar('tableFocusColor'),
 
   background: cssVar('backgroundColor'),
 

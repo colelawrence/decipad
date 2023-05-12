@@ -18,18 +18,18 @@ import {
   insertText,
   isCollapsed,
 } from '@udecode/plate';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelected } from 'slate-react';
+import { useCallback, useMemo } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
-import { useTableStore } from '../contexts/tableStore';
+import { useSelected } from 'slate-react';
 import {
   useCellType,
   useDropColumn,
   useIsCellSelected,
   useIsColumnSelected,
 } from '.';
-import { useDropdownConsumer } from './useDropdownConsumer';
+import { useTableStore } from '../contexts/tableStore';
 import { DropdownOption } from '../types';
+import { useDropdownConsumer } from './useDropdownConsumer';
 
 interface UseTableCellResult {
   cellType: CellValueType | undefined;
@@ -48,7 +48,6 @@ interface UseTableCellResult {
   dropdownResult: Result.Result | undefined;
   dropdownOptions: DropdownOption[];
   nodeText: string;
-  forceAlignRight: boolean;
 }
 
 const debounceParseErrorMs = 500;
@@ -125,18 +124,6 @@ export const useTableCell = (
     [editor, element]
   );
 
-  // When I start editing and the cell type is anything, align right until I unfocus.
-  const [forceAlignRight, setForceAlignRight] = useState(false);
-  useEffect(() => {
-    if (isColumnSelected && cellType?.kind === 'anything') {
-      setForceAlignRight(true);
-    }
-
-    if (!isColumnSelected && forceAlignRight) {
-      setForceAlignRight(false);
-    }
-  }, [cellType?.kind, isColumnSelected, forceAlignRight]);
-
   const { dropdownOptions, dropdownResult } = useDropdownConsumer({
     varName: nodeText,
     cellType,
@@ -160,7 +147,6 @@ export const useTableCell = (
       dropdownResult,
       dropdownOptions,
       nodeText,
-      forceAlignRight,
     }),
     [
       cellType,
@@ -179,7 +165,6 @@ export const useTableCell = (
       showParseError,
       unit,
       nodeText,
-      forceAlignRight,
     ]
   );
 };

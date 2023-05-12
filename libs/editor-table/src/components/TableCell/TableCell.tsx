@@ -2,8 +2,8 @@
 import { ELEMENT_TD, ELEMENT_TH, PlateComponent } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
-import { isCellAlignRight } from '../../utils/isCellAlignRight';
 import { useTableCell } from '../../hooks/useTableCell';
+import { isCellAlignRight } from '../../utils/isCellAlignRight';
 
 export const TableCell: PlateComponent = ({
   attributes,
@@ -32,7 +32,6 @@ export const TableCell: PlateComponent = ({
     nodeText,
     onChangeValue,
     collapsed,
-    forceAlignRight,
     showParseError,
     parseErrorMessage,
     dropdownOptions,
@@ -75,7 +74,7 @@ export const TableCell: PlateComponent = ({
       type={cellType}
       value={nodeText}
       onChangeValue={onChangeValue}
-      alignRight={forceAlignRight || isCellAlignRight(cellType)}
+      alignRight={isCellAlignRight(cellType)}
       parseError={showParseError ? parseErrorMessage : undefined}
       dropdownOptions={{
         dropdownOptions,
