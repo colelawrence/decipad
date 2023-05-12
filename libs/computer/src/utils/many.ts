@@ -1,7 +1,12 @@
 import { walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import type { AST, SyntaxError, BracketError } from '@decipad/language';
-import type { IdentifiedError, IdentifiedResult, ProgramBlock } from '../types';
+import type {
+  IdentifiedBlock,
+  IdentifiedError,
+  IdentifiedResult,
+  ProgramBlock,
+} from '../types';
 
 export const getStatement = (
   program: AST.Block[],
@@ -153,3 +158,25 @@ export const identifiedErrorToMessage = (error: IdentifiedError): string => {
     }
   }
 };
+
+export function statementToIdentifiedBlock(
+  id: string,
+  stat: AST.Statement
+): IdentifiedBlock {
+  const varName = getDefinedSymbol(stat, true);
+  let defs: Partial<IdentifiedBlock> = {};
+
+  if (stat?.type === 'table-column-assign' && varName != null) {
+    const [, col] = stat.args;
+    defs = { definesTableColumn: [varName, getIdentifierString(col)] };
+  } else if (varName != null) {
+    defs = { definesVariable: varName };
+  }
+
+  return {
+    type: 'identified-block',
+    id,
+    block: { id, type: 'block', args: [stat] },
+    ...defs,
+  };
+}

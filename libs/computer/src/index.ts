@@ -61,6 +61,7 @@ export {
   identifiedErrorToMessage,
   isTypeError,
   getDefinedSymbol,
+  statementToIdentifiedBlock,
   isColumn,
   isTable,
   isTableResult,

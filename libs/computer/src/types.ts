@@ -2,13 +2,13 @@ import type { AST, Parser, Result } from '@decipad/language';
 import type { AnyMapping } from '@decipad/utils';
 import type { VisibleVariables } from './computer/getVisibleVariables';
 
-export interface IdentifiedBlock {
+export type IdentifiedBlock = {
   type: 'identified-block';
   id: string;
   block: AST.Block;
   definesVariable?: string;
   definesTableColumn?: [string, string];
-}
+};
 
 /** A parse error */
 type BaseParseError = {

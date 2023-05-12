@@ -35,35 +35,6 @@ NewTable = {
 }
 ```
 
-## Table spread
-
-When creating a table using the table spread syntax, you get this error:
-
-```deci live
-Table = {
-  A = 1
-}
-Table2 = {
-  ...Table
-  B = 2
-}
-==> You're using a feature that's been retired
-```
-
-The table spread syntax has been retired, but you can instead extend existing tables:
-
-```deci live
-Table = {
-  A = 1
-}
-Table.B = 2
-Table
-==> {
-  A = [ 1 ],
-  B = [ 2 ]
-}
-```
-
 ## Splitby
 
 If you attempt to use the `splitby` function, you get an error.

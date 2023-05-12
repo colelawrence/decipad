@@ -29,27 +29,25 @@ it('finds names', async () => {
         "kind": "variable",
         "name": "Table1",
         "type": Object {
-          "columnNames": Array [
-            "Hello",
-          ],
-          "columnTypes": Array [
-            Object {
-              "kind": "string",
-            },
-          ],
+          "columnNames": Array [],
+          "columnTypes": Array [],
           "indexName": "Table1",
           "kind": "table",
         },
       },
       Object {
-        "blockId": undefined,
-        "columnId": undefined,
+        "blockId": "block-1",
+        "columnId": "block-1_0",
         "inTable": "Table1",
         "isLocal": true,
         "kind": "column",
         "name": "Hello",
         "type": Object {
-          "kind": "string",
+          "cellType": Object {
+            "kind": "string",
+          },
+          "indexedBy": "Table1",
+          "kind": "column",
         },
       },
       Object {

@@ -1,7 +1,6 @@
 import { getDefined } from '@decipad/utils';
 import { isAssignment } from '@decipad/language';
 import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
-import { getIdentifierString } from '../utils';
 import { dependencies, TableNamespaces, findAllTables } from './dependencies';
 
 interface Node {
@@ -30,9 +29,15 @@ const blockEntity = ({ block }: IdentifiedBlock): string | null => {
   if (!statement || !isAssignment(statement)) {
     return null;
   }
-  // we have a statement
+
+  // we have a statement if we've made it this far
+  if (statement.type === 'table-column-assign') {
+    const [tablePartialDef, colDef] = statement.args;
+    return `${tablePartialDef.args[0]}::${colDef.args[0]}`;
+  }
+
   const arg0 = statement.args[0];
-  return getIdentifierString(arg0);
+  return arg0.args[0];
 };
 
 const blockToNode = (block: IdentifiedBlock): Node => {
@@ -53,7 +58,23 @@ const drawEdges = (
   namespaces: TableNamespaces
 ): void => {
   const deps = dependencies(node.value.block, namespaces);
-  let edges = deps.flatMap((dep) => allNodes.get(dep)).filter(Boolean);
+
+  // Filter out builtin functions etc.
+  let edges = deps
+    .flatMap((dep) => {
+      const node = allNodes.get(dep);
+      if (node) {
+        return node;
+      }
+
+      // If a table is derived from a function like "filter" or "lookup" then its column
+      // declarations won't exist so we just add the table declaration as a dep instead.
+      const tableName = dep.includes('::') && dep.split('::')[0];
+      if (!tableName) return undefined;
+      return allNodes.get(tableName);
+    })
+    .filter(Boolean);
+
   const { entity } = node;
   if (entity != null) {
     edges = edges.filter(notSelf(entity)) as Node[];
@@ -120,6 +141,43 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     drawEdges(node, identifiersToNode, depNamespaces);
   }
 
+  // Make a dictionary of all the tables and their columns
+  const tables: { [tableName: string]: Node[] } = {};
+  for (const node of nodes) {
+    const split = node.entity?.split('::');
+    if (split?.length !== 2) continue;
+
+    const [table] = split;
+    if (tables[table] === undefined) {
+      tables[table] = [node];
+    } else {
+      tables[table].push(node);
+    }
+  }
+
+  // if some node A has a table as a dep, and A is not a property of that table, add all the table's columns as a dep
+  for (const node of nodes) {
+    if (!node.edges) continue;
+    for (const edge of node.edges) {
+      const cols = edge.entity !== null && tables[edge.entity];
+      if (!cols) continue;
+
+      // if node is a column declaration, and edge is the table of that column then we skip
+      let match: RegExpExecArray | null;
+      if (node.entity && (match = /^(.+)::.+$/.exec(node.entity))) {
+        const [, tableName] = match;
+        if (tableName === edge.entity) {
+          continue;
+        }
+      }
+
+      for (const col of cols) {
+        node.edges.push(col);
+      }
+    }
+  }
+
+  // Useful for debugging
   for (const node of nodes) {
     visit(node);
   }

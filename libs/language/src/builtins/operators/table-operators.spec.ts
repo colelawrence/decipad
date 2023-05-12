@@ -39,7 +39,45 @@ describe('table operators', () => {
         ],
       ]
     `);
+  });
 
+  it('concatenates tables whose column orders differ', async () => {
+    const t1 = Table.fromNamedColumns(
+      [fromJS([1, 2, 3]), fromJS(['a', 'b', 'c'])],
+      ['numbers', 'strings']
+    );
+
+    const t2 = Table.fromNamedColumns(
+      [fromJS(['d', 'e', 'f']), fromJS([4, 5, 6])],
+      ['strings', 'numbers']
+    );
+    const result = (
+      await operators.concatenate.fnValues?.([t1, t2])
+    )?.getData();
+
+    expect(await result).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          DeciNumber(1),
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(4),
+          DeciNumber(5),
+          DeciNumber(6),
+        ],
+        Array [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+        ],
+      ]
+    `);
+  });
+
+  it('functor passes when given correct inputs', async () => {
     const tNumber = t.table({
       columnNames: ['Hello'],
       columnTypes: [t.number()],
@@ -50,6 +88,103 @@ describe('table operators', () => {
     ).toMatchObject({
       errorCause: null,
     });
+  });
+
+  it('functor erros when given incorrect inputs whose order looks correct', () => {
+    const t1 = t.table({
+      columnNames: ['str', 'num'],
+      columnTypes: [t.string(), t.number()],
+    });
+
+    const t2 = t.table({
+      columnNames: ['num', 'str'],
+      columnTypes: [t.string(), t.number()],
+    });
+
+    expect(operators.concatenate.functor?.([t1, t2])).not.toMatchObject({
+      errorCause: null,
+    });
+  });
+
+  it('sorts a table by a column', async () => {
+    const table = t.table({
+      columnNames: ['indexcolumn'],
+      columnTypes: [t.number(U('bananas'))],
+    });
+    const column = t.column(t.number(U('bananas')), undefined, 1);
+    expect(await operators.sortby.functor!([table, column])).toMatchObject(
+      table
+    );
+
+    const tableValue = Table.fromNamedColumns(
+      [fromJS([1, 2, 3]), fromJS([6, 4, 5])],
+      ['A', 'B']
+    );
+    const columnValue = tableValue.getColumn('B');
+
+    expect(
+      await materializeOneResult(
+        (await operators.sortby.fnValues!([tableValue, columnValue])).getData()
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(1),
+        ],
+        Array [
+          DeciNumber(4),
+          DeciNumber(5),
+          DeciNumber(6),
+        ],
+      ]
+    `);
+  });
+
+  it('filters a table by a column', async () => {
+    const table = t.table({
+      columnNames: ['indexcolumn', 'booooleans'],
+      columnTypes: [t.number(U('bananas')), t.boolean()],
+    });
+    const column = t.column(t.boolean(), undefined, 1);
+    expect(
+      await operators.filter.functorNoAutomap!([table, column])
+    ).toMatchObject(
+      t.table({
+        columnNames: ['indexcolumn', 'booooleans'],
+        columnTypes: [t.number(U('bananas')), t.boolean()],
+      })
+    );
+
+    const tableValue = Table.fromNamedColumns(
+      [
+        fromJS([1, 2, 3, 4, 5, 6]),
+        fromJS([false, true, true, false, false, true]),
+      ],
+      ['Nums', 'Bools']
+    );
+    const columnValue = tableValue.getColumn('Bools');
+    expect(
+      await materializeOneResult(
+        (
+          await operators.filter.fnValuesNoAutomap!([tableValue, columnValue])
+        ).getData()
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          DeciNumber(2),
+          DeciNumber(3),
+          DeciNumber(6),
+        ],
+        Array [
+          true,
+          true,
+          true,
+        ],
+      ]
+    `);
   });
 
   it('looks things up with a string', async () => {
@@ -179,85 +314,5 @@ describe('table operators', () => {
     expect(
       await (await fnValues!([tableValue, conditionColumnValue])).getData()
     ).toEqual(['b', N(2)]);
-  });
-
-  it('sorts a table by a column', async () => {
-    const table = t.table({
-      columnNames: ['indexcolumn'],
-      columnTypes: [t.number(U('bananas'))],
-    });
-    const column = t.column(t.number(U('bananas')), undefined, 1);
-    expect(await operators.sortby.functor!([table, column])).toMatchObject(
-      table
-    );
-
-    const tableValue = Table.fromNamedColumns(
-      [fromJS([1, 2, 3]), fromJS([6, 4, 5])],
-      ['A', 'B']
-    );
-    const columnValue = tableValue.getColumn('B');
-    expect(
-      await materializeOneResult(
-        (await operators.sortby.fnValues!([tableValue, columnValue])).getData()
-      )
-    ).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(1),
-        ],
-        Array [
-          DeciNumber(4),
-          DeciNumber(5),
-          DeciNumber(6),
-        ],
-      ]
-    `);
-  });
-
-  it('filters a table by a column', async () => {
-    const table = t.table({
-      columnNames: ['indexcolumn', 'booooleans'],
-      columnTypes: [t.number(U('bananas')), t.boolean()],
-    });
-    const column = t.column(t.boolean(), undefined, 1);
-    expect(
-      await operators.filter.functorNoAutomap?.([table, column])
-    ).toMatchObject(
-      t.table({
-        columnNames: ['indexcolumn', 'booooleans'],
-        columnTypes: [t.number(U('bananas')), t.boolean()],
-      })
-    );
-
-    const tableValue = Table.fromNamedColumns(
-      [
-        fromJS([1, 2, 3, 4, 5, 6]),
-        fromJS([false, true, true, false, false, true]),
-      ],
-      ['Nums', 'Bools']
-    );
-    const columnValue = tableValue.getColumn('Bools');
-    expect(
-      await materializeOneResult(
-        (
-          await operators.filter.fnValuesNoAutomap!([tableValue, columnValue])
-        ).getData()
-      )
-    ).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(6),
-        ],
-        Array [
-          true,
-          true,
-          true,
-        ],
-      ]
-    `);
   });
 });

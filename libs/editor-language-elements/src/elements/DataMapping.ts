@@ -1,4 +1,10 @@
-import { AST, decilang, getExprRef, Program } from '@decipad/computer';
+import {
+  AST,
+  decilang,
+  getExprRef,
+  Program,
+  statementToIdentifiedBlock,
+} from '@decipad/computer';
 import {
   ELEMENT_DATA_MAPPING,
   ELEMENT_DATA_MAPPING_ROW,
@@ -6,7 +12,6 @@ import {
 import { assertElementType, astNode } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate';
 import { InteractiveLanguageElement } from '../types';
-import { statementToIdentifiedBlock } from '../utils/statementToIdentifiedBlock';
 
 interface ColumnDefWithId {
   id: string;

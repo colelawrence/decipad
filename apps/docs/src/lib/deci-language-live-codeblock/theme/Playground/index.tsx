@@ -21,6 +21,7 @@ import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
 import { CodeResult } from '@decipad/ui/src/organisms/CodeResult/CodeResult';
 import styles from './styles.module.css';
+import { maxBy } from 'lodash';
 
 interface PreviewProps {
   result: Result.Result;
@@ -35,6 +36,12 @@ const Preview: FC<PreviewProps> = ({ result }) => {
       {result && <CodeResult type={result.type} value={result.value} />}
     </div>
   );
+};
+
+export const getMaxIdObject = (
+  objects: Readonly<IdentifiedError | IdentifiedResult>[]
+): Readonly<IdentifiedError | IdentifiedResult> | undefined => {
+  return maxBy(objects, (obj) => parseInt(obj.id.split('_')[0]));
 };
 
 interface LiveErrorProps {
@@ -98,8 +105,7 @@ function LivePreviewOrError({ code: liveCode }: LivePreviewProps) {
 
   useEffect(() => {
     const subscription = computer.results.subscribe(({ blockResults }) => {
-      const r: IdentifiedResult | IdentifiedError | undefined =
-        Object.values(blockResults).pop();
+      const r = getMaxIdObject(Object.values(blockResults));
       if (!r) {
         return;
       }

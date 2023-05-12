@@ -120,26 +120,58 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
     argCount: 2,
     functor: async ([tab1, tab2]) =>
       (await Type.combine(tab1.isTable(), tab2.isTable())).mapType(() => {
-        if (
-          !dequal(tab1.columnNames, tab2.columnNames) ||
-          !dequal(tab1.columnTypes, tab2.columnTypes)
-        ) {
+        if (!dequal(new Set(tab1.columnNames), new Set(tab2.columnNames))) {
           return t.impossible('Incompatible tables');
-        } else {
-          return tab1;
         }
+        if (tab1.columnTypes?.length !== tab2.columnTypes?.length) {
+          return t.impossible('Incompatible tables');
+        }
+
+        // Check that column types match, even though we don't care about column order
+        for (const tab1ColIndex in tab1.columnNames as string[]) {
+          if (typeof tab1ColIndex === 'number') {
+            const tab1ColName = (tab1.columnNames as string[])[tab1ColIndex];
+            const tab2ColIndex = tab2.columnNames?.indexOf(tab1ColName);
+            if (tab2ColIndex === undefined) {
+              throw new Error('Something went wrong comparing tables.');
+            }
+            const tab1ColType = (tab1.columnTypes as Type[])[tab1ColIndex];
+            const tab2ColType = (tab2.columnTypes as Type[])[tab2ColIndex];
+
+            if (!dequal(tab1ColType, tab2ColType)) {
+              return t.impossible('Incompatible tables');
+            }
+          }
+        }
+
+        return tab1;
       }),
     fnValues: async ([tab1, tab2]) => {
-      const { columns: cols1, columnNames } = getInstanceof(tab1, Table);
-      const { columns: cols2 } = getInstanceof(tab2, Table);
+      const { columns: cols1, columnNames: names1 } = getInstanceof(
+        tab1,
+        Table
+      );
+      const { columns: cols2, columnNames: names2 } = getInstanceof(
+        tab2,
+        Table
+      );
+
+      const tab2Sorted = zip(names2, cols2).sort((a, b) => {
+        const aIndex = names1.indexOf(a[0]);
+        const bIndex = names1.indexOf(b[0]);
+        if (aIndex < bIndex) return -1;
+        if (aIndex > bIndex) return 1;
+        return 0;
+      });
 
       return Table.fromNamedColumns(
         await Promise.all(
-          zip(cols1, cols2).map(async ([c1, c2]) =>
-            createConcatenatedColumn(c1, c2)
-          )
+          zip(
+            cols1,
+            tab2Sorted.map((x) => x[1])
+          ).map(async ([c1, c2]) => createConcatenatedColumn(c1, c2))
         ),
-        getDefined(columnNames)
+        getDefined(names1)
       );
     },
     explanation: 'Joins two tables or columns into one.',

@@ -10,6 +10,9 @@ it('Finds variables depended upon by a statement', () => {
       "C",
     ]
   `);
+});
+
+it('Finds variables depended upon by a coulumn assignment', () => {
   expect(dependencies(parseStatementOrThrow('Table1.Col1 = 1')))
     .toMatchInlineSnapshot(`
       Array [
@@ -44,16 +47,6 @@ it('treats table refs', () => {
   expect(
     dependencies(parseStatementOrThrow('Table.NewCol = Inner + Y'), ns)
   ).toContain('Table::Inner');
-});
-
-it('deals with table property access in hacky ways', () => {
-  const ns = new Map([['Table', new Set(['Inner'])]]);
-  expect(
-    dependencies(parseStatementOrThrow('someExpression(x).Inner'), ns)
-  ).toContain('Table::Inner');
-  expect(
-    dependencies(parseStatementOrThrow('someExpression(x).Inner'), ns)
-  ).toContain('someExpression');
 });
 
 it('excludes func args', () => {

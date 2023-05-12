@@ -1336,21 +1336,6 @@ let ParserRules = [
       );
     },
   },
-  { name: 'tableItem$subexpression$1', symbols: [{ literal: '…' }] },
-  { name: 'tableItem$subexpression$1', symbols: [{ literal: '...' }] },
-  {
-    name: 'tableItem',
-    symbols: ['tableItem$subexpression$1', '_', 'ref'],
-    postprocess: (d) => {
-      return addArrayLoc(
-        {
-          type: 'table-spread',
-          args: [d[2]],
-        },
-        d
-      );
-    },
-  },
   {
     name: 'tableItem',
     symbols: ['identifier', 'equalSign', 'expression'],

@@ -1,18 +1,30 @@
 /* istanbul ignore file */
 import { formatError, formatResult } from '@decipad/format';
+import { maxBy } from 'lodash';
 import {
   deserializeType,
   materializeOneResult,
   RuntimeError,
 } from '@decipad/language';
-import { getDefined, last } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 
-import { Computer, NotebookResults } from '.';
+import {
+  Computer,
+  IdentifiedError,
+  IdentifiedResult,
+  NotebookResults,
+} from '.';
 import { createProgramFromMultipleStatements } from './computer/parseUtils';
 
 type EvaluatedDoc = string | { crash: string };
 
 const DEFAULT_LOCALE = 'en-US';
+
+export const getMaxIdObject = (
+  objects: Readonly<IdentifiedError | IdentifiedResult>[]
+): Readonly<IdentifiedError | IdentifiedResult> | undefined => {
+  return maxBy(objects, (obj) => Number(obj.id.split('_')[0]));
+};
 
 async function resultFromComputerResult(
   result: NotebookResults
@@ -23,7 +35,7 @@ async function resultFromComputerResult(
     }
   }
 
-  const lastResult = last(Object.values(result.blockResults))?.result;
+  const lastResult = getMaxIdObject(Object.values(result.blockResults))?.result;
   if (!lastResult) {
     throw new Error(`could not find a result`);
   }

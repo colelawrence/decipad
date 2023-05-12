@@ -605,6 +605,7 @@ it('can list tables and columns', async () => {
     .toMatchInlineSnapshot(`
     Array [
       Object {
+        "blockId": "block-0_0",
         "columnName": "A",
         "result": Object {
           "type": Object {
@@ -612,6 +613,7 @@ it('can list tables and columns', async () => {
               "kind": "number",
               "unit": null,
             },
+            "indexedBy": "table",
             "kind": "column",
           },
           "value": Array [
@@ -621,12 +623,14 @@ it('can list tables and columns', async () => {
         "tableName": "table",
       },
       Object {
+        "blockId": "block-0_1",
         "columnName": "B",
         "result": Object {
           "type": Object {
             "cellType": Object {
               "kind": "string",
             },
+            "indexedBy": "table",
             "kind": "column",
           },
           "value": Array [

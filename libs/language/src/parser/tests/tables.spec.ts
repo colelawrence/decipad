@@ -239,15 +239,4 @@ runTests({
       },
     ],
   },
-
-  'table with spreads': {
-    source: ' Table = {...A } ',
-    sourceMap: false,
-    ast: [n('table', n('tabledef', 'Table'), n('table-spread', n('ref', 'A')))],
-  },
-  'table with spreads and space after spread operator': {
-    source: ' Table = {... A } ',
-    sourceMap: false,
-    ast: [n('table', n('tabledef', 'Table'), n('table-spread', n('ref', 'A')))],
-  },
 });

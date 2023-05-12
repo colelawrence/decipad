@@ -4,12 +4,28 @@ import { getIdentifierString } from '../utils';
 
 export type TableNamespaces = Map<string, Set<string>>;
 
+const deriveTableExpressionRef = (
+  node: AST.Expression
+): { tableRef: string; otherRefs: string[] } | undefined => {
+  if (node.type !== 'function-call') return;
+
+  const [, argList] = node.args;
+  // It just so happens that all table-returning functions currently return a table with the same
+  // type as their first arg, but this might not always be the case. Really we need a more systematic
+  // approach to deciding which arg to use as the table's type.
+  const firstArg = argList.args[0];
+  if (firstArg.type !== 'ref') return;
+  const firstArgRefString = getIdentifierString(firstArg);
+  return { tableRef: firstArgRefString, otherRefs: dependencies(node) };
+};
+
 /** Finds what `node` depends on. `namespaces` can be built in the `findAllTables` function.
  * If we're in a table context (e.g. `Table.Col1 = 1`), then we can use the `namespaces` to
  * find out what columns are available in the table.
  *
  * Table columns are denoted as TableName::ColumnName
  */
+
 export const dependencies = (
   initialNode: AST.Node,
   namespaces: TableNamespaces = new Map()
@@ -53,8 +69,7 @@ export const dependencies = (
       case 'generic-list':
       case 'matrix-matchers':
       case 'range':
-      case 'table-column-assign':
-      case 'table-spread': {
+      case 'table-column-assign': {
         return unique(node.args.flatMap(findRefs));
       }
       case 'assign':
@@ -69,14 +84,27 @@ export const dependencies = (
       case 'property-access': {
         const [table, columnRef] = node.args;
         const column = getIdentifierString(columnRef);
+
         if (table.type === 'ref') {
-          return unique([...findRefs(table), `${table.args[0]}::${column}`]);
+          return unique([`${table.args[0]}::${column}`]);
         }
 
+        // If the table isn't referred to by name try to derive the table
+        const derivedTableRef = deriveTableExpressionRef(table);
+
+        if (derivedTableRef) {
+          return unique([
+            `${derivedTableRef.tableRef}::${column}`,
+            ...derivedTableRef.otherRefs,
+          ]);
+        }
+        const tableRefs = findRefs(table);
+        const columnRefs = findRefs(columnRef);
+
         return unique([
-          ...findRefs(table),
+          ...tableRefs,
           // colref handled below
-          ...findRefs(columnRef),
+          ...columnRefs,
         ]);
       }
       case 'colref': {

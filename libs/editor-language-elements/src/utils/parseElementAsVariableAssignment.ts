@@ -1,5 +1,9 @@
-import { AST, parseExpression, Program } from '@decipad/computer';
-import { statementToIdentifiedBlock } from './statementToIdentifiedBlock';
+import {
+  AST,
+  parseExpression,
+  Program,
+  statementToIdentifiedBlock,
+} from '@decipad/computer';
 
 /**
  * Parse a variable assignment. Source code or AST.

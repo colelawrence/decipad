@@ -17,12 +17,6 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return t.impossible(InferError.duplicatedName(tableName));
   }
 
-  if (table.args.some((a) => a.type === 'table-spread')) {
-    const ret = t.impossible(InferError.retiredFeature('table-spread'));
-    ctx.stack.set(tableName, ret, 'function', ctx.statementId);
-    return ret;
-  }
-
   const tableType = await pushTableContext(ctx, tableName, async () => {
     ctx.stack.createNamespace(tableName, 'function');
 

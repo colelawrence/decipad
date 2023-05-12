@@ -1,5 +1,9 @@
-import { parseExpression, parseStatement, Program } from '@decipad/computer';
-import { statementToIdentifiedBlock } from './statementToIdentifiedBlock';
+import {
+  parseExpression,
+  parseStatement,
+  Program,
+  statementToIdentifiedBlock,
+} from '@decipad/computer';
 
 /**
  * The main function that passes user code through to computer

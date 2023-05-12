@@ -164,15 +164,9 @@ export interface TableColumn extends BasicNode {
   args: [name: ColDef, column: Expression];
 }
 
-/** @deprecated */
-export interface TableSpread extends BasicNode {
-  type: 'table-spread';
-  args: [spreadTableRef: Ref];
-}
-
 export interface Table extends BasicNode {
   type: 'table';
-  args: [TableDef, ...(TableColumn | TableSpread)[]];
+  args: [TableDef, ...TableColumn[]];
 }
 
 export interface MatchDef extends BasicNode {
@@ -327,6 +321,5 @@ export type Node =
   | Identifier
   | Lists
   | TableColumn
-  | TableSpread
   | MatchDef
   | TieredDef;

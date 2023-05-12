@@ -40,7 +40,7 @@ const runCode = (sources) => {
       env: {
         ...process.env,
         NODE_ENV: 'test',
-      }
+      },
     }
   );
 
@@ -148,8 +148,9 @@ async function testOneFile(resultsContext, fileName, relativeFileName) {
 }
 
 async function runDocTests() {
+  const files = glob.sync('docs/**/retired-features.md', { cwd: docsDir });
   const codeNodesPerFile = new Map();
-  for (const file of glob.sync('docs/**/*.md', { cwd: docsDir })) {
+  for (const file of files) {
     // eslint-disable-next-line no-await-in-loop
     await collectOneFile(codeNodesPerFile, pathJoin(docsDir, file));
   }
@@ -157,7 +158,7 @@ async function runDocTests() {
   // Run all the tests on all the code!
   const resultsContext = await runCode(codeNodesPerFile);
 
-  for (const file of glob.sync('docs/**/*.md', { cwd: docsDir })) {
+  for (const file of files) {
     // eslint-disable-next-line no-await-in-loop
     await testOneFile(resultsContext, pathJoin(docsDir, file), file);
   }

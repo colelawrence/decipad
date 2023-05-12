@@ -145,8 +145,6 @@ export const evaluateTable = async (
 
         // eslint-disable-next-line no-await-in-loop
         await addColumn(colName, columnData);
-      } else if (item.type === 'table-spread') {
-        throw new Error('unreachable retired feature');
       } else {
         throw new Error('panic: unreachable');
       }

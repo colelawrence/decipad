@@ -1,9 +1,14 @@
 import { getNodeString } from '@udecode/plate';
 import { MyElement, ELEMENT_TABLE, MyEditor } from '@decipad/editor-types';
-import { Computer, Program, AST, decilang } from '@decipad/computer';
+import {
+  Computer,
+  Program,
+  AST,
+  decilang,
+  statementToIdentifiedBlock,
+} from '@decipad/computer';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../../utils/weakMapMemoizeInteractiveElementOutput';
-import { statementToIdentifiedBlock } from '../../utils/statementToIdentifiedBlock';
 import { InteractiveLanguageElement } from '../../types';
 import { headerToColumn } from './headerToColumn';
 

@@ -374,18 +374,24 @@ export const AutoCompleteMenu = ({
                   {...group}
                   isOnlyGroup={groupsWithItemsFiltered.length === 1}
                 >
-                  {items.map(({ ...item }) => (
-                    <AutoCompleteMenuItem
-                      {...item}
-                      key={item.blockId ?? item.identifier}
-                      focused={
-                        matchBlockIdOrIdentifier(item, focusedItem) ||
-                        item.focused
-                      }
-                      onExecute={() => onExecuteItem?.(item)}
-                      onHover={() => setHoveredItem(item)}
-                    />
-                  ))}
+                  {items.map(({ ...item }) => {
+                    return (
+                      <AutoCompleteMenuItem
+                        {...item}
+                        key={
+                          item.blockId
+                            ? `${item.blockId}__${item.identifier}`
+                            : item.identifier
+                        }
+                        focused={
+                          matchBlockIdOrIdentifier(item, focusedItem) ||
+                          item.focused
+                        }
+                        onExecute={() => onExecuteItem?.(item)}
+                        onHover={() => setHoveredItem(item)}
+                      />
+                    );
+                  })}
                 </AutoCompleteMenuGroup>
               ) : null
             )}
