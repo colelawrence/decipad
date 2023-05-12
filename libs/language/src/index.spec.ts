@@ -2195,3 +2195,34 @@ describe('grammar extensions', () => {
     `);
   });
 });
+
+describe('first in column formula', () => {
+  it('first works', async () => {
+    expect(
+      await runCode(`
+        T1 = {
+          A1 = [1, 2, 3, 4]
+          B1 = if first then 10 else previous(0) + 1
+        }
+    `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": table<A1 = number, B1 = number>,
+        "value": Array [
+          Array [
+            DeciNumber(1),
+            DeciNumber(2),
+            DeciNumber(3),
+            DeciNumber(4),
+          ],
+          Array [
+            DeciNumber(10),
+            DeciNumber(11),
+            DeciNumber(12),
+            DeciNumber(13),
+          ],
+        ],
+      }
+    `);
+  });
+});

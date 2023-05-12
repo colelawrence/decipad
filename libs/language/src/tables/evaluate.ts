@@ -1,7 +1,7 @@
 import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
-import { Column, ColumnLikeValue, Row, Table, Value } from '../value';
+import { Column, ColumnLikeValue, Row, Scalar, Table, Value } from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
   walkAst,
@@ -29,6 +29,16 @@ export const usesRecursion = (expr: AST.Expression) => {
   return result;
 };
 
+const usesOrdinalReference = (expr: AST.Expression): boolean => {
+  let result = false;
+  walkAst(expr, (expr) => {
+    if (expr.type === 'ref' && expr.args[0] === 'first') {
+      result = true;
+    }
+  });
+  return result;
+};
+
 export const evaluateTableColumn = async (
   realm: Realm,
   tableColumns: Map<string, ColumnLikeValue>,
@@ -38,7 +48,8 @@ export const evaluateTableColumn = async (
 ): Promise<ColumnLikeValue> => {
   if (
     refersToOtherColumnsByName(column, tableColumns) ||
-    usesRecursion(column)
+    usesRecursion(column) ||
+    usesOrdinalReference(column)
   ) {
     return evaluateTableColumnIteratively(
       realm,
@@ -74,6 +85,8 @@ export const evaluateTableColumnIteratively = async (
             // eslint-disable-next-line no-await-in-loop
             realm.stack.set(otherColName, await otherCol.atIndex(index));
           }
+          // make ordinal references available
+          realm.stack.set('first', Scalar.fromValue(index === 0));
           // eslint-disable-next-line no-await-in-loop
           yield evaluate(realm, column);
         }

@@ -82,7 +82,10 @@ export const pushTableContext = async <T>(
   const previousTable = ctx.inTableBraces;
   ctx.inTableBraces = tableName;
   try {
-    return ctx.stack.withPush(fn);
+    return ctx.stack.withPush(async () => {
+      ctx.stack.set('first', t.boolean());
+      return fn();
+    });
   } finally {
     ctx.previous = previousPrevious;
     ctx.inTableBraces = previousTable;
