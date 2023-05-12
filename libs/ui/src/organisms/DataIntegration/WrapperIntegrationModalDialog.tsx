@@ -1,9 +1,9 @@
-import { FC, ReactNode } from 'react';
-import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
-import { cssVar, p15Medium } from '../../primitives';
-import { Close } from '../../icons';
+import { css } from '@emotion/react';
+import { FC, ReactNode } from 'react';
 import { Button } from '../../atoms';
+import { Close } from '../../icons';
+import { cssVar, p15Medium } from '../../primitives';
 import { DbOptions } from './DatabaseConnectionScreen';
 
 type Stages = 'pick-source' | 'connect' | 'create-query' | 'map';
@@ -99,34 +99,38 @@ export const WrapperIntegrationModalDialog: FC<
         </div>
       </div>
       {children}
-      <div css={bottomBarStyles}>
-        {(!tabStage || ['pick-source', 'connect'].includes(tabStage)) && (
-          <div>
-            <Button type="secondary" onClick={onAbort}>
-              Abort
-            </Button>
-          </div>
-        )}
-        <div>
-          <Button type="text">Contact Support</Button>
+      {tabStage !== 'pick-source' && (
+        <div css={bottomBarStyles}>
+          {(!tabStage || ['pick-source', 'connect'].includes(tabStage)) && (
+            <div>
+              <Button type="secondary" onClick={onAbort}>
+                Close
+              </Button>
+            </div>
+          )}
+          {false && ( // not implemented yet
+            <div>
+              <Button type="text">Contact Support</Button>
+            </div>
+          )}
+          {isConnectShown && (
+            <div css={connectStyles}>
+              <Button
+                type="primaryBrand"
+                disabled={
+                  isConnectDisabled ||
+                  (dbOptions && shouldDisableButton(tabStage, dbOptions))
+                }
+                onClick={tabStage !== 'map' ? onConnect : onAbort}
+              >
+                {tabStage === 'create-query' && !dbOptions?.query
+                  ? buttonTitle['execute-query']
+                  : buttonTitle[tabStage]}
+              </Button>
+            </div>
+          )}
         </div>
-        {isConnectShown && (
-          <div css={connectStyles}>
-            <Button
-              type="primaryBrand"
-              disabled={
-                isConnectDisabled ||
-                (dbOptions && shouldDisableButton(tabStage, dbOptions))
-              }
-              onClick={tabStage !== 'map' ? onConnect : onAbort}
-            >
-              {tabStage === 'create-query' && !dbOptions?.query
-                ? buttonTitle['execute-query']
-                : buttonTitle[tabStage]}
-            </Button>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };
@@ -136,7 +140,6 @@ const wrapperStyles = css({
   flexDirection: 'column',
   alignItems: 'center',
   width: '740px',
-  height: '600px',
   padding: '32px',
   gap: '12px',
 
@@ -189,7 +192,7 @@ const iconStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'end',
-  borderBottom: `1px solid ${cssVar('evenStrongerHighlightColor')}`,
+  borderBottom: `1px solid ${cssVar('strongerHighlightColor')}`,
 
   div: {
     width: '16px',
@@ -204,7 +207,7 @@ export const dividerStyles = css({
 });
 
 const bottomBarStyles = css({
-  marginTop: 'auto',
+  marginTop: '100px',
   width: '100%',
 
   display: 'flex',

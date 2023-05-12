@@ -1,14 +1,9 @@
-import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
-import { FC, ReactNode, useCallback, useRef } from 'react';
 import { noop } from '@decipad/utils';
-import {
-  cssVar,
-  p12Regular,
-  p14Medium,
-  p8Medium,
-  setCssVar,
-} from '../../primitives';
+import { css } from '@emotion/react';
+import { FC, ReactNode, useCallback, useRef } from 'react';
+import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
+import { soonStyles } from '../../styles/menu';
 
 const styles = css({
   display: 'grid',
@@ -37,13 +32,6 @@ const textStyles = css({
   display: 'flex',
   flexDirection: 'column',
   textAlign: 'start',
-});
-
-const soonStyles = css(p8Medium, {
-  padding: '2px 4px',
-  borderRadius: '3px',
-  backgroundColor: cssVar('strongHighlightColor'),
-  height: '14px',
 });
 
 const inlineStyles = css({
@@ -112,9 +100,7 @@ export const InlineMenuItem = ({
       inline: 'nearest',
     });
   }
-  if (!enabled) {
-    return <></>;
-  }
+
   return (
     <button
       role="menuitem"

@@ -2,8 +2,11 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Button } from '../../atoms';
 import { AnnotationWarning } from '../../icons';
-import { cssVar, p12Medium, p13Bold } from '../../primitives';
+import { cssVar, p12Medium, p13Bold, p14Medium } from '../../primitives';
+import { soonStyles } from '../../styles/menu';
 import { MessageBlock } from './MessageBlock';
+
+const notSupportedYet = ['Google Sheet', 'Web API', 'MongoDB'];
 
 interface DataSource {
   name: string;
@@ -25,7 +28,7 @@ export const IntegrationModalDialog: FC<IntegrationModalDialogProps> = ({
       <div css={dataGridStyles}>
         {Object.values(dataSources).map((source) => {
           // TODO remove this when these databases are actually supported
-          const isDbSupported = !!source.provider || source.name !== 'MongoDB';
+          const isDbSupported = !notSupportedYet.includes(source.name);
           return (
             <div
               css={[dataCardStyles, isDbSupported ? {} : disabledDb]}
@@ -34,29 +37,32 @@ export const IntegrationModalDialog: FC<IntegrationModalDialogProps> = ({
             >
               {source.icon}
               <span>
-                {isDbSupported ? source.name : `${source.name} (soon)`}
+                {source.name}
+                {!isDbSupported && <span css={soonStyles}>SOON</span>}
               </span>
             </div>
           );
         })}
       </div>
-      <div css={importFileWrapperStyles}>
-        <div css={importFileTopbarStyles}>
-          <span>
-            <span css={p13Bold}>Import from File</span>
-            <span css={p12Medium}>(you can also drag & drop)</span>
-          </span>
-          <span>
-            <span css={p12Medium}>
-              We currently support CSV or XLS up to a file size of 10MB.
+      {false && ( // not supported yet
+        <div css={importFileWrapperStyles}>
+          <div css={importFileTopbarStyles}>
+            <span>
+              <span css={p13Bold}>Import from File</span>
+              <span css={p12Medium}>(you can also drag & drop)</span>
             </span>
-          </span>
+            <span>
+              <span css={p12Medium}>
+                We currently support CSV or XLS up to a file size of 10MB.
+              </span>
+            </span>
+          </div>
+          <div css={importFileActionStyles}>
+            <input css={inputStyles} />
+            <Button type="primary">Choose file...</Button>
+          </div>
         </div>
-        <div css={importFileActionStyles}>
-          <input css={inputStyles} />
-          <Button type="primary">Choose file...</Button>
-        </div>
-      </div>
+      )}
       <MessageBlock
         type="annotationWarning"
         icon={<AnnotationWarning />}
@@ -87,7 +93,7 @@ const dataGridStyles = css({
   gap: '10px',
 });
 
-const dataCardStyles = css({
+const dataCardStyles = css(p14Medium, {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, ReactNode } from 'react';
 import { useSelected } from 'slate-react';
 import { Tag } from '../../atoms';
+import { Data, Zap } from '../../icons';
 import {
   cssVar,
   normalOpacity,
@@ -11,7 +12,6 @@ import {
   transparency,
 } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
-import { Archive, Zap } from '../../icons';
 
 const editableLiveCaptionStyles = css({
   maxWidth: `${slimBlockWidth}px`,
@@ -42,13 +42,6 @@ const iconWrapperStyles = css({
   width: '16px',
   marginTop: '0',
   transform: 'translateY(-7%)',
-});
-
-const iconSvgStyles = css({
-  'svg > path': {
-    fill: cssVar('liveDataBackgroundColor'),
-    stroke: cssVar('liveDataTextColor'),
-  },
 });
 
 const editableTableCaptionStyles = css({
@@ -93,11 +86,10 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
             isUiIntegration
               ? iconWrapperStylesUiIntegration
               : iconWrapperStyles,
-            iconSvgStyles,
           ]}
           contentEditable={false}
         >
-          {icon ?? (isUiIntegration ? <Archive /> : <Zap />)}
+          {icon ?? (isUiIntegration ? <Data /> : <Zap />)}
         </div>
         <div
           aria-placeholder={empty ? 'LiveConnection' : ''}

@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import * as RadixDialog from '@radix-ui/react-dialog';
 import { FC, ReactNode } from 'react';
-import { showTransition } from '../../primitives';
+import { showTransition, strongOpacity } from '../../primitives';
 
 interface DialogProps {
   open: boolean;
@@ -24,8 +24,9 @@ export const Dialog: FC<DialogProps> = ({ open, setOpen, children }) => {
 };
 
 const overlayStyles = css({
-  backgroundColor: 'rgba(22, 31, 44, 0.16);',
+  backgroundColor: `rgba(22, 31, 44, ${strongOpacity})`,
   position: 'fixed',
+  zIndex: 100,
   inset: 0,
   animation: showTransition,
 });

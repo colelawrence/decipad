@@ -1,13 +1,6 @@
 import { FC, useCallback, useMemo } from 'react';
 
 import {
-  DatabaseConnectionScreen,
-  DatabaseQuery,
-  Dialog,
-  IntegrationModalDialog,
-  WrapperIntegrationModalDialog,
-} from '@decipad/ui';
-import {
   ELEMENT_LIVE_CONNECTION,
   ImportElementSource,
   LiveDataSetElement,
@@ -18,36 +11,43 @@ import {
   useConnectionStore,
   useEditorSelector,
 } from '@decipad/react-contexts';
-import { findNode, getNodeString } from '@udecode/plate';
+import {
+  DatabaseConnectionScreen,
+  DatabaseQuery,
+  Dialog,
+  IntegrationModalDialog,
+  WrapperIntegrationModalDialog,
+} from '@decipad/ui';
 import { css } from '@emotion/react';
-import { useSession } from 'next-auth/react';
+import { findNode, getNodeString } from '@udecode/plate';
 import { LiveQueryCore } from 'libs/editor-plugins/src/plugins/LiveQuery/components/LiveQueryCore';
+import { useSession } from 'next-auth/react';
+import { ProviderList } from '.';
 import { useEditorElements } from '../hooks/useEditorElements';
 import {
   addQueryToLiveDataSet,
-  insertLiveDataSet,
-  fetchQuery,
   attemptConnection,
+  fetchQuery,
+  insertLiveDataSet,
 } from '../utils';
-import { ProviderList } from '.';
 
 // Note: Some of these names were not set, we might need to review this mapping
 const providerTitle = {
   default: 'Import External Data',
-  gsheets: 'GSheetDataSet',
-  mysql: 'MySQLDataSet',
-  csv: 'FileDataSet',
-  json: 'WebAPIDataSet',
-  mariadb: 'MariaDBDataSet',
-  mongodb: 'MongoDBDataSet',
-  mssql: 'MSSQLDataSet',
-  redshift: 'RedshiftDataSet',
-  postgresql: 'PostGresDataSet',
-  oracledb: 'OracleDBDataSet',
-  arrow: 'OtherSQLDataSet',
-  cockroachdb: 'OtherSQLDataSet',
-  decipad: 'DecipadDataSet',
-  sqlite: 'OtherSQLDataSet',
+  gsheets: 'Google Sheets',
+  mysql: 'MySQL',
+  csv: 'CSV',
+  json: 'Web API',
+  mariadb: 'MariaDB',
+  mongodb: 'MongoDB',
+  mssql: 'MSSQL',
+  redshift: 'Redshift',
+  postgresql: 'Postgres',
+  oracledb: 'Oracle',
+  arrow: 'Arrow',
+  cockroachdb: 'Cockroach',
+  decipad: 'Decipad',
+  sqlite: 'SQL',
 };
 
 export const AddConnection: FC = () => {
@@ -71,9 +71,11 @@ export const AddConnection: FC = () => {
   );
 
   const connectionTitle = useMemo(() => {
-    return store.connectionType
-      ? providerTitle[store.connectionType] || providerTitle.default
-      : providerTitle.default;
+    return (
+      store.connectionType
+        ? providerTitle[store.connectionType] || providerTitle.default
+        : providerTitle.default
+    ).replace(' ', '');
   }, [store.connectionType]);
 
   // Handles creation of connection and queries as the user moves through
