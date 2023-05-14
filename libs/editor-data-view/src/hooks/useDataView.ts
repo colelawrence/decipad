@@ -5,11 +5,11 @@ import {
   DataViewElement,
 } from '@decipad/editor-types';
 import { assertElementType, matchNodeType } from '@decipad/editor-utils';
+import { useComputer } from '@decipad/react-contexts';
 import {
-  useComputer,
   useEditorChange,
-  useEditorSelector,
-} from '@decipad/react-contexts';
+  useEditorChangeCallback,
+} from '@decipad/editor-hooks';
 import { SerializedType, AutocompleteName } from '@decipad/computer';
 import { findNode, findNodePath } from '@udecode/plate';
 import { Path } from 'slate';
@@ -92,22 +92,19 @@ export const useDataView = ({
     return undefined;
   }, [availableColumns, editor, element]);
 
-  useEffect(() => {
-    sortColumns(selectColumnOrder());
-  }, [selectColumnOrder, sortColumns]);
-
-  useEditorChange(sortColumns, selectColumnOrder, {
+  useEditorChangeCallback(selectColumnOrder, sortColumns, {
     injectObservable: columnChanges$,
+    debounceTimeMs: 2000,
   });
 
-  const selectedAggregationTypes = useEditorSelector(
+  const selectedAggregationTypes = useEditorChange(
     useCallback(
       () => element.children[1]?.children?.map((th) => th.aggregation),
       [element.children]
     )
   );
 
-  const selectedRoundings = useEditorSelector(
+  const selectedRoundings = useEditorChange(
     useCallback(
       () => element.children[1]?.children?.map((th) => th.rounding),
       [element.children]

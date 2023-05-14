@@ -6,7 +6,7 @@ import {
   AggregationType,
   columnAggregationTypes,
 } from '../utils/columnAggregationTypes';
-import { TableColumn } from './useTable';
+import { TableColumn } from '../types';
 
 interface UseAggregationTypeProps {
   column: TableColumn;

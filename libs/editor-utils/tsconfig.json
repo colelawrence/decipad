@@ -13,6 +13,9 @@
       "path": "../editor-types"
     },
     {
+      "path": "../editor-hooks"
+    },
+    {
       "path": "../feature-flags"
     },
     {

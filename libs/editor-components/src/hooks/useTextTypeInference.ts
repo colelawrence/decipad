@@ -1,10 +1,11 @@
 import { MyEditor, VariableDefinitionElement } from '@decipad/editor-types';
-import { useComputer, useEditorChange } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { useCallback, useState } from 'react';
 import { dequal } from 'dequal';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import { inferType } from '@decipad/parse';
 import { SerializedType } from '@decipad/computer';
+import { useEditorChangeCallback } from '@decipad/editor-hooks';
 
 export const useTextTypeInference = (
   element: VariableDefinitionElement
@@ -40,7 +41,7 @@ export const useTextTypeInference = (
     [computer, inferredType]
   );
 
-  useEditorChange(inferAndSetType, selectTextValue);
+  useEditorChangeCallback(selectTextValue, inferAndSetType);
 
   return inferredType;
 };

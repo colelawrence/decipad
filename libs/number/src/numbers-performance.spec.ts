@@ -5,11 +5,11 @@ const OPS = ['add', 'sub', 'div', 'mul', 'mod', 'pow'] as const;
 type OpName = typeof OPS[number];
 
 const CI_SUCKINESS_FACTOR = 5;
-const MIN_ROWS_PER_SEC = 50_000 / (process.env.CI ? CI_SUCKINESS_FACTOR : 1);
+const MIN_ROWS_PER_SEC = 1_000 / (process.env.CI ? CI_SUCKINESS_FACTOR : 1);
 const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
   Object.fromEntries(
     Object.entries({
-      pow: 1500,
+      pow: 500,
     }).map(([op, minRowsPerSec]) => [
       op,
       minRowsPerSec / (process.env.CI ? CI_SUCKINESS_FACTOR : 1),

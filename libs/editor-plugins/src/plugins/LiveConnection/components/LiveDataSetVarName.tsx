@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
-import { NodeEntry } from 'slate';
+import { useCallback, useMemo } from 'react';
 import { css } from '@emotion/react';
 import {
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
@@ -13,7 +12,7 @@ import {
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
-import { useConnectionStore, useEditorChange } from '@decipad/react-contexts';
+import { useConnectionStore } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveDataSetParams,
@@ -29,6 +28,7 @@ import {
 } from '@udecode/plate';
 import pluralize from 'pluralize';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useEditorChange } from '@decipad/editor-hooks';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 import LiveDataSetCaption from './LiveDataSetCaption';
 
@@ -53,12 +53,7 @@ export const LiveDataSetVarName: PlateComponent = ({
 
   const store = useConnectionStore();
   const editor = useTEditorRef();
-  // refactor to useeditorselector
-  const [parent, setParent] = useState<
-    NodeEntry<LiveDataSetElement> | undefined
-  >();
-  useEditorChange(
-    setParent,
+  const parent = useEditorChange(
     useCallback(
       (ed) => {
         const path = findNodePath(ed, element);

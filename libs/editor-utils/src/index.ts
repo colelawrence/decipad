@@ -65,3 +65,4 @@ export * from './useSelection';
 export * from './useTableColumnFormulaResultForColumn';
 export * from './useWasSelected';
 export * from './withPath';
+export * from './useMaterializedResult';

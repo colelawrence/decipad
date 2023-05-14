@@ -1,15 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
-
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import { css } from '@emotion/react';
 import { getNode, isElement } from '@udecode/plate';
 import { AutocompleteName } from '@decipad/computer';
-
-import { useComputer, useEditorChange } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { cssVar, smallDesktopLandscapeQuery } from '@decipad/ui';
-
+import { useEditorChange } from '@decipad/editor-hooks';
 import { catalogItems } from '../NumberCatalog/catalogItems';
 import { selectCatalogNames } from '../NumberCatalog/selectCatalogNames';
 import { toVar } from '../NumberCatalog/toVar';
@@ -22,7 +20,6 @@ const catalogDebounceTimeMs: number = 1_000;
 
 export const DynamicSidebar = () => {
   const [view, setView] = useState<string>('Insert');
-  const [, setBlock] = useState<MyElement | undefined>();
   const [search, setSearch] = useState<string>('');
   const [activeBlockPath, setActiveBlockPath] = useState<Path | undefined>(
     undefined
@@ -45,7 +42,7 @@ export const DynamicSidebar = () => {
     )
   );
 
-  useEditorChange(setBlock, (edt): MyElement | undefined => {
+  useEditorChange((edt): MyElement | undefined => {
     const path = edt.selection?.focus?.path;
 
     if (path) {

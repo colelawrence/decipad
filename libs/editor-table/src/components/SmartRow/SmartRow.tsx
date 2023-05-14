@@ -3,7 +3,7 @@ import { Path } from 'slate';
 import { SmartRow as UISmartRow } from '@decipad/ui';
 import { AnyElement } from '@decipad/editor-types';
 import { SmartColumnCell } from '..';
-import { TableColumn } from '../../hooks';
+import { TableColumn } from '../../types';
 
 interface SmartRowProps {
   readonly tableName: string;

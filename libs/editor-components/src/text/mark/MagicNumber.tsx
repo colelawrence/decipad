@@ -12,7 +12,6 @@ import {
 } from '@decipad/editor-utils';
 import {
   useComputer,
-  useEditorSelector,
   useIsEditorReadOnly,
   useResult,
   useShadowCodeLine,
@@ -32,6 +31,7 @@ import { dequal } from 'dequal';
 import { useCallback, useEffect, useState } from 'react';
 import { Element } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { useEditorChange } from '@decipad/editor-hooks';
 import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
 
 export const MagicNumber: PlateComponent = ({
@@ -203,7 +203,7 @@ export const MagicNumber: PlateComponent = ({
 
 /** Get the ID of the magic number, comprised of paragraph and index */
 function useMagicNumberId(text: RichText) {
-  return useEditorSelector((editor) => {
+  return useEditorChange((editor) => {
     const path = findNodePath(editor, text);
     if (!path) return '';
 

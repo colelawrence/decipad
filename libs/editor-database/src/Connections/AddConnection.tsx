@@ -6,11 +6,8 @@ import {
   LiveDataSetElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  useComputer,
-  useConnectionStore,
-  useEditorSelector,
-} from '@decipad/react-contexts';
+import { useComputer, useConnectionStore } from '@decipad/react-contexts';
+import { findNode, getNodeString } from '@udecode/plate';
 import {
   DatabaseConnectionScreen,
   DatabaseQuery,
@@ -19,8 +16,8 @@ import {
   WrapperIntegrationModalDialog,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { findNode, getNodeString } from '@udecode/plate';
 import { LiveQueryCore } from 'libs/editor-plugins/src/plugins/LiveQuery/components/LiveQueryCore';
+import { useEditorChange } from '@decipad/editor-hooks';
 import { useSession } from 'next-auth/react';
 import { ProviderList } from '.';
 import { useEditorElements } from '../hooks/useEditorElements';
@@ -184,7 +181,7 @@ export const AddConnection: FC = () => {
     liveConnections,
   ]);
 
-  const currentQuery = useEditorSelector(
+  const currentQuery = useEditorChange(
     useCallback(() => {
       const node = findNode(editor, {
         at: [],

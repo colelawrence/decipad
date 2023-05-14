@@ -52,7 +52,7 @@ export const useColumnInferredType = (
   columnIndex?: number
 ): ObservableColumnType => {
   const context = useContext(ColumnInferredTypeContext);
-  return useBehaviorSubject(
-    context.getColumnType(columnIndex) ?? undefinedBehaviourSubject
-  );
+  const subject =
+    context.getColumnType(columnIndex) ?? undefinedBehaviourSubject;
+  return useBehaviorSubject(subject);
 };

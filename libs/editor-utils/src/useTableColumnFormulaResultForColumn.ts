@@ -6,10 +6,7 @@ import {
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  useEditorTableContext,
-  useEditorTableResultContext,
-} from '@decipad/react-contexts';
+import { useEditorTableResultContext } from '@decipad/react-contexts';
 import { useMemo } from 'react';
 import { all } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
@@ -20,18 +17,15 @@ export function useTableColumnFormulaResultForCell(
   const editor = useTEditorRef();
   const [rowIndex, colIndex] = findFormulaCoordinates(editor, element);
   const columnResult = useTableColumnFormulaResultForColumn(colIndex);
-  const isTableColumnFormula = useIsTableColumnFormula(colIndex);
   return useMemo(
     () =>
-      isTableColumnFormula &&
-      rowIndex != null &&
-      columnResult?.type.kind === 'materialized-column'
+      rowIndex != null && columnResult?.type.kind === 'materialized-column'
         ? {
             type: columnResult.type.cellType,
             value: columnResult.value[rowIndex] as Result.OneResult,
           }
         : undefined,
-    [columnResult, isTableColumnFormula, rowIndex]
+    [columnResult, rowIndex]
   );
 }
 
@@ -98,10 +92,4 @@ const getColumnResultValue = async (
     return typeof columnValue === 'function' ? all(columnValue()) : columnValue;
   }
   return undefined;
-};
-
-const useIsTableColumnFormula = (colIndex?: number): boolean => {
-  const { cellTypes } = useEditorTableContext();
-
-  return colIndex != null && cellTypes[colIndex]?.kind === 'table-formula';
 };

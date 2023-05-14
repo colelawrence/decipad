@@ -8,25 +8,16 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../ui"
+      "path": "../utils"
+    },
+    {
+      "path": "../react-contexts"
     },
     {
       "path": "../editor-types"
     },
     {
-      "path": "../editor-hooks"
-    },
-    {
-      "path": "../editor-components"
-    },
-    {
-      "path": "../editor-utils"
-    },
-    {
-      "path": "../client-events"
-    },
-    {
-      "path": "../react-contexts"
+      "path": "../react-utils"
     }
   ]
 }

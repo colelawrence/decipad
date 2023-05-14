@@ -5,7 +5,7 @@ import {
   PlateComponent,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useEditorChange } from '@decipad/editor-hooks';
 import { findNodePath, getParentNode } from '@udecode/plate';
 import { useCallback, useState } from 'react';
 import { LiveQueryCore } from './LiveQueryCore';
@@ -15,10 +15,7 @@ const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
   const [deleted, setDeleted] = useState(false);
   const onceDeleted = useCallback(() => setDeleted(true), []);
 
-  const [parent, setParent] = useState<LiveDataSetElement | undefined>();
-
-  useEditorChange(
-    setParent,
+  const parent = useEditorChange(
     useCallback(
       (editor) => {
         const path = findNodePath(editor, element);

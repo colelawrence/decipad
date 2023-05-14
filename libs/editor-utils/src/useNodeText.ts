@@ -1,19 +1,9 @@
 import { MyNode } from '@decipad/editor-types';
-import {
-  useEditorChange,
-  UseEditorChangeOptions,
-} from '@decipad/react-contexts';
+import { useEditorChange } from '@decipad/editor-hooks';
+import type { UseEditorChangeOptions } from '@decipad/editor-hooks';
 import { getNodeString } from '@udecode/plate';
-import { useState } from 'react';
 
 export const useNodeText = (
   node: MyNode,
   options?: UseEditorChangeOptions
-): string | undefined => {
-  const [text, setText] = useState<string | undefined>(() =>
-    getNodeString(node)
-  );
-  useEditorChange(setText, () => getNodeString(node), options);
-
-  return text;
-};
+): string | undefined => useEditorChange(() => getNodeString(node), options);

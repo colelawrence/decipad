@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useComputer, useEditorSelector } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import {
   MyEditor,
@@ -9,7 +9,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
-import { useResolved } from '@decipad/react-utils';
+import { useEditorChangePromise } from '@decipad/editor-hooks';
 
 const collectColumnData = (
   editor: MyEditor,
@@ -36,8 +36,6 @@ const collectColumnData = (
   return columnData;
 };
 
-const EMPTY: Array<never> = [];
-
 const collectColumnsData = (
   editor: MyEditor,
   element: TableElement
@@ -48,7 +46,7 @@ const collectColumnsData = (
 
 export const useColumnsInferredTypes = (
   element: TableElement
-): CellValueType[] => {
+): CellValueType[] | undefined => {
   const computer = useComputer();
 
   const inferColumnsTypes = useCallback(
@@ -66,5 +64,5 @@ export const useColumnsInferredTypes = (
     [computer, element]
   );
 
-  return useResolved(useEditorSelector(inferColumnsTypes)) ?? EMPTY;
+  return useEditorChangePromise(async (editor) => inferColumnsTypes(editor));
 };

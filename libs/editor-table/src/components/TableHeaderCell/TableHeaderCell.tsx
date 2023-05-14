@@ -71,6 +71,7 @@ export const TableHeaderCell: PlateComponent = ({
           draggingOver={!isDragging && isOver}
           dropDirection={dropDirection}
           dropdownNames={dropDownNames}
+          key={element.id}
         >
           {children}
         </TableColumnHeader>

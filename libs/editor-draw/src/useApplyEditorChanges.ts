@@ -3,7 +3,7 @@ import {
   DrawElementDescendant,
   DrawElements,
 } from '@decipad/editor-types';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useEditorChangeCallback } from '@decipad/editor-hooks';
 import { findNodePath, getNode } from '@udecode/plate';
 import { cloneDeep, extend } from 'lodash';
 import { useCallback, useRef } from 'react';
@@ -39,7 +39,15 @@ export const useApplyEditorChanges = (
     [updateScene]
   );
 
-  useEditorChange(
+  useEditorChangeCallback(
+    (editor): DrawElement | undefined => {
+      // refetch the element
+      const path = findNodePath(editor, element);
+      if (path) {
+        return getNode<DrawElement>(editor, path) ?? undefined;
+      }
+      return undefined;
+    },
     useCallback(
       (draw?: DrawElement) => {
         if (draw) {
@@ -52,14 +60,6 @@ export const useApplyEditorChanges = (
         }
       },
       [applyElementsDiffToDrawing]
-    ),
-    (editor): DrawElement | undefined => {
-      // refetch the element
-      const path = findNodePath(editor, element);
-      if (path) {
-        return getNode<DrawElement>(editor, path) ?? undefined;
-      }
-      return undefined;
-    }
+    )
   );
 };

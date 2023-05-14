@@ -4,7 +4,11 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, useNodePath } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  useMaterializedResult,
+  useNodePath,
+} from '@decipad/editor-utils';
 import {
   EditorTableContext,
   EditorTableContextValue,
@@ -17,16 +21,16 @@ import { Result } from '@decipad/computer';
 import { useMemo, useState } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import { useTableStore } from '../../contexts/tableStore';
-import { useMaterializedResult, useTable, useTableActions } from '../../hooks';
+import { useTable, useTableActions } from '../../hooks';
 import { SmartRow } from '../SmartRow';
 import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
 import { useSelectedCells } from './useSelectedCells';
-import { selectTableResult } from '../../utils/selectTableResult';
 import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
 import {
   ColumnInferredTypeContext,
   createDefaultColumnInferredTypeContextValue,
 } from '../../contexts/ColumnInferredTypeContext';
+import { selectTableResult } from '../../utils/selectTableResult';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
@@ -76,9 +80,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const columnInferredTypesContextValue = useMemo(
-    createDefaultColumnInferredTypeContextValue,
-    []
+  const [columnInferredTypesContextValue] = useState(
+    createDefaultColumnInferredTypeContextValue
   );
 
   return (
@@ -94,6 +97,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         suppressContentEditableWarning
         id={blockId}
         dependencyId={blockId}
+        key={blockId}
       >
         <EditorTableContext.Provider value={contextValue}>
           <ColumnInferredTypeContext.Provider

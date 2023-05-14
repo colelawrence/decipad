@@ -1,12 +1,12 @@
 import { findNodePath, isCollapsed } from '@udecode/plate';
 import { TableCellElement, TableHeaderElement } from '@decipad/editor-types';
 import { Path } from 'slate';
-import { useEditorSelector } from '@decipad/react-contexts';
+import { useEditorChange } from '@decipad/editor-hooks';
 
 export const useIsColumnSelected = (
   element: TableCellElement | TableHeaderElement
 ): boolean => {
-  return useEditorSelector((editor) => {
+  return useEditorChange((editor) => {
     const { selection } = editor;
     if (selection && isCollapsed(selection)) {
       const path = findNodePath(editor, element);

@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
-import { NodeEntry } from 'slate';
+import { useCallback, useMemo } from 'react';
 import { css } from '@emotion/react';
 import {
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -14,7 +13,7 @@ import {
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
-import { useComputer, useEditorChange } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveConnectionParams,
@@ -26,6 +25,7 @@ import { findNodePath, getNodeString, getParentNode } from '@udecode/plate';
 import pluralize from 'pluralize';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { insertLiveQueryBelow } from '@decipad/editor-components';
+import { useEditorChange } from '@decipad/editor-hooks';
 import { useLiveConnectionPossibleJsonPaths } from '../hooks/useLiveConnectionPossibleJsonPaths';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 
@@ -48,11 +48,8 @@ export const LiveConnectionVarName: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION_VARIABLE_NAME);
   const editor = useTEditorRef();
-  const [parent, setParent] = useState<
-    NodeEntry<LiveConnectionElement> | undefined
-  >();
-  useEditorChange(
-    setParent,
+
+  const parent = useEditorChange(
     useCallback(
       (ed) => {
         const path = findNodePath(ed, element);

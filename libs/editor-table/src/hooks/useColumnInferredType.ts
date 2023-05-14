@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import {
@@ -6,10 +5,12 @@ import {
   TableCellElement,
   CellValueType,
   TableHeaderElement,
+  useTEditorRef,
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
+import { Computer } from '@decipad/computer';
 import { useResolved } from '@decipad/react-utils';
-import { useEditorSelector } from '../../../react-contexts/src/editor-change';
+import { useMemo } from 'react';
 
 type UseColumnInferredTypeResult = CellValueType | undefined;
 
@@ -38,25 +39,31 @@ const collectColumnData = (
   return columnData;
 };
 
+export const getColumnInferredType = async (
+  editor: MyEditor,
+  computer: Computer,
+  element?: TableHeaderElement
+): Promise<UseColumnInferredTypeResult | undefined> => {
+  if (element && element.cellType?.kind !== 'anything') {
+    return element.cellType;
+  }
+  return (
+    element &&
+    inferColumn(computer, collectColumnData(editor, element), {
+      userType: element.cellType,
+    })
+  );
+};
+
 export const useColumnInferredType = (
   element?: TableHeaderElement
 ): UseColumnInferredTypeResult => {
+  const editor = useTEditorRef();
   const computer = useComputer();
-
-  const inferColumnType = useCallback(
-    async (editor: MyEditor): Promise<CellValueType | undefined> => {
-      if (element && element.cellType?.kind !== 'anything') {
-        return element.cellType;
-      }
-      return (
-        element &&
-        inferColumn(computer, collectColumnData(editor, element), {
-          userType: element.cellType,
-        })
-      );
-    },
-    [computer, element]
+  return useResolved(
+    useMemo(
+      () => getColumnInferredType(editor, computer, element),
+      [computer, editor, element]
+    )
   );
-
-  return useResolved(useEditorSelector(inferColumnType));
 };

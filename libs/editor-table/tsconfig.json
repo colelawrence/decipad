@@ -20,6 +20,9 @@
       "path": "../editor-utils"
     },
     {
+      "path": "../editor-hooks"
+    },
+    {
       "path": "../computer"
     },
     {

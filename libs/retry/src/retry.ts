@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import pRetry from 'p-retry';
 import type { Options } from 'p-retry';
-import { timeout } from '@decipad/utils';
+import { timeout } from '../../utils/src/timeout';
 
 type RetryFn<TError> = (error: TError) => [boolean, number | undefined];
 

@@ -1,7 +1,7 @@
 import percySnapshot from '@percy/playwright';
 import { Page } from 'playwright-core';
 
-const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 5_000;
+const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 10_000;
 
 const snapshotsTaken = new Set<string>();
 

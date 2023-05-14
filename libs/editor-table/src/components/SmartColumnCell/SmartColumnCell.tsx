@@ -12,10 +12,11 @@ import {
 } from 'react';
 import { EMPTY } from 'rxjs';
 import { Path } from 'slate';
-import { TableColumn, useColumnAggregationTypes } from '../../hooks';
+import { useColumnAggregationTypes } from '../../hooks';
 import { AggregationType } from '../../utils';
 import { onDragSmartCellResultStarted } from './onDragSmartCellResultStarted';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
+import { TableColumn } from '../../types';
 
 interface SmartColumnCellProps {
   tableName: string;

@@ -1,11 +1,10 @@
 import {
   TableHeaderElement,
-  ColumnMenuDropdown,
   ELEMENT_VARIABLE_DEF,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useCallback, useEffect, useState } from 'react';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useCallback, useEffect } from 'react';
+import { useEditorChange } from '@decipad/editor-hooks';
 import {
   assertElementType,
   usePathMutatorCallback,
@@ -17,10 +16,8 @@ export const useTableHeaderCellDropdownNames = (
   path?: Path
 ) => {
   const editor = useTEditorRef();
-  const [dropDownNames, setDropDownNames] = useState<ColumnMenuDropdown[]>([]);
 
-  useEditorChange(
-    setDropDownNames,
+  const dropDownNames = useEditorChange(
     useCallback(() => {
       return editor.children
         .filter(

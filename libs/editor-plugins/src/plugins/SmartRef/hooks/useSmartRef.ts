@@ -5,7 +5,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
-import { useComputer, useEditorChangeState } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import {
   getNextNode,
   getNodeString,
@@ -17,6 +17,7 @@ import {
 import { debounceTime, filter } from 'rxjs';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ReactEditor, useSelected } from 'slate-react';
+import { useEditorChange } from '@decipad/editor-hooks';
 
 interface UseSmartRefResult {
   symbolName?: string;
@@ -28,7 +29,7 @@ interface UseSmartRefResult {
 const smartRefDebounceTimeMs = 500;
 
 export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
-  const siblingContent = useEditorChangeState(
+  const siblingContent = useEditorChange(
     (editor) => {
       const previousNode = getPreviousNode<MyElement>(editor, {
         at: ReactEditor.findPath(editor as ReactEditor, element),
@@ -61,7 +62,6 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
         hasNext,
       };
     },
-    { hasNext: false, hasPrevious: false },
     { debounceTimeMs: smartRefDebounceTimeMs }
   );
 

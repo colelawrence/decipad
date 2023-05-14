@@ -312,7 +312,7 @@ describe('useDataView hook performance', () => {
     const computer = new Computer();
     await loadAndPushTable(computer, '/small1.csv');
     const [testResult, editor] = await runWithDataView({
-      waitForCallbackCount: 4,
+      waitForCallbackCount: 5,
       computer,
     });
     expect(testResult).toMatchSnapshot();
@@ -335,7 +335,7 @@ describe('useDataView hook performance', () => {
     await loadAndPushTable(computer, '/big1.csv');
     let startTime = Date.now();
     const [testResult, editor] = await runWithDataView({
-      waitForCallbackCount: 4,
+      waitForCallbackCount: 5,
       computer,
     });
     let elapsed = Date.now() - startTime;

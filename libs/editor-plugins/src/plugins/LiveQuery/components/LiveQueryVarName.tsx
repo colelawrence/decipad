@@ -9,7 +9,7 @@ import {
   usePathMutatorCallback,
   useEnsureValidVariableName,
 } from '@decipad/editor-utils';
-import { useEditorChange } from '@decipad/react-contexts';
+import { useEditorChange } from '@decipad/editor-hooks';
 import {
   EditableLiveDataCaption,
   Tooltip,
@@ -17,8 +17,7 @@ import {
   icons,
 } from '@decipad/ui';
 import { findNodePath, getNodeString, getParentNode } from '@udecode/plate';
-import { useCallback, useState } from 'react';
-import { NodeEntry } from 'slate';
+import { useCallback } from 'react';
 import { css } from '@emotion/react';
 import { useSourceLiveConnections } from '../hooks/useSourceLiveConnections';
 
@@ -39,11 +38,7 @@ export const LiveQueryVarName: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_LIVE_QUERY_VARIABLE_NAME);
   const editor = useTEditorRef();
-  const [parent, setParent] = useState<
-    NodeEntry<LiveQueryElement> | undefined
-  >();
-  useEditorChange(
-    setParent,
+  const parent = useEditorChange(
     useCallback(
       (ed) => {
         const path = findNodePath(ed, element);

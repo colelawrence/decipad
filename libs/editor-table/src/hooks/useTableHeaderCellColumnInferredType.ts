@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { TableHeaderElement } from '@decipad/editor-types';
-import { useColumnInferredType } from '.';
 import { ColumnInferredTypeContext } from '../contexts/ColumnInferredTypeContext';
+import { useColumnInferredType } from './useColumnInferredType';
 
 export const useTableHeaderCellColumnInferredType = (
   element: TableHeaderElement,

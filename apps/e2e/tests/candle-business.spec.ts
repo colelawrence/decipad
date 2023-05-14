@@ -1,7 +1,7 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
-import { createWorkspace, importNotebook } from '../utils/src';
+import { createWorkspace, importNotebook, Timeouts } from '../utils/src';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business';
 
 test.describe('Use case: building a candle business', () => {
@@ -40,6 +40,9 @@ test.describe('Use case: building a candle business', () => {
     await page.goto(`/n/${notebookId}`);
 
     await page.waitForSelector('[data-slate-editor] h1');
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
 
     expect(await fetchTable(page, '[id="ddTJXSKZzWh56A8NMCZmM"]')).toBe(
       `.------------------------------------------------.

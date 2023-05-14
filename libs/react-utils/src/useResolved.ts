@@ -1,21 +1,28 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PromiseOrType } from '@decipad/utils';
-import usePromise from 'react-use-promise';
 import isPromise from 'is-promise';
 import { dequal } from 'dequal';
 
 export const useResolved = <T>(_p?: PromiseOrType<T>): T | undefined => {
   const p = useMemo(() => (isPromise(_p) ? _p : Promise.resolve(_p)), [_p]);
-  const [result, error] = usePromise(p, [p]);
-  const [dedupedResult, setDedupedResult] = useState<T | undefined>();
+  const lastP = useRef(p);
+  lastP.current = p;
+  const [result, setResult] = useState<T | undefined>();
+  const lastResult = useRef<T | undefined>();
   useEffect(() => {
-    if (error) {
-      throw error;
-    }
-    if (result != null && !dequal(result, dedupedResult)) {
-      setDedupedResult(result);
-    }
-  }, [dedupedResult, error, result]);
+    let canceled = false;
+    p.then((r) => {
+      if (lastP.current === p && !canceled && !dequal(lastResult.current, r)) {
+        lastResult.current = r;
+        setResult(r);
+      }
+    }).catch((err) => {
+      console.error(err);
+    });
 
-  return dedupedResult;
+    return () => {
+      canceled = true;
+    };
+  }, [p]);
+  return result;
 };

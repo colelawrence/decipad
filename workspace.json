@@ -22,6 +22,7 @@
     "editor-components": "libs/editor-components",
     "editor-data-view": "libs/editor-data-view",
     "editor-database": "libs/editor-database",
+    "editor-hooks": "libs/editor-hooks",
     "editor-language-elements": "libs/editor-language-elements",
     "editor-plugins": "libs/editor-plugins",
     "editor-table": "libs/editor-table",

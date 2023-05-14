@@ -1,7 +1,4 @@
-import {
-  useEditorSelector,
-  useIsEditorReadOnly,
-} from '@decipad/react-contexts';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import {
   focusEditor,
   getNode,
@@ -12,12 +9,13 @@ import {
   toDOMNode,
   isVoid,
 } from '@udecode/plate';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { BaseSelection, Path, Selection } from 'slate';
 import { MyEditor } from '@decipad/editor-types';
 import { getPersistedSelection } from '@decipad/editor-plugins';
 import { getPointSafe } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';
+import { useEditorChange } from '@decipad/editor-hooks';
 
 const defaultSelection = [1] as Path;
 
@@ -44,7 +42,7 @@ export const useInitialSelection = (
   loaded: boolean,
   editor?: MyEditor
 ) => {
-  const selection = useEditorSelector((ed) => ed.selection);
+  const selection = useEditorChange(useCallback((ed) => ed.selection, []));
   const { initialFocusDone, setInitialFocusDone } =
     useNotebookState(notebookId);
   const readOnly = useIsEditorReadOnly();
