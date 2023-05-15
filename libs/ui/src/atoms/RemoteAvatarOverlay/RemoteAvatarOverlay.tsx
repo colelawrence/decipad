@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
-import { smallScreenQuery } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { smallestDesktop } from '../../primitives';
 
 const remoteAvatarOverlayWrapperStyles = css({
   position: 'absolute',
@@ -20,8 +20,10 @@ const remoteAvatarOverlayStyles = css({
   zIndex: 0,
 });
 
+const mobileQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
+
 const invisibleOnSmallScreens = css({
-  [smallScreenQuery]: {
+  [mobileQuery]: {
     display: 'none',
   },
 });

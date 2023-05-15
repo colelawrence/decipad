@@ -1,6 +1,5 @@
 import { FC, forwardRef, ReactNode } from 'react';
 import { slimBlockWidth } from '../../styles/editor-layout';
-import { mobileQuery } from '../../primitives/viewport';
 
 export const EditorLayout = forwardRef<HTMLDivElement, { children: ReactNode }>(
   ({ children }, ref): ReturnType<FC> => {
@@ -11,21 +10,9 @@ export const EditorLayout = forwardRef<HTMLDivElement, { children: ReactNode }>(
           position: 'relative',
         }}
         css={{
-          '.slate-SelectionArea': {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            gap: '30px',
-
-            [mobileQuery]: {
-              padding: '0 24px',
-            },
-          },
-
           '[data-slate-editor]': {
-            width: '100%',
             maxWidth: slimBlockWidth,
-            margin: '0px auto',
+            margin: '0 auto',
             zIndex: 1,
           },
         }}

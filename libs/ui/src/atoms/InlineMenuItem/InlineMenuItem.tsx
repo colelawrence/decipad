@@ -10,7 +10,7 @@ const styles = css({
   gridTemplateColumns: 'auto 1fr',
   alignItems: 'center',
   columnGap: '12px',
-  transition: '0.2s ease',
+
   clipPath: 'inset(-8px -8px -8px -8px round 8px)',
   ':hover, &[data-focused="true"]': {
     backgroundColor: cssVar('highlightColor'),
@@ -29,9 +29,9 @@ const iconStyles = css({
 });
 
 const textStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
+  display: 'grid',
   textAlign: 'start',
+  rowGap: '6px',
 });
 
 const inlineStyles = css({
@@ -43,7 +43,6 @@ const titleStyles = css(
   p14Medium,
   setCssVar('currentTextColor', 'strongTextColor')
 );
-
 const descriptionStyles = css(p12Regular);
 
 const disabledStyles = css(

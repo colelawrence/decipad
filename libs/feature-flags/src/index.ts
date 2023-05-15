@@ -22,7 +22,6 @@ export const availableFlags = [
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
   'LIVE_QUERY',
-  'DYNAMIC_SIDEBAR',
 
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
@@ -82,7 +81,6 @@ let overrides: Flags = {
 // Unlike overrides flag switcher will have higher priority
 const flagDefaults: Flags = {
   NO_WORKSPACE_SWITCHER: false,
-  DYNAMIC_SIDEBAR: false,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

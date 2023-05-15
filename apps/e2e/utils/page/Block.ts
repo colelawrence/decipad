@@ -43,7 +43,7 @@ export async function createToggleBelow(page: Page, identifier: string) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('[data-testid="menu-item-toggle"]').click();
+  await page.locator('role=menuitem', { hasText: 'toggle' }).click();
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
@@ -66,7 +66,7 @@ export async function createSliderBelow(
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('[data-testid="menu-item-slider"]').click();
+  await page.locator('role=menuitem', { hasText: 'slider' }).click();
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Slider[0-9]+/')
@@ -96,7 +96,7 @@ export async function createDateBelow(page: Page, identifier: string) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('[data-testid="menu-item-datepicker"]').click();
+  await page.locator('role=menuitem', { hasText: 'date' }).click();
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
@@ -125,7 +125,7 @@ export async function createCalculationBlockBelow(
 
   await page.keyboard.insertText('/advanced');
 
-  await page.locator('[data-testid="menu-item-calculation-block"]').click();
+  await page.locator('role=menuitem', { hasText: 'Advanced' }).click();
 
   await page.waitForSelector('[data-testid="code-line"]');
 

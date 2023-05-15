@@ -1,7 +1,7 @@
 import {
   TeleportEditor,
+  NumberCatalog,
   BlockLengthSynchronizationProvider,
-  DynamicSidebar,
 } from '@decipad/editor-components';
 import { AddConnection } from '@decipad/editor-database';
 import { MyEditor, MyValue } from '@decipad/editor-types';
@@ -10,7 +10,6 @@ import {
   EditorChangeContextProvider,
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useWindowListener } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
@@ -40,6 +39,7 @@ export interface EditorProps {
 const InsidePlate = ({
   containerRef,
   children,
+  readOnly,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
 }) => {
@@ -56,6 +56,11 @@ const InsidePlate = ({
       <ErrorBoundary fallback={<></>}>
         <RemoteAvatarOverlay containerRef={containerRef} />
       </ErrorBoundary>
+      {readOnly ? null : (
+        <ErrorBoundary fallback={<></>}>
+          <NumberCatalog />
+        </ErrorBoundary>
+      )}
       <ErrorBoundary fallback={<></>}>
         <DndPreview />
       </ErrorBoundary>
@@ -102,8 +107,6 @@ export const Editor = (props: EditorProps) => {
     return <EditorPlaceholder />;
   }
 
-  const isDynamicSidebarEnabled: boolean = isFlagEnabled('DYNAMIC_SIDEBAR');
-
   return (
     <EditorReadOnlyContext.Provider
       value={{ readOnly: readOnly || isWritingLocked, lockWriting }}
@@ -127,7 +130,6 @@ export const Editor = (props: EditorProps) => {
                       history: true,
                     }}
                   >
-                    {!readOnly && isDynamicSidebarEnabled && <DynamicSidebar />}
                     <InsidePlate {...props} containerRef={containerRef} />
                     <AddConnection />
                     <NotebookState
