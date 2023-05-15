@@ -6,7 +6,7 @@ import {
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { usePathMutatorCallback } from '@decipad/editor-utils';
+import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import { Path } from 'slate';
 import { ExternalDataSource } from '@decipad/interfaces';
 

@@ -4,20 +4,19 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import {
-  assertElementType,
-  usePathMutatorCallback,
   useEnsureValidVariableName,
-} from '@decipad/editor-utils';
-import { useEditorChange } from '@decipad/editor-hooks';
+  useParentNodeEntry,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import {
   EditableLiveDataCaption,
   Tooltip,
   VariableNameSelector,
   icons,
 } from '@decipad/ui';
-import { findNodePath, getNodeString, getParentNode } from '@udecode/plate';
-import { useCallback } from 'react';
+import { getNodeString } from '@udecode/plate';
 import { css } from '@emotion/react';
 import { useSourceLiveConnections } from '../hooks/useSourceLiveConnections';
 
@@ -38,18 +37,7 @@ export const LiveQueryVarName: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_LIVE_QUERY_VARIABLE_NAME);
   const editor = useTEditorRef();
-  const parent = useEditorChange(
-    useCallback(
-      (ed) => {
-        const path = findNodePath(ed, element);
-        if (path) {
-          return getParentNode<LiveQueryElement>(editor, path);
-        }
-        return undefined;
-      },
-      [editor, element]
-    )
-  );
+  const parent = useParentNodeEntry<LiveQueryElement>(element);
 
   // ensure var name is unique
   const tooltip = useEnsureValidVariableName(element, [parent?.[0].id]);

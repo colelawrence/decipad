@@ -5,20 +5,17 @@ import {
   useTEditorRef,
   TableCellType,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  usePathMutatorCallback,
-  useNodePath,
-} from '@decipad/editor-utils';
+import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
+import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { Path } from 'slate';
-import { getNodeEntry, isFirstChild } from '@udecode/plate';
 import { useCallback, useMemo, useRef } from 'react';
 import {
   columnAggregationTypes,
   isCellAlignRight,
 } from '@decipad/editor-table';
 import { useComputer } from '@decipad/react-contexts';
+import { isFirstChild } from '@udecode/plate';
 import { useDataViewActions, useDragColumn, useDropColumn } from '../../hooks';
 import { availableRoundings } from './availableRoundings';
 
@@ -40,7 +37,10 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   const dataView: DataViewElement | undefined = useMemo(() => {
     const dataViewPath = actualPath && Path.parent(Path.parent(actualPath));
     return (
-      dataViewPath && getNodeEntry<DataViewElement>(editor, dataViewPath)?.[0]
+      dataViewPath &&
+      (getNodeEntrySafe(editor, dataViewPath)?.[0] as
+        | DataViewElement
+        | undefined)
     );
   }, [editor, actualPath]);
   const columnHeaderRef = useRef<HTMLTableCellElement>(null);

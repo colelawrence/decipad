@@ -1,6 +1,6 @@
 import { Path } from 'slate';
 import { useMemo } from 'react';
-import { useTableColumnFormulaResultForColumn } from '@decipad/editor-utils';
+import { useTableColumnFormulaResultForColumn } from '@decipad/editor-hooks';
 import { TableCellType } from '@decipad/editor-types';
 import {
   AggregationType,

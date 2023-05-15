@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { useMemo } from 'react';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
-import { useEnsureValidVariableName, useNodePath } from '@decipad/editor-utils';
+import { useEnsureValidVariableName, useNodePath } from '@decipad/editor-hooks';
 import { getNode } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';

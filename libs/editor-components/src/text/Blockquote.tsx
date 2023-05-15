@@ -6,8 +6,8 @@ import {
 import {
   assertElementType,
   isDragAndDropHorizontal,
-  useNodePath,
 } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { Blockquote as UIBlockquote } from '@decipad/ui';
 import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';

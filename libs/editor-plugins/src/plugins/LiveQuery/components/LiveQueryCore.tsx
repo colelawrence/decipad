@@ -5,7 +5,8 @@ import {
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { pluginStore, useNodePath } from '@decipad/editor-utils';
+import { pluginStore } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
 import { LiveConnectionResult, Spinner } from '@decipad/ui';
 import { varNamify } from '@decipad/utils';

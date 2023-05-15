@@ -7,8 +7,8 @@ import {
 import {
   assertElementType,
   useMaterializedResult,
-  useNodePath,
 } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import {
   EditorTableContext,
   EditorTableContextValue,
@@ -71,7 +71,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     [blockResult, columns]
   );
   const materializedTableResult = useMaterializedResult(
-    tableResult as Result.Result<'table' | 'materialized-table'>
+    tableResult as Result.AnyResult
   ) as Result.Result<'materialized-table'>;
 
   const tablePath = useNodePath(element);

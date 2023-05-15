@@ -4,17 +4,15 @@ import {
   PlateComponent,
   useTPlateEditorRef,
 } from '@decipad/editor-types';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Slider as UISlider } from '@decipad/ui';
 import { useCallback, useContext } from 'react';
 import { useVariableEditorContext } from './VariableEditorContext';
 
 export const Slider: PlateComponent = ({ attributes, element, children }) => {
-  if (element?.type !== ELEMENT_SLIDER) {
-    throw new Error(`Slider is meant to render slider elements`);
-  }
-
+  assertElementType(element, ELEMENT_SLIDER);
   const editor = useTPlateEditorRef();
 
   const path = useNodePath(element);

@@ -19,9 +19,8 @@ import {
   isDragAndDropHorizontal,
   mutateText,
   safeDelete,
-  useNodePath,
-  usePathMutatorCallback,
 } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   useEditorStylesContext,
   useIsEditorReadOnly,

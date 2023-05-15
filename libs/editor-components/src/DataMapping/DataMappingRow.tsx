@@ -4,16 +4,17 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import {
-  assertElementType,
   useNodePath,
+  useParentNode,
   usePathMutatorCallback,
-} from '@decipad/editor-utils';
+} from '@decipad/editor-hooks';
 import { parseSimpleValue } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { cssVar, MenuItem, MenuList, StructuredInputUnits } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { getParentNode, removeNodes } from '@udecode/plate';
+import { removeNodes } from '@udecode/plate';
 import { Caret, Number, Trash } from 'libs/ui/src/icons';
 import { useCallback, useMemo, useState } from 'react';
 import { SimpleValueContext, VarResultContext } from '../CodeLine';
@@ -34,7 +35,7 @@ export const DataMappingRow: PlateComponent = ({
   const path = useNodePath(element);
   const onChangeUnit = usePathMutatorCallback(editor, path, 'unit');
 
-  const parent = getParentNode<DataMappingElement>(editor, path!)![0];
+  const parent = useParentNode<DataMappingElement>(element);
   const changeSourceColumn = usePathMutatorCallback(
     editor,
     path,
@@ -53,9 +54,9 @@ export const DataMappingRow: PlateComponent = ({
     }
   }, [editor, path]);
 
-  const columns = computer.getAllColumns$.use(parent.source);
+  const columns = computer.getAllColumns$.use(parent?.source);
   const selectedColumn = columns.find((c) =>
-    parent.sourceType === 'notebook-table'
+    parent?.sourceType === 'notebook-table'
       ? c.blockId === element.sourceColumn
       : c.columnName === element.sourceColumn
   );
@@ -97,7 +98,7 @@ export const DataMappingRow: PlateComponent = ({
             </div>
           }
         >
-          {parent.source &&
+          {parent?.source &&
             columns.map((column) => (
               <MenuItem
                 icon={<Number />}

@@ -10,7 +10,7 @@ import {
 import { DropdownElement, useTPlateEditorRef } from '@decipad/editor-types';
 import { SelectItems, icons } from '@decipad/ui';
 import { getNodeString, insertText, nanoid } from '@udecode/plate';
-import { usePathMutatorCallback, useNodePath } from '@decipad/editor-utils';
+import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
 import { ClientEventsContext } from '@decipad/client-events';
 import { formatResultPreview } from '@decipad/format';
 import { useResolved } from '@decipad/react-utils';

@@ -1,7 +1,7 @@
 import { MyNode } from '@decipad/editor-types';
-import { useEditorChange } from '@decipad/editor-hooks';
-import type { UseEditorChangeOptions } from '@decipad/editor-hooks';
 import { getNodeString } from '@udecode/plate';
+import type { UseEditorChangeOptions } from './useEditorChange';
+import { useEditorChange } from './useEditorChange';
 
 export const useNodeText = (
   node: MyNode,

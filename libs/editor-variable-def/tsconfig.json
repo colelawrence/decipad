@@ -11,6 +11,9 @@
       "path": "../editor-types"
     },
     {
+      "path": "../editor-hooks"
+    },
+    {
       "path": "../editor-plugins"
     },
     {

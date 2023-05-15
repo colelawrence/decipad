@@ -1,5 +1,6 @@
+import { useWasSelected } from '@decipad/editor-hooks';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
-import { convertCodeSmartRefs, useWasSelected } from '@decipad/editor-utils';
+import { convertCodeSmartRefs } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { findNodePath, isCollapsed } from '@udecode/plate';
 import { useEffect } from 'react';

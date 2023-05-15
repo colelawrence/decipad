@@ -6,12 +6,8 @@ import {
   DataViewHeader,
   DataViewHeaderRowElement,
 } from '@decipad/editor-types';
-import {
-  usePathMutatorCallback,
-  withPath,
-  insertNodes,
-  useNodePath,
-} from '@decipad/editor-utils';
+import { withPath, insertNodes } from '@decipad/editor-utils';
+import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
 import { useCallback, useMemo } from 'react';
 import {
   deleteText,

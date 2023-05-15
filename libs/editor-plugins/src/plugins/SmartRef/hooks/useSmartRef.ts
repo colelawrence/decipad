@@ -4,7 +4,11 @@ import {
   SmartRefElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
+import {
+  useNodePath,
+  usePathMutatorCallback,
+  useEditorChange,
+} from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
 import {
   getNextNode,
@@ -17,7 +21,6 @@ import {
 import { debounceTime, filter } from 'rxjs';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ReactEditor, useSelected } from 'slate-react';
-import { useEditorChange } from '@decipad/editor-hooks';
 
 interface UseSmartRefResult {
   symbolName?: string;

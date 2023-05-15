@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
 import {
   ELEMENT_LIVE_QUERY,
@@ -5,32 +6,14 @@ import {
   PlateComponent,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { useEditorChange } from '@decipad/editor-hooks';
-import { findNodePath, getParentNode } from '@udecode/plate';
-import { useCallback, useState } from 'react';
+import { useParentNode } from '@decipad/editor-hooks';
 import { LiveQueryCore } from './LiveQueryCore';
 
 const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_LIVE_QUERY);
   const [deleted, setDeleted] = useState(false);
   const onceDeleted = useCallback(() => setDeleted(true), []);
-
-  const parent = useEditorChange(
-    useCallback(
-      (editor) => {
-        const path = findNodePath(editor, element);
-        if (path) {
-          const parentEntry = getParentNode<LiveDataSetElement>(
-            editor,
-            path
-          )?.[0];
-          return parentEntry;
-        }
-        return undefined;
-      },
-      [element]
-    )
-  );
+  const parent = useParentNode<LiveDataSetElement>(element);
 
   return (
     <DraggableBlock

@@ -5,7 +5,7 @@ import {
   LiveDataSetElement,
   TableCellType,
 } from '@decipad/editor-types';
-import { useNodePath } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { useLiveConnection } from '@decipad/live-connect';
 import {
   useComputer,

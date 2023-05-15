@@ -5,11 +5,8 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  usePathMutatorCallback,
-  useNodePath,
-} from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
+import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
 import {
   AvailableSwatchColor,
   UserIconKey,

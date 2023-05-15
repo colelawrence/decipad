@@ -10,13 +10,13 @@ import {
   assertElementType,
   insertNodes,
   placeholderForCalculationLine,
-  useNodeText,
 } from '@decipad/editor-utils';
 import {
   useComputer,
   useEditorTeleportContext,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
+import { useNodeText } from '@decipad/editor-hooks';
 import { CodeLine as UICodeLine, ParagraphFormulaEditor } from '@decipad/ui';
 import { findNodePath } from '@udecode/plate';
 import { Formula } from 'libs/ui/src/icons';

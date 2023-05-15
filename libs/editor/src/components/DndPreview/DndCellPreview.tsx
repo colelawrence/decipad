@@ -4,7 +4,7 @@ import { useComputer } from '@decipad/react-contexts';
 import { isCellAlignRight, useCellType } from '@decipad/editor-table';
 import { getNodeString } from '@udecode/plate';
 import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
-import { useTableColumnFormulaResultForCell } from '@decipad/editor-utils';
+import { useTableColumnFormulaResultForCell } from '@decipad/editor-hooks';
 
 export const DndCellPreview = ({
   element,

@@ -6,14 +6,14 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  insertNodes,
-  useNodePath,
-  usePathMutatorCallback,
-} from '@decipad/editor-utils';
+import { assertElementType, insertNodes } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
-import { IdentifiedResult, parseSimpleValue } from '@decipad/computer';
+import {
+  IdentifiedResult,
+  NotebookResults,
+  parseSimpleValue,
+} from '@decipad/computer';
 import {
   DataMapping as UIDataMapping,
   StructuredInputLines,
@@ -25,6 +25,25 @@ import { getSyntaxError } from '../CodeLine/getSyntaxError';
 import { SimpleValueContext, VarResultContext } from '../CodeLine';
 
 const dataMappingResultsDebounceMs = 500;
+
+const getRelevantBlockResults = ({ blockResults }: NotebookResults) =>
+  Object.values(blockResults)
+    .map((blockResult) => {
+      const kind = blockResult.result?.type.kind;
+      if (blockResult.type === 'identified-error') return undefined;
+      if (
+        !(
+          kind === 'string' ||
+          kind === 'number' ||
+          kind === 'boolean' ||
+          kind === 'type-error'
+        )
+      ) {
+        return undefined;
+      }
+      return blockResult;
+    })
+    .filter((n): n is IdentifiedResult => n !== undefined);
 
 export const DataMapping: PlateComponent = ({
   attributes,
@@ -46,48 +65,37 @@ export const DataMapping: PlateComponent = ({
 
   const results = computer.results$.useWithSelectorDebounced(
     dataMappingResultsDebounceMs,
-    ({ blockResults }) =>
-      Object.values(blockResults)
-        .map((blockResult) => {
-          const kind = blockResult.result?.type.kind;
-          if (blockResult.type === 'identified-error') return undefined;
-          if (
-            !(
-              kind === 'string' ||
-              kind === 'number' ||
-              kind === 'boolean' ||
-              kind === 'type-error'
-            )
-          ) {
-            return undefined;
-          }
-          return blockResult;
-        })
-        .filter((n): n is IdentifiedResult => n !== undefined)
+    getRelevantBlockResults
   );
-  const bareResults: ComponentProps<typeof UIDataMapping>['results'] =
-    results.map((res) => ({
-      id: res.id,
-      name: computer.getSymbolDefinedInBlock(res.id) ?? '',
-      type: 'notebook-var',
-    }));
+  const bareResults: ComponentProps<typeof UIDataMapping>['results'] = useMemo(
+    () =>
+      results.map((res) => ({
+        id: res.id,
+        name: computer.getSymbolDefinedInBlock(res.id) ?? '',
+        type: 'notebook-var',
+      })),
+    [computer, results]
+  );
 
-  const tables: ComponentProps<typeof UIDataMapping>['results'] =
-    computer.getAllTables$.use().map((table) => ({
-      id: table.id,
-      name:
-        table.tableName.length === 0
-          ? computer.getSymbolDefinedInBlock(table.id) ?? ''
-          : table.tableName,
-      type: table.tableName.length === 0 ? 'live-connection' : 'notebook-table',
-    }));
+  const allTables: ComponentProps<typeof UIDataMapping>['results'] =
+    computer.getAllTables$.useWithSelector((tables) =>
+      tables.map((table) => ({
+        id: table.id,
+        name:
+          table.tableName.length === 0
+            ? computer.getSymbolDefinedInBlock(table.id) ?? ''
+            : table.tableName,
+        type:
+          table.tableName.length === 0 ? 'live-connection' : 'notebook-table',
+      }))
+    );
 
   const allResults = useMemo(
     () =>
-      [...bareResults, ...tables]
+      [...bareResults, ...allTables]
         .filter((r) => r.name.length > 0)
         .filter((r) => r.id !== element.id),
-    [bareResults, tables, element.id]
+    [bareResults, allTables, element.id]
   );
 
   const tableColumns = computer.getAllColumns$.use(element.source);
@@ -172,10 +180,10 @@ export const DataMapping: PlateComponent = ({
     [
       changeSource,
       changeSourceType,
-      path,
-      element.children.length,
       computer.getAllColumns$,
       editor,
+      element.children.length,
+      path,
     ]
   );
 
@@ -185,8 +193,8 @@ export const DataMapping: PlateComponent = ({
     element.sourceType === 'notebook-var'
       ? bareResults.find((res) => res.id === element.source)?.name
       : element.sourceType === 'live-connection'
-      ? tables.find((res) => res.name === element.source)?.name
-      : tables.find((res) => res.id === element.source)?.name;
+      ? allTables.find((res) => res.name === element.source)?.name
+      : allTables.find((res) => res.id === element.source)?.name;
 
   // HACK: To display the right colour on the varname, we give it a dummy simple value.
   const dummySimpleValue = useMemo(() => parseSimpleValue('0'), []);

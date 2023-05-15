@@ -1,5 +1,6 @@
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
-import { focusAndSetSelection, useSelection } from '@decipad/editor-utils';
+import { focusAndSetSelection } from '@decipad/editor-utils';
+import { useSelection } from '@decipad/editor-hooks';
 import { ShadowCalcReference } from '@decipad/react-contexts';
 import { findNodePath } from '@udecode/plate';
 import { useEffect, useState } from 'react';

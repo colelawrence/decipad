@@ -11,12 +11,8 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  isDragAndDropHorizontal,
-  safeDelete,
-  useNodePath,
-  usePathMutatorCallback,
-} from '@decipad/editor-utils';
+import { isDragAndDropHorizontal, safeDelete } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   useComputer,
   useIsEditorReadOnly,
@@ -72,29 +68,34 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   // Saving a lot of CPU when the editor is re-rendering when the user is busy
   // doing other work.
   const namesDefined = computer.getNamesDefined$
-    .useWithSelectorDebounced(displayDebounceNamesDefinedMs, (names) =>
-      Object.values(names).map((name, i): SelectItems | undefined => {
-        if (!openMenu && loaded) return undefined;
-        const { kind } = name.type;
-        if (
-          !(
-            kind === 'string' ||
-            kind === 'number' ||
-            kind === 'boolean' ||
-            kind === 'type-error'
-          ) ||
-          name.kind !== 'variable'
-        ) {
-          return undefined;
-        }
-        return {
-          index: i,
-          item: name.name,
-          blockId: name.blockId || '',
-          group: 'Variables',
-          icon: <Number />,
-        };
-      })
+    .useWithSelectorDebounced(
+      displayDebounceNamesDefinedMs,
+      useCallback(
+        (names) =>
+          Object.values(names).map((name, i): SelectItems | undefined => {
+            if (!openMenu && loaded) return undefined;
+            const { kind } = name.type;
+            if (
+              !(
+                kind === 'string' ||
+                kind === 'number' ||
+                kind === 'boolean' ||
+                kind === 'type-error'
+              ) ||
+              name.kind !== 'variable'
+            ) {
+              return undefined;
+            }
+            return {
+              index: i,
+              item: name.name,
+              blockId: name.blockId || '',
+              group: 'Variables',
+              icon: <Number />,
+            };
+          }),
+        [loaded, openMenu]
+      )
     )
     .filter((n): n is SelectItems => n !== undefined);
 

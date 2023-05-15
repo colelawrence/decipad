@@ -3,7 +3,7 @@ import {
   CellValueType,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { useNodePath } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { useColumnInferredType } from '../contexts/ColumnInferredTypeContext';
 
 export const useCellType = (

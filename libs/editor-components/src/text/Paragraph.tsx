@@ -5,11 +5,8 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  getRangeSafe,
-  isDragAndDropHorizontal,
-  useNodePath,
-} from '@decipad/editor-utils';
+import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
 import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';

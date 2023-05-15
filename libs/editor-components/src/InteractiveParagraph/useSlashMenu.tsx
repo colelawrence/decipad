@@ -1,5 +1,5 @@
 import { ParagraphElement, useTEditorRef } from '@decipad/editor-types';
-import { useNodePath, useSelection } from '@decipad/editor-utils';
+import { useNodePath, useSelection } from '@decipad/editor-hooks';
 import { useWindowListener } from '@decipad/react-utils';
 import {
   getEndPoint,

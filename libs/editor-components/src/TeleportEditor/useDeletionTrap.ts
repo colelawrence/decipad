@@ -1,4 +1,4 @@
-import { useSelection } from '@decipad/editor-utils';
+import { useSelection } from '@decipad/editor-hooks';
 import { isCollapsed } from '@udecode/plate';
 import { useEffect } from 'react';
 

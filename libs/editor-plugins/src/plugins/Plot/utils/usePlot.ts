@@ -6,7 +6,7 @@ import {
   isTable as isComputerTable,
 } from '@decipad/computer';
 import { PlotElement, useTEditorRef } from '@decipad/editor-types';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
 import _ from 'lodash';

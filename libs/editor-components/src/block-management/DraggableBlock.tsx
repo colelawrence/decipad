@@ -17,9 +17,8 @@ import {
   getCodeLineSource,
   insertNodes,
   requirePathBelowBlock,
-  useNodePath,
-  usePathMutatorCallback,
 } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   dndPreviewActions,
@@ -262,7 +261,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
     // Only show the Blue line to add element on these conditions.
     // If its a nested element (Such as a list, don't show it in between).
-    const nodePath = findNodePath(editor, element);
+    const nodePath = useNodePath(element);
     const showLine =
       nodePath &&
       nodePath.length === 1 &&

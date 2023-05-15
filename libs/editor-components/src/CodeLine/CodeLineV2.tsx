@@ -21,9 +21,8 @@ import {
   getCodeLineSource,
   insertNodes,
   isStructuredElement,
-  useEnsureValidVariableName,
-  useNodeText,
 } from '@decipad/editor-utils';
+import { useEnsureValidVariableName, useNodeText } from '@decipad/editor-hooks';
 import {
   useComputer,
   useEditorTeleportContext,

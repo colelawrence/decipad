@@ -7,8 +7,8 @@ import {
 import {
   assertElementType,
   isDragAndDropHorizontal,
-  useNodePath,
 } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Image as UIImage } from '@decipad/ui';
 import { DraggableBlock } from '../block-management/index';

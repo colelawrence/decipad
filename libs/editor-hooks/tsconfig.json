@@ -17,6 +17,9 @@
       "path": "../editor-types"
     },
     {
+      "path": "../editor-utils"
+    },
+    {
       "path": "../react-utils"
     }
   ]

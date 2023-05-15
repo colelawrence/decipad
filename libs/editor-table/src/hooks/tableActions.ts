@@ -16,10 +16,9 @@ import {
   getNodeEntrySafe,
   insertNodes,
   isElementOfType,
-  useNodePath,
-  usePathMutatorCallback,
   withPath,
 } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import {

@@ -1,16 +1,17 @@
 import { useCallback, useMemo } from 'react';
 import { css } from '@emotion/react';
 import {
+  ELEMENT_LIVE_DATASET,
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   LiveDataSetElement,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
 import {
-  assertElementType,
-  isDatabaseConnection,
   useEnsureValidVariableName,
-} from '@decipad/editor-utils';
+  useParentNodeEntry,
+} from '@decipad/editor-hooks';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
 import { useConnectionStore } from '@decipad/react-contexts';
 import {
@@ -20,15 +21,9 @@ import {
   TableButton,
   Tooltip,
 } from '@decipad/ui';
-import {
-  findNodePath,
-  getNodeString,
-  getParentNode,
-  setNodes,
-} from '@udecode/plate';
+import { getNodeString, setNodes } from '@udecode/plate';
 import pluralize from 'pluralize';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useEditorChange } from '@decipad/editor-hooks';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 import LiveDataSetCaption from './LiveDataSetCaption';
 
@@ -53,18 +48,11 @@ export const LiveDataSetVarName: PlateComponent = ({
 
   const store = useConnectionStore();
   const editor = useTEditorRef();
-  const parent = useEditorChange(
-    useCallback(
-      (ed) => {
-        const path = findNodePath(ed, element);
-        if (path) {
-          return getParentNode<LiveDataSetElement>(editor, path);
-        }
-        return undefined;
-      },
-      [editor, element]
-    )
-  );
+  // refactor to useeditorselector
+  const parent = useParentNodeEntry<LiveDataSetElement>(element);
+  if (parent) {
+    assertElementType(parent[0], ELEMENT_LIVE_DATASET);
+  }
 
   const { sourceName, url, returnRange } = useMemo(() => {
     const source = parent?.[0].source ?? '';

@@ -7,12 +7,12 @@ import {
   VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { getNodeString, isElement } from '@udecode/plate';
+import { getAboveNodeSafe } from '@decipad/editor-utils';
 import {
   usePathMutatorCallback,
   useEnsureValidVariableName,
-  getAboveNodeSafe,
   useNodePath,
-} from '@decipad/editor-utils';
+} from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { useContext, useRef } from 'react';
 import { useFocused } from 'slate-react';

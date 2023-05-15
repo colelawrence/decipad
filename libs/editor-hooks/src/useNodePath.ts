@@ -1,8 +1,8 @@
 import { MyNode, useTEditorRef } from '@decipad/editor-types';
-import { useEditorChange } from '@decipad/editor-hooks';
 import { findNodePath } from '@udecode/plate';
 import { Path } from 'slate';
 import { useCallback } from 'react';
+import { useEditorChange } from './useEditorChange';
 
 export const useNodePath = (node?: MyNode): Path | undefined => {
   const editor = useTEditorRef();

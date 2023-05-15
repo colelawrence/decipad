@@ -8,7 +8,7 @@ import {
 import {
   useSelection,
   useTableColumnFormulaResultForCell,
-} from '@decipad/editor-utils';
+} from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
 import {

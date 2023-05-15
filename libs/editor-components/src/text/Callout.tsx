@@ -7,9 +7,8 @@ import {
 import {
   assertElementType,
   isDragAndDropHorizontal,
-  useNodePath,
-  usePathMutatorCallback,
 } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import { Callout as UICallout } from '@decipad/ui';
 import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';

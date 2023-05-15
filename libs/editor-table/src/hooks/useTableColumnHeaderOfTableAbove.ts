@@ -3,7 +3,8 @@ import {
   MyElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { assertElementType, useElementAbove } from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
+import { useElementAbove } from '@decipad/editor-hooks';
 import { isTable } from '../utils/isTable';
 
 export const useTableColumnHeaderOfTableAbove = (

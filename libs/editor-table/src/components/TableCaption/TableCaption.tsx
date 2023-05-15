@@ -7,13 +7,10 @@ import {
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  assertElementType,
-  getAboveNodeSafe,
-  useEnsureValidVariableName,
-} from '@decipad/editor-utils';
+import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditableTableCaption, Tooltip } from '@decipad/ui';
+import { useEnsureValidVariableName } from '@decipad/editor-hooks';
 import {
   findNodePath,
   getNodeChild,
@@ -90,7 +87,7 @@ export const TableCaption: PlateComponent = ({
         )
       );
     },
-    [editor, element, parent, path]
+    [editor, parent, path]
   );
 
   const caption = (

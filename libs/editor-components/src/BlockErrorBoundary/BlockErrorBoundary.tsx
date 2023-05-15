@@ -2,7 +2,7 @@ import { ErrorInfo, FC, ReactNode, useCallback } from 'react';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
 import { removeNodes } from '@udecode/plate';
 import { ErrorBlock } from '@decipad/ui';
-import { useNodePath } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import * as Sentry from '@sentry/react';
 

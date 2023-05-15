@@ -1,17 +1,18 @@
 import { useCallback, useMemo } from 'react';
 import { css } from '@emotion/react';
 import {
+  ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   LiveConnectionElement,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
 import {
-  assertElementType,
-  isDatabaseConnection,
-  usePathMutatorCallback,
   useEnsureValidVariableName,
-} from '@decipad/editor-utils';
+  useParentNodeEntry,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import {
@@ -21,11 +22,10 @@ import {
   TableButton,
   Tooltip,
 } from '@decipad/ui';
-import { findNodePath, getNodeString, getParentNode } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate';
 import pluralize from 'pluralize';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { insertLiveQueryBelow } from '@decipad/editor-components';
-import { useEditorChange } from '@decipad/editor-hooks';
 import { useLiveConnectionPossibleJsonPaths } from '../hooks/useLiveConnectionPossibleJsonPaths';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 
@@ -48,19 +48,10 @@ export const LiveConnectionVarName: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION_VARIABLE_NAME);
   const editor = useTEditorRef();
-
-  const parent = useEditorChange(
-    useCallback(
-      (ed) => {
-        const path = findNodePath(ed, element);
-        if (path) {
-          return getParentNode<LiveConnectionElement>(editor, path);
-        }
-        return undefined;
-      },
-      [editor, element]
-    )
-  );
+  const parent = useParentNodeEntry<LiveConnectionElement>(element);
+  if (parent) {
+    assertElementType(parent[0], ELEMENT_LIVE_CONNECTION);
+  }
 
   const { sourceName, url, returnRange } = useMemo(() => {
     const source = parent?.[0].source ?? '';

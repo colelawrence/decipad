@@ -1,4 +1,3 @@
-import { getNodeEntry } from '@udecode/plate';
 import { Path } from 'slate';
 import {
   TableHeaderRow,
@@ -11,9 +10,11 @@ import {
   TableElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { assertElementType, useNodePath } from '@decipad/editor-utils';
+import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
+import { useNodePath } from '@decipad/editor-hooks';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useDndNode } from '@udecode/plate-dnd';
+import type { TNodeEntry } from '@udecode/plate';
 import { useTableActions } from '../../hooks';
 import { selectRow } from '../../utils/selectRow';
 import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';
@@ -32,7 +33,11 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
     path &&
     (!isCollapsed || path[path.length - 1] <= MAX_UNCOLLAPSED_TABLE_ROWS + 1);
   const tablePath = path && Path.parent(path);
-  const tableEntry = tablePath && getNodeEntry<TableElement>(editor, tablePath);
+  const tableEntry = tablePath
+    ? (getNodeEntrySafe(editor, tablePath) as
+        | TNodeEntry<TableElement>
+        | undefined)
+    : undefined;
   const table = tableEntry?.[0];
   const { onRemoveRow, onAddRowHere } = useTableActions(editor, table);
 

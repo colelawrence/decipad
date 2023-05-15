@@ -7,11 +7,8 @@ import {
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { PlotBlock } from '@decipad/ui/src/organisms/PlotBlock/PlotBlock';
 import { DraggableBlock } from '@decipad/editor-components';
-import {
-  assertElementType,
-  useNodePath,
-  usePathMutatorCallback,
-} from '@decipad/editor-utils';
+import { assertElementType } from '@decipad/editor-utils';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { usePlot } from './utils/usePlot';
 
 const DEFAULT_TITLE = 'Plot';
