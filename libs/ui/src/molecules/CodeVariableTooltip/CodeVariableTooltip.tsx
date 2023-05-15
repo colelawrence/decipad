@@ -24,10 +24,10 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   defBlockId,
   provideDefinitionLink,
   onGoToDefinition = noop,
-}): ReturnType<FC> => {
+}) => {
   const hasValue = useComputer().getBlockIdResult$.useWithSelectorDebounced(
     tooltipDebounceMs,
-    (result) => result?.result?.value != null,
+    (result) => result?.result != null,
     defBlockId
   );
 

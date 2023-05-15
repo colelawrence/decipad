@@ -44,7 +44,7 @@ it.each(['block', 'inline'] as const)(
     const { container } = render(
       <CodeResult {...await runCode('[1, 2, 3]')} variant={variant} />
     );
-    await timeout(1000);
+    await timeout(2000);
     expect(container.textContent).toContain('1');
   }
 );

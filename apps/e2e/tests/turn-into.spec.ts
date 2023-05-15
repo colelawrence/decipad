@@ -72,6 +72,8 @@ test.describe('Turn Into', () => {
 
     await page.click('[data-testid=drag-handle] >> nth=2');
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page.locator('role=menuitem', { hasText: 'calculation' }).click();
 
     await expect(

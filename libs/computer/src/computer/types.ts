@@ -1,8 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
 import { Result } from '@decipad/language';
-import { NotebookResults } from '../types';
-
-export type ResultStream = BehaviorSubject<NotebookResults>;
 
 export interface ColumnDesc {
   tableName: string;

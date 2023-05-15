@@ -24,33 +24,49 @@ export interface ListenerHelper<Args extends unknown[], Ret> {
   get(...a: Args): Ret;
 }
 
+type ListenerHelperSubject<SubjectContents, MoreArgs extends unknown[]> =
+  | BehaviorSubject<SubjectContents>
+  | ((...args: MoreArgs) => BehaviorSubject<SubjectContents>);
+
+const getSubject = <SubjectContents, MoreArgs extends unknown[]>(
+  subject: ListenerHelperSubject<SubjectContents, MoreArgs>,
+  args: MoreArgs
+): BehaviorSubject<SubjectContents> => {
+  if (typeof subject === 'function') {
+    return subject(...args);
+  }
+  return subject;
+};
+
 export function listenerHelper<
   SubjectContents,
   MoreArgs extends unknown[],
   Ret
 >(
-  subject: BehaviorSubject<SubjectContents>,
+  subject: ListenerHelperSubject<SubjectContents, MoreArgs>,
   select: (a: SubjectContents, ...m: MoreArgs) => Ret
 ): ListenerHelper<MoreArgs, Ret> {
-  const rootSubscribe = (callback: () => void) => {
-    const sub = subject.subscribe(callback);
+  const rootSubscribe = (args: MoreArgs) => (callback: () => void) => {
+    const sub = getSubject(subject, args).subscribe(callback);
     return () => sub.unsubscribe();
   };
 
   const rootSubscribeDebounced =
-    (debounceTimeMs: number) => (callback: () => void) => {
-      const sub = subject
+    (debounceTimeMs: number, args: MoreArgs) => (callback: () => void) => {
+      const sub = getSubject(subject, args)
         .pipe(debounceTime(debounceTimeMs))
         .subscribe(callback);
       return () => sub.unsubscribe();
     };
 
-  const rootGet = () => subject.getValue();
+  const rootGet = (args: MoreArgs) => () =>
+    getSubject(subject, args).getValue();
 
-  const get = (...a: MoreArgs) => select(subject.getValue(), ...a);
+  const get = (...a: MoreArgs) =>
+    select(getSubject(subject, a).getValue(), ...a);
 
   const observe = (...a: MoreArgs) =>
-    subject.pipe(
+    getSubject(subject, a).pipe(
       map((item) => select(item, ...a)),
       distinctUntilChanged((cur, next) => dequal(cur, next))
     );
@@ -59,7 +75,7 @@ export function listenerHelper<
     pick: (item: Ret) => T,
     ...a: MoreArgs
   ): Observable<T> =>
-    subject.pipe(
+    getSubject(subject, a).pipe(
       map((item) => pick(select(item, ...a))),
       distinctUntilChanged((cur, next) => dequal(cur, next))
     );
@@ -68,8 +84,8 @@ export function listenerHelper<
 
   const useWithSelector = <T>(pick: (item: Ret) => T, ...a: MoreArgs): T =>
     useSyncExternalStoreWithSelector(
-      rootSubscribe,
-      rootGet,
+      rootSubscribe(a),
+      rootGet(a),
       undefined,
       (item) => pick(select(item, ...a)),
       dequal
@@ -81,8 +97,8 @@ export function listenerHelper<
     ...a: MoreArgs
   ): T =>
     useSyncExternalStoreWithSelector(
-      rootSubscribeDebounced(debounceTimeMs),
-      rootGet,
+      rootSubscribeDebounced(debounceTimeMs, a),
+      rootGet(a),
       undefined,
       (item) => pick(select(item, ...a)),
       dequal

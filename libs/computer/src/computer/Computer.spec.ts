@@ -495,6 +495,8 @@ it('getBlockIdResult$', async () => {
     program: getIdentifiedBlocks('123'),
   });
 
+  await timeout(200);
+
   const x = await firstValueFrom(
     computer.getBlockIdResult$
       .observeWithSelector((item) => item?.result?.type.kind, 'block-0')

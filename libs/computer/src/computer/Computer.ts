@@ -67,15 +67,12 @@ import { defaultComputerResults } from './defaultComputerResults';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 import { flattenTableDeclarations } from './transformTables';
-import {
-  ColumnDesc,
-  DimensionExplanation,
-  ResultStream,
-  TableDesc,
-} from './types';
+import { ColumnDesc, DimensionExplanation, TableDesc } from './types';
 import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { isTable } from '../utils/isTable';
 import { isColumn } from '../utils/isColumn';
+import { ResultStreams } from '../resultStreams';
+import { emptyBlockResultSubject } from './emptyBlockSubject';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -98,7 +95,8 @@ export class Computer {
   private readonly extraProgramBlocks = new BehaviorSubject<
     Map<string, ProgramBlock[]>
   >(new Map());
-  public results: ResultStream = new BehaviorSubject(defaultComputerResults);
+  private resultStreams = new ResultStreams();
+  public results = this.resultStreams.global;
 
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
@@ -150,7 +148,7 @@ export class Computer {
         switchMap((item) => (item == null ? [] : [item])),
         shareReplay(1)
       )
-      .subscribe(this.results);
+      .subscribe((results) => this.resultStreams.pushResults(results));
   }
 
   getVarBlockId(varName: string) {
@@ -176,12 +174,17 @@ export class Computer {
   }
 
   getBlockIdResult$ = listenerHelper(
-    this.results,
+    (blockId?: string | null) =>
+      blockId
+        ? this.resultStreams.blockSubject(blockId)
+        : emptyBlockResultSubject(),
     (
-      results,
-      blockId?: string | null
-    ): Readonly<IdentifiedError> | Readonly<IdentifiedResult> | undefined =>
-      results.blockResults[blockId ?? '']
+      result,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _blockId?: string | null
+    ): Readonly<IdentifiedError> | Readonly<IdentifiedResult> | undefined => {
+      return result;
+    }
   );
 
   getVarBlockId$ = listenerHelper(this.results, (_, varName: string) =>
@@ -189,13 +192,14 @@ export class Computer {
   );
 
   getVarResult$ = listenerHelper(
-    this.results,
-    (
-      results,
-      varName: string
-    ): IdentifiedError | IdentifiedResult | undefined => {
+    (varName: string) => {
       const blockId = this.getVarBlockId(varName);
-      return blockId ? results.blockResults[blockId] : undefined;
+      return blockId
+        ? this.resultStreams.blockSubject(blockId)
+        : emptyBlockResultSubject();
+    },
+    (result): IdentifiedError | IdentifiedResult | undefined => {
+      return result;
     }
   );
 
@@ -527,9 +531,8 @@ export class Computer {
   }
 
   public getColumnNameDefinedInBlock$ = listenerHelper(
-    this.results,
-    (results, blockId: string): string | undefined => {
-      const block = results.blockResults[blockId];
+    (blockId: string) => this.resultStreams.blockSubject(blockId),
+    (block): string | undefined => {
       if (isColumn(block?.result?.type)) {
         const statement = this.latestProgram.find((p) => p.id === block.id)
           ?.block?.args[0];

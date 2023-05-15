@@ -1,5 +1,6 @@
 import type { AST, Parser, Result } from '@decipad/language';
 import type { AnyMapping } from '@decipad/utils';
+import type { BehaviorSubject } from 'rxjs';
 import type { VisibleVariables } from './computer/getVisibleVariables';
 
 export type IdentifiedBlock = {
@@ -70,3 +71,5 @@ export interface NotebookResults {
   };
   readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
 }
+
+export type NotebookResultStream = BehaviorSubject<NotebookResults>;
