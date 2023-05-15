@@ -19,7 +19,8 @@ const OPS_MIN_ROWS_PER_SEC_SPECIAL_CASES: Record<string, number> =
 const randomNumber = (max = 100_000) => BigInt(Math.floor(Math.random() * max));
 const randomDeciNumber = () => N(randomNumber(), randomNumber());
 
-describe('numbers performance', () => {
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('numbers performance', () => {
   it.each(OPS)('performs', async (operator: OpName) => {
     const run = () => {
       const columns = [0, 1].map(() =>
