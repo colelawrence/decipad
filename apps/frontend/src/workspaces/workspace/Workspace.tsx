@@ -11,6 +11,7 @@ import {
   DashboardPlaceholder,
   WorkspaceMembersProps,
 } from '@decipad/ui';
+import { timeout } from '@decipad/utils';
 import { sortBy } from 'lodash';
 import { signOut, useSession } from 'next-auth/react';
 import {
@@ -85,8 +86,16 @@ const EditUserModal = lazy(loadEditUserModal);
 export const loadNotebooks = () =>
   import(/* webpackChunkName: "notebooks" */ '../../notebooks/Notebooks');
 
+const preloadModals = () => {
+  timeout(3000)
+    .then(loadCreateWorkspaceModal)
+    .then(loadEditMembersModal)
+    .then(loadEditWorkspaceModal)
+    .then(loadEditUserModal);
+};
+
 // prefetch
-loadTopbar().then(loadNotebookList).then(loadSidebar);
+loadTopbar().then(loadNotebookList).then(loadSidebar).then(preloadModals);
 
 const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
@@ -573,117 +582,125 @@ const Workspace: FC = () => {
           <Route
             path={currentWorkspaceRoute.createNew.template}
             element={
-              <CreateWorkspaceModal
-                Heading="h2"
-                closeHref={currentWorkspaceRoute.$}
-                onCreate={async (workspaceName) => {
-                  const data = await createWorkspace({ name: workspaceName });
-                  if (data) {
-                    navigate(
-                      workspaces({}).workspace({
-                        workspaceId: data.createWorkspace.id,
-                      }).$
-                    );
-                  }
-                }}
-              />
+              <LazyRoute>
+                <CreateWorkspaceModal
+                  Heading="h2"
+                  closeHref={currentWorkspaceRoute.$}
+                  onCreate={async (workspaceName) => {
+                    const data = await createWorkspace({ name: workspaceName });
+                    if (data) {
+                      navigate(
+                        workspaces({}).workspace({
+                          workspaceId: data.createWorkspace.id,
+                        }).$
+                      );
+                    }
+                  }}
+                />
+              </LazyRoute>
             }
           />
           <Route
             path={currentWorkspaceRoute.edit.template}
             element={
-              <EditWorkspaceModal
-                Heading="h1"
-                name={currentWorkspace.name}
-                allowDelete={
-                  workspaceData?.workspaces &&
-                  workspaceData?.workspaces?.length > 1
-                }
-                closeHref={currentWorkspaceRoute.$}
-                membersHref={currentWorkspaceRoute.members({}).$}
-                onRename={async (newName) => {
-                  const success = await renameWorkspace({
-                    id: currentWorkspace.id,
-                    name: newName,
-                  });
-                  if (success) {
-                    navigate(currentWorkspaceRoute.$);
+              <LazyRoute>
+                <EditWorkspaceModal
+                  Heading="h1"
+                  name={currentWorkspace.name}
+                  allowDelete={
+                    workspaceData?.workspaces &&
+                    workspaceData?.workspaces?.length > 1
                   }
-                }}
-                onDelete={async () => {
-                  navigate(workspaces({}).$);
-                  const success = await deleteWorkspace({
-                    id: currentWorkspace.id,
-                  });
-                  if (success) {
-                    toast('Workspace deleted.', 'success');
-                    navigate('/');
-                  }
-                }}
-              />
+                  closeHref={currentWorkspaceRoute.$}
+                  membersHref={currentWorkspaceRoute.members({}).$}
+                  onRename={async (newName) => {
+                    const success = await renameWorkspace({
+                      id: currentWorkspace.id,
+                      name: newName,
+                    });
+                    if (success) {
+                      navigate(currentWorkspaceRoute.$);
+                    }
+                  }}
+                  onDelete={async () => {
+                    navigate(workspaces({}).$);
+                    const success = await deleteWorkspace({
+                      id: currentWorkspace.id,
+                    });
+                    if (success) {
+                      toast('Workspace deleted.', 'success');
+                      navigate('/');
+                    }
+                  }}
+                />
+              </LazyRoute>
             }
           />
           <Route
             path={currentWorkspaceRoute.members.template}
             element={
-              <EditMembersModal
-                Heading="h1"
-                name={currentWorkspace.name}
-                workspaceMembers={workspaceMembers}
-                closeHref={currentWorkspaceRoute.$}
-              />
+              <LazyRoute>
+                <EditMembersModal
+                  Heading="h1"
+                  name={currentWorkspace.name}
+                  workspaceMembers={workspaceMembers}
+                  closeHref={currentWorkspaceRoute.$}
+                />
+              </LazyRoute>
             }
           />
         </Route>
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
-      <EditUserModal
-        name={name}
-        username={username}
-        description={description}
-        onChangeName={async (newName) => {
-          setName(newName);
+      <LazyRoute>
+        <EditUserModal
+          name={name}
+          username={username}
+          description={description}
+          onChangeName={async (newName) => {
+            setName(newName);
 
-          try {
-            await updateUser({
+            try {
+              await updateUser({
+                props: {
+                  name: newName,
+                },
+              });
+
+              toast(`Your name changed to ${newName}`, 'success');
+            } catch (err) {
+              console.error('Failed to update user. Error:', err);
+              toast('Could not change your name', 'error');
+            }
+          }}
+          onChangeUsername={async (newUsername) => {
+            const data = await setUsernameMutation({
               props: {
-                name: newName,
+                username: newUsername,
               },
             });
-
-            toast(`Your name changed to ${newName}`, 'success');
-          } catch (err) {
-            console.error('Failed to update user. Error:', err);
-            toast('Could not change your name', 'error');
-          }
-        }}
-        onChangeUsername={async (newUsername) => {
-          const data = await setUsernameMutation({
-            props: {
-              username: newUsername,
-            },
-          });
-          if (data) {
-            const { setUsername: usenameChangeSuccessful } = data;
-            if (usenameChangeSuccessful) {
-              toast(`You are now ${newUsername}`, 'success');
-              setUsername(newUsername);
-            } else {
-              toast(`Username ${newUsername} is already taken`, 'error');
+            if (data) {
+              const { setUsername: usenameChangeSuccessful } = data;
+              if (usenameChangeSuccessful) {
+                toast(`You are now ${newUsername}`, 'success');
+                setUsername(newUsername);
+              } else {
+                toast(`Username ${newUsername} is already taken`, 'error');
+              }
             }
-          }
-        }}
-        onChangeDescription={async (newDescription) => {
-          const data = await updateUser({
-            props: {
-              description: newDescription,
-            },
-          });
-          if (data) {
-            setDescription(newDescription);
-          }
-        }}
-      />
+          }}
+          onChangeDescription={async (newDescription) => {
+            const data = await updateUser({
+              props: {
+                description: newDescription,
+              },
+            });
+            if (data) {
+              setDescription(newDescription);
+            }
+          }}
+        />
+      </LazyRoute>
     </>
   );
 };
