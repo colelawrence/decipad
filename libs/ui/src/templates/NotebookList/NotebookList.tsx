@@ -2,12 +2,6 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import Fuse from 'fuse.js';
 import { ComponentProps, lazy, Suspense, useMemo, useState } from 'react';
-import {
-  ArrayParam,
-  StringParam,
-  useQueryParam,
-  withDefault,
-} from 'use-query-params';
 import { ColorStatus } from '../../atoms';
 import { Generic, Info } from '../../icons';
 import {
@@ -16,6 +10,7 @@ import {
   EmptyWorkspaceCta,
   NotebookListItem,
 } from '../../organisms';
+import { useSearchBarStore } from '../../molecules';
 import { cssVar, p13Medium, smallScreenQuery } from '../../primitives';
 import { dashboard, notebookList } from '../../styles';
 import {
@@ -92,12 +87,7 @@ export const NotebookList = ({
   otherWorkspaces = [],
   onPointerEnter,
 }: NotebookListProps): ReturnType<React.FC> => {
-  const [search] = useQueryParam('search', withDefault(StringParam, ''));
-  const [status] = useQueryParam('status', withDefault(ArrayParam, []));
-  const [visibility] = useQueryParam(
-    'visibility',
-    withDefault(StringParam, '')
-  );
+  const { search, status, visibility } = useSearchBarStore();
   const fuse = useMemo(() => new Fuse(notebooks, fuseOptions), [notebooks]);
   const searchResults = useMemo(() => {
     const [include, exclude] = parseSearchInput(search);

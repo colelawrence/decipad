@@ -1,4 +1,8 @@
 export { AccountAvatar } from './AccountAvatar/AccountAvatar';
+export {
+  AccountSettingsForm,
+  serializeAccountSettingsForm,
+} from './AccountSettingsForm/AccountSettingsForm';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
 export { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup/AutoCompleteMenuGroup';
@@ -11,6 +15,7 @@ export { CodeVariableDefinition } from './CodeVariableDefinition/CodeVariableDef
 export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
 export { CollabAccessDropdown } from './CollabAccessDropdown/CollabAccessDropdown';
 export { CollabMembershipDropdown } from './CollabMembershipDropdown/CollabMembershipDropdown';
+export { ColorThemeSwitch } from './ColorThemeSwitch/ColorThemeSwitch';
 export { DataViewColumnMenu } from './DataViewColumnMenu/DataViewColumnMenu';
 export { DataViewMenu } from './DataViewMenu/DataViewMenu';
 export { DataViewRow } from './DataViewRow/DataViewRow';
@@ -50,7 +55,7 @@ export { OrderedList } from './OrderedList/OrderedList';
 export { PositiveIntegerInput } from './PositiveIntegerInput/PositiveIntegerInput';
 export { PotentialFormulaHighlight } from './PotentialFormulaHighlight/PotentialFormulaHighlight';
 export { RemoteAvatar } from './RemoteAvatar/RemoteAvatar';
-export { SearchBar } from './SearchBar/SearchBar';
+export { SearchBar, useSearchBarStore } from './SearchBar/SearchBar';
 export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
 export { SignUpContent } from './SignUpContent/SignUpContent';
 export { StructuredInputLines } from './StructuredInputLines/StructuredInputLines';

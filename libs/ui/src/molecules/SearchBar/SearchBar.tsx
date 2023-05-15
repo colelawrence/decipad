@@ -1,36 +1,37 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
 import { capitalize } from 'lodash';
+import { create } from 'zustand';
 import { FC, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  ArrayParam,
-  StringParam,
-  useQueryParam,
-  withDefault,
-} from 'use-query-params';
-import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
 import * as icons from '../../icons';
 import { smallestDesktop } from '../../primitives';
-import { AvailableColorStatus, ColorStatusNames } from '../../utils';
 import { FilterBubbles } from '../FilterBubbles/FilterBubbles';
 import { MenuList } from '../MenuList/MenuList';
+import { AvailableColorStatus, ColorStatusNames } from '../../utils';
+import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
 
 const ROUTES_WHITELIST = ['', 'edit', 'members'];
 
+export const useSearchBarStore = create<{
+  search: string;
+  status: string[];
+  visibility: string;
+  setSearch: (search: string) => void;
+  setStatus: (status: string[]) => void;
+  setVisibility: (visibility: string) => void;
+}>((set) => ({
+  search: '',
+  status: [],
+  visibility: '',
+  setSearch: (search: string) => set({ search }),
+  setStatus: (status: string[]) => set({ status }),
+  setVisibility: (visibility: string) => set({ visibility }),
+}));
+
 export const SearchBar = (): ReturnType<FC> => {
-  const [search, setSearch] = useQueryParam(
-    'search',
-    withDefault(StringParam, '')
-  );
-  const [status, setStatus] = useQueryParam(
-    'status',
-    withDefault(ArrayParam, [])
-  );
-  const [visibility, setVisibility] = useQueryParam(
-    'visibility',
-    withDefault(StringParam, '')
-  );
+  const { search, setSearch, status, setStatus, visibility, setVisibility } =
+    useSearchBarStore();
   const [statusOpen, setStatusOpen] = useState(false);
   const [visibilityOpen, setVisibilityOpen] = useState(false);
 
