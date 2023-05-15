@@ -7,7 +7,11 @@ const parseResponse = (resp: unknown, clientConfig: Knex.Config): unknown => {
   switch (clientConfig.client) {
     case 'pg':
       if (resp && typeof resp === 'object' && 'rows' in resp) {
-        return resp.rows;
+        const { rows } = resp;
+        if (Array.isArray(rows) && rows.length) {
+          return rowsToColumns(rows);
+        }
+        return resp;
       }
       break;
     case 'mysql':
