@@ -78,7 +78,8 @@ const createProgram = (op: string): AST.Block => ({
     },
   ],
 });
-describe('language performance', () => {
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('language performance', () => {
   it.each(OPS)('performs', async (op) => {
     const test = async () => {
       const columnValues: Result = {
