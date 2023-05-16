@@ -1,6 +1,8 @@
-import { SeriesType } from '@decipad/editor-types';
-import { Time } from '@decipad/computer';
+import type { Time } from '@decipad/computer';
 import { add as addDate, Duration, format as formatDate } from 'date-fns';
+import { N, ONE } from '@decipad/number';
+import { formatNumber } from '@decipad/format';
+import { SeriesType } from '@decipad/editor-types';
 import { parseDate } from './parseDate';
 
 const dateGranularityToDateFnsDuration: Record<Time.Specificity, Duration> = {
@@ -15,6 +17,10 @@ const dateGranularityToDateFnsDuration: Record<Time.Specificity, Duration> = {
   millisecond: { seconds: 0.001 },
 };
 
+/**
+ * Returns a date iterator from a string initial value .
+ * The initial value should be a string that contains a parsable date (as defined in ./parseDate.ts)
+ */
 export const dateIterator = (
   granularity: Time.Specificity,
   initialValue: string
@@ -38,16 +44,42 @@ export const dateIterator = (
   };
 };
 
+/**
+ * Returns a number iterator from a string initial value .
+ * The initial value should be a string that contains a parsable JS number
+ */
+export const numberIterator = (initialValue: string): Iterable<string> => {
+  const parseResult = Number(initialValue);
+  if (Number.isNaN(parseResult)) {
+    throw new Error(`Could not parse number ${initialValue}`);
+  }
+  let v = N(parseResult);
+  return {
+    [Symbol.iterator]: () => {
+      return {
+        next() {
+          v = v.add(ONE);
+          return {
+            value: formatNumber('en-US', null, v).asString,
+          };
+        },
+      };
+    },
+  };
+};
+
 export const seriesIterator = (
   type: SeriesType,
-  granularity: Time.Specificity,
+  granularity: Time.Specificity | undefined,
   initialValue: string
 ): Iterable<string> => {
-  if (granularity == null) {
-    throw new Error('Date series requires granularity');
-  }
   switch (type) {
     case 'date':
+      if (granularity == null) {
+        throw new Error('Date series requires granularity');
+      }
       return dateIterator(granularity, initialValue);
+    case 'number':
+      return numberIterator(initialValue);
   }
 };

@@ -108,6 +108,6 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
 export const columnAggregationTypes = (
   type: TableCellType
 ): AggregationType[] => {
-  const kind = type.kind === 'series' ? 'date' : type.kind;
+  const kind = type.kind === 'series' ? type.seriesType : type.kind;
   return aggregationTypes[kind] ?? [];
 };

@@ -40,7 +40,7 @@ export function getTypeIcon(
     case 'table-formula':
       return Formula;
     case 'series':
-      return Calendar; // only calendar for now
+      return type.seriesType === 'date' ? Calendar : Number;
     case 'dropdown':
       return type.type === 'number' ? Number : Text;
     case 'anything':

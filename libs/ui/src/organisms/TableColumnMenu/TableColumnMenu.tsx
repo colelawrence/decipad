@@ -295,12 +295,21 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                     icon={<Leaf />}
                     selected={type.kind === 'series'}
                   >
-                    <div css={{ minWidth: '116px' }}>Series</div>
+                    <div css={{ minWidth: '116px' }}>Sequence</div>
                   </TriggerMenuItem>
                 }
                 open={currentOpen === 'series'}
                 onChangeOpen={() => onColumnExpand('series')}
               >
+                <MenuItem
+                  icon={<Number />}
+                  onSelect={() => onChangeColumnType(getSeriesType('number'))}
+                  selected={
+                    type.kind === 'series' && type.seriesType === 'number'
+                  }
+                >
+                  Number
+                </MenuItem>
                 <MenuItem
                   icon={<Calendar />}
                   onSelect={() => onChangeColumnType(getSeriesType('date'))}

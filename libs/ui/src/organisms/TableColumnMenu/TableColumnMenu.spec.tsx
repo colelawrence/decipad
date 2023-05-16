@@ -192,7 +192,7 @@ it('Expands the series menu without any other menu opening', async () => {
   await userEvent.click(await findByText(/change type/i), {
     pointerEventsCheck: 0,
   });
-  await userEvent.click(getByText('Series'));
+  await userEvent.click(getByText('Sequence'));
   getAllByText('Date').forEach((el) => expect(el).toBeVisible());
   expect(getAllByText('Date')).toHaveLength(2);
   expandableCols.forEach(([, columnContent]) => {

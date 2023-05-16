@@ -1,5 +1,10 @@
 import { SeriesType } from '@decipad/editor-types';
-import { AST, Computer, IdentifiedError } from '@decipad/computer';
+import {
+  AST,
+  Computer,
+  IdentifiedError,
+  SerializedType,
+} from '@decipad/computer';
 import { astColumn, astNode } from '@decipad/editor-utils';
 import { enumerate, getDefined } from '@decipad/utils';
 import { parseCell, parseSeriesStart, seriesIterator } from '@decipad/parse';
@@ -21,11 +26,12 @@ export async function seriesColumn(
 
     /** Push a cell or error. */
     const push = async (source: string, id: string) => {
-      const cell = await parseCell(
-        computer,
-        { kind: 'date', date: getDefined(granularity) },
-        source
-      );
+      const cellType = (
+        type === 'date'
+          ? { kind: 'date', date: getDefined(granularity) }
+          : { kind: 'number' }
+      ) as SerializedType;
+      const cell = await parseCell(computer, cellType, source);
       if (cell instanceof Error || cell == null) {
         errors.push(simpleError(id, cell ? cell.message : 'Error'));
       } else {
@@ -39,7 +45,7 @@ export async function seriesColumn(
     if (errors.length) return [undefined, errors];
 
     for (const [i, seriesItem] of enumerate(
-      seriesIterator(type, getDefined(granularity), firstCell)
+      seriesIterator(type, granularity, firstCell)
     )) {
       // subsequent items -- generated
       // eslint-disable-next-line no-await-in-loop
@@ -51,6 +57,7 @@ export async function seriesColumn(
 
     return [astColumn(...cells), errors];
   } catch (e) {
+    console.error(e);
     const items = Array.from({ length: rowCount }, () =>
       astNode('date', 'year', 2020n)
     );

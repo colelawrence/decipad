@@ -13,7 +13,7 @@ import type {
 } from './element-kinds';
 import type { BaseElement } from './value';
 
-export type SeriesType = 'date'; // only date for now, but we could have others
+export type SeriesType = 'date' | 'number';
 
 /**
  * Used throughout the table header menu

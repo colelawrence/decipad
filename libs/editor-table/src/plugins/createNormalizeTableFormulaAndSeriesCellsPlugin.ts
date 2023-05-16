@@ -24,7 +24,7 @@ import {
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { enumerate, getDefined } from '@decipad/utils';
+import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 import { Computer } from '@decipad/computer';
@@ -149,11 +149,9 @@ const normalizeSeriesColumn = (
   }
 
   // now we need to ensure all the remaining cells have the expected from the next in the series
-  const series = seriesIterator(
-    type,
-    getDefined(granularity),
-    firstCellContent
-  )[Symbol.iterator]();
+  const series = seriesIterator(type, granularity, firstCellContent)[
+    Symbol.iterator
+  ]();
   for (const row of restRows) {
     const cell = getChildren(row)[columnIndex];
     if (cell) {

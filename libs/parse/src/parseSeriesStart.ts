@@ -1,5 +1,6 @@
-import { Result, Time } from '@decipad/computer';
+import { Result, Time, parseNumberWithUnit } from '@decipad/computer';
 import { SeriesType } from '@decipad/editor-types';
+import { N } from '@decipad/number';
 import { parseDate } from './parseDate';
 
 export interface ParseSeriesStartResult {
@@ -28,6 +29,21 @@ export const parseSeriesStart = (
         type,
         granularity: parsedDate.specificity,
         value: BigInt(parsedDate.date.getTime()),
+      };
+    }
+    case 'number': {
+      const parsedNumber = parseNumberWithUnit(content);
+      if (!parsedNumber) {
+        return {
+          type,
+          error: 'Could not parse number',
+        };
+      }
+      // no parsing resulted
+      // let's return the last error
+      return {
+        type,
+        value: N(parsedNumber[0]),
       };
     }
     default:
