@@ -7,9 +7,9 @@ import {
   serializeType,
 } from '@decipad/language';
 import { AnyMapping, timeout } from '@decipad/utils';
+import produce, { setAutoFreeze } from 'immer';
 import { filter, firstValueFrom } from 'rxjs';
 import { all } from '@decipad/generator-utils';
-import { clone } from 'lodash';
 import { getExprRef } from '../exprRefs';
 import {
   getIdentifiedBlock,
@@ -21,6 +21,8 @@ import { ComputeRequestWithExternalData } from '../types';
 import { Computer } from './Computer';
 import { ColumnDesc } from './types';
 import { getResultGenerator } from '../utils';
+
+setAutoFreeze(false);
 
 const testProgram = getIdentifiedBlocks(
   'A = 0',
@@ -67,8 +69,9 @@ describe('caching', () => {
     await computeOnTestComputer({ program: testProgram });
 
     // Change C
-    const changedC = clone(testProgram);
-    changedC[2] = getIdentifiedBlock('C = B1 + 10.1', 2);
+    const changedC = produce(testProgram, (program) => {
+      program[2] = getIdentifiedBlock('C = B1 + 10.1', 2);
+    });
     expect(await computeOnTestComputer({ program: changedC }))
       .toMatchInlineSnapshot(`
         Array [
@@ -82,9 +85,10 @@ describe('caching', () => {
     computer.reset();
 
     // Break it by removing B
-    const broken = clone(testProgram);
-    broken[0] = getIdentifiedBlock('A = 0.5', 0);
-    broken.splice(1, 1);
+    const broken = produce(testProgram, (program) => {
+      program[0] = getIdentifiedBlock('A = 0.5', 0);
+      program.splice(1, 1);
+    });
     expect(await computeOnTestComputer({ program: broken }))
       .toMatchInlineSnapshot(`
         Array [
@@ -94,8 +98,9 @@ describe('caching', () => {
         ]
       `);
 
-    const noD = clone(testProgram);
-    noD[3] = getIdentifiedBlock('', 3);
+    const noD = produce(testProgram, (program) => {
+      program[3] = getIdentifiedBlock('', 3);
+    });
     expect(await computeOnTestComputer({ program: noD }))
       .toMatchInlineSnapshot(`
         Array [

@@ -8,8 +8,10 @@ import {
 import { ComputationRealm } from '../computer/ComputationRealm';
 
 it('creates a result from an error', () => {
-  expect(resultFromError(new RuntimeError('Message!'), 'blockid').result.type)
-    .toMatchInlineSnapshot(`
+  const realm = new ComputationRealm();
+  expect(
+    resultFromError(new RuntimeError('Message!'), 'blockid', realm).result.type
+  ).toMatchInlineSnapshot(`
     Object {
       "errorCause": Object {
         "errType": "free-form",
@@ -20,8 +22,9 @@ it('creates a result from an error', () => {
     }
   `);
 
-  expect(resultFromError(new Error('panic: Message!'), 'blockid').result.type)
-    .toMatchInlineSnapshot(`
+  expect(
+    resultFromError(new Error('panic: Message!'), 'blockid', realm).result.type
+  ).toMatchInlineSnapshot(`
     Object {
       "errorCause": Object {
         "errType": "free-form",

@@ -1,7 +1,10 @@
 import { mutateAst, AST, decilang } from '@decipad/language';
+import produce, { setAutoFreeze } from 'immer';
 import { Program, ProgramBlock } from '../types';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { getExprRef, isExprRef } from '.';
+
+setAutoFreeze(false);
 
 /** Deal with tech debt: We have places where we refer to whole-columns by writing the column ID.
  * Make sure everyone refers to that by using tableId.ColumnId and then delete this please
@@ -35,20 +38,19 @@ export function removeLegacyTableColumnReferences(program: Program) {
   );
 
   let inTableColumnAssign: string | undefined;
-  return program.map((block: ProgramBlock): ProgramBlock => {
-    if (block.type === 'identified-block') {
-      if (block.block.args[0].type === 'table-column-assign') {
-        const tableRef = tableRefsToIds.get(
-          block.block.args[0].args[0].args[0]
-        );
-        inTableColumnAssign = tableRef && getExprRef(tableRef);
-      } else {
-        inTableColumnAssign = undefined;
-      }
+  return program.map(
+    produce((block: ProgramBlock) => {
+      if (block.type === 'identified-block') {
+        if (block.block.args[0].type === 'table-column-assign') {
+          const tableRef = tableRefsToIds.get(
+            block.block.args[0].args[0].args[0]
+          );
+          inTableColumnAssign = tableRef && getExprRef(tableRef);
+        } else {
+          inTableColumnAssign = undefined;
+        }
 
-      return {
-        ...block,
-        block: mutateAst(block.block, (node) => {
+        mutateAst(block.block, (node) => {
           if (node.type === 'ref' && isExprRef(node.args[0])) {
             const columnId = node.args[0];
             const tableColumn = idsToTableColumns.get(columnId);
@@ -59,11 +61,10 @@ export function removeLegacyTableColumnReferences(program: Program) {
             }
           }
           return node;
-        }) as AST.Block,
-      };
-    }
-    return block;
-  });
+        });
+      }
+    })
+  );
 }
 
 function getDefinedColumn(arg0: AST.Statement) {

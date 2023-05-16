@@ -124,6 +124,7 @@ it('shows a plot if has data and options', async () => {
             type: tableType,
             value: tableData,
           },
+          epoch: 1n,
         },
       }}
     ></PlotWithProviders>

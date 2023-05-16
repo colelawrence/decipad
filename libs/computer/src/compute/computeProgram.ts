@@ -65,6 +65,7 @@ const computeStatement = async (
   const result: IdentifiedResult = {
     type: 'computer-result',
     id: blockId,
+    epoch: realm.epoch,
     get result() {
       if (statement.type === 'table') {
         return identifiedResultForTable(realm, variableName, statement);
@@ -81,7 +82,8 @@ const computeStatement = async (
 
 export const resultFromError = (
   error: Error,
-  blockId: string
+  blockId: string,
+  realm: ComputationRealm
 ): IdentifiedResult => {
   // Not a user-facing error, so let's hide internal details
   const message = error.message.replace(
@@ -96,6 +98,7 @@ export const resultFromError = (
   return {
     type: 'computer-result',
     id: blockId,
+    epoch: realm.epoch,
     result: serializeResult(t.impossible(message), null),
     usedNames: [],
   };
@@ -121,7 +124,9 @@ export const computeProgram = async (
 
       resultsToCache.push({ result, value });
     } catch (err) {
-      resultsToCache.push({ result: resultFromError(err as Error, block.id) });
+      resultsToCache.push({
+        result: resultFromError(err as Error, block.id, realm),
+      });
       realm.inferContext.previousStatement = undefined;
       realm.interpreterRealm.previousStatementValue = undefined;
     }

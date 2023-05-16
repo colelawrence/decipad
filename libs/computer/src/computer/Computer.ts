@@ -655,6 +655,7 @@ export class Computer {
     req: ComputeRequestWithExternalData
   ): Promise<NotebookResults | null> {
     return this.enqueueComputation(async () => {
+      this.computationRealm.epoch += 1n;
       /* istanbul ignore catch */
       try {
         const programWithFlattenedTables = flattenTableDeclarations(

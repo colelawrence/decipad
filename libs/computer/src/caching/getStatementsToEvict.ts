@@ -1,5 +1,5 @@
-import { dequal } from 'dequal';
 import { AST, ExternalDataMap } from '@decipad/language';
+import { dequal } from 'dequal';
 import { getDependents } from './dependents';
 import {
   findSymbolsUsed,
@@ -9,10 +9,12 @@ import {
   iterProgram,
   setIntersection,
 } from '../utils';
+import { areBlocksEqual } from './areBlocksEqual';
 
 const getChangedMapKeys = <T>(
   oldMap: Map<string, T>,
-  newMap: Map<string, T>
+  newMap: Map<string, T>,
+  equals: (a: T | undefined, b: T | undefined) => boolean
 ): string[] => {
   const allKeys = new Set(
     Array.from(oldMap.keys()).concat(Array.from(newMap.keys()))
@@ -22,7 +24,7 @@ const getChangedMapKeys = <T>(
     const oldVal = oldMap.get(key);
     const newVal = newMap.get(key);
 
-    return !dequal(oldVal, newVal);
+    return !equals(oldVal, newVal);
   });
 };
 
@@ -30,7 +32,10 @@ const mapify = (blocks: AST.Block[]) => new Map(blocks.map((b) => [b.id, b]));
 export const getChangedBlocks = (
   oldBlocks: AST.Block[],
   newBlocks: AST.Block[]
-) => new Set(getChangedMapKeys(mapify(oldBlocks), mapify(newBlocks)));
+) =>
+  new Set(
+    getChangedMapKeys(mapify(oldBlocks), mapify(newBlocks), areBlocksEqual)
+  );
 
 /**
  * Find reassigned variables, variables being used before being defined
@@ -102,7 +107,7 @@ export const getStatementsToEvict = ({
   const dirtyLocs = new Set(getExistingBlockIds(oldBlocks, changedBlockIds));
 
   const dirtySymbols = new Set([
-    ...getChangedMapKeys(oldExternalData, newExternalData),
+    ...getChangedMapKeys(oldExternalData, newExternalData, dequal),
     ...findSymbolsAffectedByChange(oldBlocks, newBlocks),
     ...findSymbolErrors(oldBlocks),
     ...findSymbolErrors(newBlocks),

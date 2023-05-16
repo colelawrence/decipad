@@ -43,7 +43,6 @@ function isArgListValue(
   depth = 0
 ): boolean {
   if (!exp) return false;
-
   if (exp.type === 'ref') {
     return !definedVariables.has(exp.args[0]);
   }
@@ -89,5 +88,7 @@ function isArgListValue(
 }
 
 function isPlainNumber(exp: AST.Expression) {
-  return exp.type === 'literal' && exp.args[0] === 'number' && !exp.args[2];
+  return (
+    exp && exp.type === 'literal' && exp.args[0] === 'number' && !exp.args[2]
+  );
 }

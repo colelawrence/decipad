@@ -10,4 +10,5 @@ export const defaultBlockResults = (blockId: string): IdentifiedResult => ({
     },
     value: Result.Unknown,
   },
+  epoch: 1n,
 });

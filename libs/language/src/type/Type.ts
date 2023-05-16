@@ -1,4 +1,4 @@
-import { immerable } from 'immer';
+import { immerable, produce, setAutoFreeze } from 'immer';
 import { PromiseOrType } from '@decipad/utils';
 import type { AST, Time } from '..';
 import * as t from './buildType';
@@ -26,6 +26,8 @@ import { InferError } from './InferError';
 import type { Unit } from './unit-type';
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
+
+setAutoFreeze(false);
 
 type CombineArg = PromiseOrType<Type> | ((t: Type) => PromiseOrType<Type>);
 
@@ -115,10 +117,9 @@ export class Type {
   }
 
   inNode(node: AST.Node) {
-    const t = new Type();
-    Object.assign(t, this);
-    t.node = node;
-    return t;
+    return produce(this, (newType) => {
+      newType.node = node;
+    });
   }
 
   withErrorCause(error: InferError | string): Type {

@@ -6,11 +6,13 @@ import {
   decilang,
 } from '@decipad/language';
 import { memoizePrimitive } from '@decipad/utils';
-import { clone } from 'lodash';
+import produce, { setAutoFreeze } from 'immer';
 import { Program, ProgramBlock } from '../types';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { removeLegacyTableColumnReferences } from './makeNamesFromIdsTechDebt';
 import { assertIsExprRef, getExprRef, isExprRef } from '.';
+
+setAutoFreeze(false);
 
 /**
  * Takes exprRef_xxxx references and replaces them with variable names
@@ -37,44 +39,37 @@ export const replaceExprRefsWithPrettyRefs = (
 };
 
 /** Make sure every non-assignment is an assignment to a block ID */
-function plainExpressionsToAssignments(program: Program): Program {
-  return program.map((block) => {
-    if (block.type === 'identified-block') {
-      const stats = clone(block.block.args);
+function plainExpressionsToAssignments(program: Program) {
+  return program.map(
+    produce<ProgramBlock>((block) => {
+      if (block.type === 'identified-block') {
+        const stats = block.block.args;
 
-      if (isExpression(stats[0])) {
-        // 1 + 1 --> Value_1 = 1 + 1
-        stats[0] = decilang<AST.Assign>`${{ name: getExprRef(block.id) }} = ${
-          stats[0]
-        }`;
-      } else if (
-        stats[0].type === 'assign' &&
-        !getIdentifierString(stats[0].args[0]).trim()
-      ) {
-        // Empty var names
-        stats[0].args[0].args[0] = getExprRef(block.id);
+        if (isExpression(stats[0])) {
+          // 1 + 1 --> Value_1 = 1 + 1
+          stats[0] = decilang<AST.Assign>`${{ name: getExprRef(block.id) }} = ${
+            stats[0]
+          }`;
+        } else if (
+          stats[0].type === 'assign' &&
+          !getIdentifierString(stats[0].args[0] as AST.Identifier).trim()
+        ) {
+          // Empty var names
+          stats[0].args[0].args[0] = getExprRef(block.id);
+        }
       }
-      return {
-        ...block,
-        block: {
-          ...block.block,
-          args: stats,
-        },
-      };
-    }
-    return block;
-  });
+    })
+  );
 }
 
 function replaceAllBlockIdReferences(program: Program): [Program, Set<string>] {
   const genVarName = makeVarNameLookup(program);
 
   const generatedNames = new Set<string>();
-  const newProgram = program.map((block): ProgramBlock => {
-    if (block.type === 'identified-block') {
-      return {
-        ...block,
-        block: mutateAst(block.block, (thing) => {
+  const newProgram = program.map(
+    produce((block) => {
+      if (block.type === 'identified-block') {
+        mutateAst(block.block, (thing) => {
           if (isIdentifier(thing)) {
             const varName = getIdentifierString(thing);
             if (isExprRef(varName)) {
@@ -87,11 +82,10 @@ function replaceAllBlockIdReferences(program: Program): [Program, Set<string>] {
           }
 
           return thing;
-        }) as AST.Block,
-      };
-    }
-    return block;
-  });
+        });
+      }
+    })
+  );
 
   return [newProgram, generatedNames];
 }
@@ -141,27 +135,29 @@ function gatherAllVarNames(program: Program) {
   const idsToPretty = new Map<string, string>();
   const prettyToIds = new Map<string, string>();
 
-  for (const block of program) {
-    if (block.type === 'identified-block') {
-      const exprRef = getExprRef(block.id);
-      let symbol =
-        getDefinedColumn(block.block.args[0] ?? { type: 'noop', args: [] }) ??
-        getDefinedSymbol(
-          block.block.args[0] ?? { type: 'noop', args: [] },
-          false
-        ) ??
-        '';
+  program.map(
+    produce((block: ProgramBlock) => {
+      if (block.type === 'identified-block') {
+        const exprRef = getExprRef(block.id);
+        let symbol =
+          getDefinedColumn(block.block.args[0] ?? { type: 'noop', args: [] }) ??
+          getDefinedSymbol(
+            block.block.args[0] ?? { type: 'noop', args: [] },
+            false
+          ) ??
+          '';
 
-      if (isExprRef(symbol)) {
-        symbol = '';
-      }
+        if (isExprRef(symbol)) {
+          symbol = '';
+        }
 
-      if (symbol) {
-        prettyToIds.set(symbol, exprRef);
+        if (symbol) {
+          prettyToIds.set(symbol, exprRef);
+        }
+        idsToPretty.set(exprRef, symbol);
       }
-      idsToPretty.set(exprRef, symbol);
-    }
-  }
+    })
+  );
 
   return [idsToPretty, prettyToIds] as const;
 }

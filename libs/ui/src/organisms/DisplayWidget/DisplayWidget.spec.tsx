@@ -24,6 +24,7 @@ it('renders display widget with result', async () => {
           type: code.type,
           value: code.value,
         },
+        epoch: 1n,
       }}
     />
   );
@@ -43,6 +44,7 @@ it('dropdown menu not present', async () => {
           type: code.type,
           value: code.value,
         },
+        epoch: 1n,
       }}
     />
   );

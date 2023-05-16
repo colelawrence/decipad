@@ -29,6 +29,7 @@ export class ComputationRealm {
   interpreterRealm = new Realm(this.inferContext);
   locCache = new Map<string, CacheContents>();
   errorLocs = new Set<string>();
+  epoch = 0n;
 
   setExternalData(externalData: ExternalDataMap) {
     this.interpreterRealm.externalData = externalData;

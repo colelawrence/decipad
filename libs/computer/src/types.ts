@@ -41,6 +41,7 @@ export interface IdentifiedResult {
   type: 'computer-result';
   id: string;
   result: Result.Result;
+  epoch: bigint;
   visibleVariables?: VisibleVariables;
   /** What names were retrieved while evaluating this result? */
   usedNames?: (readonly [string, string])[];

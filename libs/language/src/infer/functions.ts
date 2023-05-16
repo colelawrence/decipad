@@ -1,4 +1,5 @@
 import pSeries from 'p-series';
+import { PromiseOrType } from '@decipad/utils';
 import { inferExpression, inferStatement } from '.';
 import { AST } from '..';
 import { callBuiltinFunctor } from '../builtins';
@@ -101,10 +102,7 @@ const guardFunctionCallInfer = (
   });
 };
 
-export const inferFunctionCall = async (
+export const inferFunctionCall = (
   ctx: Context,
   expr: AST.FunctionCall
-): Promise<Type> => {
-  const ret = await guardFunctionCallInfer(ctx, expr);
-  return ret;
-};
+): PromiseOrType<Type> => guardFunctionCallInfer(ctx, expr);

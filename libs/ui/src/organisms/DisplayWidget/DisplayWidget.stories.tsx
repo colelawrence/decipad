@@ -34,6 +34,7 @@ export const Normal: Story<
             type,
             value,
           },
+          epoch: 1n,
         }}
       />
     </div>

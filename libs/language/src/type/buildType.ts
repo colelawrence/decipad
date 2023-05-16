@@ -1,10 +1,12 @@
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import produce from 'immer';
+import produce, { setAutoFreeze } from 'immer';
 import { InferError, PrimitiveTypeName, Type } from '.';
 import type { AST, Time } from '..';
 import { timeUnitFromUnit } from '../date';
 import { Unit } from './unit-type';
+
+setAutoFreeze(false);
 
 const primitive = (type: PrimitiveTypeName) =>
   produce(new Type(), (t) => {
@@ -141,23 +143,12 @@ export const anything = () =>
 export const impossible = (
   errorCause: string | InferError,
   inNode: AST.Node | null = null
-): Type => {
-  if (inNode) {
-    // IMPORTANT: avoid freezing the AST node
-    const t = new Type();
+): Type =>
+  produce(new Type(), (impossibleType) => {
     if (typeof errorCause === 'string') {
       errorCause = new InferError(errorCause);
     }
-    t.errorCause = errorCause;
-    t.node = inNode;
-    return t;
-  } else {
-    return produce(new Type(), (impossibleType) => {
-      if (typeof errorCause === 'string') {
-        errorCause = new InferError(errorCause);
-      }
 
-      impossibleType.errorCause = errorCause;
-    });
-  }
-};
+    impossibleType.errorCause = errorCause;
+    impossibleType.node = inNode;
+  });
