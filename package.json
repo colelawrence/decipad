@@ -262,7 +262,7 @@
   },
   "devDependencies": {
     "@architect/deploy": "4.5.1",
-    "@architect/inventory": "3.4.0",
+    "@architect/inventory": "3.5.3",
     "@architect/sandbox": "5.5.0",
     "@babel/core": "7.21.0",
     "@babel/eslint-parser": "7.21.3",
