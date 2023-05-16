@@ -103,7 +103,7 @@ export default function Terms() {
                     color: '#5f6486',
                   }}
                 >
-                  Last Updated: November 8, 2022
+                  Last Updated: May 16, 2023
                 </p>
               </center>
             </div>
@@ -151,6 +151,13 @@ export default function Terms() {
               interactions may vary based on what you choose to share with us.
               When you register for an account, it will generally include your
               name, email address, and mailing address.
+            </p>
+
+            <p>
+              If you choose to use our integration with Google Sheets, we will
+              receive an authentication token from Google to access your Google
+              Sheets and provide the Service to you. We will not store or use
+              any other Personal Data from Google.
             </p>
 
             <p>
