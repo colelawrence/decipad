@@ -66,6 +66,7 @@ type NotebookListProps = {
   readonly onPointerEnter?: () => void;
   readonly Heading: 'h1';
   readonly mainWorkspaceRoute?: boolean;
+  readonly isLoading?: boolean;
 } & Omit<ComponentProps<typeof DragAndDropImportNotebook>, 'children'> &
   Pick<ComponentProps<typeof NotebookListItem>, 'page'>;
 

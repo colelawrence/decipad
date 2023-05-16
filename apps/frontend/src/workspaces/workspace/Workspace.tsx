@@ -8,7 +8,6 @@ import {
   TColorKeys,
   TColorStatus,
   TopbarPlaceholder,
-  DashboardPlaceholder,
   WorkspaceMembersProps,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
@@ -368,10 +367,6 @@ const Workspace: FC = () => {
     ]
   );
 
-  if (fetching) {
-    return <DashboardPlaceholder />;
-  }
-
   if (!currentWorkspace || !workspaceMembers || !session) {
     return <ErrorPage Heading="h1" wellKnown="404" />;
   }
@@ -470,6 +465,7 @@ const Workspace: FC = () => {
         Heading="h1"
         notebooks={showNotebooks}
         page={pageInfo}
+        isLoading={fetching}
         mainWorkspaceRoute={!maybeWorkspaceFolder}
         onCreateNotebook={handleCreateNotebook}
         otherWorkspaces={allWorkspaces.filter(
