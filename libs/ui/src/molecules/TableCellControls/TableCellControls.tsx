@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { once } from 'ramda';
-import { forwardRef, useState } from 'react';
+import { MouseEvent, forwardRef, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { DownArrow, DragHandle, Trash, UpArrow } from '../../icons/index';
 import {
@@ -46,15 +46,20 @@ export const TableCellControls = forwardRef<
 >(({ readOnly, onSelect, onRemove, onAddRowAbove, onAddRowBelow }, ref) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
-  const handleMenuClick = () => {
-    if (onSelect) {
-      onSelect();
-    }
-    setMenuIsOpen(!menuIsOpen);
-  };
+  const handleMenuClick = useCallback(
+    (ev: MouseEvent) => {
+      if (onSelect) {
+        onSelect();
+      }
+      setMenuIsOpen(!menuIsOpen);
+      ev.stopPropagation();
+      ev.preventDefault();
+    },
+    [menuIsOpen, onSelect]
+  );
 
   const menuButton = (
-    <button onClick={() => handleMenuClick()} css={importTableDragHandleStyles}>
+    <button onClick={handleMenuClick} css={importTableDragHandleStyles}>
       <DragHandle />
     </button>
   );
