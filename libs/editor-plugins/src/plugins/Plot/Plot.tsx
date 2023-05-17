@@ -50,7 +50,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
       contentEditable={false}
       {...attributes}
     >
-      {plot != null && result != null && (
+      {plot != null && (
         <PlotBlock
           readOnly={readOnly}
           plotParams={plot.plotParams as unknown as PlotParamsProps}
