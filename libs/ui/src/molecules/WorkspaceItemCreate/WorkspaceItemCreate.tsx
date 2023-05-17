@@ -15,7 +15,9 @@ export const WorkspaceItemCreate: React.FC<WorkspaceItemCreateProps> = ({
       icon={<Avatar name="+" backgroundColor={grey200} />}
       iconStyles={avatarStyles}
     >
-      <div css={textStyle}>Create workspace</div>
+      <div data-testid="create-workspace-button" css={textStyle}>
+        Create workspace
+      </div>
     </NavigationItem>
   );
 };

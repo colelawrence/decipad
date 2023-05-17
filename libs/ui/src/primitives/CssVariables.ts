@@ -157,6 +157,11 @@ export interface CssVariables {
   //
   readonly currentTextColor: Property.Color;
 
+  readonly linkNormalColor: Property.Color;
+  readonly linkNormalHoverColor: Property.Color;
+  readonly linkDangerColor: Property.Color;
+  readonly linkDangerHoverColor: Property.Color;
+
   readonly formulaUnitBackground: Property.Color;
 
   readonly chartThemeMulticolorPurple1: Property.Color;

@@ -41,7 +41,11 @@ export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
           />
         </div>
       )}
-      <div css={containerStyles} onClick={toggleMenu}>
+      <div
+        css={containerStyles}
+        onClick={toggleMenu}
+        data-testid="workspace-selector-button"
+      >
         <span css={nameStyles}>
           <strong>{props.activeWorkspace.name}</strong>
         </span>

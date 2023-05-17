@@ -70,6 +70,7 @@ const tooltipRoleStyles = css({
 export type NotebookAvatarsProps = {
   isWriter?: boolean;
   usersWithAccess?: NotebookAvatar[] | null;
+  usersFromTeam?: NotebookAvatar[] | null;
   allowInvitation?: boolean;
 
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };

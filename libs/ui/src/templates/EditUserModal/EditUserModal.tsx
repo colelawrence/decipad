@@ -1,7 +1,10 @@
 import { useSafeState } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { create } from 'zustand';
-import { useAccountSettingsState } from '@decipad/graphql-client';
+import {
+  useAccountSettingsState,
+  useAuthenticationState,
+} from '@decipad/graphql-client';
 import { useCallback } from 'react';
 import { ClosableModal } from '../../organisms';
 import { cssVar, p13Regular } from '../../primitives';
@@ -12,6 +15,7 @@ import {
   AccountSettingsForm,
   serializeAccountSettingsForm,
 } from '../../molecules/AccountSettingsForm/AccountSettingsForm';
+import { Link } from '../../atoms/Link/Link';
 
 type EditUserModalProps = {
   readonly name: string;
@@ -50,6 +54,7 @@ export const EditUserModal = ({
   const closeModal = useEditUserModalStore((state) => state.close);
 
   const { currentUser } = useAccountSettingsState();
+  const { signOutCallback } = useAuthenticationState();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
@@ -132,6 +137,17 @@ export const EditUserModal = ({
           <Button type="secondary" onClick={closeModal}>
             Cancel
           </Button>
+
+          <div css={spacerStyle} />
+
+          <Link
+            noUnderline
+            color="danger"
+            onClick={signOutCallback}
+            data-testid="logout-link"
+          >
+            Log out
+          </Link>
         </div>
       </form>
     </ClosableModal>
@@ -142,4 +158,7 @@ const createWorkspaceButtonStyle = css({
   display: 'flex',
   gap: '8px',
   button: { flexGrow: 0 },
+  alignItems: 'center',
 });
+
+const spacerStyle = css({ flex: 1 });

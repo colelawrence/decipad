@@ -21,6 +21,7 @@ import {
   grey500,
   grey600,
   grey700,
+  malibu700,
   offBlack,
   offWhite,
   orange100,
@@ -159,6 +160,11 @@ export const theme: CssVariables = {
   mutationAnimationColor: yellow200.hex,
 
   currentTextColor: grey600.hex,
+
+  linkNormalColor: malibu700.hex,
+  linkNormalHoverColor: malibu700.hex,
+  linkDangerColor: red500.hex,
+  linkDangerHoverColor: red700.hex,
 
   variableHighlightColor: grey200.hex,
   variableHighlightTextColor: teal600.hex,

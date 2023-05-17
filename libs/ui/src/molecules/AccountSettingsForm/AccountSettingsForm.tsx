@@ -34,7 +34,6 @@ export const AccountSettingsForm = ({
         onChange={setName}
       />
       <InputField
-        required
         small
         label="Username"
         name="username"

@@ -23,8 +23,8 @@ test.describe('Workspace flows', () => {
   });
 
   test('Create a workspace', async ({ page }) => {
-    await expect(page.locator('[role=img]')).toHaveCount(2);
-    await page.locator('[data-test-id="create-workspace-button"]').click();
+    await page.getByTestId('workspace-selector-button').click();
+    await page.getByTestId('create-workspace-button').click();
     await page.getByPlaceholder('Team workspace').click();
     await page.getByPlaceholder('Team workspace').fill('Wtf');
     await page.getByRole('button', { name: 'Create Workspace' }).click();
@@ -32,8 +32,8 @@ test.describe('Workspace flows', () => {
   });
 
   test('user can logout', async ({ page }) => {
-    await page.click('aside button div[role=img] >> nth=1');
-    await page.click('aside button:has-text("Log out")');
+    await page.getByTestId('account-settings-button').click();
+    await page.getByTestId('logout-link').click();
     await expect(
       page.getByRole('heading', {
         name: 'Log in to Decipad',

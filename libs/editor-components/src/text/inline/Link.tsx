@@ -14,5 +14,9 @@ export const Link: PlateComponent = (props) => {
     onClick: (e) => !readOnly && e.preventDefault(),
   });
 
-  return <UILink {...htmlProps}>{children}</UILink>;
+  return (
+    <UILink {...htmlProps} color="default">
+      {children}
+    </UILink>
+  );
 };

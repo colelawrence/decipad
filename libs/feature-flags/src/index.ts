@@ -79,9 +79,7 @@ let overrides: Flags = {
 };
 
 // Unlike overrides flag switcher will have higher priority
-const flagDefaults: Flags = {
-  NO_WORKSPACE_SWITCHER: false,
-};
+const flagDefaults: Flags = {};
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 

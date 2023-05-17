@@ -71,6 +71,7 @@ import {
   yellow700,
   yellow800,
   yellow900,
+  malibu700,
 } from '../color';
 import { CssVariables } from '../CssVariables';
 
@@ -169,6 +170,11 @@ export const theme: CssVariables = {
   mutationAnimationColor: yellow700.hex,
 
   currentTextColor: dark200.hex,
+
+  linkNormalColor: malibu700.hex,
+  linkNormalHoverColor: malibu700.hex,
+  linkDangerColor: red500.hex,
+  linkDangerHoverColor: red700.hex,
 
   structuredCalculationSimpleColor: brand800.hex,
   structuredCalculationVariableColor: yellow800.hex,
