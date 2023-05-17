@@ -42,6 +42,7 @@ export * from './NotebookTitle';
 export * from './OperationsBlackboxPlugin';
 export * from './PersistSelection';
 export * from './Plot';
+export * from './PreventInvalidSelection';
 export * from './RemoteCursors';
 export * from './RenderPerformanceStats';
 export * from './PotentialFormulaHighlight';

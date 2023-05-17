@@ -46,6 +46,7 @@ import {
   createPersistSelectionPlugin,
   createPlotPlugin,
   createPotentialFormulaHighlightPlugin,
+  createPreventInvalidSelectionPlugin,
   createRemoteCursorsPlugin,
   createRenderPerformanceStatsPlugin,
   createSelectionShortcutPlugin,
@@ -236,6 +237,7 @@ export const plugins = ({
 
       // selection
       createPersistSelectionPlugin(),
+      createPreventInvalidSelectionPlugin(),
 
       // drawings
       createDrawPlugin(),
