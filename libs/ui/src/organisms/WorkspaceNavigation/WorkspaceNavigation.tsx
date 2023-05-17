@@ -5,6 +5,7 @@ import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { CreateSectionMutation } from '@decipad/graphql-client';
 import {
   Divider,
   Dot,
@@ -71,7 +72,9 @@ interface SectionRecord {
 
 interface WorkspaceNavigationProps {
   readonly onDeleteSection: (sectionId: string) => void;
-  readonly onCreateSection: (record: SectionRecord) => Promise<any>;
+  readonly onCreateSection: (
+    record: SectionRecord
+  ) => Promise<void | CreateSectionMutation | undefined>;
   readonly onUpdateSection: (
     record: SectionRecord & { sectionId: string }
   ) => Promise<any>;
@@ -309,11 +312,11 @@ export const WorkspaceNavigation = ({
                         color: opaqueColorToHex(color),
                       })
                         .then((res) => {
-                          if (res.data) {
-                            if (res.data.addSectionToWorkspace?.id) {
+                          if (res) {
+                            if (res.addSectionToWorkspace?.id) {
                               navigate(
                                 activeWorkspaceRoute.section({
-                                  sectionId: res.data.addSectionToWorkspace.id,
+                                  sectionId: res.addSectionToWorkspace.id,
                                 }).$
                               );
                             }
