@@ -1,6 +1,7 @@
 import {
   useDndPreviewSelectors,
   useEditorStylesContext,
+  useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -210,6 +211,7 @@ export const EditorTable: FC<EditorTableProps> = ({
   useDndPreviewSelectors().previewText();
 
   const { color: defaultColor } = useEditorStylesContext();
+  const readOnly = useIsEditorReadOnly();
 
   const tableStyleContextValue = useMemo(
     () => ({
@@ -282,25 +284,28 @@ export const EditorTable: FC<EditorTableProps> = ({
                   onMouseOver={setMouseOver}
                 ></Table>
               </div>
-              {!previewMode && (
-                <div
-                  css={tableAddColumnButtonWrapperStyles}
-                  contentEditable={false}
-                  onMouseEnter={onMouseEnter}
-                  onMouseLeave={onMouseLeave}
+
+              <div
+                css={tableAddColumnButtonWrapperStyles}
+                contentEditable={false}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+              >
+                <button
+                  onClick={onAddColumnClick}
+                  css={[
+                    tableAddColumnButtonStyles,
+                    mouseOver && mouseOverAddColumnButtonStyles,
+                    // this is deliberately coded like this
+                    // to prevent a unfixable rogue cursor from slate
+                    // that otherwise would render
+                    (previewMode || readOnly) && { visibility: 'hidden' },
+                  ]}
+                  title="Add Column"
                 >
-                  <button
-                    onClick={onAddColumnClick}
-                    css={[
-                      tableAddColumnButtonStyles,
-                      mouseOver && mouseOverAddColumnButtonStyles,
-                    ]}
-                    title="Add Column"
-                  >
-                    <Add />
-                  </button>
-                </div>
-              )}
+                  <Add />
+                </button>
+              </div>
             </div>
           ) : null}
         </div>

@@ -1,4 +1,3 @@
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import { MenuItem, TextAndIconButton } from '../../atoms';
@@ -108,13 +107,12 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
 
   const Icon = icons[icon];
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
-
   return (
     <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
       <div css={[tableCaptionInnerStyles, tableCaptionSlimStyles]}>
         <div css={tableTitleWrapperStyles}>
           <div contentEditable={false} css={tableIconSizeStyles}>
-            {useIsEditorReadOnly() ? (
+            {readOnly ? (
               <Icon />
             ) : (
               <IconPopover
@@ -134,7 +132,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             aria-roledescription="table name"
             css={[editableTableCaptionStyles, placeholderStyles]}
             spellCheck={false}
-            contentEditable={!useIsEditorReadOnly()}
+            contentEditable={!readOnly}
           >
             {caption}
           </div>
@@ -207,7 +205,9 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         tableFormulaEditors
       ) && (
         <div css={hideFormulas ? { display: 'none' } : { display: 'block' }}>
-          <FormulasDrawer>{tableFormulaEditors}</FormulasDrawer>
+          <FormulasDrawer readOnly={readOnly}>
+            {tableFormulaEditors}
+          </FormulasDrawer>
         </div>
       )}
     </div>

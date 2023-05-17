@@ -12,15 +12,17 @@ const formulasDrawerStyles = css({
 interface FormulasDrawerProps {
   readonly blockId?: string;
   readonly children?: ReactNode;
+  readonly readOnly?: boolean;
 }
 
 export const FormulasDrawer = ({
   children,
+  readOnly = false,
 }: FormulasDrawerProps): ReturnType<FC> => {
   return (
     <div>
       <section css={css(formulasDrawerStyles)} spellCheck={false}>
-        <pre>{children}</pre>
+        <pre contentEditable={!readOnly}>{children}</pre>
       </section>
     </div>
   );

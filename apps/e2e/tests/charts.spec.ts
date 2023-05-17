@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
-import { createTable, writeInTable, getFromTable } from '../utils/page/Table';
+import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 import { Timeouts } from '../utils/src';
 
 test.describe('Charts', () => {
