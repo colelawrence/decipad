@@ -2,6 +2,34 @@ import { Locator, Page } from 'playwright';
 import { cleanText, Timeouts } from '../src';
 import { keyPress, ControlPlus } from './Editor';
 
+export async function createNumberInputBelow(
+  page: Page,
+  identifier: string,
+  value: string
+) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/number');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'number input' }).click();
+
+  await page.dblclick(
+    '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
+  );
+
+  await page.keyboard.type(identifier);
+
+  await page.keyboard.press('ArrowRight');
+
+  await ControlPlus(page, 'a');
+
+  await page.keyboard.type(value);
+
+  await page.waitForSelector('[data-slate-editor] code >> nth=-1');
+}
+
 export async function createInputBelow(
   page: Page,
   identifier: string,
@@ -34,6 +62,132 @@ export async function createInputBelow(
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(value.toString());
+}
+
+export async function createDropdownBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/dropdown');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'dropdown' }).click();
+
+  await page.getByText('Dropdown1', { exact: true }).last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createResultBelow(page: Page) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/result');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'result' }).click();
+
+  await page
+    .locator('[data-testid="widget-caption"] >> text=/Unnammed/')
+    .last();
+}
+
+export async function createDataViewBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/data view');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'data' }).click();
+
+  await page.getByText('Data view').last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createPieChartBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/pie chart');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+
+  await page.getByPlaceholder('Chart title').last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createLineChartBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/line chart');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+
+  await page.getByPlaceholder('Chart title').last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createBarChartBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/bar chart');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+
+  await page.getByPlaceholder('Chart title').last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createAreaChartBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/area chart');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+
+  await page.getByPlaceholder('Chart title').last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
+}
+
+export async function createScatterChartBelow(page: Page, identifier: string) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/scatter plot');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'plot' }).click();
+
+  await page.getByPlaceholder('Chart title').last().dblclick();
+
+  await keyPress(page, 'Backspace');
+
+  await page.keyboard.type(identifier);
 }
 
 export async function createToggleBelow(page: Page, identifier: string) {
