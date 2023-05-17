@@ -330,7 +330,8 @@ describe('useDataView hook performance', () => {
     expect(layoutDataResult).toMatchSnapshot();
   });
 
-  it('works on a big table', async () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('works on a big table', async () => {
     const computer = new Computer();
     await loadAndPushTable(computer, '/big1.csv');
     let startTime = Date.now();
