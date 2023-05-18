@@ -190,10 +190,13 @@ export const VariableEditor = ({
             >
               {childrenArray[0]}
             </div>
-            {!readOnly && menuProps.variant !== 'display' && (
+            {menuProps.variant !== 'display' && (
               <span
                 contentEditable={false}
-                css={iconWrapperStyles({ variant: menuProps.variant })}
+                css={[
+                  iconWrapperStyles({ variant: menuProps.variant }),
+                  readOnly && { visibility: 'hidden' },
+                ]}
               >
                 <Icon />
               </span>
@@ -202,26 +205,23 @@ export const VariableEditor = ({
               contentEditable={false}
               css={iconWrapperStyles({ variant: menuProps.variant })}
             >
-              {!readOnly && (
-                // TS can't tell which variant of the union type that composes VariableEditorMenu
-                // is being used at any given moment but we're using these type definitions on
-                // VariableEditor's typings, so we know things will be ok in the end, we just need
-                // TS to shut up.
-                <VariableEditorMenu
-                  {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
-                  trigger={
-                    <button
-                      css={buttonWrapperStyles({
+              <VariableEditorMenu
+                {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
+                trigger={
+                  <button
+                    css={[
+                      buttonWrapperStyles({
                         variant: menuProps.variant,
-                      })}
-                    >
-                      <Ellipsis />
-                    </button>
-                  }
-                  type={type}
-                  onChangeType={onChangeType}
-                />
-              )}
+                      }),
+                      readOnly && { visibility: 'hidden' },
+                    ]}
+                  >
+                    <Ellipsis />
+                  </button>
+                }
+                type={type}
+                onChangeType={onChangeType}
+              />
             </div>
           </>
         </div>
