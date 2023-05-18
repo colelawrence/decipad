@@ -287,7 +287,7 @@
     "@nrwl/jest": "15.4.2",
     "@nrwl/linter": "15.4.2",
     "@nrwl/node": "15.4.2",
-    "@nrwl/nx-cloud": "15.2.0",
+    "@nrwl/nx-cloud": "15.3.5",
     "@nrwl/react": "15.4.2",
     "@nrwl/storybook": "15.4.2",
     "@nrwl/web": "15.4.2",
