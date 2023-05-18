@@ -162,7 +162,11 @@ describe('editorToProgram', () => {
         ],
       } as DataMappingElement,
     ];
-    const { program } = await editorToProgram(editor, new Computer());
+    const program = await editorToProgram(
+      editor,
+      editor.children,
+      new Computer()
+    );
 
     expect(program.length).toBe(12);
 

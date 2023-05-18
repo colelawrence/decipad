@@ -1,14 +1,20 @@
-import { MyEditor } from '@decipad/editor-types';
-import type { Computer, ComputeRequest, Program } from '@decipad/computer';
-import { elementToLanguageBlocks } from './elementToLanguageBlock';
+import { MyEditor, MyElement } from '@decipad/editor-types';
+import type { Computer, Program } from '@decipad/computer';
+import {
+  elementToLanguageBlocks,
+  interactiveElementTypes,
+} from './elementToLanguageBlock';
+
+export { interactiveElementTypes };
 
 export const editorToProgram = async (
   editor: MyEditor,
+  blocks: Iterable<MyElement>,
   computer: Computer
-): Promise<ComputeRequest> => {
+): Promise<Program> => {
   const program: Program = [];
 
-  for (const element of editor.children) {
+  for (const element of blocks) {
     if (!('type' in element) || !('id' in element)) {
       continue;
     }
@@ -26,5 +32,5 @@ export const editorToProgram = async (
     program.push(...blockResult);
   }
 
-  return { program };
+  return program;
 };

@@ -70,7 +70,9 @@ it('can turn text into smartrefs', async () => {
     createCodeLine({ id: '2', code: 'var' }),
   ];
 
-  computer.pushCompute(await editorToProgram(editor, computer));
+  computer.pushCompute({
+    program: await editorToProgram(editor, editor.children, computer),
+  });
   await timeout(0);
 
   convertCodeSmartRefs(editor, [2], computer);
@@ -96,7 +98,9 @@ it('can turn text into smartrefs (columns edition)', async () => {
     createCodeLine({ id: '2', code: 'Table1.Column1' }),
   ];
 
-  computer.pushCompute(await editorToProgram(editor, computer));
+  computer.pushCompute({
+    program: await editorToProgram(editor, editor.children, computer),
+  });
   await timeout(0);
 
   convertCodeSmartRefs(editor, [2], computer);

@@ -5,7 +5,7 @@ import { isElement } from '@udecode/plate';
 import * as interactiveLanguageElements from './elements';
 import type { InteractiveLanguageElement } from './types';
 
-const interactiveElementsByType = (() => {
+export const interactiveElementsByType = (() => {
   const map: Array<[string, InteractiveLanguageElement]> = [];
   for (const el of Object.values(
     interactiveLanguageElements
@@ -16,6 +16,10 @@ const interactiveElementsByType = (() => {
   }
   return new Map<string, InteractiveLanguageElement>(map);
 })();
+
+export const interactiveElementTypes = new Set(
+  interactiveElementsByType.keys()
+);
 
 /**
  * Given an element, what are the language expressions, blocks or assignments that it represents?

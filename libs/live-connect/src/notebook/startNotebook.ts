@@ -62,7 +62,9 @@ export const startNotebook = (
   } = liveConnections(observeExternal);
 
   const getValue = debounce(async () => {
-    computer.pushCompute(await editorToProgram(syncEditor, computer));
+    computer.pushCompute({
+      program: await editorToProgram(syncEditor, syncEditor.children, computer),
+    });
   }, debounceGetValueMs);
 
   const externalDataSubscription = getExternalData$.subscribe((data) => {

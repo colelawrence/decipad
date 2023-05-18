@@ -324,9 +324,9 @@ const run = async (...elements: MyValue[number][]) => {
   Editor.normalize(editor as BaseEditor, { force: true });
 
   const computer = new Computer();
-  const program = await editorToProgram(editor, computer);
+  const program = await editorToProgram(editor, editor.children, computer);
 
-  computer.pushCompute(program);
+  computer.pushCompute({ program });
   await timeout(0);
 
   const ret = computer.results$.get();
