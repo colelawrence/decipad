@@ -101,13 +101,3 @@ workflows:
       - rule: $hasFileExtensions(["package.json", "yarn-lock.json"])
         extra-actions:
           - $addLabel("dependencies")
-
-  # This workflow calls Reviewpad AI agent to summarize the pull request.
-  - name: summarize
-    description: Summarize the pull request
-    always-run: true
-    if:
-      # Summarize the pull requests when pull requests are opened or synchronized.
-      - rule: ($eventType() == "synchronize" || $eventType() == "opened") && $state() == "open"
-        extra-actions:
-          - $summarize()
