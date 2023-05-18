@@ -41,6 +41,7 @@ describe('withUpdateComputerOverride', () => {
     expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
       Object {
         "id3": Object {
+          "epoch": 1n,
           "id": "id3",
           "result": Object {
             "type": Object {
@@ -83,6 +84,7 @@ describe('withUpdateComputerOverride', () => {
     expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
       Object {
         "id3": Object {
+          "epoch": 1n,
           "id": "id3",
           "result": Object {
             "type": Object {
@@ -102,6 +104,7 @@ describe('withUpdateComputerOverride', () => {
           },
         },
         "id4": Object {
+          "epoch": 2n,
           "id": "id4",
           "result": Object {
             "type": Object {
@@ -125,6 +128,7 @@ describe('withUpdateComputerOverride', () => {
           },
         },
         "id5": Object {
+          "epoch": 2n,
           "id": "id5",
           "result": Object {
             "type": Object {
@@ -182,6 +186,7 @@ describe('withUpdateComputerOverride', () => {
     expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
       Object {
         "id4": Object {
+          "epoch": 2n,
           "id": "id4",
           "result": Object {
             "type": Object {
@@ -205,6 +210,7 @@ describe('withUpdateComputerOverride', () => {
           },
         },
         "id5": Object {
+          "epoch": 3n,
           "id": "id5",
           "result": Object {
             "type": Object {
