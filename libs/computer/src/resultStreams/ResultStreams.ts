@@ -1,5 +1,4 @@
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
-import { dequal } from '@decipad/utils';
 import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type {
   IdentifiedError,
@@ -7,8 +6,9 @@ import type {
   NotebookResultStream,
   NotebookResults,
 } from '../types';
-import { BlockResultObservableStream, BlockResultStream } from './types';
+import type { BlockResultObservableStream, BlockResultStream } from './types';
 import { defaultBlockResults } from './defaultBlockResults';
+import { areBlockResultsEqual } from '../utils/areBlockResultsEqual';
 
 export class ResultStreams {
   global: NotebookResultStream = new BehaviorSubject(defaultComputerResults);
@@ -27,7 +27,7 @@ export class ResultStreams {
 
   block(blockId: string): BlockResultObservableStream {
     return this.blockSubject(blockId).pipe(
-      distinctUntilChanged((a, b) => dequal(a, b))
+      distinctUntilChanged(areBlockResultsEqual)
     );
   }
 
