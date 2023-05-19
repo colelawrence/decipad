@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
-import { dequal } from 'dequal';
 import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
 import { ColumnDesc, materializeColumnDesc } from '@decipad/computer';
 import {
@@ -14,6 +13,7 @@ import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
 import { ClientEventsContext } from '@decipad/client-events';
 import { formatResultPreview } from '@decipad/format';
 import { useResolved } from '@decipad/react-utils';
+import { dequal } from '@decipad/utils';
 
 interface UseDropdownResult {
   dropdownOpen: boolean;

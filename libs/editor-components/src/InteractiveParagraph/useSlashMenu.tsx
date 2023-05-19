@@ -7,10 +7,10 @@ import {
   isCollapsed,
   setSelection,
 } from '@udecode/plate';
-import { dequal } from 'dequal';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { BaseRange, Range, Location, Path } from 'slate';
 import { useFocused, useSelected } from 'slate-react';
+import { dequal } from '@decipad/utils';
 
 interface UseSlashCommandMenuResult {
   showSlashCommands: boolean;

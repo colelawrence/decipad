@@ -1,8 +1,7 @@
 import { MyEditor } from '@decipad/editor-types';
 import { EditorChangeContext } from '@decipad/react-contexts';
 import { createSelectableContext } from '@decipad/react-utils';
-import { noop } from '@decipad/utils';
-import { dequal } from 'dequal';
+import { noop, dequal } from '@decipad/utils';
 import {
   ReactNode,
   useState,

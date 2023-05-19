@@ -7,10 +7,10 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Draw as UIDraw } from '@decipad/ui/src/organisms/Draw/Draw';
-import { dequal } from 'dequal';
 import { cloneDeep } from 'lodash';
 import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
+import { dequal } from '@decipad/utils';
 import { unfixElements } from './fixElement';
 import { ExcalidrawRef, ExcalidrawImperativeAPI } from './types';
 import { useApplyEditorChanges } from './useApplyEditorChanges';
