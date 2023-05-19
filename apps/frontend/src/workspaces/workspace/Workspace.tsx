@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
@@ -520,7 +521,7 @@ const Workspace: FC = () => {
             });
           } else {
             console.error(
-              `Bad status. Error: ${st} is not valid ${JSON.stringify(
+              `Bad status. Error: ${st} is not valid ${stringify(
                 TColorKeys,
                 null,
                 2

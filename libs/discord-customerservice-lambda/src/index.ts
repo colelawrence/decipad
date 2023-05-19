@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import stringify from 'json-stringify-safe';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import {
   APIInteraction,
@@ -17,7 +18,7 @@ function processError(error: Boom): CommandReply {
     error.output.payload.message
   }:
 \`\`\`
-${JSON.stringify(error.output.payload, null, '\t')}
+${stringify(error.output.payload, null, '\t')}
 \`\`\`
 `;
   return {
@@ -46,7 +47,7 @@ async function processAndReplyToCommand(command: Command) {
 
   const discordResponse = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify(response),
+    body: stringify(response),
     headers: {
       'Content-Type': 'application/json',
     },

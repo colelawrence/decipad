@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
+import stringify from 'json-stringify-safe';
 import { Document } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate';
 import Zip from 'adm-zip';
@@ -35,13 +36,10 @@ export const exportNotebookWithAttachments = async ({
   const doc = _doc || (await exportNotebookContent(notebookId, remoteUpdates));
   zip.addFile(
     'notebook.json',
-    Buffer.from(JSON.stringify(doc, serialize, '\t'), 'utf-8')
+    Buffer.from(stringify(doc, serialize, '\t'), 'utf-8')
   );
   const meta = await notebookMeta(notebookId);
-  zip.addFile(
-    'meta.json',
-    Buffer.from(JSON.stringify(meta, null, '\t'), 'utf-8')
-  );
+  zip.addFile('meta.json', Buffer.from(stringify(meta, null, '\t'), 'utf-8'));
 
   for (const attachment of meta.attachments) {
     try {

@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import DeciNumber, { N } from '@decipad/number';
 import { AnyMapping, getDefined, zip } from '@decipad/utils';
 import pTime from 'p-time';
@@ -52,7 +53,7 @@ export const runCodeForVariables = async (
   const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
-      `runCodeForVariables found an error\n${JSON.stringify(
+      `runCodeForVariables found an error\n${stringify(
         erroredType,
         null,
         '\t'
@@ -120,7 +121,7 @@ export const evaluateForVariables = async (
   const erroredType = Object.values(types).find(getErrSpec);
   if (erroredType != null) {
     throw new Error(
-      `runCodeForVariables found an error\n${JSON.stringify(
+      `runCodeForVariables found an error\n${stringify(
         erroredType,
         null,
         '\t'

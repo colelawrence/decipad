@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { tokenizer, tokenize } from './tokenizer';
 
 const testTokenizer = (input: string) =>
@@ -51,7 +52,7 @@ it('accepts some currencies', () => {
 
 it('parses strings using JSON.parse', () => {
   const stringWithBS = '\n\f\b\\/ hello';
-  const [stringToken] = tokenize(JSON.stringify(stringWithBS));
+  const [stringToken] = tokenize(stringify(stringWithBS));
   expect(stringToken.value).toEqual(stringWithBS);
 });
 

@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import knex from 'knex';
 import type { Knex } from 'knex';
 import Boom from '@hapi/boom';
@@ -42,12 +43,12 @@ export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    throw Boom.notAcceptable(`Invalid connection URL: ${JSON.stringify(_url)}`);
+    throw Boom.notAcceptable(`Invalid connection URL: ${stringify(_url)}`);
   }
   const client = url.protocol.replaceAll(':', '');
   if (!supportedClients.has(client)) {
     throw Boom.notAcceptable(
-      `We don't support databases of type ${JSON.stringify(client)}`
+      `We don't support databases of type ${stringify(client)}`
     );
   }
   const clientConfig: Knex.Config = {

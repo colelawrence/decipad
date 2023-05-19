@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { formatError } from '@decipad/format';
 import {
   astNode,
@@ -145,9 +146,7 @@ export const simplifyInBlockResults = async (results: IdentifiedResult[]) => {
       const materializedResults = await all(getResultGenerator(value)());
       return numberToString(materializedResults);
     }
-    return value instanceof DeciNumber
-      ? value.toString()
-      : JSON.stringify(value);
+    return value instanceof DeciNumber ? value.toString() : stringify(value);
   };
   const simpleUpdates = [];
   for (const {

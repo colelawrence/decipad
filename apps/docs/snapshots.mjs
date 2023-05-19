@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import fs from 'fs';
 import glob from 'glob';
 import { join as pathJoin } from 'path';
@@ -35,7 +36,7 @@ const runCode = (sources) => {
       pathJoin(docsDir, '../../libs/computer/src/evaluate-docs-examples.ts'),
     ],
     {
-      input: JSON.stringify(Object.fromEntries(sources.entries())),
+      input: stringify(Object.fromEntries(sources.entries())),
       timeout: DOCS_TEST_TIMEOUT_MS,
       env: {
         ...process.env,

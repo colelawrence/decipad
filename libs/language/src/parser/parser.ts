@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import nearley, { Parser as NearleyParser } from 'nearley';
 import { getDefined } from '@decipad/utils';
 import { compiledGrammar, tokenize } from '../grammar';
@@ -86,7 +87,7 @@ export class Parser extends NearleyParser {
         return self.getSymbolDisplay(nextSymbol);
       });
     }
-    return JSON.stringify(error);
+    return stringify(error);
   }
 }
 

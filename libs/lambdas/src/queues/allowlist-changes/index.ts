@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import assert from 'assert';
 import {
   AllowListRecord,
@@ -27,7 +28,7 @@ async function allowListChangesHandler(
     user_id: event.user_id,
     subject: 'allowlist',
     action: event.action,
-    args: JSON.stringify(event.args),
+    args: stringify(event.args),
     expiresAt: timestamp() + EVENT_EXPIRATION_SECONDS,
   };
 

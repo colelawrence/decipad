@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { fetch } from '@decipad/fetch';
 import { SyncElement, withCursor, withYjs } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
@@ -41,7 +42,7 @@ async function fetchToken(): Promise<string> {
     throw new Error(
       `Error fetching token: response code was ${resp.status}: ${
         resp.statusText
-      }. response was ${(await resp?.text()) || JSON.stringify(resp)}`
+      }. response was ${(await resp?.text()) || stringify(resp)}`
     );
   }
   return resp?.text();

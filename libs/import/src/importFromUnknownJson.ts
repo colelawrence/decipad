@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { Result, isColumn } from '@decipad/computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
@@ -192,7 +193,7 @@ const internalImportFromUnknownJson = (
   if (tof === 'object' && json != null) {
     return importTableFromObject(json as Record<string, unknown>, options);
   }
-  throw new Error(`Don't know what to do with ${JSON.stringify(_json)}`);
+  throw new Error(`Don't know what to do with ${stringify(_json)}`);
 };
 
 export const importFromUnknownJson = (

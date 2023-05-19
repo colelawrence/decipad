@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { Type, serializeType } from '.';
 import { parseFunctionSignature, parseType } from './parseType';
 
@@ -6,7 +7,7 @@ expect.addSnapshotSerializer({
     return t instanceof Type;
   },
   serialize(type: Type) {
-    return JSON.stringify(serializeType(type));
+    return stringify(serializeType(type));
   },
 });
 

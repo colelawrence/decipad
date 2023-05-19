@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import DeciNumber, { N } from '@decipad/number';
 import { AST } from '..';
 import { getIdentifierString, isNode, isStatement } from '../utils';
@@ -17,7 +18,7 @@ export const prettyPrintAST = (node: AST.Node, indent = 0): string => {
           ? `${value.mul(N(100)).toString()}%`
           : value.toString();
       }
-      return JSON.stringify(value);
+      return stringify(value);
     }
     case 'property-access': {
       const [ref, prop] = node.args;

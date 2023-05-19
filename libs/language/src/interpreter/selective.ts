@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 // If you call this you'll need to rely on the ===
 
 import { AST } from '..';
@@ -15,7 +16,7 @@ const desiredTargetsToStatements = (
     if (Array.isArray(target)) {
       return getDefined(
         program[target[0]]?.args[target[1]],
-        `Could not find target ${JSON.stringify(target)}`
+        `Could not find target ${stringify(target)}`
       );
     } else if (typeof target === 'number') {
       const targetBlock = program[target].args;

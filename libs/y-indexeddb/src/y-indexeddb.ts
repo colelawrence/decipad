@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import * as Y from 'yjs';
 import * as idb from 'lib0/indexeddb';
 import { Observable } from 'lib0/observable';
@@ -244,7 +245,7 @@ export class IndexeddbPersistence extends Observable<string> {
       version: Buffer.from(Y.encodeStateVector(this.doc)).toString('hex'),
       createdAt: Date.now(),
     };
-    await idb.add(versionsStore, JSON.stringify(version), versionName);
+    await idb.add(versionsStore, stringify(version), versionName);
   }
 
   async sameVersion(versionName: string): Promise<boolean> {

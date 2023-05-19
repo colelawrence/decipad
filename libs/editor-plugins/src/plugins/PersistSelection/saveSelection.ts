@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { BaseRange } from 'slate';
 
 export const saveSelection = (
@@ -5,6 +6,6 @@ export const saveSelection = (
   selection?: Partial<BaseRange> | null
 ) => {
   if (selection) {
-    global.localStorage.setItem(storageKey, JSON.stringify(selection));
+    global.localStorage.setItem(storageKey, stringify(selection));
   }
 };

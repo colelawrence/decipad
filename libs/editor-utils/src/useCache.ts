@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { PromiseOrType } from '@decipad/utils';
 import { identity } from 'ramda';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -25,7 +26,7 @@ const fetchValue = <V>(key: string): V | undefined => {
 
 const saveValue = <V>(key: string, value: V): void => {
   try {
-    const serializedValue = JSON.stringify(value);
+    const serializedValue = stringify(value);
     localStorage.setItem(key, serializedValue);
   } catch (err) {
     console.error('Error storing value:', err);

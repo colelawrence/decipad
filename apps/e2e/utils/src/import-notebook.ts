@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { Page } from 'playwright-core';
 
 export const importNotebook = async (
@@ -6,7 +7,7 @@ export const importNotebook = async (
   p: Page
 ): Promise<string> => {
   const req = {
-    data: JSON.stringify({
+    data: stringify({
       query:
         'mutation ImportNotebook($workspaceId: ID!, $source: String!) {\n' +
         '  importPad(workspaceId: $workspaceId, source: $source) {\n' +

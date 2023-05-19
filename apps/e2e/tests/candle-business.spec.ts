@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
@@ -31,7 +32,7 @@ test.describe('Use case: building a candle business', () => {
   test('loads and computes the "starting a candle business notebook"', async () => {
     const notebookId = await importNotebook(
       workspaceId,
-      Buffer.from(JSON.stringify(startingACandleBusiness), 'utf-8').toString(
+      Buffer.from(stringify(startingACandleBusiness), 'utf-8').toString(
         'base64'
       ),
       page

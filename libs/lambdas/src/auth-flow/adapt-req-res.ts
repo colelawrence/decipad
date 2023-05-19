@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { parse as parseCookie } from 'simple-cookie';
@@ -121,7 +122,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
           if (!headers['content-type']) {
             headers['content-type'] = 'application/json; charset=utf-8';
           }
-          replyBody = JSON.stringify(replyBody);
+          replyBody = stringify(replyBody);
         }
         const response = {
           statusCode,

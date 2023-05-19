@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { Result } from '@decipad/computer';
 import { simpleFormatUnit } from '@decipad/format';
 import { N } from '@decipad/number';
@@ -34,7 +35,7 @@ export const textify = (result: Result.Result): string => {
     case 'number':
       return textifyNumber(result as Result.Result<'number'>);
     case 'string':
-      return JSON.stringify(result.value);
+      return stringify(result.value);
     default:
       throw new Error(`cannot textify ${result.type.kind}`);
   }

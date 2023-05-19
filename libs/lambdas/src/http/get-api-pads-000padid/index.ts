@@ -1,4 +1,5 @@
 /* eslint-disable import/no-import-module-exports */
+import stringify from 'json-stringify-safe';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import { resource } from '@decipad/backend-resources';
@@ -31,7 +32,7 @@ exports.handler = handle(async (event: APIGatewayProxyEvent) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(notebook),
+    body: stringify(notebook),
     headers: { ContentType: 'application/json' },
   };
 });

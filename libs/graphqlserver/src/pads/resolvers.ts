@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import {
   GraphqlContext,
   ID,
@@ -136,7 +137,7 @@ const resolvers = {
           connectionId: context.connectionId,
           user,
           type: 'padsChanged',
-          filter: JSON.stringify({ workspace_id: workspaceId }),
+          filter: stringify({ workspace_id: workspaceId }),
         });
       },
     },

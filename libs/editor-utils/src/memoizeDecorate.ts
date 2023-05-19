@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { MyDecorate, MyNodeEntry } from '@decipad/editor-types';
 import { Range } from 'slate';
 import { getRange } from '@udecode/plate';
@@ -13,7 +14,7 @@ export const memoizeDecorate = (decorate: MyDecorate): MyDecorate => {
 
   return (editor, ...args) =>
     (entry) => {
-      const dedupeKey = JSON.stringify({ entry });
+      const dedupeKey = stringify({ entry });
 
       const cacheEntry = cache.get(entry[0]);
       if (cacheEntry && cacheEntry.dedupeKey === dedupeKey) {
@@ -41,7 +42,7 @@ export const memoizeDecorateWithSelection = (
           null;
 
       const selectionKey = selectionIntersectsPath ? editor.selection : null;
-      const dedupeKey = JSON.stringify({ selectionKey, entry });
+      const dedupeKey = stringify({ selectionKey, entry });
 
       const cacheEntry = cache.get(entry[0]);
       if (cacheEntry && cacheEntry.dedupeKey === dedupeKey) {

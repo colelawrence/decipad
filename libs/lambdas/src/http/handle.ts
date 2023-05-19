@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { boomify } from '@hapi/boom';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
@@ -25,7 +26,7 @@ export default (handler: Handler) => {
         if (body == null) {
           statusCode = 404;
         } else if (typeof body !== 'string') {
-          body = JSON.stringify(body);
+          body = stringify(body);
         }
 
         return {
@@ -53,7 +54,7 @@ export default (handler: Handler) => {
         return {
           statusCode: err.output.statusCode,
           headers: getErrorHeaders(err.output.headers),
-          body: JSON.stringify(err.output.payload),
+          body: stringify(err.output.payload),
         };
       }
     }

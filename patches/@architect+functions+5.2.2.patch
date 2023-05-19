@@ -22,7 +22,7 @@ index e0378ac..9e14bd8 100644
 -if (ARC_SANDBOX && !sandboxVersionAtLeast('5.0.0')) {
 -  throw ReferenceError('Incompatible version: please upgrade to Sandbox >=5.x or Architect >=10.x')
 -}
- 
+
  let http = require('./http')
  let _static = require('./static')
 diff --git a/node_modules/@architect/functions/src/ws/index.js b/node_modules/@architect/functions/src/ws/index.js
@@ -43,7 +43,7 @@ index 0c4ea48..ccf9921 100644
 @@ -30,6 +30,10 @@ function instantiateAPI () {
    }
  }
- 
+
 +function isBuffer(buf) {
 +  return Buffer.isBuffer(buf)
 +}
@@ -58,5 +58,5 @@ index 0c4ea48..ccf9921 100644
 -    Data: JSON.stringify(payload)
 +    Data: isBuffer(payload) ? payload : JSON.stringify(payload)
    }
- 
+
    if (callback) {

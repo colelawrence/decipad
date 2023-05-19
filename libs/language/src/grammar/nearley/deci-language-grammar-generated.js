@@ -116,9 +116,9 @@ function addLoc(node, start, end = start) {
   if (typeof node.start !== 'number' || typeof node.end !== 'number') {
     throw new Error(
       'Bad start or end at ' +
-        JSON.stringify(node, null, 2) +
+        stringify(node, null, 2) +
         '\n\n-- given: ' +
-        JSON.stringify({ start, end }, null, 2) +
+        stringify({ start, end }, null, 2) +
         ''
     );
   } else {
@@ -174,9 +174,9 @@ function addArrayLoc(node, locArray) {
   if (typeof node.start !== 'number' || typeof node.end !== 'number') {
     throw new Error(
       'Bad start or end at ' +
-        JSON.stringify(node, null, 2) +
+        stringify(node, null, 2) +
         '\n\n-- given: ' +
-        JSON.stringify({ start, end }, null, 2) +
+        stringify({ start, end }, null, 2) +
         ''
     );
   } else {
@@ -184,7 +184,7 @@ function addArrayLoc(node, locArray) {
   }
 }
 
-import DeciNumber, { N } from '@decipad/number';
+import { N } from '@decipad/number';
 
 function makeNumber(parentNode, n, numberFormat = undefined) {
   const fraction = N(n);

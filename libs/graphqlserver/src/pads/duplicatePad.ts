@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
@@ -64,7 +65,7 @@ export const duplicatePad = async (
   const doc = (await snapshot(id)).value;
   // set new title
   doc.children[0].children = [{ text: newName }];
-  const document = _document != null ? _document : JSON.stringify(doc);
+  const document = _document != null ? _document : stringify(doc);
 
   return importNotebookContent({
     workspaceId,

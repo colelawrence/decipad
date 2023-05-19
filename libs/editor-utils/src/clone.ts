@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { cloneDeep } from 'lodash';
 import { isElement } from '@udecode/plate';
 import { nanoid } from 'nanoid';
@@ -22,7 +23,7 @@ const cloneAndReplaceElementIds = <T extends MyElement>(
   el: T,
   transform: (e: T) => T = identity
 ): T => {
-  let text = JSON.stringify(el);
+  let text = stringify(el);
   traverseElements(el, (e) => {
     if (e.id) {
       text = text.replaceAll(e.id, nanoid());

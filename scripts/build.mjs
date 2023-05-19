@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import stringify from 'json-stringify-safe';
 import globby from 'globby';
 import esbuild from 'esbuild';
 import { join, dirname } from 'path';
@@ -56,7 +57,7 @@ function getEnv() {
 
 function printEnv(env) {
   for (const key of Object.keys(env)) {
-    console.log(`${key} = ${JSON.stringify(env[key])}`);
+    console.log(`${key} = ${stringify(env[key])}`);
   }
 }
 

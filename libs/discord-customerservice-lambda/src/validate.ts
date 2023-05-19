@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { Buffer } from 'buffer';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
@@ -67,7 +68,7 @@ export function validate(event: APIGatewayProxyEvent): Command {
     throw Boom.badRequest('Need request body');
   }
 
-  console.log(JSON.stringify(request, null, '\t'));
+  console.log(stringify(request, null, '\t'));
 
   return request;
 }

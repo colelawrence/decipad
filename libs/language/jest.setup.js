@@ -1,5 +1,6 @@
 /* eslint-env node,browser */
 /* eslint-disable import/no-extraneous-dependencies */
+import stringify from 'json-stringify-safe';
 import isoFetch from 'isomorphic-fetch';
 import parseDataUrl from 'data-urls';
 /* eslint-enable import/no-extraneous-dependencies */
@@ -23,7 +24,7 @@ expect.extend({
   toRoundEqual(received, closeTo) {
     const pass = doesRoundEqual(received, closeTo);
     const message = () =>
-      `Expected ${JSON.stringify(received)} ${
+      `Expected ${stringify(received)} ${
         pass ? 'to' : 'not to'
       } be close to ${closeTo}`;
 

@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse as parseDotEnv } from 'dotenv';
@@ -78,7 +79,7 @@ export async function createSandboxEnv(
     ARC_TABLES_PORT: tablesPort,
     ARC_INTERNAL: arcPort,
     ARC_INTERNAL_PORT: arcPort,
-    ARC_SANDBOX: JSON.stringify(ARC_SANDBOX),
+    ARC_SANDBOX: stringify(ARC_SANDBOX),
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,

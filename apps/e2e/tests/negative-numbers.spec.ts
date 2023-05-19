@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
   getPadName,
@@ -28,7 +29,7 @@ test.describe('Loading and snapshot of notebook with charts', () => {
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,
-      Buffer.from(JSON.stringify(notebookSource), 'utf-8').toString('base64'),
+      Buffer.from(stringify(notebookSource), 'utf-8').toString('base64'),
       page
     );
   });

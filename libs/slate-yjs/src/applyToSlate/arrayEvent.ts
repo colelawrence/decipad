@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { getNode, isText, TDescendant, TNodeOperation } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
@@ -38,7 +39,7 @@ export default function translateArrayEvent(
     if ('insert' in delta) {
       invariant(
         Array.isArray(delta.insert),
-        `Unexpected array insert content type: expected array, got ${JSON.stringify(
+        `Unexpected array insert content type: expected array, got ${stringify(
           delta.insert
         )}`
       );

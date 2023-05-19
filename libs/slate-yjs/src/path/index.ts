@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { Path } from 'slate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
@@ -18,7 +19,7 @@ export function getTarget(doc: SharedType, path: Path): SyncNode {
 
     if (!isTree(current) || !children?.get(idx)) {
       throw new TypeError(
-        `path ${path.toString()} does not match doc ${JSON.stringify(
+        `path ${path.toString()} does not match doc ${stringify(
           toSlateDoc(doc)
         )}`
       );

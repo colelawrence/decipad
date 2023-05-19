@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+import stringify from 'json-stringify-safe';
 import { formatError, formatResult } from '@decipad/format';
 import { maxBy } from 'lodash';
 import {
@@ -111,7 +112,7 @@ async function main() {
 
 main()
   .then((result) => {
-    console.log(JSON.stringify(result));
+    console.log(stringify(result));
   })
   .catch((error) => {
     console.error(error);

@@ -2,6 +2,7 @@ import { Buffer } from 'buffer';
 import { nanoid } from 'nanoid';
 import nacl from 'tweetnacl';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import stringify from 'json-stringify-safe';
 
 function interaction() {
   return {
@@ -33,7 +34,7 @@ test('discord', (ctx) => {
   it('discards request without sec headers', async () => {
     const response = await ctx.http.fetch('/api/discord', {
       method: 'POST',
-      body: JSON.stringify(interaction()),
+      body: stringify(interaction()),
     });
 
     expect(response.ok).toBe(false);
@@ -41,7 +42,7 @@ test('discord', (ctx) => {
   });
 
   it('allows a ping', async () => {
-    const requestBody = JSON.stringify(interaction());
+    const requestBody = stringify(interaction());
     const response = await ctx.http.fetch('/api/discord', {
       method: 'POST',
       body: requestBody,

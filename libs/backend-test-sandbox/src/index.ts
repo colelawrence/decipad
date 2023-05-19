@@ -6,6 +6,7 @@
 /* eslint-disable jest/valid-title */
 /* eslint-disable jest/no-export */
 
+import stringify from 'json-stringify-safe';
 import sandbox from './sandbox';
 import { createSandboxEnv, Env } from './sandbox-env';
 import callGraphql, { gql } from './call-graphql';
@@ -116,7 +117,7 @@ export function testWithSandbox(
     if (!shownEnv) {
       shownEnv = true;
       console.log(
-        `Printing sandbox environment because an error happened:\n${JSON.stringify(
+        `Printing sandbox environment because an error happened:\n${stringify(
           cleanse(env),
           null,
           '\t'

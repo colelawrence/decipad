@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { mockConsoleWarn } from '@decipad/testutils';
 import { fireEvent, render, waitFor } from '@testing-library/react';
@@ -73,7 +74,7 @@ const validFile = new File(['43'], 'notebook.json', {
 });
 const textFile = new File(['42'], 'notebook.txt', { type: 'text/plain' });
 const tooLargeFile = new File(
-  [JSON.stringify('x'.repeat(20_000_001))],
+  [stringify('x'.repeat(20_000_001))],
   'notebook.json',
   { type: 'application/json' }
 );

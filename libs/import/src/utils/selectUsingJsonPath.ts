@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import jp from 'jsonpath';
 
 export const selectUsingJsonPath = (
@@ -14,7 +15,7 @@ export const selectUsingJsonPath = (
     // eslint-disable-next-line no-console
     console.error(`Error trying to use JSONpath expression ${jsonPath}`, err);
     throw new Error(
-      `JSON Path error ${(err as Error).message}: ${JSON.stringify(jsonPath)}`
+      `JSON Path error ${(err as Error).message}: ${stringify(jsonPath)}`
     );
   }
 };

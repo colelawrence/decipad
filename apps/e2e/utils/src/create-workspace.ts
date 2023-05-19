@@ -1,9 +1,10 @@
+import stringify from 'json-stringify-safe';
 import { Page } from 'playwright-core';
 
 export const createWorkspace = async (p: Page): Promise<string> => {
   const resp = await (
     await p.request.post('/graphql', {
-      data: JSON.stringify({
+      data: stringify({
         query:
           'mutation CreateWorkspace($name: String!) {\n' +
           '  createWorkspace(workspace: {name: $name}) {\n' +

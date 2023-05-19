@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { getDefined } from '@decipad/utils';
 import { User } from '@decipad/backendtypes';
@@ -54,7 +55,7 @@ export const handler = handle(async (event): Promise<HttpResponse> => {
   };
   return {
     statusCode: 200,
-    body: JSON.stringify(response),
+    body: stringify(response),
     headers: {
       'Access-Control-Allow-Methods': 'HEAD, GET',
       'Access-Control-Allow-Origin': '*',

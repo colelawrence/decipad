@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { AnyMapping } from '@decipad/utils';
 import { AST, isExpression, Type, validateResult } from '.';
 import { Context, inferBlock, makeContext } from './infer';
@@ -77,7 +78,7 @@ export const runAST = async (
 
   const erroredType = type.errorCause != null ? type : null;
   if (erroredType && throwOnError) {
-    throw new TypeError(`Type error: ${JSON.stringify(erroredType)}`);
+    throw new TypeError(`Type error: ${stringify(erroredType)}`);
   }
 
   const results = await run(

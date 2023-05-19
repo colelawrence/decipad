@@ -1,3 +1,4 @@
+const stringify = require('json-stringify-safe');
 const blogPluginExports = require('@docusaurus/plugin-content-blog');
 const utils = require('@docusaurus/utils');
 const path = require('path');
@@ -112,7 +113,7 @@ async function blogPluginExtended(...pluginArgs) {
         // Note that this created data path must be in sync with
         // metadataPath provided to mdx-loader.
         `blog-post-list-prop-relesse-notes.json`,
-        JSON.stringify(
+        stringify(
           {
             title: 'Recent Releases',
             items: allBlogPosts.map((blogPost) => ({
@@ -137,7 +138,7 @@ async function blogPluginExtended(...pluginArgs) {
             // Note that this created data path must be in sync with
             // metadataPath provided to mdx-loader.
             `${utils.docuHash(metadata.source)}.json`,
-            JSON.stringify({ ...metadata }, null, 2)
+            stringify({ ...metadata }, null, 2)
           );
 
           addRoute({
@@ -162,7 +163,7 @@ async function blogPluginExtended(...pluginArgs) {
 
           const pageMetadataPath = await createData(
             `${utils.docuHash(permalink)}.json`,
-            JSON.stringify(metadata, null, 2)
+            stringify(metadata, null, 2)
           );
 
           addRoute({
@@ -230,7 +231,7 @@ async function blogPluginExtended(...pluginArgs) {
 
         const tagsPropPath = await createData(
           `${utils.docuHash(`${blogTagsListPath}-tags`)}.json`,
-          JSON.stringify(tagsProp, null, 2)
+          stringify(tagsProp, null, 2)
         );
 
         addRoute({
@@ -256,12 +257,12 @@ async function blogPluginExtended(...pluginArgs) {
             };
             const tagPropPath = await createData(
               `${utils.docuHash(metadata.permalink)}.json`,
-              JSON.stringify(tagProp, null, 2)
+              stringify(tagProp, null, 2)
             );
 
             const listMetadataPath = await createData(
               `${utils.docuHash(metadata.permalink)}-list.json`,
-              JSON.stringify(metadata, null, 2)
+              stringify(metadata, null, 2)
             );
 
             addRoute({

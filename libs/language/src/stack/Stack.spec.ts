@@ -1,10 +1,11 @@
+import stringify from 'json-stringify-safe';
 import { Stack, VarGroup } from './index';
 
 let stack: Stack<string>;
 beforeEach(() => {
   stack = new Stack(
     undefined,
-    (nsContents) => JSON.stringify([...nsContents]),
+    (nsContents) => stringify([...nsContents]),
     (table) => {
       try {
         const names = JSON.parse(table);
@@ -106,7 +107,7 @@ it('can use namespaces', () => {
     }
   `);
 
-  stack.set('TableToSplit', JSON.stringify([['ColName', '1']]));
+  stack.set('TableToSplit', stringify([['ColName', '1']]));
 
   expect(stack.get('TableToSplit')).toMatchInlineSnapshot(
     `"[[\\"ColName\\",\\"1\\"]]"`
@@ -117,7 +118,7 @@ it('can use namespaces', () => {
 });
 
 it('can expand an empty namespace', () => {
-  stack.set('Table', JSON.stringify([]), 'global');
+  stack.set('Table', stringify([]), 'global');
   expect(stack.get('Table')).toMatchInlineSnapshot(`"[]"`);
   expect(Object.fromEntries(stack.namespaces)).toMatchInlineSnapshot(`
     Object {
@@ -213,7 +214,7 @@ describe('can set with an ID', () => {
   it('can set with ID in the context of a table', () => {
     stack.setNamespaced(
       ['', 'Table'],
-      JSON.stringify([['A', 'AVal']]),
+      stringify([['A', 'AVal']]),
       'global',
       'TableId'
     );
@@ -246,7 +247,7 @@ describe('can set with an ID', () => {
 it('has a weird namespace retriever for language tables', () => {
   const stack = new Stack<string>(
     undefined,
-    (nsContents) => JSON.stringify([...nsContents]),
+    (nsContents) => stringify([...nsContents]),
     (table) => {
       try {
         const names = JSON.parse(table);

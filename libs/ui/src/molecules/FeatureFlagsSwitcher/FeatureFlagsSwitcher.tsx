@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import {
   availableFlags,
   FEATURE_FLAGS_KEY,
@@ -85,7 +86,7 @@ export const FeatureFlagsSwitcher = () => {
       <Button
         type="primary"
         onClick={() => {
-          setItem(FEATURE_FLAGS_KEY, JSON.stringify(flags));
+          setItem(FEATURE_FLAGS_KEY, stringify(flags));
           setFlags({});
           window.location.reload();
         }}

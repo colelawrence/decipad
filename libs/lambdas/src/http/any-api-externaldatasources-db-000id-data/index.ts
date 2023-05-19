@@ -1,3 +1,4 @@
+import stringify from 'json-stringify-safe';
 import { pingDatabase, runUserQuery } from '@decipad/backend-external-db';
 import { getDefined } from '@decipad/utils';
 import { app } from '@decipad/config';
@@ -43,7 +44,7 @@ export const handler = handle(async (event) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(
+    body: stringify(
       requestBody
         ? await runUserQuery(externalDataSource.externalId, requestBody)
         : {
