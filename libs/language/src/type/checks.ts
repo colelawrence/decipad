@@ -1,5 +1,4 @@
-import { dequal } from 'dequal';
-import { PromiseOrType } from '@decipad/utils';
+import { dequal, PromiseOrType } from '@decipad/utils';
 import { PrimitiveTypeName, Type } from '.';
 import type { Time } from '..';
 import { zip } from '../utils';

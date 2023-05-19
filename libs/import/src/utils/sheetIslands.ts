@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { Result, isTable } from '@decipad/computer';
-import { getDefined } from '@decipad/utils';
-import { dequal } from 'dequal';
+import { getDefined, dequal } from '@decipad/utils';
 import { getDataRangeUrlFromSheetAndIslands } from '../providers/gsheets/getDataRangeUrlFromSheet';
 import { ImportResult } from '../types';
 import { matrix } from './matrix';

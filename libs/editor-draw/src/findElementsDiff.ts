@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 import { DrawElementDescendant } from '@decipad/editor-types';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import invariant from 'tiny-invariant';
 import { DrawElementsDiff } from './types';
 

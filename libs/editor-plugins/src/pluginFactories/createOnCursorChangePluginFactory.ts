@@ -1,5 +1,5 @@
 import { Selection } from 'slate';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 

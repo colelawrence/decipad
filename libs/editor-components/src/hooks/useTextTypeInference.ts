@@ -1,7 +1,7 @@
 import { MyEditor, VariableDefinitionElement } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { useCallback, useState } from 'react';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate';
 import { inferType } from '@decipad/parse';
 import { SerializedType } from '@decipad/computer';

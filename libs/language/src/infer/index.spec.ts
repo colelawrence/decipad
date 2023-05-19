@@ -1,7 +1,5 @@
-import { dequal } from 'dequal';
-
+import { dequal, getDefined } from '@decipad/utils';
 import { ONE } from '@decipad/number';
-import { getDefined } from '@decipad/utils';
 import {
   AST,
   inferBlock,

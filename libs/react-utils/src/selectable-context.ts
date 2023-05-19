@@ -1,4 +1,4 @@
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import {
   useEffect,
   createElement,

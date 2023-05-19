@@ -22,8 +22,13 @@ import {
   Unit,
 } from '@decipad/language';
 import DeciNumber from '@decipad/number';
-import { anyMappingToMap, getDefined, identity, zip } from '@decipad/utils';
-import { dequal } from 'dequal';
+import {
+  anyMappingToMap,
+  getDefined,
+  identity,
+  zip,
+  dequal,
+} from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {

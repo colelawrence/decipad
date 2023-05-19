@@ -1,5 +1,5 @@
 import { AST, ExternalDataMap } from '@decipad/language';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { getDependents } from './dependents';
 import {
   findSymbolsUsed,

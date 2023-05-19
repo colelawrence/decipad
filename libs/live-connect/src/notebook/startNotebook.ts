@@ -1,8 +1,7 @@
-import { dequal } from 'dequal';
+import { dequal, getDefined } from '@decipad/utils';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { debounce, noop } from 'lodash';
 import { createDocSyncEditor } from '@decipad/docsync';
-import { getDefined } from '@decipad/utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import {
   Computer,

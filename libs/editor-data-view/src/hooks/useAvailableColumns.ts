@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { SerializedType, isColumn } from '@decipad/computer';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import {
   debounceTime,
   distinctUntilChanged,

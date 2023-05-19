@@ -1,5 +1,5 @@
 import { Computer } from '@decipad/computer';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import mMemoize from 'micro-memoize';
 
 const memoizeParams = {

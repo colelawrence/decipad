@@ -63,6 +63,10 @@ module.exports = {
             name: 'fraction.js',
             message: 'Use @decipad/number instead of fraction.js',
           },
+          {
+            name: 'fast-deep-equal',
+            message: 'Use {deepequal} from @decipad/utils instead of dequal',
+          },
         ],
       },
     ],

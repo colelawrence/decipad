@@ -1,7 +1,7 @@
 import { useSelected } from 'slate-react';
 import { getTableGridAbove, useEditorRef } from '@udecode/plate';
 import { useEffect } from 'react';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { useTableStore } from '../../contexts/tableStore';
 
 export const useSelectedCells = () => {

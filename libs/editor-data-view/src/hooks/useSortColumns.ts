@@ -1,4 +1,4 @@
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { useCallback } from 'react';
 import { Column as ColumnImpl, Comparable, applyMap } from '@decipad/column';
 import { all, filter } from '@decipad/generator-utils';

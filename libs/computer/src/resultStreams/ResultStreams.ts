@@ -1,5 +1,5 @@
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type {
   IdentifiedError,

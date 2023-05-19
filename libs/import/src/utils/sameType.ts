@@ -1,5 +1,5 @@
 import { SerializedType } from '@decipad/computer';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 
 export const sameType = (types: SerializedType[]): boolean => {
   if (types.length === 0) {

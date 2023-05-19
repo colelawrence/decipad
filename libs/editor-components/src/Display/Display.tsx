@@ -91,13 +91,13 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
               item: name.name,
               blockId: name.blockId || '',
               group: 'Variables',
-              icon: <Number />,
             };
           }),
         [loaded, openMenu]
       )
     )
-    .filter((n): n is SelectItems => n !== undefined);
+    .filter((n): n is SelectItems => n !== undefined)
+    .map((name) => ({ ...name, icon: <Number /> }));
 
   // Decilang codelines do not need to have a name defining them.
   // But we still want to add them.

@@ -3,6 +3,7 @@ export * from './assert-defined';
 export * from './byDesc';
 export * from './chunks';
 export * from './containsNumber';
+export * from './deepequal';
 export * from './enumerate';
 export * from './first';
 export * from './get-defined';

@@ -24,11 +24,10 @@ import {
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { enumerate } from '@decipad/utils';
+import { enumerate, dequal } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 import { Computer } from '@decipad/computer';
-import { dequal } from 'dequal';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { insertNodes } from '@decipad/editor-utils';
 

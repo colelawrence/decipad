@@ -1,8 +1,7 @@
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
-import { dequal } from 'dequal';
+import { dequal, identity } from '@decipad/utils';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { identity } from '@decipad/utils';
 
 /**
  * Multipurpose listener helper.

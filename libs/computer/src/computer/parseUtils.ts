@@ -1,4 +1,4 @@
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { astNode, decilang, parseBlock } from '@decipad/language';
 import { Program, ProgramBlock } from '../types';
 

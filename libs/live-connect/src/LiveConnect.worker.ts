@@ -5,7 +5,7 @@ import { Computer, setErrorReporter } from '@decipad/computer';
 import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';
-import { dequal } from 'dequal';
+import { dequal } from '@decipad/utils';
 import { createRPCResponse } from './createResponse';
 import type {
   Observe,
