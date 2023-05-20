@@ -39,7 +39,7 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   });
 
   const onChangeColumnType = useCallback(
-    (columnIndex: number, type: TableCellType) => {
+    (columnIndex: number, type?: TableCellType) => {
       if (path) {
         setNodes<LiveQueryElement>(
           editor,

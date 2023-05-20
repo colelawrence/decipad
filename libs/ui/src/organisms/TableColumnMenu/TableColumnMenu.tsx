@@ -9,7 +9,7 @@ import { N, ONE } from '@decipad/number';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, ReactNode, useState, useCallback } from 'react';
+import { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   AddToWorkspace,
@@ -33,6 +33,8 @@ import {
   getStringType,
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
+import { UnitsAction } from '../../molecules/UnitMenuItem/UnitMenuItem';
+import { typeFromUnitsAction } from './typeFromUnitsAction';
 
 const tableColumnMenuStyles = css({
   marginLeft: 'auto',
@@ -48,7 +50,7 @@ type ExpandableColumns = 'currency' | 'date' | 'series' | 'dropdowns' | null;
 interface TableColumnMenuProps
   extends Pick<ComponentProps<typeof MenuList>, 'open' | 'onChangeOpen'>,
     Pick<ComponentProps<typeof UnitMenuItem>, 'parseUnit'> {
-  readonly onChangeColumnType?: (type: TableCellType) => void;
+  readonly onChangeColumnType?: (type: TableCellType | undefined) => void;
   readonly onRemoveColumn?: () => void;
   readonly isFirst?: boolean;
   readonly isReadOnly?: boolean;
@@ -322,9 +324,9 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               </MenuList>
             )}
             <UnitMenuItem
-              placeholder="create custom"
-              onSelect={(unit) => {
-                onChangeColumnType({ kind: 'number', unit });
+              placeholder="add custom unit"
+              onSelect={(state: UnitsAction | undefined) => {
+                onChangeColumnType(typeFromUnitsAction(state));
               }}
               parseUnit={parseUnit}
             />

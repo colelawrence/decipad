@@ -22,7 +22,7 @@ export const useCoreLiveConnectionActions = ({
   const editor = useTEditorRef();
 
   const onChangeColumnType = useCallback(
-    (columnIndex: number, type: TableCellType) => {
+    (columnIndex: number, type?: TableCellType) => {
       if (path) {
         setNodes<LiveConnectionElement | LiveDataSetElement>(
           editor,

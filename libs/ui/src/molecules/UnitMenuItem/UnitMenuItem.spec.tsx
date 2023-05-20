@@ -26,7 +26,6 @@ it('renders a button when parse is successful', async () => {
   expect(screen.queryByRole('button')).toBeNull();
 
   await user.type(screen.getByRole('textbox'), 'm/s');
-  await expect(screen.findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
   rerender(<UnitMenuItem parseUnit={() => []} />);
@@ -58,19 +57,6 @@ describe('onSelect prop', () => {
     expect(onSelect).not.toHaveBeenCalled();
 
     await screen.findByRole('button');
-    await user.keyboard(`{enter}`);
-    expect(onSelect).toHaveBeenCalled();
-  });
-
-  it('does not gets called when parse is unsuccessful', async () => {
-    const onSelect = jest.fn();
-    render(<UnitMenuItem onSelect={onSelect} parseUnit={() => null} />, {
-      wrapper,
-    });
-
-    await user.type(screen.getByRole('textbox'), 'm/s');
-    expect(onSelect).not.toHaveBeenCalled();
-    await expect(screen.findByRole('button')).rejects.toThrow();
     await user.keyboard(`{enter}`);
     expect(onSelect).toHaveBeenCalled();
   });

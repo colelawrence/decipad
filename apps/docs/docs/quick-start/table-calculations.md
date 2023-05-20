@@ -36,7 +36,7 @@ Column types allow you to specify the type of information in each column to help
 Units provide context to your numbers and help you create calculations fast. <br />
 Any column with numbers on a table can have a unit.
 
-- To **add a unit to a column**, click the down triangle button on a column, click `Change type`, and type your new unit in the `create custom` field.
+- To **add a unit to a column**, click the down triangle button on a column, click `Change type`, and type your new unit in the `add custom unit` field.
 
 ### Add Column Series
 

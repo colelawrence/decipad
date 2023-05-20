@@ -22,7 +22,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   readonly firstTableRowControls?: ReactNode;
   readonly onChangeColumnType?: (
     columnIndex: number,
-    type: TableCellType
+    type?: TableCellType
   ) => void;
   readonly element?: AnyElement;
 }

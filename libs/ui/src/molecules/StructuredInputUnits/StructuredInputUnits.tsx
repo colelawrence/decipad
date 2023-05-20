@@ -227,7 +227,7 @@ export const StructuredInputUnits: FC<StructuredInputUnitsProps> = ({
               </MenuList>
             ))}
           <ASTUnitMenuItem
-            placeholder="create custom"
+            placeholder="add custom unit"
             onSelect={onChangeUnit}
           />
         </MenuList>

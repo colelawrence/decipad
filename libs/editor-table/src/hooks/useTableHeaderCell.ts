@@ -26,7 +26,7 @@ const getColumnDropDirection = (dir: DropDirection) =>
 export interface UseTableHeaderCellResult {
   readOnly: boolean;
   focused: boolean;
-  onChangeColumnType: (columnIndex: number, cellType: TableCellType) => void;
+  onChangeColumnType: (columnIndex: number, cellType?: TableCellType) => void;
   onRemoveColumn: (columnId: string) => void;
   dragSource: ConnectDragSource;
   isDragging: boolean;

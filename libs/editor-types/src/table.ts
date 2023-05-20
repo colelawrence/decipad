@@ -1,4 +1,4 @@
-import type { SerializedTypes } from '@decipad/computer';
+import type { Constant, SerializedTypes } from '@decipad/computer';
 
 import type { EmptyText, PlainText, SmartRefElement, Text } from '.';
 import type {
@@ -45,7 +45,8 @@ export type TableCellType =
   | SerializedTypes.Anything
   | TableDropdownType
   | Readonly<{ kind: 'table-formula' }>
-  | Readonly<{ kind: 'series'; seriesType: SeriesType }>;
+  | Readonly<{ kind: 'series'; seriesType: SeriesType }>
+  | Readonly<{ kind: 'constant'; constant: Constant }>;
 
 export interface TableColumn {
   columnName: string;

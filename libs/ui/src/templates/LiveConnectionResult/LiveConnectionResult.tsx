@@ -17,7 +17,7 @@ interface LiveConnectionResultProps {
   result: Result.Result;
   isFirstRowHeaderRow?: boolean;
   setIsFirstRowHeader?: (is: boolean) => void;
-  onChangeColumnType?: (columnIndex: number, type: TableCellType) => void;
+  onChangeColumnType?: (columnIndex: number, type?: TableCellType) => void;
   element: LiveConnectionElement | LiveQueryElement | LiveDataSetElement;
   showLiveQueryResults?: boolean;
 }

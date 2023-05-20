@@ -61,24 +61,4 @@ describe('onSelect prop', () => {
     await user.keyboard(`{enter}`);
     expect(onSelect).toHaveBeenCalled();
   });
-
-  // ignore eslint
-  // eslint-disable-next-line jest/no-commented-out-tests
-  /* TODO: parsing a unit never "fails", it returns undefined instead. What do?
-  it('does not gets called when parse is unsuccessful', async () => {
-    const onSelect = jest.fn();
-    render(
-      <ASTUnitMenuItem
-        onSelect={onSelect}
-        parseUnit={() => goodUnit}
-      />,
-      { wrapper }
-    );
-
-    await user.type(screen.getByRole('textbox'), 'm/s');
-    expect(onSelect).not.toHaveBeenCalled();
-    await expect(screen.findByRole('button')).rejects.toThrow();
-    await user.keyboard(`{enter}`);
-    expect(onSelect).toHaveBeenCalled();
-  }); */
 });

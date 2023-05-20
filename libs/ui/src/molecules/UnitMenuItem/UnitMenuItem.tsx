@@ -1,4 +1,5 @@
-import type { Unit } from '@decipad/computer';
+import type { Constant, Unit } from '@decipad/computer';
+import { getConstantByName } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useEffect, useReducer, useRef } from 'react';
@@ -26,7 +27,7 @@ const inputStyles = css(p13Medium, {
   },
   background: cssVar('highlightColor'),
   borderRadius: '6px',
-  padding: '6px 12px',
+  padding: '6px 10px',
 
   // Make input adjust alongside button
   width: 0, // Override vendor default width
@@ -43,13 +44,15 @@ const buttonStyles = css(p12Medium, {
   padding: '4px 8px',
 });
 
-type UnitsAction =
+export type UnitsAction =
   | { type: 'text'; value: string }
-  | { type: 'unit'; value: Unit[] | null };
+  | { type: 'unit'; value: Unit[] | null }
+  | { type: 'constant'; value: Constant };
 
 interface UnitsState {
   text: string;
   unit: Unit[] | null;
+  constant?: Constant;
 }
 
 const initialState: UnitsState = {
@@ -63,11 +66,13 @@ function reducer(state: UnitsState, action: UnitsAction): UnitsState {
       return { ...state, text: action.value };
     case 'unit':
       return { ...state, unit: action.value };
+    case 'constant':
+      return { ...state, constant: action.value };
   }
 }
 
 interface UnitMenuItemProps {
-  readonly onSelect?: (unit: Unit[] | null) => void;
+  readonly onSelect?: (unit: UnitsAction | undefined) => void;
   readonly parseUnit?: (
     value: string
   ) => Promise<Unit[] | null> | Unit[] | null;
@@ -83,10 +88,20 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
   useEffect(() => {
     (async () => {
       if (state.text.length > 0) {
+        const constant = getConstantByName(state.text);
+
+        if (constant) {
+          dispatch({
+            type: 'constant',
+            value: constant,
+          });
+          return;
+        }
         try {
           const unit = await parseUnit(state.text);
           dispatch({ type: 'unit', value: unit });
-        } catch {
+        } catch (err) {
+          console.error(err);
           dispatch({ type: 'unit', value: null });
         }
       }
@@ -94,10 +109,15 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
   }, [state.text, parseUnit]);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const unitOrConstant: UnitsAction | undefined = state.constant
+    ? { type: 'constant', value: state.constant }
+    : state.unit
+    ? { type: 'unit', value: state.unit }
+    : undefined;
 
   return (
     <MenuItem
-      onSelect={() => onSelect(state.unit)}
+      onSelect={() => onSelect(unitOrConstant)}
       onFocus={() => inputRef.current?.focus()}
     >
       <div css={menuItemStyles}>
@@ -124,8 +144,8 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
           }}
           placeholder={placeholder}
         />
-        {state.unit != null && (
-          <button css={buttonStyles} onClick={() => onSelect(state.unit)}>
+        {(state.unit != null || state.constant != null) && (
+          <button css={buttonStyles} onClick={() => onSelect(unitOrConstant)}>
             Add new
           </button>
         )}

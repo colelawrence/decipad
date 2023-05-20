@@ -101,6 +101,8 @@ export const useTableCell = (
     hasText &&
     isSoleNumber
       ? computer.formatUnit(cellType.unit)
+      : cellType?.kind === 'constant'
+      ? cellType.constant.name
       : undefined;
 
   // Cell parse error (present for all cells, but only displayed in the series cell)

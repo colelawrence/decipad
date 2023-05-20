@@ -130,3 +130,5 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
 
   return cachedBuiltins;
 };
+export { getConstantByName } from './builtins';
+export type { Constant } from './builtins';

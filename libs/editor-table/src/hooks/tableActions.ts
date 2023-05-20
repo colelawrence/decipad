@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_TABLE,
   ELEMENT_TD,
@@ -18,21 +19,20 @@ import {
   isElementOfType,
   withPath,
 } from '@decipad/editor-utils';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
-import { nanoid } from 'nanoid';
-import { useCallback } from 'react';
+import { useComputer } from '@decipad/react-contexts';
 import {
+  InsertNodesOptions,
   getNodeChildren,
   hasNode,
-  InsertNodesOptions,
   insertText,
   moveNodes,
   removeNodes,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
+import { nanoid } from 'nanoid';
+import { useCallback } from 'react';
 import { BaseEditor, Path, Transforms } from 'slate';
-import { useComputer } from '@decipad/react-contexts';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 
@@ -41,7 +41,7 @@ export interface TableActions {
   onChangeColumnName: (columnIndex: number, newColumnName: string) => void;
   onChangeColumnType: (
     columnIndex: number,
-    newColumnType: TableCellType
+    newColumnType?: TableCellType
   ) => void;
   onSetCollapsed: (collapsed: boolean) => void;
   onSetHideFormulas: (isHidden: boolean) => void;
@@ -197,7 +197,7 @@ export const useTableActions = (
   );
 
   const onChangeColumnType = useCallback(
-    (columnIndex: number, cellType: TableCellType) => {
+    (columnIndex: number, cellType?: TableCellType) => {
       withoutNormalizing(editor, () => {
         onSetHideFormulas(false);
         if (path) {

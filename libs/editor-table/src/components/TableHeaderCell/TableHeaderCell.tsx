@@ -47,7 +47,7 @@ export const TableHeaderCell: PlateComponent = ({
           focused={focused}
           isFirst={columnIndex === 0}
           onChangeColumnType={useCallback(
-            (newType: TableCellType) =>
+            (newType?: TableCellType) =>
               columnIndex != null && onChangeColumnType(columnIndex, newType),
             [columnIndex, onChangeColumnType]
           )}

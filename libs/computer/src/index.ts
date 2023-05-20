@@ -52,6 +52,7 @@ export {
   materializeResult,
   serializeType,
   buildType,
+  getConstantByName,
 } from '@decipad/language';
 
 export {
@@ -70,7 +71,7 @@ export {
 
 export { unnestTableRows } from './tools';
 
-export type { AutocompleteName, ErrSpec } from '@decipad/language';
+export type { AutocompleteName, ErrSpec, Constant } from '@decipad/language';
 export * from './computer';
 
 export * from './reporting';

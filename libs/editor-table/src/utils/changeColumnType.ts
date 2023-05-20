@@ -31,12 +31,12 @@ import { findTableFormulaPath } from './findTableFormulaPath';
 export const changeColumnType = (
   editor: MyEditor,
   path: Path,
-  cellType: TableCellType,
+  cellType: TableCellType | undefined,
   columnIndex: number,
   computer?: Computer // Needed when changing from dropdown to other types
 ) => {
   withoutNormalizing(editor, () => {
-    if (cellType.kind === 'table-formula') {
+    if (cellType?.kind === 'table-formula') {
       setNodes<TableElement>(
         editor,
         {
@@ -66,7 +66,7 @@ export const changeColumnType = (
           }
         );
 
-        if (cellType.kind === 'dropdown') {
+        if (cellType?.kind === 'dropdown') {
           let counter = 2;
           let entry = getNodeEntrySafe(editor, [...path, counter, columnIndex]);
           while (entry) {

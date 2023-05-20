@@ -104,9 +104,10 @@ export function assertCellType<Kind extends CellValueType['kind']>(
 export const parseCell = memoize(
   async (
     computer: Computer,
-    cellType: CellValueType,
+    _cellType: CellValueType,
     text: string
   ): Promise<AST.Expression | Error | null> => {
+    let cellType: CellValueType = _cellType;
     if (
       cellType.kind === 'table-formula' ||
       cellType.kind === 'series' ||
@@ -115,10 +116,14 @@ export const parseCell = memoize(
     ) {
       return null;
     }
+    const constant = cellType.kind === 'constant' && cellType.constant;
+    if (constant) {
+      cellType = { kind: 'number', unit: null };
+    }
     try {
-      return await parsing(
+      const parsedValue = await parsing(
         computer,
-        cellType,
+        cellType as SerializedType,
         text,
         (result: Result.Result): ParseCellResult => {
           const { type } = result;
@@ -193,6 +198,16 @@ export const parseCell = memoize(
           );
         }
       );
+      if (parsedValue && constant && !(parsedValue instanceof Error)) {
+        const node = astNode(
+          'function-call',
+          astNode('funcref', 'implicit*'),
+          astNode('argument-list', parsedValue, astNode('ref', constant.name))
+        );
+
+        return node;
+      }
+      return parsedValue;
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error('error parsing cell:', err);

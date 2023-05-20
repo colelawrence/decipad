@@ -30,7 +30,7 @@ interface UseLiveConnectionCoreResult {
   result?: Result.Result;
   authenticate: () => void;
   error?: Error;
-  onChangeColumnType: (columnIndex: number, type: TableCellType) => void;
+  onChangeColumnType: (columnIndex: number, type?: TableCellType) => void;
   setIsFirstRowHeader: (isFirstRowHeader: boolean) => void;
   clearCacheAndRetry: () => void;
 }
