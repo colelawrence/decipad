@@ -1,9 +1,9 @@
+import { BrowserContext, ElementHandle, Page } from '@playwright/test';
 import Zip from 'adm-zip';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 import os from 'os';
 import path from 'path';
-import { BrowserContext, ElementHandle, Page } from 'playwright';
 import { withTestUser } from '../src/with-test-user';
 
 interface Pad {

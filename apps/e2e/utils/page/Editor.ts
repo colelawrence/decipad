@@ -1,8 +1,8 @@
 import { Flag } from '@decipad/feature-flags';
-import { BrowserContext, Page } from 'playwright';
+import { BrowserContext, Page } from '@playwright/test';
 import { Timeouts, withTestUser } from '../src';
 import { signOut } from './Home';
-import { navigateToPlayground, isOnPlayground } from './Playground';
+import { isOnPlayground, navigateToPlayground } from './Playground';
 import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
 interface SetupOptions {

@@ -1,4 +1,4 @@
-import { Page } from 'playwright';
+import { Page } from '@playwright/test';
 import { URL } from 'url';
 
 export function isOnPlayground(page: Page | URL): boolean {

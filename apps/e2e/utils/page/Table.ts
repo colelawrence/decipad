@@ -1,5 +1,5 @@
 /* eslint-disable playwright/no-force-option */
-import { Page } from 'playwright';
+import { Page } from '@playwright/test';
 import { Timeouts } from '../src';
 
 export async function createTable(page: Page) {

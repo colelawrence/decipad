@@ -1,5 +1,6 @@
+import { BrowserContext, Page, expect, test } from '@playwright/test';
 import stringify from 'json-stringify-safe';
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import notebookSource from '../__fixtures__/001-notebook.json';
 import {
   getPadName,
   navigateToNotebook,
@@ -8,13 +9,12 @@ import {
   waitForNotebookToLoad,
 } from '../utils/page/Editor';
 import {
+  Timeouts,
   createWorkspace,
   importNotebook,
   snapshot,
   withTestUser,
-  Timeouts,
 } from '../utils/src';
-import notebookSource from '../__fixtures__/001-notebook.json';
 
 test.describe('Loading and snapshot of big notebook', () => {
   test.describe.configure({ mode: 'serial' });

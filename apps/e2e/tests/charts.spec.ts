@@ -62,6 +62,7 @@ test.describe('Charts', () => {
   });
 
   test('pie chart looks ok', async () => {
+    await page.evaluate(() => document.fonts.ready);
     const dataViewContent = await page
       .locator('[class*=plotBlockStyles]')
       .screenshot();
@@ -82,6 +83,7 @@ test.describe('Charts', () => {
   });
 
   test('test pie chart menu', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     const pieChartMenu = await page
       .getByTestId('chart-settings-menu')
@@ -91,6 +93,7 @@ test.describe('Charts', () => {
   });
 
   test('change color scheme', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByText('Color scheme').click();
     await page.getByText('Monochrome').click();
     await page.getByText('Purple').click();
@@ -103,6 +106,7 @@ test.describe('Charts', () => {
   });
 
   test('convert to bar chart', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__bar').click();
@@ -115,6 +119,7 @@ test.describe('Charts', () => {
   });
 
   test('bar chart menu', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     const pieChartMenu = await page
       .getByTestId('chart-settings-menu')
@@ -124,6 +129,7 @@ test.describe('Charts', () => {
   });
 
   test('swap axes', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByText('label').click();
     await page.getByTestId('chart__settings__label__Column2').click();
 
@@ -139,6 +145,7 @@ test.describe('Charts', () => {
   });
 
   test('convert to scatter chart', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__point').click();
@@ -151,6 +158,7 @@ test.describe('Charts', () => {
   });
 
   test('scatter plot menu', async () => {
+    await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     const pieChartMenu = await page
       .getByTestId('chart-settings-menu')

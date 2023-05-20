@@ -1,6 +1,6 @@
-import { Locator, Page } from 'playwright';
-import { cleanText, Timeouts } from '../src';
-import { keyPress, ControlPlus } from './Editor';
+import { Locator, Page } from '@playwright/test';
+import { Timeouts, cleanText } from '../src';
+import { ControlPlus, keyPress } from './Editor';
 
 export async function createNumberInputBelow(
   page: Page,

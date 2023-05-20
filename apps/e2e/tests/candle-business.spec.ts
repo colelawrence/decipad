@@ -1,9 +1,9 @@
 import stringify from 'json-stringify-safe';
 import { BrowserContext, expect, Page, test } from '@playwright/test';
+import startingACandleBusiness from '../__fixtures__/starting-a-candle-business';
 import { setUp } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
 import { createWorkspace, importNotebook, Timeouts } from '../utils/src';
-import startingACandleBusiness from '../__fixtures__/starting-a-candle-business';
 
 test.describe('Use case: building a candle business', () => {
   test.describe.configure({ mode: 'serial' });
@@ -43,7 +43,7 @@ test.describe('Use case: building a candle business', () => {
     await page.waitForSelector('[data-slate-editor] h1');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay);
+    await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);
 
     expect(await fetchTable(page, '[id="ddTJXSKZzWh56A8NMCZmM"]')).toBe(
       `.------------------------------------------------.

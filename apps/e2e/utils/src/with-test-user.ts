@@ -1,5 +1,5 @@
 import { app, auth } from '@decipad/config';
-import { BrowserContext, Page } from 'playwright';
+import { BrowserContext, Page } from '@playwright/test';
 import { randomEmail } from '.';
 
 interface WithTestUserProps {

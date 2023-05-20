@@ -1,5 +1,4 @@
-import { expect, test } from '@playwright/test';
-import { BrowserContext, Page } from 'playwright-core';
+import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { createCalculationBlockBelow } from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import { snapshot } from '../utils/src';

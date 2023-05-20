@@ -1,5 +1,5 @@
+import { Page } from '@playwright/test';
 import stringify from 'json-stringify-safe';
-import { Page } from 'playwright-core';
 
 export const importNotebook = async (
   workspaceId: string,

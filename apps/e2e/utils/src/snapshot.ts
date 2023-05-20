@@ -1,5 +1,6 @@
 import percySnapshot from '@percy/playwright';
-import { Page } from 'playwright-core';
+import { Page } from '@playwright/test';
+import { Page as Page2 } from 'playwright';
 
 const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 10_000;
 
@@ -17,9 +18,10 @@ export const snapshot = async (
   await page.waitForLoadState('networkidle');
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
+  await page.evaluate(() => document.fonts.ready);
 
   try {
-    await percySnapshot(page, name, {
+    await percySnapshot(page as Page2, name, {
       widths: [options.mobile && 375, 1280].filter((n): n is number =>
         Number.isInteger(n)
       ),
