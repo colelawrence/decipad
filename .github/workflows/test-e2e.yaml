@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     timeout-minutes: 45
-    runs-on: buildjet-2vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:

@@ -99,6 +99,9 @@ export interface CssVariables {
   readonly buttonBrandDisabledText: Property.Color;
   readonly buttonBrandDisabledBackground: Property.Color;
 
+  readonly buttonDangerLight: Property.Color;
+  readonly buttonDangerHeavy: Property.Color;
+
   //
   // Numbers & Bubbles
   //

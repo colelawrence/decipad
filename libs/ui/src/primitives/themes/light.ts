@@ -93,6 +93,9 @@ export const theme: CssVariables = {
   notebookStateDisabledLight: grey100.hex,
   notebookStateDisabledHeavy: grey600.hex,
 
+  buttonDangerLight: red100.hex,
+  buttonDangerHeavy: red300.hex,
+
   backgroundColor: white.hex,
   tintedBackgroundColor: grey50.hex,
   iconBackgroundColor: grey200.hex,

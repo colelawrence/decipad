@@ -64,6 +64,9 @@ export const antiwiggle = keyframes`20% {
   }
 `;
 
+export const rotation = keyframes`from {transform: rotate(0deg)}
+to {transform: rotate(360deg)}`;
+
 export const animationTwoColours = (
   cssProp: string,
   one: string,

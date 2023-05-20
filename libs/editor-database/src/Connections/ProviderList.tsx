@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { ExternalProvider } from '@decipad/graphql-client';
 import {
   GoogleSheet,
@@ -12,6 +11,7 @@ import {
   Redshift,
   WebApi,
 } from '@decipad/ui';
+import { ReactNode } from 'react';
 
 interface DataSource {
   name: string;
@@ -68,6 +68,6 @@ export const ProviderList: Array<DataSource> = [
   {
     name: 'Other SQL',
     icon: <img alt="Other Sql" src={OtherSql} />,
-    provider: undefined,
+    provider: ExternalProvider.Sqlite,
   },
 ];

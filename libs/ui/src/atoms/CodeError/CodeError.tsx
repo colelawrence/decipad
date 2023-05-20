@@ -29,6 +29,14 @@ const messageStyles = css({
   textAlign: 'center',
 });
 
+const smolStylez = css({
+  '> svg': {
+    height: 12,
+    width: 12,
+    marginTop: -2,
+  },
+});
+
 const urlStyles = css({
   textDecoration: 'underline',
 });
@@ -40,6 +48,7 @@ interface CodeErrorProps {
   bracketError?: BracketError;
   defaultDocsMessage?: string;
   isEmptyExpressionError?: boolean;
+  variant?: 'default' | 'smol';
 }
 
 const bracketErrorMessage = (err: BracketError) => {
@@ -59,12 +68,16 @@ export const CodeError: FC<CodeErrorProps> = ({
   url = '/docs',
   bracketError,
   defaultDocsMessage = 'Check our docs',
+  variant = 'default',
 }) => {
   const clientEvent = useContext(ClientEventsContext);
   return (
     <Tooltip
       trigger={
-        <span css={iconWrapperStyles} title={message}>
+        <span
+          css={[iconWrapperStyles, variant === 'smol' && smolStylez]}
+          title={message}
+        >
           <Warning />
         </span>
       }

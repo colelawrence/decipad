@@ -1,6 +1,13 @@
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
-import { blue100, blue200, cssVar, p13Medium } from '../../primitives';
+import { FC, ReactNode, useState } from 'react';
+import { Refresh } from '../../icons';
+import {
+  black,
+  cssVar,
+  p13Medium,
+  rotation,
+  transparency,
+} from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
@@ -28,10 +35,20 @@ const buttonTextStyles = css(p13Medium, {
 });
 
 const blueBackgroundStyles = css({
-  backgroundColor: blue100.rgb,
+  backgroundColor: cssVar('weakerSlashIconColor'),
+  border: `solid 1px ${transparency(black, 0.08).rgba}`,
 
   ':hover, :focus': {
-    backgroundColor: blue200.rgb,
+    backgroundColor: cssVar('weakSlashIconColor'),
+  },
+});
+
+const redBackgroundStyles = css({
+  backgroundColor: cssVar('buttonDangerLight'),
+  border: `solid 1px ${transparency(black, 0.08).rgba}`,
+
+  ':hover, :focus': {
+    backgroundColor: cssVar('buttonDangerHeavy'),
   },
 });
 
@@ -51,10 +68,11 @@ const iconStyles = css({
 type IconButtonProps = {
   readonly children: ReactNode;
   readonly text: TextChildren;
-  readonly color?: 'default' | 'blue' | 'transparent';
+  readonly color?: 'default' | 'blue' | 'transparent' | 'red';
   readonly iconPosition?: 'left' | 'right';
   readonly href?: string;
   readonly onClick?: () => void;
+  readonly animateIcon?: boolean;
 };
 
 export const TextAndIconButton = ({
@@ -64,20 +82,53 @@ export const TextAndIconButton = ({
   href,
   color,
   iconPosition = 'right',
+  animateIcon = false,
 }: IconButtonProps): ReturnType<FC> => {
   const onButtonClick = useEventNoEffect(onClick);
+  const [animated, setAnimated] = useState(false);
+  const [currentColor, setCurrentColor] = useState(color);
+  const [currentIcon, setCurrentIcon] = useState(children);
+
   const textElement = <span css={buttonTextStyles}>{text}</span>;
-  const iconElement = <span css={iconStyles}>{children}</span>;
+  const iconElement = (
+    <span
+      css={[
+        iconStyles,
+        animated && {
+          animationName: rotation,
+          animationDuration: '1s',
+          animationIterationCount: 'infinite',
+          animationTimingFunction: 'linear',
+          animationPlayState: 'running',
+        },
+      ]}
+    >
+      {currentIcon}
+    </span>
+  );
   return (
     <div css={wrapperStyles}>
       {onClick ? (
         <button
           css={[
             styles,
-            color === 'blue' && blueBackgroundStyles,
-            color === 'transparent' && transparentBackgroundStyles,
+            currentColor === 'blue' && blueBackgroundStyles,
+            currentColor === 'red' && redBackgroundStyles,
+            currentColor === 'transparent' && transparentBackgroundStyles,
           ]}
-          onClick={onButtonClick}
+          onClick={(ev) => {
+            if (animateIcon) {
+              setAnimated(true);
+              setCurrentColor('default');
+              setCurrentIcon(<Refresh />);
+              setTimeout(() => {
+                setAnimated(false);
+                setCurrentColor(color);
+                setCurrentIcon(children);
+              }, 5000);
+            }
+            onButtonClick(ev);
+          }}
         >
           {iconPosition === 'left' ? (
             <>

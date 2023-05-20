@@ -30,7 +30,7 @@ import {
 
 // Note: Some of these names were not set, we might need to review this mapping
 const providerTitle = {
-  default: 'Import External Data',
+  default: 'Integrations',
   gsheets: 'Google Sheets',
   mysql: 'MySQL',
   csv: 'CSV',
@@ -50,6 +50,8 @@ const providerTitle = {
 export const AddConnection: FC = () => {
   const liveResultWrapperStyles = css({
     width: '740px',
+    maxHeight: '600px',
+    overflow: 'scroll',
     paddingLeft: '32px',
     paddingRight: '32px',
   });

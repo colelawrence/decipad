@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, ReactNode } from 'react';
 import { useSelected } from 'slate-react';
-import { Tag } from '../../atoms';
+import { Spinner, Tag } from '../../atoms';
 import { Data, Zap } from '../../icons';
 import {
   cssVar,
@@ -27,7 +27,7 @@ const tableTitleWrapper = css({
   background: cssVar('liveDataBackgroundColor'),
   borderRadius: '6px',
   padding: '2px 8px',
-  marginTop: '2.5px',
+  marginTop: '2px',
 });
 
 const iconWrapperStylesUiIntegration = css({
@@ -64,6 +64,7 @@ type EditableTableCaptionProps = PropsWithChildren<{
   url?: string;
   icon?: ReactNode;
   isUiIntegration?: boolean;
+  loading?: boolean;
 }>;
 
 export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
@@ -74,6 +75,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
   children,
   icon,
   isUiIntegration = false,
+  loading = true,
 }) => {
   const [caption] = Children.toArray(children);
   const selected = useSelected();
@@ -89,7 +91,8 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
           ]}
           contentEditable={false}
         >
-          {icon ?? (isUiIntegration ? <Data /> : <Zap />)}
+          {icon ??
+            (loading ? <Spinner /> : isUiIntegration ? <Data /> : <Zap />)}
         </div>
         <div
           aria-placeholder={empty ? 'LiveConnection' : ''}

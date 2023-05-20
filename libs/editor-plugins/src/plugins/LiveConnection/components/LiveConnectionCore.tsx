@@ -1,13 +1,12 @@
-import { FC } from 'react';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,
   LiveConnectionElement,
   LiveDataSetElement,
 } from '@decipad/editor-types';
-import { LiveConnectionResult } from '@decipad/ui';
 import { assertElementMultipleType } from '@decipad/editor-utils';
-import { LiveConnectionError } from './LiveConnectionError';
+import { LiveConnectionResult, LiveError } from '@decipad/ui';
+import { FC } from 'react';
 import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
 
 export interface LiveConnectionCoreProps {
@@ -49,7 +48,7 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
         ></LiveConnectionResult>
       )}
       {error ? (
-        <LiveConnectionError
+        <LiveError
           error={error}
           errorURL={element.url || '/docs/'}
           onRetry={clearCacheAndRetry}

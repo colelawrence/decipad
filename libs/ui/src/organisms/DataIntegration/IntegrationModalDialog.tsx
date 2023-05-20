@@ -99,9 +99,15 @@ const dataCardStyles = css(p14Medium, {
   justifyContent: 'center',
   alignItems: 'center',
   gap: '12px',
+  cursor: 'pointer',
 
   borderRadius: '6px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('buttonHoverBackground'),
+
+  ':hover': {
+    boxShadow: '0px 3px 24px -4px rgba(0, 0, 0, 0.08)',
+    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+  },
 
   div: {
     width: '32px',

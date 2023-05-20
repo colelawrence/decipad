@@ -13,3 +13,6 @@ export default {
 } as Meta;
 
 export const Normal: Story<typeof args> = (props) => <CodeError {...props} />;
+export const Smol: Story<typeof args> = (props) => (
+  <CodeError {...props} variant="smol" />
+);

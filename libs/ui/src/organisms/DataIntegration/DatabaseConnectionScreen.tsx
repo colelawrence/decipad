@@ -1,10 +1,10 @@
-import { FC, useMemo, useState } from 'react';
-import { css } from '@emotion/react';
 import { ImportElementSource } from '@decipad/editor-types';
-import { dividerStyles, inputStyles, MessageBlock } from '.';
+import { css } from '@emotion/react';
+import { FC, useMemo, useState } from 'react';
+import { MessageBlock, dividerStyles, inputStyles } from '.';
+import { Table as TableIcon, Warning } from '../../icons';
 import { brand500, grey500, p13Bold } from '../../primitives';
 import { DropdownMenu, SelectItems } from '../DropdownMenu/DropdownMenu';
-import { Table as TableIcon, Warning } from '../../icons';
 
 export type DbOptions = {
   connectionString: string;
@@ -51,7 +51,7 @@ const placeholderList = {
   csv: 'https://',
   cockroachdb: 'postgresql://',
   decipad: 'https://',
-  sqlite: 'sqlite:///',
+  sqlite: 'sql://',
 };
 
 export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
@@ -101,7 +101,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             <label css={labelStyles}>Host</label>
             <input
               css={extraInputStyles(values.dbConnType, 'credentials')}
-              placeholder="www.mydatabase.com"
+              placeholder="database.com"
               onFocus={() => setValues({ dbConnType: 'credentials' })}
               value={values.host}
               onChange={(e) => setValues({ host: e.target.value })}
@@ -112,7 +112,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             <label css={labelStyles}>Username</label>
             <input
               css={extraInputStyles(values.dbConnType, 'credentials')}
-              placeholder="admin..."
+              placeholder="admin"
               onFocus={() => setValues({ dbConnType: 'credentials' })}
               value={values.username}
               onChange={(e) => setValues({ username: e.target.value })}
@@ -124,7 +124,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             <input
               type="password"
               css={extraInputStyles(values.dbConnType, 'credentials')}
-              placeholder="password..."
+              placeholder="password"
               onFocus={() => setValues({ dbConnType: 'credentials' })}
               value={values.password}
               onChange={(e) => setValues({ password: e.target.value })}
@@ -135,7 +135,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             <label css={labelStyles}>Database</label>
             <input
               css={extraInputStyles(values.dbConnType, 'credentials')}
-              placeholder="my_database..."
+              placeholder="mydb"
               onFocus={() => setValues({ dbConnType: 'credentials' })}
               value={values.database}
               onChange={(e) => setValues({ database: e.target.value })}
@@ -146,7 +146,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
             <label css={labelStyles}>Port</label>
             <input
               css={extraInputStyles(values.dbConnType, 'credentials')}
-              placeholder="5432..."
+              placeholder="5432"
               onFocus={() => setValues({ dbConnType: 'credentials' })}
               value={values.port}
               onChange={(e) => setValues({ port: e.target.value })}

@@ -1,5 +1,10 @@
-import { useCallback, useMemo } from 'react';
-import { css } from '@emotion/react';
+import { insertLiveQueryBelow } from '@decipad/editor-components';
+
+import {
+  useEnsureValidVariableName,
+  useParentNodeEntry,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -8,24 +13,19 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
-import {
-  useEnsureValidVariableName,
-  useParentNodeEntry,
-  usePathMutatorCallback,
-} from '@decipad/editor-hooks';
-import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveConnectionParams,
-  Spinner,
   TableButton,
   Tooltip,
 } from '@decipad/ui';
+import { css } from '@emotion/react';
 import { getNodeString } from '@udecode/plate';
 import pluralize from 'pluralize';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { insertLiveQueryBelow } from '@decipad/editor-components';
+import { useCallback, useMemo } from 'react';
 import { useLiveConnectionPossibleJsonPaths } from '../hooks/useLiveConnectionPossibleJsonPaths';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 
@@ -109,6 +109,7 @@ export const LiveConnectionVarName: PlateComponent = ({
         url={url}
         empty={getNodeString(element).length === 0}
         range={returnRange}
+        loading={loading}
       >
         {children}
       </EditableLiveDataCaption>
@@ -137,7 +138,6 @@ export const LiveConnectionVarName: PlateComponent = ({
             />
           </div>
         )}
-      {loading && <Spinner />}
     </div>
   );
 

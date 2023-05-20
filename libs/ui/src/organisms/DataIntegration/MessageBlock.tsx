@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
+import { FC, ReactNode } from 'react';
 import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
 
 interface MessageBlockProps {
@@ -59,21 +59,33 @@ const messageStyles = css({
 const getMessageBlockType = (type: string) => {
   switch (type) {
     case 'error':
-      return cssVar('errorBlockError');
+      return {
+        backgroundColor: cssVar('errorBlockError'),
+        color: cssVar('normalTextColor'),
+      };
     case 'warning':
-      return cssVar('errorBlockWarning');
+      return {
+        backgroundColor: cssVar('errorBlockWarning'),
+        color: cssVar('normalTextColor'),
+      };
     case 'annotationWarning':
-      return cssVar('errorBlockAnnotationWarning');
+      return {
+        backgroundColor: cssVar('errorBlockAnnotationWarning'),
+        color: cssVar('normalTextColor'),
+      };
     default:
-      return cssVar('toastOk');
+      return {
+        backgroundColor: cssVar('toastOk'),
+        color: cssVar('normalTextColor'),
+      };
   }
 };
 
 const wrapperStyles = (type: MessageBlockProps['type']) =>
   css({
+    ...getMessageBlockType(type),
     borderRadius: '6px',
     width: '100%',
-    backgroundColor: getMessageBlockType(type),
     display: 'flex',
     alignItems: 'center',
     gap: '4px',

@@ -149,6 +149,9 @@ export const theme: CssVariables = {
   buttonBrandDisabledText: purple300.hex,
   buttonBrandDisabledBackground: purple600.hex,
 
+  buttonDangerLight: red700.hex,
+  buttonDangerHeavy: red500.hex,
+
   // hover ui buttons
   buttonHoverBackground: dark600.hex,
   buttonHoverBackgroundHover: dark500.hex,
@@ -159,7 +162,7 @@ export const theme: CssVariables = {
 
   errorBlockColor: red50.hex,
   errorBlockWarning: orange700.hex,
-  errorBlockAnnotationWarning: yellow200.hex,
+  errorBlockAnnotationWarning: yellow700.hex,
   errorBlockError: red700.hex,
 
   errorPageGradientEnd: dark500.hex,

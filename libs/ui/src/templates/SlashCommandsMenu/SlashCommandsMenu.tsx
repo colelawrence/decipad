@@ -89,7 +89,7 @@ const groups = () => [
           items: [
             {
               command: 'open-integration',
-              title: 'Import External Data',
+              title: 'Integrations',
               description:
                 'Take your existing data and bring it over to Deci seamlessly',
               icon: <DataView />,
@@ -103,6 +103,7 @@ const groups = () => [
                 'google sheets',
                 'gsheets',
                 'sheets',
+                'integrations',
               ],
             },
           ],

@@ -14,7 +14,7 @@ const sourceToName: Record<ImportElementSource, string> = {
   gsheets: 'Google Sheets',
   json: 'a JSON API',
   arrow: 'an Arrow file',
-  sqlite: 'a SQLIte database',
+  sqlite: 'a SQL database',
   postgresql: 'a PostgreSQL database',
   mysql: 'a MySQL database',
   oracledb: 'an OracleDB database',
@@ -24,6 +24,17 @@ const sourceToName: Record<ImportElementSource, string> = {
   mssql: 'a SQL Server database',
 };
 
+const databases = [
+  'sqlite',
+  'postgresql',
+  'mysql',
+  'oracledb',
+  'cockroachdb',
+  'redshift',
+  'mariadb',
+  'mssql',
+];
+
 const groups = (
   source?: ImportElementSource
 ): ComponentProps<typeof InlineMenu>['groups'] => {
@@ -32,40 +43,51 @@ const groups = (
     : 'unknown source';
   return [
     {
-      items: [
-        source === 'gsheets' && {
-          command: 'connect-islands',
-          title: 'Connect to table ranges',
-          description: `Tries to find tables in your google sheets and create a live connection`,
-          icon: <ConnectRanges />,
-          enabled: true,
-          extraSearchTerms: ['connect', 'live'],
-        },
-        {
-          command: 'connect-all',
-          title: `Connect to ${sourceName}`,
-          description: `Connect to live data from this ${sourceName}`,
-          icon: <ConnectTable />,
-          enabled: true,
-          extraSearchTerms: ['connect', 'live'],
-        },
-        source === 'gsheets' && {
-          command: 'import-islands',
-          title: 'Import table ranges',
-          description: `Tries to find tables in your google sheets and import them`,
-          icon: <ImportRangeCopies />,
-          enabled: true,
-          extraSearchTerms: ['import', 'google', 'sheets'],
-        },
-        {
-          command: 'import-all',
-          title: `Import from ${sourceName}`,
-          description: `Import all data in this ${sourceName}`,
-          icon: <ImportTable />,
-          enabled: true,
-          extraSearchTerms: ['import', 'google', 'sheets'],
-        },
-      ].filter(Boolean),
+      items: databases.includes(source || '')
+        ? [
+            {
+              command: 'connect-all',
+              title: `Connect to ${sourceName}`,
+              description: `Connect to database ${sourceName}`,
+              icon: <ConnectTable />,
+              enabled: true,
+              extraSearchTerms: ['connect', 'live'],
+            },
+          ]
+        : [
+            source === 'gsheets' && {
+              command: 'connect-islands',
+              title: 'Connect to table ranges',
+              description: `Tries to find tables in your google sheets and create a live connection`,
+              icon: <ConnectRanges />,
+              enabled: true,
+              extraSearchTerms: ['connect', 'live'],
+            },
+            {
+              command: 'connect-all',
+              title: `Connect to ${sourceName}`,
+              description: `Connect to live data from this ${sourceName}`,
+              icon: <ConnectTable />,
+              enabled: true,
+              extraSearchTerms: ['connect', 'live'],
+            },
+            source === 'gsheets' && {
+              command: 'import-islands',
+              title: 'Import table ranges',
+              description: `Tries to find tables in your google sheets and import them`,
+              icon: <ImportRangeCopies />,
+              enabled: true,
+              extraSearchTerms: ['import', 'google', 'sheets'],
+            },
+            {
+              command: 'import-all',
+              title: `Import from ${sourceName}`,
+              description: `Import all data in this ${sourceName}`,
+              icon: <ImportTable />,
+              enabled: true,
+              extraSearchTerms: ['import', 'google', 'sheets'],
+            },
+          ].filter(Boolean),
     },
   ] as ComponentProps<typeof InlineMenu>['groups'];
 };

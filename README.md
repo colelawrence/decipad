@@ -141,7 +141,7 @@ yarn test
 We use storybook for development and showcasing purposes of all of our components, you can also run storybook by running:
 
 ```bash
-yarn serve:storybook
+nx run ui:storybook
 ```
 
 ### Running docs

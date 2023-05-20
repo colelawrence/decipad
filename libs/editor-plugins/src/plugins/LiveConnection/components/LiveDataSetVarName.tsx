@@ -1,5 +1,7 @@
-import { useCallback, useMemo } from 'react';
-import { css } from '@emotion/react';
+import {
+  useEnsureValidVariableName,
+  useParentNodeEntry,
+} from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_DATASET,
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
@@ -8,22 +10,19 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
-import {
-  useEnsureValidVariableName,
-  useParentNodeEntry,
-} from '@decipad/editor-hooks';
-import { parseSourceUrl, SourceUrlParseResponse } from '@decipad/import';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
 import { useConnectionStore } from '@decipad/react-contexts';
 import {
   EditableLiveDataCaption,
   LiveDataSetParams,
-  Spinner,
   TableButton,
   Tooltip,
 } from '@decipad/ui';
+import { css } from '@emotion/react';
 import { getNodeString, setNodes } from '@udecode/plate';
 import pluralize from 'pluralize';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import { useCallback, useMemo } from 'react';
 import { useLiveConnectionStore } from '../store/liveConnectionStore';
 import LiveDataSetCaption from './LiveDataSetCaption';
 
@@ -101,16 +100,20 @@ export const LiveDataSetVarName: PlateComponent = ({
 
   const caption = (
     <div {...attributes} css={captionWrapperStyles}>
-      <EditableLiveDataCaption
-        source={sourceName}
-        url={url}
-        empty={getNodeString(element).length === 0}
-        range={returnRange}
-        isUiIntegration
-      >
-        {children}
-      </EditableLiveDataCaption>
-      <LiveDataSetCaption source={sourceName} />
+      <div css={{ display: 'flex' }}>
+        <EditableLiveDataCaption
+          source={sourceName}
+          url={url}
+          empty={getNodeString(element).length === 0}
+          range={returnRange}
+          loading={loading}
+          isUiIntegration
+        >
+          {children}
+        </EditableLiveDataCaption>
+        <LiveDataSetCaption source={sourceName} />
+      </div>
+
       {isFlagEnabled('LIVE_QUERY') &&
         parent &&
         isDatabaseConnection(parent[0]) && (
@@ -128,7 +131,6 @@ export const LiveDataSetVarName: PlateComponent = ({
           <LiveDataSetParams onClick={onOptionsPress} />
         </div>
       )}
-      {loading && <Spinner />}
     </div>
   );
 

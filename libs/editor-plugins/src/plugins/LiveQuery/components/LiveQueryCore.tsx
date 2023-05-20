@@ -1,5 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { getNodeString, insertText, setNodes } from '@udecode/plate';
+import { Result } from '@decipad/computer';
 import {
   LiveQueryElement,
   TableCellType,
@@ -8,10 +7,10 @@ import {
 import { pluginStore } from '@decipad/editor-utils';
 import { useNodePath } from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
-import { LiveConnectionResult, Spinner } from '@decipad/ui';
+import { LiveConnectionResult, LiveError, Spinner } from '@decipad/ui';
 import { varNamify } from '@decipad/utils';
-import { Result } from '@decipad/computer';
-import { LiveQueryError } from './LiveQueryError';
+import { getNodeString, insertText, setNodes } from '@udecode/plate';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiveQuery } from '../hooks/useLiveQuery';
 
 export interface LiveConnectionCoreProps {
@@ -116,8 +115,8 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
         ></LiveConnectionResult>
       )}
       {persistedError ? (
-        <LiveQueryError
-          error={persistedError}
+        <LiveError
+          error={new Error(persistedError)}
           errorURL={'/docs/'}
           onRetry={clearCacheAndRetry}
         />

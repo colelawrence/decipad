@@ -1,7 +1,7 @@
-import { FC, useState } from 'react';
-import { css } from '@emotion/react';
 import { ImportElementSource } from '@decipad/editor-types';
-import { inputStyles, MessageBlock } from '.';
+import { css } from '@emotion/react';
+import { FC, useState } from 'react';
+import { MessageBlock, inputStyles } from '.';
 import { AnnotationWarning, Sparkles, Warning } from '../../icons';
 import { cssVar, p13Medium } from '../../primitives';
 
@@ -56,7 +56,7 @@ export const DatabaseQuery: FC<DatabaseQueryProps> = ({
         onDoubleClick={() => setLocked(false)}
         css={[inputStyles, textareaStyles]}
         rows={4}
-        placeholder="SELECT * FROM users ..."
+        placeholder="SELECT * FROM users"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
@@ -74,7 +74,7 @@ export const DatabaseQuery: FC<DatabaseQueryProps> = ({
         <MessageBlock
           type="annotationWarning"
           icon={<AnnotationWarning />}
-          title="Current Data Import Limits: "
+          title="Data Import Limits: "
           message="We only support a certain number of rows"
         />
       )}
@@ -84,7 +84,6 @@ export const DatabaseQuery: FC<DatabaseQueryProps> = ({
 
 const wrapperStyles = css({
   width: '100%',
-
   display: 'flex',
   flexDirection: 'column',
   gap: '20px',

@@ -140,6 +140,7 @@ const wrapperStyles = css({
   flexDirection: 'column',
   alignItems: 'center',
   width: '740px',
+  maxHeight: '600px',
   padding: '32px',
   gap: '12px',
 
