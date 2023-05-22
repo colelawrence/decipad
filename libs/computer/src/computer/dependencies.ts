@@ -70,7 +70,7 @@ export const dependencies = (
       case 'matrix-matchers':
       case 'range':
       case 'table-column-assign': {
-        return unique(node.args.flatMap(findRefs));
+        return unique((node.args.slice(0, 3) as AST.Node[]).flatMap(findRefs));
       }
       case 'assign':
       case 'table':

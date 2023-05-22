@@ -167,17 +167,17 @@ describe('Table', () => {
         },
         Object {
           "blockId": "th1",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas)))),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas))) 0),
           "errors": false,
         },
         Object {
           "blockId": "th2",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3")),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3") 1),
           "errors": false,
         },
         Object {
           "blockId": "th3",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1))),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1)) 2),
           "errors": false,
         },
       ]
@@ -262,12 +262,12 @@ describe('Table', () => {
         },
         Object {
           "blockId": "th1",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column "Hello")),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column "Hello") 0),
           "errors": false,
         },
         Object {
           "blockId": "th2",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (+ 1 1)),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (+ 1 1) 1),
           "errors": false,
         },
       ]
@@ -347,7 +347,7 @@ describe('Table', () => {
         },
         Object {
           "blockId": "th1",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (date year 2020 month 1) (date year 2020 month 2))),
+          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (date year 2020 month 1) (date year 2020 month 2)) 0),
           "errors": false,
         },
       ]

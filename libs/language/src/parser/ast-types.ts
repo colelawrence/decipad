@@ -196,7 +196,12 @@ export interface PropertyAccess extends BasicNode {
 
 export interface TableColumnAssign extends BasicNode {
   type: 'table-column-assign';
-  args: [tableName: TablePartialDef, columnName: ColDef, value: Expression];
+  args: [
+    tableName: TablePartialDef,
+    columnName: ColDef,
+    value: Expression,
+    sortOrder?: number
+  ];
 }
 
 // Matrix stuff

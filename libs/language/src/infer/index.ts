@@ -26,6 +26,7 @@ import { inferFunctionDefinition, inferFunctionCall } from './functions';
 import { getConstantByName } from '../builtins';
 import { inferMatch } from '../match/inferMatch';
 import { inferTiered } from '../tiered/inferTiered';
+import { sortType } from './sortType';
 
 export { makeContext, logRetrievedName };
 export type { Context };
@@ -85,7 +86,7 @@ export const inferExpression = wrap(
         const fromStack = ctx.stack.get(name);
         if (fromStack) {
           logRetrievedName(ctx, name);
-          return fromStack;
+          return sortType(fromStack);
         }
 
         // create a unit with the name of the ref

@@ -38,8 +38,6 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { zip as _zip, unzip } from 'lodash';
-import { TableColumn } from 'libs/language/src/parser/ast-types';
 import { findNames } from '../autocomplete/findNames';
 import { computeProgram } from '../compute/computeProgram';
 import {
@@ -683,57 +681,6 @@ export class Computer {
           this.computationRealm
         );
 
-        // Topological sort shuffles the order of results, which is bad for tables whose
-        // columns were declared inline, so we need re-sort back to the initial order. I
-        // hate this code. If anyone can think of a better way of writing it please change it.
-        const sortedResults = computeResults.map((res): IdentifiedResult => {
-          if (res.type !== 'computer-result') return res;
-          const { result, id } = res;
-          if (result.type.kind !== 'table') return res;
-
-          // Find where the table was declared
-          const declaration = req.program.find((block) => block.id === id);
-
-          // Checking that declaration is a table
-          if (!declaration || declaration.type !== 'identified-block')
-            return res;
-          const table = declaration.block.args[0];
-          if (table.type !== 'table') return res;
-
-          const colNames = table.args
-            .filter((arg): arg is TableColumn => arg.type === 'table-column')
-            .map((col) => col.args[0].args[0]);
-
-          if (colNames.length === 0) return res;
-
-          const { value } = result;
-          if (!Array.isArray(value)) return res;
-
-          const sorted = _zip(
-            value,
-            result.type.columnNames,
-            result.type.columnTypes
-          ).sort(([, name1], [, name2]) => {
-            const indexA = colNames.indexOf(name1 as string);
-            const indexB = colNames.indexOf(name2 as string);
-            return indexA - indexB;
-          });
-          const [sortedValue, sortedColumnNames, sortedColumnTypes] =
-            unzip(sorted);
-
-          return {
-            ...res,
-            result: {
-              value: sortedValue as typeof value,
-              type: {
-                ...result.type,
-                columnNames: sortedColumnNames as string[],
-                columnTypes: sortedColumnTypes as SerializedType[],
-              },
-            },
-          };
-        });
-
         const updates: (IdentifiedError | IdentifiedResult)[] = [];
 
         for (const block of blocks) {
@@ -742,7 +689,7 @@ export class Computer {
           }
         }
 
-        updates.push(...sortedResults);
+        updates.push(...computeResults);
 
         return {
           blockResults: Object.fromEntries(

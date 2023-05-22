@@ -33,6 +33,7 @@ import { RuntimeError } from '.';
 import { resultToValue } from '../result';
 import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL } from './previous';
+import { sortValue } from './sortValue';
 
 // Gets a single value from an expanded AST.
 
@@ -86,12 +87,12 @@ async function internalEvaluate(
       if (c) {
         return c.value;
       }
+      const type = realm.getTypeAt(node);
       const value = realm.stack.get(identifier);
       if (value != null) {
-        return value;
+        return sortValue(type, value)[1];
       }
 
-      const type = realm.getTypeAt(node);
       return Scalar.fromValue(multiplyMultipliers(type.unit ?? []));
     }
     case 'externalref': {

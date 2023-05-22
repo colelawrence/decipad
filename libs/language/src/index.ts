@@ -32,6 +32,7 @@ export {
   Realm,
   runBlock,
   RuntimeError,
+  sortValue,
 } from './interpreter';
 export type { Interpreter } from './interpreter';
 export { Column, DateValue, fromJS, Range, Row, Scalar, Table } from './value';

@@ -144,11 +144,10 @@ it('supports a table column named the same as the table (2 - tricky name used in
 });
 
 it('supports a table column named the same as the table (3 - defined before)', async () => {
-  expect(
-    await run(
-      mkTable('TableName', 'TableName', '2', 'UsesTableName', 'TableName + 1')
-    )
-  ).toMatchInlineSnapshot(`
+  const result = await run(
+    mkTable('TableName', 'TableName', '2', 'UsesTableName', 'TableName + 1')
+  );
+  expect(result).toMatchInlineSnapshot(`
     Array [
       Object {
         "type": table<Column1 = number, TableName = number, UsesTableName = number>,

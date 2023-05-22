@@ -18,6 +18,7 @@ import { getInstanceof, zip } from '../../utils';
 import { BuiltinSpec } from '../interfaces';
 import { Comparable, compare } from '../../compare';
 import { valueToResultValue } from '../../value/valueToResultValue';
+import { sortValue } from '../../interpreter/sortValue';
 
 export const tableOperators: { [fname: string]: BuiltinSpec } = {
   lookup: {
@@ -65,12 +66,10 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
       let rowIndex: number;
       let table: Table;
       if (isColumnLike(tableOrColumn)) {
-        table = getInstanceof(
-          getDefined(realm).stack.get(
-            getDefined(tableType.indexedBy),
-            'global'
-          ),
-          Table
+        const tableName = getDefined(tableType.indexedBy);
+        [, table] = sortValue(
+          tableType,
+          getInstanceof(getDefined(realm).stack.get(tableName, 'global'), Table)
         );
         rowIndex = await getNeedleIndexAtTable(table);
       } else {
@@ -82,7 +81,9 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
             Boolean
           );
         } else {
-          rowIndex = await getNeedleIndexAtTable(table);
+          rowIndex = await getNeedleIndexAtTable(
+            sortValue(tableType, table)[1]
+          );
         }
       }
 

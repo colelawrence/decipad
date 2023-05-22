@@ -12,6 +12,7 @@ import {
 import { Realm, evaluate } from '../interpreter';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { shouldEvaluate } from './shouldEvaluate';
+import { sortValue } from '../interpreter/sortValue';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
@@ -150,10 +151,11 @@ export const evaluateTable = async (
       }
     }
 
-    return getInstanceof(
-      getDefined(realm.stack.get(tableName, 'function')),
-      Table
-    );
+    const tableType = realm.getTypeAt(table);
+    return sortValue(
+      tableType,
+      getInstanceof(getDefined(realm.stack.get(tableName, 'function')), Table)
+    )[1];
   });
 };
 

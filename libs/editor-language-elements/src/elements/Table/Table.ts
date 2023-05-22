@@ -45,9 +45,15 @@ export const Table: InteractiveLanguageElement = {
           });
 
         if (expression) {
-          const columnAssign = decilang<AST.TableColumnAssign>`${{
-            name: tableName,
-          }}.${{ name: columnName }} = ${expression}`;
+          const columnAssign: AST.TableColumnAssign = {
+            type: 'table-column-assign',
+            args: [
+              { type: 'tablepartialdef', args: [tableName] },
+              { type: 'coldef', args: [columnName] },
+              expression,
+              columnIndex,
+            ],
+          };
 
           columnAssigns.push(
             statementToIdentifiedBlock(elementId, columnAssign),

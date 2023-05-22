@@ -10,6 +10,7 @@ import {
   VarGroup,
 } from '../stack';
 import { Result } from '../result';
+import { sortType } from './sortType';
 
 export interface Context {
   stack: Stack<Type>;
@@ -53,11 +54,13 @@ export const makeContext = ({
 };
 
 const typesToTable: StackNamespaceJoiner<Type> = (tableMapping, indexName) =>
-  t.table({
-    indexName,
-    columnNames: [...tableMapping.keys()],
-    columnTypes: [...tableMapping.values()],
-  });
+  sortType(
+    t.table({
+      indexName,
+      columnNames: [...tableMapping.keys()],
+      columnTypes: [...tableMapping.values()],
+    })
+  );
 
 const tableToTypes: StackNamespaceSplitter<Type> = (tableMapping) => {
   if (tableMapping.columnNames && tableMapping.columnTypes) {

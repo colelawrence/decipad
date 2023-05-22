@@ -17,7 +17,7 @@ export const inferColumnAssign = async (
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const [tableNameAst, colNameAst] = assign.args;
+  const [tableNameAst, colNameAst, , sortOrder] = assign.args;
   const tableName = getIdentifierString(tableNameAst);
   const columnName = getIdentifierString(colNameAst);
 
@@ -31,7 +31,8 @@ export const inferColumnAssign = async (
     return t.impossible(InferError.duplicateTableColumn(columnName));
   }
 
-  const newColumnAtParentIndex = getDefined(table.columnNames).length;
+  const newColumnAtParentIndex =
+    sortOrder ?? getDefined(table.columnNames).length;
 
   const newColumn = await inferTableColumn(ctx, {
     columnAst: assign,

@@ -1,11 +1,13 @@
 import { getDefined } from '@decipad/utils';
 
+import produce from 'immer';
 import type { AST } from '..';
 import { Type, buildType as t, InferError } from '../type';
 import { getIdentifierString, walkAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { Context, pushTableContext } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
+import { sortType } from '../infer/sortType';
 
 export const inferTable = async (ctx: Context, table: AST.Table) => {
   if (!ctx.stack.isInGlobalScope) {
@@ -33,7 +35,7 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
       }
     }
 
-    return getDefined(ctx.stack.get(tableName, 'function'));
+    return sortType(getDefined(ctx.stack.get(tableName, 'function')));
   });
 
   return tableType;
@@ -59,7 +61,7 @@ export async function inferTableColumn(
   const exp: AST.Expression =
     columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
-  const type = await pushTableContext(ctx, tableName, async () => {
+  let type = await pushTableContext(ctx, tableName, async () => {
     if (refersToOtherColumnsByName(exp, otherColumns)) {
       return inferTableColumnPerCell(ctx, otherColumns, exp);
     } else {
@@ -69,6 +71,12 @@ export async function inferTableColumn(
       );
     }
   });
+
+  if (columnAst.type === 'table-column-assign') {
+    type = produce(type, (t) => {
+      t.atParentIndex ??= columnAst.args[3] ?? null;
+    });
+  }
 
   linkToAST(columnAst, type);
 

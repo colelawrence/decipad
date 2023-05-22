@@ -204,10 +204,12 @@ describe('table operators', () => {
       rowCellNames: ['Index', 'Value'],
     });
     expect(
-      await (await fnValues!([tableValue, fromJS('The Thing')])).getData()
+      await (
+        await fnValues!([tableValue, fromJS('The Thing')], [tableType])
+      ).getData()
     ).toEqual(['The Thing', N(12345)]);
     await expect(async () =>
-      fnValues!([tableValue, fromJS('Not found')])
+      fnValues!([tableValue, fromJS('Not found')], [tableType])
     ).rejects.toThrow(`Could not find a row with the given condition`);
   });
 
@@ -236,10 +238,12 @@ describe('table operators', () => {
       rowCellNames: ['Index', 'Value'],
     });
     expect(
-      await (await fnValues!([tableValue, fromJS('The Thing')])).getData()
+      await (
+        await fnValues!([tableValue, fromJS('The Thing')], [tableType])
+      ).getData()
     ).toEqual(['The Thing', BigInt(new Date('2022-03-01').getTime())]);
     await expect(async () =>
-      fnValues?.([tableValue, fromJS('Not found')])
+      fnValues?.([tableValue, fromJS('Not found')], [tableType])
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Could not find a row with the given condition"`
     );
