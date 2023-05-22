@@ -30,17 +30,30 @@ test.describe('Dashboard snapshot', () => {
 
   test('should display the initial notebooks', async () => {
     const pads = await (await getPadList(page)).sort(byName);
-    expect(pads).toMatchObject(
-      [
-        'Welcome to Decipad!',
-        'Starting a Business - Example Notebook',
-        'Weekend Trip - Example Notebook',
-      ]
-        .map((notebook) => ({
-          name: notebook,
-        }))
-        .sort(byName)
-    );
+
+    // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
+    process.env.CI
+      ? expect(pads).toMatchObject(
+          [
+            'Welcome to Decipad!',
+            'Starting a Business - Example Notebook',
+            'Weekend Trip - Example Notebook',
+          ]
+            .map((notebook) => ({ name: notebook }))
+            .sort(byName)
+        )
+      : expect(pads).toMatchObject(
+          [
+            'Everything, everywhere, all at once',
+            'Very weird loading when editing',
+            'Welcome to Decipad!',
+            'Starting a Business - Example Notebook',
+            'Weekend Trip - Example Notebook',
+          ]
+            .map((notebook) => ({ name: notebook }))
+            .sort(byName)
+        );
+
     await snapshot(page as Page, 'Dashboard: Initial Notebooks');
   });
 });
@@ -80,7 +93,10 @@ test.describe('Dashboard operations', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
     const pads = await getPadList(page);
-    expect(pads).toHaveLength(3);
+    // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
+    process.env.CI
+      ? expect(pads).toHaveLength(3)
+      : expect(pads).toHaveLength(5);
   });
 
   test('can duplicate pad', async () => {
@@ -89,8 +105,10 @@ test.describe('Dashboard operations', () => {
     await page.waitForTimeout(Timeouts.syncDelay);
 
     let pads = await getPadList(page);
-
-    expect(pads).toHaveLength(4);
+    // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
+    process.env.CI
+      ? expect(pads).toHaveLength(4)
+      : expect(pads).toHaveLength(6);
 
     pads = await getPadList(page);
     const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));

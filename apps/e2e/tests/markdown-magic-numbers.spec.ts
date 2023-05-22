@@ -34,6 +34,8 @@ test.describe('Inputs and magic numbers', () => {
     await keyPress(page, 'ArrowDown');
     await page.keyboard.type('That foo is %Foo% .');
     await keyPress(page, 'Enter');
-    await expect(page.locator('text=1,337')).toBeVisible();
+    await expect(
+      page.getByTestId('magic-number').getByText('1,337')
+    ).toBeVisible();
   });
 });
