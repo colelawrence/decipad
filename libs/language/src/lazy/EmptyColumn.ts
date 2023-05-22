@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Dimension } from '.';
-import { Value } from '../value';
+import { UnknownValue, Value } from '../value';
 import { implementColumnLike } from './LazyAtIndex';
 import { MinimalTensor } from './types';
 
@@ -28,7 +28,7 @@ export const EmptyColumn = implementColumnLike(
     }
 
     async lowLevelGet(): Promise<Value> {
-      throw new Error('panic: Attempting to access an empty column');
+      return UnknownValue;
     }
 
     async indexToLabelIndex(): Promise<number> {
