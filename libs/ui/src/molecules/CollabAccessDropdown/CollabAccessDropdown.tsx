@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { noop } from 'lodash';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { TextAndIconButton, MenuItem } from '../../atoms';
 import {
   p12Medium,
@@ -18,18 +19,10 @@ type CollabAccessDropdownProps = {
   isInvitationPicker?: boolean;
 
   currentPermission: PermissionType;
+  disableRemove?: boolean;
   onRemove?: () => void;
   onChange?: (newPermission: PermissionType) => void;
 };
-
-const dropDownItemStyles = css({
-  marginTop: '6px',
-  maxWidth: '200px',
-});
-
-const dropdownDisabledItemStyles = css(dropDownItemStyles, {
-  opacity: 0.5,
-});
 
 const HumanReadablePermission: Record<PermissionType, string> = {
   READ: 'reader',
@@ -43,11 +36,14 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   currentPermission,
   onRemove,
   onChange,
+  disableRemove,
 }) => {
   const permissionLabel =
     !isActivatedAccount && !isInvitationPicker
       ? 'invited'
       : HumanReadablePermission[currentPermission];
+
+  const hideSoonLabel = isFlagEnabled('NO_WORKSPACE_SWITCHER');
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');
@@ -91,20 +87,34 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         <p css={p14Medium}>Notebook collaborator</p>
         <p css={dropDownItemStyles}>Can edit only this notebook</p>
       </MenuItem>
-      <MenuItem onSelect={noop} disabled={true}>
-        <div css={dropdownDisabledItemStyles}>
-          <p css={p14Medium}>
-            Workspace member <SoonLabel />
-          </p>
-          <p css={dropDownItemStyles}>
-            Can edit and publish all notebooks in this workspace
-          </p>
-        </div>
-      </MenuItem>
+      {!hideSoonLabel && (
+        <MenuItem onSelect={noop} disabled={true}>
+          <div css={dropdownDisabledItemStyles}>
+            <p css={p14Medium}>
+              Workspace member <SoonLabel />
+            </p>
+            <p css={dropDownItemStyles}>
+              Can edit and publish all notebooks in this workspace
+            </p>
+          </div>
+        </MenuItem>
+      )}
 
-      {onRemove && (
+      {disableRemove && (
+        <MenuItem onSelect={noop} disabled={true}>
+          <div css={dropdownDisabledItemStyles}>
+            <p css={dangerOptionStyles}>Remove Collaborator</p>
+            <p css={dropDownItemStyles}>
+              We're in beta. All notebooks are visible to all workspace members
+              by default.
+            </p>
+          </div>
+        </MenuItem>
+      )}
+
+      {onRemove && !disableRemove && (
         <MenuItem onSelect={onRemove}>
-          <p css={{ ...p14Medium, color: red500.rgb }}>Remove</p>
+          <p css={dangerOptionStyles}>Remove</p>
         </MenuItem>
       )}
     </MenuList>
@@ -124,3 +134,17 @@ const SoonLabel: React.FC = () => (
     soon
   </span>
 );
+
+const dropDownItemStyles = css({
+  marginTop: '6px',
+  maxWidth: '224px',
+});
+
+const dropdownDisabledItemStyles = css(dropDownItemStyles, {
+  opacity: 0.5,
+});
+
+const dangerOptionStyles = css({
+  ...p14Medium,
+  color: red500.rgb,
+});

@@ -111,7 +111,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
       </div>
 
       <div css={groupStyles}>
-        {sortedUsersWithAccess.map(({ user, permission }) => (
+        {sortedUsersWithAccess.map(({ user, permission, isTeamMember }) => (
           <div css={collaboratorStyles} key={user.id}>
             <div css={avatarStyles}>
               <Avatar name={user.name} email={user.email || ''} />
@@ -141,7 +141,8 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
 
             <CollabAccessDropdown
               currentPermission={permission}
-              isActivatedAccount={!!user.onboarded}
+              disableRemove={isTeamMember}
+              isActivatedAccount={user.name !== user.email}
               onRemove={() => onRemoveCollaborator(user.id)}
               onChange={(newPerm) => onChangePermission(user.id, newPerm)}
             />

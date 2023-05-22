@@ -9,6 +9,7 @@ import { NotebookInvitationPopUp } from '../../organisms';
 import { cssVar, p12Regular, p13Medium, setCssVar } from '../../primitives';
 
 export interface NotebookAvatar {
+  isTeamMember?: boolean;
   user: {
     id: string;
     name: string;
@@ -90,7 +91,10 @@ export const NotebookAvatars = ({
   const clientEvent = useContext(ClientEventsContext);
 
   const allUsers = uniqBy(
-    [...usersWithAccess, ...usersFromTeam],
+    [
+      ...usersFromTeam.map((user) => ({ ...user, isTeamMember: true })),
+      ...usersWithAccess,
+    ],
     (access) => access.user.id
   );
 
@@ -117,10 +121,6 @@ export const NotebookAvatars = ({
   );
 
   useWindowListener('click', showInvitePopup ? handleClickOutside : noop);
-
-  const nonAdminUsers = usersWithAccess?.filter(
-    (user) => user.permission !== 'ADMIN'
-  );
 
   return (
     <div css={avatarsWrapperStyles} className="notebook-avatars">
@@ -184,7 +184,7 @@ export const NotebookAvatars = ({
       {showInvitePopup && (
         <div className="notebook-invitation-popup" css={popupWrapperStyles}>
           <NotebookInvitationPopUp
-            usersWithAccess={nonAdminUsers}
+            usersWithAccess={allUsers}
             {...sharingProps}
           />
         </div>
